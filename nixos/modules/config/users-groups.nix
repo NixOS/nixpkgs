@@ -385,13 +385,13 @@ in {
         according to <literal>users.extraUsers</literal>, but existing passwords
         will not be changed.
 
-        <warning>
+        <warning><para>
         If set to <literal>false</literal>, the contents of the user and
         group files will simply be replaced on system activation. This also
         holds for the user passwords; all changed
         passwords will be reset according to the
         <literal>users.extraUsers</literal> configuration on activation.
-        </warning>
+        </para></warning>
       '';
     };
 
