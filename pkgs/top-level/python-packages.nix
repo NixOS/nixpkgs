@@ -10140,6 +10140,25 @@ let
   };
 
 
+  testscenarios = buildPythonPackage rec {
+    name = "testscenarios-${version}";
+    version = "0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/testscenarios/${name}.tar.gz";
+      sha256 = "1671jvrvqlmbnc42j7pc5y6vc37q44aiwrq0zic652pxyy2fxvjg";
+    };
+
+    propagatedBuildInputs = with self; [ testtools ];
+
+    meta = {
+      description = "a pyunit extension for dependency injection";
+      homepage = https://pypi.python.org/pypi/testscenarios;
+      license = licenses.asl20;
+    };
+  };
+
+
   testtools = buildPythonPackage rec {
     name = "testtools-${version}";
     version = "0.9.34";
