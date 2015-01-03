@@ -1220,6 +1220,8 @@ let
 
   fprintd = callPackage ../tools/security/fprintd { };
 
+  fprint_demo = callPackage ../tools/security/fprint_demo { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
