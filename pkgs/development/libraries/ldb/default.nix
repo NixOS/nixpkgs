@@ -1,7 +1,5 @@
-{ stdenv, fetchurl, python27, pkgconfig, readline, gettext, tdb, talloc, tevent
+{ stdenv, fetchurl, python, pkgconfig, readline, tdb, talloc, tevent
 , popt, libxslt, docbook_xsl, docbook_xml_dtd_42
-, acl ? null, heimdal ? null, libaio ? null, libcap ? null, libgcrypt ? null
-, sasl ? null, pam ? null, zlib ? null, openldap ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -13,13 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python27 pkgconfig readline gettext tdb talloc tevent popt
+    python pkgconfig readline tdb talloc tevent popt
     libxslt docbook_xsl docbook_xml_dtd_42
-    acl heimdal libaio libcap libgcrypt sasl pam zlib openldap
   ];
 
   preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python27}/bin/python,g' buildtools/bin/waf
+    echo $PYTHONPATH
+    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
   '';
 
   configureFlags = [
