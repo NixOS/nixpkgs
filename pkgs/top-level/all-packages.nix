@@ -1218,6 +1218,8 @@ let
 
   fprot = callPackage ../tools/security/fprot { };
 
+  fprintd = callPackage ../tools/security/fprintd { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
