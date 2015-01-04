@@ -7908,6 +7908,7 @@ let
     pythonPackages = python2Packages;
     libiconv = if stdenv.isLinux then null else libiconv;
     libgcrypt = libgcrypt_1_6;
+    glusterfs = null; # Broken in the current build
   };
 
   samba = samba4;
