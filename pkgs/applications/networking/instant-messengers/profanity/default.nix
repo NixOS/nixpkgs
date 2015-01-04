@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat, ncurses, libnotify, libotr, curl, libstrophe, libXScrnSaver, libX11 }:
+{ stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat, ncurses, libotr, curl, libstrophe,
+libnotifySupport ? false, libnotify ? null, libXScrnSaver ? null, libX11 ? null, gdk_pixbuf ? null}:
 
+assert libnotifySupport -> (libnotify != null && libXScrnSaver != null && libX11 != null && gdk_pixbuf != null);
+
+let
+  optional = stdenv.lib.optional;
+in
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
   version = "0.4.5";
@@ -9,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qzwqxcxf695z3gf94psd2x619vlp4hkkjmkrpsla1ns0f6v6dkl";
   };
 
-  buildInputs = [ automake autoconf pkgconfig glib openssl expat ncurses libnotify libotr curl libstrophe libXScrnSaver libX11 ];
+  buildInputs = [ automake autoconf pkgconfig glib openssl expat ncurses libotr curl libstrophe ]
+    ++ optional libnotifySupport [ libnotify libXScrnSaver libX11 gdk_pixbuf ];
 
   preConfigure = "sh bootstrap.sh";
 
