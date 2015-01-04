@@ -6164,6 +6164,8 @@ let
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
+  libstrophe = callPackage ../development/libraries/libstrophe { };
+
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
