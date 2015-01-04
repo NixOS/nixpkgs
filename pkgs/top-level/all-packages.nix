@@ -11316,6 +11316,11 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
+  workrave = callPackage ../applications/misc/workrave {
+    inherit (gnome) GConf gconfmm;
+    inherit (python27Packages) cheetah;
+  };
+
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
     , icon ? "${browser}/lib/${browser.name}/browser/icons/mozicon128.png" }:
