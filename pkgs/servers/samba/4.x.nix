@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
     ++ (if glusterfs != null then [ "--enable-glusterfs" ] else [ "--disable-glusterfs" ]) ++ [
     # dynconfig/wscript options
     "--enable-fhs"
+    "--sysconfdir=/etc"
     "--localstatedir=/var"
 
     # buildtools/wafsamba/wscript options
