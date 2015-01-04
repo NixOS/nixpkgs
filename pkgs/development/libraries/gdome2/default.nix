@@ -15,12 +15,13 @@ stdenv.mkDerivation {
 
   buildInputs = [pkgconfig glib libxml2 gtkdoc];
   propagatedBuildInputs = [glib libxml2];
+  patches = [ ./xml-document.patch ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://gdome2.cs.unibo.it/;
     description = "DOM C library developed for the Gnome project";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-    broken = true;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ prikhi roconnor ];
+    platforms = platforms.linux;
   };
 }
