@@ -450,6 +450,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
 
+  classyPreludeYesod = callPackage ../development/libraries/haskell/classy-prelude-yesod {};
+
   clay = callPackage ../development/libraries/haskell/clay {};
 
   cleanUnions = callPackage ../development/libraries/haskell/clean-unions {};
