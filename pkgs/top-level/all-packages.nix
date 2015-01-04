@@ -7916,7 +7916,7 @@ let
   smbclient = samba;
 
   # A lightweight Samba 3, useful for non-Linux-based OSes.
-  samba3_light = lowPrio samba3.override {
+  samba3_light = lowPrio (samba3.override {
     pam = null;
     fam = null;
     cups = null;
@@ -7924,7 +7924,7 @@ let
     openldap = null;
     # libunwind 1.0.1 is not ported to GNU/Hurd.
     libunwind = null;
-  };
+  });
 
   samba4_light = lowPrio (samba4.override {
     # source3/wscript optionals
