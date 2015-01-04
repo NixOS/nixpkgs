@@ -2,6 +2,8 @@
 , tzdata, git, valgrind, procps, coreutils
 }:
 
+assert !stdenv.isFreeBSD;
+
 /* Rust's build process has a few quirks :
 
 - It requires some patched in llvm that haven't landed upstream, so it

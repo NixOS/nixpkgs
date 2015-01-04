@@ -1,5 +1,7 @@
 {stdenv, fetchurl, which, file, perl, curl, python27, makeWrapper}:
 
+assert !stdenv.isFreeBSD;
+
 /* Rust's build process has a few quirks :
 
 - It requires some patched in llvm that haven't landed upstream, so it
