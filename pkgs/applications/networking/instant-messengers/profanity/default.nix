@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat, ncurses, libnotify, libotr, curl, libstrophe }:
+{ stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat, ncurses, libnotify, libotr, curl, libstrophe, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qzwqxcxf695z3gf94psd2x619vlp4hkkjmkrpsla1ns0f6v6dkl";
   };
 
-  buildInputs = [ automake autoconf pkgconfig glib openssl expat ncurses libnotify libotr curl libstrophe ];
+  buildInputs = [ automake autoconf pkgconfig glib openssl expat ncurses libnotify libotr curl libstrophe libXScrnSaver libX11 ];
 
   preConfigure = "sh bootstrap.sh";
 
