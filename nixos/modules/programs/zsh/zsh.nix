@@ -105,6 +105,10 @@ in
 
     };
 
+    environment.profileRelativeEnvVars =
+      { FPATH = [ "/share/zsh/site-functions" ];
+      };
+
     environment.etc."zshenv".text =
       ''
         # /etc/zshenv: DO NOT EDIT -- this file has been generated automatically.
