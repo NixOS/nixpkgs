@@ -10579,6 +10579,8 @@ let
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
 
+  profanity = callPackage ../applications/networking/instant-messengers/profanity { };
+
   pstree = callPackage ../applications/misc/pstree { };
 
   pulseview = callPackage ../applications/science/electronics/pulseview { };
