@@ -106,6 +106,7 @@ in buildPythonPackage rec {
   patches = [
     ./mediafile-codec-fix.patch
     ./replaygain-default-audiotools.patch
+    ./test-bucket-fix-year.patch
   ];
 
   postPatch = ''
