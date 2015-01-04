@@ -10579,7 +10579,9 @@ let
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
 
-  profanity = callPackage ../applications/networking/instant-messengers/profanity { };
+  profanity = callPackage ../applications/networking/instant-messengers/profanity {
+    libnotifySupport = config.profanity.libnotifySupport or true;
+  };
 
   pstree = callPackage ../applications/misc/pstree { };
 
