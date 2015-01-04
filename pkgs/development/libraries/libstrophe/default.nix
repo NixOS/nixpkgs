@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://strophe.im/libstrophe/;
     license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];
   };
 }
