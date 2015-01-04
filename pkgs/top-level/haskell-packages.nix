@@ -3219,7 +3219,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
-  liquidFixpoint = callPackage ../development/tools/haskell/liquid-fixpoint { ocaml = pkgs.ocaml; };
+  liquidFixpoint = callPackage ../development/tools/haskell/liquid-fixpoint {};
 
   liquidhaskell = callPackage ../development/tools/haskell/liquidhaskell {};
 
