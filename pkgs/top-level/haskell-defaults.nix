@@ -86,6 +86,7 @@
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
+    cabalInstall = self.cabalInstall_1_20_0_6;
     caseInsensitive = self.caseInsensitive_1_0_0_1;
     deepseq = self.deepseq_1_3_0_2;
     DrIFT = null;                       # doesn't compile with old GHC versions
