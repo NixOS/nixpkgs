@@ -6443,13 +6443,13 @@ let
   };
 
   livestreamer = buildPythonPackage rec {
-    version = "1.10.2";
+    version = "1.11.1";
     name = "livestreamer-${version}";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
-      sha256 = "0f1m51wax4q17ida4h0ckyakmlchf36kbhfa9qs6bpxc6xqqbry0";
+      sha256 = "1hic3z5any64gn2b0gs1b7m34bzgzv71inr8wgjq59pwf8mbrqk9";
     };
 
     buildInputs = with self; [ pkgs.makeWrapper ];
@@ -6464,7 +6464,7 @@ let
         Livestreamer is CLI program that extracts streams from various
         services and pipes them into a video player of choice.
       '';
-      license = "bsd";
+      license = stdenv.lib.licenses.bsd2;
     };
   };
 
