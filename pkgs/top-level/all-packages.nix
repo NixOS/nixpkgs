@@ -10580,7 +10580,8 @@ let
   procmail = callPackage ../applications/misc/procmail { };
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity {
-    notifySupport = config.profanity.notifySupport or true;
+    notifySupport   = config.profanity.notifySupport   or true;
+    autoAwaySupport = config.profanity.autoAwaySupport or true;
   };
 
   pstree = callPackage ../applications/misc/pstree { };

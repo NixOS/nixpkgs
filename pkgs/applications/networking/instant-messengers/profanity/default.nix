@@ -1,12 +1,12 @@
 { stdenv, fetchurl, automake, autoconf, pkgconfig, glib, openssl, expat
 , ncurses, libotr, curl, libstrophe
 
-, notifySupport ? false, libnotify ? null, libXScrnSaver ? null
-,                        libX11 ? null, gdk_pixbuf ? null
+, autoAwaySupport ? false, libXScrnSaver ? null, libX11 ? null
+, notifySupport ? false,   libnotify ? null, gdk_pixbuf ? null
 }:
 
-assert notifySupport -> libnotify != null && libXScrnSaver != null
-                     && libX11 != null && gdk_pixbuf != null;
+assert autoAwaySupport -> libXScrnSaver != null && libX11 != null;
+assert notifySupport   -> libnotify != null && gdk_pixbuf != null;
 
 with stdenv.lib;
 
@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     automake autoconf pkgconfig
     glib openssl expat ncurses libotr curl libstrophe
-  ] ++ optionals notifySupport [ libnotify libXScrnSaver libX11 gdk_pixbuf ];
+  ] ++ optionals autoAwaySupport [ libXScrnSaver libX11 ]
+    ++ optionals notifySupport   [ libnotify gdk_pixbuf ];
 
   preConfigure = "sh bootstrap.sh";
 
