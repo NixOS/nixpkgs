@@ -140,6 +140,7 @@ in {
         Restart = "always";
         RestartSec = 2;
       };
+      environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
       restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig ];
     };
 
