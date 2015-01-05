@@ -662,7 +662,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   diagrams = callPackage ../development/libraries/haskell/diagrams/diagrams.nix {};
   diagramsBuilder = callPackage ../development/libraries/haskell/diagrams/builder { };
-  diagramsBuilderWrapper = callPackage ../development/libraries/haskell/diagrams/builder/wrapper.nix { }; 
+  diagramsBuilderWrapper = callPackage ../development/libraries/haskell/diagrams/builder/wrapper.nix { };
   diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
   diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
   diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
@@ -3113,6 +3113,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
   xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {};
+
+  xmonadScreenshot = callPackage ../development/libraries/haskell/xmonad-screenshot {};
 
   # Yi packages
 
