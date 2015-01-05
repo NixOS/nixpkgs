@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pam, kerberos }:
 
 stdenv.mkDerivation rec {
-  name = "pam_krb5-2.4.9";
+  name = "pam-krb5-4.7";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/releases/p/a/pam_krb5/${name}.tar.gz";
-    sha256 = "0vcb35shzp406jvvz0pkgqm8qq1qzhgwmkl0nrm0wrrkqlr22rfb";
+    url = "http://archives.eyrie.org/software/kerberos/${name}.tar.gz";
+    sha256 = "04klg9a2rhdz0a2dw4f0ybcm28vcbab6lrynwq7rm4sn0hnzakwv";
   };
 
   buildInputs = [ pam kerberos ];
 
   meta = with stdenv.lib; {
-    homepage = https://fedorahosted.org/pam_krb5;
+    homepage = http://www.eyrie.org/~eagle/software/pam-krb5/;
     description = "PAM module allowing PAM-aware applications to authenticate users by performing an AS exchange with a Kerberos KDC";
     longDescription = ''
       pam_krb5 can optionally convert Kerberos 5 credentials to Kerberos IV
