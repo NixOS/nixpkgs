@@ -365,7 +365,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   Cabal_1_16_0_3 = callPackage ../development/libraries/haskell/Cabal/1.16.0.3.nix {};
   Cabal_1_18_1_3 = callPackage ../development/libraries/haskell/Cabal/1.18.1.3.nix {};
   Cabal_1_20_0_3 = callPackage ../development/libraries/haskell/Cabal/1.20.0.3.nix {};
-  Cabal_HEAD = callPackage ../development/libraries/haskell/Cabal/head.nix {};
+  Cabal_1_22_0_0 = callPackage ../development/libraries/haskell/Cabal/1.22.0.0.nix {};
   Cabal = null;                 # core package since forever
 
   cabalCargs = callPackage ../development/libraries/haskell/cabal-cargs {};
@@ -957,8 +957,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   ghcid = callPackage ../development/tools/haskell/ghcid {};
 
   ghcjs = callPackage ../development/compilers/ghcjs {
-    Cabal = self.Cabal_HEAD;
-    cabalInstall = self.cabalInstall_HEAD;
+    Cabal = self.Cabal_1_22_0_0;
+    cabalInstall = self.cabalInstall_1_22_0_0;
     haddock = self.haddock.override {
       Cabal = null;
     };
@@ -3197,8 +3197,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix { Cabal = self.Cabal_1_16_0_3; };
   cabalInstall_1_18_0_3 = callPackage ../tools/package-management/cabal-install/1.18.0.3.nix { Cabal = self.Cabal_1_18_1_3; };
   cabalInstall_1_20_0_6 = callPackage ../tools/package-management/cabal-install/1.20.0.6.nix { Cabal = self.Cabal_1_20_0_3; };
-  cabalInstall_HEAD = callPackage ../tools/package-management/cabal-install/head.nix { Cabal = self.Cabal_HEAD; };
-  cabalInstall = self.cabalInstall_1_20_0_6;
+  cabalInstall_1_22_0_0 = callPackage ../tools/package-management/cabal-install/1.22.0.0.nix { Cabal = self.Cabal_1_22_0_0; };
+  cabalInstall = self.cabalInstall_1_22_0_0;
 
   codex = callPackage ../development/tools/haskell/codex {};
 
