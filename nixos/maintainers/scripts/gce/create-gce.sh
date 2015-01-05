@@ -1,6 +1,6 @@
 #! /bin/sh -e
 
-BUCKET_NAME=${BUCKET_NAME:-nixos}
+BUCKET_NAME=${BUCKET_NAME:-nixos-images}
 export NIX_PATH=nixpkgs=../../../..
 export NIXOS_CONFIG=$(dirname $(readlink -f $0))/../../../modules/virtualisation/google-compute-image.nix
 export TIMESTAMP=$(date +%Y%m%d%H%M)
