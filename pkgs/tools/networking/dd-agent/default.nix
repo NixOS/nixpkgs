@@ -2,34 +2,36 @@
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "4.4.0";
+  version = "5.1.1";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-agent";
     rev = version;
-    sha256 = "0z2gysr5g66rfd86k2ngwcm59k9y2zmrvmy22aaz2rky20z28xkx";
+    sha256 = "17gj2bsnidwwmwfc0m2ll90sh28izpxz2wkczpnvzfiq0askdxmp";
   };
 
-  buildInputs = [ python unzip makeWrapper pythonPackages.psycopg2 ];
+  buildInputs = [ python unzip makeWrapper pythonPackages.psycopg2 pythonPackages.ntplib pythonPackages.simplejson pythonPackages.pyyaml pythonPackages.requests ];
   propagatedBuildInputs = [ python tornado ];
 
-  postUnpack = "export sourceRoot=$sourceRoot/packaging";
+  buildCommand = ''
+    mkdir -p $out/bin
+    cp -R $src $out/agent
+    chmod u+w -R $out
+    PYTHONPATH=$out/agent:$PYTHONPATH
+    ln -s $out/agent/agent.py $out/bin/dd-agent
+    ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
+    ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
-  makeFlags = [ "BUILD=$(out)" ];
-
-  installTargets = [ "install_base" "install_full" ];
-
-  postInstall = ''
-    mv $out/usr/* $out
-    rmdir $out/usr
     wrapProgram $out/bin/dd-forwarder \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dd-agent \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dogstatsd \
       --prefix PYTHONPATH : $PYTHONPATH
+
+    patchShebangs $out
   '';
 
   meta = {
