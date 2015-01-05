@@ -2153,6 +2153,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   reserve = callPackage ../development/libraries/haskell/reserve {};
 
+  reverse-apply = callPackage ../development/libraries/haskell/reverse-apply {};
+
   rvar = callPackage ../development/libraries/haskell/rvar {};
 
   reactiveBanana = callPackage ../development/libraries/haskell/reactive-banana {};
