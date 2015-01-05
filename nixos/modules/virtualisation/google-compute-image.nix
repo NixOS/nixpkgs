@@ -150,8 +150,8 @@ in
                         echo "new key added to authorized_keys"
                     fi
                     chmod 600 /root/.ssh/authorized_keys
-                    rm -f /root/key.pub /root/authorized-keys-metadata
                 fi
+                rm -f /root/key.pub /root/authorized-keys-metadata
           fi
 
           echo "obtaining SSH private host key..."
