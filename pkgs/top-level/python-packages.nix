@@ -4470,6 +4470,18 @@ rec {
     };
   };
 
+  ntplib = buildPythonPackage rec {
+    name = "ntplib-0.3.2";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/n/ntplib/ntplib-0.3.2.tar.gz;
+      md5 = "0f386dc00c0056ac4d77af0b4c21bb8e";
+    };
+
+    meta = {
+      description = "Python NTP library";
+    };
+  };
+
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.7.1";
 
