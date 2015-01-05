@@ -40,6 +40,9 @@
   };
 
   ghc763Prefs = self : super : ghc784Prefs self super // {
+    Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override {
+      binary = self.binary_0_7_2_2.override { cabal = self.cabal.override { extension = self: super: { doCheck = false; }; }; };
+    };
     aeson = self.aeson_0_7_0_4;
     ariadne = super.ariadne.override {
       haskellNames = self.haskellNames.override {
