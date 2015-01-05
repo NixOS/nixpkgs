@@ -2251,6 +2251,10 @@ let
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
+  qastools = callPackage ../tools/audio/qastools {
+    qt = qt4;
+  };
+
   qhull = callPackage ../development/libraries/qhull { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
