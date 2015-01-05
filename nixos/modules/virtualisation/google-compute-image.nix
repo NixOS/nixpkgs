@@ -135,6 +135,8 @@ in
       path  = [ pkgs.wget ];
       script =
         ''
+          # When dealing with cryptographic keys, we want to keep things private.
+          umask 077
           wget="wget --retry-connrefused -t 6 --waitretry=10"
           # Don't download the SSH key if it has already been downloaded
           if ! [ -e /root/.ssh/authorized_keys ]; then
