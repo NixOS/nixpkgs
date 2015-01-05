@@ -6232,6 +6232,8 @@ let
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
+  libstrophe = callPackage ../development/libraries/libstrophe { };
+
   libspatialindex = callPackage ../development/libraries/libspatialindex { };
 
   libspatialite = callPackage ../development/libraries/libspatialite { };
@@ -10714,6 +10716,11 @@ let
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
+
+  profanity = callPackage ../applications/networking/instant-messengers/profanity {
+    notifySupport   = config.profanity.notifySupport   or true;
+    autoAwaySupport = config.profanity.autoAwaySupport or true;
+  };
 
   pstree = callPackage ../applications/misc/pstree { };
 
