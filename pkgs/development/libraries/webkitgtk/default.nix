@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
-, enableGeoLocation ? true, geoclue2
+, enableGeoLocation ? true, geoclue2, sqlite
 , gst-plugins-base
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DPORT=GTK" ];
 
   nativeBuildInputs = [
-    cmake perl python ruby bison gperf
+    cmake perl python ruby bison gperf sqlite
     pkgconfig gettext gobjectIntrospection
   ];
 
