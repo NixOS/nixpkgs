@@ -62,7 +62,7 @@ rec {
   /* Map an attribute of the form `foo = [platforms...]'  to `testOn
      [platforms...] (pkgs: pkgs.foo)'. */
   mapTestOn = pkgs.lib.mapAttrsRecursiveCond
-    (as: !(as ? type && as.type == "job"))
+    (as: as.type or "" != "job")
     (path: value:
       let
         job = toJob value;
@@ -74,7 +74,7 @@ rec {
    * parameter for allPackages, defining the target platform for cross builds,
    * and triggering the build of the host derivation (cross built - crossDrv). */
   mapTestOnCross = crossSystem: pkgs.lib.mapAttrsRecursiveCond
-    (as: !(as ? type && as.type == "job"))
+    (as: as.type or "" != "job")
     (path: value:
       let
         job = toJob value;
