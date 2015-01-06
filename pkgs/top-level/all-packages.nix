@@ -3382,6 +3382,8 @@ let
 
   go_1_3 = callPackage ../development/compilers/go/1.3.nix { };
 
+  go_1_4 = callPackage ../development/compilers/go/1.4.nix { };
+
   go = go_1_3;
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
