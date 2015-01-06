@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
-  '' ++ stdenv.lib.optionalString stdenv.isDarwin '';
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH=${zlib}/lib:$DYLD_LIBRARY_PATH
   '';
 
