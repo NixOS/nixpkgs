@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmonad-screenshot";
-  version = "0.1.0.0";
-  sha256 = "0hw289czj9zm657ynl3v074knjpr30zpd66rx3wyvwgp8v1chccv";
+  version = "0.1.1.0";
+  sha256 = "1iy6c8dis5jkgamkbbgxvbajz8f03bwhwdwk46l6wvlgmb072wl4";
   buildDepends = [ gtk xmonad ];
   meta = {
     homepage = "http://github.com/supki/xmonad-screenshot";
