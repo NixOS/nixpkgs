@@ -18,19 +18,19 @@ assert !stdenv.isFreeBSD;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-2763-g6366631";});
+with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-3497-g6539cb4";});
 
 let snapshot = if stdenv.system == "i686-linux"
-      then "3daf531aed03f5769402f2fef852377e2838db98"
+      then "b880b98d832c9a049b8ef6a50df50061e363de5a"
       else if stdenv.system == "x86_64-linux"
-      then "4f3c8b092dd4fe159d6f25a217cf62e0e899b365"
+      then "82a09c162474b69d2d1e4e8399086f3f0f4e31c3"
       else if stdenv.system == "i686-darwin"
-      then "2a3e647b9c400505bd49cfe56091e866c83574ca"
+      then "569055bb10d96ab25f78ecf2c80ffbccd5e69b8d"
       else if stdenv.system == "x86_64-darwin"
-      then "5e730efc34d79a33f464a87686c10eace0760a2e"
+      then "cff1f9ebd63dae6890359b7d353bd9486d8ecdfc"
       else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-12-20";
-    snapshotRev = "8443b09";
+    snapshotDate = "2015-01-04";
+    snapshotRev = "b2085d9";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
 
 in stdenv.mkDerivation {
@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "63666317214788329e0b7680929b09823f127d83";
-    sha256 = "1saf6ycy5dzp1bxypzqisi4g4p0y1czbgr82xbrw5c81x5c274zk";
+    rev = "6539cb417f4a7c2d9d1afce44c196578d2b67f38";
+    sha256 = "14nc42j46hvlqms77245vil2wplmvci3ramxrmjyjqg0bql1w28m";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -76,6 +76,8 @@ in stdenv.mkDerivation {
       --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
 
     substituteInPlace src/rust-installer/gen-install-script.sh \
+      --replace /bin/echo "${coreutils}/bin/echo"
+    substituteInPlace src/rust-installer/gen-installer.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
   '';
 
