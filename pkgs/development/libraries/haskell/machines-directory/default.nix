@@ -4,10 +4,9 @@
 
 cabal.mkDerivation (self: {
   pname = "machines-directory";
-  version = "0.0.0.1";
-  sha256 = "1npgh7f5czx6r3s05y48rs6xkrgpv3if38apwnbvi4ignmsfsvyx";
+  version = "0.2.0.0";
+  sha256 = "1b1jv23ijhm51nggxrncjhz24k4pl4nvj6s9h3jabr0gsnsb8y2v";
   buildDepends = [ filepath machines machinesIo transformers ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/aloiscochard/machines-io";
     description = "Directory (system) utilities for the machines library";
