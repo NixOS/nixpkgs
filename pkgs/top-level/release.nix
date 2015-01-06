@@ -207,7 +207,7 @@ let
       spidermonkey = linux;
       squid = linux;
       ssmtp = linux;
-      stdenv = prio 175 all;
+      stdenv = all;
       stlport = linux;
       su = linux;
       sudo = linux;

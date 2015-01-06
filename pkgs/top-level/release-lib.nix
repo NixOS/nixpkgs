@@ -36,15 +36,8 @@ rec {
   crossMaintainers = with pkgs.lib.maintainers; [ viric ];
 
 
-  /* Set the Hydra scheduling priority for a job.  The default
-     priority (10) should be used for most jobs.  A different priority
-     should only be used for a few particularly interesting jobs (in
-     terms of giving feedback to developers), such as stdenv. */
-  prio = level: job: toJob job // { schedulingPriority = level; };
-
-
   toJob = x: if builtins.isAttrs x then x else
-    { type = "job"; systems = x; schedulingPriority = 10; };
+    { type = "job"; systems = x; };
 
 
   /* Build a package on the given set of platforms.  The function `f'
@@ -73,9 +66,7 @@ rec {
     (path: value:
       let
         job = toJob value;
-        getPkg = pkgs:
-          pkgs.lib.addMetaAttrs { schedulingPriority = toString job.schedulingPriority; }
-          (pkgs.lib.getAttrFromPath path pkgs);
+        getPkg = pkgs: pkgs.lib.getAttrFromPath path pkgs;
       in testOn job.systems getPkg);
 
 
@@ -87,11 +78,8 @@ rec {
     (path: value:
       let
         job = toJob value;
-        getPkg = pkgs: (pkgs.lib.addMetaAttrs {
-            schedulingPriority = toString job.schedulingPriority;
-            maintainers = crossMaintainers;
-          }
-          (pkgs.lib.getAttrFromPath path pkgs));
+        getPkg = pkgs: pkgs.lib.addMetaAttrs { maintainers = crossMaintainers; }
+          (pkgs.lib.getAttrFromPath path pkgs);
       in testOnCross crossSystem job.systems getPkg);
 
 
