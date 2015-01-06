@@ -6313,7 +6313,7 @@ let
 
   libunwind = callPackage ../development/libraries/libunwind { };
 
-  libuvVersions = callPackage ../development/libraries/libuv { };
+  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv { });
 
   libv4l = lowPrio (v4l_utils.override {
     withQt4 = false;
