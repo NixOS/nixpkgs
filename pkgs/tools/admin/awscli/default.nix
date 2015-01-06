@@ -18,6 +18,7 @@ pythonPackages.buildPythonPackage rec {
     pythonPackages.docutils
     pythonPackages.rsa
     pythonPackages.pyasn1
+    groff
   ];
 
   meta = {
