@@ -617,6 +617,8 @@ let
     perl = perl516; # Docs fail to build with newer versions
   };
 
+  bibtool = callPackage ../tools/misc/bibtool { };
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   binwalk = callPackage ../tools/misc/binwalk {
