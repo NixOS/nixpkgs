@@ -2500,6 +2500,8 @@ let
   };
 
   ssss = callPackage ../tools/security/ssss { };
+ 
+  stress = callPackage ../tools/system/stress { };
 
   storeBackup = callPackage ../tools/backup/store-backup { };
 
