@@ -1,4 +1,6 @@
-{ stdenv, ghc, packages, buildEnv, makeWrapper, ignoreCollisions ? false }:
+{ stdenv, ghc, packages, buildEnv, makeWrapper
+, ignoreCollisions ? false, exposeGHC ? false
+}:
 
 # This wrapper works only with GHC 6.12 or later.
 assert stdenv.lib.versionOlder "6.12" ghc.version;
@@ -31,6 +33,7 @@ let
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   isHaskellPkg  = x: (x ? pname) && (x ? version);
+  optionalString = stdenv.lib.optionalString;
 in
 if packages == [] then ghc else
 buildEnv {
@@ -44,6 +47,7 @@ buildEnv {
       rm -f $out/bin/$prg
       makeWrapper ${ghc}/bin/$prg $out/bin/$prg         \
         --add-flags '"-B$NIX_GHC_LIBDIR"'               \
+        ${optionalString exposeGHC "--add-flags '-package ghc'"} \
         --set "NIX_GHC"        "$out/bin/ghc"           \
         --set "NIX_GHCPKG"     "$out/bin/ghc-pkg"       \
         --set "NIX_GHC_DOCDIR" "${docDir}"              \
@@ -54,6 +58,7 @@ buildEnv {
       rm -f $out/bin/$prg
       makeWrapper ${ghc}/bin/$prg $out/bin/$prg         \
         --add-flags "-f $out/bin/ghc"                   \
+        ${optionalString exposeGHC "--add-flags '-package ghc'"} \
         --set "NIX_GHC"        "$out/bin/ghc"           \
         --set "NIX_GHCPKG"     "$out/bin/ghc-pkg"       \
         --set "NIX_GHC_DOCDIR" "${docDir}"              \
