@@ -1,33 +1,35 @@
-{ stdenv, fetchurl, fetchgit, go }:
+{ stdenv, fetchgit, go }:
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.8.15";
+  version = "0.10.17";
 
   src = fetchgit {
-    url = "git://github.com/calmh/syncthing.git";
+    url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0xv8kaji60zqxws72srh5hdi9fyvaipdcsawp6gcyahhr3cz0ddq";
+    sha256 = "1hv0va7234rgyahn8xvpyj1bsbmn7ifsyqm7b3ghhybinclghp1w";
   };
 
   buildInputs = [ go ];
 
-  buildPhase = ''
-    mkdir -p "./dependencies/src/github.com/calmh/syncthing"
+  patches = [
+    # Remove when Go 1.4 is available in Nix, or when this pull request is released:
+    # https://github.com/syncthing/syncthing/pull/1183
+    ./fix-go-1.4-range.patch
+  ];
 
-    for a in auto buffers cid discover files lamport protocol scanner \
-            logger beacon config xdr upnp model osutil versioner; do
-        cp -r "./$a" "./dependencies/src/github.com/calmh/syncthing"
-    done
+  buildPhase = ''
+    mkdir -p "./dependencies/src/github.com/syncthing/syncthing"
+    cp -r internal "./dependencies/src/github.com/syncthing/syncthing"
 
     export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
 
-    go test -cpu=1,2,4 ./...
+    # Tests can't be run in parallel because TestPredictableRandom relies on global state
+    go run build.go test
 
     mkdir ./bin
 
     go build -o ./bin/syncthing -ldflags "-w -X main.Version v${version}" ./cmd/syncthing
-    go build -o ./bin/stcli -ldflags "-w -X main.Version v${version}" ./cmd/stcli
   '';
 
   installPhase = ''
