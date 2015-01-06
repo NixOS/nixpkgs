@@ -1878,6 +1878,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   newtype = callPackage ../development/libraries/haskell/newtype {};
 
+  nonEmpty = callPackage ../development/libraries/haskell/non-empty {};
+
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
   numericExtras = callPackage ../development/libraries/haskell/numeric-extras {};
