@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
+  '' ++ stdenv.lib.optionalString stdenv.isDarwin '';
+    export DYLD_LIBRARY_PATH=${zlib}/lib:$DYLD_LIBRARY_PATH
   '';
 
   # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
@@ -41,11 +43,18 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+      ( if zlibSupport then "--with-zlib=${zlib}" else "--without-zlib" )
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
+
+  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${zlib}/lib"
+    done
+  '';
 
   CXX = "g++";
   CXXCPP = "g++ -E";
