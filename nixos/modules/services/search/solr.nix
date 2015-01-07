@@ -44,7 +44,7 @@ in {
 
       javaPackage = mkOption {
         type = types.package;
-        default = pkgs.openjre;
+        default = pkgs.jre;
         description = ''
           Which Java derivation to use for running solr.
         '';
