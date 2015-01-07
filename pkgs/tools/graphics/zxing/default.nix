@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openjre, jre ? openjre}:
+{ stdenv, fetchurl, jre }:
 stdenv.mkDerivation rec {
   name = "zxing-${version}";
   version = "3.1.0";
