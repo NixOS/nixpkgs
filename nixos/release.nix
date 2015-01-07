@@ -277,7 +277,7 @@ in rec {
   tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
   tests.networking.networkd.bond = callTest tests/networking.nix { networkd = true; test = "bond"; };
   tests.networking.networkd.bridge = callTest tests/networking.nix { networkd = true; test = "bridge"; };
-  #tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
+  tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
   tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
   tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
   tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
@@ -285,7 +285,7 @@ in rec {
   tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };
   tests.networking.scripted.bond = callTest tests/networking.nix { networkd = false; test = "bond"; };
   tests.networking.scripted.bridge = callTest tests/networking.nix { networkd = false; test = "bridge"; };
-  tests.networking.scripted.macvlan = callTest tests/networking.nix { networkd = false; test = "macvlan"; };
+  #tests.networking.scripted.macvlan = callTest tests/networking.nix { networkd = false; test = "macvlan"; };
   tests.networking.scripted.sit = callTest tests/networking.nix { networkd = false; test = "sit"; };
   tests.networking.scripted.vlan = callTest tests/networking.nix { networkd = false; test = "vlan"; };
   # TODO: put in networking.nix after the test becomes more complete
