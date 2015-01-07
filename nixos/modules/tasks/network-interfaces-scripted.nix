@@ -37,6 +37,8 @@ let
     ip link del "${i}" 2>/dev/null || true
   '';
 
+  needsMstpd = any ({ rstp, ... }: rstp) (attrValues cfg.bridges);
+
 in
 
 {
@@ -185,13 +187,14 @@ in
           in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
-            bindsTo = deps;
-            after = [ "network-pre.target" ] ++ deps
+            bindsTo = deps ++ optional v.rstp "mstpd.service";
+            partOf = optional v.rstp "mstpd.service";
+            after = [ "network-pre.target" "mstpd.service" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute ] ++ optional v.rstp pkgs.mstpd;
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
@@ -205,6 +208,13 @@ in
                 ip link set "${i}" master "${n}"
                 ip link set "${i}" up
               '')}
+
+              # Enable rstp on the interface
+              ${optionalString v.rstp ''
+                echo 1 >/sys/class/net/${n}/bridge/stp_state
+                mstpctl addbridge "${n}"
+                mstpctl setforcevers "${n}" rstp
+              ''}
 
               ip link set "${n}" up
             '';
@@ -342,6 +352,8 @@ in
       ''
         KERNEL=="tun", TAG+="systemd"
       '';
+
+    services.mstpd = mkIf needsMstpd { enable = true; };
 
   };
 
