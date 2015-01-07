@@ -326,11 +326,6 @@ with stdenv.lib;
   ''}
   VIRT_DRIVERS y
 
-  # Device virtualisation.
-  ${optionalString (versionAtLeast version "3.9") ''
-    VFIO_PCI_VGA? y
-  ''}
-
   # Media support.
   ${optionalString (versionAtLeast version "3.6") ''
     MEDIA_DIGITAL_TV_SUPPORT y
