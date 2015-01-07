@@ -72,7 +72,7 @@ in rec {
         (all nixos.tests.networking.scripted.dhcpOneIf)
         (all nixos.tests.networking.scripted.bond)
         (all nixos.tests.networking.scripted.bridge)
-        (all nixos.tests.networking.scripted.macvlan)
+        #(all nixos.tests.networking.scripted.macvlan)
         (all nixos.tests.networking.scripted.sit)
         (all nixos.tests.networking.scripted.vlan)
         (all nixos.tests.nfs3)
