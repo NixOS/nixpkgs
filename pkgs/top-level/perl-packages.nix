@@ -2157,6 +2157,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "14yvbgy9n8icwlm5zi86lskvxd6nsl42i1g9f5dwdaw9my463diy";
     };
     propagatedBuildInputs = [CarpClan BitVector];
+    doCheck = false; # some of the checks rely on the year being <2015
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
