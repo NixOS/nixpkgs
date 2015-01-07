@@ -57,9 +57,10 @@ let
         assert (unfreeOrBroken == "Unfree" || unfreeOrBroken == "Broken");
         throw ''
           Package ‘${attrs.name}’ in ${pos'} ${whatIsWrong}, refusing to evaluate.
-          You can set
+          For `nixos-rebuild` you can set
             { nixpkgs.config.allow${unfreeOrBroken} = true; }
-          in configuration.nix to override this. If you use Nix standalone, you can add
+          in configuration.nix to override this.
+          For `nix-env` you can add
             { allow${unfreeOrBroken} = true; }
           to ~/.nixpkgs/config.nix.
         '';
