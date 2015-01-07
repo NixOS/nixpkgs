@@ -3861,6 +3861,8 @@ let
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
+    stringext = callPackage ../development/ocaml-modules/stringext { };
+
     twt = callPackage ../development/ocaml-modules/twt { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
