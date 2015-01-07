@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-jdk-home=${jdk}"
+    "--with-jdk-home=${jdk.home}"
   ];
 
   mozillaPlugin = "/lib";
