@@ -2413,8 +2413,6 @@ let
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
-  shebangfix = callPackage ../tools/misc/shebangfix { };
-
   shellinabox = callPackage ../servers/shellinabox { };
 
   siege = callPackage ../tools/networking/siege {};
