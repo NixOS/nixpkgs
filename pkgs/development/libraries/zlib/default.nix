@@ -2,7 +2,7 @@
 
 let version = "1.2.8"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "zlib-${version}";
 
   src = fetchurl {
@@ -25,15 +25,6 @@ stdenv.mkDerivation rec {
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc";
-
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    # jww (2015-01-06): Sometimes this library install as a .so, even on
-    # Darwin; others time it installs as a .dylib.  I haven't yet figured out
-    # what causes this difference.
-    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
-      install_name_tool -id "$file" $file
-    done
-  '';
 
   crossAttrs = {
     dontStrip = static;
@@ -58,4 +49,13 @@ stdenv.mkDerivation rec {
     description = "Lossless data-compression library";
     license = licenses.zlib;
   };
-}
+} // (if stdenv.isDarwin then {
+  postInstall = ''
+    # jww (2015-01-06): Sometimes this library install as a .so, even on
+    # Darwin; others time it installs as a .dylib.  I haven't yet figured out
+    # what causes this difference.
+    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
+      install_name_tool -id "$file" $file
+    done
+  '';
+} else {}))
