@@ -3333,8 +3333,6 @@ let
     builtins.substring 0 (builtins.stringLength "packages_") name == "packages_"
   ) haskell));
 
-  haskellPackages = haskellPackages_ghc783;
-
   haskellPackages_ghc6104 = haskell.packages_ghc6104;
   haskellPackages_ghc6123 = haskell.packages_ghc6123;
   haskellPackages_ghc704  = haskell.packages_ghc704;
@@ -3345,6 +3343,13 @@ let
   haskellPackages_ghc783_profiling    = recurseIntoAttrs haskell.packages_ghc783.profiling;
   haskellPackages_ghc783              = recurseIntoAttrs haskell.packages_ghc783.highPrio;
   haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
+  haskellPackages = haskellPackages_ghc783;
+
+  haskell-ng = callPackage ./haskell-ng.nix { };
+  haskellngPackages = haskell-ng.packages.ghc784.override {
+    overrides = config.haskellPackageOverrides or (self: super: {});
+    provideOldAttributeNames = config.provideOldHaskellAttributeNames or false;
+  };
 
   haxe = callPackage ../development/compilers/haxe { };
 
