@@ -3842,6 +3842,8 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
+    re = callPackage ../development/ocaml-modules/re { };
+
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
