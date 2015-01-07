@@ -277,7 +277,7 @@ in rec {
   tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
   tests.networking.networkd.bond = callTest tests/networking.nix { networkd = true; test = "bond"; };
   tests.networking.networkd.bridge = callTest tests/networking.nix { networkd = true; test = "bridge"; };
-  tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
+  #tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
   tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
   tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
   tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
