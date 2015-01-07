@@ -300,6 +300,7 @@ in rec {
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
+  tests.panamax = scrubDrv (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};

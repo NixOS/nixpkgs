@@ -5,8 +5,8 @@ with lib;
 let
   cfg = config.services.panamax;
 
-  panamax_api = pkgs.panamax_api.override { dataDir = cfg.dataDir+"/api"; };
-  panamax_ui = pkgs.panamax_ui.override { dataDir = cfg.dataDir+"/ui"; };
+  panamax_api = pkgs.panamax_api.override { dataDir = cfg.dataDir + "/api"; };
+  panamax_ui = pkgs.panamax_ui.override { dataDir = cfg.dataDir + "/ui"; };
 
 in {
 
@@ -48,7 +48,7 @@ in {
       type = types.str;
       default = "http://127.0.0.1:4001";
       description = ''
-        Fleetctl endpoint.
+        Panamax fleetctl endpoint.
       '';
     };
 
@@ -56,7 +56,7 @@ in {
       type = types.str;
       default = "http://127.0.0.1:19531";
       description = ''
-        Journal endpoint.
+        Panamax journal endpoint.
       '';
     };
 
@@ -64,7 +64,7 @@ in {
       type = types.str;
       default = "SomethingVeryLong.";
       description = ''
-        Secret key (do change this).
+        Panamax secret key (do change this).
       '';
     };
 
@@ -72,33 +72,64 @@ in {
 
   ##### Implementation
   config = mkIf cfg.enable {
-    systemd.services.panamax_api = {
+    systemd.services.panamax-api = {
       description = "Panamax API";
+
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "fleet.service" "etcd.service" "docker.service" ];
+
+      path = [ panamax_api ];
       environment = {
+        RAILS_ENV = "production";
         JOURNAL_ENDPOINT = cfg.journalEndpoint;
         FLEETCTL_ENDPOINT = cfg.fleetctlEndpoint;
+        PANAMAX_DATABASE_PATH = "${cfg.dataDir}/api/db/mnt/db.sqlite3";
       };
-      preStart = "${panamax_api}/bin/panamax-api-init";
+
+      preStart = ''
+        rm -rf ${cfg.dataDir}/state/tmp
+        mkdir -p ${cfg.dataDir}/api/{db/mnt,state/log,state/tmp}
+        ln -sf ${panamax_api}/share/panamax-api/_db/{schema.rb,seeds.rb,migrate} ${cfg.dataDir}/api/db/
+
+        if [ ! -f ${cfg.dataDir}/.created ]; then
+          bundle exec rake db:setup
+          bundle exec rake db:seed
+          bundle exec rake panamax:templates:load || true
+          touch ${cfg.dataDir}/.created
+        else
+          bundle exec rake db:migrate
+        fi
+      '';
+
       serviceConfig = {
-        ExecStart = "${panamax_api}/bin/panamax-api-run --port ${toString cfg.APIPort}";
+        ExecStart = "${panamax_api}/bin/bundle exec rails server --binding 127.0.0.1 --port ${toString cfg.APIPort}";
         User = "panamax";
         Group = "panamax";
       };
     };
 
-    systemd.services.panamax_ui = {
+    systemd.services.panamax-ui = {
       description = "Panamax UI";
+
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" "panamax_api.service" ];
+
+      path = [ panamax_ui ];
       environment = {
+        RAILS_ENV = "production";
         JOURNAL_ENDPOINT = cfg.journalEndpoint;
+        PMX_API_PORT_3000_TCP_ADDR = "localhost";
         PMX_API_PORT_3000_TCP_PORT = toString cfg.APIPort;
         SECRET_KEY_BASE = cfg.secretKey;
       };
+
+      preStart = ''
+        rm -rf ${cfg.dataDir}/state/tmp
+        mkdir -p ${cfg.dataDir}/ui/state/{log,tmp}
+      '';
+
       serviceConfig = {
-        ExecStart = "${panamax_ui}/bin/panamax-ui-run --port ${toString cfg.UIPort}";
+        ExecStart = "${panamax_ui}/bin/bundle exec rails server --binding 127.0.0.1 --port ${toString cfg.UIPort}";
         User = "panamax";
         Group = "panamax";
       };
