@@ -6,17 +6,8 @@ with lib;
 let
 
   cfg = config.networking;
-  interfaces = attrValues cfg.interfaces;
 
-  interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
+  interfaces = attrValues cfg.interfaces;
 
   dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "none";
 
@@ -92,8 +83,8 @@ in
         networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
-            (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
-          address = flip map (interfaceIps i)
+            (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && i.ips == [ ]));
+          address = flip map i.ips
             (ip: "${ip.address}/${toString ip.prefixLength}");
         } ];
       })))

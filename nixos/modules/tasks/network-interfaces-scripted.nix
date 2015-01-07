@@ -6,6 +6,7 @@ with lib;
 let
 
   cfg = config.networking;
+
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
@@ -18,16 +19,6 @@ let
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
-
-  interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
 
   destroyBond = i: ''
     while true; do
@@ -162,9 +153,6 @@ let
         # has appeared, and it's stopped when the interface
         # disappears.
         configureAddrs = i:
-          let
-            ips = interfaceIps i;
-          in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
             wantedBy = [
@@ -193,7 +181,7 @@ let
 
                 mkdir -p $(dirname "$state")
 
-              '' + flip concatMapStrings (ips) (ip:
+              '' + flip concatMapStrings i.ips (ip:
                 let
                   address = "${ip.address}/${toString ip.prefixLength}";
                 in
