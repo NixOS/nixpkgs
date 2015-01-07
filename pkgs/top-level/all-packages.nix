@@ -6523,6 +6523,8 @@ let
 
   mpich2 = callPackage ../development/libraries/mpich2 { };
 
+  mstpd = callPackage ../os-specific/linux/mstpd { };
+
   mtdev = callPackage ../development/libraries/mtdev { };
 
   mtpfs = callPackage ../tools/filesystems/mtpfs { };
