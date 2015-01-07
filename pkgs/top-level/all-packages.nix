@@ -1345,6 +1345,8 @@ let
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
+  go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
+
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   gource = callPackage ../applications/version-management/gource { };
