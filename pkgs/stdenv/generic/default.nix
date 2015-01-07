@@ -65,9 +65,7 @@ let
           to ~/.nixpkgs/config.nix.
         '';
     in
-    if !allowUnfree && isUnfree (lib.lists.toList attrs.meta.license or []) && !allowUnfreePredicate attrs then
-      throwEvalHelp "Unfree" "has an unfree license"
-    else if !allowBroken && attrs.meta.broken or false then
+    if !allowBroken && attrs.meta.broken or false then
       throwEvalHelp "Broken" "is marked as broken"
     else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
       throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
@@ -82,7 +80,14 @@ let
           crossConfig = attrs.crossConfig or null;
         in
         {
-          builder = attrs.realBuilder or shell;
+          builder =
+            # (un)free-ness test moved here to let nix-env -qa show even unfree packages
+            if !allowUnfree && isUnfree (lib.lists.toList attrs.meta.license or [])
+                && !allowUnfreePredicate attrs
+            then
+              throwEvalHelp "Unfree" "has an unfree license"
+            else
+              attrs.realBuilder or shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           stdenv = result;
           system = result.system;
