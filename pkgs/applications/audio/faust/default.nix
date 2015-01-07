@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     install tools/faust2appls/faustoptflags  $out/bin
     install tools/faust2appls/faust2alsa $out/bin
 
+    patchShebangs $out/bin
+
     wrapProgram $out/bin/faust2alsaconsole \
     --prefix PKG_CONFIG_PATH : ${alsaLib}/lib/pkgconfig \
     --set FAUSTLIB ${faust-compiler}/lib/faust \
@@ -41,17 +43,16 @@ stdenv.mkDerivation rec {
     --prefix PKG_CONFIG_PATH :  ${alsaLib}/lib/pkgconfig:$GTK_PKGCONFIG_PATHS \
     --set FAUSTLIB ${faust-compiler}/lib/faust \
     --set FAUSTINC ${faust-compiler}/include/ \
-    '' + stdenv.lib.optionalString (!gtkSupport) "rm $out/bin/faust2alsa"
+    ''
+    + stdenv.lib.optionalString (!gtkSupport) "rm $out/bin/faust2alsa"
   ;
 
   postInstall = ''
-    find $out/bin/ -name "faust2*" -type f | xargs sed "s@/bin/bash@${bash}/bin/bash@g" -i
-    sed -i "s@/bin/bash@${bash}/bin/bash@g" $out/bin/faustpath
     sed -e "s@\$FAUST_INSTALL /usr/local /usr /opt /opt/local@${faust-compiler}@g" -i $out/bin/faustpath
     sed -i "s@/bin/bash@${bash}/bin/bash@g" $out/bin/faustoptflags
-    find $out/bin/ -name "faust2*" -type f | xargs sed "s@pkg-config@${pkgconfig}/bin/pkg-config@g" -i
-    find $out/bin/ -name "faust2*" -type f | xargs sed "s@CXX=g++@CXX=${gcc}/bin/g++@g" -i
-    find $out/bin/ -name "faust2*" -type f | xargs sed "s@faust -i -a @${faust-compiler}/bin/faust -i -a ${faust-compiler}/lib/faust/@g" -i
+    find $out/bin/ -name "*faust2*" -type f | xargs sed "s@pkg-config@${pkgconfig}/bin/pkg-config@g" -i
+    find $out/bin/ -name "*faust2*" -type f | xargs sed "s@CXX=g++@CXX=${gcc}/bin/g++@g" -i
+    find $out/bin/ -name "*faust2*" -type f | xargs sed "s@faust -i -a @${faust-compiler}/bin/faust -i -a ${faust-compiler}/lib/faust/@g" -i
   '';
 
   meta = with stdenv.lib; {
