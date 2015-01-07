@@ -3451,7 +3451,7 @@ let
     pkgs.icedtea7_jdk.jre)) // { outputs = [ "jre" ]; };
 
   icedtea7_web = callPackage ../development/compilers/icedtea-web {
-    jdk = "${icedtea7_jdk}/lib/icedtea";
+    jdk = icedtea7_jdk;
     xulrunner = firefox;
   };
 
