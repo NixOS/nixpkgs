@@ -255,6 +255,18 @@ let
     { substitutions = { inherit autoconf automake libtool gettext; }; }
     ../build-support/setup-hooks/autoreconf.sh;
 
+  buildRustPackage = import ../build-support/rust {
+    inherit stdenv cacert;
+    cargo = cargoSnapshot;
+    rustc = rustcMaster;
+  };
+
+  fetchCargoDeps = import ../build-support/rust/fetchcargo.nix {
+    inherit stdenv cacert;
+    rustc = rustcMaster;
+    cargo = cargoSnapshot;
+  };
+
   buildEnv = import ../build-support/buildenv {
     inherit (pkgs) runCommand perl;
   };
@@ -4446,6 +4458,10 @@ let
   };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
+
+  cargo = callPackage ../development/tools/build-managers/cargo {
+    rustc = rustcMaster;
+  };
 
   cargoSnapshot = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
 

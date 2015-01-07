@@ -41,6 +41,7 @@ rec {
                --set-rpath "${stdenv.cc.gcc}/lib/:${stdenv.cc.gcc}/lib64/:${zlib}/lib" \
                "$out/bin/cargo"
     '' else "");
+    setupHook = ./setup-hook.sh;
   };
 
   meta = {
