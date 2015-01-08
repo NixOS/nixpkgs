@@ -5,8 +5,8 @@ with import ./lib.nix;
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_20_0_3 = overrideCabal super.Cabal_1_20_0_3 (drv: { doCheck = false;});
-  Cabal_1_22_0_0 = overrideCabal super.Cabal_1_22_0_0 (drv: { doCheck = false;});
+  Cabal_1_20_0_3 = overrideCabal super.Cabal_1_20_0_3 (drv: { doCheck = false; });
+  Cabal_1_22_0_0 = overrideCabal super.Cabal_1_22_0_0 (drv: { doCheck = false; });
   cabal-install = overrideCabal (super.cabal-install.override { Cabal = self.Cabal_1_22_0_0; }) (drv: { doCheck = false; });
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_20_0_3; };
 
