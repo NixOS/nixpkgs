@@ -32,6 +32,9 @@ self: super: {
   # Won't find it's header files without help.
   sfml-audio = overrideCabal super.sfml-audio (drv: { configureFlags = drv.configureFlags or [] ++ ["--extra-include-dirs=${pkgs.openal}/include/AL"]; });
 
+  # https://github.com/haskell/time/issues/23
+  time_1_5_0_1 = overrideCabal super.time_1_5_0_1 (drv: { doCheck = false; });
+
   # Hacks to make packages compile.
   abstract-deque = overrideCabal super.abstract-deque (drv: { doCheck = false; });
   accelerate-cuda = overrideCabal super.accelerate-cuda (drv: { jailbreak = true; });
