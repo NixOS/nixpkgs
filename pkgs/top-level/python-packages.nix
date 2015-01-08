@@ -7020,12 +7020,14 @@ let
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
       sed -i "setup.py" \
-          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
-              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
-              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
-              s|^TCL_ROOT=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;'
+          -e 's|^FREETYPE_ROOT\s*=.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT\s* =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT\s* =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
+              s|^LCMS_ROOT\s* =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
+              s|^TIFF_ROOT\s* =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
+              s|^TCL_ROOT\s*=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;
+              s|/Library/Frameworks||g ;
+              s|/System/Library/Frameworks||g ;'
     '';
 
     meta = {
@@ -10665,22 +10667,8 @@ let
     ] ++ optional isPy26 argparse;
 
     patchPhase = ''
-      for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
-        substituteInPlace "$file" --replace "which" "${pkgs.which}/bin/which"
-
-        # We can't set PYTHONPATH in a normal way (like exporting in a wrapper
-        # script) because the user has to evaluate the script and we don't want
-        # modify the global PYTHONPATH which would affect the user's
-        # environment.
-        # Furthermore it isn't possible to just use VIRTUALENVWRAPPER_PYTHON
-        # for this workaround, because this variable is well quoted inside the
-        # shell script.
-        # (the trailing " -" is required to only replace things like these one:
-        # "$VIRTUALENVWRAPPER_PYTHON" -c "import os,[...] and not in
-        # if-statements or anything like that.
-        # ...and yes, this "patch" is hacky :)
-        substituteInPlace "$file" --replace '"$VIRTUALENVWRAPPER_PYTHON" -' 'env PYTHONPATH="$VIRTUALENVWRAPPER_PYTHONPATH" "$VIRTUALENVWRAPPER_PYTHON" -'
-      done
+      substituteInPlace "virtualenvwrapper.sh" --replace "which" "${pkgs.which}/bin/which"
+      substituteInPlace "virtualenvwrapper_lazy.sh" --replace "which" "${pkgs.which}/bin/which"
     '';
 
     postInstall = ''
@@ -10694,8 +10682,8 @@ let
         mv "$wrapper" "$wrapped"
 
         cat > "$wrapper" <<- EOF
-	export PATH="$PATH:\$PATH"
-	export VIRTUALENVWRAPPER_PYTHONPATH="$PYTHONPATH:$(toPythonPath $out)"
+	export PATH=$PATH:\$PATH
+	export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out):\$PYTHONPATH
 	source "$wrapped"
 	EOF
 

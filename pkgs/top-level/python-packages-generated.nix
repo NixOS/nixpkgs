@@ -4190,7 +4190,7 @@ in
         md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
     doCheck = false;
-    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.unzip ];
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.unzip pkgs.tcl ];
     propagatedBuildInputs = [  ];
     configurePhase = ''
       sed -i "setup.py" \
@@ -4198,7 +4198,10 @@ in
               s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
               s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;'
+              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
+              s|^TCL_ROOT\s*=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;
+              s|/Library/Frameworks||g ;
+              s|/System/Library/Frameworks||g ;'
     '';
     installCommand = ''easy_install --always-unzip --no-deps --prefix="$out" .'';
     meta = {

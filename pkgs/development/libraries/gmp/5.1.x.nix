@@ -12,6 +12,8 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ m4 ];
 
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./need-size-t.patch ];
+
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
