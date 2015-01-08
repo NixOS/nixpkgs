@@ -55,14 +55,12 @@
 # modifyPrio argument can be set to lowPrio to make all Haskell packages have
 # low priority.
 
-let override = overrides: self_: let
-  self = self_ // overrides;
+self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
-  callPackage = x : y : modifyPrio (newScope self x y);
 # Indentation deliberately broken at this point to keep the bulk
 # of this file at a low indentation level.
 
-in {
+{
   inherit callPackage;
 
   # GHC and its wrapper
@@ -171,34 +169,6 @@ in {
   alsaMixer = callPackage ../development/libraries/haskell/alsa-mixer {};
 
   alsaPcm = callPackage ../development/libraries/haskell/alsa-pcm {};
-
-  inherit (let
-    new-transformers-self = if self.overridden or false
-      then self
-      else override {
-        overridden = true;
-
-        mtl = new-transformers-self.mtl_2_2_1;
-
-        transformers = new-transformers-self.transformers_0_4_2_0;
-
-        cabal = new-transformers-self.cabal.override {
-          enableCheckPhase = false;
-        };
-
-        nats = new-transformers-self.nats_0_2;
-      } new-transformers-self;
-
-    inherit (new-transformers-self) callPackage;
-  in {
-      amazonkaCore =
-        callPackage ../development/libraries/haskell/amazonka-core {};
-
-      amazonka = callPackage ../development/libraries/haskell/amazonka {};
-
-      amazonkaCloudwatch =
-        callPackage ../development/libraries/haskell/amazonka-cloudwatch {};
-  }) amazonka amazonkaCore amazonkaCloudwatch;
 
   amqp = callPackage ../development/libraries/haskell/amqp {};
 
@@ -1859,9 +1829,7 @@ in {
 
   nat = callPackage ../development/libraries/haskell/nat {};
 
-  nats_1 = callPackage ../development/libraries/haskell/nats/1.nix {};
-  nats_0_2 = callPackage ../development/libraries/haskell/nats/0.2.nix {};
-  nats = self.nats_1;
+  nats = callPackage ../development/libraries/haskell/nats {};
 
   naturals = callPackage ../development/libraries/haskell/naturals {};
 
@@ -3291,4 +3259,4 @@ in {
 
 # End of the main part of the file.
 
-}; in override {}
+}
