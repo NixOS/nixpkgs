@@ -18,9 +18,14 @@ assert !stdenv.isFreeBSD;
 
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-3497-g6539cb4";});
+let shortVersion = "0.13-dev";
+    rev = "6539cb417f4a7c2d9d1afce44c196578d2b67f38";
+    revShort = builtins.substring 0 7 rev;
+in
 
-let snapshot = if stdenv.system == "i686-linux"
+with ((import ./common.nix) {inherit stdenv; version = "${shortVersion}-g${revShort}"; });
+
+let snapshotHash = if stdenv.system == "i686-linux"
       then "b880b98d832c9a049b8ef6a50df50061e363de5a"
       else if stdenv.system == "x86_64-linux"
       then "82a09c162474b69d2d1e4e8399086f3f0f4e31c3"
@@ -28,19 +33,20 @@ let snapshot = if stdenv.system == "i686-linux"
       then "569055bb10d96ab25f78ecf2c80ffbccd5e69b8d"
       else if stdenv.system == "x86_64-darwin"
       then "cff1f9ebd63dae6890359b7d353bd9486d8ecdfc"
-      else abort "no-snapshot for platform ${stdenv.system}";
+      else abort "no snapshot for platform ${stdenv.system}";
     snapshotDate = "2015-01-04";
     snapshotRev = "b2085d9";
-    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
+    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
+in
 
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   inherit name;
   inherit version;
   inherit meta;
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "6539cb417f4a7c2d9d1afce44c196578d2b67f38";
+    inherit rev;
     sha256 = "14nc42j46hvlqms77245vil2wplmvci3ramxrmjyjqg0bql1w28m";
   };
 
@@ -49,7 +55,7 @@ in stdenv.mkDerivation {
     name = "rust-stage0";
     src = fetchurl {
       url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-      sha1 = snapshot;
+      sha1 = snapshotHash;
     };
     dontStrip = true;
     installPhase = ''
