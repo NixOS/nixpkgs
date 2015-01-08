@@ -53,7 +53,7 @@ echo "booting system configuration $systemConfig" > /dev/kmsg
 # Silence chown/chmod to fail gracefully on a readonly filesystem
 # like squashfs.
 chown -f 0:30000 /nix/store
-chmod -f 1775 /nix/store
+chmod -f 1735 /nix/store
 if [ -n "@readOnlyStore@" ]; then
     if ! readonly-mountpoint /nix/store; then
         mount --bind /nix/store /nix/store
