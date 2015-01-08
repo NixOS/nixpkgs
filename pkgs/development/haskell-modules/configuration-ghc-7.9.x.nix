@@ -33,6 +33,13 @@ self: super: {
   # haddock: internal error: expectJust getPackageDetails
   mkDerivation = drv: super.mkDerivation (drv // { noHaddock = true; });
 
+  # These used to be a core packages in GHC 7.8.x.
+  old-locale = self.old-locale_1_0_0_7;
+  old-time = self.old-time_1_1_0_3;
+
+  # We have transformers 4.x, so we can use the latest mtl.
+  mtl = self.mtl_2_2_1;
+
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     patchPhase = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
