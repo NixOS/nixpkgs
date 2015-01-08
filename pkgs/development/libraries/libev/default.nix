@@ -20,7 +20,6 @@ rec {
     maintainers = [
       a.lib.maintainers.raskin
     ];
-    platforms = with a.lib.platforms;
-      linux ++ freebsd;
+    platforms = a.lib.platforms.all;
   };
 }
