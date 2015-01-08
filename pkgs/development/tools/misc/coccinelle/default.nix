@@ -1,16 +1,12 @@
 { fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig, makeWrapper }:
 
-let
-
-  name = "coccinelle-1.0.0-rc15";
-  sha256 = "07fab4e17512925b958890bb13c0809797074f2e44a1107b0074bdcc156b9596";
-
-in stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name    = "coccinelle-${version}";
+  version = "1.0.0-rc23";
 
   src = fetchurl {
     url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
-    inherit sha256;
+    sha256 = "1qrd4kr3wc0hm4l60fwn19iwzwqcjsx85mm3k4gm3cdhljjma82p";
   };
 
   buildInputs = with ocamlPackages; [
@@ -38,25 +34,23 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Program to apply semantic patches to C code";
-
-    longDescription =
-      '' Coccinelle is a program matching and transformation engine which
-         provides the language SmPL (Semantic Patch Language) for specifying
-         desired matches and transformations in C code.  Coccinelle was
-         initially targeted towards performing collateral evolutions in
-         Linux.  Such evolutions comprise the changes that are needed in
-         client code in response to evolutions in library APIs, and may
-         include modifications such as renaming a function, adding a function
-         argument whose value is somehow context-dependent, and reorganizing
-         a data structure.  Beyond collateral evolutions, Coccinelle is
-         successfully used (by us and others) for finding and fixing bugs in
-         systems code.
-      '';
+    longDescription = ''
+      Coccinelle is a program matching and transformation engine which
+      provides the language SmPL (Semantic Patch Language) for
+      specifying desired matches and transformations in C code.
+      Coccinelle was initially targeted towards performing collateral
+      evolutions in Linux.  Such evolutions comprise the changes that
+      are needed in client code in response to evolutions in library
+      APIs, and may include modifications such as renaming a function,
+      adding a function argument whose value is somehow
+      context-dependent, and reorganizing a data structure.  Beyond
+      collateral evolutions, Coccinelle is successfully used (by us
+      and others) for finding and fixing bugs in systems code.
+    '';
 
     homepage = http://coccinelle.lip6.fr/;
     license = stdenv.lib.licenses.gpl2;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
