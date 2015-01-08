@@ -64,6 +64,7 @@ let
        export TERMINFO="${ncurses}/share/terminfo/";
        export TERM="xterm";
        export HOME="$TMPDIR";
+
        # disable shutils because it assumes gid 0 exists
        # disable socket because it has two actual network tests that fail
        # disable test_mhlib because it fails for unknown reason
