@@ -1226,6 +1226,10 @@ let
 
   fprot = callPackage ../tools/security/fprot { };
 
+  fprintd = callPackage ../tools/security/fprintd { };
+
+  fprint_demo = callPackage ../tools/security/fprint_demo { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
@@ -5870,6 +5874,8 @@ let
   libfm-extra = callPackage ../development/libraries/libfm {
     extraOnly = true;
   };
+
+  libfprint = callPackage ../development/libraries/libfprint/master.nix { };
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
