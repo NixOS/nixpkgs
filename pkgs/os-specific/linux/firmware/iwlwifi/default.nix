@@ -41,8 +41,7 @@ let
     # Kernel 3.17+
     { name = "7260-ucode-23.11.10.0"; sha256 = "1d9w7kd3h3632qmwb44943lxdafjn3ii8ha9wdvqri3b8fjfn7sa"; }
     { name = "3160-ucode-23.11.10.0"; sha256 = "0ijpgfzz8735rsbkc6mvk3w7f1v9rr9dgy1l79vzmzc1vh2zpbdm"; }
-    # Bad archive, assumed a problem with the served blob
-    #{ name = "7265-ucode-23.10.10.0"; sha256 = "1v2q9b3dah1p4mnmvv1blvi9awjcbiafmjyll5hi1hr6p28xwhva"; }
+    { name = "7265-ucode-23.11.10.0"; sha256 = "1az8nq6z1ns1220309wp8jq1sc5flz2ac5k41pgj50503h54rlvi"; }
   ];
 
   fetchPackage =
