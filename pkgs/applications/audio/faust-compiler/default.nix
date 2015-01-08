@@ -1,13 +1,22 @@
-{ fetchurl, stdenv, unzip, pkgconfig, makeWrapper, libsndfile, libmicrohttpd, vim }:
+{ fetchgit, stdenv, unzip, pkgconfig, makeWrapper, libsndfile, libmicrohttpd, vim }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.9.67";
+  version = "8-1-2015";
   name = "faust-compiler-${version}";
-  src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/faudiostream/faust-${version}.zip";
-    sha256 = "068vl9536zn0j4pknwfcchzi90rx5pk64wbcbd67z32w0csx8xm1";
+  src = fetchgit {
+    url = git://git.code.sf.net/p/faudiostream/code;
+    rev = "4db76fdc02b6aec8d15a5af77fcd5283abe963ce";
+    sha256 = "f1ac92092ee173e4bcf6b2cb1ac385a7c390fb362a578a403b2b6edd5dc7d5d0";
   };
+
+  # this version has a bug that manifests when doing faust2jack:
+  /*version = "0.9.67";*/
+  /*name = "faust-compiler-${version}";*/
+  /*src = fetchurl {*/
+    /*url = "http://downloads.sourceforge.net/project/faudiostream/faust-${version}.zip";*/
+    /*sha256 = "068vl9536zn0j4pknwfcchzi90rx5pk64wbcbd67z32w0csx8xm1";*/
+  /*};*/
 
   buildInputs = [ unzip pkgconfig makeWrapper libsndfile libmicrohttpd vim];
 
