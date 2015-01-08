@@ -78,4 +78,12 @@ let self = with self; {
 
     buildInputs = [ pkgs.m4 ];
   };
+
+  pthreads = assert pkgs.config.php.zts or false; buildPecl {
+    #pthreads requires a build of PHP with ZTS (Zend Thread Safety) enabled
+    #--enable-maintainer-zts or --enable-zts on Windows
+    name = "pthreads-2.0.10";
+    sha256 = "1xlcb1b1g10jd0xhm3c01a06yqpb5qln47pd1k522138324qvpwb";
+  };
+
 }; in self
