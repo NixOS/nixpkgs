@@ -21,7 +21,7 @@
     then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
     then "x86_64-apple-darwin"
-    else abort "no snapshot to bootstrap for this platform (missing target triple";
+    else abort "no snapshot to bootstrap for this platform (missing target triple)";
 
   meta = with stdenv.lib; {
     homepage = http://www.rust-lang.org/;
