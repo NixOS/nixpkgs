@@ -5852,7 +5852,7 @@ let
     extraOnly = true;
   };
 
-  libfprint = callPackage ../development/libraries/libfprint { };
+  libfprint = callPackage ../development/libraries/libfprint/master.nix { };
 
   libgadu = callPackage ../development/libraries/libgadu { };
 
