@@ -2112,6 +2112,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
+  psqueues = callPackage ../development/libraries/haskell/psqueues {};
+
   publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
 
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
@@ -2331,6 +2333,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
 
   skein = callPackage ../development/libraries/haskell/skein {};
+
+  slackApi = callPackage ../development/libraries/haskell/slack-api {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
