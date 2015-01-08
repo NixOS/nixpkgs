@@ -90,6 +90,12 @@ stdenv.mkDerivation rec {
        --replace XXX_PAXFLAGS_XXX ${paxflags}
     substituteInPlace jdk/make/common/Program.gmk  \
        --replace XXX_PAXFLAGS_XXX ${paxflags}
+
+    # Real ugly hack until we can update openjdk. Without this openjdk fails with:
+    #   Error: time is more than 10 years from present: 1104530400000
+    # See:
+    #   http://permalink.gmane.org/gmane.os.netbsd.devel.pkgsrc.user/20888
+    sed -i 's|TR=TRL;2004-12-31-22-00-00;TRY|TR=TRY|' ./jdk/src/share/classes/java/util/CurrencyData.properties
   '';
 
   installPhase = ''
