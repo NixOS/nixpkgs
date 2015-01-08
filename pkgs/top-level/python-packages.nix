@@ -7213,6 +7213,10 @@ let
       sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
     };
 
+    preConfigure = ''
+      patchShebangs .
+    '';
+
     buildInputs = [
       self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio
     ];
@@ -7581,6 +7585,7 @@ let
     propagatedBuildInputs = with self; [ pkgs.parted ];
 
     checkPhase = ''
+      patchShebangs Makefile
       make test PYTHON=${python.executable}
     '';
 

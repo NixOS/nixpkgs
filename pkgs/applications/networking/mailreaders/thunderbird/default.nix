@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
 
   configurePhase = ''
+    patchShebangs .
+
     echo '${stdenv.lib.concatMapStrings (s : "ac_add_options ${s}\n") configureFlags}' > .mozconfig
     echo "ac_add_options --prefix='$out'" >> .mozconfig
     echo "mk_add_options MOZ_MAKE_FLAGS='-j$NIX_BUILD_CORES'" >> .mozconfig

@@ -103,6 +103,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ yasm python3 ];
 
+  postConfigure = ''
+    patchShebangs TOOLS
+  '';
+
   configureFlags = with stdenv.lib;
     ''
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}

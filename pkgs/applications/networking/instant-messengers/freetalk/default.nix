@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
+    patchShebangs .
     ./autogen.sh
   '';
 

@@ -12,6 +12,7 @@ agda.mkDerivation (self: rec {
 
   sourceDirectories = [ "./." ];
   buildPhase = ''
+    patchShebangs find-deps.sh
     make
   '';
 

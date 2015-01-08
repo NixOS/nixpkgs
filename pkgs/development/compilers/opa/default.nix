@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   codeGeneratorPaths = "${ocamlPackages.ocaml}/bin:${gcc}/bin:${binutils}/bin:${gnumake}/bin:${nodejs}/bin";
 
   preConfigure = ''
+    patchShebangs .
     (
     cat ./compiler/buildinfos/buildInfos.ml.pre
     ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt 

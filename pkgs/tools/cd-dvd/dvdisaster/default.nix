@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "e9787dea39aeafa38b26604752561bc895083c17b588489d857ac05c58be196b";
   };
 
+  postPatch = ''
+    patchShebangs ./
+  '';
+
   buildInputs = [
     pkgconfig which gettext intltool
     glib gtk2

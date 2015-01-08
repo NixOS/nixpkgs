@@ -9,6 +9,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ gmp libantlr3c boost ];
 
+  preConfigure = "patchShebangs ./src/";
+
   doChecks = true;
 
   meta = with stdenv.lib; {

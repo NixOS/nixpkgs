@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "09c5gjhcz97ghfrv9zkgfb1wckvmqnhbzga0xidbm1ir7640di8l";
   };
 
+  preConfigure = "
+    patchShebangs ./configure
+    patchShebangs ./do_install
+  ";
+
   buildInputs = [ curl ];
   
   meta = with stdenv.lib; {

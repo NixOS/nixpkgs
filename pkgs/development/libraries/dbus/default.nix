@@ -47,6 +47,7 @@ let
     buildInputs = [ autoconf automake libtool ]; # ToDo: optional selinux?
 
     preConfigure = ''
+      patchShebangs .
       substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
       autoreconf -fi
     '';

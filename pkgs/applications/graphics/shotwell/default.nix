@@ -30,6 +30,10 @@ in stdenv.mkDerivation rec {
   
   configureFlags = [ "--disable-gsettings-convert-install" ];
   
+  preConfigure = ''
+    patchShebangs .
+  '';
+
   postInstall = ''
     mkdir -p $out/share/gsettings-schemas/$name
     mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/

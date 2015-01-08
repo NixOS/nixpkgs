@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses vala libxml2 ];
 
+  preConfigure = "patchShebangs .";
+
   configureFlags = [ "--enable-introspection" ];
 
   enableParallelBuilding = true;

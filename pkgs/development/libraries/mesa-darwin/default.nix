@@ -41,6 +41,8 @@ let
       ./patches/patch-src-mapi-vgapi-Makefile.diff
     ];
 
+    postPatch = "patchShebangs .";
+
     configurePhase = ":";
 
     makeFlags = "INSTALL_DIR=\${out} CC=cc CXX=c++";

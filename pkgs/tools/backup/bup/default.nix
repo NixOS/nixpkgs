@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
   patchPhase = ''
+    patchShebangs .
     substituteInPlace Makefile --replace "-Werror" ""
     substituteInPlace Makefile --replace "./format-subst.pl" "perl ./format-subst.pl"
   '' + optionalString par2Support ''

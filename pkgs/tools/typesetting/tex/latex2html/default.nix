@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tex perl ghostscript netpbm ];
 
   preConfigure = ''
+    patchShebangs .
     sed -i -e "s|#! /bin/cat|#! $(type -p cat)|" configure
     configureFlags="--with-texpath=$out/share/texmf-nix";
   '';

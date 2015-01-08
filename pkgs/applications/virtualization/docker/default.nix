@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   buildPhase = ''
+    patchShebangs ./hack
     export AUTO_GOPATH=1
     export DOCKER_GITCOMMIT="c78088f"
     ./hack/make.sh dynbinary

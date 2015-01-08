@@ -32,6 +32,7 @@ let
       ];
       postPatch = ''
         export wineDir=$(pwd)
+        patchShebangs $wineDir/tools/
 	chmod u+w $wineDir/../git-export/debian/tools/
         patchShebangs $wineDir/../git-export/debian/tools/
         chmod -R +rwx ../git-export/

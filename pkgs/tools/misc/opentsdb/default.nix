@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     mkdir build
     cd build
     ../configure --prefix=$out
+    patchShebangs ../build-aux/
   '';
 
   installPhase = ''

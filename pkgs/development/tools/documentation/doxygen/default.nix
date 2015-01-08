@@ -24,7 +24,9 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
 
   preConfigure =
-    stdenv.lib.optionalString (qt4 != null)
+    ''
+      patchShebangs .
+    '' + stdenv.lib.optionalString (qt4 != null)
     ''
       echo "using QTDIR=${qt4}..."
       export QTDIR=${qt4}

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  preBuild = "patchShebangs .";
+
   buildInputs = [ alsaLib help2man ];
 
   configureFlags = [

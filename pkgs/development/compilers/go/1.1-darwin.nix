@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     fi
     cd go
 
+    patchShebangs ./ # replace /bin/bash
     rm src/pkg/net/{multicast_test.go,parse_test.go,port_test.go}
     # The os test wants to read files in an existing path. Just it don't be /usr/bin.
     sed -i 's,/usr/bin,'"`pwd`", src/pkg/os/os_test.go

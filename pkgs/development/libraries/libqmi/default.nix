@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "03gf221yjcdzvnl4v2adwpc6cyg5mlbccn20s00fp5bgvmq81pgs";
   };
 
+  preBuild = ''
+    patchShebangs .
+  '';
+
   buildInputs = [ pkgconfig glib python ];
 
   meta = with stdenv.lib; {

@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     makeFlags="PREFIX=$out"
   '';
 
-  postBuild=''
+  patchPhase=''
     tar -xf testsuite.tar
+    patchShebangs .
   '';
 
   doCheck = true;

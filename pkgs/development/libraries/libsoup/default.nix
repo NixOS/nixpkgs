@@ -14,6 +14,10 @@ stdenv.mkDerivation {
     sha256 = "ea34dd64fe44343445daf6dd690d0691e9d973468de44878da97371c16d89784";
   };
 
+  patchPhase = ''
+    patchShebangs libsoup/
+  '';
+
   buildInputs = libintlOrEmpty ++ [ intltool python ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]

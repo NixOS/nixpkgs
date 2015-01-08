@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
     ( map (var: ''-DPACKAGE_${var}_DIR=\""${builtins.getAttr var foolVars}"\"'')
         (builtins.attrNames foolVars) );
 
-  preConfigure = stdenv.lib.optionalString useSystemd /* bogus chroot detection */ ''
+  preConfigure = ''
+    patchShebangs .
+  '' + stdenv.lib.optionalString useSystemd /* bogus chroot detection */ ''
     sed '/libsystemd-login autoconfigured, but system does not appear to use systemd/s/.*/:/' -i configure
   ''
     # ‘libpolkit-agent-1.so’ should call the setuid wrapper on

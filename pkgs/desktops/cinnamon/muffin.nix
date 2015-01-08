@@ -25,6 +25,9 @@ stdenv.mkDerivation {
     clutter cogl zenity python
     gnome_doc_utils makeWrapper];
 
+  preBuild = "patchShebangs ./scripts";
+
+
   postFixup  = ''
 
     for f in "$out/bin/"*; do

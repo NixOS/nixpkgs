@@ -1357,6 +1357,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/S/SC/SCHWIGON/class-methodmaker/Class-MethodMaker-2.21.tar.gz;
       sha256 = "0gca1cjy2k0mrpfnbyzm5islzfayqfvg3zzlrlm7n60p0cb48y7w";
     };
+    preConfigure = "patchShebangs .";
     meta = {
       description = "A module for creating generic methods";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

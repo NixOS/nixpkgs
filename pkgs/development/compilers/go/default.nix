@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     fi
     cd go
 
+    patchShebangs ./ # replace /bin/bash
     # !!! substituteInPlace does not seems to be effective.
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c

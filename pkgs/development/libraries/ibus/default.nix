@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
+    patchShebangs ./scripts
     substituteInPlace data/dconf/Makefile --replace "dconf update" "echo"
   '';
 

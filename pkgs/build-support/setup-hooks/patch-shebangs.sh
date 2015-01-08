@@ -7,12 +7,6 @@
 
 fixupOutputHooks+=('if [ -z "$dontPatchShebangs" ]; then patchShebangs "$prefix"; fi')
 
-preConfigurePhases+=" patchShebangsPhase"
-
-patchShebangsPhase() {
-    if [ -z "$dontPatchSourceShebangs" ]; then patchShebangs "."; fi
-}
-
 patchShebangs() {
     local dir="$1"
     header "patching script interpreter paths in $dir"

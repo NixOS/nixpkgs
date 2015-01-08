@@ -854,12 +854,6 @@ following:
   </varlistentry>
 
   <varlistentry>
-    <term><varname>dontPatchSourceShebangs</varname></term>
-    <listitem><para>Same as <varname>dontPatchShebangs</varname>, but applied
-    to the source code before configurePhase.</para></listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term><varname>forceShare</varname></term>
     <listitem><para>The list of directories that must be moved from
     <filename>$out</filename> to <filename>$out/share</filename>.

@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ go ];
 
   buildPhase = ''
+    patchShebangs build
     ./build
   '';
 

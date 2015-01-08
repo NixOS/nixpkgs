@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ iyzsong koral ];
   };
 
+  preConfigure = "patchShebangs Tools";
+
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
     sha256 = "1f9qm5g1mbjm2hrnlzymas99piws4h4y3yxz4p6f6gavnsvfjwji";

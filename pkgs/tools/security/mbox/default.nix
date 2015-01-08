@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   checkPhase = ''
     rm tests/test-*vim.sh tests/test-pip.sh
 
+    patchShebangs ./; dontPatchShebags=1
     sed -i 's|^/bin/||' tests/test-fileops.sh
 
     ./testall.sh

@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "08x7rigq5pa1pfpl30qp353hbdkpadr1zc49slpczhsn0sg36pd6";
   };
 
+  patchPhase = ''patchShebangs .'';
   buildInputs = [ perl zlib ];
 
   makeFlags = "CFLAGS=-fPIC";

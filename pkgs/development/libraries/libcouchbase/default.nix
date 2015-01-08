@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
+    patchShebangs ./config/
     ./config/autorun.sh
   '';
 

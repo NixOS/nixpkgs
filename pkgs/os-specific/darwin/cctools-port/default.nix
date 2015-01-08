@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+    patchShebangs tools
     sed -i -e 's/which/type -P/' tools/*.sh
     sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' cctools/autogen.sh
 

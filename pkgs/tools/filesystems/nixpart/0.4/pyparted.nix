@@ -29,6 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ parted ];
 
   checkPhase = ''
+    patchShebangs Makefile
     make test PYTHON=${python.executable}
   '';
 

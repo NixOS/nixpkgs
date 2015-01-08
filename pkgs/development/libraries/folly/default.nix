@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook python boost ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/folly";
+  preBuild = ''
+    patchShebangs build
+  '';
 
   configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
 

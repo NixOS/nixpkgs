@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre zlib ];
 
   postPatch = ''
+    patchShebangs qpdf/fix-qdf
   '';
 
   preCheck = ''
+    patchShebangs qtest/bin/qtest-driver
   '';
 
   doCheck = true;

@@ -97,6 +97,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     python3 ${waf} configure --prefix=$out ${lib.optionalString vaapiSupport "--enable-vaapi"}
+    patchShebangs TOOLS
   '';
 
   buildPhase = ''

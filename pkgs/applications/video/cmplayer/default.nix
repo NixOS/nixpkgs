@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
                 ++ optional cddaSupport libcdda
                 ;
 
+  preConfigure = ''
+    patchShebangs ./configure
+    patchShebangs src/mpv/waf
+  '';
 
   configureFlags = with stdenv.lib;
                    [ "--qmake=qmake" ]
@@ -62,6 +66,8 @@ stdenv.mkDerivation rec {
                    ++ optional pulseSupport "--enable-pulseaudio"
                    ++ optional cddaSupport "--enable-cdda"
                    ;
+
+  preBuild = "patchShebangs ./build-mpv";
 
   nativeBuildInputs = [ pkgconfig python2 perl ];
 

@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
     perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
   ];
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   doCheck = stdenv.system == "x86_64-linux";
 
   checkPhase = ''

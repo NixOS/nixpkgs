@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
+    patchShebangs .;
   '';
 
   preConfigure =  ''

@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional doCheck ./gpt-unicode-test-fix.patch;
 
   postPatch = stdenv.lib.optionalString doCheck ''
+    patchShebangs tests
   '';
 
   buildInputs = [ libuuid ]

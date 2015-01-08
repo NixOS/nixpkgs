@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gnome3.libgee libxklavier ];
 
+  preBuild = ''
+    patchShebangs .
+  '';
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
   };
