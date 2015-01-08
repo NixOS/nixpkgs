@@ -10,6 +10,10 @@ cfge = config.environment;
 
 cfg = config.programs.fish;
 
+fishAliases = concatStringsSep "\n" (
+  mapAttrsFlatten (k: v: "alias ${k}='${v}'") cfg.shellAliases
+);
+
 in
 
 {
@@ -87,6 +91,8 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.promptInit}
+
+        ${fishAliases}
       '';
 
     };
