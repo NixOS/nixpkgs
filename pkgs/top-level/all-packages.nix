@@ -705,6 +705,8 @@ let
 
   dlx = callPackage ../misc/emulators/dlx { };
 
+  dtrx = callPackage ../tools/compression/dtrx { };
+
   duperemove = callPackage ../tools/filesystems/duperemove {
     linuxHeaders = linuxHeaders_3_14;
   };
