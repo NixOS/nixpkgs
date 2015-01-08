@@ -81,6 +81,15 @@ stdenv.mkDerivation rec {
 
   configurePhase = "true";
 
+  preBuild = ''
+    # Real ugly hack until we can update openjdk. Without this openjdk fails with:
+    #   Error: time is more than 10 years from present: 1104530400000
+    # See:
+    #   http://permalink.gmane.org/gmane.os.netbsd.devel.pkgsrc.user/20888
+
+    sed -i 's|TR=TRL;2004-12-31-22-00-00;TRY|TR=TRY|' ./jdk/src/share/classes/java/util/CurrencyData.properties
+  '';
+
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
