@@ -4194,11 +4194,11 @@ in
     propagatedBuildInputs = [  ];
     configurePhase = ''
       sed -i "setup.py" \
-          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
-              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
-              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
+          -e 's|^FREETYPE_ROOT\s*=.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT\s*=.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT\s*=.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
+              s|^LCMS_ROOT\s*=.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
+              s|^TIFF_ROOT\s*=.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
               s|^TCL_ROOT\s*=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;
               s|/Library/Frameworks||g ;
               s|/System/Library/Frameworks||g ;'
