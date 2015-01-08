@@ -4984,6 +4984,7 @@ let
   audiofile = callPackage ../development/libraries/audiofile { };
 
   babl = callPackage ../development/libraries/babl { };
+  babl_git = callPackage ../development/libraries/babl/git.nix { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
@@ -5294,6 +5295,9 @@ let
   gecode = callPackage ../development/libraries/gecode { };
 
   gegl = callPackage ../development/libraries/gegl { };
+  gegl_git = callPackage ../development/libraries/gegl/git.nix {
+    babl = babl_git;
+  };
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
@@ -9904,6 +9908,16 @@ let
     webkit = null;
     lcms = lcms2;
     wrapPython = pythonPackages.wrapPython;
+  };
+
+  gimp_git = callPackage ../applications/graphics/gimp/git.nix {
+    inherit (gnome) libart_lgpl;
+    inherit (gnome3) gexiv2;
+    webkit = null;
+    lcms = lcms2;
+    wrapPython = pythonPackages.wrapPython;
+    babl = babl_git;
+    gegl = gegl_git;
   };
 
   gimp = gimp_2_8;
