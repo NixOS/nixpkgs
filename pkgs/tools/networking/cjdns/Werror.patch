@@ -1,0 +1,12 @@
+diff --git a/node_build/make.js b/node_build/make.js
+index 2c9cd18..84749c2 100644
+--- a/node_build/make.js
++++ b/node_build/make.js
+@@ -51,7 +51,6 @@ Builder.configure({
+         '-std=c99',
+         '-Wall',
+         '-Wextra',
+-        '-Werror',
+         '-Wno-pointer-sign',
+         '-pedantic',
+         '-D', builder.config.systemName + '=1',

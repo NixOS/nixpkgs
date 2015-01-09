@@ -1,0 +1,12 @@
+diff -Naur gnupg-2.1.0-orig/common/Makefile.am gnupg-2.1.0/common/Makefile.am
+--- gnupg-2.1.0-orig/common/Makefile.am	2014-10-11 13:45:14.000000000 -0400
++++ gnupg-2.1.0/common/Makefile.am	2014-11-18 14:21:31.000000000 -0500
+@@ -191,7 +191,7 @@
+ 
+ t_common_cflags = $(KSBA_CFLAGS) $(LIBGCRYPT_CFLAGS) \
+                   $(LIBASSUAN_CFLAGS) $(GPG_ERROR_CFLAGS)
+-t_common_ldadd = libcommon.a ../gl/libgnu.a \
++t_common_ldadd = libcommon.a libcommon_a-init.o ../gl/libgnu.a \
+                  $(LIBGCRYPT_LIBS) $(LIBASSUAN_LIBS) $(GPG_ERROR_LIBS) \
+ 	         $(LIBINTL) $(LIBICONV)
+ 

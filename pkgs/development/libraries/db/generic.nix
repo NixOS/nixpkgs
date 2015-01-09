@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   patches = extraPatches;
 
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    patch src/dbinc/atomic.h < ${./osx.patch}
+  '';
+
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
     (if compat185 then "--enable-compat185" else "--disable-compat185")

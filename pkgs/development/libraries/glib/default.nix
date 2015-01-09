@@ -71,11 +71,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
 
-  preBuild = optionalString stdenv.isDarwin
-    ''
-      export MACOSX_DEPLOYMENT_TARGET=
-    '';
-
   enableParallelBuilding = true;
   DETERMINISTIC_BUILD = 1;
 

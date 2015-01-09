@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     gettext ncurses pkgconfig luajit ruby tcl perl python
   ];
 
-  patches = [ ./macvim.patch ];
+  patches = [ ./macvim.patch ./ft-nix-support.patch ];
 
   postPatch = ''
     substituteInPlace src/MacVim/mvim --replace "# VIM_APP_DIR=/Applications" "VIM_APP_DIR=$out/Applications"

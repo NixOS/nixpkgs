@@ -17,21 +17,3 @@ diff -ru -x '*~' imake-1.0.3-orig/imake.c imake-1.0.3/imake.c
    /* what's the definitive way to tell what any particular distribution is? */
  
    fprintf (inFile, "%s\n", "#define DefaultLinuxDistribution LinuxUnknown");
-@@ -1328,6 +1330,7 @@
- static boolean
- get_gcc(char *cmd)
- {
-+#if 0
-   struct stat sb;
-     static char* gcc_path[] = {
- #if defined(linux) || \
-@@ -1376,6 +1379,9 @@
- 	}
-       }
-     return FALSE;
-+#endif
-+    strcpy (cmd, "gcc");
-+    return TRUE;
- }
- 
- #if defined CROSSCOMPILE || !defined __UNIXOS2__

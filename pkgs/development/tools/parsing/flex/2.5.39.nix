@@ -12,9 +12,8 @@ stdenv.mkDerivation {
 
   propagatedNativeBuildInputs = [ m4 ];
 
-  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i Makefile -e 's/-no-undefined//;'
-  '';
+  NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
+    "-undefined dynamic_lookup";
 
   crossAttrs = {
     preConfigure = ''

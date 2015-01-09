@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e's/localhost/127.0.0.1/g'
        done
+
+       ${stdenv.lib.optionalString stdenv.isDarwin
+          "export LIBS=\"-liconv -lintl\""}
     '';
 
   nativeBuildInputs = [ gettext ];

@@ -28,7 +28,9 @@ let
 
     nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty ++ libintlOrEmpty;
 
-    cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
+    cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON"
+      # otherwise, cmake finds /Library/Frameworks/freetype.framework
+      + stdenv.lib.optionalString stdenv.isDarwin " -DCMAKE_FIND_FRAMEWORK=NEVER";
 
     patches = [ ./datadir_env.patch ./poppler-glib.patch ];
 

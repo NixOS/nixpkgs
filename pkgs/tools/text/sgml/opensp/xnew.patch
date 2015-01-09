@@ -1,0 +1,12 @@
+diff --git a/include/xnew.h b/include/xnew.h
+index 0db8999..e139f1b 100644
+--- a/include/xnew.h
++++ b/include/xnew.h
+@@ -1,6 +1,7 @@
+ #ifndef xnew_INCLUDED
+ #define xnew_INCLUDED 1
+ 
++#define SP_NEW_H_MISSING
+ #ifdef SP_NEW_H_MISSING
+ 
+ typedef void (*VFP)();
