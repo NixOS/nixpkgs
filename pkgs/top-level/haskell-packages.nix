@@ -570,7 +570,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   csv = callPackage ../development/libraries/haskell/csv {};
 
-  csv-conduit = callPackage ../development/libraries/haskell/csv-conduit {};
+  csvConduit = callPackage ../development/libraries/haskell/csv-conduit {};
 
   cssText = callPackage ../development/libraries/haskell/css-text {};
 
@@ -2161,7 +2161,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   reserve = callPackage ../development/libraries/haskell/reserve {};
 
-  reverse-apply = callPackage ../development/libraries/haskell/reverse-apply {};
+  reverseApply = callPackage ../development/libraries/haskell/reverse-apply {};
 
   rvar = callPackage ../development/libraries/haskell/rvar {};
 
@@ -2316,7 +2316,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   shelly = callPackage ../development/libraries/haskell/shelly {};
 
-  shell-conduit = callPackage ../development/libraries/haskell/shell-conduit {};
+  shellConduit = callPackage ../development/libraries/haskell/shell-conduit {};
 
   simpleConduit = callPackage ../development/libraries/haskell/simple-conduit {};
 
@@ -3104,7 +3104,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   idris = callPackage ../development/compilers/idris/wrapper.nix {};
 
-  nc-indicators = callPackage ../applications/misc/nc-indicators {};
+  ncIndicators = callPackage ../applications/misc/nc-indicators {};
 
   sloane = callPackage ../applications/science/math/sloane {};
 
