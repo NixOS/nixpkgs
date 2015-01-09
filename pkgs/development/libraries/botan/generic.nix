@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "Botan-${version}.tgz";
-    url = "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tbz";
+    url = "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz";
     inherit sha256;
   };
 
