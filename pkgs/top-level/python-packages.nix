@@ -7306,6 +7306,109 @@ let
     };
   };
 
+  mmpython = buildPythonPackage rec {
+    version = "0.4.10";
+    name = "mmpython-${version}";
+
+    src = pkgs.fetchurl {
+      url = http://sourceforge.net/projects/mmpython/files/latest/download;
+      sha256 = "1b7qfad3shgakj37gcj1b9h78j1hxlz6wp9k7h76pb4sq4bfyihy";
+      name = "${name}.tar.gz";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Media Meta Data retrieval framework";
+      homepage = http://sourceforge.net/projects/mmpython/;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.DamienCassou ];
+    };
+  };
+
+  kaa-base = buildPythonPackage rec {
+    version = "0.99.2dev-384-2b73caca";
+    name = "kaa-base-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kaa-base/kaa-base-0.99.2dev-384-2b73caca.tar.gz";
+      sha256 = "0k3zzz84wzz9q1fl3vvqr2ys96z9pcf4viq9q6s2a63zaysmcfd2";
+    };
+
+    doCheck = false;
+
+    # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+
+      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
+
+      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
+      if [ -e "$eapth" ]; then
+          mv "$eapth" $(dirname "$eapth")/${name}.pth
+      fi
+
+      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
+
+      runHook postInstall
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Generic application framework, providing the foundation for other modules";
+      homepage = https://github.com/freevo/kaa-base;
+      license = licenses.lgpl21;
+      maintainers = [ maintainers.DamienCassou ];
+    };
+  };
+
+  kaa-metadata = buildPythonPackage rec {
+    version = "0.7.8dev-r4569-20111003";
+    name = "kaa-metadata-${version}";
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.libdvdread ];
+
+    # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+
+      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+      ${python}/bin/${python.executable} setup.py install \
+        --install-lib=$out/lib/${python.libPrefix}/site-packages \
+        --prefix="$out"
+
+      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
+      if [ -e "$eapth" ]; then
+          mv "$eapth" $(dirname "$eapth")/${name}.pth
+      fi
+
+      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
+
+      runHook postInstall
+    '';
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kaa-metadata/kaa-metadata-0.7.8dev-r4569-20111003.tar.gz";
+      sha256 = "0bkbzfgxvmby8lvzkqjp86anxvv3vjd9nksv2g4l7shsk1n7y27a";
+    };
+
+    propagatedBuildInputs = with self; [ kaa-base ];
+
+    meta = with stdenv.lib; {
+      description = "Python library for parsing media metadata, which can extract metadata (e.g., such as id3 tags) from a wide range of media files";
+      homepage = https://github.com/freevo/kaa-metadata;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.DamienCassou ];
+    };
+  };
 
   pyinotify = pkgs.stdenv.mkDerivation rec {
     name = "python-pyinotify-${version}";
@@ -9526,6 +9629,65 @@ let
     };
   });
 
+  subdownloader = buildPythonPackage rec {
+    version = "2.0.18";
+    name = "subdownloader-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://launchpad.net/subdownloader/trunk/2.0.18/+download/subdownloader_2.0.18.orig.tar.gz";
+      sha256 = "0manlfdpb585niw23ibb8n21mindd1bazp0pnxvmdjrp2mnw97ig";
+    };
+
+    propagatedBuildInputs = with self; [ mmpython pyqt4 ];
+
+    setup = ''
+      import os
+      import sys
+
+      try:
+          if os.environ.get("NO_SETUPTOOLS"):
+              raise ImportError()
+          from setuptools import setup, Extension
+          SETUPTOOLS = True
+      except ImportError:
+          SETUPTOOLS = False
+          # Use distutils.core as a fallback.
+          # We won t be able to build the Wheel file on Windows.
+          from distutils.core import setup, Extension
+
+      with open("README") as fp:
+          long_description = fp.read()
+
+      requirements = [ ]
+
+      install_options = {
+          "name": "subdownloader",
+          "version": "2.0.18",
+          "description": "Tool for automatic download/upload subtitles for videofiles using fast hashing",
+          "long_description": long_description,
+          "url": "http://www.subdownloader.net",
+
+          "scripts": ["run.py"],
+          "packages": ["cli", "FileManagement", "gui", "languages", "modules"],
+
+      }
+      if SETUPTOOLS:
+          install_options["install_requires"] = requirements
+
+      setup(**install_options)
+    '';
+
+    postUnpack = ''
+      echo '${setup}' > $sourceRoot/setup.py
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Tool for automatic download/upload subtitles for videofiles using fast hashing";
+      homepage = http://www.subdownloader.net;
+      license = licenses.gpl3;
+      maintainers = [ maintainers.DamienCassou ];
+    };
+  };
 
   subunit = buildPythonPackage rec {
     name = "subunit-${version}";
