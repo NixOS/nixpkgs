@@ -13042,6 +13042,8 @@ let
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
+  tup = callPackage ../development/tools/build-managers/tup { };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
