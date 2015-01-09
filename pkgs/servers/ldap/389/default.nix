@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap, db, cyrus_sasl
-, svrcore, icu, net_snmp, krb5, pcre
+, svrcore, icu, net_snmp, kerberos, pcre
 }:
 
 stdenv.mkDerivation rec {
@@ -12,17 +12,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net_snmp krb5 pcre
+    net_snmp kerberos pcre
   ];
+
+  patches = [ ./no-etc.patch ];
 
   configureFlags = [
     "--sysconfdir=/etc"
+    "--localstatedir=/var"
     "--with-openldap=${openldap}"
     "--with-db=${db}"
     "--with-sasl=${cyrus_sasl}"
     "--with-netsnmp=${net_snmp}"
   ];
   
+  preInstall = ''
+    # The makefile doesn't create this directory for whatever reason
+    mkdir -p $out/lib/dirsrv
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://directory.fedoraproject.org/;
     description = "enterprise-class Open Source LDAP server for Linux";
