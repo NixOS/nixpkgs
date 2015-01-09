@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Fiat
-    cp -pR src $COQLIB/user-contrib/Fiat
+    cp -pR src/* $COQLIB/user-contrib/Fiat
   '';
 
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
