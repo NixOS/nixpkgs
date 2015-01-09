@@ -61,6 +61,9 @@ self: super: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
 
+  # bos/attoparsec#92
+  attoparsec = overrideCabal super.attoparsec (drv: { doCheck = false; });
+
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
   syb = overrideCabal super.syb (drv: { doCheck = false; });
