@@ -3880,6 +3880,11 @@ let
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
+
+    uri = callPackage ../development/ocaml-modules/uri {
+      sexplib = ocaml_sexplib;
+    };
+
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
 
