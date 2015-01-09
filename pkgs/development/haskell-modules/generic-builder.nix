@@ -21,6 +21,7 @@
 , propagatedUserEnvPkgs ? []
 , testDepends ? []
 , doCheck ? stdenv.lib.versionOlder "7.4" ghc.version, testTarget ? ""
+, doHoogle ? true
 , jailbreak ? false
 , hyperlinkSource ? true
 , enableLibraryProfiling ? false
@@ -161,7 +162,7 @@ stdenv.mkDerivation {
     runHook preBuild
     ./Setup build
     ${optionalString (!noHaddock && hasActiveLibrary) ''
-      ./Setup haddock --html --hoogle ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
+      ./Setup haddock --html ${optionalString doHoogle "--hoogle"} ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
     ''}
     runHook postBuild
   '';
