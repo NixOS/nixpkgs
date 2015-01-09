@@ -40,6 +40,13 @@ stdenv.lib.addPassthru (buildEnv {
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
+    if test -L "$out/bin"; then
+      binTarget="$(readlink -f "$out/bin")"
+      rm "$out/bin"
+      cp -r "$binTarget" "$out/bin"
+      chmod u+w "$out/bin"
+    fi
+
     for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
       rm -f $out/bin/$prg
       makeWrapper ${ghc}/bin/$prg $out/bin/$prg         \
