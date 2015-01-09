@@ -6699,10 +6699,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetAddrIP = buildPerlPackage rec {
-    name = "NetAddr-IP-4.072";
+    name = "NetAddr-IP-4.075";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/${name}.tar.gz";
-      sha256 = "17gwhhbz25021w5k4ggp8j3plix5yixgb2vr1mj39fa0p3gafm09";
+      sha256 = "0fc8jvrcp42szscnn41sxz8z8qa4fr4dr9i9s067hvrhiyxpb0mb";
     };
   };
 
