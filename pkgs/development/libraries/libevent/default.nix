@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, use_openssl ? false, openssl }:
 
 let version = "2.0.21"; in
 stdenv.mkDerivation {
@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     url = "https://github.com/downloads/libevent/libevent/libevent-${version}-stable.tar.gz";
     sha256 = "1xblymln9vihdmf1aqkp8chwvnhpdch3786bh30bj75slnl31992";
   };
+
+  buildInputs = stdenv.lib.optionals use_openssl [openssl];
 
   patchPhase = ''
     substituteInPlace event_rpcgen.py \
