@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
   patches = [ ./missing-size_t.patch ]; # https://bugzilla.redhat.com/show_bug.cgi?id=906519
   patchFlags = "-p0";
 
+  configureFlags = [
+    "--with-openssl=${openssl}"
+  ];
+
   # Set this variable at build-time to make sure $out can be evaluated.
   preConfigure = ''
     configureFlagsArray=( --with-plugindir=$out/lib/sasl2
