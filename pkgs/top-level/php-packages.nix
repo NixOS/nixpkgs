@@ -86,4 +86,13 @@ let self = with self; {
     sha256 = "1xlcb1b1g10jd0xhm3c01a06yqpb5qln47pd1k522138324qvpwb";
   };
 
+  geoip = buildPecl {
+    name = "geoip-1.1.0";
+    sha256 = "1fcqpsvwba84gqqmwyb5x5xhkazprwkpsnn4sv2gfbsd4svxxil2";
+
+    configureFlags = [ "--with-geoip=${pkgs.geoip}" ];
+
+    buildInputs = [ pkgs.geoip ];
+  };
+
 }; in self
