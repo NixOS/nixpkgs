@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
+  doCheck = true;
 
   unpackPhase = ''
     mkdir fiat
@@ -21,15 +22,14 @@ stdenv.mkDerivation rec {
     tar xvzf ${src}
   '';
 
-  buildPhase = "make sources";
+  buildPhase = "make -j$NIX_BUILD_CORES sources";
+  checkPhase = "make -j$NIX_BUILD_CORES examples";
 
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Fiat
     cp -pR src/* $COQLIB/user-contrib/Fiat
   '';
-
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   meta = with stdenv.lib; {
     homepage = http://plv.csail.mit.edu/fiat/;
