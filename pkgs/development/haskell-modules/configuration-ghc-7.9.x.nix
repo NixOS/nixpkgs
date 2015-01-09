@@ -41,8 +41,11 @@ self: super: {
   old-locale = self.old-locale_1_0_0_7;
   old-time = self.old-time_1_1_0_3;
 
-  # We have transformers 4.x, so we can use the latest mtl.
+  # We have transformers 4.x
   mtl = self.mtl_2_2_1;
+  transformers-compat = overrideCabal super.transformers-compat (drv: {
+    configureFlags = [];
+  });
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
