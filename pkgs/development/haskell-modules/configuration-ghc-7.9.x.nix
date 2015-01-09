@@ -34,8 +34,9 @@ self: super: {
   # Cabal 1.20.x without jailbreak. Go figure. Let's use a sledgehammer.
   jailbreak-cabal = pkgs.haskellngPackages.jailbreak-cabal;
 
-  # haddock: internal error: expectJust getPackageDetails
-  mkDerivation = drv: super.mkDerivation (drv // { noHaddock = true; });
+  # GHC 7.10.x's Haddock binary cannot generate hoogle files.
+  # https://ghc.haskell.org/trac/ghc/ticket/9921
+  mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
 
   # These used to be a core packages in GHC 7.8.x.
   old-locale = self.old-locale_1_0_0_7;
