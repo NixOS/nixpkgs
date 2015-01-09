@@ -81,7 +81,7 @@ in
             # default buildInputs are just ghc, if more buildInputs are required
             # buildInputs can be extended by the client by using extraBuildInputs,
             # but often propagatedBuildInputs is preferable anyway
-            buildInputs = [ghc ghc.ghc.parent.Cabal_HEAD] ++ self.extraBuildInputs;
+            buildInputs = [ghc ghc.ghc.parent.Cabal_1_22_0_0] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
                                (optionals self.doCheck self.testDepends) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
