@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     "--with-capng"
     "--with-openldap=${openldap}"
     "--with-sqlite3=${sqlite}"
+    "--with-openssl-lib=${openssl}/lib"
     "--without-x"
   ];
 
@@ -40,10 +41,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig flex yacc readline openldap libcap_ng sqlite db ncurses
-    cyrus_sasl
+    cyrus_sasl openssl
   ];
-
-  propagatedBuildInputs = [ openssl ];
 
   meta = with stdenv.lib; {
     description = "an implementation of Kerberos 5 (and some more stuff) largely written in Sweden";
