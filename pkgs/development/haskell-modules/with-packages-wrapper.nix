@@ -33,8 +33,8 @@ let
   isHaskellPkg  = x: (x ? pname) && (x ? version);
 in
 if packages == [] then ghc else
-buildEnv {
-  name = "haskell-env-${ghc.name}";
+stdenv.lib.addPassthru (buildEnv {
+  inherit (ghc) name;
   paths = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages) ++ [ghc];
   inherit ignoreCollisions;
   postBuild = ''
@@ -76,4 +76,4 @@ buildEnv {
     $out/bin/ghc-pkg recache
     $out/bin/ghc-pkg check
   '';
-}
+}) { inherit (ghc) version; }
