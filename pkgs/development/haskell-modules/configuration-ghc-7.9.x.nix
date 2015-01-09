@@ -69,6 +69,9 @@ self: super: {
   # bos/attoparsec#92
   attoparsec = overrideCabal super.attoparsec (drv: { doCheck = false; });
 
+  # test suite hangs silently for at least 10 minutes
+  split = overrideCabal super.split (drv: { doCheck = false; });
+
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
   syb = overrideCabal super.syb (drv: { doCheck = false; });
