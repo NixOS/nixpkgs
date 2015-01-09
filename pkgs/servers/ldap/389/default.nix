@@ -1,9 +1,11 @@
 { stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap, db, cyrus_sasl
-, svrcore, icu, net_snmp, kerberos, pcre
+, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
 }:
-
+let
+  version = "1.3.3.5";
+in
 stdenv.mkDerivation rec {
-  name = "389-ds-base-1.3.3.5";
+  name = "389-ds-base-${version}";
 
   src = fetchurl {
     url = "http://directory.fedoraproject.org/binaries/${name}.tar.bz2";
@@ -13,9 +15,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig perl pam nspr nss openldap db cyrus_sasl svrcore icu
     net_snmp kerberos pcre
-  ];
+  ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
 
-  patches = [ ./no-etc.patch ];
+  # TODO: Fix bin/ds-logpipe.py, bin/logconv, bin/cl-dump
+
+  patches = [ ./no-etc.patch ./perl-path.patch ];
+
+  preConfigure = ''
+    # Create perl paths for library imports in perl scripts
+    PERLPATH=""
+    for P in $(echo $PERL5LIB | sed 's/:/ /g'); do
+      PERLPATH="$PERLPATH $(echo $P/*/*)"
+    done
+    export PERLPATH
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -30,6 +43,8 @@ stdenv.mkDerivation rec {
     # The makefile doesn't create this directory for whatever reason
     mkdir -p $out/lib/dirsrv
   '';
+
+  passthru.version = version;
 
   meta = with stdenv.lib; {
     homepage = https://directory.fedoraproject.org/;
