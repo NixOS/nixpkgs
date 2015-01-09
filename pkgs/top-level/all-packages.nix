@@ -12415,6 +12415,8 @@ let
 
     domains = callPackage ../development/coq-modules/domains {};
 
+    fiat = callPackage ../development/coq-modules/fiat {};
+
     flocq = callPackage ../development/coq-modules/flocq {};
 
     heq = callPackage ../development/coq-modules/heq {};
