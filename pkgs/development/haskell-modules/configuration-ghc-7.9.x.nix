@@ -30,6 +30,10 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # We cannot build jailbreak without Cabal 1.20.x, and we cannot build
+  # Cabal 1.20.x without jailbreak. Go figure. Let's use a sledgehammer.
+  jailbreak-cabal = pkgs.haskellngPackages.jailbreak-cabal;
+
   # haddock: internal error: expectJust getPackageDetails
   mkDerivation = drv: super.mkDerivation (drv // { noHaddock = true; });
 
