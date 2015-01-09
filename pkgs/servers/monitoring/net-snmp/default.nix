@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
       "--with-sys-contact=root@unknown"
       "--with-logfile=/var/log/net-snmpd.log"
       "--with-persistent-directory=/var/lib/net-snmp"
+      "--with-openssl=${openssl}"
     ];
 
-  buildInputs = [ autoreconfHook file perl unzip ];
-  propagatedBuildInputs = [ openssl ];
+  buildInputs = [ autoreconfHook file perl unzip openssl ];
 
   enableParallelBuilding = true;
 
