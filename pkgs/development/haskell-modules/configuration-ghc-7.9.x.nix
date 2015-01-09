@@ -38,6 +38,11 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9921
   mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
 
+  # haddock: No input file(s).
+  nats = overrideCabal super.nats (drv: {
+    noHaddock = true;
+  });
+
   # These used to be core packages in GHC 7.8.x.
   old-locale = self.old-locale_1_0_0_7;
   old-time = self.old-time_1_1_0_3;
@@ -67,4 +72,6 @@ self: super: {
   distributive = overrideCabal super.distributive (drv: { doCheck = false; });
   hackage-db = overrideCabal super.hackage-db (drv: { doCheck = false; });
   hsemail = overrideCabal super.hsemail (drv: { doCheck = false; });
+  http-types = overrideCabal super.http-types (drv: { doCheck = false; });
+  lens = overrideCabal super.lens (drv: { doCheck = false; });
 }
