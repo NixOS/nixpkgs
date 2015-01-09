@@ -6619,6 +6619,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MozillaLdap = buildPerlPackage {
+    name = "Mozilla-Ldap-1.5.3";
+    USE_OPENLDAP=1;
+    LDAPSDKDIR=pkgs.openldap;
+    src = fetchurl {
+      url = "ftp://ftp.mozilla.org/pub/mozilla.org/directory/perldap/releases/1.5.3/src/perl-mozldap-1.5.3.tar.gz";
+      sha256 = "0s0albdw0zvg3w37s7is7gddr4mqwicjxxsy400n1p96l7ipnw4x";
+    };
+    meta = {
+      description = "Mozilla's ldap client library.";
+      license = "unknown";
+    };
+  };
+
   MROCompat = buildPerlPackage {
     name = "MRO-Compat-0.12";
     src = fetchurl {
