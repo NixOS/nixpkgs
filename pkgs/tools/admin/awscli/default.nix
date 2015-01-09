@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, pythonPackages }:
+{ stdenv, fetchzip, pythonPackages, groff }:
 
 pythonPackages.buildPythonPackage rec {
   name = "awscli-${version}";
@@ -18,6 +18,7 @@ pythonPackages.buildPythonPackage rec {
     pythonPackages.docutils
     pythonPackages.rsa
     pythonPackages.pyasn1
+    groff
   ];
 
   meta = {
