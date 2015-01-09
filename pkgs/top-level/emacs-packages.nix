@@ -114,6 +114,29 @@ let self = _self // overrides;
     };
   };
 
+  apel = melpaBuild rec {
+    pname = "apel";
+    version = "10.8";
+    src = fetchFromGitHub {
+      owner  = "wanderlust";
+      repo   = pname;
+      rev    = "8402e59eadb580f59969114557b331b4d9364f95";
+      sha256 = "0sdxnf4b8rqs1cbjxh23wvxmj7ll3zddv8yfdgif6zmgyy8xhc9m";
+    };
+    files = [
+      "alist.el" "apel-ver.el" "broken.el" "calist.el"
+      "emu.el" "filename.el" "install.el" "inv-23.el" "invisible.el"
+      "mcharset.el" "mcs-20.el" "mcs-e20.el" "mule-caesar.el"
+      "path-util.el" "pccl-20.el" "pccl.el" "pces-20.el" "pces-e20.el"
+      "pces.el" "pcustom.el" "poe.el" "poem-e20.el" "poem-e20_3.el"
+      "poem.el" "product.el" "pym.el" "richtext.el" "static.el"
+    ];
+    meta = {
+      description = "A Portable Emacs Library";
+      license = gpl3Plus; # probably
+    };
+  };
+
   async = melpaBuild rec {
     pname   = "async";
     version = "1.2";
@@ -322,6 +345,22 @@ let self = _self // overrides;
       sha256 = "04k0518wfy72wpzsswmncnhd372fxa0r8nbfhmbyfmns8n7sr045";
     };
     meta = { licence = gpl3Plus; };
+  };
+
+  flim = melpaBuild rec {
+    pname = "flim";
+    version = "1.14.9"; # 20141216
+    src = fetchFromGitHub {
+      owner  = "wanderlust";
+      repo   = pname;
+      rev    = "488a4d70fb4ae57bdd30dc75c2d75579894e28a2";
+      sha256 = "178fhpbyffksr4v3m8jmx4rx2vqyz23qhbyvic5afabxi6lahjfs";
+    };
+    packageRequires = [ apel ];
+    meta = {
+      description = "Email message encoding library for Emacs";
+      license = gpl3Plus; # probably
+    };
   };
 
   flycheck-pos-tip = melpaBuild rec {
@@ -671,6 +710,22 @@ let self = _self // overrides;
     meta = { licence = gpl3Plus; };
   };
 
+  semi = melpaBuild rec {
+    pname = "semi";
+    version = "1.14.7"; # 20150203
+    src = fetchFromGitHub {
+      owner  = "wanderlust";
+      repo   = pname;
+      rev    = "9976269556c5bcc021e4edf1b0e1accd39929528";
+      sha256 = "1g1xg57pz4msd3f998af5gq28qhmvi410faygzspra6y6ygaka68";
+    };
+    packageRequires = [ apel flim ];
+    meta = {
+      description = "MIME library for Emacs";
+      license = gpl3Plus; # probably
+    };
+  };
+
   shorten = melpaBuild rec {
     pname   = "shorten";
     version = "1.5";
@@ -802,6 +857,27 @@ let self = _self // overrides;
       sha256 = "1v0chqj5jir4685jd8ahw86g9zdmi6xd05wmzhyw20rbk924fcqf";
     };
     meta = { licence = gpl3Plus; };
+  };
+
+  wanderlust = melpaBuild rec {
+    pname = "wanderlust";
+    version = "2.15.9"; # 20150301
+    src = fetchFromGitHub {
+      owner  = pname;
+      repo   = pname;
+      rev    = "13fb4f6519490d4ac7138f3bcf76707654348071";
+      sha256 = "1l48xfcwkm205prspa1rns6lqfizik5gpdwmlfgyb5mabm9x53zn";
+    };
+    packageRequires = [ apel flim semi ];
+    fileSpecs = [
+      "doc/wl.texi" "doc/wl-ja.texi"
+      "elmo/*.el" "wl/*.el"
+      "etc/icons"
+    ];
+    meta = {
+      description = "E-Mail client for Emacs";
+      license = gpl3Plus; # probably
+    };
   };
 
   weechat = melpaBuild rec {
