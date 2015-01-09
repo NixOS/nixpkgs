@@ -63,6 +63,8 @@ self: super: {
   # doctest doesn't work with GHC 7.10.x.
   # https://github.com/sol/doctest/issues/94
   cabal2nix = overrideCabal super.cabal2nix (drv: { doCheck = false; });
+  comonad = overrideCabal super.comonad (drv: { doCheck = false; });
+  distributive = overrideCabal super.distributive (drv: { doCheck = false; });
   hackage-db = overrideCabal super.hackage-db (drv: { doCheck = false; });
   hsemail = overrideCabal super.hsemail (drv: { doCheck = false; });
 }
