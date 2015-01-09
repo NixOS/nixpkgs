@@ -16,6 +16,10 @@ assert !stdenv.isFreeBSD;
   expected. Once the language is stable (1.0) , we might want to
   switch it to use nix's packaged rust compiler.
 
+
+NOTE : some derivation depend on rust. When updating this, please make
+sure those derivations still compile. (racer, for example).
+
 */
 
 let shortVersion = "0.13-dev";
