@@ -85,10 +85,10 @@ rec {
 
         cc = if isNull gccPlain
              then "/no-such-path"
-             else lib.makeOverridable (import ../../build-support/gcc-wrapper) {
+             else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
-          gcc = gccPlain;
+          cc = gccPlain;
           libc = glibc;
           inherit binutils coreutils;
           name = name;
@@ -209,7 +209,7 @@ rec {
       mpc = pkgs.mpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      gccPlain = pkgs.gcc.gcc;
+      gccPlain = pkgs.gcc.cc;
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };
@@ -229,10 +229,10 @@ rec {
       # other purposes (binutils and top-level pkgs) too.
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
 
-      gcc = lib.makeOverridable (import ../../build-support/gcc-wrapper) {
+      gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
-        gcc = stage4.stdenv.cc.gcc;
+        cc = stage4.stdenv.cc.cc;
         libc = stage4.pkgs.glibc;
         inherit (stage4.pkgs) binutils coreutils;
         name = "";
