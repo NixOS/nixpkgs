@@ -38,7 +38,7 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9921
   mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
 
-  # These used to be a core packages in GHC 7.8.x.
+  # These used to be core packages in GHC 7.8.x.
   old-locale = self.old-locale_1_0_0_7;
   old-time = self.old-time_1_1_0_3;
 
@@ -56,4 +56,13 @@ self: super: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
 
+  # Test suite fails with some (seemingly harmless) error.
+  # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
+  syb = overrideCabal super.syb (drv: { doCheck = false; });
+
+  # doctest doesn't work with GHC 7.10.x.
+  # https://github.com/sol/doctest/issues/94
+  cabal2nix = overrideCabal super.cabal2nix (drv: { doCheck = false; });
+  hackage-db = overrideCabal super.hackage-db (drv: { doCheck = false; });
+  hsemail = overrideCabal super.hsemail (drv: { doCheck = false; });
 }
