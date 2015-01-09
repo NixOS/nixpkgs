@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
   meta = {
-    description = "A Qt/KDE office suite, formely known as koffice";
+    description = "Calligra Suite is a set of applications written to help you to accomplish your work. Calligra includes efficient and capable office components: Words for text processing,  Sheets for computations, Stage for presentations, Plan for planning, Flow for flowcharts, Kexi for database creation, Krita for painting and raster drawing, and Karbon for vector graphics.";
     homepage = http://calligra.org;
     maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
     inherit (kdelibs.meta) platforms;
