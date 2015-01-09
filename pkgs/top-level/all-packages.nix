@@ -653,6 +653,8 @@ let
 
   bootchart = callPackage ../tools/system/bootchart { };
 
+  boxfs = callPackage ../tools/filesystems/boxfs { };
+
   bro = callPackage ../applications/networking/ids/bro { };
 
   bsod = callPackage ../misc/emulators/bsod { };
