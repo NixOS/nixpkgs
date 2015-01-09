@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "slack-api";
-  version = "0.2";
-  sha256 = "0gw6x57nnc16fm963l8z96cm4xapr4nbbmrbpx73k928a07fdq8j";
+  version = "0.2.1";
+  sha256 = "1k6p60gb13g09y6isr1r90zw548vs4y1fz34amfhdx79g9zm30hy";
   buildDepends = [
     aeson errors HsOpenSSL ioStreams lens lensAeson monadLoops mtl
     network opensslStreams text time transformers websockets wreq
