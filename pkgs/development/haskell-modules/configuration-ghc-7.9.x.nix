@@ -53,6 +53,11 @@ self: super: {
     configureFlags = [];
   });
 
+  # We have time 1.5
+  aeson = overrideCabal super.aeson (drv: {
+    configureFlags = [];
+  });
+
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     patchPhase = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
