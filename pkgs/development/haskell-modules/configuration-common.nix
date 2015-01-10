@@ -389,3 +389,26 @@ self: super: {
   });
 
 }
+// {
+  # Not on Hackage yet.
+  cabal2nix = self.mkDerivation {
+    pname = "cabal2nix";
+    version = "2.0";
+    src = pkgs.fetchgit {
+      url = "git://github.com/NixOS/cabal2nix.git";
+      sha256 = "95a5d40a8c23f01f99c3c537f8d9807f47b30667e0c87caca2705c4c75ba36ff";
+      rev = "ba140f1e5cb0cd2322a29c5261828747b4e9ddb0";
+    };
+    isLibrary = false;
+    isExecutable = true;
+    buildDepends = with self; [
+      aeson base bytestring Cabal containers deepseq directory filepath
+      hackage-db monad-par monad-par-extras mtl pretty process
+      regex-posix SHA split transformers utf8-string
+    ];
+    testDepends = with self; [ base doctest ];
+    homepage = "http://github.com/NixOS/cabal2nix";
+    description = "Convert Cabal files into Nix build instructions";
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  };
+}
