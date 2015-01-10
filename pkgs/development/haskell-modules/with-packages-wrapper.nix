@@ -31,11 +31,12 @@ let
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   isHaskellPkg  = x: (x ? pname) && (x ? version);
+  paths         = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages);
 in
-if packages == [] then ghc else
-stdenv.lib.addPassthru (buildEnv {
+if paths == [] then ghc else
+buildEnv {
   inherit (ghc) name;
-  paths = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages) ++ [ghc];
+  paths = paths ++ [ghc];
   inherit ignoreCollisions;
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
@@ -72,15 +73,10 @@ stdenv.lib.addPassthru (buildEnv {
       makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
     done
 
-    rm $out/lib/${ghc.name}/package.conf.d
-    mkdir $out/lib/${ghc.name}/package.conf.d
-    for pkg in $paths; do
-      for file in "$pkg/nix-support/${ghc.name}-package.conf.d/"*.conf "$pkg/lib/${ghc.name}/package.conf.d/"*.conf; do
-        ln -sf $file $out/lib/${ghc.name}/package.conf.d/
-      done
-    done
-
     $out/bin/ghc-pkg recache
     $out/bin/ghc-pkg check
   '';
-}) { inherit (ghc) version; }
+} // {
+  preferLocalBuild = true;
+  inherit (ghc) version meta;
+}
