@@ -108,6 +108,6 @@ self: super: {
     ];
     homepage = "https://github.com/sol/doctest#readme";
     description = "Test interactive Haskell examples";
-    license = self.stdenv.lib.licenses.mit;
+    license = pkgs.stdenv.lib.licenses.mit;
   };
 }
