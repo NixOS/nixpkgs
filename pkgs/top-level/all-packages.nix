@@ -3555,16 +3555,16 @@ let
     suitesparse = suitesparse_4_2;
   };
 
-  julia033 = let
+  julia035 = let
     liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.3.nix {
+  in callPackage ../development/compilers/julia/0.3.5.nix {
     inherit liblapack;
     suitesparse = suitesparse_4_2.override {
       inherit liblapack;
     };
     llvm = llvm_33;
   };
-  julia = julia033;
+  julia = julia035;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
