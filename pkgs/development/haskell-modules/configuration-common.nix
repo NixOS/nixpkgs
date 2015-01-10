@@ -35,7 +35,7 @@ self: super: {
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = overrideCabal super.time_1_5_0_1 (drv: { doCheck = false; });
 
-  # Hacks to make packages compile.
+  # Hacks to make packages compile. Are these still necessary??? HELP!
   abstract-deque = overrideCabal super.abstract-deque (drv: { doCheck = false; });
   accelerate-cuda = overrideCabal super.accelerate-cuda (drv: { jailbreak = true; });
   accelerate = overrideCabal super.accelerate (drv: { jailbreak = true; });
@@ -374,5 +374,27 @@ self: super: {
   zeromq3-haskell = overrideCabal super.zeromq3-haskell (drv: { doCheck = false; });
   zip-archive = overrideCabal super.zip-archive (drv: { doCheck = false; });
   zlib-conduit = overrideCabal super.zlib-conduit (drv: { noHaddock = true; });
-
+}
+// {
+  # Not on Hackage yet.
+  cabal2nix = self.mkDerivation {
+    pname = "cabal2nix";
+    version = "2.0";
+    src = pkgs.fetchgit {
+      url = "git://github.com/NixOS/cabal2nix.git";
+      sha256 = "b9dde970f8e64fd5faff9402f5788ee832874d7584a67210f59f2c5e504ce631";
+      rev = "6398667f4ad670eb3aa3334044a65a06971494d0";
+    };
+    isLibrary = false;
+    isExecutable = true;
+    buildDepends = with self; [
+      aeson base bytestring Cabal containers deepseq directory filepath
+      hackage-db monad-par monad-par-extras mtl pretty process
+      regex-posix SHA split transformers utf8-string
+    ];
+    testDepends = with self; [ base doctest ];
+    homepage = "http://github.com/NixOS/cabal2nix";
+    description = "Convert Cabal files into Nix build instructions";
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  };
 }

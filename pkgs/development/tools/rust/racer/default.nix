@@ -6,7 +6,7 @@ in
 
 stdenv.mkDerivation rec {
   #TODO add emacs support
-  name = "racer-git-2014-12-04";
+  name = "racer-git-2015-01-07";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
     rev = "bf73c05ac719cd3b0f8d8f9e0ecb066ede6aa9d9";

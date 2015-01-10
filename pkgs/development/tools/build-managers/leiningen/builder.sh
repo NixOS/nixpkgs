@@ -7,7 +7,7 @@ mkdir -pv $out/bin $out/share/java
 out_bin=$out/bin/lein
 
 cp -v $src $out_bin
-cp -v $jarsrc $out/share/java
+cp -v $jarsrc "$out/share/java/$name-standalone.jar"
 
 for p in $patches;
 do

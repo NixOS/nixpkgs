@@ -55,21 +55,3 @@ self: super: {
 
   ghcjs = self.callPackage ../compilers/ghcjs { Cabal = self.Cabal_1_22_0_0; };
 }
-
-//                              # packages related to amazonka
-
-(let
-  amazonkaEnv = self: super: {
-    mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
-    mtl = self.mtl_2_2_1;
-    nats = self.nats_0_2;
-    transformers = self.transformers_0_4_2_0;
-    transformers-compat = overrideCabal super.transformers-compat (drv: { configureFlags = []; });
-  };
-in
-{
-  # These packages need mtl 2.2.x to compile.
-  amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
-  amazonka = super.amazonka.overrideScope amazonkaEnv;
-  amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
-})
