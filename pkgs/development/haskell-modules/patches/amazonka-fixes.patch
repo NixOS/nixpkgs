@@ -1,0 +1,73 @@
+From 06e10485e60ec5637896dacf62f41a57fcb04bed Mon Sep 17 00:00:00 2001
+From: Shea Levy <shea@shealevy.com>
+Date: Fri, 9 Jan 2015 17:34:22 -0500
+Subject: [PATCH] Don't derive the Whole typeclass
+
+It was not preserved when Numeric.Natural was brought into base, which
+practically means it is difficult if not impossible to build this
+against newer GHCs, and also suggests that the class itself is not all
+that useful.
+---
+ amazonka-elb/gen/Network/AWS/ELB/Types.hs     | 2 +-
+ core/src/Network/AWS/Data/Internal/Numeric.hs | 1 -
+ core/src/Network/AWS/Prelude.hs               | 3 +--
+ gen/output/elb.json                           | 3 +--
+ gen/src/Gen/Output.hs                         | 5 +----
+ 5 files changed, 4 insertions(+), 10 deletions(-)
+
+diff --git a/src/Network/AWS/Data/Internal/Numeric.hs b/src/Network/AWS/Data/Internal/Numeric.hs
+index 93b92c4..445ad8e 100644
+--- a/src/Network/AWS/Data/Internal/Numeric.hs
++++ b/src/Network/AWS/Data/Internal/Numeric.hs
+@@ -34,7 +34,6 @@ newtype Nat = Nat { unNat :: Natural }
+         , Num
+         , Real
+         , Integral
+-        , Whole
+         , ToByteString
+         , FromText
+         , ToText
+diff --git a/src/Network/AWS/Prelude.hs b/src/Network/AWS/Prelude.hs
+index 1e858ee..289f51f 100644
+--- a/src/Network/AWS/Prelude.hs
++++ b/src/Network/AWS/Prelude.hs
+@@ -36,7 +36,6 @@ module Network.AWS.Prelude
+     , Generic
+     , IsString     (..)
+     , Semigroup
+-    , Whole
+ 
+     -- * Retries
+     , Retry        (..)
+@@ -75,7 +74,7 @@ import GHC.Generics              (Generic)
+ import Network.HTTP.Client       (HttpException, RequestBody)
+ import Network.HTTP.Types.Method (StdMethod(..))
+ import Network.HTTP.Types.Status (Status(..))
+-import Numeric.Natural           (Natural, Whole)
++import Numeric.Natural           (Natural)
+ 
+ import Control.Applicative       as Export
+ import Data.Bifunctor            as Export
+From 647dd8b69ec66110473195d36ff57172a592bc3b Mon Sep 17 00:00:00 2001
+From: Shea Levy <shea@shealevy.com>
+Date: Fri, 9 Jan 2015 17:54:54 -0500
+Subject: [PATCH] In the base-4.8.0.0 candidate, Data.Function defines (&)
+
+This conflicts with Control.Lens.&
+---
+ core/src/Network/AWS/Signing/Internal/V4.hs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Network/AWS/Signing/Internal/V4.hs b/src/Network/AWS/Signing/Internal/V4.hs
+index f48c0ed..34a8516 100644
+--- a/src/Network/AWS/Signing/Internal/V4.hs
++++ b/src/Network/AWS/Signing/Internal/V4.hs
+@@ -26,7 +26,7 @@ import qualified Data.ByteString.Base16       as Base16
+ import qualified Data.ByteString.Char8        as BS
+ import qualified Data.CaseInsensitive         as CI
+ import qualified Data.Foldable                as Fold
+-import           Data.Function
++import           Data.Function                hiding ((&))
+ import           Data.List                    (groupBy, intersperse, sortBy, sort)
+ import           Data.Maybe
+ import           Data.Monoid
