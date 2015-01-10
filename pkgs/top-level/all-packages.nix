@@ -2516,7 +2516,7 @@ let
   };
 
   ssss = callPackage ../tools/security/ssss { };
- 
+
   stress = callPackage ../tools/system/stress { };
 
   storeBackup = callPackage ../tools/backup/store-backup { };
@@ -9460,15 +9460,11 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = with haskellPackages_ghc784; callPackage ../applications/version-management/darcs {
-    cabal = cabal.override {
-      extension = self : super : {
-        enableSharedExecutables = false;
-        isLibrary = false;
-        configureFlags = "-f-library " + super.configureFlags or "";
-      };
-    };
-  };
+  darcs = haskell-ng.lib.overrideCabal haskellngPackages.darcs (drv: {
+    configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
+    enableSharedExecutables = false;
+    isLibrary = false;
+  });
 
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
