@@ -374,20 +374,6 @@ self: super: {
   zeromq3-haskell = overrideCabal super.zeromq3-haskell (drv: { doCheck = false; });
   zip-archive = overrideCabal super.zip-archive (drv: { doCheck = false; });
   zlib-conduit = overrideCabal super.zlib-conduit (drv: { noHaddock = true; });
-
-  amazonka-core = overrideCabal super.amazonka-core (drv: {
-    # these are upstream
-    patches = [ ./patches/amazonka-fixes.patch ];
-
-    # brendanhay/amazonka#54
-    doCheck = false;
-  });
-
-  amazonka = overrideCabal super.amazonka (drv: {
-    # brendanhay/amazonka#56
-    patches = [ ./patches/amazonka-new-monad-control.patch ];
-  });
-
 }
 // {
   # Not on Hackage yet.
