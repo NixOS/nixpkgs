@@ -10507,6 +10507,7 @@ let
     };
     jackSupport = config.mumble.jackSupport or false;
     speechdSupport = config.mumble.speechdSupport or false;
+    pulseSupport = config.pulseaudio or false;
   };
 
   murmur = callPackage ../applications/networking/mumble/murmur.nix {
