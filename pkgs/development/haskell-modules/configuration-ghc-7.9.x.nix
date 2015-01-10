@@ -38,9 +38,7 @@ self: super: {
   mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
 
   # haddock: No input file(s).
-  nats = overrideCabal super.nats (drv: {
-    noHaddock = true;
-  });
+  nats = dontHaddock super.nats;
 
   # These used to be core packages in GHC 7.8.x.
   old-locale = self.old-locale_1_0_0_7;
@@ -48,14 +46,10 @@ self: super: {
 
   # We have transformers 4.x
   mtl = self.mtl_2_2_1;
-  transformers-compat = overrideCabal super.transformers-compat (drv: {
-    configureFlags = [];
-  });
+  transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # We have time 1.5
-  aeson = overrideCabal super.aeson (drv: {
-    configureFlags = [];
-  });
+  aeson = disableCabalFlag super.aeson "old-locale";
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
@@ -66,21 +60,21 @@ self: super: {
   });
 
   # bos/attoparsec#92
-  attoparsec = overrideCabal super.attoparsec (drv: { doCheck = false; });
+  attoparsec = dontCheck super.attoparsec;
 
   # test suite hangs silently for at least 10 minutes
-  split = overrideCabal super.split (drv: { doCheck = false; });
+  split = dontCheck super.split;
 
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
-  syb = overrideCabal super.syb (drv: { doCheck = false; });
+  syb = dontCheck super.syb;
 
   # Version 1.19.5 fails its test suite.
-  happy = overrideCabal super.happy (drv: { doCheck = false; });
+  happy = dontCheck super.happy;
 
   # Test suite hangs silently without consuming any CPU.
   # https://github.com/ndmitchell/extra/issues/4
-  extra = overrideCabal super.extra (drv: { doCheck = false; });
+  extra = dontCheck super.extra;
 
 }
 // {
