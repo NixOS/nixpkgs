@@ -88,8 +88,9 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = extraLibraries ++ buildTools ++
     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
-    optionals doCheck testDepends;
-  propagatedNativeBuildInputs = buildDepends;
+    optionals doCheck testDepends ++
+    optionals (!hasActiveLibrary) buildDepends;
+  propagatedNativeBuildInputs = optionals hasActiveLibrary buildDepends;
 
   # GHC needs the locale configured during the Haddock phase.
   LANG = "en_US.UTF-8";
