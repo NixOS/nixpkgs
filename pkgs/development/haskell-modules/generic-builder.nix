@@ -69,6 +69,17 @@ let
     sha256 = editedCabalFile;
   };
 
+  isHaskellPkg = x: (x ? pname) && (x ? version);
+  isSystemPkg = x: !isHaskellPkg x;
+
+  allBuildInputs = stdenv.lib.filter (x: x != null) (
+                     buildDepends ++ extraLibraries ++ buildTools ++
+                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
+                     optionals doCheck testDepends
+                   );
+  haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
+  systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
+
 in
 stdenv.mkDerivation ({
   name = "${optionalString hasActiveLibrary "haskell-"}${pname}-${version}";
@@ -195,7 +206,17 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-  passthru = passthru // { inherit pname version; };
+  passthru = passthru // {
+
+    inherit pname version;
+
+    env = stdenv.mkDerivation {
+      name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
+      nativeBuildInputs = [ (ghc.withPackages (p: haskellBuildInputs)) systemBuildInputs ];
+      shellHook = "eval $(grep export $(type -p ghc))";
+    };
+
+  };
 
   meta = { inherit homepage license platforms hydraPlatforms; }
          // optionalAttrs broken               { inherit broken; }
