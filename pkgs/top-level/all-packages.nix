@@ -4615,6 +4615,8 @@ let
 
   flow = callPackage ../development/tools/analysis/flow { };
 
+  fswatch = callPackage ../development/tools/misc/fswatch { };
+
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
