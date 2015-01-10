@@ -1,7 +1,7 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, patchelf, openblas, liblapack
- , tcl, tk, xproto, libX11, git, mpfr, which
+ , tcl, tk, xproto, libX11, git, mpfr, which, wget
  } :
 
 assert stdenv.isLinux; 
@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.3.3";
+  version = "0.3.5";
   name = "${pname}-${version}";
 
   dsfmt_ver = "2.2";
@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
     rev = "refs/tags/v${version}";
-    md5 = "84266f0201ad34abe8ca1474620fe891";
+    md5 = "abdee0e64f8e9ae3d96e37734e2db40a";
     name = "julia-git-v${version}";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack tcl tk xproto libX11 git mpfr which
+    openblas liblapack tcl tk xproto libX11 git mpfr which wget
     ];
 
   configurePhase = ''
