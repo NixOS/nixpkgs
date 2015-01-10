@@ -1,6 +1,6 @@
 { pkgs }:
 
-with import ./lib.nix;
+with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
