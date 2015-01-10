@@ -30,9 +30,8 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # We cannot build jailbreak without Cabal 1.20.x, and we cannot build
-  # Cabal 1.20.x without jailbreak. Go figure. Let's use a sledgehammer.
-  jailbreak-cabal = pkgs.haskellngPackages.jailbreak-cabal;
+  # We have Cabal 1.22.x.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # GHC 7.10.x's Haddock binary cannot generate hoogle files.
   # https://ghc.haskell.org/trac/ghc/ticket/9921
