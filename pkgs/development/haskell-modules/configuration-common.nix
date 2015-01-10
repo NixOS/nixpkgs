@@ -35,7 +35,7 @@ self: super: {
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = overrideCabal super.time_1_5_0_1 (drv: { doCheck = false; });
 
-  # Hacks to make packages compile.
+  # Hacks to make packages compile. Are these still necessary??? HELP!
   abstract-deque = overrideCabal super.abstract-deque (drv: { doCheck = false; });
   accelerate-cuda = overrideCabal super.accelerate-cuda (drv: { jailbreak = true; });
   accelerate = overrideCabal super.accelerate (drv: { jailbreak = true; });
@@ -396,8 +396,8 @@ self: super: {
     version = "2.0";
     src = pkgs.fetchgit {
       url = "git://github.com/NixOS/cabal2nix.git";
-      sha256 = "95a5d40a8c23f01f99c3c537f8d9807f47b30667e0c87caca2705c4c75ba36ff";
-      rev = "ba140f1e5cb0cd2322a29c5261828747b4e9ddb0";
+      sha256 = "b9dde970f8e64fd5faff9402f5788ee832874d7584a67210f59f2c5e504ce631";
+      rev = "6398667f4ad670eb3aa3334044a65a06971494d0";
     };
     isLibrary = false;
     isExecutable = true;
