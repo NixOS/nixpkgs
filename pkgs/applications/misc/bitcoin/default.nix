@@ -3,6 +3,9 @@
 
 with stdenv.lib;
 
+#http://sourceforge.net/p/bitcoin/mailman/message/33221963/
+assert openssl.name != "openssl-1.0.1p" && openssl.name != "openssl-1.0.1k";
+
 stdenv.mkDerivation rec {
   version = "0.9.3";
   name = "bitcoin${toString (optional (!gui) "d")}-${version}";
@@ -14,7 +17,7 @@ stdenv.mkDerivation rec {
 
   # hexdump from utillinux is required for tests
   buildInputs = [
-    openssl db48 boost zlib miniupnpc utillinux pkgconfig protobuf 
+    openssl db48 boost zlib miniupnpc utillinux pkgconfig protobuf
   ] ++ optionals gui [ qt4 qrencode ];
 
   unpackPhase = ''
