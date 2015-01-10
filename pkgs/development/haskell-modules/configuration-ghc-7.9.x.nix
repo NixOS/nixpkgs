@@ -76,13 +76,38 @@ self: super: {
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
   syb = overrideCabal super.syb (drv: { doCheck = false; });
 
-  # doctest doesn't work with GHC 7.10.x.
-  # https://github.com/sol/doctest/issues/94
-  cabal2nix = overrideCabal super.cabal2nix (drv: { doCheck = false; });
-  comonad = overrideCabal super.comonad (drv: { doCheck = false; });
-  distributive = overrideCabal super.distributive (drv: { doCheck = false; });
-  hackage-db = overrideCabal super.hackage-db (drv: { doCheck = false; });
-  hsemail = overrideCabal super.hsemail (drv: { doCheck = false; });
-  http-types = overrideCabal super.http-types (drv: { doCheck = false; });
-  lens = overrideCabal super.lens (drv: { doCheck = false; });
+  # Version 1.19.5 fails its test suite.
+  happy = overrideCabal super.happy (drv: { doCheck = false; });
+
+  # Test suite hangs silently without consuming any CPU.
+  # https://github.com/ndmitchell/extra/issues/4
+  extra = overrideCabal super.extra (drv: { doCheck = false; });
+
+}
+// {
+  # Not on Hackage yet.
+  doctest = self.mkDerivation {
+    pname = "doctest";
+    version = "0.9.11.1";
+    src = pkgs.fetchgit {
+      url = "git://github.com/sol/doctest.git";
+      sha256 = "a01ced437f5d733f916dc62ea6a67e0e5d275164ba317da33245cf9374f23925";
+      rev = "c85fdaaa92d1f0334d835254d63bdc30f7077387";
+    };
+    isLibrary = true;
+    isExecutable = true;
+    doCheck = false;
+    buildDepends = with self; [
+      base deepseq directory filepath ghc ghc-paths process syb
+      transformers
+    ];
+    testDepends = with self; [
+      base base-compat deepseq directory filepath ghc ghc-paths hspec
+      HUnit process QuickCheck setenv silently stringbuilder syb
+      transformers
+    ];
+    homepage = "https://github.com/sol/doctest#readme";
+    description = "Test interactive Haskell examples";
+    license = self.stdenv.lib.licenses.mit;
+  };
 }
