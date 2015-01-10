@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, fuse }:
+{ stdenv, fetchgit, pkgconfig, autoreconfHook, fuse }:
 
 stdenv.mkDerivation {
-  name = "afuse-0.2";
+  name = "afuse-0.4.1";
 
-  src = fetchurl {
-    url = mirror://sourceforge/afuse/0.2/afuse-0.2.tar.gz;
-    sha256 = "1lj2jdks0bgwxbjqp5a9f7qdry19kar6pg7dh1ml98gapx9siylj";
+  src = fetchgit {
+    url = git://github.com/pcarrier/afuse.git;
+    rev = "a0892f5506ddcca2031825aff24f1518c8c2f1c8";
+    sha256 = "12071ff5171d4d5ce4d8835385f50e8079b25e885816b8ad6f22eb46c6497b28";
   };
 
-  buildInputs = [ pkgconfig fuse ];
+  buildInputs = [ autoreconfHook pkgconfig fuse ];
 
-  meta = { 
+  meta = {
     description = "Automounter in userspace";
-    homepage = http://sourceforge.net/projects/afuse;
+    homepage = https://github.com/pcarrier/afuse;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
