@@ -9755,6 +9755,8 @@ let
 
   fluidsynth = callPackage ../applications/audio/fluidsynth { };
 
+  fmit = callPackage ../applications/audio/fmit { };
+
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
   fossil = callPackage ../applications/version-management/fossil { };
