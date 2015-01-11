@@ -80,6 +80,8 @@ let
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
+  ghcEnv = ghc.withPackages (p: haskellBuildInputs);
+
 in
 stdenv.mkDerivation ({
   name = "${optionalString hasActiveLibrary "haskell-"}${pname}-${version}";
@@ -213,8 +215,13 @@ stdenv.mkDerivation ({
 
     env = stdenv.mkDerivation {
       name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
-      nativeBuildInputs = [ (ghc.withPackages (p: haskellBuildInputs)) systemBuildInputs ];
-      shellHook = "eval $(grep export $(type -p ghc))";
+      nativeBuildInputs = [ ghcEnv systemBuildInputs ];
+      shellHook = ''
+        export NIX_GHC="${ghcEnv}/bin/ghc"
+        export NIX_GHCPKG="${ghcEnv}/bin/ghc"
+        export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
+        export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+      '';
       buildCommand = ''
         echo >&2 ""
         echo >&2 "*** Haskell 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
