@@ -6529,6 +6529,11 @@ let
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
+  mkvtoolnix-cli = mkvtoolnix.override {
+    withGUI = false;
+    wxGTK = null;
+  };
+
   mlt-qt4 = callPackage ../development/libraries/mlt {
     qt = qt4;
   };

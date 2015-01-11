@@ -6,6 +6,7 @@
 , boost
 , xdg_utils
 , expat
+, withGUI ? true
 , wxGTK
 , zlib
 , ruby
@@ -13,6 +14,8 @@
 , pkgconfig
 , curl
 }:
+
+assert withGUI -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   version = "7.5.0";
@@ -25,8 +28,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libmatroska flac libvorbis file boost xdg_utils
-    expat wxGTK zlib ruby gettext pkgconfig curl
-  ];
+    expat zlib ruby gettext pkgconfig curl
+    ] ++ stdenv.lib.optional withGUI wxGTK;
 
   configureFlags = "--with-boost-libdir=${boost.lib}/lib";
   buildPhase = ''
