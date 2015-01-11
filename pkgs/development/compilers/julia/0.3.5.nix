@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   dsfmt_ver = "2.2";
   grisu_ver = "1.1.1";
-  openblas_ver = "v0.2.12";
+  openblas_ver = "v0.2.13";
   lapack_ver = "3.5.0";
   arpack_ver = "3.1.5";
   patchelf_ver = "0.8";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   openblas_src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/${openblas_ver}";
     name = "openblas-${openblas_ver}.tar.gz";
-    md5 = "dfc868e0c134855639f036d2723bf4be";
+    md5 = "74adf4c0d0d82bff4774be5bf2134183";
   };
   arpack_src = fetchurl rec {
     url = "https://github.com/opencollab/arpack-ng/archive/${arpack_ver}.tar.gz";
