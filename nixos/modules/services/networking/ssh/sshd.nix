@@ -22,6 +22,7 @@ let
     ${flip concatMapStrings knownHosts (h: ''
       pubkeyfile=${builtins.toFile "host.pub" (if h.publicKey == null then readFile h.publicKeyFile else h.publicKey)}
       ${pkgs.gnused}/bin/sed 's/^/${concatStringsSep "," h.hostNames} /' $pubkeyfile >> "$out"
+      echo "" >> "$out"
     '')}
   '';
 
