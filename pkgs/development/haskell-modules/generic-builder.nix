@@ -215,6 +215,12 @@ stdenv.mkDerivation ({
       name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
       nativeBuildInputs = [ (ghc.withPackages (p: haskellBuildInputs)) systemBuildInputs ];
       shellHook = "eval $(grep export $(type -p ghc))";
+      buildCommand = ''
+        echo >&2 ""
+        echo >&2 "*** Haskell 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
+        echo >&2 ""
+        exit 1
+      '';
     };
 
   };
