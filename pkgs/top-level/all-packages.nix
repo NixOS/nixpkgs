@@ -3948,6 +3948,10 @@ let
   sbcl = callPackage ../development/compilers/sbcl {
     clisp = clisp;
   };
+  # For StumpWM
+  sbcl_1_2_5 = callPackage ../development/compilers/sbcl/1.2.5.nix {
+    clisp = clisp;
+  };
   # For ACL2
   sbcl_1_2_0 = callPackage ../development/compilers/sbcl/1.2.0.nix {
     clisp = clisp;
