@@ -12088,7 +12088,7 @@ let
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-      calligra = callPackage ../applications/office/calligra { };
+      calligra = callPackage ../applications/office/calligra { eigen = eigen2; };
 
       colord-kde = callPackage ../tools/misc/colord-kde { };
 

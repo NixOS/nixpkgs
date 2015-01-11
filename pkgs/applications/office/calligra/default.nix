@@ -3,6 +3,7 @@
 , fontconfig, freetype, sqlite, icu, libwpd, libwpg, pkgconfig, popplerQt4
 , libkdcraw, libxslt, fftw, glew, gsl, shared_desktop_ontologies, okular
 , libvisio, kactivities, mysql, postgresql, freetds, xbase, openexr, ilmbase
+, libodfgen, opencolorio, openjpeg, pstoedit, librevenge
  }:
 
 stdenv.mkDerivation rec {
@@ -15,17 +16,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl pkgconfig ];
 
-#  patches = [ ./fix-kde4.10-build.patch ];
-
-# TODO: package Vc, libWPS, OCIO, OpenShiva, QtShiva, Spnav, m2mml
-# TODO: not found popplerQt4
+# TODO: package Vc, libWPS, Spnav, m2mml, LibEtonyek, poppler-qt4-xpdf-headers
+# not found: xbase, openjpeg(too new)
 
   buildInputs = [ kdelibs attica zlib libpng boost mesa kdepimlibs
     createresources eigen qca2 exiv2 soprano marble lcms2 fontconfig freetype
     sqlite icu libwpd libwpg popplerQt4 libkdcraw libxslt fftw glew gsl
-    shared_desktop_ontologies okular 
-    libvisio kactivities mysql postgresql freetds xbase openexr
-];
+    shared_desktop_ontologies okular libodfgen opencolorio openjpeg
+    libvisio kactivities mysql postgresql freetds xbase openexr pstoedit
+    librevenge
+  ];
+
+  patches = [ ./librevenge.patch ];
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
