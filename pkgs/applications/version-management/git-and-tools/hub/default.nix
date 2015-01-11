@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
   buildPhase = ''
-    ./script/build
+    sh script/build
   '';
 
   installPhase = ''
