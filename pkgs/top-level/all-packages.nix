@@ -9592,6 +9592,8 @@ let
 
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
+    d = callPackage ../applications/editors/emacs-modes/d { };
+
     darcsum = callPackage ../applications/editors/emacs-modes/darcsum { };
 
     dash = callPackage ../applications/editors/emacs-modes/dash { };
