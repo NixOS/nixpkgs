@@ -1549,6 +1549,8 @@ let
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
+  ipv6calc = callPackage ../tools/networking/ipv6calc {};
+
   ipxe = callPackage ../tools/misc/ipxe { };
 
   ised = callPackage ../tools/misc/ised {};
