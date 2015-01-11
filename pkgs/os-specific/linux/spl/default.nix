@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0id0m3sfpkz8w7b2pc51px8kvz8xnaf8msps57ddarxidmxvb45g";
   };
 
-  patches = [ ./install_prefix.patch ./const.patch ];
+  patches = [ ./install_prefix.patch ./const.patch ./time.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 
