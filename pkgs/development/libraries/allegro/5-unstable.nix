@@ -3,7 +3,7 @@ x@{builderDefsPackage
   , texinfo, libXext, xextproto, libX11, xproto, libXpm, libXt, libXcursor
   , alsaLib, cmake, zlib, libpng, libvorbis, libXxf86dga, libXxf86misc
   , xf86dgaproto, xf86miscproto, xf86vidmodeproto, libXxf86vm, openal, mesa
-  , kbproto, libjpeg, flac
+  , kbproto, libjpeg, flac, inputproto, libXi, fixesproto, libXfixes
   , ...}:
 builderDefsPackage
 (a :
@@ -16,7 +16,7 @@ let
   sourceInfo = rec {
     baseName="allegro";
     folderSuffix = "-unstable";
-    version = "5.1.8";
+    version = "5.1.9";
     name="${baseName}-${version}";
     project="alleg";
     url="mirror://sourceforge/project/${project}/${baseName}${folderSuffix}/${version}/${name}.tar.gz";
@@ -26,17 +26,21 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = "180mhlhgxqh3ynazf9bssnd3riw77fazjw65yr64w0av53y0h1lz";
+    sha256 = "0jn1x2l1kz0vi2fvabpk5sbn1cx4k6hwncmf2j8wnrhk8pm5af5h";
   };
 
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMakeInstall"];
+  phaseNames = ["patchIncludes" "doCmake" "doMakeInstall"];
+
+  patchIncludes = a.fullDepEntry ''
+    sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt src/*.c
+  '' ["minInit" "doUnpack"];
 
   doCmake = a.fullDepEntry (''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXext -lX11 -lXpm -lXcursor -lXxf86vm"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lXext -lX11 -lXpm -lXcursor -lXxf86vm -lXi -lXfixes"
     cmake -D CMAKE_INSTALL_PREFIX=$out -D CMAKE_SKIP_RPATH=ON .
   '') ["minInit" "doUnpack" "addInputs"];
 
