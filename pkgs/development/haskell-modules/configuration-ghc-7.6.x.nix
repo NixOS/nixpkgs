@@ -16,6 +16,7 @@ self: super: {
   directory = null;
   filepath = null;
   ghc-prim = null;
+  haskeline = self.haskeline_0_7_1_3;   # GHC's version is broken: https://github.com/NixOS/nixpkgs/issues/5616.
   haskell2010 = null;
   haskell98 = null;
   hoopl = null;
@@ -27,13 +28,14 @@ self: super: {
   process = null;
   rts = null;
   template-haskell = null;
+  terminfo = self.terminfo_0_4_0_0;     # GHC's version is broken: https://github.com/NixOS/nixpkgs/issues/5616.
   time = null;
   unix = null;
 
-  terminfo = self.terminfo_0_4_0_0;
-  haskeline = self.haskeline_0_7_1_3;
+  # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_2_0;
   mtl = self.mtl_2_2_1;
+  transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # https://github.com/haskell/cabal/issues/2322
   Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override { binary = self.binary_0_7_2_3; };
