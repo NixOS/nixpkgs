@@ -100,6 +100,10 @@ self: super: {
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
+
+  # https://github.com/gcross/AbortT-transformers/issues/1
+  AbortT-transformers = doJailbreak super.AbortT-transformers;
+
 }
 // {
   # Not on Hackage yet.
