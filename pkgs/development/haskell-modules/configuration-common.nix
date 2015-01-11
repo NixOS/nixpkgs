@@ -97,6 +97,9 @@ self: super: {
   # The test suite imposes too narrow restrictions on the version of
   # Cabal that can be used to build this package.
   cabal-test-quickcheck = dontCheck super.cabal-test-quickcheck;
+
+  # https://github.com/techtangents/ablist/issues/1
+  ABList = dontCheck super.ABList;
 }
 // {
   # Not on Hackage yet.
