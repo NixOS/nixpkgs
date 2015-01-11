@@ -1338,7 +1338,7 @@ let
 
   gnupg = gnupg20;
 
-  gnuplot = callPackage ../tools/graphics/gnuplot { };
+  gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt5; };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
 
