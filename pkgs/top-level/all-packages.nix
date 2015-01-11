@@ -3711,6 +3711,8 @@ let
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+    config-file = callPackage ../development/ocaml-modules/config-file { };
+
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
