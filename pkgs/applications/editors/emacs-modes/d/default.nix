@@ -1,5 +1,6 @@
 {stdenv, fetchurl, emacs}:
 
+# Note: Don't have a version, using date as fallback.
 let version = "20150111";
 
 in stdenv.mkDerivation {
@@ -20,4 +21,12 @@ in stdenv.mkDerivation {
     install -d $out/share/emacs/site-lisp
     install *.el *.elc $out/share/emacs/site-lisp
   '';
+
+  meta = {
+    description = "Major mode for editing D code";
+    homepage = https://github.com/Emacs-D-Mode-Maintainers/Emacs-D-Mode;
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.all;
+  };
+
 }
