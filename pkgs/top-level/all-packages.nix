@@ -3941,8 +3941,6 @@ let
   rustc       = callPackage ../development/compilers/rustc/0.12.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
 
-  rust = rustc;
-
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
@@ -4774,7 +4772,7 @@ let
 
   premake = premake4;
 
-  racerRust = callPackage ../development/tools/rust/racer { rust = rustcMaster; };
+  racerRust = callPackage ../development/tools/rust/racer { rustc = rustcMaster; };
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
