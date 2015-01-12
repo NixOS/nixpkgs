@@ -44,6 +44,17 @@ self: super: {
   amazonkaEnv = let self_ = self; in self: super: {
     mkDerivation = drv: super.mkDerivation (drv // {
       doCheck = false;
+      hyperlinkSource = false;
+      extraLibraries = (drv.extraLibraries or []) ++ [ (
+        if builtins.elem drv.pname [
+          "Cabal"
+          "time"
+          "unix"
+          "directory"
+          "process"
+          "jailbreak-cabal"
+        ] then null else self.Cabal_1_18_1_6
+      ) ];
     });
     mtl = self.mtl_2_2_1;
     transformers = self.transformers_0_4_2_0;
@@ -56,27 +67,8 @@ self: super: {
     process = overrideCabal self.process_1_2_1_0 (drv: {
       coreSetup = true;
     });
-    inherit amazonka-core;
-  } // (builtins.listToAttrs (map (name: {
-    inherit name;
-    value = overrideCabal super.${name} (drv: {
-      extraLibraries = (drv.extraLibraries or []) ++ [ self.Cabal_1_18_1_6 ];
-    });
-  }) [
-    "conduit-extra"
-    "streaming-commons"
-    "http-client"
-    "cryptohash-conduit"
-    "xml-conduit"
-    "x509"
-    "x509-store"
-    "x509-system"
-    "x509-validation"
-    "tls"
-    "connection"
-    "http-client-tls"
-    "http-conduit"
-  ]));
+    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
+  };
   Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
   amazonka-core =
     overrideCabal (super.amazonka-core.overrideScope amazonkaEnv) (drv: {
@@ -88,8 +80,8 @@ self: super: {
   useEnvCabal = p: overrideCabal (p.overrideScope amazonkaEnv) (drv: {
     extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
   });
-in {
-  inherit amazonka-core;
   amazonka = useEnvCabal super.amazonka;
   amazonka-cloudwatch = useEnvCabal super.amazonka-cloudwatch;
+in {
+  inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
 })
