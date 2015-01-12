@@ -85,6 +85,9 @@ self: super: {
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
   syb = dontCheck super.syb;
 
+  # Test suite has stricter version bounds
+  retry = dontCheck super.retry;
+
   # Version 1.19.5 fails its test suite.
   happy = dontCheck super.happy;
 
