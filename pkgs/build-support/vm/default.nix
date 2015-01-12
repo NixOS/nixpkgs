@@ -36,7 +36,7 @@ rec {
       cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
 
       # Copy BusyBox.
-      cp -pd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin
+      cp -pd ${pkgs.busybox}/bin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -162,7 +162,7 @@ rec {
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
-    ${pkgs.utillinux}/sbin/hwclock -s
+    ${pkgs.utillinux}/bin/hwclock -s
 
     export NIX_STORE=/nix/store
     export NIX_BUILD_TOP=/tmp
@@ -255,7 +255,7 @@ rec {
 
   defaultCreateRootFS = ''
     mkdir /mnt
-    ${e2fsprogs}/sbin/mkfs.ext4 /dev/${hd}
+    ${e2fsprogs}/bin/mkfs.ext4 /dev/${hd}
     ${utillinux}/bin/mount -t ext4 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
@@ -306,14 +306,14 @@ rec {
       buildInputs = [ utillinux ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/sbin/modprobe loop
-        ${module_init_tools}/sbin/modprobe ext4
-        ${module_init_tools}/sbin/modprobe hfs
-        ${module_init_tools}/sbin/modprobe hfsplus
-        ${module_init_tools}/sbin/modprobe squashfs
-        ${module_init_tools}/sbin/modprobe iso9660
-        ${module_init_tools}/sbin/modprobe ufs
-        ${module_init_tools}/sbin/modprobe cramfs
+        ${module_init_tools}/bin/modprobe loop
+        ${module_init_tools}/bin/modprobe ext4
+        ${module_init_tools}/bin/modprobe hfs
+        ${module_init_tools}/bin/modprobe hfsplus
+        ${module_init_tools}/bin/modprobe squashfs
+        ${module_init_tools}/bin/modprobe iso9660
+        ${module_init_tools}/bin/modprobe ufs
+        ${module_init_tools}/bin/modprobe cramfs
         mknod /dev/loop0 b 7 0
 
         mkdir -p $out
@@ -332,12 +332,12 @@ rec {
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/sbin/modprobe mtd
-        ${module_init_tools}/sbin/modprobe mtdram total_size=131072
-        ${module_init_tools}/sbin/modprobe mtdchar
-        ${module_init_tools}/sbin/modprobe mtdblock
-        ${module_init_tools}/sbin/modprobe jffs2
-        ${module_init_tools}/sbin/modprobe zlib
+        ${module_init_tools}/bin/modprobe mtd
+        ${module_init_tools}/bin/modprobe mtdram total_size=131072
+        ${module_init_tools}/bin/modprobe mtdchar
+        ${module_init_tools}/bin/modprobe mtdblock
+        ${module_init_tools}/bin/modprobe jffs2
+        ${module_init_tools}/bin/modprobe zlib
         mknod /dev/mtd0 c 90 0
         mknod /dev/mtdblock0 b 31 0
 
@@ -560,7 +560,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin:${lzma}/bin
+        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc}/bin:${lzma}/bin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
