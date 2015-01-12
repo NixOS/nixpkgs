@@ -9736,6 +9736,8 @@ let
 
   inherit (gnome3) empathy;
 
+  enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
+
   epdfview = callPackage ../applications/misc/epdfview { };
 
   inherit (gnome3) epiphany;
