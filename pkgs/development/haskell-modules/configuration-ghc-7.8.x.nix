@@ -56,6 +56,7 @@ self: super: {
     process = overrideCabal self.process_1_2_1_0 (drv: {
       coreSetup = true;
     });
+    inherit amazonka-core;
   } // (builtins.listToAttrs (map (name: {
     inherit name;
     value = overrideCabal super.${name} (drv: {
@@ -67,9 +68,16 @@ self: super: {
     "http-client"
     "cryptohash-conduit"
     "xml-conduit"
+    "x509"
+    "x509-store"
+    "x509-system"
+    "x509-validation"
+    "tls"
+    "connection"
+    "http-client-tls"
+    "http-conduit"
   ]));
   Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
-in {
   amazonka-core =
     overrideCabal (super.amazonka-core.overrideScope amazonkaEnv) (drv: {
       # https://github.com/brendanhay/amazonka/pull/57
@@ -77,4 +85,11 @@ in {
 
       extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
     });
+  useEnvCabal = p: overrideCabal (p.overrideScope amazonkaEnv) (drv: {
+    extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
+  });
+in {
+  inherit amazonka-core;
+  amazonka = useEnvCabal super.amazonka;
+  amazonka-cloudwatch = useEnvCabal super.amazonka-cloudwatch;
 })
