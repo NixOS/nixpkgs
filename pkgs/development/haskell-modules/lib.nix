@@ -23,4 +23,6 @@ rec {
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
+  markBroken = drv: overrideCabal (drv: { broken = true; });
+
 }
