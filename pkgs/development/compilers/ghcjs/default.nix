@@ -19,6 +19,7 @@ let
     url = git://github.com/ghcjs/ghcjs-boot.git;
     rev = "5c7a71472d5a797e895914d3b82cea447a058793";
     sha256 = "0dp97bgbnlr3sd9yfnk27p6dfv46fi26sn6y6qv1wxs5i29kmjav";
+    fetchSubmodules = true;
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
