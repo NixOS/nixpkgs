@@ -66,6 +66,14 @@ self: super: {
     # official upstream bugtracker but I've emailed this patch to the maintainer
     patches = [ ./patches/options-amp.patch ];
   });
+  chell = overrideCabal super.chell (drv: {
+    # edited cabal file simply makes a stricter base bound
+    editedCabalFile = null;
+
+    # See https://github.com/shlevy/chell/tree/AMP. There is no
+    # official upstream bugtracker but I've emailed this patch to the maintainer
+    patches = [ ./patches/chell-amp.patch ];
+  });
 
   # bos/attoparsec#92
   attoparsec = dontCheck super.attoparsec;
