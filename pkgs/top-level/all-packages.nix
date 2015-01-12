@@ -7157,6 +7157,8 @@ let
     libusb = libusb1;
   };
 
+  uthash = callPackage ../development/libraries/uthash { };
+
   ucommon = callPackage ../development/libraries/ucommon { };
 
   v8 = callPackage ../development/libraries/v8 {
