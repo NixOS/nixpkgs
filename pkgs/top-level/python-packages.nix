@@ -7440,19 +7440,19 @@ let
 
 
   pycapnp = buildPythonPackage rec {
-    name = "pycapnp-0.4.4";
+    name = "pycapnp-0.5.1";
     disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pycapnp/${name}.tar.gz";
-      sha256 = "33b2b79438bb9bf37097966e1c90403c34ab49be1eb647ee251b62f362ee3537";
+      sha256 = "1kp97il34419gcrhn866n6a10lvh8qr13bnllnnh9473n4cq0cvk";
     };
 
     buildInputs = with pkgs; [ capnproto self.cython ];
 
     # import setuptools as soon as possible, to minimize monkeypatching mayhem.
     postConfigure = ''
-      sed -i '2iimport setuptools' setup.py
+      sed -i '3iimport setuptools' setup.py
     '';
 
     meta = with stdenv.lib; {
