@@ -3758,6 +3758,11 @@ let
       inherit (gnome) libgnomecanvas libglade gtksourceview;
     };
 
+    lablgtk-extras =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/lablgtk-extras { }
+      else callPackage ../development/ocaml-modules/lablgtk-extras/1.4.nix { };
+
     lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
