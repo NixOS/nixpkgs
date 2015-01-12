@@ -2,10 +2,11 @@
 
 rec {
 
-  overrideCabal = drv: f: drv.override (args: args // {
+  overrideCabal = drv: f: (drv.override (args: args // {
     mkDerivation = drv: args.mkDerivation (drv // f drv);
+  })) // {
     overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
-  });
+  };
 
   doHaddock = drv: overrideCabal drv (drv: { noHaddock = false; });
   dontHaddock = drv: overrideCabal drv (drv: { noHaddock = true; });
