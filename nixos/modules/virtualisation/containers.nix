@@ -111,6 +111,13 @@ in
               '';
             };
 
+            autoStart = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Wether the container is automatically started at boot-time.
+              '';
+            };
           };
 
           config = mkMerge
@@ -305,6 +312,9 @@ in
                 LOCAL_ADDRESS=${cfg.localAddress}
               ''}
             ''}
+           ${optionalString cfg.autoStart ''
+             AUTO_START=1
+           ''}
           '';
       }) config.containers;
 
