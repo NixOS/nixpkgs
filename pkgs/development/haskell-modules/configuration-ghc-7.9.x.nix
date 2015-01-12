@@ -88,6 +88,9 @@ self: super: {
   # Test suite has stricter version bounds
   retry = dontCheck super.retry;
 
+  # Test suite fails with time >= 1.5
+  http-date = dontCheck super.http-date;
+
   # Version 1.19.5 fails its test suite.
   happy = dontCheck super.happy;
 
