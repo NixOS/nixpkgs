@@ -54,9 +54,6 @@ self: super: {
   # 0.7.0.2 doesn't accept recent versions of HaXml.
   encoding = doJailbreak super.encoding;
 
-  # https://github.com/simonmichael/hledger/issues/232
-  hledger-web = dontCheck super.hledger-web;
-
   # Doesn't accept recent versions of vector-space.
   active = doJailbreak super.active;
   diagrams-core = doJailbreak super.diagrams-core; # https://github.com/diagrams/diagrams-core/issues/78
