@@ -12,6 +12,8 @@ self: super: {
 
   # Break infinite recursions.
   digest = super.digest.override { inherit (pkgs) zlib; };
+  Dust-crypto = dontCheck super.Dust-crypto;
+  hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
   matlab = super.matlab.override { matlab = null; };
@@ -28,7 +30,10 @@ self: super: {
   git-annex = super.git-annex.override { inherit (pkgs) git rsync gnupg1 curl lsof openssh which bup perl wget; };
 
   # Depends on code distributed under a non-free license.
-  yices-painless = overrideCabal super.yices-painless (drv: { hydraPlatforms = []; });
+  bindings-yices = dontDistribute super.bindings-yices;
+  yices = dontDistribute super.yices;
+  yices-easy = dontDistribute super.yices-easy;
+  yices-painless = dontDistribute super.yices-painless;
 
   # This package overrides the one from pkgs.gnome.
   gtkglext = super.gtkglext.override { inherit (pkgs.gnome) gtkglext; };
@@ -100,6 +105,21 @@ self: super: {
 
   # https://github.com/gcross/AbortT-transformers/issues/1
   AbortT-transformers = doJailbreak super.AbortT-transformers;
+
+  # Depends on broken NewBinary package.
+  ASN1 = markBroken super.ASN1;
+
+  # Depends on broken Hails package.
+  hails-bin = markBroken super.hails-bin;
+
+  # Depends on broken frame package.
+  frame-markdown = markBroken super.frame-markdown;
+
+  # Depends on broken lss package.
+  snaplet-lss = markBroken super.snaplet-lss;
+
+  # depends on broken hbro package.
+  hbro-contrib = markBroken super.hbro-contrib;
 
 }
 // {
