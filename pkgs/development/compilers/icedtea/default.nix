@@ -78,6 +78,14 @@ with srcInfo; stdenv.mkDerivation {
     substituteInPlace openjdk/jdk/make/common/shared/Defs-utils.gmk --replace '/bin/echo' '${coreutils}/bin/echo'
     substituteInPlace openjdk/corba/make/common/shared/Defs-utils.gmk --replace '/bin/echo' '${coreutils}/bin/echo'
 
+    # (Copied from openjdk expression
+    # Real ugly hack until we can update openjdk. Without this openjdk fails with:
+    #   Error: time is more than 10 years from present: 1104530400000
+    # See:
+    #   http://permalink.gmane.org/gmane.os.netbsd.devel.pkgsrc.user/20888
+    sed -i 's|TR=TRL;2004-12-31-22-00-00;TRY|TR=TRY|' \
+        openjdk/jdk/src/share/classes/java/util/CurrencyData.properties
+
     patch -p0 < ${./cppflags-include-fix.patch}
     patch -p0 < ${./fix-java-home.patch}
   '';
