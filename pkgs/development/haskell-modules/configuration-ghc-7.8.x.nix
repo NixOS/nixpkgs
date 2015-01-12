@@ -37,3 +37,44 @@ self: super: {
   # mtl 2.2.x needs the latest transformers.
   mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_2_0; };
 }
+
+// # packages relating to amazonka
+
+(let
+  amazonkaEnv = let self_ = self; in self: super: {
+    mkDerivation = drv: super.mkDerivation (drv // {
+      doCheck = false;
+    });
+    mtl = self.mtl_2_2_1;
+    transformers = self.transformers_0_4_2_0;
+    transformers-compat = overrideCabal super.transformers-compat (drv: { configureFlags = []; });
+    aeson = disableCabalFlag super.aeson "old-locale";
+    hscolour = super.hscolour;
+    time = self.time_1_5_0_1;
+    unix = self.unix_2_7_1_0;
+    directory = self.directory_1_2_1_0;
+    process = overrideCabal self.process_1_2_1_0 (drv: {
+      coreSetup = true;
+    });
+  } // (builtins.listToAttrs (map (name: {
+    inherit name;
+    value = overrideCabal super.${name} (drv: {
+      extraLibraries = (drv.extraLibraries or []) ++ [ self.Cabal_1_18_1_6 ];
+    });
+  }) [
+    "conduit-extra"
+    "streaming-commons"
+    "http-client"
+    "cryptohash-conduit"
+    "xml-conduit"
+  ]));
+  Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
+in {
+  amazonka-core =
+    overrideCabal (super.amazonka-core.overrideScope amazonkaEnv) (drv: {
+      # https://github.com/brendanhay/amazonka/pull/57
+      prePatch = "sed -i 's|nats >= 0.1.3 && < 1|nats|' amazonka-core.cabal";
+
+      extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
+    });
+})
