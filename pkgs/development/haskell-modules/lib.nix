@@ -12,12 +12,12 @@ rec {
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
   dontJailbreak = drv: overrideCabal drv (drv: { jailbreak = false; });
 
-  doCheck = drv: overrideCabal drv (drv: { doCheck = false; });
+  doCheck = drv: overrideCabal drv (drv: { doCheck = true; });
   dontCheck = drv: overrideCabal drv (drv: { doCheck = false; });
 
   dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
 
-  appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = drv.configureFlags or [] ++ [x]; });
+  appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ [x]; });
   removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = pkgs.stdenv.lib.remove x (drv.configureFlags or []); });
 
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
