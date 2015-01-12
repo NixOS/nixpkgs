@@ -6,8 +6,10 @@ let
 
   cfg = config.boot.loader.grub;
 
+  efi = config.boot.loader.efi;
+
   realGrub = if cfg.version == 1 then pkgs.grub
-    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; };
+    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; efiSupport = cfg.efiSupport; };
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -23,16 +25,17 @@ let
       grub = f grub;
       shell = "${pkgs.stdenv.shell}";
       fullVersion = (builtins.parseDrvName realGrub.name).version;
+      inherit (efi) efiSysMountPoint canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices fsIdentifier;
-      path = (makeSearchPath "bin" [
+        default devices fsIdentifier efiSupport;
+      path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
-        pkgs.utillinux
-      ]) + ":" + (makeSearchPath "sbin" [
+        pkgs.utillinux ] ++ (if cfg.efiSupport then [pkgs.efibootmgr ] else [])) )
+        + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
-      ]);
+        ]);
     });
 
 in
@@ -231,6 +234,14 @@ in
         type = types.bool;
         description = ''
           Whether grub should be build against libzfs.
+        '';
+      };
+
+      efiSupport = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether grub should be build with EFI support.
         '';
       };
 
