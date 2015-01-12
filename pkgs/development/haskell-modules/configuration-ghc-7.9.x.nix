@@ -99,30 +99,3 @@ self: super: {
   extra = dontCheck super.extra;
 
 }
-// {
-  # Not on Hackage yet.
-  doctest = self.mkDerivation {
-    pname = "doctest";
-    version = "0.9.11.1";
-    src = pkgs.fetchgit {
-      url = "git://github.com/sol/doctest.git";
-      sha256 = "a01ced437f5d733f916dc62ea6a67e0e5d275164ba317da33245cf9374f23925";
-      rev = "c85fdaaa92d1f0334d835254d63bdc30f7077387";
-    };
-    isLibrary = true;
-    isExecutable = true;
-    doCheck = false;
-    buildDepends = with self; [
-      base deepseq directory filepath ghc ghc-paths process syb
-      transformers
-    ];
-    testDepends = with self; [
-      base base-compat deepseq directory filepath ghc ghc-paths hspec
-      HUnit process QuickCheck setenv silently stringbuilder syb
-      transformers
-    ];
-    homepage = "https://github.com/sol/doctest#readme";
-    description = "Test interactive Haskell examples";
-    license = pkgs.stdenv.lib.licenses.mit;
-  };
-}
