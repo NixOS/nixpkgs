@@ -39,6 +39,7 @@
 , preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
+, coreSetup ? false # Use core packages to build Setup.hs
 }:
 
 assert pkgconfigDepends != [] -> pkgconfig != null;
@@ -155,7 +156,7 @@ stdenv.mkDerivation ({
     for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
       test -f $i && break
     done
-    ghc -package-db=$packageConfDir $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ghc ${optionalString (! coreSetup) "-package-db=$packageConfDir "}$setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     echo configureFlags: $configureFlags
     unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
