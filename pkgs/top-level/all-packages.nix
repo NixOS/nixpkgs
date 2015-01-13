@@ -12915,6 +12915,8 @@ let
 
   runit = callPackage ../tools/system/runit { };
 
+  refind = callPackage ../tools/bootloaders/refind { };
+
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
   sails = callPackage ../misc/sails { };
