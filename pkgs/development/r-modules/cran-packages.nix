@@ -5487,7 +5487,7 @@ sjdbc = derive { name="sjdbc"; version="1.5.0-71"; sha256="0i9wdfadfcabayq78ilcn
 skatMeta = derive { name="skatMeta"; version="1.4.3"; sha256="0bknv066ya4yl4hl4y02d9lglq2wkl9c2j1shzg3d64dg4sjvbak"; depends=[Matrix coxme survival CompQuadForm]; };
 skda = derive { name="skda"; version="0.1"; sha256="0a6mksr1d0j3pd0kz4jb6yh466gvl4fkrvgvnlmvivpv6b2gqs3q"; depends=[]; };
 skewt = derive { name="skewt"; version="0.1"; sha256="1xm00zfzjv53cq9drfcx7w2ri5dwsq7kajrk2hc1mvw0b6s4x2ix"; depends=[]; };
-skmeans = derive { name="skmeans"; version="0.2-6"; sha256="1ncas6mx9w5saz28vvwni8g0wbm6m7gfv8a7azw4305pc64bawam"; depends=[slam clue cluster]; };
+skmeans = derive { name="skmeans"; version="0.2-6"; sha256="02zw2y7s13hb6mx9w2yr5s2v1p5yxg3k67bhrl92g9n2jkbim3ni"; depends=[slam clue cluster]; };
 sla = derive { name="sla"; version="0.1"; sha256="0fr5n65ppwsh9z7a6rma9ak0bl8x3nz7v25lij7wb5nrf3sl74yb"; depends=[]; };
 slackr = derive { name="slackr"; version="1.2"; sha256="1ymj3x52wyp0mp41xnnycg0vhdmv8whimwk1hzfsqr30pccnvn9j"; depends=[httr jsonlite data_table ggplot2]; };
 slam = derive { name="slam"; version="0.1-32"; sha256="000636dwj4kmj5w1w5s6bqixh78m7262y3fgizj7rfhcnc2gz7ad"; depends=[]; };
@@ -6113,5 +6113,5 @@ zoib = derive { name="zoib"; version="1.0"; sha256="0mxd9j5sbwyv3bhhrly2ikbfqgk3
 zoo = derive { name="zoo"; version="1.7-11"; sha256="0fp726rp9mqsfmm391bmckk76lqsvzwd39ffvb355wf2spl8nzvf"; depends=[lattice]; };
 zooimage = derive { name="zooimage"; version="3.0-5"; sha256="1r3slmyw0dyqfa40dr5xga814z09ibhmmby8p1cii5lh61xm4c39"; depends=[svMisc svDialogs mlearning filehash jpeg png]; };
 zoom = derive { name="zoom"; version="2.0.4"; sha256="03f5rxfr6ncf1j6vpn7pip21q7ylj4bx0a5xphqb6x6i33lxf1g5"; depends=[]; };
-zyp = derive { name="zyp"; version="0.10-1"; sha256="0f1fqqxysf3psnvn08s5qly2c958h1hhznjjj8mvpjr5g6hqlr1k"; depends=[Kendall]; }; 
+zyp = derive { name="zyp"; version="0.10-1"; sha256="0f1fqqxysf3psnvn08s5qly2c958h1hhznjjj8mvpjr5g6hqlr1k"; depends=[Kendall]; };
 }
