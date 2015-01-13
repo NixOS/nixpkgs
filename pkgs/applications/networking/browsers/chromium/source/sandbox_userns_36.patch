@@ -272,3 +272,16 @@ index 9345287..2db659e 100644
  
  static const long kSUIDSandboxApiNumber = 1;
  static const char kSandboxEnvironmentApiRequest[] = "SBX_CHROME_API_RQ";
+diff --git a/sandbox/linux/suid/sandbox.c b/sandbox/linux/suid/sandbox.c
+index 7410b71..a83593d 100644
+--- a/sandbox/linux/suid/sandbox.c
++++ b/sandbox/linux/suid/sandbox.c
+@@ -330,7 +330,7 @@ static bool DropRoot() {
+     return false;
+   }
+ 
+-  if (setresgid(rgid, rgid, rgid)) {
++  if (egid != rgid && setresgid(rgid, rgid, rgid)) {
+     perror("setresgid");
+     return false;
+   }
