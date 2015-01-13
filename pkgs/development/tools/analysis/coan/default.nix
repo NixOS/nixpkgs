@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    mv -v $out/share/man/man1/coan.1.{1,gz}
+  '';
+
   meta = with stdenv.lib; {
     description = "The C preprocessor chainsaw";
     longDescription = ''
