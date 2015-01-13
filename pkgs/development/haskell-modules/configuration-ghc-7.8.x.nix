@@ -36,6 +36,18 @@ self: super: {
 
   # mtl 2.2.x needs the latest transformers.
   mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_2_0; };
+
+  # Idris requires mtl 2.2.x.
+  idris = overrideCabal (super.idris.overrideScope (self: super: {
+    mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
+    transformers = super.transformers_0_4_2_0;
+    transformers-compat = disableCabalFlag super.transformers-compat "three";
+    mtl = super.mtl_2_2_1;
+  })) (drv: {
+    jailbreak = true;           # idris is scared of lens 4.7
+    patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
+  });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
+
 }
 
 // # packages relating to amazonka
