@@ -36,5 +36,7 @@ let
       home = jdk;
     };
 
+    meta.platforms = stdenv.lib.platforms.darwin;
+
   };
 in jdk
