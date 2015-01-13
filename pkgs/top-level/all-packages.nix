@@ -1710,6 +1710,8 @@ let
 
   xz = callPackage ../tools/compression/xz { };
 
+  lz4 = callPackage ../tools/compression/lz4 { };
+
   lzop = callPackage ../tools/compression/lzop { };
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
