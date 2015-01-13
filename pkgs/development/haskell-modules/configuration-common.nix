@@ -38,11 +38,11 @@ self: super: {
   # release: bumped language-ecmascript's limit in git already.
   elm-compiler = doJailbreak super.elm-compiler;
 
+  # https://github.com/acid-state/safecopy/issues/17
   safecopy = dontCheck super.safecopy;
 
-  zeromq4-haskell = super.zeromq4-haskell.override {
-       zeromq = pkgs.zeromq4;
-  };
+  # Link the proper version.
+  zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
   # "curl" means pkgs.curl
   git-annex = super.git-annex.override { inherit (pkgs) git rsync gnupg1 curl lsof openssh which bup perl wget; };
