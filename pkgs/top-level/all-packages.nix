@@ -4629,6 +4629,8 @@ let
 
   flow = callPackage ../development/tools/analysis/flow { };
 
+  fswatch = callPackage ../development/tools/misc/fswatch { };
+
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
@@ -5334,6 +5336,7 @@ let
 
   gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
   gettext_0_18 = callPackage ../development/libraries/gettext { };
+  gettext_0_19 = callPackage ../development/libraries/gettext/0.19.nix { };
 
   gd = callPackage ../development/libraries/gd { };
 
