@@ -58,22 +58,6 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  options = overrideCabal super.options (drv: {
-    # edited cabal file simply makes a stricter base bound
-    editedCabalFile = null;
-
-    # See https://github.com/shlevy/haskell-options/tree/AMP. There is no
-    # official upstream bugtracker but I've emailed this patch to the maintainer
-    patches = [ ./patches/options-amp.patch ];
-  });
-  chell = overrideCabal super.chell (drv: {
-    # edited cabal file simply makes a stricter base bound
-    editedCabalFile = null;
-
-    # See https://github.com/shlevy/chell/tree/AMP. There is no
-    # official upstream bugtracker but I've emailed this patch to the maintainer
-    patches = [ ./patches/chell-amp.patch ];
-  });
 
   # bos/attoparsec#92
   attoparsec = dontCheck super.attoparsec;
