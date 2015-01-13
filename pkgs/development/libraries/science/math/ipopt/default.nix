@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0sji4spl5dhw1s3f9y0ym09gi7d1c8wldn6wbiap4q8dq7cvklq5";
   };
 
+  preConfigure = ''
+     export CXXDEFS="-DHAVE_RAND -DHAVE_CSTRING -DHAVE_CSTDIO"
+  '';
+
   nativeBuildInputs = [ unzip ];
 
   buildInputs = [ gfortran blas liblapack ];

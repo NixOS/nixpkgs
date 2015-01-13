@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
   GST_PLUGIN_PATH = lib.makeSearchPath "lib/gstreamer-1.0" [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad ];
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-libav ];
   configurePhase = ''
     ./autogen.sh --prefix=$out
   '';

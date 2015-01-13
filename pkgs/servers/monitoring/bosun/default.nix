@@ -1,10 +1,10 @@
 { stdenv, fetchurl, go }:
 stdenv.mkDerivation rec {
   name = "bosun-${version}";
-  version = "20141204222654";
+  version = "20141215200935";
   src = fetchurl {
     url = "https://github.com/bosun-monitor/bosun/archive/${version}.tar.gz";
-    sha256 = "1jwhfwf24zhncrirna3q1vhap4f955bqx3sws3ryk5gp1w99l36n";
+    sha256 = "1py4plx5wi4mp05g4c1aa1wa8ny538kp2p4fzhalz33zm2qxbbx9";
   };
   buildInputs = [ go ];
 

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cabal, swiProlog, either, mtl, syb
-, glibcLocales, makeWrapper, rlwrap, tk }:
+, glibcLocales, makeWrapper, rlwrap, tk, which }:
 
 let
-  fname = "pakcs-1.11.3";
+  fname = "pakcs-1.11.4";
 
   fsrc = fetchurl {
     url = "http://www.informatik.uni-kiel.de/~pakcs/download/${fname}-src.tar.gz";
-    sha256 = "0f4rhaqss9vfinpdjchxq75g343hz322cv0admjnl4g5g568wk3x";
+    sha256 = "1xsn8h58pi1jp8wr4abyrqdps840j8limyv5i812z49npf91fy5c";
   };
 
 in
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fsrc;
 
-  buildInputs = [ swiProlog makeWrapper glibcLocales rlwrap tk ];
+  buildInputs = [ swiProlog makeWrapper glibcLocales rlwrap tk which ];
 
   patches = [ ./adjust-buildsystem.patch ];
 
@@ -48,48 +48,37 @@ stdenv.mkDerivation rec {
     sed -i 's@SWIPROLOG=@SWIPROLOG='${swiProlog}/bin/swipl'@' pakcsinitrc
   '';
 
-  preBuild = ''
+  buildPhase = ''
     # Some comments in files are in UTF-8, so include the locale needed by GHC runtime.
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
     export LC_ALL=en_US.UTF-8
 
+    # PAKCS must be build in place due to embedded filesystem references placed by swi.
+
+    # Prepare PAKCSHOME directory.
+    mkdir -p $out/pakcs/bin
+
     # Set up link to cymake, which has been built already.
-    mkdir -p bin/.local
-    ln -s ${curryFront}/bin/cymake bin/.local/
+    ln -s ${curryFront}/bin/cymake $out/pakcs/bin/
+
+    # Prevent embedding the derivation build directory as temp.
+    export TEMP=/tmp
+
+    # Copy to in place build location and run the build.
+    cp -r * $out/pakcs
+    (cd $out/pakcs ; make)
   '';
 
   installPhase = ''
-    # Prepare PAKCSHOME directory.
-    mkdir -p $out/pakcs
-    for d in bin curry2prolog currytools lib tools cpns include www examples docs ; do
-      cp -r $d $out/pakcs ;
-    done
-    cp pakcsrc.default $out/pakcs
-    cp pakcsinitrc $out/pakcs
-
-    # Fixing PAKCSHOME and related paths.
-    sed -i 's@PAKCSHOME=/tmp/.*@PAKCSHOME='$out/pakcs'@' $out/pakcs/bin/{pakcs,makecurrycgi,parsecurry,.makesavedstate}
-
-    # The Prolog sources must be rebuilt in their final directory,
-    # to switch the embedded references to the tmp build directory.
-    export TEMP=/tmp
-    (cd $out/pakcs/curry2prolog/ ; rm c2p.state ; make)
-    cp Makefile $out/pakcs
-    (cd $out/pakcs ; make tools)
-    (cd $out/pakcs/cpns ; make)
-    (cd $out/pakcs/www ; make)
-
     # Install bin.
     mkdir -p $out/bin
-    for b in makecurrycgi .makesavedstate pakcs parsecurry cleancurry \
-             addtypes cass currybrowse currycreatemake currydoc currytest \
-             dataToXml erd2curry ; do
+    for b in $(ls $out/pakcs/bin) ; do
       ln -s $out/pakcs/bin/$b $out/bin/ ;
     done
 
     # Place emacs lisp files in expected locations.
     mkdir -p $out/share/emacs/site-lisp/curry-pakcs
-    for e in "tools/emacs/"*.el ; do
+    for e in "$out/tools/emacs/"*.el ; do
       cp $e $out/share/emacs/site-lisp/curry-pakcs/ ;
     done
 
@@ -119,6 +108,5 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = stdenv.lib.platforms.none;
-    broken = true;
   };
 }

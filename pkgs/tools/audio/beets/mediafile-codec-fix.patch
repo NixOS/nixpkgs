@@ -1,0 +1,25 @@
+From 903e88a228d6bd93bd1884c59dd23dd9f04a1199 Mon Sep 17 00:00:00 2001
+From: Adrian Sampson <adrian@radbox.org>
+Date: Wed, 26 Nov 2014 19:04:40 -0800
+Subject: [PATCH] Fix codec reference in MediaFile (fix #1117)
+
+---
+ beets/mediafile.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/beets/mediafile.py b/beets/mediafile.py
+index ce42621..a459e09 100644
+--- a/beets/mediafile.py
++++ b/beets/mediafile.py
+@@ -1340,8 +1340,9 @@ def __init__(self, path, id3v23=False):
+             raise FileTypeError(path)
+         elif (type(self.mgfile).__name__ == 'M4A' or
+               type(self.mgfile).__name__ == 'MP4'):
+-            if hasattr(self.mgfile.info, 'codec'):
+-                if self.mgfile.codec and self.mgfile.codec.startswith('alac'):
++            info = self.mgfile.info
++            if hasattr(info, 'codec'):
++                if info.codec and info.codec.startswith('alac'):
+                     self.type = 'alac'
+                 else:
+                     self.type = 'aac'

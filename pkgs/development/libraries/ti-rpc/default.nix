@@ -1,11 +1,11 @@
 { fetchurl, stdenv, kerberos }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-0.2.4";
+  name = "libtirpc-0.2.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "18a337wa4amf0k21wnimp3yzs5l3cxqndz4x3x8bm993zhfy5hs5";
+    sha256 = "1nq2w227j9nh8qsz7b3c1pha00k5yvzf2c3pfmlcb1l65iydxyb2";
   };
 
   buildInputs = [ kerberos ];

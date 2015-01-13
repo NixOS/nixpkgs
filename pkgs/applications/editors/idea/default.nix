@@ -70,9 +70,7 @@ let
       cp -va . "$out/$name"
       ln -s "$out/$name/bin/${loName}.png" "$out/share/pixmaps/"
 
-      [ -d ${jdk}/lib/openjdk ] \
-        && jdk=${jdk}/lib/openjdk \
-        || jdk=${jdk}
+      jdk=${jdk.home}
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
         --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
@@ -204,50 +202,50 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.0.0-rc1";
-    build = "135.1598475";
+    version = "1.0.2";
+    build = "135.1653844";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "1d0gj9c2hkrcij79xv8i5fy1z8zss1fp8szjp6h7z7zak989rsrf";
+      sha256 = "0y20gp5444c2lwyzhlppjpkb657qbgpskj31lwyfhx6xyqy83159";
     };
   };
 
   clion = buildClion rec {
     name = "clion";
     version = "eap";
-    build = "140.569.17";
+    build = "140.1221.2";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
-      sha256 = "1y4137dxbydf3g5s6c58bf015k2q7dsl8h4n0q2llqj5bprwcr23";
+      sha256 = "0gf809plnw89dgn47j6hsh5nv0bpdynjnl1rg8wv7jaz2zx9bqcg";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14.0.1";
-    build = "IC-139.225";
+    version = "14.0.2";
+    build = "IC-139.659";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "166m55q33q4jwfvzwxm8mak6ic32h63bvpxdnjd41si6bs19ynvg";
+      sha256 = "0g8f66bdxdmsbv2r1jc308by5ca92ifczprf0gwy5bs2xsvxxwlf";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14.0.1";
-    build = "IU-139.225";
+    version = "14.0.2";
+    build = "IU-139.659";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0hh84f3297ak63n2kv76xv1rnf1fhjws9d3b2r5pwzgfd78zja4q";
+      sha256 = "0swd3lyrlcdlsgp350sa741bkmndlck1ss429f9faf3hm4s2y0k5";
     };
   };
 

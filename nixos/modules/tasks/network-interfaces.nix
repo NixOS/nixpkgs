@@ -368,6 +368,13 @@ in
             "The physical network interfaces connected by the bridge.";
         };
 
+        rstp = mkOption {
+          example = true;
+          default = false;
+          type = types.bool;
+          description = "Whether the bridge interface should enable rstp.";
+        };
+
       };
 
     };

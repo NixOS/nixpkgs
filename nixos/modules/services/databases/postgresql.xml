@@ -24,11 +24,11 @@
 
 <programlisting>
 services.postgresql.enable = true;
-services.postgresql.package = pkgs.postgresql93;
+services.postgresql.package = pkgs.postgresql94;
 </programlisting>
 
 Note that you are required to specify the desired version of
-PostgreSQL (e.g. <literal>pkgs.postgresql93</literal>). Since
+PostgreSQL (e.g. <literal>pkgs.postgresql94</literal>). Since
 upgrading your PostgreSQL version requires a database dump and reload
 (see below), NixOS cannot provide a default value for
 <option>services.postgresql.package</option> such as the most recent

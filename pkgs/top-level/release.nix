@@ -32,7 +32,7 @@ let
               jobs.manual
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
-              #jobs.stdenv.x86_64-darwin
+              jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
               # Ensure that X11/GTK+ are in order.
@@ -207,7 +207,7 @@ let
       spidermonkey = linux;
       squid = linux;
       ssmtp = linux;
-      stdenv = prio 175 all;
+      stdenv = all;
       stlport = linux;
       su = linux;
       sudo = linux;
@@ -371,6 +371,12 @@ let
       linuxPackages_grsec_testing_server = { };
       linuxPackages_grsec_testing_server_xen = { };
 
-    } ));
+    } ))
+
+    # Temporary hack: build some stuff on Darwin.
+    // (with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]; }; mapTestOn {
+      stdenv = all;
+      hello = all;
+    });
 
 in jobs

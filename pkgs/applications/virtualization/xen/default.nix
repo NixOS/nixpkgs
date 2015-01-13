@@ -1,19 +1,50 @@
 { stdenv, fetchurl, which, zlib, pkgconfig, SDL, openssl
-, libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2, xz
-, lvm2, utillinux, procps, texinfo, perl, pythonPackages }:
+, libuuid, gettext, ncurses, dev86, iasl, pciutils, bzip2
+, lvm2, utillinux, procps, texinfo, perl, pythonPackages
+, glib, bridge_utils, xlibs, pixman, iproute, udev, bison
+, flex, cmake, ocaml, ocamlPackages, figlet, libaio, yajl
+, checkpolicy, transfig, glusterfs, fetchgit, xz }:
 
 with stdenv.lib;
 
 let
-
-  version = "4.0.3";
+  version = "4.4.1";
 
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
-  # Sources needed to build the stubdoms.
+  # Sources needed to build the xen tools and tools/firmware.
+  toolsGits =
+    [ # tag qemu-xen-4.4.1
+      #{ name = "qemu-xen";
+      #  url = git://xenbits.xen.org/qemu-upstream-4.4-testing.git;
+      #  rev = "65fc9b78ba3d868a26952db0d8e51cecf01d47b4";
+      #  sha256 = "e7abaf0e927f7a2bba4c59b6dad6ae19e77c92689c94fa0384e2c41742f8cdb6";
+      #}
+      # tag xen-4.4.1
+      {  name = "qemu-xen-traditional";
+        url = git://xenbits.xen.org/qemu-xen-4.4-testing.git;
+        rev = "6ae4e588081620b141071eb010ec40aca7e12876";
+        sha256 = "b1ed1feb92fbe658273a8d6d38d6ea60b79c1658413dd93979d6d128d8554ded";
+      }
+    ];
+  firmwareGits =
+    [ # tag 1.7.3.1
+      { name = "seabios";
+        url = git://xenbits.xen.org/seabios.git;
+        rev = "7d9cbe613694924921ed1a6f8947d711c5832eee";
+        sha256 = "c071282bbcb1dd0d98536ef90cd1410f5d8da19648138e0e3863bc540d954a87";
+      }
+      { name = "ovmf";
+        url = git://xenbits.xen.org/ovmf.git;
+        rev = "447d264115c476142f884af0be287622cd244423";
+        sha256 = "7086f882495a8be1497d881074e8f1005dc283a5e1686aec06c1913c76a6319b";
+      }
+    ];
 
-  stubdomSrcs =
-    [ { url = http://xenbits.xensource.com/xen-extfiles/lwip-1.3.0.tar.gz;
+
+  # Sources needed to build the stubdoms and tools
+  xenExtfiles = [
+      { url = http://xenbits.xensource.com/xen-extfiles/lwip-1.3.0.tar.gz;
         sha256 = "13wlr85s1hnvia6a698qpryyy12lvmqw0a05xmjnd0h71ralsbkp";
       }
       { url = http://xenbits.xensource.com/xen-extfiles/zlib-1.2.3.tar.gz;
@@ -28,6 +59,21 @@ let
       { url = http://xenbits.xensource.com/xen-extfiles/pciutils-2.2.9.tar.bz2;
         sha256 = "092v4q478i1gc7f3s2wz6p4xlf1wb4gs5shbkn21vnnmzcffc2pn";
       }
+      { url = http://xenbits.xensource.com/xen-extfiles/tpm_emulator-0.7.4.tar.gz;
+        sha256 = "0nd4vs48j0zfzv1g5jymakxbjqf9ss6b2jph3b64356xhc6ylj2f";
+      }
+      { url = http://xenbits.xensource.com/xen-extfiles/tboot-20090330.tar.gz;
+        sha256 = "0rl1b53g019w2c268pyxhjqsj9ls37i4p74bdv1hdi2yvs0r1y81";
+      }
+      { url = http://xenbits.xensource.com/xen-extfiles/ipxe-git-9a93db3f0947484e30e753bbd61a10b17336e20e.tar.gz;
+        sha256 = "0p206zaxlhda60ci33h9gipi5gm46fvvsm6k5c0w7b6cjg0yhb33";
+      }
+      { url = http://xenbits.xensource.com/xen-extfiles/polarssl-1.1.4-gpl.tgz;
+        sha256 = "1dl4fprpwagv9akwqpb62qwqvh24i50znadxwvd2kfnhl02gsa9d";
+      }
+      { url = http://xenbits.xensource.com/xen-extfiles/gmp-4.3.2.tar.bz2;
+        sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
+      }
     ];
 
 in
@@ -37,27 +83,35 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "0p4i7mm8cdsr8i9z3dij6nriyvz6la2rhm7jkyk2n8h62nnxi1b5";
+    sha256 = "09gaqydqmy64s5pqnwgjyzhd3wc61xyghpqjfl97kmvm8ly9vd2m";
   };
 
-  patches =
-    [ # Xen looks for headers in /usr/include and for libraries using
-      # ldconfig.  Don't do that.
-      ./has-header.patch
-
-      # GCC 4.5 compatibility.
-      ./gcc-4.5.patch
-    ];
+  dontUseCmakeConfigure = true;
 
   buildInputs =
     [ which zlib pkgconfig SDL openssl libuuid gettext ncurses
-      dev86 iasl pciutils bzip2 xz texinfo perl
+      dev86 iasl pciutils bzip2 xz texinfo perl yajl
       pythonPackages.python pythonPackages.wrapPython
+      glib bridge_utils pixman iproute udev bison xlibs.libX11
+      flex ocaml ocamlPackages.findlib figlet libaio
+      checkpolicy pythonPackages.markdown transfig
+      glusterfs cmake
     ];
 
   pythonPath = [ pythonPackages.curses ];
 
-  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc";
+
+  preConfigure = ''
+    # Fake wget: copy prefetched downloads instead
+    mkdir wget
+    echo "#!/bin/sh" > wget/wget
+    echo "echo ===== Not fetching \$*, copy pre-fetched file instead" >> wget/wget
+    echo "cp \$4 \$3" >> wget/wget
+    chmod +x wget/wget
+    export PATH=$PATH:$PWD/wget
+  '';
+
+  makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
 
   buildFlags = "xen tools stubdom";
 
@@ -105,10 +159,22 @@ stdenv.mkDerivation {
         --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
         --replace /bin/ls ls
 
-      # Xen's stubdoms need various sources that it usually fetches at
-      # build time using wget.  We can't have that.
-      ${flip concatMapStrings stubdomSrcs (x: let src = fetchurl x; in ''
-        cp ${src} stubdom/${src.name}
+      # Xen's tools and firmares need various git repositories that it
+      # usually checks out at time using git.  We can't have that.
+      ${flip concatMapStrings toolsGits (x: let src = fetchgit x; in ''
+        cp -r ${src} tools/${src.name}-dir-remote
+        chmod +w tools/${src.name}-dir-remote
+      '')}
+      ${flip concatMapStrings firmwareGits (x: let src = fetchgit x; in ''
+        cp -r ${src} tools/firmware/${src.name}-dir-remote
+        chmod +w tools/firmware/${src.name}-dir-remote
+      '')}
+
+      # Xen's stubdoms and firmwares need various sources that are usually fetched
+      # at build time using wget. We can't have that, so we prefetch Xen's ext_files.
+      mkdir xen_ext_files
+      ${flip concatMapStrings xenExtfiles (x: let src = fetchurl x; in ''
+        cp ${src} xen_ext_files/${src.name}
       '')}
 
       # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
@@ -135,7 +201,6 @@ stdenv.mkDerivation {
     homepage = http://www.xen.org/;
     description = "Xen hypervisor and management tools for Dom0";
     platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    broken = true; # bump to at least 4.1.6.1 to fix security issues
+    maintainers = with stdenv.lib.maintainers; [ eelco tstrobel ];
   };
 }

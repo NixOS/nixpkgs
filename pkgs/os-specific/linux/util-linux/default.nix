@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "e0457f715b73f4a349e1acb08cb410bf0edc9a74a3f75c357070f31f70e33cd6";
   };
 
+  patches = [ ./rtcwake-search-PATH-for-shutdown.patch ];
+
   #FIXME: make it also work on non-nixos?
   postPatch = ''
     # Substituting store paths would create a circular dependency on systemd

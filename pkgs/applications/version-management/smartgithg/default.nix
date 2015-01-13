@@ -44,9 +44,7 @@ stdenv.mkDerivation rec {
     # unpacking should have produced a dir named 'smartgit'
     cp -a smartgit/* ${pkg_path}
     mkdir -pv ${bin_path}
-    [ -d ${jre}/lib/openjdk ] \
-      && jre=${jre}/lib/openjdk \
-      || jre=${jre}
+    jre=${jre.home}
     makeWrapper ${pkg_path}/bin/smartgit.sh ${bin_path}/smartgit \
       --prefix PATH : ${runtime_paths} \
       --prefix LD_LIBRARY_PATH : ${runtime_lib_paths} \

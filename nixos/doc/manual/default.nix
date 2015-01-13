@@ -20,7 +20,8 @@ let
     declarations = map (fn: stripPrefix fn) opt.declarations;
   }
   // optionalAttrs (opt ? example) { example = substFunction opt.example; }
-  // optionalAttrs (opt ? default) { default = substFunction opt.default; });
+  // optionalAttrs (opt ? default) { default = substFunction opt.default; }
+  // optionalAttrs (opt ? type) { type = substFunction opt.type; });
 
   prefix = toString ../../..;
 

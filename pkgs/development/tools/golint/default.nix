@@ -1,4 +1,4 @@
-{ stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ stdenv, lib, go_1_3, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "golint";
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ go_1_3 ];
 
   buildPhase = ''
     export GOPATH=$src

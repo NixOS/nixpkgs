@@ -96,6 +96,7 @@ rec {
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible = opt.visible or true;
+          type = opt.type.name or null;
         }
         // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
         // (if opt ? default then { default = scrubOptionValue opt.default; } else {})

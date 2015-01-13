@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec{
-  name = "iniparser-3.0b";
+  name = "iniparser-3.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/iniparser3.0b.tar.gz";
-    sha256 = "09klyddnqlpbgkv4cmh6ww9q5pv6nf1vfmzw4z256p51rnnlqqwa";
+    url = "${meta.homepage}/iniparser-3.1.tar.gz";
+    sha256 = "1igmxzcy0s25zcy9vmcw0kd13lh60r0b4qg8lnp1jic33f427pxf";
   };
 
   patches = ./no-usr.patch;

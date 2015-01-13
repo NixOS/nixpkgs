@@ -1,7 +1,7 @@
 { stdenv, pkgs, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4, makeWrapper, stumpwmContrib }:
 
 let
-  tag = "0.9.8";
+  tag = "0.9.9";
 in
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
  src = fetchgit {
    url = "https://github.com/stumpwm/stumpwm";
    rev = "refs/tags/${tag}";
-   sha256 = "0a0lwwlly4hlmb30bk6dmi6bsdsy37g4crvv1z24gixippyv1qzm";
+   sha256 = "05fkng2wlmhy3kb9zhrrv9zpa16g2p91p5y0wvmwkppy04cw04ps";
  };
 
  buildInputs = [ texinfo4 autoconf lispPackages.clx lispPackages.cl-ppcre sbcl makeWrapper stumpwmContrib ];

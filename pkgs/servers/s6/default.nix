@@ -1,13 +1,8 @@
-{ stdenv
-, execline
-, fetchurl
-, skalibs
-, skarnetConfCompile
-}:
+{ stdenv, execline, fetchurl, skalibs }:
 
 let
 
-  version = "1.1.3.2";
+  version = "2.0.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -15,12 +10,20 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6/${name}.tar.gz";
-    sha256 = "0djxdd3d3mlp63sjqqs0ilf8p68m86c1s98d82fl0kgaaibpsikp";
+    sha256 = "14x4l3xp152c9v34zs7nzxzacizfpp0k0lzwh40rxm0w5wz4x0ls";
   };
 
-  buildInputs = [ skalibs execline skarnetConfCompile ];
+  dontDisableStatic = true;
 
-  sourceRoot = "admin/${name}";
+  configureFlags = [
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-include=${execline}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-lib=${execline}/lib"
+    "--with-dynlib=${skalibs}/lib"
+    "--with-dynlib=${execline}/lib"
+  ] ++ stdenv.lib.optional stdenv.isDarwin [ "--disable-shared" ];
 
   preBuild = ''
     substituteInPlace "src/daemontools-extras/s6-log.c" \

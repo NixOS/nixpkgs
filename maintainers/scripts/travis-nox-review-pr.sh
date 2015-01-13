@@ -28,12 +28,13 @@ elif [[ $1 == build ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
-        echo "===> Not a pull request, checking evaluation"
-        nix-build pkgs/top-level/release.nix -A tarball
+        echo "=== Not a pull request"
     else
         echo "=== Checking PR"
         nox-review pr ${TRAVIS_PULL_REQUEST}
     fi
+    echo "=== Checking tarball creation"
+    nix-build pkgs/top-level/release.nix -A tarball
 else
     echo "$0: Unknown option $1" >&2
     false

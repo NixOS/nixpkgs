@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "ihaskell-" + ihaskell.version ;
+  inherit (ihaskell) name;
 
   buildInputs = [ makeWrapper ];
 

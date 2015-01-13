@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     patch package-files/linux/jedit << EOF
     5a6,8
     > # specify the correct JAVA_HOME
-    > JAVA_HOME=${jdk.jre}/lib/openjdk/jre
+    > JAVA_HOME=${jdk.jre.home}/jre
     > 
     EOF
     sed -i "s|/usr/share/jEdit/@jar.filename@|$out/share/jEdit/jedit.jar|g" package-files/linux/jedit

@@ -10,11 +10,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.72b";
+  name = "blender-2.73";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0ixz8h3c08p4f84x8r85nzddwvc0h5lw1ci8gdg2x3m2mw2cfdj4";
+    sha256 = "140fcxjb73gim430v08021ls3civ3yghld63ljkgxi5vaww1cq95";
   };
 
   patches = [(fetchpatch {
@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
+      "-DWITH_FFTW3=ON"
+      "-DWITH_SDL=ON"
+      "-DWITH_GAMEENGINE=ON"
+      "-DWITH_OPENCOLORIO=ON"
       "-DPYTHON_LIBRARY=python${python.majorVersion}m"
       "-DPYTHON_LIBPATH=${python}/lib"
       "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"

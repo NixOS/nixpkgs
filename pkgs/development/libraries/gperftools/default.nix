@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libunwind }:
+{ stdenv, fetchurl, unzip, libunwind }:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.2.1";
+  name = "gperftools-2.3";
 
   src = fetchurl {
-    url = "https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/gperftools-2.2.1.tar.gz";
-    sha256 = "04zkz5mh4vzcc7cx72b21bq70xy7y5kq9gsk4nbssxk5wlqggy2n";
+    url = "https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/gperftools-2.3.zip";
+    sha256 = "0yga56kmlf5gwr3ip7l50qlv2d3ygbyhpl7pnbx4r905qd59k3qs";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
+  buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isLinux libunwind;
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools

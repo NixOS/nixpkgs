@@ -5,10 +5,10 @@ let
   buildInputs = [ openssl tdb zlib flex bison ];
   sourceInfo = rec {
     baseName="fdm";
-    version = "1.7";
+    version = "1.8";
     name="${baseName}-${version}";
     url="mirror://sourceforge/${baseName}/${baseName}/${name}.tar.gz";
-    sha256 = "0apg1jasn4m5j3vh0v9lr2l3lyzy35av1ylxr0wf8k0j9w4p8i28";
+    sha256 = "0hi39f31ipv8f9wxb41pajvl61w6vaapl39wq8v1kl9c7q6h0k2g";
   };
 in
 stdenv.mkDerivation {

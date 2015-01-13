@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, openjdk, nettools
+, python, ruby, jre, nettools
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     perlPackages.DBDPg
     python
     ruby
-    openjdk
+    jre
     # tests
     perlPackages.TestLongString
     perlPackages.TestDifferences
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     PERL=${perl}/bin/perl
     PYTHON=${python}/bin/python
     RUBY=${ruby}/bin/ruby
-    JAVARUN=${openjdk}/bin/java
+    JAVARUN=${jre}/bin/java
     PLUGINUSER=munin
   '';
 

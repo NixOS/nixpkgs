@@ -531,6 +531,36 @@ let
     };
   });
 
+  audioread = buildPythonPackage rec {
+    name = "audioread-1.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/audioread/${name}.tar.gz";
+      md5 = "01a80357f38dbd9bf8d7403802df89ac";
+    };
+
+    meta = {
+      description = "Cross-platform audio decoding";
+      homepage = "https://github.com/sampsyo/audioread";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  audiotools = buildPythonPackage rec {
+    name = "audiotools-2.22";
+
+    src = pkgs.fetchurl {
+      url = "mirror://sourceforge/audiotools/${name}.tar.gz";
+      sha256 = "1c52pggsbxdbj8h92njf4h0jgfndh4yv58ad723pidys47nw1y71";
+    };
+
+    meta = {
+      description = "Utilities and Python modules for handling audio.";
+      homepage = "http://audiotools.sourceforge.net/";
+      license = stdenv.lib.licenses.gpl2Plus;
+    };
+  };
+
   autopep8 = buildPythonPackage (rec {
     name = "autopep8-1.0.4";
 
@@ -789,44 +819,6 @@ let
     };
   };
 
-  beets = buildPythonPackage rec {
-    name = "beets-1.3.6";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
-      md5 = "59615a54b3ac3983159e77ff9dda373e";
-    };
-
-    # tests depend on $HOME setting
-    preConfigure = "export HOME=$TMPDIR";
-
-    propagatedBuildInputs =
-      [ self.pyyaml
-        self.unidecode
-        self.mutagen
-        self.munkres
-        self.musicbrainzngs
-        self.enum34
-        self.pylast
-        self.rarfile
-        self.flask
-        modules.sqlite3
-        modules.readline
-      ];
-
-    buildInputs = with self; [ mock pyechonest six responses nose ];
-
-    # 10 tests are failing
-    doCheck = false;
-
-    meta = {
-      homepage = http://beets.radbox.org;
-      description = "Music tagger and library organizer";
-      license = licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
-    };
-  };
-
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
@@ -972,6 +964,37 @@ let
     };
   };
 
+  bleach = buildPythonPackage rec {
+    version = "v1.4";
+    name = "bleach-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
+      sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
+    };
+
+    propagatedBuildInputs = with self; [ six html5lib ];
+
+    meta = with stdenv.lib; {
+      description = "An easy, HTML5, whitelisting HTML sanitizer.";
+      longDescription = ''
+        Bleach is an HTML sanitizing library that escapes or strips markup and
+        attributes based on a white list. Bleach can also linkify text safely,
+        applying filters that Django's urlize filter cannot, and optionally
+        setting rel attributes, even on links already in the text.
+
+        Bleach is intended for sanitizing text from untrusted sources. If you
+        find yourself jumping through hoops to allow your site administrators
+        to do lots of things, you're probably outside the use cases. Either
+        trust those users, or don't.
+      '';
+      homepage = https://github.com/jsocol/bleach;
+      downloadPage = https://github.com/jsocol/bleach/releases;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
 
   blinker = buildPythonPackage rec {
     name = "blinker-${version}";
@@ -2188,6 +2211,23 @@ let
       description = "derpconf abstracts loading configuration files for your app";
       homepage = https://github.com/globocom/derpconf;
       license = licenses.mit;
+    };
+  };
+
+  discogs_client = buildPythonPackage rec {
+    name = "discogs-client-2.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/discogs-client/${name}.tar.gz";
+      md5 = "2cc57e1d134aa93404e779b9311676fa";
+    };
+
+    propagatedBuildInputs = with self; [ oauth2 requests ];
+
+    meta = {
+      description = "Official Python API client for Discogs";
+      license = licenses.bsd2;
+      homepage = "https://github.com/discogs/discogs_client";
     };
   };
 
@@ -4045,6 +4085,35 @@ let
     };
   };
 
+  filebrowser_safe = buildPythonPackage rec {
+    version = "0.3.6";
+    name = "filebrowser_safe-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/f/filebrowser_safe/${name}.tar.gz";
+      md5 = "12a1ad3a1ed6a9377e758c4fa7fee570";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A snapshot of django-filebrowser for the Mezzanine CMS";
+      longDescription = ''
+        filebrowser_safe was created to provide a snapshot of the FileBrowser
+        asset manager for Django, to be referenced as a dependency for the
+        Mezzanine CMS for Django.
+
+        At the time of filebrowser_safe's creation, FileBrowser was incorrectly
+        packaged on PyPI, and had also dropped compatibility with Django 1.1 -
+        filebrowser_safe was therefore created to address these specific
+        issues.
+      '';
+      homepage = https://github.com/stephenmcd/filebrowser-safe;
+      downloadPage = https://pypi.python.org/pypi/filebrowser_safe/;
+      license = licenses.free;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
+
   flake8 = buildPythonPackage (rec {
     name = "flake8-2.1.0";
 
@@ -4130,6 +4199,34 @@ let
       description = "Multipurpose automation tool for content like torrents";
       license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  grappelli_safe = buildPythonPackage rec {
+    version = "0.3.13";
+    name = "grappelli_safe-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/g/grappelli_safe/${name}.tar.gz";
+      md5 = "5c8c681a0b1df94ecd6dc0b3a8b80892";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A snapshot of django-grappelli for the Mezzanine CMS";
+      longDescription = ''
+        grappelli_safe was created to provide a snapshot of the Grappelli admin
+        skin for Django, to be referenced as a dependency for the Mezzanine CMS
+        for Django.
+
+        At the time of grappelli_safe's creation, Grappelli was incorrectly
+        packaged on PyPI, and had also dropped compatibility with Django 1.1 -
+        grappelli_safe was therefore created to address these specific issues.
+      '';
+      homepage = https://github.com/stephenmcd/grappelli-safe;
+      downloadPage = http://pypi.python.org/pypi/grappelli_safe/;
+      license = licenses.free;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
     };
   };
 
@@ -4283,6 +4380,39 @@ let
       license = stdenv.lib.licenses.lgpl21;
     };
   });
+
+  future = buildPythonPackage rec {
+    version = "v0.14.3";
+    name = "future-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://github.com/PythonCharmers/python-future/archive/${version}.tar.gz";
+      sha256 = "0hgp9kq7h4ipw8ax5xvvkyh3bkqw361d3rndvb9xix01h9j9mi3p";
+    };
+
+    propagatedBuildInputs = with self; optionals isPy26 [ importlib argparse ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Clean single-source support for Python 3 and 2";
+      longDescription = ''
+        python-future is the missing compatibility layer between Python 2 and
+        Python 3. It allows you to use a single, clean Python 3.x-compatible
+        codebase to support both Python 2 and Python 3 with minimal overhead.
+
+        It provides future and past packages with backports and forward ports
+        of features from Python 3 and 2. It also comes with futurize and
+        pasteurize, customized 2to3-based scripts that helps you to convert
+        either Py2 or Py3 code easily to support both Python 2 and 3 in a
+        single clean Py3-style codebase, module by module.
+      '';
+      homepage = https://python-future.org;
+      downloadPage = https://github.com/PythonCharmers/python-future/releases;
+      license = licenses.mit;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
 
   futures = buildPythonPackage rec {
     name = "futures-2.1.6";
@@ -4700,18 +4830,32 @@ let
 
 
   html5lib = buildPythonPackage (rec {
-    name = "html5lib-0.95";
+    version = "0.999";
+    name = "html5lib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/h/html5lib/${name}.tar.gz";
-      md5 = "fe607f9917d81763e842f818f23464ee";
+      url = "http://github.com/html5lib/html5lib-python/archive/${version}.tar.gz";
+      sha256 = "1kxl36p0csssaf37zbbc9p4h8l1s7yb1qnfv3d4nixplvrxqkybp";
     };
 
-    meta = {
-      homepage = http://code.google.com/p/html5lib/;
+    buildInputs = with self; [ nose flake8 ];
+    propagatedBuildInputs = with self; [
+      six
+    ] ++ optionals isPy26 [ ordereddict ];
+
+    checkPhase = "nosetests";
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/html5lib/html5lib-python;
+      downloadPage = https://github.com/html5lib/html5lib-python/releases;
       description = "HTML parser based on WHAT-WG HTML5 specification";
-      license = stdenv.lib.licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
+      longDescription = ''
+        html5lib is a pure-python library for parsing HTML. It is designed to
+        conform to the WHATWG HTML specification, as is implemented by all
+        major web browsers.
+      '';
+      license = licenses.mit;
+      maintainers = with maintainers; [ iElectric prikhi ];
     };
   });
 
@@ -5134,6 +5278,25 @@ let
     };
   };
 
+  llfuse = buildPythonPackage rec {
+    name = "llfuse-0.40";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/llfuse/${name}.tar.bz2";
+      sha256 = "0mx87n6j2g63mgiimjqn0gj6jgqfdkc04xkxc56r1azjlqji32zf";
+    };
+
+    buildInputs = [ pkgs.pkgconfig pkgs.fuse pkgs.attr ];
+
+    meta = with stdenv.lib; {
+      description = "Python bindings for the low-level FUSE API";
+      homepage = https://code.google.com/p/python-llfuse/;
+      license = licenses.lgpl2Plus;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
   locustio = buildPythonPackage rec {
     name = "locustio-0.7.2";
 
@@ -5452,6 +5615,58 @@ let
     };
   };
 
+  mezzanine = buildPythonPackage rec {
+    version = "3.1.10";
+    name = "mezzanine-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
+      sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
+    };
+
+    buildInputs = with self; [ pyflakes pep8 ];
+    propagatedBuildInputs = with self; [
+      django_1_6 filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
+      requests2 requests_oauthlib future pillow modules.sqlite3
+    ];
+
+    # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
+    doCheck = false;
+    # sed calls will be unecessary in v3.1.11+
+    preConfigure = ''
+      sed -i 's/future == 0.9.0/future>=0.9.0/' setup.py
+      sed -i 's/tzlocal == 1.0/tzlocal>=1.0/' setup.py
+      sed -i 's/pep8==1.4.1/pep8>=1.4.1/' setup.py
+      sed -i 's/pyflakes==0.6.1/pyflakes>=0.6.1/' setup.py
+      export LC_ALL="en_US.UTF-8"
+    '';
+
+    meta = with stdenv.lib; {
+      description = ''
+        A content management platform built using the Django framework.
+      '';
+      longDescription = ''
+        Mezzanine is a powerful, consistent, and flexible content management
+        platform. Built using the Django framework, Mezzanine provides a
+        simple yet highly extensible architecture that encourages diving in and
+        hacking on the code. Mezzanine is BSD licensed and supported by a
+        diverse and active community.
+
+        In some ways, Mezzanine resembles tools such as Wordpress that provide
+        an intuitive interface for managing pages, blog posts, form data, store
+        products, and other types of content. But Mezzanine is also different.
+        Unlike many other platforms that make extensive use of modules or
+        reusable applications, Mezzanine provides most of its functionality by
+        default. This approach yields a more integrated and efficient platform.
+      '';
+      homepage = http://mezzanine.jupo.org/;
+      downloadPage = https://github.com/stephenmcd/mezzanine/releases;
+      license = licenses.free;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
+
   minimock = buildPythonPackage rec {
     version = "1.2.8";
     name = "minimock-${version}";
@@ -5760,15 +5975,15 @@ let
   };
 
   mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.23";
+    name = "mutagen-1.27";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mutagen/${name}.tar.gz";
-      sha256 = "12f70aaf5ggdzll76bhhkn64b27xy9s1acx417dbsaqnnbis8s76";
+      md5 = "6a9bb5cc33214add35348f1bb3448340";
     };
 
-    # one unicode test fails
-    doCheck = false;
+    # Needed for tests only
+    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbisTools pkgs.liboggz ];
 
     meta = {
       description = "Python multimedia tagging library";
@@ -6119,6 +6334,18 @@ let
     };
   };
 
+  ntplib = buildPythonPackage rec {
+    name = "ntplib-0.3.2";
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/n/ntplib/ntplib-0.3.2.tar.gz;
+      md5 = "0f386dc00c0056ac4d77af0b4c21bb8e";
+    };
+
+    meta = {
+      description = "Python NTP library";
+    };
+  };
+
   numexpr = buildPythonPackage rec {
     version = "2.4";
     name = "numexpr-${version}";
@@ -6216,13 +6443,13 @@ let
   };
 
   livestreamer = buildPythonPackage rec {
-    version = "1.10.2";
+    version = "1.11.1";
     name = "livestreamer-${version}";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
-      sha256 = "0f1m51wax4q17ida4h0ckyakmlchf36kbhfa9qs6bpxc6xqqbry0";
+      sha256 = "1hic3z5any64gn2b0gs1b7m34bzgzv71inr8wgjq59pwf8mbrqk9";
     };
 
     buildInputs = with self; [ pkgs.makeWrapper ];
@@ -6237,7 +6464,7 @@ let
         Livestreamer is CLI program that extracts streams from various
         services and pipes them into a video player of choice.
       '';
-      license = "bsd";
+      license = stdenv.lib.licenses.bsd2;
     };
   };
 
@@ -6284,20 +6511,23 @@ let
 
 
   oauthlib = buildPythonPackage rec {
-    name = "oauthlib-0.5.0";
+    version = "0.7.2";
+    name = "oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/o/oauthlib/${name}.tar.gz";
-      md5 = "d12c507de33403ebdf290fbffdb98213";
+      url = "https://github.com/idan/oauthlib/archive/${version}.tar.gz";
+      sha256 = "08b7swyswhxh90k9mp54rk1qks2l2s2pdcjap6x118y27p7dhp4h";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
 
-    propagatedBuildInputs = with self; [ pycrypto ];
+    propagatedBuildInputs = with self; [ pycrypto blinker pyjwt ];
 
     meta = {
       homepage = https://github.com/idan/oauthlib;
+      downloadPage = https://github.com/idan/oauthlib/releases;
       description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
+      maintainers = with maintainers; [ prikhi ];
     };
   };
 
@@ -6590,11 +6820,11 @@ let
 
   pelican = buildPythonPackage rec {
     name = "pelican-${version}";
-    version = "3.4.0";
+    version = "3.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pelican/${name}.tar.gz";
-      md5 = "8e57bdd075503903125b14621b1e533d";
+      sha256 = "0dl8i26sa20iijlg3z9gxn3p6f1d9v44b9742929xfaqwj4amvdp";
     };
 
     preConfigure = ''
@@ -6606,13 +6836,16 @@ let
     #buildInputs = [nose mock];
     doCheck = false;
 
-    propagatedBuildInputs = with self; [jinja2 pygments docutils pytz unidecode six dateutil feedgenerator blinker pillow beautifulsoup4];
+    propagatedBuildInputs = with self; [
+      jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
+      blinker pillow beautifulsoup4
+    ];
 
     meta = {
       homepage = http://getpelican.com/;
       description = "A tool to generate a static blog from reStructuredText or Markdown input files";
       license = licenses.agpl3;
-      maintainers = [ stdenv.lib.maintainers.offline ];
+      maintainers = with stdenv.lib.maintainers; [ offline prikhi ];
     };
   };
 
@@ -6779,7 +7012,10 @@ let
       md5 = "56b6614499aacb7d6b5983c4914daea7";
     };
 
-    buildInputs = with self; [ pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ];
+    buildInputs = with self; [
+      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
+      ++ optionals (isPy26 || isPyPy) [ pkgs.lcms2 ]
+      ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = ''
@@ -6806,7 +7042,7 @@ let
 
       license = "http://www.pythonware.com/products/pil/license.htm";
 
-      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+      maintainers = with stdenv.lib.maintainers; [ goibhniu prikhi ];
     };
   };
 
@@ -6980,6 +7216,30 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
       md5 = "8f32ee0cd1e01472a255fe1d28d81217";
+    };
+  };
+
+
+  pyacoustid = buildPythonPackage rec {
+    name = "pyacoustid-1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyacoustid/${name}.tar.gz";
+      md5 = "b27c714d530300b917eb869726334226";
+    };
+
+    propagatedBuildInputs = with self; [ requests audioread ];
+
+    postPatch = ''
+      sed -i \
+          -e '/^FPCALC_COMMAND *=/s|=.*|= "${pkgs.chromaprint}/bin/fpcalc"|' \
+          acoustid.py
+    '';
+
+    meta = {
+      description = "Bindings for Chromaprint acoustic fingerprinting";
+      homepage = "https://github.com/sampsyo/pyacoustid";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
@@ -7180,19 +7440,19 @@ let
 
 
   pycapnp = buildPythonPackage rec {
-    name = "pycapnp-0.4.4";
+    name = "pycapnp-0.5.1";
     disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pycapnp/${name}.tar.gz";
-      sha256 = "33b2b79438bb9bf37097966e1c90403c34ab49be1eb647ee251b62f362ee3537";
+      sha256 = "1kp97il34419gcrhn866n6a10lvh8qr13bnllnnh9473n4cq0cvk";
     };
 
     buildInputs = with pkgs; [ capnproto self.cython ];
 
     # import setuptools as soon as possible, to minimize monkeypatching mayhem.
     postConfigure = ''
-      sed -i '2iimport setuptools' setup.py
+      sed -i '3iimport setuptools' setup.py
     '';
 
     meta = with stdenv.lib; {
@@ -7474,6 +7734,27 @@ let
     };
   };
 
+  pyjwt = buildPythonPackage rec {
+    version = "0.3.2";
+    name = "pyjwt-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
+      sha256 = "118rzhpyvx1h4hslms4fdizyv6mnyd4g34fv089lvs116pj08k9c";
+    };
+
+    propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+
+    meta = with stdenv.lib; {
+      description = "JSON Web Token implementation in Python";
+      longDescription = "A Python implementation of JSON Web Token draft 01.";
+      homepage = https://github.com/progrium/pyjwt;
+      downloadPage = https://github.com/progrium/pyjwt/releases;
+      license = licenses.mit;
+      maintainers = with maintainers; [ prikhi ];
+      platforms = platforms.linux;
+    };
+  };
 
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
@@ -8281,18 +8562,21 @@ let
 
 
   requests_oauthlib = buildPythonPackage rec {
-    name = "requests-oauthlib-0.3.2";
+    version = "v0.4.1";
+    name = "requests-oauthlib-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/r/requests-oauthlib/${name}.tar.gz";
-      md5 = "35b3b750493c231145c39db0216813e7";
+      url = "http://github.com/requests/requests-oauthlib/archive/${version}.tar.gz";
+      sha256 = "0vx252nzq5h9m9brwnw2ph8aj526y26jr2dqcafzzcdx6z4l8vj4";
     };
 
-    propagatedBuildInputs = with self; [ oauthlib requests ];
+    doCheck = false;        # Internet tests fail when building in chroot
+    propagatedBuildInputs = with self; [ oauthlib requests2 ];
 
     meta = {
       description = "OAuthlib authentication support for Requests";
       homepage = https://github.com/requests/requests-oauthlib;
+      maintainers = with maintainers; [ prikhi ];
     };
   };
 
@@ -9670,16 +9954,20 @@ let
   });
 
 
-  subunit = buildPythonPackage rec {
+  subunit = stdenv.mkDerivation rec {
     name = "subunit-${version}";
-    version = "0.0.16";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      url = "https://launchpad.net/subunit/trunk/${version}/+download/python-${name}.tar.gz";
-      sha256 = "1ylla1wlmv29vdr76r5kgr7y21bz4ahi3v26mxsys42w90rfkahi";
+      url = "https://launchpad.net/subunit/trunk/${version}/+download/${name}.tar.gz";
+      sha256 = "1fnhrrwww90746an2nz2kn9qdf9pklmaf5lm22gssl6648f2rp2m";
     };
 
-    propagatedBuildInputs = with self; [ testtools ];
+    buildInputs = (with pkgs; [ pkgconfig check cppunit perl ]) ++ [ self.wrapPython ];
+
+    propagatedBuildInputs = with self; [ testtools testscenarios ];
+
+    postFixup = "wrapPythonPrograms";
 
     meta = {
       description = "A streaming protocol for test results";
@@ -9864,6 +10152,25 @@ let
     meta = {
       homepage = http://pythonpaste.org/tempita/;
       description = "A very small text templating language";
+    };
+  };
+
+
+  testscenarios = buildPythonPackage rec {
+    name = "testscenarios-${version}";
+    version = "0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/testscenarios/${name}.tar.gz";
+      sha256 = "1671jvrvqlmbnc42j7pc5y6vc37q44aiwrq0zic652pxyy2fxvjg";
+    };
+
+    propagatedBuildInputs = with self; [ testtools ];
+
+    meta = {
+      description = "a pyunit extension for dependency injection";
+      homepage = https://pypi.python.org/pypi/testscenarios;
+      license = licenses.asl20;
     };
   };
 

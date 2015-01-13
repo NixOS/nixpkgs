@@ -201,7 +201,7 @@
 +Description: Network Security Services
 +Version: @NSS_MAJOR_VERSION@.@NSS_MINOR_VERSION@.@NSS_PATCH_VERSION@
 +Requires: nspr >= 4.8
-+Libs: -lssl3 -lsmime3 -lnss3 -lnssutil3
++Libs: -L${libdir} -lssl3 -lsmime3 -lnss3 -lnssutil3
 +Cflags: -I${includedir}
 +
 --- nss-3.17.1/nss/Makefile

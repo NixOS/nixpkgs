@@ -11,8 +11,8 @@ stdenv.mkDerivation {
     url = http://www.openafs.org/dl/openafs/1.6.9/openafs-1.6.9-src.tar.bz2;
     sha256 = "1isgw7znp10w0mr3sicnjzbc12bd1gdwfqqr667w6p3syyhs6bkv";
   };
- 
-  patches = [ 
+
+  patches = [
    ./f3c0f74186f4a323ffc5f125d961fe384d396cac.patch
    ./ae86b07f827d6f3e2032a412f5f6cb3951a27d2d.patch
    ./I5558c64760e4cad2bd3dc648067d81020afc69b6.patch
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 
   preConfigure = ''
-    ln -s ${kernel.dev}/lib/modules/*/build $TMP/linux
+    ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
 
     patchShebangs .
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
@@ -34,11 +34,13 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
-    export KRB5_CONFIG=${kerberos}/bin/krb5-config
+    ${stdenv.lib.optionalString (kerberos != null) ''
+      export KRB5_CONFIG=${kerberos}/bin/krb5-config"
+    ''}
 
     configureFlagsArray=(
       "--with-linux-kernel-build=$TMP/linux"
-      "--with-krb5"
+      ${stdenv.lib.optionalString (kerberos != null) "--with-krb5"}
       "--sysconfdir=/etc/static"
     )
   '';

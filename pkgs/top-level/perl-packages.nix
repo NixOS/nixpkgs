@@ -2157,6 +2157,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "14yvbgy9n8icwlm5zi86lskvxd6nsl42i1g9f5dwdaw9my463diy";
     };
     propagatedBuildInputs = [CarpClan BitVector];
+    doCheck = false; # some of the checks rely on the year being <2015
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
@@ -6618,6 +6619,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MozillaLdap = buildPerlPackage {
+    name = "Mozilla-Ldap-1.5.3";
+    USE_OPENLDAP=1;
+    LDAPSDKDIR=pkgs.openldap;
+    src = fetchurl {
+      url = "ftp://ftp.mozilla.org/pub/mozilla.org/directory/perldap/releases/1.5.3/src/perl-mozldap-1.5.3.tar.gz";
+      sha256 = "0s0albdw0zvg3w37s7is7gddr4mqwicjxxsy400n1p96l7ipnw4x";
+    };
+    meta = {
+      description = "Mozilla's ldap client library.";
+      license = "unknown";
+    };
+  };
+
   MROCompat = buildPerlPackage {
     name = "MRO-Compat-0.12";
     src = fetchurl {
@@ -6684,10 +6699,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetAddrIP = buildPerlPackage rec {
-    name = "NetAddr-IP-4.072";
+    name = "NetAddr-IP-4.075";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/${name}.tar.gz";
-      sha256 = "17gwhhbz25021w5k4ggp8j3plix5yixgb2vr1mj39fa0p3gafm09";
+      sha256 = "0fc8jvrcp42szscnn41sxz8z8qa4fr4dr9i9s067hvrhiyxpb0mb";
     };
   };
 
@@ -10253,6 +10268,20 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ Wx OpenGL pkgs.mesa_glu ];
     doCheck = false;
+  };
+
+  X11IdleTime = buildPerlPackage rec {
+    name = "X11-IdleTime-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AW/AWENDT/${name}.tar.gz";
+      sha256 = "0j27cb9yy9ymni8cbiyxplbg086b8lv6b330nwqyx0briq3xrzfq";
+    };
+    buildInputs = [ pkgs.xlibs.libXext pkgs.xlibs.libXScrnSaver pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = [ InlineC ];
+    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xlibs.libX11}/lib/ -L${pkgs.xlibs.libXext}/lib/ -L${pkgs.xlibs.libXScrnSaver}/lib/,' IdleTime.pm'';
+    meta = {
+      description = "Get the idle time of X11";
+    };
   };
 
   X11Protocol = buildPerlPackage rec {

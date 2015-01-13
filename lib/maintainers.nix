@@ -74,6 +74,7 @@
   garbas = "Rok Garbas <rok@garbas.si>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
+  gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
