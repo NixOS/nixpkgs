@@ -8,7 +8,7 @@
 , withGd ? false, gd ? null, libpng ? null
 }:
 
-assert stdenv.cc ? gcc;
+assert stdenv.cc.cc.isGNU or false;
 
 let
   build = import ./common.nix;

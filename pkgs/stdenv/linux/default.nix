@@ -55,6 +55,7 @@ rec {
     # Needed by the GCC wrapper.
     langC = true;
     langCC = true;
+    isGNU = true;
   };
 
 
