@@ -65,6 +65,13 @@ rec {
           overrideDerivation = fdrv:
             makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
         })
+      else if builtins.isFunction ff then
+        { override = newArgs:
+            makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
+          __functor = self: ff;
+          deepOverride = throw "deepOverride not yet supported for functors";
+          overrideDerivation = throw "overrideDerivation not yet supported for functors";
+        }
       else ff;
 
   deepOverrider = newArgs: name: x: if builtins.isAttrs x then (
