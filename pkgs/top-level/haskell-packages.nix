@@ -2328,6 +2328,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   silently = callPackage ../development/libraries/haskell/silently {};
 
+  sitemap = callPackage ../development/libraries/haskell/sitemap {};
+
   sized = callPackage ../development/libraries/haskell/sized {};
 
   sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
