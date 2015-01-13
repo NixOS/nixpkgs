@@ -117,6 +117,8 @@ stdenv.mkDerivation ({
     ${optionalString (versionOlder "7.8" ghc.version && !isLibrary) ''
       configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
       setupCompileFlags="-j$NIX_BUILD_CORES"
+    ''}${optionalString stdenv.isDarwin ''
+      configureFlags+=" --with-gcc=$CC"  # Cabal won't find clang without help.
     ''}
 
     packageConfDir="$TMP/package.conf.d"
