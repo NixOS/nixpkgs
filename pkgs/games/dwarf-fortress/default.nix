@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = "${srcs.df_unfuck} ${srcs.df}";
   phases = "unpackPhase patchPhase configurePhase buildPhase installPhase";
 
-  sourceRoot = "git-export";
+  sourceRoot = srcs.df_unfuck.name;
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.orig
     # Fix rpath
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
-    cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
+    cp -f ./${srcs.df_unfuck.name}/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
 
     cp $permission $out/share/df_linux/nix_permission
 

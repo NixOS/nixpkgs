@@ -11,7 +11,7 @@ let
     name="${baseName}-${version}";
     url="https://github.com/GNUFreetalk/freetalk";
     rev = "refs/tags/v${version}";
-    sha256="0sj3bwq9n6ijwv552nmi038sz7wayq8r3zaj6ngn2cnkn2b5nwbz";
+    sha256="0vh6snkd66gdzimdiyy9idhsip60d5xc7qh4w48k7n8h93ydrb2b";
   };
   buildInputs = [
     guile pkgconfig glib loudmouth gmp libidn readline libtool
@@ -24,7 +24,6 @@ stdenv.mkDerivation {
   inherit buildInputs;
   src = fetchgit {
     inherit (s) url rev sha256;
-    name = "git-export-${s.name}";
   };
 
   preConfigure = ''

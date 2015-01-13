@@ -33,10 +33,10 @@ let
       postPatch = ''
         export wineDir=$(pwd)
         patchShebangs $wineDir/tools/
-	chmod u+w $wineDir/../git-export/debian/tools/
-        patchShebangs $wineDir/../git-export/debian/tools/
-        chmod -R +rwx ../git-export/
-        make -C ../git-export/patches DESTDIR=$wineDir install
+        chmod u+w $wineDir/../${wine_patches.name}/debian/tools/
+        patchShebangs $wineDir/../${wine_patches.name}/debian/tools/
+        chmod -R +rwx ../${wine_patches.name}/
+        make -C ../${wine_patches.name}/patches DESTDIR=$wineDir install
       '';
     });
 
