@@ -38,6 +38,8 @@ self: super: {
   # release: bumped language-ecmascript's limit in git already.
   elm-compiler = doJailbreak super.elm-compiler;
 
+  safecopy = dontCheck super.safecopy;
+
   # "curl" means pkgs.curl
   git-annex = super.git-annex.override { inherit (pkgs) git rsync gnupg1 curl lsof openssh which bup perl wget; };
 
