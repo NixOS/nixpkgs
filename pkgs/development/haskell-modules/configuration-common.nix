@@ -40,6 +40,10 @@ self: super: {
 
   safecopy = dontCheck super.safecopy;
 
+  zeromq4-haskell = super.zeromq4-haskell.override {
+       zeromq = pkgs.zeromq4;
+  };
+
   # "curl" means pkgs.curl
   git-annex = super.git-annex.override { inherit (pkgs) git rsync gnupg1 curl lsof openssh which bup perl wget; };
 
