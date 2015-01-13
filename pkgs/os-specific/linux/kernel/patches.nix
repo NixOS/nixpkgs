@@ -32,6 +32,11 @@ in
 
 rec {
 
+  dont_require_bridge_helper =
+    { name = "dont-require-bridge-helper";
+      patch = ./dont-require-bridge-helper.patch;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
