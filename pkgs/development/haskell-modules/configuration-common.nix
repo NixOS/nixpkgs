@@ -26,6 +26,18 @@ self: super: {
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
 
+  # Please also remove optparse-applicative special case from
+  # cabal2nix/hackage2nix.hs when removing the following.
+  elm-make = super.elm-make.override {
+    optparse-applicative = optparse-applicative_0_10_0;
+  };
+  elm-package = super.elm-package.override {
+    optparse-applicative = optparse-applicative_0_10_0;
+  };
+  # elm-compiler jail-break can be removed after next elm-compiler
+  # release: bumped language-ecmascript's limit in git already.
+  elm-compiler = doJailbreak super.elm-compiler;
+
   # "curl" means pkgs.curl
   git-annex = super.git-annex.override { inherit (pkgs) git rsync gnupg1 curl lsof openssh which bup perl wget; };
 
