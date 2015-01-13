@@ -17,12 +17,6 @@ stdenv.mkDerivation rec {
     sha256 = "140fcxjb73gim430v08021ls3civ3yghld63ljkgxi5vaww1cq95";
   };
 
-  patches = [(fetchpatch {
-    url = "https://raw.githubusercontent.com/Exherbo/media-unofficial/b5b09fa35ed/"
-      + "packages/media-gfx/blender/files/blender-2.71-Fix-build-with-freetype-2.5.4.patch";
-    sha256 = "19kx9h030zy2f0ah5v69ank2ak8gfp1zv26pm4ixngfdbsiy5lvk";
-  })];
-
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
@@ -41,6 +35,7 @@ stdenv.mkDerivation rec {
     [ "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
+      "-DWITH_FFTW3=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
       "-DWITH_FFTW3=ON"
       "-DWITH_SDL=ON"
