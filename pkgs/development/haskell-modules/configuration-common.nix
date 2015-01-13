@@ -28,12 +28,9 @@ self: super: {
 
   # Please also remove optparse-applicative special case from
   # cabal2nix/hackage2nix.hs when removing the following.
-  elm-make = super.elm-make.override {
-    optparse-applicative = optparse-applicative_0_10_0;
-  };
-  elm-package = super.elm-package.override {
-    optparse-applicative = optparse-applicative_0_10_0;
-  };
+  elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
+  elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
+
   # elm-compiler jail-break can be removed after next elm-compiler
   # release: bumped language-ecmascript's limit in git already.
   elm-compiler = doJailbreak super.elm-compiler;
