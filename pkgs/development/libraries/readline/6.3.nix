@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ maintainers.ludo ];
+    maintainers = [ ];
 
     platforms = platforms.unix;
     branch = "6.3";

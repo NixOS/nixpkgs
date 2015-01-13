@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/gdbm/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

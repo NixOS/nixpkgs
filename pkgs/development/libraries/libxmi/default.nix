@@ -16,6 +16,6 @@ stdenv.mkDerivation {
     homepage = http://www.gnu.org/software/libxmi/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

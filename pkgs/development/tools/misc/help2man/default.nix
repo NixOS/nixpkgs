@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
     platforms = platforms.gnu;         # arbitrary choice
-    maintainers = with maintainers; [ ludo pSub ];
+    maintainers = with maintainers; [ pSub ];
   };
 }

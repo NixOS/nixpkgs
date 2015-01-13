@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.mit;
 
-    maintainers = [ lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

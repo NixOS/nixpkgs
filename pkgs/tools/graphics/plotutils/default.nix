@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [
       stdenv.lib.maintainers.marcweber
-      stdenv.lib.maintainers.ludo
     ];
     platforms = stdenv.lib.platforms.gnu;
   };

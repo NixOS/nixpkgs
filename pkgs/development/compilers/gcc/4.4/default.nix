@@ -265,7 +265,6 @@ stdenv.mkDerivation ({
 
     maintainers = [
       # Add your name here!
-      stdenv.lib.maintainers.ludo
       stdenv.lib.maintainers.viric
     ];
 

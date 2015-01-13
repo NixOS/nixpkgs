@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.bitlbee.org/;
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ ludo wkennington ];
+    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.gnu;  # arbitrary choice
   };
 }
