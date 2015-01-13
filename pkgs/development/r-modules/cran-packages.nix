@@ -2505,7 +2505,7 @@ car = derive { name="car"; version="2.0-22"; sha256="0jffyz0gv0isc9ww3mv1y40b16l
 carcass = derive { name="carcass"; version="1.3"; sha256="1psxdxdqlc999xylizj5vg1p1pzyrikg9gjqvpv4k0q9b5h0nrpj"; depends=[lme4 survival expm arm MASS]; };
 cardidates = derive { name="cardidates"; version="0.4.5"; sha256="1zw8c8jiq8bz748xppwj88z1882qk7k2r0k2gkrsvw7b6c9h35pb"; depends=[boot pastecs]; };
 care = derive { name="care"; version="1.1.7"; sha256="0lgas00qp1cvn3cbimxlli99czvkh6b9hxahzif5fgbnfik4d47y"; depends=[corpcor]; };
-caret = derive { name="caret"; version="6.0-37"; sha256="0cifln20pa8wlwri7f67wrji8x1b4v7i3aygfmjiwxjp9gp55lyn"; depends=[lattice ggplot2 car reshape2 foreach plyr nlme BradleyTerry2]; };
+caret = derive { name="caret"; version="6.0-37"; sha256="102rw6gw1mrbr00s8b1bnz2yh2nqk411qdhs6kncs6scalixjb5p"; depends=[lattice ggplot2 car reshape2 foreach plyr nlme BradleyTerry2]; };
 caribou = derive { name="caribou"; version="1.1"; sha256="0ibl3jhvsgjfcva0113z0di9n5n30bs90yz0scckfv1c0pjhn4xd"; depends=[]; };
 caroline = derive { name="caroline"; version="0.7.6"; sha256="1afxxbrd7w628l4pxdmvwbs7mbgxlhnfq3nxk2s93w47gn7r9fp7"; depends=[]; };
 caschrono = derive { name="caschrono"; version="1.4"; sha256="1l9hmsacynh73kh14jrp7a42385v78znn9ll1jchzgkyz2x4dibw"; depends=[forecast Hmisc its timeSeries]; };
