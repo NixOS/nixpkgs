@@ -36,7 +36,7 @@ in
           Initial administrative public key for Gitolite. This should
           be an SSH Public Key. Note that this key will only be used
           once, upon the first initialization of the Gitolite user.
-          The Key has to be written in one line.
+          The key string cannot have any line breaks in it.
         '';
       };
 
