@@ -1187,7 +1187,7 @@ ORIClust = derive { name="ORIClust"; version="1.0-1"; sha256="1biddddyls2zsg71w4
 ORMDR = derive { name="ORMDR"; version="1.3-2"; sha256="0y7b2aja3zvsd6lm7jal9pabcfxv16r2wh0kyzjkdfanvvgk3wmm"; depends=[]; };
 OUwie = derive { name="OUwie"; version="1.43"; sha256="1ixyws6q9p8kms3smzj8rkmsry2y4s9al4vhxpqfmbgypigq7n9k"; depends=[ape nloptr numDeriv corpcor lattice phytools phangorn]; };
 Oarray = derive { name="Oarray"; version="1.4-5"; sha256="1w66vqxvqyrp2h6acnbg3xy7cp6j2dgvzmqqk564kvivbn40vyy4"; depends=[]; };
-OceanView = derive { name="OceanView"; version="1.0.1"; sha256="12jah913rfwin45rv4zhkd28l2fwg5ajz4ixl39gd8j78mni4xdx"; depends=[plot3D plot3Drgl shape]; };
+OceanView = derive { name="OceanView"; version="1.0.1"; sha256="102rw6gw1mrbr00s8b1bnz2yh2nqk411qdhs6kncs6scalixjb5p"; depends=[plot3D plot3Drgl shape]; };
 Ohmage = derive { name="Ohmage"; version="2.11-4"; sha256="14pga59ikiywyl6xnfd2d8sy323vyn88q9sf101bcwp0s0qczwzg"; depends=[RCurl RJSONIO]; };
 OjaNP = derive { name="OjaNP"; version="0.9-8"; sha256="010l75irgj7nl8yq6crp8d00zjgpv9wg2maw99cj0frhqxvqzbfz"; depends=[ICS ICSNP]; };
 OligoSpecificitySystem = derive { name="OligoSpecificitySystem"; version="1.3"; sha256="0s76fxai1kgq0hcr5m18yz7i14algld97rjrax75cxm1ccylah71"; depends=[tkrplot]; };
