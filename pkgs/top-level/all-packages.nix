@@ -3747,6 +3747,8 @@ let
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
+    gtktop = callPackage ../development/ocaml-modules/gtktop { };
+
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
