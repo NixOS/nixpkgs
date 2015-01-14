@@ -1370,6 +1370,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
 
+  hspec20 = callPackage ../development/libraries/haskell/hspec/2.0.nix {};
+
   hspecAttoparsec = callPackage ../development/libraries/haskell/hspec-attoparsec {};
 
   hspecWai = callPackage ../development/libraries/haskell/hspec-wai {};
@@ -1389,6 +1391,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   hspecContrib = callPackage ../development/libraries/haskell/hspec-contrib {};
 
   hspecDiscover = callPackage ../development/libraries/haskell/hspec-discover {};
+
+  hspecDiscover20 = callPackage ../development/libraries/haskell/hspec-discover/2.0.nix {};
 
   hspecLaws = callPackage ../development/libraries/haskell/hspec-laws {};
 
