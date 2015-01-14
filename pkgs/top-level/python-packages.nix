@@ -10952,6 +10952,32 @@ let
   };
 
 
+  wcwidth = buildPythonPackage rec {
+    name = "wcwidth-${version}";
+    version = "0.1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/wcwidth/${name}.tar.gz";
+      sha256 = "0awx28xi938nv55qlmai3b5ddqd1w5c294gy95xh4xsx0hik2vch";
+    };
+
+    # Checks fail due to missing tox.ini file:
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Measures number of Terminal column cells of wide-character codes";
+      longDescription = ''
+        This API is mainly for Terminal Emulator implementors -- any Python
+        program that attempts to determine the printable width of a string on
+        a Terminal. It is implemented in python (no C library calls) and has
+        no 3rd-party dependencies.
+      '';
+      homepage = https://github.com/jquast/wcwidth;
+      license = with licenses; [ mit ];
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
   webob = buildPythonPackage rec {
     version = "1.4";
     name = "webob-${version}";
