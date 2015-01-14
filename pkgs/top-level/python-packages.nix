@@ -10079,6 +10079,26 @@ let
   };
 
 
+  sqlparse = buildPythonPackage rec {
+    name = "sqlparse-${version}";
+    version = "0.1.14";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sqlparse/${name}.tar.gz";
+      sha256 = "1w6shyh7n139cp636sym0frdyiwybw1m7gd2l4s3d7xbaccf6qg5";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Non-validating SQL parser for Python";
+      longDescription = ''
+        Provides support for parsing, splitting and formatting SQL statements.
+      '';
+      homepage = https://github.com/andialbrecht/sqlparse;
+      license = with licenses; [ bsd3 ];
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
   python_statsd = buildPythonPackage rec {
     name = "python-statsd-${version}";
     version = "1.6.0";
