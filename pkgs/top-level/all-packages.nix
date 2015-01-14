@@ -2522,6 +2522,8 @@ let
 
   stress = callPackage ../tools/system/stress { };
 
+  stress-ng = callPackage ../tools/system/stress-ng { };
+
   storeBackup = callPackage ../tools/backup/store-backup { };
 
   stow = callPackage ../tools/misc/stow { };
