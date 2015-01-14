@@ -148,6 +148,16 @@ self: super: {
   # https://github.com/LukeHoersten/snaplet-stripe/pull/4
   snaplet-stripe = doJailbreak super.snaplet-stripe;
 
+  # https://github.com/prowdsponsor/fb/pull/33
+  fb = doJailbreak (overrideCabal super.fb (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = https://github.com/prowdsponsor/fb/pull/33.patch;
+        sha256 = "0xfbfyg86lrimwhfd2s41xy5axcsnw0rqvic8ak72rq2sssyljpg";
+      })
+    ];
+  }));
+
 }
 // {
   # Not on Hackage yet.
