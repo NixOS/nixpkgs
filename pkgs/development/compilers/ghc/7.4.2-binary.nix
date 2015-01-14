@@ -62,9 +62,8 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out \
-      --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
+    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
+      ${if stdenv.isDarwin then "--with-gcc=${./gcc-clang-wrapper.sh}" else "--with-clang"}
   '';
 
   # Stripping combined with patchelf breaks the executables (they die
