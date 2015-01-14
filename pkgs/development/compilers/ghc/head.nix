@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nncvvwksqqz1d991jbag3b4174i275nn0psadriq5hi3px11dkl";
   };
 
-  buildInputs = [ ghc perl happy alex ];
-  propagatedBuildInputs = [ gmp ncurses ];
+  buildInputs = [ ghc perl ncurses happy alex ];
 
   preConfigure = ''
     echo >mk/build.mk "DYNAMIC_BY_DEFAULT = NO"

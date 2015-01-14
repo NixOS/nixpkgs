@@ -17,8 +17,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1669m8k9q72rpd2mzs0bh2q6lcwqiwd1ax3vrard1dgn64yq4hxx";
   };
 
-  buildInputs = [ ghc perl ];
-  propagatedBuildInputs = [ gmp ncurses ];
+  buildInputs = [ ghc perl gmp ncurses ];
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"

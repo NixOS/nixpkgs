@@ -129,7 +129,7 @@ stdenv.mkDerivation ({
     mkdir -p $packageConfDir
 
     local inputClosure=""
-    for i in $propagatedNativeBuildInputs $nativeBuildInputs ${ghc}; do
+    for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
       findInputs $i inputClosure propagated-native-build-inputs
     done
     for p in $inputClosure; do
