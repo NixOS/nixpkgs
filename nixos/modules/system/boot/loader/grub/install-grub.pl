@@ -7,6 +7,7 @@ use File::Path;
 use File::stat;
 use File::Copy;
 use File::Slurp;
+require List::Compare;
 use POSIX;
 use Cwd;
 
@@ -39,6 +40,7 @@ sub runCommand {
 
 my $grub = get("grub");
 my $grubVersion = int(get("version"));
+my $grubTarget = get("grubTarget");
 my $extraConfig = get("extraConfig");
 my $extraPrepareConfig = get("extraPrepareConfig");
 my $extraPerEntryConfig = get("extraPerEntryConfig");
@@ -50,7 +52,8 @@ my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
 my $defaultEntry = int(get("default"));
 my $fsIdentifier = get("fsIdentifier");
-my $efiSupport = get("efiSupport");
+my $grubEfi = get("grubEfi");
+my $grubTargetEfi = get("grubTargetEfi");
 my $canTouchEfiVariables = get("canTouchEfiVariables");
 my $efiSysMountPoint = get("efiSysMountPoint");
 $ENV{'PATH'} = get("path");
@@ -407,24 +410,114 @@ foreach my $fn (glob "/boot/kernels/*") {
 }
 
 
-# Install GRUB if the version changed from the last time we installed
-# it.  FIXME: shouldn't we reinstall if ‘devices’ changed?
-my $prevVersion = readFile("/boot/grub/version") // "";
-if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1" || get("fullVersion") ne $prevVersion) {
+#
+# Install GRUB if the parameters changed from the last time we installed it.
+#
+
+struct(GrubState => {
+    version => '$',
+    efi => '$',
+    devices => '$',
+    efiMountPoint => '$',
+});
+sub readGrubState {
+    my $defaultGrubState = GrubState->new(version => "", efi => "", devices => "", efiMountPoint => "" );
+    open FILE, "</boot/grub/state" or return $defaultGrubState;
+    local $/ = "\n";
+    my $line;
+    $line = <FILE>;
+    my $version = chomp($line);
+    $line = <FILE>;
+    my $efi = chomp($line);
+    $line = <FILE>;
+    my @devices = chomp($line);
+    $line = <FILE>;
+    my $efiMountPoint = chomp($line);
+    close FILE;
+    my $grubState = GrubState->new(version => $version, efi => $efi, devices => @devices, efiMountPoint => $efiMountPoint );
+    return $grubState
+}
+
+sub getDeviceTargets {
+    my @devices = ();
     foreach my $dev ($dom->findnodes('/expr/attrs/attr[@name = "devices"]/list/string/@value')) {
         $dev = $dev->findvalue(".") or die;
+        push(@devices, $dev);
+    }
+    return @devices;
+}
+
+# check whether to install GRUB EFI or not
+sub getEfiTarget {
+    if (($grub ne "") && ($grubEfi ne "")) {
+        # EFI can only be installed when target is set;
+        # A target is also required then for non-EFI grub
+        if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }
+        else { return "both" }
+    } elsif (($grub ne "") && ($grubEfi eq "")) {
+        # TODO: It would be safer to disallow non-EFI grub installation if no taget is given.
+        #       If no target is given, then grub auto-detects the target which can lead to errors.
+        #       E.g. it seems as if grub would auto-detect a EFI target based on the availability
+        #       of a EFI partition.
+        #       However, it seems as auto-detection is currently relied on for non-x86_64 and non-i386
+        #       architectures in NixOS. That would have to be fixed in the nixos modules first.
+        return "no"
+    } elsif (($grub eq "") && ($grubEfi ne "")) {
+        # EFI can only be installed when target is set;
+        if ($grubTargetEfi eq "") { die }
+        else {return "only" }
+    } else {
+        # at least one grub target has to be given
+        die
+    }
+}
+
+my @deviceTargets = getDeviceTargets();
+my $efiTarget = getEfiTarget();
+my $prevGrubState = readGrubState();
+my @prevDeviceTargets = split/:/, $prevGrubState->devices;
+
+my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference() );
+my $versionDiffer = (get("fullVersion") ne \$prevGrubState->version);
+my $efiDiffer = ($efiTarget ne \$prevGrubState->efi);
+my $efiMountPointDiffer = ($efiSysMountPoint ne \$prevGrubState->efiMountPoint);
+my $requireNewInstall = $devicesDiffer || $versionDiffer || $efiDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
+
+# install non-EFI GRUB
+if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
+    foreach my $dev (@deviceTargets) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
-        if ($efiSupport eq "true" && $canTouchEfiVariables eq "true" ) {
-            system("$grub/sbin/grub-install", "--recheck", "--efi-directory=$efiSysMountPoint", Cwd::abs_path($dev)) == 0
-                or die "$0: installation of GRUB on $dev failed\n";
-        } elsif ($efiSupport eq "true") {
-            system("$grub/sbin/grub-install", "--recheck", "--efi-directory=$efiSysMountPoint", "--no-nvram", Cwd::abs_path($dev)) == 0
+        if ($grubTarget eq "") {
+            system("$grub/sbin/grub-install", "--recheck", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         } else {
-            system("$grub/sbin/grub-install", "--recheck", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         }
     }
-    writeFile("/boot/grub/version", get("fullVersion"));
+}
+
+
+# install EFI GRUB
+if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
+    print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
+    if ($canTouchEfiVariables eq "true") {
+        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--efi-directory=$efiSysMountPoint") == 0
+                or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
+    } else {
+        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--efi-directory=$efiSysMountPoint", "--no-nvram") == 0
+                or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
+    }
+}
+
+
+# update GRUB state file
+if ($requireNewInstall != 0) {
+    open FILE, ">/boot/grub/state" or die "cannot create /boot/grub/state: $!\n";
+    print get("fullVersion"), "\n" or die;
+    print FILE $efiTarget, "\n" or die;
+    print FILE join( ":", @deviceTargets ), "\n" or die;
+    print FILE $efiSysMountPoint, "\n" or die;
+    close FILE or die;
 }

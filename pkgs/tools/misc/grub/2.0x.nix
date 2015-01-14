@@ -7,12 +7,18 @@
 
 with stdenv.lib;
 let
+  pcSystems = {
+    "i686-linux".target = "i386";
+    "x86_64-linux".target = "i386";
+  };
+
   efiSystems = {
     "i686-linux".target = "i386";
     "x86_64-linux".target = "x86_64";
   };
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
+  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   prefix = "grub${if efiSupport then "-efi" else ""}${optionalString zfsSupport "-zfs"}";
 
@@ -81,6 +87,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
+
+  # save target that grub is compiled for
+  grubTarget = if efiSupport
+               then "${efiSystems.${stdenv.system}.target}-efi"
+               else if inPCSystems
+                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    else "";
 
   doCheck = false;
   enableParallelBuilding = true;
