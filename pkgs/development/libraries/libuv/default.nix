@@ -6,7 +6,7 @@ let
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
-    homepage    = https://github.com/joyent/libuv;
+    homepage    = https://github.com/libuv/libuv;
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
   };
@@ -17,7 +17,7 @@ let
     else "libuv-${stability}-${version}";
 
   mkSrc = version: sha256: fetchFromGitHub {
-    owner = "joyent";
+    owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
     inherit sha256;
@@ -101,4 +101,8 @@ in
     v0_11_25 = "1abszivlxf0sddwvcj3jywfsip5q9vz6axvn40qqyl8sjs80zcvj";
     v0_11_26 = "1pfjdwrxhqz1vqcdm42g3j45ghrb4yl7wsngvraclhgqicff1sc3";
     v0_11_29 = "1z07phfwryfy2155p3lxcm2a33h20sfl96lds5dghn157x6csz7m";
+  }
+  //
+  mapAttrs (v: h: mkWithAutotools stable (toVersion v) h) {
+    v1_2_0 = "1nbp8qpgw64gl9nrjzxw0ndv1m64cfms0cy5a2883vw6877kizmx";
   }
