@@ -116,12 +116,10 @@
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
-  ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
-  ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
@@ -377,6 +375,7 @@
   ./system/boot/loader/raspberrypi/raspberrypi.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
+  ./system/boot/sal.nix
   ./system/boot/shutdown.nix
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
@@ -418,4 +417,4 @@
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
   #./virtualisation/xen-dom0.nix
-]
+] ++ (import ../../services/module-list.nix)

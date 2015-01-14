@@ -6,7 +6,9 @@ let
 
   b2s = x: if x then "true" else "false";
 
+  pm = config.sal.processManager;
   cfg = config.services.mongodb;
+  forking = pm.supports.fork && pm.supports.syslog;
 
   mongodb = cfg.package;
 
@@ -15,8 +17,8 @@ let
     bind_ip = ${cfg.bind_ip}
     ${optionalString cfg.quiet "quiet = true"}
     dbpath = ${cfg.dbpath}
-    syslog = true
-    fork = true
+    syslog = ${b2s forking}
+    fork = ${b2s forking}
     pidfilepath = ${cfg.pidFile}
     ${optionalString (cfg.replSetName != "") "replSet = ${cfg.replSetName}"}
     ${cfg.extraConfig}
@@ -34,9 +36,8 @@ in
 
       enable = mkOption {
         default = false;
-        description = "
-          Whether to enable the MongoDB server.
-        ";
+        type = types.bool;
+        description = "Whether to enable mongodb service.";
       };
 
       package = mkOption {
@@ -45,11 +46,6 @@ in
         description = "
           Which MongoDB derivation to use.
         ";
-      };
-
-      user = mkOption {
-        default = "mongodb";
-        description = "User account under which MongoDB runs";
       };
 
       bind_ip = mkOption {
@@ -63,12 +59,12 @@ in
       };
 
       dbpath = mkOption {
-        default = "/var/db/mongodb";
+        default = config.sal.dataContainerPaths.mongodb;
         description = "Location where MongoDB stores its files";
       };
 
       pidFile = mkOption {
-        default = "/var/run/mongodb.pid";
+        default = "${config.sal.dataContainerPaths.mongodb-state}/mongodb.pid";
         description = "Location of MongoDB pid file";
       };
 
@@ -94,41 +90,44 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.mongodb.enable {
+  config = mkIf (cfg.enable) {
+    sal.services.mongodb = {
+      description = "MongoDB server";
+      platforms = pkgs.mongodb.meta.platforms;
+      type = "${if forking then "forking" else "simple"}";
+      start.command = "${mongodb}/bin/mongod --quiet --config ${mongoCnf}";
 
-    users.extraUsers.mongodb = mkIf (cfg.user == "mongodb")
-      { name = "mongodb";
-        uid = config.ids.uids.mongodb;
-        description = "MongoDB server user";
+      requires = {
+        networking = true;
+        dataContainers = ["mongodb" "mongodb-state"];
       };
+
+      pidFile = cfg.pidFile;
+      user = "mongodb";
+    };
+
+    sal.dataContainers.mongodb = {
+      description = "Mongodb data container";
+      type = "db";
+      mode = "700";
+      user = "mongodb";
+    };
+
+    sal.dataContainers.mongodb-state = {
+      description = "Mongodb state container";
+      name = "mongodb";
+      type = "run";
+      mode = "755";
+      user = "mongodb";
+    };
 
     environment.systemPackages = [ mongodb ];
 
-    systemd.services.mongodb =
-      { description = "MongoDB server";
-
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig = {
-          ExecStart = "${mongodb}/bin/mongod --quiet --config ${mongoCnf}";
-          User = cfg.user;
-          PIDFile = cfg.pidFile;
-          Type = "forking";
-          TimeoutStartSec=120; # intial creating of journal can take some time
-          PermissionsStartOnly = true;
-        };
-
-        preStart = ''
-          if ! test -e ${cfg.dbpath}; then
-              install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
-          fi
-          if ! test -e ${cfg.pidFile}; then
-              install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
-          fi
-        '';
-      };
-
+    users.extraUsers.mongodb = {
+      name = "mongodb";
+      uid = config.ids.uids.mongodb;
+      description = "MongoDB server user";
+    };
   };
 
 }

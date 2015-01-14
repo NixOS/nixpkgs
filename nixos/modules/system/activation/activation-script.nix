@@ -139,13 +139,6 @@ in
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
       '';
 
-    system.activationScripts.tmpfs =
-      ''
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" none /dev
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" none /dev/shm
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
-      '';
-
   };
 
 }

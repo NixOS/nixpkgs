@@ -233,4 +233,7 @@ rec {
         xs = unique (drop 1 list);
       in [x] ++ remove x xs;
 
+  # Checks whether list contains element
+  contains = el: any (e: e == el);
+
 }
