@@ -1,14 +1,8 @@
-{ stdenv
-, execline
-, fetchurl
-, s6Dns
-, skalibs
-, skarnetConfCompile
-}:
+{ stdenv, execline, fetchurl, s6Dns, skalibs }:
 
 let
 
-  version = "0.1.0.0";
+  version = "2.0.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -16,12 +10,23 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6-networking/${name}.tar.gz";
-    sha256 = "1np9m2j1i2450mbcjvpbb56kv3wc2fbyvmv2a039q61j2lk6vjz7";
+    sha256 = "0k2i0g5lsvh1gz90ixwdip1pngj9vd45d4fpmdg075vd8zhh7j37";
   };
 
-  buildInputs = [ skalibs s6Dns execline skarnetConfCompile ];
+  dontDisableStatic = true;
 
-  sourceRoot = "net/${name}";
+  configureFlags = [
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-include=${execline}/include"
+    "--with-include=${s6Dns}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-lib=${execline}/lib"
+    "--with-lib=${s6Dns}/lib"
+    "--with-dynlib=${skalibs}/lib"
+    "--with-dynlib=${execline}/lib"
+    "--with-dynlib=${s6Dns}/lib"
+  ];
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-networking/;

@@ -1,15 +1,16 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
 
 stdenv.mkDerivation rec {
-  version = "7.9.20141217";
+  version = "7.10.0.20141222";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://deb.haskell.org/dailies/2014-12-17/ghc_${version}.orig.tar.bz2";
-    sha256 = "1yfdi9r07aqbnv6xfdhs6cpj0y0yjdr03l5sa4dv0j1xs3lh1wkv";
+    url = "https://downloads.haskell.org/~ghc/7.10.1-rc1/ghc-7.10.0.20141222-src.tar.xz";
+    sha256 = "0nncvvwksqqz1d991jbag3b4174i275nn0psadriq5hi3px11dkl";
   };
 
-  buildInputs = [ ghc perl ncurses happy alex ];
+  buildInputs = [ ghc perl happy alex ];
+  propagatedBuildInputs = [ gmp ncurses ];
 
   preConfigure = ''
     echo >mk/build.mk "DYNAMIC_BY_DEFAULT = NO"

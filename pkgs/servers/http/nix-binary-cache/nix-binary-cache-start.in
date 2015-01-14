@@ -39,6 +39,10 @@ parse_opts () {
         echo "PORT=$1"
         shift;
         ;;
+      --ipv6)
+        shift;
+	echo "USE_IPV6=enable"
+	;;
       --help)
         cat <<EOF >&2
 "$0": start the Nix binary cache serving the Nix store dynamically.
@@ -56,6 +60,8 @@ Recognized options:
 
 --nix-remote     'daemon' or empty string '' - whether to use daemon for store
                    operations
+
+--ipv6           enable ipv6
 
 --help           show help and exit
 EOF
@@ -81,6 +87,12 @@ server.document-root = \"$workingdir\"
 cgi.assign = ( \".cgi\" => \"@shell@\" )
 setenv.add-request-header = ( \"NIX_BINARY_CACHE_CONFIG\" => \"$workingdir/nix-binary-cache.conf\" )
 " > lighttpd.conf
+
+test -n "$USE_IPV6" && echo "
+\$SERVER[\"socket\"] == \"[::]:$PORT\" {
+server.use-ipv6 = \"enable\"
+}
+" >> lighttpd.conf
 
 cp @out@/nix-binary-cache.cgi . 
 cp @out@/nix-binary-cache.cgi ./nix-bc.cgi 

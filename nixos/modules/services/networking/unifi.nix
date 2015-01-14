@@ -3,7 +3,7 @@ with lib;
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = "@${pkgs.icedtea7_jre}/bin/java java -jar ${stateDir}/lib/ace.jar";
+  cmd = "@${pkgs.jre}/bin/java java -jar ${stateDir}/lib/ace.jar";
   mountPoints = [
     {
       what = "${pkgs.unifi}/dl";

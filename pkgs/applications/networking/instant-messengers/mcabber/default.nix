@@ -1,4 +1,6 @@
-{stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr}:
+{ stdenv, fetchurl, openssl, ncurses, pkgconfig, glib, loudmouth, libotr
+, gpgme
+}:
 
 stdenv.mkDerivation rec {
   name = "mcabber-${version}";
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vgsqw6yn0lzzcnr4fql4ycgf3gwqj6w4p0l4nqnvhkc94w62ikp";
   };
 
-  buildInputs = [openssl ncurses pkgconfig glib loudmouth libotr];
+  buildInputs = [ openssl ncurses pkgconfig glib loudmouth libotr gpgme ];
 
   configureFlags = "--with-openssl=${openssl} --enable-modules --enable-otr";
   

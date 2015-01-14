@@ -8,8 +8,8 @@ let
       src = fetchFromGitHub {
         owner = "coreos";
         repo = "etcd";
-        rev = "d01d6119e54f729f54e9776ad5729277fcf38668";
-        sha256 = "0h9d6rc8yx7vyv2ggvzsddyng03pjhyb7avm9wrc805qr7p8nhns";
+        rev = "221abdcb3b755b36d1e7d70149f6de3450351619";
+        sha256 = "1wkd238ap9gp5irrb3f6nnh83rzizwfrfac76j0dvqdka35l247k";
       };
     }
   ];

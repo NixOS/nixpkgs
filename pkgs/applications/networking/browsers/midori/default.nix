@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, intltool, vala, makeWrapper
-, gtk3, webkitgtk, librsvg, libnotify
+, gtk3, webkitgtk, librsvg, libnotify, sqlite
 , glib_networking, gsettings_desktop_schemas
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake pkgconfig intltool vala makeWrapper
-    webkitgtk librsvg libnotify
+    webkitgtk librsvg libnotify sqlite
   ];
 
   cmakeFlags = ''

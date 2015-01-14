@@ -14,21 +14,21 @@ stdenv.mkDerivation rec {
 
   installPhase = let
     gameDir = "$out/openarena-$version";
-    interpreter = "${stdenv.glibc}/lib/ld-linux*.so.?";
+    interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
   in ''
     mkdir -pv $out/bin
     cd $out
     unzip $src
 
-    if [ "${stdenv.system}" == "x86_64-linux" ]; then
-      patchelf --set-interpreter ${interpreter} ${gameDir}/openarena.x86_64
+    ${if stdenv.system == "x86_64-linux" then ''
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.x86_64"
       makeWrapper "${gameDir}/openarena.x86_64" "$out/bin/openarena" \
         --prefix LD_LIBRARY_PATH : "${SDL}/lib:${libogg}/lib:${libvorbis}/lib"
-    else
-      patchelf --set-interpreter ${interpreter} ${gameDir}/openarena.i386
+    '' else ''
+      patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.i386"
       makeWrapper "${gameDir}/openarena.i386" "$out/bin/openarena" \
         --prefix LD_LIBRARY_PATH : "${SDL}/lib:${libogg}/lib:${libvorbis}/lib"
-    fi
+    ''}
   '';
 
   meta = {

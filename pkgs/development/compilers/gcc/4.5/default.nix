@@ -378,7 +378,6 @@ stdenv.mkDerivation ({
     '';
 
     maintainers = [
-      stdenv.lib.maintainers.ludo
       stdenv.lib.maintainers.viric
     ];
 

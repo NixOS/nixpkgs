@@ -1,8 +1,8 @@
-{stdenv, fetchurl, perl, ncurses, yacc}:
+{ stdenv, fetchurl, pkgconfig, perl, ncurses, yacc, openssl, openldap }:
 
 let
   pname = "krb5";
-  version = "1.12.2";
+  version = "1.13";
   name = "${pname}-${version}";
   webpage = http://web.mit.edu/kerberos/;
 in
@@ -11,11 +11,11 @@ stdenv.mkDerivation (rec {
   inherit name;
 
   src = fetchurl {
-    url = "${webpage}dist/krb5/1.12/${name}-signed.tar";
-    sha256 = "0i1p9xx5s9q0sqnnz7f3rba07882zciw0mwc6yvv7hmm0w0iig89";
+    url = "${webpage}dist/krb5/1.13/${name}-signed.tar";
+    sha256 = "10lmbbcrzknzjnhlfjgb4rc3vzncqhmd0kp82pwd0xxpkap7k3yw";
   };
 
-  buildInputs = [ perl ncurses yacc ];
+  buildInputs = [ pkgconfig perl ncurses yacc openssl openldap ];
 
   unpackPhase = ''
     tar -xf $src
@@ -23,15 +23,15 @@ stdenv.mkDerivation (rec {
     cd ${name}/src
   '';
 
-  configureFlags = "--with-tcl=no";
-
-  #doCheck = true; # report: No suitable file for testing purposes
+  configureFlags = [ "--with-tcl=no" ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "MIT Kerberos 5";
     homepage = webpage;
     license = "MPL";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 })

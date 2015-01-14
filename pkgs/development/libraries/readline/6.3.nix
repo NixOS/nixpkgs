@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       reedit those lines, and perform csh-like history expansion on
       previous commands.
 
-      The history facilites are also placed into a separate library,
+      The history facilities are also placed into a separate library,
       the History library, as part of the build process.  The History
       library may be used without Readline in applications which
       desire its capabilities.
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ maintainers.ludo ];
+    maintainers = [ ];
 
     platforms = platforms.unix;
     branch = "6.3";

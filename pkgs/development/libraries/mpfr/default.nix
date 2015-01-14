@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ];
 
   CFLAGS = "-I${gmp}/include";
+  LDFLAGS = if stdenv.isDarwin then "-L${gmp}/lib" else null;
 
   configureFlags =
     /* Work around a FreeBSD bug that otherwise leads to segfaults in the test suite:
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

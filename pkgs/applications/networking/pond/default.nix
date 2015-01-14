@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchhg, go, trousers }:
+{ stdenv, lib, fetchgit, fetchhg, go_1_3, trousers }:
 
 let deps = import ./deps.nix {
   inherit stdenv lib fetchgit fetchhg;
@@ -7,7 +7,7 @@ let deps = import ./deps.nix {
 in stdenv.mkDerivation rec {
   name = "pond";
 
-  buildInputs  = [ go trousers ];
+  buildInputs  = [ go_1_3 trousers ];
 
   unpackPhase = ''
     export GOPATH=$PWD

@@ -1,7 +1,7 @@
 # Operations on attribute sets.
 
 with {
-  inherit (builtins) head tail;
+  inherit (builtins) head tail length;
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;

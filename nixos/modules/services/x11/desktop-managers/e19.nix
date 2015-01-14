@@ -7,6 +7,11 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.e19;
   e19_enlightenment = pkgs.e19.enlightenment.override { set_freqset_setuid = true; };
+  GST_PLUGIN_PATH = lib.makeSearchPath "lib/gstreamer-1.0" [
+    pkgs.gst_all_1.gst-plugins-base
+    pkgs.gst_all_1.gst-plugins-good
+    pkgs.gst_all_1.gst-plugins-bad
+    pkgs.gst_all_1.gst-libav ];
 
 in
 
@@ -44,6 +49,8 @@ in
         # find theme engines
         export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
         export XDG_MENU_PREFIX=enlightenment
+
+        export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}"
 
         # make available for D-BUS user services
         #export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}:${config.system.path}/share:${pkgs.e19.efl}/share

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, gtk, libpng, exiv2
-, lcms, intltool, gettext, libchamplain, fbida
+{ stdenv, fetchurl, pkgconfig, autoconf, automake, gtk, libpng, exiv2
+, lcms, intltool, gettext, fbida
 }:
 
 stdenv.mkDerivation rec {
@@ -7,17 +7,16 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   src = fetchurl {
-    url = mirror://debian/pool/main/g/geeqie/geeqie_1.2.orig.tar.gz;
+    url = "mirror://debian/pool/main/g/geeqie/geeqie_${version}.orig.tar.gz";
     sha256 = "0wkcpyh3f6ig36x1q6h9iqgq225w37visip48m72j8rpghmv1rn3";
   };
 
-  configureFlags = [ "--enable-gps" ];
-
   preConfigure = "./autogen.sh";
 
+  configureFlags = [ "--enable-gps" ];
+
   buildInputs = [
-    autoconf automake libtool pkgconfig gtk libpng exiv2 lcms intltool gettext
-    #libchamplain
+    pkgconfig autoconf automake gtk libpng exiv2 lcms intltool gettext
   ];
 
   postInstall = ''

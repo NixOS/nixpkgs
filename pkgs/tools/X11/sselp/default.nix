@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://tools.suckless.org/sselp";
-    description = "Prints the X selection to stdout, usefull in scripts";
+    description = "Prints the X selection to stdout, useful in scripts";
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

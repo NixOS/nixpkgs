@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, unzip, autoconf, automake, libtool,
   python, sodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
-  flex, haskellPackages, help2man, autoconf-archive, callPackage }:
+  flex, pandoc, help2man, autoconf-archive, callPackage }:
 
 assert stdenv.isLinux;
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     yacc
     flex
     help2man
-    haskellPackages.pandoc
+    pandoc
   ];
   preConfigure = "autoreconf -fi";
 

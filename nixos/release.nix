@@ -242,6 +242,7 @@ in rec {
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
+  tests.cadvisor = scrubDrv (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = callTest tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};

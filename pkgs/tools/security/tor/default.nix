@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     license="mBSD";
 
     maintainers = with stdenv.lib.maintainers;
-      [ phreedom ludo doublec thoughtpolice ];
+      [ phreedom doublec thoughtpolice ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Categories";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

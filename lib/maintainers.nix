@@ -74,6 +74,7 @@
   garbas = "Rok Garbas <rok@garbas.si>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
+  gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
@@ -81,6 +82,7 @@
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   iElectric = "Domen Kozar <domen@dev.si>";
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
+  j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";

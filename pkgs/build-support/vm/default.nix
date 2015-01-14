@@ -36,7 +36,7 @@ rec {
       cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
 
       # Copy BusyBox.
-      cp -pd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin
+      cp -pd ${pkgs.busybox}/bin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -162,7 +162,7 @@ rec {
 
     # Set the system time from the hardware clock.  Works around an
     # apparent KVM > 1.5.2 bug.
-    ${pkgs.utillinux}/sbin/hwclock -s
+    ${pkgs.utillinux}/bin/hwclock -s
 
     export NIX_STORE=/nix/store
     export NIX_BUILD_TOP=/tmp
@@ -255,7 +255,7 @@ rec {
 
   defaultCreateRootFS = ''
     mkdir /mnt
-    ${e2fsprogs}/sbin/mkfs.ext4 /dev/${hd}
+    ${e2fsprogs}/bin/mkfs.ext4 /dev/${hd}
     ${utillinux}/bin/mount -t ext4 /dev/${hd} /mnt
 
     if test -e /mnt/.debug; then
@@ -306,14 +306,14 @@ rec {
       buildInputs = [ utillinux ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/sbin/modprobe loop
-        ${module_init_tools}/sbin/modprobe ext4
-        ${module_init_tools}/sbin/modprobe hfs
-        ${module_init_tools}/sbin/modprobe hfsplus
-        ${module_init_tools}/sbin/modprobe squashfs
-        ${module_init_tools}/sbin/modprobe iso9660
-        ${module_init_tools}/sbin/modprobe ufs
-        ${module_init_tools}/sbin/modprobe cramfs
+        ${module_init_tools}/bin/modprobe loop
+        ${module_init_tools}/bin/modprobe ext4
+        ${module_init_tools}/bin/modprobe hfs
+        ${module_init_tools}/bin/modprobe hfsplus
+        ${module_init_tools}/bin/modprobe squashfs
+        ${module_init_tools}/bin/modprobe iso9660
+        ${module_init_tools}/bin/modprobe ufs
+        ${module_init_tools}/bin/modprobe cramfs
         mknod /dev/loop0 b 7 0
 
         mkdir -p $out
@@ -332,12 +332,12 @@ rec {
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/sbin/modprobe mtd
-        ${module_init_tools}/sbin/modprobe mtdram total_size=131072
-        ${module_init_tools}/sbin/modprobe mtdchar
-        ${module_init_tools}/sbin/modprobe mtdblock
-        ${module_init_tools}/sbin/modprobe jffs2
-        ${module_init_tools}/sbin/modprobe zlib
+        ${module_init_tools}/bin/modprobe mtd
+        ${module_init_tools}/bin/modprobe mtdram total_size=131072
+        ${module_init_tools}/bin/modprobe mtdchar
+        ${module_init_tools}/bin/modprobe mtdblock
+        ${module_init_tools}/bin/modprobe jffs2
+        ${module_init_tools}/bin/modprobe zlib
         mknod /dev/mtd0 c 90 0
         mknod /dev/mtdblock0 b 31 0
 
@@ -560,7 +560,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/sbin:${glibc}/sbin:${lzma}/bin
+        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc}/bin:${lzma}/bin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -1097,10 +1097,10 @@ rec {
       name = "centos-6.5-i386";
       fullName = "CentOS 6.5 (i386)";
       packagesList = fetchurl {
-        url = http://mirror.centos.org/centos/6.5/os/i386/repodata/a89f27cc7d3cea431f3bd605a1e9309c32d5d409abc1b51a7b5c71c05f18a0c2-primary.xml.gz;
+        url = http://vault.centos.org/6.5/os/i386/repodata/a89f27cc7d3cea431f3bd605a1e9309c32d5d409abc1b51a7b5c71c05f18a0c2-primary.xml.gz;
         sha256 = "1hm031gw0wawgcdbbhdb17adaclw63ls21fn7cgl7siwgp62g7x8";
       };
-      urlPrefix = http://mirror.centos.org/centos/6.5/os/i386/ ;
+      urlPrefix = http://vault.centos.org/6.5/os/i386;
       archs = ["noarch" "i386"];
       packages = commonCentOSPackages;
     };
@@ -1109,24 +1109,12 @@ rec {
       name = "centos-6.5-x86_64";
       fullName = "CentOS 6.5 (x86_64)";
       packagesList = fetchurl {
-        url = http://mirror.centos.org/centos/6.5/os/x86_64/repodata/3353e378f5cb4bb6c3b3dd2ca266c6d68a1e29c36cf99f76aea3d8e158626024-primary.xml.gz;
+        url = http://vault.centos.org/6.5/os/x86_64/repodata/3353e378f5cb4bb6c3b3dd2ca266c6d68a1e29c36cf99f76aea3d8e158626024-primary.xml.gz;
         sha256 = "0930c9cf3n53mrv9zybcqclix2nnqrka4b6xng1vcjybymwf6lrk";
       };
-      urlPrefix = http://mirror.centos.org/centos/6.5/os/x86_64/ ;
+      urlPrefix = http://vault.centos.org/6.5/os/x86_64/;
       archs = ["noarch" "x86_64"];
       packages = commonCentOSPackages;
-    };
-
-    rhel7x86_64 = {
-      name = "rhel-7rc-x86_64";
-      fullName = "RHEL 7 rc (x86_64)";
-      packagesList = fetchurl {
-        url = http://ftp.redhat.com/redhat/rhel/rc/7/Server/x86_64/os/repodata/81f41fc6206a8477235dc7b5099ffe0867f71802415d66d6c0a213a41cae27c3-primary.xml.gz;
-        sha256 = "1hr7mqfa84x2q3b6cpa108cgfrq8zsghkdf7blipg13a4331zx41";
-      };
-      urlPrefix = http://ftp.redhat.com/redhat/rhel/rc/7/Server/x86_64/os ;
-      archs = ["noarch" "x86_64"];
-      packages = commonRHELPackages;
     };
 
   };

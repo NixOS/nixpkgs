@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d"
     substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
     substituteInPlace ./cmd/zed/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
+    substituteInPlace ./module/Makefile.in        --replace "/bin/cp"                 "cp"
 
     ./autogen.sh
   '';

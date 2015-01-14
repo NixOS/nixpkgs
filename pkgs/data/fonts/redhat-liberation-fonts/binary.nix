@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [
       stdenv.lib.maintainers.raskin
-      stdenv.lib.maintainers.ludo
     ];
   };
 }

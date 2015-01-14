@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = http://gmplib.org/;
     license = stdenv.lib.licenses.lgpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.all;
   };
 }

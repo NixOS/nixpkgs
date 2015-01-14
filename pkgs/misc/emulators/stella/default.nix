@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     the GNU General Public License (GPL). Stella was originally
     developed for Linux by Bradford W. Mott, and is currently
     maintained by Stephen Anthony.
-    As of its 3.5 release, Stella is officialy donationware. 
+    As of its 3.5 release, Stella is officially donationware. 
     '';
     homepage = http://stella.sourceforge.net/;
     license = licenses.gpl2;

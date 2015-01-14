@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, buildPythonPackage, pythonPackages, pkgconfig
 , pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkitgtk2, libsoup, pygtk
-, taglib, pysqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
+, taglib, sqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
 , gst_python, gst_plugins_base, gst_plugins_good, gst_ffmpeg
 , enableBonjour ? false, avahi ? null
@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     pkgconfig pyrex096 ffmpeg boost glib pygobject gtk2 webkitgtk2 libsoup
-    pygtk taglib gsettings_desktop_schemas
+    pygtk taglib gsettings_desktop_schemas sqlite
   ];
 
   propagatedBuildInputs = [

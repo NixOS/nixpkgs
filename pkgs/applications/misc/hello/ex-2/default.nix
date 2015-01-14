@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.gnu.org/software/hello/manual/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.eelco ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 }

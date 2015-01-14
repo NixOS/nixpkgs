@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "taggy";
-  version = "0.1.2";
-  sha256 = "0sj7da4yawfajyrd2gg2dxzgj5n99mdm5cz3bdhfipas4bb4216y";
+  version = "0.1.3";
+  sha256 = "18azsibsfjz4zj69dk4a3jrdw6zvd8n1gsd1ynd2hy7i9z168iw8";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

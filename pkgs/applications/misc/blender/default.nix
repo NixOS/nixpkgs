@@ -10,18 +10,12 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.72b";
+  name = "blender-2.73";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0ixz8h3c08p4f84x8r85nzddwvc0h5lw1ci8gdg2x3m2mw2cfdj4";
+    sha256 = "140fcxjb73gim430v08021ls3civ3yghld63ljkgxi5vaww1cq95";
   };
-
-  patches = [(fetchpatch {
-    url = "https://raw.githubusercontent.com/Exherbo/media-unofficial/b5b09fa35ed/"
-      + "packages/media-gfx/blender/files/blender-2.71-Fix-build-with-freetype-2.5.4.patch";
-    sha256 = "19kx9h030zy2f0ah5v69ank2ak8gfp1zv26pm4ixngfdbsiy5lvk";
-  })];
 
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
@@ -41,7 +35,12 @@ stdenv.mkDerivation rec {
     [ "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
+      "-DWITH_FFTW3=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
+      "-DWITH_FFTW3=ON"
+      "-DWITH_SDL=ON"
+      "-DWITH_GAMEENGINE=ON"
+      "-DWITH_OPENCOLORIO=ON"
       "-DPYTHON_LIBRARY=python${python.majorVersion}m"
       "-DPYTHON_LIBPATH=${python}/lib"
       "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"

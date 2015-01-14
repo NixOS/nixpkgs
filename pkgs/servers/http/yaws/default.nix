@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yaws-${version}";
-  version = "1.98";
+  version = "1.99";
 
   src = fetchurl {
     url = "http://yaws.hyber.org/download/${name}.tar.gz";
-    sha256 = "0c88da7gxha7an3c82j5a3r1y0j7cjq66zqfrzjihg8pwp618zfl";
+    sha256 = "057ymg84ji4pfi3xai6kis3mk8zks2ynbiam0x68cb4cb1yfzwcl";
   };
 
   # The tarball includes a symlink yaws -> yaws-1.95, which seems to be

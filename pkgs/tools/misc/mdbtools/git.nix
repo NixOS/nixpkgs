@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     url = "http://github.com/brianb/mdbtools.git";
     rev = "9ab40e83e6789015c965c92bdb62f92f8cdd0dbd";
     sha256 = "18j1a9y9xhl7hhx30zvmx2n4w7dc8c7sdr6722sf3mh5230mvv59";
-    name = "mdbtools-git-export";
   };
 
   buildInputs = [

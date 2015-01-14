@@ -7,6 +7,9 @@ with stdenv.lib;
   DEBUG_KERNEL y
   PM_ADVANCED_DEBUG y
   PM_RUNTIME y
+  ${optionalString (versionAtLeast version "3.10") ''
+    X86_INTEL_PSTATE y
+  ''}
   TIMER_STATS y
   ${optionalString (versionOlder version "3.10") ''
     USB_SUSPEND y

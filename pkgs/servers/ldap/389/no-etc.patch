@@ -1,0 +1,62 @@
+From bcdd781b01beba59b9f6993355732070b9487603 Mon Sep 17 00:00:00 2001
+From: "William A. Kennington III" <william@wkennington.com>
+Date: Fri, 9 Jan 2015 14:51:46 -0800
+Subject: [PATCH 1/2] Makefile: Don't install files to /etc or /var
+
+---
+ Makefile.in | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 24a9ddf..c97d1e1 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -169,15 +169,14 @@ am__uninstall_files_from_dir = { \
+ am__installdirs = "$(DESTDIR)$(serverdir)" \
+ 	"$(DESTDIR)$(serverplugindir)" "$(DESTDIR)$(bindir)" \
+ 	"$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)" \
+-	"$(DESTDIR)$(initdir)" "$(DESTDIR)$(sbindir)" \
++	"$(DESTDIR)$(sbindir)" \
+ 	"$(DESTDIR)$(taskdir)" "$(DESTDIR)$(updatedir)" \
+ 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(man8dir)" \
+-	"$(DESTDIR)$(configdir)" "$(DESTDIR)$(infdir)" \
+-	"$(DESTDIR)$(initconfigdir)" "$(DESTDIR)$(mibdir)" \
++	"$(DESTDIR)$(infdir)" \
++	"$(DESTDIR)$(mibdir)" \
+ 	"$(DESTDIR)$(propertydir)" "$(DESTDIR)$(perldir)" \
+ 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(propertydir)" \
+ 	"$(DESTDIR)$(pythondir)" "$(DESTDIR)$(sampledatadir)" \
+-	"$(DESTDIR)$(schemadir)" "$(DESTDIR)$(systemdsystemunitdir)" \
+ 	"$(DESTDIR)$(updatedir)" "$(DESTDIR)$(serverincdir)"
+ LTLIBRARIES = $(server_LTLIBRARIES) $(serverplugin_LTLIBRARIES)
+ am__DEPENDENCIES_1 =
+@@ -10207,7 +10206,7 @@ check: $(BUILT_SOURCES)
+ all-am: Makefile $(LIBRARIES) $(LTLIBRARIES) $(PROGRAMS) $(SCRIPTS) \
+ 		$(MANS) $(DATA) $(HEADERS) config.h
+ installdirs:
+-	for dir in "$(DESTDIR)$(serverdir)" "$(DESTDIR)$(serverplugindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(initdir)" "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(taskdir)" "$(DESTDIR)$(updatedir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(man8dir)" "$(DESTDIR)$(configdir)" "$(DESTDIR)$(infdir)" "$(DESTDIR)$(initconfigdir)" "$(DESTDIR)$(mibdir)" "$(DESTDIR)$(propertydir)" "$(DESTDIR)$(perldir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(propertydir)" "$(DESTDIR)$(pythondir)" "$(DESTDIR)$(sampledatadir)" "$(DESTDIR)$(schemadir)" "$(DESTDIR)$(systemdsystemunitdir)" "$(DESTDIR)$(updatedir)" "$(DESTDIR)$(serverincdir)"; do \
++	for dir in "$(DESTDIR)$(serverdir)" "$(DESTDIR)$(serverplugindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(taskdir)" "$(DESTDIR)$(updatedir)" "$(DESTDIR)$(man1dir)" "$(DESTDIR)$(man8dir)" "$(DESTDIR)$(infdir)" "$(DESTDIR)$(mibdir)" "$(DESTDIR)$(propertydir)" "$(DESTDIR)$(perldir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(propertydir)" "$(DESTDIR)$(pythondir)" "$(DESTDIR)$(sampledatadir)" "$(DESTDIR)$(updatedir)" "$(DESTDIR)$(serverincdir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+ 	done
+ install: $(BUILT_SOURCES)
+@@ -10363,13 +10362,13 @@ info: info-am
+ 
+ info-am:
+ 
+-install-data-am: install-configDATA install-infDATA \
+-	install-initSCRIPTS install-initconfigDATA install-man \
++install-data-am: install-infDATA \
++	install-man \
+ 	install-mibDATA install-nodist_propertyDATA install-perlDATA \
+ 	install-pkgconfigDATA install-propertyDATA install-pythonDATA \
+-	install-sampledataDATA install-schemaDATA \
++	install-sampledataDATA \
+ 	install-serverLTLIBRARIES install-serverincHEADERS \
+-	install-serverpluginLTLIBRARIES install-systemdsystemunitDATA \
++	install-serverpluginLTLIBRARIES \
+ 	install-taskSCRIPTS install-updateDATA install-updateSCRIPTS
+ 
+ install-dvi: install-dvi-am
+-- 
+2.1.4
+

@@ -1,5 +1,7 @@
 {stdenv, fetchurl, which, file, perl, curl, python27, makeWrapper}:
 
+assert !stdenv.isFreeBSD;
+
 /* Rust's build process has a few quirks :
 
 - It requires some patched in llvm that haven't landed upstream, so it
@@ -16,7 +18,7 @@
 
 with ((import ./common.nix) {inherit stdenv; version = "0.12.0"; });
 
-let snapshot = if stdenv.system == "i686-linux"
+let snapshotHash = if stdenv.system == "i686-linux"
       then "555aca74f9a268f80cab2df1147dc6406403e9e4"
       else if stdenv.system == "x86_64-linux"
       then "6a43c2f6c8ba2cbbcb9da1f7b58f748aef99f431"
@@ -27,7 +29,7 @@ let snapshot = if stdenv.system == "i686-linux"
       else abort "no-snapshot for platform ${stdenv.system}";
     snapshotDate = "2014-10-04";
     snapshotRev = "749ff5e";
-    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
+    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
 
 in stdenv.mkDerivation {
   inherit name;
@@ -35,7 +37,7 @@ in stdenv.mkDerivation {
   inherit meta;
 
   src = fetchurl {
-    url = http://static.rust-lang.org/dist/rust-0.12.0.tar.gz;
+    url = "http://static.rust-lang.org/dist/rust-${version}.tar.gz";
     sha256 = "1dv9wxh41230zknbwj34zgjnh1kgvvy6k12kbiy9bnch9nr6cgl8";
   };
 
@@ -44,7 +46,7 @@ in stdenv.mkDerivation {
     name = "rust-stage0";
     src = fetchurl {
       url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-      sha1 = snapshot;
+      sha1 = snapshotHash;
     };
     dontStrip = true;
     installPhase = ''

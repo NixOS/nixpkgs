@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       ocp-build is a build system for OCaml application, based on simple
       descriptions of packages. ocp-build combines the descriptions of
       packages, and optimize the parallel compilation of files depending on
-      the number of cores and the automatically-infered dependencies
+      the number of cores and the automatically-inferred dependencies
       between source files.
     '';
     license = licenses.gpl3;

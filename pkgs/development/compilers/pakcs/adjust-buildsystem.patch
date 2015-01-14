@@ -1,15 +1,15 @@
-diff -Naur pakcs-1.11.3-upstream/Makefile pakcs-1.11.3/Makefile
---- pakcs-1.11.3-upstream/Makefile	2014-01-31 09:10:03.000000000 -0430
-+++ pakcs-1.11.3/Makefile	2014-02-03 20:27:41.558334480 -0430
-@@ -66,7 +66,6 @@
- #
- .PHONY: install
- install: installscripts
+diff -Naur pakcs-1.11.4-upstream/Makefile pakcs-1.11.4/Makefile
+--- pakcs-1.11.4-upstream/Makefile	2014-10-24 05:12:37.000000000 -0430
++++ pakcs-1.11.4/Makefile	2015-01-05 16:26:39.256709080 -0430
+@@ -94,7 +94,6 @@
+ install: cleanoldinfos installscripts copylibs
+ 	@echo "PAKCS installation configuration (file pakcsinitrc):"
+ 	@cat pakcsinitrc
 -	$(MAKE) frontend
  	# pre-compile all libraries:
  	@cd lib && $(MAKE) fcy
  	# install the Curry2Prolog compiler as a saved system:
-@@ -105,10 +104,6 @@
+@@ -145,10 +144,6 @@
  # compile the tools:
  .PHONY: tools
  tools:
@@ -20,9 +20,9 @@ diff -Naur pakcs-1.11.3-upstream/Makefile pakcs-1.11.3/Makefile
  	@if [ -r bin/pakcs ] ; then cd currytools && $(MAKE) ; fi
  	@if [ -r bin/pakcs ] ; then cd tools      && $(MAKE) ; fi
  
-diff -Naur pakcs-1.11.3-upstream/scripts/pakcs.sh pakcs-1.11.3/scripts/pakcs.sh
---- pakcs-1.11.3-upstream/scripts/pakcs.sh	2014-01-31 09:04:19.000000000 -0430
-+++ pakcs-1.11.3/scripts/pakcs.sh	2014-02-03 20:20:40.775350116 -0430
+diff -Naur pakcs-1.11.4-upstream/scripts/pakcs.sh pakcs-1.11.4/scripts/pakcs.sh
+--- pakcs-1.11.4-upstream/scripts/pakcs.sh	2014-10-24 05:06:07.000000000 -0430
++++ pakcs-1.11.4/scripts/pakcs.sh	2015-01-05 16:26:15.697982791 -0430
 @@ -16,7 +16,7 @@
  # use readline wrapper rlwrap if it is installed and we have tty as stdin:
  USERLWRAP=no

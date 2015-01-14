@@ -197,6 +197,7 @@
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/bosun.nix
+  ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
@@ -253,6 +254,7 @@
   ./services/networking/kippo.nix
   ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
+  ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
@@ -305,6 +307,7 @@
   ./services/search/solr.nix
   ./services/security/clamav.nix
   ./services/security/fail2ban.nix
+  ./services/security/fprintd.nix
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix

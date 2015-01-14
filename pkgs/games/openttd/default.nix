@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
       In multiplayer networked mode, players may:
         - play competitively as different businesses
-        - play cooperatively controling the same business
+        - play cooperatively controlling the same business
         - observe as spectators
     '';
     homepage = http://www.openttd.org/;

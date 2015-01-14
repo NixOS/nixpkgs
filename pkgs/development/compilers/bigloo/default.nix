@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "09yrz8r0jpj7bda39fdxzrrdyhi851nlfajsyf0b6jxanz6ygcjx";
   };
 
-  buildInputs = [ gmp ];
+  propagatedBuildInputs = [ gmp ];
 
   preConfigure =
     # Help libgc's configure.
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     # Fix absolute paths.
     sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'			\
-        -e 's=/tmp=$TMPDIR=g' -i configure autoconf/*		\
+        -e 's=/tmp=$TMPDIR=g' -i autoconf/*		\
 	[Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
 	*/*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
 	comptime/Cc/cc.scm gc/install-*
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www-sop.inria.fr/indes/fp/Bigloo/;
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ ludo thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

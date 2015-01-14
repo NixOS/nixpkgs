@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://ocsigen.org/tyxml/;
-    description = "A library that makes it almost impossible for your OCaml programs to generate wrong XML ouput, using static typing";
+    description = "A library that makes it almost impossible for your OCaml programs to generate wrong XML output, using static typing";
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms;
     maintainers = with maintainers; [

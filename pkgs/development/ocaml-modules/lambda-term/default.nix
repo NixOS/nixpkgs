@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libev, ocaml, findlib, ocaml_lwt, ocaml_react, zed}:
+{ stdenv, fetchurl, libev, ocaml, findlib, ocaml_lwt, ocaml_react, zed, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "1.6";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libev ocaml findlib ocaml_lwt ocaml_react ];
 
-  propagatedBuildInputs = [ zed ];
+  propagatedBuildInputs = [ camlp4 zed ];
 
   createFindlibDestdir = true;
 

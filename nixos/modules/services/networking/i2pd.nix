@@ -142,7 +142,7 @@ in
           type = types.int;
           default = 80;
           description = ''
-            Port to forward incoming trafic to. 80 by default.
+            Port to forward incoming traffic to. 80 by default.
           '';
         };
         keyFile = mkOption {
