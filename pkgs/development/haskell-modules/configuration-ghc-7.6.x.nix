@@ -42,4 +42,8 @@ self: super: {
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
+
+  # Needs Cabal >= 1.18.x.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };
+
 }
