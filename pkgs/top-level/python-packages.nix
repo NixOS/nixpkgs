@@ -5080,11 +5080,11 @@ let
   };
 
   jedi = buildPythonPackage (rec {
-    name = "jedi-0.8.0-final0";
+    name = "jedi-0.8.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/j/jedi/${name}.tar.gz";
-      sha256 = "0jnhwh0b1hy5cssi3n5a4j7z9pgpcckyv5s52ba4jnq5bwgdpbcf";
+      sha256 = "1a7bg159mc1la5p1zsblzpr9hmypa7nz0mpvf7dww57cgi2sw8sd";
     };
 
     meta = {
