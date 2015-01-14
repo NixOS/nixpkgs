@@ -7336,7 +7336,7 @@ let
 
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.5.3";
+    name = "psycopg2-2.5.4";
     disabled = isPyPy;
 
     # error: invalid command 'test'
@@ -7344,7 +7344,7 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/psycopg2/${name}.tar.gz";
-      sha256 = "02h33barxigsczpympnwa0yvw9hgdv8d63bxm5x251ri26xz6b9s";
+      sha256 = "07ivzl7bq8bjcq5n90w4bsl29gjfm5l8yamw0paxh25si8r3zfi4";
     };
 
     propagatedBuildInputs = with self; [ pkgs.postgresql ];
