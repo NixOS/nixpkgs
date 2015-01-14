@@ -1,5 +1,9 @@
 {stdenv, fetchurl, perl, ncurses, gmp}:
 
+let
+  optS = stdenv.lib.optionalString;
+in
+
 stdenv.mkDerivation rec {
   version = "7.4.2";
 
@@ -62,8 +66,7 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      --with-clang
+    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include ${optS stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
   '';
 
   # Stripping combined with patchelf breaks the executables (they die
