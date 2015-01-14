@@ -622,48 +622,6 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [            # sort -t '#' -k 2
-    "birdring" # depends on broken gdal library
-    "capm" # depends on broken gdal library
-    "DeducerSpatial" # depends on broken gdal library
-    "divagis" # depends on broken gdal library
-    "drsmooth" # depends on broken gdal library
-    "dynatopmodel" # depends on broken gdal library
-    "fuzzyMM" # depends on broken gdal library
-    "gfcanalysis" # depends on broken gdal library
-    "GSIF" # depends on broken gdal library
-    "hddtools" # depends on broken gdal library
-    "lakemorpho" # depends on broken gdal library
-    "landsat" # depends on broken gdal library
-    "M3" # depends on broken gdal library
-    "mgraph" # depends on broken gdal library
-    "micromap" # depends on broken gdal library
-    "ModelMap" # depends on broken gdal library
-    "modiscloud" # depends on broken gdal library
-    "move" # depends on broken gdal library
-    "OpasnetUtils" # depends on broken gdal library
-    "OpenStreetMap" # depends on broken gdal library
-    "opentraj" # depends on broken gdal library
-    "paleofire" # depends on broken gdal library
-    "pgirmess" # depends on broken gdal library
-    "plotGoogleMaps" # depends on broken gdal library
-    "plotKML" # depends on broken gdal library
-    "PopGenReport" # depends on broken gdal library
-    "prevR" # depends on broken gdal library
-    "qrfactor" # depends on broken gdal library
-    "r2dRue" # depends on broken gdal library
-    "rangeMapper" # depends on broken gdal library
-    "rAvis" # depends on broken gdal library
-    "rgdal" # depends on broken gdal library
-    "rnrfa" # depends on broken gdal library
-    "spatial_tools" # depends on broken gdal library
-    "SPODT" # depends on broken gdal library
-    "taRifx_geo" # depends on broken gdal library
-    "tmap" # depends on broken gdal library
-    "trajectories" # depends on broken gdal library
-    "tripEstimation" # depends on broken gdal library
-    "UScancer" # depends on broken gdal library
-    "wrspathrow" # depends on broken gdal library
-    "wux" # depends on broken gdal library
     "CARrampsOcl" # depends on OpenCL
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
     "alm" # jsonlite.so: undefined symbol: XXX
