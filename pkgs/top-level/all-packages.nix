@@ -8345,6 +8345,8 @@ let
 
   iwlegacy = callPackage ../os-specific/linux/firmware/iwlegacy { };
 
+  jfbview = callPackage ../os-specific/linux/jfbview { };
+
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
