@@ -9448,6 +9448,8 @@ let
     inherit (gnome) libgnomeui GConf;
   };
 
+  cortex = callPackage ../applications/misc/cortex { };
+
   csound = callPackage ../applications/audio/csound { };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
