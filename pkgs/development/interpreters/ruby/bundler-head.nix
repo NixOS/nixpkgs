@@ -4,8 +4,8 @@ buildRubyGem {
   name = "bundler-HEAD";
   src = fetchgit {
     url = "https://github.com/bundler/bundler.git";
-    rev = "17919e790cd8f6fb369d6afc81f0afec6fb5ad8b";
-    sha256 = "10gqashaax0i18gs95pijqsnpnwfj9v3va5rpxps0v597d16px9b";
+    rev = "a2343c9eabf5403d8ffcbca4dea33d18a60fc157";
+    sha256 = "1f0isjrn4rwak3q6sbs6v6gqhwln32gv2dbd98r902nkg9i7y5i0";
     leaveDotGit = true;
   };
   dontPatchShebangs = true;
