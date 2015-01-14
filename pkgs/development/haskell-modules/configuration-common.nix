@@ -158,6 +158,9 @@ self: super: {
     ];
   }));
 
+  # https://github.com/haskell/vector/issues/47
+  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
+
 }
 // {
   # Not on Hackage yet.
