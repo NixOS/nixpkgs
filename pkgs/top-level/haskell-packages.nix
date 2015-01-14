@@ -2993,6 +2993,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
 
+  yesodMarkdown = callPackage ../development/libraries/haskell/yesod-markdown {};
+
   yesodNewsfeed = callPackage ../development/libraries/haskell/yesod-newsfeed {};
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
