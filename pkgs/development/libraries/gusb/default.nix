@@ -1,15 +1,15 @@
-{stdenv, fetchurl, fetchgit
+{stdenv, fetchurl
 , automake, autoconf, libtool, which, gtkdoc, gettext, pkgconfig, gobjectIntrospection, libxslt
 , glib, systemd, libusb1
 }:
-stdenv.mkDerivation {
-  name = "gusb-git";
+stdenv.mkDerivation rec {
+  name = "gusb-${version}";
+  version = "0.2.4";
   enableParallelBuilding = true;
 
-  src = fetchgit {
-    url = git://gitorious.org/gusb/gusb.git;
-    rev = "53226a15a627b20fde38303c2141a17985d741ae";
-    sha256 = "01daf09f663e27bdd92532e3e2a3e87de895e9cc1f150d4e0fc75b0dc489fccf";
+  src = fetchurl {
+    url = "http://people.freedesktop.org/~hughsient/releases/libgusb-${version}.tar.xz";
+    sha256 = "10w0sdq7505iwd8y305aylmx4zafbnphs81cgdsqw2z38pxncya3";
   };
 
   preConfigure = "./autogen.sh";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "GLib libusb wrapper";
-    homepage = http://gitorious.org/gusb;
+    homepage = http://people.freedesktop.org/~hughsient/releases/;
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
