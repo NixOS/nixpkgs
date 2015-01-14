@@ -113,6 +113,14 @@ stdenv.mkDerivation (attrs // {
     fi
     EOF
 
+    # Copy the gem file to the cache.
+    # This is very important in order for many parts of Bundler to not blow up.
+    # See https://github.com/bundler/bundler/issues/3327
+    gemname=$(basename $out/${ruby.gemPath}/gems/*).gem
+    echo "caching $gemname"
+    mkdir $out/${ruby.gemPath}/cache
+    cp $gempkg $out/${ruby.gemPath}/cache/$gemname
+
     runHook postInstall
   '';
 
