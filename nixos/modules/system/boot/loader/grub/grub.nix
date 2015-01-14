@@ -6,6 +6,8 @@ let
 
   cfg = config.boot.loader.grub;
 
+  efi = config.boot.loader.efi;
+
   realGrub = if cfg.version == 1 then pkgs.grub
     else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; };
 
@@ -16,21 +18,31 @@ let
     then null
     else realGrub;
 
+  grubEfi =
+    # EFI version of Grub v2
+    if (cfg.devices != ["nodev"]) && cfg.efiSupport && (cfg.version == 2)
+    then pkgs.grub2.override { zfsSupport = cfg.zfsSupport; efiSupport = cfg.efiSupport; }
+    else null;
+
   f = x: if x == null then "" else "" + x;
 
   grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
+      grubTarget = f grub.grubTarget;
       shell = "${pkgs.stdenv.shell}";
       fullVersion = (builtins.parseDrvName realGrub.name).version;
+      grubEfi = f grubEfi;
+      grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f grubEfi.grubTarget else "";
+      inherit (efi) efiSysMountPoint canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices fsIdentifier;
-      path = (makeSearchPath "bin" [
+        default devices fsIdentifier efiSupport;
+      path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
-        pkgs.utillinux
-      ]) + ":" + (makeSearchPath "sbin" [
+        pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
+      )) + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
     });
@@ -231,6 +243,18 @@ in
         type = types.bool;
         description = ''
           Whether grub should be build against libzfs.
+          ZFS support is only available for GRUB v2.
+          This option is ignored for GRUB v1.
+        '';
+      };
+
+      efiSupport = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether grub should be build with EFI support.
+          EFI support is only available for GRUB v2.
+          This option is ignored for GRUB v1.
         '';
       };
 
@@ -269,7 +293,7 @@ in
         if cfg.devices == [] then
           throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
-          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ])} " +
+          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])} " +
           (if cfg.enableCryptodisk then "GRUB_ENABLE_CRYPTODISK=y " else "") +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 

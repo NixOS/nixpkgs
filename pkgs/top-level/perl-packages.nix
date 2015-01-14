@@ -227,6 +227,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ListCompare = buildPerlPackage {
+    name = "List-Compare-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.39.tar.gz;
+      sha256 = "1v4gn176faanzf1kr9axdp1220da7nkvz0d66mnk34nd0skjjxcl";
+    };
+  };
+
   ArchiveCpio = buildPerlPackage {
     name = "Archive-Cpio-0.09";
     src = fetchurl {
