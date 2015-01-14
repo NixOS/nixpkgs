@@ -196,7 +196,7 @@ in
       };
 
       timeout = mkOption {
-        default = 5;
+        default = if (config.boot.loader.timeout != null) then config.boot.loader.timeout else -1;
         type = types.int;
         description = ''
           Timeout (in seconds) until GRUB boots the default menu item.
