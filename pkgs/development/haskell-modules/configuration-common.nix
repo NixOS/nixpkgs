@@ -136,6 +136,9 @@ self: super: {
   # depends on broken hbro package.
   hbro-contrib = markBroken super.hbro-contrib;
 
+  # https://github.com/goldfirere/th-desugar/issues/21
+  th-desugar = dontCheck super.th-desugar;
+
 }
 // {
   # Not on Hackage yet.
