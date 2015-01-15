@@ -185,6 +185,9 @@ let
         $machine->succeed("test -e /boot/grub");
       ''}
 
+      # Check whether /root has correct permissions.
+      $machine->succeed("stat -c '%a' /root") =~ /700/ or die;
+
       # Did the swap device get activated?
       $machine->waitForUnit("swap.target");
       $machine->succeed("cat /proc/swaps | grep -q /dev");
