@@ -139,9 +139,6 @@ self: super: {
   # https://github.com/goldfirere/th-desugar/issues/21
   th-desugar = dontCheck super.th-desugar;
 
-  # https://github.com/dzhus/snaplet-redis/pull/11
-  snaplet-redis = doJailbreak super.snaplet-redis;
-
   # https://github.com/prowdsponsor/fb/pull/33
   fb = doJailbreak (overrideCabal super.fb (drv: {
     patches = [
