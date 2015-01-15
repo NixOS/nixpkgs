@@ -9576,6 +9576,8 @@ let
 
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
+  e = callPackage ../tools/misc/e { };
+
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
