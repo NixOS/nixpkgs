@@ -114,16 +114,6 @@ self: super: {
   # depends on broken hbro package.
   hbro-contrib = markBroken super.hbro-contrib;
 
-  # https://github.com/prowdsponsor/fb/pull/33
-  fb = overrideCabal super.fb (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-        url = https://github.com/prowdsponsor/fb/pull/31.patch;
-        sha256 = "0ip8mhpbbvlp4pz7d27d6cg39gm6ypfsf4rdmfrmdh3pkig0axls";
-      })
-    ];
-  });
-
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
