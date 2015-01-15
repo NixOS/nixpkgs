@@ -19,8 +19,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/seenaburns/stag";
     description = "Terminal streaming bar graph passed through stdin";
     license = stdenv.lib.licenses.bsdOriginal;
-
-    # FIXME: waiting on PR #5773 for maintainer entry
-    #maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
+    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
   };
 }
