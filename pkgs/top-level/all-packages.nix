@@ -10957,6 +10957,10 @@ let
     conf = config.st.conf or null;
   };
 
+  stag = callPackage ../applications/misc/stag {
+    curses = ncurses;
+  };
+
   stella = callPackage ../misc/emulators/stella { };
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
