@@ -62,6 +62,7 @@ fi
 # into the chroot because we need networking and the nixbld user
 # accounts in /etc/passwd.  But we do need the target's /etc/nixos.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/mnt2 $mountPoint/mnt-nixpkgs $mountPoint/etc /etc/nixos
+mkdir -m 0700 -p $mountPoint/root
 mount --make-private / # systemd makes / shared, which is annoying
 mount --bind / $mountPoint/mnt
 mount --bind /nix $mountPoint/mnt/nix
