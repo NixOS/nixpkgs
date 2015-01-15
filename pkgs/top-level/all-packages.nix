@@ -1633,6 +1633,8 @@ let
 
   netperf = callPackage ../applications/networking/netperf { };
 
+  netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
+
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs = callPackage ../development/web/nodejs { };
