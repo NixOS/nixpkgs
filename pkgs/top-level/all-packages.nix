@@ -444,6 +444,10 @@ let
 
   ### TOOLS
 
+  "3dfsb" = callPackage ../applications/misc/3dfsb {
+    glibc = glibc.override { debugSymbols = true; };
+  };
+
   abduco = callPackage ../tools/misc/abduco { };
 
   acct = callPackage ../tools/system/acct { };
