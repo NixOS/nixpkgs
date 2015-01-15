@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
     mk install
     mkdir -p $out/bin
     makeWrapper $out/share/inferno/Linux/386/bin/emu $out/bin/emu \
-      --suffix LD_LIBRARY_PATH ':' "${gcc46.gcc}/lib" \
+      --suffix LD_LIBRARY_PATH ':' "${gcc46.cc}/lib" \
       --suffix PATH ':' "$out/share/inferno/Linux/386/bin"
     makeWrapper $infernoWrapper $out/bin/inferno \
-      --suffix LD_LIBRARY_PATH ':' "${gcc46.gcc}/lib" \
+      --suffix LD_LIBRARY_PATH ':' "${gcc46.cc}/lib" \
       --suffix PATH ':' "$out/share/inferno/Linux/386/bin" \
       --set INFERNO_ROOT "$out/share/inferno"
   '';

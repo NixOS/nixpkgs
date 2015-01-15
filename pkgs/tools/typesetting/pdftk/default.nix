@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sed -e 's@/usr/bin/@@g' -i Makefile.*
     NIX_ENFORCE_PURITY= \
       make \
-      LIBGCJ="${gcj.gcc}/share/java/libgcj-${gcj.gcc.version}.jar" \
+      LIBGCJ="${gcj.cc}/share/java/libgcj-${gcj.cc.version}.jar" \
       GCJ=gcj GCJH=gcjh GJAR=gjar \
       -iC ../java all
   '';
