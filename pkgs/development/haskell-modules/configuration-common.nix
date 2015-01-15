@@ -145,9 +145,6 @@ self: super: {
   # https://github.com/michaelschade/hs-stripe/pull/37
   stripe = doJailbreak super.stripe;
 
-  # https://github.com/LukeHoersten/snaplet-stripe/pull/4
-  snaplet-stripe = doJailbreak super.snaplet-stripe;
-
   # https://github.com/prowdsponsor/fb/pull/33
   fb = doJailbreak (overrideCabal super.fb (drv: {
     patches = [
