@@ -91,6 +91,7 @@ mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log /var/lib /var/db
 mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
+chmod 0700 /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
 mkdir -m 0755 -p /etc/nixos
