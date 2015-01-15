@@ -1465,20 +1465,25 @@ let
     };
   };
 
+  click = buildPythonPackage rec {
+    name = "click-3.3";
 
-  click = buildPythonPackage {
-    name = "click-2.1";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/c/click/click-2.1.tar.gz;
-      md5 = "0ba97ba09af82c56e2d35f3412d0aa6e";
+      url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
+      sha256 = "1rfn8ml80rw3hkgpm1an5p3vdyhh7hzx4zynr8dhfl7bsw28r77p";
     };
-    meta = {
-      homepage = "http://click.pocoo.org/";
-      description = "A Python package for creating beautiful command line interfaces in a composable way with as little code as necessary";
-      license = stdenv.lib.licenses.bsd3;
+
+    meta = with stdenv.lib; {
+      homepage = http://click.pocoo.org/;
+      description = "Create beautiful command line interfaces in Python";
+      longDescription = ''
+        A Python package for creating beautiful command line interfaces in a
+        composable way, with as little code as necessary.
+      '';
+      license = with licenses; [ bsd3 ];
+      maintainers = with maintainers; [ nckx ];
     };
   };
-
 
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
