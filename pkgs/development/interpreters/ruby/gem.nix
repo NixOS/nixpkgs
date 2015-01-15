@@ -29,6 +29,8 @@ stdenv.mkDerivation (attrs // {
       inherit (attrs) sha256;
     };
 
+  phases = [ "unpackPhase" "patchPhase" "buildPhase" "checkPhase" "installPhase" "fixupPhase" ];
+
   # The source is expected to either be a gem package or a directory.
   #
   # - Gem packages are already built, so they don't even need to be unpacked.
@@ -40,7 +42,7 @@ stdenv.mkDerivation (attrs // {
     if [[ $src =~ $gemRegex ]]
     then
       runHook preUnpack
-      echo "Source is a gem package, won't unpack."
+      echo "source is a gem package, won't unpack"
       gempkg=$src
       dontBuild=1
       runHook postUnpack
@@ -60,14 +62,20 @@ stdenv.mkDerivation (attrs // {
       git reset
     fi
 
-    gemspec=`find . -name '*.gemspec'`
-    output=`gem build $gemspec`
+    gemspec=$(find . -name '*.gemspec')
+    echo "found the following gemspecs:"
+    echo "$gemspec"
 
-    gem build $gemspec | tee .output
-    gempkg=`cat .output | grep -oP 'File: \K(.*)'`
-    rm .output
+    gemspec=$(echo "$gemspec" | head -n1)
+    echo "building $gemspec"
 
-    echo "Gem package built: $gempkg"
+    exec 3>&1
+    output=$(gem build $gemspec | tee >(cat - >&3))
+    exec 3>&-
+
+    gempkg=$(echo "$output" | grep -oP 'File: \K(.*)')
+
+    echo "gem package built: $gempkg"
 
     runHook postBuild
   '';
@@ -90,7 +98,9 @@ stdenv.mkDerivation (attrs // {
       --backtrace \
       $gempkg $gemFlags -- $buildFlags
 
-    rm -frv $out/${ruby.gemPath}/cache # don't keep the .gem file here
+    # Yes, we really do need the $out/${ruby.gemPath}/cache.
+    # This is very important in order for many parts of RubyGems/Bundler to not blow up.
+    # See https://github.com/bundler/bundler/issues/3327
 
     mkdir -p $out/bin
     for prog in $out/${ruby.gemPath}/gems/*/bin/*; do
@@ -112,14 +122,6 @@ stdenv.mkDerivation (attrs // {
       addToSearchPath GEM_PATH $out/${ruby.gemPath}
     fi
     EOF
-
-    # Copy the gem file to the cache.
-    # This is very important in order for many parts of Bundler to not blow up.
-    # See https://github.com/bundler/bundler/issues/3327
-    gemname=$(basename $out/${ruby.gemPath}/gems/*).gem
-    echo "caching $gemname"
-    mkdir $out/${ruby.gemPath}/cache
-    cp $gempkg $out/${ruby.gemPath}/cache/$gemname
 
     runHook postInstall
   '';
