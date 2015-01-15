@@ -40,7 +40,7 @@
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
-, useCpphs ? stdenv.isDarwin
+, useCpphs ? false
 }:
 
 assert pkgconfigDepends != [] -> pkgconfig != null;
