@@ -7837,6 +7837,8 @@ let
 
   postfix = postfix211;
 
+  pshs = callPackage ../servers/http/pshs { };
+
   pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome.GConf;
     # The following are disabled in the default build, because if this
