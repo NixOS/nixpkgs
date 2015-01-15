@@ -6840,6 +6840,8 @@ let
 
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
+  SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
+
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
   SDL2 = callPackage ../development/libraries/SDL2 {
