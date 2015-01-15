@@ -4540,6 +4540,11 @@ let
     inherit pkgs ctags writeScriptBin;
   };
 
+  ctodo = callPackage ../applications/misc/ctodo {
+    cmake = cmake;
+    ncurses = ncurses;
+  };
+
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
   cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
