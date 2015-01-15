@@ -136,9 +136,6 @@ self: super: {
   # depends on broken hbro package.
   hbro-contrib = markBroken super.hbro-contrib;
 
-  # https://github.com/goldfirere/th-desugar/issues/21
-  th-desugar = dontCheck super.th-desugar;
-
   # https://github.com/prowdsponsor/fb/pull/33
   fb = doJailbreak (overrideCabal super.fb (drv: {
     patches = [
