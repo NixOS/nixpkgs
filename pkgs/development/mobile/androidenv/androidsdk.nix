@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       for i in emulator emulator-arm emulator-mips emulator-x86 mksdcard
       do
           patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
-          patchelf --set-rpath ${stdenv_32bit.cc.gcc}/lib $i
+          patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
       done
       
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
