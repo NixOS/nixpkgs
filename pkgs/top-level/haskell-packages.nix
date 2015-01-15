@@ -2997,6 +2997,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yesodNewsfeed = callPackage ../development/libraries/haskell/yesod-newsfeed {};
 
+  yesodPagination = callPackage ../development/libraries/haskell/yesod-pagination {};
+
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
   yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
