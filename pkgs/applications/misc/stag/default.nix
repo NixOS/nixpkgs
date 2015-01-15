@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/seenaburns/stag";
-    description = "Terminal streaming bar graph passed through stdin.;
+    description = "Terminal streaming bar graph passed through stdin";
     license = stdenv.lib.licenses.bsdOriginal;
 
     # FIXME: waiting on PR #5773 for maintainer entry
