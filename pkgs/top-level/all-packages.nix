@@ -9183,10 +9183,11 @@ let
 
   source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
 
-  source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
-  source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
-  source-han-sans-simplified-chinese = callPackage ../data/fonts/source-han-sans/simplified-chinese.nix {};
-  source-han-sans-traditional-chinese = callPackage ../data/fonts/source-han-sans/traditional-chinese.nix {};
+  sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
+  source-han-sans-japanese = sourceHanSansPackages.japanese;
+  source-han-sans-korean = sourceHanSansPackages.korean;
+  source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
+  source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
