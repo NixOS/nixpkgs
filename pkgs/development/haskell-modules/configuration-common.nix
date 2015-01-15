@@ -152,8 +152,8 @@ self: super: {
   fb = doJailbreak (overrideCabal super.fb (drv: {
     patches = [
       (pkgs.fetchpatch {
-        url = https://github.com/prowdsponsor/fb/pull/33.patch;
-        sha256 = "0xfbfyg86lrimwhfd2s41xy5axcsnw0rqvic8ak72rq2sssyljpg";
+        url = https://github.com/prowdsponsor/fb/pull/31.patch;
+        sha256 = "0ip8mhpbbvlp4pz7d27d6cg39gm6ypfsf4rdmfrmdh3pkig0axls";
       })
     ];
   }));
