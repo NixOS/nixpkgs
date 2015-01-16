@@ -53,4 +53,21 @@ in rec {
     };
   };
 
+  privmsg = zncDerivation rec {
+    name        = "znc-privmsg-c9f98690be";
+    module_name = "privmsg";
+
+    src = fetchgit {
+      url    = meta.repositories.git;
+      rev    = "c9f98690beb4e3a7681468d5421ff11dc8e1ee8b";
+      sha256 = "dfeb28878b12b98141ab204191288cb4c3f7df153a01391ebf6ed6a32007247f";
+    };
+
+    meta = {
+      description = "ZNC privmsg module";
+      homepage = https://github.com/kylef/znc-contrib;
+      repositories.git = https://github.com/kylef/znc-contrib.git;
+    };
+  };
+
 }
