@@ -270,29 +270,7 @@ let
         gnome_vfs = linux;
       };
 
-      haskellPackages_ghc6104 = {
-        ghc = ghcSupported;
-      };
-
-      haskellPackages_ghc6123 = {
-        ghc = ghcSupported;
-      };
-
-      haskellPackages_ghc704 = {
-        ghc = ghcSupported;
-      };
-
-      haskellPackages_ghc722 = {
-        ghc = ghcSupported;
-      };
-
-      haskellPackages_ghc742 = {
-        ghc = ghcSupported;
-      };
-
-      haskellPackages_ghc763 = {
-        ghc = ghcSupported;
-      };
+      haskell-ng.compiler = packagesWithMetaPlatform pkgs.haskell-ng.compiler;
 
       strategoPackages = {
         sdf = linux;
