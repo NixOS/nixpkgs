@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     description = "A simple ncurses-based task list manager.";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
