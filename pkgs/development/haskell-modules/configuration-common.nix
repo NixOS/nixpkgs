@@ -131,9 +131,10 @@ self: super: {
     isLibrary = false;
     isExecutable = true;
     buildDepends = with self; [
-      aeson base bytestring Cabal containers deepseq directory filepath
-      hackage-db monad-par monad-par-extras mtl pretty process
-      regex-posix SHA split transformers utf8-string
+      aeson base bytestring Cabal containers deepseq deepseq-generics
+      directory filepath hackage-db hspec monad-par monad-par-extras
+      mtl pretty process regex-posix SHA split transformers
+      utf8-string QuickCheck
     ];
     testDepends = with self; [ base doctest ];
     homepage = "http://github.com/NixOS/cabal2nix";
