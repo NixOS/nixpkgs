@@ -1,4 +1,4 @@
-{ stdenv, cmake, fetchgit, ncurses }:
+{ stdenv, cmake, fetchurl, ncurses }:
 
 let
   version = "1.1";
@@ -6,10 +6,9 @@ in
 stdenv.mkDerivation {
   name = "ctodo-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/Acolarh/ctodo.git";
-    rev = "de478f5028a1b167bfdb6dd4160d83d9ef7db839";
-    sha256 = "3a43a6237e8fe5b37ca7d5abc88c20158f2cff1f8b98762c404e6f24d4b7993e";
+  src = fetchurl {
+    url = "https://github.com/Acolarh/ctodo/archive/v1.1.tar.gz";
+    sha256 = "1sv5p1b08pp73qshakz4qy4pjglxz2pvx2cjfx52i3532hd3xcaf";
   };
 
   buildInputs = [ stdenv cmake ncurses ];
