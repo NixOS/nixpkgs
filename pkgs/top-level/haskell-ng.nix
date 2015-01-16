@@ -26,10 +26,22 @@ rec {
   packages = {
 
     ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
-    ghc6123 = callPackage ../development/haskell-modules { ghc = compiler.ghc6123; };
-    ghc704 = callPackage ../development/haskell-modules { ghc = compiler.ghc704; };
-    ghc722 = callPackage ../development/haskell-modules { ghc = compiler.ghc722; };
-    ghc742 = callPackage ../development/haskell-modules { ghc = compiler.ghc742; };
+    ghc6123 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc6123;
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
+    };
+    ghc704 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc704;
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.0.x.nix { };
+    };
+    ghc722 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc722;
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.2.x.nix { };
+    };
+    ghc742 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc742;
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.4.x.nix { };
+    };
     ghc763 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc763;
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.6.x.nix { };

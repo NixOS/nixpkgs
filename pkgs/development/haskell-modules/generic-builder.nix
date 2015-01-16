@@ -55,6 +55,9 @@ let
                      main = defaultMain
                    '';
 
+  ghc76xOrLater = stdenv.lib.versionOlder "7.6" ghc.version;
+  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
+
   defaultConfigureFlags = [
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
@@ -146,7 +149,7 @@ stdenv.mkDerivation ({
         fi
       done
     done
-    ghc-pkg --package-db="$packageConfDir" recache
+    ghc-pkg --${packageDbFlag}="$packageConfDir" recache
     configureFlags+=" --package-db=$packageConfDir"
 
     ${optionalString (editedCabalFile != null) ''
@@ -162,7 +165,7 @@ stdenv.mkDerivation ({
     for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
       test -f $i && break
     done
-    ghc ${optionalString (! coreSetup) "-package-db=$packageConfDir "}$setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ghc ${optionalString (! coreSetup) "-${packageDbFlag}=$packageConfDir "}$setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     echo configureFlags: $configureFlags
     unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
