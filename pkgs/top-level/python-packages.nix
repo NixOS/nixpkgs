@@ -11604,7 +11604,7 @@ let
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_testing six ] ++ optional (!python.is_py3k or false) subunit;
 
-    doCheck = true;
+    doCheck = !isPy27;
 
     meta = {
       description = "A flexible test runner with layer support";
