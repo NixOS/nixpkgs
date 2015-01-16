@@ -8178,6 +8178,8 @@ let
 
   shishi = callPackage ../servers/shishi { };
 
+  sipcmd = callPackage ../applications/networking/sipcmd { };
+
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
