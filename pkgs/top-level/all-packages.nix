@@ -2808,6 +2808,8 @@ let
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
 
+  xbrightness = callPackage ../tools/X11/xbrightness { };
+
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   unarj = callPackage ../tools/archivers/unarj { };
