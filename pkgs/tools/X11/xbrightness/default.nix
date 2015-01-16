@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11, xlibs }:
+{ stdenv, fetchurl, xlibs }:
 
 stdenv.mkDerivation {
 
