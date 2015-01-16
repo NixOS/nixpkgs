@@ -34,5 +34,5 @@ if [ -n "@coreutils@" ]; then
     addToSearchPath PATH @coreutils@/bin
 fi
 
-export CC=cc
-export CXX=c++
+export CC=@real_cc@
+export CXX=@real_cxx@

@@ -160,12 +160,18 @@ stdenv.mkDerivation {
         wrap ld.bfd ${./ld-wrapper.sh} $binutils/bin/ld.bfd
       fi
 
+      export real_cc=cc
+      export real_cxx=c++
       if [ -e $ccPath/gcc ]; then
         wrap gcc ${./cc-wrapper.sh} $ccPath/gcc
         ln -s gcc $out/bin/cc
+        export real_cc=gcc
+        export real_cxx=g++
       elif [ -e $ccPath/clang ]; then
         wrap clang ${./cc-wrapper.sh} $ccPath/clang
         ln -s clang $out/bin/cc
+        export real_cc=clang
+        export real_cxx=clang++
       fi
 
       if [ -e $ccPath/g++ ]; then
