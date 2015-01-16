@@ -22,7 +22,8 @@ in stdenv.mkDerivation rec {
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
-
+    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
+    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Set ghcFlags for building ghc itself
     SRC_HC_OPTS += ${ghcFlags}
