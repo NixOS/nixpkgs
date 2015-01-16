@@ -43,16 +43,19 @@ let
 
   instantiate = (attrs:
     let
+      defaultAttrs = {
+        name = "${attrs.name}-${attrs.version}";
+        inherit ruby gemPath;
+      };
       gemPath = map (name: gemset''."${name}") (attrs.dependencies or []);
       fixedAttrs = attrs // (fixes."${attrs.name}" or (const {})) attrs;
+      withSource = fixedAttrs //
+        (if (lib.isDerivation fixedAttrs.src || builtins.isString fixedAttrs.src)
+           then {}
+           else { src = (fetchers."${fixedAttrs.src.type}" fixedAttrs); });
+
     in
-      buildRubyGem (
-        fixedAttrs // {
-          name = "${attrs.name}-${attrs.version}";
-          src = fetchers."${attrs.src.type}" attrs;
-          inherit ruby gemPath;
-        }
-      )
+      buildRubyGem (withSource // defaultAttrs)
   );
 
   gemset' = if builtins.isAttrs gemset then gemset else import gemset;
