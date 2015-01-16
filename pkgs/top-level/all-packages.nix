@@ -12612,13 +12612,10 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-  */
-  nixUnstable = nixStable;
 
   nixops = callPackage ../tools/package-management/nixops { };
 
