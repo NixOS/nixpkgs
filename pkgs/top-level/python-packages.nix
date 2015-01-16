@@ -7678,16 +7678,19 @@ let
   };
 
   pygments = buildPythonPackage rec {
-    name = "Pygments-1.6";
+    version = "2.0.1";
+    name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      md5 = "a18feedf6ffd0b0cc8c8b0fbdb2027b1";
+      sha256 = "1js5vq0xvsiykzpj5snxhdz3li9fmk8vc549slg9hcnj80frw0sy";
     };
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
+      license = with licenses; [ bsd2 ];
+      maintainers = with maintainers; [ nckx ];
     };
   };
 
