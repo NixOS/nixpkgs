@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, python, buildPythonPackage
+{ stdenv, fetchurl, python, buildPythonPackage, pycairo
 , which, dateutil, nose, numpy, pyparsing, tornado
-, freetype, libpng, pkgconfig, mock, pytz
-, enableGhostscript ? false, ghostscript ? null
-, enableGtk2 ? false, pygtk ? null
+, freetype, libpng, pkgconfig, mock, pytz, pygobject3
+, enableGhostscript ? false, ghostscript ? null, gtk3
+, enableGtk2 ? false, pygtk ? null, gobjectIntrospection
+, enableGtk3 ? true, cairo
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -15,15 +16,18 @@ buildPythonPackage rec {
     url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
     sha256 = "0m6v9nwdldlwk22gcd339zg6mny5m301fxgks7z8sb8m9wawg8qp";
   };
+  
+  XDG_RUNTIME_DIR = "/tmp";
 
   buildInputs = [ python which stdenv ]
     ++ stdenv.lib.optional enableGhostscript ghostscript;
 
   propagatedBuildInputs =
-    [ dateutil nose numpy pyparsing tornado freetype
-      libpng pkgconfig mock pytz
+    [ dateutil nose numpy pyparsing tornado freetype 
+      libpng pkgconfig mock pytz  
     ]
-    ++ stdenv.lib.optional enableGtk2 pygtk;
+    ++ stdenv.lib.optional enableGtk2 pygtk
+    ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ];
 
   meta = with stdenv.lib; {
     description = "python plotting library, making publication quality plots";
