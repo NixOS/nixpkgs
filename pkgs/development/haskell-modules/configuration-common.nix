@@ -117,6 +117,21 @@ self: super: {
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
+  # https://github.com/haskell/pretty/issues/17
+  pretty_1_1_2_0 = dontCheck super.pretty_1_1_2_0;
+
+  # Does not compile: <http://hydra.cryp.to/build/469842/nixlog/1/raw>.
+  base_4_7_0_2 = markBroken super.base_4_7_0_2;
+
+  # Obsolete: https://github.com/massysett/prednote/issues/1.
+  prednote-test = markBroken super.prednote-test;
+
+  # Doesn't compile: <http://hydra.cryp.to/build/465891/nixlog/1/raw>.
+  integer-gmp_0_5_1_0 = markBroken super.integer-gmp_0_5_1_0;
+
+  # https://github.com/haskell/bytestring/issues/41
+  bytestring_0_10_4_1 = dontCheck super.bytestring_0_10_4_1;
+
 }
 // {
   # Not on Hackage yet.

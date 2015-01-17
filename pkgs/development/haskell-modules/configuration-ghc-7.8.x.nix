@@ -49,6 +49,9 @@ self: super: {
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
+  # Depends on time == 0.1.5, which we don't have.
+  HStringTemplate_0_8 = dontDistribute super.HStringTemplate_0_8;
+
 }
 
 // # packages relating to amazonka
