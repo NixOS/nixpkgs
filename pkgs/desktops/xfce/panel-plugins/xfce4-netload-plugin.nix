@@ -2,13 +2,13 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-battery-plugin";
-  ver_maj = "1.0";
-  ver_min = "5";
+  p_name  = "xfce4-netload-plugin";
+  ver_maj = "1.2";
+  ver_min = "4";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "04gbplcj8z4vg5xbks8cc2jjf62mmf9sdymg90scjwmb82pv2ngn";
+    sha256 = "1lrhhzxmybcfl52hnadr2dvasis9wmk6a48pcy02s09ch8cfkb7z";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
