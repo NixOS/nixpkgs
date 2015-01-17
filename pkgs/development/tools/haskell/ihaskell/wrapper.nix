@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  inherit (ihaskell) name;
+  inherit (ihaskell) name pname version;
 
   buildInputs = [ makeWrapper ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       --set PROFILE_DIR "\$HOME/.ipython/profile_haskell" \
       --set PROFILE_TAR "$(find ${ihaskell} -iname "profile.tar")" \
       --set PROFILE_INIT "\$([ ! -d \$PROFILE_DIR ] && mkdir -p \$PROFILE_DIR && tar xvf \$PROFILE_TAR -C \$PROFILE_DIR)" \
-      --prefix GHC_PACKAGE_PATH : "\$(${ghc.GHCGetPackages} ${ghc.version}|sed -e 's, -package-db ,:,g'|cut -b 2-):${ihaskell}/lib/ghc-${ghc.version}/package.conf.d/${name}.installedconf" \
+      --prefix GHC_PACKAGE_PATH : "\$(${ghc.GHCGetPackages} ${ghc.version}|sed -e 's, -package-db ,:,g'|cut -b 2-):${ihaskell}/lib/ghc-${ghc.version}/package.conf.d/${pname}-${version}.installedconf" \
       --set GHC_PACKAGE_PATH "\$GHC_PACKAGE_PATH:" # always end with : to include base packages
   '';
 
