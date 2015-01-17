@@ -19,13 +19,14 @@ let lispPackages = rec {
 
   clx = buildLispPackage rec {
     baseName = "clx";
-    version = "2014-11-03";
-    description = "X11 bindings for Common Lisp";
+    version = "git-20150117";
+    description = "An implementation of the X Window System protocol in Lisp.";
     deps = [];
+    # Source type: git
     src = pkgs.fetchgit {
-      url = "https://github.com/sharplispers/clx.git";
-      rev = "c2910c5d707a97e87b354de3f2fbe2ae038e9bc8";
-      sha256 = "1jk0hfk6rb9cf58xhqq7vaisj63k3x9jpj06wqpa32y5ppjcyijw";
+      url = ''https://github.com/sharplispers/clx'';
+      sha256 = "ada6cf450c22d1ed297e5575f832bee8e4b61d602ffa9a145ae2fab7cd80f3b6";
+      rev = ''0a3bea0fab66058e9394973e23954c43083d96e2'';
       name = "clx-git-checkout-${version}";
     };
   };
