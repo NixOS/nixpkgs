@@ -48,4 +48,7 @@ self: super: {
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
 
+  # https://github.com/haskell/primitive/issues/16
+  primitive = dontCheck super.primitive;
+
 }
