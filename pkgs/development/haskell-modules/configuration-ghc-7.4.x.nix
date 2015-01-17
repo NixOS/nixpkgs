@@ -51,4 +51,7 @@ self: super: {
   # https://github.com/haskell/primitive/issues/16
   primitive = dontCheck super.primitive;
 
+  # https://github.com/tibbe/unordered-containers/issues/96
+  unordered-containers = dontCheck super.unordered-containers;
+
 }
