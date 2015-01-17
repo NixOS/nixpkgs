@@ -3,7 +3,7 @@
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3
 , enableGhostscript ? false, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobjectIntrospection
-, enableGtk3 ? true, cairo
+, enableGtk3 ? false, cairo
 }:
 
 assert enableGhostscript -> ghostscript != null;
