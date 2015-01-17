@@ -132,6 +132,8 @@ self: super: {
   # https://github.com/haskell/bytestring/issues/41
   bytestring_0_10_4_1 = dontCheck super.bytestring_0_10_4_1;
 
+  # https://github.com/zmthy/http-media/issues/6
+  http-media = dontCheck super.http-media;
 }
 // {
   # Not on Hackage yet.
