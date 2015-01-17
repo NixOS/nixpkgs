@@ -9149,6 +9149,8 @@ let
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
+  open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
+
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
 
   poly = callPackage ../data/fonts/poly { };
