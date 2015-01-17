@@ -139,21 +139,27 @@ self: super: {
     pname = "cabal2nix";
     version = "2.0";
     src = pkgs.fetchgit {
-      url = "git://github.com/NixOS/cabal2nix.git";
-      rev = "2a1a10f38f21f27e6555b399db131380af1cf7ff";
-      sha256 = "51c96e5a089396c34bfa27e76778743161504e04d6220b2bb7e0fbcde80430fa";
+      url = "http://github.com/NixOS/cabal2nix.git";
+      sha256 = "c1927f7441a057f02d25cbca855f533fc8073e7680083caa86d48e3d69ab69fd";
+      rev = "0c4c1f2529a7e4b83ec21922d77c792a9bd1d662";
     };
     isLibrary = false;
     isExecutable = true;
     buildDepends = with self; [
       aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory filepath hackage-db hspec monad-par monad-par-extras
-      mtl pretty process regex-posix SHA split transformers
-      utf8-string QuickCheck
+      directory filepath hackage-db monad-par monad-par-extras mtl pretty
+      prettyclass process QuickCheck regex-posix SHA split transformers
+      utf8-string
     ];
-    testDepends = with self; [ base doctest ];
+    testDepends = with self; [
+      aeson base bytestring Cabal containers deepseq deepseq-generics
+      directory doctest filepath hackage-db hspec monad-par
+      monad-par-extras mtl pretty prettyclass process QuickCheck
+      regex-posix SHA split transformers utf8-string
+    ];
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
     license = pkgs.stdenv.lib.licenses.bsd3;
   };
+
 }
