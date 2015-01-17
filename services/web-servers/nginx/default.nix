@@ -63,7 +63,7 @@ in
       };
 
       stateDir = mkOption {
-        default = "/var/spool/nginx";
+        default = config.sal.dataContainerPaths.nginx;
         description = "
           Directory holding all state for nginx to run.
         ";
@@ -86,20 +86,29 @@ in
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
-    systemd.services.nginx = {
+    sal.services.nginx = {
+      inherit (cfg) user group;
       description = "Nginx Web Server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      path = [ nginx ];
-      preStart =
-        ''
-        mkdir -p ${cfg.stateDir}/logs
-        chmod 700 ${cfg.stateDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
-      serviceConfig = {
-        ExecStart = "${nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+      platforms = nginx.meta.platforms;
+
+      requires = {
+        networking = true;
+        dataContainers = ["nginx"];
       };
+
+      path = [ nginx ];
+      preStart.script =''
+        mkdir -p ${cfg.stateDir}/logs
+      '';
+
+      start.command = "${nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+    };
+
+    sal.dataContainers.nginx = {
+      description = "Nginx data container";
+      type = "spool";
+      mode = "700";
+      inherit (cfg) user group;
     };
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton

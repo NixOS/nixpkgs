@@ -110,7 +110,6 @@
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
   ./services/databases/hbase.nix
-  ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
   ./services/databases/mysql.nix
@@ -151,7 +150,6 @@
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
-  ./services/logging/logstash.nix
   ./services/logging/rsyslogd.nix
   ./services/logging/syslogd.nix
   ./services/logging/syslog-ng.nix
@@ -293,7 +291,6 @@
   ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
-  ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
   ./services/security/fail2ban.nix
@@ -319,7 +316,6 @@
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
-  ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/varnish/default.nix

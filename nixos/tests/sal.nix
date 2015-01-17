@@ -2,8 +2,6 @@ import ./make-test.nix {
   name = "sal";
 
   machine = { config, pkgs, ... }: {
-    services.postgresql.enable = true;
-    services.postgresql.package = pkgs.postgresql92;
     services.mongodb.enable = true;
     services.mongodb.extraConfig = ''
       nojournal = true
@@ -13,7 +11,7 @@ import ./make-test.nix {
   testScript =
     ''
       startAll;
-      $machine->waitForUnit("mongodb.service");
+      $machine->waitForUnit("elasticsearch.service");
       $machine->shutdown;
     '';
 }

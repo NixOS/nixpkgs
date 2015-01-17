@@ -77,7 +77,7 @@ in
       };
 
       dataDir = mkOption {
-        default = "/var/db/influxdb";
+        default = config.sal.dataContainerPaths.influxdb;
         description = "Data directory for influxd data files.";
         type = types.path;
       };
@@ -210,34 +210,43 @@ in
 
   config = mkIf config.services.influxdb.enable {
 
-    systemd.services.influxdb = {
+    sal.services.influxdb = {
+      inherit (cfg) user group;
       description = "InfluxDB Server";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
-      serviceConfig = {
-        ExecStart = ''${cfg.package}/bin/influxdb -config "${influxdbConfig}"'';
-        User = "${cfg.user}";
-        Group = "${cfg.group}";
-        PermissionsStartOnly = true;
+      platforms = pkgs.influxdb.meta.platforms;
+
+      requires = {
+        networking = true;
+        dataContainers = ["influxdb"];
+        ports = [ cfg.apiPort cfg.adminPort ];
       };
-      preStart = ''
-        mkdir -m 0770 -p ${cfg.dataDir}
+
+      start.command = ''${cfg.package}/bin/influxdb -config "${influxdbConfig}"'';
+
+      preStart.script = ''
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
       '';
-      postStart = mkBefore ''
+      postStart.script = mkBefore ''
         until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.bindAddress}:${toString cfg.apiPort}/'; do
           sleep 1;
         done
       '';
     };
 
-    users.extraUsers = optional (cfg.user == "influxdb") {
+    sal.dataContainers.influxdb = {
+      description = "PostgreSQL data container";
+      type = "db";
+      mode = "0770";
+      inherit (cfg) user group;
+    };
+
+    users.extraUsers = mkIf (cfg.user == "influxdb") {
       name = "influxdb";
       uid = config.ids.uids.influxdb;
       description = "Influxdb daemon user";
     };
 
-    users.extraGroups = optional (cfg.group == "influxdb") {
+    users.extraGroups = mkIf (cfg.group == "influxdb") {
       name = "influxdb";
       gid = config.ids.gids.influxdb;
     };

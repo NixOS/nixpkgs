@@ -20,6 +20,7 @@ in {
   sal.processManager.envNames = {
     mainPid = "MAINPID";
   };
+  sal.processManager.extraPath = [ pkgs.su ];
 
   systemd.services = mapAttrs (n: s:
     let
@@ -62,7 +63,18 @@ in {
           User = s.user;
           Group = s.group;
           WorkingDirectory = s.workingDirectory;
+          Restart = let
+            restart = remove "changed" s.restart;
+          in
+            if length restart == 0 then "no" else
+            if length restart == 1 then head restart else
+            if contains "success" restart && contains "failure" restart
+            then "allways" else "no";
+          SuccessExitStatus =
+            concatMapStringsSep " " (c: toString c) s.exitCodes;
         };
+
+        restartIfChanged = contains "changed" s.restart;
       }
       (mkIf (s.start.command != "") {
         serviceConfig.ExecStart =

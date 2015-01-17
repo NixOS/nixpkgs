@@ -81,7 +81,7 @@ rec {
 
       type = mkOption {
         default = "lib";
-        type = types.enum ["db" "lib" "log" "run"];
+        type = types.enum ["db" "lib" "log" "run" "spool"];
         description = "Type of data container.";
       };
 
@@ -112,7 +112,6 @@ rec {
   };
 
   socketOptions = commonOptions // {
-
     listen = mkOption {
       type = types.str;
       example = "0.0.0.0:993";
@@ -124,90 +123,23 @@ rec {
       description = "Type of listening socket";
     };
 
-  };
-
-  userOptions = { name, config, ... }: {
-
-    options = {
-
-      name = mkOption {
-        type = types.str;
-        description = ''
-          The name of the user account. If undefined, the name of the
-          attribute set will be used.
-        '';
-      };
-
-      description = mkOption {
-        type = types.str;
-        default = "";
-        example = "Alice Q. User";
-        description = ''
-          A short description of the user account, typically the
-          user's full name.  This is actually the “GECOS” or “comment”
-          field in <filename>/etc/passwd</filename>.
-        '';
-      };
-
-      uid = mkOption {
-        type = with types; nullOr int;
-        default = null;
-        description = ''
-          The account UID. If the UID is null, a free UID is picked on
-          activation.
-        '';
-      };
-
-      group = mkOption {
-        type = types.str;
-        default = "nogroup";
-        description = "The user's primary group.";
-      };
-
-      extraGroups = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = "The user's auxiliary groups.";
-      };
-
-      home = mkOption {
-        type = types.str;
-        default = "/var/empty";
-        description = "The user's home directory.";
-      };
-
-      shell = mkOption {
-        type = types.str;
-        default = "/run/current-system/sw/sbin/nologin";
-        description = "The path to the user's shell.";
-      };
-
-      createHome = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          If true, the home directory will be created automatically. If this
-          option is true and the home directory already exists but is not
-          owned by the user, directory owner and group will be changed to
-          match the user.
-        '';
-      };
-
-      useDefaultShell = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          If true, the user's shell will be set to
-          <option>users.defaultUserShell</option>.
-        '';
-      };
-
+    mode = mkOption {
+      default = "600";
+      type = types.str;
+      description = "File mode for socker";
     };
 
-    config = {
-      name = mkDefault name;
+    user = mkOption {
+      default = "";
+      type = types.str;
+      description = "Socket owner user.";
     };
 
+    group = mkOption {
+      default = "";
+      type = types.str;
+      description = "Socket owner group.";
+    };
   };
 
   serviceOptions =  { name, config, ... }: {
@@ -235,7 +167,7 @@ rec {
 
       environment = mkOption {
         default = {};
-        type = types.attrsOf types.str;
+        type = types.attrsOf (types.either types.str types.package);
         example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
         description = "Environment variables passed to the service's processes.";
       };
@@ -318,11 +250,27 @@ rec {
         description = "Service working directory.";
       };
 
-      restart = mkOption {
-        default = "no";
-        type = types.enum ["success" "failure" "always" "no"];
-        description = "Condition when to restart a service.";
-      };
+      restart = mkOption (let
+        restartConditions = ["success" "failure" "changed"];
+      in {
+        default = ["changed"];
+        apply = value:
+          if isList value then value else
+          if value == "allways" then restartConditions
+          else [value "changed"];
+        type = types.uniq (
+          types.either
+            (types.enum (restartConditions ++ ["allways"]))
+            (types.listOf (types.enum restartConditions))
+        );
+        description = ''
+          Conditions when to restart a service. If value is a list
+          it must contain one of "success", "failure" and "changed" values.
+          If value is a string, it must be one of "sucess", "failure" or
+          "allways". At the same time if value is a string "changed" condition
+          is allways applied.
+        '';
+      });
 
       exitCodes = mkOption {
         default = [0 1 2 15 13];

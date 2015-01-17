@@ -52,7 +52,7 @@ let
       environment = mkOption {
         description = "Supervisor service environment variables.";
         default = {};
-        type = types.attrsOf types.str;
+        type = types.attrsOf (types.either types.str types.package);
       };
 
       stopsignal = mkOption {
@@ -169,9 +169,6 @@ let
       }
       process_name=${if config.processname!="" then config.processname else "%(program_name)s"}
       ${optionalString (config.directory != null) "directory=${config.directory}"}
-      environment=${
-        concatStringsSep "," (mapAttrsToList (k: v: "${k}=\"${v}\"") config.environment)
-      }
       autostart=${b2s config.autostart}
       autorestart=${if isBool config.autorestart then b2s config.autorestart else config.autorestart}
       stopwaitsecs=${toString config.stopwaitsecs}
@@ -265,6 +262,9 @@ in {
       in (pkgs.writeScript "supervisor-${name}-service" ''
         #!${pkgs.stdenv.shell} -e
 
+        export PATH="${makeSearchPath "bin" service.path}:${makeSearchPath "sbin" service.path}"
+        ${concatStrings (mapAttrsToList (k: v: "export ${k}=\"${v}\"\n") service.environment)}
+
         ${concatStringsSep "\n" (map (name:
         let
           dc = getAttr name config.sal.dataContainers;
@@ -306,9 +306,6 @@ in {
       pidfile = service.pidFile;
       forking = if service.type == "forking" then true else false;
       directory = service.workingDirectory;
-      environment = service.environment // {
-        PATH = "${makeSearchPath "bin" service.path}:${makeSearchPath "sbin" service.path}";
-      };
       stopsignal = service.stop.stopSignal;
       stopwaitsecs = service.stop.timeout;
       stopasgroup = (if service.stop.stopMode == "group" then true else false);

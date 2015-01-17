@@ -1,5 +1,9 @@
 [
   ./services.nix
   ./databases/mongodb.nix
+  ./databases/influxdb.nix
   ./databases/postgresql.nix
+  ./logging/logstash.nix
+  ./search/elasticsearch.nix
+  ./web-servers/nginx/default.nix
 ]

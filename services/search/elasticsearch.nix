@@ -93,7 +93,7 @@ in {
 
     dataDir = mkOption {
       type = types.path;
-      default = "/var/lib/elasticsearch";
+      default = config.sal.dataContainerPaths.elasticsearch;
       description = ''
         Data directory for elasticsearch.
       '';
@@ -117,29 +117,38 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.elasticsearch = {
+    sal.services.elasticsearch = {
       description = "Elasticsearch Daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-interfaces.target" ];
-      environment = { ES_HOME = cfg.dataDir; };
-      serviceConfig = {
-        ExecStart = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
-        User = "elasticsearch";
-        PermissionsStartOnly = true;
+      platforms = platforms.unix;
+      requires = {
+        networking = true;
+        dataContainers = ["elasticsearch"];
+        ports = [ cfg.port ];
       };
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
+      environment.ES_HOME = cfg.dataDir;
 
+      start.command = "${pkgs.elasticsearch}/bin/elasticsearch -Des.path.conf=${configDir} ${toString cfg.extraCmdLineOptions}";
+
+      user = "elasticsearch";
+
+      preStart.script = ''
         # Install plugins
         rm ${cfg.dataDir}/plugins || true
         ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
       '';
-      postStart = mkBefore ''
+
+      postStart.script = mkBefore ''
         until ${pkgs.curl}/bin/curl -s -o /dev/null ${cfg.host}:${toString cfg.port}; do
           sleep 1
         done
       '';
+    };
+
+    sal.dataContainers.elasticsearch = {
+      description = "Elasticsearch data container";
+      type = "lib";
+      mode = "0700";
+      user = "elasticsearch";
     };
 
     environment.systemPackages = [ pkgs.elasticsearch ];

@@ -15,9 +15,21 @@ let
     fatal = "--silent";
   }."${cfg.logLevel}";
 
-in
+  configFile = pkgs.writeText "logstash.conf" ''
+    input {
+      ${cfg.inputConfig}
+    }
 
-{
+    filter {
+      ${cfg.filterConfig}
+    }
+
+    output {
+      ${cfg.outputConfig}
+    }
+  '';
+
+in {
   ###### interface
 
   options = {
@@ -75,8 +87,8 @@ in
       };
 
       port = mkOption {
-        type = types.str;
-        default = "9292";
+        type = types.int;
+        default = 9292;
         description = "Port on which to start webserver.";
       };
 
@@ -113,7 +125,7 @@ in
 
       outputConfig = mkOption {
         type = types.lines;
-        default = ''stdout { debug => true debug_format => "json"}'';
+        default = ''stdout { }'';
         description = "Logstash output configuration.";
         example = ''
           redis { host => "localhost" data_type => "list" key => "logstash" codec => json }
@@ -128,32 +140,28 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.logstash = with pkgs; {
+    sal.services.logstash = with pkgs; {
       description = "Logstash Daemon";
-      wantedBy = [ "multi-user.target" ];
-      environment = { JAVA_HOME = jre; };
-      serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/logstash agent " +
-          "-w ${toString cfg.filterWorkers} " +
-          ops havePluginPath "--pluginpath ${pluginPath} " +
-          "${verbosityFlag} " +
-          "--watchdog-timeout ${toString cfg.watchdogTimeout} " +
-          "-f ${writeText "logstash.conf" ''
-            input {
-              ${cfg.inputConfig}
-            }
+      platforms = cfg.package.meta.platforms;
 
-            filter {
-              ${cfg.filterConfig}
-            }
-
-            output {
-              ${cfg.outputConfig}
-            }
-          ''} " +
-          ops cfg.enableWeb "-- web -a ${cfg.address} -p ${cfg.port}";
+      requires = {
+        networking = true;
+        ports = optionals cfg.enableWeb [ cfg.port ];
       };
+
+      environment.JAVA_HOME = jre;
+
+      preStart.script = ''
+        ${cfg.package}/bin/logstash agent --configtest --config ${configFile}
+      '';
+      start.command =
+        "${cfg.package}/bin/logstash agent " +
+        "-w ${toString cfg.filterWorkers} " +
+        ops havePluginPath "--pluginpath ${pluginPath} " +
+        "${verbosityFlag} " +
+        "--watchdog-timeout ${toString cfg.watchdogTimeout} " +
+        "-f ${configFile} " +
+        ops cfg.enableWeb "-- web -a ${cfg.address} -p ${toString cfg.port}";
     };
   };
 }

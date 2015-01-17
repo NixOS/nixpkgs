@@ -14,7 +14,7 @@ let
           pkgs.findutils
           pkgs.gnugrep
           pkgs.gnused
-        ];
+        ] ++ pm.extraPath;
       }
     ];
   };
@@ -116,6 +116,14 @@ in {
       description = ''
         Environment variable names. If you suffix argument with .var
         you will get environment variable in it's variable form.
+      '';
+    };
+
+    sal.processManager.extraPath = mkOption {
+      default = [];
+      type = types.listOf types.package;
+      description = ''
+        Extra packages to be put in path.
       '';
     };
   };
