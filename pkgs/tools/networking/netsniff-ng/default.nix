@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
   # ./configure is not autoGNU but some home-brewn magic
   preConfigure = "patchShebangs configure";
 
-  # FIXME: missing nacl/libcli and a *working* libnetfilter_conntrack
-  # The following tools will be missing: curvetun flowtop mausezahn
+  # FIXME: add missing nacl to build curvetun
   buildInputs = [ bison flex geoip libcli libnet libnl libnetfilter_conntrack
     libpcap liburcu ncurses perl pkgconfig which zlib ];
 
