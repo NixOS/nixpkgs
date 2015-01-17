@@ -57,4 +57,9 @@ self: super: {
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
 
+  # https://github.com/glguy/utf8-string/issues/9
+  utf8-string = overrideCabal super.utf8-string (drv: {
+    patchPhase = "sed -ir -e 's|Extensions: | Extensions: UndecidableInstances, |' utf8-string.cabal";
+  });
+
 }
