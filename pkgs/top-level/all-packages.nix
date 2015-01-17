@@ -5831,6 +5831,8 @@ let
 
   libchop = callPackage ../development/libraries/libchop { };
 
+  libcli = callPackage ../development/libraries/libcli { };
+
   libcm = callPackage ../development/libraries/libcm { };
 
   inherit (gnome3) libcroco;

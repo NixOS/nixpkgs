@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, bison, flex, geoip, libnet, libnetfilter_conntrack, libnl
-, libpcap, liburcu, ncurses, perl, pkgconfig, which, zlib }:
+{ stdenv, fetchFromGitHub, bison, flex, geoip, libcli, libnet
+, libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
+, pkgconfig, which, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.5.9-rc4-40-g5107740";
@@ -12,14 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "1z3b7pa5rhz37dhfb1riy1j9lg917bs4z7clqbxm1hzi1x2ln988";
   };
 
-  # ./configure is not autoGNU but some home-brewn magic
-  preConfigure = "patchShebangs configure";
-  postConfigure = "substituteInPlace Makefile --replace ' tput ' ' true '";
+  buildInputs = [ bison flex geoip libcli libnet libnl libnetfilter_conntrack
+    libpcap libsodium liburcu ncurses perl pkgconfig which zlib ];
 
-  # FIXME: missing nacl/libcli and a *working* libnetfilter_conntrack
-  # The following tools will be missing: curvetun flowtop mausezahn
-  buildInputs = [ bison flex geoip libnet libnl libnetfilter_conntrack
-    libpcap liburcu ncurses perl pkgconfig which zlib ];
+  # ./configure is not autoGNU but some home-brewn magic
+  configurePhase = ''
+    patchShebangs configure
+    NACL_INC_DIR=${libsodium}/include/sodium NACL_LIB=sodium ./configure
+  '';
 
   enableParallelBuilding = true;
 
