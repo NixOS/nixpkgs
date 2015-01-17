@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   # ./configure is not autoGNU but some home-brewn magic
   preConfigure = "patchShebangs configure";
-  postConfigure = "substituteInPlace Makefile --replace ' tput ' ' true '";
 
   # FIXME: missing nacl/libcli and a *working* libnetfilter_conntrack
   # The following tools will be missing: curvetun flowtop mausezahn
