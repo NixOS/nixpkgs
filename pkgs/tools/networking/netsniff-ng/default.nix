@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, bison, flex, geoip, libnet, libnetfilter_conntrack, libnl
-, libpcap, liburcu, ncurses, perl, pkgconfig, which, zlib }:
+{ stdenv, fetchFromGitHub, bison, flex, geoip, libcli, libnet
+, libnetfilter_conntrack, libnl, libpcap, liburcu, ncurses, perl, pkgconfig
+, which, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.5.9-rc4-40-g5107740";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
 
   # FIXME: missing nacl/libcli and a *working* libnetfilter_conntrack
   # The following tools will be missing: curvetun flowtop mausezahn
-  buildInputs = [ bison flex geoip libnet libnl libnetfilter_conntrack
+  buildInputs = [ bison flex geoip libcli libnet libnl libnetfilter_conntrack
     libpcap liburcu ncurses perl pkgconfig which zlib ];
 
   enableParallelBuilding = true;
