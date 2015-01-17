@@ -1,6 +1,6 @@
 { stdenv, fetchurl, writeTextFile, coreutils, gnumake, gcc, gnutar, bzip2
   , gnugrep, gnused, gawk, diffutils, patch
-  , gmp, mpfr, mpc }:
+  , gmp, mpfr, libmpc }:
 
 stdenv.mkDerivation {
   name = "avr-gcc-libc";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     mkdir -p "$out"
     export > env-vars
 
-    for i in "${gmp}" "${mpfr}" "${mpc}"; do
+    for i in "${gmp}" "${mpfr}" "${libmpc}"; do
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$i/include "
       export NIX_LDFLAGS="$NIX_LDFLAGS -L$i/lib "
     done

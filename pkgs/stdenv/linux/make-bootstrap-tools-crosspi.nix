@@ -81,7 +81,7 @@ let
   cloog = pkgs.cloog.crossDrv;
   zlib = pkgs.zlib.crossDrv;
   isl = pkgs.isl.crossDrv;
-  mpc = pkgs.mpc.crossDrv;
+  libmpc = pkgs.libmpc.crossDrv;
   binutils = pkgs.binutils.crossDrv;
   klibc = pkgs.linuxPackages.klibc.crossDrv;
 
@@ -188,7 +188,7 @@ rec {
         cp -d ${cloog}/lib/libcloog*.so* $out/lib
         cp -d ${ppl}/lib/libppl*.so* $out/lib
         cp -d ${isl}/lib/libisl*.so* $out/lib
-        cp -d ${mpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         
         # Copy binutils.

@@ -113,7 +113,7 @@ rec {
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
-        cp -d ${mpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 

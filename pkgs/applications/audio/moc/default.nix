@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, pkgconfig, alsaLib, flac, libmad, speex, ffmpeg
-, libvorbis, mpc, libsndfile, jack2, db, libmodplug, timidity, libid3tag
+, libvorbis, libmpc, libsndfile, jack2, db, libmodplug, timidity, libid3tag
 , libtool
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses pkgconfig alsaLib flac libmad speex ffmpeg libvorbis
-    mpc libsndfile jack2 db libmodplug timidity libid3tag libtool
+    libmpc libsndfile jack2 db libmodplug timidity libid3tag libtool
   ];
 
   meta = with stdenv.lib; {
