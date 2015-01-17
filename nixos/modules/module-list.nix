@@ -54,8 +54,8 @@
   ./misc/version.nix
   ./programs/atop.nix
   ./programs/bash/bash.nix
-  ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
+  ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/info.nix
