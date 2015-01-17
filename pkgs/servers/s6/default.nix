@@ -1,19 +1,22 @@
-{ stdenv, execline, fetchurl, skalibs }:
+{ stdenv, execline, fetchgit, skalibs }:
 
 let
 
-  version = "2.0.0.0";
+  version = "2.0.1.0";
 
 in stdenv.mkDerivation rec {
 
   name = "s6-${version}";
 
-  src = fetchurl {
-    url = "http://www.skarnet.org/software/s6/${name}.tar.gz";
-    sha256 = "14x4l3xp152c9v34zs7nzxzacizfpp0k0lzwh40rxm0w5wz4x0ls";
+  src = fetchgit {
+    url = "git://git.skarnet.org/s6";
+    rev = "refs/tags/v${version}";
+    sha256 = "1x7za0b1a2i6xn06grpb5j361s9bl4524bp5mz3zcdg8s9nil50d";
   };
 
   dontDisableStatic = true;
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
