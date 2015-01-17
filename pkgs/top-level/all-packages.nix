@@ -6656,6 +6656,8 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
+  openbr = callPackage ../development/libraries/openbr { };
+
   opencascade = callPackage ../development/libraries/opencascade { };
 
   opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
