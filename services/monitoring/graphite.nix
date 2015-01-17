@@ -4,12 +4,13 @@ with lib;
 
 let
   cfg = config.services.graphite;
+  pm = config.sal.processManager;
   writeTextOrNull = f: t: if t == null then null else pkgs.writeTextDir f t;
 
   dataDir = cfg.dataDir;
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
-    time_zone: ${config.time.timeZone}
+    time_zone: ${config.sal.timeZone}
     search_index: ${dataDir}/index
     ${optionalString (cfg.api.finders != []) ''finders:''}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
@@ -57,7 +58,7 @@ in {
   options.services.graphite = {
     dataDir = mkOption {
       type = types.path;
-      default = "/var/db/graphite";
+      default = config.sal.dataContainerPaths.graphite;
       description = ''
         Data directory for graphite.
       '';
@@ -360,51 +361,51 @@ in {
 
   config = mkMerge [
     (mkIf cfg.carbon.enableCache {
-      systemd.services.carbonCache = {
+      sal.services.carbonCache = {
         description = "Graphite Data Storage Backend";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
-        environment = carbonEnv;
-        serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-cache"}";
-          User = "graphite";
-          Group = "graphite";
-          PermissionsStartOnly = true;
+        platforms = pkgs.python27Packages.carbon.meta.platforms;
+
+        requires = {
+          networking = true;
+          dataContainers = ["graphite"];
         };
-        preStart = ''
-          mkdir -p ${cfg.dataDir}/whisper
-          chmod 0700 ${cfg.dataDir}/whisper
-          chown -R graphite:graphite ${cfg.dataDir}
-        '';
+
+        environment = carbonEnv;
+
+        start.command =
+          "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-cache"}";
+        user = "graphite";
+        group = "graphite";
       };
     })
 
     (mkIf cfg.carbon.enableAggregator {
-      systemd.services.carbonAggregator = {
-        enable = cfg.carbon.enableAggregator;
+      sal.services.carbonAggregator = {
         description = "Carbon Data Aggregator";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        platforms = pkgs.python27Packages.carbon.meta.platforms;
+
+        requires.networking = true;
+
         environment = carbonEnv;
-        serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-aggregator"}";
-          User = "graphite";
-          Group = "graphite";
-        };
+        start.command =
+          "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-aggregator"}";
+        user = "graphite";
+        group = "graphite";
       };
     })
 
     (mkIf cfg.carbon.enableRelay {
-      systemd.services.carbonRelay = {
+      sal.services.carbonRelay = {
         description = "Carbon Data Relay";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        platforms = pkgs.python27Packages.carbon.meta.platforms;
+
+        requires.networking = true;
+
         environment = carbonEnv;
-        serviceConfig = {
-          ExecStart = "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-relay"}";
-          User = "graphite";
-          Group = "graphite";
-        };
+        start.command =
+          "${pkgs.twisted}/bin/twistd ${carbonOpts "carbon-relay"}";
+        user = "graphite";
+        group = "graphite";
       };
     })
 
@@ -415,10 +416,15 @@ in {
     })
 
     (mkIf cfg.web.enable {
-      systemd.services.graphiteWeb = {
+      sal.services.graphiteWeb = {
         description = "Graphite Web Interface";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        platforms = pkgs.python27Packages.graphite_web.meta.platforms;
+
+        requires = {
+          networking = true;
+          ports = [ cfg.web.port ];
+          dataContainers = ["graphite"];
+        };
         path = [ pkgs.perl ];
         environment = {
           PYTHONPATH = "${pkgs.python27Packages.graphite_web}/lib/python2.7/site-packages";
@@ -426,19 +432,17 @@ in {
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
         };
-        serviceConfig = {
-          ExecStart = ''
+
+        start.command = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
             --host=${cfg.web.host} --port=${toString cfg.web.port} \
             --call django.core.handlers.wsgi:WSGIHandler'';
-          User = "graphite";
-          Group = "graphite";
-          PermissionsStartOnly = true;
-        };
-        preStart = ''
+        user = "graphite";
+        group = "graphite";
+
+        preStart.script = ''
           if ! test -e ${dataDir}/db-created; then
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
-            chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
             # populate database
             ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
@@ -447,8 +451,6 @@ in {
             ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
 
             touch ${dataDir}/db-created
-
-            chown -R graphite:graphite ${cfg.dataDir}
           fi
         '';
       };
@@ -457,10 +459,16 @@ in {
     })
 
     (mkIf cfg.api.enable {
-      systemd.services.graphiteApi = {
+      sal.services.graphiteApi = {
         description = "Graphite Api Interface";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        platforms = cfg.api.package.meta.platforms;
+
+        requires = {
+          networking = true;
+          ports = [ cfg.api.port ];
+          dataContainers = ["graphite"];
+        };
+
         environment = {
           PYTHONPATH =
             "${cfg.api.package}/lib/python2.7/site-packages:" +
@@ -468,69 +476,62 @@ in {
           GRAPHITE_API_CONFIG = graphiteApiConfig;
           LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
         };
-        serviceConfig = {
-          ExecStart = ''
-            ${pkgs.python27Packages.waitress}/bin/waitress-serve \
-            --host=${cfg.api.host} --port=${toString cfg.api.port} \
-            graphite_api.app:app
-          '';
-          User = "graphite";
-          Group = "graphite";
-          PermissionsStartOnly = true;
-        };
-        preStart = ''
-          if ! test -e ${dataDir}/db-created; then
-            mkdir -p ${dataDir}/cache/
-            chmod 0700 ${dataDir}/cache/
+        start.command = ''
+          ${pkgs.python27Packages.waitress}/bin/waitress-serve \
+          --host=${cfg.api.host} --port=${toString cfg.api.port} \
+          graphite_api.app:app
+        '';
+        user = "graphite";
+        group = "graphite";
 
-            touch ${dataDir}/db-created
-
-            chown -R graphite:graphite ${cfg.dataDir}
-          fi
+        preStart.script = ''
+          mkdir -p ${dataDir}/cache/
         '';
       };
     })
 
     (mkIf cfg.seyren.enable {
-      systemd.services.seyren = {
+      sal.services.seyren = {
         description = "Graphite Alerting Dashboard";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "mongodb.service" ];
-        environment = seyrenConfig;
-        serviceConfig = {
-          ExecStart = "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
-          WorkingDirectory = dataDir;
-          User = "graphite";
-          Group = "graphite";
+        platforms = pkgs.seyren.meta.platforms;
+
+        requires = {
+          networking = true;
+          services = [ "mongodb" ];
+          dataContainers = [ "graphite" ];
         };
-        preStart = ''
-          if ! test -e ${dataDir}/db-created; then
-            mkdir -p ${dataDir}
-            chown -R graphite:graphite ${dataDir}
-          fi
-        '';
+        environment = seyrenConfig;
+
+        start.command =
+          "${pkgs.seyren}/bin/seyren -httpPort ${toString cfg.seyren.port}";
+        workingDirectory = dataDir;
+        user = "graphite";
+        group = "graphite";
       };
 
-      services.mongodb.enable = mkDefault true;
+      services.mongodb.enable = mkIf pm.enableDefaults (mkDefault true);
     })
 
     (mkIf cfg.pager.enable {
-      systemd.services.graphitePager = {
+      sal.services.graphitePager = {
         description = "Graphite Pager Alerting Daemon";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" "redis.service" ];
+
+        requires = {
+          networking = true;
+          services = [ "redis" ];
+        };
         environment = {
           REDIS_URL = cfg.pager.redisUrl;
           GRAPHITE_URL = cfg.pager.graphiteUrl;
         };
-        serviceConfig = {
-          ExecStart = "${pkgs.pythonPackages.graphite_pager}/bin/graphite-pager --config ${pagerConfig}";
-          User = "graphite";
-          Group = "graphite";
-        };
+
+        start.command =
+          "${pkgs.pythonPackages.graphite_pager}/bin/graphite-pager --config ${pagerConfig}";
+        user = "graphite";
+        group = "graphite";
       };
 
-      services.redis.enable = mkDefault true;
+      services.redis.enable = mkIf pm.enableDefaults (mkDefault true);
 
       environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
     })
@@ -540,6 +541,13 @@ in {
       cfg.web.enable || cfg.api.enable ||
       cfg.seyren.enable || cfg.pager.enable
      ) {
+      sal.dataContainers.graphite = {
+        type = "lib";
+        mode = "0770";
+        user = "graphite";
+        group = "graphite";
+      };
+
       users.extraUsers = singleton {
         name = "graphite";
         uid = config.ids.uids.graphite;

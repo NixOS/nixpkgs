@@ -54,6 +54,17 @@ in {
       example = "nixos";
     };
 
+    sal.timeZone = mkOption {
+      default = "UTC";
+      type = types.str;
+      example = "America/New_York";
+      description = ''
+        The time zone used when displaying times and dates. See <link
+        xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>
+        for a comprehensive list of possible values for this setting.
+      '';
+    };
+
     sal.processManager.name = mkOption {
       type = types.str;
       description = "Name of the process manager.";
@@ -126,9 +137,19 @@ in {
         Extra packages to be put in path.
       '';
     };
+
+    sal.processManager.enableDefaults = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to enable default services.
+      '';
+    };
   };
 
   config = {
+    sal.timeZone = mkAliasDefinitions (options.time.timeZone or {});
+
     assertions =
       # Check services
       (flatten (mapAttrsToList (n: s:

@@ -3,7 +3,9 @@
   ./databases/mongodb.nix
   ./databases/influxdb.nix
   ./databases/postgresql.nix
+  ./databases/redis.nix
   ./logging/logstash.nix
+  ./monitoring/graphite.nix
   ./search/elasticsearch.nix
   ./web-servers/nginx/default.nix
 ]

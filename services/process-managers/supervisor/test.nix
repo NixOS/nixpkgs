@@ -9,4 +9,6 @@
   services.nginx.enable = true;
   services.logstash.enable = true;
   services.logstash.enableWeb = true;
+  services.graphite.api.enable = true;
+  services.graphite.seyren.enable = true;
 }

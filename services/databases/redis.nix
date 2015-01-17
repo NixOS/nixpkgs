@@ -13,7 +13,6 @@ let
     ${condOption "bind" cfg.bind}
     ${condOption "unixsocket" cfg.unixSocket}
     loglevel ${cfg.logLevel}
-    logfile ${cfg.logfile}
     syslog-enabled ${redisBool cfg.syslog}
     databases ${toString cfg.databases}
     ${concatMapStrings (d: "save ${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}\n") cfg.save}
@@ -57,7 +56,7 @@ in
 
       pidFile = mkOption {
         type = types.path;
-        default = "/var/lib/redis/redis.pid";
+        default = config.sal.dataContainerPaths.redis-run;
         description = "";
       };
 
@@ -122,7 +121,7 @@ in
 
       dbpath = mkOption {
         type = types.path;
-        default = "/var/lib/redis";
+        default = config.sal.dataContainerPaths.redis;
         description = "The DB will be written inside this directory, with the filename specified using the 'dbFilename' configuration.";
       };
 
@@ -200,33 +199,32 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    systemd.services.redis_init =
-      { description = "Redis server initialisation";
-
-        wantedBy = [ "redis.service" ];
-        before = [ "redis.service" ];
-
-        serviceConfig.Type = "oneshot";
-
-        script = ''
-          if ! test -e ${cfg.dbpath}; then
-              install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
-          fi
-        '';
-      };
-
-    systemd.services.redis =
+    sal.services.redis =
       { description = "Redis server";
+        platforms = package.meta.platforms;
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/redis-server ${redisConfig}";
-          User = cfg.user;
+        requires = {
+          networking = true;
+          ports = [ cfg.port ];
+          dataContainers = ["redis" "redis-run"];
         };
+
+        start.command =
+          "${cfg.package}/bin/redis-server ${redisConfig}";
+        user = cfg.user;
       };
 
+    sal.dataContainers.redis = {
+      type = "db";
+      mode = "0770";
+      user = cfg.user;
+    };
+
+    sal.dataContainers.redis-run = {
+      type = "run";
+      mode = "0770";
+      user = cfg.user;
+    };
   };
 
 }
