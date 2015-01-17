@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www-sop.inria.fr/indes/fp/Bigloo/;
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ ludo thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

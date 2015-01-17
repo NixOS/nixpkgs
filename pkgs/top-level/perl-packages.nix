@@ -3742,6 +3742,15 @@ let self = _self // overrides; _self = with self; {
     preCheck = "export HOME=$TMPDIR";
   };
 
+  FileKeePass = buildPerlPackage rec {
+    name = "File-KeePass-2.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RH/RHANDOM/${name}.tar.gz";
+      sha256 = "c30c688027a52ff4f58cd69d6d8ef35472a7cf106d4ce94eb73a796ba7c7ffa7";
+    };
+    propagatedBuildInputs = [ CryptRijndael ];
+  };
+
   FileListing = buildPerlPackage rec {
     name = "File-Listing-6.04";
     src = fetchurl {
@@ -8128,6 +8137,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SortNaturally = buildPerlPackage rec {
+    name = "Sort-Naturally-1.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
+      sha256 = "eaab1c5c87575a7826089304ab1f8ffa7f18e6cd8b3937623e998e865ec1e746";
+    };
+  };
 
   Starman = buildPerlModule {
     name = "Starman-0.4010";
@@ -8831,6 +8847,14 @@ let self = _self // overrides; _self = with self; {
 
     # Tests don't work because they require /dev/tty.
     doCheck = false;
+  };
+
+  TermShellUI = buildPerlPackage rec {
+    name = "Term-ShellUI-0.92";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRONSON/${name}.tar.gz";
+      sha256 = "3279c01c76227335eeff09032a40f4b02b285151b3576c04cacd15be05942bdb";
+    };
   };
 
   TermSizeAny = buildPerlPackage {

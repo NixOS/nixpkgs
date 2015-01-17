@@ -1,10 +1,8 @@
 {stdenv, git, cacert}: let
   urlToName = url: rev: let
-    base = baseNameOf url;
+    base = baseNameOf (stdenv.lib.removeSuffix "/" url);
 
-    matched = (builtins.match or (x: y:
-      abort "This version of fetchgit requires Nix >= 1.8, please upgrade!"
-    )) "(.*).git" base;
+    matched = builtins.match "(.*).git" base;
 
     short = builtins.substring 0 7 rev;
 
@@ -12,7 +10,8 @@
       then "-${short}"
       else "";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
-in {url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false
+in
+{ url, rev ? "HEAD", md5 ? "", sha256 ? "", leaveDotGit ? false
 , fetchSubmodules ? true
 , name ? urlToName url rev
 }:

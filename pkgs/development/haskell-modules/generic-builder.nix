@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour
+, jailbreak-cabal, hscolour, cpphs
 }:
 
 { pname
@@ -39,7 +39,8 @@
 , preInstall ? "", postInstall ? ""
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , preFixup ? "", postFixup ? ""
-, coreSetup ? false # Use core packages to build Setup.hs
+, coreSetup ? false # Use only core packages to build Setup.hs.
+, useCpphs ? stdenv.isDarwin
 }:
 
 assert pkgconfigDepends != [] -> pkgconfig != null;
@@ -117,6 +118,11 @@ stdenv.mkDerivation ({
     ${optionalString (versionOlder "7.8" ghc.version && !isLibrary) ''
       configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
       setupCompileFlags="-j$NIX_BUILD_CORES"
+    ''}${optionalString stdenv.isDarwin ''
+      configureFlags+=" --with-gcc=$CC"  # Cabal won't find clang without help.
+    ''}${optionalString useCpphs ''
+      configureFlags+=" --with-cpphs=${cpphs}/bin/cpphs"
+      configureFlags+=" --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp"
     ''}
 
     packageConfDir="$TMP/package.conf.d"

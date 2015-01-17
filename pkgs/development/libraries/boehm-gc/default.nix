@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # non-copyleft, X11-style license
     license = http://hboehm.info/gc/license.txt;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

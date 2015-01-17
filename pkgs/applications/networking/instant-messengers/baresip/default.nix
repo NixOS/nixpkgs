@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "USE_BV32=" "USE_COREAUDIO=" "USE_G711=" "USE_G722=" "USE_G722_1=" 
     "USE_ILBC=" "USE_OPUS=" "USE_SILK=" 
   ]
-  ++ stdenv.lib.optional (stdenv.cc.gcc != null) "SYSROOT_ALT=${stdenv.cc.gcc}"
+  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
   NIX_CFLAGS_COMPILE='' -I${librem}/include/rem -I${gsm}/include/gsm '';

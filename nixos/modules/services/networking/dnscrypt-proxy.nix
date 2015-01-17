@@ -103,7 +103,7 @@ in
           ${pkgs.tzdata}/share/zoneinfo/** r,
 
           ${dnscrypt-proxy}/share/dnscrypt-proxy/** r,
-          ${pkgs.gcc.gcc}/lib/libssp.so.* mr,
+          ${pkgs.gcc.cc}/lib/libssp.so.* mr,
           ${pkgs.libsodium}/lib/libsodium.so.* mr,
         }
       '')

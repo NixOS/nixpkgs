@@ -73,7 +73,7 @@ in
 
       license = stdenv.lib.licenses.gpl2;
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };
   }

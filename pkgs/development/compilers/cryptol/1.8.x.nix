@@ -11,11 +11,11 @@ let
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.libc
-      stdenv.cc.gcc
+      stdenv.cc.cc
       gmp4
       ncurses
       zlib
-    ] + ":${stdenv.cc.gcc}/lib64";
+    ] + ":${stdenv.cc.cc}/lib64";
 
   cryptol-bin =
     if stdenv.system == "i686-linux"

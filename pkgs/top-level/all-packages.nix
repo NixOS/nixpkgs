@@ -239,7 +239,7 @@ let
   # just the plain stdenv.
   stdenv_32bit = lowPrio (
     if system == "x86_64-linux" then
-      overrideGCC stdenv gcc48_multi
+      overrideCC stdenv gcc48_multi
     else
       stdenv);
 
@@ -358,8 +358,8 @@ let
 
   fetchzip = import ../build-support/fetchzip { inherit lib fetchurl unzip; };
 
-  fetchFromGitHub = { owner, repo, rev, sha256 }: fetchzip {
-    name = "${repo}-${rev}-src";
+  fetchFromGitHub = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name;
     url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
     inherit sha256;
   };
@@ -1597,6 +1597,8 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  kpcli = callPackage ../tools/security/kpcli { };
+
   kst = callPackage ../tools/graphics/kst { };
 
   less = callPackage ../tools/misc/less { };
@@ -1709,6 +1711,8 @@ let
   lzma = xz;
 
   xz = callPackage ../tools/compression/xz { };
+
+  lz4 = callPackage ../tools/compression/lz4 { };
 
   lzop = callPackage ../tools/compression/lzop { };
 
@@ -2520,6 +2524,8 @@ let
 
   stress = callPackage ../tools/system/stress { };
 
+  stress-ng = callPackage ../tools/system/stress-ng { };
+
   storeBackup = callPackage ../tools/backup/store-backup { };
 
   stow = callPackage ../tools/misc/stow { };
@@ -2618,7 +2624,7 @@ let
   torbutton = callPackage ../tools/security/torbutton { };
 
   torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
-    stdenv = overrideGCC stdenv gcc49;
+    stdenv = overrideCC stdenv gcc49;
   };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
@@ -3040,10 +3046,10 @@ let
 
   ccl = callPackage ../development/compilers/ccl { };
 
-  clang = wrapGCC llvmPackages.clang;
+  clang = wrapCC llvmPackages.clang;
 
-  clang_34 = wrapGCC llvmPackages_34.clang;
-  clang_33 = wrapGCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
+  clang_34 = wrapCC llvmPackages_34.clang;
+  clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
   clangAnalyzer = callPackage ../development/tools/analysis/clang-analyzer {
     clang = clang_34;
@@ -3056,8 +3062,8 @@ let
 
   clangSelf = clangWrapSelf llvmPackagesSelf.clang;
 
-  clangWrapSelf = build: (import ../build-support/gcc-wrapper) {
-    gcc = build;
+  clangWrapSelf = build: (import ../build-support/cc-wrapper) {
+    cc = build;
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
@@ -3068,8 +3074,8 @@ let
   };
 
   #Use this instead of stdenv to build with clang
-  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio (stdenvAdapters.overrideGCC stdenv clang);
-  libcxxStdenv = stdenvAdapters.overrideGCC stdenv (clangWrapSelf llvmPackages.clang);
+  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio (stdenvAdapters.overrideCC stdenv clang);
+  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -3109,7 +3115,7 @@ let
 
   gccApple = throw "gccApple is no longer supported";
 
-  gcc34 = wrapGCC (import ../development/compilers/gcc/3.4 {
+  gcc34 = wrapCC (import ../development/compilers/gcc/3.4 {
     inherit fetchurl stdenv noSysDirs;
   });
 
@@ -3171,14 +3177,14 @@ let
     cross = assert crossSystem != null; crossSystem;
   };
 
-  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.4) {
+  gcc44 = lowPrio (wrapCC (makeOverridable (import ../development/compilers/gcc/4.4) {
     inherit fetchurl stdenv gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
     texinfo = texinfo4;
     profiledCompiler = true;
   }));
 
-  gcc45 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.5 {
+  gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
     inherit fetchurl stdenv gmp mpfr mpc libelf zlib perl
       gettext which noSysDirs;
     texinfo = texinfo4;
@@ -3201,7 +3207,7 @@ let
       else null;
   }));
 
-  gcc46 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
+  gcc46 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.6 {
     inherit noSysDirs;
 
     ppl = null;
@@ -3223,7 +3229,7 @@ let
     texinfo = texinfo413;
   }));
 
-  gcc48 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
+  gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
@@ -3242,14 +3248,14 @@ let
 
   gcc48_multi =
     if system == "x86_64-linux" then lowPrio (
-      wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc48.gcc.override {
-        stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc.gcc);
+      wrapCCWith (import ../build-support/cc-wrapper) glibc_multi (gcc48.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi gcc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
     else throw "Multilib gcc not supported on ‘${system}’";
 
-  gcc48_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
+  gcc48_debug = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     stripped = false;
 
     inherit noSysDirs;
@@ -3258,7 +3264,7 @@ let
     binutilsCross = null;
   }));
 
-  gcc49 = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.9 {
+  gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
     inherit noSysDirs;
 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
@@ -3277,7 +3283,7 @@ let
 
   gfortran = gfortran48;
 
-  gfortran48 = wrapGCC (gcc48.gcc.override {
+  gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -3287,7 +3293,7 @@ let
 
   gcj = gcj48;
 
-  gcj48 = wrapGCC (gcc48.gcc.override {
+  gcj48 = wrapCC (gcc48.cc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -3303,7 +3309,7 @@ let
 
   gnat = gnat45; # failed to make 4.6 or 4.8 build
 
-  gnat45 = wrapGCC (gcc45.gcc.override {
+  gnat45 = wrapCC (gcc45.cc.override {
     name = "gnat";
     langCC = false;
     langC = true;
@@ -3322,14 +3328,14 @@ let
 
   gccgo = gccgo48;
 
-  gccgo48 = wrapGCC (gcc48.gcc.override {
+  gccgo48 = wrapCC (gcc48.cc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
     langGo = true;
   });
 
-  ghdl = wrapGCC (import ../development/compilers/gcc/4.3 {
+  ghdl = wrapCC (import ../development/compilers/gcc/4.3 {
     inherit stdenv fetchurl gmp mpfr noSysDirs gnat;
     texinfo = texinfo4;
     name = "ghdl";
@@ -3409,7 +3415,6 @@ let
   haskellPackages_ghc784_no_profiling = recurseIntoAttrs haskell.packages_ghc784.noProfiling;
   haskellPackages_ghc784_profiling    = recurseIntoAttrs haskell.packages_ghc784.profiling;
   haskellPackages_ghc784              = recurseIntoAttrs haskell.packages_ghc784.highPrio;
-  haskellPackages_ghcHEAD = haskell.packages_ghcHEAD;
   haskellPackages_ghcjs = haskell.packages_ghcjs;
   haskellPackages = haskellPackages_ghc784;
 
@@ -4015,7 +4020,18 @@ let
 
   win32hello = callPackage ../development/compilers/visual-c++/test { };
 
-  wrapGCCWith = gccWrapper: glibc: baseGCC: gccWrapper {
+  wrapCCWith = ccWrapper: libc: baseCC: ccWrapper {
+    nativeTools = stdenv.cc.nativeTools or false;
+    nativeLibc = stdenv.cc.nativeLibc or false;
+    nativePrefix = stdenv.cc.nativePrefix or "";
+    cc = baseCC;
+    libc = libc;
+    inherit stdenv binutils coreutils zlib;
+  };
+
+  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) glibc;
+  # legacy version, used for gnat bootstrapping
+  wrapGCC-old = baseGCC: (makeOverridable (import ../build-support/gcc-wrapper-old)) {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
@@ -4023,10 +4039,6 @@ let
     libc = glibc;
     inherit stdenv binutils coreutils zlib;
   };
-
-  wrapGCC = wrapGCCWith (makeOverridable (import ../build-support/gcc-wrapper)) glibc;
-  # legacy version, used for gnat bootstrapping
-  wrapGCC-old = wrapGCCWith (makeOverridable (import ../build-support/gcc-wrapper-old)) glibc;
 
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
@@ -4356,7 +4368,7 @@ let
 
   avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {
     gcc = gcc46;
-    stdenv = overrideGCC stdenv gcc46;
+    stdenv = overrideCC stdenv gcc46;
   };
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
@@ -4512,8 +4524,8 @@ let
   #     };
   #
   ccacheWrapper = makeOverridable ({ extraConfig ? "" }:
-     wrapGCC (ccache.links extraConfig)) {};
-  ccacheStdenv = lowPrio (overrideGCC stdenv ccacheWrapper);
+     wrapCC (ccache.links extraConfig)) {};
+  ccacheStdenv = lowPrio (overrideCC stdenv ccacheWrapper);
 
   cccc = callPackage ../development/tools/analysis/cccc { };
 
@@ -4595,13 +4607,13 @@ let
   #     };
   #
   distccWrapper = makeOverridable ({ extraConfig ? "" }:
-     wrapGCC (distcc.links extraConfig)) {};
-  distccStdenv = lowPrio (overrideGCC stdenv distccWrapper);
+     wrapCC (distcc.links extraConfig)) {};
+  distccStdenv = lowPrio (overrideCC stdenv distccWrapper);
 
   distccMasquerade = if stdenv.isDarwin
     then null
     else callPackage ../development/tools/misc/distcc/masq.nix {
-      gccRaw = gcc.gcc;
+      gccRaw = gcc.cc;
       binutils = binutils;
     };
 
@@ -4767,7 +4779,7 @@ let
 
   phantomjs = callPackage ../development/tools/phantomjs {
     stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
+      then overrideCC stdenv gccApple
       else stdenv;
   };
 
@@ -4920,7 +4932,7 @@ let
       # On Darwin, Valgrind 3.7.0 expects Apple's GCC (for
       # `__private_extern'.)
       if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
+      then overrideCC stdenv gccApple
       else stdenv;
   };
 
@@ -5238,7 +5250,7 @@ let
     vpxSupport = !stdenv.isMips;
 
     stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
+      then overrideCC stdenv gccApple
       else stdenv;
   };
 
@@ -6136,7 +6148,7 @@ let
   libmikmod = callPackage ../development/libraries/libmikmod {
     # resolve the "stray '@' in program" errors
     stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
+      then overrideCC stdenv gccApple
       else stdenv;
   };
 
@@ -6245,7 +6257,7 @@ let
 
   libproxy = callPackage ../development/libraries/libproxy {
     stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gcc
+      then overrideCC stdenv gcc
       else stdenv;
   };
 
@@ -7067,7 +7079,7 @@ let
 
   stfl = callPackage ../development/libraries/stfl {
     stdenv = if stdenv.isDarwin
-      then overrideGCC stdenv gccApple
+      then overrideCC stdenv gccApple
       else stdenv;
   };
 
@@ -8395,12 +8407,13 @@ let
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [];
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+     ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
       ];
@@ -8408,11 +8421,13 @@ let
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
     inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -8421,7 +8436,8 @@ let
 
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -8430,7 +8446,8 @@ let
 
   linux_3_14 = makeOverridable (import ../os-specific/linux/kernel/linux-3.14.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -8439,7 +8456,8 @@ let
 
   linux_3_17 = makeOverridable (import ../os-specific/linux/kernel/linux-3.17.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -8448,7 +8466,8 @@ let
 
   linux_3_18 = makeOverridable (import ../os-specific/linux/kernel/linux-3.18.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -8457,7 +8476,8 @@ let
 
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -10200,7 +10220,7 @@ let
   irssi = callPackage ../applications/networking/irc/irssi {
     # compile with gccApple on darwin to support the -no-cpp-precompile flag
     stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideGCC stdenv gccApple
+      then stdenvAdapters.overrideCC stdenv gccApple
       else stdenv;
   };
 
@@ -11529,7 +11549,7 @@ let
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen = callPackage ../applications/virtualization/xen {
-    stdenv = overrideGCC stdenv gcc45;
+    stdenv = overrideCC stdenv gcc45;
   };
 
   xfe = callPackage ../applications/misc/xfe {
@@ -11648,7 +11668,7 @@ let
     (let callPackage = newScope pkgs.zathuraCollection; in
       import ../applications/misc/zathura {
         inherit callPackage pkgs fetchurl;
-        stdenv = overrideGCC stdenv gcc49;
+        stdenv = overrideCC stdenv gcc49;
         useMupdf = config.zathura.useMupdf or false;
       });
 
@@ -11660,7 +11680,7 @@ let
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
-    stdenv = overrideGCC stdenv gcc49;
+    stdenv = overrideCC stdenv gcc49;
   };
 
   girara-light = callPackage ../applications/misc/girara {
@@ -13042,6 +13062,8 @@ let
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
+  tup = callPackage ../development/tools/build-managers/tup { };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
@@ -13141,7 +13163,7 @@ let
     # this is to circumvent the bug with libgcc_s.so.1 which is
     # not found when using thread
     extraCmds = ''
-       LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.gcc}/lib
+       LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.cc}/lib
        export LD_LIBRARY_PATH
     '';
   };

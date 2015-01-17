@@ -6,22 +6,7 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}-binary";
 
   src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
-        sha256 = "0gny7knhss0w0d9r6jm1gghrcb8kqjvj94bb7hxf9syrk4fxlcxi";
-      }
-    else if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
-        sha256 = "043jabd0lh6n1zlqhysngbpvlsdznsa2mmsj08jyqgahw9sjb5ns";
-      }
-    else if stdenv.system == "i686-darwin" then
-      fetchurl {
-        url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
-        sha256 = "1vrbs3pzki37hzym1f1nh07lrqh066z3ypvm81fwlikfsvk4djc0";
-      }
-    else if stdenv.system == "x86_64-darwin" then
+    if stdenv.system == "x86_64-darwin" then
       fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
         sha256 = "1ja0cq5xyjcvjpvjmm4nzhkpmwfs2kjlldbc48lxcs9rmqi7rnay";
@@ -89,5 +74,5 @@ stdenv.mkDerivation rec {
       '';
 
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "i686-darwin" "x86_64-darwin"];
+  meta.platforms = ["x86_64-darwin"];
 }

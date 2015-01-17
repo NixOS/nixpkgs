@@ -50,6 +50,6 @@ let version = "5.18"; in
 
       homepage = http://www.gnu.org/software/autogen/;
 
-      maintainers = [ stdenv.lib.maintainers.ludo ];
+      maintainers = [ ];
     };
   }

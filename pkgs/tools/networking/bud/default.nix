@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "bud-${version}";
 
-  version = "0.32.0";
+  version = "0.34.1";
 
   src = fetchgit {
     url = "https://github.com/indutny/bud.git";
-    rev = "1bfcc8c73c386f0ac12763949cd6c214058900a6";
-    sha256 = "1lfq6q026yawi0ps0gf0nl9a76qkpcc40r3v7zrj9cxzjb9fcymc";
+    rev = "b112852c9667632f692d2ce3dcd9a8312b61155a";
+    sha256 = "1acvsx71fmmqhqf00ria3rbq453476x1jx0x8rp6nds5nx2mi0np";
   };
 
   buildInputs = [

@@ -25,6 +25,17 @@ let
           hyperlinkSource = false;      # Avoid depending on hscolour for this build.
           postFixup = "rm -rf $out/lib $out/share $out/nix-support";
         });
+        cpphs = overrideCabal (self.cpphs.overrideScope (self: super: {
+          mkDerivation = drv: super.mkDerivation (drv // {
+            enableSharedExecutables = false;
+            enableSharedLibraries = false;
+            noHaddock = true;
+            useCpphs = false;
+          });
+        })) (drv: {
+            isLibrary = false;
+            postFixup = "rm -rf $out/lib $out/share $out/nix-support";
+        });
       };
 
       overrideCabal = drv: f: drv.override (args: args // {

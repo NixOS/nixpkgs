@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://people.csail.mit.edu/jaffer/SLIB;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

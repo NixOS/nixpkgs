@@ -26,6 +26,21 @@ self: super: {
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
 
+  # Please also remove optparse-applicative special case from
+  # cabal2nix/hackage2nix.hs when removing the following.
+  elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
+  elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
+
+  # elm-compiler jail-break can be removed after next elm-compiler
+  # release: bumped language-ecmascript's limit in git already.
+  elm-compiler = doJailbreak super.elm-compiler;
+
+  # https://github.com/acid-state/safecopy/issues/17
+  safecopy = dontCheck super.safecopy;
+
+  # Link the proper version.
+  zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
+
   # "curl" means pkgs.curl
   git-annex = super.git-annex.override { inherit (pkgs) git rsync gnupg1 curl lsof openssh which bup perl wget; };
 
@@ -120,6 +135,28 @@ self: super: {
 
   # depends on broken hbro package.
   hbro-contrib = markBroken super.hbro-contrib;
+
+  # https://github.com/goldfirere/th-desugar/issues/21
+  th-desugar = dontCheck super.th-desugar;
+
+  # https://github.com/dzhus/snaplet-redis/pull/11
+  snaplet-redis = doJailbreak super.snaplet-redis;
+
+  # https://github.com/michaelschade/hs-stripe/pull/37
+  stripe = doJailbreak super.stripe;
+
+  # https://github.com/LukeHoersten/snaplet-stripe/pull/4
+  snaplet-stripe = doJailbreak super.snaplet-stripe;
+
+  # https://github.com/prowdsponsor/fb/pull/33
+  fb = doJailbreak (overrideCabal super.fb (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = https://github.com/prowdsponsor/fb/pull/33.patch;
+        sha256 = "0xfbfyg86lrimwhfd2s41xy5axcsnw0rqvic8ak72rq2sssyljpg";
+      })
+    ];
+  }));
 
 }
 // {

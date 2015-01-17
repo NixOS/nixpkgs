@@ -446,6 +446,10 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   circlePacking = callPackage ../development/libraries/haskell/circle-packing {};
 
+  clashLib = callPackage ../development/libraries/haskell/clash-lib {};
+
+  clashPrelude = callPackage ../development/libraries/haskell/clash-prelude {};
+
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
@@ -525,6 +529,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   contravariant = callPackage ../development/libraries/haskell/contravariant {};
 
   concurrentExtra = callPackage ../development/libraries/haskell/concurrent-extra {};
+
+  concurrentSupply = callPackage ../development/libraries/haskell/concurrent-supply {};
 
   converge = callPackage ../development/libraries/haskell/converge {};
 
@@ -2987,6 +2993,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
 
+  yesodMarkdown = callPackage ../development/libraries/haskell/yesod-markdown {};
+
   yesodNewsfeed = callPackage ../development/libraries/haskell/yesod-newsfeed {};
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
@@ -3103,6 +3111,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   # Applications.
 
   arbtt = callPackage ../applications/misc/arbtt {};
+
+  clashGhc = callPackage ../development/compilers/clash-ghc {};
 
   idris_plain = callPackage ../development/compilers/idris {};
 

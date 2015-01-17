@@ -165,8 +165,8 @@ let
     cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/
 
     # copy gcc libs (and may overwrite exitsting wrongly placed libs)
-    cp -rsf ${choosenGcc.gcc}/lib/*   lib/
-    cp -rsf ${choosenGcc.gcc}/lib64/* lib64/
+    cp -rsf ${choosenGcc.cc}/lib/*   lib/
+    cp -rsf ${choosenGcc.cc}/lib64/* lib64/
   '';
 
 in stdenv.mkDerivation {

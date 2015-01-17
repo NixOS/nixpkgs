@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, m4, gtk, pango, perl, python, zip, libIDL
+{ stdenv, fetchurl, pkgconfig, which, m4, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
@@ -13,7 +13,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "31.2.0"; in
+let version = "31.4.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
-    sha1 = "87dff89388bd7ec51876e1bdbd82bc3fe60006b6";
+    sha1 = "00b55e28f55b84e3cd257407d797e07a363aeef8";
   };
 
   buildInputs = # from firefox30Pkgs.xulrunner, but without gstreamer and libvpx
-    [ pkgconfig libpng gtk perl zip libIDL libjpeg zlib bzip2
+    [ pkgconfig which libpng gtk perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xlibs.libXi
       xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
       alsaLib nspr nss libnotify xlibs.pixman yasm mesa
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       hunspell libevent libstartup_notification cairo icu
     ] ++ [ m4 ];
 
-  configureFlags = [ "--enable-application=mail" ]
+  configurePhase = let configureFlags = [ "--enable-application=mail" ]
     # from firefox30Pkgs.commonConfigureFlags, but without gstreamer and libvpx
     ++ [
       "--with-system-jpeg"
@@ -63,28 +63,33 @@ stdenv.mkDerivation rec {
       "--disable-pulseaudio"
     ] ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                         else [ "--disable-debug" "--enable-release"
+                               "--disable-debug-symbols"
                                "--enable-optimize" "--enable-strip" ])
     ++ [
       "--disable-javaxpcom"
       "--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
     ]
     ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
-
-  configurePhase = ''
-    patchShebangs .
-
+  in ''
+    mkdir -p objdir/mozilla
+    cd objdir
     echo '${stdenv.lib.concatMapStrings (s : "ac_add_options ${s}\n") configureFlags}' > .mozconfig
-    echo "ac_add_options --prefix='$out'" >> .mozconfig
-    echo "mk_add_options MOZ_MAKE_FLAGS='-j$NIX_BUILD_CORES'" >> .mozconfig
+    echo 'ac_add_options --prefix="'"$out"'"' >> .mozconfig
+    echo 'mk_add_options MOZ_MAKE_FLAGS="-j'"$NIX_BUILD_CORES"'"' >> .mozconfig
+    echo 'mk_add_options MOZ_OBJDIR="'`pwd`'"' >> .mozconfig
 
-    make ${makeFlags} configure
+    export MOZCONFIG=`realpath ./.mozconfig`
+
+    patchShebangs ../mozilla/mach
+    ../mozilla/mach configure
   '';
 
-  makeFlags = "-f client.mk";
-  buildFlags = "build";
+  buildPhase =  "../mozilla/mach build";
 
-  postInstall =
+  installPhase =
     ''
+      ../mozilla/mach install
+
       rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
       # Create a desktop item.

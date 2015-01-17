@@ -61,7 +61,6 @@ stdenv.mkDerivation {
     homepage = http://www.seeks-project.info/;
 
     maintainers = [
-      stdenv.lib.maintainers.ludo
       stdenv.lib.maintainers.matejc
     ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice

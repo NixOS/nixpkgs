@@ -8,13 +8,15 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "chruby";
+  name = "chruby-${version}";
+
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "postmodern";
     repo = "chruby";
-    rev = "d5ae98410311aec1358d4cfcc1e3ec02de593c3b";
-    sha256 = "1iq9milnnj3189yw02hkly2pnnh4g0vn2fxq6dfx90kldjwpwxq5";
+    rev = "v${version}";
+    sha256 = "1894g6fymr8kra9vwhbmnrcr58l022mcd7g9ans4zd3izla2j3gx";
   };
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];

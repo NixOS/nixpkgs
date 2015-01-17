@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.gcc
+    [ stdenv.cc.cc
       alsaLib
       atk
       cairo
@@ -106,7 +106,7 @@ stdenv.mkDerivation {
       pulseaudio
       systemd
     ] + ":" + stdenv.lib.makeSearchPath "lib64" [
-      stdenv.cc.gcc
+      stdenv.cc.cc
     ];
 
   # "strip" after "patchelf" may break binaries.

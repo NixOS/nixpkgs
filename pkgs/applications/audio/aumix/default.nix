@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.jpj.net/~trevor/aumix.html;
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

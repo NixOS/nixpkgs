@@ -79,7 +79,6 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
     params=("${rest[@]}")
 fi
 
-
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_CFLAGS_COMPILE)
 extraBefore=()

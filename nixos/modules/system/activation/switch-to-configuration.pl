@@ -323,7 +323,7 @@ system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
 # Signal dbus to reload its configuration before starting other units.
 # Other units may rely on newly installed policy files under /etc/dbus-1
-system("@systemd@/bin/systemctl", "reload", "dbus.service");
+system("@systemd@/bin/systemctl", "reload-or-restart", "dbus.service");
 
 # Restart changed services (those that have to be restarted rather
 # than stopped and started).

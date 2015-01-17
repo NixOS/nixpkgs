@@ -487,7 +487,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; };
+    { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };
 
   inherit enableParallelBuilding enableMultilib;
 
@@ -508,7 +508,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ ludo viric shlevy simons ];
+    maintainers = with stdenv.lib.maintainers; [ viric shlevy simons ];
 
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).
