@@ -1,11 +1,11 @@
-{stdenv, fetchurl, ocaml, findlib, ocaml_oasis, camlp4, uutf}:
+{ stdenv, fetchurl, ocaml, findlib, ocaml_oasis, camlp4, uutf }:
 
 stdenv.mkDerivation {
-  name = "tyxml-3.3.0";
+  name = "tyxml-3.4.0";
 
   src = fetchurl {
-    url = http://github.com/ocsigen/tyxml/archive/3.3.0.tar.gz;
-    sha256 = "0r1hj8qy91i48nd7wj0x2dqrgspqrry5awraxl4pl10vh0mn6pk7";
+    url = http://github.com/ocsigen/tyxml/archive/3.4.0.tar.gz;
+    sha256 = "10hb0b2j33fjqzmx450ns7dmf4pqmx3gyvr6dk99mghqk13cj5ww";
     };
 
   buildInputs = [ocaml findlib ocaml_oasis camlp4];
