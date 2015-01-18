@@ -119,7 +119,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
 
     systemd.services.syncserver = {
       after = [ "network.target" ];
