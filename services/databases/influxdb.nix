@@ -240,13 +240,13 @@ in
       inherit (cfg) user group;
     };
 
-    users.extraUsers = mkIf (cfg.user == "influxdb") {
+    users.extraUsers.influxdb = mkIf (cfg.user == "influxdb") {
       name = "influxdb";
       uid = config.ids.uids.influxdb;
       description = "Influxdb daemon user";
     };
 
-    users.extraGroups = mkIf (cfg.group == "influxdb") {
+    users.extraGroups.influxdb = mkIf (cfg.group == "influxdb") {
       name = "influxdb";
       gid = config.ids.gids.influxdb;
     };
