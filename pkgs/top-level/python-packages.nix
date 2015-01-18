@@ -832,6 +832,20 @@ let
     propagatedBuildInputs = with self; [ iowait psutil pyzmq tornado mock ];
   };
 
+  cornice = buildPythonPackage rec {
+    name = "cornice-${version}";
+    version = "0.17.0";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/cornice.git;
+      rev = "refs/tags/${version}";
+      sha256 = "12yrcsv1sdl5w308y1cc939ppq7pi2490s54zfcbs481cvsyr1lg";
+    };
+
+    propagatedBuildInputs = with self; [ pyramid simplejson ];
+
+    doCheck = false; # lazy packager
+  };
+
   cvxopt = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "cvxopt";
@@ -1606,6 +1620,26 @@ let
         stdenv.lib.maintainers.garbas
         stdenv.lib.maintainers.iElectric
       ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+  # Backported version of the ConfigParser library of Python 3.3
+  configparser = if isPy3k then null else buildPythonPackage rec {
+    name = "configparser-${version}";
+    version = "3.3.0r2";
+
+    # running install_egg_info
+    # error: [Errno 9] Bad file descriptor: '<stdout>'
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/configparser/${name}.tar.gz";
+      sha256 = "6a2318590dfc4013fc5bf53c2bec14a8cb455a232295eb282a13f94786c4b0b2";
+    };
+
+    meta = {
+      maintainers = [ ];
       platforms = stdenv.lib.platforms.all;
     };
   };
@@ -3205,6 +3239,18 @@ let
     };
   };
 
+  pyramid_hawkauth = buildPythonPackage rec {
+    name = "pyramidhawkauth-${version}";
+    version = "0.1.0";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/pyramid_hawkauth.git;
+      rev = "refs/tags/v${version}";
+      sha256 = "1ic7xl72qnz382xaqhcy9ql17gx7pxbs78znp8xr66sp3dcx2s3c";
+    };
+
+    propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
+  };
+
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
@@ -4762,6 +4808,18 @@ let
     };
   };
 
+  hawkauthlib = buildPythonPackage rec {
+    name = "hawkauthlib-${version}";
+    version = "0.1.1";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/hawkauthlib.git;
+      rev = "refs/tags/v${version}";
+      sha256 = "0b3xydii50ifs8qkgbpdlidfs2rzw63f807ahrq9flz90ahf582h";
+    };
+
+    propagatedBuildInputs = with self; [ requests webob ];
+  };
+
   hcs_utils = buildPythonPackage rec {
     name = "hcs_utils-1.5";
 
@@ -5180,6 +5238,29 @@ let
       license     = licenses.psfl;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
+    };
+  };
+
+  konfig = buildPythonPackage rec {
+    name = "konfig-${version}";
+    version = "0.9";
+
+    # konfig unconditionaly depend on configparser, even if it is part of
+    # the standard library in python 3.2 or above.
+    disabled = isPy3k;
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/konfig.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1v9pjb9idapjlc75p6h06kx7bi8zxhfgj93yxq1bn337kmyk1xdf";
+    };
+
+    propagatedBuildInputs = with self; [ configparser argparse ];
+
+    meta = with stdenv.lib; {
+      description = "Yet Another Config Parser";
+      homepage    = "https://github.com/mozilla-services/konfig";
+      license     = licenses.mpl20;
     };
   };
 
@@ -5792,7 +5873,6 @@ let
     };
   };
 
-
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
 
@@ -5810,6 +5890,29 @@ let
     };
   };
 
+  mozsvc = buildPythonPackage rec {
+    name = "mozsvc-${version}";
+    version = "0.8";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/mozservices.git;
+      rev = "refs/tags/${version}";
+      sha256 = "0k1d7v8aa4xd3f9h8m5crl647136ba15i9nzdrpxg5aqmv2n0i0p";
+    };
+
+    patches = singleton (pkgs.fetchurl {
+      url = https://github.com/nbp/mozservices/commit/f86c0b0b870cd8f80ce90accde9e16ecb2e88863.diff;
+      sha256 = "1lnghx821f6dqp3pa382ka07cncdz7hq0mkrh44d0q3grvrlrp9n";
+    });
+
+    doCheck = false; # lazy packager
+    propagatedBuildInputs = with self; [ pyramid simplejson konfig ];
+
+    meta = {
+      homepage = https://github.com/mozilla-services/mozservices;
+      description = "Various utilities for Mozilla apps";
+    };
+  };
 
   mpmath = buildPythonPackage rec {
     name = "mpmath-0.17";
@@ -5995,6 +6098,33 @@ let
     };
   });
 
+  pymysql = buildPythonPackage rec {
+    name = "pymysql-${version}";
+    version = "0.6.3";
+    src = pkgs.fetchgit {
+      url = https://github.com/PyMySQL/PyMySQL.git;
+      rev = "refs/tags/pymysql-${version}";
+      sha256 = "1m9fr2x49s3aixlmccr3w80skl19dya9h3x69wgl6ly1z27iyg24";
+    };
+  };
+
+  pymysqlsa = self.buildPythonPackage rec {
+    name = "pymysqlsa-${version}";
+    version = "1.0";
+
+    propagatedBuildInputs = with self; [ pymysql sqlalchemy9 ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pymysql_sa/pymysql_sa-1.0.tar.gz";
+      sha256 = "a2676bce514a29b2d6ab418812259b0c2f7564150ac53455420a20bd7935314a";
+    };
+
+    meta = {
+      description = "PyMySQL dialect for SQL Alchemy";
+      homepage = https://pypi.python.org/pypi/pymysql_sa;
+      license = licenses.mit;
+    };
+  };
 
   MySQL_python = buildPythonPackage {
     name = "MySQL-python-1.2.3";
@@ -6742,6 +6872,26 @@ let
     meta = {
       description = "Load, configure, and compose WSGI applications and servers";
       homepage = http://pythonpaste.org/deploy/;
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+   pasteScript = buildPythonPackage rec {
+    version = "1.7.5";
+    name = "PasterScript-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PasteScript/${name}.tar.gz";
+      sha256 = "2b685be69d6ac8bc0fe6f558f119660259db26a15e16a4943c515fbee8093539";
+    };
+
+    doCheck = false;
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ paste paste_deploy cheetah argparse ];
+
+    meta = {
+      description = "A pluggable command-line frontend, including commands to setup package file layouts";
+      homepage = http://pythonpaste.org/script/;
       platforms = stdenv.lib.platforms.all;
     };
   };
@@ -10497,6 +10647,23 @@ let
     };
   };
 
+  umemcache = buildPythonPackage rec {
+    name = "umemcache-${version}";
+    version = "1.6.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/u/umemcache/${name}.zip";
+      sha256 = "211031a03576b7796bf277dbc9c9e3e754ba066bbb7fb601ab5c6291b8ec1918";
+    };
+
+    meta = {
+      description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
+      homepage = https://github.com/esnme/ultramemcache;
+      license = licenses.bsdOriginal;
+    };
+  };
+
   unittest2 = buildPythonPackage rec {
     version = "0.5.1";
     name = "unittest2-${version}";
@@ -11683,6 +11850,17 @@ let
     doCheck = false;
   };
 
+  tokenlib = buildPythonPackage rec {
+    name = "tokenlib-${version}";
+    version = "0.3.1";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/tokenlib.git;
+      rev = "refs/tags/${version}";
+      sha256 = "0dmq41sy64jmkj7n49jgbpii5n5d41ci263lyhqbff5slr289m51";
+    };
+
+    propagatedBuildInputs = with self; [ requests webob ];
+  };
 
   tornadokick = buildPythonPackage rec {
     name = "tornadokick-0.2.1";
@@ -11765,6 +11943,26 @@ let
     propagatedBuildInputs = with self; [ pkgs.libarchive ];
   };
 
+  pybrowserid = buildPythonPackage rec {
+    name = "PyBrowserID-${version}";
+    version = "0.9.2";
+    disabled = isPy3k; # Errors in the test suite.
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla/PyBrowserID.git;
+      rev = "refs/tags/${version}";
+      sha256 = "0nyqb0v8yrkqnrqsh1hlhvzr2pyvkxvkw701p3gpsvk29c0gb5n6";
+    };
+
+    buildInputs = with self; [ mock unittest2 ];
+    propagatedBuildInputs = with self; [ requests ];
+
+    meta = with stdenv.lib; {
+      description = "Python library for the BrowserID Protocol";
+      homepage    = "https://github.com/mozilla/PyBrowserID";
+      license     = licenses.mpl20;
+    };
+  };
 
   pyzmq = buildPythonPackage rec {
     name = "pyzmq-13.0.0";
@@ -11776,6 +11974,28 @@ let
     doCheck = false;
   };
 
+  tokenserver = buildPythonPackage rec {
+    name = "tokenserver-${version}";
+    version = "1.2.11";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/tokenserver.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1pjrw7xhhqx7h4s08h1lsaa499r2ymc41zdknjimn6zlqdjdk1fb";
+    };
+
+    doCheck = false;
+    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid tokenlib ];
+
+    patchPhase = ''
+      sed -i "s|'testfixtures'||" setup.py
+    '';
+
+    meta = {
+      maintainers = [ ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
 
   tissue = buildPythonPackage rec {
     name = "tissue-0.9.2";
@@ -12645,6 +12865,46 @@ let
       maintainers =  with pkgs.stdenv.lib.maintainers; [gal_bolle];
     };
   };
+
+  syncserver = buildPythonPackage rec {
+    name = "syncserver-${version}";
+    version = "1.5.0";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/syncserver.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1xljylycxg7351hmqh7aa6fvvsjg06zvd4r7hcjqyd0k0sxvk7y6";
+    };
+
+    buildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [
+      cornice gunicorn pyramid requests simplejson sqlalchemy9 mozsvc tokenserver
+      serversyncstorage configparser
+    ];
+
+    meta = {
+      maintainers = [ ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+  serversyncstorage = buildPythonPackage rec {
+    name = "serversyncstorage-${version}";
+    version = "1.5.11";
+    src = pkgs.fetchgit {
+      url = https://github.com/mozilla-services/server-syncstorage.git;
+      rev = "refs/tags/${version}";
+      sha256 = "1byq2k2f36f1jli9599ygfm2qsb4adl9140sxjpgfjbznb74q90q";
+    };
+
+    propagatedBuildInputs = with self; [
+      pyramid sqlalchemy9 simplejson mozsvc cornice pyramid_hawkauth pymysql
+      pymysqlsa umemcache wsgiproxy2 requests pybrowserid
+    ];
+
+    doCheck = false; # lazy packager
+  };
+
 
   thumbor = self.buildPythonPackage rec {
     name = "thumbor-4.0.4";
