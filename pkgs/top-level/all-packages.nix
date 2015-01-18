@@ -3511,6 +3511,8 @@ let
         jdk = openjdkBootstrap;
       }) // { outputs = [ "out" ]; };
 
+  openjdk8 = callPackage ../development/compilers/openjdk/openjdk8.nix { } // { outputs = [ "out" ]; };
+
   # FIXME: Need a way to set per-output meta attributes.
   openjre = (lib.setName "openjre-${lib.getVersion pkgs.openjdk.jre}" (lib.addMetaAttrs
     { description = "The open-source Java Runtime Environment"; }
