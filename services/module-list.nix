@@ -6,6 +6,7 @@
   ./databases/redis.nix
   ./logging/logstash.nix
   ./monitoring/graphite.nix
+  ./monitoring/statsd.nix
   ./search/elasticsearch.nix
   ./web-servers/nginx/default.nix
 ]

@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.statsd;
+  pm = config.sal.processManager;
 
   configFile = pkgs.writeText "statsd.conf" ''
     {
@@ -19,7 +20,7 @@ let
         prettyprint: false
       },
       log: {
-        backend: "syslog"
+        backend: "${if pm.supports.syslog then "syslog" else "stdout"}"
       },
       automaticConfigReload: false${optionalString (cfg.extraConfig != null) ","}
       ${cfg.extraConfig}
@@ -101,16 +102,21 @@ in
       description = "Statsd daemon user";
     };
 
-    systemd.services.statsd = {
+    sal.services.statsd = {
       description = "Statsd Server";
-      wantedBy = [ "multi-user.target" ];
+      platforms = platforms.unix;
+
+      requires = {
+        networking = true;
+        ports = [ cfg.port cfg.mgmt_port ];
+      };
       environment = {
         NODE_PATH=concatMapStringsSep ":" (el: "${el}/lib/node_modules") (filter (el: (nixType el) != "string") cfg.backends);
       };
-      serviceConfig = {
-        ExecStart = "${pkgs.nodePackages.statsd}/bin/statsd ${configFile}";
-        User = "statsd";
-      };
+
+      start.command =
+        "${pkgs.nodePackages.statsd}/bin/statsd ${configFile}";
+      user = "statsd";
     };
 
     environment.systemPackages = [pkgs.nodePackages.statsd];

@@ -11,4 +11,5 @@
   services.logstash.enableWeb = true;
   services.graphite.api.enable = true;
   services.graphite.seyren.enable = true;
+  services.statsd.enable = true;
 }
