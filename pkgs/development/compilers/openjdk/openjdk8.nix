@@ -128,4 +128,12 @@ stdenv.mkDerivation {
     ln -s $out/lib/openjdk/bin $out/bin
     ln -s $jre/lib/openjdk/jre/bin $jre/bin
   '';
+
+  meta = {
+    homepage = http://openjdk.java.net/;
+    license = stdenv.lib.licenses.gpl2;
+    description = "The open-source Java Development Kit";
+    platforms = stdenv.lib.platforms.linux;
+  };
+
 }
