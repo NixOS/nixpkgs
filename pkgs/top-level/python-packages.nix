@@ -4031,6 +4031,10 @@ let
 
     propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
 
+    preCheck = ''
+      substituteInPlace tests/__init__.py --replace "TEST_TIMEOUT = 1" "TEST_TIMEOUT = 60"
+    '';
+
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
       description = "A concurrent networking library for Python";
