@@ -1,5 +1,8 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
+# When upgrading, check if deamon and gui clients start.
+# We don't use upstream install.sh so it may break easily
+
 let version = "3.7.0";
 
 in stdenv.mkDerivation rec {
@@ -37,12 +40,12 @@ in stdenv.mkDerivation rec {
     # Make sure the daemon is running using the same localization as
     # the (installing) user
     echo "" >> run.conf
-    echo "export LC_ALL=en_US.UTF-8" >> run.conf
+    echo "export LC_ALL=en_US.UTF-8" >> scripts/run.conf
 
     install -d -m 755 unpacked $out
 
     install -D -m 644 EULA.txt $out/EULA.txt
-    install -D -m 644 run.conf $out/bin/run.conf
+    install -D -m 644 scripts/run.conf $out/bin/run.conf
     install -D -m 755 scripts/CrashPlanDesktop $out/bin/CrashPlanDesktop
     install -D -m 755 scripts/CrashPlanEngine $out/bin/CrashPlanEngine
     install -D -m 644 scripts/CrashPlan.desktop $out/share/applications/CrashPlan.desktop
