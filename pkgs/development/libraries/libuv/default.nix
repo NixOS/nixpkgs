@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
 
 let
   stable = "stable";
@@ -59,7 +59,7 @@ let
   mkWithAutotools = stability: version: sha256: stdenv.mkDerivation {
     name = mkName stability version;
     src = mkSrc version sha256;
-    buildInputs = [ automake autoconf libtool ];
+    buildInputs = [ automake autoconf libtool pkgconfig ];
     preConfigure = ''
       LIBTOOLIZE=libtoolize ./autogen.sh
     '';
