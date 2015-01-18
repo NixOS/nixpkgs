@@ -117,9 +117,6 @@ self: super: {
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
-  # https://github.com/haskell/pretty/issues/17
-  pretty_1_1_2_0 = dontCheck super.pretty_1_1_2_0;
-
   # Does not compile: <http://hydra.cryp.to/build/469842/nixlog/1/raw>.
   base_4_7_0_2 = markBroken super.base_4_7_0_2;
 
