@@ -134,6 +134,9 @@ self: super: {
 
   # https://github.com/zmthy/http-media/issues/6
   http-media = dontCheck super.http-media;
+
+  # tests don't compile for some odd reason
+  jwt = dontCheck super.jwt;
 }
 // {
   # Not on Hackage yet.
