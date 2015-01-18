@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
-let version = "3.6.4";
+let version = "3.7.0";
 
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}";
 
   crashPlanArchive = fetchurl {
-    url = "http://download.crashplan.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "0xmzpxfm8vghk552jy167wg1nky1pp93dqds1p922hn73g0x5cv3";
+    url = "http://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
+    sha256 = "05lwn6g6c0dlcz48c8h9ivyc1dvrxzjymjj4dir9l8jjv39bnv2r";
   };
 
   srcs = [ crashPlanArchive ];
