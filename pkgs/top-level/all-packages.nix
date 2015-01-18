@@ -4193,6 +4193,7 @@ let
   gemFixes = callPackage ../development/interpreters/ruby/fixes.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
   loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
+  bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env.nix { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
   ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix { };
