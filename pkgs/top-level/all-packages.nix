@@ -11831,6 +11831,8 @@ let
 
   gltron = callPackage ../games/gltron { };
 
+  gnubg = callPackage ../games/gnubg { };
+
   gnuchess = callPackage ../games/gnuchess { };
 
   gnugo = callPackage ../games/gnugo { };
