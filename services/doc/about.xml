@@ -1,0 +1,26 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-introduction">
+
+<title>What are nix services?</title>
+
+<para>Nix services is abstraction of services for different process managers
+based on nix package manager and nixos. It does that by graceful
+degradation of service behaviour depending on the capabilities of the
+underlying process managers. It provides several key features:</para>
+
+<para>
+<orderedlist>
+
+  <listitem><para>Portable service definitions.</para></listitem>
+  <listitem><para>Graceful degradation of service behavior depending on the
+  capabilities of the underlying process managers.</para></listitem>
+  <listitem><para>Resource tracking and creation for services.</para></listitem>
+  <listitem><para>Interation with nixos.</para></listitem>
+  <listitem><para>Support for multiple process managers including distributed
+  process managers (eg. docker, kubernetes)</para></listitem>
+
+</orderedlist>
+</para>
+
+</chapter>

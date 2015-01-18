@@ -219,7 +219,7 @@ let
 
 in {
   imports = [
-    ../../assertions.nix
+    ../../lib/assertions.nix
     ../../../nixos/modules/misc/ids.nix
     ../../../nixos/modules/config/users-groups.nix
     ../../../nixos/modules/system/activation/activation-script.nix

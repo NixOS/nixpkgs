@@ -181,7 +181,7 @@ let
   };
 in {
   imports = [
-    ../../assertions.nix
+    ../../lib/assertions.nix
   ] ++ (import ../../module-list.nix);
 
   options = {

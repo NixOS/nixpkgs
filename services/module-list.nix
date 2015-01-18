@@ -1,5 +1,5 @@
 [
-  ./services.nix
+  ./lib/services.nix
   ./databases/mongodb.nix
   ./databases/influxdb.nix
   ./databases/postgresql.nix
