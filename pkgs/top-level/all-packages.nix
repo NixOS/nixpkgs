@@ -12366,8 +12366,6 @@ let
 
   archimedes = callPackage ../applications/science/electronics/archimedes { };
 
-  biolib = callPackage ../development/libraries/science/biology/biolib { };
-
   emboss = callPackage ../applications/science/biology/emboss { };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
