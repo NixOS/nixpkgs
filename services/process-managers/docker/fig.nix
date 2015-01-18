@@ -4,7 +4,7 @@ with pkgs.lib;
 
 let
   config = (evalModules {
-    modules = [configuration] ++ (import ./module-list.nix);
+    modules = [./module.nix configuration];
     args = { inherit pkgs; };
   }).config;
 

@@ -180,6 +180,10 @@ let
     };
   };
 in {
+  imports = [
+    ../../assertions.nix
+  ] ++ (import ../../module-list.nix);
+
   options = {
     sal.supervisor = {
       services = mkOption {
@@ -250,7 +254,7 @@ in {
         let
           command = if cmd == null then null else
             if cmd.command != "" then cmd.command
-            else if cmd.script != null then cmd.script
+            else if cmd.script != "" then cmd.script
             else null;
 
         in if command != null then ''
@@ -277,11 +281,11 @@ in {
 
         # Setup SIGTERM trap
         _term() {
-          ${if service.stop.command == "" && service.stop.script == null then
+          ${if service.stop.command == "" && service.stop.script == "" then
             ''timeout ${toString service.stop.timeout} \
               kill -${toString service.stop.stopSignal} ${pm.envNames.mainPid.var} 2>/dev/null''
           else
-            mkScript config.service.stop
+            mkScript service.stop
           }
         }
 

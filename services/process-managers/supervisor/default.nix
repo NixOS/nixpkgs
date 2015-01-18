@@ -7,13 +7,13 @@ let
 
   config = (evalModules {
     modules = [
-      configuration ./module.nix ../../assertions.nix
+      configuration ./module.nix
       {
         sal.processManager.supports.privileged = false;
         sal.supervisor.unprivilegedUser = "nobody";
         sal.supervisor.stateDir = "/tmp/services";
       }
-    ] ++ (import ../../module-list.nix);
+    ];
     args = { inherit pkgs; };
   }).config;
 
@@ -27,18 +27,28 @@ let
       mkdir -p "${config.sal.supervisor.stateDir}"/{run,log}
     fi
 
+    cp ${config.sal.supervisor.config} "${config.sal.supervisor.stateDir}/supervisord.conf"
+    chmod +w "${config.sal.supervisor.stateDir}/supervisord.conf"
+
     # Run supervisord
-    exec ${supervisor}/bin/supervisord -c "${config.sal.supervisor.config}" $extraFlags "$@"
+    exec ${supervisor}/bin/supervisord -c "${config.sal.supervisor.stateDir}/supervisord.conf" $extraFlags "$@"
   '';
 
   supervisorctlWrapper = pkgs.writeScript "supervisorctl-wrapper" ''
     #!${pkgs.stdenv.shell}
-    exec ${supervisor}/bin/supervisorctl -c "${config.sal.supervisor.config}" "$@"
+    cp ${config.sal.supervisor.config} "${config.sal.supervisor.stateDir}/supervisord.conf"
+    chmod +w "${config.sal.supervisor.stateDir}/supervisord.conf"
+    exec ${supervisor}/bin/supervisorctl -c "${config.sal.supervisor.stateDir}/supervisord.conf" "$@"
   '';
 
   stopServices = pkgs.writeScript "stopServices" ''
     #!${pkgs.stdenv.shell}
     ${supervisorctlWrapper} shutdown
+  '';
+
+  updateServices = pkgs.writeScript "updateServices" ''
+    #!${pkgs.stdenv.shell}
+    ${supervisorctlWrapper} update
   '';
 
   servicesControl  = pkgs.stdenv.mkDerivation {
@@ -50,6 +60,7 @@ let
       mkdir -p $out/bin/
       ln -s ${supervisordWrapper} $out/bin/${name}-start-services
       ln -s ${stopServices} $out/bin/${name}-stop-services
+      ln -s ${updateServices} $out/bin/${name}-update-services
       ln -s ${supervisorctlWrapper} $out/bin/${name}-control-services
     '');
   };

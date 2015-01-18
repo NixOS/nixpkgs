@@ -30,8 +30,8 @@ rec {
     };
 
     script = mkOption {
-      default = null;
-      type = types.nullOr (types.either types.lines types.package);
+      default = "";
+      type = types.lines;
       description = "Script to execute.";
     };
 

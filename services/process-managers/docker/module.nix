@@ -130,7 +130,7 @@ let
     environment = mkOption {
       description = "Docker container exposed environment variables.";
       default = {};
-      type = types.attrsOf types.str;
+      type = types.attrsOf (types.either types.str types.package);
     };
 
     links = mkOption {
@@ -218,6 +218,27 @@ let
   };
 
 in {
+  imports = [
+    ../../assertions.nix
+    ../../../nixos/modules/misc/ids.nix
+    ../../../nixos/modules/config/users-groups.nix
+    ../../../nixos/modules/system/activation/activation-script.nix
+    ../../../nixos/modules/system/etc/etc.nix
+    ../../../nixos/modules/security/setuid-wrappers.nix
+    ../../../nixos/modules/security/pam.nix
+    ../../../nixos/modules/security/pam_usb.nix
+    ../../../nixos/modules/config/system-environment.nix
+    ../../../nixos/modules/config/nsswitch.nix
+    ../../../nixos/modules/config/timezone.nix
+    ../../../nixos/modules/programs/shadow.nix
+    ../../../nixos/modules/programs/bash/bash.nix
+    ../../../nixos/modules/programs/environment.nix
+    ../../../nixos/modules/config/system-path.nix
+    ../../../nixos/modules/config/shells-environment.nix
+    ../../../nixos/modules/services/misc/nix-daemon.nix
+    ../../../nixos/modules/misc/version.nix
+  ] ++ (import ../../module-list.nix);
+
   options = {
     system.build = mkOption {
       internal = true;
