@@ -41,7 +41,8 @@ in
           replicate the following change
 
           <screen>
-          services.sync.tokenServerURI: http://localhost:5000/token/1.0/sync/1.5</screen>
+          services.sync.tokenServerURI: http://localhost:5000/token/1.0/sync/1.5
+          </screen>
 
           where <option>http://localhost:5000/</option> corresponds to the
           public url of the server.
@@ -95,7 +96,10 @@ in
           <option>mysql</option>, <option>oracle</option>, <option>postgresql</option>,
           etc., and <option>driver</option> the name of a DBAPI, such as
           <option>psycopg2</option>, <option>pyodbc</option>, <option>cx_oracle</option>,
-          etc.
+          etc. The <link
+          xlink:href="http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html#database-urls">
+          SQLAlchemy documentation</link> provides more examples and describe the syntax of
+          the expected URL.
         '';
       };
 
@@ -103,12 +107,14 @@ in
         type = types.str;
         default = "/etc/firefox/syncserver-secret.ini";
         description = ''
-          If defined, this file would be used to set all fields which were omitted in the
-          generated ini files used for configuring the syncserver.  This file is useful
-          for storing secrets, such as the syncserver.secret or the syncserver.sqluri.
+          The private config file is used to extend the generated config with confidential
+          information, such as the <option>syncserver.sqlUri</option> setting if it contains a
+          password, and the <option>syncserver.secret</option> setting is used by the server to
+          generate cryptographically-signed authentication tokens.
 
-          If this file does not exists, it would be created with a unique secret.
-        '';
+          If this file does not exists, then it is created with a generated
+          <option>syncserver.secret</option> settings.
+       '';
       };
     };
   };
