@@ -20,9 +20,9 @@ in rec {
          rev = "refs/tags/v0.1.6";
       })
     ];
-    buildInputs = [ pkgs.nodePackages.coffee-script ];
+    buildInputs = [ nodePackages.coffee-script ];
     postInstall = ''
-        ${nodePackages.coffee-script}/bin/coffee -o $out/lib/node_modules/sloc/lib/ -c $src/src/
+        coffee -o $out/lib/node_modules/sloc/lib/ -c $src/src/
       '';
     deps = [ nodePackages.commander nodePackages.async nodePackages.cli-table nodePackages.readdirp ];
     passthru.names = [ "sloc" ];
