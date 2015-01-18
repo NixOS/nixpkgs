@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, libevent, file, qrencode }:
 
 let
-  version = "0.2.5";
+  version = "0.2.6";
 in stdenv.mkDerivation {
   name = "pshs-${version}";
 
   src = fetchurl {
     url = "https://www.bitbucket.org/mgorny/pshs/downloads/pshs-${version}.tar.bz2";
-    sha256 = "1lbybww9b74a9ssrii15w6qby0d66j367kara7kmfhakpv8jsvyh";
+    sha256 = "0n8l5sjnwjqjmw0jzg3hb93n6npg2wahmdg1zrpsw8fyh9ggjg4g";
   };
 
   buildInputs = [ pkgconfig libevent file qrencode ];
