@@ -50,7 +50,8 @@ in
 
       listen.address = mkOption {
         type = types.str;
-        default = "0.0.0.0";
+        default = "127.0.0.1";
+        example = "0.0.0.0";
         description = ''
           Address on which the sync server listen to.
         '';
