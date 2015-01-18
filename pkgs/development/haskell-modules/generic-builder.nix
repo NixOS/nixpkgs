@@ -27,7 +27,7 @@
 , jailbreak ? false
 , license
 , maintainers ? []
-, noHaddock ? false
+, doHaddock ? true
 , passthru ? {}
 , pkgconfigDepends ? []
 , platforms ? ghc.meta.platforms
@@ -214,7 +214,7 @@ stdenv.mkDerivation ({
 
   haddockPhase = ''
     runHook preHaddock
-    ${optionalString (!noHaddock && hasActiveLibrary) ''
+    ${optionalString (doHaddock && hasActiveLibrary) ''
       ./Setup haddock --html \
         ${optionalString doHoogle "--hoogle"} \
         ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
