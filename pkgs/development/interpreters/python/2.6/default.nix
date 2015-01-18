@@ -24,6 +24,9 @@ let
       # doesn't work in Nix because Nix changes the mtime of files in
       # the Nix store to 1.  So treat that as a special case.
       ./nix-store-mtime.patch
+
+      # http://bugs.python.org/issue10013
+      ./python2.6-fix-parallel-make.patch
     ];
     
   preConfigure = ''
