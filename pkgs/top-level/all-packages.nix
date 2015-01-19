@@ -11079,8 +11079,8 @@ let
 
   stp = callPackage ../applications/science/logic/stp {};
 
+  stumpwmContrib = callPackage ../applications/window-managers/stumpwm/contrib.nix { };
   stumpwm = callPackage ../applications/window-managers/stumpwm {
-    stumpwmContrib = callPackage ../applications/window-managers/stumpwm/contrib.nix { };
     sbcl = sbcl_1_2_5;
     lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
   };
