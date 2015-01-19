@@ -6856,6 +6856,7 @@ let
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
   popplerQt4 = poppler.poppler_qt4;
+  popplerQt5 = poppler.poppler_qt5;
 
   popt = callPackage ../development/libraries/popt { };
 
