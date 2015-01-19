@@ -1501,6 +1501,8 @@ let
 
   httpie = callPackage ../tools/networking/httpie { };
 
+  httping = callPackage ../tools/networking/httping {};
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
