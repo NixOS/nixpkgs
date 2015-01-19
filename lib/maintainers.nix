@@ -126,6 +126,7 @@
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   olcai = "Erik Timan <dev@timan.info>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
+  osener = "Ozan Sener <ozan@ozansener.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";

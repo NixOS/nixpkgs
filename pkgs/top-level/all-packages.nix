@@ -4010,6 +4010,10 @@ let
 
   tbb = callPackage ../development/libraries/tbb { };
 
+  thrust = callPackage ../development/tools/thrust {
+    gconf = pkgs.gnome.GConf;
+  };
+
   tinycc = callPackage ../development/compilers/tinycc { };
 
   urweb = callPackage ../development/compilers/urweb { };
