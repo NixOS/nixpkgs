@@ -1,7 +1,13 @@
 { config, lib, pkgs, ... }:
 
-let kernel = config.boot.kernelPackages; in
 with lib;
+let
+  kernel = config.boot.kernelPackages;
+  bumblebee = if config.hardware.bumblebee.connectDisplay
+              then pkgs.bumblebee_display
+              else pkgs.bumblebee;
+
+in
 
 {
 
@@ -23,6 +29,17 @@ with lib;
       type = types.uniq types.str;
       description = ''Group for bumblebee socket'';
     };
+    hardware.bumblebee.connectDisplay = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Set to true if you intend to connect your discrete card to a
+        monitor. This option will set up your Nvidia card for EDID
+        discovery and to turn on the monitor signal.
+
+        Only nvidia driver is supported so far.
+      '';
+    };
   };
 
   config = mkIf config.hardware.bumblebee.enable {
@@ -30,13 +47,13 @@ with lib;
     boot.kernelModules = [ "bbswitch" ];
     boot.extraModulePackages = [ kernel.bbswitch kernel.nvidia_x11 ];
 
-    environment.systemPackages = [ pkgs.bumblebee pkgs.primus ];
+    environment.systemPackages = [ bumblebee pkgs.primus ];
 
     systemd.services.bumblebeed = {
       description = "Bumblebee Hybrid Graphics Switcher";
       wantedBy = [ "display-manager.service" ];
       script = "bumblebeed --use-syslog -g ${config.hardware.bumblebee.group}";
-      path = [ kernel.bbswitch pkgs.bumblebee ];
+      path = [ kernel.bbswitch bumblebee ];
       serviceConfig = {
         Restart = "always";
         RestartSec = 60;

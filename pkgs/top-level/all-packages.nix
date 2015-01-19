@@ -11372,6 +11372,11 @@ let
       else null;
   };
 
+  # use if you intend to connect the nvidia card to a monitor
+  bumblebee_display = bumblebee.override {
+    useDisplayDevice = true;
+  };
+
   vkeybd = callPackage ../applications/audio/vkeybd {
     inherit (xlibs) libX11;
   };
