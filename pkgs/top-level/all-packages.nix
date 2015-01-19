@@ -444,6 +444,10 @@ let
 
   ### TOOLS
 
+  "3dfsb" = callPackage ../applications/misc/3dfsb {
+    glibc = glibc.override { debugSymbols = true; };
+  };
+
   abduco = callPackage ../tools/misc/abduco { };
 
   acct = callPackage ../tools/system/acct { };
@@ -6995,6 +6999,8 @@ let
   SDL_net = callPackage ../development/libraries/SDL_net { };
 
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
+
+  SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
