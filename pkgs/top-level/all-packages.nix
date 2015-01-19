@@ -11529,6 +11529,16 @@ let
       );
   };
 
+  wrapKodi = { kodi }: import ../applications/video/kodi/wrapper.nix {
+    inherit stdenv lib makeWrapper kodi;
+    plugins = let inherit (lib) optional; in with kodiPlugins;
+      ([]
+      ++ optional (config.kodi.enableAdvancedLauncher or false) advanced-launcher
+      ++ optional (config.kodi.enableGenesis or false) genesis
+      ++ optional (config.kodi.enableSVTPlay or false) svtplay
+      );
+  };
+
   wxhexeditor = callPackage ../applications/editors/wxhexeditor { };
 
   wxcam = callPackage ../applications/video/wxcam {
@@ -11566,12 +11576,20 @@ let
     xbmc = xbmcPlain;
   };
 
-  kodi = callPackage ../applications/video/kodi { };
+  kodiPlain = callPackage ../applications/video/kodi { };
+
+  kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {
+    kodi = kodiPlain;
+  });
+
+  kodi = wrapKodi {
+    kodi = kodiPlain;
+  };
 
   xbmc-retroarch-advanced-launchers =
     callPackage ../misc/emulators/retroarch/xbmc-advanced-launchers.nix {
       cores = retroArchCores;
-    };
+  };
 
   xca = callPackage ../applications/misc/xca { };
 
