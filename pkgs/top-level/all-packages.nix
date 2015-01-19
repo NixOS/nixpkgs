@@ -11591,6 +11591,11 @@ let
       cores = retroArchCores;
   };
 
+  kodi-retroarch-advanced-launchers =
+    callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix {
+      cores = retroArchCores;
+  };
+
   xca = callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
