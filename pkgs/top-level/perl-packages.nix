@@ -4019,10 +4019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.306";
+    name = "Glib-1.307";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0j4kf707vy9vhpifwl6icc7rqyf75z2lhc626af7ag8srqva81ic";
+      sha256 = "1km4261a5kaazz77qplpqj2yv91p0bqcjjvd6xdvdgdd4rib7ngr";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -4099,10 +4099,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2493";
+    name = "Gtk2-1.2494";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1zhrvwl584yrf0b1rrkli0k2ly221xhdyix8ykmm9zs674gain0z";
+      sha256 = "1kkm1z1xqnrfdfjric5y3935dbi9qnhcd6c1z58g4m0y95mwpv9v";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
