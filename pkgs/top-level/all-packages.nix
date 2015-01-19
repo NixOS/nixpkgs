@@ -973,6 +973,8 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
+  darkstat = callPackage ../tools/networking/darkstat { };
+
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
