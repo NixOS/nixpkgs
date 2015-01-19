@@ -5425,7 +5425,8 @@ let
     installLocales = config.glibc.locales or false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc/locales.nix { };
+  # Not supported on Darwin
+  glibcLocales = if (! stdenv.isDarwin) then (callPackage ../development/libraries/glibc/locales.nix { }) else null;
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 

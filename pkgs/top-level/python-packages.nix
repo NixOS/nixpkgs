@@ -30,9 +30,6 @@ let
     crypt = null;
   };
 
-  # glibcLocales doesn't build on Darwin
-  localePath = optionalString (! stdenv.isDarwin) "${pkgs.glibcLocales}/lib/locale/locale-archive";
-
   pythonPackages = modules // import ./python-packages-generated.nix {
     inherit pkgs python;
     inherit (pkgs) stdenv fetchurl;
@@ -2107,8 +2104,9 @@ let
 
     propagatedBuildInputs = with self; [ self.six ];
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -2821,8 +2819,9 @@ let
       sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
     };
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4066,8 +4065,9 @@ let
       md5 = "92978492871342ad64e8ae0ccfcf200c";
     };
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     preConfigure = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -4833,11 +4833,10 @@ let
     };
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
-    buildInputs = with self; [ six ];
+    buildInputs = with self; [ six pkgs.glibcLocales ];
 
     meta = with stdenv.lib; {
       description = "Library collecting some useful snippets";
@@ -5766,7 +5765,6 @@ let
     doCheck = false;
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -5778,7 +5776,7 @@ let
     '';
 
     buildInputs = with self; [
-      pkgs.libjpeg pkgs.freetype pkgs.zlib
+      pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales
       pillow twitter pyfiglet requests arrow dateutil modules.readline pysocks
     ];
 
@@ -5965,9 +5963,10 @@ let
       md5 = "84a117c9a75b86842b0fa5f5c9c767f3";
     };
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     # some files in tests dir include unicode names
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -6033,8 +6032,9 @@ let
       md5 = "9e17a181af72d04a291c9a960bc73d44";
     };
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     preCheck = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -6965,13 +6965,14 @@ let
     };
 
     preConfigure = ''
-      export LOCALE_ARCHIVE=${pkgs.glibcLocales}/lib/locale/locale-archive
       export LC_ALL="en_US.UTF-8"
     '';
 
     # Test data not provided
     #buildInputs = [nose mock];
     doCheck = false;
+
+    buildInputs = [ pkgs.glibcLocales ];
 
     propagatedBuildInputs = with self; [
       jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
@@ -7263,10 +7264,11 @@ let
       url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.bz2";
       sha1 = "ad346a18d92c1d95f2295397c7a8a4f489e48851";
     };
+        
+    buildInputs = [ pkgs.glibcLocales ];
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${localePath}
     '';
 
     meta = {
@@ -9298,7 +9300,7 @@ let
     '';
 
     checkPhase = ''
-      LOCALE_ARCHIVE=${localePath} LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+      LOCALE_ARCHIVE=${pkgs.glibcLocales} LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
     '';
 
     meta = {
@@ -9481,11 +9483,10 @@ let
       sha256 = "099sc7ajpp6hbgrx3c0bl6hhkz1mhnr0ahvc7s4i3f3b7q1zfn7l";
     };
 
-    buildInputs = with self; [ pkgs.geos ];
+    buildInputs = with self; [ pkgs.geos pkgs.glibcLocales ];
 
     preConfigure = ''
       export LANG="en_US.UTF-8";
-      export LOCALE_ARCHIVE=${localePath}
     '';
 
     patchPhase = ''
@@ -9541,9 +9542,10 @@ let
       sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
     };
 
+    buildInputs = [ pkgs.glibcLocales ];
+
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${localePath}
     '';
 
     meta = with stdenv.lib; {
@@ -9606,10 +9608,9 @@ let
 
     preCheck = ''
       export LANG="en_US.UTF-8"
-      export LOCALE_ARCHIVE=${localePath}
     '';
 
-    buildInputs = with self; [ pytest py mock ];
+    buildInputs = with self; [ pytest py mock pkgs.glibcLocales ];
 
     meta = with stdenv.lib; {
       maintainers = [ maintainers.iElectric ];
@@ -10122,7 +10123,6 @@ let
     version = "1.2.8";
 
     preBuild = ''
-      export LOCALE_ARCHIVE=${localePath}
       export LC_ALL="en_US.UTF-8"
     '';
 
@@ -10135,7 +10135,7 @@ let
       sha256 = "0pgi9xg00wcw0m1pv5qp7jv53q38yffcmkf2fj1zlfi2b9c3njid";
     };
 
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose pkgs.glibcLocales ];
 
     propagatedBuildInputs = with self; [ six mock ];
 
