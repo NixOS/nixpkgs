@@ -781,7 +781,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     optparseApplicative = self.optparseApplicative_0_10_0;
   };
 
-  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {};
+  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {
+    optparseApplicative = self.optparseApplicative_0_10_0;
+  };
 
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
