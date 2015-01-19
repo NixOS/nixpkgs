@@ -134,6 +134,21 @@ self: super: {
 
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
+
+  # Allow building with mtl 2.2. Upstream has been notified by e-mail.
+  tabular = doJailbreak super.tabular;
+
+  # https://github.com/liamoc/wizards/issues/5
+  wizards = doJailbreak super.wizards;
+
+  # https://github.com/ekmett/trifecta/issues/41
+  trifecta = overrideCabal super.trifecta (drv: {
+    patches = [
+    (pkgs.fetchpatch {
+       url = "https://github.com/ekmett/trifecta/pull/40.patch";
+       sha256 = "0q8j9zwi5q651q5zd3mz52nz4ki36rvixbkp20nx2vf5imi050bq";
+    })];});
+
 }
 // {
   # Not on Hackage yet.

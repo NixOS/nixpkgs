@@ -51,4 +51,10 @@ self: super: {
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
 
+  # https://github.com/haskell/containers/issues/134
+  containers_0_4_2_1 = doJailbreak super.containers_0_4_2_1;
+
+  # These packages need more recent versions of core libraries to compile.
+  happy = addBuildTools super.happy [self.containers_0_4_2_1 self.deepseq_1_3_0_1 self.containers_0_4_2_1];
+
 }

@@ -41,7 +41,8 @@ self: super: {
   binary = self.binary_0_7_2_3;
 
   # deepseq is not a core library for this compiler.
-  deepseq = self.deepseq_1_4_0_0;
+  deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
+  deepseq = self.deepseq_1_3_0_1;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_2_0;
@@ -61,5 +62,17 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     patchPhase = "sed -ir -e 's|Extensions: | Extensions: UndecidableInstances, |' utf8-string.cabal";
   });
+
+  # https://github.com/haskell/HTTP/issues/80
+  HTTP = doJailbreak super.HTTP;
+
+  # 6.12.3 doesn't support the latest version.
+  primitive = self.primitive_0_5_1_0;
+
+  # These packages need more recent versions of core libraries to compile.
+  happy = addBuildTools super.happy [self.Cabal_1_18_1_6 self.containers_0_4_2_1];
+  network-uri = addBuildTool super.network-uri self.Cabal_1_18_1_6;
+  stm = addBuildTool super.stm self.Cabal_1_18_1_6;
+  split = super.split_0_1_4_3;
 
 }
