@@ -148,10 +148,11 @@ in
         gid = config.ids.gids.dovecot2;
       };
 
-    jobs.dovecot2 =
+    systemd.services.dovecot2 =
       { description = "Dovecot IMAP/POP3 server";
 
-        startOn = "started networking";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         preStart =
           ''
@@ -159,7 +160,13 @@ in
             ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} /var/run/dovecot2
           '';
 
-        exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${cfg.configFile}";
+        serviceConfig = {
+          ExecStart = "${pkgs.dovecot}/sbin/dovecot -F -c ${cfg.configFile}";
+          Restart = "on-failure";
+          RestartSec = "10s";
+          StartLimitInterval = "1min";
+        };
+
       };
 
     environment.systemPackages = [ pkgs.dovecot ];
