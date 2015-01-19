@@ -1,7 +1,7 @@
 { stdenv, fetchgit, emscriptenfastcomp, python, nodejs, closurecompiler, jre }:
 
 let
-  tag = "1.21.0";
+  tag = "1.29.3";
 in
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/kripken/emscripten;
     rev = "refs/tags/${tag}";
-    sha256 = "0y17ab4nhd3521b50sv2i2667w0rlcnmlkpkgw5j3fsh8awxgf32";
+    sha256 = "7f65d1d5cc1c1866554cd79ff83f87fc72a7df59cf1dfd6481e3f0aed5c7dc1f";
   };
 
   buildCommand = ''
