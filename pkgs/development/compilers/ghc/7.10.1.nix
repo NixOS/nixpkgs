@@ -13,12 +13,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150118";
+  version = "7.10.0.20141222";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://deb.haskell.org/dailies/2015-01-18/ghc_7.11.20150118.orig.tar.bz2";
-    sha256 = "1zy960q2faq03camq2n4834bd748vkc15h83bapswc68dqncqj20";
+    url = "https://downloads.haskell.org/~ghc/7.10.1-rc1/ghc-7.10.0.20141222-src.tar.xz";
+    sha256 = "0nncvvwksqqz1d991jbag3b4174i275nn0psadriq5hi3px11dkl";
   };
 
   buildInputs = [ ghc perl ];

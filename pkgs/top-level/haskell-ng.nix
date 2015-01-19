@@ -17,7 +17,8 @@ rec {
     ghc742 = callPackage ../development/compilers/ghc/7.4.2.nix { ghc = compiler.ghc704Binary; gmp = pkgs.gmp.override { withStatic = true; }; };
     ghc763 = callPackage ../development/compilers/ghc/7.6.3.nix { ghc = compiler.ghc704Binary; gmp = pkgs.gmp.override { withStatic = true; }; };
     ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix { ghc = compiler.ghc742Binary; gmp = pkgs.gmp.override { withStatic = true; }; };
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix { inherit (packages.ghc784) ghc alex happy; };
+    ghc7101 = callPackage ../development/compilers/ghc/7.10.1.nix { ghc = compiler.ghc784; gmp = pkgs.gmp.override { withStatic = true; }; };
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix { ghc = compiler.ghc784; gmp = pkgs.gmp.override { withStatic = true; }; };
     ghc = compiler.ghc784;
 
   };
@@ -45,17 +46,18 @@ rec {
       ghc = compiler.ghc763;
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.6.x.nix { };
     };
-
     ghc784 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc784;
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
     };
-
+    ghc7101 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc7101;
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
+    };
     ghcHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD;
-      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-7.9.x.nix { };
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-
     ghcjs = callPackage ../development/haskell-modules {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };

@@ -4,7 +4,7 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
-  # Disable GHC 7.9.x core libraries.
+  # Disable GHC 7.11.x core libraries.
   array = null;
   base = null;
   binary = null;
