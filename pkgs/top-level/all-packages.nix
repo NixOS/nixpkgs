@@ -3975,7 +3975,7 @@ let
     ocaml = ocaml_3_08_0;
   };
 
-  rustc       = callPackage ../development/compilers/rustc/0.12.nix {};
+  rustc       = callPackage ../development/compilers/rustc/1.0.0-alpha.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
 
 
