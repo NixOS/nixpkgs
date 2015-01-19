@@ -4431,6 +4431,34 @@ let
     };
   });
 
+  fusepy = buildPythonPackage rec {
+    name = "fusepy-2.0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/fusepy/${name}.tar.gz";
+      sha256 = "1z0va3z1hzjw167skl21k9dsklbmr46k66j80qadibjc8vajjnda";
+    };
+
+    propagatedBuildInputs = [ pkgs.fuse ];
+
+    patchPhase = ''
+      substituteInPlace fuse.py --replace \
+        "find_library('fuse')" "'${pkgs.fuse}/lib/libfuse.so'"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Simple ctypes bindings for FUSE";
+      longDescription = ''
+        Python module that provides a simple interface to FUSE and MacFUSE.
+        It's just one file and is implemented using ctypes.
+      '';
+      homepage = http://github.com/terencehonles/fusepy;
+      license = with licenses; isc;
+      platforms = with platforms; linux;
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
   future = buildPythonPackage rec {
     version = "v0.14.3";
     name = "future-${version}";
@@ -4491,6 +4519,42 @@ let
     meta = {
       description = "A Python script for summarizing gcov data";
       license = "BSD";
+    };
+  };
+
+  gdrivefs = buildPythonPackage rec {
+    version = "0.14.2";
+    name = "gdrivefs-${version}";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/dsoprea/GDriveFS/archive/${version}.tar.gz";
+      sha256 = "0cfx9y1kqikrn3ngyl93k9f939hf1h7adqv0lpfri8m8glszhchz";
+    };
+
+    buildInputs = with self; [ gipc greenlet httplib2 six ];
+    propagatedBuildInputs = with self; [ dateutil fusepy google_api_python_client ];
+
+    patchPhase = ''
+      substituteInPlace gdrivefs/resources/requirements.txt \
+        --replace "==" ">="
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Mount Google Drive as a local file system";
+      longDescription = ''
+        GDriveFS is a FUSE wrapper for Google Drive developed. Design goals:
+        - Thread for monitoring changes via "changes" functionality of API.
+        - Complete stat() implementation.
+        - Seamlessly work around duplicate-file allowances in Google Drive.
+        - Seamlessly manage file-type versatility in Google Drive
+          (Google Doc files do not have a particular format).
+        - Allow for the same file at multiple paths.
+      '';
+      homepage = https://github.com/dsoprea/GDriveFS;
+      license = with licenses; gpl2;
+      platforms = with platforms; linux;
+      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -4619,6 +4683,32 @@ let
     };
   };
 
+  gipc = buildPythonPackage rec {
+    name = "gipc-0.5.0";
+    disabled = !isPy26 && !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gipc/${name}.zip";
+      sha256 = "08c35xzv7nr12d9xwlywlbyzzz2igy0yy6y52q2nrkmh5d4slbpc";
+    };
+
+    propagatedBuildInputs = with self; [ gevent ];
+
+    meta = with stdenv.lib; {
+      description = "gevent-cooperative child processes and IPC";
+      longDescription = ''
+        Usage of Python's multiprocessing package in a gevent-powered
+        application may raise problems and most likely breaks the application
+        in various subtle ways. gipc (pronunciation "gipsy") is developed with
+        the motivation to solve many of these issues transparently. With gipc,
+        multiprocessing. Process-based child processes can safely be created
+        anywhere within your gevent-powered application.
+      '';
+      homepage = http://gehrcke.de/gipc;
+      license = with licenses; mit;
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
 
   glance = buildPythonPackage rec {
     name = "glance-0.1.7";
@@ -4714,7 +4804,7 @@ let
     };
   };
 
-   google_apputils = buildPythonPackage rec {
+  google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.0";
     disabled = isPy3k;
 
