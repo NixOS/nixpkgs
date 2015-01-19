@@ -102,6 +102,9 @@ in
         '';
       serviceConfig = {
         ExecStart = "${nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        Restart = "on-failure";
+        RestartSec = "10s";
+        StartLimitInterval = "1min";
       };
     };
 
