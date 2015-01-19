@@ -251,6 +251,8 @@ let
     theAttrSet = arg;
   };
 
+  autonix = callPackage ../build-support/autonix {};
+
   autoreconfHook = makeSetupHook
     { substitutions = { inherit autoconf automake libtool gettext; }; }
     ../build-support/setup-hooks/autoreconf.sh;
