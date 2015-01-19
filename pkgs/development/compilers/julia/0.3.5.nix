@@ -140,6 +140,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+  checkTarget = "testall";
+
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "http://julialang.org/";
