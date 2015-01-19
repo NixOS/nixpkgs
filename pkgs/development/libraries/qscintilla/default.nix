@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "qscintilla";
-  version = "2.8.3";
+  version = "2.8.4";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-${version}/QScintilla-gpl-${version}.tar.gz";
-    sha256 = "fb94e6d61c3ccd4bf167d5f092629e619f7069d42207469458998b761a7cf505";
+    sha256 = "03z8mc7wpk0hyza9b45pyf523gdk0qsqaywkprmp6ffc81s2sywv";
   };
 
   buildInputs = [ qt ];
 
   preConfigure = ''
     cd Qt4Qt5
-    sed -i -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/libs," \
+    sed -i -e "s,\$\$\\[QT_INSTALL_LIBS\\],$out/lib," \
            -e "s,\$\$\\[QT_INSTALL_HEADERS\\],$out/include/," \
            -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/share/qt/translations," \
            -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share/qt," \
