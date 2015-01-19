@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   phases = "installPhase";
   ld_preload = ./isatty.c;
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.cc.libc ] 
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ] 
     + ":" + stdenv.lib.makeLibraryPath [ SDL pulseaudio alsaLib ] ;
 
   installPhase = ''

@@ -18,8 +18,8 @@ envHooks+=(addCVars)
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 
-if [ -n "@gcc@" ]; then
-    addToSearchPath PATH @gcc@/bin
+if [ -n "@cc@" ]; then
+    addToSearchPath PATH @cc@/bin
 fi
 
 if [ -n "@binutils@" ]; then
@@ -34,5 +34,5 @@ if [ -n "@coreutils@" ]; then
     addToSearchPath PATH @coreutils@/bin
 fi
 
-export CC=cc
-export CXX=c++
+export CC=@real_cc@
+export CXX=@real_cxx@

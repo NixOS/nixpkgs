@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     coreutils
     fontconfig
     freetype
-    gcc.gcc
+    gcc.cc
     gcc.libc
     glib
     ncurses

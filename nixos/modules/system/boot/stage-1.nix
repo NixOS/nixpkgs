@@ -46,7 +46,7 @@ let
       cp -pv ${pkgs.glibc}/lib/libpthread.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/librt.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/libdl.so.* $out/lib
-      cp -pv ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
+      cp -pv ${pkgs.gcc.cc}/lib*/libgcc_s.so.* $out/lib
 
       # Copy BusyBox.
       cp -pvd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin/

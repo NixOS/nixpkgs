@@ -5,7 +5,7 @@ let
   bits = stdenv.lib.optionalString (stdenv.system == "x86_64-linux") "64";
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.libc stdenv.cc.gcc ] + ":${stdenv.cc.gcc}/lib64";
+    [ stdenv.cc.libc stdenv.cc.cc ] + ":${stdenv.cc.cc}/lib64";
   patchLib = x: "patchelf --set-rpath ${libPath} ${x}";
 in
 stdenv.mkDerivation rec {

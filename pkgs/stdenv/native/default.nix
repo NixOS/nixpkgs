@@ -98,8 +98,8 @@ rec {
   };
 
 
-  cc = import ../../build-support/gcc-wrapper {
-    name = "gcc-native";
+  cc = import ../../build-support/cc-wrapper {
+    name = "cc-native";
     nativeTools = true;
     nativeLibc = true;
     nativePrefix = if system == "i686-solaris" then "/usr/gnu" else if system == "x86_64-solaris" then "/opt/local/gcc47" else "/usr";

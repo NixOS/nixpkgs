@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper }:
 assert stdenv.isLinux;
-assert stdenv.cc.gcc != null;
+assert stdenv.cc.cc.isGNU or false;
 let
 version = "0.7";
 debianPatch = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ readline tcp_wrappers pcre makeWrapper ];
   patches = [ debianPatch ];
   postInstall = ''
-    wrapProgram $out/sbin/atftpd --prefix LD_LIBRARY_PATH : ${stdenv.cc.gcc}/lib${if stdenv.system == "x86_64-linux" then "64" else ""}
+    wrapProgram $out/sbin/atftpd --prefix LD_LIBRARY_PATH : ${stdenv.cc.cc}/lib${if stdenv.system == "x86_64-linux" then "64" else ""}
   '';
   meta = {
     description = "Advanced tftp tools";
