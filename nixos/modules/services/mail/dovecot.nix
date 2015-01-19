@@ -45,8 +45,6 @@ let
       pop3_uidl_format = %08Xv%08Xu
     '' + cfg.extraConfig;
 
-  confFile = pkgs.writeText "dovecot.conf" dovecotConf;
-
 in
 
 {
@@ -86,6 +84,12 @@ in
         default = "";
         example = "mail_debug = yes";
         description = "Additional entries to put verbatim into Dovecot's config file.";
+      };
+
+      configFile = mkOption {
+        default = null;
+        description = "Config file used for the whole dovecot configuration.";
+        apply = v: if v != null then v else pkgs.writeText "dovecot.conf" dovecotConf;
       };
 
       mailLocation = mkOption {
@@ -155,7 +159,7 @@ in
             ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} /var/run/dovecot2
           '';
 
-        exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}";
+        exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${cfg.configFile}";
       };
 
     environment.systemPackages = [ pkgs.dovecot ];
