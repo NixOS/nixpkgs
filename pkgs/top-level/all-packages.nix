@@ -10364,6 +10364,11 @@ let
     boost = boost155;
   };
 
+  kdeApps_latest = kdeApps_14_12;
+  kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
+    stdenv = overrideGCC stdenv gccStdInc;
+  });
+
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
   };
