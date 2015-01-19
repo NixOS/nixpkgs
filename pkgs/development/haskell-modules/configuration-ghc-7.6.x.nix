@@ -16,7 +16,7 @@ self: super: {
   directory = null;
   filepath = null;
   ghc-prim = null;
-  haskeline = self.haskeline_0_7_1_3;   # GHC's version is broken: https://github.com/NixOS/nixpkgs/issues/5616.
+  haskeline = null;
   haskell2010 = null;
   haskell98 = null;
   hoopl = null;
@@ -28,7 +28,7 @@ self: super: {
   process = null;
   rts = null;
   template-haskell = null;
-  terminfo = self.terminfo_0_4_0_0;     # GHC's version is broken: https://github.com/NixOS/nixpkgs/issues/5616.
+  terminfo = null;
   time = null;
   unix = null;
 
@@ -42,4 +42,11 @@ self: super: {
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
+
+  # Needs Cabal >= 1.18.x.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };
+
+  # Haddock chokes on the prologue from the cabal file.
+  ChasingBottoms = dontHaddock super.ChasingBottoms;
+
 }

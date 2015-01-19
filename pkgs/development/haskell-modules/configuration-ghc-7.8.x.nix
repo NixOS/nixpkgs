@@ -16,7 +16,7 @@ self: super: {
   directory = null;
   filepath = null;
   ghc-prim = null;
-  haskeline = self.haskeline_0_7_1_3;   # GHC's version is broken: https://github.com/NixOS/nixpkgs/issues/5616.
+  haskeline = null;
   haskell2010 = null;
   haskell98 = null;
   hoopl = null;
@@ -28,7 +28,7 @@ self: super: {
   process = null;
   rts = null;
   template-haskell = null;
-  terminfo = self.terminfo_0_4_0_0;     # GHC's version is broken: https://github.com/NixOS/nixpkgs/issues/5616.
+  terminfo = null;
   time = null;
   transformers = null;
   unix = null;
@@ -42,11 +42,15 @@ self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
     transformers = super.transformers_0_4_2_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
+    haskeline = self.haskeline_0_7_1_3;
     mtl = super.mtl_2_2_1;
   })) (drv: {
     jailbreak = true;           # idris is scared of lens 4.7
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
+
+  # Depends on time == 0.1.5, which we don't have.
+  HStringTemplate_0_8 = dontDistribute super.HStringTemplate_0_8;
 
 }
 
@@ -58,7 +62,7 @@ self: super: {
       doCheck = false;
       hyperlinkSource = false;
       extraLibraries = (drv.extraLibraries or []) ++ [ (
-        if builtins.elem drv.pname [
+        if pkgs.stdenv.lib.elem drv.pname [
           "Cabal"
           "time"
           "unix"
@@ -70,15 +74,12 @@ self: super: {
     });
     mtl = self.mtl_2_2_1;
     transformers = self.transformers_0_4_2_0;
-    transformers-compat = overrideCabal super.transformers-compat (drv: { configureFlags = []; });
-    aeson = disableCabalFlag super.aeson "old-locale";
+    transformers-compat = disableCabalFlag super.transformers-compat "three";
     hscolour = super.hscolour;
     time = self.time_1_5_0_1;
     unix = self.unix_2_7_1_0;
     directory = self.directory_1_2_1_0;
-    process = overrideCabal self.process_1_2_1_0 (drv: {
-      coreSetup = true;
-    });
+    process = overrideCabal self.process_1_2_1_0 (drv: { coreSetup = true; });
     inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
   };
   Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
@@ -86,11 +87,10 @@ self: super: {
     overrideCabal (super.amazonka-core.overrideScope amazonkaEnv) (drv: {
       # https://github.com/brendanhay/amazonka/pull/57
       prePatch = "sed -i 's|nats >= 0.1.3 && < 1|nats|' amazonka-core.cabal";
-
       extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
     });
   useEnvCabal = p: overrideCabal (p.overrideScope amazonkaEnv) (drv: {
-    extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
+    buildDepends = (drv.buildDepends or []) ++ [ Cabal ];
   });
   amazonka = useEnvCabal super.amazonka;
   amazonka-cloudwatch = useEnvCabal super.amazonka-cloudwatch;

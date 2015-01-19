@@ -21,7 +21,7 @@ let
         inherit (self) ghc jailbreak-cabal;
         hscolour = overrideCabal self.hscolour (drv: {
           isLibrary = false;
-          noHaddock = true;
+          doHaddock = false;
           hyperlinkSource = false;      # Avoid depending on hscolour for this build.
           postFixup = "rm -rf $out/lib $out/share $out/nix-support";
         });
@@ -29,7 +29,7 @@ let
           mkDerivation = drv: super.mkDerivation (drv // {
             enableSharedExecutables = false;
             enableSharedLibraries = false;
-            noHaddock = true;
+            doHaddock = false;
             useCpphs = false;
           });
         })) (drv: {

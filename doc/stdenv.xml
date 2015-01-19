@@ -718,7 +718,7 @@ the Nix store under <envar>out</envar>.  The default
 install</command>.</para>
 
 <variablelist>
-  <title>Variables controlling the check phase</title>
+  <title>Variables controlling the install phase</title>
 
   <varlistentry>
     <term><varname>makeFlags</varname> /
@@ -797,7 +797,7 @@ following:
 </para>
 
 <variablelist>
-  <title>Variables controlling the check phase</title>
+  <title>Variables controlling the fixup phase</title>
 
   <varlistentry>
     <term><varname>dontStrip</varname></term>

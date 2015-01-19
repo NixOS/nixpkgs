@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     '';
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
+    branch = "4";
   };
 }

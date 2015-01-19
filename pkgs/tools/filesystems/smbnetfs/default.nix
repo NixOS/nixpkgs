@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , fuse, samba, pkgconfig
+  , fuse, samba, pkgconfig, glib
   , ...}:
 builderDefsPackage
 (a :  
@@ -12,7 +12,7 @@ let
   sourceInfo = rec {
     baseName="smbnetfs";
     dirBaseName="SMBNetFS";
-    version = "0.5.3b";
+    version = "0.6.0";
     name="${baseName}-${version}";
     project="${baseName}";
     url="mirror://sourceforge/project/${project}/${baseName}/${dirBaseName}-${version}/${name}.tar.bz2";
@@ -21,7 +21,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = "1j9b30kh4ymv4nr8c1qc7hfg6pscgyj75ib16pqa0zljjk1klx18";
+    sha256 = "16sikr81ipn8v1a1zrqgnsy2as3zcaxbzkr0bm5vxy012bq0plkd";
   };
 
   inherit (sourceInfo) name version;

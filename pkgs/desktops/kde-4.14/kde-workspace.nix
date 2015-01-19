@@ -6,11 +6,12 @@
 
 kde {
 #todo: wayland, xmms,   libusb isn't found
+#note: xorg.libXft is needed to build kfontview and kfontinst though this isn't reflected in the build log
   buildInputs =
     [ kdelibs qimageblitz libdbusmenu_qt xorg.libxcb xorg.xcbutilimage libjpeg
       xorg.xcbutilrenderutil xorg.xcbutilkeysyms xorg.libpthreadstubs xorg.libXdmcp
       xorg.libxkbfile xorg.libXcomposite  xorg.libXtst
-      xorg.libXdamage
+      xorg.libXdamage xorg.libXft
 
       python boost qjson lm_sensors gpsd libraw1394 pciutils udev
       akonadi pam libusb1 libqalculate kdepimlibs  prison

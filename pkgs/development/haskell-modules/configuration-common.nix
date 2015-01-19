@@ -5,8 +5,8 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_18_1_6 = doJailbreak (dontCheck super.Cabal_1_18_1_6);
-  Cabal_1_20_0_3 = doJailbreak (dontCheck super.Cabal_1_20_0_3);
+  Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
+  Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
   Cabal_1_22_0_0 = dontCheck super.Cabal_1_22_0_0;
   cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_0_0; });
 
@@ -30,10 +30,6 @@ self: super: {
   # cabal2nix/hackage2nix.hs when removing the following.
   elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
   elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-
-  # elm-compiler jail-break can be removed after next elm-compiler
-  # release: bumped language-ecmascript's limit in git already.
-  elm-compiler = doJailbreak super.elm-compiler;
 
   # https://github.com/acid-state/safecopy/issues/17
   safecopy = dontCheck super.safecopy;
@@ -62,26 +58,11 @@ self: super: {
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = dontCheck super.time_1_5_0_1;
 
-  # Won't accept recent random: https://bitbucket.org/dafis/arithmoi/issue/14/outdated-dependency-on-random.
-  arithmoi = doJailbreak super.arithmoi;
-
   # Doesn't accept modern versions of hashtable.
-  Agda = dontHaddock (doJailbreak super.Agda);
+  Agda = dontHaddock super.Agda;
 
   # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
   network-uri = dontCheck super.network-uri;
-
-  # 0.7.0.2 doesn't accept recent versions of HaXml.
-  encoding = doJailbreak super.encoding;
-
-  # Doesn't accept recent versions of vector-space.
-  active = doJailbreak super.active;
-  diagrams-core = doJailbreak super.diagrams-core; # https://github.com/diagrams/diagrams-core/issues/78
-  diagrams-contrib = doJailbreak super.diagrams-contrib;
-  diagrams-lib = doJailbreak super.diagrams-lib;
-  diagrams-svg = doJailbreak super.diagrams-svg;
-  force-layout = doJailbreak super.force-layout;
-  vector-space-points = doJailbreak super.vector-space-points;
 
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
@@ -118,9 +99,6 @@ self: super: {
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
-  # https://github.com/gcross/AbortT-transformers/issues/1
-  AbortT-transformers = doJailbreak super.AbortT-transformers;
-
   # Depends on broken NewBinary package.
   ASN1 = markBroken super.ASN1;
 
@@ -136,28 +114,26 @@ self: super: {
   # depends on broken hbro package.
   hbro-contrib = markBroken super.hbro-contrib;
 
-  # https://github.com/goldfirere/th-desugar/issues/21
-  th-desugar = dontCheck super.th-desugar;
+  # https://github.com/haskell/vector/issues/47
+  vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
-  # https://github.com/dzhus/snaplet-redis/pull/11
-  snaplet-redis = doJailbreak super.snaplet-redis;
+  # Does not compile: <http://hydra.cryp.to/build/469842/nixlog/1/raw>.
+  base_4_7_0_2 = markBroken super.base_4_7_0_2;
 
-  # https://github.com/michaelschade/hs-stripe/pull/37
-  stripe = doJailbreak super.stripe;
+  # Obsolete: https://github.com/massysett/prednote/issues/1.
+  prednote-test = markBroken super.prednote-test;
 
-  # https://github.com/LukeHoersten/snaplet-stripe/pull/4
-  snaplet-stripe = doJailbreak super.snaplet-stripe;
+  # Doesn't compile: <http://hydra.cryp.to/build/465891/nixlog/1/raw>.
+  integer-gmp_0_5_1_0 = markBroken super.integer-gmp_0_5_1_0;
 
-  # https://github.com/prowdsponsor/fb/pull/33
-  fb = doJailbreak (overrideCabal super.fb (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-        url = https://github.com/prowdsponsor/fb/pull/33.patch;
-        sha256 = "0xfbfyg86lrimwhfd2s41xy5axcsnw0rqvic8ak72rq2sssyljpg";
-      })
-    ];
-  }));
+  # https://github.com/haskell/bytestring/issues/41
+  bytestring_0_10_4_1 = dontCheck super.bytestring_0_10_4_1;
 
+  # https://github.com/zmthy/http-media/issues/6
+  http-media = dontCheck super.http-media;
+
+  # tests don't compile for some odd reason
+  jwt = dontCheck super.jwt;
 }
 // {
   # Not on Hackage yet.
@@ -165,20 +141,27 @@ self: super: {
     pname = "cabal2nix";
     version = "2.0";
     src = pkgs.fetchgit {
-      url = "git://github.com/NixOS/cabal2nix.git";
-      sha256 = "b9dde970f8e64fd5faff9402f5788ee832874d7584a67210f59f2c5e504ce631";
-      rev = "6398667f4ad670eb3aa3334044a65a06971494d0";
+      url = "http://github.com/NixOS/cabal2nix.git";
+      sha256 = "8e1943affa70bf664d6b306f6331bad9332ca74816078f298d4acff0921c8520";
+      rev = "a5db30dbd55d7b4ec5df8fa116083b786bcf81c4";
     };
     isLibrary = false;
     isExecutable = true;
     buildDepends = with self; [
-      aeson base bytestring Cabal containers deepseq directory filepath
-      hackage-db monad-par monad-par-extras mtl pretty process
+      aeson base bytestring Cabal containers deepseq deepseq-generics
+      directory filepath hackage-db monad-par monad-par-extras mtl pretty
+      prettyclass process QuickCheck regex-posix SHA split transformers
+      utf8-string
+    ];
+    testDepends = with self; [
+      aeson base bytestring Cabal containers deepseq deepseq-generics
+      directory doctest filepath hackage-db hspec monad-par
+      monad-par-extras mtl pretty prettyclass process QuickCheck
       regex-posix SHA split transformers utf8-string
     ];
-    testDepends = with self; [ base doctest ];
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
     license = pkgs.stdenv.lib.licenses.bsd3;
   };
+
 }

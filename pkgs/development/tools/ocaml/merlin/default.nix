@@ -5,11 +5,11 @@ assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
 
 stdenv.mkDerivation {
 
-  name = "merlin-2.0";
+  name = "merlin-2.1";
 
   src = fetchurl {
-    url = https://github.com/the-lambda-church/merlin/archive/v2.0.tar.gz;
-    sha256 = "1khvmncj6gfk9p5wl07gp6ii9csc5s1bcv892lkfpfbnsspis7cp";
+    url = https://github.com/the-lambda-church/merlin/archive/v2.1.tar.gz;
+    sha256 = "0rk5ffhr69wbhr50ixgw1vnv0wkhxwh1z3cpbcwkm72cnac74nj6";
   };
 
   buildInputs = [ ocaml findlib yojson menhir ]

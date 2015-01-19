@@ -1,19 +1,22 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchgit }:
 
 let
 
-  version = "2.0.0.0";
+  version = "2.2.0.0";
 
 in stdenv.mkDerivation rec {
 
   name = "skalibs-${version}";
 
-  src = fetchurl {
-    url = "http://skarnet.org/software/skalibs/${name}.tar.gz";
-    sha256 = "0cz30wqg8fnkwjlacs4s3sjs3l34sa91xgci95fmb187zhiq693n";
+  src = fetchgit {
+    url = "git://git.skarnet.org/skalibs";
+    rev = "refs/tags/v${version}";
+    sha256 = "1ww45ygrws7h3p3p7y3blc5kzvvy5fmzb158ngfbdamf0pgc5vkn";
   };
 
   dontDisableStatic = true;
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-force-devr"       # assume /dev/random works

@@ -139,7 +139,7 @@ in
           # Don't download the SSH key if it has already been downloaded
           if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
-                mkdir -p /root/.ssh
+                mkdir -m 0700 -p /root/.ssh
                 ${wget} -O /root/authorized-keys-metadata http://metadata/0.1/meta-data/authorized-keys
                 if [ $? -eq 0 -a -e /root/authorized-keys-metadata ]; then
                     cat /root/authorized-keys-metadata | cut -d: -f2- > /root/key.pub

@@ -194,7 +194,7 @@ in
         script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-            mkdir -p -m 0700 "$root/var/lib/private"
+            mkdir -p -m 0700 "$root/var/lib/private" "$root/root"
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi

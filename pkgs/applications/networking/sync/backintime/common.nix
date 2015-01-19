@@ -1,20 +1,16 @@
-{stdenv, fetchurl, makeWrapper, gettext, python2, python2Packages }:
+{stdenv, fetchurl, makeWrapper, gettext, python3, python3Packages, rsync, cron, openssh, sshfsFuse, encfs }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.36";
+  version = "1.1.0";
 
   name = "backintime-common-${version}";
 
   src = fetchurl {
-    url = "https://launchpad.net/backintime/1.0/${version}/+download/backintime-${version}.tar.gz";
-    md5 = "28630bc7bd5f663ba8fcfb9ca6a742d8";
+    url = "https://launchpad.net/backintime/1.1/${version}/+download/backintime-${version}.tar.gz";
+    md5 = "21e15538c38d0c440c1281457319c7f1";
   };
 
-  # because upstream tarball has no top-level directory.
-  # https://bugs.launchpad.net/backintime/+bug/1359076
-  sourceRoot = ".";
-
-  buildInputs = [ makeWrapper gettext python2 python2Packages.dbus ];
+  buildInputs = [ makeWrapper gettext python3 python3Packages.dbus python3Packages.keyring openssh cron rsync sshfsFuse encfs ];
 
   installFlags = [ "DEST=$(out)" ];
 

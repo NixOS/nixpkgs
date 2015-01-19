@@ -8,8 +8,8 @@ rec {
     overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
   };
 
-  doHaddock = drv: overrideCabal drv (drv: { noHaddock = false; });
-  dontHaddock = drv: overrideCabal drv (drv: { noHaddock = true; });
+  doHaddock = drv: overrideCabal drv (drv: { doHaddock = true; });
+  dontHaddock = drv: overrideCabal drv (drv: { doHaddock = false; });
 
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
   dontJailbreak = drv: overrideCabal drv (drv: { jailbreak = false; });

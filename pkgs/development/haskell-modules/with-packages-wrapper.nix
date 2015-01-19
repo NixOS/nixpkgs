@@ -30,7 +30,7 @@ let
   libDir        = "$out/lib/ghc-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  isHaskellPkg  = x: (x ? pname) && (x ? version);
+  isHaskellPkg  = x: (x ? pname) && (x ? version) && (x ? env);
   paths         = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages);
 in
 if paths == [] then ghc else

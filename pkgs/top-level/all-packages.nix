@@ -444,6 +444,10 @@ let
 
   ### TOOLS
 
+  "3dfsb" = callPackage ../applications/misc/3dfsb {
+    glibc = glibc.override { debugSymbols = true; };
+  };
+
   abduco = callPackage ../tools/misc/abduco { };
 
   acct = callPackage ../tools/system/acct { };
@@ -973,6 +977,8 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
+  darkstat = callPackage ../tools/networking/darkstat { };
+
   davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
@@ -1341,7 +1347,7 @@ let
 
   gnupg = gnupg20;
 
-  gnuplot = callPackage ../tools/graphics/gnuplot { };
+  gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt5; };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
 
@@ -1499,6 +1505,8 @@ let
 
   httpie = callPackage ../tools/networking/httpie { };
 
+  httping = callPackage ../tools/networking/httping {};
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
@@ -1632,6 +1640,8 @@ let
   multitail = callPackage ../tools/misc/multitail { };
 
   netperf = callPackage ../applications/networking/netperf { };
+
+  netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
@@ -2266,6 +2276,8 @@ let
     inherit python libsexy pkgconfig libxml2 pygtk pango gtk glib;
   };
 
+  pytrainer = callPackage ../applications/misc/pytrainer { };
+
   openmpi = callPackage ../development/libraries/openmpi { };
 
   qastools = callPackage ../tools/audio/qastools {
@@ -2807,6 +2819,8 @@ let
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
+
+  xbrightness = callPackage ../tools/X11/xbrightness { };
 
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
@@ -4291,6 +4305,7 @@ let
   ruby_2_1_1 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { });
   ruby_2_1_2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { });
   ruby_2_1_3 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { });
+  ruby_2_2_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { });
 
   # Ruby aliases
   ruby = ruby_1_9;
@@ -4298,6 +4313,7 @@ let
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
+  ruby_2_2 = ruby_2_2_0;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
@@ -4546,6 +4562,8 @@ let
   ctagsWrapped = import ../development/tools/misc/ctags/wrapped.nix {
     inherit pkgs ctags writeScriptBin;
   };
+
+  ctodo = callPackage ../applications/misc/ctodo { };
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
@@ -4855,6 +4873,8 @@ let
   slimerjs = callPackage ../development/tools/slimerjs {};
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
+
+  sloc = callPackage ../development/tools/sloc { };
 
   smatch = callPackage ../development/tools/analysis/smatch {
     buildllvmsparse = false;
@@ -5412,7 +5432,8 @@ let
     installLocales = config.glibc.locales or false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc/locales.nix { };
+  # Not supported on Darwin
+  glibcLocales = if (! stdenv.isDarwin) then (callPackage ../development/libraries/glibc/locales.nix { }) else null;
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
@@ -5831,6 +5852,8 @@ let
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
+
+  libcli = callPackage ../development/libraries/libcli { };
 
   libcm = callPackage ../development/libraries/libcm { };
 
@@ -6659,6 +6682,8 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
+  openbr = callPackage ../development/libraries/openbr { };
+
   opencascade = callPackage ../development/libraries/opencascade { };
 
   opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
@@ -6916,6 +6941,8 @@ let
 
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
+  readosm = callPackage ../development/libraries/readosm { };
+
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
   librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };
@@ -6981,6 +7008,8 @@ let
 
   SDL_sound = callPackage ../development/libraries/SDL_sound { };
 
+  SDL_stretch= callPackage ../development/libraries/SDL_stretch { };
+
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
   SDL2 = callPackage ../development/libraries/SDL2 {
@@ -7039,6 +7068,8 @@ let
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
   spandsp = callPackage ../development/libraries/spandsp {};
+
+  spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
 
   speechd = callPackage ../development/libraries/speechd { };
 
@@ -7844,6 +7875,8 @@ let
 
   postfix = postfix211;
 
+  pshs = callPackage ../servers/http/pshs { };
+
   pulseaudio = callPackage ../servers/pulseaudio {
     gconf = gnome.GConf;
     # The following are disabled in the default build, because if this
@@ -8132,6 +8165,8 @@ let
 
   acpitool = callPackage ../os-specific/linux/acpitool { };
 
+  alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
+
   alienfx = callPackage ../os-specific/linux/alienfx { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
@@ -8356,6 +8391,8 @@ let
   iwlwifi = callPackage ../os-specific/linux/firmware/iwlwifi { };
 
   iwlegacy = callPackage ../os-specific/linux/firmware/iwlegacy { };
+
+  jfbview = callPackage ../os-specific/linux/jfbview { };
 
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
@@ -9148,6 +9185,8 @@ let
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
+  open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
+
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
 
   poly = callPackage ../data/fonts/poly { };
@@ -9188,10 +9227,11 @@ let
 
   source-serif-pro = callPackage ../data/fonts/source-serif-pro { };
 
-  source-han-sans-japanese = callPackage ../data/fonts/source-han-sans/japanese.nix {};
-  source-han-sans-korean = callPackage ../data/fonts/source-han-sans/korean.nix {};
-  source-han-sans-simplified-chinese = callPackage ../data/fonts/source-han-sans/simplified-chinese.nix {};
-  source-han-sans-traditional-chinese = callPackage ../data/fonts/source-han-sans/traditional-chinese.nix {};
+  sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
+  source-han-sans-japanese = sourceHanSansPackages.japanese;
+  source-han-sans-korean = sourceHanSansPackages.korean;
+  source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
+  source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme { };
 
@@ -9338,9 +9378,9 @@ let
 
   backintime-common = callPackage ../applications/networking/sync/backintime/common.nix { };
 
-  backintime-gnome = callPackage ../applications/networking/sync/backintime/gnome.nix { };
+  backintime-qt4 = callPackage ../applications/networking/sync/backintime/qt4.nix { };
 
-  backintime = backintime-gnome;
+  backintime = backintime-qt4;
 
   bar = callPackage ../applications/window-managers/bar { };
 
@@ -9469,6 +9509,8 @@ let
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
   };
+
+  cortex = callPackage ../applications/misc/cortex { };
 
   csound = callPackage ../applications/audio/csound { };
 
@@ -10252,6 +10294,11 @@ let
     inherit (pythonPackages) lxml;
   };
 
+  jumanji = callPackage ../applications/networking/browsers/jumanji {
+    webkitgtk = webkitgtk24x;
+    gtk = gtk3;
+  };
+
   jwm = callPackage ../applications/window-managers/jwm { };
 
   k3d = callPackage ../applications/graphics/k3d {
@@ -10957,6 +11004,10 @@ let
     conf = config.st.conf or null;
   };
 
+  stag = callPackage ../applications/misc/stag {
+    curses = ncurses;
+  };
+
   stella = callPackage ../misc/emulators/stella { };
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
@@ -11035,8 +11086,8 @@ let
 
   stp = callPackage ../applications/science/logic/stp {};
 
+  stumpwmContrib = callPackage ../applications/window-managers/stumpwm/contrib.nix { };
   stumpwm = callPackage ../applications/window-managers/stumpwm {
-    stumpwmContrib = callPackage ../applications/window-managers/stumpwm/contrib.nix { };
     sbcl = sbcl_1_2_5;
     lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
   };
@@ -11326,6 +11377,11 @@ let
     virtualgl_i686 = if system == "x86_64-linux"
       then pkgsi686Linux.virtualgl
       else null;
+  };
+
+  # use if you intend to connect the nvidia card to a monitor
+  bumblebee_display = bumblebee.override {
+    useDisplayDevice = true;
   };
 
   vkeybd = callPackage ../applications/audio/vkeybd {
@@ -11808,6 +11864,8 @@ let
   };
 
   gltron = callPackage ../games/gltron { };
+
+  gnubg = callPackage ../games/gnubg { };
 
   gnuchess = callPackage ../games/gnuchess { };
 
@@ -12346,8 +12404,6 @@ let
 
   archimedes = callPackage ../applications/science/electronics/archimedes { };
 
-  biolib = callPackage ../development/libraries/science/biology/biolib { };
-
   emboss = callPackage ../applications/science/biology/emboss { };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
@@ -12838,13 +12894,10 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-  */
-  nixUnstable = nixStable;
 
   nixops = callPackage ../tools/package-management/nixops { };
 
