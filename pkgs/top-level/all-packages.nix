@@ -3572,23 +3572,23 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia021 = callPackage ../development/compilers/julia/0.2.1.nix {
+  julia02 = callPackage ../development/compilers/julia/0.2.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
     openblas = openblas_0_2_2;
     suitesparse = suitesparse_4_2;
   };
 
-  julia035 = let
+  julia03 = let
     liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.5.nix {
+  in callPackage ../development/compilers/julia/0.3.nix {
     inherit liblapack;
     suitesparse = suitesparse_4_2.override {
       inherit liblapack;
     };
     llvm = llvm_33;
   };
-  julia = julia035;
+  julia = julia03;
 
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
