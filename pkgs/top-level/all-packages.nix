@@ -6802,23 +6802,16 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
-  phonon = callPackage ../development/libraries/phonon { inherit qt4; };
+  phonon = callPackage ../development/libraries/phonon/qt4 {};
 
-  phonon_qt5 = phonon.override {
-    withQt5 = true;
-    inherit qt5;
-    qt4 = null;
-  };
+  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt4 {};
 
-  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt4 {};
 
-  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { inherit qt4; };
+  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {};
 
-  phonon_qt5_backend_vlc = phonon_backend_vlc.override {
-    withQt5 = true;
-    inherit qt5;
-    qt4 = null;
-  };
+  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {};
+  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {};
 
   physfs = callPackage ../development/libraries/physfs { };
 
