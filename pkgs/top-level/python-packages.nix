@@ -9291,7 +9291,7 @@ let
       md5 = "d9822ad0238e17b382a3c756ea94fe0d";
     };
 
-    buildInputs = with self; [ nose pillow pkgs.gfortran ];
+    buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy pkgs.atlas ];
 
     buildPhase = ''
@@ -9300,7 +9300,7 @@ let
     '';
 
     checkPhase = ''
-      LOCALE_ARCHIVE=${pkgs.glibcLocales} LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+      LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
     '';
 
     meta = {
