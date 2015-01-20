@@ -174,6 +174,15 @@ self: super: {
   # https://github.com/vincenthz/tasty-kat/issues/1
   tasty-kat = dontCheck super.tasty-kat;
 
+  # Tries to execute non-existent external programs.
+  HList = dontCheck super.HList;
+
+  # https://github.com/NICTA/digit/issues/3
+  digit = dontCheck super.digit;
+
+  # Tries to execute non-existent external programs.
+  filestore = dontCheck super.filestore;
+
 }
 // {
   # Not on Hackage yet.
