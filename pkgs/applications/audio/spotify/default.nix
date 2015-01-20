@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
-, libgcrypt, chromium, sqlite, gst_plugins_base, gstreamer, udev, fontconfig
+, libgcrypt, chromium, udev, fontconfig
 , dbus, expat }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -22,15 +22,12 @@ let
     GConf
     gdk_pixbuf
     glib
-    gst_plugins_base
-    gstreamer
     gtk
     libgcrypt
     libpng
     nss
     pango
     qt4
-    sqlite
     stdenv.cc.gcc
     xlibs.libX11
     xlibs.libXcomposite
@@ -42,7 +39,6 @@ let
     xlibs.libXrender
     xlibs.libXrender
     xlibs.libXScrnSaver
-    #xlibs.libXss
   ];
 
 in
