@@ -522,6 +522,8 @@ let
 
   attic = callPackage ../tools/backup/attic { };
 
+  avfs = callPackage ../tools/filesystems/avfs { };
+
   awscli = callPackage ../tools/admin/awscli { };
 
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
