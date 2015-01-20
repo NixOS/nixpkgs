@@ -146,7 +146,7 @@ self: super: {
     patches = [
     (pkgs.fetchpatch {
        url = "https://github.com/ekmett/trifecta/pull/40.patch";
-       sha256 = "0q8j9zwi5q651q5zd3mz52nz4ki36rvixbkp20nx2vf5imi050bq";
+       sha256 = "0qwz83fp0karf6164jykdwsrafq08l6zsdmcdm83xnkcxabgplxv";
     })];});
 
   # https://github.com/NixOS/cabal2nix/issues/136
