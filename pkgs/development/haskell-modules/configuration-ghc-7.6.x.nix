@@ -51,6 +51,7 @@ self: super: {
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
 
-  # wizards = doJailbreak super.wizards;
+  # Later versions require a newer version of bytestring than we have.
+  aeson = self.aeson_0_7_0_6;
 
 }
