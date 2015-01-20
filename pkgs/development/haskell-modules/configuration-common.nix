@@ -154,6 +154,11 @@ self: super: {
   glade = overrideCabal super.gio (drv: { pkgconfigDepends = [pkgs.gtk2]; });
   pango = super.pango.override { cairo = self.cairo; };
 
+  # https://github.com/jgm/zip-archive/issues/21
+  zip-archive = overrideCabal super.zip-archive (drv: { patchPhase = ''
+    sed -i -e 's|/usr/bin/zip|${pkgs.zip}/bin/zip|' "tests/"*.hs
+  ''; });
+
 }
 // {
   # Not on Hackage yet.
