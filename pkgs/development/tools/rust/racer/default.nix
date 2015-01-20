@@ -1,19 +1,23 @@
-{stdenv, fetchgit, rustc, makeWrapper }:
+{stdenv, fetchgit, rustc, cargo, makeWrapper }:
 
 stdenv.mkDerivation rec {
   #TODO add emacs support
-  name = "racer-git-2015-01-07";
+  name = "racer-git-2015-01-20";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "bf73c05ac719cd3b0f8d8f9e0ecb066ede6aa9d9";
-    sha256 = "1159fsfca2kqvlajp8sawrskip7hc0rppk8vhwxa2vw8zznp56w0";
+    rev = "599aa524ea949ec5f9f0be0375dbb1df9cb852ae";
+    sha256 = "1kasm7vffn176wr072m1dmqg1rb3wqai9yisxf8mia62548pdx88";
   };
 
-  buildInputs = [ rustc makeWrapper ];
+  buildInputs = [ rustc cargo makeWrapper ];
+
+  buildPhase = ''
+    cargo build --release
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p bin/racer $out/bin/
+    cp -p target/release/racer $out/bin/
     wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustc.src}/src"
   '';
 
