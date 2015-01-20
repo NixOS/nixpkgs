@@ -10129,7 +10129,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/URI-Find-20111103.tar.gz;
       sha256 = "1igbbj14j5fssdqrbr60mg3w95wldfxdikplqdmqgf2zn5j65ibr";
     };
-    propagatedBuildInputs = [ URI URIURL ];
+    propagatedBuildInputs = [ URI ];
     meta = {
       homepage = http://search.cpan.org/dist/URI-Find;
       description = "Find URIs in arbitrary text";
@@ -10159,18 +10159,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
     buildInputs = [URI TestMore];
-  };
-
-  URIURL = buildPerlPackage {
-    name = "URI-URL-1.60";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
-    };
-    meta = {
-      description = "Uniform Resource Identifiers (absolute and relative)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
   };
 
   VariableMagic = buildPerlPackage rec {
