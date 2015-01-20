@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile "cp plugins\/input_gspcav1\/input_gspcav1.so" "# cp plugins\/input_gspcav1\/input_gspcav1.so"
   '';
 
-  # Make sure mjpeg-streamer will look in "$out/lib/plugins" for its plugins.
-  NIX_LDFLAGS = "-rpath $out/lib:$out/lib/plugins";
-  dontPatchELF = true;
+  postFixup = ''
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/mjpg_streamer):$out/lib:$out/lib/plugins" $out/bin/mjpg_streamer
+  '';
 
   makeFlags = "DESTDIR=$(out)";
 
