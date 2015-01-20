@@ -61,6 +61,8 @@ stdenv.mkDerivation {
   ];
   preConfigure = ''
     chmod +x configure
+    substituteInPlace configure --replace /bin/bash "$shell"
+    substituteInPlace ../hotspot-${repover}/make/linux/adlc_updater --replace /bin/sh "$shell"
   '';
   configureFlags = [
     "--with-freetype=${freetype}"
