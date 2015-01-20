@@ -54,4 +54,7 @@ self: super: {
   # Later versions require a newer version of bytestring than we have.
   aeson = self.aeson_0_7_0_6;
 
+  # The test suite depends on time >=1.4.0.2.
+  cookie = dontCheck super.cookie ;
+
 }

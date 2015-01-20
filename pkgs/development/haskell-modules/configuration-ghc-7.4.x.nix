@@ -54,4 +54,7 @@ self: super: {
   # https://github.com/tibbe/unordered-containers/issues/96
   unordered-containers = dontCheck super.unordered-containers;
 
+  # The test suite depends on time >=1.4.0.2.
+  cookie = dontCheck super.cookie ;
+
 }
