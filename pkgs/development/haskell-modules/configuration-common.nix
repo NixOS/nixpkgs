@@ -149,6 +149,10 @@ self: super: {
        sha256 = "0q8j9zwi5q651q5zd3mz52nz4ki36rvixbkp20nx2vf5imi050bq";
     })];});
 
+  # https://github.com/NixOS/cabal2nix/issues/136
+  gio = overrideCabal (super.gio.override { glib = self.glib; }) (drv: { pkgconfigDepends = [pkgs.glib]; });
+  pango = super.pango.override { cairo = self.cairo; };
+
 }
 // {
   # Not on Hackage yet.
