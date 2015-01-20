@@ -341,6 +341,10 @@ self: super: {
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
+  # These test suites run for ages, even on a fast machine. This is nuts.
+  Random123 = dontCheck super.Random123;
+  systemd = dontCheck super.systemd;
+
 }
 // {
   # Not on Hackage yet.
