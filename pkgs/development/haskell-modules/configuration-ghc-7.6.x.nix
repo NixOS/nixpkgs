@@ -57,8 +57,8 @@ self: super: {
   # The test suite depends on time >=1.4.0.2.
   cookie = dontCheck super.cookie ;
 
-  # bytestring >=0.10.2.0
-  streaming-commons = addBuildTool super.streaming-commons self.bytestring-builder;
+  # Work around bytestring >=0.10.2.0 requirement.
+  streaming-commons = addBuildDepend super.streaming-commons self.bytestring-builder;
 
   # Choose appropriate flags for our version of 'bytestring'.
   bytestring-builder = disableCabalFlag super.bytestring-builder "bytestring_has_builder";
