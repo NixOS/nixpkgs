@@ -188,10 +188,16 @@ self: super: {
   # These packages try to access the network.
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
+  holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
+  http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
   js-jquery = dontCheck super.js-jquery;
+  marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
+  stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
+  wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
+  raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -210,26 +216,33 @@ self: super: {
   aeson-lens = dontCheck super.aeson-lens;              # http://hydra.cryp.to/build/496769/log/raw
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
+  aws = dontCheck super.aws;                            # needs aws credentials
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   bindings-GLFW = dontCheck super.bindings-GLFW;        # http://hydra.cryp.to/build/497379/log/raw
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
+  buildwrapper = dontCheck super.buildwrapper;
   burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
   cabal-bounds = dontCheck super.cabal-bounds;          # http://hydra.cryp.to/build/496935/nixlog/1/raw
   cabal-meta = dontCheck super.cabal-meta;              # http://hydra.cryp.to/build/497892/log/raw
   cautious-file = dontCheck super.cautious-file;        # http://hydra.cryp.to/build/499730/log/raw
   cjk = dontCheck super.cjk;
   command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
+  conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
   crypto-pubkey = dontCheck super.crypto-pubkey;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
   Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
+  DigitalOcean = dontCheck super.DigitalOcean;
   directory-layout = dontCheck super.directory-layout;
   docopt = dontCheck super.docopt;                      # http://hydra.cryp.to/build/499172/log/raw
   dom-selector = dontCheck super.dom-selector;          # http://hydra.cryp.to/build/497670/log/raw
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
+  elm-repl = dontCheck super.elm-repl;                  # http://hydra.cryp.to/build/501878/nixlog/1/raw
+  etcd = dontCheck super.etcd;
+  fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
   ghc-events = dontCheck super.ghc-events;              # http://hydra.cryp.to/build/498226/log/raw
   ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
@@ -265,9 +278,11 @@ self: super: {
   htsn-import = dontCheck super.htsn-import;
   http2 = dontCheck super.http2;
   http-client-openssl = dontCheck super.http-client-openssl;
+  http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
   influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
+  katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
@@ -284,6 +299,7 @@ self: super: {
   openpgp = dontCheck super.openpgp;
   optional = dontCheck super.optional;
   os-release = dontCheck super.os-release;
+  pandoc-citeproc = dontCheck super.pandoc-citeproc;
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -301,6 +317,7 @@ self: super: {
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
   static-resources = dontCheck super.static-resources;
+  strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
   svndump = dontCheck super.svndump;
   thumbnail-plus = dontCheck super.thumbnail-plus;
   tickle = dontCheck super.tickle;
@@ -308,8 +325,10 @@ self: super: {
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
   unagi-chan = dontCheck super.unagi-chan;
+  wai-app-file-cgi = dontCheck super.wai-app-file-cgi;
   wai-logger = dontCheck super.wai-logger;
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
+  webdriver-angular = dontCheck super.webdriver-angular;
   webdriver = dontCheck super.webdriver;
   xcffib = dontCheck super.xcffib;
   xsd = dontCheck super.xsd;
@@ -319,6 +338,9 @@ self: super: {
 
   # The build fails with the most recent version of c2hs.
   ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
+
+  # Needs access to locale data, but looks for it in the wrong place.
+  scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
 }
 // {
