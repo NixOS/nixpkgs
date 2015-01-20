@@ -4189,7 +4189,9 @@ let
   };
 
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
-  bundler_HEAD = callPackage ../development/interpreters/ruby/bundler-head.nix { };
+  bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
+    inherit buildRubyGem coreutils fetchgit;
+  };
   gemFixes = callPackage ../development/interpreters/ruby/fixes.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
   loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };

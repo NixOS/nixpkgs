@@ -107,9 +107,9 @@ stdenv.mkDerivation (attrs // {
       makeWrapper $prog $out/bin/$(basename $prog) \
         --prefix GEM_PATH : "$out/${ruby.gemPath}:$GEM_PATH" \
         --prefix RUBYLIB : "${rubygems}/lib" \
-        --set RUBYOPT rubygems \
         $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
     done
+        #--prefix RUBYOPT rubygems \
 
     # looks like useless files which break build repeatability and consume space
     rm -fv $out/${ruby.gemPath}/doc/*/*/created.rid || true

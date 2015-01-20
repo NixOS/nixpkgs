@@ -1,21 +1,34 @@
-{ stdenv, runCommand, writeText, writeScriptBin, ruby, lib, callPackage
-, gemFixes, fetchurl, fetchgit, buildRubyGem
+{ stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
+, callPackage , gemFixes, fetchurl, fetchgit, buildRubyGem
+#, bundler_PATCHED
+, bundler_HEAD
+, git
 }@defs:
 
 # This is a work-in-progress.
-# The idea is that his will replace load-ruby-env.nix,
-# using (a patched) bundler to handle the entirety of the installation process.
+# The idea is that his will replace load-ruby-env.nix.
 
 { name, gemset, gemfile, lockfile, ruby ? defs.ruby, fixes ? gemFixes }@args:
 
 let
   const = x: y: x;
+  #bundler = bundler_PATCHED;
+  bundler = bundler_HEAD.override { inherit ruby; };
+  inherit (builtins) attrValues;
 
   fetchers.path = attrs: attrs.src.path;
-  fetchers.gem = attrs: fetchurl {
-    url = "${attrs.src.source or "https://rubygems.org"}/downloads/${attrs.name}-${attrs.version}.gem";
-    inherit (attrs.src) sha256;
-  };
+  fetchers.gem = attrs:
+    let fname = "${attrs.name}-${attrs.version}.gem";
+    in toString (runCommand fname {
+      gem = fetchurl {
+        url = "${attrs.src.source or "https://rubygems.org"}/downloads/${fname}";
+        inherit (attrs.src) sha256;
+      };
+    } ''
+      mkdir $out
+      cp $gem $out/${fname}
+    '') + "/${fname}";
+
   fetchers.git = attrs: fetchgit {
     inherit (attrs.src) url rev sha256 fetchSubmodules;
     leaveDotGit = true;
@@ -39,6 +52,13 @@ let
   instantiated = lib.flip lib.mapAttrs (import gemset) (name: attrs:
     instantiate (attrs // { inherit name; })
   );
+
+  # only the *.gem files.
+  gems = lib.fold (next: acc:
+    if next.source.type == "gem"
+    then acc ++ [next.src]
+    else acc
+  ) [] (attrValues instantiated);
 
   runRuby = name: env: command:
     runCommand name env ''
@@ -102,44 +122,58 @@ let
   '';
 
   # rewrite PATH sources to point into the nix store.
-  pureLockfile = runRuby "pureLockfile" { inherit sources; } ''
-    out   = ENV['out']
-    paths = eval(File.read(ENV['sources']))
+  purifyLockfile = writeScript "purifyLockfile" ''
+    #!${ruby}/bin/ruby
 
-    lockfile = File.read("${lockfile}")
+    out     = ENV['out']
+    sources = eval(File.read("${sources}"))
+    paths   = sources["path"]
+
+    lockfile = STDIN.read
 
     paths.each_pair do |impure, pure|
       lockfile.gsub!(/^  remote: #{Regexp.escape(impure)}/, "  remote: #{pure}")
     end
 
-    File.open(out, "wb") do |f|
-      f.print lockfile
-    end
+    print lockfile
   '';
 
 in
 
 stdenv.mkDerivation {
   inherit name;
+  buildInputs = [
+    ruby
+    bundler
+    git
+  ];
+  phases = [ "installPhase" "fixupPhase" ];
   outputs = [
     "out"     # the installed libs/bins
     "bundler" # supporting files for bundler
   ];
-  phases = [ "installPhase" "fixupPhase" ];
   installPhase = ''
     # Copy the Gemfile and Gemfile.lock
     mkdir -p $bundler
-    BUNDLE_GEMFILE=$bundler/Gemfile
+    export BUNDLE_GEMFILE=$bundler/Gemfile
     cp ${gemfile} $BUNDLE_GEMFILE
-    cp ${pureLockfile} $BUNDLE_GEMFILE.lock
+    cat ${lockfile} | ${purifyLockfile} > $BUNDLE_GEMFILE.lock
 
     export NIX_GEM_SOURCES=${sources}
+    export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
 
     export GEM_HOME=$out/${ruby.gemPath}
     export GEM_PATH=$GEM_HOME
     mkdir -p $GEM_HOME
 
-    bundler install
+    mkdir gems
+    for gem in ${toString gems}; do
+      ln -s $gem gems
+    done
+
+    cp ${./monkey_patches.rb} monkey_patches.rb
+    export RUBYOPT="-rmonkey_patches.rb -I $(pwd -P)"
+    bundler install --frozen
   '';
   passthru = {
     inherit ruby;
