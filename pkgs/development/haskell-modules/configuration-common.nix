@@ -160,9 +160,6 @@ self: super: {
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
-  # Wants to call external processes that don't exist in our sandbox.
-  graceful = dontCheck super.graceful;
-
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
@@ -178,6 +175,8 @@ self: super: {
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   filestore = dontCheck super.filestore;
+  graceful = dontCheck super.graceful;
+  hakyll = dontCheck super.hakyll;
   Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
   memcached-binary = dontCheck super.memcached-binary;
