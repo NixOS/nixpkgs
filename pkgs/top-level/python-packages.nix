@@ -7078,6 +7078,29 @@ let
     };
   };
 
+  pgcli = buildPythonPackage rec {
+    name = "pgcli-${version}";
+    version = "0.13.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pgcli/${name}.tar.gz";
+      sha256 = "15qw4as8ryl4qv3p3diq31xwa7kygrnsx4ixlfijgvfwr2pcmgxm";
+    };
+
+    propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
+
+    meta = with stdenv.lib; {
+      description = "Command-line interface for PostgreSQL";
+      longDescription = ''
+        Rich command-line interface for PostgreSQL with auto-completion and
+        syntax highlighting.
+      '';
+      homepage = http://pgcli.com/about;
+      license = with licenses; [ bsd3 ];
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
   pip = buildPythonPackage rec {
     version = "1.5.6";
     name = "pip-${version}";
