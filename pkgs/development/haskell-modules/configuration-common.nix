@@ -151,6 +151,7 @@ self: super: {
 
   # https://github.com/NixOS/cabal2nix/issues/136
   gio = overrideCabal (super.gio.override { glib = self.glib; }) (drv: { pkgconfigDepends = [pkgs.glib]; });
+  glade = overrideCabal super.gio (drv: { pkgconfigDepends = [pkgs.gtk2]; });
   pango = super.pango.override { cairo = self.cairo; };
 
 }
