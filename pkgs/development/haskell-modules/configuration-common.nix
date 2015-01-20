@@ -171,6 +171,9 @@ self: super: {
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
 
+  # https://github.com/vincenthz/tasty-kat/issues/1
+  tasty-kat = dontCheck super.tasty-kat;
+
 }
 // {
   # Not on Hackage yet.
