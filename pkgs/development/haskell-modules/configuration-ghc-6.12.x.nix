@@ -68,6 +68,8 @@ self: super: {
 
   # 6.12.3 doesn't support the latest version.
   primitive = self.primitive_0_5_1_0;
+  parallel = self.parallel_3_2_0_3;
+  vector = self.vector_0_10_9_3;
 
   # These packages need more recent versions of core libraries to compile.
   happy = addBuildTools super.happy [self.Cabal_1_18_1_6 self.containers_0_4_2_1];
