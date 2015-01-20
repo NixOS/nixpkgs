@@ -6733,7 +6733,7 @@ let self = _self // overrides; _self = with self; {
     name = "Net-Amazon-EC2-0.14-stanaka-bc66577e13";
     src = fetchurl {
       url = https://github.com/stanaka/net-amazon-ec2/zipball/bc66577e1312e828e252937d95f9f5f637af6a0b;
-      sha256 = "1c0k3addkaaf4zj7z87svm9xc3c06v0r06rf5rpqmps413lqisbn";
+      sha256 = "1a46lcphsrvi0ypgk64qwan3zfar6f1ha4z2w4ly7ga6lwrb2a1c";
       name  = "${name}.zip";
     };
     buildInputs = [ pkgs.unzip ];
