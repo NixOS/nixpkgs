@@ -89,6 +89,7 @@ self: super: {
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
+    doCheck = false;            # The test suite won't even start.
     patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
   });
 
@@ -175,15 +176,22 @@ self: super: {
   tasty-kat = dontCheck super.tasty-kat;
 
   # These packages try to execute non-existent external programs.
+  cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   filestore = dontCheck super.filestore;
+  Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
   memcached-binary = dontCheck super.memcached-binary;
   postgresql-simple = dontCheck super.postgresql-simple;
   snowball = dontCheck super.snowball;
   xmlgen = dontCheck super.xmlgen;
 
-  # Tries to access the network.
+  # These packages try to access the network.
+  concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
+  dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
+  http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   js-jquery = dontCheck super.js-jquery;
+  riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
+  warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -196,6 +204,118 @@ self: super: {
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
+
+  # Disable test suites to fix the build.
+  acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
+  aeson-lens = dontCheck super.aeson-lens;              # http://hydra.cryp.to/build/496769/log/raw
+  apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
+  app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
+  binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
+  bindings-GLFW = dontCheck super.bindings-GLFW;        # http://hydra.cryp.to/build/497379/log/raw
+  bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
+  bloodhound = dontCheck super.bloodhound;
+  burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
+  cabal-bounds = dontCheck super.cabal-bounds;          # http://hydra.cryp.to/build/496935/nixlog/1/raw
+  cabal-meta = dontCheck super.cabal-meta;              # http://hydra.cryp.to/build/497892/log/raw
+  cautious-file = dontCheck super.cautious-file;        # http://hydra.cryp.to/build/499730/log/raw
+  cjk = dontCheck super.cjk;
+  command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
+  craftwerk = dontCheck super.craftwerk;
+  crypto-pubkey = dontCheck super.crypto-pubkey;
+  damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
+  Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
+  directory-layout = dontCheck super.directory-layout;
+  docopt = dontCheck super.docopt;                      # http://hydra.cryp.to/build/499172/log/raw
+  dom-selector = dontCheck super.dom-selector;          # http://hydra.cryp.to/build/497670/log/raw
+  dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
+  DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
+  either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
+  fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
+  ghc-events = dontCheck super.ghc-events;              # http://hydra.cryp.to/build/498226/log/raw
+  ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
+  ghcid = dontCheck super.ghcid;
+  ghc-imported-from = dontCheck super.ghc-imported-from;
+  ghc-mod = dontCheck super.ghc-mod;                    # http://hydra.cryp.to/build/499674/log/raw
+  ghc-parmake = dontCheck super.ghc-parmake;
+  gitlib-cmdline = dontCheck super.gitlib-cmdline;
+  git-vogue = dontCheck super.git-vogue;
+  GLFW-b = dontCheck super.GLFW-b;
+  hackport = dontCheck super.hackport;
+  hadoop-formats = dontCheck super.hadoop-formats;
+  haeredes = dontCheck super.haeredes;
+  hashed-storage = dontCheck super.hashed-storage;
+  hashring = dontCheck super.hashring;
+  hath = dontCheck super.hath;
+  hdbi-postgresql = dontCheck super.hdbi-postgresql;
+  hedis = dontCheck super.hedis;
+  hedis-pile = dontCheck super.hedis-pile;
+  hedis-tags = dontCheck super.hedis-tags;
+  hedn = dontCheck super.hedn;
+  hgdbmi = dontCheck super.hgdbmi;
+  hi = dontCheck super.hi;
+  hmatrix-tests = dontCheck super.hmatrix-tests;
+  hPDB-examples = dontCheck super.hPDB-examples;
+  hquery = dontCheck super.hquery;
+  hs2048 = dontCheck super.hs2048;
+  hsbencher = dontCheck super.hsbencher;
+  hsexif = dontCheck super.hsexif;
+  hspec-server = dontCheck super.hspec-server;
+  HTF = dontCheck super.HTF;
+  htsn = dontCheck super.htsn;
+  htsn-import = dontCheck super.htsn-import;
+  http2 = dontCheck super.http2;
+  http-client-openssl = dontCheck super.http-client-openssl;
+  ihaskell = dontCheck super.ihaskell;
+  influxdb = dontCheck super.influxdb;
+  itanium-abi = dontCheck super.itanium-abi;
+  language-slice = dontCheck super.language-slice;
+  lensref = dontCheck super.lensref;
+  liquidhaskell = dontCheck super.liquidhaskell;
+  lvmrun = dontCheck super.lvmrun;
+  memcache = dontCheck super.memcache;
+  milena = dontCheck super.milena;
+  nats-queue = dontCheck super.nats-queue;
+  netpbm = dontCheck super.netpbm;
+  network-dbus = dontCheck super.network-dbus;
+  notcpp = dontCheck super.notcpp;
+  ntp-control = dontCheck super.ntp-control;
+  numerals = dontCheck super.numerals;
+  opaleye = dontCheck super.opaleye;
+  openpgp = dontCheck super.openpgp;
+  optional = dontCheck super.optional;
+  os-release = dontCheck super.os-release;
+  persistent-redis = dontCheck super.persistent-redis;
+  pipes-extra = dontCheck super.pipes-extra;
+  pipes-websockets = dontCheck super.pipes-websockets;
+  postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  process-streaming = dontCheck super.process-streaming;
+  punycode = dontCheck super.punycode;
+  pwstore-cli = dontCheck super.pwstore-cli;
+  quantities = dontCheck super.quantities;
+  redis-io = dontCheck super.redis-io;
+  rethinkdb = dontCheck super.rethinkdb;
+  Rlang-QQ = dontCheck super.Rlang-QQ;
+  sai-shape-syb = dontCheck super.sai-shape-syb;
+  scp-streams = dontCheck super.scp-streams;
+  separated = dontCheck super.separated;
+  shadowsocks = dontCheck super.shadowsocks;
+  shake-language-c = dontCheck super.shake-language-c;
+  static-resources = dontCheck super.static-resources;
+  svndump = dontCheck super.svndump;
+  thumbnail-plus = dontCheck super.thumbnail-plus;
+  tickle = dontCheck super.tickle;
+  tpdb = dontCheck super.tpdb;
+  translatable-intset = dontCheck super.translatable-intset;
+  ua-parser = dontCheck super.ua-parser;
+  unagi-chan = dontCheck super.unagi-chan;
+  wai-logger = dontCheck super.wai-logger;
+  WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
+  webdriver = dontCheck super.webdriver;
+  xcffib = dontCheck super.xcffib;
+  xsd = dontCheck super.xsd;
+
+  # https://github.com/athanclark/dag/issues/2
+  dag = addBuildTool super.dag self.Cabal_1_22_0_0;     # http://hydra.cryp.to/build/498554/log/raw
 
 }
 // {
