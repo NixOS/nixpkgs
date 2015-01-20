@@ -3774,6 +3774,8 @@ let
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
+    jsonm = callPackage ../development/ocaml-modules/jsonm { };
+
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
 
     lablgtk_2_14 = callPackage ../development/ocaml-modules/lablgtk/2.14.0.nix {
