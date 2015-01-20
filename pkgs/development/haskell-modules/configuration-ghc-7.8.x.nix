@@ -52,6 +52,9 @@ self: super: {
   # Depends on time == 0.1.5, which we don't have.
   HStringTemplate_0_8 = dontDistribute super.HStringTemplate_0_8;
 
+  # This is part of bytestring in our compiler.
+  bytestring-builder = dontHaddock super.bytestring-builder;
+
 }
 
 // # packages relating to amazonka
