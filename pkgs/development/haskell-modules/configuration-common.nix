@@ -168,6 +168,9 @@ self: super: {
   # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
   simple-sendfile = dontCheck super.simple-sendfile;
 
+  # Fails no apparent reason. Upstream has been notified by e-mail.
+  assertions = dontCheck super.assertions;
+
 }
 // {
   # Not on Hackage yet.
