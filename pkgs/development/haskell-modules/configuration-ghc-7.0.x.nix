@@ -55,6 +55,6 @@ self: super: {
   containers_0_4_2_1 = doJailbreak super.containers_0_4_2_1;
 
   # These packages need more recent versions of core libraries to compile.
-  happy = addBuildTools super.happy [self.containers_0_4_2_1 self.deepseq_1_3_0_1 self.containers_0_4_2_1];
+  happy = addBuildTools super.happy [self.containers_0_4_2_1 self.deepseq_1_3_0_1];
 
 }

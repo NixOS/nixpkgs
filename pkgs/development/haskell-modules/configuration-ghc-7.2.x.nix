@@ -51,7 +51,10 @@ self: super: {
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
 
+  # The old containers version won't compile against newer versions of deepseq.
+  containers_0_4_2_1 = super.containers_0_4_2_1.override { deepseq = self.deepseq_1_3_0_1; };
+
   # These packages need more recent versions of core libraries to compile.
-  happy = addBuildTools super.happy [self.containers_0_4_2_1 self.deepseq_1_3_0_1 self.containers_0_4_2_1];
+  happy = addBuildTools super.happy [self.containers_0_4_2_1 self.deepseq_1_3_0_1];
 
 }
