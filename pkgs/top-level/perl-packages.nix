@@ -10111,15 +10111,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  URI = buildPerlPackage {
-    name = "URI-1.60";
+  URI = buildPerlPackage rec {
+    name = "URI-1.65";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "149bvzb0873vqp993mkcwmgmk2cyaa5kzmfdn2msprigvklc7plk";
     };
-    meta = {
+    meta = with stdenv.lib; {
       description = "Uniform Resource Identifiers (absolute and relative)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ nckx ];
     };
   };
 
