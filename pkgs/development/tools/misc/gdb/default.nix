@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo python perl ]
     ++ stdenv.lib.optional isGNU mig;
 
-  buildInputs = [ ncurses readline gmp mpfr expat pkgconfig guile ]
+  buildInputs = [ ncurses readline gmp mpfr expat /* pkgconfig guile */ ]
     ++ stdenv.lib.optional isGNU hurd
     ++ stdenv.lib.optional doCheck dejagnu;
 
