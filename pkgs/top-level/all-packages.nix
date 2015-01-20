@@ -8415,6 +8415,8 @@ let
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
+  freefall = callPackage ../os-specific/linux/freefall { };
+
   fuse = callPackage ../os-specific/linux/fuse { };
 
   fxload = callPackage ../os-specific/linux/fxload { };
