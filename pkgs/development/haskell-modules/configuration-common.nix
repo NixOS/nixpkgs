@@ -165,6 +165,9 @@ self: super: {
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
+  # Tries to read data files during testing but cannot find them for some reason.
+  simple-sendfile = dontCheck super.simple-sendfile;
+
 }
 // {
   # Not on Hackage yet.
