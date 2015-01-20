@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       --replace "modutil" "${nssTools}/bin/modutil"
   '';
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, valgrind }:
 
 stdenv.mkDerivation rec {
   # The r127 source still calls itself r126 everywhere, but I'm not going to
@@ -11,9 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0hvbbr07j4hfix4dn4xw4fsmkr5s02bj596fn0i15d1i49xby2aj";
   };
 
+  # valgrind is required only by `make test`
+  buildInputs = [ valgrind ];
+
   enableParallelBuilding = true;
 
   makeFlags = "PREFIX=$(out)";
+
+  doCheck = true;
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
