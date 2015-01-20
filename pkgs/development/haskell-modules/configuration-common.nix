@@ -162,6 +162,12 @@ self: super: {
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
+  # Wants to call external processes that don't exist in our sandbox.
+  graceful = dontCheck super.graceful;
+
+  # https://github.com/jputcu/serialport/issues/25
+  serialport = dontCheck super.serialport;
+
 }
 // {
   # Not on Hackage yet.
