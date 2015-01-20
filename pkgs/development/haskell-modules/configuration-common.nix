@@ -135,9 +135,6 @@ self: super: {
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
-  # Allow building with mtl 2.2. Upstream has been notified by e-mail.
-  tabular = doJailbreak super.tabular;
-
   # https://github.com/liamoc/wizards/issues/5
   wizards = doJailbreak super.wizards;
 
