@@ -135,6 +135,7 @@ stdenv.mkDerivation {
     homepage = http://openjdk.java.net/;
     license = stdenv.lib.licenses.gpl2;
     description = "The open-source Java Development Kit";
+    maintainers = [ stdenv.lib.maintainers.cocreature ];
     platforms = stdenv.lib.platforms.linux;
   };
 
