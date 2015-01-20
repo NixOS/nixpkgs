@@ -174,14 +174,28 @@ self: super: {
   # https://github.com/vincenthz/tasty-kat/issues/1
   tasty-kat = dontCheck super.tasty-kat;
 
-  # Tries to execute non-existent external programs.
+  # These packages try to execute non-existent external programs.
+  filestore = dontCheck super.filestore;
   HList = dontCheck super.HList;
+  memcached-binary = dontCheck super.memcached-binary;
+  postgresql-simple = dontCheck super.postgresql-simple;
+  snowball = dontCheck super.snowball;
+  xmlgen = dontCheck super.xmlgen;
+
+  # Tries to access the network.
+  js-jquery = dontCheck super.js-jquery;
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
 
-  # Tries to execute non-existent external programs.
-  filestore = dontCheck super.filestore;
+  # Fails for non-obvious reasons while attempting to use doctest.
+  search = dontCheck super.search;
+
+  # https://github.com/ekmett/structures/issues/3
+  structures = dontCheck super.structures;
+
+  # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
+  xattr = dontCheck super.xattr;
 
 }
 // {
