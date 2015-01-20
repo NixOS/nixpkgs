@@ -15,7 +15,7 @@ Index: b/gevent/ssl.py
 -                                            keyfile, certfile,
 -                                            cert_reqs, ssl_version, ca_certs,
 -                                            ciphers)
-+            ctx = SSLContext(ssl_version)
++            ctx = __ssl__.SSLContext(ssl_version)
 +            if keyfile or certfile:
 +                ctx.load_cert_chain(certfile, keyfile)
 +            if ca_certs:
