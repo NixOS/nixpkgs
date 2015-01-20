@@ -159,6 +159,9 @@ self: super: {
     sed -i -e 's|/usr/bin/zip|${pkgs.zip}/bin/zip|' "tests/"*.hs
   ''; });
 
+  # Upstream notified by e-mail.
+  permutation = dontCheck super.permutation;
+
 }
 // {
   # Not on Hackage yet.
