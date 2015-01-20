@@ -83,37 +83,37 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      mkdir -p $out
+      libdir=$out/lib/spotify
+      mkdir -p $libdir
       dpkg-deb -x $src $out
       mv $out/opt/spotify/* $out/
       rm -rf $out/usr $out/opt
 
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
-      mkdir $out/lib
 
-      ln -s ${nss}/lib/libnss3.so $out/lib/libnss3.so.1d
-      ln -s ${nss}/lib/libnssutil3.so $out/lib/libnssutil3.so.1d
-      ln -s ${nss}/lib/libsmime3.so $out/lib/libsmime3.so.1d
+      ln -s ${nss}/lib/libnss3.so $libdir/libnss3.so.1d
+      ln -s ${nss}/lib/libnssutil3.so $libdir/libnssutil3.so.1d
+      ln -s ${nss}/lib/libsmime3.so $libdir/libsmime3.so.1d
 
       ${if stdenv.system == "x86_64-linux" then ''
-      ln -s ${openssl}/lib/libssl.so $out/lib/libssl.so.1.0.0
-      ln -s ${openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
-      ln -s ${nspr}/lib/libnspr4.so $out/lib/libnspr4.so
-      ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so
+      ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
+      ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+      ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
+      ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
       '' else ''
-      ln -s ${openssl}/lib/libssl.so $out/lib/libssl.so.0.9.8
-      ln -s ${openssl}/lib/libcrypto.so $out/lib/libcrypto.so.0.9.8
-      ln -s ${nspr}/lib/libnspr4.so $out/lib/libnspr4.so.0d
-      ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so.0d
+      ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.0.9.8
+      ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.0.9.8
+      ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so.0d
+      ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so.0d
       ''}
 
       # Work around Spotify trying to open libudev.so.0 (which we don't have)
-      ln -s ${udev}/lib/libudev.so.1 $out/lib/libudev.so.0
+      ln -s ${udev}/lib/libudev.so.1 $libdir/libudev.so.0
 
       mkdir -p $out/bin
 
-      rpath="$out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.cc.gcc}/lib64"
+      rpath="$out/spotify-client/Data:$libdir:$out/spotify-client:${stdenv.cc.gcc}/lib64"
 
       ln -s $out/spotify-client/spotify $out/bin/spotify
 
@@ -126,11 +126,10 @@ stdenv.mkDerivation {
         --set-rpath $rpath $out/spotify-client/Data/SpotifyHelper
 
       dpkg-deb -x ${qt4webkit} ./
-      mkdir -p $out/lib/
-      cp -v usr/lib/*/* $out/lib/
+      cp -v usr/lib/*/* $libdir/
 
       preload=$out/libexec/spotify/libpreload.so
-      librarypath="${stdenv.lib.makeLibraryPath deps}:$out/lib"
+      librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
       mkdir -p $out/libexec/spotify
       gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
 
