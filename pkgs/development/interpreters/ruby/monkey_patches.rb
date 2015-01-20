@@ -95,6 +95,46 @@ Bundler::Source::Rubygems.class_eval do
   end
 end
 
+Bundler::Installer.class_eval do
+  def generate_bundler_executable_stubs(spec, options = {})
+    return if spec.executables.empty?
+
+    out = ENV['out']
+
+    spec.executables.each do |executable|
+      next if executable == "bundle" || executable == "bundler"
+
+      binstub_path = "#{out}/bin/#{executable}"
+
+      File.open(binstub_path, 'w', 0777 & ~File.umask) do |f|
+        f.print <<-TEXT
+#!/usr/bin/env #{RbConfig::CONFIG['ruby_install_name']}
+
+old_gemfile  = ENV["BUNDLE_GEMFILE"]
+old_gem_home = ENV["GEM_HOME"]
+old_gem_path = ENV["GEM_PATH"]
+
+ENV["BUNDLE_GEMFILE"] =
+  "#{ENV["BUNDLE_GEMFILE"]}"
+ENV["GEM_HOME"] =
+  "#{ENV["GEM_HOME"]}"
+ENV["GEM_PATH"] =
+  "#{ENV["NIX_BUNDLER_GEMPATH"]}:#{ENV["GEM_HOME"]}\#{old_gem_path ? ":\#{old_gem_path}" : ""}}"
+
+require 'rubygems'
+require 'bundler/setup'
+
+ENV["BUNDLE_GEMFILE"] = old_gemfile
+ENV["GEM_HOME"]       = old_gem_home
+ENV["GEM_PATH"]       = old_gem_path
+
+load Gem.bin_path('#{spec.name}', '#{executable}')
+TEXT
+      end
+    end
+  end
+end
+
 Gem::Installer.class_eval do
   # Make the wrappers automagically use bundler.
   #
@@ -122,7 +162,7 @@ Gem::Installer.class_eval do
 # this file is here to facilitate running it.
 #
 
-old_gemfile = ENV["BUNDLE_GEMFILE"]
+old_gemfile  = ENV["BUNDLE_GEMFILE"]
 old_gem_home = ENV["GEM_HOME"]
 old_gem_path = ENV["GEM_PATH"]
 

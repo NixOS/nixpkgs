@@ -4188,6 +4188,9 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  bundix = callPackage ../development/interpreters/ruby/bundix {
+    ruby = ruby_2_1_3;
+  };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
   bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
     inherit buildRubyGem coreutils fetchgit;
