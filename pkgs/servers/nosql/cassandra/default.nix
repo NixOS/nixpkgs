@@ -8,13 +8,13 @@
 , getopt
 }:
 
-let version = "2.1.0";
+let version = "2.1.2";
 in stdenv.mkDerivation rec {
   name = "cassandra-${version}";
 
   src = fetchurl {
     url = "http://apache.cs.utah.edu/cassandra/${version}/apache-${name}-bin.tar.gz";
-    sha256 = "da99c4ebc8de925dc6b493443b70d2183cf3090b1aad6b6b918efa9565f264dd";
+    sha256 = "1glpv3d1c63ccqnfjzz76cxb508qyvbgva26h5j7k8dd5av84lcr";
   };
 
   buildInputs = [ makeWrapper ];
@@ -34,10 +34,11 @@ in stdenv.mkDerivation rec {
     wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://cassandra.apache.org/;
     description = "A massively scalable open source NoSQL database";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.asl20;
+    platforms = with platforms; all;
+    license = with licenses; asl20;
+    maintainers = with maintainers; [ nckx ];
   };
 }
