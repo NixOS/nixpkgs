@@ -10,20 +10,6 @@ let
     then "0.9.4.183.g644e24e.428"
     else "0.9.11.27.g2b1a638.81";
 
-  qt4webkit =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        name = "libqtwebkit4_2.3.2_i386.deb";
-        url = http://ie.archive.ubuntu.com/ubuntu/pool/main/q/qtwebkit-source/libqtwebkit4_2.3.2-0ubuntu7_i386.deb;
-        sha256 = "0q4abhczx91ma57fjss0gn8j6nkfbfsbsh6kxhykzj88dih2s8rn";
-      }
-    else
-      fetchurl {
-        name = "libqtwebkit4_2.3.2_amd64.deb";
-        url = http://ie.archive.ubuntu.com/ubuntu/pool/main/q/qtwebkit-source/libqtwebkit4_2.3.2-0ubuntu7_amd64.deb;
-        sha256 = "0sac88avfivwkfhmd6fik7ili8fdznqas6741dbspf9mfnawbwch";
-      };
-
   deps = [
     alsaLib
     atk
@@ -124,9 +110,6 @@ stdenv.mkDerivation {
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/spotify-client/Data/SpotifyHelper
-
-      dpkg-deb -x ${qt4webkit} ./
-      cp -v usr/lib/*/* $libdir/
 
       preload=$out/libexec/spotify/libpreload.so
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
