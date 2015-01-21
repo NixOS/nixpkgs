@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dfsjsa95ix8bx3h8w4bhnz7rymgl2paclvbn93x6qp8b53y0pys";
   };
 
-  buildInputs = [ python pkgconfig glib gobjectIntrospection pycairo cairo ];
+  buildInputs = [ python pkgconfig glib gobjectIntrospection ];
+  propagatedBuildInputs = [ pycairo cairo ];
 
   meta = {
     homepage = http://live.gnome.org/PyGObject;

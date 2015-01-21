@@ -10440,7 +10440,6 @@ let
 
   meld = callPackage ../applications/version-management/meld {
     inherit (gnome) scrollkeeper;
-    pygtk = pyGtkGlade;
   };
 
   mcomix = callPackage ../applications/graphics/mcomix { };
