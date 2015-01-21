@@ -32,7 +32,7 @@ self: super: {
   unix = null;
 
   # binary is not a core library for this compiler.
-  binary = self.binary_0_7_2_3;
+  binary = self.binary_0_7_3_0;
 
   # deepseq is not a core library for this compiler.
   deepseq = self.deepseq_1_4_0_0;

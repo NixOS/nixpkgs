@@ -40,7 +40,7 @@ self: super: {
   terminfo = self.terminfo_0_4_0_0;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override { binary = self.binary_0_7_2_3; };
+  Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override { binary = self.binary_0_7_3_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -55,7 +55,7 @@ self: super: {
   aeson = self.aeson_0_7_0_6;
 
   # The test suite depends on time >=1.4.0.2.
-  cookie = dontCheck super.cookie ;
+  cookie = dontCheck super.cookie;
 
   # Work around bytestring >=0.10.2.0 requirement.
   streaming-commons = addBuildDepend super.streaming-commons self.bytestring-builder;

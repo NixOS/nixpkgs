@@ -16,7 +16,6 @@ self: super: {
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
-  matlab = super.matlab.override { matlab = null; };
   mwc-random = dontCheck super.mwc-random;
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
@@ -149,9 +148,8 @@ self: super: {
     })];});
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gio = overrideCabal (super.gio.override { glib = self.glib; }) (drv: { pkgconfigDepends = [pkgs.glib]; });
-  glade = overrideCabal super.gio (drv: { pkgconfigDepends = [pkgs.gtk2]; buildDepends = drv.buildDepends ++ [self.glib]; });
-  pango = super.pango.override { cairo = self.cairo; };
+  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
+  glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
 
   # https://github.com/jgm/zip-archive/issues/21
   zip-archive = addBuildTool super.zip-archive pkgs.zip;
