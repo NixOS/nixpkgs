@@ -1,3 +1,17 @@
+# Maintainer's Notes:
+#
+# Minor updates:
+#  1. Edit ./manifest.sh to point to the updated URL. Upstream sometimes
+#     releases updates that include only the changed packages; in this case,
+#     multiple URLs can be provided and the results will be merged.
+#  2. Run ./manifest.sh and ./dependencies.sh.
+#  3. Build and enjoy.
+#
+# Major updates:
+#  We prefer not to immediately overwrite older versions with major updates, so
+#  make a copy of this directory first. After copying, be sure to delete ./tmp
+#  if it exists. Then follow the minor update instructions.
+
 { autonix, kf55, pkgs, stdenv, debug ? false }:
 
 with stdenv.lib; with autonix;
