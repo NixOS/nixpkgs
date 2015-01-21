@@ -1,11 +1,11 @@
 { stdenv, fetchurl, qt }:
 
 stdenv.mkDerivation rec {
-  name = "tiled-qt-0.9.1";
+  name = "tiled-0.11.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tiled/${name}.tar.gz";
-    sha256 = "09xm6ry56zsqbfl9fvlvc5kq9ikzdskm283r059q6rlc7crzhs38";
+    url = "https://github.com/bjorn/tiled/archive/v0.11.0.tar.gz";
+    sha256 = "03a15vbzjfwc8dpifbjvd0gnr208mzmdkgs2nlc8zq6z0a4h4jqd";
   };
 
   buildInputs = [ qt ];
