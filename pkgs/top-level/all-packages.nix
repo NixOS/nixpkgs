@@ -1064,6 +1064,8 @@ let
 
   dtach = callPackage ../tools/misc/dtach { };
 
+  dub = callPackage ../development/tools/build-managers/dub { };
+
   duff = callPackage ../tools/filesystems/duff { };
 
   duo-unix = callPackage ../tools/security/duo-unix { };
