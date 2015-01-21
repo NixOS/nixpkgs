@@ -26,7 +26,7 @@ let
   #   * COM32 entries (chainload, reboot, poweroff) are not recognized. They
   #     result in incorrect boot entries.
 
-  isolinuxCfg =
+  baseIsolinuxCfg =
     ''
     SERIAL 0 38400
     TIMEOUT ${builtins.toString syslinuxTimeout}
@@ -41,6 +41,14 @@ let
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
     '';
+
+  isolinuxMemtest86Entry = ''
+    LABEL memtest
+    MENU LABEL Memtest86+
+    LINUX /boot/memtest.bin
+  '';
+
+  isolinuxCfg = baseIsolinuxCfg + (if config.boot.loader.grub.memtest86.enable then isolinuxMemtest86Entry else "");
 
   # The efi boot image
   efiDir = pkgs.runCommand "efi-directory" {} ''
@@ -282,6 +290,10 @@ in
         }
         { source = "${efiDir}/loader";
           target = "/loader";
+        }
+      ] ++ optionals config.boot.loader.grub.memtest86.enable [
+        { source = "${pkgs.memtest86plus}/memtest.bin";
+          target = "/boot/memtest.bin";
         }
       ];
 
