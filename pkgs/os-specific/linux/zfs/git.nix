@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, kernel, spl_git, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
+{ stdenv, fetchgit, kernel, spl_git, perl, python, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
   name = "zfs-0.6.4-${kernel.version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     ./nix-build-git.patch
   ];
 
-  buildInputs = [ spl_git perl autoconf automake libtool zlib libuuid coreutils ];
+  buildInputs = [ spl_git perl python autoconf automake libtool zlib libuuid coreutils ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
