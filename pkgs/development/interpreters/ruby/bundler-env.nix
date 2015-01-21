@@ -8,9 +8,13 @@
 # This is a work-in-progress.
 # The idea is that his will replace load-ruby-env.nix.
 
-{ name, gemset, gemfile, lockfile, ruby ? defs.ruby, fixes ? gemFixes }@args:
+{ name, gemset, gemfile, lockfile, ruby ? defs.ruby, fixes ? gemFixes
+, enableParallelBuilding ? false # TODO: this might not work, given the env-var shinanigans.
+, documentation ? false}@args:
 
 let
+
+  shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   const = x: y: x;
   bundler = bundler_HEAD.override { inherit ruby; };
   inherit (builtins) attrValues;
@@ -128,7 +132,7 @@ let
     then acc
     else acc + ''
       cp ${writeScript "${next.name}-pre-install" ''
-        #!/bin/sh
+        #!${stdenv.shell}
 
         buildInputs="${toString (next.buildInputs or [])}"
         nativeBuildInputs="${toString (next.nativeBuildInputs or [])}"
@@ -227,6 +231,16 @@ let
     end
   '';
 
+  needsBuildArgs = attrs: attrs ? buildArgs;
+
+  mkBuildArgs = spec:
+    "export BUNDLE_BUILD__${lib.toUpper spec.name}='${lib.concatStringsSep " " (map shellEscape spec.buildArgs)}'";
+
+  allBuildArgs =
+    lib.concatStringsSep "\n"
+      (map mkBuildArgs
+        (lib.filter needsBuildArgs (attrValues instantiated)));
+
 in
 
 stdenv.mkDerivation {
@@ -262,10 +276,18 @@ stdenv.mkDerivation {
     mkdir pre-installers
     ${createPreInstallers}
 
+    ${allBuildArgs}
+
+    ${lib.optionalString (!documentation) ''
+      mkdir home
+      HOME="$(pwd -P)/home"
+      echo "gem: --no-rdoc --no-ri" > $HOME/.gemrc
+    ''}
+
     mkdir $out/bin
     cp ${./monkey_patches.rb} monkey_patches.rb
     export RUBYOPT="-rmonkey_patches.rb -I $(pwd -P)"
-    bundler install --frozen --binstubs
+    bundler install --frozen --binstubs ${lib.optionalString enableParallelBuilding "--jobs $NIX_BUILD_CORES"}
   '';
   passthru = {
     inherit ruby;
