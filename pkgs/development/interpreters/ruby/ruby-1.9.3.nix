@@ -2,7 +2,7 @@
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
-, ncurses, readline, cursesSupport ? false
+, ncurses, readline, cursesSupport ? true
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , ruby_1_9_3, autoreconfHook, bison, useRailsExpress ? true
