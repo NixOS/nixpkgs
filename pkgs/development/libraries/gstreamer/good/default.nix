@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hg6qzdpib9nwn3hdxv0d4rvivi1c4bmxsq2a9hqmamwyzrvbcbr";
   };
 
+  configureFlags = "--enable-experimental";
+
   nativeBuildInputs = [ pkgconfig python ];
 
   buildInputs = [
