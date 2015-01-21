@@ -1,0 +1,19 @@
+--- a/rpython/translator/c/gcc/trackgcroot.py
++++ b/rpython/translator/c/gcc/trackgcroot.py
+@@ -590,7 +590,7 @@
+ 
+     # The various cmov* operations
+     for name in '''
+-        e ne g ge l le a ae b be p np s ns o no
++        e ne g ge l le a ae b be nb p np s ns o no
+         '''.split():
+         locals()['visit_cmov' + name] = binary_insn
+         locals()['visit_cmov' + name + 'l'] = binary_insn
+@@ -837,6 +837,7 @@
+     visit_jb = conditional_jump
+     visit_jbe = conditional_jump
+     visit_jp = conditional_jump
++    visit_jnb = conditional_jump
+     visit_jnp = conditional_jump
+     visit_js = conditional_jump
+     visit_jns = conditional_jump

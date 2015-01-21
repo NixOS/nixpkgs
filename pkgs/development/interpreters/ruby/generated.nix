@@ -75,6 +75,8 @@ g: # Get dependencies from patched gems
     jsduck = g.jsduck_5_3_4;
     json = g.json_1_8_1;
     json_pure = g.json_pure_1_8_0;
+    kitchen_ansible = g.kitchen_ansible_0_0_4;
+    kitchen_vagrant = g.kitchen_vagrant_0_15_0;
     kramdown = g.kramdown_1_5_0;
     launchy = g.launchy_2_4_3;
     liquid = g.liquid_2_6_1;
@@ -90,12 +92,14 @@ g: # Get dependencies from patched gems
     mini_portile = g.mini_portile_0_6_1;
     minitar = g.minitar_0_5_4;
     minitest = g.minitest_5_5_0;
+    mixlib_shellout = g.mixlib_shellout_1_6_1;
     multi_json = g.multi_json_1_10_1;
     multi_test = g.multi_test_0_1_1;
     multipart_post = g.multipart_post_2_0_0;
     net_http_digest_auth = g.net_http_digest_auth_1_4;
     net_http_persistent = g.net_http_persistent_2_9_4;
     net_http_pipeline = g.net_http_pipeline_1_0_1;
+    net_scp = g.net_scp_1_2_1;
     net_sftp = g.net_sftp_2_1_2;
     net_ssh = g.net_ssh_2_9_1;
     netrc = g.netrc_0_10_1;
@@ -151,6 +155,7 @@ g: # Get dependencies from patched gems
     taskjuggler = g.taskjuggler_3_5_0;
     term_ansicolor = g.term_ansicolor_1_3_0;
     terminal_notifier = g.terminal_notifier_1_6_2;
+    test_kitchen = g.test_kitchen_1_2_1;
     text = g.text_1_3_0;
     thin = g.thin_1_6_3;
     thor = g.thor_0_19_1;
@@ -176,7 +181,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_2;
     yajl_ruby = g.yajl_ruby_1_2_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''redis'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''compass'' ''cucumber'' ''erubis'' ''execjs'' ''fakes3'' ''foreman'' ''gettext'' ''heroku'' ''iconv'' ''jekyll'' ''jsduck'' ''kitchen-ansible'' ''kitchen-vagrant'' ''lockfile'' ''mechanize'' ''newrelic_plugin'' ''nix'' ''papertrail-cli'' ''rabbitmq_manager-0.1.0'' ''rails'' ''rake'' ''rb-fsevent'' ''rdoc'' ''redis'' ''remote_syslog'' ''riemann-dash'' ''right_aws'' ''rmail'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''taskjuggler'' ''terminal-notifier'' ''test-kitchen'' ''thin'' ''tmuxinator'' ''travis'' ''trollop'' ''uglifier'' ''uuid'' ''xapian-full'' ''xapian-ruby'' ''yajl-ruby'' ];
   gems = {
     ZenTest_4_11_0 = {
       basename = ''ZenTest'';
@@ -1113,6 +1118,36 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [  ];
       sha256 = ''0kkn5zhiffav2cffj43wwvzj07825r4j463ilfjgik034vnbjs83'';
     };
+    kitchen_ansible_0_0_4 = {
+      basename = ''kitchen_ansible'';
+      meta = {
+        description = ''ansible provisioner for test-kitchen'';
+        homepage = ''https://github.com/neillturner/kitchen-ansible'';
+        longDescription = ''== DESCRIPTION:
+
+Ansible Provisioner for Test Kitchen
+
+== FEATURES:
+
+Supports running ansible-playbook
+
+'';
+      };
+      name = ''kitchen-ansible-0.0.4'';
+      requiredGems = [  ];
+      sha256 = ''0wwp7yq2n1jjisy00yiahzpxjdjvk40ry0m9a1rzd56fr9yvck2y'';
+    };
+    kitchen_vagrant_0_15_0 = {
+      basename = ''kitchen_vagrant'';
+      meta = {
+        description = ''Kitchen::Driver::Vagrant - A Vagrant Driver for Test Kitchen.'';
+        homepage = ''https://github.com/test-kitchen/kitchen-vagrant/'';
+        longDescription = ''Kitchen::Driver::Vagrant - A Vagrant Driver for Test Kitchen.'';
+      };
+      name = ''kitchen-vagrant-0.15.0'';
+      requiredGems = [ g.test_kitchen_1_2_1 ];
+      sha256 = ''1blf6qr0j9ab9ajrkb9fx67wnns3hgi9gda2l83hd3zfrjp6vc9w'';
+    };
     kramdown_1_5_0 = {
       basename = ''kramdown'';
       meta = {
@@ -1382,6 +1417,17 @@ extract-method refactorings still apply.'';
       requiredGems = [  ];
       sha256 = ''1kzq25l8fh2ngshlwy7k535ncb15n2piqmha86272frh71vw0xq2'';
     };
+    mixlib_shellout_1_6_1 = {
+      basename = ''mixlib_shellout'';
+      meta = {
+        description = ''Run external commands on Unix or Windows'';
+        homepage = ''http://wiki.opscode.com/'';
+        longDescription = ''Run external commands on Unix or Windows'';
+      };
+      name = ''mixlib-shellout-1.6.1'';
+      requiredGems = [  ];
+      sha256 = ''0awwll2gbsvsz7g6j473f0xrjzyxq755vl260lmki6p937d33f7a'';
+    };
     multi_json_1_10_1 = {
       basename = ''multi_json'';
       meta = {
@@ -1475,6 +1521,17 @@ The server will respond in-order.'';
       name = ''net-http-pipeline-1.0.1'';
       requiredGems = [  ];
       sha256 = ''0bxjy33yhxwsbnld8xj3zv64ibgfjn9rjpiqkyd5ipmz50pww8v9'';
+    };
+    net_scp_1_2_1 = {
+      basename = ''net_scp'';
+      meta = {
+        description = ''A pure Ruby implementation of the SCP client protocol'';
+        homepage = ''https://github.com/net-ssh/net-scp'';
+        longDescription = ''A pure Ruby implementation of the SCP client protocol'';
+      };
+      name = ''net-scp-1.2.1'';
+      requiredGems = [ g.net_ssh_2_9_1 ];
+      sha256 = ''0b0jqrcsp4bbi4n4mzyf70cp2ysyp6x07j8k8cqgxnvb4i3a134j'';
     };
     net_sftp_2_1_2 = {
       basename = ''net_sftp'';
@@ -2264,6 +2321,17 @@ management.
       name = ''terminal-notifier-1.6.2'';
       requiredGems = [  ];
       sha256 = ''0v0bqpmnyivn0dqqkbzq0xcmas2l1msbwlpp2iclkninkmcqg9sf'';
+    };
+    test_kitchen_1_2_1 = {
+      basename = ''test_kitchen'';
+      meta = {
+        description = ''Test Kitchen is an integration tool for developing and testing infrastructure code and software on isolated target platforms.'';
+        homepage = ''http://kitchen.ci'';
+        longDescription = ''Test Kitchen is an integration tool for developing and testing infrastructure code and software on isolated target platforms.'';
+      };
+      name = ''test-kitchen-1.2.1'';
+      requiredGems = [ g.mixlib_shellout_1_6_1 g.net_scp_1_2_1 g.net_ssh_2_9_1 g.safe_yaml_1_0_4 g.thor_0_19_1 ];
+      sha256 = ''1pmjzvmcvlfhk6l8p665dvx7qw6kypcbhwshkq999wjhbwmjq1nk'';
     };
     text_1_3_0 = {
       basename = ''text'';

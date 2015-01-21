@@ -54,6 +54,15 @@ let
         '';
       };
 
+      fprintAuth = mkOption {
+        default = config.services.fprintd.enable;
+        type = types.bool;
+        description = ''
+          If set, fingerprint reader will be used (if exists and
+          your fingerprints are enrolled).
+        '';
+      };
+
       sshAgentAuth = mkOption {
         default = false;
         type = types.bool;
@@ -110,6 +119,14 @@ let
           field set to <literal>!</literal>).  Note that regardless of
           what the pam_unix documentation says, accounts with hashed
           empty passwords are always allowed to log in.
+        '';
+      };
+
+      requireWheel = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to permit root access only to members of group wheel.
         '';
       };
 
@@ -175,10 +192,14 @@ let
           # Authentication management.
           ${optionalString cfg.rootOK
               "auth sufficient pam_rootok.so"}
+          ${optionalString cfg.requireWheel
+              "auth required pam_wheel.so use_uid"}
           ${optionalString cfg.logFailures
               "auth required pam_tally.so"}
           ${optionalString (config.security.pam.enableSSHAgentAuth && cfg.sshAgentAuth)
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
+          ${optionalString cfg.fprintAuth
+              "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${optionalString cfg.unixAuth

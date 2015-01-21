@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, libxml2, webkitgtk, highlight
+{ stdenv, intltool, fetchurl, libxml2, webkitgtk, highlight, sqlite
 , pkgconfig, gtk3, glib, hicolor_icon_theme, libnotify, gtkspell3
 , makeWrapper, itstool, shared_mime_info, libical, db, gcr
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu, libtool
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base p11_kit
                   hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
                   nss nspr libnotify procps highlight gnome3.libgweather
-                  gnome3.gsettings_desktop_schemas makeWrapper ];
+                  gnome3.gsettings_desktop_schemas makeWrapper sqlite ];
 
   configureFlags = [ "--disable-spamassassin" "--disable-pst-import" ];
 

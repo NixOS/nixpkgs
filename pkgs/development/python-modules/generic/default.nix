@@ -143,14 +143,6 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   postFixup = attrs.postFixup or ''
       wrapPythonPrograms
 
-      # If a user installs a Python package, they probably also wants its
-      # dependencies in the user environment profile (only way to find the
-      # dependencies is to have them in the PYTHONPATH variable).
-      # Allows you to do: $ PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages python
-      if test -e $out/nix-support/propagated-build-inputs; then
-          ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-      fi
-
       # TODO: document
       createBuildInputsPth build-inputs "$buildInputStrings"
       for inputsfile in propagated-build-inputs propagated-native-build-inputs; do

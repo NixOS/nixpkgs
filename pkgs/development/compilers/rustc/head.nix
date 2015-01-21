@@ -2,6 +2,8 @@
 , tzdata, git, valgrind, procps, coreutils
 }:
 
+assert !stdenv.isFreeBSD;
+
 /* Rust's build process has a few quirks :
 
 - It requires some patched in llvm that haven't landed upstream, so it
@@ -14,32 +16,42 @@
   expected. Once the language is stable (1.0) , we might want to
   switch it to use nix's packaged rust compiler.
 
+
+NOTE : some derivation depend on rust. When updating this, please make
+sure those derivations still compile. (racer, for example).
+
 */
 
-with ((import ./common.nix) {inherit stdenv; version = "0.13.0-pre-2604-g2f3cff6";});
+let shortVersion = "1.0.0-dev";
+    rev = "a833337943300db1c310a4cf9c84b7b4ef4e9468";
+    revShort = builtins.substring 0 7 rev;
+in
 
-let snapshot = if stdenv.system == "i686-linux"
-      then "3daf531aed03f5769402f2fef852377e2838db98"
+with ((import ./common.nix) {inherit stdenv; version = "${shortVersion}-g${revShort}"; });
+
+let snapshotHash = if stdenv.system == "i686-linux"
+      then "0197ad7179d74eba06a8b46432548caf226aa03d"
       else if stdenv.system == "x86_64-linux"
-      then "4f3c8b092dd4fe159d6f25a217cf62e0e899b365"
+      then "03459f8b216e96ed8b9abe25a42a75859195103d"
       else if stdenv.system == "i686-darwin"
-      then "2a3e647b9c400505bd49cfe56091e866c83574ca"
+      then "b5c004883ddff84159f11a3329cde682e0b7f75b"
       else if stdenv.system == "x86_64-darwin"
-      then "5e730efc34d79a33f464a87686c10eace0760a2e"
-      else abort "no-snapshot for platform ${stdenv.system}";
-    snapshotDate = "2014-12-20";
-    snapshotRev = "8443b09";
-    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshot}.tar.bz2";
+      then "b69ea42e1c995682adf0390ed4ef8a762c001a4e"
+      else abort "no snapshot for platform ${stdenv.system}";
+    snapshotDate = "2015-01-15";
+    snapshotRev = "9ade482";
+    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
+in
 
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   inherit name;
   inherit version;
   inherit meta;
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
-    rev = "2f3cff6956d56048ef7afb6d33e17cbdb2dcf038";
-    sha256 = "113y74sd1gr7f0xs1lsgjw3jkvhz8s4dxx34r9cxlw5vjr7fp066";
+    inherit rev;
+    sha256 = "1b9rnx3j37ckxa3vf20g8amsbffzvk2m9lzv5x1m04ci54w85f56";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
@@ -47,7 +59,7 @@ in stdenv.mkDerivation {
     name = "rust-stage0";
     src = fetchurl {
       url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-      sha1 = snapshot;
+      sha1 = snapshotHash;
     };
     dontStrip = true;
     installPhase = ''
@@ -75,6 +87,8 @@ in stdenv.mkDerivation {
 
     substituteInPlace src/rust-installer/gen-install-script.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
+    substituteInPlace src/rust-installer/gen-installer.sh \
+      --replace /bin/echo "${coreutils}/bin/echo"
   '';
 
   buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];
@@ -84,9 +98,4 @@ in stdenv.mkDerivation {
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 
   doCheck = true;
-
-  postInstall = ''
-      # Install documentation
-      cp -r doc "$out/share/doc"
-  '';
 }

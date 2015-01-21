@@ -45,8 +45,6 @@ let
       pop3_uidl_format = %08Xv%08Xu
     '' + cfg.extraConfig;
 
-  confFile = pkgs.writeText "dovecot.conf" dovecotConf;
-
 in
 
 {
@@ -86,6 +84,12 @@ in
         default = "";
         example = "mail_debug = yes";
         description = "Additional entries to put verbatim into Dovecot's config file.";
+      };
+
+      configFile = mkOption {
+        default = null;
+        description = "Config file used for the whole dovecot configuration.";
+        apply = v: if v != null then v else pkgs.writeText "dovecot.conf" dovecotConf;
       };
 
       mailLocation = mkOption {
@@ -144,10 +148,11 @@ in
         gid = config.ids.gids.dovecot2;
       };
 
-    jobs.dovecot2 =
+    systemd.services.dovecot2 =
       { description = "Dovecot IMAP/POP3 server";
 
-        startOn = "started networking";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         preStart =
           ''
@@ -155,7 +160,13 @@ in
             ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} /var/run/dovecot2
           '';
 
-        exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}";
+        serviceConfig = {
+          ExecStart = "${pkgs.dovecot}/sbin/dovecot -F -c ${cfg.configFile}";
+          Restart = "on-failure";
+          RestartSec = "1s";
+          StartLimitInterval = "1min";
+        };
+
       };
 
     environment.systemPackages = [ pkgs.dovecot ];

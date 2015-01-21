@@ -1,33 +1,28 @@
-{ stdenv, fetchurl, fetchgit, go }:
+{ stdenv, fetchgit, go }:
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.8.15";
+  version = "0.10.20";
 
   src = fetchgit {
-    url = "git://github.com/calmh/syncthing.git";
+    url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0xv8kaji60zqxws72srh5hdi9fyvaipdcsawp6gcyahhr3cz0ddq";
+    sha256 = "2d61a5b1ca45e4ad0805413e8965a6f3d61256cccb7a6a08cc146bf7433f5d80";
   };
 
   buildInputs = [ go ];
 
   buildPhase = ''
-    mkdir -p "./dependencies/src/github.com/calmh/syncthing"
-
-    for a in auto buffers cid discover files lamport protocol scanner \
-            logger beacon config xdr upnp model osutil versioner; do
-        cp -r "./$a" "./dependencies/src/github.com/calmh/syncthing"
-    done
+    mkdir -p "./dependencies/src/github.com/syncthing/syncthing"
+    cp -r internal "./dependencies/src/github.com/syncthing/syncthing"
 
     export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
 
-    go test -cpu=1,2,4 ./...
+    go run build.go test
 
     mkdir ./bin
 
     go build -o ./bin/syncthing -ldflags "-w -X main.Version v${version}" ./cmd/syncthing
-    go build -o ./bin/stcli -ldflags "-w -X main.Version v${version}" ./cmd/stcli
   '';
 
   installPhase = ''

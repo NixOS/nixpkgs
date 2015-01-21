@@ -14,8 +14,8 @@ else assert licenseAccepted;
 
 # the installer is very picky and demands 1.7.0.07
 let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
-      JRE_VERSION	${jre}${path}	1	7	0	7
-      JRE_INFO	${jre}${path}	94
+      JRE_VERSION	${path}	1	7	0	7
+      JRE_INFO	${path}	94
     ''; };
 
     responseVarfile = writeTextFile { name = "response.varfile"; text = ''
@@ -55,20 +55,20 @@ in stdenv.mkDerivation rec {
     sed -e 's/^if \[ -f jre.tar.gz/if false          /' $src > installer
     chmod a+x installer
 
-    cp ${dotInstall4j ""} .install4j
+    cp ${dotInstall4j jre} .install4j
     chmod u+w .install4j
 
     sed -e "s|INSTALLDIR|$out|" ${responseVarfile} > response.varfile
 
     export HOME=`pwd`
-    export INSTALL4J_JAVA_HOME=${jre}
+    export INSTALL4J_JAVA_HOME=${jre.home}
     export FONTCONFIG_FILE=${fontsConf}
     bash -ic './installer -q -varfile response.varfile'
 
     sed -i 's/Xmx450m/Xmx900m/;s/Xss192k/Xss384k/' $out/lib/neoload/conf/agent.properties
 
     for i in $out/bin/*; do
-      wrapProgram $i --run 'cp ${dotInstall4j "/lib/openjdk/jre"} ~/.install4j' \
+      wrapProgram $i --run 'cp ${dotInstall4j "${jre.home}/jre"} ~/.install4j' \
                      --run 'chmod u+w ~/.install4j'
     done
 

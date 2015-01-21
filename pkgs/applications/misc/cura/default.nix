@@ -1,14 +1,14 @@
 { stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
 let
   py = python27Packages;
-  version = "14.09";
+  version = "14.12.1";
 in
 stdenv.mkDerivation rec {
   name = "cura-${version}";
 
   src = fetchurl {
     url = "https://github.com/daid/Cura/archive/${version}.tar.gz";
-    sha256 = "1nr26hfqa6chim5qch92wpk0s28wfvznvcf3kkzgf23hw707f40v";
+    sha256 = "1sybsa84qznlzcgn18p70gh1v60npwfca5yn80h35msxrnh8gbp5";
   };
 
   desktopItem = makeDesktopItem {

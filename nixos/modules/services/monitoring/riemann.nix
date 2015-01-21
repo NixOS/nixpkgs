@@ -17,7 +17,7 @@ let
 
   launcher = writeScriptBin "riemann" ''
     #!/bin/sh
-    exec ${openjdk}/bin/java ${concatStringsSep "\n" cfg.extraJavaOpts} \
+    exec ${jdk}/bin/java ${concatStringsSep "\n" cfg.extraJavaOpts} \
       -cp ${classpath} \
       riemann.bin ${writeText "riemann-config.clj" riemannConfig}
   '';

@@ -18,17 +18,8 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  # The supplied installer uses opam-installer which breaks when run
-  # normally since it tries to `mkdir $HOME`. However, we can use
-  # `opam-installer --script` to get the shell script that performs only
-  # the installation and just run that. Furthermore, we do the same that is
-  # done by pkgs/development/ocaml-modules/react and rename the paths meant
-  # for opam-installer so that they are in line with the other OCaml
-  # libraries in Nixpkgs.
-  installPhase = ''
-    opam-installer --script --prefix=$out ocp-indent.install \
-    | sed s!lib/ocp-indent!lib/ocaml/${getVersion ocaml}/site-lib/ocp-indent! \
-    | sh
+  postInstall = ''
+    mv $out/lib/{ocp-indent,ocaml/${getVersion ocaml}/site-lib/}
   '';
 
   meta = with stdenv.lib; {

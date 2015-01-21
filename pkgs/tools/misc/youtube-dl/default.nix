@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, zip }:
+{ stdenv, fetchurl, python, zip, pandoc }:
 
 let
   version = "2014.12.17.2";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ python ];
-  nativeBuildInputs = [ zip ];
+  nativeBuildInputs = [ zip pandoc ];
 
   patchPhase = ''
     rm youtube-dl

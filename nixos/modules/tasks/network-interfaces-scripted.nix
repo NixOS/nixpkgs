@@ -185,8 +185,9 @@ in
           in
           { description = "Bridge Interface ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
-            bindsTo = deps;
-            after = [ "network-pre.target" ] ++ deps
+            bindsTo = deps ++ optional v.rstp "mstpd.service";
+            partOf = optional v.rstp "mstpd.service";
+            after = [ "network-pre.target" "mstpd.service" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
@@ -205,6 +206,11 @@ in
                 ip link set "${i}" master "${n}"
                 ip link set "${i}" up
               '')}
+
+              # Enable stp on the interface
+              ${optionalString v.rstp ''
+                echo 2 >/sys/class/net/${n}/bridge/stp_state
+              ''}
 
               ip link set "${n}" up
             '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl }:
+{ stdenv, fetchurl, tcl, makeWrapper }:
 
 let version = "5.45";
 in
@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ tcl ];
+  nativeBuildInputs = [ makeWrapper ];
 
   #NIX_CFLAGS_COMPILE = "-DHAVE_UNISTD_H";
 
@@ -30,11 +31,16 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
-    "--exec-prefix=$out"
+    "--exec-prefix=$(out)"
   ];
 
-  postInstall = let libSuff = if stdenv.isDarwin then "dylib" else "so";
-    in "cp expect $out/bin; mkdir -p $out/lib; cp *.${libSuff} $out/lib";
+  postInstall = ''
+    for i in $out/bin/*; do
+      wrapProgram $i \
+        --prefix PATH : "${tcl}/bin" \
+        --prefix TCLLIBPATH ' ' $out/lib/*
+    done
+  '';
 
   meta = {
     description = "A tool for automating interactive applications";

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # See http://github.com/atgreen/libffi/blob/master/LICENSE .
     license = stdenv.lib.licenses.free;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -14,8 +14,7 @@ stdenv.mkDerivation {
   buildFlags = [ "OSTYPE=linux" ];
 
   installPhase = ''
-    mkdir -p $out/usr/bin
-    cp mp3gain $out/usr/bin
+    install -vD mp3gain "$out/bin/mp3gain"
   '';
 
   meta = {

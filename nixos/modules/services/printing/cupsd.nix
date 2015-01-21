@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) cups;
+  inherit (pkgs) cups cups_filters;
 
   cfg = config.services.printing;
 
@@ -123,6 +123,19 @@ in
         '';
       };
 
+      browsedConf = mkOption {
+        type = types.lines;
+        default = "";
+        example =
+          ''
+            BrowsePoll cups.example.com
+          '';
+        description = ''
+          The contents of the configuration. file of the CUPS Browsed daemon
+          (<filename>cups-browsed.conf</filename>)
+        '';
+      };
+
       drivers = mkOption {
         type = types.listOf types.path;
         example = literalExample "[ pkgs.splix ]";
@@ -161,6 +174,7 @@ in
     environment.etc."cups/client.conf".text = cfg.clientConf;
     environment.etc."cups/cups-files.conf".text = cfg.cupsFilesConf;
     environment.etc."cups/cupsd.conf".text = cfg.cupsdConf;
+    environment.etc."cups/cups-browsed.conf".text = cfg.browsedConf;
 
     services.dbus.packages = [ cups ];
 
@@ -192,6 +206,22 @@ in
         restartTriggers =
           [ config.environment.etc."cups/cups-files.conf".source
             config.environment.etc."cups/cupsd.conf".source
+          ];
+      };
+
+    systemd.services.cups-browsed =
+      { description = "Make remote CUPS printers available locally";
+
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "cups.service" "avahi-daemon.service" ];
+        after = [ "cups.service" "avahi-daemon.service" ];
+
+        path = [ cups ];
+
+        serviceConfig.ExecStart = "${cups_filters}/bin/cups-browsed";
+
+        restartTriggers =
+          [ config.environment.etc."cups/cups-browsed.conf".source
           ];
       };
 

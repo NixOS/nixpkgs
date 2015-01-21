@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [
       # Add your name here!
-      stdenv.lib.maintainers.ludo
     ];
 
     # GNU Parted requires libuuid, which is part of util-linux-ng.

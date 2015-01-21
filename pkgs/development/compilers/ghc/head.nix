@@ -1,18 +1,30 @@
-{ stdenv, fetchurl, ghc, perl, gmp, ncurses, happy, alex }:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses }:
+
+let
+
+  buildMK = ''
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
+    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
+    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
+    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
+    DYNAMIC_BY_DEFAULT = NO
+  '';
+
+in
 
 stdenv.mkDerivation rec {
-  version = "7.9.20141217";
+  version = "7.11.20150118";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://deb.haskell.org/dailies/2014-12-17/ghc_${version}.orig.tar.bz2";
-    sha256 = "1yfdi9r07aqbnv6xfdhs6cpj0y0yjdr03l5sa4dv0j1xs3lh1wkv";
+    url = "http://deb.haskell.org/dailies/2015-01-18/ghc_7.11.20150118.orig.tar.bz2";
+    sha256 = "1zy960q2faq03camq2n4834bd748vkc15h83bapswc68dqncqj20";
   };
 
-  buildInputs = [ ghc perl ncurses happy alex ];
+  buildInputs = [ ghc perl ];
 
   preConfigure = ''
-    echo >mk/build.mk "DYNAMIC_BY_DEFAULT = NO"
+    echo >mk/build.mk "${buildMK}"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"

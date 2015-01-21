@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gentoo-prototypes.patch ];
 
+  postPatch = ''
+     # Fix http://sourceforge.net/p/gltron/bugs/15
+     sed -i /__USE_MISC/d lua/src/lib/liolib.c
+  '';
+
   # The build fails, unless we disable the default -Wall -Werror
   configureFlags = "--disable-warn";
 
@@ -20,6 +25,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    broken = true; # see http://sourceforge.net/p/gltron/bugs/15
   };
 }

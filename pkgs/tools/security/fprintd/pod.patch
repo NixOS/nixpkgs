@@ -1,0 +1,9 @@
+diff -u -r fprintd-0.5.1/data/fprintd.pod fprintd-0.5.1-pod/data/fprintd.pod
+--- fprintd-0.5.1/data/fprintd.pod	2013-06-26 13:10:17.000000000 +0200
++++ fprintd-0.5.1-pod/data/fprintd.pod	2013-08-17 12:17:36.330332635 +0200
+@@ -100,3 +100,5 @@
+ =over 8
+ 
+ =item B<dbus-daemon>, B<gnome-about-me>
++
++=back

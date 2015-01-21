@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaTeX";
-  version = "3.15.0.0";
-  sha256 = "1rhxml458d8y0vxns2rp76yvfk66496mvab81i71km653n6g5kky";
+  version = "3.16.0.0";
+  sha256 = "16b3aaaahsy153dfii2lc1672kkm6i9mch5hmyf9229b17hhh5pa";
   buildDepends = [
     matrix parsec QuickCheck text transformers wlPprintExtras
   ];

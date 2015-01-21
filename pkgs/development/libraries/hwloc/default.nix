@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.open-mpi.org/projects/hwloc/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

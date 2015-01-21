@@ -34,6 +34,14 @@
                                select="attr[@name = 'description']/string/@value" />
                </para>
 
+               <xsl:if test="attr[@name = 'type']">
+                 <para>
+                   <emphasis>Type:</emphasis>
+                   <xsl:text> </xsl:text>
+                   <xsl:apply-templates select="attr[@name = 'type']" mode="top" />
+                 </para>
+               </xsl:if>
+
                <xsl:if test="attr[@name = 'default']">
                  <para>
                    <emphasis>Default:</emphasis>

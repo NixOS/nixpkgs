@@ -1,0 +1,18 @@
+diff --git a/module/spl/spl-time.c b/module/spl/spl-time.c
+index 0ed49cc..b0fad4f 100644
+--- a/module/spl/spl-time.c
++++ b/module/spl/spl-time.c
+@@ -40,12 +40,7 @@ extern unsigned long long monotonic_clock(void);
+ void
+ __gethrestime(timestruc_t *ts)
+ {
+-	struct timespec tspec;
+-
+-	getnstimeofday(&tspec);
+-
+-	ts->tv_sec = tspec.tv_sec;
+-	ts->tv_nsec = tspec.tv_nsec;
++	*ts = current_kernel_time();
+ }
+ EXPORT_SYMBOL(__gethrestime);
+ 

@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/eid-viewer --suffix LD_LIBRARY_PATH : ${pcsclite}/lib
   '';
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) viewer";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;

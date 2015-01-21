@@ -1,5 +1,5 @@
 { stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon, buildRubyGem
-, mpd_clientlib, curl, sqlite, ruby, rubyPackages, libnotify, haskellPackages }:
+, mpd_clientlib, curl, sqlite, ruby, rubyPackages, libnotify, pandoc }:
 
 stdenv.mkDerivation rec {
   version = "20130809";

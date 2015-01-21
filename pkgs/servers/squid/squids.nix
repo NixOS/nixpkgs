@@ -40,15 +40,26 @@ rec {
   };
 
   squid34 = squid30.merge rec {
-    name = "squid-3.4.9";
+    name = "squid-3.4.11";
     src = args.fetchurl {
       url = "http://www.squid-cache.org/Versions/v3/3.4/${name}.tar.bz2";
-      sha256 = "0rnf0awf54mpbwnx45r5rivgz260jn20hacspbjf2yb6xnzzzwj2";
+      sha256 = "0p9dbsz541cpcc88albwpgq15jgpczv12j9b9g5xw6d3i977qm1h";
     };
     buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
       libtool openssl];
     configureFlags = ["--enable-ssl" "--enable-ssl-crtd"];
   };
 
-  latest = squid34;
+  squid35 = squid30.merge rec {
+    name = "squid-3.5.1";
+    src = args.fetchurl {
+      url = "http://www.squid-cache.org/Versions/v3/3.5/${name}.tar.bz2";
+      sha256 = "0rfv1v5vkk7l08v4j16l0lz2grrzd8qf2n25i73qd7c8rgwd6a3x";
+    };
+    buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
+      libtool openssl];
+    configureFlags = ["--with-openssl" "--enable-ssl-crtd"];
+  };
+
+  latest = squid35;
 }

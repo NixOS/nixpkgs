@@ -10,14 +10,15 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "0h1kib2pzv4nbppdnxv6vhngvk9ic531y8rzcwb8bg6am125jszl";
   };
 
-  buildInputs = [ unzip libjpeg libtiff python pythonPackages.numpy proj];
+  buildInputs = [ unzip libjpeg libtiff python pythonPackages.numpy proj ];
 
-  # don't use optimization for gcc >= 4.3. That's said to be causeing segfaults
-  preConfigure = "export CFLAGS=-O0; export CXXFLAGS=-O0";
+  # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
+  # Unset CC and CXX as they confuse libtool.
+  preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
 
   configureFlags = [
     "--with-jpeg=${libjpeg}"
-    "--with-libtiff=${libtiff}" # optional (without largetiff support
+    "--with-libtiff=${libtiff}" # optional (without largetiff support)
     "--with-libz=${zlib}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"

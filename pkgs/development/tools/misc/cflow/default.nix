@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/cflow/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
 
     /* On Darwin, build fails with:
 

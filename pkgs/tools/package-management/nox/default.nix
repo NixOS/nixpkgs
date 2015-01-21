@@ -1,4 +1,4 @@
-{ lib, pythonPackages, fetchurl, makeWrapper, nix }:
+{ lib, pythonPackages, fetchurl }:
 
 pythonPackages.buildPythonPackage rec {
   name = "nox-${version}";
@@ -10,7 +10,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "1s1jhickdhym70qrb5h4qxq1mvkpwgdppqpfb2jnpfaf1az6c207";
   };
 
-  buildInputs = [ pythonPackages.pbr makeWrapper ];
+  buildInputs = [ pythonPackages.pbr ];
 
   pythonPath = with pythonPackages; [
       dogpile_cache
@@ -18,8 +18,6 @@ pythonPackages.buildPythonPackage rec {
       requests2
       characteristic
     ];
-
-  postInstall = "wrapProgram $out/bin/nox --prefix PATH : ${nix}/bin";
 
   meta = {
     homepage = https://github.com/madjar/nox;

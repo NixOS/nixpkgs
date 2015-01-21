@@ -58,12 +58,10 @@ controls memory allocation limits; by default, all processes are in
 the top-level cgroup, so any service or session can exhaust all
 available memory.  Per-cgroup memory limits can be specified in
 <filename>configuration.nix</filename>; for instance, to limit
-<literal>httpd.service</literal> to 512 MiB of RAM (excluding swap)
-and 640 MiB of RAM (including swap):
+<literal>httpd.service</literal> to 512 MiB of RAM (excluding swap):
 
 <programlisting>
 systemd.services.httpd.serviceConfig.MemoryLimit = "512M";
-systemd.services.httpd.serviceConfig.ControlGroupAttribute = [ "memory.memsw.limit_in_bytes 640M" ];
 </programlisting>
 
 </para>

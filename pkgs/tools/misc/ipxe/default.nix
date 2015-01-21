@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     inherit rev;
   };
 
-  sourceRoot = "git-export/src";
+  preConfigure = "cd src";
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.

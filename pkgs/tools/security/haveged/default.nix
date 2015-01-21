@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       random number generator based upon an adaptation of the HAVEGE algorithm.
       Haveged was created to remedy low-entropy conditions in the Linux random device
       that can occur under some workloads, especially on headless servers. Current development
-      of haveged is directed towards improving overall reliablity and adaptability while minimizing
+      of haveged is directed towards improving overall reliability and adaptability while minimizing
       the barriers to using haveged for other tasks.
     '';
     homepage = http://www.issihosts.com/haveged/;

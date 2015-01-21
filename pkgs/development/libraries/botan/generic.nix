@@ -9,18 +9,22 @@ stdenv.mkDerivation rec {
   version = "${baseVersion}.${revision}";
 
   src = fetchurl {
-    name = "Botan-${version}.tar.bz2";
-    url = "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tbz";
+    name = "Botan-${version}.tgz";
+    url = "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz";
     inherit sha256;
   };
 
   buildInputs = [ python bzip2 zlib gmp openssl boost ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-gnump --with-bzip2 --with-zlib --with-openssl --cc=$CC
+    python configure.py --prefix=$out --with-gnump --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""}
   '';
 
   enableParallelBuilding = true;
+
+  preInstall = ''
+    patchShebangs src/scripts
+  '';
 
   postInstall = ''
     cd "$out"/lib/pkgconfig
@@ -28,6 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Cryptographic algorithms library";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python
+{ fetchurl, stdenv, pkgconfig, gnome3, python, sqlite
 , intltool, libsoup, libxml2, libsecret, icu
 , p11_kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true, vala }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ pkgconfig glib python intltool libsoup libxml2 gtk gnome_online_accounts libsecret
-      gcr p11_kit db nspr nss libgweather libical libgdata gperf makeWrapper icu ]
+      gcr p11_kit db nspr nss libgweather libical libgdata gperf makeWrapper icu sqlite ]
     ++ stdenv.lib.optional valaSupport vala;
 
   # uoa irrelevant for now

@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "k3b-2.0.2";
+  name = "k3b-2.0.3a";
   
   src = fetchurl {
-    url = "mirror://sourceforge/k3b/${name}.tar.bz2";
-    sha256 = "1kdpylz3w9bg02jg4mjhqz8bq1yb4xi4fqfl9139qcyjq4lny5xg";
+    url = "http://download.kde.org/stable/k3b/${name}.tar.xz";
+    sha256 = "10f07465g9860chfnvrp9w3m686g6j9f446xgnnx7h82d1sb42rd";
   };
 
   buildInputs =

@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libuuid gnutls ];
 
+  postInstall = ''
+    mkdir -p "$out/etc/bash_completion.d"
+    ln -s "../../share/doc/task/scripts/bash/task.sh" "$out/etc/bash_completion.d/"
+  '';
+
   meta = {
     description = "GTD (getting things done) implementation";
     homepage = http://taskwarrior.org;

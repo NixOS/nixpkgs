@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, python, ruby, bison, gperf, flex
 , pkgconfig, which, gettext, gobjectIntrospection
-, gtk2, gtk3, wayland, libwebp, enchant
+, gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz
 , gst-plugins-base
 , withGtk2 ? false
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 wayland libwebp enchant
     libxml2 libsecret libxslt harfbuzz
-    gst-plugins-base
+    gst-plugins-base sqlite
   ];
 
   propagatedBuildInputs = [

@@ -4,10 +4,13 @@
 , jack2 ? null
 , speechdSupport ? false
 , speechd ? null
+, pulseSupport ? false
+, pulseaudio ? null
 }:
 
 assert jackSupport -> jack2 != null;
 assert speechdSupport -> speechd != null;
+assert pulseSupport -> pulseaudio != null;
 
 let
   optional = stdenv.lib.optional;
@@ -37,7 +40,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 boost protobuf libsndfile speex
     libopus avahi pkgconfig ]
     ++ (optional jackSupport jack2)
-    ++ (optional speechdSupport speechd);
+    ++ (optional speechdSupport speechd)
+    ++ (optional pulseSupport pulseaudio);
 
   installPhase = ''
     mkdir -p $out

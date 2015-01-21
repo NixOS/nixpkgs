@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec
 {
   version = "1.2.2";
-  seafileVersion = "3.0.4";
+  seafileVersion = "3.0-latest";
   name = "libsearpc-${version}";
 
   src = fetchurl
   {
     url = "https://github.com/haiwen/libsearpc/archive/v${seafileVersion}.tar.gz";
-    sha256 = "0s5bqqajxfzyw4km6nhhx39nyq20gv0fxlf2v6ifipvnyk14850k";
+    sha256 = "1kdq6chn3qhvr616sw91gf9kjfgbv9snl2srqisw0zddw1qkfcan";
   };
 
   patches = [ ./libsearpc.pc.patch ];

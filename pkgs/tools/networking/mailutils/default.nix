@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     license = [ "LGPLv3+" /* libraries */  "GPLv3+" /* tools */ ];
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
 
     homepage = http://www.gnu.org/software/mailutils/;
 

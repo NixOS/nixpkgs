@@ -1,6 +1,6 @@
 {stdenv, fetchgit, automake, autoconf, zlib, pciutils}:
 let
-  version = "0.5.1";
+  version = "0.6.1";
 in
 stdenv.mkDerivation {
   name = "biosdevname-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://linux.dell.com/biosdevname.git;
     rev = "refs/tags/v${version}";
-    sha256 = "0qmgfyqv13qwh86140q0qdjxys76arg2d1slyvijx6r314ca4r7z";
+    sha256 = "11g2pziss0i65mr4y3mwjlcdgpygaxa06lr4q8plmrwl9cick1qa";
   };
 
   buildInputs = [

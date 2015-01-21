@@ -120,6 +120,25 @@ let
     instantiate (attrs // { inherit name; })
   );
 
+  needsPreInstall = attrs:
+    (attrs ? preInstall) || (attrs ? buildInputs);
+
+  createPreInstallers = lib.fold (next: acc:
+    if !needsPreInstall next
+    then acc
+    else acc + ''
+      cp ${writeScript "${next.name}-pre-install" ''
+        #!/bin/sh
+        buildInputs="${toString (next.buildInputs or [])}"
+        source ${stdenv}/setup
+
+        ${next.preInstall or ""}
+
+        ${ruby}/bin/ruby -e 'ENV.inspect' > env/${next.name}
+      ''} pre-installers/${next.name}
+    ''
+  ) "" (attrValues instantiated);
+
   # copy *.gem to ./gems
   copyGems = lib.fold (next: acc:
     if next.source.type == "gem"
@@ -190,8 +209,6 @@ let
 
   # rewrite PATH sources to point into the nix store.
   purifiedLockfile = runRuby "purifiedLockfile" {} ''
-    #!${ruby}/bin/ruby
-
     out     = ENV['out']
     sources = eval(File.read("${sources}"))
     paths   = sources["path"]
@@ -237,6 +254,10 @@ stdenv.mkDerivation {
 
     mkdir gems
     ${copyGems}
+
+    mkdir env
+    mkdir pre-installers
+    ${createPreInstallers}
 
     mkdir $out/bin
     cp ${./monkey_patches.rb} monkey_patches.rb

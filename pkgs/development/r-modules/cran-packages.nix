@@ -1187,7 +1187,7 @@ ORIClust = derive { name="ORIClust"; version="1.0-1"; sha256="1biddddyls2zsg71w4
 ORMDR = derive { name="ORMDR"; version="1.3-2"; sha256="0y7b2aja3zvsd6lm7jal9pabcfxv16r2wh0kyzjkdfanvvgk3wmm"; depends=[]; };
 OUwie = derive { name="OUwie"; version="1.43"; sha256="1ixyws6q9p8kms3smzj8rkmsry2y4s9al4vhxpqfmbgypigq7n9k"; depends=[ape nloptr numDeriv corpcor lattice phytools phangorn]; };
 Oarray = derive { name="Oarray"; version="1.4-5"; sha256="1w66vqxvqyrp2h6acnbg3xy7cp6j2dgvzmqqk564kvivbn40vyy4"; depends=[]; };
-OceanView = derive { name="OceanView"; version="1.0.1"; sha256="12jah913rfwin45rv4zhkd28l2fwg5ajz4ixl39gd8j78mni4xdx"; depends=[plot3D plot3Drgl shape]; };
+OceanView = derive { name="OceanView"; version="1.0.1"; sha256="102rw6gw1mrbr00s8b1bnz2yh2nqk411qdhs6kncs6scalixjb5p"; depends=[plot3D plot3Drgl shape]; };
 Ohmage = derive { name="Ohmage"; version="2.11-4"; sha256="14pga59ikiywyl6xnfd2d8sy323vyn88q9sf101bcwp0s0qczwzg"; depends=[RCurl RJSONIO]; };
 OjaNP = derive { name="OjaNP"; version="0.9-8"; sha256="010l75irgj7nl8yq6crp8d00zjgpv9wg2maw99cj0frhqxvqzbfz"; depends=[ICS ICSNP]; };
 OligoSpecificitySystem = derive { name="OligoSpecificitySystem"; version="1.3"; sha256="0s76fxai1kgq0hcr5m18yz7i14algld97rjrax75cxm1ccylah71"; depends=[tkrplot]; };
@@ -2505,7 +2505,7 @@ car = derive { name="car"; version="2.0-22"; sha256="0jffyz0gv0isc9ww3mv1y40b16l
 carcass = derive { name="carcass"; version="1.3"; sha256="1psxdxdqlc999xylizj5vg1p1pzyrikg9gjqvpv4k0q9b5h0nrpj"; depends=[lme4 survival expm arm MASS]; };
 cardidates = derive { name="cardidates"; version="0.4.5"; sha256="1zw8c8jiq8bz748xppwj88z1882qk7k2r0k2gkrsvw7b6c9h35pb"; depends=[boot pastecs]; };
 care = derive { name="care"; version="1.1.7"; sha256="0lgas00qp1cvn3cbimxlli99czvkh6b9hxahzif5fgbnfik4d47y"; depends=[corpcor]; };
-caret = derive { name="caret"; version="6.0-37"; sha256="0cifln20pa8wlwri7f67wrji8x1b4v7i3aygfmjiwxjp9gp55lyn"; depends=[lattice ggplot2 car reshape2 foreach plyr nlme BradleyTerry2]; };
+caret = derive { name="caret"; version="6.0-37"; sha256="102rw6gw1mrbr00s8b1bnz2yh2nqk411qdhs6kncs6scalixjb5p"; depends=[lattice ggplot2 car reshape2 foreach plyr nlme BradleyTerry2]; };
 caribou = derive { name="caribou"; version="1.1"; sha256="0ibl3jhvsgjfcva0113z0di9n5n30bs90yz0scckfv1c0pjhn4xd"; depends=[]; };
 caroline = derive { name="caroline"; version="0.7.6"; sha256="1afxxbrd7w628l4pxdmvwbs7mbgxlhnfq3nxk2s93w47gn7r9fp7"; depends=[]; };
 caschrono = derive { name="caschrono"; version="1.4"; sha256="1l9hmsacynh73kh14jrp7a42385v78znn9ll1jchzgkyz2x4dibw"; depends=[forecast Hmisc its timeSeries]; };
@@ -5487,7 +5487,7 @@ sjdbc = derive { name="sjdbc"; version="1.5.0-71"; sha256="0i9wdfadfcabayq78ilcn
 skatMeta = derive { name="skatMeta"; version="1.4.3"; sha256="0bknv066ya4yl4hl4y02d9lglq2wkl9c2j1shzg3d64dg4sjvbak"; depends=[Matrix coxme survival CompQuadForm]; };
 skda = derive { name="skda"; version="0.1"; sha256="0a6mksr1d0j3pd0kz4jb6yh466gvl4fkrvgvnlmvivpv6b2gqs3q"; depends=[]; };
 skewt = derive { name="skewt"; version="0.1"; sha256="1xm00zfzjv53cq9drfcx7w2ri5dwsq7kajrk2hc1mvw0b6s4x2ix"; depends=[]; };
-skmeans = derive { name="skmeans"; version="0.2-6"; sha256="1ncas6mx9w5saz28vvwni8g0wbm6m7gfv8a7azw4305pc64bawam"; depends=[slam clue cluster]; };
+skmeans = derive { name="skmeans"; version="0.2-6"; sha256="02zw2y7s13hb6mx9w2yr5s2v1p5yxg3k67bhrl92g9n2jkbim3ni"; depends=[slam clue cluster]; };
 sla = derive { name="sla"; version="0.1"; sha256="0fr5n65ppwsh9z7a6rma9ak0bl8x3nz7v25lij7wb5nrf3sl74yb"; depends=[]; };
 slackr = derive { name="slackr"; version="1.2"; sha256="1ymj3x52wyp0mp41xnnycg0vhdmv8whimwk1hzfsqr30pccnvn9j"; depends=[httr jsonlite data_table ggplot2]; };
 slam = derive { name="slam"; version="0.1-32"; sha256="000636dwj4kmj5w1w5s6bqixh78m7262y3fgizj7rfhcnc2gz7ad"; depends=[]; };
@@ -6113,5 +6113,5 @@ zoib = derive { name="zoib"; version="1.0"; sha256="0mxd9j5sbwyv3bhhrly2ikbfqgk3
 zoo = derive { name="zoo"; version="1.7-11"; sha256="0fp726rp9mqsfmm391bmckk76lqsvzwd39ffvb355wf2spl8nzvf"; depends=[lattice]; };
 zooimage = derive { name="zooimage"; version="3.0-5"; sha256="1r3slmyw0dyqfa40dr5xga814z09ibhmmby8p1cii5lh61xm4c39"; depends=[svMisc svDialogs mlearning filehash jpeg png]; };
 zoom = derive { name="zoom"; version="2.0.4"; sha256="03f5rxfr6ncf1j6vpn7pip21q7ylj4bx0a5xphqb6x6i33lxf1g5"; depends=[]; };
-zyp = derive { name="zyp"; version="0.10-1"; sha256="0f1fqqxysf3psnvn08s5qly2c958h1hhznjjj8mvpjr5g6hqlr1k"; depends=[Kendall]; }; 
+zyp = derive { name="zyp"; version="0.10-1"; sha256="0f1fqqxysf3psnvn08s5qly2c958h1hhznjjj8mvpjr5g6hqlr1k"; depends=[Kendall]; };
 }

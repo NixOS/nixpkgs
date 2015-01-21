@@ -1,25 +1,31 @@
-{ stdenv
-, fetchurl
-, skalibs
-, skarnetConfCompile
-}:
+{ stdenv, fetchgit, skalibs }:
 
 let
 
-  version = "1.3.1.1";
+  version = "2.0.1.1";
 
 in stdenv.mkDerivation rec {
 
   name = "execline-${version}";
 
-  src = fetchurl {
-    url = "http://skarnet.org/software/execline/${name}.tar.gz";
-    sha256 = "1br3qzif166kbp4k813ljbyq058p7mfsp2lj88n8vi4dmj935nzg";
+  src = fetchgit {
+    url = "git://git.skarnet.org/execline";
+    rev = "refs/tags/v${version}";
+    sha256 = "06fn4fb8hp68pffgfc55l5raph3bk9v0gngbgxfyzkmwbb1gxhll";
   };
 
-  buildInputs = [ skalibs skarnetConfCompile ];
+  dontDisableStatic = true;
 
-  sourceRoot = "admin/${name}";
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--libdir=\${prefix}/lib"
+    "--includedir=\${prefix}/include"
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-dynlib=${skalibs}/lib"
+  ] ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ]);
 
   meta = {
     homepage = http://skarnet.org/software/execline/;

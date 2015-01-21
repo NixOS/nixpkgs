@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # gettexttize rightly refuses to run non-interactively:
     cp ${gettext}/bin/gettextize .
     substituteInPlace gettextize \
-      --replace "read dummy" "echo (Automatically acknowledged)"
+      --replace "read dummy" "echo '(Automatically acknowledged)' #"
     ./gettextize
     sed 's@po/Makefile.in\( .*\)po/Makefile.in@po/Makefile.in \1@' \
       -i configure.ac

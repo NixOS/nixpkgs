@@ -1,25 +1,31 @@
-{ stdenv
-, fetchurl
-, skalibs
-, skarnetConfCompile
-}:
+{ stdenv, fetchgit, skalibs }:
 
 let
 
-  version = "0.1.0.0";
+  version = "2.0.0.2";
 
 in stdenv.mkDerivation rec {
 
   name = "s6-dns-${version}";
 
-  src = fetchurl {
-    url = "http://www.skarnet.org/software/s6-dns/${name}.tar.gz";
-    sha256 = "1r82l5fnz2rrwm5wq2sldqp74lk9fifr0d8hyq98xdyh24hish68";
+  src = fetchgit {
+    url = "git://git.skarnet.org/s6-dns";
+    rev = "refs/tags/v${version}";
+    sha256 = "0y76gvgvg2y3hhr3pk2nkki1idjj6sxxcnvd29yd79v0419p2dl3";
   };
 
-  buildInputs = [ skalibs skarnetConfCompile ];
+  dontDisableStatic = true;
 
-  sourceRoot = "web/${name}";
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--includedir=\${prefix}/include"
+    "--libdir=\${prefix}/lib"
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-dynlib=${skalibs}/lib"
+  ] ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ]);
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-dns/;

@@ -4,17 +4,17 @@
 
 let
   baseVersion = "40";
-  patchVersion = "19";
+  patchVersion = "23";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "dadf3d48e93a2800db5d4f98d775ba8453ca55a4";
-      sha256 = "011pbcfc3a0mnwqg3pkhngnb1h7z1jbx4qbvj03blpzfjia075sv";
+      rev = "c6ec52520c44ba09d0d14c1688d2e9d70354fd01";
+      sha256 = "0pp602ykyrq4rhyrf3pyy9vplxlkl256lw8bcfmgh0mqzzap9wq9";
     };
 
     df = fetchurl {
       url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "16xb6py7l1hf9hc7gn50nwajqgmv01zdhbkh7g6a8gnx7wlhl2p9";
+      sha256 = "12gjb19scdgsz7zgk9s01qjxqrvh7z0xr68svwgxxqn4wf8kppcl";
     };
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = "${srcs.df_unfuck} ${srcs.df}";
   phases = "unpackPhase patchPhase configurePhase buildPhase installPhase";
 
-  sourceRoot = "git-export";
+  sourceRoot = srcs.df_unfuck.name;
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.orig
     # Fix rpath
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ stdenv.cc.gcc stdenv.glibc ]}:$out/share/df_linux/libs"  $out/share/df_linux/libs/Dwarf_Fortress
-    cp -f ./git-export/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
+    cp -f ./${srcs.df_unfuck.name}/build/libgraphics.so $out/share/df_linux/libs/libgraphics.so
 
     cp $permission $out/share/df_linux/nix_permission
 

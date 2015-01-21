@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/modules/xkbswitch/e_mod_parse.c \
       --replace "/usr/share/X11/xkb/rules/xorg.lst" "${xkeyboard_config}/share/X11/xkb/rules/base.lst"
+
+    substituteInPlace "src/bin/e_import_config_dialog.c" \
+      --replace "e_prefix_bin_get()" "\"${e19.efl}/bin\""
   '';
 
   enableParallelBuilding = true;

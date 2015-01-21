@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "yubikey-personalization-${version}";
-  version = "1.16.1";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization/Releases/ykpers-${version}.tar.gz";
-    sha256 = "1zivikg1ndxziwdmy2x66f9x0jxwbl0km4vxr5wgjsk94q6h45li";
+    sha256 = "0841iddqbs6f43wwr058algkibyhyp143b9c034zagrmslvsfb9b";
   };
 
   buildInputs = [ pkgconfig libusb libyubikey json_c ];

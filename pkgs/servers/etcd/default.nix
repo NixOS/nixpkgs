@@ -1,7 +1,7 @@
 { stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.0-alpha.4";
+  version = "2.0.0-rc.1";
   name = "etcd-${version}";
 
   src = import ./deps.nix {

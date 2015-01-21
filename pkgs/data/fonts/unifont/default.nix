@@ -1,37 +1,40 @@
-{ stdenv, fetchurl, mkfontscale, mkfontdir, bdftopcf, fontutil }:
+{ stdenv, fetchurl, mkfontscale, mkfontdir }:
 
-let
+stdenv.mkDerivation rec {
+  name = "unifont-${version}";
+  version = "7.0.06";
 
   ttf = fetchurl {
-    url = http://unifoundry.com/unifont-5.1.20080907.ttf.gz;
-    sha256 = "03ssxsfhnayarzx15mn6khry2kgdxhkkc1bqzgr0c85ab5xm9jxw";
+    url = "http://unifoundry.com/pub/${name}/font-builds/${name}.ttf";
+    sha256 = "0qmk06rwhxs43n1xbwj14fanbih60zqli002qhy0609da24r3957";
   };
 
   pcf = fetchurl {
-    url = http://unifoundry.com/unifont-5.1.20080820.pcf.gz;
-    sha256 = "0qwsgaplb2a79w14rrvazby3kwx7vyk08x70n0ih5dr91x3rqaqj";
+    url = "http://unifoundry.com/pub/${name}/font-builds/${name}.pcf.gz";
+    sha256 = "1wplig57wpc79mlqamhknn39cibg5z8dvbyibp1490ljcjs1dxdc";
   };
 
-in
+  buildInputs = [ mkfontscale mkfontdir ];
 
-stdenv.mkDerivation {
-  name = "unifont-5.1-20080907";
+  phases = "installPhase";
 
-  buildInputs = [ mkfontscale mkfontdir bdftopcf fontutil ];
-
-  unpackPhase = "true";
-  
   installPhase =
     ''
       mkdir -p $out/share/fonts $out/share/fonts/truetype
-      cp ${pcf} $out/share/fonts/unifont.pcf.gz
-      gunzip < ${ttf} > $out/share/fonts/truetype/unifont.ttf
+      cp -v ${pcf} $out/share/fonts/unifont.pcf.gz
+      cp -v ${ttf} $out/share/fonts/truetype/unifont.ttf
       cd $out/share/fonts
-      mkfontdir 
+      mkfontdir
       mkfontscale
     '';
-    
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "Unicode font for Base Multilingual Plane";
+    homepage = http://unifoundry.com/unifont.html;
+
+    # Basically GPL2+ with font exception.
+    license = http://unifoundry.com/LICENSE.txt;
+    maintainers = [ maintainers.rycee ];
+    platforms = platforms.all;
   };
 }

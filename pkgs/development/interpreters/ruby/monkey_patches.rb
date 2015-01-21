@@ -18,6 +18,21 @@ Bundler.module_eval do
       end
     end
 
+    # swap out ENV
+    def nix_with_env(env, &block)
+      if env
+        begin
+          old_env = ENV.to_h
+          ENV.replace(env)
+          block.call
+        ensure
+          ENV.replace old_env
+        end
+      else
+        block.call
+      end
+    end
+
     # map a git uri to a fetchgit store path.
     def nix_git(uri)
       Pathname.new(nix_gem_sources["git"][uri])
@@ -77,7 +92,7 @@ Bundler::Source::Rubygems.class_eval do
     ]
   end
 
-  # Look-up gems that were originally from Rubygems.
+  # Look-up gems that were originally from RubyGems.
   def remote_specs
     @remote_specs ||=
       begin
@@ -96,6 +111,35 @@ Bundler::Source::Rubygems.class_eval do
 end
 
 Bundler::Installer.class_eval do
+
+  # WHY:
+  # This allows us to provide a typical Nix experience, where
+  # `buildInputs` and/or `preInstall` may set up the $PATH and other env-vars
+  # as needed. By swapping out the environment per install, we can have finer
+  # grained control than we would have otherwise.
+  #
+  # HOW:
+  # This is a wrapper around the original `install_gem_from_spec`.
+  # We expect that a "pre-installer" might exist at `pre-installers/<gem-name>`,
+  # and if it does, we execute it.
+  # The pre-installer is expected to dump its environment variables as a Ruby
+  # hash to `env/<gem-name>`.
+  # We then swap out the environment for the duration of the install,
+  # and then set it back to what it was originally.
+  alias original_install_gem_from_spec install_gem_from_spec
+  def install_gem_from_spec(spec, standalone = false, worker = 0)
+    pre_installer = "pre-installers/#{spec.name}"
+    if File.exist?(pre_installer)
+      system(pre_installer)
+      env = eval(Bundler.read_file("env/#{spec.name}"))
+      Bundler.nix_with_env(env) do
+        original_install_gem_from_spec(spec, standalone, worker)
+      end
+    else
+      original_install_gem_from_spec(spec, standalone, worker)
+    end
+  end
+
   def generate_bundler_executable_stubs(spec, options = {})
     return if spec.executables.empty?
 
@@ -119,7 +163,7 @@ ENV["BUNDLE_GEMFILE"] =
 ENV["GEM_HOME"] =
   "#{ENV["GEM_HOME"]}"
 ENV["GEM_PATH"] =
-  "#{ENV["NIX_BUNDLER_GEMPATH"]}:#{ENV["GEM_HOME"]}\#{old_gem_path ? ":\#{old_gem_path}" : ""}}"
+  "#{ENV["NIX_BUNDLER_GEMPATH"]}:\#{ENV["GEM_HOME"]}\#{old_gem_path ? ":\#{old_gem_path}" : ""}}"
 
 require 'rubygems'
 require 'bundler/setup'
@@ -171,7 +215,7 @@ ENV["BUNDLE_GEMFILE"] =
 ENV["GEM_HOME"] =
   "#{ENV["GEM_HOME"]}"
 ENV["GEM_PATH"] =
-  "#{ENV["NIX_BUNDLER_GEMPATH"]}:#{ENV["GEM_HOME"]}\#{old_gem_path ? ":\#{old_gem_path}" : ""}}"
+  "#{ENV["NIX_BUNDLER_GEMPATH"]}:\#{ENV["GEM_HOME"]}\#{old_gem_path ? ":\#{old_gem_path}" : ""}}"
 
 require 'rubygems'
 require 'bundler/setup'

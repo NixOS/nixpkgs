@@ -1,7 +1,7 @@
 { stdenv, fetchurl, SDL, SDL_ttf, SDL_image, SDL_mixer, pkgconfig, lua, zlib, unzip }:
 
 let
-  version = "1.9.1";
+  version = "2.2.0";
 
   # I took several games at random from http://instead.syscall.ru/games/
   games = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/instead/instead/${version}/instead_${version}.tar.gz";
-    sha256 = "f5577c5118b5f4a2897c7bb26f3ad7993005dbf0ae8fe762b4434e1151ddb430";
+    sha256 = "0szg8ns9k8d85ap8cdd3mgxgldry369kxfj6wp1nc3a73pw4gghv";
   };
 
   NIX_LDFLAGS = "-llua -lgcc_s";
@@ -56,10 +56,11 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple text adventure interpreter for Unix and Windows";
     homepage = http://instead.syscall.ru/;
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, which, coreutils, rrdtool, perl, perlPackages
-, python, ruby, openjdk, nettools
+, python, ruby, jre, nettools
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     perlPackages.DBDPg
     python
     ruby
-    openjdk
+    jre
     # tests
     perlPackages.TestLongString
     perlPackages.TestDifferences
@@ -91,11 +91,14 @@ stdenv.mkDerivation rec {
     PERL=${perl}/bin/perl
     PYTHON=${python}/bin/python
     RUBY=${ruby}/bin/ruby
-    JAVARUN=${openjdk}/bin/java
+    JAVARUN=${jre}/bin/java
     PLUGINUSER=munin
   '';
 
   postFixup = ''
+    echo "Removing references to /usr/{bin,sbin}/ from munin plugins..."
+    find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g"
+
     if test -e $out/nix-support/propagated-native-build-inputs; then
         ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
     fi

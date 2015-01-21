@@ -1,0 +1,23 @@
+From 80038e2a3fe6f5ac174a30f6fd01ebf8dd63e414 Mon Sep 17 00:00:00 2001
+From: Fabrice Laporte <kraymer@gmail.com>
+Date: Sat, 3 Jan 2015 23:03:29 +0100
+Subject: [PATCH] test_bucket: update test_year_single_year
+
+2015 was used as an example of date outside of [1970-current year] intervall which is not true anymore
+---
+ test/test_bucket.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/test_bucket.py b/test/test_bucket.py
+index 4610ec7..060c360 100644
+--- a/test/test_bucket.py
++++ b/test/test_bucket.py
+@@ -51,7 +51,7 @@ def test_year_single_year_last_folder(self):
+         year."""
+         self._setup_config(bucket_year=['1950', '1970'])
+         self.assertEqual(self.plugin._tmpl_bucket('2014'), '1970')
+-        self.assertEqual(self.plugin._tmpl_bucket('2015'), '2015')
++        self.assertEqual(self.plugin._tmpl_bucket('2025'), '2025')
+ 
+     def test_year_two_years(self):
+         """Buckets can be named with the 'from-to' syntax."""

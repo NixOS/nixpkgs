@@ -1,14 +1,15 @@
 { stdenv, fetchgit, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.3-${kernel.version}";
+  name = "spl-0.6.4-${kernel.version}";
+
   src = fetchgit {
     url = git://github.com/zfsonlinux/spl.git;
-    rev = "31cb5383bff0fddc5058973e32a6f2c446d45e59";
-    sha256 = "0mcivbddms8kbapbs9x6achqyvh5i6h1rd2b3jm8g5yjn0flc5gl";
+    rev = "a3c1eb77721a0d511b4fe7111bb2314686570c4b";
+    sha256 = "050qvaw45rxlfwm3dxlxw89p3d3hcnkls6k1s4anlzb4qz5x5ph9";
   };
 
-  patches = [ ./install_prefix.patch ./const.patch ./kernel-3.16.patch ./kernel-3.17.patch ];
+  patches = [ ./const.patch ./install_prefix-git.patch ];
 
   buildInputs = [ perl autoconf automake libtool ];
 
@@ -23,10 +24,10 @@ stdenv.mkDerivation {
     substituteInPlace ./module/splat/splat-linux.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"
   '';
 
-  configureFlags = ''
-     --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
-     --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
-  '';
+  configureFlags = [
+    "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
+    "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 

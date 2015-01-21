@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, libxfce4util, xfce4panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-cpufreq-plugin";
   ver_maj = "1.0";
@@ -17,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "CPU Freq load plugin for Xfce panel";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
   };
 }

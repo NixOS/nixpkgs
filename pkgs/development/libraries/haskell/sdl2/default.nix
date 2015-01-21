@@ -9,7 +9,6 @@ cabal.mkDerivation (self: {
   buildDepends = [ transformers ];
   extraLibraries = [ SDL2 ];
   pkgconfigDepends = [ SDL2 ];
-  noHaddock = true;
   meta = {
     description = "Low-level bindings to SDL2";
     license = self.stdenv.lib.licenses.bsd3;
