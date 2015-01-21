@@ -37,24 +37,33 @@ let
     then attrs // fixes."${attrs.name}" attrs
     else attrs;
 
+  needsPatch = attrs:
+    (attrs ? patches) || (attrs ? prePatch) || (attrs ? postPatch);
+
   # patch a gem or source tree.
   # for gems, the gem is unpacked, patched, and then repacked.
   # see: https://github.com/fedora-ruby/gem-patch/blob/master/lib/rubygems/patcher.rb
-  applyPatches = { attrs }:
-    if (!(attrs ? patches))
+  applyPatches = attrs:
+    if !needsPatch attrs
     then attrs
     else attrs // { src =
       stdenv.mkDerivation {
         name = gemName attrs;
         phases = [ "unpackPhase" "patchPhase" "installPhase" ];
-        buildInputs = [ ruby ];
-        inherit (attrs) patches;
+        buildInputs = [ ruby ] ++ attrs.buildInputs or [];
+        patches = attrs.patches or [ ];
+        prePatch = attrs.prePatch or "true";
+        postPatch = attrs.postPatch or "true";
         unpackPhase = ''
           runHook preUnpack
 
           if [[ -f ${attrs.src} ]]; then
             isGem=1
-            gem unpack ${attrs.src} --target=contents
+            # we won't know the name of the directory that RubyGems creates,
+            # so we'll just use a glob to find it and move it over.
+            gem unpack ${attrs.src} --target=container
+            cp -r container/* contents
+            rm -r container
           else
             cp -r ${attrs.src} contents
             chmod -R +w contents
@@ -66,25 +75,33 @@ let
         installPhase = ''
           runHook preInstall
 
-          mkdir build
           if [[ -n "$isGem" ]]; then
             ${writeScript "repack.rb" ''
               #!${ruby}/bin/ruby
               require 'rubygems'
+              require 'rubygems/package'
               require 'fileutils'
+
+              if defined?(Encoding.default_internal)
+                Encoding.default_internal = Encoding::UTF_8
+                Encoding.default_external = Encoding::UTF_8
+              end
+
+              if Gem::VERSION < '2.0'
+                load "${./package-1.8.rb}"
+              end
 
               out = ENV['out']
               files = Dir['**/{.[^\.]*,*}']
+
               package = Gem::Package.new("${attrs.src}")
               patched_package = Gem::Package.new(package.spec.file_name)
               patched_package.spec = package.spec.clone
               patched_package.spec.files = files
 
-              # Change dir and build the patched gem
-              Dir.chdir("../build") do
-                patched_package.build false
-              end
-              FileUtils.cp "../build/#{package.file_name}" out
+              patched_package.build(false)
+
+              FileUtils.cp(patched_package.spec.file_name, out)
             ''}
           else
             cp -r . out
@@ -96,7 +113,7 @@ let
     };
 
   instantiate = (attrs:
-    applyFixes (applySrc attrs)
+    applyPatches (applyFixes (applySrc attrs))
   );
 
   instantiated = lib.flip lib.mapAttrs (import gemset) (name: attrs:
