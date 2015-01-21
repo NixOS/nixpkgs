@@ -1,26 +1,47 @@
-{ stdenv, fetchurl, file, mono, gtksharp, gtksourceviewsharp
-, gtkmozembedsharp, monodoc
-, perl, perlXMLParser, pkgconfig
-, glib, gtk, GConf, gnome_vfs, libbonobo, libglade, libgnome
-, mozilla, makeWrapper
+{stdenv, fetchgit
+, autoconf, automake, pkgconfig, shared_mime_info, intltool
+, glib, mono, gtk-sharp, gnome-sharp
 }:
 
-stdenv.mkDerivation {
-  name = "monodevelop-0.6-pre2315";
-  builder = ./builder.sh;
-
-  src = fetchurl {
-    url = http://tarballs.nixos.org/monodevelop-0.6-pre2315.tar.bz2;
-    md5 = "8c33df5629b0676b7ab552854c1de6fd";
+stdenv.mkDerivation rec {
+  version = "5.1.4.0";
+  revision = "7d45bbe2ee22625f125d0c52548524f02d005cca";
+  name = "monodevelop-${version}";
+  src = fetchgit {
+    url = https://github.com/mono/monodevelop.git;
+    rev = revision;
+    sha256 = "0qy12zdvb0jiic3pq1w9mcsz2wwxrn0m92abd184q06yg5m48g1b";
   };
 
-  patches = [./prefix.patch];
-  
   buildInputs = [
-    file mono gtksharp gtksourceviewsharp perl perlXMLParser pkgconfig
-    glib gtk GConf gnome_vfs libbonobo libglade libgnome
-    gtkmozembedsharp monodoc
+    autoconf automake pkgconfig shared_mime_info intltool
+    mono gtk-sharp gnome-sharp
   ];
-  
-  inherit mozilla monodoc gtksharp gtkmozembedsharp gtksourceviewsharp makeWrapper;
+
+  preConfigure = "patchShebangs ./configure";
+  preBuild = ''
+    cat > ./main/buildinfo <<EOF
+    Release ID: ${version}
+    Git revision: ${revision}
+    Build date: 1970-01-01 00:00:01
+    EOF
+  '';
+
+  postInstall = ''
+    for prog in monodevelop mdtool; do
+    patch -p 0 $out/bin/$prog <<EOF
+    2a3,5
+    > export MONO_GAC_PREFIX=${gtk-sharp}:\$MONO_GAC_PREFIX
+    > export PATH=${mono}/bin:\$PATH
+    > export LD_LIBRARY_PATH=${glib}/lib:${gnome-sharp}/lib:${gtk-sharp}/lib:${gtk-sharp.gtk}/lib:\$LD_LIBRARY_PATH
+    > 
+    EOF
+    done
+  '';
+
+  dontStrip = true;
+
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
 }

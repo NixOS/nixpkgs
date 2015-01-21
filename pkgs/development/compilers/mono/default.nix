@@ -6,10 +6,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "3.2.8";
+  version = "3.8.0";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "0h0s42pmgrhwqaym0b1401h70dcpr179ngcsp7f8i4hl4snqrd7x";
+    sha256 = "0jraxsjn7ra6z02n4wjpbj21mxm2w50iqviqvfl0ajikbxahvf3i";
   };
 
   buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib];
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   #http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | while read i; do
-        sed -i "s@libMonoPosixHelper.so@$out/lib/libMonoPosixHelper.so@g" $i
         sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
         sed -i "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" $i
     done
