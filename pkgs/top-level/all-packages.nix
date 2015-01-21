@@ -9594,7 +9594,9 @@ let
   dmtx-utils = callPackage (import ../tools/graphics/dmtx-utils) {
   };
 
-  docker = callPackage ../applications/virtualization/docker { };
+  docker = callPackage ../applications/virtualization/docker {
+    go = go_1_3;
+  };
 
   doodle = callPackage ../applications/search/doodle { };
 
