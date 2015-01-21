@@ -48,7 +48,7 @@ let
     LINUX /boot/memtest.bin
   '';
 
-  isolinuxCfg = baseIsolinuxCfg + (if config.boot.loader.grub.memtest86.enable then isolinuxMemtest86Entry else "");
+  isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   # The efi boot image
   efiDir = pkgs.runCommand "efi-directory" {} ''
