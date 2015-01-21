@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXft, libXmu }:
+{ stdenv, fetchurl, pkgconfig, libjpeg, libtiff, libpng, libX11, libXft, libXmu }:
 
 stdenv.mkDerivation rec {
   name = "windowmaker-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i3dw1yagsa3rs9x2na2ynqlgmbahayws0kz4vl00fla6550nns3";
   };
 
-  buildInputs = [ pkgconfig libX11 libXft libXmu ];
+  buildInputs = [ pkgconfig libjpeg libtiff libpng libX11 libXft libXmu ];
 
   meta = with stdenv.lib; {
     homepage = http://windowmaker.org/;

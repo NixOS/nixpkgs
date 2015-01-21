@@ -4689,6 +4689,11 @@ let
   gnumake41 = callPackage ../development/tools/build-managers/gnumake/4.1 { };
   gnumake = gnumake382;
 
+  gnustep_back = callPackage ../development/libraries/gnustep-back { stdenv = clangStdenv; };
+  gnustep_base = callPackage ../development/libraries/gnustep-base { stdenv = clangStdenv; giflib = giflib_4_1; };
+  gnustep_make = callPackage ../development/tools/build-managers/gnustep-make { stdenv = clangStdenv; };
+  gnustep_gui = callPackage ../development/libraries/gnustep-gui { stdenv = clangStdenv; };
+
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gradle = callPackage ../development/tools/build-managers/gradle { };
@@ -4701,6 +4706,7 @@ let
 
   guileLint = callPackage ../development/tools/guile/guile-lint { };
 
+  gworkspace = callPackage ../applications/misc/gworkspace { stdenv = clangStdenv; };
   gwrap = callPackage ../development/tools/guile/g-wrap { };
 
   help2man = callPackage ../development/tools/misc/help2man {
@@ -5593,6 +5599,13 @@ let
       else stdenv;
   };
 
+  gorm = callPackage ../applications/editors/gorm/default.nix {
+    stdenv = clangStdenv;
+  };
+  projectcenter = callPackage ../applications/editors/projectcenter/default.nix {
+    stdenv = clangStdenv;
+  };
+
   granite = callPackage ../development/libraries/granite { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
@@ -6236,6 +6249,8 @@ let
   libnova = callPackage ../development/libraries/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
+
+  libobjc2 = callPackage ../development/libraries/libobjc2 { stdenv = clangStdenv; };
 
   libodfgen = callPackage ../development/libraries/libodfgen { };
 
@@ -7137,6 +7152,8 @@ let
   svrcore = callPackage ../development/libraries/svrcore { };
 
   sword = callPackage ../development/libraries/sword { };
+
+  system_preferences = callPackage ../applications/misc/systempreferences { stdenv = clangStdenv; };
 
   szip = callPackage ../development/libraries/szip { };
 
