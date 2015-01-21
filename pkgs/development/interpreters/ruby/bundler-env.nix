@@ -1,6 +1,5 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
 , callPackage , gemFixes, fetchurl, fetchgit, buildRubyGem
-#, bundler_PATCHED
 , bundler_HEAD
 , git
 }@defs:
@@ -10,7 +9,9 @@
 
 { name, gemset, gemfile, lockfile, ruby ? defs.ruby, fixes ? gemFixes
 , enableParallelBuilding ? false # TODO: this might not work, given the env-var shinanigans.
-, documentation ? false}@args:
+, documentation ? false
+, meta ? {}
+}@args:
 
 let
 
@@ -127,22 +128,26 @@ let
   needsPreInstall = attrs:
     (attrs ? preInstall) || (attrs ? buildInputs) || (attrs ? nativeBuildInputs);
 
-  createPreInstallers = lib.fold (next: acc:
+  # TODO: support cross compilation? look at stdenv/generic/default.nix.
+  runPreInstallers = lib.fold (next: acc:
     if !needsPreInstall next
     then acc
     else acc + ''
-      cp ${writeScript "${next.name}-pre-install" ''
+      ${writeScript "${next.name}-pre-install" ''
         #!${stdenv.shell}
 
-        buildInputs="${toString (next.buildInputs or [])}"
-        nativeBuildInputs="${toString (next.nativeBuildInputs or [])}"
+        export nativeBuildInputs="${toString ((next.nativeBuildInputs or []) ++ (next.buildInputs or []))}"
 
         source ${stdenv}/setup
+
+        header "running pre-install script for ${next.name}"
 
         ${next.preInstall or ""}
 
         ${ruby}/bin/ruby -e 'print ENV.inspect' > env/${next.name}
-      ''} pre-installers/${next.name}
+
+        stopNest
+      ''}
     ''
   ) "" (attrValues instantiated);
 
@@ -245,18 +250,23 @@ in
 
 stdenv.mkDerivation {
   inherit name;
+
   buildInputs = [
     ruby
     bundler
     git
   ];
+
   phases = [ "installPhase" "fixupPhase" ];
+
   outputs = [
     "out"    # the installed libs/bins
     "bundle" # supporting files for bundler
   ];
+
   installPhase = ''
     # Copy the Gemfile and Gemfile.lock
+
     mkdir -p $bundle
     export BUNDLE_GEMFILE=$bundle/Gemfile
     cp ${gemfile} $BUNDLE_GEMFILE
@@ -273,8 +283,7 @@ stdenv.mkDerivation {
     ${copyGems}
 
     mkdir env
-    mkdir pre-installers
-    ${createPreInstallers}
+    ${runPreInstallers}
 
     ${allBuildArgs}
 
@@ -289,8 +298,11 @@ stdenv.mkDerivation {
     export RUBYOPT="-rmonkey_patches.rb -I $(pwd -P)"
     bundler install --frozen --binstubs ${lib.optionalString enableParallelBuilding "--jobs $NIX_BUILD_CORES"}
   '';
+
   passthru = {
     inherit ruby;
     inherit bundler;
   };
+
+  inherit meta;
 }

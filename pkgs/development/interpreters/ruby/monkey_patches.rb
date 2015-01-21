@@ -133,14 +133,9 @@ Bundler::Installer.class_eval do
   # and then set it back to what it was originally.
   alias original_install_gem_from_spec install_gem_from_spec
   def install_gem_from_spec(spec, standalone = false, worker = 0)
-    pre_installer = "pre-installers/#{spec.name}"
-    if File.exist?(pre_installer)
-      system(pre_installer)
-      unless $?.success?
-        Bundler.ui.error "The pre-installer script for #{spec.name} failed!"
-        exit 1
-      end
-      env = eval(Bundler.read_file("env/#{spec.name}"))
+    env_dump = "env/#{spec.name}"
+    if File.exist?(env_dump)
+      env = eval(Bundler.read_file(env_dump))
       unless env
         Bundler.ui.error "The environment variables for #{spec.name} could not be loaded!"
         exit 1

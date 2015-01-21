@@ -10643,42 +10643,14 @@ let
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
-  ruby_gpgme = callPackage ../development/libraries/ruby_gpgme {
-    ruby = ruby_1_9_3;
-    hoe = rubyPackages.hoe;
-  };
-
-  ruby_ncursesw_sup = callPackage ../development/libraries/ruby_ncursesw_sup { };
-
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
 
   smplayer = callPackage ../applications/video/smplayer { };
 
   smtube = callPackage ../applications/video/smtube {};
 
-  sup = with rubyPackages; callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby_1_9_3.override {
-      cursesSupport = true;
-    };
-
-    inherit gettext highline iconv locale lockfile
-      text trollop xapian_ruby which;
-
-    rmail_sup = ""; # missing
-    unicode = "";
-
-    # See https://github.com/NixOS/nixpkgs/issues/1804 and
-    # https://github.com/NixOS/nixpkgs/issues/2146
-    bundler = pkgs.lib.overrideDerivation pkgs.rubyPackages.bundler (
-      oldAttrs: {
-        dontPatchShebangs = 1;
-      }
-    );
-    chronic      = chronic;
-    gpgme        = ruby_gpgme;
-    mime_types   = mime_types;
-    ncursesw_sup = ruby_ncursesw_sup;
-    rake         = rake;
+  sup = callPackage ../applications/networking/mailreaders/sup {
+    ruby = ruby_1_9_3.override { cursesSupport = true; };
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio {

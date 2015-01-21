@@ -1,6 +1,8 @@
 source "https://rubygems.org"
 
-#gem "sup", "0.20.0"
-#gem 'sup', '~> 0.20.0'
-#gem 'gpgme'
-gem 'gpgme', '2.0.7'
+gem 'sup'
+gem 'gpgme'
+
+# Sup tries to `xapian-ruby` in its extconf instead of listing it as a
+# dependency.
+gem 'xapian-ruby', "~> 1.2.15"
