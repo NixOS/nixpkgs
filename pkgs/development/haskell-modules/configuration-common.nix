@@ -369,6 +369,12 @@ self: super: {
   # https://github.com/begriffs/postgrest/issues/127
   postgrest = dontDistribute super.postgrest;
 
+  # Needs older versions of its dependencies.
+  structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
+    haskell-src-exts = self.haskell-src-exts_1_15_0_1;  # https://github.com/chrisdone/structured-haskell-mode/issues/90
+    descriptive = self.descriptive_0_0_2;               # https://github.com/chrisdone/structured-haskell-mode/issues/94
+  };
+
 }
 // {
   # Not on Hackage yet.
