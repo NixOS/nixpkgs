@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       mkdir -p $out
-      cp -r * $out
+      find . -maxdepth 1 -execdir cp -r '{}' $out \;
 
       substituteInPlace $out/lib/base.php \
         --replace 'OC_Config::$object = new \OC\Config(self::$configDir);' \

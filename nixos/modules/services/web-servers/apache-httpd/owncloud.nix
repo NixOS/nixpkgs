@@ -352,6 +352,10 @@ rec {
       RewriteEngine On
       RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
       RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+
+      <Directory ${pkgs.owncloud}>
+        ${builtins.readFile "${pkgs.owncloud}/.htaccess"}
+      </Directory>
     '';
 
   globalEnvVars = [
