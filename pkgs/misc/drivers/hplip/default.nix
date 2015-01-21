@@ -1,23 +1,35 @@
 { stdenv, fetchurl, automake, pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
 , polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
-, withPlugin ? false
+, withPlugin ? false, substituteAll
 }:
 
-stdenv.mkDerivation rec {
-  name = "hplip-3.14.4";
+let
+
+  name = "hplip-3.14.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "1j8h44f8igl95wqypj4rk9awcw513hlps980jmcnkx60xghc4l6f";
+    sha256 = "164mm30yb61psk5j4ziybxdd310y09fixgl09hmb59ny261wvcqi";
   };
+
+  hplip_state =
+    substituteAll
+      {
+        src = ./hplip.state;
+        # evaluated this way, version is always up-to-date
+        version = (builtins.parseDrvName name).version;
+      };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "0k1vpmy7babbm3c5v4dcbhq0jgyr8as722nylfs8zx0dy7kr8874";
+    sha256 = "10cvgy1h84fwh7xpw4x6cbkpisqbn3nbcqrgd9xz5fc6mn0b95dk";
   };
 
-  hplip_state = ./hplip.state;
+in
+
+stdenv.mkDerivation {
+  inherit name src;
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
