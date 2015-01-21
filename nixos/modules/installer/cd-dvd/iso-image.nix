@@ -46,6 +46,13 @@ let
     INITRD /boot/initrd
     '';
 
+  isolinuxMemtest86Entry = ''
+    LABEL memtest
+    MENU LABEL Memtest86+
+    LINUX /boot/memtest.bin
+    APPEND ${toString config.boot.loader.grub.memtest86.params}
+  '';
+
   isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   # The efi boot image
@@ -288,6 +295,10 @@ in
         }
         { source = "${efiDir}/loader";
           target = "/loader";
+        }
+      ] ++ optionals config.boot.loader.grub.memtest86.enable [
+        { source = "${pkgs.memtest86plus}/memtest.bin";
+          target = "/boot/memtest.bin";
         }
       ];
 
