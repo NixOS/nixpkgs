@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   name = "${pname}-${v}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${pname}/${v}/${pname}-${v}.tar.xz";
+    url = "mirror://kde/stable/phonon/${pname}/${v}/src/${pname}-${v}.tar.xz";
     sha256 = "18ysdga681my75lxxv5h242pa4qappvg5z73wnc0ks9yypnzidys";
   };
 
