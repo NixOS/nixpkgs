@@ -70,6 +70,7 @@ self: super: {
   bytestring-progress = dontHaddock super.bytestring-progress;
   comonads-fd = dontHaddock super.comonads-fd;
   comonad-transformers = dontHaddock super.comonad-transformers;
+  deepseq-magic = dontHaddock super.deepseq-magic;
   diagrams = dontHaddock super.diagrams;
   either = dontHaddock super.either;
   gl = dontHaddock super.gl;
@@ -153,9 +154,10 @@ self: super: {
   pango = super.pango.override { cairo = self.cairo; };
 
   # https://github.com/jgm/zip-archive/issues/21
-  zip-archive = overrideCabal super.zip-archive (drv: { patchPhase = ''
-    sed -i -e 's|/usr/bin/zip|${pkgs.zip}/bin/zip|' "tests/"*.hs
-  ''; });
+  zip-archive = addBuildTool super.zip-archive pkgs.zip;
+
+  # https://github.com/mvoidex/hsdev/issues/11
+  hsdev = dontHaddock super.hsdev;
 
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
@@ -187,16 +189,17 @@ self: super: {
   # These packages try to access the network.
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
+  hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
   js-jquery = dontCheck super.js-jquery;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
+  raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
-  raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -216,6 +219,7 @@ self: super: {
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
   aws = dontCheck super.aws;                            # needs aws credentials
+  aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
   bindings-GLFW = dontCheck super.bindings-GLFW;        # http://hydra.cryp.to/build/497379/log/raw
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
@@ -258,6 +262,7 @@ self: super: {
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
   hath = dontCheck super.hath;
+  haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
   hedis-pile = dontCheck super.hedis-pile;
@@ -302,6 +307,7 @@ self: super: {
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
+  postgresql-binary = dontCheck super.postgresql-binary;# needs a running postgresql server
   postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
   process-streaming = dontCheck super.process-streaming;
   punycode = dontCheck super.punycode;
@@ -344,6 +350,24 @@ self: super: {
   # These test suites run for ages, even on a fast machine. This is nuts.
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
+
+  # https://github.com/eli-frey/cmdtheline/issues/28
+  cmdtheline = dontCheck super.cmdtheline;
+
+  # https://github.com/bos/snappy/issues/1
+  snappy = dontCheck super.snappy;
+
+  # https://github.com/fanjam/paypal-adaptive-hoops/issues/5
+  paypal-adaptive-hoops = dontCheck super.paypal-adaptive-hoops;
+
+  # Needs llvm to compile.
+  bytestring-arbitrary = addBuildTool super.bytestring-arbitrary pkgs.llvm;
+
+  # https://github.com/chrisdone/hindent/issues/83
+  hindent = dontCheck super.hindent;
+
+  # https://github.com/begriffs/postgrest/issues/127
+  postgrest = dontDistribute super.postgrest;
 
 }
 // {
