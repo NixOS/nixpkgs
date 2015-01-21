@@ -1,5 +1,10 @@
 require 'bundler'
 
+# Undo the RUBYOPT trickery.
+opt = ENV['RUBYOPT'].dup
+opt.gsub!(/-rmonkey_patches.rb -I [^ ]*/, '')
+ENV['RUBYOPT'] = opt
+
 Bundler.module_eval do
   class << self
     # mappings from original uris to store paths.
@@ -21,12 +26,12 @@ Bundler.module_eval do
     # swap out ENV
     def nix_with_env(env, &block)
       if env
+        old_env = ENV.to_hash
         begin
-          old_env = ENV.to_h
           ENV.replace(env)
           block.call
         ensure
-          ENV.replace old_env
+          ENV.replace(old_env)
         end
       else
         block.call
@@ -131,7 +136,15 @@ Bundler::Installer.class_eval do
     pre_installer = "pre-installers/#{spec.name}"
     if File.exist?(pre_installer)
       system(pre_installer)
+      unless $?.success?
+        Bundler.ui.error "The pre-installer script for #{spec.name} failed!"
+        exit 1
+      end
       env = eval(Bundler.read_file("env/#{spec.name}"))
+      unless env
+        Bundler.ui.error "The environment variables for #{spec.name} could not be loaded!"
+        exit 1
+      end
       Bundler.nix_with_env(env) do
         original_install_gem_from_spec(spec, standalone, worker)
       end

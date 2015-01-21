@@ -121,7 +121,7 @@ let
   );
 
   needsPreInstall = attrs:
-    (attrs ? preInstall) || (attrs ? buildInputs);
+    (attrs ? preInstall) || (attrs ? buildInputs) || (attrs ? nativeBuildInputs);
 
   createPreInstallers = lib.fold (next: acc:
     if !needsPreInstall next
@@ -129,12 +129,15 @@ let
     else acc + ''
       cp ${writeScript "${next.name}-pre-install" ''
         #!/bin/sh
+
         buildInputs="${toString (next.buildInputs or [])}"
+        nativeBuildInputs="${toString (next.nativeBuildInputs or [])}"
+
         source ${stdenv}/setup
 
         ${next.preInstall or ""}
 
-        ${ruby}/bin/ruby -e 'ENV.inspect' > env/${next.name}
+        ${ruby}/bin/ruby -e 'print ENV.inspect' > env/${next.name}
       ''} pre-installers/${next.name}
     ''
   ) "" (attrValues instantiated);
