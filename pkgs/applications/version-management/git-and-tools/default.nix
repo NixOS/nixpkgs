@@ -46,7 +46,7 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   };
 
-  gitAnnex = pkgs.haskellPackages.gitAnnex;
+  gitAnnex = pkgs.haskellngPackages.gitAnnex;
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
