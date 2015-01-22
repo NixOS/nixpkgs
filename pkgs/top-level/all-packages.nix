@@ -5023,6 +5023,8 @@ let
 
   amrwb = callPackage ../development/libraries/amrwb { };
 
+  appstream = callPackage ../development/libraries/appstream { };
+
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
