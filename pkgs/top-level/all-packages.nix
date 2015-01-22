@@ -727,7 +727,8 @@ let
 
   fop = callPackage ../tools/typesetting/fop { };
 
-  gist = callPackage ../tools/text/gist { };
+  # Evaluation broken by recent ruby changes.
+  # gist = callPackage ../tools/text/gist { };
 
   mcrl = callPackage ../tools/misc/mcrl { };
 
@@ -1309,11 +1310,13 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  gitlab = callPackage ../applications/version-management/gitlab {
-    libiconv = libiconvOrLibc;
-  };
+  # Evaluation broken by recent ruby changes.
+  # gitlab = callPackage ../applications/version-management/gitlab {
+  #  libiconv = libiconvOrLibc;
+  # };
 
-  gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
+  # Evaluation broken by recent ruby changes.
+  # gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -3460,7 +3463,8 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
-  gem-nix = callPackage ../tools/package-management/gem-nix { };
+  # Evaluation broken by recent ruby changes.
+  # gem-nix = callPackage ../tools/package-management/gem-nix { };
 
   go_1_0 = callPackage ../development/compilers/go { };
 
@@ -4315,7 +4319,8 @@ let
   };
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
-  loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
+  # Evaluation broken by recent ruby changes.
+  # loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
