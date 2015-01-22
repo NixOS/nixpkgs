@@ -4591,7 +4591,7 @@ let
       url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
       sha256 = "0hyzfb0gcx9pm5c2igan8y57hqy2wixrwvdjwsaivxsqs0ay49s6";
     };
- 
+
     patches = [ ../development/python-modules/gevent_sslwrap.patch ];
 
     buildInputs = with self; [ pkgs.libev ];
@@ -7375,7 +7375,7 @@ let
       url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.bz2";
       sha1 = "ad346a18d92c1d95f2295397c7a8a4f489e48851";
     };
-        
+
     buildInputs = [ pkgs.glibcLocales ];
 
     preCheck = ''
@@ -7597,7 +7597,7 @@ let
     meta = with stdenv.lib; {
       description = "Module for reading vCard and vCalendar files";
       homepage = http://vobject.skyhouseconsulting.com/;
-      license = licenses.apache;
+      license = licenses.asl20;
       maintainers = [ maintainers.DamienCassou ];
     };
   };
