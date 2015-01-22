@@ -221,7 +221,7 @@ let
     libamtrack = [ pkgs.gsl ];
     mixcat = [ pkgs.gsl ];
     outbreaker = [ pkgs.gsl ];
-    pcaPA = [ pkgs.gsl ];
+    #pcaPA = [ pkgs.gsl ];
     ridge = [ pkgs.gsl ];
     simplexreg = [ pkgs.gsl ];
     stsm = [ pkgs.gsl ];
@@ -283,10 +283,10 @@ let
     PopGenome = [ pkgs.zlib ];
     RJaCGH = [ pkgs.zlib ];
     RcppCNPy = [ pkgs.zlib ];
-    Rniftilib = [ pkgs.zlib ];
-    WhopGenome = [ pkgs.zlib ];
-    devEMF = [ pkgs.zlib ];
-    gdsfmt = [ pkgs.zlib ];
+    #Rniftilib = [ pkgs.zlib ];
+    #WhopGenome = [ pkgs.zlib ];
+    #devEMF = [ pkgs.zlib ];
+    #gdsfmt = [ pkgs.zlib ];
     rbamtools = [ pkgs.zlib ];
     rmatio = [ pkgs.zlib ];
     RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
@@ -311,7 +311,7 @@ let
     gmatrix = [ pkgs.cudatoolkit ];
     WideLM = [ pkgs.cudatoolkit ];
     RCurl = [ pkgs.curl ];
-    Rgnuplot = [ pkgs.gnuplot ];
+    #Rgnuplot = [ pkgs.gnuplot ];
     R2SWF = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
@@ -393,7 +393,7 @@ let
     "LS2Wstat"
     "MAR1"
     "MTurkR"
-    "MVPARTwrap"
+    #"MVPARTwrap"
     "MareyMap"
     "MergeGUI"
     "Meth27QC"
@@ -405,8 +405,8 @@ let
     "PBSadmb"
     "PBSmodelling"
     "PCPS"
-    "PKmodelFinder"
-    "PoMoS"
+    #"PKmodelFinder"
+    #"PoMoS"
     "PopGenReport"
     "PredictABEL"
     "PrevMap"
@@ -432,7 +432,7 @@ let
     "RcmdrPlugin_KMggplot2"
     "RcmdrPlugin_MA"
     "RcmdrPlugin_MPAStats"
-    "RcmdrPlugin_NMBU"
+    #"RcmdrPlugin_NMBU"
     "RcmdrPlugin_ROC"
     "RcmdrPlugin_SCDA"
     "RcmdrPlugin_SLC"
@@ -474,7 +474,7 @@ let
     "TestScorer"
     "VIMGUI"
     "VecStatGraphs3D"
-    "VisuClust"
+    #"VisuClust"
     "WMCapacity"
     "accrual"
     "ade4TkGUI"
@@ -644,7 +644,7 @@ let
     "rmongodb" # jsonlite.so: undefined symbol: XXX
     "rnoaa" # jsonlite.so: undefined symbol: XXX
     "RSiteCatalyst" # jsonlite.so: undefined symbol: XXX
-    "RSocrata" # jsonlite.so: undefined symbol: XXX
+    #"RSocrata" # jsonlite.so: undefined symbol: XXX
     "rsunlight" # jsonlite.so: undefined symbol: XXX
     "rWBclimate" # jsonlite.so: undefined symbol: XXX
     "SGP" # jsonlite.so: undefined symbol: XXX
@@ -722,7 +722,7 @@ let
     "gRapHD" # requires graph
     "msSurv" # requires graph
     "PairViz" # requires graph
-    "ddepn" # requires graph, and genefilter
+    #"ddepn" # requires graph, and genefilter
     "iRefR" # requires graph, and RBGL
     "pcalg" # requires graph, and RBGL
     "protiq" # requires graph, and RBGL
@@ -765,7 +765,7 @@ let
     "metaMA" # requires limma
     "plmDE" # requires limma
     "SQDA" # requires limma
-    "RPPanalyzer" # requires limma, and Biobase
+    #"RPPanalyzer" # requires limma, and Biobase
     "PerfMeas" # requires limma, graph, and RBGL
     "rLindo" # requires LINDO API
     "magma" # requires MAGMA
@@ -802,7 +802,7 @@ let
     "crmn" # requires pcaMethods, and Biobase
     "imputeLCMD" # requires pcaMethods, and impute
     "MEET" # requires pcaMethods, and seqLogo
-    "SigTree" # requires phyloseq
+    #"SigTree" # requires phyloseq
     "saps" # requires piano, and survcomp
     "smart" # requires PMA
     "surveillance" # requires polyCub
@@ -823,7 +823,7 @@ let
     "PKgraph" # requires rggobi
     "SeqGrapheR" # requires rggobi
     "branchLars" # requires Rgraphviz
-    "gcExplorer" # requires Rgraphviz
+    #"gcExplorer" # requires Rgraphviz
     "hasseDiagram" # requires Rgraphviz
     "hpoPlot" # requires Rgraphviz
     "strum" # requires Rgraphviz
@@ -891,7 +891,7 @@ let
     "rsig" # requires survcomp
     "leapp" # requires sva
     "ttScreening" # requires sva, and limma
-    "ENA" # requires WGCNA
+    #"ENA" # requires WGCNA
     "GOGANPA" # requires WGCNA
     "nettools" # requires WGCNA
     "rneos" # requires XMLRPC
