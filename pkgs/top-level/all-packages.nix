@@ -1946,6 +1946,11 @@ let
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
+  pwsafe = callPackage ../applications/misc/pwsafe {
+    inherit (xlibs) libXt libXtst libXi xextproto;
+    wxGTK = wxGTK30;
+  };
+
   nifskope = callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
