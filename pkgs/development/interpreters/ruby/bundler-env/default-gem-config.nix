@@ -63,8 +63,7 @@ in
       "--with-xslt-include=${libxslt}/include"
       "--with-exslt-lib=${libxslt}/lib"
       "--with-exslt-include=${libxslt}/include"
-      "--with-iconv-dir=${libiconv}"
-    ];
+    ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
   pg = attrs: {
