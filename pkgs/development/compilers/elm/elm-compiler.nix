@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "elm-compiler";
-  version = "0.14";
-  sha256 = "1vgbs3navs6dr36k408kc83gkn2ndhmc0b1015zk3jb0wkmvm73y";
+  version = "0.14.1";
+  sha256 = "0my04mipgia5qw02nzzrzc4kq3vl7bv75rzrsmd2bdb2wll1k94f";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
