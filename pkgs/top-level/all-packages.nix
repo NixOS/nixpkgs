@@ -12904,6 +12904,8 @@ let
 
   nixopsUnstable = callPackage ../tools/package-management/nixops/unstable.nix { };
 
+  nixui = callPackage ../tools/package-management/nixui { node_webkit = node_webkit_0_11; };
+
   nix-prefetch-scripts = callPackage ../tools/package-management/nix-prefetch-scripts { };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { };
