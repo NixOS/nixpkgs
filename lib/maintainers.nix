@@ -180,6 +180,7 @@
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
   vlstill = "Vladimír Štill <xstill@fi.muni.cz>";
+  vmandela = "Venkateswara Rao Mandela <venkat.mandela@gmail.com>";
   vozz = "Oliver Hunt <oliver.huntuk@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
