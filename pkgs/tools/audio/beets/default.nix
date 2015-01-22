@@ -32,7 +32,6 @@ let
     chroma = enableAcoustid;
     discogs = enableDiscogs;
     echonest = enableEchonest;
-    echonest_tempo = enableEchonest;
     fetchart = enableFetchart;
     lastgenre = enableLastfm;
     lastimport = enableLastfm;
@@ -46,8 +45,8 @@ let
     "bench" "bpd" "bpm" "bucket" "convert" "duplicates" "embedart" "freedesktop"
     "fromfilename" "ftintitle" "fuzzy" "ihate" "importadded" "importfeeds"
     "info" "inline" "keyfinder" "lyrics" "mbcollection" "mbsync" "missing"
-    "play" "random" "rewrite" "scrub" "smartplaylist" "spotify" "the" "types"
-    "zero"
+    "permissions" "play" "plexupdate" "random" "rewrite" "scrub" "smartplaylist"
+    "spotify" "the" "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -55,22 +54,19 @@ let
   allPlugins = pluginsWithoutDeps ++ attrNames optionalPlugins;
   allEnabledPlugins = pluginsWithoutDeps ++ enabledOptionalPlugins;
 
-  # Discogs plugin wants to have an API token, so skip install checks.
-  allTestablePlugins = remove "discogs" allEnabledPlugins;
-
   testShell = "${bashInteractive}/bin/bash --norc";
   completion = "${bashCompletion}/share/bash-completion/bash_completion";
 
 in buildPythonPackage rec {
   name = "beets-${version}";
-  version = "1.3.9";
+  version = "1.3.10";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "sampsyo";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "1srhkiyjqx6i3gn20ihf087l5pa77yh5b81ivc52lj491fda7xqk";
+    sha256 = "136rvzpygjym6hxq19qwiri5jxx718bbmi471mvc3vibrb7xj1sr";
   };
 
   propagatedBuildInputs = [
@@ -104,9 +100,7 @@ in buildPythonPackage rec {
   ];
 
   patches = [
-    ./mediafile-codec-fix.patch
     ./replaygain-default-audiotools.patch
-    ./test-bucket-fix-year.patch
   ];
 
   postPatch = ''
@@ -158,10 +152,7 @@ in buildPythonPackage rec {
     EDITOR="${writeScript "beetconfig.sh" ''
       #!${stdenv.shell}
       cat > "$1" <<CFG
-      plugins: ${concatStringsSep " " allTestablePlugins}
-      musicbrainz:
-        user: dummy
-        pass: dummy
+      plugins: ${concatStringsSep " " allEnabledPlugins}
       CFG
     ''}" HOME="$tmphome" "$out/bin/beet" config -e
     EDITOR=true HOME="$tmphome" "$out/bin/beet" config -e
