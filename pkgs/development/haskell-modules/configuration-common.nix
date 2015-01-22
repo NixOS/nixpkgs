@@ -379,6 +379,9 @@ self: super: {
   # Help the test suite find system timezone data.
   tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
 
+  # https://ghc.haskell.org/trac/ghc/ticket/9625
+  vty = dontCheck super.vty;
+
 }
 // {
   # Not on Hackage yet.
