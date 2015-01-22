@@ -8346,7 +8346,7 @@ let
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  linuxPackagesFor = kernel: self: let callPackage = newScope self; in {
+  linuxPackagesFor = kernel: self: let callPackage = newScope self; in rec {
     inherit kernel;
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
@@ -8426,6 +8426,10 @@ let
       enableExtensionPack = config.virtualbox.enableExtensionPack or false;
       pulseSupport = config.pulseaudio or false;
     };
+
+    virtualboxHardened = lowPrio (virtualbox.override {
+      enableHardening = true;
+    });
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
