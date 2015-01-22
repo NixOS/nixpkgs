@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "1f6r8vlwnmqmr85drfv24vhqx1aacz6s83c2i804v9997n0wrwfm";
   };
 
-
   buildInputs = [ go ];
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
 # Should we also install provided git-hooks?
 # ?
   '';
-
 
   meta = with stdenv.lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";

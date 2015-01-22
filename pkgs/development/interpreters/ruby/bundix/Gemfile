@@ -1,0 +1,4 @@
+source "http://rubygems.org"
+gem "bundix",
+  :git => "https://github.com/cstrahan/bundix.git",
+  :ref => "5df25b11b5b86e636754d54c2a8859c7c6ec78c7"
