@@ -33,7 +33,8 @@ let
   zipModules = list:
     zipAttrsWith (n: v:
       if tail v != [] then
-        if n == "_type" then (head v)
+        if all (o: isAttrs o && o ? _type) v then mkMerge v
+        else if n == "_type" then head v
         else if n == "warnings" then concatLists v
         else if n == "description" || n == "apply" then
           abort "Cannot rename an option to multiple options."
@@ -115,8 +116,8 @@ in zipModules ([]
 ++ obsolete [ "nix" "proxy" ] [ "networking" "proxy" "default" ]
 
 # KDE
-++ deprecated [ "kde" "extraPackages" ] [ "environment" "kdePackages" ]
-# ++ obsolete [ "environment" "kdePackages" ] [ "environment" "systemPackages" ] # !!! doesn't work!
+++ deprecated [ "kde" "extraPackages" ] [ "environment" "systemPackages" ]
+++ obsolete [ "environment" "kdePackages" ] [ "environment" "systemPackages" ]
 
 # Multiple efi bootloaders now
 ++ obsolete [ "boot" "loader" "efi" "efibootmgr" "enable" ] [ "boot" "loader" "efi" "canTouchEfiVariables" ]
