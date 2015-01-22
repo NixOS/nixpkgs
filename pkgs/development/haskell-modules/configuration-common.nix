@@ -373,6 +373,12 @@ self: super: {
     descriptive = self.descriptive_0_0_2;               # https://github.com/chrisdone/structured-haskell-mode/issues/94
   };
 
+  # Expect to find sendmail(1) in $PATH.
+  mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
+
+  # Help the test suite find system timezone data.
+  tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
+
 }
 // {
   # Not on Hackage yet.
