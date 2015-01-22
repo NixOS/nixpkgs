@@ -759,6 +759,8 @@ let
 
   autossh = callPackage ../tools/networking/autossh { };
 
+  asynk = callPackage ../tools/networking/asynk { };
+
   bacula = callPackage ../tools/backup/bacula { };
 
   bareos = callPackage ../tools/backup/bareos { };
