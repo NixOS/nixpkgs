@@ -38,8 +38,9 @@ in
       "--with-system-v8=true"
     ];
     patches = [
+      # see: https://github.com/cowboyd/libv8/pull/161
       (fetchpatch {
-        url = https://github.com/cowboyd/libv8/pull/161.patch;
+        url = https://github.com/cstrahan/libv8/commit/c79378bf346d4ed2429af36d745d17c478ffbe96.patch;
         sha256 = "1l6572cmigc22g249jj8h0xlbig88mj43kdqdbimhw2pmpv3q0rs";
       })
     ];
@@ -113,3 +114,4 @@ in
     '';
   };
 }
+
