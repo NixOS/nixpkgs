@@ -19,7 +19,7 @@
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8, v8_3_16_14, clang, sqlite, zlib, imagemagick, pkgconfig
-, ncurses, xapian, gpgme, utillinux
+, ncurses, xapian, gpgme, utillinux, fetchpatch
 }:
 
 let
@@ -39,9 +39,14 @@ in
   libv8 = attrs: {
     buildInputs = [ which v8 python ];
     # The  "--with-system-v8" flag doesn't seem to work...
+    patches = [
+      (fetchpatch {
+        url = https://github.com/cowboyd/libv8/pull/161.patch;
+        sha256 = "1l6572cmigc22g249jj8h0xlbig88mj43kdqdbimhw2pmpv3q0rs";
+      })
+    ];
     postPatch = ''
       rm -r vendor
-      cp ${./location.rb} ext/libv8/location.rb
       cat <<-EOF > ext/libv8/extconf.rb
       require 'mkmf'
       create_makefile('libv8')
