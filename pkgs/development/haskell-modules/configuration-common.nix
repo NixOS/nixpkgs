@@ -231,7 +231,6 @@ self: super: {
   command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
-  crypto-pubkey = dontCheck super.crypto-pubkey;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
   Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
   DigitalOcean = dontCheck super.DigitalOcean;
@@ -370,7 +369,6 @@ self: super: {
   # Needs older versions of its dependencies.
   structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
     haskell-src-exts = self.haskell-src-exts_1_15_0_1;  # https://github.com/chrisdone/structured-haskell-mode/issues/90
-    descriptive = self.descriptive_0_0_2;               # https://github.com/chrisdone/structured-haskell-mode/issues/94
   };
 
   # Expect to find sendmail(1) in $PATH.
@@ -381,6 +379,9 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
+
+  # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
+  crypto-pubkey = dontCheck super.crypto-pubkey;
 
 }
 // {

@@ -61,6 +61,9 @@ self: super: {
   # Newer versions require mtl 2.2.x.
   mtl-prelude = self.mtl-prelude_1_0_2;
 
+  # The test suite pulls in mtl 2.2.x
+  command-qq = dontCheck super.command-qq;
+
 }
 
 // # packages relating to amazonka
