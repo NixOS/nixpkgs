@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   buildFlags = [
-    #"LINK=g++"
     "-C out"
     "builddir=$(CURDIR)/Release"
     "BUILDTYPE=Release"

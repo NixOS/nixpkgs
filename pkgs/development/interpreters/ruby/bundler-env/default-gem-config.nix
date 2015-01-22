@@ -28,35 +28,21 @@ let
 in
 
 {
-  bundler = attrs: {
-    dontPatchShebangs = true;
-  };
-
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
 
   libv8 = attrs: {
     buildInputs = [ which v8 python ];
-    # The  "--with-system-v8" flag doesn't seem to work...
+    buildFlags = [
+      "--with-system-v8=true"
+    ];
     patches = [
       (fetchpatch {
         url = https://github.com/cowboyd/libv8/pull/161.patch;
         sha256 = "1l6572cmigc22g249jj8h0xlbig88mj43kdqdbimhw2pmpv3q0rs";
       })
     ];
-    postPatch = ''
-      rm -r vendor
-      cat <<-EOF > ext/libv8/extconf.rb
-      require 'mkmf'
-      create_makefile('libv8')
-
-      require File.expand_path '../location', __FILE__
-      location = Libv8::Location::System.new
-
-      exit location.install!
-      EOF
-    '';
   };
 
   ncursesw = attrs: {
@@ -110,19 +96,6 @@ in
   };
 
   therubyracer = attrs: {
-    #preInstall = ''
-    #  ln -s ${clang}/bin/clang $TMPDIR/gcc
-    #  ln -s ${clang}/bin/clang++ $TMPDIR/g++
-    #  export PATH=$TMPDIR:$PATH
-    #'';
-
-    #buildInputs = [
-    #  utillinux # for `flock`
-    #];
-
-    #postInstall = ''
-    #'';
-
     buildFlags = [
       "--with-v8-dir=${v8}"
       "--with-v8-include=${v8}/include"

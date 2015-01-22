@@ -4307,7 +4307,7 @@ let
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
   loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
-  bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env.nix { };
+  bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
   ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix { };
@@ -4325,8 +4325,6 @@ let
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_3;
   ruby_2_2 = ruby_2_2_0;
-
-  rubyPackages = callPackage ../development/interpreters/ruby/packages.nix { };
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;

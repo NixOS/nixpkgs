@@ -264,10 +264,6 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    # Copy the Gemfile and Gemfile.lock
-    #mkdir out
-    #out=$(pwd -P)/out
-
     mkdir -p $bundle
     export BUNDLE_GEMFILE=$bundle/Gemfile
     cp ${gemfile} $BUNDLE_GEMFILE
@@ -280,19 +276,20 @@ stdenv.mkDerivation {
     export GEM_PATH=$GEM_HOME
     mkdir -p $GEM_HOME
 
+    ${allBuildFlags}
+    #export
+
     mkdir gems
     ${copyGems}
-
-    mkdir env
-    ${runPreInstallers}
-
-    ${allBuildFlags}
 
     ${lib.optionalString (!documentation) ''
       mkdir home
       HOME="$(pwd -P)/home"
       echo "gem: --no-rdoc --no-ri" > $HOME/.gemrc
     ''}
+
+    mkdir env
+    ${runPreInstallers}
 
     mkdir $out/bin
     cp ${./monkey_patches.rb} monkey_patches.rb
