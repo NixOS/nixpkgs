@@ -1,13 +1,12 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
-, callPackage , gemFixes, fetchurl, fetchgit, buildRubyGem
-, bundler_HEAD
+, callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem , bundler_HEAD
 , git
 }@defs:
 
 # This is a work-in-progress.
 # The idea is that his will replace load-ruby-env.nix.
 
-{ name, gemset, gemfile, lockfile, ruby ? defs.ruby, fixes ? gemFixes
+{ name, gemset, gemfile, lockfile, ruby ? defs.ruby, gemConfig ? defaultGemConfig
 , enableParallelBuilding ? false # TODO: this might not work, given the env-var shinanigans.
 , documentation ? false
 , meta ? {}
@@ -37,9 +36,9 @@ let
       src = (fetchers."${attrs.source.type}" attrs);
     };
 
-  applyFixes = attrs:
-    if fixes ? "${attrs.name}"
-    then attrs // fixes."${attrs.name}" attrs
+  applyGemConfigs = attrs:
+    if gemConfig ? "${attrs.name}"
+    then attrs // gemConfig."${attrs.name}" attrs
     else attrs;
 
   needsPatch = attrs:
@@ -118,7 +117,7 @@ let
     };
 
   instantiate = (attrs:
-    applyPatches (applyFixes (applySrc attrs))
+    applyPatches (applyGemConfigs (applySrc attrs))
   );
 
   instantiated = lib.flip lib.mapAttrs (import gemset) (name: attrs:
@@ -236,15 +235,15 @@ let
     end
   '';
 
-  needsBuildArgs = attrs: attrs ? buildArgs;
+  needsBuildFlags = attrs: attrs ? buildFlags;
 
-  mkBuildArgs = spec:
-    "export BUNDLE_BUILD__${lib.toUpper spec.name}='${lib.concatStringsSep " " (map shellEscape spec.buildArgs)}'";
+  mkBuildFlags = spec:
+    "export BUNDLE_BUILD__${lib.toUpper spec.name}='${lib.concatStringsSep " " (map shellEscape spec.buildFlags)}'";
 
-  allBuildArgs =
+  allBuildFlags =
     lib.concatStringsSep "\n"
-      (map mkBuildArgs
-        (lib.filter needsBuildArgs (attrValues instantiated)));
+      (map mkBuildFlags
+        (lib.filter needsBuildFlags (attrValues instantiated)));
 
 in
 
@@ -266,6 +265,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     # Copy the Gemfile and Gemfile.lock
+    #mkdir out
+    #out=$(pwd -P)/out
 
     mkdir -p $bundle
     export BUNDLE_GEMFILE=$bundle/Gemfile
@@ -285,7 +286,7 @@ stdenv.mkDerivation {
     mkdir env
     ${runPreInstallers}
 
-    ${allBuildArgs}
+    ${allBuildFlags}
 
     ${lib.optionalString (!documentation) ''
       mkdir home

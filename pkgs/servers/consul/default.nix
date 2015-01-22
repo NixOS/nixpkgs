@@ -1,9 +1,15 @@
-{ stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub
-, ruby, nodejs, loadRubyEnv }:
+{ stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub , ruby , nodejs
+, bundlerEnv }:
 
 let
   version = "0.4.1";
-  rubyEnv = loadRubyEnv { gemset = ./gemset.nix; };
+  # `sass` et al
+  gems = bundlerEnv {
+    name = "consul-deps";
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+  };
 in
 
 with lib;
@@ -14,7 +20,7 @@ stdenv.mkDerivation {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
   };
 
-  buildInputs = [ go ruby rubyEnv.sass rubyEnv.uglifier nodejs ];
+  buildInputs = [ go ruby gems nodejs ];
 
   buildPhase = ''
     # Build consul binary

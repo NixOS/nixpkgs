@@ -680,7 +680,7 @@ let
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
   consul = callPackage ../servers/consul {
-    inherit ruby rubyPackages;
+   # inherit ruby;
   };
 
   consul_ui = consul.ui;
@@ -4304,7 +4304,7 @@ let
   bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
     inherit buildRubyGem coreutils fetchgit;
   };
-  gemFixes = callPackage ../development/interpreters/ruby/fixes.nix { };
+  defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
   loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env.nix { };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gyp, readline, python, which, icu }:
+{ stdenv, lib, fetchurl, gyp, readline, python, which, icu, utillinux}:
 
 assert readline != null;
 
@@ -35,9 +35,12 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ which ];
-  buildInputs = [ readline python icu ];
+  buildInputs = [ readline python icu ] ++ lib.optional stdenv.isLinux utillinux;
+
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   buildFlags = [
+    #"LINK=g++"
     "-C out"
     "builddir=$(CURDIR)/Release"
     "BUILDTYPE=Release"
@@ -48,9 +51,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -vD out/Release/d8 "$out/bin/d8"
     ${if stdenv.system == "x86_64-darwin" then ''
-    install -vD out/Release/libv8.dylib "$out/lib/libv8.dylib"
+    install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
     '' else ''
-    install -vD out/Release/libv8.so "$out/lib/libv8.so"
+    install -vD out/Release/lib.target/libv8.so "$out/lib/libv8.so"
     ''}
     cp -vr include "$out/"
   '';

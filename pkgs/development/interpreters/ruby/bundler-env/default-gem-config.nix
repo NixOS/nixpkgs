@@ -18,7 +18,9 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick, pkgconfig}:
+, libiconv, postgresql, v8, v8_3_16_14, clang, sqlite, zlib, imagemagick, pkgconfig
+, ncurses, xapian, gpgme, utillinux
+}:
 
 let
   v8 = v8_3_16_14;
@@ -30,9 +32,34 @@ in
     dontPatchShebangs = true;
   };
 
+  gpgme = attrs: {
+    buildInputs = [ gpgme ];
+  };
+
   libv8 = attrs: {
-    buildFlags = [ "--with-system-v8" ];
     buildInputs = [ which v8 python ];
+    # The  "--with-system-v8" flag doesn't seem to work...
+    postPatch = ''
+      rm -r vendor
+      cp ${./location.rb} ext/libv8/location.rb
+      cat <<-EOF > ext/libv8/extconf.rb
+      require 'mkmf'
+      create_makefile('libv8')
+
+      require File.expand_path '../location', __FILE__
+      location = Libv8::Location::System.new
+
+      exit location.install!
+      EOF
+    '';
+  };
+
+  ncursesw = attrs: {
+    buildInputs = [ ncurses ];
+    buildFlags = [
+      "--with-cflags=-I${ncurses}/include"
+      "--with-ldflags=-L${ncurses}/lib"
+    ];
   };
 
   nokogiri = attrs: {
@@ -66,24 +93,46 @@ in
     ];
   };
 
+  sup = attrs: {
+    # prevent sup from trying to dynamically install `xapian-ruby`.
+    postPatch = ''
+      cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
+
+      substituteInPlace lib/sup/crypto.rb \
+        --replace 'which gpg2' \
+                  '${which}/bin/which gpg2'
+    '';
+  };
+
   therubyracer = attrs: {
-    dontBuild = false;
+    #preInstall = ''
+    #  ln -s ${clang}/bin/clang $TMPDIR/gcc
+    #  ln -s ${clang}/bin/clang++ $TMPDIR/g++
+    #  export PATH=$TMPDIR:$PATH
+    #'';
 
-    preInstall = ''
-      ln -s ${clang}/bin/clang $TMPDIR/gcc
-      ln -s ${clang}/bin/clang++ $TMPDIR/g++
-      export PATH=$TMPDIR:$PATH
-    '';
+    #buildInputs = [
+    #  utillinux # for `flock`
+    #];
 
-    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      cat >> $out/nix-support/setup-hook <<EOF
-        export DYLD_INSERT_LIBRARIES="$DYLD_INSERT_LIBRARIES''${!DYLD_INSERT_LIBRARIES:+:}${v8}/lib/libv8.dylib"
-      EOF
-    '';
+    #postInstall = ''
+    #'';
 
     buildFlags = [
-      "--with-v8-dir=${v8}" "--with-v8-include=${v8}/include"
+      "--with-v8-dir=${v8}"
+      "--with-v8-include=${v8}/include"
       "--with-v8-lib=${v8}/lib"
     ];
+  };
+
+  xapian-ruby = attrs: {
+    # use the system xapian
+    buildInputs = [ xapian pkgconfig zlib ];
+    postPatch = ''
+      cp ${./xapian-Rakefile} Rakefile
+    '';
+    preInstall = ''
+      export XAPIAN_CONFIG=${xapian}/bin/xapian-config
+    '';
   };
 }
