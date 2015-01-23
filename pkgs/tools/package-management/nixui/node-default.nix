@@ -2,7 +2,7 @@
 , pkgs ? import <nixpkgs> {}
 }:
 let
-  nodePackages = import "${pkgs.path}/pkgs/top-level/node-packages.nix" {
+  nodePackages = import ../../../top-level/node-packages.nix {
     inherit pkgs;
     inherit (pkgs) stdenv nodejs fetchurl fetchgit;
     neededNatives = [ pkgs.python ] ++ pkgs.lib.optional pkgs.stdenv.isLinux pkgs.utillinux;
@@ -10,14 +10,14 @@ let
     generated = ./node.nix;
   };
 in rec {
-  tarball = pkgs.runCommand "nixui-0.1.0.tgz" { buildInputs = [ pkgs.nodejs ]; } ''
+  tarball = pkgs.runCommand "nixui.tgz" { buildInputs = [ pkgs.nodejs ]; } ''
     mv `HOME=$PWD npm pack ${nixui}` $out
   '';
   build = nodePackages.buildNodePackage {
-    name = "nixui-0.1.0";
+    name = "nixui";
     src = [ tarball ];
     buildInputs = nodePackages.nativeDeps."nixui" or [];
-    deps = [ nodePackages.by-spec."underscore"."^1.6.0" nodePackages.by-spec."nedb"."~1.0.0" ];
+    deps = [ nodePackages.underscore nodePackages.nedb ];
     peerDependencies = [];
     passthru.names = [ "nixui" ];
   };
