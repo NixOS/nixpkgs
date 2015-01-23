@@ -105,7 +105,8 @@ self: super: {
   frame-markdown = dontDistribute super.frame-markdown;         # frame
   hails-bin = dontDistribute super.hails-bin;                   # Hails
   hbro-contrib = dontDistribute super.hbro-contrib;             # hbro
-  snaplet-lss = dontDistribute super.snaplet-lss;               # lss
+  lss = markBrokenVersion "0.1.0.0" super.lss;                  # https://github.com/dbp/lss/issues/2
+  snaplet-lss = markBrokenVersion "0.1.0.0" super.snaplet-lss;  # https://github.com/dbp/lss/issues/2
 
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
