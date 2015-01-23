@@ -3785,6 +3785,8 @@ let
 
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
+    hex = callPackage ../development/ocaml-modules/hex { };
+
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
