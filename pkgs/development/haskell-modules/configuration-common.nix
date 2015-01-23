@@ -100,20 +100,12 @@ self: super: {
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
 
-  # Depends on broken NewBinary package.
-  ASN1 = markBroken super.ASN1;
-
-  # Depends on broken Hails package.
-  hails-bin = markBroken super.hails-bin;
-
-  # Depends on broken frame package.
-  frame-markdown = markBroken super.frame-markdown;
-
-  # Depends on broken lss package.
-  snaplet-lss = markBroken super.snaplet-lss;
-
-  # depends on broken hbro package.
-  hbro-contrib = markBroken super.hbro-contrib;
+  # These packages have broken dependencies.
+  ASN1 = dontDistribute super.ASN1;                             # NewBinary
+  frame-markdown = dontDistribute super.frame-markdown;         # frame
+  hails-bin = dontDistribute super.hails-bin;                   # Hails
+  hbro-contrib = dontDistribute super.hbro-contrib;             # hbro
+  snaplet-lss = dontDistribute super.snaplet-lss;               # lss
 
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
@@ -122,7 +114,7 @@ self: super: {
   base_4_7_0_2 = markBroken super.base_4_7_0_2;
 
   # Obsolete: https://github.com/massysett/prednote/issues/1.
-  prednote-test = markBroken super.prednote-test;
+  prednote-test = markBrokenVersion "0.26.0.4" super.prednote-test;
 
   # Doesn't compile: <http://hydra.cryp.to/build/465891/nixlog/1/raw>.
   integer-gmp_0_5_1_0 = markBroken super.integer-gmp_0_5_1_0;
@@ -140,12 +132,10 @@ self: super: {
   wizards = doJailbreak super.wizards;
 
   # https://github.com/ekmett/trifecta/issues/41
-  trifecta = overrideCabal super.trifecta (drv: {
-    patches = [
-    (pkgs.fetchpatch {
-       url = "https://github.com/ekmett/trifecta/pull/40.patch";
-       sha256 = "0qwz83fp0karf6164jykdwsrafq08l6zsdmcdm83xnkcxabgplxv";
-    })];});
+  trifecta = appendPatch super.trifecta (pkgs.fetchpatch {
+    url = "https://github.com/ekmett/trifecta/pull/40.patch";
+    sha256 = "0qwz83fp0karf6164jykdwsrafq08l6zsdmcdm83xnkcxabgplxv";
+  });
 
   # https://github.com/NixOS/cabal2nix/issues/136
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
@@ -382,6 +372,9 @@ self: super: {
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
+
+  # https://github.com/rrnewton/haskell-lockfree/issues/44
+  chaselev-deque = markBrokenVersion "0.5.0.3" super.chaselev-deque;
 
 }
 // {
