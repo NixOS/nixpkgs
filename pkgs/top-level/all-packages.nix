@@ -1430,6 +1430,8 @@ let
 
   partimage = callPackage ../tools/backup/partimage { };
 
+  pgf_graphics = callPackage ../tools/graphics/pgf { };
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pxz = callPackage ../tools/compression/pxz { };
