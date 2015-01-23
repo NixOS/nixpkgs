@@ -31,7 +31,8 @@ rec {
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 
-  markBroken = drv: overrideCabal (drv: { broken = true; });
+  markBroken = drv: overrideCabal drv (drv: { broken = true; });
+  markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
 
   enableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = drv: overrideCabal drv (drv: { enableLibraryProfiling = false; });
@@ -47,5 +48,8 @@ rec {
 
   enableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = true; });
   disableStaticLibraries = drv: overrideCabal drv (drv: { enableStaticLibraries = false; });
+
+  appendPatch = drv: x: appendPatches drv [x];
+  appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
 
 }
