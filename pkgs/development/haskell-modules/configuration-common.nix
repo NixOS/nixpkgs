@@ -57,13 +57,11 @@ self: super: {
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = dontCheck super.time_1_5_0_1;
 
-  # Doesn't accept modern versions of hashtable.
-  Agda = dontHaddock super.Agda;
-
   # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
   network-uri = dontCheck super.network-uri;
 
   # The Haddock phase fails for one reason or another.
+  Agda = dontHaddock super.Agda;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
   bytestring-progress = dontHaddock super.bytestring-progress;
@@ -83,6 +81,7 @@ self: super: {
   hspec-discover = dontHaddock super.hspec-discover;
   http-client-conduit = dontHaddock super.http-client-conduit;
   http-client-multipart = dontHaddock super.http-client-multipart;
+  hxt = dontHaddock super.hxt;                                  # https://github.com/UweSchmidt/hxt/issues/38
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-text = dontHaddock super.shakespeare-text;
