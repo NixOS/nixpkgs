@@ -59,7 +59,10 @@ self: super: {
   ChasingBottoms = dontHaddock super.ChasingBottoms;
 
   # https://github.com/glguy/utf8-string/issues/9
-  utf8-string = appendConfigureFlag super.utf8-string "--ghc-option=-XUndecidableInstances";
+  utf8-string = overrideCabal super.utf8-string (drv: {
+    configureFlags = drv.configureFlags or [] ++ ["-f-bytestring-in-base" "--ghc-option=-XUndecidableInstances"];
+    preConfigure = "sed -i -e 's|base >= .* < .*,|base,|' utf8-string.cabal";
+  });
 
   # https://github.com/haskell/HTTP/issues/80
   HTTP = doJailbreak super.HTTP;
