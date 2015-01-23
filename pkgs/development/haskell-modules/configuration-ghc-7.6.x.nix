@@ -63,4 +63,30 @@ self: super: {
   # Choose appropriate flags for our version of 'bytestring'.
   bytestring-builder = disableCabalFlag super.bytestring-builder "bytestring_has_builder";
 
+} // {
+
+  # Not on Hackage.
+  cryptol = self.mkDerivation rec {
+    pname = "cryptol";
+    version = "2.1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "GaloisInc";
+      repo = "cryptol";
+      rev = "v${version}";
+      sha256 = "00bmad3qc7h47j26xp7hbrlb0qv0f7k9spxgsc1f6lsmpgq9axr3";
+    };
+    isLibrary = true;
+    isExecutable = true;
+    buildDepends = with self; [
+      ansi-terminal array async base containers deepseq directory
+      executable-path filepath GraphSCC haskeline monadLib mtl old-time
+      presburger pretty process QuickCheck random smtLib syb text
+      tf-random transformers utf8-string
+    ];
+    buildTools = with self; [ alex happy Cabal_1_22_0_0 ];
+    patchPhase = "sed -i -e 's|process .*,|process,|' cryptol.cabal";
+    description = "Cryptol: The Language of Cryptography";
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  };
+
 }

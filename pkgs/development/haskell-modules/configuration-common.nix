@@ -376,9 +376,9 @@ self: super: {
   # https://github.com/rrnewton/haskell-lockfree/issues/44
   chaselev-deque = markBrokenVersion "0.5.0.3" super.chaselev-deque;
 
-}
-// {
-  # Not on Hackage yet.
+} // {
+
+  # Not on Hackage.
   cabal2nix = self.mkDerivation {
     pname = "cabal2nix";
     version = "2.0";
