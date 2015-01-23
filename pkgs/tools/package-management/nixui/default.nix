@@ -10,6 +10,8 @@ let
     rev = "refs/tags/${version}";
     sha256 = "198inv8ih751fc1l4dvjp9p6k4kfacikab61v6f604d45psnk6qf";
   };
+  # FIXME this should not import from the derivation
+  # default.nix and and its dependencies should be in the nixpkgs tree
   nixui = (import "${src}/default.nix" { nixui = src; inherit pkgs; }).build;
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
     ln -s ${desktop}/share/applications/* $out/share/applications/
   '';
   meta = {
+    # We don't want derivation building during evaluation
+    broken = true;
     description = "NodeWebkit user interface for Nix";
     homepage = https://github.com/matejc/nixui;
     license = stdenv.lib.licenses.bsd2;
