@@ -345,9 +345,6 @@ self: super: {
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
 
-  # https://github.com/fanjam/paypal-adaptive-hoops/issues/5
-  paypal-adaptive-hoops = dontCheck super.paypal-adaptive-hoops;
-
   # Needs llvm to compile.
   bytestring-arbitrary = addBuildTool super.bytestring-arbitrary pkgs.llvm;
 
