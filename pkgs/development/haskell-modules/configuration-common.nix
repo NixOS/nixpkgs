@@ -327,9 +327,6 @@ self: super: {
   xcffib = dontCheck super.xcffib;
   xsd = dontCheck super.xsd;
 
-  # https://github.com/athanclark/dag/issues/2
-  dag = addBuildTool super.dag self.Cabal_1_22_0_0;     # http://hydra.cryp.to/build/498554/log/raw
-
   # The build fails with the most recent version of c2hs.
   ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
 
