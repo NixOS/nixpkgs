@@ -23,22 +23,31 @@ lib.overrideDerivation (fetchurl ({
     ''
       export PATH=${unzip}/bin:$PATH
       mkdir $out
-      cd $out
-      renamed="$TMPDIR/${baseNameOf url}"
+
+      unpackDir="$TMPDIR/unpack"
+      mkdir "$unpackDir"
+      cd "$unpackDir"
+
+      renamed="$TMPDIR/$name"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
-    ''
-    # FIXME: handle zip files that contain a single regular file.
-    + lib.optionalString stripRoot ''
+
       shopt -s dotglob
-      if [ "$(ls -d $out/* | wc -l)" != 1 ]; then
-        echo "error: zip file must contain a single directory."
+    ''
+    + (if stripRoot then ''
+      if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
+        echo "error: zip file must contain a single file or directory."
         exit 1
       fi
-      fn=$(cd "$out" && echo *)
-      mv $out/$fn/* "$out/"
-      rmdir "$out/$fn"
-    '';
-} // args))
+      fn=$(cd "$unpackDir" && echo *)
+      if [ -f "$unpackDir/$fn" ]; then
+        mv "$unpackDir/$fn" "$out"
+      else
+        mv "$unpackDir/$fn"/* "$out/"
+      fi
+    '' else ''
+      mv "$unpackDir"/* "$out/"
+    '');
+} // removeAttrs args [ "stripRoot" ]))
 # Hackety-hack: we actually need unzip hooks, too
 (x: {nativeBuildInputs = x.nativeBuildInputs++ [unzip];})
