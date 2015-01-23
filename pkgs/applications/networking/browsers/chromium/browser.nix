@@ -9,7 +9,7 @@ mkChromiumDerivation (base: rec {
 
   installPhase = ''
     mkdir -p "$libExecPath"
-    cp -v "$buildPath/"*.pak "$libExecPath/"
+    cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/libpdf.so" "$buildPath/libffmpegsumo.so" "$libExecPath/"

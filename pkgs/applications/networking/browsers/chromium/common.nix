@@ -143,6 +143,12 @@ let
       sed -i -e '/module_path *=.*libexif.so/ {
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
+
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${udev}/lib/\1!' \
+        device/udev_linux/udev?_loader.cc
+
+      sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
+        gpu/config/gpu_info_collector_linux.cc
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
