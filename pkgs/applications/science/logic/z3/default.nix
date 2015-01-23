@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, python, unzip, autoreconfHook }:
+{ stdenv, fetchurl, python, unzip }:
 
 stdenv.mkDerivation rec {
   name = "z3-${version}";
-  version = "4.3.1";
+  version = "4.3.2";
   src = fetchurl {
-    url    = "http://download-codeplex.sec.s-msft.com/Download/SourceControlFileDownload.ashx\?ProjectName\=z3\&changeSetId\=89c1785b73225a1b363c0e485f854613121b70a7";
+    url    = "http://download-codeplex.sec.s-msft.com/Download/SourceControlFileDownload.ashx\?ProjectName\=z3\&changeSetId\=cee7dd39444c9060186df79c2a2c7f8845de415b";
     name   = "${name}.zip";
-    sha256 = "3b94465c52ec174350d8707dd6a1fb0cef42f0fa23f148cc1808c14f3c2c7f76";
+    sha256 = "0hagy7xm0m52jd6vlrbizkj24mn6c49hkb3r5p66wilvp15ivpbn";
   };
 
-  buildInputs = [ python unzip autoreconfHook ];
+  buildInputs = [ python unzip ];
   enableParallelBuilding = true;
 
   # The zip file doesn't unpack a directory, just the code itself.
   unpackPhase = "mkdir ${name} && cd ${name} && unzip $src";
-  postConfigure = ''
-    python scripts/mk_make.py
+
+  configurePhase = ''
+    python scripts/mk_make.py --prefix=$out
     cd build
   '';
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Z3 is a high-performance theorem prover and SMT solver";
+    description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://z3.codeplex.com";
     license     = stdenv.lib.licenses.msrla;
     platforms   = stdenv.lib.platforms.unix;
