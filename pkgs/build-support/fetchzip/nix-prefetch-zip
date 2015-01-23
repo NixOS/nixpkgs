@@ -15,6 +15,7 @@ Options:
 }
 
 
+name=""
 argi=0
 argfun=""
 for arg; do
