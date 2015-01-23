@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://github.com/muennich/sxiv.git";
-    rev = "6216bf6c2d42be63025d29550831d9f4447f4066";
-    sha256 = "e25e19cf073cc2621656e50d2c31cc59cc0fc200716f96c765374568a26977f1";
+    rev = "92e3b57816e999b46f8d0778984719227631e9a7";
+    sha256 = "0jbswh0k1xq5hgrv1pyvk7lpwbbj66p7gjsdm8zh6ah324apjr2b";
   };
 
   postUnpack = ''
