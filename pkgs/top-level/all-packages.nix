@@ -6294,6 +6294,8 @@ let
 
   libpipeline = callPackage ../development/libraries/libpipeline { };
 
+  libpgf = callPackage ../development/libraries/libpgf { };
+
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
