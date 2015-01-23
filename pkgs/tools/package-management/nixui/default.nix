@@ -10,7 +10,7 @@ let
     rev = "refs/tags/${version}";
     sha256 = "198inv8ih751fc1l4dvjp9p6k4kfacikab61v6f604d45psnk6qf";
   };
-  nixui = (import "${src}/default.nix" { nixui = src; inherit pkgs; }).build;
+  nixui = (import ./node-default.nix { nixui = src; inherit pkgs; }).build;
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"
