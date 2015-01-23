@@ -252,6 +252,8 @@ stdenv.mkDerivation ({
     env = stdenv.mkDerivation {
       name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ];
+      LANG = "en_US.UTF-8";
+      LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
         export NIX_GHC="${ghcEnv}/bin/ghc"
         export NIX_GHCPKG="${ghcEnv}/bin/ghc"
