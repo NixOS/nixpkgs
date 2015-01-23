@@ -50,7 +50,7 @@ self: super: {
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
   # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8 = dontDistribute super.HStringTemplate_0_8;
+  HStringTemplate_0_8_1 = dontDistribute super.HStringTemplate_0_8_1;
 
   # This is part of bytestring in our compiler.
   bytestring-builder = dontHaddock super.bytestring-builder;
