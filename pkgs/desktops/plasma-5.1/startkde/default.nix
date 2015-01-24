@@ -1,3 +1,7 @@
+# We provide our own version of the startkde script in its entirety, rather than
+# patching the version provided by kde-workspace, because it requires such
+# extensive patching.
+
 { stdenv, bash, dbus, gnused, gnugrep, kconfig, kinit, kservice, plasma-desktop
 , plasma-workspace, qt5, socat, xorg }:
 
