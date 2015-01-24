@@ -24,6 +24,10 @@ rec {
     "node-stringprep".buildInputs = [ pkgs.icu pkgs.which ];
     "node-protobuf".buildInputs = [ pkgs.protobuf ];
     "rbytes".buildInputs = [ pkgs.openssl ];
+
+    bipio.patchPhase = ''
+      ${self.json}/bin/json -I -f package.json -e 'this.scripts.install=""'
+    '';
   } // args.overrides or {};
 
   # Apply overrides and back compatiblity transformations
