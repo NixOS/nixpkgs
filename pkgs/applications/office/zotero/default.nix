@@ -1,46 +1,68 @@
-{ stdenv, fetchurl, useGoldLinker, bash, callPackage, gnome, xlibs }:
-
-assert (stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux");
-
+{ stdenv, fetchurl, bash, firefox, perl, unzipNLS, xlibs }:
 
 let
-  /* Zotero always has a hard upper bound on its firefox/xulrunner dependency.
-   * Use private version of firefox to prevent breakage when the system
-   * packages are updated. Please update this dependency whenever zotero is
-   * updated; it should be as simple as copying the system firefox expression
-   * into place.
-   */
 
-  firefox = callPackage ./firefox-bin {
-    gconf = gnome.GConf;
-    inherit (gnome) libgnome libgnomeui;
-    inherit (xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
-      libXfixes libXinerama libXrender libXt;
+  xpi = fetchurl {
+    url = "https://download.zotero.org/extension/zotero-${version}.xpi";
+    sha256 = "0di6d3s95fmb4pmghl4ix7lq5pmqrddd4y8dmnpsrhbj0awzxw3s";
   };
 
-  # Please update the firefox dependency when zotero is updated!
-  version = "4.0.23";
-  arch = if stdenv.system == "x86_64-linux"
-           then "linux-x86_64"
-           else "linux-i686";
+  version = "4.0.25.2";
+
 in
 stdenv.mkDerivation {
   name = "zotero-${version}";
+  inherit version;
 
   src = fetchurl {
-    url = "https://download.zotero.org/standalone/${version}/Zotero-${version}_${arch}.tar.bz2";
-    sha256 = if stdenv.system == "x86_64-linux"
-               then "1fz5xn69vapfw8d20207zr9p5r1h9x5kahh334pl2dn1h8il0sm8"
-               else "1kmsvvg2lh881rzy3rxbigzivixjamyrwf5x7vmn1kzhvsvifrng";
+    url = "https://github.com/zotero/zotero-standalone-build/archive/${version}.tar.gz";
+    sha256 = "0wjmpz7fy3ij8q22s885kv8xrgc3yx7f1mwrvb6lnpc2xl54rl5g";
   };
 
-  # Strip the bundled xulrunner
-  prePatch = ''rm -fr run-zotero.sh zotero xulrunner/'';
+  nativeBuildInputs = [ perl unzipNLS ];
 
   inherit bash firefox;
+
+  phases = "unpackPhase installPhase fixupPhase";
+
   installPhase = ''
     mkdir -p "$out/libexec/zotero"
-    cp -vR * "$out/libexec/zotero/"
+    unzip "${xpi}" -d "$out/libexec/zotero"
+
+    BUILDID=`date +%Y%m%d`
+    GECKO_VERSION="${firefox.passthru.version}"
+    UPDATE_CHANNEL="default"
+
+    # Copy branding
+    cp -R assets/branding "$out/libexec/zotero/chrome/branding"
+
+    # Adjust chrome.manifest
+    echo "" >> "$out/libexec/zotero/chrome.manifest"
+    cat assets/chrome.manifest >> "$out/libexec/zotero/chrome.manifest"
+
+    # Copy updater.ini
+    cp assets/updater.ini "$out/libexec/zotero"
+
+    # Adjust connector pref
+    perl -pi -e 's/pref\("extensions\.zotero\.httpServer\.enabled", false\);/pref("extensions.zotero.httpServer.enabled", true);/g' "$out/libexec/zotero/defaults/preferences/zotero.js"
+    perl -pi -e 's/pref\("extensions\.zotero\.connector\.enabled", false\);/pref("extensions.zotero.connector.enabled", true);/g' "$out/libexec/zotero/defaults/preferences/zotero.js"
+
+    # Copy icons
+    cp -r assets/icons "$out/libexec/zotero/chrome/icons"
+
+    # Copy application.ini and modify
+    cp assets/application.ini "$out/libexec/zotero/application.ini"
+    perl -pi -e "s/{{VERSION}}/$version/" "$out/libexec/zotero/application.ini"
+    perl -pi -e "s/{{BUILDID}}/$BUILDID/" "$out/libexec/zotero/application.ini"
+    perl -pi -e "s/^MaxVersion.*\$/MaxVersion=$GECKO_VERSION/" "$out/libexec/zotero/application.ini"
+
+    # Copy prefs.js and modify
+    cp assets/prefs.js "$out/libexec/zotero/defaults/preferences"
+    perl -pi -e 's/pref\("app\.update\.channel", "[^"]*"\);/pref\("app\.update\.channel", "'"$UPDATE_CHANNEL"'");/' "$out/libexec/zotero/defaults/preferences/prefs.js"
+    perl -pi -e 's/%GECKO_VERSION%/'"$GECKO_VERSION"'/g' "$out/libexec/zotero/defaults/preferences/prefs.js"
+
+    # Add platform-specific standalone assets
+    cp -R assets/unix "$out/libexec/zotero"
 
     mkdir -p "$out/bin"
     substituteAll "${./zotero.sh}" "$out/bin/zotero"
