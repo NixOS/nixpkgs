@@ -9001,11 +9001,11 @@ let
 
   restview = buildPythonPackage rec {
     name = "restview-${version}";
-    version = "2.1.1";
+    version = "2.2.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/restview/${name}.tar.gz";
-      sha256 = "07scf80hhr9rijrbfrplyi3gwkx74knnzfhvlg6yf1cd0x2yiy8v";
+      sha256 = "070qx694bpk2n67grm82jvvar4nqvvfmmibbnv8snl4qn41jw66s";
     };
 
     propagatedBuildInputs = with self; [ docutils mock pygments ];
