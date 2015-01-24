@@ -838,6 +838,8 @@ let
 
   ccrypt = callPackage ../tools/security/ccrypt { };
 
+  ccze = callPackage ../tools/misc/ccze { };
+
   cdecl = callPackage ../development/tools/cdecl { };
 
   cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
