@@ -3,6 +3,8 @@
 with pkgs.lib;
 
 let
+  pythonAtLeast = versionAtLeast python.pythonVersion;
+  pythonOlder = versionOlder python.pythonVersion;
   isPy26 = python.majorVersion == "2.6";
   isPy27 = python.majorVersion == "2.7";
   isPy33 = python.majorVersion == "3.3";
@@ -2995,7 +2997,7 @@ let
     name = "pew-0.1.14";
     namePrefix = "";
 
-    disabled = isPy26 || isPy27 || isPy33; # old versions require backported libraries
+    disabled = pythonOlder "3.4"; # old versions require backported libraries
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pew/${name}.tar.gz";
