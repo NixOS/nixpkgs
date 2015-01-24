@@ -1,0 +1,63 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-packageconfig">
+
+<title>nixpkgs configuration</title>
+
+    <para>
+        The Nix package manager can be configured to allow or deny certain
+        package sets. At this moment, packages can either be allowed to be
+        installed or denied to be installed based on their license.
+    </para>
+
+    <itemizedlist>
+        <listitem>
+            <para>
+                Allow packages that do not have a free license by setting
+                <programlisting>
+                    nixpkgs.config.allowUnfree = true;
+                </programlisting>
+                or deny them by setting it to <literal>false</literal>.
+            </para>
+            <para>
+                This can also be achieved for one call to the Nix package
+                manager by setting the environment variable:
+                <programlisting>
+                    export NIXPKGS_ALLOW_UNFREE=1
+                </programlisting>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                Whenever unfree packages are not allowed, single packages can
+                still be allowed by a predicate:
+                <programlisting>
+                    nixpkgs.config.allowUnfreePredicate = (x: ...);
+                </programlisting>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                Whenever unfree packages are not allowed, packages can still be
+                whitelisted by their license:
+                <programlisting>
+                    nixpkgs.config.whitelistedLicenses = [ licenseA licenseB ];
+                </programlisting>
+            </para>
+        </listitem>
+
+        <listitem>
+            <para>
+                In addition to whitelisting licenses which are denied by the
+                <literal>allowUnfree</literal> setting, you can also explicitely
+                deny installation of packages which have a certain license:
+                <programlisting>
+                    nixpkgs.config.blacklistedLicenses = [ licenseA licenseB ];
+                </programlisting>
+            </para>
+        </listitem>
+    </itemizedlist>
+
+</chapter>
