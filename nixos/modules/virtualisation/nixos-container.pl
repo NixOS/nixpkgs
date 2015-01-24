@@ -22,6 +22,7 @@ Usage: nixos-container list
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container status <container-name>
+       nixos-container update <container-name> [--config <string>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
