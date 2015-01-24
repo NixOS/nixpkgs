@@ -5,7 +5,7 @@ with lib;
 let
 
   xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.plasma5;
+  cfg = xcfg.desktopManager.kde5;
   xorg = pkgs.xorg;
 
   phononBackends = {
@@ -44,7 +44,7 @@ in
 {
   options = {
 
-    services.xserver.desktopManager.plasma5 = {
+    services.xserver.desktopManager.kde5 = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -69,7 +69,7 @@ in
   config = mkIf (xcfg.enable && cfg.enable) {
 
     services.xserver.desktopManager.session = singleton {
-      name = "plasma5";
+      name = "kde5";
       bgSupport = true;
       start = ''
         # The KDE icon cache is supposed to update itself
@@ -212,10 +212,12 @@ in
       target = "X11/xkb";
     };
 
-    environment.profileRelativeEnvVars = mkIf (lib.elem "gstreamer" cfg.phononBackends) {
-      GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
-      GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
-    };
+    environment.profileRelativeEnvVars =
+      mkIf (lib.elem "gstreamer" cfg.phononBackends)
+      {
+        GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
+        GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
+      };
 
     fonts.fonts = [ plasma5.oxygen-fonts ];
 
