@@ -12909,6 +12909,8 @@ let
       pysqlite = pkgs.pythonPackages.sqlite3;
   };
 
+  sooperlooper = callPackage ../applications/audio/sooperlooper { };
+
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia {
