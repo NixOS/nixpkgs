@@ -8225,14 +8225,16 @@ let
 
   pyqtgraph = buildPythonPackage rec {
     name = "pyqtgraph-${version}";
-    version = "0.9.8";
+    version = "0.9.10";
+
+    doCheck = false;  # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyqtgraph/${name}.tar.gz";
-      sha256 = "1fnhj26d9qrqqmjx092m1qspclh3mia3vag7rji5wciw0plpszi5";
+      sha256 = "188pcxf3sxxjf0aipjn820lx2rf9f42zzp0sibmcl90955a3ipf1";
     };
 
-    propagatedBuildInputs = with self; [ scipy pyqt4 pyopengl ];
+    propagatedBuildInputs = with self; [ scipy numpy pyqt4 pyopengl ];
 
     meta = with stdenv.lib; {
       description = "Scientific Graphics and GUI Library for Python";
