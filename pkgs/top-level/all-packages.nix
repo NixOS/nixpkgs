@@ -727,8 +727,7 @@ let
 
   fop = callPackage ../tools/typesetting/fop { };
 
-  # Evaluation broken by recent ruby changes.
-  # gist = callPackage ../tools/text/gist { };
+  gist = callPackage ../tools/text/gist { };
 
   mcrl = callPackage ../tools/misc/mcrl { };
 
