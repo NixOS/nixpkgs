@@ -12538,6 +12538,14 @@ let
 
     bedrock = callPackage ../development/coq-modules/bedrock {};
 
+    contribs =
+      let contribs =
+        import ../development/coq-modules/contribs
+        contribs
+        callPackage { };
+      in
+        recurseIntoAttrs contribs;
+
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
 
     coqeal = callPackage ../development/coq-modules/coqeal {};
