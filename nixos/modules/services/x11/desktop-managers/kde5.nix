@@ -75,27 +75,6 @@ in
       name = "kde5";
       bgSupport = true;
       start = ''
-        # The KDE icon cache is supposed to update itself
-        # automatically, but it uses the timestamp on the icon
-        # theme directory as a trigger.  Since in Nix the
-        # timestamp is always the same, this doesn't work.  So as
-        # a workaround, nuke the icon cache on login.  This isn't
-        # perfect, since it may require logging out after
-        # installing new applications to update the cache.
-        # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
-        rm -fv $HOME/.cache/icon-cache.kcache
-
-        # Qt writes a weird ‘libraryPath’ line to
-        # ~/.config/Trolltech.conf that causes the KDE plugin
-        # paths of previous KDE invocations to be searched.
-        # Obviously using mismatching KDE libraries is potentially
-        # disastrous, so here we nuke references to the Nix store
-        # in Trolltech.conf.  A better solution would be to stop
-        # Qt from doing this wackiness in the first place.
-        if [ -e $HOME/.config/Trolltech.conf ]; then
-            sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
-        fi
-
         exec ${plasma5.startkde}/bin/startkde;
       '';
     };
