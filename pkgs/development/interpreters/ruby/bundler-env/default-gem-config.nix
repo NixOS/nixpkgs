@@ -19,7 +19,7 @@
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8, v8_3_16_14, clang, sqlite, zlib, imagemagick, pkgconfig
-, ncurses, xapian, gpgme, utillinux, fetchpatch
+, ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata
 }:
 
 let
@@ -101,6 +101,13 @@ in
       "--with-v8-include=${v8}/include"
       "--with-v8-lib=${v8}/lib"
     ];
+  };
+
+  tzdata = attrs: {
+    postPatch = ''
+      substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
+        --replace "/etc/zoneinfo" "${tzdata}/share/zoneinfo"
+    '';
   };
 
   xapian-ruby = attrs: {
