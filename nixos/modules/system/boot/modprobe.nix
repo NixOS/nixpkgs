@@ -10,10 +10,18 @@ with lib;
 
     system.sbin.modprobe = mkOption {
       internal = true;
-      default = pkgs.writeTextFile {
+      default = pkgs.stdenv.mkDerivation {
         name = "modprobe";
-        destination = "/sbin/modprobe";
-        executable = true;
+        buildCommand = ''
+          mkdir -p $out/bin
+          for i in ${pkgs.kmod}/sbin/*; do
+            name=$(basename $i)
+            echo "$text" > $out/bin/$name
+            echo 'exec '$i' "$@"' >> $out/bin/$name
+            chmod +x $out/bin/$name
+          done
+          ln -s bin $out/sbin
+        '';
         text =
           ''
             #! ${pkgs.stdenv.shell}
@@ -26,7 +34,6 @@ with lib;
                 MODULE_DIR=/run/booted-system/kernel-modules/lib/modules/
             fi
 
-            exec ${pkgs.kmod}/sbin/modprobe "$@"
           '';
       };
       description = ''
