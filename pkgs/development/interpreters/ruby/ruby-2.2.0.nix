@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchgit, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -85,6 +85,12 @@ stdenv.mkDerivation rec {
 
     envHooks+=(addGemPath)
     EOF
+  '' + lib.optionalString useRailsExpress ''
+    rbConfig=$(find $out/lib/ruby -name rbconfig.rb)
+
+    # Prevent the baseruby from being included in the closure.
+    sed -i '/^  CONFIG\["BASERUBY"\]/d' $rbConfig
+    sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
   '';
 
   meta = {
