@@ -10783,6 +10783,8 @@ let
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
+  spek = callPackage ../applications/audio/spek { };
+
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
     libpng = libpng12;
