@@ -49,7 +49,9 @@ let
   in stdenv.mkDerivation ({
     inherit src;
 
-    postPatch = ''
+    configurePhase = ''
+      runHook preConfigure
+
       ${patchShebangs "./"}
 
       # Some version specifiers (latest, unstable, URLs, file paths) force NPM
@@ -107,10 +109,9 @@ let
         fs.writeFileSync("package.json", JSON.stringify(packageObj));
       EOF
       ) | node
-    '';
 
-    configurePhase = ''
-      runHook preConfigure
+      # We do not handle shrinkwraps yet
+      rm npm-shrinkwrap.json 2>/dev/null || true
 
       mkdir build-dir
       (
