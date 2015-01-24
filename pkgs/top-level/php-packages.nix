@@ -95,4 +95,36 @@ let self = with self; {
     buildInputs = [ pkgs.geoip ];
   };
 
+  redis = buildPecl {
+    name = "redis-2.2.5";
+
+    sha256 = "0hrk0lf8h6l30zrjld29csl186zb1cl2rz1gfn9dma33np4iisyw";
+  };
+
+  composer = pkgs.stdenv.mkDerivation rec {
+    name = "composer-${version}";
+    version = "1.0.0-alpha9";
+
+    src = pkgs.fetchurl {
+      url = "https://getcomposer.org/download/1.0.0-alpha9/composer.phar";
+      sha256 = "1x7i9xs9xggq0qq4kzrwh2pky8skax0l829zwwsy3hcvch3irvrk";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/composer/composer.phar
+      makeWrapper ${php}/bin/php $out/bin/composer \
+        --add-flags "$out/libexec/composer/composer.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "Dependency Manager for PHP";
+      license = licenses.mit;
+      homepage = https://getcomposer.org/;
+      maintainers = with maintainers; [offline];
+    };
+  };
 }; in self
