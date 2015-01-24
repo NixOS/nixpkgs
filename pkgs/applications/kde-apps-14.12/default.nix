@@ -101,6 +101,13 @@ let
   postResolve = super:
     super // {
 
+      ark = with pkgs; super.ark // {
+        buildInputs = (super.ark.buildInputs or []) ++ [ makeWrapper ];
+        postInstall = ''
+          wrapProgram $out/bin/ark --prefix PATH : "${unzipNLS}/bin"
+        '';
+      };
+
       ffmpegthumbs = with pkgs; super.ffmpegthumbs // {
         nativeBuildInputs = super.ffmpegthumbs.nativeBuildInputs ++ [pkgconfig];
       };
