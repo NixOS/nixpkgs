@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -p target/release/racer $out/bin/
     wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustc.src}/src"
+    install -d $out/share/emacs/site-lisp
+    install "editors/"*.el $out/share/emacs/site-lisp
   '';
 
   meta = with stdenv.lib; {
