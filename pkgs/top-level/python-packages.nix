@@ -683,12 +683,12 @@ let
   };
 
   batinfo = buildPythonPackage rec {
-    version = "0.1.9";
+    version = "0.2";
     name = "batinfo-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/batinfo/${name}.tar.gz";
-      sha256 = "0ppzbh8lii16xfq5piczn82hwps1fnbq9rbwwl3rdpdx0n86l560";
+      sha256 = "1kmrdr1c2ivpqgp2csln7vbanga3sh3nvaqmgbsg96z6fbg7f7w8";
     };
 
     meta = with stdenv.lib; {
