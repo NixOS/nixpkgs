@@ -1224,6 +1224,8 @@ let
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
+  libbladeRF = callPackage ../development/libraries/libbladeRF { };
+
   lprof = callPackage ../tools/graphics/lprof { };
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
