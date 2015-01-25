@@ -777,6 +777,14 @@
     propagatedUserEnvPkgs = [  ];
   };
 
+  kde-workspace = {
+    buildInputs = [ "Akonadi" "Boost" "DBusMenuQt" "Fontconfig" "Freetype" "GLIB2" "JPEG" "KActivities" "KDE4" "KDeclarative" "KdepimLibs" "NepomukCore" "OpenGL" "OpenGLES" "PCIUTILS" "PNG" "Prison" "PythonLibrary" "QImageBlitz" "QJSON" "Qalculate" "Qt4" "RAW1394" "Sensors" "Soprano" "Strigi" "UDev" "USB" "Wayland" "X11" "X11_XCB" "XCB" "Xmms" "ZLIB" "libgps" ];
+    nativeBuildInputs = [ "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [  ];
+  };
+
   kdeartwork = {
     buildInputs = [ "Eigen3" "KDE4" "KDE4Workspace" "Kexiv2" "OpenGL" "Xscreensaver" ];
     nativeBuildInputs = [ "cmake" ];
@@ -817,6 +825,14 @@
     propagatedUserEnvPkgs = [  ];
   };
 
+  kdelibs = {
+    buildInputs = [ "ACL" "AGG" "ASPELL" "Automoc4" "Avahi" "BZip2" "Blitz" "BlueZ" "Carbon" "DBusMenuQt" "DNSSD" "DocBookXML" "DocBookXSL" "ENCHANT" "Eigen2" "FAM" "FFmpeg" "Flac" "Flex" "GIF" "GObject" "GSSAPI" "GStreamer" "Grantlee" "HSPELL" "HUNSPELL" "HUpnp" "IOKit" "JPEG" "Jasper" "KDE4" "KDE4Internal" "LCMS" "LibArt" "LibAttica" "LibXml2" "Libintl" "OpenEXR" "OpenSSL" "PCRE" "PNG" "QCA2" "QImageBlitz" "Qt4" "SharedDesktopOntologies" "SharedMimeInfo" "Soprano" "Sqlite" "Strigi" "UDev" "USB" "Xine" "Xmms" "ZLIB" ];
+    nativeBuildInputs = [ "BISON" "FLEX" "LibXslt" "Perl" "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [ "SharedMimeInfo" ];
+  };
+
   kdenetwork-filesharing = {
     buildInputs = [ "KDE4" ];
     nativeBuildInputs = [ "cmake" ];
@@ -831,6 +847,30 @@
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
+  };
+
+  kdepim = {
+    buildInputs = [ "Akonadi" "Baloo" "Boost" "Git" "Grantlee" "KDE4" "KdepimLibs" "LibKGAPI2" "Prison" "QGpgme" "QJSON" "Sasl2" "Xsltproc" "ZLIB" ];
+    nativeBuildInputs = [ "DBLATEX_EXECUTABLE" "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [  ];
+  };
+
+  kdepim-runtime = {
+    buildInputs = [ "AccountsQt" "Akonadi" "Boost" "KDE4" "KdepimLibs" "LibKFbAPI" "LibKGAPI2" "Libkolab" "Libkolabxml" "QJSON" "Qt4" "Sasl2" "SharedMimeInfo" "SignOnQt" "Xsltproc" ];
+    nativeBuildInputs = [ "_testrunner" "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [ "SharedMimeInfo" ];
+  };
+
+  kdepimlibs = {
+    buildInputs = [ "Akonadi" "Boost" "Gpgme" "KDE4" "Ldap" "LibXml2" "Libical" "Prison" "QJSON" "Sasl2" "SharedMimeInfo" "Xsltproc" ];
+    nativeBuildInputs = [ "LibXslt" "PERL_EXECUTABLE" "_testrunner" "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [ "SharedMimeInfo" ];
   };
 
   kdesdk-kioslaves = {

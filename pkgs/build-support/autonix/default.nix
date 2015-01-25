@@ -48,6 +48,7 @@ let
     , mkDerivation ? mkDerivation
     , preResolve ? id # modify package set before dependency resolution
     , postResolve ? id # modify package set after dependency resolution
+    , renames ? {}
     , scope ? {}
     }:
     let
@@ -61,7 +62,10 @@ let
 
       derive = mapAttrs (name: mkDerivation);
 
-      packages = importPackages dir { inherit mirror; };
+      renames_ =
+        if renames == {} then (import (dir + "/renames.nix") {}) else renames;
+
+      packages = importPackages dir renames_ { inherit mirror; };
 
     in derive (postResolve (resolve (preResolve packages)));
 
@@ -112,7 +116,7 @@ let
     in
       fold (f: x: f x) orig [ withNames bestVersions ];
 
-  importPackages = path: manifestScope:
+  importPackages = path: renames: manifestScope:
     let
 
       # Do not allow any package to depend on itself.
@@ -123,8 +127,6 @@ let
                       then filter (dep: dep != pkg && renamed dep != pkg)
                     else id);
         in mapAttrs removeSelfDep;
-
-      renames = import (path + "/renames.nix") {};
 
       renamed = dep: renames."${dep}" or dep;
 

@@ -130,7 +130,7 @@ let
 
   plasma5 = generateCollection ./. {
     inherit (kf5) mkDerivation;
-    inherit mirror preResolve postResolve scope;
+    inherit mirror preResolve postResolve renames scope;
   };
 
 in

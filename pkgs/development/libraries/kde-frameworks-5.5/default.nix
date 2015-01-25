@@ -177,7 +177,7 @@ let
     };
 
   kf5 = generateCollection ./. {
-    inherit mirror mkDerivation preResolve postResolve scope;
+    inherit mirror mkDerivation preResolve postResolve renames scope;
   };
 
 in

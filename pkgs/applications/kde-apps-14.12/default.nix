@@ -23,9 +23,17 @@ let
   mirror = "mirror://kde";
 
   renames =
-    builtins.removeAttrs
+    (builtins.removeAttrs
       (import ./renames.nix {})
-      ["Backend" "CTest"];
+      ["Backend" "CTest"])
+    // {
+      "KDE4" = "kdelibs";
+      "Kexiv2" = "libkexiv2";
+      "Kdcraw" = "libkdcraw";
+      "Kipi" = "libkipi";
+      "LibKMahjongg" = "libkmahjongg";
+      "LibKonq" = "kde-baseapps";
+    };
 
   scope =
     # packages in this collection
@@ -35,16 +43,28 @@ let
     # packages from nixpkgs
     (with pkgs;
       {
+        ACL = acl;
+        Akonadi = kde4.akonadi;
         Alsa = alsaLib;
+        Automoc4 = automoc4;
+        Avahi = avahi;
+        BISON = bison;
+        Baloo = kde4.baloo;
+        Boost = boost156;
+        Canberra = libcanberra;
         Cdparanoia = cdparanoia;
         CUPS = cups;
+        DBusMenuQt = libdbusmenu_qt;
         DjVuLibre = djvulibre;
+        ENCHANT = enchant;
         EPub = ebook_tools;
         Eigen2 = eigen2;
         Eigen3 = eigen;
         Exiv2 = exiv2;
+        FAM = fam;
         FFmpeg = ffmpeg;
         Flac = flac;
+        FLEX = flex;
         Freetype = freetype;
         GMP = gmp;
         Gettext = gettext;
@@ -53,38 +73,44 @@ let
         Grantlee = grantlee;
         GSL = gsl;
         HUNSPELL = hunspell;
+        HUpnp = herqq;
+        Jasper = jasper;
         KActivities = kde4.kactivities;
-        KDE4 = kde4.kdelibs;
-        KDE4Workspace = kde4.kde_workspace;
-        Kexiv2 = kdeApps.libkexiv2;
-        Kdcraw = kdeApps.libkdcraw;
-        KdepimLibs = kde4.kdepimlibs;
-        Kipi = kdeApps.libkipi;
         LCMS2 = lcms2;
+        Ldap = openldap;
         LibAttica = attica;
         LibGcrypt = libgcrypt;
-        LibKMahjongg = kdeApps.libkmahjongg;
-        LibKonq = kdeApps.kde-baseapps;
         LibSSH = libssh;
         LibSpectre = libspectre;
         LibVNCServer = libvncserver;
+        Libical = libical;
         MusicBrainz3 = libmusicbrainz;
         NetworkManager = networkmanager;
         OggVorbis = libvorbis;
         OpenAL = openal;
         OpenEXR = openexr;
         Poppler = poppler.poppler_qt4;
+        Prison = prison;
         PulseAudio = pulseaudio;
+        PythonLibrary = python;
         Qalculate = libqalculate;
         QCA2 = qca2;
+        QImageBlitz = qimageblitz;
+        QJSON = qjson;
+        Qt4 = qt4;
         Samba = samba;
+        Sasl2 = cyrus_sasl;
+        SharedDesktopOntologies = shared_desktop_ontologies;
         SndFile = libsndfile;
         Speechd = speechd;
         TIFF = libtiff;
         Taglib = taglib;
         TelepathyQt4 = telepathy_qt;
         TunePimp = libtunepimp;
+        UDev = udev;
+        USB = libusb;
         Xscreensaver = xscreensaver;
+        Xsltproc = libxslt;
       }
     );
 
@@ -126,6 +152,57 @@ let
           + " -I${ilmbase}/include/OpenEXR";
       };
 
+      kde-workspace = with pkgs; super.kde-workspace // {
+        buildInputs = with xlibs;
+          super.kde-workspace.buildInputs
+          ++
+          [
+            libxkbfile libXcomposite xcbutilimage xcbutilkeysyms
+            xcbutilrenderutil
+          ];
+        nativeBuildInputs =
+          super.kde-workspace.nativeBuildInputs
+          ++ [ pkgconfig ];
+      };
+
+      kdelibs = with pkgs; super.kdelibs // {
+        buildInputs =
+          super.kdelibs.buildInputs ++ [ attr libxslt polkit_qt4 xz ];
+
+        nativeBuildInputs =
+          super.kdelibs.nativeBuildInputs ++ [ pkgconfig ];
+
+        NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
+
+        propagatedBuildInputs =
+          super.kdelibs.propagatedBuildInputs ++ [ qt4 soprano phonon strigi ];
+
+        propagatedNativeBuildInputs =
+          super.kdelibs.propagatedNativeBuildInputs
+          ++ [ automoc4 cmake perl shared_mime_info ];
+
+        patches = [ ./kdelibs/polkit-install.patch ];
+
+        cmakeFlags = [
+          "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"
+          "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
+          "-DHUPNP_ENABLED=ON"
+          "-DWITH_SOLID_UDISKS2=ON"
+        ];
+      };
+
+      kdepim = with pkgs; super.kdepim // {
+        buildInputs =
+          super.kdepim.buildInputs ++ [ gpgme libassuan ];
+        nativeBuildInputs =
+          super.kdepim.nativeBuildInputs ++ [ pkgconfig ];
+      };
+
+      kdepimlibs = with pkgs; super.kdepimlibs // {
+        nativeBuildInputs =
+          super.kdepimlibs.nativeBuildInputs ++ [ pkgconfig ];
+      };
+
       kdesdk-thumbnailers = with pkgs; super.kdesdk-thumbnailers // {
         nativeBuildInputs =
           super.kdesdk-thumbnailers.nativeBuildInputs
@@ -138,6 +215,7 @@ let
 
       kmix = with pkgs; super.kmix // {
         nativeBuildInputs = super.kmix.nativeBuildInputs ++ [pkgconfig];
+        cmakeFlags = [ "-DKMIX_KF5_BUILD=ON" ];
       };
 
       kmousetool = with pkgs; super.kmousetool // {
@@ -157,35 +235,31 @@ let
       };
 
       libkdcraw = with pkgs; super.libkdcraw // {
-        buildInputs = super.libkdcraw.buildInputs ++ [kde4.kdelibs libraw];
+        buildInputs = super.libkdcraw.buildInputs ++ [scope.KDE4 libraw];
         nativeBuildInputs = super.libkdcraw.nativeBuildInputs ++ [pkgconfig];
       };
 
       libkexiv2 = with pkgs; super.libkexiv2 // {
-        buildInputs = super.libkexiv2.buildInputs ++ [exiv2 kde4.kdelibs];
+        buildInputs = super.libkexiv2.buildInputs ++ [exiv2 scope.KDE4];
       };
 
       libkface = with pkgs; super.libkface // {
-        buildInputs = super.libkface.buildInputs ++ [kde4.kdelibs opencv];
+        buildInputs = super.libkface.buildInputs ++ [scope.KDE4 opencv];
       };
 
       libkipi = with pkgs; super.libkipi // {
-        buildInputs = super.libkipi.buildInputs ++ [kde4.kdelibs];
+        buildInputs = super.libkipi.buildInputs ++ [scope.KDE4];
       };
 
       libksane = with pkgs; super.libksane // {
-        buildInputs = super.libksane.buildInputs ++ [kde4.kdelibs saneBackends];
-      };
-
-      okular = with pkgs; super.okular // {
-        buildInputs = super.okular.buildInputs ++ [ebook_tools];
+        buildInputs = super.libksane.buildInputs ++ [scope.KDE4 saneBackends];
       };
 
     };
 
   kdeApps = generateCollection ./. {
     inherit (kf5) mkDerivation;
-    inherit mirror preResolve postResolve scope;
+    inherit mirror preResolve postResolve renames scope;
   };
 
 in kdeApps
