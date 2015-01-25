@@ -64,6 +64,9 @@ self: super: {
   # The test suite pulls in mtl 2.2.x
   command-qq = dontCheck super.command-qq;
 
+  # Doesn't support GHC < 7.10.x.
+  ghc-exactprint = dontDistribute super.ghc-exactprint;
+
 }
 
 // # packages relating to amazonka
