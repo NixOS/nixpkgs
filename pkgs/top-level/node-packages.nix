@@ -37,11 +37,12 @@ rec {
       pkgs.callPackage ../development/web/nodejs/build-node-package.nix {
         inherit nodejs neededNatives;
       }
-    ) (args // {
+    ) (args // (optionalAttrs (isList args.src) {
       # Backwards compatibility
-      src = if isList args.src then head args.src else args.src;
-      pkgName = (builtins.parseDrvName args.name).name;
-    });
+      src = head args.src;
+    }) // (optionalAttrs (attrByPath ["passthru" "names"] null args != null) {
+       pkgName = head args.passthru.names;
+    }));
 
     override = overrides.${args.name} or overrides.${pkg.pkgName} or {};
 

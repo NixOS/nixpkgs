@@ -3,6 +3,9 @@
 {
   name, src,
 
+  # Node package name
+  pkgName ? (builtins.parseDrvName name).name,
+
   # List or attribute set of dependencies
   deps ? {},
 
@@ -37,9 +40,6 @@ let
     tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv *node* $out
   '';
-
-  # Package name without version
-  pkgName = (builtins.parseDrvName name).name;
 
   # Convert deps to attribute set
   attrDeps = if isAttrs deps then deps else
