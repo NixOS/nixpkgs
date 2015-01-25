@@ -74,9 +74,7 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''
-        exec ${plasma5.startkde}/bin/startkde;
-      '';
+      start = ''exec ${plasma5.startkde}/bin/startkde;'';
     };
 
     security.setuidOwners = singleton {
@@ -88,101 +86,32 @@ in
     };
 
     environment.systemPackages = with plasma5; with kf5;
+      (builtins.attrValues
+        (removeAttrs plasma5
+          [ "deepOverride" "override" "overrideDerivation"
+            "recurseForDerivations" "scope"
+          ]))
+      ++
+      (builtins.attrValues
+        (removeAttrs kf5
+          [ "deepOverride" "extra-cmake-modules" "mkDerivation" "override"
+            "overrideDerivation" "recurseForDerivations" "scope"
+          ]))
+      ++
       [
-        # Plasma packages
-        baloo
-        breeze-qt4
-        breeze-qt5
-        kde-cli-tools
-        kdeplasma-addons
-        kfilemetadata
-        khelpcenter
-        khotkeys
-        kinfocenter
-        kio-extras
-        kmenuedit
-        ksysguard
-        kwin
-        kwrited
-        libkscreen
-        libksysguard
-        libmm-qt
-        libnm-qt
-        milou
-        oxygen
-        plasma-desktop
-        plasma-workspace
-        plasma-workspace-wallpapers
-        powerdevil
-        qt5
-        pkgs.qt4 # qtconfig is the only way to set the theme for Qt 4 programs
-        systemsettings
-
-        # Frameworks packages
-        attica
-        frameworkintegration
-        kactivities
-        karchive
-        kauth
-        kbookmarks
-        kcmutils
-        kcodecs
-        kcompletion
-        kconfig
-        kconfigwidgets
-        kcoreaddons
-        kcrash
-        kdbusaddons
-        kdeclarative
-        kded
-        kdesignerplugin
-        kdesu
-        kdewebkit
-        kdnssd
-        kemoticons
-        kglobalaccel
-        kguiaddons
-        khtml
-        kiconthemes
-        kidletime
-        kimageformats
-        kinit
-        kio
-        kitemmodels
-        kjobwidgets
-        kjs
-        kjsembed
-        kmediaplayer
-        knewstuff
-        knotifications
-        knotifyconfig
-        kparts
-        kplotting
-        kpty
-        kross
-        krunner
-        kservice
-        ktexteditor
-        ktextwidgets
-        kunitconversion
-        kwallet
-        kwidgetsaddons
-        kwindowsystem
-        kxmlgui
-        plasma-framework
-        solid
-        sonnet
-        threadweaver
+        pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
         kdeApps.kde-baseapps
         kdeApps.kde-base-artwork
+        kdeApps.kde-workspace
+        kdeApps.kde-runtime
+        kdeApps.kmix
         kdeApps.konsole
         kdeApps.oxygen-icons
 
         pkgs.hicolor_icon_theme
 
-        # GTK theme, nearly identical to Breeze
-        pkgs.orion
+        pkgs.orion # GTK theme, nearly identical to Breeze
       ]
       ++ (optional config.networking.networkmanager.enable plasma-nm)
       ++ phononBackendPackages;
