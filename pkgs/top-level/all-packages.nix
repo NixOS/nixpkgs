@@ -10344,6 +10344,8 @@ let
 
   kermit = callPackage ../tools/misc/kermit { };
 
+  keyfinder = callPackage ../applications/audio/keyfinder { };
+
   keymon = callPackage ../applications/video/key-mon { };
 
   kid3 = callPackage ../applications/audio/kid3 {
