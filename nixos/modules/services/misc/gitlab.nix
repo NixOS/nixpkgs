@@ -7,8 +7,10 @@ with lib;
 let
   cfg = config.services.gitlab;
 
-  ruby = pkgs.ruby;
-  rubyLibs = pkgs.rubyLibs;
+  ruby = pkgs.gitlab.ruby;
+  bundler = pkgs.bundler;
+
+  gemHome = "${pkgs.gitlab.env}/${ruby.gemPath}"
 
   databaseYml = ''
     production:
@@ -38,13 +40,14 @@ let
 
   gitlab-runner = pkgs.stdenv.mkDerivation rec {
     name = "gitlab-runner";
-    buildInputs = [ pkgs.gitlab pkgs.rubyLibs.bundler pkgs.makeWrapper ];
+    buildInputs = [ pkgs.gitlab pkgs.bundler pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
     buildPhase = "";
     installPhase = ''
       mkdir -p $out/bin
-      makeWrapper ${rubyLibs.bundler}/bin/bundle $out/bin/gitlab-runner\
+      makeWrapper ${bundler}/bin/bundle $out/bin/gitlab-runner\
           --set RAKEOPT '"-f ${pkgs.gitlab}/share/gitlab/Rakefile"'\
+          --set GEM_HOME '${gemHome}'\
           --set UNICORN_PATH "${cfg.stateDir}/"\
           --set GITLAB_PATH "${pkgs.gitlab}/share/gitlab/"\
           --set GITLAB_APPLICATION_LOG_PATH "${cfg.stateDir}/log/application.log"\
@@ -172,6 +175,7 @@ in {
       after = [ "network.target" "redis.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = "${cfg.stateDir}/home";
+      environment.GEM_HOME = gemHome;
       environment.UNICORN_PATH = "${cfg.stateDir}/";
       environment.GITLAB_PATH = "${pkgs.gitlab}/share/gitlab/";
       environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/application.log";
@@ -201,7 +205,7 @@ in {
         Group = "gitlab";
         TimeoutSec = "300";
         WorkingDirectory = "${pkgs.gitlab}/share/gitlab";
-        ExecStart="${rubyLibs.bundler}/bin/bundle exec \"sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.stateDir}/tmp/sidekiq.pid\"";
+        ExecStart="${bundler}/bin/bundle exec \"sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.stateDir}/tmp/sidekiq.pid\"";
       };
     };
 
@@ -209,6 +213,7 @@ in {
       after = [ "network.target" "postgresql.service" "redis.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = "${cfg.stateDir}/home";
+      environment.GEM_HOME = gemHome;
       environment.UNICORN_PATH = "${cfg.stateDir}/";
       environment.GITLAB_PATH = "${pkgs.gitlab}/share/gitlab/";
       environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/application.log";
@@ -263,7 +268,7 @@ in {
 
             # force=yes disables the manual-interaction yes/no prompt
             # which breaks without an stdin.
-            force=yes ${rubyLibs.bundler}/bin/bundle exec rake -f ${pkgs.gitlab}/share/gitlab/Rakefile gitlab:setup RAILS_ENV=production
+            force=yes ${bundler}/bin/bundle exec rake -f ${pkgs.gitlab}/share/gitlab/Rakefile gitlab:setup RAILS_ENV=production
           fi
         fi
 
@@ -285,7 +290,7 @@ in {
         Group = "gitlab";
         TimeoutSec = "300";
         WorkingDirectory = "${pkgs.gitlab}/share/gitlab";
-        ExecStart="${rubyLibs.bundler}/bin/bundle exec \"unicorn -c ${cfg.stateDir}/config/unicorn.rb -E production\"";
+        ExecStart="${bundler}/bin/bundle exec \"unicorn -c ${cfg.stateDir}/config/unicorn.rb -E production\"";
       };
 
     };

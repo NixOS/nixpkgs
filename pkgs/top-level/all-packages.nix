@@ -1316,9 +1316,10 @@ let
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   # Evaluation broken by recent ruby changes.
-  # gitlab = callPackage ../applications/version-management/gitlab {
-  #  libiconv = libiconvOrLibc;
-  # };
+  gitlab = callPackage ../applications/version-management/gitlab {
+    libiconv = libiconvOrLibc;
+    ruby = ruby_2_1_3;
+  };
 
   # Evaluation broken by recent ruby changes.
   # gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };

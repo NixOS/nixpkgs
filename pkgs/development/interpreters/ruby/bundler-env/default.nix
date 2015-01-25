@@ -8,6 +8,7 @@
 
 { name, gemset, gemfile, lockfile, ruby ? defs.ruby, gemConfig ? defaultGemConfig
 , enableParallelBuilding ? false # TODO: this might not work, given the env-var shinanigans.
+, postInstall ? null
 , documentation ? false
 , meta ? {}
 }@args:
@@ -108,7 +109,7 @@ let
               FileUtils.cp(patched_package.spec.file_name, out)
             ''}
           else
-            cp -r . out
+            cp -r . $out
           fi
 
           runHook postInstall
@@ -273,13 +274,13 @@ stdenv.mkDerivation {
     export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
 
     export GEM_HOME=$out/${ruby.gemPath}
-    export GEM_PATH=$GEM_HOME
+    export GEM_PATH=$NIX_BUNDLER_GEMPATH:$GEM_HOME
     mkdir -p $GEM_HOME
 
     ${allBuildFlags}
-    #export
 
     mkdir gems
+    cp ${bundler}/${bundler.ruby.gemPath}/cache/bundler-*.gem gems
     ${copyGems}
 
     ${lib.optionalString (!documentation) ''
@@ -295,7 +296,12 @@ stdenv.mkDerivation {
     cp ${./monkey_patches.rb} monkey_patches.rb
     export RUBYOPT="-rmonkey_patches.rb -I $(pwd -P)"
     bundler install --frozen --binstubs ${lib.optionalString enableParallelBuilding "--jobs $NIX_BUILD_CORES"}
+    RUBYOPT=""
+
+    runHook postInstall
   '';
+
+  inherit postInstall;
 
   passthru = {
     inherit ruby;
