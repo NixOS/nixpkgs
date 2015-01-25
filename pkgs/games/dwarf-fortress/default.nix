@@ -4,17 +4,17 @@
 
 let
   baseVersion = "40";
-  patchVersion = "23";
+  patchVersion = "24";
   srcs = {
     df_unfuck = fetchgit {
       url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-      rev = "c6ec52520c44ba09d0d14c1688d2e9d70354fd01";
-      sha256 = "0pp602ykyrq4rhyrf3pyy9vplxlkl256lw8bcfmgh0mqzzap9wq9";
+      rev = "39742d64d2886fb594d79e7cc4b98fb917f26811";
+      sha256 = "19vwx6kpv1sf93bx5v8x47f7x2cgxsqk82v6j1a72sa3q7m5cpc7";
     };
 
     df = fetchurl {
       url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-      sha256 = "12gjb19scdgsz7zgk9s01qjxqrvh7z0xr68svwgxxqn4wf8kppcl";
+      sha256 = "0d4jrs45qj89vq9mjg7fxxhis7zivvb0vzjpmkk274b778kccdys";
     };
   };
 
