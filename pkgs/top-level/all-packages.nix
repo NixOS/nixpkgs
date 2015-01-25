@@ -4460,7 +4460,10 @@ let
 
   gnustep_back = callPackage ../development/libraries/gnustep-back { stdenv = clangStdenv; };
   gnustep_base = callPackage ../development/libraries/gnustep-base { stdenv = clangStdenv; giflib = giflib_4_1; };
+
   gnustep_make = callPackage ../development/tools/build-managers/gnustep-make { stdenv = clangStdenv; };
+  gsmakeDerivation = callPackage ../development/tools/build-managers/gnustep-make/gsmakeDerivation.nix { stdenv = clangStdenv; };
+  
   gnustep_gui = callPackage ../development/libraries/gnustep-gui { stdenv = clangStdenv; };
 
   gob2 = callPackage ../development/tools/misc/gob2 { };

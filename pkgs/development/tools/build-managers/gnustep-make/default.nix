@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
   configureFlags = "--with-installation-domain=SYSTEM";
   buildInputs = [ clang which libobjc2 ];
-  patches = [ ./gs-makefiles-additional.patch ];
+  patches = [ ./fixup-paths.patch ];
   setupHook = ./setup-hook.sh;
   meta = {
     description = "GNUstep-make is a build manager for GNUstep.";

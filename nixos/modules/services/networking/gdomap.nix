@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.gdomap;
-  stateDir = "/var/lib/gdomap";
+  pidFile = "${cfg.pidDir}/gdomap.pid";
 in
 {
   #
@@ -20,6 +20,10 @@ in
 	  Note that gdomap runs as root.
         ";
       };
+      pidDir = mkOption {
+        default = "/var/run/gdomap";
+	description = "Location of the file which stores the PID of gdomap";
+      };
     };
   };
   #
@@ -27,20 +31,22 @@ in
   #
   config = mkIf config.services.gdomap.enable {
     # NOTE: gdomap runs as root
+    # TODO: extra user for gdomap?
     systemd.services.gdomap = {
       description = "gdomap server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path  = [ pkgs.gnustep_base ];
       preStart = ''
-	mkdir -m 755 -p ${stateDir}
-	mkdir -m 755 -p /run/gdomap
+        mkdir -m 0700 -p ${cfg.pidDir}
+	chown -R nobody:nobody ${cfg.pidDir}
       '';
       serviceConfig = {
-        # NOTE: this is local-only configuration!
         ExecStart = "@${pkgs.gnustep_base}/bin/gdomap"
-	  + " -j ${stateDir} -p";
-	Restart = "always"; # "no";
+	  + " -d -p"
+	  + " -I ${pidFile}";
+#	  + " -j ${cfg.pidDir}";
+	Restart = "always";
 	RestartSec = 2;
 	TimeoutStartSec = "30";
 	Type = "forking";

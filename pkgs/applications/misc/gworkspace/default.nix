@@ -1,4 +1,4 @@
-{ gnustep_back, gnustep_base, gnustep_gui, gnustep_make
+{ gnustep_back, gnustep_base, gnustep_gui, gsmakeDerivation
 , fetchurl
 , sqlite
 , stdenv
@@ -7,7 +7,7 @@
 let
   version = "0.9.2";
 in
-stdenv.mkDerivation {
+gsmakeDerivation {
   name = "gworkspace-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/usr-apps/gworkspace-${version}.tar.gz";
@@ -16,9 +16,8 @@ stdenv.mkDerivation {
   # additional dependencies:
   # - PDFKit framework from http://gap.nongnu.org/
   # - TODO: to --enable-gwmetadata, need libDBKit as well as sqlite!
-  GNUSTEP_MAKEFILES = "${gnustep_make}/share/GNUstep/Makefiles";
-  buildInputs = [ gnustep_back gnustep_base gnustep_make gnustep_gui system_preferences ];
-  propagatedBuildInputs = [ gnustep_back gnustep_base gnustep_gui system_preferences ];
+  buildInputs = [ gnustep_back gnustep_base gnustep_gui system_preferences ];
+#  propagatedBuildInputs = [ gnustep_back gnustep_base gnustep_gui system_preferences ];
   configureFlags = [ "--with-inotify" ];
   meta = {
     description = "GWorkspace is a workspace manager for GNUstep";

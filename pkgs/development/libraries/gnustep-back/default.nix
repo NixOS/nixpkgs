@@ -1,8 +1,7 @@
-{ buildEnv
+{ gsmakeDerivation
 , cairo
-, clang
 , fetchurl
-, gnustep_base, gnustep_make, gnustep_gui
+, gnustep_base, gnustep_gui
 , xlibs
 , x11
 , freetype
@@ -12,13 +11,13 @@
 let
   version = "0.24.0";
 in
-stdenv.mkDerivation rec {
+gsmakeDerivation {
   name = "gnustep-back-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-0.24.0.tar.gz";
     sha256 = "0qixbilkkrqxrhhj9hnp7ygd5gs23b3qbbgk3gaxj73d0xqfvhjz";
   };
-  buildInputs = [ cairo clang gnustep_base gnustep_gui gnustep_make freetype pkgconfig x11 ];
+  buildInputs = [ cairo gnustep_base gnustep_gui freetype pkgconfig x11 ];
   meta = {
     description = "GNUstep-back is a generic backend for GNUstep.";
     
