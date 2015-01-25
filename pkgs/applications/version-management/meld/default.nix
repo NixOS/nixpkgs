@@ -1,4 +1,6 @@
-{stdenv, fetchurl, itstool, buildPythonPackage, python27, intltool, scrollkeeper, makeWrapper, libxml2, pygobject3, gobjectIntrospection, gtk3, gnome3, pycairo, cairo}:
+{ stdenv, fetchurl, itstool, buildPythonPackage, python27, intltool, makeWrapper
+, libxml2, pygobject3, gobjectIntrospection, gtk3, gnome3, pycairo, cairo
+}:
 
 
 let
@@ -15,7 +17,10 @@ buildPythonPackage rec {
     sha256 = "1zg6qhm53j0vxmjj3pcj2hwi8c12dxzmlh98zks0jnwhqv2p4dfv";
   };
 
-  buildInputs = [ python27 intltool scrollkeeper makeWrapper itstool libxml2 gnome3.gtksourceview gnome3.gsettings_desktop_schemas pycairo cairo];
+  buildInputs = [
+    python27 intltool makeWrapper itstool libxml2
+    gnome3.gtksourceview gnome3.gsettings_desktop_schemas pycairo cairo
+  ];
   propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];
 
   installPhase = ''

@@ -10474,9 +10474,7 @@ let
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  meld = callPackage ../applications/version-management/meld {
-    inherit (gnome) scrollkeeper;
-  };
+  meld = callPackage ../applications/version-management/meld { };
 
   mcomix = callPackage ../applications/graphics/mcomix { };
 
