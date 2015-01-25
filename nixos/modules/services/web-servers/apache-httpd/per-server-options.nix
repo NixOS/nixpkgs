@@ -24,13 +24,23 @@ with lib;
     '';
   };
 
-  port = mkOption {
-    type = types.int;
-    default = 0;
-    description = ''
-      Port for the server.  0 means use the default port: 80 for http
-      and 443 for https (i.e. when enableSSL is set).
-    '';
+  listen = mkOption {
+     type = types.listOf (types.submodule (
+          {
+            options = {
+              port = mkOption {
+                type = types.int;
+                description = "port to listen on";
+              };
+              ip = mkOption {
+                type = types.string;
+                default = "*";
+                description = "Ip to listen on. 0.0.0.0 for ipv4 only, * for all.";
+              };
+            };
+          } ));
+
+    default = [];
   };
 
   enableSSL = mkOption {
