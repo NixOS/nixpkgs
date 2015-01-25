@@ -3462,9 +3462,6 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
-  # Evaluation broken by recent ruby changes.
-  # gem-nix = callPackage ../tools/package-management/gem-nix { };
-
   go_1_0 = callPackage ../development/compilers/go { };
 
   go_1_1 =
@@ -4331,8 +4328,6 @@ let
   };
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
-  # Evaluation broken by recent ruby changes.
-  # loadRubyEnv = callPackage ../development/interpreters/ruby/load-ruby-env.nix { };
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
