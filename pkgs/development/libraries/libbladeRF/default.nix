@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, cmake, git, libusb1, udev  }:
+{ stdenv, fetchgit, pkgconfig, cmake, git, doxygen, help2man, tecla, libusb1, udev }:
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -11,17 +11,22 @@ stdenv.mkDerivation rec {
     name = "libbladeRF_v${version}-checkout";
   };
 
-  buildInputs = [ pkgconfig cmake git libusb1 udev ];
+  buildInputs = [ pkgconfig cmake git doxygen help2man tecla libusb1 udev ];
 
-  # TODO: Fix upstream, Documentation fails to build when pandoc is
-  #       in PATH with the following errors:
-  # error: 'CLI_CMD_HELPTEXT_*' undeclared here (not in a function)
+  # Fixup shebang
+  prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
+
+  # Let us avoid nettools as a dependency.
+  patchPhase = ''
+    sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
+    sed -i 's/ --no-info/ --no-info --no-discard-stderr/' host/utilities/bladeRF-cli/CMakeLists.txt
+  '';
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Debug"
     "-DUDEV_RULES_PATH=$out/etc/udev/rules.d"
     "-DINSTALL_UDEV_RULES=ON"
-    "-DBUILD_BLADERF_CLI_DOCUMENTATION=OFF"
+    "-DBUILD_DOCUMENTATION=ON"
   ];
 
   meta = {
