@@ -2,26 +2,37 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-packageconfig">
 
-<title>nixpkgs configuration</title>
+<title>nixpkgs global configuration</title>
 
     <para>
-        The Nix package manager can be configured to allow or deny certain
-        package sets. At this moment, packages can either be allowed to be
-        installed or denied to be installed based on their license.
+        Nix packages can be configured to allow or deny certain
+        options.
+    </para>
+
+    <para>
+        To apply the configuration edit <filename>~/.nixpkgs/config.nix</filename>
+        and set it like
+        <programlisting>
+            {
+                allowUnfree = true;
+            }
+        </programlisting>
+        and will allow the Nix package manager to install unfree licensed packages.
+
+        The configuration as listed also applies for NixOS under <option>nixpkgs.config</option> set.
     </para>
 
     <itemizedlist>
         <listitem>
             <para>
-                Allow packages that do not have a free license by setting
+                Allow installing of packages that are distributed under unfree license by setting
                 <programlisting>
-                    nixpkgs.config.allowUnfree = true;
+                  allowUnfree = true;
                 </programlisting>
                 or deny them by setting it to <literal>false</literal>.
             </para>
             <para>
-                This can also be achieved for one call to the Nix package
-                manager by setting the environment variable:
+                Same can be achieved by setting the environment variable:
                 <programlisting>
                     export NIXPKGS_ALLOW_UNFREE=1
                 </programlisting>
@@ -31,9 +42,15 @@
         <listitem>
             <para>
                 Whenever unfree packages are not allowed, single packages can
-                still be allowed by a predicate:
+                still be allowed by a predicate function that accepts package
+                as an argument and should return a boolean:
                 <programlisting>
-                    nixpkgs.config.allowUnfreePredicate = (x: ...);
+                  allowUnfreePredicate = (pkg: ...);
+                </programlisting>
+
+                Example to allow flash player only:
+                <programlisting>
+                  allowUnfreePredicate = (pkg: pkgs.lib.hasPrefix "flashplayer-" pkg.name);
                 </programlisting>
             </para>
         </listitem>
@@ -43,7 +60,7 @@
                 Whenever unfree packages are not allowed, packages can still be
                 whitelisted by their license:
                 <programlisting>
-                    nixpkgs.config.whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
+                  whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
                 </programlisting>
             </para>
         </listitem>
@@ -54,7 +71,7 @@
                 <literal>allowUnfree</literal> setting, you can also explicitely
                 deny installation of packages which have a certain license:
                 <programlisting>
-                    nixpkgs.config.blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
+                  blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
                 </programlisting>
             </para>
         </listitem>
@@ -62,32 +79,7 @@
 
     <para>
         A complete list of licenses can be found in the file
-        <programlisting>
-            lib/licenses.nix
-        </programlisting>
-        of the nix package tree.
+        <filename>lib/licenses.nix</filename> of the nix package tree.
     </para>
-
-    <para>
-        To apply the configuration to the package manager, you have to emit the
-        <programlisting>
-            nixpkgs.config
-        </programlisting>
-        part from the upper listings. So a configuration with
-        <programlisting>
-            {
-                allowUnfree = true;
-            }
-        </programlisting>
-        in
-        <programlisting>
-            ~/.nixpkgs/config.nix
-        </programlisting>
-        will prevent the Nix package manager from installing unfree licensed
-        packages.
-
-        The configuration as listed applies for NixOS.
-    </para>
-
 
 </chapter>
