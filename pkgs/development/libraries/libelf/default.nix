@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext }:
+{ fetchurl, stdenv, gettext, glibc }:
 
 stdenv.mkDerivation (rec {
   name = "libelf-0.8.13";
@@ -9,6 +9,11 @@ stdenv.mkDerivation (rec {
   };
 
   doCheck = true;
+  
+  # For cross-compiling, native glibc is needed for the "gencat" program.
+  crossAttrs = {
+    nativeBuildInputs = [ glibc ];
+  };
 
   meta = {
     description = "ELF object file access library";
