@@ -60,4 +60,26 @@
         </listitem>
     </itemizedlist>
 
+    <para>
+        To apply the configuration to the package manager, you have to emit the
+        <programlisting>
+            nixpkgs.config
+        </programlisting>
+        part from the upper listings. So a configuration with
+        <programlisting>
+            {
+                allowUnfree = true;
+            }
+        </programlisting>
+        in
+        <programlisting>
+            ~/.nixpkgs/config.nix
+        </programlisting>
+        will prevent the Nix package manager from installing unfree licensed
+        packages.
+
+        The configuration as listed applies for NixOS.
+    </para>
+
+
 </chapter>
