@@ -61,6 +61,14 @@
     </itemizedlist>
 
     <para>
+        A complete list of licenses can be found in the file
+        <programlisting>
+            lib/licenses.nix
+        </programlisting>
+        of the nix package tree.
+    </para>
+
+    <para>
         To apply the configuration to the package manager, you have to emit the
         <programlisting>
             nixpkgs.config
