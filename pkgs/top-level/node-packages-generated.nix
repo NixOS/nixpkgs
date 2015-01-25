@@ -9022,7 +9022,7 @@
     name = "esprima-1.1.0-dev-harmony";
     bin = true;
     src = fetchgit {
-      url = "git://github.com/ariya/esprima.git";
+      url = "https://github.com/ariya/esprima.git";
       rev = "216189496afc6bd3f7021a05253c64f9858b6ff9";
       sha256 = "bdfe327bcc19a2adca183c0f1f5517cff87afdfbadce1a77e43841c1539cedca";
     };
@@ -13474,7 +13474,7 @@
       "passport-0.2.1" = self.by-version."passport"."0.2.1";
       "passport-http-0.2.2" = self.by-version."passport-http"."0.2.2";
       "js-yaml-3.2.5" = self.by-version."js-yaml"."3.2.5";
-      "mongoose-3.8.21" = self.by-version."mongoose"."3.8.21";
+      "mongoose-3.8.22" = self.by-version."mongoose"."3.8.22";
       "gridfs-stream-0.5.3" = self.by-version."gridfs-stream"."0.5.3";
       "temp-0.8.1" = self.by-version."temp"."0.8.1";
       "kue-0.8.11" = self.by-version."kue"."0.8.11";
@@ -14569,6 +14569,21 @@
       sha1 = "11836638f729a2f6c5bae056a7d7a15898c9ba7c";
     };
     deps = {
+    };
+    peerDependencies = [];
+  };
+  by-spec."kerberos"."0.0.7" =
+    self.by-version."kerberos"."0.0.7";
+  by-version."kerberos"."0.0.7" = self.buildNodePackage {
+    name = "kerberos-0.0.7";
+    bin = false;
+    src = fetchurl {
+      url = "http://registry.npmjs.org/kerberos/-/kerberos-0.0.7.tgz";
+      name = "kerberos-0.0.7.tgz";
+      sha1 = "48db5e268e59ebb1626fd3c76ff8ff7f267a9852";
+    };
+    deps = {
+      "nan-1.3.0" = self.by-version."nan"."1.3.0";
     };
     peerDependencies = [];
   };
@@ -17048,6 +17063,23 @@
     };
     peerDependencies = [];
   };
+  by-spec."mongodb"."1.4.28" =
+    self.by-version."mongodb"."1.4.28";
+  by-version."mongodb"."1.4.28" = self.buildNodePackage {
+    name = "mongodb-1.4.28";
+    bin = false;
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mongodb/-/mongodb-1.4.28.tgz";
+      name = "mongodb-1.4.28.tgz";
+      sha1 = "4308333aa9b369cc8214a67602527d138bf74e1f";
+    };
+    deps = {
+      "bson-0.2.18" = self.by-version."bson"."0.2.18";
+      "kerberos-0.0.7" = self.by-version."kerberos"."0.0.7";
+      "readable-stream-1.1.13" = self.by-version."readable-stream"."1.1.13";
+    };
+    peerDependencies = [];
+  };
   by-spec."mongodb".">= 1.2.0 <2.1.0" =
     self.by-version."mongodb"."2.0.14";
   by-version."mongodb"."2.0.14" = self.buildNodePackage {
@@ -17129,17 +17161,17 @@
   };
   "mongoose" = self.by-version."mongoose"."3.6.20";
   by-spec."mongoose"."3.8.x" =
-    self.by-version."mongoose"."3.8.21";
-  by-version."mongoose"."3.8.21" = self.buildNodePackage {
-    name = "mongoose-3.8.21";
+    self.by-version."mongoose"."3.8.22";
+  by-version."mongoose"."3.8.22" = self.buildNodePackage {
+    name = "mongoose-3.8.22";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/mongoose/-/mongoose-3.8.21.tgz";
-      name = "mongoose-3.8.21.tgz";
-      sha1 = "ba96d6e73b7b73a5c133ca886de316994df2a2f0";
+      url = "http://registry.npmjs.org/mongoose/-/mongoose-3.8.22.tgz";
+      name = "mongoose-3.8.22.tgz";
+      sha1 = "e5f21eb1dac5532cdee15241dea50553267eb2e4";
     };
     deps = {
-      "mongodb-1.4.12" = self.by-version."mongodb"."1.4.12";
+      "mongodb-1.4.28" = self.by-version."mongodb"."1.4.28";
       "hooks-0.2.1" = self.by-version."hooks"."0.2.1";
       "ms-0.1.0" = self.by-version."ms"."0.1.0";
       "sliced-0.0.5" = self.by-version."sliced"."0.0.5";
@@ -17654,6 +17686,20 @@
     };
     peerDependencies = [];
   };
+  by-spec."nan"."1.3.0" =
+    self.by-version."nan"."1.3.0";
+  by-version."nan"."1.3.0" = self.buildNodePackage {
+    name = "nan-1.3.0";
+    bin = false;
+    src = fetchurl {
+      url = "http://registry.npmjs.org/nan/-/nan-1.3.0.tgz";
+      name = "nan-1.3.0.tgz";
+      sha1 = "9a5b8d5ef97a10df3050e59b2c362d3baf779742";
+    };
+    deps = {
+    };
+    peerDependencies = [];
+  };
   by-spec."nan"."1.5.0" =
     self.by-version."nan"."1.5.0";
   by-version."nan"."1.5.0" = self.buildNodePackage {
@@ -17774,18 +17820,6 @@
   };
   by-spec."nan"."~1.3.0" =
     self.by-version."nan"."1.3.0";
-  by-version."nan"."1.3.0" = self.buildNodePackage {
-    name = "nan-1.3.0";
-    bin = false;
-    src = fetchurl {
-      url = "http://registry.npmjs.org/nan/-/nan-1.3.0.tgz";
-      name = "nan-1.3.0.tgz";
-      sha1 = "9a5b8d5ef97a10df3050e59b2c362d3baf779742";
-    };
-    deps = {
-    };
-    peerDependencies = [];
-  };
   by-spec."nan"."~1.4.1" =
     self.by-version."nan"."1.4.3";
   by-version."nan"."1.4.3" = self.buildNodePackage {
@@ -19613,15 +19647,15 @@
   };
   by-spec."npm-user-validate"."~0.1.1" =
     self.by-version."npm-user-validate"."0.1.1";
-  by-spec."npm2nix"."git://github.com/NixOS/npm2nix.git#5.10.2" =
-    self.by-version."npm2nix"."5.10.2";
-  by-version."npm2nix"."5.10.2" = self.buildNodePackage {
-    name = "npm2nix-5.10.2";
+  by-spec."npm2nix"."git://github.com/NixOS/npm2nix.git#5.10.3" =
+    self.by-version."npm2nix"."5.10.3";
+  by-version."npm2nix"."5.10.3" = self.buildNodePackage {
+    name = "npm2nix-5.10.3";
     bin = true;
     src = fetchgit {
       url = "git://github.com/NixOS/npm2nix.git";
-      rev = "088d63714c08bdb36fbb9cf08f9e848c67a68f4e";
-      sha256 = "9c83c39883995ccd3f8726cd717985e9363fa5a1a9a5309cdd5486216adc7018";
+      rev = "d7c63c4edf4d6df4ff829c47f487b5903307b053";
+      sha256 = "8c2ef1a6b1637440d181282f90d46f55dcf92c4eecf8093663a53041225754cd";
     };
     deps = {
       "semver-2.3.2" = self.by-version."semver"."2.3.2";
@@ -19636,7 +19670,7 @@
     };
     peerDependencies = [];
   };
-  "npm2nix" = self.by-version."npm2nix"."5.10.2";
+  "npm2nix" = self.by-version."npm2nix"."5.10.3";
   by-spec."npmconf"."0.1.1" =
     self.by-version."npmconf"."0.1.1";
   by-version."npmconf"."0.1.1" = self.buildNodePackage {
@@ -22273,7 +22307,7 @@
     };
     peerDependencies = [];
   };
-  "pure-css" = self.by-version."pure-css"."0.5.0-rc-1";
+  "pure-css" = self.by-version."pure"."0.5.0-rc-1";
   by-spec."pusher"."^1.0.0" =
     self.by-version."pusher"."1.0.2";
   by-version."pusher"."1.0.2" = self.buildNodePackage {

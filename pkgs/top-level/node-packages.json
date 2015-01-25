@@ -32,7 +32,7 @@
 , "browserchannel"
 , "node-gyp"
 , "semver"
-, { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.10.2" }
+, { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.10.3" }
 , "ansi-remover"
 , "mkdirp"
 , "jshint"
