@@ -3783,6 +3783,8 @@ let
 
     patoline = callPackage ../tools/typesetting/patoline { };
 
+    gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
+
     gg = callPackage ../development/ocaml-modules/gg { };
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
@@ -3836,6 +3838,8 @@ let
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+
+    ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
 
@@ -3918,6 +3922,8 @@ let
     ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
       minimal = false;
     };
+
+    ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
@@ -9924,6 +9930,8 @@ let
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
+
+  google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
 
