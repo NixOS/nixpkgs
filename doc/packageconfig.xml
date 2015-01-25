@@ -43,7 +43,7 @@
                 Whenever unfree packages are not allowed, packages can still be
                 whitelisted by their license:
                 <programlisting>
-                    nixpkgs.config.whitelistedLicenses = [ licenseA licenseB ];
+                    nixpkgs.config.whitelistedLicenses = with stdenv.lib.licenses; [ amd wtfpl ];
                 </programlisting>
             </para>
         </listitem>
@@ -54,7 +54,7 @@
                 <literal>allowUnfree</literal> setting, you can also explicitely
                 deny installation of packages which have a certain license:
                 <programlisting>
-                    nixpkgs.config.blacklistedLicenses = [ licenseA licenseB ];
+                    nixpkgs.config.blacklistedLicenses = with stdenv.lib.licenses; [ agpl3 gpl3 ];
                 </programlisting>
             </para>
         </listitem>
