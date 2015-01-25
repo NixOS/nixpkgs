@@ -1,6 +1,6 @@
 { aspell, audiofile
-, gnustep_make
-, clang, cups
+, gsmakeDerivation
+, cups
 , fetchurl
 , gmp, gnutls
 , libffi
@@ -10,12 +10,11 @@
 , icu
 , pkgconfig, portaudio
 , stdenv
-, which
 }:
 let
   version = "1.24.7";
 in
-stdenv.mkDerivation {
+gsmakeDerivation {
   name = "gnustep-base-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-1.24.7.tar.gz";
@@ -23,15 +22,14 @@ stdenv.mkDerivation {
   };
   buildInputs = [
     aspell audiofile
-    clang cups
-    gmp gnustep_make gnutls
+    cups
+    gmp gnutls
     libffi
     libjpeg libtiff libpng giflib libungif
     libxml2 libxslt libiconv
     libobjc2 libgcrypt
     icu
     pkgconfig portaudio
-    which
   ];
   propagatedBuildInputs = [
     aspell audiofile
@@ -44,7 +42,7 @@ stdenv.mkDerivation {
     icu
     portaudio
   ];
-  patches = [ ./fixup-base-makefile-installdir.patch ];
+  patches = [ ./fixup-paths.patch ];
   meta = {
     description = "GNUstep-base is an implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa.";
 

@@ -1,18 +1,22 @@
 { stdenv, fetchurl
-, gnustep_base, gnustep_back, gnustep_make, gnustep_gui
+, gnustep_base, gnustep_back, gsmakeDerivation, gnustep_gui, gorm
+, gnumake, gdb
 }:
 let
   version = "0.6.2";
 in
-stdenv.mkDerivation rec {
+gsmakeDerivation {
   name = "projectcenter-${version}";
   src = fetchurl {
     url = "ftp://ftp.gnustep.org/pub/gnustep/dev-apps/ProjectCenter-${version}.tar.gz";
     sha256 = "0wwlbpqf541apw192jb633d634zkpjhcrrkd1j80y9hihphll465";
   };
 
-  buildInputs = [ gnustep_make gnustep_base gnustep_back gnustep_gui ];
-  propagatedBuildInputs = [ gnustep_base gnustep_back gnustep_gui ];
+  # NOTE: need a patch for ProjectCenter to help it locate some necessary tools:
+  # 1. Framework/PCProjectLauncher.m, locate gdb (say among NIX_GNUSTEP_SYSTEM_TOOLS)
+  # 2. Framework/PCProjectBuilder.m, locate gmake (similar)
+  buildInputs = [ gnustep_base gnustep_back gnustep_gui ];
+  propagatedBuildInputs = [ gnustep_base gnustep_back gnustep_gui gnumake gdb gorm ];
   
   meta = {
     description = "ProjectCenter is GNUstep's integrated development environment (IDE) and allows a rapid development and easy managment of ProjectCenter running on GNUstep applications, tools and frameworks.";
