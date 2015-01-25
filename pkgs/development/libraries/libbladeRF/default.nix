@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, libftdi, libusb, udev, cmake, git }:
+{ stdenv, fetchgit, pkgconfig, cmake, git, libusb1, udev  }:
 
 stdenv.mkDerivation rec {
   version = "1.1.0";
@@ -11,15 +11,18 @@ stdenv.mkDerivation rec {
     name = "libbladeRF_v${version}-checkout";
   };
 
-  buildInputs = [ pkgconfig libftdi libusb udev cmake git ];
+  buildInputs = [ pkgconfig cmake git libusb1 udev ];
 
-# XXX: documentation fails to build due to a "undeclared here" bug.
-#      requires pandoc in buildInputs also..
-# YYY: udev rule wont install to "/etc/udev/rules.d/88-nuand.rules"???
-  configurePhase = ''
-    cmake -DCMAKE_BUILD_TYPE=Debug -DINSTALL_UDEV_RULES=OFF \
-          -DBUILD_BLADERF_CLI_DOCUMENTATION=OFF -DCMAKE_INSTALL_PREFIX=$out .
-  '';
+  # TODO: Fix upstream, Documentation fails to build when pandoc is
+  #       in PATH with the following errors:
+  # error: 'CLI_CMD_HELPTEXT_*' undeclared here (not in a function)
+
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Debug"
+    "-DUDEV_RULES_PATH=$out/etc/udev/rules.d"
+    "-DINSTALL_UDEV_RULES=ON"
+    "-DBUILD_BLADERF_CLI_DOCUMENTATION=OFF"
+  ];
 
   meta = {
     homepage = "https://www.nuand.com/";
