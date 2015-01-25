@@ -10346,6 +10346,8 @@ let
 
   keyfinder = callPackage ../applications/audio/keyfinder { };
 
+  keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
+
   keymon = callPackage ../applications/video/key-mon { };
 
   kid3 = callPackage ../applications/audio/kid3 {
