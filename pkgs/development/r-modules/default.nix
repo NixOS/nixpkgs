@@ -899,6 +899,10 @@ let
   ];
 
   otherOverrides = old: new: {
+    curl = old.curl.overrideDerivation (attrs: {
+      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
+    });
+
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
     });
