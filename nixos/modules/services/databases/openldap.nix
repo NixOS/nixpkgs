@@ -20,6 +20,7 @@ in
     services.openldap = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "
           Whether to enable the ldap server.
@@ -43,16 +44,25 @@ in
       };
 
       user = mkOption {
+        type = types.string;
         default = "openldap";
         description = "User account under which slapd runs.";
       };
 
       group = mkOption {
+        type = types.string;
         default = "openldap";
         description = "Group account under which slapd runs.";
       };
 
+      dataDir = mkOption {
+        type = types.string;
+        default = "/var/db/openldap";
+        description = "The database directory.";
+      };
+
       extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = "
           sldapd.conf configuration
@@ -76,22 +86,22 @@ in
       preStart = ''
         mkdir -p /var/run/slapd
         chown -R ${cfg.user}:${cfg.group} /var/run/slapd
-        mkdir -p /var/db/openldap
-        chown -R ${cfg.user}:${cfg.group} /var/db/openldap
+        mkdir -p ${cfg.dataDir}
+        chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
       '';
-      serviceConfig.ExecStart = "${openldap}/libexec/slapd -u openldap -g openldap -d 0 -f ${configFile}";
+      serviceConfig.ExecStart = "${openldap}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -f ${configFile}";
     };
 
-    users.extraUsers = optionalAttrs (cfg.user == "openldap") (singleton
-      { name = "openldap";
+    users.extraUsers.openldap =
+      { name = cfg.user;
         group = cfg.group;
         uid = config.ids.uids.openldap;
-      });
+      };
 
-    users.extraGroups = optionalAttrs (cfg.group == "openldap") (singleton
-      { name = "openldap";
+    users.extraGroups.openldap =
+      { name = cfg.group;
         gid = config.ids.gids.openldap;
-     });
+      };
 
   };
 }
