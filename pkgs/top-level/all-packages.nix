@@ -7985,7 +7985,11 @@ let
 
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
-  OVMF = callPackage ../applications/virtualization/OVMF { };
+  OVMF = callPackage ../applications/virtualization/OVMF { seabios=false; openssl=null; };
+  OVMF-CSM = callPackage ../applications/virtualization/OVMF { openssl=null; };
+  #WIP: OVMF-secureBoot = callPackage ../applications/virtualization/OVMF { seabios=false; secureBoot=true; };
+
+  seabios = callPackage ../applications/virtualization/seabios { };
 
   pgpool92 = callPackage ../servers/sql/pgpool/default.nix {
     postgresql = postgresql92;
@@ -8550,6 +8554,20 @@ let
       ];
   };
 
+  linux_3_18_xen = makeOverridable (import ../os-specific/linux/kernel/linux-3.18.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+    features = {
+      xen = true;
+      xenDom0 = true;
+      xenDomU = false;
+    };
+  };
+
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
@@ -8708,7 +8726,13 @@ let
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_17 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_17 linuxPackages_3_17);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
+  linuxPackages_3_18_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18_xen linuxPackages_3_18_xen);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
+  linuxPackages_custom = {version, src, configfile}:
+                           let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
+                                                                                               allowImportFromDerivation=true;})
+                                                     linuxPackages_self);
+                           in recurseIntoAttrs linuxPackages_self;
 
   # grsecurity flavors
   # Stable kernels

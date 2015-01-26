@@ -136,6 +136,12 @@ stdenv.mkDerivation {
       substituteInPlace tools/ioemu-qemu-xen/xen-hooks.mak \
         --replace /usr/include/pci ${pciutils}/include/pci
 
+      substituteInPlace tools/hotplug/Linux/xen-backend.rules \
+        --replace /etc/xen/scripts $out/etc/xen/scripts
+
+      # blktap is not provided by xen, but by xapi
+      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules
+
       # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
       # print the GCC version number properly.
       substituteInPlace xen/Makefile \
@@ -157,6 +163,8 @@ stdenv.mkDerivation {
       # overriden at runtime.
       substituteInPlace tools/hotplug/Linux/init.d/xendomains \
         --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
+        --replace 'XENDOM_CONFIG=/etc/default/xendomains' "" \
+        --replace /etc/xen/scripts/hotplugpath.sh $out/etc/xen/scripts/hotplugpath.sh \
         --replace /bin/ls ls
 
       # Xen's tools and firmares need various git repositories that it
@@ -192,9 +200,11 @@ stdenv.mkDerivation {
       mkdir -p $out
       cp -prvd dist/install/nix/store/*/* $out/
       cp -prvd dist/install/boot $out/boot
-      cp -prvd dist/install/etc $out/etc
+      cp -prvd dist/install/etc $out
       cp -dR docs/man1 docs/man5 $out/share/man/
       wrapPythonPrograms
+      substituteInPlace $out/etc/xen/scripts/hotplugpath.sh \
+        --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
     ''; # */
 
   meta = {
