@@ -10,7 +10,7 @@ let
   ruby = pkgs.gitlab.ruby;
   bundler = pkgs.bundler;
 
-  gemHome = "${pkgs.gitlab.env}/${ruby.gemPath}"
+  gemHome = "${pkgs.gitlab.env}/${ruby.gemPath}";
 
   databaseYml = ''
     production:
