@@ -13281,9 +13281,7 @@ let
     propagatedBuildInputs = with pythonPackages; [  ];
 
     meta = with stdenv.lib; {
-      description = "# html2text";
       homepage = https://github.com/Alir3z4/html2text/;
-      license = unknown;
     };
   };
 
