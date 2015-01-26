@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib, libX11, libXcursor
 , libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
+, substituteAll
 , pulseaudio ? null, cups ? null, pcsclite ? null
 }:
 
@@ -12,6 +13,13 @@ stdenv.mkDerivation rec {
     rev = "1.2.0-beta1+android7";
     sha256 = "08nn18jydblrif1qs92pakzd3ww7inr0i378ssn1bjp09lm1bkk0";
   };
+
+  patches = [
+  ] ++ stdenv.lib.optional (pcsclite != null)
+      (substituteAll {
+        src = ./dlopen-absolute-paths.diff;
+        inherit pcsclite;
+      });
 
   buildInputs = [
     cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext glib
