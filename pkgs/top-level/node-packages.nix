@@ -28,6 +28,11 @@ rec {
     bipio.patchPhase = ''
       ${self.json}/bin/json -I -f package.json -e 'this.scripts.install=""'
     '';
+    bip-pod.patchPhase = ''
+      substituteInPlace index.js --replace \
+        "__dirname + (literal ? '/' : '/../bip-pod-') + podName" \
+        "(literal ? __dirname + '/' : \"bip-pod-\") + podName"
+    '';
   } // args.overrides or {};
 
   # Apply overrides and back compatiblity transformations
