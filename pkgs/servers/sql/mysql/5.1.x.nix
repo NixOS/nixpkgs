@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_CXXFLAGS = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  patches = [./abi_check.patch];
+  patches = [
+    ./abi_check.patch
+    ./tztime-symlink-loop-hell.patch
+  ];
 
   postInstall =
     ''
