@@ -19,7 +19,7 @@
         </programlisting>
         and will allow the Nix package manager to install unfree licensed packages.
 
-        The configuration as listed also applies for NixOS under <option>nixpkgs.config</option> set.
+        The configuration as listed also applies to NixOS under <option>nixpkgs.config</option> set.
     </para>
 
     <itemizedlist>
