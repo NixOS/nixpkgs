@@ -11183,6 +11183,8 @@ let
 
   telepathy_idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
 
+  terminal-notifier = callPackage ../applications/misc/terminal-notifier {};
+
   terminator = callPackage ../applications/misc/terminator {
     vte = gnome.vte.override { pythonSupport = true; };
     inherit (pythonPackages) notify;
