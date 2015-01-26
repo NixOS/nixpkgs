@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
   meta = {
     description = "OCaml bindings to libcurl";
-    license = stdenv.lib.licenses.bsd;
+    license = stdenv.lib.licenses.bsd3;
     homepage = http://ocurl.forge.ocamlcore.org/;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
     platforms = ocaml.meta.platforms;
