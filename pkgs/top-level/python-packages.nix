@@ -13203,9 +13203,10 @@ let
 
     propagatedBuildInputs = with self; [ dateutil ];
 
-    preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyPackages.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
-    '';
+    # TODO: rubyPackages doesn't exist
+    #preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    #  sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.rubyPackages.terminal_notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
+    #'';
 
     meta = with stdenv.lib; {
       description = "Python Wrapper for Mac OS 10.8 Notification Center";
@@ -13213,6 +13214,7 @@ let
       license     = licenses.mit;
       platforms   = platforms.darwin;
       maintainers = [ maintainers.lovek323 ];
+      broken = true;
     };
   };
 
