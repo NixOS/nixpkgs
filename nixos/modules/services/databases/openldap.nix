@@ -37,7 +37,7 @@ in
             rootdn cn=admin,dc=example,dc=org 
             # NOTE: change after first start
             rootpw secret
-            directory /var/run/slapd
+            directory /var/db/openldap
           ''';
         '';
       };
