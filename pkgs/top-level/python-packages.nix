@@ -13286,22 +13286,5 @@ let
       license = unknown;
     };
   };
-  
-  beautifulsoup = buildPythonPackage rec {
-    name = "beautifulsoup-3.2.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/B/BeautifulSoup/BeautifulSoup-3.2.1.tar.gz";
-      md5 = "44656527ef3ac9874ac4d1c9f35f70ee";
-    };
-
-    propagatedBuildInputs = with pythonPackages; [  ];
-
-    meta = with stdenv.lib; {
-      description = "This package is OBSOLETE. It has been replaced by the beautifulsoup4 package. You should use Beautiful Soup 4 for all new projects.";
-      homepage = http://www.crummy.com/software/BeautifulSoup/;
-      license = licenses.bsd;
-    };
-  };
 
 }); in pythonPackages
