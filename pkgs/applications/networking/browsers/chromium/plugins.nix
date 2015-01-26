@@ -94,6 +94,7 @@ let
           else head (tail v);
       in fold (l: r: zipAttrsWith (_: f) [ l r ]) {};
     in {
+      inherit enabledPlugins;
       settings = mergeAttrsets (map getNix enabledPlugins);
     };
   };
