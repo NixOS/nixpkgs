@@ -36,13 +36,28 @@ let
             ${toString config.virtualisation.diskSize}M || exit 1
       fi
 
-      # Create a directory for exchanging data with the VM.
+      # Create a directory for storing temporary data of the running VM.
       if [ -z "$TMPDIR" -o -z "$USE_TMPDIR" ]; then
           TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
       fi
-      cd $TMPDIR
+      # Create a directory for exchanging data with the VM.
       mkdir -p $TMPDIR/xchg
 
+      ${if cfg.useBootLoader then ''
+        # Create a writable copy/snapshot of the boot disk
+        # A writable boot disk can be booted from automatically
+        ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
+
+        ${if cfg.useEFIBoot then ''
+          # VM needs a writable flash BIOS
+          cp ${bootDisk}/bios.bin $TMPDIR || exit 1
+          chmod 0644 $TMPDIR/bios.bin || exit 1
+        '' else ''
+        ''}
+      '' else ''
+      ''}
+
+      cd $TMPDIR
       idx=2
       extraDisks=""
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
@@ -52,7 +67,6 @@ let
       '')}
 
       # Start QEMU.
-      # "-boot menu=on" is there, because I don't know how to make qemu boot from 2nd hd.
       exec ${pkgs.qemu_kvm}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
@@ -63,8 +77,11 @@ let
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
           ${if cfg.useBootLoader then ''
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
-            -drive index=1,id=drive2,file=${bootDisk}/disk.img,if=virtio,readonly \
-            -boot menu=on \
+            -drive index=1,id=drive2,file=$TMPDIR/disk.img,media=disk \
+            ${if cfg.useEFIBoot then ''
+              -pflash $TMPDIR/bios.bin \
+            '' else ''
+            ''}
           '' else ''
             -drive file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
@@ -74,7 +91,8 @@ let
           $extraDisks \
           ${qemuGraphics} \
           ${toString config.virtualisation.qemu.options} \
-          $QEMU_OPTS
+          $QEMU_OPTS \
+          $@
     '';
 
 
@@ -98,23 +116,44 @@ let
             ''
               mkdir $out
               diskImage=$out/disk.img
-              ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 $diskImage "32M"
+              bootFlash=$out/bios.bin
+              ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 $diskImage "40M"
+              ${if cfg.useEFIBoot then ''
+                cp ${pkgs.OVMF-CSM}/FV/OVMF.fd $bootFlash
+                chmod 0644 $bootFlash
+              '' else ''
+              ''}
             '';
           buildInputs = [ pkgs.utillinux ];
+          QEMU_OPTS = if cfg.useEFIBoot
+                      then "-pflash $out/bios.bin -nographic -serial pty"
+                      else "-nographic -serial pty";
         }
         ''
-          # Create a single /boot partition.
-          ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-          ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
-          . /sys/class/block/vda1/uevent
-          mknod /dev/vda1 b $MAJOR $MINOR
+          # Create a /boot EFI partition with 40M
+          ${pkgs.gptfdisk}/sbin/sgdisk -G /dev/vda
+          ${pkgs.gptfdisk}/sbin/sgdisk -a 1 -n 1:34:2047 -c 1:"BIOS Boot Partition" -t 1:ef02 /dev/vda
+          ${pkgs.gptfdisk}/sbin/sgdisk -a 512 -N 2 -c 2:"EFI System" -t 2:ef00 /dev/vda
+          ${pkgs.gptfdisk}/sbin/sgdisk -A 1:set:1 /dev/vda
+          ${pkgs.gptfdisk}/sbin/sgdisk -A 2:set:2 /dev/vda
+          ${pkgs.gptfdisk}/sbin/sgdisk -h 2 /dev/vda
+          ${pkgs.gptfdisk}/sbin/sgdisk -C /dev/vda
+          ${pkgs.utillinux}/bin/sfdisk /dev/vda -A 2
+          . /sys/class/block/vda2/uevent
+          mknod /dev/vda2 b $MAJOR $MINOR
           . /sys/class/block/vda/uevent
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L boot /dev/vda1
-          ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
+          ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
+          export MTOOLS_SKIP_CHECK=1
+          ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
 
-          # Mount /boot.
+          # Mount /boot; load necessary modules first.
+          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko || true
+          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko || true
+          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko || true
+          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko || true
+          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko || true
           mkdir /boot
-          mount /dev/vda1 /boot
+          mount /dev/vda2 /boot
 
           # This is needed for GRUB 0.97, which doesn't know about virtio devices.
           mkdir /boot/grub
@@ -287,6 +326,17 @@ in
           '';
       };
 
+    virtualisation.useEFIBoot =
+      mkOption {
+        default = false;
+        description =
+          ''
+            If enabled, the virtual machine will provide a EFI boot
+            manager.
+            useEFIBoot is ignored if useBootLoader == false.
+          '';
+      };
+
   };
 
   config = {
@@ -379,8 +429,8 @@ in
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
-          { device = "/dev/disk/by-label/boot";
-            fsType = "ext4";
+          { device = "/dev/vdb2";
+            fsType = "vfat";
             options = "ro";
             noCheck = true; # fsck fails on a r/o filesystem
           };
@@ -413,6 +463,7 @@ in
 
     # Wireless won't work in the VM.
     networking.wireless.enable = mkVMOverride false;
+    networking.connman.enable = mkVMOverride false;
 
     # Speed up booting by not waiting for ARP.
     networking.dhcpcd.extraConfig = "noarp";
