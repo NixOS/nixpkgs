@@ -13269,5 +13269,22 @@ let
       license = licenses.mit;
     };
   };
+  
+  html2text = buildPythonPackage rec {
+    name = "html2text-2014.12.29";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/html2text/html2text-2014.12.29.tar.gz";
+      md5 = "c5bd796bdf7d1bfa43f55f1e2b5e4826";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    meta = with stdenv.lib; {
+      description = "# html2text";
+      homepage = https://github.com/Alir3z4/html2text/;
+      license = unknown;
+    };
+  };
 
 }); in pythonPackages
