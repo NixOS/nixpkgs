@@ -1153,6 +1153,8 @@ let
 
   exercism = callPackage ../development/tools/exercism { };
 
+  exfat-utils = callPackage ../tools/filesystems/exfat-utils { };
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
