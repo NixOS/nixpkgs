@@ -1658,6 +1658,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   logict = callPackage ../development/libraries/haskell/logict {};
 
+  logsink = callPackage ../development/libraries/haskell/logsink {};
+
   loop = callPackage ../development/libraries/haskell/loop {};
 
   lushtags = callPackage ../development/libraries/haskell/lushtags {};
