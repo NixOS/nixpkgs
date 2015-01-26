@@ -8569,6 +8569,11 @@ let
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_3_18_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18_xen linuxPackages_3_18_xen);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
+  linuxPackages_custom = {version, src, configfile}:
+                           let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
+                                                                                               allowImportFromDerivation=true;})
+                                                     linuxPackages_self);
+                           in recurseIntoAttrs linuxPackages_self;
 
   # grsecurity flavors
   # Stable kernels
