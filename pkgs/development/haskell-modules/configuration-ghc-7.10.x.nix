@@ -63,6 +63,7 @@ self: super: {
   attoparsec = dontCheck super.attoparsec;
 
   # test suite hangs silently for at least 10 minutes
+  ChasingBottoms = dontCheck super.ChasingBottoms;
   split = dontCheck super.split;
 
   # Test suite fails with some (seemingly harmless) error.
