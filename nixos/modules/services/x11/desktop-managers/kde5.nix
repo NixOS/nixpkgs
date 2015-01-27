@@ -33,11 +33,11 @@ let
   phononBackendPackages = flip concatMap cfg.phononBackends
     (name: attrByPath [name] (throw "unknown phonon backend `${name}'") phononBackends);
 
-  kf5 = pkgs.kf55;
+  kf5 = pkgs.kf5_stable;
 
-  plasma5 = pkgs.plasma51;
+  plasma5 = pkgs.plasma5_stable;
 
-  kdeApps = pkgs.kdeApps_14_12;
+  kdeApps = pkgs.kdeApps_stable;
 
 in
 
