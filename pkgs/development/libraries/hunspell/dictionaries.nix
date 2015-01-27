@@ -71,7 +71,79 @@ let
       '';
     };
 
+  mkDictFromWordlist =
+    { shortName, shortDescription, dictFileName, src }:
+    stdenv.mkDerivation rec {
+      inherit src;
+      version = "2014.11.17";
+      name = "hunspell-dict-${shortName}-wordlist-${version}";
+      meta = with stdenv.lib; {
+        description = "Hunspell dictionary for ${shortDescription} from Wordlist";
+        homepage =http://wordlist.aspell.net/;
+        license = licenses.bsd3;
+        platforms = platforms.all;
+      };
+      maintainers = [ stdenv.lib.maintainers.renzo ];
+      buildInputs = [ unzip ];
+      phases = "unpackPhase installPhase";
+      unpackCmd = "unzip $src README_${dictFileName}.txt ${dictFileName}.dic ${dictFileName}.aff";
+      sourceRoot = ".";
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        # docs
+        install -dm755 "$out/share/doc"
+        install -m644 README_${dictFileName}.txt "$out/share/doc/${name}.txt"
+      '';
+    };
+
 in {
+  /* ENGLISH */
+  en-us = mkDictFromWordlist {
+    shortName = "en-us";
+    shortDescription = "English (United States)";
+    dictFileName = "en_US";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_US-2014.11.17.zip;
+      sha256 = "4ce88a1af457ce0e256110277a150e5da798213f611929438db059c1c81e20f2";
+    };
+  };
+
+  en-ca = mkDictFromWordlist {
+    shortName = "en-ca";
+    shortDescription = "English (Canada)";
+    dictFileName = "en_CA";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_CA-2014.11.17.zip;
+      sha256 = "59950448440657a6fc3ede15720c1b86c0b66c4ec734bf1bd9157f6a1786673b";
+    };
+  };
+
+  en-gb-ise = mkDictFromWordlist {
+    shortName = "en-gb-ise";
+    shortDescription = "English (United Kingdom, 'ise' ending)";
+    dictFileName = "en_GB-ise";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_GB-ise-2014.11.17.zip;
+      sha256 = "97f3b25102fcadd626ae4af3cdd97f017ce39264494f98b1f36ad7d96b9d5a94";
+    };
+  };
+
+  en-gb-ize = mkDictFromWordlist {
+    shortName = "en-gb-ize";
+    shortDescription = "English (United Kingdom, 'ize' ending)";
+    dictFileName = "en_GB-ize";
+    src = fetchurl {
+      url = mirror://sourceforge/wordlist/speller/2014.11.17/hunspell-en_GB-ize-2014.11.17.zip;
+      sha256 = "84270673ed7c014445f3ba02f9efdb0ac44cea9ee0bfec76e3e10feae55c4e1c";
+    };
+  };
 
   /* SPANISH */
 
