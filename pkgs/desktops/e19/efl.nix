@@ -3,22 +3,22 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.12.2";
+  version = "1.12.3";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.gz";
-    sha256 = "1knxm4xiqxpvpszhyqik43lw36hdwdfh8z7y62803a7093j3yjnw";
+    sha256 = "1xvcym11j4vs8djx7v70alzyhir1gw2zsm1nl5kv1pfz1kgqc8fv";
   };
 
   buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-libav pulseaudio libsndfile xlibs.libXcursor xlibs.printproto
-    xlibs.libX11 libdrm udev utillinuxCurses luajit ];
+    xlibs.libX11 udev utillinuxCurses luajit ];
 
   propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xlibs.libXcomposite
     xlibs.libXdamage xlibs.libXinerama xlibs.libXp xlibs.libXtst xlibs.libXi xlibs.libXext
     bullet xlibs.libXScrnSaver xlibs.libXrender xlibs.libXfixes xlibs.libXrandr
     xlibs.libxkbfile xlibs.libxcb xlibs.xcbutilkeysyms openjpeg doxygen expat lua5_2
-    harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler libraw libspectre xineLib vlc libwebp curl ];
+    harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler libraw libspectre xineLib vlc libwebp curl libdrm ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [ "--with-tests=none" "--enable-sdl" "--enable-drm" "--with-opengl=full"
