@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
       fi
     '';
 
+  preInstall =
+    ''
+    substituteInPlace udev-md-raid-assembly.rules --replace "/sbin/mdadm" "$out/sbin/mdadm"
+    substituteInPlace udev-md-raid-arrays.rules --replace "/sbin/mdadm" "$out/sbin/mdadm"
+    '';
+
   meta = {
     description = "Programs for managing RAID arrays under Linux";
     homepage = http://neil.brown.name/blog/mdadm;
