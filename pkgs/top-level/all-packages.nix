@@ -1631,6 +1631,8 @@ let
 
   kst = callPackage ../tools/graphics/kst { };
 
+  leocad = callPackage ../applications/graphics/leocad { };
+
   less = callPackage ../tools/misc/less { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
