@@ -11047,6 +11047,8 @@ let
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  sooperlooper = callPackage ../applications/audio/sooperlooper { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
@@ -13014,8 +13016,6 @@ let
   solfege = callPackage ../misc/solfege {
       pysqlite = pkgs.pythonPackages.sqlite3;
   };
-
-  sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 
