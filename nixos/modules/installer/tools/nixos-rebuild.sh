@@ -148,9 +148,9 @@ if [ -n "$buildNix" ]; then
             if ! nix-build '<nixpkgs>' -A nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
                 machine="$(uname -m)"
                 if [ "$machine" = x86_64 ]; then
-                    nixStorePath=/nix/store/d34q3q2zj9nriq4ifhn3dnnngqvinjb3-nix-1.7
+                    nixStorePath=/nix/store/ffig6yaggbh12dh9y5pnf1grf5lqyipz-nix-1.8
                 elif [[ "$machine" =~ i.86 ]]; then
-                    nixStorePath=/nix/store/qlah0darpcn6sf3lr2226rl04l1gn4xz-nix-1.7
+                    nixStorePath=/nix/store/lglhfp4mimfa5wzjjf1kqz6f5wlsj2mn-nix-1.8
                 else
                     echo "$0: unsupported platform"
                     exit 1
