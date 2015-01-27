@@ -13229,7 +13229,6 @@ let
       license     = licenses.mit;
       platforms   = platforms.darwin;
       maintainers = [ maintainers.lovek323 ];
-      broken = true;
     };
   };
 
