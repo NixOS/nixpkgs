@@ -1,9 +1,9 @@
 /* This file defines the composition for CRAN (R) packages. */
 
-{ pkgs, overrides }:
+{ R, pkgs, overrides }:
 
 let
-  inherit (pkgs) R fetchurl stdenv lib xvfb_run utillinux;
+  inherit (pkgs) fetchurl stdenv lib xvfb_run utillinux;
 
   buildRPackage = import ./generic-builder.nix { inherit R xvfb_run utillinux ; };
 
