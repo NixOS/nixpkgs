@@ -43,7 +43,7 @@ in
         passwd:    files ldap
         group:     files ldap
         shadow:    files ldap
-        hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
+        hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} myhostname mymachines dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"}
         networks:  files dns
         ethers:    files
         services:  files
