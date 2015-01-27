@@ -9321,8 +9321,6 @@ let
 
   diffuse = callPackage ../applications/version-management/diffuse { };
 
-  distrho = callPackage ../applications/audio/distrho {};
-
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
   djvu2pdf = callPackage ../tools/typesetting/djvu2pdf { };
