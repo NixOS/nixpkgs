@@ -11,3 +11,7 @@ result-*
 .version-suffix
 
 .DS_Store
+
+/pkgs/applications/kde-apps-*/tmp/
+/pkgs/development/libraries/kde-frameworks-*/tmp/
+/pkgs/desktops/plasma-*/tmp/
