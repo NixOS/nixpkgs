@@ -9,12 +9,13 @@ let
       inherit src;
       version = "0.7";
       name = "hunspell-dict-${shortName}-rediris-${version}";
-      meta = {
+      meta = with stdenv.lib; {
         description = "Hunspell dictionary for ${shortDescription} from RedIRIS";
-        platforms = stdenv.lib.platforms.all;
         homepage = https://forja.rediris.es/projects/rla-es/;
-        license = with stdenv.lib.licenses; [ gpl3 lgpl3 mpl11 ];
+        license = with licenses; [ gpl3 lgpl3 mpl11 ];
+        platforms = platforms.all;
       };
+      maintainers = [ stdenv.lib.maintainers.renzo ];
       buildInputs = [ unzip ];
       phases = "unpackPhase installPhase";
       unpackCmd = "unzip $src README.txt ${dictFileName}.dic ${dictFileName}.aff";
@@ -39,13 +40,14 @@ let
     stdenv.mkDerivation rec {
       version = "5.2";
       name = "hunspell-dict-${shortName}-dicollecte-${version}";
-      meta = {
+      meta = with stdenv.lib; {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        platforms = stdenv.lib.platforms.all;
         homepage = http://www.dicollecte.org/home.php?prj=fr;
-        license = stdenv.lib.licenses.mpl20;
+        license = licenses.mpl20;
+        platforms = platforms.all;
       };
+      maintainers = [ stdenv.lib.maintainers.renzo ];
       src = fetchurl {
          url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
          sha256 = "c5863f7592a8c4defe8b4ed2b3b45f6f10ef265d34ae9881c1f3bbb3b80bdd02";
@@ -336,12 +338,13 @@ in {
         url = mirror://sourceforge/linguistico/italiano_2_4_2007_09_01.zip;
         md5 = "e7fbd9e2dfb25ea3288cdb918e1e1260";
       };
-      meta = {
+      meta = with stdenv.lib; {
         description = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
-        platforms = stdenv.lib.platforms.all;
         homepage = http://sourceforge.net/projects/linguistico/;
-        license = stdenv.lib.licenses.gpl3;
+        license = licenses.gpl3;
+        platforms = platforms.all;
       };
+      maintainers = [ stdenv.lib.maintainers.renzo ];
       buildInputs = [ unzip ];
       phases = "unpackPhase patchPhase installPhase";
       unpackCmd = "unzip $src it_IT_README.txt it_IT.dic it_IT.aff";
