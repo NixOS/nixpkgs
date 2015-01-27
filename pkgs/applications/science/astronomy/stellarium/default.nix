@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, qt4, perl
+{ stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, qt5, perl
 , libiconvOrEmpty }:
 
 stdenv.mkDerivation rec {
-  name = "stellarium-0.12.4";
+  name = "stellarium-0.13.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/stellarium/${name}.tar.gz";
-    sha256 = "11367hv9niyz9v47lf31vjsqkgc8da0vy2nhiyxgmk1i49p1pbhg";
+    sha256 = "1asrq1v6vjzxd2zz92brdfs5f5b1qf8zwd7k2dpg3dl4shl8wwg5";
   };
 
-  buildInputs = [ cmake freetype libpng mesa gettext openssl qt4 perl ]
+  buildInputs = [ cmake freetype libpng mesa gettext openssl qt5 perl ]
     ++ libiconvOrEmpty;
 
   enableParallelBuilding = true;
