@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.4.1.1";
-  sha256 = "0p95f6gjpcl28ysl82hbyxh7fjql6lr5csndmnrd264h2pd88pxx";
+  version = "1.4.1.4";
+  sha256 = "1av6s5nanq5y9fqlzq2yq95989gg1fyqlpzg6y5pl4dcc45srm1x";
   buildDepends = [
     aeson blazeHtml blazeMarkup conduitExtra dataDefault fastLogger
     monadControl monadLogger safe semigroups shakespeare
