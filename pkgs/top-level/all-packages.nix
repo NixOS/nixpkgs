@@ -11047,6 +11047,8 @@ let
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  sooperlooper = callPackage ../applications/audio/sooperlooper { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
