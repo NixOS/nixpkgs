@@ -12801,7 +12801,8 @@ let
     inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
       xf86vidmodeproto;
     inherit (gnome) GConf;
-    inherit (pythonPackages) pyxdg;
+    inherit (python3Packages) pyxdg;
+    inherit (python3Packages) pygobject3;
     geoclue = geoclue2;
   };
 
