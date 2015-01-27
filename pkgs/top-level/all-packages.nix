@@ -5814,7 +5814,10 @@ let
   kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
     stdenv = overrideGCC stdenv gccStdInc;
   });
-  kf5_latest = kf55;
+  kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {
+    stdenv = overrideGCC stdenv gccStdInc;
+  });
+  kf5_latest = kf56;
   kf5_stable = kf55;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
