@@ -5,10 +5,14 @@
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, stdenv, fetchurl, cmake, makeWrapper, qt, kdelibs, automoc4, phonon, dconf }:
+, kdelibs ? null # optional
+, useQt5 ? false
+, phonon_qt5, libdbusmenu_qt5
+, stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf }:
 
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
+assert withKDE -> kdelibs != null;
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
@@ -28,20 +32,19 @@ in with stdenv; mkDerivation rec {
   buildInputs = [ cmake makeWrapper qt ]
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
-    ++ lib.optional withKDE phonon;
+    ++ lib.optional withKDE phonon
+    ++ lib.optional useQt5 phonon_qt5
+    ++ lib.optional useQt5 libdbusmenu_qt5;
 
   cmakeFlags = [
-    "-DWITH_DBUS=OFF"
-    "-DWITH_LIBINDICATE=OFF"
     "-DEMBED_DATA=OFF"
-    "-DSTATIC=OFF"
-    "-DWITH_PHONON=ON" ]
+    "-DSTATIC=OFF" ]
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
     ++ edf withKDE "WITH_KDE"
-    ++ edf ssl "WITH_OPENSSL"
-    ++ edf previews "WITH_WEBKIT"  ;
+    ++ edf previews "WITH_WEBKIT"
+    ++ edf useQt5 "USE_QT5";
 
   preFixup =
     lib.optionalString client ''

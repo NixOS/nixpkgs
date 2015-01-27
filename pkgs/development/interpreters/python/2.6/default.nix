@@ -56,6 +56,7 @@ let
   # external dependencies.
   python = stdenv.mkDerivation {
     name = "python${if includeModules then "" else "-minimal"}-${version}";
+    pythonVersion = majorVersion;
 
     inherit majorVersion version src patches buildInputs preConfigure;
 

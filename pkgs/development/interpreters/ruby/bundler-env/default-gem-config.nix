@@ -18,16 +18,26 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8, v8_3_16_14, clang, sqlite, zlib, imagemagick, pkgconfig
-, ncurses, xapian, gpgme, utillinux, fetchpatch
+, libiconv, postgresql, v8, v8_3_16_14, clang, sqlite, zlib, imagemagick
+, pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
+, cmake, libssh2, openssl, mysql
 }:
 
 let
   v8 = v8_3_16_14;
+  mysql = (import <nixpkgs> {}).mysql;
 
 in
 
 {
+  charlock_holmes = attrs: {
+    buildInputs = [ which icu ];
+  };
+
+  ffi = attrs: {
+    buildInputs = [ libffi pkgconfig ];
+  };
+
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
@@ -44,6 +54,10 @@ in
         sha256 = "1l6572cmigc22g249jj8h0xlbig88mj43kdqdbimhw2pmpv3q0rs";
       })
     ];
+  };
+
+  mysql2 = attrs: {
+    buildInputs = [ mysql zlib openssl ];
   };
 
   ncursesw = attrs: {
@@ -77,6 +91,10 @@ in
     buildInputs = [ imagemagick pkgconfig ];
   };
 
+  rugged = attrs: {
+    buildInputs = [ cmake pkgconfig openssl libssh2 zlib ];
+  };
+
   sqlite3 = attrs: {
     buildFlags = [
       "--with-sqlite3-include=${sqlite}/include"
@@ -101,6 +119,13 @@ in
       "--with-v8-include=${v8}/include"
       "--with-v8-lib=${v8}/lib"
     ];
+  };
+
+  tzinfo = attrs: {
+    postPatch = ''
+      substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
+        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    '';
   };
 
   xapian-ruby = attrs: {

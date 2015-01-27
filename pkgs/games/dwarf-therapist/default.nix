@@ -1,15 +1,16 @@
-{ stdenv, coreutils, fetchurl, qt4, dwarf_fortress, bash, makeWrapper }:
+{ stdenv, coreutils, fetchgit, qt4, dwarf_fortress, bash, makeWrapper }:
 
 let
-  version = "30.1.0";
+  version = "30.2.0pre";
   df = dwarf_fortress;
 in
 stdenv.mkDerivation rec {
   name = "dwarf-therapist-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/splintermind/Dwarf-Therapist/archive/v${version}.tar.gz";
-    sha256 = "1x9dkis6b3f8iqcfrc2cj9mcgkwf0rzhxhq2lgy4xdr2n0yjkyv7";
+  src = fetchgit {
+    url = "https://github.com/splintermind/Dwarf-Therapist.git";
+    rev = "65bb15a29d616d788c20a3344058b7277e4fadba";
+    sha256 = "1q1n9sm0lgmn52m4aigb22cdfbh2s569y1mn5cmimgj600i6c2f2";
   };
 
   # Needed for hashing
@@ -19,12 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   configurePhase = ''
-    substituteInPlace dwarftherapist.pro \
-      --replace /usr/bin $out/bin     \
-      --replace /usr/share $out/share \
-      --replace "INSTALLS += doc" ""
-
-    qmake INSTALL_PREFIX=$out
+    qmake PREFIX=$out
   '';
 
   postInstall = ''

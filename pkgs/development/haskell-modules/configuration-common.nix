@@ -54,6 +54,9 @@ self: super: {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
+  # Foreign dependency name clashes with another Haskell package.
+  libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
+
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = dontCheck super.time_1_5_0_1;
 
@@ -172,6 +175,7 @@ self: super: {
   memcached-binary = dontCheck super.memcached-binary;
   postgresql-simple = dontCheck super.postgresql-simple;
   snowball = dontCheck super.snowball;
+  wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.

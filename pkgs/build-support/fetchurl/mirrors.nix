@@ -53,6 +53,7 @@ rec {
 
   # GnuPG.
   gnupg = [
+    http://gd.tuwien.ac.at/privacy/gnupg/
     ftp://gd.tuwien.ac.at/privacy/gnupg/
     ftp://gnupg.x-zone.org/pub/gnupg/
     ftp://ftp.gnupg.cz/pub/gcrypt/

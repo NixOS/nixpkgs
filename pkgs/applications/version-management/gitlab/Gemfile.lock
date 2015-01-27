@@ -281,6 +281,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.1.2)
       launchy (~> 2.2)
+    libv8 (3.16.14.3)
     listen (2.3.1)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -297,6 +298,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
+    mysql2 (0.3.16)
     net-ldap (0.7.0)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
@@ -420,6 +422,7 @@ GEM
       redis-store (~> 1.1.0)
     redis-store (1.1.4)
       redis (>= 2.2)
+    ref (1.0.5)
     request_store (1.0.5)
     require_all (1.3.2)
     rest-client (1.6.7)
@@ -518,6 +521,9 @@ GEM
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     test_after_commit (0.2.2)
+    therubyracer (0.12.0)
+      libv8 (~> 3.16.14.0)
+      ref
     thin (1.6.1)
       daemons (>= 1.0.9)
       eventmachine (>= 1.0.0)
@@ -691,6 +697,7 @@ DEPENDENCIES
   stamp
   state_machine
   test_after_commit
+  therubyracer
   thin
   tinder (~> 1.9.2)
   turbolinks
