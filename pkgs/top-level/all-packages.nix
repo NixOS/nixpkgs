@@ -9343,6 +9343,8 @@ let
 
   xkeyboard_config = xorg.xkeyboardconfig;
 
+  zeal = callPackage ../data/documentation/zeal { };
+
 
   ### APPLICATIONS
 
