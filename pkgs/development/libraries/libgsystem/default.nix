@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "libgsystem-2014.2";
+  name = "libgsystem-2015.1";
 
   meta = with stdenv.lib; {
     description = "GIO-based library with Unix/Linux specific API";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "GNOME";
     repo = "libgsystem";
-    rev = "v2014.2";
-    sha256 = "10mqyy94wbmxv9rizwby4dyvqgranjr3hixr5k7fs90lhgbxbkj6";
+    rev = "v2015.1";
+    sha256 = "0j5dqn1pnspfxifklw4wkikqlbxr4faib07550n5gi58m89gg68n";
   };
 
   nativeBuildInputs = [
