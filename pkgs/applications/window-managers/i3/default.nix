@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
+    mkdir -p $out/man/man1
+    cp man/*.1 $out/man/man1
   '';
 
   meta = with stdenv.lib; {
