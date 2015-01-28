@@ -4509,6 +4509,8 @@ let
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
+  apacheKafka = callPackage ../servers/apache-kafka { };
+
   astyle = callPackage ../development/tools/misc/astyle { };
 
   atom-shell = callPackage ../development/tools/atom-shell {
