@@ -127,10 +127,6 @@ let
           substituteInPlace kcms/dateandtime/helper.cpp \
             --subst-var-by hwclock "${utillinux}/sbin/hwclock"
         '';
-        enableParallelBuilding = false;
-        NIX_CFLAGS_COMPILE =
-          (super.plasma-desktop.NIX_CFLAGS_COMPILE or "")
-          + " -Wno-error=return-type";
       };
 
       plasma-workspace = with pkgs; super.plasma-workspace // {

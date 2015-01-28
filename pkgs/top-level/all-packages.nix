@@ -5814,9 +5814,7 @@ let
   kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
     stdenv = overrideGCC stdenv gccStdInc;
   });
-  kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {
-    stdenv = overrideGCC stdenv gccStdInc;
-  });
+  kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {});
   kf5_latest = kf56;
   kf5_stable = kf55;
 
@@ -12462,9 +12460,7 @@ let
   plasma51 = recurseIntoAttrs (callPackage ../desktops/plasma-5.1 {
     stdenv = overrideGCC stdenv gccStdInc;
   });
-  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
-    stdenv = overrideGCC stdenv gccStdInc;
-  });
+  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {});
   plasma5_latest = plasma52;
   plasma5_stable = plasma51;
 
