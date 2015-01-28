@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bison-3.0.2";
+  name = "bison-3.0.4";
 
   src = fetchurl {
     url = "mirror://gnu/bison/${name}.tar.gz";
-    sha256 = "1vc17y6242jlwp0gdj7wsim3nvc1ws7q3j0v3065nz8g9hd9vwnd";
+    sha256 = "b67fd2daae7a64b5ba862c66c07c1addb9e6b1b05c5f2049392cfd8a2172952e";
   };
 
   nativeBuildInputs = [ m4 perl ];
