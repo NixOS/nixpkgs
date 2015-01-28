@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, fuse, scons }:
 
 stdenv.mkDerivation rec {
-  name = "fuse-exfat-1.0.1";
+  name = "fuse-exfat-1.1.0";
 
   src = fetchurl {
-    url = "http://exfat.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0n27hpi45lj9hpi7k8d7npiwyhasf1v832g7ckpknd6lnyhipb0j";
+    sha256 = "0glmgwrf0nv09am54i6s35ksbvrywrwc51w6q32mv5by8475530r";
+    url = "https://docs.google.com/uc?export=download&id=0B7CLI-REKbE3VTdaa0EzTkhYdU0";
+    name = "${name}.tar.gz";
   };
 
   buildInputs = [ pkgconfig fuse scons ];
@@ -19,11 +20,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ":";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://code.google.com/p/exfat/;
     description = "A FUSE-based filesystem that allows read and write access to exFAT devices";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = with platforms; linux;
+    license = with licenses; gpl2Plus;
+    maintainers = with maintainers; [ nckx ];
   };
 }
 
