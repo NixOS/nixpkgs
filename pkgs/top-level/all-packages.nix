@@ -10531,6 +10531,8 @@ let
 
   mcomix = callPackage ../applications/graphics/mcomix { };
 
+  mendeley = callPackage ../applications/office/mendeley { };
+
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (pythonPackages) curses docutils;
     guiSupport = false; # use mercurialFull to get hgk GUI
