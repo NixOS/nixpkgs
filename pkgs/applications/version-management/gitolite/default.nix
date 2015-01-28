@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "gitolite-${version}";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://github.com/sitaramc/gitolite/archive/v${version}.tar.gz";
