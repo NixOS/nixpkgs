@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "1.2.3";
-  sha256 = "1knwmvs9hczlknyi27hciy1xkn219s6niv3w7q0wkw6rxz2q555v";
+  version = "1.2.3.1";
+  sha256 = "10cqhqpc85zx87jc0hapzkvwm76drpxqsjliipvlah2a0x8l4ai8";
   buildDepends = [
     attoparsec blazeBuilder blazeHtml blazeMarkup conduit conduitExtra
     dataDefault deepseq monadControl resourcet systemFilepath text
@@ -18,7 +18,6 @@ cabal.mkDerivation (self: {
     blazeMarkup conduit hspec HUnit resourcet text transformers
     xmlTypes
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/snoyberg/xml";
     description = "Pure-Haskell utilities for dealing with XML with the conduit package";
