@@ -9,7 +9,9 @@ with (import ./update.nix {
   inherit (stdenv) system;
 }).getChannel channel;
 
-stdenv.mkDerivation {
+let
+  pre42 = versionOlder version "42.0.0.0";
+in stdenv.mkDerivation {
   name = "chromium-source-${version}";
 
   src = fetchurl main;
@@ -22,7 +24,11 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
-  patches = [ ./sandbox_userns_36.patch ./nix_plugin_paths.patch ];
+  patches = if pre42 then [
+    ./sandbox_userns_36.patch ./nix_plugin_paths.patch
+  ] else [
+    ./nix_plugin_paths_42.patch
+  ];
 
   postPatch = ''
     sed -i -r \
@@ -32,6 +38,9 @@ stdenv.mkDerivation {
       build/common.gypi chrome/chrome_tests.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString (!pre42) ''
+    sed -i -e '/LOG.*no_suid_error/d' \
+      "$main/content/browser/browser_main_loop.cc"
   '';
 
   outputs = [ "out" "sandbox" "bundled" "main" ];
