@@ -65,7 +65,7 @@ let
     (with pkgs;
       {
         inherit cmake;
-        Boost = boost;
+        Boost = boost155;
         GIF = giflib;
         GLIB2 = glib;
         Gpgme = gpgme;
