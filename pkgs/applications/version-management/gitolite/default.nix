@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gitolite-${version}";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://github.com/sitaramc/gitolite/archive/v${version}.tar.gz";
-    sha256 = "0sizzv705aypasi9vf9kmdbzcl3gmyfxg9dwdl5prn64biqkvq3y";
+    sha256 = "1gsgzi9ayb4rablki3mqr11b0h8db4xg43df660marfpacmkfb01";
   };
 
   buildInputs = [ perl git ];
