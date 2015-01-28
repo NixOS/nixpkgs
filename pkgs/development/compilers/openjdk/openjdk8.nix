@@ -58,6 +58,7 @@ stdenv.mkDerivation {
     ./fix-java-home.patch
     ./read-truststore-from-env-jdk8.patch
     ./currency-date-range-jdk8.patch
+    ./nonreparenting-wm.patch
   ];
   preConfigure = ''
     chmod +x configure
