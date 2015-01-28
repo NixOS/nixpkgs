@@ -925,6 +925,8 @@ let
 
   clamav = callPackage ../tools/security/clamav { };
 
+  clex = callPackage ../tools/misc/clex { };
+
   cloc = callPackage ../tools/misc/cloc {
     inherit (perlPackages) perl AlgorithmDiff RegexpCommon;
   };
