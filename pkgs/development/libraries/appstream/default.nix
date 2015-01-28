@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "appstream-0.7.6";
+  name = "appstream-0.8.0";
 
   meta = with stdenv.lib; {
     description = "Software metadata handling library";
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
  };
 
   src = fetchurl {
-    url = "https://github.com/ximion/appstream/archive/APPSTREAM_0_7_6.tar.gz";
-    sha256 = "0djbngda3qbhvz1p0cqlsxy5iyshyrya0vh8xvc75y99agsrijkz";
+    url = "https://github.com/ximion/appstream/archive/APPSTREAM_0_8_0.tar.gz";
+    sha256 = "16a3b38avrwyl1pp8jdgfjv6cd5mccbmk4asni92l40y5r0xfycr";
   };
 
   nativeBuildInputs = [
