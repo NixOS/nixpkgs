@@ -2962,6 +2962,8 @@ let
 
   xdummy = callPackage ../tools/misc/xdummy { };
 
+  xflux = callPackage ../tools/misc/xflux { };
+
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
