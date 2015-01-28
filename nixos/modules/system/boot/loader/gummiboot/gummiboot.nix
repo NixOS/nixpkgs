@@ -31,9 +31,7 @@ in {
     };
 
     timeout = mkOption {
-      default = if (config.boot.loader.timeout != null) then
-        (if (config.boot.loader.timeout == 0) then null else config.boot.loader.timeout)
-        else config.boot.loader.timeout;
+      default = if config.boot.loader.timeout == null then 10000 else config.boot.loader.timeout;
 
       example = 4;
 
