@@ -6228,6 +6228,8 @@ let
 
   libkate = callPackage ../development/libraries/libkate { };
 
+  libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
+
   libksba = callPackage ../development/libraries/libksba { };
 
   libmad = callPackage ../development/libraries/libmad { };
@@ -10402,6 +10404,10 @@ let
   };
 
   kermit = callPackage ../tools/misc/kermit { };
+
+  keyfinder = callPackage ../applications/audio/keyfinder { };
+
+  keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
 
   keymon = callPackage ../applications/video/key-mon { };
 
