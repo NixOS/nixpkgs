@@ -5893,7 +5893,6 @@ let
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
-  libbluedevil-qt5 = callPackage ../development/libraries/libbluedevil/qt5.nix { };
 
   libbluray = callPackage ../development/libraries/libbluray { };
 
