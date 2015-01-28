@@ -104,6 +104,10 @@ if ($action eq "create") {
 
     die "$0: container ‘$containerName’ already exists\n" if -e $confFile;
 
+    # Due to interface name length restrictions, container names must
+    # be restricted too.
+    die "$0: container name ‘$containerName’ is too long\n" if length $containerName > 11;
+
     # Get an unused IP address.
     my %usedIPs;
     foreach my $confFile2 (glob "/etc/containers/*.conf") {
