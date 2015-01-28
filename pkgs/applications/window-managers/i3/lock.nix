@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   makeFlags = "all";
   installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc";
   postInstall = ''
-    mkdir -p $out/man/man1
-    cp *.1 $out/man/man1
+    mkdir -p $out/share/man/man1
+    cp *.1 $out/share/man/man1
   '';
 
   meta = with stdenv.lib; {
