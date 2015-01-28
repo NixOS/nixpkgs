@@ -161,10 +161,10 @@ in rec {
     '';
     postConfigure = ''
       sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
-              s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix|g
+              s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
               " \
           "raster/loader/Makefile";
-      sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix|g
+      sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
               " \
           "raster/scripts/python/Makefile";
     '';
