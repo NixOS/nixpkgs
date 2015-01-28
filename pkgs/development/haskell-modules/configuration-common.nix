@@ -122,6 +122,8 @@ self: super: {
   # Doesn't compile: <http://hydra.cryp.to/build/465891/nixlog/1/raw>.
   integer-gmp_0_5_1_0 = markBroken super.integer-gmp_0_5_1_0;
 
+  lushtags = markBrokenVersion "0.0.1" super.lushtags;
+
   # https://github.com/haskell/bytestring/issues/41
   bytestring_0_10_4_1 = dontCheck super.bytestring_0_10_4_1;
 
