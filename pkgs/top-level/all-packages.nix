@@ -3822,7 +3822,11 @@ let
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
-    lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
+    lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { };
+    lambdaTerm =
+      if lib.versionOlder "4.01" ocaml_version
+      then callPackage ../development/ocaml-modules/lambda-term { }
+      else lambdaTerm-1_6;
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
