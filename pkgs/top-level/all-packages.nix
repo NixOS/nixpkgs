@@ -731,6 +731,8 @@ let
 
   fop = callPackage ../tools/typesetting/fop { };
 
+  filter_audio = callPackage ../development/libraries/filter_audio { };
+
   gist = callPackage ../tools/text/gist { };
 
   mcrl = callPackage ../tools/misc/mcrl { };
