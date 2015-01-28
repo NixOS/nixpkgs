@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ppl ];
 
-  buildInputs = [ automake autoconf libtool ];
+  nativeBuildInputs = [ automake autoconf libtool ];
 
   patches = [ ./fix-ppl-version.patch ];
 
