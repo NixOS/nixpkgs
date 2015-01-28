@@ -14,7 +14,6 @@ stdenv.mkDerivation {
     libXrandr
   ];
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
   unpackPhase = ''
     unpackFile $src;
   '';
@@ -22,7 +21,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     cp  xflux "$out/bin"
   '';
-  fixupPhase = ''
+  postFixup = ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "$libPath" "$out/bin/xflux"
   '';
   meta = {
