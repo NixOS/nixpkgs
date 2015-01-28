@@ -71,6 +71,9 @@ self: super: {
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
+  # https://github.com/avieth/smtp-mail-ng/issues/1
+  smtp-mail-ng = dontDistribute super.smtp-mail-ng;
+
 }
 
 // # packages relating to amazonka
