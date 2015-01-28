@@ -163,6 +163,8 @@ let
 
       kinit = super.kinit // { patches = [ ./kinit/kinit-libpath.patch ]; };
 
+      kpackage = super.kpackage // { patches = [ ./kpackage/0001-allow-external-paths.patch ]; };
+
       kservice = super.kservice // {
         buildInputs = super.kservice.buildInputs ++ [kf5.kwindowsystem];
         patches =
