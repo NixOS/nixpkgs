@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     "--with-build-number=b${build}"
     "--with-milestone=fcs"
   ];
-  buildFlags = "all";
+  buildFlags = "DEBUG_BINARIES=true all";
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
