@@ -5826,7 +5826,8 @@ let
   kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
     stdenv = overrideGCC stdenv gccStdInc;
   });
-  kf5_latest = kf55;
+  kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {});
+  kf5_latest = kf56;
   kf5_stable = kf55;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
@@ -5892,6 +5893,7 @@ let
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
+  libbluedevil-qt5 = callPackage ../development/libraries/libbluedevil/qt5.nix { };
 
   libbluray = callPackage ../development/libraries/libbluray { };
 
@@ -12483,7 +12485,8 @@ let
   plasma51 = recurseIntoAttrs (callPackage ../desktops/plasma-5.1 {
     stdenv = overrideGCC stdenv gccStdInc;
   });
-  plasma5_latest = plasma51;
+  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {});
+  plasma5_latest = plasma52;
   plasma5_stable = plasma51;
 
   kde5 = kf55 // plasma51 // kdeApps_14_12;
