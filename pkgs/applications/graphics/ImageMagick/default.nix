@@ -30,7 +30,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ImageMagick-${version}";
+  name = "imagemagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/releases/${name}.tar.xz";
