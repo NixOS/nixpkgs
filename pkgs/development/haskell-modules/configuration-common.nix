@@ -390,6 +390,9 @@ self: super: {
   # https://github.com/zouppen/stratum-tool/issues/14
   stratum-tool = markBrokenVersion "0.0.4" super.stratum-tool;
 
+  # https://github.com/JPMoresmau/HGraphStorage/issues/1
+  HGraphStorage = markBrokenVersion "0.0.1" super.HGraphStorage;
+
 } // {
 
   # Not on Hackage.
