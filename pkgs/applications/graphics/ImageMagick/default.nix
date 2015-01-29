@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
 
   src = fetchurl {
-    url = "mirror://imagemagick/releases/${name}.tar.xz";
+    url = "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz";
     sha256 = "1dmrl5x63msdnxsf4cmhz5v4ard2z3jrgp2zhqlb27399j81qcqj";
   };
 
