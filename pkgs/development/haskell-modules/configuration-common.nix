@@ -381,6 +381,15 @@ self: super: {
   # http://hydra.cryp.to/build/526196/nixlog/2/raw
   text-show = dontCheck super.text-show;
 
+  # https://github.com/kojung/sdf2p1-parser/issues/1
+  sdf2p1-parser = dontHaddock super.sdf2p1-parser;
+
+  # https://github.com/mhwombat/grid/issues/12
+  grid = dontCheck super.grid;
+
+  # https://github.com/zouppen/stratum-tool/issues/14
+  stratum-tool = markBrokenVersion "0.0.4" super.stratum-tool;
+
 } // {
 
   # Not on Hackage.
