@@ -12,7 +12,7 @@ in {
 
   options = {
 
-    services.canto-daemon {
+    services.canto-daemon = {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -26,12 +26,12 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.user.services.canto-next = {
+    systemd.user.services.canto-daemon = {
       description = "Canto RSS Daemon";
       after = [ "network.target" ];
       wantedBy = [ "default.target" ];
       serviceConfig.ExecStart = "${pkgs.canto-daemon}/bin/canto-daemon";
-      TimeoutStopSec = 10;
     };
   };
+
 }
