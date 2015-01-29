@@ -3379,6 +3379,8 @@ let
 
   avra = callPackage ../development/compilers/avra { };
 
+  azulZulu = callPackage ../development/compilers/azul-zulu { };
+
   bigloo = callPackage ../development/compilers/bigloo { };
 
   fetchegg = callPackage ../build-support/fetchegg { };
