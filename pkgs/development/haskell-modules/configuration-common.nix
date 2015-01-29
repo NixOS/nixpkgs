@@ -190,6 +190,7 @@ self: super: {
   js-jquery = dontCheck super.js-jquery;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  network-transport-tcp = dontCheck super.network-transport-tcp;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
@@ -378,20 +379,27 @@ self: super: {
   # https://github.com/rrnewton/haskell-lockfree/issues/44
   chaselev-deque = markBrokenVersion "0.5.0.3" super.chaselev-deque;
 
-  # http://hydra.cryp.to/build/526196/nixlog/2/raw
-  text-show = dontCheck super.text-show;
-
-  # https://github.com/kojung/sdf2p1-parser/issues/1
-  sdf2p1-parser = dontHaddock super.sdf2p1-parser;
-
-  # https://github.com/mhwombat/grid/issues/12
-  grid = dontCheck super.grid;
-
   # https://github.com/zouppen/stratum-tool/issues/14
   stratum-tool = markBrokenVersion "0.0.4" super.stratum-tool;
 
-  # https://github.com/JPMoresmau/HGraphStorage/issues/1
-  HGraphStorage = markBrokenVersion "0.0.1" super.HGraphStorage;
+  # https://github.com/Gabriel439/Haskell-Turtle-Library/issues/1
+  turtle = dontCheck super.turtle;
+
+  # https://github.com/Philonous/xml-picklers/issues/5
+  xml-picklers = dontCheck super.xml-picklers;
+
+  # https://github.com/blamario/monoid-subclasses/issues/4
+  monoid-subclasses = dontCheck super.monoid-subclasses;
+
+  # https://github.com/joeyadams/haskell-stm-delay/issues/3
+  stm-delay = dontCheck super.stm-delay;
+
+  # https://github.com/JPMoresmau/HGraphStorage/issues/2
+  HGraphStorage = dontHaddock super.HGraphStorage;
+
+  # https://github.com/fumieval/call/issues/3
+  call = markBrokenVersion "0.1.2" super.call;
+  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
 
 } // {
 
