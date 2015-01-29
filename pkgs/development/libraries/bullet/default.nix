@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, mesa, freeglut }:
 
 stdenv.mkDerivation rec {
-  name = "bullet-2.80"; # vdrift 2012-07-22 doesn't build with 2.81
+  name = "bullet-2.82"; # vdrift 2012-07-22 doesn't build with 2.81
   rev = "2531";
   src = fetchurl {
     url = "http://bullet.googlecode.com/files/${name}-rev${rev}.tgz";
