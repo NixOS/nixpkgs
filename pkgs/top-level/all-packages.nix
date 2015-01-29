@@ -11757,6 +11757,8 @@ let
 
   xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
+  xmind = callPackage ../applications/misc/xmind { };
+
   xmonad_log_applet_gnome2 = callPackage ../applications/window-managers/xmonad-log-applet {
     desktopSupport = "gnome2";
     inherit (xfce) libxfce4util xfce4panel;
