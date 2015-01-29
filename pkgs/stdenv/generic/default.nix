@@ -108,9 +108,9 @@ let
 
       licenseAllowed = attrs:
         if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
-          throwEvalHelp "Unfree" "has an unfree license ‘${attrs.meta.license.shortName}’ which is not whitelisted"
+          throwEvalHelp "Unfree" "has an unfree license ‘${builtins.toJSON attrs.meta.license}’ which is not whitelisted"
         else if hasBlacklistedLicense attrs then
-          throwEvalHelp "blacklisted" "has the ‘${attrs.meta.license.shortName}’ license which is blacklisted"
+          throwEvalHelp "blacklisted" "has the ‘${builtins.toJSON attrs.meta.license}’ license which is blacklisted"
         else if !allowBroken && attrs.meta.broken or false then
           throwEvalHelp "Broken" "is marked as broken"
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
