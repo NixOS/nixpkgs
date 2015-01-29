@@ -48,7 +48,7 @@ in rec {
         (all nixos.ova)
 
         #(all nixos.tests.containers)
-        (all nixos.tests.chromium)
+        #(all nixos.tests.chromium)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
