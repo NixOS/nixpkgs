@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "gpa-0.9.7";
 
   src = fetchurl {
-    url = "ftp://ftp.gnupg.org/gcrypt/gpa/${name}.tar.bz2";
+    url = "mirror://gnupg/gpa/${name}.tar.bz2";
     sha256 = "1r8pnvfw66b2m9lhajlarbxx9172c1gzripdij01bawgbrhwp33y";
   };
 
