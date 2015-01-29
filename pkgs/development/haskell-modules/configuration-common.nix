@@ -378,6 +378,9 @@ self: super: {
   # https://github.com/rrnewton/haskell-lockfree/issues/44
   chaselev-deque = markBrokenVersion "0.5.0.3" super.chaselev-deque;
 
+  # http://hydra.cryp.to/build/526196/nixlog/2/raw
+  text-show = dontCheck super.text-show;
+
 } // {
 
   # Not on Hackage.
