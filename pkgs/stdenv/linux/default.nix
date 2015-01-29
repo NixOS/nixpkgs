@@ -42,10 +42,9 @@ rec {
 
     builder = bootstrapFiles.busybox;
 
-    args =
-      if system == "armv5tel-linux" || system == "armv6l-linux"
+    args = if system == "armv5tel-linux" || system == "armv6l-linux"
         || system == "armv7l-linux"
-      then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
+      then [ "ash" "-e" ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
 
     tarball = bootstrapFiles.bootstrapTools;
