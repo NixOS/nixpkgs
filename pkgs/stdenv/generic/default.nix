@@ -113,7 +113,7 @@ let
           throwEvalHelp "blacklisted" "has the ‘${attrs.meta.license.shortName}’ license which is blacklisted"
         else if !allowBroken && attrs.meta.broken or false then
           throwEvalHelp "Broken" "is marked as broken"
-        else if !allowBroken && builtins.hasAttr "platforms" attrs.meta && !lib.lists.elem result.system attrs.meta.platforms then
+        else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
           throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
         else true;
 
