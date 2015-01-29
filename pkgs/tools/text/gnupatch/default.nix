@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ed }:
 
 stdenv.mkDerivation rec {
-  name = "patch-2.7.1";
+  name = "patch-2.7.3";
 
   src = fetchurl {
-    url = "mirror://gnu/patch/${name}.tar.gz";
-    sha256 = "1m9r83b5c154xnxbvgjg4lfff58xjapanj6dmmivqx1liik2hpy0";
+    url = "mirror://gnu/patch/${name}.tar.bz2";
+    sha256 = "0za8wh4lgjk8k9s0rd7y5gjid99126myrh3nkifpi4ny6rkj9xh2";
   };
 
   buildInputs = stdenv.lib.optional doCheck ed;
