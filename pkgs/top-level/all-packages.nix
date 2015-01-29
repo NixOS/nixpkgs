@@ -2551,6 +2551,8 @@ let
 
   sshuttle = callPackage ../tools/security/sshuttle { };
 
+  sstp = callPackage ../tools/networking/sstp {};
+
   sudo = callPackage ../tools/security/sudo { };
 
   suidChroot = builderDefsPackage (import ../tools/system/suid-chroot) { };
