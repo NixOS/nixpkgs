@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.gdomap;
-  pidFile = "${cfg.pidDir}/gdomap.pid";
 in
 {
   #
@@ -20,9 +19,11 @@ in
 	  Note that gdomap runs as root.
         ";
       };
-      pidDir = mkOption {
-        default = "/var/run/gdomap";
-	description = "Location of the file which stores the PID of gdomap";
+
+      pidfile = mkOption {
+        type = types.path;
+        default = "/tmp/gdomap.pid";
+	description = "Location of the pid file for gdomap daemon";
       };
     };
   };
@@ -37,15 +38,11 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path  = [ pkgs.gnustep_base ];
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.pidDir}
-	chown -R nobody:nobody ${cfg.pidDir}
-      '';
       serviceConfig = {
+        PIDFile = cfg.pidfile;
         ExecStart = "@${pkgs.gnustep_base}/bin/gdomap"
 	  + " -d -p"
-	  + " -I ${pidFile}";
-#	  + " -j ${cfg.pidDir}";
+	  + " -I ${cfg.pidfile}";
 	Restart = "always";
 	RestartSec = 2;
 	TimeoutStartSec = "30";
