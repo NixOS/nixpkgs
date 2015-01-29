@@ -24,11 +24,10 @@ in {
       requires = [ "gdomap.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = ''${pkgs.gnustep_base}/bin/gdnc --verbose'';
+        ExecStart = ''${pkgs.gnustep_base}/bin/gdnc -f'';
         Restart = "always";
 	RestartSec = 10;
 	TimeoutStartSec = "30";
-	Type = "simple";
       };
     };
   };
