@@ -9623,6 +9623,8 @@ let
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
 
+  gpa = callPackage ../applications/misc/gpa { };
+
   gpicview = callPackage ../applications/graphics/gpicview { };
 
   gqrx = callPackage ../applications/misc/gqrx { };
