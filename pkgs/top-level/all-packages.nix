@@ -4161,8 +4161,12 @@ let
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
   erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix { odbcSupport = true; };
+  erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; };
+  erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; odbcSupport = true; };
   erlang = erlangR17;
   erlang_odbc = erlangR17_odbc;
+  erlang_javac = erlangR17_javac;
+  erlang_odbc_javac = erlangR17_odbc_javac;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
 
