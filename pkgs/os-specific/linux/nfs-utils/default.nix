@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-1.2.5";
+  name = "nfs-utils-1.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "16ssfkj36ljifyaskgwpd3ys8ylhi5gasq88aha3bhg5dr7yv59m";
+    sha256 = "1lxfjl6mzdfn7kw2hcn40q9xn40a539iv7spzqbj1sfkvzxlm33l";
   };
 
   buildInputs =
