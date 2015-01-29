@@ -4099,10 +4099,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2494";
+    name = "Gtk2-1.2495";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1kkm1z1xqnrfdfjric5y3935dbi9qnhcd6c1z58g4m0y95mwpv9v";
+      sha256 = "1mpxkcy8j7r95z4g4xx6ggbgzaxj4zl0szz54y1k120z95rcgg3a";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
