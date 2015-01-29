@@ -12008,9 +12008,10 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen = callPackage ../applications/virtualization/xen {
-    stdenv = overrideCC stdenv gcc45;
-  };
+  xen_4_4_1 = callPackage ../applications/virtualization/xen/4.4.1.nix { };
+  xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
+  xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; };
+  xen = xen_4_5_0;
 
   xfe = callPackage ../applications/misc/xfe {
     fox = fox_1_6;
