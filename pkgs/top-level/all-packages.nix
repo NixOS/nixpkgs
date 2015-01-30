@@ -3767,6 +3767,8 @@ let
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
+    cpdf = callPackage ../development/ocaml-modules/cpdf { };
+
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
