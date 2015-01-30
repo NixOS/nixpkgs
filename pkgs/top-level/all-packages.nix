@@ -10675,6 +10675,10 @@ let
 
   keymon = callPackage ../applications/video/key-mon { };
 
+  khal = callPackage ../applications/misc/khal {
+    pythonPackages = python3Packages;
+  };
+
   kid3 = callPackage ../applications/audio/kid3 {
     qt = qt4;
   };
