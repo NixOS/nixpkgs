@@ -4256,6 +4256,10 @@ let
     };
   };
 
+  # py3k disabled, see https://travis-ci.org/NixOS/nixpkgs/builds/48759067
+  graph-tool = if isPy3k then throw "graph-tool in Nix doesn't support py3k yet"
+    else callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
+
   grappelli_safe = buildPythonPackage rec {
     version = "0.3.13";
     name = "grappelli_safe-${version}";
