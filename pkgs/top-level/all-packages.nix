@@ -9834,6 +9834,8 @@ let
 
     js2 = callPackage ../applications/editors/emacs-modes/js2 { };
 
+    let-alist = callPackage ../applications/editors/emacs-modes/let-alist { };
+
     logito = callPackage ../applications/editors/emacs-modes/logito { };
 
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
