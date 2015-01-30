@@ -11383,6 +11383,10 @@ let
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
+ vdirsyncer = callPackage ../tools/misc/vdirsyncer {
+   pythonPackages = python3Packages;
+ };
+
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   veracity = callPackage ../applications/version-management/veracity {};
