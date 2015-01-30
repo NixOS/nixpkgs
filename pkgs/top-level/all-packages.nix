@@ -12366,7 +12366,9 @@ let
 
       eventlist = callPackage ../applications/office/eventlist {};
 
-      k3b = callPackage ../applications/misc/k3b { };
+      k3b = callPackage ../applications/misc/k3b {
+        cdrtools = cdrkit;
+      };
 
       kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 

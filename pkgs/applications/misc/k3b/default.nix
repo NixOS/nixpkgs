@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, cmake, qt4, perl, shared_mime_info, libvorbis, taglib
 , flac, libsamplerate, libdvdread, lame, libsndfile, libmad, gettext
-, transcode, cdrdao, dvdplusrwtools, vcdimager, cdparanoia
+, transcode, cdrdao, cdrtools, dvdplusrwtools, vcdimager, cdparanoia
 , kdelibs, kdemultimedia, automoc4, phonon, libkcddb ? null
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # at runtime, k3b needs the executables cdrdao, cdrecord, dvd+rw-format,
   # eMovix, growisofs, mkisofs, normalize, readcd, transcode, vcdxbuild,
   # vcdxminfo, and vcdxrip
-  propagatedUserEnvPkgs = [ transcode dvdplusrwtools cdrdao vcdimager ];
+  propagatedUserEnvPkgs = [ cdrdao cdrtools dvdplusrwtools transcode vcdimager ];
 
   postInstall = ''
     wrapProgram $out/bin/k3b \
