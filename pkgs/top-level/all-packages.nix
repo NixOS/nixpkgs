@@ -11748,6 +11748,8 @@ let
 
   khal = callPackage ../applications/misc/khal { };
 
+  khard = callPackage ../applications/misc/khard { };
+
   kid3 = callPackage ../applications/audio/kid3 {
     qt = qt4;
   };
