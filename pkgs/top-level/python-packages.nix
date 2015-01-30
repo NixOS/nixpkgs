@@ -8955,6 +8955,25 @@ let
     };
   };
 
+  requests_toolbelt = buildPythonPackage rec {
+    version = "0.3.0";
+    name = "requests-toolbelt-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
+      sha256 = "177lqpm2czx81pjg0zfs1dkbbmcn5yf1y5qxj23x6y5d28518qwl";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    meta = {
+      description = "A toolbelt of useful classes and functions to be used with python-requests";
+      homepage = http://toolbelt.rtfd.org;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+
+  };
+
   retry_decorator = buildPythonPackage rec {
     name = "retry_decorator-1.0.0";
     src = pkgs.fetchurl {
