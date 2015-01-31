@@ -1,5 +1,7 @@
 {system ? builtins.currentSystem}:
 
+let buildFor = toolsArch: (
+
 let
   pkgsFun = import ../../top-level/all-packages.nix;
   pkgsNoParams = pkgsFun {};
@@ -33,8 +35,12 @@ let
       inherit (platform) gcc;
     };
   };
+  
+  selectedCrossSystem =
+    if toolsArch == "armv6l" then raspberrypiCrossSystem else
+    if toolsArch == "armv7l" then beagleboneCrossSystem else null;
 
-  pkgs = pkgsFun ({inherit system;} // raspberrypiCrossSystem);
+  pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
   inherit (pkgs) stdenv nukeReferences cpio binutilsCross;
 
@@ -226,4 +232,9 @@ rec {
       allowedReferences = [];
     };
 
+}
+
+); in {
+    armv6l = buildFor "armv6l";
+    armv7l = buildFor "armv7l";
 }
