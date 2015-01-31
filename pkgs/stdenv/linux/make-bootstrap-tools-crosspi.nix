@@ -3,8 +3,9 @@
 let
   pkgsFun = import ../../top-level/all-packages.nix;
   pkgsNoParams = pkgsFun {};
+  
   raspberrypiCrossSystem = {
-    crossSystem = {
+    crossSystem = rec {
       config = "armv6l-unknown-linux-gnueabi";  
       bigEndian = false;
       arch = "arm";
@@ -14,11 +15,22 @@ let
       libc = "glibc";
       platform = pkgsNoParams.platforms.raspberrypi;
       openssl.system = "linux-generic32";
-      gcc = {
-        arch = "armv6";
-        fpu = "vfp";
-        float = "hard";
-      };
+      inherit (platform) gcc;
+    };
+  };
+  
+  beagleboneCrossSystem = {
+    crossSystem = rec {
+      config = "armv7l-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "hard";
+      fpu = "vfpv3-d16";
+      withTLS = true;
+      libc = "glibc";
+      platform = pkgsNoParams.platforms.beaglebone;
+      openssl.system = "linux-generic32";
+      inherit (platform) gcc;
     };
   };
 
