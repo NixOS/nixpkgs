@@ -136,12 +136,6 @@ self: super: {
   # https://github.com/liamoc/wizards/issues/5
   wizards = doJailbreak super.wizards;
 
-  # https://github.com/ekmett/trifecta/issues/41
-  trifecta = appendPatch super.trifecta (pkgs.fetchpatch {
-    url = "https://github.com/ekmett/trifecta/pull/40.patch";
-    sha256 = "0qwz83fp0karf6164jykdwsrafq08l6zsdmcdm83xnkcxabgplxv";
-  });
-
   # https://github.com/NixOS/cabal2nix/issues/136
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
@@ -400,6 +394,9 @@ self: super: {
   # https://github.com/fumieval/call/issues/3
   call = markBrokenVersion "0.1.2" super.call;
   rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
+
+  # The install target tries to run lots of commands as "root". WTF???
+  hannahci = markBroken super.hannahci;
 
 } // {
 
