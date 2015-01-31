@@ -9,7 +9,11 @@ with lib;
 let
   # Timeout in syslinux is in units of 1/10 of a second.
   # 0 is used to disable timeouts.
-  syslinuxTimeout = max (config.boot.loader.grub.timeout * 10) 1;
+  syslinuxTimeout = if config.boot.loader.timeout == null then
+      0
+    else
+      max (config.boot.loader.timeout * 10) 1;
+
 
   max = x: y: if x > y then x else y;
 
@@ -297,7 +301,7 @@ in
         }
       ];
 
-    boot.loader.grub.timeout = 10;
+    boot.loader.timeout = 10;
 
     # Create the ISO image.
     system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
