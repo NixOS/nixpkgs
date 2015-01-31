@@ -156,6 +156,24 @@ in
           '';
         };
 
+        denyUSB = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If true, then set <literal>GRKERNSEC_DENYUSB y</literal>.
+
+            This enables a sysctl with name
+            <literal>kernel.grsecurity.deny_new_usb</literal>. Setting
+            its value to <literal>1</literal> will prevent any new USB
+            devices from being recognized by the OS.  Any attempted
+            USB device insertion will be logged.
+
+            This option is intended to be used against custom USB
+            devices designed to exploit vulnerabilities in various USB
+            device drivers.
+          '';
+        };
+
         restrictProc = mkOption {
           type = types.bool;
           default = false;

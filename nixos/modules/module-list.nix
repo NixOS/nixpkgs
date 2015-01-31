@@ -144,11 +144,13 @@
   ./services/hardware/acpid.nix
   ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
+  ./services/hardware/freefall.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
   ./services/hardware/tcsd.nix
+  ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
@@ -168,6 +170,7 @@
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
   ./services/mail/spamassassin.nix
+  ./services/misc/apache-kafka.nix
   #./services/misc/autofs.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
@@ -290,6 +293,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tftpd.nix
+  ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -369,6 +373,7 @@
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
+  ./system/boot/loader/loader.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/ipxe.nix

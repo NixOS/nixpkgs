@@ -32,7 +32,7 @@ self: super: {
   unix = null;
 
   # binary is not a core library for this compiler.
-  binary = self.binary_0_7_2_3;
+  binary = self.binary_0_7_3_0;
 
   # deepseq is not a core library for this compiler.
   deepseq = self.deepseq_1_4_0_0;
@@ -50,5 +50,14 @@ self: super: {
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
+
+  # https://github.com/haskell/containers/issues/134
+  containers_0_4_2_1 = doJailbreak super.containers_0_4_2_1;
+
+  # These packages need more recent versions of core libraries to compile.
+  happy = addBuildTools super.happy [self.containers_0_4_2_1 self.deepseq_1_3_0_1];
+
+  # Setup: Can't find transitive deps for haddock
+  doctest = dontHaddock super.doctest;
 
 }

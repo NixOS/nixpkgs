@@ -6,7 +6,9 @@ with stdenv.lib;
   # Power management and debugging.
   DEBUG_KERNEL y
   PM_ADVANCED_DEBUG y
-  PM_RUNTIME y
+  ${optionalString (versionOlder version "3.19") ''
+    PM_RUNTIME y
+  ''}
   ${optionalString (versionAtLeast version "3.10") ''
     X86_INTEL_PSTATE y
   ''}

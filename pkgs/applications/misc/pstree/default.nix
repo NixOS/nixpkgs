@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "unpackFile \$src; sourceRoot=.";
 
-  buildPhase = "pwd; gcc -o pstree pstree.c";
+  buildPhase = "pwd; $CC -o pstree pstree.c";
   installPhase = "mkdir -p \$out/bin; cp pstree \$out/bin";
 
   meta = {

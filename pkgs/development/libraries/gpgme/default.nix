@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "gpgme-1.5.3";
 
   src = fetchurl {
-    url = "ftp://ftp.gnupg.org/gcrypt/gpgme/${name}.tar.bz2";
+    url = "mirror://gnupg/gpgme/${name}.tar.bz2";
     sha256 = "1jgwmra6cf0i5x2prj92w77vl7hmj276qmmll3lwysbyn32l1c0d";
   };
 

@@ -8,6 +8,7 @@
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? []
+, setupHook ? ./setup-hook.sh
 , libcxx ? null, libcxxabi ? null
 }:
 
@@ -213,7 +214,7 @@ stdenv.mkDerivation {
     ''
 
     + ''
-      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
+      substituteAll ${setupHook} $out/nix-support/setup-hook
       substituteAll ${./add-flags} $out/nix-support/add-flags.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
     '';

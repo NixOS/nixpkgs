@@ -22,24 +22,24 @@ sure those derivations still compile. (racer, for example).
 
 */
 
-let shortVersion = "0.13-dev";
-    rev = "6539cb417f4a7c2d9d1afce44c196578d2b67f38";
+let shortVersion = "1.0.0-dev";
+    rev = "a833337943300db1c310a4cf9c84b7b4ef4e9468";
     revShort = builtins.substring 0 7 rev;
 in
 
 with ((import ./common.nix) {inherit stdenv; version = "${shortVersion}-g${revShort}"; });
 
 let snapshotHash = if stdenv.system == "i686-linux"
-      then "b880b98d832c9a049b8ef6a50df50061e363de5a"
+      then "0197ad7179d74eba06a8b46432548caf226aa03d"
       else if stdenv.system == "x86_64-linux"
-      then "82a09c162474b69d2d1e4e8399086f3f0f4e31c3"
+      then "03459f8b216e96ed8b9abe25a42a75859195103d"
       else if stdenv.system == "i686-darwin"
-      then "569055bb10d96ab25f78ecf2c80ffbccd5e69b8d"
+      then "b5c004883ddff84159f11a3329cde682e0b7f75b"
       else if stdenv.system == "x86_64-darwin"
-      then "cff1f9ebd63dae6890359b7d353bd9486d8ecdfc"
+      then "b69ea42e1c995682adf0390ed4ef8a762c001a4e"
       else abort "no snapshot for platform ${stdenv.system}";
-    snapshotDate = "2015-01-04";
-    snapshotRev = "b2085d9";
+    snapshotDate = "2015-01-15";
+    snapshotRev = "9ade482";
     snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
 in
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
     inherit rev;
-    sha256 = "14nc42j46hvlqms77245vil2wplmvci3ramxrmjyjqg0bql1w28m";
+    sha256 = "1b9rnx3j37ckxa3vf20g8amsbffzvk2m9lzv5x1m04ci54w85f56";
   };
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.

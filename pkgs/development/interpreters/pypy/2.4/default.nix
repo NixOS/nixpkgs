@@ -8,11 +8,11 @@ let
 
   majorVersion = "2.4";
   version = "${majorVersion}.0";
-  pythonVersion = "2.7";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
     name = "pypy-${version}";
+    pythonVersion = "2.7";
 
     inherit majorVersion version;
 

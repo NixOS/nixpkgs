@@ -46,12 +46,14 @@ in
         PERL5LIB = [ "/lib/perl5/site_perl" ];
         KDEDIRS = [ "" ];
         STRIGI_PLUGIN_PATH = [ "/lib/strigi/" ];
-        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];
+        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" "/lib/qt5/plugins" ];
+        QML2_IMPORT_PATH = [ "/lib/qml" ];
         QTWEBKIT_PLUGIN_PATH = [ "/lib/mozilla/plugins/" ];
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
         XDG_DATA_DIRS = [ "/share" ];
         MOZ_PLUGIN_PATH = [ "/lib/mozilla/plugins" ];
+        LIBEXEC_PATH = [ "/lib/libexec" ];
       };
 
     environment.extraInit =

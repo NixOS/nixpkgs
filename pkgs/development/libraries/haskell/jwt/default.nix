@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "jwt";
-  version = "0.5.0";
-  sha256 = "0445biw5rj4plbz4nbmzrn446dfsjnggzrrcn1m292g3dqp6gzgh";
+  version = "0.5.3";
+  sha256 = "1225fa53gghfpgwhr4x269a6kygfj39fh2qdapdi9mrrvlg302i4";
   buildDepends = [
     aeson base64Bytestring cryptohash dataDefault httpTypes network
     networkUri scientific semigroups text time unorderedContainers

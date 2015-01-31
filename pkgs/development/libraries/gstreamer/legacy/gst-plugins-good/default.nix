@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./v4l.patch ./linux-headers-3.9.patch ];
 
-  configureFlags = "--disable-oss";
+  configureFlags = "--enable-experimental --disable-oss";
 
   buildInputs =
     [ pkgconfig glib gstreamer gst_plugins_base pulseaudio ]

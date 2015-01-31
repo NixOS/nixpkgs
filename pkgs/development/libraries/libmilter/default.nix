@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       define(\`confUBINDIR', \`$out/bin')
       define(\`confINCGRP', \`root')
       define(\`confLIBGRP', \`root')
+      APPENDDEF(\`confENVDEF', \`-DNETINET6')
     EOF
     sh Build -f ./a.m4
   '';

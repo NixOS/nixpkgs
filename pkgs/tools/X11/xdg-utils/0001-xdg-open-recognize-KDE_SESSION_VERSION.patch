@@ -1,0 +1,25 @@
+From 2059662f6bd5de59144d6825d93cb5783110cd97 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sat, 24 Jan 2015 17:07:50 -0600
+Subject: [PATCH] xdg-open: recognize KDE_SESSION_VERSION
+
+---
+ scripts/xdg-open | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/xdg-open b/scripts/xdg-open
+index b8db0aa..9fcf458 100755
+--- a/scripts/xdg-open
++++ b/scripts/xdg-open
+@@ -341,7 +341,7 @@ open_kde()
+     if kde-open -v 2>/dev/null 1>&2; then
+         kde-open "$1"
+     else
+-        if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
++        if [ $KDE_SESSION_VERSION -gt 3 ]; then
+             kfmclient openURL "$1"
+         else
+             kfmclient exec "$1"
+-- 
+2.1.4
+

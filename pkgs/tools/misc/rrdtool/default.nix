@@ -1,22 +1,23 @@
-{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo }:
+{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff }:
 
-stdenv.mkDerivation {
-  name = "rrdtool-1.4.5";
+stdenv.mkDerivation rec {
+  name = "rrdtool-1.4.9";
   src = fetchurl {
-    url = http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.4.5.tar.gz;
-    sha256 = "07fgn0y4yj7p2vh6a37q273hf98gkfw2sdam5r1ldn1k0m1ayrqj";
+    url = "http://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
+    sha256 = "1k1506v86nijd9vdljib93z4hrwj786kqnx37lqqbbqasvh2ca1y";
   };
-  buildInputs = [ gettext perl pkgconfig libxml2 pango cairo ];
+  buildInputs = [ gettext perl pkgconfig libxml2 pango cairo groff ];
   
   postInstall = ''
     # for munin support
     mv $out/lib/perl/5*/*/*.pm $out/lib/perl/5*/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://oss.oetiker.ch/rrdtool/;
     description = "High performance logging in Round Robin Databases";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

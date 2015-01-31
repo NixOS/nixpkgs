@@ -1,41 +1,54 @@
-{ stdenv, fetchurl, ruby, rubyLibs, libiconv, libxslt, libxml2, pkgconfig, libffi, postgresql, libyaml, ncurses, curl, openssh, redis, zlib, icu, checkinstall, logrotate, docutils, cmake, git, gdbm, readline, unzip, gnumake, which, tzdata, nodejs }:
+{ stdenv, lib, bundler, fetchgit, bundlerEnv, defaultGemConfig, libiconv, ruby
+, tzdata, git
+}:
 
 let
-  gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
-
-
-in stdenv.mkDerivation rec {
-  version = "7.4.2";
-  name = "gitlab-${version}";
-
-  src = fetchurl {
-    url = "https://github.com/gitlabhq/gitlabhq/archive/v${version}.zip";
-    sha256 = "01iplkpa4scr0wcap6vjrc960dj15z4ciclaqswj0sz5hrp9glw6";
+  gitlab = fetchgit {
+    url = "https://github.com/gitlabhq/gitlabhq.git";
+    rev = "477743a154e85c411e8a533980abce460b5669fc";
+    fetchSubmodules = false;
+    sha256 = "0jl1w9d46v8hc27h9s380ha07m3fd2zpflj4q9vywwcf570ahj7x";
   };
 
-  buildInputs = [
-    ruby rubyLibs.bundler libyaml gdbm readline ncurses curl openssh redis zlib
-    postgresql libxslt libxml2 pkgconfig libffi icu checkinstall logrotate docutils nodejs
-    git unzip gnumake which cmake
-  ];
+  env = bundlerEnv {
+    name = "gitlab";
+    inherit ruby;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+    meta = with lib; {
+      homepage = http://www.gitlab.com/;
+      platforms = platforms.linux;
+      maintainers = [ ];
+      license = licenses.mit;
+    };
+  };
 
-  # cmake is required by a build depdenceny, not the main binary:
-  dontUseCmakeConfigure = true;
+in
 
+stdenv.mkDerivation rec {
+  name = "gitlab-${version}";
+  version = "7.4.2";
+  buildInputs = [ ruby bundler tzdata git ];
+  unpackPhase = ''
+    runHook preUnpack
+    cp -r ${gitlab}/* .
+    chmod -R +w .
+    cp ${./Gemfile} Gemfile
+    cp ${./Gemfile.lock} Gemfile.lock
+    runHook postUnpack
+  '';
   patches = [
     ./remove-hardcoded-locations.patch
   ];
   postPatch = ''
+    # For reasons I don't understand "bundle exec" ignores the
+    # RAILS_ENV causing tests to be executed that fail because we're
+    # not installing development and test gems above. Deleting the
+    # tests works though.:
+    rm lib/tasks/test.rake
+
     mv config/gitlab.yml.example config/gitlab.yml
-  '';
-
-  installPhase = ''
-    mkdir -p $out/share/gitlab
-    cp -R . $out/share/gitlab
-    cd $out/share/gitlab
-
-    export HOME=$(pwd)
-    export GITLAB_EMAIL_FROM="required@to-make-it-work.org"
 
     # required for some gems:
     cat > config/database.yml <<EOF
@@ -47,41 +60,17 @@ in stdenv.mkDerivation rec {
         username: gitlab
         encoding: utf8
     EOF
-
-    mkdir -p vendor/cache
-    ${stdenv.lib.concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
-
-    cp ${./Gemfile.lock} Gemfile.lock
-    substituteInPlace Gemfile --replace 'gem "therubyracer"' ""
-
-    bundle config build.nokogiri \
-      --use-system-libraries \
-      --with-xslt-dir=${libxslt} \
-      --with-xml2-dir=${libxml2} \
-      --with-pkg-config=${pkgconfig}/bin/pkg-config \
-      --with-pg-config=${postgresql}/bin/pg_config
-
-    # See https://github.com/gitlabhq/gitlab-public-wiki/wiki/Trouble-Shooting-Guide:
-    bundle install -j4 --verbose --local --deployment --without development test mysql
-
-    # Fix timezone data directory
-    substituteInPlace $out/share/gitlab/vendor/bundle/ruby/*/gems/tzinfo-*/lib/tzinfo/zoneinfo_data_source.rb \
-      --replace "/etc/zoneinfo" "${tzdata}/share/zoneinfo"
-
-    # For reasons I don't understand "bundle exec" ignores the
-    # RAILS_ENV causing tests to be executed that fail because we're
-    # not installing development and test gems above. Deleting the
-    # tests works though.:
-    rm $out/share/gitlab/lib/tasks/test.rake
-
-    # Assets
+  '';
+  buildPhase = ''
+    export GEM_HOME=${env}/${ruby.gemPath}
     bundle exec rake assets:precompile RAILS_ENV=production
   '';
-
-  meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
-    platforms = platforms.linux;
-    maintainers = [ ];
-    license = licenses.mit;
+  installPhase = ''
+    mkdir -p $out/share
+    cp -r . $out/share/gitlab
+  '';
+  passthru = {
+    inherit env;
+    inherit ruby;
   };
 }

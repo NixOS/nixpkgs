@@ -6,8 +6,8 @@ let
   loaderArm = "${glibc}/lib/ld-linux.so.3";
   srcs = {
     golang = fetchurl {
-      url = https://storage.googleapis.com/golang/go1.4.src.tar.gz;
-      sha1 = "6a7d9bd90550ae1e164d7803b3e945dc8309252b";
+      url = https://github.com/golang/go/archive/go1.4.1.tar.gz;
+      sha256 = "1q21i08nymy30vszbcah8l8yjxm32x2wmjs44kn2x2r4556y1mgi";
     };
     tools = fetchgit {
       url = https://github.com/golang/tools.git;
@@ -18,7 +18,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.4";
+  name = "go-1.4.1";
 
   src = srcs.golang;
 
@@ -31,10 +31,6 @@ stdenv.mkDerivation {
     mkdir -p $out/share
     cd $out/share
   '';
-  postUnpack = ''
-    mkdir -p $out/share/go/src/golang.org/x
-    cp -rv --no-preserve=mode,ownership ${srcs.tools} $out/share/go/src/golang.org/x/tools
-  '';
 
   prePatch = ''
     # Ensure that the source directory is named go
@@ -42,6 +38,10 @@ stdenv.mkDerivation {
     if [ ! -d go ]; then
       mv * go
     fi
+
+    mkdir -p $out/share/go/src/golang.org/x
+    cp -r --no-preserve=mode,ownership ${srcs.tools} $out/share/go/src/golang.org/x/tools
+
     cd go
     patchShebangs ./ # replace /bin/bash
 

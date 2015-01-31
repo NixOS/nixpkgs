@@ -15,6 +15,7 @@ Options:
 }
 
 
+name=""
 argi=0
 argfun=""
 for arg; do
@@ -66,8 +67,12 @@ hashFormat="--base32"
 tmp=$(mktemp -d 2>/dev/null || mktemp -d -t "$$")
 trap "rm -rf '$tmp'" EXIT
 
+unpackDirTmp=$tmp/unpacked-tmp/$name
+mkdir -p $unpackDirTmp
+
 unpackDir=$tmp/unpacked/$name
 mkdir -p $unpackDir
+
 downloadedFile=$tmp/$name
 
 unpackFile() {
@@ -116,19 +121,27 @@ if test -z "$finalPath"; then
     exit 1
   fi
 
-  cd $unpackDir
-  unpackFile "$downloadedFile"
-
-  # FIXME: handle zip files that contain a single regular file.
   if [ -z "$leaveRoot" ]; then
     shopt -s dotglob
-    if [ $(ls -d $unpackDir/* | wc -l) != 1 ]; then
-      echo "error: zip file must contain a single directory."
+
+    cd "$unpackDirTmp"
+    unpackFile "$downloadedFile"
+
+    if [ $(ls "$unpackDirTmp" | wc -l) != 1 ]; then
+      echo "error: zip file must contain a single file or directory."
       exit 1
     fi
-    fn=$(cd "$unpackDir" && echo *)
-    mv $unpackDir/$fn/* "$unpackDir/"
-    rmdir "$unpackDir/$fn"
+
+    fn=$(cd "$unpackDirTmp" && echo *)
+
+    if [ -f "$unpackDirTmp/$fn" ]; then
+      mv "$unpackDirTmp/$fn" "$unpackDir"
+    else
+      mv "$unpackDirTmp/$fn/"* "$unpackDir/"
+    fi
+  else
+    cd $unpackDir
+    unpackFile "$downloadedFile"
   fi
 
   # Compute the hash.

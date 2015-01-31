@@ -16,7 +16,6 @@ self: super: {
   directory = null;
   filepath = null;
   ghc-prim = null;
-  haskeline = null;
   haskell2010 = null;
   haskell98 = null;
   hoopl = null;
@@ -28,7 +27,6 @@ self: super: {
   process = null;
   rts = null;
   template-haskell = null;
-  terminfo = null;
   time = null;
   unix = null;
 
@@ -37,8 +35,12 @@ self: super: {
   mtl = self.mtl_2_2_1;
   transformers-compat = disableCabalFlag super.transformers-compat "three";
 
+  # haskeline and terminfo are not core libraries for this compiler.
+  haskeline = self.haskeline_0_7_1_3;
+  terminfo = self.terminfo_0_4_0_0;
+
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override { binary = self.binary_0_7_2_3; };
+  Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override { binary = self.binary_0_7_3_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -48,5 +50,43 @@ self: super: {
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
+
+  # Later versions require a newer version of bytestring than we have.
+  aeson = self.aeson_0_7_0_6;
+
+  # The test suite depends on time >=1.4.0.2.
+  cookie = dontCheck super.cookie;
+
+  # Work around bytestring >=0.10.2.0 requirement.
+  streaming-commons = addBuildDepend super.streaming-commons self.bytestring-builder;
+
+  # Choose appropriate flags for our version of 'bytestring'.
+  bytestring-builder = disableCabalFlag super.bytestring-builder "bytestring_has_builder";
+
+} // {
+
+  # Not on Hackage.
+  cryptol = self.mkDerivation rec {
+    pname = "cryptol";
+    version = "2.1.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "GaloisInc";
+      repo = "cryptol";
+      rev = "v${version}";
+      sha256 = "00bmad3qc7h47j26xp7hbrlb0qv0f7k9spxgsc1f6lsmpgq9axr3";
+    };
+    isLibrary = true;
+    isExecutable = true;
+    buildDepends = with self; [
+      ansi-terminal array async base containers deepseq directory
+      executable-path filepath GraphSCC haskeline monadLib mtl old-time
+      presburger pretty process QuickCheck random smtLib syb text
+      tf-random transformers utf8-string
+    ];
+    buildTools = with self; [ alex happy Cabal_1_22_0_0 ];
+    patchPhase = "sed -i -e 's|process .*,|process,|' cryptol.cabal";
+    description = "Cryptol: The Language of Cryptography";
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  };
 
 }

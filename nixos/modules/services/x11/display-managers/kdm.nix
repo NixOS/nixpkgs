@@ -151,6 +151,9 @@ in
         description = "KDM user";
       };
 
+    environment.systemPackages =
+      [ pkgs.kde4.kde_wallpapers ]; # contains kdm's default background
+
   };
 
 }

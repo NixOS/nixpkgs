@@ -21,7 +21,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/eid-viewer --suffix LD_LIBRARY_PATH : ${pcsclite}/lib
+    cat >> $out/share/applications/eid-viewer.desktop << EOF
+    # eid-viewer creates XML without a header, making it "plain text":
+    MimeType=application/xml;text/xml;text/plain
+    EOF
   '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) viewer";

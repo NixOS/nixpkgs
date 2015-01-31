@@ -53,6 +53,7 @@ rec {
 
   # GnuPG.
   gnupg = [
+    http://gd.tuwien.ac.at/privacy/gnupg/
     ftp://gd.tuwien.ac.at/privacy/gnupg/
     ftp://gnupg.x-zone.org/pub/gnupg/
     ftp://ftp.gnupg.cz/pub/gcrypt/
@@ -430,5 +431,14 @@ rec {
   mysql = [
     http://mysql.mirrors.pair.com/Downloads/
     http://cdn.mysql.com/Downloads/
+  ];
+
+  # OpenBSD mirrors
+  openbsd = [
+    http://ftp.openbsd.org/pub/OpenBSD/
+    ftp://ftp.nluug.nl/pub/OpenBSD/
+    ftp://ftp-stud.fht-esslingen.de/pub/OpenBSD/
+    ftp://ftp.halifax.rwth-aachen.de/pub/OpenBSD/
+    ftp://mirror.switch.ch/pub/OpenBSD/
   ];
 }

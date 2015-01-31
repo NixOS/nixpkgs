@@ -50,18 +50,38 @@ self: super: {
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
   # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8 = dontDistribute super.HStringTemplate_0_8;
+  HStringTemplate_0_8_1 = dontDistribute super.HStringTemplate_0_8_1;
+
+  # This is part of bytestring in our compiler.
+  bytestring-builder = dontHaddock super.bytestring-builder;
+
+  # Won't compile against mtl 2.1.x.
+  imports = super.imports.override { mtl = self.mtl_2_2_1; };
+
+  # Newer versions require mtl 2.2.x.
+  mtl-prelude = self.mtl-prelude_1_0_2;
+
+  # The test suite pulls in mtl 2.2.x
+  command-qq = dontCheck super.command-qq;
+
+  # Doesn't support GHC < 7.10.x.
+  ghc-exactprint = dontDistribute super.ghc-exactprint;
+
+  # Newer versions require transformers 0.4.x.
+  seqid = super.seqid_0_1_0;
+  seqid-streams = super.seqid-streams_0_1_0;
 
 }
 
 // # packages relating to amazonka
 
 (let
-  amazonkaEnv = let self_ = self; in self: super: {
+  Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
+  amazonkaEnv = self: super: {
     mkDerivation = drv: super.mkDerivation (drv // {
       doCheck = false;
       hyperlinkSource = false;
-      extraLibraries = (drv.extraLibraries or []) ++ [ (
+      buildTools = (drv.buildTools or []) ++ [ (
         if pkgs.stdenv.lib.elem drv.pname [
           "Cabal"
           "time"
@@ -69,7 +89,7 @@ self: super: {
           "directory"
           "process"
           "jailbreak-cabal"
-        ] then null else self.Cabal_1_18_1_6
+        ] then null else Cabal
       ) ];
     });
     mtl = self.mtl_2_2_1;
@@ -82,18 +102,11 @@ self: super: {
     process = overrideCabal self.process_1_2_1_0 (drv: { coreSetup = true; });
     inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
   };
-  Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
-  amazonka-core =
-    overrideCabal (super.amazonka-core.overrideScope amazonkaEnv) (drv: {
-      # https://github.com/brendanhay/amazonka/pull/57
-      prePatch = "sed -i 's|nats >= 0.1.3 && < 1|nats|' amazonka-core.cabal";
-      extraLibraries = (drv.extraLibraries or []) ++ [ Cabal ];
-    });
-  useEnvCabal = p: overrideCabal (p.overrideScope amazonkaEnv) (drv: {
-    buildDepends = (drv.buildDepends or []) ++ [ Cabal ];
-  });
-  amazonka = useEnvCabal super.amazonka;
-  amazonka-cloudwatch = useEnvCabal super.amazonka-cloudwatch;
+  amazonka = super.amazonka.overrideScope amazonkaEnv;
+  amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
+  amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
+  amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
 in {
-  inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
+  inherit amazonkaEnv;
+  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-kms;
 })

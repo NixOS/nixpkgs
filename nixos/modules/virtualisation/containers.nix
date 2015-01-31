@@ -54,6 +54,14 @@ in
       '';
     };
 
+    boot.enableContainers = mkOption {
+      type = types.bool;
+      default = !config.boot.isContainer;
+      description = ''
+        Whether to enable support for nixos containers.
+      '';
+    };
+
     containers = mkOption {
       type = types.attrsOf (types.submodule (
         { config, options, name, ... }:
@@ -164,7 +172,7 @@ in
   };
 
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf (config.boot.enableContainers) {
 
     systemd.services."container@" =
       { description = "Container '%i'";

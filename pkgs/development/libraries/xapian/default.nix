@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libuuid, zlib }:
 
 stdenv.mkDerivation {
-  name = "xapian-1.2.8";
+  name = "xapian-1.2.19";
 
   src = fetchurl {
-    url = http://oligarchy.co.uk/xapian/1.2.8/xapian-core-1.2.8.tar.gz;
-    sha256 = "00411ebac66a5592b87fc57ccfeb234c84b929ed23c185befb5df9929df3d4f9";
+    url = http://oligarchy.co.uk/xapian/1.2.19/xapian-core-1.2.19.tar.xz;
+    sha256 = "11a7lm3w3pchk4rx144nc2p31994spyqmldm18ph86zzi01jcy2a";
   };
 
   buildInputs = [ libuuid zlib ];

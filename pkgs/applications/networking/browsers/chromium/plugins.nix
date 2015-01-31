@@ -21,9 +21,10 @@ let
       chan = if source.channel == "dev"    then "chrome-unstable"
         else if source.channel == "stable" then "chrome"
         else "chrome-${source.channel}";
+      cext = if versionOlder source.version "41.0.0.0" then "lzma" else "xz";
     in ''
       mkdir -p plugins
-      ar p "$src" data.tar.lzma | tar xJ -C plugins --strip-components=4 \
+      ar p "$src" data.tar.${cext} | tar xJ -C plugins --strip-components=4 \
         ./opt/google/${chan}/PepperFlash \
         ./opt/google/${chan}/libwidevinecdm.so \
         ./opt/google/${chan}/libwidevinecdmadapter.so
@@ -93,6 +94,7 @@ let
           else head (tail v);
       in fold (l: r: zipAttrsWith (_: f) [ l r ]) {};
     in {
+      inherit enabledPlugins;
       settings = mergeAttrsets (map getNix enabledPlugins);
     };
   };

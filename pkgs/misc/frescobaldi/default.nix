@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, lilypond, pyqt4 }:
+{ stdenv, fetchurl, pythonPackages, lilypond, pyqt4, pygame }:
 
 pythonPackages.buildPythonPackage rec {
   name = "frescobaldi-${version}";
@@ -11,7 +11,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [ lilypond
-    pyqt4 poppler-qt4 ];
+    pyqt4 poppler-qt4 pygame ];
 
   patches = [ ./setup.cfg.patch ./python-path.patch ];
 

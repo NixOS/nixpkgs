@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
   };
   buildInputs = [
-    ruby rubyLibs.bundler libiconv libxslt libxml2 pkgconfig
+    ruby bundler libiconv libxslt libxml2 pkgconfig
     libffi imagemagickBig postgresql which stdenv
   ];
   installPhase = ''

@@ -1,6 +1,35 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { name, src, deps ? {}, peerDependencies ? [], flags ? [], preShellHook ? "",  postShellHook ? "", resolvedDeps ? {}, bin ? null, ... }:
+{
+  name, src,
+
+  # Node package name
+  pkgName ? (builtins.parseDrvName name).name,
+
+  # List or attribute set of dependencies
+  deps ? {},
+
+  # List or attribute set of peer depencies
+  peerDependencies ? [],
+
+  # Whether package is binary or library
+  bin ? null,
+
+  # Flags passed to npm install
+  flags ? [],
+
+  # Command to be run before shell hook
+  preShellHook ? "",
+
+  # Command to be run after shell hook
+  postShellHook ? "",
+
+  # Attribute set of already resolved deps (internal),
+  # for avoiding infinite recursion
+  resolvedDeps ? {},
+
+  ...
+} @ args:
 
 with stdenv.lib;
 
@@ -22,10 +51,7 @@ let
   # Recursive dependencies that we want to avoid with shim creation
   recursiveDeps = removeAttrs attrDeps (attrNames requiredDeps);
 
-  peerDeps = listToAttrs (concatMap (dep: map (name: {
-    inherit name;
-    value = dep;
-  }) (filter (nm: !(elem nm (args.passthru.names or []))) dep.names)) (peerDependencies));
+  peerDeps = filter (dep: dep.pkgName != pkgName) peerDependencies;
 
   self = let
     # Pass resolved dependencies to dependencies of this package
@@ -49,7 +75,9 @@ let
   in stdenv.mkDerivation ({
     inherit src;
 
-    postPatch = ''
+    configurePhase = ''
+      runHook preConfigure
+
       ${patchShebangs "./"}
 
       # Some version specifiers (latest, unstable, URLs, file paths) force NPM
@@ -107,10 +135,9 @@ let
         fs.writeFileSync("package.json", JSON.stringify(packageObj));
       EOF
       ) | node
-    '';
 
-    configurePhase = ''
-      runHook preConfigure
+      # We do not handle shrinkwraps yet
+      rm npm-shrinkwrap.json 2>/dev/null || true
 
       mkdir build-dir
       (
@@ -120,29 +147,29 @@ let
         # Symlink or copy dependencies for node modules
         # copy is needed if dependency has recursive dependencies,
         # because node can't follow symlinks while resolving recursive deps.
-        ${concatStrings (concatMap (dep: map (name:
+        ${concatMapStrings (dep:
           if dep.recursiveDeps == [] then ''
-            ln -sv ${dep}/lib/node_modules/${name} node_modules/
+            ln -sv ${dep}/lib/node_modules/${dep.pkgName} node_modules/
           '' else ''
-            cp -R ${dep}/lib/node_modules/${name} node_modules/
+            cp -R ${dep}/lib/node_modules/${dep.pkgName} node_modules/
           ''
-        ) dep.names) deps)}
+        ) deps}
 
         # Symlink peer dependencies
-        ${concatStrings (mapAttrsToList (name: dep: ''
-          ln -sv ${dep}/lib/node_modules/${name} node_modules/
-        '') peerDeps)}
+        ${concatMapStrings (dep: ''
+          ln -sv ${dep}/lib/node_modules/${dep.pkgName} node_modules/
+        '') peerDeps}
 
         # Create shims for recursive dependenceies
-        ${concatStrings (concatMap (dep: map (name: ''
-          mkdir -p node_modules/${name}
-          cat > node_modules/${name}/package.json <<EOF
+        ${concatMapStrings (dep: ''
+          mkdir -p node_modules/${dep.pkgName}
+          cat > node_modules/${dep.pkgName}/package.json <<EOF
           {
-              "name": "${name}",
-              "version": "${(builtins.parseDrvName dep.name).version}"
+              "name": "${dep.pkgName}",
+              "version": "${getVersion dep}"
           }
           EOF
-        '') dep.names) (attrValues recursiveDeps))}
+        '') (attrValues recursiveDeps)}
       )
 
       export HOME=$PWD/build-dir
@@ -173,34 +200,32 @@ let
         cd $HOME
 
         # Remove shims
-        ${concatStrings (concatMap (dep: map (name: ''
-          rm node_modules/${name}/package.json
-          rmdir node_modules/${name}
-        '') dep.names) (attrValues recursiveDeps))}
+        ${concatMapStrings (dep: ''
+          rm node_modules/${dep.pkgName}/package.json
+          rmdir node_modules/${dep.pkgName}
+        '') (attrValues recursiveDeps)}
 
         mkdir -p $out/lib/node_modules
 
         # Install manual
-        ${concatStrings (map (name: ''
-          mv node_modules/${name} $out/lib/node_modules
-          rm -fR $out/lib/node_modules/${name}/node_modules
-          cp -r node_modules $out/lib/node_modules/${name}/node_modules
+        mv node_modules/${pkgName} $out/lib/node_modules
+        rm -fR $out/lib/node_modules/${pkgName}/node_modules
+        cp -r node_modules $out/lib/node_modules/${pkgName}/node_modules
 
-          if [ -e "$out/lib/node_modules/${name}/man" ]; then
-            mkdir -p $out/share
-            for dir in "$out/lib/node_modules/${name}/man/"*; do
-              mkdir -p $out/share/man/$(basename "$dir")
-              for page in "$dir"/*; do
-                ln -sv $page $out/share/man/$(basename "$dir")
-              done
+        if [ -e "$out/lib/node_modules/${pkgName}/man" ]; then
+          mkdir -p $out/share
+          for dir in "$out/lib/node_modules/${pkgName}/man/"*; do
+            mkdir -p $out/share/man/$(basename "$dir")
+            for page in "$dir"/*; do
+              ln -sv $page $out/share/man/$(basename "$dir")
             done
-          fi
-        '') args.passthru.names)}
+          done
+        fi
 
         # Symlink dependencies
-        ${concatStrings (mapAttrsToList (name: dep: ''
-          mv node_modules/${name} $out/lib/node_modules
-        '') peerDeps)}
+        ${concatMapStrings (dep: ''
+          mv node_modules/${dep.pkgName} $out/lib/node_modules
+        '') peerDeps}
 
         # Install binaries and patch shebangs
         mv node_modules/.bin $out/lib/node_modules 2>/dev/null || true
@@ -213,19 +238,21 @@ let
       runHook postInstall
     '';
 
-    preFixup = concatStringsSep "\n" (map (src: ''
+    preFixup = ''
       find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
-    '') src);
+    '';
 
     shellHook = ''
       ${preShellHook}
       export PATH=${nodejs}/bin:$(pwd)/node_modules/.bin:$PATH
       mkdir -p node_modules
-      ${concatStrings (concatMap (dep: map (name: ''
-        ln -sfv ${dep}/lib/node_modules/${name} node_modules/
-      '') dep.names) deps)}
+      ${concatMapStrings (dep: ''
+        ln -sfv ${dep}/lib/node_modules/${dep.pkgName} node_modules/
+      '') deps}
       ${postShellHook}
     '';
+
+    passthru.pkgName = pkgName;
   } // (filterAttrs (n: v: n != "deps" && n != "resolvedDeps") args) // {
     name = "${
       if bin == true then "bin-" else if bin == false then "node-" else ""

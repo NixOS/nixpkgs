@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, ocaml, ncurses}:
+{stdenv, fetchurl, makeWrapper, gcc, ocaml, ncurses}:
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "camlidl";
@@ -20,7 +20,20 @@ stdenv.mkDerivation {
     mv config/Makefile.unix config/Makefile
     substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
     substituteInPlace config/Makefile --replace OCAMLLIB=/usr/local/lib/ocaml OCAMLLIB=$out/lib/ocaml/${ocaml_version}/site-lib/camlidl
+    substituteInPlace config/Makefile --replace CPP=/lib/cpp CPP=${gcc}/bin/cpp
     mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/camlidl/caml
+  '';
+
+  postInstall = ''
+    cat >$out/lib/ocaml/${ocaml_version}/site-lib/camlidl/META <<EOF
+    # Courtesy of GODI
+    description = "Stub generator"
+    version = "${version}"
+    archive(byte) = "com.cma"
+    archive(native) = "com.cmxa"
+    EOF
+    mkdir -p $out/bin
+    ln -s $out/camlidl $out/bin
   '';
 
   meta = {

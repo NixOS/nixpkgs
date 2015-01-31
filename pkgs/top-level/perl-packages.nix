@@ -4019,10 +4019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.307";
+    name = "Glib-1.310";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1km4261a5kaazz77qplpqj2yv91p0bqcjjvd6xdvdgdd4rib7ngr";
+      sha256 = "1iv8q7d0817m3byh2yn7bxxk5qp8bgapaflbglhkw467i31slign";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -4099,10 +4099,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2494";
+    name = "Gtk2-1.2495";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1kkm1z1xqnrfdfjric5y3935dbi9qnhcd6c1z58g4m0y95mwpv9v";
+      sha256 = "1mpxkcy8j7r95z4g4xx6ggbgzaxj4zl0szz54y1k120z95rcgg3a";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
@@ -10129,7 +10129,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/URI-Find-20111103.tar.gz;
       sha256 = "1igbbj14j5fssdqrbr60mg3w95wldfxdikplqdmqgf2zn5j65ibr";
     };
-    propagatedBuildInputs = [ URI URIURL ];
+    propagatedBuildInputs = [ URI ];
     meta = {
       homepage = http://search.cpan.org/dist/URI-Find;
       description = "Find URIs in arbitrary text";
@@ -10159,18 +10159,6 @@ let self = _self // overrides; _self = with self; {
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
     buildInputs = [URI TestMore];
-  };
-
-  URIURL = buildPerlPackage {
-    name = "URI-URL-1.60";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
-    };
-    meta = {
-      description = "Uniform Resource Identifiers (absolute and relative)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
   };
 
   VariableMagic = buildPerlPackage rec {
