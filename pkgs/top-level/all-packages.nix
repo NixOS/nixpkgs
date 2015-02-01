@@ -10995,6 +10995,12 @@ let
     tag = "-client-qt5";
   };
 
+  quasselDaemon_qt5 = quassel_qt5.override {
+    monolithic = false;
+    daemon = true;
+    tag = "-daemon-qt5";
+  };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
