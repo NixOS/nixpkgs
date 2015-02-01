@@ -91,6 +91,13 @@ let
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
 
+    # don't provide another dbus-1.pc (with incorrect include and link dirs),
+    # also remove useless empty dirs
+    postInstall = ''
+      rm "$out"/lib/pkgconfig/dbus-1.pc
+      rmdir --parents --ignore-fail-on-non-empty "$out"/{lib/pkgconfig,share/dbus-1/*}
+    '';
+
     meta.platforms = with stdenv.lib.platforms; allBut darwin;
   };
 
@@ -101,3 +108,4 @@ let
   };
 };
 in attrs.libs // attrs
+
