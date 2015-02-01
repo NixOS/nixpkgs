@@ -162,6 +162,7 @@ in
   inherit generateCollection;
   inherit isDepAttr;
   inherit manifest;
+  inherit removePkgDeps;
   inherit resolveDeps;
   inherit userEnvPkg;
   inherit writeManifestXML;

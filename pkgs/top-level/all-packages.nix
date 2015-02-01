@@ -10434,6 +10434,7 @@ let
   };
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
+    kf5 = kf55;
     stdenv = overrideGCC stdenv gccStdInc;
   });
   kdeApps_latest = kdeApps_14_12;
