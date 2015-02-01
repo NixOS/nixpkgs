@@ -401,6 +401,15 @@ self: super: {
   call = markBrokenVersion "0.1.2" super.call;
   rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
 
+  # Can't find the readline library on Mac OS X
+  readline = appendConfigureFlag super.readline
+    ''
+      --extra-include-dirs=${pkgs.readline}/include
+      --extra-lib-dirs=${pkgs.readline}/lib
+      --configure-option=--with-readline-includes=${pkgs.readline}/include
+      --configure-option=--with-readline-libraries=${pkgs.readline}/lib
+    '';
+
 } // {
 
   # Not on Hackage.
