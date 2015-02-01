@@ -311,9 +311,9 @@ in {
         PATH = "${makeSearchPath "bin" service.path}:${makeSearchPath "sbin" service.path}";
       };
       links = mkDefault service.requires.services;
-      expose = mkDefault (map (p: p.number) service.requires.ports);
+      expose = service.requires.ports;
       volumes = map (name: {
-        volumePath = mkDefault sal.dataContainerPaths."${name}";
+        volumePath = mkDefault sal.dataContainers."${name}".path;
       }) service.requires.dataContainers;
       workingDirectory = mkDefault service.workingDirectory;
       startScript = let
@@ -334,11 +334,10 @@ in {
         ${concatStringsSep "\n" (map (name:
         let
           dc = getAttr name config.sal.dataContainers;
-          path = getAttr name config.sal.dataContainerPaths;
         in ''
         mkdir -m ${dc.mode} -p ${path}
-        chown ${if dc.user == "" then "root" else dc.user} ${path}
-        chgrp ${if dc.group == "" then "root" else dc.user} ${path}
+        chown ${if dc.user == "" then "root" else dc.user} ${dc.path}
+        chgrp ${if dc.group == "" then "root" else dc.user} ${dc.path}
         '') service.requires.dataContainers)}
 
         # Run pre start scripts
@@ -377,9 +376,5 @@ in {
         wait
       '';
     }) config.sal.services;
-
-    sal.dataContainerPaths = mapAttrs (n: dc:
-      "/var/${dc.type}/${if dc.name != "" then dc.name else n}"
-    ) config.sal.dataContainers;
   };
 }

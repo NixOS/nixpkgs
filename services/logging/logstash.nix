@@ -144,11 +144,7 @@ in {
       description = "Logstash Daemon";
       platforms = cfg.package.meta.platforms;
 
-      requires = {
-        networking = true;
-        ports = optionals cfg.enableWeb [ cfg.port ];
-      };
-
+      requires.networking = true;
       environment.JAVA_HOME = jre;
 
       preStart.script = ''

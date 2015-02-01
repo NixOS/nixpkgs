@@ -93,7 +93,7 @@ in {
 
     dataDir = mkOption {
       type = types.path;
-      default = config.sal.dataContainerPaths.elasticsearch;
+      default = config.resources.dataContainers.elasticsearch.path;
       description = ''
         Data directory for elasticsearch.
       '';
@@ -144,8 +144,7 @@ in {
       '';
     };
 
-    sal.dataContainers.elasticsearch = {
-      description = "Elasticsearch data container";
+    resources.dataContainers.elasticsearch = {
       type = "lib";
       mode = "0700";
       user = "elasticsearch";

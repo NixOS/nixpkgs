@@ -73,7 +73,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        default = config.sal.dataContainerPaths.postgresql;
+        default = config.resources.dataContainers.postgresql.path;
         description = ''
           Data directory for PostgreSQL.
         '';
@@ -172,8 +172,8 @@ in
         requires = {
           networking = true;
           dataContainers = [ "postgresql" ];
-          ports = [ cfg.port ];
           dropPrivileges = pm.supports.privileged;
+          ports = [ cfg.port ];
         };
 
         environment.PGDATA = cfg.dataDir;
@@ -226,8 +226,7 @@ in
         stop.stopMode = "mixed";
       };
 
-    sal.dataContainers.postgresql = {
-      description = "PostgreSQL data container";
+    resources.dataContainers.postgresql = {
       type = "db";
       mode = "0700";
       user = "postgres";

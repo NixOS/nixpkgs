@@ -88,12 +88,10 @@ in {
           concatStrings (map (n:
           let
             dc = getAttr n config.sal.dataContainers;
-            path = "/var/${dc.type}/${if dc.name != "" then dc.name else n}";
-
           in ''
-            mkdir -m ${dc.mode} -p ${path}
-            ${optionalString (dc.user != "") "chown -R ${dc.user} ${path}"}
-            ${optionalString (dc.group != "") "chgrp -R ${dc.group} ${path}"}
+            mkdir -m ${dc.mode} -p ${dc.path}
+            ${optionalString (dc.user != "") "chown -R ${dc.user} ${dc.path}"}
+            ${optionalString (dc.group != "") "chgrp -R ${dc.group} ${dc.path}"}
           ''
           ) s.requires.dataContainers)
         );
@@ -106,10 +104,6 @@ in {
     inherit (s) description;
 
     listenStreams = [ s.listen ];
-  }) config.sal.sockets;
-
-  sal.dataContainerPaths = mapAttrs (n: dc:
-    "/var/${dc.type}/${if dc.name != "" then dc.name else n}"
-  ) config.sal.dataContainers;
+  }) config.resources.sockets;
 
 }

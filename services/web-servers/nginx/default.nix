@@ -63,7 +63,7 @@ in
       };
 
       stateDir = mkOption {
-        default = config.sal.dataContainerPaths.nginx;
+        default = config.resources.dataContainers.nginx.path;
         description = "
           Directory holding all state for nginx to run.
         ";
@@ -104,8 +104,7 @@ in
       start.command = "${nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
     };
 
-    sal.dataContainers.nginx = {
-      description = "Nginx data container";
+    resources.dataContainers.nginx = {
       type = "spool";
       mode = "700";
       inherit (cfg) user group;

@@ -70,81 +70,10 @@ rec {
     };
   };
 
-  dataContainerOptions = { name, config, ... }: {
-    options = commonOptions // {
-
-      name = mkOption {
-        default = "";
-        type = types.str;
-        description = "Name of data container.";
-      };
-
-      type = mkOption {
-        default = "lib";
-        type = types.enum ["db" "lib" "log" "run" "spool"];
-        description = "Type of data container.";
-      };
-
-      mode = mkOption {
-        default = "600";
-        type = types.str;
-        description = "File mode for data container";
-      };
-
-      user = mkOption {
-        default = "";
-        type = types.str;
-        description = "Data container user.";
-      };
-
-      group = mkOption {
-        default = "";
-        type = types.str;
-        description = "Data container group.";
-      };
-
-    };
-
-    config = {
-      name = mkDefault name;
-    };
-
-  };
-
-  socketOptions = commonOptions // {
-    listen = mkOption {
-      type = types.str;
-      example = "0.0.0.0:993";
-      description = "Address or file where socket should listen.";
-    };
-
-    type = mkOption {
-      type = types.enum ["inet" "inet6" "unix"];
-      description = "Type of listening socket";
-    };
-
-    mode = mkOption {
-      default = "600";
-      type = types.str;
-      description = "File mode for socker";
-    };
-
-    user = mkOption {
-      default = "";
-      type = types.str;
-      description = "Socket owner user.";
-    };
-
-    group = mkOption {
-      default = "";
-      type = types.str;
-      description = "Socket owner group.";
-    };
-  };
-
   serviceOptions =  { name, config, ... }: {
     options = commonOptions // {
       name = mkOption {
+        default = name;
         type = types.str;
         description = ''
           The name of the service.
@@ -295,23 +224,17 @@ rec {
           '';
         };
 
+        ports = mkOption {
+          default = [];
+          type = types.int;
+          description = "List of ports service is bound to.";
+        };
+
         dataContainers = mkOption {
           default = [];
           type = types.listOf types.str;
           description = ''
             List of data container names required by service.
-          '';
-        };
-
-        ports = mkOption {
-          default = [];
-          type = types.listOf (types.either types.int types.attrs);
-          apply = ports: map (el:
-            if isInt el then {number = el; type = "tcp";} else el
-          ) ports;
-          example = [ 80 {number = 53; type = "udp";} ];
-          description = ''
-            List of free ports required by service.
           '';
         };
 
@@ -351,10 +274,6 @@ rec {
           '';
         };
       };
-    };
-
-    config = {
-      name = mkDefault name;
     };
   };
 }

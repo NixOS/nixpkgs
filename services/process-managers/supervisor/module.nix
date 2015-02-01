@@ -271,12 +271,11 @@ in {
 
         ${concatStringsSep "\n" (map (name:
         let
-          dc = getAttr name config.sal.dataContainers;
-          path = getAttr name config.sal.dataContainerPaths;
+          dc = getAttr name config.resources.dataContainers;
         in ''
-        mkdir -m ${dc.mode} -p ${path}
+        mkdir -m ${dc.mode} -p ${dc.path}
         ${optionalString (pm.supports.privileged && dc.user != "")
-          "chown $ cfg.unprivilegedUser} ${path}" }
+          "chown $ cfg.unprivilegedUser} ${dc.path}" }
         '') service.requires.dataContainers)}
 
         # Setup SIGTERM trap
@@ -338,8 +337,7 @@ in {
       ${concatMapStringsSep "\n" (s: s.section) (attrValues cfg.services)}
     '';
 
-    sal.dataContainerPaths = mapAttrs (n: dc:
-      "${cfg.stateDir}/${dc.type}/${if dc.name != "" then dc.name else n}"
-    ) config.sal.dataContainers;
+    resources.dataContainerMapping =
+      dc: "${cfg.stateDir}/${dc.type}/${dc.name}";
   };
 }

@@ -77,7 +77,7 @@ in
       };
 
       dataDir = mkOption {
-        default = config.sal.dataContainerPaths.influxdb;
+        default = config.resources.dataContainers.influxdb.path;
         description = "Data directory for influxd data files.";
         type = types.path;
       };
@@ -233,8 +233,7 @@ in
       '';
     };
 
-    sal.dataContainers.influxdb = {
-      description = "PostgreSQL data container";
+    resources.dataContainers.influxdb = {
       type = "db";
       mode = "0770";
       inherit (cfg) user group;

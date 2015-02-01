@@ -100,6 +100,7 @@ in
       name = "statsd";
       uid = config.ids.uids.statsd;
       description = "Statsd daemon user";
+
     };
 
     sal.services.statsd = {
@@ -108,8 +109,9 @@ in
 
       requires = {
         networking = true;
-        ports = [ cfg.port cfg.mgmt_port ];
+        ports = [ cfg.mgmt_port cfg.port ];
       };
+
       environment = {
         NODE_PATH=concatMapStringsSep ":" (el: "${el}/lib/node_modules") (filter (el: (nixType el) != "string") cfg.backends);
       };

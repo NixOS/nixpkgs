@@ -58,7 +58,7 @@ in {
   options.services.graphite = {
     dataDir = mkOption {
       type = types.path;
-      default = config.sal.dataContainerPaths.graphite;
+      default = config.resources.dataContainers.graphite.path;
       description = ''
         Data directory for graphite.
       '';
@@ -422,8 +422,8 @@ in {
 
         requires = {
           networking = true;
-          ports = [ cfg.web.port ];
           dataContainers = ["graphite"];
+          ports = [ cfg.web.port ];
         };
         path = [ pkgs.perl ];
         environment = {
@@ -465,8 +465,8 @@ in {
 
         requires = {
           networking = true;
-          ports = [ cfg.api.port ];
           dataContainers = ["graphite"];
+          ports = [ cfg.api.port ];
         };
 
         environment = {
@@ -499,6 +499,7 @@ in {
           networking = true;
           services = [ "mongodb" ];
           dataContainers = [ "graphite" ];
+          ports = [ cfg.seyren.port ];
         };
         environment = seyrenConfig;
 
@@ -541,7 +542,7 @@ in {
       cfg.web.enable || cfg.api.enable ||
       cfg.seyren.enable || cfg.pager.enable
      ) {
-      sal.dataContainers.graphite = {
+      resources.dataContainers.graphite = {
         type = "lib";
         mode = "0770";
         user = "graphite";

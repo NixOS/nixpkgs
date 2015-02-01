@@ -59,12 +59,12 @@ in
       };
 
       dbpath = mkOption {
-        default = config.sal.dataContainerPaths.mongodb;
+        default = config.resources.dataContainers.mongodb.path;
         description = "Location where MongoDB stores its files";
       };
 
       pidFile = mkOption {
-        default = "${config.sal.dataContainerPaths.mongodb-state}/mongodb.pid";
+        default = "${config.resources.dataContainers.mongodb-state.path}/mongodb.pid";
         description = "Location of MongoDB pid file";
       };
 
@@ -100,21 +100,20 @@ in
       requires = {
         networking = true;
         dataContainers = ["mongodb" "mongodb-state"];
+        port = [ 27017 ];
       };
 
       pidFile = cfg.pidFile;
       user = "mongodb";
     };
 
-    sal.dataContainers.mongodb = {
-      description = "Mongodb data container";
+    resources.dataContainers.mongodb = {
       type = "db";
       mode = "700";
       user = "mongodb";
     };
 
-    sal.dataContainers.mongodb-state = {
-      description = "Mongodb state container";
+    resources.dataContainers.mongodb-state = {
       name = "mongodb";
       type = "run";
       mode = "755";

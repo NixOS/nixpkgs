@@ -28,26 +28,6 @@ in {
       description = "Definition of sal services.";
     };
 
-    sal.sockets = mkOption {
-      default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ socketOptions ];
-      description = "Definition of sal sockets.";
-    };
-
-    sal.dataContainers = mkOption {
-      default = {};
-      type = types.attrsOf types.optionSet;
-      options = [ dataContainerOptions ];
-      description = "Definition of sal data containers.";
-    };
-
-    sal.dataContainerPaths = mkOption {
-      default = [];
-      type = types.attrsOf types.path;
-      description = "Paths to data containers.";
-    };
-
     sal.systemName = mkOption {
       type = types.str;
       description = "Name of the system sal is providing services for.";
@@ -192,24 +172,9 @@ in {
               "Service ${n} command for ${cmd} can only start with systems privilges and ${pm.name} does not seem to have them";
           })
           ["start" "stop" "reload" "preStart" "postStart" "postStop"]
-        ) ++
-
-        # Check ports
-        (
-          map (port: mapAttrsToList (n2: s2: {
-            assertion =
-              !(contains port s2.requires.ports && !pm.supports.networkNamespaces);
-            message =
-              "Service ${n} ports clash with service ${n2} ports and ${pm.name} does not support network namespaces.";
-          }) (filterAttrs (n2: s2: s2 != s) config.sal.services)) s.requires.ports
         )
-      ) config.sal.services)) ++
 
-      # Check sockets
-      (mapAttrsToList (n: v: [{
-        assertion = contains v.type pm.supports.socketTypes;
-        message = "Socket ${n} with type ${v.type} is not supported on ${pm.name}.";
-      }]) config.sal.sockets);
+      ) config.sal.services));
 
   };
 }

@@ -56,7 +56,7 @@ in
 
       pidFile = mkOption {
         type = types.path;
-        default = config.sal.dataContainerPaths.redis-run;
+        default = config.resources.dataContainers.redis-run.path;
         description = "";
       };
 
@@ -121,7 +121,7 @@ in
 
       dbpath = mkOption {
         type = types.path;
-        default = config.sal.dataContainerPaths.redis;
+        default = config.resources.dataContainers.redis.path;
         description = "The DB will be written inside this directory, with the filename specified using the 'dbFilename' configuration.";
       };
 
@@ -205,8 +205,8 @@ in
 
         requires = {
           networking = true;
-          ports = [ cfg.port ];
           dataContainers = ["redis" "redis-run"];
+          ports = [ cfg.port ];
         };
 
         start.command =
@@ -214,13 +214,13 @@ in
         user = cfg.user;
       };
 
-    sal.dataContainers.redis = {
+    resources.dataContainers.redis = {
       type = "db";
       mode = "0770";
       user = cfg.user;
     };
 
-    sal.dataContainers.redis-run = {
+    resources.dataContainers.redis-run = {
       type = "run";
       mode = "0770";
       user = cfg.user;
