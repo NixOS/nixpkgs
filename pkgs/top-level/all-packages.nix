@@ -11834,6 +11834,8 @@ let
     inherit (gnome) libglade;
   };
 
+  xss-lock = callPackage ../misc/screensavers/xss-lock { };
+
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
