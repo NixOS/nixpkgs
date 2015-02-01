@@ -5763,6 +5763,10 @@ let
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
+  hunspellDicts = recurseIntoAttrs (import ../development/libraries/hunspell/dictionaries.nix {
+    inherit stdenv fetchurl unzip;
+  });
+
   hwloc = callPackage ../development/libraries/hwloc {
     inherit (xlibs) libX11;
   };
