@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, pythonPackages, picocom
-, avrdude, arduino_core, avrgcclibc }:
+, avrdude, arduino-core, avrgcclibc }:
 
 buildPythonPackage rec {
   name = "ino-0.3.6";
@@ -12,12 +12,12 @@ buildPythonPackage rec {
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
   propagatedBuildInputs =
-    [ arduino_core avrdude picocom pythonPackages.configobj
+    [ arduino-core avrdude picocom pythonPackages.configobj
       pythonPackages.jinja2 pythonPackages.pyserial pythonPackages.six ];
 
   patchPhase = ''
     echo "Patching Arduino distribution path"
-    sed -i 's@/usr/local/share/arduino@${arduino_core}/share/arduino@g' \
+    sed -i 's@/usr/local/share/arduino@${arduino-core}/share/arduino@g' \
         ino/environment.py
     sed -i -e 's@argparse@@' -e 's@ordereddict@@' \
         requirements.txt
