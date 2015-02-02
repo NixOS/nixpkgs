@@ -1,0 +1,15 @@
+this patch set the bash path from '/bin/bash' to '/var/run/current-system/sw/bin/bash'
+
+diff --git a/progs/capsh.c b/progs/capsh.c
+index 52336d7..fd98a03 100644
+--- a/progs/capsh.c
++++ b/progs/capsh.c
+@@ -556,7 +556,7 @@ int main(int argc, char *argv[], char *envp[])
+ 	    }
+ 	    printf("\n");
+ 	} else if ((!strcmp("--", argv[i])) || (!strcmp("==", argv[i]))) {
+-	    argv[i] = strdup(argv[i][0] == '-' ? "/bin/bash" : argv[0]);
++	    argv[i] = strdup(argv[i][0] == '-' ? "/var/run/current-system/sw/bin/bash" : argv[0]);
+ 	    argv[argc] = NULL;
+ 	    execve(argv[i], argv+i, envp);
+ 	    fprintf(stderr, "execve /bin/bash failed!\n");

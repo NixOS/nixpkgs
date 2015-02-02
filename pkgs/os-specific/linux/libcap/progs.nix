@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap ];
 
+  patches = [ ./progs-bash-path.patch ];
+
   preConfigure = "cd progs";
 
   installFlags = "RAISE_SETFCAP=no";
