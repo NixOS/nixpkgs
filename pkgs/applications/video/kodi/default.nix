@@ -36,16 +36,18 @@ assert pulseSupport -> pulseaudio != null;
 assert cecSupport   -> libcec != null;
 
 let
-  ffmpeg_2_4_4 = fetchurl {
-    url = "https://github.com/xbmc/FFmpeg/archive/2.4.4-Helix.tar.gz";
-    sha256 = "1pkkmnq0kbwb13ps1wk01709lp3l2dzbfay6l29zj1204lbc3anb";
+  rel = "Helix";
+  ffmpeg_2_4_6 = fetchurl {
+    url = "https://github.com/xbmc/FFmpeg/archive/2.4.6-${rel}.tar.gz";
+    sha256 = "1kxp2z2zgcbplm5398zrfgwcfacfzvbg9y9wwrmm8vgwfmj32wh8";
   };
 in stdenv.mkDerivation rec {
-    name = "kodi-14.0";
+    name = "kodi-" + version;
+    version = "14.1";
 
     src = fetchurl {
-      url = "https://github.com/xbmc/xbmc/archive/14.0-Helix.tar.gz";
-      sha256 = "14hip50gg3qgfb0mw7wrdqvw77mxdg9x1abfrqv1ydjrrjansx0i";
+      url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
+      sha256 = "1mjmf8ag8dg5brzxy7cmnz72b1b85p69zr1li28j71fgjbi5k053";
     };
 
     buildInputs = [
@@ -82,7 +84,7 @@ in stdenv.mkDerivation rec {
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
       substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
         --replace "/bin/bash" "${bash}/bin/bash -ex"
-      cp ${ffmpeg_2_4_4} tools/depends/target/ffmpeg/ffmpeg-2.4.4-Helix.tar.gz
+      cp ${ffmpeg_2_4_6} tools/depends/target/ffmpeg/ffmpeg-2.4.6-${rel}.tar.gz
     '';
 
     preConfigure = ''
@@ -115,6 +117,6 @@ in stdenv.mkDerivation rec {
       description = "Media center";
       license = stdenv.lib.licenses.gpl2;
       platforms = platforms.linux;
-      maintainers = [ maintainers.iElectric maintainers.titanous ];
+      maintainers = with maintainers; [ iElectric titanous edwtjo ];
     };
 }
