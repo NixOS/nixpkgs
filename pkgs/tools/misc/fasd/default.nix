@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pandoc, ... } :
+{ stdenv, fetchgit, pandoc } :
 
 let
   rev = "287af2b80e0829b08dc6329b4fe8d8e5594d64b0";
@@ -13,13 +13,16 @@ stdenv.mkDerivation {
     sha256 = "0kv9iyfdf916x0gab9fzs4vmsnkaqmb6kh4xna485nqij89xzkgs";
   };
 
+  # seems to be needed non-deterministically (timestamps?)
+  nativeBuildInputs = [ pandoc ];
+
   installPhase = ''
     PREFIX=$out make install
   '';
 
   meta = {
     homepage = "https://github.com/clvv/fasd";
-    description = "quick command-line access to files and directories for POSIX shells";
+    description = "Quick command-line access to files and directories for POSIX shells";
     license = stdenv.lib.licenses.free; # https://github.com/clvv/fasd/blob/master/LICENSE
 
     longDescription = ''
