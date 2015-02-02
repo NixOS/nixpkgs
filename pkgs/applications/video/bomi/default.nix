@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, python2, perl
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python3
 , libX11, libxcb, qt5, mesa
 , ffmpeg
 , libchardet
@@ -22,16 +22,24 @@ assert portaudioSupport -> portaudio != null;
 assert pulseSupport -> pulseaudio != null;
 assert cddaSupport -> libcdda != null;
 
-stdenv.mkDerivation rec {
-  name = "cmplayer-${version}";
-  version = "0.8.16";
-
-  src = fetchurl {
-    url = "https://github.com/xylosper/cmplayer/releases/download/v${version}/${name}-source.tar.gz";
-    sha256 = "1yppp0jbq3mwa7vq4sjmm2lsqnfcv4n7cjap50gc2bavq7qynr85";
+let
+  waf = fetchurl {
+    url = http://ftp.waf.io/pub/release/waf-1.8.4;
+    sha256 = "1a7skwgpl91adhcwlmdr76xzdpidh91hvcmj34zz6548bpx3a87h";
   };
 
-  patches = [ ./fix-gcc48.patch ];
+in
+
+stdenv.mkDerivation rec {
+  name = "bomi-${version}";
+  version = "0.9.0";
+
+  src = fetchFromGitHub {
+    owner = "xylosper";
+    repo = "bomi";
+    rev = "v${version}";
+    sha256 = "12xyz40kl03h1m8g7d7s0wf74l2c70v6bd1drhww7ky48hxi0z14";
+  };
 
   buildInputs = with stdenv.lib;
                 [ libX11 libxcb qt5 mesa
@@ -55,8 +63,14 @@ stdenv.mkDerivation rec {
                 ;
 
   preConfigure = ''
-    patchShebangs ./configure
-    patchShebangs src/mpv/waf
+    patchShebangs configure
+    # src/mpv/waf build-mpv; do
+  '';
+
+  preBuild = ''
+    patchShebangs build-mpv
+    install -m755 ${waf} src/mpv/waf
+    sed -i '1 s,.*,#!${python3.interpreter},' src/mpv/waf
   '';
 
   configureFlags = with stdenv.lib;
@@ -67,15 +81,13 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  preBuild = "patchShebangs ./build-mpv";
-
-  nativeBuildInputs = [ pkgconfig python2 perl ];
+  nativeBuildInputs = [ pkgconfig perl ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Powerful and easy-to-use multimedia player";
-    homepage = http://cmplayer.github.io;
+    homepage = https://bomi-player.github.io/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.abbradar ];
     platforms = platforms.linux;

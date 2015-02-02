@@ -9625,9 +9625,12 @@ let
 
   clipit = callPackage ../applications/misc/clipit { };
 
-  cmplayer = callPackage ../applications/video/cmplayer {
+  bomi = callPackage ../applications/video/bomi {
+    stdenv = overrideCC stdenv gcc49;
     pulseSupport = config.pulseaudio or false;
   };
+
+  cmplayer = builtins.trace "cmplayer is renamed to bomi" bomi;
 
   cmus = callPackage ../applications/audio/cmus { };
 
