@@ -146,4 +146,5 @@
 , "sloc"
 , "peerflix"
 , "peerflix-server"
+, "fetch-bower"
 ]
