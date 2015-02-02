@@ -401,6 +401,9 @@ self: super: {
   # https://github.com/jkarni/th-alpha/issues/1
   th-alpha = markBrokenVersion "0.2.0.0" super.th-alpha;
 
+  # https://github.com/haskell-hub/hub-src/issues/24
+  hub = markBrokenVersion "1.4.0" super.hub;
+
 } // {
 
   # Not on Hackage.
