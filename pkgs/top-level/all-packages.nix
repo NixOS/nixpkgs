@@ -1566,6 +1566,12 @@ let
     inherit (haskellPackages) ihaskell ghc;
   };
 
+  ihaskell-with-packages = callPackage ../development/tools/haskell/ihaskell/ng-wrapper.nix {
+    inherit (pythonPackages) ipython;
+    inherit (haskellngPackages) ihaskell ghcWithPackages;
+    packages = self: [];
+  };
+
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
   imapsync = callPackage ../tools/networking/imapsync {
