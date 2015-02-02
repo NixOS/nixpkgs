@@ -4994,6 +4994,8 @@ let
 
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
+  sauce-connect = callPackage ../development/tools/sauce-connect { };
+
   # couldn't find the source yet
   seleniumRCBin = callPackage ../development/tools/selenium/remote-control {
     jre = jdk;
