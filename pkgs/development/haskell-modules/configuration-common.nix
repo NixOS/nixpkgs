@@ -407,6 +407,9 @@ self: super: {
   # https://github.com/audreyt/MoeDict.hs/issues/1
   MoeDict = markBrokenVersion "0.0.1" super.MoeDict;
 
+  # https://github.com/pixbi/duplo/issues/25
+  duplo = dontCheck super.duplo;
+
 } // {
 
   # Not on Hackage.
