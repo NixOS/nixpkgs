@@ -384,14 +384,8 @@ self: super: {
   # https://github.com/Philonous/xml-picklers/issues/5
   xml-picklers = dontCheck super.xml-picklers;
 
-  # https://github.com/blamario/monoid-subclasses/issues/4
-  monoid-subclasses = dontCheck super.monoid-subclasses;
-
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
-
-  # https://github.com/JPMoresmau/HGraphStorage/issues/2
-  HGraphStorage = dontHaddock super.HGraphStorage;
 
   # https://github.com/fumieval/call/issues/3
   call = markBrokenVersion "0.1.2" super.call;
