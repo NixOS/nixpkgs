@@ -88,6 +88,7 @@ self: super: {
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-text = dontHaddock super.shakespeare-text;
+  uhc-light = dontHaddock super.uhc-light;                      # https://github.com/UU-ComputerScience/uhc/issues/45
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
