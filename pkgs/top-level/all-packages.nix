@@ -8881,6 +8881,8 @@ let
 
   golint = callPackage ../development/tools/golint { };
 
+  godep = callPackage ../development/tools/godep { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
