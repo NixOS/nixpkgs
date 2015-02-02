@@ -404,6 +404,9 @@ self: super: {
   # https://github.com/haskell-hub/hub-src/issues/24
   hub = markBrokenVersion "1.4.0" super.hub;
 
+  # https://github.com/audreyt/MoeDict.hs/issues/1
+  MoeDict = markBrokenVersion "0.0.1" super.MoeDict;
+
 } // {
 
   # Not on Hackage.
