@@ -1,36 +1,38 @@
-set -e
+# TBD: It should be OK to mv this file to unpack-bootstrap-tools.sh,
+# except for a mass rebuild.
 
 # Unpack the bootstrap tools tarball.
 echo Unpacking the bootstrap tools...
-$mkdir $out
-$bzip2 -d < $tarball | (cd $out && $cpio -V -i)
+$builder mkdir $out
+< $tarball $builder unxz | $builder tar x -C $out
 
 # Set the ELF interpreter / RPATH in the bootstrap binaries.
 echo Patching the bootstrap tools...
 
+if test -f $out/lib/ld.so.?; then
+   # MIPS case
+   LD_BINARY=$out/lib/ld.so.?
+else
+   # i686, x86_64 and armv5tel
+   LD_BINARY=$out/lib/ld-*so.?
+fi
+
 # On x86_64, ld-linux-x86-64.so.2 barfs on patchelf'ed programs.  So
 # use a copy of patchelf.
-LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? $out/bin/cp $out/bin/patchelf .
+LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
 
-for i in $out/bin/* $out/libexec/gcc/*/*/* $out/lib/librt*; do
-    if test ${i%.la} != $i; then continue; fi
-    if test ${i%*.so*} != $i; then continue; fi
-    if ! test -f $i; then continue; fi
-    if test -L $i; then continue; fi
-    echo patching $i
-    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-        $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
-    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-        $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+for i in $out/bin/* $out/libexec/gcc/*/*/*; do
+    if [ -L "$i" ]; then continue; fi
+    if [ -z "${i##*/liblto*}" ]; then continue; fi
+    echo patching "$i"
+    LD_LIBRARY_PATH=$out/lib $LD_BINARY \
+        $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
-for i in $out/lib/librt* $out/lib/libcloog* $out/lib/libppl* $out/lib/libgmp*; do
-    if ! test -f $i; then continue; fi
-    if test -L $i; then continue; fi
-    echo patching $i
-    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-        $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
-    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-        $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
+
+for i in $out/lib/librt-*.so $out/lib/libpcre*; do
+    if [ -L "$i" ]; then continue; fi
+    echo patching "$i"
+    $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
 done
 
 # Fix the libc linker script.
@@ -44,13 +46,21 @@ mv $out/lib/libpthread.so.tmp $out/lib/libpthread.so
 ln -s bash $out/bin/sh
 ln -s bzip2 $out/bin/bunzip2
 
-# Mimic the gunzip script as in gzip installations
+# Provide a gunzip script.
 cat > $out/bin/gunzip <<EOF
 #!$out/bin/sh
 exec $out/bin/gzip -d "\$@"
 EOF
 chmod +x $out/bin/gunzip
 
-# fetchurl needs curl.
-bzip2 -d < $curl > $out/bin/curl
-chmod +x $out/bin/curl
+# Provide fgrep/egrep.
+echo "#! $out/bin/sh" > $out/bin/egrep
+echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+echo "#! $out/bin/sh" > $out/bin/fgrep
+echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+
+# Provide xz (actually only xz -d will work).
+echo "#! $out/bin/sh" > $out/bin/xz
+echo "exec $builder unxz \"\$@\"" >> $out/bin/xz
+
+chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/xz

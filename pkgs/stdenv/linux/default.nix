@@ -16,7 +16,7 @@ rec {
     else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
     else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
-    else if system == "armv7l-linux" then import ./bootstrap/armv6l.nix
+    else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv";
 
@@ -42,10 +42,9 @@ rec {
 
     builder = bootstrapFiles.busybox;
 
-    args =
-      if system == "armv5tel-linux" || system == "armv6l-linux"
+    args = if system == "armv5tel-linux" || system == "armv6l-linux"
         || system == "armv7l-linux"
-      then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
+      then [ "ash" "-e" ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
 
     tarball = bootstrapFiles.bootstrapTools;
