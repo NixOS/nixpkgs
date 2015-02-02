@@ -9267,6 +9267,8 @@ let
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
 
+  inconsolataDzForPowerline = callPackage ../data/fonts/inconsolataDzForPowerline { };
+
   ipafont = callPackage ../data/fonts/ipafont {};
 
   junicode = callPackage ../data/fonts/junicode { };
