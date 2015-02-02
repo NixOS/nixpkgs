@@ -9527,8 +9527,8 @@ let
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
-  bitcoin = callPackage ../applications/misc/bitcoin {};
-  bitcoind = callPackage ../applications/misc/bitcoin { gui = false; };
+  bitcoin = callPackage ../applications/misc/bitcoin/master.nix {};
+  bitcoind = callPackage ../applications/misc/bitcoin/master.nix { gui = false; };
 
   altcoins = recurseIntoAttrs (
     (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
