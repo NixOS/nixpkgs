@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yi-language";
-  version = "0.1.0.8";
-  sha256 = "1lzn1yswrh72lqvc5xcna2xjv5zs3x1mzc1ijkqjl84nvqcabj60";
+  version = "0.1.1.0";
+  sha256 = "1gsh0njslncfh0r5wg1rq9w4f03ixkk5grd9zigkspsndhij7379";
   buildDepends = [
     binary dataDefault derive hashable lens ooPrototypes pointedlist
     regexBase regexTdfa transformersBase unorderedContainers
