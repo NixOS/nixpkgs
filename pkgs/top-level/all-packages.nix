@@ -880,6 +880,7 @@ let
   chunksync = callPackage ../tools/backup/chunksync { };
 
   cjdns = callPackage ../tools/networking/cjdns { };
+  cjdcmd-ng = callPackage ../tools/networking/cjdns/cjdcmd-ng { };
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
@@ -7601,6 +7602,16 @@ let
   jquery-ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
+
+  ### DEVELOPMENT / GO MODULES
+
+  buildGoPackage = import ../development/go-modules/generic {
+    inherit go;
+  };
+
+  goPackages = recurseIntoAttrs (callPackage ./go-packages.nix {
+    overrides = (config.goPackageOverrides or (p: {})) pkgs;
+  });
 
   ### DEVELOPMENT / LISP MODULES
 
