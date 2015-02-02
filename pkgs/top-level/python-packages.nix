@@ -7200,11 +7200,11 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.13.0";
+    version = "0.14.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pgcli/${name}.tar.gz";
-      sha256 = "15qw4as8ryl4qv3p3diq31xwa7kygrnsx4ixlfijgvfwr2pcmgxm";
+      sha256 = "0x31b3kvybdvd413h6b5iq4b5vv2x30ff1r00gs6ana0xpzzrqxp";
     };
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
