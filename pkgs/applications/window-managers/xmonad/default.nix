@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
   '';
   patches = [
     # Patch to make xmonad use XMONAD_{GHC,XMESSAGE} (if available).
-    ./xmonad_ghc_var_0.11.patch
+    ../../../development/haskell-modules/xmonad-nix.patch
   ];
   meta = {
     homepage = "http://xmonad.org";
