@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
+let version = "0.03.13"; in
 stdenv.mkDerivation rec {
-  version = "0.03.11";
   name = "stress-ng-${version}";
 
   src = fetchurl {
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
-    sha256 = "01pshnqb75c0g4pwcz5i1gh2a6ijy3dlz8drb0i0p6n6l3fpgmar";
+    sha256 = "1ppf50rwq784qri62s2yvxif7gcrazhd6xin04yzavjdmwjayggz";
   };
 
   patchPhase = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       hardware issues such as thermal overruns as well as operating system
       bugs that only occur when a system is being thrashed hard.
     '';
-    homepage = http://kernel.ubuntu.com/~cking/stress-ng/;
+    homepage = http://kernel.ubuntu.com/~cking/stress-ng;
     license = with licenses; gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
