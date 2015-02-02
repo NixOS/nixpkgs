@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   buildPhase = ''
       cd src/dmd
+      # Use whatever compiler Nix provides
+      sed 's/HOST_CC=g++/HOST_CC=''${CXX}/g' -i  posix.mak
+      # Don't try to target any other environment than the current
+      sed 's/export MACOSX_DEPLOYMENT_TARGET=10.3//g' -i posix.mak
       make -f posix.mak INSTALL_DIR=$out
       export DMD=$PWD/dmd
       cd ../druntime
@@ -35,7 +39,7 @@ stdenv.mkDerivation {
       cd ../phobos
       mkdir $out/lib
       ${let bits = if stdenv.is64bit then "64" else "32"; in
-      "cp generated/linux/release/${bits}/libphobos2.a $out/lib"
+      "cp generated/*/release/${bits}/libphobos2.a $out/lib"
       }
 
       cp -r std $out/include/d2
