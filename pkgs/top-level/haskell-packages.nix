@@ -714,11 +714,21 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
+  distributedProcessAsync = callPackage ../development/libraries/haskell/distributed-process-async {};
+
+  distributedProcessClientServer = callPackage ../development/libraries/haskell/distributed-process-client-server {};
+
+  distributedProcessExtras = callPackage ../development/libraries/haskell/distributed-process-extras {};
+
+  distributedProcessTests = callPackage ../development/libraries/haskell/distributed-process-tests {};
+
   distributedProcessMonadControl = callPackage ../development/libraries/haskell/distributed-process-monad-control {};
 
   distributedProcessP2p = callPackage ../development/libraries/haskell/distributed-process-p2p {};
 
   distributedProcessPlatform = callPackage ../development/libraries/haskell/distributed-process-platform {};
+
+  distributedProcessSimplelocalnet = callPackage ../development/libraries/haskell/distributed-process-simplelocalnet {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
