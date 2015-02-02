@@ -398,6 +398,9 @@ self: super: {
   # The install target tries to run lots of commands as "root". WTF???
   hannahci = markBroken super.hannahci;
 
+  # https://github.com/jkarni/th-alpha/issues/1
+  th-alpha = markBrokenVersion "0.2.0.0" super.th-alpha;
+
 } // {
 
   # Not on Hackage.
