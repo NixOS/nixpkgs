@@ -1,6 +1,6 @@
 /* This file defines the composition for Go packages. */
 
-{ overrides, stdenv, go, buildGoPackage
+{ overrides, stdenv, go, buildGoPackage, git
 ,fetchgit, fetchhg, fetchurl, fetchFromGitHub }:
 
 let self = _self // overrides; _self = with self; {
@@ -46,6 +46,30 @@ let self = _self // overrides; _self = with self; {
 
   ## THIRD PARTY
 
+  binarydist = buildGoPackage rec {
+    rev = "9955b0ab8708602d411341e55fffd7e0700f86bd";
+    name = "binarydist-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/kr/binarydist";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kr";
+      repo = "binarydist";
+      sha256 = "11wncbbbrdcxl5ff3h6w8vqfg4bxsf8709mh6vda0cv236flkyn3";
+    };
+  };
+
+  check-v1 = buildGoPackage rec {
+    rev = "871360013c92e1c715c2de6d06b54899468a8a2d";
+    name = "check-v1-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "gopkg.in/check.v1";
+    src = fetchgit {
+      inherit rev;
+      url = "https://github.com/go-check/check.git";
+      sha256 = "0i83qjmd4ri9mrfddhsbpj9nb43rf2j9803k030fj155j31klwcx";
+    };
+  };
+ 
   cobra = buildGoPackage rec {
     date = "20140617";
     rev = "10a8494a87448bf5003222d9974f166437e7f042";
@@ -80,6 +104,107 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "https://${goPackagePath}/archive/v${version}.tar.gz";
       sha256 = "0y2kz2sg1f7mh6vn70kga5d0qhp04n01pf1w7k6s8j2nm62h24j6";
+    };
+  };
+
+  go-bindata = buildGoPackage rec {
+    version = "3.0.7";
+    name = "go-bindata-${version}";
+    goPackagePath = "github.com/jteeuwen/go-bindata";
+    src = fetchFromGitHub {
+      repo = "go-bindata";
+      owner = "jteeuwen";
+      rev = "v${version}";
+      sha256 = "1v8xwwlv6my5ixvis31m3vgz4sdc0cq82855j8gxmjp1scinv432";
+    };
+
+    subPackages = [ "./" "go-bindata" ]; # don't build testdata
+
+    meta = with stdenv.lib; {
+      homepage    = "https://github.com/jteeuwen/go-bindata";
+      description = "A small utility which generates Go code from any file. Useful for embedding binary data in a Go program.";
+      maintainers = with maintainers; [ cstrahan ];
+      license     = licenses.cc0 ;
+      platforms   = platforms.all;
+    };
+  };
+
+  go-metrics = buildGoPackage rec {
+    rev = "f770e6f5e91a8770cecee02d5d3f7c00b023b4df";
+    name = "go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/rcrowley/go-metrics";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "rcrowley";
+      repo = "go-metrics";
+      sha256 = "07dc74kiam8v5my7rhi3yxqrpnaapladhk8b3qbnrpjk3shvnx5f";
+    };
+
+    buildInputs = [ influxdb-go stathat ];
+  };
+ 
+  go-update = buildGoPackage rec {
+    rev = "c1385108bc3a016f1c88b75ea7d2e2a356a1571d";
+    name = "go-update-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/inconshreveable/go-update";
+
+    buildInputs = [ osext binarydist ];
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "inconshreveable";
+      repo = "go-update";
+      sha256 = "16zaxa0i07ismxdmkvjj4dpyc9lgp6wa94q090m9a48si40w9sjn";
+    };
+  };
+
+  go-vhost = buildGoPackage rec {
+    rev = "c4c28117502e4bf00960c8282b2d1c51c865fe2c";
+    name = "go-vhost-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/inconshreveable/go-vhost";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "inconshreveable";
+      repo = "go-vhost";
+      sha256 = "1rway6sls6fl2s2jk20ajj36rrlzh9944ncc9pdd19kifix54z32";
+    };
+  };
+
+  influxdb-go = buildGoPackage rec {
+    rev = "63c9a5f67dcb633d05164bf8442160c9e2e402f7";
+    name = "influxdb-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/influxdb/influxdb-go";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "influxdb";
+      repo = "influxdb-go";
+      sha256 = "16in1xhx94pir06aw166inn0hzpb7836xbws16laabs1p2np7bld";
+    };
+  };
+
+  log4go = buildGoPackage rec {
+    rev = "48";
+    name = "log4go-${rev}";
+    goPackagePath = "code.google.com/p/log4go";
+
+    src = fetchhg {
+      inherit rev;
+      url = "https://${goPackagePath}";
+      sha256 = "0q906sxrmwir295virfibqvdzlaj340qh2r4ysx1ccjrjazc0q5p";
+    };
+
+    subPackages = [ "./" ]; # don't build examples
+  };
+
+  mousetrap = buildGoPackage rec {
+    rev = "9dbb96d2c3a964935b0870b5abaea13c98b483aa";
+    name = "mousetrap-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/inconshreveable/mousetrap";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "inconshreveable";
+      repo = "mousetrap";
+      sha256 = "1f9g8vm18qv1rcb745a4iahql9vfrz0jni9mnzriab2wy1pfdl5b";
     };
   };
 
@@ -123,6 +248,17 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # check this again
   };
 
+  osext = buildGoPackage rec {
+    rev = "10";
+    name = "osext-${rev}";
+    goPackagePath = "bitbucket.org/kardianos/osext";
+    src = fetchhg {
+      inherit rev;
+      url = "https://${goPackagePath}";
+      sha256 = "1sj9r5pm28l9sqx6354fwp032n53znx9k8495k3dfnyqjrkvlw6n";
+    };
+  };
+
   pflag = buildGoPackage rec {
     date = "20131112";
     rev = "94e98a55fb412fcbcfc302555cb990f5e1590627";
@@ -134,6 +270,56 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0z8nzdhj8nrim8fz11magdl0wxnisix9p2kcvn5kkb3bg8wmxhbg";
     };
     doCheck = false; # bad import path in tests
+  };
+
+  stathat = buildGoPackage rec {
+    rev = "01d012b9ee2ecc107cb28b6dd32d9019ed5c1d77";
+    name = "stathat-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/stathat/go";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "stathat";
+      repo = "go";
+      sha256 = "0mrn70wjfcs4rfkmga3hbfqmbjk33skcsc8pyqxp02bzpwdpc4bi";
+    };
+  };
+
+  termbox-go = buildGoPackage rec {
+    rev = "9aecf65084a5754f12d27508fa2e6ed56851953b";
+    name = "termbox-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/nsf/termbox-go";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "nsf";
+      repo = "termbox-go";
+      sha256 = "16sak07bgvmax4zxfrd4jia1dgygk733xa8vk8cdx28z98awbfsh";
+    };
+
+    subPackages = [ "./" ]; # prevent building _demos
+  };
+
+  websocket = buildGoPackage rec {
+    rev = "f4076986b69612ecb8bc7ce06d742eda6286200d";
+    name = "websocket-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/gorilla/websocket";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "gorilla";
+      repo = "websocket";
+      sha256 = "09arvwlxw15maf4z8pcgjc25hd00mckqpdi0byafqfgm3nvvacvq";
+    };
+  };
+
+  yaml-v1 = buildGoPackage rec {
+    rev = "b0c168ac0cf9493da1f9bb76c34b26ffef940b4a";
+    name = "yaml-v1-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "gopkg.in/yaml.v1";
+    src = fetchgit {
+      inherit rev;
+      url = "https://github.com/go-yaml/yaml.git";
+      sha256 = "0jbdy41pplf2d1j24qwr8gc5qsig6ai5ch8rwgvg72kq9q0901cy";
+    };
   };
 
 }; in self
