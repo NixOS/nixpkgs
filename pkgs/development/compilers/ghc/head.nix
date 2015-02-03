@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghc, perl, gmp, ncurses }:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses, libiconv }:
 
 let
 
@@ -7,7 +7,10 @@ let
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
-    DYNAMIC_BY_DEFAULT = NO
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
+      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
+    ''}
   '';
 
 in
@@ -20,6 +23,11 @@ stdenv.mkDerivation rec {
     url = "http://deb.haskell.org/dailies/2015-01-18/ghc_${version}.orig.tar.bz2";
     sha256 = "1zy960q2faq03camq2n4834bd748vkc15h83bapswc68dqncqj20";
   };
+
+  postUnpack = ''
+    # tarball includes many already-compiled files
+    find . \( -name '*.dyn_o' -o -name '*.dyn_hi' -o -name haddock \) -type f -exec rm {} \;
+  '';
 
   buildInputs = [ ghc perl ];
 
@@ -39,7 +47,7 @@ stdenv.mkDerivation rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags = [ "-S" "--keep-file-symbols" ];
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   meta = {
     homepage = "http://haskell.org/ghc";

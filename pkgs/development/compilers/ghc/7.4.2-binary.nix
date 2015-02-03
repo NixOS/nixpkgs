@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, ncurses, gmp}:
+{stdenv, fetchurl, perl, ncurses, gmp, libiconv, makeWrapper}:
 
 stdenv.mkDerivation rec {
   version = "7.4.2";
@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
   buildInputs = [perl];
 
   postUnpack =
+    # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
+    # during linking
+    stdenv.lib.optionalString stdenv.isDarwin ''
+      export NIX_LDFLAGS+=" -no_dtrace_dof"
+    '' +
+
     # Strip is harmful, see also below. It's important that this happens
     # first. The GHC Cabal build system makes use of strip by default and
     # has hardcoded paths to /usr/bin/strip in many places. We replace
@@ -47,10 +53,13 @@ stdenv.mkDerivation rec {
      ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp}/lib@" {} \;
+     '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      find . -name base.buildinfo \
+          -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
      '' +
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.
-    (if stdenv.isLinux then ''
+    stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm +100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${ncurses}/lib:${gmp}/lib" {} \;
@@ -59,12 +68,29 @@ stdenv.mkDerivation rec {
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
       done
-     '' else "");
+     '' + stdenv.lib.optionalString stdenv.isDarwin ''
+       # not enough room in the object files for the full path to libiconv :(
+       fix () {
+         install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $1
+       }
+
+       ln -s ${libiconv}/lib/libiconv.dylib ghc-7.4.2/utils/ghc-pwd/dist-install/build/tmp
+       ln -s ${libiconv}/lib/libiconv.dylib ghc-7.4.2/utils/hpc/dist-install/build/tmp
+       ln -s ${libiconv}/lib/libiconv.dylib ghc-7.4.2/ghc/stage2/build/tmp
+
+       for file in ghc-cabal ghc-pwd ghc-stage2 ghc-pkg haddock hsc2hs hpc; do
+         fix $(find . -type f -name $file)
+       done
+
+       for file in $(find . -name setup-config); do
+         substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
+       done
+     '';
 
   configurePhase = ''
     ./configure --prefix=$out \
       --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
+      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"}
   '';
 
   # Stripping combined with patchelf breaks the executables (they die
@@ -75,19 +101,27 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   buildPhase = "true";
 
-  postInstall =
-      ''
-        # Sanity check, can ghc create executables?
-        cd $TMP
-        mkdir test-ghc; cd test-ghc
-        cat > main.hs << EOF
-          module Main where
-          main = putStrLn "yes"
-        EOF
-        $out/bin/ghc --make main.hs
-        echo compilation ok
-        [ $(./main) == "yes" ]
-      '';
+  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/lib/ghc-7.4.2
+    mkdir -p $out/bin
+    ln -s ${libiconv}/lib/libiconv.dylib $out/bin
+    ln -s ${libiconv}/lib/libiconv.dylib $out/lib/ghc-7.4.2/libiconv.dylib
+    ln -s ${libiconv}/lib/libiconv.dylib utils/ghc-cabal/dist-install/build/tmp
+  '';
+
+  postInstall = ''
+    # Sanity check, can ghc create executables?
+    cd $TMP
+    mkdir test-ghc; cd test-ghc
+    cat > main.hs << EOF
+      {-# LANGUAGE TemplateHaskell #-}
+      module Main where
+      main = putStrLn \$([|"yes"|])
+    EOF
+    $out/bin/ghc --make main.hs || exit 1
+    echo compilation ok
+    [ $(./main) == "yes" ]
+  '';
 
   meta.license = stdenv.lib.licenses.bsd3;
   meta.platforms = ["x86_64-linux" "i686-linux" "i686-darwin" "x86_64-darwin"];
