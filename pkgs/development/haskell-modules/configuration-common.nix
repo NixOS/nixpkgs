@@ -412,6 +412,9 @@ self: super: {
   # Nix-specific workaround
   xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
 
+  # https://github.com/evanrinehart/mikmod/issues/1
+  mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
+
 } // {
 
   # Not on Hackage.
