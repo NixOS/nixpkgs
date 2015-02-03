@@ -409,6 +409,9 @@ self: super: {
   # https://github.com/seagreen/hjsonschema/issues/4
   hjsonschema = dontCheck super.hjsonschema;
 
+  # Nix-specific workaround
+  xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
+
 } // {
 
   # Not on Hackage.
