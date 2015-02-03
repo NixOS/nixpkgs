@@ -56,7 +56,7 @@ in stdenv.mkDerivation {
       cp -r bin "$out/bin"
     '' + (if stdenv.isLinux then ''
       patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
-               --set-rpath "${stdenv.cc.gcc}/lib/:${stdenv.cc.gcc}/lib64/" \
+               --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/" \
                "$out/bin/rustc"
     '' else "");
   };

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
         sha256 = "00935c4vxfj2h3x354g75qdazswwissbwc7kj5k05l1m3lizikf6";
       };
  
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
  
   dontStrip = true;
 }

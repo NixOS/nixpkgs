@@ -13,13 +13,13 @@ import ../generic rec {
 
   system = stdenv.system;
 
-  gcc = import ../../build-support/gcc-wrapper {
+  cc = import ../../build-support/cc-wrapper {
     nativeTools = false;
     nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
     binutils = pkgs.binutils;
-    gcc = pkgs.gcc.gcc;
+    cc = pkgs.gcc.cc;
     coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };
@@ -29,8 +29,8 @@ import ../generic rec {
   fetchurlBoot = stdenv.fetchurlBoot;
 
   overrides = pkgs_: {
-    inherit gcc;
-    inherit (gcc) binutils;
+    inherit cc;
+    inherit (cc) binutils;
     inherit (pkgs)
       gzip bzip2 xz bash coreutils diffutils findutils gawk
       gnumake gnused gnutar gnugrep gnupatch perl;

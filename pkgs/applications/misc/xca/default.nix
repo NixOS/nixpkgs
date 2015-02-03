@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/xca" \
-      --prefix LD_LIBRARY_PATH : "${qt4}/lib:${gcc.gcc}/lib:${gcc.gcc}/lib64:${openssl}/lib:${libtool}/lib"
+      --prefix LD_LIBRARY_PATH : "${qt4}/lib:${gcc.cc}/lib:${gcc.cc}/lib64:${openssl}/lib:${libtool}/lib"
   '';
 
   buildInputs = [ openssl qt4 libtool gcc makeWrapper ];

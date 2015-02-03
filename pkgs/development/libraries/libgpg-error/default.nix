@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dapxzxl1naghf342fwfc2w2f2c5hb9gr1a1s4n8dsqn26kybx1z";
   };
 
-  postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:00+0000/' -i ./configure";
+  postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";
 
   # If architecture-dependent MO files aren't available, they're generated
   # during build, so we need gettext for cross-builds.
