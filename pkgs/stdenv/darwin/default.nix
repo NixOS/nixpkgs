@@ -130,9 +130,8 @@ rec {
       cc        = pkgs.llvmPackages.clang;
       coreutils = pkgs.coreutils;
       shell     = "${pkgs.bash}/bin/bash";
+      extraPackages = [ pkgs.libcxx ];
     };
-
-    extraBuildInputs = [ pkgs.libcxx ];
 
     shell = "${pkgs.bash}/bin/bash";
   };

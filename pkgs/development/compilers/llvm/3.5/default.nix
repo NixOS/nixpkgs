@@ -1,4 +1,4 @@
-{ newScope, stdenv, isl, fetchurl }:
+{ pkgs, newScope, stdenv, isl, fetchurl }:
 let
   callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
@@ -33,5 +33,9 @@ let
     polly = callPackage ./polly.nix {};
 
     dragonegg = callPackage ./dragonegg.nix {};
+
+    libcxx = callPackage ./libc++ { stdenv = pkgs.clangStdenv; };
+
+    libcxxabi = callPackage ./libc++abi { stdenv = pkgs.clangStdenv; };
   };
 in self
