@@ -10,8 +10,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libcap ];
 
   prePatch = ''
-    BASH=$(type -tp bash)
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "$BASH"
+    # use relative bash path
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "bash"
+
+    # ensure capsh can find bash in $PATH
+    substituteInPlace progs/capsh.c --replace execve execvpe
   '';
 
   preConfigure = "cd progs";
