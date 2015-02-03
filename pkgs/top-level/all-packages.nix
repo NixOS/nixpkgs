@@ -14955,6 +14955,8 @@ let
 
   sails = callPackage ../misc/sails { };
 
+  canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
+
   samsungUnifiedLinuxDriver = import ../misc/cups/drivers/samsung {
     inherit fetchurl stdenv;
     inherit cups ghostscript glibc patchelf;
