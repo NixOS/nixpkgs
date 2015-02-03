@@ -9631,8 +9631,7 @@ let
     stdenv = overrideCC stdenv gcc49;
     pulseSupport = config.pulseaudio or false;
   };
-
-  cmplayer = builtins.trace "cmplayer is renamed to bomi" bomi;
+  cmplayer = bomi;
 
   cmus = callPackage ../applications/audio/cmus { };
 
