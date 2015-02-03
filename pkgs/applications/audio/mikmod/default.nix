@@ -1,10 +1,11 @@
 { stdenv, fetchurl, libmikmod, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "mikmod-3.2.2";
+  name = "mikmod-3.2.6";
+
   src = fetchurl {
-    url = "http://mikmod.shlomifish.org/files/${name}.tar.gz";
-    sha256 = "105vl1kyah588wpbpq6ck1wlr0jj55l2ps72q5i01gs9px8ncmp8";
+    url = "http://downloads.sourceforge.net/project/mikmod/mikmod/3.2.6/mikmod-3.2.6.tar.gz";
+    sha256 = "0wr61raj10rpl64mk3x9g3rwys898fbzyg93c6mrz89nvc74wm04";
   };
 
   buildInputs = [ libmikmod ncurses ];
