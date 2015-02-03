@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap ];
 
-  patches = [ ./progs-bash-path.patch ];
+  prePatch = ''
+    BASH=$(type -tp bash)
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "$BASH"
+  '';
 
   preConfigure = "cd progs";
 
