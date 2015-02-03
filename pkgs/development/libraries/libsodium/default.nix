@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "Version of NaCl with harwdare tests at runtime, not build time";
+    description = "Version of NaCl with hardware tests at runtime, not build time";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.all;
