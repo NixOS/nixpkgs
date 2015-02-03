@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mudlet-${version}";
-  version = "3.0";
+  version = "3.0.0-delta";
 
   src = fetchurl {
-    url = "https://github.com/Mudlet/Mudlet/archive/6bc55dde0499cffab48b0021f27dcff1d57b0b66.zip";
-    sha256 = "c7b9a383d2cf393da730ce07ac8f06478eaec1fdf730054e837e58c598222d38";
+    url = "https://github.com/Mudlet/Mudlet/archive/Mudlet-${version}.tar.gz";
+    sha256 = "08fhqd323kgz5s17ac5z9dhkjxcmwvcmvhzy0x1vw4rayhijfrd7";
   };
 
   buildInputs = [ pkgs.unzip qt5 lua5_1 hunspell libzip yajl boost makeWrapper luafilesystem luazip lrexlib luasqlite3 ];
