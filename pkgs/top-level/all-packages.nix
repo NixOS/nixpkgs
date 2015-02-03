@@ -7923,6 +7923,8 @@ let
 
   joseki = callPackage ../servers/http/joseki {};
 
+  kafka = callPackage ../servers/kafka { };
+
   leafnode = callPackage ../servers/news/leafnode { };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
