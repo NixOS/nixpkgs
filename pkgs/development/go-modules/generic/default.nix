@@ -28,12 +28,12 @@ go.stdenv.mkDerivation ( args // {
 
     if [ -n "$subPackages" ] ; then
 	for p in $subPackages ; do
-            go install -p $NIX_BUILD_CORES -v $goPackagePath/$p
+            go install $makeFlags -p $NIX_BUILD_CORES -v $goPackagePath/$p
 	done
     else
 	find . -type d | while read d; do
             for i in $d/*.go; do
-                go install -p $NIX_BUILD_CORES -v $d
+                go install $makeFlags -p $NIX_BUILD_CORES -v $d
                 break
 	    done
 	done
