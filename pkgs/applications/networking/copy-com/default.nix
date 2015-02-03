@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
       "$out/${appdir}/CopyConsole"
 
-    RPATH=${gcc.gcc}/lib:$out/${appdir}
+    RPATH=${gcc.cc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"
     find "$out/${appdir}" -type f -a -perm +0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;

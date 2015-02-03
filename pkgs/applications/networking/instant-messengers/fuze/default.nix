@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   libPath =
     stdenv.lib.makeLibraryPath [
       openssl alsaLib libXext libXfixes libXrandr libjpeg curl_custom
-      libX11 libXmu libXv qt4 libXtst mesa stdenv.cc.gcc zlib
+      libX11 libXmu libXv qt4 libXtst mesa stdenv.cc.cc zlib
       gnome.GConf libidn rtmpdump c-ares openldap
     ];
   buildCommand = ''

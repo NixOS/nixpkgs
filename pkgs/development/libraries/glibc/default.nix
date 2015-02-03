@@ -8,7 +8,7 @@
 , withGd ? false, gd ? null, libpng ? null
 }:
 
-assert stdenv.cc ? gcc;
+assert stdenv.cc.cc.isGNU or false;
 
 let
   build = import ./common.nix;
@@ -33,9 +33,9 @@ in
     # libgcc_s will not be at {gcc}/lib, and gcc's libgcc will be found without
     # any special hack.
     preInstall = ''
-      if [ -f ${stdenv.cc.gcc}/lib/libgcc_s.so.1 ]; then
+      if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
-          cp ${stdenv.cc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+          cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
       fi
     '';
 

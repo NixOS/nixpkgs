@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "libjpeg-turbo-1.3.1";
+  name = "libjpeg-turbo-1.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/libjpeg-turbo/${name}.tar.gz";
-    sha256 = "1fbgcvlnn3d5gvf0v9jnlcabpv2z3nwxclzyabahxi6x2xs90cn1";
+    sha256 = "1vmv5ciqq98gi2ishqbvlx9hsk7sl06lr6xkcgw480jiddadhfnr";
   };
 
   buildInputs = [ nasm ];
@@ -13,9 +13,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libjpeg-turbo.virtualgl.org/;
     description = "A faster (using SIMD) libjpeg implementation";
-    license = stdenv.lib.licenses.free;
+    license = licenses.ijg; # and some parts under other BSD-style licenses
+    platforms = platforms.all;
+    maintainers = [ maintainers.vcunat ];
   };
 }
+

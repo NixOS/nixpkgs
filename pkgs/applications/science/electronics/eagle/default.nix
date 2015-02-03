@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/bin
     cat > "$out"/bin/eagle << EOF
     #!${stdenv.shell}
-    export LD_LIBRARY_PATH="${stdenv.cc.gcc}/lib:${libPath}"
+    export LD_LIBRARY_PATH="${stdenv.cc.cc}/lib:${libPath}"
     export LD_PRELOAD="$out/lib/eagle_fixer.so"
     exec "$dynlinker" "$out/eagle-${version}/bin/eagle" "\$@"
     EOF

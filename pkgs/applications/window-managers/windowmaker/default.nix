@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXft, libXmu }:
+{ stdenv, fetchurl, pkgconfig
+, libX11, libXext, libXft, libXmu, libXinerama, libXrandr, libXpm
+, imagemagick, libpng, libjpeg, libexif, libtiff, libungif, libwebp }:
 
 stdenv.mkDerivation rec {
   name = "windowmaker-${version}";
@@ -10,7 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "1i3dw1yagsa3rs9x2na2ynqlgmbahayws0kz4vl00fla6550nns3";
   };
 
-  buildInputs = [ pkgconfig libX11 libXft libXmu ];
+  buildInputs = [ pkgconfig
+                  libX11 libXext libXft libXmu libXinerama libXrandr libXpm
+                  imagemagick libpng libjpeg libexif libtiff libungif libwebp ];
+
+  configureFlags = [
+    "--with-x"
+    "--enable-modelock"
+    "--enable-randr"
+    "--enable-magick"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://windowmaker.org/;
@@ -27,3 +38,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.AndersonTorres ];
   };
 }
+
+# TODO: investigate support for WEBP (its autodetection is failing)

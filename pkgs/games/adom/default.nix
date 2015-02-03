@@ -7,7 +7,7 @@ let
 
   inherit (xlibs) libXext libX11;
 
-  lpath = "${stdenv.cc.gcc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
+  lpath = "${stdenv.cc.cc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
       zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib pulseaudio];
 
 in

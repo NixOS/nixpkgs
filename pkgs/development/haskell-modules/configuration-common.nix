@@ -54,6 +54,18 @@ self: super: {
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
+  hzk = overrideCabal super.hzk (drv: {
+    preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
+    doCheck = false;
+  });
+       
+  haskakafka = overrideCabal super.haskakafka (drv: {
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+    doCheck = false;
+   });
+
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 
@@ -149,6 +161,9 @@ self: super: {
 
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
+
+  # https://github.com/vincenthz/hs-tls/issues/102
+  tls = dontCheck super.tls;
 
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
@@ -408,6 +423,12 @@ self: super: {
 
   # https://github.com/seagreen/hjsonschema/issues/4
   hjsonschema = dontCheck super.hjsonschema;
+
+  # Nix-specific workaround
+  xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
+
+  # https://github.com/evanrinehart/mikmod/issues/1
+  mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
 } // {
 
