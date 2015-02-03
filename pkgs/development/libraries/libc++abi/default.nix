@@ -1,45 +1,47 @@
-{ lib, stdenv, fetchurl, libcxx, coreutils, gnused }:
+{ stdenv, cmake, coreutils, fetchurl, libcxx, libunwind, llvm }:
 
-let rev = "199626"; in
+let version = "3.5.0"; in
 
 stdenv.mkDerivation {
-  name = "libc++abi-${rev}";
+  name = "libc++abi-${version}";
 
   src = fetchurl {
-    url = "http://tarballs.nixos.org/libcxxabi-${rev}.tar.bz2";
-    sha256 = "09wr6qwgmdzbmgfkdzfhph9giy0zd6fp3s017fcfy4g0prjn5s4c";
+    url = "http://llvm.org/releases/${version}/libcxxabi-${version}.src.tar.xz";
+    sha256 = "1ndcpw3gfrzh7m1jac2qadhkrqgvb65cns69j9niydyj5mmbxijk";
   };
 
-  patches = [ ./no-stdc++.patch ./darwin.patch ];
+  NIX_CFLAGS_LINK = "-L${libunwind}/lib";
 
-  buildInputs = [ coreutils ];
+  buildInputs = [ coreutils cmake llvm ];
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    cp -r libcxx-*/include libcxxabi*/
-  '' + lib.optionalString stdenv.isDarwin ''
+    export NIX_CFLAGS_COMPILE+=" -I${libunwind}/include -I$PWD/include"
+    export cmakeFlags="-DLIBCXXABI_LIBCXX_INCLUDES=$(${coreutils}/bin/readlink -f libcxx-*)/include"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
-    # Hack: NIX_CFLAGS_COMPILE doesn't work here because clang++ isn't
-    # wrapped at this point.
-    export CXX="clang++ -D_LIBCXX_DYNAMIC_FALLBACK=1"
-    unset SDKROOT
   '';
 
   installPhase = if stdenv.isDarwin
     then ''
-      install -d -m 755 $out/include $out/lib
-      install -m 644 lib/libc++abi.dylib $out/lib
-      install -m 644 include/cxxabi.h $out/include
+      for file in lib/*; do
+        # this should be done in CMake, but having trouble figuring out
+        # the magic combination of necessary CMake variables
+        # if you fancy a try, take a look at
+        # http://www.cmake.org/Wiki/CMake_RPATH_handling
+        install_name_tool -id $out/$file $file
+      done
+      make install
+      install -d 755 $out/include
+      install -m 644 ../include/cxxabi.h $out/include
     ''
     else ''
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.so.1.0 $out/lib
-      install -m 644 include/cxxabi.h $out/include
+      install -m 644 ../include/cxxabi.h $out/include
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
     '';
-
-  buildPhase = "(cd lib; ./buildit)";
 
   meta = {
     homepage = http://libcxxabi.llvm.org/;
