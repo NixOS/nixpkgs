@@ -150,6 +150,9 @@ self: super: {
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
+  # https://github.com/vincenthz/hs-tls/issues/102
+  tls = dontCheck super.tls;
+
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
