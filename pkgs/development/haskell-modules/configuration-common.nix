@@ -53,6 +53,12 @@ self: super: {
 
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
+  
+  haskakafka = overrideCabal super.haskakafka (drv: {
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+    doCheck = false;
+   });
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };

@@ -7925,6 +7925,8 @@ let
 
   kafka = callPackage ../servers/kafka { };
 
+  rdkafka = callPackage ../development/libraries/rdkafka { };
+
   leafnode = callPackage ../servers/news/leafnode { };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
