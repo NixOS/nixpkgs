@@ -28,7 +28,6 @@ let
     nss
     pango
     qt4
-    sqlite
     stdenv.cc.cc
     xlibs.libX11
     xlibs.libXcomposite

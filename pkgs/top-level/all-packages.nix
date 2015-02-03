@@ -4135,17 +4135,17 @@ let
    * build system so that the Qt 4 components find the Qt 4 headers and the Qt 5
    * components find the Qt 5 headers.
    */
-  wrapGCCStdInc = glibc: baseGCC: (import ../build-support/gcc-wrapper) {
+  wrapGCCStdInc = glibc: baseGCC: (import ../build-support/cc-wrapper) {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    gcc = baseGCC;
+    cc = baseGCC;
     libc = glibc;
     inherit stdenv binutils coreutils zlib;
-    setupHook = ../build-support/gcc-wrapper/setup-hook-stdinc.sh;
+    setupHook = ../build-support/cc-wrapper/setup-hook-stdinc.sh;
   };
 
-  gccStdInc = wrapGCCStdInc glibc gcc.gcc;
+  gccStdInc = wrapGCCStdInc glibc gcc.cc;
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -5853,7 +5853,7 @@ let
   };
 
   kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
-    stdenv = overrideGCC stdenv gccStdInc;
+    stdenv = overrideCC stdenv gccStdInc;
   });
   kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {});
   kf5_latest = kf56;
@@ -10444,7 +10444,7 @@ let
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
     kf5 = kf55;
-    stdenv = overrideGCC stdenv gccStdInc;
+    stdenv = overrideCC stdenv gccStdInc;
   });
   kdeApps_latest = kdeApps_14_12;
   kdeApps_stable = kdeApps_14_12;
@@ -12549,7 +12549,7 @@ let
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
   plasma51 = recurseIntoAttrs (callPackage ../desktops/plasma-5.1 {
-    stdenv = overrideGCC stdenv gccStdInc;
+    stdenv = overrideCC stdenv gccStdInc;
   });
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {});
   plasma5_latest = plasma52;
