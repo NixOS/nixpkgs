@@ -7925,6 +7925,8 @@ let
 
   kafka = callPackage ../servers/kafka { };
 
+  rdkafka = callPackage ../development/libraries/rdkafka { };
+
   leafnode = callPackage ../servers/news/leafnode { };
 
   lighttpd = callPackage ../servers/http/lighttpd { };
@@ -8239,6 +8241,8 @@ let
 
   zookeeper = callPackage ../servers/zookeeper { };
 
+  zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
+  
   xquartz = callPackage ../servers/x11/xquartz { };
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
