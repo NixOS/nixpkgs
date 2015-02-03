@@ -1,14 +1,24 @@
 { lib, stdenv, fetchurl, cmake, libcxxabi, fixDarwinDylibNames }:
 
-let version = "3.4.2"; in
+let version = "3.5.0"; in
 
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
   src = fetchurl {
-    url = "http://llvm.org/releases/${version}/libcxx-${version}.src.tar.gz";
-    sha256 = "0z3jdvgcq995khkpis5c5vaxhbmvbqjlalbhn09k6pgb5zp46rc2";
+    url = "http://llvm.org/releases/${version}/libcxx-${version}.src.tar.xz";
+    sha256 = "1h5is2jd802344kddm45jcm7bra51llsiv9r34h0rrb3ba2dlic0";
   };
+
+  # instead of allowing libc++ to link with /usr/lib/libc++abi.dylib,
+  # force it to link with our copy
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace lib/CMakeLists.txt \
+      --replace 'OSX_RE_EXPORT_LINE "/usr/lib/libc++abi.dylib' \
+                'OSX_RE_EXPORT_LINE "${libcxxabi}/lib/libc++abi.dylib' \
+      --replace '"''${CMAKE_OSX_SYSROOT}/usr/lib/libc++abi.dylib"' \
+                '"${libcxxabi}/lib/libc++abi.dylib"'
+  '';
 
   patches = [ ./darwin.patch ];
 
@@ -25,9 +35,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   inherit libcxxabi;
-
-  # Remove a Makefile that causes many retained dependencies.
-  postInstall = "rm $out/include/c++/v1/Makefile";
 
   setupHook = ./setup-hook.sh;
 
