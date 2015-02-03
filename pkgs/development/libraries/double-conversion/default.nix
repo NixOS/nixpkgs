@@ -1,18 +1,15 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "double-conversion-1.1.5";
+  version = "2.0.1";
+  name = "double-conversion-${version}";
 
-  src = fetchurl {
-    url = "https://double-conversion.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0hnlyn9r8vd9b3dafnk01ykz4k7bk6xvmvslv93as1cswf7vdvqv";
+  src = fetchFromGitHub {
+    owner = "floitsch";
+    repo = "double-conversion";
+    rev = "v${version}";
+    sha256 = "05x5rdwndgp1vdq2z1bpvng0dd8pn93kw4vhl6nsvv9vsara2q4b";
   };
-
-  unpackPhase = ''
-    mkdir $name
-    cd $name
-    tar xzf $src
-  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -22,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
-    homepage = https://code.google.com/p/double-conversion/;
+    homepage = https://github.com/floitsch/double-conversion;
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = maintainers.abbradar;
