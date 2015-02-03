@@ -48,7 +48,7 @@ let
 
   isolinuxMemtest86Entry = ''
     LABEL memtest
-    MENU LABEL Memtest86+
+    MENU LABEL Memtest86
     LINUX /boot/memtest.bin
   '';
 
@@ -297,7 +297,7 @@ in
           target = "/loader";
         }
       ] ++ optionals config.boot.loader.grub.memtest86.enable [
-        { source = "${pkgs.memtest86plus}/memtest.bin";
+        { source = "${pkgs.memtest86}/memtest.bin";
           target = "/boot/memtest.bin";
         }
       ];
