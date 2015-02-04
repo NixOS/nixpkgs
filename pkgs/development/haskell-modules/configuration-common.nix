@@ -49,9 +49,6 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
-  # This package overrides the one from pkgs.gnome.
-  gtkglext = super.gtkglext.override { inherit (pkgs.gnome) gtkglext; };
-
   # The test suite refers to its own library with an invalid version constraint.
   presburger = dontCheck super.presburger;
 
