@@ -216,6 +216,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  iochan = buildGoPackage rec {
+    rev = "b584a329b193e206025682ae6c10cdbe03b0cd77";
+    name = "iochan-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mitchellh/iochan";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mitchellh";
+      repo = "iochan";
+      sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
+    };
+  };
+
   log4go = buildGoPackage rec {
     rev = "48";
     name = "log4go-${rev}";
