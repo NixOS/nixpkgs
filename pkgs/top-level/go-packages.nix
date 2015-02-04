@@ -1,7 +1,7 @@
 /* This file defines the composition for Go packages. */
 
-{ overrides, stdenv, go, buildGoPackage, git
-,fetchgit, fetchhg, fetchurl, fetchFromGitHub }:
+{ overrides, stdenv, go, buildGoPackage, git, pkgconfig, libusb
+, fetchgit, fetchhg, fetchurl, fetchFromGitHub }:
 
 let self = _self // overrides; _self = with self; {
 
@@ -256,6 +256,19 @@ let self = _self // overrides; _self = with self; {
       repo = "go";
       sha256 = "157f24xnkhclrjwwa1b7lmpj112ynlbf7g1cfw0c657iqny5720j";
     };
+  };
+
+  go-fuse = buildGoPackage rec {
+    rev = "5d16aa11eef4643de2d91e88a64dcb6138705d58";
+    name = "go-fuse-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/hanwen/go-fuse";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hanwen";
+      repo = "go-fuse";
+      sha256 = "0lycfhchn88kbs81ypz8m5jh032fpbv14gldrjirf32wm1d4f8pj";
+    };
+    subPackages = [ "fuse" "fuse/nodefs" "fuse/pathfs" ];
   };
 
   rcrowley.go-metrics = buildGoPackage rec {
@@ -548,6 +561,19 @@ let self = _self // overrides; _self = with self; {
     };
 
     subPackages = [ "./" ]; # prevent building _demos
+  };
+
+  usb = buildGoPackage rec {
+    rev = "69aee4530ac705cec7c5344418d982aaf15cf0b1";
+    name = "usb-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/hanwen/usb";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hanwen";
+      repo = "usb";
+      sha256 = "01k0c2g395j65vm1w37mmrfkg6nm900khjrrizzpmx8f8yf20dky";
+    };
+    buildInputs = [ pkgconfig libusb ];
   };
 
   websocket = buildGoPackage rec {
