@@ -6,7 +6,7 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.4";
+  majorVersion = "2.5";
   version = "${majorVersion}.0";
   libPrefix = "pypy${majorVersion}";
 
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "1lhk86clnkj305dxa6xr9wjib6ckf6xxl6qj0bq20vqh80nfq3by";
+      sha256 = "126zrsx6663n9w60018mii1z7cqb87iq9irnhp8z630mldallr4d";
     };
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 makeWrapper ]
@@ -29,8 +29,6 @@ let
     LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
     LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib")
       (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs));
-
-    patches = [ ./fix-gcc-4-9-2.patch ];
 
     preConfigure = ''
       substituteInPlace Makefile \

@@ -4339,7 +4339,7 @@ let
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
     self = python34;
   });
-  pypy = callPackage ../development/interpreters/pypy/2.4 {
+  pypy = callPackage ../development/interpreters/pypy {
     self = pypy;
   };
 
