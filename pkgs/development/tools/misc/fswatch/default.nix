@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoconf
-, automake114x
+, automake
 , findutils                     # for xargs
 , gettext_0_19
 , libtool
@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
     sha256 = "0flq8baqzifhmf61zyiipdipvgy4h0kl551clxrhwa8gvzf75im4";
   };
 
-  buildInputs = [ autoconf automake114x gettext_0_19 libtool makeWrapper texinfo ];
+  buildInputs = [ autoconf automake gettext_0_19 libtool makeWrapper texinfo ];
 
   preConfigure = ''
     ./autogen.sh
