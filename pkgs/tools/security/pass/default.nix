@@ -1,10 +1,11 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
 , makeWrapper
-, withX ? false, xclip ? null
+, withX ? true, xclip ? null, xdotool ? null
 }:
 
 assert withX -> xclip != null;
+assert withX -> xdotool != null;
 
 stdenv.mkDerivation rec {
   version = "1.6.3";
@@ -36,6 +37,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    PREFIX="$out" make install
+
     mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
@@ -46,7 +49,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
 
-    PREFIX="$out" make install
+    ${if withX then ''
+      cp "contrib/dmenu/passmenu" "$out/bin/"
+    '' else ""}
   '';
 
   postFixup = ''
@@ -57,5 +62,10 @@ stdenv.mkDerivation rec {
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
       --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
+
+    ${if withX then ''
+      wrapProgram $out/bin/passmenu \
+        --prefix PATH : "$out/bin:${xdotool}/bin"
+    '' else ""}
   '';
 }
