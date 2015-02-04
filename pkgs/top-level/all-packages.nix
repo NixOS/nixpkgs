@@ -8882,7 +8882,7 @@ let
 
   gotags = callPackage ../development/tools/gotags { };
 
-  golint = callPackage ../development/tools/golint { };
+  golint = callPackage ../development/tools/golint { goPackages = go13Packages; };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
