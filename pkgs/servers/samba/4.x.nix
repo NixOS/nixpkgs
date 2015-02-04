@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
   name = "samba-4.1.14";
 
   src = fetchurl {
-    url = "http://samba.org/samba/ftp/stable/${name}.tar.gz";
+    urls = [
+      "http://samba.org/samba/ftp/stable/${name}.tar.gz"
+      "http://pkgs.fedoraproject.org/repo/pkgs/samba/${name}.tar.gz"
+    ];
     sha256 = "1ficvglapxcw4zrgwkmmjbprsqrxks3ii29nblsr4wlrram4p8ay";
   };
 
