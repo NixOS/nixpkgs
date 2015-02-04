@@ -11320,6 +11320,8 @@ let
     vte = gnome3_12.vte-select-text;
    };
 
+  termite-terminfo = callPackage ../applications/misc/termite/terminfo.nix { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
