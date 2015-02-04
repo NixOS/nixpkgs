@@ -1,7 +1,7 @@
 /* This file defines the composition for Go packages. */
 
 { overrides, stdenv, go, buildGoPackage, git, pkgconfig, libusb
-, fetchgit, fetchhg, fetchurl, fetchFromGitHub }:
+, fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchbzr }:
 
 let self = _self // overrides; _self = with self; {
 
@@ -213,6 +213,18 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # please check again
   };
 
+  go-assert = buildGoPackage rec {
+    rev = "e17e99893cb6509f428e1728281c2ad60a6b31e3";
+    name = "assert-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bmizerany/assert";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bmizerany";
+      repo = "assert";
+      sha256 = "1lfrvqqmb09y6pcr76yjv4r84cshkd4s7fpmiy7268kfi2cvqnpc";
+    };
+  };
+
   go-bencode = buildGoPackage rec {
     version = "1.1.1";
     name = "go-bencode-${version}";
@@ -271,6 +283,18 @@ let self = _self // overrides; _self = with self; {
     subPackages = [ "fuse" "fuse/nodefs" "fuse/pathfs" ];
   };
 
+  go-hostpool = buildGoPackage rec {
+    rev = "fed86fae5cacdc77e7399937e2f8836563620a2e";
+    name = "go-hostpool-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bitly/go-hostpool";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bitly";
+      repo = "go-hostpool";
+      sha256 = "0nbssfp5ksj4hhc0d8lfq54afd9nqv6qzk3vi6rinxr3fgplrj44";
+    };
+  };
+
   rcrowley.go-metrics = buildGoPackage rec {
     rev = "f770e6f5e91a8770cecee02d5d3f7c00b023b4df";
     name = "rcrowley.go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
@@ -307,6 +331,56 @@ let self = _self // overrides; _self = with self; {
       repo = "go-msgpack";
       sha256 = "1bmqi16bfiqw7qhb3d5hbh0dfzhx2bbq1g15nh2pxwxckwh80x98";
     };
+  };
+
+  go-nsq = buildGoPackage rec {
+    rev = "c79a282f05364e340eadc2ce2f862a3d44eea9c0";
+    name = "go-nsq-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bitly/go-nsq";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bitly";
+      repo = "go-nsq";
+      sha256 = "19jlwj5419p5xwjzfnzlddjnbh5g7ifnqhd00i5p0b6ww1gk011p";
+    };
+    propagatedBuildInputs = [ go-simplejson go-snappystream ];
+  };
+
+  go-options = buildGoPackage rec {
+    rev = "896a539cd709f4f39d787562d1583c016ce7517e";
+    name = "go-options-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mreiferson/go-options";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mreiferson";
+      repo = "go-options";
+      sha256 = "0hg0n5grcjcj5719rqchz0plp39wfk3znqxw8y354k4jwsqwmn17";
+    };
+  };
+
+  go-simplejson = buildGoPackage rec {
+    rev = "1cfceb0e12f47ec02665ef480212d7b531d6f4c5";
+    name = "go-simplejson-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bitly/go-simplejson";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bitly";
+      repo = "go-simplejson";
+      sha256 = "1d8x0himl58qn87lv418djy6mbs66p9ai3zpqq13nhkfl67fj3bi";
+    };
+  };
+
+  go-snappystream = buildGoPackage rec {
+    rev = "97c96e6648e99c2ce4fe7d169aa3f7368204e04d";
+    name = "go-snappystream-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mreiferson/go-snappystream";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mreiferson";
+      repo = "go-snappystream";
+      sha256 = "08ylvx9r6b1fi76v6cqjvny4yqsvcqjfsg93jdrgs7hi4mxvxynn";
+    };
+    propagatedBuildInputs = [ snappy-go ];
   };
 
   go-syslog = buildGoPackage rec {
@@ -524,6 +598,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  perks = buildGoPackage rec {
+    rev = "aac9e2eab5a334037057336897fd10b0289a5ae8";
+    name = "perks-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bmizerany/perks";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bmizerany";
+      repo = "perks";
+      sha256 = "1d027jgc327qz5xmal0hrpqvsj45i9yqmm9pxk3xp3hancvz3l3k";
+    };
+  };
+
   pflag = buildGoPackage rec {
     date = "20131112";
     rev = "94e98a55fb412fcbcfc302555cb990f5e1590627";
@@ -535,6 +621,41 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0z8nzdhj8nrim8fz11magdl0wxnisix9p2kcvn5kkb3bg8wmxhbg";
     };
     doCheck = false; # bad import path in tests
+  };
+
+  pretty = buildGoPackage rec {
+    rev = "bc9499caa0f45ee5edb2f0209fbd61fbf3d9018f";
+    name = "pretty-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/kr/pretty";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kr";
+      repo = "pretty";
+      sha256 = "1m61y592qsnwsqn76v54mm6h2pcvh4wlzbzscc1ag645x0j33vvl";
+    };
+  };
+
+  pty = buildGoPackage rec {
+    rev = "67e2db24c831afa6c64fc17b4a143390674365ef";
+    name = "pty-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/kr/pty";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kr";
+      repo = "pty";
+      sha256 = "1l3z3wbb112ar9br44m8g838z0pq2gfxcp5s3ka0xvm1hjvanw2d";
+    };
+  };
+
+  snappy-go = buildGoPackage rec {
+    rev = "14";
+    name = "snappy-go-${rev}";
+    goPackagePath = "code.google.com/p/snappy-go";
+    src = fetchhg {
+      inherit rev;
+      url = "http://code.google.com/p/snappy-go";
+      sha256 = "0ywa52kcii8g2a9lbqcx8ghdf6y56lqq96sl5nl9p6h74rdvmjr7";
+    };
   };
 
   stathat = buildGoPackage rec {
@@ -561,6 +682,31 @@ let self = _self // overrides; _self = with self; {
     };
 
     subPackages = [ "./" ]; # prevent building _demos
+  };
+
+  kr.text = buildGoPackage rec {
+    rev = "6807e777504f54ad073ecef66747de158294b639";
+    name = "kr.text-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/kr/text";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kr";
+      repo = "text";
+      sha256 = "1wkszsg08zar3wgspl9sc8bdsngiwdqmg3ws4y0bh02sjx5a4698";
+    };
+    propagatedBuildInputs = [ pty ];
+  };
+
+  toml = buildGoPackage rec {
+    rev = "f87ce853111478914f0bcffa34d43a93643e6eda";
+    name = "toml-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/BurntSushi/toml";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "BurntSushi";
+      repo = "toml";
+      sha256 = "0g8203y9ycf34j2q3ymxb8nh4habgwdrjn9vdgrginllx73yq565";
+    };
   };
 
   usb = buildGoPackage rec {
