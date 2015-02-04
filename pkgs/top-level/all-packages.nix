@@ -9450,7 +9450,9 @@ let
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
 
-  avxsynth = callPackage ../applications/video/avxsynth { };
+  avxsynth = callPackage ../applications/video/avxsynth {
+    libjpeg = libjpeg_original; # error: 'JCOPYRIGHT_SHORT' was not declared in this scope
+  };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     cairo = cairo.override { xcbSupport = true; };
