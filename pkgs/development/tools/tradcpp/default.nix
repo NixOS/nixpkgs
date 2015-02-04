@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoconf }:
 
 stdenv.mkDerivation {
   name = "tradcpp-0.4";
@@ -9,8 +9,9 @@ stdenv.mkDerivation {
   };
 
   # tradcpp only comes with BSD-make Makefile; the patch adds configure support
+  buildInputs = [ autoconf ];
+  preConfigure = "autoconf";
   patches = [ ./tradcpp-configure.patch ];
-  postPatch = "chmod +x configure";
 
   meta = {
     description = "A traditional (K&R-style) C macro preprocessor";
