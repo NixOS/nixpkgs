@@ -42,9 +42,11 @@ in stdenv.mkDerivation rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
-    "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
   ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON"
-    ++ stdenv.lib.optional ( isDarwin) "-DCAN_TARGET_i386=false";
+    ++ stdenv.lib.optionals ( isDarwin) [
+    "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
+    "-DCAN_TARGET_i386=false"
+  ];
 
   postBuild = ''
     rm -fR $out
