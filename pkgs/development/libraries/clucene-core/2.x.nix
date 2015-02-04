@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     [ ./Fix-pkgconfig-file-by-adding-clucene-shared-library.patch
       ./Fixing_ZLIB_configuration_in_shared_CMakeLists.patch
       ./Install-contribs-lib.patch
+      ./fix-darwin.patch
     ];
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
