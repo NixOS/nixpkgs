@@ -274,7 +274,8 @@ in
         libpciaccess inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ]
+                   ++ lib.optional isDarwin ./fix-clang.patch;
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -313,7 +314,7 @@ in
           url = mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2;
           sha256 = "0c57vp1z0p38dj5gfipkmlw6bvbz1mrr0sb3sbghdxxdyq4kzcz8";
         };
-        buildInputs = commonBuildInputs;
+        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
@@ -377,6 +378,7 @@ in
 
   xinit = attrs: attrs // {
     stdenv = if isDarwin then args.clangStdenv else stdenv;
+    buildInputs = if isDarwin then [ args.bootstrap_cmds args.pkgconfig ] else null;
     configureFlags = [
       "--with-xserver=${xorg.xorgserver}/bin/X"
     ] ++ lib.optionals isDarwin [
@@ -384,7 +386,8 @@ in
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
-    propagatedBuildInputs = [ xorg.xauth ];
+    propagatedBuildInputs = [ xorg.xauth ]
+                         ++ lib.optionals isDarwin [ xorg.libX11 xorg.xproto ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';
