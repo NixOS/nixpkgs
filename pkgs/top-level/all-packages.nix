@@ -2764,8 +2764,6 @@ let
 
   varnish = callPackage ../servers/varnish { };
 
-  varnish2 = callPackage ../servers/varnish/2.1.nix { };
-
   venus = callPackage ../tools/misc/venus {
     python = python27;
   };
