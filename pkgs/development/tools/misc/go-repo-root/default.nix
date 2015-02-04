@@ -1,28 +1,21 @@
-{ stdenv, lib, go, fetchgit, fetchhg, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
 let
   version = "0.0.1";
 in
 
-with lib;
-stdenv.mkDerivation {
+with lib; with goPackages;
+buildGoPackage rec {
   name = "go-repo-root-${version}";
-
-  src = import ./deps.nix {
-    inherit stdenv lib fetchhg fetchFromGitHub;
+  goPackagePath = "github.com/cstrahan/go-repo-root";
+  src = fetchFromGitHub {
+    owner = "cstrahan";
+    repo = "go-repo-root";
+    rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
+    sha256 = "1rlzp8kjv0a3dnfhyqcggny0ad648j5csr2x0siq5prahlp48mg4";
   };
 
-  buildInputs = [ go ];
-
-  buildPhase = ''
-    export GOPATH=$src
-    go build -v -o go-repo-root github.com/cstrahan/go-repo-root
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp go-repo-root $out/bin
-  '';
+  buildInputs = [ tools ];
 
   meta = with lib; {
     homepage    = "https://github.com/cstrahan/go-repo-root";

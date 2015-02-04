@@ -67,6 +67,18 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  tools = buildGoPackage rec {
+    rev = "140fcaadc5860b1a014ec69fdeec807fe3b787e8";
+    name = "go.tools-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "code.google.com/p/go.tools";
+    src = fetchhg {
+      inherit rev;
+      url = "http://code.google.com/p/go.tools";
+      sha256 = "1vgz4kxy0p56qh6pfbs2c68156hakgx4cmrci9jbg7lnrdaz4y56";
+    };
+    subPackages = [ "go/vcs" ];
+  };
+
   ## THIRD PARTY
 
   binarydist = buildGoPackage rec {
