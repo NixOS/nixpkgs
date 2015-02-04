@@ -7384,6 +7384,8 @@ let
 
   xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
 
+  xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
+
   xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib {
@@ -10300,7 +10302,9 @@ let
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  i3 = callPackage ../applications/window-managers/i3 { };
+  i3 = callPackage ../applications/window-managers/i3 {
+    xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
+  };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
     inherit (xorg) libxkbfile;
