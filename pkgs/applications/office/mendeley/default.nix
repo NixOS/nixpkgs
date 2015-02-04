@@ -22,7 +22,7 @@ let
     else "8db101b26dd2978e991421260a2e55d849014f64005930b2528080bbbaa78600";
 
   deps = [
-    gcc.gcc
+    gcc.cc
     qt4
     xlibs.libX11
     zlib
