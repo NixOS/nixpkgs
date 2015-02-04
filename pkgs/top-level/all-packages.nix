@@ -9150,9 +9150,11 @@ let
 
   ### DATA
 
-  andagii = callPackage ../data/fonts/andagii {};
+  andagii = callPackage ../data/fonts/andagii { };
 
-  anonymousPro = callPackage ../data/fonts/anonymous-pro {};
+  android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
+
+  anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) { };
 
