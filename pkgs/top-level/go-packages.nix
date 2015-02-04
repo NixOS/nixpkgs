@@ -94,6 +94,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  bufio = buildGoPackage rec {
+    rev = "24e7e48f60fc2d9e99e43c07485d9fff42051e66";
+    name = "bufio-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/vmihailenco/bufio";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "vmihailenco";
+      repo = "bufio";
+      sha256 = "0x46qnf2f15v7m0j2dcb16raxjamk5rdc7hqwgyxfr1sqmmw3983";
+    };
+  };
+
   check-v1 = buildGoPackage rec {
     rev = "871360013c92e1c715c2de6d06b54899468a8a2d";
     name = "check-v1-${stdenv.lib.strings.substring 0 7 rev}";
@@ -104,7 +116,31 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0i83qjmd4ri9mrfddhsbpj9nb43rf2j9803k030fj155j31klwcx";
     };
   };
- 
+
+  circbuf = buildGoPackage rec {
+    rev = "f092b4f207b6e5cce0569056fba9e1a2735cb6cf";
+    name = "circbuf-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/armon/circbuf";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "armon";
+      repo = "circbuf";
+      sha256 = "06kwwdwa3hskdh6ws7clj1vim80dyc3ldim8k9y5qpd30x0avn5s";
+    };
+  };
+
+  cli = buildGoPackage rec {
+    rev = "8262fe3f76f0da53b5674eb35c8c6436430794c3";
+    name = "cli-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mitchellh/cli";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mitchellh";
+      repo = "cli";
+      sha256 = "0pqkxh1q49kkxihggrfjs8174d927g4c5qqx00ggw8sqqsgrw6vn";
+    };
+  };
+
   cobra = buildGoPackage rec {
     date = "20140617";
     rev = "10a8494a87448bf5003222d9974f166437e7f042";
@@ -118,6 +154,30 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pflag ];
   };
 
+  columnize = buildGoPackage rec {
+    rev = "785d943a7b6886e0bb2f139a60487b823dd8d9de";
+    name = "columnize-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/ryanuber/columnize";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "ryanuber";
+      repo = "columnize";
+      sha256 = "1h3sxzhiwz65vf3cvclirlf6zhdr97v01dpn5cmf3m09rxxpnp3f";
+    };
+  };
+
+  dns = buildGoPackage rec {
+    rev = "fc67c4b981930a377f8a26a5a1f2c0ccd5dd1514";
+    name = "dns-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/miekg/dns";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "miekg";
+      repo = "dns";
+      sha256 = "1csjmkx0gl34r4hmkhdbdxb0693f1p10yrjaj8f2jwli9p9sl4mg";
+    };
+  };
+
   ed25519 = buildGoPackage rec {
     rev = "d2b94fd789ea21d12fac1a4443dd3a3f79cda72c";
     name = "ed25519-${stdenv.lib.strings.substring 0 7 rev}";
@@ -126,6 +186,17 @@ let self = _self // overrides; _self = with self; {
       inherit rev;
       url = "git://${goPackagePath}.git";
       sha256 = "83e3010509805d1d315c7aa85a356fda69d91b51ff99ed98a503d63adb3613e9";
+    };
+  };
+
+  gocheck = buildGoPackage rec {
+    rev = "87";
+    name = "gocheck-${rev}";
+    goPackagePath = "launchpad.net/gocheck";
+    src = fetchbzr {
+      inherit rev;
+      url = "https://${goPackagePath}";
+      sha256 = "1y9fa2mv61if51gpik9isls48idsdz87zkm1p3my7swjdix7fcl0";
     };
   };
 
@@ -175,9 +246,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  go-metrics = buildGoPackage rec {
+  go-codec = buildGoPackage rec {
+    rev = "71c2886f5a673a35f909803f38ece5810165097b";
+    name = "go-codec-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/ugorji/go";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "ugorji";
+      repo = "go";
+      sha256 = "157f24xnkhclrjwwa1b7lmpj112ynlbf7g1cfw0c657iqny5720j";
+    };
+  };
+
+  rcrowley.go-metrics = buildGoPackage rec {
     rev = "f770e6f5e91a8770cecee02d5d3f7c00b023b4df";
-    name = "go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
+    name = "rcrowley.go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/rcrowley/go-metrics";
     src = fetchFromGitHub {
       inherit rev;
@@ -187,6 +270,42 @@ let self = _self // overrides; _self = with self; {
     };
 
     buildInputs = [ influxdb-go stathat ];
+  };
+
+  armon.go-metrics = buildGoPackage rec {
+    rev = "02567bbc4f518a43853d262b651a3c8257c3f141";
+    name = "armon.go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/armon/go-metrics";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "armon";
+      repo = "go-metrics";
+      sha256 = "08fk3zmw0ywmdfp2qhrpv0vrk1y97hzqczrgr3y2yip3x8sr37ar";
+    };
+  };
+
+  go-msgpack = buildGoPackage rec {
+    rev = "75092644046c5e38257395b86ed26c702dc95b92";
+    name = "go-msgpack-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/ugorji/go-msgpack";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "ugorji";
+      repo = "go-msgpack";
+      sha256 = "1bmqi16bfiqw7qhb3d5hbh0dfzhx2bbq1g15nh2pxwxckwh80x98";
+    };
+  };
+
+  go-syslog = buildGoPackage rec {
+    rev = "ac3963b72ac367e48b1e68a831e62b93fb69091c";
+    name = "go-syslog-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/hashicorp/go-syslog";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hashicorp";
+      repo = "go-syslog";
+      sha256 = "1r9s1gsa4azcs05gx1179ixk7qvrkrik3v92wr4s8gwm00m0gf81";
+    };
   };
  
   go-update = buildGoPackage rec {
@@ -254,6 +373,69 @@ let self = _self // overrides; _self = with self; {
     subPackages = [ "./" ]; # don't build examples
   };
 
+  logutils = buildGoPackage rec {
+    rev = "8e0820fe7ac5eb2b01626b1d99df47c5449eb2d8";
+    name = "logutils-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/hashicorp/logutils";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hashicorp";
+      repo = "logutils";
+      sha256 = "033rbkc066g657r0dnzysigjz2bs4biiz0kmiypd139d34jvslwz";
+    };
+  };
+
+  mapstructure = buildGoPackage rec {
+    rev = "6fb2c832bcac61d01212ab1d172f7a14a8585b07";
+    name = "mapstructure-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mitchellh/mapstructure";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mitchellh";
+      repo = "mapstructure";
+      sha256 = "0mx855lwhv0rk461wmbnbzbpkhmq5p2ipmrm5bhzimagrr1w17hw";
+    };
+  };
+
+  mdns = buildGoPackage rec {
+    rev = "70462deb060d44247356ee238ebafd7699ddcffe";
+    name = "mdns-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/armon/mdns";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "armon";
+      repo = "mdns";
+      sha256 = "0xkm3d0hsixdm1yrkx9c39723kfjkb3wvrzrmx3np9ylcwn6h5p5";
+    };
+
+    propagatedBuildInputs = [ dns net ];
+  };
+
+  memberlist = buildGoPackage rec {
+    rev = "17d39b695094be943bfb98442a80b082e6b9ac47";
+    name = "memberlist-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/hashicorp/memberlist";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hashicorp";
+      repo = "memberlist";
+      sha256 = "0nvgjnwmfqhv2wvr77d2q5mq1bfw4xbpil6wgyj4fyrmhsfzrv3g";
+    };
+
+    propagatedBuildInputs = [ go-codec armon.go-metrics ];
+  };
+
+  mgo = buildGoPackage rec {
+    rev = "2";
+    name = "mgo-${rev}"; 
+    goPackagePath = "launchpad.net/mgo";
+    src = fetchbzr {
+      inherit rev;
+      url = "https://${goPackagePath}";
+      sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
+    };
+  };
+
   mousetrap = buildGoPackage rec {
     rev = "9dbb96d2c3a964935b0870b5abaea13c98b483aa";
     name = "mousetrap-${stdenv.lib.strings.substring 0 7 rev}";
@@ -263,6 +445,18 @@ let self = _self // overrides; _self = with self; {
       owner = "inconshreveable";
       repo = "mousetrap";
       sha256 = "1f9g8vm18qv1rcb745a4iahql9vfrz0jni9mnzriab2wy1pfdl5b";
+    };
+  };
+
+  msgpack = buildGoPackage rec {
+    rev = "20c1b88a6c7fc5432037439f4e8c582e236fb205";
+    name = "msgpack-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/vmihailenco/msgpack";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "vmihailenco";
+      repo = "msgpack";
+      sha256 = "1dj5scpfhgnw0yrh0w6jlrb9d03halvsv4l3wgjhazrrimdqf0q0";
     };
   };
 

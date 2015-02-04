@@ -24,7 +24,7 @@ buildGoPackage rec {
     export sourceRoot=$sourceRoot/src/ngrok
   '';
 
-  buildInputs = [ git log4go websocket go-vhost mousetrap termbox-go go-metrics
+  buildInputs = [ git log4go websocket go-vhost mousetrap termbox-go rcrowley.go-metrics
                   yaml-v1 go-bindata go-update binarydist osext ];
 
   makeFlags = "-tags release";
