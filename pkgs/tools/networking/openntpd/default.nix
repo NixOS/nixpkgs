@@ -1,16 +1,15 @@
-{ stdenv, fetchgit, openssl
+{ stdenv, fetchurl, openssl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:
 
 stdenv.mkDerivation rec {
   name = "openntpd-${version}";
-  version = "20080406p-10";
+  version = "5.7p3";
 
-  src = fetchgit {
+  src = fetchurl {
     url = "git://git.debian.org/collab-maint/openntpd.git";
-    rev = "refs/tags/debian/${version}";
-    sha256 = "0gd6j4sw4x4adlz0jzbp6lblx5vlnk6l1034hzbj2xd95k8hjhh8";
+    sha256 = "4f417c8a4c21ed7ec3811107829f931404f9bf121855b8571a2ca3355695343a";
   };
 
   postPatch = ''
@@ -24,9 +23,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.openntpd.org/";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     description = "OpenBSD NTP daemon (Debian port)";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
