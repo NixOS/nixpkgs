@@ -59,7 +59,7 @@ self: super: {
     configureFlags =  "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper";
     doCheck = false;
   });
-       
+
   haskakafka = overrideCabal super.haskakafka (drv: {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
@@ -422,7 +422,8 @@ self: super: {
   duplo = dontCheck super.duplo;
 
   # https://github.com/seagreen/hjsonschema/issues/4
-  hjsonschema = dontCheck super.hjsonschema;
+  # https://github.com/seagreen/hjsonschema/issues/5
+  hjsonschema = dontHaddock (dontCheck super.hjsonschema);
 
   # Nix-specific workaround
   xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
