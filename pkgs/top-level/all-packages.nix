@@ -507,9 +507,12 @@ let
 
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
+  arduino = arduino-core.override { withGui = true; };
+
   arduino-core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
     jre = jdk;
+    withGui = false;
   };
 
   apitrace = callPackage ../applications/graphics/apitrace {};
