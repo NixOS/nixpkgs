@@ -10938,7 +10938,7 @@ let
     inherit (xorg) libXpm;
   };
 
-  pond = callPackage ../applications/networking/pond { };
+  pond = callPackage ../applications/networking/pond { goPackages = go13Packages; };
 
   potrace = callPackage ../applications/graphics/potrace {};
 

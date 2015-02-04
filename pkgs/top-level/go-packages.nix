@@ -9,6 +9,17 @@ let self = _self // overrides; _self = with self; {
 
   ## OFFICIAL GO PACKAGES
 
+  crypto = buildGoPackage rec {
+    rev = "31393df5baea";
+    name = "go-crypto-${rev}";
+    goPackagePath = "code.google.com/p/go.crypto";
+    src = fetchhg {
+      inherit rev;
+      url = "https://${goPackagePath}";
+      sha256 = "0b95dpsvxxapcjjvhj05fdmyn0mzffamc25hvxy7xgsl2l9yy3nw";
+    };
+  };
+
   image = buildGoPackage rec {
     rev = "490b1ad139b3";
     name = "go.image-${rev}";
@@ -30,6 +41,18 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0yz807y3ac07x3nf0qlaw1w1i6asynrpyssjl8jyv3pplww0qj7i";
     };
     propagatedBuildInputs = [ text ];
+  };
+
+  protobuf = buildGoPackage rec {
+    rev = "36be16571e14";
+    name = "goprotobuf-${rev}";
+    goPackagePath = "code.google.com/p/goprotobuf";
+    src = fetchhg {
+      inherit rev;
+      url = "https://code.google.com/p/goprotobuf";
+      sha256 = "14yay2sgfbbs0bx3q03bdqn1kivyvxfdm34rmp2612gvinlll215";
+    };
+    subPackages = [ "proto" "protoc-gen-go" ];
   };
 
   text = buildGoPackage rec {
@@ -81,6 +104,17 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1ydcccx0zdswca4v9hfmrn8ck42h485hy3wrd9k7y6mra3r6c08j";
     };
     propagatedBuildInputs = [ pflag ];
+  };
+
+  ed25519 = buildGoPackage rec {
+    rev = "d2b94fd789ea21d12fac1a4443dd3a3f79cda72c";
+    name = "ed25519-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/agl/ed25519";
+    src = fetchgit {
+      inherit rev;
+      url = "git://${goPackagePath}.git";
+      sha256 = "83e3010509805d1d315c7aa85a356fda69d91b51ff99ed98a503d63adb3613e9";
+    };
   };
 
   goconvey = buildGoPackage rec {
