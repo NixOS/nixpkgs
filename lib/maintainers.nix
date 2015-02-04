@@ -35,6 +35,7 @@
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   bobvanderlinden = "Bob van der Linden <bobvanderlinden@gmail.com>";
   bodil = "Bodil Stokke <nix@bodil.org>";
+  boothead = "Ben Ford <ben@perurbis.com>";
   bosu = "Boris Sukholitko <boriss@gmail.com>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
@@ -147,6 +148,7 @@
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   refnil = "Martin Lavoie <broemartino@gmail.com>";
   relrod = "Ricky Elrod <ricky@elrod.me>";
+  renzo = "Renzo Carbonara <renzocarbonara@gmail.com>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";

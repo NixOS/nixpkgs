@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libav, libkeyfinder }:
 
+let version = "20150130"; in
 stdenv.mkDerivation rec {
-  version = "20150125";
   name = "keyfinder-cli-${version}";
 
   src = fetchFromGitHub {
     repo = "keyfinder-cli";
     owner = "EvanPurkhiser";
-    rev = "3a6f598b3661fdba73ada81cd200a6e56c23ddca";
-    sha256 = "05k4g9zdzi4q81p8lax9b2j4bcg1bpp04sdbza5i5pfz2fng2cf7";
+    rev = "e8a20e73f8a465a6c3c9e71dabf4b636244a9b0c";
+    sha256 = "0x198ijr6wgzq24642s4pz5zxn4gvcc7dxmb6d1bfn3dwzi3j8lp";
   };
 
   meta = with stdenv.lib; {

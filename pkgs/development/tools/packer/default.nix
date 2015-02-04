@@ -1,7 +1,7 @@
 { stdenv, lib, gox, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "packer-0.6.0";
+  name = "packer-0.7.5";
 
   src = import ./deps.nix {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;

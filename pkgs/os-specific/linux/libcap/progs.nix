@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap ];
 
+  prePatch = ''
+    # use relative bash path
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "bash"
+
+    # ensure capsh can find bash in $PATH
+    substituteInPlace progs/capsh.c --replace execve execvpe
+  '';
+
   preConfigure = "cd progs";
 
   installFlags = "RAISE_SETFCAP=no";

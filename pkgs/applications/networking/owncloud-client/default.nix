@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "owncloud-client" + "-" + version;
 
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://download.owncloud.com/desktop/stable/mirall-${version}.tar.bz2";
-    sha256 = "b1cb0612e5022de263dc4c6309eba8207d694a40a80dae6762b4a56fa8d4d944";
+    sha256 = "0n9gv97jqval7xjyix2lkywvmvvfv052s0bd1i8kybdl9rwca6yf";
   };
 
   buildInputs =

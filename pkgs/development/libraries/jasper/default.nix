@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, xlibs, libjpeg}:
+{ stdenv, fetchurl, unzip, xlibs, libjpeg }:
 
 stdenv.mkDerivation rec {
   name = "jasper-1.900.1";
@@ -9,8 +9,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./jasper-CVE-2014-8137-variant2.diff ./jasper-CVE-2014-8137-noabort.diff
+    ./jasper-CVE-2014-8137-variant2.diff
+    ./jasper-CVE-2014-8137-noabort.diff
     ./jasper-CVE-2014-8138.diff
+    ./jasper-CVE-2014-8157.diff
+    ./jasper-CVE-2014-8158.diff
     ./jasper-CVE-2014-9029.diff
   ];
 

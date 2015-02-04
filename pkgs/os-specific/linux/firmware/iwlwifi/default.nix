@@ -47,7 +47,7 @@ let
   fetchPackage =
     { name, sha256 }: fetchurl {
       name = "iwlwifi-${name}.tgz";
-      url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=iwlwifi-${name}.tgz";
+      url = "https://wireless.wiki.kernel.org/_media/en/users/drivers/iwlwifi-${name}.tgz";
       inherit sha256;
     };
 

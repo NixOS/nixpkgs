@@ -15,8 +15,7 @@
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for
   # files in standard system directories (/usr/include, etc.)
-  noSysDirs ? (system != "x86_64-darwin"
-               && system != "x86_64-freebsd" && system != "i686-freebsd"
+  noSysDirs ? (system != "x86_64-freebsd" && system != "i686-freebsd"
                && system != "x86_64-kfreebsd-gnu")
 
   # More flags for the bootstrapping of stdenv.
@@ -500,7 +499,7 @@ let
 
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
-  arduino_core = callPackage ../development/arduino/arduino-core {
+  arduino-core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
     jre = jdk;
   };
@@ -1566,6 +1565,12 @@ let
     inherit (haskellPackages) ihaskell ghc;
   };
 
+  ihaskell-with-packages = callPackage ../development/tools/haskell/ihaskell/ng-wrapper.nix {
+    inherit (pythonPackages) ipython;
+    inherit (haskellngPackages) ihaskell ghcWithPackages;
+    packages = self: [];
+  };
+
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
   imapsync = callPackage ../tools/networking/imapsync {
@@ -2092,11 +2097,7 @@ let
 
   openssh_with_kerberos = pkgs.appendToName "with-kerberos" (openssh.override { withKerberos = true; });
 
-  opensp = callPackage ../tools/text/sgml/opensp {
-    stdenv = if stdenv.isDarwin
-      then allStdenvs.stdenvDarwinNaked
-      else stdenv;
-  };
+  opensp = callPackage ../tools/text/sgml/opensp { };
 
   spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
 
@@ -2825,6 +2826,8 @@ let
 
   tm = callPackage ../tools/system/tm { };
 
+  tradcpp = callPackage ../development/tools/tradcpp { };
+
   trang = callPackage ../tools/text/xml/trang { };
 
   tre = callPackage ../development/libraries/tre { };
@@ -2880,8 +2883,6 @@ let
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
   varnish = callPackage ../servers/varnish { };
-
-  varnish2 = callPackage ../servers/varnish/2.1.nix { };
 
   venus = callPackage ../tools/misc/venus {
     python = python27;
@@ -3109,6 +3110,7 @@ let
 
   clang = wrapCC llvmPackages.clang;
 
+  clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
   clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
@@ -3642,13 +3644,17 @@ let
 
   llvm_v = path: callPackage path { };
 
-  llvmPackages = llvmPackages_34;
+  llvmPackages = llvmPackages_35;
 
   llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
     inherit stdenv newScope fetchurl;
     isl = isl_0_12;
   });
   llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
+
+  llvmPackages_35 = import ../development/compilers/llvm/3.5 {
+    inherit pkgs stdenv newScope fetchurl isl;
+  };
 
   manticore = callPackage ../development/compilers/manticore { };
 
@@ -4336,7 +4342,7 @@ let
   python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
     self = python34;
   });
-  pypy = callPackage ../development/interpreters/pypy/2.4 {
+  pypy = callPackage ../development/interpreters/pypy {
     self = pypy;
   };
 
@@ -4655,7 +4661,10 @@ let
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake = callPackage ../development/tools/build-managers/cmake { };
+  cmake = callPackage ../development/tools/build-managers/cmake {
+    wantPS = stdenv.isDarwin;
+    ps     = if stdenv.isDarwin then darwin.ps else null;
+  };
 
   cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
   cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
@@ -4682,8 +4691,8 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
-  libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
-  libcxxabi = callPackage ../development/libraries/libc++abi { stdenv = pkgs.clangStdenv; };
+  libcxx = llvmPackages_35.libcxx;
+  libcxxabi = llvmPackages_35.libcxxabi;
 
   libsigrok = callPackage ../development/tools/libsigrok { };
 
@@ -4891,11 +4900,7 @@ let
 
   peg = callPackage ../development/tools/parsing/peg { };
 
-  phantomjs = callPackage ../development/tools/phantomjs {
-    stdenv = if stdenv.isDarwin
-      then overrideCC stdenv gccApple
-      else stdenv;
-  };
+  phantomjs = callPackage ../development/tools/phantomjs { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -5046,14 +5051,7 @@ let
     target = crossSystem;
   });
 
-  valgrind = callPackage ../development/tools/analysis/valgrind {
-    stdenv =
-      # On Darwin, Valgrind 3.7.0 expects Apple's GCC (for
-      # `__private_extern'.)
-      if stdenv.isDarwin
-      then overrideCC stdenv gccApple
-      else stdenv;
-  };
+  valgrind = callPackage ../development/tools/analysis/valgrind { };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -5259,7 +5257,7 @@ let
 
   coredumper = callPackage ../development/libraries/coredumper { };
 
-  ctl = dropCxx (callPackage ../development/libraries/ctl { });
+  ctl = callPackage ../development/libraries/ctl { };
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
@@ -5371,10 +5369,6 @@ let
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     vpxSupport = !stdenv.isMips;
-
-    stdenv = if stdenv.isDarwin
-      then overrideCC stdenv gccApple
-      else stdenv;
   };
 
   ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
@@ -5685,12 +5679,7 @@ let
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf {
-    # workaround signal 10 in gdk_pixbuf tests
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
 
@@ -5770,6 +5759,10 @@ let
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
+  hunspellDicts = recurseIntoAttrs (import ../development/libraries/hunspell/dictionaries.nix {
+    inherit stdenv fetchurl unzip;
+  });
+
   hwloc = callPackage ../development/libraries/hwloc {
     inherit (xlibs) libX11;
   };
@@ -5786,7 +5779,7 @@ let
 
   ilixi = callPackage ../development/libraries/ilixi { };
 
-  ilmbase = dropCxx (callPackage ../development/libraries/ilmbase { });
+  ilmbase = callPackage ../development/libraries/ilmbase { };
 
   imlib = callPackage ../development/libraries/imlib {
     libpng = libpng12;
@@ -5990,7 +5983,7 @@ let
 
   libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
 
-  libdevil = dropCxx (callPackage ../development/libraries/libdevil { });
+  libdevil = callPackage ../development/libraries/libdevil { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
@@ -6272,12 +6265,7 @@ let
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = callPackage ../development/libraries/libmikmod {
-    # resolve the "stray '@' in program" errors
-    stdenv = if stdenv.isDarwin
-      then overrideCC stdenv gccApple
-      else stdenv;
-  };
+  libmikmod = callPackage ../development/libraries/libmikmod { };
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
@@ -6392,6 +6380,8 @@ let
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
+  libpst = callPackage ../development/libraries/libpst { };
+
   libpwquality = callPackage ../development/libraries/libpwquality { };
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
@@ -6447,12 +6437,7 @@ let
 
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
-  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar {
-    # fix "unrecognized option -arch" error
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
   libtorrentRasterbar_0_16 = callPackage ../development/libraries/libtorrent-rasterbar/0.16.nix {
     # fix "unrecognized option -arch" error
@@ -6489,18 +6474,19 @@ let
   libunibreak = callPackage ../development/libraries/libunibreak { };
 
   libunique = callPackage ../development/libraries/libunique/default.nix { };
+  libunique3 = callPackage ../development/libraries/libunique/3.x.nix { inherit (gnome) gtkdoc; };
 
   liburcu = callPackage ../development/libraries/liburcu { };
 
   libusb = callPackage ../development/libraries/libusb {};
 
-  libusb1 = callPackage ../development/libraries/libusb1 {
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  libusb1 = callPackage ../development/libraries/libusb1 { };
 
-  libunwind = callPackage ../development/libraries/libunwind { };
+  libunwind = if stdenv.isDarwin
+    then callPackage ../development/libraries/libunwind/native.nix {}
+    else callPackage ../development/libraries/libunwind { };
+
+  libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
 
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv { });
 
@@ -6642,6 +6628,7 @@ let
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
+    llvm = llvm_34;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
@@ -6814,13 +6801,9 @@ let
   # this ctl version is needed by openexr_viewers
   openexr_ctl = callPackage ../development/libraries/openexr_ctl { };
 
-  openexr = dropCxx (callPackage ../development/libraries/openexr { });
+  openexr = callPackage ../development/libraries/openexr { };
 
-  openldap = callPackage ../development/libraries/openldap {
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  openldap = callPackage ../development/libraries/openldap { };
 
   openlierox = callPackage ../games/openlierox { };
 
@@ -6919,12 +6902,7 @@ let
 
   popt = callPackage ../development/libraries/popt { };
 
-  portaudio = callPackage ../development/libraries/portaudio {
-    # resolves a variety of compile-time errors
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  portaudio = callPackage ../development/libraries/portaudio { };
 
   portaudioSVN = callPackage ../development/libraries/portaudio/svn-head.nix { };
 
@@ -6974,11 +6952,6 @@ let
     mesa = mesa_noglu;
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     cups = if stdenv.isLinux then cups else null;
-
-    # resolve unrecognised flag '-fconstant-cfstrings' errors
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   qt48Full = appendToName "full" (qt48.override {
@@ -7097,12 +7070,7 @@ let
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
 
-  SDL_image = callPackage ../development/libraries/SDL_image {
-    # provide an Objective-C compiler
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  SDL_image = callPackage ../development/libraries/SDL_image { };
 
   SDL_mixer = callPackage ../development/libraries/SDL_mixer { };
 
@@ -7210,11 +7178,7 @@ let
     ncurses = null;
   });
 
-  stfl = callPackage ../development/libraries/stfl {
-    stdenv = if stdenv.isDarwin
-      then overrideCC stdenv gccApple
-      else stdenv;
-  };
+  stfl = callPackage ../development/libraries/stfl { };
 
   stlink = callPackage ../development/tools/misc/stlink { };
 
@@ -7389,21 +7353,11 @@ let
   wxGTK29 = callPackage ../development/libraries/wxGTK-2.9/default.nix {
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
-
-    # use for Objective-C++ compiler
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
-
-    # use for Objective-C++ compiler
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -7719,11 +7673,7 @@ let
 
   rhpl = callPackage ../development/python-modules/rhpl { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
-  };
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
 
   pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
 
@@ -7915,6 +7865,10 @@ let
   jetty92 = callPackage ../servers/http/jetty/9.2.nix { };
 
   joseki = callPackage ../servers/http/joseki {};
+
+  kafka = callPackage ../servers/kafka { };
+
+  rdkafka = callPackage ../development/libraries/rdkafka { };
 
   leafnode = callPackage ../servers/news/leafnode { };
 
@@ -8230,13 +8184,15 @@ let
 
   zookeeper = callPackage ../servers/zookeeper { };
 
+  zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
+  
   xquartz = callPackage ../servers/x11/xquartz { };
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice_protocol
-      dbus libuuid openssl gperf m4 libevdev
+      dbus libuuid openssl gperf m4 libevdev tradcpp
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
@@ -8358,13 +8314,16 @@ let
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
   darwin = let
-    cmdline = (callPackage ../os-specific/darwin/command-line-tools {}).pure { inherit xpwn; };
+    cmdline = callPackage ../os-specific/darwin/command-line-tools {};
   in rec {
-    cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools-port {
+
+    cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     });
+
+    cctools_native = (callPackage ../os-specific/darwin/cctools/port.nix {}).native;
 
     maloader = callPackage ../os-specific/darwin/maloader {
       inherit opencflite;
@@ -8374,8 +8333,13 @@ let
 
     xcode = callPackage ../os-specific/darwin/xcode {};
 
+    libc = callPackage ../os-specific/darwin/libc {};
+
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
+
+    ps = callPackage ../os-specific/darwin/adv_cmds/ps.nix {};
+    bootstrap_cmds   = callPackage ../os-specific/darwin/bootstrap-cmds {};
 
     security_tool = callPackage ../os-specific/darwin/security-tool { inherit osx_private_sdk; };
 
@@ -8881,6 +8845,8 @@ let
 
   golint = callPackage ../development/tools/golint { };
 
+  godep = callPackage ../development/tools/godep { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
@@ -9184,9 +9150,11 @@ let
 
   ### DATA
 
-  andagii = callPackage ../data/fonts/andagii {};
+  andagii = callPackage ../data/fonts/andagii { };
 
-  anonymousPro = callPackage ../data/fonts/anonymous-pro {};
+  android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
+
+  anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
   arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) { };
 
@@ -9482,7 +9450,9 @@ let
 
   avrdudess = callPackage ../applications/misc/avrdudess { };
 
-  avxsynth = callPackage ../applications/video/avxsynth { };
+  avxsynth = callPackage ../applications/video/avxsynth {
+    libjpeg = libjpeg_original; # error: 'JCOPYRIGHT_SHORT' was not declared in this scope
+  };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
     cairo = cairo.override { xcbSupport = true; };
@@ -9616,9 +9586,11 @@ let
 
   clipit = callPackage ../applications/misc/clipit { };
 
-  cmplayer = callPackage ../applications/video/cmplayer {
+  bomi = callPackage ../applications/video/bomi {
+    stdenv = overrideCC stdenv gcc49;
     pulseSupport = config.pulseaudio or false;
   };
+  cmplayer = bomi;
 
   cmus = callPackage ../applications/audio/cmus { };
 
@@ -10386,12 +10358,7 @@ let
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
-  irssi = callPackage ../applications/networking/irc/irssi {
-    # compile with gccApple on darwin to support the -no-cpp-precompile flag
-    stdenv = if stdenv.isDarwin
-      then stdenvAdapters.overrideCC stdenv gccApple
-      else stdenv;
-  };
+  irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
@@ -10434,6 +10401,7 @@ let
   };
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
+    kf5 = kf55;
     stdenv = overrideCC stdenv gccStdInc;
   });
   kdeApps_latest = kdeApps_14_12;
@@ -10998,6 +10966,18 @@ let
     tag = "-qt5";
   };
 
+  quasselClient_qt5 = quassel_qt5.override {
+    monolithic = false;
+    client = true;
+    tag = "-client-qt5";
+  };
+
+  quasselDaemon_qt5 = quassel_qt5.override {
+    monolithic = false;
+    daemon = true;
+    tag = "-daemon-qt5";
+  };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
@@ -11183,6 +11163,8 @@ let
   sox = callPackage ../applications/misc/audio/sox { };
 
   soxr = callPackage ../applications/misc/audio/soxr { };
+
+  spek = callPackage ../applications/audio/spek { };
 
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
@@ -11433,9 +11415,6 @@ let
 
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
-
-    # so that we can use gccApple if we're building on darwin
-    inherit stdenvAdapters gccApple;
   });
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
@@ -11448,7 +11427,7 @@ let
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
       libICE;
 
-    inherit (pkgs) stdenvAdapters gccApple;
+    inherit (pkgs) stdenvAdapters;
 
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5;
@@ -11788,6 +11767,11 @@ let
 
   xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
+  xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
+    ghcWithPackages = haskellngPackages.ghcWithPackages;
+    packages = self: [];
+  };
+
   xmonad_log_applet_gnome2 = callPackage ../applications/window-managers/xmonad-log-applet {
     desktopSupport = "gnome2";
     inherit (xfce) libxfce4util xfce4panel;
@@ -11818,6 +11802,8 @@ let
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
   };
+
+  xss-lock = callPackage ../misc/screensavers/xss-lock { };
 
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
@@ -12351,7 +12337,9 @@ let
 
       eventlist = callPackage ../applications/office/eventlist {};
 
-      k3b = callPackage ../applications/misc/k3b { };
+      k3b = callPackage ../applications/misc/k3b {
+        cdrtools = cdrkit;
+      };
 
       kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
@@ -13421,6 +13409,7 @@ let
 
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
+  arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31

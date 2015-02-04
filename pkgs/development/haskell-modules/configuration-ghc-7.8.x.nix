@@ -71,6 +71,9 @@ self: super: {
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
+  # https://github.com/ivan-m/monad-levels/issues/1
+  monad-levels = dontDistribute super.monad-levels;
+
 }
 
 // # packages relating to amazonka

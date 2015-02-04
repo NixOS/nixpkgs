@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-logger";
-  version = "0.3.11";
-  sha256 = "0ydxv4pdq660dh3cdmsd5lgjkfhh7c62kb5vcl8jl6qmjf8kvmdq";
+  version = "0.3.11.1";
+  sha256 = "1vh847ivymhb20sly9aplcm35zcmn7xmibv8lkv1ws9y7s1951p7";
   buildDepends = [
     blazeBuilder conduit conduitExtra exceptions fastLogger liftedBase
     monadControl monadLoops mtl resourcet stm stmChans text

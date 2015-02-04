@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr}:
+{stdenv, fetchurl, libXxf86vm, libXext, libX11, libXrandr, gcc}:
 stdenv.mkDerivation {
   name = "xflux";
   src = fetchurl {
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   };
 
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.gcc
+    gcc.cc
     libXxf86vm
     libXext
     libX11

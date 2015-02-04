@@ -1,0 +1,122 @@
+From b6001ddb935351b4d150546ddab6d25eae05afaa Mon Sep 17 00:00:00 2001
+From: Daniel Peebles <pumpkin@me.com>
+Date: Sun, 12 Oct 2014 12:23:51 -0400
+Subject: [PATCH] work
+
+---
+ cctools/Makefile.am             | 2 +-
+ cctools/configure.ac            | 2 --
+ cctools/ld64/src/3rd/helper.c   | 2 ++
+ cctools/ld64/src/3rd/strlcat.c  | 2 ++
+ cctools/ld64/src/3rd/strlcpy.c  | 3 ++-
+ cctools/ld64/src/ld/Options.cpp | 2 ++
+ tools/find_lto_header.sh        | 2 +-
+ 7 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/cctools/Makefile.am b/cctools/Makefile.am
+index 44084ad..34a670c 100644
+--- a/cctools/Makefile.am
++++ b/cctools/Makefile.am
+@@ -1,2 +1,2 @@
+-SUBDIRS=libstuff ar as misc libobjc2 otool ld64 $(LD_CLASSIC)
++SUBDIRS=libstuff ar as misc ld64 $(LD_CLASSIC)
+ ACLOCAL_AMFLAGS = -I m4
+diff --git a/cctools/configure.ac b/cctools/configure.ac
+index c4f6c47..b641925 100644
+--- a/cctools/configure.ac
++++ b/cctools/configure.ac
+@@ -278,8 +278,6 @@ AC_CONFIG_FILES([as/ppc/Makefile])
+ AC_CONFIG_FILES([as/ppc64/Makefile])
+ #AC_CONFIG_FILES([man/Makefile])
+ AC_CONFIG_FILES([misc/Makefile])
+-AC_CONFIG_FILES([otool/Makefile])
+-AC_CONFIG_FILES([libobjc2/Makefile])
+ AC_CONFIG_FILES([ld/Makefile])
+ 
+ 
+diff --git a/cctools/ld64/src/3rd/helper.c b/cctools/ld64/src/3rd/helper.c
+index 19f4be7..bec6869 100644
+--- a/cctools/ld64/src/3rd/helper.c
++++ b/cctools/ld64/src/3rd/helper.c
+@@ -23,6 +23,7 @@
+ const char ldVersionString[] = "236.3\n";
+ 
+ 
++#if 0
+ void __assert_rtn(const char *func, const char *file, int line, const char *msg)
+ {
+ #ifdef __FreeBSD__
+@@ -33,6 +34,7 @@ void __assert_rtn(const char *func, const char *file, int line, const char *msg)
+     __assert(msg, file, line);
+ #endif /* __FreeBSD__ */
+ }
++#endif
+ 
+ int _NSGetExecutablePath(char *path, unsigned int *size)
+ {
+diff --git a/cctools/ld64/src/3rd/strlcat.c b/cctools/ld64/src/3rd/strlcat.c
+index 500d038..dadf269 100644
+--- a/cctools/ld64/src/3rd/strlcat.c
++++ b/cctools/ld64/src/3rd/strlcat.c
+@@ -23,6 +23,7 @@
+ 
+ #include <string.h>
+ 
++#if 0
+ size_t
+ strlcat(char * restrict dst, const char * restrict src, size_t maxlen) {
+     const size_t srclen = strlen(src);
+@@ -36,3 +37,4 @@ strlcat(char * restrict dst, const char * restrict src, size_t maxlen) {
+     }
+     return dstlen + srclen;
+ }
++#endif
+\ No newline at end of file
+diff --git a/cctools/ld64/src/3rd/strlcpy.c b/cctools/ld64/src/3rd/strlcpy.c
+index c69f107..34a399b 100644
+--- a/cctools/ld64/src/3rd/strlcpy.c
++++ b/cctools/ld64/src/3rd/strlcpy.c
+@@ -23,6 +23,7 @@
+ 
+ #include <string.h>
+ 
++#if 0
+ size_t
+ strlcpy(char * restrict dst, const char * restrict src, size_t maxlen) {
+     const size_t srclen = strlen(src);
+@@ -34,4 +35,4 @@ strlcpy(char * restrict dst, const char * restrict src, size_t maxlen) {
+     }
+     return srclen;
+ }
+-
++#endif
+\ No newline at end of file
+diff --git a/cctools/ld64/src/ld/Options.cpp b/cctools/ld64/src/ld/Options.cpp
+index 3a78df8..0ecf9f2 100644
+--- a/cctools/ld64/src/ld/Options.cpp
++++ b/cctools/ld64/src/ld/Options.cpp
+@@ -49,6 +49,8 @@ namespace lto {
+ 	extern const char* version();
+ }
+ 
++#define __MAC_OS_X_VERSION_MIN_REQUIRED 1060
++
+ // magic to place command line in crash reports
+ const int crashreporterBufferSize = 2000;
+ static char crashreporterBuffer[crashreporterBufferSize];
+diff --git a/tools/find_lto_header.sh b/tools/find_lto_header.sh
+index aee3a4a..4733981 100755
+--- a/tools/find_lto_header.sh
++++ b/tools/find_lto_header.sh
+@@ -14,7 +14,7 @@ function try()
+         # Adding the include directory with -I causes the build to fail.
+         ln -sf "$LLVM_INC_DIR/llvm-c/lto.h" "include/llvm-c/lto.h"
+         mkdir -p tmp
+-        echo -n "-Wl,-rpath,$LLVM_LIB_DIR,--enable-new-dtags -L$LLVM_LIB_DIR -lLTO " > tmp/ldflags
++        echo -n "-Wl,-rpath,$LLVM_LIB_DIR -L$LLVM_LIB_DIR -lLTO " > tmp/ldflags
+         echo -n "-DLTO_SUPPORT=1 " > tmp/cflags
+         echo -n "-DLTO_SUPPORT=1 " > tmp/cxxflags
+         echo -n "$LLVM_LIB_DIR" > tmp/ldpath
+-- 
+1.9.3 (Apple Git-50)
+

@@ -6,7 +6,10 @@ stdenv.mkDerivation rec {
   name = "ntdb-1.0";
 
   src = fetchurl {
-    url = "http://samba.org/ftp/tdb/${name}.tar.gz";
+    urls = [
+      "http://samba.org/ftp/tdb/${name}.tar.gz"
+      "http://ftp.riken.jp/net/samba/tdb/${name}.tar.gz"
+    ];
     sha256 = "0jdzgrz5sr25k83yrw7wqb3r0yj1v04z4s3lhsmnr5z6n5ifhyl1";
   };
 

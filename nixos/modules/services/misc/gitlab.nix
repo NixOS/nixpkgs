@@ -61,7 +61,7 @@ let
           --set GITLAB_SHELL_SECRET_PATH "${cfg.stateDir}/config/gitlab_shell_secret"\
           --set GITLAB_HOST "${cfg.host}"\
           --set GITLAB_PORT "${toString cfg.port}"\
-          --set GITLAB_BACKUP_PATH"${cfg.backupPath}"\
+          --set GITLAB_BACKUP_PATH "${cfg.backupPath}"\
           --set RAILS_ENV "production"
     '';
   };
