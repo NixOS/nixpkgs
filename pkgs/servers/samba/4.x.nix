@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     urls = [
       "http://samba.org/samba/ftp/stable/${name}.tar.gz"
-      "http://pkgs.fedoraproject.org/repo/pkgs/samba/${name}.tar.gz"
+      "http://distfiles.exherbo.org/distfiles/${name}.tar.gz"
     ];
     sha256 = "1ficvglapxcw4zrgwkmmjbprsqrxks3ii29nblsr4wlrram4p8ay";
   };
