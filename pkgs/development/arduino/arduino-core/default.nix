@@ -1,13 +1,9 @@
-{ stdenv, fetchFromGitHub, jdk, jre, ant, coreutils, gnugrep, file, libusb
-, withGui ? false, gtk2 ? null
-}:
-
-assert withGui -> gtk2 != null;
+{ stdenv, fetchFromGitHub, jdk, jre, ant, coreutils, gnugrep, file }:
 
 stdenv.mkDerivation rec {
 
   version = "1.0.6";
-  name = "arduino${stdenv.lib.optionalString (withGui == false) "-core"}";
+  name = "arduino-core";
 
   src = fetchFromGitHub {
     owner = "arduino";
@@ -26,15 +22,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/arduino
-    cp -r ./build/linux/work/* "$out/share/arduino/"
+    cp -r ./build/linux/work/hardware/ $out/share/arduino
+    cp -r ./build/linux/work/libraries/ $out/share/arduino
+    cp -r ./build/linux/work/tools/ $out/share/arduino
+    cp -r ./build/linux/work/lib/ $out/share/arduino
     echo ${version} > $out/share/arduino/lib/version.txt
-
-    ${stdenv.lib.optionalString withGui ''
-      mkdir -p "$out/bin"
-      sed -i -e "s|^java|${jdk}/bin/java|" "$out/share/arduino/arduino"
-      sed -i -e "s|^LD_LIBRARY_PATH=|LD_LIBRARY_PATH=${gtk2}/lib:|" "$out/share/arduino/arduino"
-      ln -sr "$out/share/arduino/arduino" "$out/bin/arduino"
-    ''}
 
     # Fixup "/lib64/ld-linux-x86-64.so.2" like references in ELF executables.
     echo "running patchelf on prebuilt binaries:"
@@ -49,13 +41,10 @@ stdenv.mkDerivation rec {
             test $? -eq 0 || { echo "patchelf failed to process $filepath"; exit 1; }
         fi
     done
-
-    patchelf --set-rpath ${stdenv.lib.makeSearchPath "lib" [ stdenv.glibc libusb ]} \
-        "$out/share/arduino/hardware/tools/avrdude"
   '';
 
   meta = {
-    description = "Open-source electronics prototyping platform";
+    description = "Libraries for the open-source electronics prototyping platform";
     homepage = http://arduino.cc/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.antono stdenv.lib.maintainers.robberer ];
