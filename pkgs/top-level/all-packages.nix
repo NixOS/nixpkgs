@@ -3638,7 +3638,7 @@ let
 
   llvm_v = path: callPackage path { };
 
-  llvmPackages = if stdenv.isDarwin then llvmPackages_35 else llvmPackages_34;
+  llvmPackages = llvmPackages_35;
 
   llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
     inherit stdenv newScope fetchurl;
