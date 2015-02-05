@@ -2071,6 +2071,11 @@ let
 
   openntpd = callPackage ../tools/networking/openntpd { };
 
+  openntpd_nixos = openntpd.override {
+    privsepUser = "ntp";
+    privsepPath = "/var/empty";
+  };
+
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openopc = callPackage ../tools/misc/openopc {
