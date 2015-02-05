@@ -435,6 +435,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  eckardt.influxdb-go = buildGoPackage rec {
+    rev = "8b71952efc257237e077c5d0672e936713bad38f";
+    name = "influxdb-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/eckardt/influxdb-go";
+    src = fetchgit {
+      inherit rev;
+      url = "https://${goPackagePath}.git";
+      sha256 = "5318c7e1131ba2330c90a1b67855209e41d3c77811b1d212a96525b42d391f6e";
+    };
+  };
+
   iochan = buildGoPackage rec {
     rev = "b584a329b193e206025682ae6c10cdbe03b0cd77";
     name = "iochan-${stdenv.lib.strings.substring 0 7 rev}";
