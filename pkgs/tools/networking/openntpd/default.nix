@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "5.7p3";
 
   src = fetchurl {
-    url = "git://git.debian.org/collab-maint/openntpd.git";
+    url = "mirror://openbsd/OpenNTPD/${name}.tar.gz";
     sha256 = "4f417c8a4c21ed7ec3811107829f931404f9bf121855b8571a2ca3355695343a";
   };
 
