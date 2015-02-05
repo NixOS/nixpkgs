@@ -15,6 +15,8 @@ buildGoPackage rec {
 
   subPackages = [ "./" ];
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "A highly-available key value store for shared configuration and service discovery";
     homepage = http://coreos.com/using-coreos/etcd/;

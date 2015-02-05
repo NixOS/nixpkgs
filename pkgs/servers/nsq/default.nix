@@ -20,6 +20,8 @@ buildGoPackage rec {
 
   buildInputs = [ go-nsq go-options toml perks go-hostpool ];
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "A realtime distributed messaging platform";
     homepage = http://nsq.io/;

@@ -18,6 +18,8 @@ buildGoPackage rec {
     
   buildFlags = "--tags nogui";
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "Forward secure, asynchronous messaging for the discerning";
     homepage = https://pond.imperialviolet.org;

@@ -15,6 +15,8 @@ buildGoPackage rec {
     sha256 = "1drbypby0isdmkq44jmlv59k3jrwvq2jciaccxx2qc2nnx444fkq";
   };
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "Ctags-compatible tag generator for Go";
     homepage = https://github.com/nsf/gotags;

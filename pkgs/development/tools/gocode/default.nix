@@ -15,6 +15,8 @@ buildGoPackage rec {
 
   subPackages = [ "./" ];
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "An autocompletion daemon for the Go programming language";
     homepage = https://github.com/nsf/gocode;

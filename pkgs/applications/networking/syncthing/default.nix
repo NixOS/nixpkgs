@@ -20,6 +20,8 @@ buildGoPackage rec {
 
   doCheck = true;
 
+  dontInstallSrc = true;
+
   meta = {
     homepage = http://syncthing.net/;
     description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";

@@ -16,6 +16,8 @@ buildGoPackage rec {
 
   buildInputs = [ cli mapstructure memberlist logutils go-syslog mdns columnize circbuf ];
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "A service discovery and orchestration tool that is decentralized, highly available, and fault tolerant";
     homepage = http://www.serfdom.io/;

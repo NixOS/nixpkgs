@@ -29,6 +29,8 @@ buildGoPackage rec {
 
   buildFlags = "-tags release";
 
+  dontInstallSrc = true;
+
   meta = with stdenv.lib; {
     description = "Reverse proxy that creates a secure tunnel between from a public endpoint t
 o a locally running web service";

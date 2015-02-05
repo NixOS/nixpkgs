@@ -64,12 +64,16 @@ go.stdenv.mkDerivation ( args // {
   installPhase = args.installPhase or ''
     runHook preInstall
 
-    local dir
-    for d in pkg src; do
-        mkdir -p $out/share/go
-        dir="$NIX_BUILD_TOP/go/$d"
-        [ -e "$dir" ] && cp -r $dir $out/share/go
-    done
+    mkdir $out
+
+    if [ -z "$dontInstallSrc" ]; then
+        local dir
+        for d in pkg src; do
+            mkdir -p $out/share/go
+            dir="$NIX_BUILD_TOP/go/$d"
+            [ -e "$dir" ] && cp -r $dir $out/share/go
+        done
+    fi
 
     dir="$NIX_BUILD_TOP/go/bin"
     [ -e "$dir" ] && cp -r $dir $out

@@ -16,6 +16,8 @@ buildGoPackage rec {
 
   subPackages = [ "golint" ];
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "Linter for Go source code";
     homepage = https://github.com/golang/lint;

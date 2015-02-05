@@ -15,6 +15,10 @@ buildGoPackage rec {
 
   buildInputs = [ iochan ];
 
+  propagatedBuildInputs = [ go ];
+
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "A simple, no-frills tool for Go cross compilation that behaves a lot like standard go build";
     homepage    = https://github.com/mitchellh/gox;

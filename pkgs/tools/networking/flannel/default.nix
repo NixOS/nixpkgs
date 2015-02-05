@@ -13,6 +13,8 @@ buildGoPackage rec {
     sha256 = "1f7x6a2c8ix6j5y1r0dq56b58bl2rs2ycbdqb9fz5zv1zk2w20rd";
   };
 
+  dontInstallSrc = true;
+
   meta = with lib; {
     description = "Flannel is an etcd backed network fabric for containers";
     homepage = https://github.com/coreos/flannel;
