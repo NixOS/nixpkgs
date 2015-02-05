@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.11";
+  version = "2.2.12";
   name = "ffmpeg-${version}";
 
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "06sli7xvihh97ss6a2mkdq4dcj3rg1w8zffrmjfc1hvyjxhc8f2r";
+    sha256 = "1a1ki0v7c94l68blbimh3xl5adz599ql8nrdm2q0g285qy6mqxck";
   };
 
   subtitleSupport = config.ffmpeg.subtitle or true;
@@ -104,6 +104,6 @@ stdenv.mkDerivation rec {
     license = if (fdkAACSupport || faacSupport) then stdenv.lib.licenses.unfree else stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    branch = "2.3";
+    branch = "2.2";
   };
 }
