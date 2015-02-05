@@ -443,8 +443,10 @@ self: super: {
   # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
   liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
 
-  # https://github.com/jimsnow/glome/issues/2
-  GlomeVec = super.GlomeVec.override { llvm = pkgs.llvm_34; };
+  # LLVM 3.5 breaks GHC: https://ghc.haskell.org/trac/ghc/ticket/9142.
+  GlomeVec = super.GlomeVec.override { llvm = pkgs.llvm_34; };  # https://github.com/jimsnow/glome/issues/2
+  gloss-raster = super.gloss-raster.override { llvm = pkgs.llvm_34; };
+  repa-examples = super.repa-examples.override { llvm = pkgs.llvm_34; };
 
   # Upstream notified by e-mail.
   OpenGLRaw21 = markBrokenVersion "1.2.0.1" super.OpenGLRaw21;
