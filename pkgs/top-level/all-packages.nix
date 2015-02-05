@@ -12153,9 +12153,17 @@ let
 
   stardust = callPackage ../games/stardust {};
 
-  steam = callPackage ../games/steam {};
+  steamOriginal = callPackage ../games/steam { };
 
-  steamChrootEnv = callPackage ../games/steam/chrootenv.nix { };
+  steam = callPackage ../games/steam/chrootenv.nix { };
+
+  steamChrootEnv = steam.overrideDerivation (args: {
+    buildCommand = ''
+      ${args.buildCommand}
+      echo >&2 "'steamChrootEnv' is replaced with 'steam' now"
+      echo >&2 "You now need just to run 'steam' without root rights"
+    '';
+  });
 
   stuntrally = callPackage ../games/stuntrally { };
 
