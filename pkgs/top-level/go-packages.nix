@@ -223,6 +223,7 @@ let self = _self // overrides; _self = with self; {
       repo = "assert";
       sha256 = "1lfrvqqmb09y6pcr76yjv4r84cshkd4s7fpmiy7268kfi2cvqnpc";
     };
+    propagatedBuildInputs = [ pretty ];
   };
 
   go-bencode = buildGoPackage rec {
@@ -633,6 +634,7 @@ let self = _self // overrides; _self = with self; {
       repo = "pretty";
       sha256 = "1m61y592qsnwsqn76v54mm6h2pcvh4wlzbzscc1ag645x0j33vvl";
     };
+    propagatedBuildInputs = [ kr.text ];
   };
 
   pty = buildGoPackage rec {
