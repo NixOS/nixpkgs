@@ -192,6 +192,7 @@ self: super: {
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
+  amqp = dontCheck super.amqp;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
