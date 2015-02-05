@@ -54,6 +54,9 @@ in
   config = mkIf cfg.enable {
     services.ntp.enable = mkForce false;
 
+    # Add ntpctl to the environment for status checking
+    environment.systemPackages = [ openntpd ];
+
     users.extraUsers = singleton {
       name = "ntp";
       uid = config.ids.uids.ntp;
