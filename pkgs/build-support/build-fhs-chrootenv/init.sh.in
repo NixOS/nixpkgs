@@ -6,9 +6,9 @@ chrootenvDest=/run/chrootenv/@name@
 mkdir -p $chrootenvDest/{nix/store,dev,proc,sys,host-etc,home,var,run}
 
 # Symlink the software that should be part of the chroot system profile
-for i in @chrootEnv@/sw/*
+for i in @chrootEnv@/*
 do
-    if [ "$i" != "@chrootEnv@/sw/etc" ] && [ "$i" != "@chrootEnv@/sw/var" ]
+    if [ "$i" != "@chrootEnv@/etc" ] && [ "$i" != "@chrootEnv@/var" ]
     then
         ln -s "$i" "$chrootenvDest"
     fi
@@ -18,7 +18,7 @@ done
 
 mkdir $chrootenvDest/etc
 
-for i in @chrootEnv@/sw/etc/*
+for i in @chrootEnv@/etc/*
 do
     ln -s "$i" $chrootenvDest/etc
 done
