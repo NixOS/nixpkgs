@@ -8159,7 +8159,7 @@ let
     libcap = null;
   });
 
-  samba_light = samba3_light;
+  samba_light = samba4_light;
 
   serfdom = callPackage ../servers/serfdom { };
 
