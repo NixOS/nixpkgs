@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   name = "despotify-svn521";
 
   src = fetchsvn {
-    url = "https://despotify.svn.sourceforge.net/svnroot/despotify";
+    url = "http://svn.code.sf.net/p/despotify/code";
     rev = "521";
   };
 
