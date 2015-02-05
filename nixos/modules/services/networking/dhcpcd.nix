@@ -68,8 +68,10 @@ let
           # will actually do something: if ntpd cannot resolve the
           # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation.
+          # it"), so we silently lose time synchronisation. This also
+          # applies to openntpd.
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
+          ${config.systemd.package}/bin/systemctl try-restart openntpd.service
 
           ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
