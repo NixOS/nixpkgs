@@ -443,6 +443,9 @@ self: super: {
   # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
   liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
 
+  # https://github.com/jimsnow/glome/issues/2
+  GlomeVec = super.GlomeVec.override { llvm = pkgs.llvm_34; };
+
 } // {
 
   # Not on Hackage.
