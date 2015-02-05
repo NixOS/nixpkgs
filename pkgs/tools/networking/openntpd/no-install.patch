@@ -1,0 +1,26 @@
+diff --git a/Makefile.in b/Makefile.in
+index 81549cf..1262bbf 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -1740,21 +1740,6 @@ uninstall-man: uninstall-man5 uninstall-man8
+ 
+ install-exec-hook:
+ 	@ln -f "$(DESTDIR)$(sbindir)/ntpd" "$(DESTDIR)$(sbindir)/ntpctl"
+-	@if [ ! -d "$(DESTDIR)$(sysconfdir)" ]; then \
+-		$(INSTALL) -m 755 -d "$(DESTDIR)$(sysconfdir)"; \
+-	fi
+-	@if [ ! -d "$(DESTDIR)$(localstatedir)/run" ]; then \
+-		$(INSTALL) -m 755 -d "$(DESTDIR)$(localstatedir)/run"; \
+-	fi
+-	@if [ ! -d "$(DESTDIR)$(localstatedir)/db" ]; then \
+-		$(INSTALL) -m 755 -d "$(DESTDIR)$(localstatedir)/db"; \
+-	fi
+-	@if [ ! -f "$(DESTDIR)$(sysconfdir)/ntpd.conf" ]; then \
+-		$(INSTALL) -m 644 "$(srcdir)/ntpd.conf" "$(DESTDIR)$(sysconfdir)/ntpd.conf"; \
+-	else \
+-		echo; \
+-		echo " $(DESTDIR)$(sysconfdir)/ntpd.conf already exists, install will not overwrite"; \
+-	fi
+ 	@if [ ! -d "$(PRIVSEP_PATH)" ]; then \
+ 		echo; \
+ 		echo " Please created a privilege separation directory for ntpd." ; \

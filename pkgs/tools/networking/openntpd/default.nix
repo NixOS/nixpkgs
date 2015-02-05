@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "4f417c8a4c21ed7ec3811107829f931404f9bf121855b8571a2ca3355695343a";
   };
 
-  postPatch = ''
-    sed -i -e '/^install:/,/^$/{/@if.*PRIVSEP_PATH/,/^$/d}' Makefile.in
-  '';
+  patches = [ ./no-install.patch ];
 
   configureFlags = [
     "--with-privsep-path=${privsepPath}"
     "--with-privsep-user=${privsepUser}"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
   ];
 
   buildInputs = [ openssl ];
