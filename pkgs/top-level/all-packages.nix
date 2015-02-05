@@ -4317,6 +4317,8 @@ let
 
   php54 = callPackage ../development/interpreters/php/5.4.nix { };
 
+  php55 = callPackage ../development/interpreters/php/5.5.nix { };
+
   picolisp = callPackage ../development/interpreters/picolisp {};
 
   pltScheme = racket; # just to be sure
