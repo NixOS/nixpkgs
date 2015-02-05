@@ -154,92 +154,12 @@ rec {
       allowedReferences = [];
     };
 
-
-  unpack =
-
-    derivation {
-      name = "unpack";
-      inherit system;
-      builder = "${build}/on-server/busybox";
-      args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
-
-      buildCommand = ''
-        export PATH=${build}/on-server:$out/bin
-
-        busybox mkdir $out
-        < ${build}/on-server/bootstrap-tools.tar.xz busybox unxz | busybox tar x -C $out
-
-        for i in $out/bin/* $out/libexec/gcc/*/*/*; do
-            if [ -L "$i" ]; then continue; fi
-            if [ -z "''${i##*/liblto*}" ]; then continue; fi
-            echo patching "$i"
-            LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.2 \
-                $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.2 --set-rpath $out/lib --force-rpath "$i"
-        done
-
-        for i in $out/lib/libpcre*; do
-            if [ -L "$i" ]; then continue; fi
-            echo patching "$i"
-            $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
-        done
-
-        # Fix the libc linker script.
-        for i in $out/lib/libc.so; do
-            cat $i | sed "s|/nix/store/e*-[^/]*/|$out/|g" > $i.tmp
-            mv $i.tmp $i
-        done
-      ''; # " */
-
-      allowedReferences = ["out"];
+  test = ((import ./default.nix) {
+    inherit system;
+    
+    customBootstrapFiles = {
+      busybox = "${build}/on-server/busybox";
+      bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
     };
-
-
-  test =
-
-    derivation {
-      name = "test";
-      inherit system;
-      builder = "${build}/on-server/busybox";
-      args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
-
-      buildCommand = ''
-        export PATH=${unpack}/bin
-        ls -l
-        mkdir $out
-        mkdir $out/bin
-        sed --version
-        find --version
-        diff --version
-        patch --version
-        make --version
-        awk --version
-        grep --version
-        gcc --version
-        curl --version
-
-        ldlinux=$(echo ${unpack}/lib/ld-linux*.so.2)
-
-        export CPP="cpp -idirafter ${unpack}/include-glibc -B${unpack}"
-        export CC="gcc -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${unpack}/lib"
-        export CXX="g++ -idirafter ${unpack}/include-glibc -B${unpack} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${unpack}/lib"
-
-        echo '#include <stdio.h>' >> foo.c
-        echo '#include <limits.h>' >> foo.c
-        echo 'int main() { printf("Hello World\\n"); return 0; }' >> foo.c
-        $CC -o $out/bin/foo foo.c
-        $out/bin/foo
-
-        echo '#include <iostream>' >> bar.cc
-        echo 'int main() { std::cout << "Hello World\\n"; }' >> bar.cc
-        $CXX -v -o $out/bin/bar bar.cc
-        $out/bin/bar
-
-        tar xvf ${hello.src}
-        cd hello-*
-        ./configure --prefix=$out
-        make
-        make install
-      ''; # */
-    };
-
+  }).testBootstrapTools;
 }

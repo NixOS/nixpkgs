@@ -1,11 +1,12 @@
-# Use the static tools for armv5tel-linux.
-(import ./armv5tel.nix) //
-
 {
-  bootstrapTools = {
-    # Built from make-bootstrap-tools-crosspi.nix
-    # nixpkgs rev eb0422e4c1263a65a9b2b954fe10a1e03d67db3e
-    url = http://viric.name/tmp/nix/pi/bootstrap-tools.cpio.bz2;
-    sha256 = "1zb27x5h54k51yrvn3sy4wb1qprx8iv2kfbgklxwc0mcxp9b7ccd";
+  busybox = import <nix/fetchurl.nix> {
+    url = https://dl.dropboxusercontent.com/s/4705ffxjrxxqnh2/busybox?dl=0;
+    sha256 = "032maafy4akcdgccpxdxrza29pkcpm81g8kh1hv8bj2rvssly3z2";
+    executable = true;
+  };
+
+  bootstrapTools = import <nix/fetchurl.nix> {
+    url = https://dl.dropboxusercontent.com/s/pen8ieymeqqdvqn/bootstrap-tools.tar.xz?dl=0;
+    sha256 = "0kjpjwi6qw82ca02ppsih3bnhc3y150q23k9d56xzscs0xf5d0dv";
   };
 }

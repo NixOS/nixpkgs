@@ -114,6 +114,7 @@ rec {
         };
     } // {
       inherit cross gccCross binutilsCross;
+      ccCross = gccCross;
     };
 
 
