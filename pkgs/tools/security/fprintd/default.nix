@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, libfprint, intltool, glib, dbus_glib, polkit, nss, pam, systemd }:
+{ stdenv, fetchgit, automake, autoconf, libtool, pkgconfig, gtk_doc
+, libfprint, intltool, glib, dbus_glib, polkit, nss, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "fprintd-0.5.1";
+  name = "fprintd";
 
-  src = fetchurl {
-    url = "http://people.freedesktop.org/~hadess/${name}.tar.xz";
-    sha256 = "0n3fh28cvqrhjig30lz1p075g0wd7jnhvz1j34n37c0cwc7rfmlj";
+  src = fetchgit {
+    url = "git://anongit.freedesktop.org/libfprint/fprintd";
+    rev = "f7c51b0d585eb63702f0d005081e53f44325df86";
+    sha256 = "1gmnn72ablfxvv13s0rms5f39hc4y2z97aq44d7l9hblnfn6wq12";
   };
 
-  patches = [ ./pod.patch ];
-
   buildInputs = [ libfprint glib dbus_glib polkit nss pam systemd ];
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ automake libtool autoconf gtk_doc pkgconfig intltool ];
+
+  configureScript = "./autogen.sh";
 
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/lib/systemd/system" ];
 

@@ -66,6 +66,8 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
       ''}
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
     '';
 
   preBuild = optionalString (!(stdenv ? cc && stdenv.cc.nativeTools))

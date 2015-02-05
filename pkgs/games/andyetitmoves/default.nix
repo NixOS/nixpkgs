@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{opt/andyetitmoves,bin}
     cp -r * $out/opt/andyetitmoves/
 
-    fullPath=${stdenv.cc.gcc}/lib64
+    fullPath=${stdenv.cc.cc}/lib64
     for i in $nativeBuildInputs; do
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done

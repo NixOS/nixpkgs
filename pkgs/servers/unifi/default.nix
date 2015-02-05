@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unifi-controller-${version}";
-  version = "3.2.7";
+  version = "3.2.10";
 
   src = fetchurl {
     url = "http://dl.ubnt.com/unifi/${version}/UniFi.unix.zip";
-    sha256 = "12g9x1k0l89rdlaw260561m17yc0bkp62prg3y05z6gbs7khh2xh";
+    sha256 = "0hrb8bbpkz1ijgsqsxhwjx1iq11ircr0pb2n5nr6hna9zxkkkb04";
   };
 
   buildInputs = [ unzip ];

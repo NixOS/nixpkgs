@@ -44,7 +44,7 @@ let
       links = extraConfig : (runCommand "distcc-links" { }
         ''
           mkdir -p $out/bin
-          if [ -x "${gcc.gcc}/bin/gcc" ]; then
+          if [ -x "${gcc.cc}/bin/gcc" ]; then
             cat > $out/bin/gcc << EOF
             #!/bin/sh
             ${extraConfig}
@@ -52,7 +52,7 @@ let
           EOF
             chmod +x $out/bin/gcc
           fi
-          if [ -x "${gcc.gcc}/bin/g++" ]; then
+          if [ -x "${gcc.cc}/bin/g++" ]; then
             cat > $out/bin/g++ << EOF
             #!/bin/sh
             ${extraConfig}

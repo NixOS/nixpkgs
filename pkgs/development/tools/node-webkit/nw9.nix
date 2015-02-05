@@ -10,7 +10,7 @@ let
     paths = [
       xlibs.libX11 xlibs.libXrender glib gtk atk pango cairo gdk_pixbuf
       freetype fontconfig xlibs.libXcomposite alsaLib xlibs.libXdamage
-      xlibs.libXext xlibs.libXfixes nss nspr gconf expat dbus stdenv.cc.gcc
+      xlibs.libXext xlibs.libXfixes nss nspr gconf expat dbus stdenv.cc.cc
       xlibs.libXtst xlibs.libXi
     ];
   };

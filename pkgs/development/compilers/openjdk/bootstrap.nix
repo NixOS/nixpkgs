@@ -16,8 +16,12 @@ let
 in
 
 runCommand "openjdk-bootstrap" {} ''
-  xz -dc ${src} | sed "s/e*-glibc-[^/]*/$(basename ${glibc})/g" | tar xv
+  tar xvf ${src}
   mv openjdk-bootstrap $out
+
+  for i in $out/bin/*; do
+    patchelf --set-interpreter ${glibc}/lib/ld-linux*.so.2 $i
+  done
 
   # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:
   exes=$(${file}/bin/file $out/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')

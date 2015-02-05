@@ -325,13 +325,13 @@ let
 
 
   alot = buildPythonPackage rec {
-    rev = "fa4ddf000dc2ac4933852b210901b649634a5f86";
-    name = "alot-0.3.5_${rev}";
+    rev = "0.3.6";
+    name = "alot-0.3.6";
 
     src = pkgs.fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "0h11lqyxg0xbkc9y1xqjvd0kmfm5pdwnmv9chmlsi1614dxn08n0";
+      sha256 = "1rzy70w4isvypa94310xw403vq5him21q8rlx4laa0z530phkrmq";
     };
 
     # error: invalid command 'test'
@@ -4256,6 +4256,10 @@ let
     };
   };
 
+  # py3k disabled, see https://travis-ci.org/NixOS/nixpkgs/builds/48759067
+  graph-tool = if isPy3k then throw "graph-tool in Nix doesn't support py3k yet"
+    else callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
+
   grappelli_safe = buildPythonPackage rec {
     version = "0.3.13";
     name = "grappelli_safe-${version}";
@@ -7196,11 +7200,11 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.13.0";
+    version = "0.14.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pgcli/${name}.tar.gz";
-      sha256 = "15qw4as8ryl4qv3p3diq31xwa7kygrnsx4ixlfijgvfwr2pcmgxm";
+      sha256 = "0x31b3kvybdvd413h6b5iq4b5vv2x30ff1r00gs6ana0xpzzrqxp";
     };
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
@@ -7637,6 +7641,8 @@ let
       url = "https://pypi.python.org/packages/source/v/vobject/vobject-${version}.tar.gz";
       sha256 = "1xanqn7rn96841s3lim5lnx5743gc4kyfg4ggj1ys5r0gw8i6har";
     };
+
+    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ dateutil ];
 

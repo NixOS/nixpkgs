@@ -68,9 +68,7 @@ rec {
     inherit stdenv fetchurl;
   };
 
-  tig = import ./tig {
-    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl docbook_xml_dtd_45 readline;
-  };
+  tig = callPackage ./tig { };
 
   hub = import ./hub {
     inherit go;

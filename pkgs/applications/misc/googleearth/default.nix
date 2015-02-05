@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     glibc
     glib
-    stdenv.cc.gcc
+    stdenv.cc.cc
     libSM 
     libICE 
     libXi 

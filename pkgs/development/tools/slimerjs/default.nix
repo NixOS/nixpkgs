@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="slimerjs";
-    version="0.9.4";
+    version="0.9.5";
     name="${baseName}-${version}";
-    hash="0g00mb4z8z5if3sf52bad75w9xdx8p81y5p4p46c2v577v42s5z3";
-    url="http://download.slimerjs.org/releases/0.9.4/slimerjs-0.9.4.zip";
-    sha256="0g00mb4z8z5if3sf52bad75w9xdx8p81y5p4p46c2v577v42s5z3";
+    hash="05p7cwbr2jly6sd6h69j577y48yr05zm2nj7wgnxw0rhyrhkl22s";
+    url="http://download.slimerjs.org/releases/0.9.5/slimerjs-0.9.5.zip";
+    sha256="05p7cwbr2jly6sd6h69j577y48yr05zm2nj7wgnxw0rhyrhkl22s";
   };
   buildInputs = [
     unzip zip

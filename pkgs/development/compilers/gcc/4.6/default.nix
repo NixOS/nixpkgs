@@ -9,7 +9,7 @@
 , enableShared ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
-, gmp, mpfr, mpc, gettext, which
+, gmp, mpfr, libmpc, gettext, which
 , libelf                      # optional, for link-time optimizations (LTO)
 , ppl ? null, cloog ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
@@ -253,7 +253,7 @@ stdenv.mkDerivation ({
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ gmp mpfr mpc libelf ]
+  buildInputs = [ gmp mpfr libmpc libelf ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloog != null) cloog)
     ++ (optional (zlib != null) zlib)
@@ -291,7 +291,7 @@ stdenv.mkDerivation ({
     ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
     --with-gmp=${gmp}
     --with-mpfr=${mpfr}
-    --with-mpc=${mpc}
+    --with-mpc=${libmpc}
     ${if libelf != null then "--with-libelf=${libelf}" else ""}
     --disable-libstdcxx-pch
     --without-included-gettext

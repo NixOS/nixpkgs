@@ -10,9 +10,8 @@ in
 
 (
 assert a.stdenv ? cc ;
-assert a.stdenv.cc ? gcc ;
+assert a.stdenv.cc.cc.isGNU or false ;
 assert a.stdenv.cc ? libc ;
-assert a.stdenv.cc.gcc != null ;
 assert a.stdenv.cc.libc != null ;
 
 rec {
@@ -37,7 +36,7 @@ rec {
   preBuild = a.fullDepEntry (''
     sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
     sed -re "s@if test -d /proc/self @if false @" -i configure
-    sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.cc.gcc}/include -I${a.stdenv.cc.libc}/include ^g' -i makefile
+    sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.cc.cc}/include -I${a.stdenv.cc.libc}/include ^g' -i makefile
   '') ["minInit" "doUnpack" "addInputs"];
 
   /* doConfigure should be removed if not needed */

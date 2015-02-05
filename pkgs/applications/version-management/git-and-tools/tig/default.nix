@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
-, readline
+, readline, makeWrapper, git
 }:
 
 stdenv.mkDerivation rec {
@@ -11,17 +11,22 @@ stdenv.mkDerivation rec {
 
   };
 
-  buildInputs = [ ncurses asciidoc xmlto docbook_xsl readline ];
+  buildInputs = [ ncurses asciidoc xmlto docbook_xsl readline git makeWrapper ];
 
   preConfigure = ''
     export XML_CATALOG_FILES='${docbook_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml'
   '';
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     make install
     make install-doc
     mkdir -p $out/etc/bash_completion.d/
     cp contrib/tig-completion.bash $out/etc/bash_completion.d/
+
+    wrapProgram $out/bin/tig \
+      --prefix PATH ':' "${git}/bin"
   '';
 
   meta = with stdenv.lib; {

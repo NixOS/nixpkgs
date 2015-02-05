@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkgconfig, fontconfig
 , withAACS ? false, libaacs ? null, jdk ? null, ant ? null
 , withMetadata ? true, libxml2 ? null
 , withFonts ? true, freetype ? null
@@ -13,12 +13,12 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   baseName = "libbluray";
-  version  = "0.6.2";
+  version  = "0.7.0";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/${baseName}/${version}/${name}.tar.bz2";
-    sha256 = "1l2wr9mwz5pikqxlxkjfw3rwz0l1j0n7x9hl80sfiqm1lk41194c";
+    sha256 = "13dngs4b4cv29f6b825dq14n77mfhvk1kjb42axpq494pfgyp6zp";
   };
 
   nativeBuildInputs = with stdenv.lib;
@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
                       ;
 
   buildInputs =  with stdenv.lib;
-                 optionals withAACS [jdk libaacs]
+                 [fontconfig]
+              ++ optionals withAACS [jdk libaacs]
               ++ optional withMetadata libxml2
               ++ optional withFonts freetype
               ;

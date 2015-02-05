@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b4qw686bwjn19iyb0lg918q23xxd6s2gnyczhjq992d3m1vwjp9";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin_fix_configure.patch ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
   configureFlags =
     # Including the Windows headers breaks unistd.h.

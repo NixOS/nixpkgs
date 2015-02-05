@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     "USE_ZLIB=1" "USE_OPENSSL=1" 
     ''PREFIX=$(out)''
   ]
-  ++ stdenv.lib.optional (stdenv.cc.gcc != null) "SYSROOT_ALT=${stdenv.cc.gcc}"
+  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
   meta = {

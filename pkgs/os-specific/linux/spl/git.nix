@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/spl.git;
-    rev = "a3c1eb77721a0d511b4fe7111bb2314686570c4b";
-    sha256 = "050qvaw45rxlfwm3dxlxw89p3d3hcnkls6k1s4anlzb4qz5x5ph9";
+    rev = "54cccfc2e30fa84463c056e8ad04b2be9448999e";
+    sha256 = "07nbrq3li51lvncqvj4rzgdw9bnfzr4bc5qqwizrgangd839jlkx";
   };
 
   patches = [ ./const.patch ./install_prefix-git.patch ];

@@ -16,11 +16,40 @@ let
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  # Allowed licenses, defaults to no licenses
-  whitelistedLicenses = config.whitelistedLicenses or [];
+  whitelist = config.whitelistedLicenses or [];
+  blacklist = config.blacklistedLicenses or [];
 
-  # Blacklisted licenses, default to no licenses
-  blacklistedLicenses = config.blacklistedLicenses or [];
+  onlyLicenses = list:
+    lib.lists.all (license:
+      let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
+      if license == l then true else
+        throw ''‘${builtins.toJSON license}’ is not an attribute of lib.licenses''
+    ) list;
+
+  mutuallyExclusive = a: b:
+    (builtins.length a) == 0 ||
+    (!(builtins.elem (builtins.head a) b) &&
+     mutuallyExclusive (builtins.tail a) b);
+
+  areLicenseListsValid =
+    if mutuallyExclusive whitelist blacklist then
+      assert onlyLicenses whitelist; assert onlyLicenses blacklist; true
+    else
+      throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
+
+  hasLicense = attrs:
+    builtins.hasAttr "meta" attrs && builtins.hasAttr "license" attrs.meta;
+
+  hasWhitelistedLicense = assert areLicenseListsValid; attrs:
+    hasLicense attrs && builtins.elem attrs.meta.license whitelist;
+
+  hasBlacklistedLicense = assert areLicenseListsValid; attrs:
+    hasLicense attrs && builtins.elem attrs.meta.license blacklist;
+
+  allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+
+  isUnfree = licenses: lib.lists.any (l:
+    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
 
   # Alow granular checks to allow only some unfree packages
   # Example:
@@ -31,12 +60,16 @@ let
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
-  allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+  # Check whether unfree packages are allowed and if not, whether the
+  # package has an unfree license and is not explicitely allowed by the
+  # `allowUNfreePredicate` function.
+  hasDeniedUnfreeLicense = attrs:
+    !allowUnfree &&
+    hasLicense attrs &&
+    isUnfree (lib.lists.toList attrs.meta.license) &&
+    !allowUnfreePredicate attrs;
 
   unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
-
-  isUnfree = licenses: lib.lists.any (l:
-    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
 
   defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
@@ -60,75 +93,33 @@ let
       pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
 
       throwEvalHelp = unfreeOrBroken: whatIsWrong:
-        assert (builtins.elem unfreeOrBroken [ "Unfree"
-                                               "Broken"
-                                               "BlacklistedLicense"
-                                             ]);
-        throw ''
-          Package ‘${attrs.name}’ in ${pos'} ${whatIsWrong}, refusing to evaluate.
+        assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
+
+        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos'} ${whatIsWrong}, refusing to evaluate."
+        + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''
+
           For `nixos-rebuild` you can set
             { nixpkgs.config.allow${unfreeOrBroken} = true; }
           in configuration.nix to override this.
           For `nix-env` you can add
             { allow${unfreeOrBroken} = true; }
           to ~/.nixpkgs/config.nix.
-        '';
+        ''));
 
-      # Check whether unfree packages are allowed and if not, whether the
-      # package has an unfree license and is not explicitely allowed by the
-      # `allowUNfreePredicate` function.
-      hasDeniedUnfreeLicense = attrs:
-        !allowUnfree &&
-        isUnfree (lib.lists.toList attrs.meta.license or []) &&
-        !allowUnfreePredicate attrs;
-
-      # Check whether two sets are mutual exclusive
-      mutualExclusive = a: b:
-        (builtins.length a) == 0 ||
-        (!(builtins.elem (builtins.head a) b) &&
-         mutualExclusive (builtins.tail a) b);
-
-      # Check whether an package has the license set
-      licenseCheckable = attr:
-        builtins.hasAttr "meta" attrs && builtins.hasAttr "license" attrs.meta;
-
-      # Check whether the license of the package is whitelisted.
-      # If the package has no license, print a warning about this and allow the
-      # package (return that it is actually whitelisted)
-      hasWhitelistedLicense = attrs:
-        if licenseCheckable attrs then
-          builtins.elem attrs.meta.license whitelistedLicenses
-        else
-          #builtins.trace "Has no license: ${attrs.name}, allowing installation"
-                         true;
-
-      # Check whether the license of the package is blacklisted.
-      # If the package has no license, print a warning about this and allow the
-      # package (return that it is actually not blacklisted)
-      hasBlacklistedLicense = attrs:
-        if licenseCheckable attrs then
-          builtins.elem attrs.meta.license blacklistedLicenses
-        else
-          #builtins.trace "Has no license: ${attrs.name}, allowing installation"
-                         false;
+      licenseAllowed = attrs:
+        if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
+          throwEvalHelp "Unfree" "has an unfree license ‘${builtins.toJSON attrs.meta.license}’ which is not whitelisted"
+        else if hasBlacklistedLicense attrs then
+          throwEvalHelp "blacklisted" "has the ‘${builtins.toJSON attrs.meta.license}’ license which is blacklisted"
+        else if !allowBroken && attrs.meta.broken or false then
+          throwEvalHelp "Broken" "is marked as broken"
+        else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
+          throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
+        else true;
 
     in
-    if !(mutualExclusive whitelistedLicenses blacklistedLicenses) then
-      throw ''
-          Package blacklist (${blacklistedLicenses}) and whitelist
-          (${whitelistedLicenses}) are not mutual exclusive.
-      ''
-    else if hasDeniedUnfreeLicense attrs &&
-            !(hasWhitelistedLicense attrs) then
-      throwEvalHelp "Unfree" "has an unfree license which is not whitelisted"
-    else if hasBlacklistedLicense attrs then
-      throwEvalHelp "BlacklistedLicense"
-                    "has a license which is blacklisted"
-    else if !allowBroken && attrs.meta.broken or false then
-      throwEvalHelp "Broken" "is marked as broken"
-    else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-      throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
-    else
+      assert licenseAllowed attrs;
+
       lib.addPassthru (derivation (
         (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
         // (let

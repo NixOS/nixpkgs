@@ -204,7 +204,7 @@ with lib;
             ${optionalString (fontconfig.dpi != 0) ''
             <match target="pattern">
               <edit name="dpi" mode="assign">
-                <double>${fontconfig.dpi}</double>
+                <double>${toString fontconfig.dpi}</double>
               </edit>
             </match>
             ''}

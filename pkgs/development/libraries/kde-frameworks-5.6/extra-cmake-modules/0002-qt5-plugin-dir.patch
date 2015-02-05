@@ -1,0 +1,25 @@
+From e4fb9d880cefa743df2b5da3a67db617d66faf63 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Wed, 31 Dec 2014 07:23:59 -0600
+Subject: [PATCH 2/2] qt5 plugin dir
+
+---
+ kde-modules/KDEInstallDirs.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kde-modules/KDEInstallDirs.cmake b/kde-modules/KDEInstallDirs.cmake
+index a79a12a..70dbe02 100644
+--- a/kde-modules/KDEInstallDirs.cmake
++++ b/kde-modules/KDEInstallDirs.cmake
+@@ -315,7 +315,7 @@ if(KDE_INSTALL_USE_QT_SYS_PATHS)
+         "QtQuick2 imports"
+         QML_INSTALL_DIR)
+ else()
+-    _define_relative(QTPLUGINDIR LIBDIR "plugins"
++    _define_relative(QTPLUGINDIR LIBDIR "qt5/plugins"
+         "Qt plugins"
+         QT_PLUGIN_INSTALL_DIR)
+ 
+-- 
+2.1.4
+

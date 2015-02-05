@@ -28,7 +28,8 @@ stdenv.mkDerivation (rec {
   patches = [
     ./rxvt-unicode-9.06-font-width.patch
     ./rxvt-unicode-256-color-resources.patch
-  ];
+  ]
+  ++ stdenv.lib.optional stdenv.isDarwin ./rxvt-unicode-makefile-phony.patch;
 
   preConfigure =
     ''

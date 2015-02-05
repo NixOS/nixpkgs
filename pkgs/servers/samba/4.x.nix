@@ -31,11 +31,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "samba-4.1.14";
+  name = "samba-4.1.16";
 
   src = fetchurl {
-    url = "http://samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1ficvglapxcw4zrgwkmmjbprsqrxks3ii29nblsr4wlrram4p8ay";
+    urls = [
+      "http://samba.org/samba/ftp/stable/${name}.tar.gz"
+      "http://distfiles.exherbo.org/distfiles/${name}.tar.gz"
+    ];
+    sha256 = "0yx840qg5q6syq81439v3pbwawacm7nwnnvph85za9gsgcb9r80j";
   };
 
   patches = [ ./4.x-no-persistent-install.patch ];

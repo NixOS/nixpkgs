@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, cmake, vim, vimUtils, perl, ruby, unzip,
   which, fetchgit, fetchhg, fetchzip, llvmPackages, zip, vim_configurable,
-  vimPlugins
+  vimPlugins, xkb_switch
 }:
 
 let
@@ -509,6 +509,20 @@ rec {
     postInstall = false;
     meta = {
       homepage = https://github.com/joonty/vim-xdebug;
+      maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    };
+  };
+
+  xkbswitch = buildVimPlugin {
+    name = "xkbswitch-git-2015-01-18";
+    src = fetchgit {
+      url = "https://github.com/lyokha/vim-xkbswitch.git";
+      rev = "932765d8a45b0c8b994b920505b8f10cc7e8cad0";
+      sha256 = "20e1f7196b65d98687a27c8a3f2d0847701890a0818dfcfec13f24a3151b0e73";
+     };
+    buildInputs = [ xkb_switch ];
+    meta = {
+      homepage = https://github.com/lyokha/vim-xkbswitch; 
       maintainers = [ stdenv.lib.maintainers.jagajaga ];
     };
   };

@@ -71,6 +71,9 @@ self: super: {
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
+  # Requires mtl 2.2.x: https://github.com/tatac1/amqp-conduit/issues/1
+  amqp-conduit = markBroken super.amqp-conduit;
+
 }
 
 // # packages relating to amazonka

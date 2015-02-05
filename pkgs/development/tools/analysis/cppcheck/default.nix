@@ -4,14 +4,14 @@
 
 let
   name = "cppcheck";
-  version = "1.67";
+  version = "1.68";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "1f9azv714mk37mjij29nfyd3hizsnj6wry1mmv7kxj0i1k7w0532";
+    sha256 = "1ca9fdhrrxfyzd6kn67gxbfszp70191cf3ndasrh5jh55ghybmmd";
   };
 
   configurePhase = ''

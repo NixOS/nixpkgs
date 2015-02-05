@@ -85,3 +85,6 @@ if test "$NIX_NO_SELF_RPATH" != "1"; then
         export NIX_CROSS_LDFLAGS="-rpath $out/lib64 -rpath-link $out/lib $NIX_CROSS_LDFLAGS"
     fi
 fi
+
+export CC=${crossConfig}-gcc
+export CXX=${crossConfig}-g++

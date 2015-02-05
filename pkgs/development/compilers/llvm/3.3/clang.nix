@@ -2,7 +2,7 @@
 
 let
   version = "3.3";
-  gccReal = if (stdenv.cc.gcc or null) == null then stdenv.cc else stdenv.cc.gcc;
+  gccReal = if (stdenv.cc.cc or null) == null then stdenv.cc else stdenv.cc.cc;
 in
 
 stdenv.mkDerivation {
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       sha256 = "15mrvw43s4frk1j49qr4v5viq68h8qlf10qs6ghd6mrsmgj5vddi";
   };
 
-  passthru = { gcc = stdenv.cc.gcc; };
+  passthru = { cc = stdenv.cc.cc; };
 
   meta = {
     homepage = http://clang.llvm.org/;

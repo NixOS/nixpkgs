@@ -81,7 +81,7 @@ let
   cloog = pkgs.cloog.crossDrv;
   zlib = pkgs.zlib.crossDrv;
   isl = pkgs.isl.crossDrv;
-  mpc = pkgs.mpc.crossDrv;
+  libmpc = pkgs.libmpc.crossDrv;
   binutils = pkgs.binutils.crossDrv;
   klibc = pkgs.linuxPackages.klibc.crossDrv;
 
@@ -162,12 +162,12 @@ rec {
         cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
         
         # Copy what we need of GCC.
-        cp -d ${gcc.gcc.crossDrv}/bin/gcc $out/bin
-        cp -d ${gcc.gcc.crossDrv}/bin/cpp $out/bin
-        cp -d ${gcc.gcc.crossDrv}/bin/g++ $out/bin
-        cp -d ${gcc.gcc.crossDrv}/lib*/libgcc_s.so* $out/lib
-        cp -d ${gcc.gcc.crossDrv}/lib*/libstdc++.so* $out/lib
-        cp -rd ${gcc.gcc.crossDrv}/lib/gcc $out/lib
+        cp -d ${gcc.cc.crossDrv}/bin/gcc $out/bin
+        cp -d ${gcc.cc.crossDrv}/bin/cpp $out/bin
+        cp -d ${gcc.cc.crossDrv}/bin/g++ $out/bin
+        cp -d ${gcc.cc.crossDrv}/lib*/libgcc_s.so* $out/lib
+        cp -d ${gcc.cc.crossDrv}/lib*/libstdc++.so* $out/lib
+        cp -rd ${gcc.cc.crossDrv}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -175,9 +175,9 @@ rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.gcc.crossDrv}/libexec/* $out/libexec
+        cp -rd ${gcc.cc.crossDrv}/libexec/* $out/libexec
         mkdir $out/include
-        cp -rd ${gcc.gcc.crossDrv}/include/c++ $out/include
+        cp -rd ${gcc.cc.crossDrv}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -188,7 +188,7 @@ rec {
         cp -d ${cloog}/lib/libcloog*.so* $out/lib
         cp -d ${ppl}/lib/libppl*.so* $out/lib
         cp -d ${isl}/lib/libisl*.so* $out/lib
-        cp -d ${mpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib}/lib/libz.so* $out/lib
         
         # Copy binutils.

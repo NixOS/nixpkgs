@@ -5,10 +5,7 @@ with lib;
 let
   cfg = config.services.openntpd;
 
-  package = pkgs.openntpd.override {
-    privsepUser = "ntp";
-    privsepPath = "/var/empty";
-  };
+  package = pkgs.openntpd_nixos;
 
   cfgFile = pkgs.writeText "openntpd.conf" ''
     ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
@@ -53,6 +50,9 @@ in
 
   config = mkIf cfg.enable {
     services.ntp.enable = mkForce false;
+
+    # Add ntpctl to the environment for status checking
+    environment.systemPackages = [ package ];
 
     users.extraUsers = singleton {
       name = "ntp";

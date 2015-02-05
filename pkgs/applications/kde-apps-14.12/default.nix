@@ -12,13 +12,15 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, kde4, kf55, pkgs, qt4, stdenv, debug ? false }:
+{ autonix, kde4, kf5, pkgs, qt4, stdenv, debug ? false }:
 
 with stdenv.lib; with autonix;
 
+let kf5Orig = kf5; in
+
 let
 
-  kf5 = kf55.override { inherit debug; };
+  kf5 = kf5Orig.override { inherit debug; };
 
   mirror = "mirror://kde";
 
@@ -114,9 +116,14 @@ let
       }
     );
 
+  qt5Only = tgt:
+    let qt4Deps = [ "KDE4" "Phonon" ];
+    in mapAttrs (name: if name == tgt then removePkgDeps qt4Deps else id);
+
   preResolve = super:
     fold (f: x: f x) super
       [
+        (qt5Only "kmix")
         (userEnvPkg "SharedMimeInfo")
         (userEnvPkg "SharedDesktopOntologies")
         (blacklist ["artikulate"]) # build failure, wrong boost?

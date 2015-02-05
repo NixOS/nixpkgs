@@ -17,19 +17,19 @@ stdenv.mkDerivation {
     links = extraConfig : (runCommand "ccache-links" { }
       ''
         mkdir -p $out/bin
-        if [ -x "${gcc.gcc}/bin/gcc" ]; then
+        if [ -x "${gcc.cc}/bin/gcc" ]; then
           cat > $out/bin/gcc << EOF
           #!/bin/sh
           ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.gcc}/bin/gcc "\$@"
+          exec ${ccache}/bin/ccache ${gcc.cc}/bin/gcc "\$@"
         EOF
           chmod +x $out/bin/gcc
         fi
-        if [ -x "${gcc.gcc}/bin/g++" ]; then
+        if [ -x "${gcc.cc}/bin/g++" ]; then
           cat > $out/bin/g++ << EOF
           #!/bin/sh
           ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.gcc}/bin/g++ "\$@"
+          exec ${ccache}/bin/ccache ${gcc.cc}/bin/g++ "\$@"
         EOF
           chmod +x $out/bin/g++
         fi

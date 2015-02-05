@@ -8,11 +8,11 @@
 # (icu is a ~30 MB dependency, the rest is very small in comparison)
 
 stdenv.mkDerivation rec {
-  name = "harfbuzz-0.9.36";
+  name = "harfbuzz-0.9.37";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/harfbuzz/release/${name}.tar.bz2";
-    sha256 = "3bfbf7b016167ee6b2a2f83948fef75cc1253081873d6a91022161815956b9be";
+    sha256 = "01q22an29ni6b7yaial7l2zq0yyr8dk2230x7n31dbfy88w3npr5";
   };
 
   configureFlags = [

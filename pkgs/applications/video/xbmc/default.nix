@@ -21,7 +21,7 @@
 , samba ? null, sambaSupport ? true
 , libmicrohttpd
 # TODO: would be nice to have nfsSupport (needs libnfs library)
-# TODO: librtmp
+, rtmpdump ? null, rtmpSupport ? true
 , libvdpau ? null, vdpauSupport ? true
 , pulseaudio ? null, pulseSupport ? true
 , libcec ? null, cecSupport ? true
@@ -68,7 +68,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional sambaSupport samba
     ++ lib.optional vdpauSupport libvdpau
     ++ lib.optional pulseSupport pulseaudio
-    ++ lib.optional cecSupport libcec;
+    ++ lib.optional cecSupport libcec
+    ++ lib.optional rtmpSupport rtmpdump;
 
     dontUseCmakeConfigure = true;
 
@@ -85,7 +86,8 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (! sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"
-    ++ lib.optional pulseSupport "--enable-pulse";
+    ++ lib.optional pulseSupport "--enable-pulse"
+    ++ lib.optional rtmpSupport "--enable-rtmp";
 
     postInstall = ''
       for p in $(ls $out/bin/) ; do
@@ -97,7 +99,8 @@ stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libmad}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libcec}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${libcec}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib"
       done
     '';
 

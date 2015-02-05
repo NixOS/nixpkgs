@@ -33,30 +33,11 @@ rec {
     pkgs = stdenvNativePkgs;
   };
 
-  stdenvDarwin = import ./darwin {
-    inherit config;
-    stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
-  };
-
-  stdenvDarwinNaked = import ./darwin {
-    inherit config;
-    stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
-    haveLibCxx = false;
-  };
-
-  stdenvDarwin33 = import ./darwin {
-    inherit config;
-    stdenv = stdenvNative;
-    pkgs = stdenvNativePkgs;
-    useClang33 = true;
-  };
-
-
   # Linux standard environment.
   stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
 
+  # Darwin standard environment.
+  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stdenvDarwin;
 
   # Select the appropriate stdenv for the platform `system'.
   stdenv =

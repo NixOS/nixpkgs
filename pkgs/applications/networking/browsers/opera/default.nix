@@ -6,7 +6,7 @@
 , kdeSupport ? false, qt4, kdelibs
 }:
 
-assert stdenv.isLinux && stdenv.cc.gcc != null && stdenv.cc.libc != null;
+assert stdenv.isLinux && stdenv.cc.cc.isGNU or false && stdenv.cc.libc != null;
 
 let
   mirror = http://get.geo.opera.com/pub/opera;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ stdenv.cc.gcc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
+    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
       libXft freetype fontconfig libXrender libuuid expat
       gstreamer libxml2 gst_plugins_base
     ]

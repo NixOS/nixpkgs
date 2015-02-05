@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/zfs.git;
-    rev = "74328ee18f94d27f9c802d29fdd311018dab2adf";
-    sha256 = "0ayyqbb2crki1xvibfmscav5j7g0z77ys83dx10430ljamvylwb0";
+    rev = "2c41df5bf8327f3bc6ee25cf2aa570bb159cb348";
+    sha256 = "0bmpxcb1k99fs86qql8pblmr2w6bf1sgxc9igh1vhjl672ma6634";
   };
 
   patches = [

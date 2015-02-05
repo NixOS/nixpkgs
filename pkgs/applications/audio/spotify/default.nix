@@ -28,7 +28,7 @@ let
     nss
     pango
     qt4
-    stdenv.cc.gcc
+    stdenv.cc.cc
     xlibs.libX11
     xlibs.libXcomposite
     xlibs.libXdamage
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
 
       mkdir -p $out/bin
 
-      rpath="$out/spotify-client/Data:$libdir:$out/spotify-client:${stdenv.cc.gcc}/lib64"
+      rpath="$out/spotify-client/Data:$out/lib:$out/spotify-client:${stdenv.cc.cc}/lib64"
 
       ln -s $out/spotify-client/spotify $out/bin/spotify
 

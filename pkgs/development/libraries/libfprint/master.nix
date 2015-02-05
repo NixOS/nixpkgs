@@ -5,11 +5,9 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://anongit.freedesktop.org/libfprint/libfprint";
-    rev = "35e356f625d254f44c14f720c0eb9216297d35c2";
-    sha256 = "b7fd74a914d7c4e2999ac20432a7f2af5d6c7af5e75a367bc3babe03e4576c86";
+    rev = "a3c90f2b24434aa36f782aca3950fd89af01fce0";
+    sha256 = "01qa58vq299xzxzxrcqkl51k8396wh56674d9wjmkv2msxx877hi";
   };
-
-  patches = [ ./0001-lib-Add-VFS5011-driver.patch ];
 
   buildInputs = [ libusb glib nss nspr pixman ];
   nativeBuildInputs = [ libtool autoconf automake113x pkgconfig ];

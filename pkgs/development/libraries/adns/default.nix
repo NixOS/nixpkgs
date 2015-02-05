@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   doCheck = false;
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id $out/lib/libadns.so.1.3 $out/lib/libadns.so.1.3
+    install_name_tool -id $out/lib/libadns.so.1.5 $out/lib/libadns.so.1.5
   '';
 
   meta = {

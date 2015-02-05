@@ -56,9 +56,9 @@ let
         snappyPath="lib/snappy-java-1.0.5"
         7z x -o"$snappyPath" "$snappyPath.jar"
         if [ "${stdenv.system}" == "x86_64-linux" ]; then
-          patchelf --set-rpath ${stdenv.cc.gcc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
+          patchelf --set-rpath ${stdenv.cc.cc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
         else
-          patchelf --set-rpath ${stdenv.cc.gcc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
+          patchelf --set-rpath ${stdenv.cc.cc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
         fi
         7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
         rm -vr "$snappyPath"
@@ -74,7 +74,7 @@ let
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
         --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --prefix LD_RUN_PATH : "${stdenv.cc.gcc}/lib/" \
+        --prefix LD_RUN_PATH : "${stdenv.cc.cc}/lib/" \
         --prefix JDK_HOME : "$jdk" \
         --prefix ${hiName}_JDK : "$jdk"
 
@@ -202,50 +202,50 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.0.2";
-    build = "135.1653844";
+    version = "1.1.0b2";
+    build = "135.1711524";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "0y20gp5444c2lwyzhlppjpkb657qbgpskj31lwyfhx6xyqy83159";
+      sha256 = "0pkmyk7ipd4bfbryhanak5mq3x8ix1yv4czx8yi9vdpa34b6pnkw";
     };
   };
 
   clion = buildClion rec {
     name = "clion";
     version = "eap";
-    build = "140.1221.2";
+    build = "140.1740.3";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
-      sha256 = "0gf809plnw89dgn47j6hsh5nv0bpdynjnl1rg8wv7jaz2zx9bqcg";
+      sha256 = "1hpsq37hq61id836wg5j6l3xapln6qdkqa10r3ig2p1rs2hq7i9y";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14.0.2";
-    build = "IC-139.659";
+    version = "14.0.3";
+    build = "IC-139.1117";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0g8f66bdxdmsbv2r1jc308by5ca92ifczprf0gwy5bs2xsvxxwlf";
+      sha256 = "01wcpzdahkh3li2l3k2bgirnlp7hdxk9y1kyrxc3d9d1nazq8wqn";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14.0.2";
-    build = "IU-139.659";
+    version = "14.0.3";
+    build = "IU-139.1117";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "0swd3lyrlcdlsgp350sa741bkmndlck1ss429f9faf3hm4s2y0k5";
+      sha256 = "1zkqigdh9l1f3mjjvxsp7b7vc93v5ylvxa1dfpclzmfbzna7h69s";
     };
   };
 

@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     cd linux${arch}
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.gcc libXrender fontconfig freetype libXext libX11 ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libXrender fontconfig freetype libXext libX11 ];
 
   installPhase = ''
     install -Dm755 OCZToolbox $out/bin/OCZToolbox

@@ -1,0 +1,55 @@
+From f1e22a65f94a231edfe01ac6a3fcf30d95b6329f Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Wed, 31 Dec 2014 07:16:45 -0600
+Subject: [PATCH 1/2] libdir default
+
+---
+ kde-modules/KDEInstallDirs.cmake | 31 +------------------------------
+ 1 file changed, 1 insertion(+), 30 deletions(-)
+
+diff --git a/kde-modules/KDEInstallDirs.cmake b/kde-modules/KDEInstallDirs.cmake
+index e255e87..a79a12a 100644
+--- a/kde-modules/KDEInstallDirs.cmake
++++ b/kde-modules/KDEInstallDirs.cmake
+@@ -162,37 +162,8 @@
+ # (To distribute this file outside of extra-cmake-modules, substitute the full
+ #  License text for the above reference.)
+ 
+-# Figure out what the default install directory for libraries should be.
+-# This is based on the logic in GNUInstallDirs, but simplified (the
+-# GNUInstallDirs code deals with re-configuring, but that is dealt with
+-# by the _define_* macros in this module).
++# The default library directory on NixOS is *always* /lib.
+ set(_LIBDIR_DEFAULT "lib")
+-# Override this default 'lib' with 'lib64' iff:
+-#  - we are on a Linux, kFreeBSD or Hurd system but NOT cross-compiling
+-#  - we are NOT on debian
+-#  - we are on a 64 bits system
+-# reason is: amd64 ABI: http://www.x86-64.org/documentation/abi.pdf
+-# For Debian with multiarch, use 'lib/${CMAKE_LIBRARY_ARCHITECTURE}' if
+-# CMAKE_LIBRARY_ARCHITECTURE is set (which contains e.g. "i386-linux-gnu"
+-# See http://wiki.debian.org/Multiarch
+-if((CMAKE_SYSTEM_NAME MATCHES "Linux|kFreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "GNU")
+-   AND NOT CMAKE_CROSSCOMPILING)
+-  if (EXISTS "/etc/debian_version") # is this a debian system ?
+-    if(CMAKE_LIBRARY_ARCHITECTURE)
+-      set(_LIBDIR_DEFAULT "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
+-    endif()
+-  else() # not debian, rely on CMAKE_SIZEOF_VOID_P:
+-    if(NOT DEFINED CMAKE_SIZEOF_VOID_P)
+-      message(AUTHOR_WARNING
+-        "Unable to determine default LIB_INSTALL_LIBDIR directory because no target architecture is known. "
+-        "Please enable at least one language before including KDEInstallDirs.")
+-    else()
+-      if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+-        set(_LIBDIR_DEFAULT "lib64")
+-      endif()
+-    endif()
+-  endif()
+-endif()
+ 
+ # Macro for variables that are relative to another variable. We store an empty
+ # value in the cache (for documentation/GUI cache editor purposes), and store
+-- 
+2.1.4
+

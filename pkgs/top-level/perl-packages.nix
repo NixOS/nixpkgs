@@ -4019,10 +4019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.307";
+    name = "Glib-1.310";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1km4261a5kaazz77qplpqj2yv91p0bqcjjvd6xdvdgdd4rib7ngr";
+      sha256 = "1iv8q7d0817m3byh2yn7bxxk5qp8bgapaflbglhkw467i31slign";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -4099,10 +4099,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2494";
+    name = "Gtk2-1.2495";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1kkm1z1xqnrfdfjric5y3935dbi9qnhcd6c1z58g4m0y95mwpv9v";
+      sha256 = "1mpxkcy8j7r95z4g4xx6ggbgzaxj4zl0szz54y1k120z95rcgg3a";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
@@ -4745,7 +4745,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "System() and background procs w/ piping, redirs, ptys (Unix, Win32)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 
@@ -4958,7 +4958,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CommonSense ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 

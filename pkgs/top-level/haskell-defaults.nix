@@ -34,6 +34,7 @@
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_20_0_3; };
     MonadRandom = self.MonadRandom_0_2_0_1; # newer versions require transformers >= 0.4.x
     mtl = self.mtl_2_1_3_1;
+    xhtml = null;
     transformersCompat = super.transformersCompat.override { cabal = self.cabal.override {
       extension = self: super: { configureFlags = "-fthree " + super.configureFlags or ""; };
     }; };

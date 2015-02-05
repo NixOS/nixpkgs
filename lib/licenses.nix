@@ -190,6 +190,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = http://www.calculate-linux.org/packages/licenses/iASL;
   };
 
+  ijg = spdx {
+    spdxId = "IJG";
+    fullName = "Independent JPEG Group License";
+  };
+
   inria = {
     fullName  = "INRIA Non-Commercial License Agreement";
     url       = "http://compcert.inria.fr/doc/LICENSE";

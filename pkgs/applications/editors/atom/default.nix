@@ -7,7 +7,7 @@ let
   atomEnv = buildEnv {
     name = "env-atom";
     paths = [
-      stdenv.cc.gcc zlib glib dbus gtk atk pango freetype libgnome_keyring3
+      stdenv.cc.cc zlib glib dbus gtk atk pango freetype libgnome_keyring3
       fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
       xlibs.libXrender xlibs.libX11 xlibs.libXext xlibs.libXdamage xlibs.libXtst
       xlibs.libXcomposite xlibs.libXi xlibs.libXfixes xlibs.libXrandr

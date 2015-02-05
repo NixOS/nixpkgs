@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "ostree-2014.11";
+  name = "ostree-2015.3";
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "GNOME";
     repo = "ostree";
-    rev = "v2014.11";
-    sha256 = "152s94r744lyz64syagha2c4y4afblc178lr9mkk8h2d4xvp6nf5";
+    rev = "v2015.3";
+    sha256 = "1n5q0yxwqx4pqiww3yjmqxl5835kknpw1bnwzbpanmyndnnl88dd";
   };
 
   nativeBuildInputs = [

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with ocamlPackages;
-    [ coq ocaml findlib lablgtk ocamlgraph zarith ];
+    [ coq coq.camlp5 ocaml findlib lablgtk ocamlgraph zarith ];
 
   meta = with stdenv.lib; {
     description = "A platform for deductive program verification";

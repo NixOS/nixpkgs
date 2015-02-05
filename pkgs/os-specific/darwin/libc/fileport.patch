@@ -1,0 +1,38 @@
+diff --git a/Platforms/macosx/Makefile.inc b/Platforms/macosx/Makefile.inc
+index ff3617f..fdda58f 100644
+--- a/Platforms/macosx/Makefile.inc
++++ b/Platforms/macosx/Makefile.inc
+@@ -41,7 +41,7 @@ FEATURE_PATCH_3417676 = 1
+ FEATURE_PATCH_5243343 = 1
+ 
+ # plockstat dtrace support
+-FEATURE_PLOCKSTAT = 1
++FEATURE_PLOCKSTAT = 0
+ 
+ # Timezone change notification
+ FEATURE_TIMEZONE_CHANGE_NOTIFICATION = 1
+diff --git a/gen/asl.c b/gen/asl.c
+index 1948c92..53fce02 100644
+--- a/gen/asl.c
++++ b/gen/asl.c
+@@ -35,6 +35,7 @@
+ #include <time.h>
+ #include <sys/time.h>
+ #include <sys/fcntl.h>
++#include <sys/fileport.h>
+ #include <crt_externs.h>
+ #include <asl.h>
+ #include <regex.h>
+diff --git a/locale/FreeBSD/toupper.c b/locale/FreeBSD/toupper.c
+index d02ddd6..e5a1f10 100644
+--- a/locale/FreeBSD/toupper.c
++++ b/locale/FreeBSD/toupper.c
+@@ -39,6 +39,8 @@ __FBSDID("$FreeBSD: src/lib/libc/locale/toupper.c,v 1.13 2007/01/09 00:28:01 imp
+ #include <stdio.h>
+ #include <runetype.h>
+ 
++#define __ct_rune_t ct_rune_t
++
+ __ct_rune_t
+ ___toupper_l(c, loc)
+ 	__ct_rune_t c;

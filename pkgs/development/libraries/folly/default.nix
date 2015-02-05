@@ -1,16 +1,16 @@
-{ stdenv, fetchgit, autoreconfHook, boost, libevent, double_conversion, glog
+{ stdenv, fetchFromGitHub, autoreconfHook, boost, libevent, double_conversion, glog
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "folly-17";
+  version = "0.22.0";
+  name = "folly-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/facebook/folly";
-    rev = "2c2d5777cd2551397a920007589fd3adba6cb7ab";
-    sha256 = "13mfnv04ckkr2syigaaxrbaxmfiwqvn0a7fjxvdi6dii3fx81rsx";
+  src = fetchFromGitHub {
+    owner = "facebook";
+    repo = "folly";
+    rev = "v${version}";
+    sha256 = "12p7vbx73jmhf772nbqvd8imw4ihpi16cw6cwxq459r7qds4n0ca";
   };
-
-  patches = [ ./105.patch ];
 
   buildInputs = [ libiberty boost.lib libevent double_conversion glog google-gflags openssl ];
 
