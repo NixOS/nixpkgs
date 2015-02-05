@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    make x11-install PREFIX=$out
+    make x11-dist-install PREFIX=$out
+    mv $out/lib/libglfw.so $out/lib/libglfw.so.2
+    ln -s libglfw.so.2 $out/lib/libglfw.so
   ''; 
   
   meta = with stdenv.lib; { 
