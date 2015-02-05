@@ -11,7 +11,8 @@ let
   name = env.pname;
 
 in stdenv.mkDerivation {
-  name         = "${name}-chrootenv";
+  name = "${name}-chrootenv";
+  preferLocalBuild = true;
   buildCommand = ''
     mkdir -p $out/bin
     cd $out/bin

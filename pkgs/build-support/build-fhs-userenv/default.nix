@@ -15,8 +15,9 @@ let
   };
 
 in stdenv.mkDerivation {
-  name         = "${name}-userenv";
+  name = "${name}-userenv";
   buildInputs = [ ruby ];
+  preferLocalBuild = true;
   buildCommand = ''
     mkdir -p $out/bin
     cat > $out/bin/${name} <<EOF

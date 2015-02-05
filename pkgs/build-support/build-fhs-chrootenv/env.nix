@@ -170,6 +170,7 @@ in nixpkgs.stdenv.mkDerivation {
     cd $out
     ${if isMultiBuild then extraBuildCommandsMulti else ""}
   '';
+  preferLocalBuild = true;
   passthru = {
     pname = name;
   };
