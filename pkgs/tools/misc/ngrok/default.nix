@@ -27,7 +27,7 @@ buildGoPackage rec {
   buildInputs = [ git log4go websocket go-vhost mousetrap termbox-go rcrowley.go-metrics
                   yaml-v1 go-bindata go-update binarydist osext ];
 
-  makeFlags = "-tags release";
+  buildFlags = "-tags release";
 
   meta = with stdenv.lib; {
     description = "Reverse proxy that creates a secure tunnel between from a public endpoint t

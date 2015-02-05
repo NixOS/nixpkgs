@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   buildInputs = [ trousers net crypto protobuf ed25519 ];
     
-  makeFlags = "--tags nogui";
+  buildFlags = "--tags nogui";
 
   meta = with lib; {
     description = "Forward secure, asynchronous messaging for the discerning";
