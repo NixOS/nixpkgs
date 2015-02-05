@@ -1,41 +1,41 @@
 { stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, openjdk, cacert, perl } :
 let
-  update = "25";
-  build = "18";
+  update = "31";
+  build = "13";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "90eb3f3cb7094e609686168ec52ba462ef0f9832a4264bd1575e5896a6dd85c3";
+             sha256 = "824b28c554ce32edbdaa77cc4f21f8ed57542c74c8748b89cd06be43a1537b34";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "f292afe8540436090489841771259b274e3c36d42f11d0f58ba8082cd24fcc66";
+             sha256 = "3e09a644d2fb38970acf78c72bc201c031d43574b5a3f7e00bec1b11bffec9c4";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "e574567b48f57c5cdeebae6fa22e2482c05446dbf9133e820f2d95e99459ddf2";
+             sha256 = "485b1a88b4b44b468e96211de238a5eed80f7472f91977fc27e2f443a8ab8ed3";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "61d0bba710d6803b0368c93bc9182b0b40348eed81d578886a03904baf61ba6f";
+             sha256 = "47b07945d3f534e6b87dc273676b8bcb493292e8769667493bb5febfb5c9f347";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "8ef05535a0e03c4262d55cc67887e884f3fda8e4872cbc2941dcb216ef1460ca";
+             sha256 = "b3801935199973cc02df02ac2f2587ff0f1989f98af5bf6fe46520a8108c8d6a";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "afbdf119af2ffc0f9cd6eb93e6dac8e6a56a4ed4b68c7ff07f9b0c1a6bd56a8f";
+             sha256 = "04bb35fd8b071f65014fa1d3b9816886b88e06548eeda27181993b80efb6a0bf";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "2e91c958024e6b64f7484b8225e07edce3bd3bcde43081fb73f32e4b73ef7b87";
+             sha256 = "74bb7a376fa706e4283e235caebbcf9736974a6a4cf97b8c8335d389581965e2";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "98b4fc2d448920b81404ce745d9c00e9a33b58e123176dec4074caf611c3f9c2";
+             sha256 = "2fbdcb016506de4e86db5813c78b28382df5b601f0e73ffd5465c12519b75fd3";
           };
 in
 stdenv.mkDerivation {
@@ -58,6 +58,7 @@ stdenv.mkDerivation {
     ./fix-java-home.patch
     ./read-truststore-from-env-jdk8.patch
     ./currency-date-range-jdk8.patch
+    ./nonreparenting-wm.patch
   ];
   preConfigure = ''
     chmod +x configure
@@ -78,7 +79,7 @@ stdenv.mkDerivation {
     "--with-build-number=b${build}"
     "--with-milestone=fcs"
   ];
-  buildFlags = "all";
+  buildFlags = "DEBUG_BINARIES=true all";
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
