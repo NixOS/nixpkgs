@@ -439,6 +439,9 @@ self: super: {
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
+  # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
+  liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
+
 } // {
 
   # Not on Hackage.
