@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.7.0";
 
   src = fetchurl {
-    url = "https://github.com/PrivacySolutions/i2pd/archive/${version}.tar.gz";
+    url = "https://github.com/PurpleI2P/i2pd/archive/${version}.tar.gz";
     sha256 = "1fic1jxdr48b0jfaamwbfkldbfi7awfbrqga2k7gvpncq32v0aj6";
   };
 
