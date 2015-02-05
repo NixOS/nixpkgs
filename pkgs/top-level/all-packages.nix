@@ -1756,6 +1756,8 @@ let
     inherit (gnome) scrollkeeper;
   };
 
+  mdp = callPackage ../applications/misc/mdp { };
+
   mednafen = callPackage ../misc/emulators/mednafen { };
 
   mednafen-server = callPackage ../misc/emulators/mednafen/server.nix { };
