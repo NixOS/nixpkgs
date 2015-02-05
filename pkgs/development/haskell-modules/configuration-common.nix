@@ -446,6 +446,9 @@ self: super: {
   # https://github.com/jimsnow/glome/issues/2
   GlomeVec = super.GlomeVec.override { llvm = pkgs.llvm_34; };
 
+  # Upstream notified by e-mail.
+  OpenGLRaw21 = markBrokenVersion "1.2.0.1" super.OpenGLRaw21;
+
 } // {
 
   # Not on Hackage.
