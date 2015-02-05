@@ -435,6 +435,9 @@ self: super: {
   # https://github.com/d12frosted/CanonicalPath/issues/3
   system-canonicalpath = dontCheck super.system-canonicalpath;
 
+  # https://github.com/basvandijk/threads/issues/10
+  threads = dontCheck super.threads;
+
 } // {
 
   # Not on Hackage.
