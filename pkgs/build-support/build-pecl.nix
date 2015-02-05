@@ -20,4 +20,6 @@ stdenv.mkDerivation (args // {
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 
   autoreconfPhase = "phpize";
+
+  preConfigure = "touch unix.h";
 })
