@@ -1,22 +1,25 @@
-{ stdenv, fetchgit, curl, fuse, libxml2, pkgconfig }:
+{ stdenv, fetchFromGitHub, curl, fuse, libxml2, pkgconfig }:
 
 let
   version = "2-20150109";
   srcs = {
-    boxfs2 = fetchgit {
-      url = git://github.com/drotiro/boxfs2.git;
+    boxfs2 = fetchFromGitHub {
+      sha256 = "10af1l3sjnh25shmq5gdnpyqk4vrq7i1zklv4csf1n2nrahln8j8";
       rev = "d7018b0546d2dae956ae3da3fb95d2f63fa6d3ff";
-      sha256 = "c22402373589221371f32ec9c86813d5d41aeb1f3a8e2004019019af2f1d8785";
+      repo = "boxfs2";
+      owner = "drotiro";
     };
-    libapp = fetchgit {
-      url = git://github.com/drotiro/libapp.git;
+    libapp = fetchFromGitHub {
+      sha256 = "1p2sbxiranan2n2xsfjkp3c6r2vcs57ds6qvjv4crs1yhxr7cp00";
       rev = "febebe2bc0fb88d57bdf4eb4a2a54c9eeda3f3d8";
-      sha256 = "dbae0e80cd926a45dcf267d33ed03434b377c758a4d1d556f39f7f17255a650e";
+      repo = "libapp";
+      owner = "drotiro";
     };
-    libjson = fetchgit {
-      url = git://github.com/vincenthz/libjson.git;
+    libjson = fetchFromGitHub {
+      sha256 = "1vhss3gq44nl61fbnh1l3qzwvz623gwhfgykf1lf1p31rjr7273w";
       rev = "75a7f50fca2c667bc5f32cdd6dd98f2b673f6657";
-      sha256 = "7c1c71b2cc61dce06870d33f07f91bc2fccd3f1e3440bb5c30d41282dfd01aee";
+      repo = "libjson";
+      owner = "vincenthz";
     };
   };
 in stdenv.mkDerivation {
