@@ -12,8 +12,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ pcre libiconv ];
 
-  NIX_LDFLAGS = "-L${libiconv}/lib -liconv";
-
   doCheck = !stdenv.isDarwin;
 
   # On Mac OS X, force use of mkdir -p, since Grep's fallback
