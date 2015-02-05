@@ -12,7 +12,7 @@
 "matchit.zip"
 "vim-addon-xdebug"
 "vim-addon-php-manual"
-"sourcemap.vim"
+"sourcemap"
 "vim-iced-coffee-script"
 "ctrlp"
 "commentary"
