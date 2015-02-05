@@ -58,7 +58,7 @@ import ./make-test.nix ({pkgs, ... }: {
       foreach my $file ("${pkgs.groff}/share/doc/*/examples/mom/penguin.pdf",
                         "${pkgs.groff}/share/doc/*/meref.ps",
                         "${pkgs.cups}/share/doc/cups/images/cups.png",
-                        "${pkgs.xz}/share/doc/xz/faq.txt")
+                        "${pkgs.pcre}/share/doc/pcre/pcre.txt")
       {
           $file =~ /([^\/]*)$/; my $fn = $1;
 
