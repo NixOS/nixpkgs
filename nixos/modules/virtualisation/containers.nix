@@ -30,6 +30,13 @@ let
         if [ -n "$LOCAL_ADDRESS" ]; then
           ip addr add $LOCAL_ADDRESS dev eth0
         fi
+        if [ -n "$HOST_IPV6_ADDRESS" ]; then
+          ip route add $HOST_IPV6_ADDRESS dev eth0
+          ip route add default via $HOST_IPV6_ADDRESS
+        fi
+        if [ -n "$LOCAL_IPV6_ADDRESS" ]; then
+          ip addr add $LOCAL_IPV6_ADDRESS dev eth0
+        fi
       fi
 
       # Start the regular stage 1 script, passing the bind-mounted
@@ -115,6 +122,25 @@ in
               example = "10.231.136.2";
               description = ''
                 The IPv4 address assigned to <literal>eth0</literal>
+                in the container.
+              '';
+            };
+
+            hostIPv6Address = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "fc00::1";
+              description = ''
+                The IPv6 address assigned to the host interface.
+              '';
+            };
+
+            localIPv6Address = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              example = "fc00::2";
+              description = ''
+                The IPv6 address assigned to <literal>eth0</literal>
                 in the container.
               '';
             };
@@ -244,6 +270,8 @@ in
               --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
               --setenv HOST_ADDRESS="$HOST_ADDRESS" \
               --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
+              --setenv HOST_IPV6_ADDRESS="$HOST_IPV6_ADDRESS" \
+              --setenv LOCAL_IPV6_ADDRESS="$LOCAL_IPV6_ADDRESS" \
               --setenv PATH="$PATH" \
               ${containerInit} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
           '';
@@ -258,6 +286,12 @@ in
               fi
               if [ -n "$LOCAL_ADDRESS" ]; then
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
+              fi
+              if [ -n "$HOST_IPV6_ADDRESS" ]; then
+                ip addr add $HOST_IPV6_ADDRESS dev $ifaceHost
+              fi
+              if [ -n "$LOCAL_IPV6_ADDRESS" ]; then
+                ip route add $LOCAL_IPV6_ADDRESS dev $ifaceHost
               fi
             fi
           '';
@@ -318,6 +352,12 @@ in
               ''}
               ${optionalString (cfg.localAddress != null) ''
                 LOCAL_ADDRESS=${cfg.localAddress}
+              ''}
+              ${optionalString (cfg.hostIPv6Address != null) ''
+                HOST_IPV6_ADDRESS=${cfg.hostIPv6Address}
+              ''}
+              ${optionalString (cfg.localIPv6Address != null) ''
+                LOCAL_IPV6_ADDRESS=${cfg.localIPv6Address}
               ''}
             ''}
            ${optionalString cfg.autoStart ''
