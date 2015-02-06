@@ -530,8 +530,8 @@ rec {
   YouCompleteMe = addRtp "${rtpPath}/youcompleteme" (stdenv.mkDerivation {
     src = fetchgit {
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "87b42c689391b69968950ae99c3aaacf2e14c329";
-      sha256 = "1f3pywv8bsqyyakvyarg7z9m73gmvp1lfbfp2f2jj73jmmlzb2kv";
+      rev = "035b6ca862da3bba0ab8aad388a485758311a464";
+      sha256 = "9cd8fc8bb9b35e7a164d62fa8e3a1bd3be7e18f4d46c78b5827612f32b9541d5";
      };
 
     name = "vimplugin-youcompleteme-2014-10-06";
