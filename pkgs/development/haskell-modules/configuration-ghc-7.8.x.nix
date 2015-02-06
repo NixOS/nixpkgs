@@ -59,7 +59,7 @@ self: super: {
   imports = super.imports.override { mtl = self.mtl_2_2_1; };
 
   # Newer versions require mtl 2.2.x.
-  mtl-prelude = self.mtl-prelude_1_0_2;
+  mtl-prelude = self.mtl-prelude_1_0_3;
 
   # The test suite pulls in mtl 2.2.x
   command-qq = dontCheck super.command-qq;
@@ -71,8 +71,9 @@ self: super: {
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
-  # Requires mtl 2.2.x: https://github.com/tatac1/amqp-conduit/issues/1
-  amqp-conduit = markBroken super.amqp-conduit;
+  # Need binary >= 0.7.2, but our compiler has only 0.7.1.0.
+  hosc = dontDistribute super.hosc;
+  tidal-midi = dontDistribute super.tidal-midi;
 
 }
 
