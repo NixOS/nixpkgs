@@ -527,14 +527,15 @@ rec {
     };
   };
 
-  YouCompleteMe = addRtp "${rtpPath}/youcompleteme" (stdenv.mkDerivation {
+  YouCompleteMe = addRtp "${rtpPath}/youcompleteme" (stdenv.mkDerivation rec {
+    rev = "035b6ca862da3bba0ab8aad388a485758311a464";
     src = fetchgit {
+      inherit rev;
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      rev = "035b6ca862da3bba0ab8aad388a485758311a464";
       sha256 = "9cd8fc8bb9b35e7a164d62fa8e3a1bd3be7e18f4d46c78b5827612f32b9541d5";
      };
 
-    name = "vimplugin-youcompleteme-2014-10-06";
+    name = "vimplugin-youcompleteme-${rev}";
 
     buildInputs = [ python cmake llvmPackages.clang ];
 
