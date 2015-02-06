@@ -9,14 +9,14 @@ assert sqlite != null || postgresql != null || mysql != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "bareos-${version}";
-  version = "14.2.2";
+  version = "14.2.3";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
     name = "${name}-src";
-    sha256 = "12605jibvj6kdp15s8jpzb9fw1mfm53npf8ib2jfn1r4hvhdrl4j";
+    sha256 = "04z6nwlnk6kk5ghbdw5g34mkypmpk4qpkd08cjxwblg8sdj4j8fl";
   };
 
   buildInputs = [
