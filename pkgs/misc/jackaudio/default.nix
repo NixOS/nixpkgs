@@ -6,13 +6,13 @@ assert firewireSupport -> ffado != null;
 
 stdenv.mkDerivation rec {
   name = "jack2-${version}";
-  version = "1.9.9.5";
+  version = "1.9.10";
 
   src = fetchurl {
     urls = [
-      https://dl.dropbox.com/u/28869550/jack-1.9.9.5.tar.bz2
+      https://github.com/jackaudio/jack2/archive/v1.9.10.tar.gz
     ];
-    sha256 = "1ggba69jsfg7dmjzlyqz58y2wa92lm3vwdy4r15bs7mvxb65mvv5";
+    sha256 = "03b0iiyk3ng3vh5s8gaqwn565vik7910p56mlbk512bw3dhbdwc8";
   };
 
   buildInputs =
