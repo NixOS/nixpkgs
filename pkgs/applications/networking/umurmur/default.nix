@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Minimalistic Murmur (Mumble server)";
     license = licenses.bsd3;
     homepage = http://code.google.com/p/umurmur/;
+    platforms = platforms.all;
   };
 }
