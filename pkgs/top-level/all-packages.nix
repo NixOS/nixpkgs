@@ -12162,7 +12162,7 @@ let
 
   stardust = callPackage ../games/stardust {};
 
-  steamOriginal = callPackage ../games/steam { };
+  steam-original = callPackage ../games/steam { };
 
   steam = callPackage ../games/steam/chrootenv.nix { };
 

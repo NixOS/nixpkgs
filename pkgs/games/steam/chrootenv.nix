@@ -4,7 +4,7 @@ buildFHSUserEnv {
   name = "steam";
 
   targetPkgs = pkgs:
-    [ pkgs.steamOriginal
+    [ pkgs.steam-original
       pkgs.corefonts
       pkgs.curl
       pkgs.dbus
