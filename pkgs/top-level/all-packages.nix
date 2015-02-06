@@ -2698,6 +2698,8 @@ let
     stdenv = overrideCC stdenv gcc49;
   };
 
+  touchegg = callPackage = ../tools/inputmethods/touchegg { };
+
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
@@ -4781,6 +4783,8 @@ let
 
   fswatch = callPackage ../development/tools/misc/fswatch { };
 
+  frame = callPackage ../development/libraries/frame { };
+
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
@@ -4792,6 +4796,8 @@ let
   flex = flex_2_5_39;
 
   m4 = gnum4;
+
+  geis = callPackage ../development/libraries/geis { };
 
   global = callPackage ../development/tools/misc/global { };
 
@@ -4811,6 +4817,8 @@ let
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
+
+  grail = callPackage ../development/libraries/grail { };
 
   gtk_doc = callPackage ../development/tools/documentation/gtk-doc { };
 
