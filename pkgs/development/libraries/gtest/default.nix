@@ -1,15 +1,13 @@
-{ stdenv, fetchurl, unzip, cmake}:
-
+{ stdenv, cmake, callPackage }:
+let
+  source = callPackage ./source.nix { };
+in
 stdenv.mkDerivation rec {
-  version = "1.7.0";
-  name = "gtest-${version}";
+  name = "gtest-${source.version}";
 
-  src = fetchurl {
-    url = "https://googletest.googlecode.com/files/${name}.zip";
-    sha256="03fnw3bizw9bcx7l5qy1vz7185g33d5pxqcb6aqxwlrzv26s2z14";
-  };
+  src = source;
 
-  buildInputs = [ unzip cmake ];
+  buildInputs = [ cmake ];
 
   configurePhase = ''
     mkdir build
@@ -31,5 +29,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ zoomulator ];
   };
-}
 
+  passthru = { inherit source; };
+}
