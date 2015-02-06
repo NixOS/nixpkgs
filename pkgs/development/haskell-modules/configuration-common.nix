@@ -372,8 +372,8 @@ self: super: {
   # https://github.com/chrisdone/hindent/issues/83
   hindent = dontCheck super.hindent;
 
-  # https://github.com/begriffs/postgrest/issues/127
-  postgrest = dontDistribute super.postgrest;
+  # https://github.com/begriffs/postgrest/issues/131
+  postgrest = markBrokenVersion "0.2.5.2" super.postgrest;
 
   # Needs older versions of its dependencies.
   structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
