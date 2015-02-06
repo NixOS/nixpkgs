@@ -1,15 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, protobuf, zlib }:
+{ stdenv, src, version
+, autoreconfHook, pkgconfig, protobuf, zlib
+, ...
+}:
 
 stdenv.mkDerivation rec {
   name = "protobuf-c-${version}";
-  version = "1.0.2";
 
-  src = fetchFromGitHub {
-    owner = "protobuf-c";
-    repo = "protobuf-c";
-    rev = "v${version}";
-    sha256 = "1harabw7qdgcmh098664xkcv8bkyach6i35sisc40yhvagr3fzsz";
-  };
+  inherit src;
 
   buildInputs = [ autoreconfHook pkgconfig protobuf zlib ];
 
