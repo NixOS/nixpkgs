@@ -151,8 +151,9 @@ self: super: {
   wizards = doJailbreak super.wizards;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
+  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
+  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
 
   # https://github.com/jgm/zip-archive/issues/21
   zip-archive = addBuildTool super.zip-archive pkgs.zip;
