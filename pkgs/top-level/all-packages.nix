@@ -2698,7 +2698,7 @@ let
     stdenv = overrideCC stdenv gcc49;
   };
 
-  touchegg = callPackage = ../tools/inputmethods/touchegg { };
+  touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
