@@ -14,6 +14,7 @@ in
     ./i3.nix
     ./metacity.nix
     ./openbox.nix
+    ./sawfish.nix
     ./stumpwm.nix
     ./twm.nix
     ./windowmaker.nix
