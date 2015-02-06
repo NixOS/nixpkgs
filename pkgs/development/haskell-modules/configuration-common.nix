@@ -37,7 +37,7 @@ self: super: {
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
   # These changes are required to support Darwin.
-  git-annex = super.git-annex.override {
+  git-annex = (disableSharedExecutables super.git-annex).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
