@@ -71,7 +71,7 @@ in
           };
 
           package = mkOption {
-            default = pkgs.tinc;
+            default = pkgs.tinc_pre;
             description = ''
               The package to use for the tinc daemon's binary.
             '';
@@ -131,14 +131,22 @@ in
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
 
-          # Prefer ED25519 keys (only in 1.1+)
-          [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
+          # Determine how we should generate our keys
+          if type tinc >/dev/null 2>&1; then
+            # Tinc 1.1+ uses the tinc helper application for key generation
 
-          # Otherwise use RSA keys
-          [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+            # Prefer ED25519 keys (only in 1.1+)
+            [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
+
+            # Otherwise use RSA keys
+            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+          else
+            # Tinc 1.0 uses the tincd application
+            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
+          fi
         '';
         script = ''
-          ${data.package}/sbin/tincd -D -U tinc.${network} -n ${network} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
+          tincd -D -U tinc.${network} -n ${network} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
         '';
       })
     );
