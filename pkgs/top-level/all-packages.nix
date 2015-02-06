@@ -6963,7 +6963,9 @@ let
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = callPackage ../development/libraries/protobuf { };
+  protobuf = protobuf2_6;
+  protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
+  protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc { };
 

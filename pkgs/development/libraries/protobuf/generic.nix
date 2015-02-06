@@ -1,14 +1,20 @@
-{ fetchurl, stdenv, zlib }:
+{ stdenv, version, src
+, autoreconfHook, zlib, gtest
+, ...
+}:
 
 stdenv.mkDerivation rec {
-  name = "protobuf-2.5.0";
+  name = "protobuf-${version}";
 
-  src = fetchurl {
-    url = "http://protobuf.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "0xxn9gxhvsgzz2sgmihzf6pf75clr05mqj6218camwrwajpcbgqk";
-  };
+  inherit src;
 
-  buildInputs = [ zlib ];
+  postPatch = ''
+    rm -rf gtest
+    cp -r ${gtest.source} gtest
+    chmod -R a+w gtest
+  '';
+
+  buildInputs = [ autoreconfHook zlib ];
 
   doCheck = true;
 
