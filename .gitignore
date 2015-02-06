@@ -9,6 +9,7 @@ result-*
 /doc/manual.html
 /doc/manual.pdf
 .version-suffix
+tags
 
 .DS_Store
 
