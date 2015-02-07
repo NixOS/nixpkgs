@@ -5,12 +5,13 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/zfs.git;
-    rev = "2c41df5bf8327f3bc6ee25cf2aa570bb159cb348";
-    sha256 = "0bmpxcb1k99fs86qql8pblmr2w6bf1sgxc9igh1vhjl672ma6634";
+    rev = "33b4de513ee81c2a87e1b954a9544a5eec1f8f94";
+    sha256 = "07kdml65l22z1xi8jif5hr7zr7a8mykyms4f5yrf8nyad20kp6il";
   };
 
   patches = [
     ./nix-build-git.patch
+    ./3.19-compat-git.patch # Remove once PR-3084 is mainlined
   ];
 
   buildInputs = [ spl_git perl python autoconf automake libtool zlib libuuid coreutils ];
