@@ -11,14 +11,15 @@
 
 with stdenv.lib;
 let
-  needsKernelSource = any (n: n == configFile) [ "kernel" "all" ];
+  buildKernel = any (n: n == configFile) [ "kernel" "all" ];
+  buildUser = any (n: n == configFile) [ "user" "all" ];
 in
 
 assert any (n: n == configFile) [ "kernel" "user" "all" ];
-assert needsKernelSource -> kernel != null;
+assert buildKernel -> kernel != null && spl != null;
 
 stdenv.mkDerivation rec {
-  name = "spl-${configFile}-${version}${optionalString needsKernelSource "-${kernel.version}"}";
+  name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
   inherit version src patches;
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-config=${configFile}"
-  ] ++ optionals needsKernelSource [
+  ] ++ optionals buildKernel [
     "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
     "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
