@@ -1,16 +1,21 @@
-{ stdenv, fetchgit, fetchurl, makeWrapper
+{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler_HEAD
 , ruby, rubygemsFun, openssl, sqlite, dataDir ? "/var/lib/panamax-ui"}:
 
 with stdenv.lib;
 
+let
+  env = bundlerEnv {
+    name = "panamax-api-gems";
+    inherit ruby;
+    gemset = ./gemset-ui.nix;
+    gemfile = ./Gemfile-ui;
+    lockfile = ./Gemfile-ui.lock;
+  };
+  bundler = bundler_HEAD.override { inherit ruby; };
+in
 stdenv.mkDerivation rec {
   name = "panamax-ui-${version}";
   version = "0.2.11";
-
-  bundler = fetchurl {
-    url = "http://rubygems.org/downloads/bundler-1.7.9.gem";
-    sha256 = "1gd201rh17xykab9pbqp0dkxfm7b9jri02llyvmrc0c5bz2vhycm";
-  };
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
@@ -18,13 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "17j5ac8fzp377bzg7f239jdcc9j0c63bkx0ill5nl10i3h05z7jh";
   };
 
-  gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile-ui.nix);
-
-  buildInputs = [ makeWrapper ruby openssl sqlite (rubygemsFun ruby) ];
+  buildInputs = [ makeWrapper env.ruby openssl sqlite bundler ];
 
   setSourceRoot = ''
     mkdir -p $out/share
-    cp -R git-export $out/share/panamax-ui
+    cp -R panamax-ui $out/share/panamax-ui
     export sourceRoot="$out/share/panamax-ui"
   '';
 
@@ -37,18 +40,12 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     export HOME=$PWD
-    export GEM_HOME=$PWD
-
-    mkdir -p vendor/cache
-    ${concatStrings (map (gem: "ln -s ${gem} vendor/cache/${gem.name};") gemspec)}
-    ln -s ${bundler} vendor/cache/${bundler.name}
+    export GEM_HOME=${env}/${env.ruby.gemPath}
   '';
 
   buildPhase = ''
-    gem install --local vendor/cache/${bundler.name}
-    bin/bundle install --verbose --local --without development test
     rm -f ./bin/*
-    ruby ./gems/bundler-*/bin/bundle exec rake rails:update:bin
+    bundle exec rake rails:update:bin
   '';
 
   installPhase = ''
@@ -58,10 +55,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper bin/bundle "$out/bin/bundle" \
       --run "cd $out/share/panamax-ui" \
-      --prefix "PATH" : "$out/share/panamax-ui/bin:${ruby}/bin:$PATH" \
+      --prefix "PATH" : "$out/share/panamax-ui/bin:${env.ruby}/bin:$PATH" \
       --prefix "HOME" : "$out/share/panamax-ui" \
-      --prefix "GEM_HOME" : "$out/share/panamax-ui" \
-      --prefix "GEM_PATH" : "$out/share/panamax-ui"
+      --prefix "GEM_HOME" : "${env}/${env.ruby.gemPath}" \
+      --prefix "GEM_PATH" : "$out/share/panamax-ui:${bundler}/${env.ruby.gemPath}"
   '';
 
   meta = with stdenv.lib; {
