@@ -10789,6 +10789,13 @@ let
   namecoin = callPackage ../applications/misc/namecoin { };
   namecoinqt = callPackage ../applications/misc/namecoin/qt.nix { };
 
+  panamax_api = callPackage ../applications/networking/cluster/panamax/api.nix {
+    ruby = ruby_2_1;
+  };
+  panamax_ui = callPackage ../applications/networking/cluster/panamax/ui.nix {
+    ruby = ruby_2_1;
+  };
+
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
