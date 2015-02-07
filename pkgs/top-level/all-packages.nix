@@ -699,6 +699,8 @@ let
 
   consul_ui = consul.ui;
 
+  consul-alerts = callPackage ../servers/consul/alerts.nix { };
+
   corosync = callPackage ../servers/corosync { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
