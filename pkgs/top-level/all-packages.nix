@@ -8802,8 +8802,14 @@ let
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
-    zfs = callPackage ../os-specific/linux/zfs { };
-    zfs_git = callPackage ../os-specific/linux/zfs/git.nix { };
+    zfs = callPackage ../os-specific/linux/zfs {
+      configFile = "kernel";
+      inherit kernel;
+    };
+    zfs_git = callPackage ../os-specific/linux/zfs/git.nix {
+      configFile = "kernel";
+      inherit kernel;
+    };
   };
 
   # The current default kernel / kernel modules.
@@ -9230,6 +9236,12 @@ let
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
+  zfs = callPackage ../os-specific/linux/zfs {
+    configFile = "user";
+  };
+  zfs_git = callPackage ../os-specific/linux/zfs/git.nix {
+    configFile = "user";
+  };
 
   ### DATA
 
