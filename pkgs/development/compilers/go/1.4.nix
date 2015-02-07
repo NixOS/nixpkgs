@@ -95,6 +95,8 @@ stdenv.mkDerivation {
     go test -v    $TOOL_ROOT/cover $TOOL_ROOT/vet # $TOOL_ROOT/godoc
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = http://golang.org/;
     description = "The Go Programming language";

@@ -1,23 +1,21 @@
-{ stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "gotags";
+with goPackages;
 
-  src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+buildGoPackage rec {
+  rev = "a60c6a1b171faedc44354bd437d965e5e3bdc220";
+  name = "gotags-${lib.strings.substring 0 7 rev}";
+
+  goPackagePath = "github.com/jstemmer/gotags";
+
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "jstemmer";
+    repo = "gotags";
+    sha256 = "1drbypby0isdmkq44jmlv59k3jrwvq2jciaccxx2qc2nnx444fkq";
   };
 
-  buildInputs = [ go ];
-
-  buildPhase = ''
-    export GOPATH=$src
-    go build -v -o gotags github.com/jstemmer/gotags
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv gotags $out/bin
-  '';
+  dontInstallSrc = true;
 
   meta = with lib; {
     description = "Ctags-compatible tag generator for Go";
