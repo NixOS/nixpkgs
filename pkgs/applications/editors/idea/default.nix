@@ -232,8 +232,8 @@ in
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "01wcpzdahkh3li2l3k2bgirnlp7hdxk9y1kyrxc3d9d1nazq8wqn";
+      url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
+      sha256 = "167384bfb2a1a53658cf7e069f666ff05c6a737c4bcc4145a4034ea8dabf8c07";
     };
   };
 
@@ -244,8 +244,8 @@ in
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1zkqigdh9l1f3mjjvxsp7b7vc93v5ylvxa1dfpclzmfbzna7h69s";
+      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
+      sha256 = "3a197894fdcbd54fd9752da8bea92f7b24b6cf3a57f72d651d2ed004db8b78fe";
     };
   };
 
