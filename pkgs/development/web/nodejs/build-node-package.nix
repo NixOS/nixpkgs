@@ -83,6 +83,9 @@ let
       # Some version specifiers (latest, unstable, URLs, file paths) force NPM
       # to make remote connections or consult paths outside the Nix store.
       # The following JavaScript replaces these by * to prevent that:
+      # Also some packages require a specific npm version because npm may
+      # resovle dependencies differently, but npm is not used by Nix for dependency
+      # reslution, so these requirements are dropped.
 
       (
       cat <<EOF
@@ -129,6 +132,11 @@ let
                 var versionSpec = packageObj.optionalDependencies[dependency];
                 packageObj.optionalDependencies[dependency] = replaceImpureVersionSpec(versionSpec);
             }
+        }
+
+        /* Ignore npm version requirement */
+        if(packageObj.engines) {
+            delete packageObj.engines.npm;
         }
 
         /* Write the fixed JSON file */
