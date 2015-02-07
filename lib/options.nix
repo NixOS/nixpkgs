@@ -99,7 +99,10 @@ rec {
           type = opt.type.name or null;
         }
         // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
-        // (if opt ? default then { default = scrubOptionValue opt.default; } else {})
+        // (if opt ? default then (
+          let canEval = (builtins.tryEval (builtins.deepSeq opt.default null)).success; in
+          { default = if canEval then scrubOptionValue opt.default else
+              "Default value could not be evaluated."; }) else {})
         // (if opt ? defaultText then { default = opt.defaultText; } else {});
 
         subOptions =
