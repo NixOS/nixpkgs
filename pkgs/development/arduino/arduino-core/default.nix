@@ -54,10 +54,11 @@ stdenv.mkDerivation rec {
         "$out/share/arduino/hardware/tools/avrdude"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open-source electronics prototyping platform";
     homepage = http://arduino.cc/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.antono stdenv.lib.maintainers.robberer ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ antono robberer bjornfor ];
   }; 
 }
