@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , zfs ? null
-, efiSupport ? false
-, zfsSupport ? false
+, efiSupport ? true
+, zfsSupport ? true
 }:
 
 with stdenv.lib;
@@ -13,8 +13,6 @@ let
   };
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
-
-  prefix = "grub${if efiSupport then "-efi" else ""}${optionalString zfsSupport "-zfs"}";
 
   version = "2.02-git-1de3a4";
 
@@ -35,7 +33,7 @@ assert efiSupport -> canEfi;
 assert zfsSupport -> zfs != null;
 
 stdenv.mkDerivation rec {
-  name = "${prefix}-${version}";
+  name = "grub-${version}";
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
