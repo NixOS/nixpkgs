@@ -9,8 +9,8 @@
 
 cabal.mkDerivation (self: {
   pname = "webdriver";
-  version = "0.6.0.3";
-  sha256 = "1q0l9rs5j4cxzyqsy6r40y425359s246spk3g3pks7s47yynjn4q";
+  version = "0.6.0.4";
+  sha256 = "1miy65dl60gymf0a65kjykdmsl3cwcjrfg1iiyk6vkjz39y6y7qf";
   buildDepends = [
     aeson attoparsec base64Bytestring cond dataDefault directoryTree
     exceptions filepath httpClient httpTypes liftedBase monadControl
@@ -18,7 +18,6 @@ cabal.mkDerivation (self: {
     transformersBase unorderedContainers vector zipArchive
   ];
   testDepends = [ parallel text ];
-  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/kallisti-dev/hs-webdriver";
