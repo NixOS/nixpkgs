@@ -5,6 +5,7 @@
 
 assert mp4v2Support -> (mp4v2 != null);
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "faac-${version}";
   version = "1.28";
@@ -14,17 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "1pqr7nf6p2r283n0yby2czd3iy159gz8rfinkis7vcfgyjci2565";
   };
 
-  configureFlags = []
-    ++ stdenv.lib.optional mp4v2Support "--with-mp4v2"
-    ++ stdenv.lib.optional drmSupport "--enable-drm";
+  configureFlags = [ ]
+    ++ optional mp4v2Support "--with-mp4v2"
+    ++ optional drmSupport "--enable-drm";
 
-  buildInputs = []
-    ++ stdenv.lib.optional mp4v2Support mp4v2;
+  buildInputs = [ ]
+    ++ optional mp4v2Support mp4v2;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC encoder";
     homepage    = http://www.audiocoding.com/faac.html;
-    license     = stdenv.lib.licenses.unfree;
+    license     = licenses.unfree;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
   };
