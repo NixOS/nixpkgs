@@ -7,16 +7,16 @@
 with stdenv.lib;
 
 let
-  version = "1.0";
+  version = "1.1";
 
   main = {
     name = "tkabber";
-    sha256 = "49ee6e897dfe52ebac256531b54955e6b39223f606a9b8ad63a52475389db206";
+    sha256 = "1ip0mi2icqkjxiam4qj1qcynnz9ck1ggzcbcqyjj132hakd855a2";
   };
 
   plugins = {
     name = "tkabber-plugins";
-    sha256 = "d61251dc664f0bfa8534e578096dede9a7bb7d4f2620489f8d2c43d36cd61ba9";
+    sha256 = "1dr12rh4vs1w1bga45k4ijgxs39801c1k4z3b892pn1dwv84il5y";
   };
 
   tclLibraries = [ bwidget tcllib tcltls tclgpg ];
