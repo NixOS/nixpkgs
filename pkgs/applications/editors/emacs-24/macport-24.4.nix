@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
+    substituteInPlace Makefile.in --replace "/bin/pwd" "pwd"
+    substituteInPlace lib-src/Makefile.in --replace "/bin/pwd" "pwd"
+
     patch -p0 < patch-mac
 
     # The search for 'tputs' will fail because it's in ncursesw within the
