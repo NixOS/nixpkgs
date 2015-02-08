@@ -832,10 +832,10 @@ rec {
     name = "github-MarcWeber-vim-addon-vim2nix";
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-vim2nix";
-      rev = "74345fa9858eb979c8d66cb59f07211f7c07ae69";
-      sha256 = "76dbe055b9eecd107a4607ab8af32b39de3a342e63eadac5a9ddae6852ffdcec";
-    };
-    dependencies = ["vim-addon-manager"];
+       rev = "5507ee4db7599873d72fab035c752dea245e2cd4";
+       sha256 = "1rqvgg3wq1grkh4nfj2wqmjg7a9r4hd82m89s9520kyzvldp8sgx";
+     };
+     dependencies = ["vim-addon-manager"];
 
   };
   "matchit.zip" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1053,7 +1053,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/MarcWeber/vim-addon-manager";
       rev = "fda9d2f4522024aa8bd8b8305e6a71c4a4a28c07";
-      sha256 = "a3b5da9bcc01c6f0fb0a5e13a6f9efb58471339ed32c480fde96856bb9e1e7be";
+      sha256 = "1gp7w6wnp1cnvq7lhb6kkqrp315mxzwsc4sy1bxz1ih1rjdxmdd3";
     };
     dependencies = [];
 
