@@ -8402,11 +8402,11 @@ let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
   in rec {
 
-    cctools = forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {
+    cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
-    });
+    };
 
     cctools_native = (callPackage ../os-specific/darwin/cctools/port.nix {}).native;
 
