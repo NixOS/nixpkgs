@@ -449,8 +449,9 @@ self: super: {
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
 
-  # https://github.com/Twinside/Rasterific/issues/19
-  Rasterific = dontCheck super.Rasterific;
+  # Missing files in the test suite stanza.
+  Rasterific = dontCheck super.Rasterific;              # https://github.com/Twinside/Rasterific/issues/19
+  rasterific-svg = dontCheck super.rasterific-svg;      # https://github.com/Twinside/rasterific-svg/issues/1
 
   # https://github.com/utdemir/handsy/issues/5
   handsy = dontCheck super.handsy;
