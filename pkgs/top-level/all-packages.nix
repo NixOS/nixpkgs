@@ -8425,13 +8425,11 @@ let
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
 
     ps = callPackage ../os-specific/darwin/adv_cmds/ps.nix {};
-    bootstrap_cmds   = callPackage ../os-specific/darwin/bootstrap-cmds {};
 
     security_tool = callPackage ../os-specific/darwin/security-tool { inherit osx_private_sdk; };
 
     cmdline_sdk   = cmdline.sdk;
     cmdline_tools = cmdline.tools;
-
 
     libobjc = apple-source-releases.objc4;
   };
