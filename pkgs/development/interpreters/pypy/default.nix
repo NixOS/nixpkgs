@@ -81,6 +81,7 @@ let
        mkdir -p $out/{bin,include,lib,pypy-c}
 
        cp -R {include,lib_pypy,lib-python,pypy-c} $out/pypy-c
+       cp libpypy-c.so $out/lib/
        ln -s $out/pypy-c/pypy-c $out/bin/pypy
        chmod +x $out/bin/pypy
 
@@ -88,13 +89,12 @@ let
        ln -s $out/pypy-c/include $out/include/${libPrefix}
        ln -s $out/pypy-c/lib-python/${pythonVersion} $out/lib/${libPrefix}
 
+       wrapProgram "$out/bin/pypy" \
+         --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$out/lib" \
+         --set LIBRARY_PATH "${LIBRARY_PATH}:$out/lib"
+
        # verify cffi modules
        $out/bin/pypy -c "import Tkinter;import sqlite3;import curses"
-
-       # make sure pypy finds sqlite3 library
-       wrapProgram "$out/bin/pypy" \
-         --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}" \
-         --set LIBRARY_PATH "${LIBRARY_PATH}"
     '';
 
     passthru = rec {
@@ -105,11 +105,11 @@ let
       interpreter = "${self}/bin/${executable}";
     };
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = true;  # almost no parallelization without STM
 
     meta = with stdenv.lib; {
       homepage = http://pypy.org/;
-      description = "Fast, compliant alternative implementation of the Python language (2.7.3)";
+      description = "Fast, compliant alternative implementation of the Python language (2.7.8)";
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = with maintainers; [ iElectric ];
