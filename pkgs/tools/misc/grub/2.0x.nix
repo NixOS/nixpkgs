@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , zfs ? null
-, efiSupport ? true
+, efiSupport ? false
 , zfsSupport ? true
 }:
 

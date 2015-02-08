@@ -1456,8 +1456,11 @@ let
 
   grub2_full = callPackage ../tools/misc/grub/2.0x.nix { };
 
+  grub2_efi = grub2_full.override {
+    efiSupport = true;
+  };
+
   grub2_light = grub2_full.override {
-    efiSupport = false;
     zfsSupport = false;
   };
 
