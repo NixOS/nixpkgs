@@ -450,6 +450,9 @@ self: super: {
   # Upstream notified by e-mail.
   OpenGLRaw21 = markBrokenVersion "1.2.0.1" super.OpenGLRaw21;
 
+  # module missing: https://github.com/tcrayford/rematch/issues/5
+  rematch = dontCheck super.rematch; 
+
 } // {
 
   # Not on Hackage.
