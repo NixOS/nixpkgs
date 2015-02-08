@@ -38,7 +38,7 @@ let
 
   sources = runCommand "node-sources" {} ''
     tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
-    mv *node* $out
+    mv $(find . -type d -mindepth 1 -maxdepth 1) $out
   '';
 
   # Convert deps to attribute set

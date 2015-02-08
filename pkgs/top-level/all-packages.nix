@@ -1729,6 +1729,13 @@ let
     callPackage ./node-packages.nix { self = nodePackages; }
   );
 
+  iojs = callPackage ../development/web/iojs { };
+  iojs-nightly = callPackage ../development/web/iojs { nightly = true; };
+
+  iojsPackages = recurseIntoAttrs (
+    callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; }
+  );
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns { };
