@@ -199,6 +199,7 @@ self: super: {
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
+  hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
@@ -422,10 +423,6 @@ self: super: {
 
   # https://github.com/pixbi/duplo/issues/25
   duplo = dontCheck super.duplo;
-
-  # https://github.com/seagreen/hjsonschema/issues/4
-  # https://github.com/seagreen/hjsonschema/issues/5
-  hjsonschema = dontHaddock (dontCheck super.hjsonschema);
 
   # Nix-specific workaround
   xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
