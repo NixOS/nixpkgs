@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "talloc-2.1.1";
 
   src = fetchurl {
-    url = "http://samba.org/ftp/talloc/${name}.tar.gz";
+    url = "mirror://samba/talloc/${name}.tar.gz";
     sha256 = "0x31id42b425dbxv5whrqlc6dj14ph7wzs3wsp1ggi537dncwa9y";
   };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   name = "samba-3.6.24";
 
   src = fetchurl {
-    url = "http://samba.org/samba/ftp/stable/${name}.tar.gz";
+    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
     sha256 = "19rln8m1k359bz6dhmlv39kzyjg7p296dz4y4mq1jwrlnw2bvl0i";
   };
 

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ctdb-2.5.4";
 
   src = fetchurl {
-    url = "http://samba.org/ftp/ctdb/${name}.tar.gz";
+    url = "mirror://samba/ctdb/${name}.tar.gz";
     sha256 = "09fb29ngxnh1crsqchykg23bl6s4fifvxwq4gwg1y742mmnjp9fy";
   };
 

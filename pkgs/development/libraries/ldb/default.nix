@@ -6,10 +6,7 @@ stdenv.mkDerivation rec {
   name = "ldb-1.1.19";
 
   src = fetchurl {
-    urls = [
-      "http://samba.org/ftp/ldb/${name}.tar.gz"
-      "http://distfiles.exherbo.org/distfiles/${name}.tar.gz"
-    ];
+    url = "mirror://samba/ldb/${name}.tar.gz";
     sha256 = "1p2815z9sjack08pcdbv4xzp1fvr4lxcn30rj0wh3py4ly6ji1h0";
   };
 
