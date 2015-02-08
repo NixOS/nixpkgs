@@ -42,11 +42,11 @@ let
       });
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-        overrideScope = f: callPackageWithScope (fix (extend scope.__unfix__ f)) drv args;
+        overrideScope = f: callPackageWithScope (mkScope (fix (extend scope.__unfix__ f))) drv args;
       };
 
-      defaultScope = pkgs // pkgs.xlibs // pkgs.gnome // self;
-      callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      mkScope = scope: pkgs // pkgs.xlibs // pkgs.gnome // scope;
+      callPackage = drv: args: callPackageWithScope (mkScope self) drv args;
 
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
