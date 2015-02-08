@@ -448,6 +448,9 @@ self: super: {
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
 
+  # https://github.com/Twinside/Rasterific/issues/19
+  Rasterific = dontCheck super.Rasterific;
+
 } // {
 
   # Not on Hackage.
