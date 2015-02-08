@@ -2827,6 +2827,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
 
+  vectorFftw = callPackage ../development/libraries/haskell/vector-fftw {};
+
   vectorInstances = callPackage ../development/libraries/haskell/vector-instances {};
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
