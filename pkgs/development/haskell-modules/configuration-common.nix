@@ -452,6 +452,9 @@ self: super: {
   # https://github.com/Twinside/Rasterific/issues/19
   Rasterific = dontCheck super.Rasterific;
 
+  # https://github.com/utdemir/handsy/issues/5
+  handsy = dontCheck super.handsy;
+
 } // {
 
   # Not on Hackage.
