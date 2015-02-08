@@ -8803,11 +8803,11 @@ let
 
     zfs = callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
-      inherit kernel;
+      inherit kernel spl;
     };
     zfs_git = callPackage ../os-specific/linux/zfs/git.nix {
       configFile = "kernel";
-      inherit kernel;
+      inherit kernel spl_git;
     };
   };
 
