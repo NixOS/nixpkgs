@@ -8400,7 +8400,8 @@ let
 
   darwin = let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
-  in rec {
+    apple-source-releases = import ../os-specific/darwin/apple-source-releases { inherit stdenv fetchurl pkgs; };
+  in apple-source-releases // rec {
 
     cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
       cross = assert crossSystem != null; crossSystem;
