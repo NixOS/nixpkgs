@@ -16,7 +16,7 @@ let
 in
 
 assert any (n: n == configFile) [ "kernel" "user" "all" ];
-assert buildKernel -> kernel != null && spl != null;
+assert buildKernel -> kernel != null;
 
 stdenv.mkDerivation rec {
   name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
