@@ -11098,6 +11098,8 @@ let
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
+  slap = callPackage ../applications/editors/slap {};
+
   slmenu = callPackage ../applications/misc/slmenu {};
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
