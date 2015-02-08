@@ -899,6 +899,15 @@ rec {
     dependencies = [];
 
   };
+  "sensible" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "sensible";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-sensible";
+      rev = "b30dcf387af977acfa21732592bfca05598b2188";
+      sha256 = "6a9fc68c3eb0ee500ac59bdbc2c48d98e88a2936ee544f7203fa1a0296002b5f";
+    };
+    dependencies = [];
+  };
   "snipmate" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "snipmate";
     src = fetchgit {
