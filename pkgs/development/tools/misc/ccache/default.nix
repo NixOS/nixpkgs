@@ -5,7 +5,7 @@ let
 stdenv.mkDerivation {
   name = "ccache-3.2.1";
   src = fetchurl {
-    url = http://samba.org/ftp/ccache/ccache-3.2.1.tar.xz;
+    url = mirror://samba/ccache/ccache-3.2.1.tar.xz;
     sha256 = "17dxb0adha2bqzb2r8rcc3kl9mk7y6vrvlh181liivrc3m7g6al7";
   };
 
