@@ -188,6 +188,7 @@ self: super: {
   HList = dontCheck super.HList;
   memcached-binary = dontCheck super.memcached-binary;
   postgresql-simple = dontCheck super.postgresql-simple;
+  postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xmlgen = dontCheck super.xmlgen;
