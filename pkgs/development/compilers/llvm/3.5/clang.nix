@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   patches = [ ./clang-purity.patch ];
 
   postPatch = ''
-    substituteInPlace lib/Driver/Tools.cpp      --replace       "Args.hasArg(options::OPT_nostdlibinc)" "true"
-    substituteInPlace lib/Driver/ToolChains.cpp --replace "DriverArgs.hasArg(options::OPT_nostdlibinc)" "true"
+    sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
+    sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
   '';
 
   # Clang expects to find LLVMgold in its own prefix
