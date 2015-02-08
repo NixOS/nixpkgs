@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://ppp.samba.org/;
     description = "Point-to-point implementation for Linux and Solaris";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.falsifian ];
   };
 }
