@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-1.3.1";
+  name = "nfs-utils-1.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "1lxfjl6mzdfn7kw2hcn40q9xn40a539iv7spzqbj1sfkvzxlm33l";
+    sha256 = "1xwilpdr1vizq2yhpzxpwqqr9f8kn0dy2wcpc626mf30ybp7572v";
   };
 
   buildInputs =
@@ -23,24 +23,21 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc}/bin/rpcgen";
 
-  patchPhase =
-    ''
-      for i in "tests/"*.sh
-      do
-        sed -i "$i" -e's|/bin/bash|/bin/sh|g'
-        chmod +x "$i"
-      done
-      sed -i s,/usr/sbin,$out/sbin, utils/statd/statd.c
+  patches = [ ./no-install.patch ];
 
-      # https://bugzilla.redhat.com/show_bug.cgi?id=749195
-      sed -i s,PAGE_SIZE,getpagesize\(\), utils/blkmapd/device-process.c
-    '';
+  postPatch = ''
+    for i in "tests/"*.sh
+    do
+      sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+      chmod +x "$i"
+    done
+    sed -i s,/usr/sbin,$out/sbin, utils/statd/statd.c
+  '';
 
-  preBuild =
-    ''
-      makeFlags="sbindir=$out/sbin"
-      installFlags="statedir=$TMPDIR" # hack to make `make install' work
-    '';
+  preBuild = ''
+    makeFlags="sbindir=$out/sbin"
+    installFlags="statedir=$TMPDIR" # hack to make `make install' work
+  '';
 
   # One test fails on mips.
   doCheck = !stdenv.isMips;
