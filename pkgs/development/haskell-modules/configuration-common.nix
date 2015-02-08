@@ -455,6 +455,9 @@ self: super: {
   # https://github.com/utdemir/handsy/issues/5
   handsy = dontCheck super.handsy;
 
+  # Upstream notified by e-mail.
+  MonadCompose = markBrokenVersion "0.2.0.0" super.MonadCompose;
+
 } // {
 
   # Not on Hackage.
