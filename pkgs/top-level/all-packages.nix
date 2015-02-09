@@ -8664,6 +8664,16 @@ let
       ];
   };
 
+  linux_3_19 = makeOverridable (import ../os-specific/linux/kernel/linux-3.19.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
@@ -8817,12 +8827,12 @@ let
   };
 
   # The current default kernel / kernel modules.
-  linux = linuxPackages.kernel;
   linuxPackages = linuxPackages_3_14;
+  linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linux_latest = pkgs.linux_3_18;
-  linuxPackages_latest = pkgs.linuxPackages_3_18;
+  linuxPackages_latest = pkgs.linuxPackages_3_19;
+  linux_latest = linuxPackage_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
@@ -8833,6 +8843,7 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
+  linuxPackages_3_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_19 linuxPackages_3_19);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
                            let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
