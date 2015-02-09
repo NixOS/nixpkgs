@@ -382,6 +382,17 @@ rec {
     packageRequires = [ async ];
   });
 
+  hi2 = melpa.mkDerivation (self: {
+    pname   = "hi2";
+    version = "1.0";
+    src = fetchFromGitHub {
+      owner  = "nilcons";
+      repo   = self.pname;
+      rev    = self.version;
+      sha256 = "1s08sgbh5v59lqskd0s1dscs6dy7z5mkqqkabs3gd35agbfvbmlf";
+    };
+  });
+
   idris-mode = melpa.mkDerivation (self: {
     pname   = "idris-mode";
     version = "0.9.15";
