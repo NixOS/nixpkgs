@@ -7,6 +7,8 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
 
+# Stop LVM complaining about fd3
+export LVM_SUPPRESS_FD_WARNINGS=true
 
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
@@ -347,7 +349,8 @@ while read -u 3 mountPoint; do
     # that we don't properly recognise.
     if test -z "$pseudoDevice" -a ! -e $device; then
         echo -n "waiting for device $device to appear..."
-        for try in $(seq 1 20); do
+        try=20
+        while [ $try -gt 0 ]; do
             sleep 1
             # also re-try lvm activation now that new block devices might have appeared
             lvm vgchange -ay
@@ -355,8 +358,12 @@ while read -u 3 mountPoint; do
             udevadm trigger --action=add
             if test -e $device; then break; fi
             echo -n "."
+            try=$((try - 1))
         done
         echo
+        if [ $try -eq 0 ]; then
+          echo "Timed out waiting for device $device, trying to mount anyway."
+        fi
     fi
 
     # Wait once more for the udev queue to empty, just in case it's
