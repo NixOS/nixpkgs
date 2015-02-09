@@ -1,49 +1,23 @@
-{ stdenv, lib, go_1_3, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
-let
-  goDeps = [
-    {
-      root = "github.com/mitchellh/gox";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "gox";
-        rev = "c7329055e2aeb253a947e5cc876586ff4ca19199";
-        sha256 = "0zhb88jjxqn3sdc4bpzvajqvgi9igp5gk03q12gaksaxhy2wl4jy";
-      };
-    }
-    {
-      root = "github.com/mitchellh/iochan";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "iochan";
-        rev = "b584a329b193e206025682ae6c10cdbe03b0cd77";
-        sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
-      };
-    }
-  ];
-  sources = stdenv.mkDerivation rec {
-    name = "go-deps";
-    buildCommand =
-      lib.concatStrings
-        (map (dep: ''
-                mkdir -p $out/src/`dirname ${dep.root}`
-                ln -s ${dep.src} $out/src/${dep.root}
-              '') goDeps);
+with goPackages;
+
+buildGoPackage rec {
+  rev = "c7329055e2aeb253a947e5cc876586ff4ca19199";
+  name = "gox-${lib.strings.substring 0 7 rev}";
+  goPackagePath = "github.com/mitchellh/gox";
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "mitchellh";
+    repo = "gox";
+    sha256 = "0zhb88jjxqn3sdc4bpzvajqvgi9igp5gk03q12gaksaxhy2wl4jy";
   };
-in
 
-stdenv.mkDerivation rec {
-  name = "gox";
+  buildInputs = [ iochan ];
 
-  src = sources;
+  propagatedBuildInputs = [ go ];
 
-  propagatedBuildInputs = [ go_1_3 ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    export GOPATH=$src
-    go build -v -o $out/bin/gox github.com/mitchellh/gox
-  '';
+  dontInstallSrc = true;
 
   meta = with lib; {
     description = "A simple, no-frills tool for Go cross compilation that behaves a lot like standard go build";

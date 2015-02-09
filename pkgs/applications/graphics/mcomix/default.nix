@@ -2,14 +2,12 @@
 
 buildPythonPackage rec {
     namePrefix = "";
-    name = "mcomix-1.00";
+    name = "mcomix-1.01";
 
     src = fetchurl {
       url = "mirror://sourceforge/mcomix/${name}.tar.bz2";
-      sha256 = "1phcdx1agacdadz8bvbibdbps1apz8idi668zmkky5cpl84k2ifq";
+      sha256 = "0k3pqbvk08kb1nr0qldaj9bc7ca6rvcycgfi2n7gqmsirq5kscys";
     };
-
-    doCheck = false;
 
     pythonPath = [ pygtk pil python27Packages.sqlite3 ];
 

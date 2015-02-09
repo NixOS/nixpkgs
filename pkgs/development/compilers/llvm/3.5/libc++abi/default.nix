@@ -1,23 +1,29 @@
-{ stdenv, cmake, coreutils, fetchurl, libcxx, libunwind, llvm }:
+{ stdenv, cmake, fetchurl, libcxx, libunwind, llvm }:
 
-let version = "3.5.0"; in
-
-stdenv.mkDerivation {
+let
+  version = "3.5.0";
+  cmakeLists = fetchurl {
+    name   = "CMakeLists.txt";
+    url    = "http://llvm.org/svn/llvm-project/libcxxabi/trunk/CMakeLists.txt?p=217324";
+    sha256 = "10idgcbs4pcx6mjsbq1vjm8hzqqdk2p7k86cw9f473jmfyfwgf5j";
+  };
+in stdenv.mkDerivation {
   name = "libc++abi-${version}";
 
   src = fetchurl {
-    url = "http://llvm.org/releases/${version}/libcxxabi-${version}.src.tar.xz";
+    url    = "http://llvm.org/releases/${version}/libcxxabi-${version}.src.tar.xz";
     sha256 = "1ndcpw3gfrzh7m1jac2qadhkrqgvb65cns69j9niydyj5mmbxijk";
   };
 
-  NIX_CFLAGS_LINK = "-L${libunwind}/lib";
-
-  buildInputs = [ coreutils cmake llvm ];
+  buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin) libunwind;
 
   postUnpack = ''
     unpackFile ${libcxx.src}
-    export NIX_CFLAGS_COMPILE+=" -I${libunwind}/include -I$PWD/include"
-    export cmakeFlags="-DLIBCXXABI_LIBCXX_INCLUDES=$(${coreutils}/bin/readlink -f libcxx-*)/include"
+    unpackFile ${llvm.src}
+    echo cp ${cmakeLists} libcxxabi-*/CMakeLists.txt
+    cp ${cmakeLists} libcxxabi-*/CMakeLists.txt
+    export NIX_CFLAGS_COMPILE+=" -I$PWD/include"
+    export cmakeFlags="-DLLVM_PATH=$PWD/$(ls -d llvm-*) -DLIBCXXABI_LIBCXX_INCLUDES=$PWD/$(ls -d libcxx-*)/include"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export TRIPLE=x86_64-apple-darwin
   '';
@@ -38,7 +44,7 @@ stdenv.mkDerivation {
     else ''
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.so.1.0 $out/lib
-      install -m 644 ../include/cxxabi.h $out/include
+      install -m 644 $src/include/cxxabi.h $out/include
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
     '';

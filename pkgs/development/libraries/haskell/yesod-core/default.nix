@@ -3,18 +3,18 @@
 { cabal, aeson, async, autoUpdate, blazeBuilder, blazeHtml
 , blazeMarkup, caseInsensitive, cereal, clientsession, conduit
 , conduitExtra, cookie, dataDefault, deepseq, exceptions
-, fastLogger, hspec, httpTypes, HUnit, liftedBase, monadControl
-, monadLogger, mtl, mwcRandom, network, parsec, pathPieces
-, primitive, QuickCheck, random, resourcet, safe, shakespeare
-, streamingCommons, text, time, transformers, transformersBase
-, unixCompat, unorderedContainers, vector, wai, waiExtra, waiLogger
-, warp, word8
+, fastLogger, hspec, hspecExpectations, httpTypes, HUnit
+, liftedBase, monadControl, monadLogger, mtl, mwcRandom, network
+, parsec, pathPieces, primitive, QuickCheck, random, resourcet
+, safe, shakespeare, streamingCommons, text, time, transformers
+, transformersBase, unixCompat, unorderedContainers, vector, wai
+, waiExtra, waiLogger, warp, word8
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.4.6";
-  sha256 = "1xlqqiyn2p0c1qxrkx0mlkp4cra0adhlpw27y03icvj0c93xi27g";
+  version = "1.4.7.2";
+  sha256 = "0k6zsjds594zy0cvnryz071nis3zmv1sjiyn14cc80j0rvjll46y";
   buildDepends = [
     aeson autoUpdate blazeBuilder blazeHtml blazeMarkup caseInsensitive
     cereal clientsession conduit conduitExtra cookie dataDefault
@@ -25,11 +25,11 @@ cabal.mkDerivation (self: {
     word8
   ];
   testDepends = [
-    async blazeBuilder conduit conduitExtra hspec httpTypes HUnit
-    liftedBase mwcRandom network pathPieces QuickCheck random resourcet
-    shakespeare streamingCommons text transformers wai waiExtra
+    async blazeBuilder clientsession conduit conduitExtra cookie hspec
+    hspecExpectations httpTypes HUnit liftedBase mwcRandom network
+    pathPieces QuickCheck random resourcet shakespeare streamingCommons
+    text transformers wai waiExtra
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

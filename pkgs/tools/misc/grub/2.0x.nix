@@ -1,20 +1,24 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
-, linuxPackages ? null
+, zfs ? null
 , efiSupport ? false
-, zfsSupport ? false
+, zfsSupport ? true
 }:
 
 with stdenv.lib;
 let
+  pcSystems = {
+    "i686-linux".target = "i386";
+    "x86_64-linux".target = "i386";
+  };
+
   efiSystems = {
     "i686-linux".target = "i386";
     "x86_64-linux".target = "x86_64";
   };
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
-
-  prefix = "grub${if efiSupport then "-efi" else ""}${optionalString zfsSupport "-zfs"}";
+  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   version = "2.02-git-1de3a4";
 
@@ -32,10 +36,10 @@ let
 in (
 
 assert efiSupport -> canEfi;
-assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
+assert zfsSupport -> zfs != null;
 
 stdenv.mkDerivation rec {
-  name = "${prefix}-${version}";
+  name = "grub-${version}";
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu
-    ++ optional zfsSupport linuxPackages.zfs;
+    ++ optional zfsSupport zfs;
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -81,6 +85,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
+
+  # save target that grub is compiled for
+  grubTarget = if efiSupport
+               then "${efiSystems.${stdenv.system}.target}-efi"
+               else if inPCSystems
+                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    else "";
 
   doCheck = false;
   enableParallelBuilding = true;

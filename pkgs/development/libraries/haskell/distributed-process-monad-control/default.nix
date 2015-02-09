@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "distributed-process-monad-control";
-  version = "0.5.0";
-  sha256 = "1ja6xwdpssm7wafv2id6c3f49iw7pkks2smk6l1n1dxkh029z8nk";
+  version = "0.5.1";
+  sha256 = "01sdzmb8izsycxshhsg0pbx0mgn10y41df1dj1s66ish0qszw07m";
   buildDepends = [
     distributedProcess monadControl transformers transformersBase
   ];

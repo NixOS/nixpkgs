@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-client";
-  version = "0.4.0.1";
-  sha256 = "1bn2kgyr6q0wxlp3kman20wn7jgz5dc6m8rq5xf0mknpbh8rrnpc";
+  version = "0.4.0.5";
+  sha256 = "11rsy9an7ck94ijafqd2ddichz0xgb01w2ybyg3iiwy5ckiy384s";
   buildDepends = [
     aesonUtils caseInsensitive dataDefault exceptionTransformers
     httpConduit httpTypes hxt hxtPickleUtils monadControl mtl primitive

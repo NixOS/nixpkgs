@@ -21,6 +21,11 @@ stdenv.mkDerivation {
 
   patches = [ ./clang-purity.patch ];
 
+  postPatch = ''
+    sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp
+    sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/ToolChains.cpp
+  '';
+
   # Clang expects to find LLVMgold in its own prefix
   # Clang expects to find sanitizer libraries in its own prefix
   postInstall = ''

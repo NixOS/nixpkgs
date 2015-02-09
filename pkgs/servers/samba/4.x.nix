@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl_ns
 , docbook_xml_dtd_42, readline, talloc, ntdb, tdb, tevent, ldb, popt, iniparser
-, pythonPackages
+, pythonPackages, libbsd
 
 # source3/wscript optionals
 , heimdal ? null # Samba only supports heimdal for kerberos although mit-krb5 is being worked on
@@ -31,14 +31,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "samba-4.1.14";
+  name = "samba-4.1.16";
 
   src = fetchurl {
-    urls = [
-      "http://samba.org/samba/ftp/stable/${name}.tar.gz"
-      "http://distfiles.exherbo.org/distfiles/${name}.tar.gz"
-    ];
-    sha256 = "1ficvglapxcw4zrgwkmmjbprsqrxks3ii29nblsr4wlrram4p8ay";
+    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
+    sha256 = "0yx840qg5q6syq81439v3pbwawacm7nwnnvph85za9gsgcb9r80j";
   };
 
   patches = [ ./4.x-no-persistent-install.patch ];
@@ -46,6 +43,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python pkgconfig perl libxslt docbook_xsl_ns docbook_xml_dtd_42
     readline talloc ntdb tdb tevent ldb popt iniparser pythonPackages.subunit
+    libbsd
 
     heimdal openldap cups pam avahi acl libaio fam ctdb ceph glusterfs
 

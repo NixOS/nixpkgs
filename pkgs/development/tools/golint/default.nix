@@ -1,23 +1,22 @@
-{ stdenv, lib, go_1_3, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "golint";
+with goPackages;
 
-  src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+buildGoPackage rec {
+  rev = "8ca23475bcb43213a55dd8210b69363f6b0e09c1";
+  name = "golint-${lib.strings.substring 0 7 rev}";
+  goPackagePath = "github.com/golang/lint";
+
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "golang";
+    repo = "lint";
+    sha256 = "16wbykik6dw3x9s7iqi4ln8kvzsh3g621wb8mk4nfldw7lyqp3cs";
   };
 
-  buildInputs = [ go_1_3 ];
+  subPackages = [ "golint" ];
 
-  buildPhase = ''
-    export GOPATH=$src
-    go build -v -o lint github.com/golang/lint/golint
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv lint $out/bin/golint
-  '';
+  dontInstallSrc = true;
 
   meta = with lib; {
     description = "Linter for Go source code";

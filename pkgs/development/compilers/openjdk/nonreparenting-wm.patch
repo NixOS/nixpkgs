@@ -1,0 +1,39 @@
+--- a/jdk/src/solaris/classes/sun/awt/X11/XWM.java	2014-09-06 18:41:39.018530981 -0400
++++ b/jdk/src/solaris/classes/sun/awt/X11/XWM.java	2014-09-06 18:46:43.098540372 -0400
+@@ -104,7 +104,8 @@
+         COMPIZ_WM = 12,
+         LG3D_WM = 13,
+         CWM_WM = 14,
+-        MUTTER_WM = 15;
++        MUTTER_WM = 15,
++        OTHER_NONREPARENTING_WM = 16;
+     public String toString() {
+         switch  (WMID) {
+           case NO_WM:
+@@ -596,7 +597,7 @@
+     }
+ 
+     static boolean isNonReparentingWM() {
+-        return (XWM.getWMID() == XWM.COMPIZ_WM || XWM.getWMID() == XWM.LG3D_WM || XWM.getWMID() == XWM.CWM_WM);
++        return (XWM.getWMID() == XWM.COMPIZ_WM || XWM.getWMID() == XWM.LG3D_WM || XWM.getWMID() == XWM.CWM_WM || XWM.getWMID() == XWM.OTHER_NONREPARENTING_WM);
+     }
+ 
+     /*
+@@ -786,6 +787,9 @@
+             } else if (doIsIceWM && isIceWM()) {
+                 awt_wmgr = XWM.ICE_WM;
+             }
++            else if (XToolkit.getEnv("_JAVA_AWT_WM_NONREPARENTING") != null) {
++                awt_wmgr = XWM.OTHER_NONREPARENTING_WM;
++            }
+             /*
+              * We don't check for legacy WM when we already know that WM
+              * supports WIN or _NET wm spec.
+@@ -1332,6 +1336,7 @@
+                   res = new Insets(28, 6, 6, 6);
+                   break;
+               case NO_WM:
++              case OTHER_NONREPARENTING_WM:
+               case LG3D_WM:
+                   res = zeroInsets;
+                   break;

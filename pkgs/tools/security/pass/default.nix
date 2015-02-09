@@ -1,22 +1,21 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
 , makeWrapper
-, withX ? true, xclip ? null, xdotool ? null
+, withX ? true, xclip, xdotool, dmenu
 }:
 
 assert withX -> xclip != null;
 assert withX -> xdotool != null;
+assert withX -> dmenu != null;
 
 stdenv.mkDerivation rec {
-  version = "1.6.3";
+  version = "1.6.5";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "1xs00c7ffqd0093i452kryw9sjip6dkp1pclx69zihb5l45d86fl";
+    sha256 = "05bk3lrp5jwg0v338lvylp7glpliydzz4jf5pjr6k3kagrv3jyik";
   };
-
-  patches = [ ./darwin-getopt.patch ];
 
   buildInputs = [ makeWrapper ];
 
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
 
     ${if withX then ''
       wrapProgram $out/bin/passmenu \
-        --prefix PATH : "$out/bin:${xdotool}/bin"
+        --prefix PATH : "$out/bin:${xdotool}/bin:${dmenu}/bin"
     '' else ""}
   '';
 }

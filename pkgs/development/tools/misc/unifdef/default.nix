@@ -1,24 +1,27 @@
 { fetchurl, stdenv }:
 
-stdenv.mkDerivation {
-  name = "unifdef-1.0";
+stdenv.mkDerivation rec {
+  name = "unifdef-2.6";
 
   src = fetchurl {
-    url = http://www.cs.cmu.edu/~ajw/public/dist/unifdef-1.0.tar.gz;
-    sha256 = "1bcxq7qgf6r98m6l277fx6s0gn9sr4vn7f3s0r5mwx79waqk0k6i";
+    url    = "https://github.com/fanf2/unifdef/archive/${name}.tar.gz";
+    sha256 = "1p5wr5ms9w8kijy9h7qs1mz36dlavdj6ngz2bks588w7a20kcqxj";
   };
 
-  buildPhase = ''
-    make unifdef
+  postUnpack = ''
+    substituteInPlace $sourceRoot/unifdef.c \
+      --replace '#include "version.h"' ""
+
+    substituteInPlace $sourceRoot/Makefile \
+      --replace "unifdef.c: version.h" "unifdef.c:"
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp unifdef $out/bin
+  preBuild = ''
+    unset HOME
+    export DESTDIR=$out
   '';
 
   meta = {
-    description = "useful for removing #ifdef'ed lines from a file while otherwise leaving the file alone";
-
+    description = "Selectively remove C preprocessor conditionals";
   };
 }

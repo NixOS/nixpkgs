@@ -1,23 +1,21 @@
-{ stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "gocode";
+with goPackages;
 
-  src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+buildGoPackage rec {
+  rev = "9b760fdb16f18eafbe0cd274527efd2bd89dfa78";
+  name = "gocode-${lib.strings.substring 0 7 rev}";
+  goPackagePath = "github.com/nsf/gocode";
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "nsf";
+    repo = "gocode";
+    sha256 = "0d1wl0x8jkaav6lcfzs70cr6gy0p88cbk5n3p19l6d0h9xz464ax";
   };
 
-  buildInputs = [ go ];
+  subPackages = [ "./" ];
 
-  buildPhase = ''
-    export GOPATH=$src
-    go build -v -o gocode github.com/nsf/gocode
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv gocode $out/bin
-  '';
+  dontInstallSrc = true;
 
   meta = with lib; {
     description = "An autocompletion daemon for the Go programming language";

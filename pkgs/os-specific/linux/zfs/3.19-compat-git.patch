@@ -1,0 +1,146 @@
+From 5a562310d706c3c2f2adc067fe73f1061c4fc386 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@higgsboson.tk>
+Date: Sat, 7 Feb 2015 13:41:01 +0100
+Subject: [PATCH] Linux 3.19 compat: file_inode was added
+
+struct access f->f_dentry->d_inode was replaced by accessor function
+file_inode(f)
+---
+ config/kernel-file-inode.m4 | 20 ++++++++++++++++++++
+ config/kernel.m4            |  1 +
+ include/linux/Makefile.am   |  1 +
+ include/linux/fs_compat.h   | 38 ++++++++++++++++++++++++++++++++++++++
+ include/sys/zpl.h           |  1 +
+ module/zfs/zpl_file.c       |  4 ++--
+ 6 files changed, 63 insertions(+), 2 deletions(-)
+ create mode 100644 config/kernel-file-inode.m4
+ create mode 100644 include/linux/fs_compat.h
+
+diff --git a/config/kernel-file-inode.m4 b/config/kernel-file-inode.m4
+new file mode 100644
+index 0000000..13af4e6
+--- /dev/null
++++ b/config/kernel-file-inode.m4
+@@ -0,0 +1,20 @@
++dnl #
++dnl # 3.19 API change
++dnl # struct access f->f_dentry->d_inode was replaced by accessor function
++dnl # file_inode(f)
++dnl #
++AC_DEFUN([ZFS_AC_KERNEL_FILE_INODE], [
++	AC_MSG_CHECKING([whether file_inode() is available])
++	ZFS_LINUX_TRY_COMPILE([
++		#include <linux/fs.h>
++	],[
++		struct file *f = NULL;
++		file_inode(f);
++	],[
++		AC_MSG_RESULT(yes)
++		AC_DEFINE(HAVE_FILE_INODE, 1,
++		          [file_inode() is available])
++	],[
++		AC_MSG_RESULT(no)
++	])
++])
+diff --git a/config/kernel.m4 b/config/kernel.m4
+index bdfb19c..e0b7954 100644
+--- a/config/kernel.m4
++++ b/config/kernel.m4
+@@ -61,6 +61,7 @@ AC_DEFUN([ZFS_AC_CONFIG_KERNEL], [
+ 	ZFS_AC_KERNEL_INODE_OPERATIONS_GET_ACL
+ 	ZFS_AC_KERNEL_CURRENT_UMASK
+ 	ZFS_AC_KERNEL_SHOW_OPTIONS
++	ZFS_AC_KERNEL_FILE_INODE
+ 	ZFS_AC_KERNEL_FSYNC
+ 	ZFS_AC_KERNEL_EVICT_INODE
+ 	ZFS_AC_KERNEL_DIRTY_INODE_WITH_FLAGS
+diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
+index d00b1c8..480af26 100644
+--- a/include/linux/Makefile.am
++++ b/include/linux/Makefile.am
+@@ -4,6 +4,7 @@ KERNEL_H = \
+ 	$(top_srcdir)/include/linux/dcache_compat.h \
+ 	$(top_srcdir)/include/linux/xattr_compat.h \
+ 	$(top_srcdir)/include/linux/vfs_compat.h \
++	$(top_srcdir)/include/linux/fs_compat.h \
+ 	$(top_srcdir)/include/linux/blkdev_compat.h \
+ 	$(top_srcdir)/include/linux/utsname_compat.h
+ 
+diff --git a/include/linux/fs_compat.h b/include/linux/fs_compat.h
+new file mode 100644
+index 0000000..7860d75
+--- /dev/null
++++ b/include/linux/fs_compat.h
+@@ -0,0 +1,38 @@
++/*
++ * CDDL HEADER START
++ *
++ * The contents of this file are subject to the terms of the
++ * Common Development and Distribution License (the "License").
++ * You may not use this file except in compliance with the License.
++ *
++ * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
++ * or http://www.opensolaris.org/os/licensing.
++ * See the License for the specific language governing permissions
++ * and limitations under the License.
++ *
++ * When distributing Covered Code, include this CDDL HEADER in each
++ * file and include the License file at usr/src/OPENSOLARIS.LICENSE.
++ * If applicable, add the following below this CDDL HEADER, with the
++ * fields enclosed by brackets "[]" replaced with your own identifying
++ * information: Portions Copyright [yyyy] [name of copyright owner]
++ *
++ * CDDL HEADER END
++ */
++
++/*
++ * Copyright (C) 2015 Jörg Thalheim.
++ */
++
++#ifndef _ZFS_FS_H
++#define	_ZFS_FS_H
++
++#include <linux/fs.h>
++
++#ifndef HAVE_FILE_INODE
++static inline struct inode *file_inode(const struct file *f)
++{
++    return f->f_dentry->d_inode;
++}
++#endif /* HAVE_FILE_INODE */
++
++#endif /* _ZFS_FS_H */
+diff --git a/include/sys/zpl.h b/include/sys/zpl.h
+index 3fc5d97..20eb27b 100644
+--- a/include/sys/zpl.h
++++ b/include/sys/zpl.h
+@@ -31,6 +31,7 @@
+ #include <linux/exportfs.h>
+ #include <linux/falloc.h>
+ #include <linux/file_compat.h>
++#include <linux/fs_compat.h>
+ #include <linux/task_io_accounting_ops.h>
+ #include <linux/vfs_compat.h>
+ #include <linux/writeback.h>
+diff --git a/module/zfs/zpl_file.c b/module/zfs/zpl_file.c
+index 1f4f219..5f5bbba 100644
+--- a/module/zfs/zpl_file.c
++++ b/module/zfs/zpl_file.c
+@@ -617,7 +617,7 @@ zpl_fallocate(struct file *filp, int mode, loff_t offset, loff_t len)
+ static int
+ zpl_ioctl_getflags(struct file *filp, void __user *arg)
+ {
+-	struct inode *ip = filp->f_dentry->d_inode;
++	struct inode *ip = file_inode(filp);
+ 	unsigned int ioctl_flags = 0;
+ 	uint64_t zfs_flags = ITOZ(ip)->z_pflags;
+ 	int error;
+@@ -653,7 +653,7 @@ zpl_ioctl_getflags(struct file *filp, void __user *arg)
+ static int
+ zpl_ioctl_setflags(struct file *filp, void __user *arg)
+ {
+-	struct inode	*ip = filp->f_dentry->d_inode;
++	struct inode	*ip = file_inode(filp);
+ 	uint64_t	zfs_flags = ITOZ(ip)->z_pflags;
+ 	unsigned int	ioctl_flags;
+ 	cred_t		*cr = CRED();
