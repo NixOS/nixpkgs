@@ -8,7 +8,7 @@
 , meta ? {}, ... } @ args:
 
 go.stdenv.mkDerivation ( args // {
-  name = "${go.name}-${name}";
+  name = "go${go.meta.branch}-${name}";
   buildInputs = [ go ] ++ buildInputs;
 
   configurePhase = args.configurePhase or ''
