@@ -459,6 +459,13 @@ self: super: {
   # Upstream notified by e-mail.
   MonadCompose = markBrokenVersion "0.2.0.0" super.MonadCompose;
 
+  # Make distributed-process-platform compile until next version
+  distributed-process-platform = overrideCabal super.distributed-process-platform (drv: {
+    patchPhase = "mv Setup.hs Setup.lhs";
+    doCheck = false;
+    doHaddock = false;
+  });
+
 } // {
 
   # Not on Hackage.
