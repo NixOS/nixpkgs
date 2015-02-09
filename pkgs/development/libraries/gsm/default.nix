@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/includes,' -i Makefile
-    mkdir -p "$out/"{bin,lib,man/man1,man/man3,include}
+    sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
+    mkdir -p "$out/"{bin,lib,man/man1,man/man3,include/gsm}
     makeFlags="$makeFlags INSTALL_ROOT=$out"
   '';
 
