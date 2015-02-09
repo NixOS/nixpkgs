@@ -8832,7 +8832,7 @@ let
 
   # Update this when adding the newest kernel major version!
   linuxPackages_latest = pkgs.linuxPackages_3_19;
-  linux_latest = linuxPackage_latest.kernel;
+  linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
