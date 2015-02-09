@@ -37,7 +37,7 @@ self: super: {
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
   # These changes are required to support Darwin.
-  git-annex = super.git-annex.override {
+  git-annex = (disableSharedExecutables super.git-annex).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -151,8 +151,9 @@ self: super: {
   wizards = doJailbreak super.wizards;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
+  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
+  gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
 
   # https://github.com/jgm/zip-archive/issues/21
   zip-archive = addBuildTool super.zip-archive pkgs.zip;
@@ -187,15 +188,19 @@ self: super: {
   HList = dontCheck super.HList;
   memcached-binary = dontCheck super.memcached-binary;
   postgresql-simple = dontCheck super.postgresql-simple;
+  postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
+  amqp = dontCheck super.amqp;
+  amqp-conduit = dontCheck super.amqp-conduit;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
+  hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
@@ -205,6 +210,7 @@ self: super: {
   network-transport-tcp = dontCheck super.network-transport-tcp;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
+  slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
@@ -368,9 +374,6 @@ self: super: {
   # https://github.com/chrisdone/hindent/issues/83
   hindent = dontCheck super.hindent;
 
-  # https://github.com/begriffs/postgrest/issues/127
-  postgrest = dontDistribute super.postgrest;
-
   # Needs older versions of its dependencies.
   structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
     haskell-src-exts = self.haskell-src-exts_1_15_0_1;  # https://github.com/chrisdone/structured-haskell-mode/issues/90
@@ -416,15 +419,8 @@ self: super: {
   # https://github.com/haskell-hub/hub-src/issues/24
   hub = markBrokenVersion "1.4.0" super.hub;
 
-  # https://github.com/audreyt/MoeDict.hs/issues/1
-  MoeDict = markBrokenVersion "0.0.1" super.MoeDict;
-
   # https://github.com/pixbi/duplo/issues/25
   duplo = dontCheck super.duplo;
-
-  # https://github.com/seagreen/hjsonschema/issues/4
-  # https://github.com/seagreen/hjsonschema/issues/5
-  hjsonschema = dontHaddock (dontCheck super.hjsonschema);
 
   # Nix-specific workaround
   xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
@@ -434,6 +430,34 @@ self: super: {
 
   # https://github.com/d12frosted/CanonicalPath/issues/3
   system-canonicalpath = dontCheck super.system-canonicalpath;
+
+  # https://github.com/basvandijk/threads/issues/10
+  threads = dontCheck super.threads;
+
+  # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
+  liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
+
+  # LLVM 3.5 breaks GHC: https://ghc.haskell.org/trac/ghc/ticket/9142.
+  GlomeVec = super.GlomeVec.override { llvm = pkgs.llvm_34; };  # https://github.com/jimsnow/glome/issues/2
+  gloss-raster = super.gloss-raster.override { llvm = pkgs.llvm_34; };
+  repa-examples = super.repa-examples.override { llvm = pkgs.llvm_34; };
+
+  # Upstream notified by e-mail.
+  OpenGLRaw21 = markBrokenVersion "1.2.0.1" super.OpenGLRaw21;
+
+  # Missing module.
+  rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
+  rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
+
+  # Missing files in the test suite stanza.
+  Rasterific = dontCheck super.Rasterific;              # https://github.com/Twinside/Rasterific/issues/19
+  rasterific-svg = dontCheck super.rasterific-svg;      # https://github.com/Twinside/rasterific-svg/issues/1
+
+  # https://github.com/utdemir/handsy/issues/5
+  handsy = dontCheck super.handsy;
+
+  # Upstream notified by e-mail.
+  MonadCompose = markBrokenVersion "0.2.0.0" super.MonadCompose;
 
 } // {
 

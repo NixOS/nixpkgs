@@ -6,9 +6,9 @@ chrootenvDest=/run/chrootenv/@name@
 rmdir $chrootenvDest/{dev,nix/store,nix,proc,sys,host-etc,home,var,run,tmp}
 
 # Remove symlinks to the software that should be part of the chroot system profile
-for i in @chrootEnv@/sw/*
+for i in @chrootEnv@/*
 do
-    if [ "$i" != "@chrootEnv@/sw/etc" ] && [ "$i" != "@chrootEnv@/sw/var" ]
+    if [ "$i" != "@chrootEnv@/etc" ] && [ "$i" != "@chrootEnv@/var" ]
     then
         rm $chrootenvDest/$(basename $i)
     fi

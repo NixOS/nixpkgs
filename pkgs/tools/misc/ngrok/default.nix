@@ -1,42 +1,43 @@
-{ stdenv, lib, go, go-bindata, fetchgit, fetchbzr, fetchhg, fetchFromGitHub }:
+{ stdenv, git, fetchFromGitHub, goPackages }:
 
-let deps = import ./deps.nix {
-  inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
-};
-in stdenv.mkDerivation rec {
-  name = "ngrok-${version}";
-  version = "1.7";
+with goPackages;
 
-  buildInputs = [ go go-bindata ];
+buildGoPackage rec {
+  name = "ngrok-1.7";
+  goPackagePath = "ngrok";
 
-  unpackPhase = ''
-    export GOPATH=$(pwd)
-    cp -LR ${deps}/src src
-    chmod u+w -R src
-    sourceRoot=src/github.com/inconshreveable/ngrok
+  src = fetchFromGitHub {
+    rev = "b7d5571aa7f12ac304b8f8286b855cc64dd9bab8";
+    owner = "inconshreveable";
+    repo = "ngrok";
+    sha256 = "0a5iq9l9f2xdg6gnc9pj0iczhycv1w5iwcqgzzap83xfpy01xkh4";
+  };
+
+  subPackages = [ "main/ngrok" "main/ngrokd" ];
+
+  preConfigure = ''
+    sed -e '/jteeuwen\/go-bindata/d' \
+        -e '/export GOPATH/d' \
+        -e 's/go get/#go get/' \
+        -e 's|bin/go-bindata|go-bindata|' -i Makefile
+    make assets BUILDTAGS=release
+    export sourceRoot=$sourceRoot/src/ngrok
   '';
 
-  preBuild = ''
-    export HOME=$(pwd)
-    export GOPATH=$(pwd):$GOPATH
+  buildInputs = [ git log4go websocket go-vhost mousetrap termbox-go rcrowley.go-metrics
+                  yaml-v1 go-bindata go-update binarydist osext ];
 
-    # don't download dependencies as we already have them
-    sed -i '/jteeuwen\/go-bindata/d' Makefile
-    sed -i '/export GOPATH/d' Makefile
-    sed -i 's|bin/go-bindata|go-bindata|' Makefile
-  '';
+  buildFlags = "-tags release";
 
-  installPhase = ''
-    make release-client release-server
-    mkdir -p $out/bin
-    cp bin/ngrok{d,} $out/bin
-  '';
+  dontInstallSrc = true;
 
-  meta = with lib; {
-    description = "Reverse proxy that creates a secure tunnel between from a public endpoint to a locally running web service";
+  meta = with stdenv.lib; {
+    description = "Reverse proxy that creates a secure tunnel between from a public endpoint t
+o a locally running web service";
     homepage = https://ngrok.com/;
     license = licenses.asl20;
     maintainers = with maintainers; [ iElectric cstrahan ];
     platforms = with platforms; linux ++ darwin;
   };
+
 }

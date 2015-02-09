@@ -6,12 +6,12 @@
 
 cabal.mkDerivation (self: {
   pname = "list-t";
-  version = "0.3.0";
-  sha256 = "091gz47gisajd2p0iwx0mw99bivfl7wpyddg1ypsvjv2qax94cm9";
+  version = "0.4.2";
+  sha256 = "0n6zc7n5znjas9mgh3a9bn44xv55910i6c3b2l83n4pl9fnad03v";
   buildDepends = [
     basePrelude mmorph monadControl transformers transformersBase
   ];
-  testDepends = [ basePrelude HTF mtlPrelude ];
+  testDepends = [ basePrelude HTF mmorph mtlPrelude ];
   meta = {
     homepage = "https://github.com/nikita-volkov/list-t";
     description = "ListT done right";

@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://darwinsys.com/file";
     description = "A program that shows the type of files";
-    platforms = with stdenv.lib.platforms; allBut darwin;
+    platforms = stdenv.lib.platforms.all;
   };
 }

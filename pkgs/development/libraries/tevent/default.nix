@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "tevent-0.9.22";
 
   src = fetchurl {
-    url = "http://samba.org/ftp/tevent/${name}.tar.gz";
+    url = "mirror://samba/tevent/${name}.tar.gz";
     sha256 = "0myyi3lwsi6f3f0a5qw8rjpm2d5yf18pw4vljdwyi885l411sksl";
   };
 

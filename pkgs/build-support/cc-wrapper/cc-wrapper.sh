@@ -79,6 +79,13 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
     params=("${rest[@]}")
 fi
 
+if [[ "@prog@" = *++ ]]; then
+    if  echo "$@" | grep -qvw -- -nostdlib; then
+        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE"
+        NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
+    fi
+fi
+
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_CFLAGS_COMPILE)
 extraBefore=()

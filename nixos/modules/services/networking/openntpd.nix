@@ -5,10 +5,7 @@ with lib;
 let
   cfg = config.services.openntpd;
 
-  package = pkgs.openntpd.override {
-    privsepUser = "ntp";
-    privsepPath = "/var/empty";
-  };
+  package = pkgs.openntpd_nixos;
 
   cfgFile = pkgs.writeText "openntpd.conf" ''
     ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
@@ -54,6 +51,9 @@ in
   config = mkIf cfg.enable {
     services.ntp.enable = mkForce false;
 
+    # Add ntpctl to the environment for status checking
+    environment.systemPackages = [ package ];
+
     users.extraUsers = singleton {
       name = "ntp";
       uid = config.ids.uids.ntp;
@@ -64,6 +64,8 @@ in
     systemd.services.openntpd = {
       description = "OpenNTP Server";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "dnsmasq.service" "bind.service" "network-online.target" ];
       serviceConfig.ExecStart = "${package}/sbin/ntpd -d -f ${cfgFile} ${cfg.extraOptions}";
     };
   };

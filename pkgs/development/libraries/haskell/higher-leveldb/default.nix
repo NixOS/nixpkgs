@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "higher-leveldb";
-  version = "0.2.0.0";
-  sha256 = "1al8l96ysmcjx3g93ryfr939jqhjqk8g5bvww5gj9mx6pdkqrcm3";
+  version = "0.2.1.0";
+  sha256 = "13bwh9jg7smh8vwgrih79ivi073690l9nn478r5m0w64gbkvdm5p";
   buildDepends = [
     cereal dataDefault leveldbHaskell liftedBase monadControl mtl
     resourcet transformers transformersBase

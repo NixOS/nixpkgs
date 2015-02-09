@@ -26,5 +26,7 @@ cabal.mkDerivation (self: {
     description = "SuperCollider server resource management and synchronization";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

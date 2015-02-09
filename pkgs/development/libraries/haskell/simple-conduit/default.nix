@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     primitive semigroups stm streamingCommons text transformers
     transformersBase vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jwiegley/simple-conduit";
     description = "A simple streaming I/O library based on monadic folds";

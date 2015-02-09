@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "dnscrypt-proxy-1.4.1";
+  name = "dnscrypt-proxy-1.4.3";
 
   src = fetchurl {
     url = "http://download.dnscrypt.org/dnscrypt-proxy/${name}.tar.bz2";
-    sha256 = "00cf5c520c8a5a71ad4916b33aa0c8f9f55434039304f4ba10d7fffc620563f8";
+    sha256 = "0cij80ryxnikpmm6s79c2fqg6bdiz1wdy50xrnd7w954vw9mhr0b";
   };
 
   buildInputs = [ libsodium ];

@@ -3,28 +3,28 @@
 stdenv.mkDerivation rec {
   name = "exercism-${version}";
 
-  version = "1.6.2";
+  version = "1.9.2";
 
   src =
     if stdenv.system == "x86_64-darwin" then
       fetchurl {
-        url = "https://github.com/exercism/cli/releases/download/v${version}/exercism-darwin-amd64.tgz";
-        sha256 = "1w9jw52nhb5mlcj6ampzwjscdr9rja5mdn5ga2r4z2qzsqzwkpm2";
+        url = "https://github.com/exercism/cli/releases/download/v${version}/exercism-mac-64bit.tgz";
+        sha256 = "01ddwblq1kqxhjv8mp8r1zy6p78p6pysf1mbsyjxw1y8skfdapnp";
       }
     else if stdenv.system == "i686-darwin" then
       fetchurl {
-        url = "https://github.com/exercism/cli/releases/download/v${version}/exercism-darwin-386.tgz";
-        sha256 = "1g5cy53mrdzq047b8hlkjrkc4bp7yhipvhf4lnw0x2jr50z73bzd";
+        url = "https://github.com/exercism/cli/releases/download/v${version}/exercism-mac-32bit.tgz";
+        sha256 = "0nkpnvbyi3c3dkw3149jiwil06x997wml844i9m0d6q1wblk0qdd";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "https://github.com/exercism/cli/releases/download/v1.6.2/exercism-linux-386.tgz";
-        sha256 = "1akdggla9kn7v4dwkyz63bp84dihcgyph546zskiyh9bz67l5liz";
+        url = "https://github.com/exercism/cli/releases/download/v${version}/exercism-linux-32bit.tgz";
+        sha256 = "0szrn28sb0w88j0kbras10wm76rsndg9j4328p01f60rabq9q3z6";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "https://github.com/exercism/cli/releases/download/v1.6.2/exercism-linux-amd64.tgz";
-        sha256 = "00kp0r9xy9bw9b2854csy35pk9sxvbivxmwiy97wl9gh0acva5ng";
+        url = "https://github.com/exercism/cli/releases/download/v${version}/exercism-linux-64bit.tgz";
+        sha256 = "17iah373ssd9313irmw27jq1a2gpxf8w3chjmgcgiarqfpyny5bz";
       }
     else throw "Platform: ${stdenv.system} not supported!";
 

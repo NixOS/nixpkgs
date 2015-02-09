@@ -63,8 +63,6 @@ stdenv.mkDerivation {
     rm -rf "$out/tools/gyp" # XXX: Don't even copy it in the first place.
   '';
 
-  preferLocalBuild = true;
-
   passthru = {
     inherit version channel;
     plugins = fetchurl binary;

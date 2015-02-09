@@ -5,6 +5,10 @@ source $stdenv/setup
 # *our* versions, not the ones found in the system, as it would do by default.
 # On other platforms, this appears to be unnecessary.
 preConfigure() {
+    for i in Makefile.in ./src/Makefile.in ./lib-src/Makefile.in ./leim/Makefile.in; do
+        substituteInPlace $i --replace /bin/pwd pwd
+    done
+
     case "${system}" in
 	x86_64-linux)	glibclibdir=lib64 ;;
 	i686-linux)	glibclibdir=lib ;;
@@ -23,7 +27,9 @@ preConfigure() {
             --replace /usr/lib/crti.o $libc/${glibclibdir}/crti.o \
             --replace /usr/lib/crtn.o $libc/${glibclibdir}/crtn.o
     done
+}
 
+preInstall () {
     for i in Makefile.in ./src/Makefile.in ./lib-src/Makefile.in ./leim/Makefile.in; do
         substituteInPlace $i --replace /bin/pwd pwd
     done

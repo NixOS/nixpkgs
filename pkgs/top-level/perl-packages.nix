@@ -227,6 +227,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ListCompare = buildPerlPackage {
+    name = "List-Compare-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.39.tar.gz;
+      sha256 = "1v4gn176faanzf1kr9axdp1220da7nkvz0d66mnk34nd0skjjxcl";
+    };
+  };
+
   ArchiveCpio = buildPerlPackage {
     name = "Archive-Cpio-0.09";
     src = fetchurl {
@@ -4745,7 +4753,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "System() and background procs w/ piping, redirs, ptys (Unix, Win32)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 
@@ -4958,7 +4966,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CommonSense ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };
   };
 

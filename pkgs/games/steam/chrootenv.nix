@@ -1,10 +1,10 @@
-{ buildFHSChrootEnv, config }:
+{ buildFHSUserEnv, config }:
 
-buildFHSChrootEnv {
+buildFHSUserEnv {
   name = "steam";
 
   targetPkgs = pkgs:
-    [ pkgs.steam
+    [ pkgs.steam-original
       pkgs.corefonts
       pkgs.curl
       pkgs.dbus
@@ -69,4 +69,6 @@ buildFHSChrootEnv {
     export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib32:/lib64
     export PATH=$PATH:/usr/bin:/usr/sbin
   '';
+
+  runScript = "exec steam";
 }

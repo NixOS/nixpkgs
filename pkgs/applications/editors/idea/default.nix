@@ -220,7 +220,7 @@ in
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
+      url = "https://download.jetbrains.com/cpp/${name}-${build}.tar.gz";
       sha256 = "1hpsq37hq61id836wg5j6l3xapln6qdkqa10r3ig2p1rs2hq7i9y";
     };
   };
@@ -232,7 +232,7 @@ in
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIC-${version}.tar.gz";
+      url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
       sha256 = "01wcpzdahkh3li2l3k2bgirnlp7hdxk9y1kyrxc3d9d1nazq8wqn";
     };
   };
@@ -244,7 +244,7 @@ in
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download-ln.jetbrains.com/idea/ideaIU-${version}.tar.gz";
+      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
       sha256 = "1zkqigdh9l1f3mjjvxsp7b7vc93v5ylvxa1dfpclzmfbzna7h69s";
     };
   };
@@ -256,7 +256,7 @@ in
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
+      url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
       sha256 = "0xsx44gaddarkw5k4yjidzwkayf2xvsxklfzdnzcck4rg4vyk4v4";
     };
   };
@@ -268,7 +268,7 @@ in
     description = "PyCharm 4.0 Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
-      url = "http://download.jetbrains.com/python/${name}.tar.gz";
+      url = "https://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "0jh0sxi5dpgpw7ga018fby7zvb4i9k49vwl8422lfcrgckdz9nv2";
     };
   };
@@ -280,7 +280,7 @@ in
     description = "PyCharm 4.0 Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download.jetbrains.com/python/${name}.tar.gz";
+      url = "https://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "04yjhg6vi2kz00sy8zg4wkz26ai90vbp0cnd850ynsab0jsy24w4";
     };
   };
@@ -292,7 +292,7 @@ in
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "http://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
+      url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
       sha256 = "01b8vx6swi71sd0rc7i1jnicilqp11ch3zrm8gwb6xh1pmmpdirf";
     };
   };
