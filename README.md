@@ -1,7 +1,7 @@
 Nixpkgs is a collection of packages for [Nix](https://nixos.org/nix/) package
 manager.
 
-[![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs) [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr)](http://www.issuestats.com/github/nixos/nixpkgs) [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue)](http://www.issuestats.com/github/nixos/nixpkgs)
+[![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs) [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr)](http://www.issuestats.com/github/nixos/nixpkgs) [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue)](http://www.issuestats.com/github/nixos/nixpkgs) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/NixOS/nixpkgs/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 [NixOS](https://nixos.org/nixos/) linux distribution source code is located inside `nixos/` folder.
 
