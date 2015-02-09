@@ -48,4 +48,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     autoreconf
   '';
+
+  passthru.grubTarget = "";
+
 }
