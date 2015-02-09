@@ -29,7 +29,7 @@ let
   grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
-      grubTarget = f grub.grubTarget;
+      grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.stdenv.shell}";
       fullVersion = (builtins.parseDrvName realGrub.name).version;
       grubEfi = f grubEfi;
