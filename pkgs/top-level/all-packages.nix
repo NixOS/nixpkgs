@@ -1753,6 +1753,8 @@ let
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
+  libxcomp = callPackage ../development/libraries/libxcomp { };
+
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
   logcheck = callPackage ../tools/system/logcheck {
@@ -2050,6 +2052,10 @@ let
   nwdiag = pythonPackages.nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
+
+  nxproxy = callPackage ../tools/admin/nxproxy { };
+
+  x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
