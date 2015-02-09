@@ -9971,6 +9971,24 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Tk = buildPerlPackage rec {
+    name = "Tk-804.032_501";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
+    };
+    makeMakerFlags = "X11LIB=${pkgs.xlibs.libX11}/lib";
+    buildInputs = with pkgs; [ xlibs.libX11 libpng ];
+    configurePhase = ''
+      perl Makefile.PL PREFIX=$out $makeMakerFlags
+    '';
+    doCheck = false;
+    meta ={
+      homepage = "http://search.cpan.org/~srezic/Tk-804.032/Tk.pod";
+      license = stdenv.lib.licenses.tcltk;
+    };
+  };
+
   TreeDAGNode = buildPerlPackage {
     name = "Tree-DAG_Node-1.09";
     src = fetchurl {
