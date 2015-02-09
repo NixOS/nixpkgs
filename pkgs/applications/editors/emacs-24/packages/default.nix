@@ -68,9 +68,10 @@ rec {
   });
   
   auto-complete = melpa.mkDerivation (self: {
-    pname = "auto-complete-1.3.1";
+    pname = "auto-complete";
+    version = "1.3.1";
     src = fetchurl {
-      url = "http://cx4a.org/pub/auto-complete/${self.pname}.tar.bz2";
+      url = "http://cx4a.org/pub/auto-complete/${self.fname}.tar.bz2";
       sha256 = "124qxfp0pcphwlmrasbfrci48brxnrzc38h4wcf2sn20x1mvcrlj";
     };
     meta = {
