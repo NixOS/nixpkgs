@@ -11798,6 +11798,10 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
+  xbindkeys-config = callPackage ../tools/X11/xbindkeys-config/default.nix {
+    gtk = gtk2;
+  };
+
   xbmcPlain = callPackage ../applications/video/xbmc {
     ffmpeg = ffmpeg_1;
   };
