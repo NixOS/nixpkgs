@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs
+, jailbreak-cabal, hscolour, cpphs, withPackagesBuilder
 }:
 
 { pname
@@ -62,9 +62,6 @@ let
                      main = defaultMain
                    '';
 
-  ghc76xOrLater = stdenv.lib.versionOlder "7.6" ghc.version;
-  packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
-
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
   enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
@@ -72,11 +69,10 @@ let
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
     "--with-gcc=$CC"            # Clang won't work without that extra information.
-    "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
-    (optionalString (useCpphs) "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (enableFeature enableSharedLibraries "shared")
@@ -86,11 +82,11 @@ let
   ];
 
   setupCompileFlags = [
-    (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
     (optionalString (versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
   ];
+  setupCompiler = if coreSetup then "${ghc}/bin/ghc" else "ghc";
 
-  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
+  isHaskellPkg = x: (x ? pname) && (x ? version);
   isSystemPkg = x: !isHaskellPkg x;
 
   propagatedBuildInputs = buildDepends;
@@ -103,7 +99,7 @@ let
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
-  ghcEnv = ghc.withPackages (p: haskellBuildInputs);
+  paths = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation allBuildInputs);
 
 in
 stdenv.mkDerivation ({
@@ -125,34 +121,16 @@ stdenv.mkDerivation ({
     runHook preSetupCompilerEnvironment
 
     echo "Building with ${ghc}."
-    export PATH="${ghc}/bin:$PATH"
+    ghcDir=$(mktemp -d)/ghc
+    local realout="$out"
+    export out=$ghcDir
+    ${withPackagesBuilder { inherit paths; ignoreCollisions = false; }}
+    export out=$realout
+
+    export PATH="$ghcDir/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
-
-    packageConfDir="$TMP/package.conf.d"
-    mkdir -p $packageConfDir
-
-    setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
-    configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
-
-    local inputClosure=""
-    for i in $propagatedNativeBuildInputs $nativeBuildInputs; do
-      findInputs $i inputClosure propagated-native-build-inputs
-    done
-    for p in $inputClosure; do
-      if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
-        cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
-        continue
-      fi
-      if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
-      fi
-      for d in lib{,64}; do
-        if [ -d "$p/$d" ]; then
-          configureFlags+=" --extra-lib-dirs=$p/$d"
-        fi
-      done
-    done
-    ghc-pkg --${packageDbFlag}="$packageConfDir" recache
+    setupCompileFlags="${stdenv.lib.concatStringsSep " " setupCompileFlags}"
+    configureFlags="${stdenv.lib.concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
     runHook postSetupCompilerEnvironment
   '';
@@ -163,7 +141,8 @@ stdenv.mkDerivation ({
     ${optionalString (editedCabalFile != null) ''
       echo "Replacing Cabal file with edited version ${newCabalFile}."
       cp ${newCabalFile} ${pname}.cabal
-    ''}${optionalString jailbreak ''
+    ''}
+    ${optionalString jailbreak ''
       echo "Running jailbreak-cabal to lift version restrictions on build inputs."
       ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
     ''}
@@ -179,7 +158,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ghc $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${setupCompiler} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -187,16 +166,12 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
-    unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
-
     echo configureFlags: $configureFlags
     ./Setup configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
       exit 1
     fi
-
-    export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
   '';
@@ -226,8 +201,8 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !hasActiveLibrary then "./Setup install" else ''
-      ./Setup copy
+    ./Setup copy
+    ${optionalString hasActiveLibrary ''
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
@@ -245,30 +220,11 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
-  passthru = passthru // {
+  shellHook = ''
+    runHook setupCompilerEnvironmentPhase
+  '';
 
-    inherit pname version;
-
-    env = stdenv.mkDerivation {
-      name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
-      nativeBuildInputs = [ ghcEnv systemBuildInputs ];
-      LANG = "en_US.UTF-8";
-      LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
-      shellHook = ''
-        export NIX_GHC="${ghcEnv}/bin/ghc"
-        export NIX_GHCPKG="${ghcEnv}/bin/ghc"
-        export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
-      '';
-      buildCommand = ''
-        echo >&2 ""
-        echo >&2 "*** Haskell 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
-        echo >&2 ""
-        exit 1
-      '';
-    };
-
-  };
+  passthru = passthru // { inherit pname version; };
 
   meta = { inherit homepage license platforms; }
          // optionalAttrs broken               { inherit broken; }
