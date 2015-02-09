@@ -8419,8 +8419,6 @@ let
 
     xcode = callPackage ../os-specific/darwin/xcode {};
 
-    libc = callPackage ../os-specific/darwin/libc {};
-
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
 
