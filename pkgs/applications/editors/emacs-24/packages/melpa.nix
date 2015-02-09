@@ -11,6 +11,11 @@ let
   optionals             = stdenv.lib.optionals;
   optionalString        = stdenv.lib.optionalString;
   filter                = stdenv.lib.filter;
+  
+  packageBuild          = fetchurl {
+    url = https://raw.githubusercontent.com/milkypostman/melpa/12a862e5c5c62ce627dab83d7cf2cca6e8b56c47/package-build.el;
+    sha256 = "1nviyyprypz7nmam9rwli4yv3kxh170glfbznryrp4czxkrjjdhk";
+  };
 
 in
 
@@ -71,7 +76,7 @@ in
             buildPhase = ''
               eval "$preBuild"
 
-              emacs --batch -Q -l ${./package-build.el} -l ${./melpa2nix.el} \
+              emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
                 -f melpa2nix-build-package \
                 ${self.pname} ${self.version} ${self.targets}
 
@@ -81,7 +86,7 @@ in
             installPhase = ''
               eval "$preInstall"
 
-              emacs --batch -Q -l ${./package-build.el} -l ${./melpa2nix.el} \
+              emacs --batch -Q -l $packageBuild -l ${./melpa2nix.el} \
                 -f melpa2nix-install-package \
                 ${self.fname}.* $out/share/emacs/site-lisp/elpa
 
@@ -90,7 +95,7 @@ in
 
             # We inherit stdenv and emacs so that they can be used
             # in melpa derivations.
-            inherit stdenv emacs texinfo;
+            inherit stdenv emacs texinfo packageBuild;
           };
     in
     stdenv.mkDerivation (postprocess (let super = defaults self // args self;
