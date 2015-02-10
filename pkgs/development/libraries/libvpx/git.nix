@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bash, perl, yasm
+{stdenv, fetchgit, perl, yasm
 , vp8Support ? true # VP8
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
@@ -13,6 +13,7 @@
 , debugSupport ? false # debug mode
 , gprofSupport ? false # gprof profiling instrumentation
 , gcovSupport ? false # gcov coverage instrumentation
+, sizeLimitSupport ? true # limit max size to allow in the decoder
 , optimizationsSupport ? true # compiler optimization flags
 , runtimeCpuDetectSupport ? true # detect cpu capabilities at runtime
 , thumbSupport ? false # build arm assembly in thumb mode
@@ -21,26 +22,32 @@
 , fastUnalignedSupport ? true # use unaligned accesses if supported by hardware
 , codecSrcsSupport ? false # codec library source code
 , debugLibsSupport ? false # include debug version of each library
-, md5Support ? true # support for output of checksum data
 , postprocSupport ? true # postprocessing
 , vp9PostprocSupport ? true # VP9 specific postprocessing
 , multithreadSupport ? true # multithreaded decoding & encoding
 , internalStatsSupport ? false # output of encoder internal stats for debug, if supported (encoders)
 , memTrackerSupport ? false # track memory usage
+, spatialResamplingSupport ? true # spatial sampling (scaling)
 , realtimeOnlySupport ? false # build for real-time encoding
 , ontheflyBitpackingSupport ? false # on-the-fly bitpacking in real-time encoding
 , errorConcealmentSupport ? false # decoder conceals losses
 , smallSupport ? false # favor smaller binary over speed
 , postprocVisualizerSupport ? false # macro block/block level visualizers
 , unitTestsSupport ? false, curl ? null, coreutils ? null # unit tests
+, webmIOSupport ? true # input from and output to webm container
+, libyuvSupport ? true # libyuv
+, decodePerfTestsSupport ? false # build decoder perf tests with unit tests
+, encodePerfTestsSupport ? false # build encoder perf tests with unit tests
 , multiResEncodingSupport ? false # multiple-resolution encoding
 , temporalDenoisingSupport ? true # use temporal denoising instead of spatial denoising
-, decryptSupport ? false
+, vp9TemporalDenoisingSupport ? true # VP9 specific temporal denoising
+, coefficientRangeCheckingSupport ? false # decoder checks if intermediate transform coefficients are in valid range
+, vp9HighbitdepthSupport ? true # 10/12 bit color support in VP9
 , experimentalSupport ? false # experimental features
 # Experimental features
-, experimentalMultipleArfSupport ? false
-, experimentalNon420Support ? false
-, experimentalAlphaSupport ? false
+, experimentalSpatialSvcSupport ? false # Spatial scalable video coding
+, experimentalFpMbStatsSupport ? false
+, experimentalEmulateHardwareSupport ? false
 }:
 
 assert (vp8Support || vp9Support);
@@ -52,14 +59,19 @@ assert vp9EncoderSupport -> vp9Support;
 assert installLibsSupport -> libsSupport;
 # libvpx will not build binaries if examplesSupport is not enabled (ie. vpxdec & vpxenc)
 assert installBinsSupport -> examplesSupport;
-assert examplesSupport -> md5Support;
 assert vp9PostprocSupport -> (vp9Support && postprocSupport);
 assert (internalStatsSupport && vp9Support) -> vp9PostprocSupport;
+/* If spatialResamplingSupport not enabled, build will fail with undeclared variable errors.
+   Variables called in vpx_scale/generic/vpx_scale.c are declared by vpx_scale/vpx_scale_rtcd.pl,
+   but is only executed if spatialResamplingSupport is enabled */
+assert spatialResamplingSupport;
 assert postprocVisualizerSupport -> postprocSupport;
 assert (postprocVisualizerSupport && vp9Support) -> vp9PostprocSupport;
 assert unitTestsSupport -> ((curl != null) && (coreutils != null));
-assert (experimentalMultipleArfSupport || experimentalNon420Support || experimentalAlphaSupport) -> experimentalSupport;
-assert stdenv.isCygwin -> unitTestsSupport;
+assert vp9TemporalDenoisingSupport -> (vp9Support && temporalDenoisingSupport);
+assert vp9HighbitdepthSupport -> vp9Support;
+assert (experimentalSpatialSvcSupport || experimentalFpMbStatsSupport || experimentalEmulateHardwareSupport) -> experimentalSupport;
+assert stdenv.isCygwin -> (unitTestsSupport && webmIOSupport && libyuvSupport);
 
 let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
@@ -67,19 +79,21 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libvpx-${version}";
-  version = "1.3.0";
+  name = "libvpx-git";
 
-  src = fetchurl {
-    url = "http://webm.googlecode.com/files/libvpx-v${version}.tar.bz2";
-    sha1 = "191b95817aede8c136cc3f3745fb1b8c50e6d5dc";
+  src = fetchgit {
+    url = "https://chromium.googlesource.com/webm/libvpx";
+  /* DO NOT under any circumstance ever just bump the git commit without
+     confirming changes have not been made to the configure system */
+    rev = "aa6db39a173a1f69d9d80e578bc5ca0a06d0bac3"; # 2015-2-6
+    sha256 = "1d6lf3hksk59f50wkjidbmbglwppl5kqwmbsbi3ba83xbbpz84yp";
   };
 
   patchPhase = ''
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ bash perl yasm ];
+  nativeBuildInputs = [ perl yasm ];
 
   buildInputs = [ ]
     ++ optional unitTestsSupport coreutils
@@ -103,7 +117,7 @@ stdenv.mkDerivation rec {
     (mkFlag gcovSupport "gcov")
     # Required to build shared libraries
     (mkFlag (!stdenv.isDarwin && !stdenv.isCygwin) "pic")
-    (mkFlag (stdenv.isx86_64 || !stdenv.isDarwin || stdenv.isCygwin) "use-x86inc")
+    (mkFlag (stdenv.isi686 || stdenv.isx86_64) "use-x86inc")
     (mkFlag optimizationsSupport "optimizations")
     (mkFlag runtimeCpuDetectSupport "runtime-cpu-detect")
     (mkFlag thumbSupport "thumb")
@@ -111,10 +125,11 @@ stdenv.mkDerivation rec {
     (mkFlag examplesSupport "examples")
     "--disable-docs"
     "--as=yasm"
+    # Limit default decoder max to WHXGA
+    (if sizeLimitSupport then "--size-limit=5120x3200" else "")
     (mkFlag fastUnalignedSupport "fast-unaligned")
     (mkFlag codecSrcsSupport "codec-srcs")
     (mkFlag debugLibsSupport "debug-libs")
-    (mkFlag md5Support "md5")
     (mkFlag stdenv.isMips "dequant-tokens")
     (mkFlag stdenv.isMips "dc-recon")
     (mkFlag postprocSupport "postproc")
@@ -122,10 +137,7 @@ stdenv.mkDerivation rec {
     (mkFlag multithreadSupport "multithread")
     (mkFlag internalStatsSupport "internal-stats")
     (mkFlag memTrackerSupport "mem-tracker")
-    /* If --enable-spatial-resampling not enabled, build will fail with undeclared variable errors.
-       Variables called in vpx_scale/generic/vpx_scale.c are declared by vpx_scale/vpx_scale_rtcd.pl,
-       but is only executed if --enable-spatial-resampling is enabled */
-    "--enable-spatial-resampling"
+    (mkFlag spatialResamplingSupport "spatial-resampling")
     (mkFlag realtimeOnlySupport "realtime-only")
     (mkFlag ontheflyBitpackingSupport "onthefly-bitpacking")
     (mkFlag errorConcealmentSupport "error-concealment")
@@ -135,14 +147,20 @@ stdenv.mkDerivation rec {
     (mkFlag smallSupport "small")
     (mkFlag postprocVisualizerSupport "postproc-visualizer")
     (mkFlag unitTestsSupport "unit-tests")
+    (mkFlag webmIOSupport "webm-io")
+    (mkFlag libyuvSupport "libyuv")
+    (mkFlag decodePerfTestsSupport "decode-perf-tests")
+    (mkFlag encodePerfTestsSupport "encode-perf-tests")
     (mkFlag multiResEncodingSupport "multi-res-encoding")
     (mkFlag temporalDenoisingSupport "temporal-denoising")
-    (mkFlag decryptSupport "decrypt")
+    (mkFlag vp9TemporalDenoisingSupport "vp9-temporal-denoising")
+    (mkFlag coefficientRangeCheckingSupport "coefficient-range-checking")
+    (mkFlag vp9HighbitdepthSupport "vp9-highbitdepth")
     (mkFlag experimentalSupport "experimental")
     # Experimental features
-    (mkFlag experimentalMultipleArfSupport "multiple-arf")
-    (mkFlag experimentalNon420Support "non420")
-    (mkFlag experimentalAlphaSupport "alpha")
+    (mkFlag experimentalSpatialSvcSupport "spatial-svc")
+    (mkFlag experimentalFpMbStatsSupport "fp-mb-stats")
+    (mkFlag experimentalEmulateHardwareSupport "emulate-hardware")
   ];
 
   enableParallelBuilding = true;
@@ -163,7 +181,8 @@ stdenv.mkDerivation rec {
       # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
       "--force-target=${stdenv.cross.config}${(
               if isDarwin then (
-                if stdenv.cross.osxMinVersion == "10.9"  then "13"
+                if      stdenv.cross.osxMinVersion == "10.10" then "14"
+                else if stdenv.cross.osxMinVersion == "10.9"  then "13"
                 else if stdenv.cross.osxMinVersion == "10.8"  then "12"
                 else if stdenv.cross.osxMinVersion == "10.7"  then "11"
                 else if stdenv.cross.osxMinVersion == "10.6"  then "10"
@@ -178,7 +197,7 @@ stdenv.mkDerivation rec {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = http://www.webmproject.org/;
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ codyopel lovek323 ];
+    maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;
   };
 }
