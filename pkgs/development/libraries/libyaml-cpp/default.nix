@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, boost }:
+{ stdenv, fetchurl, cmake, boost, makePIC ? false }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "libyaml-cpp-0.5.1";
 
   src = fetchurl {
@@ -17,4 +17,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
-}
+} // (if makePIC then {
+  cmakeFlags = [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ];
+} else {}))
