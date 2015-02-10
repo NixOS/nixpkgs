@@ -373,6 +373,12 @@ let
     inherit sha256;
   };
 
+  fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name;
+    url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
+    inherit sha256;
+  };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
@@ -8281,7 +8287,7 @@ let
   zookeeper = callPackage ../servers/zookeeper { };
 
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
-  
+
   xquartz = callPackage ../servers/x11/xquartz { };
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
@@ -8415,7 +8421,7 @@ let
     apple-source-releases = import ../os-specific/darwin/apple-source-releases { inherit stdenv fetchurl pkgs; };
   in apple-source-releases // rec {
 
-    cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
+    cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) {
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
@@ -9922,6 +9928,8 @@ let
 
     ess = callPackage ../applications/editors/emacs-modes/ess { };
 
+    evil = callPackage ../applications/editors/emacs-modes/evil { };
+
     flycheck = callPackage ../applications/editors/emacs-modes/flycheck { };
 
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
@@ -9936,6 +9944,8 @@ let
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
     haskellModeGit = lowPrio (callPackage ../applications/editors/emacs-modes/haskell/git.nix { });
+
+    helm = callPackage ../applications/editors/emacs-modes/helm { };
 
     hsc3Mode = callPackage ../applications/editors/emacs-modes/hsc3 { };
 
