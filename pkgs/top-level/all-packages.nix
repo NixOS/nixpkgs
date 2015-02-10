@@ -8275,7 +8275,7 @@ let
   zookeeper = callPackage ../servers/zookeeper { };
 
   zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
-  
+
   xquartz = callPackage ../servers/x11/xquartz { };
   quartz-wm = callPackage ../servers/x11/quartz-wm { stdenv = clangStdenv; };
 
@@ -8409,7 +8409,7 @@ let
     apple-source-releases = import ../os-specific/darwin/apple-source-releases { inherit stdenv fetchurl pkgs; };
   in apple-source-releases // rec {
 
-    cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
+    cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) {
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
@@ -9902,6 +9902,8 @@ let
     ensime = callPackage ../applications/editors/emacs-modes/ensime { };
 
     ess = callPackage ../applications/editors/emacs-modes/ess { };
+
+    evil = callPackage ../applications/editors/emacs-modes/evil { };
 
     flycheck = callPackage ../applications/editors/emacs-modes/flycheck { };
 
