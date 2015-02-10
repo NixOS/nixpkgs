@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     makeFlags="$makeFlags INSTALL_ROOT=$out"
   '';
 
+  NIX_CFLAGS_COMPILE = "-fPIC";
+
   parallelBuild = false;
 
   meta = {
