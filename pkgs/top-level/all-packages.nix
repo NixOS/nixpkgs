@@ -686,6 +686,14 @@ let
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
+
+  cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
+
+  gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
+
+  image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
+
   ccnet = callPackage ../tools/networking/ccnet { };
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
@@ -8797,6 +8805,8 @@ let
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
+
+    vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
 
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
