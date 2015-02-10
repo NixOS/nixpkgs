@@ -36,7 +36,7 @@
 
 let
   # -> http://get.adobe.com/flashplayer/
-  version = "11.2.202.425";
+  version = "11.2.202.442";
 
   src =
     if stdenv.system == "x86_64-linux" then
