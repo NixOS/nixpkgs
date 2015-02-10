@@ -8231,6 +8231,8 @@ let
   });
   squid = squids.squid31; # has ipv6 support
 
+  sslh = callPackage ../servers/sslh { };
+
   thttpd = callPackage ../servers/http/thttpd { };
 
   storm = callPackage ../servers/computing/storm { };
