@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, coreutils, findutils, jdk, rlwrap, gnupg }:
+, coreutils, findutils, jdk, rlwrap, gnupg1compat }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lein-fix-jar-path.patch ];
 
-  inherit rlwrap gnupg findutils coreutils jdk;
+  inherit rlwrap gnupg1compat findutils coreutils jdk;
 
   builder = ./builder.sh;
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = name;
 
-  buildInputs = [ patchelf gmp ];
+  buildInputs = [ gmp ] ++ stdenv.lib.optional stdenv.isLinux patchelf;
 
   makeFlags = [ "all-no-docs" ];
 
@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
     find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
 
     substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
+    substituteInPlace bin/mlton-script --replace gcc cc
+    substituteInPlace bin/regression --replace gcc cc
+    substituteInPlace lib/mlnlffi-lib/Makefile --replace gcc cc
+    substituteInPlace mlnlffigen/gen-cppcmd --replace gcc cc
+    substituteInPlace runtime/Makefile --replace gcc cc
+    substituteInPlace ../${usr_prefix}/bin/mlton --replace gcc cc
 
     # Fix paths in the binary distribution.
     BIN_DIST_DIR="$(pwd)/../${usr_prefix}"
@@ -91,8 +97,8 @@ stdenv.mkDerivation rec {
     # Path to gmp.h.
     substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "-cc-opt '-O1 -fno-common'" "-cc-opt '-O1 -fno-common -I${gmp}/include'"
 
-    # Path to the same gcc used in the build; needed at runtime.
-    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "gcc='gcc'" "gcc='"$(type -p gcc)"'"
+    # Path to the same cc used in the build; needed at runtime.
+    substituteInPlace $(pwd)/install/${usr_prefix}/bin/mlton --replace "gcc='gcc'" "gcc='"$(type -p cc)"'"
 
     # Copy files to final positions.
     cp -r $(pwd)/install/${usr_prefix}/bin $out

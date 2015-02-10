@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "ppp-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}ftp/ppp/${name}.tar.gz";
+    url = "mirror://samba/ppp/${name}.tar.gz";
     sha256 = "0c7vrjxl52pdwi4ckrvfjr08b31lfpgwf3pp0cqy76a77vfs7q02";
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-3.0.10";
+  name = "iperf-3.0.11";
 
   src = fetchurl {
     url = "http://downloads.es.net/pub/iperf/${name}.tar.gz";
-    sha256 = "17856cp4c6z4hh9jh3bvz2q2yfwhi1ybwf6mnaq822fgcwll84x1";
+    sha256 = "0vkzx7yxhah49l83jb5r3y4zzfdqypj5y2b3fjc7rxj7dyzba7g0";
   };
 
   postInstall = ''

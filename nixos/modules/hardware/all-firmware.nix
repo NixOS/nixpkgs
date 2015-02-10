@@ -12,8 +12,7 @@ with lib;
       default = false;
       type = types.bool;
       description = ''
-        Turn on this option if you want to enable all the firmware shipped with Debian/Ubuntu
-        and iwlwifi.
+        Turn on this option if you want to enable all the firmware shipped in linux-firmware.
       '';
     };
 
@@ -26,7 +25,6 @@ with lib;
     hardware.firmware = [
       "${pkgs.firmwareLinuxNonfree}/lib/firmware"
       "${pkgs.iwlegacy}/lib/firmware"
-      "${pkgs.iwlwifi}/lib/firmware"
     ];
   };
 

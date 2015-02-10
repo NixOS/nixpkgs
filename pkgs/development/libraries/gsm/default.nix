@@ -1,59 +1,28 @@
-x@{builderDefsPackage
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchurl }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="gsm";
-    version="1.0.13";
-    name="${baseName}-${version}";
-    url="http://www.quut.com/gsm/${name}.tar.gz";
-    hash="1bcjl2h60gvr1dc5a963h3vnz9zl6n8qrfa3qmb2x3229lj1iiaj";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+with stdenv.lib;
+stdenv.mkDerivation rec {
+  name = "gsm-${version}";
+  version = "1.0.13";
+
+  src = fetchurl {
+    url = "http://www.quut.com/gsm/${name}.tar.gz";
+    sha256 = "1bcjl2h60gvr1dc5a963h3vnz9zl6n8qrfa3qmb2x3229lj1iiaj";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["createDirs" "setVars" "doMakeInstall"];
-
-  createDirs = a.fullDepEntry ''
-    mkdir -p "$out/"{bin,lib,share/man,share/info,include/gsm}
-  '' ["minInit" "defEnsureDir"];
-
-  setVars = a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
+  preConfigure = ''
+    sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
+    mkdir -p "$out/"{bin,lib,man/man1,man/man3,include/gsm}
+    makeFlags="$makeFlags INSTALL_ROOT=$out"
   '';
 
-  makeFlags = [
-    ''INSTALL_ROOT="$out"''
-    ''GSM_INSTALL_INC="$out/include/gsm"''
-  ];
+  parallelBuild = false;
 
   meta = {
-    description = "A GSM codec library";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.free;
+    description = "Lossy speech compression codec";
+    homepage    = http://www.quut.com/gsm/;
+    license     = licenses.bsd2;
+    maintainers = with maintainers; [ codyopel raskin ];
+    platforms   = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.quut.com/gsm/";
-    };
-  };
-}) x
+}

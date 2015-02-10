@@ -227,6 +227,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ListCompare = buildPerlPackage {
+    name = "List-Compare-1.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JK/JKEENAN/List-Compare-0.39.tar.gz;
+      sha256 = "1v4gn176faanzf1kr9axdp1220da7nkvz0d66mnk34nd0skjjxcl";
+    };
+  };
+
   ArchiveCpio = buildPerlPackage {
     name = "Archive-Cpio-0.09";
     src = fetchurl {
@@ -9960,6 +9968,24 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Time/${name}.tar.gz";
       sha256 = "17hhd53p72z08l1riwz5f6rch6hngby1pympkla5miznn7cjlrpz";
+    };
+  };
+
+  Tk = buildPerlPackage rec {
+    name = "Tk-804.032_501";
+    src = fetchurl {
+      url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
+    };
+    makeMakerFlags = "X11LIB=${pkgs.xlibs.libX11}/lib";
+    buildInputs = with pkgs; [ xlibs.libX11 libpng ];
+    configurePhase = ''
+      perl Makefile.PL PREFIX=$out $makeMakerFlags
+    '';
+    doCheck = false;
+    meta ={
+      homepage = "http://search.cpan.org/~srezic/Tk-804.032/Tk.pod";
+      license = stdenv.lib.licenses.tcltk;
     };
   };
 

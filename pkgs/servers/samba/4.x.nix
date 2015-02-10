@@ -34,10 +34,7 @@ stdenv.mkDerivation rec {
   name = "samba-4.1.16";
 
   src = fetchurl {
-    urls = [
-      "http://samba.org/samba/ftp/stable/${name}.tar.gz"
-      "http://distfiles.exherbo.org/distfiles/${name}.tar.gz"
-    ];
+    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
     sha256 = "0yx840qg5q6syq81439v3pbwawacm7nwnnvph85za9gsgcb9r80j";
   };
 

@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stm-conduit";
-  version = "2.5.2";
-  sha256 = "1r8l9nznavxd0cg30mj7qdp9nq8jlcr0vcv8ljn6lfw67s0pk82x";
+  version = "2.5.3";
+  sha256 = "1jsij92i3rw2wz1166i58p0lxrbx0jndf1hi3kj92ccvnc3zg1iw";
   buildDepends = [
     async cereal cerealConduit conduit conduitExtra liftedAsync
     liftedBase monadControl monadLoops resourcet stm stmChans

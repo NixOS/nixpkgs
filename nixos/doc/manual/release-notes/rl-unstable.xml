@@ -1,0 +1,41 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        version="5.0"
+        xml:id="sec-release-unstable">
+
+<title>Unstable revision</title>
+
+<para>In addition to numerous new and upgraded packages, this release has the following highlights:
+
+<!--<itemizedlist>
+
+</itemizedlist>-->
+</para>
+
+<para>Following new services were added since the last release:
+
+<!--<itemizedlist>
+
+</itemizedlist>-->
+</para>
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:
+
+<itemizedlist>
+
+<listitem><para>Steam now doesn't need root rights to work. Instead of using
+<literal>*-steam-chrootenv</literal>, you should now just run <literal>steam</literal>.
+<literal>steamChrootEnv</literal> package was renamed to <literal>steam</literal>,
+and old <literal>steam</literal> package -- to <literal>steamOriginal</literal>.
+</para></listitem>
+
+<listitem><para>CMPlayer has been renamed to bomi upstream. Package <literal>cmplayer</literal>
+was accordingly renamed to <literal>bomi</literal>
+</para></listitem>
+
+</itemizedlist>
+</para>
+
+</chapter>

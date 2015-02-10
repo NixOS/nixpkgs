@@ -1,15 +1,24 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gtk, vte, pixman, gettext, perl }:
+{ stdenv, fetchurl, cmake, pkgconfig, gtk3, perl, vte }:
+
 stdenv.mkDerivation rec {
   name = "sakura-${version}";
-  version = "2.4.2";
+  version = "3.2.0";
+
   src = fetchurl {
     url = "http://launchpad.net/sakura/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "1mpsjsk7dgz56h7yagd9aq0d92vj59yrz4ri6za3mfmglhn29rn5";
+    sha256 = "1pfvc35kckrzik5wx8ywhkhclr52rfp2syg46ix2nsdm72q6dl90";
   };
-  buildInputs = [ cmake pkgconfig gtk vte pixman gettext perl ];
-  meta = {
-    homepage = "http://www.pleyades.net/david/sakura.php";
+
+  nativeBuildInputs = [ cmake perl pkgconfig ];
+
+  buildInputs = [ gtk3 vte ];
+
+  meta = with stdenv.lib; {
     description = "A terminal emulator based on GTK and VTE";
+    homepage    = http://www.pleyades.net/david/projects/sakura;
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ astsmtl codyopel ];
+    platforms   = platforms.linux;
     longDescription = ''
       sakura is a terminal emulator based on GTK and VTE. It's a terminal
       emulator with few dependencies, so you don't need a full GNOME desktop
@@ -20,8 +29,5 @@ stdenv.mkDerivation rec {
       terminals in one window and adds a contextual menu with some basic
       options. No more no less.
     '';
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
   };
 }

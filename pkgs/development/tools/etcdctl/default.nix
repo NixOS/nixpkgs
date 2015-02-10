@@ -1,26 +1,21 @@
-{ stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+with goPackages;
+
+buildGoPackage rec {
   version = "0.4.5";
   name = "etcdctl-${version}";
-
-  src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+  goPackagePath = "github.com/coreos/etcdctl";
+  src = fetchFromGitHub {
+    owner = "coreos";
+    repo = "etcdctl";
+    rev = "v${version}";
+    sha256 = "1kbri59ppil52v7s992q8r6i1zk9lac0s2w00z2lsgc9w1z59qs0";
   };
 
-  buildInputs = [ go ];
+  dontInstallSrc = true;
 
-  buildPhase = ''
-    export GOPATH=$src
-    go build -v -o etcdctl github.com/coreos/etcdctl
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv etcdctl $out/bin
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple command line client for etcd";
     homepage = http://coreos.com/using-coreos/etcd/;
     license = licenses.asl20;

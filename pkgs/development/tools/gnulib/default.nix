@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "gnulib-0.1-263-g92b60e6";
+  name = "gnulib-0.1-357-gffe6467";
 
   phases = ["unpackPhase" "installPhase"];
 

@@ -624,6 +624,85 @@ sed -i '/ = data_files/d' setup.py</programlisting>
 
 
 <section xml:id="ssec-language-go"><title>Go</title>
+
+<para>The function <varname>buildGoPackage</varname> builds
+standard Go packages.
+</para>
+
+<example xml:id='ex-buildGoPackage'><title>buildGoPackage</title>
+<programlisting>
+net = buildGoPackage rec {
+  name = "go.net-${rev}";
+  goPackagePath = "code.google.com/p/go.net"; <co xml:id='ex-buildGoPackage-1' />
+  subPackages = [ "ipv4" "ipv6" ]; <co xml:id='ex-buildGoPackage-2' />
+  rev = "28ff664507e4";
+  src = fetchhg {
+    inherit rev;
+    url = "https://${goPackagePath}";
+    sha256 = "1lkz4c9pyz3yz2yz18hiycvlfhgy3jxp68bs7mv7bcfpaj729qav";
+  };
+  propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-3' />
+};
+</programlisting>
+</example>
+
+<para><xref linkend='ex-buildGoPackage'/> is an example expression using buildGoPackage,
+the following arguments are of special significance to the function:
+
+<calloutlist>
+
+  <callout arearefs='ex-buildGoPackage-1'>
+    <para>
+      <varname>goPackagePath</varname> specifies the package's canonical Go import path.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-2'>
+    <para>
+      <varname>subPackages</varname> limits the builder from building child packages that
+      have not been listed. If <varname>subPackages</varname> is not specified, all child
+      packages will be built.
+    </para>
+    <para>
+      In this example only <literal>code.google.com/p/go.net/ipv4</literal> and
+      <literal>code.google.com/p/go.net/ipv4</literal> will be built.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-3'>
+    <para>
+      <varname>propagatedBuildInputs</varname> is where the dependencies of a Go library are
+      listed. Only libraries should list <varname>propagatedBuildInputs</varname>. If a standalone
+      program is being build instead, use <varname>buildInputs</varname>. If a library's tests require
+      additional dependencies that are not propagated, they should be listed in <varname>buildInputs</varname>.
+    </para>
+  </callout>
+
+</calloutlist>
+
+</para>
+
+<para>
+Reusable Go libraries may be found in the <varname>goPackages</varname> set. You can test
+build a Go package as follows:
+
+<screen>
+$ nix-build -A goPackages.net
+</screen>
+
+</para>
+
+<para>
+You may use Go packages installed into the active Nix profiles by adding
+the following to your ~/.bashrc:
+
+<screen>
+for p in $NIX_PROFILES; do
+    GOPATH="$p/share/go:$GOPATH"
+done
+</screen>
+</para>
+
   <para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/cstrahan/go2nix">go2nix</link>.</para>
 </section>
 

@@ -492,6 +492,23 @@ let
     };
   };
 
+  atomicwrites = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "atomicwrites-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/atomicwrites/atomicwrites-${version}.tar.gz";
+      sha256 = "1lxz0xhnzihqlvl1h6j2nfxjqqgr4s08196z5phnlcz2s7d5z0mg";
+    };
+
+    meta = {
+      description = "Atomic file writes on POSIX";
+      homepage = https://pypi.python.org/pypi/atomicwrites/0.1.0;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+
+  };
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.2.1";
 
@@ -7200,11 +7217,11 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.14.0";
+    version = "0.15.4";
 
     src = pkgs.fetchurl {
+      sha256 = "1s57krfa5kpn15ma7dcivizgn987j24i6cxrnjf9hnnann0q26cd";
       url = "https://pypi.python.org/packages/source/p/pgcli/${name}.tar.gz";
-      sha256 = "0x31b3kvybdvd413h6b5iq4b5vv2x30ff1r00gs6ana0xpzzrqxp";
     };
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
@@ -7215,7 +7232,7 @@ let
         Rich command-line interface for PostgreSQL with auto-completion and
         syntax highlighting.
       '';
-      homepage = http://pgcli.com/about;
+      homepage = http://pgcli.com;
       license = with licenses; [ bsd3 ];
       maintainers = with maintainers; [ nckx ];
     };
@@ -8953,6 +8970,25 @@ let
       homepage = https://github.com/requests/requests-oauthlib;
       maintainers = with maintainers; [ prikhi ];
     };
+  };
+
+  requests_toolbelt = buildPythonPackage rec {
+    version = "0.3.0";
+    name = "requests-toolbelt-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
+      sha256 = "177lqpm2czx81pjg0zfs1dkbbmcn5yf1y5qxj23x6y5d28518qwl";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    meta = {
+      description = "A toolbelt of useful classes and functions to be used with python-requests";
+      homepage = http://toolbelt.rtfd.org;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+
   };
 
   retry_decorator = buildPythonPackage rec {

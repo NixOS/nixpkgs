@@ -160,6 +160,7 @@ let
 in
 {
   inherit generateCollection;
+  inherit importManifest;
   inherit isDepAttr;
   inherit manifest;
   inherit removePkgDeps;

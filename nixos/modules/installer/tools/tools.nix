@@ -53,46 +53,9 @@ let
     inherit (config.system) nixosVersion nixosCodeName;
   };
 
-  /*
-  nixos-gui = pkgs.xulrunnerWrapper {
-    launcher = "nixos-gui";
-    application = pkgs.stdenv.mkDerivation {
-      name = "nixos-gui";
-      buildCommand = ''
-        cp -r "$gui" "$out"
-
-        # Do not force the copy if the file exists in the sources (this
-        # happens for developpers)
-        test -e "$out/chrome/content/jquery-1.5.2.js" ||
-          cp -f "$jquery" "$out/chrome/content/jquery-1.5.2.js"
-      '';
-      gui = lib.cleanSource "${modulesPath}/../gui";
-      jquery = pkgs.fetchurl {
-        url = http://code.jquery.com/jquery-1.5.2.min.js;
-        sha256 = "8f0a19ee8c606b35a10904951e0a27da1896eafe33c6e88cb7bcbe455f05a24a";
-      };
-    };
-  };
-  */
-
 in
 
 {
-  /*
-  options = {
-
-    installer.enableGraphicalTools = mkOption {
-      default = false;
-      type = types.bool;
-      example = true;
-      description = ''
-        Enable the installation of graphical tools.
-      '';
-    };
-
-  };
-  */
-
   config = {
     environment.systemPackages =
       [ nixos-build-vms
