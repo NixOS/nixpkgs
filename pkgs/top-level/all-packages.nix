@@ -9920,6 +9920,8 @@ let
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
     haskellModeGit = lowPrio (callPackage ../applications/editors/emacs-modes/haskell/git.nix { });
 
+    helm = callPackage ../applications/editors/emacs-modes/helm { };
+
     hsc3Mode = callPackage ../applications/editors/emacs-modes/hsc3 { };
 
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
