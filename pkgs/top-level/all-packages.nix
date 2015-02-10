@@ -3671,6 +3671,8 @@ let
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
   mozart = mozart-binary;
 
+  nim = callPackage ../development/compilers/nim { };
+
   neko = callPackage ../development/compilers/neko { };
 
   nasm = callPackage ../development/compilers/nasm { };
