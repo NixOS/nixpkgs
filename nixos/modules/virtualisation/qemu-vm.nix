@@ -43,19 +43,23 @@ let
       # Create a directory for exchanging data with the VM.
       mkdir -p $TMPDIR/xchg
 
-      ${if cfg.useBootLoader then ''
-        # Create a writable copy/snapshot of the boot disk
-        # A writable boot disk can be booted from automatically
-        ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
+      ${if cfg.useBootLoader
+        then ''
+          # Create a writable copy/snapshot of the boot disk
+          # A writable boot disk can be booted from automatically
+          ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 -b ${bootDisk}/disk.img $TMPDIR/disk.img || exit 1
 
-        ${if cfg.useEFIBoot then ''
-          # VM needs a writable flash BIOS
-          cp ${bootDisk}/bios.bin $TMPDIR || exit 1
-          chmod 0644 $TMPDIR/bios.bin || exit 1
-        '' else ''
-        ''}
-      '' else ''
-      ''}
+          ${if cfg.useEFIBoot
+            then ''
+              # VM needs a writable flash BIOS
+              cp ${bootDisk}/bios.bin $TMPDIR || exit 1
+              chmod 0644 $TMPDIR/bios.bin || exit 1
+              ''
+            else ''
+              ''}
+          ''
+        else ''
+          ''}
 
       cd $TMPDIR
       idx=2
@@ -117,7 +121,7 @@ let
               mkdir $out
               diskImage=$out/disk.img
               bootFlash=$out/bios.bin
-              ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 $diskImage "40M"
+              ${pkgs.qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
               ${if cfg.useEFIBoot then ''
                 cp ${pkgs.OVMF-CSM}/FV/OVMF.fd $bootFlash
                 chmod 0644 $bootFlash
@@ -126,8 +130,8 @@ let
             '';
           buildInputs = [ pkgs.utillinux ];
           QEMU_OPTS = if cfg.useEFIBoot
-                      then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+                      then "-no-kvm -pflash $out/bios.bin -nographic -serial pty"
+                      else "-no-kvm -nographic -serial pty";
         }
         ''
           # Create a /boot EFI partition with 40M
