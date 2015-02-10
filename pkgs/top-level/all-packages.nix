@@ -8548,8 +8548,6 @@ let
 
   iw = callPackage ../os-specific/linux/iw { };
 
-  iwlwifi = callPackage ../os-specific/linux/firmware/iwlwifi { };
-
   iwlegacy = callPackage ../os-specific/linux/firmware/iwlegacy { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
