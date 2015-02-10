@@ -10,9 +10,9 @@ in callPackage pkg {
     postFixup = ''
       wrapProgram $out/bin/gcdemu \
         --set PYTHONPATH "$PYTHONPATH" \
-	--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
-	--set XDG_DATA_DIRS "$out/share:$XDG_DATA_DIRS"
-    '';  
+        --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
+        --set XDG_DATA_DIRS "$out/share:$XDG_DATA_DIRS"
+    '';
     # TODO AppIndicator
   };
 }
