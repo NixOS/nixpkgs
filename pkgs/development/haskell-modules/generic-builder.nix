@@ -79,7 +79,7 @@ let
     (optionalString (versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
     (optionalString (versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
-  ];
+  ] ++ extraLibFlags ++ extraIncludeFlags;
 
   setupCompileFlags = [
     (optionalString (versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
@@ -90,16 +90,24 @@ let
   isSystemPkg = x: !isHaskellPkg x;
 
   propagatedBuildInputs = buildDepends;
-  otherBuildInputs = extraLibraries ++
+  systemLibraries = extraLibraries ++
+                    optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends);
+  otherBuildInputs = systemLibraries ++
                      buildTools ++
-                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
                      optionals doCheck testDepends;
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
+  haskellBuildInputsClosure = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation allBuildInputs);
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
-  paths = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation allBuildInputs);
+  pathExists = x: builtins.pathExists (builtins.unsafeDiscardStringContext x);
+  addEach = xs: p: map (x: p + x) xs;
+  subPaths = ps: xs: with stdenv.lib; filter pathExists (concatMap (addEach ps) xs);
+  extraIncludeDirs = subPaths ["/include"] systemLibraries;
+  extraLibDirs = subPaths ["/lib" "/lib64"] systemLibraries;
+  extraIncludeFlags = addEach extraIncludeDirs "--extra-include-dirs=";
+  extraLibFlags = addEach extraLibDirs "--extra-lib-dirs=";
 
 in
 stdenv.mkDerivation ({
@@ -124,7 +132,10 @@ stdenv.mkDerivation ({
     ghcDir=$(mktemp -d)/ghc
     local realout="$out"
     export out=$ghcDir
-    ${withPackagesBuilder { inherit paths; ignoreCollisions = false; }}
+    ${withPackagesBuilder { 
+      paths = haskellBuildInputsClosure; 
+      ignoreCollisions = false; 
+    }}
     export out=$realout
 
     export PATH="$ghcDir/bin:$PATH"
