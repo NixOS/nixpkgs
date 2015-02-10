@@ -4869,6 +4869,8 @@ let
     inherit (perlPackages) XMLSimple;
   };
 
+  include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use { };
+
   indent = callPackage ../development/tools/misc/indent { };
 
   ino = callPackage ../development/arduino/ino { };
