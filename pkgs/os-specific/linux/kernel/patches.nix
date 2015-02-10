@@ -77,4 +77,9 @@ rec {
     { name = "grsec-fix-path";
       patch = ./grsec-path.patch;
     };
+
+  crc_regression =
+    { name = "crc-backport-regression";
+      patch = ./crc-regression.patch;
+    };
 }
