@@ -2,11 +2,11 @@
 
 with lib;
 
-let cfg = config.services.cdemu;
+let cfg = config.programs.cdemu;
 in {
 
   options = {
-    services.cdemu = {
+    programs.cdemu = {
       enable = mkOption {
         default = false;
         description = "Whether to enable cdemu for users of appropriate group (default cdrom)";

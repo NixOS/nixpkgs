@@ -55,6 +55,7 @@
   ./programs/atop.nix
   ./programs/bash/bash.nix
   ./programs/blcr.nix
+  ./programs/cdemu.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
@@ -144,7 +145,6 @@
   ./services/games/minecraft-server.nix
   ./services/hardware/acpid.nix
   ./services/hardware/amd-hybrid-graphics.nix
-  ./services/hardware/cdemu.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/freefall.nix
   ./services/hardware/nvidia-optimus.nix
