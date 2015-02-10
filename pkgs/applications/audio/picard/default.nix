@@ -3,14 +3,14 @@
 , pyqt4, mutagen, python-libdiscid
 }:
 
-let version = "1.3"; in
+let version = "1.3.2"; in
 buildPythonPackage {
   name = "picard-${version}";
   namePrefix = "";
 
   src = fetchurl {
-    url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
-    sha256 = "06s90w1j29qhd931dgj752k5v4pjbvxiz6g0613xzj3ms8zsrlys";
+    url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";
+    sha256 = "0821xb7gyg0rhch8s3qkzmak90wjpcxkv9a364yv6bmqc12j6a77";
   };
 
   buildInputs = [
