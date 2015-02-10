@@ -420,9 +420,10 @@ rec {
         ''}
 
         echo "unpacking RPMs..."
+        set +o pipefail
         for i in $rpms; do
             echo "$i..."
-            ${rpm}/bin/rpm2cpio "$i" | (chroot /mnt ${cpio}/bin/cpio -i --make-directories)
+            ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories
         done
 
         eval "$preInstall"
@@ -1028,6 +1029,32 @@ rec {
         sha256 = "1510x32bxfvnplwy81nxfzxpgn7qbgghm4717xnciqb6xjk7wxyp";
       };
       urlPrefix = mirror://fedora/linux/releases/20/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora21i386 = {
+      name = "fedora-21-i386";
+      fullName = "Fedora 21 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/21/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "a6ad1140adeef65bbc1fdcc7f8f2b356f0d20c71bbe3f1625038e7f43fc44780";
+      };
+      urlPrefix = mirror://fedora/linux/releases/21/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora21x86_64 = {
+      name = "fedora-21-x86_64";
+      fullName = "Fedora 21 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/21/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "e2a28baab2ea4632fad93f9f28144cda3458190888fdf7f2acc9bc289f397e96";
+      };
+      urlPrefix = mirror://fedora/linux/releases/21/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
       unifiedSystemDir = true;
