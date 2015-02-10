@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, exampleSupport ? true # Example encoding program
+, exampleSupport ? false # Example encoding program
 }:
 
 with stdenv.lib;
