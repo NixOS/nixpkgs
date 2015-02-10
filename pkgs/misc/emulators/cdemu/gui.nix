@@ -11,7 +11,7 @@ in callPackage pkg {
       wrapProgram $out/bin/gcdemu \
         --set PYTHONPATH "$PYTHONPATH" \
         --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH" \
-        --set XDG_DATA_DIRS "$out/share:$XDG_DATA_DIRS"
+        --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS"
     '';
     # TODO AppIndicator
   };
