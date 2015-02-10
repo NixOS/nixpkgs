@@ -9,7 +9,7 @@ in callPackage pkg {
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/image-analyzer \
-        --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH:$XDG_DATA_DIRS"
+        --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
     '';
   };
 }
