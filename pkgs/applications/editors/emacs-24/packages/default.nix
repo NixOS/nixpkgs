@@ -21,6 +21,18 @@ let
 in
 
 rec {
+  ac-haskell-process = melpa.mkDerivation (self: {
+    pname   = "ac-haskell-process";
+    version = "0.5";
+    src = fetchFromGitHub {
+      owner  = "purcell";
+      repo   = self.pname;
+      rev    = self.version;
+      sha256 = "0dlrhc1dmzgrjvcnlqvm6clyv0r6zray6qqliqngy14880grghbm";
+    };
+    packageRequires = [ auto-complete haskell-mode ];
+  });
+
   ace-jump-mode = melpa.mkDerivation (self: {
     pname   = "ace-jump-mode";
     version = "20140616";
@@ -69,11 +81,14 @@ rec {
   
   auto-complete = melpa.mkDerivation (self: {
     pname = "auto-complete";
-    version = "1.3.1";
-    src = fetchurl {
-      url = "http://cx4a.org/pub/auto-complete/${self.fname}.tar.bz2";
-      sha256 = "124qxfp0pcphwlmrasbfrci48brxnrzc38h4wcf2sn20x1mvcrlj";
+    version = "1.4.0";
+    src = fetchFromGitHub {
+      owner = self.pname;
+      repo  = self.pname;
+      rev   = "v${self.version}";
+      sha256 = "050lb8qjq7ra35mqp6j6qkwbvq5zj3yhz73aym5kf1vjd42rmjcw";
     };
+    packageRequires = [ popup ];
     meta = {
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
