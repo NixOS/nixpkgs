@@ -101,13 +101,15 @@ let
   haskellBuildInputsClosure = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation allBuildInputs);
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
-  pathExists = x: builtins.pathExists (builtins.unsafeDiscardStringContext x);
-  addEach = xs: p: map (x: p + x) xs;
-  subPaths = ps: xs: with stdenv.lib; filter pathExists (concatMap (addEach ps) xs);
-  extraIncludeDirs = subPaths ["/include"] systemLibraries;
-  extraLibDirs = subPaths ["/lib" "/lib64"] systemLibraries;
-  extraIncludeFlags = addEach extraIncludeDirs "--extra-include-dirs=";
-  extraLibFlags = addEach extraLibDirs "--extra-lib-dirs=";
+  # Note: cannot use builtins.pathExists here because that doesn't work for strings
+  # with contexts.
+  hasSubPath = path: sub: builtins.readDir path ? ${sub};
+  subPaths = subs: with stdenv.lib;
+    concatMap (path: map (sub: path + "/" + sub) (filter (hasSubPath path) subs));
+  extraIncludeDirs = subPaths ["include"] systemLibraries;
+  extraLibDirs = subPaths ["lib" "lib64"] systemLibraries;
+  extraIncludeFlags = map (x: "--extra-include-dirs=" + x) extraIncludeDirs;
+  extraLibFlags = map (x: "--extra-lib-dirs=" + x) extraLibDirs;
 
 in
 stdenv.mkDerivation ({
