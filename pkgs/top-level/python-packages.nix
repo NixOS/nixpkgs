@@ -9806,12 +9806,12 @@ let
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.4";
+    name = "sympy-0.7.6";
     disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
-      sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
+      sha256 = "19yp0gy4i7p4g6l3b8vaqkj9qj7yqb5kqy0qgbdagpzgkdz958yz";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
@@ -10546,7 +10546,6 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/taskw/${name}.tar.gz";
-      # md5 = "9f3ce2eaff9a3986d04632547168894d"; # provided by pypi website.
       sha256 = "341a165a1c2ef94fb1c2a49a785357377f04a0d55cabe9563179849497e47146";
     };
 
