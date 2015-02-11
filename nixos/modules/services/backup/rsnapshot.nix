@@ -70,18 +70,7 @@ in
       environment.systemPackages = [ myRsnapshot ];
 
       systemd.services.rsnapshot.preStart = ''
-        ensureDir() {
-          dir=$1
-          mode=$2
-
-          if ! test -e $dir; then
-            ${pkgs.coreutils}/bin/mkdir -m $mode -p $dir
-          elif [ "$(${pkgs.coreutils}/bin/stat -c %a $dir)" != "$mode" ]; then
-            ${pkgs.coreutils}/bin/chmod $mode $dir
-          fi
-        }
-
-        ensureDir ${rundir} 755
+        mkdir -p --mode=755 ${rundir}
       '';
 
       services.cron.systemCronJobs =
