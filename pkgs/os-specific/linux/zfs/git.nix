@@ -5,13 +5,12 @@ callPackage ./generic.nix (args // rec {
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/zfs.git;
-    rev = "33b4de513ee81c2a87e1b954a9544a5eec1f8f94";
-    sha256 = "07kdml65l22z1xi8jif5hr7zr7a8mykyms4f5yrf8nyad20kp6il";
+    rev = "5f15fa22167ff665d0db0159551eb90759683984";
+    sha256 = "14l1s1rfykj5dz1ssh5c8d1k98qn19l48sd31lwshiczx63zjygw";
   };
 
   patches = [
     ./nix-build-git.patch
-    ./3.19-compat-git.patch # Remove once PR-3084 is mainlined
   ];
 
   spl = spl_git;
