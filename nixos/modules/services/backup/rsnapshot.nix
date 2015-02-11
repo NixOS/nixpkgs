@@ -2,7 +2,9 @@
 
 with lib;
 
-let cfg = config.services.rsnapshot;
+let
+  cfg = config.services.rsnapshot;
+  rundir = "/run/rsnapshot";
 in
 {
   options = {
@@ -60,12 +62,27 @@ in
         cmd_ssh	${openssh}/bin/ssh
         cmd_logger	${inetutils}/bin/logger
         cmd_du	${coreutils}/bin/du
-        lockfile	/run/rsnapshot.pid
+        lockfile	${rundir}/rsnapshot.pid
 
         ${cfg.extraConfig}
       '');
     in {
       environment.systemPackages = [ myRsnapshot ];
+
+      systemd.services.rsnapshot.preStart = ''
+        ensureDir() {
+          dir=$1
+          mode=$2
+
+          if ! test -e $dir; then
+            ${pkgs.coreutils}/bin/mkdir -m $mode -p $dir
+          elif [ "$(${pkgs.coreutils}/bin/stat -c %a $dir)" != "$mode" ]; then
+            ${pkgs.coreutils}/bin/chmod $mode $dir
+          fi
+        }
+
+        ensureDir ${rundir} 755
+      '';
 
       services.cron.systemCronJobs =
         mapAttrsToList (interval: time: "${time} root ${myRsnapshot}/bin/rsnapshot ${interval}") cfg.cronIntervals;
