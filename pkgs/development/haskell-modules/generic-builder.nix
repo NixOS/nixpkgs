@@ -79,7 +79,7 @@ let
     (optionalString (versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
     (optionalString (versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
-  ] ++ extraLibFlags ++ extraIncludeFlags;
+  ];
 
   setupCompileFlags = [
     (optionalString (versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
@@ -101,15 +101,14 @@ let
   haskellBuildInputsClosure = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation allBuildInputs);
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
 
-  # Note: cannot use builtins.pathExists here because that doesn't work for strings
-  # with contexts.
-  hasSubPath = path: sub: builtins.readDir path ? ${sub};
-  subPaths = subs: with stdenv.lib;
-    concatMap (path: map (sub: path + "/" + sub) (filter (hasSubPath path) subs));
+  subPaths = subs: stdenv.lib.concatMap (path: map (sub: path + "/" + sub) subs);
   extraIncludeDirs = subPaths ["include"] systemLibraries;
   extraLibDirs = subPaths ["lib" "lib64"] systemLibraries;
-  extraIncludeFlags = map (x: "--extra-include-dirs=" + x) extraIncludeDirs;
-  extraLibFlags = map (x: "--extra-lib-dirs=" + x) extraLibDirs;
+  addConfigureIfExists = flag: path:
+    '' if [ -d ${path} ]; then configureFlags+=" --${flag}=${path}"; fi
+    '';
+  addLibFlags = stdenv.lib.concatMapStrings (addConfigureIfExists "extra-lib-dirs") extraLibDirs;
+  addIncludeFlags = stdenv.lib.concatMapStrings (addConfigureIfExists "extra-include-dirs") extraIncludeDirs;
 
 in
 stdenv.mkDerivation ({
@@ -134,16 +133,16 @@ stdenv.mkDerivation ({
     ghcDir=$(mktemp -d)/ghc
     local realout="$out"
     export out=$ghcDir
-    ${withPackagesBuilder { 
-      paths = haskellBuildInputsClosure; 
-      ignoreCollisions = false; 
+    ${withPackagesBuilder {
+      paths = haskellBuildInputsClosure;
+      ignoreCollisions = false;
     }}
     export out=$realout
 
     export PATH="$ghcDir/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
     setupCompileFlags="${stdenv.lib.concatStringsSep " " setupCompileFlags}"
-    configureFlags="${stdenv.lib.concatStringsSep " " defaultConfigureFlags} $configureFlags"
+    ${addLibFlags}${addIncludeFlags}configureFlags="${stdenv.lib.concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
     runHook postSetupCompilerEnvironment
   '';
