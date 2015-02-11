@@ -2466,6 +2466,8 @@ let
   rzip = callPackage ../tools/compression/rzip { };
 
   s3backer = callPackage ../tools/filesystems/s3backer { };
+  
+  s3fs = callPackage ../tools/filesystems/s3fs { };
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
