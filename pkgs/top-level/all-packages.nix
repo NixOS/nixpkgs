@@ -491,6 +491,8 @@ let
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  amazonGlacierCmdInterface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
+
   analog = callPackage ../tools/admin/analog {};
 
   apktool = callPackage ../development/tools/apktool {
