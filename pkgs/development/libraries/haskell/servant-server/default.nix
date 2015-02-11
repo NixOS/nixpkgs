@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "servant-server";
-  version = "0.2.1";
-  sha256 = "1b2aqxnn9nf5qabbl8k9kq9b2mpn591j9jpjy33sis7ni469bayj";
+  version = "0.2.2";
+  sha256 = "11zyv1igg01a08j94698lpg55pp2ziizr0p5r0xfq768wz2l91m7";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
