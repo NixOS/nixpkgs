@@ -49,7 +49,6 @@ with stdenv.lib;
   NUMA? y
 
   # Disable some expensive (?) features.
-  FTRACE n
   KPROBES n
   PM_TRACE_RTC n
 
