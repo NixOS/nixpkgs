@@ -4170,6 +4170,19 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  bundix = callPackage ../development/interpreters/ruby/bundix {
+    ruby = ruby_2_1_3;
+  };
+  bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
+  bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
+    inherit buildRubyGem coreutils fetchgit;
+  };
+  defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
+  buildRubyGem = callPackage ../development/interpreters/ruby/gem-ng.nix {
+    rubygemsFun = rubygemsngFun;
+  };
+  bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
+
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
   ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix { };
   ruby_2_0_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.0.nix { });
@@ -4195,6 +4208,11 @@ let
     inherit ruby makeWrapper;
   };
   rubygems = hiPrio (rubygemsFun ruby);
+
+  rubygemsngFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems-ng.nix) {
+    inherit ruby makeWrapper;
+  };
+  rubygemsng = loPrio (rubygemsngFun ruby);
 
   rq = callPackage ../applications/networking/cluster/rq { };
 
@@ -7048,6 +7066,10 @@ let
   ucommon = callPackage ../development/libraries/ucommon { };
 
   v8 = callPackage ../development/libraries/v8 {
+    inherit (pythonPackages) gyp;
+  };
+
+  v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
   };
 
