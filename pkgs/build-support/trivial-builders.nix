@@ -17,16 +17,36 @@ rec {
     , text
     , executable ? false # run chmod +x ?
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
+    , split_at ? 100 * 1024 # if text size is bigger than split_at use cat
     }:
+    let
+        # There is a problem passing more than 400k to a builder, thus split the
+        # text into chunks and concatenate again using cat shell command
+        # The better fix would be fix builtins.toFile which cannot
+        # write text depending on other derivations yet.
+        # See https://github.com/NixOS/nix/issues/473
+
+        split = builtins.stringLength text > split_at;
+        many_files = s: split_at:
+          if s == "" then []
+          else
+            [(writeText "concat-part" (builtins.substring 0 split_at s))]
+            ++ (many_files (builtins.substring split_at (builtins.stringLength s - split_at) s) split_at);
+
+        common = {
+          inherit executable;
+          # Pointless to do this on a remote machine.
+          preferLocalBuild = true;
+        };
+    in
     runCommand name
-      { inherit text executable;
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
-      }
+      (if split then (common // { files = many_files text split_at; })
+                else (common // { inherit text; })
+      )
       ''
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
-        echo -n "$text" > "$n"
+        ${if split then ''cat $files > "$n"'' else ''echo -n "$text" > "$n"''}
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
