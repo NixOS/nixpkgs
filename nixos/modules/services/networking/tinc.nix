@@ -135,11 +135,11 @@ in
           if type tinc >/dev/null 2>&1; then
             # Tinc 1.1+ uses the tinc helper application for key generation
 
-            # Prefer ED25519 keys (only in 1.1+)
-            [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
-
-            # Otherwise use RSA keys
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+            # If no key file is present, generate a new ED25519 key
+            # (only in 1.1+).
+            [ -f "/etc/tinc/${network}/ed25519_key.priv" -o \
+              -o -f "/etc/tinc/${network}/rsa_key.priv" ] \
+            || tinc -n ${network} generate-ed25519-keys \
           else
             # Tinc 1.0 uses the tincd application
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
