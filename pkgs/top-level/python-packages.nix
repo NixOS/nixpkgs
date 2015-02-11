@@ -7489,9 +7489,8 @@ let
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    propagatedBuildInputs = with self; [ pkgs.protobuf google_apputils  ];
-    sourceRoot = "${name}/python";
-
+    propagatedBuildInputs = with self; [ pkgs.protobuf google_apputils ];
+    sourceRoot = "${name}-src/python";
 
     meta = {
       description = "Protocol Buffers are Google's data interchange format";
