@@ -72,7 +72,6 @@
   ./programs/virtualbox-host.nix
   ./programs/wvdial.nix
   ./programs/freetds.nix
-  ./programs/fish/fish.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/apparmor.nix
