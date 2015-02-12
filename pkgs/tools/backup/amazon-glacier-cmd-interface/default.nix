@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pythonPackages }:
+{ stdenv, fetchFromGitHub, buildPythonPackage, pythonPackages, python }:
 
 buildPythonPackage rec {
-  name    = "amazon-glacier-cmd-interface-${version}";
-  version = "2014-01-30";
+  name     = "amazon-glacier-cmd-interface-${version}";
+  version  = "2014-01-30";
+  disabled = python.executable == "pypy"; # will not build for pypy
 
   src = fetchFromGitHub {
     owner  = "uskudnik";
