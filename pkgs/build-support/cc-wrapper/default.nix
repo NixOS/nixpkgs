@@ -8,6 +8,7 @@
 { name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? []
+, dyld ? null # TODO: should this be a setup-hook on dyld?
 , setupHook ? ./setup-hook.sh
 }:
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
       }
     ''
 
-    + optionalString (!nativeLibc) ''
+    + optionalString (!nativeLibc) (if (!stdenv.isDarwin) then ''
       dynamicLinker="$libc/lib/$dynamicLinker"
       echo $dynamicLinker > $out/nix-support/dynamic-linker
 
@@ -63,6 +64,17 @@ stdenv.mkDerivation {
         echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
       fi
 
+      # The dynamic linker is passed in `ldflagsBefore' to allow
+      # explicit overrides of the dynamic linker by callers to gcc/ld
+      # (the *last* value counts, so ours should come first).
+      echo "-dynamic-linker" $dynamicLinker > $out/nix-support/libc-ldflags-before
+    '' else ''
+      echo $dynamicLinker > $out/nix-support/dynamic-linker
+
+      echo "export LD_DYLD_PATH=\"$dynamicLinker\"" >> $out/nix-support/setup-hook
+    '')
+
+    + optionalString (!nativeLibc) ''
       # The "-B$libc/lib/" flag is a quick hack to force gcc to link
       # against the crt1.o from our own glibc, rather than the one in
       # /usr/lib.  (This is only an issue when using an `impure'
@@ -77,11 +89,6 @@ stdenv.mkDerivation {
       echo "-B$libc/lib/ -idirafter $libc/include -idirafter $cc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
       echo "-L$libc/lib" > $out/nix-support/libc-ldflags
-
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to gcc/ld
-      # (the *last* value counts, so ours should come first).
-      echo "-dynamic-linker" $dynamicLinker > $out/nix-support/libc-ldflags-before
 
       echo $libc > $out/nix-support/orig-libc
     ''
@@ -213,7 +220,10 @@ stdenv.mkDerivation {
     ''
 
     + ''
-      substituteAll ${setupHook} $out/nix-support/setup-hook
+      substituteAll ${setupHook} $out/nix-support/setup-hook.tmp
+      cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
+      rm $out/nix-support/setup-hook.tmp
+
       substituteAll ${./add-flags} $out/nix-support/add-flags.sh
       cp -p ${./utils.sh} $out/nix-support/utils.sh
     '';
@@ -227,6 +237,7 @@ stdenv.mkDerivation {
        if stdenv.isArm then "ld-linux*.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
+       if stdenv.system == "x86_64-darwin" then "${dyld}/lib/dyld" else
        abort "Don't know the name of the dynamic linker for this platform.")
     else "";
 
