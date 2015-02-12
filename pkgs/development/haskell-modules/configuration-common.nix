@@ -459,6 +459,9 @@ self: super: {
     doHaddock = false;
   });
 
+  # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
+  CHXHtml = dontDistribute super.CHXHtml;
+
 } // {
 
   # Not on Hackage.
