@@ -4212,7 +4212,7 @@ let
   rubygemsngFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems-ng.nix) {
     inherit ruby makeWrapper;
   };
-  rubygemsng = loPrio (rubygemsngFun ruby);
+  rubygemsng = lowPrio (rubygemsngFun ruby);
 
   rq = callPackage ../applications/networking/cluster/rq { };
 
