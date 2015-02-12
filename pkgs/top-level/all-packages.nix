@@ -730,6 +730,8 @@ let
 
   cv = callPackage ../tools/misc/cv { };
 
+  contacts = callPackage ../tools/misc/contacts { };
+
   datamash = callPackage ../tools/misc/datamash { };
 
   ddate = callPackage ../tools/misc/ddate { };
