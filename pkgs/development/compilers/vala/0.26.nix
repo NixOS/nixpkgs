@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, flex, bison, libxslt
-, glib, libiconvOrEmpty, libintlOrEmpty
+, glib, libiconv, libintlOrEmpty
 }:
 
 let
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig flex bison libxslt ];
 
-  buildInputs = [ glib ]
-    ++ libiconvOrEmpty
+  buildInputs = [ glib libiconv ]
     ++ libintlOrEmpty;
 }

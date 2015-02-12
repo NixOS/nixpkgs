@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, zlib, expat, openssl
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
-, libiconvOrEmpty
+, libiconv
 , x11Support ? false, x11 ? null
 , cupsSupport ? false, cups ? null
 }:
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig zlib expat openssl
       libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
+      libiconv
     ]
     ++ stdenv.lib.optional x11Support x11
     ++ stdenv.lib.optional cupsSupport cups
-    ++ libiconvOrEmpty
     # [] # maybe sometimes jpeg2000 support
     ;
 

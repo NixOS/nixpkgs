@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libiconvOrNull, recode }:
+{ stdenv, fetchurl, libiconv, recode }:
 
 stdenv.mkDerivation rec {
   name = "enca-1.16";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hg7ggldam66l9j53nlrvi2lv1k99r2qfk6dh23vg6mi05cph7bw";
   };
 
-  buildInputs = [ recode libiconvOrNull ];
+  buildInputs = [ recode libiconv ];
 
   meta = {
     homepage = http://freecode.com/projects/enca;
