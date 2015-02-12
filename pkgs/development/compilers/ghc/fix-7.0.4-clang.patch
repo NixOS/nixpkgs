@@ -14,7 +14,7 @@ index f704a69..37753fd 100644
  
  stack_layout :: [(VirtualSpOffset, CgIdInfo)]
 diff --git a/compiler/main/GHC.hs b/compiler/main/GHC.hs
-index 638e1db..a24e564 100644
+index 638e1db..0aee4b7 100644
 --- a/compiler/main/GHC.hs
 +++ b/compiler/main/GHC.hs
 @@ -788,8 +788,7 @@ load2 how_much mod_graph = do
@@ -27,6 +27,16 @@ index 638e1db..a24e564 100644
  		  List.init partial_mg0
  		| otherwise
  		= partial_mg0
+@@ -879,8 +878,7 @@ load2 how_much mod_graph = do
+ 	      liftIO $ cleanTempFilesExcept dflags (ppFilesFromSummaries mods_to_keep)
+ 
+ 	      -- there should be no Nothings where linkables should be, now
+-	      ASSERT(all (isJust.hm_linkable) 
+-			(eltsUFM (hsc_HPT hsc_env))) do
++	      ASSERT(all (isJust.hm_linkable) (eltsUFM (hsc_HPT hsc_env))) do
+ 	
+ 	      -- Link everything together
+               linkresult <- liftIO $ link (ghcLink dflags) dflags False hpt4
 diff --git a/compiler/simplCore/SimplUtils.lhs b/compiler/simplCore/SimplUtils.lhs
 index 99a63e4..3268726 100644
 --- a/compiler/simplCore/SimplUtils.lhs
