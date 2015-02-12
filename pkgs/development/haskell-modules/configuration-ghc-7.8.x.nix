@@ -75,6 +75,9 @@ self: super: {
   hosc = dontDistribute super.hosc;
   tidal-midi = dontDistribute super.tidal-midi;
 
+  # Needs mtl 2.2.x due to "plailude".
+  clac = dontDistribute super.clac;
+
 }
 
 // # packages relating to amazonka
