@@ -85,8 +85,8 @@ stdenv.mkDerivation rec {
     url = "https://chromium.googlesource.com/webm/libvpx";
   /* DO NOT under any circumstance ever just bump the git commit without
      confirming changes have not been made to the configure system */
-    rev = "aa6db39a173a1f69d9d80e578bc5ca0a06d0bac3"; # 2015-2-6
-    sha256 = "1d6lf3hksk59f50wkjidbmbglwppl5kqwmbsbi3ba83xbbpz84yp";
+    rev = "f4c29ae9ea16c502c980a81ca9683327d5051929"; # 2015-2-12
+    sha256 = "1d5m3dryfdrsf3mi6bcbsndyhihzksqalzfvi21fbxxkk1imsb9x";
   };
 
   patchPhase = ''
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     (mkFlag temporalDenoisingSupport "temporal-denoising")
     (mkFlag vp9TemporalDenoisingSupport "vp9-temporal-denoising")
     (mkFlag coefficientRangeCheckingSupport "coefficient-range-checking")
-    (mkFlag vp9HighbitdepthSupport "vp9-highbitdepth")
+    (mkFlag (vp9HighbitdepthSupport && !stdenv.isi686) "vp9-highbitdepth")
     (mkFlag experimentalSupport "experimental")
     # Experimental features
     (mkFlag experimentalSpatialSvcSupport "spatial-svc")
