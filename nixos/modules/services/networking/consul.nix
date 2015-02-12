@@ -15,9 +15,6 @@ let
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
     ++ cfg.extraConfigFiles;
 
-  devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = flip map devices
-    (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
 in
 {
   options = {
@@ -140,8 +137,7 @@ in
 
     systemd.services.consul = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ systemdDevices;
-      bindsTo = systemdDevices;
+      after = [ "network.target" ];
       restartTriggers = [ config.environment.etc."consul.json".source ];
 
       serviceConfig = {
