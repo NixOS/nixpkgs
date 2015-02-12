@@ -465,6 +465,9 @@ self: super: {
   # https://github.com/jaspervdj/blaze-markup/issues/15
   blaze-markup = dontCheck super.blaze-markup;
 
+  # https://github.com/bos/bloomfilter/issues/7
+  bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
+
 } // {
 
   # Not on Hackage.
