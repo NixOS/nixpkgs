@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
-    rev = "1de3a48098053aaebd35232bd73e3ce3f3fdf51c";
-    sha256 = "0d1953nmi251czkm1dmd7vnm3iz2rkqbznlp6ph33va0d7kw1kfc";
+    rev = "32cd33bd19348afb77ab849846e0b6d6157ea308";
+    sha256 = "1fsc1sa5ymdkf11bshlh8fwqv7j7c4pfzjdf6ivllpanp02ryv4l";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
-  patches = [ ./fix-bash-completion.patch ./glibc-2.20.patch ];
+  patches = [ ./fix-bash-completion.patch ];
 
   configureFlags = optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
