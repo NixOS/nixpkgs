@@ -1,11 +1,14 @@
 { stdenv, fetchurl }:
 
+let
+  version = "9.38";
+in
 stdenv.mkDerivation rec {
-  name = "p7zip-9.20.1";
-  
+  name = "p7zip-${version}";
+
   src = fetchurl {
-    url = mirror://sourceforge/p7zip/p7zip_9.20.1_src_all.tar.bz2;
-    sha256 = "10j7rc1nzdp7vvcpc3340yi3qw7abby4szv8zkwh10d0zizpwma9";
+    url = "mirror://sourceforge/p7zip/p7zip_${version}_src_all.tar.bz2";
+    sha256 = "0mxribb9a3lz3bifz6002hg7vyy8h9piinypian533hw8qvswfx7";
   };
 
   preConfigure = ''
