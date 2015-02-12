@@ -1803,37 +1803,7 @@ rec {
 
 
   /* Default disk images generated from the `rpmDistros' and
-     `debDistros' sets (along with Red Hat 9 and SuSE 9.0 images). */
+     `debDistros' sets. */
+  diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
 
-  diskImages =
-    lib.mapAttrs (name: f: f {}) diskImageFuns //
-
-    { redhat9i386 = fillDiskWithRPMs {
-        name = "redhat-9-i386";
-        fullName = "Red Hat Linux 9 (i386)";
-        size = 1024;
-        rpms = import ./rpm/redhat-9-i386.nix { inherit fetchurl; };
-      };
-
-      suse90i386 = fillDiskWithRPMs {
-        name = "suse-9.0-i386";
-        fullName = "SUSE Linux 9.0 (i386)";
-        size = 1024;
-        rpms = import ./rpm/suse-9-i386.nix { inherit fetchurl; };
-        # Urgh.  The /etc/group entries are installed by aaa_base (or
-        # something) but due to dependency ordering, that package isn't
-        # installed yet by the time some other packages refer to these
-        # entries.
-        preInstall = ''
-          echo 'bin:x:1:daemon' >> /mnt/etc/group
-          echo 'tty:x:5:' >> /mnt/etc/group
-          echo 'disk:x:6:' >> /mnt/etc/group
-          echo 'lp:x:7:' >> /mnt/etc/group
-          echo 'uucp:x:14:' >> /mnt/etc/group
-          echo 'audio:x:17:' >> /mnt/etc/group
-          echo 'video:x:33:' >> /mnt/etc/group
-        '';
-      };
-
-    };
 } // import ./windows pkgs
