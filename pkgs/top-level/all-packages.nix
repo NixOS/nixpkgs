@@ -2327,6 +2327,8 @@ let
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
+  polygraph = callPackage ../tools/networking/polygraph { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
