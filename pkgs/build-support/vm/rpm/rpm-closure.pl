@@ -28,20 +28,20 @@ sub rpmvercmp {
         my $v2 = $vercmps2[$i];
 
         if($v1 =~ /^[0-9]*$/ && $v2 =~ /^[0-9]*$/) {
-	    if ( int($v1) > int($v2) ) {
-		return 1;
-	    }
-	    elsif ( int($v1) < int($v2) ) {
-		return -1;
-	    }
-	} else {
-	    if ( $v1 gt $v2 ) {
-		return 1;
-	    }
-	    elsif ( $v1 lt $v2 ) {
-		return -1;
-	    }
-	}
+            if ( int($v1) > int($v2) ) {
+                return 1;
+            }
+            elsif ( int($v1) < int($v2) ) {
+                return -1;
+            }
+        } else {
+            if ( $v1 gt $v2 ) {
+                return 1;
+            }
+            elsif ( $v1 lt $v2 ) {
+                return -1;
+            }
+        }
     }
     if($l1 == $l2) {
         return 0;
@@ -93,11 +93,11 @@ my %provides;
 foreach my $pkgName (keys %pkgs) {
     #print STDERR "looking at $pkgName\n";
     my $pkg = $pkgs{$pkgName};
-    
+
     #print STDERR keys %{$pkg->{format}}, "\n";
 
     #print STDERR $pkg->{format}->{'rpm:provides'}, "\n";
-    
+
     my $provides = $pkg->{format}->{'rpm:provides'}->{'rpm:entry'} or die;
     foreach my $req (@{$provides}) {
         #print "$req->{name}\n";
@@ -123,9 +123,9 @@ sub closePackage {
 
     return if defined $donePkgs{$pkgName};
     $donePkgs{$pkgName} = 1;
-    
+
     print STDERR ">>> $pkgName\n";
-    
+
     my $pkg = $pkgs{$pkgName} or die "package $pkgName doesn't exist";
 
     my $requires = $pkg->{format}->{'rpm:requires'}->{'rpm:entry'} || [];
@@ -140,7 +140,7 @@ sub closePackage {
             next;
         }
         print STDERR "    satisfied by $provider\n";
-        push @deps, $provider; 
+        push @deps, $provider;
     }
 
     closePackage($_) foreach @deps;
