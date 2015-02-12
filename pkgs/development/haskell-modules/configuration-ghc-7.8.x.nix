@@ -103,7 +103,7 @@ self: super: {
     time = self.time_1_5_0_1;
     unix = self.unix_2_7_1_0;
     directory = self.directory_1_2_1_0;
-    process = overrideCabal self.process_1_2_1_0 (drv: { coreSetup = true; });
+    process = overrideCabal self.process_1_2_2_0 (drv: { coreSetup = true; });
     inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
   };
   amazonka = super.amazonka.overrideScope amazonkaEnv;
