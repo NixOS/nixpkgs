@@ -90,19 +90,25 @@ for (my $i = 0; $i < scalar(@packagesFiles); $i++) {
 }
 
 my %provides;
-foreach my $pkgName (keys %pkgs) {
+PKG: foreach my $pkgName (keys %pkgs) {
     #print STDERR "looking at $pkgName\n";
     my $pkg = $pkgs{$pkgName};
 
-    #print STDERR keys %{$pkg->{format}}, "\n";
-
-    #print STDERR $pkg->{format}->{'rpm:provides'}, "\n";
+    # Skip packages that conflict with a required package.
+    my $conflicts = $pkg->{format}->{'rpm:conflicts'}->{'rpm:entry'} // [];
+    foreach my $conflict (@{$conflicts}) {
+        next if $conflict->{flags} // "" eq "LT" || $conflict->{flags} // "" eq "LE";
+        #print STDERR "  $pkgName conflicts with $conflict->{name}\n";
+        if (grep { $_ eq $conflict->{name} } @toplevelPkgs) {
+            print STDERR "skipping package $pkgName because it conflicts with a required package\n";
+            next PKG;
+        }
+    }
 
     my $provides = $pkg->{format}->{'rpm:provides'}->{'rpm:entry'} or die;
     foreach my $req (@{$provides}) {
-        #print "$req->{name}\n";
-        #print STDERR "  provides $req\n";
-        #die "multiple provides for $req" if defined $provides{$req};
+        #print STDERR "  $pkgName provides $req->{name}\n";
+        #die "multiple provides for $req->{name}" if defined $provides{$req->{name}};
         $provides{$req->{name}} = $pkgName;
     }
 
@@ -133,13 +139,13 @@ sub closePackage {
     my @deps = ();
     foreach my $req (@{$requires}) {
         next if $req->{name} =~ /^rpmlib\(/;
-        print STDERR "  needs $req->{name}\n";
+        #print STDERR "  needs $req->{name}\n";
         my $provider = $provides{$req->{name}};
         if (!defined $provider) {
             print STDERR "    WARNING: no provider for $req->{name}\n";
             next;
         }
-        print STDERR "    satisfied by $provider\n";
+        #print STDERR "    satisfied by $provider\n";
         push @deps, $provider;
     }
 
