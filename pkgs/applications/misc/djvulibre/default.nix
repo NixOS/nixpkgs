@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libjpeg, libtiff, librsvg, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  name = "djvulibre-3.5.25.3";
+  name = "djvulibre-3.5.27";
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${name}.tar.gz";
-    sha256 = "1q5i5ha4zmj2ahjfhi8cv1rah80vm43m9ads46ji38rgvpb7x3c9";
+    sha256 = "0psh3zl9dj4n4r3lx25390nx34xz0bg0ql48zdskhq354ljni5p6";
   };
 
   buildInputs = [ libjpeg libtiff librsvg ] ++ libintlOrEmpty;
