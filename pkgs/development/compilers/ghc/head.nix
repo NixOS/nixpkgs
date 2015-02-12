@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     pushd ghc-${builtins.substring 0 7 rev}
+    patchShebangs .
     ./boot
     popd
   '';
