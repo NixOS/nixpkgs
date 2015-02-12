@@ -64,8 +64,8 @@ let
     patchShebangs = dir: ''
         node=`type -p node`
         coffee=`type -p coffee || true`
-        find -L ${dir} -type f -print0 | \
-        xargs -0 sed --follow-symlinks -i \
+        find -L ${dir} -type f -print0 | xargs -0 grep -Il . | \
+        xargs sed --follow-symlinks -i \
             -e 's@#!/usr/bin/env node@#!'"$node"'@' \
             -e 's@#!/usr/bin/env coffee@#!'"$coffee"'@' \
             -e 's@#!/.*/node@#!'"$node"'@' \
