@@ -118,7 +118,7 @@ python.stdenv.mkDerivation (attrs // {
     # work as expected
 
     # --old-and-unmanagable:
-    # instruct setuptools not to use eggs but fallback to plan package install 
+    # instruct setuptools not to use eggs but fallback to plan package install
     # this also reduces one .pth file in the chain, but the main reason is to
     # force install process to install only scripts for the package we are
     # installing (otherwise it will install scripts also for dependencies)
