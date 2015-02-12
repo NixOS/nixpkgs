@@ -6,13 +6,13 @@ let
   cfg = config.services.sslh;
   configFile = pkgs.writeText "sslh.conf" ''
     verbose: ${if cfg.verbose then "true" else "false"};
-    foreground: false;
+    foreground: true;
     inetd: false;
     numeric: false;
     transparent: false;
     timeout: "${toString cfg.timeout}";
     user: "nobody";
-    pidfile: "/run/sslh.pid";
+    pidfile: "${cfg.pidfile}";
 
     listen:
     (
@@ -50,6 +50,12 @@ in
         description = "Timeout in seconds.";
       };
 
+      pidfile = mkOption {
+        type = types.path;
+        default = "/run/sslh.pid";
+        description = "PID file path for sslh daemon.";
+      };
+
       host = mkOption {
         type = types.str;
         default = config.networking.hostName;
@@ -77,7 +83,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${pkgs.sslh}/bin/sslh -F ${configFile}";
       serviceConfig.KillMode = "process";
-      serviceConfig.PIDFile = "/run/sslh.pid";
+      serviceConfig.PIDFile = "${cfg.pidfile}";
     };
   };
 }
