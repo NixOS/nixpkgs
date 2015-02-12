@@ -50,6 +50,9 @@ stdenv.mkDerivation rec {
 
     # Use whatever `cc` the stdenv provides
     substituteInPlace src/runtime/Config.x86-64-darwin --replace gcc cc
+
+    substituteInPlace src/runtime/Config.x86-64-darwin \
+      --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
   '';
 
   preBuild = ''
