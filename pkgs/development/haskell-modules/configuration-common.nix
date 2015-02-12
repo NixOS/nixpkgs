@@ -465,6 +465,9 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
 
+  # https://github.com/gregwebs/FileLocation.hs/issues/13
+  file-location = dontCheck super.file-location;
+
 } // {
 
   # Not on Hackage.
