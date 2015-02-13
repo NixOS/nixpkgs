@@ -10,10 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "1bcjl2h60gvr1dc5a963h3vnz9zl6n8qrfa3qmb2x3229lj1iiaj";
   };
 
-  preConfigure = ''
+  patchPhase = ''
     sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
+  '';
+
+  makeFlags = [
+    ''INSTALL_ROOT=$(out)''
+  ];
+
+  preInstall = ''
     mkdir -p "$out/"{bin,lib,man/man1,man/man3,include/gsm}
-    makeFlags="$makeFlags INSTALL_ROOT=$out"
   '';
 
   NIX_CFLAGS_COMPILE = "-fPIC";
