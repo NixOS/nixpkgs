@@ -3494,7 +3494,7 @@ let
 
   # Import Haskell infrastructure.
 
-  haskell = let pkgs_       = pkgs // { gmp = gmp.override { withStatic = true; }; };
+  haskell = let pkgs_       = pkgs // { /* add necessary overrides here */ };
                 callPackage = newScope pkgs_;
                 newScope    = extra: lib.callPackageWith (pkgs_ // pkgs_.xorg // extra);
             in callPackage ./haskell-defaults.nix { pkgs = pkgs_; inherit callPackage newScope; };
