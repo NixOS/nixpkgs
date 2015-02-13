@@ -12637,6 +12637,9 @@ let
     cmake = cmakeCurses;
   });
 
+  ### SCIENCE/PROGRAMMING
+
+  plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
 
