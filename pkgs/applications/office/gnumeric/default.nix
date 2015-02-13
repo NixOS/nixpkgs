@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, goffice, makeWrapper, gtk3, gnome_icon_theme
+, goffice, makeWrapper, gtk3, gnome_icon_theme, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for f in "$out"/bin/gnumeric-*; do
       wrapProgram $f \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
     done
     rm $out/share/icons/hicolor/icon-theme.cache
   '';
