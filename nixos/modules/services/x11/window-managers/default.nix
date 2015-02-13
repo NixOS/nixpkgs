@@ -7,19 +7,19 @@ let
 in
 
 {
-  imports =
-    [ ./compiz.nix
-      ./openbox.nix
-      ./metacity.nix
-      ./none.nix
-      ./twm.nix
-      ./wmii.nix
-      ./xmonad.nix
-      ./i3.nix
-      ./herbstluftwm.nix
-      ./bspwm.nix
-      ./stumpwm.nix
-    ];
+  imports = [
+    ./bspwm.nix
+    ./compiz.nix
+    ./herbstluftwm.nix
+    ./i3.nix
+    ./metacity.nix
+    ./openbox.nix
+    ./stumpwm.nix
+    ./twm.nix
+    ./windowmaker.nix
+    ./wmii.nix
+    ./xmonad.nix
+    ./none.nix ];
 
   options = {
 

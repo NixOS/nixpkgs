@@ -2,6 +2,7 @@
 
 callPackage ./generic.nix (args // rec {
   version = "2.6.1";
+  # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {
     owner = "google";
     repo = "protobuf";

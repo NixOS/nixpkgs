@@ -26,6 +26,7 @@ let
                 pkgs.docbook5_xsl
                 pkgs.grub
                 pkgs.perlPackages.XMLLibXML
+                pkgs.perlPackages.ListCompare
                 pkgs.unionfs-fuse
                 pkgs.gummiboot
               ];

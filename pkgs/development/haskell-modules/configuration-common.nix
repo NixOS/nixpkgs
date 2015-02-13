@@ -449,9 +449,6 @@ self: super: {
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
 
-  # https://github.com/Twinside/Rasterific/issues/20
-  Rasterific = dontCheck super.Rasterific;
-
   # Upstream notified by e-mail.
   MonadCompose = markBrokenVersion "0.2.0.0" super.MonadCompose;
 
@@ -461,6 +458,12 @@ self: super: {
     doCheck = false;
     doHaddock = false;
   });
+
+  # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
+  CHXHtml = dontDistribute super.CHXHtml;
+
+  # https://github.com/bos/bloomfilter/issues/7
+  bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
 
 } // {
 

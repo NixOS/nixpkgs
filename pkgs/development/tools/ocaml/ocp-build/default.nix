@@ -5,8 +5,8 @@ stdenv.mkDerivation {
   name = "ocp-build-1.99.8-beta";
 
   src = fetchurl {
-    url = "https://github.com/OCamlPro/ocp-build/archive/ocp-build.1.99.8-beta.tar.gz";
-    sha256 = "06qh8v7k5m52xbivas08lblspsnvdl0vd7ghfj6wvpnfl8qvqabn";
+    url = http://www.typerex.org/pub/ocp-build/ocp-build.1.99.8-beta.tar.gz;
+    sha256 = "03zqpl73ah0fji5baxmk8w0h7waamlnhhysi128yap4abzsh5w87";
   };
 
   buildInputs = [ ocaml findlib ncurses ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   TERM = "xterm";
 
   meta = with stdenv.lib; {
-    homepage = "http://typerex.ocamlpro.com/ocp-build.html";
+    homepage = http://www.typerex.org/ocp-build.html;
     description = "A build tool for OCaml";
     longDescription = ''
       ocp-build is a build system for OCaml application, based on simple
