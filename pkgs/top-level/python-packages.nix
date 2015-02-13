@@ -1092,15 +1092,19 @@ let
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.34.0";
+    version = "2.36.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "08zavyn02qng9y0251a9mrlkb3aw33m7gx5kc97hwngl3xk3s777";
+      sha256 = "1zrlmri89q2090yh9ylx798q4yk54y39v7w7xj101fnwc1r6jlqr";
     };
 
-    # The tests seem to require AWS credentials.
-    doCheck = false;
+    checkPhase = ''
+      ${python.interpreter} tests/test.py default
+    '';
+
+    buildInputs = [ self.nose self.mock ];
+    propagatedBuildInputs = [ self.requests self.httpretty ];
 
     meta = {
       homepage = https://github.com/boto/boto;
@@ -7217,11 +7221,11 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.14.0";
+    version = "0.15.4";
 
     src = pkgs.fetchurl {
+      sha256 = "1s57krfa5kpn15ma7dcivizgn987j24i6cxrnjf9hnnann0q26cd";
       url = "https://pypi.python.org/packages/source/p/pgcli/${name}.tar.gz";
-      sha256 = "0x31b3kvybdvd413h6b5iq4b5vv2x30ff1r00gs6ana0xpzzrqxp";
     };
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
@@ -7232,7 +7236,7 @@ let
         Rich command-line interface for PostgreSQL with auto-completion and
         syntax highlighting.
       '';
-      homepage = http://pgcli.com/about;
+      homepage = http://pgcli.com;
       license = with licenses; [ bsd3 ];
       maintainers = with maintainers; [ nckx ];
     };
@@ -7485,9 +7489,8 @@ let
   protobuf = buildPythonPackage rec {
     inherit (pkgs.protobuf) name src;
 
-    propagatedBuildInputs = with self; [ pkgs.protobuf google_apputils  ];
-    sourceRoot = "${name}/python";
-
+    propagatedBuildInputs = with self; [ pkgs.protobuf google_apputils ];
+    sourceRoot = "${name}-src/python";
 
     meta = {
       description = "Protocol Buffers are Google's data interchange format";
@@ -7659,7 +7662,7 @@ let
       sha256 = "1xanqn7rn96841s3lim5lnx5743gc4kyfg4ggj1ys5r0gw8i6har";
     };
 
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;
 
     propagatedBuildInputs = with self; [ dateutil ];
 
@@ -7680,7 +7683,7 @@ let
       sha256 = "0avkrcpisfvhz103v7vmq2jd83hvmpqrb4mlbx6ikkk1wcvclsx8";
     };
 
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;
 
     propagatedBuildInputs = with self; [ sqlite3 vobject lxml requests urwid pyxdg ];
 
@@ -9803,12 +9806,12 @@ let
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.4";
+    name = "sympy-0.7.6";
     disabled = isPy34;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
-      sha256 = "0h1b9mx0snyyybj1x1ga69qssgjzkkgx2rw6nddjhyz1fknf8ywh";
+      sha256 = "19yp0gy4i7p4g6l3b8vaqkj9qj7yqb5kqy0qgbdagpzgkdz958yz";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
@@ -10243,11 +10246,11 @@ let
   };
 
   sqlalchemy9 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.9.4";
+    name = "SQLAlchemy-0.9.8";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      md5 = "c008ea5e2565ec1418ee8461393a99b1";
+      md5 = "470ca4da4a0081efc830f0d90dd91682";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -10538,13 +10541,12 @@ let
   };
 
   taskw = buildPythonPackage rec {
-    version = "0.8.6";
+    version = "1.0.2";
     name = "taskw-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/taskw/${name}.tar.gz";
-      # md5 = "9f3ce2eaff9a3986d04632547168894d"; # provided by pypi website.
-      sha256 = "341a165a1c2ef94fb1c2a49a785357377f04a0d55cabe9563179849497e47146";
+      sha256 = "0wa2hwplss2r56jrwib6j9sxxm02dz78878975jk9fj10p84w5kr";
     };
 
     patches = [ ../development/python-modules/taskw/use-template-for-taskwarrior-install-path.patch ];
@@ -10553,7 +10555,7 @@ let
         --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
     '';
 
-    buildInputs = with self; [ nose pkgs.taskwarrior ];
+    buildInputs = with self; [ nose pkgs.taskwarrior tox ];
     propagatedBuildInputs = with self; [ six dateutil pytz ];
 
     meta = {
@@ -10693,14 +10695,8 @@ let
     };
   };
 
-  # TODO
-  # Installs correctly but fails tests that involve simple things like:
-  # cmd.run("tox", "-h")
-  # also, buildPythonPackage needs to supply the tox.ini correctly for projects that use tox for their tests
-  #
-
   tox = buildPythonPackage rec {
-    name = "tox-1.7.2";
+    name = "tox-1.8.1";
 
     propagatedBuildInputs = with self; [ py virtualenv ];
 
@@ -10708,7 +10704,7 @@ let
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/tox/${name}.tar.gz";
-      md5 = "0d9b3acb1a9252659d753b0ae6b9b264";
+      md5 = "c4423cc6512932b37e5b0d1faa87bef2";
     };
   };
 
@@ -12272,6 +12268,8 @@ let
       rev = "refs/tags/${version}";
       sha256 = "0nyqb0v8yrkqnrqsh1hlhvzr2pyvkxvkw701p3gpsvk29c0gb5n6";
     };
+
+    doCheck = false;  # some tests use networking
 
     buildInputs = with self; [ mock unittest2 ];
     propagatedBuildInputs = with self; [ requests ];

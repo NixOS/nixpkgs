@@ -34,7 +34,7 @@ rec {
     ghc7101 = callPackage ../development/compilers/ghc/7.10.1.nix ({ ghc = compiler.ghc784; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({ ghc = packages.ghc784.ghc; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
     ghc = compiler.ghc784;

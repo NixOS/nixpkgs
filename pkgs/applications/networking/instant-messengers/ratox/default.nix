@@ -1,15 +1,14 @@
-{ stdenv, fetchgit, libtoxcore
+{ stdenv, fetchurl, libtoxcore
 , conf ? null }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "ratox-dev-20150107";
+  name = "ratox-0.2.1";
 
-  src = fetchgit {
-    url = "git://git.2f30.org/ratox";
-    rev = "8be76e4cc829d86b8e1cae43a0d932600d6ff9fb";
-    sha256 = "7fe492de3e69a08f9c1bb59a319d0e410905f06514abe99b4d4fe5c899650448";
+  src = fetchurl {
+    url = "nix-prefetch-url http://git.2f30.org/ratox/snapshot/${name}.tar.gz";
+    sha256 = "1fm9b3clvnc2nf0pd1z8g08kfszwhk1ij1lyx57wl8vd51z4xsi5";
   };
 
   buildInputs = [ libtoxcore ];

@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, libevent, zlib, openssl, db, bison, pam }:
+{ stdenv, fetchurl, libasr, libevent, zlib, openssl, db, bison, pam }:
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "5.4.2p1";
+  version = "5.4.4p1";
 
-  buildInputs = [ libevent zlib openssl db bison pam ];
+  buildInputs = [ libasr libevent zlib openssl db bison pam ];
 
   src = fetchurl {
     url = "http://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "18nrzfjhv9znb5dbhc5k3fi31a3vr1r8j36q3fzghkh47n6z9yjg";
-  };  
+    sha256 = "1gcfdmpkk892wnnhwc2nb559bwl3k892w7saj4q8m6jfll53660i";
+  };
 
-  configureFlags = [ 
+  configureFlags = [
     "--with-mantype=doc"
     "--with-pam"
     "--without-bsd-auth"
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--with-privsep-user=smtpd"
     "--with-queue-user=smtpq"
     "--with-ca-file=/etc/ssl/certs/ca-bundle.crt"
-  ];  
+  ];
 
   meta = {
     homepage = https://www.opensmtpd.org/;

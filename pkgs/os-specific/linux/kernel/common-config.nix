@@ -49,7 +49,6 @@ with stdenv.lib;
   NUMA? y
 
   # Disable some expensive (?) features.
-  FTRACE n
   KPROBES n
   PM_TRACE_RTC n
 
@@ -148,6 +147,7 @@ with stdenv.lib;
 
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
+  FANOTIFY y
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y

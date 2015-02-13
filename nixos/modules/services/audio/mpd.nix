@@ -100,6 +100,7 @@ in {
       script = "exec mpd --no-daemon ${mpdConf}";
       serviceConfig = {
         User = "mpd";
+        PermissionsStartOnly = true;
       };
     };
 

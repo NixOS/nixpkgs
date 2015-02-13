@@ -35,13 +35,15 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  installPhase = ''
-    PREFIX="$out" make install
-
+  preInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
+  '';
 
+  installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
     # Install Emacs Mode. NOTE: We can't install the necessary
     # dependencies (s.el and f.el) here. The user has to do this
     # himself.

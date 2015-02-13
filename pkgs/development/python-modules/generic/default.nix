@@ -51,7 +51,7 @@
 
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled then throw "${name} not supported for interpreter ${python.executable}" else python.stdenv.mkDerivation (attrs // {
+python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   name = namePrefix + name;
@@ -118,7 +118,7 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
     # work as expected
 
     # --old-and-unmanagable:
-    # instruct setuptools not to use eggs but fallback to plan package install 
+    # instruct setuptools not to use eggs but fallback to plan package install
     # this also reduces one .pth file in the chain, but the main reason is to
     # force install process to install only scripts for the package we are
     # installing (otherwise it will install scripts also for dependencies)
@@ -167,6 +167,7 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   meta = with lib.maintainers; {
     # default to python's platforms
     platforms = python.meta.platforms;
+    broken = disabled;
   } // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];

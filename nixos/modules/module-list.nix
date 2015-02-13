@@ -55,6 +55,7 @@
   ./programs/atop.nix
   ./programs/bash/bash.nix
   ./programs/blcr.nix
+  ./programs/cdemu.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
@@ -173,6 +174,7 @@
   ./services/mail/spamassassin.nix
   ./services/misc/apache-kafka.nix
   #./services/misc/autofs.nix
+  ./services/misc/canto-daemon.nix
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/dictd.nix
@@ -287,6 +289,7 @@
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
   ./services/networking/spiped.nix
+  ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix

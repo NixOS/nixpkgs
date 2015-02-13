@@ -1,13 +1,13 @@
 { stdenv, fetchzip, ocaml, findlib, jsonm, hex, sexplib, lwt }:
 
-let version = "0.3.1"; in
+let version = "0.4.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml-ezjsonm-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/ezjsonm/archive/${version}.tar.gz";
-    sha256 = "0cz1v75j8j5y4vfcgylp5zaxiy7541qg6pm4wrgmvy6fmh82654f";
+    sha256 = "0cfjh8awajvw6kkmxr65dvri4k6h29pynxvk76a8c2lkixpsc095";
   };
 
   buildInputs = [ ocaml findlib ];

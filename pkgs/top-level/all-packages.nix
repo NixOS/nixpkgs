@@ -374,6 +374,12 @@ let
     inherit sha256;
   };
 
+  fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name;
+    url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
+    inherit sha256;
+  };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
@@ -524,10 +530,7 @@ let
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asymptote = builderDefsPackage ../tools/graphics/asymptote {
-    inherit freeglut ghostscriptX imagemagick fftw boehmgc
-      mesa ncurses readline gsl libsigsegv python zlib perl
-      texinfo xz;
+  asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texLiveAggregationFun {
       paths = [ texLive texLiveExtra texLiveCMSuper ];
     };
@@ -690,6 +693,14 @@ let
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
+
+  cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
+
+  gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
+
+  image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
+
   ccnet = callPackage ../tools/networking/ccnet { };
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
@@ -719,6 +730,8 @@ let
   };
 
   cv = callPackage ../tools/misc/cv { };
+
+  contacts = callPackage ../tools/misc/contacts { };
 
   datamash = callPackage ../tools/misc/datamash { };
 
@@ -1751,6 +1764,8 @@ let
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
+  limesurvey = callPackage ../servers/limesurvey { };
+
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
   };
@@ -2055,6 +2070,8 @@ let
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  openfortivpn = callPackage ../tools/networking/openfortivpn { };
+
   obexfs = callPackage ../tools/bluetooth/obexfs { };
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
@@ -2315,6 +2332,8 @@ let
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
+  polygraph = callPackage ../tools/networking/polygraph { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
@@ -2460,6 +2479,8 @@ let
   rzip = callPackage ../tools/compression/rzip { };
 
   s3backer = callPackage ../tools/filesystems/s3backer { };
+  
+  s3fs = callPackage ../tools/filesystems/s3fs { };
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
@@ -3708,6 +3729,8 @@ let
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
   mozart = mozart-binary;
 
+  nim = callPackage ../development/compilers/nim { };
+
   neko = callPackage ../development/compilers/neko { };
 
   nasm = callPackage ../development/compilers/nasm { };
@@ -4861,6 +4884,8 @@ let
     inherit (perlPackages) XMLSimple;
   };
 
+  include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use { };
+
   indent = callPackage ../development/tools/misc/indent { };
 
   ino = callPackage ../development/arduino/ino { };
@@ -5942,6 +5967,8 @@ let
 
   libarchive = callPackage ../development/libraries/libarchive { };
 
+  libasr = callPackage ../development/libraries/libasr { };
+
   libass = callPackage ../development/libraries/libass { };
 
   libassuan1 = callPackage ../development/libraries/libassuan1 { };
@@ -6550,6 +6577,7 @@ let
   libviper = callPackage ../development/libraries/libviper { };
 
   libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
 
@@ -8133,6 +8161,7 @@ let
   radius = callPackage ../servers/radius { };
 
   redis = callPackage ../servers/nosql/redis { };
+  redis3 = callPackage ../servers/nosql/redis/3.0.nix { };
 
   redstore = callPackage ../servers/http/redstore { };
 
@@ -8225,6 +8254,8 @@ let
       openssl;
   });
   squid = squids.squid31; # has ipv6 support
+
+  sslh = callPackage ../servers/sslh { };
 
   thttpd = callPackage ../servers/http/thttpd { };
 
@@ -8543,8 +8574,6 @@ let
 
   iw = callPackage ../os-specific/linux/iw { };
 
-  iwlwifi = callPackage ../os-specific/linux/firmware/iwlwifi { };
-
   iwlegacy = callPackage ../os-specific/linux/firmware/iwlegacy { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
@@ -8618,7 +8647,7 @@ let
 
   linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.crc_regression ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -8628,7 +8657,7 @@ let
 
   linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.crc_regression ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -8638,7 +8667,7 @@ let
 
   linux_3_14 = makeOverridable (import ../os-specific/linux/kernel/linux-3.14.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.crc_regression ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -8647,6 +8676,16 @@ let
   };
 
   linux_3_18 = makeOverridable (import ../os-specific/linux/kernel/linux-3.18.nix) {
+    inherit fetchurl stdenv perl buildLinux;
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
+  linux_3_19 = makeOverridable (import ../os-specific/linux/kernel/linux-3.19.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -8785,6 +8824,8 @@ let
 
     v86d = callPackage ../os-specific/linux/v86d { };
 
+    vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
+
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit (gnome) libIDL;
@@ -8809,12 +8850,12 @@ let
   };
 
   # The current default kernel / kernel modules.
-  linux = linuxPackages.kernel;
   linuxPackages = linuxPackages_3_14;
+  linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linux_latest = pkgs.linux_3_18;
-  linuxPackages_latest = pkgs.linuxPackages_3_18;
+  linuxPackages_latest = pkgs.linuxPackages_3_19;
+  linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
@@ -8825,6 +8866,7 @@ let
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
+  linuxPackages_3_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_19 linuxPackages_3_19);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
                            let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
@@ -9625,6 +9667,10 @@ let
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
+
+  canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
+
+  canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
@@ -11159,7 +11205,7 @@ let
   };
 
   sakura = callPackage ../applications/misc/sakura {
-    inherit (gnome) vte;
+    inherit (gnome3) vte;
   };
 
   sbagen = callPackage ../applications/misc/sbagen { };
