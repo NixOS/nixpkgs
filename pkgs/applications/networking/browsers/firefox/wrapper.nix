@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   desktopItem = makeDesktopItem {
     name = browserName;
     exec = browserName + " %U";
-    icon = "$out/icons/${browserName}.png";
+    icon = browserName;
     comment = "";
     desktopName = desktopName;
     genericName = "Web Browser";
