@@ -88,6 +88,7 @@ let
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
     (optionalString (versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
+    (optionalString (versionOlder "7.10" ghc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
   ];
 
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
