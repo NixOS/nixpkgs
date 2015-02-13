@@ -36,7 +36,7 @@ EOF
     read reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
-        exec setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console"
+        exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
     elif [ -n "$allowShell" -a "$reply" = i ]; then
         echo "Starting interactive shell..."
         setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
