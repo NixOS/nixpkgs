@@ -8583,8 +8583,6 @@ let
 
   iw = callPackage ../os-specific/linux/iw { };
 
-  iwlegacy = callPackage ../os-specific/linux/firmware/iwlegacy { };
-
   jfbview = callPackage ../os-specific/linux/jfbview { };
 
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
