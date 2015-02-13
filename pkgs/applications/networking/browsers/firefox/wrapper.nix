@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   desktopItem = makeDesktopItem {
     name = browserName;
     exec = browserName + " %U";
-    icon = "$out/icons/firefox.png";
+    icon = "$out/icons/${browserName}.png";
     comment = "";
     desktopName = desktopName;
     genericName = "Web Browser";
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     }
 
     mkdir -p $out/share/icons
-    ln -s "$out/lib/firefox-35.0.1/browser/icons/mozicon128.png" "$out/share/icons/firefox.png"
+    ln -s $out/lib/${browserName}/browser/icons/mozicon128.png $out/share/icons/${browserName}.png
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications
