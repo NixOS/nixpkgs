@@ -43,6 +43,20 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
+  fsnotify = overrideCabal (super.fsnotify.override {
+    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.hfsevents;
+  }) (drv: {
+    doCheck = !pkgs.stdenv.isDarwin;
+  });
+
+  system-fileio = overrideCabal super.system-fileio (drv: {
+    doCheck = !pkgs.stdenv.isDarwin;
+  });
+
+  c2hs = overrideCabal super.c2hs (drv: {
+    doCheck = !pkgs.stdenv.isDarwin;
+  });
+
   # Depends on code distributed under a non-free license.
   bindings-yices = dontDistribute super.bindings-yices;
   yices = dontDistribute super.yices;
