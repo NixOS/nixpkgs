@@ -5677,6 +5677,8 @@ let
 
   libarchive = callPackage ../development/libraries/libarchive { };
 
+  libasr = callPackage ../development/libraries/libasr { };
+
   libass = callPackage ../development/libraries/libass { };
 
   libassuan1 = callPackage ../development/libraries/libassuan1 { };
