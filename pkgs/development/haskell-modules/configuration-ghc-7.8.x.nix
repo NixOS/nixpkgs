@@ -37,6 +37,9 @@ self: super: {
   # mtl 2.2.x needs the latest transformers.
   mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_2_0; };
 
+  # https://github.com/RyanGlScott/mtl-compat/issues/1
+  mtl-compat = markBrokenVersion "0.1.1" super.mtl-compat;
+
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
