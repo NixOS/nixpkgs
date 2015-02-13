@@ -1,11 +1,12 @@
 { stdenv, fetchurl, sqlite, ocaml, findlib, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "ocaml-sqlite3-2.0.8";
+stdenv.mkDerivation rec {
+  name = "ocaml-sqlite3-${version}";
+  version = "2.0.9";
 
   src = fetchurl {
-    url = https://github.com/mmottl/sqlite3-ocaml/releases/download/v2.0.8/sqlite3-ocaml-2.0.8.tar.gz;
-    sha256 = "1xalhjg5pbyad6b8cijq7fm5ss7ipjz68hzycggac58rnshwn2ix";
+    url = "https://github.com/mmottl/sqlite3-ocaml/releases/download/v${version}/sqlite3-ocaml-${version}.tar.gz";
+    sha256 = "0rwsx1nfa3xqmbygim2qx45jqm1gwf08m70wmcwkx50f1qk3l551";
   };
 
   buildInputs = [ ocaml findlib pkgconfig sqlite ];
