@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, libconfig, perl }:
+{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers }:
 
 stdenv.mkDerivation rec {
   name = "sslh-${version}";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libcap libconfig perl ];
+  buildInputs = [ libcap libconfig perl tcp_wrappers ];
 
-  makeFlags = "USELIBCAP=1";
+  makeFlags = "USELIBCAP=1 USELIBWRAP=1";
 
   installFlags = "PREFIX=$(out)";
 
