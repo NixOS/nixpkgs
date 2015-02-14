@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    description = "A private Mac OS ${version} SDK, suitable for building many of Apple's open source releases";
+    description = "A private Mac OS ${sdkVersion} SDK, suitable for building many of Apple's open source releases";
     maintainers = with maintainers; [ copumpkin ];
     platforms   = platforms.darwin;
     license     = licenses.unfree;
