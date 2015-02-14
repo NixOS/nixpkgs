@@ -488,6 +488,9 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
 
+  # https://github.com/ekmett/exceptions/issues/40
+  exceptions = dontCheck super.exceptions;
+
 } // {
 
   # Not on Hackage.
