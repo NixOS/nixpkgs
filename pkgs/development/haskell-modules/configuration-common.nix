@@ -102,6 +102,7 @@ self: super: {
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-text = dontHaddock super.shakespeare-text;
   uhc-light = dontHaddock super.uhc-light;                      # https://github.com/UU-ComputerScience/uhc/issues/45
+  wai-test = dontHaddock super.wai-test;
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
@@ -126,6 +127,29 @@ self: super: {
 
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
+
+  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146
+  hinotify = if pkgs.stdenv.isDarwin then super.hfsevents else super.hinotify;
+
+  # FSEvents API is very buggy and tests are unreliable. See
+  # http://openradar.appspot.com/10207999 and similar issues
+  fsnotify = if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
+
+  # Doesn't properly handle nonsense byte sequences on HFS+
+  # https://github.com/fpco/haskell-filesystem/issues/5
+  system-fileio = if pkgs.stdenv.isDarwin
+    then dontCheck super.system-fileio
+    else super.system-fileio;
+
+  # Prevents needing to add security_tool as a build tool to all of x509-system's
+  # dependencies.
+  x509-system = overrideCabal super.x509-system (drv: {
+    patchPhase = ''
+      ${drv.patchPhase or ""}
+      substituteInPlace System/X509/MacOS.hs --replace security ${pkgs.darwin.security_tool}/bin/security
+    '';
+  });
 
   # Does not compile: <http://hydra.cryp.to/build/469842/nixlog/1/raw>.
   base_4_7_0_2 = markBroken super.base_4_7_0_2;
