@@ -372,4 +372,21 @@ rec {
     uboot = null;
     gcc.arch = "loongson2f";
   };
+  
+  beaglebone = {
+    name = "beaglebone";
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "omap2plus_defconfig";
+    kernelBaseConfig = "omap2plus_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    kernelExtraConfig = ""; # TBD kernel config
+    kernelTarget = "zImage";
+    uboot = null;
+    gcc = {
+      arch = "armv7-a";
+      fpu = "vfpv3-d16";
+      float = "hard";
+    };
+  };
 }
