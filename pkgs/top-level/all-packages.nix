@@ -3720,6 +3720,8 @@ let
 
   mercury = callPackage ../development/compilers/mercury { };
 
+  microscheme = callPackage ../development/compilers/microscheme { };
+
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
   mlton = callPackage ../development/compilers/mlton { };
