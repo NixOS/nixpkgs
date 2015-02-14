@@ -8905,6 +8905,8 @@ let
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
+  libsass = callPackage ../development/libraries/libsass { };
+
   libsexy = callPackage ../development/libraries/libsexy { };
 
   libsepol = callPackage ../os-specific/linux/libsepol { };
