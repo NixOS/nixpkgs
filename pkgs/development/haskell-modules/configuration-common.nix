@@ -145,8 +145,7 @@ self: super: {
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
   x509-system = overrideCabal super.x509-system (drv: {
-    patchPhase = ''
-      ${drv.patchPhase or ""}
+    patchPhase = (drv.patchPhase or "") + pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
       substituteInPlace System/X509/MacOS.hs --replace security ${pkgs.darwin.security_tool}/bin/security
     '';
   });
