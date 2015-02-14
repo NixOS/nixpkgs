@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1pp5n15qwxrw1pibwjhhgsibyv5cafhamf8lwzjygs6y00fa2i2j";
   };
 
+  patches = [ ./cve-2015-1345.patch ];
+
   buildInputs = [ pcre libiconv ];
 
   doCheck = !stdenv.isDarwin;
