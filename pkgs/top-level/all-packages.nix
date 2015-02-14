@@ -4077,6 +4077,8 @@ let
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
+  ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
+
   opa = callPackage ../development/compilers/opa {
     ocamlPackages = ocamlPackages_4_00_1;
   };
