@@ -10,10 +10,25 @@ stdenv.mkDerivation rec {
     sha256 = "1bcjl2h60gvr1dc5a963h3vnz9zl6n8qrfa3qmb2x3229lj1iiaj";
   };
 
-  preConfigure = ''
+  patchPhase = ''
+    # Fix include directory
     sed -e 's,$(GSM_INSTALL_ROOT)/inc,$(GSM_INSTALL_ROOT)/include/gsm,' -i Makefile
-    mkdir -p "$out/"{bin,lib,man/man1,man/man3,include/gsm}
+
     makeFlags="$makeFlags INSTALL_ROOT=$out"
+
+    # Build shared library instead of static
+    sed -e 's,-c -O2 -DNeedFunctionPrototypes=1,-c -O2 -fPIC -DNeedFunctionPrototypes=1,' -i Makefile
+    sed -e 's,libgsm.a,libgsm.so,' -i Makefile
+    sed -e 's/$(AR) $(ARFLAGS) $(LIBGSM) $(GSM_OBJECTS)/$(LD) -shared -Wl,-soname,libgsm.so -o $(LIBGSM) $(GSM_OBJECTS) -lc/' -i Makefile
+    sed -e 's,$(RANLIB) $(LIBGSM),,' -i Makefile
+  '';
+
+  makeFlags = [
+    ''SHELL=${stdenv.shell}''
+  ];
+
+  preInstall = ''
+    mkdir -p "$out/"{bin,lib,man/man1,man/man3,include/gsm}
   '';
 
   NIX_CFLAGS_COMPILE = "-fPIC";
