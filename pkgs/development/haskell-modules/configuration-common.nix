@@ -488,6 +488,9 @@ self: super: {
   # https://github.com/ekmett/exceptions/issues/40
   exceptions = dontCheck super.exceptions;
 
+  # https://github.com/NixOS/nixpkgs/issues/6350
+  paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
+
 } // {
 
   # Not on Hackage.
