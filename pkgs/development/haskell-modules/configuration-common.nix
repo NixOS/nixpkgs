@@ -497,6 +497,15 @@ self: super: {
   # https://github.com/gregwebs/haskell-heroku/issues/9
   heroku = dontCheck super.heroku;
 
+  # https://github.com/seanparsons/wiring/issues/1
+  wiring = markBrokenVersion super.wiring;
+
+  # https://github.com/gibiansky/IHaskell/issues/355
+  ihaskell-parsec = markBroken super.ihaskell-parsec;
+
+  # https://github.com/jwiegley/simple-conduit/issues/2
+  simple-conduit = markBroken super.simple-conduit;
+
 } // {
 
   # Not on Hackage.
