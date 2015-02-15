@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sample Rate Converter for audio";
-    homepage = http://www.mega-nerd.com/SRC/index.html;
+    homepage = http://sox.sourceforge.net/;
     maintainers = [ lib.maintainers.marcweber lib.maintainers.shlevy ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
