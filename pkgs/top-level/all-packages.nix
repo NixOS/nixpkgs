@@ -10581,7 +10581,7 @@ let
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
 
-  lame = callPackage ../applications/audio/lame { };
+  lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
