@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, utillinux, nightly ? false }:
 
 let
-  version = if nightly then "1.1.1-nightly201502072c3121c606" else "1.1.0";
+  version = if nightly then "1.2.1-nightly20150213f0296933f8" else "1.2.0";
   inherit (stdenv.lib) optional maintainers licenses platforms;
 in stdenv.mkDerivation {
   name = "iojs-${version}";
@@ -11,8 +11,8 @@ in stdenv.mkDerivation {
           then "https://iojs.org/download/nightly/v${version}/iojs-v${version}.tar.gz"
           else "https://iojs.org/dist/v${version}/iojs-v${version}.tar.gz";
     sha256 = if nightly
-             then "1jjh5f8kpcgdjjib9q1f2hqvrs6p4m4fyfbfy6dsdbzl2hglajvw"
-             else "0yvz3rw7d73snc1g447l4amqbbyydbyzr9ynykmyld7l3gdsif7h";
+             then "0v9njaggddi128v58rd34qknph8pn9c653gqd4y29l1mwjvqg62s"
+             else "17axqswpl252gliak1wjc2l9jk6n5jqdfa9f1vv7x9acj776yrik";
   };
 
   prePatch = ''
