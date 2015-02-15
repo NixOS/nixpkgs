@@ -2751,6 +2751,8 @@ let
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
+  ttfautohint = callPackage ../tools/misc/ttfautohint { };
+
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
   ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
