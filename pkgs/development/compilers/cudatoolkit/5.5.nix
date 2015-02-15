@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
+{ lib, stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
 , xlibs, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib
 } :
 
@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    license = [ "nonfree" ];
+    license = lib.licenses.unfree;
   };
 }
