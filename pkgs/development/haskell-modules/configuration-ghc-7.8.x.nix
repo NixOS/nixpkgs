@@ -81,6 +81,10 @@ self: super: {
   # Needs mtl 2.2.x due to "plailude".
   clac = dontDistribute super.clac;
 
+  # https://github.com/junjihashimoto/test-sandbox-compose/issues/1
+  test-sandbox = markBroken super.test-sandbox;
+  test-sandbox-compose = markBroken super.test-sandbox-compose;
+
 }
 
 // # packages relating to amazonka
