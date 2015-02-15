@@ -397,11 +397,6 @@ self: super: {
   # https://github.com/chrisdone/hindent/issues/83
   hindent = dontCheck super.hindent;
 
-  # Needs older versions of its dependencies.
-  structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
-    haskell-src-exts = self.haskell-src-exts_1_15_0_1;  # https://github.com/chrisdone/structured-haskell-mode/issues/90
-  };
-
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
