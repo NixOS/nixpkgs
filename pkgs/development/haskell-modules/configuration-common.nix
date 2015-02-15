@@ -510,6 +510,9 @@ self: super: {
   configuration-tools = markBroken super.configuration-tools;
   yet-another-logger = markBroken super.yet-another-logger;
 
+  # https://github.com/evanrinehart/lowgl/issues/1
+  lowgl = markBroken super.lowgl;
+
 } // {
 
   # Not on Hackage.
