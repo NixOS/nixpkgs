@@ -10906,6 +10906,10 @@ let
 
   batti = callPackage ../applications/misc/batti { };
 
+  baudline = callPackage ../applications/audio/baudline {
+    jack = jack1;
+  };
+
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
   bazaar = callPackage ../applications/version-management/bazaar { };
