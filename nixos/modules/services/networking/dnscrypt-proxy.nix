@@ -88,7 +88,12 @@ in
     security.apparmor.profiles = mkIf apparmorEnabled [
       (pkgs.writeText "apparmor-dnscrypt-proxy" ''
 
-        ${dnscrypt-proxy}/sbin/dnscrypt-proxy {
+        ${dnscrypt-proxy}/bin/dnscrypt-proxy {
+          network inet stream,
+          network inet6 stream,
+          network inet dgram,
+          network inet6 dgram,
+
           capability ipc_lock,
           capability net_bind_service,
           capability net_admin,
@@ -126,7 +131,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${dnscrypt-proxy}/sbin/dnscrypt-proxy ${toString daemonArgs}";
+        ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
       };
     };
 
