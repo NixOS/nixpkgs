@@ -4275,6 +4275,8 @@ let
 
   kona = callPackage ../development/interpreters/kona {};
 
+  lolcode = callPackage ../development/interpreters/lolcode { };
+
   love = callPackage ../development/interpreters/love {lua=lua5_1;};
   love_luajit = callPackage ../development/interpreters/love {lua=luajit;};
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
