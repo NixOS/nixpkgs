@@ -465,9 +465,6 @@ self: super: {
   gloss-raster = super.gloss-raster.override { llvm = pkgs.llvm_34; };
   repa-examples = super.repa-examples.override { llvm = pkgs.llvm_34; };
 
-  # Upstream notified by e-mail.
-  OpenGLRaw21 = markBrokenVersion "1.2.0.1" super.OpenGLRaw21;
-
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
