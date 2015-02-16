@@ -7,17 +7,6 @@ in
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ];
 
-  options = {
-    ec2 = {
-      hvm = mkOption {
-        default = false;
-        description = ''
-          Whether the EC2 instance is a HVM instance.
-        '';
-      };
-    };
-  };
-
   config = {
     system.build.amazonImage =
       pkgs.vmTools.runInLinuxVM (
