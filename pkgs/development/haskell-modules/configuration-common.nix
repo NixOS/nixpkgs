@@ -501,10 +501,6 @@ self: super: {
   # https://github.com/jwiegley/simple-conduit/issues/2
   simple-conduit = markBroken super.simple-conduit;
 
-  # https://github.com/alephcloud/hs-configuration-tools/issues/36
-  configuration-tools = markBroken super.configuration-tools;
-  yet-another-logger = markBroken super.yet-another-logger;
-
   # https://github.com/evanrinehart/lowgl/issues/1
   lowgl = markBroken super.lowgl;
 
