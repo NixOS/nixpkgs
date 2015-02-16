@@ -13410,4 +13410,20 @@ let
     };
   };
 
+  funcy = buildPythonPackage rec {
+    name = "funcy-1.4";
+
+    src = pkgs.fetchurl {
+        url = "https://github.com/Suor/funcy/archive/1.4.tar.gz";
+        sha256 = "694e29aa67d03a6ab006f1854740b65f4f87e581afb33853f80e647ddb5f24e7";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Collection of fancy functional tools focused on practicality.";
+      homepage = "http://funcy.readthedocs.org/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+
 }); in pythonPackages
