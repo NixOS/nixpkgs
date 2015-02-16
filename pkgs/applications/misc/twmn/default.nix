@@ -1,19 +1,20 @@
-{ fetchurl, stdenv, fetchgit, qt4, pkgconfig, boost, dbus }:
+{ fetchurl, stdenv, fetchgit, qt5, pkgconfig, boost }:
 
 stdenv.mkDerivation rec {
-  rev = "9f52882688ba03d7aaab2e3fd83cb05cfbf1a374";
-  name = "twmn-${rev}";
+  name = "twmn-git-2014-09-23";
 
   src = fetchgit {
-    inherit rev;
     url = "https://github.com/sboli/twmn.git";
-    sha256 = "1jd2y0ydcpjdmjbx77lw35710sqfwbgyrnpv66mi3gwvrbyiwpf3";
+    rev = "9492a47e25547e602dd57efd807033677c90b150";
+    sha256 = "9c91e9d3d6d7f9d90d34da6f1a4b9f3dee65605c1e43729417d6921c54dded6b";
   };
 
-  buildInputs = [ qt4 pkgconfig boost ];
-  propagatedBuildInputs = [ dbus ];
+  buildInputs = [ qt5 pkgconfig boost ];
 
-  configurePhase = "qmake";
+  configurePhase = ''
+    sed -i s/-Werror// twmnd/twmnd.pro
+    qmake
+  '';
 
   installPhase = ''
     mkdir -p "$out/bin"
