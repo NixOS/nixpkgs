@@ -15,16 +15,15 @@ else
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
-  - DRI and EGL drivers are compiled into $drivers output,
-    which is much bigger and depends on LLVM.
-    These should be searched at runtime in "/run/opengl-driver{,-32}/lib/*"
-    and so are kind-of impure (given by NixOS).
+  - DRI drivers are compiled into $drivers output, which is much bigger and
+    depends on LLVM. These should be searched at runtime in
+    "/run/opengl-driver{,-32}/lib/*" and so are kind-of impure (given by NixOS).
     (I suppose on non-NixOS one would create the appropriate symlinks from there.)
   - libOSMesa is in $osmesa (~4 MB)
 */
 
 let
-  version = "10.3.7";
+  version = "10.4.2";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -38,7 +37,7 @@ stdenv.mkDerivation {
       "https://launchpad.net/mesa/trunk/${version}/+download/MesaLib-${version}.tar.bz2"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2"
     ];
-    sha256 = "43c6ced15e237cbb21b3082d7c0b42777c50c1f731d0d4b5efb5231063fb6a5b";
+    sha256 = "08a119937d9f2aa2f66dd5de97baffc2a6e675f549e40e699a31f5485d15327f";
   };
 
   prePatch = "patchShebangs .";
@@ -47,29 +46,16 @@ stdenv.mkDerivation {
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
-    (fetchpatch {
-      name = "fix-lp_test_arit.diff";
-      url = "http://cgit.freedesktop.org/mesa/mesa/patch/"
-        + "?id=8148a06b8fdb734f7f9a11ce787ee6505939fdaa";
-      sha256 = "0k2bnl7d28nx2y88jchw6jj4f3xfdjjvz4vpvhc40060c2iz8fla";
-    })
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit udev;
       });
 
-  # Change the search path for EGL drivers from $drivers/* to driverLink
-  postPatch = ''
-    sed '/D_EGL_DRIVER_SEARCH_DIR=/s,EGL_DRIVER_INSTALL_DIR,${driverLink}/lib/egl,' \
-      -i src/egl/main/Makefile.am
-  '';
-
   outputs = ["out" "drivers" "osmesa"];
 
   configureFlags = [
     "--with-dri-driverdir=$(drivers)/lib/dri"
-    "--with-egl-driver-dir=$(drivers)/lib/egl"
     "--with-dri-searchpath=${driverLink}/lib/dri"
 
     "--enable-dri"
