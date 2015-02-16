@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-types";
-  version = "0.8.5";
-  sha256 = "0d282sf3xyk5makhnwfm2k9mgw1fkh07kasmy85fiwjkc1447ciw";
+  version = "0.8.6";
+  sha256 = "1q1ni88rs8d79xnk1x2jaf3848ygxlfhpvv4gw46k08lw29ihfxh";
   buildDepends = [ blazeBuilder caseInsensitive text ];
   testDepends = [
     blazeBuilder doctest hspec QuickCheck quickcheckInstances text
