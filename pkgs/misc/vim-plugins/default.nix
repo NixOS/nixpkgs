@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, cmake, vim, vimUtils, perl, ruby, unzip,
-  which, fetchgit, fetchhg, fetchzip, llvmPackages, zip, vim_configurable,
-  vimPlugins, xkb_switch
+  which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip,
+  vim_configurable, vimPlugins, xkb_switch
 }:
 
 let
@@ -484,6 +484,27 @@ rec {
       set runtimepath+=${vimproc}/${rtpPath}/vimproc\
       ' autoload/vimshell.vim
     '';
+  };
+
+  wakatime = buildVimPlugin {
+    name = "wakatime-20150213";
+
+    src = fetchFromGitHub {
+      sha256 = "1vbka18av7wgpqhfaqql5mvcgjdmxgz3hzg55ih7r63qx0icpk19";
+      rev = "d639c5ea7bbd67e5a3b4974a982f6c4412f4aa3";
+      repo = "vim-wakatime";
+      owner = "wakatime";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Analytics about your programming";
+      homepage = https://wakatime.com;
+      license = with licenses; bsd3;
+      platforms = with platforms; linux;
+      maintainers = with maintainers; [ nckx ];
+    };
+
+    buildInputs = [ python ];
   };
 
   watchdogs = buildVimPlugin {
