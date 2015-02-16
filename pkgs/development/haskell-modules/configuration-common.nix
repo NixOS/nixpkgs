@@ -507,6 +507,9 @@ self: super: {
   # https://github.com/srijs/hwsl2/issues/1
   hwsl2 = markBroken super.hwsl2;
 
+  # https://code.google.com/p/linux-music-player/issues/detail?id=1
+  mp = markBroken super.mp;
+
 } // {
 
   # Not on Hackage.
