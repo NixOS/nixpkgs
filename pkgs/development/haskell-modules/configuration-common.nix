@@ -504,6 +504,9 @@ self: super: {
   # https://github.com/evanrinehart/lowgl/issues/1
   lowgl = markBroken super.lowgl;
 
+  # https://github.com/srijs/hwsl2/issues/1
+  hwsl2 = markBroken super.hwsl2;
+
 } // {
 
   # Not on Hackage.
