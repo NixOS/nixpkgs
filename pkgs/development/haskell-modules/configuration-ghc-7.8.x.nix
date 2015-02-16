@@ -121,14 +121,15 @@ self: super: {
     unix = self.unix_2_7_1_0;
     directory = self.directory_1_2_1_0;
     process = overrideCabal self.process_1_2_2_0 (drv: { coreSetup = true; });
-    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch amazonka-glacier;
+    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch amazonka-glacier amazonka-ecs;
   };
   amazonka = super.amazonka.overrideScope amazonkaEnv;
   amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
   amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
+  amazonka-ecs = super.amazonka-ecs.overrideScope amazonkaEnv;
   amazonka-glacier = super.amazonka-glacier.overrideScope amazonkaEnv;
   amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
 in {
   inherit amazonkaEnv;
-  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-kms amazonka-glacier;
+  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-ecs amazonka-kms amazonka-glacier;
 })
