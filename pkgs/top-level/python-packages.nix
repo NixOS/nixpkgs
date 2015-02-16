@@ -13107,7 +13107,21 @@ let
     };
   };
 
+  parsimonious = buildPythonPackage rec {
+    name = "parsimonious-0.6.0";
+    src = pkgs.fetchurl {
+      url = "https://github.com/erikrose/parsimonious/archive/0.6.tar.gz";
+      sha256 = "7ad992448b69a3f3d943bac0be132bced3f13937c8ca150ba2fd1d7b6534f846";
+    };
 
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      homepage = "https://github.com/erikrose/parsimonious";
+      description = "Fast arbitrary-lookahead packrat parser written in pure Python.";
+      license = licenses.mit;
+    };
+  };
 
 # python2.7 specific packages
 } // optionalAttrs isPy27 (
@@ -13391,22 +13405,6 @@ let
       description = "Library for creating high quality encapsulated Postscript, PDF, PNG, or SVG charts";
       homepage = http://home.gna.org/pychart/;
       license = licenses.gpl2;
-    };
-  };
-
-  parsimonious = buildPythonPackage rec {
-    name = "parsimonious-0.6.0";
-    src = pkgs.fetchurl {
-      url = "https://github.com/erikrose/parsimonious/archive/0.6.tar.gz";
-      sha256 = "7ad992448b69a3f3d943bac0be132bced3f13937c8ca150ba2fd1d7b6534f846";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = "https://github.com/erikrose/parsimonious";
-      description = "Fast arbitrary-lookahead packrat parser written in pure Python.";
-      license = licenses.mit;
     };
   };
 
