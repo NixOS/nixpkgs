@@ -67,12 +67,12 @@ in
         type = types.int;
         default = 1;
         example = 64;
-        description = "
+        description = ''
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
           set it to the number of CPUs in your system (e.g., 2 on an Athlon
           64 X2).
-        ";
+        '';
       };
 
       buildCores = mkOption {
@@ -204,7 +204,6 @@ in
 
       nrBuildUsers = mkOption {
         type = types.int;
-        default = 10;
         description = ''
           Number of <literal>nixbld</literal> user accounts created to
           perform secure concurrent builds.  If you receive an error
@@ -323,12 +322,9 @@ in
         fi
       '';
 
-    users.extraUsers =
-      if cfg.nrBuildUsers >= cfg.maxJobs then
-        map makeNixBuildUser (range 1 cfg.nrBuildUsers)
-      else
-        throw "Not enough build users (${cfg.nrBuildUsers}) to support ${cfg.maxJobs} build jobs. Change nrBuildUsers or maxJobs."
-      ;
+    nix.nrBuildUsers = mkDefault (lib.max 10 cfg.maxJobs);
+
+    users.extraUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
