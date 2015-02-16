@@ -178,6 +178,6 @@ stdenv.mkDerivation {
     homepage = http://www.mesa3d.org/;
     license = "bsd";
     platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = with stdenv.lib.maintainers; [ simons vcunat ];
+    maintainers = with stdenv.lib.maintainers; [ eduarrrd simons vcunat ];
   };
 }
