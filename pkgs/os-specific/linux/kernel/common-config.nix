@@ -189,6 +189,12 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.14") ''
     CEPH_FS_POSIX_ACL y
   ''}
+  SQUASHFS_FILE_DIRECT y
+  SQUASHFS_DECOMP_MULTI_PERCPU y
+  SQUASHFS_XATTR y
+  SQUASHFS_ZLIB y
+  SQUASHFS_LZO y
+  SQUASHFS_XZ y
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
