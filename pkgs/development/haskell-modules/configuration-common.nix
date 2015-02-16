@@ -510,6 +510,9 @@ self: super: {
   # https://code.google.com/p/linux-music-player/issues/detail?id=1
   mp = markBroken super.mp;
 
+  # https://github.com/athanclark/lucid-foundation/issues/1
+  lucid-foundation = markBroken super.lucid-foundation;
+
 } // {
 
   # Not on Hackage.
