@@ -1818,6 +1818,8 @@ let
 
   man_db = callPackage ../tools/misc/man-db { };
 
+  mawk = callPackage ../tools/text/mawk { };
+
   mbox = callPackage ../tools/security/mbox { };
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
