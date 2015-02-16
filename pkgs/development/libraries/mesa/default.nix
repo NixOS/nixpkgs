@@ -24,7 +24,7 @@ else
 */
 
 let
-  version = "10.2.9";
+  version = "10.3.1";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -38,13 +38,12 @@ stdenv.mkDerivation {
       "https://launchpad.net/mesa/trunk/${version}/+download/MesaLib-${version}.tar.bz2"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2"
     ];
-    sha256 = "f6031f8b7113a92325b60635c504c510490eebb2e707119bbff7bd86aa34657d";
+    sha256 = "b081d077d717e5d56f2d59677490856052c41573e50378ff86d6c72456714add";
   };
 
   prePatch = "patchShebangs .";
 
   patches = [
-    ./static-gallium.patch
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
@@ -64,8 +63,6 @@ stdenv.mkDerivation {
   postPatch = ''
     sed '/D_EGL_DRIVER_SEARCH_DIR=/s,EGL_DRIVER_INSTALL_DIR,${driverLink}/lib/egl,' \
       -i src/egl/main/Makefile.am
-  '' + /* work around RTTI LLVM problems */ ''
-    patch -R -p1 < ${./rtti.patch}
   '';
 
   outputs = ["out" "drivers" "osmesa"];
@@ -77,7 +74,7 @@ stdenv.mkDerivation {
 
     "--enable-dri"
     "--enable-glx-tls"
-    "--enable-shared-glapi" "--enable-shared-gallium"
+    "--enable-shared-glapi"
     "--enable-driglx-direct" # seems enabled anyway
     "--enable-gallium-llvm" "--enable-llvm-shared-libs"
     "--enable-xa" # used in vmware driver
@@ -112,7 +109,7 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  doCheck = true;
+  doCheck = false;
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
