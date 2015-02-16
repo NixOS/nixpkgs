@@ -89,6 +89,9 @@ self: super: {
   configuration-tools = markBroken super.configuration-tools;
   yet-another-logger = markBroken super.yet-another-logger;
 
+  # Needs mtl 2.2.x.
+  hypher = markBroken super.hypher;
+
 }
 
 // # packages relating to amazonka
