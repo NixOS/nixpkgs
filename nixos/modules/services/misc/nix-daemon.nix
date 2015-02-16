@@ -323,7 +323,12 @@ in
         fi
       '';
 
-    users.extraUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
+    users.extraUsers =
+      if cfg.nrBuildUsers >= cfg.maxJobs then
+        map makeNixBuildUser (range 1 cfg.nrBuildUsers)
+      else
+        throw "Not enough build users (${cfg.nrBuildUsers}) to support ${cfg.maxJobs} build jobs. Change nrBuildUsers or maxJobs."
+      ;
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
