@@ -1215,8 +1215,6 @@ let
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
-  fatrace = callPackage ../os-specific/linux/fatrace { };
-
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
   fcitx-anthy = callPackage ../tools/inputmethods/fcitx/fcitx-anthy.nix { };
@@ -2414,8 +2412,6 @@ let
 
   remmina = callPackage ../applications/networking/remote/remmina {};
 
-  remotebox = callPackage ../applications/virtualization/remotebox {};
-
   renameutils = callPackage ../tools/misc/renameutils { };
 
   replace = callPackage ../tools/text/replace { };
@@ -3203,8 +3199,6 @@ let
   closurecompiler = callPackage ../development/compilers/closure { };
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
-
-  coan = callPackage ../development/tools/analysis/coan { };
 
   compcert = callPackage ../development/compilers/compcert {};
 
@@ -4723,6 +4717,8 @@ let
   chruby = callPackage ../development/tools/misc/chruby { rubies = null; };
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
+
+  coan = callPackage ../development/tools/analysis/coan { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -8536,6 +8532,8 @@ let
 
   eject = utillinux;
 
+  fatrace = callPackage ../os-specific/linux/fatrace { };
+
   ffado = callPackage ../os-specific/linux/ffado { };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -11196,6 +11194,8 @@ let
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
   recode = callPackage ../tools/text/recode { };
+
+  remotebox = callPackage ../applications/virtualization/remotebox { };
 
   retroshare = callPackage ../applications/networking/p2p/retroshare {
     qt = qt4;
