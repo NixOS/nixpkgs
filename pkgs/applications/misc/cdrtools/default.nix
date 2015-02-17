@@ -15,5 +15,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://sourceforge.net/projects/cdrtools/;
     description = "Highly portable CD/DVD/BluRay command line recording software";
+    # Licensing issues: This package contains code licensed under CDDL, GPL2
+    # and LGPL2. There is debate regarding the legality of this licensing.
+    # Marked as unfree to avoid any possible legal issues.
+    license = stdenv.lib.licenses.unfree;
   };
 }
