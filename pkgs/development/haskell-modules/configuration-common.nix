@@ -475,6 +475,7 @@ self: super: {
     doHaddock = false;
   });
 
+<<<<<<< HEAD
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
@@ -520,6 +521,11 @@ self: super: {
 
   # https://github.com/osa1/language-lua/issues/14
   language-lua = dontCheck super.language-lua;
+
+=======
+>>>>>>> c723352d7741f5b348be652b35e8c2f1a1908c22
+  # https://github.com/afcowie/http-streams/issues/80
+  http-streams = dontCheck super.http-streams;
 
 } // {
 
