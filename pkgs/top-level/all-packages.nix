@@ -7418,6 +7418,8 @@ let
     libpng = libpng12;
   };
 
+  wavpack = callPackage ../development/libraries/wavpack { };
+
   wayland = callPackage ../development/libraries/wayland { };
 
   webkit = webkitgtk;
