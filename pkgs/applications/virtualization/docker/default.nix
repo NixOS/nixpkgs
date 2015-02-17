@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "0d98c7dfzv1gj5ssbyln4pbkbml6rrmy22v5v4ricbsx9qhhwc1l";
   };
 
-  buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables e2fsprogs];
+  buildInputs = [ makeWrapper go sqlite lxc iproute bridge_utils devicemapper btrfsProgs iptables e2fsprogs ];
 
   dontStrip = true;
 
   buildPhase = ''
-    patchShebangs ./hack
+    patchShebangs ./project
     export AUTO_GOPATH=1
     export DOCKER_GITCOMMIT="c78088f"
-    ./hack/make.sh dynbinary
+    ./project/make.sh dynbinary
   '';
 
   installPhase = ''
