@@ -6,7 +6,7 @@ stdenv.mkDerivation (rec {
   name = "unison-2.48.3";
   src = fetchurl {
     url = "http://www.seas.upenn.edu/~bcpierce/unison/download/releases/stable/${name}.tar.gz";
-    sha256 = "1vmpf11f282sg0dzh28plmd0xcjy3y4z3jszyb1xklwmbvagk5d6";
+    sha256 = "10sln52rnnsj213jy3166m0q97qpwnrwl6mm529xfy10x3xkq3gl";
   };
 
   buildInputs = [ ocaml makeWrapper ncurses ];
