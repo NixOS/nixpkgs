@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # 'hide' the template file from shebang-patching
     chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
-    chmod -x $out/opt/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
+    chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   postFixup = ''
     chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
-    chmod +x $out/opt/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
+    chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 }
