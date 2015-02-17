@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl, perl, python }:
 
 stdenv.mkDerivation rec {
   version = "6.0.1";
@@ -9,9 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1d041j0nd1hc0562lbj269dydjm4rbzagdgzdnmwdxr98544yw44";
   };
 
-  buildInputs = [ perl ];
+  # Python is required only by `make check`
+  buildInputs = [ perl python ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   postInstall = ''
     mv -v $out/share/man/man1/coan.1.{1,gz}
