@@ -6657,7 +6657,7 @@ let
     '';
 
     preBuild = ''
-      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      export BLAS=${pkgs.openblas} LAPACK=${pkgs.openblas}
     '';
 
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
@@ -6666,7 +6666,7 @@ let
     doCheck = false;
 
     buildInputs = with self; [ pkgs.gfortran ];
-    propagatedBuildInputs = with self; [ pkgs.liblapack pkgs.blas ];
+    propagatedBuildInputs = with self; [  pkgs.openblas ];
 
     meta = {
       description = "Scientific tools for Python";
