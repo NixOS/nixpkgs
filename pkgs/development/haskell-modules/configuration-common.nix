@@ -462,6 +462,9 @@ self: super: {
     doHaddock = false;
   });
 
+  # https://github.com/afcowie/http-streams/issues/80
+  http-streams = dontCheck super.http-streams;
+
 } // {
 
   # Not on Hackage.
