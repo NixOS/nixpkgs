@@ -518,6 +518,9 @@ self: super: {
   # Depends on broken lmdb package.
   vcache = markBroken super.vcache;
 
+  # https://github.com/osa1/language-lua/issues/14
+  language-lua = dontCheck super.language-lua;
+
 } // {
 
   # Not on Hackage.
