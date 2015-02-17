@@ -8,12 +8,17 @@ in
 
 {
   imports = [
+    ./afterstep.nix
+    ./awesome.nix
     ./bspwm.nix
     ./compiz.nix
+    ./fluxbox.nix
     ./herbstluftwm.nix
     ./i3.nix
+    ./icewm.nix
     ./metacity.nix
     ./openbox.nix
+    ./ratpoison.nix
     ./sawfish.nix
     ./stumpwm.nix
     ./twm.nix
