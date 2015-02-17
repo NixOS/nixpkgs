@@ -552,7 +552,7 @@ rec {
     src = fetchgit {
       rev = "035b6ca862da3bba0ab8aad388a485758311a464";
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      sha256 = "9cd8fc8bb9b35e7a164d62fa8e3a1bd3be7e18f4d46c78b5827612f32b9541d5";
+      sha256 = "0l4a7mp0r888gdfzl59z8vk5jx4km58kzzqbn8v48i1k6scryvl7";
      };
 
     name = "vimplugin-youcompleteme-2015-02-05";
