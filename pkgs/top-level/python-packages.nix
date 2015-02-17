@@ -522,11 +522,11 @@ let
   });
 
   astroid = buildPythonPackage (rec {
-    name = "astroid-1.3.2";
+    name = "astroid-1.3.4";
     propagatedBuildInputs = with self; [ logilab_common six ];
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/astroid/${name}.tar.gz";
-      md5 = "2ab96129a977b6eba27765a15d1a9bf2";
+      sha256 = "1fz9x21pziy9dmivvlsgl7a86ka2m9jp3pky01da5aj89ym3wi8b";
     };
   });
 
@@ -5516,14 +5516,14 @@ let
   };
 
   logilab_common = buildPythonPackage rec {
-    name = "logilab-common-0.61.0";
+    name = "logilab-common-0.63.2";
 
     src = pkgs.fetchurl {
-      url = "http://download.logilab.org/pub/common/${name}.tar.gz";
-      sha256 = "09apsrcvjliawbxmfrmi1l8hlbaj87mb7n4lrlivy5maxs6yg4hd";
+      url = "https://pypi.python.org/packages/source/l/logilab-common/${name}.tar.gz";
+      sha256 = "1rr81zlmlgdma3s75i5c1l8q2m25v4ac41i9pniik4mhkc6a0fv0";
     };
 
-    propagatedBuildInputs = with self; [ unittest2 ];
+    propagatedBuildInputs = with self; [ unittest2 six ];
   };
 
   loxodo = buildPythonPackage {
@@ -9962,11 +9962,11 @@ let
 
 
   six = buildPythonPackage rec {
-    name = "six-1.8.0";
+    name = "six-1.9.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
-      md5 = "1626eb24cc889110c38f7e786ec69885";
+      sha256 = "1mci5i8mjqmljmv33h0q3d4djc13zk1kfmb3fbvd3yy43x0m4h72";
     };
 
     # error: invalid command 'test'
