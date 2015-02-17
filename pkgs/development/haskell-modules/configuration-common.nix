@@ -513,6 +513,7 @@ self: super: {
 
   # https://github.com/athanclark/lucid-foundation/issues/1
   lucid-foundation = markBroken super.lucid-foundation;
+  digestive-foundation-lucid = markBroken super.digestive-foundation-lucid;
 
 } // {
 
