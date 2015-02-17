@@ -521,6 +521,9 @@ self: super: {
   # https://github.com/osa1/language-lua/issues/14
   language-lua = dontCheck super.language-lua;
 
+  # https://github.com/afcowie/http-streams/issues/80
+  http-streams = dontCheck super.http-streams;
+
 } // {
 
   # Not on Hackage.
