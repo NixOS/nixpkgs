@@ -13111,8 +13111,8 @@ let
     name = "more-itertools-2.2";
 
     src = pkgs.fetchurl {
-       url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
-       sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
+      url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
+      ha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
     };
    
     propagatedBuildInputs = with self; [ nose ];
