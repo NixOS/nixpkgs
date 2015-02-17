@@ -1,5 +1,5 @@
 { stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
-, libiconvOrEmpty
+, libiconv
 , outputsSupport ? false # outputs screen
 , visualizerSupport ? false, fftw ? null # visualizer screen
 , clockSupport ? false # clock screen
@@ -30,11 +30,10 @@ stdenv.mkDerivation rec {
     ++ optional curlSupport "--with-curl"
     ++ optional taglibSupport "--with-taglib";
 
-  buildInputs = [ boost mpd_clientlib ncurses pkgconfig readline ]
+  buildInputs = [ boost mpd_clientlib ncurses pkgconfig readline libiconv ]
     ++ optional curlSupport curl
     ++ optional visualizerSupport fftw
-    ++ optional taglibSupport taglib
-    ++ libiconvOrEmpty;
+    ++ optional taglibSupport taglib;
 
   meta = {
     description = "A featureful ncurses based MPD client inspired by ncmpc";

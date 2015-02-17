@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, python
-, libiconvOrEmpty, libintlOrEmpty, zlib, libffi, pcre, libelf
+, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
 
 # this is just for tests (not in closure of any regular package)
 , coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
@@ -60,8 +60,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ pcre zlib libffi ]
-    ++ optional (!stdenv.isDarwin) libiconvOrEmpty
+  propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
   configureFlags =

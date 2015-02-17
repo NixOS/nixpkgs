@@ -14,24 +14,24 @@ rec {
       libiconv = pkgs.darwin.libiconv;
     });
 
-    ghc6104 = callPackage ../development/compilers/ghc/6.10.4.nix { ghc = compiler.ghc6102Binary; gmp = pkgs.gmp.override { withStatic = true; }; };
-    ghc6123 = callPackage ../development/compilers/ghc/6.12.3.nix { ghc = compiler.ghc6102Binary; gmp = pkgs.gmp.override { withStatic = true; }; };
-    ghc704 = callPackage ../development/compilers/ghc/7.0.4.nix ({ ghc = compiler.ghc704Binary; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghc6104 = callPackage ../development/compilers/ghc/6.10.4.nix { ghc = compiler.ghc6102Binary; };
+    ghc6123 = callPackage ../development/compilers/ghc/6.12.3.nix { ghc = compiler.ghc6102Binary; };
+    ghc704 = callPackage ../development/compilers/ghc/7.0.4.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghc722 = callPackage ../development/compilers/ghc/7.2.2.nix ({ ghc = compiler.ghc704Binary; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghc722 = callPackage ../development/compilers/ghc/7.2.2.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghc742 = callPackage ../development/compilers/ghc/7.4.2.nix ({ ghc = compiler.ghc704Binary; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghc742 = callPackage ../development/compilers/ghc/7.4.2.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghc763 = callPackage ../development/compilers/ghc/7.6.3.nix ({ ghc = compiler.ghc704Binary; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghc763 = callPackage ../development/compilers/ghc/7.6.3.nix ({ ghc = compiler.ghc704Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix ({ ghc = compiler.ghc742Binary; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix ({ ghc = compiler.ghc742Binary; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghc7101 = callPackage ../development/compilers/ghc/7.10.1.nix ({ ghc = compiler.ghc784; gmp = pkgs.gmp.override { withStatic = true; }; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    ghc7101 = callPackage ../development/compilers/ghc/7.10.1.nix ({ ghc = compiler.ghc784; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
