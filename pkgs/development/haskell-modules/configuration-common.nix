@@ -515,6 +515,9 @@ self: super: {
   lucid-foundation = markBroken super.lucid-foundation;
   digestive-foundation-lucid = markBroken super.digestive-foundation-lucid;
 
+  # Depends on broken lmdb package.
+  vcache = markBroken super.vcache;
+
 } // {
 
   # Not on Hackage.
