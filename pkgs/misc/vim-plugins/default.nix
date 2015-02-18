@@ -487,11 +487,11 @@ rec {
   };
 
   wakatime = buildVimPlugin {
-    name = "wakatime-20150213";
+    name = "wakatime-3.0.7";
 
     src = fetchFromGitHub {
-      sha256 = "1vbka18av7wgpqhfaqql5mvcgjdmxgz3hzg55ih7r63qx0icpk19";
-      rev = "d639c5ea7bbd67e5a3b4974a982f6c4412f4aa3";
+      sha256 = "1kn50fz9hnimzic640blmb5wi64vkcn45g15i4ckfzivza4jyc73";
+      rev = "30ce2e30670d80ec1ef033ae4415c1f6ea46f18f";
       repo = "vim-wakatime";
       owner = "wakatime";
     };
