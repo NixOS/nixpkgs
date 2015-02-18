@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc }:
+{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "b7e4d3c3d55fc3859edcb20462fcf0d14ab26e920eddcd503072e8105284d924";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses libiconv ];
 
   # Required binaries during execution
   # Python: Autocompletion generated from manpages and config editing
