@@ -3853,6 +3853,8 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
+    erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
       sexplib = ocaml_sexplib;
