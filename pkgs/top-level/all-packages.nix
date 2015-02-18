@@ -11713,6 +11713,8 @@ let
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
+  wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
+
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
