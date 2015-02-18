@@ -1,4 +1,4 @@
-{stdenv, fetchurl, linuxHeaders, libiconv, cross ? null, gccCross ? null,
+{stdenv, fetchurl, linuxHeaders, libiconvReal, cross ? null, gccCross ? null,
 extraConfig ? ""}:
 
 assert stdenv.isLinux;
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
 
   passthru = {
     # Derivations may check for the existance of this attribute, to know what to link to.
-    inherit libiconv;
+    libiconv = libiconvReal;
   };
 
   meta = {
