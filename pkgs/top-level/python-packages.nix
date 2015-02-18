@@ -7808,6 +7808,21 @@ let
     };
   };
 
+  pybcrypt = buildPythonPackage rec {
+    name = "pybcrypt";
+    version = "0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py-bcrypt/py-bcrypt-${version}.tar.gz";
+      md5 = "dd8b367d6b716a2ea2e72392525f4e36";
+    };
+
+    meta = {
+      description = "bcrypt password hashing and key derivation";
+      homepage = https://code.google.com/p/py-bcrypt2;
+      license = "BSD";
+    };
+  };
 
   pycapnp = buildPythonPackage rec {
     name = "pycapnp-0.5.1";
