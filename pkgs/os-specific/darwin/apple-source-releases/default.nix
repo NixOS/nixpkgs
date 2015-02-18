@@ -54,7 +54,7 @@ let
     copyfile        = applePackage "copyfile"          "103.92.1"    "15i2hw5aqx0fklvmq6avin5s00adacvzqc740vviwc2y742vrdcd" {};
     CoreOSMakefiles = applePackage "CoreOSMakefiles"   "76"          "0sw3w3sjil0kvxz8y86b81sz82rcd1nijayki1a1bsnsf0hz6qbf" {};
     Csu             = applePackage "Csu"               "79"          "1hif4dz23isgx85sgh11yg8amvp2ksvvhz3y5v07zppml7df2lnh" {};
-    dtrace          = applePackage "dtrace"            "118.1"       "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wcf" { cctools = pkgs.darwin.cctools_native; };
+    dtrace          = applePackage "dtrace"            "118.1"       "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wcf" {};
     dyld            = applePackage "dyld"              "239.4"       "07z7lyv6x0f6gllb5hymccl31zisrdhz4gqp722xcs9nhsqaqvn7" {};
     eap8021x        = applePackage "eap8021x"          "180"         "1ynkq8zmhgqhpkdg2syj085lzya0fz55d3423hvf9kcgpbjcd9ic" {};
     IOKit           = applePackage "IOKit"             "907.100.13"  "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x0m" { inherit IOKitSrcs; };
@@ -70,7 +70,7 @@ let
     Libnotify       = applePackage "Libnotify"         "121.20.1"    "164rx4za5z74s0mk9x0m1815r1m9kfal8dz3bfaw7figyjd6nqad" {};
     libpthread      = applePackage "libpthread"        "105.1.4"     "09vwwahcvmxvx2xl0890gkp91n61dld29j73y2pa597bqkag2qpg" {};
     libresolv       = applePackage "libresolv"         "54"          "028mp2smd744ryxwl8cqz4njv8h540sdw3an1yl7yxqcs04r0p4b" {};
-    Libsystem       = applePackage "Libsystem"         "1197.1.1"    "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" { cctools = pkgs.darwin.cctools_native; };
+    Libsystem       = applePackage "Libsystem"         "1197.1.1"    "1yfj2qdrf9vrzs7p9m4wlb7zzxcrim1gw43x4lvz4qydpp5kg2rh" {};
     libunwind       = applePackage "libunwind"         "35.3"        "0miffaa41cv0lzf8az5k1j1ng8jvqvxcr4qrlkf3xyj479arbk1b" {};
     mDNSResponder   = applePackage "mDNSResponder"     "522.92.1"    "1cp87qda1s7brriv413i71yggm8yqfwv64vknrnqv24fcb8hzbmy" {};
     objc4           = applePackage "objc4"             "551.1"       "1jrdb6yyb5jwwj27c1r0nr2y2ihqjln8ynj61mpkvp144c1cm5bg" {};
