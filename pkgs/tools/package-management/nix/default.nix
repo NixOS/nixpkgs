@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "a30a5e801bc1cb1019cbc3456d961a307c45c9c588b8692cf1293ea6588ef01c";
   };
 
+  patches = [ ./xfs.patch ];
+
   nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ curl openssl sqlite ];
