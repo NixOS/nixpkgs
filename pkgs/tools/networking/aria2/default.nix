@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libxml2, sqlite, zlib }:
+{ stdenv, fetchurl, pkgconfig, cacert, c-ares, openssl, libxml2, sqlite, zlib }:
 
 stdenv.mkDerivation rec {
   name = "aria2-${version}";
@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1cn4g4mcrnw67y23970a9bngl8nf2x9hh82lc59gz3xyxn8wljz2";
   };
 
-  buildInputs = [ pkgconfig openssl libxml2 sqlite zlib ];
+  buildInputs = [ pkgconfig c-ares openssl libxml2 sqlite zlib ];
+
+  propagatedBuildInputs = [ cacert ];
+
+  configureFlags = [ "--with-ca-bundle=${cacert}/etc/ca-bundle.crt" ];
 
   meta = with stdenv.lib; {
     homepage = http://aria2.sourceforge.net/;
