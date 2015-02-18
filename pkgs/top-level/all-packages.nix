@@ -2376,6 +2376,8 @@ let
 
   qpdf = callPackage ../development/libraries/qpdf { };
 
+  qprint = callPackage ../tools/text/qprint { };
+
   qscintilla = callPackage ../development/libraries/qscintilla {
     qt = qt4;
   };
