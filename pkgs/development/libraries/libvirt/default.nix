@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnutls, devicemapper, perl, python
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, makeWrapper, pmutils, libcap_ng
-, dnsmasq, libnl, libpcap
-, pythonPackages
+, dnsmasq, libnl, libpcap, libxslt, xhtml1
+, pythonPackages, perlPackages
 }:
 
-let version = "1.2.9"; in
+let version = "1.2.12"; in
 
 assert version == pythonPackages.libvirt.version;
 
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "1i4ggs50dipz1hm0qlk6kak1n3klll8sx9fnffmvjlgla9d1m4wm";
+    sha256 = "0sp6xm6iyg5wfjgxiba4rpl527429r22lh241dzxjq25fxzj5xgg";
   };
 
   buildInputs = [
     pkgconfig libxml2 gnutls devicemapper perl python readline lvm2
     utillinux udev libpciaccess gettext libtasn1 libgcrypt yajl makeWrapper
-    libcap_ng libnl
+    libcap_ng libnl libxslt xhtml1 perlPackages.XMLXPath
   ];
 
   preConfigure = ''
