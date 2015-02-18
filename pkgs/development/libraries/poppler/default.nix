@@ -61,7 +61,7 @@ let
   poppler_glib = poppler_drv "glib" { };
 
   poppler_qt4 = poppler_drv "qt4" {
-    patches = [ qtcairo_patch ];
+    #patches = [ qtcairo_patch ]; # text rendering artifacts in recent versions
     propagatedBuildInputs = [ qt4 poppler_glib ];
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = ''
