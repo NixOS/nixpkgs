@@ -9913,6 +9913,13 @@ let
   });
   emacs24Macport = self.emacs24Macport_24_4;
 
+  emacsMelpa = import ./emacs-melpa-packages.nix {
+    inherit stdenv pkgs fetchurl fetchgit fetchFromGitHub emacs texinfo;
+    external = {
+      inherit (haskellngPackages) ghc-mod structured-haskell-mode;
+    };
+  };
+
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
