@@ -23,7 +23,7 @@ let
     src = fetchurl {
       urls = [
         "mirror://cran/src/contrib/${name}_${version}.tar.gz"
-        "mirror://cran/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+        "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
       ];
       inherit sha256;
     };
