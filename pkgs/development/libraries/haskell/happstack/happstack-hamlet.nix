@@ -12,5 +12,7 @@ cabal.mkDerivation (self: {
     description = "Support for Hamlet HTML templates in Happstack";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })
