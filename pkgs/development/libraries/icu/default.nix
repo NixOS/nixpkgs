@@ -27,10 +27,16 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    export INSTALL="install -c"
   '';
 
   configureFlags = "--disable-debug" +
-    stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
+    stdenv.lib.optionalString stdenv.isDarwin
+      # CC=cc works regardless of gcc or clang, and this prevents the generated
+      # output from retaining unnecessary absolute references to our bootstrap
+      # tools during the darwin stdenv bootstrapping
+      " CC=cc CXX=c++ SHELL=bash --enable-rpath";
 
   enableParallelBuilding = true;
 
