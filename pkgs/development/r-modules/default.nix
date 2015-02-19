@@ -78,6 +78,29 @@ let
       })
     ) overrides;
 
+  # Overrides package definitions with new R dependencies.
+  # For example,
+  #
+  # overrideRDepends {
+  #   foo = [ self.bar ]
+  # } old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.overrideDerivation (attrs: {
+  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
+  #     propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ [ self.bar ];
+  #   });
+  # }
+  overrideRDepends = overrides: old:
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
+      })
+    ) overrides;
+
   # Overrides package definition requiring X running to install.
   # For example,
   #
@@ -158,10 +181,11 @@ let
     let
       old1 = old0 // (overrideRequireX packagesRequireingX old0);
       old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
-      old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
-      old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
-      old5 = old4 // (overrideBroken brokenPackages old4);
-      old = old5;
+      old3 = old2 // (overrideRDepends packagesWithRDepends old2);
+      old4 = old3 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old3);
+      old5 = old4 // (overrideBuildInputs packagesWithBuildInputs old4);
+      old6 = old5 // (overrideBroken brokenPackages old5);
+      old = old6;
     in old // (otherOverrides old new);
 
   # Recursive override pattern.
@@ -172,6 +196,10 @@ let
   _self = import ./cran-packages.nix { inherit self derive; };
 
   # tweaks for the individual packages and "in self" follow
+
+  packagesWithRDepends = {
+    # sort -t '=' -k 2
+  };
 
   packagesWithNativeBuildInputs = {
     # sort -t '=' -k 2
