@@ -315,6 +315,7 @@
   ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix
