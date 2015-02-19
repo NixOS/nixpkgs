@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, jansson }:
 
 stdenv.mkDerivation rec {
-  name = "jshon-${lib.strings.substring 0 7 rev}";
+  name = "jshon-20140712";
 
   rev = "a61d7f2f85f4627bc3facdf951746f0fd62334b7";
   sha256 = "b0365e58553b9613a5636545c5bfd4ad05ab5024f192e1cb1d1824bae4e1a380";
