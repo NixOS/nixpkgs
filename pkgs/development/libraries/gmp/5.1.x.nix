@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
 
-with { inherit (stdenv.lib) optional; };
+with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     ++ (if cxx then [ "--enable-cxx"  ]
                else [ "--disable-cxx" ])
     ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
-    ++ optional stdenv.isDarwin "ABI=64"
+    # CC=cc works regardless of gcc or clang, and this prevents the generated
+    # output from retaining unnecessary absolute references to our bootstrap
+    # tools during the darwin stdenv bootstrapping
+    ++ optionals stdenv.isDarwin ["CC=cc" "ABI=64"]
     ++ optional stdenv.is64bit "--with-pic"
     ;
 
