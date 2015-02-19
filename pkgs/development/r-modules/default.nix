@@ -51,17 +51,11 @@ let
   #   });
   # }
   overrideNativeBuildInputs = overrides: old:
-    let
-      attrNames = builtins.attrNames overrides;
-      nameValuePairs = map (name: rec {
-        inherit name;
-        nativeBuildInputs = builtins.getAttr name overrides;
-        value = (builtins.getAttr name old).overrideDerivation (attrs: {
-          nativeBuildInputs = attrs.nativeBuildInputs ++ nativeBuildInputs;
-        });
-      }) attrNames;
-    in
-      builtins.listToAttrs nameValuePairs;
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+      })
+    ) overrides;
 
   # Overrides package definitions with buildInputs.
   # For example,
@@ -78,17 +72,11 @@ let
   #   });
   # }
   overrideBuildInputs = overrides: old:
-    let
-      attrNames = builtins.attrNames overrides;
-      nameValuePairs = map (name: rec {
-        inherit name;
-        buildInputs = builtins.getAttr name overrides;
-        value = (builtins.getAttr name old).overrideDerivation (attrs: {
-          buildInputs = attrs.buildInputs ++ buildInputs;
-        });
-      }) attrNames;
-    in
-      builtins.listToAttrs nameValuePairs;
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        buildInputs = attrs.buildInputs ++ value;
+      })
+    ) overrides;
 
   # Overrides package definition requiring X running to install.
   # For example,
