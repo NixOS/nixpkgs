@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser
 , pkgconfig, runCommand, which, unstableVersion ? false 
 }:
 
@@ -8,7 +8,7 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = if unstableVersion then "0.11.13" else "0.10.33";
+  version = if unstableVersion then "0.11.13" else "0.12.0";
 
   # !!! Should we also do shared libuv?
   deps = {
@@ -19,9 +19,7 @@ let
     # inherit v8
   } // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
     inherit http-parser;
-  })
-  # Node 0.11 has patched c-ares, won't compile with system's version
-  // (if unstableVersion then {} else { cares = c-ares; });
+  });
 
   sharedConfigureFlags = name: [
     "--shared-${name}"
@@ -37,7 +35,7 @@ in stdenv.mkDerivation {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
     sha256 = if unstableVersion
              then "1642zj3sajhqflfhb8fsvy84w9mm85wagm8w8300gydd2q6fkmhm"
-             else "07h8vl750svjg8x5zhxhwjkx03jpy2m6h3fbj7fd1rj4671jdp3m";
+             else "0cifd2qhpyrbxx71a4hsagzk24qas8m5zvwcyhx69cz9yhxf404p";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);

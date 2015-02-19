@@ -102,6 +102,7 @@ self: super: {
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-text = dontHaddock super.shakespeare-text;
   uhc-light = dontHaddock super.uhc-light;                      # https://github.com/UU-ComputerScience/uhc/issues/45
+  wai-test = dontHaddock super.wai-test;
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
@@ -126,6 +127,30 @@ self: super: {
 
   # https://github.com/haskell/vector/issues/47
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
+
+  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146
+  hinotify = if pkgs.stdenv.isDarwin then super.hfsevents else super.hinotify;
+
+  # FSEvents API is very buggy and tests are unreliable. See
+  # http://openradar.appspot.com/10207999 and similar issues
+  fsnotify = if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
+
+  # Doesn't properly handle nonsense byte sequences on HFS+
+  # https://github.com/fpco/haskell-filesystem/issues/5
+  system-fileio = if pkgs.stdenv.isDarwin
+    then dontCheck super.system-fileio
+    else super.system-fileio;
+
+  # Prevents needing to add security_tool as a build tool to all of x509-system's
+  # dependencies.
+  # TODO: use pkgs.darwin.security_tool once we can build it
+  x509-system = let security_tool = "/usr";
+  in overrideCabal super.x509-system (drv: {
+    patchPhase = (drv.patchPhase or "") + pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
+      substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
+    '';
+  });
 
   # Does not compile: <http://hydra.cryp.to/build/469842/nixlog/1/raw>.
   base_4_7_0_2 = markBroken super.base_4_7_0_2;
@@ -206,10 +231,11 @@ self: super: {
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
   js-jquery = dontCheck super.js-jquery;
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
-  network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   network-transport-tcp = dontCheck super.network-transport-tcp;
+  network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
+  scotty-binding-play = dontCheck super.scotty-binding-play;
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
@@ -374,11 +400,6 @@ self: super: {
   # https://github.com/chrisdone/hindent/issues/83
   hindent = dontCheck super.hindent;
 
-  # Needs older versions of its dependencies.
-  structured-haskell-mode = (dontJailbreak super.structured-haskell-mode).override {
-    haskell-src-exts = self.haskell-src-exts_1_15_0_1;  # https://github.com/chrisdone/structured-haskell-mode/issues/90
-  };
-
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
@@ -442,9 +463,6 @@ self: super: {
   gloss-raster = super.gloss-raster.override { llvm = pkgs.llvm_34; };
   repa-examples = super.repa-examples.override { llvm = pkgs.llvm_34; };
 
-  # Upstream notified by e-mail.
-  OpenGLRaw21 = markBrokenVersion "1.2.0.1" super.OpenGLRaw21;
-
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
@@ -464,6 +482,49 @@ self: super: {
 
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
+
+  # https://github.com/ekmett/exceptions/issues/40
+  exceptions = dontCheck super.exceptions;
+
+  # https://github.com/NixOS/nixpkgs/issues/6350
+  paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
+
+  # https://github.com/anton-k/temporal-csound/issues/2
+  temporal-csound = markBrokenVersion "0.4.1" super.temporal-csound;
+
+  # https://github.com/gregwebs/haskell-heroku/issues/9
+  heroku = dontCheck super.heroku;
+
+  # https://github.com/seanparsons/wiring/issues/1
+  wiring = markBrokenVersion super.wiring;
+
+  # https://github.com/gibiansky/IHaskell/issues/355
+  ihaskell-parsec = markBroken super.ihaskell-parsec;
+
+  # https://github.com/jwiegley/simple-conduit/issues/2
+  simple-conduit = markBroken super.simple-conduit;
+
+  # https://github.com/evanrinehart/lowgl/issues/1
+  lowgl = markBroken super.lowgl;
+
+  # https://github.com/srijs/hwsl2/issues/1
+  hwsl2 = markBroken super.hwsl2;
+
+  # https://code.google.com/p/linux-music-player/issues/detail?id=1
+  mp = markBroken super.mp;
+
+  # https://github.com/athanclark/lucid-foundation/issues/1
+  lucid-foundation = markBroken super.lucid-foundation;
+  digestive-foundation-lucid = markBroken super.digestive-foundation-lucid;
+
+  # Depends on broken lmdb package.
+  vcache = markBroken super.vcache;
+
+  # https://github.com/osa1/language-lua/issues/14
+  language-lua = dontCheck super.language-lua;
+
+  # https://github.com/afcowie/http-streams/issues/80
+  http-streams = dontCheck super.http-streams;
 
 } // {
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ghc, perl, gmp, ncurses, binutils }:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses, binutils, libiconv }:
 
 let
   # The "-Wa,--noexecstack" options might be needed only with GNU ld (as opposed
@@ -17,6 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1669m8k9q72rpd2mzs0bh2q6lcwqiwd1ax3vrard1dgn64yq4hxx";
   };
 
+  patches = [ ./fix-7.6.3-clang.patch ];
+
   buildInputs = [ ghc perl gmp ncurses ];
 
   buildMK = ''
@@ -24,6 +26,10 @@ in stdenv.mkDerivation rec {
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
+      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
+    ''}
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     # Set ghcFlags for building ghc itself
     SRC_HC_OPTS += ${ghcFlags}
@@ -40,9 +46,14 @@ in stdenv.mkDerivation rec {
 
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    find . -name '*.hs'  | xargs sed -i -e 's|ASSERT (|ASSERT(|' -e 's|ASSERT2 (|ASSERT2(|' -e 's|WARN (|WARN(|'
+    find . -name '*.lhs' | xargs sed -i -e 's|ASSERT (|ASSERT(|' -e 's|ASSERT2 (|ASSERT2(|' -e 's|WARN (|WARN(|'
+    export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 
-  configureFlags = "--with-gcc=${stdenv.cc}/bin/gcc";
+  configureFlags = if stdenv.isDarwin then "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"
+                                      else "--with-gcc=${stdenv.cc}/bin/gcc";
 
   postInstall = ''
     # ghci uses mmap with rwx protection at it implements dynamic
@@ -56,7 +67,7 @@ in stdenv.mkDerivation rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags=["-S" "--keep-file-symbols"];
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   meta = {
     homepage = "http://haskell.org/ghc";

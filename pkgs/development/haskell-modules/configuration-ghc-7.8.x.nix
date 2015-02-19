@@ -37,6 +37,9 @@ self: super: {
   # mtl 2.2.x needs the latest transformers.
   mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_2_0; };
 
+  # Configure build for mtl 2.1.x.
+  mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
+
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
@@ -78,6 +81,17 @@ self: super: {
   # Needs mtl 2.2.x due to "plailude".
   clac = dontDistribute super.clac;
 
+  # https://github.com/junjihashimoto/test-sandbox-compose/issues/1
+  test-sandbox = markBroken super.test-sandbox;
+  test-sandbox-compose = markBroken super.test-sandbox-compose;
+
+  # https://github.com/alephcloud/hs-configuration-tools/issues/38
+  configuration-tools = markBroken super.configuration-tools;
+  yet-another-logger = markBroken super.yet-another-logger;
+
+  # Needs mtl 2.2.x.
+  hypher = markBroken super.hypher;
+
 }
 
 // # packages relating to amazonka
@@ -107,13 +121,15 @@ self: super: {
     unix = self.unix_2_7_1_0;
     directory = self.directory_1_2_1_0;
     process = overrideCabal self.process_1_2_2_0 (drv: { coreSetup = true; });
-    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch;
+    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch amazonka-glacier amazonka-ecs;
   };
   amazonka = super.amazonka.overrideScope amazonkaEnv;
   amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
   amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
+  amazonka-ecs = super.amazonka-ecs.overrideScope amazonkaEnv;
+  amazonka-glacier = super.amazonka-glacier.overrideScope amazonkaEnv;
   amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
 in {
   inherit amazonkaEnv;
-  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-kms;
+  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-ecs amazonka-kms amazonka-glacier;
 })

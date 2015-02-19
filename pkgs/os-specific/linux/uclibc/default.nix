@@ -1,4 +1,4 @@
-{stdenv, fetchurl, linuxHeaders, libiconv, cross ? null, gccCross ? null,
+{stdenv, fetchurl, linuxHeaders, libiconvReal, cross ? null, gccCross ? null,
 extraConfig ? ""}:
 
 assert stdenv.isLinux;
@@ -19,10 +19,10 @@ let
             echo "parseconfig: removing $NAME"
             sed -i /^$NAME=/d .config
 
-            if test "$OPTION" != n; then
+            #if test "$OPTION" != n; then
                 echo "parseconfig: setting $NAME=$OPTION"
                 echo "$NAME=$OPTION" >> .config
-            fi
+            #fi
         done
         set +x
     }
@@ -43,17 +43,24 @@ let
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
+  '' + stdenv.lib.optionalString (stdenv.isArm && cross == null) ''
+    CONFIG_ARM_EABI y
+    ARCH_WANTS_BIG_ENDIAN n
+    ARCH_BIG_ENDIAN n
+    ARCH_WANTS_LITTLE_ENDIAN y
+    ARCH_LITTLE_ENDIAN y
+    UCLIBC_HAS_FPU n
   '';
 
 in
 
 stdenv.mkDerivation {
-  name = "uclibc-0.9.34-pre-20141215" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.34-pre-20150131" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/snapshots/uClibc-20141215.tar.bz2;
-    sha256 = "07d1fmnc2yapfhhadr5c8q7591xqxxqmiicmcgcn8sqmaxppzp5f";
+    url = http://www.uclibc.org/downloads/snapshots/uClibc-20150131.tar.bz2;
+    sha256 = "14svyxw4nizdcz4vqk9nizlgy32d8ngpvcca34jjbdjjg77xdvkc";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -88,7 +95,7 @@ stdenv.mkDerivation {
 
   passthru = {
     # Derivations may check for the existance of this attribute, to know what to link to.
-    inherit libiconv;
+    libiconv = libiconvReal;
   };
 
   meta = {

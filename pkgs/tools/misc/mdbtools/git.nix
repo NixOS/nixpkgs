@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, glib, readline, bison, flex, pkgconfig,
-  libiconvOrEmpty, autoconf, automake, libtool, which, txt2man, gnome_doc_utils,
+  libiconv, autoconf, automake, libtool, which, txt2man, gnome_doc_utils,
   scrollkeeper}:
 
 stdenv.mkDerivation {
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     glib readline bison flex pkgconfig autoconf automake
-    libtool which txt2man gnome_doc_utils scrollkeeper
-  ] ++ libiconvOrEmpty;
+    libtool which txt2man gnome_doc_utils scrollkeeper libiconv
+  ];
 
   preConfigure = ''
     sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c

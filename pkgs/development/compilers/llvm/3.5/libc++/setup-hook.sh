@@ -1,2 +1,4 @@
-export NIX_CFLAGS_COMPILE+=" -isystem @out@/include/c++/v1 -stdlib=libc++"
-export NIX_CFLAGS_LINK+=" -stdlib=libc++ -Wl,-rpath,@libcxxabi@/lib"
+export NIX_CFLAGS_COMPILE+=" -isystem @out@/include/c++/v1"
+
+export NIX_CXXSTDLIB_COMPILE=" -stdlib=libc++"
+export NIX_CXXSTDLIB_LINK=" -stdlib=libc++"

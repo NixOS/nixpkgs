@@ -1,5 +1,5 @@
 { stdenv, fetchgit, sqlite, curl, pkgconfig, libxml2, stfl, json-c-0-11, ncurses
-, gettext, libiconvOrEmpty, makeWrapper, perl }:
+, gettext, libiconv, makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
   name = "newsbeuter-dev-20140309";
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs
     # use gettext instead of libintlOrEmpty so we have access to the msgfmt
     # command
-    = [ pkgconfig sqlite curl libxml2 stfl json-c-0-11 ncurses gettext perl ]
-      ++ libiconvOrEmpty
+    = [ pkgconfig sqlite curl libxml2 stfl json-c-0-11 ncurses gettext perl libiconv ]
       ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
   preBuild = ''

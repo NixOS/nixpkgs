@@ -41,9 +41,10 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
+  ] ++ stdenv.lib.optionals (!isDarwin) [
+    "-DBUILD_SHARED_LIBS=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
-  ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON"
-    ++ stdenv.lib.optionals ( isDarwin) [
+  ] ++ stdenv.lib.optionals ( isDarwin) [
     "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
     "-DCAN_TARGET_i386=false"
   ];

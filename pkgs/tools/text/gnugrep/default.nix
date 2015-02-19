@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, libiconvOrNull }:
+{ stdenv, fetchurl, pcre, libiconv }:
 
 let version = "2.20"; in
 
@@ -10,9 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0rcs0spsxdmh6yz8y4frkqp6f5iw19mdbdl9s2v6956hq0mlbbzh";
   };
 
-  buildInputs = [ pcre libiconvOrNull ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString (libiconvOrNull != null) "-L${libiconvOrNull}/lib -liconv";
+  buildInputs = [ pcre libiconv ];
 
   doCheck = !stdenv.isDarwin;
 

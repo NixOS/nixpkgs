@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, expat, gettext, libiconvOrEmpty, dbus, glib }:
+{ stdenv, fetchurl, pkgconfig, expat, gettext, libiconv, dbus, glib }:
 
 stdenv.mkDerivation rec {
   name = "dbus-glib-0.102";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext ];
 
-  buildInputs = [ expat ] ++ libiconvOrEmpty;
+  buildInputs = [ expat libiconv ];
 
   propagatedBuildInputs = [ dbus.libs glib ];
 

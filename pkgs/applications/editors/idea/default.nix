@@ -6,28 +6,29 @@ assert stdenv.isLinux;
 
 let
 
-  mkIdeaProduct =
-  { name, product, version, build, src, meta, patchSnappy ? true }:
+  mkIdeaProduct = with stdenv.lib;
+  { name, product, version, build, src, meta }:
 
-  let loName = stdenv.lib.toLower product;
-      hiName = stdenv.lib.toUpper product; in
+  let loName = toLower product;
+      hiName = toUpper product;
+      execName = concatStringsSep "-" (init (splitString "-" name));
+  in
 
   with stdenv; lib.makeOverridable mkDerivation rec {
     inherit name build src meta;
     desktopItem = makeDesktopItem {
-      name = loName;
-      exec = loName;
+      name = execName;
+      exec = execName;
       comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
       desktopName = product;
       genericName = meta.description;
       categories = "Application;Development;";
-      icon = loName;
+      icon = execName;
     };
 
     buildInputs = [ makeWrapper patchelf p7zip unzip ];
 
-    patchPhase = lib.concatStringsSep "\n" [
-      ''
+    patchPhase = ''
         get_file_size() {
           local fname="$1"
           echo $(ls -l $fname | cut -d ' ' -f5)
@@ -50,31 +51,18 @@ let
           patchelf --set-interpreter "$interpreter" bin/fsnotifier
           munge_size_hack bin/fsnotifier $target_size
         fi
-      ''
-
-      (lib.optionalString patchSnappy ''
-        snappyPath="lib/snappy-java-1.0.5"
-        7z x -o"$snappyPath" "$snappyPath.jar"
-        if [ "${stdenv.system}" == "x86_64-linux" ]; then
-          patchelf --set-rpath ${stdenv.cc.cc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
-        else
-          patchelf --set-rpath ${stdenv.cc.cc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
-        fi
-        7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
-        rm -vr "$snappyPath"
-      '')
-    ];
+    '';
 
     installPhase = ''
-      mkdir -vp "$out/bin" "$out/$name" "$out/share/pixmaps"
-      cp -va . "$out/$name"
-      ln -s "$out/$name/bin/${loName}.png" "$out/share/pixmaps/"
+      mkdir -vp $out/{bin,$name,share/pixmaps,libexec/${name}}
+      cp -va . $out/$name
+      ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
+      mv bin/fsnotifier* $out/libexec/${name}/.
 
       jdk=${jdk.home}
 
-      makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
-        --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --prefix LD_RUN_PATH : "${stdenv.cc.cc}/lib/" \
+      makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
+        --prefix PATH : "$out/libexec/${name},${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
         --prefix JDK_HOME : "$jdk" \
         --prefix ${hiName}_JDK : "$jdk"
 
@@ -104,7 +92,6 @@ let
   buildClion = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "CLion";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/clion/";
@@ -121,7 +108,6 @@ let
   buildIdea = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "IDEA";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/idea/";
@@ -139,7 +125,6 @@ let
   buildRubyMine = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "RubyMine";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/ruby/";
@@ -154,7 +139,6 @@ let
     (mkIdeaProduct {
       inherit name version build src;
       product = "PhpStorm";
-      patchSnappy = false;
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
         inherit description license;
@@ -171,7 +155,6 @@ let
   buildPycharm = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "PyCharm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
@@ -214,7 +197,7 @@ in
   };
 
   clion = buildClion rec {
-    name = "clion";
+    name = "clion-${version}";
     version = "eap";
     build = "140.1740.3";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";

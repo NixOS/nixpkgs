@@ -1,5 +1,5 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk, python, stdenv, libiconvOrEmpty, imagemagick
+, zlib, libuuid, gems, jdk, python, stdenv, libiconv, imagemagick
 , pkgconfig }:
 
 let
@@ -33,7 +33,7 @@ in
     NIX_POST_EXTRACT_FILES_HOOK = patchUsrBinEnv;
   };
 
-  iconv = { buildInputs = [ libiconvOrEmpty ]; };
+  iconv = { buildInputs = [ libiconv ]; };
 
   libv8 = {
     # This fix is needed to fool scons, which clears the environment by default.
@@ -84,7 +84,8 @@ in
     buildFlags =
       [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
         "--with-xslt-dir=${libxslt}  --use-system-libraries"
-      ] ++ libiconvOrEmpty;
+        libiconv
+      ];
   };
 
   pry = { gemFlags = "--no-ri --no-rdoc"; };

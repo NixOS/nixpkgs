@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, unzip }:
 
 stdenv.mkDerivation {
-  name = "weka-3.6.9";
+  name = "weka-3.6.12";
   
   src = fetchurl {
-    url = "mirror://sourceforge/weka/weka-3-6-9.zip";
-    sha256 = "0rnis4vvihhdcdvpp79hkmklcnn897paa0qrs95cbjnpgvxzbczs";
+    url = "mirror://sourceforge/weka/weka-3-6-12.zip";
+    sha256 = "0sdhiv1nr5rxgjry05srsnynsydkyny79zvaxdj6dk8m1768qksh";
   };
 
   buildInputs = [ unzip ];

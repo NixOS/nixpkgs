@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtool, readline, zlib, openssl, libiconvOrNull, pcsclite
+{ stdenv, fetchurl, libtool, readline, zlib, openssl, libiconv, pcsclite
 , libassuan1, pkgconfig, libXt, docbook_xsl, libxslt, docbook_xml_dtd_412
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libtool readline zlib openssl pcsclite libassuan1 pkgconfig
-    libXt libxslt libiconvOrNull docbook_xml_dtd_412
+    libXt libxslt libiconv docbook_xml_dtd_412
   ];
 
   configureFlags = [

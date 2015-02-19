@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "pylint-1.4.0";
+  name = "pylint-1.4.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/p/pylint/${name}.tar.gz";
-    md5 = "c164738f90213981db5d3297a60b4138";
+    sha256 = "0c7hw1pcp5sqmc0v86zygw21isfgzbsqdmlb1sywncnlxmh30f1y";
   };
 
   propagatedBuildInputs = with pythonPackages; [ astroid ];

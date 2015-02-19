@@ -2,6 +2,19 @@
 
 with lib;
 
+let
+
+  caBundle = pkgs.runCommand "ca-bundle.crt"
+    { files =
+        config.security.pki.certificateFiles ++
+        [ (builtins.toFile "extra.crt" (concatStringsSep "\n" config.security.pki.certificates)) ];
+     }
+    ''
+      cat $files > $out
+    '';
+
+in
+
 {
 
   options = {
@@ -42,25 +55,21 @@ with lib;
 
     security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ca-bundle.crt" ];
 
-    environment.etc =
-      [ { source = pkgs.runCommand "ca-bundle.crt"
-          { files =
-              config.security.pki.certificateFiles ++
-              [ (builtins.toFile "extra.crt" (concatStringsSep "\n" config.security.pki.certificates)) ];
-           }
-          ''
-            cat $files > $out
-          '';
-          target = "ssl/certs/ca-bundle.crt";
-        }
-      ];
+    # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
+    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
+
+    # Old NixOS compatibility.
+    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
+
+    # CentOS/Fedora compatibility.
+    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
 
     environment.sessionVariables =
-      { SSL_CERT_FILE          = "/etc/ssl/certs/ca-bundle.crt";
+      { SSL_CERT_FILE          = "/etc/ssl/certs/ca-certificates.crt";
         # FIXME: unneeded - remove eventually.
-        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
         # FIXME: unneeded - remove eventually.
-        GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-bundle.crt";
+        GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-certificates.crt";
       };
 
   };

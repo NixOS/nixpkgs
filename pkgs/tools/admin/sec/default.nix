@@ -1,11 +1,11 @@
 { fetchurl, perl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "sec-2.7.6";
+  name = "sec-2.7.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/simple-evcorr/${name}.tar.gz";
-    sha256 = "1lrssln55p3bmn3d2hl8c5l5ix32bn8065w1cgycwsf7r6fww51p";
+    sha256 = "116nn8fg24nwcimm8gcfp52bsgh1ckrspjr8sk4i0arvpl3d12m9";
   };
 
   buildInputs = [ perl ];
