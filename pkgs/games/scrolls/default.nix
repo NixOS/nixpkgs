@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.scrolls.com/client/linux.tar.gz";
-    sha256 = "c94fd2181dfac708755f9d70fa91f6106acd124b6b01717641a4dc4240e7e2c0";
+    sha256 = "0gpwb8f1wrj6dfd9ffxga07whnxdgk66bj7j9gkbxlvrx3sj8zbp";
   };
 
   libPath = stdenv.lib.makeLibraryPath [
