@@ -1,21 +1,45 @@
-{ stdenv, fetchurl, libffi, expat, pkgconfig, libxslt, docbook_xsl, doxygen }:
+{ stdenv, fetchurl, pkgconfig
+, libffi
+, scannerSupport ? true, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
+, documentationSupport ? false, docbook_xsl ? null, doxygen ? null, graphviz-nox ? null, libxslt ? null, xmlto ? null #, publican ? null
+}:
 
-let version = "1.6.0"; in
+# Require the optional to be enabled until upstream fixes or removes the configure flag
+assert scannerSupport;
 
+assert scannerSupport -> (expat != null);
+assert documentationSupport -> ((docbook_xsl != null) && (doxygen != null) && (graphviz-nox != null) && (libxslt != null) && (xmlto != null));
+
+let
+  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
+in
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "wayland-${version}";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0zzwlrmxil10g9rvdgha0y1d8z0x97g65g14kl2qrl2krwni1md7";
+    sha256 = "173w0pqzk2m7hjlg15bymrx7ynxgq1ciadg03hzybxwnvfi4gsmx";
   };
 
-  buildInputs = [ pkgconfig libffi expat libxslt docbook_xsl doxygen ];
+  configureFlags = [
+    (mkFlag scannerSupport "scanner")
+    (mkFlag documentationSupport "documentation")
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libffi ]
+    ++ optional scannerSupport expat
+    ++ optionals documentationSupport [ docbook_xsl doxygen graphviz-nox libxslt xmlto ];
 
   meta = {
     description = "Reference implementation of the wayland protocol";
-    homepage = http://wayland.freedesktop.org/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://wayland.freedesktop.org/;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ codyopel wkennington ];
   };
 }
