@@ -10013,6 +10013,8 @@ let
 
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
+    marathon = callPackage ../applications/networking/cluster/marathon { };
+
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
     metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
