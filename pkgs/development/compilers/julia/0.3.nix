@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.3.5";
+  version = "0.3.6";
   name = "${pname}-${version}";
 
   dsfmt_ver = "2.2";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
     rev = "refs/tags/v${version}";
-    md5 = "abdee0e64f8e9ae3d96e37734e2db40a";
+    md5 = "d28e8f428485219f756d80c011d5dd32";
     name = "julia-git-v${version}";
   };
 
