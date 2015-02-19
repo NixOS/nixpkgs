@@ -4,9 +4,7 @@ with import ../../top-level/all-packages.nix {inherit system;};
 
 rec {
   # We want coreutils without ACL support.
-  coreutils_ = coreutils.override (orig: {
-    aclSupport = false;
-  });
+  coreutils_ = coreutils.override (orig: { aclSupport = false; });
 
   build = stdenv.mkDerivation {
     name = "build";
@@ -84,19 +82,19 @@ rec {
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool dsymutil; do
-        cp ${darwin.cctools}/bin/$i $out/bin
+        cp ${darwin.binutils}/bin/$i $out/bin
       done
 
-      cp -rd ${pkgs.darwin.CF}/Library $out
+      cp -rd ${darwin.CF}/Library $out
 
       chmod -R u+w $out
 
       nuke-refs $out/bin/*
 
       rpathify() {
-        local libs=$(${darwin.cctools}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local libs=$(otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
         for lib in $libs; do
-          ${darwin.cctools}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
+          install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
         done
       }
 
@@ -107,7 +105,7 @@ rec {
 
       # Strip executables even further
       for i in $out/bin/*; do
-        if test -x $i -a ! -L $i; then
+        if test ! -L $i; then
           chmod +w $i
 
           fix_dyld $i
@@ -116,7 +114,7 @@ rec {
       done
 
       for i in $out/bin/* $out/lib/*.dylib $out/lib/clang/3.5.0/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if test -x $i -a ! -L $i; then
+        if test ! -L $i; then
           echo "Adding rpath to $i"
           rpathify $i
         fi
