@@ -1,5 +1,6 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
-, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11, self, callPackage }:
+, sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, libX11, self, callPackage
+, configd, corefoundation }:
 
 assert zlibSupport -> zlib != null;
 
@@ -28,13 +29,20 @@ let
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
     ];
-    
-  preConfigure = ''
-      # Purity.
-      for i in /usr /sw /opt /pkg; do
-        substituteInPlace ./setup.py --replace $i /no-such-path
-      done
-    '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
+
+  # The `/usr/bin/arch` substitution only affects darwin systems,
+  # and i386 just means intel here (not 32-bit specifically)
+  ensurePurity = ''
+    substituteInPlace configure \
+      --replace '`/usr/bin/arch`' '"i386"'
+
+    # Purity.
+    for i in /usr /sw /opt /pkg; do
+      substituteInPlace ./setup.py --replace $i /no-such-path
+    done
+  '';
+
+  preConfigure = ensurePurity + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
@@ -49,7 +57,7 @@ let
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl ] ++ optionals includeModules [ db openssl ncurses gdbm libX11 readline x11 tcl tk sqlite ]
-    ++ optional zlibSupport zlib;
+    ++ optional zlibSupport zlib ++ optionals stdenv.isDarwin [ configd corefoundation ];
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
@@ -63,7 +71,7 @@ let
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
-    configureFlags = "--enable-shared --with-threads --enable-unicode";
+    configureFlags = "--enable-shared --with-threads --enable-unicode" + stdenv.lib.optionalString stdenv.isDarwin " --disable-toolbox-glue";
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
@@ -87,7 +95,7 @@ let
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
         paxmark E $out/bin/python${majorVersion}
-        
+
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 

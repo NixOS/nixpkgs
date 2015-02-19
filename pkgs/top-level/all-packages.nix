@@ -4464,6 +4464,8 @@ let
   };
   python27 = callPackage ../development/interpreters/python/2.7 {
     self = python27;
+    inherit (darwin) configd;
+    corefoundation = darwin.CF;
   };
   python32 = callPackage ../development/interpreters/python/3.2 {
     self = python32;
