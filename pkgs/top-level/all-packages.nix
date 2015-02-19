@@ -1438,6 +1438,10 @@ let
 
   graphviz = callPackage ../tools/graphics/graphviz { };
 
+  graphviz-nox = callPackage ../tools/graphics/graphviz {
+    xlibs = null;
+  };
+
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal. The feature is integer coordinates

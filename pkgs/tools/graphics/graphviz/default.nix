@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat, libXaw
-, yacc, libtool, fontconfig, pango, gd, xlibs, gts, gettext, cairo
+, yacc, libtool, fontconfig, pango, gd, xlibs, gts, libdevil, gettext, cairo
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-vimdot-lookup-vim-in-PATH.patch ];
 
   buildInputs =
-    [ pkgconfig libpng libjpeg expat libXaw yacc libtool fontconfig
-      pango gd gts
-    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ]
+    [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil
+    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender pango libXaw ]
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
-  CPPFLAGS = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "-I${cairo}/include/cairo";
+  CPPFLAGS = stdenv.lib.optionalString (xlibs != null && stdenv.system == "x86_64-darwin")
+    "-I${cairo}/include/cairo";
 
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   # "command -v" is POSIX, "which" is not
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString (xlibs != null) ''
     sed -i 's|`which lefty`|"'$out'/bin/lefty"|' $out/bin/dotty
     sed -i 's|which|command -v|' $out/bin/vimdot
   '';
