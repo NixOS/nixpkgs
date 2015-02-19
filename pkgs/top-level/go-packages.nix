@@ -215,6 +215,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  fsnotify = buildGoPackage rec {
+    rev = "4894fe7efedeeef21891033e1cce3b23b9af7ad2";
+    name = "fsnotify-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/howeyc/fsnotify";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "howeyc";
+      repo = "fsnotify";
+      sha256 = "09r3h200nbw8a4d3rn9wxxmgma2a8i6ssaplf3zbdc2ykizsq7mn";
+    };
+  };
+
   g2s = buildGoPackage rec {
     rev = "ec76db4c1ac16400ac0e17ca9c4840e1d23da5dc";
     name = "g2s-${stdenv.lib.strings.substring 0 7 rev}";
@@ -619,6 +631,18 @@ let self = _self // overrides; _self = with self; {
                     go-homedir ldap g2s gox govers ];
   };
 
+  httprouter = buildGoPackage rec {
+    rev = "bde5c16eb82ff15a1734a3818d9b9547065f65b1";
+    name = "httprouter-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/julienschmidt/httprouter";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "julienschmidt";
+      repo = "httprouter";
+      sha256 = "1l74pvqqhhval4vfnhca9d6i1ij69qs3ljf41w3m1l2id42rq7r9";
+    };
+  };
+
   influxdb-go = buildGoPackage rec {
     rev = "63c9a5f67dcb633d05164bf8442160c9e2e402f7";
     name = "influxdb-go-${stdenv.lib.strings.substring 0 7 rev}";
@@ -910,6 +934,18 @@ let self = _self // overrides; _self = with self; {
       owner = "kr";
       repo = "pty";
       sha256 = "1l3z3wbb112ar9br44m8g838z0pq2gfxcp5s3ka0xvm1hjvanw2d";
+    };
+  };
+
+  pushover = buildGoPackage rec {
+    rev = "a8420a1935479cc266bda685cee558e86dad4b9f";
+    name = "pushover-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/thorduri/pushover";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "thorduri";
+      repo = "pushover";
+      sha256 = "0j4k43ppka20hmixlwhhz5mhv92p6wxbkvdabs4cf7k8jpk5argq";
     };
   };
 
