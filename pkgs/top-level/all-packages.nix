@@ -5035,6 +5035,8 @@ let
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
+  sikulix = callPackage ../development/tools/sikuli { };
+
   scons = callPackage ../development/tools/build-managers/scons { };
 
   sbt = callPackage ../development/tools/build-managers/sbt { };
