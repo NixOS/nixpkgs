@@ -41,6 +41,10 @@ let
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
+        binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
+        ${optionalString cfg.requireSignedBinaryCaches ''
+          signed-binary-caches = *
+        ''}
         $extraOptions
         END
       '';
@@ -244,6 +248,33 @@ in
         '';
       };
 
+      requireSignedBinaryCaches = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, Nix will only download binaries from binary
+          caches if they are cryptographically signed with any of the
+          keys listed in
+          <option>nix.binaryCachePublicKeys</option>. If disabled (the
+          default), signatures are neither required nor checked, so
+          it's strongly recommended that you use only trustworthy
+          caches and https to prevent man-in-the-middle attacks.
+        '';
+      };
+
+      binaryCachePublicKeys = mkOption {
+        type = types.listOf types.str;
+        example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
+        description = ''
+          List of public keys used to sign binary caches. If
+          <option>nix.requireSignedBinaryCaches</option> is enabled,
+          then Nix will use a binary from a binary cache if and only
+          if it is signed by <emphasis>any</emphasis> of the keys
+          listed here. By default, only the key for
+          <uri>cache.nixos.org</uri> is included.
+        '';
+      };
+
     };
 
   };
@@ -252,6 +283,8 @@ in
   ###### implementation
 
   config = {
+
+    nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
