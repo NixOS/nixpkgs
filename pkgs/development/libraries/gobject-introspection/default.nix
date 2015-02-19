@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, autoconf, automake, otool }:
+, libintlOrEmpty, autoconf, automake }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "162flbzwzz0b8axab2gimc4dglpaw88fh1d177zfg0whczlpbsln";
   };
 
-  buildInputs = [ flex bison pkgconfig python ]
-    ++ libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin otool;
+  buildInputs = [ flex bison pkgconfig python ] ++ libintlOrEmpty;
   propagatedBuildInputs = [ libffi glib ];
 
   # Tests depend on cairo, which is undesirable (it pulls in lots of
