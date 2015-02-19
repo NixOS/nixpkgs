@@ -3,9 +3,9 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib xvfb_run utillinux;
+  inherit (pkgs) fetchurl stdenv lib;
 
-  buildRPackage = import ./generic-builder.nix { inherit R xvfb_run utillinux ; };
+  buildRPackage = pkgs.callPackage ./generic-builder.nix { inherit R; };
 
   # Package template
   #
