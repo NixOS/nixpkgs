@@ -4704,11 +4704,9 @@ let
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  binutils = if stdenv.isDarwin
-    then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
-    else callPackage ../development/tools/misc/binutils {
-      inherit noSysDirs;
-    };
+  binutils = if stdenv.isDarwin then darwin.binutils else binutils-raw;
+
+  binutils-raw = callPackage ../development/tools/misc/binutils { inherit noSysDirs; };
 
   binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
