@@ -1440,6 +1440,7 @@ let
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
     xlibs = null;
+    libdevil = libdevil-nox;
   };
 
   /* Readded by Michael Raskin. There are programs in the wild
@@ -6077,6 +6078,11 @@ let
   libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
 
   libdevil = callPackage ../development/libraries/libdevil { };
+
+  libdevil-nox = libdevil.override {
+    libX11 = null;
+    mesa = null;
+  };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
