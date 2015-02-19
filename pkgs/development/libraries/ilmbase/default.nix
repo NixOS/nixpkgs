@@ -1,10 +1,24 @@
-{stdenv, fetchurl}:
+{ stdenv, openexr, automake, autoconf, libtool }:
 
 stdenv.mkDerivation {
-  name = "ilmbase-1.0.1";
+  name = "ilmbase-${openexr.source.version}";
   
-  src = fetchurl {
-    url = mirror://savannah/openexr/ilmbase-1.0.1.tar.gz;
-    sha256 = "0z9r3r0bxyhgwhkdwln0dg1lnxz691qnjygrqlg3jym34rxzq52g";
+  src = openexr.source.src;
+
+  prePatch = ''
+    cd IlmBase
+  '';
+
+  preConfigure = ''
+    ./bootstrap
+  '';
+
+  buildInputs = [ automake autoconf libtool ];
+
+  meta = with stdenv.lib; {
+    homepage = http://www.openexr.com/;
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
