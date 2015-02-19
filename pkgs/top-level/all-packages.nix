@@ -7432,7 +7432,9 @@ let
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
-  wayland = callPackage ../development/libraries/wayland { };
+  wayland = callPackage ../development/libraries/wayland {
+    graphviz = graphviz-nox;
+  };
 
   webkit = webkitgtk;
 

@@ -1,14 +1,10 @@
 { stdenv, fetchurl, pkgconfig
-, libffi
-, scannerSupport ? true, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
-, documentationSupport ? false, docbook_xsl ? null, doxygen ? null, graphviz-nox ? null, libxslt ? null, xmlto ? null #, publican ? null
+, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto
+, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 
 # Require the optional to be enabled until upstream fixes or removes the configure flag
-assert scannerSupport;
-
-assert scannerSupport -> (expat != null);
-assert documentationSupport -> ((docbook_xsl != null) && (doxygen != null) && (graphviz-nox != null) && (libxslt != null) && (xmlto != null));
+assert expat != null;
 
 let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
@@ -25,15 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag scannerSupport "scanner")
-    (mkFlag documentationSupport "documentation")
+    (mkFlag (expat != null) "scanner")
   ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libffi ]
-    ++ optional scannerSupport expat
-    ++ optionals documentationSupport [ docbook_xsl doxygen graphviz-nox libxslt xmlto ];
+  buildInputs = [ libffi docbook_xsl doxygen graphviz libxslt xmlto expat ];
 
   meta = {
     description = "Reference implementation of the wayland protocol";
@@ -42,4 +35,6 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
     maintainers = with maintainers; [ codyopel wkennington ];
   };
+
+  passthru.version = version;
 }
