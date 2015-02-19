@@ -6789,6 +6789,8 @@ let
 
   movit = callPackage ../development/libraries/movit { };
 
+  mosquitto = callPackage ../servers/mqtt/mosquitto { };
+
   mps = callPackage ../development/libraries/mps { };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
