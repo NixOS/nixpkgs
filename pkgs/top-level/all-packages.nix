@@ -9807,6 +9807,8 @@ let
     imagemagick = imagemagick;
   };
 
+  cutecom = callPackage ../tools/misc/cutecom { };
+
   cvs = callPackage ../applications/version-management/cvs { };
 
   cvsps = callPackage ../applications/version-management/cvsps { };
