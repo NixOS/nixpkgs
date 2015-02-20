@@ -137,7 +137,7 @@ stdenv.mkDerivation (
     buildInputs =
       buildInputs ++
       (stdenv.lib.optional doCoverageAnalysis args.makeGCOVReport) ++
-      (stdenv.lib.optional doClangAnalysis args.clangAnalyzer) ++
+      (stdenv.lib.optional doClangAnalysis args.clang-analyzer) ++
       (stdenv.lib.optional doCoverityAnalysis args.cov-build) ++
       (stdenv.lib.optional doCoverityAnalysis args.xz);
 

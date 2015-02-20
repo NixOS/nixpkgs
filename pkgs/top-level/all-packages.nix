@@ -3181,7 +3181,7 @@ let
   clang_34 = wrapCC llvmPackages_34.clang;
   clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
-  clangAnalyzer = callPackage ../development/tools/analysis/clang-analyzer {
+  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     clang = clang_34;
     llvmPackages = llvmPackages_34;
   };
@@ -13644,6 +13644,7 @@ let
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bridge_utils = bridge-utils;  # added 2015-02-20
+  clangAnalyzer = clang-analyzer;  # added 2015-02-20
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
