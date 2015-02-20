@@ -537,6 +537,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  go-runit = buildGoPackage rec {
+    rev = "a9148323a615e2e1c93b7a9893914a360b4945c8";
+    name = "go-runit-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/soundcloud/go-runit";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "soundcloud";
+      repo = "go-runit";
+      sha256 = "00f2rfhsaqj2wjanh5qp73phx7x12a5pwd7lc0rjfv68l6sgpg2v";
+    };
+  };
+
   go-simplejson = buildGoPackage rec {
     rev = "1cfceb0e12f47ec02665ef480212d7b531d6f4c5";
     name = "go-simplejson-${stdenv.lib.strings.substring 0 7 rev}";
@@ -790,6 +802,18 @@ let self = _self // overrides; _self = with self; {
       owner = "vmihailenco";
       repo = "msgpack";
       sha256 = "1dj5scpfhgnw0yrh0w6jlrb9d03halvsv4l3wgjhazrrimdqf0q0";
+    };
+  };
+
+  ntp = buildGoPackage rec {
+    rev = "0a5264e2563429030eb922f258229ae3fee5b5dc";
+    name = "ntp-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/beevik/ntp";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "beevik";
+      repo = "ntp";
+      sha256 = "03fvgbjf2aprjj1s6wdc35wwa7k1w5phkixzvp5n1j21sf6w4h24";
     };
   };
 
