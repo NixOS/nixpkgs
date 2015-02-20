@@ -7975,6 +7975,8 @@ let
 
   etcdctl = callPackage ../development/tools/etcdctl { };
 
+  exim = callPackage ../servers/mail/exim { };
+
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
   felix = callPackage ../servers/felix { };
