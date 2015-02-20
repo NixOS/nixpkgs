@@ -8385,6 +8385,8 @@ let
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager =
     callPackage ../servers/monitoring/prometheus/alertmanager { };
+  prometheus-cli =
+    callPackage ../servers/monitoring/prometheus/cli { };
   prometheus-haproxy-exporter =
     callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
   prometheus-pushgateway =
