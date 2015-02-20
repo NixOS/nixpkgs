@@ -10027,8 +10027,6 @@ let
 
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
-    marathon = callPackage ../applications/networking/cluster/marathon { };
-
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
     metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
@@ -10743,6 +10741,8 @@ let
   lyx = callPackage ../applications/misc/lyx { };
 
   makeself = callPackage ../applications/misc/makeself { };
+
+  marathon = callPackage ../applications/networking/cluster/marathon { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
