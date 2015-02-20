@@ -3988,6 +3988,8 @@ let
 
     ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
 
+    ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
+
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
