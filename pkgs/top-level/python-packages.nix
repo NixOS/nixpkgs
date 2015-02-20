@@ -565,6 +565,8 @@ let
   audiotools = buildPythonPackage rec {
     name = "audiotools-2.22";
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/audiotools/${name}.tar.gz";
       sha256 = "1c52pggsbxdbj8h92njf4h0jgfndh4yv58ad723pidys47nw1y71";
