@@ -10484,7 +10484,9 @@ let
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
-  homebank = callPackage ../applications/office/homebank { };
+  homebank = callPackage ../applications/office/homebank {
+    gtk = gtk3;
+  };
 
   htmldoc = callPackage ../applications/misc/htmldoc {
     fltk = fltk13;
