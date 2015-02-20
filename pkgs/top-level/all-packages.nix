@@ -3714,6 +3714,7 @@ let
 
   llvm = llvmPackages.llvm;
 
+  llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
 
