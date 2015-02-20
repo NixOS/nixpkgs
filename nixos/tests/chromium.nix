@@ -154,7 +154,7 @@ import ./make-test.nix (
 
           my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
           die "sandbox not working properly: $clipboard"
-          unless $clipboard =~ /suid sandbox.*yes/mi
+          unless $clipboard =~ /(?:suid|namespace) sandbox.*yes/mi
               && $clipboard =~ /pid namespaces.*yes/mi
               && $clipboard =~ /network namespaces.*yes/mi
               && $clipboard =~ /seccomp.*sandbox.*yes/mi;
