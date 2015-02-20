@@ -112,7 +112,7 @@ in
         startOn = "stopped udevtrigger";
 
         path =
-          [ pkgs.bridge_utils pkgs.gawk pkgs.iproute pkgs.nettools
+          [ pkgs.bridge-utils pkgs.gawk pkgs.iproute pkgs.nettools
             pkgs.utillinux pkgs.bash xen pkgs.pciutils pkgs.procps
           ];
 
@@ -172,7 +172,7 @@ in
     # Xen provides udev rules.
     services.udev.packages = [ xen ];
 
-    services.udev.path = [ pkgs.bridge_utils pkgs.iproute ];
+    services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
 
   };
 

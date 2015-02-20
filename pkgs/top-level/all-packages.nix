@@ -8436,7 +8436,7 @@ let
 
   beret = callPackage ../games/beret { };
 
-  bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
+  bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };
 
@@ -13643,6 +13643,7 @@ let
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
+  bridge_utils = bridge-utils;  # added 2015-02-20
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
