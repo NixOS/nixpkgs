@@ -36,6 +36,7 @@ in
       if [ -f ${stdenv.cc.cc}/lib/libgcc_s.so.1 ]; then
           mkdir -p $out/lib
           cp ${stdenv.cc.cc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
+          ln -s libgcc_s.so.1 $out/lib/libgcc_s.so
       fi
     '';
 
