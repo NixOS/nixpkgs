@@ -7527,6 +7527,7 @@ let
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
     inherit (protobuf) name src;
+    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ protobuf google_apputils ];
 
@@ -7543,9 +7544,9 @@ let
     '';
 
     checkPhase = if versionAtLeast protobuf.version "2.6.0" then ''
-      python setup.py google_test --cpp_implementation
+      ${python.executable} setup.py google_test --cpp_implementation
     '' else ''
-      python setup.py test
+      ${python.executable} setup.py test
     '';
 
     installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--cpp_implementation";
