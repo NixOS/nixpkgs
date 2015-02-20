@@ -1,7 +1,5 @@
 {stdenv, fetchurl, cmake, libX11, libuuid, xz}:
 
-#TODO let version = 4.7.1 in
-
 stdenv.mkDerivation rec {
   name = "itk-4.7.1";
 
