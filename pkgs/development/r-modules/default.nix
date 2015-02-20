@@ -648,16 +648,35 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [            # sort -t '#' -k 2
+    "V8" # compilation error
     "metabolomics" # depends on broken crmn
+    "selectspm" # depends on broken ecespa
+    "BLCOP" # depends on broken fPortfolio
+    "MXM" # depends on broken gRbase
+    "bamboo" # depends on broken jvmr
+    "flexCWM" # depends on broken mixture
+    "pmcgd" # depends on broken mixture
     "retistruct" # depends on broken RImageJROI
+    "ROI_plugin_symphony" # depends on broken Rsymphony
+    "ChemoSpec" # depends on broken speaq
     "CARrampsOcl" # depends on OpenCL
+    "gmatrix" # depends on proprietary cudatoolkit
+    "gputools" # depends on proprietary cudatoolkit
+    "iFes" # depends on proprietary cudatoolkit
+    "SOD" # depends on proprietary cudatoolkit
+    "WideLM" # depends on proprietary cudatoolkit
+    "OpenCL" # FIXME: requires CL/opencl.h
+    "Rsymphony" # FIXME: requires SYMPHONY
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
+    "jomo" # linking errors
+    "mixture" # mixture.so: undefined symbol: dtrmm_
+    "rDEA" # no such file or directory
     "demi" # requires affy, affxparser, and oligo
     "KANT" # requires affy, and Biobase
     "pathClass" # requires affy, and Biobase
     "msarc" # requires AnnotationDbi
+    "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
     "ACNE" # requires aroma_affymetrix
-    "Statomica" # requires Biobase, multtest
     "aroma_affymetrix" # requires aroma_core
     "calmate" # requires aroma_core
     "NSA" # requires aroma_core
@@ -672,6 +691,7 @@ let
     "IsoGene" # requires Biobase, and affy
     "mGSZ" # requires Biobase, and limma
     "GExMap" # requires Biobase and multtest
+    "Statomica" # requires Biobase, multtest
     "netweavers" # requires BiocGenerics, Biobase, and limma
     "NCmisc" # requires BiocInstaller
     "EMDomics" # requires BiocParallel
@@ -683,12 +703,9 @@ let
     "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
     "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
     "FunctionalNetworks" # requires breastCancerVDX, and Biobase
-    "rJPSGCS" # requires chopsticks
-    "OpenCL" # FIXME: requires CL/opencl.h
-    "Rsymphony" # FIXME: requires SYMPHONY
-    "V8" # compilation error
     "js" # requires broken V8
     "minimist" # requires broken V8
+    "rJPSGCS" # requires chopsticks
     "clpAPI" # requires clp
     "pcaL1" # requires clp
     "bmrm" # requires clpAPI
@@ -701,17 +718,16 @@ let
     "PSCBS" # requires DNAcopy
     "dcGOR" # requires dnet
     "gitter" # requires EBImage
-    "speaq" # requires MassSpecWavelet
     "Rcell" # requires EBImage
     "RockFab" # requires EBImage
     "babel" # requires edgeR
     "edgeRun" # requires edgeR
+    "fdrDiscreteNull" # requires edgeR
     "GSAgm" # requires edgeR
     "HTSCluster" # requires edgeR
     "QuasiSeq" # requires edgeR
     "SimSeq" # requires edgeR
     "BcDiag" # requires fabia
-    "BACA" # requires RDAVIDWebService
     "superbiclust" # requires fabia
     "curvHDR" # requires flowCore
     "RbioRXN" # requires fmcsR, and KEGGREST
@@ -747,7 +763,6 @@ let
     "RcppRedis" # requires Hiredis
     "interval" # requires Icens
     "FAMT" # requires impute
-    "fdrDiscreteNull" # requires edgeR
     "moduleColor" # requires impute
     "PMA" # requires impute
     "samr" # requires impute
@@ -771,10 +786,10 @@ let
     "plmDE" # requires limma
     "SQDA" # requires limma
     "PerfMeas" # requires limma, graph, and RBGL
-    "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
     "rLindo" # requires LINDO API
     "magma" # requires MAGMA
     "HiPLARM" # requires MAGMA or PLASMA
+    "speaq" # requires MassSpecWavelet
     "MAMA" # requires metaMA
     "Rmosek" # requires mosek
     "bigGP" # requires MPI running. HELP WANTED!
@@ -821,6 +836,7 @@ let
     "RSNPset" # requires qvalue
     "gRbase" # requires RBGL, and graph
     "RSeed" # requires RBGL, and graph
+    "BACA" # requires RDAVIDWebService
     "beadarrayMSV" # requires rggobi
     "clusterfly" # requires rggobi
     "PKgraph" # requires rggobi
@@ -899,9 +915,6 @@ let
     "taxize" # requres bold
     "cudaBayesreg" # requres Rmath
     "rsprng" # requres sprng
-    "rDEA" # no such file or directory
-    "jomo" # linking errors
-    "mixture" # mixture.so: undefined symbol: dtrmm_
     "evobiR" # requres taxiz
     "bdvis" # requres taxize
     "RNeXML" # requres taxize
