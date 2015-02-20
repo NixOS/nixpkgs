@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "dragonegg-${version}";
 
-  src = fetch "dragonegg" "1733czbvby1ww3xkwcwmm0km0bpwhfyxvf56wb0zv5gksp3kbgrr";
+  src = fetch "dragonegg" "1v1lc9h2nfk3lsk9sx1k4ckwddz813hqjmlp2bx2kwxx9hw364ar";
 
   patches = [(fetchpatch {
     url = "https://llvm.org/viewvc/llvm-project/dragonegg/trunk/src/x86/ABIHack.inc"
