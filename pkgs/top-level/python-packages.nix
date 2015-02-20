@@ -4861,6 +4861,7 @@ let
 
   google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.1";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/google-apputils/${name}.tar.gz";
