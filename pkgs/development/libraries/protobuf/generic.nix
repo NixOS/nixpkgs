@@ -31,4 +31,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://code.google.com/p/protobuf/;
   };
+
+  passthru.version = version;
 }
