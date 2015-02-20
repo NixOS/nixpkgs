@@ -101,6 +101,7 @@ self: super: {
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-text = dontHaddock super.shakespeare-text;
+  types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
