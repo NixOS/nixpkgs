@@ -1,4 +1,4 @@
-args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, proj, flex, gdal, pkgconfig, file, ...}:
+args@{fetchurl, composableDerivation, stdenv, perl, libxml2, postgresql, geos, proj, flex, gdal, json_c, pkgconfig, file, ...}:
 
   /*
 
@@ -88,11 +88,11 @@ in rec {
     version = "2.1.4";
     sha256 = "1z00n5654r7l38ydkn2grbwl5gg0mravjwxfdipp7j18hjiw4wyd";
     sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
-    builtInputs = [gdal pkgconfig];
+    builtInputs = [gdal json_c pkgconfig];
     dontDisableStatic = true;
     preConfigure = ''
       sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config"
+      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c}"
     '';
     postConfigure = ''
       sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
