@@ -25,11 +25,11 @@ let
   }) // {inherit ;};
 
   bdftopcf = (mkDerivation "bdftopcf" {
-    name = "bdftopcf-1.0.4";
+    name = "bdftopcf-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/bdftopcf-1.0.4.tar.bz2;
-      sha256 = "1617zmgnx50n7vxlqyj84fl7vnk813jjqmi6jpigyz1xp9br1xga";
+      url = mirror://xorg/individual/app/bdftopcf-1.0.5.tar.bz2;
+      sha256 = "09i03sk878cmx2i40lkpsysn7zqcvlczb30j7x3lryb11jz4gx1q";
     };
     buildInputs = [pkgconfig libXfont ];
   }) // {inherit libXfont ;};
@@ -515,11 +515,11 @@ let
   }) // {inherit ;};
 
   iceauth = (mkDerivation "iceauth" {
-    name = "iceauth-1.0.6";
+    name = "iceauth-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/iceauth-1.0.6.tar.bz2;
-      sha256 = "1x72y99dxf2fxnlyf0yrf9yzd8xzimxshy6l8mprwhrv6lvhi6dx";
+      url = mirror://xorg/individual/app/iceauth-1.0.7.tar.bz2;
+      sha256 = "02izdyzhwpgiyjd8brzilwvwnfr72ncjb6mzz3y1icwrxqnsy5hj";
     };
     buildInputs = [pkgconfig libICE xproto ];
   }) // {inherit libICE xproto ;};
@@ -895,11 +895,11 @@ let
   }) // {inherit xproto zlib ;};
 
   libpciaccess = (mkDerivation "libpciaccess" {
-    name = "libpciaccess-0.13.2";
+    name = "libpciaccess-0.13.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libpciaccess-0.13.2.tar.bz2;
-      sha256 = "06fy43n3c450h7xqpn3094bnfn7ca1mrq3i856y8kyqa0lmqraxb";
+      url = mirror://xorg/individual/lib/libpciaccess-0.13.3.tar.bz2;
+      sha256 = "1qy2i776jb7912dxqylv59p41sa0hw8lmn7asd3ywvp0wk56rmvc";
     };
     buildInputs = [pkgconfig zlib ];
   }) // {inherit zlib ;};
@@ -935,11 +935,11 @@ let
   }) // {inherit kbproto libX11 ;};
 
   libxshmfence = (mkDerivation "libxshmfence" {
-    name = "libxshmfence-1.1";
+    name = "libxshmfence-1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxshmfence-1.1.tar.bz2;
-      sha256 = "1gnfb1z8sbbdc3xpz1zmm94lv7yvfh4kvip9s5pj37ya4llxphnv";
+      url = mirror://xorg/individual/lib/libxshmfence-1.2.tar.bz2;
+      sha256 = "032b0nlkdrpbimdld4gqvhqx53rzn8fawvf1ybhzn7lcswgjs6yj";
     };
     buildInputs = [pkgconfig xproto ];
   }) // {inherit xproto ;};
@@ -985,11 +985,11 @@ let
   }) // {inherit ;};
 
   mkfontscale = (mkDerivation "mkfontscale" {
-    name = "mkfontscale-1.1.1";
+    name = "mkfontscale-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/mkfontscale-1.1.1.tar.bz2;
-      sha256 = "0cdpn1ii2iw1vg2ga4w62acrh78gzgf0vza4g8wx5kkp4jcifh14";
+      url = mirror://xorg/individual/app/mkfontscale-1.1.2.tar.bz2;
+      sha256 = "081z8lwh9c1gyrx3ad12whnpv3jpfbqsc366mswpfm48mwl54vcc";
     };
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
   }) // {inherit libfontenc freetype xproto zlib ;};
@@ -2025,11 +2025,11 @@ let
   }) // {inherit libX11 xproto ;};
 
   xproto = (mkDerivation "xproto" {
-    name = "xproto-7.0.26";
+    name = "xproto-7.0.27";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/xproto-7.0.26.tar.bz2;
-      sha256 = "0ksi8vhfd916bx2f3xlyhn6azf6cvvzrsdja26haa1cqfp0n4qb3";
+      url = mirror://xorg/individual/proto/xproto-7.0.27.tar.bz2;
+      sha256 = "030ix881p0crnd4bc01nz6cs0afmfv6ivsyyhf0h1j1mnak26vr4";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
