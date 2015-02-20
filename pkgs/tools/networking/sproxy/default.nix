@@ -35,5 +35,6 @@ cabal.mkDerivation (self: {
   meta = {
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })
