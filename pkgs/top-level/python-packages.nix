@@ -4860,15 +4860,24 @@ let
   };
 
   google_apputils = buildPythonPackage rec {
-    name = "google-apputils-0.4.0";
-    disabled = isPy3k;
+    name = "google-apputils-0.4.1";
 
     src = pkgs.fetchurl {
-      url = http://pypi.python.org/packages/source/g/google-apputils/google-apputils-0.4.0.tar.gz;
-      sha256 = "18wlivnqxvx1wsw177lckpl32nmr6cq7f5nhk8r72fvjy8wynq5j";
+      url = "http://pypi.python.org/packages/source/g/google-apputils/${name}.tar.gz";
+      sha256 = "1sxsm5q9vr44qzynj8l7p3l7ffb0zl1jdqhmmzmalkx941nbnj1b";
     };
 
-    propagatedBuildInputs = with self; [ pytz gflags dateutil_1_5 mox ];
+    preConfigure = ''
+      sed -i '/ez_setup/d' setup.py
+    '';
+
+    propagatedBuildInputs = with self; [ pytz gflags dateutil mox ];
+
+    checkPhase = ''
+      ${python.executable} setup.py google_test
+    '';
+
+    doCheck = true;
 
     meta = with stdenv.lib; {
       description = "Google Application Utilities for Python";
