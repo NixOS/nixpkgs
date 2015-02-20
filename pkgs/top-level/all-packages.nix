@@ -8921,6 +8921,9 @@ let
                                                      linuxPackages_self);
                            in recurseIntoAttrs linuxPackages_self;
 
+  # Build a kernel for Xen dom0
+  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
+
   # grsecurity flavors
   # Stable kernels
   linuxPackages_grsec_stable_desktop    = grPackage grFlavors.linux_grsec_stable_desktop;
