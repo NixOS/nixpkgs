@@ -3,9 +3,9 @@
 { R, pkgs, overrides }:
 
 let
-  inherit (pkgs) fetchurl stdenv lib xvfb_run utillinux;
+  inherit (pkgs) fetchurl stdenv lib;
 
-  buildRPackage = import ./generic-builder.nix { inherit R xvfb_run utillinux ; };
+  buildRPackage = pkgs.callPackage ./generic-builder.nix { inherit R; };
 
   # Package template
   #
@@ -23,7 +23,7 @@ let
     src = fetchurl {
       urls = [
         "mirror://cran/src/contrib/${name}_${version}.tar.gz"
-        "mirror://cran/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+        "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
       ];
       inherit sha256;
     };
@@ -51,17 +51,11 @@ let
   #   });
   # }
   overrideNativeBuildInputs = overrides: old:
-    let
-      attrNames = builtins.attrNames overrides;
-      nameValuePairs = map (name: rec {
-        inherit name;
-        nativeBuildInputs = builtins.getAttr name overrides;
-        value = (builtins.getAttr name old).overrideDerivation (attrs: {
-          nativeBuildInputs = attrs.nativeBuildInputs ++ nativeBuildInputs;
-        });
-      }) attrNames;
-    in
-      builtins.listToAttrs nameValuePairs;
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+      })
+    ) overrides;
 
   # Overrides package definitions with buildInputs.
   # For example,
@@ -78,17 +72,34 @@ let
   #   });
   # }
   overrideBuildInputs = overrides: old:
-    let
-      attrNames = builtins.attrNames overrides;
-      nameValuePairs = map (name: rec {
-        inherit name;
-        buildInputs = builtins.getAttr name overrides;
-        value = (builtins.getAttr name old).overrideDerivation (attrs: {
-          buildInputs = attrs.buildInputs ++ buildInputs;
-        });
-      }) attrNames;
-    in
-      builtins.listToAttrs nameValuePairs;
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        buildInputs = attrs.buildInputs ++ value;
+      })
+    ) overrides;
+
+  # Overrides package definitions with new R dependencies.
+  # For example,
+  #
+  # overrideRDepends {
+  #   foo = [ self.bar ]
+  # } old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.overrideDerivation (attrs: {
+  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
+  #     propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ [ self.bar ];
+  #   });
+  # }
+  overrideRDepends = overrides: old:
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
+      })
+    ) overrides;
 
   # Overrides package definition requiring X running to install.
   # For example,
@@ -170,10 +181,11 @@ let
     let
       old1 = old0 // (overrideRequireX packagesRequireingX old0);
       old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
-      old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
-      old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
-      old5 = old4 // (overrideBroken brokenPackages old4);
-      old = old5;
+      old3 = old2 // (overrideRDepends packagesWithRDepends old2);
+      old4 = old3 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old3);
+      old5 = old4 // (overrideBuildInputs packagesWithBuildInputs old4);
+      old6 = old5 // (overrideBroken brokenPackages old5);
+      old = old6;
     in old // (otherOverrides old new);
 
   # Recursive override pattern.
@@ -185,9 +197,16 @@ let
 
   # tweaks for the individual packages and "in self" follow
 
+  packagesWithRDepends = {
+    # sort -t '=' -k 2
+    FactoMineR = [ self.car ];
+  };
+
   packagesWithNativeBuildInputs = {
     # sort -t '=' -k 2
+    graphscan = [ pkgs.gsl ];
     RAppArmor = [ pkgs.apparmor ];
+    BNSP = [ pkgs.gsl ];
     SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
     curl = [ pkgs.curl pkgs.openldap ];
     Rssa = [ pkgs.fftw ];
@@ -203,11 +222,12 @@ let
     RCA = [ pkgs.gmp ];
     gmp = [ pkgs.gmp ];
     rcdd = [ pkgs.gmp ];
+    Rlibeemd = [ pkgs.gsl ];
     igraph = [ pkgs.gmp ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr ];
-    BNSP = [ pkgs.gsl ];
+    Formula = [ pkgs.gmp ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
     HiCseg = [ pkgs.gsl ];
@@ -228,10 +248,13 @@ let
     topicmodels = [ pkgs.gsl ];
     RcppGSL = [ pkgs.gsl ];
     bnpmr = [ pkgs.gsl ];
+    V8 = [ pkgs.v8 ];
     geoCount = [ pkgs.gsl ];
+    devEMF = [ pkgs.xlibs.libXft ];
     gsl = [ pkgs.gsl ];
     mvabund = [ pkgs.gsl ];
     diversitree = [ pkgs.gsl pkgs.fftw ];
+    TKF = [ pkgs.gsl ];
     VBmix = [ pkgs.gsl pkgs.fftw pkgs.qt4 ];
     RGtk2 = [ pkgs.gtk2 ];
     cairoDevice = [ pkgs.gtk2 ];
@@ -244,6 +267,8 @@ let
     jpeg = [ pkgs.libjpeg ];
     EMCluster = [ pkgs.liblapack ];
     png = [ pkgs.libpng ];
+    pbdMPI = [ pkgs.openmpi ];
+    bigGP = [ pkgs.openmpi ];
     rtiff = [ pkgs.libtiff ];
     tiff = [ pkgs.libtiff ];
     Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
@@ -278,7 +303,7 @@ let
     BayesXsrc = [ pkgs.readline pkgs.ncurses ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
     tkrplot = [ pkgs.xlibs.libX11 ];
-    rzmq = [ pkgs.zeromq2 ];
+    rzmq = [ pkgs.zeromq3 ];
     PopGenome = [ pkgs.zlib ];
     RJaCGH = [ pkgs.zlib ];
     RcppCNPy = [ pkgs.zlib ];
@@ -286,8 +311,9 @@ let
     rmatio = [ pkgs.zlib ];
     RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
     seqminer = [ pkgs.zlib pkgs.bzip2 ];
-    rphast = [ pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
-    rtfbs = [ pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    seqinr = [ pkgs.zlib ];
+    rphast = [ pkgs.pcre pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rtfbs = [ pkgs.zlib pkgs.pcre pkgs.bzip2 pkgs.gzip pkgs.readline ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
@@ -301,6 +327,12 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    svKomodo = [ pkgs.which ];
+    nat = [ pkgs.which ];
+    nat_nblast = [ pkgs.which ];
+    nat_templatebrains = [ pkgs.which ];
+    RMark = [ pkgs.which ];
+    RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
@@ -325,10 +357,12 @@ let
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
+    ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
-    tikzDevice = [ pkgs.texLive ];
+    tikzDevice = [ pkgs.which pkgs.texLive ];
     rPython = [ pkgs.which ];
     CARramps = [ pkgs.which pkgs.cudatoolkit ];
+    gridGraphics = [ pkgs.which ];
     gputools = [ pkgs.which pkgs.cudatoolkit ];
     rpud = [ pkgs.which pkgs.cudatoolkit ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
@@ -358,6 +392,8 @@ let
     "DeducerPlugInScaling"
     "DeducerSpatial"
     "DeducerSurvival"
+    "HomoPolymer"
+    "MetSizeR"
     "DeducerText"
     "Demerelate"
     "DescTools"
@@ -607,6 +643,7 @@ let
     "gmatrix" # requires CUDA runtime
     "npRmpi" # tries to run MPI processes
     "sprint" # tries to run MPI processes
+    "pbdMPI" # tries to run MPI processes
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
@@ -615,38 +652,12 @@ let
     "retistruct" # depends on broken RImageJROI
     "CARrampsOcl" # depends on OpenCL
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
-    "alm" # jsonlite.so: undefined symbol: XXX
-    "archivist" # jsonlite.so: undefined symbol: XXX
-    "bold" # jsonlite.so: undefined symbol: XXX
-    "enigma" # jsonlite.so: undefined symbol: XXX
-    "exCon" # jsonlite.so: undefined symbol: XXX
-    "gender" # jsonlite.so: undefined symbol: XXX
-    "jSonarR" # jsonlite.so: undefined symbol: XXX
-    "leafletR" # jsonlite.so: undefined symbol: XXX
-    "opencpu" # jsonlite.so: undefined symbol: XXX
-    "pdfetch" # jsonlite.so: undefined symbol: XXX
-    "polidata" # jsonlite.so: undefined symbol: XXX
-    "pollstR" # jsonlite.so: undefined symbol: XXX
-    "rbison" # jsonlite.so: undefined symbol: XXX
-    "RGA" # jsonlite.so: undefined symbol: XXX
-    "rHealthDataGov" # jsonlite.so: undefined symbol: XXX
-    "rinat" # jsonlite.so: undefined symbol: XXX
-    "rjstat" # jsonlite.so: undefined symbol: XXX
-    "rmongodb" # jsonlite.so: undefined symbol: XXX
-    "rnoaa" # jsonlite.so: undefined symbol: XXX
-    "RSiteCatalyst" # jsonlite.so: undefined symbol: XXX
-    "rsunlight" # jsonlite.so: undefined symbol: XXX
-    "rWBclimate" # jsonlite.so: undefined symbol: XXX
-    "SGP" # jsonlite.so: undefined symbol: XXX
-    "slackr" # jsonlite.so: undefined symbol: XXX
-    "SocialMediaMineR" # jsonlite.so: undefined symbol: XXX
-    "webutils" # jsonlite.so: undefined symbol: XXX
-    "WikipediR" # jsonlite.so: undefined symbol: XXX
     "demi" # requires affy, affxparser, and oligo
     "KANT" # requires affy, and Biobase
     "pathClass" # requires affy, and Biobase
     "msarc" # requires AnnotationDbi
     "ACNE" # requires aroma_affymetrix
+    "Statomica" # requires Biobase, multtest
     "aroma_affymetrix" # requires aroma_core
     "calmate" # requires aroma_core
     "NSA" # requires aroma_core
@@ -673,7 +684,11 @@ let
     "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
     "FunctionalNetworks" # requires breastCancerVDX, and Biobase
     "rJPSGCS" # requires chopsticks
-    "OpenCL" # requires CL/opencl.h
+    "OpenCL" # FIXME: requires CL/opencl.h
+    "Rsymphony" # FIXME: requires SYMPHONY
+    "V8" # compilation error
+    "js" # requires broken V8
+    "minimist" # requires broken V8
     "clpAPI" # requires clp
     "pcaL1" # requires clp
     "bmrm" # requires clpAPI
@@ -685,8 +700,8 @@ let
     "ParDNAcopy" # requires DNAcopy
     "PSCBS" # requires DNAcopy
     "dcGOR" # requires dnet
-    "bcool" # requires doMPI
     "gitter" # requires EBImage
+    "speaq" # requires MassSpecWavelet
     "Rcell" # requires EBImage
     "RockFab" # requires EBImage
     "babel" # requires edgeR
@@ -696,6 +711,7 @@ let
     "QuasiSeq" # requires edgeR
     "SimSeq" # requires edgeR
     "BcDiag" # requires fabia
+    "BACA" # requires RDAVIDWebService
     "superbiclust" # requires fabia
     "curvHDR" # requires flowCore
     "RbioRXN" # requires fmcsR, and KEGGREST
@@ -729,9 +745,9 @@ let
     "gridDebug" # requires gridGraphviz
     "RAM" # requires Heatplus
     "RcppRedis" # requires Hiredis
-    "HTSDiff" # requires HTSCluster
     "interval" # requires Icens
     "FAMT" # requires impute
+    "fdrDiscreteNull" # requires edgeR
     "moduleColor" # requires impute
     "PMA" # requires impute
     "samr" # requires impute
@@ -755,6 +771,7 @@ let
     "plmDE" # requires limma
     "SQDA" # requires limma
     "PerfMeas" # requires limma, graph, and RBGL
+    "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
     "rLindo" # requires LINDO API
     "magma" # requires MAGMA
     "HiPLARM" # requires MAGMA or PLASMA
@@ -763,7 +780,6 @@ let
     "bigGP" # requires MPI running. HELP WANTED!
     "doMPI" # requires MPI running. HELP WANTED!
     "metaMix" # requires MPI running. HELP WANTED!
-    "pbdMPI" # requires MPI running. HELP WANTED!
     "pmclust" # requires MPI running. HELP WANTED!
     "MSeasyTkGUI" # requires MSeasyTkGUI
     "hddplot" # requires multtest
@@ -883,6 +899,9 @@ let
     "taxize" # requres bold
     "cudaBayesreg" # requres Rmath
     "rsprng" # requres sprng
+    "rDEA" # no such file or directory
+    "jomo" # linking errors
+    "mixture" # mixture.so: undefined symbol: dtrmm_
     "evobiR" # requres taxiz
     "bdvis" # requres taxize
     "RNeXML" # requres taxize
@@ -893,7 +912,6 @@ let
     "rainfreq" # SDMTools.so: undefined symbol: X
     "MigClim" # SDMTools.So: Undefined Symbol: X
     "PatternClass" # SDMTools.So: Undefined Symbol: X
-    "qtbase" # the smokegen binary cannot find libQtCore.so.4 etc. at runtime
     "jvmr" # tries to download files during its build
     "h2o" # tries to download some h2o.jar during its build
   ];
@@ -901,6 +919,11 @@ let
   otherOverrides = old: new: {
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
+    });
+
+    iFes = old.iFes.overrideDerivation (attrs: {
+      patches = [ ./patches/iFes.patch ];
+      CUDA_HOME = "${pkgs.cudatoolkit}";
     });
 
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
@@ -967,9 +990,12 @@ let
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      configureFlags = [
-        "--with-mysql-dir=${pkgs.mysql}"
-      ];
+      patches = [ ./patches/RMySQL.patch ];
+      MYSQL_DIR="${pkgs.mysql}";
+    });
+
+    devEMF = old.devEMF.overrideDerivation (attrs: {
+      NIX_CFLAGS_LINK = "-L${pkgs.xlibs.libXft}/lib -lXft";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
@@ -1030,8 +1056,7 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      patches = [ ./patches/openssl.patch ];
-      OPENSSL_HOME = "${pkgs.openssl}";
+      OPENSSL_INCLUDES = "${pkgs.openssl}/include";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {
@@ -1047,14 +1072,6 @@ let
         "--with-nlopt-libs='-L${pkgs.nlopt}/lib -lnlopt_cxx -lm'"
       ];
     });
-
-    # Depends on broken ecespa package.
-    selectspm = old.selectspm.override { hydraPlatforms = stdenv.lib.platforms.none; };
-
-    # Depends on broken qtbase package.
-    qtutils = old.qtutils.override { hydraPlatforms = stdenv.lib.platforms.none; };
-    qtpaint = old.qtpaint.override { hydraPlatforms = stdenv.lib.platforms.none; };
-    bamboo = old.bamboo.override { hydraPlatforms = stdenv.lib.platforms.none; };
 
   };
 in
