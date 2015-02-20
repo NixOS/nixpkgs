@@ -118,14 +118,12 @@ let
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else "install") ];
 
-      postInstall = optionalString installsFirmware ''
+      postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '' + (if (platform ? kernelDTB && platform.kernelDTB) then ''
-	set -x
- 	make dtbs
+      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
+ 	make "$makeFlags" dtbs
         cp arch/$arch/boot/dts/*dtb $out
       '' else "") + (if isModular then ''
-	set -x
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
