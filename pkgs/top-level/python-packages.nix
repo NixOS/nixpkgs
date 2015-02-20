@@ -10293,6 +10293,8 @@ let
   sqlalchemy9 = buildPythonPackage rec {
     name = "SQLAlchemy-0.9.8";
 
+    disabled = isPyPy;
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       md5 = "470ca4da4a0081efc830f0d90dd91682";
