@@ -2519,6 +2519,8 @@ let
 
   screen = callPackage ../tools/misc/screen { };
 
+  screen-message = callPackage ../tools/X11/screen-message { };
+
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrypt = callPackage ../tools/security/scrypt { };
