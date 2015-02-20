@@ -529,6 +529,9 @@ self: super: {
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
+  # https://github.com/NixOS/nixpkgs/issues/6343
+  c2hs = dontCheck super.c2hs;
+
 } // {
 
   # Not on Hackage.
