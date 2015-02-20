@@ -1765,11 +1765,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
 
   xf86videovmware = (mkDerivation "xf86videovmware" {
-    name = "xf86-video-vmware-13.0.2";
+    name = "xf86-video-vmware-13.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vmware-13.0.2.tar.bz2;
-      sha256 = "0m1wfsv34s4pyr5ry87yyjb2p6vmy6vyypdz5jx0sqnkx8n3vfn8";
+      url = mirror://xorg/individual/driver/xf86-video-vmware-13.1.0.tar.bz2;
+      sha256 = "1k50whwnkzxam2ihc1sw456dx0pvr76naycm4qhyjxqv9d72879w";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
