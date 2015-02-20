@@ -121,7 +121,7 @@ let
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
- 	make "$makeFlags" dtbs
+ 	make $makeFlags "''${makeFlagsArray[@]}" dtbs
         cp arch/$arch/boot/dts/*dtb $out
       '' else "") + (if isModular then ''
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
