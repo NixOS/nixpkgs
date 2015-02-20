@@ -526,6 +526,9 @@ self: super: {
   # https://github.com/afcowie/http-streams/issues/80
   http-streams = dontCheck super.http-streams;
 
+  # https://github.com/vincenthz/hs-asn1/issues/12
+  asn1-encoding = dontCheck super.asn1-encoding;
+
 } // {
 
   # Not on Hackage.
