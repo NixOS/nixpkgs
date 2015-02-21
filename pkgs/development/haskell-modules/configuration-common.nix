@@ -532,6 +532,14 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/6343
   c2hs = dontCheck super.c2hs;
 
+  # wxc needs help deciding which version of GTK to use.
+  wxc = overrideCabal (super.wxc.override { wxGTK = pkgs.wxGTK29; }) (drv: {
+    patches = [ ./wxc-no-ldconfig.patch ];
+    doHaddock = false;
+    postInstall = "cp -v dist/build/libwxc.so.${drv.version} $out/lib/libwxc.so";
+  });
+  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK29; };
+
 } // {
 
   # Not on Hackage.
