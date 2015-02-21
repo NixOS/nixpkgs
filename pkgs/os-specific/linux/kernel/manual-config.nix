@@ -122,7 +122,7 @@ let
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
  	make $makeFlags "''${makeFlagsArray[@]}" dtbs
-        cp arch/$arch/boot/dts/*dtb $out
+        cp $buildRoot/arch/$karch/boot/dts/*dtb $out
       '' else "") + (if isModular then ''
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
@@ -225,12 +225,16 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
     "ARCH=${stdenv.platform.kernelArch}"
   ];
 
+  karch = stdenv.platform.kernelArch;
+
   crossAttrs = let cp = stdenv.cross.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
       makeFlags = commonMakeFlags ++ [
         "ARCH=${cp.kernelArch}"
         "CROSS_COMPILE=$(crossConfig)-"
       ];
+
+      karch = cp.kernelArch;
 
       # !!! uboot has messed up cross-compiling, nativeDrv builds arm tools on x86,
       # crossDrv builds x86 tools on x86 (but arm uboot). If this is fixed, uboot
