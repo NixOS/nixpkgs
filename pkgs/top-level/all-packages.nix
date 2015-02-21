@@ -3499,7 +3499,12 @@ let
     releaseType = "update";
     sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
   };
-  gcc-arm-embedded = gcc-arm-embedded-4_8;
+  gcc-arm-embedded-4_9 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
+    version = "4.9-2014q4-20141203";
+    releaseType = "major";
+    sha256 = "a440bcf68e36b291697567816e756877cd3b5782298e3e3c44eb0812a471980f";
+  };
+  gcc-arm-embedded = gcc-arm-embedded-4_9;
 
   gforth = callPackage ../development/compilers/gforth {};
 
