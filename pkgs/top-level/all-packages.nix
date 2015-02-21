@@ -5937,14 +5937,11 @@ let
     automake = automake111x;
   };
 
-  kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
-    stdenv = overrideCC stdenv gccStdInc;
   kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 {
     qt5 = qt54;
   });
-  kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {});
-  kf5_latest = kf56;
-  kf5_stable = kf55;
+  kf5_latest = kf57;
+  kf5_stable = kf57;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     openldap = openldap.override {
@@ -10603,11 +10600,11 @@ let
   };
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
-    kf5 = kf55;
-    stdenv = overrideCC stdenv gccStdInc;
+    kf5 = kf57;
+    qt5 = qt54;
   });
-  kdeApps_latest = kdeApps_14_12;
   kdeApps_stable = kdeApps_14_12;
+  kdeApps_latest = kdeApps_14_12;
 
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
@@ -12741,8 +12738,10 @@ let
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
+  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
+    qt5 = qt54;
+    kf5 = kf57;
   });
-  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {});
   plasma5_latest = plasma52;
   plasma5_stable = plasma52;
 
