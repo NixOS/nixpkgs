@@ -540,6 +540,23 @@ self: super: {
   });
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK29; };
 
+  # Depends on obsolete QuickCheck 1.x.
+  test-framework-quickcheck = markBroken super.test-framework-quickcheck;
+
+  # Depends on broken test-framework-quickcheck.
+  apiary = dontCheck super.apiary;
+  apiary-authenticate = dontCheck super.apiary-authenticate;
+  apiary-clientsession = dontCheck super.apiary-clientsession;
+  apiary-cookie = dontCheck super.apiary-cookie;
+  apiary-eventsource = dontCheck super.apiary-eventsource;
+  apiary-logger = dontCheck super.apiary-logger;
+  apiary-memcached = dontCheck super.apiary-memcached;
+  apiary-mongoDB = dontCheck super.apiary-mongoDB;
+  apiary-persistent = dontCheck super.apiary-persistent;
+  apiary-purescript = dontCheck super.apiary-purescript;
+  apiary-session = dontCheck super.apiary-session;
+  apiary-websockets = dontCheck super.apiary-websockets;
+
 } // {
 
   # Not on Hackage.
