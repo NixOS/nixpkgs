@@ -49,6 +49,7 @@ stdenv.mkDerivation {
   # we don't support the gtk2 version
   gtk3Path = optionalString (!libsOnly) (makeLibraryPath
     [ gtk3 atk pango glib gdk_pixbuf cairo ] );
+  programPath = makeLibraryPath [ xlibs.libXv ];
 
   buildInputs = [ perl ];
 
