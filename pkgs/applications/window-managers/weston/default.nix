@@ -5,14 +5,12 @@
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
-let version = "1.6.0"; in
-
 stdenv.mkDerivation rec {
-  name = "weston-${version}";
+  name = "weston-${wayland.version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0kb1mb54l7adihmr2y77xgsdb00dvifnq886q2mmy0mz7g8sagnw";
+    sha256 = "1kb6a494j56sh7iy43xwkjlr3bh0nnkq4bkimwj6qirzbya12i8w";
   };
 
   buildInputs = [

@@ -126,7 +126,7 @@ rec {
       inherit stdenv;
       nativeTools  = false;
       nativeLibc   = true;
-      binutils  = pkgs.darwin.cctools_native;
+      binutils  = pkgs.darwin.cctools;
       cc        = pkgs.llvmPackages.clang;
       coreutils = pkgs.coreutils;
       shell     = "${pkgs.bash}/bin/bash";

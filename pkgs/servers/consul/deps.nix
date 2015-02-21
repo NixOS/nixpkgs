@@ -57,6 +57,24 @@ let
       };
     }
     {
+      root = "github.com/hashicorp/go-multierror";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-multierror";
+        rev = "fcdddc395df1ddf4247c69bd436e84cfa0733f7e";
+        sha256 = "1gvrm2bqi425mfg55m01z9gppfd7v4ljz1z8bykmh2sc82fj25jz";
+      };
+    }
+    {
+      root = "github.com/hashicorp/consul-template";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "consul-template";
+        rev = "v0.5.1";
+        sha256 = "1h8sqmzf73bn12bj1yqldp9gl46gz766c3zrymwgl8p0mb74dllf";
+      };
+    }
+    {
       root = "github.com/hashicorp/go-checkpoint";
       src = fetchFromGitHub {
         owner = "hashicorp";

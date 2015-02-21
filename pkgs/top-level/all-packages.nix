@@ -713,6 +713,8 @@ let
 
   consul-alerts = callPackage ../servers/consul/alerts.nix { };
 
+  consul-template = callPackage ../servers/consul/template.nix { };
+
   corosync = callPackage ../servers/corosync { };
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
@@ -1435,6 +1437,11 @@ let
   grails = callPackage ../development/web/grails { jdk = null; };
 
   graphviz = callPackage ../tools/graphics/graphviz { };
+
+  graphviz-nox = callPackage ../tools/graphics/graphviz {
+    xlibs = null;
+    libdevil = libdevil-nox;
+  };
 
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
@@ -2373,6 +2380,8 @@ let
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
   qpdf = callPackage ../development/libraries/qpdf { };
+
+  qprint = callPackage ../tools/text/qprint { };
 
   qscintilla = callPackage ../development/libraries/qscintilla {
     qt = qt4;
@@ -3849,6 +3858,8 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
+    erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
       sexplib = ocaml_sexplib;
@@ -4660,7 +4671,7 @@ let
   });
 
   binutilsCross =
-    if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools
+    if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools_cross
     else lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
       inherit stdenv fetchurl zlib bison;
       noSysDirs = true;
@@ -6072,6 +6083,11 @@ let
 
   libdevil = callPackage ../development/libraries/libdevil { };
 
+  libdevil-nox = libdevil.override {
+    libX11 = null;
+    mesa = null;
+  };
+
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
@@ -6883,7 +6899,7 @@ let
   };
 
   # this ctl version is needed by openexr_viewers
-  openexr_ctl = callPackage ../development/libraries/openexr_ctl { };
+  openexr_ctl = ctl;
 
   openexr = callPackage ../development/libraries/openexr { };
 
@@ -7420,7 +7436,9 @@ let
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
-  wayland = callPackage ../development/libraries/wayland { };
+  wayland = callPackage ../development/libraries/wayland {
+    graphviz = graphviz-nox;
+  };
 
   webkit = webkitgtk;
 
@@ -8452,14 +8470,13 @@ let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
     apple-source-releases = import ../os-specific/darwin/apple-source-releases { inherit stdenv fetchurl pkgs; };
   in apple-source-releases // rec {
-
-    cctools = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
+    cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     };
 
-    cctools_native = (callPackage ../os-specific/darwin/cctools/port.nix {}).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {}).native;
 
     maloader = callPackage ../os-specific/darwin/maloader {
       inherit opencflite;
@@ -9802,6 +9819,8 @@ let
     imagemagick = imagemagick;
   };
 
+  cutecom = callPackage ../tools/misc/cutecom { };
+
   cvs = callPackage ../applications/version-management/cvs { };
 
   cvsps = callPackage ../applications/version-management/cvsps { };
@@ -10007,6 +10026,8 @@ let
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
 
     magit = callPackage ../applications/editors/emacs-modes/magit { };
+
+    marathon = callPackage ../applications/networking/cluster/marathon { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 

@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       ${if pam != null then "--with-pam" else "--without-pam"}
       ${optionalString (etcDir != null) "--sysconfdir=${etcDir}"}
       ${optionalString withKerberos "--with-kerberos5=${kerberos}"}
+      ${optionalString stdenv.isDarwin "--disable-libutil"}
     '';
 
   preConfigure =

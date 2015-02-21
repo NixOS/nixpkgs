@@ -1,29 +1,22 @@
-{ stdenv, fetchurl, ilmbase }:
+{ stdenv, callPackage, cmake, pkgconfig, ilmbase, libtiff, openexr }:
 
+let
+  source = callPackage ./source.nix { };
+in
 stdenv.mkDerivation {
-  name = "ctl-1.4.1";
+  name = "ctl-${source.version}";
 
-  src = fetchurl {
-    url = mirror://sourceforge/ampasctl/ctl-1.4.1.tar.gz;
-    sha256 = "16lzgbpxdyhykdwndj1i9vx3h4bfkxqqcrvasvgg70gb5raxj0mj";
-  };
+  src = source.src;
 
-  patches = [ ./patch.patch ./gcc47.patch ];
+  buildInputs = [ cmake pkgconfig libtiff ilmbase openexr ];
 
-  propagatedBuildInputs = [ ilmbase ];
-
-  configureFlags = "--with-ilmbase-prefix=${ilmbase}";
-
-  #configurePhase = "
-    #export CXXFLAGS=\"-I${ilmbase}/include -L${ilmbase}/lib\"
-    #echo $CXXFLAGS
-    #unset configurePhase; configurePhase
-  #";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "Color Transformation Language";
     homepage = http://ampasctl.sourceforge.net;
-    license = "SOME OPEN SOURCE LICENSE"; # TODO which exactly is this?
+    license = "A.M.P.A.S";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 
+  passthru.source = source;
 }

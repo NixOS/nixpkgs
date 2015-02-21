@@ -9702,6 +9702,8 @@ let
     version = "2.1.1";
     name = "simpleparse-${version}";
 
+    disabled = isPy3k || isPyPy;
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SimpleParse/SimpleParse-${version}.tar.gz";
       sha256 = "1n8msk71lpl3kv086xr2sv68ppgz6228575xfnbszc6p1mwr64rg";
@@ -13140,6 +13142,24 @@ let
       license = licenses.mit;
     };
   };
+
+  uncertainties = buildPythonPackage rec {
+    name = "uncertainties-2.4.6.1";
+
+    src = pkgs.fetchurl {
+       url = "https://github.com/lebigot/uncertainties/archive/2.4.6.1.tar.gz";
+       sha256 = "993ad1a380185ff9548510401ed89fe96cf1f18ca48b44657356c8dcd3ad5032";
+    };
+
+    buildInputs = with self; [ nose numpy ];
+   
+    meta = {
+      homepage = "http://pythonhosted.org/uncertainties/";
+      description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
+      license = licenses.bsd3;
+    };
+  };
+
 
 # python2.7 specific packages
 } // optionalAttrs isPy27 (

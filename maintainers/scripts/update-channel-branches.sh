@@ -1,13 +1,14 @@
 #!/bin/sh
+set -e
 
 : ${NIXOS_CHANNELS:=https://nixos.org/channels/}
 : ${CHANNELS_NAMESPACE:=refs/heads/channels/}
 
 # List all channels which are currently in the repository which we would
 # have to remove if they are not found again.
-deadChannels=$(git for-each-ref --format="%(refname)" $CHANNELS_NAMESPACE)
+deadChannels=$(git for-each-ref --format="%(refname)" "$CHANNELS_NAMESPACE")
 
-function updateRef() {
+updateRef() {
     local channelName=$1
     local newRev=$2
 
@@ -17,9 +18,9 @@ function updateRef() {
     # Update the local refs/heads/channels/* branches to be in-sync with the
     # channel references.
     local branch=$CHANNELS_NAMESPACE$channelName
-    oldRev=$(git rev-parse --short $branch 2>/dev/null || true)
+    oldRev=$(git rev-parse --short "$branch" 2>/dev/null || true)
     if test "$oldRev" != "$newRev"; then
-        if git update-ref $branch $newRev 2>/dev/null; then
+        if git update-ref "$branch" "$newRev" 2>/dev/null; then
             if test -z "$oldRev"; then
                 echo " * [new branch]      $newRev           -> ${branch#refs/heads/}"
             else
@@ -35,21 +36,21 @@ function updateRef() {
     fi
 
     # Filter out the current channel from the list of dead channels.
-    deadChannels=$(grep -v $CHANNELS_NAMESPACE$channelName <<EOF
+    deadChannels=$(grep -v "$CHANNELS_NAMESPACE$channelName" <<EOF
 $deadChannels
 EOF
-)
+) ||true
 }
 
 # Find the name of all channels which are listed in the directory.
 echo "Fetching channels from $NIXOS_CHANNELS:"
-for channelName in : $(curl -s $NIXOS_CHANNELS | sed -n '/folder/ { s,.*href=",,; s,/".*,,; p }'); do
+for channelName in : $(curl -s "$NIXOS_CHANNELS" | sed -n '/folder/ { s,.*href=",,; s,/".*,,; p }'); do
     test "$channelName" = : && continue;
 
     # Do not follow redirections, such that we can extract the
     # short-changeset from the name of the directory where we are
     # redirected to.
-    sha1=$(curl -sI $NIXOS_CHANNELS$channelName | sed -n '/Location/ { s,.*\.\([a-f0-9]*\)[ \r]*$,\1,; p; }')
+    sha1=$(curl -sI "$NIXOS_CHANNELS$channelName" | sed -n '/Location/ { s,.*\.\([a-f0-9]*\)[ \r]*$,\1,; p; }')
 
     updateRef "remotes/$channelName" "$sha1"
 done
@@ -60,13 +61,13 @@ if currentSystem=$(nixos-version 2>/dev/null); then
     # then the version is not annotated in git version. This sed
     # expression is basically matching that the expressions end with
     # ".<sha1> (Name)" to extract the sha1.
-    sha1=$(echo $currentSystem | sed -n 's,^.*\.\([a-f0-9]*\) *(.*)$,\1,; T skip; p; :skip;')
+    sha1=$(echo "$currentSystem" | sed -n 's,^.*\.\([a-f0-9]*\) *(.*)$,\1,; T skip; p; :skip;')
 
     updateRef current-system "$sha1"
 fi
 
-echo "Fetching channels from ~/.nix-defexpr:"
-for revFile in : $(find -L ~/.nix-defexpr/ -maxdepth 4 -name svn-revision); do
+echo "Fetching channels from $HOME/.nix-defexpr:"
+for revFile in : $(find -L "$HOME/.nix-defexpr/" -maxdepth 4 -name svn-revision); do
     test "$revFile" = : && continue;
 
     # Deconstruct a path such as, into:
@@ -85,7 +86,7 @@ for revFile in : $(find -L ~/.nix-defexpr/ -maxdepth 4 -name svn-revision); do
     test -z "$user" && user=$USER
     channelName="$user${user:+/}$repo"
 
-    sha1=$(cat $revFile | sed -n 's,^.*\.\([a-f0-9]*\)$,\1,; T skip; p; :skip;')
+    sha1=$(sed -n 's,^.*\.\([a-f0-9]*\)$,\1,; T skip; p; :skip;' "$revFile")
 
     updateRef "$channelName" "$sha1"
 done
