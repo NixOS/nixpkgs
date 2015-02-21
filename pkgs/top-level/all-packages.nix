@@ -2519,8 +2519,6 @@ let
 
   screen = callPackage ../tools/misc/screen { };
 
-  screen-message = callPackage ../tools/X11/screen-message { };
-
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrypt = callPackage ../tools/security/scrypt { };
@@ -3181,7 +3179,7 @@ let
   clang_34 = wrapCC llvmPackages_34.clang;
   clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
-  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
+  clangAnalyzer = callPackage ../development/tools/analysis/clang-analyzer {
     clang = clang_34;
     llvmPackages = llvmPackages_34;
   };
@@ -3990,8 +3988,6 @@ let
 
     ocp-index = callPackage ../development/tools/ocaml/ocp-index { };
 
-    ocplib-endian = callPackage ../development/ocaml-modules/ocplib-endian { };
-
     ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
 
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
@@ -4158,6 +4154,10 @@ let
   swiProlog = callPackage ../development/compilers/swi-prolog { };
 
   tbb = callPackage ../development/libraries/tbb { };
+
+  teyjus = callPackage ../development/compilers/teyjus {
+    omake = omake_rc1;
+  };
 
   tinycc = callPackage ../development/compilers/tinycc { };
 
@@ -7971,15 +7971,12 @@ let
   prosody = recurseIntoAttrs (
     callPackage ../servers/xmpp/prosody {
       lua5 = lua5_1;
-      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent;
-      withLibevent = true;
+      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop;
   });
 
   elasticmq = callPackage ../servers/elasticmq { };
 
   etcdctl = callPackage ../development/tools/etcdctl { };
-
-  exim = callPackage ../servers/mail/exim { };
 
   fcgiwrap = callPackage ../servers/fcgiwrap { };
 
@@ -8436,7 +8433,7 @@ let
 
   beret = callPackage ../games/beret { };
 
-  bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
+  bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
 
   busybox = callPackage ../os-specific/linux/busybox { };
 
@@ -8920,9 +8917,6 @@ let
                                                                                                allowImportFromDerivation=true;})
                                                      linuxPackages_self);
                            in recurseIntoAttrs linuxPackages_self;
-
-  # Build a kernel for Xen dom0
-  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
 
   # grsecurity flavors
   # Stable kernels
@@ -9624,9 +9618,6 @@ let
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
-  bitcoin = altcoins.bitcoin;
-
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
@@ -9685,6 +9676,15 @@ let
   };
 
   bibletime = callPackage ../applications/misc/bibletime { };
+
+  bitcoin = callPackage ../applications/misc/bitcoin { openssl = openssl_1_0_1j; };
+  bitcoind = callPackage ../applications/misc/bitcoin { openssl = openssl_1_0_1j; gui = false; };
+
+  altcoins = recurseIntoAttrs (
+    (callPackage ../applications/misc/bitcoin/altcoins.nix {}) //
+    (callPackage ../applications/misc/bitcoin/dogecoin.nix {}) //
+    (callPackage ../applications/misc/bitcoin/litecoin.nix {})
+  );
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
@@ -10484,9 +10484,7 @@ let
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
-  homebank = callPackage ../applications/office/homebank {
-    gtk = gtk3;
-  };
+  homebank = callPackage ../applications/office/homebank { };
 
   htmldoc = callPackage ../applications/misc/htmldoc {
     fltk = fltk13;
@@ -10926,6 +10924,9 @@ let
     withSidebar = true;
   };
 
+  namecoin = callPackage ../applications/misc/namecoin { };
+  namecoinqt = callPackage ../applications/misc/namecoin/qt.nix { };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api.nix {
     ruby = ruby_2_1;
   };
@@ -11284,9 +11285,7 @@ let
 
   seafile-client = callPackage ../applications/networking/seafile-client { };
 
-  seeks = callPackage ../tools/networking/p2p/seeks {
-    protobuf = protobuf2_5;
-  };
+  seeks = callPackage ../tools/networking/p2p/seeks { };
 
   seg3d = callPackage ../applications/graphics/seg3d {
     wxGTK = wxGTK28.override { unicode = false; };
@@ -12863,9 +12862,6 @@ let
     cmake = cmakeCurses;
   });
 
-  ### SCIENCE/PROGRAMMING
-
-  plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
 
@@ -13645,8 +13641,6 @@ let
   adobeReader = adobe-reader;
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
-  bridge_utils = bridge-utils;  # added 2015-02-20
-  clangAnalyzer = clang-analyzer;  # added 2015-02-20
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
