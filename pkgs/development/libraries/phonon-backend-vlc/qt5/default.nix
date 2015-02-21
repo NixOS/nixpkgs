@@ -11,7 +11,6 @@ let
     qt4 = null;
     withQt5 = true;
   };
-  phonon_ = phonon.override { inherit qt4 qt5 withQt5; };
 in
 
 stdenv.mkDerivation {
@@ -24,7 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkgconfig xz ];
 
-  buildInputs = [ vlc_ phonon_qt5 qt5];
+  buildInputs = [ vlc_ phonon_qt5 qt5.base ];
 
   cmakeFlags = ["-DPHONON_BUILD_PHONON4QT5=ON"];
 

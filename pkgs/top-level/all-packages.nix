@@ -6074,7 +6074,9 @@ let
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
-  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix {};
+  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix {
+    qt5 = qt54;
+  };
 
   libdc1394 = callPackage ../development/libraries/libdc1394 { };
 
@@ -6970,10 +6972,16 @@ let
 
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt4 {};
 
-  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {};
+  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {
+    qt5 = qt54;
+  };
 
-  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {};
-  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {};
+  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {
+    qt5 = qt54;
+  };
+  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {
+    qt5 = qt54;
+  };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -6998,15 +7006,15 @@ let
   };
 
   polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
-    inherit qt5;
     withQt5 = true;
+    qt5 = qt54;
   };
 
   policykit = callPackage ../development/libraries/policykit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
   popplerQt4 = poppler.poppler_qt4;
-  popplerQt5 = poppler.poppler_qt5;
+  poppler_qt5 = poppler.poppler_qt5;
 
   popt = callPackage ../development/libraries/popt { };
 
@@ -11179,7 +11187,7 @@ let
     client = false;
     withKDE = false;
     useQt5 = true;
-    qt = qt5;
+    qt = qt54;
     dconf = gnome3.dconf;
     tag = "-qt5";
   };
@@ -11718,6 +11726,12 @@ let
 
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2_2;
+  };
+
+  vlc_qt5 = vlc.override {
+    qt4 = null;
+    qt5 = qt54;
+    withQt5 = true;
   };
 
   vmpk = callPackage ../applications/audio/vmpk { };

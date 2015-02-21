@@ -12,7 +12,7 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, kde4, kf5, pkgs, qt4, stdenv, debug ? false }:
+{ autonix, symlinkJoin, kde4, kf5, pkgs, qt4, qt5, stdenv, debug ? false }:
 
 with stdenv.lib; with autonix;
 
@@ -20,7 +20,7 @@ let kf5Orig = kf5; in
 
 let
 
-  kf5 = kf5Orig.override { inherit debug; };
+  kf5 = kf5Orig.override { inherit debug qt5; };
 
   mirror = "mirror://kde";
 
@@ -36,6 +36,22 @@ let
       "LibKMahjongg" = "libkmahjongg";
       "LibKonq" = "kde-baseapps";
     };
+
+  mkDerivation = drv: kf5.mkDerivation (drv // {
+    preHook = (drv.preHook or "") + ''
+      addQt4Plugins() {
+        if [[ -d "$1/lib/qt4/plugins" ]]; then
+            propagatedUserEnvPkgs+=" $1"
+        fi
+
+        if [[ -d "$1/lib/kde4/plugins" ]]; then
+            propagatedUserEnvPkgs+=" $1"
+        fi
+      }
+
+      envHooks+=(addQt4Plugins)
+    '';
+  });
 
   scope =
     # packages in this collection
@@ -131,8 +147,36 @@ let
         (blacklist ["kdewebdev"]) # unknown build failure
       ];
 
+  l10nPkgQt4 = orig:
+    let drvName = builtins.parseDrvName orig.name; in
+    mkDerivation {
+      name = "${drvName.name}-qt4-${drvName.version}";
+      inherit (orig) src;
+      buildInputs = [ kdeApps.kdelibs ];
+      nativeBuildInputs = with pkgs; [ cmake gettext perl ];
+      preConfigure = ''
+        cd 4/
+      '';
+    };
+
+  l10nPkgQt5 = orig:
+    let drvName = builtins.parseDrvName orig.name; in
+    mkDerivation {
+      name = "${drvName.name}-qt5-${drvName.version}";
+      inherit (orig) src;
+      buildInputs = with kf5; [ kdoctools ki18n ];
+      nativeBuildInputs = with pkgs; [ cmake kf5.extra-cmake-modules gettext perl ];
+      preConfigure = ''
+        cd 5/
+      '';
+    };
+
+  l10nPkg = name: orig: symlinkJoin orig.name [(l10nPkgQt4 orig) (l10nPkgQt5 orig)];
+
+  removeL10nPkgs = filterAttrs (n: v: !(hasPrefix "kde-l10n") n);
+
   postResolve = super:
-    super // {
+    (removeL10nPkgs super) // {
 
       ark = with pkgs; super.ark // {
         buildInputs = (super.ark.buildInputs or []) ++ [ makeWrapper ];
@@ -264,9 +308,14 @@ let
 
     };
 
+  l10nManifest =
+    filterAttrs
+      (n: v: hasPrefix "kde-l10n" n)
+      (importManifest ./manifest.nix { inherit mirror; });
+
   kdeApps = generateCollection ./. {
-    inherit (kf5) mkDerivation;
+    inherit mkDerivation;
     inherit mirror preResolve postResolve renames scope;
   };
 
-in kdeApps
+in kdeApps // (mapAttrs l10nPkg l10nManifest)

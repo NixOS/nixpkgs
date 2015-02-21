@@ -29,7 +29,10 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake makeWrapper qt ]
+  buildInputs = [ cmake makeWrapper ]
+    ++ (if useQt5 then [ qt.base ] else [ qt ])
+    ++ (if useQt5 && (monolithic || daemon) then [ qt.script ] else [])
+    ++ (if useQt5 && previews then [ qt.webkit qt.webkitwidgets ] else [])
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
     ++ lib.optional withKDE phonon
@@ -58,17 +61,17 @@ in with stdenv; mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
-    description = "Qt4/KDE4 distributed IRC client suppporting a remote daemon";
+    description = "Qt4/KDE4/Qt5 distributed IRC client suppporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to
       and detach from a central core -- much like the popular
       combination of screen and a text-based IRC client such
-      as WeeChat, but graphical (based on Qt4/KDE4).
+      as WeeChat, but graphical (based on Qt4/KDE4 or Qt5).
     '';
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = with maintainers; [ phreedom ttuegel ];
     repositories.git = https://github.com/quassel/quassel.git;
-    inherit (qt.meta) platforms;
+    inherit ((if useQt5 then qt.base else qt).meta) platforms;
   };
 }
