@@ -58,8 +58,8 @@ in
         default = ["gstreamer"];
         example = ["gstreamer" "vlc"];
         description = ''
-          Phonon backends to use in KDE. Only the VLC and gstreamer backends are
-          available. The VLC backend is preferred by upstream.
+          Phonon backends to use in KDE. Only the VLC and GStreamer backends are
+          available. The GStreamer backend is preferred by upstream.
         '';
       };
 
