@@ -5939,6 +5939,8 @@ let
 
   kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
     stdenv = overrideCC stdenv gccStdInc;
+  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 {
+    qt5 = qt54;
   });
   kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {});
   kf5_latest = kf56;
