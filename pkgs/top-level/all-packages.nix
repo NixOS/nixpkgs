@@ -12739,14 +12739,12 @@ let
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
-  plasma51 = recurseIntoAttrs (callPackage ../desktops/plasma-5.1 {
-    stdenv = overrideCC stdenv gccStdInc;
   });
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {});
   plasma5_latest = plasma52;
-  plasma5_stable = plasma51;
+  plasma5_stable = plasma52;
 
-  kde5 = kf55 // plasma51 // kdeApps_14_12;
+  kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });
