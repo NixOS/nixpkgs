@@ -138,6 +138,9 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
+    # Extra UDEV rules used by Solid
+    services.udev.packages = [ pkgs.media-player-info ];
+
     security.pam.services.kde = { allowNullPassword = true; };
 
   };
