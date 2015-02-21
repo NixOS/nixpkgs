@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ expat erlang zlib openssl pam ];
   patchPhase = ''
-    sed -i -e "s|erl \\\|${erlang}/bin/erl \\\|" src/ejabberdctl.template
+    sed -i \
+      -e "s|erl \\\|${erlang}/bin/erl \\\|" \
+      -e 's|EXEC_CMD=\"sh -c\"|EXEC_CMD=\"${stdenv.shell} -c\"|' \
+      src/ejabberdctl.template
   '';
   preConfigure = ''
     cd src
