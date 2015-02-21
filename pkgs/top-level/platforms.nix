@@ -293,8 +293,8 @@ rec {
     kernelTarget = "zImage";
     uboot = null;
     gcc = {
-      cpu = "cortex-a7";
-      fpu = "neon-vfpv4";
+      arch = "armv7-a";
+      fpu = "vfpv3-d16";
       float = "hard";
     };
   };
