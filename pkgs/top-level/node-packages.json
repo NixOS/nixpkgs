@@ -85,6 +85,7 @@
 , "grunt-karma"
 , "grunt-sed"
 , "gulp"
+, "webpack"
 , "karma"
 , "karma-mocha"
 , "karma-coverage"
