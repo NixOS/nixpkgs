@@ -5937,12 +5937,11 @@ let
     automake = automake111x;
   };
 
-  kf55 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.5 {
-    stdenv = overrideCC stdenv gccStdInc;
+  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 {
+    qt5 = qt54;
   });
-  kf56 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.6 {});
-  kf5_latest = kf56;
-  kf5_stable = kf55;
+  kf5_latest = kf57;
+  kf5_stable = kf57;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     openldap = openldap.override {
@@ -6075,7 +6074,9 @@ let
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
-  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix {};
+  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix {
+    qt5 = qt54;
+  };
 
   libdc1394 = callPackage ../development/libraries/libdc1394 { };
 
@@ -6971,10 +6972,16 @@ let
 
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt4 {};
 
-  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {};
+  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {
+    qt5 = qt54;
+  };
 
-  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {};
-  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {};
+  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {
+    qt5 = qt54;
+  };
+  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {
+    qt5 = qt54;
+  };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -6999,15 +7006,15 @@ let
   };
 
   polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
-    inherit qt5;
     withQt5 = true;
+    qt5 = qt54;
   };
 
   policykit = callPackage ../development/libraries/policykit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
   popplerQt4 = poppler.poppler_qt4;
-  popplerQt5 = poppler.poppler_qt5;
+  poppler_qt5 = poppler.poppler_qt5;
 
   popt = callPackage ../development/libraries/popt { };
 
@@ -7087,7 +7094,7 @@ let
     bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
-  qt5split = callPackage ../development/libraries/qt-5/5.3-submodules {};
+  qt54 = callPackage ../development/libraries/qt-5/5.4 {};
 
   qt5Full = appendToName "full" (qt5.override {
     buildDocs = true;
@@ -9451,6 +9458,8 @@ let
 
   miscfiles = callPackage ../data/misc/miscfiles { };
 
+  media-player-info = callPackage ../data/misc/media-player-info {};
+
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
@@ -10601,11 +10610,11 @@ let
   };
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
-    kf5 = kf55;
-    stdenv = overrideCC stdenv gccStdInc;
+    kf5 = kf57;
+    qt5 = qt54;
   });
-  kdeApps_latest = kdeApps_14_12;
   kdeApps_stable = kdeApps_14_12;
+  kdeApps_latest = kdeApps_14_12;
 
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
@@ -11178,7 +11187,7 @@ let
     client = false;
     withKDE = false;
     useQt5 = true;
-    qt = qt5;
+    qt = qt54;
     dconf = gnome3.dconf;
     tag = "-qt5";
   };
@@ -11717,6 +11726,12 @@ let
 
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2_2;
+  };
+
+  vlc_qt5 = vlc.override {
+    qt4 = null;
+    qt5 = qt54;
+    withQt5 = true;
   };
 
   vmpk = callPackage ../applications/audio/vmpk { };
@@ -12739,14 +12754,14 @@ let
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
-  plasma51 = recurseIntoAttrs (callPackage ../desktops/plasma-5.1 {
-    stdenv = overrideCC stdenv gccStdInc;
+  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
+    qt5 = qt54;
+    kf5 = kf57;
   });
-  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {});
   plasma5_latest = plasma52;
-  plasma5_stable = plasma51;
+  plasma5_stable = plasma52;
 
-  kde5 = kf55 // plasma51 // kdeApps_14_12;
+  kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });

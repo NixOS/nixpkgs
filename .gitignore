@@ -14,5 +14,5 @@ result-*
 
 /pkgs/applications/kde-apps-*/tmp/
 /pkgs/development/libraries/kde-frameworks-*/tmp/
-/pkgs/development/libraries/qt-5/*-submodules/tmp/
+/pkgs/development/libraries/qt-5/*/tmp/
 /pkgs/desktops/plasma-*/tmp/

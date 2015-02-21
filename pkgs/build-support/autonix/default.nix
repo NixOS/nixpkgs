@@ -36,9 +36,10 @@ let
   writeManifestXML = filename:
     let
       generateStores = mapAttrs (n: pkg: pkg.store);
-      manifest = generateStores (importManifest filename { mirror = ""; });
+      manifest = importManifest filename { mirror = ""; };
+      stores = generateStores manifest;
     in
-      writeText "manifest.xml" (builtins.toXML manifest);
+      writeText "manifest.xml" (builtins.toXML stores);
 
   /* Generate a set of Nix expressions for the collection, given a
    * manifest.nix, dependencies.nix, and renames.nix in the same directory.
@@ -69,9 +70,8 @@ let
 
     in derive (postResolve (resolve (preResolve packages)));
 
-  pkgNameVersion = pkg: nameFromURL pkg.name ".tar";
-  pkgAttrName = pkg: (builtins.parseDrvName (pkgNameVersion pkg)).name;
-  pkgVersion = pkg: (builtins.parseDrvName (pkgNameVersion pkg)).version;
+  pkgAttrName = pkg: (builtins.parseDrvName pkg.name).name;
+  pkgVersion = pkg: (builtins.parseDrvName pkg.name).version;
 
   depAttrNames = [
     "buildInputs" "nativeBuildInputs"
@@ -112,7 +112,7 @@ let
         builtins.listToAttrs
           (map (p: nameValuePair (toLower (pkgAttrName p)) p) manifest);
 
-      orig = import path { inherit mirror; };
+      orig = import path { inherit stdenv fetchurl mirror; };
     in
       fold (f: x: f x) orig [ withNames bestVersions ];
 
@@ -134,11 +134,10 @@ let
 
       deps = import (path + "/dependencies.nix") {};
 
-      mkPkg = pkg: pkgManifest:
+      mkPkg = name: manifest:
         {
-          name = nameFromURL pkgManifest.name ".tar";
-          src = { inherit (pkgManifest) sha256 name url; };
-          inherit (deps."${pkg}")
+          inherit (manifest) name src;
+          inherit (deps."${name}")
             buildInputs nativeBuildInputs propagatedBuildInputs
             propagatedNativeBuildInputs propagatedUserEnvPkgs;
         };
