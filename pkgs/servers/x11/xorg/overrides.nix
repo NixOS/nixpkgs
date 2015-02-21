@@ -235,7 +235,7 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
+    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb"; 
   };
 
   xkeyboardconfig = attrs: attrs // {
