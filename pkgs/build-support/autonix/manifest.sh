@@ -6,7 +6,7 @@
 
 cat >../manifest.nix <<EOF
 # This file is generated automatically. DO NOT EDIT!
-{ mirror }:
+{ stdenv, fetchurl, mirror }:
 [
 EOF
 
@@ -24,10 +24,13 @@ workdir=$(pwd)
         store=$(@nix@/bin/nix-store --print-fixed-path sha256 "$sha256" "$name")
         cat >>../manifest.nix <<EOF
   {
-    url = "\${mirror}/${url}";
-    sha256 = "${sha256}";
-    name = "${name}";
+    name = stdenv.lib.nameFromURL "${name}" ".tar";
     store = "${store}";
+    src = fetchurl {
+      url = "\${mirror}/${url}";
+      sha256 = "${sha256}";
+      name = "${name}";
+    };
   }
 EOF
     fi
