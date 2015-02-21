@@ -11,12 +11,14 @@ let
   phononBackends = {
     gstreamer = [
       pkgs.phonon_backend_gstreamer
+      pkgs.gst_all.gstreamer
       pkgs.gst_all.gstPluginsBase
       pkgs.gst_all.gstPluginsGood
       pkgs.gst_all.gstPluginsUgly
       pkgs.gst_all.gstPluginsBad
       pkgs.gst_all.gstFfmpeg # for mp3 playback
       pkgs.phonon_qt5_backend_gstreamer
+      pkgs.gst_all_1.gstreamer
       pkgs.gst_all_1.gst-plugins-base
       pkgs.gst_all_1.gst-plugins-good
       pkgs.gst_all_1.gst-plugins-ugly
