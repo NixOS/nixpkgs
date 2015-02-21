@@ -29,6 +29,29 @@ buildPhase() {
 
 
 installPhase() {
+    # Install libGL and friends.
+    mkdir -p "$out/lib/vendors"
+    cp -p nvidia.icd $out/lib/vendors/
+
+    cp -prd *.so.* tls "$out/lib/"
+    rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+
+    for libname in `find "$out/lib/" -name '*.so.*'`
+    do
+      # I'm lazy to differentiate needed libs per-library, as the closure is the same.
+      # Unfortunately --shrink-rpath would strip too much.
+      patchelf --set-rpath "$out/lib:$allLibPath" "$libname"
+
+      libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
+      ln -srnf "$libname" "$libname_short"
+      ln -srnf "$libname" "$libname_short.1"
+    done
+
+    #patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
+    #patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
+    #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
+    #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
+
 
     if test -z "$libsOnly"; then
         # Install the kernel module.
@@ -52,8 +75,10 @@ installPhase() {
         for i in nvidia-settings nvidia-smi; do
             cp $i $out/bin/$i
             patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
+                --set-rpath $out/lib:$glPath $out/bin/$i
         done
+
+        patchelf --set-rpath $glPath:$gtk3Path $out/lib/libnvidia-gtk3.so.*.*
 
         # Header files etc.
         mkdir -p $out/include/nvidia
@@ -76,31 +101,11 @@ installPhase() {
 
         # Test a bit.
         $out/bin/nvidia-settings --version
+    else
+        rm $out/lib/libnvidia-gtk3.*
     fi
-
-
-    # Install libGL and friends.
-    mkdir -p "$out/lib/vendors"
-    cp -p nvidia.icd $out/lib/vendors/
-
-    cp -prd *.so.* tls "$out/lib/"
-    rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
-
-    for libname in `find "$out/lib/" -name '*.so.*'`
-    do
-      # I'm lazy to differentiate needed libs per-library, as the closure is the same.
-      # Unfortunately --shrink-rpath would strip too much.
-      patchelf --set-rpath "$out/lib:$allLibPath" "$libname"
-
-      libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
-      ln -srnf "$libname" "$libname_short"
-      ln -srnf "$libname" "$libname_short.1"
-    done
-
-    #patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
-    #patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
-    #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
-    #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
+    # for simplicity and dependency reduction, don't support the gtk2 interface
+    rm $out/lib/libnvidia-gtk2.*
 }
 
 
