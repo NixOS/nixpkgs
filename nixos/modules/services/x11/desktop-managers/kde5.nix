@@ -88,18 +88,6 @@ in
     };
 
     environment.systemPackages =
-      (builtins.attrValues
-        (removeAttrs plasma5
-          [ "deepOverride" "kf5" "override" "overrideDerivation"
-            "recurseForDerivations" "scope"
-          ]))
-      ++
-      (builtins.attrValues
-        (removeAttrs kf5
-          [ "deepOverride" "mkDerivation" "override" "overrideDerivation"
-            "recurseForDerivations" "qt5" "scope"
-          ]))
-      ++
       [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
@@ -115,7 +103,8 @@ in
 
         pkgs.orion # GTK theme, nearly identical to Breeze
       ]
-      ++ (optional config.networking.networkmanager.enable plasma5.plasma-nm)
+      ++ filter isDerivation (builtins.attrValues plasma5)
+      ++ filter isDerivation (builtins.attrValues kf5)
       ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
