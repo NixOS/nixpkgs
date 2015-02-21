@@ -2725,6 +2725,8 @@ let
 
   tmux = callPackage ../tools/misc/tmux { };
 
+  tmuxinator = callPackage ../tools/misc/tmuxinator { };
+
   tmin = callPackage ../tools/security/tmin { };
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
