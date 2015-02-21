@@ -1704,6 +1704,8 @@ let
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
+  makebootfat = callPackage ../tools/misc/makebootfat { };
+
   minidlna = callPackage ../tools/networking/minidlna {
     ffmpeg = ffmpeg_0_10;
   };
