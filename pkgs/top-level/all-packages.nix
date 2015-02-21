@@ -9450,6 +9450,8 @@ let
 
   miscfiles = callPackage ../data/misc/miscfiles { };
 
+  media-player-info = callPackage ../data/misc/media-player-info {};
+
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
