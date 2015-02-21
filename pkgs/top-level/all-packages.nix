@@ -4144,6 +4144,10 @@ let
 
   tbb = callPackage ../development/libraries/tbb { };
 
+  teyjus = callPackage ../development/compilers/teyjus {
+    omake = omake_rc1;
+  };
+
   tinycc = callPackage ../development/compilers/tinycc { };
 
   urweb = callPackage ../development/compilers/urweb { };
