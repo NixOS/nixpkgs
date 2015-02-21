@@ -40,7 +40,16 @@ in
       '';
 
     hardware.opengl.package = nvidia_x11;
-    hardware.opengl.package32 = pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; };
+    hardware.opengl.package32 =
+      if elem "nvidia" drivers then
+        pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; }
+      else if elem "nvidiaLegacy173" drivers then
+        pkgs_i686.linuxPackages.nvidia_x11_legacy173.override { libsOnly = true; kernel = null; }
+      else if elem "nvidiaLegacy304" drivers then
+        pkgs_i686.linuxPackages.nvidia_x11_legacy304.override { libsOnly = true; kernel = null; }
+      else if elem "nvidiaLegacy340" drivers then
+        pkgs_i686.linuxPackages.nvidia_x11_legacy340.override { libsOnly = true; kernel = null; }
+      else throw "impossible";
 
     environment.systemPackages = [ nvidia_x11 ];
 
