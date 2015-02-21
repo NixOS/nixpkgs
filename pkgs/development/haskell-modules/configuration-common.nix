@@ -561,6 +561,9 @@ self: super: {
   elevator = markBroken super.elevator;
   minioperational = markBroken super.minioperational;
 
+  # https://github.com/mikeizbicki/hmm/issues/12
+  hmm = markBroken super.hmm;
+
 } // {
 
   # Not on Hackage.
