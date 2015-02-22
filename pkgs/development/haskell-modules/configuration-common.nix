@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_0_0 = dontCheck super.Cabal_1_22_0_0;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_0_0; });
+  Cabal_1_22_1_0 = dontCheck super.Cabal_1_22_1_0;
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_1_0; });
 
   # Break infinite recursions.
   digest = super.digest.override { inherit (pkgs) zlib; };
