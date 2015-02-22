@@ -560,9 +560,6 @@ self: super: {
   buffer-builder = markBroken super.buffer-builder;
   buffer-builder-aeson = markBroken super.buffer-builder-aeson;
 
-  # https://github.com/chrisdone/hindent/issues/93
-  descriptive = dontCheck super.descriptive;
-
   # https://github.com/osa1/language-lua/issues/19
   language-lua = addBuildTool super.language-lua self.alex;
 
