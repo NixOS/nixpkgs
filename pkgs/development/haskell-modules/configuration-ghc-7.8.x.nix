@@ -82,8 +82,12 @@ self: super: {
   clac = dontDistribute super.clac;
 
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/1
+  hspec-test-sandbox = markBroken super.hspec-test-sandbox;
+  test-framework-sandbox = markBroken super.test-sandbox-quickcheck;
   test-sandbox = markBroken super.test-sandbox;
   test-sandbox-compose = markBroken super.test-sandbox-compose;
+  test-sandbox-hunit = markBroken super.test-sandbox-hunit;
+  test-sandbox-quickcheck = markBroken super.test-sandbox-quickcheck;
 
   # Needs mtl 2.2.x.
   hypher = markBroken super.hypher;
