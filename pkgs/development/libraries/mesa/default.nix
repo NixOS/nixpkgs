@@ -15,16 +15,15 @@ else
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
     This or the mesa attribute (which also contains GLU) are small (~ 2 MB, mostly headers)
     and are designed to be the buildInput of other packages.
-  - DRI and EGL drivers are compiled into $drivers output,
-    which is much bigger and depends on LLVM.
-    These should be searched at runtime in "/run/opengl-driver{,-32}/lib/*"
-    and so are kind-of impure (given by NixOS).
+  - DRI drivers are compiled into $drivers output, which is much bigger and
+    depends on LLVM. These should be searched at runtime in
+    "/run/opengl-driver{,-32}/lib/*" and so are kind-of impure (given by NixOS).
     (I suppose on non-NixOS one would create the appropriate symlinks from there.)
   - libOSMesa is in $osmesa (~4 MB)
 */
 
 let
-  version = "10.2.9";
+  version = "10.4.5";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -38,46 +37,35 @@ stdenv.mkDerivation {
       "https://launchpad.net/mesa/trunk/${version}/+download/MesaLib-${version}.tar.bz2"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2"
     ];
-    sha256 = "f6031f8b7113a92325b60635c504c510490eebb2e707119bbff7bd86aa34657d";
+    sha256 = "bf60000700a9d58e3aca2bfeee7e781053b0d839e61a95b1883e05a2dee247a0";
   };
 
   prePatch = "patchShebangs .";
 
   patches = [
-    ./static-gallium.patch
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
-    (fetchpatch {
-      name = "fix-lp_test_arit.diff";
-      url = "http://cgit.freedesktop.org/mesa/mesa/patch/"
-        + "?id=8148a06b8fdb734f7f9a11ce787ee6505939fdaa";
-      sha256 = "0k2bnl7d28nx2y88jchw6jj4f3xfdjjvz4vpvhc40060c2iz8fla";
-    })
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit udev;
       });
 
-  # Change the search path for EGL drivers from $drivers/* to driverLink
   postPatch = ''
-    sed '/D_EGL_DRIVER_SEARCH_DIR=/s,EGL_DRIVER_INSTALL_DIR,${driverLink}/lib/egl,' \
-      -i src/egl/main/Makefile.am
-  '' + /* work around RTTI LLVM problems */ ''
-    patch -R -p1 < ${./rtti.patch}
+    substituteInPlace src/egl/main/egldriver.c \
+      --replace _EGL_DRIVER_SEARCH_DIR '"${driverLink}"'
   '';
 
   outputs = ["out" "drivers" "osmesa"];
 
   configureFlags = [
     "--with-dri-driverdir=$(drivers)/lib/dri"
-    "--with-egl-driver-dir=$(drivers)/lib/egl"
     "--with-dri-searchpath=${driverLink}/lib/dri"
 
     "--enable-dri"
     "--enable-glx-tls"
-    "--enable-shared-glapi" "--enable-shared-gallium"
+    "--enable-shared-glapi"
     "--enable-driglx-direct" # seems enabled anyway
     "--enable-gallium-llvm" "--enable-llvm-shared-libs"
     "--enable-xa" # used in vmware driver
@@ -112,7 +100,7 @@ stdenv.mkDerivation {
     ;
 
   enableParallelBuilding = true;
-  doCheck = true;
+  doCheck = false;
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
@@ -178,6 +166,6 @@ stdenv.mkDerivation {
     homepage = http://www.mesa3d.org/;
     license = "bsd";
     platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = with stdenv.lib.maintainers; [ simons vcunat ];
+    maintainers = with stdenv.lib.maintainers; [ eduarrrd simons vcunat ];
   };
 }
