@@ -520,9 +520,6 @@ self: super: {
   # Depends on broken lmdb package.
   vcache = markBroken super.vcache;
 
-  # https://github.com/osa1/language-lua/issues/14
-  language-lua = dontCheck super.language-lua;
-
   # https://github.com/afcowie/http-streams/issues/80
   http-streams = dontCheck super.http-streams;
 
@@ -581,6 +578,9 @@ self: super: {
 
   # https://github.com/chrisdone/hindent/issues/93
   descriptive = dontCheck super.descriptive;
+
+  # https://github.com/osa1/language-lua/issues/19
+  language-lua = addBuildTool super.language-lua self.alex;
 
 } // {
 
