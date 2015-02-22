@@ -563,6 +563,9 @@ self: super: {
   # https://github.com/mikeizbicki/hmm/issues/12
   hmm = markBroken super.hmm;
 
+  # https://github.com/alephcloud/hs-configuration-tools/issues/40
+  configuration-tools = dontCheck super.configuration-tools;
+
 } // {
 
   # Not on Hackage.

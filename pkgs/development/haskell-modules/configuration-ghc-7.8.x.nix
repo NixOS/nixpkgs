@@ -85,12 +85,9 @@ self: super: {
   test-sandbox = markBroken super.test-sandbox;
   test-sandbox-compose = markBroken super.test-sandbox-compose;
 
-  # https://github.com/alephcloud/hs-configuration-tools/issues/38
-  configuration-tools = markBroken super.configuration-tools;
-  yet-another-logger = markBroken super.yet-another-logger;
-
   # Needs mtl 2.2.x.
   hypher = markBroken super.hypher;
+  yet-another-logger = markBroken super.yet-another-logger;
 
 }
 
