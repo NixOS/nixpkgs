@@ -587,6 +587,13 @@ self: super: {
   concraft = markBroken super.concraft;
   concraft-pl = markBroken super.concraft-pl;
 
+  # Upstream notified by e-mail.
+  snowglobe = markBroken super.snowglobe;
+  gearbox = markBroken super.gearbox;
+
+  # https://github.com/deech/fltkhs/issues/7
+  fltkhs = markBroken super.fltkhs;
+
 } // {
 
   # Not on Hackage.
