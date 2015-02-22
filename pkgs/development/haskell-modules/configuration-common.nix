@@ -557,10 +557,6 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
-  # https://github.com/fumieval/elevator/issues/2
-  elevator = markBroken super.elevator;
-  minioperational = markBroken super.minioperational;
-
   # https://github.com/mikeizbicki/hmm/issues/12
   hmm = markBroken super.hmm;
 
