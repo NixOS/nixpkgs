@@ -13516,11 +13516,6 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-
-  faust = callPackage ../applications/audio/faust { };
-
-  faust-compiler = callPackage ../applications/audio/faust-compiler { };
-
   fceux = callPackage ../misc/emulators/fceux { };
 
   foldingathome = callPackage ../misc/foldingathome { };
