@@ -555,9 +555,6 @@ self: super: {
   # https://github.com/fumieval/karakuri/issues/1
   karakuri = markBroken super.karakuri;
 
-  # https://github.com/tekul/jose-jwt/issues/3
-  jose-jwt = dontCheck super.jose-jwt;
-
   # https://github.com/jtdaugherty/dbmigrations/issues/19
   dbmigrations = dontCheck super.dbmigrations;
 
