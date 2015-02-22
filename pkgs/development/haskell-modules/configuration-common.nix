@@ -579,6 +579,9 @@ self: super: {
   buffer-builder = markBroken super.buffer-builder;
   buffer-builder-aeson = markBroken super.buffer-builder-aeson;
 
+  # https://github.com/chrisdone/hindent/issues/93
+  descriptive = dontCheck super.descriptive;
+
 } // {
 
   # Not on Hackage.
