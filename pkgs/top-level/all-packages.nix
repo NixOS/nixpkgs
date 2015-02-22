@@ -4569,10 +4569,7 @@ let
     samples = true;
   };
 
-  avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {
-    gcc = gcc46;
-    stdenv = overrideCC stdenv gcc46;
-  };
+  avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
