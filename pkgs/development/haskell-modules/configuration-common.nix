@@ -599,6 +599,10 @@ self: super: {
   # https://github.com/deech/fltkhs/issues/7
   fltkhs = markBroken super.fltkhs;
 
+  # Build fails, but there seems to be no issue tracker available. :-(
+  hmidi = markBrokenVersion "0.2.1.0" super.hmidi;
+  padKONTROL = markBroken super.padKONTROL;
+
 } // {
 
   # Not on Hackage.
