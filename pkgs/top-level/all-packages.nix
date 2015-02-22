@@ -6466,6 +6466,8 @@ let
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
+  libosmpbf = callPackage ../development/libraries/libosmpbf {};
+
   libotr = callPackage ../development/libraries/libotr {
     libgcrypt = libgcrypt_1_6;
   };
@@ -6726,6 +6728,8 @@ let
   log4cplus = callPackage ../development/libraries/log4cplus { };
 
   loudmouth = callPackage ../development/libraries/loudmouth { };
+
+  luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
   lzo = callPackage ../development/libraries/lzo { };
 
@@ -7311,6 +7315,8 @@ let
   srtp = callPackage ../development/libraries/srtp {};
 
   srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
+
+  stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
@@ -8103,6 +8109,8 @@ let
   openresty = callPackage ../servers/http/openresty { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
+
+  osrm-backend = callPackage ../servers/osrm-backend { };
 
   petidomo = callPackage ../servers/mail/petidomo { };
 
