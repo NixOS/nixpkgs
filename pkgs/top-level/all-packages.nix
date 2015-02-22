@@ -2779,6 +2779,8 @@ let
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
+  u9fs = callPackage ../servers/u9fs { };
+
   ucl = callPackage ../development/libraries/ucl { };
 
   ucspi-tcp = callPackage ../tools/networking/ucspi-tcp { };
