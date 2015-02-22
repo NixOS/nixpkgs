@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, utillinux, nightly ? false }:
+{ stdenv, fetchurl, python, utillinux, openssl, http-parser, zlib, nightly ? false }:
 
 let
   version = if nightly then "1.2.1-nightly20150213f0296933f8" else "1.2.0";
@@ -19,7 +19,9 @@ in stdenv.mkDerivation {
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
   '';
 
-  buildInputs = [ python ] ++ (optional stdenv.isLinux utillinux);
+  configureFlags = [ "--shared-openssl" "--shared-http-parser" "--shared-zlib" ];
+
+  buildInputs = [ python openssl http-parser zlib ] ++ (optional stdenv.isLinux utillinux);
   setupHook = ../nodejs/setup-hook.sh;
 
   meta = {
