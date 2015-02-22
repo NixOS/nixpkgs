@@ -93,6 +93,7 @@ self: super: {
   hypher = markBroken super.hypher;
   yet-another-logger = markBroken super.yet-another-logger;
   purescript = markBroken super.purescript;
+  highlighter2 = markBroken super.highlighter2;
 
 }
 
