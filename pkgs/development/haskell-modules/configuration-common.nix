@@ -216,6 +216,7 @@ self: super: {
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
+  wai-middleware-throttle = dontCheck super.wai-middleware-throttle;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
