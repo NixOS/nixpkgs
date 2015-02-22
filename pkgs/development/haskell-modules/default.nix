@@ -15,8 +15,13 @@ let
   haskellPackages = self:
     let
 
+      withPackagesBuilder = pkgs.callPackage ./with-packages-builder.nix {
+        inherit (self) ghc;
+        inherit (pkgs) makeWrapper perl;
+      };
+
       mkDerivation = pkgs.callPackage ./generic-builder.nix {
-        inherit stdenv;
+        inherit stdenv withPackagesBuilder;
         inherit (pkgs) fetchurl pkgconfig glibcLocales coreutils gnugrep gnused;
         inherit (self) ghc jailbreak-cabal;
         hscolour = overrideCabal self.hscolour (drv: {
@@ -54,7 +59,11 @@ let
 
         inherit mkDerivation callPackage;
 
-        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix { packages = pkgs self; };
+        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix {
+          packages = pkgs self;
+          inherit withPackagesBuilder;
+          inherit (ghc) version meta;
+        };
 
         ghc = ghc // { withPackages = self.ghcWithPackages; };
 
