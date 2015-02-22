@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     patchShebangs ./
   '';
 
+  # Explicit --docdir= is required for on-line help to work:
+  configureFlags = [ "--docdir=$out/share/doc" ];
+
   buildInputs = [
     pkgconfig which gettext intltool
     glib gtk2
