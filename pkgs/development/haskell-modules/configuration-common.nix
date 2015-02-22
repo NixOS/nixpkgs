@@ -492,30 +492,17 @@ self: super: {
   # https://github.com/anton-k/temporal-csound/issues/2
   temporal-csound = markBrokenVersion "0.4.1" super.temporal-csound;
 
-  # https://github.com/gregwebs/haskell-heroku/issues/9
-  heroku = dontCheck super.heroku;
-
   # https://github.com/seanparsons/wiring/issues/1
   wiring = markBrokenVersion super.wiring;
 
-  # https://github.com/gibiansky/IHaskell/issues/355
-  ihaskell-parsec = markBroken super.ihaskell-parsec;
-
   # https://github.com/jwiegley/simple-conduit/issues/2
   simple-conduit = markBroken super.simple-conduit;
-
-  # https://github.com/evanrinehart/lowgl/issues/1
-  lowgl = markBroken super.lowgl;
 
   # https://github.com/srijs/hwsl2/issues/1
   hwsl2 = markBroken super.hwsl2;
 
   # https://code.google.com/p/linux-music-player/issues/detail?id=1
   mp = markBroken super.mp;
-
-  # https://github.com/athanclark/lucid-foundation/issues/1
-  lucid-foundation = markBroken super.lucid-foundation;
-  digestive-foundation-lucid = markBroken super.digestive-foundation-lucid;
 
   # Depends on broken lmdb package.
   vcache = markBroken super.vcache;
