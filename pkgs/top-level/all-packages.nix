@@ -5934,6 +5934,8 @@ let
 
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
 
+  jshon = callPackage ../development/tools/parsing/jshon { };
+
   json_glib = callPackage ../development/libraries/json-glib { };
 
   json-c-0-11 = callPackage ../development/libraries/json-c/0.11.nix { }; # vulnerable
