@@ -513,9 +513,6 @@ self: super: {
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
-  # https://github.com/NixOS/nixpkgs/issues/6343
-  c2hs = dontCheck super.c2hs;
-
   # wxc needs help deciding which version of GTK to use.
   wxc = overrideCabal (super.wxc.override { wxGTK = pkgs.wxGTK29; }) (drv: {
     patches = [ ./wxc-no-ldconfig.patch ];
