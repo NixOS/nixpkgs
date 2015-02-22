@@ -250,6 +250,8 @@ stdenv.mkDerivation ({
 
     inherit pname version;
 
+    isHaskellLibrary = hasActiveLibrary;
+
     env = stdenv.mkDerivation {
       name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ];
