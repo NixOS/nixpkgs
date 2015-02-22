@@ -587,6 +587,15 @@ self: super: {
   hmidi = markBrokenVersion "0.2.1.0" super.hmidi;
   padKONTROL = markBroken super.padKONTROL;
 
+  # https://github.com/lambdabot/lambdabot/issues/105
+  lambdabot-core = markBroken super.lambdabot-core;
+  lambdabot-haskell-plugins = markBroken super.lambdabot-haskell-plugins;
+  lambdabot-irc-plugins = markBroken super.lambdabot-irc-plugins;
+  lambdabot-misc-plugins = markBroken super.lambdabot-misc-plugins;
+  lambdabot-novelty-plugins = markBroken super.lambdabot-novelty-plugins;
+  lambdabot-reference-plugins = markBroken super.lambdabot-reference-plugins;
+  lambdabot-social-plugins = markBroken super.lambdabot-social-plugins;
+
 } // {
 
   # Not on Hackage.
