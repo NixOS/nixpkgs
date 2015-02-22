@@ -589,6 +589,9 @@ self: super: {
   concraft = markBroken super.concraft;
   concraft-pl = markBroken super.concraft-pl;
 
+  # https://github.com/kawu/crf-chain2-tiers/issues/2
+  crf-chain2-tiers = markBroken super.crf-chain2-tiers;
+
   # Upstream notified by e-mail.
   snowglobe = markBroken super.snowglobe;
   gearbox = markBroken super.gearbox;
