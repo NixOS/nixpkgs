@@ -2,7 +2,7 @@
 , libxslt, lv2, pkgconfig, premake3, xlibs }:
 
 stdenv.mkDerivation rec {
-  name = "DISTRHO-Ports-git-2015-01-28";
+  name = "distrho-ports-git-2015-01-28";
 
   src = fetchgit {
     url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
