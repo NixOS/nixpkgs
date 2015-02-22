@@ -3864,6 +3864,11 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
+    cstruct = callPackage ../development/ocaml-modules/cstruct {
+      lwt = ocaml_lwt;
+      sexplib = ocaml_sexplib;
+    };
+
     csv = callPackage ../development/ocaml-modules/csv { };
 
     deriving = callPackage ../development/tools/ocaml/deriving { };
