@@ -80,6 +80,8 @@ in stdenv.mkDerivation {
       "$main/content/browser/browser_main_loop.cc"
   '';
 
+  preferLocalBuild = true;
+
   passthru = {
     inherit version channel;
     plugins = fetchurl binary;
