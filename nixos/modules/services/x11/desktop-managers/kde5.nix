@@ -93,8 +93,6 @@ in
 
         kdeApps.kde-baseapps
         kdeApps.kde-base-artwork
-        kdeApps.kde-workspace
-        kdeApps.kde-runtime
         kdeApps.kmix
         kdeApps.konsole
         kdeApps.oxygen-icons
