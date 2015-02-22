@@ -95,6 +95,9 @@ self: super: {
   purescript = markBroken super.purescript;
   highlighter2 = markBroken super.highlighter2;
 
+  # https://github.com/frosch03/arrowVHDL/issues/2
+  ArrowVHDL = markBroken super.ArrowVHDL;
+
 }
 
 // # packages relating to amazonka
