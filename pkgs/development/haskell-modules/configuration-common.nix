@@ -450,9 +450,6 @@ self: super: {
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
-  # https://github.com/d12frosted/CanonicalPath/issues/3
-  system-canonicalpath = dontCheck super.system-canonicalpath;
-
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
