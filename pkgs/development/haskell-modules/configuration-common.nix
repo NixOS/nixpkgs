@@ -538,7 +538,7 @@ self: super: {
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK29; };
 
   # Depends on QuickCheck 1.x.
-  ersatz = super.ersatz.override { QuickCheck = self.QuickCheck_1_2_0_1; };
+  ersatz = dontCheck (super.ersatz.override { QuickCheck = self.QuickCheck_1_2_0_1; }); # https://github.com/ekmett/ersatz/issues/8
   HaVSA = super.HaVSA.override { QuickCheck = self.QuickCheck_1_2_0_1; };
   lhc = super.lhc.override { QuickCheck = self.QuickCheck_1_2_0_1; };
   test-framework-quickcheck = super.test-framework-quickcheck.override { QuickCheck = self.QuickCheck_1_2_0_1; };
