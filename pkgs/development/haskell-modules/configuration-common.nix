@@ -566,6 +566,12 @@ self: super: {
   # https://github.com/alephcloud/hs-configuration-tools/issues/40
   configuration-tools = dontCheck super.configuration-tools;
 
+  # https://github.com/fumieval/karakuri/issues/1
+  karakuri = markBroken super.karakuri;
+
+  # https://github.com/tekul/jose-jwt/issues/3
+  jose-jwt = dontCheck super.jose-jwt;
+
 } // {
 
   # Not on Hackage.
