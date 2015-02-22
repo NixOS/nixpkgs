@@ -565,6 +565,8 @@ let
   audiotools = buildPythonPackage rec {
     name = "audiotools-2.22";
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/audiotools/${name}.tar.gz";
       sha256 = "1c52pggsbxdbj8h92njf4h0jgfndh4yv58ad723pidys47nw1y71";
@@ -2961,6 +2963,30 @@ let
     propagatedBuildInputs = with self; [ logilab_common ];
   };
 
+  mailchimp = buildPythonPackage rec {
+
+    version = "2.0.9";
+    name = "mailchimp-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/mailchimp/mailchimp-${version}.tar.gz";
+      sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
+    };  
+  
+    # Test fails because specific version of docopt is searched
+    # (Possible fix: Needs upstream patching in the library)
+    doCheck = false;
+
+    buildInputs = with self; [ docopt ];
+
+    propagatedBuildInputs = with self; [ requests ];                                       
+
+    meta = {
+      description = "A CLI client and Python API library for the MailChimp email platform";
+      homepage = "http://apidocs.mailchimp.com/api/2.0/";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   logster = buildPythonPackage {
     name = "logster-7475c53822";
@@ -4834,15 +4860,25 @@ let
   };
 
   google_apputils = buildPythonPackage rec {
-    name = "google-apputils-0.4.0";
+    name = "google-apputils-0.4.1";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url = http://pypi.python.org/packages/source/g/google-apputils/google-apputils-0.4.0.tar.gz;
-      sha256 = "18wlivnqxvx1wsw177lckpl32nmr6cq7f5nhk8r72fvjy8wynq5j";
+      url = "http://pypi.python.org/packages/source/g/google-apputils/${name}.tar.gz";
+      sha256 = "1sxsm5q9vr44qzynj8l7p3l7ffb0zl1jdqhmmzmalkx941nbnj1b";
     };
 
-    propagatedBuildInputs = with self; [ pytz gflags dateutil_1_5 mox ];
+    preConfigure = ''
+      sed -i '/ez_setup/d' setup.py
+    '';
+
+    propagatedBuildInputs = with self; [ pytz gflags dateutil mox ];
+
+    checkPhase = ''
+      ${python.executable} setup.py google_test
+    '';
+
+    doCheck = true;
 
     meta = with stdenv.lib; {
       description = "Google Application Utilities for Python";
@@ -7486,16 +7522,43 @@ let
     };
   };
 
-  protobuf = buildPythonPackage rec {
-    inherit (pkgs.protobuf) name src;
+  protobuf = self.protobuf2_6;
+  protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
+  protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
+  protobufBuild = protobuf: buildPythonPackage rec {
+    inherit (protobuf) name src;
+    disabled = isPy3k;
 
-    propagatedBuildInputs = with self; [ pkgs.protobuf google_apputils ];
-    sourceRoot = "${name}-src/python";
+    propagatedBuildInputs = with self; [ protobuf google_apputils ];
+
+    prePatch = ''
+      while [ ! -d python ]; do
+        cd *
+      done
+      cd python
+    '';
+
+    preConfigure = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=cpp
+      PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
+    '';
+
+    checkPhase = if versionAtLeast protobuf.version "2.6.0" then ''
+      ${python.executable} setup.py google_test --cpp_implementation
+    '' else ''
+      ${python.executable} setup.py test
+    '';
+
+    installFlags = optional (versionAtLeast protobuf.version "2.6.0") "--cpp_implementation";
+
+    doCheck = true;
 
     meta = {
       description = "Protocol Buffers are Google's data interchange format";
       homepage = http://code.google.com/p/protobuf/;
     };
+
+    passthru.protobuf = protobuf;
   };
 
 
@@ -7828,6 +7891,21 @@ let
     };
   };
 
+  pybcrypt = buildPythonPackage rec {
+    name = "pybcrypt";
+    version = "0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py-bcrypt/py-bcrypt-${version}.tar.gz";
+      md5 = "dd8b367d6b716a2ea2e72392525f4e36";
+    };
+
+    meta = {
+      description = "bcrypt password hashing and key derivation";
+      homepage = https://code.google.com/p/py-bcrypt2;
+      license = "BSD";
+    };
+  };
 
   pycapnp = buildPythonPackage rec {
     name = "pycapnp-0.5.1";
@@ -8661,6 +8739,23 @@ let
       homepage = "http://pyserial.sourceforge.net/";
       license = stdenv.lib.licenses.psfl;
       description = "Python serial port extension";
+    };
+  };
+
+  pymongo = buildPythonPackage rec {
+    name = "pymongo-2.8";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pymongo/${name}.tar.gz";
+      sha256 = "0d9rlxghqg9dqmcmrlf1lw9ap2g6npv6q4slp5agnm7vci9zchq5";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://github.com/mongodb/mongo-python-driver";
+      license = [ "Apache-2.0" ];
+      description = "Python driver for MongoDB ";
     };
   };
 
@@ -9702,6 +9797,8 @@ let
     version = "2.1.1";
     name = "simpleparse-${version}";
 
+    disabled = isPy3k || isPyPy;
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SimpleParse/SimpleParse-${version}.tar.gz";
       sha256 = "1n8msk71lpl3kv086xr2sv68ppgz6228575xfnbszc6p1mwr64rg";
@@ -9824,7 +9921,7 @@ let
 
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.6";
-    disabled = isPy34;  # some tests fail
+    disabled = isPy34 || isPyPy;  # some tests fail
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/s/sympy/${name}.tar.gz";
@@ -10264,6 +10361,8 @@ let
 
   sqlalchemy9 = buildPythonPackage rec {
     name = "SQLAlchemy-0.9.8";
+
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
@@ -13127,6 +13226,8 @@ let
   moreItertools = buildPythonPackage rec {
     name = "more-itertools-2.2";
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
       sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
@@ -13140,6 +13241,24 @@ let
       license = licenses.mit;
     };
   };
+
+  uncertainties = buildPythonPackage rec {
+    name = "uncertainties-2.4.6.1";
+
+    src = pkgs.fetchurl {
+       url = "https://github.com/lebigot/uncertainties/archive/2.4.6.1.tar.gz";
+       sha256 = "993ad1a380185ff9548510401ed89fe96cf1f18ca48b44657356c8dcd3ad5032";
+    };
+
+    buildInputs = with self; [ nose numpy ];
+   
+    meta = {
+      homepage = "http://pythonhosted.org/uncertainties/";
+      description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
+      license = licenses.bsd3;
+    };
+  };
+
 
 # python2.7 specific packages
 } // optionalAttrs isPy27 (

@@ -50,8 +50,10 @@ echo "booting system configuration $systemConfig" > /dev/kmsg
 # Make /nix/store a read-only bind mount to enforce immutability of
 # the Nix store.  Note that we can't use "chown root:nixbld" here
 # because users/groups might not exist yet.
-chown 0:30000 /nix/store
-chmod 1775 /nix/store
+# Silence chown/chmod to fail gracefully on a readonly filesystem
+# like squashfs.
+chown -f 0:30000 /nix/store
+chmod -f 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
     if ! readonly-mountpoint /nix/store; then
         mount --bind /nix/store /nix/store

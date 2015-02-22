@@ -6,13 +6,12 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-types";
-  version = "1.11.1.1";
-  sha256 = "0xr9h1bivw3miyg4xill0jwn95lybsbqgrnw2323pwxlbbnaa25a";
+  version = "1.12";
+  sha256 = "0is0kzpr7w1bfw32ybkqwj8g4fyx5ii983hbrqas9gbrkgc0hxv6";
   buildDepends = [
     aeson genericAeson hxt jsonSchema mtl regular regularXmlpickler
     restStringmap text uuid
   ];
-  jailbreak = true;
   meta = {
     description = "Silk Rest Framework Types";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,24 +1,28 @@
-{ stdenv, fetchurl, cmake, automoc4, pulseaudio, qt5 }:
+{ stdenv, fetchurl, cmake, mesa, pkgconfig, pulseaudio, qt5, debug ? false }:
 
 with stdenv.lib;
 
 let
-  v = "4.8.1";
+  v = "4.8.3";
 in
 
 stdenv.mkDerivation rec {
   name = "phonon-${v}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${v}/phonon-${v}.tar.xz";
-    sha256 = "1l97h1jj3gvl1chx1qbipizfvjgqc05wrhdcflc76c2krlk03jmn";
+    url = "mirror://kde/stable/phonon/${v}/src/phonon-${v}.tar.xz";
+    sha256 = "05nshngk03ln90vsjz44dx8al576f4vd5fvhs1l0jmx13jb9q551";
   };
 
-  buildInputs = [ qt5 pulseaudio ];
+  buildInputs = [ mesa qt5.base qt5.quick1 qt5.tools pulseaudio ];
 
-  nativeBuildInputs = [ cmake automoc4 ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  cmakeFlags = ["-DPHONON_BUILD_PHONON4QT5=ON"];
+  cmakeFlags = [
+    "-DPHONON_BUILD_PHONON4QT5=ON"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ]
+  ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
   meta = {
     homepage = http://phonon.kde.org/;

@@ -12,15 +12,15 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, kf56, pkgs, stdenv, debug ? false }:
+{ autonix, kf5, pkgs, qt5, stdenv, debug ? false }:
 
 with stdenv.lib; with autonix;
 
+let kf5Orig = kf5; in
+
 let
 
-  kf5 = kf56.override { inherit debug; };
-
-  inherit (kf5) qt5;
+  kf5 = kf5Orig.override { inherit debug qt5; };
 
   mirror = "mirror://kde";
 
@@ -38,7 +38,7 @@ let
     {
       LibBlueDevil = pkgs.libbluedevil;
       PolkitQt5-1 = pkgs.polkit_qt5.override { inherit qt5; };
-      PopplerQt5 = (pkgs.poppler.override { inherit (kf5) qt5; }).poppler_qt5;
+      PopplerQt5 = (pkgs.poppler.override { inherit qt5; }).poppler_qt5;
     } //
     # packages from nixpkgs
     (with pkgs;
@@ -90,7 +90,7 @@ let
         buildInputs = with kf5; with plasma5;
           [
             kcompletion kconfig kconfigwidgets kcoreaddons kdecoration
-            frameworkintegration ki18n kwindowsystem qt5
+            frameworkintegration ki18n kwindowsystem qt5.base qt5.x11extras
           ];
         nativeBuildInputs = [ cmake kf5.extra-cmake-modules pkgconfig ];
         cmakeFlags = [ "-DUSE_KDE4=OFF" ];
@@ -155,7 +155,7 @@ let
 
 in
   plasma5 // {
-    inherit scope;
+    inherit kf5 scope;
     startkde = pkgs.callPackage ./startkde {
       inherit (kf5) kconfig kinit kservice;
       inherit (plasma5) plasma-desktop plasma-workspace;

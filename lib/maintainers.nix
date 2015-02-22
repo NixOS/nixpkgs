@@ -27,6 +27,7 @@
   aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
   balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
+  bcdarwin = "Ben Darwin <bcdarwin@gmail.com>";
   bdimcheff = "Brandon Dimcheff <brandon@dimcheff.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   benley = "Benjamin Staffin <benley@gmail.com>";
@@ -159,6 +160,7 @@
   roelof = "Roelof Wobben <rwobben@hotmail.com>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
+  rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   schristo = "Scott Christopher <schristopher@konputa.com>";

@@ -6,11 +6,11 @@
 
 let
 
-  name = "hplip-3.14.10";
+  name = "hplip-3.15.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "164mm30yb61psk5j4ziybxdd310y09fixgl09hmb59ny261wvcqi";
+    sha256 = "0z7n62vdbr0p0kls1m2sr3nhvkhx3rawcbzd0zdl0lnq8fkyq0jz";
   };
 
   hplip_state =
@@ -23,7 +23,7 @@ let
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "10cvgy1h84fwh7xpw4x6cbkpisqbn3nbcqrgd9xz5fc6mn0b95dk";
+    sha256 = "0j8z8m3ygwahka7jv3hpzvfz187lh3kzzjhcy7grgaw2k01v5frm";
   };
 
 in

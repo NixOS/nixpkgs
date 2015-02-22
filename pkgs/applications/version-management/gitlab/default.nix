@@ -7,7 +7,7 @@ let
     url = "https://github.com/gitlabhq/gitlabhq.git";
     rev = "477743a154e85c411e8a533980abce460b5669fc";
     fetchSubmodules = false;
-    sha256 = "0jl1w9d46v8hc27h9s380ha07m3fd2zpflj4q9vywwcf570ahj7x";
+    sha256 = "1gk77j886w6zvw5cawpgja6f87qirmjx7y4g5i3psxm4j67llxdp";
   };
 
   env = bundlerEnv {

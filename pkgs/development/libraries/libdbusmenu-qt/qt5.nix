@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1dbhaljyivbv3wc184zpjfjmn24zb6aj72wgg1gg1xl5f783issd";
   };
 
-  buildInputs = [ qt5 ];
+  buildInputs = [ qt5.base ];
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = "-DWITH_DOC=OFF";
@@ -18,6 +18,6 @@ stdenv.mkDerivation {
     homepage = "http://launchpad.net/libdbusmenu-qt";
     description = "Provides a Qt implementation of the DBusMenu spec";
     maintainers = [ maintainers.ttuegel ];
-    inherit (qt5.meta) platforms;
+    inherit (qt5.base.meta) platforms;
   };
 }

@@ -1,18 +1,31 @@
-{ stdenv, fetchurl, pkgconfig, zlib, ctl, ilmbase }:
-
+{ stdenv, callPackage, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
+let
+  source = callPackage ./source.nix { };
+in
 stdenv.mkDerivation rec {
-  name = "openexr-1.7.1";
+  name = "openexr-${source.version}";
   
-  src = fetchurl {
-    url = "mirror://savannah/openexr/${name}.tar.gz";
-    sha256 = "0l2rdbx9lg4qk2ms98hwbsnzpggdrx3pbjl6pcvrrpjqp5m905n6";
+  src = source.src;
+
+  prePatch = ''
+    cd OpenEXR
+  '';
+
+  preConfigure = ''
+    ./bootstrap
+  '';
+
+  configureFlags = [ "--enable-imfexamples" ];
+  
+  buildInputs = [ autoconf automake libtool pkgconfig ];
+  propagatedBuildInputs = [ ilmbase zlib ];
+  
+  meta = with stdenv.lib; {
+    homepage = http://www.openexr.com/;
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
-  
-  buildInputs = [ pkgconfig ctl ];
-  
-  propagatedBuildInputs = [ zlib ilmbase ];
-  
-  configureFlags = "--enable-imfexamples";
-  
-  patches = [ ./stringh.patch ];
+
+  passthru.source = source;
 }

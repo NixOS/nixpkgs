@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
-, gtk, atk, pango, glib, gdk_pixbuf
+, gtk3, atk, pango, glib, gdk_pixbuf, cairo
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -46,8 +46,10 @@ stdenv.mkDerivation {
   openclPath  = makeLibraryPath [zlib];
   allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.cc.cc];
 
-  programPath = optionalString (!libsOnly) (makeLibraryPath
-    [ gtk atk pango glib gdk_pixbuf xlibs.libXv ] );
+  # we don't support the gtk2 version
+  gtk3Path = optionalString (!libsOnly) (makeLibraryPath
+    [ gtk3 atk pango glib gdk_pixbuf cairo ] );
+  programPath = makeLibraryPath [ xlibs.libXv ];
 
   buildInputs = [ perl ];
 

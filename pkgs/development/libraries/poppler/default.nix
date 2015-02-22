@@ -61,7 +61,7 @@ let
   poppler_glib = poppler_drv "glib" { };
 
   poppler_qt4 = poppler_drv "qt4" {
-    patches = [ qtcairo_patch ];
+    #patches = [ qtcairo_patch ]; # text rendering artifacts in recent versions
     propagatedBuildInputs = [ qt4 poppler_glib ];
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = ''
@@ -72,7 +72,7 @@ let
   };
 
   poppler_qt5 = poppler_drv "qt5" {
-    propagatedBuildInputs = [ qt5 poppler_glib ];
+    propagatedBuildInputs = [ qt5.base poppler_glib ];
     postConfigure = ''
       mkdir -p "$out/lib/pkgconfig"
       install -c -m 644 poppler-qt5.pc "$out/lib/pkgconfig"

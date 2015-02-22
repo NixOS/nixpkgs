@@ -52,7 +52,7 @@
 
 { stdenv, fetchurl, gtk, libglade, libxml2, libraw1394, libsamplerate, libdv
 , pkgconfig, perl, perlXMLParser, libavc1394, libiec61883, libXv, gettext
-, libX11, glib, cairo, intltool, ffmpeg
+, libX11, glib, cairo, intltool, ffmpeg, libv4l
 }:
 
 stdenv.mkDerivation {
@@ -64,13 +64,16 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ gtk libglade libxml2 libraw1394 libsamplerate libdv 
-      pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg ]; # TODOoptional packages 
+      pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg libv4l ]; # TODOoptional packages 
 
   configureFlags = "--enable-local-ffmpeg=no";
   #preConfigure = "
   #  grep 11 env-vars
   #  ex
   #";
+
+  patches = [ ./kino-1.3.4-v4l1.patch ./kino-1.3.4-libav-0.7.patch ./kino-1.3.4-libav-0.8.patch ]; #./kino-1.3.4-libavcodec-pkg-config.patch ];
+
 
   postInstall = "
     rpath=`patchelf --print-rpath \$out/bin/kino`;

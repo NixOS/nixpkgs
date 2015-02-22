@@ -319,6 +319,26 @@ with stdenv.lib;
   ''}
   XEN? y
   XEN_DOM0? y
+  ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
+    PCI_XEN? y
+    HVC_XEN? y
+    HVC_XEN_FRONTEND? y
+    XEN_SYS_HYPERVISOR? y
+    SWIOTLB_XEN? y
+    XEN_BACKEND? y
+    XEN_BALLOON? y
+    XEN_BALLOON_MEMORY_HOTPLUG? y
+    XEN_EFI? y
+    XEN_HAVE_PVMMU? y
+    XEN_MCE_LOG? y
+    XEN_PVH? y
+    XEN_PVHVM? y
+    XEN_SAVE_RESTORE? y
+    XEN_SCRUB_PAGES? y
+    XEN_SELFBALLOONING? y
+    XEN_STUB? y
+    XEN_TMEM? y
+  ''}
   KSM y
   ${optionalString (!stdenv.is64bit) ''
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.

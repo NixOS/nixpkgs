@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, go }:
+{ stdenv, fetchgit, go, Security }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1f6r8vlwnmqmr85drfv24vhqx1aacz6s83c2i804v9997n0wrwfm";
   };
 
-  buildInputs = [ go ];
+
+  buildInputs = [ go ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
   buildPhase = ''
+    patchShebangs .
     sh script/build
   '';
 

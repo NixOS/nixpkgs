@@ -166,6 +166,7 @@
   ./services/logging/syslogd.nix
   ./services/logging/syslog-ng.nix
   ./services/mail/dovecot.nix
+  ./services/mail/exim.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/mlmmj.nix
@@ -315,6 +316,7 @@
   ./services/scheduling/chronos.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
   ./services/search/solr.nix
   ./services/security/clamav.nix

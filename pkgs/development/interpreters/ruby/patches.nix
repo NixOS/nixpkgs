@@ -84,7 +84,8 @@ in
     buildFlags =
       [ "--with-xml2-dir=${libxml2} --with-xml2-include=${libxml2}/include/libxml2"
         "--with-xslt-dir=${libxslt}  --use-system-libraries"
-      ] ++ libiconvOrEmpty;
+        libiconv
+      ];
   };
 
   pry = { gemFlags = "--no-ri --no-rdoc"; };

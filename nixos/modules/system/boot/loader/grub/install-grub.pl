@@ -448,7 +448,9 @@ sub getDeviceTargets {
 
 # check whether to install GRUB EFI or not
 sub getEfiTarget {
-    if (($grub ne "") && ($grubEfi ne "")) {
+    if ($grubVersion == 1) {
+        return "no"
+    } elsif (($grub ne "") && ($grubEfi ne "")) {
         # EFI can only be installed when target is set;
         # A target is also required then for non-EFI grub
         if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }

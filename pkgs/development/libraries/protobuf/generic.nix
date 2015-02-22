@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "protobuf-v${version}";
+  name = "protobuf-${version}";
 
   inherit src;
 
@@ -31,4 +31,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://code.google.com/p/protobuf/;
   };
+
+  passthru.version = version;
 }
