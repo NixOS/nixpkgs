@@ -575,6 +575,9 @@ self: super: {
   # https://github.com/jtdaugherty/dbmigrations/issues/19
   dbmigrations = dontCheck super.dbmigrations;
 
+  # https://github.com/chadaustin/buffer-builder/issues/2
+  buffer-builder = markBroken super.buffer-builder;
+
 } // {
 
   # Not on Hackage.
