@@ -582,6 +582,11 @@ self: super: {
   # https://github.com/osa1/language-lua/issues/19
   language-lua = addBuildTool super.language-lua self.alex;
 
+  # https://github.com/kawu/crf-chain1-constrained/issues/8
+  crf-chain1-constrained = markBroken super.crf-chain1-constrained;
+  concraft = markBroken super.concraft;
+  concraft-pl = markBroken super.concraft-pl;
+
 } // {
 
   # Not on Hackage.
