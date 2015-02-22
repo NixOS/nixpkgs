@@ -577,6 +577,7 @@ self: super: {
 
   # https://github.com/chadaustin/buffer-builder/issues/2
   buffer-builder = markBroken super.buffer-builder;
+  buffer-builder-aeson = markBroken super.buffer-builder-aeson;
 
 } // {
 
