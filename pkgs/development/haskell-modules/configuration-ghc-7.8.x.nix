@@ -92,6 +92,7 @@ self: super: {
   # Needs mtl 2.2.x.
   hypher = markBroken super.hypher;
   yet-another-logger = markBroken super.yet-another-logger;
+  purescript = markBroken super.purescript;
 
 }
 
