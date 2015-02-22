@@ -184,7 +184,7 @@ in
         }
       ];
 
-    powerManagement.resumeCommands =
+    powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
         ${config.systemd.package}/bin/systemctl reload dhcpcd.service
