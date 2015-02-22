@@ -16,18 +16,18 @@ let
     };
 
     gecko = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.24-x86.msi";
-      sha256 = "0b10f55q3sldlcywscdlw3kd7vl9izlazw7jx30y4rpahypaqf3f";
+      url = "mirror://sourceforge/wine/wine_gecko-2.34-x86.msi";
+      sha256 = "19www9vbi5b3mxhifwsp24lc3m43zkjawv6bszs6861b62zjcv4m";
     };
 
     gecko64 = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.24-x86_64.msi";
-      sha256 = "1j4wdlhzvjrabzr9igcnx0ivm5mcb8kp7bwkpfpfsanbifk7sma7";
+      url = "mirror://sourceforge/wine/wine_gecko-2.34-x86_64.msi";
+      sha256 = "0w0h3863mc4cijhw0w1k3xml8qp1kv6ivqrzzfiky6ydqhj1nb0g";
     };
 
     mono = fetchurl {
-      url = "mirror://sourceforge/wine/wine-mono-4.5.2.msi";
-      sha256 = "1bgasysf3qacxgh5rlk7qlw47ar5zgd1k9gb22pihi5s87dlw4nr";
+      url = "mirror://sourceforge/wine/wine-mono-4.5.4.msi";
+      sha256 = "1wnn273f232141x9x0sahg4w499x0g2p0xphxmwm5wh1xrzyvg10";
     };
 
 in stdenv.mkDerivation rec {
