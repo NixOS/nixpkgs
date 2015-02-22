@@ -89,11 +89,13 @@ self: super: {
   test-sandbox-hunit = markBroken super.test-sandbox-hunit;
   test-sandbox-quickcheck = markBroken super.test-sandbox-quickcheck;
 
-  # Needs mtl 2.2.x.
-  hypher = markBroken super.hypher;
-  yet-another-logger = markBroken super.yet-another-logger;
-  purescript = markBroken super.purescript;
+  # These packages need mtl 2.2.x directly or indirectly via dependencies.
+  apiary-purescript = markBroken super.apiary-purescript;
   highlighter2 = markBroken super.highlighter2;
+  hypher = markBroken super.hypher;
+  purescript = markBroken super.purescript;
+  yesod-purescript = markBroken super.yesod-purescript;
+  yet-another-logger = markBroken super.yet-another-logger;
 
   # https://github.com/frosch03/arrowVHDL/issues/2
   ArrowVHDL = markBroken super.ArrowVHDL;
