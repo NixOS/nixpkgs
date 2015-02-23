@@ -118,6 +118,29 @@ let
     };
   };
 
+  lpty = buildLuaPackage rec {
+    name = "lpty-${version}";
+    version = "1.1.1";
+    src = fetchurl {
+      url = "http://www.tset.de/downloads/lpty-1.1-1.tar.gz";
+      sha256 = "0d4ffda654dcf37dd8c99bcd100d0ee0dde7782cbd0ba9200ef8711c5cab02f1";
+    };
+    meta = {
+      homepage = "http://www.tset.de/lpty";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
+    preBuild = ''
+      makeFlagsArray=(
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="${lua}/bin"
+        LUA_INCDIR="-I${lua}/include"
+        LUA_LIBDIR="-L${lua}/lib"
+        );
+    '';
+  };
+
   luasec = buildLuaPackage rec {
     version = "0.5";
     name = "sec-${version}";
