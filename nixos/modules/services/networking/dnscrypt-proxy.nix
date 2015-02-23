@@ -104,6 +104,10 @@ in
           /dev/null rw,
           /dev/urandom r,
 
+          /etc/passwd r,
+          /etc/group r,
+          ${config.environment.etc."nsswitch.conf".source} r,
+
           ${pkgs.glibc}/lib/*.so mr,
           ${pkgs.tzdata}/share/zoneinfo/** r,
 
