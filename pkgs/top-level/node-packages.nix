@@ -4,6 +4,12 @@
   # Self-reference
 , self
 
+  # Prefix for package names
+, prefix ? "node-"
+
+  # Prefix for binary package names
+, binPrefix ? "bin-"
+
   # Needed natives for installation
 , neededNatives ? [pkgs.python] ++ stdenv.lib.optionals stdenv.isLinux [ pkgs.utillinux ]
 
@@ -40,7 +46,7 @@ rec {
   let
     pkg = makeOverridable (
       pkgs.callPackage ../development/web/nodejs/build-node-package.nix {
-        inherit nodejs neededNatives;
+        inherit nodejs neededNatives prefix binPrefix;
       }
     ) (args // (optionalAttrs (isList args.src) {
       # Backwards compatibility

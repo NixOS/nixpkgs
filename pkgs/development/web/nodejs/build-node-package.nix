@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nodejs, neededNatives}:
+{ stdenv, runCommand, nodejs, neededNatives, prefix ? "node-", binPrefix ? "bin-" }:
 
 {
   name, src,
@@ -263,7 +263,7 @@ let
     passthru.pkgName = pkgName;
   } // (filterAttrs (n: v: n != "deps" && n != "resolvedDeps") args) // {
     name = "${
-      if bin == true then "bin-" else if bin == false then "node-" else ""
+      if bin == true then binPrefix else if bin == false then prefix else ""
     }${name}";
 
     # Run the node setup hook when this package is a build input
