@@ -2,9 +2,11 @@
 , withAACS ? false, libaacs ? null, jdk ? null, ant ? null
 , withMetadata ? true, libxml2 ? null
 , withFonts ? true, freetype ? null
+# Need to run autoreconf hook after BDJ jarfile patch
+, autoreconfHook ? null
 }:
 
-assert withAACS -> jdk != null && ant != null && libaacs != null;
+assert withAACS -> jdk != null && ant != null && libaacs != null && autoreconfHook != null;
 assert withMetadata -> libxml2 != null;
 assert withFonts -> freetype != null;
 
@@ -28,16 +30,26 @@ stdenv.mkDerivation rec {
 
   buildInputs =  with stdenv.lib;
                  [fontconfig]
-              ++ optionals withAACS [jdk libaacs]
+              ++ optionals withAACS [ jdk autoreconfHook ]
               ++ optional withMetadata libxml2
               ++ optional withFonts freetype
               ;
 
+  propagatedBuildInputs = stdenv.lib.optional withAACS libaacs;
+
+  preConfigure = stdenv.lib.optionalString withAACS ''
+    export JDK_HOME=${jdk.home}
+    export LIBS="$LIBS -L${libaacs} -laacs"
+  '';
+
   configureFlags =  with stdenv.lib;
-                    optionals withAACS ["--enable-bdjava" "--with-jdk=${jdk}"]
+                    optional withAACS "--enable-bdjava"
                  ++ optional (! withMetadata) "--without-libxml2"
                  ++ optional (! withFonts) "--without-freetype"
                  ;
+
+  # Fix search path for BDJ jarfile
+  patches = stdenv.lib.optional withAACS ./BDJ-JARFILE-path.patch;
 
   meta = with stdenv.lib; {
     homepage = http://www.videolan.org/developers/libbluray.html;
