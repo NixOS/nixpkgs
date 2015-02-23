@@ -551,13 +551,6 @@ self: super: {
   # https://github.com/fumieval/karakuri/issues/1
   karakuri = markBroken super.karakuri;
 
-  # https://github.com/chadaustin/buffer-builder/issues/2
-  buffer-builder = markBroken super.buffer-builder;
-  buffer-builder-aeson = markBroken super.buffer-builder-aeson;
-
-  # https://github.com/osa1/language-lua/issues/19
-  language-lua = addBuildTool super.language-lua self.alex;
-
   # https://github.com/kawu/crf-chain1-constrained/issues/8
   crf-chain1-constrained = markBroken super.crf-chain1-constrained;
   concraft = markBroken super.concraft;
