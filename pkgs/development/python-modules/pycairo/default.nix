@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, python, pkgconfig, cairo, x11, isPyPy }:
 
-if isPyPy then throw "pycairo not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "1.10.0";
   name = "pycairo-${version}";
   src = if python.is_py3k or false
@@ -36,4 +36,6 @@ if isPyPy then throw "pycairo not supported for interpreter ${python.executable}
   '';
   buildPhase = "${python.executable} waf";
   installPhase = "${python.executable} waf install";
+
+  meta.broken = isPyPy;
 }
