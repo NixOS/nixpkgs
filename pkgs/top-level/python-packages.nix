@@ -3024,6 +3024,23 @@ let
     };
   };
 
+  passlib = buildPythonPackage rec {
+    version = "1.6.2";
+    name    = "passlib-${version}";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/source/p/passlib/passlib-${version}.tar.gz";
+      md5    = "2f872ae7c72ca338634c618f2cff5863";
+    };
+
+    buildInputs = with self; [ nose pybcrypt];
+
+    meta = with stdenv.lib; {
+      description = "A password hashing library for Python";
+      homepage    = https://code.google.com/p/passlib/;
+    };
+  };
+
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.4";
