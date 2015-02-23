@@ -142,7 +142,7 @@ let
     cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/
 
     # copy content of multiPaths (32bit libs)
-    cp -rsf ${staticUsrProfileMulti}/lib/* lib/
+    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/
 
     # copy content of targetPaths (64bit libs)
     cp -rsf ${staticUsrProfileTarget}/lib/* lib64/
