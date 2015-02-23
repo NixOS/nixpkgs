@@ -39,6 +39,7 @@ self: super: {
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
+  bytestring-builder = dontHaddock super.bytestring-builder;
 
   # These used to be core packages in GHC 7.8.x.
   old-locale = self.old-locale_1_0_0_7;
@@ -99,10 +100,6 @@ self: super: {
   foldl = appendPatch super.foldl (pkgs.fetchpatch {
     url = "https://github.com/Gabriel439/Haskell-Foldl-Library/pull/30.patch";
     sha256 = "15lfh54vhdp36197dp4xpb2mr3g49gz2xzl31cjir1fmcvjsbgjl";
-  });
-  shakespeare = appendPatch super.shakespeare (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/shakespeare/pull/151.patch";
-    sha256 = "1lb8x89jmvmd73rxkw68a3arbp5nyjiz28i78sz8idh7vcisxb7l";
   });
   persistent-template = appendPatch super.persistent-template (pkgs.fetchpatch {
     url = "https://github.com/yesodweb/persistent/commit/4d34960bc421ec0aa353d69fbb3eb0c73585db97.patch";
