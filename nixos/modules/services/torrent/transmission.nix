@@ -9,28 +9,16 @@ let
   homeDir = "/var/lib/transmission";
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
+  
   settingsDir = "${homeDir}/.config/transmission-daemon";
-  settingsFile = "${settingsDir}/settings.json";
+  settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
   # Strings must be quoted, ints and bools must not (for settings.json).
   toOption = x:
     if x == true then "true"
     else if x == false then "false"
     else if isInt x then toString x
-    else toString ''\"${x}\"'';
-
-  # All lines in settings.json end with a ',' (comma), except for the last
-  # line. This is standard JSON. But a comma can also appear *inside* some
-  # fields, notably the "rpc-whitelist" field. This is difficult to handle in
-  # sed so we simply ignore it and say that if you want to change the option at
-  # the last line of settings.json, you have to do it manually. At this time of
-  # writing, the last option is "utp-enable":true.
-  attrsToSedArgs = as:
-    concatStrings (concatLists (mapAttrsToList (name: value:
-      #map (x: '' -e 's=\(\"${name}\":\)[^,]*\(.*\)=\1 ${toOption x}\2=' '') # breaks if comma inside value field
-      map (x: '' -e 's=\(\"${name}\":\).*=\1 ${toOption x},=' '') # always append ',' (breaks last line in settings.json)
-        (if isList value then value else [value]))
-        as));
+    else toString ''"${x}"'';
 
   # for users in group "transmission" to have access to torrents
   fullSettings = cfg.settings // { umask = 2; };
@@ -73,7 +61,7 @@ in
           boolean values must not.
 
           See https://trac.transmissionbt.com/wiki/EditConfigFiles for
-          documentation and/or look at ${settingsFile}.
+          documentation.
         '';
       };
 
@@ -95,7 +83,7 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && ${pkgs.transmission}/bin/transmission-daemon -d |& sed ${attrsToSedArgs fullSettings} > ${settingsFile}.tmp && mv ${settingsFile}.tmp ${settingsFile}"
+          ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
       '';
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
