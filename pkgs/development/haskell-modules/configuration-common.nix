@@ -380,6 +380,9 @@ self: super: {
   xcffib = dontCheck super.xcffib;
   xsd = dontCheck super.xsd;
 
+  # https://bitbucket.org/wuzzeb/webdriver-utils/issue/1/hspec-webdriver-101-cant-compile-its-test
+  hspec-webdriver = markBroken super.hspec-webdriver;
+
   # The build fails with the most recent version of c2hs.
   ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
 
