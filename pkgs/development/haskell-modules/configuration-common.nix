@@ -579,6 +579,14 @@ self: super: {
   lambdabot-reference-plugins = markBroken super.lambdabot-reference-plugins;
   lambdabot-social-plugins = markBroken super.lambdabot-social-plugins;
 
+  # https://github.com/byorgey/haxr/issues/7
+  BlogLiterately = markBroken super.BlogLiterately;
+  haxr = markBroken super.haxr;
+  haxr-th = markBroken super.haxr-th;
+  hubigraph = markBroken super.hubigraph;
+  rtorrent-rpc = markBroken super.rtorrent-rpc;
+  vacuum-ubigraph = markBroken super.vacuum-ubigraph;
+
 } // {
 
   # Not on Hackage.
