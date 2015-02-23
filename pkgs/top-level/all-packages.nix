@@ -8505,7 +8505,7 @@ let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
     apple-source-releases = import ../os-specific/darwin/apple-source-releases { inherit stdenv fetchurl pkgs; };
   in apple-source-releases // rec {
-    cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
+    cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) {
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
@@ -10385,7 +10385,7 @@ let
     libart = gnome2.libart_lgpl;
   }; # latest version: gnome3.goffice
 
-  idea = recurseIntoAttrs (callPackage ../applications/editors/idea { });
+  idea = recurseIntoAttrs (callPackage ../applications/editors/idea { androidsdk = androidsdk_4_4; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
