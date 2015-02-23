@@ -262,9 +262,7 @@ let
 
     passthru.pkgName = pkgName;
   } // (filterAttrs (n: v: n != "deps" && n != "resolvedDeps") args) // {
-    name = "${
-      if bin == true then "bin-" else if bin == false then "node-" else ""
-    }${name}";
+    name = "${nodejs.interpreterName}-${name}";
 
     # Run the node setup hook when this package is a build input
     propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];

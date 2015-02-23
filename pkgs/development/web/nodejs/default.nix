@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, unstableVersion ? false 
+, pkgconfig, runCommand, which, unstableVersion ? false
 }:
 
 let
@@ -53,6 +53,8 @@ in stdenv.mkDerivation {
     ++ (optional stdenv.isLinux utillinux)
     ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
   setupHook = ./setup-hook.sh;
+
+  passthru.interpreterName = "nodejs";
 
   meta = {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
