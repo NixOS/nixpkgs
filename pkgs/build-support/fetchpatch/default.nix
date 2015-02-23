@@ -19,4 +19,4 @@ fetchurl ({
         --clean "$out" > "$tmpfile"
     mv "$tmpfile" "$out"
   '';
-} // args)
+} // builtins.removeAttrs args ["stripLen"])
