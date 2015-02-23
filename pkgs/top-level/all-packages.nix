@@ -1735,7 +1735,7 @@ let
   iojs-nightly = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; nightly = true; };
 
   iojsPackages = recurseIntoAttrs (
-    callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; }
+    callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; prefix = "iojs-"; binPrefix = "bin-iojs-"; }
   );
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
