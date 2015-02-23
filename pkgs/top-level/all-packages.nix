@@ -4064,7 +4064,6 @@ let
     glpk = null;
     suitesparse = null;
     openjdk = null;
-    gnuplot = null;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13;
