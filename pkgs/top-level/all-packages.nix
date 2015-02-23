@@ -1724,15 +1724,15 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = callPackage ../development/web/nodejs { };
-  nodejs-unstable = callPackage ../development/web/nodejs { unstableVersion = true; };
+  nodejs = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; };
+  nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
 
   nodePackages = recurseIntoAttrs (
     callPackage ./node-packages.nix { self = nodePackages; }
   );
 
-  iojs = callPackage ../development/web/iojs { };
-  iojs-nightly = callPackage ../development/web/iojs { nightly = true; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
+  iojs-nightly = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; nightly = true; };
 
   iojsPackages = recurseIntoAttrs (
     callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; }

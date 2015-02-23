@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser
+{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
 , pkgconfig, runCommand, which, unstableVersion ? false 
 }:
 
@@ -10,9 +10,8 @@ let
 
   version = if unstableVersion then "0.11.13" else "0.12.0";
 
-  # !!! Should we also do shared libuv?
   deps = {
-    inherit openssl zlib;
+    inherit openssl zlib libuv;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
