@@ -129,7 +129,7 @@ stdenv.mkDerivation ({
     export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
-    packageConfDir="$TMP/package.conf.d"
+    packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
 
     setupCompileFlags="${concatStringsSep " " setupCompileFlags}"
