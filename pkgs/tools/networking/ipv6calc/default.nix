@@ -1,12 +1,12 @@
 { stdenv, fetchurl, geoip, getopt, openssl, perl }:
 
 stdenv.mkDerivation rec {
-  version = "0.97.4";
+  version = "0.98.0";
   name = "ipv6calc-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/${name}.tar.gz";
-    sha256 = "0ffzqflvm6pfzgjsr3mzq7pwvshhl3h92rg4waza7zyvby4rwb7d";
+    url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
+    sha256 = "1wdlyklqjvslcbvyx7ch4aziwvjbpj852k59m02gakisq9bywfcd";
   };
 
   buildInputs = [ geoip getopt openssl perl ];
