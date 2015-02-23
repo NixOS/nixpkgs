@@ -206,6 +206,7 @@ self: super: {
 
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
+  dbmigrations = dontCheck super.dbmigrations;
   filestore = dontCheck super.filestore;
   graceful = dontCheck super.graceful;
   hakyll = dontCheck super.hakyll;
@@ -549,9 +550,6 @@ self: super: {
 
   # https://github.com/fumieval/karakuri/issues/1
   karakuri = markBroken super.karakuri;
-
-  # https://github.com/jtdaugherty/dbmigrations/issues/19
-  dbmigrations = dontCheck super.dbmigrations;
 
   # https://github.com/chadaustin/buffer-builder/issues/2
   buffer-builder = markBroken super.buffer-builder;
