@@ -3,6 +3,9 @@
 {
   name, version ? "", src,
 
+  # by default name of nodejs interpreter e.g. "nodejs-${name}"
+  namePrefix ? nodejs.interpreterName + "-",
+
   # Node package name
   pkgName ?
     if version != "" then stdenv.lib.removeSuffix "-${version}" name else
@@ -304,7 +307,7 @@ let
 
     passthru.pkgName = pkgName;
   } // (filterAttrs (n: v: all (k: n != k) ["deps" "resolvedDeps" "optionalDependencies"]) args) // {
-    name = "${nodejs.interpreterName}-${name}";
+    name = namePrefix + name;
 
     # Run the node setup hook when this package is a build input
     propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];
