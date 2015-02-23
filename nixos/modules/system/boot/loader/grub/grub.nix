@@ -179,6 +179,7 @@ in
       };
 
       splashImage = mkOption {
+        type = types.nullOr types.path;
         example = literalExample "./my-background.png";
         description = ''
           Background image used for GRUB.  It must be a 640x480,
