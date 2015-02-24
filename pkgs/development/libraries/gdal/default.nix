@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, python, pythonPackages, proj}:
+, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos}:
 
 composableDerivation.composableDerivation {} (fixed: rec {
   version = "1.11.2";
@@ -26,6 +26,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-geotiff=${libgeotiff}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional
+    "--with-geos=${geos}/bin/geos-config"# optional
   ];
 
   meta = {
