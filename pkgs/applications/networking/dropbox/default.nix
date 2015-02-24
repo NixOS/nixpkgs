@@ -1,8 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem
-, libSM, libX11, libXext, libXcomposite, libXcursor, libXdamage
-, libXfixes, libXi, libXinerama, libXrandr, libXrender
-, dbus, dbus_glib, fontconfig, gcc, patchelf
-, atk, glib, gdk_pixbuf, gtk, pango, zlib
+, dbus_libs, gcc, glib, libdrm, libffi, libICE, librsync, libSM
+, libX11, libXmu, mesa, ncurses, popt, qt5, zlib
 }:
 
 # this package contains the daemon version of dropbox
@@ -33,14 +31,11 @@ let
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
 
-  # Libraries referenced by dropbox binary.
-  # Be aware that future versions of the dropbox binary may refer
-  # to different versions than are currently in these packages.
-  ldpath = stdenv.lib.makeSearchPath "lib" [
-      libSM libX11 libXext libXcomposite libXcursor libXdamage
-      libXfixes libXi libXinerama libXrandr libXrender
-      atk dbus dbus_glib glib fontconfig gcc gdk_pixbuf
-      gtk pango zlib
+  ldpath = stdenv.lib.makeSearchPath "lib"
+    [
+      dbus_libs gcc glib libdrm libffi libICE librsync libSM libX11
+      libXmu mesa ncurses popt qt5.base qt5.declarative qt5.webkit
+      zlib
     ];
 
   desktopItem = makeDesktopItem {
@@ -73,9 +68,33 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
     ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
-      "$out/${appdir}/dropbox"
-    
+    rm "$out/${appdir}/libdrm.so.2"
+    rm "$out/${appdir}/libffi.so.6"
+    rm "$out/${appdir}/libicudata.so.42"
+    rm "$out/${appdir}/libicui18n.so.42"
+    rm "$out/${appdir}/libicuuc.so.42"
+    rm "$out/${appdir}/libGL.so.1"
+    rm "$out/${appdir}/libpopt.so.0"
+    rm "$out/${appdir}/libQt5Core.so.5"
+    rm "$out/${appdir}/libQt5DBus.so.5"
+    rm "$out/${appdir}/libQt5Gui.so.5"
+    rm "$out/${appdir}/libQt5Network.so.5"
+    rm "$out/${appdir}/libQt5OpenGL.so.5"
+    rm "$out/${appdir}/libQt5PrintSupport.so.5"
+    rm "$out/${appdir}/libQt5Qml.so.5"
+    rm "$out/${appdir}/libQt5Quick.so.5"
+    rm "$out/${appdir}/libQt5Sql.so.5"
+    rm "$out/${appdir}/libQt5WebKit.so.5"
+    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
+    rm "$out/${appdir}/libQt5Widgets.so.5"
+    rm "$out/${appdir}/librsync.so.1"
+    rm "$out/${appdir}/libX11-xcb.so.1"
+
+    rm -fr "$out/${appdir}/plugins"
+
+    find "$out/${appdir}" -type f -a -perm +0100 \
+      -print -exec patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} {} \;
+
     RPATH=${ldpath}:${gcc.cc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"
     find "$out/${appdir}" -type f -a -perm +0100 \
