@@ -7947,7 +7947,9 @@ let
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
-  cassandra = callPackage ../servers/nosql/cassandra { };
+  cassandra_2_0 = callPackage ../servers/nosql/cassandra/2.0.nix { };
+  cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
+  cassandra = cassandra_2_1;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jdk;
