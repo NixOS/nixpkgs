@@ -274,6 +274,7 @@ let
 
   almir = buildPythonPackage rec {
     name = "almir-0.1.8";
+    disabled = isPy3k;          # for beaker
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/a/almir/${name}.zip";
@@ -1339,6 +1340,7 @@ let
   zc_recipe_egg_fun = { buildout, version, md5 }: buildPythonPackage rec {
     inherit version;
     name = "zc.recipe.egg-${version}";
+    disabled = isPy3k;
 
     buildInputs = with self; [ buildout ];
     doCheck = false;
@@ -2298,6 +2300,7 @@ let
 
   discogs_client = buildPythonPackage rec {
     name = "discogs-client-2.0.2";
+    disabled = isPy3k;          # for oauth2
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/discogs-client/${name}.tar.gz";
@@ -2385,7 +2388,7 @@ let
 
   docker_registry = buildPythonPackage rec {
     name = "docker-registry-0.9.0";
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-registry/${name}.tar.gz";
@@ -3190,6 +3193,7 @@ let
 
   pyramid_beaker = buildPythonPackage rec {
     name = "pyramid_beaker-0.7";
+    disabled = isPy3k;          # for beaker
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid_beaker/${name}.tar.gz";
@@ -3747,6 +3751,7 @@ let
 
   deluge = buildPythonPackage rec {
     name = "deluge-1.3.11";
+    disabled = isPy3k;          # for gygtk
 
     src = pkgs.fetchurl {
       url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
@@ -4705,6 +4710,7 @@ let
   geventhttpclient = buildPythonPackage rec {
     name = "geventhttpclient-${version}";
     version = "1.1.0";
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/geventhttpclient/${name}.tar.gz";
@@ -4723,7 +4729,7 @@ let
 
   gevent-socketio = buildPythonPackage rec {
     name = "gevent-socketio-0.3.6";
-    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent-socketio/${name}.tar.gz";
@@ -4737,7 +4743,7 @@ let
 
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
-    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent-websocket/${name}.tar.gz";
@@ -4781,7 +4787,7 @@ let
 
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
-    disabled = !isPy26 && !isPy27;
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/gipc/${name}.zip";
@@ -5581,6 +5587,7 @@ let
 
   locustio = buildPythonPackage rec {
     name = "locustio-0.7.2";
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/locustio/${name}.tar.gz";
@@ -8275,6 +8282,7 @@ let
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
     version = "1.99.39";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl rec {
       url = "http://pkgs.fedoraproject.org/repo/pkgs/pykickstart/"
@@ -10968,6 +10976,7 @@ let
 
   turses = buildPythonPackage (rec {
     name = "turses-0.2.22";
+    disabled = isPy3k;          # for oauth2
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
@@ -13067,6 +13076,7 @@ let
   searx = buildPythonPackage rec {
     name = "searx-${rev}";
     rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchgit {
       url = "git://github.com/asciimoo/searx";
@@ -13088,6 +13098,7 @@ let
 
   grequests = buildPythonPackage rec {
     name = "grequests-0.2.0";
+    disabled = isPy3k || isPyPy;  # for gevent
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/grequests/${name}.tar.gz";

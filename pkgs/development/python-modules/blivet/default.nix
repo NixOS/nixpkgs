@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, cryptsetup, multipath_tools, lsof, utillinux
+, pyudev, six, libselinux, cryptsetup, multipath_tools, lsof, utillinux, isPy3k
 }:
 
 let
@@ -9,6 +9,7 @@ let
 in buildPythonPackage rec {
   name = "blivet-${version}";
   version = "0.67";
+  disabled = isPy3k;            # for urlgrabber
 
   src = fetchFromGitHub {
     owner = "dwlehman";
