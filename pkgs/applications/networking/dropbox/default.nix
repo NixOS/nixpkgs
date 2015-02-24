@@ -89,6 +89,7 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/librsync.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
 
+    rm "$out/${appdir}/qt.conf"
     rm -fr "$out/${appdir}/plugins"
 
     find "$out/${appdir}" -type f -a -perm +0100 \
