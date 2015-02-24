@@ -709,7 +709,7 @@ rec {
     src = fetchgit {
       url = "git://github.com/scrooloose/syntastic";
       rev = "47821840200cd8e14e99001caac602a37cdf8d5c";
-      sha256 = "becf0b07d25d9514ac7c5328d4e3deeab5731792887c8334571b72c3871a50ee";
+      sha256 = "01a1px7i77ajc4y8czwhkhhqif89q6yf26wpjakh3asdv7cvnidm";
     };
     dependencies = [];
 
