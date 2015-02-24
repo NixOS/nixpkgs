@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An agile dynamic language for the Java Platform";
-    homepage = http://groovy.codehaus.org/;
+    homepage = http://groovy-lang.org/;
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
   };
