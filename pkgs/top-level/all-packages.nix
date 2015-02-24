@@ -11396,7 +11396,10 @@ let
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
-  xpra = callPackage ../tools/X11/xpra { };
+  xpra = callPackage ../tools/X11/xpra { inherit (texFunctions) fontsConf; };
+  libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { inherit (xlibs) libXinerama; };
+  #TODO: 'pil' is not available for python3, yet
+  xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonPackage python cython pygobject3 pycairo; };
 
   xrestop = callPackage ../tools/X11/xrestop { };
 
