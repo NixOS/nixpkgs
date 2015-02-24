@@ -47,8 +47,6 @@ stdenv.mkDerivation rec {
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   patches = [ ./search_providers_dir.patch ];
