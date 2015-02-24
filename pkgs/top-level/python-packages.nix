@@ -407,6 +407,20 @@ let
   };
 
 
+  apptools = buildPythonPackage {
+    name = "apptools";
+    version = "4.2.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/enthought/apptools/archive/4.2.1.zip";
+      sha256 = "07pvynf6dclaarcjala2mxgf42lzndps6vs1hnl2pcbg6fp7wggf";
+    };
+    buildInputs = with self; [ configobj traitsui six ];
+    propagatedBuildInputs = with self; [ configobj traitsui six ];
+  };
+
+
   apsw = buildPythonPackage rec {
     name = "apsw-3.7.6.2-r1";
     disabled = isPyPy;
@@ -2548,6 +2562,20 @@ let
       homepage = https://www.dropbox.com/developers/core/docs;
       license = licenses.mit;
     };
+  };
+
+
+  envisage = buildPythonPackage {
+    name = "envisage";
+    version = "4.4.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/envisage/envisage-4.4.0.tar.gz";
+      md5 = "35547a7b5736de292a264cba4326bca4";
+    };
+    buildInputs = with self; [ traitsui apptools ];
+    propagatedBuildInputs = with self; [ traitsui apptools ];
   };
 
 
@@ -5814,6 +5842,21 @@ let
   };
 
 
+  mayavi = buildPythonPackage {
+    name = "mayavi";
+    version = "4.3.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/mayavi/mayavi-4.3.1.tar.gz";
+      sha256 = "0ca8zpsxyram98a3k0xa1gw6wc2mxhmjirqxsh1169wc4cymf2ss";
+    };     
+    
+    buildInputs = with self; [ numpy pkgs.vtkWithPython wxPython pyface configobj traitsui apptools envisage ];
+    propagatedBuildInputs = with self; [ numpy pkgs.vtkWithPython wxPython pyface configobj traitsui apptools envisage ];
+  };
+
+
   mccabe = buildPythonPackage (rec {
     name = "mccabe-0.2.1";
 
@@ -8112,6 +8155,21 @@ let
       description = "Allows to easily create both directed and non directed graphs from Python";
     };
   };
+
+
+  pyface = buildPythonPackage {
+    name = "pyface";
+    version = "4.4.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyface/pyface-4.4.0.tar.gz";
+      md5 = "0e8667a365042310b7302d968e067e5b";
+    };
+    buildInputs = with self; [ traits ];
+    propagatedBuildInputs = with self; [ traits ];
+  };
+
 
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
@@ -10914,6 +10972,32 @@ let
 
       license = "BSD";
     };
+  };
+
+
+  traits = buildPythonPackage {
+    name = "traits";
+    version = "4.5.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/traits/traits-4.5.0.tar.gz";
+      md5 = "3ad558eebaedc63c29c80183c0371d2f";
+    };
+    buildInputs = with self; [ numpy ];
+    propagatedBuildInputs = with self; [ numpy ];
+  };
+
+
+  traitsui = buildPythonPackage {
+    name = "traitsui";
+    version = "4.4.0";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/traitsui/traitsui-4.4.0.tar.gz";
+      md5 = "71aaf7f5b9b76e5f288252e090d29a63";
+    };
+    buildInputs = with self; [ traits pyface ];
+    propagatedBuildInputs = with self; [ traits pyface ];
   };
 
 

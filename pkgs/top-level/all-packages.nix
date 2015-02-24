@@ -7463,8 +7463,10 @@ let
   vrpn = callPackage ../development/libraries/vrpn { };
 
   vtk = callPackage ../development/libraries/vtk { };
-
+  
   vtkWithQt4 = vtk.override { qtLib = qt4; };
+  
+  vtkWithPython = vtk.override { wrapPython = true; };
 
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
