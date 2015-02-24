@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, librsync, libSM
 , libX11, libXmu, ncurses, popt, qt5, zlib
 }:
@@ -61,11 +61,11 @@ in stdenv.mkDerivation {
     rm -f .dropbox-dist/dropboxd
   '';
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
     mkdir -p "$out/${appdir}"
     cp -r ".dropbox-dist/dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
-    mkdir -p "$out/bin"
-    ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
     rm "$out/${appdir}/libdrm.so.2"
     rm "$out/${appdir}/libffi.so.6"
@@ -101,6 +101,10 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications
+
+    mkdir -p "$out/bin"
+    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
+      --prefix LD_LIBRARY_PATH : "${ldpath}"
   '';
 
   meta = {
