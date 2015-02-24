@@ -126,6 +126,8 @@ let
 
   pitz = callPackage ../applications/misc/pitz { };
 
+  plantuml = callPackage ../tools/misc/plantuml { };
+
   pycairo = callPackage ../development/python-modules/pycairo {
   };
 
@@ -10338,6 +10340,29 @@ let
 
     meta = {
       description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
+
+      homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
+
+      license = "BSD";
+    };
+  });
+
+
+  sphinxcontrib_plantuml = buildPythonPackage (rec {
+    name = "sphinxcontrib-plantuml-0.5";
+
+    # See issue #6548
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinxcontrib-plantuml/${name}.tar.gz";
+      md5 = "4a8840fe3475a19c2af3fa877ab9d296";
+    };
+
+    propagatedBuildInputs = with self; [sphinx plantuml];
+
+    meta = {
+      description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
 
       homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
 
