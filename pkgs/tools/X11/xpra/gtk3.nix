@@ -1,8 +1,8 @@
 { stdenv, fetchurl, buildPythonPackage
 , python, cython, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
+, xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk, pygobject3, pycairo, gobjectIntrospection
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
-, ffmpeg, x264, libvpx, pil, libwebp
+, ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama }:
 
 buildPythonPackage rec {
@@ -15,14 +15,14 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    cython pkgconfig
+    pkgconfig
 
     xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
     xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
     xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage
     xorg.libXrandr xorg.libxkbfile
 
-    pango cairo gdk_pixbuf atk gtk glib
+    pango cairo gdk_pixbuf atk gtk3 glib gobjectIntrospection
 
     ffmpeg libvpx x264 libwebp
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pil pygtk pygobject
+    pygobject3 pycairo cython
   ];
 
   postPatch = ''
@@ -38,9 +38,10 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-3.0) $(pkg-config --cflags xtst)"
   '';
-  setupPyBuildFlags = ["--with-Xdummy"];
+  setupPyBuildFlags = [ "--with-gtk3" "--without-gtk2" "--with-Xdummy" ];
+
 
   preInstall = ''
     # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
@@ -68,6 +69,5 @@ buildPythonPackage rec {
     homepage = http://xpra.org/;
     description = "Persistent remote applications for X";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
   };
 }
