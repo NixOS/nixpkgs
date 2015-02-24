@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper
-, dbus_libs, gcc, glib, libdrm, libffi, libICE, librsync, libSM
+, dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
 , libX11, libXmu, ncurses, popt, qt5, zlib
 }:
 
@@ -9,10 +9,13 @@
 # note: the resulting program has to be invoced as
 # 'dropbox' because the internal python engine takes
 # uses the name of the program as starting point.
-#
-# todo: dropbox is shipped with some copies of libraries.
-# replace these libraries with the appropriate ones in
-# nixpkgs.
+
+# Dropbox ships with its own copies of some libraries.
+# Unfortunately, upstream makes changes to the source of
+# some libraries, rendering them incompatible with the
+# open-source versions. Wherever possible, we must try
+# to make the bundled libraries work, rather than replacing
+# them with our own.
 
 let
   arch = if stdenv.system == "x86_64-linux" then "x86_64"
@@ -33,7 +36,7 @@ let
 
   ldpath = stdenv.lib.makeSearchPath "lib"
     [
-      dbus_libs gcc glib libdrm libffi libICE librsync libSM libX11
+      dbus_libs gcc glib libdrm libffi libICE libSM libX11
       libXmu ncurses popt qt5.base qt5.declarative qt5.webkit
       zlib
     ];
@@ -86,7 +89,6 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/libQt5WebKit.so.5"
     rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
     rm "$out/${appdir}/libQt5Widgets.so.5"
-    rm "$out/${appdir}/librsync.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
 
     rm "$out/${appdir}/qt.conf"
