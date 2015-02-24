@@ -38,7 +38,7 @@ self: super: {
   unix = null;
 
   # binary is not a core library for this compiler.
-  binary = self.binary_0_7_3_0;
+  binary = self.binary_0_7_4_0;
 
   # deepseq is not a core library for this compiler.
   deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
