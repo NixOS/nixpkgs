@@ -1,15 +1,14 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.25.2";
+  name = "util-linux-2.26";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v2.25/${name}.tar.xz";
-    sha256 = "e0457f715b73f4a349e1acb08cb410bf0edc9a74a3f75c357070f31f70e33cd6";
+    url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
+    sha256 = "a23c6f39dea0ed215ccd589509ffc7bb6f706f6e1a04760f493fb0fd7e93c489";
   };
 
   patches = [ ./rtcwake-search-PATH-for-shutdown.patch
-              ./unshare-fix-map-root-user.patch
             ];
 
   #FIXME: make it also work on non-nixos?
