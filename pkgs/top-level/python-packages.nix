@@ -2142,6 +2142,26 @@ let
     };
   });
 
+  ddar = buildPythonPackage {
+    name = "ddar-1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/basak/ddar/archive/v1.0.tar.gz";
+      sha256 = "08lv7hrbhcv6hbl01sx8fgx3l8s2nn8rvcicdidafwm87bvi2nmr";
+    };
+
+    preBuild = ''
+      make -f Makefile.prep synctus/ddar_pb2.py
+    '';
+
+    propagatedBuildInputs = with self; [ protobuf modules.sqlite3 ];
+
+    meta = {
+      description = "Unix de-duplicating archiver";
+      license = licenses.gpl3;
+      homepage = https://github.com/basak/ddar;
+    };
+  };
 
   decorator = buildPythonPackage rec {
     name = "decorator-3.4.0";
