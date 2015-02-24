@@ -14631,6 +14631,10 @@ let
     inherit texLive unzip;
   };
 
+  ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
+
+  ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
+
   thermald = callPackage ../tools/system/thermald { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };

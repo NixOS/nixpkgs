@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=IB TWS
+GenericName=InteractiveBrokers TraderWorkStation
+Exec=@exec@
+Version=@version@
+Icon=tws
+Terminal=false
+Type=Application
+StartupNotify=true
+Categories=Office;
+MimeType=application/x-tws-image;
+NoDisplay=false
