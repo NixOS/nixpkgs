@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeDesktopItem
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, librsync, libSM
-, libX11, libXmu, mesa, ncurses, popt, qt5, zlib
+, libX11, libXmu, ncurses, popt, qt5, zlib
 }:
 
 # this package contains the daemon version of dropbox
@@ -34,7 +34,7 @@ let
   ldpath = stdenv.lib.makeSearchPath "lib"
     [
       dbus_libs gcc glib libdrm libffi libICE librsync libSM libX11
-      libXmu mesa ncurses popt qt5.base qt5.declarative qt5.webkit
+      libXmu ncurses popt qt5.base qt5.declarative qt5.webkit
       zlib
     ];
 
@@ -51,7 +51,6 @@ in stdenv.mkDerivation {
   name = "dropbox-${version}-bin";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    
     url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
