@@ -6352,7 +6352,9 @@ let
     inherit (gnome) gtkdoc;
   };
 
-  libinput = callPackage ../development/libraries/libinput { };
+  libinput = callPackage ../development/libraries/libinput {
+    graphviz = graphviz-nox;
+  };
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
