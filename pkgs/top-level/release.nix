@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" /* "x86_64-darwin" */ ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
 }:
 
 with import ./release-lib.nix { inherit supportedSystems; };
@@ -351,12 +351,6 @@ let
       linuxPackages_grsec_testing_server = { };
       linuxPackages_grsec_testing_server_xen = { };
 
-    } ))
-
-    # Temporary hack: build some stuff on Darwin.
-    // (with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]; }; mapTestOn {
-      stdenv = all;
-      hello = all;
-    });
+    } ));
 
 in jobs
