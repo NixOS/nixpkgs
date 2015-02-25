@@ -43,6 +43,20 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
+  # CUDA needs help finding the SDK headers and libraries.
+  cuda = overrideCabal super.cuda (drv: {
+    extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
+    configureFlags = (drv.configureFlags or []) ++
+      pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
+      "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
+      "--extra-include-dirs=${pkgs.cudatoolkit}/usr_include"
+    ];
+    preConfigure = ''
+      unset CC          # unconfuse the haskell-cuda configure script
+      sed -i -e 's|/usr/local/cuda|${pkgs.cudatoolkit}|g' configure
+    '';
+  });
+
   # Depends on code distributed under a non-free license.
   bindings-yices = dontDistribute super.bindings-yices;
   yices = dontDistribute super.yices;
