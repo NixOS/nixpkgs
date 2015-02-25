@@ -8153,7 +8153,6 @@ let
   mariadb = callPackage ../servers/sql/mariadb {};
 
   mongodb = callPackage ../servers/nosql/mongodb {
-    boost = boost156;
     sasl = cyrus_sasl;
   };
 
