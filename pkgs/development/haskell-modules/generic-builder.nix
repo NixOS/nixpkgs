@@ -147,11 +147,9 @@ stdenv.mkDerivation ({
       if [ -d "$p/include" ]; then
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
-      for d in lib{,64}; do
-        if [ -d "$p/$d" ]; then
-          configureFlags+=" --extra-lib-dirs=$p/$d"
-        fi
-      done
+      if [ -d "$p/lib" ]; then
+        configureFlags+=" --extra-lib-dirs=$p/lib"
+      fi
     done
     ghc-pkg --${packageDbFlag}="$packageConfDir" recache
 
