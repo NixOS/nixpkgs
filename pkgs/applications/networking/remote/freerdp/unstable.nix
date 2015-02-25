@@ -2,6 +2,7 @@
 , libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
 , substituteAll
 , pulseaudio ? null, cups ? null, pcsclite ? null
+, buildServer ? true, optimize ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
     "-DWITH_CUNIT=OFF"
   ] ++ stdenv.lib.optional (pulseaudio != null) "-DWITH_PULSE=ON"
     ++ stdenv.lib.optional (cups != null) "-DWITH_CUPS=ON"
-    ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON";
+    ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON"
+    ++ stdenv.lib.optional buildServer "-DWITH_SERVER=ON"
+    ++ stdenv.lib.optional optimize "-DWITH_SSE2=ON";
+
 
   meta = with stdenv.lib; {
     description = "A Remote Desktop Protocol Client";

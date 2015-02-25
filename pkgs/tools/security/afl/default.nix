@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "1.21b";
+  version = "1.49b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "1j3857947lyr0j6jjdrx1mrdqpgi7fnfysxlycxb61xyg4av0k30";
+    sha256 = "14mbfdg78p80517zirvcsc2l2fbxn7n3j9zyfq8cn9dr2qi9icpq";
   };
 
   buildPhase   = "make PREFIX=$out";

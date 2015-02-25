@@ -31,11 +31,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "samba-4.1.16";
+  name = "samba-4.1.17";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "0yx840qg5q6syq81439v3pbwawacm7nwnnvph85za9gsgcb9r80j";
+    sha256 = "07fban97xmf4r5y48jp6ajfdki6vx4239lwq9gmvwjy8x44mvsvs";
   };
 
   patches = [ ./4.x-no-persistent-install.patch ];

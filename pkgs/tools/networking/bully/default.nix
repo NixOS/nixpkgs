@@ -1,11 +1,13 @@
-{stdenv, fetchurl, openssl, libpcap}:
+{stdenv, fetchFromGitHub, openssl, libpcap}:
 
 stdenv.mkDerivation rec {
   name = "bully-${version}";
   version = "1.0-22";
-  src = fetchurl {
-    url = "https://github.com/bdpurcell/bully/archive/v${version}.tar.gz";
-    sha256 = "72f568f659fdcf70455a17f91f25dde65a53431c67c796517d3d3c4a4703ab68";
+  src = fetchFromGitHub {
+    sha256 = "0wk9jmcibd03gspnnr2qvfkw57rg94cwmi0kjpy1mgi05s6vlw1y";
+    rev = "v${version}";
+    repo = "bully";
+    owner = "Lrs121";
   };
   buildInputs = [ openssl libpcap ];
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Retrieve WPA/WPA2 passphrase from a WPS enabled access point";
-    homepage = https://github.com/bdpurcell/bully;
+    homepage = https://github.com/Lrs121/bully;
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     license = stdenv.lib.licenses.gpl3;
   };

@@ -2,7 +2,7 @@
 , bundlerEnv }:
 
 let
-  version = "0.4.1";
+  version = "0.5.0";
   # `sass` et al
   gems = bundlerEnv {
     name = "consul-deps";

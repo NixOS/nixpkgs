@@ -89,6 +89,10 @@ let
         ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
       ''}
 
+      # Tell systemd about our $DISPLAY. This is needed by the
+      # ssh-agent unit.
+      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY
+
       # Load X defaults.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then

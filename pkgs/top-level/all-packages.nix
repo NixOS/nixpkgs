@@ -1722,15 +1722,15 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = callPackage ../development/web/nodejs { };
-  nodejs-unstable = callPackage ../development/web/nodejs { unstableVersion = true; };
+  nodejs = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; };
+  nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
 
   nodePackages = recurseIntoAttrs (
     callPackage ./node-packages.nix { self = nodePackages; }
   );
 
-  iojs = callPackage ../development/web/iojs { };
-  iojs-nightly = callPackage ../development/web/iojs { nightly = true; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
+  iojs-nightly = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; nightly = true; };
 
   iojsPackages = recurseIntoAttrs (
     callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; }
@@ -3863,6 +3863,11 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
+    cstruct = callPackage ../development/ocaml-modules/cstruct {
+      lwt = ocaml_lwt;
+      sexplib = ocaml_sexplib;
+    };
+
     csv = callPackage ../development/ocaml-modules/csv { };
 
     deriving = callPackage ../development/tools/ocaml/deriving { };
@@ -4373,7 +4378,6 @@ let
     glpk = null;
     suitesparse = null;
     jdk = null;
-    gnuplot = null;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13;
@@ -6344,7 +6348,9 @@ let
     inherit (gnome) gtkdoc;
   };
 
-  libinput = callPackage ../development/libraries/libinput { };
+  libinput = callPackage ../development/libraries/libinput {
+    graphviz = graphviz-nox;
+  };
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
@@ -6933,7 +6939,10 @@ let
 
   opal = callPackage ../development/libraries/opal {};
 
-  openjpeg = callPackage ../development/libraries/openjpeg { lcms = lcms2; };
+  openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
+  openjpeg_2_0_1 = callPackage ../development/libraries/openjpeg/2.0.1.nix { };
+  openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
+  openjpeg = openjpeg_2_1;
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
     giflib = giflib_4_1;
@@ -8497,7 +8506,7 @@ let
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
     apple-source-releases = import ../os-specific/darwin/apple-source-releases { inherit stdenv fetchurl pkgs; };
   in apple-source-releases // rec {
-    cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) { 
+    cctools_cross = callPackage (forceNativeDrv (callPackage ../os-specific/darwin/cctools/port.nix {}).cross) {
       cross = assert crossSystem != null; crossSystem;
       inherit maloader;
       xctoolchain = xcode.toolchain;
@@ -8974,6 +8983,8 @@ let
   libraw = callPackage ../development/libraries/libraw { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
+
+  libsass = callPackage ../development/libraries/libsass { };
 
   libsexy = callPackage ../development/libraries/libsexy { };
 
@@ -9931,6 +9942,8 @@ let
 
   ed = callPackage ../applications/editors/ed { };
 
+  edbrowse = callPackage ../applications/editors/edbrowse { };
+
   ekho = callPackage ../applications/audio/ekho { };
 
   electrum = callPackage ../applications/misc/electrum { };
@@ -10052,8 +10065,6 @@ let
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
 
     magit = callPackage ../applications/editors/emacs-modes/magit { };
-
-    marathon = callPackage ../applications/networking/cluster/marathon { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
@@ -10375,7 +10386,7 @@ let
     libart = gnome2.libart_lgpl;
   }; # latest version: gnome3.goffice
 
-  idea = recurseIntoAttrs (callPackage ../applications/editors/idea { });
+  idea = recurseIntoAttrs (callPackage ../applications/editors/idea { androidsdk = androidsdk_4_4; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
@@ -10772,6 +10783,8 @@ let
 
   makeself = callPackage ../applications/misc/makeself { };
 
+  marathon = callPackage ../applications/networking/cluster/marathon { };
+
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
   mcpp = callPackage ../development/compilers/mcpp { };
@@ -10989,7 +11002,9 @@ let
     lua = lua5;
  };
 
-  mupdf = callPackage ../applications/misc/mupdf { };
+  mupdf = callPackage ../applications/misc/mupdf {
+    openjpeg = openjpeg_2_0_1;
+  };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
@@ -11368,7 +11383,9 @@ let
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
-  dropbox = callPackage ../applications/networking/dropbox { };
+  dropbox = callPackage ../applications/networking/dropbox {
+    qt5 = qt54;
+  };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
@@ -12029,6 +12046,8 @@ let
   };
 
   xkb_switch = callPackage ../tools/X11/xkb-switch { };
+
+  xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     ghcWithPackages = haskellngPackages.ghcWithPackages;
