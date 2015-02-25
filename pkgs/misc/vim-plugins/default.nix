@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, cmake, vim, vimUtils, perl, ruby, unzip,
-  which, fetchgit, fetchhg, fetchzip, llvmPackages, zip, vim_configurable,
-  vimPlugins, xkb_switch
+  which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip,
+  vim_configurable, vimPlugins, xkb_switch
 }:
 
 let
@@ -486,6 +486,27 @@ rec {
     '';
   };
 
+  wakatime = buildVimPlugin {
+    name = "wakatime-3.0.7";
+
+    src = fetchFromGitHub {
+      sha256 = "1kn50fz9hnimzic640blmb5wi64vkcn45g15i4ckfzivza4jyc73";
+      rev = "30ce2e30670d80ec1ef033ae4415c1f6ea46f18f";
+      repo = "vim-wakatime";
+      owner = "wakatime";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Analytics about your programming";
+      homepage = https://wakatime.com;
+      license = with licenses; bsd3;
+      platforms = with platforms; linux;
+      maintainers = with maintainers; [ nckx ];
+    };
+
+    buildInputs = [ python ];
+  };
+
   watchdogs = buildVimPlugin {
     name = "watchdogs-git-2014-10-18";
     src = fetchgit {
@@ -531,7 +552,7 @@ rec {
     src = fetchgit {
       rev = "035b6ca862da3bba0ab8aad388a485758311a464";
       url = "https://github.com/Valloric/YouCompleteMe.git";
-      sha256 = "9cd8fc8bb9b35e7a164d62fa8e3a1bd3be7e18f4d46c78b5827612f32b9541d5";
+      sha256 = "0l4a7mp0r888gdfzl59z8vk5jx4km58kzzqbn8v48i1k6scryvl7";
      };
 
     name = "vimplugin-youcompleteme-2015-02-05";

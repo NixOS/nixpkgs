@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl gmp ncurses ];
 
-  enableParallelBuilding = true;
-
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags=["-S" "--keep-file-symbols"];
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   meta = {
     homepage = "http://haskell.org/ghc";

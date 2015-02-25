@@ -8,13 +8,13 @@
 , getopt
 }:
 
-let version = "2.1.2";
+let version = "2.1.3";
 in stdenv.mkDerivation rec {
   name = "cassandra-${version}";
 
   src = fetchurl {
     url = "http://apache.cs.utah.edu/cassandra/${version}/apache-${name}-bin.tar.gz";
-    sha256 = "1glpv3d1c63ccqnfjzz76cxb508qyvbgva26h5j7k8dd5av84lcr";
+    sha256 = "1hzb7h73vr28v9axw85c1987l2i5g4i9ivmgq5mqlv3cv1ng0knz";
   };
 
   buildInputs = [ makeWrapper ];

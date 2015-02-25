@@ -13,6 +13,7 @@ let
     stdenv.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
+      preferLocalBuild = true;
     } // mirrors);
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",

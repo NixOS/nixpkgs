@@ -63,6 +63,14 @@ let
         '';
       };
 
+      oathAuth = mkOption {
+        default = config.security.pam.enableOATH;
+        type = types.bool;
+        description = ''
+          If set, the OATH Toolkit will be used.
+        '';
+      };
+
       sshAgentAuth = mkOption {
         default = false;
         type = types.bool;
@@ -206,6 +214,8 @@ let
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
+          ${optionalString cfg.oathAuth
+              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=5 usersfile=/etc/users.oath"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.krb5.enable ''
@@ -241,6 +251,8 @@ let
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.otpwAuth
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
+          ${optionalString cfg.oathAuth
+              "session optional ${pkgs.oathToolkit}/lib/security/pam_oath.so window=5 usersfile=/etc/users.oath"}
           ${optionalString cfg.startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString cfg.forwardXAuth
@@ -338,6 +350,13 @@ in
       '';
     };
 
+    security.pam.enableOATH = mkOption {
+      default = false;
+      description = ''
+        Enable the OATH (one-time password) PAM module.
+      '';
+    };
+
     users.motd = mkOption {
       default = null;
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
@@ -357,7 +376,8 @@ in
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
-      ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ];
+      ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
+      ++ optionals config.security.pam.enableOATH [ pkgs.oathToolkit ];
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;

@@ -95,7 +95,7 @@ in
     environment.etc."fail2ban/filter.d".source = "${pkgs.fail2ban}/etc/fail2ban/filter.d/*.conf";
 
     systemd.services.fail2ban =
-      { description = "Fail2ban intrusion prevention system";
+      { description = "Fail2ban Intrusion Prevention System";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];

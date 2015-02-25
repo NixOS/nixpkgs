@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , qt4, xapian, file, python
 , djvulibre, groff, libxslt, unzip, xpdf, antiword, catdoc, lyx
-, ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconvOrLibc }:
+, ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv }:
 
 assert stdenv.system != "powerpc-linux";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace grep          ${gnugrep}/bin/grep
       substituteInPlace  $f --replace groff         ${groff}/bin/groff
       substituteInPlace  $f --replace gunzip        ${gzip}/bin/gunzip
-      substituteInPlace  $f --replace iconv         ${libiconvOrLibc}/bin/iconv
+      substituteInPlace  $f --replace iconv         ${libiconv}/bin/iconv
       substituteInPlace  $f --replace lyx           ${lyx}/bin/lyx
       substituteInPlace  $f --replace pdftotext     ${xpdf}/bin/pdftotext
       substituteInPlace  $f --replace pstotext      ${ghostscript}/bin/ps2ascii 

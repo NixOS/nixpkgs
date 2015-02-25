@@ -10,7 +10,7 @@
   };
 
   analitza = {
-    buildInputs = [ "ECM" "Eigen3" "GLEW" "OpenGL" "Qt5" "Qt5OpenGL" ];
+    buildInputs = [ "ECM" "Eigen3" "GLEW" "OpenGL" "Qt5" "Qt5NO_MODULE" "Qt5OpenGL" "Qt5Qml" "Qt5Quick" "Qt5Svg" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "Qt5Core" ];
     propagatedNativeBuildInputs = [  ];
@@ -122,7 +122,7 @@
   };
 
   gwenview = {
-    buildInputs = [ "ECM" "Exiv2" "JPEG" "KF5" "KF5Activities" "KF5Baloo" "KF5KDELibs4Support" "KF5KIO" "Kdcraw" "Kipi" "LCMS2" "PNG" "Phonon4Qt5" "Qt5" "Qt5Test" ];
+    buildInputs = [ "ECM" "Exiv2" "JPEG" "KF5" "KF5Activities" "KF5Baloo" "KF5KDELibs4Support" "KF5KIO" "Kdcraw" "Kipi" "LCMS2" "PNG" "Phonon4Qt5" "Qt5" "Qt5Concurrent" "Qt5Core" "Qt5DBus" "Qt5OpenGL" "Qt5QUIET" "Qt5Script" "Qt5Svg" "Qt5Test" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -162,7 +162,7 @@
   };
 
   kalgebra = {
-    buildInputs = [ "Analitza5" "Curses" "ECM" "KF5ConfigWidgets" "KF5DocTools" "KF5I18n" "KF5KIO" "KF5WidgetsAddons" "OpenGL" "Qt5" "Qt5WebKitWidgets" "Readline" ];
+    buildInputs = [ "Analitza5" "Curses" "ECM" "KF5ConfigWidgets" "KF5DocTools" "KF5I18n" "KF5KIO" "KF5WidgetsAddons" "OpenGL" "Qt5" "Qt5NO_MODULE" "Qt5OpenGL" "Qt5PrintSupport" "Qt5Qml" "Qt5Quick" "Qt5Svg" "Qt5Test" "Qt5WebKitWidgets" "Qt5Xml" "Readline" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -186,7 +186,7 @@
   };
 
   kanagram = {
-    buildInputs = [ "ECM" "KF5" "KF5Config" "KF5ConfigWidgets" "KF5Crash" "KF5Declarative" "KF5DocTools" "KF5I18n" "KF5KIO" "KF5NewStuff" "KF5Sonnet" "LibKEduVocDocument" "Phonon4Qt5" "Qt5" ];
+    buildInputs = [ "ECM" "KF5" "KF5Config" "KF5ConfigWidgets" "KF5Crash" "KF5Declarative" "KF5DocTools" "KF5I18n" "KF5KIO" "KF5NewStuff" "KF5Sonnet" "LibKEduVocDocument" "Phonon4Qt5" "Qt5" "Qt5Core" "Qt5OPTIONAL_COMPONENTS" "Qt5OpenGL" "Qt5PrintSupport" "Qt5Qml" "Qt5Quick" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -202,7 +202,7 @@
   };
 
   kapptemplate = {
-    buildInputs = [ "ECM" "KDE4" "KF5" "KF5Archive" "KF5Completion" "KF5ConfigWidgets" "KF5CoreAddons" "KF5DocTools" "KF5I18n" "KF5KIO" "KF5XmlGui" "KdepimLibs" "Qt5" "Qt5Widgets" ];
+    buildInputs = [ "ECM" "KDE4" "KF5" "KF5Archive" "KF5Completion" "KF5ConfigWidgets" "KF5CoreAddons" "KF5DocTools" "KF5I18n" "KF5KIO" "KF5XmlGui" "KdepimLibs" "Qt5" "Qt5Core" "Qt5Gui" "Qt5Test" "Qt5Widgets" ];
     nativeBuildInputs = [ "RBKCONFIG_COMPILER4" "RBUIC4" "XSLTPROC_EXECUTABLE" "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -210,7 +210,7 @@
   };
 
   kate = {
-    buildInputs = [ "ECM" "KF5" "KF5Config" "KF5DBusAddons" "KF5DocTools" "KF5GuiAddons" "KF5I18n" "KF5Init" "KF5ItemModels" "KF5JobWidgets" "KF5KIO" "KF5NewStuff" "KF5Notifications" "KF5OPTIONAL_COMPONENTS" "KF5Parts" "KF5Plasma" "KF5Service" "KF5TextEditor" "KF5ThreadWeaver" "KF5Wallet" "KF5WindowSystem" "KF5XmlGui" "LibGit2" "PyKDE4" "PyQt4" "PythonLibrary" "Qt5" "SIP" ];
+    buildInputs = [ "ECM" "KF5" "KF5Config" "KF5DBusAddons" "KF5DocTools" "KF5GuiAddons" "KF5I18n" "KF5Init" "KF5ItemModels" "KF5JobWidgets" "KF5KIO" "KF5NewStuff" "KF5Notifications" "KF5OPTIONAL_COMPONENTS" "KF5Parts" "KF5Plasma" "KF5Service" "KF5TextEditor" "KF5ThreadWeaver" "KF5Wallet" "KF5WindowSystem" "KF5XmlGui" "LibGit2" "PyKDE4" "PyQt4" "PythonLibrary" "Qt5" "Qt5Core" "Qt5DBus" "Qt5Script" "Qt5Sql" "Qt5Test" "Qt5Widgets" "SIP" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -978,7 +978,7 @@
   };
 
   khangman = {
-    buildInputs = [ "ECM" "KDE4" "KF5" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5CoreAddons" "KF5Crash" "KF5DocTools" "KF5I18n" "KF5NewStuff" "KF5Notifications" "KF5XmlGui" "LibKEduVocDocument" "Phonon4Qt5" "Qt5" ];
+    buildInputs = [ "ECM" "KDE4" "KF5" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5CoreAddons" "KF5Crash" "KF5DocTools" "KF5I18n" "KF5NewStuff" "KF5Notifications" "KF5XmlGui" "LibKEduVocDocument" "Phonon4Qt5" "Qt5" "Qt5Core" "Qt5Svg" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -1170,7 +1170,7 @@
   };
 
   konsole = {
-    buildInputs = [ "ECM" "KF5" "KF5Bookmarks" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5CoreAddons" "KF5DocTools" "KF5GuiAddons" "KF5I18n" "KF5IconThemes" "KF5Init" "KF5KDELibs4Support" "KF5KIO" "KF5Konq" "KF5Notifications" "KF5NotifyConfig" "KF5Parts" "KF5Pty" "KF5Service" "KF5TextWidgets" "KF5WidgetsAddons" "KF5WindowSystem" "KF5XmlGui" "Qt5" "X11" ];
+    buildInputs = [ "ECM" "KF5" "KF5Bookmarks" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5CoreAddons" "KF5DocTools" "KF5GuiAddons" "KF5I18n" "KF5IconThemes" "KF5Init" "KF5KDELibs4Support" "KF5KIO" "KF5Konq" "KF5Notifications" "KF5NotifyConfig" "KF5Parts" "KF5Pty" "KF5Service" "KF5TextWidgets" "KF5WidgetsAddons" "KF5WindowSystem" "KF5XmlGui" "Qt5" "Qt5Core" "Qt5DBus" "Qt5Script" "Qt5Test" "Qt5Widgets" "X11" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -1178,7 +1178,7 @@
   };
 
   kopete = {
-    buildInputs = [ "Alsa" "Boost" "Expat" "GIF" "GLIB2" "IDN" "Jasper" "JsonCpp" "KDE4" "KdepimLibs" "Kleopatra" "LibMeanwhile" "LibOTR" "LibV4L2" "LibXml2" "Libgadu" "Libmsn" "LiboRTP" "Mediastreamer" "OpenSSL" "QCA2" "QGpgme" "QImageBlitz" "Qt4" "Qt5Core" "Qt5Network" "SRTP" "Speex" "Sqlite" "Xmms" "ZLIB" ];
+    buildInputs = [ "Alsa" "Boost" "Expat" "GIF" "GLIB2" "IDN" "Jasper" "JsonCpp" "KDE4" "KdepimLibs" "Kleopatra" "LibMeanwhile" "LibOTR" "LibV4L2" "LibXml2" "Libgadu" "Libmsn" "LiboRTP" "Mediastreamer" "OpenSSL" "QCA2" "QGpgme" "QImageBlitz" "Qt4" "Qt5Core" "Qt5Network" "Qt5QUIET" "SRTP" "Speex" "Sqlite" "Xmms" "ZLIB" ];
     nativeBuildInputs = [ "LibXslt" "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -1458,7 +1458,7 @@
   };
 
   libkeduvocdocument = {
-    buildInputs = [ "ECM" "KF5" "KF5Archive" "KF5I18n" "KF5KIO" "Qt5" ];
+    buildInputs = [ "ECM" "KF5" "KF5Archive" "KF5I18n" "KF5KIO" "Qt5" "Qt5NO_MODULE" "Qt5Test" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -1546,7 +1546,7 @@
   };
 
   okteta = {
-    buildInputs = [ "ECM" "KF5" "KF5Bookmarks" "KF5Codecs" "KF5Completion" "KF5ConfigWidgets" "KF5DBusAddons" "KF5DocTools" "KF5I18n" "KF5KCMUtils" "KF5KIO" "KF5NewStuff" "KF5Parts" "KF5Service" "KF5WidgetsAddons" "KF5XmlGui" "QCA2" "Qt5" "Qt5Test" "SharedMimeInfo" ];
+    buildInputs = [ "ECM" "KF5" "KF5Bookmarks" "KF5Codecs" "KF5Completion" "KF5ConfigWidgets" "KF5DBusAddons" "KF5DocTools" "KF5I18n" "KF5KCMUtils" "KF5KIO" "KF5NewStuff" "KF5Parts" "KF5Service" "KF5WidgetsAddons" "KF5XmlGui" "Qca-qt5" "Qt5" "Qt5Core" "Qt5Designer" "Qt5NO_MODULE" "Qt5Network" "Qt5PrintSupport" "Qt5QUIET" "Qt5Script" "Qt5ScriptTools" "Qt5Test" "Qt5Widgets" "Qt5Xml" "SharedMimeInfo" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -1586,7 +1586,7 @@
   };
 
   parley = {
-    buildInputs = [ "ECM" "KF5" "KF5Config" "KF5CoreAddons" "KF5Crash" "KF5DocTools" "KF5I18n" "KF5KCMUtils" "KF5KHtml" "KF5KIO" "KF5Kross" "KF5MODULE" "KF5NewStuff" "KF5Notifications" "KF5Sonnet" "KF5XmlGui" "KF5docbook" "KF5produce" "KF5the" "LibAttica" "LibKEduVocDocument" "LibXml2" "Qt5" ];
+    buildInputs = [ "ECM" "KF5" "KF5Config" "KF5CoreAddons" "KF5Crash" "KF5DocTools" "KF5I18n" "KF5KCMUtils" "KF5KHtml" "KF5KIO" "KF5Kross" "KF5MODULE" "KF5NewStuff" "KF5Notifications" "KF5Sonnet" "KF5XmlGui" "KF5docbook" "KF5produce" "KF5the" "LibAttica" "LibKEduVocDocument" "LibXml2" "Qt5" "Qt5Concurrent" "Qt5Core" "Qt5Multimedia" "Qt5Svg" "Qt5Test" ];
     nativeBuildInputs = [ "LibXslt" "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];

@@ -2,7 +2,7 @@
 , sslSupport ? true, openssl
 , bdbSupport ? false, db
 , ldapSupport ? true, openldap
-, libiconvOrNull
+, libiconv
 }:
 
 assert sslSupport -> openssl != null;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString ldapSupport "--with-ldap"}
   '';
 
-  propagatedBuildInputs = [ makeWrapper apr expat libiconvOrNull ]
+  propagatedBuildInputs = [ makeWrapper apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
     ++ optional ldapSupport openldap;

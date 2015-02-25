@@ -1,18 +1,22 @@
-{ stdenv, fetchurl, x11, libXmu }:
+{ stdenv, fetchsvn, x11, libXmu, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "xclip-0.12";
+  # The last release from 2012, 0.12, lacks '-targets'
+  name = "xclip-0.12-svn-20140209";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/xclip/${name}.tar.gz";
-    sha256 = "0ibcf46rldnv0r424qcnai1fa5iq3lm5q5rdd7snsi5sb78gmixp";
+  src = fetchsvn {
+    url = "svn://svn.code.sf.net/p/xclip/code/trunk";
+    sha256 = "0d6r38xas5l79l700sdm14l41vvjqhah613367ha8kcvx54zkddz";
   };
 
-  buildInputs = [ x11 libXmu ];
+  preConfigure = "autoreconf -vfi";
+
+  buildInputs = [ x11 libXmu autoconf automake libtool ];
 
   meta = { 
     description = "Tool to access the X clipboard from a console application";
     homepage = http://sourceforge.net/projects/xclip/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.all;
   };
 }

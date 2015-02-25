@@ -1,25 +1,28 @@
-{ stdenv, fetchsvn, wine, perl, which, coreutils, zenity, curl
+{ stdenv, fetchgit, wine, perl, which, coreutils, zenity, curl
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
 stdenv.mkDerivation rec {
-  rev = "1199";
-  name = "winetricks-${rev}";
+  name = "winetricks-20150206";
 
-  src = fetchsvn {
-    url = "http://winetricks.googlecode.com/svn/trunk";
-    inherit rev;
-    sha256 = "1kji1n6ps09g8xnl9m7vqk3vkl03abzwnc43c52i8p0adnv06khb";
+  src = fetchgit {
+    url = "https://code.google.com/p/winetricks/";
+    rev = "483056823093a90c9186b3d1a4867f481acf5fa1";
+    sha256 = "8b86a2a130ced405886775f0f81e7a6b25eb1bc22f357d0fe705fead52fff829";
   };
 
   buildInputs = [ perl which ];
 
-  pathAdd = stdenv.lib.concatStringsSep "/bin:" # coreutils is for sha1sum
-    [ wine perl which coreutils zenity curl cabextract unzip p7zip gnused gnugrep bash ]
-    + "/bin";
+  # coreutils is for sha1sum
+  pathAdd = stdenv.lib.concatMapStringsSep ":" (x: x + "/bin")
+    [ wine perl which coreutils zenity curl cabextract unzip p7zip gnused gnugrep bash ];
 
-  patch = ./winetricks.patch;
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  builder = ./build_winetricks.sh;
+  postInstall = ''
+    sed -i \
+      -e '2i PATH="${pathAdd}:$PATH"' \
+      "$out/bin/winetricks"
+  '';
 
   meta = {
     description = "A script to install DLLs needed to work around problems in Wine";

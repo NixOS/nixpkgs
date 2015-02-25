@@ -1,16 +1,13 @@
 { stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jack2
 , libxslt, lv2, pkgconfig, premake3, xlibs }:
 
-let
-  rev = "3bfddf7f";
-in
 stdenv.mkDerivation rec {
-  name = "distrho-${rev}";
+  name = "distrho-ports-git-2015-01-28";
 
   src = fetchgit {
     url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
-    inherit rev;
-    sha256 = "55dc52921bb757c3213da5ef6cab40909f39be3e3b41ba4c6cd66ad90bfb2e6c";
+    rev = "b4e2dc24802fe6804c60fcd2559a0bca46b7709c";
+    sha256 = "661ff6f7cda71a8dd08cbcea3f560e99f0fc2232053cbc9a2aaba854137805c6";
   };
 
   patchPhase = ''

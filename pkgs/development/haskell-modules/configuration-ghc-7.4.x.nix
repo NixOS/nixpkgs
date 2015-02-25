@@ -37,7 +37,7 @@ self: super: {
   transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override { binary = self.binary_0_7_3_0; };
+  Cabal_1_22_1_1 = super.Cabal_1_22_1_1.override { binary = self.binary_0_7_4_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;

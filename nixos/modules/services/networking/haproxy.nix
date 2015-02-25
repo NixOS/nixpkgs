@@ -9,13 +9,16 @@ with lib;
     services.haproxy = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = "
-          Enable the HAProxy.
-        ";
+        description = ''
+          Whether to enable HAProxy, the reliable, high performance TCP/HTTP
+          load balancer.
+        '';
       };
 
       config = mkOption {
+        type = types.lines;
         default =
           ''
           global
@@ -51,9 +54,10 @@ with lib;
             stats refresh 5s
             stats realm Haproxy statistics
           '';
-        description = "
-          Default configuration.
-        ";
+        description = ''
+          Contents of the HAProxy configuration file,
+          <filename>haproxy.conf</filename>.
+        '';
       };
 
     };
@@ -68,10 +72,10 @@ with lib;
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
-        PIDFile = "/var/run/haproxy.pid";
+        PIDFile = "/run/haproxy.pid";
         ExecStartPre = "${pkgs.haproxy}/sbin/haproxy -c -q -f ${haproxyCfg}";
-        ExecStart = "${pkgs.haproxy}/sbin/haproxy -D -f ${haproxyCfg} -p /var/run/haproxy.pid";
-        ExecReload = "-${pkgs.bash}/bin/bash -c \"exec ${pkgs.haproxy}/sbin/haproxy -D -f ${haproxyCfg} -p /var/run/haproxy.pid -sf $MAINPID\"";
+        ExecStart = "${pkgs.haproxy}/sbin/haproxy -D -f ${haproxyCfg} -p /run/haproxy.pid";
+        ExecReload = "-${pkgs.bash}/bin/bash -c \"exec ${pkgs.haproxy}/sbin/haproxy -D -f ${haproxyCfg} -p /run/haproxy.pid -sf $MAINPID\"";
       };
     };
 

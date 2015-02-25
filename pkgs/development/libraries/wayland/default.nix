@@ -1,21 +1,40 @@
-{ stdenv, fetchurl, libffi, expat, pkgconfig, libxslt, docbook_xsl, doxygen }:
+{ stdenv, fetchurl, pkgconfig
+, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto
+, expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
+}:
 
-let version = "1.6.0"; in
+# Require the optional to be enabled until upstream fixes or removes the configure flag
+assert expat != null;
 
+let
+  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
+in
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "wayland-${version}";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0zzwlrmxil10g9rvdgha0y1d8z0x97g65g14kl2qrl2krwni1md7";
+    sha256 = "173w0pqzk2m7hjlg15bymrx7ynxgq1ciadg03hzybxwnvfi4gsmx";
   };
 
-  buildInputs = [ pkgconfig libffi expat libxslt docbook_xsl doxygen ];
+  configureFlags = [
+    (mkFlag (expat != null) "scanner")
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libffi docbook_xsl doxygen graphviz libxslt xmlto expat ];
 
   meta = {
     description = "Reference implementation of the wayland protocol";
-    homepage = http://wayland.freedesktop.org/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://wayland.freedesktop.org/;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ codyopel wkennington ];
   };
+
+  passthru.version = version;
 }

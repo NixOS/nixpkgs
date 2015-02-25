@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, libiconvOrEmpty }:
+{ stdenv, fetchurl, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "stfl-0.22";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "062lqlf3qhp8bcapbpc0k3wym7x6ngncql8jmx5x06p6679szp9d";
   };
 
-  buildInputs = [ ncurses ] ++ libiconvOrEmpty;
+  buildInputs = [ ncurses libiconv ];
 
   buildPhase = ''
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h

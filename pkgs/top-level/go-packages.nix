@@ -167,14 +167,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   dns = buildGoPackage rec {
-    rev = "fc67c4b981930a377f8a26a5a1f2c0ccd5dd1514";
+    rev = "0bd3fb7026404936cf18204ea527d27f067923cf";
     name = "dns-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/miekg/dns";
     src = fetchFromGitHub {
       inherit rev;
       owner = "miekg";
       repo = "dns";
-      sha256 = "1csjmkx0gl34r4hmkhdbdxb0693f1p10yrjaj8f2jwli9p9sl4mg";
+      sha256 = "1hv2ikpd9gr9idf7zh8nyqgdbnnffs057wsdpd7m44mllbmzhdxn";
     };
   };
 

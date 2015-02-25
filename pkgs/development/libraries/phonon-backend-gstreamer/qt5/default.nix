@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cmake, qt5, pkgconfig, phonon_qt5, gst_all_1 }:
+{ stdenv, fetchurl, cmake, gst_all_1, phonon_qt5, pkgconfig, qt5, debug ? false }:
+
+with stdenv.lib;
 
 let
   version = "4.8.2";
@@ -13,14 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "1q1ix6zsfnh6gfnpmwp67s376m7g7ahpjl1qp2fqakzb5cgzgq10";
   };
 
-  buildInputs = with gst_all_1; [ phonon_qt5 qt5 gstreamer gst-plugins-base ];
+  buildInputs = with gst_all_1; [ gstreamer gst-plugins-base phonon_qt5 qt5.base ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DPHONON_BUILD_PHONON4QT5=ON"
-  ];
+  ]
+  ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
   meta = with stdenv.lib; {
     homepage = http://phonon.kde.org/;

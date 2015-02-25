@@ -68,6 +68,11 @@ let
       Only applies if <option>sslEnable</option> is true. Non anonymous (local) users
       must use a secure SSL connection for sending/receiving data on data connection.
     '')
+    (yesNoOption "portPromiscuous" "port_promiscuous" false ''
+      Set to YES if you want to disable the PORT security check that ensures that
+      outgoing data connections can only connect to the client. Only enable if you
+      know what you are doing!
+    '')
     (yesNoOption "ssl_tlsv1" "ssl_tlsv1" true  '' '')
     (yesNoOption "ssl_sslv2" "ssl_sslv2" false '' '')
     (yesNoOption "ssl_sslv3" "ssl_sslv3" false '' '')

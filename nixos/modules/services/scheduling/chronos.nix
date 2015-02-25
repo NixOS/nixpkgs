@@ -18,7 +18,7 @@ in {
 
     httpPort = mkOption {
       description = "Chronos listening port";
-      default = 8080;
+      default = 4400;
       type = types.int;
     };
 

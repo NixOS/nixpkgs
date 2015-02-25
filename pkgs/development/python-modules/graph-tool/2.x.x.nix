@@ -1,5 +1,8 @@
 { stdenv, fetchurl, python, cairomm, sparsehash, pycairo, automake, m4, pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper }:
 
+# pypy lacks the sitePackages attribute used in this expression
+assert python.executable != "pypy";
+
 stdenv.mkDerivation rec {
   version = "2.2.36";
   name = "${python.libPrefix}-graph-tool-${version}";

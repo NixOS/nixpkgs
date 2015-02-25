@@ -92,7 +92,7 @@ in
                 ++ optional vswitch.enable "vswitchd.service";
 
         path = [ 
-            pkgs.bridge_utils 
+            pkgs.bridge-utils 
             pkgs.dmidecode 
             pkgs.dnsmasq
             pkgs.ebtables

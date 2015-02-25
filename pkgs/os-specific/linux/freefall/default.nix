@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
+let version = "3.19"; in
 stdenv.mkDerivation rec {
-  version = "3.18.3";
   name = "freefall-${version}";
 
   src = fetchurl {
+    sha256 = "0v40b5l6dcviqgl47bxlcbimz7kawmy1c2909axi441jwlgm2hmy";
     url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-    sha256 = "0ma2x68975xsi9kb15p0615nx9sm5ppb309kfdz7fgx9pg84q0hf";
   };
 
   buildPhase = ''

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-snap";
-  version = "0.1.17.14";
-  sha256 = "0fd6d85gzp9mr7y7bgfk9wscrhrych9q7cssps8m5l03n83d8asp";
+  version = "0.1.17.16";
+  sha256 = "02dh2wjhaabg2aabsf7gl5w65kqpb3jigawwh9n2dr4hz6jhvwia";
   buildDepends = [
     caseInsensitive restCore safe snapCore unorderedContainers
     uriEncode utf8String
@@ -19,3 +19,4 @@ cabal.mkDerivation (self: {
     maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })
+

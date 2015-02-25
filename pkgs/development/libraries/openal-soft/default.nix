@@ -3,29 +3,32 @@
 , pulseSupport ? true, pulseaudio ? null
 }:
 
+with stdenv.lib;
+
 assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> pulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "1.15.1";
+  version = "1.16.0";
   name = "openal-soft-${version}";
 
   src = fetchurl {
     url = "http://kcat.strangesoft.net/openal-releases/${name}.tar.bz2";
-    sha256 = "0mmhdqiyb3c9dzvxspm8h2v8jibhi8pfjxnf6m0wn744y1ia2a8f";
+    sha256 = "0pqdykdclycfnk66v166srjrry936y39d1dz9wl92qz27wqwsg9g";
   };
 
   buildInputs = [ cmake ]
-    ++ stdenv.lib.optional alsaSupport alsaLib
-    ++ stdenv.lib.optional pulseSupport pulseaudio;
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseSupport pulseaudio;
 
   NIX_LDFLAGS = []
-    ++ stdenv.lib.optional alsaSupport "-lasound"
-    ++ stdenv.lib.optional pulseSupport "-lpulse";
+    ++ optional alsaSupport "-lasound"
+    ++ optional pulseSupport "-lpulse";
 
   meta = {
     description = "OpenAL alternative";
     homepage = http://kcat.strangesoft.net/openal.html;
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.lgpl2;
+    maintainers = with maintainers; [ftrvxmtrx];
   };
 }

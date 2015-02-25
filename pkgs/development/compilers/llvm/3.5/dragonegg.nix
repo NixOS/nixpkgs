@@ -3,15 +3,7 @@
 stdenv.mkDerivation rec {
   name = "dragonegg-${version}";
 
-  src = fetch "dragonegg" "1733czbvby1ww3xkwcwmm0km0bpwhfyxvf56wb0zv5gksp3kbgrr";
-
-  patches = [(fetchpatch {
-    url = "https://llvm.org/viewvc/llvm-project/dragonegg/trunk/src/x86/ABIHack.inc"
-      + "?r1=208730&r2=208729&view=patch";
-    sha256 = "1al82gqz90hzjx24p0wls029lw2bgnlgd209kgvxsp82p4z1v1c1";
-    name = "bug-18548.patch";
-  })];
-  patchFlags = "-p2";
+  src = fetch "dragonegg" "1v1lc9h2nfk3lsk9sx1k4ckwddz813hqjmlp2bx2kwxx9hw364ar";
 
   # The gcc the plugin will be built for (the same used building dragonegg)
   GCC = "gcc";

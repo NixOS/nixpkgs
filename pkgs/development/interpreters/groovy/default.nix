@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "groovy-${version}";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchurl {
     url = "http://dl.bintray.com/groovy/maven/groovy-binary-${version}.zip";
-    sha256 = "1wb0rb89mvy1x64a8z9z3jmphw72vnkxaqbc0f2v35c2wv61p839";
+    sha256 = "1bhsv804iik497gflgp0wfhj6j4ylrladp1xndcszlfg576r1zch";
   };
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An agile dynamic language for the Java Platform";
-    homepage = http://groovy.codehaus.org/;
+    homepage = http://groovy-lang.org/;
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];
   };

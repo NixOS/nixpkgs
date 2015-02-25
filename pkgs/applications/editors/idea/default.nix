@@ -1,33 +1,34 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip, jdk
-, coreutils, gnugrep, which, git, python, unzip
+, coreutils, gnugrep, which, git, python, unzip, androidsdk
 }:
 
 assert stdenv.isLinux;
 
 let
 
-  mkIdeaProduct =
-  { name, product, version, build, src, meta, patchSnappy ? true }:
+  mkIdeaProduct = with stdenv.lib;
+  { name, product, version, build, src, meta }:
 
-  let loName = stdenv.lib.toLower product;
-      hiName = stdenv.lib.toUpper product; in
+  let loName = toLower product;
+      hiName = toUpper product;
+      execName = concatStringsSep "-" (init (splitString "-" name));
+  in
 
   with stdenv; lib.makeOverridable mkDerivation rec {
     inherit name build src meta;
     desktopItem = makeDesktopItem {
-      name = loName;
-      exec = loName;
+      name = execName;
+      exec = execName;
       comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
       desktopName = product;
       genericName = meta.description;
       categories = "Application;Development;";
-      icon = loName;
+      icon = execName;
     };
 
     buildInputs = [ makeWrapper patchelf p7zip unzip ];
 
-    patchPhase = lib.concatStringsSep "\n" [
-      ''
+    patchPhase = ''
         get_file_size() {
           local fname="$1"
           echo $(ls -l $fname | cut -d ' ' -f5)
@@ -50,41 +51,29 @@ let
           patchelf --set-interpreter "$interpreter" bin/fsnotifier
           munge_size_hack bin/fsnotifier $target_size
         fi
-      ''
-
-      (lib.optionalString patchSnappy ''
-        snappyPath="lib/snappy-java-1.0.5"
-        7z x -o"$snappyPath" "$snappyPath.jar"
-        if [ "${stdenv.system}" == "x86_64-linux" ]; then
-          patchelf --set-rpath ${stdenv.cc.cc}/lib64 "$snappyPath/org/xerial/snappy/native/Linux/amd64/libsnappyjava.so"
-        else
-          patchelf --set-rpath ${stdenv.cc.cc}/lib "$snappyPath/org/xerial/snappy/native/Linux/i386/libsnappyjava.so"
-        fi
-        7z a -tzip "$snappyPath.jar" ./"$snappyPath"/*
-        rm -vr "$snappyPath"
-      '')
-    ];
+    '';
 
     installPhase = ''
-      mkdir -vp "$out/bin" "$out/$name" "$out/share/pixmaps"
-      cp -va . "$out/$name"
-      ln -s "$out/$name/bin/${loName}.png" "$out/share/pixmaps/"
+      mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
+      cp -a . $out/$name
+      ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
+      mv bin/fsnotifier* $out/libexec/${name}/.
 
       jdk=${jdk.home}
+      item=${desktopItem}
 
-      makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${loName}" \
-        --prefix PATH : "${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --prefix LD_RUN_PATH : "${stdenv.cc.cc}/lib/" \
+      makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
+        --prefix PATH : "$out/libexec/${name},${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
         --prefix JDK_HOME : "$jdk" \
         --prefix ${hiName}_JDK : "$jdk"
 
-      cp -a "${desktopItem}"/* "$out"
+      ln -s "$item/share/applications" $out/share
     '';
 
   };
 
   buildAndroidStudio = { name, version, build, src, license, description }:
-    (mkIdeaProduct rec {
+    let drv = (mkIdeaProduct rec {
       inherit name version build src;
       product = "Studio";
       meta = with stdenv.lib; {
@@ -100,11 +89,17 @@ let
         maintainers = with maintainers; [ edwtjo ];
       };
     });
+    in stdenv.lib.overrideDerivation drv (x : {
+      buildInputs = x.buildInputs ++ [ makeWrapper ];
+      installPhase = x.installPhase +  ''
+        wrapProgram "$out/bin/android-studio" \
+          --set ANDROID_HOME "${androidsdk}/libexec/android-sdk-linux/"
+      '';
+    });
 
   buildClion = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "CLion";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/clion/";
@@ -121,7 +116,6 @@ let
   buildIdea = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "IDEA";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/idea/";
@@ -139,7 +133,6 @@ let
   buildRubyMine = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "RubyMine";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/ruby/";
@@ -154,7 +147,6 @@ let
     (mkIdeaProduct {
       inherit name version build src;
       product = "PhpStorm";
-      patchSnappy = false;
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
         inherit description license;
@@ -171,7 +163,6 @@ let
   buildPycharm = { name, version, build, src, license, description }:
     (mkIdeaProduct rec {
       inherit name version build src;
-      patchSnappy = false;
       product = "PyCharm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
@@ -202,19 +193,19 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.1.0b2";
-    build = "135.1711524";
+    version = "1.1.0";
+    build = "135.1740770";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "0pkmyk7ipd4bfbryhanak5mq3x8ix1yv4czx8yi9vdpa34b6pnkw";
+      sha256 = "1r2hrld3yfaxq3mw2xmzhvrrhc7w5xlv3d18rv758hy9n40c2nr1";
     };
   };
 
   clion = buildClion rec {
-    name = "clion";
+    name = "clion-${version}";
     version = "eap";
     build = "140.1740.3";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";

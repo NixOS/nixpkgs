@@ -43,5 +43,7 @@ perlPackages.buildPerlPackage rec {
     description = "Off-line HTML generation toolkit for Unix";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    # Not sure what broke this build, it used to work
+    broken = true;
   };
 }

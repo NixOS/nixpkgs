@@ -10,7 +10,7 @@
 use NetworkManager. You can enable NetworkManager by setting:
 
 <programlisting>
-services.networkmanager.enable = true;
+networking.networkmanager.enable = true;
 </programlisting>
 
 some desktop managers (e.g., GNOME) enable NetworkManager
@@ -19,8 +19,8 @@ automatically for you.</para>
 <para>All users that should have permission to change network settings
 must belong to the <code>networkmanager</code> group.</para>
 
-<note><para><code>services.networkmanager</code> and
-<code>services.wireless</code> can not be enabled at the same time:
+<note><para><code>networking.networkmanager</code> and
+<code>networking.wireless</code> can not be enabled at the same time:
 you can still connect to the wireless networks using
 NetworkManager.</para></note>
 

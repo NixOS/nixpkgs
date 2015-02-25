@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake, libiconvOrEmpty, libintlOrEmpty
+{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null, qt5
 }:
@@ -26,7 +26,7 @@ let
 
     propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms curl openjpeg ];
 
-    nativeBuildInputs = [ pkgconfig cmake ] ++ libiconvOrEmpty ++ libintlOrEmpty;
+    nativeBuildInputs = [ pkgconfig cmake libiconv ] ++ libintlOrEmpty;
 
     cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 
@@ -61,7 +61,7 @@ let
   poppler_glib = poppler_drv "glib" { };
 
   poppler_qt4 = poppler_drv "qt4" {
-    patches = [ qtcairo_patch ];
+    #patches = [ qtcairo_patch ]; # text rendering artifacts in recent versions
     propagatedBuildInputs = [ qt4 poppler_glib ];
     NIX_LDFLAGS = "-lpoppler";
     postConfigure = ''
@@ -72,7 +72,7 @@ let
   };
 
   poppler_qt5 = poppler_drv "qt5" {
-    propagatedBuildInputs = [ qt5 poppler_glib ];
+    propagatedBuildInputs = [ qt5.base poppler_glib ];
     postConfigure = ''
       mkdir -p "$out/lib/pkgconfig"
       install -c -m 644 poppler-qt5.pc "$out/lib/pkgconfig"

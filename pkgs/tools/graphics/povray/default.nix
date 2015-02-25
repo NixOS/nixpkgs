@@ -23,8 +23,10 @@ stdenv.mkDerivation {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = [ "COMPILED_BY='nix'" ];
+  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" ];
 
+  enableParallelBuilding = true;
+  
   preInstall = ''
     mkdir "$TMP/bin"
     for i in chown chgrp; do
@@ -34,9 +36,10 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.povray.org/;
     description = "Persistence of Vision Raytracer";
-    license = stdenv.lib.licenses.free;
+    license = licenses.free;
+	platforms = platforms.linux;
   };
 }

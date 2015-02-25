@@ -3,6 +3,7 @@
 pythonPackages.buildPythonPackage rec {
   name = "speedtest-cli-${version}";
   version = "0.3.1";
+  namePrefix = "";
   
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/s/speedtest-cli/speedtest-cli-${version}.tar.gz";

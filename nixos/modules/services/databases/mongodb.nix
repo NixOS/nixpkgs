@@ -120,6 +120,7 @@ in
         };
 
         preStart = ''
+          rm ${cfg.dbpath}/mongod.lock || true
           if ! test -e ${cfg.dbpath}; then
               install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
           fi

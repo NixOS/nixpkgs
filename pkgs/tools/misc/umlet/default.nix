@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   major = "13";
-  minor = "1";
+  minor = "2";
   version = "${major}.${minor}";
   name = "umlet-${version}";
 
   src = fetchurl {
     url = "http://www.umlet.com/umlet_${major}_${minor}/umlet_${version}.zip";
-    sha256 = "0s10cmx0m5vbjj6y6gn007vzx1k5dlccgafccixl43q68dva3n3a";
+    sha256 = "19jngb2sr212lh3yi43bqq2skhd9cxa8yfbfc3i6fbm2v0b7i2xf";
   };
 
   buildInputs = [ unzip ];

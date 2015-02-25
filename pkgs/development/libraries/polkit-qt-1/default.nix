@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake automoc4 pkgconfig ];
 
-  propagatedBuildInputs = [ polkit glib (if withQt5 then qt5 else qt4) ];
+  propagatedBuildInputs = [ polkit glib ] ++ (if withQt5 then [qt5.base] else [qt4]);
 
   meta = {
     description = "A Qt wrapper around PolKit";

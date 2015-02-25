@@ -70,7 +70,7 @@ rec {
                   # virtualisation.vlans option).
                   networking.extraHosts = flip concatMapStrings machines
                     (m': let config = (getAttr m' nodes).config; in
-                      optionalString (m.first != m' && config.networking.primaryIPAddress != "")
+                      optionalString (config.networking.primaryIPAddress != "")
                         ("${config.networking.primaryIPAddress} " +
                          "${config.networking.hostName}\n"));
 

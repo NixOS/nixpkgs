@@ -30,8 +30,8 @@ let
   libDir        = "$out/lib/ghc-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  isHaskellPkg  = x: (x ? pname) && (x ? version) && (x ? env);
-  paths         = stdenv.lib.filter isHaskellPkg (stdenv.lib.closePropagation packages);
+  paths         = stdenv.lib.filter (x: x ? isHaskellLibrary) (stdenv.lib.closePropagation packages);
+  hasLibraries  = stdenv.lib.any (x: x.isHaskellLibrary) paths;
 in
 if paths == [] then ghc else
 buildEnv {
@@ -73,7 +73,7 @@ buildEnv {
       makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
     done
 
-    $out/bin/ghc-pkg recache
+    ${stdenv.lib.optionalString hasLibraries "$out/bin/ghc-pkg recache"}
     $out/bin/ghc-pkg check
   '';
 } // {

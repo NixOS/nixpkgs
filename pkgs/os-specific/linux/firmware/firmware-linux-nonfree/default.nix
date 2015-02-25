@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 let
-  version = "17657c35869baa999b454e868cd3d5a7e1656425";
+  version = "4517261caab34742afdeaf0c36128b9579675717";
   shortVersion = stdenv.lib.substring 0 7 version;
 in
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
     rev = version;
-    sha256 = "15lv58wf3vjs4dpxvx3a7wn0pj83952wa2ab6ajfl3pbdhcvkzjb";
+    sha256 = "0w386nfwlqhk1wn7zzhfxkxx06nzqasc4dr0qq61wc29s9qlgi3c";
   };
 
   preInstall = ''

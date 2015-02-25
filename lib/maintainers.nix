@@ -17,6 +17,7 @@
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   antono = "Antono Vasiljev <self@antono.info>";
+  ardumont = "Antoine R. Dumont <eniotna.t@gmail.com>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";
   arobyn = "Alexei Robyn <shados@shados.net>";
   asppsa = "Alastair Pharo <asppsa@gmail.com>";
@@ -26,6 +27,7 @@
   aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
   balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
+  bcdarwin = "Ben Darwin <bcdarwin@gmail.com>";
   bdimcheff = "Brandon Dimcheff <brandon@dimcheff.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   benley = "Benjamin Staffin <benley@gmail.com>";
@@ -38,6 +40,7 @@
   bodil = "Bodil Stokke <nix@bodil.org>";
   boothead = "Ben Ford <ben@perurbis.com>";
   bosu = "Boris Sukholitko <boriss@gmail.com>";
+  bstrik = "Berno Strik <dutchman55@gmx.com>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
   cdepillabout = "Dennis Gosnell <cdep.illabout@gmail.com>";
@@ -157,8 +160,10 @@
   roelof = "Roelof Wobben <rwobben@hotmail.com>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
+  rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
+  schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   shell = "Shell Turner <cam.turn@gmail.com>";

@@ -36,8 +36,6 @@ in stdenv.mkDerivation rec {
     SRC_CC_OPTS += ${cFlags}
   '';
 
-  enableParallelBuilding = true;
-
   preConfigure = ''
     echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure

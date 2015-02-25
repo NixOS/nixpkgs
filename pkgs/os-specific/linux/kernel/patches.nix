@@ -18,7 +18,7 @@ let
       };
     };
 
-  grsecPatch = { grversion ? "3.0", kversion, revision, branch, sha256 }:
+  grsecPatch = { grversion ? "3.1", kversion, revision, branch, sha256 }:
     { name = "grsecurity-${grversion}-${kversion}";
       inherit grversion kversion revision;
       patch = fetchurl {
@@ -65,17 +65,17 @@ rec {
   };
 
   grsecurity_stable = grsecPatch
-    { kversion  = "3.14.32";
-      revision  = "201502062101";
+    { kversion  = "3.14.33";
+      revision  = "201502222137";
       branch    = "stable";
-      sha256    = "1qni3x6kwrhgqbhwm02m9wnmz7y2ydwwxw9ckk06xyq3j9qgv3aj";
+      sha256    = "1mzw5g4m5yxs0qzrx2am5s19zggn4n9pws8vsqq82dhawmwcbbq2";
     };
 
   grsecurity_unstable = grsecPatch
-    { kversion  = "3.18.6";
-      revision  = "201502062100";
+    { kversion  = "3.18.7";
+      revision  = "201502222138";
       branch    = "test";
-      sha256    = "11cy7qqkahd323hmi67r4psgryapk1qwamm9m15rhbfqgq428306";
+      sha256    = "0dnnwky9s8qhfm2b5zhl41m8br4qdxwmwwv8rbp11srydcz1pzib";
     };
 
   grsec_fix_path =
