@@ -122,7 +122,7 @@ stdenv.mkDerivation {
       ln -s "$prefix/usr/lib/firefox-bin-${version}/firefox" "$out/bin/"
 
       for executable in \
-        firefox mozilla-xremote-client firefox-bin plugin-container \
+        firefox firefox-bin plugin-container \
         updater crashreporter webapprt-stub
       do
         patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
@@ -130,7 +130,7 @@ stdenv.mkDerivation {
       done
 
       for executable in \
-        firefox mozilla-xremote-client firefox-bin plugin-container \
+        firefox firefox-bin plugin-container \
         updater crashreporter webapprt-stub libxul.so
       do
         patchelf --set-rpath "$libPath" \
