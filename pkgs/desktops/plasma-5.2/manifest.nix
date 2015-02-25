@@ -325,4 +325,328 @@
       name = "kwin-5.2.0.tar.xz";
     };
   }
+  {
+    name = stdenv.lib.nameFromURL "kio-extras-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/79invr6hmjir390chxkbqwijfl47sn44-kio-extras-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kio-extras-5.2.1.tar.xz";
+      sha256 = "0b410hrwpanshvnr3qsgcpza142d178nr3hsgb0r0ssfh0wycmm8";
+      name = "kio-extras-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-gtk-config-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/wp46hfmfna4343jryqnxgkx0i73w206m-kde-gtk-config-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kde-gtk-config-5.2.1.tar.xz";
+      sha256 = "0d1ll4wx1wr14rczjmzxpfiwp67i0ljn172c9w8vhvrv7gy579vw";
+      name = "kde-gtk-config-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "oxygen-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/qsi6ridvxykn2qpdq6h8s85dcnn04l1a-oxygen-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/oxygen-5.2.1.tar.xz";
+      sha256 = "1aj9y24ii51av8ydkk07nj666xk6igqkqqhlcpcc513qy87l041l";
+      name = "oxygen-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "khotkeys-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/98gn6w9nnzl0901dgs7kzm9j5kgf9i75-khotkeys-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/khotkeys-5.2.1.tar.xz";
+      sha256 = "012hnykqwx4asmbsd84kqzrq90bwkpryh7nribpsc99kwlngdgsn";
+      name = "khotkeys-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "plasma-desktop-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/ndkx7f2agaxdgn0l8yz9p3a0ahkhbyy8-plasma-desktop-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/plasma-desktop-5.2.1.tar.xz";
+      sha256 = "08pjyvb8lzjd0pmc72k8c6jcgprzq0g8psd5vhmvw614j9pz1a5d";
+      name = "plasma-desktop-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "baloo-5.6.1.tar.xz" ".tar";
+    store = "/nix/store/qjcgng89qgribr5np0vrvj86jvvprsg4-baloo-5.6.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/baloo-5.6.1.tar.xz";
+      sha256 = "1agf2vqkx9hb95di99c65752q9wjnyhkz1iwwvyk1n1a7jzvdqf2";
+      name = "baloo-5.6.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "sddm-kcm-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/g5lazmji9vlyiqkl6sj8h6i0yzdgnx1k-sddm-kcm-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/sddm-kcm-5.2.1.tar.xz";
+      sha256 = "0jjis582j1rk8ss64ys94izsg29sik0khv3czzw5zjqns22kn2r3";
+      name = "sddm-kcm-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "powerdevil-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/dv4cbwkmvpinz0v3s9y6p0ifci0q5fh0-powerdevil-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/powerdevil-5.2.1.tar.xz";
+      sha256 = "147hpzwmw0vxysp7wv0fhmrgaw1aclap70ii7i5pz05k093xngfm";
+      name = "powerdevil-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "plasma-workspace-wallpaper-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/mfchg5yspiyzvhhp5qh6j3zwfnwpca70-plasma-workspace-wallpaper-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/plasma-workspace-wallpaper-5.2.1.tar.xz";
+      sha256 = "0cr6s3rs2gz8cq93q7l2w2g0ibzqqlyh0v1nkzhpyxqq0vggjliw";
+      name = "plasma-workspace-wallpaper-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libbluedevil-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/iwiksm38d0ywn3x4rvcfjiynknxmy628-libbluedevil-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/libbluedevil-5.2.1.tar.xz";
+      sha256 = "1wqk03pxl2bzy4f77fy1zwlrlv3k96x9xz8qnavkir9j0i3ijndp";
+      name = "libbluedevil-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kfilemetadata-5.6.1.tar.xz" ".tar";
+    store = "/nix/store/m3f02ph2gqj8zw3p1kq86ih6m423i670-kfilemetadata-5.6.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kfilemetadata-5.6.1.tar.xz";
+      sha256 = "0w6dzhng4wp4mrxnq6859np6j3h9iydj4dscp1qr3zc0y377blw3";
+      name = "kfilemetadata-5.6.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "milou-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/f5979rdy20yxjbh9qif3wf7sylhdfr5i-milou-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/milou-5.2.1.tar.xz";
+      sha256 = "1q5bfw7wbgq3gz5r3sdvx7rmsf4cbj501cy1asl6bf1grshjqiyn";
+      name = "milou-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksysguard-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/6llw96fvpb79s3482w0v3ahb6qzn8czi-ksysguard-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/ksysguard-5.2.1.tar.xz";
+      sha256 = "06sr86siw43ly1c8iqjd672szxxjqxl6n8gnxmf92h3qqh1i8a2k";
+      name = "ksysguard-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmenuedit-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/fka4bg5h2hz93knjv2kqvz62dg5pk805-kmenuedit-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kmenuedit-5.2.1.tar.xz";
+      sha256 = "0kpfxgm8jfm2lyf7wxmnnl9flligmds8f6fy1cy36fqxpzhcal98";
+      name = "kmenuedit-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "systemsettings-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/942knn924cz51wwn3jimhcp799zlc7c8-systemsettings-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/systemsettings-5.2.1.tar.xz";
+      sha256 = "0ib84irgdbjd3sga7csjx59c2wxg34yr3j9a8ajhqvdq34yb14n4";
+      name = "systemsettings-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "muon-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/fvq7swhq8343kr70vjsl11bv1c3ayw3k-muon-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/muon-5.2.1.tar.xz";
+      sha256 = "115a7q2ns0h6lszn1lq84y5bk02fm4ly3alxkig7976jh8rbykxf";
+      name = "muon-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "plasma-nm-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/igw2v8zgczarw9ynxf473mfl76y6wd4j-plasma-nm-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/plasma-nm-5.2.1.tar.xz";
+      sha256 = "1c4gkxv24kdl2b5gslljihwh5h0v970f70802swblgrp87819bfj";
+      name = "plasma-nm-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libksysguard-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/zkrwgpjsa2761wpmic225szjs4503kss-libksysguard-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/libksysguard-5.2.1.tar.xz";
+      sha256 = "0f0s3hafdvgvscfbvkkdll95rzxa44j89qm7cmsclaqclmnwcfa2";
+      name = "libksysguard-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "polkit-kde-agent-1-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/gsni5ny5qx2j1vic0q1pa0xb0126x2z0-polkit-kde-agent-1-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/polkit-kde-agent-1-5.2.1.tar.xz";
+      sha256 = "0scmsiwwmmz1by8yzh5waa8ngp13hk7yihxh0bf0mfph8zkv3jf4";
+      name = "polkit-kde-agent-1-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kwin-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/n8bydi50mqc41sxh95v1zyncfh157am1-kwin-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kwin-5.2.1.tar.xz";
+      sha256 = "1cp7rak0y7jjizj9ampx2wcvra0kffxjs7grd2j57s4qy3z9az6i";
+      name = "kwin-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "plasma-workspace-wallpapers-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/cmrfclyx47g0byimi9fk2vgc92mi8vjd-plasma-workspace-wallpapers-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/plasma-workspace-wallpapers-5.2.1.tar.xz";
+      sha256 = "0dhbwygbxzjxzklcrqa2429k1harl9gz33l9183bz3q62iwcxf0x";
+      name = "plasma-workspace-wallpapers-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "bluedevil-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/5mj21ln4sm2i32xbhzbadjhgxhig0fjs-bluedevil-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/bluedevil-5.2.1.tar.xz";
+      sha256 = "1jahp2a8v4hmar8qfiw04miiih5br5s3jpkqlqmmpc56vn1czx6m";
+      name = "bluedevil-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kinfocenter-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/cww4i8a48yhm0mddak67lqy9lld20wy3-kinfocenter-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kinfocenter-5.2.1.tar.xz";
+      sha256 = "141mkk1gnhmnxxk0j1mn4p5zzwyjkbbwmwbpqq2adaar18p917i8";
+      name = "kinfocenter-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kscreen-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/h65gaypalzzqfgq3vcc495cdan9k4p5v-kscreen-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kscreen-5.2.1.tar.xz";
+      sha256 = "164vwvqrvzjczg2nbi9wkpnk8yki240iz2h5j50n5gkqvgg0w7df";
+      name = "kscreen-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "oxygen-fonts-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/hlcr09wkzjs62vwawsi9d611n0gxrixp-oxygen-fonts-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/oxygen-fonts-5.2.1.tar.xz";
+      sha256 = "0xnhh135yihmv40imd3mibwzcfdxgbn1mk4rjrsj5fqni113f0lm";
+      name = "oxygen-fonts-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkscreen-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/6xs5v03w12rmqpz235sk9scxap51s2db-libkscreen-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/libkscreen-5.2.1.tar.xz";
+      sha256 = "0i7vm73gs1f715fnmacrdnvk1hij03d72fr70wwa3x18cdcg4qas";
+      name = "libkscreen-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "breeze-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/8sr3b4ah8ds74wgfna9zcnq6vm5s3kn3-breeze-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/breeze-5.2.1.tar.xz";
+      sha256 = "0qdps15mr897s2pcjdci4nyg81n3j90ksz7jybqfkd0gr9l14iy5";
+      name = "breeze-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libmm-qt-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/cgj3wzm22izb1hvbx3wdd18zw3wswgil-libmm-qt-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/libmm-qt-5.2.1.tar.xz";
+      sha256 = "0n3q4bgj4ijrx7hdrnbbhxfnw4w97vgj5ba341qwf89hkhc4dhwn";
+      name = "libmm-qt-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kwrited-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/l3swq17a373a0z131mvqn4xa0nwsvjp5-kwrited-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kwrited-5.2.1.tar.xz";
+      sha256 = "006y89c7pxzc55lrkjrvyrywj4j95641n3j0b5vjr2mgxcnv8q7a";
+      name = "kwrited-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdeplasma-addons-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/06vk8iv3k4xb96rghh6jva6zj8q9a7ha-kdeplasma-addons-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kdeplasma-addons-5.2.1.tar.xz";
+      sha256 = "1lfb6f5h1qjbl0zyqw5q98b27hw16lszyk1nacgncp3ig1y177r3";
+      name = "kdeplasma-addons-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksshaskpass-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/fydms9jaal65yga60hngnz7hmz268wi2-ksshaskpass-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/ksshaskpass-5.2.1.tar.xz";
+      sha256 = "18wa7naxv7g7zrrkrbh9iljd4h479cq6xmair5iqc0cbbfw7znm0";
+      name = "ksshaskpass-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-cli-tools-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/1rm663f8mdif77m0wrkib534yskj0g6n-kde-cli-tools-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kde-cli-tools-5.2.1.tar.xz";
+      sha256 = "0zxrn1j4lmlj0s6j5245sd0ykg9wa93i0d8qzca4rjxn5mh87v9q";
+      name = "kde-cli-tools-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdecoration-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/06pjfn5j8lwbd7dj808mjs2bsfwbc3hr-kdecoration-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kdecoration-5.2.1.tar.xz";
+      sha256 = "0910hgh64xbap213sjj1bbxwmibi74chdyyp2qc149f5anqs3fcy";
+      name = "kdecoration-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kwayland-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/03np6kr81s99j3ijzq236ywc8nkxpy0j-kwayland-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/kwayland-5.2.1.tar.xz";
+      sha256 = "1c7h9csiam65jkrlg81iqi9y7q3mf63af87zkf6nfalbmz6j0p8l";
+      name = "kwayland-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "khelpcenter-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/2ws6508gv1m375l4xcyf6pa8q5c26748-khelpcenter-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/khelpcenter-5.2.1.tar.xz";
+      sha256 = "17sl0va35p420s8lmyz1pzyhzmrssvakc3w06xjj7f6hvgh8iqxw";
+      name = "khelpcenter-5.2.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "plasma-workspace-5.2.1.tar.xz" ".tar";
+    store = "/nix/store/04b1cp5432y80dl8a55xy4nvw586f33c-plasma-workspace-5.2.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/plasma/5.2.1/plasma-workspace-5.2.1.tar.xz";
+      sha256 = "0ldls1q5f88imc4cvxizssizswfgalh9ix95ab7p5f6ylizagp63";
+      name = "plasma-workspace-5.2.1.tar.xz";
+    };
+  }
 ]
