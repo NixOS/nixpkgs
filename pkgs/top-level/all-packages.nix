@@ -6944,8 +6944,9 @@ let
   opal = callPackage ../development/libraries/opal {};
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
-  openjpeg_2 = callPackage ../development/libraries/openjpeg/2.x.nix { };
-  openjpeg = openjpeg_2;
+  openjpeg_2_0_1 = callPackage ../development/libraries/openjpeg/2.0.1.nix { };
+  openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
+  openjpeg = openjpeg_2_1;
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
     giflib = giflib_4_1;
@@ -11005,7 +11006,9 @@ let
     lua = lua5;
  };
 
-  mupdf = callPackage ../applications/misc/mupdf { };
+  mupdf = callPackage ../applications/misc/mupdf {
+    openjpeg = openjpeg_2_0_1;
+  };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 

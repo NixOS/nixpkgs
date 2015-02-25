@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libpng, libtiff, lcms2, glib/*passthru only*/
+{ stdenv, cmake, pkgconfig, libpng, libtiff, lcms2, glib/*passthru only*/
 , sharedLibsSupport ? true # Build shared libraries
 , codecSupport ? true # Codec executables
 , mj2Support ? true # MJ2 executables
@@ -11,7 +11,7 @@
 , thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build
 , testsSupport ? false
 # Inherit generics
-, branch, sha256, version, ...
+, branch, src, version, ...
 }:
 
 assert jpipServerSupport -> (jpipLibSupport && (curl != null) && (fcgi != null));
@@ -28,11 +28,7 @@ stdenv.mkDerivation rec {
   name = "openjpeg-${version}";
   inherit branch;
   inherit version;
-
-  src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.gz";
-    inherit sha256;
-  };
+  inherit src;
 
   cmakeFlags = [
     (mkFlag sharedLibsSupport "BUILD_SHARED_LIBS")
