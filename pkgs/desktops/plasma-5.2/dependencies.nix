@@ -241,6 +241,14 @@
     propagatedUserEnvPkgs = [  ];
   };
 
+  plasma-workspace-wallpaper = {
+    buildInputs = [ "ECM" ];
+    nativeBuildInputs = [ "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [  ];
+  };
+
   plasma-workspace-wallpapers = {
     buildInputs = [ "ECM" ];
     nativeBuildInputs = [ "cmake" ];
