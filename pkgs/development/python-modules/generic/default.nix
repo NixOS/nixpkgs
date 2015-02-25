@@ -51,7 +51,7 @@
 
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-python.stdenv.mkDerivation (attrs // {
+if disabled then throw "${name} not supported for interpreter ${python.executable}" else python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   name = namePrefix + name;
@@ -167,7 +167,6 @@ python.stdenv.mkDerivation (attrs // {
   meta = with lib.maintainers; {
     # default to python's platforms
     platforms = python.meta.platforms;
-    broken = disabled;
   } // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
