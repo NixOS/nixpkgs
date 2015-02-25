@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, buildPythonPackage
-, python, cython, pkgconfig
-, xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
-, ffmpeg, x264, libvpx, pil, libwebp }:
+{ stdenv, fetchurl, buildPythonPackage, python, cython, pkgconfig,
+xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject,
+pycairo, ffmpeg, x264, libvpx, pil, libwebp, libxkbfile}:
 
 buildPythonPackage rec {
-  name = "xpra-0.11.6";
+  name = "xpra-0.14.19";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://xpra.org/src/${name}.tar.bz2";
-    sha256 = "0n3lr8nrfmrll83lgi1nzalng902wv0dcmcyx4awnman848dxij0";
+    url = "http://xpra.org/src/${name}.tar.xz";
+    sha256 = "0jifaysz4br1v0zibnzgd0k02rgybbsysvwrgbar1452sjb3db5m";
   };
 
   buildInputs = [
@@ -22,7 +21,7 @@ buildPythonPackage rec {
 
     pango cairo gdk_pixbuf atk gtk glib
 
-    ffmpeg libvpx x264 libwebp
+    ffmpeg libvpx x264 libwebp libxkbfile
   ];
 
   propagatedBuildInputs = [
@@ -36,7 +35,6 @@ buildPythonPackage rec {
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
   '';
-  setupPyBuildFlags = ["--enable-Xdummy"];
 
   preInstall = ''
     # see https://bitbucket.org/pypa/setuptools/issue/130/install_data-doesnt-respect-prefix
