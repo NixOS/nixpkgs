@@ -126,6 +126,8 @@ let
 
   pitz = callPackage ../applications/misc/pitz { };
 
+  plantuml = callPackage ../tools/misc/plantuml { };
+
   pycairo = callPackage ../development/python-modules/pycairo {
   };
 
@@ -10337,17 +10339,47 @@ let
 
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
-    name = "sphinxcontrib-httpdomain-1.1.9";
+    name = "sphinxcontrib-httpdomain-1.3.0";
+
+    # See issue #6548
+    disabled = isPyPy;
+
+    # Check is disabled due to this issue:
+    # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
+    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sphinxcontrib-httpdomain/${name}.tar.gz";
-      md5 = "0f63aea612cc9e0b55a6c39e5b0f87b7";
+      md5 = "ad7ea42bd4c7c0ee57b1cb25bbf24aab";
     };
 
     propagatedBuildInputs = with self; [sphinx];
 
     meta = {
       description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
+
+      homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
+
+      license = "BSD";
+    };
+  });
+
+
+  sphinxcontrib_plantuml = buildPythonPackage (rec {
+    name = "sphinxcontrib-plantuml-0.5";
+
+    # See issue #6548
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinxcontrib-plantuml/${name}.tar.gz";
+      md5 = "4a8840fe3475a19c2af3fa877ab9d296";
+    };
+
+    propagatedBuildInputs = with self; [sphinx plantuml];
+
+    meta = {
+      description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
 
       homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
 
