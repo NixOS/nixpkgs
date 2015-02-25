@@ -2725,8 +2725,6 @@ let
 
   fedpkg = buildPythonPackage (rec {
     name = "fedpkg-1.14";
-    disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
-
     meta.maintainers = [ stdenv.lib.maintainers.mornfall ];
 
     src = pkgs.fetchurl {
@@ -2993,15 +2991,15 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/m/mailchimp/mailchimp-${version}.tar.gz";
       sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
-    };
-
+    };  
+  
     # Test fails because specific version of docopt is searched
     # (Possible fix: Needs upstream patching in the library)
     doCheck = false;
 
     buildInputs = with self; [ docopt ];
 
-    propagatedBuildInputs = with self; [ requests ];
+    propagatedBuildInputs = with self; [ requests ];                                       
 
     meta = {
       description = "A CLI client and Python API library for the MailChimp email platform";
@@ -4733,7 +4731,6 @@ let
 
   gevent-socketio = buildPythonPackage rec {
     name = "gevent-socketio-0.3.6";
-    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent-socketio/${name}.tar.gz";
@@ -4747,7 +4744,6 @@ let
 
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
-    disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent-websocket/${name}.tar.gz";
@@ -6634,7 +6630,6 @@ let
 
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
-    disabled = isPy3k;          # for pygtk
 
     src = pkgs.fetchurl {
       url = http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2;
@@ -7016,8 +7011,6 @@ let
     # Tests require networking to pass
     doCheck = false;
 
-    disabled = isPyPy;  # because of numpy
-
     meta = {
       homepage = "http://pandas.pydata.org/";
       description = "Python Data Analysis Library";
@@ -7113,7 +7106,6 @@ let
    pasteScript = buildPythonPackage rec {
     version = "1.7.5";
     name = "PasterScript-${version}";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/PasteScript/${name}.tar.gz";
@@ -8425,7 +8417,6 @@ let
   pyqtgraph = buildPythonPackage rec {
     name = "pyqtgraph-${version}";
     version = "0.9.10";
-    disabled = isPyPy;  # for numpy
 
     doCheck = false;  # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
 
@@ -8982,7 +8973,6 @@ let
   pywebkitgtk = stdenv.mkDerivation rec {
     name = "pywebkitgtk-${version}";
     version = "1.1.8";
-    disabled = isPy3k;          # for pygtk
 
     src = pkgs.fetchurl {
       url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
@@ -9261,7 +9251,6 @@ let
 
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-1.6.16";
-    disabled = isPy3k;          # because of flup
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
@@ -9321,7 +9310,7 @@ let
 
     # Remove Windows .bat files
     postInstall = ''
-      rm "$out/bin/"*.bat
+      rm "$out"/bin/*.bat
     '';
 
     meta = with stdenv.lib; {
@@ -9513,7 +9502,6 @@ let
 
   routes = buildPythonPackage rec {
     name = "routes-1.12.3";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = http://pypi.python.org/packages/source/R/Routes/Routes-1.12.3.tar.gz;
@@ -9599,7 +9587,7 @@ let
 
   runsnakerun = buildPythonPackage rec {
     name = "runsnakerun-2.0.4";
-    disabled = isPy3k;
+
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";
@@ -9906,7 +9894,6 @@ let
 
   spambayes = buildPythonPackage rec {
     name = "spambayes-1.1b1";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/spambayes/${name}.tar.gz";
@@ -11823,7 +11810,6 @@ let
 
   xdot = buildPythonPackage rec {
     name = "xdot-0.6";
-    disabled = isPy3k;          # for pygtk
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xdot/xdot-0.6.tar.gz";
@@ -12374,7 +12360,6 @@ let
   screenkey = buildPythonPackage rec {
     version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
     name = "screenkey-${version}";
-    disabled = isPy3k;          # for pygtk
 
     propagatedBuildInputs = with self; [ pygtk distutils_extra xlib pkgs.xorg.xmodmap ];
 
@@ -12616,7 +12601,6 @@ let
 
   webhelpers = buildPythonPackage rec {
     name = "WebHelpers-1.3";
-    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/W/WebHelpers/${name}.tar.gz";
@@ -13191,7 +13175,7 @@ let
     propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
 
     preFixup = ''
-        wrapProgram "$out/bin/"* \
+        wrapProgram $out/bin/* \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
     '';
 
@@ -13267,7 +13251,6 @@ let
 
   redNotebook = buildPythonPackage rec {
     name = "rednotebook-1.8.1";
-    disabled = isPy3k;          # for pygtk
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/rednotebook/${name}.tar.gz";
@@ -13296,7 +13279,7 @@ let
       url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
       sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
     };
-
+   
     propagatedBuildInputs = with self; [ nose ];
 
     meta = {
@@ -13315,7 +13298,7 @@ let
     };
 
     buildInputs = with self; [ nose numpy ];
-
+   
     meta = {
       homepage = "http://pythonhosted.org/uncertainties/";
       description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
@@ -13578,7 +13561,7 @@ let
       license = licenses.mit;
     };
   };
-
+  
   html2text = buildPythonPackage rec {
     name = "html2text-2014.12.29";
 
