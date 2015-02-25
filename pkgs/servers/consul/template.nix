@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "consul-template-${version}";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = import ./deps.nix {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Generic template rendering and notifications with Consul";
     homepage = https://github.com/hashicorp/consul-template;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh wkennington ];
     platforms = platforms.unix;
   };
 }
