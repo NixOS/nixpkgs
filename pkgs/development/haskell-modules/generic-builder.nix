@@ -111,7 +111,7 @@ stdenv.mkDerivation ({
   name = "${optionalString hasActiveLibrary "haskell-"}${pname}-${version}";
 
   prePhases = ["setupCompilerEnvironmentPhase"];
-  preConfigurePhases = ["jailbreakPhase" "compileBuildDriverPhase"];
+  preConfigurePhases = ["compileBuildDriverPhase"];
   preInstallPhases = ["haddockPhase"];
 
   inherit src;
@@ -120,6 +120,14 @@ stdenv.mkDerivation ({
   propagatedNativeBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
+
+  prePatch = optionalString (editedCabalFile != null) ''
+    echo "Replacing Cabal file with edited version ${newCabalFile}."
+    cp ${newCabalFile} ${pname}.cabal
+  '' + optionalString jailbreak ''
+    echo "Running jailbreak-cabal to lift version restrictions on build inputs."
+    ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
+  '' + prePatch;
 
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
@@ -153,20 +161,6 @@ stdenv.mkDerivation ({
     ghc-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
-  '';
-
-  jailbreakPhase = ''
-    runHook preJailbreak
-
-    ${optionalString (editedCabalFile != null) ''
-      echo "Replacing Cabal file with edited version ${newCabalFile}."
-      cp ${newCabalFile} ${pname}.cabal
-    ''}${optionalString jailbreak ''
-      echo "Running jailbreak-cabal to lift version restrictions on build inputs."
-      ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
-    ''}
-
-    runHook postJailbreak
   '';
 
   compileBuildDriverPhase = ''
@@ -281,7 +275,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
-// optionalAttrs (prePatch != "")       { inherit prePatch; }
 // optionalAttrs (postPatch != "")      { inherit postPatch; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
