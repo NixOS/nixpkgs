@@ -178,7 +178,7 @@ in
         ExecReload = "${pkgs.consul}/bin/consul reload";
         PermissionsStartOnly = true;
         User = if cfg.dropPrivileges then "consul" else null;
-        TimeoutStartSec = "${toString (20 + (3 * cfg.joinRetries))}s";
+        TimeoutStartSec = "0";
       } // (optionalAttrs (cfg.leaveOnStop) {
         ExecStop = "${pkgs.consul}/bin/consul leave";
       });
@@ -209,13 +209,14 @@ in
           echo "$ADDR"
         }
         echo "{" > /etc/consul-addrs.json
+        delim=" "
       ''
       + concatStrings (flip mapAttrsToList cfg.interface (name: i:
         optionalString (i != null) ''
-          echo "    \"${name}_addr\": \"$(getAddr "${i}")\"," >> /etc/consul-addrs.json
+          echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
+          delim=","
         ''))
       + ''
-        echo "    \"\": \"\"" >> /etc/consul-addrs.json
         echo "}" >> /etc/consul-addrs.json
       '';
       postStart = ''
