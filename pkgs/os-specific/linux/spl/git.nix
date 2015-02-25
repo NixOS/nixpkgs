@@ -1,7 +1,7 @@
 { callPackage, fetchgit, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "086476f";
+  version = "2015-02-04";
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/spl.git;
