@@ -2550,6 +2550,28 @@ let
   };
 
 
+  elasticsearch = buildPythonPackage (rec {
+    name = "elasticsearch-1.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/elasticsearch/${name}.tar.gz";
+      md5 = "14a758debd2296d923cb6c958db98eba";
+    };
+
+    # Check is disabled because running them destroy the content of the local cluster!
+    # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
+    doCheck = false;
+
+    meta = {
+      description = "Official low-level client for Elasticsearch";
+
+      homepage = https://github.com/elasticsearch/elasticsearch-py;
+
+      license = stdenv.lib.licenses.asl20;
+    };
+  });
+
+
   evdev = buildPythonPackage rec {
     version = "0.4.6";
     name = "evdev-${version}";
