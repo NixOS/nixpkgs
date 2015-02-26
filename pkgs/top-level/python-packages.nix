@@ -9101,6 +9101,24 @@ let
   });
 
 
+  pyaml = buildPythonPackage (rec {
+    name = "pyaml-15.02.1";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyaml/${name}.tar.gz";
+      md5 = "e98cf27f50b9ca291ca4937c135db1c9";
+    };
+
+    buildInputs = with self; [ pyyaml ];
+
+    meta = {
+      description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
+      homepage = https://github.com/mk-fg/pretty-yaml;
+    };
+  });
+
+
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.10";
 
