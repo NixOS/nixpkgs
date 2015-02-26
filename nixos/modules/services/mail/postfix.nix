@@ -329,6 +329,11 @@ in
 
       # This makes comfortable for root to run 'postqueue' for example.
       systemPackages = [ pkgs.postfix ];
+
+      # This is where postfix delivers local mail.
+      variables = {
+        MAIL = "/var/spool/mail/$USER";
+      };
     };
 
     services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
