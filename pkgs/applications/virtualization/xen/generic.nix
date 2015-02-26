@@ -52,7 +52,7 @@ let
 
   scriptEnvPath = stdenv.lib.concatStrings (stdenv.lib.intersperse ":" (map (x: "${x}/bin")
     [ coreutils gawk gnused gnugrep which perl diffutils utillinux multipath_tools
-      iproute inetutils iptables bridge_utils openvswitch nbd drbd ]));
+      iproute inetutils iptables bridge-utils openvswitch nbd drbd ]));
 in
 
 
