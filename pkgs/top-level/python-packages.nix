@@ -4321,6 +4321,24 @@ let
     };
   };
 
+  wtforms = buildPythonPackage rec {
+    version = "2.0.2";
+    name = "wtforms-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/W/WTForms/WTForms-${version}.zip";
+      md5 = "613cf723ab40537705bec02733c78d95";
+    };
+
+    propagatedBuildInputs = with self; [ ordereddict Babel ];
+
+    meta = {
+      homepage = https://github.com/wtforms/wtforms;
+      description = "A flexible forms validation and rendering library for Python";
+      license = licenses.bsd3;
+    };
+  };
+
   flexget = buildPythonPackage rec {
     version = "1.2.278";
     name = "FlexGet-${version}";
