@@ -1166,6 +1166,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hastePerch = callPackage ../development/libraries/haskell/haste-perch {};
 
+  hatt = callPackage ../development/libraries/haskell/hatt {};
+
   HaTeX = callPackage ../development/libraries/haskell/HaTeX {};
 
   hcltest = callPackage ../development/libraries/haskell/hcltest {};
