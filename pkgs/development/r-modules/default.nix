@@ -663,7 +663,6 @@ let
     "ArrayBin" # requires SAGx
     "babel" # requires edgeR
     "BACA" # requires RDAVIDWebService
-    "bamboo" # depends on broken jvmr
     "BcDiag" # requires fabia
     "bdvis" # requres taxize
     "beadarrayFilter" # requires beadarray
@@ -761,7 +760,6 @@ let
     "isva" # requires qvalue
     "jomo" # linking errors
     "js" # requires broken V8
-    "jvmr" # tries to download files during its build
     "KANT" # requires affy, and Biobase
     "ktspair" # requires Biobase
     "latticeDensity" # requires spatstat
@@ -909,7 +907,6 @@ let
     "spocc" # requires leafletR
     "SQDA" # requires limma
     "Statomica" # requires Biobase, multtest
-    "StochKit2R" # tarball is invalid on server
     "stpp" # requires spatstat
     "structSSI" # requires multtest
     "strum" # requires Rgraphviz
