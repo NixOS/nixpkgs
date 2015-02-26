@@ -1063,6 +1063,8 @@ let
 
   dhcp = callPackage ../tools/networking/dhcp { };
 
+  dhcpdump = callPackage ../tools/networking/dhcpdump { };
+
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
   di = callPackage ../tools/system/di { };
@@ -8336,6 +8338,8 @@ let
 
   shishi = callPackage ../servers/shishi { };
 
+  sipcmd = callPackage ../applications/networking/sipcmd { };
+
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
@@ -11430,6 +11434,8 @@ let
   snd = callPackage ../applications/audio/snd { };
 
   shntool = callPackage ../applications/audio/shntool { };
+
+  sipp = callPackage ../development/tools/misc/sipp { };
 
   sonic-visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
