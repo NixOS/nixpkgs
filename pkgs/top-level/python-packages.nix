@@ -8208,12 +8208,12 @@ let
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.0.1";
+    version = "2.0.2";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "1js5vq0xvsiykzpj5snxhdz3li9fmk8vc549slg9hcnj80frw0sy";
+      sha256 = "0lagrwifsgn0s8bzqahpr87p7gd38xja8f06akscinp6hj89283k";
     };
 
     meta = with stdenv.lib; {
