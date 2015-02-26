@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoodle-types";
-  version = "0.3";
-  sha256 = "0n9plj6hhsc5482pl7sw4gw7py8r6cn0cl7hg35g2qxdxnzapifm";
+  version = "0.3.0";
+  sha256 = "0mkx3n1sni43665dk5ify890wdfxamxvkx1h61kzsk3c3bazngr5";
   buildDepends = [ cereal lens mtl strict text uuid ];
   meta = {
     description = "Data types for programs for hoodle file format";
@@ -15,3 +15,4 @@ cabal.mkDerivation (self: {
     maintainers = with self.stdenv.lib.maintainers; [ ianwookim ];
   };
 })
+

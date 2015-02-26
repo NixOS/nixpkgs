@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoodle-builder";
-  version = "0.3";
-  sha256 = "0mj58g7kfr5hpqv6idjb24d3gdh25z5x2ym62c6ckm5g3f4x3jm9";
+  version = "0.3.0";
+  sha256 = "0g4a3gf1mgf5gyniif0i2b89dz416h28171mwx7k7ivjw23gjvm7";
   buildDepends = [
     blazeBuilder doubleConversion hoodleTypes lens strict text
   ];

@@ -1292,6 +1292,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hoodleParser = callPackage ../development/libraries/haskell/hoodle-parser {};
 
+  hoodlePublish = callPackage ../development/libraries/haskell/hoodle-publish {};
+
   hoodleRender = callPackage ../development/libraries/haskell/hoodle-render {};
 
   hoodleTypes = callPackage ../development/libraries/haskell/hoodle-types {};
