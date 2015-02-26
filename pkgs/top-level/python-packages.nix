@@ -1781,10 +1781,10 @@ let
   };
 
   covCore = buildPythonPackage rec {
-    name = "cov-core-1.7";
+    name = "cov-core-1.15.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cov-core/cov-core-1.7.tar.gz";
-      md5 = "59c1e22e636633e10120beacbf45b28c";
+      url = "http://pypi.python.org/packages/source/c/cov-core/${name}.tar.gz";
+      md5 = "f519d4cb4c4e52856afb14af52919fe6";
     };
     meta = {
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
