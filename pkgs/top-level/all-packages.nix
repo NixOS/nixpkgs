@@ -3889,6 +3889,8 @@ let
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
+    erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
       sexplib = ocaml_sexplib;
