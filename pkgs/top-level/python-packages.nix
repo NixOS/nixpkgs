@@ -2591,6 +2591,26 @@ let
   });
 
 
+  elasticsearchdsl = buildPythonPackage (rec {
+    name = "elasticsearch-dsl-0.0.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
+      md5 = "6cbc9ed7aefb3ef804be4e3b318b2570";
+    };
+
+    buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov urllib3 ];
+
+    meta = {
+      description = "Python client for Elasticsearch";
+
+      homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
+
+      license = stdenv.lib.licenses.asl20;
+    };
+  });
+
+
   evdev = buildPythonPackage rec {
     version = "0.4.6";
     name = "evdev-${version}";
