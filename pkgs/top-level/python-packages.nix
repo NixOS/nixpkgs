@@ -4467,6 +4467,25 @@ let
     };
   });
 
+  falcon = buildPythonPackage (rec {
+    name = "falcon-0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/falcon/${name}.tar.gz";
+      md5 = "bf9e8bdd20700f1ff7ce6397cd441fbd";
+    };
+
+    propagatedBuildInputs = with self; [ coverage ddt nose pyyaml requests2 six testtools python_mimeparse ];
+
+    meta = {
+      description = "An unladen web framework for building APIs and app backends";
+
+      homepage = http://falconframework.org;
+
+      license = stdenv.lib.licenses.asl20;
+    };
+  });
+
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
     disabled = isPy3k;
