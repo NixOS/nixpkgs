@@ -7368,6 +7368,20 @@ let
     propagatedBuildInputs = with self; [ unittest2 ];
   };
 
+
+  python3pika = buildPythonPackage {
+    name = "python3-pika-0.9.14";
+    disabled = !isPy3k;
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/p/python3-pika/python3-pika-0.9.14.tar.gz;
+      md5 = "f3a3ee58afe0ae06f1fa553710e1aa28";
+    };
+    buildInputs = with self; [ nose mock pyyaml ];
+
+    propagatedBuildInputs = with self; [ unittest2 ];
+  };
+
+
   pil = buildPythonPackage rec {
     name = "PIL-${version}";
     version = "1.1.7";
