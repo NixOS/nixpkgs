@@ -13632,6 +13632,8 @@ let
     inherit (gnome2) zenity;
   };
 
+  wmutils-core = callPackage ../tools/X11/wmutils-core { };
+
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   x2x = callPackage ../tools/X11/x2x { };
