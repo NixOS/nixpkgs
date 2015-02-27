@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
   # there is a mysterious sh: command not found
   doCheck = false;
 
-  enableParallelBuilding = true;
+  # problems on Hydra
+  enableParallelBuilding = false;
 
   configureFlags = [ "--enable-readline" "--enable-dl" ];
 
