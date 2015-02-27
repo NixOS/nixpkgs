@@ -16,4 +16,11 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    description = "Dynamic DNS daemon for no-ip accounts";
+    homepage = http://noip.com/download?page=linux;
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.iand675 ];
+  };
 }
