@@ -989,7 +989,7 @@ MAPA = derive { name="MAPA"; version="1.9"; sha256="1i143x2l6fq4vl8l8cagai580yqv
 MAPLES = derive { name="MAPLES"; version="1.0"; sha256="0hzsh7z1k7qazpxjqbm9842zgdpl51irg7yfd119a7b2sd3a8li9"; depends=[mgcv]; };
 MAR1 = derive { name="MAR1"; version="1.0"; sha256="1r6j890icl5h3m2876sakmwr3c65513xnsj68sy0y0q7xj3a039l"; depends=[leaps bestglm]; };
 MARSS = derive { name="MARSS"; version="3.9"; sha256="0vn8axzz0nqdcl3w00waghz68z8pvfm764w11kxxigvjpw2plj31"; depends=[nlme mvtnorm KFAS]; };
-MASS = derive { name="MASS"; version="7.3-39"; sha256="07fi4987v185kb8llw8maldh1bssa4dd7p9z7ih58l9am9rcjswk"; depends=[]; };
+MASS = derive { name="MASS"; version="7.3-39"; sha256="08h94j5zcf8sgg2bynnhq2wcysw3rvzdw4hcp1il3y38i6d31zgm"; depends=[]; };
 MASSTIMATE = derive { name="MASSTIMATE"; version="1.2"; sha256="1j9l8b5d518ag9ivzr1z4dd2m23y2ia1wdshx1krmshn8xsd6lwp"; depends=[]; };
 MAT = derive { name="MAT"; version="2.2"; sha256="093axw2zp4i3f6s9621zwibcxrracp77xrc0q5q0m4yv3m35x908"; depends=[Rcpp Rcpp RcppArmadillo]; };
 MATA = derive { name="MATA"; version="0.2"; sha256="0jmsgis1jkyqywa4i5rq5inb72hsgc9s4xwmaqyfdnfa6lw44sfx"; depends=[]; };
