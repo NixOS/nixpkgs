@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fch1l55753y6jkk0hj8f6vw4h1kinkn9ysp22dq5g9zjnvjf88l";
   };
 
+  # Patch incompatiblity with GCC. Source: http://koji.fedoraproject.org/koji/buildinfo?buildID=586907
+  patches = [ ./compile-fix.patch ./crash-fix.patch ./no-optimization.patch ];
+
   preBuild = ''
     # Really dirty hack to get Memtest to build without needing a Glibc
     # with 32-bit libraries and headers.
