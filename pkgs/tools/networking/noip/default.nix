@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=\${out}" ];
   installPhase =
     ''
-      if [ ! -d "$out/bin" ]; then mkdir -p $out/bin;fi
+      mkdir -p $out/bin
       cp noip2 $out/bin
     '';
 
