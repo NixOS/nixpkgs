@@ -263,6 +263,9 @@ with stdenv.lib;
   SLIP_COMPRESSED y # CSLIP compressed headers
   SLIP_SMART y
   THERMAL_HWMON y # Hardware monitoring support
+  ${optionalString (versionAtLeast version "3.15") ''
+    UEVENT_HELPER n
+  ''}
   USB_DEBUG? n
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
