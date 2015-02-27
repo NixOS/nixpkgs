@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxcb ];
 
   makeFlags = [ "PREFIX=$out" ];
-  
+
   installFlags = [ "PREFIX=$out" ];
 
   meta = with lib; {
     description = "Set of window manipulation tools";
     homepage = https://github.com/wmutils/core;
-	license = stdenv.lib.licenses.isc;
-	platforms = platforms.unix;
+    license = stdenv.lib.licenses.isc;
+    platforms = platforms.unix;
   };
 }
