@@ -199,7 +199,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.xen.org/;
     description = "Xen hypervisor and management tools for Dom0";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ eelco tstrobel ];
   };
 }
