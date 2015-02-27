@@ -129,10 +129,10 @@ in
 
       wantedBy = [ "sshd.service" ];
       before = [ "sshd.service" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "ip-up.target" ];
+      wants = [ "network-online.target" "ip-up.target" ];
 
-      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 6 --waitretry=10 --header='Metadata-Flavor: Google'"; in
+      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'"; in
         ''
           # When dealing with cryptographic keys, we want to keep things private.
           umask 077
