@@ -9,9 +9,10 @@
 , modules
 , check ? true
 , prefix ? []
+, host ? null
 }:
 
-let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
+let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system; host_ = host;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                    in if e == "" then [] else [(import (builtins.toPath e))];
 in rec {
@@ -33,9 +34,9 @@ in rec {
   # the 64-bit package anyway. However, it would be cleaner to respect
   # nixpkgs.config here.
   extraArgs = extraArgs_ // {
-    inherit pkgs modules baseModules;
+    inherit pkgs modules baseModules host;
     modulesPath = ../modules;
-    pkgs_i686 = import ./nixpkgs.nix { system = "i686-linux"; config.allowUnfree = true; };
+    pkgs_i686 = import ./nixpkgs.nix { system = "i686-linux"; host = host; config.allowUnfree = true; };
     utils = import ./utils.nix pkgs;
   };
 
@@ -55,17 +56,18 @@ in rec {
     else import ./nixpkgs.nix (
       let
         system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
+        host = if nixpkgsOptions.host != "" then nixpkgsOptions.host else host_;
         nixpkgsOptions = (import ./eval-config.nix {
-          inherit system extraArgs modules prefix;
+          inherit system extraArgs modules prefix host;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ../modules/config/no-x-libs.nix ];
-          pkgs = import ./nixpkgs.nix { system = system_; config = {}; };
+          pkgs = import ./nixpkgs.nix { system = system_; host = host_; config = {}; };
           check = false;
         }).config.nixpkgs;
       in
       {
-        inherit system;
+        inherit system host;
         inherit (nixpkgsOptions) config;
       });
 
