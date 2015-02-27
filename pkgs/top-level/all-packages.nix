@@ -6087,6 +6087,8 @@ let
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
+  libctemplate_2_2 = callPackage ../development/libraries/libctemplate/2.2.nix { };
+
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
 
   libcue = callPackage ../development/libraries/libcue { };
@@ -13402,6 +13404,7 @@ let
 
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5_1;
+    libctemplate = libctemplate_2_2;
     inherit (pythonPackages) pexpect paramiko;
   };
 
