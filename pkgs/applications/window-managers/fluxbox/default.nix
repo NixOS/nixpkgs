@@ -4,19 +4,20 @@
 , libXinerama
 , imlib2 }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "fluxbox-${version}";
-  version = "1.3.5";
+  version = "1.3.7";
 
   buildInputs = [ pkgconfig freetype fribidi libXext libXft libXpm libXrandr libXrender xextproto libXinerama imlib2 ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/fluxbox/${name}.tar.bz2";
-    sha256 = "164dd7bf59791d09a1e729a4fcd5e7347a1004ba675629860a5cf1a271c32983";
+    url = "mirror://sourceforge/fluxbox/${name}.tar.xz";
+    sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
       Fluxbox is a X window manager based on Blackbox 0.61.1 window
