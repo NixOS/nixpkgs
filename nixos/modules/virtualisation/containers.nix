@@ -203,7 +203,7 @@ in
         script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-            mkdir -p -m 0700 "$root/var/lib/private" "$root/root"
+            mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi
@@ -261,11 +261,21 @@ in
                 ip route add $LOCAL_ADDRESS dev $ifaceHost
               fi
             fi
+
+            # Get the leader PID so that we can signal it in
+            # preStop. We can't use machinectl there because D-Bus
+            # might be shutting down. FIXME: in systemd 219 we can
+            # just signal systemd-nspawn to do a clean shutdown.
+            machinectl show "$INSTANCE" | sed 's/Leader=\(.*\)/\1/;t;d' > "/run/containers/$INSTANCE.pid"
           '';
 
         preStop =
           ''
-            machinectl poweroff "$INSTANCE" || true
+            pid="$(cat /run/containers/$INSTANCE.pid)"
+            if [ -n "$pid" ]; then
+              kill -RTMIN+4 "$pid"
+            fi
+            rm -f "/run/containers/$INSTANCE.pid"
           '';
 
         restartIfChanged = false;
