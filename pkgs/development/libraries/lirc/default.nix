@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "011nwpxm5d12rsapljg3pjf9pgb0j8ngmc3zg69q4kv61hkx2zim";
   };
 
+  patchPhase = ''
+    sed -e 's|^#!/usr/bin/env python3$|#!${python3}/bin/python3|g' -i tools/*.py
+  '';
+
   preBuild = "patchShebangs .";
 
   buildInputs = [ alsaLib help2man pkgconfig x11 python3 ];
