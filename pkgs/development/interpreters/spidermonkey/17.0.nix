@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip }:
+{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip, bash }:
 
 stdenv.mkDerivation rec {
   version = "17.0.0";
@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
+
+    # Test broken on ARM. Fedora disables it.
+    # https://lists.fedoraproject.org/pipermail/scm-commits/Week-of-Mon-20130617/1041155.html
+    echo -e '#!${bash}/bin/bash\nexit 0' > config/find_vanilla_new_calls
 
     paxmark m shell/js17
     paxmark mr jsapi-tests/jsapi-tests
