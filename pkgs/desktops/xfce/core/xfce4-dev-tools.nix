@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-dev-tools";
-  ver_maj = "4.10";
+  ver_maj = "4.12";
   ver_min = "0";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1y1byfjciqhxqfxbjfp22bn5lxk3a01ng7zfjha8h5mzzfxlk5pp";
+    sha256 = "1jxmyp80pwbfgmqmwpjxs7z5dmm6pyf3qj62z20xy44izraadqz2";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

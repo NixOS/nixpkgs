@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-power-manager";
-  ver_maj = "1.3";
-  ver_min = "2";
+  ver_maj = "1.4";
+  ver_min = "3";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0lv29ycws185qr89xn01vcddkvpddk7q6hni0s6d0nqvjavycg0j";
+    sha256 = "04909sfc2nrj2wg9cw6y9y2r9yrp3l3vc201sy1gaiap67fi33h1";
   };
 
   name = "${p_name}-${ver_maj}.${ver_min}";
