@@ -11300,6 +11300,10 @@ let
     qt = qt4;
   });
 
+  rofi = callPackage ../applications/misc/rofi {
+    automake = automake114x;
+  };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
