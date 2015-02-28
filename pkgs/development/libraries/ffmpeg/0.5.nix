@@ -2,6 +2,6 @@
 
 callPackage ./generic.nix (args // rec {
   version = "${branch}.15";
-  branch = "0.10";
-  sha256 = "0p9x559fpj4zxll7rn3kwdig6y66c3ahv3pddmz23lljq5rvyvcb";
+  branch = "0.5";
+  sha256 = "1rcy15dv5bnpnncb78kgki9xl279bh99b76nzqdd87b61r04z74z";
 })
