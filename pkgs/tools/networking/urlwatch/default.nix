@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
-  name = "urlwatch-1.17";
+  name = "urlwatch-1.18";
 
   src = fetchurl {
     url = "http://thp.io/2008/urlwatch/${name}.tar.gz";
-    sha256 = "1xl8gi01bfbrg2mchns9cgagpxjjsig1x4kis3isqgfg4k0h8vq0";
+    sha256 = "090qfgx249ks7103sap6w47f8302ix2k46wxhfssxwsqcqdl25vb";
   };
 
   patchPhase = ''
