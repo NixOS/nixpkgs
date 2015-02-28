@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0e5ead50a07668d29888f2fa6f53220f900c886e46a2c99c7e8656842f05ff2d";
   };
 
-  patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ];
+  patches = [ ./0.9.1_modern_boost_fix.patch ./0.9.1_boost_1.57_fix.patch ./0.9.1_discover_luajit.patch ];
 
   buildInputs = [ boost-build lua boost ];
 

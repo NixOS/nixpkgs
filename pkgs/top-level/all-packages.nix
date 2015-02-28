@@ -6731,6 +6731,8 @@ let
 
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
+  luabind_luajit = callPackage ../development/libraries/luabind { lua = luajit; };
+
   lzo = callPackage ../development/libraries/lzo { };
 
   matio = callPackage ../development/libraries/matio { };
