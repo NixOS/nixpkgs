@@ -3510,6 +3510,7 @@ let
       url = "https://pypi.python.org/packages/source/p/py3status/${name}.tar.gz";
       md5 = "89ad395268c7791ff5d36412b1efeeb9";
     };
+    propagatedBuildInputs = with self; [ requests2 ];
     meta = {
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
