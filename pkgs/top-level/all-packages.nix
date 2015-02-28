@@ -4103,7 +4103,9 @@ let
 
     zed = callPackage ../development/ocaml-modules/zed { };
 
-    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving { };
+    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
+      oasis = ocaml_oasis;
+    };
 
   };
 
