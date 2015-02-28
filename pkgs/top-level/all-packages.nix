@@ -2850,6 +2850,8 @@ let
 
   skydns = callPackage ../servers/dns/skydns { };
 
+  sipcalc = callPackage ../tools/networking/sipcalc { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
