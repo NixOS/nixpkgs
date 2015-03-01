@@ -32,6 +32,11 @@ stdenv.mkDerivation {
     )
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/gsettings-schemas/$name
+    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/finalterm" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
