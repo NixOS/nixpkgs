@@ -993,6 +993,10 @@ let
     python = python26;
   };
 
+  cudatoolkit65 = callPackage ../development/compilers/cudatoolkit/6.5.nix {
+    python = python26;
+  };
+
   cudatoolkit = cudatoolkit5;
 
   curl = callPackage ../tools/networking/curl rec {
