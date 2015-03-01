@@ -1,0 +1,12 @@
+diff -ru -x '*~' blender-2.73a-orig/CMakeLists.txt blender-2.73a/CMakeLists.txt
+--- blender-2.73a-orig/CMakeLists.txt	2015-01-21 13:31:24.000000000 +0100
++++ blender-2.73a/CMakeLists.txt	2015-03-01 23:14:22.962585422 +0100
+@@ -351,7 +351,7 @@
+ option(WITH_CYCLES_STANDALONE_GUI	"Build cycles standalone with GUI" OFF)
+ option(WITH_CYCLES_OSL				"Build Cycles with OSL support" ${_init_CYCLES_OSL})
+ option(WITH_CYCLES_CUDA_BINARIES	"Build cycles CUDA binaries" OFF)
+-set(CYCLES_CUDA_BINARIES_ARCH sm_20 sm_21 sm_30 sm_35 sm_50 CACHE STRING "CUDA architectures to build binaries for")
++set(CYCLES_CUDA_BINARIES_ARCH sm_20 sm_21 sm_30 sm_35 sm_50 sm_52 CACHE STRING "CUDA architectures to build binaries for")
+ mark_as_advanced(CYCLES_CUDA_BINARIES_ARCH)
+ unset(PLATFORM_DEFAULT)
+ option(WITH_CYCLES_LOGGING	"Build cycles with logging support" ON)
