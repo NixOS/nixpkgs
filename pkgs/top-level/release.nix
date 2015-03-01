@@ -12,7 +12,7 @@
 { nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" /* "x86_64-darwin" */ ]
+  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
 }:
 
 with import ./release-lib.nix { inherit supportedSystems; };
@@ -23,6 +23,7 @@ let
     { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
 
       manual = import ../../doc;
+      lib.tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
@@ -30,6 +31,7 @@ let
           constituents =
             [ jobs.tarball
               jobs.manual
+              jobs.lib.tests
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -349,12 +351,6 @@ let
       linuxPackages_grsec_testing_server = { };
       linuxPackages_grsec_testing_server_xen = { };
 
-    } ))
-
-    # Temporary hack: build some stuff on Darwin.
-    // (with import ./release-lib.nix { supportedSystems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]; }; mapTestOn {
-      stdenv = all;
-      hello = all;
-    });
+    } ));
 
 in jobs

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "tinc-1.1pre4b2ddde";
+  name = "tinc-1.1pre-2015-02-24";
 
   src = fetchgit {
     url = "git://tinc-vpn.org/tinc";

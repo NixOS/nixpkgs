@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
   buildInputs = [ python openssl http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
   setupHook = ../nodejs/setup-hook.sh;
 
+  passthru.interpreterName = "iojs";
+
   meta = {
     description = "A friendly fork of Node.js with an open governance model";
     homepage = https://iojs.org/;

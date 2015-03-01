@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_1_0 = dontCheck super.Cabal_1_22_1_0;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_1_0; });
+  Cabal_1_22_1_1 = dontCheck super.Cabal_1_22_1_1;
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_1_1; });
 
   # Break infinite recursions.
   digest = super.digest.override { inherit (pkgs) zlib; };
@@ -42,6 +42,20 @@ self: super: {
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
+
+  # CUDA needs help finding the SDK headers and libraries.
+  cuda = overrideCabal super.cuda (drv: {
+    extraLibraries = (drv.extraLibraries or []) ++ [pkgs.linuxPackages.nvidia_x11];
+    configureFlags = (drv.configureFlags or []) ++
+      pkgs.lib.optional pkgs.stdenv.is64bit "--extra-lib-dirs=${pkgs.cudatoolkit}/lib64" ++ [
+      "--extra-lib-dirs=${pkgs.cudatoolkit}/lib"
+      "--extra-include-dirs=${pkgs.cudatoolkit}/usr_include"
+    ];
+    preConfigure = ''
+      unset CC          # unconfuse the haskell-cuda configure script
+      sed -i -e 's|/usr/local/cuda|${pkgs.cudatoolkit}|g' configure
+    '';
+  });
 
   # Depends on code distributed under a non-free license.
   bindings-yices = dontDistribute super.bindings-yices;
@@ -206,6 +220,7 @@ self: super: {
 
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
+  dbmigrations = dontCheck super.dbmigrations;
   filestore = dontCheck super.filestore;
   graceful = dontCheck super.graceful;
   hakyll = dontCheck super.hakyll;
@@ -379,6 +394,9 @@ self: super: {
   xcffib = dontCheck super.xcffib;
   xsd = dontCheck super.xsd;
 
+  # https://bitbucket.org/wuzzeb/webdriver-utils/issue/1/hspec-webdriver-101-cant-compile-its-test
+  hspec-webdriver = markBroken super.hspec-webdriver;
+
   # The build fails with the most recent version of c2hs.
   ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
 
@@ -549,24 +567,6 @@ self: super: {
 
   # https://github.com/fumieval/karakuri/issues/1
   karakuri = markBroken super.karakuri;
-
-  # https://github.com/jtdaugherty/dbmigrations/issues/19
-  dbmigrations = dontCheck super.dbmigrations;
-
-  # https://github.com/chadaustin/buffer-builder/issues/2
-  buffer-builder = markBroken super.buffer-builder;
-  buffer-builder-aeson = markBroken super.buffer-builder-aeson;
-
-  # https://github.com/osa1/language-lua/issues/19
-  language-lua = addBuildTool super.language-lua self.alex;
-
-  # https://github.com/kawu/crf-chain1-constrained/issues/8
-  crf-chain1-constrained = markBroken super.crf-chain1-constrained;
-  concraft = markBroken super.concraft;
-  concraft-pl = markBroken super.concraft-pl;
-
-  # https://github.com/kawu/crf-chain2-tiers/issues/2
-  crf-chain2-tiers = markBroken super.crf-chain2-tiers;
 
   # Upstream notified by e-mail.
   snowglobe = markBroken super.snowglobe;

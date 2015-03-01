@@ -3,46 +3,20 @@
 , lvm2, utillinux, procps, texinfo, perl, pythonPackages
 , glib, bridge-utils, xlibs, pixman, iproute, udev, bison
 , flex, cmake, ocaml, ocamlPackages, figlet, libaio, yajl
-, checkpolicy, transfig, glusterfs, fetchgit, xz }:
+, checkpolicy, transfig, glusterfs, fetchgit, xz, spice
+, spice_protocol, usbredir, alsaLib, quilt
+, coreutils, gawk, gnused, gnugrep, diffutils, multipath_tools
+, inetutils, iptables, openvswitch, nbd, drbd, xenConfig
+, xenserverPatched ? false, ... }:
 
 with stdenv.lib;
 
 let
-  version = "4.4.1";
 
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
-  # Sources needed to build the xen tools and tools/firmware.
-  toolsGits =
-    [ # tag qemu-xen-4.4.1
-      #{ name = "qemu-xen";
-      #  url = git://xenbits.xen.org/qemu-upstream-4.4-testing.git;
-      #  rev = "65fc9b78ba3d868a26952db0d8e51cecf01d47b4";
-      #  sha256 = "e7abaf0e927f7a2bba4c59b6dad6ae19e77c92689c94fa0384e2c41742f8cdb6";
-      #}
-      # tag xen-4.4.1
-      {  name = "qemu-xen-traditional";
-        url = git://xenbits.xen.org/qemu-xen-4.4-testing.git;
-        rev = "6ae4e588081620b141071eb010ec40aca7e12876";
-        sha256 = "b1ed1feb92fbe658273a8d6d38d6ea60b79c1658413dd93979d6d128d8554ded";
-      }
-    ];
-  firmwareGits =
-    [ # tag 1.7.3.1
-      { name = "seabios";
-        url = git://xenbits.xen.org/seabios.git;
-        rev = "7d9cbe613694924921ed1a6f8947d711c5832eee";
-        sha256 = "c071282bbcb1dd0d98536ef90cd1410f5d8da19648138e0e3863bc540d954a87";
-      }
-      { name = "ovmf";
-        url = git://xenbits.xen.org/ovmf.git;
-        rev = "447d264115c476142f884af0be287622cd244423";
-        sha256 = "7086f882495a8be1497d881074e8f1005dc283a5e1686aec06c1913c76a6319b";
-      }
-    ];
-
-
   # Sources needed to build the stubdoms and tools
+  # These sources are already rather old and probably do not change frequently
   xenExtfiles = [
       { url = http://xenbits.xensource.com/xen-extfiles/lwip-1.3.0.tar.gz;
         sha256 = "13wlr85s1hnvia6a698qpryyy12lvmqw0a05xmjnd0h71ralsbkp";
@@ -76,15 +50,15 @@ let
       }
     ];
 
+  scriptEnvPath = stdenv.lib.concatStrings (stdenv.lib.intersperse ":" (map (x: "${x}/bin")
+    [ coreutils gawk gnused gnugrep which perl diffutils utillinux multipath_tools
+      iproute inetutils iptables bridge-utils openvswitch nbd drbd ]));
 in
 
-stdenv.mkDerivation {
-  name = "xen-${version}";
 
-  src = fetchurl {
-    url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "09gaqydqmy64s5pqnwgjyzhd3wc61xyghpqjfl97kmvm8ly9vd2m";
-  };
+
+stdenv.mkDerivation {
+  inherit (xenConfig) name version src;
 
   dontUseCmakeConfigure = true;
 
@@ -95,11 +69,15 @@ stdenv.mkDerivation {
       glib bridge-utils pixman iproute udev bison xlibs.libX11
       flex ocaml ocamlPackages.findlib figlet libaio
       checkpolicy pythonPackages.markdown transfig
-      glusterfs cmake
+      glusterfs cmake spice spice_protocol usbredir
+      alsaLib quilt
     ];
 
   pythonPath = [ pythonPackages.curses ];
 
+  patchPhase = if ((xenserverPatched == true) && (builtins.hasAttr "xenserverPatches" xenConfig))
+    then xenConfig.xenserverPatches
+    else "";
 
   preConfigure = ''
     # Fake wget: copy prefetched downloads instead
@@ -111,6 +89,13 @@ stdenv.mkDerivation {
     export PATH=$PATH:$PWD/wget
   '';
 
+  # TODO: If multiple arguments are given with with-extra-qemuu,
+  #       then the configuration aborts; the reason is unclear.
+  #       If you know how to fix it, please let me know! :)
+  #configureFlags = "--with-extra-qemuu-configure-args='--enable-spice --enable-usb-redir --enable-linux-aio'";
+
+  # TODO: Flask needs more testing before enabling it by default.
+  #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
   makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
 
   buildFlags = "xen tools stubdom";
@@ -136,6 +121,12 @@ stdenv.mkDerivation {
       substituteInPlace tools/ioemu-qemu-xen/xen-hooks.mak \
         --replace /usr/include/pci ${pciutils}/include/pci
 
+      substituteInPlace tools/hotplug/Linux/xen-backend.rules \
+        --replace /etc/xen/scripts $out/etc/xen/scripts
+
+      # blktap is not provided by xen, but by xapi
+      sed -i '/blktap/d' tools/hotplug/Linux/xen-backend.rules
+
       # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
       # print the GCC version number properly.
       substituteInPlace xen/Makefile \
@@ -157,15 +148,17 @@ stdenv.mkDerivation {
       # overriden at runtime.
       substituteInPlace tools/hotplug/Linux/init.d/xendomains \
         --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
+        --replace 'XENDOM_CONFIG=/etc/default/xendomains' "" \
+        --replace /etc/xen/scripts/hotplugpath.sh $out/etc/xen/scripts/hotplugpath.sh \
         --replace /bin/ls ls
 
       # Xen's tools and firmares need various git repositories that it
       # usually checks out at time using git.  We can't have that.
-      ${flip concatMapStrings toolsGits (x: let src = fetchgit x; in ''
+      ${flip concatMapStrings xenConfig.toolsGits (x: let src = fetchgit x; in ''
         cp -r ${src} tools/${src.name}-dir-remote
         chmod +w tools/${src.name}-dir-remote
       '')}
-      ${flip concatMapStrings firmwareGits (x: let src = fetchgit x; in ''
+      ${flip concatMapStrings xenConfig.firmwareGits (x: let src = fetchgit x; in ''
         cp -r ${src} tools/firmware/${src.name}-dir-remote
         chmod +w tools/firmware/${src.name}-dir-remote
       '')}
@@ -189,18 +182,24 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      mkdir -p $out
+      mkdir -p $out $out/share
       cp -prvd dist/install/nix/store/*/* $out/
       cp -prvd dist/install/boot $out/boot
-      cp -prvd dist/install/etc $out/etc
+      cp -prvd dist/install/etc $out
       cp -dR docs/man1 docs/man5 $out/share/man/
       wrapPythonPrograms
-    ''; # */
+      substituteInPlace $out/etc/xen/scripts/hotplugpath.sh --replace SBINDIR=\"$out/sbin\" SBINDIR=\"$out/bin\"
+
+      shopt -s extglob
+      for i in $out/etc/xen/scripts/!(*.sh); do
+        sed -i '2s@^@export PATH=$out/bin:${scriptEnvPath}@' $i
+      done
+    '';
 
   meta = {
     homepage = http://www.xen.org/;
     description = "Xen hypervisor and management tools for Dom0";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ eelco tstrobel ];
   };
 }

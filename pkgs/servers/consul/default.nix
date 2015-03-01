@@ -2,7 +2,7 @@
 , bundlerEnv }:
 
 let
-  version = "0.4.1";
+  version = "0.5.0";
   # `sass` et al
   gems = bundlerEnv {
     name = "consul-deps";
@@ -39,6 +39,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "ui" ];
 
   installPhase = ''
+    # Fix references to go-deps in the binary
+    hash=$(echo $src | sed 's,.*/\([^/-]*\).*,\1,g')
+    xs=$(printf 'x%.0s' $(seq 2 $(echo $hash | wc -c)))
+    sed -i "s,$hash,$xs,g" consul
+
     # Install consul binary
     mkdir -p $out/bin
     cp consul $out/bin

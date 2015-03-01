@@ -126,6 +126,8 @@ let
 
   pitz = callPackage ../applications/misc/pitz { };
 
+  plantuml = callPackage ../tools/misc/plantuml { };
+
   pycairo = callPackage ../development/python-modules/pycairo {
   };
 
@@ -1764,11 +1766,11 @@ let
   };
 
   coverage = buildPythonPackage rec {
-    name = "coverage-3.6";
+    name = "coverage-3.7";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "67d4e393f4c6a5ffc18605409d2aa1ac";
+      md5 = "c47b36ceb17eaff3ecfab3bcd347d0df";
     };
 
     meta = {
@@ -1779,10 +1781,10 @@ let
   };
 
   covCore = buildPythonPackage rec {
-    name = "cov-core-1.7";
+    name = "cov-core-1.15.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cov-core/cov-core-1.7.tar.gz";
-      md5 = "59c1e22e636633e10120beacbf45b28c";
+      url = "http://pypi.python.org/packages/source/c/cov-core/${name}.tar.gz";
+      md5 = "f519d4cb4c4e52856afb14af52919fe6";
     };
     meta = {
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
@@ -2005,6 +2007,25 @@ let
     };
   };
 
+  pytestcov = buildPythonPackage (rec {
+    name = "pytest-cov-1.8.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-cov/${name}.tar.gz";
+      md5 = "76c778afa2494088270348be42d759fc";
+    };
+
+   buildInputs = with self; [ covCore pytest ];
+
+    meta = {
+      description = "py.test plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
+
+      homepage = https://github.com/schlamar/pytest-cov;
+
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
   pytest_xdist = buildPythonPackage rec {
     name = "pytest-xdist-1.8";
 
@@ -2142,6 +2163,26 @@ let
     };
   });
 
+  ddar = buildPythonPackage {
+    name = "ddar-1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/basak/ddar/archive/v1.0.tar.gz";
+      sha256 = "08lv7hrbhcv6hbl01sx8fgx3l8s2nn8rvcicdidafwm87bvi2nmr";
+    };
+
+    preBuild = ''
+      make -f Makefile.prep synctus/ddar_pb2.py
+    '';
+
+    propagatedBuildInputs = with self; [ protobuf modules.sqlite3 ];
+
+    meta = {
+      description = "Unix de-duplicating archiver";
+      license = licenses.gpl3;
+      homepage = https://github.com/basak/ddar;
+    };
+  };
 
   decorator = buildPythonPackage rec {
     name = "decorator-3.4.0";
@@ -2526,6 +2567,51 @@ let
       license = licenses.mit;
     };
   };
+
+
+  elasticsearch = buildPythonPackage (rec {
+    name = "elasticsearch-1.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/elasticsearch/${name}.tar.gz";
+      md5 = "14a758debd2296d923cb6c958db98eba";
+    };
+
+    # Check is disabled because running them destroy the content of the local cluster!
+    # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
+    doCheck = false;
+
+    meta = {
+      description = "Official low-level client for Elasticsearch";
+
+      homepage = https://github.com/elasticsearch/elasticsearch-py;
+
+      license = stdenv.lib.licenses.asl20;
+    };
+  });
+
+
+  elasticsearchdsl = buildPythonPackage (rec {
+    name = "elasticsearch-dsl-0.0.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
+      md5 = "6cbc9ed7aefb3ef804be4e3b318b2570";
+    };
+
+    buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 ];
+
+    # ImportError: No module named test_elasticsearch_dsl
+    doCheck = false;
+
+    meta = {
+      description = "Python client for Elasticsearch";
+
+      homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
+
+      license = stdenv.lib.licenses.asl20;
+    };
+  });
 
 
   evdev = buildPythonPackage rec {
@@ -3022,6 +3108,23 @@ let
     };
   };
 
+  passlib = buildPythonPackage rec {
+    version = "1.6.2";
+    name    = "passlib-${version}";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/source/p/passlib/passlib-${version}.tar.gz";
+      md5    = "2f872ae7c72ca338634c618f2cff5863";
+    };
+
+    buildInputs = with self; [ nose pybcrypt];
+
+    meta = with stdenv.lib; {
+      description = "A password hashing library for Python";
+      homepage    = https://code.google.com/p/passlib/;
+    };
+  };
+
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.4";
@@ -3401,6 +3504,17 @@ let
     };
   };
 
+  py3status = buildPythonPackage rec {
+    name = "py3status-2.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py3status/${name}.tar.gz";
+      md5 = "89ad395268c7791ff5d36412b1efeeb9";
+    };
+    propagatedBuildInputs = with self; [ requests2 ];
+    meta = {
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  };
 
   pyramid_zodbconn = buildPythonPackage rec {
     name = "pyramid_zodbconn-0.7";
@@ -3691,6 +3805,23 @@ let
       platforms = stdenv.lib.platforms.all;
     };
   };
+
+  ddt = buildPythonPackage (rec {
+    name = "ddt-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/ddt/${name}.tar.gz";
+      md5 = "29688456f9ee42d09d7d7c864ce6e17b";
+    };
+
+    meta = {
+      description = "Data-Driven/Decorated Tests, a library to multiply test cases";
+
+      homepage = https://github.com/txels/ddt;
+
+      license = stdenv.lib.licenses.mit;
+    };
+  });
 
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
@@ -4272,6 +4403,24 @@ let
     };
   };
 
+  wtforms = buildPythonPackage rec {
+    version = "2.0.2";
+    name = "wtforms-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/W/WTForms/WTForms-${version}.zip";
+      md5 = "613cf723ab40537705bec02733c78d95";
+    };
+
+    propagatedBuildInputs = with self; [ ordereddict Babel ];
+
+    meta = {
+      homepage = https://github.com/wtforms/wtforms;
+      description = "A flexible forms validation and rendering library for Python";
+      license = licenses.bsd3;
+    };
+  };
+
   flexget = buildPythonPackage rec {
     version = "1.2.278";
     name = "FlexGet-${version}";
@@ -4380,6 +4529,25 @@ let
       description = "An implementation of JSON Schema validation for Python";
       license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
+
+  falcon = buildPythonPackage (rec {
+    name = "falcon-0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/falcon/${name}.tar.gz";
+      md5 = "bf9e8bdd20700f1ff7ce6397cd441fbd";
+    };
+
+    propagatedBuildInputs = with self; [ coverage ddt nose pyyaml requests2 six testtools python_mimeparse ];
+
+    meta = {
+      description = "An unladen web framework for building APIs and app backends";
+
+      homepage = http://falconframework.org;
+
+      license = stdenv.lib.licenses.asl20;
     };
   });
 
@@ -6555,6 +6723,25 @@ let
     doCheck = false;
   });
 
+  nosexcover = buildPythonPackage (rec {
+    name = "nosexcover-1.0.10";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nosexcover/${name}.tar.gz";
+      md5 = "12bf494a801b376debeb6a167c247391";
+    };
+
+    propagatedBuildInputs = with self; [ coverage nose ];
+
+    meta = {
+      description = "Extends nose.plugins.cover to add Cobertura-style XML reports";
+
+      homepage = http://github.com/cmheisel/nose-xcover/;
+
+      license = stdenv.lib.licenses.bsd3;
+    };
+  });
+
   nosejs = buildPythonPackage {
     name = "nosejs-0.9.4";
     src = pkgs.fetchurl {
@@ -7257,11 +7444,13 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.15.4";
+    version = "0.16.0";
 
-    src = pkgs.fetchurl {
-      sha256 = "1s57krfa5kpn15ma7dcivizgn987j24i6cxrnjf9hnnann0q26cd";
-      url = "https://pypi.python.org/packages/source/p/pgcli/${name}.tar.gz";
+    src = pkgs.fetchFromGitHub {
+      sha256 = "05xqv3z47xk8v4pbhkavbw49wxq4i3zg49v4g074spqgvcs4jy1n";
+      rev = "v${version}";
+      repo = "pgcli";
+      owner = "amjith";
     };
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
@@ -7300,6 +7489,20 @@ let
 
     propagatedBuildInputs = with self; [ unittest2 ];
   };
+
+
+  python3pika = buildPythonPackage {
+    name = "python3-pika-0.9.14";
+    disabled = !isPy3k;
+    src = pkgs.fetchurl {
+      url = https://pypi.python.org/packages/source/p/python3-pika/python3-pika-0.9.14.tar.gz;
+      md5 = "f3a3ee58afe0ae06f1fa553710e1aa28";
+    };
+    buildInputs = with self; [ nose mock pyyaml ];
+
+    propagatedBuildInputs = with self; [ unittest2 ];
+  };
+
 
   pil = buildPythonPackage rec {
     name = "PIL-${version}";
@@ -7351,7 +7554,7 @@ let
 
     buildInputs = with self; [
       pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
-      ++ optionals (isPy26 || isPyPy) [ pkgs.lcms2 ]
+      ++ optionals (isPy26 || isPy33 || isPyPy) [ pkgs.lcms2 ]
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
@@ -8141,12 +8344,12 @@ let
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.0.1";
+    version = "2.0.2";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "1js5vq0xvsiykzpj5snxhdz3li9fmk8vc549slg9hcnj80frw0sy";
+      sha256 = "0lagrwifsgn0s8bzqahpr87p7gd38xja8f06akscinp6hj89283k";
     };
 
     meta = with stdenv.lib; {
@@ -8965,6 +9168,24 @@ let
   });
 
 
+  pyaml = buildPythonPackage (rec {
+    name = "pyaml-15.02.1";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyaml/${name}.tar.gz";
+      md5 = "e98cf27f50b9ca291ca4937c135db1c9";
+    };
+
+    buildInputs = with self; [ pyyaml ];
+
+    meta = {
+      description = "PyYAML-based module to produce pretty and readable YAML-serialized data";
+      homepage = https://github.com/mk-fg/pretty-yaml;
+    };
+  });
+
+
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.10";
 
@@ -9037,11 +9258,11 @@ let
 
 
   requests2 = buildPythonPackage rec {
-    name = "requests-2.4.3";
+    name = "requests-2.5.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "02214b3a179e445545de4b7a98d3dd17";
+      sha256 = "0rnyg6164jp7x7slgwnhigqza18d705hdvzwr4yk5qmisgpkaxvv";
     };
 
     meta = {
@@ -10290,17 +10511,47 @@ let
 
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
-    name = "sphinxcontrib-httpdomain-1.1.9";
+    name = "sphinxcontrib-httpdomain-1.3.0";
+
+    # See issue #6548
+    disabled = isPyPy;
+
+    # Check is disabled due to this issue:
+    # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
+    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sphinxcontrib-httpdomain/${name}.tar.gz";
-      md5 = "0f63aea612cc9e0b55a6c39e5b0f87b7";
+      md5 = "ad7ea42bd4c7c0ee57b1cb25bbf24aab";
     };
 
     propagatedBuildInputs = with self; [sphinx];
 
     meta = {
       description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
+
+      homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
+
+      license = "BSD";
+    };
+  });
+
+
+  sphinxcontrib_plantuml = buildPythonPackage (rec {
+    name = "sphinxcontrib-plantuml-0.5";
+
+    # See issue #6548
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sphinxcontrib-plantuml/${name}.tar.gz";
+      md5 = "4a8840fe3475a19c2af3fa877ab9d296";
+    };
+
+    propagatedBuildInputs = with self; [sphinx plantuml];
+
+    meta = {
+      description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
 
       homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
 
@@ -12991,18 +13242,18 @@ let
 
   libvirt = pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
-    version = "1.2.9";
+    version = "1.2.12";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1vbrkwvsvcfgibdw4drcypg2n6zcpi3zv23zw20nkk5fjfp26w4g";
+      sha256 = "17w4mpsp4pxhbzs128ig3gxp12rr0j41mxch8i11dqjrjy7l6bs3";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
 
-    buildPhase = "python setup.py build";
+    buildPhase = "${python.interpreter} setup.py build";
 
-    installPhase = "python setup.py install --prefix=$out";
+    installPhase = "${python.interpreter} setup.py install --prefix=$out";
 
     meta = {
       homepage = http://www.libvirt.org/;

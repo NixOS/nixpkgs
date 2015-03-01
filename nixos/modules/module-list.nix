@@ -228,6 +228,7 @@
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/diod.nix
+  ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/amuled.nix
   ./services/networking/atftpd.nix
@@ -432,5 +433,5 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
-  #./virtualisation/xen-dom0.nix
+  ./virtualisation/xen-dom0.nix
 ]

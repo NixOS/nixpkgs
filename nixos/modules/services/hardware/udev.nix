@@ -236,8 +236,6 @@ in
 
     system.activationScripts.udevd =
       ''
-        echo "" > /proc/sys/kernel/hotplug
-
         # Regenerate the hardware database /var/lib/udev/hwdb.bin
         # whenever systemd changes.
         if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${config.systemd.package} ]; then

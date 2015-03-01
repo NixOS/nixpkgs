@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, unzip, SDL, mesa, openal, curl }:
+{ stdenv, fetchurl, unzip, SDL, mesa, openal, curl, libXxf86vm }:
 stdenv.mkDerivation rec {
   name = "urbanterror-${version}";
-  version = "4.2.018";
+  version = "4.2.023";
   srcs =
     [ (fetchurl {
-         url = "http://mirror.urtstats.net/urbanterror/UrbanTerror42_full018.zip";
-         sha256 = "10710c5b762687a75a7abd3cc56de005ce12dcb7ac14c08f40bcb4e9d96f4e83";
+         url = "http://mirror.urtstats.net/urbanterror/UrbanTerror42_full023.zip";
+         sha256 = "e287e2a17432b81551f5c16e431d752484ce9be10508e756542f653757a29090";
        })
       (fetchurl {
-         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-4.2.018.tar.gz";
-         sha256 = "c1fb3eb3a1e526247352b1c6abb5432b8a9b8730731ef917e4e5d21a152fb494";
+         url = "https://github.com/Barbatos/ioq3-for-UrbanTerror-4/archive/release-4.2.023.tar.gz";
+         sha256 = "03zrrx5b96c1srf2p24ca7zygq84byvrmcgh42d8bh5ds579ziqp";
        })
     ];
-  buildInputs = [ unzip SDL mesa openal curl ];
-  sourceRoot = "ioq3-for-UrbanTerror-4-release-4.2.018";
+  buildInputs = [ unzip SDL mesa openal curl libXxf86vm];
+  sourceRoot = "ioq3-for-UrbanTerror-4-release-4.2.023";
   configurePhase = ''
     echo "USE_OPENAL = 1" > Makefile.local
     echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local

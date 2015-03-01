@@ -32,9 +32,13 @@ buildPythonPackage rec {
       --install-lib=$out/lib/${python27.libPrefix}/site-packages \
       --prefix="$out"
 
+    mkdir -p $out/share/gsettings-schemas/$name
+    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/
+  '';
+
+  preFixup = ''
     wrapProgram $out/bin/meld \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH : "${gnome3.gtk3}/lib" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 

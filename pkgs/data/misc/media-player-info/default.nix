@@ -15,6 +15,10 @@ in
     buildInputs = [ udev ];
     nativeBuildInputs = [ pkgconfig python3 ];
 
+    postPatch = ''
+      patchShebangs ./tools
+    '';
+
     preConfigure = ''
       configureFlags="$configureFlags --with-udevdir=$out/lib/udev"
     '';

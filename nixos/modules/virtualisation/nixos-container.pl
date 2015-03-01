@@ -8,6 +8,7 @@ use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt);
 
 my $nsenter = "@utillinux@/bin/nsenter";
+my $su = "@su@";
 
 # Ensure a consistent umask.
 umask 0022;
@@ -271,14 +272,14 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    runInContainer("su", "root", "-l");
+    runInContainer("@su@", "root", "-l");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
     # Escape command.
     my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
-    runInContainer("su", "root", "-l", "-c", "exec " . $s);
+    runInContainer("@su@", "root", "-l", "-c", "exec " . $s);
 }
 
 elsif ($action eq "show-ip") {

@@ -215,7 +215,7 @@ let
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString cfg.oathAuth
-              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so"} window=5 usersfile=/etc/users.oath
+              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=5 usersfile=/etc/users.oath"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.krb5.enable ''
@@ -252,7 +252,7 @@ let
           ${optionalString cfg.otpwAuth
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString cfg.oathAuth
-              "session optional ${pkgs.oathToolkit}/lib/security/pam_oath.so"} window=5 usersfile=/etc/users.oath
+              "session optional ${pkgs.oathToolkit}/lib/security/pam_oath.so window=5 usersfile=/etc/users.oath"}
           ${optionalString cfg.startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString cfg.forwardXAuth

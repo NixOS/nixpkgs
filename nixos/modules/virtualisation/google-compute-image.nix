@@ -129,10 +129,10 @@ in
 
       wantedBy = [ "sshd.service" ];
       before = [ "sshd.service" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "ip-up.target" ];
+      wants = [ "network-online.target" "ip-up.target" ];
 
-      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 6 --waitretry=10"; in
+      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'"; in
         ''
           # When dealing with cryptographic keys, we want to keep things private.
           umask 077
@@ -140,7 +140,7 @@ in
           if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
                 mkdir -m 0700 -p /root/.ssh
-                ${wget} -O /root/authorized-keys-metadata http://metadata/0.1/meta-data/authorized-keys
+                ${wget} -O /root/authorized-keys-metadata http://metadata.google.internal/0.1/meta-data/authorized-keys
                 if [ $? -eq 0 -a -e /root/authorized-keys-metadata ]; then
                     cat /root/authorized-keys-metadata | cut -d: -f2- > /root/key.pub
                     if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
@@ -156,7 +156,7 @@ in
           ${flip concatMapStrings config.services.openssh.hostKeys (k :
             let kName = baseNameOf k.path; in ''
               echo "trying to obtain SSH private host key ${kName}"
-              ${wget} -O /root/${kName} http://metadata/0.1/meta-data/attributes/${kName} && :
+              ${wget} -O /root/${kName} http://metadata.google.internal/0.1/meta-data/attributes/${kName} && :
               if [ $? -eq 0 -a -e /root/${kName} ]; then
                   countKeys=$((countKeys+1))
                   mv -f /root/${kName} ${k.path}
