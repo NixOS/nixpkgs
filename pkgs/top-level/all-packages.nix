@@ -2016,6 +2016,8 @@ let
 
   ngrok = callPackage ../tools/misc/ngrok { };
 
+  noip = callPackage ../tools/networking/noip { };
+
   mpack = callPackage ../tools/networking/mpack { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
