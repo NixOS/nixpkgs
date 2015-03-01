@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
     mkdir -p $out/man/man1
     cp man/*.1 $out/man/man1
+    for program in $out/bin/i3-sensible-*; do
+      sed -i 's/which/command -v/' $program
+    done
   '';
 
   meta = with stdenv.lib; {
