@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16hrs8k3nmc7a8jam5j1fpspd6sdpkamskvsdpcw6m29vnis8q44";
   };
 
-  doCheck = true;
+  # https://github.com/NixOS/nixpkgs/issues/6028
+  doCheck = false;
 
   meta = {
     homepage = http://www.gnu.org/software/libsigsegv/;
