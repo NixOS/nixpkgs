@@ -295,6 +295,7 @@ in
         ];
         patches = commonPatches;
         configureFlags = [
+          "--enable-kdrive"             # not built by default
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
