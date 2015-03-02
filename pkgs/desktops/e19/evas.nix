@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, e19, zlib, libspectre, gstreamer, gst_plugins_base, gst_ffmpeg, gst_plugins_good, poppler, librsvg, libraw }:
 stdenv.mkDerivation rec {
   name = "evas_generic_loaders-${version}";
-  version = "1.12.0";
+  version = "1.13.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/evas_generic_loaders/${name}.tar.gz";
-    sha256 = "0viph73wv83xw9g6rgjhhiav9n896m0ixnz2m27cnmmn8llchcf5";
+    sha256 = "16yzjk58bxsd0rlnpzrr8as9fxjjiq01swzhpadsgkmq33abgg63";
   };
   buildInputs = [ pkgconfig e19.efl zlib libspectre gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good poppler librsvg libraw ];
   meta = {
