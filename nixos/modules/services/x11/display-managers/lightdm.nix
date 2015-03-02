@@ -4,7 +4,8 @@ with lib;
 
 let
 
-  dmcfg = config.services.xserver.displayManager;
+  xcfg = config.services.xserver;
+  dmcfg = xcfg.displayManager;
   xEnv = config.systemd.services."display-manager".environment;
   cfg = dmcfg.lightdm;
 
@@ -15,7 +16,7 @@ let
     ''
       #! /bin/sh
       ${concatMapStrings (n: "export ${n}=\"${getAttr n xEnv}\"\n") (attrNames xEnv)}
-      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
+      exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs} "$@"
     '';
 
   # The default greeter provided with this expression is the GTK greeter.
@@ -56,11 +57,13 @@ let
       greeter-user = ${config.users.extraUsers.lightdm.name}
       greeters-directory = ${cfg.greeter.package}
       sessions-directory = ${dmcfg.session.desktops}
+      minimum-vt = ${toString xcfg.tty}
 
       [SeatDefaults]
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
+      xserver-allow-tcp = ${if xcfg.enableTCP then "true" else "false"}
     '';
 
 in
