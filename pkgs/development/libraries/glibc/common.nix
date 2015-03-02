@@ -13,7 +13,7 @@ cross:
 
 let
 
-  version = "2.20";
+  version = "2.21";
 
 in
 
@@ -127,7 +127,8 @@ stdenv.mkDerivation ({
   # I.e. when gcc is compiled with --with-arch=i686, then the
   # preprocessor symbol `__i686' will be defined to `1'.  This causes
   # the symbol __i686.get_pc_thunk.dx to be mangled.
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.system == "i686-linux") "-U__i686";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.system == "i686-linux") "-U__i686"
+    + " -Wno-error=strict-prototypes";
 }
 
 # Remove the `gccCross' attribute so that the *native* glibc store path
@@ -150,7 +151,7 @@ stdenv.mkDerivation ({
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-      sha256 = "1g6ysvk15arpi7c1f1fpx5slgfr2k3dqd5xr0yvijajp1m0xxq9p";
+      sha256 = "0f4prv4c0fcpi85wv4028wqxn075197gwxhgf0vp571fiw2pi3wd";
     };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
