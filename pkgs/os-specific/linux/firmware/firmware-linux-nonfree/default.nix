@@ -1,15 +1,11 @@
 { stdenv, fetchgit }:
 
-let
-  version = "4517261caab34742afdeaf0c36128b9579675717";
-  shortVersion = stdenv.lib.substring 0 7 version;
-in
 stdenv.mkDerivation {
-  name = "firmware-linux-nonfree-${shortVersion}";
+  name = "firmware-linux-nonfree-2015-02-24";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = version;
+    rev = "4517261caab34742afdeaf0c36128b9579675717";
     sha256 = "0w386nfwlqhk1wn7zzhfxkxx06nzqasc4dr0qq61wc29s9qlgi3c";
   };
 

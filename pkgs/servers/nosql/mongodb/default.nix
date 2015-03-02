@@ -41,6 +41,9 @@ in stdenv.mkDerivation rec {
     # bug #482576
     sed -i -e "/-Werror/d" src/third_party/v8/SConscript
 
+    # fix inclusion of std::swap
+    sed -i '1i #include <algorithm>' src/mongo/shell/linenoise_utf8.h
+
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"

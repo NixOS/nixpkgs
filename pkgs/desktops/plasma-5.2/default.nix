@@ -108,7 +108,7 @@ let
       kwin = with pkgs; super.kwin // {
         buildInputs = with xlibs;
           super.kwin.buildInputs ++ [ libICE libSM libXcursor ];
-        patches = [ ./kwin/kwin-import-plugin-follow-symlinks.patch ./kwin/libinput-0.8.patch ];
+        patches = [ ./kwin/kwin-import-plugin-follow-symlinks.patch ];
       };
 
       libkscreen = with pkgs; super.libkscreen // {

@@ -1,18 +1,18 @@
 { fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl
-, xcb-util-cursor, coreutils, perl, pango, perlPackages, xdummy }:
+, xcb-util-cursor, coreutils, perl, pango, perlPackages, xdummy, libxkbcommon }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.8";
+  version = "4.9";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "0sqvd8yqf9vwqrrvbpbf8k93b3qfa3q9289m82xq15r31wlk8b2h";
+    sha256 = "0n6hfma058iykfxnl1m23mkh8y5sx1x80s3fxfdngbd9wc41kqxy";
   };
 
   buildInputs = [
-    which pkgconfig makeWrapper libxcb xcbutilkeysyms xcbutil xcbutilwm
+    which pkgconfig makeWrapper libxcb xcbutilkeysyms xcbutil xcbutilwm libxkbcommon
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
     perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/i3-save-tree" --prefix PERL5LIB ":" "$PERL5LIB"
     mkdir -p $out/man/man1
     cp man/*.1 $out/man/man1
+    for program in $out/bin/i3-sensible-*; do
+      sed -i 's/which/command -v/' $program
+    done
   '';
 
   meta = with stdenv.lib; {

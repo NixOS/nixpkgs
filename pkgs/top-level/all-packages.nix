@@ -993,6 +993,10 @@ let
     python = python26;
   };
 
+  cudatoolkit65 = callPackage ../development/compilers/cudatoolkit/6.5.nix {
+    python = python26;
+  };
+
   cudatoolkit = cudatoolkit5;
 
   curl = callPackage ../tools/networking/curl rec {
@@ -1062,6 +1066,8 @@ let
   dnstop = callPackage ../tools/networking/dnstop { };
 
   dhcp = callPackage ../tools/networking/dhcp { };
+
+  dhcpdump = callPackage ../tools/networking/dhcpdump { };
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
@@ -2013,6 +2019,8 @@ let
 
   ngrok = callPackage ../tools/misc/ngrok { };
 
+  noip = callPackage ../tools/networking/noip { };
+
   mpack = callPackage ../tools/networking/mpack { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
@@ -2034,6 +2042,8 @@ let
   nilfs_utils = nilfs-utils;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
+
+  nkf = callPackage ../tools/text/nkf {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
 
@@ -2607,7 +2617,7 @@ let
 
   storebrowse = callPackage ../tools/system/storebrowse { };
 
-  fusesmb = callPackage ../tools/filesystems/fusesmb { };
+  fusesmb = callPackage ../tools/filesystems/fusesmb { samba = samba3; };
 
   sl = callPackage ../tools/misc/sl { };
 
@@ -2777,6 +2787,8 @@ let
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
+
+  u9fs = callPackage ../servers/u9fs { };
 
   ucl = callPackage ../development/libraries/ucl { };
 
@@ -3797,6 +3809,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
@@ -3881,6 +3895,8 @@ let
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
+    erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
       sexplib = ocaml_sexplib;
@@ -3893,6 +3909,8 @@ let
     fix = callPackage ../development/ocaml-modules/fix { };
 
     functory = callPackage ../development/ocaml-modules/functory { };
+
+    io-page = callPackage ../development/ocaml-modules/io-page { };
 
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
@@ -4091,7 +4109,9 @@ let
 
     zed = callPackage ../development/ocaml-modules/zed { };
 
-    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving { };
+    ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
+      oasis = ocaml_oasis;
+    };
 
   };
 
@@ -6076,6 +6096,8 @@ let
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
+  libctemplate_2_2 = callPackage ../development/libraries/libctemplate/2.2.nix { };
+
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
 
   libcue = callPackage ../development/libraries/libcue { };
@@ -7944,7 +7966,9 @@ let
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
-  cassandra = callPackage ../servers/nosql/cassandra { };
+  cassandra_2_0 = callPackage ../servers/nosql/cassandra/2.0.nix { };
+  cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
+  cassandra = cassandra_2_1;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jdk;
@@ -8150,7 +8174,6 @@ let
   mariadb = callPackage ../servers/sql/mariadb {};
 
   mongodb = callPackage ../servers/nosql/mongodb {
-    boost = boost156;
     sasl = cyrus_sasl;
   };
 
@@ -8325,6 +8348,8 @@ let
   seyren = callPackage ../servers/monitoring/seyren { };
 
   shishi = callPackage ../servers/shishi { };
+
+  sipcmd = callPackage ../applications/networking/sipcmd { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
@@ -11282,6 +11307,10 @@ let
     qt = qt4;
   });
 
+  rofi = callPackage ../applications/misc/rofi {
+    automake = automake114x;
+  };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
@@ -11420,6 +11449,8 @@ let
   snd = callPackage ../applications/audio/snd { };
 
   shntool = callPackage ../applications/audio/shntool { };
+
+  sipp = callPackage ../development/tools/misc/sipp { };
 
   sonic-visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
@@ -11760,7 +11791,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_2_2;
+    ffmpeg = ffmpeg_2;
   };
 
   vlc_qt5 = vlc.override {
@@ -11802,6 +11833,10 @@ let
   };
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
+
+  wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
+
+  wmsystemtray = callPackage ../applications/window-managers/windowmaker/dockapps/wmsystemtray.nix { };
 
   winswitch = callPackage ../tools/X11/winswitch { };
 
@@ -12008,9 +12043,10 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xen = callPackage ../applications/virtualization/xen {
-    stdenv = overrideCC stdenv gcc45;
-  };
+  xen_4_4_1 = callPackage ../applications/virtualization/xen/4.4.1.nix { };
+  xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
+  xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; };
+  xen = xen_4_5_0;
 
   xfe = callPackage ../applications/misc/xfe {
     fox = fox_1_6;
@@ -12078,7 +12114,10 @@ let
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
-  xpra = callPackage ../tools/X11/xpra { };
+  xpra = callPackage ../tools/X11/xpra { inherit (texFunctions) fontsConf; };
+  libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { inherit (xlibs) libXinerama; };
+  #TODO: 'pil' is not available for python3, yet
+  xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonPackage python cython pygobject3 pycairo; };
 
   xrestop = callPackage ../tools/X11/xrestop { };
 
@@ -13378,6 +13417,7 @@ let
 
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5_1;
+    libctemplate = libctemplate_2_2;
     inherit (pythonPackages) pexpect paramiko;
   };
 

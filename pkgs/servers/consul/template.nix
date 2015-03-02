@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    # Fix references to go-deps in the binary
+    hash=$(echo $src | sed 's,.*/\([^/-]*\).*,\1,g')
+    xs=$(printf 'x%.0s' $(seq 2 $(echo $hash | wc -c)))
+    sed -i "s,$hash,$xs,g" consul-template
+
     mkdir -p $out/bin
     cp consul-template $out/bin
   '';

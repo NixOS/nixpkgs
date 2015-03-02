@@ -8,8 +8,10 @@ in
 
 {
   imports = [
+    ./afterstep.nix
     ./bspwm.nix
     ./compiz.nix
+    ./fluxbox.nix
     ./herbstluftwm.nix
     ./i3.nix
     ./metacity.nix

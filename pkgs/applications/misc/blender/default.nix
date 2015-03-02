@@ -3,7 +3,7 @@
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
 , jackaudioSupport ? false, jack2
-, cudaSupport ? false, cudatoolkit6
+, cudaSupport ? false, cudatoolkit65
 , colladaSupport ? true, opencollada
 }:
 
@@ -17,13 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "114ipidrja6ryi6wv0w55wmh10ikazy24r8js596g7b9fpkzpymc";
   };
 
+  patches = [ ./sm52.patch ];
+
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ]
     ++ optional jackaudioSupport jack2
-    ++ optional cudaSupport cudatoolkit6
+    ++ optional cudaSupport cudatoolkit65
     ++ optional colladaSupport opencollada;
 
   postUnpack =

@@ -99,7 +99,7 @@ self: super: {
   });
   foldl = appendPatch super.foldl (pkgs.fetchpatch {
     url = "https://github.com/Gabriel439/Haskell-Foldl-Library/pull/30.patch";
-    sha256 = "15lfh54vhdp36197dp4xpb2mr3g49gz2xzl31cjir1fmcvjsbgjl";
+    sha256 = "0q4gs3xkazh644ff7qn2mp2q1nq3jq71x82g7iaacxclkiv0bphx";
   });
   persistent-template = appendPatch super.persistent-template (pkgs.fetchpatch {
     url = "https://github.com/yesodweb/persistent/commit/4d34960bc421ec0aa353d69fbb3eb0c73585db97.patch";

@@ -131,8 +131,8 @@ in {
         type = types.string;
         default = "/var/lib/couchdb/couchdb.ini";
         description = ''
-          Custom configuration file. File needs to be readable and writable
-          from couchdb user/group.
+          Configuration file for persisting runtime changes. File
+          needs to be readable and writable from couchdb user/group.
         '';
       };
 
@@ -157,12 +157,15 @@ in {
         mkdir -p ${cfg.databaseDir};
         mkdir -p ${cfg.viewIndexDir};
         touch ${cfg.configFile}
+        touch -a ${cfg.logFile}
 
         if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} ${cfg.uriFile}
+          chown ${cfg.user}:${cfg.group} `dirname ${cfg.uriFile}`;
+          (-f ${cfg.uriFile} && chown ${cfg.user}:${cfg.group} ${cfg.uriFile}) || true
           chown ${cfg.user}:${cfg.group} ${cfg.databaseDir}
           chown ${cfg.user}:${cfg.group} ${cfg.viewIndexDir}
           chown ${cfg.user}:${cfg.group} ${cfg.configFile}
+          chown ${cfg.user}:${cfg.group} ${cfg.logFile}
         fi
         '';
 

@@ -21,6 +21,7 @@ in
 
     boot.loader.raspberryPi.enable = mkOption {
       default = false;
+      type = types.bool;
       description = ''
         Whether to create files with the system generations in
         <literal>/boot</literal>.

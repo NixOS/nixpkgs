@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
-let version = "0.03.19"; in
+let version = "0.03.20"; in
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
 
   src = fetchurl {
-    sha256 = "1icr9gk0zm2hhn19xg57x0509w4jz4mf72hsyy6nadzn9426ssaq";
+    sha256 = "0j1nppja56cgsd7vg3465y9kbxy3hl8mbyzc254qqm4z9ij1m3dg";
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
   };
 
@@ -20,9 +20,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Stress test a computer system";
     longDescription = ''
-      Stress test a computer system in various selectable ways, by exercising
-      various physical subsystems of a computer as well as the various
-      operating system kernel interfaces. Stress-ng features:
+      Stress test a system in various selectable ways, exercising both various
+      physical subsystems and various operating system kernel interfaces:
       - over 60 different stress tests
       - over 50 CPU specific stress tests that exercise floating point,
         integer, bit manipulation and control flow
