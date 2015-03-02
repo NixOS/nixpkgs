@@ -16,7 +16,7 @@
 with stdenv.lib.licences;
 
 let
-  melpaBuild = import ../build-support/melpa {
+  melpaBuild = import ../build-support/emacs/melpa.nix {
     inherit stdenv fetchurl emacs texinfo;
   };
 in
