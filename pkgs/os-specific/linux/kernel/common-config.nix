@@ -21,7 +21,7 @@ with stdenv.lib;
   DEBUG_DEVRES n
   DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
-  ${optionalString (!(features.grsecurity or true)) ''
+  ${optionalString (!(features.grsecurity or false)) ''
     DEBUG_STACKOVERFLOW n
   ''}
   RCU_TORTURE_TEST n
