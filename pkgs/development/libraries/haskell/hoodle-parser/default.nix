@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoodle-parser";
-  version = "0.3";
-  sha256 = "1ihpmkhjzsf8w4ygljx2agx31xblc0ch4y8m9pwj7rnnjj1sw15i";
+  version = "0.3.0";
+  sha256 = "0qp7x6csacf4w9crvmyrs7qsm9caici95qiwm11zyzyz2k9nm52g";
   buildDepends = [
     attoparsec either hoodleTypes lens mtl strict text transformers
     xournalTypes

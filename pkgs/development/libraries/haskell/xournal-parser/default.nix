@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xournal-parser";
-  version = "0.5.0.3";
-  sha256 = "1r99xv7w2gxms1ff5qpj36dcb3gb5lpccr1mjjdnkcij81i748ly";
+  version = "0.5.1";
+  sha256 = "07b1gflqsjsydn304vw6zwgwlc0g7riv0b80lr165mw6c2fkmx78";
   buildDepends = [
     attoparsec attoparsecConduit conduit conduitExtra exceptions lens
     mtl strict text transformers xmlConduit xmlTypes xournalTypes

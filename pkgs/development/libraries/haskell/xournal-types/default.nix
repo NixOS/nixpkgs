@@ -4,10 +4,9 @@
 
 cabal.mkDerivation (self: {
   pname = "xournal-types";
-  version = "0.5.0.2";
-  sha256 = "1z1zxgwnd2bpgmiimil2jnz4xdcvvi59y2qdvqgy42b10db8rvkm";
+  version = "0.5.1";
+  sha256 = "1ii4d560wvy6iky09wbz2kdf370y87ldgr0ymsv50d7cqxfgbjap";
   buildDepends = [ cereal lens strict TypeCompose ];
-  jailbreak = true;
   meta = {
     description = "Data types for programs for xournal file format";
     license = self.stdenv.lib.licenses.bsd3;
