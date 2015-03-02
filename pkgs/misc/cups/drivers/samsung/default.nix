@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Samsung's Linux drivers; includes binaries without source code";
     homepage = "http://www.samsung.com/";
-    license = "samsung";  # Binary-only
+    license = licenses.unfree;
+    platforms = platforms.linux;
   };
 }
