@@ -50,6 +50,7 @@ let
     LABEL memtest
     MENU LABEL Memtest86+
     LINUX /boot/memtest.bin
+    APPEND ${toString config.boot.loader.grub.memtest86.params}
   '';
 
   isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
