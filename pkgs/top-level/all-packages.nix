@@ -3910,6 +3910,8 @@ let
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
+    io-page = callPackage ../development/ocaml-modules/io-page { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
