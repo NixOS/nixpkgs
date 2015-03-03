@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "volumeicon-${version}";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchurl {
-    url = "http://softwarebakery.com/maato/files/volumeicon/volumeicon-0.5.0.tar.gz";
-    sha256 = "10np3fvfzyxkjw0kfzg81a7kcxda1fz6nkqffkijbay5ksgigwg5";
+    url = "http://softwarebakery.com/maato/files/volumeicon/volumeicon-0.5.1.tar.gz";
+    sha256 = "182xl2w8syv6ky2h2bc9imc6ap8pzh0p7rp63hh8nw0xm38c3f14";
   };
 
   buildInputs = [ gtk3 pkgconfig intltool alsaLib ];
