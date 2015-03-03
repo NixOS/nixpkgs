@@ -520,6 +520,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ldap = buildGoPackage rec {
+    rev = "469fe5a802d61523b40dbb29bb8012a6b99b06b5";
+    name = "ldap-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/nmcclain/ldap";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "nmcclain";
+      repo   = "ldap";
+      sha256 = "0xq5dc03ym0wlg9mvf4gbrmj74l4c8bgkls8fd7c98a128qw2srk";
+    };
+    propagatedBuildInputs = [ asn1-ber ];
+    subPackages = [ "./" ];
+  };
+
   log4go = buildGoPackage rec {
     rev = "48";
     name = "log4go-${rev}";
