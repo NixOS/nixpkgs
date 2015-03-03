@@ -202,6 +202,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  g2s = buildGoPackage rec {
+    rev = "ec76db4c1ac16400ac0e17ca9c4840e1d23da5dc";
+    name = "g2s-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/peterbourgon/g2s";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "peterbourgon";
+      repo   = "g2s";
+      sha256 = "1p4p8755v2nrn54rik7yifpg9szyg44y5rpp0kryx4ycl72307rj";
+    };
+  };
+
   gocheck = buildGoPackage rec {
     rev = "87";
     name = "gocheck-${rev}";
