@@ -322,6 +322,18 @@ let self = _self // overrides; _self = with self; {
     subPackages = [ "fuse" "fuse/nodefs" "fuse/pathfs" ];
   };
 
+  go-homedir = buildGoPackage rec {
+    rev = "7d2d8c8a4e078ce3c58736ab521a40b37a504c52";
+    name = "go-homedir-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mitchellh/go-homedir";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "mitchellh";
+      repo   = "go-homedir";
+      sha256 = "1ixhwxnvq1qx53asq47yhg3l88ndwrnyw4fkkidcjg759dc86d0i";
+    };
+  };
+
   go-hostpool = buildGoPackage rec {
     rev = "fed86fae5cacdc77e7399937e2f8836563620a2e";
     name = "go-hostpool-${stdenv.lib.strings.substring 0 7 rev}";
