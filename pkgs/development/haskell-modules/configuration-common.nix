@@ -588,6 +588,9 @@ self: super: {
   # Test suite wants to connect to $DISPLAY.
   hsqml = dontCheck super.hsqml;
 
+  # https://github.com/megantti/rtorrent-rpc/issues/1
+  rtorrent-rpc = markBroken super.rtorrent-rpc;
+
 } // {
 
   # Not on Hackage.
