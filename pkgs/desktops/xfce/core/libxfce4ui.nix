@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gtk, libxfce4util, xfconf
+{ stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, xfconf
 , libglade, libstartup_notification }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ pkgconfig intltool gtk gtk3 libxfce4util xfconf libglade
+    [ pkgconfig intltool gtk libxfce4util xfconf libglade
       libstartup_notification
     ];
 
