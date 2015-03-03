@@ -748,6 +748,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  sets = buildGoPackage rec {
+    rev = "6c54cb57ea406ff6354256a4847e37298194478f";
+    name = "sets-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/feyeleanor/sets";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "feyeleanor";
+      repo   = "sets";
+      sha256 = "1l3hyl8kmwb9k6qi8x4w54g2cmydap0g3cqvs47bhvm47rg1j1zc";
+    };
+    propagatedBuildInputs = [ slices ];
+  };
+
   slices = buildGoPackage rec {
     rev = "bb44bb2e4817fe71ba7082d351fd582e7d40e3ea";
     name = "slices-${stdenv.lib.strings.substring 0 7 rev}";
