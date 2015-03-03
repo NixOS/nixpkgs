@@ -150,12 +150,6 @@ self: super: {
   # http://openradar.appspot.com/10207999 and similar issues
   fsnotify = if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
 
-  # Doesn't properly handle nonsense byte sequences on HFS+
-  # https://github.com/fpco/haskell-filesystem/issues/5
-  system-fileio = if pkgs.stdenv.isDarwin
-    then dontCheck super.system-fileio
-    else super.system-fileio;
-
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
   # TODO: use pkgs.darwin.security_tool once we can build it
