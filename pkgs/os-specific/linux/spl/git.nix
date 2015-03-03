@@ -1,12 +1,12 @@
 { callPackage, fetchgit, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "2015-02-04";
+  version = "2015-02-27";
 
   src = fetchgit {
     url = git://github.com/zfsonlinux/spl.git;
-    rev = "086476f92005506cb07e75f889e8ddb69026e842";
-    sha256 = "1n3cjdwxccvcns7jydgznkb6jy0p59qx1yg512jjf4m9hf5p2pwm";
+    rev = "c1bc8e610be8bf1cc8170f788a89a9ee257eb51f";
+    sha256 = "1rpq7rxqmqmlaqv9aj7n2bmlw3ls55iyhcsk8kp4g9kf20f0pgym";
   };
 
   patches = [ ./const.patch ./install_prefix-git.patch ];
