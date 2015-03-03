@@ -346,6 +346,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  go-ini = buildGoPackage rec {
+    rev = "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1";
+    name = "go-ini-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/vaughan0/go-ini";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "vaughan0";
+      repo   = "go-ini";
+      sha256 = "1l1isi3czis009d9k5awsj4xdxgbxn4n9yqjc1ac7f724x6jacfa";
+    };
+  };
+
   rcrowley.go-metrics = buildGoPackage rec {
     rev = "f770e6f5e91a8770cecee02d5d3f7c00b023b4df";
     name = "rcrowley.go-metrics-${stdenv.lib.strings.substring 0 7 rev}";
