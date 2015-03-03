@@ -489,6 +489,7 @@ in {
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
       grsecurity.gid = ids.gids.grsecurity;
+      input.gid = ids.gids.input;
     };
 
     system.activationScripts.users = stringAfter [ "etc" ]
