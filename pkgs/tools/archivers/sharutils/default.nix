@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mallg1gprimlggdisfzdmh1xi676jsfdlfyvanlcw72ny8fsj3g";
   };
 
-  preConfigure = stdenv.lib.optionalString (!stdenv.isBSD)
+  preConfigure = stdenv.lib.optionalString (!(stdenv.isFreeBSD || stdenv.isOpenBSD))
     ''
        # Fix for building on Glibc 2.16.  Won't be needed once the
        # gnulib in sharutils is updated.
