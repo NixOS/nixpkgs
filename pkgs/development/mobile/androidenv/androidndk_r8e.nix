@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses, p7zip, lib, makeWrapper
+{ stdenv, fetchurl, zlib, ncurses, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
 , platformTools
 }:
@@ -6,22 +6,22 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "android-ndk-r10c";
+  name = "android-ndk-r8e";
 
   src = if stdenv.system == "i686-linux"
     then fetchurl {
-      url = "http://dl.google.com/android/ndk/${name}-linux-x86.bin";
-      sha256 = "0gyq68zrpzj3gkh81czs6r0jmikg5rwzh1bqg4rk16g2nxm4lll3";
+      url = "http://dl.google.com/android/ndk/${name}-linux-x86.tar.bz2";
+      sha256 = "c2c4e0c8b3037149a0f5dbb08d72f814a52af4da9fff9d80328c675457e95a98";
     }
     else if stdenv.system == "x86_64-linux" then fetchurl {
-      url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.bin";
-      sha256 = "126rqzkmf8xz1hqdziwx81yln17hpivs2j45rxhzdr45iw9b758c";
+      url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.tar.bz2";
+      sha256 = "093gf55zbh38p2gk5bdykj1vg9p5l774wjdzw5mhk4144jm1wdq7";
     }
     else throw "platform ${stdenv.system} not supported!";
 
   phases = "buildPhase";
 
-  buildInputs = [ p7zip makeWrapper ];
+  buildInputs = [ makeWrapper ];
 
   buildCommand = let
     bin_path = "$out/bin";
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
     set -x
     mkdir -pv $out/libexec
     cd $out/libexec
-    7z x $src
+    tar -xjf $src
 
     # so that it doesn't fail because of read-only permissions set
     cd -
     patch -p1 \
         --no-backup-if-mismatch \
-        -d $out/libexec/${name} < ${ ./make-standalone-toolchain.patch }
+        -d $out/libexec/${name} < ${ ./make-standalone-toolchain_r8e.patch }
     cd ${pkg_path}
 
     find $out \( \

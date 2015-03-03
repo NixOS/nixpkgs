@@ -148,11 +148,10 @@ rec {
     inherit platformTools;
   };
 
-  androidndk_r8e = import ./androidndk.nix {
-    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
+  androidndk_r8e = import ./androidndk_r8e.nix {
+    inherit (pkgs) stdenv fetchurl zlib ncurses lib makeWrapper;
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
-    pinToVersion8 = true;
   };
 
   
