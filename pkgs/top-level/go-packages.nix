@@ -10,13 +10,14 @@ let self = _self // overrides; _self = with self; {
   ## OFFICIAL GO PACKAGES
 
   crypto = buildGoPackage rec {
-    rev = "31393df5baea";
+    rev = "1351f936d976c60a0a48d728281922cf63eafb8d";
     name = "go-crypto-${rev}";
-    goPackagePath = "code.google.com/p/go.crypto";
-    src = fetchhg {
+    goPackagePath = "golang.org/x/crypto";
+    src = fetchFromGitHub {
       inherit rev;
-      url = "https://${goPackagePath}";
-      sha256 = "0b95dpsvxxapcjjvhj05fdmyn0mzffamc25hvxy7xgsl2l9yy3nw";
+      owner  = "golang";
+      repo   = "crypto";
+      sha256 = "1vf4z97y7xnhzjizik0lghr7ip77hhdj9kbb35rr4c9sn108f20j";
     };
   };
 
