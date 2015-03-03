@@ -3811,6 +3811,8 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
+    base64 = callPackage ../development/ocaml-modules/base64 { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
