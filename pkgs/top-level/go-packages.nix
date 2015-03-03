@@ -238,6 +238,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # please check again
   };
 
+  gox = buildGoPackage rec {
+    rev = "e8e6fd4fe12510cc46893dff18c5188a6a6dc549";
+    name = "gox-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/mitchellh/gox";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "mitchellh";
+      repo   = "gox";
+      sha256 = "14jb2vgfr6dv7zlw8i3ilmp125m5l28ljv41a66c9b8gijhm48k1";
+    };
+    buildInputs = [ iochan ];
+  };
+
   go-assert = buildGoPackage rec {
     rev = "e17e99893cb6509f428e1728281c2ad60a6b31e3";
     name = "assert-${stdenv.lib.strings.substring 0 7 rev}";
