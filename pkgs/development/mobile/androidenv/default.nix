@@ -147,6 +147,14 @@ rec {
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
+
+  androidndk_r8e = import ./androidndk.nix {
+    inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
+    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+    pinToVersion8 = true;
+  };
+
   
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant gnumake gawk file which;
