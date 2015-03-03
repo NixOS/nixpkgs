@@ -47,6 +47,15 @@ in
 
     boot.extraModulePackages = [ nvidia_x11 ];
 
+    # nvidia-uvm is required by CUDA applications.
+    boot.kernelModules = [ "nvidia-uvm" ];
+
+    # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
+    services.udev.extraRules =
+      ''
+        KERNEL=="nvidia_uvm", RUN+="${pkgs.stdenv.shell} -c 'mknod -m 666 /dev/nvidia-uvm c $(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+      '';
+
     boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" ];
 
     services.acpid.enable = true;
