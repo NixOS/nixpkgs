@@ -224,6 +224,7 @@ self: super: {
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
+  test-sandbox = dontCheck super.test-sandbox;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle;
   xmlgen = dontCheck super.xmlgen;
