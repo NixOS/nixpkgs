@@ -13,17 +13,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opera-12.12-1707";
+  name = "opera-12.16-1860";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "${mirror}/linux/1212/${name}.i386.linux.tar.xz";
+        url = "${mirror}/linux/1216/${name}.i386.linux.tar.xz";
         sha256 = "1jkrhxjxa5kz4bhyma0zlnsszdn84sq4pks3x8bfcayn12m6yxkz";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "${mirror}/linux/1212/${name}.x86_64.linux.tar.xz";
+        url = "${mirror}/linux/1216/${name}.x86_64.linux.tar.xz";
         sha256 = "0acizxgyqblcvl91dwmvi937fi1kw6whz5qgxyl1fkygbayji90v";
       }
     else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
