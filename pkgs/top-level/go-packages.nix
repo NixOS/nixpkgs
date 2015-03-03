@@ -736,6 +736,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  raw = buildGoPackage rec {
+    rev = "724aedf6e1a5d8971aafec384b6bde3d5608fba4";
+    name = "raw-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/feyeleanor/raw";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "feyeleanor";
+      repo   = "raw";
+      sha256 = "0z4dcnadgk0fbxxd14dqa1wzzr0v3ksqlzd0swzs2mipim5wjgsz";
+    };
+  };
+
   snappy-go = buildGoPackage rec {
     rev = "14";
     name = "snappy-go-${rev}";
