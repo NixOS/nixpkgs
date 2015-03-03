@@ -92,6 +92,9 @@ self: super: {
   # https://github.com/frosch03/arrowVHDL/issues/2
   ArrowVHDL = markBroken super.ArrowVHDL;
 
+  # https://ghc.haskell.org/trac/ghc/ticket/9625
+  wai-middleware-preprocessor = dontCheck super.wai-middleware-preprocessor;
+
 }
 
 // # packages relating to amazonka
