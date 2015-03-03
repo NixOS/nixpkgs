@@ -82,6 +82,18 @@ let self = _self // overrides; _self = with self; {
 
   ## THIRD PARTY
 
+  asn1-ber = buildGoPackage rec {
+    rev = "ec51d5ed21377b4023ca7b1e70ae4cb296ee6047";
+    name = "asn1-ber-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/nmcclain/asn1-ber";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "nmcclain";
+      repo   = "asn1-ber";
+      sha256 = "0a2d38k7zpcnf148zlxq2rm7s1s1hzybb3w5ygxilipz0m7qkdsb";
+    };
+  };
+
   binarydist = buildGoPackage rec {
     rev = "9955b0ab8708602d411341e55fffd7e0700f86bd";
     name = "binarydist-${stdenv.lib.strings.substring 0 7 rev}";
