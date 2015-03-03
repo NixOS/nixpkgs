@@ -582,6 +582,12 @@ self: super: {
   lambdabot-reference-plugins = markBroken super.lambdabot-reference-plugins;
   lambdabot-social-plugins = markBroken super.lambdabot-social-plugins;
 
+  # Upstream provides no issue tracker and no contact details.
+  vivid = markBroken super.vivid;
+
+  # Test suite wants to connect to $DISPLAY.
+  hsqml = dontCheck super.hsqml;
+
 } // {
 
   # Not on Hackage.
