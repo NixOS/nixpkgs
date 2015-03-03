@@ -748,6 +748,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  rgbterm = buildGoPackage rec {
+    rev = "9e3d038e1b8341ed7416c841a884cab4a3487941";
+    name = "rgbterm-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/aybabtme/rgbterm";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "aybabtme";
+      repo   = "rgbterm";
+      sha256 = "1pfg56pkm9clzd3c1s0czvydw1k35jggz9ydv8x2dbns3f7qn2ph";
+    };
+  };
+
   sets = buildGoPackage rec {
     rev = "6c54cb57ea406ff6354256a4847e37298194478f";
     name = "sets-${stdenv.lib.strings.substring 0 7 rev}";
