@@ -214,6 +214,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  goamz = buildGoPackage rec {
+    rev = "2a8fed5e89ab9e16210fc337d1aac780e8c7bbb7";
+    name = "goamz-${rev}";
+    goPackagePath = "github.com/goamz/goamz";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "goamz";
+      repo   = "goamz";
+      sha256 = "0rlinp0cvgw66qjndg4padr5s0wd3n7kjfggkx6czqj9bqaxcz4b";
+    };
+    propagatedBuildInputs = [ go-ini ];
+
+    # These might need propagating too, but I haven't tested the entire library
+    buildInputs = [ sets go-simplejson check-v1 ];
+  };
+
   gocheck = buildGoPackage rec {
     rev = "87";
     name = "gocheck-${rev}";
