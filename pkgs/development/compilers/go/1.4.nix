@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchgit, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl }:
+{ stdenv, lib, fetchurl, fetchgit, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, Security }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -23,7 +23,9 @@ stdenv.mkDerivation {
   src = srcs.golang;
 
   # perl is used for testing go vet
-  buildInputs = [ bison bash makeWrapper perl ] ++ lib.optionals stdenv.isLinux [ glibc ] ;
+  buildInputs = [ bison bash makeWrapper perl ]
+             ++ lib.optionals stdenv.isLinux [ glibc ]
+             ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
@@ -76,10 +78,13 @@ stdenv.mkDerivation {
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = if stdenv.isDarwin then 0 else 1;
+  CGO_ENABLED = 1;
+
+  # The go build actually checks for CC=*/clang and does something different, so we don't
+  # just want the generic `cc` here.
+  CC = if stdenv.isDarwin then "clang" else "cc";
 
   installPhase = ''
-    export CC=cc
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"
