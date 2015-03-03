@@ -54,7 +54,10 @@ let self = _self // overrides;
       rev    = "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac";
       sha256 = "17axrgd99glnl6ma4ls3k01ysdqmiqr581wnrbsn3s4gp53mm2x6";
     };
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "Advanced cursor movements mode for Emacs";
+      licence = gpl3Plus;
+    };
   };
 
   ag = melpaBuild rec {
@@ -172,7 +175,6 @@ let self = _self // overrides;
       sha256 = "050lb8qjq7ra35mqp6j6qkwbvq5zj3yhz73aym5kf1vjd42rmjcw";
     };
     packageRequires = [ popup ];
-
     meta = {
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
@@ -308,7 +310,10 @@ let self = _self // overrides;
       sha256 = "0wrmlmgr4mwxlmmh8blplddri2lpk4g8k3l1vpb5c6a975420qvn";
     };
     packageRequires = [ evil ];
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "surround.vim emulation for Emacs evil mode";
+      licence = gpl3Plus;
+    };
   };
 
   evil = melpaBuild {
@@ -320,7 +325,10 @@ let self = _self // overrides;
       sha256 = "0yiqpzsm5sr7xdkixdvfg312dk9vsdcmj69gizk744d334yn8rsz";
     };
     packageRequires = [ goto-chg undo-tree ];
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "Extensible vi layer for Emacs";
+      licence = gpl3Plus;
+    };
   };
 
   exec-path-from-shell = melpaBuild rec {
@@ -344,7 +352,10 @@ let self = _self // overrides;
       rev    = "fa413e07c97997d950c92d6012f5442b5c3cee78";
       sha256 = "04k0518wfy72wpzsswmncnhd372fxa0r8nbfhmbyfmns8n7sr045";
     };
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "Increases the selected region by semantic units in Emacs";
+      licence = gpl3Plus;
+    };
   };
 
   flim = melpaBuild rec {
