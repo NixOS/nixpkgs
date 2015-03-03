@@ -1,9 +1,10 @@
-{stdenv, fetchurl, pkgconfig, libusb1}:
+{stdenv, fetchurl, pkgconfig, libusb1, darwin}:
 
 stdenv.mkDerivation {
   name = "libusb-compat-0.1.5";
 
   nativeBuildInputs = [ pkgconfig ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.IOKit ];
   propagatedBuildInputs = [ libusb1 ];
 
   src = fetchurl {

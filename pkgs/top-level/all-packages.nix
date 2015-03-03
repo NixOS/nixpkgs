@@ -6632,7 +6632,9 @@ let
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
 
-  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv { });
+  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
+    libtool = if stdenv.isDarwin then libtool_2 else libtool;
+  });
 
   libv4l = lowPrio (v4l_utils.override {
     withQt4 = false;

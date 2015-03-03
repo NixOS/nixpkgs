@@ -27,6 +27,9 @@ configureImakefiles() {
 buildPhase() {
     xmkmf
     make Makefiles
+    for file in $(find . -name Makefile); do
+      substituteInPlace $file --replace /usr/bin/cc cc
+    done
     make
 }
 

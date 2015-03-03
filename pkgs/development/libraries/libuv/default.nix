@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, darwin }:
 
 let
   stable = "stable";
@@ -59,7 +59,11 @@ let
   mkWithAutotools = stability: version: sha256: stdenv.mkDerivation {
     name = mkName stability version;
     src = mkSrc version sha256;
-    buildInputs = [ automake autoconf libtool pkgconfig ];
+    buildInputs = [ automake autoconf libtool pkgconfig ] ++
+      stdenv.lib.optionals stdenv.isDarwin [
+        darwin.apple_sdk.frameworks.CoreServices
+        darwin.apple_sdk.frameworks.ApplicationServices
+      ];
     preConfigure = ''
       LIBTOOLIZE=libtoolize ./autogen.sh
     '';
