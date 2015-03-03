@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "pax-utils-${version}";
-  version = "0.9.2";
+  version = "1.0";
 
   src = fetchurl {
     url = "http://dev.gentoo.org/~vapier/dist/${name}.tar.xz";
-    sha256 = "1pmlpjhr2475h5v90abmsfgr37r3b6c4mknhzswbgcb10vgh322p";
+    sha256 = "04p356j46symayh2d14i51xv9qic3iz9gnc7fr906skw3hccr7y3";
   };
 
   makeFlags = [
