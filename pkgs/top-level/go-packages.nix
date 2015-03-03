@@ -1,7 +1,7 @@
 /* This file defines the composition for Go packages. */
 
 { overrides, stdenv, go, buildGoPackage, git, pkgconfig, libusb
-, fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchbzr }:
+, fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchbzr, pkgs }:
 
 let self = _self // overrides; _self = with self; {
 
@@ -499,6 +499,31 @@ let self = _self // overrides; _self = with self; {
       repo = "go-vhost";
       sha256 = "1rway6sls6fl2s2jk20ajj36rrlzh9944ncc9pdd19kifix54z32";
     };
+  };
+
+  hologram = buildGoPackage rec {
+    rev  = "6e81a11091f59a9392e424d8f1c42b4b813c4bff";
+    name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/AdRoll/hologram";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "copumpkin";
+      repo   = "hologram";
+      sha256 = "1rpnc8sv9mwm9r9yfh8h2zxczznmvlhasrz55bcifmk4sym4ywq7";
+    };
+    preBuild = ''
+      cd "go/src/$goPackagePath"
+      # Work around `go install` assuming containing directory is the executable name we want
+      for i in */bin; do
+        mv "$i" "$(dirname "$i")/$(dirname "$i")"
+      done
+
+      # Generate protobuf definitions and static assets
+      make protocol/hologram.pb.go
+      make transport/remote/bindata.go
+    '';
+
+    buildInputs = [ pkgs.protobuf crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
   };
 
   influxdb-go = buildGoPackage rec {
