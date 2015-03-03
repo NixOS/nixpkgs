@@ -748,6 +748,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  slices = buildGoPackage rec {
+    rev = "bb44bb2e4817fe71ba7082d351fd582e7d40e3ea";
+    name = "slices-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/feyeleanor/slices";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "feyeleanor";
+      repo   = "slices";
+      sha256 = "1miqhzqgww41d8xbvmxfzx9rsfxgw742nqz96mhjkxpadrxg870v";
+    };
+    propagatedBuildInputs = [ raw ];
+  };
+
   snappy-go = buildGoPackage rec {
     rev = "14";
     name = "snappy-go-${rev}";
