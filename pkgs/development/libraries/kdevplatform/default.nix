@@ -2,11 +2,11 @@
   gettext, pkgconfig, apr, aprutil, boost, qjson, grantlee }:
 
 stdenv.mkDerivation rec {
-  name = "kdevplatform-1.7.0";
+  name = "kdevplatform-1.7.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/4.7.0/src/${name}.tar.xz";
-    sha256 = "bfd765019511c5c9abc19bc412c75d7abd468f1a077ce4bc471cd6704b9f53f7";
+    url = "mirror://kde/stable/kdevelop/4.7.1/src/${name}.tar.xz";
+    sha256 = "dfd8953aec204f04bd949443781aa0f6d9d58c40f73027619a168bb4ffc4b1ac";
   };
 
   propagatedBuildInputs = [ kdelibs qt4 phonon ];

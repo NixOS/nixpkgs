@@ -993,6 +993,10 @@ let
     python = python26;
   };
 
+  cudatoolkit65 = callPackage ../development/compilers/cudatoolkit/6.5.nix {
+    python = python26;
+  };
+
   cudatoolkit = cudatoolkit5;
 
   curl = callPackage ../tools/networking/curl rec {
@@ -3906,6 +3910,8 @@ let
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
+    io-page = callPackage ../development/ocaml-modules/io-page { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
@@ -4143,8 +4149,10 @@ let
     ocaml = ocaml_3_08_0;
   };
 
-  rustc       = callPackage ../development/compilers/rustc/1.0.0-alpha.nix {};
+  rustcAlpha  = callPackage ../development/compilers/rustc/1.0.0-alpha.nix {};
+  rustcAlpha2 = callPackage ../development/compilers/rustc/1.0.0-alpha2.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
+  rustc = rustcAlpha2;
 
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};

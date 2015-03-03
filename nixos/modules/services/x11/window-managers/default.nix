@@ -8,6 +8,7 @@ in
 
 {
   imports = [
+    ./afterstep.nix
     ./bspwm.nix
     ./compiz.nix
     ./fluxbox.nix
