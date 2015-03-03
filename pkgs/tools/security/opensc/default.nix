@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
+    "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so"
   ];
 
   meta = with stdenv.lib; {
