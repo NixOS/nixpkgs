@@ -34,9 +34,7 @@ in stdenv.mkDerivation {
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
 
-  prePatch = ''
-    patchShebangs .
-  '';
+  prePatch = "patchShebangs .";
 
   patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
 
@@ -44,9 +42,9 @@ in stdenv.mkDerivation {
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
   '' else null;
 
-  buildInputs = [ python which libtool ]
+  buildInputs = [ python which ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl darwin.libtool ];
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

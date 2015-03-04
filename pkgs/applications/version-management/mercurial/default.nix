@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, makeWrapper, docutils, unzip
+{ stdenv, fetchurl, python, makeWrapper, docutils, unzip, darwin
 , guiSupport ? false, tk ? null, curses }:
 
 let
@@ -17,7 +17,8 @@ stdenv.mkDerivation {
   inherit python; # pass it so that the same version can be used in hg2git
   pythonPackages = [ curses ];
 
-  buildInputs = [ python makeWrapper docutils unzip ];
+  buildInputs = [ python makeWrapper docutils unzip ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
 
   makeFlags = "PREFIX=$(out)";
 

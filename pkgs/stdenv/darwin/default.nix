@@ -299,10 +299,6 @@ in rec {
     overrides = orig: persistent4 orig // {
       clang = cc;
       inherit cc;
-
-      # TODO: do this more generally (requires some cleverness due to libtool depending on cctools
-      # depending on libtool)
-      inherit (pkgs.darwin) libtool;
     };
   };
 
