@@ -148,7 +148,9 @@ with stdenv.lib;
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
-  EXT2_FS_XIP y # Ext2 execute in place support
+  ${optionalString (versionOlder version "4.0") ''
+    EXT2_FS_XIP y # Ext2 execute in place support
+  ''}
   EXT3_FS_POSIX_ACL y
   EXT3_FS_SECURITY y
   EXT4_FS_POSIX_ACL y
