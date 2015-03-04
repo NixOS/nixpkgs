@@ -593,6 +593,15 @@ self: super: {
   # https://github.com/megantti/rtorrent-rpc/issues/1
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 
+  # https://github.com/PaulJohnson/geodetics/issues/1
+  geodetics = dontCheck super.geodetics;
+
+  # https://github.com/AndrewRademacher/aeson-casing/issues/1
+  aeson-casing = dontCheck super.aeson-casing;
+
+  # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
+  test-sandbox-compose = dontCheck super.test-sandbox-compose;
+
 } // {
 
   # Not on Hackage.

@@ -86,6 +86,8 @@ self: super: {
   highlighter2 = markBroken super.highlighter2;
   hypher = markBroken super.hypher;
   purescript = markBroken super.purescript;
+  xhb-atom-cache = markBroken super.xhb-atom-cache;
+  xhb-ewmh = markBroken super.xhb-ewmh;
   yesod-purescript = markBroken super.yesod-purescript;
   yet-another-logger = markBroken super.yet-another-logger;
 
@@ -94,6 +96,7 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   wai-middleware-preprocessor = dontCheck super.wai-middleware-preprocessor;
+  incremental-computing = dontCheck super.incremental-computing;
 
 }
 
