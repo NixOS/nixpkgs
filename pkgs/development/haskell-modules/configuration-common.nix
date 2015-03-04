@@ -117,6 +117,7 @@ self: super: {
   shakespeare-text = dontHaddock super.shakespeare-text;
   types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
+  zlib-conduit = dontHaddock super.zlib-conduit;
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
