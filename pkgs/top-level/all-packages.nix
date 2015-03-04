@@ -9527,6 +9527,10 @@ let
 
   nafees = callPackage ../data/fonts/nafees { };
 
+  numix_icon_theme = callPackage ../data/icons/numix-icon-theme { };
+
+  numix_icon_theme_circle = callPackage ../data/icons/numix-icon-theme-circle { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
