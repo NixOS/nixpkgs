@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     set +e
     for a in $out/bin/* ; do
       patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath $(cat $NIX_CC/nix-support/orig-libc)/lib:$(cat $NIX_CC/nix-support/orig-gcc)/lib64:$(cat $NIX_CC/nix-support/orig-gcc)/lib $a
+        --set-rpath $(cat $NIX_CC/nix-support/orig-libc)/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib64:$(cat $NIX_CC/nix-support/orig-cc)/lib $a
     done
     set -e
     mv $out/bin/gnatgcc_2wrap $out/bin/gnatgcc
