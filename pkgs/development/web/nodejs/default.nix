@@ -1,13 +1,8 @@
-{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, unstableVersion ? false
+{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser, libtool,
+darwin, pkgconfig, runCommand, which, unstableVersion ? false
 }:
 
 let
-  dtrace = runCommand "dtrace-native" {} ''
-    mkdir -p $out/bin
-    ln -sv /usr/sbin/dtrace $out/bin
-  '';
-
   version = if unstableVersion then "0.11.13" else "0.12.0";
 
   deps = {
@@ -24,7 +19,7 @@ let
     "--shared-${name}"
     "--shared-${name}-includes=${builtins.getAttr name deps}/include"
     "--shared-${name}-libpath=${builtins.getAttr name deps}/lib"
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--without-dtrace";
 
   inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;
 in stdenv.mkDerivation {
@@ -40,7 +35,7 @@ in stdenv.mkDerivation {
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
 
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
+    patchShebangs .
   '';
 
   patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
@@ -49,10 +44,12 @@ in stdenv.mkDerivation {
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
   '' else null;
 
-  buildInputs = [ python which ]
+  buildInputs = [ python which libtool ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl ];
   setupHook = ./setup-hook.sh;
+
+  enableParallelBuilding = true;
 
   passthru.interpreterName = "nodejs";
 
