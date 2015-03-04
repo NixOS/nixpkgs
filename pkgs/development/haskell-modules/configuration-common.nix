@@ -227,7 +227,7 @@ self: super: {
   snowball = dontCheck super.snowball;
   test-sandbox = dontCheck super.test-sandbox;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
-  wai-middleware-throttle = dontCheck super.wai-middleware-throttle;
+  wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
