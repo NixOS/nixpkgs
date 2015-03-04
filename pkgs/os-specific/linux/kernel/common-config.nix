@@ -26,6 +26,8 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.10") ''
     X86_INTEL_PSTATE y
   ''}
+  INTEL_IDLE y
+  CPU_FREQ_DEFAULT_GOV_PERFORMANCE y
   ${optionalString (versionOlder version "3.10") ''
     USB_SUSPEND y
   ''}
