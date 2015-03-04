@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "regex-applicative";
-  version = "0.3.0.3";
-  sha256 = "111j6x1j7bx5viz2hmgyvcdwfrv5x3f9mifx888hyd3hz850wpwc";
+  version = "0.3.1";
+  sha256 = "1klmi101zfpngf8c7fp2ch48kadbw6xs5lg0h00x7wi0zfrdbf0y";
   buildDepends = [ transformers ];
   testDepends = [
     smallcheck tasty tastyHunit tastySmallcheck transformers
