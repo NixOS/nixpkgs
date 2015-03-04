@@ -693,6 +693,7 @@ let
     "curvHDR" # requires flowCore
     "D2C" # requires gRbase
     "DAAGbio" # requires limma
+    "daff" # requires V8 to build
     "dagbag" # requires Rlapack
     "DBKGrad" # requires SDD
     "dbmss" # requires spatstat
@@ -858,6 +859,7 @@ let
     "retistruct" # depends on broken RImageJROI
     "rggobi" # requires GGobi
     "RImageJROI" # requires spatstat
+    "rjade" # requires V8 to build
     "rJPSGCS" # requires chopsticks
     "rLindo" # requires LINDO API
     "Rmosek" # requires mosek
