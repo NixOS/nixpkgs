@@ -9129,9 +9129,7 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
-  plymouth = callPackage ../os-specific/linux/plymouth {
-    automake = automake113x;
-  };
+  plymouth = callPackage ../os-specific/linux/plymouth { };
 
   pmount = callPackage ../os-specific/linux/pmount { };
 
