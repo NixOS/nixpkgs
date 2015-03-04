@@ -2710,9 +2710,8 @@ let
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
-  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
+  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer/10.nix { };
 
-  # Work In Progress: it doesn't start unless running a daemon as root
   teamviewer8 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/8.nix { });
 
   teamviewer9 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/9.nix { });
