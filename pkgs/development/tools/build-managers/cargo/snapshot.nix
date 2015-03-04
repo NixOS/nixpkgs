@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out"
-    cp -r cargo/bin "$out/bin"
+    ./install.sh "--prefix=$out"
   '' + (if stdenv.isLinux then ''
     patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
              --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib}/lib" \
