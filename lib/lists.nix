@@ -236,6 +236,6 @@ rec {
   # Intersects list 'e' and another list
   intersect = e: filter (x: elem x e);
 
-  # Substracts list 'e' from another list
-  substract = e: filter (x: !(elem x e));
+  # Subtracts list 'e' from another list
+  subtract = e: filter (x: !(elem x e));
 }

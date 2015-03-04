@@ -67,7 +67,7 @@ let
           if filterPlatforms == [] then platforms
           else
             if hasPrefix "!" entry then
-              substract (intersect filterPlatforms nodejs.meta.platforms) platforms
+              subtract (intersect filterPlatforms nodejs.meta.platforms) platforms
             else
               platforms ++ (intersect filterPlatforms nodejs.meta.platforms)
       ) [] os;
