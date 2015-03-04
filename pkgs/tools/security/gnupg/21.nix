@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, npth
 , readline ? null, libusb ? null, gnutls ? null, adns ? null, openldap ? null
-, zlib ? null, bzip2 ? null, pinentry ? null, autoreconfHook, gettext
+, zlib ? null, bzip2 ? null, pinentry ? null, autoreconfHook, texinfo, gettext
 }:
 
 with stdenv.lib;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba npth
     readline libusb gnutls adns openldap zlib bzip2
-    autoreconfHook gettext
+    autoreconfHook texinfo gettext
   ];
 
   configureFlags =

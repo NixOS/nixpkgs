@@ -1469,6 +1469,7 @@ let
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
+    automake = automake112x; # fails with 13 and 14
   };
 
   trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix {
@@ -2212,7 +2213,9 @@ let
 
   panomatic = callPackage ../tools/graphics/panomatic { };
 
-  par2cmdline = callPackage ../tools/networking/par2cmdline { };
+  par2cmdline = callPackage ../tools/networking/par2cmdline {
+    automake = automake112x; # fails with 14
+  };
 
   parallel = callPackage ../tools/misc/parallel { };
 
@@ -2333,7 +2336,9 @@ let
 
   ponysay = callPackage ../tools/misc/ponysay { };
 
-  povray = callPackage ../tools/graphics/povray { };
+  povray = callPackage ../tools/graphics/povray {
+    automake = automake113x; # fails with 14
+  };
 
   ppl = callPackage ../development/libraries/ppl { };
 
@@ -6037,7 +6042,9 @@ let
 
   libassuan = callPackage ../development/libraries/libassuan { };
 
-  libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
+  libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix {
+    automake = automake112x; # fails with 13 and 14
+  };
 
   libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
 
@@ -6632,7 +6639,9 @@ let
 
   libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
 
-  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv { });
+  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
+    automake = automake113x; # fails with 14
+  });
 
   libv4l = lowPrio (v4l_utils.override {
     withQt4 = false;
