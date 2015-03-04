@@ -101,7 +101,7 @@ with frameworks; with libs; {
   SystemConfiguration     = [ CoreFoundation Security ];
   TWAIN                   = [ Carbon ];
   Tcl                     = [];
-  Tk                      = [ ApplicationServices Carbon X11 ];
+  Tk                      = [ ApplicationServices ];
   VideoDecodeAcceleration = [ CoreFoundation CoreVideo ];
   VideoToolbox            = [ CoreFoundation CoreMedia CoreVideo ];
   WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL X11 ];

@@ -9,6 +9,7 @@
 , sqlite
 , tcl, tk
 , zlib
+, darwin
 , callPackage
 , self
 }:
@@ -23,7 +24,9 @@ let
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    SystemConfiguration Tcl Tk
+  ]);
 in
 stdenv.mkDerivation {
   name = "python3-${version}";
