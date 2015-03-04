@@ -7306,6 +7306,8 @@ let
 
   snappy = callPackage ../development/libraries/snappy { };
 
+  socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
+
   sodium = callPackage ../development/libraries/sodium {};
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
