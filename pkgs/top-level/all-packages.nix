@@ -7443,6 +7443,8 @@ let
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
+
   unicap = callPackage ../development/libraries/unicap {};
 
   tsocks = callPackage ../development/libraries/tsocks { };
