@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tevent-0.9.23";
+  name = "tevent-0.9.24";
 
   src = fetchurl {
     url = "mirror://samba/tevent/${name}.tar.gz";
-    sha256 = "10ram0wqj19dq4cjr1mdb0yzijm3bbiflw7jl9wng0g8p4a81xpk";
+    sha256 = "0l1zjx2z6nhvn6gwbcvzn8w0cca53j717fwi10s7a5v1jb04rfad";
   };
 
   buildInputs = [
