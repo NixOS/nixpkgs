@@ -3905,6 +3905,8 @@ let
 
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
 
+    fileutils = callPackage ../development/ocaml-modules/fileutils { };
+
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
     fix = callPackage ../development/ocaml-modules/fix { };
