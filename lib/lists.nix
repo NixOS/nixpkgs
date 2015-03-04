@@ -234,8 +234,8 @@ rec {
       in [x] ++ remove x xs;
 
   # Intersects list 'e' and another list
-  intersect = e: filter (x: elem x e);
+  intersectLists = e: filter (x: elem x e);
 
   # Subtracts list 'e' from another list
-  subtract = e: filter (x: !(elem x e));
+  subtractLists = e: filter (x: !(elem x e));
 }
