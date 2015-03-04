@@ -59,11 +59,12 @@ in
 
     virtualisation.xen.stored =
       mkOption {
-        default = "${pkgs.xen}/bin/oxenstored";
+        default = null;
         description =
           ''
-            Xen Store daemon to use.
+            Xen Store daemon to use. Defaults to oxenstored of the xen package.
           '';
+        apply = x: if x == null then "${xen}/bin/oxenstored" else x;
       };
 
     virtualisation.xen.trace =
