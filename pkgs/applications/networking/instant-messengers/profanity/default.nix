@@ -12,11 +12,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "profanity-${version}";
-  version = "0.4.5";
+  version = "0.4.6";
 
   src = fetchurl {
     url = "http://www.profanity.im/profanity-${version}.tar.gz";
-    sha256 = "0qzwqxcxf695z3gf94psd2x619vlp4hkkjmkrpsla1ns0f6v6dkl";
+    sha256 = "17ra53c1m0w0lzm5bj63y1ysx8bv119z5h0csisxsn4r85z6cwln";
   };
 
   buildInputs = [
