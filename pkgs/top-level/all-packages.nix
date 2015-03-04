@@ -6907,6 +6907,8 @@ let
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
 
+  nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
+
   nssTools = callPackage ../development/libraries/nss {
     includeTools = true;
   };
