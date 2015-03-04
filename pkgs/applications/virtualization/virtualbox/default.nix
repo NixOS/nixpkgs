@@ -14,7 +14,7 @@ with stdenv.lib;
 let
   buildType = "release";
 
-  version = "4.3.22"; # changes ./guest-additions as well
+  version = "4.3.24"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -35,13 +35,13 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "98236";
+  extpackRevision = "98716";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
     # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "6ba0d2f46143505f4bf8843538f773a030752c5f2f368bf862f14c9fca234c96";
+    sha256 = "c6b61774e323b70da0d4f5677ef56f1c53990eccef859d3c720d814f98a01f8d";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "0d41e044589d3371f765a98ddc071d9cf9788289f72b7efbb5db64f5488c8eba";
+    sha256 = "e2123c9b6100fdd52a9b436fe29aa7215fce17c26904583977c1160b11b170cc";
   };
 
   buildInputs =
