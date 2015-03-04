@@ -12321,6 +12321,8 @@ let
 
   slmenu = callPackage ../applications/misc/slmenu {};
 
+  slop = callPackage ../tools/misc/slop {};
+
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
