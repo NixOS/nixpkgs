@@ -8304,11 +8304,11 @@ let
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
+    #glusterfs = null; # Broken in the current build
+    libgcrypt = libgcrypt_1_6;
+    libiconv = if stdenv.isLinux then null else libiconv;
     python = python2;
     pythonPackages = python2Packages;
-    libiconv = if stdenv.isLinux then null else libiconv;
-    libgcrypt = libgcrypt_1_6;
-    glusterfs = null; # Broken in the current build
   };
 
   samba = samba4;
@@ -8328,7 +8328,7 @@ let
 
   samba4_light = lowPrio (samba4.override {
     # source3/wscript optionals
-    heimdal = null;
+    kerberos = null;
     openldap = null;
     cups = null;
     pam = null;
@@ -8336,7 +8336,6 @@ let
     acl = null;
     libaio = null;
     fam = null;
-    ctdb = null;
     ceph = null;
     glusterfs = null;
 
