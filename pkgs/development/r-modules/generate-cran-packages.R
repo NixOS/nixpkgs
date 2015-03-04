@@ -3,7 +3,12 @@ library(parallel)
 cl <- makeCluster(10)
 options(repos=structure(c(CRAN="http://cran.rstudio.com/")))
 
+
+readFormatted <- as.data.table(read.table(skip=6, sep='"', text=head(readLines('cran-packages.nix'), -1)))
+
 nixPrefetch <- function(name, version) {
+  prevV <- readFormatted$V2 == name & readFormatted$V4 == version
+  if (sum(prevV) == 1) as.character(readFormatted$V6[ prevV ]) else
     system(paste0("nix-prefetch-url --type sha256 http://cran.rstudio.com/src/contrib/", name, "_", version, ".tar.gz"), intern=TRUE)
     # system(paste0("nix-hash --flat --base32 --type sha256 /nix/store/*", name, "_", version, ".tar.gz", "| head -n 1"), intern=TRUE)
 }
@@ -21,7 +26,7 @@ formatPackage <- function(name, version, sha256, depends, imports, linkingTo, kn
     paste0(attr, " = derive { name=\"", name, "\"; version=\"", version, "\"; sha256=\"", sha256, "\"; depends=[", depends, "]; };")
 }
 
-clusterExport(cl, c("nixPrefetch"))
+clusterExport(cl, c("nixPrefetch","readFormatted"))
 
 pkgs <- as.data.table(available.packages(filters=c("R_version", "OS_type", "CRAN", "duplicates")))
 pkgs <- subset(pkgs, Repository=="http://cran.rstudio.com/src/contrib")
