@@ -2065,6 +2065,8 @@ let
     guile = guile_1_8;
   };
 
+  maim = callPackage ../tools/graphics/maim {};
+
   mairix = callPackage ../tools/text/mairix { };
 
   makemkv = callPackage ../applications/video/makemkv { };
