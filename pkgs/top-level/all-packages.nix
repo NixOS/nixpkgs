@@ -520,6 +520,7 @@ let
     jdk = jdk;
     jre = jdk;
     withGui = false;
+    gccRaw = gcc.cc;
   };
 
   apitrace = callPackage ../applications/graphics/apitrace {};
