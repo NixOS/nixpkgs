@@ -3,19 +3,9 @@
 with stdenv.lib;
 
 ''
-  # Power management and debugging.
+  # Debugging.
   DEBUG_KERNEL y
-  PM_ADVANCED_DEBUG y
-  ${optionalString (versionOlder version "3.19") ''
-    PM_RUNTIME y
-  ''}
-  ${optionalString (versionAtLeast version "3.10") ''
-    X86_INTEL_PSTATE y
-  ''}
   TIMER_STATS y
-  ${optionalString (versionOlder version "3.10") ''
-    USB_SUSPEND y
-  ''}
   BACKTRACE_SELF_TEST n
   CPU_NOTIFIER_ERROR_INJECT? n
   DEBUG_DEVRES n
@@ -27,6 +17,18 @@ with stdenv.lib;
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  # Power management.
+  ${optionalString (versionOlder version "3.19") ''
+    PM_RUNTIME y
+  ''}
+  PM_ADVANCED_DEBUG y
+  ${optionalString (versionAtLeast version "3.10") ''
+    X86_INTEL_PSTATE y
+  ''}
+  ${optionalString (versionOlder version "3.10") ''
+    USB_SUSPEND y
+  ''}
 
   # Support drivers that need external firmware.
   STANDALONE n
