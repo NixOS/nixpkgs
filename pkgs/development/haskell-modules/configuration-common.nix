@@ -504,9 +504,6 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
 
-  # https://github.com/anton-k/temporal-csound/issues/2
-  temporal-csound = markBrokenVersion "0.4.1" super.temporal-csound;
-
   # https://github.com/seanparsons/wiring/issues/1
   wiring = markBrokenVersion super.wiring;
 
