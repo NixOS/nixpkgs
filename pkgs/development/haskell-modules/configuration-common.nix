@@ -610,6 +610,9 @@ self: super: {
   influxdb = markBroken super.influxdb;
   snaplet-influxdb = markBroken super.snaplet-influxdb;
 
+  # https://github.com/frasertweedale/hs-jose/issues/4
+  jose = dontCheck super.jose;
+
 } // {
 
   # Not on Hackage.
