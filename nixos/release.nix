@@ -231,6 +231,7 @@ in rec {
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
   tests.grsecurity = callTest tests/grsecurity.nix {};
+  tests.hibernate = callTest tests/hibernate.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
