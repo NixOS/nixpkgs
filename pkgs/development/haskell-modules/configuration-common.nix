@@ -606,9 +606,6 @@ self: super: {
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
 
-  # https://github.com/ddssff/cabal-debian/issues/35
-  cabal-debian = markBroken super.cabal-debian;
-
 } // {
 
   # Not on Hackage.
