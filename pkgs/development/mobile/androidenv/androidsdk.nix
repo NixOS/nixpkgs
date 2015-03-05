@@ -5,7 +5,7 @@
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
 , freetype, fontconfig, glib, gtk, atk, file, jdk
 }:
-{platformVersions, abiVersions, useGoogleAPIs}:
+{platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs?false, useGooglePlayServices?false}:
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
@@ -134,6 +134,18 @@ stdenv.mkDerivation rec {
 
     ln -s ${supportRepository}/m2repository
 
+    ${if useExtraSupportLibs then
+       "ln -s ${addons.android_support_extra}/support ."
+     else ""}
+
+    cd ..
+    mkdir -p google
+    cd google
+
+    ${if useGooglePlayServices then
+       "ln -s ${addons.google_play_services}/google-play-services google_play_services"
+     else ""}
+      
     cd ../..
 
     # Symlink required platforms

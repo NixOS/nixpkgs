@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 let
   version = "1.7.0";
@@ -6,17 +6,17 @@ let
   # These settings are found in the Makefile, but there seems to be no
   # way to select one ore the other setting other than editing the file
   # manually, so we have to duplicate the know how here.
-  systemFlags =
-    if stdenv.isDarwin then ''
+  systemFlags = with stdenv;
+    if isDarwin then ''
       CFLAGS="-O2 -Wall -fomit-frame-pointer"
       LDFLAGS=
       EXTRA_OBJS=strverscmp.o
-    '' else if stdenv.isCygwin then ''
+    '' else if isCygwin then ''
       CFLAGS="-O2 -Wall -fomit-frame-pointer -DCYGWIN"
       LDFLAGS=-s
       TREE_DEST=tree.exe
       EXTRA_OBJS=strverscmp.o
-    '' else if stdenv.isBSD then ''
+    '' else if (isFreeBSD || isOpenBSD) then ''
       CFLAGS="-O2 -Wall -fomit-frame-pointer"
       LDFLAGS=-s
       EXTRA_OBJS=strverscmp.o

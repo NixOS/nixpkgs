@@ -81,24 +81,22 @@ self: super: {
   # Needs mtl 2.2.x due to "plailude".
   clac = dontDistribute super.clac;
 
-  # https://github.com/junjihashimoto/test-sandbox-compose/issues/1
-  hspec-test-sandbox = markBroken super.hspec-test-sandbox;
-  test-framework-sandbox = markBroken super.test-sandbox-quickcheck;
-  test-sandbox = markBroken super.test-sandbox;
-  test-sandbox-compose = markBroken super.test-sandbox-compose;
-  test-sandbox-hunit = markBroken super.test-sandbox-hunit;
-  test-sandbox-quickcheck = markBroken super.test-sandbox-quickcheck;
-
   # These packages need mtl 2.2.x directly or indirectly via dependencies.
   apiary-purescript = markBroken super.apiary-purescript;
   highlighter2 = markBroken super.highlighter2;
   hypher = markBroken super.hypher;
   purescript = markBroken super.purescript;
+  xhb-atom-cache = markBroken super.xhb-atom-cache;
+  xhb-ewmh = markBroken super.xhb-ewmh;
   yesod-purescript = markBroken super.yesod-purescript;
   yet-another-logger = markBroken super.yet-another-logger;
 
   # https://github.com/frosch03/arrowVHDL/issues/2
   ArrowVHDL = markBroken super.ArrowVHDL;
+
+  # https://ghc.haskell.org/trac/ghc/ticket/9625
+  wai-middleware-preprocessor = dontCheck super.wai-middleware-preprocessor;
+  incremental-computing = dontCheck super.incremental-computing;
 
 }
 

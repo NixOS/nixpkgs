@@ -30,7 +30,7 @@ stdenv.mkDerivation {
       echo "patching ts3server"
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath $(cat $NIX_CC/nix-support/orig-gcc)/${libDir} \
+        --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         ts3server
     '';

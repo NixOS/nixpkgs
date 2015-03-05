@@ -2714,9 +2714,8 @@ let
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
-  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
+  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer/10.nix { };
 
-  # Work In Progress: it doesn't start unless running a daemon as root
   teamviewer8 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/8.nix { });
 
   teamviewer9 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/9.nix { });
@@ -3597,7 +3596,7 @@ let
 
   go_1_3 = callPackage ../development/compilers/go/1.3.nix { };
 
-  go_1_4 = callPackage ../development/compilers/go/1.4.nix { };
+  go_1_4 = callPackage ../development/compilers/go/1.4.nix { inherit (darwin) Security; };
 
   go = go_1_4;
 
@@ -3816,6 +3815,8 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
+    base64 = callPackage ../development/ocaml-modules/base64 { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
@@ -3908,6 +3909,8 @@ let
     };
 
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
+
+    fileutils = callPackage ../development/ocaml-modules/fileutils { };
 
     findlib = callPackage ../development/tools/ocaml/findlib { };
 
@@ -4154,8 +4157,10 @@ let
     ocaml = ocaml_3_08_0;
   };
 
-  rustc       = callPackage ../development/compilers/rustc/1.0.0-alpha.nix {};
+  rustcAlpha  = callPackage ../development/compilers/rustc/1.0.0-alpha.nix {};
+  rustcAlpha2 = callPackage ../development/compilers/rustc/1.0.0-alpha2.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
+  rustc = rustcAlpha2;
 
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
@@ -6908,6 +6913,8 @@ let
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
 
+  nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
+
   nssTools = callPackage ../development/libraries/nss {
     includeTools = true;
   };
@@ -7305,6 +7312,8 @@ let
 
   snappy = callPackage ../development/libraries/snappy { };
 
+  socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
+
   sodium = callPackage ../development/libraries/sodium {};
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
@@ -7439,6 +7448,8 @@ let
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
   tremor = callPackage ../development/libraries/tremor { };
+
+  uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
 
   unicap = callPackage ../development/libraries/unicap {};
 
@@ -8299,11 +8310,10 @@ let
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
+    libgcrypt = libgcrypt_1_6;
+    libiconv = if stdenv.isLinux then null else libiconv;
     python = python2;
     pythonPackages = python2Packages;
-    libiconv = if stdenv.isLinux then null else libiconv;
-    libgcrypt = libgcrypt_1_6;
-    glusterfs = null; # Broken in the current build
   };
 
   samba = samba4;
@@ -8323,7 +8333,7 @@ let
 
   samba4_light = lowPrio (samba4.override {
     # source3/wscript optionals
-    heimdal = null;
+    kerberos = null;
     openldap = null;
     cups = null;
     pam = null;
@@ -8331,7 +8341,6 @@ let
     acl = null;
     libaio = null;
     fam = null;
-    ctdb = null;
     ceph = null;
     glusterfs = null;
 
@@ -9526,6 +9535,10 @@ let
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
   nafees = callPackage ../data/fonts/nafees { };
+
+  numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
+
+  numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
@@ -12836,6 +12849,8 @@ let
   mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
+
+  numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
     qt5 = qt54;

@@ -57,6 +57,9 @@ self: super: {
     '';
   });
 
+  # The package doesn't know about the AL include hierarchy.
+  al = appendConfigureFlag super.al "--extra-include-dirs=${pkgs.openal}/include/AL";
+
   # Depends on code distributed under a non-free license.
   bindings-yices = dontDistribute super.bindings-yices;
   yices = dontDistribute super.yices;
@@ -117,6 +120,7 @@ self: super: {
   shakespeare-text = dontHaddock super.shakespeare-text;
   types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
+  zlib-conduit = dontHaddock super.zlib-conduit;
 
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
@@ -149,12 +153,6 @@ self: super: {
   # FSEvents API is very buggy and tests are unreliable. See
   # http://openradar.appspot.com/10207999 and similar issues
   fsnotify = if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
-
-  # Doesn't properly handle nonsense byte sequences on HFS+
-  # https://github.com/fpco/haskell-filesystem/issues/5
-  system-fileio = if pkgs.stdenv.isDarwin
-    then dontCheck super.system-fileio
-    else super.system-fileio;
 
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
@@ -230,8 +228,9 @@ self: super: {
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
+  test-sandbox = dontCheck super.test-sandbox;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
-  wai-middleware-throttle = dontCheck super.wai-middleware-throttle;
+  wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
@@ -587,6 +586,30 @@ self: super: {
   lambdabot-novelty-plugins = markBroken super.lambdabot-novelty-plugins;
   lambdabot-reference-plugins = markBroken super.lambdabot-reference-plugins;
   lambdabot-social-plugins = markBroken super.lambdabot-social-plugins;
+
+  # Upstream provides no issue tracker and no contact details.
+  vivid = markBroken super.vivid;
+
+  # Test suite wants to connect to $DISPLAY.
+  hsqml = dontCheck super.hsqml;
+
+  # https://github.com/megantti/rtorrent-rpc/issues/1
+  rtorrent-rpc = markBroken super.rtorrent-rpc;
+
+  # https://github.com/PaulJohnson/geodetics/issues/1
+  geodetics = dontCheck super.geodetics;
+
+  # https://github.com/AndrewRademacher/aeson-casing/issues/1
+  aeson-casing = dontCheck super.aeson-casing;
+
+  # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
+  test-sandbox-compose = dontCheck super.test-sandbox-compose;
+
+  # Broken by GLUT update.
+  Monadius = markBroken super.Monadius;
+
+  # https://github.com/ddssff/cabal-debian/issues/35
+  cabal-debian = markBroken super.cabal-debian;
 
 } // {
 

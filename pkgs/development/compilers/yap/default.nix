@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
+    broken = !stdenv.is64bit;   # the linux 32 bit build fails.
   };
 }

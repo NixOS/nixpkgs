@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   #TODO add emacs support
-  name = "racer-git-2015-01-20";
+  name = "racer-git-2015-02-28";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "599aa524ea949ec5f9f0be0375dbb1df9cb852ae";
-    sha256 = "1kasm7vffn176wr072m1dmqg1rb3wqai9yisxf8mia62548pdx88";
+    rev = "2e1d718fae21431de4493c238196466e9d4996bc";
+    sha256 = "0lvp494kg2hlbbdrwxmmxkyhjw53y9wjdml9z817pwj3fwmrjsx0";
   };
 
   buildInputs = [ rustc cargo makeWrapper ];

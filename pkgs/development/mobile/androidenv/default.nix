@@ -134,11 +134,26 @@ rec {
     useGoogleAPIs = true;
   };
 
+  androidsdk_5_0_1_extras = androidsdk {
+    platformVersions = [ "21" ];
+    abiVersions = [ "armeabi-v7a" "x86" ];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+  };
+
   androidndk = import ./androidndk.nix {
     inherit (pkgs) stdenv fetchurl zlib ncurses p7zip lib makeWrapper;
     inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
   };
+
+  androidndk_r8e = import ./androidndk_r8e.nix {
+    inherit (pkgs) stdenv fetchurl zlib ncurses lib makeWrapper;
+    inherit (pkgs) coreutils file findutils gawk gnugrep gnused jdk which;
+    inherit platformTools;
+  };
+
   
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant gnumake gawk file which;

@@ -246,67 +246,94 @@ let
       (map mkBuildFlags
         (lib.filter needsBuildFlags (attrValues instantiated)));
 
-in
+  derivation = stdenv.mkDerivation {
+    inherit name;
 
-stdenv.mkDerivation {
-  inherit name;
+    buildInputs = [
+      ruby
+      bundler
+      git
+    ];
 
-  buildInputs = [
-    ruby
-    bundler
-    git
-  ];
+    phases = [ "installPhase" "fixupPhase" ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+    outputs = [
+      "out"    # the installed libs/bins
+      "bundle" # supporting files for bundler
+    ];
 
-  outputs = [
-    "out"    # the installed libs/bins
-    "bundle" # supporting files for bundler
-  ];
+    installPhase = ''
+      mkdir -p $bundle
+      export BUNDLE_GEMFILE=$bundle/Gemfile
+      cp ${gemfile} $BUNDLE_GEMFILE
+      cp ${purifiedLockfile} $BUNDLE_GEMFILE.lock
 
-  installPhase = ''
-    mkdir -p $bundle
-    export BUNDLE_GEMFILE=$bundle/Gemfile
-    cp ${gemfile} $BUNDLE_GEMFILE
-    cp ${purifiedLockfile} $BUNDLE_GEMFILE.lock
+      export NIX_GEM_SOURCES=${sources}
+      export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
 
-    export NIX_GEM_SOURCES=${sources}
-    export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
+      export GEM_HOME=$out/${ruby.gemPath}
+      export GEM_PATH=$NIX_BUNDLER_GEMPATH:$GEM_HOME
+      mkdir -p $GEM_HOME
 
-    export GEM_HOME=$out/${ruby.gemPath}
-    export GEM_PATH=$NIX_BUNDLER_GEMPATH:$GEM_HOME
-    mkdir -p $GEM_HOME
+      ${allBuildFlags}
 
-    ${allBuildFlags}
+      mkdir gems
+      cp ${bundler}/${bundler.ruby.gemPath}/cache/bundler-*.gem gems
+      ${copyGems}
 
-    mkdir gems
-    cp ${bundler}/${bundler.ruby.gemPath}/cache/bundler-*.gem gems
-    ${copyGems}
+      ${lib.optionalString (!documentation) ''
+        mkdir home
+        HOME="$(pwd -P)/home"
+        echo "gem: --no-rdoc --no-ri" > $HOME/.gemrc
+      ''}
 
-    ${lib.optionalString (!documentation) ''
-      mkdir home
-      HOME="$(pwd -P)/home"
-      echo "gem: --no-rdoc --no-ri" > $HOME/.gemrc
-    ''}
+      mkdir env
+      ${runPreInstallers}
 
-    mkdir env
-    ${runPreInstallers}
+      mkdir $out/bin
+      cp ${./monkey_patches.rb} monkey_patches.rb
+      export RUBYOPT="-rmonkey_patches.rb -I $(pwd -P)"
+      bundler install --frozen --binstubs ${lib.optionalString enableParallelBuilding "--jobs $NIX_BUILD_CORES"}
+      RUBYOPT=""
 
-    mkdir $out/bin
-    cp ${./monkey_patches.rb} monkey_patches.rb
-    export RUBYOPT="-rmonkey_patches.rb -I $(pwd -P)"
-    bundler install --frozen --binstubs ${lib.optionalString enableParallelBuilding "--jobs $NIX_BUILD_CORES"}
-    RUBYOPT=""
+      runHook postInstall
+    '';
 
-    runHook postInstall
-  '';
+    inherit postInstall;
 
-  inherit postInstall;
+    passthru = {
+      inherit ruby;
+      inherit bundler;
 
-  passthru = {
-    inherit ruby;
-    inherit bundler;
+      env = let
+        irbrc = builtins.toFile "irbrc" ''
+          if not ENV["OLD_IRBRC"].empty?
+            require ENV["OLD_IRBRC"]
+          end
+          require 'rubygems'
+          require 'bundler/setup'
+        '';
+        in stdenv.mkDerivation {
+          name = "interactive-${name}-environment";
+          nativeBuildInputs = [ ruby derivation ];
+          shellHook = ''
+            export BUNDLE_GEMFILE=${derivation.bundle}/Gemfile
+            export GEM_HOME=${derivation}/${ruby.gemPath}
+            export NIX_BUNDLER_GEMPATH=${bundler}/${ruby.gemPath}
+            export GEM_PATH=$NIX_BUNDLER_GEMPATH:$GEM_HOME
+            export OLD_IRBRC="$IRBRC"
+            export IRBRC=${irbrc}
+          '';
+          buildCommand = ''
+            echo >&2 ""
+            echo >&2 "*** Ruby 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
+            echo >&2 ""
+            exit 1
+          '';
+        };
+    };
+
+    inherit meta;
   };
 
-  inherit meta;
-}
+in derivation

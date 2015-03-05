@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ncurses, openssl, perl, python, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile
-, pythonPackages, cacert, cmake, makeWrapper }:
+, pythonPackages, cacert, cmake, makeWrapper
+, extraBuildInputs ? [] }:
 
 stdenv.mkDerivation rec {
   version = "1.1.1";
@@ -15,18 +16,15 @@ stdenv.mkDerivation rec {
     [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig
       libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
       cacert cmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin pythonPackages.pync;
+    ++ extraBuildInputs;
 
-  NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix} -DCA_FILE=${cacert}/etc/ca-bundle.crt";
 
   postInstall = ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    NIX_PYTHONPATH+="${pythonPackages.pync}/lib/${python.libPrefix}/site-packages"
-  '' + ''
-     wrapProgram "$out/bin/weechat" \
-       --prefix PYTHONPATH : "$PYTHONPATH" \
-       --prefix PYTHONPATH : "$NIX_PYTHONPATH"
+    wrapProgram "$out/bin/weechat" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "$NIX_PYTHONPATH"
   '';
 
   meta = {

@@ -2,19 +2,19 @@
 
 /* Cargo binary snapshot */
 
-let snapshotDate = "2015-01-24";
+let snapshotDate = "2015-02-26";
 in
 
 with ((import ./common.nix) { inherit stdenv; version = "snapshot-${snapshotDate}"; });
 
 let snapshotHash = if stdenv.system == "i686-linux"
-      then "96213038f850569f1c4fa6a0d146c6155c0d566b"
+      then "2a28b604d09b4a76a54a05d91f7f158692427b3a"
       else if stdenv.system == "x86_64-linux"
-      then "4d87486493c2881edced7b1d2f8beaac32aaa5b5"
+      then "7367f4aca86d38e209ef7236b00175df036c03e2"
       else if stdenv.system == "i686-darwin"
-      then "17b9fc782e86bffe170abb83a01e0cb7c90a0daa"
+      then "e5cabb0a4a2b4e47f7b1ae9b802e2b5d0b14eac5"
       else if stdenv.system == "x86_64-darwin"
-      then "18887bdbd3e6d2a127aa34216fa06e9877b0fbc6"
+      then "3026c60ddd46d2bcf1cb178fc801095dbfba5286"
       else throw "no snapshot for platform ${stdenv.system}";
     snapshotName = "cargo-nightly-${platform}.tar.gz";
 in
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out"
-    cp -r bin "$out/bin"
+    ./install.sh "--prefix=$out"
   '' + (if stdenv.isLinux then ''
     patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
              --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib}/lib" \

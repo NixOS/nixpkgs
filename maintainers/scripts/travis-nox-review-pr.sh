@@ -33,8 +33,8 @@ elif [[ $1 == build ]]; then
         echo "=== Checking PR"
         nox-review pr ${TRAVIS_PULL_REQUEST}
     fi
-    echo "=== Checking tarball creation"
-    nix-build pkgs/top-level/release.nix -A tarball
+    # echo "=== Checking tarball creation"
+    # nix-build pkgs/top-level/release.nix -A tarball
 else
     echo "$0: Unknown option $1" >&2
     false

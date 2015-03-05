@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchgit, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl }:
+{ stdenv, lib, fetchurl, fetchgit, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, Security }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -6,8 +6,8 @@ let
   loaderArm = "${glibc}/lib/ld-linux.so.3";
   srcs = {
     golang = fetchurl {
-      url = https://github.com/golang/go/archive/go1.4.1.tar.gz;
-      sha256 = "1q21i08nymy30vszbcah8l8yjxm32x2wmjs44kn2x2r4556y1mgi";
+      url = https://github.com/golang/go/archive/go1.4.2.tar.gz;
+      sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
     };
     tools = fetchgit {
       url = https://github.com/golang/tools.git;
@@ -18,12 +18,14 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.4.1";
+  name = "go-1.4.2";
 
   src = srcs.golang;
 
   # perl is used for testing go vet
-  buildInputs = [ bison bash makeWrapper perl ] ++ lib.optionals stdenv.isLinux [ glibc ] ;
+  buildInputs = [ bison bash makeWrapper perl ]
+             ++ lib.optionals stdenv.isLinux [ glibc ]
+             ++ lib.optionals stdenv.isDarwin [ Security ];
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
@@ -76,10 +78,13 @@ stdenv.mkDerivation {
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = if stdenv.isDarwin then 0 else 1;
+  CGO_ENABLED = 1;
+
+  # The go build actually checks for CC=*/clang and does something different, so we don't
+  # just want the generic `cc` here.
+  CC = if stdenv.isDarwin then "clang" else "cc";
 
   installPhase = ''
-    export CC=cc
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"
