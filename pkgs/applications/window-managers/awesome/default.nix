@@ -6,15 +6,15 @@
 , docbook_xsl }:
 
 let
-  version = "3.5.5";
+  version = "3.5.6";
 in with luaPackages;
 
 stdenv.mkDerivation rec {
   name = "awesome-${version}";
- 
+
   src = fetchurl {
     url    = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "0iwd4pjvq0akm9dbipbl4m4fm24m017l06arasr445v2qkbxnc5z";
+    sha256 = "1ms6a3l1i2jdhzrd1zr25cqckznmb44qgz4n635jam42hzhrvx1p";
   };
 
   meta = with stdenv.lib; {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;
   };
- 
+
   buildInputs = [
     asciidoc
     cairo
