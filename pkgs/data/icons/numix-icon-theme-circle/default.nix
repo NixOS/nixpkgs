@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   package-name = "numix-icon-theme-circle";
   
-  name = "${package-name}-${version}";
+  name = "${package-name}-20150304";
 
   buildInputs = [ unzip ];
   
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    install -dm 755 $out/usr/share/icons
-    cp -dr --no-preserve='ownership' Numix-Circle{,-Light} $out/usr/share/icons/
+    install -dm 755 $out/share/icons
+    cp -dr --no-preserve='ownership' Numix-Circle{,-Light} $out/share/icons/
   '';
   
   meta = {
