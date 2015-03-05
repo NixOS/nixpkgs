@@ -1,8 +1,7 @@
 { stdenv, fetchurl, noSysDirs, zlib
 , cross ? null, gold ? true, bison ? null
+, libintlOrEmpty
 }:
-
-assert !stdenv.isDarwin;
 
 let basename = "binutils-2.23.1"; in
 
@@ -37,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = optional gold bison;
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ] ++ libintlOrEmpty;
 
   inherit noSysDirs;
 
@@ -56,7 +55,8 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = "-static-libgcc";
+  NIX_CFLAGS_COMPILE = if (!stdenv.isDarwin) then "-static-libgcc" else
+    "-Wno-string-plus-int -Wno-deprecated-declarations";
 
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" ]

@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 
-  doCheck = true;
+  # on darwin, sandbox prevents unix socket binding
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     homepage = "http://gnupg.org/";

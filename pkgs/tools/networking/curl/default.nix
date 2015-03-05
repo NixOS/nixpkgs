@@ -44,11 +44,15 @@ stdenv.mkDerivation rec {
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
+    # CC=cc works regardless of gcc or clang, and this prevents the generated
+    # output from retaining unnecessary absolute references to our bootstrap
+    # tools during the darwin stdenv bootstrapping
+    ++ stdenv.lib.optional stdenv.isDarwin "CC=cc"
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
 
-  CXX = "g++";
-  CXXCPP = "g++ -E";
+  CXX    = if stdenv.isDarwin then "c++"    else "g++";
+  CXXCPP = if stdenv.isDarwin then "c++ -E" else "g++ -E";
 
   crossAttrs = {
     # We should refer to the cross built openssl

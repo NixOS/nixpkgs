@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableNLS ? true, libnatspec ? null }:
+{ stdenv, fetchurl, libiconv, enableNLS ? true, libnatspec ? null }:
 
 assert enableNLS -> libnatspec != null;
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   patches = if enableNLS then [ ./natspec-gentoo.patch.bz2 ] else [];
 
-  buildInputs = if enableNLS then [ libnatspec ] else [];
+  buildInputs = [ libiconv ] ++ (if enableNLS then [ libnatspec ] else []);
 
   meta = {
     description = "Compressor/archiver for creating and modifying zipfiles";

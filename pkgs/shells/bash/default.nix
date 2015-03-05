@@ -41,7 +41,9 @@ stdenv.mkDerivation rec {
       " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing";
   };
 
-  configureFlags = baseConfigureFlags;
+  # The CC=cc prevents the generated bashbug script from permanently holding onto a
+  # reference to our bootstrap compiler during darwin stdenv bootstrapping
+  configureFlags = baseConfigureFlags + stdenv.lib.optionalString stdenv.isDarwin " CC=cc";
 
   # Note: Bison is needed because the patches above modify parse.y.
   nativeBuildInputs = [bison]

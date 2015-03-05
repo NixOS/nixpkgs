@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool
 , llvm, libcxx, libcxxabi, clang, openssl, libuuid
 , libobjc ? null
 }:
@@ -8,14 +8,11 @@ let
     name = "cctools-port-${version}";
     version = "862";
 
-    src = let
-      # Should be fetchFromGitHub but it was whining so this will do for now
+    src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
       rev    = "59d21d2c793c51d205c8b4ab14b9b28e63c72445";
-    in fetchurl {
-      url    = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
-      sha256 = "01f31ijpnplbiyp7ldwzy8vbkn3j3m56n5blsvsav5nlp4lp2g71";
+      sha256 = "11cfn49k30kla9z4sr094cfsfj41jryq2wj80sb761v596q6ai4r";
     };
 
     buildInputs = [ autoconf automake libtool openssl libuuid ] ++
@@ -32,7 +29,8 @@ let
     configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [ "CXXFLAGS=-I${libcxx}/include/c++/v1" ];
 
     postPatch = ''
-      sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
+      substituteInPlace cctools/ld64/src/ld/Options.cpp \
+        --replace "addStandardLibraryDirectories = true" "addStandardLibraryDirectories = false"
 
       # FIXME: there are far more absolute path references that I don't want to fix right now
       substituteInPlace cctools/configure.ac \

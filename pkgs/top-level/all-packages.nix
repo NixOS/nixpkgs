@@ -12,9 +12,9 @@
   # null, the default standard environment is used.
   bootStdenv ? null
 
-, # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
-  # outside of the store.  Thus, GCC, GFortran, & co. must always look for
-  # files in standard system directories (/usr/include, etc.)
+, # Non-GNU/Linux (and darwin) OSes are currently "impure" platforms, with
+  # their libc outside of the store.  Thus, GCC, GFortran, & co. must always
+  # look for files in standard system directories (/usr/include, etc.)
   noSysDirs ? (system != "x86_64-freebsd" && system != "i686-freebsd"
                && system != "x86_64-kfreebsd-gnu")
 
@@ -570,8 +570,6 @@ let
   grc = callPackage ../tools/misc/grc { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
-
-  otool = callPackage ../os-specific/darwin/otool { };
 
   pass = callPackage ../tools/security/pass {
     gnupg = gnupg1compat;
@@ -3217,6 +3215,7 @@ let
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
+    shell = bash;
     inherit coreutils zlib;
     extraPackages = [ libcxx ];
     nativeTools = false;
@@ -3224,8 +3223,8 @@ let
   };
 
   #Use this instead of stdenv to build with clang
-  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio (stdenvAdapters.overrideCC stdenv clang);
-  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang);
+  clangStdenv  = if stdenv.isDarwin then stdenv else lowPrio (stdenvAdapters.overrideCC stdenv clang);
+  libcxxStdenv = if stdenv.isDarwin then stdenv else stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -3252,8 +3251,6 @@ let
 
   gcc       = gcc48;
   gcc_multi = gcc48_multi;
-
-  gccApple = throw "gccApple is no longer supported";
 
   gcc34 = wrapCC (import ../development/compilers/gcc/3.4 {
     inherit fetchurl stdenv noSysDirs;
@@ -4230,9 +4227,10 @@ let
     cc = baseCC;
     libc = libc;
     inherit stdenv binutils coreutils zlib;
+    inherit (darwin) dyld;
   };
 
-  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) glibc;
+  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) stdenv.cc.libc;
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: (makeOverridable (import ../build-support/gcc-wrapper-old)) {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -4465,6 +4463,8 @@ let
   };
   python27 = callPackage ../development/interpreters/python/2.7 {
     self = python27;
+    inherit (darwin) configd;
+    corefoundation = darwin.CF;
   };
   python32 = callPackage ../development/interpreters/python/3.2 {
     self = python32;
@@ -4705,11 +4705,9 @@ let
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  binutils = if stdenv.isDarwin
-    then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
-    else callPackage ../development/tools/misc/binutils {
-      inherit noSysDirs;
-    };
+  binutils = if stdenv.isDarwin then darwin.binutils else binutils-raw;
+
+  binutils-raw = callPackage ../development/tools/misc/binutils { inherit noSysDirs; };
 
   binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
@@ -4719,7 +4717,7 @@ let
   binutilsCross =
     if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools_cross
     else lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
-      inherit stdenv fetchurl zlib bison;
+      inherit stdenv fetchurl zlib bison libintlOrEmpty;
       noSysDirs = true;
       cross = assert crossSystem != null; crossSystem;
     }));
@@ -4793,10 +4791,7 @@ let
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake = callPackage ../development/tools/build-managers/cmake {
-    wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.ps else null;
-  };
+  cmake = callPackage ../development/tools/build-managers/cmake { };
 
   cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
   cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
@@ -6635,10 +6630,8 @@ let
   libusb1 = callPackage ../development/libraries/libusb1 { };
 
   libunwind = if stdenv.isDarwin
-    then callPackage ../development/libraries/libunwind/native.nix {}
+    then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
-
-  libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
 
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv { });
 
@@ -8550,7 +8543,7 @@ let
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {}).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
 
     maloader = callPackage ../os-specific/darwin/maloader {
       inherit opencflite;
@@ -8563,14 +8556,19 @@ let
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
 
-    ps = callPackage ../os-specific/darwin/adv_cmds/ps.nix {};
-
     security_tool = callPackage ../os-specific/darwin/security-tool { inherit osx_private_sdk; };
 
     cmdline_sdk   = cmdline.sdk;
     cmdline_tools = cmdline.tools;
 
+    apple_sdk = callPackage ../os-specific/darwin/apple-sdk {};
+
     libobjc = apple-source-releases.objc4;
+
+    binutils = callPackage ../os-specific/darwin/binutils { inherit cctools; };
+    libtool = callPackage ../os-specific/darwin/libtool { inherit cctools; };
+
+    sw_vers = callPackage ../os-specific/darwin/sw_vers {};
   };
 
   devicemapper = lvm2;
@@ -9147,6 +9145,8 @@ let
   powertop = callPackage ../os-specific/linux/powertop { };
 
   prayer = callPackage ../servers/prayer { };
+
+  ps = if stdenv.isDarwin then darwin.adv_cmds else procps;
 
   procps = procps-ng;
 
