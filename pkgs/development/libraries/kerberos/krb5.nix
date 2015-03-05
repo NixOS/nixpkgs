@@ -34,4 +34,6 @@ stdenv.mkDerivation (rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
+
+  passthru.implementation = "krb5";
 })
