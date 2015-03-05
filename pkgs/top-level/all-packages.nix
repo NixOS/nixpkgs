@@ -12647,6 +12647,8 @@ let
 
       calligra = callPackage ../applications/office/calligra { eigen = eigen2; };
 
+      choqok = callPackage ../applications/networking/instant-messengers/choqok { };
+
       colord-kde = callPackage ../tools/misc/colord-kde { };
 
       digikam = if builtins.compareVersions "4.9" kde4.release == 1 then
