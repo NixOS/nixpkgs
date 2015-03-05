@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "b7e4d3c3d55fc3859edcb20462fcf0d14ab26e920eddcd503072e8105284d924";
+    sha256 = "1pgnz5lapm4qk48a13k9698jaswybzlbz2nyc621d852ldf0vhn6";
   };
 
   buildInputs = [ ncurses libiconv ];
