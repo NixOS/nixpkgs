@@ -117,6 +117,7 @@ self: super: {
   hxt = dontHaddock super.hxt;                                  # https://github.com/UweSchmidt/hxt/issues/38
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
+  shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
   types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
