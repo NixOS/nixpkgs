@@ -293,6 +293,11 @@ rec {
     kernelTarget = "zImage";
     uboot = null;
     gcc = {
+      # For gcc 4.8, the best for rpi2 would be:
+      #   cpu = "cortex-a7";
+      #   fpu = "neon-vfpv4";
+      # But we prefer compatibility with the beaglebone, so both
+      # can run the same built store paths.
       arch = "armv7-a";
       fpu = "vfpv3-d16";
       float = "hard";
