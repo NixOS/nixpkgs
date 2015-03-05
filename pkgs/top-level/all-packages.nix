@@ -1782,6 +1782,8 @@ let
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
+  libxcomp = callPackage ../development/libraries/libxcomp { };
+
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
   limesurvey = callPackage ../servers/limesurvey { };
