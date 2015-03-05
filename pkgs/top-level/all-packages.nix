@@ -11363,6 +11363,8 @@ let
     boost = boost155;
   };
 
+  scim = callPackage ../applications/misc/scim { };
+
   scite = callPackage ../applications/editors/scite { };
 
   scribus = callPackage ../applications/office/scribus {
