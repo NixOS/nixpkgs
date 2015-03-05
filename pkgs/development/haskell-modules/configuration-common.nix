@@ -613,6 +613,10 @@ self: super: {
   # https://github.com/frasertweedale/hs-jose/issues/4
   jose = dontCheck super.jose;
 
+  # We don't have the groonga package these libraries bind to.
+  haroonga = markBroken super.haroonga;
+  haroonga-httpd = markBroken super.haroonga-httpd;
+
 } // {
 
   # Not on Hackage.
