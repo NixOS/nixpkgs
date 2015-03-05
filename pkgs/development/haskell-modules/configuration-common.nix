@@ -618,6 +618,10 @@ self: super: {
   haroonga = markBroken super.haroonga;
   haroonga-httpd = markBroken super.haroonga-httpd;
 
+  # Cannot find pkg-config data for "webkit-1.0".
+  webkit = markBroken super.webkit;
+  websnap = markBroken super.websnap;
+
 } // {
 
   # Not on Hackage.
