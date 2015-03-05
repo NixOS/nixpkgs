@@ -327,6 +327,7 @@ self: super: {
   hedn = dontCheck super.hedn;
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
+  hierarchical-clustering = dontCheck super.hierarchical-clustering;
   hmatrix-tests = dontCheck super.hmatrix-tests;
   hPDB-examples = dontCheck super.hPDB-examples;
   hquery = dontCheck super.hquery;
