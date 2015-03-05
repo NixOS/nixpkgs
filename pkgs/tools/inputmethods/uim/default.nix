@@ -1,4 +1,4 @@
-{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, cmake, anthy, ... }:
+{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, cmake, anthy}:
 
 stdenv.mkDerivation rec {
   version = "1.8.6";
