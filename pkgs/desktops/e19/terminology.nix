@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/ecore-con-1 $NIX_CFLAGS_COMPILE"
     export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/eldbus-1 $NIX_CFLAGS_COMPILE"
     export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/ethumb-1 $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/elocation-1 $NIX_CFLAGS_COMPILE"
   '';
   meta = {
     description = "The best terminal emulator written with the EFL";

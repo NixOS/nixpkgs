@@ -13394,12 +13394,12 @@ let
     };
   };
 
-  pythonefl_1_12 = buildPythonPackage rec {
+  pythonefl_1_13 = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.12.0";
+    version = "1.13.0";
     src = pkgs.fetchurl {
-      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
-      sha256 = "0rxv5nrqg5c2l93ns2k6gjil1y7qq6amfh5slkarm3kv8fzk17xv";
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.bz2";
+      sha256 = "0yy4v0f04dgdz21wd2c09x9w6lzsbq6g12s8895laln44l5aqd82";
     };
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="-I${pkgs.e19.efl}/include/eo-1 -I${pkgs.e19.efl}/include/eina-1 -I${pkgs.e19.efl}/include/eina-1/eina -I${pkgs.e19.efl}/include/evas-1 -I${self.dbus}/include/dbus-1.0 -I${pkgs.e19.efl}/include/efl-1 -I${pkgs.e19.efl}/include/eet-1 -I${pkgs.e19.efl}/include/ecore-1 -I${pkgs.e19.efl}/include/ecore-evas-1 -I${pkgs.e19.efl}/include/ecore-file-1 -I${pkgs.e19.efl}/include/ecore-input-1 -I${pkgs.e19.efl}/include/ecore-imf-1 -I${pkgs.e19.efl}/include/ecore-con-1 -I${pkgs.e19.efl}/include/edje-1 -I${pkgs.e19.efl}/include/eldbus-1 -I${pkgs.e19.efl}/include/efreet-1 -I${pkgs.e19.efl}/include/ethumb-client-1 -I${pkgs.e19.efl}/include/ethumb-1 -I${pkgs.e19.efl}/include/ecore-x-1 $NIX_CFLAGS_COMPILE"
@@ -13408,7 +13408,7 @@ let
     meta = {
       description = "Python bindings for EFL and Elementary.";
       homepage = http://enlightenment.org/;
-      maintainers = [ stdenv.lib.maintainers.matejc ];
+      maintainers = [ stdenv.lib.maintainers.matejc stdenv.lib.maintainers.tstrobel ];
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.gpl3;
     };
