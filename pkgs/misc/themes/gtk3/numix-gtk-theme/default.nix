@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    install -dm 755 $out/usr/share/themes/Numix
-    cp -dr --no-preserve='ownership' {LICENSE,CREDITS,index.theme,gtk-2.0,gtk-3.0,metacity-1,openbox-3,unity,xfce-notify-4.0,xfwm4} $out/usr/share/themes/Numix/
+    install -dm 755 $out/share/themes/Numix
+    cp -dr --no-preserve='ownership' {LICENSE,CREDITS,index.theme,gtk-2.0,gtk-3.0,metacity-1,openbox-3,unity,xfce-notify-4.0,xfwm4} $out/share/themes/Numix/
   '';
   
   meta = {
