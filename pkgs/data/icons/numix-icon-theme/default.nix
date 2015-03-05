@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Numix icon theme";
     homepage = https://numixproject.org;
-    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.all;
   };
 }

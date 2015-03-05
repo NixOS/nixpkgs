@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.3";
-  name = "numix-${version}";
+  name = "numix-gtk-theme-${version}";
   
   src = fetchurl {
     url = "https://github.com/shimmerproject/Numix/archive/v${version}.tar.gz";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Numix GTK theme";
     homepage = https://numixproject.org;
-    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.all;
   };
 }

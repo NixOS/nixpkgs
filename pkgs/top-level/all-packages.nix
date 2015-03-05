@@ -9527,9 +9527,9 @@ let
 
   nafees = callPackage ../data/fonts/nafees { };
 
-  numix_icon_theme = callPackage ../data/icons/numix-icon-theme { };
+  numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
 
-  numix_icon_theme_circle = callPackage ../data/icons/numix-icon-theme-circle { };
+  numix-icon-theme-circle = callPackage ../data/icons/numix-icon-theme-circle { };
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
@@ -12841,7 +12841,7 @@ let
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
-  numix = callPackage ../misc/themes/gtk3/numix { };
+  numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
     qt5 = qt54;
