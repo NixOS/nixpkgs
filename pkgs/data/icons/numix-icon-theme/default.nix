@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    ls -lah
     install -dm 755 $out/usr/share/icons
     cp -dr --no-preserve='ownership' Numix{,-Light} $out/usr/share/icons/
   '';

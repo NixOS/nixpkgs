@@ -12841,6 +12841,8 @@ let
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
+  numix = callPackage ../misc/themes/gtk3/numix { };
+
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
     qt5 = qt54;
     kf5 = kf57;
