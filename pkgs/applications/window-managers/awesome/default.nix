@@ -1,7 +1,7 @@
 { stdenv, fetchurl, luaPackages, cairo, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xlibs, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
-, compton, procps, iproute, coreutils, curl, alsaUtils, findutils, rxvt_unicode
+, compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen, xmlto, docbook_xml_dtd_45
 , docbook_xsl }:
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix LD_LIBRARY_PATH : "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib" \
-      --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl}/bin:${alsaUtils}/bin:${findutils}/bin:${rxvt_unicode}/bin"
+      --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl}/bin:${alsaUtils}/bin:${findutils}/bin:${xterm}/bin"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"
