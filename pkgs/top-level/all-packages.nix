@@ -11449,10 +11449,13 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
+  sddm = callPackage ../applications/display-managers/sddm {
+    qt5 = qt54;
+  };
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
-
 
   smartgithg = callPackage ../applications/version-management/smartgithg { };
 
