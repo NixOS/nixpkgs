@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "a wrapper for the user, group and hosts NSS API";
-    homepage = https://git.samba.org/?p=uid_wrapper.git;a=summary;
+    homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
