@@ -135,7 +135,8 @@ self: super: {
   amazonka-ecs = super.amazonka-ecs.overrideScope amazonkaEnv;
   amazonka-glacier = super.amazonka-glacier.overrideScope amazonkaEnv;
   amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
+  amazonka-ssm = super.amazonka-ssm.overrideScope amazonkaEnv;
 in {
   inherit amazonkaEnv;
-  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-ecs amazonka-kms amazonka-glacier;
+  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-ecs amazonka-kms amazonka-glacier amazonka-ssm;
 })
