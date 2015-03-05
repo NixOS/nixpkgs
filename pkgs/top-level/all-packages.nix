@@ -8304,7 +8304,6 @@ let
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
-    #glusterfs = null; # Broken in the current build
     libgcrypt = libgcrypt_1_6;
     libiconv = if stdenv.isLinux then null else libiconv;
     python = python2;
