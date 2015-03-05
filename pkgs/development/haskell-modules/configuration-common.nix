@@ -227,6 +227,7 @@ self: super: {
   HList = dontCheck super.HList;
   memcached-binary = dontCheck super.memcached-binary;
   persistent-zookeeper = dontCheck super.persistent-zookeeper;
+  pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
