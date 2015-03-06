@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, jdk, jre, ant, coreutils, gnugrep, file, libusb, unzip,
-  gccRaw, readline, zlib, ncurses, withGui ? false, gtk2 ? null
+  readline, zlib, ncurses, withGui ? false, gtk2 ? null
 }:
 
 assert withGui -> gtk2 != null;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     zlib
     ncurses
     readline
-    gccRaw
+    stdenv.cc.cc
   ];
 
   installPhase = ''
