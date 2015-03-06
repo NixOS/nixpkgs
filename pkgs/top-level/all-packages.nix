@@ -2090,6 +2090,8 @@ let
 
   nylon = callPackage ../tools/networking/nylon { };
 
+  nxproxy = callPackage ../tools/admin/nxproxy { };
+
   nzbget = callPackage ../tools/networking/nzbget { };
 
   oathToolkit = callPackage ../tools/security/oath-toolkit { };
