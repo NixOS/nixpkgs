@@ -288,8 +288,6 @@ rec {
       ];
 
     overrides = pkgs: {
-      inherit cc;
-
       gcc = cc;
 
       inherit (stage4.pkgs)
@@ -298,8 +296,8 @@ rec {
         attr acl paxctl zlib pcre;
     };
   };
-  
-  
+
+
   testBootstrapTools = let
     defaultPkgs = allPackages { inherit system platform; };
   in derivation {
@@ -310,7 +308,7 @@ rec {
 
     buildCommand = ''
       export PATH=${bootstrapTools}/bin
-      
+
       ls -l
       mkdir $out
       mkdir $out/bin
