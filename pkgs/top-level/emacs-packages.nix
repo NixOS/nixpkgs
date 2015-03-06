@@ -1,27 +1,37 @@
-{ pkgs, stdenv, fetchurl, fetchFromGitHub, fetchgit
-, emacs, texinfo
-
-# non-emacs packages
-, external
-}:
-
 # package.el-based emacs packages
-
-## init.el
+#
+## add this at the start your init.el:
 # (require 'package)
-# (setq package-archives nil
-#       package-user-dir "~/.nix-profile/share/emacs/site-lisp/elpa")
+#
+# ;; optional. makes unpure packages archives unavailable
+# (setq package-archives nil)
+#
+# (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
+#
+# ;; optional. use this if you install emacs packages to user profiles (with nix-env)
+# (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
+#
 # (package-initialize)
 
-with stdenv.lib.licences;
+{ overrides
 
-let
-  melpaBuild = import ../build-support/melpa {
-    inherit stdenv fetchurl emacs texinfo;
-  };
-in
+, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub
 
-rec {
+, emacs
+, trivialBuild
+, melpaBuild
+
+, external
+}@args:
+
+with lib.licences;
+
+let self = _self // overrides;
+    callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
+    _self = with self; {
+
+  ## START HERE
+
   ac-haskell-process = melpaBuild rec {
     pname   = "ac-haskell-process";
     version = "0.5";
@@ -44,7 +54,10 @@ rec {
       rev    = "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac";
       sha256 = "17axrgd99glnl6ma4ls3k01ysdqmiqr581wnrbsn3s4gp53mm2x6";
     };
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "Advanced cursor movements mode for Emacs";
+      licence = gpl3Plus;
+    };
   };
 
   ag = melpaBuild rec {
@@ -58,6 +71,73 @@ rec {
     };
     packageRequires = [ dash s ];
     meta = { licence = gpl3Plus; };
+  };
+
+  agda2-mode = with external; trivialBuild {
+    pname = "agda-mode";
+    version = Agda.version;
+
+    phases = [ "buildPhase" "installPhase" ];
+
+    # already byte-compiled by Agda builder
+    buildPhase = ''
+      agda=`${Agda}/bin/agda-mode locate`
+      cp `dirname $agda`/*.el* .
+    '';
+
+    meta = {
+      description = "Agda2-mode for Emacs extracted from Agda package";
+      longDescription = ''
+        Wrapper packages that liberates init.el from `agda-mode locate` magic.
+        Simply add this to user profile or systemPackages and do `(require 'agda2)` in init.el.
+      '';
+      homepage = Agda.meta.homepage;
+      license = Agda.meta.license;
+    };
+  };
+
+  anzu = melpaBuild rec {
+    pname = "anzu";
+    version = "0.52";
+    src = fetchFromGitHub {
+      owner = "syohex";
+      repo  = "emacs-anzu";
+      rev = "f41db6225d8fb983324765aa42c94d3ee379a49f";
+      sha256 = "1mn20swasrl8kr557r1850vr1q0gcnwlxxafnc6lq5g01kjfcdxd";
+    };
+    meta = {
+      description = "Show number of matches in Emacs mode-line while searching";
+      longDescription = ''
+        anzu.el is an Emacs port of anzu.vim. anzu.el provides a minor
+        mode which displays current match and total matches information
+        in the mode-line in various search mode.
+      '';
+      homepage = https://github.com/syohex/emacs-anzu/;
+      license = gpl3Plus;
+    };
+  };
+
+  apel = melpaBuild rec {
+    pname = "apel";
+    version = "10.8";
+    src = fetchFromGitHub {
+      owner  = "wanderlust";
+      repo   = pname;
+      rev    = "8402e59eadb580f59969114557b331b4d9364f95";
+      sha256 = "0sdxnf4b8rqs1cbjxh23wvxmj7ll3zddv8yfdgif6zmgyy8xhc9m";
+    };
+    files = [
+      "alist.el" "apel-ver.el" "broken.el" "calist.el"
+      "emu.el" "filename.el" "install.el" "inv-23.el" "invisible.el"
+      "mcharset.el" "mcs-20.el" "mcs-e20.el" "mule-caesar.el"
+      "path-util.el" "pccl-20.el" "pccl.el" "pces-20.el" "pces-e20.el"
+      "pces.el" "pcustom.el" "poe.el" "poem-e20.el" "poem-e20_3.el"
+      "poem.el" "product.el" "pym.el" "richtext.el" "static.el"
+    ];
+    meta = {
+      description = "A Portable Emacs Library";
+      license = gpl3Plus; # probably
+    };
   };
 
   async = melpaBuild rec {
@@ -95,12 +175,11 @@ rec {
       sha256 = "050lb8qjq7ra35mqp6j6qkwbvq5zj3yhz73aym5kf1vjd42rmjcw";
     };
     packageRequires = [ popup ];
-
     meta = {
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
       license = gpl3Plus;
-      platforms = stdenv.lib.platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -115,6 +194,22 @@ rec {
     };
     files = [ "bind-key.el" ];
     meta = { licence = gpl3Plus; };
+  };
+
+  browse-kill-ring = melpaBuild rec {
+    pname   = "browse-kill-ring";
+    version = "20140104";
+    src = fetchFromGitHub {
+      owner  = pname;
+      repo   = pname;
+      rev    = "f81ca5f14479fa9e938f89bf8f6baa3c4bdfb755";
+      sha256 = "149g4qs5dqy6yzdj5smb39id5f72bz64qfv5bjf3ssvhwl2rfba8";
+    };
+    meta = {
+      description = "Interactively insert items from Emacs kill-ring";
+      homepage = https://github.com/browse-kill-ring/browse-kill-ring/;
+      license = gpl2Plus;
+    };
   };
 
   change-inner = melpaBuild rec {
@@ -215,7 +310,10 @@ rec {
       sha256 = "0wrmlmgr4mwxlmmh8blplddri2lpk4g8k3l1vpb5c6a975420qvn";
     };
     packageRequires = [ evil ];
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "surround.vim emulation for Emacs evil mode";
+      licence = gpl3Plus;
+    };
   };
 
   evil = melpaBuild {
@@ -227,7 +325,10 @@ rec {
       sha256 = "0yiqpzsm5sr7xdkixdvfg312dk9vsdcmj69gizk744d334yn8rsz";
     };
     packageRequires = [ goto-chg undo-tree ];
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "Extensible vi layer for Emacs";
+      licence = gpl3Plus;
+    };
   };
 
   exec-path-from-shell = melpaBuild rec {
@@ -251,7 +352,26 @@ rec {
       rev    = "fa413e07c97997d950c92d6012f5442b5c3cee78";
       sha256 = "04k0518wfy72wpzsswmncnhd372fxa0r8nbfhmbyfmns8n7sr045";
     };
-    meta = { licence = gpl3Plus; };
+    meta = {
+      description = "Increases the selected region by semantic units in Emacs";
+      licence = gpl3Plus;
+    };
+  };
+
+  flim = melpaBuild rec {
+    pname = "flim";
+    version = "1.14.9"; # 20141216
+    src = fetchFromGitHub {
+      owner  = "wanderlust";
+      repo   = pname;
+      rev    = "488a4d70fb4ae57bdd30dc75c2d75579894e28a2";
+      sha256 = "178fhpbyffksr4v3m8jmx4rx2vqyz23qhbyvic5afabxi6lahjfs";
+    };
+    packageRequires = [ apel ];
+    meta = {
+      description = "Email message encoding library for Emacs";
+      license = gpl3Plus; # probably
+    };
   };
 
   flycheck-pos-tip = melpaBuild rec {
@@ -442,6 +562,22 @@ rec {
     meta = { licence = gpl3Plus; };
   };
 
+  ido-ubiquitous = melpaBuild rec {
+    pname   = "ido-ubiquitous";
+    version = "2.17";
+    src = fetchFromGitHub {
+      owner  = "DarwinAwardWinner";
+      repo   = pname;
+      rev    = "323e4cddc05d5a4546c1b64132b2b1e9f8896452";
+      sha256 = "0wdjz3cqzrxhrk68g5gyvc9j2rb6f4yw00xbjgw9ldwlhmkwy5ja";
+    };
+    meta = {
+      description = "Does what you expected ido-everywhere to do in Emacs";
+      homepage = https://github.com/DarwinAwardWinner/ido-ubiquitous/;
+      license = gpl3Plus;
+    };
+  };
+
   idris-mode = melpaBuild rec {
     pname   = "idris-mode";
     version = "0.9.15";
@@ -506,6 +642,8 @@ rec {
     };
     meta = { licence = gpl3Plus; };
   };
+
+  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
 
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
@@ -583,6 +721,22 @@ rec {
     meta = { licence = gpl3Plus; };
   };
 
+  semi = melpaBuild rec {
+    pname = "semi";
+    version = "1.14.7"; # 20150203
+    src = fetchFromGitHub {
+      owner  = "wanderlust";
+      repo   = pname;
+      rev    = "9976269556c5bcc021e4edf1b0e1accd39929528";
+      sha256 = "1g1xg57pz4msd3f998af5gq28qhmvi410faygzspra6y6ygaka68";
+    };
+    packageRequires = [ apel flim ];
+    meta = {
+      description = "MIME library for Emacs";
+      license = gpl3Plus; # probably
+    };
+  };
+
   shorten = melpaBuild rec {
     pname   = "shorten";
     version = "1.5";
@@ -620,6 +774,22 @@ rec {
     };
     packageRequires = [ dash ];
     meta = { licence = gpl3Plus; };
+  };
+
+  smex = melpaBuild rec {
+    pname = "smex";
+    version = "20141210";
+    src = fetchFromGitHub {
+      owner  = "nonsequitur";
+      repo   = pname;
+      rev    = "aff8d4485139ac28f1c7e62912c0d0d480995831";
+      sha256 = "0017f1ji7rxad2n49dhn5g0pmw6lmw80cqk6dynszizj46xpbqfp";
+    };
+    meta = {
+      description = "M-x enhancement for Emacs build on top of Ido";
+      homepage = https://github.com/nonsequitur/smex/;
+      license = emacs.meta.license; # should be "same as Emacs"
+    };
   };
 
   structured-haskell-mode = melpaBuild rec {
@@ -700,6 +870,27 @@ rec {
     meta = { licence = gpl3Plus; };
   };
 
+  wanderlust = melpaBuild rec {
+    pname = "wanderlust";
+    version = "2.15.9"; # 20150301
+    src = fetchFromGitHub {
+      owner  = pname;
+      repo   = pname;
+      rev    = "13fb4f6519490d4ac7138f3bcf76707654348071";
+      sha256 = "1l48xfcwkm205prspa1rns6lqfizik5gpdwmlfgyb5mabm9x53zn";
+    };
+    packageRequires = [ apel flim semi ];
+    fileSpecs = [
+      "doc/wl.texi" "doc/wl-ja.texi"
+      "elmo/*.el" "wl/*.el"
+      "etc/icons"
+    ];
+    meta = {
+      description = "E-Mail client for Emacs";
+      license = gpl3Plus; # probably
+    };
+  };
+
   weechat = melpaBuild rec {
     pname   = "weechat.el";
     version = "20141016";
@@ -709,7 +900,7 @@ rec {
       rev    = "4cb2ced1eda5167ce774e04657d2cd077b63c706";
       sha256 = "003sihp7irm0qqba778dx0gf8xhkxd1xk7ig5kgkryvl2jyirk28";
     };
-    postPatch = stdenv.lib.optionalString (!stdenv.isLinux) ''
+    postPatch = lib.optionalString (!stdenv.isLinux) ''
       rm weechat-sauron.el weechat-secrets.el
     '';
     packageRequires = [ s ];
@@ -727,4 +918,5 @@ rec {
     };
     meta = { licence = gpl3Plus; };
   };
-}
+
+}; in self
