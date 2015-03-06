@@ -79,10 +79,10 @@ let
 
     outputs = [ "out" "tools" ];
 
+    # move avplay to get rid of the SDL dependency in the main output
     postInstall = ''
       mkdir -p "$tools/bin"
       mv "$out/bin/avplay" "$tools/bin"
-      cp -s "$out"/bin/* "$tools/bin/"
     '';
 
     doInstallCheck = false; # fails randomly
