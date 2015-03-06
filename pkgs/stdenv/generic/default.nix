@@ -83,7 +83,15 @@ let
 
   # Add a utility function to produce derivations that use this
   # stdenv and its shell.
-  mkDerivation = attrs:
+  mkDerivation =
+    { buildInputs ? []
+    , nativeBuildInputs ? []
+    , propagatedBuildInputs ? []
+    , propagatedNativeBuildInputs ? []
+    , crossConfig ? null
+    , meta ? {}
+    , passthru ? {}
+    , ... } @ attrs:
     let
       pos =
         if attrs.meta.description or null != null then
@@ -122,13 +130,7 @@ let
 
       lib.addPassthru (derivation (
         (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
-        // (let
-          buildInputs = attrs.buildInputs or [];
-          nativeBuildInputs = attrs.nativeBuildInputs or [];
-          propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-          propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
-          crossConfig = attrs.crossConfig or null;
-        in
+        //
         {
           builder = attrs.realBuilder or shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
@@ -144,7 +146,7 @@ let
           nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
-        }))) (
+        })) (
       {
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not
@@ -152,15 +154,15 @@ let
         # include it in the result, it *is* available to nix-env for
         # queries.  We also a meta.position attribute here to
         # identify the source location of the package.
-        meta = attrs.meta or {} // (if pos != null then {
-          position = pos.file + ":" + (toString pos.line);
+        meta = meta // (if pos != null then {
+          position = pos.file + ":" + toString pos.line;
         } else {});
-        passthru = attrs.passthru or {};
+        inherit passthru;
       } //
       # Pass through extra attributes that are not inputs, but
       # should be made available to Nix expressions using the
       # derivation (e.g., in assertions).
-      (attrs.passthru or {}));
+      passthru);
 
   # The stdenv that we are producing.
   result =
