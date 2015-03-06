@@ -8313,7 +8313,6 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     libgcrypt = libgcrypt_1_6;
-    libiconv = if stdenv.isLinux then null else libiconv;
     python = python2;
     pythonPackages = python2Packages;
   };
