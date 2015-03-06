@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
 
   # -fpermissive helps building opencascade, although gcc detects a flaw in the code
   # and reports an error otherwise. Further versions may fix that.
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  NIX_CFLAGS_COMPILE = "-fpermissive"
+  # https://bugs.freedesktop.org/show_bug.cgi?id=83631
+    + " -DGLX_GLXEXT_LEGACY";
 
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" "--with-qt=${qt4}" "--with-ftgl=${ftgl}" "--with-freetype=${freetype}" ];
 
