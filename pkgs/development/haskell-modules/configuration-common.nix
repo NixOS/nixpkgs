@@ -620,6 +620,9 @@ self: super: {
   webkit = markBroken super.webkit;
   websnap = markBroken super.websnap;
 
+  # https://github.com/victoredwardocallaghan/hlibBladeRF/issues/4
+  hlibBladeRF = dontCheck super.hlibBladeRF;
+
 } // {
 
   # Not on Hackage.
