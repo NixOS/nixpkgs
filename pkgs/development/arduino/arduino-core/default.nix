@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
     gccRaw
   ];
 
-
-
   installPhase = ''
     mkdir -p $out/share/arduino
     cp -r ./build/linux/work/* "$out/share/arduino/"
@@ -50,30 +48,29 @@ stdenv.mkDerivation rec {
         $out/share/applications/arduino.desktop
     ''}
 
-    # Fixup "/lib64/ld-linux-x86-64.so.2" like references in ELF executables.
+    # Fixup "/lib64/ld-linux-x86-64.so.2" like references in ELF executables
+    # and fix their RPATH header value. 
     echo "running patchelf on prebuilt binaries:"
-    echo "Setting rpath to ${rpath}:"
-    echo "ncurses: ${ncurses}:"
     find "$out" -type f -executable | while read filepath; do
-        echo "Checking `basename $filepath`"
         if file "$filepath" | grep -q "ELF.*executable"; then
             # skip target firmware files
             if [[ "$filepath" == *.elf ]]; then
                 continue
             fi
             echo "Patching $filepath"
-            #echo "setting interpreter $(cat "$NIX_CC"/nix-support/dynamic-linker) in $filepath"
-            patchelf --set-interpreter "$(cat "$NIX_CC"/nix-support/dynamic-linker)" "$filepath"
-            test $? -eq 0 || { echo "patchelf failed to process $filepath"; exit 1; }
-            patchelf --set-rpath ${rpath} "$filepath"
-            test $? -eq 0 || { echo "patchelf failed to set rpath for $filepath"; exit 1; }
+            patchelf --set-interpreter "$(cat "$NIX_CC"/nix-support/dynamic-linker)" "$filepath" || \
+                { echo "patchelf failed to process $filepath"; exit 1; }
+            patchelf --set-rpath ${rpath} "$filepath" || \
+                { echo "patchelf failed to set rpath for $filepath"; exit 1; }
+            patchelf --shrink-rpath "$filepath" || \
+                { echo "patchelf failed to shrink rpath for $filepath"; exit 1; }
         fi
     done
-    # HACK: link libncurses to libtinfo which avrdude requires. Its wrapper
-    # includes the destination directory in the LD_LIBRARY_PATH
+    # HACK: link libncurses to libtinfo which avrdude requires. 
+    # Note that out/share/arduino/hardware/tools/avr/lib is added to
+    # LD_LIBRARY_PATH by upstream's avrdude wrapper script
     ln -s ${ncurses}/lib/libncurses.so.5 $out/share/arduino/hardware/tools/avr/lib/libtinfo.so.5
     ln -s $out/share/arduino/hardware/tools/avr/lib/libtinfo.so.5 $out/share/arduino/hardware/tools/avr/lib/libtinfo.so
-
   '';
 
   meta = with stdenv.lib; {
