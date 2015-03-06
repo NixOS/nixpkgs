@@ -623,6 +623,9 @@ self: super: {
   # https://github.com/victoredwardocallaghan/hlibBladeRF/issues/4
   hlibBladeRF = dontCheck super.hlibBladeRF;
 
+  # https://github.com/frasertweedale/hs-persona-idp/issues/1
+  persona-idp = markBroken super.persona-idp;
+
 } // {
 
   # Not on Hackage.
