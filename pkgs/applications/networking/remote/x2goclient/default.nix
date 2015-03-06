@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   installTargets = [ "install_client" "install_man" ];
   postInstall = ''
