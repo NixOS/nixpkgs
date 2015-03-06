@@ -1782,6 +1782,8 @@ let
 
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
+  libxcomp = callPackage ../development/libraries/libxcomp { };
+
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
   limesurvey = callPackage ../servers/limesurvey { };
@@ -2087,6 +2089,8 @@ let
   nwdiag = pythonPackages.nwdiag;
 
   nylon = callPackage ../tools/networking/nylon { };
+
+  nxproxy = callPackage ../tools/admin/nxproxy { };
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
@@ -7063,7 +7067,7 @@ let
   poker-eval = callPackage ../development/libraries/poker-eval { };
 
   polkit = callPackage ../development/libraries/polkit {
-    spidermonkey = spidermonkey_185;
+    spidermonkey = spidermonkey_17;
   };
 
   polkit_qt4 = callPackage ../development/libraries/polkit-qt-1 {
@@ -8764,7 +8768,7 @@ let
       ];
   };
 
-  linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
+  linux_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
@@ -8984,7 +8988,7 @@ let
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
-  linuxPackages_3_6_rpi = linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi;
+  linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
@@ -9999,6 +10003,9 @@ let
   elvis = callPackage ../applications/editors/elvis { };
 
   emacs = emacs24;
+  emacsPackages = emacs24Packages;
+  emacsPackagesNg = emacs24PackagesNg;
+  emacsMelpa = emacs24PackagesNg; # for backward compatibility
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
@@ -10021,14 +10028,7 @@ let
   });
   emacs24Macport = self.emacs24Macport_24_4;
 
-  emacsMelpa = import ./emacs-melpa-packages.nix {
-    inherit stdenv pkgs fetchurl fetchgit fetchFromGitHub emacs texinfo;
-    external = {
-      inherit (haskellngPackages) ghc-mod structured-haskell-mode;
-    };
-  };
-
-  emacsPackages = emacs: self: let callPackage = newScope self; in rec {
+  emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
@@ -10183,7 +10183,27 @@ let
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
+  emacs24Packages = recurseIntoAttrs (emacsPackagesGen emacs24 pkgs.emacs24Packages);
+
+  emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
+    overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
+
+    inherit lib stdenv fetchurl fetchgit fetchFromGitHub emacs;
+
+    trivialBuild = import ../build-support/emacs/trivial.nix {
+      inherit lib stdenv emacs texinfo;
+    };
+
+    melpaBuild = import ../build-support/emacs/melpa.nix {
+      inherit lib stdenv fetchurl emacs texinfo;
+    };
+
+    external = {
+      inherit (haskellngPackages) ghc-mod structured-haskell-mode Agda;
+    };
+  };
+
+  emacs24PackagesNg = emacsPackagesNgGen emacs24;
 
   inherit (gnome3) empathy;
 
@@ -11367,6 +11387,8 @@ let
     boost = boost155;
   };
 
+  scim = callPackage ../applications/misc/scim { };
+
   scite = callPackage ../applications/editors/scite { };
 
   scribus = callPackage ../applications/office/scribus {
@@ -11451,10 +11473,13 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
+  sddm = callPackage ../applications/display-managers/sddm {
+    qt5 = qt54;
+  };
+
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
   };
-
 
   smartgithg = callPackage ../applications/version-management/smartgithg { };
 
@@ -11988,6 +12013,8 @@ let
   };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
+
+  x2goclient = callPackage ../applications/networking/remote/x2goclient { };
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
 

@@ -117,6 +117,7 @@ self: super: {
   hxt = dontHaddock super.hxt;                                  # https://github.com/UweSchmidt/hxt/issues/38
   markdown-unlit = dontHaddock super.markdown-unlit;
   network-conduit = dontHaddock super.network-conduit;
+  shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
   types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
@@ -225,6 +226,8 @@ self: super: {
   Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
   memcached-binary = dontCheck super.memcached-binary;
+  persistent-zookeeper = dontCheck super.persistent-zookeeper;
+  pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
@@ -325,6 +328,7 @@ self: super: {
   hedn = dontCheck super.hedn;
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
+  hierarchical-clustering = dontCheck super.hierarchical-clustering;
   hmatrix-tests = dontCheck super.hmatrix-tests;
   hPDB-examples = dontCheck super.hPDB-examples;
   hquery = dontCheck super.hquery;
@@ -339,7 +343,6 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
-  influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -504,9 +507,6 @@ self: super: {
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
 
-  # https://github.com/anton-k/temporal-csound/issues/2
-  temporal-csound = markBrokenVersion "0.4.1" super.temporal-csound;
-
   # https://github.com/seanparsons/wiring/issues/1
   wiring = markBrokenVersion super.wiring;
 
@@ -608,8 +608,26 @@ self: super: {
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
 
-  # https://github.com/ddssff/cabal-debian/issues/35
-  cabal-debian = markBroken super.cabal-debian;
+  # https://github.com/maoe/influxdb-haskell/issues/24
+  influxdb = markBroken super.influxdb;
+  snaplet-influxdb = markBroken super.snaplet-influxdb;
+
+  # We don't have the groonga package these libraries bind to.
+  haroonga = markBroken super.haroonga;
+  haroonga-httpd = markBroken super.haroonga-httpd;
+
+  # Cannot find pkg-config data for "webkit-1.0".
+  webkit = markBroken super.webkit;
+  websnap = markBroken super.websnap;
+
+  # https://github.com/victoredwardocallaghan/hlibBladeRF/issues/4
+  hlibBladeRF = dontCheck super.hlibBladeRF;
+
+  # https://github.com/frasertweedale/hs-persona-idp/issues/1
+  persona-idp = markBroken super.persona-idp;
+
+  # Build is broken and no contact info available.
+  hopenpgp-tools = markBroken super.hopenpgp-tools;
 
 } // {
 

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
 
     # buildtools/wafsamba/wscript options
-    "--bundled-libraries=${if kerberos.implementation == "heimdal" then "NONE" else "com_err"}"
+    "--bundled-libraries=${if kerberos != null && kerberos.implementation == "heimdal" then "NONE" else "com_err"}"
     "--private-libraries=NONE"
     "--builtin-libraries=replace"
   ] ++ (if libiconv != null then [ "--with-libiconv=${libiconv}" ] else [ ])
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
         then [ "--enable-gnutls" ] else [ "--disable-gnutls" ]) ++ [
 
     # wscript options
-  ] ++ stdenv.lib.optional (kerberos.implementation == "krb5") "--with-system-mitkrb5"
+  ] ++ stdenv.lib.optional (kerberos != null && kerberos.implementation == "krb5") "--with-system-mitkrb5"
     ++ stdenv.lib.optional (kerberos == null) "--without-ad-dc" ++ [
 
     # ctdb/wscript

@@ -4,11 +4,11 @@ with stdenv;
 
 mkDerivation rec {
 
-  version = "8";
+  version = "9";
   name = "zdfmediathk";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/zdfmediathk/Mediathek/Mediathek%208/MediathekView_${version}.zip";
-    sha256 = "1sglzk8zh6cyijyw82k49yqzjv0ywglp03w09s7wr4mzk48mfjj9";
+    url = "http://downloads.sourceforge.net/project/zdfmediathk/Mediathek/Mediathek%209/MediathekView_${version}.zip";
+    sha256 = "1wff0igr33z9p1mjw7yvb6658smdwnp22dv8klz0y8qg116wx7a4";
   };
 
   buildInputs = [ unzip ];

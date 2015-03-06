@@ -9,6 +9,7 @@
 , enableTomcatWebApplication ? false
 , enableMongoDatabase ? false
 , catalinaBaseDir ? "/var/tomcat"
+, jobTemplate ? "systemd"
 , getopt
 }:
 
@@ -19,24 +20,25 @@ assert enableEjabberdDump -> ejabberd != null;
 assert enableMongoDatabase -> mongodb != null;
 
 stdenv.mkDerivation {
-  name = "dysnomia-0.3pre92a89d735776366633fdea301fdc6dc537009bba";
+  name = "dysnomia-0.3pre87657a43630ffcb9396261d3874b8fd1a89f4c9f";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/20062629/download/1/dysnomia-0.3pre92a89d735776366633fdea301fdc6dc537009bba.tar.gz;
+    url = http://hydra.nixos.org/build/20131278/download/1/dysnomia-0.3pre87657a43630ffcb9396261d3874b8fd1a89f4c9f.tar.gz;
     sha256 = "0dv7ivph2v5j4g5fqdrllxyzmp1hwnsd22n1s61qpkzb6qxaywjj";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
   
-  configureFlags = ''
-     ${if enableApacheWebApplication then "--with-apache" else "--without-apache"}
-     ${if enableAxis2WebService then "--with-axis2" else "--without-axis2"}
-     ${if enableEjabberdDump then "--with-ejabberd" else "--without-ejabberd"}
-     ${if enableMySQLDatabase then "--with-mysql" else "--without-mysql"}
-     ${if enablePostgreSQLDatabase then "--with-postgresql" else "--without-postgresql"}
-     ${if enableSubversionRepository then "--with-subversion" else "--without-subversion"}
-     ${if enableTomcatWebApplication then "--with-tomcat=${catalinaBaseDir}" else "--without-tomcat"}
-     ${if enableMongoDatabase then "--with-mongodb" else "--without-mongodb"}
-   '';
+  configureFlags = [
+     (if enableApacheWebApplication then "--with-apache" else "--without-apache")
+     (if enableAxis2WebService then "--with-axis2" else "--without-axis2")
+     (if enableEjabberdDump then "--with-ejabberd" else "--without-ejabberd")
+     (if enableMySQLDatabase then "--with-mysql" else "--without-mysql")
+     (if enablePostgreSQLDatabase then "--with-postgresql" else "--without-postgresql")
+     (if enableSubversionRepository then "--with-subversion" else "--without-subversion")
+     (if enableTomcatWebApplication then "--with-tomcat=${catalinaBaseDir}" else "--without-tomcat")
+     (if enableMongoDatabase then "--with-mongodb" else "--without-mongodb")
+     "--with-job-template=${jobTemplate}"
+   ];
   
   buildInputs = [ getopt ]
     ++ stdenv.lib.optional enableEjabberdDump ejabberd

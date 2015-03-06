@@ -180,6 +180,7 @@
       panamax = 170;
       marathon = 171;
       exim = 172;
+      sddm = 175;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -322,6 +323,7 @@
       exim = 172;
       fleet = 173;
       input = 174;
+      sddm = 175;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
