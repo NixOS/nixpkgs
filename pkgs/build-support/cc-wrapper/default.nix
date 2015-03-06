@@ -169,6 +169,12 @@ stdenv.mkDerivation {
 
       export real_cc=cc
       export real_cxx=c++
+      export default_cxx_stdlib_compile="${
+        if stdenv.isLinux && !(cc.isGNU or false)
+          then "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+          else ""
+      }"
+
       if [ -e $ccPath/gcc ]; then
         wrap gcc ${./cc-wrapper.sh} $ccPath/gcc
         ln -s gcc $out/bin/cc
