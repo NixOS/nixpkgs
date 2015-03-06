@@ -626,6 +626,9 @@ self: super: {
   # https://github.com/frasertweedale/hs-persona-idp/issues/1
   persona-idp = markBroken super.persona-idp;
 
+  # Build is broken and no contact info available.
+  hopenpgp-tools = markBroken super.hopenpgp-tools;
+
 } // {
 
   # Not on Hackage.
