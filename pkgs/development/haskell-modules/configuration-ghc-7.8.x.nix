@@ -83,6 +83,7 @@ self: super: {
   clac = dontDistribute super.clac;
   highlighter2 = markBroken super.highlighter2;
   hypher = markBroken super.hypher;
+  miniforth = markBroken super.miniforth;
   purescript = markBroken super.purescript;
   xhb-atom-cache = markBroken super.xhb-atom-cache;
   xhb-ewmh = markBroken super.xhb-ewmh;
