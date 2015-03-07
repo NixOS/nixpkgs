@@ -1,13 +1,13 @@
 { lib, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.4.2";
+  version = "0.4.3";
   name = "vdirsyncer-${version}";
   namePrefix = "";
 
   src = fetchurl {
-    url = https://github.com/untitaker/vdirsyncer/archive/0.4.2.tar.gz;
-    sha256 = "008181mglbrp5jsvpxr59b6w4mw26h4s4gwij152i47mfbrizsl4";
+    url = "https://github.com/untitaker/vdirsyncer/archive/${version}.tar.gz";
+    sha256 = "0jrxmq8lq0dvqflmh42hhyvc3jjrg1cg3gzfhdcsskj9zz0m6wai";
   };
 
   pythonPath = with pythonPackages; [
