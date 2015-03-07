@@ -16,13 +16,13 @@ wrapPythonProgramsIn() {
     done
 
     for i in $(find "$dir" -type f -perm +0100); do
-
         # Rewrite "#! .../env python" to "#! /nix/store/.../python".
         if head -n1 "$i" | grep -q '#!.*/env.*\(python\|pypy\)'; then
             sed -i "$i" -e "1 s^.*/env[ ]*\(python\|pypy\)^#! $python^"
         fi
         
-        if head -n1 "$i" | grep -q '/python\|/pypy'; then
+        # catch /python and /.python-wrapped
+        if head -n1 "$i" | grep -q '/\.\?\(python\|pypy\)'; then
             # dont wrap EGG-INFO scripts since they are called from python
             if echo "$i" | grep -v EGG-INFO/scripts; then
                 echo "wrapping \`$i'..."
