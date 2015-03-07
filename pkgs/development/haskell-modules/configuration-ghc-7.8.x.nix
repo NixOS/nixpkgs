@@ -88,7 +88,6 @@ self: super: {
   xhb-atom-cache = markBroken super.xhb-atom-cache;
   xhb-ewmh = markBroken super.xhb-ewmh;
   yesod-purescript = markBroken super.yesod-purescript;
-  yabi-muno = markBroken super.yabi-muno;
   yet-another-logger = markBroken super.yet-another-logger;
 
   # https://github.com/frosch03/arrowVHDL/issues/2
