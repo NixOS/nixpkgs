@@ -7,7 +7,7 @@
 , which
 , libedit
 , llvm
-, clang
+, clang-unwrapped
 , python
 , version
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DLLDB_PATH_TO_LLVM_BUILD=${llvm}"
-    "-DLLDB_PATH_TO_CLANG_BUILD=${clang}"
+    "-DLLDB_PATH_TO_CLANG_BUILD=${clang-unwrapped}"
   ];
 
   enableParallelBuilding = true;

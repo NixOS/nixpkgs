@@ -1,6 +1,6 @@
-{ pkgs, newScope, stdenv, isl, fetchurl }:
+{ pkgs, newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
 let
-  callPackage = newScope (self // { inherit stdenv isl version fetch; });
+  callPackage = newScope (self // { inherit isl version fetch; });
 
   version = "3.6.0";
 
@@ -15,17 +15,21 @@ let
 
   self = {
     llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src;
+      inherit compiler-rt_src stdenv;
     };
 
-    clang = callPackage ./clang {
-      inherit clang-tools-extra_src;
+    clang-unwrapped = callPackage ./clang {
+      inherit clang-tools-extra_src stdenv;
     };
+
+    clang = wrapCC self.clang-unwrapped;
+
+    stdenv = overrideCC stdenv self.clang;
 
     lldb = callPackage ./lldb.nix {};
 
-    libcxx = callPackage ./libc++ { stdenv = pkgs.clangStdenv; };
+    libcxx = callPackage ./libc++ {};
 
-    libcxxabi = callPackage ./libc++abi.nix { stdenv = pkgs.clangStdenv; };
+    libcxxabi = callPackage ./libc++abi.nix {};
   };
 in self

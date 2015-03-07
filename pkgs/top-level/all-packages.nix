@@ -3203,9 +3203,9 @@ let
 
   ccl = callPackage ../development/compilers/ccl { };
 
-  clang = wrapCC llvmPackages.clang;
+  clang = llvmPackages.clang;
 
-  clang_36 = wrapCC llvmPackages_36.clang;
+  clang_36 = llvmPackages.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
   clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
@@ -3233,8 +3233,8 @@ let
   };
 
   #Use this instead of stdenv to build with clang
-  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio (stdenvAdapters.overrideCC stdenv clang);
-  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang);
+  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
+  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang-unwrapped);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -3756,7 +3756,8 @@ let
   };
 
   llvmPackages_36 = import ../development/compilers/llvm/3.6 {
-    inherit pkgs stdenv newScope fetchurl isl;
+    inherit pkgs stdenv newScope fetchurl isl wrapCC;
+    inherit (stdenvAdapters) overrideCC;
   };
 
   manticore = callPackage ../development/compilers/manticore { };
@@ -4837,8 +4838,8 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
-  libcxx = llvmPackages_35.libcxx;
-  libcxxabi = llvmPackages_35.libcxxabi;
+  libcxx = llvmPackages.libcxx;
+  libcxxabi = llvmPackages.libcxxabi;
 
   libsigrok = callPackage ../development/tools/libsigrok { };
 
