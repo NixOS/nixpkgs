@@ -622,6 +622,9 @@ self: super: {
   # Build is broken and no contact info available.
   hopenpgp-tools = markBroken super.hopenpgp-tools;
 
+  # https://github.com/hunt-framework/hunt/issues/99
+  hunt-server = markBrokenVersion "0.3.0.2" super.hunt-server;
+
 } // {
 
   # Not on Hackage.
