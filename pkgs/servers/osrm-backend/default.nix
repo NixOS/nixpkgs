@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, luabind, libosmpbf, stxxl, tbb, boost, expat, protobuf, bzip2, zlib}:
+{stdenv, fetchurl, cmake, luabind, libosmpbf, stxxl, tbb, boost, expat, protobuf, bzip2, zlib, substituteAll}:
 
 stdenv.mkDerivation rec {
   name = "osrm-backend-4.5.0";
@@ -8,9 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "af61e883051f2ecb73520ace6f17cc6da30edc413208ff7cf3d87992eca0756c";
   };
 
-  patches = [ ./4.5.0-openmp.patch ];
+  patches = [
+    ./4.5.0-openmp.patch
+    (substituteAll {
+      src = ./4.5.0-default-profile-path.template.patch;
+    })
+  ];
 
   buildInputs = [ cmake luabind luabind.lua libosmpbf stxxl tbb boost expat protobuf bzip2 zlib ];
+
+  postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 
   meta = {
     homepage = https://github.com/Project-OSRM/osrm-backend/wiki;
