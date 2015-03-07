@@ -220,6 +220,7 @@ self: super: {
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   dbmigrations = dontCheck super.dbmigrations;
+  euler = dontCheck super.euler;                        # https://github.com/decomputed/euler/issues/1
   filestore = dontCheck super.filestore;
   graceful = dontCheck super.graceful;
   hakyll = dontCheck super.hakyll;
