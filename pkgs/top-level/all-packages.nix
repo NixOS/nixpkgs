@@ -7286,6 +7286,8 @@ let
 
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
+  SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {};
