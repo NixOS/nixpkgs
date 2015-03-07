@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
   (stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include");
 
-  patches = [ ./clang-purity.patch ./clang-exports.patch ];
+  patches = [ ./purity.patch ./cmake-exports.patch ];
 
   postPatch = ''
     sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp

@@ -18,7 +18,7 @@ let
       inherit compiler-rt_src;
     };
 
-    clang = callPackage ./clang.nix {
+    clang = callPackage ./clang {
       inherit clang-tools-extra_src;
     };
 
@@ -26,6 +26,6 @@ let
 
     libcxx = callPackage ./libc++ { stdenv = pkgs.clangStdenv; };
 
-    libcxxabi = callPackage ./libc++abi { stdenv = pkgs.clangStdenv; };
+    libcxxabi = callPackage ./libc++abi.nix { stdenv = pkgs.clangStdenv; };
   };
 in self
