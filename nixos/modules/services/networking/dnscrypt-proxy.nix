@@ -7,8 +7,7 @@ let
   cfg = config.services.dnscrypt-proxy;
   uid = config.ids.uids.dnscrypt-proxy;
   daemonArgs =
-    [ "--daemonize"
-      "--user=dnscrypt-proxy"
+    [ "--user=dnscrypt-proxy"
       "--local-address=${cfg.localAddress}:${toString cfg.port}"
       (optionalString cfg.tcpOnly "--tcp-only")
       "--resolvers-list=${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv"
@@ -114,6 +113,10 @@ in
           ${dnscrypt-proxy}/share/dnscrypt-proxy/** r,
           ${pkgs.gcc.cc}/lib/libssp.so.* mr,
           ${pkgs.libsodium}/lib/libsodium.so.* mr,
+          ${pkgs.systemd}/lib/libsystemd.so.* mr,
+          ${pkgs.xz}/lib/liblzma.so.* mr,
+          ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
+          ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
         }
       '')
     ];
@@ -128,13 +131,27 @@ in
 
     ### Service definition
 
+    ## derived from upstream dnscrypt-proxy.socket
+    systemd.sockets.dnscrypt-proxy = {
+      description = "dnscrypt-proxy listening socket";
+
+      socketConfig = {
+        ListenStream = "${cfg.localAddress}:${toString cfg.port}";
+        ListenDatagram = "${cfg.localAddress}:${toString cfg.port}";
+      };
+
+      wantedBy = [ "sockets.target" ];
+    };
+
+    # derived from upstream dnscrypt-proxy.service
     systemd.services.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon";
       after = [ "network.target" ] ++ optional apparmorEnabled "apparmor.service";
-      requires = mkIf apparmorEnabled [ "apparmor.service" ];
-      wantedBy = [ "multi-user.target" ];
+      requires = [ "dnscrypt-proxy.socket "] ++ optional apparmorEnabled "apparmor.service";
       serviceConfig = {
-        Type = "forking";
+        Type = "simple";
+        ## note: NonBlocking is required for socket activation to work
+        NonBlocking = "true";
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
       };
     };
