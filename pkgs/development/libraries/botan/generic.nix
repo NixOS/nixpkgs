@@ -1,6 +1,7 @@
 { stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
+, extraConfigureFlags ? ""
 , ...
 }:
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python bzip2 zlib gmp openssl boost ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-gnump --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""}
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}
   '';
 
   enableParallelBuilding = true;
