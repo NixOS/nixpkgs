@@ -2546,6 +2546,8 @@ let
 
   scrot = callPackage ../tools/graphics/scrot { };
 
+  scrolls = callPackage ../games/scrolls { };
+
   scrypt = callPackage ../tools/security/scrypt { };
 
   sdcv = callPackage ../applications/misc/sdcv { };
