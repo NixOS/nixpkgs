@@ -522,6 +522,7 @@ self: super: {
 
   # Depends on broken lmdb package.
   vcache = markBroken super.vcache;
+  vcache-trie = markBroken super.vcache-trie;
 
   # https://github.com/afcowie/http-streams/issues/80
   http-streams = dontCheck super.http-streams;
