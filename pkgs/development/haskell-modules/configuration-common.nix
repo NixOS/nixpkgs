@@ -344,6 +344,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
+  influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -608,10 +609,6 @@ self: super: {
 
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
-
-  # https://github.com/maoe/influxdb-haskell/issues/24
-  influxdb = markBroken super.influxdb;
-  snaplet-influxdb = markBroken super.snaplet-influxdb;
 
   # We don't have the groonga package these libraries bind to.
   haroonga = markBroken super.haroonga;
