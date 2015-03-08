@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Enterprise-class stacked cryptographic filesystem";
     license = licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.obadz ];
+    maintainers = [ maintainers.obadz ];
     platforms = platforms.linux;
   };
 }
