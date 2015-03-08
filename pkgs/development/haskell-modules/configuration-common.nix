@@ -395,7 +395,6 @@ self: super: {
   WebBits = dontCheck super.WebBits;                    # http://hydra.cryp.to/build/499604/log/raw
   webdriver-angular = dontCheck super.webdriver-angular;
   webdriver = dontCheck super.webdriver;
-  xcffib = dontCheck super.xcffib;
   xsd = dontCheck super.xsd;
 
   # https://bitbucket.org/wuzzeb/webdriver-utils/issue/1/hspec-webdriver-101-cant-compile-its-test
@@ -622,6 +621,12 @@ self: super: {
 
   # https://github.com/hunt-framework/hunt/issues/99
   hunt-server = markBrokenVersion "0.3.0.2" super.hunt-server;
+
+  # https://github.com/bjpop/blip/issues/16
+  blip = markBroken super.blip;
+
+  # https://github.com/tych0/xcffib/issues/37
+  xcffib = markBroken super.xcffib;
 
 } // {
 
