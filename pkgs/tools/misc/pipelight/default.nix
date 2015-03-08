@@ -3,13 +3,13 @@
   }:
 
 let
-  wine_patches_version = "1.7.36";
-  wine_hash = "1gg3xzccbsxfmvp7r09mq7q9904p7h97nr3pdkk5l1f6n8xbzai1";
+  wine_patches_version = "1.7.38";
+  wine_hash = "1h3bsga9qzqkavf9wlv62ldl3a8mz7grr68nxv8vicmnglzfj7lq";
 
   wine_patches = fetchgit {
     url = "git://github.com/compholio/wine-compholio.git";
     rev = "refs/tags/v${wine_patches_version}";
-    sha256 = "1nnwhd7m1wwipg72dzjhzhk9fgcf1ynknncj89ab0pabn4wmib2i";
+    sha256 = "0lcagswy1lgqz6qlpf0ng7ksl2sbaqldrgnhf0n1278jj82rq80n";
   };
 
   wine_custom =
