@@ -100,4 +100,6 @@ rec {
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
 
   git-extras = callPackage ./git-extras { };
+
+  git-cola = callPackage ./git-cola { };
 }
