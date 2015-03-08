@@ -128,12 +128,12 @@ in
     users.extraUsers = optionalAttrs (cfg.user == "tss") (singleton
       { name = "tss";
         group = "tss";
-        uid = config.ids.uids.nginx;
+        uid = config.ids.uids.tss;
       });
 
     users.extraGroups = optionalAttrs (cfg.group == "tss") (singleton
       { name = "tss";
-        gid = config.ids.gids.nginx;
+        gid = config.ids.gids.tss;
       });
   };
 }
