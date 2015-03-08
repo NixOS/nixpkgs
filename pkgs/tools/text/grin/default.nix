@@ -15,5 +15,6 @@ pythonPackages.buildPythonPackage rec {
   meta = {
     homepage = https://pypi.python.org/pypi/grin;
     description = "A grep program configured the way I like it.";
+    platform = stdenv.lib.platforms.all;
   };
 }
