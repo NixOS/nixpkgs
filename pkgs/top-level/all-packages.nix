@@ -11697,6 +11697,8 @@ let
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
+  tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
+
   twister = callPackage ../applications/networking/p2p/twister { };
 
   twmn = callPackage ../applications/misc/twmn { };
