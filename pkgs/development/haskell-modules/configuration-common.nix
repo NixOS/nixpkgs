@@ -367,7 +367,7 @@ self: super: {
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
-  postgresql-binary = dontCheck super.postgresql-binary;# needs a running postgresql server
+  postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
   postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
   process-streaming = dontCheck super.process-streaming;
   punycode = dontCheck super.punycode;
