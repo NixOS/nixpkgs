@@ -7,22 +7,22 @@ assert stdenv.isLinux;
 assert stdenv.cc.cc.isGNU or false;
 
 let
-    version = "1.7.37";
+    version = "1.7.38";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "01gk9bm0s1hzfc1lx072g4d7r996mgd53jyrj2mn2pwdpiwyqc37";
+      sha256 = "1h3bsga9qzqkavf9wlv62ldl3a8mz7grr68nxv8vicmnglzfj7lq";
     };
 
     gecko = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.34-x86.msi";
-      sha256 = "19www9vbi5b3mxhifwsp24lc3m43zkjawv6bszs6861b62zjcv4m";
+      url = "mirror://sourceforge/wine/wine_gecko-2.36-x86.msi";
+      sha256 = "12hjks32yz9jq4w3xhk3y1dy2g3iakqxd7aldrdj51cqiz75g95g";
     };
 
     gecko64 = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.34-x86_64.msi";
-      sha256 = "0w0h3863mc4cijhw0w1k3xml8qp1kv6ivqrzzfiky6ydqhj1nb0g";
+      url = "mirror://sourceforge/wine/wine_gecko-2.36-x86_64.msi";
+      sha256 = "0i7dchrzsda4nqbkhp3rrchk74rc2whn2af1wzda517m9c0886vh";
     };
 
     mono = fetchurl {
