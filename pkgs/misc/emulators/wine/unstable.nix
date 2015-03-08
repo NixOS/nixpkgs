@@ -7,27 +7,27 @@ assert stdenv.isLinux;
 assert stdenv.cc.cc.isGNU or false;
 
 let
-    version = "1.7.36";
+    version = "1.7.38";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "1gg3xzccbsxfmvp7r09mq7q9904p7h97nr3pdkk5l1f6n8xbzai1";
+      sha256 = "1h3bsga9qzqkavf9wlv62ldl3a8mz7grr68nxv8vicmnglzfj7lq";
     };
 
     gecko = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.24-x86.msi";
-      sha256 = "0b10f55q3sldlcywscdlw3kd7vl9izlazw7jx30y4rpahypaqf3f";
+      url = "mirror://sourceforge/wine/wine_gecko-2.36-x86.msi";
+      sha256 = "12hjks32yz9jq4w3xhk3y1dy2g3iakqxd7aldrdj51cqiz75g95g";
     };
 
     gecko64 = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.24-x86_64.msi";
-      sha256 = "1j4wdlhzvjrabzr9igcnx0ivm5mcb8kp7bwkpfpfsanbifk7sma7";
+      url = "mirror://sourceforge/wine/wine_gecko-2.36-x86_64.msi";
+      sha256 = "0i7dchrzsda4nqbkhp3rrchk74rc2whn2af1wzda517m9c0886vh";
     };
 
     mono = fetchurl {
-      url = "mirror://sourceforge/wine/wine-mono-4.5.2.msi";
-      sha256 = "1bgasysf3qacxgh5rlk7qlw47ar5zgd1k9gb22pihi5s87dlw4nr";
+      url = "mirror://sourceforge/wine/wine-mono-4.5.4.msi";
+      sha256 = "1wnn273f232141x9x0sahg4w499x0g2p0xphxmwm5wh1xrzyvg10";
     };
 
 in stdenv.mkDerivation rec {
