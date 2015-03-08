@@ -13045,8 +13045,6 @@ let
     };
   };
 
-  grin = callPackage ../development/python-modules/grin { };
-
   gsutil = buildPythonPackage rec {
     name = "gsutil-4.6";
     meta = {

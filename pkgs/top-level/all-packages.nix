@@ -1412,6 +1412,8 @@ let
    */
   graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix { };
 
+  grin = callPackage ../tools/text/grin { };
+
   grive = callPackage ../tools/filesystems/grive {
     json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
   };
