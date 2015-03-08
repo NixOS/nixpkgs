@@ -570,7 +570,6 @@ self: super: {
   karakuri = markBroken super.karakuri;
 
   # Upstream notified by e-mail.
-  snowglobe = markBroken super.snowglobe;
   gearbox = markBroken super.gearbox;
 
   # https://github.com/deech/fltkhs/issues/7
