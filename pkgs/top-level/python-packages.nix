@@ -5073,7 +5073,6 @@ let
     };
   };
 
-
   gyp = buildPythonPackage rec {
     rev = "1977";
     name = "gyp-r${rev}";
@@ -13765,7 +13764,7 @@ let
       license = licenses.mit;
     };
   };
-  
+
   html2text = buildPythonPackage rec {
     name = "html2text-2014.12.29";
 
