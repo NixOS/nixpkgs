@@ -1317,7 +1317,7 @@ let
   ftop = callPackage ../os-specific/linux/ftop { };
 
   fuppes = callPackage ../tools/networking/fuppes {
-    ffmpeg = ffmpeg_0_6_90;
+    ffmpeg = ffmpeg_0_5;
   };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
@@ -1715,7 +1715,7 @@ let
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
   minidlna = callPackage ../tools/networking/minidlna {
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
   };
 
   mmv = callPackage ../tools/misc/mmv { };
@@ -5513,26 +5513,16 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg_0_6 = callPackage ../development/libraries/ffmpeg/0.6.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.x.nix { };
-
-  ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix { };
-
+  ffmpeg_0_5 = callPackage ../development/libraries/ffmpeg/0.5.nix { };
+  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
+  ffmpeg_0_11 = callPackage ../development/libraries/ffmpeg/0.11.nix { };
+  ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
+  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
+  ffmpeg_2_5 = callPackage ../development/libraries/ffmpeg/2.5.nix { };
+  # Aliases
+  ffmpeg_0 = ffmpeg_0_11;
+  ffmpeg_1 = ffmpeg_1_2;
+  ffmpeg_2 = ffmpeg_2_5;
   ffmpeg = ffmpeg_2;
 
   ffms = callPackage ../development/libraries/ffms { };
@@ -7597,9 +7587,7 @@ let
 
   xdo = callPackage ../tools/misc/xdo { };
 
-  xineLib = callPackage ../development/libraries/xine-lib {
-    ffmpeg = ffmpeg_1;
-  };
+  xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
@@ -12563,7 +12551,7 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
-    ffmpeg = ffmpeg_0_6;
+    ffmpeg = ffmpeg_0_5;
     lua = lua5;
   };
 
