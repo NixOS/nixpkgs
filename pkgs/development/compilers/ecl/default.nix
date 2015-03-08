@@ -6,11 +6,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="13.5.1";
+    version="15.3.7";
     name="${baseName}-${version}";
-    hash="18ic8w9sdl0dh3kmyc9lsrafikrd9cg1jkhhr25p9saz0v75f77r";
-    url="mirror://sourceforge/project/ecls/ecls/13.5/ecl-13.5.1.tgz";
-    sha256="18ic8w9sdl0dh3kmyc9lsrafikrd9cg1jkhhr25p9saz0v75f77r";
+    hash="13wlxkd5prm93gcm2dhm7v52fl803yx93aa97lrb39z0y6xzziid";
+    url="mirror://sourceforge/project/ecls/ecls/15.3/ecl-15.3.7.tgz";
+    sha256="13wlxkd5prm93gcm2dhm7v52fl803yx93aa97lrb39z0y6xzziid";
   };
   buildInputs = [
     libffi
