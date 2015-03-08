@@ -17,13 +17,17 @@ in stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out
-    cp -r * $out/
+    mkdir -p $out/bin
+    cp -r lib share $out/
+    cp tuxguitar $out/bin/tuxguitar
+    cp tuxguitar.jar $out/lib
 
-    wrapProgram $out/tuxguitar \
+    ln -s $out/share $out/bin/share
+
+    wrapProgram $out/bin/tuxguitar \
       --set JAVA "${jdk}/bin/java" \
-      --prefix LD_LIBRARY_PATH : "${swt}/lib:${alsaLib}/lib" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar"
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${swt}/lib:${alsaLib}/lib" \
+      --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';
 
   meta = with stdenv.lib; {
