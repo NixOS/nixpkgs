@@ -4844,6 +4844,7 @@ let
     };
   };
 
+  grin = callPackage ../development/python-modules/grin { };
 
   gyp = buildPythonPackage rec {
     rev = "1977";
