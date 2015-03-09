@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "utf8proc is a library for processing UTF-8 encoded Unicode strings";
+    description = "A library for processing UTF-8 encoded Unicode strings";
     homepage = http://www.public-software-group.org/utf8proc;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;
