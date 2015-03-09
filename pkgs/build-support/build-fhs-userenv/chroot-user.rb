@@ -29,7 +29,8 @@ symlinks =
     ['pam.d', 'static'],
     ['fonts/fonts.conf', 'static'],
     ['fonts/conf.d/00-nixos.conf', 'static'],
-  ].map! { |x| [ "host-etc/#{x[1]}/#{x[0]}", "etc/#{File.dirname x[0]}" ] }
+    ['machine-id', ''],
+  ].map! { |x| [ "/host-etc/#{x[1]}/#{x[0]}", "etc/#{File.dirname x[0]}" ] }
 
 require 'tmpdir'
 require 'fileutils'
