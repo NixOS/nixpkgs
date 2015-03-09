@@ -66,8 +66,8 @@ buildFHSUserEnv {
   '';
 
   profile = ''
-    export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib32:/lib64
-    export PATH=$PATH:/usr/bin:/usr/sbin
+    # Ugly workaround for https://github.com/ValveSoftware/steam-for-linux/issues/3504
+    export LD_PRELOAD=/lib32/libpulse.so:/lib64/libpulse.so:/lib32/libasound.so:/lib64/libasound.so
   '';
 
   runScript = "exec steam";
