@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "162flbzwzz0b8axab2gimc4dglpaw88fh1d177zfg0whczlpbsln";
   };
 
-  buildInputs = [ flex bison pkgconfig python ]
-    ++ libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin otool;
+  nativeBuildInputs = [ flex bison pkgconfig python ];
+
+  buildInputs = libintlOrEmpty
+             ++ stdenv.lib.optional stdenv.isDarwin otool;
   propagatedBuildInputs = [ libffi glib ];
 
   # Tests depend on cairo, which is undesirable (it pulls in lots of
