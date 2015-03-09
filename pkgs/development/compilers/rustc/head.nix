@@ -2,15 +2,15 @@
 callPackage ./makeRustcDerivation.nix {
   shortVersion = "1.0.0-dev";
   isRelease = false;
-  # src rev for master on 2015/03/01
-  srcRev = "157614249594f187f421cd97f928e64c5ab5c1fa";
-  srcSha = "06d6fwl1dg6wfnwa002ak89hnjplpf2sjhg78yjg4ki0ca7b0b74";
-  snapshotHashLinux686 = "3278ebbce8cb269acc0614dac5ddac07eab6a99c";
-  snapshotHashLinux64 = "72287d0d88de3e5a53bae78ac0d958e1a7637d73";
-  snapshotHashDarwin686 = "33b366b5287427a340a0aa6ed886d5ff4edf6a76";
-  snapshotHashDarwin64 = "914bf9baa32081a9d5633f1d06f4d382cd71504e";
-  snapshotDate = "2015-02-25";
-  snapshotRev = "880fb89";
+  # src rev for master on 2015/03/09
+  srcRev = "91bdf23f504f79ed59617cde3dfebd3d5e39a476";
+  srcSha = "1s1v1q630d88idz331n4m0c3ninzipmvfzmkvdaqqm28wsn69xx7";
+  snapshotHashLinux686 = "50a47ef247610fb089d2c4f24e4b641eb0ba4afb";
+  snapshotHashLinux64 = "ccb20709b3c984f960ddde996451be8ce2268d7c";
+  snapshotHashDarwin686 = "ad263bdeadcf9bf1889426e0c1391a7cf277364e";
+  snapshotHashDarwin64 = "01c8275828042264206b7acd8e86dc719a2f27aa";
+  snapshotDate = "2015-03-07";
+  snapshotRev = "270a677";
   patches = [
     ./patches/head.patch
   ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
