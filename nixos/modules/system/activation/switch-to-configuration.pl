@@ -132,6 +132,8 @@ sub fingerprintUnit {
 # Figure out what units need to be stopped, started, restarted or reloaded.
 my (%unitsToStop, %unitsToSkip, %unitsToStart, %unitsToRestart, %unitsToReload);
 
+my %unitsToFilter; # units not shown
+
 $unitsToStart{$_} = 1 foreach
     split('\n', read_file($startListFile, err_mode => 'quiet') // "");
 
@@ -171,6 +173,8 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
+                    # Don't spam the user with target units that always get started.
+                    $unitsToFilter{$unit} = 1;
                 }
             }
 
@@ -321,16 +325,30 @@ foreach my $device (keys %$prevSwaps) {
 my $restartSystemd = abs_path("/proc/1/exe") ne abs_path("@systemd@/lib/systemd/systemd");
 
 
+sub filterUnits {
+    my ($units) = @_;
+    my @res;
+    foreach my $unit (sort(keys %{$units})) {
+        push @res, $unit if !defined $unitsToFilter{$unit};
+    }
+    return @res;
+}
+
+my @unitsToStopFiltered = filterUnits(\%unitsToStop);
+my @unitsToStartFiltered = filterUnits(\%unitsToStart);
+
+
 # Show dry-run actions.
 if ($action eq "dry-activate") {
-    print STDERR "would stop the following units: ", join(", ", sort(keys %unitsToStop)), "\n"
-        if scalar(keys %unitsToStop) > 0;
+    print STDERR "would stop the following units: ", join(", ", @unitsToStopFiltered), "\n"
+        if scalar @unitsToStopFiltered > 0;
     print STDERR "would NOT stop the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
         if scalar(keys %unitsToSkip) > 0;
     print STDERR "would restart systemd\n" if $restartSystemd;
     print STDERR "would restart the following units: ", join(", ", sort(keys %unitsToRestart)), "\n"
         if scalar(keys %unitsToRestart) > 0;
-    print STDERR "would start the following units: ", join(", ", sort(keys %unitsToStart)), "\n";
+    print STDERR "would start the following units: ", join(", ", @unitsToStartFiltered), "\n"
+        if scalar @unitsToStartFiltered;
     print STDERR "would reload the following units: ", join(", ", sort(keys %unitsToReload)), "\n"
         if scalar(keys %unitsToReload) > 0;
     exit 0;
@@ -340,7 +358,8 @@ if ($action eq "dry-activate") {
 syslog(LOG_NOTICE, "switching to system configuration $out");
 
 if (scalar (keys %unitsToStop) > 0) {
-    print STDERR "stopping the following units: ", join(", ", sort(keys %unitsToStop)), "\n";
+    print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
+        if scalar @unitsToStopFiltered;
     system("systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
 }
 
@@ -383,7 +402,8 @@ if (scalar(keys %unitsToRestart) > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
-print STDERR "starting the following units: ", join(", ", sort(keys %unitsToStart)), "\n";
+print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
+    if scalar @unitsToStartFiltered;
 system("@systemd@/bin/systemctl", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;
 unlink($startListFile);
 
