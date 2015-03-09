@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_34;
+
   # Disable GHC 7.6.x core libraries.
   array = null;
   base = null;

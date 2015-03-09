@@ -54,7 +54,10 @@ let
 
         inherit mkDerivation callPackage;
 
-        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix { packages = pkgs self; };
+        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix {
+          inherit (self) llvmPackages;
+          packages = pkgs self;
+        };
 
         ghc = ghc // { withPackages = self.ghcWithPackages; };
 
