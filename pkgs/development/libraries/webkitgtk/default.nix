@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./finding-harfbuzz-icu.patch ];
 
-  cmakeFlags = [ "-DPORT=GTK" ];
+  cmakeFlags = [ "-DPORT=GTK" ]
+    ++ optionals (stdenv ? cross && stdenv.cross.libc == "msvcrt") [
+      "-DCMAKE_SYSTEM_NAME=Windows"
+    ];
 
   nativeBuildInputs = [
     cmake perl python ruby bison gperf sqlite
