@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/help2man/;
 
     license = licenses.gpl3Plus;
-    platforms = platforms.gnu;         # arbitrary choice
+    platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];
   };
 }
