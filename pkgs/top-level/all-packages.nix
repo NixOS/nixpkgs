@@ -7501,6 +7501,8 @@ let
 
   uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
 
+  unibilium = callPackage ../development/libraries/unibilium { };
+
   unicap = callPackage ../development/libraries/unicap {};
 
   tsocks = callPackage ../development/libraries/tsocks { };
