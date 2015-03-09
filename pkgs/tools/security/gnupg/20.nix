@@ -1,5 +1,5 @@
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
-, libksba, coreutils, libiconv
+, libksba, coreutils, libiconv, pcsclite
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
 , pinentry ? null, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
+    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     find . -name pcsc-wrapper.c | xargs sed -i 's/typedef unsinged int pcsc_dword_t/typedef unsigned int pcsc_dword_t/'
   '' + ''
