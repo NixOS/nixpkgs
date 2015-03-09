@@ -434,9 +434,6 @@ self: super: {
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
 
-  # https://github.com/rrnewton/haskell-lockfree/issues/44
-  chaselev-deque = markBrokenVersion "0.5.0.3" super.chaselev-deque;
-
   # https://github.com/zouppen/stratum-tool/issues/14
   stratum-tool = markBrokenVersion "0.0.4" super.stratum-tool;
 
