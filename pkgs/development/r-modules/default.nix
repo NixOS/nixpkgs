@@ -849,7 +849,6 @@ let
     "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
     "RbioRXN" # requires fmcsR, and KEGGREST
     "RcppAPT" # configure script depends on /bin/sh
-    "Rcell" # requires EBImage
     "RcmdrPlugin_seeg" # requires seeg
     "Rcplex" # requires cplexAPI
     "RcppRedis" # requires Hiredis
