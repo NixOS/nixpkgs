@@ -449,14 +449,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
 
   buildInputs = [
-    alsaLib bzip2 celt faac faad2 fdk_aac fontconfig freetype frei0r fribidi
+    alsaLib bzip2 celt faad2 fdk_aac fontconfig freetype frei0r fribidi
     game-music-emu gnutls gsm jack2 ladspaH lame libass libbluray libbs2b
     libcaca libdc1394 libmodplug libogg libopus libraw1394 libssh libtheora
     libva libvdpau libvpx libvorbis libwebp libX11 libxcb libXext libXfixes
     libXv lzma mesa openal opencv openjpeg_1 openssl pulseaudio rtmpdump
     samba SDL soxr speex v4l_utils vid-stab wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
-  ];
+  ] ++ optional faacExtlib faac;
 
   # Build qt-faststart executable
   buildPhase = optional (qt-faststartProgram && (reqMin "0.9")) ''make tools/qt-faststart'';
