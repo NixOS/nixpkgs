@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.26";
+  name = "gnupg-2.0.27";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1q5qcl5panrvcvpwvz6nl9gayl5a6vwvfhgdcxqpmbl2qc6y6n3p";
+    sha256 = "1wihx7dphacg9fy5wfj93h236lr1w5gwzh7ir3js37wi9cz6sr2p";
   };
 
   buildInputs
