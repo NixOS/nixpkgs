@@ -1802,6 +1802,8 @@ let
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
+  libtermkey = callPackage ../development/libraries/libtermkey { };
+
   libtidy = callPackage ../development/libraries/libtidy { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
