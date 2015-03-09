@@ -893,6 +893,7 @@ let
     "sequenza" # requires copynumber
     "SGCS" # requires spatstat
     "siar" # requires spatstat
+    "SID" # requires pcalg
     "SimRAD" # requires Biostrings, and ShortRead
     "SimSeq" # requires edgeR
     "siplab" # requires spatstat
