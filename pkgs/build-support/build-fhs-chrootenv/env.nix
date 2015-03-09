@@ -81,11 +81,13 @@ let
   staticUsrProfileTarget = nixpkgs.buildEnv {
     name = "system-profile-target";
     paths = basePkgs ++ [ profilePkg ] ++ targetPaths;
+    ignoreCollisions = true;
   };
 
   staticUsrProfileMulti = nixpkgs.buildEnv {
     name = "system-profile-multi";
     paths = multiPaths;
+    ignoreCollisions = true;
   };
 
   linkProfile = profile: ''
@@ -129,7 +131,7 @@ let
     mkdir -m0755 lib
 
     # copy content of targetPaths
-    cp -rsf ${staticUsrProfileTarget}/lib/* lib/
+    cp -rsf ${staticUsrProfileTarget}/lib/* lib/ && chmod u+w -R lib/
   '';
 
   # setup /lib, /lib32 and /lib64
@@ -142,16 +144,16 @@ let
     cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/
 
     # copy content of multiPaths (32bit libs)
-    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/
+    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/ && chmod u+w -R lib/
 
     # copy content of targetPaths (64bit libs)
-    cp -rsf ${staticUsrProfileTarget}/lib/* lib64/
+    cp -rsf ${staticUsrProfileTarget}/lib/* lib64/ && chmod u+w -R lib64/
 
     # most 64bit only libs put their stuff into /lib
     # some pkgs (like gcc_multi) put 32bit libs into and /lib 64bit libs into /lib64
     # by overwriting these we will hopefully catch all these cases
     # in the end /lib should only contain 32bit and /lib64 only 64bit libs
-    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/
+    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/ && chmod u+w -R lib64/
 
     # copy gcc libs (and may overwrite exitsting wrongly placed libs)
     cp -rsf ${chosenGcc.cc}/lib/*   lib/
