@@ -2267,6 +2267,8 @@ let
 
   pcsclite = callPackage ../tools/security/pcsclite { };
 
+  pcsctools = callPackage ../tools/security/pcsctools { };
+
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
