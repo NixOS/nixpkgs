@@ -1,9 +1,9 @@
 { stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages,
   shuffle,
-  binary, hashable, mtl, network, uhc-util, uulib
+  hashable, mtl, network, uhc-util, uulib
 }:
 
-let wrappedGhc = ghcWithPackages ( self: [binary hashable mtl network uhc-util uulib] );
+let wrappedGhc = ghcWithPackages ( self: [hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
   version = "1.1.8.7";
   name = "uhc-${version}";
