@@ -10197,7 +10197,7 @@ let
     };
   };
 
-  emacs24PackagesNg = emacsPackagesNgGen emacs24;
+  emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
 
   inherit (gnome3) empathy;
 
