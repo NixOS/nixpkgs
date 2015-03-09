@@ -89,7 +89,7 @@ let
   };
 
   linkProfile = profile: ''
-    for i in ${profile}/{etc,bin,sbin,share,var}; do
+    for i in ${profile}/{bin,sbin,share,var}; do
         if [ -x "$i" ]
         then
             ln -s "$i"
@@ -158,6 +158,40 @@ let
     cp -rsf ${chosenGcc.cc}/lib64/* lib64/
   '';
 
+  setupEtc = ''
+    mkdir -m0755 etc
+
+    # copy profile content
+    cp -rsf ${staticUsrProfileTarget}/etc/* etc/ && chmod u+w -R etc/
+    [ -d ${staticUsrProfileMulti}/etc ] && cp -rsf ${staticUsrProfileMulti}/etc/* etc/ && chmod u+w -R etc/
+
+    # compatibility with NixOS
+    ln -s /host-etc/static etc/static
+
+    # symlink some NSS stuff
+    ln -s /host-etc/passwd etc/passwd
+    ln -s /host-etc/group etc/group
+    ln -s /host-etc/shadow etc/shadow
+    ln -s /host-etc/hosts etc/hosts
+    ln -s /host-etc/resolv.conf etc/resolv.conf
+    ln -s /host-etc/nsswitch.conf etc/nsswitch.conf
+
+    # symlink other core stuff
+    ln -s /host-etc/localtime etc/localtime
+    ln -s /host-etc/machine-id etc/machine-id
+
+    # symlink PAM stuff
+    rm -rf etc/pam.d
+    ln -s /host-etc/pam.d etc/pam.d
+
+    # symlink fonts stuff
+    rm -rf etc/fonts
+    ln -s /host-etc/fonts etc/fonts
+
+    # symlink ALSA stuff
+    ln -s /host-etc/asound.conf etc/asound.conf
+  '';
+
 in nixpkgs.stdenv.mkDerivation {
   name         = "${name}-fhs";
   buildCommand = ''
@@ -165,6 +199,7 @@ in nixpkgs.stdenv.mkDerivation {
     cd $out
     ${setupTargetProfile}
     ${setupMultiProfile}
+    ${setupEtc}
     cd $out
     ${extraBuildCommands}
     cd $out

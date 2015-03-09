@@ -17,20 +17,6 @@ mounts = [ ['/nix/store', nil],
 mkdirs = ['tmp',
          ]
 
-# Symlinks: [from, to (dir)]
-symlinks =
-  # /etc symlinks: [file name, prefix in host-etc]
-  [ ['passwd', ''],
-    ['group', ''],
-    ['shadow', ''],
-    ['hosts', ''],
-    ['resolv.conf', ''],
-    ['nsswitch.conf', ''],
-    ['pam.d', 'static'],
-    ['fonts/fonts.conf', 'static'],
-    ['fonts/conf.d/00-nixos.conf', 'static'],
-  ].map! { |x| [ "host-etc/#{x[1]}/#{x[0]}", "etc/#{File.dirname x[0]}" ] }
-
 require 'tmpdir'
 require 'fileutils'
 require 'pathname'
@@ -110,12 +96,6 @@ if $cpid == 0
   # Chroot!
   Dir.chroot root
   Dir.chdir '/'
-
-  # Do symlinks
-  symlinks.each do |x|
-    FileUtils.mkdir_p x[1]
-    FileUtils.ln_s x[0], x[1]
-  end
 
   # Symlink swdir hierarchy
   mount_dirs = Set.new mounts.map { |x| Pathname.new x[1] }
