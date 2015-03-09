@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jagajaga ];
   };
 }
