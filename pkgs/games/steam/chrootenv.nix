@@ -1,4 +1,4 @@
-{ buildFHSUserEnv, config }:
+{ lib, buildFHSUserEnv, config }:
 
 buildFHSUserEnv {
   name = "steam";
@@ -14,7 +14,8 @@ buildFHSUserEnv {
       pkgs.gnome2.zenity
       pkgs.xdg_utils
     ]
-    ++ (if config.steam.java or false then [ pkgs.jdk ] else [ ])
+    ++ lib.optional (config.steam.java or false) pkgs.jdk
+    ++ lib.optional (config.steam.primus or false) pkgs.primus
     ;
 
   multiPkgs = pkgs:
