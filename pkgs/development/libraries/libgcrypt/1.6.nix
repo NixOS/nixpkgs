@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror, transfig, ghostscript, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-1.6.2";
+  name = "libgcrypt-1.6.3";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "de084492a6b38cdb27b67eaf749ceba76bf7029f63a9c0c3c1b05c88c9885c4c";
+    sha256 = "0pq2nwfqgggrsh8rk84659d80vfnlkbphwqjwahccd5fjdxr3d21";
   };
 
   nativeBuildInputs = [ transfig ghostscript texinfo ];
@@ -17,12 +17,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-
-  # For some reason the tests don't find `libgpg-error.so'.
-  checkPhase = ''
-    LD_LIBRARY_PATH="${libgpgerror}/lib:$LD_LIBRARY_PATH" \
-    make check
-  '';
 
   crossAttrs = let
     isCross64 = stdenv.cross.config == "x86_64-w64-mingw32";
