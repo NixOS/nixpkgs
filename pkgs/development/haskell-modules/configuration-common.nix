@@ -233,6 +233,7 @@ self: super: {
   postgrest = dontCheck super.postgrest;
   snowball = dontCheck super.snowball;
   test-sandbox = dontCheck super.test-sandbox;
+  users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xmlgen = dontCheck super.xmlgen;
