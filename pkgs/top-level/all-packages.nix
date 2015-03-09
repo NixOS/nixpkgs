@@ -13647,6 +13647,8 @@ let
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
+  utf8proc = callPackage ../development/libraries/utf8proc { };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
