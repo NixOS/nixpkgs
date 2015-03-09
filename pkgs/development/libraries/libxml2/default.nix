@@ -28,6 +28,12 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  crossAttrs = stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+    postPatch = ''
+      sed -i 's/LIBXML_STATIC/_WIN32/g' include/libxml/xmlexports.h
+    '';
+  };
+
   meta = {
     homepage = http://xmlsoft.org/;
     description = "An XML parsing library for C";
