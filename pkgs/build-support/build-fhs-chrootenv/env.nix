@@ -62,7 +62,7 @@ let
       chosenGcc
       bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz
+      gnutar gzip bzip2 xz glibcLocales
     ];
 
   # Compose a global profile for the chroot environment
@@ -72,6 +72,9 @@ let
       mkdir -p $out/etc
       cat >> $out/etc/profile << "EOF"
       export PS1='${name}-chrootenv:\u@\h:\w\$ '
+      export LOCALE_ARCHIVE='/usr/lib${if is64Bit then "64" else ""}/locale/locale-archive'
+      export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib32:/lib64
+      export PATH='/bin:/sbin'
       ${profile}
       EOF
     '';

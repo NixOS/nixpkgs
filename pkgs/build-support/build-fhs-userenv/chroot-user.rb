@@ -116,13 +116,11 @@ if $cpid == 0
   link_swdir.call swdir, Pathname.new('')
 
   # New environment
-  oldenv = ENV.to_h
-  ENV.replace({ 'PS1' => oldenv['PS1'],
-                'TERM' => oldenv['TERM'],
-                'DISPLAY' => oldenv['DISPLAY'],
-                'HOME' => oldenv['HOME'],
-                'PATH' => '/bin:/sbin',
-                'XDG_RUNTIME_DIR' => oldenv['XDG_RUNTIME_DIR'],
+  ENV.replace({ 'TERM' => ENV['TERM'],
+                'DISPLAY' => ENV['DISPLAY'],
+                'HOME' => ENV['HOME'],
+                'XDG_RUNTIME_DIR' => ENV['XDG_RUNTIME_DIR'],
+                'LANG' => ENV['LANG'],
               })
 
   # Finally, exec!
