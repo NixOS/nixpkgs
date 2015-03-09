@@ -3,6 +3,8 @@
 , cdparanoia, libvisual
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "gst-plugins-base-1.4.5";
 
@@ -23,10 +25,8 @@ stdenv.mkDerivation rec {
     pkgconfig python gobjectIntrospection
   ];
 
-  buildInputs = [
-    orc alsaLib libXv pango libtheora
-    cdparanoia libvisual
-  ];
+  buildInputs = [ orc pango libtheora libvisual ]
+             ++ optionals (!(stdenv ? cross)) [ alsaLib cdparanoia libXv ];
 
   propagatedBuildInputs = [ gstreamer ];
 
