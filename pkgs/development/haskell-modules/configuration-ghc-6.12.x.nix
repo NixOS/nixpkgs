@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # LLVM is not supported on this GHC; use the latest one.
+  inherit (pkgs) llvmPackages;
+
   # Disable GHC 6.12.x core libraries.
   array = null;
   base = null;
