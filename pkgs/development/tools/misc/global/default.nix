@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libtool, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "global-6.2.12";
+  name = "global-6.3.4";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "05jkhya1cs6yqhkf8nw5x56adkxxrqyga7sq7hx44dbf7alczwfa";
+    sha256 = "0hcplcayyjf42d8ygzla6142b5dq4ybq4wg3n3cgx3b5yfhvic85";
   };
 
   buildInputs = [ libtool ncurses ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cp -v *.el "$out/share/emacs/site-lisp"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Source code tag system";
 
     longDescription = ''
@@ -37,11 +37,11 @@ stdenv.mkDerivation rec {
       operating system like GNU and BSD.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/global/;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.unix;
   };
 }
