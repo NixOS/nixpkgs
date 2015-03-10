@@ -6,8 +6,6 @@
 #ToDo: bad icons with gtk2;
 #  avatar icon is missing in standard hicolor theme, I don't know where gtk3 takes it from
 
-#ToDo: Failed to open sessions directory: Error opening directory '${lightdm}/share/lightdm/remote-sessions': No such file or directory
-
 let
   ver_branch = "2.0";
   version = "2.0.0";

@@ -26,19 +26,15 @@ let
     buildInputs = [ pkgs.makeWrapper ];
 
     buildCommand = ''
-      mkdir -p $out/gtk-3.0/
-
-      # This wrapper ensures that we actually get ?? (fonts should be OK now)
+      # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
-        --set XDG_DATA_DIRS ${pkgs.gnome2.gnome_icon_theme}/share \
-        --set XDG_CONFIG_HOME $out/
-
-      # We need this to ensure that it actually tries to find icons from gnome-icon-theme
-      cat - > $out/gtk-3.0/settings.ini << EOF
-      [Settings]
-      gtk-icon-theme-name=gnome
-      EOF
+        --prefix PATH : "${pkgs.glibc}/bin" \
+        --set GTK_DATA_PREFIX "${pkgs.gnome3.gnome_themes_standard}" \
+        --set GTK_EXE_PREFIX "${pkgs.gnome3.gnome_themes_standard}" \
+        --set GTK_PATH "${pkgs.gnome3.gnome_themes_standard}" \
+        --set XDG_DATA_DIRS "${pkgs.gnome3.gnome_themes_standard}/share:${pkgs.gnome3.gnome_icon_theme}/share" \
+        --set XDG_CONFIG_HOME ${pkgs.gnome3.gnome_themes_standard}/share
 
       cat - > $out/lightdm-gtk-greeter.desktop << EOF
       [Desktop Entry]
@@ -71,6 +67,13 @@ let
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
+    '';
+
+  gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
+    ''
+    [greeter]
+    theme-name = Adwaita
+    icon-theme-name = Adwaita
     '';
 
 in
@@ -112,6 +115,7 @@ in
       '';
     };
 
+    environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
     environment.etc."lightdm/users.conf".source = usersConf;
 
