@@ -3111,6 +3111,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DistZillaPluginsCJM = buildPerlPackage {
+    name = "Dist-Zilla-Plugins-CJM-4.26";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CJ/CJM/Dist-Zilla-Plugins-CJM-4.26.tar.gz;
+      sha256 = "0812afa640d5df74d9878b1434ca834a4e4ab1b69d01daeb127bb22c3cbf3e04";
+    };
+    buildInputs = [ DistZilla Filepushd TryTiny ];
+    propagatedBuildInputs = [ DistZilla FileHomeDir Moose PathClass namespaceautoclean ];
+    meta = {
+      description = "CJM's plugins for Dist::Zilla";
+      license = "perl";
+    };
+  };
+
   EmailAbstract = buildPerlPackage {
     name = "Email-Abstract-3.007";
     src = fetchurl {
