@@ -634,26 +634,28 @@ self: super: {
   # Not on Hackage.
   cabal2nix = self.mkDerivation {
     pname = "cabal2nix";
-    version = "2.0";
+    version = "20150310";
     src = pkgs.fetchgit {
       url = "http://github.com/NixOS/cabal2nix.git";
-      sha256 = "5cc98f530303a82885e2f23d2c83f67f1a3767bfdd5ed3340e45858f1a0f04e1";
-      rev = "6a445468030b064e4f71b43c269ba506e7e2f779";
+      rev = "267d0495209822ad819b58cb472a0da54f5a0b72";
+      sha256 = "1sdsjwf1cda4bpriiv1vfx0pa26087hzw7vviacvgbmn0xh6wm8g";
+      deepClone = true;
     };
     isLibrary = false;
     isExecutable = true;
     buildDepends = with self; [
-      aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory filepath hackage-db monad-par monad-par-extras mtl pretty
-      prettyclass process QuickCheck regex-posix SHA split transformers
-      utf8-string
+      aeson base bytestring Cabal containers deepseq-generics directory
+      filepath hackage-db lens monad-par monad-par-extras mtl pretty
+      prettyclass process regex-posix SHA split transformers utf8-string cartel
     ];
     testDepends = with self; [
       aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory doctest filepath hackage-db hspec monad-par
+      directory doctest filepath hackage-db hspec lens monad-par
       monad-par-extras mtl pretty prettyclass process QuickCheck
       regex-posix SHA split transformers utf8-string
     ];
+    buildTools = [ pkgs.gitMinimal ];
+    preConfigure = "runhaskell $setupCompileFlags generate-cabal-file >cabal2nix.cabal";
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
     license = pkgs.stdenv.lib.licenses.bsd3;
