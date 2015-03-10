@@ -76,6 +76,7 @@ let
     [greeter]
     theme-name = Adwaita
     icon-theme-name = Adwaita
+    background = ${cfg.background}
     '';
 
 in
@@ -99,6 +100,13 @@ in
           name = "lightdm-gtk-greeter";
           package = wrappedGtkGreeter;
         };
+      };
+
+      background = mkOption {
+        default = "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png";
+        description = ''
+          The background image or color to use.
+        '';
       };
 
     };
