@@ -1557,7 +1557,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "10hc8v22mv56wqi6drpl4pw3r8y3xrgh80ayrb2gir80ah9s5bvi";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassLoad Moose MooseXOneArgNew ParamsUtil RoleHasMessage RoleIdentifiable Throwable TieIxHash TryTiny ];
+    propagatedBuildInputs = [ ModulePluggable ClassLoad Moose MooseXOneArgNew ParamsUtil RoleHasMessage RoleIdentifiable Throwable TieIxHash TryTiny ];
     meta = {
       homepage = https://github.com/rjbs/config-mvp;
       description = "Multivalue-property package-oriented configuration";
