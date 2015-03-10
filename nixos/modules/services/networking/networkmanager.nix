@@ -71,6 +71,13 @@ let
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
 
+  # pre-up and pre-down hooks were added in NM 0.9.10, but we still use 0.9.0
+  dispatcherTypesSubdirMap = {
+    "basic" = "";
+    /*"pre-up" = "pre-up.d/";
+    "pre-down" = "pre-down.d/";*/
+  };
+
 in {
 
   ###### interface
@@ -118,6 +125,30 @@ in {
         '';
       };
 
+      dispatcherScripts = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            source = mkOption {
+              type = types.str;
+              description = ''
+                A script source.
+              '';
+            };
+
+            type = mkOption {
+              type = types.enum (attrNames dispatcherTypesSubdirMap); 
+              default = "basic";
+              description = ''
+                Dispatcher hook type. Only basic hooks are currently available.
+              '';
+            };
+          };
+        });
+        default = [];
+        description = ''
+          A list of scripts which will be executed in response to  network  events.
+        '';
+      };
     };
   };
 
@@ -155,7 +186,11 @@ in {
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
-           };
+           }
+      ++ lib.imap (i: s: {
+        text = s.source;
+        target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+      }) cfg.dispatcherScripts;
 
     environment.systemPackages = cfg.packages ++ [
         networkmanager_openvpn

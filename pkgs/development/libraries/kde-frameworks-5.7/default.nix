@@ -56,8 +56,8 @@ let
       Qt5DBus = qt5.base;
       Qt5Gui = qt5.base;
       Qt5LinguistTools = qt5.tools;
-      Qt5Qml = qt5.declarative;
-      Qt5Quick = qt5.quickcontrols;
+      Qt5Qml = [qt5.declarative qt5.graphicaleffects];
+      Qt5Quick = [qt5.quickcontrols qt5.graphicaleffects];
       Qt5Script = qt5.script;
       Qt5Svg = qt5.svg;
       Qt5WebkitWidgets = qt5.webkit;

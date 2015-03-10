@@ -50,6 +50,16 @@ let
     '';
   };
 
+  hiddenUsers = config.services.xserver.displayManager.hiddenUsers;
+
+  usersConf = writeText "users.conf"
+    ''
+      [UserList]
+      minimum-uid=500
+      hidden-users=${concatStringsSep " " hiddenUsers}
+      hidden-shells=/run/current-system/sw/sbin/nologin
+    '';
+
   lightdmConf = writeText "lightdm.conf"
     ''
       [LightDM]
@@ -84,6 +94,7 @@ in
           package = wrappedGtkGreeter;
         };
       };
+
     };
   };
 
@@ -97,9 +108,12 @@ in
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
       execCmd = ''
         export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run --config=${lightdmConf}
+        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
       '';
     };
+
+    environment.etc."lightdm/lightdm.conf".source = lightdmConf;
+    environment.etc."lightdm/users.conf".source = usersConf;
 
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];

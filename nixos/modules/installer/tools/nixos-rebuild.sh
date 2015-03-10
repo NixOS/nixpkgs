@@ -26,7 +26,8 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|dry-run|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+        if [ "$i" = dry-run ]; then i=dry-build; fi
         action="$i"
         ;;
       --install-grub)
@@ -137,7 +138,7 @@ fi
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
-if [ -n "$rollback" -o "$action" = dry-run ]; then
+if [ -n "$rollback" -o "$action" = dry-build ]; then
     buildNix=
 fi
 
@@ -180,7 +181,7 @@ if [ -n "$canRun" ]; then
 fi
 
 
-if [ "$action" = dry-run ]; then
+if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
 fi
 
@@ -193,7 +194,7 @@ if [ -z "$rollback" ]; then
     if [ "$action" = switch -o "$action" = boot ]; then
         nix-env "${extraBuildFlags[@]}" -p "$profile" -f '<nixpkgs/nixos>' --set -A system
         pathToConfig="$profile"
-    elif [ "$action" = test -o "$action" = build -o "$action" = dry-run ]; then
+    elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
         nix-build '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
@@ -224,7 +225,7 @@ fi
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
+if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = dry-activate ]; then
     if ! $pathToConfig/bin/switch-to-configuration "$action"; then
         echo "warning: error(s) occured while switching to the new configuration" >&2
         exit 1

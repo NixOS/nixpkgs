@@ -1315,7 +1315,7 @@ let
   ftop = callPackage ../os-specific/linux/ftop { };
 
   fuppes = callPackage ../tools/networking/fuppes {
-    ffmpeg = ffmpeg_0_6_90;
+    ffmpeg = ffmpeg_0_5;
   };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
@@ -1458,6 +1458,8 @@ let
    * objections before removal. The feature is libgraph.
    */
   graphviz_2_32 = callPackage ../tools/graphics/graphviz/2.32.nix { };
+
+  grin = callPackage ../tools/text/grin { };
 
   grive = callPackage ../tools/filesystems/grive {
     json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
@@ -1713,7 +1715,7 @@ let
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
   minidlna = callPackage ../tools/networking/minidlna {
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
   };
 
   mmv = callPackage ../tools/misc/mmv { };
@@ -2267,6 +2269,8 @@ let
 
   pcsclite = callPackage ../tools/security/pcsclite { };
 
+  pcsctools = callPackage ../tools/security/pcsctools { };
+
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
@@ -2549,6 +2553,8 @@ let
   screen-message = callPackage ../tools/X11/screen-message { };
 
   scrot = callPackage ../tools/graphics/scrot { };
+
+  scrolls = callPackage ../games/scrolls { };
 
   scrypt = callPackage ../tools/security/scrypt { };
 
@@ -3516,6 +3522,12 @@ let
       regexCompat HsSyck random;
   };
 
+  uhc = callPackage ../development/compilers/uhc/default.nix ({
+    stdenv = clangStdenv;
+    ghcWithPackages = haskellngPackages.ghcWithPackages;
+    inherit (haskellngPackages) shuffle hashable mtl network uhc-util uulib;
+  });
+
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
     version = "4.7-2013q3-20130916";
     releaseType = "update";
@@ -3909,6 +3921,10 @@ let
     eff = callPackage ../development/interpreters/eff { };
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
+
+    enumerate = callPackage ../development/ocaml-modules/enumerate {
+      type_conv = ocaml_typeconv;
+    };
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
@@ -5514,26 +5530,16 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg_0_6 = callPackage ../development/libraries/ffmpeg/0.6.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.x.nix { };
-
-  ffmpeg_2 = callPackage ../development/libraries/ffmpeg/2.x.nix { };
-
+  ffmpeg_0_5 = callPackage ../development/libraries/ffmpeg/0.5.nix { };
+  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
+  ffmpeg_0_11 = callPackage ../development/libraries/ffmpeg/0.11.nix { };
+  ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
+  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
+  ffmpeg_2_5 = callPackage ../development/libraries/ffmpeg/2.5.nix { };
+  # Aliases
+  ffmpeg_0 = ffmpeg_0_11;
+  ffmpeg_1 = ffmpeg_1_2;
+  ffmpeg_2 = ffmpeg_2_5;
   ffmpeg = ffmpeg_2;
 
   ffms = callPackage ../development/libraries/ffms { };
@@ -5909,6 +5915,8 @@ let
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
 
   hsqldb = callPackage ../development/libraries/java/hsqldb { };
+
+  hstr = callPackage ../applications/misc/hstr { };
 
   http-parser = callPackage ../development/libraries/http-parser { inherit (pythonPackages) gyp; };
 
@@ -7295,6 +7303,8 @@ let
 
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
+  SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {};
@@ -7598,9 +7608,7 @@ let
 
   xdo = callPackage ../tools/misc/xdo { };
 
-  xineLib = callPackage ../development/libraries/xine-lib {
-    ffmpeg = ffmpeg_1;
-  };
+  xineLib = callPackage ../development/libraries/xine-lib { };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
@@ -7939,14 +7947,14 @@ let
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
-    withRecommendedPackages = true;
+    withRecommendedPackages = false;
   };
 
   rWrapper = callPackage ../development/r-modules/wrapper.nix {
-    # Those packages are usually installed as part of the R build.
-    recommendedPackages = with rPackages; [ boot class cluster codetools
-      foreign KernSmooth lattice MASS Matrix mgcv nlme nnet rpart
-      spatial survival ];
+    recommendedPackages = with rPackages; [
+      boot class cluster codetools foreign KernSmooth lattice MASS
+      Matrix mgcv nlme nnet rpart spatial survival
+    ];
     # Override this attribute to register additional libraries.
     packages = [];
   };
@@ -8322,7 +8330,6 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     libgcrypt = libgcrypt_1_6;
-    libiconv = if stdenv.isLinux then null else libiconv;
     python = python2;
     pythonPackages = python2Packages;
   };
@@ -10210,7 +10217,7 @@ let
     };
   };
 
-  emacs24PackagesNg = emacsPackagesNgGen emacs24;
+  emacs24PackagesNg = recurseIntoAttrs (emacsPackagesNgGen emacs24);
 
   inherit (gnome3) empathy;
 
@@ -10728,6 +10735,10 @@ let
   keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
 
   keymon = callPackage ../applications/video/key-mon { };
+
+  khal = callPackage ../applications/misc/khal {
+    pythonPackages = python3Packages;
+  };
 
   kid3 = callPackage ../applications/audio/kid3 {
     qt = qt4;
@@ -11468,7 +11479,12 @@ let
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
-  lightdm = callPackage ../applications/display-managers/lightdm { };
+  lightdm = callPackage ../applications/display-managers/lightdm {
+    qt4 = null;
+    qt5 = null;
+  };
+
+  lightdm_qt = lightdm.override { qt5 = qt5; };
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
 
@@ -11700,6 +11716,8 @@ let
   trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
+
+  tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 
   twister = callPackage ../applications/networking/p2p/twister { };
 
@@ -12557,7 +12575,7 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
-    ffmpeg = ffmpeg_0_6;
+    ffmpeg = ffmpeg_0_5;
     lua = lua5;
   };
 
@@ -13654,6 +13672,8 @@ let
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
+  utf8proc = callPackage ../development/libraries/utf8proc { };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
@@ -13706,6 +13726,8 @@ let
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
   };
+
+  wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 

@@ -62,7 +62,7 @@ let
       chosenGcc
       bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz
+      gnutar gzip bzip2 xz glibcLocales
     ];
 
   # Compose a global profile for the chroot environment
@@ -72,6 +72,9 @@ let
       mkdir -p $out/etc
       cat >> $out/etc/profile << "EOF"
       export PS1='${name}-chrootenv:\u@\h:\w\$ '
+      export LOCALE_ARCHIVE='/usr/lib${if is64Bit then "64" else ""}/locale/locale-archive'
+      export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib32:/lib64
+      export PATH='/bin:/sbin'
       ${profile}
       EOF
     '';
@@ -81,15 +84,17 @@ let
   staticUsrProfileTarget = nixpkgs.buildEnv {
     name = "system-profile-target";
     paths = basePkgs ++ [ profilePkg ] ++ targetPaths;
+    ignoreCollisions = true;
   };
 
   staticUsrProfileMulti = nixpkgs.buildEnv {
     name = "system-profile-multi";
     paths = multiPaths;
+    ignoreCollisions = true;
   };
 
   linkProfile = profile: ''
-    for i in ${profile}/{etc,bin,sbin,share,var}; do
+    for i in ${profile}/{bin,sbin,share,var}; do
         if [ -x "$i" ]
         then
             ln -s "$i"
@@ -129,7 +134,7 @@ let
     mkdir -m0755 lib
 
     # copy content of targetPaths
-    cp -rsf ${staticUsrProfileTarget}/lib/* lib/
+    cp -rsf ${staticUsrProfileTarget}/lib/* lib/ && chmod u+w -R lib/
   '';
 
   # setup /lib, /lib32 and /lib64
@@ -142,20 +147,54 @@ let
     cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/
 
     # copy content of multiPaths (32bit libs)
-    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/
+    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/ && chmod u+w -R lib/
 
     # copy content of targetPaths (64bit libs)
-    cp -rsf ${staticUsrProfileTarget}/lib/* lib64/
+    cp -rsf ${staticUsrProfileTarget}/lib/* lib64/ && chmod u+w -R lib64/
 
     # most 64bit only libs put their stuff into /lib
     # some pkgs (like gcc_multi) put 32bit libs into and /lib 64bit libs into /lib64
     # by overwriting these we will hopefully catch all these cases
     # in the end /lib should only contain 32bit and /lib64 only 64bit libs
-    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/
+    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/ && chmod u+w -R lib64/
 
     # copy gcc libs (and may overwrite exitsting wrongly placed libs)
     cp -rsf ${chosenGcc.cc}/lib/*   lib/
     cp -rsf ${chosenGcc.cc}/lib64/* lib64/
+  '';
+
+  setupEtc = ''
+    mkdir -m0755 etc
+
+    # copy profile content
+    cp -rsf ${staticUsrProfileTarget}/etc/* etc/ && chmod u+w -R etc/
+    [ -d ${staticUsrProfileMulti}/etc ] && cp -rsf ${staticUsrProfileMulti}/etc/* etc/ && chmod u+w -R etc/
+
+    # compatibility with NixOS
+    ln -s /host-etc/static etc/static
+
+    # symlink some NSS stuff
+    ln -s /host-etc/passwd etc/passwd
+    ln -s /host-etc/group etc/group
+    ln -s /host-etc/shadow etc/shadow
+    ln -s /host-etc/hosts etc/hosts
+    ln -s /host-etc/resolv.conf etc/resolv.conf
+    ln -s /host-etc/nsswitch.conf etc/nsswitch.conf
+
+    # symlink other core stuff
+    ln -s /host-etc/localtime etc/localtime
+    ln -s /host-etc/machine-id etc/machine-id
+
+    # symlink PAM stuff
+    rm -rf etc/pam.d
+    ln -s /host-etc/pam.d etc/pam.d
+
+    # symlink fonts stuff
+    rm -rf etc/fonts
+    ln -s /host-etc/fonts etc/fonts
+
+    # symlink ALSA stuff
+    ln -s /host-etc/asound.conf etc/asound.conf
   '';
 
 in nixpkgs.stdenv.mkDerivation {
@@ -165,6 +204,7 @@ in nixpkgs.stdenv.mkDerivation {
     cd $out
     ${setupTargetProfile}
     ${setupMultiProfile}
+    ${setupEtc}
     cd $out
     ${extraBuildCommands}
     cd $out

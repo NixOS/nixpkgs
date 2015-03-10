@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, bison, flex, geoip, libcli, libnet
+{ stdenv, fetchFromGitHub, bison, flex, libcli, libnet
 , libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
-, pkgconfig, which, zlib }:
+, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.5.9-rc4-40-g5107740";
@@ -13,12 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1z3b7pa5rhz37dhfb1riy1j9lg917bs4z7clqbxm1hzi1x2ln988";
   };
 
-  buildInputs = [ bison flex geoip libcli libnet libnl libnetfilter_conntrack
-    libpcap libsodium liburcu ncurses perl pkgconfig which zlib ];
+  buildInputs = [ bison flex libcli libnet libnl libnetfilter_conntrack
+    libpcap libsodium liburcu ncurses perl pkgconfig zlib ];
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
     patchShebangs configure
+    substituteInPlace configure --replace "which" "command -v"
     NACL_INC_DIR=${libsodium}/include/sodium NACL_LIB=sodium ./configure
   '';
 

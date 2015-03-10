@@ -24,7 +24,7 @@
 , external
 }@args:
 
-with lib.licences;
+with lib.licenses;
 
 let self = _self // overrides;
     callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
@@ -42,7 +42,7 @@ let self = _self // overrides;
       sha256 = "0dlrhc1dmzgrjvcnlqvm6clyv0r6zray6qqliqngy14880grghbm";
     };
     packageRequires = [ auto-complete haskell-mode ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   ace-jump-mode = melpaBuild rec {
@@ -56,7 +56,7 @@ let self = _self // overrides;
     };
     meta = {
       description = "Advanced cursor movements mode for Emacs";
-      licence = gpl3Plus;
+      license = gpl3Plus;
     };
   };
 
@@ -70,7 +70,7 @@ let self = _self // overrides;
       sha256 = "19y5w9m2flp4as54q8yfngrkri3kd7fdha9pf2xjgx6ryflqx61k";
     };
     packageRequires = [ dash s ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   agda2-mode = with external; trivialBuild {
@@ -149,7 +149,7 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1j6mbvvbnm2m1gpsy9ipxiv76b684nn57yssbqdyiwyy499cma6q";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   auctex = melpaBuild rec {
@@ -162,7 +162,7 @@ let self = _self // overrides;
     buildPhase = ''
       cp $src ${pname}-${version}.tar
     '';
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   auto-complete = melpaBuild rec {
@@ -193,7 +193,7 @@ let self = _self // overrides;
       sha256 = "1m4v5h52brg2g9rpbqfq9m3m8fv520vg5mjwppnbw6099d17msqd";
     };
     files = [ "bind-key.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   browse-kill-ring = melpaBuild rec {
@@ -222,7 +222,7 @@ let self = _self // overrides;
       sha256 = "1fv8630bqbmfr56zai08f1q4dywksmghhm70084bz4vbs6rzdsbq";
     };
     packageRequires = [ expand-region ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   circe = melpaBuild rec {
@@ -236,7 +236,7 @@ let self = _self // overrides;
     };
     packageRequires = [ lcs lui ];
     fileSpecs = [ "lisp/circe*.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   company = melpaBuild rec {
@@ -248,7 +248,7 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "1xwxyqg5dan8m1qkdxyzm066ryf24h07karpdlm3s09izfdny33f";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   dash = melpaBuild rec {
@@ -260,7 +260,7 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "1lg31s8y6ljsz6ps765ia5px39wim626xy8fbc4jpk8fym1jh7ay";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   diminish = melpaBuild rec {
@@ -272,7 +272,7 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   epl = melpaBuild rec {
@@ -284,7 +284,7 @@ let self = _self // overrides;
       rev    = "63c78c08e345455f3d4daa844fdc551a2c18024e";
       sha256 = "04a2aq8dj2cmy77vw142wcmnjvqdbdsp6z0psrzz2qw0b0am03li";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   evil-god-state = melpaBuild rec {
@@ -297,7 +297,7 @@ let self = _self // overrides;
       sha256 = "16v6dpw1hibrkf9hga88gv5axvp1pajd67brnh5h4wpdy9qvwgyy";
     };
     packageRequires = [ evil god-mode ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   evil-surround = melpaBuild rec {
@@ -312,7 +312,7 @@ let self = _self // overrides;
     packageRequires = [ evil ];
     meta = {
       description = "surround.vim emulation for Emacs evil mode";
-      licence = gpl3Plus;
+      license = gpl3Plus;
     };
   };
 
@@ -327,7 +327,7 @@ let self = _self // overrides;
     packageRequires = [ goto-chg undo-tree ];
     meta = {
       description = "Extensible vi layer for Emacs";
-      licence = gpl3Plus;
+      license = gpl3Plus;
     };
   };
 
@@ -340,7 +340,7 @@ let self = _self // overrides;
       rev    = "e4af0e9b44738e7474c89ed895200b42e6541515";
       sha256 = "0lxikiqf1jik88lf889q4f4f8kdgg3npciz298x605nhbfd5snbd";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   expand-region = melpaBuild rec {
@@ -354,7 +354,7 @@ let self = _self // overrides;
     };
     meta = {
       description = "Increases the selected region by semantic units in Emacs";
-      licence = gpl3Plus;
+      license = gpl3Plus;
     };
   };
 
@@ -384,7 +384,7 @@ let self = _self // overrides;
       sha256 = "0b4x24aq0jh4j4bjv0fqyaz6hzh3gqf57k9763jj9rl32cc3dpnp";
     };
     packageRequires = [ flycheck popup ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   flycheck = melpaBuild rec {
@@ -397,7 +397,7 @@ let self = _self // overrides;
       sha256 = "0cq7y7ssm6phvx5pfv2yqq4j0yqmm0lhjav7v4a8ql7094cd790a";
     };
     packageRequires = [ dash pkg-info ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   ghc-mod = melpaBuild rec {
@@ -405,7 +405,7 @@ let self = _self // overrides;
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
     fileSpecs = [ "elisp/*.el" ];
-    meta = { licence = bsd3; };
+    meta = { license = bsd3; };
   };
 
   git-commit-mode = melpaBuild rec {
@@ -418,7 +418,7 @@ let self = _self // overrides;
       sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
     };
     files = [ "git-commit-mode.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   git-rebase-mode = melpaBuild rec {
@@ -431,7 +431,7 @@ let self = _self // overrides;
       sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
     };
     files = [ "git-rebase-mode.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   gitattributes-mode = melpaBuild rec {
@@ -444,7 +444,7 @@ let self = _self // overrides;
       sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
     };
     files = [ "gitattributes-mode.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   gitconfig-mode = melpaBuild rec {
@@ -457,7 +457,7 @@ let self = _self // overrides;
       sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
     };
     files = [ "gitconfig-mode.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   gitignore-mode = melpaBuild rec {
@@ -470,7 +470,7 @@ let self = _self // overrides;
       sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
     };
     files = [ "gitignore-mode.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   gnus = melpaBuild rec {
@@ -485,7 +485,7 @@ let self = _self // overrides;
     preBuild = ''
       (cd lisp && make gnus-load.el)
     '';
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   god-mode = melpaBuild rec {
@@ -497,7 +497,7 @@ let self = _self // overrides;
       rev    = "6b7ae259a58ca1d7776aa4eca9f1092e4c0033e6";
       sha256 = "1amr98nq82g2d3f3f5wlqm9g38j64avygnsi9rrlbfqz4f71vq7x";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   goto-chg = melpaBuild rec {
@@ -509,7 +509,7 @@ let self = _self // overrides;
       sha256 = "0yiqpzsm5sr7xdkixdvfg312dk9vsdcmj69gizk744d334yn8rsz";
     };
     files = [ "lib/goto-chg.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   haskell-mode = melpaBuild rec {
@@ -521,7 +521,7 @@ let self = _self // overrides;
       rev    = "0db5efaaeb3b22e5a3fdafa600729e14c1716ee2";
       sha256 = "0d63cgzj579cr8zbrnl0inyy35b26sxinqxr7bgrjsngpmhm52an";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   helm-swoop = melpaBuild rec {
@@ -534,7 +534,7 @@ let self = _self // overrides;
       sha256 = "0nq33ldhbvfbm6jnsxqdf3vwaqrsr2gprkzll081gcyl2s1x0l2m";
     };
     packageRequires = [ helm ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   helm = melpaBuild rec {
@@ -547,7 +547,7 @@ let self = _self // overrides;
       sha256 = "0n2kr6pyzcsi8pq6faxz2y8kicz1gmvj98fzzlq3a107dqqp25ay";
     };
     packageRequires = [ async ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   hi2 = melpaBuild rec {
@@ -559,7 +559,7 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "1s08sgbh5v59lqskd0s1dscs6dy7z5mkqqkabs3gd35agbfvbmlf";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   ido-ubiquitous = melpaBuild rec {
@@ -588,7 +588,7 @@ let self = _self // overrides;
       sha256 = "00pkgk1zxan89i8alsa2dpa9ls7imqk5zb1kbjwzrlbr0gk4smdb";
     };
     packageRequires = [ flycheck ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   lcs = melpaBuild rec {
@@ -601,7 +601,7 @@ let self = _self // overrides;
       sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
     };
     fileSpecs = [ "lisp/lcs*.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   lui = melpaBuild rec {
@@ -615,7 +615,7 @@ let self = _self // overrides;
     };
     packageRequires = [ tracking ];
     fileSpecs = [ "lisp/lui*.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   magit = melpaBuild rec {
@@ -628,7 +628,7 @@ let self = _self // overrides;
       sha256 = "0mzyx72pidzvla1x2qszn3c60n2j0n8i5k875c4difvd1n4p0vsk";
     };
     packageRequires = [ git-commit-mode git-rebase-mode ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   markdown-mode = melpaBuild rec {
@@ -640,7 +640,7 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1l2w0j9xl8pipz61426s79jq2yns42vjvysc6yjc29kbsnhalj29";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
@@ -655,7 +655,7 @@ let self = _self // overrides;
     buildPhase = ''
       cp $src ${pname}-${version}.tar
     '';
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   pkg-info = melpaBuild rec {
@@ -668,7 +668,7 @@ let self = _self // overrides;
       sha256 = "0x4nz54f2shgcw3gx66d265vxwdpdirn64gzii8dpxhsi7v86n0p";
     };
     packageRequires = [ epl ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   popup = melpaBuild rec {
@@ -680,7 +680,7 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "0836ayyz1syvd9ry97ya06l8mpr88c6xbgb4d98szj6iwbypcj7b";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   projectile = melpaBuild rec {
@@ -693,7 +693,7 @@ let self = _self // overrides;
       sha256 = "10c28h2g53sg68lwamhak0shdhh26h5xaipipz3n4281sr1fwg58";
     };
     packageRequires = [ dash helm s pkg-info epl ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   rich-minority = melpaBuild rec {
@@ -706,7 +706,7 @@ let self = _self // overrides;
       sha256 = "0kvhy4mgs9llihwsb1a9n5a85xzjiyiyawxnz0axy2bvwcxnp20k";
     };
     packageRequires = [ dash ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   s = melpaBuild rec {
@@ -718,7 +718,7 @@ let self = _self // overrides;
       rev    = "1f85b5112f3f68169ddaa2911fcfa030f979eb4d";
       sha256 = "9d871ea84f98c51099528a03eddf47218cf70f1431d4c35c19c977d9e73d421f";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   semi = melpaBuild rec {
@@ -747,7 +747,7 @@ let self = _self // overrides;
       sha256 = "08dsv1dzgb9jx076ia7xbpyjpaxn1w87h6rzlb349spaydq7ih24";
     };
     fileSpecs = [ "lisp/shorten*.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   smart-mode-line = melpaBuild rec {
@@ -760,7 +760,7 @@ let self = _self // overrides;
       sha256 = "17nav2jbvbd13xzgp29x396mc617n2dh6whjk4wnyvsyv7r0s9f6";
     };
     packageRequires = [ dash rich-minority ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   smartparens = melpaBuild rec {
@@ -773,7 +773,7 @@ let self = _self // overrides;
       sha256 = "16pzd740vd1r3qfmxia2ibiarinm6xpja0mjv3nni5dis5s4r9gc";
     };
     packageRequires = [ dash ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   smex = melpaBuild rec {
@@ -816,7 +816,7 @@ let self = _self // overrides;
       rev    = "3ffbe68e584f811e891f96afa1de15e0d9c1ebb5";
       sha256 = "09221128a0f55a575ed9addb3a435cfe01ab6bdd0cca5d589ccd37de61ceccbd";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   tracking = melpaBuild rec {
@@ -830,7 +830,7 @@ let self = _self // overrides;
     };
     packageRequires = [ shorten ];
     fileSpecs = [ "lisp/tracking*.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   undo-tree = melpaBuild rec {
@@ -841,7 +841,7 @@ let self = _self // overrides;
       rev    = "a3e81b682053a81e082139300ef0a913a7a610a2";
       sha256 = "1qla7njkb7gx5aj87i8x6ni8jfk1k78ivwfiiws3gpbnyiydpx8y";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   use-package = melpaBuild rec {
@@ -855,7 +855,7 @@ let self = _self // overrides;
     };
     packageRequires = [ bind-key diminish ];
     files = [ "use-package.el" ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   volatile-highlights = melpaBuild rec {
@@ -867,7 +867,7 @@ let self = _self // overrides;
       rev    = "fb2abc2d4d4051a9a6b7c8de2fe7564161f01f24";
       sha256 = "1v0chqj5jir4685jd8ahw86g9zdmi6xd05wmzhyw20rbk924fcqf";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   wanderlust = melpaBuild rec {
@@ -904,7 +904,7 @@ let self = _self // overrides;
       rm weechat-sauron.el weechat-secrets.el
     '';
     packageRequires = [ s ];
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
   wgrep = melpaBuild rec {
@@ -916,7 +916,7 @@ let self = _self // overrides;
       rev    = "7ef26c51feaef8a5ec0929737130ab8ba326983c";
       sha256 = "075z0glain0dp56d0cp468y5y88wn82ab26aapsrdzq8hmlshwn4";
     };
-    meta = { licence = gpl3Plus; };
+    meta = { license = gpl3Plus; };
   };
 
 }; in self

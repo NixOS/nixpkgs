@@ -1,32 +1,47 @@
 { stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
-, intltool, x11, libxklavier, libgcrypt, dbus/*for tests*/ }:
+, intltool, x11, libxklavier, libgcrypt
+, qt4 ? null, qt5 ? null
+}:
 
 let
-  ver_branch = "1.8";
-  version = "1.8.6";
+  ver_branch = "1.13";
+  version = "1.13.1";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "17ivc0c4dbnc0fzd581j53cn6hdav34zz2hswjzy8aczbpk605qi";
+    sha256 = "0xa23maq6phkfil8xx26viig2m99sbzcf1w7s56hns2qw6pycn79";
   };
-
-  patches = [ ./lightdm.patch ];
-  patchFlags = "-p1";
 
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
-  ] ++ stdenv.lib.optional doCheck dbus.daemon;
+    qt4 qt5
+  ];
 
-  configureFlags = [ "--enable-liblightdm-gobject" "--localstatedir=/var" ];
+  configureFlags = [
+    "--enable-liblightdm-gobject"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
+    ++ stdenv.lib.optional (qt5 != null) "--enable-liblightdm-qt5";
 
-  doCheck = false; # some tests fail, don't know why
+  installFlags = [ "DESTDIR=\${out}" ];
 
-  meta = {
+  # Correct for the nested nix folder tree
+  postInstall = ''
+    mv $out/$out/* $out
+    DIR=$out/$out
+    while rmdir $DIR 2>/dev/null; do
+      DIR="$(dirname "$DIR")"
+    done
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://launchpad.net/lightdm;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    platforms = platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ocharles wkennington ];
   };
 }

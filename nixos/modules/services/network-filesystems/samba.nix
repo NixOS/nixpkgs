@@ -27,7 +27,7 @@ let
       [ global ]
       security = ${cfg.securityType}
       passwd program = /var/setuid-wrappers/passwd %u
-      pam password change = ${toString cfg.syncPasswordsByPam}
+      pam password change = ${if cfg.syncPasswordsByPam then "yes" else "no"}
       invalid users = ${toString cfg.invalidUsers}
 
       ${cfg.extraConfig}

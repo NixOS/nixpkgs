@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gzip, bzip2 }:
+{ stdenv, fetchurl, autoconf, automake, libtool, gzip, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "kbd-1.15.3";
@@ -14,10 +14,24 @@ stdenv.mkDerivation rec {
     sha256 = "0e859211cfe16a18a3b9cbf2ca3e280a23a79b4e40b60d8d01d0fde7336b6d50";
   };
 
+  neoSrc = fetchurl {
+    name = "neo.map";
+    url = "https://svn.neo-layout.org/linux/console/neo.map?r=2455";
+    sha256 = "1wlgp09wq84hml60hi4ls6d4zna7vhycyg40iipyh1279i91hsx7";
+  };
+
   configureFlags = "--disable-nls";
+
+  preConfigure = ''
+    sh autogen.sh
+  '';
 
   patchPhase =
     ''
+      mkdir -p data/keymaps/i386/neo
+      cat "$neoSrc" > data/keymaps/i386/neo/neo.map
+      sed -i -e 's,^KEYMAPSUBDIRS *= *,&i386/neo ,' data/Makefile.in
+
       # Add the dvp keyboard in the dvorak folder
       ${gzip}/bin/gzip -c -d ${dvpSrc} > data/keymaps/i386/dvorak/dvp.map
 
@@ -32,6 +46,8 @@ stdenv.mkDerivation rec {
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';
+
+  buildInputs = [ autoconf automake libtool ];
 
   makeFlags = "setowner= ";
 

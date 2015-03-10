@@ -208,6 +208,14 @@ in
         description = "Shell commands executed just before the window or desktop manager is started.";
       };
 
+      hiddenUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "nobody" ];
+        description = ''
+          A list of users which will not be shown in the display manager.
+        '';
+      };
+
       desktopManagerHandlesLidAndPower = mkOption {
         type = types.bool;
         default = true;

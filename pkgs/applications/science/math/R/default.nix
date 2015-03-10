@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.1.2";
+  name = "R-3.1.3";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0ypsm11c7n49pgh2ricyhhpfhas3famscdazzdp2zq70rapm1ldw";
+    sha256 = "04kk6wd55bi0f0qsp98ckjxh95q2990vkgq4j83kiajvjciq7s87";
   };
 
   buildInputs = [ blas bzip2 gfortran liblapack libX11 libXmu libXt
@@ -54,8 +54,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
-  # The test suite fails when building without the recommended packages.
-  doCheck = withRecommendedPackages;
+  doCheck = true;
 
   enableParallelBuilding = true;
 

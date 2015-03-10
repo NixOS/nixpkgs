@@ -3901,6 +3901,24 @@ let
 
   django = self.django_1_6;
 
+  django_1_7 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.7.6";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.7/${name}.tar.gz";
+      sha256 = "142cim55wnv5q0zg039rankwah1gbpq46dgmp9yg78jrzq7mxwdh";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.6.6";
@@ -5072,7 +5090,6 @@ let
       platforms   = platforms.all;
     };
   };
-
 
   gyp = buildPythonPackage rec {
     rev = "1977";
@@ -10513,9 +10530,6 @@ let
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
     name = "sphinxcontrib-httpdomain-1.3.0";
 
-    # See issue #6548
-    disabled = isPyPy;
-
     # Check is disabled due to this issue:
     # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
     doCheck = false;
@@ -10539,9 +10553,6 @@ let
 
   sphinxcontrib_plantuml = buildPythonPackage (rec {
     name = "sphinxcontrib-plantuml-0.5";
-
-    # See issue #6548
-    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sphinxcontrib-plantuml/${name}.tar.gz";
@@ -13765,7 +13776,7 @@ let
       license = licenses.mit;
     };
   };
-  
+
   html2text = buildPythonPackage rec {
     name = "html2text-2014.12.29";
 

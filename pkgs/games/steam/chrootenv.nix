@@ -1,4 +1,4 @@
-{ buildFHSUserEnv, config }:
+{ lib, buildFHSUserEnv, config }:
 
 buildFHSUserEnv {
   name = "steam";
@@ -14,7 +14,8 @@ buildFHSUserEnv {
       pkgs.gnome2.zenity
       pkgs.xdg_utils
     ]
-    ++ (if config.steam.java or false then [ pkgs.jdk ] else [ ])
+    ++ lib.optional (config.steam.java or false) pkgs.jdk
+    ++ lib.optional (config.steam.primus or false) pkgs.primus
     ;
 
   multiPkgs = pkgs:
@@ -66,8 +67,8 @@ buildFHSUserEnv {
   '';
 
   profile = ''
-    export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib32:/lib64
-    export PATH=$PATH:/usr/bin:/usr/sbin
+    # Ugly workaround for https://github.com/ValveSoftware/steam-for-linux/issues/3504
+    export LD_PRELOAD=/lib32/libpulse.so:/lib64/libpulse.so:/lib32/libasound.so:/lib64/libasound.so
   '';
 
   runScript = "exec steam";

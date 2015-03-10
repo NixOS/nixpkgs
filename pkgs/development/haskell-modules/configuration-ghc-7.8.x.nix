@@ -35,7 +35,7 @@ self: super: {
   xhtml = null;
 
   # mtl 2.2.x needs the latest transformers.
-  mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_2_0; };
+  mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_3_0; };
 
   # Configure build for mtl 2.1.x.
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
@@ -43,7 +43,7 @@ self: super: {
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
-    transformers = super.transformers_0_4_2_0;
+    transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
     haskeline = self.haskeline_0_7_1_3;
     mtl = super.mtl_2_2_1;
@@ -88,7 +88,6 @@ self: super: {
   xhb-atom-cache = markBroken super.xhb-atom-cache;
   xhb-ewmh = markBroken super.xhb-ewmh;
   yesod-purescript = markBroken super.yesod-purescript;
-  yabi-muno = markBroken super.yabi-muno;
   yet-another-logger = markBroken super.yet-another-logger;
 
   # https://github.com/frosch03/arrowVHDL/issues/2
@@ -120,7 +119,7 @@ self: super: {
       ) ];
     });
     mtl = self.mtl_2_2_1;
-    transformers = self.transformers_0_4_2_0;
+    transformers = self.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
     hscolour = super.hscolour;
     time = self.time_1_5_0_1;

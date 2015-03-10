@@ -146,7 +146,11 @@ let
 
   mkDerivation = drv: stdenv.mkDerivation (drv // { src = fetchurl drv.src; });
 
-  resolveDeps = scope: map (dep: scope."${dep}" or null);
+  resolveDeps = scope:
+    let resolveDeps_go = dep:
+          let res = scope."${dep}" or [];
+          in if isList res then res else [res];
+    in concatMap resolveDeps_go;
 
   userEnvPkg = dep:
     mapAttrs
