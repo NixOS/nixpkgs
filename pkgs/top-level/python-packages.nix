@@ -2615,13 +2615,13 @@ let
 
 
   evdev = buildPythonPackage rec {
-    version = "0.4.6";
+    version = "0.4.7";
     name = "evdev-${version}";
     disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/evdev/${name}.tar.gz";
-      sha256 = "08bzyr3zc8ijnv25bysmmvzircblh42ja15f6ijdzmqqw8vfaij8";
+      sha256 = "1mz8cfncpxc1wbk2nj7apl0ssqc0vfndysxchq3wabd9vzx5p71k";
     };
 
     buildInputs = with self; [ pkgs.linuxHeaders ];
