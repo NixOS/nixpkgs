@@ -97,9 +97,11 @@ in
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
       execCmd = ''
         export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run --config=${lightdmConf}
+        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
       '';
     };
+
+    environment.etc."lightdm/lightdm.conf".source = lightdmConf;
 
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
