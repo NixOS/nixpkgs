@@ -28,4 +28,5 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
+  broken = true;
 }
