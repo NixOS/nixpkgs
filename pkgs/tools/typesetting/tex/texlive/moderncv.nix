@@ -4,7 +4,7 @@ rec {
   name = "moderncv-${version}";
   src = fetchurl {
     url = "https://launchpad.net/moderncv/trunk/${version}/+download/moderncv-${version}.zip";
-    sha256 = "0k26s0z8hmw3h09vnpndim7gigwh8q6n9nbbihb5qbrw5qg2yqck";
+    sha256 = "0y2m0qd0izrfjcwrmf3nvzkqmrhkdhzbv29s4c0knksdnfgcchc8";
   };
 
   buildInputs = [texLive unzip];
