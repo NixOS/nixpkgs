@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1134q8qd7gr34jkivqxckdnwbpa8pl7dhjpdi9fci0pcs4hh22jc";
   };
 
-  buildInputs = [ pkgconfig lightdm intltool ]
-    ++ (if useGTK2 then [ gtk2 makeWrapper ] else [ gtk3 ]);
+  buildInputs = [ pkgconfig lightdm intltool makeWrapper ]
+    ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
   configureFlags = [
     "--localstatedir=/var"
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
 
       substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
         --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
-    '' + stdenv.lib.optionalString useGTK2 ''
       wrapProgram "$out/sbin/lightdm-gtk-greeter" \
         --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
     '';
