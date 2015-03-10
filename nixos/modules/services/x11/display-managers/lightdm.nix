@@ -82,6 +82,7 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm = {
+
       enable = mkOption {
         default = false;
         description = ''
@@ -129,7 +130,7 @@ in
 
     users.extraUsers.lightdm = {
       createHome = true;
-      home = "/var/lib/lightdm";
+      home = "/var/lib/lightdm-data";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
