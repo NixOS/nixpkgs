@@ -50,6 +50,16 @@ let
     '';
   };
 
+  hiddenUsers = config.services.xserver.displayManager.hiddenUsers;
+
+  usersConf = writeText "users.conf"
+    ''
+      [UserList]
+      minimum-uid=500
+      hidden-users=${concatStringsSep " " hiddenUsers}
+      hidden-shells=/run/current-system/sw/sbin/nologin
+    '';
+
   lightdmConf = writeText "lightdm.conf"
     ''
       [LightDM]
@@ -84,6 +94,7 @@ in
           package = wrappedGtkGreeter;
         };
       };
+
     };
   };
 
@@ -102,6 +113,7 @@ in
     };
 
     environment.etc."lightdm/lightdm.conf".source = lightdmConf;
+    environment.etc."lightdm/users.conf".source = usersConf;
 
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
