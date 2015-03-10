@@ -9,10 +9,10 @@ let
   
 in stdenv.mkDerivation rec {
 
-  name = "gobby-0.4.94";
+  name = "gobby-0.5.0";
   src = fetchurl {
     url = "http://releases.0x539.de/gobby/${name}.tar.gz";
-    sha256 = "b9798808447cd94178430f0fb273d0e45d0ca30ab04560e3790bac469e03bb00";
+    sha256 = "165x0r668ma5blziisvbr8qig3jw9hf7i6w8r7wwvz3wsac3bswc";
   };
 
   buildInputs = [ pkgconfig gtkmm gsasl gtksourceview libxmlxx libinf intltool ]
