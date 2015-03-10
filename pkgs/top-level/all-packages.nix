@@ -955,6 +955,8 @@ let
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  ibus-anthy = callPackage ../tools/inputmethods/ibus-anthy { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   clamav = callPackage ../tools/security/clamav { };
