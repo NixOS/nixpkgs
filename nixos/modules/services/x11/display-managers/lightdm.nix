@@ -50,13 +50,11 @@ let
     '';
   };
 
-  hiddenUsers = config.services.xserver.displayManager.hiddenUsers;
-
   usersConf = writeText "users.conf"
     ''
       [UserList]
       minimum-uid=500
-      hidden-users=${concatStringsSep " " hiddenUsers}
+      hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
       hidden-shells=/run/current-system/sw/sbin/nologin
     '';
 
