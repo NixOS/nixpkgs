@@ -13448,6 +13448,12 @@ let
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nixos-artwork = fetchgit {
+    url = "git://github.com/NixOS/nixos-artwork";
+    rev = "e71b6846023919136795ede22b16d73b2cf1693d";
+    sha256 = "167yvhm2qy7qgyrqqs4hv98mmlarhgxpcsyv0r8a9g3vkblfdczb";
+  };
+
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
