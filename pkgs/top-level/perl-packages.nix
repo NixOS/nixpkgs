@@ -2844,6 +2844,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DistZillaPluginCheckExtraTests = buildPerlPackage {
+    name = "Dist-Zilla-Plugin-CheckExtraTests-0.025";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Dist-Zilla-Plugin-CheckExtraTests-0.025.tar.gz;
+      sha256 = "3017a481c8a810420c2724f6fa7807e9e6411f293e85dcbec3fde059d5fe7480";
+    };
+    buildInputs = [ CaptureTiny DistZilla ParamsUtil SubExporter TestRequires TryTiny ];
+    propagatedBuildInputs = [ DistZilla Filepushd Moose PathIteratorRule PathTiny namespaceautoclean ];
+    meta = {
+      homepage = https://github.com/dagolden/Dist-Zilla-Plugin-CheckExtraTests;
+      description = "Check xt tests before release";
+      license = "apache";
+    };
+  };
+
   DistZillaPluginMojibakeTests = buildPerlPackage {
     name = "Dist-Zilla-Plugin-MojibakeTests-0.5";
     src = fetchurl {
@@ -7183,6 +7198,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PathIteratorRule = buildPerlPackage {
+    name = "Path-Iterator-Rule-1.008";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Iterator-Rule-1.008.tar.gz;
+      sha256 = "261fb71c9b44d52981e08bac552ba2a9a7a1a3b6dc77f8b20f8ddc2541567e9e";
+    };
+    buildInputs = [ Filepushd PathTiny TestDeep TestFilename ];
+    propagatedBuildInputs = [ NumberCompare TextGlob TryTiny ];
+    meta = {
+      homepage = https://github.com/dagolden/Path-Iterator-Rule;
+      description = "Iterative, recursive file finder";
+      license = "apache";
+    };
+  };
+
   PathTiny = buildPerlPackage {
     name = "Path-Tiny-0.052";
     src = fetchurl {
@@ -8968,6 +8998,21 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/test-fatal;
       description = "Incredibly simple helpers for testing code with exceptions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestFilename = buildPerlPackage {
+    name = "Test-Filename-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-Filename-0.03.tar.gz;
+      sha256 = "6a450cc4c6281ed1129f32a1c0741f228967feda2e32a2915ff621c36525fcbe";
+    };
+    buildInputs = [ TestSimple TestTester ];
+    propagatedBuildInputs = [ PathTiny ];
+    meta = {
+      homepage = https://metacpan.org/release/Test-Filename;
+      description = "Portable filename comparison";
+      license = "apache";
     };
   };
 
