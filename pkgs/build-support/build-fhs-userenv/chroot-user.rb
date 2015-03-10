@@ -79,7 +79,11 @@ if $cpid == 0
   $unshare.call CLONE_NEWNS | CLONE_NEWUSER
 
   # Map users and groups to the parent namespace
-  write_file '/proc/self/setgroups', 'deny'
+  begin
+    # setgroups is only available since Linux 3.19
+    write_file '/proc/self/setgroups', 'deny'
+  rescue
+  end
   write_file '/proc/self/uid_map', "#{uid} #{uid} 1"
   write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
 
