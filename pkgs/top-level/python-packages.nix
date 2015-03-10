@@ -3901,6 +3901,24 @@ let
 
   django = self.django_1_6;
 
+  django_1_7 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.7.6";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.7/${name}.tar.gz";
+      sha256 = "142cim55wnv5q0zg039rankwah1gbpq46dgmp9yg78jrzq7mxwdh";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.6.6";
