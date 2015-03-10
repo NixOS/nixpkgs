@@ -6331,6 +6331,7 @@ let
   libmtp = callPackage ../development/libraries/libmtp { };
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
+  libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 

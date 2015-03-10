@@ -1,12 +1,14 @@
 { callPackage, fetchFromGitHub, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "1.0.0";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
     rev = "cpp-${version}";
-    sha256 = "0vkhjil4rh5z9kvjfgzm79kfqwvlimvv49q74wlsjx7vgvv9019d";
+    sha256 = "19cmlxfr0sc2b08a1mq9plk9fj5l1i20f69j4pvbhlnah3xqfdjs";
   };
+
+  patches = [ ./0.5-CMake.patch ];
 })
