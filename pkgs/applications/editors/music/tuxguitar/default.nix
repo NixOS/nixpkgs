@@ -1,10 +1,10 @@
 { stdenv, fetchurl, swt, jdk, makeWrapper, alsaLib }:
 
-let metadata = if stdenv.system == "i686-linux"
-               then { arch = "x86"; sha256 = "1qmb51k0538pn7gv4nsvhfv33xik4l4af0qmpllkzrikmj8wvzlb"; }
-               else if stdenv.system == "x86_64-linux"
-                    then { arch = "x86_64"; sha256 = "12af47jhlrh9aq5b3d13l7cdhlndgnfpy61gz002hajbq7i00ixh"; }
-                    else { };
+let metadata = assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+  if stdenv.system == "i686-linux" then
+    { arch = "x86"; sha256 = "1qmb51k0538pn7gv4nsvhfv33xik4l4af0qmpllkzrikmj8wvzlb"; }
+  else
+    { arch = "x86_64"; sha256 = "12af47jhlrh9aq5b3d13l7cdhlndgnfpy61gz002hajbq7i00ixh"; };
 in stdenv.mkDerivation rec {
   version = "1.2";
   name = "tuxguitar-${version}";
