@@ -87,7 +87,7 @@ rec {
     let
       toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || isFunction x then
-          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (applyIfFunction x args)
+          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (unpackSubmodule applyIfFunction x args)
         else
           unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
     in
@@ -120,6 +120,18 @@ rec {
 
   applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
     let
+      # Module arguments are resolved in a strict manner when attribute set
+      # deconstruction is used.  As the arguments are now defined with the
+      # config.__interanl.args option, the strictness used on the attribute
+      # set argument would cause an infinite loop, if the result of the
+      # option is given as argument.
+      #
+      # To work-around the strictness issue on the deconstruction of the
+      # attributes set argument, we create a new attribute set which is
+      # constructed to satisfy the expected set of attributes.  Thus calling
+      # a module will resolve strictly the attributes used as argument but
+      # not their values.  The values are forwarding the result of the
+      # evaluation of the option.
       requiredArgs = builtins.attrNames (builtins.functionArgs f);
       extraArgs = builtins.listToAttrs (map (name: {
         inherit name;
@@ -128,6 +140,17 @@ rec {
     in f (extraArgs // arg)
   else
     f;
+
+  /* We have to pack and unpack submodules. We cannot wrap the expected
+     result of the function as we would no longer be able to list the arguments
+     of the submodule. (see applyIfFunction) */
+  unpackSubmodule = unpack: m: args:
+    if isType "submodule" m then
+      { _file = m.file; } // (unpack m.submodule args)
+    else unpack m args;
+
+  packSubmodule = file: m:
+    { _type = "submodule"; file = file; submodule = m; };
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
@@ -206,15 +229,12 @@ rec {
              current option declaration as the file use for the submodule.  If the
              submodule defines any filename, then we ignore the enclosing option file. */
           options' = toList opt.options.options;
-          addModuleFile = m:
-            if isFunction m then args: { _file = opt.file; } // (m args)
-            else { _file = opt.file; } // m;
           coerceOption = file: opt:
-            if isFunction opt then args: { _file = file; } // (opt args)
-            else { _file = file; options = opt; };
+            if isFunction opt then packSubmodule file opt
+            else packSubmodule file { options = opt; };
           getSubModules = opt.options.type.getSubModules or null;
           submodules =
-            if getSubModules != null then map addModuleFile getSubModules ++ res.options
+            if getSubModules != null then map (packSubmodule opt.file) getSubModules ++ res.options
             else if opt.options ? options then map (coerceOption opt.file) options' ++ res.options
             else res.options;
         in opt.options // res //
