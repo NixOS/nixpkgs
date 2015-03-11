@@ -32,7 +32,7 @@ let
           ]
           ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
-        meta = drv.meta or
+        meta =
           {
             license = with stdenv.lib.licenses; [
               lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
@@ -40,7 +40,7 @@ let
             platforms = stdenv.lib.platforms.linux;
             maintainers = with stdenv.lib.maintainers; [ ttuegel ];
             homepage = "http://www.kde.org";
-          };
+          } // (drv.meta or {});
       });
 
   renames = builtins.removeAttrs (import ./renames.nix {}) ["Backend" "CTest"];
