@@ -267,6 +267,6 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     license = stdenv.lib.licenses.php301;
   };
 
-  patches = [ ./fix-5.4.patch ];
+  patches = [ ./fix-paths.patch ];
 
 })
