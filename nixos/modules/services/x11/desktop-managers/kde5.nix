@@ -88,7 +88,9 @@ in
     };
 
     environment.systemPackages =
-      [
+      filter isDerivation (builtins.attrValues plasma5)
+      ++ filter isDerivation (builtins.attrValues kf5)
+      ++ [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
         kdeApps.kde-baseapps
@@ -97,13 +99,12 @@ in
         kdeApps.konsole
         kdeApps.oxygen-icons
 
+        kdeApps.kde-runtime
+
         pkgs.hicolor_icon_theme
 
         pkgs.orion # GTK theme, nearly identical to Breeze
-      ]
-      ++ filter isDerivation (builtins.attrValues plasma5)
-      ++ filter isDerivation (builtins.attrValues kf5)
-      ++ phononBackendPackages;
+      ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 
