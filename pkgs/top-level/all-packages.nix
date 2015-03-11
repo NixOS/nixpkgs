@@ -6319,6 +6319,8 @@ let
 
   liblogging = callPackage ../development/libraries/liblogging { };
 
+  liblognorm = callPackage ../development/libraries/liblognorm { };
+
   libltc = callPackage ../development/libraries/libltc { };
 
   libmcrypt = callPackage ../development/libraries/libmcrypt {};
