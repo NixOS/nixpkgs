@@ -1,11 +1,11 @@
 { stdenv, fetchurl, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "pgpool-II-3.4.0";
+  name = "pgpool-II-3.4.1";
 
   src = fetchurl {
     url = "http://www.pgpool.net/download.php?f=${name}.tar.gz";
-    sha256 = "1aind5rbdld5ip92xlh4f6dgvdc4zxzgzi5n33xbvdrsrvagbc4j";
+    sha256 = "11fy4lvh2n04zmywy4vhp229yxdw8fbirrlvz44j1vnarkb664pd";
   };
 
   buildInputs = [ postgresql ];

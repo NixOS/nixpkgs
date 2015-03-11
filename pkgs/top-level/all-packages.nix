@@ -8254,6 +8254,10 @@ let
     postgresql = postgresql93;
   };
 
+  pgpool94 = callPackage ../servers/sql/pgpool/default.nix {
+    postgresql = postgresql94;
+  };
+
   pgpool = pgpool92;
 
   postgresql = postgresql92;
