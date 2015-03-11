@@ -2986,6 +2986,8 @@ let
 
   vlan = callPackage ../tools/networking/vlan { };
 
+  vmtouch = callPackage ../tools/misc/vmtouch { };
+
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
