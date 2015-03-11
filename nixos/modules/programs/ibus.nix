@@ -30,7 +30,7 @@ in
     environment.systemPackages = [ pkgs.ibus ];
 
     gtkPlugins = [ pkgs.ibus ];
-    qtPlugins = [ pkgs.ibus ];
+    qtPlugins = [ pkgs.ibus-qt ];
 
     environment.variables =
       let

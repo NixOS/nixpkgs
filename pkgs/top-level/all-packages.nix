@@ -4972,6 +4972,8 @@ let
 
   ibus = callPackage ../development/libraries/ibus { };
 
+  ibus-qt = callPackage ../development/libraries/ibus-qt { };
+
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils {
