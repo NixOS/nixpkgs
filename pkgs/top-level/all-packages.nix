@@ -5967,6 +5967,8 @@ let
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
+  jemalloc = callPackage ../development/libraries/jemalloc { };
+
   jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
 
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
