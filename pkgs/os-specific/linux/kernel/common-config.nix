@@ -53,7 +53,6 @@ with stdenv.lib;
   NUMA? y
 
   # Disable some expensive (?) features.
-  KPROBES n
   PM_TRACE_RTC n
 
   # Enable various subsystems.
@@ -300,9 +299,14 @@ with stdenv.lib;
 
   # Tracing.
   FTRACE y
+  KPROBES y
   FUNCTION_TRACER y
   FTRACE_SYSCALLS y
   SCHED_TRACER y
+  STACK_TRACER y
+  UPROBE_EVENT y
+  FUNCTION_PROFILER y
+  RING_BUFFER_BENCHMARK n
 
   # Devtmpfs support.
   DEVTMPFS y
