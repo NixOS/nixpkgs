@@ -9138,6 +9138,8 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
+  perf-tools = callPackage ../os-specific/linux/perf-tools { };
+
   plymouth = callPackage ../os-specific/linux/plymouth {
     automake = automake113x;
   };
