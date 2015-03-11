@@ -7,7 +7,10 @@
 assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
-stdenv.mkDerivation rec {
+let
+  isCrossWin = stdenv ? cross && stdenv.cross.libc == "msvcrt";
+
+in stdenv.mkDerivation rec {
   name = "gtk+-2.24.27";
 
   src = fetchurl {
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ x11 libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
-    ++ optionals cupsSupport [ cups ];
+    ++ optional (cupsSupport && !isCrossWin) cups;
 
   configureFlags = if stdenv.isDarwin
     then "--disable-glibtest --disable-introspection --disable-visibility"
