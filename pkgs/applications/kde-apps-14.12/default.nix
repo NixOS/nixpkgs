@@ -201,6 +201,7 @@ let
         NIX_CFLAGS_COMPILE =
           (super.kde-runtime.NIX_CFLAGS_COMPILE or "")
           + " -I${ilmbase}/include/OpenEXR";
+        meta = { priority = 10; };
       };
 
       kde-workspace = with pkgs; super.kde-workspace // {
@@ -214,6 +215,7 @@ let
         nativeBuildInputs =
           super.kde-workspace.nativeBuildInputs
           ++ [ pkgconfig ];
+        meta = { priority = 10; };
       };
 
       kdelibs = with pkgs; super.kdelibs // {
