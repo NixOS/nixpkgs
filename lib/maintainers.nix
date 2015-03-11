@@ -80,6 +80,7 @@
   garbas = "Rok Garbas <rok@garbas.si>";
   garrison = "Jim Garrison <jim@garrison.cc>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
+  globin = "Robin Gloster <robin@glob.in>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
