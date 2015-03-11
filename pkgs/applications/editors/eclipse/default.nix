@@ -271,4 +271,19 @@ in {
     };
   };
 
+  scala_ide = buildEclipse {
+    name = "scala-ide";
+    description = "Scala IDE for Eclipse";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://downloads.typesafe.com/scalaide-pack/4.0.0.vfinal-luna-211-20150305/scala-SDK-4.0.0-vfinal-2.11-linux.gtk.x86_64.tar.gz;
+          sha256 = "b65c5e8160e72c8389537e9e427138e6daa2065f9df3a943a86e40dd1543dd83";
+        };
+      "i686-linux" = fetchurl {
+          url = http://downloads.typesafe.com/scalaide-pack/4.0.0.vfinal-luna-211-20150305/scala-SDK-4.0.0-vfinal-2.11-linux.gtk.x86.tar.gz;
+          sha256 = "f422aea5903c97d212264a5a43c6ebc638aecbd4ce5e6078d92618725bc5d31e";
+        };
+    };
+  };
+
 }
