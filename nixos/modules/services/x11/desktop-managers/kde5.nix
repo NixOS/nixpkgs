@@ -122,6 +122,8 @@ in
 
     fonts.fonts = [ plasma5.oxygen-fonts ];
 
+    programs.ssh.askPassword = "${plasma5.ksshaskpass}/bin/ksshaskpass";
+
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
