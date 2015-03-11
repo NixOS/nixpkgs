@@ -28,9 +28,14 @@ chrootCommand=(/run/current-system/sw/bin/bash)
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
-        -I)
-            given_path="$1"; shift 1
-            extraBuildFlags+=("$i" "$given_path")
+        --max-jobs|-j|--cores|-I)
+            j="$1"; shift 1
+            extraBuildFlags+=("$i" "$j")
+            ;;
+        --option)
+            j="$1"; shift 1
+            k="$1"; shift 1
+            extraBuildFlags+=("$i" "$j" "$k")
             ;;
         --root)
             mountPoint="$1"; shift 1
