@@ -193,6 +193,9 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [freetds];
       };
 
+      calendar = {
+        configureFlags = ["--enable-calendar"];
+      };
     };
 
   cfg = {
@@ -227,6 +230,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     fpmSupport = config.php.fpm or true;
     gmpSupport = config.php.gmp or true;
     mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
+    calendarSupport = config.php.calendar or true;
   };
 
   configurePhase = ''

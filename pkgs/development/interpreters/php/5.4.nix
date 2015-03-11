@@ -189,6 +189,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-maintainer-zts"];
       };
 
+      calendar = {
+        configureFlags = ["--enable-calendar"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -229,6 +233,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     fpmSupport = config.php.fpm or true;
     mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
     ztsSupport = config.php.zts or false;
+    calendarSupport = config.php.calendar or false;
   };
 
   configurePhase = ''
