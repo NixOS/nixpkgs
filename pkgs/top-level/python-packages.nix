@@ -809,6 +809,31 @@ let
     };
   };
 
+  caldavclientlibrary-asynk = buildPythonPackage rec {
+    version = "asynkdev";
+    name = "caldavclientlibrary-asynk-${version}";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/skarra/CalDAVClientLibrary.git";
+      rev = "06699b08190d50cc2636b921a654d67db0a967d1";
+      sha256 = "1i6is7lv4v9by4panrd9w63m4xsmhwlp3rq4jjj3azwg5jm10940";
+    };
+
+    meta = {
+      description = "CalDAVCLientLibrary is a Python library and tool for CalDAV";
+
+      longDescription = ''
+        CalDAVCLientLibrary is a Python library and tool for CalDAV.
+
+        This package is the unofficial CalDAVCLientLibrary Python
+        library maintained by the author of Asynk and is needed for
+        that package.
+      '';
+
+      homepage = https://github.com/skarra/CalDAVClientLibrary/tree/asynkdev/;
+      maintainers = with maintainers; [ pjones ];
+    };
+  };
 
   bedup = buildPythonPackage rec {
     name = "bedup-20140413";
@@ -3057,15 +3082,15 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/m/mailchimp/mailchimp-${version}.tar.gz";
       sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
-    };  
-  
+    };
+
     # Test fails because specific version of docopt is searched
     # (Possible fix: Needs upstream patching in the library)
     doCheck = false;
 
     buildInputs = with self; [ docopt ];
 
-    propagatedBuildInputs = with self; [ requests ];                                       
+    propagatedBuildInputs = with self; [ requests ];
 
     meta = {
       description = "A CLI client and Python API library for the MailChimp email platform";
@@ -13494,7 +13519,7 @@ let
       url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
       sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
     };
-   
+
     propagatedBuildInputs = with self; [ nose ];
 
     meta = {
@@ -13513,7 +13538,7 @@ let
     };
 
     buildInputs = with self; [ nose numpy ];
-   
+
     meta = {
       homepage = "http://pythonhosted.org/uncertainties/";
       description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
