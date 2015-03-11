@@ -5,6 +5,8 @@
 let
   ver_maj = "1.36";
   ver_min = "8";
+
+  isCrossWin = stdenv ? cross && stdenv.cross.libc == "msvcrt";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
@@ -18,7 +20,8 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ fontconfig ];
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ x11 glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ glib cairo libpng fontconfig freetype harfbuzz ]
+    ++ libintlOrEmpty ++ stdenv.lib.optional (!isCrossWin) x11;
 
   enableParallelBuilding = true;
 
