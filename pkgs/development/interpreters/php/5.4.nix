@@ -261,10 +261,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     sha256 = "121ybn55c9f65r1mwiy4yks67bb6m5m5zwwx9y0vpjddryq7vwxb";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An HTML-embedded scripting language";
     homepage = http://www.php.net/;
     license = stdenv.lib.licenses.php301;
+    maintainers = with maintainers; [ globin ];
   };
 
   patches = [ ./fix-paths.patch ];
