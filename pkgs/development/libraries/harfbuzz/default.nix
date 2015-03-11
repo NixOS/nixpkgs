@@ -7,7 +7,11 @@
 # TODO: split non-icu and icu lib into different outputs?
 # (icu is a ~30 MB dependency, the rest is very small in comparison)
 
-stdenv.mkDerivation rec {
+let
+  isCrossWin = stdenv ? cross && stdenv.cross.libc == "msvcrt";
+  useGraphite2 = withGraphite2 && !isCrossWin;
+
+in stdenv.mkDerivation rec {
   name = "harfbuzz-0.9.40";
 
   src = fetchurl {
@@ -16,14 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    ( "--with-graphite2=" + (if withGraphite2 then "yes" else "no") ) # not auto-detected by default
+    ( "--with-graphite2=" + (if useGraphite2  then "yes" else "no") ) # not auto-detected by default
     ( "--with-icu=" +       (if withIcu       then "yes" else "no") )
   ];
 
   buildInputs = [ pkgconfig glib freetype cairo ] # recommended by upstream
     ++ libintlOrEmpty;
   propagatedBuildInputs = []
-    ++ stdenv.lib.optional withGraphite2 graphite2
+    ++ stdenv.lib.optional useGraphite2 graphite2
     ++ stdenv.lib.optional withIcu icu
     ;
 
