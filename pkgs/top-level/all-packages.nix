@@ -1761,6 +1761,8 @@ let
 
   libevdev = callPackage ../development/libraries/libevdev { };
 
+  libevhtp = callPackage ../development/libraries/libevhtp { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
 
   libtidy = callPackage ../development/libraries/libtidy { };
