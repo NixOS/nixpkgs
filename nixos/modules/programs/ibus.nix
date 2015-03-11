@@ -46,6 +46,6 @@ in
         IBUS_COMPONENT_PATH = "${env}/share/ibus/component";
       };
 
-    services.xserver.displayManager.sessionCommands = "${pkgs.ibus}/bin/ibus-daemon -d -t none";
+    services.xserver.displayManager.sessionCommands = "${pkgs.ibus}/bin/ibus-daemon --daemonize --xim --cache=none";
   };
 }
