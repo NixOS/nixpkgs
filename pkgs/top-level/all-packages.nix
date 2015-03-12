@@ -779,7 +779,11 @@ let
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
-  rsyslog = callPackage ../tools/system/rsyslog { };
+  rsyslog = callPackage ../tools/system/rsyslog {
+    libgcrypt = libgcrypt_1_6;
+    czmq = null; # Currently Broken
+    hadoop = null; # Currently Broken
+  };
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
