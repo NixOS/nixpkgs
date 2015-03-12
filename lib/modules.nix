@@ -274,20 +274,21 @@ rec {
       defsFinal =
         let
           # Process mkMerge and mkIf properties
-          discharged = concatMap (m:
+          processIfAndMerge = defs: concatMap (m:
             map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
           ) defs;
 
           # Process mkOverride properties
-          overridden = filterOverrides discharged;
+          processOverride = defs: filterOverrides defs;
 
           # Sort mkOrder properties
-          sorted =
+          processOrder = defs:
             # Avoid sorting if we don't have to.
-            if any (def: def.value._type or "" == "order") overridden
-            then sortProperties overridden
-            else overridden;
-        in sorted;
+            if any (def: def.value._type or "" == "order") defs
+            then sortProperties defs
+            else defs;
+        in
+          processOrder (processOverride (processIfAndMerge defs));
 
         # Type-check the remaining definitions, and merge them
         mergedValue = fold (def: res:
