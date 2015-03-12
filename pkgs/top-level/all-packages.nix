@@ -12962,8 +12962,8 @@ let
 
   kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 
-  xfce = xfce4_10;
-  xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });
+  xfce = xfce4-12;
+  xfce4-12 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
