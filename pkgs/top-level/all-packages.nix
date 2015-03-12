@@ -1777,6 +1777,8 @@ let
 
   libmbim = callPackage ../development/libraries/libmbim { };
 
+  libmongo-client = callPackage ../development/libraries/libmongo-client { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   libtorrent-git = callPackage ../tools/networking/p2p/libtorrent/git.nix { };
