@@ -6596,12 +6596,12 @@ let
 
 
   nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-0.5.1";
+    name = "nbxmpp-0.5.2";
 
     src = pkgs.fetchurl {
       name = "${name}.tar.gz";
-      url = "https://python-nbxmpp.gajim.org/downloads/6";
-      sha256 = "0agr0ikfdmna5rjvm7lm0mx52cdwqp5b2xbx3inagp70whmdv219";
+      url = "https://python-nbxmpp.gajim.org/downloads/7";
+      sha256 = "0q2iph07aahwn6hlr38v0cvzlfc9hrf5mz6qs1kp4b4x9l8x5mqn";
     };
 
     meta = {
