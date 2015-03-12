@@ -783,6 +783,7 @@ let
     libgcrypt = libgcrypt_1_6;
     czmq = null; # Currently Broken
     hadoop = null; # Currently Broken
+    systemd = if stdenv.isLinux then systemd else null;
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
