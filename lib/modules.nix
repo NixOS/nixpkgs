@@ -250,14 +250,14 @@ rec {
       # Add in the default value for this option, if any.
       defs' = (optional (opt ? default)
         { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+
       # Handle properties, check types, and merge everything together
-      inherit (mergeDefinitions loc opt.type defs') defsFinal mergedValue;
+      inherit (mergeDefinitions loc opt.type defs') isDefined defsFinal mergedValue;
       files = map (def: def.file) defsFinal;
       merged =
-        if defsFinal == [] then
-          throw "The option `${showOption loc}' is used but not defined."
-        else
-          mergedValue;
+        if isDefined then mergedValue
+        else throw "The option `${showOption loc}' is used but not defined.";
+
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -265,8 +265,7 @@ rec {
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
         definitions = map (def: def.value) defsFinal;
-        isDefined = defsFinal != [];
-        inherit files;
+        inherit isDefined files;
       };
 
     # Merge definitions of a value of a given type
@@ -295,6 +294,11 @@ rec {
           if type.check def.value then res
           else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
           (type.merge loc defsFinal) defsFinal;
+
+        isDefined = defsFinal != [];
+        optionalValue =
+          if isDefined then { value = mergedValue; }
+          else {};
     };
 
   /* Given a config set, expand mkMerge properties, and push down the

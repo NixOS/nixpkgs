@@ -6,10 +6,9 @@ with import ./attrsets.nix;
 with import ./options.nix;
 with import ./trivial.nix;
 with import ./strings.nix;
+with {inherit (import ./modules.nix) mergeDefinitions; };
 
-let
-  inherit (import ./modules.nix) mergeDefinitions;
-in rec {
+rec {
 
   isType = type: x: (x._type or "") == type;
 
@@ -114,11 +113,12 @@ in rec {
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def: imap (m: def':
-          let
-            inherit (mergeDefinitions (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
-              elemType [{ inherit (def) file; value = def'; }]
-            ) defsFinal mergedValue;
-          in if defsFinal == [] then {} else { value = mergedValue; }) def.value) defs)));
+            (mergeDefinitions
+              (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+              elemType
+              [{ inherit (def) file; value = def'; }]
+            ).optionalValue
+          ) def.value) defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -129,10 +129,8 @@ in rec {
       check = isAttrs;
       merge = loc: defs:
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-          let
-            inherit (mergeDefinitions (loc ++ [name]) elemType defs)
-              defsFinal mergedValue;
-          in if defsFinal == [] then {} else { value = mergedValue; })
+            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
+          )
           # Push down position info.
           (map (def: listToAttrs (mapAttrsToList (n: def':
             { name = n; value = { inherit (def) file; value = def'; }; }) def.value)) defs)));
