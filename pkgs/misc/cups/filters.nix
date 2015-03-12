@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
+, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi }:
 
 stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig cups poppler poppler_utils fontconfig libjpeg libpng perl
-    ijs qpdf dbus
+    ijs qpdf dbus avahi
   ];
 
   configureFlags = "--with-pdftops=pdftops --enable-imagefilters --with-rcdir=no";
