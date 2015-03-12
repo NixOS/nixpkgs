@@ -9247,10 +9247,9 @@ let
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
-  systemd = if !stdenv.isLinux then null else
-    callPackage ../os-specific/linux/systemd {
-      linuxHeaders = linuxHeaders_3_14;
-    };
+  systemd = callPackage ../os-specific/linux/systemd {
+    linuxHeaders = linuxHeaders_3_14;
+  };
 
   systemtap = callPackage ../development/tools/profiling/systemtap {
     inherit (gnome) libglademm;
