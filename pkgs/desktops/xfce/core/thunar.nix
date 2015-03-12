@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   p_name  = "thunar";
   ver_maj = "1.6";
-  ver_min = "3";
+  ver_min = "6";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/Thunar-${ver_maj}.${ver_min}.tar.bz2";
-    sha256 = "17api7nc3h93k2mzrfmw6ygc0fqmg78ja0qbkzd9rhhsi3v0c9ws";
+    sha256 = "1cl9v3rdzipyyxml3pyrzspxfmmssz5h5snpj18irq4an42539dr";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
