@@ -8446,6 +8446,13 @@ let
     perl = perl516; # ${perl}/.../CORE/handy.h:124:34: error: 'bool' undeclared
   };
 
+  apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { };
+  libapparmor = apparmor_2_9.libapparmor;
+  apparmor-pam = apparmor_2_9.apparmor-pam;
+  apparmor-parser = apparmor_2_9.apparmor-parser;
+  apparmor-profiles = apparmor_2_9.apparmor-profiles;
+  apparmor-utils = apparmor_2_9.apparmor-utils;
+
   atop = callPackage ../os-specific/linux/atop { };
 
   audit = callPackage ../os-specific/linux/audit { };
