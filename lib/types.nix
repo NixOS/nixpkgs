@@ -200,7 +200,6 @@ rec {
             modules = opts' ++ map (def: { _file = def.file; imports = [(coerce def.value)]; }) defs;
           in (evalModules {
             inherit modules;
-            # !!! See comment about args in lib/modules.nix
             args.name = last loc;
             prefix = loc;
           }).config;

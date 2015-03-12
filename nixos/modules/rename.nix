@@ -136,7 +136,7 @@ in zipModules ([]
 
 ++ obsolete [ "services" "mysql55" ] [ "services" "mysql" ]
 
-++ obsolete [ "environment" "checkConfigurationOptions" ] [ "__internal" "check" ]
+++ obsolete [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ]
 
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]

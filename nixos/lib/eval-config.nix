@@ -35,7 +35,7 @@ let
     key = _file;
     config = {
       nixpkgs.system = lib.mkDefault system_;
-      __internal.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
+      _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };
 
@@ -60,5 +60,5 @@ in rec {
     inherit modules baseModules;
   };
 
-  inherit (config.__internal.args) pkgs;
+  inherit (config._module.args) pkgs;
 }

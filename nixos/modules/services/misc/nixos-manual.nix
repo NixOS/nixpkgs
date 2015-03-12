@@ -18,7 +18,7 @@ let
 
   eval = evalModules {
     modules = [ versionModule ] ++ baseModules;
-    args = (config.__internal.args) // { modules = [ ]; };
+    args = (config._module.args) // { modules = [ ]; };
   };
 
   manual = import ../../../doc/manual {

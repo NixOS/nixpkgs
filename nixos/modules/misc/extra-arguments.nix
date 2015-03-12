@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 
 {
-  __internal.args = {
+  _module.args = {
     modulesPath = ../.;
 
     pkgs_i686 = import ../../lib/nixpkgs.nix {
