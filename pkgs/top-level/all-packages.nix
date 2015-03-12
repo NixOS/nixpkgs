@@ -5895,6 +5895,8 @@ let
     libusb = libusb1;
   };
 
+  hiredis = callPackage ../development/libraries/hiredis { };
+
   hivex = callPackage ../development/libraries/hivex {
     inherit (perlPackages) IOStringy;
   };
