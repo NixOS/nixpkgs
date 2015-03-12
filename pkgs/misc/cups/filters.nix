@@ -29,11 +29,7 @@ stdenv.mkDerivation rec {
     ijs qpdf dbus
   ];
 
-  preBuild = ''
-    substituteInPlace Makefile --replace "/etc/rc.d" "$out/etc/rc.d"
-  '';
-
-  configureFlags = "--with-pdftops=pdftops --enable-imagefilters";
+  configureFlags = "--with-pdftops=pdftops --enable-imagefilters --with-rcdir=no";
 
   makeFlags = "CUPS_SERVERBIN=$(out)/lib/cups CUPS_DATADIR=$(out)/share/cups CUPS_SERVERROOT=$(out)/etc/cups";
 
