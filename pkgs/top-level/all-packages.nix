@@ -697,6 +697,10 @@ let
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
 
+  ceres-solver = callPackage ../development/libraries/ceres-solver {
+    google-gflags = null; # only required for examples/tests
+  };
+
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
 
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
