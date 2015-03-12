@@ -955,6 +955,10 @@ let
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  ibus = callPackage ../tools/inputmethods/ibus { };
+
+  ibus-qt = callPackage ../tools/inputmethods/ibus-qt { };
+
   ibus-anthy = callPackage ../tools/inputmethods/ibus-anthy { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
@@ -4969,10 +4973,6 @@ let
   };
 
   hyenae = callPackage ../tools/networking/hyenae { };
-
-  ibus = callPackage ../development/libraries/ibus { };
-
-  ibus-qt = callPackage ../development/libraries/ibus-qt { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
 
