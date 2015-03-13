@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, requireFile, unzip, oraclejdk7}:
+{ stdenv, makeWrapper, requireFile, unzip, oraclejdk7, bash}:
 
 stdenv.mkDerivation rec {
   version = "4.0.3.16.84";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     mkdir -p $out/bin
     # patch to be able to install a sqldeveloper wrapper script compliant with nix's bin folder once installed
-    echo -e '#!/bin/bash\ncd "`dirname $0`"/../sqldeveloper/bin && bash sqldeveloper $*' >> $out/bin/sqldeveloper
+    echo -e '#!${bash}/bin/bash\ncd "`dirname $0`"/../sqldeveloper/bin && ${bash}/bin/bash sqldeveloper $*' >> $out/bin/sqldeveloper
 
     cd $out
     unzip ${src}
