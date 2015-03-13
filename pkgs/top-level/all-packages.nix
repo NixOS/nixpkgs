@@ -4175,6 +4175,8 @@ let
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
 
+    xml-light = callPackage ../development/ocaml-modules/xml-light { };
+
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     zarith = callPackage ../development/ocaml-modules/zarith { };
