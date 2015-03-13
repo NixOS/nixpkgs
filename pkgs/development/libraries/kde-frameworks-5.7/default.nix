@@ -19,6 +19,7 @@ with stdenv.lib; with autonix;
 let
 
   mkDerivation = drv:
+    let inherit (parseDrvName drv.version) version; in
     stdenv.mkDerivation
       (drv // {
         setupHook = ./setup-hook.sh;
@@ -40,6 +41,8 @@ let
             platforms = stdenv.lib.platforms.linux;
             maintainers = with stdenv.lib.maintainers; [ ttuegel ];
             homepage = "http://www.kde.org";
+            inherit version;
+            branch = intersperse "." (take 2 (splitString "." version));
           } // (drv.meta or {});
       });
 
@@ -108,12 +111,16 @@ let
           [
             ./extra-cmake-modules/0001-extra-cmake-modules-paths.patch
           ];
-        meta = {
-          license = with stdenv.lib.licenses; [ bsd2 ];
-          platforms = stdenv.lib.platforms.linux;
-          maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-          homepage = "http://www.kde.org";
-        };
+        meta =
+          let inherit (parseDrvName super.extra-cmake-modules.name) version; in
+          {
+            license = with stdenv.lib.licenses; [ bsd2 ];
+            platforms = stdenv.lib.platforms.linux;
+            maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+            homepage = "http://www.kde.org";
+            inherit version;
+            branch = intersperse "." (take 2 (splitString "." version));
+          };
       };
 
       frameworkintegration = super.frameworkintegration // {
