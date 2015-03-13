@@ -39,6 +39,9 @@ rec {
     });
     ghc = compiler.ghc784;
 
+    ghcjs = packages.ghc7101.callPackage ../development/compilers/ghcjs {
+      ghc = compiler.ghc7101;
+    };
   };
 
   packages = {
@@ -77,6 +80,7 @@ rec {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
     ghcjs = callPackage ../development/haskell-modules {
+      ghc = compiler.ghcjs;
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
 
