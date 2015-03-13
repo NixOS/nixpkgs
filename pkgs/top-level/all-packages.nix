@@ -2440,6 +2440,10 @@ let
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
+  qarte = callPackage ../applications/video/qarte {
+    sip = pythonPackages.sip_4_16;
+  };
+
   qastools = callPackage ../tools/audio/qastools {
     qt = qt4;
   };
