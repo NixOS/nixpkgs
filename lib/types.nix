@@ -227,4 +227,19 @@ rec {
 
   };
 
+  mkMultiInstance = path: args: f:
+    let
+      def = f (args // { name = "default"; config = getAttrFromPath path args.config; });
+    in {
+      options = setAttrByPath path (def.options // {
+        instances = mkOption {
+          type = types.attrsOf (types.submodule f);
+          default = {};
+          description = "Additional instances of this service";
+        };
+      });
+
+      config = def.config;
+    };
+
 }
