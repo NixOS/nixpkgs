@@ -10894,6 +10894,35 @@ let
     };
   };
 
+  syncthing-gtk = buildPythonPackage rec {
+    version = "0.6.2";
+    name = "syncthing-gtk-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "syncthing";
+      repo = "syncthing-gtk";
+      rev = "v${version}";
+      sha256 = "0dfs5kzdj9ld20i23w6ldj7z761rwnnbqkr0l12wkgcxi58jcqds";
+    };
+
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ pkgs.syncthing pygobject3 dateutil pkgs.gtk3 pyinotify pkgs.libnotify pkgs.psmisc ];
+
+    patchPhase = ''
+      substituteInPlace "scripts/syncthing-gtk" \
+              --replace "/usr/share" "$out/share"   \
+    '';
+
+
+    meta = with stdenv.lib; {
+      description = " GTK3 & python based GUI for Syncthing ";
+      maintainers = [ maintainers.DamienCassou ];
+      platforms = pkgs.syncthing.meta.platforms;
+      homepage = "https://github.com/syncthing/syncthing-gtk";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   tarsnapper = buildPythonPackage rec {
     name = "tarsnapper-0.2.1";
     disabled = isPy3k;
