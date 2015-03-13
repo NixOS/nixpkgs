@@ -103,15 +103,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     extension = self : super : {};
   };
 
-  cabalJs = callPackage ../build-support/cabal/ghcjs.nix {
-    Cabal = null;               # prefer the Cabal version shipped with the compiler
-    hscolour = self.hscolourBootstrap;
-    inherit enableLibraryProfiling enableCheckPhase
-      enableStaticLibraries enableSharedLibraries enableSharedExecutables;
-    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
-    extension = self : super : {};
-  };
-
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
@@ -967,14 +958,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   ghcid = callPackage ../development/tools/haskell/ghcid {};
-
-  ghcjs = callPackage ../development/compilers/ghcjs {
-    Cabal = self.Cabal_1_22_0_0;
-    cabalInstall = self.cabalInstall_1_22_0_0;
-    haddock = self.haddock.override {
-      Cabal = null;
-    };
-  };
 
   ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
 

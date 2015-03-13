@@ -1,64 +1,91 @@
-{ nodejs, cabal, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
-, testFramework, testFrameworkHunit, testFrameworkQuickcheck2, time
-, zlib, aeson, attoparsec, bzlib, dataDefault, ghcPaths, hashable
-, haskellSrcExts, haskellSrcMeta, lens, optparseApplicative
-, parallel, safe, shelly, split, stringsearch, syb, systemFileio
-, systemFilepath, tar, terminfo, textBinary, unorderedContainers
-, vector, wlPprintText, yaml, fetchgit, Cabal, cabalInstall
-, regexPosix, alex, happy, git, gnumake, gcc, autoconf, patch
-, automake, libtool, gmp, base16Bytestring
-, cryptohash, executablePath, transformersCompat, haddockApi
-, haddock, hspec, xhtml, primitive, cacert, pkgs, ghc
+{ mkDerivation
+, test-framework
+, test-framework-hunit
+, test-framework-quickcheck2
+, data-default
+, ghc-paths
+, haskell-src-exts
+, haskell-src-meta
+, optparse-applicative
+, system-fileio
+, system-filepath
+, text-binary
+, unordered-containers
+, cabal-install
+, wl-pprint-text
+, base16-bytestring
+, executable-path
+, transformers-compat
+, haddock-api
+, ghcjs-prim
+, regex-posix
+
+, ghc, gmp
+, jailbreak-cabal
+
+, nodejs, stdenv, filepath, HTTP, HUnit, mtl, network, QuickCheck, random, stm
+, time
+, zlib, aeson, attoparsec, bzlib, hashable
+, lens
+, parallel, safe, shelly, split, stringsearch, syb
+, tar, terminfo
+, vector, yaml, fetchgit, Cabal
+, alex, happy, git, gnumake, autoconf, patch
+, automake, libtool
+, cryptohash
+, haddock, hspec, xhtml, primitive, cacert, pkgs
 , coreutils
-, ghcjsPrim
+, libiconv
 }:
 let
   version = "0.1.0";
-  libDir = "share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.ghc.version}/ghcjs";
+  libDir = "share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.version}/ghcjs";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "5c7a71472d5a797e895914d3b82cea447a058793";
-    sha256 = "0dp97bgbnlr3sd9yfnk27p6dfv46fi26sn6y6qv1wxs5i29kmjav";
+    rev = "8cd6144870470258fb037b3e04a0a2a98c2b6551"; # 7.10 branch
+    sha256 = "16cbncx179n5khf8hkj9r221wf73rc8isffk8rv3n9psshv1jiji";
     fetchSubmodules = true;
   };
   shims = fetchgit {
     url = git://github.com/ghcjs/shims.git;
-    rev = "99bbd4bed584ec42bfcc5ea61c3808a2c670053d";
-    sha256 = "1my3gqkln7hgm0bpy32pnhwjfza096alh0n9x9ny8xfpxhmzz4h6";
+    rev = "6ada4bf1a084d1b80b993303d35ed863d219b031"; # master branch
+    sha256 = "0dhfnjj3rxdbb2m1pbnjc2yp4xcgsfdrsinljgdmg0hpqkafp4vc";
   };
-in cabal.mkDerivation (self: rec {
+in mkDerivation (rec {
   pname = "ghcjs";
   inherit version;
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "4b9461e8be646d5152a0ae7ece5b3616bf938637";
-    sha256 = "19g62j1kkdwcgp0042ppmskwbvfk7qkf1fjs8bpjc6wwd19ipiar";
+    rev = "35a59743c4027f26a227635cb24a6246bd851f8d"; # master branch
+    sha256 = "107sh36ji3psdl3py84vxgqbywjyzglj3p0akzpvcmbarxwfr1mw";
   };
   isLibrary = true;
   isExecutable = true;
   jailbreak = true;
-  noHaddock = true;
+  doHaddock = false;
   doCheck = false;
   buildDepends = [
     filepath HTTP mtl network random stm time zlib aeson attoparsec
-    bzlib dataDefault ghcPaths hashable haskellSrcExts haskellSrcMeta
-    lens optparseApplicative parallel safe shelly split
-    stringsearch syb systemFileio systemFilepath tar terminfo textBinary
-    unorderedContainers vector wlPprintText yaml
-    alex happy git gnumake gcc autoconf automake libtool patch gmp
-    base16Bytestring cryptohash executablePath haddockApi
-    transformersCompat QuickCheck haddock hspec xhtml
-    ghcjsPrim regexPosix
+    bzlib data-default ghc-paths hashable haskell-src-exts haskell-src-meta
+    lens optparse-applicative parallel safe shelly split
+    stringsearch syb system-fileio system-filepath tar terminfo text-binary
+    unordered-containers vector wl-pprint-text yaml
+    alex happy git gnumake autoconf automake libtool patch gmp
+    base16-bytestring cryptohash executable-path haddock-api
+    transformers-compat QuickCheck haddock hspec xhtml
+    ghcjs-prim regex-posix libiconv
   ];
   buildTools = [ nodejs git ];
   testDepends = [
-    HUnit testFramework testFrameworkHunit
+    HUnit test-framework test-framework-hunit
   ];
   patches = [ ./ghcjs.patch ];
   postPatch = ''
     substituteInPlace Setup.hs --replace "/usr/bin/env" "${coreutils}/bin/env"
     substituteInPlace src/Compiler/Info.hs --replace "@PREFIX@" "$out"
-    substituteInPlace src-bin/Boot.hs --replace "@PREFIX@" "$out"
+    substituteInPlace src-bin/Boot.hs \
+      --replace "@PREFIX@" "$out"     \
+      --replace "@CC@"     "${stdenv.cc}/bin/cc"
   '';
   preBuild = ''
     local topDir=$out/${libDir}
@@ -69,23 +96,33 @@ in cabal.mkDerivation (self: rec {
 
     cp -r ${shims} $topDir/shims
     chmod -R u+w $topDir/shims
+
+    # Make the patches be relative their corresponding package's directory.
+    # See: https://github.com/ghcjs/ghcjs-boot/pull/12
+    for patch in $topDir/ghcjs-boot/patches/*.patch; do
+      echo "fixing patch: $patch"
+      sed -i -e 's@ \(a\|b\)/boot/[^/]\+@ \1@g' $patch
+    done
   '';
   postInstall = ''
-    PATH=$out/bin:${Cabal}/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${gcc.cc}/lib64:$LD_LIBRARY_PATH \
+    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \
-        --with-cabal ${cabalInstall}/bin/cabal \
+        --with-cabal ${cabal-install}/bin/cabal \
         --with-gmp-includes ${gmp}/include \
         --with-gmp-libraries ${gmp}/lib
   '';
   passthru = {
     inherit libDir;
+    isGhcjs = true;
+    nativeGhc = ghc;
   };
-  meta = {
-    homepage = "https://github.com/ghcjs/ghcjs";
-    description = "GHCJS is a Haskell to JavaScript compiler that uses the GHC API";
-    license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.jwiegley ];
-  };
+
+  homepage = "https://github.com/ghcjs/ghcjs";
+  description = "GHCJS is a Haskell to JavaScript compiler that uses the GHC API";
+  license = stdenv.lib.licenses.bsd3;
+  platforms = ghc.meta.platforms;
+  maintainers = with stdenv.lib.maintainers; [
+    jwiegley cstrahan
+  ];
 })

@@ -28,7 +28,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # We patch Cabal for GHCJS. See: https://github.com/haskell/cabal/issues/2454
   preConfigure = ''
+    sed -i 's/HcPkg.useSingleFileDb = .*/HcPkg.useSingleFileDb = False/' libraries/Cabal/Cabal/Distribution/Simple/GHCJS.hs
     echo >mk/build.mk "${buildMK}"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''

@@ -33,6 +33,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Cabal_1_22_1_1 requires filepath >=1 && <1.4
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
+
   # We have Cabal 1.22.x.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
@@ -54,6 +57,9 @@ self: super: {
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
+
+  # requires filepath >=1.1 && <1.4
+  Glob = doJailbreak super.Glob;
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
@@ -83,6 +89,20 @@ self: super: {
   # Test suite fails in "/tokens_bytestring_unicode.g.bin".
   alex = dontCheck super.alex;
 
+  # TODO: should eventually update the versions in hackage-packages.nix
+  haddock-library = overrideCabal super.haddock-library (drv: {
+    version = "1.2.0";
+    sha256 = "0kf8qihkxv86phaznb3liq6qhjs53g3iq0zkvz5wkvliqas4ha56";
+  });
+  haddock-api = overrideCabal super.haddock-api (drv: {
+    version = "2.16.0";
+    sha256 = "0hk42w6fbr6xp8xcpjv00bhi9r75iig5kp34vxbxdd7k5fqxr1hj";
+  });
+  haddock = overrideCabal super.haddock (drv: {
+    version = "2.16.0";
+    sha256 = "1afb96w1vv3gmvha2f1h3p8zywpdk8dfk6bgnsa307ydzsmsc3qa";
+  });
+
   # Upstream was notified about the over-specified constraint on 'base'
   # but refused to do anything about it because he "doesn't want to
   # support a moving target". Go figure.
@@ -104,14 +124,13 @@ self: super: {
       sed -i '119iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen/Text.hs
     '';
   });
-    
+
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
-  haskell-src-meta = appendPatch super.haskell-src-meta (pkgs.fetchpatch {
-    url = "https://github.com/bmillwood/haskell-src-meta/pull/31.patch";
-    sha256 = "0idf12b2wd6chyvsgdcfl5kzx67crvgs1cqklx5say3426j57g4q";
+  haskell-src-meta = overrideCabal (doJailbreak (appendPatch super.haskell-src-meta ./haskell-src-meta-ghc710.patch)) (drv: {
+    prePatch = "sed -i -e 's|template-haskell [^,]\\+|template-haskell|' haskell-src-meta.cabal && cat haskell-src-meta.cabal";
   });
   foldl = appendPatch super.foldl (pkgs.fetchpatch {
     url = "https://github.com/Gabriel439/Haskell-Foldl-Library/pull/30.patch";
@@ -144,4 +163,16 @@ self: super: {
     sha256 = "1fycvjfr1l9wa03k30bnppl3ns99lffh9kmp9r7sr8b6yiydcajq";
     stripLen = 1;
   });
+
+  ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
+    pname = "ghcjs-prim";
+    version = "0.1.0.0";
+    src = fetchgit {
+      url = git://github.com/ghcjs/ghcjs-prim.git;
+      rev = "ca08e46257dc276e01d08fb47a693024bae001fa"; # ghc-7.10 branch
+      sha256 = "0w7sqzp5p70yhmdhqasgkqbf3b61wb24djlavwil2j8ry9y472w3";
+    };
+    buildDepends = [ primitive ];
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  }) {};
 }
