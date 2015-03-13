@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintlOrEmpty, libiconv }:
+{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable, dysnomia, libintlOrEmpty, libiconvOrEmpty }:
 
 stdenv.mkDerivation {
   name = "disnix-0.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "11yh270r8mgnkz98ax3p4rlc5dh88sxykvsmcpvgaqnqjh1rwd3j";
   };
   
-  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable libintlOrEmpty libiconv dysnomia ];
+  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable libintlOrEmpty libiconvOrEmpty dysnomia ];
 
   dontStrip = true;
   
