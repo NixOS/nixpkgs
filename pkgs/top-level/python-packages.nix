@@ -7689,6 +7689,25 @@ let
     };
   });
 
+  pyasn1-modules = buildPythonPackage rec {
+    name = "pyasn1-modules-${version}";
+    version = "0.0.5";
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyasn1-modules/${name}.tar.gz";
+      sha256 = "0hcr6klrzmw4d9j9s5wrhqva5014735pg4zk3rppac4fs87g0rdy";
+    };
+
+    propagatedBuildInputs = with self; [ pyasn1 ];
+
+    meta = {
+      description = "A collection of ASN.1-based protocols modules";
+      homepage = https://pypi.python.org/pypi/pyasn1-modules;
+      license = stdenv.lib.licenses.bsd3;
+      platforms = stdenv.lib.platforms.unix;  # same as pyasn1
+    };
+  };
 
   pyaudio = pkgs.stdenv.mkDerivation rec {
     name = "python-pyaudio-${version}";
@@ -10792,6 +10811,40 @@ let
       description = "A module to generate a formatted text table, using ASCII characters";
       homepage = http://foutaise.org/code/;
       license = licenses.lgpl2;
+    };
+  };
+
+  tlslite = buildPythonPackage rec {
+    name = "tlslite-${version}";
+    version = "0.4.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tlslite/${name}.tar.gz";
+      sha256 = "1fxx6d3nw5r1hqna1h2jvqhcygn9fyshlm0gh3gp0b1ji824gd6r";
+    };
+
+    meta = {
+      description = "A pure Python implementation of SSL and TLS";
+      homepage = https://pypi.python.org/pypi/tlslite;
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+  qrcode = buildPythonPackage rec {
+    name = "qrcode-${version}";
+    version = "5.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/q/qrcode/${name}.tar.gz";
+      sha256 = "0skzrvhjnnacrz52jml4i050vdx5lfcd3np172srxjaghdgfxg9k";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Quick Response code generation for Python";
+      home = "https://pypi.python.org/pypi/qrcode";
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 
