@@ -6085,7 +6085,8 @@ let
   };
 
   kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 { });
-  kf5_latest = kf57;
+  kf58 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.8 { });
+  kf5_latest = kf58;
   kf5_stable = kf57;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
