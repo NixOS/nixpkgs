@@ -278,13 +278,13 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "8.0.2";
-    build = "PS-139.732";
+    version = "8.0.3";
+    build = "PS-139.1348";
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "01b8vx6swi71sd0rc7i1jnicilqp11ch3zrm8gwb6xh1pmmpdirf";
+      sha256 = "1x67nfr3nap93cx7yhdrp02xvp1v6g74zy7hdmhx41sal7hzy49b";
     };
   };
 
