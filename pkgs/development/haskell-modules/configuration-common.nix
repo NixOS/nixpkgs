@@ -276,6 +276,7 @@ self: super: {
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
   aeson-lens = dontCheck super.aeson-lens;              # http://hydra.cryp.to/build/496769/log/raw
+  aeson-schema = dontCheck super.aeson-schema;          # http://hydra.cryp.to/build/576244/nixlog/2/raw
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
   aws = dontCheck super.aws;                            # needs aws credentials
