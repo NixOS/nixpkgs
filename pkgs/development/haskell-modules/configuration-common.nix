@@ -422,9 +422,6 @@ self: super: {
   # Needs llvm to compile.
   bytestring-arbitrary = addBuildTool super.bytestring-arbitrary pkgs.llvm;
 
-  # https://github.com/chrisdone/hindent/issues/83
-  hindent = dontCheck super.hindent;
-
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
