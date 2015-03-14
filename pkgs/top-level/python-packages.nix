@@ -6529,7 +6529,7 @@ let
       sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
     };
 
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose pkgs.openssl ];
 
     propagatedBuildInputs = with self; [ pkgs.mysql pkgs.zlib ];
 
