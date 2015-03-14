@@ -709,6 +709,8 @@ let
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
+  cockatrice = callPackage ../games/cockatrice/default.nix { };
+
   consul = callPackage ../servers/consul {
    # inherit ruby;
   };
