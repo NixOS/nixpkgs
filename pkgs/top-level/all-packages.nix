@@ -9770,6 +9770,8 @@ let
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
   });
 
+  ario = callPackage ../applications/audio/ario { };
+
   arora = callPackage ../applications/networking/browsers/arora { };
 
   atom = callPackage ../applications/editors/atom {
