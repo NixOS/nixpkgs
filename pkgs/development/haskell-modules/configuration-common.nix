@@ -502,7 +502,7 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
 
-  # https://github.com/ekmett/exceptions/issues/40
+  # https://github.com/ekmett/exceptions/issues/42
   exceptions = dontCheck super.exceptions;
 
   # https://github.com/NixOS/nixpkgs/issues/6350
