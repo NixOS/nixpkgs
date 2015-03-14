@@ -8189,6 +8189,8 @@ let
 
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 
+  mpdscribble = callPackage ../tools/misc/mpdscribble { };
+
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
