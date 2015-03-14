@@ -236,6 +236,7 @@ let self = _self // overrides; _self = with self; {
       StringShellQuote SubExporter TemplateTiny Throwable TryTiny TypeTiny URI
       URIdb libintlperl namespaceautoclean
     ];
+    doCheck = false;  # Can't find home directory.
     meta = {
       homepage = http://sqitch.org/;
       description = "Sane database change management";
