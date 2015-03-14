@@ -79,6 +79,7 @@ self: super: {
   tidal-midi = dontDistribute super.tidal-midi;
 
   # These packages need mtl 2.2.x directly or indirectly via dependencies.
+  amazonka = markBroken super.amazonka;
   apiary-purescript = markBroken super.apiary-purescript;
   clac = dontDistribute super.clac;
   highlighter2 = markBroken super.highlighter2;
