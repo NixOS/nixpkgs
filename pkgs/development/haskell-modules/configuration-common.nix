@@ -286,7 +286,6 @@ self: super: {
   bindings-GLFW = dontCheck super.bindings-GLFW;        # requires an active X11 display
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
-  boundingboxes = dontCheck super.boundingboxes;        # https://github.com/fumieval/boundingboxes/issues/1
   buildwrapper = dontCheck super.buildwrapper;
   burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
   cabal-bounds = dontCheck super.cabal-bounds;          # http://hydra.cryp.to/build/496935/nixlog/1/raw
