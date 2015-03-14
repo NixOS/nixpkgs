@@ -623,7 +623,7 @@ self: super: {
   blip = markBroken super.blip;
 
   # https://github.com/tych0/xcffib/issues/37
-  xcffib = markBroken super.xcffib;
+  xcffib = dontCheck super.xcffib;
 
 } // {
 
