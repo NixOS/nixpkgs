@@ -3794,7 +3794,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/A/AD/ADAMK/File-HomeDir-1.00.tar.gz;
       sha256 = "85b94f3513093ec0a25b91f9f2571918519ae6f2b7a1e8546f8f78d09a877143";
     };
-    buildInputs = stdenv.lib.optional stdenv.isDarwin [ MacSystemDirectory ];
     propagatedBuildInputs = [ FileWhich ];
     meta = {
       description = "Find your home and other directories on any platform";
@@ -5428,18 +5427,6 @@ let self = _self // overrides; _self = with self; {
 
   maatkit = import ../development/perl-modules/maatkit {
     inherit fetchurl buildPerlPackage stdenv DBDmysql;
-  };
-
-  MacSystemDirectory = buildPerlPackage {
-    name = "Mac-SystemDirectory-0.06";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHANSEN/Mac-SystemDirectory-0.06.tar.gz;
-      sha256 = "d008e8c893f971bdb9e935e87e9f62e693d8532b01ed5b2dc89e915d9199b21f";
-    };
-    meta = {
-      description = "Locate Mac OS X Standard System Directories";
-      license = "perl";
-    };
   };
 
   MailDKIM = buildPerlPackage rec {
