@@ -320,9 +320,9 @@ let self = _self // overrides;
     pname   = "evil";
     version = "20141020";
     src = fetchgit {
-      url = "git://gitorious.org/evil/evil";
+      url = "https://gitorious.org/evil/evil.git";
       rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
-      sha256 = "0yiqpzsm5sr7xdkixdvfg312dk9vsdcmj69gizk744d334yn8rsz";
+      sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
     };
     packageRequires = [ goto-chg undo-tree ];
     meta = {
@@ -504,9 +504,9 @@ let self = _self // overrides;
     pname   = "goto-chg";
     version = "1.6";
     src = fetchgit {
-      url = "git://gitorious.org/evil/evil";
+      url = "https://gitorious.org/evil/evil.git";
       rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
-      sha256 = "0yiqpzsm5sr7xdkixdvfg312dk9vsdcmj69gizk744d334yn8rsz";
+      sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
     };
     files = [ "lib/goto-chg.el" ];
     meta = { license = gpl3Plus; };
