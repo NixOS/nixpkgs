@@ -627,9 +627,6 @@ self: super: {
   # https://github.com/tych0/xcffib/issues/37
   xcffib = markBroken super.xcffib;
 
-  # https://github.com/snapframework/snap/issues/141
-  # snap = overrideCabal super.snap (drv: { preConfigure = "sed -i -e 's|lens .*<4.8|lens|' snap.cabal"; });
-
 } // {
 
   # Not on Hackage.
