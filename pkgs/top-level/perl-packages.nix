@@ -3800,6 +3800,7 @@ let self = _self // overrides; _self = with self; {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     preCheck = "export HOME=$TMPDIR";
+    doCheck = !stdenv.isDarwin;
   };
 
   FileKeePass = buildPerlPackage rec {
