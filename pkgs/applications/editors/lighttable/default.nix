@@ -14,7 +14,7 @@ in
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
-  name = "LightTable-${version}";
+  name = "lighttable-${version}";
   version = "0.7.2";
 
   src = 
