@@ -282,7 +282,7 @@ self: super: {
   aws = dontCheck super.aws;                            # needs aws credentials
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
-  bindings-GLFW = dontCheck super.bindings-GLFW;        # http://hydra.cryp.to/build/497379/log/raw
+  bindings-GLFW = dontCheck super.bindings-GLFW;        # requires an active X11 display
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
   boundingboxes = dontCheck super.boundingboxes;        # https://github.com/fumieval/boundingboxes/issues/1
@@ -316,7 +316,7 @@ self: super: {
   ghc-parmake = dontCheck super.ghc-parmake;
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   git-vogue = dontCheck super.git-vogue;
-  GLFW-b = dontCheck super.GLFW-b;
+  GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
