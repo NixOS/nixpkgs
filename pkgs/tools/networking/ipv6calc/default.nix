@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "1wdlyklqjvslcbvyx7ch4aziwvjbpj852k59m02gakisq9bywfcd";
+    sha256 = "02r0r4lgz10ivbmgdzivj7dvry1aad75ik9vyy6irjvngjkzg5r3";
   };
 
   buildInputs = [ geoip getopt openssl perl ];
