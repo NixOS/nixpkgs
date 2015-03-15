@@ -15,26 +15,19 @@ let
 in
 
 {
-  ##### interface
-
   options = {
-
     services.dnscrypt-proxy = {
-
       enable = mkOption {
         default = false;
         type = types.bool;
         description = ''
-          Enable dnscrypt-proxy.
-          The proxy relays regular DNS queries to a DNSCrypt enabled
-          upstream resolver.
-          The traffic between the client and the upstream resolver is
-          encrypted and authenticated, which may mitigate the risk of MITM
-          attacks and third-party snooping (assuming the upstream is
-          trustworthy).
+          Enable dnscrypt-proxy. The proxy relays regular DNS queries to a
+          DNSCrypt enabled upstream resolver. The traffic between the
+          client and the upstream resolver is encrypted and authenticated,
+          which may mitigate the risk of MITM attacks and third-party
+          snooping (assuming the upstream is trustworthy).
         '';
       };
-
       localAddress = mkOption {
         default = "127.0.0.1";
         type = types.string;
@@ -42,7 +35,6 @@ in
           Listen for DNS queries on this address.
         '';
       };
-
       port = mkOption {
         default = 53;
         type = types.int;
@@ -50,7 +42,6 @@ in
           Listen on this port.
         '';
       };
-
       resolverName = mkOption {
         default = "opendns";
         type = types.string;
@@ -61,59 +52,47 @@ in
           location).
         '';
       };
-
       tcpOnly = mkOption {
         default = false;
         type = types.bool;
         description = ''
           Force sending encrypted DNS queries to the upstream resolver
-          over TCP instead of UDP (on port 443).
-          Enabling this option may help circumvent filtering, but should
-          not be used otherwise.
+          over TCP instead of UDP (on port 443). Enabling this option may
+          help circumvent filtering, but should not be used otherwise.
         '';
       };
-
     };
-
   };
-
-  ##### implementation
 
   config = mkIf cfg.enable {
 
-    ### AppArmor profile
+    security.apparmor.profiles = mkIf apparmorEnabled (singleton (pkgs.writeText "apparmor-dnscrypt-proxy" ''
+      ${dnscrypt-proxy}/bin/dnscrypt-proxy {
+        /dev/null rw,
+        /dev/urandom r,
 
-    security.apparmor.profiles = mkIf apparmorEnabled [
-      (pkgs.writeText "apparmor-dnscrypt-proxy" ''
+        /etc/passwd r,
+        /etc/group r,
+        ${config.environment.etc."nsswitch.conf".source} r,
 
-        ${dnscrypt-proxy}/bin/dnscrypt-proxy {
+        ${pkgs.glibc}/lib/*.so mr,
+        ${pkgs.tzdata}/share/zoneinfo/** r,
 
-          /dev/null rw,
-          /dev/urandom r,
+        network inet stream,
+        network inet6 stream,
+        network inet dgram,
+        network inet6 dgram,
 
-          /etc/passwd r,
-          /etc/group r,
-          ${config.environment.etc."nsswitch.conf".source} r,
+        ${pkgs.gcc.cc}/lib/libssp.so.* mr,
+        ${pkgs.libsodium}/lib/libsodium.so.* mr,
+        ${pkgs.systemd}/lib/libsystemd.so.* mr,
+        ${pkgs.xz}/lib/liblzma.so.* mr,
+        ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
+        ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
 
-          ${pkgs.glibc}/lib/*.so mr,
-          ${pkgs.tzdata}/share/zoneinfo/** r,
-
-          network inet stream,
-          network inet6 stream,
-          network inet dgram,
-          network inet6 dgram,
-
-          ${pkgs.gcc.cc}/lib/libssp.so.* mr,
-          ${pkgs.libsodium}/lib/libsodium.so.* mr,
-          ${pkgs.systemd}/lib/libsystemd.so.* mr,
-          ${pkgs.xz}/lib/liblzma.so.* mr,
-          ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
-          ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
-
-          ${resolverListFile} r,
-        }
-      '')
-    ];
+        ${resolverListFile} r,
+      }
+    ''));
 
     users.extraUsers.dnscrypt-proxy = {
       uid = config.ids.uids.dnscrypt-proxy;
@@ -121,26 +100,21 @@ in
     };
     users.extraGroups.dnscrypt-proxy.gid = config.ids.gids.dnscrypt-proxy;
 
-    ## derived from upstream dnscrypt-proxy.socket
     systemd.sockets.dnscrypt-proxy = {
       description = "dnscrypt-proxy listening socket";
-
       socketConfig = {
         ListenStream = "${cfg.localAddress}:${toString cfg.port}";
         ListenDatagram = "${cfg.localAddress}:${toString cfg.port}";
       };
-
       wantedBy = [ "sockets.target" ];
     };
 
-    # derived from upstream dnscrypt-proxy.service
     systemd.services.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon";
       after = [ "network.target" ] ++ optional apparmorEnabled "apparmor.service";
       requires = [ "dnscrypt-proxy.socket "] ++ optional apparmorEnabled "apparmor.service";
       serviceConfig = {
         Type = "simple";
-        ## note: NonBlocking is required for socket activation to work
         NonBlocking = "true";
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
         User = "dnscrypt-proxy";
@@ -149,6 +123,5 @@ in
         PrivateDevices = true;
       };
     };
-
   };
 }
