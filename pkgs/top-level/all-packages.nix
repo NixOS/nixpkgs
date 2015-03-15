@@ -4449,7 +4449,7 @@ let
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
     inherit (pythonPackages) python boto setuptools distutils-cfg wrapPython;
-    pythonProtobuf = pythonPackages.protobuf;
+    pythonProtobuf = pythonPackages.protobuf2_5;
   };
 
   mesos-dns = callPackage ../servers/dns/mesos-dns { };
