@@ -7816,6 +7816,11 @@ let
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
+  sqitch = callPackage ../development/tools/misc/sqitch {
+    inherit stdenv writeScript makeWrapper ;
+    sqitchModule = perlPackages.AppSqitch;
+  };
+
   ### DEVELOPMENT / PYTHON MODULES
 
   # python function with default python interpreter
