@@ -4609,7 +4609,7 @@ let
 
   perl = if system != "i686-cygwin" then perl520 else sysPerl;
 
-  php = php54;
+  php = php56;
 
   phpPackages = recurseIntoAttrs (import ./php-packages.nix {
     inherit php pkgs;
