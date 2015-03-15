@@ -1797,7 +1797,7 @@ let
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "c47b36ceb17eaff3ecfab3bcd347d0df";
+      md5 = "055d82e6849d882ec6cf2ae1faca8e56";
     };
 
     meta = {
