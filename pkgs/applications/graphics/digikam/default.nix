@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
-lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, libjpeg, libtiff,
+lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, libjpeg, libtiff, libusb1,
 liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost,
 shared_desktop_ontologies, marble, mysql, libpgf }:
 
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   # Make digikam find some FindXXXX.cmake
   KDEDIRS="${marble}:${qjson}";
+
+  cmakeFlags = "-DLIBUSB_LIBRARIES=${libusb1}/lib -DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0";
 
   enableParallelBuilding = true;
 
