@@ -681,6 +681,28 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  org-trello = melpaBuild rec {
+    pname = "org-trello";
+    version = "0.6.9.2";
+    src = fetchFromGitHub {
+      owner = "org-trello";
+      repo = pname;
+      rev = "5656f32d3624b3c82014658aef88ffa47c0fca7b";
+      sha256 = "0781prmxbx3lmylma63vw80rix7dmhy8861jz4cbqmkfid6d3x73";
+    };
+    packageRequires = [ request-deferred deferred dash s ];
+    files = [ "org-trello-*.el" ];
+    meta = {
+      description = "Org minor mode - 2-way sync org & trello";
+      longDescription = ''
+        Org-trello is an emacs minor mode that extends org-mode with
+        Trello abilities.
+      '';
+      homepage = https://org-trello.github.io;
+      license = gpl3Plus;
+    };
+  };
+
   pkg-info = melpaBuild rec {
     pname   = "pkg-info";
     version = "20140610";
