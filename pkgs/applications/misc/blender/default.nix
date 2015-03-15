@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       "-DWITH_SDL=ON"
       "-DWITH_GAMEENGINE=ON"
       "-DWITH_OPENCOLORIO=ON"
+      "-DWITH_PLAYER=ON"
       "-DPYTHON_LIBRARY=python${python.majorVersion}m"
       "-DPYTHON_LIBPATH=${python}/lib"
       "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
