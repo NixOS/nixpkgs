@@ -5,12 +5,11 @@ let
   apparmorEnabled = config.security.apparmor.enable;
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
-  uid = config.ids.uids.dnscrypt-proxy;
+  resolverListFile = "${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
   daemonArgs =
-    [ "--user=dnscrypt-proxy"
-      "--local-address=${cfg.localAddress}:${toString cfg.port}"
+    [ "--local-address=${cfg.localAddress}:${toString cfg.port}"
       (optionalString cfg.tcpOnly "--tcp-only")
-      "--resolvers-list=${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv"
+      "--resolvers-list=${resolverListFile}"
       "--resolver-name=${cfg.resolverName}"
     ];
 in
@@ -56,10 +55,10 @@ in
         default = "opendns";
         type = types.string;
         description = ''
-          The name of the upstream DNSCrypt resolver to use.
-          See <literal>${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv</literal>
-          for alternative resolvers (e.g., if you are concerned about logging
-          and/or server location).
+          The name of the upstream DNSCrypt resolver to use. See
+          <literal>${resolverListFile}</literal> for alternative resolvers
+          (e.g., if you are concerned about logging and/or server
+          location).
         '';
       };
 
@@ -88,17 +87,6 @@ in
       (pkgs.writeText "apparmor-dnscrypt-proxy" ''
 
         ${dnscrypt-proxy}/bin/dnscrypt-proxy {
-          network inet stream,
-          network inet6 stream,
-          network inet dgram,
-          network inet6 dgram,
-
-          capability ipc_lock,
-          capability net_bind_service,
-          capability net_admin,
-          capability sys_chroot,
-          capability setgid,
-          capability setuid,
 
           /dev/null rw,
           /dev/urandom r,
@@ -110,26 +98,28 @@ in
           ${pkgs.glibc}/lib/*.so mr,
           ${pkgs.tzdata}/share/zoneinfo/** r,
 
-          ${dnscrypt-proxy}/share/dnscrypt-proxy/** r,
+          network inet stream,
+          network inet6 stream,
+          network inet dgram,
+          network inet6 dgram,
+
           ${pkgs.gcc.cc}/lib/libssp.so.* mr,
           ${pkgs.libsodium}/lib/libsodium.so.* mr,
           ${pkgs.systemd}/lib/libsystemd.so.* mr,
           ${pkgs.xz}/lib/liblzma.so.* mr,
           ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
           ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
+
+          ${resolverListFile} r,
         }
       '')
     ];
 
-    ### User
-
-    users.extraUsers = singleton {
-      inherit uid;
-      name = "dnscrypt-proxy";
+    users.extraUsers.dnscrypt-proxy = {
+      uid = config.ids.uids.dnscrypt-proxy;
       description = "dnscrypt-proxy daemon user";
     };
-
-    ### Service definition
+    users.extraGroups.dnscrypt-proxy.gid = config.ids.gids.dnscrypt-proxy;
 
     ## derived from upstream dnscrypt-proxy.socket
     systemd.sockets.dnscrypt-proxy = {
@@ -153,6 +143,10 @@ in
         ## note: NonBlocking is required for socket activation to work
         NonBlocking = "true";
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+        User = "dnscrypt-proxy";
+        Group = "dnscrypt-proxy";
+        PrivateTmp = true;
+        PrivateDevices = true;
       };
     };
 
