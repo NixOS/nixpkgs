@@ -6,7 +6,9 @@ stdenv.mkDerivation rec {
   builder = writeScript (name + "-builder.sh") ''
     . ${stdenv}/setup
     mkdir -p $out/bin
-    cp ${sqitchModule}/bin/sqitch $out/bin
+    for d in bin/sqitch etc lib share ; do
+      ln -s ${sqitchModule}/$d $out/$d
+    done
     fixupPhase
     wrapProgram $out/bin/sqitch \
       --prefix PERL5LIB : \
