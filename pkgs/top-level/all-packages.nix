@@ -9993,6 +9993,8 @@ let
 
   cvs2svn = callPackage ../applications/version-management/cvs2svn { };
 
+  cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
+
   d4x = callPackage ../applications/misc/d4x { };
 
   darcs = haskell-ng.lib.overrideCabal haskellngPackages.darcs (drv: {
@@ -10659,6 +10661,8 @@ let
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
+  helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
+
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
 
   hexchat = callPackage ../applications/networking/irc/hexchat { };
@@ -11082,6 +11086,8 @@ let
     vaapiSupport = config.mpv.vaapiSupport or false;
   };
 
+  mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
+
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
   mudlet = callPackage ../games/mudlet {
@@ -11151,6 +11157,8 @@ let
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
  };
+
+  maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
   mupdf = callPackage ../applications/misc/mupdf {
     openjpeg = openjpeg_2_0_1;
@@ -11337,6 +11345,9 @@ let
   pulseview = callPackage ../applications/science/electronics/pulseview { };
 
   puredata = callPackage ../applications/audio/puredata { };
+  puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
+
+  puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
@@ -11740,6 +11751,8 @@ let
     vte = gnome3.vte;
     gtk = gtk3;
   };
+
+  timbreid = callPackage ../applications/audio/pd-plugins/timbreid { };
 
   timidity = callPackage ../tools/misc/timidity { };
 
@@ -12327,6 +12340,8 @@ let
   zed = callPackage ../applications/editors/zed { };
 
   zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
+
+  zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
