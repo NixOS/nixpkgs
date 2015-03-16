@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "time domain pitch tracker for Pure Data";
+    description = "Time domain pitch tracker for Pure Data";
     homepage = http://www.katjaas.nl/helmholtz/helmholtz.html;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];

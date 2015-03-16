@@ -11,10 +11,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ puredata ];
 
-  /*unpackPhase = ''*/
-    /*unzip $src*/
-  /*'';*/
-
   patchPhase = ''
     for file in `grep -r -l g_canvas.h`
       do
@@ -32,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A library of PureData classes, bringing some level of compatibility between Max/MSP and Pd environments.";
+    description = "A library of PureData classes, bringing some level of compatibility between Max/MSP and Pd environments";
     homepage = http://puredata.info/downloads/cyclone;
     license = stdenv.lib.licenses.tcltk;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
