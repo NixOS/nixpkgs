@@ -9837,6 +9837,8 @@ let
 
   batti = callPackage ../applications/misc/batti { };
 
+  cbatticon = callPackage ../applications/misc/cbatticon { };
+
   bazaar = callPackage ../applications/version-management/bazaar { };
 
   bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
