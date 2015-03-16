@@ -4997,7 +4997,7 @@ let
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
   gnumake40 = callPackage ../development/tools/build-managers/gnumake/4.0 { };
   gnumake41 = callPackage ../development/tools/build-managers/gnumake/4.1 { };
-  gnumake = gnumake382;
+  gnumake = gnumake41;
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
