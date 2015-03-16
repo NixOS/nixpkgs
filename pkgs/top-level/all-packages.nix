@@ -1010,7 +1010,7 @@ let
   ddccontrol = callPackage ../tools/misc/ddccontrol { };
 
   ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
-  
+
   ddclient = callPackage ../tools/networking/ddclient { };
 
   dd_rescue = callPackage ../tools/system/dd_rescue { };

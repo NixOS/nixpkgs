@@ -18,7 +18,6 @@ stdenv.mkDerivation {
   };
   buildInputs =
     [
-      stdenv
       perl
       perlPackages.libxml_perl
       libxml2
@@ -29,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Monitor database for DDCcontrol";
-    homepage = "http://http://ddccontrol.sourceforge.net/";
+    homepage = "http://ddccontrol.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ stdenv.lib.maintainers.pakhfn ];
