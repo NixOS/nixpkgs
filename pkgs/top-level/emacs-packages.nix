@@ -263,6 +263,29 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  deferred = melpaBuild rec {
+    version = "0.3.2";
+    pname = "deferred";
+
+    src = fetchFromGitHub {
+      owner = "kiwanami";
+      repo = "emacs-${pname}";
+      rev = "896d4b53210289afe489e1ee7db4e12cb9248109";
+      sha256 = "0ysahdyvlg240dynwn23kk2d9kb432zh2skr1gydm3rxwn6f18r0";
+    };
+
+    meta = {
+      description = "Simple asynchronous functions for emacs-lisp";
+      longDescription = ''
+        deferred.el provides facilities to manage asynchronous tasks.
+        The API and implementations were translated from JSDeferred (by cho45)
+         and Mochikit.Async (by Bob Ippolito) in JavaScript.
+      '';
+      homepage =  https://github.com/kiwanami/emacs-deferred;
+      license = gpl3Plus;
+    };
+  };
+
   diminish = melpaBuild rec {
     pname   = "diminish";
     version = "0.44";
@@ -658,6 +681,28 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  org-trello = melpaBuild rec {
+    pname = "org-trello";
+    version = "0.6.9.2";
+    src = fetchFromGitHub {
+      owner = "org-trello";
+      repo = pname;
+      rev = "5656f32d3624b3c82014658aef88ffa47c0fca7b";
+      sha256 = "0781prmxbx3lmylma63vw80rix7dmhy8861jz4cbqmkfid6d3x73";
+    };
+    packageRequires = [ request-deferred deferred dash s ];
+    files = [ "org-trello-*.el" ];
+    meta = {
+      description = "Org minor mode - 2-way sync org & trello";
+      longDescription = ''
+        Org-trello is an emacs minor mode that extends org-mode with
+        Trello abilities.
+      '';
+      homepage = https://org-trello.github.io;
+      license = gpl3Plus;
+    };
+  };
+
   pkg-info = melpaBuild rec {
     pname   = "pkg-info";
     version = "20140610";
@@ -694,6 +739,58 @@ let self = _self // overrides;
     };
     packageRequires = [ dash helm s pkg-info epl ];
     meta = { license = gpl3Plus; };
+  };
+
+  request = melpaBuild rec {
+    pname = "request";
+    version = "0.2.0";
+
+    src = fetchFromGitHub {
+      owner = "tkf";
+      repo = "emacs-${pname}";
+      rev = "adf7de452f9914406bfb693541f1d280093c4efd";
+      sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Easy HTTP request for Emacs Lisp";
+      longDescription = ''
+        Request.el is a HTTP request library with multiple backends. It supports
+        url.el which is shipped with Emacs and curl command line program. User
+        can use curl when s/he has it, as curl is more reliable than url.el.
+        Library author can use request.el to avoid imposing external dependencies
+        such as curl to users while giving richer experience for users who have curl.
+      '';
+      homepage = https://github.com/tkf/emacs-request;
+      license = gpl3Plus;
+    };
+  };
+
+  request-deferred = melpaBuild rec {
+    pname = "request-deferred";
+    version = "0.2.0";
+
+    src = fetchFromGitHub {
+      owner = "tkf";
+      repo = "emacs-request";
+      rev = "adf7de452f9914406bfb693541f1d280093c4efd";
+      sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
+    };
+
+    packageRequires = [ request deferred ];
+
+    meta = with stdenv.lib; {
+      description = "Easy HTTP request for Emacs Lisp";
+      longDescription = ''
+        Request.el is a HTTP request library with multiple backends. It supports
+        url.el which is shipped with Emacs and curl command line program. User
+        can use curl when s/he has it, as curl is more reliable than url.el.
+        Library author can use request.el to avoid imposing external dependencies
+        such as curl to users while giving richer experience for users who have curl.
+      '';
+      homepage = https://github.com/tkf/emacs-request;
+      license = gpl3Plus;
+    };
   };
 
   rich-minority = melpaBuild rec {
