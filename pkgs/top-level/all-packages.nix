@@ -1399,7 +1399,6 @@ let
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   gitlab = callPackage ../applications/version-management/gitlab {
-    libiconv = libiconvOrLibc;
     ruby = ruby_2_1_3;
   };
 
@@ -6427,10 +6426,7 @@ let
   # glibc provides libiconv so systems with glibc don't need to build libiconv
   # separately, but we also provide libiconvReal, which will always be a
   # standalone libiconv, just in case you want it
-  libiconv =
-    if stdenv.isGlibc
-    then stdenv.cc.libc
-    else callPackage ../development/libraries/libiconv { };
+  libiconv = if stdenv.isGlibc then stdenv.cc.libc else libiconvReal;
 
   libiconvReal = callPackage ../development/libraries/libiconv { };
 
