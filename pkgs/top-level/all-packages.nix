@@ -1084,6 +1084,10 @@ let
 
   detox = callPackage ../tools/misc/detox { };
 
+  ddccontrol = callPackage ../tools/misc/ddccontrol { };
+
+  ddccontrol-db = callPackage ../data/misc/ddccontrol-db { };
+
   ddclient = callPackage ../tools/networking/ddclient { };
 
   dd_rescue = callPackage ../tools/system/dd_rescue { };
@@ -4761,6 +4765,8 @@ let
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = automake114x;
+
+  automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
