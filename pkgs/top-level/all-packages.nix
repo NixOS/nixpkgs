@@ -8545,6 +8545,8 @@ let
 
   alienfx = callPackage ../os-specific/linux/alienfx { };
 
+  alsaFirmware = callPackage ../os-specific/linux/alsa-firmware { };
+
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
