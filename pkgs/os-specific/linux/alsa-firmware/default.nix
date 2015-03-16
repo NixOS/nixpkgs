@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # These are lifted from the Arch PKGBUILD
     # remove files which conflicts with linux-firmware
-    rm -rf $out/usr/lib/firmware/{ct{efx,speq}.bin,ess,korg,sb16,yamaha}
+    rm -rf $out/lib/firmware/{ct{efx,speq}.bin,ess,korg,sb16,yamaha}
     # remove broken symlinks (broken upstream)
-    rm -rf $out/usr/lib/firmware/turtlebeach
+    rm -rf $out/lib/firmware/turtlebeach
     # remove empty dir
-    rm -rf $out/usr/bin
+    rm -rf $out/bin
   '';
 
   meta = {
