@@ -1421,6 +1421,8 @@ let
     inherit (xorg) libXpm;
   };
 
+  gnuapl = callPackage ../development/interpreters/gnu-apl { };
+
   gnufdisk = callPackage ../tools/system/fdisk {
     guile = guile_1_8;
   };
