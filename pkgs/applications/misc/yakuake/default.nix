@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, gettext }:
+{ stdenv, fetchurl, kdelibs, gettext, konsole }:
 
 let
   pname = "yakuake";
@@ -15,6 +15,10 @@ stdenv.mkDerivation {
   buildInputs = [ kdelibs ];
 
   nativeBuildInputs = [ gettext ];
+
+  patchPhase = ''
+    substituteInPlace app/terminal.cpp --replace \"konsolepart\" "\"${konsole}/lib/kde4/libkonsolepart.so\""
+  '';
 
   meta = {
     homepage = http://yakuake.kde.org;
