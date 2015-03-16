@@ -666,6 +666,18 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  monokai-theme = melpaBuild rec {
+    pname   = "monokai-theme";
+    version = "1.0.0";
+    src = fetchFromGitHub {
+      owner  = "oneKelvinSmith";
+      repo   = "monokai-emacs";
+      rev    = "v${version}";
+      sha256 = "02w7k4s4698p4adjy4a36na28sb1s2zw4xsjs7p2hv9iiw9kmyvz";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
 
   org-plus-contrib = melpaBuild rec {
@@ -1015,5 +1027,18 @@ let self = _self // overrides;
     };
     meta = { license = gpl3Plus; };
   };
+
+  zenburn-theme = melpaBuild rec {
+    pname   = "zenburn-theme";
+    version = "2.2";
+    src = fetchFromGitHub {
+      owner  = "bbatsov";
+      repo   = "zenburn-emacs";
+      rev    = "v${version}";
+      sha256 = "1zspqpwgyv3969irg8p7zj3g4hww4bmnlvx33bvjyvvv5c4mg5wv";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
 
 }; in self
