@@ -95,6 +95,7 @@
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
+  jb55 = "William Casarin <bill@casarin.me>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";

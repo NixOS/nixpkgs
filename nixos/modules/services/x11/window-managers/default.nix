@@ -18,6 +18,7 @@ in
     ./openbox.nix
     ./sawfish.nix
     ./stumpwm.nix
+    ./spectrwm.nix
     ./twm.nix
     ./windowmaker.nix
     ./wmii.nix
