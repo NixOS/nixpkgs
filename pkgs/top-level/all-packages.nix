@@ -8678,6 +8678,7 @@ let
 
   apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { };
   libapparmor = apparmor_2_9.libapparmor;
+  apparmor-kernel-patches = apparmor_2_9.apparmor-kernel-patches;
   apparmor-pam = apparmor_2_9.apparmor-pam;
   apparmor-parser = apparmor_2_9.apparmor-parser;
   apparmor-profiles = apparmor_2_9.apparmor-profiles;
@@ -8943,12 +8944,12 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl buildLinux;
+    inherit fetchurl stdenv perl buildLinux apparmor-kernel-patches;
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl buildLinux;
+    inherit fetchurl stdenv perl buildLinux apparmor-kernel-patches;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
      ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu

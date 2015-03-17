@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ... } @ args:
+{ stdenv, fetchurl, apparmor-kernel-patches, ... } @ args:
 
 import ./generic.nix (args // rec {
   version = "3.2.68";
@@ -13,15 +13,16 @@ import ./generic.nix (args // rec {
   # the grsec 3.2 -stable patchset already includes them.
   kernelPatches = args.kernelPatches ++ (
     stdenv.lib.optionals (!(args.features.grsecurity or false))
-      [ { name = "0001-AppArmor-compatibility-patch-for-v5-network-controll";
-          patch = ./apparmor-patches/3.2/0001-AppArmor-compatibility-patch-for-v5-network-controll.patch;
-        }
-        { name = "0002-AppArmor-compatibility-patch-for-v5-interface";
-          patch = ./apparmor-patches/3.2/0002-AppArmor-compatibility-patch-for-v5-interface.patch;
-        }
-        { name = "0003-AppArmor-Allow-dfa-backward-compatibility-with-broke";
-          patch = ./apparmor-patches/3.2/0003-AppArmor-Allow-dfa-backward-compatibility-with-broke.patch;
-        }]);
+      [ rec { name  = "0001-AppArmor-compatibility-patch-for-v5-network-controll";
+              patch = "${apparmor-kernel-patches}/${extraMeta.branch}/${name}.patch";
+            }
+        rec { name  = "0002-AppArmor-compatibility-patch-for-v5-interface";
+              patch = "${apparmor-kernel-patches}/${extraMeta.branch}/${name}.patch";
+            }
+        rec { name  = "0003-AppArmor-Allow-dfa-backward-compatibility-with-broke";
+              patch = "${apparmor-kernel-patches}/${extraMeta.branch}/${name}.patch";
+            }
+      ]);
 
   features.iwlwifi  = true;
 } // (args.argsOverride or {}))

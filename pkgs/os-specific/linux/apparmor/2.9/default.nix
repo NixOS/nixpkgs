@@ -169,7 +169,7 @@ let
 
     installPhase = ''
       mkdir "$out"
-      cp -R ./kernel-patches "$out"
+      cp -R ./kernel-patches/* "$out"
     '';
 
     meta = apparmor-meta "kernel patches";
