@@ -40,18 +40,15 @@ let
     ];
 
     prePatch = ''
-      ### common
       substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
       substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
       substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
 
-      ### libapparmor
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
       '';
 
     buildPhase = ''
-      ### libapparmor
       cd ./libraries/libapparmor
       ./autogen.sh
       ./configure --prefix="$out" --with-python
@@ -76,7 +73,6 @@ let
     ];
 
     prePatch = ''
-      ### common
       substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
       substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
       substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
@@ -106,12 +102,10 @@ let
     ];
 
     prePatch = ''
-      ### common
       substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
       substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
       substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
 
-      ### apparmor-parser
       substituteInPlace ./parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
       substituteInPlace ./parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
       substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
@@ -158,9 +152,7 @@ let
     name = "apparmor-profiles-${apparmor-version}";
     src = apparmor-sources;
 
-    buildInputs = [
-      which
-    ];
+    buildInputs = [ which ];
 
     buildPhase = ''
       cd ./profiles
