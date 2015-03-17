@@ -2255,6 +2255,8 @@ let
 
   owncloudclient = callPackage ../applications/networking/owncloud-client { };
 
+  p2pvc = callPackage ../applications/video/p2pvc {};
+
   p7zip = callPackage ../tools/archivers/p7zip { };
 
   pal = callPackage ../tools/misc/pal { };
