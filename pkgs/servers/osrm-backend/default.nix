@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ cmake luabind luabind.lua libosmpbf stxxl tbb boost expat protobuf bzip2 zlib ];
+  buildInputs = [ cmake luabind libosmpbf stxxl tbb boost expat protobuf bzip2 zlib ];
 
   postInstall = "mkdir -p $out/share/osrm-backend && cp -r ../profiles $out/share/osrm-backend/profiles";
 

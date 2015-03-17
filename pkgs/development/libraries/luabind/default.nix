@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost-build lua boost ];
 
+  propagatedBuildInputs = [ lua ];
+
   buildPhase = "LUA_PATH=${lua} bjam release";
 
   installPhase = "LUA_PATH=${lua} bjam --prefix=$out release install";
