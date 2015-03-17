@@ -102,6 +102,19 @@ composableDerivation {
         };
       }
 
+      // edf {
+        name = "python3";
+        feat = "python3interp";
+        enable = {
+          nativeBuildInputs = [ pkgs.python3 ];
+        } // lib.optionalAttrs stdenv.isDarwin {
+          configureFlags
+            = [ "--enable-python3interp=yes"
+                "--with-python3-config-dir=${pkgs.python3}/lib"
+                "--disable-pythoninterp" ];
+        };
+      }
+
       // edf { name = "tcl"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf {
@@ -131,6 +144,7 @@ composableDerivation {
   cfg = {
     luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
+    python3Support   = config.vim.python3 or false;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
