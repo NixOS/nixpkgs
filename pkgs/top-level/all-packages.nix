@@ -536,6 +536,8 @@ let
     };
   };
 
+  atomicparsley = callPackage ../tools/video/atomicparsley { };
+
   attic = callPackage ../tools/backup/attic { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
