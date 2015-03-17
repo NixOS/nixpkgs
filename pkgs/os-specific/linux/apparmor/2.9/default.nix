@@ -24,6 +24,7 @@ let
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
     substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
+    substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
   '';
 
   libapparmor = stdenv.mkDerivation {
@@ -82,7 +83,7 @@ let
     '';
 
     installPhase = ''
-      make install LANGS="" DESTDIR="$out" BINDIR="$out/bin"
+      make install LANGS="" DESTDIR="$out" BINDIR="$out/bin" VIM_INSTALL_PATH="$out/share" PYPREFIX=""
     '';
 
     meta = apparmor-meta "user-land utilities";
@@ -154,7 +155,7 @@ let
     '';
 
     installPhase = ''
-      make install DESTDIR="$out"
+      make install DESTDIR="$out" EXTRAS_DEST="$out/share/apparmor/extra-profiles"
     '';
 
     meta = apparmor-meta "profiles";
