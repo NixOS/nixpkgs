@@ -9056,7 +9056,7 @@ let
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_3_14;
+  linuxPackages = linuxPackages_3_18;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
