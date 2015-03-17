@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, buildPythonPackage, slowaes, ecdsa, pyqt4 }:
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, slowaes }:
 
 buildPythonPackage rec {
   namePrefix = "";
   name = "electrum-${version}";
-  version = "1.9.8";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "8fc144a32013e4a747fea27fff981762a6b9e14cde9ffb405c4c721975d846ff";
+    sha256 = "1kzrbnkl5jps0kf0420vzpiqjk3v1jxvlrxwhc0f58xbqyc7l4mj";
   };
 
-  buildInputs = [ slowaes ecdsa ];
-
-  propagatedBuildInputs = [
-    slowaes
+  propagatedBuildInputs = with pythonPackages; [
+    dns
     ecdsa
+    pbkdf2
+    protobuf
+    pyasn1
+    pyasn1-modules
     pyqt4
+    qrcode
+    requests
+    slowaes
+    tlslite
   ];
 
   postPatch = ''
@@ -28,6 +34,6 @@ buildPythonPackage rec {
     long-description = "Electrum is an easy to use Bitcoin client. It protects you from losing coins in a backup mistake or computer failure, because your wallet can be recovered from a secret phrase that you can write on paper or learn by heart. There is no waiting time when you start the client, because it does not download the Bitcoin blockchain.";
     homepage = "https://electrum.org";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ "emery@vfemail.net" ];
+    maintainers = [ "emery@vfemail.net" stdenv.lib.maintainers.joachifm ];
   };
 }
