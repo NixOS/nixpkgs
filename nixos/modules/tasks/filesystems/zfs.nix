@@ -12,6 +12,7 @@ let
   cfgSpl = config.boot.spl;
   cfgZfs = config.boot.zfs;
   cfgSnapshots = config.services.zfs.autoSnapshot;
+  cfgSnapFlags = cfgSnapshots.flags;
 
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
@@ -137,6 +138,25 @@ in
         '';
       };
 
+      flags = mkOption {
+        default = "-k -p";
+        example = "-k -p --utc";
+        type = types.str;
+        description = ''
+          Flags to pass to the zfs-auto-snapshot command.
+
+          Run <literal>zfs-auto-snapshot</literal> (without any arguments) to
+          see available flags.
+
+          If it's not too inconvenient for snapshots to have timestamps in UTC,
+          it is suggested that you append <literal>--utc</literal> to the list
+          of default options (see example).
+
+          Otherwise, snapshot names can cause name conflicts or apparent time
+          reversals due to daylight savings, timezone or other date/time changes.
+        '';
+      };
+
       frequent = mkOption {
         default = 4;
         type = types.int;
@@ -232,7 +252,9 @@ in
       environment.etc."zfs/zed.d".source = "${zfsUserPkg}/etc/zfs/zed.d/*";
 
       system.fsPackages = [ zfsUserPkg ];                  # XXX: needed? zfs doesn't have (need) a fsck
-      environment.systemPackages = [ zfsUserPkg ];
+      environment.systemPackages = [ zfsUserPkg ]
+        ++ optional enableAutoSnapshots autosnapPkg;       # so the user can run the command to see flags
+
       services.udev.packages = [ zfsUserPkg ];             # to hook zvol naming, etc.
       systemd.packages = [ zfsUserPkg ];
 
@@ -289,7 +311,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} frequent ${toString cfgSnapshots.frequent}";
+          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} frequent ${toString cfgSnapshots.frequent}";
         };
         restartIfChanged = false;
         startAt = "*:15,30,45";
@@ -300,7 +322,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} hourly ${toString cfgSnapshots.hourly}";
+          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} hourly ${toString cfgSnapshots.hourly}";
         };
         restartIfChanged = false;
         startAt = "hourly";
@@ -311,7 +333,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} daily ${toString cfgSnapshots.daily}";
+          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} daily ${toString cfgSnapshots.daily}";
         };
         restartIfChanged = false;
         startAt = "daily";
@@ -322,7 +344,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} weekly ${toString cfgSnapshots.weekly}";
+          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} weekly ${toString cfgSnapshots.weekly}";
         };
         restartIfChanged = false;
         startAt = "weekly";
@@ -333,7 +355,7 @@ in
         after = [ "zfs-import.target" ];
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} monthly ${toString cfgSnapshots.monthly}";
+          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} monthly ${toString cfgSnapshots.monthly}";
         };
         restartIfChanged = false;
         startAt = "monthly";
