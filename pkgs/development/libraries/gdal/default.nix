@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos}:
+, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, openssl }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
   version = "1.11.2";
@@ -10,7 +10,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "66bc8192d24e314a66ed69285186d46e6999beb44fc97eeb9c76d82a117c0845";
   };
 
-  buildInputs = [ unzip libjpeg libtiff python pythonPackages.numpy proj ];
+  buildInputs = [ unzip libjpeg libtiff python pythonPackages.numpy proj openssl ];
 
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
