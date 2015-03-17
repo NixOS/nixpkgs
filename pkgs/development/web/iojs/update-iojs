@@ -1,10 +1,12 @@
-#!/bin/sh -e
+#!/bin/sh
 #
 # Fetch the latest io.js release (stable/nightly) and update
 # `default.nix` in this directory.
 #
 
-cd "$(dirname "$0")"
+set -e
+
+HERE="$(dirname "$0")"
 
 latest() {
     curl -s "$1" | grep 'href="v' \
@@ -39,11 +41,11 @@ nightly=$(latest_log nightly 'https://iojs.org/download/nightly/')
 
 sed -i \
     "/version = if nightly/s/then.*/then \"$nightly\" else \"$stable\";/" \
-    default.nix
+    "$HERE/default.nix"
 
 stableHash=$(hash_log "$(url iojs.src)")
 nightlyHash=$(hash_log "$(url iojs-nightly.src)")
 
 sed -i \
     "/sha256 = if nightly/{N;s/\"[^\"]*\"/\"$nightlyHash\"/;N;s/\"[^\"]*\";/\"$stableHash\";/}" \
-    default.nix
+    "$HERE/default.nix"
