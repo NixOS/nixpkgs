@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation  rec {
   name = "lmms-${version}";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchurl {
     url = "https://github.com/LMMS/lmms/archive/v${version}.tar.gz";
-    sha256 = "0p0lfy3vmxjf9nwajzyhl2jscpmbi26qqqsy1hsa4ljc0plfz60p";
+    sha256 = "1g76z7ha3hd53vbqaq9n1qg6s3lw8zzaw51iny6y2bz0j1xqwcsr";
   };
 
   buildInputs = [

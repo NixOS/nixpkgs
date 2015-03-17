@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "syslog-ng-${version}";
 
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "http://www.balabit.com/downloads/files?path=/syslog-ng/sources/${version}/source/syslog-ng_${version}.tar.gz";
-    sha256 = "1s3lsxk2pky3jkfamkw5ivpxq2kazikcvdgpmxiyn5w10dwkd0m7";
+    sha256 = "0qc21mwajk6xrra3gqy2nvaza5gq62psamq4ayphj7lqabdglizg";
   };
 
   buildInputs = [ eventlog pkgconfig glib python systemd perl riemann_c_client protobufc yacc ];

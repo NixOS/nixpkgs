@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    broken = true;  # see https://github.com/NixOS/nixpkgs/pull/4031#issuecomment-56283520 
   };
 }
 

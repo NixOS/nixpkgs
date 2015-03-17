@@ -17,10 +17,10 @@ let
     log_file            "syslog"
     user                "${cfg.user}"
     group               "${cfg.group}"
-    ${if cfg.network.host != "any" then
-   "bind_to_address     ${cfg.network.host}" else ""}
-    ${if cfg.network.port != 6600 then
-   "port                ${toString cfg.network.port}" else ""}
+
+    ${optionalString (cfg.network.host != "any") ''bind_to_address "${cfg.network.host}"''}
+    ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
+
     ${cfg.extraConfig}
   '';
 

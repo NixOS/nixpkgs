@@ -19,6 +19,7 @@ with stdenv.lib; with autonix;
 let
 
   mkDerivation = drv:
+    let inherit (builtins.parseDrvName drv.name) version; in
     stdenv.mkDerivation
       (drv // {
         setupHook = ./setup-hook.sh;
@@ -32,7 +33,7 @@ let
           ]
           ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
-        meta = drv.meta or
+        meta =
           {
             license = with stdenv.lib.licenses; [
               lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
@@ -40,7 +41,9 @@ let
             platforms = stdenv.lib.platforms.linux;
             maintainers = with stdenv.lib.maintainers; [ ttuegel ];
             homepage = "http://www.kde.org";
-          };
+            inherit version;
+            branch = intersperse "." (take 2 (splitString "." version));
+          } // (drv.meta or {});
       });
 
   renames = builtins.removeAttrs (import ./renames.nix {}) ["Backend" "CTest"];
@@ -108,12 +111,16 @@ let
           [
             ./extra-cmake-modules/0001-extra-cmake-modules-paths.patch
           ];
-        meta = {
-          license = with stdenv.lib.licenses; [ bsd2 ];
-          platforms = stdenv.lib.platforms.linux;
-          maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-          homepage = "http://www.kde.org";
-        };
+        meta =
+          let inherit (builtins.parseDrvName super.extra-cmake-modules.name) version; in
+          {
+            license = with stdenv.lib.licenses; [ bsd2 ];
+            platforms = stdenv.lib.platforms.linux;
+            maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+            homepage = "http://www.kde.org";
+            inherit version;
+            branch = intersperse "." (take 2 (splitString "." version));
+          };
       };
 
       frameworkintegration = super.frameworkintegration // {

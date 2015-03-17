@@ -61,7 +61,7 @@ let version = if isRelease then
     meta = with stdenv.lib; {
       homepage = http://www.rust-lang.org/;
       description = "A safe, concurrent, practical language";
-      maintainers = with maintainers; [ madjar cstrahan wizeman ];
+      maintainers = with maintainers; [ madjar cstrahan wizeman globin ];
       license = map (builtins.getAttr "shortName") [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux;
     };
@@ -132,7 +132,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];
 
-  enableParallelBuilding = false; # disabled due to rust-lang/rust#16305
+  enableParallelBuilding = true;
 
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 

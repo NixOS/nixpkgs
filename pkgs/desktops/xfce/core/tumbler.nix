@@ -4,11 +4,11 @@ libgsf, poppler, bzip2 }:
 stdenv.mkDerivation rec {
   p_name  = "tumbler";
   ver_maj = "0.1";
-  ver_min = "30";
+  ver_min = "31";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "013kacqyy1vya7kp6jgc1almp3cbbvq96a3r7f5myiihr1whvhp7";
+    sha256 = "0wvip28gm2w061hn84zp2q4dv947ihylrppahn4cjspzff935zfh";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

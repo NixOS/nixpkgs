@@ -112,6 +112,9 @@ in zipModules ([]
 # VirtualBox
 ++ obsolete [ "services" "virtualbox" "enable" ] [ "services" "virtualboxGuest" "enable" ]
 
+# Tarsnap
+++ obsolete [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ]
+
 # proxy
 ++ obsolete [ "nix" "proxy" ] [ "networking" "proxy" "default" ]
 

@@ -246,11 +246,11 @@ in {
     description = "Eclipse Classic";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.3.1-201309111000/eclipse-SDK-4.3.1-linux-gtk-x86_64.tar.gz;
+          url = http://archive.eclipse.org/eclipse/downloads/drops4/R-4.3.1-201309111000/eclipse-SDK-4.3.1-linux-gtk-x86_64.tar.gz;
           sha256 = "0ncm56ylwxw9z8rk8ccgva68c2yr9yrf1kcr1zkgw6p87xh1yczd";
         };
       "i686-linux" = fetchurl {
-          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.3.1-201309111000/eclipse-SDK-4.3.1-linux-gtk.tar.gz;
+          url = http://archive.eclipse.org/eclipse/downloads/drops4/R-4.3.1-201309111000/eclipse-SDK-4.3.1-linux-gtk.tar.gz;
           sha256 = "1zxsh838khny7mvl01h28xna6xdh01yi4mvls28zj22v0340lgsg";
         };
     };
@@ -261,14 +261,29 @@ in {
     description = "Eclipse Classic";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.4-201406061215/eclipse-SDK-4.4-linux-gtk-x86_64.tar.gz;
+          url = http://archive.eclipse.org/eclipse/downloads/drops4/R-4.4-201406061215/eclipse-SDK-4.4-linux-gtk-x86_64.tar.gz;
           sha256 = "14hdkijsjq0hhzi9ijpwjjkhz7wm0pry86l3dniy5snlh3l5bsb2";
         };
       "i686-linux" = fetchurl {
-          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.4-201406061215/eclipse-SDK-4.4-linux-gtk.tar.gz;
+          url = http://archive.eclipse.org/eclipse/downloads/drops4/R-4.4-201406061215/eclipse-SDK-4.4-linux-gtk.tar.gz;
           sha256 = "0hjc4zrsmik6vff851p0a4ydnx99840j2xrx8348kk6h0af8vx6z";
         };
     };
   };
 
+  eclipse_sdk_442 = buildEclipse {
+    name = "eclipse-sdk-4.4.2";
+    description = "Eclipse Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.4.2-201502041700/eclipse-SDK-4.4.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "0g00alsixfaakmn4khr0m9fxvkrbhbg6qqfa27xr6a9np6gzg98l";
+
+        };
+      "i686-linux" = fetchurl {
+          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.4.2-201502041700/eclipse-SDK-4.4.2-linux-gtk.tar.gz;
+          sha256 = "9f4238ce9f887a1a57bbc6c6898e43357d14a6d74f59385327813c5e82aa735d";
+        };
+    };
+  };
 }

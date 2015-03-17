@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, freetype, yasm
+, aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib;
     [ pkgconfig freetype ]
+    ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext mesa ]

@@ -56,6 +56,11 @@ stdenv.mkDerivation rec {
     zlib ncurses libcap
   ];
 
+  postPatch = ''
+    # Removes absolute paths in scripts
+    sed -i 's,/sbin/,,g' ctdb/config/functions
+  '';
+
   enableParallelBuilding = true;
 
   configureFlags = [
@@ -110,6 +115,19 @@ stdenv.mkDerivation rec {
   ];
 
   stripAllList = [ "bin" "sbin" ];
+
+  postFixup = ''
+    export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
+    read -r -d "" SCRIPT << EOF
+    [ -z "\$SAMBA_LIBS" ] && exit 1;
+    BIN='{}';
+    OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
+    ALL_LIBS="\$(echo -e "\$SAMBA_LIBS\n\$OLD_LIBS" | sort | uniq | tr '\n' ':')";
+    patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
+    patchelf --shrink-rpath "\$BIN";
+    EOF
+    find $out -type f -exec $SHELL -c "$SCRIPT" \;
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.samba.org/;

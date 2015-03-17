@@ -61,6 +61,15 @@ in
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
   };
 
+  mkfontscale = attrs: attrs // {
+    patches = lib.singleton (args.fetchpatch {
+      name = "mkfontscale-fix-sig11.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=113951";
+      sha256 = "0i2xf768mz8kvm7i514v0myna9m6jqw82f9a03idabdpamxvwnim";
+    });
+    patchFlags = [ "-p0" ];
+  };
+
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb";
@@ -293,6 +302,7 @@ in
         ];
         patches = commonPatches;
         configureFlags = [
+          "--enable-kdrive"             # not built by default
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway

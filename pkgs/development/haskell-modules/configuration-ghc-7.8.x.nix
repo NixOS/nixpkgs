@@ -79,6 +79,7 @@ self: super: {
   tidal-midi = dontDistribute super.tidal-midi;
 
   # These packages need mtl 2.2.x directly or indirectly via dependencies.
+  amazonka = markBroken super.amazonka;
   apiary-purescript = markBroken super.apiary-purescript;
   clac = dontDistribute super.clac;
   highlighter2 = markBroken super.highlighter2;
@@ -98,44 +99,3 @@ self: super: {
   incremental-computing = dontCheck super.incremental-computing;
 
 }
-
-// # packages relating to amazonka
-
-(let
-  Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
-  amazonkaEnv = self: super: {
-    mkDerivation = drv: super.mkDerivation (drv // {
-      doCheck = false;
-      hyperlinkSource = false;
-      buildTools = (drv.buildTools or []) ++ [ (
-        if pkgs.stdenv.lib.elem drv.pname [
-          "Cabal"
-          "time"
-          "unix"
-          "directory"
-          "process"
-          "jailbreak-cabal"
-        ] then null else Cabal
-      ) ];
-    });
-    mtl = self.mtl_2_2_1;
-    transformers = self.transformers_0_4_3_0;
-    transformers-compat = disableCabalFlag super.transformers-compat "three";
-    hscolour = super.hscolour;
-    time = self.time_1_5_0_1;
-    unix = self.unix_2_7_1_0;
-    directory = self.directory_1_2_1_0;
-    process = overrideCabal self.process_1_2_2_0 (drv: { coreSetup = true; });
-    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch amazonka-glacier amazonka-ecs;
-  };
-  amazonka = super.amazonka.overrideScope amazonkaEnv;
-  amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
-  amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
-  amazonka-ecs = super.amazonka-ecs.overrideScope amazonkaEnv;
-  amazonka-glacier = super.amazonka-glacier.overrideScope amazonkaEnv;
-  amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
-  amazonka-ssm = super.amazonka-ssm.overrideScope amazonkaEnv;
-in {
-  inherit amazonkaEnv;
-  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-ecs amazonka-kms amazonka-glacier amazonka-ssm;
-})

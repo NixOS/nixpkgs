@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.9";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "0n6hfma058iykfxnl1m23mkh8y5sx1x80s3fxfdngbd9wc41kqxy";
+    sha256 = "0hyw2rdxigiklqvv7fbhcdqdxkgcxvx56vk4r5v55l674zqfy3dp";
   };
 
   buildInputs = [

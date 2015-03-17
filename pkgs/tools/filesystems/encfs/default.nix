@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, boost, fuse, openssl, perl
 , pkgconfig, rlog }:
 
-let version = "1.8-rc1"; in
+let version = "1.8"; in
 stdenv.mkDerivation rec {
   name = "encfs-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "17a09pg7752nlbgm2nmrwhm90kv2z3dj20xs79qvvr6x7rdgzck8";
+    sha256 = "1dp3558x9v5hqnjnrlnd0glrkcc23anl2mxhjirhhw8dyh1lzl5z";
     rev = "v${version}";
     repo = "encfs";
     owner = "vgough";

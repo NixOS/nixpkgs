@@ -58,6 +58,7 @@ self: super: {
   });
 
   # The package doesn't know about the AL include hierarchy.
+  # https://github.com/phaazon/al/issues/1
   al = appendConfigureFlag super.al "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   # Depends on code distributed under a non-free license.
@@ -199,6 +200,12 @@ self: super: {
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
 
+  hs-mesos = overrideCabal super.hs-mesos (drv: {
+    # Pass _only_ mesos; the correct protobuf is propagated.
+    extraLibraries = [ pkgs.mesos ];
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e 's|, /usr/include, /usr/local/include/mesos||' hs-mesos.cabal";
+  });
+
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
@@ -276,15 +283,15 @@ self: super: {
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
   aeson-lens = dontCheck super.aeson-lens;              # http://hydra.cryp.to/build/496769/log/raw
+  aeson-schema = dontCheck super.aeson-schema;          # https://github.com/timjb/aeson-schema/issues/9
   apache-md5 = dontCheck super.apache-md5;              # http://hydra.cryp.to/build/498709/nixlog/1/raw
   app-settings = dontCheck super.app-settings;          # http://hydra.cryp.to/build/497327/log/raw
   aws = dontCheck super.aws;                            # needs aws credentials
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
-  bindings-GLFW = dontCheck super.bindings-GLFW;        # http://hydra.cryp.to/build/497379/log/raw
+  bindings-GLFW = dontCheck super.bindings-GLFW;        # requires an active X11 display
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
-  boundingboxes = dontCheck super.boundingboxes;        # https://github.com/fumieval/boundingboxes/issues/1
   buildwrapper = dontCheck super.buildwrapper;
   burst-detection = dontCheck super.burst-detection;    # http://hydra.cryp.to/build/496948/log/raw
   cabal-bounds = dontCheck super.cabal-bounds;          # http://hydra.cryp.to/build/496935/nixlog/1/raw
@@ -315,7 +322,7 @@ self: super: {
   ghc-parmake = dontCheck super.ghc-parmake;
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   git-vogue = dontCheck super.git-vogue;
-  GLFW-b = dontCheck super.GLFW-b;
+  GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
@@ -420,9 +427,6 @@ self: super: {
   # Needs llvm to compile.
   bytestring-arbitrary = addBuildTool super.bytestring-arbitrary pkgs.llvm;
 
-  # https://github.com/chrisdone/hindent/issues/83
-  hindent = dontCheck super.hindent;
-
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
@@ -499,9 +503,6 @@ self: super: {
 
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = overrideCabal super.bloomfilter (drv: { broken = !pkgs.stdenv.is64bit; });
-
-  # https://github.com/ekmett/exceptions/issues/40
-  exceptions = dontCheck super.exceptions;
 
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
@@ -624,36 +625,35 @@ self: super: {
   blip = markBroken super.blip;
 
   # https://github.com/tych0/xcffib/issues/37
-  xcffib = markBroken super.xcffib;
-
-  # https://github.com/snapframework/snap/issues/141
-  # snap = overrideCabal super.snap (drv: { preConfigure = "sed -i -e 's|lens .*<4.8|lens|' snap.cabal"; });
+  xcffib = dontCheck super.xcffib;
 
 } // {
 
   # Not on Hackage.
   cabal2nix = self.mkDerivation {
     pname = "cabal2nix";
-    version = "2.0";
+    version = "20150310";
     src = pkgs.fetchgit {
       url = "http://github.com/NixOS/cabal2nix.git";
-      sha256 = "5cc98f530303a82885e2f23d2c83f67f1a3767bfdd5ed3340e45858f1a0f04e1";
-      rev = "6a445468030b064e4f71b43c269ba506e7e2f779";
+      rev = "267d0495209822ad819b58cb472a0da54f5a0b72";
+      sha256 = "1sdsjwf1cda4bpriiv1vfx0pa26087hzw7vviacvgbmn0xh6wm8g";
+      deepClone = true;
     };
     isLibrary = false;
     isExecutable = true;
     buildDepends = with self; [
-      aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory filepath hackage-db monad-par monad-par-extras mtl pretty
-      prettyclass process QuickCheck regex-posix SHA split transformers
-      utf8-string
+      aeson base bytestring Cabal containers deepseq-generics directory
+      filepath hackage-db lens monad-par monad-par-extras mtl pretty
+      prettyclass process regex-posix SHA split transformers utf8-string cartel
     ];
     testDepends = with self; [
       aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory doctest filepath hackage-db hspec monad-par
+      directory doctest filepath hackage-db hspec lens monad-par
       monad-par-extras mtl pretty prettyclass process QuickCheck
       regex-posix SHA split transformers utf8-string
     ];
+    buildTools = [ pkgs.gitMinimal ];
+    preConfigure = "runhaskell $setupCompileFlags generate-cabal-file >cabal2nix.cabal";
     homepage = "http://github.com/NixOS/cabal2nix";
     description = "Convert Cabal files into Nix build instructions";
     license = pkgs.stdenv.lib.licenses.bsd3;

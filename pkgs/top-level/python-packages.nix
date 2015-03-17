@@ -809,6 +809,31 @@ let
     };
   };
 
+  caldavclientlibrary-asynk = buildPythonPackage rec {
+    version = "asynkdev";
+    name = "caldavclientlibrary-asynk-${version}";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/skarra/CalDAVClientLibrary.git";
+      rev = "06699b08190d50cc2636b921a654d67db0a967d1";
+      sha256 = "1i6is7lv4v9by4panrd9w63m4xsmhwlp3rq4jjj3azwg5jm10940";
+    };
+
+    meta = {
+      description = "CalDAVCLientLibrary is a Python library and tool for CalDAV";
+
+      longDescription = ''
+        CalDAVCLientLibrary is a Python library and tool for CalDAV.
+
+        This package is the unofficial CalDAVCLientLibrary Python
+        library maintained by the author of Asynk and is needed for
+        that package.
+      '';
+
+      homepage = https://github.com/skarra/CalDAVClientLibrary/tree/asynkdev/;
+      maintainers = with maintainers; [ pjones ];
+    };
+  };
 
   bedup = buildPythonPackage rec {
     name = "bedup-20140413";
@@ -1109,6 +1134,8 @@ let
 
     buildInputs = [ self.nose self.mock ];
     propagatedBuildInputs = [ self.requests self.httpretty ];
+
+    patches = [ ../development/python-modules/boto/content-length-str.patch ];
 
     meta = {
       homepage = https://github.com/boto/boto;
@@ -1770,7 +1797,7 @@ let
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "c47b36ceb17eaff3ecfab3bcd347d0df";
+      md5 = "055d82e6849d882ec6cf2ae1faca8e56";
     };
 
     meta = {
@@ -2405,12 +2432,12 @@ let
   };
 
   docker_registry = buildPythonPackage rec {
-    name = "docker-registry-0.9.0";
+    name = "docker-registry-0.9.1";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-registry/${name}.tar.gz";
-      md5 = "65eb9fd05b94f7f9fbbb5e2e8ca62912";
+      sha256 = "1svm1h59sg4bwj5cy10m016gj0xpiin15nrz5z66h47sbkndvlw3";
     };
 
     DEPS = "loose";
@@ -2418,7 +2445,7 @@ let
     doCheck = false; # requires redis server
     propagatedBuildInputs = with self; [
       setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests2 rsa sqlalchemy setuptools backports_lzma pyasn1
+      requests2 rsa sqlalchemy9 setuptools backports_lzma pyasn1 m2crypto
     ];
 
     patchPhase = "> requirements/main.txt";
@@ -2615,13 +2642,13 @@ let
 
 
   evdev = buildPythonPackage rec {
-    version = "0.4.6";
+    version = "0.4.7";
     name = "evdev-${version}";
     disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/evdev/${name}.tar.gz";
-      sha256 = "08bzyr3zc8ijnv25bysmmvzircblh42ja15f6ijdzmqqw8vfaij8";
+      sha256 = "1mz8cfncpxc1wbk2nj7apl0ssqc0vfndysxchq3wabd9vzx5p71k";
     };
 
     buildInputs = with self; [ pkgs.linuxHeaders ];
@@ -3057,15 +3084,15 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/m/mailchimp/mailchimp-${version}.tar.gz";
       sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
-    };  
-  
+    };
+
     # Test fails because specific version of docopt is searched
     # (Possible fix: Needs upstream patching in the library)
     doCheck = false;
 
     buildInputs = with self; [ docopt ];
 
-    propagatedBuildInputs = with self; [ requests ];                                       
+    propagatedBuildInputs = with self; [ requests ];
 
     meta = {
       description = "A CLI client and Python API library for the MailChimp email platform";
@@ -6504,7 +6531,7 @@ let
       sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
     };
 
-    buildInputs = with self; [ nose ];
+    buildInputs = with self; [ nose pkgs.openssl ];
 
     propagatedBuildInputs = with self; [ pkgs.mysql pkgs.zlib ];
 
@@ -6571,12 +6598,12 @@ let
 
 
   nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-0.5.1";
+    name = "nbxmpp-0.5.2";
 
     src = pkgs.fetchurl {
       name = "${name}.tar.gz";
-      url = "https://python-nbxmpp.gajim.org/downloads/6";
-      sha256 = "0agr0ikfdmna5rjvm7lm0mx52cdwqp5b2xbx3inagp70whmdv219";
+      url = "https://python-nbxmpp.gajim.org/downloads/7";
+      sha256 = "0q2iph07aahwn6hlr38v0cvzlfc9hrf5mz6qs1kp4b4x9l8x5mqn";
     };
 
     meta = {
@@ -10869,6 +10896,35 @@ let
     };
   };
 
+  syncthing-gtk = buildPythonPackage rec {
+    version = "0.6.2";
+    name = "syncthing-gtk-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "syncthing";
+      repo = "syncthing-gtk";
+      rev = "v${version}";
+      sha256 = "0dfs5kzdj9ld20i23w6ldj7z761rwnnbqkr0l12wkgcxi58jcqds";
+    };
+
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ pkgs.syncthing pygobject3 dateutil pkgs.gtk3 pyinotify pkgs.libnotify pkgs.psmisc ];
+
+    patchPhase = ''
+      substituteInPlace "scripts/syncthing-gtk" \
+              --replace "/usr/share" "$out/share"   \
+    '';
+
+
+    meta = with stdenv.lib; {
+      description = " GTK3 & python based GUI for Syncthing ";
+      maintainers = [ maintainers.DamienCassou ];
+      platforms = pkgs.syncthing.meta.platforms;
+      homepage = "https://github.com/syncthing/syncthing-gtk";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   tarsnapper = buildPythonPackage rec {
     name = "tarsnapper-0.2.1";
     disabled = isPy3k;
@@ -13485,6 +13541,7 @@ let
     };
   };
 
+
   moreItertools = buildPythonPackage rec {
     name = "more-itertools-2.2";
 
@@ -13494,7 +13551,7 @@ let
       url = "https://github.com/erikrose/more-itertools/archive/2.2.tar.gz";
       sha256 = "4606417182e0a1289e23fb7f964a64ca9fdaafb7c1999034dc4fa0cc5850c478";
     };
-   
+
     propagatedBuildInputs = with self; [ nose ];
 
     meta = {
@@ -13503,6 +13560,7 @@ let
       license = licenses.mit;
     };
   };
+
 
   uncertainties = buildPythonPackage rec {
     name = "uncertainties-2.4.6.1";
@@ -13513,11 +13571,28 @@ let
     };
 
     buildInputs = with self; [ nose numpy ];
-   
+
     meta = {
       homepage = "http://pythonhosted.org/uncertainties/";
       description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
       license = licenses.bsd3;
+    };
+  };
+
+
+  funcy = buildPythonPackage rec {
+    name = "funcy-1.4";
+
+    src = pkgs.fetchurl {
+        url = "https://github.com/Suor/funcy/archive/1.4.tar.gz";
+        sha256 = "694e29aa67d03a6ab006f1854740b65f4f87e581afb33853f80e647ddb5f24e7";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Collection of fancy functional tools focused on practicality.";
+      homepage = "http://funcy.readthedocs.org/";
+      license = stdenv.lib.licenses.bsd3;
+
     };
   };
 
@@ -13820,21 +13895,6 @@ let
       homepage = "https://github.com/erikrose/parsimonious";
       description = "Fast arbitrary-lookahead packrat parser written in pure Python.";
       license = licenses.mit;
-    };
-  };
-
-  funcy = buildPythonPackage rec {
-    name = "funcy-1.4";
-
-    src = pkgs.fetchurl {
-        url = "https://github.com/Suor/funcy/archive/1.4.tar.gz";
-        sha256 = "694e29aa67d03a6ab006f1854740b65f4f87e581afb33853f80e647ddb5f24e7";
-    };
-
-    meta = with stdenv.lib; {
-      description = "Collection of fancy functional tools focused on practicality.";
-      homepage = "http://funcy.readthedocs.org/";
-      license = stdenv.lib.licenses.bsd3;
     };
   };
 

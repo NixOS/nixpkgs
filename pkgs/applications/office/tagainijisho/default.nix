@@ -1,10 +1,10 @@
-{stdenv, fetchurl, qt4, cmake, sqlite}:
+{ stdenv, fetchurl, qt4, cmake, sqlite }:
 
 stdenv.mkDerivation {
-  name = "tagainijisho-1.0.2";
+  name = "tagainijisho-1.0.3";
   src = fetchurl {
-    url = https://github.com/Gnurou/tagainijisho/releases/download/1.0.2/tagainijisho-1.0.2.tar.gz;
-    sha256 = "0gvwsphy2a1b2npxkzvaf91rbzb00zhi2anxd5102h6ld5m52jhl";
+    url = https://github.com/Gnurou/tagainijisho/releases/download/1.0.3/tagainijisho-1.0.3.tar.gz;
+    sha256 = "0kmg1940yiqfm4vpifyj680283ids4nsij9s750nrshwxiwwbqvg";
   };
 
   buildInputs = [ qt4 cmake sqlite ];

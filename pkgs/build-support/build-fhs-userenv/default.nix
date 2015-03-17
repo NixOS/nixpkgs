@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cat > $out/bin/${name} <<EOF
     #! ${stdenv.shell}
-    exec ${chroot-user}/bin/chroot-user ${env} $out/libexec/run
+    exec ${chroot-user}/bin/chroot-user ${env} $out/libexec/run "\$@"
     EOF
     chmod +x $out/bin/${name}
 
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
     cat > $out/libexec/run <<EOF
     #! ${stdenv.shell}
     source /etc/profile
-    ${runScript}
+    ${runScript} "\$@"
     EOF
     chmod +x $out/libexec/run
   '';

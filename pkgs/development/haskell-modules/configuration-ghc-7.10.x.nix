@@ -89,9 +89,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
-  # https://github.com/peti/jailbreak-cabal/issues/5
-  ReadArgs = dontCheck super.ReadArgs;
-
   # Until the changes have been pushed to Hackage
   haskell-src-meta = appendPatch super.haskell-src-meta (pkgs.fetchpatch {
     url = "https://github.com/bmillwood/haskell-src-meta/pull/31.patch";

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "srm-" + version;
-  version = "1.2.14";
+  version = "1.2.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/srm/1.2.14/srm-1.2.14.tar.gz";
-    sha256 = "1irwwpb7yhmii2v4vz1fjkmmhw7w7qd1ak9arn9zfg3mgcnwl32q";
+    url = "mirror://sourceforge/project/srm/${version}/${name}.tar.gz";
+    sha256 = "10sjarhprs6s4zandndg720528rcnd4xk8dl48pjj7li1q9c30vm";
   };
 
   meta = with stdenv.lib; {
