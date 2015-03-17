@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
     --with-hotplug-dir=$(out)/lib/firmware
   '';
 
-  installFlags = ''
-    DESTDIR=$(out)
-  '';
+  dontStrip = true;
 
   postInstall = ''
     # These are lifted from the Arch PKGBUILD
