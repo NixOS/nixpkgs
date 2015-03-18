@@ -18,6 +18,11 @@ let
       sha256 = "0bdq6yggyl7nkc2pbl6pxhhyx15nyqhz3ds6rfn448n6rxdwlhzc";
     };
 
+    # The test tends to fail on btrfs and maybe other unusual filesystems.
+    postPatch = ''
+      sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
+    '';
+
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
