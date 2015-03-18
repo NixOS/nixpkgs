@@ -292,7 +292,6 @@ self: super: {
   aws = dontCheck super.aws;                            # needs aws credentials
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
-  bindings-GLFW = dontCheck super.bindings-GLFW;        # requires an active X11 display
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
   buildwrapper = dontCheck super.buildwrapper;
@@ -325,7 +324,6 @@ self: super: {
   ghc-parmake = dontCheck super.ghc-parmake;
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   git-vogue = dontCheck super.git-vogue;
-  GLFW-b = dontCheck super.GLFW-b;                      # https://github.com/bsl/GLFW-b/issues/50
   hackport = dontCheck super.hackport;
   hadoop-formats = dontCheck super.hadoop-formats;
   haeredes = dontCheck super.haeredes;
@@ -629,6 +627,18 @@ self: super: {
 
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
+
+  # https://github.com/bsl/bindings-GLFW/issues/25
+  bindings-GLFW = markBroken super.bindings-GLFW;
+  dynamic-graph = dontDistribute super.dynamic-graph;
+  fwgl-glfw = dontDistribute super.fwgl-glfw;
+  glapp = dontDistribute super.glapp;
+  GLFW-b-demo = dontDistribute super.GLFW-b-demo;
+  GLFW-b = dontDistribute super.GLFW-b;
+  GLFW = dontDistribute super.GLFW;
+  lambdacube-samples = dontDistribute super.lambdacube-samples;
+  nehe-tuts = dontDistribute super.nehe-tuts;
+  netwire-input-glfw = dontDistribute super.netwire-input-glfw;
 
 } // {
 
