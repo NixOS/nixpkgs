@@ -25,6 +25,9 @@ self: super: {
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
 
+  # Use the default version of mysql to build this package (which is actually mariadb).
+  mysql = super.mysql.override { inherit (pkgs) mysql; };
+
   # Please also remove optparse-applicative special case from
   # cabal2nix/hackage2nix.hs when removing the following.
   elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
