@@ -219,8 +219,9 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AppSqitch = buildPerlModule {
-    name = "App-Sqitch-0.999";
+  AppSqitch = buildPerlModule rec {
+    version = "0.999";
+    name = "App-Sqitch-${version}";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-0.999.tar.gz;
       sha256 = "e7e02194a7b0c42fb4df046cd834d5eb99ff9a2c169f5c60a52c362e89351da6";
@@ -235,11 +236,11 @@ let self = _self // overrides; _self = with self; {
       IPCSystemSimple ListMoreUtils Moo PathClass PerlIOutf8_strict StringFormatter
       StringShellQuote SubExporter TemplateTiny Throwable TryTiny TypeTiny URI
       URIdb libintlperl namespaceautoclean
-      strictures ModuleRuntime DevelGlobalDestruction SubExporterProgressive
-      ImportInto ExporterTiny DataOptList ParamsUtil SubInstall RoleTiny
-      MooXTypesMooseLike ClassLoad ModuleImplementation ClassLoadXS
-      BHooksEndOfScope namespaceclean PackageStash SubIdentify
-      ClassMethodModifiers
+      # strictures ModuleRuntime DevelGlobalDestruction SubExporterProgressive
+      # ImportInto ExporterTiny DataOptList ParamsUtil SubInstall RoleTiny
+      # MooXTypesMooseLike ClassLoad ModuleImplementation ClassLoadXS
+      # BHooksEndOfScope namespaceclean PackageStash SubIdentify
+      # ClassMethodModifiers
     ];
     doCheck = false;  # Can't find home directory.
     meta = {

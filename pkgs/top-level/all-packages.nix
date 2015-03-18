@@ -7816,8 +7816,10 @@ let
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
-  sqitch = callPackage ../development/tools/misc/sqitch {
-    inherit stdenv writeScript makeWrapper ;
+  sqitchPg = callPackage ../development/tools/misc/sqitch {
+    inherit stdenv perl makeWrapper;
+    name = "sqitch-pg";
+    databaseModule = perlPackages.DBDPg;
     sqitchModule = perlPackages.AppSqitch;
   };
 
