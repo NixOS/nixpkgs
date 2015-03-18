@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     "--with-backend=libusb-1.0"
   ];
 
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d/
+    cp -v *.rules $out/lib/udev/rules.d/
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/yubikey-personalization;
     description = "a library and command line tool to personalize YubiKeys";
