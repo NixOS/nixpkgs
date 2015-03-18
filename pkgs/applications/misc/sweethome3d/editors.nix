@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, p7zip, sweethome3dApp }:
+, gtk3, gsettings_desktop_schemas, p7zip, sweethome3dApp }:
 
 let
 
@@ -24,7 +24,7 @@ let
       categories = "Application;CAD;";
     };
 
-    buildInputs = [ ant jre jdk makeWrapper ];
+    buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings_desktop_schemas ];
 
     patchPhase = ''
       sed -i -e 's,../SweetHome3D,${application.src},g' build.xml
@@ -38,8 +38,9 @@ let
       mkdir -p $out/bin
       mkdir -p $out/share/{java,applications}
       cp ${module}-${version}.jar $out/share/java/.
-      cp ${editorItem}/share/applications/* $out/share/applications
+      cp "${editorItem}/share/applications/"* $out/share/applications
       makeWrapper ${jre}/bin/java $out/bin/$exec \
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gsettings_desktop_schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-jar $out/share/java/${module}-${version}.jar ${if stdenv.system == "x86_64-linux" then "-d64" else "-d32"}"
     '';
 
@@ -57,7 +58,7 @@ let
 
   d2u = stdenv.lib.replaceChars ["."] ["_"];
 
-in rec {
+in {
 
   textures-editor = mkEditorProject rec {
     version = "1.4";
@@ -74,14 +75,14 @@ in rec {
   };
 
   furniture-editor = mkEditorProject rec {
-    version = "1.14";
+    version = "1.16";
     module = "FurnitureLibraryEditor";
     name = sweetName module version;
     description = "Quickly create SH3F files and edit the properties of the 3D models it contain";
     license = stdenv.lib.licenses.gpl2;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "0rdcd8vjbcv9jdms2xr3y7ykm2a9bkmwj4y7ybk9zcldayqsgn6z";
+      sha256 = "09dmb0835kncs1ngszhyp1pgvj7vqjjrp9q405gakm8ylrzym374";
       module = module;
       tag = "V_" + d2u version;
     };
