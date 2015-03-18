@@ -383,7 +383,7 @@ stdenv.mkDerivation rec {
     (mkFlag (libdc1394 != null && libraw1394 != null) "0.5" "libdc1394")
     (mkFlag (libiconv != null) "1.2" "iconv")
     #(mkFlag (libiec61883 != null && libavc1394 != null && libraw1394 != null) "1.0" "libiec61883")
-    (mkFlag (libmfz != null) "2.6" "libmfx")
+    #(mkFlag (libmfx != null) "2.6" "libmfx")
     (mkFlag (libmodplug != null) "0.9" "libmodplug")
     #(mkFlag (libnut != null) "0.5" "libnut")
     (mkFlag (libopus != null) "1.0" "libopus")

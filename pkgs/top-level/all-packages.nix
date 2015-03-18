@@ -5593,6 +5593,7 @@ let
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
   ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
   ffmpeg_2_5 = callPackage ../development/libraries/ffmpeg/2.5.nix { };
+  ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
   # Aliases
   ffmpeg_0 = ffmpeg_0_11;
   ffmpeg_1 = ffmpeg_1_2;
