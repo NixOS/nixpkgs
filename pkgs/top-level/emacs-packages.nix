@@ -96,6 +96,19 @@ let self = _self // overrides;
     };
   };
 
+  alert = melpaBuild rec {
+    pname = "alert";
+    version = "1.2";
+    src = fetchFromGitHub {
+      owner = "jwiegley";
+      repo  = pname;
+      rev   = "v${version}";
+      sha256 = "1vpc3q40m6dcrslki4bg725j4kv6c6xfxwjjl1ilg7la49fwwf26";
+    };
+    packageRequires = [ gntp log4e ];
+    meta = { license = gpl2Plus; };
+  };
+
   anzu = melpaBuild rec {
     pname = "anzu";
     version = "0.52";
@@ -185,12 +198,12 @@ let self = _self // overrides;
 
   bind-key = melpaBuild {
     pname   = "bind-key";
-    version = "20141013";
+    version = "20150317";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = "use-package";
-      rev    = "d43af5e0769a92f77e01dea229e376d9006722ef";
-      sha256 = "1m4v5h52brg2g9rpbqfq9m3m8fv520vg5mjwppnbw6099d17msqd";
+      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
+      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
     };
     files = [ "bind-key.el" ];
     meta = { license = gpl3Plus; };
@@ -210,6 +223,20 @@ let self = _self // overrides;
       homepage = https://github.com/browse-kill-ring/browse-kill-ring/;
       license = gpl2Plus;
     };
+  };
+
+  caml = melpaBuild rec {
+    pname   = "caml";
+    version = "4.2.1"; # TODO: emacs doesn't seem to like 02 as a version component..
+    src = fetchFromGitHub {
+      owner  = "ocaml";
+      repo   = "ocaml";
+      rev    = "4.02.1";
+      sha256 = "05lms9qhcnwgi7k034kiiic58c9da22r32mpak0ahmvp5fylvjpb";
+    };
+    fileSpecs = [ "emacs/*.el" ];
+    configurePhase = "true";
+    meta = { license = gpl2Plus; };
   };
 
   change-inner = melpaBuild rec {
@@ -496,6 +523,18 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  gntp = melpaBuild rec {
+    pname = "gntp";
+    version = "0.1";
+    src = fetchFromGitHub {
+      owner = "tekai";
+      repo  = "${pname}.el";
+      rev   = "v${version}";
+      sha256 = "1nvyjjjydrimpxy4cpg90si7sr8lmldbhlcm2mx8npklp9pn5y3a";
+    };
+    meta = { license = gpl2Plus; };
+  };
+
   gnus = melpaBuild rec {
     pname   = "gnus";
     version = "20140501";
@@ -625,6 +664,18 @@ let self = _self // overrides;
     };
     fileSpecs = [ "lisp/lcs*.el" ];
     meta = { license = gpl3Plus; };
+  };
+
+  log4e = melpaBuild rec {
+    pname = "log4e";
+    version = "0.3.0";
+    src = fetchFromGitHub {
+      owner = "aki2o";
+      repo  = pname;
+      rev   = "v${version}";
+      sha256 = "1l28n7a0v2zkknc70i1wn6qb5i21dkhfizzk8wcj28v44cgzk022";
+    };
+    meta = { license = gpl2Plus; };
   };
 
   lui = melpaBuild rec {
@@ -942,6 +993,19 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  tuareg = melpaBuild rec {
+    pname = "tuareg";
+    version = "2.0.9";
+    src = fetchFromGitHub {
+      owner  = "ocaml";
+      repo   = pname;
+      rev    = version;
+      sha256 = "1j2smhqrwy0zydhbyjkpnwzq05fgfa85kc0d9kzwq0mppdndspp4";
+    };
+    packageRequires = [ caml ];
+    meta = { license = gpl3Plus; };
+  };
+
   undo-tree = melpaBuild rec {
     pname   = "undo-tree";
     version = "0.6.4";
@@ -955,12 +1019,12 @@ let self = _self // overrides;
 
   use-package = melpaBuild rec {
     pname   = "use-package";
-    version = "20141013";
+    version = "20150317";
     src = fetchFromGitHub {
       owner  = "jwiegley";
       repo   = pname;
-      rev    = "d43af5e0769a92f77e01dea229e376d9006722ef";
-      sha256 = "1m4v5h52brg2g9rpbqfq9m3m8fv520vg5mjwppnbw6099d17msqd";
+      rev    = "b836266ddfbc835efdb327ecb389ff9e081d7c55";
+      sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
     };
     packageRequires = [ bind-key diminish ];
     files = [ "use-package.el" ];
