@@ -1309,6 +1309,8 @@ let
 
   flpsed = callPackage ../applications/editors/flpsed { };
 
+  fluentd = callPackage ../tools/misc/fluentd { };
+
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
