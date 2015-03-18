@@ -1,12 +1,9 @@
-{ config, lib, pkgs, ... }@args:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
-let topconfig = config;
-in mkMultiInstance [ "services" "nginx" ] args ({ config, name, ... }:
-
 let
-  cfg = config;
+  cfg = config.services.nginx;
   nginx = cfg.package;
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
@@ -23,6 +20,7 @@ in
 
 {
   options = {
+    services.nginx = {
       enable = mkOption {
         default = false;
         type = types.bool;
@@ -84,13 +82,15 @@ in
         description = "Group account under which nginx runs.";
       };
 
+    };
+
   };
 
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
-    systemd.services."nginx-${name}" = {
-      description = "Nginx Web Server - ${name}";
+    systemd.services.nginx = {
+      description = "Nginx Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ nginx ];
@@ -111,12 +111,12 @@ in
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
         group = cfg.group;
-        uid = topconfig.ids.uids.nginx;
+        uid = config.ids.uids.nginx;
       });
 
     users.extraGroups = optionalAttrs (cfg.group == "nginx") (singleton
       { name = "nginx";
-        gid = topconfig.ids.gids.nginx;
+        gid = config.ids.gids.nginx;
       });
   };
-})
+}
