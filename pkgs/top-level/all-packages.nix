@@ -11134,10 +11134,10 @@ let
     withSidebar = true;
   };
 
-  panamax_api = callPackage ../applications/networking/cluster/panamax/api.nix {
+  panamax_api = callPackage ../applications/networking/cluster/panamax/api {
     ruby = ruby_2_1;
   };
-  panamax_ui = callPackage ../applications/networking/cluster/panamax/ui.nix {
+  panamax_ui = callPackage ../applications/networking/cluster/panamax/ui {
     ruby = ruby_2_1;
   };
 

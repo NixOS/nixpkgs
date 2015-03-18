@@ -3,24 +3,25 @@
 
 with stdenv.lib;
 
-let
-  env = bundlerEnv {
-    name = "panamax-api-gems";
-    inherit ruby;
-    gemset = ./gemset-ui.nix;
-    gemfile = ./Gemfile-ui;
-    lockfile = ./Gemfile-ui.lock;
-  };
-  bundler = bundler_HEAD.override { inherit ruby; };
-in
 stdenv.mkDerivation rec {
   name = "panamax-ui-${version}";
-  version = "0.2.11";
+  version = "0.2.14";
+
+  env = bundlerEnv {
+    name = "panamax-ui-gems-${version}";
+    inherit ruby;
+    gemset = ./gemset.nix;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    buildInputs = [ openssl ];
+  };
+
+  bundler = bundler_HEAD.override { inherit ruby; };
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "git://github.com/CenturyLinkLabs/panamax-ui";
-    sha256 = "17j5ac8fzp377bzg7f239jdcc9j0c63bkx0ill5nl10i3h05z7jh";
+    sha256 = "0vwy0gazfx3zkf2bx862jspidgn5p97d3jaq99x38qfhxp554sn9";
   };
 
   buildInputs = [ makeWrapper env.ruby openssl sqlite bundler ];

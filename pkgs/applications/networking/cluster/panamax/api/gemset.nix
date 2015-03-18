@@ -1,6 +1,4 @@
-let
-  pkgs = import <nixpkgs> { };
-in {
+{
   "actionmailer" = {
     version = "4.1.7";
     source = {
@@ -223,10 +221,10 @@ in {
     };
   };
   "i18n" = {
-    version = "0.6.11";
+    version = "0.7.0";
     source = {
       type = "gem";
-      sha256 = "0fwjlgmgry2blf8zlxn9c555cf4a16p287l599kz5104ncjxlzdk";
+      sha256 = "1i5z1ykl8zhszsxcs8mzl8d0dxgs3ylz8qlzrw74jb0gplkx6758";
     };
   };
   "its" = {
@@ -271,10 +269,10 @@ in {
     };
   };
   "minitest" = {
-    version = "5.4.3";
+    version = "5.5.1";
     source = {
       type = "gem";
-      sha256 = "1ws2cphg9jh45nrvs43s2ww5r14nb026bwlbwwpi0jz6qsqm86x4";
+      sha256 = "1h8jn0rgmwy37jnhfcg55iilw0n370vgp8xnh0g5laa8rhv32fyn";
     };
   };
   "multi_json" = {
@@ -310,7 +308,6 @@ in {
     dependencies = [
       "rack"
     ];
-    buildInputs = [ pkgs.openssl ];
   };
   "rack" = {
     version = "1.5.2";
@@ -320,10 +317,10 @@ in {
     };
   };
   "rack-test" = {
-    version = "0.6.2";
+    version = "0.6.3";
     source = {
       type = "gem";
-      sha256 = "01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky";
+      sha256 = "0h6x5jq24makgv2fq5qqgjlrk74dxfy62jif9blk43llw8ib2q7z";
     };
     dependencies = [
       "rack"
@@ -491,10 +488,10 @@ in {
     ];
   };
   "sprockets-rails" = {
-    version = "2.2.0";
+    version = "2.2.4";
     source = {
       type = "gem";
-      sha256 = "042fxqskvaa0wn9kpy02nv6p7sa355py9pi58zw96l30170sd3hl";
+      sha256 = "172cdg38cqsfgvrncjzj0kziz7kv6b1lx8pccd0blyphs25qf4gc";
     };
     dependencies = [
       "actionpack"

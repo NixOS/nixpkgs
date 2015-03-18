@@ -1,6 +1,4 @@
-let
-  pkgs = import <nixpkgs> { };
-in {
+{
   "actionmailer" = {
     version = "4.1.7";
     source = {
@@ -131,10 +129,10 @@ in {
     ];
   };
   "capybara" = {
-    version = "2.3.0";
+    version = "2.4.4";
     source = {
       type = "gem";
-      sha256 = "12x24zsn3y7sigmz45ijd9bkq7l14r2a00ay6k9mdgrbncbr3ins";
+      sha256 = "114k4xi4nfbp3jfbxgwa3fksbwsyibx74gbdqpcgg3dxpmzkaa4f";
     };
     dependencies = [
       "mime-types"
@@ -183,10 +181,10 @@ in {
     ];
   };
   "ctl_base_ui" = {
-    version = "0.0.4";
+    version = "0.0.5";
     source = {
       type = "gem";
-      sha256 = "0h0dbl0mf6cql7yp10jywv22rn0iy2188phdxvr2ladwwn2vxf5d";
+      sha256 = "1pji85xmddgld5lqx52zxi5r2kx6rsjwkqlr26bp62xb29r10x57";
     };
     dependencies = [
       "haml"
@@ -259,10 +257,10 @@ in {
     };
   };
   "execjs" = {
-    version = "2.2.1";
+    version = "2.2.2";
     source = {
       type = "gem";
-      sha256 = "1s41g9qwq0h4452q4gp934lnkzfkxh4wrg8fd4bcynba86bf3j8b";
+      sha256 = "05m41mnxn4b2p133qzbz5cy9cc5rn57aa0pp2943hxmzbk379z1f";
     };
   };
   "haml" = {
@@ -283,11 +281,21 @@ in {
     };
   };
   "i18n" = {
-    version = "0.6.11";
+    version = "0.7.0";
     source = {
       type = "gem";
-      sha256 = "0fwjlgmgry2blf8zlxn9c555cf4a16p287l599kz5104ncjxlzdk";
+      sha256 = "1i5z1ykl8zhszsxcs8mzl8d0dxgs3ylz8qlzrw74jb0gplkx6758";
     };
+  };
+  "its" = {
+    version = "0.2.0";
+    source = {
+      type = "gem";
+      sha256 = "0rxwds9ipqp48mzqcaxzmfcqhawazg0zlhc1avv3i2cmm3np1z8g";
+    };
+    dependencies = [
+      "rspec-core"
+    ];
   };
   "jquery-rails" = {
     version = "3.1.2";
@@ -311,10 +319,10 @@ in {
     ];
   };
   "json" = {
-    version = "1.8.1";
+    version = "1.8.2";
     source = {
       type = "gem";
-      sha256 = "0002bsycvizvkmk1jyv8px1hskk6wrjfk4f7x5byi8gxm6zzn6wn";
+      sha256 = "0zzvv25vjikavd3b1bp6lvbgj23vv9jvmnl4vpim8pv30z8p6vr5";
     };
   };
   "kramdown" = {
@@ -356,17 +364,17 @@ in {
     };
   };
   "mini_portile" = {
-    version = "0.6.0";
+    version = "0.6.1";
     source = {
       type = "gem";
-      sha256 = "09kcn4g63xrdirgwxgjikqg976rr723bkc9bxfr29pk22cj3wavn";
+      sha256 = "07gah4k84sar9d850v9gip9b323pw74vwwndh3bbzxpw5iiwsd3l";
     };
   };
   "minitest" = {
-    version = "5.4.3";
+    version = "5.5.1";
     source = {
       type = "gem";
-      sha256 = "1ws2cphg9jh45nrvs43s2ww5r14nb026bwlbwwpi0jz6qsqm86x4";
+      sha256 = "1h8jn0rgmwy37jnhfcg55iilw0n370vgp8xnh0g5laa8rhv32fyn";
     };
   };
   "multi_json" = {
@@ -376,11 +384,18 @@ in {
       sha256 = "1ll21dz01jjiplr846n1c8yzb45kj5hcixgb72rz0zg8fyc9g61c";
     };
   };
-  "nokogiri" = {
-    version = "1.6.2.1";
+  "netrc" = {
+    version = "0.8.0";
     source = {
       type = "gem";
-      sha256 = "0dj8ajm9hlfpa71qz1xn5prqy5qdi32ll74qh8ssjwknp1a35cnz";
+      sha256 = "1j4jbdvd19kq34xiqx1yqb4wmcywyrlaky8hrh09c1hz3c0v5dkb";
+    };
+  };
+  "nokogiri" = {
+    version = "1.6.5";
+    source = {
+      type = "gem";
+      sha256 = "1xmxz6fa0m4p7c7ngpgz6gjgv65lzz63dsf0b6vh7gs2fkiw8j7l";
     };
     dependencies = [
       "mini_portile"
@@ -436,7 +451,6 @@ in {
     dependencies = [
       "rack"
     ];
-    buildInputs = [ pkgs.openssl ];
   };
   "rack" = {
     version = "1.5.2";
@@ -456,10 +470,10 @@ in {
     ];
   };
   "rack-test" = {
-    version = "0.6.2";
+    version = "0.6.3";
     source = {
       type = "gem";
-      sha256 = "01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky";
+      sha256 = "0h6x5jq24makgv2fq5qqgjlrk74dxfy62jif9blk43llw8ib2q7z";
     };
     dependencies = [
       "rack"
@@ -506,10 +520,10 @@ in {
     ];
   };
   "rake" = {
-    version = "10.4.1";
+    version = "10.4.0";
     source = {
       type = "gem";
-      sha256 = "1446zzdpwpvwkd0zk19b2smmmvdiarh4b26cdbcw4fy5p67wxkw2";
+      sha256 = "0a10xzqc1lh6gjkajkslr0n40wjrniyiyzxkp9m5fc8wf7b74zw8";
     };
   };
   "ref" = {
@@ -520,60 +534,75 @@ in {
     };
   };
   "rest-client" = {
-    version = "1.6.7";
+    version = "1.7.2";
     source = {
       type = "gem";
-      sha256 = "0nn7zalgidz2yj0iqh3xvzh626krm2al79dfiij19jdhp0rk8853";
+      sha256 = "0h8c0prfi2v5p8iim3wm60xc4yripc13nqwq601bfl85k4gf25i0";
     };
     dependencies = [
       "mime-types"
+      "netrc"
     ];
   };
   "rspec-core" = {
-    version = "2.14.8";
+    version = "3.1.7";
     source = {
       type = "gem";
-      sha256 = "0psjy5kdlz3ph39br0m01w65i1ikagnqlg39f8p65jh5q7dz8hwc";
+      sha256 = "01bawvln663gffljwzpq3mrpa061cghjbvfbq15jvhmip3csxqc9";
     };
+    dependencies = [
+      "rspec-support"
+    ];
   };
   "rspec-expectations" = {
-    version = "2.14.5";
+    version = "3.1.2";
     source = {
       type = "gem";
-      sha256 = "1ni8kw8kjv76jvwjzi4jba00k3qzj9f8wd94vm6inz0jz3gwjqf9";
+      sha256 = "0m8d36wng1lpbcs54zhg1rxh63rgj345k3p0h0c06lgknz339nzh";
     };
     dependencies = [
       "diff-lcs"
+      "rspec-support"
     ];
   };
   "rspec-mocks" = {
-    version = "2.14.6";
+    version = "3.1.3";
     source = {
       type = "gem";
-      sha256 = "1fwsmijd6w6cmqyh4ky2nq89jrpzh56hzmndx9wgkmdgfhfakv30";
+      sha256 = "0gxk5w3klia4zsnp0svxck43xxwwfdqvhr3srv6p30f3m5q6rmzr";
     };
+    dependencies = [
+      "rspec-support"
+    ];
   };
   "rspec-rails" = {
-    version = "2.14.2";
+    version = "3.1.0";
     source = {
       type = "gem";
-      sha256 = "1j9nbha6p12kwy9c5g3lw541xg20yzk95lzgmsq7kvngiqz88p57";
+      sha256 = "1b1in3n1dc1bpf9wb3p3b2ynq05iacmr48jxzc73lj4g44ksh3wq";
     };
     dependencies = [
       "actionpack"
-      "activemodel"
       "activesupport"
       "railties"
       "rspec-core"
       "rspec-expectations"
       "rspec-mocks"
+      "rspec-support"
     ];
   };
-  "safe_yaml" = {
-    version = "1.0.3";
+  "rspec-support" = {
+    version = "3.1.2";
     source = {
       type = "gem";
-      sha256 = "063bykyk40s3rhy1dxfbvl69s179n1iny418z4wqjbvhrmjn18wl";
+      sha256 = "14y6v9r9lrh91ry9r79h85v0f3y9ja25w42nv5z9n0bipfcwhprb";
+    };
+  };
+  "safe_yaml" = {
+    version = "1.0.4";
+    source = {
+      type = "gem";
+      sha256 = "1hly915584hyi9q9vgd968x2nsi5yag9jyf5kq60lwzi5scr7094";
     };
   };
   "sass" = {
@@ -635,10 +664,10 @@ in {
     ];
   };
   "sprockets-rails" = {
-    version = "2.2.2";
+    version = "2.2.4";
     source = {
       type = "gem";
-      sha256 = "192d4vfl1gjz6phli6sqk98364x6v4jkpl5imajvimsinvgyv81b";
+      sha256 = "172cdg38cqsfgvrncjzj0kziz7kv6b1lx8pccd0blyphs25qf4gc";
     };
     dependencies = [
       "actionpack"
@@ -699,10 +728,10 @@ in {
     };
   };
   "tins" = {
-    version = "1.1.0";
+    version = "1.3.3";
     source = {
       type = "gem";
-      sha256 = "0jddc40lw8lzn421p6pjvvs7b37qyd8jgsl5nrq16rc46wgx2r2r";
+      sha256 = "14jnsg15wakdk1ljh2iv9yvzk8nb7gpzd2zw4yvjikmffqjyqvna";
     };
   };
   "tzinfo" = {
@@ -727,10 +756,10 @@ in {
     ];
   };
   "webmock" = {
-    version = "1.18.0";
+    version = "1.20.4";
     source = {
       type = "gem";
-      sha256 = "1r21a4x7dljb3cqxp7w7mdq5a1xvw9kn6m3gldsldsfza5b4hq03";
+      sha256 = "01cz13ybxbbvkpl21bcfv0p9ir8m2zcplx93ps01ma54p25z4mxr";
     };
     dependencies = [
       "addressable"
