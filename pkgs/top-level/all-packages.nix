@@ -4859,6 +4859,10 @@ let
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
+  chefdk = callPackage ../development/tools/chefdk {
+    ruby = ruby_2_0_0;
+  };
+
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
 
   chrpath = callPackage ../development/tools/misc/chrpath { };
