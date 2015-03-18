@@ -2748,6 +2748,8 @@ let
 
   swaks = callPackage ../tools/networking/swaks { };
 
+  t = callPackage ../tools/misc/t { };
+
   t1utils = callPackage ../tools/misc/t1utils { };
 
   tarsnap = callPackage ../tools/backup/tarsnap { };
