@@ -264,7 +264,7 @@ let
     '';
 
     passthru.pkgName = pkgName;
-  } // (filterAttrs (n: v: n != "deps" && n != "resolvedDeps") args) // {
+} // (filterAttrs (n: v: all (k: n != k) ["deps" "resolvedDeps" "optionalDependencies"]) args)// {
     name = namePrefix + name;
 
     # Run the node setup hook when this package is a build input
