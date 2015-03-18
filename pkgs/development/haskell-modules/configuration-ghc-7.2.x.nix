@@ -32,7 +32,7 @@ self: super: {
   unix = null;
 
   # deepseq is not a core library for this compiler.
-  deepseq = self.deepseq_1_4_0_0;
+  deepseq = self.deepseq_1_4_1_0;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
