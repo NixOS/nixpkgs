@@ -12798,6 +12798,8 @@ let
   };
 
   simutrans = callPackage ../games/simutrans { };
+  # get binaries without data built by Hydra
+  simutrans_binaries = lowPrio simutrans.binaries;
 
   soi = callPackage ../games/soi {};
 
