@@ -13056,8 +13056,6 @@ let
   };
 
   redshift = callPackage ../applications/misc/redshift {
-    inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
-      xf86vidmodeproto;
     inherit (gnome) GConf;
     inherit (pythonPackages) pyxdg;
     geoclue = geoclue2;
