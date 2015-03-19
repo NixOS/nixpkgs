@@ -87,7 +87,7 @@ composableDerivation {
       // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
-      // edf { name = "mzscheme"; } #Include MzScheme interpreter.
+      // edf { name = "mzscheme"; feat = "mzschemeinterp";} #Include MzScheme interpreter.
       // edf { name = "perl"; feat = "perlinterp"; enable = { nativeBuildInputs = [perl]; };} #Include Perl interpreter.
 
       // edf {
@@ -115,7 +115,7 @@ composableDerivation {
         };
       }
 
-      // edf { name = "tcl"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
+      // edf { name = "tcl"; feat = "tclinterp"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf {
         name = "lua";
