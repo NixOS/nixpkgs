@@ -13951,5 +13951,21 @@ let
     };
   };
 
+  networkx = buildPythonPackage rec {
+    name = "networkx-1.9.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/networkx/networkx-1.9.1.tar.gz";
+      sha256 = "6380eb38d0b5770d7e50813c8a48ff7c373b2187b4220339c1adce803df01c59";
+    };
+
+    buildInputs = with self; [ nose decorator ];
+
+    meta = {
+      homepage = "https://networkx.github.io/";
+      description = "Library for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks.";
+      license = licenses.bsd3;
+    };
+  };
 
 }); in pythonPackages
