@@ -8266,8 +8266,7 @@ let
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
-    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent;
-    withLibevent = true;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
