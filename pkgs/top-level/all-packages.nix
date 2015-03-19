@@ -10386,9 +10386,7 @@ let
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
-  fetchmail = import ../applications/misc/fetchmail {
-    inherit stdenv fetchurl openssl;
-  };
+  fetchmail = callPackage ../applications/misc/fetchmail { };
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
