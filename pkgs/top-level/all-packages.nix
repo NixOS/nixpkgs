@@ -8476,6 +8476,8 @@ let
   thttpd = callPackage ../servers/http/thttpd { };
 
   storm = callPackage ../servers/computing/storm { };
+  
+  slurm-llnl = callPackage ../servers/computing/slurm { };
 
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
