@@ -1622,6 +1622,8 @@ let
     lua = lua5;
   };
 
+  honcho = callPackage ../tools/system/honcho { };
+
   host = callPackage ../tools/networking/host { };
 
   hping = callPackage ../tools/networking/hping { };
