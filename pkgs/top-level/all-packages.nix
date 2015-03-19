@@ -5543,7 +5543,7 @@ let
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
 
-  dbus = callPackage ../development/libraries/dbus { };
+  dbus = callPackage ../development/libraries/dbus (config.dbus or {});
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };

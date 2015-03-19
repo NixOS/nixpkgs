@@ -1,6 +1,10 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, libtool
 , expat, systemd, glib, dbus_glib, python
-, libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
+, libX11 ? null, libICE ? null, libSM ? null, x11Support ? (stdenv.isLinux || stdenv.isDarwin) }:
+
+assert x11Support -> libX11 != null
+                  && libICE != null
+                  && libSM != null;
 
 let
   version = "1.8.16";
@@ -8,7 +12,7 @@ let
 
   inherit (stdenv) lib;
 
-  buildInputsX = lib.optionals useX11 [ libX11 libICE libSM ];
+  buildInputsX = lib.optionals x11Support [ libX11 libICE libSM ];
 
   # also other parts than "libs" need this statically linked lib
   makeInternalLib = "(cd dbus && make libdbus-internal.la)";
@@ -57,7 +61,7 @@ let
       "--sysconfdir=/etc"
       "--with-session-socket-dir=/tmp"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ] ++ lib.optional (!useX11) "--without-x";
+    ] ++ lib.optional (!x11Support) "--without-x";
 
     enableParallelBuilding = true;
 
