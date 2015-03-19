@@ -48,7 +48,7 @@ hashes=builtins.listToAttrs[
   {name="kdegraphics-mobipocket";value="0m41s8scy5hym6mk0kfmjj54dc3yxahsdrliaadixhp0fx02cx0v";}
   {name="kdegraphics-strigi-analyzer";value="08d2vrghwqkw4mg4vmgsynfnhygxpavxnscvs3z70hdff7i001f0";}
   {name="kdegraphics-thumbnailers";value="1lhb7m298mbz7dk50savqdz3p6lkbscn0gi6bqapji24464vlb8k";}
-  {name="kdelibs";value="17pxihhcbinr3jpwvi1iwfnqs2wiqh0jgf1is05yz13122hns87q";}
+  {name="kdelibs";value="165xn2bv03j2g4j7m287add40kwhccvp2ci5hrar2xfd9sgl24xk";}
   {name="kdenetwork-filesharing";value="0a8vw6jj0kz0lq96mj3mfzpdvb6xpw8xvccwxhjqp164bzqdz66d";}
   {name="kdenetwork-strigi-analyzers";value="14px6ddp8flqd40bww0sl71jmn5bfqm9j3v6rqm63ii7z87qk6xl";}
   {name="kdepim";value="0i7r68r5nzflmpdkkzpj5xc3fwxg5903g1fj5g1yn79v5zx1gzd3";}
@@ -221,7 +221,7 @@ versions=builtins.listToAttrs[
   {name="kdegraphics-mobipocket";value="4.14.3";}
   {name="kdegraphics-strigi-analyzer";value="4.14.3";}
   {name="kdegraphics-thumbnailers";value="4.14.3";}
-  {name="kdelibs";value="4.14.3";}
+  {name="kdelibs";value="4.14.6";}
   {name="kdenetwork-filesharing";value="4.14.3";}
   {name="kdenetwork-strigi-analyzers";value="4.14.3";}
   {name="kdepim";value="4.14.3";}
@@ -343,6 +343,9 @@ versions=builtins.listToAttrs[
   {name="sweeper";value="4.14.3";}
   {name="umbrello";value="4.14.3";}
   {name="zeroconf-ioslave";value="4.14.3";}
+];
+urls=builtins.listToAttrs[
+  {name="kdelibs";value="mirror://kde/stable/applications/14.12.3/src/kdelibs-4.14.6.tar.xz";}
 ];
 modules=[
 {

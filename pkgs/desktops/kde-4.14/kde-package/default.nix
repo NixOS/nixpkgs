@@ -11,7 +11,8 @@ rec {
 
   # src attribute for $name tarball
   kdesrc = name: version: fetchurl {
-    url = "mirror://kde/" + (if manifest.stable then "" else "un")
+    url = if hasAttr name manifest.urls then manifest.urls."${name}" else
+      "mirror://kde/" + (if manifest.stable then "" else "un")
       + "stable/${release}/src/${name}-${version}.tar.xz";
     sha256 = getAttr name manifest.hashes;
   };

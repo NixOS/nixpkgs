@@ -27,9 +27,8 @@ let
   renames =
     (builtins.removeAttrs
       (import ./renames.nix {})
-      ["Backend" "CTest"])
+      ["Backend" "CTest" "KDeclarative"])
     // {
-      "KDE4" = "kdelibs";
       "Kexiv2" = "libkexiv2";
       "Kdcraw" = "libkdcraw";
       "Kipi" = "libkipi";
@@ -93,7 +92,9 @@ let
         HUNSPELL = hunspell;
         HUpnp = herqq;
         Jasper = jasper;
+        KDE4 = kde4.kdelibs;
         KActivities = kde4.kactivities;
+        KDeclarative = kde4.kdelibs;
         LCMS2 = lcms2;
         Ldap = openldap;
         LibAttica = attica;
@@ -145,6 +146,7 @@ let
         (blacklist ["artikulate"]) # build failure, wrong boost?
         (blacklist ["kde-dev-scripts" "kde-dev-utils"]) # docbook errors
         (blacklist ["kdewebdev"]) # unknown build failure
+        (blacklist ["kdelibs"]) # we use kdelibs from kde4 expressions
       ];
 
   l10nPkgQt4 = orig:
@@ -152,7 +154,7 @@ let
     mkDerivation {
       name = "${drvName.name}-qt4-${drvName.version}";
       inherit (orig) src;
-      buildInputs = [ kdeApps.kdelibs ];
+      buildInputs = [ kde4.kdelibs ];
       nativeBuildInputs = with pkgs; [ cmake gettext perl ];
       preConfigure = ''
         cd 4/
@@ -216,32 +218,6 @@ let
           super.kde-workspace.nativeBuildInputs
           ++ [ pkgconfig ];
         meta = { priority = 10; };
-      };
-
-      kdelibs = with pkgs; super.kdelibs // {
-        buildInputs =
-          super.kdelibs.buildInputs ++ [ attr libxslt polkit_qt4 xz ];
-
-        nativeBuildInputs =
-          super.kdelibs.nativeBuildInputs ++ [ pkgconfig ];
-
-        NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
-
-        propagatedBuildInputs =
-          super.kdelibs.propagatedBuildInputs ++ [ qt4 soprano phonon strigi ];
-
-        propagatedNativeBuildInputs =
-          super.kdelibs.propagatedNativeBuildInputs
-          ++ [ automoc4 cmake perl shared_mime_info ];
-
-        patches = [ ./kdelibs/polkit-install.patch ];
-
-        cmakeFlags = [
-          "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"
-          "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
-          "-DHUPNP_ENABLED=ON"
-          "-DWITH_SOLID_UDISKS2=ON"
-        ];
       };
 
       kdepim = with pkgs; super.kdepim // {
