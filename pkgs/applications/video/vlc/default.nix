@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
       "--enable-dc1394"
       "--enable-ncurses"
       "--enable-vdpau"
-      "--enable-dvdnav"
     ]
     ++ optional onlyLibVLC  "--disable-vlc";
 
