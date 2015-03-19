@@ -55,8 +55,7 @@ in
     boot.zfs = {
       useGit = mkOption {
         type = types.bool;
-        # TODO(wkennington): Revert when 0.6.4 is out
-        default = versionAtLeast config.boot.kernelPackages.kernel.version "3.19";
+        default = false;
         example = true;
         description = ''
           Use the git version of the SPL and ZFS packages.
