@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk, python, glib, gobjectIntrospection, libevent
+, perl, gtk, python, glib, gobjectIntrospection, libevent, zlib
 }:
 
 let
@@ -204,6 +204,37 @@ let
       license = stdenv.lib.licenses.mit;
     };
   };
+
+  luazlib = buildLuaPackage rec {
+    name = "zlib-${version}";
+    version = "0.4";
+
+    src = fetchurl {
+      url = "https://github.com/brimworks/lua-zlib/archive/v${version}.tar.gz";
+      sha256 = "1l32nwyh8b4vicxvlhbv9qhkhklbhvjfn8wd72bjk7ac9kz172rd";
+    };
+
+    buildInputs = [ zlib ];
+
+    preBuild = ''
+      makeFlagsArray=(
+        linux
+        LUAPATH="$out/share/lua/${lua.luaversion}"
+        LUACPATH="$out/lib/lua/${lua.luaversion}"
+        INCDIR="-I${lua}/include"
+        LIBDIR="-L$out/lib");
+    '';
+
+    preInstall = "mkdir -p $out/lib/lua/${lua.luaversion}";
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/brimworks/lua-zlib;
+      hydraPlatforms = platforms.linux;
+      license = licenses.mit;
+      maintainers = [ maintainers.koral ];
+    };
+  };
+      
 
   luastdlib = buildLuaPackage {
     name = "stdlib";
