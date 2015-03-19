@@ -11402,6 +11402,28 @@ in modules // {
   });
 
 
+  pylibmc = buildPythonPackage rec {
+    name = "pylibmc-${version}";
+    version = "1.5.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pylibmc/${name}.tar.gz";
+      sha256 = "1mnd8lng9wmcihl7mxd940hy1dzzvzsb971qclrvmqf3b4c2dfpc";
+    };
+
+    buildInputs = with self; [ pkgs.libmemcached pkgs.zlib nose ];
+
+    # requires an external memcached server running
+    doCheck = false;
+
+    meta = {
+      description = "Quick and small memcached client for Python";
+      homepage = http://sendapatch.se/projects/pylibmc/;
+      license = licenses.bsd3;
+    };
+  };
+
+
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
 
