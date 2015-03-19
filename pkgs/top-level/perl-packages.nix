@@ -236,11 +236,6 @@ let self = _self // overrides; _self = with self; {
       IPCSystemSimple ListMoreUtils Moo PathClass PerlIOutf8_strict StringFormatter
       StringShellQuote SubExporter TemplateTiny Throwable TryTiny TypeTiny URI
       URIdb libintlperl namespaceautoclean
-      # strictures ModuleRuntime DevelGlobalDestruction SubExporterProgressive
-      # ImportInto ExporterTiny DataOptList ParamsUtil SubInstall RoleTiny
-      # MooXTypesMooseLike ClassLoad ModuleImplementation ClassLoadXS
-      # BHooksEndOfScope namespaceclean PackageStash SubIdentify
-      # ClassMethodModifiers
     ];
     doCheck = false;  # Can't find home directory.
     meta = {
