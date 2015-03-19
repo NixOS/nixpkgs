@@ -256,7 +256,7 @@ let
     qtpaint = [ pkgs.qt4 ];
     R2GUESS = [ pkgs.gsl ];
     R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
-    RAppArmor = [ pkgs.apparmor ];
+    RAppArmor = [ pkgs.libapparmor ];
     rbamtools = [ pkgs.zlib ];
     RCA = [ pkgs.gmp ];
     rcdd = [ pkgs.gmp ];
@@ -1003,7 +1003,7 @@ let
 
     RAppArmor = old.RAppArmor.overrideDerivation (attrs: {
       patches = [ ./patches/RAppArmor.patch ];
-      LIBAPPARMOR_HOME = "${pkgs.apparmor}";
+      LIBAPPARMOR_HOME = "${pkgs.libapparmor}";
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
