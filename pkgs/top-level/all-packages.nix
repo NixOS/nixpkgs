@@ -999,6 +999,8 @@ let
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
+  checkbashism = callPackage ../development/tools/misc/checkbashisms { };
+
   clamav = callPackage ../tools/security/clamav { };
 
   clex = callPackage ../tools/misc/clex { };
