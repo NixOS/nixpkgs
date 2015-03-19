@@ -11139,6 +11139,8 @@ let
     withSidebar = true;
   };
 
+  mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api.nix {
     ruby = ruby_2_1;
   };
