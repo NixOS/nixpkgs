@@ -11418,7 +11418,7 @@ let
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
-  qemu = callPackage ../applications/virtualization/qemu { };
+  qemu = callPackage ../applications/virtualization/qemu (config.qemu or {});
 
   qmmp = callPackage ../applications/audio/qmmp { };
 
