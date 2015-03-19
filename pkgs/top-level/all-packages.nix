@@ -8173,8 +8173,6 @@ let
 
   joseki = callPackage ../servers/http/joseki {};
 
-  kafka = callPackage ../servers/kafka { };
-
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
   leafnode = callPackage ../servers/news/leafnode { };
