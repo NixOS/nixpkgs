@@ -7896,6 +7896,13 @@ let
 
   planetary_annihilation = callPackage ../games/planetaryannihilation { };
 
+  sqitchPg = callPackage ../development/tools/misc/sqitch {
+    inherit stdenv perl makeWrapper;
+    name = "sqitch-pg";
+    databaseModule = perlPackages.DBDPg;
+    sqitchModule = perlPackages.AppSqitch;
+  };
+
   ### DEVELOPMENT / PYTHON MODULES
 
   # python function with default python interpreter
