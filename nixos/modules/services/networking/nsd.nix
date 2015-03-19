@@ -107,6 +107,7 @@ let
     zone:
       name:         "${name}"
       zonefile:     "${stateDir}/zones/${name}"
+      ${maybeString "zonestats: "          zone.zoneStats}
       ${maybeString "outgoing-interface: " zone.outgoingInterface}
     ${forEach     "  rrl-whitelist: "      zone.rrlWhitelist}
 
@@ -268,6 +269,19 @@ let
         description = ''
           The actual zone data. This is the content of your zone file.
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
+        '';
+      };
+
+      zoneStats = mkOption {
+        type        = types.nullOr types.str;
+        default     = null;
+        example     = "%s";
+        description = ''
+          When config.nsd.zoneStats is set to true NSD is able of collecting
+          statistics per zone. All statistics of this zone(s) will be added
+          to the group specified by this given name. Use "%s" to use the zones
+          name as the group. The groups are output from nsd-control stats
+          and stats_noreset.
         '';
       };
     };
