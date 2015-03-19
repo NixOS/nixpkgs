@@ -15,10 +15,12 @@
 , libelf                      # optional, for link-time optimizations (LTO)
 , cloog ? null, isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null, boehmgc ? null
-, zip ? null, unzip ? null, pkgconfig ? null, gtk ? null, libart_lgpl ? null
+, zip ? null, unzip ? null, pkgconfig ? null
+, gtk ? null, libart_lgpl ? null
 , libX11 ? null, libXt ? null, libSM ? null, libICE ? null, libXtst ? null
 , libXrender ? null, xproto ? null, renderproto ? null, xextproto ? null
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
+, x11Support ? langJava
 , gnatboot ? null
 , enableMultilib ? false
 , enablePlugin ? true             # whether to support user-supplied plug-ins
@@ -91,7 +93,7 @@ let version = "4.8.4";
       xproto renderproto xextproto inputproto randrproto
     ];
 
-    javaAwtGtk = langJava && gtk != null;
+    javaAwtGtk = langJava && x11Support;
 
     /* Platform flags */
     platformFlags = let
@@ -200,7 +202,7 @@ let version = "4.8.4";
 in
 
 # We need all these X libraries when building AWT with GTK+.
-assert gtk != null -> (filter (x: x == null) xlibs) == [];
+assert x11Support -> (filter (x: x == null) ([ gtk libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
