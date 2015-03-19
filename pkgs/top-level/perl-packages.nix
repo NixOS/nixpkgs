@@ -219,8 +219,9 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AppSqitch = buildPerlModule {
-    name = "App-Sqitch-0.999";
+  AppSqitch = buildPerlModule rec {
+    version = "0.999";
+    name = "App-Sqitch-${version}";
     src = fetchurl {
       url = mirror://cpan/authors/id/D/DW/DWHEELER/App-Sqitch-0.999.tar.gz;
       sha256 = "e7e02194a7b0c42fb4df046cd834d5eb99ff9a2c169f5c60a52c362e89351da6";
