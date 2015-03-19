@@ -3969,6 +3969,8 @@ let
 
     deriving = callPackage ../development/tools/ocaml/deriving { };
 
+    dolog = callPackage ../development/ocaml-modules/dolog { };
+
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
     eff = callPackage ../development/interpreters/eff { };
