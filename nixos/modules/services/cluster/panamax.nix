@@ -124,14 +124,15 @@ in {
       };
 
       preStart = ''
-        rm -rf ${cfg.dataDir}/state/tmp
         mkdir -p ${cfg.dataDir}/ui/state/{log,tmp}
+        chown -R panamax:panamax ${cfg.dataDir}
       '';
 
       serviceConfig = {
         ExecStart = "${panamax_ui}/bin/bundle exec rails server --binding 127.0.0.1 --port ${toString cfg.UIPort}";
         User = "panamax";
         Group = "panamax";
+        PermissionsStartOnly = true;
       };
     };
 
@@ -145,6 +146,8 @@ in {
 
     services.journald.enableHttpGateway = mkDefault true;
     services.fleet.enable = mkDefault true;
+    services.cadvisor.enable = mkDefault true;
+    services.cadvisor.port = mkDefault 3002;
     virtualisation.docker.enable = mkDefault true;
 
     environment.systemPackages = [ panamax_api panamax_ui ];

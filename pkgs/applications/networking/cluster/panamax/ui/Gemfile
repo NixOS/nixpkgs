@@ -13,10 +13,11 @@ gem 'zeroclipboard-rails'
 
 
 group :test, :development do
-  gem 'rspec-rails', '2.14.2'
-  gem 'capybara', '2.3.0'
-  gem 'teaspoon', '0.8.0'
-  gem 'phantomjs', '1.9.7.1'
+  gem 'rspec-rails'
+  gem 'its'
+  gem 'capybara'
+  gem 'teaspoon'
+  gem 'phantomjs'
   gem 'dotenv-rails', '0.11.1'
   gem 'pry'
   gem 'pry-byebug'
@@ -24,7 +25,7 @@ group :test, :development do
 end
 
 group :test do
-  gem 'webmock', '1.18.0'
+  gem 'webmock'
   gem 'sinatra', '1.4.5'
   gem 'coveralls', '0.7.0'
 end

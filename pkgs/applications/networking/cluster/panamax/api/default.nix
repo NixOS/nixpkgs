@@ -4,29 +4,31 @@
 
 with stdenv.lib;
 
-let
+stdenv.mkDerivation rec {
+  name = "panamax-api-${version}";
+  version = "0.2.16";
+
+  env = bundlerEnv {
+    name = "panamax-api-gems-${version}";
+    inherit ruby;
+    gemset = ./gemset.nix;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    buildInputs = [ openssl ];
+  };
+  bundler = bundler_HEAD.override { inherit ruby; };
+
   database_yml = builtins.toFile "database.yml" ''
     production:
       adapter: sqlite3
       database: <%= ENV["PANAMAX_DATABASE_PATH"] || "${dataDir}/db/mnt/db.sqlite3" %>
       timeout: 5000
   '';
-  env = bundlerEnv {
-    name = "panamax-api-gems";
-    inherit ruby;
-    gemset = ./gemset-api.nix;
-    gemfile = ./Gemfile-api;
-    lockfile = ./Gemfile-api.lock;
-  };
-  bundler = bundler_HEAD.override { inherit ruby; };
-in stdenv.mkDerivation rec {
-  name = "panamax-api-${version}";
-  version = "0.2.11";
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     url = "git://github.com/CenturyLinkLabs/panamax-api";
-    sha256 = "01sz7jibn1rqfga85pr4p8wk6jfldzfaxj1726vs6znmcwhfkcgj";
+    sha256 = "1g75y25asj33gcczpb9iwnk6f7afm1xjqyw803rr3y2h7dm6jivy";
   };
 
   buildInputs = [ makeWrapper sqlite openssl env.ruby bundler ];
