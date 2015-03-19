@@ -12,11 +12,12 @@ diff -ru -x '*~' openssl-1.0.0e-orig/crypto/x509/x509_def.c openssl-1.0.0e/crypt
  #include "cryptlib.h"
  #include <openssl/crypto.h>
  #include <openssl/x509.h>
-@@ -78,7 +78,23 @@
+@@ -71,7 +75,25 @@
+ 	{ return(X509_CERT_DIR); }
  
  const char *X509_get_default_cert_file(void)
- {
--    return (X509_CERT_FILE);
+-	{ return(X509_CERT_FILE); }
++	{
 +	static char buf[PATH_MAX] = X509_CERT_FILE;
 +	static int init = 0;
 +	if (!init) {
@@ -34,4 +35,7 @@ diff -ru -x '*~' openssl-1.0.0e-orig/crypto/x509/x509_def.c openssl-1.0.0e/crypt
 +	    }
 +	}
 +	return buf;
- }
++	}
+ 
+ const char *X509_get_default_cert_dir_env(void)
+ 	{ return(X509_CERT_DIR_EVP); }
