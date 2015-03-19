@@ -8,7 +8,6 @@
 , openssl ? null
 , cyrus_sasl ? null
 , gpgme ? null
-#, withSidebar ? false
 }:
 
 assert headerCache -> gdbm != null;
@@ -34,9 +33,6 @@ stdenv.mkDerivation rec {
     ++ optional saslSupport cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 
-#  nativeBuildInputs = stdenv.lib.optional withSidebar autoreconfHook;
-
-
 configureFlags = [
     "--with-mailpath=" "--enable-smtp"
 
@@ -57,13 +53,6 @@ configureFlags = [
     (if saslSupport then "--with-sasl" else "--without-sasl")
     (if gpgmeSupport then "--enable-gpgme" else "--disable-gpgme")
   ];
-
-  # Adding the sidebar
-  /*patches = [] ++*/
-    /*(stdenv.lib.optional withSidebar (fetchurl {*/
-      /*url = http://lunar-linux.org/~tchan/mutt/patch-1.5.23.sidebar.20140412.txt;*/
-      /*sha256 = "1i2r7dj0pd1k0z3jjxn2szi6sf0k28i8dwhr4f65pn8r2lh3wisz";*/
-    /*}));*/
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client, forked to support notmuch";
