@@ -63,15 +63,8 @@ fi
 # * Then ksmserver is started which takes control of the rest of the startup sequence
 
 # We need to create config folder so we can write startupconfigkeys
-if [  ${XDG_CONFIG_HOME} ]; then
-  configDir=$XDG_CONFIG_HOME;
-else
-  # This is the default
-  # http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-  configDir=${HOME}/.config;
-fi
-
-mkdir -p $configDir
+configDir=$(@qt5@/bin/qtpaths --writable-path GenericConfigLocation)
+mkdir -p "$configDir"
 
 # This is basically setting defaults so we can use them with kstartupconfig5
 cat @startupconfigkeys@ >$configDir/startupconfigkeys
@@ -177,8 +170,7 @@ fi
 # For anything else (that doesn't set env vars, or that needs a window manager),
 # better use the Autostart folder.
 
-# TODO: Use GenericConfigLocation once we depend on Qt 5.4
-scriptpath=`@qt5@/bin/qtpaths --paths ConfigLocation | tr ':' '\n' | @gnused@/bin/sed 's,$,/plasma-workspace,g'`
+scriptpath=$(@qt5@/bin/qtpaths --paths GenericConfigLocation | tr ':' '\n' | @gnused@/bin/sed 's,$,/plasma-workspace,g')
 
 # Add /env/ to the directory to locate the scripts to be sourced
 for prefix in `echo $scriptpath`; do
