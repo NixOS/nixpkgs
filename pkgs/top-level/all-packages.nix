@@ -4576,9 +4576,9 @@ let
     db = db47;
     self = python26;
   };
-  python27 = callPackage ../development/interpreters/python/2.7 {
+  python27 = callPackage ../development/interpreters/python/2.7 ({
     self = python27;
-  };
+  } // (config.python27 or {}));
   python32 = callPackage ../development/interpreters/python/3.2 {
     self = python32;
   };
