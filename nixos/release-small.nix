@@ -79,7 +79,7 @@ in rec {
       vim;
   };
 
-  tested = pkgs.releaseTools.aggregate {
+  tested = lib.hydraJob (pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
@@ -88,6 +88,6 @@ in rec {
     constituents =
       let all = x: map (system: x.${system}) supportedSystems; in
       [ nixpkgs.tarball ] ++ lib.collect lib.isDerivation nixos;
-  };
+  });
 
 }

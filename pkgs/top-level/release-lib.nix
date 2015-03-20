@@ -44,7 +44,7 @@ rec {
      a derivation for each supported platform, i.e. ‘{ x86_64-linux =
      f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
   testOn = systems: f: genAttrs
-    (filter (x: elem x supportedSystems) systems) (system: f (pkgsFor system));
+    (filter (x: elem x supportedSystems) systems) (system: hydraJob (f (pkgsFor system)));
 
 
   /* Similar to the testOn function, but with an additional

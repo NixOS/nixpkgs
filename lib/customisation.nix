@@ -105,6 +105,7 @@ rec {
     let f = if builtins.isFunction fn then fn else import fn; in
     makeOverridable f ((builtins.intersectAttrs (builtins.functionArgs f) autoArgs) // args);
 
+
   /* Add attributes to each output of a derivation without changing the derivation itself */
   addPassthru = drv: passthru:
     let
@@ -122,4 +123,38 @@ rec {
 
       outputsList = map outputToAttrListElement outputs;
   in commonAttrs.${drv.outputName};
+
+
+  /* Strip a derivation of all non-essential attributes, returning
+     only those needed by hydra-eval-jobs. Also strictly evaluate the
+     result to ensure that there are no thunks kept alive to prevent
+     garbage collection. */
+  hydraJob = drv:
+    let
+      outputs = drv.outputs or ["out"];
+
+      commonAttrs =
+        { inherit (drv) name system meta; inherit outputs; }
+        // lib.optionalAttrs (drv._hydraAggregate or false) {
+          _hydraAggregate = true;
+          constituents = map hydraJob (lib.flatten drv.constituents);
+        }
+        // (lib.listToAttrs outputsList);
+
+      makeOutput = outputName:
+        let output = drv.${outputName}; in
+        { name = outputName;
+          value = commonAttrs // {
+            outPath = output.outPath;
+            drvPath = output.drvPath;
+            type = "derivation";
+            inherit outputName;
+          };
+        };
+
+      outputsList = map makeOutput outputs;
+
+      drv' = (lib.head outputsList).value;
+    in lib.deepSeq drv' drv';
+
 }
