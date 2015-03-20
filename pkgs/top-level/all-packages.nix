@@ -9238,8 +9238,6 @@ let
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
 
-  pam_login = callPackage ../os-specific/linux/pam_login { };
-
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };

@@ -171,7 +171,6 @@ let
       nss_ldap = linux;
       nssmdns = linux;
       ocaml = linux;
-      pam_login = linux;
       pan = gtkSupported;
       par2cmdline = all;
       pciutils = linux;

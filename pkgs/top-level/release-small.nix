@@ -128,7 +128,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   ntp = linux;
   openssh = linux;
   openssl = all;
-  pam_login = linux;
   pan = gtkSupported;
   par2cmdline = all;
   pciutils = linux;
