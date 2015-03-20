@@ -125,6 +125,7 @@ in {
     });
 
     users.extraGroups = optionalAttrs (cfg.group == "mpd") (singleton {
+      name = "mpd";
       gid = gid;
     });
   };
