@@ -153,7 +153,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   sqlite = allBut cygwin;
   squid = linux;
   ssmtp = linux;
-  stdenv = prio 175 all;
+  stdenv = all;
   strace = linux;
   su = linux;
   sudo = linux;

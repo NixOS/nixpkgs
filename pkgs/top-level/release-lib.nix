@@ -38,18 +38,13 @@ rec {
   crossMaintainers = [ maintainers.viric ];
 
 
-  toJob = x: if isAttrs x then x else
-    { type = "job"; systems = x; };
-
-
   /* Build a package on the given set of platforms.  The function `f'
      is called for each supported platform with Nixpkgs for that
      platform as an argument .  We return an attribute set containing
      a derivation for each supported platform, i.e. ‘{ x86_64-linux =
      f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
   testOn = systems: f: genAttrs
-    (filter (x: elem x supportedSystems) systems)
-    (system: f (pkgsFor system));
+    (filter (x: elem x supportedSystems) systems) (system: f (pkgsFor system));
 
 
   /* Similar to the testOn function, but with an additional
@@ -61,60 +56,33 @@ rec {
     else {};
 
 
-  /* Map an attribute of the form `foo = [platforms...]'  to `testOn
-     [platforms...] (pkgs: pkgs.foo)'. */
-  mapTestOn = mapAttrsRecursiveCond
-    (as: as.type or "" != "job")
-    (path: value:
-      let
-        job = toJob value;
-        getPkg = pkgs: getAttrFromPath path pkgs;
-      in testOn job.systems getPkg);
+  /* Given a nested set where the leaf nodes are lists of platforms,
+     map each leaf node to `testOn [platforms...] (pkgs:
+     pkgs.<attrPath>)'. */
+  mapTestOn = mapAttrsRecursive
+    (path: systems: testOn systems (pkgs: getAttrFromPath path pkgs));
 
 
   /* Similar to the testOn function, but with an additional 'crossSystem'
    * parameter for allPackages, defining the target platform for cross builds,
    * and triggering the build of the host derivation (cross built - crossDrv). */
-  mapTestOnCross = crossSystem: mapAttrsRecursiveCond
-    (as: as.type or "" != "job")
-    (path: value:
-      let
-        job = toJob value;
-        getPkg = pkgs: addMetaAttrs { maintainers = crossMaintainers; }
-          (getAttrFromPath path pkgs);
-      in testOnCross crossSystem job.systems getPkg);
+  mapTestOnCross = crossSystem: mapAttrsRecursive
+    (path: systems: testOnCross crossSystem systems
+      (pkgs: addMetaAttrs { maintainers = crossMaintainers; } (getAttrFromPath path pkgs)));
 
 
-  /* Find all packages that have a meta.platforms field listing the
-     supported platforms. */
-  packagesWithMetaPlatform = attrSet:
-    let pairs = concatMap
-      (x:
-        let pair = builtins.tryEval
-              (let
-                 attrVal = attrSet.${x};
-               in
-                 { val = processPackage attrVal;
-                   attrVal = attrVal;
-                   attrValIsAttrs = isAttrs attrVal;
-                 });
-            success = (builtins.tryEval pair.value.attrVal).success;
-        in
-        optional (success && pair.value.attrValIsAttrs && pair.value.val != [])
-          { name = x; value = pair.value.val; })
-      (attrNames attrSet);
-    in
-      listToAttrs pairs;
-
-
-  # May fail as much as it wishes, we will catch the error.
-  processPackage = attrSet:
-    if attrSet.recurseForDerivations or false || attrSet.recurseForRelease or false then
-      packagesWithMetaPlatform attrSet
-    else if attrSet.meta.broken or false then
-      []
-    else
-      attrSet.meta.hydraPlatforms or (attrSet.meta.platforms or []);
+  /* Recursively map a (nested) set of derivations to an isomorphic
+     set of meta.platforms values. */
+  packagePlatforms = mapAttrs (name: value:
+    let res = builtins.tryEval (
+      if isDerivation value then
+        value.meta.hydraPlatforms or (value.meta.platforms or [])
+      else if value.recurseForDerivations or false || value.recurseForRelease or false then
+        packagePlatforms value
+      else
+        []);
+    in if res.success then res.value else []
+    );
 
 
   /* Common platform groups on which to test packages. */

@@ -47,7 +47,7 @@ let
             ];
         };
 
-    } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
+    } // (mapTestOn ((packagePlatforms pkgs) // rec {
 
       abcde = linux;
       apacheHttpd = linux;
@@ -270,7 +270,7 @@ let
         gnome_vfs = linux;
       };
 
-      haskell-ng.compiler = packagesWithMetaPlatform pkgs.haskell-ng.compiler;
+      haskell-ng.compiler = packagePlatforms pkgs.haskell-ng.compiler;
 
       strategoPackages = {
         sdf = linux;
