@@ -45,7 +45,7 @@ self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
     transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
-    haskeline = self.haskeline_0_7_1_3;
+    haskeline = self.haskeline_0_7_2_0;
     mtl = super.mtl_2_2_1;
   })) (drv: {
     jailbreak = true;           # idris is scared of lens 4.7
