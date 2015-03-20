@@ -3650,6 +3650,7 @@ let
   };
 
   haxe = callPackage ../development/compilers/haxe { };
+  hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
   hhvm = callPackage ../development/compilers/hhvm { };
   hiphopvm = hhvm; /* Compatibility alias */
