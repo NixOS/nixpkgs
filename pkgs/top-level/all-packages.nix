@@ -1029,6 +1029,8 @@ let
 
   cron = callPackage ../tools/system/cron { };
 
+  crosstool-ng = callPackage ../development/tools/crosstool-ng/default.nix { };
+
   cudatoolkit5 = callPackage ../development/compilers/cudatoolkit/5.5.nix {
     python = python26;
   };

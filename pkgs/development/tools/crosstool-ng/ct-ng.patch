@@ -1,0 +1,12 @@
+diff --git a/scripts/crosstool-NG.sh.in b/scripts/crosstool-NG.sh.in
+index 53ac552..d5904f7 100644
+--- a/scripts/crosstool-NG.sh.in
++++ b/scripts/crosstool-NG.sh.in
+@@ -609,6 +609,7 @@ if [ -z "${CT_RESTART}" ]; then
+         do_libc_extract
+         do_debug_extract
+         do_test_suite_extract
++        do_nix_patching
+         CT_EndStep
+     fi
+ fi
