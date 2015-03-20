@@ -11428,6 +11428,8 @@ let
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
+  sound-juicer = callPackage ../applications/audio/sound-juicer { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
