@@ -171,9 +171,6 @@ with stdenv.lib;
   XFS_RT? y # XFS Realtime subvolume support
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
-  ${optionalString (versionAtLeast version "3.12") ''
-    UBIFS_FS_XATTR? y
-  ''}
   UBIFS_FS_ADVANCED_COMPR? y
   ${optionalString (versionAtLeast version "3.6") ''
     NFS_SWAP y
@@ -283,7 +280,9 @@ with stdenv.lib;
   SLIP_COMPRESSED y # CSLIP compressed headers
   SLIP_SMART y
   THERMAL_HWMON y # Hardware monitoring support
-  USB_DEBUG? n
+  ${optionalString (versionOlder version "3.15") ''
+    USB_DEBUG? n
+  ''}
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   X86_CHECK_BIOS_CORRUPTION y
