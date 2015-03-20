@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.linux-usb.org/;
     description = "Tools for working with USB devices, such as lsusb";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

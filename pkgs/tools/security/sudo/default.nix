@@ -61,5 +61,7 @@ stdenv.mkDerivation rec {
     license = http://www.sudo.ws/sudo/license.html;
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
+
+    platforms = stdenv.lib.platforms.linux;
   };
 }

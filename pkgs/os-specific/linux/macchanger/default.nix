@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A utility for viewing/manipulating the MAC address of network interfaces";
-    maintainers = with stdenv.lib.maintainers; [ joachifm ];
-    license = with stdenv.lib.licenses; gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.joachifm ];
+    license = stdenv.lib.licenses.gpl2Plus;
     homepage = "https://www.gnu.org/software/macchanger";
-    platform = with stdenv.lib.platforms; linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

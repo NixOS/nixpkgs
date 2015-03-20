@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://dnscrypt.org/;
     license = with stdenv.lib.licenses; [ isc ];
     maintainers = with stdenv.lib.maintainers; [ joachifm ];
-    platform = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 }

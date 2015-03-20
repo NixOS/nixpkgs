@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
     maintainers = [ stdenv.lib.maintainers.mornfall ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

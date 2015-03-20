@@ -52,4 +52,7 @@ stdenv.mkDerivation {
 
   passthru.grubTarget = "";
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

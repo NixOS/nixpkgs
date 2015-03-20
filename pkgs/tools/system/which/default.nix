@@ -10,5 +10,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://ftp.gnu.org/gnu/which/;
+    platforms = stdenv.lib.platforms.all;
   };
 }

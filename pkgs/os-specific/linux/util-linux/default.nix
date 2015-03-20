@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
     description = "A set of system utilities for Linux";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
