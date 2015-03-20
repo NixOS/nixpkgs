@@ -46,6 +46,8 @@ let
 
   dataPools = unique (filter (pool: !(elem pool rootPools)) allPools);
 
+  snapshotNames = [ "frequent" "hourly" "daily" "weekly" "monthly" ];
+
 in
 
 {
@@ -306,60 +308,41 @@ in
     })
 
     (mkIf enableAutoSnapshots {
-      systemd.services."zfs-snapshot-frequent" = {
-        description = "ZFS auto-snapshotting every 15 mins";
-        after = [ "zfs-import.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} frequent ${toString cfgSnapshots.frequent}";
-        };
-        restartIfChanged = false;
-        startAt = "*:15,30,45";
-      };
+      systemd.services = let
+                           descr = name: if name == "frequent" then "15 mins"
+                                    else if name == "hourly" then "hour"
+                                    else if name == "daily" then "day"
+                                    else if name == "weekly" then "week"
+                                    else if name == "monthly" then "month"
+                                    else throw "unknown snapshot name";
+                           numSnapshots = name: builtins.getAttr name cfgSnapshots;
+                         in builtins.listToAttrs (map (snapName:
+                              {
+                                name = "zfs-snapshot-${snapName}";
+                                value = {
+                                  description = "ZFS auto-snapshotting every ${descr snapName}";
+                                  after = [ "zfs-import.target" ];
+                                  serviceConfig = {
+                                    Type = "oneshot";
+                                    ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} ${snapName} ${toString (numSnapshots snapName)}";
+                                  };
+                                  restartIfChanged = false;
+                                };
+                              }) snapshotNames);
 
-      systemd.services."zfs-snapshot-hourly" = {
-        description = "ZFS auto-snapshotting every hour";
-        after = [ "zfs-import.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} hourly ${toString cfgSnapshots.hourly}";
-        };
-        restartIfChanged = false;
-        startAt = "hourly";
-      };
-
-      systemd.services."zfs-snapshot-daily" = {
-        description = "ZFS auto-snapshotting every day";
-        after = [ "zfs-import.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} daily ${toString cfgSnapshots.daily}";
-        };
-        restartIfChanged = false;
-        startAt = "daily";
-      };
-
-      systemd.services."zfs-snapshot-weekly" = {
-        description = "ZFS auto-snapshotting every week";
-        after = [ "zfs-import.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} weekly ${toString cfgSnapshots.weekly}";
-        };
-        restartIfChanged = false;
-        startAt = "weekly";
-      };
-
-      systemd.services."zfs-snapshot-monthly" = {
-        description = "ZFS auto-snapshotting every month";
-        after = [ "zfs-import.target" ];
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} monthly ${toString cfgSnapshots.monthly}";
-        };
-        restartIfChanged = false;
-        startAt = "monthly";
-      };
+      systemd.timers = let
+                         timer = name: if name == "frequent" then "*:15,30,45" else name;
+                       in builtins.listToAttrs (map (snapName:
+                            {
+                              name = "zfs-snapshot-${snapName}";
+                              value = {
+                                wantedBy = [ "timers.target" ];
+                                timerConfig = {
+                                  OnCalendar = timer snapName;
+                                  Persistent = "yes";
+                                };
+                              };
+                            }) snapshotNames);
     })
   ];
 }
