@@ -475,7 +475,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru =
-    { inherit langC langCC langAda langFortran langVhdl langGo enableMultilib version; };
+    { inherit langC langCC langAda langFortran langVhdl langGo enableMultilib version; isGNU = true; };
 
   inherit enableParallelBuilding;
 

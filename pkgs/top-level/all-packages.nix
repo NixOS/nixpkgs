@@ -1520,6 +1520,7 @@ let
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
+    automake = automake112x; # fails with 13 and 14
   };
 
   trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix {
@@ -2275,7 +2276,9 @@ let
 
   panomatic = callPackage ../tools/graphics/panomatic { };
 
-  par2cmdline = callPackage ../tools/networking/par2cmdline { };
+  par2cmdline = callPackage ../tools/networking/par2cmdline {
+    automake = automake112x; # fails with 14
+  };
 
   parallel = callPackage ../tools/misc/parallel { };
 
@@ -2398,7 +2401,9 @@ let
 
   ponysay = callPackage ../tools/misc/ponysay { };
 
-  povray = callPackage ../tools/graphics/povray { };
+  povray = callPackage ../tools/graphics/povray {
+    automake = automake113x; # fails with 14
+  };
 
   ppl = callPackage ../development/libraries/ppl { };
 
@@ -3269,8 +3274,9 @@ let
 
   ccl = callPackage ../development/compilers/ccl { };
 
-  clang = wrapCC llvmPackages.clang;
+  clang = llvmPackages.clang;
 
+  clang_36 = llvmPackages.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
   clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
@@ -3298,8 +3304,8 @@ let
   };
 
   #Use this instead of stdenv to build with clang
-  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio (stdenvAdapters.overrideCC stdenv clang);
-  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang);
+  clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
+  libcxxStdenv = stdenvAdapters.overrideCC stdenv (clangWrapSelf llvmPackages.clang-unwrapped);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -3808,13 +3814,14 @@ let
 
   llvm = llvmPackages.llvm;
 
+  llvm_36 = llvmPackages_36.llvm;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
   llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
 
   llvm_v = path: callPackage path { };
 
-  llvmPackages = llvmPackages_35;
+  llvmPackages = llvmPackages_36;
 
   llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
     inherit stdenv newScope fetchurl;
@@ -3824,6 +3831,11 @@ let
 
   llvmPackages_35 = import ../development/compilers/llvm/3.5 {
     inherit pkgs stdenv newScope fetchurl isl;
+  };
+
+  llvmPackages_36 = import ../development/compilers/llvm/3.6 {
+    inherit pkgs stdenv newScope fetchurl isl wrapCC;
+    inherit (stdenvAdapters) overrideCC;
   };
 
   manticore = callPackage ../development/compilers/manticore { };
@@ -4920,8 +4932,8 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
-  libcxx = llvmPackages_35.libcxx;
-  libcxxabi = llvmPackages_35.libcxxabi;
+  libcxx = llvmPackages.libcxx;
+  libcxxabi = llvmPackages.libcxxabi;
 
   libsigrok = callPackage ../development/tools/libsigrok { };
 
@@ -5018,7 +5030,7 @@ let
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
   gnumake40 = callPackage ../development/tools/build-managers/gnumake/4.0 { };
   gnumake41 = callPackage ../development/tools/build-managers/gnumake/4.1 { };
-  gnumake = gnumake382;
+  gnumake = gnumake41;
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
@@ -5548,7 +5560,7 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = llvmPackages.dragonegg;
+  dragonegg = llvmPackages_35.dragonegg;
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
@@ -6130,7 +6142,9 @@ let
 
   libassuan = callPackage ../development/libraries/libassuan { };
 
-  libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
+  libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix {
+    automake = automake112x; # fails with 13 and 14
+  };
 
   libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
 
@@ -6727,7 +6741,9 @@ let
 
   libunwindNative = callPackage ../development/libraries/libunwind/native.nix {};
 
-  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv { });
+  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
+    automake = automake113x; # fails with 14
+  });
 
   libv4l = lowPrio (v4l_utils.override {
     withQt4 = false;
@@ -9245,9 +9261,7 @@ let
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
-  plymouth = callPackage ../os-specific/linux/plymouth {
-    automake = automake113x;
-  };
+  plymouth = callPackage ../os-specific/linux/plymouth { };
 
   pmount = callPackage ../os-specific/linux/pmount { };
 

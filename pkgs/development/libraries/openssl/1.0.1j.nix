@@ -18,7 +18,7 @@ let
       # hardcoding something like /etc/ssl/cert.pem is impure and
       # cannot be overriden per-process.  For security, the
       # environment variable is ignored for setuid binaries.
-      ./cert-file.patch
+      ./cert-file-1.0.1j.patch
       # Remove the compilation time from the library
       ./no-date-in-library.patch
     ]
