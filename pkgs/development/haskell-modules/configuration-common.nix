@@ -633,6 +633,10 @@ self: super: {
   # https://github.com/afcowie/locators/issues/1
   locators = dontCheck super.locators;
 
+  # https://github.com/scravy/hydrogen-syntax/issues/1
+  hydrogen-syntax = markBroken super.hydrogen-syntax;
+  hydrogen-cli = dontDistribute super.hydrogen-cli;
+
 } // {
 
   # Not on Hackage.
