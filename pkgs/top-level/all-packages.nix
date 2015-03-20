@@ -8153,12 +8153,11 @@ let
     erlang = erlangR16;
   };
 
-  prosody = recurseIntoAttrs (
-    callPackage ../servers/xmpp/prosody {
-      lua5 = lua5_1;
-      inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent;
-      withLibevent = true;
-  });
+  prosody = callPackage ../servers/xmpp/prosody {
+    lua5 = lua5_1;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent;
+    withLibevent = true;
+  };
 
   elasticmq = callPackage ../servers/elasticmq { };
 
