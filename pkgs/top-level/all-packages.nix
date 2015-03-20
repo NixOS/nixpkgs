@@ -9232,10 +9232,6 @@ let
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
-  pam_console = callPackage ../os-specific/linux/pam_console {
-    libtool = libtool_1_5;
-  };
-
   pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
 
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
