@@ -20,6 +20,13 @@ let
     sha256 = "a63b8724c36c29ed438c9e3ca403bfeeb6c998a45990e300aa1b10faa23a0a22";
   };
 
+  prePatchCommon = ''
+    substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
+    substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
+    substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
+    substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
+  '';
+
   libapparmor = stdenv.mkDerivation {
     name = "libapparmor-${apparmor-version}";
     src = apparmor-sources;
@@ -39,19 +46,12 @@ let
       which
     ];
 
-    prePatch = ''
-      ### common
-      substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
-      substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
-      substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
-
-      ### libapparmor
+    prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
       '';
 
     buildPhase = ''
-      ### libapparmor
       cd ./libraries/libapparmor
       ./autogen.sh
       ./configure --prefix="$out" --with-python
@@ -75,12 +75,7 @@ let
       which
     ];
 
-    prePatch = ''
-      ### common
-      substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
-      substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
-      substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
-    '';
+    prePatch = prePatchCommon;
 
     buildPhase = ''
       cd ./utils
@@ -88,7 +83,7 @@ let
     '';
 
     installPhase = ''
-      make install LANGS="" DESTDIR="$out" BINDIR="$out/bin"
+      make install LANGS="" DESTDIR="$out" BINDIR="$out/bin" VIM_INSTALL_PATH="$out/share" PYPREFIX=""
     '';
 
     meta = apparmor-meta "user-land utilities";
@@ -105,13 +100,7 @@ let
       which
     ];
 
-    prePatch = ''
-      ### common
-      substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
-      substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
-      substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
-
-      ### apparmor-parser
+    prePatch = prePatchCommon + ''
       substituteInPlace ./parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
       substituteInPlace ./parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
       substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
@@ -158,9 +147,7 @@ let
     name = "apparmor-profiles-${apparmor-version}";
     src = apparmor-sources;
 
-    buildInputs = [
-      which
-    ];
+    buildInputs = [ which ];
 
     buildPhase = ''
       cd ./profiles
@@ -168,7 +155,7 @@ let
     '';
 
     installPhase = ''
-      make install DESTDIR="$out"
+      make install DESTDIR="$out" EXTRAS_DEST="$out/share/apparmor/extra-profiles"
     '';
 
     meta = apparmor-meta "profiles";
