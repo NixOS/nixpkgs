@@ -640,6 +640,9 @@ self: super: {
   nehe-tuts = dontDistribute super.nehe-tuts;
   netwire-input-glfw = dontDistribute super.netwire-input-glfw;
 
+  # https://github.com/afcowie/locators/issues/1
+  locators = dontCheck super.locators;
+
 } // {
 
   # Not on Hackage.
