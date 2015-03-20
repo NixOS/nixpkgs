@@ -233,6 +233,7 @@
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
+  ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
