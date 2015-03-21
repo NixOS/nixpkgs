@@ -10732,6 +10732,8 @@ let
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  spectrwm = callPackage ../applications/window-managers/spectrwm { };
+
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
