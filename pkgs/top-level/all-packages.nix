@@ -13723,7 +13723,7 @@ let
     retroarch = retroarchBare;
   });
 
-  rssglx = callPackage ../misc/screensavers/rss-glx { };
+  rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   runit = callPackage ../tools/system/runit { };
 
@@ -14014,6 +14014,8 @@ let
   nfsUtils = nfs-utils;  # added 2014-12-06
   buildbotSlave = buildbot-slave;  # added 2014-12-09
   cool-old-term = cool-retro-term; # added 2015-01-31
+  rssglx = rss-glx; #added 2015-03-25
+
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
