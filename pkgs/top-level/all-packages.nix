@@ -12835,9 +12835,9 @@ let
     }) ../desktops/kde-4.14;
 
   kdePackagesFor = self: dir:
-    let callPackageOrig = callPackage; in
+    let callPackageOrig = newScope { cmake = cmake-3_2; }; in
     let
-      callPackage = newScope self;
+      callPackage = newScope (self // { cmake = cmake-3_2; });
       kde4 = callPackageOrig dir {
         inherit callPackage callPackageOrig;
       };
