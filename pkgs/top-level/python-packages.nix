@@ -5341,6 +5341,23 @@ let
     };
   };
 
+  hypothesis = pythonPackages.buildPythonPackage rec {
+    name = "hypothesis-0.7.0";
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/hypothesis/hypothesis-0.7.0.tar.gz";
+      md5 = "0c4112bab04b71979286387b033921b5";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A Python library for property based testing";
+      homepage = https://github.com/DRMacIver/hypothesis;
+      license = licenses.mpl20;
+    };
+  };
+
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.3";
