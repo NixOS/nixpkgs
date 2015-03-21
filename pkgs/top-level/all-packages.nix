@@ -4179,6 +4179,10 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
+    qtest = callPackage ../development/ocaml-modules/qtest {
+      oasis = ocaml_oasis;
+    };
+
     re = callPackage ../development/ocaml-modules/re { };
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
