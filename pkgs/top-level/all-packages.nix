@@ -4253,7 +4253,7 @@ let
   };
   opam = callPackage ../development/tools/ocaml/opam { };
 
-  ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
+  ocamlnat = newScope pkgs.ocamlPackages_3_12_1 ../development/ocaml-modules/ocamlnat { };
 
   qcmm = callPackage ../development/compilers/qcmm {
     lua   = lua4;
