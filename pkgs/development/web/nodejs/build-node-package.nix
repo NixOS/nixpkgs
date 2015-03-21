@@ -1,31 +1,45 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
 {
-  name, src,
+  name, version ? "", src,
 
   # by default name of nodejs interpreter e.g. "nodejs-${name}"
   namePrefix ? nodejs.interpreterName + "-",
 
   # Node package name
-  pkgName ? (builtins.parseDrvName name).name,
+  pkgName ?
+    if version != "" then stdenv.lib.removeSuffix "-${version}" name else
+    (builtins.parseDrvName name).name,
 
   # List or attribute set of dependencies
   deps ? {},
 
   # List or attribute set of peer depencies
-  peerDependencies ? [],
+  peerDependencies ? {},
+
+  # List or attribute set of optional dependencies
+  optionalDependencies ? {},
+
+  # List of optional dependencies to skip
+  skipOptionalDependencies ? [],
 
   # Whether package is binary or library
-  bin ? null,
+  bin ? false,
 
-  # Flags passed to npm install
-  flags ? [],
+  # Additional flags passed to npm install
+  flags ? "",
 
   # Command to be run before shell hook
   preShellHook ? "",
 
   # Command to be run after shell hook
   postShellHook ? "",
+
+  # Same as https://docs.npmjs.com/files/package.json#os
+  os ? [],
+
+  # Same as https://docs.npmjs.com/files/package.json#cpu
+  cpu ? [],
 
   # Attribute set of already resolved deps (internal),
   # for avoiding infinite recursion
@@ -37,42 +51,72 @@
 with stdenv.lib;
 
 let
-  npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
-
-  sources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
-    mv $(find . -type d -mindepth 1 -maxdepth 1) $out
-  '';
-
-  # Convert deps to attribute set
-  attrDeps = if isAttrs deps then deps else
-    (listToAttrs (map (dep: nameValuePair dep.name dep) deps));
-
-  # All required node modules, without already resolved dependencies
-  requiredDeps = removeAttrs attrDeps (attrNames resolvedDeps);
-
-  # Recursive dependencies that we want to avoid with shim creation
-  recursiveDeps = removeAttrs attrDeps (attrNames requiredDeps);
-
-  peerDeps = filter (dep: dep.pkgName != pkgName) peerDependencies;
-
   self = let
-    # Pass resolved dependencies to dependencies of this package
-    deps = map (
-      dep: dep.override {
-        resolvedDeps = resolvedDeps // { "${name}" = self; };
-      }
-    ) (attrValues requiredDeps);
+    sources = runCommand "node-sources" {} ''
+      tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
+      mv $(find . -type d -mindepth 1 -maxdepth 1) $out
+    '';
+
+    platforms = if os == [] then nodejs.meta.platforms else
+      fold (entry: platforms:
+        let
+          filterPlatforms =
+            stdenv.lib.platforms.${removePrefix "!" entry} or [];
+        in
+          # Ignore unknown platforms
+          if filterPlatforms == [] then platforms
+          else
+            if hasPrefix "!" entry then
+              subtractLists (intersectLists filterPlatforms nodejs.meta.platforms) platforms
+            else
+              platforms ++ (intersectLists filterPlatforms nodejs.meta.platforms)
+      ) [] os;
+
+    mapDependencies = deps: f: rec {
+      # Convert deps to attribute set
+      attrDeps = if isAttrs deps then deps else
+        (listToAttrs (map (dep: nameValuePair dep.name dep) deps));
+
+      # All required node modules, without already resolved dependencies
+      # Also override with already resolved dependencies
+      requiredDeps = mapAttrs (name: dep:
+        dep.override {
+          resolvedDeps = resolvedDeps // { "${name}" = self; };
+        }
+      ) (filterAttrs f (removeAttrs attrDeps (attrNames resolvedDeps)));
+
+      # Recursive dependencies that we want to avoid with shim creation
+      recursiveDeps = filterAttrs f (removeAttrs attrDeps (attrNames requiredDeps));
+    };
+
+    _dependencies = mapDependencies deps (name: dep:
+      dep.pkgName != pkgName);
+    _optionalDependencies = mapDependencies optionalDependencies (name: dep:
+      (builtins.tryEval dep).success &&
+      !(elem dep.pkgName skipOptionalDependencies)
+    );
+    _peerDependencies = mapDependencies peerDependencies (name: dep:
+      dep.pkgName != pkgName);
+
+    requiredDependencies =
+      _dependencies.requiredDeps //
+      _optionalDependencies.requiredDeps //
+      _peerDependencies.requiredDeps;
+
+    recursiveDependencies =
+      _dependencies.recursiveDeps //
+      _optionalDependencies.recursiveDeps //
+      _peerDependencies.recursiveDeps;
 
     patchShebangs = dir: ''
-        node=`type -p node`
-        coffee=`type -p coffee || true`
-        find -L ${dir} -type f -print0 | xargs -0 grep -Il . | \
-        xargs sed --follow-symlinks -i \
-            -e 's@#!/usr/bin/env node@#!'"$node"'@' \
-            -e 's@#!/usr/bin/env coffee@#!'"$coffee"'@' \
-            -e 's@#!/.*/node@#!'"$node"'@' \
-            -e 's@#!/.*/coffee@#!'"$coffee"'@' || true
+      node=`type -p node`
+      coffee=`type -p coffee || true`
+      find -L ${dir} -type f -print0 | xargs -0 grep -Il . | \
+      xargs sed --follow-symlinks -i \
+          -e 's@#!/usr/bin/env node@#!'"$node"'@' \
+          -e 's@#!/usr/bin/env coffee@#!'"$coffee"'@' \
+          -e 's@#!/.*/node@#!'"$node"'@' \
+          -e 's@#!/.*/coffee@#!'"$coffee"'@' || true
     '';
 
   in stdenv.mkDerivation ({
@@ -150,9 +194,9 @@ let
       # We do not handle shrinkwraps yet
       rm npm-shrinkwrap.json 2>/dev/null || true
 
-      mkdir build-dir
+      mkdir ../build-dir
       (
-        cd build-dir
+        cd ../build-dir
         mkdir node_modules
 
         # Symlink or copy dependencies for node modules
@@ -164,12 +208,7 @@ let
           '' else ''
             cp -R ${dep}/lib/node_modules/${dep.pkgName} node_modules/
           ''
-        ) deps}
-
-        # Symlink peer dependencies
-        ${concatMapStrings (dep: ''
-          ln -sv ${dep}/lib/node_modules/${dep.pkgName} node_modules/
-        '') peerDeps}
+        ) (attrValues requiredDependencies)}
 
         # Create shims for recursive dependenceies
         ${concatMapStrings (dep: ''
@@ -180,10 +219,10 @@ let
               "version": "${getVersion dep}"
           }
           EOF
-        '') (attrValues recursiveDeps)}
+        '') (attrValues recursiveDependencies)}
       )
 
-      export HOME=$PWD/build-dir
+      export HOME=$PWD/../build-dir
       runHook postConfigure
     '';
 
@@ -192,14 +231,14 @@ let
 
       # If source was a file, repackage it, so npm pre/post publish hooks are not triggered,
       if [[ -f $src ]]; then
-        tar --exclude='build-dir' -czf build-dir/package.tgz ./
+        GZIP=-1 tar -czf ../build-dir/package.tgz ./
         export src=$HOME/package.tgz
       else
         export src=$PWD
       fi
 
       # Install package
-      (cd $HOME && npm --registry http://www.example.com --nodedir=${sources} install $src ${npmFlags})
+      (cd $HOME && npm --registry http://www.example.com --nodedir=${sources} install $src --fetch-retries 0 ${flags})
 
       runHook postBuild
     '';
@@ -214,7 +253,7 @@ let
         ${concatMapStrings (dep: ''
           rm node_modules/${dep.pkgName}/package.json
           rmdir node_modules/${dep.pkgName}
-        '') (attrValues recursiveDeps)}
+        '') (attrValues recursiveDependencies)}
 
         mkdir -p $out/lib/node_modules
 
@@ -233,10 +272,10 @@ let
           done
         fi
 
-        # Symlink dependencies
+        # Move peer dependencies to node_modules
         ${concatMapStrings (dep: ''
           mv node_modules/${dep.pkgName} $out/lib/node_modules
-        '') peerDeps}
+        '') (attrValues _peerDependencies.requiredDeps)}
 
         # Install binaries and patch shebangs
         mv node_modules/.bin $out/lib/node_modules 2>/dev/null || true
@@ -259,23 +298,36 @@ let
       mkdir -p node_modules
       ${concatMapStrings (dep: ''
         ln -sfv ${dep}/lib/node_modules/${dep.pkgName} node_modules/
-      '') deps}
+      '') (attrValues requiredDependencies)}
       ${postShellHook}
     '';
 
+    # Stipping does not make a lot of sense in node packages
+    dontStrip = true;
+
+    meta = {
+      inherit platforms;
+      maintainers = [ stdenv.lib.maintainers.offline ];
+    };
+
     passthru.pkgName = pkgName;
-} // (filterAttrs (n: v: all (k: n != k) ["deps" "resolvedDeps" "optionalDependencies"]) args)// {
+  } // (filterAttrs (n: v: all (k: n != k) ["deps" "resolvedDeps" "optionalDependencies"]) args) // {
     name = namePrefix + name;
 
     # Run the node setup hook when this package is a build input
     propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];
 
-    # Make buildNodePackage useful with --run-env
-    nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps ++ peerDependencies ++ neededNatives;
+    nativeBuildInputs =
+      (args.nativeBuildInputs or []) ++ neededNatives ++
+      (attrValues requiredDependencies);
 
     # Expose list of recursive dependencies upstream, up to the package that
     # caused recursive dependency
-    recursiveDeps = (flatten (map (d: remove name d.recursiveDeps) deps)) ++ (attrNames recursiveDeps);
+    recursiveDeps =
+      (flatten (
+        map (dep: remove name dep.recursiveDeps) (attrValues requiredDependencies)
+      )) ++
+      (attrNames recursiveDependencies);
   });
 
 in self
