@@ -7109,15 +7109,6 @@ let
     };
   };
 
-  # bitcoin 0.9.3 requires openssl 1.0.1j
-  openssl_1_0_1j = callPackage ../development/libraries/openssl/1.0.1j.nix {
-    fetchurl = fetchurlBoot;
-    cryptodevHeaders = linuxPackages.cryptodev.override {
-      fetchurl = fetchurlBoot;
-      onlyHeaders = true;
-    };
-  };
-
   ortp = callPackage ../development/libraries/ortp {
     srtp = srtp_linphone;
   };
