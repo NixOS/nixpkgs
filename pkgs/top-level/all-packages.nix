@@ -13709,7 +13709,8 @@ let
     retroarch = retroarchBare;
   });
 
-  rssglx = callPackage ../misc/screensavers/rss-glx { };
+  rss-glx = callPackage ../misc/screensavers/rss-glx { };
+  rssglx = builtins.trace "WARNING: rssglx package was renamed to rss-glx" pkgs.rss-glx;
 
   runit = callPackage ../tools/system/runit { };
 
