@@ -1788,16 +1788,12 @@ let
   nodejs = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
 
-  nodePackages = recurseIntoAttrs (
-    callPackage ./node-packages.nix { self = nodePackages; }
-  );
+  nodePackages = callPackage ./node-packages.nix { self = nodePackages; };
 
   iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
   iojs-nightly = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; nightly = true; };
 
-  iojsPackages = recurseIntoAttrs (
-    callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; }
-  );
+  iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
@@ -8422,6 +8418,10 @@ let
     boost = boost155;
   };
 
+  ripple-data-api = callPackage ../servers/rippled/data-api.nix {
+    buildNodePackage = nodePackages.buildNodePackage;
+  };
+
   s6 = callPackage ../servers/s6 { };
 
   spamassassin = callPackage ../servers/mail/spamassassin {
@@ -8506,7 +8506,7 @@ let
   thttpd = callPackage ../servers/http/thttpd { };
 
   storm = callPackage ../servers/computing/storm { };
-  
+
   slurm-llnl = callPackage ../servers/computing/slurm { };
 
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
