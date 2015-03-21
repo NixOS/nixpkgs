@@ -242,7 +242,6 @@ let
     ncdf4 = [ pkgs.netcdf ];
     ncdf = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    npRmpi = [ pkgs.openmpi ];
     openssl = [ pkgs.openssl ];
     outbreaker = [ pkgs.gsl ];
     pbdMPI = [ pkgs.openmpi ];
@@ -607,7 +606,6 @@ let
     "ripa"
     "rite"
     "rnbn"
-    "rriskDistributions"
     "rsgcc"
     "sdcMicroGUI"
     "sharpshootR"
@@ -642,7 +640,6 @@ let
   packagesToSkipCheck = [
     "Rmpi" # tries to run MPI processes
     "gmatrix" # requires CUDA runtime
-    "npRmpi" # tries to run MPI processes
     "sprint" # tries to run MPI processes
     "pbdMPI" # tries to run MPI processes
   ];
@@ -687,7 +684,6 @@ let
     "compendiumdb" # requires Biobase
     "CORM" # requires limma
     "cplexAPI" # requires CPLEX
-    "cqrReg" # requires Rmosek
     "crmn" # requires pcaMethods, and Biobase
     "CrypticIBDcheck" # requires rJPSGCS
     "cudaBayesreg" # requres Rmath
@@ -702,6 +698,7 @@ let
     "dcGOR" # requires dnet
     "demi" # requires affy, affxparser, and oligo
     "DepthProc" # requires samr
+    "DiagrammeR" # requires V8 to build
     "Digiroo2" # requires spatstat
     "dixon" # requires spatstat
     "dnet" # requires supraHex, graph, Rgraphviz, and Biobase
@@ -978,12 +975,6 @@ let
     });
 
     Rmpi = old.Rmpi.overrideDerivation (attrs: {
-      configureFlags = [
-        "--with-Rmpi-type=OPENMPI"
-      ];
-    });
-
-    npRmpi = old.npRmpi.overrideDerivation (attrs: {
       configureFlags = [
         "--with-Rmpi-type=OPENMPI"
       ];
