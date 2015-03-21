@@ -11124,21 +11124,17 @@ let
 
   normalize = callPackage ../applications/audio/normalize { };
 
-  mplayer = callPackage ../applications/video/mplayer {
+  mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
-    vdpauSupport = config.mplayer.vdpauSupport or false;
-  };
+  } // (config.mplayer or {}));
 
-  mplayer2 = callPackage ../applications/video/mplayer2 {
+  mplayer2 = callPackage ../applications/video/mplayer2 ({
     ffmpeg = libav_9; # see https://trac.macports.org/ticket/44386
-  };
+  } // (config.mplayer2 or {}));
 
   MPlayerPlugin = browser:
-    import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
+    callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
-      inherit fetchurl stdenv pkgconfig gettext;
-      inherit (xlibs) libXpm;
-      # !!! should depend on MPlayer
     };
 
   mpv = callPackage ../applications/video/mpv {
