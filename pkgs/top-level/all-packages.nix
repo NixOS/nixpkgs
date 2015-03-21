@@ -11793,10 +11793,7 @@ let
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
-  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
-    sslSupport = true;
-    gpgSupport = true;
-  };
+  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
 
   symlinks = callPackage ../tools/system/symlinks { };
 
