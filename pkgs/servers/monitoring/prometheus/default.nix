@@ -4,15 +4,15 @@ with goPackages;
 
 buildGoPackage rec {
    name = "prometheus-${version}";
-   version = "0.10.0";
+   version = "0.12.0";
    goPackagePath = "github.com/prometheus/prometheus";
-   rev = "f5a0f7fa185dae2c772a5847a7aac9ba33b545f9";
+   rev = "55dcb55498b43bafe94915a4de7907d6d66b4427";
 
    src = fetchFromGitHub {
      inherit rev;
      owner = "prometheus";
      repo = "prometheus";
-     sha256 = "1wagmr4bca8fbvi48n9p4hdnx1m4chyaa1bzman6dhqfmkiikf5q";
+     sha256 = "17bbdk9axr91m2947ddbnzqwaap2vrzsbknbrlpdsmlsjhc8h7cb";
    };
 
    buildInputs = [

@@ -268,6 +268,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ sets go-simplejson check-v1 ];
   };
 
+  goautoneg = buildGoPackage rec {
+    rev = "75cd24fc2f2c2a2088577d12123ddee5f54e0675";
+    name = "goautoneg-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "bitbucket.org/ww/goautoneg";
+
+    src = fetchhg {
+      inherit rev;
+      url = "https://${goPackagePath}";
+      sha256 = "19khhn5xhqv1yp7d6k987gh5w5rhrjnp4p0c6fyrd8z6lzz5h9qi";
+    };
+  };
+
   gocheck = buildGoPackage rec {
     rev = "87";
     name = "gocheck-${rev}";
@@ -880,6 +892,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  beorn7.perks = buildGoPackage rec {
+    rev = "b965b613227fddccbfffe13eae360ed3fa822f8d";
+    name = "beorn7.perks-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/beorn7/perks";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "beorn7";
+      repo = "perks";
+      sha256 = "1p8zsj4r0g61q922khfxpwxhdma2dx4xad1m5qx43mfn28kxngqk";
+    };
+  };
+
   pflag = buildGoPackage rec {
     date = "20131112";
     rev = "94e98a55fb412fcbcfc302555cb990f5e1590627";
@@ -907,20 +931,22 @@ let self = _self // overrides; _self = with self; {
   };
 
   prometheus.client_golang = buildGoPackage rec {
-    rev = "4627d59e8a09c330c5ccfe7414baca28d8df847d";
-    name = "prometheus-client-${stdenv.lib.strings.substring 0 7 rev}";
+    name = "prometheus-client-${version}";
+    version = "0.3.2";
     goPackagePath = "github.com/prometheus/client_golang";
     src = fetchFromGitHub {
-      inherit rev;
       owner = "prometheus";
       repo = "client_golang";
-      sha256 = "1mmj1r8xfi1gwb5f0l6sxjj804dhavp3pjmrqpbaa1g82bmz1hr1";
+      rev = "${version}";
+      sha256 = "1fn56zp420hxpm0prr76yyhh62zq3sqj3ppl2r4qxjc78f8ckbj4";
     };
     propagatedBuildInputs = [
       protobuf
       golang_protobuf_extensions
       prometheus.client_model
       prometheus.procfs
+      beorn7.perks
+      goautoneg
     ];
   };
 
