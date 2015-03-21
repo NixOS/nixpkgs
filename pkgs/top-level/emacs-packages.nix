@@ -746,12 +746,12 @@ let self = _self // overrides;
 
   org-trello = melpaBuild rec {
     pname = "org-trello";
-    version = "0.6.9.2";
+    version = "0.6.9.3";
     src = fetchFromGitHub {
       owner = "org-trello";
       repo = pname;
-      rev = "5656f32d3624b3c82014658aef88ffa47c0fca7b";
-      sha256 = "0781prmxbx3lmylma63vw80rix7dmhy8861jz4cbqmkfid6d3x73";
+      rev = "f1e1401a373dd492eee49fb131b1cd66b3a9ac37";
+      sha256 = "003gdh8rgdl3k8h20wgbciqyacyqr64w1wfdqvwm9qdz414q5yj3";
     };
     packageRequires = [ request-deferred deferred dash s ];
     files = [ "org-trello-*.el" ];
