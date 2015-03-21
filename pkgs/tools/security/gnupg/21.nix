@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./socket-activate-2.1.1.patch ];
 
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
