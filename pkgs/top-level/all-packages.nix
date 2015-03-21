@@ -1450,13 +1450,13 @@ let
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg20 = callPackage ../tools/security/gnupg/20.nix {
+  gnupg20 = callPackage ../tools/security/gnupg/20.nix ({
     libgcrypt = libgcrypt_1_6;
-  };
+  } // (config.gnupg or {}));
 
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
+  gnupg21 = callPackage ../tools/security/gnupg/21.nix ({
     libgcrypt = libgcrypt_1_6;
-  };
+  } // (config.gnupg or {}));
 
   gnupg = gnupg20;
 
