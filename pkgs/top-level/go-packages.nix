@@ -782,6 +782,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ go-codec armon.go-metrics ];
   };
 
+  mesos-stats = buildGoPackage rec {
+    rev = "0c6ea494c19bedc67ebb85ce3d187ec21050e920";
+    name = "mesos-stats-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/antonlindstrom/mesos_stats";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "antonlindstrom";
+      repo = "mesos_stats";
+      sha256 = "18ggyjf4nyn77gkn16wg9krp4dsphgzdgcr3mdflv6mvbr482ar4";
+    };
+
+    propagatedBuildInputs = [ prometheus.client_golang glog ];
+  };
+
   mgo = buildGoPackage rec {
     rev = "2";
     name = "mgo-${rev}"; 
