@@ -4913,6 +4913,9 @@ let
     ps     = if stdenv.isDarwin then darwin.ps else null;
   };
 
+  cmake-3_2 = callPackage ../development/tools/build-managers/cmake/3.2.nix {
+    jsoncpp = jsoncpp-1_6;
+  };
   cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
   cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
 
