@@ -5728,7 +5728,7 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
-  libgit2 = callPackage ../development/libraries/git2 { };
+  libgit2 = callPackage ../development/libraries/git2 { cmake = cmake-3_2; };
 
   glew = callPackage ../development/libraries/glew { };
 
