@@ -129,6 +129,6 @@ self: super: {
   # https://github.com/batterseapower/ansi-wl-pprint/issues/13
   ansi-wl-pprint = appendPatch super.ansi-wl-pprint (pkgs.fetchpatch {
     url = "https://github.com/hvr/ansi-wl-pprint/commit/7e489ea6b546899074b1cdccf37d2e49ab313098.patch";
-    sha256 = "111aasm6pb55prldzwzgfffd5zz1npl7akdzcwh2hsri865i1806";
+    sha256 = "0j20cwbph1wg82gfad5a6gfc5gy42cf4vz514jrpfg8d9qvyfhlj";
   });
 }
