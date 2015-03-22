@@ -4252,8 +4252,7 @@ let
   opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix {
     inherit (ocamlPackages_4_01_0) ocaml;
   };
-  opam_1_2_0 = callPackage ../development/tools/ocaml/opam/1.2.0.nix { };
-  opam = opam_1_2_0;
+  opam = callPackage ../development/tools/ocaml/opam { };
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
