@@ -241,6 +241,7 @@ let
           "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
           "-DHUPNP_ENABLED=ON"
           "-DWITH_SOLID_UDISKS2=ON"
+          "-DKDE_DEFAULT_HOME=.kde"
         ];
       };
 

@@ -27,10 +27,7 @@ let
         enableParallelBuilding = drv.enableParallelBuilding or true;
         cmakeFlags =
           (drv.cmakeFlags or [])
-          ++ [ "-DBUILD_TESTING=OFF"
-            "-DKDE_DEFAULT_HOME=.kde5"
-            "-DKDE4_DEFAULT_HOME=.kde"
-          ]
+          ++ [ "-DBUILD_TESTING=OFF" ]
           ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
         meta =
