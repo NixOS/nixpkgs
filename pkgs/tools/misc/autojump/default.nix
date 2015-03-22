@@ -24,7 +24,7 @@ in
 
       # FIXME: What's the right place for `autojump.zsh'?
       # This can be used as a workaround in .zshrc:
-      # . $(dirname $(readlink -f $HOME/.nix-profile/bin/autojump))/../share/autojump/autojump.zsh
+      # . $HOME/.nix-profile/share/autojump/autojump.zsh
     '';
 
     meta = {
