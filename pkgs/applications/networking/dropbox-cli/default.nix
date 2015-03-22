@@ -22,7 +22,7 @@ stdenv.mkDerivation {
       --replace '@DESKTOP_FILE_DIR@' "$out/share/applications" \
       --replace '@IMAGEDATA16@' '"too-lazy-to-fix"' \
       --replace '@IMAGEDATA64@' '"too-lazy-to-fix"'
-
+    sed -i 's:db_path = .*:db_path = "${dropboxd}":' $out/bin/dropbox
     chmod +x "$out/bin/"*
     patchShebangs "$out/bin"
   '';
