@@ -45,13 +45,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   protobuf = buildGoPackage rec {
-    rev = "36be16571e14";
-    name = "goprotobuf-${rev}";
-    goPackagePath = "code.google.com/p/goprotobuf";
-    src = fetchhg {
+    rev = "5677a0e3d5e89854c9974e1256839ee23f8233ca";
+    name = "goprotobuf-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/golang/protobuf";
+    src = fetchFromGitHub {
       inherit rev;
-      url = "https://code.google.com/p/goprotobuf";
-      sha256 = "14yay2sgfbbs0bx3q03bdqn1kivyvxfdm34rmp2612gvinlll215";
+      owner = "golang";
+      repo = "protobuf";
+      sha256 = "18dzxmy0gfjnwa9x8k3hv9calvmydv0dnz1iibykkzd20gw4l85v";
     };
     subPackages = [ "proto" "protoc-gen-go" ];
   };
@@ -252,6 +253,18 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ oglematchers ];
     doCheck = false; # please check again
+  };
+
+  govers = buildGoPackage rec {
+    rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
+    name = "govers-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/rogpeppe/govers";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "rogpeppe";
+      repo = "govers";
+      sha256 = "0din5a7nff6hpc4wg0yad2nwbgy4q1qaazxl8ni49lkkr4hyp8pc";
+    };
   };
 
   gox = buildGoPackage rec {
@@ -513,17 +526,22 @@ let self = _self // overrides; _self = with self; {
     };
     preBuild = ''
       cd "go/src/$goPackagePath"
+
+      govers -d -m code.google.com/p/goprotobuf github.com/golang/protobuf
+
       # Work around `go install` assuming containing directory is the executable name we want
       for i in */bin; do
         mv "$i" "$(dirname "$i")/$(dirname "$i")"
       done
 
       # Generate protobuf definitions and static assets
+      sed -i '1s|^|SHELL = ${stdenv.shell}\n|' Makefile
       make protocol/hologram.pb.go
       make transport/remote/bindata.go
     '';
 
-    buildInputs = [ pkgs.protobuf crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
+    buildInputs = [ pkgs.protobuf crypto protobuf goamz rgbterm go-bindata
+                    go-homedir ldap g2s gox govers ];
   };
 
   influxdb-go = buildGoPackage rec {
