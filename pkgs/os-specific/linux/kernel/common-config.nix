@@ -275,6 +275,7 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
   ''}
+  RT2800USB_RT55XX y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
