@@ -10916,13 +10916,13 @@ let
   };
 
   syncthing-gtk = buildPythonPackage rec {
-    version = "0.6.2";
+    version = "0.6.3";
     name = "syncthing-gtk-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "syncthing";
       repo = "syncthing-gtk";
       rev = "v${version}";
-      sha256 = "0dfs5kzdj9ld20i23w6ldj7z761rwnnbqkr0l12wkgcxi58jcqds";
+      sha256 = "1qa5bw2qizjiqvkms8i31wsjf8cw9p0ciamxgfgq6n37wcalv6ms";
     };
 
     disabled = isPy3k;
