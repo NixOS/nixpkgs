@@ -11,7 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0ff1niks3y41gr6z13q9m391na70abqyi9rj4z3y2fz69cwm6sgz";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs =
+    [
+      # cmake can be built with the system jsoncpp, or its own bundled version.
+      # Obviously we cannot build it against the system jsoncpp that doesn't yet exist, so
+      # we make a bootstrapping build with the bundled version.
+      (cmake.override { jsoncpp = null; })
+      python
+    ];
 
   meta = {
     inherit version;

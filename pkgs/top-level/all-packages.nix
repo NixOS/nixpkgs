@@ -4910,12 +4910,12 @@ let
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake = callPackage ../development/tools/build-managers/cmake {
+  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
     ps     = if stdenv.isDarwin then darwin.ps else null;
   };
 
-  cmake-3_2 = callPackage ../development/tools/build-managers/cmake/3.2.nix {
+  cmake = callPackage ../development/tools/build-managers/cmake {
     jsoncpp = jsoncpp-1_6;
   };
   cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
@@ -5728,7 +5728,7 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
-  libgit2 = callPackage ../development/libraries/git2 { cmake = cmake-3_2; };
+  libgit2 = callPackage ../development/libraries/git2 {};
 
   glew = callPackage ../development/libraries/glew { };
 
@@ -10832,9 +10832,7 @@ let
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
     kf5 = kf57;
     qt5 = qt54;
-    pkgs = pkgs // {
-      cmake = cmake-3_2;
-    };
+    inherit pkgs;
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_stable = kdeApps_14_12;
@@ -12830,9 +12828,9 @@ let
     }) ../desktops/kde-4.14;
 
   kdePackagesFor = self: dir:
-    let callPackageOrig = newScope { cmake = cmake-3_2; }; in
+    let callPackageOrig = newScope {}; in
     let
-      callPackage = newScope (self // { cmake = cmake-3_2; });
+      callPackage = newScope self;
       kde4 = callPackageOrig dir {
         inherit callPackage callPackageOrig;
         kdelibs = kdeApps_stable.kdelibs;
