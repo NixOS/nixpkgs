@@ -8395,6 +8395,8 @@ let
     callPackage ../servers/monitoring/prometheus/node_exporter { };
   prometheus-pushgateway =
     callPackage ../servers/monitoring/prometheus/pushgateway { };
+  prometheus-statsd-bridge =
+    callPackage ../servers/monitoring/prometheus/statsd_bridge { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
