@@ -5726,7 +5726,7 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
-  libgit2 = callPackage ../development/libraries/git2 { };
+  libgit2 = callPackage ../development/libraries/git2 { cmake = cmake-3_2; };
 
   glew = callPackage ../development/libraries/glew { };
 
@@ -10830,6 +10830,10 @@ let
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
     kf5 = kf57;
     qt5 = qt54;
+    pkgs = pkgs // {
+      cmake = cmake-3_2;
+    };
+    kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_stable = kdeApps_14_12;
   kdeApps_latest = kdeApps_14_12;
@@ -12829,6 +12833,7 @@ let
       callPackage = newScope (self // { cmake = cmake-3_2; });
       kde4 = callPackageOrig dir {
         inherit callPackage callPackageOrig;
+        kdelibs = kdeApps_stable.kdelibs;
       };
     in kde4 // {
       inherit kde4;

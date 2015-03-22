@@ -281,10 +281,10 @@ let
         buildInputs = super.kremotecontrol.buildInputs ++ [xlibs.libXtst];
       };
 
-      krfb = with pkgs; super.krfb // {
+      krfb = super.krfb // {
         buildInputs =
           super.krfb.buildInputs
-          ++ [xlibs.libXtst kde4.telepathy.common_internals];
+          ++ [pkgs.xlibs.libXtst kde4.telepathy.common_internals];
       };
 
       libkdcraw = with pkgs; super.libkdcraw // {
