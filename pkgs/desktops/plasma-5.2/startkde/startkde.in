@@ -11,7 +11,7 @@
 # perfect, since it may require logging out after
 # installing new applications to update the cache.
 # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
-rm -fv $HOME/.cache/icon-cache.kcache
+rm -fv "$HOME/.cache/icon-cache.kcache"
 
 # Qt writes a weird ‘libraryPath’ line to
 # ~/.config/Trolltech.conf that causes the KDE plugin
@@ -21,7 +21,7 @@ rm -fv $HOME/.cache/icon-cache.kcache
 # in Trolltech.conf.  A better solution would be to stop
 # Qt from doing this wackiness in the first place.
 if [ -e $HOME/.config/Trolltech.conf ]; then
-    @gnused@/bin/sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
+    @gnused@/bin/sed -e '/nix\\store\|nix\/store/ d' -i "$HOME/.config/Trolltech.conf"
 fi
 
 if test "x$1" = x--failsafe; then
@@ -67,12 +67,12 @@ configDir=$(@qt5@/bin/qtpaths --writable-path GenericConfigLocation)
 mkdir -p "$configDir"
 
 # This is basically setting defaults so we can use them with kstartupconfig5
-cat @startupconfigkeys@ >$configDir/startupconfigkeys
+cat @startupconfigkeys@ > "$configDir/startupconfigkeys"
 
 # preload the user's locale on first start
-plasmalocalerc=$configDir/plasma-localerc
-test -f $plasmalocalerc || {
-cat >$plasmalocalerc <<EOF
+plasmalocalerc="$configDir/plasma-localerc"
+test -f "$plasmalocalerc" || {
+cat > "$plasmalocalerc" <<EOF
 [Formats]
 LANG=$LANG
 EOF
@@ -80,12 +80,12 @@ EOF
 
 # export LC_* variables set by kcmshell5 formats into environment
 # so it can be picked up by QLocale and friends.
-exportformatssettings=$configDir/plasma-locale-settings.sh
-[ -f $exportformatssettings ] && . $exportformatssettings
+exportformatssettings="$configDir/plasma-locale-settings.sh"
+[ -f "$exportformatssettings" ] && . "$exportformatssettings"
 
 # Write a default kdeglobals file to set up the font
-kdeglobalsfile=$configDir/kdeglobals
-[ -f $kdeglobalsfile ] || cat @kdeglobals@ >$kdeglobalsfile
+kdeglobalsfile="$configDir/kdeglobals"
+[ -f "$kdeglobalsfile" ] || cat @kdeglobals@ > "$kdeglobalsfile"
 
 @plasmaWorkspace@/bin/kstartupconfig5
 returncode=$?
@@ -93,7 +93,7 @@ if test $returncode -ne 0; then
     @xmessage@/bin/xmessage -geometry 500x100 "kstartupconfig5 exited with $returncode"
     exit 1
 fi
-[ -r $configDir/startupconfig ] && . $configDir/startupconfig
+[ -r "$configDir/startupconfig" ] && . "$configDir/startupconfig"
 
 XCURSOR_PATH=~/.icons:$(echo "$XDG_DATA_DIRS" | tr ":" "\n" | @gnused@/bin/sed 's,$,/icons,g' | tr "\n" ":")
 export XCURSOR_PATH
@@ -125,13 +125,13 @@ fi
 #
 @xsetroot@/bin/xsetroot -cursor_name left_ptr
 
-dl=$DESKTOP_LOCKED
+dl="$DESKTOP_LOCKED"
 unset DESKTOP_LOCKED # Don't want it in the environment
 
 # Make sure that D-Bus is running
 # D-Bus autolaunch is broken
 if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-    eval `@dbus_tools@/bin/dbus-launch --sh-syntax --exit-with-session`
+    eval $(@dbus_tools@/bin/dbus-launch --sh-syntax --exit-with-session)
 fi
 if @qt5@/bin/qdbus >/dev/null 2>/dev/null; then
     : # ok
@@ -147,7 +147,7 @@ if test -z "$dl"; then
   # the splashscreen and progress indicator
   case "$ksplashrc_ksplash_engine" in
     KSplashQML)
-      ksplash_pid=`@plasmaWorkspace@/bin/ksplashqml "${ksplashrc_ksplash_theme}" --pid`
+      ksplash_pid=$(@plasmaWorkspace@/bin/ksplashqml "${ksplashrc_ksplash_theme}" --pid)
       ;;
     None)
       ;;
@@ -162,8 +162,8 @@ fi
 # and /etc/xdg/ on Linux)
 #
 # This is where you can define environment variables that will be available to
-# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
-# or eval `gpg-agent --daemon`.
+# all KDE programs, so this is where you can run agents using e.g. eval $(ssh-agent)
+# or eval $(gpg-agent --daemon).
 # Note: if you do that, you should also put "ssh-agent -k" as a shutdown script
 #
 # (see end of this file).
@@ -173,16 +173,16 @@ fi
 scriptpath=$(@qt5@/bin/qtpaths --paths GenericConfigLocation | tr ':' '\n' | @gnused@/bin/sed 's,$,/plasma-workspace,g')
 
 # Add /env/ to the directory to locate the scripts to be sourced
-for prefix in `echo $scriptpath`; do
+for prefix in $(echo $scriptpath); do
   for file in "$prefix"/env/*.sh; do
     test -r "$file" && . "$file"
   done
 done
 
 # Set the path for Qt plugins provided by KDE
-QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`@qt5@/bin/qtpaths --plugin-dir`
+QT_PLUGIN_PATH="${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}$(@qt5@/bin/qtpaths --plugin-dir)"
 # TODO: Do we really need this?
-QT_PLUGIN_PATH=$QT_PLUGIN_PATH:$kdehome/lib/kde5/plugins/
+QT_PLUGIN_PATH="$QT_PLUGIN_PATH:$kdehome/lib/kde5/plugins/"
 export QT_PLUGIN_PATH
 
 # Activate the kde font directories.
@@ -202,16 +202,16 @@ export QT_PLUGIN_PATH
 # Where X is the original font database that was set up before this script
 # runs.
 
-usr_odir=$HOME/.fonts/kde-override
-usr_fdir=$HOME/.fonts
+usr_odir="$HOME/.fonts/kde-override"
+usr_fdir="$HOME/.fonts"
 
 if test -n "$KDEDIRS"; then
-  kdedirs_first=`echo "$KDEDIRS" | @gnused@/bin/sed -e 's/:.*//'`
-  sys_odir=$kdedirs_first/share/fonts/override
-  sys_fdir=$kdedirs_first/share/fonts
+  kdedirs_first=$(echo "$KDEDIRS" | @gnused@/bin/sed -e 's/:.*//')
+  sys_odir="$kdedirs_first/share/fonts/override"
+  sys_fdir="$kdedirs_first/share/fonts"
 else
-  sys_odir=$KDEDIR/share/fonts/override
-  sys_fdir=$KDEDIR/share/fonts
+  sys_odir="$KDEDIR/share/fonts/override"
+  sys_fdir="$KDEDIR/share/fonts"
 fi
 
 # We run mkfontdir on the user's font dirs (if we have permission) to pick
@@ -229,10 +229,10 @@ test -d "$sys_fdir" && @xset@/bin/xset fp+ "$sys_fdir"
 
 # Get Ghostscript to look into user's KDE fonts dir for additional Fontmap
 if test -n "$GS_LIB" ; then
-    GS_LIB=$usr_fdir:$GS_LIB
+    GS_LIB="$usr_fdir:$GS_LIB"
     export GS_LIB
 else
-    GS_LIB=$usr_fdir
+    GS_LIB="$usr_fdir"
     export GS_LIB
 fi
 
@@ -269,7 +269,7 @@ KDE_SESSION_VERSION=5
 export KDE_SESSION_VERSION
 @xprop@/bin/xprop -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 5
 
-KDE_SESSION_UID=`id -ru`
+KDE_SESSION_UID=$(id -ru)
 export KDE_SESSION_UID
 
 XDG_CURRENT_DESKTOP=KDE
@@ -277,7 +277,7 @@ export XDG_CURRENT_DESKTOP
 
 # At this point all the environment is ready, let's send it to kwalletd if running
 if test -n "$PAM_KWALLET_LOGIN" ; then
-    env | @socat@/bin/socat STDIN UNIX-CONNECT:$PAM_KWALLET_LOGIN
+    env | @socat@/bin/socat STDIN "UNIX-CONNECT:$PAM_KWALLET_LOGIN"
 fi
 
 # At this point all environment variables are set, let's send it to the DBus
@@ -330,11 +330,11 @@ if test $? -eq 255; then
   @xmessage@/bin/xmessage -geometry 500x100 "Could not start ksmserver."
 fi
 
-wait_drkonqi=`@kconfig@/bin/kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true`
+wait_drkonqi=$(@kconfig@/bin/kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true)
 
 if test x"$wait_drkonqi"x = x"true"x ; then
     # wait for remaining drkonqi instances with timeout (in seconds)
-    wait_drkonqi_timeout=`@kconfig@/bin/kreadconfig5 --file startkderc --group WaitForDrKonqi --key Timeout --default 900`
+    wait_drkonqi_timeout=$(@kconfig@/bin/kreadconfig5 --file startkderc --group WaitForDrKonqi --key Timeout --default 900)
     wait_drkonqi_counter=0
     while @qt5@/bin/qdbus | @gnugrep@/bin/grep "^[^w]*org.kde.drkonqi" > /dev/null ; do
         sleep 5
@@ -359,8 +359,8 @@ test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
 echo 'startkde: Running shutdown scripts...'  1>&2
 
 # Run scripts found in <config locations>/plasma-workspace/shutdown
-for prefix in `echo "$scriptpath"`; do
-  for file in `ls "$prefix"/shutdown 2> /dev/null | @gnugrep@/bin/egrep -v '(~|\.bak)$'`; do
+for prefix in $(echo "$scriptpath"); do
+  for file in $(ls "$prefix"/shutdown 2> /dev/null | @gnugrep@/bin/egrep -v '(~|\.bak)$'); do
     test -x "$prefix$file" && "$prefix$file"
   done
 done
