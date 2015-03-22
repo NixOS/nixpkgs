@@ -4913,7 +4913,6 @@ let
   cmake = callPackage ../development/tools/build-managers/cmake {
     jsoncpp = jsoncpp-1_6;
   };
-  cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
