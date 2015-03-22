@@ -1638,7 +1638,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvm; };
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvmPackages_34.llvm; };
 
   llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
