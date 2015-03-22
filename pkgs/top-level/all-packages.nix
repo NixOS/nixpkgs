@@ -4910,11 +4910,6 @@ let
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
-  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
-    wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.ps else null;
-  };
-
   cmake = callPackage ../development/tools/build-managers/cmake {
     jsoncpp = jsoncpp-1_6;
   };
