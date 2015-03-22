@@ -9359,11 +9359,12 @@ let
 
 
   requests2 = buildPythonPackage rec {
-    name = "requests-2.5.1";
+    name = "requests-${version}";
+    version = "2.6.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      sha256 = "0rnyg6164jp7x7slgwnhigqza18d705hdvzwr4yk5qmisgpkaxvv";
+      sha256 = "0xadnw27m257scrhjcc66zm4z3ikg8n9h6g9akpkavr31qgyvnqw";
     };
 
     meta = {
