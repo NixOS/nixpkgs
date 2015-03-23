@@ -32,14 +32,18 @@ stdenv.mkDerivation rec {
       sha256 = "136z63ff83hnwd247cq4m8m8164pklzyl5i2csf5h6wd8p01pdkj";
     })] ++
     # Don't search in non-Nix locations such as /usr, but do search in
-    # Nixpkgs' Glibc. 
+    # Nixpkgs' Glibc.
     optional (stdenv ? glibc) ./search-path.patch ++
     optional (stdenv ? cross) (fetchurl {
       name = "fix-darwin-cross-compile.patch";
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    });
+    }) ++
+    # fix cmake detection of openssl libs
+    # see: http://public.kitware.com/Bug/bug_relationship_graph.php?bug_id=15386
+    #      and http://www.cmake.org/gitweb?p=cmake.git;a=commitdiff;h=c5d9a8283cfac15b4a5a07f18d5eb10c1f388505#patch1
+    [./cmake_find_openssl_for_openssl-1.0.1m_and_up.patch];
 
   buildInputs = [ curl expat zlib bzip2 libarchive ]
     ++ optional useNcurses ncurses
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = optional wantPS ps;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
-  
+
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
     + stdenv.lib.optionalString useQt4 " --qt-gui";
