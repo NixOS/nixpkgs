@@ -137,7 +137,8 @@ in
       after = [ "network-online.target" "ip-up.target" ];
       wants = [ "network-online.target" "ip-up.target" ];
 
-      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'"; in
+      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'";
+                   mktemp = "mktemp --tmpdir=/run"; in
         ''
           # When dealing with cryptographic keys, we want to keep things private.
           umask 077
@@ -145,10 +146,10 @@ in
           if ! [ -e /root/.ssh/authorized_keys ]; then
               echo "obtaining SSH key..."
               mkdir -m 0700 -p /root/.ssh
-              AUTH_KEYS=$(mktemp) && {
+              AUTH_KEYS=$(${mktemp}) && {
                 ${wget} -O $AUTH_KEYS http://metadata.google.internal/0.1/meta-data/authorized-keys
                 if [ $? -eq 0 -a -e $AUTH_KEYS ]; then
-                    KEY_PUB=$(mktemp) && {
+                    KEY_PUB=$(${mktemp}) && {
                       cat $AUTH_KEYS | cut -d: -f2- > $KEY_PUB
                       if ! grep -q -f $KEY_PUB /root/.ssh/authorized_keys; then
                           cat $KEY_PUB >> /root/.ssh/authorized_keys
@@ -165,7 +166,7 @@ in
           countKeys=0
           ${flip concatMapStrings config.services.openssh.hostKeys (k :
             let kName = baseNameOf k.path; in ''
-              PRIV_KEY=$(mktemp) && {
+              PRIV_KEY=$(${mktemp}) && {
                 echo "trying to obtain SSH private host key ${kName}"
                 ${wget} -O $PRIV_KEY http://metadata.google.internal/0.1/meta-data/attributes/${kName} && :
                 if [ $? -eq 0 -a -e $PRIV_KEY ]; then
