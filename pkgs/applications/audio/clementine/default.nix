@@ -14,7 +14,11 @@ stdenv.mkDerivation {
     sha256 = "1gx1109i4pylz6x7gvp4rdzc6dvh0w6in6hfbygw01d08l26bxbx";
   };
 
-  patches = [ ./clementine-1.2.1-include-paths.patch ];
+  patches =
+    [
+      ./clementine-1.2.1-include-paths.patch
+      ./clementine-dbus-namespace.patch
+    ];
 
   buildInputs = [
     boost

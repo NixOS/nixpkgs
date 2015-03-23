@@ -1,0 +1,36 @@
+From ec580cb815c16ec1ab43a469d5af7d51d8d03082 Mon Sep 17 00:00:00 2001
+From: Chocobozzz <florian.chocobo@gmail.com>
+Date: Wed, 16 Jul 2014 15:57:25 +0200
+Subject: [PATCH] No namespaces for DBus interfaces. Fixes #4401
+
+---
+ src/CMakeLists.txt | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 650fa74..775b0a5 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -892,11 +892,6 @@ optional_source(LINUX SOURCES widgets/osd_x11.cpp)
+ if(HAVE_DBUS)
+   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dbus)
+ 
+-  # Hack to get it to generate interfaces without namespaces - required
+-  # because otherwise org::freedesktop::UDisks and
+-  # org::freedesktop::UDisks::Device conflict.
+-  list(APPEND QT_DBUSXML2CPP_EXECUTABLE -N)
+-
+   # MPRIS DBUS interfaces
+   qt4_add_dbus_adaptor(SOURCES
+       dbus/org.freedesktop.MediaPlayer.player.xml
+@@ -964,6 +959,10 @@ if(HAVE_DBUS)
+ 
+   # DeviceKit DBUS interfaces
+   if(HAVE_DEVICEKIT)
++    set_source_files_properties(dbus/org.freedesktop.UDisks.xml
++        PROPERTIES NO_NAMESPACE dbus/udisks)
++    set_source_files_properties(dbus/org.freedesktop.UDisks.Device.xml
++        PROPERTIES NO_NAMESPACE dbus/udisksdevice)
+     qt4_add_dbus_interface(SOURCES
+         dbus/org.freedesktop.UDisks.xml
+         dbus/udisks)
