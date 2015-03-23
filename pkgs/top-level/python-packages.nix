@@ -13422,17 +13422,15 @@ let
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-${rev}";
-    rev = "44d3af9fb2482cd0df1a8ababbe2fdf27ab33172";
+    name = "searx-0.7.0";
 
-    src = pkgs.fetchgit {
-      url = "git://github.com/asciimoo/searx";
-      inherit rev;
-      sha256 = "1w505pzdkkcglq782wg7f5fxrw9i5jzp7px20c2xz18pps2m3rsm";
+    src = pkgs.fetchurl {
+      url = "https://github.com/asciimoo/searx/archive/v0.7.0.tar.gz";
+      sha256 = "0vq2zjdr1c8mr3zkycqq3732zf4pybbbrs3kzplqgf851k9zfpbw";
     };
 
     propagatedBuildInputs = with self; [ pyyaml lxml grequests flaskbabel flask requests
-      gevent speaklater Babel pytz dateutil ];
+      gevent speaklater Babel pytz dateutil pygments ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
