@@ -5146,7 +5146,6 @@ let
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gspread/${name}.tar.gz";
       md5 = "5a71e4e3fc509dc1c4d34722f102dec1";
-      sha256 = "01kihhnzp60694hib6bvqzy1ikbfpmlmbrhsav7xip2jwvwmx96v";
     };
 
     meta = {
