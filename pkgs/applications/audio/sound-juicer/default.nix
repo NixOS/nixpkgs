@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, intltool, itstool, libxml2, brasero, libcanberra_gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, gtk3, intltool, itstool, libxml2, brasero
+, libcanberra_gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
+, makeWrapper }:
 
 let
   major = "3.15";
