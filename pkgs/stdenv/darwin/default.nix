@@ -12,7 +12,7 @@ rec {
 
     name    = "trivial-bootstrap-tools";
     builder = "/bin/sh";
-    args    = [ ./trivialBootstrap.sh ];
+    args    = [ ./trivial-bootstrap.sh ];
 
     mkdir   = "/bin/mkdir";
     ln      = "/bin/ln";
