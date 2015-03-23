@@ -28,8 +28,12 @@ let
 
     lldb = callPackage ./lldb.nix {};
 
-    libcxx = callPackage ./libc++ {};
+    libcxx = callPackage ./libc++ {
+      inherit stdenv;
+    };
 
-    libcxxabi = callPackage ./libc++abi.nix {};
+    libcxxabi = callPackage ./libc++abi.nix {
+      inherit stdenv;
+    };
   };
 in self
