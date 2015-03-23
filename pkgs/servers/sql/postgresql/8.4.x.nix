@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses, readline }:
+{ stdenv, fetchurl, zlib, ncurses, readline, openssl }:
 
 let version = "8.4.22"; in
 
@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "09iqr9sldiq7jz1rdnywp2wv36lxy5m8kch3vpchd1s4fz75c7aw";
   };
 
-  buildInputs = [ zlib ncurses readline ];
+  buildInputs = [ zlib ncurses readline openssl ];
 
   LC_ALL = "C";
+
+  configureFlags = [ "--with-openssl" ];
 
   patches = [ ./less-is-more.patch ];
 
