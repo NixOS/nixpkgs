@@ -1,6 +1,5 @@
 { stdenv, fetchgit, fetchurl, ocaml, unzip, ncurses, curl }:
 
-# Opam 1.2.0 only works with ocaml >= 3.12.1 according to ./configure
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12.1";
 
 let
@@ -22,12 +21,12 @@ let
       sha256 = "d167466435a155c779d5ec25b2db83ad851feb42ebc37dca8ffa345ddaefb82f";
     };
     dose3 = fetchurl {
-      url = "https://gforge.inria.fr/frs/download.php/file/33677/dose3-3.2.2.tar.gz";
-      sha256 = "a30a189f9f298ed1de96d7098440c951f3df2c8da626f7f37f38cbfddefc909c";
+      url = "https://gforge.inria.fr/frs/download.php/file/34277/dose3-3.3.tar.gz";
+      sha256 = "8dc4dae9b1a81bb3a42abb283df785ba3eb00ade29b13875821c69f03e00680e";
     };
     cmdliner = fetchurl {
-      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-0.9.4.tbz";
-      sha256 = "ecb65e2cfd984ec07e97a78f334a80cda41fb8f8bb5e37c41fd33e6a0e2e69ef";
+      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-0.9.7.tbz";
+      sha256 = "9c19893cffb5d3c3469ee0cce85e3eeeba17d309b33b9ace31aba06f68f0bf7a";
     };
     uutf = fetchurl {
       url = "http://erratique.ch/software/uutf/releases/uutf-0.9.3.tbz";
@@ -38,13 +37,13 @@ let
       sha256 = "3fd4dca045d82332da847e65e981d8b504883571d299a3f7e71447d46bc65f73";
     };
     opam = fetchurl {
-      url = "https://github.com/ocaml/opam/archive/1.2.0.zip";
-      sha256 = "b78bb9570fbd1dae50583792525a3dd612f8f90db367771fabd7bf4571ba25f7";
+      url = "https://github.com/ocaml/opam/archive/1.2.1.zip";
+      sha256 = "1mvsy89l5g9nvwmmls5jf46anh6gk8dk8a1dn42rmnihnb0zjcs4";
     };
   };
-in
-stdenv.mkDerivation rec {
-  name = "opam-1.2.0";
+in stdenv.mkDerivation rec {
+  name = "opam-${version}";
+  version = "1.2.1";
 
   buildInputs = [ unzip curl ncurses ocaml ];
 
@@ -61,7 +60,9 @@ stdenv.mkDerivation rec {
     ln -sv ${srcs.jsonm} $sourceRoot/src_ext/${srcs.jsonm.name}
   '';
 
-  patches = [ ./1.2.0-src_ext-Makefile.patch ];
+  preConfigure = ''
+    substituteInPlace ./src_ext/Makefile --replace "%.stamp: %.download" "%.stamp:"
+  '';
 
   postConfigure = "make lib-ext";
 
@@ -70,10 +71,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = {
-    maintainers = [ stdenv.lib.maintainers.henrytill ];
+  meta = with stdenv.lib; {
     description = "A package manager for OCaml";
-    homepage = "http://opam.ocamlpro.com/";
-    platforms = stdenv.lib.platforms.all;
+    homepage = http://opam.ocamlpro.com/;
+    maintainers = [ maintainers.henrytill ];
+    platforms = platforms.all;
   };
 }
