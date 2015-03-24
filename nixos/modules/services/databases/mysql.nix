@@ -107,6 +107,13 @@ in
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
 
+      databases = mkOption {
+        default = [];
+        description = "List of databases that should exist on each startup and users that should have access to it.";
+        example = [ { name = "foodatabase"; users = [ { username = "foouser"; password = "secret"; } ]; } ];
+      };
+
+
       # FIXME: remove this option; it's a really bad idea.
       rootPassword = mkOption {
         default = null;
@@ -159,6 +166,19 @@ in
     users.extraGroups.mysql.gid = config.ids.gids.mysql;
 
     environment.systemPackages = [mysql];
+
+    system.activationScripts.mysql = ''
+      ${concatMapStrings (database: ''
+        if [ -z "$(${mysql}/bin/mysqlshow | ${pkgs.gnugrep}/bin/grep -E '^\| +${database.name} +\|')" ]
+        then
+          ${mysql}/bin/mysqladmin create "${database.name}"
+        fi
+        ${concatMapStrings (user: ''
+          ## `` are *NONSTANDARD* but work on MYSQL. For other SQL servers, "" should work better
+          echo "GRANT ALL ON \`${database.name}\`.* TO '${user.username}'@localhost IDENTIFIED BY '${user.password}'" | ${mysql}/bin/mysql "${database.name}" ;
+        '') database.users}
+      '') cfg.databases}
+    '';
 
     systemd.services.mysql =
       { description = "MySQL Server";
