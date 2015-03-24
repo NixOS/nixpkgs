@@ -2,7 +2,8 @@
 , libnotify, libsecret, dbus_glib, polkit, isocodes, libgnome_keyring 
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
 , makeWrapper, networkmanager_openvpn, networkmanager_vpnc
-, networkmanager_openconnect, networkmanager_pptp, udev, hicolor_icon_theme, dconf }:
+, networkmanager_openconnect, networkmanager_pptp, networkmanager_l2tp
+, udev, hicolor_icon_theme, dconf }:
 
 let
   pn = "network-manager-applet";
@@ -37,16 +38,19 @@ stdenv.mkDerivation rec {
     ln -s ${networkmanager_vpnc}/etc/NetworkManager/VPN/nm-vpnc-service.name $out/etc/NetworkManager/VPN/nm-vpnc-service.name
     ln -s ${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name $out/etc/NetworkManager/VPN/nm-openconnect-service.name
     ln -s ${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name $out/etc/NetworkManager/VPN/nm-pptp-service.name
+    ln -s ${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name $out/etc/NetworkManager/VPN/nm-l2tp-service.name
     mkdir -p $out/lib/NetworkManager
     ln -s ${networkmanager_openvpn}/lib/NetworkManager/* $out/lib/NetworkManager/
     ln -s ${networkmanager_vpnc}/lib/NetworkManager/* $out/lib/NetworkManager/
     ln -s ${networkmanager_openconnect}/lib/NetworkManager/* $out/lib/NetworkManager/
     ln -s ${networkmanager_pptp}/lib/NetworkManager/* $out/lib/NetworkManager/
+    ln -s ${networkmanager_l2tp}/lib/NetworkManager/* $out/lib/NetworkManager/
     mkdir -p $out/libexec
     ln -s ${networkmanager_openvpn}/libexec/* $out/libexec/
     ln -s ${networkmanager_vpnc}/libexec/* $out/libexec/
     ln -s ${networkmanager_openconnect}/libexec/* $out/libexec/
     ln -s ${networkmanager_pptp}/libexec/* $out/libexec/
+    ln -s ${networkmanager_l2tp}/libexec/* $out/libexec/
   '';
 
   preFixup = ''
