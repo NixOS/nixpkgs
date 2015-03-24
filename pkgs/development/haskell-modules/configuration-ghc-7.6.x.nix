@@ -36,7 +36,7 @@ self: super: {
   transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # haskeline and terminfo are not core libraries for this compiler.
-  haskeline = self.haskeline_0_7_2_0;
+  haskeline = self.haskeline_0_7_2_1;
   terminfo = self.terminfo_0_4_0_1;
 
   # https://github.com/haskell/cabal/issues/2322
