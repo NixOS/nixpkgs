@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig : (runCommand "ccache-links" { }
+    links = extraConfig : (runCommand "ccache-links" { passthru.gcc = gcc; }
       ''
         mkdir -p $out/bin
         if [ -x "${gcc.cc}/bin/gcc" ]; then

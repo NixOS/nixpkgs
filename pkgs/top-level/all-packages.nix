@@ -2293,7 +2293,6 @@ let
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1;
     clutter-gtk = clutter_gtk;
-    inherit (gnome3) gnome_icon_theme gnome_icon_theme_symbolic;
   };
 
   p0f = callPackage ../tools/security/p0f { };
@@ -4252,8 +4251,7 @@ let
   opam_1_1 = callPackage ../development/tools/ocaml/opam/1.1.nix {
     inherit (ocamlPackages_4_01_0) ocaml;
   };
-  opam_1_2_0 = callPackage ../development/tools/ocaml/opam/1.2.0.nix { };
-  opam = opam_1_2_0;
+  opam = callPackage ../development/tools/ocaml/opam { };
 
   ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
@@ -5030,6 +5028,7 @@ let
   gnumake380 = callPackage ../development/tools/build-managers/gnumake/3.80 { };
   gnumake381 = callPackage ../development/tools/build-managers/gnumake/3.81 { };
   gnumake382 = callPackage ../development/tools/build-managers/gnumake/3.82 { };
+  gnumake3 = gnumake382;
   gnumake40 = callPackage ../development/tools/build-managers/gnumake/4.0 { };
   gnumake41 = callPackage ../development/tools/build-managers/gnumake/4.1 { };
   gnumake = gnumake41;
@@ -6107,7 +6106,9 @@ let
     python = python2;
   };
 
-  lensfun = callPackage ../development/libraries/lensfun { };
+  lensfun = callPackage ../development/libraries/lensfun {
+    inherit gnumake3;
+  };
 
   lesstif = callPackage ../development/libraries/lesstif { };
 
@@ -6599,6 +6600,8 @@ let
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
+  libosmpbf = callPackage ../development/libraries/libosmpbf {};
+
   libotr = callPackage ../development/libraries/libotr {
     libgcrypt = libgcrypt_1_6;
   };
@@ -6861,6 +6864,10 @@ let
   log4cplus = callPackage ../development/libraries/log4cplus { };
 
   loudmouth = callPackage ../development/libraries/loudmouth { };
+
+  luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
+
+  luabind_luajit = callPackage ../development/libraries/luabind { lua = luajit; };
 
   lzo = callPackage ../development/libraries/lzo { };
 
@@ -7438,6 +7445,8 @@ let
   srtp = callPackage ../development/libraries/srtp {};
 
   srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
+
+  stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
@@ -8242,6 +8251,10 @@ let
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
+  osrm-backend = callPackage ../servers/osrm-backend { };
+
+  osrm-backend_luajit = callPackage ../servers/osrm-backend { luabind = luabind_luajit; };
+
   petidomo = callPackage ../servers/mail/petidomo { };
 
   popa3d = callPackage ../servers/mail/popa3d { };
@@ -8360,6 +8373,22 @@ let
   postgresql94 = callPackage ../servers/sql/postgresql/9.4.x.nix { };
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
+
+  prometheus = callPackage ../servers/monitoring/prometheus { };
+  prometheus-alertmanager =
+    callPackage ../servers/monitoring/prometheus/alertmanager { };
+  prometheus-cli =
+    callPackage ../servers/monitoring/prometheus/cli { };
+  prometheus-haproxy-exporter =
+    callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
+  prometheus-mesos-exporter =
+    callPackage ../servers/monitoring/prometheus/mesos_exporter { };
+  prometheus-node-exporter =
+    callPackage ../servers/monitoring/prometheus/node_exporter { };
+  prometheus-pushgateway =
+    callPackage ../servers/monitoring/prometheus/pushgateway { };
+  prometheus-statsd-bridge =
+    callPackage ../servers/monitoring/prometheus/statsd_bridge { };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
@@ -11469,6 +11498,8 @@ let
     automake = automake114x;
   };
 
+  rstudio = callPackage ../applications/editors/rstudio { };
+
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
@@ -12796,187 +12827,201 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde414;
 
-  kde414 = kdePackagesFor (pkgs.kde414 // {
-      libusb = libusb1;
-      libcanberra = libcanberra_kde;
-      boost = boost156;
-    }) ../desktops/kde-4.14;
-
-  kdePackagesFor = self: dir:
-    let callPackageOrig = newScope {}; in
-    let
-      callPackage = newScope self;
-      kde4 = callPackageOrig dir {
-        inherit callPackage callPackageOrig;
+  kde414 =
+    kdePackagesFor
+      {
+        libusb = libusb1;
+        libcanberra = libcanberra_kde;
+        boost = boost156;
         kdelibs = kdeApps_stable.kdelibs;
-      };
-    in kde4 // {
-      inherit kde4;
+      }
+      ../desktops/kde-4.14;
 
-      wrapper = callPackage ../build-support/kdewrapper {};
 
-      recurseForRelease = true;
+  kdePackagesFor = extra: dir:
+    let
+      # list of extra packages not included in KDE
+      # the real work in this function is done below this list
+      extraPackages = callPackage:
+        rec {
+          amarok = callPackage ../applications/audio/amarok { };
 
-      amarok = callPackage ../applications/audio/amarok { };
+          bangarang = callPackage ../applications/video/bangarang { };
 
-      bangarang = callPackage ../applications/video/bangarang { };
+          basket = callPackage ../applications/office/basket { };
 
-      basket = callPackage ../applications/office/basket { };
+          bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-      bluedevil = callPackage ../tools/bluetooth/bluedevil { };
+          calligra = callPackage ../applications/office/calligra { eigen = eigen2; };
 
-      calligra = callPackage ../applications/office/calligra { eigen = eigen2; };
+          choqok = callPackage ../applications/networking/instant-messengers/choqok { };
 
-      choqok = callPackage ../applications/networking/instant-messengers/choqok { };
+          colord-kde = callPackage ../tools/misc/colord-kde { };
 
-      colord-kde = callPackage ../tools/misc/colord-kde { };
+          digikam = if builtins.compareVersions "4.9" kde4.release == 1 then
+              callPackage ../applications/graphics/digikam/2.nix { }
+            else
+              callPackage ../applications/graphics/digikam { };
 
-      digikam = if builtins.compareVersions "4.9" kde4.release == 1 then
-          callPackage ../applications/graphics/digikam/2.nix { }
-        else
-          callPackage ../applications/graphics/digikam { };
+          eventlist = callPackage ../applications/office/eventlist {};
 
-      eventlist = callPackage ../applications/office/eventlist {};
+          k3b = callPackage ../applications/misc/k3b {
+            cdrtools = cdrkit;
+          };
 
-      k3b = callPackage ../applications/misc/k3b {
-        cdrtools = cdrkit;
-      };
+          kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
-      kadu = callPackage ../applications/networking/instant-messengers/kadu { };
+          kbibtex = callPackage ../applications/office/kbibtex { };
 
-      kbibtex = callPackage ../applications/office/kbibtex { };
+          kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
 
-      kde_gtk_config = callPackage ../tools/misc/kde-gtk-config { };
+          kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
-      kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
+          kdeconnect = callPackage ../applications/misc/kdeconnect { };
 
-      kdeconnect = callPackage ../applications/misc/kdeconnect { };
+          kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
 
-      kdenlive = callPackage ../applications/video/kdenlive { mlt = mlt-qt4; };
+          kdesvn = callPackage ../applications/version-management/kdesvn { };
 
-      kdesvn = callPackage ../applications/version-management/kdesvn { };
+          kdevelop = callPackage ../applications/editors/kdevelop { };
 
-      kdevelop = callPackage ../applications/editors/kdevelop { };
+          kdevplatform = callPackage ../development/libraries/kdevplatform {
+            boost = boost156;
+          };
 
-      kdevplatform = callPackage ../development/libraries/kdevplatform {
-        boost = boost156;
-      };
+          kdiff3 = callPackage ../tools/text/kdiff3 { };
 
-      kdiff3 = callPackage ../tools/text/kdiff3 { };
+          kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
 
-      kgraphviewer = callPackage ../applications/graphics/kgraphviewer { };
+          kile = callPackage ../applications/editors/kile { };
 
-      kile = callPackage ../applications/editors/kile { };
+          kmplayer = callPackage ../applications/video/kmplayer { };
 
-      kmplayer = callPackage ../applications/video/kmplayer { };
+          kmymoney = callPackage ../applications/office/kmymoney { };
 
-      kmymoney = callPackage ../applications/office/kmymoney { };
+          kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
-      kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
+          konversation = callPackage ../applications/networking/irc/konversation { };
 
-      konversation = callPackage ../applications/networking/irc/konversation { };
+          kvirc = callPackage ../applications/networking/irc/kvirc { };
 
-      kvirc = callPackage ../applications/networking/irc/kvirc { };
+          krename = callPackage ../applications/misc/krename { };
 
-      krename = callPackage ../applications/misc/krename { };
+          krusader = callPackage ../applications/misc/krusader { };
 
-      krusader = callPackage ../applications/misc/krusader { };
+          ksshaskpass = callPackage ../tools/security/ksshaskpass {};
 
-      ksshaskpass = callPackage ../tools/security/ksshaskpass {};
+          ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
 
-      ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
+          kuickshow = callPackage ../applications/graphics/kuickshow { };
 
-      kuickshow = callPackage ../applications/graphics/kuickshow { };
+          libalkimia = callPackage ../development/libraries/libalkimia { };
 
-      libalkimia = callPackage ../development/libraries/libalkimia { };
+          libktorrent = callPackage ../development/libraries/libktorrent {
+            boost = boost156;
+          };
 
-      libktorrent = callPackage ../development/libraries/libktorrent {
-        boost = boost156;
-      };
+          libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
 
-      libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
+          liblikeback = callPackage ../development/libraries/liblikeback { };
 
-      liblikeback = callPackage ../development/libraries/liblikeback { };
+          libmm-qt = callPackage ../development/libraries/libmm-qt { };
 
-      libmm-qt = callPackage ../development/libraries/libmm-qt { };
+          libnm-qt = callPackage ../development/libraries/libnm-qt { };
 
-      libnm-qt = callPackage ../development/libraries/libnm-qt { };
+          massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
 
-      massif-visualizer = callPackage ../development/tools/analysis/massif-visualizer { };
+          networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
-      networkmanagement = callPackage ../tools/networking/networkmanagement { };
+          partitionManager = callPackage ../tools/misc/partition-manager { };
 
-      partitionManager = callPackage ../tools/misc/partition-manager { };
+          plasma-nm = callPackage ../tools/networking/plasma-nm { };
 
-      plasma-nm = callPackage ../tools/networking/plasma-nm { };
+          polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
-      polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
+          psi = callPackage ../applications/networking/instant-messengers/psi { };
 
-      psi = callPackage ../applications/networking/instant-messengers/psi { };
+          qtcurve = callPackage ../misc/themes/qtcurve { };
 
-      qtcurve = callPackage ../misc/themes/qtcurve { };
+          quassel = callPackage ../applications/networking/irc/quassel rec {
+            monolithic = true;
+            daemon = false;
+            client = false;
+            withKDE = stdenv.isLinux;
+            qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
+            dconf = gnome3.dconf;
+          };
 
-      quassel = callPackage ../applications/networking/irc/quassel rec {
-        monolithic = true;
-        daemon = false;
-        client = false;
-        withKDE = stdenv.isLinux;
-        qt = if withKDE then qt4 else qt5; # KDE supported quassel cannot build with qt5 yet (maybe in 0.12.0)
-        dconf = gnome3.dconf;
-      };
+          quasselWithoutKDE = (quassel.override {
+            monolithic = true;
+            daemon = false;
+            client = false;
+            withKDE = false;
+            #qt = qt5;
+            tag = "-without-kde";
+          });
 
-      quasselWithoutKDE = (self.quassel.override {
-        monolithic = true;
-        daemon = false;
-        client = false;
-        withKDE = false;
-        #qt = qt5;
-        tag = "-without-kde";
-      });
+          quasselDaemon = (quassel.override {
+            monolithic = false;
+            daemon = true;
+            client = false;
+            withKDE = false;
+            #qt = qt5;
+            tag = "-daemon";
+          });
 
-      quasselDaemon = (self.quassel.override {
-        monolithic = false;
-        daemon = true;
-        client = false;
-        withKDE = false;
-        #qt = qt5;
-        tag = "-daemon";
-      });
+          quasselClient = (quassel.override {
+            monolithic = false;
+            daemon = false;
+            client = true;
+            tag = "-client";
+          });
 
-      quasselClient = (self.quassel.override {
-        monolithic = false;
-        daemon = false;
-        client = true;
-        tag = "-client";
-      });
+          quasselClientWithoutKDE = (quasselClient.override {
+            monolithic = false;
+            daemon = false;
+            client = true;
+            withKDE = false;
+            #qt = qt5;
+            tag = "-client-without-kde";
+          });
 
-      quasselClientWithoutKDE = (self.quasselClient.override {
-        monolithic = false;
-        daemon = false;
-        client = true;
-        withKDE = false;
-        #qt = qt5;
-        tag = "-client-without-kde";
-      });
+          rekonq = callPackage ../applications/networking/browsers/rekonq { };
 
-      rekonq = callPackage ../applications/networking/browsers/rekonq { };
+          kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
 
-      kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
+          rsibreak = callPackage ../applications/misc/rsibreak { };
 
-      rsibreak = callPackage ../applications/misc/rsibreak { };
+          semnotes = callPackage ../applications/misc/semnotes { };
 
-      semnotes = callPackage ../applications/misc/semnotes { };
+          skrooge = callPackage ../applications/office/skrooge { };
 
-      skrooge = callPackage ../applications/office/skrooge { };
+          telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
 
-      telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
+          yakuake = callPackage ../applications/misc/yakuake { };
 
-      yakuake = callPackage ../applications/misc/yakuake { };
+          zanshin = callPackage ../applications/office/zanshin { };
 
-      zanshin = callPackage ../applications/office/zanshin { };
+          kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
+        };
 
-      kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
-    };
+      callPackageOrig = newScope (extra // { cmake = cmake-3_2; });
+
+      makePackages = extra:
+        let
+          callPackage = newScope (extra // { cmake = cmake-3_2; } // self);
+          kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
+          self =
+            kde4
+            // extraPackages callPackage
+            // {
+              inherit kde4;
+              wrapper = callPackage ../build-support/kdewrapper {};
+              recurseForRelease = true;
+            };
+        in self;
+
+    in makeOverridable makePackages extra;
 
   pantheon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.pantheon;

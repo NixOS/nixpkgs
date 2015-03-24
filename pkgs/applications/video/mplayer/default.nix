@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
       ${if speexSupport then "--enable-speex" else "--disable-speex"}
       ${if theoraSupport then "--enable-theora" else "--disable-theora"}
       ${if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc"}
-      ${if jackaudioSupport then "--enable-jack" else "--disable-jack"}
+      ${if jackaudioSupport then "" else "--disable-jack"}
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}

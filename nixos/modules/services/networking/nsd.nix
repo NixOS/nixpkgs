@@ -9,6 +9,14 @@ let
   stateDir = "/var/lib/nsd";
   pidFile  = stateDir + "/var/nsd.pid";
 
+  nsdPkg = pkgs.nsd.override {
+    bind8Stats = cfg.bind8Stats;
+    ipv6       = cfg.ipv6;
+    ratelimit  = cfg.ratelimit.enable;
+    rootServer = cfg.rootServer;
+    zoneStats  = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
+  };
+
   zoneFiles = pkgs.stdenv.mkDerivation {
     preferLocalBuild = true;
     name = "nsd-env";
@@ -277,7 +285,7 @@ let
         default     = null;
         example     = "%s";
         description = ''
-          When config.nsd.zoneStats is set to true NSD is able of collecting
+          When set to something distinct to null NSD is able to collect
           statistics per zone. All statistics of this zone(s) will be added
           to the group specified by this given name. Use "%s" to use the zones
           name as the group. The groups are output from nsd-control stats
@@ -297,6 +305,15 @@ in
         default     = false;
         description = ''
           Whether to enable the NSD authoritative domain name server.
+        '';
+      };
+
+      bind8Stats = mkOption {
+        type        = types.bool;
+        default     = false;
+        example     = true;
+        description = ''
+          Wheter to enable BIND8 like statisics.
         '';
       };
 
@@ -673,13 +690,6 @@ in
 
   config = mkIf cfg.enable {
 
-    # this is not working :(
-    nixpkgs.config.nsd = {
-      ipv6       = cfg.ipv6;
-      ratelimit  = cfg.ratelimit.enable;
-      rootServer = cfg.rootServer;
-    };
-
     users.extraGroups = singleton {
       name = username;
       gid  = config.ids.gids.nsd;
@@ -702,7 +712,7 @@ in
       serviceConfig = {
         PIDFile   = pidFile;
         Restart   = "always";
-        ExecStart = "${pkgs.nsd}/sbin/nsd -d -c ${configFile}";
+        ExecStart = "${nsdPkg}/sbin/nsd -d -c ${configFile}";
       };
 
       preStart = ''

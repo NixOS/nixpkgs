@@ -8,6 +8,7 @@
 , ratelimit        ? false
 , recvmmsg         ? false
 , rootServer       ? false
+, rrtypes          ? false
 , zoneStats        ? false
 }:
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
      ++ edf ratelimit        "ratelimit"
      ++ edf recvmmsg         "recvmmsg"
      ++ edf rootServer       "root-server"
+     ++ edf rrtypes          "draft-rrtypes"
      ++ edf zoneStats        "zone-stats"
      ++ [ "--with-ssl=${openssl}" "--with-libevent=${libevent}" ];
 
