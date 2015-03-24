@@ -7361,6 +7361,23 @@ let
     };
   };
 
+  pathlib = buildPythonPackage rec {
+    name = "pathlib-${version}";
+    version = "1.0.1";
+    disabled = pythonAtLeast "3.4"; # Was added to std library in Python 3.4
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pathlib/${name}.tar.gz";
+      sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
+    };
+
+    meta = {
+      description = "Object-oriented filesystem paths";
+      homepage = "https://pathlib.readthedocs.org/";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
   pathpy = buildPythonPackage rec {
     name = "path.py-5.2";
 
