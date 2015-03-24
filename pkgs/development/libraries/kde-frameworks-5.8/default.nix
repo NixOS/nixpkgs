@@ -112,7 +112,7 @@ let
             ./extra-cmake-modules/0001-extra-cmake-modules-paths.patch
           ];
         meta =
-          let inherit (parseDrvName super.extra-cmake-modules.name) version; in
+          let inherit (builtins.parseDrvName super.extra-cmake-modules.name) version; in
           {
             license = with stdenv.lib.licenses; [ bsd2 ];
             platforms = stdenv.lib.platforms.linux;
