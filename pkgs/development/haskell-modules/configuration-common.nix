@@ -638,6 +638,10 @@ self: super: {
   hydrogen-syntax = markBroken super.hydrogen-syntax;
   hydrogen-cli = dontDistribute super.hydrogen-cli;
 
+  # https://github.com/meteficha/Hipmunk/issues/8
+  Hipmunk = markBroken super.Hipmunk;
+  HipmunkPlayground = dontDistribute super.HipmunkPlayground;
+
 } // {
 
   # Not on Hackage.
