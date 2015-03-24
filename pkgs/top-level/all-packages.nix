@@ -8392,6 +8392,22 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
+  prometheus = callPackage ../servers/monitoring/prometheus { };
+  prometheus-alertmanager =
+    callPackage ../servers/monitoring/prometheus/alertmanager { };
+  prometheus-cli =
+    callPackage ../servers/monitoring/prometheus/cli { };
+  prometheus-haproxy-exporter =
+    callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
+  prometheus-mesos-exporter =
+    callPackage ../servers/monitoring/prometheus/mesos_exporter { };
+  prometheus-node-exporter =
+    callPackage ../servers/monitoring/prometheus/node_exporter { };
+  prometheus-pushgateway =
+    callPackage ../servers/monitoring/prometheus/pushgateway { };
+  prometheus-statsd-bridge =
+    callPackage ../servers/monitoring/prometheus/statsd_bridge { };
+
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
