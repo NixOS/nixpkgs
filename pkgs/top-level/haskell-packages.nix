@@ -868,6 +868,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ftphs = callPackage ../development/libraries/haskell/ftphs {};
 
+  fullstop = callPackage ../development/libraries/haskell/fullstop {};
+
   extensibleEffects = callPackage ../development/libraries/haskell/extensible-effects {};
 
   extensibleExceptions = callPackage ../development/libraries/haskell/extensible-exceptions {};
