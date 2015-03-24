@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "libev-${version}";
-  version="4.15";
+  version="4.19";
   src = fetchurl {
-    url = "http://dist.schmorp.de/libev/Attic/${name}.tar.gz";
-    sha256 = "1svgc1hq4i5zsw4i02sf7xb4pk2d8kpvc1gdrd856vsmffh47pdj";
+    url = "http://dist.schmorp.de/libev/${name}.tar.gz";
+    sha256 = "1jyw7qbl0spxqa0dccj9x1jsw7cj7szff43cq4acmklnra4mzz48";
   };
   meta = {
     description = "A high-performance event loop/event model with lots of features";
