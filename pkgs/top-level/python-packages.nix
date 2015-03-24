@@ -7526,10 +7526,10 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.16.1";
+    version = "0.16.2";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "1sysx67inf0fcfa4qhqcii97y59zpg98f4kcvz15rlbnsi357css";
+      sha256 = "1f30f9v2iz2206aqzwc6jjadlxd7snicazrp9bcy5sizpha3r55i";
       rev = "v${version}";
       repo = "pgcli";
       owner = "amjith";
