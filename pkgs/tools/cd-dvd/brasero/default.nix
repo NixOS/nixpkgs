@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 itstool libxml2 libnotify libcanberra_gtk3
                   intltool gnome3.gsettings_desktop_schemas makeWrapper libdvdcss
-                  gst_all_1.gstreamer gst_all_1.gst-plugins-base
+                  gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.dconf
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad ];
 
   # brasero checks that the applications it uses aren't symlinks, but this
@@ -42,6 +42,7 @@ in stdenv.mkDerivation rec {
         --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
         --prefix GST_PLUGIN_PATH : "${GST_PLUGIN_PATH}" \
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
         --prefix LD_LIBRARY_PATH : ${libdvdcss}/lib
     done
     rm $out/share/icons/hicolor/icon-theme.cache
