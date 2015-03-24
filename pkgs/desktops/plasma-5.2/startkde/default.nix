@@ -11,8 +11,9 @@ stdenv.mkDerivation {
   name = "startkde-0.1";
   phases = "installPhase";
 
-  inherit bash gnused gnugrep kconfig kinit kservice qt5 socat;
+  inherit bash gnused gnugrep kconfig kinit kservice socat;
   inherit (xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
+  qt5 = qt5.base;
   dbus_tools = dbus.tools;
   plasmaWorkspace = plasma-workspace;
   plasmaDesktop = plasma-desktop;

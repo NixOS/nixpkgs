@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "19pz27jsdpa3pybj8sghmmd1zqgr73js1mp3875rhx158dav37nz";
   };
 
-  buildInputs = [ qt5 ];
+  buildInputs = [ qt5.base qt5.quick1 ];
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configurePhase = "qmake PREFIX=$out";
 
   installPhase=''make INSTALL_ROOT="$out" install'';
-  
+
   enableParallelBuilding = true;
 
   meta = {

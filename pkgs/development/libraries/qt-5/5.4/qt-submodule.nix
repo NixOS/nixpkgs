@@ -20,9 +20,11 @@ mkDerivation (args // {
   dontFixLibtool = args.dontFixLibtool or true;
   configureScript = args.configureScript or "qmake";
 
+  /*
   preConfigure = ''
     export PATH="$out/bin:$PATH"
   '';
+  */
 
   postInstall = ''
     rm "$out/bin/qmake" "$out/bin/qt.conf"

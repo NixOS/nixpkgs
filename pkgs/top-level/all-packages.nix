@@ -6084,9 +6084,7 @@ let
     automake = automake111x;
   };
 
-  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 {
-    qt5 = qt54;
-  });
+  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 { });
   kf5_latest = kf57;
   kf5_stable = kf57;
 
@@ -6225,9 +6223,7 @@ let
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
-  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix {
-    qt5 = qt54;
-  };
+  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix { };
 
   libdc1394 = callPackage ../development/libraries/libdc1394 { };
 
@@ -6942,7 +6938,7 @@ let
   };
 
   mlt-qt5 = callPackage ../development/libraries/mlt {
-    qt = qt5;
+    qt = qt53;
   };
 
   movit = callPackage ../development/libraries/movit { };
@@ -7122,21 +7118,12 @@ let
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
   phonon = callPackage ../development/libraries/phonon/qt4 {};
-
   phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt4 {};
-
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt4 {};
 
-  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {
-    qt5 = qt54;
-  };
-
-  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {
-    qt5 = qt54;
-  };
-  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {
-    qt5 = qt54;
-  };
+  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 { };
+  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 { };
+  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -7162,12 +7149,11 @@ let
 
   polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
     withQt5 = true;
-    qt5 = qt54;
   };
 
   policykit = callPackage ../development/libraries/policykit { };
 
-  poppler = callPackage ../development/libraries/poppler { lcms = lcms2; qt5 = qt54; };
+  poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
   popplerQt4 = poppler.poppler_qt4;
   poppler_qt5 = poppler.poppler_qt5;
 
@@ -7241,7 +7227,7 @@ let
     qtLib = qt48Full;
   };
 
-  qt5 = callPackage ../development/libraries/qt-5/5.3 {
+  qt53 = callPackage ../development/libraries/qt-5/5.3 {
     mesa = mesa_noglu;
     cups = if stdenv.isLinux then cups else null;
     # GNOME dependencies are not used unless gtkStyle == true
@@ -7251,7 +7237,9 @@ let
 
   qt54 = callPackage ../development/libraries/qt-5/5.4 {};
 
-  qt5Full = appendToName "full" (qt5.override {
+  qt5 = qt54;
+
+  qt5Full = appendToName "full" (qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
@@ -9904,6 +9892,7 @@ let
 
   calibre = callPackage ../applications/misc/calibre {
     inherit (pythonPackages) pyqt5 sip_4_16;
+    qt5 = qt53; # depends on pyqt5
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -10568,7 +10557,7 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
-  linssid = callPackage ../applications/networking/linssid { };
+  linssid = callPackage ../applications/networking/linssid { qt5 = qt53; };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -10821,7 +10810,6 @@ let
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
     kf5 = kf57;
-    qt5 = qt54;
     inherit pkgs;
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
@@ -11164,7 +11152,7 @@ let
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
-  shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
+  shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; qt5 = qt53; };
 
   smplayer = callPackage ../applications/video/smplayer { };
 
@@ -11414,7 +11402,7 @@ let
     client = false;
     withKDE = false;
     useQt5 = true;
-    qt = qt54;
+    qt = qt5;
     dconf = gnome3.dconf;
     tag = "-qt5";
   };
@@ -11584,9 +11572,7 @@ let
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
-  dropbox = callPackage ../applications/networking/dropbox {
-    qt5 = qt54;
-  };
+  dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
@@ -11607,9 +11593,7 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  sddm = callPackage ../applications/display-managers/sddm {
-    qt5 = qt54;
-  };
+  sddm = callPackage ../applications/display-managers/sddm { };
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
@@ -11635,6 +11619,7 @@ let
     inherit (pkgs.vamp) vampSDK;
     inherit (pkgs.xlibs) libX11;
     fftw = pkgs.fftwSinglePrec;
+    qt5 = qt53;
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
@@ -11979,7 +11964,6 @@ let
 
   vlc_qt5 = vlc.override {
     qt4 = null;
-    qt5 = qt54;
     withQt5 = true;
   };
 
@@ -13027,7 +13011,6 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
-    qt5 = qt54;
     kf5 = kf57;
   });
   plasma5_latest = plasma52;

@@ -593,7 +593,7 @@ self: super: {
   vivid = markBroken super.vivid;
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck super.hsqml;
+  hsqml = dontCheck (super.hsqml.override { qt5 = pkgs.qt53; });
 
   # https://github.com/megantti/rtorrent-rpc/issues/1
   rtorrent-rpc = markBroken super.rtorrent-rpc;

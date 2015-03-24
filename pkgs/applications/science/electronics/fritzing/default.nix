@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
     tar xjf ${src}
   '';
 
-  buildInputs = [ qt5 boost ];
+  buildInputs = [ qt5.base qt5.svg boost ];
 
   configurePhase = ''
     cd fritzing-${version}.source
+    echo $PATH
     qmake PREFIX=$out phoenix.pro
   '';
 

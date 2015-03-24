@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: upgrade libav when "Audio sample format conversion failed" is fixed
-  buildInputs = [ libav_0_8 libkeyfinder qt5 taglib ];
+  buildInputs = [ libav_0_8 libkeyfinder qt5.base qt5.xmlpatterns taglib ];
 
   configurePhase = ''
     substituteInPlace is_KeyFinder.pro \

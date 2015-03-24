@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y59ys1dgjppahs7v7kxwva7ik23s0x7j2f6glv6sn23l9cfq9rp";
   };
 
-  buildInputs = [ cmake qt5 exiv2 graphicsmagick ];
+  buildInputs = [ cmake qt5.base qt5.tools exiv2 graphicsmagick ];
 
   patches = [ ./graphicsmagick-path.patch ];
 
