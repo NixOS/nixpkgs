@@ -19,7 +19,7 @@ with stdenv.lib; with autonix;
 let
 
   mkDerivation = drv:
-    let inherit (builtins.parseDrvName drv.version) version; in
+    let inherit (builtins.parseDrvName drv.name) version; in
     stdenv.mkDerivation
       (drv // {
         setupHook = ./setup-hook.sh;
