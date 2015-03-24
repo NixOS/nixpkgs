@@ -13182,6 +13182,8 @@ let
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
 
+  abella = callPackage ../applications/science/logic/abella {};
+
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   coq = callPackage ../applications/science/logic/coq {
