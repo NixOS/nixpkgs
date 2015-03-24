@@ -2965,6 +2965,8 @@ let
 
   welkin = callPackage ../tools/graphics/welkin {};
 
+  xl2tpd = callPackage ../tools/networking/xl2tpd { };
+
   testdisk = callPackage ../tools/misc/testdisk { };
 
   html2text = callPackage ../tools/text/html2text { };
