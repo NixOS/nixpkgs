@@ -163,5 +163,6 @@ in
     startkde = pkgs.callPackage ./startkde {
       inherit (kf5) kconfig kinit kservice;
       inherit (plasma5) plasma-desktop plasma-workspace;
+      inherit qt5;
     };
   }
