@@ -10,7 +10,7 @@
 # their absolute path (using "install_name_tool -id").  It also
 # rewrites references in other dylibs to absolute paths.
 
-fixupOutputHooks+=('fixDarwinDylibNamesIn $prefix')
+postFixupHooks+=('fixDarwinDylibNamesIn $prefix')
 
 fixDarwinDylibNames() {
     local flags=()
