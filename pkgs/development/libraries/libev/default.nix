@@ -8,10 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1svgc1hq4i5zsw4i02sf7xb4pk2d8kpvc1gdrd856vsmffh47pdj";
   };
   meta = {
-    description = "An event loop library remotely similar to libevent";
-    maintainers = [
-      stdenv.lib.maintainers.raskin
-    ];
+    description = "A high-performance event loop/event model with lots of features";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.bsd2; # or GPL2+
   };
 }
