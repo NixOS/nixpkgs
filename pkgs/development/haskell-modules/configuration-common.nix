@@ -107,6 +107,7 @@ self: super: {
   deepseq-magic = dontHaddock super.deepseq-magic;
   diagrams = dontHaddock super.diagrams;
   either = dontHaddock super.either;
+  feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   gl = dontHaddock super.gl;
   groupoids = dontHaddock super.groupoids;
   hamlet = dontHaddock super.hamlet;
