@@ -9061,6 +9061,25 @@ let
     };
   });
 
+  pyscss = buildPythonPackage rec {
+    name = "pyScss-${version}";
+    version = "1.3.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyScss/${name}.tar.gz";
+      sha256 = "03lcp853kgr66aqrw2jd1q9jhs9h049w7zlwp7bfmly7xh832cnh";
+    };
+
+    propagatedBuildInputs = with self; [ six ]
+      ++ (optionals (pythonOlder "3.4") [ enum34 pathlib ])
+      ++ (optionals (pythonOlder "2.7") [ ordereddict ]);
+
+    meta = {
+      description = "A Scss compiler for Python";
+      homepage = http://pyscss.readthedocs.org/en/latest/;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
 
   pyserial = buildPythonPackage rec {
     name = "pyserial-2.7";
