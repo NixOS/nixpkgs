@@ -11519,8 +11519,6 @@ let
     automake = automake114x;
   };
 
-  rstudio = callPackage ../applications/editors/rstudio { };
-
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
