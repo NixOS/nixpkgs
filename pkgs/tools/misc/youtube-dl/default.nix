@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, zip, pandoc }:
+{ stdenv, fetchurl, makeWrapper, python, zip, pandoc, ffmpeg }:
 
 let
   version = "2015.03.24";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1m462hcgizdp59s9h62hjwhq4vjrgmck23x2bh5jvb9vjpcfqjxv";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python makeWrapper ];
   nativeBuildInputs = [ zip pandoc ];
 
   patchPhase = ''
@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc PYTHON=${python}/bin/python )
+  '';
+
+  postInstall = ''
+    # ffmpeg is used for post-processing and fixups
+    wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"
   '';
 
   meta = {
