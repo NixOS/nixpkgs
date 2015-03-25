@@ -2362,7 +2362,9 @@ let
 
   philter = callPackage ../tools/networking/philter { };
 
-  pinentry = callPackage ../tools/security/pinentry { };
+  pinentry = callPackage ../tools/security/pinentry {
+    qt4 = null;
+  };
 
   pius = callPackage ../tools/security/pius { };
 
