@@ -637,6 +637,17 @@ self: super: {
   # https://github.com/prowdsponsor/esqueleto/issues/93
   esqueleto = dontCheck super.esqueleto;
 
+  # https://github.com/anchor/ceilometer-common/issues/16
+  ceilometer-common = dontCheck super.ceilometer-common;
+
+  # https://github.com/fumieval/audiovisual/issues/1
+  audiovisual = markBroken super.audiovisual;
+
+  # https://github.com/cdupont/Nomyx/issues/85
+  Nomyx-Core = markBroken super.Nomyx-Core;
+  Nomyx-Web = dontDistribute super.Nomyx-Web;
+  Nomyx = dontDistribute super.Nomyx;
+
 } // {
 
   # Not on Hackage.
