@@ -64,7 +64,9 @@ rec {
       name = "stdenv-darwin-boot-1";
 
       inherit system config;
-      inherit (stage0.stdenv) shell initialPath fetchurlBoot;
+      inherit (stage0.stdenv) shell fetchurlBoot;
+
+      initialPath = stage0.stdenv.initialPath ++ [ nativePrefix ];
 
       preHook = preHook + "\n" + ''
         export NIX_LDFLAGS_AFTER+=" -L/usr/lib"
@@ -82,7 +84,7 @@ rec {
         cc           = {
           name    = "clang-9.9.9";
           cc      = "/usr";
-          outPath = "${buildTools.tools}/Library/Developer/CommandLineTools/usr";
+          outPath = nativePrefix;
         };
       };
     };
@@ -126,7 +128,7 @@ rec {
       nativeTools  = false;
       nativeLibc   = true;
       binutils  = pkgs.darwin.cctools;
-      cc        = pkgs.llvmPackages.clang;
+      cc        = pkgs.llvmPackages.clang-unwrapped;
       coreutils = pkgs.coreutils;
       shell     = "${pkgs.bash}/bin/bash";
       extraPackages = [ pkgs.libcxx ];
