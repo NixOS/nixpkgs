@@ -431,7 +431,7 @@ self: super: {
   snappy = dontCheck super.snappy;
 
   # Needs llvm to compile.
-  bytestring-arbitrary = addBuildTool super.bytestring-arbitrary pkgs.llvm_34;
+  bytestring-arbitrary = addBuildTool super.bytestring-arbitrary self.llvm;
 
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
