@@ -1,4 +1,4 @@
-{stdenv, fetchurl, yasm}:
+{stdenv, fetchurl, yasm, enable10bit ? false}:
 
 stdenv.mkDerivation rec {
   version = "snapshot-20141218-2245-stable";
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--enable-shared" ]
-    ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic";
+    ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic"
+    ++ stdenv.lib.optional (enable10bit) "--bit-depth=10";
 
   buildInputs = [ yasm ];
 
