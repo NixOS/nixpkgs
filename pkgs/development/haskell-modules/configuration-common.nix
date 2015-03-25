@@ -634,6 +634,9 @@ self: super: {
   Hipmunk = markBroken super.Hipmunk;
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
 
+  # https://github.com/prowdsponsor/esqueleto/issues/93
+  esqueleto = dontCheck super.esqueleto;
+
 } // {
 
   # Not on Hackage.
