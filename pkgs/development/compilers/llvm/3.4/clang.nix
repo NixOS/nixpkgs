@@ -35,6 +35,9 @@ stdenv.mkDerivation {
   '';
 
   passthru.cc = stdenv.cc.cc;
+  # GCC_INSTALL_PREFIX points here, so just use it even though it may not
+  # actually be a gcc
+  passthru.gcc = stdenv.cc.cc;
 
   enableParallelBuilding = true;
 

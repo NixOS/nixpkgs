@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       sha256 = "15mrvw43s4frk1j49qr4v5viq68h8qlf10qs6ghd6mrsmgj5vddi";
   };
 
-  passthru = { cc = stdenv.cc.cc; };
+  passthru = { cc = stdenv.cc.cc; gcc = gccReal; };
 
   meta = {
     homepage = http://clang.llvm.org/;

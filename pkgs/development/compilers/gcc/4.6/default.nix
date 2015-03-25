@@ -427,7 +427,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langVhdl
-      langGo version; };
+      langGo version; isGNU = true; };
 
   enableParallelBuilding = false;
 

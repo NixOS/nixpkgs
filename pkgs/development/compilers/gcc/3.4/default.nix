@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     }
   ";
 
-  passthru = { inherit langC langCC langF77; };
+  passthru = { inherit langC langCC langF77; isGNU = true; };
 
   meta = {
     homepage = "http://gcc.gnu.org/";
