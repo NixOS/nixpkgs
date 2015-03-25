@@ -2,11 +2,11 @@
 , libcanberra_gtk3, makeWrapper, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "pavucontrol-2.0";
+  name = "pavucontrol-3.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/pavucontrol/${name}.tar.xz";
-    sha256 = "02s775m1531sshwlbvfddk3pz8zjmwkv1sgzggn386ja3gc9vwi2";
+    sha256 = "14486c6lmmirkhscbfygz114f6yzf97h35n3h3pdr27w4mdfmlmk";
   };
 
   preFixup = ''
