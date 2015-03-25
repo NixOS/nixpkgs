@@ -396,7 +396,7 @@ let
     inherit lib;
   };
 
-  makeInitrd = { contents, compressor ? "gzip -9n", prepend }:
+  makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }:
     import ../build-support/kernel/make-initrd.nix {
       inherit stdenv perl perlArchiveCpio cpio contents ubootChooser compressor prepend;
     };
