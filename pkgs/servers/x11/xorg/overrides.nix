@@ -79,6 +79,10 @@ in
     nativeBuildInputs = [ args.python ];
   };
 
+  libxkbfile = attrs: attrs // {
+    patches = lib.optional (stdenv.cc.cc.isClang or false) ./libxkbfile-clang36.patch;
+  };
+
   libpciaccess = attrs : attrs // {
     patches = [ ./libpciaccess-apple.patch ];
   };
