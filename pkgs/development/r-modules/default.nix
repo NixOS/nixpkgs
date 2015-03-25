@@ -729,6 +729,7 @@ let
     "GeneticTools" # requires snpStats
     "GExMap" # requires Biobase and multtest
     "gitter" # requires EBImage
+    "glmgraph" # test suite says: "undefined symbol: dgemv_"
     "gmatrix" # depends on proprietary cudatoolkit
     "GOGANPA" # requires WGCNA
     "gputools" # depends on proprietary cudatoolkit
@@ -796,6 +797,7 @@ let
     "NCmisc" # requires BiocInstaller
     "netClass" # requires samr
     "nettools" # requires WGCNA
+    "NORRRM" # can't load SDMTools properly
     "netweavers" # requires BiocGenerics, Biobase, and limma
     "NLPutils" # requires qdap
     "NSA" # requires aroma_core
@@ -803,6 +805,7 @@ let
     "optBiomarker" # requires rpanel
     "ora" # requires ROracle
     "orQA" # requires genefilter
+    "PBSmapping" # fails its test suite for unclear reasons
     "PairViz" # requires graph
     "PANDA" # requires GO.db
     "ParDNAcopy" # requires DNAcopy
@@ -843,6 +846,7 @@ let
     "rainfreq" # SDMTools.so: undefined symbol: X
     "RAM" # requires Heatplus
     "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
+    "RapidPolygonLookup" # depends on broken PBSmapping
     "RbioRXN" # requires fmcsR, and KEGGREST
     "RcppAPT" # configure script depends on /bin/sh
     "RcmdrPlugin_seeg" # requires seeg
@@ -920,6 +924,7 @@ let
     "ttScreening" # requires sva, and limma
     "V8" # compilation error
     "vows" # requires rpanel
+    "vmsbase" # depends on broken PBSmapping
     "WGCNA" # requires impute
     "wgsea" # requires snpStats
     "WideLM" # depends on proprietary cudatoolkit
