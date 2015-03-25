@@ -1,7 +1,8 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation {
-  name = "firmware-linux-nonfree-2015-03-09";
+stdenv.mkDerivation rec {
+  name = "firmware-linux-nonfree-${version}";
+  version = "2015-03-09";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
@@ -22,4 +23,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
+
+  passthru = { inherit version; };
 }
