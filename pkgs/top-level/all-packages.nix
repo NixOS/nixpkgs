@@ -4816,6 +4816,8 @@ let
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
+  bazel = callPackage ../development/tools/build-managers/bazel { jdk = oraclejdk8; };
+
   binutils = if stdenv.isDarwin
     then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
     else callPackage ../development/tools/misc/binutils {
