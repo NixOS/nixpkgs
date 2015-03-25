@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig
-, libcap ? null, ncurses ? null, gtk ? null, qt4 ? null
+, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
 }:
 
 let
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "1awhajq21hcjgqfxg9czaxg555gij4bba6axrwg8w6lfmc3ml14h";
   };
 
-  buildInputs = [ libcap gtk ncurses qt4 ];
+  buildInputs = [ libcap gtk2 ncurses qt4 ];
 
   configureFlags = [
     (mkWith   (libcap != null)  "libcap")
     (mkEnable (ncurses != null) "pinentry-curses")
     (mkEnable true              "pinentry-tty")
-    (mkEnable (gtk != null)     "pinentry-gtk2")
+    (mkEnable (gtk2 != null)    "pinentry-gtk2")
     (mkEnable (qt4 != null)     "pinentry-qt4")
   ];
 
