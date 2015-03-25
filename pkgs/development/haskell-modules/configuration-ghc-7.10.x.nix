@@ -125,10 +125,4 @@ self: super: {
     sha256 = "1fycvjfr1l9wa03k30bnppl3ns99lffh9kmp9r7sr8b6yiydcajq";
     stripLen = 1;
   });
-
-  # https://github.com/batterseapower/ansi-wl-pprint/issues/13
-  ansi-wl-pprint = appendPatch super.ansi-wl-pprint (pkgs.fetchpatch {
-    url = "https://github.com/hvr/ansi-wl-pprint/commit/7e489ea6b546899074b1cdccf37d2e49ab313098.patch";
-    sha256 = "0j20cwbph1wg82gfad5a6gfc5gy42cf4vz514jrpfg8d9qvyfhlj";
-  });
 }
