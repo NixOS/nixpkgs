@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    inherit (ghc.meta) license platforms;
+    platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
+    inherit (ghc.meta) license;
   };
 }
