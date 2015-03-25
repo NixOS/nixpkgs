@@ -6,7 +6,7 @@ let
   mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
   mkEnable = mkFlag "enable" "disable";
   mkWith = mkFlag "with" "without";
-  hasX = gtk != null || qt4 != null;
+  hasX = gtk2 != null || qt4 != null;
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
