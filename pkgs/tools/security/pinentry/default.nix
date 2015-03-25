@@ -1,10 +1,14 @@
-{ fetchurl, stdenv, pkgconfig, glib
-, useGtk ? !stdenv.isDarwin, gtk
-, useNcurses ? true, ncurses
-, useQt4 ? false, qt4 }:
+{ fetchurl, stdenv, pkgconfig
+, libcap ? null, ncurses ? null, gtk ? null, qt4 ? null
+}:
 
-assert useGtk || useNcurses || useQt4;
-
+let
+  mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
+  mkEnable = mkFlag "enable" "disable";
+  mkWith = mkFlag "with" "without";
+  hasX = gtk != null || qt4 != null;
+in
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pinentry-0.9.0";
 
@@ -13,16 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "1awhajq21hcjgqfxg9czaxg555gij4bba6axrwg8w6lfmc3ml14h";
   };
 
-  buildInputs = let opt = stdenv.lib.optional; in []
-    ++ opt useGtk glib
-    ++ opt useGtk gtk
-    ++ opt useNcurses ncurses
-    ++ opt useQt4 qt4;
+  buildInputs = [ libcap gtk ncurses qt4 ];
 
-  configureFlags = [ "--disable-pinentry-gtk" "--disable-pinentry-qt" ]
-    ++ (if useGtk || useQt4 then ["--with-x"] else ["--without-x"])
-    ++ (if useGtk then ["--enable-pinentry-gtk2"] else ["--disable-pinentry-gtk"])
-    ++ (if useQt4 then ["--enable-pinentry-qt4"] else ["--disable-pinentry-qt4"]);
+  configureFlags = [
+    (mkWith   (libcap != null)  "libcap")
+    (mkEnable (ncurses != null) "pinentry-curses")
+    (mkEnable true              "pinentry-tty")
+    (mkEnable (gtk != null)     "pinentry-gtk2")
+    (mkEnable (qt4 != null)     "pinentry-qt4")
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
 
