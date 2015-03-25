@@ -70,7 +70,7 @@ let
       meta = with stdenv.lib; {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = http://www.dicollecte.org/home.php?prj=fr;
+        homepage = "http://www.dicollecte.org/home.php?prj=fr";
         license = licenses.mpl20;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
@@ -86,7 +86,7 @@ let
       readmeFile = "README_" + dictFileName + ".txt";
       meta = with stdenv.lib; {
         description = "Hunspell dictionary for ${shortDescription} from Wordlist";
-        homepage =http://wordlist.aspell.net/;
+        homepage = http://wordlist.aspell.net/;
         license = licenses.bsd3;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
