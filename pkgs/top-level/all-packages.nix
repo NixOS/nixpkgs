@@ -8595,8 +8595,6 @@ let
 
   afuse = callPackage ../os-specific/linux/afuse { };
 
-  amdUcode = callPackage ../os-specific/linux/microcode/amd.nix { };
-
   autofs5 = callPackage ../os-specific/linux/autofs/autofs-v5.nix { };
 
   _915resolution = callPackage ../os-specific/linux/915resolution { };
@@ -8626,6 +8624,7 @@ let
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
   alsaOss = callPackage ../os-specific/linux/alsa-oss { };
 
+  microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
