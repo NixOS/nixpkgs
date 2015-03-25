@@ -222,6 +222,16 @@ with stdenv.lib;
   SECURITY_APPARMOR y
   DEFAULT_SECURITY_APPARMOR y
 
+  # Microcode loading support
+  MICROCODE y
+  MICROCODE_INTEL y
+  MICROCODE_AMD y
+  ${optionalString (versionAtLeast version "3.11") ''
+    MICROCODE_EARLY y
+    MICROCODE_INTEL_EARLY y
+    MICROCODE_AMD_EARLY y
+  ''}
+
   # Misc. options.
   8139TOO_8129 y
   8139TOO_PIO n # PIO is slower
@@ -264,7 +274,6 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  MICROCODE_AMD y
   MODVERSIONS y
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
