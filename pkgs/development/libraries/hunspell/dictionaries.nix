@@ -60,12 +60,12 @@ let
     { shortName, shortDescription, longDescription, dictFileName }:
     mkDict rec {
       inherit dictFileName;
-      version = "5.2";
+      version = "5.3";
       name = "hunspell-dict-${shortName}-dicollecte-${version}";
       readmeFile = "README_dict_fr.txt";
       src = fetchurl {
          url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
-         sha256 = "c5863f7592a8c4defe8b4ed2b3b45f6f10ef265d34ae9881c1f3bbb3b80bdd02";
+         sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
       };
       meta = with stdenv.lib; {
         inherit longDescription;
