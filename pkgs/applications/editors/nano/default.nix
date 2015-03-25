@@ -2,6 +2,7 @@
 , ncurses
 , gettext ? null
 , enableNls ? false
+, enableTiny ? false
 }:
 
 assert enableNls -> (gettext != null);
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --sysconfdir=/etc
     ${optionalString (!enableNls) "--disable-nls"}
+    ${optionalString enableTiny "--enable-tiny"}
   '';
 
   meta = {
