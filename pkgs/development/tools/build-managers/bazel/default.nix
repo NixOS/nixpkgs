@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig protobuf zlib zip jdk libarchive unzip makeWrapper ];
 
   installPhase = ''
+    # apply patch suggested by bazel people, remove when added upstream
+    sed -i 's/open(path.c_str(), O_CREAT | O_WRONLY, archive_entry_perm(entry))/open(path.c_str(), O_CREAT | O_WRONLY, 0755)/' ./src/main/cpp/blaze.cc
+
     PROTOC=protoc bash compile.sh
     mkdir -p $out/bin $out/share
     cp -R output $out/share/bazel
