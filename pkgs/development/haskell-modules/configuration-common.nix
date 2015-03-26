@@ -644,6 +644,9 @@ self: super: {
   Nomyx-Web = dontDistribute super.Nomyx-Web;
   Nomyx = dontDistribute super.Nomyx;
 
+  # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
+  stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
+
 } // {
 
   # Not on Hackage.
