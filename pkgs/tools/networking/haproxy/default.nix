@@ -1,12 +1,12 @@
 { stdenv, pkgs, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  major-version = "1.5";
-  version = "${major-version}.11";
+  majorVersion = "1.5";
+  version = "${majorVersion}.11";
   name = "haproxy-${version}";
 
   src = fetchurl {
-    url = "http://haproxy.1wt.eu/download/${major-version}/src/${name}.tar.gz";
+    url = "http://haproxy.1wt.eu/download/${majorVersion}/src/${name}.tar.gz";
     sha256 = "1gwkyy06c8bw5vcjv82hai554zrd415jjsb1iafg01c4k1ia8nlb";
   };
 
