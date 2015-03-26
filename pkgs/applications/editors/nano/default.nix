@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , ncurses
 , gettext ? null
-, enableNls ? false
+, enableNls ? true
 , enableTiny ? false
 }:
 
