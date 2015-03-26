@@ -6694,6 +6694,8 @@ let
 
   libstatgrab = callPackage ../development/libraries/libstatgrab { };
 
+  libsvm = callPackage ../development/libraries/libsvm { };
+
   libtar = callPackage ../development/libraries/libtar { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
