@@ -149,6 +149,47 @@ let
       feature = "run <literal>checkPhase</literal> by default";
     };
 
+    /* callPackage scope */
+
+    extraScope = mkOption {
+      type = types.attrs;
+      default = {};
+      example = literalExample ''
+        {
+          openssl = libressl;
+          libpulseaudio = libcardiacarrest;
+        }
+      '';
+      description = ''
+        Extra scope to supply to all <literal>callPackages</literal> calls.
+
+        This mechanism is a cheap and simple alternative to overlays for when
+        you don't want to touch the global scope of <literal>pkgs</literal> but
+        you want to override scopes of all packages produced by
+        <literal>callPackage</literal>.
+
+        For instance:
+        <itemizedlist>
+          <listitem><para>
+            you want to make all packages to depend on <literal>libressl</literal>
+            instead of <literal>openssl</literal>, but you want to keep the
+            vanilla <literal>openssl</literal> available as
+            <literal>pkgs.openssl</literal>;
+          </para></listitem>
+          <listitem><para>
+            you want to set the default value for some option like
+            <literal>x11Support</literal> for all packages all at
+            once.
+          </para></listitem>
+        </itemizedlist>
+
+        Changing this to a non-default value will void your warranty! That is,
+        at the very least, you will not be able to benefit from Hydra binary
+        cache. It is also entirely possible (likely, even) that your system will
+        not even build.
+      '';
+    };
+
   };
 
 in {

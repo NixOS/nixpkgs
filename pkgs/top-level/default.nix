@@ -126,6 +126,7 @@ in let
   # sets. Only apply arguments which no stdenv would want to override.
   allPackages = newArgs: import ./stage.nix ({
     inherit lib nixpkgsFun;
+    inherit (config) extraScope;
   } // newArgs);
 
   boot = import ../stdenv/booter.nix { inherit lib allPackages; };
