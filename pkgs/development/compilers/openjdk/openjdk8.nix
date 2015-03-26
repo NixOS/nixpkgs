@@ -37,8 +37,7 @@ let
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
              sha256 = "1np8hkg2fmj5s6ipd1vb8x0z6xy00kbi2ipqca9pxzib58caj6b2";
           };
-in
-stdenv.mkDerivation {
+  openjdk8 = stdenv.mkDerivation {
   name = "openjdk-8u${update}b${build}";
   srcs = [jdk8 langtools hotspot corba jdk jaxws jaxp nashorn];
   outputs = [ "out" "jre" ];
@@ -138,5 +137,6 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.cocreature ];
     platforms = stdenv.lib.platforms.linux;
   };
-
-}
+  
+  passthru.home = "${openjdk8}/lib/openjdk";
+}; in openjdk8
