@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Use LLVM for particular GHC version.
+  inherit (self.llvmPackages) llvm;
+
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
