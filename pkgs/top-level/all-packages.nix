@@ -3239,6 +3239,8 @@ let
 
   rush = callPackage ../shells/rush { };
 
+  xonsh = callPackage ../shells/xonsh { };
+
   zsh = callPackage ../shells/zsh { };
 
 
