@@ -9683,6 +9683,8 @@ let
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
+  mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
+
   nafees = callPackage ../data/fonts/nafees { };
 
   numix-icon-theme = callPackage ../data/icons/numix-icon-theme { };
