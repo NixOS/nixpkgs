@@ -39,7 +39,9 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru = stdenv.lib.optionalAttrs stdenv.isLinux {
+  passthru = {
+    isClang = true;
+  } // stdenv.lib.optionalAttrs stdenv.isLinux {
     inherit gcc;
   };
 

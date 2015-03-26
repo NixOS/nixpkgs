@@ -205,7 +205,7 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
-    inherit (config.boot.initrd) compressor;
+    inherit (config.boot.initrd) compressor prepend;
 
     contents =
       [ { object = bootStage1;
@@ -244,6 +244,14 @@ in
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
         <literal><replaceable>resume_offset</replaceable></literal>.
+      '';
+    };
+
+    boot.initrd.prepend = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        Other initrd files to prepend to the final initrd we are building.
       '';
     };
 

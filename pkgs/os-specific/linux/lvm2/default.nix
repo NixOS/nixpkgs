@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils, enable_dmeventd ? false }:
 
 let
-  version = "2.02.114";
+  version = "2.02.118";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "19bl536yylyi873p46prfwv086bg0sg0q5l4c7x6lnlwzfnb176y";
+    sha256 = "1ishsibxn1l5fymrrc5fd3z05x1z2zh0y8939wpvwz0qp9rwxazn";
   };
 
   configureFlags =

@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_1_1 = dontCheck super.Cabal_1_22_1_1;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_1_1; });
+  Cabal_1_22_2_0 = dontCheck super.Cabal_1_22_2_0;
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_2_0; });
 
   # Break infinite recursions.
   digest = super.digest.override { inherit (pkgs) zlib; };
@@ -107,6 +107,7 @@ self: super: {
   deepseq-magic = dontHaddock super.deepseq-magic;
   diagrams = dontHaddock super.diagrams;
   either = dontHaddock super.either;
+  feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
   gl = dontHaddock super.gl;
   groupoids = dontHaddock super.groupoids;
   hamlet = dontHaddock super.hamlet;
@@ -181,7 +182,7 @@ self: super: {
   lushtags = markBrokenVersion "0.0.1" super.lushtags;
 
   # https://github.com/haskell/bytestring/issues/41
-  bytestring_0_10_4_1 = dontCheck super.bytestring_0_10_4_1;
+  bytestring_0_10_6_0 = dontCheck super.bytestring_0_10_6_0;
 
   # https://github.com/zmthy/http-media/issues/6
   http-media = dontCheck super.http-media;
@@ -253,6 +254,7 @@ self: super: {
   amqp-conduit = dontCheck super.amqp-conduit;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
+  directory_1_2_2_0 = dontCheck super.directory_1_2_2_0; # https://github.com/haskell/directory/issues/24
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
@@ -300,6 +302,7 @@ self: super: {
   cabal-bounds = dontCheck super.cabal-bounds;          # http://hydra.cryp.to/build/496935/nixlog/1/raw
   cabal-meta = dontCheck super.cabal-meta;              # http://hydra.cryp.to/build/497892/log/raw
   cautious-file = dontCheck super.cautious-file;        # http://hydra.cryp.to/build/499730/log/raw
+  CLI = dontCheck super.CLI;                            # Upstream has no issue tracker.
   cjk = dontCheck super.cjk;
   command-qq = dontCheck super.command-qq;              # http://hydra.cryp.to/build/499042/log/raw
   conduit-connection = dontCheck super.conduit-connection;
@@ -428,7 +431,7 @@ self: super: {
   snappy = dontCheck super.snappy;
 
   # Needs llvm to compile.
-  bytestring-arbitrary = addBuildTool super.bytestring-arbitrary pkgs.llvm_34;
+  bytestring-arbitrary = addBuildTool super.bytestring-arbitrary self.llvm;
 
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
@@ -481,11 +484,6 @@ self: super: {
 
   # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
   liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
-
-  # LLVM 3.5 breaks GHC: https://ghc.haskell.org/trac/ghc/ticket/9142.
-  GlomeVec = super.GlomeVec.override { llvm = pkgs.llvm_34; };  # https://github.com/jimsnow/glome/issues/2
-  gloss-raster = super.gloss-raster.override { llvm = pkgs.llvm_34; };
-  repa-examples = super.repa-examples.override { llvm = pkgs.llvm_34; };
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
@@ -580,15 +578,6 @@ self: super: {
   hmidi = markBrokenVersion "0.2.1.0" super.hmidi;
   padKONTROL = markBroken super.padKONTROL;
 
-  # https://github.com/lambdabot/lambdabot/issues/105
-  lambdabot-core = markBroken super.lambdabot-core;
-  lambdabot-haskell-plugins = markBroken super.lambdabot-haskell-plugins;
-  lambdabot-irc-plugins = markBroken super.lambdabot-irc-plugins;
-  lambdabot-misc-plugins = markBroken super.lambdabot-misc-plugins;
-  lambdabot-novelty-plugins = markBroken super.lambdabot-novelty-plugins;
-  lambdabot-reference-plugins = markBroken super.lambdabot-reference-plugins;
-  lambdabot-social-plugins = markBroken super.lambdabot-social-plugins;
-
   # Upstream provides no issue tracker and no contact details.
   vivid = markBroken super.vivid;
 
@@ -636,6 +625,27 @@ self: super: {
   # https://github.com/scravy/hydrogen-syntax/issues/1
   hydrogen-syntax = markBroken super.hydrogen-syntax;
   hydrogen-cli = dontDistribute super.hydrogen-cli;
+
+  # https://github.com/meteficha/Hipmunk/issues/8
+  Hipmunk = markBroken super.Hipmunk;
+  HipmunkPlayground = dontDistribute super.HipmunkPlayground;
+
+  # https://github.com/prowdsponsor/esqueleto/issues/93
+  esqueleto = dontCheck super.esqueleto;
+
+  # https://github.com/anchor/ceilometer-common/issues/16
+  ceilometer-common = dontCheck super.ceilometer-common;
+
+  # https://github.com/fumieval/audiovisual/issues/1
+  audiovisual = markBroken super.audiovisual;
+
+  # https://github.com/cdupont/Nomyx/issues/85
+  Nomyx-Core = markBroken super.Nomyx-Core;
+  Nomyx-Web = dontDistribute super.Nomyx-Web;
+  Nomyx = dontDistribute super.Nomyx;
+
+  # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
+  stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
 
 } // {
 

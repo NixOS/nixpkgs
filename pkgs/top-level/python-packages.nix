@@ -5140,6 +5140,22 @@ let
     };
   };
 
+  gspread = buildPythonPackage rec {
+    version = "0.2.3";
+    name = "gspread-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gspread/${name}.tar.gz";
+      md5 = "5a71e4e3fc509dc1c4d34722f102dec1";
+    };
+
+    meta = {
+      description = "Google Spreadsheets client library";
+      homepage = "https://github.com/burnash/gspread";
+      license = licenses.mit;
+    };
+  };
+
   gyp = buildPythonPackage rec {
     rev = "1977";
     name = "gyp-r${rev}";

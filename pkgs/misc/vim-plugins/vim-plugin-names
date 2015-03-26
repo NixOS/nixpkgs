@@ -52,5 +52,5 @@
 "YankRing"
 "vim-addon-manager"
 "vim-addon-nix"
-"github:MarcWeber/vim-addon-vim2nix"
+"github:JagaJaga/vim-addon-vim2nix"
 "sensible"

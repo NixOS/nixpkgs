@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./robomongo.patch ];
 
   postPatch = ''
-    rm ./cmake/FindOpenSSL.cmake
+    rm ./cmake/FindOpenSSL.cmake # remove outdated bundled CMake file
   '';
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";

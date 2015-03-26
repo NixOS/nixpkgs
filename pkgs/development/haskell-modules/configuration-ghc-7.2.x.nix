@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_34;
+
   # Disable GHC 7.2.x core libraries.
   array = null;
   base = null;
@@ -32,7 +35,7 @@ self: super: {
   unix = null;
 
   # deepseq is not a core library for this compiler.
-  deepseq = self.deepseq_1_4_1_0;
+  deepseq = self.deepseq_1_4_1_1;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
@@ -40,7 +43,7 @@ self: super: {
   transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_1_1 = super.Cabal_1_22_1_1.override { binary = self.binary_0_7_4_0; process = self.process_1_2_3_0; };
+  Cabal_1_22_2_0 = super.Cabal_1_22_2_0.override { binary = self.binary_0_7_4_0; process = self.process_1_2_3_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;

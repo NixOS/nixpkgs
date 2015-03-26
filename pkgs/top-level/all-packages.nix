@@ -396,9 +396,9 @@ let
     inherit lib;
   };
 
-  makeInitrd = {contents, compressor ? "gzip -9n"}:
+  makeInitrd = { contents, compressor ? "gzip -9n", prepend ? [ ] }:
     import ../build-support/kernel/make-initrd.nix {
-      inherit stdenv perl perlArchiveCpio cpio contents ubootChooser compressor;
+      inherit stdenv perl perlArchiveCpio cpio contents ubootChooser compressor prepend;
     };
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
@@ -2362,7 +2362,10 @@ let
 
   philter = callPackage ../tools/networking/philter { };
 
-  pinentry = callPackage ../tools/security/pinentry { };
+  pinentry = callPackage ../tools/security/pinentry {
+    libcap = if stdenv.isDarwin then null else libcap;
+    qt4 = null;
+  };
 
   pius = callPackage ../tools/security/pius { };
 
@@ -4482,6 +4485,10 @@ let
 
   luarocks = luaPackages.luarocks;
 
+  toluapp = callPackage ../development/tools/toluapp {
+    lua = lua5_1; # doesn't work with any other :(
+  };
+
   ### END OF LUA
 
   lush2 = callPackage ../development/interpreters/lush {};
@@ -4815,6 +4822,8 @@ let
   babeltrace = callPackage ../development/tools/misc/babeltrace { };
 
   bam = callPackage ../development/tools/build-managers/bam {};
+
+  bazel = callPackage ../development/tools/build-managers/bazel { jdk = oraclejdk8; };
 
   binutils = if stdenv.isDarwin
     then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
@@ -5471,8 +5480,6 @@ let
   clearsilver = callPackage ../development/libraries/clearsilver { };
 
   cln = callPackage ../development/libraries/cln { };
-
-  clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) { };
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
@@ -6320,7 +6327,7 @@ let
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
-  libev = builderDefsPackage ../development/libraries/libev { };
+  libev = callPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
   libevent = callPackage ../development/libraries/libevent { };
@@ -6678,6 +6685,8 @@ let
   libspatialite = callPackage ../development/libraries/libspatialite { };
 
   libstatgrab = callPackage ../development/libraries/libstatgrab { };
+
+  libsvm = callPackage ../development/libraries/libsvm { };
 
   libtar = callPackage ../development/libraries/libtar { };
 
@@ -8276,11 +8285,13 @@ let
     bluez = null;
     avahi = null;
   };
+
   pulseaudioFull = pulseaudio.override {
     bluez = bluez5;
     avahi = avahi;
     jackaudioSupport = true;
     x11Support = true;
+    useSystemd = stdenv.isLinux;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -8421,6 +8432,8 @@ let
   rippled = callPackage ../servers/rippled {
     boost = boost155;
   };
+
+  ripple-data-api = callPackage ../servers/rippled/data-api.nix { };
 
   s6 = callPackage ../servers/s6 { };
 
@@ -8575,8 +8588,6 @@ let
 
   afuse = callPackage ../os-specific/linux/afuse { };
 
-  amdUcode = callPackage ../os-specific/linux/microcode/amd.nix { };
-
   autofs5 = callPackage ../os-specific/linux/autofs/autofs-v5.nix { };
 
   _915resolution = callPackage ../os-specific/linux/915resolution { };
@@ -8606,7 +8617,7 @@ let
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
   alsaOss = callPackage ../os-specific/linux/alsa-oss { };
 
-  microcode2ucode = callPackage ../os-specific/linux/microcode/converter.nix { };
+  microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
@@ -8674,7 +8685,9 @@ let
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
@@ -9661,6 +9674,8 @@ let
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
+
+  mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
 
   nafees = callPackage ../data/fonts/nafees { };
 
@@ -11173,6 +11188,8 @@ let
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
     withSidebar = true;
   };
+
+  mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
 
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
     ruby = ruby_2_1;
@@ -13188,6 +13205,8 @@ let
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
 
+  abella = callPackage ../applications/science/logic/abella {};
+
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   coq = callPackage ../applications/science/logic/coq {
@@ -13488,7 +13507,9 @@ let
 
   beep = callPackage ../misc/beep { };
 
-  cups = callPackage ../misc/cups { libusb = libusb1; };
+  cups = callPackage ../misc/cups {
+    libusb = libusb1;
+  };
 
   cups_filters = callPackage ../misc/cups/filters.nix { };
 
@@ -13676,6 +13697,8 @@ let
 
   phabricator = callPackage ../misc/phabricator { };
 
+  physlock = callPackage ../misc/screensavers/physlock { };
+
   pjsip = callPackage ../applications/networking/pjsip { };
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
@@ -13696,7 +13719,7 @@ let
     retroarch = retroarchBare;
   });
 
-  rssglx = callPackage ../misc/screensavers/rss-glx { };
+  rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   runit = callPackage ../tools/system/runit { };
 
@@ -13987,6 +14010,8 @@ let
   nfsUtils = nfs-utils;  # added 2014-12-06
   buildbotSlave = buildbot-slave;  # added 2014-12-09
   cool-old-term = cool-retro-term; # added 2015-01-31
+  rssglx = rss-glx; #added 2015-03-25
+
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 

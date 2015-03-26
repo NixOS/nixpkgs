@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_34;
+
   # Disable GHC 7.6.x core libraries.
   array = null;
   base = null;
@@ -36,11 +39,11 @@ self: super: {
   transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # haskeline and terminfo are not core libraries for this compiler.
-  haskeline = self.haskeline_0_7_2_0;
+  haskeline = self.haskeline_0_7_2_1;
   terminfo = self.terminfo_0_4_0_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_1_1 = super.Cabal_1_22_1_1.override { binary = self.binary_0_7_4_0; };
+  Cabal_1_22_2_0 = super.Cabal_1_22_2_0.override { binary = self.binary_0_7_4_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -87,7 +90,7 @@ self: super: {
       presburger pretty process QuickCheck random smtLib syb text
       tf-random transformers utf8-string
     ];
-    buildTools = with self; [ alex happy Cabal_1_22_1_1 ];
+    buildTools = with self; [ alex happy Cabal_1_22_2_0 ];
     patchPhase = "sed -i -e 's|process .*,|process,|' cryptol.cabal";
     description = "Cryptol: The Language of Cryptography";
     license = pkgs.stdenv.lib.licenses.bsd3;

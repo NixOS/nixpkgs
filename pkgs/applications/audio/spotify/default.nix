@@ -8,7 +8,7 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 let
   version = if stdenv.system == "i686-linux"
     then "0.9.4.183.g644e24e.428"
-    else "0.9.11.27.g2b1a638.81";
+    else "0.9.17.1.g9b85d43.7";
 
   deps = [
     alsaLib
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_amd64.deb";
-        sha256 = "0yfljiw01kssj3qaz8m0ppgrpjs6xrhzlr2wccp64bsnmin7g4sg";
+        sha256 = "0x87q7gd2997sgppsm4lmdiz1cm11x5vnd5c34nqb5d4ry5qfyki";
       }
     else throw "Spotify not supported on this platform.";
 
@@ -90,8 +90,8 @@ stdenv.mkDerivation {
       ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so.0d
       ''}
 
-      # Work around Spotify trying to open libudev.so.0 (which we don't have)
-      ln -s ${udev}/lib/libudev.so.1 $libdir/libudev.so.0
+      # Work around Spotify trying to open libudev.so.1 (which we don't have)
+      ln -s ${udev}/lib/libudev.so.1 $libdir/libudev.so.1
 
       mkdir -p $out/bin
 
@@ -128,6 +128,6 @@ stdenv.mkDerivation {
     homepage = https://www.spotify.com/;
     description = "Play music from the Spotify music service";
     license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = with stdenv.lib.maintainers; [ eelco ftrvxmtrx ];
   };
 }

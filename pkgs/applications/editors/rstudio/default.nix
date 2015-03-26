@@ -51,7 +51,7 @@ stdenv.mkDerivation {
 
       mkdir dependencies/common/dictionaries
       for dict in $hunspellDicts; do
-          for i in $dict/share/hunspell/*
+          for i in "$dict/share/hunspell/"*
 	  do ln -sv $i dependencies/common/dictionaries/
 	  done
       done

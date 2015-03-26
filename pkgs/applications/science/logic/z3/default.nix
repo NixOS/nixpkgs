@@ -26,11 +26,8 @@ stdenv.mkDerivation rec {
   soext = if stdenv.system == "x86_64-darwin" then ".dylib" else ".so";
   installPhase = ''
     mkdir -p $out/bin $out/lib/${python.libPrefix}/site-packages $out/include
-    cp ../src/api/z3.h        $out/include
-    cp ../src/api/z3_api.h    $out/include
-    cp ../src/api/z3_v1.h     $out/include
-    cp ../src/api/z3_macros.h $out/include
-    cp ../src/api/c++/z3++.h  $out/include
+    cp ../src/api/z3*.h       $out/include
+    cp ../src/api/c++/z3*.h   $out/include
     cp z3                     $out/bin
     cp libz3${soext}          $out/lib
     cp libz3${soext}          $out/lib/${python.libPrefix}/site-packages

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libva, libX11, intel-gpu-tools, mesa_noglu, wayland, python, gnum4 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-intel-driver-1.5.0";
+  name = "libva-intel-driver-1.5.1";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
-    sha256 = "1p537n2dpmybpf7rligbnhw406lr575bhkafs4n64jxk78clid6h";
+    sha256 = "1p7aw0wmb6z3rbbm3bqlp6rxw41kii23csbjmcvbbk037lq6rnqb";
   };
 
   prePatch = ''

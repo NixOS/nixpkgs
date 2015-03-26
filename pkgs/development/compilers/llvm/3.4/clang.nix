@@ -34,7 +34,13 @@ stdenv.mkDerivation {
     ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
   '';
 
-  passthru.cc = stdenv.cc.cc;
+  passthru = {
+    isClang = true;
+    cc = stdenv.cc.cc;
+    # GCC_INSTALL_PREFIX points here, so just use it even though it may not
+    # actually be a gcc
+    gcc = stdenv.cc.cc;
+  };
 
   enableParallelBuilding = true;
 

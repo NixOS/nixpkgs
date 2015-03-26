@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_34;
+
   # Disable GHC 7.8.x core libraries.
   array = null;
   base = null;
@@ -45,7 +48,7 @@ self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
     transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
-    haskeline = self.haskeline_0_7_2_0;
+    haskeline = self.haskeline_0_7_2_1;
     mtl = super.mtl_2_2_1;
   })) (drv: {
     jailbreak = true;           # idris is scared of lens 4.7
@@ -53,7 +56,7 @@ self: super: {
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
   # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8_1 = dontDistribute super.HStringTemplate_0_8_1;
+  HStringTemplate_0_8_3 = dontDistribute super.HStringTemplate_0_8_3;
 
   # This is part of bytestring in our compiler.
   bytestring-builder = dontHaddock super.bytestring-builder;
