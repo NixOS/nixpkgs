@@ -10866,16 +10866,20 @@ let
   });
 
 
-  subunit = buildPythonPackage rec {
+  subunit = stdenv.mkDerivation rec {
     name = "subunit-${version}";
-    version = "1.1.0";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/python-subunit/python-subunit-${version}.tar.gz";
-      sha256 = "125zh5i1f21ficn8ix5q33jk87j2pfmzbw6jq5l8v0hhjrp619yr";
+      url = "https://launchpad.net/subunit/trunk/${version}/+download/${name}.tar.gz";
+      sha256 = "1fnhrrwww90746an2nz2kn9qdf9pklmaf5lm22gssl6648f2rp2m";
     };
 
+    buildInputs = (with pkgs; [ pkgconfig check cppunit perl ]) ++ [ self.wrapPython ];
+
     propagatedBuildInputs = with self; [ testtools testscenarios ];
+
+    postFixup = "wrapPythonPrograms";
 
     meta = {
       description = "A streaming protocol for test results";
