@@ -379,6 +379,27 @@ let
   };
 
 
+  amqp = buildPythonPackage rec {
+    name = "amqp-${version}";
+    version = "1.4.6";
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/amqp/${name}.tar.gz";
+      sha256 = "0h76dnqfbc6fslwr7lx86n2gyslfv2x1vl8lpbszjs2svrkwikzb";
+      md5 = "a061581b6864f838bffd62b6a3d0fb9f";
+    };
+
+    buildInputs = with self; [ mock coverage nose-cover3 unittest2 ];
+
+    meta = {
+      homepage = http://github.com/celery/py-amqp;
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project.";
+      license = licenses.lgpl21;
+    };
+  };
+
+
   amqplib = buildPythonPackage rec {
     name = "amqplib-0.6.1";
 
@@ -967,6 +988,31 @@ let
   };
 
 
+  billiard = buildPythonPackage rec {
+    name = "billiard-${version}";
+    version = "3.3.0.19";
+
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/billiard/${name}.tar.gz";
+      sha256 = "06bs1kl7dji6lwpj3dkfi61mmrfq2mi7wz3ka683i2avwk38wsvf";
+      md5 = "7e473b9da01956ce91a650f99fe8d4ad";
+    };
+
+    buildInputs = with self; [ nose unittest2 mock ];
+
+    # i can't imagine these were intentionally installed
+    postInstall = "rm -r $out/${python.sitePackages}/funtests";
+
+    meta = {
+      homepage = https://github.com/celery/billiard;
+      description = "Python multiprocessing fork with improvements and bugfixes";
+      license = licenses.bsd3;
+    };
+  };
+
+
   bitbucket_api = buildPythonPackage rec {
     name = "bitbucket-api-0.4.4";
 
@@ -1440,6 +1486,33 @@ let
       description = "AMQP Messaging Framework for Python";
     };
   };
+
+
+  celery = buildPythonPackage rec {
+    name = "celery-${version}";
+    version = "3.1.17";
+
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/celery/${name}.tar.gz";
+      sha256 = "0qh38xnbgbj7awpjxxvjlddyafxyyy3fhxcas3i8dmcb4r9vdqng";
+      md5 = "e37f5d93b960bf68fc26c1325f30fd16";
+    };
+
+    buildInputs = with self; [ mock nose unittest2 ];
+    propagatedBuildInputs = with self; [ kombu billiard pytz anyjson ];
+
+    # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
+    doCheck = pythonAtLeast "2.7";
+
+    meta = {
+      homepage = https://github.com/celery/celery/;
+      description = "Distributed task queue";
+      license = licenses.bsd3;
+    };
+  };
+
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
@@ -5666,6 +5739,34 @@ let
     };
   };
 
+  kombu = buildPythonPackage rec {
+    name = "kombu-${version}";
+    version = "3.0.24";
+
+    disabled = pythonOlder "2.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
+      sha256 = "13dzybciispin9c4znpiyvgha354mz124lgx06ksw4vic0vh9zxr";
+      md5 = "37c8b5084ac83b8a6f5ff9f157cac0e9";
+    };
+
+    buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
+
+    propagatedBuildInputs = with self; [ amqp ] ++
+      (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
+
+    # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
+    # tests also appear to depend on anyjson, which has Py3k problems
+    doCheck = (pythonAtLeast "2.7") && !isPy3k ;
+
+    meta = with stdenv.lib; {
+      description = "Messaging library for Python";
+      homepage    = "http://github.com/celery/kombu";
+      license     = licenses.bsd3;
+    };
+  };
+
   konfig = buildPythonPackage rec {
     name = "konfig-${version}";
     version = "0.9";
@@ -6821,6 +6922,25 @@ let
     # AttributeError: 'module' object has no attribute 'collector'
     doCheck = false;
   });
+
+  nose-cover3 = buildPythonPackage rec {
+    name = "nose-cover3-${version}";
+    version = "0.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nose-cover3/${name}.tar.gz";
+      sha256 = "1la4hhc1yszjpcchvkqk5xmzlb2g1b3fgxj9wwc58qc549whlcc1";
+      md5 = "82f981eaa007b430679899256050fa0c";
+    };
+
+    propagatedBuildInputs = with self; [ nose ];
+
+    meta = {
+      description = "Coverage 3.x support for Nose";
+      homepage = https://github.com/ask/nosecover3;
+      license = stdenv.lib.licenses.lgpl21;
+    };
+  };
 
   nosexcover = buildPythonPackage (rec {
     name = "nosexcover-1.0.10";
