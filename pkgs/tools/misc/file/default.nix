@@ -1,13 +1,13 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "file-5.17";
+  name = "file-5.22";
 
   buildInputs = [ zlib ];
 
   src = fetchurl {
     url = "ftp://ftp.astron.com/pub/file/${name}.tar.gz";
-    sha256 = "1jl31jli87s5xnjq14r1fh72qc95562qbr5f63d68yrq3ca9gsrz";
+    sha256 = "02zw14hw3gqlw91w2f2snbirvyrp7r83irvnnkjcb25q9kjaiqy4";
   };
 
   meta = {
