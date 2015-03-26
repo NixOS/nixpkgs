@@ -4485,6 +4485,10 @@ let
 
   luarocks = luaPackages.luarocks;
 
+  toluapp = callPackage ../development/tools/toluapp {
+    lua = lua5_1; # doesn't work with any other :(
+  };
+
   ### END OF LUA
 
   lush2 = callPackage ../development/interpreters/lush {};
