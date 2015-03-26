@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1m3i322n2fwgrvbs1yck7g5md1dbg22bhq5xdqmjpz5m7j4jxqny";
   };
 
+  # Otherwise clang fails with 'duplicate symbol ___sputc'
+  buildFlags = stdenv.lib.optionalString stdenv.isDarwin "CFLAGS=-std=gnu89";
+
   meta = {
     homepage = http://libmpeg2.sourceforge.net/;
     description = "A free library for decoding mpeg-2 and mpeg-1 video streams";
