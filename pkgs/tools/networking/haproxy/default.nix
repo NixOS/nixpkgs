@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl }:
+{ stdenv, pkgs, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   version = "1.5.11";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1gwkyy06c8bw5vcjv82hai554zrd415jjsb1iafg01c4k1ia8nlb";
   };
 
-  buildInputs = [ ];
+  buildInputs = [ openssl ];
 
   # TODO: make it work on darwin/bsd as well
   preConfigure = ''
-    export makeFlags="TARGET=linux2628 PREFIX=$out"
+    export makeFlags="TARGET=linux2628 PREFIX=$out USE_OPENSSL=yes"
   '';
 
   meta = {
