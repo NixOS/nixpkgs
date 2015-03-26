@@ -1,16 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, texinfo }:
 
 let
   pname = "macchanger";
-  version = "1.6.0";
+  version = "1.7.0";
 in
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  src = fetchurl {
-    url = "mirror://gnu/${pname}/${name}.tar.gz";
-    sha256 = "31534f138f1d21fa247be74ba6bef3fbfa47bbcd5033e99bd10c432fe58e51f7";
+
+  src = fetchFromGitHub {
+    owner = "alobbs";
+    repo = "macchanger";
+    rev = version;
+    sha256 = "1hypx6sxhd2b1nsxj314hpkhj7q4x9p2kfaaf20rjkkkig0nck9r";
   };
+
+  buildInputs = [ autoreconfHook texinfo ];
 
   meta = {
     description = "A utility for viewing/manipulating the MAC address of network interfaces";
