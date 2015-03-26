@@ -11837,7 +11837,9 @@ let
 
   trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
 
-  tribler = callPackage ../applications/networking/p2p/tribler { };
+  tribler = callPackage ../applications/networking/p2p/tribler {
+    libtorrent = libtorrentRasterbar;
+  };
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar { };
 

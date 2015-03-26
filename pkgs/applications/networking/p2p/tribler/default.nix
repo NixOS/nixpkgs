@@ -1,33 +1,32 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchgit, pythonPackages, makeWrapper, nettools, libtorrent
 , enablePlayer ? false, vlc ? null }:
 
-let rev = "25411"; in
+stdenv.mkDerivation rec {
+  name = "tribler-${version}";
+  version = "6.4.3";
 
-stdenv.mkDerivation {
-  name = "tribler-5.5.21-pre${rev}";
-
-  src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.5.x;
-    inherit rev;
-    sha256 = "17c9svy4zjchzihk6mf0kh4lnvaxjfmgfmimyby5w0d3cwbw49zx";
+  src = fetchgit {
+    url = https://github.com/Tribler/tribler.git;
+    rev = "refs/tags/v${version}";
+    sha256 = "0i7pwqd4yizbv2z6ckz6897dw21parl1mvml4yvn522ry6hgvk3k";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
 
   pythonPath =
-    [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
-      pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
+    [ pythonPackages.wxPython pythonPackages.apsw
+      pythonPackages.m2crypto pythonPackages.sqlite3
+      pythonPackages.twisted pythonPackages.pil pythonPackages.gmpy
+      pythonPackages.pycrypto pythonPackages.pyasn1 pythonPackages.requests
+      pythonPackages.netifaces
+      libtorrent
     ];
 
   installPhase =
     ''
-      substituteInPlace Tribler/Core/NATFirewall/guessip.py \
-          --replace /bin/netstat ${nettools}/bin/netstat \
-          --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
-    
       # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
       wrapPythonPrograms
-      
+
       mkdir -p $out/share/tribler
       cp -prvd Tribler $out/share/tribler/
 
@@ -41,9 +40,11 @@ stdenv.mkDerivation {
           ''}
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.tribler.org/;
     description = "A completely decentralised P2P filesharing client based on the Bittorrent protocol";
-    license = stdenv.lib.licenses.lgpl21;
+    license = licenses.lgpl21;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.offline ];
   };
 }
