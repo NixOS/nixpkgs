@@ -21,7 +21,7 @@
 # For performance reasons, rather than uniformally splice in all cases, we only
 # do so when `pkgs` and `buildPackages` are distinct. The `actuallySplice`
 # parameter there the boolean value of that equality check.
-lib: pkgs: actuallySplice:
+lib: config: pkgs: actuallySplice:
 
 let
 
@@ -126,9 +126,9 @@ in
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope {};
 
-  callPackages = lib.callPackagesWith splicedPackagesWithXorg;
+  callPackages = lib.callPackagesWith (splicedPackagesWithXorg // (config.poorMansUseFlags or {}));
 
-  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
+  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // (config.poorMansUseFlags or {}) // extra);
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
