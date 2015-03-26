@@ -1,3 +1,21 @@
+/*
+
+  WARNING/NOTE: whenever you want to add an option here you need to
+  either
+
+  * mark it as an optional one with `?` suffix,
+  * or make sure it works for all the versions in nixpkgs,
+  * or check for which kernel versions it will work (using kernel
+    changelog, google or whatever) and mark it with `versionOlder` or
+    `versionAtLeast`.
+
+  Then do test your change by building all the kernels (or at least
+  their configs) in nixpkgs or else you will guarantee lots and lots
+  of pain to users trying to switch to an older kernel because of some
+  hardware problems with a new one.
+
+*/
+
 { stdenv, version, kernelPlatform, extraConfig, features }:
 
 with stdenv.lib;

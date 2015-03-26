@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, browser, libXpm, gettext}:
+{stdenv, fetchurl, pkgconfig, browser, libXpm, gettext, mplayer}:
 
 stdenv.mkDerivation rec {
   name = "mplayerplug-in-3.55";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
      else "");
 
   buildInputs = [ pkgconfig browser (browser.gtk) libXpm gettext ];
-  
+  propagatedUserEnvPkgs = [ mplayer ];
+
   installPhase = ''
     mkdir -p $out/lib/mozilla/plugins
     cp -p mplayerplug-in*.so mplayerplug-in*.xpt $out/lib/mozilla/plugins

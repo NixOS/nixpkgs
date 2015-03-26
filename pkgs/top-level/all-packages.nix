@@ -577,9 +577,9 @@ let
 
   otool = callPackage ../os-specific/darwin/otool { };
 
-  pass = callPackage ../tools/security/pass {
+  pass = callPackage ../tools/security/pass ({
     gnupg = gnupg1compat;
-  };
+  } // (config.pass or {}));
 
   setfile = callPackage ../os-specific/darwin/setfile { };
 
@@ -1450,13 +1450,13 @@ let
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg20 = callPackage ../tools/security/gnupg/20.nix {
+  gnupg20 = callPackage ../tools/security/gnupg/20.nix ({
     libgcrypt = libgcrypt_1_6;
-  };
+  } // (config.gnupg or {}));
 
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
+  gnupg21 = callPackage ../tools/security/gnupg/21.nix ({
     libgcrypt = libgcrypt_1_6;
-  };
+  } // (config.gnupg or {}));
 
   gnupg = gnupg20;
 
@@ -4256,7 +4256,7 @@ let
   };
   opam = callPackage ../development/tools/ocaml/opam { };
 
-  ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
+  ocamlnat = newScope pkgs.ocamlPackages_3_12_1 ../development/ocaml-modules/ocamlnat { };
 
   qcmm = callPackage ../development/compilers/qcmm {
     lua   = lua4;
@@ -4485,6 +4485,10 @@ let
 
   luarocks = luaPackages.luarocks;
 
+  toluapp = callPackage ../development/tools/toluapp {
+    lua = lua5_1; # doesn't work with any other :(
+  };
+
   ### END OF LUA
 
   lush2 = callPackage ../development/interpreters/lush {};
@@ -4575,9 +4579,9 @@ let
     db = db47;
     self = python26;
   };
-  python27 = callPackage ../development/interpreters/python/2.7 {
+  python27 = callPackage ../development/interpreters/python/2.7 ({
     self = python27;
-  };
+  } // (config.python27 or {}));
   python32 = callPackage ../development/interpreters/python/3.2 {
     self = python32;
   };
@@ -5542,7 +5546,7 @@ let
   db6 = db60;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
 
-  dbus = callPackage ../development/libraries/dbus { };
+  dbus = callPackage ../development/libraries/dbus (config.dbus or {});
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
@@ -8678,16 +8682,9 @@ let
 
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  conky = callPackage ../os-specific/linux/conky {
-    mpdSupport   = config.conky.mpdSupport   or true;
-    x11Support   = config.conky.x11Support   or false;
-    xdamage      = config.conky.xdamage      or false;
-    wireless     = config.conky.wireless     or false;
-    luaSupport   = config.conky.luaSupport   or false;
-    rss          = config.conky.rss          or false;
-    weatherMetar = config.conky.weatherMetar or false;
-    weatherXoap  = config.conky.weatherXoap  or false;
-  };
+  conky = callPackage ../os-specific/linux/conky ({
+    lua = lua5_1; # conky can use 5.2, but toluapp can not
+  } // config.conky or {});
 
   conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
 
@@ -10400,9 +10397,7 @@ let
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
-  fetchmail = import ../applications/misc/fetchmail {
-    inherit stdenv fetchurl openssl;
-  };
+  fetchmail = callPackage ../applications/misc/fetchmail { };
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
@@ -11140,21 +11135,17 @@ let
 
   normalize = callPackage ../applications/audio/normalize { };
 
-  mplayer = callPackage ../applications/video/mplayer {
+  mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
-    vdpauSupport = config.mplayer.vdpauSupport or false;
-  };
+  } // (config.mplayer or {}));
 
-  mplayer2 = callPackage ../applications/video/mplayer2 {
+  mplayer2 = callPackage ../applications/video/mplayer2 ({
     ffmpeg = libav_9; # see https://trac.macports.org/ticket/44386
-  };
+  } // (config.mplayer2 or {}));
 
   MPlayerPlugin = browser:
-    import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
+    callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
-      inherit fetchurl stdenv pkgconfig gettext;
-      inherit (xlibs) libXpm;
-      # !!! should depend on MPlayer
     };
 
   mpv = callPackage ../applications/video/mpv {
@@ -11440,7 +11431,7 @@ let
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
-  qemu = callPackage ../applications/virtualization/qemu { };
+  qemu = callPackage ../applications/virtualization/qemu (config.qemu or {});
 
   qmmp = callPackage ../applications/audio/qmmp { };
 
@@ -11745,10 +11736,7 @@ let
 
   swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
 
-  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
-    sslSupport = true;
-    gpgSupport = true;
-  };
+  sylpheed = callPackage ../applications/networking/mailreaders/sylpheed (config.sylpheed or {});
 
   symlinks = callPackage ../tools/system/symlinks { };
 
@@ -13063,8 +13051,6 @@ let
   };
 
   redshift = callPackage ../applications/misc/redshift {
-    inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
-      xf86vidmodeproto;
     inherit (gnome) GConf;
     inherit (pythonPackages) pyxdg;
     geoclue = geoclue2;
@@ -13712,6 +13698,8 @@ let
 
   phabricator = callPackage ../misc/phabricator { };
 
+  physlock = callPackage ../misc/screensavers/physlock { };
+
   pjsip = callPackage ../applications/networking/pjsip { };
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
@@ -13732,7 +13720,8 @@ let
     retroarch = retroarchBare;
   });
 
-  rssglx = callPackage ../misc/screensavers/rss-glx { };
+  rss-glx = callPackage ../misc/screensavers/rss-glx { };
+  rssglx = builtins.trace "WARNING: rssglx package was renamed to rss-glx" pkgs.rss-glx;
 
   runit = callPackage ../tools/system/runit { };
 

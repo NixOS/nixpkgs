@@ -27,9 +27,14 @@ in
     programs.ssh = {
 
       askPassword = mkOption {
-        type = types.string;
-        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
-        description = ''Program used by SSH to ask for passwords.'';
+        type = types.nullOr types.string;
+        description = ''
+          Program used by SSH to ask for passwords when it is being run without a tty (e.g. from <filename>.xsession</filename>).
+          With this option set to null SSH will simply return with an error in this kind of situation.
+
+          The default is <command>x11-ssh-askpass</command> when <option>services.xserver.enable</option> is on,
+          and null otherwise.
+        '';
       };
 
       forwardX11 = mkOption {
@@ -103,6 +108,12 @@ in
         message = "cannot enable X11 forwarding without setting XAuth location";
       };
 
+    programs.ssh.askPassword = mkDefault (
+      if config.services.xserver.enable
+      then "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass"
+      else null
+    );
+
     environment.etc =
       [ { # SSH configuration.  Slight duplication of the sshd_config
           # generation in the sshd service.
@@ -137,7 +148,7 @@ in
         # Allow ssh-agent to ask for confirmation. This requires the
         # unit to know about the user's $DISPLAY (via ‘systemctl
         # import-environment’).
-        environment.SSH_ASKPASS = optionalString config.services.xserver.enable askPasswordWrapper;
+        environment.SSH_ASKPASS = optionalString (askPassword != null) askPasswordWrapper;
         environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
       };
 
@@ -148,7 +159,7 @@ in
         fi
       '';
 
-    environment.interactiveShellInit = optionalString config.services.xserver.enable
+    environment.interactiveShellInit = optionalString (askPassword != null)
       ''
         export SSH_ASKPASS=${askPassword}
       '';

@@ -4,5 +4,5 @@
 { config, lib, pkgs, ... }:
 
 {
-  environment.noXlibs = true;
+  environment.xlibs = "no";
 }
