@@ -10,22 +10,22 @@ stdenv.mkDerivation rec {
 
   geoLiteCity = fetchurl {
     url = "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz";
-    sha256 = "1sqskc8nh9k46nif4i6abjil9nfl4x6na4gadzbxp0929lbzyh0f";
+    sha256 = "1xqjyz9xnga3dvhj0f38hf78wv781jflvqkxm6qni3sj781nfr4a";
   };
 
   geoLiteCityV6 = fetchurl {
     url = "http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz";
-    sha256 = "1427zljjhbixjcihinj7l79v1daii7ikcmxgkmwdp4rbr25qxlhz";
+    sha256 = "03s41ffc5a13qy5kgx8jqya97jkw2qlvdkak98hab7xs0i17z9pd";
   };
 
   geoIPASNum = fetchurl {
     url = "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz";
-    sha256 = "1rh2920sdciqn3pifl4rz0jl3m32ww4gjx495p5xd6ldpy95gn31";
+    sha256 = "1h766l8dsfgzlrz0q76877xksaf5qf91nwnkqwb6zl1gkczbwy6p";
   };
 
   geoIPASNumV6 = fetchurl {
     url = "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNumv6.dat.gz";
-    sha256 = "1064arl40c80kwhbdylhwk6gn2xs36dr0aq3634i1rdpd4jm1a41";
+    sha256 = "0dwi9b3amfpmpkknf9ipz2r8aq05gn1j2zlvanwwah3ib5cgva9d";
   };
 
   src = fetchurl {
