@@ -1,24 +1,15 @@
 { stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.0";
+  name = "gawk-4.1.1";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "0hin2hswbbd6kd6i4zzvgciwpl5fba8d2s524z8y5qagyz3x010q";
+    sha256 = "1nz83vpss8xv7m475sv4qhhj40g74nvcw0y9kwq9ds8wzfmcdm7g";
   };
 
-  # Fix cross compile (stolen from Gentoo).
-  # Not needed for 4.1.1.
-  crossAttrs = {
-    preConfigure = ''
-      sed -i \
-        -e '/check-recursive all-recursive: check-for-shared-lib-support/d' \
-        extension/Makefile.in
-    '';
-  };
-
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  # Currently broken due to locale tests failing
+  #doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
   buildInputs = [ libsigsegv ]
     ++ stdenv.lib.optional readlineSupport readline;
