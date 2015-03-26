@@ -1,11 +1,12 @@
 { stdenv, pkgs, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.11";
+  major-version = "1.5";
+  version = "${major-version}.11";
   name = "haproxy-${version}";
 
   src = fetchurl {
-    url = "http://haproxy.1wt.eu/download/1.5/src/${name}.tar.gz";
+    url = "http://haproxy.1wt.eu/download/${major-version}/src/${name}.tar.gz";
     sha256 = "1gwkyy06c8bw5vcjv82hai554zrd415jjsb1iafg01c4k1ia8nlb";
   };
 
@@ -29,9 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://haproxy.1wt.eu;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     platforms = stdenv.lib.platforms.linux;
-    /* TODO license = [
-       stdenv.lib.licenses.gpl2
-       stdenv.lib.licenses.lgpl21
-    ];*/
+    license = stdenv.lib.licenses.gpl2;
   };
 }
