@@ -8703,7 +8703,9 @@ let
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup {
+    libgcrypt = libgcrypt_1_6;
+  };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
