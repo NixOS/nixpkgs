@@ -1,25 +1,16 @@
-a :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = [];
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+stdenv.mkDerivation rec {
+  name = "libev-${version}";
+  version="4.19";
+  src = fetchurl {
+    url = "http://dist.schmorp.de/libev/${name}.tar.gz";
+    sha256 = "1jyw7qbl0spxqa0dccj9x1jsw7cj7szff43cq4acmklnra4mzz48";
+  };
   meta = {
-    description = "An event loop library remotely similar to libevent";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = a.lib.platforms.all;
+    description = "A high-performance event loop/event model with lots of features";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.bsd2; # or GPL2+
   };
 }

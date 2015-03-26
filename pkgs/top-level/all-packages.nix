@@ -6335,7 +6335,7 @@ let
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
-  libev = builderDefsPackage ../development/libraries/libev { };
+  libev = callPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
   libevent = callPackage ../development/libraries/libevent { };
