@@ -9,12 +9,16 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = "cd make/linux";
-  makeFlags = "prefix=$(out) LIBEBML_INCLUDE_DIR=${libebml}/include LIBEBML_LIB_DIR=${libebml}/lib";
+  makeFlags = "prefix=$(out) LIBEBML_INCLUDE_DIR=${libebml}/include LIBEBML_LIB_DIR=${libebml}/lib"
+    + stdenv.lib.optionalString stdenv.isDarwin " CXX=clang++";
   propagatedBuildInputs = [ libebml ];
 
-  meta = {
-    description = "Matroska library";
-    homepage = http://dl.matroska.org/downloads/libmatroska;
+  meta = with stdenv.lib; {
+    description = "A library to parse Matroska files";
+    homepage = http://matroska.org/;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.spwhitt ];
+    platforms = platforms.unix;
   };
 }
 
