@@ -4244,13 +4244,22 @@ let
   };
 
   enum34 = buildPythonPackage rec {
-    name = "enum34-1.0";
+    name = "enum34-${version}";
+    version = "1.0.4";
+    disabled = pythonAtLeast "3.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/e/enum34/${name}.tar.gz";
-      md5 = "9d57f5454c70c11707998ea26c1b0a7c";
+      sha256 = "0iz4jjdvdgvfllnpmd92qxj5fnfxqpgmjpvpik0jjim3lqk9zhfk";
     };
 
+    buildInputs = optional isPy26 self.ordereddict;
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/enum34;
+      description = "Python 3.4 Enum backported to 3.3, 3.2, 3.1, 2.7, 2.6, 2.5, and 2.4";
+      license = "BSD";
+    };
   };
 
   epc = buildPythonPackage rec {
