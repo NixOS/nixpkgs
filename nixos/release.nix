@@ -237,7 +237,7 @@ in rec {
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
   tests.chromium = callTest tests/chromium.nix {};
-  #tests.cjdns = callTest tests/cjdns.nix {};
+  tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
   tests.docker = scrubDrv (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = scrubDrv (import tests/docker-registry.nix { system = "x86_64-linux"; });
