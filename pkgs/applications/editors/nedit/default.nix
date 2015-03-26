@@ -1,21 +1,25 @@
-{stdenv, fetchurl, x11, motif, libXpm}:
+{ stdenv, fetchurl, x11, motif, libXpm }:
 
 assert stdenv.isLinux;
 
-stdenv.mkDerivation {
-  name = "nedit-5.5";
-  builder = ./builder.sh;
+stdenv.mkDerivation rec {
+  name = "nedit-5.6";
   
   src = fetchurl {
-    url = http://nl.nedit.org/ftp/v5_5/nedit-5.5-src.tar.bz2;
-    md5 = "48cb3dce52d44988f3a4d7c6f47b6bbe";
+    url = "mirror://sourceforge/nedit/nedit-source/${name}-src.tar.gz";
+    sha256 = "023hwpqc57mnzvg6p7jda6193afgjzxzajlhwhqvk3jq2kdv6zna";
   };
-  patches = [./dynamic.patch];
 
-  inherit motif;
-  buildInputs = [x11 motif libXpm];
+  buildInputs = [ x11 motif libXpm ];
 
   buildFlags = if stdenv.isLinux then "linux" else "";
+
+  NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -p source/nedit source/nc $out/bin
+  '';
 
   meta = {
     homepage = http://www.nedit.org;
