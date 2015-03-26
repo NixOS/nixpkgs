@@ -370,7 +370,7 @@ substitute() {
         content="${content//"$pattern"/$replacement}"
     done
 
-    if [ -e "$output" ]; then chmod +w "$output".tmp; fi
+    if [ -e "$output" ]; then chmod +w "$output"; fi
     printf "%s" "$content" > "$output"
 }
 
