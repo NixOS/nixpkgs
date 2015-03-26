@@ -2363,8 +2363,8 @@ let
   philter = callPackage ../tools/networking/philter { };
 
   pinentry = callPackage ../tools/security/pinentry {
-    gtk2 = if stdenv.isDarwin then null else gtk2;
-    qt4 = if stdenv.isDarwin then qt4 else null;
+    libcap = if stdenv.isDarwin then null else libcap;
+    qt4 = null;
   };
 
   pius = callPackage ../tools/security/pius { };
