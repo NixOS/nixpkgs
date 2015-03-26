@@ -147,7 +147,6 @@ let
       pciutils = linux;
       pdf2xml = all;
       php = linux;
-      pinentry = linux;
       pltScheme = linux;
       pmccabe = linux;
       ppl = all;

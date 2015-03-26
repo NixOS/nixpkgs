@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (mkWith   (libcap != null)  "libcap")
+    (mkWith   (hasX)            "x")
     (mkEnable (ncurses != null) "pinentry-curses")
     (mkEnable true              "pinentry-tty")
     (mkEnable (gtk2 != null)    "pinentry-gtk2")
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://gnupg.org/aegypten2/";
     description = "GnuPG's interface to passphrase input";
     license = stdenv.lib.licenses.gpl2Plus;
-
+    platforms = stdenv.lib.platforms.all;
     longDescription = ''
       Pinentry provides a console and a GTK+ GUI that allows users to
       enter a passphrase when `gpg' or `gpg2' is run and needs it.
