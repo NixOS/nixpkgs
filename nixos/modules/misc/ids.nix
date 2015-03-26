@@ -211,6 +211,7 @@
       unifi = 183;
       uptimed = 184;
       zope2 = 185;
+      ripple-data-api = 186;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -399,6 +400,7 @@
       #unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
+      #ripple-data-api = 186; #unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
