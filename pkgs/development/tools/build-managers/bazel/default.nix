@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "bazel";
     rev = "981b7bc1";
-    sha256 = "1bgx12bnrqxz720ljn7kdzd4678p4mxldiylll3h0v5673vgrf5p";
+    sha256 = "0i9gxgqhfmix7hmkb15s7h9f8ssln08pixqm26pd1d20g0kfyxj7";
   };
 
   buildInputs = [ pkgconfig protobuf zlib zip jdk libarchive unzip makeWrapper ];
