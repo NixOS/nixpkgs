@@ -3952,6 +3952,7 @@ let
   django_1_7 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.7.7";
+    disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.7/${name}.tar.gz";
