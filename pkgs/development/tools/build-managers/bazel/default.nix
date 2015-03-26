@@ -1,21 +1,18 @@
 { stdenv, fetchFromGitHub, jdk, zip, zlib, protobuf, pkgconfig, libarchive, unzip, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "bazel-20150325.9a0dc1b2";
+  name = "bazel-20150326.981b7bc1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bazel";
-    rev = "9a0dc1b2";
+    rev = "981b7bc1";
     sha256 = "1bgx12bnrqxz720ljn7kdzd4678p4mxldiylll3h0v5673vgrf5p";
   };
 
   buildInputs = [ pkgconfig protobuf zlib zip jdk libarchive unzip makeWrapper ];
 
   installPhase = ''
-    # apply patch suggested by bazel people, remove when added upstream
-    sed -i 's/open(path.c_str(), O_CREAT | O_WRONLY, archive_entry_perm(entry))/open(path.c_str(), O_CREAT | O_WRONLY, 0755)/' ./src/main/cpp/blaze.cc
-
     PROTOC=protoc bash compile.sh
     mkdir -p $out/bin $out/share
     cp -R output $out/share/bazel
