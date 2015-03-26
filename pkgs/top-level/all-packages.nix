@@ -8299,11 +8299,13 @@ let
     bluez = null;
     avahi = null;
   };
+
   pulseaudioFull = pulseaudio.override {
     bluez = bluez5;
     avahi = avahi;
     jackaudioSupport = true;
     x11Support = true;
+    useSystemd = stdenv.isLinux;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
