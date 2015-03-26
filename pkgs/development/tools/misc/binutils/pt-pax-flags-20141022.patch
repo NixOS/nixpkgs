@@ -1,0 +1,1030 @@
+--- binutils-2.24.90/bfd/elf-bfd.h
++++ binutils-2.24.90/bfd/elf-bfd.h
+@@ -1558,6 +1558,9 @@ struct output_elf_obj_tdata
+   /* Segment flags for the PT_GNU_STACK segment.  */
+   unsigned int stack_flags;
+ 
++  /* Segment flags for the PT_PAX_FLAGS segment.  */
++  unsigned int pax_flags;
++
+   /* This is set to TRUE if the object was created by the backend
+      linker.  */
+   bfd_boolean linker;
+@@ -1703,6 +1706,7 @@ struct elf_obj_tdata
+ #define elf_eh_frame_hdr(bfd)	(elf_tdata(bfd) -> o->eh_frame_hdr)
+ #define elf_linker(bfd)		(elf_tdata(bfd) -> o->linker)
+ #define elf_stack_flags(bfd)	(elf_tdata(bfd) -> o->stack_flags)
++#define elf_pax_flags(bfd)	(elf_tdata(bfd) -> o->pax_flags)
+ #define elf_shstrtab(bfd)	(elf_tdata(bfd) -> o->strtab_ptr)
+ #define elf_onesymtab(bfd)	(elf_tdata(bfd) -> symtab_section)
+ #define elf_symtab_shndx(bfd)	(elf_tdata(bfd) -> symtab_shndx_section)
+--- binutils-2.24.90/bfd/elf.c
++++ binutils-2.24.90/bfd/elf.c
+@@ -1151,6 +1151,7 @@ get_segment_type (unsigned int p_type)
+     case PT_GNU_EH_FRAME: pt = "EH_FRAME"; break;
+     case PT_GNU_STACK: pt = "STACK"; break;
+     case PT_GNU_RELRO: pt = "RELRO"; break;
++    case PT_PAX_FLAGS: pt = "PAX_FLAGS"; break;
+     default: pt = NULL; break;
+     }
+   return pt;
+@@ -2498,6 +2499,9 @@ bfd_section_from_phdr (bfd *abfd, Elf_Internal_Phdr *hdr, int hdr_index)
+     case PT_GNU_RELRO:
+       return _bfd_elf_make_section_from_phdr (abfd, hdr, hdr_index, "relro");
+ 
++    case PT_PAX_FLAGS:
++      return _bfd_elf_make_section_from_phdr (abfd, hdr, hdr_index, "pax_flags");
++
+     default:
+       /* Check for any processor-specific program segment types.  */
+       bed = get_elf_backend_data (abfd);
+@@ -3590,6 +3594,11 @@ get_program_header_size (bfd *abfd, struct bfd_link_info *info)
+       ++segs;
+     }
+ 
++    {
++      /* We need a PT_PAX_FLAGS segment.  */
++      ++segs;
++    }
++
+   for (s = abfd->sections; s != NULL; s = s->next)
+     {
+       if ((s->flags & SEC_LOAD) != 0
+@@ -4226,6 +4235,20 @@ _bfd_elf_map_sections_to_segments (bfd *abfd, struct bfd_link_info *info)
+ 	    }
+ 	}
+ 
++    {
++      amt = sizeof (struct elf_segment_map);
++      m = bfd_zalloc (abfd, amt);
++      if (m == NULL)
++	goto error_return;
++      m->next = NULL;
++      m->p_type = PT_PAX_FLAGS;
++      m->p_flags = elf_pax_flags (abfd);
++      m->p_flags_valid = 1;
++
++      *pm = m;
++      pm = &m->next;
++    }
++
+       free (sections);
+       elf_seg_map (abfd) = mfirst;
+     }
+@@ -5584,7 +5607,8 @@ rewrite_elf_program_header (bfd *ibfd, bfd *obfd)
+        6. PT_TLS segment includes only SHF_TLS sections.
+        7. SHF_TLS sections are only in PT_TLS or PT_LOAD segments.
+        8. PT_DYNAMIC should not contain empty sections at the beginning
+-	  (with the possible exception of .dynamic).  */
++	  (with the possible exception of .dynamic).
++       9. PT_PAX_FLAGS segments do not include any sections.  */
+ #define IS_SECTION_IN_INPUT_SEGMENT(section, segment, bed)		\
+   ((((segment->p_paddr							\
+       ? IS_CONTAINED_BY_LMA (section, segment, segment->p_paddr)	\
+@@ -5592,6 +5616,7 @@ rewrite_elf_program_header (bfd *ibfd, bfd *obfd)
+      && (section->flags & SEC_ALLOC) != 0)				\
+     || IS_NOTE (segment, section))					\
+    && segment->p_type != PT_GNU_STACK					\
++   && segment->p_type != PT_PAX_FLAGS					\
+    && (segment->p_type != PT_TLS					\
+        || (section->flags & SEC_THREAD_LOCAL))				\
+    && (segment->p_type == PT_LOAD					\
+--- binutils-2.24.90/bfd/elflink.c
++++ binutils-2.24.90/bfd/elflink.c
+@@ -5563,18 +5563,31 @@ bfd_elf_size_dynamic_sections (bfd *output_bfd,
+       && ! (*bed->elf_backend_always_size_sections) (output_bfd, info))
+     return FALSE;
+ 
++  elf_pax_flags (output_bfd) = PF_NORANDEXEC;
++  if (info->execheap)
++    elf_pax_flags (output_bfd) |= PF_NOMPROTECT;
++  else if (info->noexecheap)
++    elf_pax_flags (output_bfd) |= PF_MPROTECT;
++
+   /* Determine any GNU_STACK segment requirements, after the backend
+      has had a chance to set a default segment size.  */
+   if (info->execstack)
+-    elf_stack_flags (output_bfd) = PF_R | PF_W | PF_X;
++    {
++      elf_stack_flags (output_bfd) = PF_R | PF_W | PF_X;
++      elf_pax_flags (output_bfd) |= PF_EMUTRAMP;
++    }
+   else if (info->noexecstack)
+-    elf_stack_flags (output_bfd) = PF_R | PF_W;
++    {
++      elf_stack_flags (output_bfd) = PF_R | PF_W;
++      elf_pax_flags (output_bfd) |= PF_NOEMUTRAMP;
++    }
+   else
+     {
+       bfd *inputobj;
+       asection *notesec = NULL;
+       int exec = 0;
+ 
++      elf_pax_flags (output_bfd) |= PF_NOEMUTRAMP;
+       for (inputobj = info->input_bfds;
+ 	   inputobj;
+ 	   inputobj = inputobj->link.next)
+@@ -5601,7 +5601,11 @@ bfd_elf_size_dynamic_sections (bfd *output_bfd,
+ 	  if (s)
+ 	    {
+ 	      if (s->flags & SEC_CODE)
+-		exec = PF_X;
++		{
++		  elf_pax_flags (output_bfd) &= ~PF_NOEMUTRAMP;
++		  elf_pax_flags (output_bfd) |= PF_EMUTRAMP;
++		  exec = PF_X;
++		}
+ 	      notesec = s;
+ 	    }
+ 	  else if (bed->default_execstack)
+--- binutils-2.24.90/binutils/readelf.c
++++ binutils-2.24.90/binutils/readelf.c
+@@ -3262,6 +3262,7 @@ get_segment_type (unsigned long p_type)
+ 			return "GNU_EH_FRAME";
+     case PT_GNU_STACK:	return "GNU_STACK";
+     case PT_GNU_RELRO:  return "GNU_RELRO";
++    case PT_PAX_FLAGS:  return "PAX_FLAGS";
+ 
+     default:
+       if ((p_type >= PT_LOPROC) && (p_type <= PT_HIPROC))
+--- binutils-2.24.90/include/bfdlink.h
++++ binutils-2.24.90/include/bfdlink.h
+@@ -339,6 +339,14 @@ struct bfd_link_info
+   /* TRUE if PT_GNU_RELRO segment should be created.  */
+   unsigned int relro: 1;
+ 
++  /* TRUE if PT_PAX_FLAGS segment should be created with PF_NOMPROTECT
++     flags.  */
++  unsigned int execheap: 1;
++
++  /* TRUE if PT_PAX_FLAGS segment should be created with PF_MPROTECT
++     flags.  */
++  unsigned int noexecheap: 1;
++
+   /* TRUE if .eh_frame_hdr section and PT_GNU_EH_FRAME ELF segment
+      should be created.  */
+   unsigned int eh_frame_hdr: 1;
+--- binutils-2.24.90/include/elf/common.h
++++ binutils-2.24.90/include/elf/common.h
+@@ -434,6 +434,7 @@
+ #define PT_SUNW_EH_FRAME PT_GNU_EH_FRAME      /* Solaris uses the same value */
+ #define PT_GNU_STACK	(PT_LOOS + 0x474e551) /* Stack flags */
+ #define PT_GNU_RELRO	(PT_LOOS + 0x474e552) /* Read-only after relocation */
++#define PT_PAX_FLAGS	(PT_LOOS + 0x5041580) /* PaX flags */
+ 
+ /* Program segment permissions, in program header p_flags field.  */
+ 
+@@ -444,6 +445,21 @@
+ #define PF_MASKOS	0x0FF00000	/* New value, Oct 4, 1999 Draft */
+ #define PF_MASKPROC	0xF0000000	/* Processor-specific reserved bits */
+ 
++/* Flags to control PaX behavior.  */
++
++#define PF_PAGEEXEC	(1 << 4)	/* Enable  PAGEEXEC */
++#define PF_NOPAGEEXEC	(1 << 5)	/* Disable PAGEEXEC */
++#define PF_SEGMEXEC	(1 << 6)	/* Enable  SEGMEXEC */
++#define PF_NOSEGMEXEC	(1 << 7)	/* Disable SEGMEXEC */
++#define PF_MPROTECT	(1 << 8)	/* Enable  MPROTECT */
++#define PF_NOMPROTECT	(1 << 9)	/* Disable MPROTECT */
++#define PF_RANDEXEC	(1 << 10)	/* Enable  RANDEXEC */
++#define PF_NORANDEXEC	(1 << 11)	/* Disable RANDEXEC */
++#define PF_EMUTRAMP	(1 << 12)	/* Enable  EMUTRAMP */
++#define PF_NOEMUTRAMP	(1 << 13)	/* Disable EMUTRAMP */
++#define PF_RANDMMAP	(1 << 14)	/* Enable  RANDMMAP */
++#define PF_NORANDMMAP	(1 << 15)	/* Disable RANDMMAP */
++
+ /* Values for section header, sh_type field.  */
+ 
+ #define SHT_NULL	0		/* Section header table entry unused */
+--- binutils-2.24.90/ld/emultempl/elf32.em
++++ binutils-2.24.90/ld/emultempl/elf32.em
+@@ -2276,6 +2276,16 @@ fragment <<EOF
+ 	  link_info.noexecstack = TRUE;
+ 	  link_info.execstack = FALSE;
+ 	}
++      else if (strcmp (optarg, "execheap") == 0)
++	{
++	  link_info.execheap = TRUE;
++	  link_info.noexecheap = FALSE;
++	}
++      else if (strcmp (optarg, "noexecheap") == 0)
++	{
++	  link_info.noexecheap = TRUE;
++	  link_info.execheap = FALSE;
++	}
+ EOF
+ if test x"$GENERATE_SHLIB_SCRIPT" = xyes; then
+ fragment <<EOF
+@@ -2395,6 +2405,8 @@ fragment <<EOF
+   -z defs                     Report unresolved symbols in object files.\n"));
+   fprintf (file, _("\
+   -z execstack                Mark executable as requiring executable stack\n"));
++  fprintf (file, _("\
++  -z execheap                 Mark executable as requiring executable heap\n"));
+ EOF
+ 
+ if test x"$GENERATE_SHLIB_SCRIPT" = xyes; then
+@@ -2439,6 +2451,8 @@ fi
+ fragment <<EOF
+   fprintf (file, _("\
+   -z noexecstack              Mark executable as not requiring executable stack\n"));
++  fprintf (file, _("\
++  -z noexecheap               Mark executable as not requiring executable heap\n"));
+ EOF
+ if test x"$GENERATE_SHLIB_SCRIPT" = xyes; then
+ fragment <<EOF
+--- binutils-2.24.90/ld/ldgram.y
++++ binutils-2.24.90/ld/ldgram.y
+@@ -1235,6 +1235,8 @@ phdr_type:
+ 			    $$ = exp_intop (0x6474e550);
+ 			  else if (strcmp (s, "PT_GNU_STACK") == 0)
+ 			    $$ = exp_intop (0x6474e551);
++			  else if (strcmp (s, "PT_PAX_FLAGS") == 0)
++			    $$ = exp_intop (0x65041580);
+ 			  else
+ 			    {
+ 			      einfo (_("\
+--- binutils-2.24.90/ld/testsuite/ld-alpha/tlsbin.rd
++++ binutils-2.24.90/ld/testsuite/ld-alpha/tlsbin.rd
+@@ -35,13 +35,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+   Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+-  PHDR +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+150 R E 0x8
++  PHDR +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+188 R E 0x8
+   INTERP +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x1
+ .*Requesting program interpreter.*
+   LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R E 0x10000
+   LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x10000
+   DYNAMIC +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RW +0x8
+   TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 3 entries:
+--- binutils-2.24.90/ld/testsuite/ld-alpha/tlsbinr.rd
++++ binutils-2.24.90/ld/testsuite/ld-alpha/tlsbinr.rd
+@@ -42,6 +42,7 @@ Program Headers:
+  +LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x10000
+  +DYNAMIC +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RW +0x8
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 2 entries:
+--- binutils-2.24.90/ld/testsuite/ld-alpha/tlspic.rd
++++ binutils-2.24.90/ld/testsuite/ld-alpha/tlspic.rd
+@@ -38,6 +38,7 @@ Program Headers:
+  +LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x10000
+  +DYNAMIC +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RW +0x8
+  +TLS +0x0+10e0 0x0+110e0 0x0+110e0 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 7 entries:
+--- binutils-2.24.90/ld/testsuite/ld-elf/eh1.d
++++ binutils-2.24.90/ld/testsuite/ld-elf/eh1.d
+@@ -23,11 +23,11 @@ Contents of the .eh_frame section:
+   DW_CFA_nop
+   DW_CFA_nop
+ 
+-0+0018 0+001c 0+001c FDE cie=0+0000 pc=0+400078\.\.0+400090
+-  DW_CFA_advance_loc: 8 to 0+400080
++0+0018 0+001c 0+001c FDE cie=0+0000 pc=[0-9a-f.]+
++  DW_CFA_advance_loc: 8 to [0-9a-f]+
+   DW_CFA_def_cfa_offset: 16
+   DW_CFA_offset: r6 \(rbp\) at cfa-16
+-  DW_CFA_advance_loc: 8 to 0+400088
++  DW_CFA_advance_loc: 8 to [0-9a-f]+
+   DW_CFA_def_cfa_register: r6 \(rbp\)
+ 
+ 0+0038 ZERO terminator
+--- binutils-2.24.90/ld/testsuite/ld-elf/eh2.d
++++ binutils-2.24.90/ld/testsuite/ld-elf/eh2.d
+@@ -23,11 +23,11 @@ Contents of the .eh_frame section:
+   DW_CFA_nop
+   DW_CFA_nop
+ 
+-0+0018 0+001c 0+001c FDE cie=0+0000 pc=0+400078\.\.0+400090
+-  DW_CFA_advance_loc: 8 to 0+400080
++0+0018 0+001c 0+001c FDE cie=0+0000 pc=[0-9a-f.]+
++  DW_CFA_advance_loc: 8 to [0-9a-f]+
+   DW_CFA_def_cfa_offset: 16
+   DW_CFA_offset: r6 \(rbp\) at cfa-16
+-  DW_CFA_advance_loc: 8 to 0+400088
++  DW_CFA_advance_loc: 8 to [0-9a-f]+
+   DW_CFA_def_cfa_register: r6 \(rbp\)
+ 
+ 0+0038 ZERO terminator
+--- binutils-2.24.90/ld/testsuite/ld-elf/eh3.d
++++ binutils-2.24.90/ld/testsuite/ld-elf/eh3.d
+@@ -23,11 +23,11 @@ Contents of the .eh_frame section:
+   DW_CFA_nop
+   DW_CFA_nop
+ 
+-0+0018 0+001c 0+001c FDE cie=0+0000 pc=0+400078\.\.0+400090
+-  DW_CFA_advance_loc: 8 to 0+400080
++0+0018 0+001c 0+001c FDE cie=0+0000 pc=[0-9a-f.]+)
++  DW_CFA_advance_loc: 8 to [0-9a-f]+
+   DW_CFA_def_cfa_offset: 16
+   DW_CFA_offset: r6 \(rbp\) at cfa-16
+-  DW_CFA_advance_loc: 8 to 0+400088
++  DW_CFA_advance_loc: 8 to [0-9a-f]+
+   DW_CFA_def_cfa_register: r6 \(rbp\)
+ 
+ 0+0038 ZERO terminator
+--- binutils-2.24.90/ld/testsuite/ld-elf/orphan-region.d
++++ binutils-2.24.90/ld/testsuite/ld-elf/orphan-region.d
+@@ -15,7 +15,9 @@
+ Program Headers:
+   Type.*
+   LOAD[ \t]+0x[0-9a-f]+ 0x0*40000000 0x0*40000000 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x[0-9a-f]+
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+   Segment Sections...
+    00     .text .rodata .moredata *
++   01 +
+--- binutils-2.24.90/ld/testsuite/ld-i386/tlsbin.rd
++++ binutils-2.24.90/ld/testsuite/ld-i386/tlsbin.rd
+@@ -44,6 +44,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+a0 R +0x1000
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -53,6 +54,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got .got.plt *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 9 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.24.90/ld/testsuite/ld-i386/tlsbindesc.rd
++++ binutils-2.24.90/ld/testsuite/ld-i386/tlsbindesc.rd
+@@ -42,6 +42,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+a0 R +0x1000
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -51,6 +52,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got .got.plt *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 9 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.24.90/ld/testsuite/ld-i386/tlsdesc.rd
++++ binutils-2.24.90/ld/testsuite/ld-i386/tlsdesc.rd
+@@ -39,6 +39,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+80 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -46,6 +47,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 20 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.24.90/ld/testsuite/ld-i386/tlsgdesc.rd
++++ binutils-2.24.90/ld/testsuite/ld-i386/tlsgdesc.rd
+@@ -36,12 +36,14 @@ Program Headers:
+  +LOAD.*
+  +LOAD.*
+  +DYNAMIC.*
++ +PAX_FLAGS.*
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+  +00 +.hash .dynsym .dynstr .rel.dyn .rel.plt .plt .text *
+  +01 +.dynamic .got .got.plt *
+  +02 +.dynamic *
++ +03 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 8 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.24.90/ld/testsuite/ld-i386/tlsnopic.rd
++++ binutils-2.24.90/ld/testsuite/ld-i386/tlsnopic.rd
+@@ -37,6 +37,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+ 0x0+24 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -44,6 +45,7 @@ Program Headers:
+  +01 +.dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tbss *
++ +04 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 20 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.24.90/ld/testsuite/ld-i386/tlspic.rd
++++ binutils-2.24.90/ld/testsuite/ld-i386/tlspic.rd
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+80 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -47,6 +48,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 26 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.24.90/ld/testsuite/ld-ia64/merge1.d
++++ binutils-2.24.90/ld/testsuite/ld-ia64/merge1.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+1e0 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 c0 04 00 48 00 	            addl r12=24,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.24.90/ld/testsuite/ld-ia64/merge2.d
++++ binutils-2.24.90/ld/testsuite/ld-ia64/merge2.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+1e0 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 c0 04 00 48 00 	            addl r12=24,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.24.90/ld/testsuite/ld-ia64/merge3.d
++++ binutils-2.24.90/ld/testsuite/ld-ia64/merge3.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+210 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 40 05 00 48 00 	            addl r12=40,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.24.90/ld/testsuite/ld-ia64/merge4.d
++++ binutils-2.24.90/ld/testsuite/ld-ia64/merge4.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+240 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 40 05 00 48 00 	            addl r12=40,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.24.90/ld/testsuite/ld-ia64/merge5.d
++++ binutils-2.24.90/ld/testsuite/ld-ia64/merge5.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+270 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 40 05 00 48 00 	            addl r12=40,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.24.90/ld/testsuite/ld-ia64/tlsbin.rd
++++ binutils-2.24.90/ld/testsuite/ld-ia64/tlsbin.rd
+@@ -36,13 +36,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+- +PHDR +0x0+40 0x40+40 0x40+40 0x0+188 0x0+188 R E 0x8
+- +INTERP +0x0+1c8 0x40+1c8 0x40+1c8 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x1
++ +PHDR +0x0+40 0x40+40 0x40+40 (0x[0-9a-f]+) \1 R E 0x8
++ +INTERP +0x0+([0-9a-f]+) (0x40+\1) \2 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x1
+ .*Requesting program interpreter.*
+  +LOAD +0x0+ 0x40+ 0x40+ 0x0+1[0-9a-f]+ 0x0+1[0-9a-f]+ R E 0x10000
+  +LOAD +0x0+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x0+0[0-9a-f]+ 0x0+0[0-9a-f]+ RW +0x10000
+  +DYNAMIC +0x0+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x0+150 0x0+150 RW +0x8
+  +TLS +0x0+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x0+60 0x0+a0 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  +IA_64_UNWIND .* R +0x8
+ #...
+ 
+--- binutils-2.24.90/ld/testsuite/ld-ia64/tlspic.rd
++++ binutils-2.24.90/ld/testsuite/ld-ia64/tlspic.rd
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD +0x0+1[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+0[0-9a-f]+ 0x0+0[0-9a-f]+ RW +0x10000
+  +DYNAMIC +0x0+1[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+140 0x0+140 RW +0x8
+  +TLS +0x0+1[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  +IA_64_UNWIND +0x0+1[0-9a-f]+ 0x0+1[0-9a-f]+ 0x0+1[0-9a-f]+ 0x0+18 0x0+18 R +0x8
+ #...
+ 
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/multi-got-no-shared.d
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/multi-got-no-shared.d
+@@ -8,9 +8,9 @@
+ .*: +file format.*
+ 
+ Disassembly of section \.text:
+-004000f0 <[^>]*> 3c1c0043 	lui	gp,0x43
+-004000f4 <[^>]*> 279c9ff0 	addiu	gp,gp,-24592
+-004000f8 <[^>]*> afbc0008 	sw	gp,8\(sp\)
++00400110 <[^>]*> 3c1c0043 	lui	gp,0x43
++00400114 <[^>]*> 279c9ff0 	addiu	gp,gp,-24592
++00400118 <[^>]*> afbc0008 	sw	gp,8\(sp\)
+ #...
+ 00408da0 <[^>]*> 3c1c0043 	lui	gp,0x43
+ 00408da4 <[^>]*> 279c2c98 	addiu	gp,gp,11416
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-3a.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-3a.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is DYN \(Shared object file\)
+ Entry point .*
+-There are 5 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -9,6 +9,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+00000 * 0x0+00000 [^ ]+ * [^ ]+ * R E * 0x.*
+  * LOAD * [^ ]+ * 0x0+10000 * 0x0+10000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+00400 * 0x0+00400 [^ ]+ * [^ ]+ * R  * 0x.*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -18,3 +19,4 @@ Program Headers:
+  *0*2 * \.data \.got *
+  *0*3 * \.dynamic *
+  *0*4 *
++ *0*5 *
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-3b.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-3b.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 *\.got \.data *
+  *0*6 *\.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-4b.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-4b.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-5b.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-5b.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n32.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n32.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n64.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n64.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 7 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -12,6 +12,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -23,3 +24,4 @@ Program Headers:
+  *0*4 * \.got \.data \.bss *
+  *0*5 * \.dynamic *
+  *0*6 *
++ *0*7 *
+--- binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-o32.sd
++++ binutils-2.24.90/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-o32.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.24.90/ld/testsuite/ld-powerpc/tlsexe32.r
++++ binutils-2.24.90/ld/testsuite/ld-powerpc/tlsexe32.r
+@@ -33,13 +33,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz MemSiz +Flg Align
+- +PHDR +0x000034 0x01800034 0x01800034 0x000c0 0x000c0 R E 0x4
+- +INTERP +0x0000f4 0x018000f4 0x018000f4 0x00011 0x00011 R +0x1
++ +PHDR +0x000034 0x01800034 0x01800034 (0x000[0-9a-f]{2}) \1 R E 0x4
++ +INTERP +0x000([0-9a-f]{3}) 0x01800\1 0x01800\1 0x00011 0x00011 R +0x1
+  +\[Requesting program interpreter: .*\]
+  +LOAD .* R E 0x10000
+  +LOAD .* RWE 0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0001c 0x00038 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -49,6 +50,7 @@ Program Headers:
+  +03 +\.tdata \.dynamic \.got \.plt 
+  +04 +\.dynamic 
+  +05 +\.tdata \.tbss 
++ +06 +
+ 
+ Relocation section '\.rela\.dyn' at offset .* contains 2 entries:
+  Offset +Info +Type +Sym\. Value +Symbol's Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-powerpc/tlsso32.r
++++ binutils-2.24.90/ld/testsuite/ld-powerpc/tlsso32.r
+@@ -35,6 +35,7 @@ Program Headers:
+  +LOAD .* RWE 0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+1c 0x0+38 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -42,6 +43,7 @@ Program Headers:
+  +01 +\.tdata \.dynamic \.got \.plt 
+  +02 +\.dynamic 
+  +03 +\.tdata \.tbss 
++ +04 +
+ 
+ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 18 entries:
+  Offset +Info +Type +Sym\. Value +Symbol's Name \+ Addend
+@@ -52,9 +54,9 @@ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 18 entries:
+ [0-9a-f ]+R_PPC_TPREL16 +0+30 +le0 \+ 0
+ [0-9a-f ]+R_PPC_TPREL16_HA +0+34 +le1 \+ 0
+ [0-9a-f ]+R_PPC_TPREL16_LO +0+34 +le1 \+ 0
+-[0-9a-f ]+R_PPC_TPREL16 +0+103d0 +\.tdata \+ 103e4
+-[0-9a-f ]+R_PPC_TPREL16_HA +0+103d0 +\.tdata \+ 103e8
+-[0-9a-f ]+R_PPC_TPREL16_LO +0+103d0 +\.tdata \+ 103e8
++[0-9a-f ]+R_PPC_TPREL16 +0+103[df]0 +\.tdata \+ 10[0-9a-f]{3}
++[0-9a-f ]+R_PPC_TPREL16_HA +0+103[df]0 +\.tdata \+ 10[0-9a-f]{3}
++[0-9a-f ]+R_PPC_TPREL16_LO +0+103[df]0 +\.tdata \+ 10[0-9a-f]{3}
+ [0-9a-f ]+R_PPC_DTPMOD32 +0
+ [0-9a-f ]+R_PPC_DTPREL32 +0
+ [0-9a-f ]+R_PPC_DTPMOD32 +0
+--- binutils-2.24.90/ld/testsuite/ld-s390/tlsbin.rd
++++ binutils-2.24.90/ld/testsuite/ld-s390/tlsbin.rd
+@@ -43,6 +43,7 @@ Program Headers:
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+60 0x0+a0 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -52,6 +53,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rela.dyn' at offset .* contains 4 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-s390/tlsbin_64.rd
++++ binutils-2.24.90/ld/testsuite/ld-s390/tlsbin_64.rd
+@@ -43,6 +43,7 @@ Program Headers:
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+60 0x0+a0 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -52,6 +53,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-s390/tlspic.rd
++++ binutils-2.24.90/ld/testsuite/ld-s390/tlspic.rd
+@@ -39,6 +39,7 @@ Program Headers:
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+60 0x0+80 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -46,6 +47,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got 
+  +02 +.dynamic 
+  +03 +.tdata .tbss 
++ +04 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-s390/tlspic_64.rd
++++ binutils-2.24.90/ld/testsuite/ld-s390/tlspic_64.rd
+@@ -39,6 +39,7 @@ Program Headers:
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+60 0x0+80 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -46,6 +47,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-sh/tlsbin-2.d
++++ binutils-2.24.90/ld/testsuite/ld-sh/tlsbin-2.d
+@@ -44,6 +44,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+18 0x0+28 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -53,6 +54,7 @@ Program Headers:
+  +03 +\.tdata \.dynamic \.got *
+  +04 +\.dynamic *
+  +05 +\.tdata \.tbss *
++ +06 +
+ 
+ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+  Offset +Info +Type +Sym\.Value +Sym\. Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-sh/tlspic-2.d
++++ binutils-2.24.90/ld/testsuite/ld-sh/tlspic-2.d
+@@ -32,7 +32,7 @@ Key to Flags:
+ 
+ Elf file type is DYN \(Shared object file\)
+ Entry point 0x[0-9a-f]+
+-There are 4 program headers, starting at offset [0-9]+
++There are [0-9] program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS .* 0x0+18 0x0+20 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -47,6 +48,7 @@ Program Headers:
+  +01 +\.tdata \.dynamic \.got *
+  +02 +\.dynamic *
+  +03 +\.tdata \.tbss *
++ +04 +
+ 
+ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 10 entries:
+  Offset +Info +Type +Sym\.Value +Sym\. Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-sparc/gotop32.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/gotop32.rd
+@@ -31,6 +31,7 @@ Program Headers:
+  +LOAD +0x0+ 0x0+ 0x0+ 0x0+2000 0x0+2000 R E 0x10000
+  +LOAD +0x0+2000 0x0+12000 0x0+12000 0x0+2000 0x0+2000 RW +0x10000
+  +DYNAMIC +0x0+2000 0x0+12000 0x0+12000 0x0+70 0x0+70 RW +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 1 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/gotop64.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/gotop64.rd
+@@ -31,6 +31,7 @@ Program Headers:
+  +LOAD +0x0+ 0x0+ 0x0+ 0x0+2000 0x0+2000 R E 0x100000
+  +LOAD +0x0+2000 0x0+102000 0x0+102000 0x0+2000 0x0+2000 RW +0x100000
+  +DYNAMIC +0x0+2000 0x0+102000 0x0+102000 0x0+e0 0x0+e0 RW +0x8
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 1 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/tlssunbin32.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/tlssunbin32.rd
+@@ -30,13 +30,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz MemSiz +Flg Align
+- +PHDR +0x0+34 0x0+10034 0x0+10034 0x0+c0 0x0+c0 R E 0x4
+- +INTERP +0x0+f4 0x0+100f4 0x0+100f4 0x0+11 0x0+11 R +0x1
++ +PHDR +0x0+34 0x0+10034 0x0+10034 (0x[0-9a-f]+) \1 R E 0x4
++ +INTERP +(0x[0-9a-f]+ ){3}0x0+11 0x0+11 R +0x1
+ .*Requesting program interpreter.*
+  +LOAD .* R E 0x10000
+  +LOAD .* RW +0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+1060 0x0+10a0 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/tlssunbin64.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/tlssunbin64.rd
+@@ -30,13 +30,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+- +PHDR +0x0+40 0x0+100040 0x0+100040 0x0+150 0x0+150 R E 0x8
+- +INTERP +0x0+190 0x0+100190 0x0+100190 0x0+19 0x0+19 R +0x1
++ +PHDR +0x0+40 0x0+100040 0x0+100040 (0x[0-9a-f]+) \1 R E 0x8
++ +INTERP +0x0+([0-9a-f]+) (0x0+10+\1) \2 0x0+19 0x0+19 R +0x1
+ .*Requesting program interpreter.*
+  +LOAD .* R E 0x100000
+  +LOAD .* RW +0x100000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+60 0x0+a0 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/tlssunnopic32.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/tlssunnopic32.rd
+@@ -32,6 +32,7 @@ Program Headers:
+  +LOAD .* RW +0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+ 0x0+24 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 12 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/tlssunnopic64.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/tlssunnopic64.rd
+@@ -32,6 +32,7 @@ Program Headers:
+  +LOAD .* RW +0x100000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+ 0x0+24 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/tlssunpic32.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/tlssunpic32.rd
+@@ -36,6 +36,7 @@ Program Headers:
+  +LOAD +0x0+2000 0x0+12000 0x0+12000 0x0+184 0x0+184 RWE 0x10000
+  +DYNAMIC +0x0+2060 0x0+12060 0x0+12060 0x0+98 0x0+98 RW +0x4
+  +TLS +0x0+2000 0x0+12000 0x0+12000 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+--- binutils-2.24.90/ld/testsuite/ld-sparc/tlssunpic64.rd
++++ binutils-2.24.90/ld/testsuite/ld-sparc/tlssunpic64.rd
+@@ -36,6 +36,7 @@ Program Headers:
+  +LOAD +0x0+2000 0x0+102000 0x0+102000 0x0+3a0 0x0+3a0 RWE 0x100000
+  +DYNAMIC +0x0+2060 0x0+102060 0x0+102060 0x0+130 0x0+130 RW +0x8
+  +TLS +0x0+2000 0x0+102000 0x0+102000 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+--- binutils-2.24.90/ld/testsuite/ld-x86-64/tlsgdesc.rd
++++ binutils-2.24.90/ld/testsuite/ld-x86-64/tlsgdesc.rd
+@@ -36,12 +36,14 @@ Program Headers:
+  +LOAD.*
+  +LOAD.*
+  +DYNAMIC.*
++ +PAX_FLAGS.*
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+  +00 +.hash .dynsym .dynstr .rela.dyn .rela.plt .plt .text *
+  +01 +.dynamic .got .got.plt *
+  +02 +.dynamic *
++ +03 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 8 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
+--- binutils-2.24.90/ld/testsuite/ld-x86-64/tlspic.rd
++++ binutils-2.24.90/ld/testsuite/ld-x86-64/tlspic.rd
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD +0x0+131a 0x0+20131a 0x0+20131a 0x0+246 0x0+246 RW +0x200000
+  +DYNAMIC +0x0+1380 0x0+201380 0x0+201380 0x0+130 0x0+130 RW +0x8
+  +TLS +0x0+131a 0x0+20131a 0x0+20131a 0x0+60 0x0+80 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -47,6 +48,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
