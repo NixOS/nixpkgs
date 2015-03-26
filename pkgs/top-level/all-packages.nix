@@ -13023,11 +13023,11 @@ let
           kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
         };
 
-      callPackageOrig = newScope (extra // { cmake = cmake-3_2; });
+      callPackageOrig = newScope extra;
 
       makePackages = extra:
         let
-          callPackage = newScope (extra // { cmake = cmake-3_2; } // self);
+          callPackage = newScope (extra // self);
           kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
           self =
             kde4
