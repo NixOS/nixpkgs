@@ -3325,7 +3325,7 @@ let
 
   compcert = callPackage ../development/compilers/compcert {};
 
-  cryptol = haskell-ng.packages.ghc763.cryptol;
+  cryptol = haskellngPackages.cryptol;
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
