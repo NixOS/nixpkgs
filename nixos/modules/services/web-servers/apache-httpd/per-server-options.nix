@@ -56,6 +56,12 @@ with lib;
     description = "Path to server SSL certificate key.";
   };
 
+  sslServerChain = mkOption {
+    type = types.path;
+    example = "/var/ca.pem";
+    description = "Path to server SSL extra chain file.";
+  };
+
   adminAddr = mkOption ({
     type = types.nullOr types.str;
     example = "admin@example.org";
