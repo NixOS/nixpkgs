@@ -430,14 +430,17 @@ self: super: {
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
 
-  # Needs llvm to compile.
-  bytestring-arbitrary = addBuildTool super.bytestring-arbitrary self.llvm;
-
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
   # Help the test suite find system timezone data.
   tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
+
+  # Deprecated upstream and doesn't compile.
+  llvm-base = markBroken super.llvm-base;
+  bytestring-arbitrary = dontDistribute (addBuildTool super.bytestring-arbitrary self.llvm);
+  objectid = dontDistribute super.objectid;
+  saltine-quickcheck = dontDistribute super.saltine-quickcheck;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
