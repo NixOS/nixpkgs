@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     Name: openjp2
     Description: JPEG2000 library (Part 1 and 2)
     URL: http://www.openjpeg.org/
-    Version: @OPENJPEG_VERSION@
+    Version: ${version}
     Libs: -L$out/lib -lopenjp2
     Cflags: -I$out/include
     EOF
