@@ -43,7 +43,7 @@
 , preFixup ? "", postFixup ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-}:
+} @ args:
 
 assert pkgconfigDepends != [] -> pkgconfig != null;
 assert editedCabalFile != null -> revision != null;
@@ -111,6 +111,8 @@ let
 in
 stdenv.mkDerivation ({
   name = "${optionalString hasActiveLibrary "haskell-"}${pname}-${version}";
+
+  pos = builtins.unsafeGetAttrPos "pname" args;
 
   prePhases = ["setupCompilerEnvironmentPhase"];
   preConfigurePhases = ["compileBuildDriverPhase"];

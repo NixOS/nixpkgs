@@ -69,8 +69,6 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
-  unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
-
   defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
@@ -91,19 +89,22 @@ let
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
+    , pos ? null # position used in error messages and for meta.position
     , ... } @ attrs:
     let
-      pos =
-        if attrs.meta.description or null != null then
-          unsafeGetAttrPos "description" attrs.meta
+      pos' =
+        if pos != null then
+          pos
+        else if attrs.meta.description or null != null then
+          builtins.unsafeGetAttrPos "description" attrs.meta
         else
-          unsafeGetAttrPos "name" attrs;
-      pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
+          builtins.unsafeGetAttrPos "name" attrs;
+      pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
 
       throwEvalHelp = unfreeOrBroken: whatIsWrong:
         assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
 
-        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos'} ${whatIsWrong}, refusing to evaluate."
+        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${whatIsWrong}, refusing to evaluate."
         + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''
 
           For `nixos-rebuild` you can set
@@ -129,7 +130,7 @@ let
       assert licenseAllowed attrs;
 
       lib.addPassthru (derivation (
-        (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
+        (removeAttrs attrs ["meta" "passthru" "crossAttrs" "pos"])
         //
         {
           builder = attrs.realBuilder or shell;
@@ -154,8 +155,8 @@ let
         # include it in the result, it *is* available to nix-env for
         # queries.  We also a meta.position attribute here to
         # identify the source location of the package.
-        meta = meta // (if pos != null then {
-          position = pos.file + ":" + toString pos.line;
+        meta = meta // (if pos' != null then {
+          position = pos'.file + ":" + toString pos'.line;
         } else {});
         inherit passthru;
       } //
