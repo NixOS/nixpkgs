@@ -635,7 +635,7 @@ let self = _self // overrides; _self = with self; {
       repo   = "hologram";
       sha256 = "1ra6rdniqh3pi84fm29zam4irzv52a1dd2sppaqngk07f7rkkhi4";
     };
-    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox govers ];
+    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
   };
 
   httprouter = buildGoPackage rec {
