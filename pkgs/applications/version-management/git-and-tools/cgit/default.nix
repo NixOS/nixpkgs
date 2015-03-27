@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "cgit-${version}";
-  version = "0.10.2";
+  version = "0.11.2";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "13ac4rqmxc87ymh78ff8kbw1s252nbid71l0ircmj9kmh9jqwncl";
+    sha256 = "0fryh56kyah7v9a8zzhbhwlyy2j116w87sxmgrn2kmwk0rvnw4if";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   # NOTE: as of 0.10.1, the git version is compatible from 1.9.0 to
   # 1.9.2 (see the repository history)
   gitSrc = fetchurl {
-    url    = "https://www.kernel.org/pub/software/scm/git/git-1.9.2.tar.xz";
-    sha256 = "1x4rb06vw4ckdflmn01r5l9spvn7cng4i5mm3sbd0n8cz0n6xz13";
+    url    = "mirror://kernel/software/scm/git/git-2.3.2.tar.xz";
+    sha256 = "09gqijsjfnxlbsxbxzlvllg37bfs9f4jwa2plqsanmba09i89sqq";
   };
 
   buildInputs = [
