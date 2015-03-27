@@ -89,13 +89,29 @@ self: super: {
   barecheck = doJailbreak super.barecheck;
   cartel = overrideCabal super.cartel (drv: { doCheck = false; patchPhase = "sed -i -e 's|base >= .*|base|' cartel.cabal"; });
 
+  syb-with-class = appendPatch super.syb-with-class (pkgs.fetchpatch {
+    url = "https://github.com/seereason/syb-with-class/compare/adc86a9...719e567.patch";
+    sha256 = "1lwwvxyhxcmppdapbgpfhwi7xc2z78qir03xjrpzab79p2qyq7br";
+  });
+
+  wl-pprint = overrideCabal super.wl-pprint (drv: {
+    patchPhase = "sed -i '113iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen.hs";
+  });
+
+  wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
+    patchPhase = ''
+      sed -i '71iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen/Text/Monadic.hs
+      sed -i '119iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen/Text.hs
+    '';
+  });
+    
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
   haskell-src-meta = appendPatch super.haskell-src-meta (pkgs.fetchpatch {
     url = "https://github.com/bmillwood/haskell-src-meta/pull/31.patch";
-    sha256 = "0ij5zi2sszqns46mhfb87fzrgn5lkdv8yf9iax7cbrxb4a2j4y1w";
+    sha256 = "0idf12b2wd6chyvsgdcfl5kzx67crvgs1cqklx5say3426j57g4q";
   });
   foldl = appendPatch super.foldl (pkgs.fetchpatch {
     url = "https://github.com/Gabriel439/Haskell-Foldl-Library/pull/30.patch";
@@ -108,7 +124,7 @@ self: super: {
   });
   stringsearch = appendPatch super.stringsearch (pkgs.fetchpatch {
     url = "https://bitbucket.org/api/2.0/repositories/dafis/stringsearch/pullrequests/3/patch";
-    sha256 = "13n7wipaa1j2rghg2j68yjnda8a5galpv5sfz4j4d9509xakz25g";
+    sha256 = "1j2a327m3bjl8k4dipc52nlh2ilg94gdcj9hdmdq62yh2drslvgx";
   });
   mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
     url = "https://github.com/snoyberg/mono-traversable/pull/68.patch";
