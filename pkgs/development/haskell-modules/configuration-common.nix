@@ -176,9 +176,10 @@ self: super: {
   # Obsolete: https://github.com/massysett/prednote/issues/1.
   prednote-test = markBrokenVersion "0.26.0.4" super.prednote-test;
 
-  # Doesn't compile: <http://hydra.cryp.to/build/465891/nixlog/1/raw>.
-  integer-gmp_0_5_1_0 = markBroken super.integer-gmp_0_5_1_0;
+  # Doesn't compile: "Setup: can't find include file ghc-gmp.h"
+  integer-gmp_1_0_0_0 = markBroken super.integer-gmp_1_0_0_0;
 
+  # Obsolete.
   lushtags = markBrokenVersion "0.0.1" super.lushtags;
 
   # https://github.com/haskell/bytestring/issues/41
