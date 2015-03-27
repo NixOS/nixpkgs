@@ -11422,6 +11422,8 @@ let
 
     propagatedBuildInputs = with pythonPackages; [ requests2 ];
 
+    doCheck = false;
+
     meta = with stdenv.lib; {
       description = "A python module that will check for package updates";
       homepage = https://github.com/bboe/update_checker;
