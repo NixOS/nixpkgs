@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libtool, perl, libxml2 }:
+{ stdenv, fetchurl, openssl, libtool, perl, libxml2, json_c }:
 
 let version = "9.10.2"; in
 
@@ -14,12 +14,13 @@ stdenv.mkDerivation rec {
     sed -i 's/^\t.*run/\t/' Makefile.in
   '';
 
-  buildInputs = [ openssl libtool perl libxml2 ];
+  buildInputs = [ openssl libtool perl libxml2 json_c ];
 
   configureFlags = [
     "--localstatedir=/var"
     "--with-libtool"
     "--with-libxml2=${libxml2}"
+    "--with-libjson=${json_c}"
     "--with-openssl=${openssl}"
     "--without-atf"
     "--without-dlopen"
