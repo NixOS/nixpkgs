@@ -170,8 +170,8 @@ self: super: {
     '';
   });
 
-  # Does not compile: <http://hydra.cryp.to/build/469842/nixlog/1/raw>.
-  base_4_7_0_2 = markBroken super.base_4_7_0_2;
+  # Does not compile: "fatal error: ieee-flpt.h: No such file or directory"
+  base_4_8_0_0 = markBroken super.base_4_8_0_0;
 
   # Obsolete: https://github.com/massysett/prednote/issues/1.
   prednote-test = markBrokenVersion "0.26.0.4" super.prednote-test;
