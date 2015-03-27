@@ -1,11 +1,11 @@
 { stdenv, fetchurl, groff }:
 
 stdenv.mkDerivation rec {
-  name = "mdadm-3.3";
+  name = "mdadm-3.3.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.bz2";
-    sha256 = "0igdqflihiq1dp5qlypzw0xfl44f4n3bckl7r2x2wfgkplcfa1ww";
+    url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
+    sha256 = "132vdvh3myjgcjn6i9w90ck16ddjxjcszklzkyvr4f5ifqd7wfhg";
   };
 
   nativeBuildInputs = [ groff ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, acl
+, dbus, acl, gmp
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
-  propagatedBuildInputs = [ openssl ];
+  propagatedBuildInputs = [ openssl gmp ];
 
   configureFlags = [
     "--localstatedir=/var"

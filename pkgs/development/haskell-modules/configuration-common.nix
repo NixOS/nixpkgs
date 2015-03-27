@@ -647,6 +647,11 @@ self: super: {
   # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
   stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
 
+  # https://github.com/GaloisInc/cryptol/issues/197
+  cryptol = overrideCabal super.cryptol (drv: {
+    postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
+  });
+
 } // {
 
   # Not on Hackage.
@@ -655,8 +660,8 @@ self: super: {
     version = "20150318";
     src = pkgs.fetchgit {
       url = "http://github.com/NixOS/cabal2nix.git";
-      rev = "a8eaadbe6529cabd5088b8ae24fb325fc85a50c1";
-      sha256 = "08q6c6g6syf4qgmgmicq8gf3fmp2cvy9mm6wm0vi7wjll3i2dns1";
+      rev = "d131b2b2db1bc37a10bbc40c3adea3f006633a5e";
+      sha256 = "0s92mdkgjqkqby6b1lrxs5dh9ja49sj5jpdc56g5v8g03h3g9m0a";
       deepClone = true;
     };
     isLibrary = false;

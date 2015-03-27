@@ -267,6 +267,7 @@ let
     rgeos = [ pkgs.geos ];
     rgl = [ pkgs.mesa pkgs.x11 ];
     Rglpk = [ pkgs.glpk ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
     RGtk2 = [ pkgs.gtk2 ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     ridge = [ pkgs.gsl ];
@@ -339,6 +340,7 @@ let
     WideLM = [ pkgs.cudatoolkit ];
     RCurl = [ pkgs.curl ];
     R2SWF = [ pkgs.pkgconfig ];
+    rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
@@ -664,7 +666,6 @@ let
     "BcDiag" # requires fabia
     "bdvis" # requres taxize
     "beadarrayFilter" # requires beadarray
-    "beadarrayMSV" # requires rggobi
     "bigGP" # requires MPI running. HELP WANTED!
     "bigpca" # requires NCmisc
     "Biograph" # requires mvna
@@ -680,7 +681,6 @@ let
     "ChemoSpec" # depends on broken speaq
     "classGraph" # requires graph, and Rgraphviz
     "clpAPI" # requires clp
-    "clusterfly" # requires rggobi
     "compendiumdb" # requires Biobase
     "CORM" # requires limma
     "cplexAPI" # requires CPLEX
@@ -821,7 +821,6 @@ let
     "permGPU" # requires Biobase
     "PhViD" # requires LBE
     "pi0" # requires qvalue
-    "PKgraph" # requires rggobi
     "plmDE" # requires limma
     "plsRcox" # requires survcomp
     "PMA" # requires impute
@@ -855,7 +854,6 @@ let
     "REBayes" # requires Rmosek
     "RefFreeEWAS" # requires isva
     "retistruct" # depends on broken RImageJROI
-    "rggobi" # requires GGobi
     "RImageJROI" # requires spatstat
     "rjade" # requires V8 to build
     "rJPSGCS" # requires chopsticks
@@ -886,7 +884,6 @@ let
     "selectspm" # depends on broken ecespa
     "semiArtificial" # requires RSNNS
     "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
-    "SeqGrapheR" # requires rggobi
     "sequenza" # requires copynumber
     "SGCS" # requires spatstat
     "siar" # requires spatstat

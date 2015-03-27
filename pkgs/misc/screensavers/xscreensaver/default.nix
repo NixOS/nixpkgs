@@ -18,14 +18,15 @@ stdenv.mkDerivation rec {
       libXxf86misc intltool
     ];
 
-  patchPhase =
+  preConfigure =
     ''
       # Fix build error in version 5.18. Remove this patch when updating
       # to a later version.
       #sed -i -e '/AF_LINK/d' hacks/glx/sonar-icmp.c
-      # Fix path to GTK.
+
+      # Fix installation paths for GTK resources.
       sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
-	  -i driver/Makefile.in po/Makefile.in.in
+          -i driver/Makefile.in po/Makefile.in.in
     '';
 
   configureFlags =

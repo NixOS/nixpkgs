@@ -626,33 +626,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   hologram = buildGoPackage rec {
-    rev  = "6e81a11091f59a9392e424d8f1c42b4b813c4bff";
+    rev  = "2bf08f0edee49297358bd06a0c9bf44ba9051e9c";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/AdRoll/hologram";
     src = fetchFromGitHub {
       inherit rev;
       owner  = "copumpkin";
       repo   = "hologram";
-      sha256 = "1rpnc8sv9mwm9r9yfh8h2zxczznmvlhasrz55bcifmk4sym4ywq7";
+      sha256 = "1ra6rdniqh3pi84fm29zam4irzv52a1dd2sppaqngk07f7rkkhi4";
     };
-    preBuild = ''
-      cd "go/src/$goPackagePath"
-
-      govers -d -m code.google.com/p/goprotobuf github.com/golang/protobuf
-
-      # Work around `go install` assuming containing directory is the executable name we want
-      for i in */bin; do
-        mv "$i" "$(dirname "$i")/$(dirname "$i")"
-      done
-
-      # Generate protobuf definitions and static assets
-      sed -i '1s|^|SHELL = ${stdenv.shell}\n|' Makefile
-      make protocol/hologram.pb.go
-      make transport/remote/bindata.go
-    '';
-
-    buildInputs = [ pkgs.protobuf crypto protobuf goamz rgbterm go-bindata
-                    go-homedir ldap g2s gox govers ];
+    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
   };
 
   httprouter = buildGoPackage rec {
@@ -1026,14 +1009,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   rgbterm = buildGoPackage rec {
-    rev = "9e3d038e1b8341ed7416c841a884cab4a3487941";
+    rev = "c07e2f009ed2311e9c35bca12ec00b38ccd48283";
     name = "rgbterm-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/aybabtme/rgbterm";
     src = fetchFromGitHub {
       inherit rev;
       owner  = "aybabtme";
       repo   = "rgbterm";
-      sha256 = "1pfg56pkm9clzd3c1s0czvydw1k35jggz9ydv8x2dbns3f7qn2ph";
+      sha256 = "1qph7drds44jzx1whqlrh1hs58k0wv0v58zyq2a81hmm72gsgzam";
     };
   };
 
