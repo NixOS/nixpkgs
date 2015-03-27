@@ -8676,6 +8676,9 @@ let
 
   bluez5 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5.nix { });
 
+  # Needed for LibreOffice
+  bluez5_28 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5_28.nix { });
+
   bluez = bluez4;
 
   inherit (pythonPackages) bedup;
@@ -10970,6 +10973,7 @@ let
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    bluez5 = bluez5_28;
   };
 
   liferea = callPackage ../applications/networking/newsreaders/liferea {
