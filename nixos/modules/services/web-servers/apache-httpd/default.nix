@@ -231,6 +231,9 @@ let
     ${if cfg.sslServerCert != null then ''
       SSLCertificateFile ${cfg.sslServerCert}
       SSLCertificateKeyFile ${cfg.sslServerKey}
+      ${if cfg.sslServerChain != null then ''
+        SSLCertificateChainFile ${cfg.sslServerChain}
+      '' else ""}
     '' else ""}
 
     ${if cfg.enableSSL then ''
