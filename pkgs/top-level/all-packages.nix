@@ -6314,6 +6314,8 @@ let
 
   libfprint = callPackage ../development/libraries/libfprint/master.nix { };
 
+  libfpx = callPackage ../development/libraries/libfpx { };
+
   libgadu = callPackage ../development/libraries/libgadu { };
 
   libgdata = gnome3.libgdata;
