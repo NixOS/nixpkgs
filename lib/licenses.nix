@@ -287,6 +287,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "MIT License";
   };
 
+  mpl10 = spdx {
+    spdxId = "MPL-1.0";
+    fullName = "Mozilla Public License 1.0";
+  };
+
   mpl11 = spdx {
     spdxId = "MPL-1.1";
     fullName = "Mozilla Public License 1.1";
