@@ -1407,6 +1407,8 @@ let
 
   gftp = callPackage ../tools/networking/gftp { };
 
+  ggobi = callPackage ../tools/graphics/ggobi { };
+
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
   gitlab = callPackage ../applications/version-management/gitlab {
