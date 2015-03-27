@@ -36,11 +36,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  #preConfigure = if tetex != null then
-  #  ''
-  #    export DVIDecodeDelegate=${tetex}/bin/dvips
-  #  '' else "";
-
   configureFlags = [
     (mkEnable (libcl != null)        "opencl")
     (mkWith   true                   "modules")
@@ -76,8 +71,6 @@ stdenv.mkDerivation rec {
     (mkWith   (libxml2 != null)      "xml")
   ] ++ optional (dejavu_fonts != null) "--with-dejavu-font-dir=${dejavu_fonts}/share/fonts/truetype/"
     ++ optional (ghostscript != null) "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts/";
-
-  propagatedBuildInputs = [ ];
 
   buildInputs = [
     pkgconfig libtool libcl perl jemalloc bzip2 zlib libX11 libXext libXt fftw
