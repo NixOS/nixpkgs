@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  version = "1.5";
+  version = "1.7";
   name    = "grc-${version}";
 
   src = fetchurl {
-    url    = "http://korpus.juls.savba.sk/~garabik/software/grc/grc_${version}.tar.gz";
-    sha256 = "1p6xffp5mmnaw9llvrd4rc7zd4l7b1m62dlmn3c8p1ina831yn52";
+    url    = "http://korpus.juls.savba.sk/~garabik/software/grc/grc_${version}.orig.tar.gz";
+    sha256 = "01hpvs5915ajcswm7kg4167qsa9kbg0snxxj5k3ymkz6c567dp70";
   };
 
   installPhase = ''
