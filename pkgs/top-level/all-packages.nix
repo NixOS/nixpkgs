@@ -7365,7 +7365,7 @@ let
     openglSupport = mesaSupported;
     alsaSupport = (!stdenv.isDarwin);
     x11Support = true;
-    pulseaudioSupport = true;
+    pulseaudioSupport = (!stdenv.isDarwin);
 
     # resolve the unrecognized -fpascal-strings option error
     stdenv = if stdenv.isDarwin
