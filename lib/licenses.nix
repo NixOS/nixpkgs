@@ -130,6 +130,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
+  efl10 = spdx {
+    spdxId = "EFL-1.0";
+    fullName = "Eiffel Forum License v1.0";
+  };
+
+  efl20 = spdx {
+    spdxId = "EFL-2.0";
+    fullName = "Eiffel Forum License v2.0";
+  };
+
   epl10 = spdx {
     spdxId = "EPL-1.0";
     fullName = "Eclipse Public License 1.0";

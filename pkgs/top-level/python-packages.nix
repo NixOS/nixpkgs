@@ -7777,6 +7777,27 @@ let
   };
 
 
+
+  praw = pythonPackages.buildPythonPackage rec {
+    name = "praw-2.1.21";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/praw/praw-2.1.21.tar.gz";
+      md5 = "3b0388c9105662f8be8f1a4d3a38216d";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ update_checker six mock flake8 ];
+
+    # can't find the tests module?
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Python Reddit API wrapper";
+      homepage = http://praw.readthedocs.org/;
+      license = licenses.gpl3;
+    };
+  };
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.7.1";
 
@@ -8382,6 +8403,33 @@ let
     };
   };
 
+
+  pyenchant = pythonPackages.buildPythonPackage rec {
+    name = "pyenchant-1.6.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyenchant/pyenchant-1.6.6.tar.gz";
+      md5 = "9f5acfd87d04432bf8df5f9710a17358";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ pkgs.enchant ];
+
+    patchPhase = let
+      path_hack_script = "s|LoadLibrary(e_path)|LoadLibrary('${pkgs.enchant}/lib/' + e_path)|";
+    in ''
+      sed -i "${path_hack_script}" enchant/_enchant.py
+    '';
+
+    # dictionaries needed for tests
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "pyenchant: Python bindings for the Enchant spellchecker";
+      homepage = https://pythonhosted.org/pyenchant/;
+      license = licenses.lgpl21;
+    };
+  };
+
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
@@ -8435,6 +8483,24 @@ let
       description = "A simple program which checks Python source files for errors";
       license = licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  };
+
+
+  pygeoip = pythonPackages.buildPythonPackage rec {
+    name = "pygeoip-0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pygeoip/pygeoip-0.3.2.tar.gz";
+      md5 = "861664f8be3bed44820356539f2ea5b6";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+
+    meta = with stdenv.lib; {
+      description = "Pure Python GeoIP API";
+      homepage = https://github.com/appliedsec/pygeoip;
+      license = licenses.lgpl3Plus;
     };
   };
 
@@ -11521,6 +11587,26 @@ let
   };
 
 
+
+  update_checker = pythonPackages.buildPythonPackage rec {
+    name = "update_checker-0.11";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/u/update_checker/update_checker-0.11.tar.gz";
+      md5 = "1daa54bac316be6624d7ee77373144bb";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ requests2 ];
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A python module that will check for package updates";
+      homepage = https://github.com/bboe/update_checker;
+      license = licenses.bsd2;
+    };
+  };
+
   urlgrabber =  buildPythonPackage rec {
     name = "urlgrabber-3.9.1";
     disabled = isPy3k;
@@ -11875,6 +11961,24 @@ let
     };
   };
 
+
+
+  willie = pythonPackages.buildPythonPackage rec {
+    name = "willie-5.2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/willie/willie-5.2.0.tar.gz";
+      md5 = "a19f8c34e10e3c2d0d915c894224e521";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
+
+    meta = with stdenv.lib; {
+      description = "Willie is a simple, lightweight, open source, easy-to-use IRC utility bot, written in Python.";
+      homepage = http://willie.dftba.net/;
+      license = licenses.efl20;
+    };
+  };
 
   wokkel = buildPythonPackage (rec {
     url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
