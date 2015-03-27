@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     ${optionalString enableTiny "--enable-tiny"}
   '';
 
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/text.c --replace "__time_t" "time_t"
+  '';
+
   meta = {
     homepage = http://www.nano-editor.org/;
     description = "A small, user-friendly console text editor";
