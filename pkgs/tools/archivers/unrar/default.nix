@@ -23,6 +23,8 @@ stdenv.mkDerivation {
         $out/share/doc/unrar
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     description = "Utility for RAR archives";
     homepage = http://www.rarlab.com/;
