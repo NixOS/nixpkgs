@@ -10816,12 +10816,42 @@ let
       AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
   };
 
-  imagemagick = callPackage ../applications/graphics/ImageMagick {
-    tetex = null;
+  imagemagick_light = imagemagick.override {
+    libcl = null;
+    perl = null;
+    jemalloc = null;
+    bzip2 = null;
+    zlib = null;
+    libX11 = null;
+    libXext = null;
+    libXt = null;
+    dejavu_fonts = null;
+    fftw = null;
+    libfpx = null;
+    djvulibre = null;
+    fontconfig = null;
+    freetype = null;
+    ghostscript = null;
+    graphviz = null;
+    jbigkit = null;
+    libjpeg = null;
+    lcms2 = null;
+    openjpeg = null;
+    liblqr1 = null;
+    xz = null;
+    openexr = null;
+    pango = null;
+    libpng = null;
     librsvg = null;
+    libtiff = null;
+    libwebp = null;
+    libxml2 = null;
   };
 
-  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick { });
+  imagemagick = callPackage ../applications/graphics/ImageMagick {
+    ghostscript = if stdenv.isDarwin then null else ghostscript;
+    perl = null; # Currently Broken
+  };
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
