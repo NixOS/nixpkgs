@@ -454,6 +454,7 @@ let self = _self // overrides;
     pname = "ghc";
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
+    propagatedUserEnvPkgs = [ external.ghc-mod ];
     fileSpecs = [ "elisp/*.el" ];
     meta = { license = bsd3; };
   };

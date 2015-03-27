@@ -6902,7 +6902,7 @@ let
 
     src = pkgs.notmuch.src;
 
-    sourceRoot = "${pkgs.notmuch.name}/bindings/python";
+    sourceRoot = "${pkgs.notmuch.src.name}/bindings/python";
 
     buildInputs = with self; [ python pkgs.notmuch ];
 
