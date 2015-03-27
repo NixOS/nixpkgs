@@ -155,10 +155,6 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  # These used to be core packages in GHC 7.8.x.
-  old-locale = self.old-locale_1_0_0_7;
-  old-time = self.old-time_1_1_0_3;
-
   # We have transformers 4.x
   mtl = self.mtl_2_2_1;
   transformers-compat = disableCabalFlag super.transformers-compat "three";
