@@ -3858,6 +3858,8 @@ let
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
+  mkcl = callPackage ../development/compilers/mkcl {};
+
   mlton = callPackage ../development/compilers/mlton { };
 
   mono = callPackage ../development/compilers/mono {
