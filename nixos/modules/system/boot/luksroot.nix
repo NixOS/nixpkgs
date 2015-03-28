@@ -407,7 +407,7 @@ in
     boot.initrd.extraUtilsCommands = ''
       cp -pdv ${pkgs.cryptsetup}/sbin/cryptsetup $out/bin
 
-      cp -pdv ${pkgs.libgcrypt}/lib/libgcrypt*.so.* $out/lib
+      cp -pdv ${pkgs.libgcrypt_1_6}/lib/libgcrypt*.so.* $out/lib
       cp -pdv ${pkgs.libgpgerror}/lib/libgpg-error*.so.* $out/lib
       cp -pdv ${pkgs.cryptsetup}/lib/libcryptsetup*.so.* $out/lib
       cp -pdv ${pkgs.popt}/lib/libpopt*.so.* $out/lib
