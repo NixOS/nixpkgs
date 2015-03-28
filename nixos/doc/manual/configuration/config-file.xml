@@ -8,7 +8,7 @@
 
 <para>The NixOS configuration file generally looks like this:
 
-<programlisting>
+<programlisting role="nix">
 { config, pkgs, ... }:
 
 { <replaceable>option definitions</replaceable>
@@ -98,7 +98,7 @@ networking.hostName = "dexter";
       <para>Multi-line strings can be enclosed in <emphasis>double
       single quotes</emphasis>, e.g.
 
-<programlisting>
+<programlisting role="nix">
 networking.extraHosts =
   ''
     127.0.0.2 other-localhost
@@ -133,7 +133,7 @@ networking.firewall.allowPing = false;
     <listitem>
       <para>For example,
 
-<programlisting>
+<programlisting role="nix">
 boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
 </programlisting>
 
