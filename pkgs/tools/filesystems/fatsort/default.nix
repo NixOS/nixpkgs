@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://fatsort.sourceforge.net/;
-    description = "Sorts FAT partition table, for devices that don't do sorting of files.";
+    description = "Sorts FAT partition table, for devices that don't do sorting of files";
     maintainers = [ maintainers.kovirobi ];
     license = licenses.gpl2;
     inherit version;
