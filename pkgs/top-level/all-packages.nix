@@ -733,6 +733,8 @@ let
     flex = flex_2_5_35;
   };
 
+  cpulimit = callPackage ../tools/misc/cpulimit { };
+
   crawlTiles = callPackage ../games/crawl { };
 
   crawl = callPackage ../games/crawl {
