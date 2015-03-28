@@ -52,7 +52,7 @@ buildEnv {
     . ${makeWrapper}/nix-support/setup-hook
 
     ${optionalString ghc.isGhcjs ''
-    cp -r ${ghc}/${ghc.libDir}/* ${libDir}/
+    cp -r "${ghc}/${ghc.libDir}/"* ${libDir}/
     ''}
 
     if test -L "$out/bin"; then
