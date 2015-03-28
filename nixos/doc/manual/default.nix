@@ -116,7 +116,7 @@ in rec {
         --param chunk.first.sections 1 \
         --param use.id.as.filename 1 \
         --stringparam generate.toc "book toc chapter toc appendix toc" \
-        --nonet --xinclude --output $dst/ \
+        --nonet --xinclude --output $dst/index.html \
         ${./html-customization-layer.xsl} ./manual.xml
 
       mkdir -p $dst/images/callouts
