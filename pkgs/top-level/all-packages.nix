@@ -8956,8 +8956,6 @@ let
 
   setuptools = pythonPackages.setuptools;
 
-  slowaes = callPackage ../development/python-modules/slowaes { };
-
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
 
