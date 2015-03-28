@@ -13370,6 +13370,8 @@ let
 
   iprover = callPackage ../applications/science/logic/iprover {};
 
+  lean = callPackage ../applications/science/logic/lean {};
+
   leo2 = callPackage ../applications/science/logic/leo2 {};
 
   logisim = callPackage ../applications/science/logic/logisim {};
