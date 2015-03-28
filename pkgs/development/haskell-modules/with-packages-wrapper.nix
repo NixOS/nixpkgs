@@ -51,7 +51,7 @@ buildEnv {
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
-    ${lib.optionalString ghc.isGhcjs ''
+    ${optionalString ghc.isGhcjs ''
     cp -r ${ghc}/${ghc.libDir}/* ${libDir}/
     ''}
 
