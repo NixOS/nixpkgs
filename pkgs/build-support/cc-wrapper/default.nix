@@ -211,7 +211,7 @@ stdenv.mkDerivation {
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ccgo ${./cc-wrapper.sh} $ccPath/gccgo
+      wrap gccgo ${./cc-wrapper.sh} $ccPath/gccgo
     ''
 
     + optionalString cc.langAda or false ''
