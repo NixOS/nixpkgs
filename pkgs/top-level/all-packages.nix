@@ -10852,6 +10852,8 @@ let
     ghostscript = if stdenv.isDarwin then null else ghostscript;
     perl = null; # Currently Broken
   };
+  
+  imagemagickBig = imagemagick;
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
