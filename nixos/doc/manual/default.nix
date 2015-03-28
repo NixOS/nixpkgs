@@ -1,5 +1,4 @@
-{ pkgs, options, version, revision }:
-
+{ pkgs, options, version, revision }: 
 with pkgs;
 with pkgs.lib;
 
@@ -118,7 +117,7 @@ in rec {
         --param use.id.as.filename 1 \
         --stringparam generate.toc "book toc chapter toc appendix toc" \
         --nonet --xinclude --output $dst/ \
-        ${./programlist-format-html.xsl} ./manual.xml
+        ${./html-customization-layer.xsl} ./manual.xml
 
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
