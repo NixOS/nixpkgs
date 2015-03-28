@@ -959,8 +959,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ghcid = callPackage ../development/tools/haskell/ghcid {};
 
-  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
-
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
   ghcjsPrim = callPackage ../development/libraries/haskell/ghcjs-prim {};
