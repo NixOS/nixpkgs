@@ -4514,8 +4514,6 @@ let
 
   pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
-  qi = callPackage ../development/compilers/qi { };
-
   racket = callPackage ../development/interpreters/racket { };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
