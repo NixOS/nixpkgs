@@ -8900,8 +8900,6 @@ let
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
-  ecdsa = callPackage ../development/python-modules/ecdsa { };
-
   numeric = callPackage ../development/python-modules/numeric { };
 
   pil = pythonPackages.pil;
