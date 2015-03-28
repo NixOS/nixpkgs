@@ -6608,6 +6608,8 @@ let
 
   liboil = callPackage ../development/libraries/liboil { };
 
+  libomxil-bellagio = callPackage ../development/libraries/libomxil-bellagio { };
+
   liboop = callPackage ../development/libraries/liboop { };
 
   libopus = callPackage ../development/libraries/libopus { };
