@@ -69,9 +69,10 @@ abi_ulong afl_entry_point, /* ELF entry point (_start) */
           afl_start_code,  /* .text start pointer      */
           afl_end_code;    /* .text end pointer        */
 
-/* Set on the child in forkserver mode: */
+/* Set in the child process in forkserver mode: */
 
 static unsigned char afl_fork_child;
+unsigned int afl_forksrv_pid;
 
 /* Instrumentation ratio: */
 
@@ -157,6 +158,8 @@ static void afl_forkserver(CPUArchState *env) {
      to talk, assume that we're not running in forkserver mode. */
 
   if (write(FORKSRV_FD + 1, tmp, 4) != 4) return;
+
+  afl_forksrv_pid = getpid();
 
   /* All right, let's await orders... */
 
