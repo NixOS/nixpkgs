@@ -436,6 +436,7 @@ let
     "PBSadmb"
     "PBSmodelling"
     "PCPS"
+    "PKgraph"
     "PopGenReport"
     "PredictABEL"
     "PrevMap"
@@ -664,6 +665,7 @@ let
     "babel" # requires edgeR
     "BACA" # requires RDAVIDWebService
     "BcDiag" # requires fabia
+    "beadarrayMSV" # requires Biobase, geneplotter, andlimma
     "bdvis" # requres taxize
     "beadarrayFilter" # requires beadarray
     "bigGP" # requires MPI running. HELP WANTED!
@@ -679,6 +681,7 @@ let
     "CARrampsOcl" # depends on OpenCL
     "CHAT" # requires DNAcopy
     "ChemoSpec" # depends on broken speaq
+    "Crossover" # fails self-test
     "classGraph" # requires graph, and Rgraphviz
     "clpAPI" # requires clp
     "compendiumdb" # requires Biobase
@@ -733,6 +736,7 @@ let
     "gmatrix" # depends on proprietary cudatoolkit
     "GOGANPA" # requires WGCNA
     "gputools" # depends on proprietary cudatoolkit
+    "gMCP" # fails self-test
     "gRain" # requires gRbase
     "gRapHD" # requires graph
     "gRbase" # requires RBGL, and graph
@@ -805,7 +809,9 @@ let
     "optBiomarker" # requires rpanel
     "ora" # requires ROracle
     "orQA" # requires genefilter
+    "pRF" # requires multtest
     "PBSmapping" # fails its test suite for unclear reasons
+    "PBSddesolve" # fails its test suite for unclear reasons
     "PairViz" # requires graph
     "PANDA" # requires GO.db
     "ParDNAcopy" # requires DNAcopy
@@ -874,6 +880,8 @@ let
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
     "RQuantLib" # requires QuantLib
     "RSAP" # requires SAPNWRFCSDK
+    "rgp" # fails self-test
+    "rgpui" # depends on broken rgp
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
@@ -909,6 +917,8 @@ let
     "spocc" # requires leafletR
     "SQDA" # requires limma
     "Statomica" # requires Biobase, multtest
+    "stagePop" # depends on broken PBSddesolve
+    "SeqGrapheR" # depends on Biostrings
     "stpp" # requires spatstat
     "structSSI" # requires multtest
     "strum" # requires Rgraphviz
