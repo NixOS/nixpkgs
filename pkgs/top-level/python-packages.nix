@@ -5957,14 +5957,14 @@ let
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-0.9.1";
+    name = "Mako-1.0.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/M/Mako/${name}.tar.gz";
-      md5 = "fe3f394ef714776d09ec6133923736a7";
+      md5 = "9f0aafd177b039ef67b90ea350497a54";
     };
 
-    buildInputs = with self; [ markupsafe nose ];
+    buildInputs = with self; [ markupsafe nose mock ];
     propagatedBuildInputs = with self; [ markupsafe ];
 
     meta = {
