@@ -220,7 +220,6 @@ versions=builtins.listToAttrs[
   {name="kdegraphics-mobipocket";value="4.14.3";}
   {name="kdegraphics-strigi-analyzer";value="4.14.3";}
   {name="kdegraphics-thumbnailers";value="4.14.3";}
-  {name="kdelibs";value="4.14.3";}
   {name="kdenetwork-filesharing";value="4.14.3";}
   {name="kdenetwork-strigi-analyzers";value="4.14.3";}
   {name="kdepim";value="4.14.3";}
@@ -386,7 +385,6 @@ modules=[
   module="kdelibs";
   split=true;
   pkgs=[
-    { name="kdelibs"; }
     { name="baloo";  }
     { name="baloo-widgets"; sane="baloo_widgets"; }
     { name="kfilemetadata";  }
