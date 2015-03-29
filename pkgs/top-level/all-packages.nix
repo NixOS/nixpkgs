@@ -11197,9 +11197,8 @@ let
   };
 
   MPlayerPlugin = browser:
-    import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
+    callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
-      inherit fetchurl stdenv pkgconfig gettext;
       inherit (xlibs) libXpm;
       # !!! should depend on MPlayer
     };
