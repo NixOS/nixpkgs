@@ -716,6 +716,9 @@ self: super: {
 
   llvm-general = super.llvm-general.override { llvm-config = pkgs.llvmPackages_34.llvm; };
 
+  # Tries to run GUI in tests
+  leksah = dontCheck super.leksah;
+
 } // {
 
   # Not on Hackage.
