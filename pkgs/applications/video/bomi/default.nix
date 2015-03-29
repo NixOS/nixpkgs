@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python3
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python3, which
 , libX11, libxcb, qt5, mesa
 , ffmpeg
 , libchardet
@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "bomi-${version}";
-  version = "0.9.0";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "xylosper";
     repo = "bomi";
     rev = "v${version}";
-    sha256 = "12xyz40kl03h1m8g7d7s0wf74l2c70v6bd1drhww7ky48hxi0z14";
+    sha256 = "1pf82dp7v18yd7knsjl853sfzhq4rqc3sq15jgqiw37096gp0sll";
   };
 
   buildInputs = with stdenv.lib;
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl which ];
 
   enableParallelBuilding = true;
 
