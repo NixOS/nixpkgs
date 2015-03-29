@@ -29,9 +29,10 @@ assert versionOlder "6.12" ghc.version;
 #   fi
 
 let
-  ghc761OrLater = ghc.isGhcjs || versionOlder "7.6.1" ghc.version;
+  isGhcjs       = ghc.isGhcjs or false;
+  ghc761OrLater = isGhcjs || versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand    = if ghc.isGhcjs then "ghcjs" else "ghc";
+  ghcCommand    = if isGhcjs then "ghcjs" else "ghc";
   libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
@@ -51,7 +52,7 @@ buildEnv {
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
-    ${optionalString (ghc.isGhcjs or false) ''
+    ${optionalString isGhcjs ''
     cp -r "${ghc}/${ghc.libDir}/"* ${libDir}/
     ''}
 
