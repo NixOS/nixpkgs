@@ -436,6 +436,7 @@ let
     "PBSadmb"
     "PBSmodelling"
     "PCPS"
+    "PKgraph"
     "PopGenReport"
     "PredictABEL"
     "PrevMap"
@@ -664,6 +665,7 @@ let
     "babel" # requires edgeR
     "BACA" # requires RDAVIDWebService
     "BcDiag" # requires fabia
+    "beadarrayMSV" # requires Biobase, geneplotter, andlimma
     "bdvis" # requres taxize
     "beadarrayFilter" # requires beadarray
     "bigGP" # requires MPI running. HELP WANTED!
@@ -679,6 +681,7 @@ let
     "CARrampsOcl" # depends on OpenCL
     "CHAT" # requires DNAcopy
     "ChemoSpec" # depends on broken speaq
+    "Crossover" # fails self-test
     "classGraph" # requires graph, and Rgraphviz
     "clpAPI" # requires clp
     "compendiumdb" # requires Biobase
@@ -729,9 +732,11 @@ let
     "GeneticTools" # requires snpStats
     "GExMap" # requires Biobase and multtest
     "gitter" # requires EBImage
+    "glmgraph" # test suite says: "undefined symbol: dgemv_"
     "gmatrix" # depends on proprietary cudatoolkit
     "GOGANPA" # requires WGCNA
     "gputools" # depends on proprietary cudatoolkit
+    "gMCP" # fails self-test
     "gRain" # requires gRbase
     "gRapHD" # requires graph
     "gRbase" # requires RBGL, and graph
@@ -796,6 +801,7 @@ let
     "NCmisc" # requires BiocInstaller
     "netClass" # requires samr
     "nettools" # requires WGCNA
+    "NORRRM" # can't load SDMTools properly
     "netweavers" # requires BiocGenerics, Biobase, and limma
     "NLPutils" # requires qdap
     "NSA" # requires aroma_core
@@ -803,6 +809,9 @@ let
     "optBiomarker" # requires rpanel
     "ora" # requires ROracle
     "orQA" # requires genefilter
+    "pRF" # requires multtest
+    "PBSmapping" # fails its test suite for unclear reasons
+    "PBSddesolve" # fails its test suite for unclear reasons
     "PairViz" # requires graph
     "PANDA" # requires GO.db
     "ParDNAcopy" # requires DNAcopy
@@ -843,6 +852,7 @@ let
     "rainfreq" # SDMTools.so: undefined symbol: X
     "RAM" # requires Heatplus
     "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
+    "RapidPolygonLookup" # depends on broken PBSmapping
     "RbioRXN" # requires fmcsR, and KEGGREST
     "RcppAPT" # configure script depends on /bin/sh
     "RcmdrPlugin_seeg" # requires seeg
@@ -870,6 +880,8 @@ let
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
     "RQuantLib" # requires QuantLib
     "RSAP" # requires SAPNWRFCSDK
+    "rgp" # fails self-test
+    "rgpui" # depends on broken rgp
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
@@ -905,6 +917,8 @@ let
     "spocc" # requires leafletR
     "SQDA" # requires limma
     "Statomica" # requires Biobase, multtest
+    "stagePop" # depends on broken PBSddesolve
+    "SeqGrapheR" # depends on Biostrings
     "stpp" # requires spatstat
     "structSSI" # requires multtest
     "strum" # requires Rgraphviz
@@ -920,6 +934,7 @@ let
     "ttScreening" # requires sva, and limma
     "V8" # compilation error
     "vows" # requires rpanel
+    "vmsbase" # depends on broken PBSmapping
     "WGCNA" # requires impute
     "wgsea" # requires snpStats
     "WideLM" # depends on proprietary cudatoolkit

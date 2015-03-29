@@ -8,11 +8,11 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "1.57b";
+  version = "1.58b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "05dwh2kgz31702y339bvbs0b3ffadxgxk8cqqhs2i0ggx5bnl5p4";
+    sha256 = "1szggm4x9i9bsrcb99s5vbgncagp7jvhz8cg9amkx7p6mp2x4pld";
   };
 
   buildInputs  = [ makeWrapper ];

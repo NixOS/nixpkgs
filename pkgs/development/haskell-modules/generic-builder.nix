@@ -15,8 +15,8 @@
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? false
-, enableSharedExecutables ? stdenv.lib.versionOlder "7.7" ghc.version
-, enableSharedLibraries ? stdenv.lib.versionOlder "7.7" ghc.version
+, enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
+, enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSplitObjs ? !stdenv.isDarwin # http://hackage.haskell.org/trac/ghc/ticket/4013
 , enableStaticLibraries ? true
 , extraLibraries ? []
@@ -53,6 +53,8 @@ let
   inherit (stdenv.lib) optional optionals optionalString versionOlder
                        concatStringsSep enableFeature optionalAttrs;
 
+  isGhcjs = ghc.isGhcjs or false;
+
   newCabalFile = fetchurl {
     url = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
     sha256 = editedCabalFile;
@@ -64,7 +66,7 @@ let
                      main = defaultMain
                    '';
 
-  ghc76xOrLater = stdenv.lib.versionOlder "7.6" ghc.version;
+  ghc76xOrLater = isGhcjs || stdenv.lib.versionOlder "7.6" ghc.version;
   packageDbFlag = if ghc76xOrLater then "package-db" else "package-conf";
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
@@ -82,14 +84,17 @@ let
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (enableFeature enableSharedLibraries "shared")
-    (optionalString (versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
-    (optionalString (versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
-    (optionalString (versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature enableStaticLibraries "library-vanilla"))
+    (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
+    (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+  ] ++ optionals isGhcjs [
+    "--with-hsc2hs=${ghc.nativeGhc}/bin/hsc2hs"
+    "--ghcjs"
   ];
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${packageDbFlag}=$packageConfDir")
-    (optionalString (versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
+    (optionalString (isGhcjs || versionOlder "7.8" ghc.version) "-j$NIX_BUILD_CORES")
     (optionalString (versionOlder "7.10" ghc.version) "-threaded") # https://github.com/haskell/cabal/issues/2398
   ];
 
@@ -108,9 +113,12 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
+  setupBuilder = if isGhcjs then "${ghc.nativeGhc}/bin/ghc" else "ghc";
+  ghcCommand = if isGhcjs then "ghcjs" else "ghc";
+
 in
 stdenv.mkDerivation ({
-  name = "${optionalString hasActiveLibrary "haskell-"}${pname}-${version}";
+  name = "${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}";
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 
@@ -162,7 +170,7 @@ stdenv.mkDerivation ({
         configureFlags+=" --extra-lib-dirs=$p/lib"
       fi
     done
-    ghc-pkg --${packageDbFlag}="$packageConfDir" recache
+    ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
 
     runHook postSetupCompilerEnvironment
   '';
@@ -175,7 +183,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ghc $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${setupBuilder} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -248,13 +256,13 @@ stdenv.mkDerivation ({
     isHaskellLibrary = hasActiveLibrary;
 
     env = stdenv.mkDerivation {
-      name = "interactive-${optionalString hasActiveLibrary "haskell-"}${pname}-${version}-environment";
+      name = "interactive-${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
-        export NIX_GHC="${ghcEnv}/bin/ghc"
-        export NIX_GHCPKG="${ghcEnv}/bin/ghc"
+        export NIX_GHC="${ghcEnv}/bin/${ghcCommand}"
+        export NIX_GHCPKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
       '';

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rdkafka-${version}";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "librdkafka";
     rev = version;
-    sha256 = "0qx5dnq9halqaznmbwg44p1wl64pzl485r4054569rbx9y9ak1zy";
+    sha256 = "0iklvslz35dd0lz26ffrbfb20qirl9v5kcdmlcnnzc034hr2zmnv";
   };
 
   buildInputs = [ zlib perl ];

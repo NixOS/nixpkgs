@@ -1246,6 +1246,16 @@ rec {
     dependencies = [];
 
   };
+  "vim-gista" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-gista-2015-01-29";
+    src = fetchgit {
+      url = "git://github.com/lambdalisue/vim-gista";
+      rev = "e450417a6eaeb99d3982b880507697dce85b7217";
+      sha256 = "a7665dbc63a35d1fe9b7679a498deafb80c8dfb05fced37ac4722212c673f2ec";
+    };
+    dependencies = [];
+
+  };
   "vim-snippets" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-snippets-2015-03-24";
     src = fetchgit {

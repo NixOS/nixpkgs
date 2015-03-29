@@ -1,4 +1,5 @@
 {stdenv, fetchurl
+, libtool, autoconf, automake
 , gmp, mpfr, libffi
 , noUnicode ? false, 
 }:
@@ -13,10 +14,10 @@ let
     sha256="13wlxkd5prm93gcm2dhm7v52fl803yx93aa97lrb39z0y6xzziid";
   };
   buildInputs = [
-    libffi
+    libtool autoconf automake
   ];
   propagatedBuildInputs = [
-    gmp mpfr
+    libffi gmp mpfr
   ];
 in
 stdenv.mkDerivation {
@@ -25,8 +26,18 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  patches = [ ./libffi-prefix.patch ];
+  preConfigure = ''
+    (cd src ; libtoolize -f)
+    (cd src ; autoheader -f)
+    (cd src ; aclocal)
+    (cd src ; automake --add-missing -c)
+    (cd src ; autoconf -f)
+  '';
   configureFlags = [
     "--enable-threads"
+    "--with-gmp-prefix=${gmp}"
+    "--with-libffi-prefix=${libffi}"
     ]
     ++
     (stdenv.lib.optional (! noUnicode)

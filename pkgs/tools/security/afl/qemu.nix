@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       ./qemu-patches/cpu-exec.patch
       ./qemu-patches/no-etc-install.patch
       ./qemu-patches/translate-all.patch
+      ./qemu-patches/syscall.patch
     ];
 
   preConfigure = ''

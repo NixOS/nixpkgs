@@ -43,11 +43,11 @@ let
   };
 in stdenv.mkDerivation rec {
     name = "kodi-" + version;
-    version = "14.1";
+    version = "14.2";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1mjmf8ag8dg5brzxy7cmnz72b1b85p69zr1li28j71fgjbi5k053";
+      sha256 = "1x37l8db6xrvdw933p804lnwvkcm4vdb9gm5i6vmz4ha8f88bjyr";
     };
 
     buildInputs = [

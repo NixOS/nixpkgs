@@ -1,13 +1,15 @@
-{ stdenv, fetchgit, wine, perl, which, coreutils, zenity, curl
+{ stdenv, fetchFromGitHub, wine, perl, which, coreutils, zenity, curl
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
-stdenv.mkDerivation rec {
-  name = "winetricks-20150206";
+let version = "20150316";
+in stdenv.mkDerivation rec {
+  name = "winetricks-${version}";
 
-  src = fetchgit {
-    url = "https://code.google.com/p/winetricks/";
-    rev = "483056823093a90c9186b3d1a4867f481acf5fa1";
-    sha256 = "8b86a2a130ced405886775f0f81e7a6b25eb1bc22f357d0fe705fead52fff829";
+  src = fetchFromGitHub {
+    owner = "Winetricks";
+    repo = "winetricks";
+    rev = version;
+    sha256 = "00c55jpca6l3v3p02xc0gy5l4xb17gf90282hq5h85nh72kqsbrh";
   };
 
   buildInputs = [ perl which ];

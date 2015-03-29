@@ -39,9 +39,8 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
     ];
 
     boot.initrd.extraUtilsCommands = ''
-      cp -av -t "$out/bin/" \
-        "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/mount.vboxsf" \
-        "${pkgs.utillinux}/bin/unshare"
+      copy_bin_and_libs "${pkgs.linuxPackages.virtualboxGuestAdditions}/sbin/mount.vboxsf"
+      copy_bin_and_libs "${pkgs.utillinux}/bin/unshare"
       ${(attrs.extraUtilsCommands or (const "")) pkgs}
     '';
 

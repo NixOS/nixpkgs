@@ -56,17 +56,28 @@ let
     echo "timeout 5" >> $out/loader/loader.conf
   '';
 
-  efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools ]; }
+  efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools pkgs.libfaketime ]; }
+    # Be careful about determinism: du --apparent-size,
+    #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
-      #Let's hope 15M is enough
-      dd bs=2048 count=7680 if=/dev/zero of="$out"
-      ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
-      mcopy -svi "$out" ${efiDir}/* ::
-      mmd -i "$out" boot
-      mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel}/bzImage ::boot/bzImage
-      mcopy -v -i "$out" \
-        ${config.system.build.initialRamdisk}/initrd ::boot/initrd
+      mkdir ./contents && cd ./contents
+      cp -rp "${efiDir}"/* .
+      mkdir ./boot
+      cp -p "${config.boot.kernelPackages.kernel}/bzImage" \
+        "${config.system.build.initialRamdisk}/initrd" ./boot/
+      touch --date=@0 ./*
+
+      usage_size=$(du -sb --apparent-size . | tr -cd '[:digit:]')
+      # Make the image 110% as big as the files need to make up for FAT overhead
+      image_size=$(( ($usage_size * 110) / 100 ))
+      # Make the image fit blocks of 1M
+      block_size=$((1024*1024))
+      image_size=$(( ($image_size / $block_size + 1) * $block_size ))
+      echo "Usage size: $usage_size"
+      echo "Image size: $image_size"
+      truncate --size=$image_size "$out"
+      ${pkgs.libfaketime}/bin/faketime "2000-01-01 00:00:00" ${pkgs.dosfstools}/sbin/mkfs.vfat -i 12345678 -n EFIBOOT "$out"
+      mcopy -bpsvm -i "$out" ./* ::
     ''; # */
 
   targetArch = if pkgs.stdenv.isi686 then
@@ -154,7 +165,6 @@ in
 
 
   };
-
 
   config = {
 
