@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "16nhx2pahh9d62mvszc88q226q5lwjankij276fxwrm8wb50zzlx";
   };
 
+  patches = [ ./libunwind-1.1-lzma.patch ];
+
+  postPatch = ''
+    sed -i -e '/LIBLZMA/s:-lzma:-llzma:' configure
+  '';
+
   propagatedBuildInputs = [ xz ];
 
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
