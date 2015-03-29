@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "01hcwf5rgqi303fa4kdjkbpa7n8mvvh7h9gpgh2b23nz73k0q0zf";
   };
 
-  phases = "unpackPhase installPhase";
+  patches = [ ./fix-librsync-rs_default_strong_len.patch ];
+
   installPhase = ''
     python ./setup.py install --prefix=$out
     sed -i $out/bin/rdiff-backup -e \
