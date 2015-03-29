@@ -310,6 +310,10 @@ in rec {
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.virtualbox = callTest tests/virtualbox.nix {};
   tests.xfce = callTest tests/xfce.nix {};
+  tests.bootBiosCdrom = forAllSystems (system: scrubDrv (import tests/boot.nix { inherit system; }).bootBiosCdrom);
+  tests.bootBiosUsb = forAllSystems (system: scrubDrv (import tests/boot.nix { inherit system; }).bootBiosUsb);
+  tests.bootUefiCdrom = forAllSystems (system: scrubDrv (import tests/boot.nix { inherit system; }).bootUefiCdrom);
+  tests.bootUefiUsb = forAllSystems (system: scrubDrv (import tests/boot.nix { inherit system; }).bootUefiUsb);
 
 
   /* Build a bunch of typical closures so that Hydra can keep track of

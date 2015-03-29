@@ -37,6 +37,10 @@ sub new {
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
+        $startCommand .= "-device piix3-usb-uhci -drive id=usbdisk,file=$args->{usb},if=none,readonly -device usb-storage,drive=usbdisk "
+            if defined $args->{usb};
+        $startCommand .= "-bios $args->{bios} "
+            if defined $args->{bios};
         $startCommand .= $args->{qemuFlags} || "";
     } else {
         $startCommand = Cwd::abs_path $startCommand;
