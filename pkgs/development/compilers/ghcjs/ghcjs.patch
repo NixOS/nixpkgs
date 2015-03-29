@@ -1,5 +1,5 @@
 diff --git a/src-bin/Boot.hs b/src-bin/Boot.hs
-index 988955b..a55f07b 100644
+index 3c68dcf..64f3cf7 100644
 --- a/src-bin/Boot.hs
 +++ b/src-bin/Boot.hs
 @@ -512,9 +512,7 @@ initPackageDB :: B ()
@@ -46,9 +46,11 @@ index 988955b..a55f07b 100644
        mapM_ patchPackage =<< allPackages
        preparePrimops
        buildGenPrim
-@@ -1086,7 +1077,9 @@ cabalInstallFlags parmakeGhcjs = do
+@@ -1085,8 +1076,11 @@ cabalInstallFlags parmakeGhcjs = do
+            , "--avoid-reinstalls"
             , "--builddir",      "dist"
             , "--with-compiler", ghcjs ^. pgmLocText
++           , "--with-gcc",      "@CC@"
             , "--with-hc-pkg",   ghcjsPkg ^. pgmLocText
 -           , "--prefix",        toTextI instDir
 +           , "--prefix",        "@PREFIX@"
