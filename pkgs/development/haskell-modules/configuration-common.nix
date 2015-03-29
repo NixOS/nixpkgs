@@ -657,6 +657,9 @@ self: super: {
     postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
   });
 
+  # https://github.com/haskell/haddock/issues/378
+  haddock-library = dontCheck super.haddock-library;
+
 } // {
 
   # Not on Hackage.
