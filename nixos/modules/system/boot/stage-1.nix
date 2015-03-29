@@ -45,8 +45,7 @@ let
       copy_bin_and_libs () {
         [ -f "$out/bin/$(basename $1)" ] && return 0
         cp -pdv $1 $out/bin
-        LDD="$(ldd $1)"
-        [ "$?" -eq "1" ] && return 0
+        LDD="$(ldd $1)" || return 0
         LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
         for LIB in $LIBS; do
           [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
