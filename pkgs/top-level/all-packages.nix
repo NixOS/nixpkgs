@@ -6319,7 +6319,7 @@ let
     extraOnly = true;
   };
 
-  libfprint = callPackage ../development/libraries/libfprint/master.nix { };
+  libfprint = callPackage ../development/libraries/libfprint { };
 
   libfpx = callPackage ../development/libraries/libfpx { };
 
