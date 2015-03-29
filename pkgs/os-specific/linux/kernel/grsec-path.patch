@@ -1,7 +1,7 @@
-diff --git a/a/kernel/kmod.c b/b/kernel/kmod.c
+diff --git a/kernel/kmod.c b/kernel/kmod.c
 index a26e825..29baec1 100644
---- a/a/kernel/kmod.c
-+++ b/b/kernel/kmod.c
+--- a/kernel/kmod.c
++++ b/kernel/kmod.c
 @@ -294,10 +294,9 @@ static int ____call_usermodehelper(void *data)
  	   out the path to be used prior to this point and are now operating
  	   on that copy
