@@ -1771,6 +1771,8 @@ let
 
   logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
 
+  lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
+
   kippo = callPackage ../servers/kippo { };
 
   klavaro = callPackage ../games/klavaro {};
