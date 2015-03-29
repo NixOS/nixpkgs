@@ -10,8 +10,6 @@ let
 
   is55 = mysql.mysqlVersion == "5.5";
 
-  mysqldDir = if is55 then "${mysql}/bin" else "${mysql}/libexec";
-
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
   mysqldOptions =
@@ -182,7 +180,7 @@ in
             chown -R ${cfg.user} ${cfg.pidDir}
           '';
 
-        serviceConfig.ExecStart = "${mysqldDir}/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
 
         postStart =
           ''
