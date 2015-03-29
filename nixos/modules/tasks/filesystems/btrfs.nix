@@ -17,13 +17,9 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
-        mkdir -p $out/bin
-        cp -v ${pkgs.btrfsProgs}/bin/btrfs $out/bin
+        copy_bin_and_libs ${pkgs.btrfsProgs}/bin/btrfs
         ln -sv btrfs $out/bin/btrfsck
         ln -sv btrfsck $out/bin/fsck.btrfs
-        # !!! Increases uncompressed initrd by 240k
-        cp -pv ${pkgs.zlib}/lib/libz.so* $out/lib
-        cp -pv ${pkgs.lzo}/lib/liblzo2.so* $out/lib
       '';
 
     boot.initrd.extraUtilsCommandsTest = mkIf inInitrd

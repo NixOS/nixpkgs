@@ -18,7 +18,7 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
-        cp -v ${pkgs.cifs_utils}/sbin/mount.cifs $out/bin
+        copy_bin_and_libs ${pkgs.cifs_utils}/sbin/mount.cifs
       '';
 
   };

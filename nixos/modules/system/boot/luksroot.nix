@@ -405,29 +405,19 @@ in
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
-      cp -pdv ${pkgs.cryptsetup}/sbin/cryptsetup $out/bin
-
-      cp -pdv ${pkgs.libgcrypt_1_6}/lib/libgcrypt*.so.* $out/lib
-      cp -pdv ${pkgs.libgpgerror}/lib/libgpg-error*.so.* $out/lib
-      cp -pdv ${pkgs.cryptsetup}/lib/libcryptsetup*.so.* $out/lib
-      cp -pdv ${pkgs.popt}/lib/libpopt*.so.* $out/lib
+      copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
 
       ${optionalString luks.yubikeySupport ''
-      cp -pdv ${pkgs.ykpers}/bin/ykchalresp $out/bin
-      cp -pdv ${pkgs.ykpers}/bin/ykinfo $out/bin
-      cp -pdv ${pkgs.openssl}/bin/openssl $out/bin
+        copy_bin_and_libs ${pkgs.ykpers}/bin/ykchalresp
+        copy_bin_and_libs ${pkgs.ykpers}/bin/ykinfo
+        copy_bin_and_libs ${pkgs.openssl}/bin/openssl
 
-      cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o $out/bin/pbkdf2-sha512 -lcrypto
-      strip -s $out/bin/pbkdf2-sha512
+        cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
+        strip -s pbkdf2-sha512
+        copy_bin_and_libs pbkdf2-sha512
 
-      cp -pdv ${pkgs.libusb1}/lib/libusb*.so.* $out/lib
-      cp -pdv ${pkgs.ykpers}/lib/libykpers*.so.* $out/lib
-      cp -pdv ${pkgs.libyubikey}/lib/libyubikey*.so.* $out/lib
-      cp -pdv ${pkgs.openssl}/lib/libssl*.so.* $out/lib
-      cp -pdv ${pkgs.openssl}/lib/libcrypto*.so.* $out/lib
-
-      mkdir -p $out/etc/ssl
-      cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
+        mkdir -p $out/etc/ssl
+        cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
 
       cat > $out/bin/openssl-wrap <<EOF
 #!$out/bin/sh
