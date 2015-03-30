@@ -8710,7 +8710,9 @@ let
 
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
 
-  conky = callPackage ../os-specific/linux/conky (config.conky or {});
+  conky = callPackage ../os-specific/linux/conky ({
+    lua = lua5_1; # conky can use 5.2, but toluapp can not
+  } // config.conky or {});
 
   conntrack_tools = callPackage ../os-specific/linux/conntrack-tools { };
 
