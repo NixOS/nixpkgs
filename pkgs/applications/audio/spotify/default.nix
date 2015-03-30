@@ -11,6 +11,7 @@ let
     else "0.9.17.1.g9b85d43.7";
 
   deps = [
+    udev
     alsaLib
     atk
     cairo
@@ -89,9 +90,6 @@ stdenv.mkDerivation {
       ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so.0d
       ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so.0d
       ''}
-
-      # Work around Spotify trying to open libudev.so.1
-      ln -s ${udev}/lib/libudev.so.1 $libdir/libudev.so.1
 
       mkdir -p $out/bin
 
