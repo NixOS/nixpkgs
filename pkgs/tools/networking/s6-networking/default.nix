@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.1.0";
+  version = "2.1.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-networking";
     rev = "refs/tags/v${version}";
-    sha256 = "1q094x8x99cy0kkq74kfw1rd9kmp6ynpz9ahx0lviz05n9paq7ya";
+    sha256 = "057xwh1dpwg2dz47s0badqhi66nhxgs5ps0xwn7s6hvba0lwyy4c";
   };
 
   dontDisableStatic = true;
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     "--with-include=${s6Dns}/include"
     "--with-lib=${skalibs}/lib"
     "--with-lib=${execline}/lib"
-    "--with-lib=${s6}/lib"
+    "--with-lib=${s6}/lib/s6"
     "--with-lib=${s6Dns}/lib"
     "--with-dynlib=${skalibs}/lib"
     "--with-dynlib=${execline}/lib"
