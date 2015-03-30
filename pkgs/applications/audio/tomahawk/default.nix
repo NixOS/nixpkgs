@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, attica, boost, gnutls, libechonest
-, liblastfm, lucenepp, phonon, phonon_backend_vlc, qca2, qca2_ossl, qjson, qt4
+, liblastfm, lucenepp, phonon, phonon_backend_vlc, qca2, qjson, qt4
 , qtkeychain, quazip, sparsehash, taglib, websocketpp, makeWrapper
 
 , enableXMPP      ? true,  libjreen     ? null
@@ -38,7 +38,6 @@ in stdenv.mkDerivation rec {
   postInstall = let
     pluginPath = stdenv.lib.concatStringsSep ":" [
       "${phonon_backend_vlc}/lib/kde4/plugins"
-      "${qca2_ossl}/lib/qt4/plugins"
     ];
   in ''
     for i in "$out"/bin/*; do

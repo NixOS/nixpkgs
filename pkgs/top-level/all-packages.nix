@@ -7252,9 +7252,7 @@ let
 
   re2 = callPackage ../development/libraries/re2 { };
 
-  qca2 = callPackage ../development/libraries/qca2 {};
-
-  qca2_ossl = callPackage ../development/libraries/qca2/ossl.nix {};
+  qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
