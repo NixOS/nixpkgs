@@ -79,6 +79,18 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  propagatedBuildInputs = []
+    ++ (stdenv.lib.optional (lcms2 != null) lcms2)
+    ++ (stdenv.lib.optional (liblqr1 != null) liblqr1)
+    ++ (stdenv.lib.optional (fftw != null) fftw)
+    ++ (stdenv.lib.optional (libtool != null) libtool)
+    ++ (stdenv.lib.optional (jemalloc != null) jemalloc)
+    ++ (stdenv.lib.optional (libXext != null) libXext)
+    ++ (stdenv.lib.optional (libX11 != null) libX11)
+    ++ (stdenv.lib.optional (libXt != null) libXt)
+    ++ (stdenv.lib.optional (bzip2 != null) bzip2)
+    ;
+
   postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
 
   meta = with stdenv.lib; {
