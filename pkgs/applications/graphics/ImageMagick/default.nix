@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     (mkEnable (libcl != null)        "opencl")
     (mkWith   true                   "modules")
     (mkWith   true                   "gcc-arch=${arch}")
-    (mkEnable true                   "hdri")
+    #(mkEnable true                   "hdri") This breaks some dependencies
     (mkWith   (perl != null)         "perl")
     (mkWith   (jemalloc != null)     "jemalloc")
     (mkWith   true                   "frozenpaths")
