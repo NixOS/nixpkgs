@@ -122,9 +122,6 @@ in zipModules ([]
 ++ deprecated [ "kde" "extraPackages" ] [ "environment" "systemPackages" ]
 ++ obsolete [ "environment" "kdePackages" ] [ "environment" "systemPackages" ]
 
-# Prosody
-++ deprecated [ "services" "prosody" "virtualHosts" "enabled" ] [ "services" "prosody" "virtualHosts" "enable" ]
-
 # Multiple efi bootloaders now
 ++ obsolete [ "boot" "loader" "efi" "efibootmgr" "enable" ] [ "boot" "loader" "efi" "canTouchEfiVariables" ]
 
