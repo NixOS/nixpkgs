@@ -644,11 +644,6 @@ self: super: {
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
 
-  # https://github.com/cdupont/Nomyx/issues/85
-  Nomyx-Core = markBroken super.Nomyx-Core;
-  Nomyx-Web = dontDistribute super.Nomyx-Web;
-  Nomyx = dontDistribute super.Nomyx;
-
   # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
   stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
 
