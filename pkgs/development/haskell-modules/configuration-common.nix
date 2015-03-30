@@ -601,6 +601,9 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
+  # https://github.com/jgm/pandoc/issues/2045
+  pandoc = dontCheck super.pandoc;
+
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
 
