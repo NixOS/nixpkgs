@@ -10884,6 +10884,8 @@ let
 
   bip = callPackage ../applications/networking/irc/bip { };
 
+  jabref = callPackage ../applications/office/jabref/default.nix { };
+
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
   jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
