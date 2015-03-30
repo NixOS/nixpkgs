@@ -70,4 +70,7 @@ self: super: {
   contravariant = addBuildDepend super.contravariant self.tagged;
   reflection = dontHaddock (addBuildDepend super.reflection self.tagged);
 
+  # The compat library is empty in the presence of mtl 2.2.x.
+  mtl-compat = dontHaddock super.mtl-compat;
+
 }
