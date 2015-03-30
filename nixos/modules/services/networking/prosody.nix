@@ -113,7 +113,7 @@ let
         description = "Domain name";
       };
 
-      enabled = mkOption {
+      enable = mkOption {
         default = false;
         description = "Whether to enable the virtual host";
       };
@@ -169,14 +169,14 @@ in
         example = {
           myhost = {
             domain = "my-xmpp-example-host.org";
-            enabled = true;
+            enable = true;
           };
         };
 
         default = {
           localhost = {
             domain = "localhost";
-            enabled = true;
+            enable = true;
           };
         };
 
@@ -214,7 +214,6 @@ in
 
       pidfile = "/var/lib/prosody/prosody.pid"
 
-
       log = "*syslog"
 
       data_path = "/var/lib/prosody"
@@ -244,7 +243,7 @@ in
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         VirtualHost "${v.domain}"
-          enabled = ${if v.enabled then "true" else "false"};
+          enabled = ${if v.enable then "true" else "false"};
           ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
           ${ v.extraConfig }
         '') cfg.virtualHosts) }
