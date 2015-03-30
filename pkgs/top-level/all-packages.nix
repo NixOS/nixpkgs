@@ -687,6 +687,8 @@ let
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
+  brasero = callPackage ../tools/cd-dvd/brasero { };
+
   bro = callPackage ../applications/networking/ids/bro { };
 
   bsod = callPackage ../misc/emulators/bsod { };
@@ -11663,6 +11665,8 @@ let
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
+
+  sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
