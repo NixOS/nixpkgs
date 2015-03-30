@@ -198,6 +198,11 @@ self: super: {
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
+  gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
+
+  # Need WebkitGTK, not just webkit.
+  webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
+  webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
 
   # https://github.com/jgm/zip-archive/issues/21
   zip-archive = addBuildTool super.zip-archive pkgs.zip;
