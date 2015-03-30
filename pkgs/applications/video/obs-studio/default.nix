@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "obs-studio";
+  name = "obs-studio-${version}";
   version = "0.9.1";
 
   src = fetchurl {
-    url = "https://github.com/jp9000/${name}/archive/${version}.tar.gz";
+    url = "https://github.com/jp9000/obs-studio/archive/${version}.tar.gz";
     sha256 = "198ymfdrg58i3by58fs68df835rkpnpagnvyzlilmn9ypvpa8h81";
   };
 
