@@ -2483,6 +2483,8 @@ let
     sip = pythonPackages.sip_4_16;
   };
 
+  ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
+
   qastools = callPackage ../tools/audio/qastools {
     qt = qt4;
   };
