@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnu-apl-${version}";
-  version = "1.4";
+  version = "1.5";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${version}.tar.gz";
-    sha256 = "0fl9l4jb5wpnb54kqkphavi657z1cv15h9qj2rqy2shf33dk3nk9";
+    sha256 = "0h4diq3wfbdwxp5nm0z4b0p1zq13lwip0y7v28r9v0mbbk8xsfh1";
   };
 
   buildInputs = [ liblapack readline gettext ncurses ];
@@ -16,12 +16,13 @@ stdenv.mkDerivation rec {
     find $out/share/doc/support-files -name 'Makefile*' -delete
   '';
 
-  meta = {
-    description = "Free interpreter for the APL programming language.";
+  meta = with stdenv.lib; {
+    description = "Free interpreter for the APL programming language";
     homepage    = http://www.gnu.org/software/apl/;
-    license     = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ kovirobi ];
+    license     = licenses.gpl3Plus;
+    maintainers = [ maintainers.kovirobi ];
     platforms   = stdenv.lib.platforms.linux;
+    inherit version;
 
     longDescription = ''
       GNU APL is a free interpreter for the programming language APL, with an
