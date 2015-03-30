@@ -11662,6 +11662,8 @@ let
     gtk = gtk3;
   };
 
+  simple-scan = callPackage ../applications/graphics/simple-scan { };
+
   siproxd = callPackage ../applications/networking/siproxd { };
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype { };
