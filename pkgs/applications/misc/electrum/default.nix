@@ -1,13 +1,12 @@
 { stdenv, fetchurl, buildPythonPackage, pythonPackages, slowaes }:
 
 buildPythonPackage rec {
-  namePrefix = "";
   name = "electrum-${version}";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "1kzrbnkl5jps0kf0420vzpiqjk3v1jxvlrxwhc0f58xbqyc7l4mj";
+    sha256 = "0q9vrrzy2iypfg2zvs3glzvqyq65dnwn1ijljvfqfwrkpvpp0zxp";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -24,16 +23,21 @@ buildPythonPackage rec {
     tlslite
   ];
 
-  postPatch = ''
+  preInstall = ''
     mkdir -p $out/share
     sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
   '';
 
-  meta = {
-    description = "Bitcoin thin-wallet";
-    long-description = "Electrum is an easy to use Bitcoin client. It protects you from losing coins in a backup mistake or computer failure, because your wallet can be recovered from a secret phrase that you can write on paper or learn by heart. There is no waiting time when you start the client, because it does not download the Bitcoin blockchain.";
-    homepage = "https://electrum.org";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ "emery@vfemail.net" stdenv.lib.maintainers.joachifm ];
+  meta = with stdenv.lib; {
+    description = "Bitcoin thin-client";
+    longDescription = ''
+      An easy-to-use Bitcoin client featuring wallets generated from
+      mnemonic seeds (in addition to other, more advanced, wallet options)
+      and the ability to perform transactions without downloading a copy
+      of the blockchain.
+    '';
+    homepage = https://electrum.org;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ emery joachifm ];
   };
 }
