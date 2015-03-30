@@ -2081,6 +2081,8 @@ let
 
   networkmanager_pptp = callPackage ../tools/networking/network-manager/pptp.nix { };
 
+  networkmanager_l2tp = callPackage ../tools/networking/network-manager/l2tp.nix { };
+
   networkmanager_vpnc = callPackage ../tools/networking/network-manager/vpnc.nix { };
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
@@ -2966,6 +2968,8 @@ let
   wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
+
+  xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
   testdisk = callPackage ../tools/misc/testdisk { };
 
