@@ -1,11 +1,9 @@
-{ stdenv, ghc, llvmPackages, packages, buildEnv
+{ stdenv, lib, ghc, llvmPackages, packages, buildEnv
 , makeWrapper
 , ignoreCollisions ? false, withLLVM ? false }:
 
-with stdenv.lib;
-
 # This wrapper works only with GHC 6.12 or later.
-assert versionOlder "6.12" ghc.version;
+assert lib.versionOlder "6.12" ghc.version;
 
 # It's probably a good idea to include the library "ghc-paths" in the
 # compiler environment, because we have a specially patched version of
@@ -30,19 +28,19 @@ assert versionOlder "6.12" ghc.version;
 
 let
   isGhcjs       = ghc.isGhcjs or false;
-  ghc761OrLater = isGhcjs || versionOlder "7.6.1" ghc.version;
+  ghc761OrLater = isGhcjs || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
   ghcCommand    = if isGhcjs then "ghcjs" else "ghc";
   libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  paths         = filter (x: x ? isHaskellLibrary) (closePropagation packages);
-  hasLibraries  = any (x: x.isHaskellLibrary) paths;
+  paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
+  hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/code-generators.html
-  llvm          = makeSearchPath "bin"
+  llvm          = lib.makeSearchPath "bin"
                   ([ llvmPackages.llvm ]
-                   ++ optional stdenv.isDarwin llvmPackages.clang);
+                   ++ lib.optional stdenv.isDarwin llvmPackages.clang);
 in
 if paths == [] && !withLLVM then ghc else
 buildEnv {
@@ -52,7 +50,7 @@ buildEnv {
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
-    ${optionalString isGhcjs ''
+    ${lib.optionalString isGhcjs ''
     cp -r "${ghc}/${ghc.libDir}/"* ${libDir}/
     ''}
 
@@ -71,7 +69,7 @@ buildEnv {
         --set "NIX_GHCPKG"     "$out/bin/${ghcCommand}-pkg" \
         --set "NIX_GHC_DOCDIR" "${docDir}"                  \
         --set "NIX_GHC_LIBDIR" "${libDir}"                  \
-        ${optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+        ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
     done
 
     for prg in runghc runhaskell; do
@@ -89,7 +87,7 @@ buildEnv {
       makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
     done
 
-    ${optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
+    ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
     $out/bin/${ghcCommand}-pkg check
   '';
 } // {
