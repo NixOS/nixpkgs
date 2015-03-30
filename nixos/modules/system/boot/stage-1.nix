@@ -39,26 +39,9 @@ let
       mkdir -p $out/bin $out/lib
       ln -s $out/bin $out/sbin
 
-      # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
-
       copy_bin_and_libs () {
         [ -f "$out/bin/$(basename $1)" ] && rm "$out/bin/$(basename $1)"
         cp -pdv $1 $out/bin
-        LDD="$(ldd $1)" || return 0
-        LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
-        for LIB in $LIBS; do
-          [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-          while [ "$(readlink $LIB)" != "" ]; do
-            LINK="$(readlink $LIB)"
-            if [ "${LINK:0:1}" != "/" ]; then
-              LINK="$(dirname $LIB)/$LINK"
-            fi
-            LIB="$LINK"
-            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-          done
-        done
-        return 0
       }
 
       # Copy BusyBox.
@@ -88,6 +71,27 @@ let
       ln -sf kmod $out/bin/modprobe
 
       ${config.boot.initrd.extraUtilsCommands}
+
+      # Copy ld manually since it isn't detected correctly
+      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
+
+      # Copy all of the needed libraries for the binaries
+      for BIN in $(find $out/{bin,sbin} -type f); do
+        echo "Copying libs for bin $BIN"
+        LDD="$(ldd $BIN)" || continue
+        LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
+        for LIB in $LIBS; do
+          [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+          while [ "$(readlink $LIB)" != "" ]; do
+            LINK="$(readlink $LIB)"
+            if [ "${LINK:0:1}" != "/" ]; then
+              LINK="$(dirname $LIB)/$LINK"
+            fi
+            LIB="$LINK"
+            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+          done
+        done
+      done
 
       # Strip binaries further than normal.
       chmod -R u+w $out
