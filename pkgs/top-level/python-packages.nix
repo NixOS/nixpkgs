@@ -6806,6 +6806,22 @@ let
   });
 
 
+  nameparser = buildPythonPackage rec {
+    name = "nameparser-${version}";
+    version = "0.3.4";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nameparser/${name}.tar.gz";
+      sha256 = "1zi94m99ziwwd6kkip3w2xpnl05r2cfv9iq68inz7np81c3g8vag";
+    };
+    
+    meta = {
+      description = "A simple Python module for parsing human names into their individual components";
+      homepage = https://github.com/derek73/python-nameparser;
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
   nbxmpp = buildPythonPackage rec {
     name = "nbxmpp-0.5.2";
 
