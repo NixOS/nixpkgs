@@ -1021,6 +1021,8 @@ let
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
+  cmatrix = callPackage ../applications/misc/cmatrix { };
+
   convmv = callPackage ../tools/misc/convmv { };
 
   cool-retro-term = callPackage ../applications/misc/cool-retro-term { };
