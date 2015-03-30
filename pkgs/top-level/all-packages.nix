@@ -8546,6 +8546,8 @@ let
 
   seyren = callPackage ../servers/monitoring/seyren { };
 
+  sensu = callPackage ../servers/monitoring/sensu { };
+
   shishi = callPackage ../servers/shishi { };
 
   sipcmd = callPackage ../applications/networking/sipcmd { };
