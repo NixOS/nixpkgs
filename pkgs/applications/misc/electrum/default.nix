@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, slowaes }:
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, enableTrezor ? false }:
 
 buildPythonPackage rec {
+  namePrefix = "";
   name = "electrum-${version}";
   version = "2.5.1";
 
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     requests
     slowaes
     tlslite
-  ];
+  ] ++ stdenv.lib.optional enableTrezor trezor;
 
   preInstall = ''
     mkdir -p $out/share
