@@ -1,9 +1,15 @@
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
 , libksba, coreutils, libiconv, pcsclite
+
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
+, pinentry ? null, x11Support ? true
+, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
 }:
+
+with stdenv.lib;
+
+assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
   name = "gnupg-2.0.27";
@@ -27,9 +33,7 @@ stdenv.mkDerivation rec {
     patch gl/stdint_.h < ${./clang.patch}
   '';
 
-  configureFlags =
-    if pinentry != null then "--with-pinentry-pgm=${pinentry}/bin/pinentry"
-                        else "";
+  configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 

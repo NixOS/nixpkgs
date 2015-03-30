@@ -1,12 +1,14 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
 , makeWrapper
-, withX ? true, xclip, xdotool, dmenu
+
+, xclip ? null, xdotool ? null, dmenu ? null
+, x11Support ? true
 }:
 
-assert withX -> xclip != null;
-assert withX -> xdotool != null;
-assert withX -> dmenu != null;
+assert x11Support -> xclip != null
+                  && xdotool != null
+                  && dmenu != null;
 
 stdenv.mkDerivation rec {
   version = "1.6.5";
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
 
-    ${if withX then ''
+    ${if x11Support then ''
       cp "contrib/dmenu/passmenu" "$out/bin/"
     '' else ""}
   '';
@@ -64,9 +66,9 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
+      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if x11Support then ":${xclip}/bin" else ""}"
 
-    ${if withX then ''
+    ${if x11Support then ''
       wrapProgram $out/bin/passmenu \
         --prefix PATH : "$out/bin:${xdotool}/bin:${dmenu}/bin"
     '' else ""}
