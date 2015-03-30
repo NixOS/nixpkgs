@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
 
-  versionMajor = "3.12";
-  versionMinor = "1";
+  versionMajor = "3.14";
+  versionMinor = "0";
 
   name = "zenity-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${versionMajor}/${name}.tar.xz";
-    sha256 = "a59705cdd1ea5318fdae3075c1cedcbead479230e9bead204391566d973dae11";
+    sha256 = "0bw95d6ns67h0mw90qcbhxvhbglbpgd66vinvha7gwba8mnfqmvb";
   };
 
   buildInputs = [ gnome3.gtk libxml2 libxslt libX11 itstool ];
