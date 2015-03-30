@@ -11357,6 +11357,8 @@ let
     inherit (gnome) libglade;
   };
 
+  obs-studio = callPackage ../applications/video/obs-studio { };
+
   ocrad = callPackage ../applications/graphics/ocrad { };
 
   offrss = callPackage ../applications/networking/offrss { };
