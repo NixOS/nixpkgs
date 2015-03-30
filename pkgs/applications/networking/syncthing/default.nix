@@ -27,6 +27,6 @@ buildGoPackage rec {
     description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
     license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [ matejc ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }
