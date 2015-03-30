@@ -1279,7 +1279,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   hoogle_4_2_34 = callPackage ../development/libraries/haskell/hoogle/4.2.34.nix { haskellSrcExts = self.haskellSrcExts_1_15_0_1; };
   hoogle_4_2_36 = callPackage ../development/libraries/haskell/hoogle/4.2.36.nix {};
-  hoogle = self.hoogle_4_2_36;
+  hoogle_4_2_39 = callPackage ../development/libraries/haskell/hoogle/4.2.39.nix {};
+  hoogle = self.hoogle_4_2_39;
 
   hoogleLocal = callPackage ../development/libraries/haskell/hoogle/local.nix {};
 
