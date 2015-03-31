@@ -666,6 +666,9 @@ self: super: {
     '';
   });
 
+  # https://github.com/anton-k/csound-expression-dynamic/issues/1
+  csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
+
 } // {
 
   # Not on Hackage.
