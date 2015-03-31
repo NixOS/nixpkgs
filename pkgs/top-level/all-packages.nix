@@ -4592,7 +4592,9 @@ let
 
   polyml = callPackage ../development/compilers/polyml { };
 
-  pure = callPackage ../development/interpreters/pure { };
+  pure = callPackage ../development/interpreters/pure {
+    llvm = llvm_35;
+  };
   pure-gsl = callPackage ../development/pure-modules/pure-gsl { };
 
   python = python2;
