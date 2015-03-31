@@ -85,4 +85,9 @@ self: super: {
   # https://github.com/ndmitchell/extra/issues/4
   extra = dontCheck super.extra;
 
+  # Workaround for a workaround, see comment for "ghcjs" flag.
+  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
+            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
+                                          self.webkitgtk3-javascriptcore ];
+
 }
