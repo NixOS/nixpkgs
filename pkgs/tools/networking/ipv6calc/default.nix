@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, geoip, getopt, openssl, perl }:
+{ stdenv, fetchurl, geoip, geolite-legacy, getopt, openssl, perl }:
 
 stdenv.mkDerivation rec {
   version = "0.98.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02r0r4lgz10ivbmgdzivj7dvry1aad75ik9vyy6irjvngjkzg5r3";
   };
 
-  buildInputs = [ geoip getopt openssl perl ];
+  buildInputs = [ geoip geolite-legacy getopt openssl perl ];
 
   patchPhase = ''
     for i in {,databases/}lib/Makefile.in; do
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     --disable-dynamic-load
     --enable-shared
     --enable-geoip
-    --with-geoip-db=${geoip}/share/GeoIP
+    --with-geoip-db=${geolite-legacy}/share/GeoIP
   '';
 
   enableParallelBuilding = true;
