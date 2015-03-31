@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bison, flex, libcli, libnet
+{ stdenv, fetchFromGitHub, bison, flex, geoip, geolite-legacy, libcli, libnet
 , libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
 , pkgconfig, zlib }:
 
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0iwnfjbxiv10zk5mfpnvs2xb88f14hv1a156kn9mhasszknp0a57";
   };
 
-  buildInputs = [ bison flex libcli libnet libnl libnetfilter_conntrack
-    libpcap libsodium liburcu ncurses perl pkgconfig zlib ];
+  buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl
+    libnetfilter_conntrack libpcap libsodium liburcu ncurses perl
+    pkgconfig zlib ];
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
@@ -25,8 +26,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Tries to install to /etc, but they're more like /share files anyway
+  # All files installed to /etc are just static data that can go in the store
   makeFlags = "PREFIX=$(out) ETCDIR=$(out)/etc";
+
+  postInstall = ''
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat		$out/etc/netsniff-ng/country4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat		$out/etc/netsniff-ng/country6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoLiteCity.dat	$out/etc/netsniff-ng/city4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoLiteCityv6.dat	$out/etc/netsniff-ng/city6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNum.dat		$out/etc/netsniff-ng/asname4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNumv6.dat	$out/etc/netsniff-ng/asname6.dat
+    rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
+  '';
 
   meta = with stdenv.lib; {
     description = "Swiss army knife for daily Linux network plumbing";
