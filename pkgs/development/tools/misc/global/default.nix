@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libtool, ncurses }:
+{ fetchurl, stdenv, libtool, ncurses, ctags, sqlite, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "global-6.3.4";
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     '' ./configure --prefix="$out" --disable-static ''
     + ''--with-posix-sort=$(type -p sort) ''
     + ''--with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib ''
-    + ''--with-ncurses=${ncurses}'';
+    + ''--with-ncurses=${ncurses}''
+    + ''--with-sqlite3=${sqlite}''
+    + ''--with-exuberant-ctags=${ctags}/bin/ctags'';
 
   doCheck = true;
 
