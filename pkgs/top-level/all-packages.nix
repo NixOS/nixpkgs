@@ -13413,6 +13413,8 @@ let
 
   verifast = callPackage ../applications/science/logic/verifast {};
 
+  veriT = callPackage ../applications/science/logic/verit {};
+
   why3 = callPackage ../applications/science/logic/why3 {};
 
   yices = callPackage ../applications/science/logic/yices {};
