@@ -43,6 +43,9 @@ self: super: {
   # Configure build for mtl 2.1.x.
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
+  # haddock-api 2.16 requires ghc>=7.10
+  haddock-api = super.haddock-api_2_15_0_2;
+
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
