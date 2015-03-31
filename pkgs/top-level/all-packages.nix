@@ -12384,7 +12384,7 @@ let
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
-    ghcWithPackages = haskellngPackages.ghcWithPackages;
+    inherit (haskellngPackages) ghcWithPackages;
     packages = self: [];
   };
 
