@@ -9939,7 +9939,9 @@ let
 
   ekho = callPackage ../applications/audio/ekho { };
 
-  electrum = callPackage ../applications/misc/electrum { };
+  electrum = callPackage ../applications/misc/electrum {
+    enableTrezor = config.electrum.enableTrezor or false;
+  };
 
   elinks = callPackage ../applications/networking/browsers/elinks { };
 
