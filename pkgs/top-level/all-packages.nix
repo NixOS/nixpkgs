@@ -7394,6 +7394,10 @@ let
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  leksah = callPackage ../development/tools/leksah {
+    inherit (haskellngPackages) ghcWithPackages;
+  };
+
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
 
   librdf_raptor2 = callPackage ../development/libraries/librdf/raptor2.nix { };
