@@ -9676,6 +9676,8 @@ let
 
   gentium = callPackage ../data/fonts/gentium {};
 
+  geolite-legacy = callPackage ../data/misc/geolite-legacy { };
+
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
   inherit (gnome3) gsettings_desktop_schemas;
