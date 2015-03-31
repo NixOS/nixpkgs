@@ -120,4 +120,9 @@ self: super: {
   # Newer versions require base > 4.7
   gloss = super.gloss_1_9_2_1;
 
+  # Workaround for a workaround, see comment for "ghcjs" flag.
+  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
+            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
+                                          self.webkitgtk3-javascriptcore ];
+
 }

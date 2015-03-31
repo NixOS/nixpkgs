@@ -303,4 +303,10 @@ self: super: {
       sed -i -e "s,<\*,<¤,g" XMonad/Actions/Volume.hs
     '';
   });
+
+  # Workaround for a workaround, see comment for "ghcjs" flag.
+  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
+            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
+                                          self.webkitgtk3-javascriptcore ];
+
 }
