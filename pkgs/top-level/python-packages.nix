@@ -4162,7 +4162,7 @@ let
     };
 
     propagatedBuildInputs = with self; [ django_1_7 ];
-    
+
     # tests appear to be broken on 0.6.1 at least
     doCheck = ( version != "0.6.1" );
 
@@ -4303,11 +4303,11 @@ let
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
-    version = "0.11";
+    version = "0.13";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/e/ecdsa/${name}.tar.gz";
-      md5 = "8ef586fe4dbb156697d756900cb41d7c";
+      sha256 = "1yj31j0asmrx4an9xvsaj2icdmzy6pw0glfpqrrkrphwdpi1xkv4";
     };
 
     # Only needed for tests
@@ -5403,6 +5403,30 @@ let
   };
 
 
+  hidapi =
+  let rev = "78722d3c6c028cd66e3ecc1ee9fa03e63e671de9"; in
+  buildPythonPackage rec {
+    name = "hidapi-${builtins.substring 0 7 rev}";
+    buildInputs = [ self.cython pkgs.libusb1 ];
+    # Use fetchgit to retrieve submodules
+    src = pkgs.fetchgit {
+      url = https://github.com/trezor/cython-hidapi.git;
+      inherit rev;
+      sha256 = "0h093m351yzyl22zg5f4smi21d030diizc1dyq5c6ksjzchxdirl";
+    };
+    postPatch =
+      ''
+        substituteInPlace setup.py \
+            --replace /usr/include/libusb-1.0 ${pkgs.libusb1}/include/libusb-1.0
+       '';
+    meta = with stdenv.lib;
+      { description = "A Cython interface to the HIDAPI from https://github.com/signal11/hidapi";
+        license = licenses.free;
+        maintainer = [ maintainers.emery ];
+      };
+  };
+
+
   htmllaundry = buildPythonPackage rec {
     name = "htmllaundry-2.0";
 
@@ -6416,6 +6440,25 @@ let
       license = licenses.mit;
     };
   };
+
+
+  mnemonic =
+  let rev = "9973afdf4a9d37b7cbac4069723889eeee0e0d2a"; in
+  buildPythonPackage rec {
+    name = "mnemonic-${builtins.substring 0 7 rev}";
+    propagatedBuildInputs = with self; [ pbkdf2 ];
+    src = pkgs.fetchFromGitHub {
+      owner = "trezor";
+      repo = "python-mnemonic";
+      inherit rev;
+      sha256 = "1zj7k3b7070snl5mnbyl866nkzxf99hjkay5cw44yhkgs0xdvwsh";
+    };
+    meta = with stdenv.lib;
+      { license = licenses.mit;
+        maintainer = [ maintainers.emery ];
+      };
+  };
+
 
   mock = buildPythonPackage (rec {
     name = "mock-1.0.1";
@@ -10781,6 +10824,22 @@ let
     };
   });
 
+  slowaes = buildPythonPackage rec {
+    name = "slowaes-0.1a1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/slowaes/${name}.tar.gz";
+      sha256 = "02dzajm83a7lqgxf6r3hgj64wfmcxz8gs4nvgxpvj5n19kjqlrc3";
+  };
+
+    meta = with stdenv.lib;
+      { homepage = "http://code.google.com/p/slowaes/";
+        description = "AES implemented in pure python";
+        license = licenses.asl20;
+        maintainers = [ maintainers.emery ];
+      };
+  };
+
   smartdc = buildPythonPackage rec {
     name = "smartdc-0.1.12";
 
@@ -11527,6 +11586,28 @@ let
       md5 = "c4423cc6512932b37e5b0d1faa87bef2";
     };
   };
+
+
+  trezor =
+  let rev = "c47065fb11fa9e064a91eb77088d1adbc040e413"; in
+  buildPythonPackage {
+    name = "trezor-20150317-${builtins.substring 0 7 rev}";
+    propagatedBuildInputs = with self; [ hidapi mnemonic protobuf2_5 ecdsa ];
+    src = pkgs.fetchFromGitHub {
+      owner = "trezor";
+      repo = "python-trezor";
+      inherit rev;
+      sha256 = "1xzkvr3w2war15705j97vzp6c80djza5kdq0qx2c178pc3qq7yq7";
+    };
+    doCheck = false;
+    meta = with stdenv.lib;
+      { description = "Client side implementation for TREZOR-compatible Bitcoin hardware wallets.";
+        homepage = https://github.com/trezor/python-trezor;
+        license = licenses.lgpl3;
+        maintainer = [ maintainers.emery ];
+      };
+  };
+
 
   smmap = buildPythonPackage rec {
     name = "smmap-0.8.2";
