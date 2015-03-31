@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, enableTrezor ? false }:
+{ stdenv, fetchurl, pythonPackages, enableTrezor ? false }:
 
-buildPythonPackage rec {
+pythonPackages.buildPythonPackage rec {
   namePrefix = "";
   name = "electrum-${version}";
   version = "2.0.4";
