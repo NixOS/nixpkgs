@@ -9941,6 +9941,7 @@ let
 
   electrum = callPackage ../applications/misc/electrum {
     enableTrezor = config.electrum.enableTrezor or false;
+    enableQt4 = config.electrum.enableQt4 or true;
   };
 
   elinks = callPackage ../applications/networking/browsers/elinks { };
