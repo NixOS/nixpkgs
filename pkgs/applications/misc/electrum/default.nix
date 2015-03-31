@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pythonPackages, enableTrezor ? false }:
+{ stdenv, fetchurl, pythonPackages
+, enableTrezor ? false
+, enableQt4 ? true
+}:
 
 pythonPackages.buildPythonPackage rec {
   namePrefix = "";
@@ -18,12 +21,13 @@ pythonPackages.buildPythonPackage rec {
     pyasn1
     pyasn1-modules
     pycrypto
-    pyqt4
     qrcode
     requests
     slowaes
     tlslite
-  ] ++ stdenv.lib.optional enableTrezor trezor;
+  ]
+  ++ stdenv.lib.optional enableTrezor trezor
+  ++ stdenv.lib.optional enableQt4 pyqt4;
 
   preInstall = ''
     mkdir -p $out/share
