@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "i-rinat";
     repo = "apulse";
     rev = "v${version}";
-    sha256 = "0ypirj7srdspbqhgi74a4blmb1g4sgvz96abw4m8y1fils4ysdgj";
+    sha256 = "0b384dr415flxk3n4abfwfljlh7vvr1g9gad15zc5fgbyxsinv12";
   };
 
   buildInputs =
