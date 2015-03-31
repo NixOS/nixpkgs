@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libtool ncurses ];
-  propagatedBuildInputs = [ libtool ncurses pythonPackages.pygments ];
+  propagatedBuildInputs = [ pythonPackages.pygments ];
 
   configurePhase =
     '' ./configure --prefix="$out" --disable-static ''
