@@ -107,7 +107,6 @@ self: super: {
   # but refused to do anything about it because he "doesn't want to
   # support a moving target". Go figure.
   barecheck = doJailbreak super.barecheck;
-  cartel = overrideCabal super.cartel (drv: { doCheck = false; patchPhase = "sed -i -e 's|base >= .*|base|' cartel.cabal"; });
 
   syb-with-class = appendPatch super.syb-with-class (pkgs.fetchpatch {
     url = "https://github.com/seereason/syb-with-class/compare/adc86a9...719e567.patch";
