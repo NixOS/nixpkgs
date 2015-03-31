@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pythonPackages
 , enableTrezor ? false
 , enableQt4 ? true
+, enableTextUi ? false
 }:
 
 pythonPackages.buildPythonPackage rec {
@@ -27,7 +28,8 @@ pythonPackages.buildPythonPackage rec {
     tlslite
   ]
   ++ stdenv.lib.optional enableTrezor trezor
-  ++ stdenv.lib.optional enableQt4 pyqt4;
+  ++ stdenv.lib.optional enableQt4 pyqt4
+  ++ stdenv.lib.optional enableTextUi python.modules.curses;
 
   preInstall = ''
     mkdir -p $out/share
