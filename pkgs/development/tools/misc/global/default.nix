@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
     '' ./configure --prefix="$out" --disable-static ''
     + ''--with-posix-sort=$(type -p sort) ''
     + ''--with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib ''
-    + ''--with-ncurses=${ncurses}''
-    + ''--with-sqlite3=${sqlite}''
+    + ''--with-ncurses=${ncurses} ''
+    + ''--with-sqlite3=${sqlite} ''
     + ''--with-exuberant-ctags=${ctags}/bin/ctags'';
 
   doCheck = true;
