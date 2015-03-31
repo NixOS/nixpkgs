@@ -1045,6 +1045,10 @@ let
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  mozc = callPackage ../tools/inputmethods/mozc {
+    inherit (pythonPackages) gyp;
+  };
+
   ibus = callPackage ../tools/inputmethods/ibus { };
 
   ibus-qt = callPackage ../tools/inputmethods/ibus-qt { };
@@ -3314,6 +3318,9 @@ let
   zfstools = callPackage ../tools/filesystems/zfstools { };
 
   zile = callPackage ../applications/editors/zile { };
+
+  zinnia = callPackage ../tools/inputmethods/zinnia { };
+  tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
 
   zip = callPackage ../tools/archivers/zip { };
 
