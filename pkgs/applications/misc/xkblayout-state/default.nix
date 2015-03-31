@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "xkblayout-state";
+  name = "xkblayout-state-${version}";
   version = "1b";
 
   src = fetchurl {
