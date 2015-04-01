@@ -267,12 +267,6 @@ stdenv.mkDerivation ({
         export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
       '';
-      buildCommand = ''
-        echo >&2 ""
-        echo >&2 "*** Haskell 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
-        echo >&2 ""
-        exit 1
-      '';
     };
 
   };
