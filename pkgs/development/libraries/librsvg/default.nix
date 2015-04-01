@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco
+, bzip2, libcroco, libintlOrEmpty
 , gtk3 ? null
 , gobjectIntrospection ? null, enableIntrospection ? false }:
 
@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fplymmqqr28y24vcnb01szn62pfbqhk8p1ngns54x9m6mflr5hk";
   };
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango ]
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
 
   propagatedBuildInputs = [ glib gdk_pixbuf cairo gtk3 ];
