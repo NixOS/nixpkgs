@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, libtool, ncurses, ctags, sqlite, pythonPackages }:
+{ fetchurl, stdenv, libtool, ncurses, ctags, sqlite
+, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "global-6.3.4";
@@ -8,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hcplcayyjf42d8ygzla6142b5dq4ybq4wg3n3cgx3b5yfhvic85";
   };
 
-  buildInputs = [ libtool ncurses ];
+  buildInputs = [ libtool ncurses makeWrapper ];
   propagatedBuildInputs = [ pythonPackages.pygments ];
 
   configurePhase =
@@ -24,6 +25,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p "$out/share/emacs/site-lisp"
     cp -v *.el "$out/share/emacs/site-lisp"
+
+    wrapProgram $out/bin/gtags \
+      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
   '';
 
   meta = with stdenv.lib; {
