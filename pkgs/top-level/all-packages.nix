@@ -11632,9 +11632,12 @@ let
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
   urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
 
-  rxvt_unicode_with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
+  rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
     plugins = [ urxvt_perls urxvt_tabbedex ];
   };
+
+  # FIXME: remove somewhere in future
+  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins;
 
   sakura = callPackage ../applications/misc/sakura {
     inherit (gnome3) vte;
