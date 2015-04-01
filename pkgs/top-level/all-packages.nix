@@ -330,7 +330,7 @@ let
   fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
 
   fetchgitLocal = import ../build-support/fetchgitlocal {
-    inherit runCommand git;
+    inherit runCommand git nix;
   };
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
