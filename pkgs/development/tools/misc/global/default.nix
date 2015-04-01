@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/gtags \
       --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+    wrapProgram $out/bin/global \
+      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
   '';
 
   meta = with stdenv.lib; {
