@@ -1655,6 +1655,8 @@ let
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  i2p = callPackage ../tools/networking/i2p {};
+
   i2pd = callPackage ../tools/networking/i2pd {};
 
   iasl = callPackage ../development/compilers/iasl { };
