@@ -55,8 +55,9 @@ let
 
   isGhcjs = ghc.isGhcjs or false;
 
+  newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
-    url = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
+    url = newCabalFileUrl;
     sha256 = editedCabalFile;
     name = "${pname}-${version}-r${revision}.cabal";
   };
@@ -134,7 +135,7 @@ stdenv.mkDerivation ({
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
   prePatch = optionalString (editedCabalFile != null) ''
-    echo "Replacing Cabal file with edited version ${newCabalFile}."
+    echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
     cp ${newCabalFile} ${pname}.cabal
   '' + optionalString jailbreak ''
     echo "Running jailbreak-cabal to lift version restrictions on build inputs."
