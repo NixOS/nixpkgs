@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libestr json_c zlib pythonPackages.docutils
-    krb5 jemalloc mysql postgresql libdbi net_snmp libuuid curl gnutls
+    krb5 jemalloc mysql.lib postgresql libdbi net_snmp libuuid curl gnutls
     libgcrypt liblognorm openssl librelp libgt liblogging libnet hadoop rdkafka
     libmongo-client czmq rabbitmq-c hiredis
   ] ++ stdenv.lib.optional stdenv.isLinux systemd;

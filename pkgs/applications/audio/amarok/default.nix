@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
 
   buildInputs = [ qtscriptgenerator stdenv.cc.libc gettext curl
-    libxml2 mysql taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
+    libxml2 mysql.lib taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
     soprano qca2 libmtp liblastfm libgpod pkgconfig qjson ffmpeg libofa nepomuk_core ];
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";

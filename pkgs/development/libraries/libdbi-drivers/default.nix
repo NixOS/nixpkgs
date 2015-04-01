@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0m680h8cc4428xin4p733azysamzgzcmv4psjvraykrsaz6ymlj3";
   };
 
-  buildInputs = [ libdbi mysql sqlite postgresql ];
+  buildInputs = [ libdbi mysql.lib sqlite postgresql ];
 
   postPatch = ''
     sed -i '/SQLITE3_LIBS/ s/-lsqlite/-lsqlite3/' configure;
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     "--with-dbi-libdir=${libdbi}/lib"
   ] ++ optionals (mysql != null) [
     "--with-mysql"
-    "--with-mysql-incdir=${mysql}/include/mysql"
-    "--with-mysql-libdir=${mysql}/lib/mysql"
+    "--with-mysql-incdir=${mysql.lib}/include/mysql"
+    "--with-mysql-libdir=${mysql.lib}/lib/mysql"
   ] ++ optionals (postgresql != null) [
     "--with-pgsql"
     "--with-pgsql_incdir=${postgresql}/include"

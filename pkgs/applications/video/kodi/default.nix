@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql nasm avahi libdvdcss lame
+      sqlite mysql.lib nasm avahi libdvdcss lame
       curl bzip2 zip unzip glxinfo xdpyinfo
     ]
     ++ lib.optional dbusSupport dbus_libs

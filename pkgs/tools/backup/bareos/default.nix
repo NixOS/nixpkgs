@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig nettools gettext readline openssl python
-    ncurses sqlite postgresql mysql zlib lzo acl glusterfs ceph libcap
+    ncurses sqlite postgresql mysql.lib zlib lzo acl glusterfs ceph libcap
   ];
 
   postPatch = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ++ optional (openssl != null) "--with-openssl=${openssl}"
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (mysql != null) "--with-mysql=${mysql}"
+    ++ optional (mysql != null) "--with-mysql=${mysql.lib}"
     ++ optional (zlib != null) "--with-zlib=${zlib}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (acl != null) "--enable-acl"
