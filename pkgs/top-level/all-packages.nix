@@ -3574,6 +3574,8 @@ let
     inherit fetchurl stdenv;
   });
 
+  gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
+
   gccgo = gccgo48;
 
   gccgo48 = wrapCC (gcc48.cc.override {
