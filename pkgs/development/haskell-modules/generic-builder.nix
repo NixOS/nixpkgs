@@ -138,14 +138,14 @@ stdenv.mkDerivation ({
     echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
     cp ${newCabalFile} ${pname}.cabal
   '' + optionalString jailbreak ''
-    echo "Running jailbreak-cabal to lift version restrictions on build inputs."
+    echo "Run jailbreak-cabal to lift version restrictions on build inputs."
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + prePatch;
 
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
 
-    echo "Building with ${ghc}."
+    echo "Build with ${ghc}."
     export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
