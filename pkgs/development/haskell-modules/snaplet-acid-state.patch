@@ -1,0 +1,29 @@
+diff -Naur snaplet-acid-state-0.2.6.1/snaplet-acid-state.cabal snaplet-acid-state-0.2.6.1-patched/snaplet-acid-state.cabal
+--- snaplet-acid-state-0.2.6.1/snaplet-acid-state.cabal	2015-04-01 17:59:02.027931618 +0300
++++ snaplet-acid-state-0.2.6.1-patched/snaplet-acid-state.cabal	2015-04-01 18:14:40.911170635 +0300
+@@ -28,8 +28,10 @@
+   build-depends:
+     acid-state                >= 0.6     && < 0.13,
+     base                      >= 4       && < 5,
+-    snap                      >= 0.6     && < 0.14,
+-    text                      >= 0.11    && < 1.3
++    snap                      >= 0.6     && < 0.14.1,
++    text                      >= 0.11    && < 1.3,
++    transformers              >= 0.3.0.0 && < 0.5,
++    mtl                       >= 2.0     && < 2.2
+ 
+   ghc-options: -Wall -fwarn-tabs -funbox-strict-fields
+                -fno-warn-orphans -fno-warn-unused-do-bind
+diff -Naur snaplet-acid-state-0.2.6.1/src/Snap/Snaplet/AcidState.hs snaplet-acid-state-0.2.6.1-patched/src/Snap/Snaplet/AcidState.hs
+--- snaplet-acid-state-0.2.6.1/src/Snap/Snaplet/AcidState.hs	2015-04-01 17:59:02.026931602 +0300
++++ snaplet-acid-state-0.2.6.1-patched/src/Snap/Snaplet/AcidState.hs	2015-04-01 17:08:09.653203679 +0300
+@@ -24,7 +24,8 @@
+   , module Data.Acid
+   ) where
+ 
+-
++import Control.Monad.IO.Class
++import Control.Monad.State.Class
+ import qualified Data.Acid as A
+ import qualified Data.Acid.Advanced as A
+ import qualified Data.Acid.Memory as AM
