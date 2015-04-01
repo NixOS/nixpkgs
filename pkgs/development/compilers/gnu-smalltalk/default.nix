@@ -1,5 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libtool, zip, libffi, libsigsegv, readline, gmp,
-gnutls, gnome, cairo, SDL, sqlite }:
+gnutls, gnome, cairo, SDL, sqlite, emacsSupport ? false, emacs ? null }:
+
+assert emacsSupport -> (emacs != null);
 
 let # The gnu-smalltalk project has a dependency to the libsigsegv library.
     # The project ships with sources for this library, but deprecated this option.
@@ -26,9 +28,12 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libtool zip libffi libsigsegv-shared readline gmp gnutls gnome.gtk
     cairo SDL sqlite
-  ];
+  ]
+  ++ stdenv.lib.optional emacsSupport emacs;
 
-  configureFlags = [ "--without-emacs" ];
+  configureFlags = stdenv.lib.optional (!emacsSupport) "--without-emacs";
+
+  installFlags = stdenv.lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
 
   # For some reason the tests fail if executated with nix-build, but pass if
   # executed within nix-shell --pure.
