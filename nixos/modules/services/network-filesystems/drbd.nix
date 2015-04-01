@@ -44,7 +44,7 @@ let cfg = config.services.drbd; in
 
     boot.extraModprobeConfig =
       ''
-        options drbd usermode_helper=/run/current-system/sw/sbin/drbdadm
+        options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
       '';
 
     environment.etc = singleton

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
-      -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
+      -e s,/usr/sbin,/var/run/current-system/sw/bin, \
       -e s,:/sbin,, src/util/sys_defs.h
   '';
 
