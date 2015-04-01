@@ -594,6 +594,12 @@ self: super: {
   # Test suite wants to connect to $DISPLAY.
   hsqml = dontCheck super.hsqml;
 
+  # https://github.com/lookunder/RedmineHs/issues/4
+  Redmine = markBroken super.Redmine;
+
+  # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
+  unlambda = dontHyperlinkSource super.unlambda;
+
   # https://github.com/megantti/rtorrent-rpc/issues/1
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 

@@ -76,7 +76,9 @@ self: super: {
   command-qq = dontCheck super.command-qq;
 
   # Doesn't support GHC < 7.10.x.
+  bound-gen = dontDistribute super.bound-gen;
   ghc-exactprint = dontDistribute super.ghc-exactprint;
+  ghc-typelits-natnormalise = dontDistribute super.ghc-typelits-natnormalise;
 
   # Newer versions require transformers 0.4.x.
   seqid = super.seqid_0_1_0;
