@@ -55,4 +55,7 @@ rec {
   appendPatch = drv: x: appendPatches drv [x];
   appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
 
+  doHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = true; });
+  dontHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = false; });
+
 }
