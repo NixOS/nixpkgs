@@ -64,17 +64,17 @@
 , freetype ? null # Needed for drawtext filter
 , frei0r ? null # frei0r video filtering
 , fribidi ? null # Needed for drawtext filter
-, game-music-emu ? null # Game Music Emulator
+#, game-music-emu ? null # Game Music Emulator
 , gnutls ? null
-, gsm ? null # GSM de/encoder
+#, gsm ? null # GSM de/encoder
 #, ilbc ? null # iLBC de/encoder
-, jack2 ? null # Jack audio (only version 2 is supported in this build)
+#, jack2 ? null # Jack audio (only version 2 is supported in this build)
 , ladspaH ? null # LADSPA audio filtering
 , lame ? null # LAME MP3 encoder
 , libass ? null # (Advanced) SubStation Alpha subtitle rendering
 , libbluray ? null # BluRay reading
 , libbs2b ? null # bs2b DSP library
-, libcaca ? null # Textual display (ASCII art)
+#, libcaca ? null # Textual display (ASCII art)
 #, libcdio-paranoia ? null # Audio CD grabbing
 , libdc1394 ? null, libraw1394 ? null # IIDC-1394 grabbing (ieee 1394)
 , libiconv ? null
@@ -100,7 +100,7 @@
 , libXv ? null # Xlib support
 , lzma ? null # xz-utils
 #, nvenc ? null # NVIDIA NVENC support
-, openal ? null # OpenAL 1.1 capture support
+#, openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 #, opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
@@ -127,9 +127,9 @@
 , x11grabExtlib ? false, libXext ? null, libXfixes ? null # X11 grabbing (legacy)
 , x264 ? null # H.264/AVC encoder
 , x265 ? null # H.265/HEVC encoder
-, xavs ? null # AVS encoder
+#, xavs ? null # AVS encoder
 , xvidcore ? null # Xvid encoder, native encoder exists
-, zeromq4 ? null # Message passing
+#, zeromq4 ? null # Message passing
 , zlib ? null
 #, zvbi ? null # Teletext support
 /*
@@ -367,9 +367,9 @@ stdenv.mkDerivation rec {
     (mkFlag (freetype != null) "0.7" "libfreetype")
     (mkFlag (disDarwinFix (frei0r != null && gplLicensing)) "0.7" "frei0r")
     (mkFlag (fribidi != null) "2.3" "libfribidi")
-    (mkFlag (disDarwinFix (game-music-emu != null)) "2.2" "libgme")
+    #(mkFlag (disDarwinFix (game-music-emu != null)) "2.2" "libgme")
     (mkFlag (gnutls != null) "0.9" "gnutls")
-    (verFix (mkFlag (disDarwinFix (gsm != null)) "0.5" "libgsm") "0.5" "--disable-libgsm")
+    #(verFix (mkFlag (disDarwinFix (gsm != null)) "0.5" "libgsm") "0.5" "--disable-libgsm")
     #(mkFlag (ilbc != null) "1.0" "libilbc")
     (mkFlag (ladspaH !=null) "2.1" "ladspa")
     (mkFlag (lame != null) "0.5" "libmp3lame")
@@ -377,7 +377,7 @@ stdenv.mkDerivation rec {
     #(mkFlag (libavc1394 != null) null null)
     (mkFlag (libbluray != null) "1.0" "libbluray")
     (mkFlag (libbs2b != null) "2.3" "libbs2b")
-    (mkFlag (libcaca != null) "1.0" "libcaca")
+    #(mkFlag (libcaca != null) "1.0" "libcaca")
     #(mkFlag (cdio-paranoia != null && gplLicensing) "0.9" "libcdio")
     (mkFlag (if !isLinux then false else libdc1394 != null && libraw1394 != null && isLinux) "0.5" "libdc1394")
     (mkFlag (libiconv != null) "1.2" "iconv")
@@ -400,7 +400,7 @@ stdenv.mkDerivation rec {
     (mkFlag libxcb-shapeExtlib "2.5" "libxcb-shape")
     (mkFlag (lzma != null) "2.4" "lzma")
     #(mkFlag nvenc        "2.6" "nvenc")
-    (mkFlag (disDarwinFix (openal != null)) "0.9" "openal")
+    #(mkFlag (disDarwinFix (openal != null)) "0.9" "openal")
     #(mkFlag opencl       "2.2" "opencl")
     #(mkFlag (opencore-amr != null && version3Licensing) "0.5" "libopencore-amrnb")
     #(mkFlag (opencv != null) "1.1" "libopencv") # Actual min. version 0.7
@@ -419,7 +419,7 @@ stdenv.mkDerivation rec {
     (mkFlag (speex != null) "0.5" "libspeex")
     #(mkFlag (twolame != null) "1.0" "libtwolame")
     #(mkFlag (utvideo != null && gplLicensing) "0.9" "libutvideo")
-    (mkFlag (if !isLinux then false else v4l_utils != null && isLinux) "0.9" "libv4l2")
+    #(mkFlag (if !isLinux then false else v4l_utils != null && isLinux) "0.9" "libv4l2")
     (mkFlag (disDarwinFix (vid-stab != null && gplLicensing)) "2.2" "libvidstab") # Actual min. version 2.0
     #(mkFlag (vo-aacenc != null && version3Licensing) "0.6" "libvo-aacenc")
     #(mkFlag (vo-amrwbenc != null && version3Licensing) "0.7" "libvo-amrwbenc")
@@ -427,9 +427,9 @@ stdenv.mkDerivation rec {
     (mkFlag (x11grabExtlib && gplLicensing) "0.5" "x11grab")
     (mkFlag (x264 != null && gplLicensing) "0.5" "libx264")
     (mkFlag (disDarwinFix (x265 != null && gplLicensing)) "2.2" "libx265")
-    (mkFlag (disDarwinFix (xavs != null && gplLicensing)) "0.7" "libxavs")
+    #(mkFlag (disDarwinFix (xavs != null && gplLicensing)) "0.7" "libxavs")
     (mkFlag (xvidcore != null && gplLicensing) "0.5" "libxvid")
-    (mkFlag (zeromq4 != null) "2.0" "libzmq")
+    #(mkFlag (zeromq4 != null) "2.0" "libzmq")
     (mkFlag (zlib != null) "0.5" "zlib")
     #(mkFlag (zvbi != null && gplLicensing) "2.1" "libzvbi")
     /*
@@ -448,18 +448,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 celt fontconfig freetype fribidi gnutls ladspaH lame libass libbluray
-    libbs2b libcaca libdc1394 libogg libopus libtheora libvdpau libvorbis
+    libbs2b /* libcaca */ libdc1394 libogg libopus libtheora libvdpau libvorbis
     libwebp libX11 libxcb libXext libXfixes libXv lzma SDL soxr speex x264
-    xvidcore zeromq4 zlib
+    xvidcore /* zeromq4 */ zlib
   ] ++ optional (disDarwinFix sambaExtlib) samba
     ++ optional openglExtlib mesa
     ++ optionals x11grabExtlib [ libXext libXfixes ]
     ++ optionals nonfreeLicensing [ faac faad2 fdk_aac openssl ]
     ++ optionals (!isDarwin) [
-      frei0r game-music-emu gsm jack2 libmodplug libssh libvpx openal
-      openjpeg_1 pulseaudio rtmpdump vid-stab wavpack x265 xavs
+      frei0r /* game-music-emu gsm jack2 */ libmodplug libssh libvpx /* openal */
+      openjpeg_1 pulseaudio rtmpdump vid-stab wavpack x265 /* xavs */
   ] ++ optional (!isDarwin && !isCygwin) libva
-    ++ optionals isLinux [ alsaLib libraw1394 v4l_utils ];
+    ++ optionals isLinux [ alsaLib libraw1394 /* v4l_utils */ ];
 
   # Build qt-faststart executable
   buildPhase = optional (qt-faststartProgram && (reqMin "0.9")) ''make tools/qt-faststart'';
