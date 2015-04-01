@@ -260,6 +260,7 @@ in rec {
   tests.installer.simple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simple.test);
   tests.installer.simpleLabels = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleLabels.test);
   tests.installer.simpleProvided = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleProvided.test);
+  tests.installer.swraid = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).swraid.test);
   tests.installer.btrfsSimple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSimple.test);
   tests.installer.btrfsSubvols = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
   tests.installer.btrfsSubvolDefault = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);

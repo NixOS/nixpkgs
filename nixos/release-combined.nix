@@ -57,6 +57,7 @@ in rec {
         (all nixos.tests.installer.simple)
         (all nixos.tests.installer.simpleLabels)
         (all nixos.tests.installer.simpleProvided)
+        (all nixos.tests.installer.swraid)
         (all nixos.tests.installer.btrfsSimple)
         (all nixos.tests.installer.btrfsSubvols)
         (all nixos.tests.installer.btrfsSubvolDefault)
