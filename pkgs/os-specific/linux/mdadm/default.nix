@@ -1,11 +1,20 @@
 { stdenv, fetchurl, groff }:
 
 stdenv.mkDerivation rec {
-  name = "mdadm-3.3.2";
+  name = "mdadm-3.3";
 
+  # WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING
+  #  Do NOT update this if you're not ABSOLUTELY certain that it will work.
+  #  Please check the update using the NixOS VM test, BEFORE pushing:
+  #    nix-build nixos/release.nix -A tests.installer.swraid.x86_64-linux
+  # Discussion:
+  #   https://github.com/NixOS/nixpkgs/commit/7719f7f
+  #   https://github.com/NixOS/nixpkgs/commit/666cf99
+  #   https://github.com/NixOS/nixpkgs/pull/6006
+  # WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING -- WARNING
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.xz";
-    sha256 = "132vdvh3myjgcjn6i9w90ck16ddjxjcszklzkyvr4f5ifqd7wfhg";
+    url = "mirror://kernel/linux/utils/raid/mdadm/${name}.tar.bz2";
+    sha256 = "0igdqflihiq1dp5qlypzw0xfl44f4n3bckl7r2x2wfgkplcfa1ww";
   };
 
   nativeBuildInputs = [ groff ];
