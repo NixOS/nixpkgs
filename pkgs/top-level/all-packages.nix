@@ -2093,7 +2093,9 @@ let
 
   newsbeuter-dev = callPackage ../applications/networking/feedreaders/newsbeuter/dev.nix { };
 
-  ngrep = callPackage ../tools/networking/ngrep { };
+  ngrep = callPackage ../tools/networking/ngrep {
+    inherit gnumake3;
+  };
 
   ngrok = callPackage ../tools/misc/ngrok { };
 
