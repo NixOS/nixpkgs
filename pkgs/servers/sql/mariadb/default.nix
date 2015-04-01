@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
     # Make sure to propagate lib for compatability
     mkdir -p $out/nix-support
-    echo "$lib" > $out/nix-support/propagated-native-build-inputs
+    echo "$lib" > $out/nix-support/propagated-build-inputs
   '';
 
   passthru.mysqlVersion = "5.6";
