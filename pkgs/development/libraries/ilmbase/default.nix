@@ -1,4 +1,4 @@
-{ stdenv, openexr, automake, autoconf, libtool }:
+{ stdenv, openexr, automake, autoconf, libtool, which }:
 
 stdenv.mkDerivation {
   name = "ilmbase-${openexr.source.version}";
@@ -13,7 +13,9 @@ stdenv.mkDerivation {
     ./bootstrap
   '';
 
-  buildInputs = [ automake autoconf libtool ];
+  buildInputs = [ automake autoconf libtool which ];
+
+  patches = [ ./bootstrap.patch ];
 
   meta = with stdenv.lib; {
     homepage = http://www.openexr.com/;
