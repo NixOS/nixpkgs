@@ -72,7 +72,7 @@ let
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
-  enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
+  enableParallelBuilding = versionOlder "7.10" ghc.version || (versionOlder "7.8" ghc.version && !hasActiveLibrary);
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
