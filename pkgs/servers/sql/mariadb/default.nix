@@ -88,6 +88,11 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib
     mv $out/include $lib
 
+    # Add mysql_config to libs since configure scripts use it
+    mkdir -p $lib/bin
+    cp $out/bin/mysql_config $lib/bin
+    sed -i "/\(execdir\|bindir\)/ s,'[^\"']*',$lib/bin,g" $lib/bin/mysql_config
+
     # Make sure to propagate lib for compatability
     mkdir -p $out/nix-support
     echo "$lib" > $out/nix-support/propagated-build-inputs
