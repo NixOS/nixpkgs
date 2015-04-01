@@ -2128,6 +2128,71 @@ let
     };
   };
 
+  pytestcache = buildPythonPackage rec {
+    name = "pytest-cache-1.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-cache/pytest-cache-1.0.tar.gz";
+      sha256 = "1a873fihw4rhshc722j4h6j7g3nj7xpgsna9hhg3zn6ksknnhx5y";
+    };
+
+    propagatedBuildInputs = with self ; [ pytest execnet ];
+
+    meta = {
+      license = stdenv.lib.licenses.mit;
+      website = "https://pypi.python.org/pypi/pytest-cache/";
+      description = "pytest plugin with mechanisms for caching across test runs";
+    };
+  };
+
+  pytestflakes = buildPythonPackage rec {
+    name = "pytset-flakes-0.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-flakes/pytest-flakes-0.2.zip";
+      sha256 = "0n4mc2kaqasxmj8jid7jlss7nwgz4qgglcwdyrqvh08dilnp354i";
+    };
+
+    propagatedBuildInputs = with self ; [ pytest pyflakes pytestcache ];
+
+    meta = {
+      license = stdenv.lib.licenses.mit;
+      website = "https://pypi.python.org/pypi/pytest-flakes";
+      description = "pytest plugin to check source code with pyflakes";
+    };
+  };
+
+  pytestpep8 = buildPythonPackage rec {
+    name = "pytest-pep8";
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pytest-pep8/pytest-pep8-1.0.6.tar.gz";
+      sha256 = "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3";
+    };
+
+    propagatedBuildInputs = with self ; [ pytest pytestcache pep8 ];
+
+    meta = {
+      license = stdenv.lib.licenses.mit;
+      website = "https://pypi.python.org/pypi/pytest-pep8";
+      description = "pytest plugin to check PEP8 requirements";
+    };
+  };
+
+  pytestquickcheck = buildPythonPackage rec {
+    name = "pytest-quickcheck-0.8.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-quickcheck/pytest-quickcheck-0.8.2.tar.gz";
+      sha256 = "047w4zwdsnlzmsc5f3rapzbzd2frlvz9nnp8v4b48fjmqmxassh3";
+    };
+
+    propagatedBuildInputs = with self ; [ pytest pytestflakes pytestpep8 tox ];
+
+    meta = {
+      license = stdenv.lib.licenses.asl20;
+      website = "https://pypi.python.org/pypi/pytest-quickcheck";
+      description = "pytest plugin to generate random data inspired by QuickCheck";
+    };
+  };
+
   pytestcov = buildPythonPackage (rec {
     name = "pytest-cov-1.8.1";
 
