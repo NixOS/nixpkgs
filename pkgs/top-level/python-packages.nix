@@ -7560,7 +7560,7 @@ let
        '';
     meta = with stdenv.lib;
       { description = "A Cython interface to the HIDAPI from https://github.com/signal11/hidapi";
-        license = licenses.free;
+        license = with licenses; [ bsd3 gpl3 ]; # or custom license
         maintainer = [ maintainers.emery ];
       };
   };
