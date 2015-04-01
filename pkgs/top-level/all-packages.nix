@@ -3574,7 +3574,9 @@ let
     inherit fetchurl stdenv;
   });
 
-  gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
+  gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk {
+    emacsSupport = config.emacsSupport or false;
+  };
 
   gccgo = gccgo48;
 
