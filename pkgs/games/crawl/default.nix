@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL, SDL_image, mesa, freetype
+, dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype
 , tileMode ? true
 }:
 
@@ -21,14 +21,14 @@ stdenv.mkDerivation rec {
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
              ++ stdenv.lib.optionals tileMode
-                [ libpng SDL SDL_image freetype mesa ];
+                [ libpng SDL2 SDL2_image freetype mesa ];
 
   preBuild = ''
     cd crawl-ref/source
     echo "${version}" > util/release_ver
     # Related to issue #1963
     sed -i 's/-fuse-ld=gold//g' Makefile
-    for i in util/*.pl; do
+    for i in util/*; do
       patchShebangs $i
     done
     patchShebangs util/gen-mi-enum
