@@ -7043,6 +7043,15 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [IOSocketSSL DigestHMAC];
   };
 
+  NetSMTPTLSButMaintained = buildPerlPackage {
+    name = "Net-SMTP-TLS-ButMaintained-0.24";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FA/FAYLAND/Net-SMTP-TLS-ButMaintained-0.24.tar.gz;
+      sha256 = "0vi5cv7f9i96hgp3q3jpxzn1ysn802kh5xc304f8b7apf67w15bb";
+    };
+    propagatedBuildInputs = [NetSSLeay DigestHMAC IOSocketSSL];
+  };
+
   NetSNMP = buildPerlPackage rec {
     name = "Net-SNMP-6.0.1";
     src = fetchurl {
