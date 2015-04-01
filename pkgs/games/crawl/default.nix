@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
+{ stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
 , dejavu_fonts, libpng, SDL, SDL_image, mesa, freetype
 , tileMode ? true
 }:
 
-let version = "0.15.2";
+let version = "0.16.1";
 in
 stdenv.mkDerivation rec {
   name = "crawl-${version}" + (if tileMode then "-tiles" else "");
-  src = fetchurl {
-    url = "mirror://sourceforge/crawl-ref/Stone%20Soup/${version}/stone_soup-${version}-nodeps.tar.xz";
-    sha256 = "1qi1g8w0sxmwrv96hnay20gpwp1xn2xcq1cw9iwn1yq112484fp9";
+  src = fetchFromGitHub {
+    owner = "crawl-ref";
+    repo = "crawl-ref";
+    rev = version;
+    sha256 = "0gciqaij05qr5bwkk5mblvk5k0p6bzjd58czk1b6x5xx5qcp6mmh";
   };
 
-  patches = [ ./makefile_fonts.patch ./makefile_sqlite.patch ];
+  patches = [ ./crawl_purify.patch ];
 
   nativeBuildInputs = [ pkgconfig which perl ];
 
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
                 [ libpng SDL SDL_image freetype mesa ];
 
   preBuild = ''
-    cd source
+    cd crawl-ref/source
+    echo "${version}" > util/release_ver
     # Related to issue #1963
     sed -i 's/-fuse-ld=gold//g' Makefile
     for i in util/*.pl; do

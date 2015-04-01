@@ -68,7 +68,7 @@ instance, if you try to define an option that doesn’t exist (that is,
 doesn’t have a corresponding <emphasis>option declaration</emphasis>),
 <command>nixos-rebuild</command> will give an error like:
 <screen>
-The option `services.httpd.enabl' defined in `/etc/nixos/configuration.nix' does not exist.
+The option `services.httpd.enable' defined in `/etc/nixos/configuration.nix' does not exist.
 </screen>
 Likewise, values in option definitions must have a correct type.  For
 instance, <option>services.httpd.enable</option> must be a Boolean

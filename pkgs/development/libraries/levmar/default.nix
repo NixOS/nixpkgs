@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
         
 stdenv.mkDerivation rec {
-  name = "levmar-2.5";
+  name = "levmar-2.6";
 
   src = fetchurl {
     url = "http://www.ics.forth.gr/~lourakis/levmar/${name}.tgz";
-    sha256 = "0xcx9fvymr0j5kmfy5cqaa2lxf1c64vv25z2a28w43pkxz1nl3xp";
+    sha256 = "1mxsjip9x782z6qa6k5781wjwpvj5aczrn782m9yspa7lhgfzx1v";
   };
 
   patchPhase = ''

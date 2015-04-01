@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  rev = "185852eac44c25ae2e8d3b3fb6c9630e754e6363";
-  version = "v0.2-185852eac44c25ae2e8d3b3fb6c9630e754e6363";
+  rev = "e716a9e1a9e460a45663694ba4e9e8894a8452b2";
+  version = "v0.2-e716a9e1a9e460a45663694ba4e9e8894a8452b2";
   name = "git-remote-hg-${version}";
 
   src = fetchgit {
     inherit rev;
-    url = "git://github.com/felipec/git-remote-hg.git";
-    sha256 = "1hc65nvxq7if1imwffyxia0i6vnkbax09gfcl9vq9yffzi8xzzfy";
+    url = "git://github.com/fingolfin/git-remote-hg.git";
+    sha256 = "7c61c8f2be47d96c4244f0f8a3c8f9b994994b15dbe1754581f746888d705463";
   };
 
   buildInputs = [ mercurial.python mercurial makeWrapper

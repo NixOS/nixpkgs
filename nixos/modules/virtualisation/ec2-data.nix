@@ -44,7 +44,7 @@ with lib;
             # into the image (a Nova feature).
             if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
-                mkdir -p /root/.ssh
+                mkdir -m 0700 -p /root/.ssh
                 $wget http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key > /root/key.pub
                 if [ $? -eq 0 -a -e /root/key.pub ]; then
                     if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then

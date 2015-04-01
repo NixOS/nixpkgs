@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, expat, gettext, libiconvOrEmpty, dbus, glib }:
+{ stdenv, fetchurl, pkgconfig, expat, gettext, libiconv, dbus, glib }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-glib-0.102";
+  name = "dbus-glib-0.104";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/dbus-glib/${name}.tar.gz";
-    sha256 = "177j5p2vrvpmzk2xrrj6akn73kvpbvnmsjvlmca9l55qbdcfsr39";
+    sha256 = "1xi1v1msz75qs0s4lkyf1psrksdppa3hwkg0mznc6gpw5flg3hdz";
   };
 
   nativeBuildInputs = [ pkgconfig gettext ];
 
-  buildInputs = [ expat ] ++ libiconvOrEmpty;
+  buildInputs = [ expat libiconv ];
 
   propagatedBuildInputs = [ dbus.libs glib ];
 

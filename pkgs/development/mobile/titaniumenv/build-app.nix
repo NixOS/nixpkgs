@@ -1,7 +1,7 @@
 {stdenv, androidsdk, titaniumsdk, titanium, xcodewrapper, jdk, python, which, xcodeBaseDir}:
 { name, src, target, androidPlatformVersions ? [ "8" ], androidAbiVersions ? [ "armeabi" "armeabi-v7a" ], tiVersion ? null
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.0", iosWwdrCertificate ? null
+, iosMobileProvisioningProfile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosVersion ? "8.1", iosWwdrCertificate ? null
 , enableWirelessDistribution ? false, installURL ? null
 }:
 

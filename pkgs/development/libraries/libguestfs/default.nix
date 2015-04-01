@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://libguestfs.org/;
     maintainers = with maintainers; [offline];
     platforms = with platforms; linux;
+    hydraPlatforms = [];
   };
 }

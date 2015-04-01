@@ -1,0 +1,49 @@
+From 485cebc4d9bab2dae51cf29f91fad2f1cf157fec Mon Sep 17 00:00:00 2001
+From: Eugene Pankov <john.pankov@gmail.com>
+Date: Sun, 21 Sep 2014 12:04:13 +0300
+Subject: [PATCH] Work around missing sslwrap in Python 2.7.9 (fixes #477)
+
+---
+ gevent/_ssl2.py | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
+
+diff --git a/gevent/ssl.py b/gevent/ssl.py
+index 21491b7..85e6a86 100644
+--- a/gevent/ssl.py
++++ b/gevent/ssl.py
+@@ -80,15 +80,27 @@ def __init__(self, sock, keyfile=None, certfile=None,
+             self._sslobj = None
+         else:
+             # yes, create the SSL object
+-            if ciphers is None:
+-                self._sslobj = _ssl.sslwrap(self._sock, server_side,
+-                                            keyfile, certfile,
+-                                            cert_reqs, ssl_version, ca_certs)
++            if hasattr(_ssl, 'sslwrap'):
++                if ciphers is None:
++                    self._sslobj = _ssl.sslwrap(self._sock, server_side,
++                                                keyfile, certfile,
++                                                cert_reqs, ssl_version, ca_certs)
++                else:
++                    self._sslobj = _ssl.sslwrap(self._sock, server_side,
++                                                keyfile, certfile,
++                                                cert_reqs, ssl_version, ca_certs,
++                                                ciphers)
+             else:
+-                self._sslobj = _ssl.sslwrap(self._sock, server_side,
+-                                            keyfile, certfile,
+-                                            cert_reqs, ssl_version, ca_certs,
+-                                            ciphers)
++                self.context = __ssl__.SSLContext(ssl_version)
++                self.context.verify_mode = cert_reqs
++                if ca_certs:
++                    self.context.load_verify_locations(ca_certs)
++                if certfile:
++                    self.context.load_cert_chain(certfile, keyfile)
++                if ciphers:
++                    self.context.set_ciphers(ciphers)
++                self._sslobj = self.context._wrap_socket(self._sock, server_side=server_side, ssl_sock=self)
++
+             if do_handshake_on_connect:
+                 self.do_handshake()
+         self.keyfile = keyfile

@@ -49,10 +49,25 @@ in
     inherit (xorg) xorgcffiles;
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch];
+    setupHook = if stdenv.isDarwin then ./darwin-imake-setup-hook.sh else null;
+    CFLAGS = [ "-DIMAKE_COMPILETIME_CPP=\\\"${if stdenv.isDarwin
+      then "${args.tradcpp}/bin/cpp"
+      else "gcc"}\\\""
+    ];
+    tradcpp = if stdenv.isDarwin then args.tradcpp else null;
   };
 
   mkfontdir = attrs: attrs // {
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
+  };
+
+  mkfontscale = attrs: attrs // {
+    patches = lib.singleton (args.fetchpatch {
+      name = "mkfontscale-fix-sig11.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=113951";
+      sha256 = "0i2xf768mz8kvm7i514v0myna9m6jqw82f9a03idabdpamxvwnim";
+    });
+    patchFlags = [ "-p0" ];
   };
 
   libxcb = attrs : attrs // {
@@ -62,6 +77,10 @@ in
 
   xcbproto = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
+  };
+
+  libxkbfile = attrs: attrs // {
+    patches = lib.optional (stdenv.cc.cc.isClang or false) ./libxkbfile-clang36.patch;
   };
 
   libpciaccess = attrs : attrs // {
@@ -215,11 +234,6 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
-    patches = [( args.fetchpatch {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/patch/"
-        + "?id=4664412d7a5266d2b392957406b34abc5db95e48";
-      sha256 = "1gix83f1is91iq1zd66nj4k72jm24jjjd9s9l0bzpzhgc8smqdk2";
-    })];
   };
 
   xf86videoqxl = attrs: attrs // {
@@ -235,7 +249,7 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
+    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb"; 
   };
 
   xkeyboardconfig = attrs: attrs // {
@@ -268,7 +282,8 @@ in
         libpciaccess inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ]
+                   ++ lib.optional isDarwin ./fix-clang.patch;
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -291,6 +306,7 @@ in
         ];
         patches = commonPatches;
         configureFlags = [
+          "--enable-kdrive"             # not built by default
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
@@ -307,7 +323,7 @@ in
           url = mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2;
           sha256 = "0c57vp1z0p38dj5gfipkmlw6bvbz1mrr0sb3sbghdxxdyq4kzcz8";
         };
-        buildInputs = commonBuildInputs;
+        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
@@ -371,6 +387,7 @@ in
 
   xinit = attrs: attrs // {
     stdenv = if isDarwin then args.clangStdenv else stdenv;
+    buildInputs = attrs.buildInputs ++ lib.optional isDarwin args.bootstrap_cmds;
     configureFlags = [
       "--with-xserver=${xorg.xorgserver}/bin/X"
     ] ++ lib.optionals isDarwin [
@@ -378,7 +395,8 @@ in
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
-    propagatedBuildInputs = [ xorg.xauth ];
+    propagatedBuildInputs = [ xorg.xauth ]
+                         ++ lib.optionals isDarwin [ xorg.libX11 xorg.xproto ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';

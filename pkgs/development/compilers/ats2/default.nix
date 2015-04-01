@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "ats2-${version}";
-  version = "0.1.4";
+  version = "0.1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-${version}.tgz";
-    sha256 = "174kxdvdgp2rlb0qq7d854n6m9gzy0g8annk3bmbqb23m36n2g39";
+    sha256 = "0zcki97zj9r1dvlfriwfckp9b9z7iavw09q21v6i5ld90hw9588q";
   };
 
   buildInputs = [ gmp ];

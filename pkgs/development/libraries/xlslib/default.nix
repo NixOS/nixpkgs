@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, autoreconfHook, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.0";
+  version = "2.5.0";
   name = "xlslib-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/xlslib/xlslib-package-${version}.zip";
-    sha256 = "0h7qhxcc55cz3jvrfv4scjnzf5w9g97wigyviandi4ag54qjxjdc";
+    sha256 = "1wx3jbpkz2rvgs45x6mwawamd1b2llb0vn29b5sr0rfxzx9d1985";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip autoreconfHook ];
 
   setSourceRoot = "export sourceRoot=xlslib/xlslib";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++/C library to construct Excel .xls files in code";
-    homepage = http://xlslib.sourceforge.net/;
+    homepage = http://sourceforge.net/projects/xlslib/files/;
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = maintainers.abbradar;

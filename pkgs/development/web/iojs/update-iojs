@@ -1,0 +1,51 @@
+#!/bin/sh
+#
+# Fetch the latest io.js release (stable/nightly) and update
+# `default.nix` in this directory.
+#
+
+set -e
+
+HERE="$(dirname "$0")"
+
+latest() {
+    curl -s "$1" | grep 'href="v' \
+        | tail -1 | sed 's/.*href="v//;s/\/".*//'
+}
+
+latest_log() {
+    echo "Getting latest $1 version from $2" >&2
+    version=$(latest "$2")
+    echo " -> $version" >&2
+    echo "$version"
+}
+
+url() {
+    nix-instantiate -A "$1" 2> /dev/null | xargs cat \
+        | sed 's/.*"urls","//;s/".*//'
+}
+
+hash() {
+    nix-prefetch-url "$1" 2> /dev/null
+}
+
+hash_log() {
+    echo "Finding hash for $1" >&2
+    value=$(hash "$1")
+    echo " -> $value" >&2
+    echo "$value"
+}
+
+stable=$(latest_log stable 'https://iojs.org/dist/')
+nightly=$(latest_log nightly 'https://iojs.org/download/nightly/')
+
+sed -i \
+    "/version = if nightly/s/then.*/then \"$nightly\" else \"$stable\";/" \
+    "$HERE/default.nix"
+
+stableHash=$(hash_log "$(url iojs.src)")
+nightlyHash=$(hash_log "$(url iojs-nightly.src)")
+
+sed -i \
+    "/sha256 = if nightly/{N;s/\"[^\"]*\"/\"$nightlyHash\"/;N;s/\"[^\"]*\";/\"$stableHash\";/}" \
+    "$HERE/default.nix"

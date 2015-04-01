@@ -74,10 +74,13 @@ buildPythonPackage rec {
   # path to the executable in argv[0] therefore the wrapper is
   # modified accordingly.
   postFixup = ''
+    wrapProgram "$out/bin/zim" \
+      --prefix XDG_DATA_DIRS : "$out/share"
+
     wrapPythonPrograms
 
-    sed -i "s#sys\.argv\[0\] = 'zim'#sys.argv[0] = '$out/bin/zim'#g" \
-      $out/bin/.zim-wrapped
+    sed -i "s#sys\.argv\[0\] = '.zim-wrapped'#sys.argv[0] = '$out/bin/zim'#g" \
+      $out/bin/..zim-wrapped-wrapped
 
     if test -e $out/nix-support/propagated-build-inputs; then
         ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages

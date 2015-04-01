@@ -81,6 +81,7 @@ stdenv.mkDerivation {
   installPhase = ''
     export CC=cc
     mkdir -p "$out/bin"
+    unset GOPATH
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"
     export PATH="$GOBIN:$PATH"
@@ -99,7 +100,10 @@ stdenv.mkDerivation {
     cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
+    branch = "1.3";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";

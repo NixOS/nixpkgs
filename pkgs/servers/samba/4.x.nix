@@ -1,9 +1,9 @@
 { stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl_ns
 , docbook_xml_dtd_42, readline, talloc, ntdb, tdb, tevent, ldb, popt, iniparser
-, pythonPackages
+, pythonPackages, libbsd, nss_wrapper, socket_wrapper, uid_wrapper, libarchive
 
 # source3/wscript optionals
-, heimdal ? null # Samba only supports heimdal for kerberos although mit-krb5 is being worked on
+, kerberos ? null
 , openldap ? null
 , cups ? null
 , pam ? null
@@ -11,7 +11,6 @@
 , acl ? null
 , libaio ? null
 , fam ? null
-, ctdb ? null
 , ceph ? null
 , glusterfs ? null
 
@@ -31,20 +30,24 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "samba-4.1.14";
+  name = "samba-4.2.0";
 
   src = fetchurl {
-    url = "http://samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1ficvglapxcw4zrgwkmmjbprsqrxks3ii29nblsr4wlrram4p8ay";
+    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
+    sha256 = "03s9pjdgq6nlv2lcnlmxlhhj8m5drgv6z4xy9zkgwwd92mw0b9k6";
   };
 
-  patches = [ ./4.x-no-persistent-install.patch ];
+  patches = [
+    ./4.x-no-persistent-install.patch
+    ./4.x-heimdal-compat.patch
+  ];
 
   buildInputs = [
     python pkgconfig perl libxslt docbook_xsl_ns docbook_xml_dtd_42
     readline talloc ntdb tdb tevent ldb popt iniparser pythonPackages.subunit
+    libbsd nss_wrapper socket_wrapper uid_wrapper libarchive
 
-    heimdal openldap cups pam avahi acl libaio fam ctdb ceph glusterfs
+    kerberos openldap cups pam avahi acl libaio fam ceph glusterfs
 
     libiconv gettext
 
@@ -53,6 +56,11 @@ stdenv.mkDerivation rec {
     zlib ncurses libcap
   ];
 
+  postPatch = ''
+    # Removes absolute paths in scripts
+    sed -i 's,/sbin/,,g' ctdb/config/functions
+  '';
+
   enableParallelBuilding = true;
 
   configureFlags = [
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--with-winbind"
-  ] ++ (if heimdal != null then [ "--with-ads" ] else [ "--without-ads" ])
+  ] ++ (if kerberos != null then [ "--with-ads" ] else [ "--without-ads" ])
     ++ (if openldap != null then [ "--with-ldap" ] else [ "--without-ldap" ])
     ++ (if cups != null then [ "--enable-cups" ] else [ "--disable-cups" ])
     ++ (if pam != null then [ "--with-pam" "--with-pam_smbpass" ]
@@ -76,29 +84,50 @@ stdenv.mkDerivation rec {
     "--with-syslog"
     "--with-automount"
   ] ++ (if libaio != null then [ "--with-aio-support" ] else [ "--without-aio-support" ])
-    ++ (if fam != null then [ "--with-fam" ] else [ "--without-fam" ])
-    ++ (if ctdb != null then [ "--with-cluster-support" "--with-ctdb-dir=${ctdb}" ]
-        else [ "--without-cluster-support" ])
-    ++ (if ceph != null then [ "--with-libcephfs=${ceph}" ] else [ ])
+    ++ (if fam != null then [ "--with-fam" ] else [ "--without-fam" ]) ++ [
+    "--with-cluster-support"
+  ] ++ (if ceph != null then [ "--with-libcephfs=${ceph}" ] else [ ])
     ++ (if glusterfs != null then [ "--enable-glusterfs" ] else [ "--disable-glusterfs" ]) ++ [
+
     # dynconfig/wscript options
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
 
     # buildtools/wafsamba/wscript options
-    "--bundled-libraries=${if heimdal != null then "NONE" else "com_err"}"
+    "--bundled-libraries=${if kerberos != null && kerberos.implementation == "heimdal" then "NONE" else "com_err"}"
     "--private-libraries=NONE"
     "--builtin-libraries=replace"
   ] ++ (if libiconv != null then [ "--with-libiconv=${libiconv}" ] else [ ])
     ++ (if gettext != null then [ "--with-gettext=${gettext}" ] else [ "--without-gettext" ]) ++ [
+
     # source4/lib/tls/wscript options
   ] ++ (if gnutls != null && libgcrypt != null && libgpgerror != null
         then [ "--enable-gnutls" ] else [ "--disable-gnutls" ]) ++ [
+
     # wscript options
-  ] ++ stdenv.lib.optional (heimdal == null) "--without-ad-dc";
+  ] ++ stdenv.lib.optional (kerberos != null && kerberos.implementation == "krb5") "--with-system-mitkrb5"
+    ++ stdenv.lib.optional (kerberos == null) "--without-ad-dc" ++ [
+
+    # ctdb/wscript
+    "--enable-infiniband"
+    "--enable-pmda"
+  ];
 
   stripAllList = [ "bin" "sbin" ];
+
+  postFixup = ''
+    export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
+    read -r -d "" SCRIPT << EOF
+    [ -z "\$SAMBA_LIBS" ] && exit 1;
+    BIN='{}';
+    OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
+    ALL_LIBS="\$(echo -e "\$SAMBA_LIBS\n\$OLD_LIBS" | sort | uniq | tr '\n' ':')";
+    patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
+    patchelf --shrink-rpath "\$BIN";
+    EOF
+    find $out -type f -exec $SHELL -c "$SCRIPT" \;
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.samba.org/;

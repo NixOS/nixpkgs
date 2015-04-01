@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://sethwklein.net/projects/iana-etc/;
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

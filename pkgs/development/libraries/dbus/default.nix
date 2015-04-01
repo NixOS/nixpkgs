@@ -1,14 +1,18 @@
 { stdenv, fetchurl, pkgconfig, autoconf, automake, libtool
 , expat, systemd, glib, dbus_glib, python
-, libX11, libICE, libSM, useX11 ? (stdenv.isLinux || stdenv.isDarwin) }:
+, libX11 ? null, libICE ? null, libSM ? null, x11Support ? (stdenv.isLinux || stdenv.isDarwin) }:
+
+assert x11Support -> libX11 != null
+                  && libICE != null
+                  && libSM != null;
 
 let
-  version = "1.8.12";
-  sha256 = "07jhcalg00i2rx5zrgk73rg0vm7lzi5q5z2gscrbl999ipr2h569";
+  version = "1.8.16";
+  sha256 = "01rba8mp8kqvmy6ibdmi806kjr3m14swnskqk02gyhykxxl54ybz";
 
   inherit (stdenv) lib;
 
-  buildInputsX = lib.optionals useX11 [ libX11 libICE libSM ];
+  buildInputsX = lib.optionals x11Support [ libX11 libICE libSM ];
 
   # also other parts than "libs" need this statically linked lib
   makeInternalLib = "(cd dbus && make libdbus-internal.la)";
@@ -57,7 +61,7 @@ let
       "--sysconfdir=/etc"
       "--with-session-socket-dir=/tmp"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ] ++ lib.optional (!useX11) "--without-x";
+    ] ++ lib.optional (!x11Support) "--without-x";
 
     enableParallelBuilding = true;
 
@@ -91,6 +95,13 @@ let
       stdenv.lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed "
       + "-ldbus-1";
 
+    # don't provide another dbus-1.pc (with incorrect include and link dirs),
+    # also remove useless empty dirs
+    postInstall = ''
+      rm "$out"/lib/pkgconfig/dbus-1.pc
+      rmdir --parents --ignore-fail-on-non-empty "$out"/{lib/pkgconfig,share/dbus-1/*}
+    '';
+
     meta.platforms = with stdenv.lib.platforms; allBut darwin;
   };
 
@@ -101,3 +112,4 @@ let
   };
 };
 in attrs.libs // attrs
+

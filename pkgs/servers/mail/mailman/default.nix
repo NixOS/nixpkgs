@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python, dnspython }:
 
 stdenv.mkDerivation rec {
-  name = "mailman-2.1.17";
+  name = "mailman-2.1.18";
 
   src = fetchurl {
     url = "mirror://gnu/mailman/${name}.tgz";
-    sha256 = "1rws4ghpq78ldp1si3z4pmiv1k4l8g6i6hjb2y4cwsjlxssahc64";
+    sha256 = "0jc360crakvpz71msl0h11zv3849fqzlj9jfh1g7x3j4459n07fw";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python dnspython ];
 
   patches = [ ./fix-var-prefix.patch ];
 

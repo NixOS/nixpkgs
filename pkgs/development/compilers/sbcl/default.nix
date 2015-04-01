@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.2.7";
+  version = "1.2.9";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "10sjrh91pak4s6j4ks02xp88s25lh8zsii3x7rkn6p7vr7c9jw5j";
+    sha256 = "0pws10ylnsxj17dagqcdv0l36k3ax5k3hkc6c91n9yxh2nziagk0";
   };
 
   buildInputs = [ which ]
@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
 
     # Use whatever `cc` the stdenv provides
     substituteInPlace src/runtime/Config.x86-64-darwin --replace gcc cc
+
+    substituteInPlace src/runtime/Config.x86-64-darwin \
+      --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
   '';
 
   preBuild = ''

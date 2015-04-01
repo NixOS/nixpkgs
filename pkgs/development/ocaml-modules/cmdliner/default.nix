@@ -2,11 +2,11 @@
 
 let
   pname = "cmdliner";
-  version = "0.9.6";
+  version = "0.9.7";
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-assert stdenv.lib.versionAtLeast ocaml_version "3.12";
+assert stdenv.lib.versionAtLeast ocaml_version "4.00";
 
 stdenv.mkDerivation {
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "1i08yjkk5wln60bw9rrllh6ajjgq14cvzvcci8y1nk5v6ys7jr8p";
+    sha256 = "0ymzy1l6z85b6779lfxk179igfpf7rgfik70kr3c7lxmzwy8j6cw";
   };
 
   unpackCmd = "tar xjf $src";

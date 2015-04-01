@@ -15,7 +15,7 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="allegro";
-    version="5.0.10";
+    version = "5.0.11";
     name="${baseName}-${version}";
     project="alleg";
     url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
@@ -25,7 +25,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "0cd51qrh97jrr0xdmnivqgwljpmizg8pixsgvc4blqqlaz4i9zj9";
   };
 
   inherit (sourceInfo) name version;

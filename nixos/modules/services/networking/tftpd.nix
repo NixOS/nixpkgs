@@ -9,16 +9,18 @@ with lib;
   options = {
 
     services.tftpd.enable = mkOption {
+      type = types.bool;
       default = false;
       description = ''
-        Whether to enable the anonymous FTP user.
+        Whether to enable tftpd, a Trivial File Transfer Protocol server.
       '';
     };
 
     services.tftpd.path = mkOption {
+      type = types.path;
       default = "/home/tftp";
       description = ''
-        Where the tftp server files are stored
+        Where the tftp server files are stored.
       '';
     };
 

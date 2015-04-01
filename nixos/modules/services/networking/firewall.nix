@@ -356,7 +356,7 @@ in
         ''
           If pings are allowed, this allows setting rate limits
           on them. If non-null, this option should be in the form
-          of flags like "-limit 1/minute -limit-burst 5"
+          of flags like "--limit 1/minute --limit-burst 5"
         '';
     };
 

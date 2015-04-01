@@ -25,7 +25,7 @@ let
 
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
-    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${fontconfig.dpi}''}
+    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
     Xft.antialias: ${if fontconfig.antialias then "1" else "0"}
     Xft.rgba: ${fontconfig.subpixel.rgba}
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
@@ -88,6 +88,10 @@ let
         # Keep track of devices.  Mostly useful for Phonon/KDE.
         ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
       ''}
+
+      # Tell systemd about our $DISPLAY. This is needed by the
+      # ssh-agent unit.
+      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY
 
       # Load X defaults.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
@@ -202,6 +206,14 @@ in
             xmessage "Hello World!" &
           '';
         description = "Shell commands executed just before the window or desktop manager is started.";
+      };
+
+      hiddenUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "nobody" ];
+        description = ''
+          A list of users which will not be shown in the display manager.
+        '';
       };
 
       desktopManagerHandlesLidAndPower = mkOption {

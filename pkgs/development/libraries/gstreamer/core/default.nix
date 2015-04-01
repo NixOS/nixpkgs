@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, bison, flex, python, gobjectIntrospection
-, glib
+, glib, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +19,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig perl bison flex python gobjectIntrospection
+    pkgconfig perl bison flex python gobjectIntrospection makeWrapper
   ];
 
   propagatedBuildInputs = [ glib ];
+
+  postInstall = ''
+    for prog in "$out/bin/"*; do
+        wrapProgram "$prog" --prefix GST_PLUGIN_SYSTEM_PATH : "\$(unset _tmp; for profile in \$NIX_PROFILES; do _tmp="\$profile/lib/gstreamer-1.0''$\{_tmp:+:\}\$_tmp"; done; printf "\$_tmp")"
+    done
+  '';
 
   setupHook = ./setup-hook.sh;
 }

@@ -1,6 +1,7 @@
 { stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
+, extraConfigureFlags ? ""
 , ...
 }:
 
@@ -10,14 +11,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "Botan-${version}.tgz";
-    url = "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz";
+    urls = [
+       "http://files.randombit.net/botan/v${baseVersion}/Botan-${version}.tgz"
+       "http://botan.randombit.net/releases/Botan-${version}.tgz"
+    ];
     inherit sha256;
   };
 
   buildInputs = [ python bzip2 zlib gmp openssl boost ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-gnump --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""}
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}
   '';
 
   enableParallelBuilding = true;

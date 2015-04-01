@@ -34,5 +34,6 @@ in nodePackages.buildNodePackage rec {
     homepage = https://github.com/emblica/airfield;
     maintainers = with maintainers; [offline];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

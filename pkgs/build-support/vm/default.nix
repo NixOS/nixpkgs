@@ -420,9 +420,10 @@ rec {
         ''}
 
         echo "unpacking RPMs..."
+        set +o pipefail
         for i in $rpms; do
             echo "$i..."
-            ${rpm}/bin/rpm2cpio "$i" | (chroot /mnt ${cpio}/bin/cpio -i --make-directories)
+            ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories --unconditional --extract-over-symlinks
         done
 
         eval "$preInstall"
@@ -437,7 +438,7 @@ rec {
 
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
-          rpm -iv ${if runScripts then "" else "--noscripts"} $rpms
+          rpm -iv --nosignature ${if runScripts then "" else "--noscripts"} $rpms
 
         echo "running post-install script..."
         eval "$postInstall"
@@ -1033,6 +1034,32 @@ rec {
       unifiedSystemDir = true;
     };
 
+    fedora21i386 = {
+      name = "fedora-21-i386";
+      fullName = "Fedora 21 (i386)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/21/Everything/i386/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "a6ad1140adeef65bbc1fdcc7f8f2b356f0d20c71bbe3f1625038e7f43fc44780";
+      };
+      urlPrefix = mirror://fedora/linux/releases/21/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora21x86_64 = {
+      name = "fedora-21-x86_64";
+      fullName = "Fedora 21 (x86_64)";
+      packagesList = fetchurl rec {
+        url = "mirror://fedora/linux/releases/21/Everything/x86_64/os/repodata/${sha256}-primary.xml.gz";
+        sha256 = "e2a28baab2ea4632fad93f9f28144cda3458190888fdf7f2acc9bc289f397e96";
+      };
+      urlPrefix = mirror://fedora/linux/releases/21/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1604,22 +1631,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.7-wheezy-i386";
-      fullName = "Debian 7.7 Wheezy (i386)";
+      name = "debian-7.8-wheezy-i386";
+      fullName = "Debian 7.8 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "f2fd890597b6f0d82c5d66ccc8b12a963937a0576a377dd0ccbe47de4c1b09c8";
+        sha256 = "d86c28cb4f1aa178e678c253944c674a60991a367349e58a90d9a3e939e4e4bc";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.7-wheezy-amd64";
-      fullName = "Debian 7.7 Wheezy (amd64)";
+      name = "debian-7.8-wheezy-amd64";
+      fullName = "Debian 7.8 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "8ce14e88febc58310a1c13350f016ce583f068d10031ed4f0cb50985707786d8";
+        sha256 = "c8257d74c9411e2f0b9891a21f5dbf5fb088b46d1df043907a4d390b32da2931";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1776,37 +1803,7 @@ rec {
 
 
   /* Default disk images generated from the `rpmDistros' and
-     `debDistros' sets (along with Red Hat 9 and SuSE 9.0 images). */
+     `debDistros' sets. */
+  diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
 
-  diskImages =
-    lib.mapAttrs (name: f: f {}) diskImageFuns //
-
-    { redhat9i386 = fillDiskWithRPMs {
-        name = "redhat-9-i386";
-        fullName = "Red Hat Linux 9 (i386)";
-        size = 1024;
-        rpms = import ./rpm/redhat-9-i386.nix { inherit fetchurl; };
-      };
-
-      suse90i386 = fillDiskWithRPMs {
-        name = "suse-9.0-i386";
-        fullName = "SUSE Linux 9.0 (i386)";
-        size = 1024;
-        rpms = import ./rpm/suse-9-i386.nix { inherit fetchurl; };
-        # Urgh.  The /etc/group entries are installed by aaa_base (or
-        # something) but due to dependency ordering, that package isn't
-        # installed yet by the time some other packages refer to these
-        # entries.
-        preInstall = ''
-          echo 'bin:x:1:daemon' >> /mnt/etc/group
-          echo 'tty:x:5:' >> /mnt/etc/group
-          echo 'disk:x:6:' >> /mnt/etc/group
-          echo 'lp:x:7:' >> /mnt/etc/group
-          echo 'uucp:x:14:' >> /mnt/etc/group
-          echo 'audio:x:17:' >> /mnt/etc/group
-          echo 'video:x:33:' >> /mnt/etc/group
-        '';
-      };
-
-    };
 } // import ./windows pkgs

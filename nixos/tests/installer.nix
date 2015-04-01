@@ -24,10 +24,15 @@ let
                 pkgs.sudo
                 pkgs.docbook5
                 pkgs.docbook5_xsl
-                pkgs.grub
-                pkgs.perlPackages.XMLLibXML
                 pkgs.unionfs-fuse
+
+                # Bootloader support
+                pkgs.grub
+                pkgs.grub2
+                pkgs.grub2_efi
                 pkgs.gummiboot
+                pkgs.perlPackages.XMLLibXML
+                pkgs.perlPackages.ListCompare
               ];
 
             # Don't use https://cache.nixos.org since the fake
@@ -190,6 +195,9 @@ let
 
       $machine->succeed("test -e /boot/grub");
 
+      # Check whether /root has correct permissions.
+      $machine->succeed("stat -c '%a' /root") =~ /700/ or die;
+
       # Did the swap device get activated?
       # uncomment once https://bugs.freedesktop.org/show_bug.cgi?id=86930 is resolved
       #$machine->waitForUnit("swap.target");
@@ -319,12 +327,12 @@ in {
           $machine->succeed(
               "parted /dev/vda --"
               . " mklabel msdos"
-              . " mkpart primary ext2 1M 30MB" # /boot
-              . " mkpart extended 30M -1s"
-              . " mkpart logical 31M 1531M" # md0 (root), first device
-              . " mkpart logical 1540M 3040M" # md0 (root), second device
-              . " mkpart logical 3050M 3306M" # md1 (swap), first device
-              . " mkpart logical 3320M 3576M", # md1 (swap), second device
+              . " mkpart primary ext2 1M 100MB" # /boot
+              . " mkpart extended 100M -1s"
+              . " mkpart logical 102M 1602M" # md0 (root), first device
+              . " mkpart logical 1603M 3103M" # md0 (root), second device
+              . " mkpart logical 3104M 3360M" # md1 (swap), first device
+              . " mkpart logical 3361M 3617M", # md1 (swap), second device
               "udevadm settle",
               "ls -l /dev/vda* >&2",
               "cat /proc/partitions >&2",

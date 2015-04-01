@@ -1,9 +1,16 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyLibs, libiconvOrLibc
+{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
 , libxml2, libxslt }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
-let version = "1.6.5";
+let
+  version = "1.6.5";
+  rake = buildRubyGem {
+    inherit ruby;
+    name = "rake-10.3.2";
+    sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
+  };
+
 in
 stdenv.mkDerivation rec {
   name = "vagrant-${version}";
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
     ln -s ${ruby}/bin/erb opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/gem opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/irb opt/vagrant/embedded/bin
-    ln -s ${rubyLibs.rake}/bin/rake opt/vagrant/embedded/bin
+    ln -s ${rake}/bin/rake opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/rdoc opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin
@@ -66,7 +73,7 @@ stdenv.mkDerivation rec {
 
     # libiconv: iconv
     rm opt/vagrant/embedded/bin/iconv
-    ln -s ${libiconvOrLibc}/bin/iconv opt/vagrant/embedded/bin
+    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
@@ -87,9 +94,11 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # 'hide' the template file from shebang-patching
     chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
+    chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   postFixup = ''
     chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
+    chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 }

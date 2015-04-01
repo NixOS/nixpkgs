@@ -8,7 +8,6 @@ let
   cfg = config.services.redmine;
 
   ruby = pkgs.ruby;
-  rubyLibs = pkgs.rubyLibs;
 
   databaseYml = ''
     production:
@@ -155,7 +154,7 @@ in {
       environment.HOME = "${pkgs.redmine}/share/redmine";
       environment.REDMINE_LANG = "en";
       environment.GEM_HOME = "${pkgs.redmine}/share/redmine/vendor/bundle/ruby/1.9.1";
-      environment.GEM_PATH = "${rubyLibs.bundler}/lib/ruby/gems/1.9";
+      environment.GEM_PATH = "${bundler}/${bundler.ruby.gemPath}";
       path = with pkgs; [
         imagemagickBig
         subversion

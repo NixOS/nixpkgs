@@ -1,15 +1,15 @@
-{stdenv, fetchurl, ocaml, findlib, camomile, ocaml_react}:
+{ stdenv, fetchzip, ocaml, findlib, camomile, ocaml_react }:
 
 stdenv.mkDerivation rec {
-  version = "1.3";
+  version = "1.4";
   name = "ocaml-zed-${version}";
 
-  src = fetchurl {
-    url = https://github.com/diml/zed/archive/1.3.tar.gz;
-    sha256 = "1fr9xzf5msdnl2wx279aqj051nqbhs6v9aq1mfpv3r1mrqvrrfwj";
+  src = fetchzip {
+    url = "https://github.com/diml/zed/archive/${version}.tar.gz";
+    sha256 = "0d8qfy0qiydrrqi8qc9rcwgjigql6vx9gl4zp62jfz1lmjgb2a3w";
   };
 
-  buildInputs = [ ocaml findlib ocaml_react];
+  buildInputs = [ ocaml findlib ocaml_react ];
 
   propagatedBuildInputs = [ camomile ];
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, flex, bison, libxslt
-, glib, libiconvOrEmpty, libintlOrEmpty
+, glib, libiconv, libintlOrEmpty
 }:
 
 let
   major = "0.26";
-  minor = "1";
-  sha256 = "8407abb19ab3a58bbfc0d288abb47666ef81f76d0540258c03965e7545f59e6b";
+  minor = "2";
+  sha256 = "37f13f430c56a93b6dac85239084681fd8f31c407d386809c43bc2f2836e03c4";
 in
 stdenv.mkDerivation rec {
   name = "vala-${major}.${minor}";
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig flex bison libxslt ];
 
-  buildInputs = [ glib ]
-    ++ libiconvOrEmpty
+  buildInputs = [ glib libiconv ]
     ++ libintlOrEmpty;
 }

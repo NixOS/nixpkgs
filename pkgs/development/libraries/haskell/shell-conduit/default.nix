@@ -19,5 +19,7 @@ cabal.mkDerivation (self: {
     description = "Write shell scripts with Conduit";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

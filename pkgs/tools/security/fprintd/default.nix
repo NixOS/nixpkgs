@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, libfprint, intltool, glib, dbus_glib, polkit, nss, pam, systemd }:
+{ stdenv, fetchurl, pkgconfig, intltool
+, libfprint, glib, dbus_glib, polkit, nss, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "fprintd-0.5.1";
+  name = "fprintd-0.6.0";
 
   src = fetchurl {
     url = "http://people.freedesktop.org/~hadess/${name}.tar.xz";
-    sha256 = "0n3fh28cvqrhjig30lz1p075g0wd7jnhvz1j34n37c0cwc7rfmlj";
+    sha256 = "1by6nvlrqkwzcz2v2kyq6avi3h384vmlr42vj9s2yzcinkp64m1z";
   };
-
-  patches = [ ./pod.patch ];
 
   buildInputs = [ libfprint glib dbus_glib polkit nss pam systemd ];
   nativeBuildInputs = [ pkgconfig intltool ];

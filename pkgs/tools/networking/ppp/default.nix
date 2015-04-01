@@ -1,12 +1,12 @@
 { stdenv, fetchurl, substituteAll, libpcap }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.5";
+  version = "2.4.7";
   name = "ppp-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}ftp/ppp/${name}.tar.gz";
-    sha256 = "019m00q85nrgdpjlhb9021a3iw3pr4a0913gp4h9k7r9r7z7lca3";
+    url = "mirror://samba/ppp/${name}.tar.gz";
+    sha256 = "0c7vrjxl52pdwi4ckrvfjr08b31lfpgwf3pp0cqy76a77vfs7q02";
   };
 
   patches =
@@ -15,24 +15,17 @@ stdenv.mkDerivation rec {
         inherit libpcap;
         glibc = stdenv.cc.libc;
       })
+      # Without nonpriv.patch, pppd --version doesn't work when not run as
+      # root.
       ./nonpriv.patch
     ];
 
-  postPatch = ''
-    # enable ipv6
-    substituteInPlace pppd/Makefile.linux \
-      --replace "#HAVE_INET6=y" "HAVE_INET6=y"
-    rm -v include/linux/if_pppol2tp.h
-  '';
-
   buildInputs = [ libpcap ];
 
-  postInstall = "chmod -v -R +rw $out";
-
   meta = {
-    homepage = http://ppp.samba.org/;
+    homepage = https://ppp.samba.org/;
     description = "Point-to-point implementation for Linux and Solaris";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.falsifian ];
   };
 }

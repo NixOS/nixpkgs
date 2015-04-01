@@ -20,6 +20,8 @@ let
       extraGroups = [ "nixbld" ];
     };
 
+  nixbldUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
+
   nixConf =
     let
       # If we're using a chroot for builds, then provide /bin/sh in
@@ -41,6 +43,10 @@ let
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
+        binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
+        ${optionalString cfg.requireSignedBinaryCaches ''
+          signed-binary-caches = *
+        ''}
         $extraOptions
         END
       '';
@@ -67,12 +73,12 @@ in
         type = types.int;
         default = 1;
         example = 64;
-        description = "
+        description = ''
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
           set it to the number of CPUs in your system (e.g., 2 on an Athlon
           64 X2).
-        ";
+        '';
       };
 
       buildCores = mkOption {
@@ -204,7 +210,6 @@ in
 
       nrBuildUsers = mkOption {
         type = types.int;
-        default = 10;
         description = ''
           Number of <literal>nixbld</literal> user accounts created to
           perform secure concurrent builds.  If you receive an error
@@ -245,6 +250,33 @@ in
         '';
       };
 
+      requireSignedBinaryCaches = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, Nix will only download binaries from binary
+          caches if they are cryptographically signed with any of the
+          keys listed in
+          <option>nix.binaryCachePublicKeys</option>. If disabled (the
+          default), signatures are neither required nor checked, so
+          it's strongly recommended that you use only trustworthy
+          caches and https to prevent man-in-the-middle attacks.
+        '';
+      };
+
+      binaryCachePublicKeys = mkOption {
+        type = types.listOf types.str;
+        example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
+        description = ''
+          List of public keys used to sign binary caches. If
+          <option>nix.requireSignedBinaryCaches</option> is enabled,
+          then Nix will use a binary from a binary cache if and only
+          if it is signed by <emphasis>any</emphasis> of the keys
+          listed here. By default, only the key for
+          <uri>cache.nixos.org</uri> is included.
+        '';
+      };
+
     };
 
   };
@@ -253,6 +285,8 @@ in
   ###### implementation
 
   config = {
+
+    nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
@@ -323,7 +357,11 @@ in
         fi
       '';
 
-    users.extraUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
+    nix.nrBuildUsers = mkDefault (lib.max 10 cfg.maxJobs);
+
+    users.extraUsers = nixbldUsers;
+
+    services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
@@ -341,9 +379,6 @@ in
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \
           /nix/var/nix/gcroots/tmp
-
-        ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
-        ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
       '';
 
   };

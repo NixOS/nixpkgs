@@ -31,8 +31,8 @@ import ./make-test.nix ({pkgs, ... }: {
       startAll;
 
       # Make sure that cups is up on both sides.
-      $server->waitForUnit("cupsd.service");
-      $client->waitForUnit("cupsd.service");
+      $server->waitForUnit("cups.service");
+      $client->waitForUnit("cups.service");
       $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
       $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
       $client->succeed("curl --fail http://localhost:631/");
@@ -58,7 +58,7 @@ import ./make-test.nix ({pkgs, ... }: {
       foreach my $file ("${pkgs.groff}/share/doc/*/examples/mom/penguin.pdf",
                         "${pkgs.groff}/share/doc/*/meref.ps",
                         "${pkgs.cups}/share/doc/cups/images/cups.png",
-                        "${pkgs.xz}/share/doc/xz/faq.txt")
+                        "${pkgs.pcre}/share/doc/pcre/pcre.txt")
       {
           $file =~ /([^\/]*)$/; my $fn = $1;
 

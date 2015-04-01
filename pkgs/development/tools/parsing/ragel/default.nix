@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "6.9";
 
   src = fetchurl {
-    url = "http://www.colm.net/wp-content/uploads/2014/10/${name}.tar.gz";
+    url = "http://www.colm.net/files/ragel/${name}.tar.gz";
     sha256 = "02k6rwh8cr95f1p5sjjr3wa6dilg06572xz1v71dk8awmc7vw1vf";
   };
 

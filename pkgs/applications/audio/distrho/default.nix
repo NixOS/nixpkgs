@@ -1,16 +1,13 @@
 { stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jack2
 , libxslt, lv2, pkgconfig, premake3, xlibs }:
 
-let
-  rev = "99efbf0b";
-in
 stdenv.mkDerivation rec {
-  name = "distrho-${rev}";
+  name = "distrho-ports-git-2015-01-28";
 
   src = fetchgit {
-    url = "https://github.com/falkTX/DISTRHO.git";
-    inherit rev;
-    sha256 = "ed26a6edca19ebb8260b3dc042f69c32162e1d91179fb9d22da42ec7131936f9";
+    url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
+    rev = "b4e2dc24802fe6804c60fcd2559a0bca46b7709c";
+    sha256 = "661ff6f7cda71a8dd08cbcea3f560e99f0fc2232053cbc9a2aaba854137805c6";
   };
 
   patchPhase = ''
@@ -50,5 +47,9 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+
+    # The old repo was removed and split into multiple repos. More
+    # work is required to get everything to build and work.
+    broken = true;
   };
 }

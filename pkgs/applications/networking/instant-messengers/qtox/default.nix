@@ -1,18 +1,34 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtoxcore, qt5, openalSoft, opencv
-, libsodium }:
+, libsodium, libXScrnSaver }:
 
+let
 
-stdenv.mkDerivation rec {
-  name = "qtox-dev-20141201";
+  filteraudio = stdenv.mkDerivation rec {
+    name = "filter_audio-20150128";
+
+    src = fetchFromGitHub {
+      owner = "irungentoo";
+      repo = "filter_audio";
+      rev = "76428a6cda";
+      sha256 = "0c4wp9a7dzbj9ykfkbsxrkkyy0nz7vyr5map3z7q8bmv9pjylbk9";
+    };
+
+    doCheck = false;
+
+    makeFlags = "PREFIX=$(out)";
+  };
+
+in stdenv.mkDerivation rec {
+  name = "qtox-dev-20150130";
 
   src = fetchFromGitHub {
     owner = "tux3";
     repo = "qTox";
-    rev = "qtox-windows-1417469442.11";
-    sha256 = "02nxj0w5qbgc79n8mgyqldk1yadf4p8pysn79f7fvi8fxq4j0j5n";
+    rev = "7574569b3d";
+    sha256 = "0a7zkhl4w2r5ifzs7vwws2lpplp6q5c4jllyf4ld64njgiz6jzip";
   };
 
-  buildInputs = [ pkgconfig libtoxcore qt5 openalSoft opencv libsodium ];
+  buildInputs = [ pkgconfig libtoxcore qt5 openalSoft opencv libsodium filteraudio libXScrnSaver ];
 
   configurePhase = "qmake";
 

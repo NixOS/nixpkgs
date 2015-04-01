@@ -1,21 +1,25 @@
 { stdenv, fetchurl
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg
 , makeWrapper
-, withX ? false, xclip ? null
+
+, xclip ? null, xdotool ? null, dmenu ? null
+, x11Support ? true
 }:
 
-assert withX -> xclip != null;
+assert x11Support -> xclip != null
+                  && xdotool != null
+                  && dmenu != null;
 
 stdenv.mkDerivation rec {
-  version = "1.6.3";
+  version = "1.6.5";
   name    = "password-store-${version}";
 
   src = fetchurl {
     url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-    sha256 = "1xs00c7ffqd0093i452kryw9sjip6dkp1pclx69zihb5l45d86fl";
+    sha256 = "05bk3lrp5jwg0v338lvylp7glpliydzz4jf5pjr6k3kagrv3jyik";
   };
 
-  patches = [ ./darwin-getopt.patch ];
+  patches = if stdenv.isDarwin then [ ./no-darwin-getopt.patch ] else null;
 
   buildInputs = [ makeWrapper ];
 
@@ -35,18 +39,24 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  installPhase = ''
+  preInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
     mkdir -p "$out/share/fish/completions"
+  '';
 
+  installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
     # Install Emacs Mode. NOTE: We can't install the necessary
     # dependencies (s.el and f.el) here. The user has to do this
     # himself.
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
 
-    PREFIX="$out" make install
+    ${if x11Support then ''
+      cp "contrib/dmenu/passmenu" "$out/bin/"
+    '' else ""}
   '';
 
   postFixup = ''
@@ -56,6 +66,11 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
+      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if x11Support then ":${xclip}/bin" else ""}"
+
+    ${if x11Support then ''
+      wrapProgram $out/bin/passmenu \
+        --prefix PATH : "$out/bin:${xdotool}/bin:${dmenu}/bin"
+    '' else ""}
   '';
 }

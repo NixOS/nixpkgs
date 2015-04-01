@@ -15,7 +15,7 @@ kde {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  passthru.propagatedUserEnvPackages = [ akonadi kdepimlibs kdepim_runtime ];
+  propagatedUserEnvPkgs = [ akonadi kdepimlibs kdepim_runtime ];
 
   meta = {
     description = "KDE PIM tools";

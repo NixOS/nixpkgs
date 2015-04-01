@@ -8,7 +8,7 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideGCC = stdenv: gcc: stdenv.override { allowedRequisites = null; cc = gcc; };
+  overrideCC = stdenv: cc: stdenv.override { allowedRequisites = null; cc = cc; };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
@@ -114,6 +114,7 @@ rec {
         };
     } // {
       inherit cross gccCross binutilsCross;
+      ccCross = gccCross;
     };
 
 

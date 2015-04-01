@@ -171,6 +171,9 @@ let
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
+
+    SSLProtocol All -SSLv2 -SSLv3
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!EXP
   '';
 
 
@@ -682,6 +685,7 @@ in
         serviceConfig.Type = "forking";
         serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
         serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
       };
 
   };

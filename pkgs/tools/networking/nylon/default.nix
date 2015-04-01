@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libevent} :
+{ stdenv, fetchurl, libevent }:
 
 stdenv.mkDerivation {
   name = "nylon-1.21";
@@ -7,13 +7,17 @@ stdenv.mkDerivation {
     sha256 = "34c132b005c025c1a5079aae9210855c80f50dc51dde719298e1113ad73408a4";
   };
 
+  patches = [ ./configure-use-solib.patch ];
+
   configureFlags = [ "--with-libevent=${libevent}" ];
 
   buildInputs = [ libevent ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://monkey.org/~marius/nylon;
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
-    license = stdenv.lib.licenses.free;
+    license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ edwtjo viric ];
+    platform = platforms.linux;
   };
 }

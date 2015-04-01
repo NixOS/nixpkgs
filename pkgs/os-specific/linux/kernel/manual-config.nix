@@ -118,9 +118,12 @@ let
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else "install") ];
 
-      postInstall = optionalString installsFirmware ''
+      postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
-      '' + (if isModular then ''
+      '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
+ 	make $makeFlags "''${makeFlagsArray[@]}" dtbs
+        cp $buildRoot/arch/$karch/boot/dts/*dtb $out
+      '' else "") + (if isModular then ''
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
@@ -222,12 +225,16 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
     "ARCH=${stdenv.platform.kernelArch}"
   ];
 
+  karch = stdenv.platform.kernelArch;
+
   crossAttrs = let cp = stdenv.cross.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
       makeFlags = commonMakeFlags ++ [
         "ARCH=${cp.kernelArch}"
         "CROSS_COMPILE=$(crossConfig)-"
       ];
+
+      karch = cp.kernelArch;
 
       # !!! uboot has messed up cross-compiling, nativeDrv builds arm tools on x86,
       # crossDrv builds x86 tools on x86 (but arm uboot). If this is fixed, uboot

@@ -1,0 +1,18 @@
+GIT
+  remote: https://github.com/cstrahan/bundix.git
+  revision: e098b8c04087079c897aaf9542990e9fdd503bcf
+  ref: v1.0.2
+  specs:
+    bundix (1.0.2)
+      thor (~> 0.19.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundix!

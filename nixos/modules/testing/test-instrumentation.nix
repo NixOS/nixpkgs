@@ -38,6 +38,11 @@ let kernel = config.boot.kernelPackages.kernel; in
     systemd.services."serial-getty@ttyS0".enable = false;
     systemd.services."serial-getty@hvc0".enable = false;
 
+    # Don't use a pager when executing backdoor actions. Because we
+    # use a tty, commands like systemctl or nix-store get confused
+    # into thinking they're running interactively.
+    environment.variables.PAGER = "";
+
     boot.initrd.postDeviceCommands =
       ''
         # Using acpi_pm as a clock source causes the guest clock to

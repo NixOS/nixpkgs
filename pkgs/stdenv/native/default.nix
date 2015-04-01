@@ -18,13 +18,6 @@ rec {
     export NIX_ENFORCE_PURITY=
   '';
 
-  prehookDarwin = ''
-    ${prehookBase}
-    export NIX_DONT_SET_RPATH=1
-    export NIX_NO_SELF_RPATH=1
-    ${import ../darwin/prehook.nix}
-  '';
-
   prehookFreeBSD = ''
     ${prehookBase}
 
@@ -77,7 +70,6 @@ rec {
 
     import ../generic {
       preHook =
-        if system == "x86_64-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "x86_64-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
@@ -98,8 +90,8 @@ rec {
   };
 
 
-  cc = import ../../build-support/gcc-wrapper {
-    name = "gcc-native";
+  cc = import ../../build-support/cc-wrapper {
+    name = "cc-native";
     nativeTools = true;
     nativeLibc = true;
     nativePrefix = if system == "i686-solaris" then "/usr/gnu" else if system == "x86_64-solaris" then "/opt/local/gcc47" else "/usr";

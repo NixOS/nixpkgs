@@ -7,6 +7,8 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
 
+# Stop LVM complaining about fd3
+export LVM_SUPPRESS_FD_WARNINGS=true
 
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
@@ -34,7 +36,7 @@ EOF
     read reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
-        exec setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console"
+        exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
     elif [ -n "$allowShell" -a "$reply" = i ]; then
         echo "Starting interactive shell..."
         setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
@@ -175,20 +177,24 @@ fi
 if test -e /sys/power/resume -a -e /sys/power/disk; then
     if test -n "@resumeDevice@"; then
         resumeDev="@resumeDevice@"
+        resumeInfo="$(udevadm info -q property "$resumeDev" )"
     else
         for sd in @resumeDevices@; do
             # Try to detect resume device. According to Ubuntu bug:
             # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
             # When there are multiple swap devices, we can't know where will hibernate
             # image reside. We can check all of them for swsuspend blkid.
-            if [ "$(udevadm info -q property "$sd" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
+            resumeInfo="$(udevadm info -q property "$sd" )"
+            if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
                 resumeDev="$sd"
                 break
             fi
         done
     fi
-    if test -n "$resumeDev"; then
-        readlink -f "$resumeDev" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+    if test -e "$resumeDev"; then
+        resumeMajor="$(echo "$resumeInfo" | sed -n 's/^MAJOR=//p')"
+        resumeMinor="$(echo "$resumeInfo" | sed -n 's/^MINOR=//p')"
+        echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
     fi
 fi
 
@@ -215,6 +221,9 @@ checkFS() {
 
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
+
+    # Skip fsck for inherently readonly filesystems.
+    if [ "$fsType" = squashfs ]; then return 0; fi
 
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
@@ -347,7 +356,8 @@ while read -u 3 mountPoint; do
     # that we don't properly recognise.
     if test -z "$pseudoDevice" -a ! -e $device; then
         echo -n "waiting for device $device to appear..."
-        for try in $(seq 1 20); do
+        try=20
+        while [ $try -gt 0 ]; do
             sleep 1
             # also re-try lvm activation now that new block devices might have appeared
             lvm vgchange -ay
@@ -355,8 +365,12 @@ while read -u 3 mountPoint; do
             udevadm trigger --action=add
             if test -e $device; then break; fi
             echo -n "."
+            try=$((try - 1))
         done
         echo
+        if [ $try -eq 0 ]; then
+          echo "Timed out waiting for device $device, trying to mount anyway."
+        fi
     fi
 
     # Wait once more for the udev queue to empty, just in case it's

@@ -1,8 +1,3 @@
-with {
-  inherit (import ./lists.nix) deepSeqList;
-  inherit (import ./attrsets.nix) deepSeqAttrs;
-};
-
 rec {
 
   # Identity function.
@@ -23,23 +18,11 @@ rec {
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
 
-  # `seq x y' evaluates x, then returns y.  That is, it forces strict
-  # evaluation of its first argument.
-  seq = x: y: if x == null then y else y;
-
-  # Like `seq', but recurses into lists and attribute sets to force evaluation
-  # of all list elements/attributes.
-  deepSeq = x: y:
-    if builtins.isList x
-      then deepSeqList x y
-    else if builtins.isAttrs x
-      then deepSeqAttrs x y
-      else seq x y;
-
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists readFile isBool isFunction
-    isInt add sub lessThan;
+    isInt add sub lessThan
+    seq deepSeq;
 
   # Return the Nixpkgs version number.
   nixpkgsVersion =
@@ -47,7 +30,11 @@ rec {
     readFile ../.version
     + (if pathExists suffixFile then readFile suffixFile else "pre-git");
 
-  # Whether we're being called by nix-shell.  This is useful to  
+  # Whether we're being called by nix-shell.
   inNixShell = builtins.getEnv "IN_NIX_SHELL" == "1";
+
+  # Return minimum/maximum of two numbers.
+  min = x: y: if x < y then x else y;
+  max = x: y: if x > y then x else y;
 
 }

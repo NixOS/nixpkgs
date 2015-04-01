@@ -6,25 +6,25 @@
 , kdeSupport ? false, qt4, kdelibs
 }:
 
-assert stdenv.isLinux && stdenv.cc.gcc != null && stdenv.cc.libc != null;
+assert stdenv.isLinux && stdenv.cc.cc.isGNU or false && stdenv.cc.libc != null;
 
 let
   mirror = http://get.geo.opera.com/pub/opera;
 in
 
 stdenv.mkDerivation rec {
-  name = "opera-12.12-1707";
+  name = "opera-12.16-1860";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "${mirror}/linux/1212/${name}.i386.linux.tar.xz";
-        sha256 = "1jkrhxjxa5kz4bhyma0zlnsszdn84sq4pks3x8bfcayn12m6yxkz";
+        url = "${mirror}/linux/1216/${name}.i386.linux.tar.xz";
+        sha256 = "df640656a52b7c714faf25de92d84992116ce8f82b7a67afc1121eb3c428489d";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "${mirror}/linux/1212/${name}.x86_64.linux.tar.xz";
-        sha256 = "0acizxgyqblcvl91dwmvi937fi1kw6whz5qgxyl1fkygbayji90v";
+        url = "${mirror}/linux/1216/${name}.x86_64.linux.tar.xz";
+        sha256 = "b3b5cada3829d2b3b0e2da25e9444ce9dff73dc6692586ce72cfd4f6431e639e";
       }
     else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ stdenv.cc.gcc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
+    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
       libXft freetype fontconfig libXrender libuuid expat
       gstreamer libxml2 gst_plugins_base
     ]

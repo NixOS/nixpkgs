@@ -19,5 +19,5 @@ patchShebangs $out
 
 wrapProgram $out_bin \
     --prefix PATH ":" "${rlwrap}/bin:${coreutils}/bin:${findutils}/bin" \
-    --set LEIN_GPG ${gnupg}/bin/gpg \
+    --set LEIN_GPG ${gnupg1compat}/bin/gpg \
     --set JAVA_CMD ${jdk}/bin/java

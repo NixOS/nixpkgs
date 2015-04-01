@@ -4,30 +4,30 @@
 }:
 
 assert stdenv.isLinux;
-assert stdenv.cc.gcc != null;
+assert stdenv.cc.cc.isGNU or false;
 
 let
-    version = "1.7.34";
+    version = "1.7.39";
     name = "wine-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/wine/${name}.tar.bz2";
-      sha256 = "02rk686l0kpbnvplmwl0c7xqy2ymnxcxh38dknm35chg8ljknnjd";
+      sha256 = "0p1kj61hkfyhbxdfgj3z3hlxi5nvcbdknkjqiicbabkpzq3v1zva";
     };
 
     gecko = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.24-x86.msi";
-      sha256 = "0b10f55q3sldlcywscdlw3kd7vl9izlazw7jx30y4rpahypaqf3f";
+      url = "mirror://sourceforge/wine/wine_gecko-2.36-x86.msi";
+      sha256 = "12hjks32yz9jq4w3xhk3y1dy2g3iakqxd7aldrdj51cqiz75g95g";
     };
 
     gecko64 = fetchurl {
-      url = "mirror://sourceforge/wine/wine_gecko-2.24-x86_64.msi";
-      sha256 = "1j4wdlhzvjrabzr9igcnx0ivm5mcb8kp7bwkpfpfsanbifk7sma7";
+      url = "mirror://sourceforge/wine/wine_gecko-2.36-x86_64.msi";
+      sha256 = "0i7dchrzsda4nqbkhp3rrchk74rc2whn2af1wzda517m9c0886vh";
     };
 
     mono = fetchurl {
-      url = "mirror://sourceforge/wine/wine-mono-4.5.2.msi";
-      sha256 = "1bgasysf3qacxgh5rlk7qlw47ar5zgd1k9gb22pihi5s87dlw4nr";
+      url = "mirror://sourceforge/wine/wine-mono-4.5.4.msi";
+      sha256 = "1wnn273f232141x9x0sahg4w499x0g2p0xphxmwm5wh1xrzyvg10";
     };
 
 in stdenv.mkDerivation rec {
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.cc.gcc mesa mesa_noglu.osmesa libdrm
+    freetype fontconfig stdenv.cc.cc mesa mesa_noglu.osmesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups ncurses
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     install -D ${gecko} $out/share/wine/gecko/${gecko64.name}
   '' + ''
     install -D ${mono} $out/share/wine/mono/${mono.name}
-    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.cc.gcc}/lib
+    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.cc.cc}/lib
   '';
 
   enableParallelBuilding = true;

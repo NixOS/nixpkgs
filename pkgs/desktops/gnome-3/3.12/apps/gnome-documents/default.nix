@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
         --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --run "if [ -z \"\$XDG_CACHE_DIR\" ]; then XDG_CACHE_DIR=\$HOME/.cache; fi; if [ -w \"\$XDG_CACHE_DIR/..\" ]; then mkdir -p \"\$XDG_CACHE_DIR/gnome-documents\"; fi"
     done
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

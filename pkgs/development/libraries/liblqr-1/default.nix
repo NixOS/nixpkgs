@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
-  name = "liblqr-1-0.4.1";
+  name = "liblqr-1-0.4.2";
+
   src = fetchurl {
     url = "${meta.homepage}/local--files/en:download-page/${name}.tar.bz2";
-    sha256 = "02g90wag7xi5rjlmwq8h0qs666b1i2sa90s4303hmym40il33nlz";
+    sha256 = "0dzikxzjz5zmy3vnydh90aqk23q0qm8ykx6plz6p4z90zlp84fhp";
   };
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib ];
-  configureFlags = "--enable-install-man";
 
   meta = with stdenv.lib; {
     homepage = http://liblqr.wikidot.com;

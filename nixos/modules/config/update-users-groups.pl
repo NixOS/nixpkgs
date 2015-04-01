@@ -174,12 +174,12 @@ foreach my $u (@{$spec->{users}}) {
         } elsif (defined $u->{initialHashedPassword}) {
             $u->{hashedPassword} = $u->{initialHashedPassword};
         }
+    }
 
-        # Create a home directory.
-        if ($u->{createHome}) {
-            make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
-            chown $u->{uid}, $u->{gid}, $u->{home};
-        }
+    # Create a home directory.
+    if ($u->{createHome} && ! -e $u->{home}) {
+        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
+        chown $u->{uid}, $u->{gid}, $u->{home};
     }
 
     if (defined $u->{passwordFile}) {

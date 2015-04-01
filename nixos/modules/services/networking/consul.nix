@@ -122,6 +122,34 @@ in
         '';
       };
 
+      alerts = {
+        enable = mkEnableOption "Whether to enable consul-alerts";
+
+        listenAddr = mkOption {
+          description = "Api listening address.";
+          default = "localhost:9000";
+          type = types.str;
+        };
+
+        consulAddr = mkOption {
+          description = "Consul api listening adddress";
+          default = "localhost:8500";
+          type = types.str;
+        };
+
+        watchChecks = mkOption {
+          description = "Whether to enable check watcher.";
+          default = true;
+          type = types.bool;
+        };
+
+        watchEvents = mkOption {
+          description = "Whether to enable event watcher.";
+          default = true;
+          type = types.bool;
+        };
+      };
+
     };
 
   };
@@ -150,7 +178,7 @@ in
         ExecReload = "${pkgs.consul}/bin/consul reload";
         PermissionsStartOnly = true;
         User = if cfg.dropPrivileges then "consul" else null;
-        TimeoutStartSec = "${toString (20 + (3 * cfg.joinRetries))}s";
+        TimeoutStartSec = "0";
       } // (optionalAttrs (cfg.leaveOnStop) {
         ExecStop = "${pkgs.consul}/bin/consul leave";
       });
@@ -181,13 +209,14 @@ in
           echo "$ADDR"
         }
         echo "{" > /etc/consul-addrs.json
+        delim=" "
       ''
       + concatStrings (flip mapAttrsToList cfg.interface (name: i:
         optionalString (i != null) ''
-          echo "    \"${name}_addr\": \"$(getAddr "${i}")\"," >> /etc/consul-addrs.json
+          echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
+          delim=","
         ''))
       + ''
-        echo "    \"\": \"\"" >> /etc/consul-addrs.json
         echo "}" >> /etc/consul-addrs.json
       '';
       postStart = ''
@@ -202,6 +231,24 @@ in
         wait
         exit 0
       '';
+    };
+
+    systemd.services.consul-alerts = mkIf (cfg.alerts.enable) {
+      wantedBy = [ "multi-user.target" ];
+      after = [ "consul.service" ];
+
+      path = [ pkgs.consul ];
+
+      serviceConfig = {
+        ExecStart = ''
+          ${pkgs.consul-alerts}/bin/consul-alerts start \
+            --alert-addr=${cfg.alerts.listenAddr} \
+            --consul-addr=${cfg.alerts.consulAddr} \
+            ${optionalString cfg.alerts.watchChecks "--watch-checks"} \
+            ${optionalString cfg.alerts.watchEvents "--watch-events"}
+        '';
+        User = if cfg.dropPrivileges then "consul" else null;
+      };
     };
 
   };

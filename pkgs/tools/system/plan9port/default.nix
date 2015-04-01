@@ -7,6 +7,11 @@ stdenv.mkDerivation rec {
   name = "plan9port-20140306";
 
   patches = [ ./fontsrv.patch ];
+  postPatch =
+    ''
+      substituteInPlace src/cmd/acme/acme.c \
+          --replace /lib/font/bit $out/plan9/font
+    '';
 
   builder = ./builder.sh;
 

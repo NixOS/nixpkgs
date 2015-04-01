@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
+{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
 
 with { inherit (stdenv.lib) optional; };
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "gmp-5.1.3";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -11,6 +11,8 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ m4 ];
+
+  patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
@@ -27,6 +29,8 @@ stdenv.mkDerivation (rec {
     ;
 
   doCheck = true;
+
+  dontDisableStatic = withStatic;
 
   enableParallelBuilding = true;
 
@@ -61,6 +65,3 @@ stdenv.mkDerivation (rec {
     maintainers = [ maintainers.simons ];
   };
 }
-  // stdenv.lib.optionalAttrs withStatic { dontDisableStatic = true; }
-)
-

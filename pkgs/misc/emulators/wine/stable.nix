@@ -4,7 +4,7 @@
 }:
 
 assert stdenv.isLinux;
-assert stdenv.cc.gcc != null;
+assert stdenv.cc.cc.isGNU or false;
 
 let
     version = "1.6.2";
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.cc.gcc mesa mesa_noglu.osmesa libdrm
+    freetype fontconfig stdenv.cc.cc mesa mesa_noglu.osmesa libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
 
     paxmark psmr $out/bin/wine{,-preloader}
 
-    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.cc.gcc}/lib
+    wrapProgram $out/bin/wine --prefix LD_LIBRARY_PATH : ${stdenv.cc.cc}/lib
   '';
 
   enableParallelBuilding = true;

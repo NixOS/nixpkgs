@@ -14,7 +14,7 @@ let
     };
     patches = [
       (fetchurl {
-       url = "http://ftp.de.debian.org/debian/pool/main/m/makedev/makedev_2.3.1-89.diff.gz";
+       url = "mirror://debian/pool/main/m/makedev/makedev_2.3.1-89.diff.gz";
        sha256 = "1zbifw2jkq6471fb67y893nq4lq009xbfbi57jbjwxnhqmrppcy9";
        })
     ];
@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation {
 
-  name = "debootstrap-1.0.64";
+  name = "debootstrap-1.0.66";
 
   src = fetchurl {
     # git clone git://git.debian.org/d-i/debootstrap.git
     # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = http://ftp.de.debian.org/debian/pool/main/d/debootstrap/debootstrap_1.0.64.tar.xz;
-    sha256 = "0yrdgggqgb7g1h677zipaxs17iyw4fmnmhh0l5n17d8x39pqjkd8";
+    url = mirror://debian/pool/main/d/debootstrap/debootstrap_1.0.66.tar.gz;
+    sha256 = "15gh6pvk7f0fib8ggz2zx53pg2jzqk4x0s8ihkpqxqdf4rlns91k";
   };
 
   buildInputs = [ dpkg gettext gawk perl ];

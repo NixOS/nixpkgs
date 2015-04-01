@@ -1,12 +1,11 @@
-{ fetchgit, stdenv, flex, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "iproute2-3.17.0";
+  name = "iproute2-3.19.0";
 
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2.git";
-    rev = "refs/tags/v3.17.0";
-    sha256 = "113ayyy7cjxn0bf67fh4is4z0jysgif016kv7ig0jp6r68xp2spa";
+  src = fetchurl {
+    url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
+    sha256 = "1c6pgysxfqs5qkd4kpwkbdhw3xydhjnskrz1q2k2nvqndv1ziyg2";
   };
 
   patch = [ ./vpnc.patch ];

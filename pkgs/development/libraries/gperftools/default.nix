@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip, libunwind }:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.3";
+  name = "gperftools-2.4";
 
   src = fetchurl {
-    url = "https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/gperftools-2.3.zip";
-    sha256 = "0yga56kmlf5gwr3ip7l50qlv2d3ygbyhpl7pnbx4r905qd59k3qs";
+    url = "https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/gperftools-2.4.tar.gz";
+    sha256 = "0b8aqgch8dyapzw2zd9g89x6gsnm2ml0gf169rql0bxldqi3falq";
   };
 
   buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isLinux libunwind;

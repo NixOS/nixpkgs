@@ -108,7 +108,6 @@ in
         "/info"
         "/lib"
         "/man"
-        "/sbin"
         "/share/emacs"
         "/share/vim-plugins"
         "/share/org"

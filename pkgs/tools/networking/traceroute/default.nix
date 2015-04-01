@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "traceroute-${version}";
-  version = "2.0.20";
+  version = "2.0.21";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/traceroute/${name}.tar.gz";
-    sha256 = "0wf2xnh5hm81fdn6dbkqqqlwbn6gdvy178zkpzbjhm694navmb1g";
+    sha256 = "1q4n9s42nfcc4fmnwmrsiabvqrcaagiagmmqj9r5hfmi63pr7b7p";
   };
 
   makeFlags = "prefix=$(out)";

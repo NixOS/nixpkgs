@@ -3,10 +3,10 @@
 let
   ccache =
 stdenv.mkDerivation {
-  name = "ccache-3.1.10";
+  name = "ccache-3.2.1";
   src = fetchurl {
-    url = http://samba.org/ftp/ccache/ccache-3.1.10.tar.gz;
-    sha256 = "0fzxa45q7wfm63zrak65wh31w7pnsp0k65fxv00cgmf454as4dza";
+    url = mirror://samba/ccache/ccache-3.2.1.tar.xz;
+    sha256 = "17dxb0adha2bqzb2r8rcc3kl9mk7y6vrvlh181liivrc3m7g6al7";
   };
 
   buildInputs = [ zlib ];
@@ -14,32 +14,33 @@ stdenv.mkDerivation {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig : (runCommand "ccache-links" { }
+    links = extraConfig : (runCommand "ccache-links" { passthru.gcc = gcc; }
       ''
         mkdir -p $out/bin
-        if [ -x "${gcc.gcc}/bin/gcc" ]; then
+        if [ -x "${gcc.cc}/bin/gcc" ]; then
           cat > $out/bin/gcc << EOF
           #!/bin/sh
           ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.gcc}/bin/gcc "\$@"
+          exec ${ccache}/bin/ccache ${gcc.cc}/bin/gcc "\$@"
         EOF
           chmod +x $out/bin/gcc
         fi
-        if [ -x "${gcc.gcc}/bin/g++" ]; then
+        if [ -x "${gcc.cc}/bin/g++" ]; then
           cat > $out/bin/g++ << EOF
           #!/bin/sh
           ${extraConfig}
-          exec ${ccache}/bin/ccache ${gcc.gcc}/bin/g++ "\$@"
+          exec ${ccache}/bin/ccache ${gcc.cc}/bin/g++ "\$@"
         EOF
           chmod +x $out/bin/g++
         fi
       '');
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = http://ccache.samba.org/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = with licenses; gpl3Plus;
+    maintainers = with maintainers; [ nckx ];
   };
 };
 in

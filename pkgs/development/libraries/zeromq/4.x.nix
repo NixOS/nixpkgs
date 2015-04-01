@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libuuid}:
+{ stdenv, fetchurl, libuuid }:
 
 stdenv.mkDerivation rec {
   name = "zeromq-4.0.5";
@@ -10,9 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libuuid ];
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "4";
     homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";
+    license = licenses.gpl3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

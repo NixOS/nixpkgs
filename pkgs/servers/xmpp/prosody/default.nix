@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, libidn, openssl, makeWrapper, fetchhg }:
+{ stdenv, fetchurl, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, libidn, openssl, makeWrapper, fetchhg, withLibevent ? false }:
+
+assert withLibevent -> luaevent != null;
+
+with stdenv.lib;
 
 let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ];
+  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ] ++ optional withLibevent luaevent;
   getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
   getLuaPath  = lib : getPath lib "lua";
   getLuaCPath = lib : getPath lib "so";
-  luaPath     = stdenv.lib.concatStringsSep ";" (map getLuaPath  libs);
-  luaCPath    = stdenv.lib.concatStringsSep ";" (map getLuaCPath libs);
+  luaPath     = concatStringsSep ";" (map getLuaPath  libs);
+  luaCPath    = concatStringsSep ";" (map getLuaCPath libs);
 in
 
 stdenv.mkDerivation rec {
-  version = "0.9.7";
+  version = "0.9.8";
   name = "prosody-${version}";
+
   src = fetchurl {
     url = "http://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "001fgslg3h7zfrfpkmqixnz5ircq6l0kr4wci5aj0i3nk6rrjjyx";
+    sha256 = "0wbq4ps69l09fjb5dfjzab6i30hzpi4bvyj5kc44gf70arf42w4l";
   };
 
   communityModules = fetchhg {
@@ -23,7 +28,8 @@ stdenv.mkDerivation rec {
     sha256 = "0010x2rl9f9ihy2nwqan2jdlz25433srj2zna1xh10490mc28hij";
   };
 
-  buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ];
+  buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ]
+                ++ optional withLibevent luaevent;
 
   configureFlags = [
     "--ostype=linux"
@@ -44,9 +50,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
     homepage = http://www.prosody.im;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.flosse ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.flosse ];
   };
 }

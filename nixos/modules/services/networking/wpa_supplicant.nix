@@ -31,12 +31,14 @@ in
         description = ''
           Whether to start <command>wpa_supplicant</command> to scan for
           and associate with wireless networks.  Note: NixOS currently
-          does not generate <command>wpa_supplicant</command>'s
+          does not manage <command>wpa_supplicant</command>'s
           configuration file, <filename>${configFile}</filename>.  You
           should edit this file yourself to define wireless networks,
           WPA keys and so on (see
           <citerefentry><refentrytitle>wpa_supplicant.conf</refentrytitle>
-          <manvolnum>5</manvolnum></citerefentry>).
+          <manvolnum>5</manvolnum></citerefentry>), or use
+          networking.wireless.userControlled.* to allow users to add entries
+          through <command>wpa_cli</command> and <command>wpa_gui</command>.
         '';
       };
 
@@ -62,7 +64,9 @@ in
           default = false;
           description = ''
             Allow normal users to control wpa_supplicant through wpa_gui or wpa_cli.
-            This is useful for laptop users that switch networks a lot.
+            This is useful for laptop users that switch networks a lot and don't want
+            to depend on a large package such as NetworkManager just to pick nearby
+            access points.
 
             When you want to use this, make sure ${configFile} doesn't exist.
             It will be created for you.

@@ -82,7 +82,8 @@ in
           '';
 
         serviceConfig = {
-          ExecStart = "@${ntp}/bin/ntpd ntpd -g -n ${ntpFlags}";
+          ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
+          Type = "forking";
         };
       };
 

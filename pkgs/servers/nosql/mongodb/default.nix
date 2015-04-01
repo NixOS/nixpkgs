@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 
-let version = "2.6.6";
+let version = "2.6.8";
     system-libraries = [
       "pcre"
       "boost"
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "0shb069xsqyslazdq66smr7ifppvdclbzpdjhrj2y3qb78y70pbm";
+    sha256 = "01hs65xswggy628hxka2f63qvwz5rfhqlkb05kr20wz1kl6zd5qr";
   };
 
   nativeBuildInputs = [ scons ];
@@ -40,6 +40,9 @@ in stdenv.mkDerivation rec {
 
     # bug #482576
     sed -i -e "/-Werror/d" src/third_party/v8/SConscript
+
+    # fix inclusion of std::swap
+    sed -i '1i #include <algorithm>' src/mongo/shell/linenoise_utf8.h
 
     # fix environment variable reading
     substituteInPlace SConstruct \

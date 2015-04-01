@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, fetchurl, x11, imlib2, libjpeg, libpng
-, libXinerama, curl }:
+, libXinerama, curl, libexif }:
 
 stdenv.mkDerivation rec {
   name = "feh-2.12";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0ckhidmsms2l5jycp0qf71jzmb3bpbhjq3bcgfpvfvszah7pmq30";
   };
 
-  buildInputs = [makeWrapper x11 imlib2 libjpeg libpng libXinerama curl];
+  buildInputs = [ makeWrapper x11 imlib2 libjpeg libpng libXinerama curl libexif ];
 
   preBuild = ''
-    makeFlags="PREFIX=$out"
+    makeFlags="PREFIX=$out exif=1"
   '';
 
   postInstall = ''

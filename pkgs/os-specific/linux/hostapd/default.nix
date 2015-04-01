@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libnl, openssl, pkgconfig }:
-stdenv.mkDerivation rec {
 
+stdenv.mkDerivation rec {
   name = "hostapd-${version}";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "1pxlkfj1r2k5lxph2x9l02jrn652b3whcfh6l604rbbghxv2nk69";
+    sha256 = "0zv5pnfrp6z7jjbskzgdb2rlmlbvdxmmis7ca94x5jy9s5mypq3g";
   };
 
   buildInputs = [ libnl openssl pkgconfig ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     echo CONFIG_IEEE80211N=y | tee -a .config
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
   '';
+
   preInstall = "mkdir -p $out/bin";
 
   meta = with stdenv.lib; {

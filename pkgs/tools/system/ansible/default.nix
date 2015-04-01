@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pythonPackages, python }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "1.7.2";
+  version = "1.8.4";
   name = "ansible-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://releases.ansible.com/ansible/ansible-${version}.tar.gz";
-    sha256 = "1b4qhh6a8z18q7lfa7laxb3p0f7sacvv7nlbr2lix0vznhbffz51";
+    sha256 = "1hcy4f6l9c23aa05yi4mr0zbqp0c6v5zq4c3dim076yfmfrh8z6k";
   };
 
   prePatch = ''
-    sed -i "s,\/usr\/share\/ansible\/,$out/share/ansible," lib/ansible/constants.py 
+    sed -i "s,\/usr\/share\/ansible\/,$out/share/ansible," lib/ansible/constants.py
   '';
 
   doCheck = false;

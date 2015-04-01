@@ -9,7 +9,11 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./robomongo.patch ];
-  
+
+  postPatch = ''
+    rm ./cmake/FindOpenSSL.cmake # remove outdated bundled CMake file
+  '';
+
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   buildInputs = [ cmake boost scons qt5 openssl python pcre bzip2 ];

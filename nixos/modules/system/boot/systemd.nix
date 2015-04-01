@@ -13,7 +13,7 @@ let
 
   makeUnit = name: unit:
     let
-      pathSafeName = lib.replaceChars ["@" "\\"] ["-" "-"] name;
+      pathSafeName = lib.replaceChars ["@" ":" "\\"] ["-" "-" "-"] name;
     in
     if unit.enable then
       pkgs.runCommand "unit-${pathSafeName}" { preferLocalBuild = true; inherit (unit) text; }
@@ -1040,6 +1040,11 @@ in
       ''
         # This file is created automatically and should not be modified.
         # Please change the option ‘systemd.tmpfiles.rules’ instead.
+
+        z /var/log/journal 2755 root systemd-journal - -
+        z /var/log/journal/%m 2755 root systemd-journal - -
+        z /var/log/journal/%m/* 0640 root systemd-journal - -
+
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 

@@ -1,0 +1,25 @@
+diff --git a/configure.ac b/configure.ac
+index 3609d88..48c6bc6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -227,6 +227,7 @@ if [[ $use_bdjava = "yes" ]]; then
+   AC_DEFINE([USING_BDJAVA], [1], ["Define to 1 if using BD-Java"])
+   AC_DEFINE_UNQUOTED([JAVA_ARCH], ["$java_arch"], ["Defines the architecture of the java vm."])
+   AC_DEFINE_UNQUOTED([JDK_HOME], ["$JDK_HOME"], [""])
++  CPPFLAGS="${CPPFLAGS} -DJARDIR='\"\$(datadir)/java\"'"
+ fi
+ AM_CONDITIONAL([USING_BDJAVA], [ test $use_bdjava = "yes" ])
+ 
+diff --git a/src/libbluray/bdj/bdj.c b/src/libbluray/bdj/bdj.c
+index c622801..f4aab9b 100644
+--- a/src/libbluray/bdj/bdj.c
++++ b/src/libbluray/bdj/bdj.c
+@@ -210,7 +210,7 @@ static const char *_find_libbluray_jar(void)
+ #ifdef _WIN32
+         "" BDJ_JARFILE,
+ #else
+-        "/usr/share/java/" BDJ_JARFILE,
++        JARDIR "/" BDJ_JARFILE,
+ #endif
+     };
+ 

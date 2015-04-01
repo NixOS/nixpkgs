@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "yodl-${version}";
-  version = "3.04.00";
+  version = "3.05.00";
 
   buildInputs = [ perl icmake ];
 
   src = fetchurl {
     url = "mirror://sourceforge/yodl/yodl_${version}.orig.tar.gz";
-    sha256 = "14sqd03j3w9g5l5rkdnqyxv174yz38m39ycncx86bq86g63igcv6";
+    sha256 = "12hv5ghrsk6kdi414glg888v3qk3m1nmicl8f0h5k4szm1i00dig";
   };
 
   preConfigure = ''
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     ./build programs
-    ./build man
     ./build macros
+    ./build man
   '';
 
   installPhase = ''
     ./build install programs $out
-    ./build install man $out
     ./build install macros $out
+    ./build install man $out
   '';
 
   meta = with stdenv.lib; {

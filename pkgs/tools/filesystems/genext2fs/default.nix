@@ -8,8 +8,11 @@ stdenv.mkDerivation {
     sha256 = "1z7czvsf3ircvz2cw1cf53yifsq29ljxmj15hbgc79l6gbxbnka0";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://genext2fs.sourceforge.net/;
     description = "A tool to generate ext2 filesystem images without requiring root privileges";
+    license = licenses.gpl2;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
   };
 }

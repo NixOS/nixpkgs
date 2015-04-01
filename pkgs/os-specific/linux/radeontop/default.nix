@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
 
-stdenv.mkDerivation rec {
+let version = "v0.8-8-g2499679"; in
+stdenv.mkDerivation {
   name = "radeontop-${version}";
-  version = "v0.8-8-g575a416";
 
-  src = fetchgit {
-    url = git://github.com/clbr/radeontop.git;
-    rev = "575a416596dbedb25bc6f3f0b16a0e2296fbb9bb";
-    sha256 = "6100a7159384cfcd71e59ef7096450e975d01786ee4e3a7cf9c0e56045c4ac91";
+  src = fetchFromGitHub {
+    sha256 = "112zf6ms0qpmr9h3l4lg5wik5j206mgij0nypba5lnqzksxh2f88";
+    rev = "2499679fda60c3f6239886296fd2a74155f45f77";
+    repo = "radeontop";
+    owner = "clbr";
   };
 
   buildInputs = [ pkgconfig gettext ncurses libdrm libpciaccess ];

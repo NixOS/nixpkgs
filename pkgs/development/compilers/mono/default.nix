@@ -6,10 +6,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "3.2.8";
+  version = "3.12.1";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "0h0s42pmgrhwqaym0b1401h70dcpr179ngcsp7f8i4hl4snqrd7x";
+    sha256 = "03dn68vignknzxy1rx75p16qx1ild27hixgvr5mw0j19mx9z332x";
   };
 
   buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib];
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   #http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | while read i; do
-        sed -i "s@libMonoPosixHelper.so@$out/lib/libMonoPosixHelper.so@g" $i
         sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
         sed -i "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" $i
     done
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
     platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   };
 }

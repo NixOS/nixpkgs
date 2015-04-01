@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       any kind of file.
     '';
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ muflax ];
-
+    maintainers = [ stdenv.lib.maintainers.muflax ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

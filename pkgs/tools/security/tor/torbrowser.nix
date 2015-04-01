@@ -9,7 +9,7 @@ let
   torEnv = buildEnv {
     name = "tor-env";
     paths = [
-      stdenv.cc.gcc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
+      stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
       fontconfig gdk_pixbuf cairo xlibs.libXrender xlibs.libX11 xlibs.libXext
       xlibs.libXt
     ];
@@ -20,13 +20,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "4.0.2";
+  version = "4.0.5";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${bits}-${version}_en-US.tar.xz";
     sha256 = if bits == "64" then
-      "02ibpkfq6cmr5dxgps9hr0dk1vgmda3m4g24yq6cg15sp94147mh" else
-      "1cxhkbdrwixfg81wwd6hdf5zbil12mff4yfqxzlwp55iqh49skry";
+      "0w1vq2fvk0ik503vz02znk80ywpnsybx0sc6906q7sbk3i7ggxp1" else
+      "1yljz43kyl6pmri1xnxmfxh6nphczvwgbrdgdsimc05zsfbrh363";
   };
 
   patchPhase = ''

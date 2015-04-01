@@ -217,6 +217,30 @@ in
         
       };
     };
-    
+  
+  android_support_extra = buildGoogleApis {
+    name = "android_support_extra";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/support_r20.zip;
+      sha1 = "719c260dc3eb950712988f987daaf91afa9e36af";
+    };
+    meta = {
+      description = "Android Support Library";
+      url = http://developer.android.com/;
+    };
+  };
+  google_play_services = buildGoogleApis {
+    name = "google_play_services";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/google_play_services_3265130_r12.zip;
+      sha1 = "92558dbc380bba3d55d0ec181167fb05ce7c79d9";
+    };
+    meta = {
+      description = "Google Play services client library and sample code";
+      url = http://developer.android.com/;
+    };
+  };
+
+  
 }
   

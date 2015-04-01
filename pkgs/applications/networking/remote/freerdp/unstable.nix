@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, zlib, libX11, libXcursor
 , libXdamage, libXext, glib, alsaLib, ffmpeg, libxkbfile, libXinerama, libXv
+, substituteAll
 , pulseaudio ? null, cups ? null, pcsclite ? null
+, buildServer ? true, optimize ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +14,13 @@ stdenv.mkDerivation rec {
     rev = "1.2.0-beta1+android7";
     sha256 = "08nn18jydblrif1qs92pakzd3ww7inr0i378ssn1bjp09lm1bkk0";
   };
+
+  patches = [
+  ] ++ stdenv.lib.optional (pcsclite != null)
+      (substituteAll {
+        src = ./dlopen-absolute-paths.diff;
+        inherit pcsclite;
+      });
 
   buildInputs = [
     cmake pkgconfig openssl zlib libX11 libXcursor libXdamage libXext glib
@@ -25,7 +34,10 @@ stdenv.mkDerivation rec {
     "-DWITH_CUNIT=OFF"
   ] ++ stdenv.lib.optional (pulseaudio != null) "-DWITH_PULSE=ON"
     ++ stdenv.lib.optional (cups != null) "-DWITH_CUPS=ON"
-    ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON";
+    ++ stdenv.lib.optional (pcsclite != null) "-DWITH_PCSC=ON"
+    ++ stdenv.lib.optional buildServer "-DWITH_SERVER=ON"
+    ++ stdenv.lib.optional optimize "-DWITH_SSE2=ON";
+
 
   meta = with stdenv.lib; {
     description = "A Remote Desktop Protocol Client";

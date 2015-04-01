@@ -12,7 +12,7 @@ let
 
       rtdeps = stdenv.lib.makeLibraryPath
         [ xlibs.libXxf86vm xlibs.libXext openal ]
-        + ":" + stdenv.lib.makeSearchPath "lib64" [ stdenv.cc.gcc ];
+        + ":" + stdenv.lib.makeSearchPath "lib64" [ stdenv.cc.cc ];
 
       buildCommand =
       ''

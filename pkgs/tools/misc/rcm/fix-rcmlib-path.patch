@@ -1,0 +1,68 @@
+*** rcm-1.2.3/bin/lsrc.in.orig	2014-05-09 04:57:39.000000000 -0700
+--- rcm-1.2.3/bin/lsrc.in	2015-01-24 14:27:48.786595479 -0800
+***************
+*** 1,6 ****
+  #!@SHELL@
+  
+! : ${RCM_LIB:=$(dirname "$0")/../share/rcm}
+  . "$RCM_LIB/rcm.sh"
+  
+  pushdir() {
+--- 1,6 ----
+  #!@SHELL@
+  
+! RCM_LIB=@rcm@/share/rcm
+  . "$RCM_LIB/rcm.sh"
+  
+  pushdir() {
+*** rcm-1.2.3/bin/mkrc.in.orig	2014-05-09 04:57:39.000000000 -0700
+--- rcm-1.2.3/bin/mkrc.in	2015-01-24 14:27:48.786595479 -0800
+***************
+*** 1,6 ****
+  #!@SHELL@
+  
+! : ${RCM_LIB:=$(dirname "$0")/../share/rcm}
+  . "$RCM_LIB/rcm.sh"
+  
+  destination() {
+--- 1,6 ----
+  #!@SHELL@
+  
+! RCM_LIB=@rcm@/share/rcm
+  . "$RCM_LIB/rcm.sh"
+  
+  destination() {
+*** rcm-1.2.3/bin/rcdn.in.orig	2014-05-09 04:57:39.000000000 -0700
+--- rcm-1.2.3/bin/rcdn.in	2015-01-24 14:27:48.786595479 -0800
+***************
+*** 1,6 ****
+  #!@SHELL@
+  
+! : ${RCM_LIB:=$(dirname "$0")/../share/rcm}
+  . "$RCM_LIB/rcm.sh"
+  
+  remove_link() {
+--- 1,6 ----
+  #!@SHELL@
+  
+! RCM_LIB=@rcm@/share/rcm
+  . "$RCM_LIB/rcm.sh"
+  
+  remove_link() {
+*** rcm-1.2.3/bin/rcup.in.orig	2014-05-09 04:57:39.000000000 -0700
+--- rcm-1.2.3/bin/rcup.in	2015-01-24 14:27:48.786595479 -0800
+***************
+*** 1,6 ****
+  #!@SHELL@
+  
+! : ${RCM_LIB:=$(dirname "$0")/../share/rcm}
+  . "$RCM_LIB/rcm.sh"
+  
+  link_or_copy() {
+--- 1,6 ----
+  #!@SHELL@
+  
+! RCM_LIB=@rcm@/share/rcm
+  . "$RCM_LIB/rcm.sh"
+  
+  link_or_copy() {

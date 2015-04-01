@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/evince" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   doCheck = false; # would need pythonPackages.dogTail, which is missing

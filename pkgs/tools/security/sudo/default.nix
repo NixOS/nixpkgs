@@ -3,20 +3,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.11p2";
+  name = "sudo-1.8.13";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "1bd1zf85q15z015268w9vchzwypzalc3v2dnddmwy67s32a88cw1";
+    sha256 = "09asw1hpxc39a6hhydr8n33m2pni1b5m37vaj7b00761ybnyax73";
   };
 
   configureFlags = [
     "--with-env-editor"
     "--with-editor=/run/current-system/sw/bin/nano"
-    "--with-rundir=/run"
+    "--with-rundir=/run/sudo"
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
     "--with-sendmail=${sendmailPath}"
@@ -61,5 +61,7 @@ stdenv.mkDerivation rec {
     license = http://www.sudo.ws/sudo/license.html;
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
+
+    platforms = stdenv.lib.platforms.linux;
   };
 }

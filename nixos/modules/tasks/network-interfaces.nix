@@ -16,6 +16,35 @@ let
 
   slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
+  rstpBridges = flip filterAttrs cfg.bridges (_: { rstp, ... }: rstp);
+
+  needsMstpd = rstpBridges != { };
+
+  bridgeStp = optional needsMstpd (pkgs.writeTextFile {
+    name = "bridge-stp";
+    executable = true;
+    destination = "/bin/bridge-stp";
+    text = ''
+      #!${pkgs.stdenv.shell} -e
+      export PATH="${pkgs.mstpd}/bin"
+
+      BRIDGES=(${concatStringsSep " " (attrNames rstpBridges)})
+      for BRIDGE in $BRIDGES; do
+        if [ "$BRIDGE" = "$1" ]; then
+          if [ "$2" = "start" ]; then
+            mstpctl addbridge "$BRIDGE"
+            exit 0
+          elif [ "$2" = "stop" ]; then
+            mstpctl delbridge "$BRIDGE"
+            exit 0
+          fi
+          exit 1
+        fi
+      done
+      exit 1
+    '';
+  });
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -683,7 +712,7 @@ in
         pkgs.iw
         pkgs.rfkill
         pkgs.openresolv
-      ];
+      ] ++ bridgeStp;
 
     systemd.targets."network-interfaces" =
       { description = "All Network Interfaces";
@@ -731,6 +760,9 @@ in
             ip link set "${i.name}" mtu "${toString i.mtu}"
           '';
       })));
+
+    services.mstpd = mkIf needsMstpd { enable = true; };
+
   };
 
 }

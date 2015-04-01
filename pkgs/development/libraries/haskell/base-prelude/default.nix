@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "base-prelude";
-  version = "0.1.7";
-  sha256 = "0xzgwj5sqx7y57biby77d6vrsghcmq85ha3frn8k4xq7wqqk4aqp";
+  version = "0.1.11";
+  sha256 = "0g6p1d3r6jbqcd8flxfbasb40ga7k90bc0q07drwhlaiadjnx1an";
   meta = {
     homepage = "https://github.com/nikita-volkov/base-prelude";
     description = "The most complete prelude formed from only the \"base\" package";

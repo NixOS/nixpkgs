@@ -1,10 +1,10 @@
 { stdenv, cmake, fetchurl, pkgconfig, qt4, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "doomseeker-0.12.1b";
+  name = "doomseeker-0.12.2b";
   src = fetchurl {
     url = "http://doomseeker.drdteam.org/files/${name}_src.tar.bz2";
-    sha256 = "110yg3w3y1x8p4gqpxb6djxw348caj50q5liq8ssb5mf78v8gk6b";
+    sha256 = "1bcrxc3g9c6b4d8dbm2rx0ldxkqc5fc91jndkwiaykf8hajm0jnr";
   };
 
   cmakeFlags = ''

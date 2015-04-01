@@ -1,20 +1,26 @@
-{stdenv, fetchgit, rustc, makeWrapper }:
+{stdenv, fetchgit, rustc, cargo, makeWrapper }:
 
 stdenv.mkDerivation rec {
   #TODO add emacs support
-  name = "racer-git-2015-01-07";
+  name = "racer-git-2015-02-28";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "bf73c05ac719cd3b0f8d8f9e0ecb066ede6aa9d9";
-    sha256 = "1159fsfca2kqvlajp8sawrskip7hc0rppk8vhwxa2vw8zznp56w0";
+    rev = "2e1d718fae21431de4493c238196466e9d4996bc";
+    sha256 = "0lvp494kg2hlbbdrwxmmxkyhjw53y9wjdml9z817pwj3fwmrjsx0";
   };
 
-  buildInputs = [ rustc makeWrapper ];
+  buildInputs = [ rustc cargo makeWrapper ];
+
+  buildPhase = ''
+    cargo build --release
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -p bin/racer $out/bin/
+    cp -p target/release/racer $out/bin/
     wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustc.src}/src"
+    install -d $out/share/emacs/site-lisp
+    install "editors/"*.el $out/share/emacs/site-lisp
   '';
 
   meta = with stdenv.lib; {

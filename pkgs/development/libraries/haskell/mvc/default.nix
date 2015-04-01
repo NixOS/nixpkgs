@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mvc";
-  version = "1.0.2";
-  sha256 = "1hah38hzy0d12b3vk7m6wfzx6hbm79zl4a9mx8bk9825c0g9qy0z";
+  version = "1.0.3";
+  sha256 = "1b1342qxyn2jxb3a5c9bp6ai7iwhbjxgfpbh2kjm7v75444lx78g";
   buildDepends = [
     async contravariant managed mmorph pipes pipesConcurrency
     transformers

@@ -5,10 +5,14 @@
 , ssl ? true # enable SSL support
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
-, stdenv, fetchurl, cmake, makeWrapper, qt, kdelibs, automoc4, phonon, dconf }:
+, kdelibs ? null # optional
+, useQt5 ? false
+, phonon_qt5, libdbusmenu_qt5
+, stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf }:
 
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
+assert withKDE -> kdelibs != null;
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
@@ -25,23 +29,25 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake makeWrapper qt ]
+  buildInputs = [ cmake makeWrapper ]
+    ++ (if useQt5 then [ qt.base ] else [ qt ])
+    ++ (if useQt5 && (monolithic || daemon) then [ qt.script ] else [])
+    ++ (if useQt5 && previews then [ qt.webkit qt.webkitwidgets ] else [])
     ++ lib.optional withKDE kdelibs
     ++ lib.optional withKDE automoc4
-    ++ lib.optional withKDE phonon;
+    ++ lib.optional withKDE phonon
+    ++ lib.optional useQt5 phonon_qt5
+    ++ lib.optional useQt5 libdbusmenu_qt5;
 
   cmakeFlags = [
-    "-DWITH_DBUS=OFF"
-    "-DWITH_LIBINDICATE=OFF"
     "-DEMBED_DATA=OFF"
-    "-DSTATIC=OFF"
-    "-DWITH_PHONON=ON" ]
+    "-DSTATIC=OFF" ]
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
     ++ edf withKDE "WITH_KDE"
-    ++ edf ssl "WITH_OPENSSL"
-    ++ edf previews "WITH_WEBKIT"  ;
+    ++ edf previews "WITH_WEBKIT"
+    ++ edf useQt5 "USE_QT5";
 
   preFixup =
     lib.optionalString client ''
@@ -55,17 +61,17 @@ in with stdenv; mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://quassel-irc.org/;
-    description = "Qt4/KDE4 distributed IRC client suppporting a remote daemon";
+    description = "Qt4/KDE4/Qt5 distributed IRC client suppporting a remote daemon";
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to
       and detach from a central core -- much like the popular
       combination of screen and a text-based IRC client such
-      as WeeChat, but graphical (based on Qt4/KDE4).
+      as WeeChat, but graphical (based on Qt4/KDE4 or Qt5).
     '';
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = with maintainers; [ phreedom ttuegel ];
     repositories.git = https://github.com/quassel/quassel.git;
-    inherit (qt.meta) platforms;
+    inherit ((if useQt5 then qt.base else qt).meta) platforms;
   };
 }

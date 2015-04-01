@@ -1,19 +1,22 @@
-{ stdenv, execline, fetchurl, skalibs }:
+{ stdenv, execline, fetchgit, skalibs }:
 
 let
 
-  version = "2.0.0.0";
+  version = "2.1.3.0";
 
 in stdenv.mkDerivation rec {
 
   name = "s6-${version}";
 
-  src = fetchurl {
-    url = "http://www.skarnet.org/software/s6/${name}.tar.gz";
-    sha256 = "14x4l3xp152c9v34zs7nzxzacizfpp0k0lzwh40rxm0w5wz4x0ls";
+  src = fetchgit {
+    url = "git://git.skarnet.org/s6";
+    rev = "refs/tags/v${version}";
+    sha256 = "0dnwkdxqjv5awdgwxci1spcx1s13y5s9wd8ccskwv1rymvpgn8b3";
   };
 
   dontDisableStatic = true;
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
@@ -23,7 +26,7 @@ in stdenv.mkDerivation rec {
     "--with-lib=${execline}/lib"
     "--with-dynlib=${skalibs}/lib"
     "--with-dynlib=${execline}/lib"
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ "--disable-shared" ];
+  ] ++ [ (if stdenv.isDarwin then "--disable-shared" else "--enable-shared") ];
 
   preBuild = ''
     substituteInPlace "src/daemontools-extras/s6-log.c" \

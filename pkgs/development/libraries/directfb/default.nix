@@ -2,12 +2,18 @@
 , enableX11 ? true, xlibs
 , enableSDL ? true, SDL }:
 
-let s = import ./src-for-default.nix; in
+let s = 
+rec {
+   version = "1.7.7";
+   name="directfb-${version}";
+   sha256 = "18r7h0pwbyyk8z3pgdv77nmma8lvr1si9gl1ghxgxf1ivhwcd1dp";
+   url="http://directfb.org/downloads/Core/DirectFB-1.7/DirectFB-${version}.tar.gz";
+}
+; in
 stdenv.mkDerivation {
   inherit (s) name;
   src = fetchurl {
-    url = s.url;
-    sha256 = s.hash;
+    inherit (s) url sha256;
   };
 
   nativeBuildInputs = [ perl ];

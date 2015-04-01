@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, openssl, pkgconfig, zlib, python, libiconvOrNull, geoip
+{ stdenv, fetchurl, boost, openssl, pkgconfig, zlib, python, libiconv, geoip
 # Version specific options
 , version, sha256
 , ... }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ boost pkgconfig openssl zlib python libiconvOrNull geoip ];
+  buildInputs = [ boost pkgconfig openssl zlib python libiconv geoip ];
 
   configureFlags = [ 
     "--enable-python-binding"
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     "--with-libiconv=yes"
     "--with-boost=${boost.dev}"
     "--with-boost-libdir=${boost.lib}/lib"
-  ] ++ stdenv.lib.optional (libiconvOrNull != null) "--with-libiconv=yes";
+    "--with-libiconv=yes"
+  ];
   
   meta = with stdenv.lib; {
     homepage = http://www.rasterbar.com/products/libtorrent/;

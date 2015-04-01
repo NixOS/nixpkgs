@@ -70,14 +70,6 @@ in
         description = "Custom kde-workspace, used for NixOS rebranding.";
       };
     };
-
-    environment.kdePackages = mkOption {
-      default = [];
-      example = literalExample "[ pkgs.kde4.kdesdk ]";
-      type = types.listOf types.package;
-      description = "This option is obsolete.  Please use <option>environment.systemPackages</option> instead.";
-    };
-
   };
 
 

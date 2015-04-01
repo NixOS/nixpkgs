@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
 
     # Create wrappers
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/clinfo
-    patchelf --set-rpath ${stdenv.cc.gcc}/lib64:${stdenv.cc.gcc}/lib $out/bin/clinfo
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib $out/bin/clinfo
 
     # Fix modes
     find "$out/" -type f -exec chmod 644 {} \;

@@ -16,6 +16,41 @@ let
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
+  whitelist = config.whitelistedLicenses or [];
+  blacklist = config.blacklistedLicenses or [];
+
+  onlyLicenses = list:
+    lib.lists.all (license:
+      let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
+      if license == l then true else
+        throw ''‘${builtins.toJSON license}’ is not an attribute of lib.licenses''
+    ) list;
+
+  mutuallyExclusive = a: b:
+    (builtins.length a) == 0 ||
+    (!(builtins.elem (builtins.head a) b) &&
+     mutuallyExclusive (builtins.tail a) b);
+
+  areLicenseListsValid =
+    if mutuallyExclusive whitelist blacklist then
+      assert onlyLicenses whitelist; assert onlyLicenses blacklist; true
+    else
+      throw "whitelistedLicenses and blacklistedLicenses are not mutually exclusive.";
+
+  hasLicense = attrs:
+    builtins.hasAttr "meta" attrs && builtins.hasAttr "license" attrs.meta;
+
+  hasWhitelistedLicense = assert areLicenseListsValid; attrs:
+    hasLicense attrs && builtins.elem attrs.meta.license whitelist;
+
+  hasBlacklistedLicense = assert areLicenseListsValid; attrs:
+    hasLicense attrs && builtins.elem attrs.meta.license blacklist;
+
+  allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+
+  isUnfree = licenses: lib.lists.any (l:
+    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
+
   # Alow granular checks to allow only some unfree packages
   # Example:
   # {pkgs, ...}:
@@ -25,12 +60,14 @@ let
   # }
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
-  allowBroken = config.allowBroken or false || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
-
-  unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
-
-  isUnfree = licenses: lib.lists.any (l:
-    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
+  # Check whether unfree packages are allowed and if not, whether the
+  # package has an unfree license and is not explicitely allowed by the
+  # `allowUNfreePredicate` function.
+  hasDeniedUnfreeLicense = attrs:
+    !allowUnfree &&
+    hasLicense attrs &&
+    isUnfree (lib.lists.toList attrs.meta.license) &&
+    !allowUnfreePredicate attrs;
 
   defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
@@ -44,43 +81,57 @@ let
 
   # Add a utility function to produce derivations that use this
   # stdenv and its shell.
-  mkDerivation = attrs:
+  mkDerivation =
+    { buildInputs ? []
+    , nativeBuildInputs ? []
+    , propagatedBuildInputs ? []
+    , propagatedNativeBuildInputs ? []
+    , crossConfig ? null
+    , meta ? {}
+    , passthru ? {}
+    , pos ? null # position used in error messages and for meta.position
+    , ... } @ attrs:
     let
-      pos =
-        if attrs.meta.description or null != null then
-          unsafeGetAttrPos "description" attrs.meta
+      pos' =
+        if pos != null then
+          pos
+        else if attrs.meta.description or null != null then
+          builtins.unsafeGetAttrPos "description" attrs.meta
         else
-          unsafeGetAttrPos "name" attrs;
-      pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
+          builtins.unsafeGetAttrPos "name" attrs;
+      pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
 
       throwEvalHelp = unfreeOrBroken: whatIsWrong:
-        assert (unfreeOrBroken == "Unfree" || unfreeOrBroken == "Broken");
-        throw ''
-          Package ‘${attrs.name}’ in ${pos'} ${whatIsWrong}, refusing to evaluate.
+        assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
+
+        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${whatIsWrong}, refusing to evaluate."
+        + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''
+
           For `nixos-rebuild` you can set
             { nixpkgs.config.allow${unfreeOrBroken} = true; }
           in configuration.nix to override this.
           For `nix-env` you can add
             { allow${unfreeOrBroken} = true; }
           to ~/.nixpkgs/config.nix.
-        '';
+        ''));
+
+      licenseAllowed = attrs:
+        if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
+          throwEvalHelp "Unfree" "has an unfree license ‘${builtins.toJSON attrs.meta.license}’ which is not whitelisted"
+        else if hasBlacklistedLicense attrs then
+          throwEvalHelp "blacklisted" "has the ‘${builtins.toJSON attrs.meta.license}’ license which is blacklisted"
+        else if !allowBroken && attrs.meta.broken or false then
+          throwEvalHelp "Broken" "is marked as broken"
+        else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
+          throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
+        else true;
+
     in
-    if !allowUnfree && isUnfree (lib.lists.toList attrs.meta.license or []) && !allowUnfreePredicate attrs then
-      throwEvalHelp "Unfree" "has an unfree license"
-    else if !allowBroken && attrs.meta.broken or false then
-      throwEvalHelp "Broken" "is marked as broken"
-    else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
-      throwEvalHelp "Broken" "is not supported on ‘${result.system}’"
-    else
+      assert licenseAllowed attrs;
+
       lib.addPassthru (derivation (
-        (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
-        // (let
-          buildInputs = attrs.buildInputs or [];
-          nativeBuildInputs = attrs.nativeBuildInputs or [];
-          propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-          propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
-          crossConfig = attrs.crossConfig or null;
-        in
+        (removeAttrs attrs ["meta" "passthru" "crossAttrs" "pos"])
+        //
         {
           builder = attrs.realBuilder or shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
@@ -96,7 +147,7 @@ let
           nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
-        }))) (
+        })) (
       {
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not
@@ -104,15 +155,15 @@ let
         # include it in the result, it *is* available to nix-env for
         # queries.  We also a meta.position attribute here to
         # identify the source location of the package.
-        meta = attrs.meta or {} // (if pos != null then {
-          position = pos.file + ":" + (toString pos.line);
+        meta = meta // (if pos' != null then {
+          position = pos'.file + ":" + toString pos'.line;
         } else {});
-        passthru = attrs.passthru or {};
+        inherit passthru;
       } //
       # Pass through extra attributes that are not inputs, but
       # should be made available to Nix expressions using the
       # derivation (e.g., in assertions).
-      (attrs.passthru or {}));
+      passthru);
 
   # The stdenv that we are producing.
   result =
@@ -152,14 +203,9 @@ let
       isCygwin = system == "i686-cygwin"
               || system == "x86_64-cygwin";
       isFreeBSD = system == "i686-freebsd"
-              || system == "x86_64-freebsd";
+               || system == "x86_64-freebsd";
       isOpenBSD = system == "i686-openbsd"
-              || system == "x86_64-openbsd";
-      isBSD = system == "i686-freebsd"
-           || system == "x86_64-freebsd"
-           || system == "i686-openbsd"
-           || system == "x86_64-openbsd"
-           || system == "x86_64-darwin";
+               || system == "x86_64-openbsd";
       isi686 = system == "i686-linux"
             || system == "i686-gnu"
             || system == "i686-freebsd"

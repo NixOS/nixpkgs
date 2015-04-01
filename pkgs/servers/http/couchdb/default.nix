@@ -13,6 +13,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ erlang icu openssl spidermonkey curl help2man sphinx which
     file pkgconfig ];
 
+  /* This patch removes the `-Werror` flag as there are warnings due to
+   * _BSD_SOURCE being deprecated in glibc >= 2.20
+   */
+  patchPhase = ''
+    patch src/couchdb/priv/Makefile.in <<EOF
+    392c392
+    < couchjs_CFLAGS = -g -Wall -Werror -D_BSD_SOURCE \$(CURL_CFLAGS) \$(JS_CFLAGS)
+    ---
+    > couchjs_CFLAGS = -g -Wall -D_BSD_SOURCE \$(CURL_CFLAGS) \$(JS_CFLAGS)
+    EOF
+  '';
+
   postInstall = ''
     sed -i -e "s|\`getopt|\`${getopt}/bin/getopt|" $out/bin/couchdb
   '';

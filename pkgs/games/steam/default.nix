@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, traceDeps ? false}:
 
 stdenv.mkDerivation rec {
   name = "${program}-${version}";
@@ -10,16 +10,29 @@ stdenv.mkDerivation rec {
     sha256 = "1c1gl5pwvb5gnnnqf5d9hpcjnfjjgmn4lgx8v0fbx1am5xf3p2gx";
   };
 
+  traceLog = "/tmp/steam-trace-dependencies.log";
+
   installPhase = ''
     make DESTDIR=$out install
     mv $out/usr/* $out #*/
     rmdir $out/usr
+
+    rm $out/bin/steamdeps
+    ${stdenv.lib.optionalString traceDeps ''
+      cat > $out/bin/steamdeps <<EOF
+      #! /bin/bash
+      echo \$1 >> ${traceLog}
+      cat \$1 >> ${traceLog}
+      echo >> ${traceLog}
+      EOF
+      chmod +x $out/bin/steamdeps
+    ''}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jagajaga ];
   };
 }

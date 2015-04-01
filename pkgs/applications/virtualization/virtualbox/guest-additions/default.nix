@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "9ab48f44ac26a6deb374cb5fe6bad103bbf4fdf5186140e2d40ebe48bd01f3ea";
+    sha256 = "df4385aaa80f322ee2acda0657a53d9ca5c489e695ee5f9776574b67c649c960";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
@@ -70,13 +70,17 @@ stdenv.mkDerivation {
         ''
         else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
         }
-        patchelf --set-rpath ${stdenv.cc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
+        patchelf --set-rpath ${stdenv.cc.cc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
     done
 
     for i in lib/VBoxOGL*.so
     do
         patchelf --set-rpath $out/lib:${dbus}/lib $i
     done
+
+    # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions
+    # NixOS module) to 98vboxadd-xclient. For now, just work around it:
+    mv lib/VBoxGuestAdditions/98vboxadd-xclient bin/VBoxClient-all
 
     # Remove references to /usr from various scripts and files
     sed -i -e "s|/usr/bin|$out/bin|" share/VBoxGuestAdditions/vboxclient.desktop

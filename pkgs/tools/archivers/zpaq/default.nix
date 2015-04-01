@@ -1,18 +1,18 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 let
   s = # Generated upstream information
   rec {
     baseName="zpaq";
-    version="660";
+    version="704";
     name="${baseName}-${version}";
-    hash="1p6b56zf676bkfc20lxhjh9bsgh92z6bln7b0kxibh8s8aa7vzjq";
-    url="http://mattmahoney.net/dc/zpaq660.zip";
-    sha256="1p6b56zf676bkfc20lxhjh9bsgh92z6bln7b0kxibh8s8aa7vzjq";
+    hash="0ffs2br5sjsd5pvy2x476fakbpvcf7yf0agzys0cfcib8pw9bd91";
+    url="http://mattmahoney.net/dc/zpaq704.zip";
+    sha256="0ffs2br5sjsd5pvy2x476fakbpvcf7yf0agzys0cfcib8pw9bd91";
   };
   buildInputs = [
     unzip
   ];
-  isUnix = stdenv.isLinux || stdenv.isGNU || stdenv.isDarwin || stdenv.isBSD;
+  isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
   isx86 = stdenv.isi686 || stdenv.isx86_64;
   compileFlags = ""
     + (stdenv.lib.optionalString isUnix " -Dunix -pthread ")

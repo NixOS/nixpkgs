@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, libidn
 , perl, perlPackages, LWP, python3
-, gnutls ? null }:
+, libiconv, gnutls ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.16";
@@ -21,19 +21,22 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e's/localhost/127.0.0.1/g'
        done
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+       export LIBS="-liconv -lintl"
     '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ libidn ]
+  buildInputs = [ libidn libiconv ]
     ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
-    ++ stdenv.lib.optional (gnutls != null) gnutls;
+    ++ stdenv.lib.optional (gnutls != null) gnutls
+    ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags =
     if gnutls != null
     then "--with-ssl=gnutls"
     else "--without-ssl";
 
-  doCheck = (perl != null && python3 != null);
+  doCheck = (perl != null && python3 != null && !stdenv.isDarwin);
 
   meta = with stdenv.lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";

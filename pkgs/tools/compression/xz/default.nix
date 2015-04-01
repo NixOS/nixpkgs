@@ -1,17 +1,19 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "xz-5.0.7";
+  name = "xz-5.2.0";
 
   src = fetchurl {
     url = "http://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "05nnxl19a49h15lxzpn3fd76izrycnr7qaf9qvd408yz973iv1g8";
+    sha256 = "19f4kkydyjv240y78qnvi6vi6pfxf7d2386cnclh4rx1ams7sdgp";
   };
 
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   preConfigure = "unset CONFIG_SHELL";
+
+  postInstall = "rm -rf $out/share/doc";
 
   meta = {
     homepage = http://tukaani.org/xz/;

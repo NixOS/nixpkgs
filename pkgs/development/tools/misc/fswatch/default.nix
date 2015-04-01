@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoconf
-, automake114x
+, automake
 , findutils                     # for xargs
 , gettext_0_19
 , libtool
@@ -11,7 +11,7 @@
 
 let
 
- version = "1.4.5.3";
+ version = "1.4.6";
 
 in stdenv.mkDerivation {
 
@@ -21,10 +21,10 @@ in stdenv.mkDerivation {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "05jphslvfgp94vd86myjw5q4wgbayj8avw49h4a4npkwhn93d11j";
+    sha256 = "0flq8baqzifhmf61zyiipdipvgy4h0kl551clxrhwa8gvzf75im4";
   };
 
-  buildInputs = [ autoconf automake114x gettext_0_19 libtool makeWrapper texinfo ];
+  buildInputs = [ autoconf automake gettext_0_19 libtool makeWrapper texinfo ];
 
   preConfigure = ''
     ./autogen.sh
@@ -37,11 +37,12 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A cross-platform file change monitor with multiple backends";
     homepage = https://github.com/emcrisostomo/fswatch;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ pSub ];
   };
 
 }

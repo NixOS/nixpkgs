@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, go }:
+{ stdenv, fetchgit, go, Security }:
 
 stdenv.mkDerivation rec {
   name = "hub-${version}";
@@ -11,11 +11,12 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ go ];
+  buildInputs = [ go ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
   buildPhase = ''
+    patchShebangs .
     sh script/build
   '';
 
@@ -36,7 +37,6 @@ stdenv.mkDerivation rec {
 # Should we also install provided git-hooks?
 # ?
   '';
-
 
   meta = with stdenv.lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";

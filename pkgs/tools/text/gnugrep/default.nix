@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pcre, libiconvOrNull }:
+{ stdenv, fetchurl, pcre, libiconv }:
 
-let version = "2.20"; in
+let version = "2.21"; in
 
 stdenv.mkDerivation {
   name = "gnugrep-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "0rcs0spsxdmh6yz8y4frkqp6f5iw19mdbdl9s2v6956hq0mlbbzh";
+    sha256 = "1pp5n15qwxrw1pibwjhhgsibyv5cafhamf8lwzjygs6y00fa2i2j";
   };
 
-  buildInputs = [ pcre libiconvOrNull ];
+  patches = [ ./cve-2015-1345.patch ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString (libiconvOrNull != null) "-L${libiconvOrNull}/lib -liconv";
+  buildInputs = [ pcre libiconv ];
 
   doCheck = !stdenv.isDarwin;
 

@@ -18,11 +18,11 @@
 assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.24";
+  name = "samba-3.6.25";
 
   src = fetchurl {
-    url = "http://samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "19rln8m1k359bz6dhmlv39kzyjg7p296dz4y4mq1jwrlnw2bvl0i";
+    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
+    sha256 = "0l9pz2m67vf398q3c2dwn8jwdxsjb20igncf4byhv6yq5dzqlb4g";
   };
 
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]

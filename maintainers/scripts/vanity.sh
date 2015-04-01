@@ -47,11 +47,11 @@ fetchGithubName () {
 
 # For RDF
 normalize_name () {
-	sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g; s/`/%60/g'
+	sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g; s/`/%60/g; s/\^/%5e/g; '
 }
 
 denormalize_name () {
-	sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%60/`/g; s/%25/%/g;';
+	sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%60/`/g; s/%5e/^/g; s/%25/%/g;';
 }
 
 n3="$(mktemp --suffix .n3)"

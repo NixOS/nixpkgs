@@ -1,13 +1,14 @@
 { stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, x11, sqlite, gsl,
-  pyqt4, qwt, fcgi, python, libspatialindex, libspatialite }:
+  pyqt4, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.4.0";
+  name = "qgis-2.6.1";
 
-  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt
-    fcgi libspatialindex libspatialite ];
+  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt qscintilla
+    fcgi libspatialindex libspatialite postgresql ] ++
+    (with pythonPackages; [ numpy psycopg2 ]);
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
   #enableParallelBuilding = true;
@@ -20,10 +21,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "711b7d81ddff45b083a21f05c8aa5093a6a38a0ee42dfcc873234fcef1fcdd76";
-    
-
+    sha256 = "1avw9mnhrcxsdalqr2yhyif1cacl4dsgcpfc31axkv7vj401djnl";
   };
+
+  postInstall = ''
+    wrapProgram $out/bin/qgis \
+      --prefix PYTHONPATH : $PYTHONPATH
+  '';
 
   meta = {
     description = "User friendly Open Source Geographic Information System";

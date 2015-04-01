@@ -58,7 +58,7 @@ let
       "simple" "forking" "oneshot" "dbus" "notify" "idle"
     ])
     (assertValueOneOf "Restart" [
-      "no" "on-success" "on-failure" "on-abort" "always"
+      "no" "on-success" "on-failure" "on-abnormal" "on-abort" "always"
     ])
   ];
 

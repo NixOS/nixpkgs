@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libiconvOrEmpty }:
+{ stdenv, fetchurl, libiconv }:
 
 stdenv.mkDerivation rec {
   version = "3.0.9";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp aescrypt_keygen $out/bin
   '';
 
-  buildInputs = [ libiconvOrEmpty ];
+  buildInputs = [ libiconv ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
 

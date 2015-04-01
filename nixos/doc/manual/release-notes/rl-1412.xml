@@ -112,9 +112,9 @@ xlink:href="http://httpd.apache.org/docs/2.4/upgrading.html">Apache’s
 documentation</link> for details. If you wish to continue to use
 httpd 2.2, add the following line to your NixOS configuration:
 
-rogramlisting>
-rvices.httpd.package = pkgs.apacheHttpd_2_2;
-programlisting>
+<programlisting>
+services.httpd.package = pkgs.apacheHttpd_2_2;
+</programlisting>
 
 </para></listitem>
 

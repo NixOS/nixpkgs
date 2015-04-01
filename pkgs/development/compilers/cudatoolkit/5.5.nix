@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
+{ lib, stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
 , xlibs, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib
 } :
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     gtk2 glib fontconfig freetype unixODBC alsaLib
   ];
 
-  rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.gcc}/lib64";
+  rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc}/lib64";
 
   unpackPhase = ''
     sh $src --keep --noexec
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       '{}' \; || true
     find . -type f -exec patchelf \
-      --set-rpath $rpath:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_CC/nix-support/orig-gcc)/lib \
+      --set-rpath $rpath:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64:$(cat $NIX_CC/nix-support/orig-cc)/lib \
       --force-rpath \
       '{}' \; || true
   '';
@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    license = [ "nonfree" ];
+    license = lib.licenses.unfree;
   };
 }

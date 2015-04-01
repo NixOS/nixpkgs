@@ -100,6 +100,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Creative Commons Attribution 4.0";
   };
 
+  cc-by-sa-40 = spdx {
+    spdxId = "CC-BY-SA-4.0";
+    fullName = "Creative Commons Attribution Share Alike 4.0";
+  };
+
   cddl = spdx {
     spdxId = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
@@ -125,9 +130,24 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
+  efl10 = spdx {
+    spdxId = "EFL-1.0";
+    fullName = "Eiffel Forum License v1.0";
+  };
+
+  efl20 = spdx {
+    spdxId = "EFL-2.0";
+    fullName = "Eiffel Forum License v2.0";
+  };
+
   epl10 = spdx {
     spdxId = "EPL-1.0";
     fullName = "Eclipse Public License 1.0";
+  };
+
+  fdl12 = spdx {
+    spdxId = "GFDL-1.2";
+    fullName = "GNU Free Documentation License v1.2";
   };
 
   free = {
@@ -183,6 +203,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   iasl = {
     fullName = "iASL";
     url = http://www.calculate-linux.org/packages/licenses/iASL;
+  };
+
+  ijg = spdx {
+    spdxId = "IJG";
+    fullName = "Independent JPEG Group License";
   };
 
   inria = {
@@ -270,6 +295,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   mit = spdx {
     spdxId = "MIT";
     fullName = "MIT License";
+  };
+
+  mpl10 = spdx {
+    spdxId = "MPL-1.0";
+    fullName = "Mozilla Public License 1.0";
   };
 
   mpl11 = spdx {

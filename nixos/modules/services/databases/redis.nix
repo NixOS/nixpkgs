@@ -201,7 +201,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.redis_init =
-      { description = "Redis server initialisation";
+      { description = "Redis Server Initialisation";
 
         wantedBy = [ "redis.service" ];
         before = [ "redis.service" ];
@@ -216,7 +216,7 @@ in
       };
 
     systemd.services.redis =
-      { description = "Redis server";
+      { description = "Redis Server";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];

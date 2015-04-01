@@ -49,4 +49,8 @@ on container networking.)</para>
 switch</literal>. Note that this will not delete the root directory of
 the container in <literal>/var/lib/containers</literal>.</para>
 
+<para>Declarative containers can be started and stopped using the
+corresponding systemd service, e.g. <literal>systemctl start
+container@database</literal>.</para>
+
 </section>

@@ -50,7 +50,7 @@ releaseTools.sourceTarball rec {
     fi
 
     # Check that all-packages.nix evaluates on a number of platforms.
-    for platform in i686-linux x86_64-linux x86_64-darwin i686-freebsd x86_64-freebsd; do
+    for platform in i686-linux x86_64-linux x86_64-darwin; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
         NIXPKGS_ALLOW_BROKEN=1 nix-env -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \

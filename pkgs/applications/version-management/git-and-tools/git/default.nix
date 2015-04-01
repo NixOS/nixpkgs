@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper
+, libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
@@ -9,11 +9,8 @@
 }:
 
 let
-
-  version = "2.1.4";
-
+  version = "2.3.4";
   svn = subversionClient.override { perlBindings = true; };
-
 in
 
 stdenv.mkDerivation {
@@ -21,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0gh57mfxz1qrxzfp1lpcaqswhixc246kmajlf0db7g0cn6wnhjd0";
+    sha256 = "15fv155skjy80j7sv7x4kxlj3m8i334bic4q2qmb6zvr04hjpslp";
   };
 
   patches = [
@@ -31,7 +28,7 @@ stdenv.mkDerivation {
     ./ssl-cert-file.patch
   ];
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];

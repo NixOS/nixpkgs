@@ -147,7 +147,7 @@ in
         path =
           [ pkgs.sudo pkgs.vlan pkgs.nettools pkgs.iptables pkgs.qemu_kvm
             pkgs.e2fsprogs pkgs.utillinux pkgs.multipath_tools pkgs.iproute
-            pkgs.bridge_utils
+            pkgs.bridge-utils
           ];
 
         exec = "${nova}/bin/nova-compute --flagfile=${novaConf}";
@@ -163,7 +163,7 @@ in
 
         path =
           [ pkgs.sudo pkgs.vlan pkgs.dnsmasq pkgs.nettools pkgs.iptables
-            pkgs.iproute pkgs.bridge_utils pkgs.radvd
+            pkgs.iproute pkgs.bridge-utils pkgs.radvd
           ];
 
         exec = "${nova}/bin/nova-network --flagfile=${novaConf}";

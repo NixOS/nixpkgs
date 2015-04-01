@@ -17,15 +17,6 @@
   ghcHEADPrefs = self : super : super // {
     cabalInstall_1_20_0_6 = super.cabalInstall_1_20_0_6.override { Cabal = null; };
     mtl = self.mtl_2_2_1;
-    ghcjsBase = null;
-    ghcjsDom = with self; super.ghcjsDom.override {
-      cabal = self.cabal.override {
-        extension = self: super: {
-          configureFlags = [ "-f-ghcjs" "-fwebkit" "-f-gtk3" ];
-          buildDepends = [ mtl glib transformers gtk webkit ];
-        };
-      };
-    };
   };
 
   ghc784Prefs = self : super : ghcHEADPrefs self super // {
@@ -34,6 +25,7 @@
     jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_20_0_3; };
     MonadRandom = self.MonadRandom_0_2_0_1; # newer versions require transformers >= 0.4.x
     mtl = self.mtl_2_1_3_1;
+    xhtml = null;
     transformersCompat = super.transformersCompat.override { cabal = self.cabal.override {
       extension = self: super: { configureFlags = "-fthree " + super.configureFlags or ""; };
     }; };
@@ -134,7 +126,6 @@
     binary = super.binary_0_7_2_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2;
     caseInsensitive = super.caseInsensitive.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
-    GLUT = self.GLUT_2_2_2_1;
     happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashable = super.hashable.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashtables = super.hashtables.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
@@ -142,8 +133,6 @@
     HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     network = super.network_2_2_1_7.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
-    OpenGLRaw = self.OpenGLRaw_1_3_0_0;
-    OpenGL = self.OpenGL_2_6_0_1;
     parsec = super.parsec.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
@@ -158,20 +147,17 @@
 
   # Abstraction for Haskell packages collections
   packagesFun = makeOverridable
-   ({ ghcPath
-    , ghcBinary ? ghc6101Binary
+   ({ ghc
     , prefFun
     , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
-    , extraArgs ? {}
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope ghc modifyPrio;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
-          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
         };
         haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
         haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
@@ -195,170 +181,43 @@
                                                           modifyPrio   = defaultVersionPrioFun true; };
                              };
 
-  # Binary versions of GHC
-  #
-  # GHC binaries are around for bootstrapping purposes
-
-  ghc6101Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.1-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc6102Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.2-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc6121Binary = lowPrio (callPackage ../development/compilers/ghc/6.12.1-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc704Binary = lowPrio (callPackage ../development/compilers/ghc/7.0.4-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc742Binary = lowPrio (callPackage ../development/compilers/ghc/7.4.2-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc783Binary = lowPrio (callPackage ../development/compilers/ghc/7.8.3-binary.nix {});
-
-  ghc6101BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
-  ghc6121BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
-
   # Compiler configurations
   #
   # Here, we associate compiler versions with bootstrap compiler versions and
   # preference functions.
 
-  packages_ghcHEAD =
-    packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = pkgs.haskellPackages.ghcPlain;
-               prefFun = ghcHEADPrefs;
-               extraArgs = {
-                 happy = pkgs.haskellPackages.happy;
-                 alex = pkgs.haskellPackages.alex;
-               };
-             };
-
   packages_ghc784 =
-    packages { ghcPath = ../development/compilers/ghc/7.8.4.nix;
-               ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc784;
                prefFun = ghc784Prefs;
              };
 
-  packages_ghcjs =
-    packages {
-      ghcPath = ../development/compilers/ghc/7.8.4.nix;
-      ghcBinary = if stdenv.isDarwin then ghc783Binary else ghc742Binary;
-      prefFun = self : super : super // {
-        ghc = let parent = packages_ghc784; in
-          callPackage ../development/compilers/ghcjs/wrapper.nix {
-            ghc = parent.ghcjs // { inherit parent; };
-          };
-        cabal = self.cabalJs;
-        buildLocalCabalWithArgs = args: super.buildLocalCabalWithArgs (args // {
-          nativePkgs = packages_ghc784;
-        });
-        ghcjsDom = with self; super.ghcjsDom.override {
-          cabal = self.cabal.override {
-            extension = self: super: {
-              configureFlags = [ ];
-              buildDepends = [ mtl ghcjsBase ];
-            };
-          };
-        };
-        # This is the list of packages that are built into a booted ghcjs installation
-        # It can be generated with the command:
-        # nix-shell '<nixpkgs>' -A pkgs.haskellPackages_ghcjs.ghc --command "ghcjs-pkg list | sed -n 's/^    \(.*\)-\([0-9.]*\)$/\1_\2/ p' | sed 's/\./_/g' | sed 's/-\(.\)/\U\1/' | sed 's/^\([^_]*\)\(.*\)$/\1 = null;/'"
-        Cabal = null;
-        aeson = null;
-        array = null;
-        async = null;
-        attoparsec = null;
-        base = null;
-        binary = null;
-        rts = null;
-        bytestring = null;
-        caseInsensitive = null;
-        containers = null;
-        deepseq = null;
-        directory = null;
-        dlist = null;
-        extensibleExceptions = null;
-        filepath = null;
-        ghcPrim = null;
-        ghcjsBase = null;
-        ghcjsPrim = null;
-        hashable = null;
-        integerGmp = null;
-        mtl = null;
-        oldLocale = null;
-        oldTime = null;
-        parallel = null;
-        pretty = null;
-        primitive = null;
-        process = null;
-        scientific = null;
-        stm = null;
-        syb = null;
-        templateHaskell = null;
-        text = null;
-        time = null;
-        transformers = null;
-        unix = null;
-        unorderedContainers = null;
-        vector = null;
-
-        # GHCJS-specific workarounds
-        split = super.split.override {
-          cabal = self.cabal.override {
-            extension = self: super: {
-              doCheck = false; # Under ghcjs, the tests hang
-            };
-          };
-        };
-        dependentMap = super.dependentMap.override {
-          cabal = self.cabal.override {
-            extension = self: super: {
-              preConfigure = ''
-                sed -i 's/^.*ghc-options:.*$//' *.cabal
-              ''; # Without this, we get "target ‘base’ is not a module name or a source file"
-            };
-          };
-        };
-      };
-    };
-
   packages_ghc763 =
-    packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
-               ghcBinary = ghc704Binary;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc763;
                prefFun = ghc763Prefs;
              };
 
   packages_ghc742 =
-    packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
-               ghcBinary = ghc6121BinaryDarwin;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc742;
                prefFun = ghc742Prefs;
              };
 
   packages_ghc722 =
-    packages { ghcPath = ../development/compilers/ghc/7.2.2.nix;
-               ghcBinary = ghc6121BinaryDarwin;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc722;
                prefFun = ghc722Prefs;
              };
 
   packages_ghc704 =
-    packages { ghcPath = ../development/compilers/ghc/7.0.4.nix;
-               ghcBinary = ghc6101BinaryDarwin;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc704;
                prefFun = ghc704Prefs;
              };
 
   packages_ghc6123 =
-    packages { ghcPath = ../development/compilers/ghc/6.12.3.nix;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc6123;
                prefFun = ghc6123Prefs;
              };
 
   packages_ghc6104 =
-    packages { ghcPath = ../development/compilers/ghc/6.10.4.nix;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc6104;
                prefFun = ghc6104Prefs;
              };
 

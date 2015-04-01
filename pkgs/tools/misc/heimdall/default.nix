@@ -1,14 +1,16 @@
-{ stdenv, fetchgit, pkgconfig, libusb1, udev
+{ stdenv, fetchFromGitHub, pkgconfig, libusb1, udev
 , enableGUI ? true, qt4 ? null
 }:
 
-stdenv.mkDerivation {
-  name = "heimdall-1.4.0";
+stdenv.mkDerivation rec {
+  version = "1.4.1";
+  name = "heimdall-${version}";
 
-  src = fetchgit {
-    url = git://github.com/Benjamin-Dobell/Heimdall.git;
-    rev = "refs/tags/v1.4.0";
-    sha256 = "285785d83fd4edbe98c0fa38c27772f72950a5887b255c00937a1f11c79ebf57";
+  src = fetchFromGitHub {
+    owner  = "Benjamin-Dobell";
+    repo   = "Heimdall";
+    rev    = "v${version}";
+    sha256 = "1b7xpamwvw5r2d9yf73f0axv35vg8zaz1345xs3lmsr105phnnp4";
   };
 
   buildInputs =

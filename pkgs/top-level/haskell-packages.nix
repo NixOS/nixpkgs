@@ -103,15 +103,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     extension = self : super : {};
   };
 
-  cabalJs = callPackage ../build-support/cabal/ghcjs.nix {
-    Cabal = null;               # prefer the Cabal version shipped with the compiler
-    hscolour = self.hscolourBootstrap;
-    inherit enableLibraryProfiling enableCheckPhase
-      enableStaticLibraries enableSharedLibraries enableSharedExecutables;
-    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
-    extension = self : super : {};
-  };
-
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
@@ -781,7 +772,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     optparseApplicative = self.optparseApplicative_0_10_0;
   };
 
-  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {};
+  elmPackage = callPackage ../development/compilers/elm/elm-package.nix {
+    optparseApplicative = self.optparseApplicative_0_10_0;
+  };
 
   elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
@@ -965,16 +958,6 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   };
 
   ghcid = callPackage ../development/tools/haskell/ghcid {};
-
-  ghcjs = callPackage ../development/compilers/ghcjs {
-    Cabal = self.Cabal_1_22_0_0;
-    cabalInstall = self.cabalInstall_1_22_0_0;
-    haddock = self.haddock.override {
-      Cabal = null;
-    };
-  };
-
-  ghcjsDom = callPackage ../development/libraries/haskell/ghcjs-dom {};
 
   ghcjsCodemirror = callPackage ../development/libraries/haskell/ghcjs-codemirror {};
 
@@ -1636,7 +1619,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
 
-  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvm; };
+  llvmGeneral = callPackage ../development/libraries/haskell/llvm-general { llvmConfig = pkgs.llvmPackages_34.llvm; };
 
   llvmGeneralPure = callPackage ../development/libraries/haskell/llvm-general-pure {};
 
@@ -1655,6 +1638,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   loggingFacadeJournald = callPackage ../development/libraries/haskell/logging-facade-journald {};
 
   logict = callPackage ../development/libraries/haskell/logict {};
+
+  logsink = callPackage ../development/libraries/haskell/logsink {};
 
   loop = callPackage ../development/libraries/haskell/loop {};
 
@@ -2823,6 +2808,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
 
+  vectorFftw = callPackage ../development/libraries/haskell/vector-fftw {};
+
   vectorInstances = callPackage ../development/libraries/haskell/vector-instances {};
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
@@ -2884,6 +2871,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
   webRoutesBoomerang = callPackage ../development/libraries/haskell/web-routes-boomerang {};
+
+  webRoutesHappstack = callPackage ../development/libraries/haskell/web-routes-happstack {};
 
   websockets = callPackage ../development/libraries/haskell/websockets {};
 
@@ -2993,7 +2982,11 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
 
+  yesodMarkdown = callPackage ../development/libraries/haskell/yesod-markdown {};
+
   yesodNewsfeed = callPackage ../development/libraries/haskell/yesod-newsfeed {};
+
+  yesodPagination = callPackage ../development/libraries/haskell/yesod-pagination {};
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 

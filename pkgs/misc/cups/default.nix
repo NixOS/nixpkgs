@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, libusb, acl }:
+, dbus, libusb, acl, gmp }:
 
 let version = "1.7.5"; in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
-  propagatedBuildInputs = [ openssl ];
+  propagatedBuildInputs = [ openssl gmp ];
 
   configureFlags = "--localstatedir=/var --sysconfdir=/etc --enable-dbus"; # --with-dbusdir
 

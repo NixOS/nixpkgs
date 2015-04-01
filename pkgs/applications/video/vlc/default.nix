@@ -13,15 +13,16 @@
 
 with stdenv.lib;
 
-assert (withQt5 -> qt5 != null); assert (!withQt5 -> qt4 != null);
+assert (withQt5 -> qt5 != null);
+assert (!withQt5 -> qt4 != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.1.5";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "http://download.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "0whzbn7ahn5maarcwl1yhk9lq10b0q0y9w5pjl9kh3frdjmncrbg";
+    sha256 = "05smn9hqdp7iscc1dj4cxp1mrlad7b50lhlnlqisfzf493i2f2jy";
   };
 
   buildInputs =
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
       libdc1394 libraw1394 libopus libebml libmatroska libvdpau
-    ] ++ [(if withQt5 then qt5 else qt4)];
+    ] ++ (if withQt5 then with qt5; [ base ] else [qt4]);
 
   nativeBuildInputs = [ pkgconfig ];
 

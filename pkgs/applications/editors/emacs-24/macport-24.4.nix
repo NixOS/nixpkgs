@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   emacsName = "emacs-24.4";
-  name = "${emacsName}-mac-5.1";
+  name = "${emacsName}-mac-5.3";
 
   #builder = ./builder.sh;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${name}.tar.gz";
-    sha256 = "0qn200vv91qxf93x6y8fdi7l3bsni3clqzf8rcjdpbva1qzgcx27";
+    sha256 = "0qzzqnql0z0a2p3ciccy8gq79v0s7s717lchcprn3wlaqcrk2g1p";
   };
 
   patches = [ ./darwin-new-sections.patch ];
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
+    substituteInPlace Makefile.in --replace "/bin/pwd" "pwd"
+    substituteInPlace lib-src/Makefile.in --replace "/bin/pwd" "pwd"
+
     patch -p0 < patch-mac
 
     # The search for 'tputs' will fail because it's in ncursesw within the

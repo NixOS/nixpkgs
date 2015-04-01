@@ -1,20 +1,45 @@
-{ stdenv, fetchurl, pkgconfig, mtdev, udev, libevdev }:
+{ stdenv, fetchurl, pkgconfig
+, libevdev, mtdev, udev
+, documentationSupport ? true, doxygen ? null, graphviz ? null # Documentation
+, eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
+, testsSupport ? false, check ? null, valgrind ? null
+}:
 
+assert documentationSupport -> doxygen != null && graphviz != null;
+assert eventGUISupport -> cairo != null && glib != null && gtk3 != null;
+assert testsSupport -> check != null && valgrind != null;
+
+let
+  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
+in
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libinput-0.7.0";
+  name = "libinput-0.13.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "17jps5iz8kvhbgbd0h436grzb6fbjwf9k4qjcja96jjyzrd4i7qj";
+    sha256 = "06n6ih2bfr957rprsgjxhi6f7m96wmf4kgac8y0ispsjvrzszv3c";
   };
 
-  buildInputs = [ pkgconfig mtdev udev libevdev ];
+  configureFlags = [
+    (mkFlag documentationSupport "documentation")
+    (mkFlag eventGUISupport "event-gui")
+    (mkFlag testsSupport "tests")
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/libinput;
-    description = "handles input devices in Wayland compositors and to provide a generic X.Org input driver";
-    platforms = platforms.unix;
-    license = licenses.mit;
-    maintainers = with maintainers; [ wkennington ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libevdev mtdev udev ]
+    ++ optionals eventGUISupport [ cairo glib gtk3 ]
+    ++ optionals documentationSupport [ doxygen graphviz ]
+    ++ optionals testsSupport [ check valgrind ];
+
+  meta = {
+    description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
+    homepage    = http://www.freedesktop.org/wiki/Software/libinput;
+    license     = licenses.mit;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ codyopel wkennington ];
   };
 }

@@ -1,7 +1,7 @@
 [
 {
-  name = "libabw-0.1.0.tar.bz2";
-  md5 = "9317e967c8fa8ff50e049744c4b33c87";
+  name = "libabw-0.1.1.tar.bz2";
+  md5 = "7a3815b506d064313ba309617b6f5a0b";
   brief = true;
 }
 {
@@ -35,6 +35,16 @@
   brief = false;
 }
 {
+  name = "commons-httpclient-3.1-src.tar.gz";
+  md5 = "2c9b0f83ed5890af02c0df1c1776f39b";
+  brief = false;
+}
+{
+  name = "commons-logging-1.2-src.tar.gz";
+  md5 = "ce977548f1cbf46918e93cd38ac35163";
+  brief = true;
+}
+{
   name = "apr-1.4.8.tar.gz";
   md5 = "eff9d741b0999a9bbab96862dd2a2a3d";
   brief = true;
@@ -60,8 +70,8 @@
   brief = false;
 }
 {
-  name = "libcdr-0.1.0.tar.bz2";
-  md5 = "0e2f56934c8872ec4a254cd4bb1d7cf6";
+  name = "libcdr-0.1.1.tar.bz2";
+  md5 = "b33fd0be3befdd1b37777e08ce058bd9";
   brief = true;
 }
 {
@@ -70,8 +80,8 @@
   brief = false;
 }
 {
-  name = "libcmis-0.4.1.tar.gz";
-  md5 = "22f8a85daf4a012180322e1f52a7563b";
+  name = "libcmis-0.5.0.tar.gz";
+  md5 = "5821b806a98e6c38370970e682ce76e8";
   brief = false;
 }
 {
@@ -85,9 +95,9 @@
   brief = false;
 }
 {
-  name = "cppunit-1.13.1.tar.gz";
-  md5 = "ac4781e01619be13461bb2d562b94a7b";
-  brief = false;
+  name = "cppunit-1.13.2.tar.gz";
+  md5 = "d1c6bdd5a76c66d2c38331e2d287bc01";
+  brief = true;
 }
 {
   name = "ConvertTextToNumber-1.3.2.oxt";
@@ -100,8 +110,8 @@
   brief = true;
 }
 {
-  name = "libe-book-0.1.1.tar.bz2";
-  md5 = "c25a881d21abc5b4da19205db513cc22";
+  name = "libe-book-0.1.2.tar.bz2";
+  md5 = "6b48eda57914e6343efebc9381027b78";
   brief = true;
 }
 {
@@ -180,11 +190,6 @@
   brief = false;
 }
 {
-  name = "source-sans-font-1.036.tar.gz";
-  md5 = "1e9ddfe25ac9577da709d7b2ea36f939";
-  brief = false;
-}
-{
   name = "source-sans-pro-2.010R-ro-1.065R-it.tar.gz";
   md5 = "edc4d741888bc0d38e32dbaa17149596";
   brief = false;
@@ -225,13 +230,13 @@
   brief = false;
 }
 {
-  name = "hunspell-1.3.2.tar.gz";
-  md5 = "3121aaf3e13e5d88dfff13fb4a5f1ab8";
+  name = "hunspell-1.3.3.tar.gz";
+  md5 = "4967da60b23413604c9e563beacc63b4";
   brief = false;
 }
 {
-  name = "hyphen-2.8.4.tar.gz";
-  md5 = "a2f6010987e1c601274ab5d63b72c944";
+  name = "hyphen-2.8.8.tar.gz";
+  md5 = "5ade6ae2a99bc1e9e57031ca88d36dad";
   brief = false;
 }
 {
@@ -300,8 +305,13 @@
   brief = true;
 }
 {
-  name = "language-subtag-registry-2014-04-10.tar.bz2";
-  md5 = "49c94710f7858b1969d74ff72e6aac84";
+  name = "libjpeg-turbo-1.3.1.tar.gz";
+  md5 = "2c3a68129dac443a72815ff5bb374b05";
+  brief = true;
+}
+{
+  name = "language-subtag-registry-2014-12-03.tar.bz2";
+  md5 = "0f2677ec23bb43ddc7355d1b4cc8ed45";
   brief = true;
 }
 {
@@ -325,13 +335,13 @@
   brief = true;
 }
 {
-  name = "libexttextcat-3.4.3.tar.bz2";
-  md5 = "ae330b9493bd4503ac390106ff6060d7";
+  name = "libexttextcat-3.4.4.tar.bz2";
+  md5 = "10d61fbaa6a06348823651b1bd7940fe";
   brief = false;
 }
 {
-  name = "libgltf-0.0.0.tar.bz2";
-  md5 = "ca5436e916bfe70694adfe2607782786";
+  name = "libgltf-0.0.2.tar.bz2";
+  md5 = "d63a9f47ab048f5009d90693d6aa6424";
   brief = true;
   subDir = "libgltf/";
 }
@@ -361,18 +371,18 @@
   brief = false;
 }
 {
-  name = "mariadb-native-client-1.0.0.tar.bz2";
-  md5 = "05f84c95b610c21c5fd510d10debcabf";
+  name = "mariadb_client-2.0.0-src.tar.gz";
+  md5 = "a233181e03d3c307668b4c722d881661";
   brief = false;
 }
 {
-  name = "mdds_0.10.3.tar.bz2";
-  md5 = "aa5ca9d1ed1082890835afab26400a39";
+  name = "mdds_0.11.2.tar.bz2";
+  md5 = "cb4207cb913c7a5a8bfa5b91234618ee";
   brief = false;
 }
 {
-  name = "libmspub-0.1.1.tar.bz2";
-  md5 = "1d489c4932109e72495b1df8b69e5f11";
+  name = "libmspub-0.1.2.tar.bz2";
+  md5 = "ff9d0f9dd8fbc523408ea1953d5bde41";
   brief = true;
 }
 {
@@ -381,13 +391,13 @@
   brief = true;
 }
 {
-  name = "mysql-connector-c++-1.1.0.tar.gz";
-  md5 = "0981bda6548a8c8233ffce2b6e4b2a23";
+  name = "mysql-connector-c++-1.1.4.tar.gz";
+  md5 = "7239a4430efd4d0189c4f24df67f08e5";
   brief = false;
 }
 {
-  name = "mythes-1.2.3.tar.gz";
-  md5 = "46e92b68e31e858512b680b3b61dc4c1";
+  name = "mythes-1.2.4.tar.gz";
+  md5 = "a8c2c5b8f09e7ede322d5c602ff6a4b6";
   brief = false;
 }
 {
@@ -396,8 +406,8 @@
   brief = false;
 }
 {
-  name = "nss-3.15.3-with-nspr-4.10.2.tar.gz";
-  md5 = "06beb053e257d9e22641339c905c6eba";
+  name = "nss-3.16.5-with-nspr-4.10.6.tar.gz";
+  md5 = "b279551b7638d0e36d1199548124c247";
   brief = false;
 }
 {
@@ -416,14 +426,19 @@
   brief = false;
 }
 {
-  name = "openssl-1.0.1h.tar.gz";
-  md5 = "8d6d684a9430d5cc98a62a5d8fbda8cf";
-  brief = false;
+  name = "openssl-1.0.1j.tar.gz";
+  md5 = "f7175c9cd3c39bb1907ac8bba9df8ed3";
+  brief = true;
 }
 {
   name = "liborcus-0.7.0.tar.bz2";
   md5 = "7681383be6ce489d84c1c74f4e7f9643";
   brief = false;
+}
+{
+  name = "libpagemaker-0.0.2.tar.bz2";
+  md5 = "795cc7a59ace4db2b12586971d668671";
+  brief = true;
 }
 {
   name = "pixman-0.24.4.tar.bz2";
@@ -436,9 +451,9 @@
   brief = true;
 }
 {
-  name = "poppler-0.22.5.tar.gz";
-  md5 = "1cd27460f7e3379d1eb109cfd7bcdb39";
-  brief = false;
+  name = "poppler-0.26.4.tar.gz";
+  md5 = "35c0660065d023365e9854c13e289d12";
+  brief = true;
 }
 {
   name = "postgresql-9.2.1.tar.bz2";
@@ -466,8 +481,8 @@
   brief = false;
 }
 {
-  name = "librevenge-0.0.1.tar.bz2";
-  md5 = "69c367c6b0a360411965a1c409a0b6c1";
+  name = "librevenge-0.0.2.tar.bz2";
+  md5 = "2d4183bf17aea1a71842468a71a68c47";
   brief = true;
 }
 {
@@ -496,8 +511,8 @@
   brief = false;
 }
 {
-  name = "libvisio-0.1.0.tar.bz2";
-  md5 = "931588332ba44682c9cd5eefbd358ab4";
+  name = "libvisio-0.1.1.tar.bz2";
+  md5 = "726c1f5be65eb7d649e0d48b63d920e7";
   brief = true;
 }
 {
@@ -511,8 +526,8 @@
   brief = true;
 }
 {
-  name = "libwps-0.3.0.tar.bz2";
-  md5 = "d4d77d08b9048bae3b8ec8df11f80efd";
+  name = "libwps-0.3.1.tar.bz2";
+  md5 = "a111d9ef5a0dab564e9aec0f2cf8d218";
   brief = true;
 }
 {
@@ -526,8 +541,8 @@
   brief = true;
 }
 {
-  name = "libgltf-0.0.2.tar.bz2";
-  md5 = "d63a9f47ab048f5009d90693d6aa6424";
+  name = "libgltf-0.0.0.tar.bz2";
+  md5 = "ca5436e916bfe70694adfe2607782786";
   brief = true;
   subDir = "libgltf/";
 }

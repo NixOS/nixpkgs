@@ -1,9 +1,9 @@
-{ stdenv, ruby, rubyLibs, fetchgit }:
+{ stdenv, ruby, bundler, fetchgit }:
 
 stdenv.mkDerivation rec {
   version = "2.1.0";
   name = "gitlab-shell-${version}";
-  
+
   srcs = fetchgit {
     url = "https://gitlab.com/gitlab-org/gitlab-shell.git";
     rev = "823aba63e444afa2f45477819770fec3cb5f0159";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ruby rubyLibs.bundler
+    ruby bundler
   ];
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     export HOME=$(pwd)
     bundle install -j4 --verbose --local --deployment --without development test
   '';
-  
+
   # gitlab-shell will try to read its config relative to the source
   # code by default which doesn't work in nixos because it's a
   # read-only filesystem

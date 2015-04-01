@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconvOrNull, libxml2, openssl, ncurses, curl }:
+{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl }:
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.98.5";
+  version = "0.98.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
-    sha256 = "0kdaimnbbb0hymg7d15a3iwk17r8555nyzr3d1j96cwhzbakfbww";
+    sha256 = "0l99a0shgzpl8rvrrgbm1ki2zxlb7g1n82bhq7f2snj4amfj94b5";
   };
 
-  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl ]
-    ++ stdenv.lib.optional (libiconvOrNull != null) libiconvOrNull;
+  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv ];
 
   configureFlags = [
     "--with-zlib=${zlib}"
     "--with-libbz2-prefix=${bzip2}"
-  ] ++ (stdenv.lib.optional (libiconvOrNull != null)
-       "--with-iconv-dir=${libiconvOrNull}")
-  ++ [
+    "--with-iconv-dir=${libiconv}"
     "--with-xml=${libxml2}"
     "--with-openssl=${openssl}"
     "--with-libncurses-prefix=${ncurses}"
     "--with-libcurl=${curl}"
-    "--disable-clamav" ];
+    "--disable-clamav"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;

@@ -68,8 +68,10 @@ let
           # will actually do something: if ntpd cannot resolve the
           # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation.
+          # it"), so we silently lose time synchronisation. This also
+          # applies to openntpd.
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
+          ${config.systemd.package}/bin/systemctl try-restart openntpd.service
 
           ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
@@ -182,7 +184,7 @@ in
         }
       ];
 
-    powerManagement.resumeCommands =
+    powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
         ${config.systemd.package}/bin/systemctl reload dhcpcd.service

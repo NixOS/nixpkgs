@@ -21,14 +21,13 @@ stdenv.mkDerivation rec {
 
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 
-  postInstall =
-    # Install headers in the right place.
-    '' ln -s${if stdenv.isBSD then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
-    '';
+  # Install headers in the right place.
+  postInstall = ''
+    ln -s${if (stdenv.isFreeBSD || stdenv.isOpenBSD || stdenv.isDarwin) then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
+  '';
 
   meta = {
     description = "A foreign function call interface library";
-
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a
@@ -43,12 +42,9 @@ stdenv.mkDerivation rec {
       interface.  A layer must exist above libffi that handles type
       conversions for values passed between the two languages.
     '';
-
     homepage = http://sourceware.org/libffi/;
-
     # See http://github.com/atgreen/libffi/blob/master/LICENSE .
     license = stdenv.lib.licenses.free;
-
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };

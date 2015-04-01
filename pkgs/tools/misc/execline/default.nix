@@ -1,19 +1,22 @@
-{ stdenv, fetchurl, skalibs }:
+{ stdenv, fetchgit, skalibs }:
 
 let
 
-  version = "2.0.0.0";
+  version = "2.1.1.0";
 
 in stdenv.mkDerivation rec {
 
   name = "execline-${version}";
 
-  src = fetchurl {
-    url = "http://skarnet.org/software/execline/${name}.tar.gz";
-    sha256 = "1g5v6icxsf7p2ccj9iq85iikkm12xph65ri86ydakihv6al3jw71";
+  src = fetchgit {
+    url = "git://git.skarnet.org/execline";
+    rev = "refs/tags/v${version}";
+    sha256 = "0yhxyih8p6p9135nifi655qk4gnhdarjzfp1lb4pxx9ar9ay5q7w";
   };
 
   dontDisableStatic = true;
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--libdir=\${prefix}/lib"

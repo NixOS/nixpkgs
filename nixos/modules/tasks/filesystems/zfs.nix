@@ -21,11 +21,12 @@ let
 
   kernel = config.boot.kernelPackages;
 
-  splPkg = if cfgZfs.useGit then kernel.spl_git else kernel.spl;
-  zfsPkg = if cfgZfs.useGit then kernel.zfs_git else kernel.zfs;
+  splKernelPkg = if cfgZfs.useGit then kernel.spl_git else kernel.spl;
+  zfsKernelPkg = if cfgZfs.useGit then kernel.zfs_git else kernel.zfs;
+  zfsUserPkg = if cfgZfs.useGit then pkgs.zfs_git else pkgs.zfs;
 
   autosnapPkg = pkgs.zfstools.override {
-    zfs = zfsPkg;
+    zfs = zfsUserPkg;
   };
 
   zfsAutoSnap = "${autosnapPkg}/bin/zfs-auto-snapshot";
@@ -195,18 +196,21 @@ in
 
       boot = {
         kernelModules = [ "spl" "zfs" ] ;
-        extraModulePackages = [ splPkg zfsPkg ];
+        extraModulePackages = [ splKernelPkg zfsKernelPkg ];
       };
 
       boot.initrd = mkIf inInitrd {
         kernelModules = [ "spl" "zfs" ];
         extraUtilsCommands =
           ''
-            cp -v ${zfsPkg}/sbin/zfs $out/bin
-            cp -v ${zfsPkg}/sbin/zdb $out/bin
-            cp -v ${zfsPkg}/sbin/zpool $out/bin
-            cp -pdv ${zfsPkg}/lib/lib*.so* $out/lib
-            cp -pdv ${pkgs.zlib}/lib/lib*.so* $out/lib
+            copy_bin_and_libs ${zfsUserPkg}/sbin/zfs
+            copy_bin_and_libs ${zfsUserPkg}/sbin/zdb
+            copy_bin_and_libs ${zfsUserPkg}/sbin/zpool
+          '';
+        extraUtilsCommandsTest = mkIf inInitrd
+          ''
+            $out/bin/zfs --help >/dev/null 2>&1
+            $out/bin/zpool --help >/dev/null 2>&1
           '';
         postDeviceCommands = concatStringsSep "\n" ([''
             ZFS_FORCE="${optionalString cfgZfs.forceImportRoot "-f"}"
@@ -228,12 +232,12 @@ in
         zfsSupport = true;
       };
 
-      environment.etc."zfs/zed.d".source = "${zfsPkg}/etc/zfs/zed.d/*";
+      environment.etc."zfs/zed.d".source = "${zfsUserPkg}/etc/zfs/zed.d/*";
 
-      system.fsPackages = [ zfsPkg ];                  # XXX: needed? zfs doesn't have (need) a fsck
-      environment.systemPackages = [ zfsPkg ];
-      services.udev.packages = [ zfsPkg ];             # to hook zvol naming, etc.
-      systemd.packages = [ zfsPkg ];
+      system.fsPackages = [ zfsUserPkg ];                  # XXX: needed? zfs doesn't have (need) a fsck
+      environment.systemPackages = [ zfsUserPkg ];
+      services.udev.packages = [ zfsUserPkg ];             # to hook zvol naming, etc.
+      systemd.packages = [ zfsUserPkg ];
 
       systemd.services = let
         getPoolFilesystems = pool:
@@ -260,7 +264,7 @@ in
               RemainAfterExit = true;
             };
             script = ''
-              zpool_cmd="${zfsPkg}/sbin/zpool"
+              zpool_cmd="${zfsUserPkg}/sbin/zpool"
               ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
             '';
           };

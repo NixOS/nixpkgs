@@ -1,10 +1,10 @@
 { nixpkgs ? <nixpkgs>
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
-, xcodeVersion ? "6.0.1"
+, xcodeVersion ? "6.1.1"
 , xcodeBaseDir ? "/Applications/Xcode.app"
-, tiVersion ? "3.4.0.GA"
+, tiVersion ? "3.5.0.GA"
 , rename ? false
-, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "8.0", iosWwdrCertificate ? null
+, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "8.1", iosWwdrCertificate ? null
 , allowUnfree ? false
 , enableWirelessDistribution ? false, installURL ? null
 }:

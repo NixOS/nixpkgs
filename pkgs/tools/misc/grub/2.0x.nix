@@ -1,22 +1,26 @@
 { stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
-, linuxPackages ? null
+, zfs ? null
 , efiSupport ? false
-, zfsSupport ? false
+, zfsSupport ? true
 }:
 
 with stdenv.lib;
 let
+  pcSystems = {
+    "i686-linux".target = "i386";
+    "x86_64-linux".target = "i386";
+  };
+
   efiSystems = {
     "i686-linux".target = "i386";
     "x86_64-linux".target = "x86_64";
   };
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
+  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  prefix = "grub${if efiSupport then "-efi" else ""}${optionalString zfsSupport "-zfs"}";
-
-  version = "2.02-git-1de3a4";
+  version = "2.02-git-2ae9457";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -32,21 +36,21 @@ let
 in (
 
 assert efiSupport -> canEfi;
-assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
+assert zfsSupport -> zfs != null;
 
 stdenv.mkDerivation rec {
-  name = "${prefix}-${version}";
+  name = "grub-${version}";
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/grub.git";
-    rev = "1de3a48098053aaebd35232bd73e3ce3f3fdf51c";
-    sha256 = "0d1953nmi251czkm1dmd7vnm3iz2rkqbznlp6ph33va0d7kw1kfc";
+    rev = "2ae9457e6eb4c352051fb32bc6fc931a22528ab2";
+    sha256 = "1ik60qgkymg0xdns5az1hbxasspah2vzxg334rpbk2yy3h3nx5ln";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu
-    ++ optional zfsSupport linuxPackages.zfs;
+    ++ optional zfsSupport zfs;
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -77,10 +81,17 @@ stdenv.mkDerivation rec {
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
-  patches = [ ./fix-bash-completion.patch ./glibc-2.20.patch ];
+  patches = [ ./fix-bash-completion.patch ];
 
   configureFlags = optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
+
+  # save target that grub is compiled for
+  grubTarget = if efiSupport
+               then "${efiSystems.${stdenv.system}.target}-efi"
+               else if inPCSystems
+                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    else "";
 
   doCheck = false;
   enableParallelBuilding = true;

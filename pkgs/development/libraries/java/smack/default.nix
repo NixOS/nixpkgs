@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "smack-3_2_1";
+  name = "smack-3.4.1";
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://www.igniterealtime.org/downloadServlet?filename=smack/smack_3_2_1.tar.gz;
-    sha256 = "0lljrxky66gc73caaflia2wgmlpry2cdj00bz1gd1vqrzd3pg3gd";
-  };  
+    url = http://www.igniterealtime.org/downloadServlet?filename=smack/smack_3_4_1.tar.gz;
+    sha256 = "13jm93b0dsfxr62brq1hagi9fqk7ip3pi80svq10zh5kcpk77jf4";
+  };
 }

@@ -2,10 +2,6 @@ From Ludo's suggestion at:
 
   http://debbugs.gnu.org/cgi/bugreport.cgi?msg=8;bug=18258
 
-diff --git a/tests/.t0251-gpt-unicode.sh.swp b/tests/.t0251-gpt-unicode.sh.swp
-deleted file mode 100644
-index b41c337..0000000
-Binary files a/tests/.t0251-gpt-unicode.sh.swp and /dev/null differ
 diff --git a/tests/t0251-gpt-unicode.sh b/tests/t0251-gpt-unicode.sh
 index c845950..fa63a72 100755
 --- a/tests/t0251-gpt-unicode.sh

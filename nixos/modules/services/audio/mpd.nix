@@ -15,10 +15,12 @@ let
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
     log_file            "syslog"
-    ${if cfg.network.host != "any" then
-   "bind_to_address     ${cfg.network.host}" else ""}
-    ${if cfg.network.port != 6600 then
-   "port                ${toString cfg.network.port}" else ""}
+    user                "${cfg.user}"
+    group               "${cfg.group}"
+
+    ${optionalString (cfg.network.host != "any") ''bind_to_address "${cfg.network.host}"''}
+    ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
+
     ${cfg.extraConfig}
   '';
 
@@ -40,8 +42,7 @@ in {
       musicDirectory = mkOption {
         default = "${cfg.dataDir}/music";
         description = ''
-          Extra configuration added to the end of MPD's
-          configuration file, mpd.conf.
+          The directory where mpd reads music from.
         '';
       };
 
@@ -60,6 +61,16 @@ in {
           The directory where MPD stores its state, tag cache,
           playlists etc.
         '';
+      };
+
+      user = mkOption {
+        default = "mpd";
+        description = "User account under which MPD runs.";
+      };
+
+      group = mkOption {
+        default = "mpd";
+        description = "Group account under which MPD runs.";
       };
 
       network = {
@@ -96,23 +107,27 @@ in {
       description = "Music Player Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.mpd ];
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R mpd:mpd  ${cfg.dataDir}";
+      preStart = "mkdir -p ${cfg.dataDir} && chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}";
       script = "exec mpd --no-daemon ${mpdConf}";
       serviceConfig = {
         User = "mpd";
+        PermissionsStartOnly = true;
       };
     };
 
-    users.extraUsers.mpd = {
+    users.extraUsers = optionalAttrs (cfg.user == "mpd") (singleton {
       inherit uid;
-      group = "mpd";
+      name = "mpd";
+      group = cfg.group;
       extraGroups = [ "audio" ];
       description = "Music Player Daemon user";
       home = "${cfg.dataDir}";
-    };
+    });
 
-    users.extraGroups.mpd.gid = gid;
-
+    users.extraGroups = optionalAttrs (cfg.group == "mpd") (singleton {
+      name = "mpd";
+      gid = gid;
+    });
   };
 
 }

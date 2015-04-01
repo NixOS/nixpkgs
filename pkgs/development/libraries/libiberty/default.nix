@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "4.8.3";
+  version = "4.8.4";
   name = "libiberty-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "07hg10zs7gnqz58my10ch0zygizqh0z0bz6pv4pgxx45n48lz3ka";
+    sha256 = "15c6gwm6dzsaagamxkak5smdkf1rdfbqqjs9jdbrp3lbg4ism02a";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libiberty";

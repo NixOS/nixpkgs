@@ -7,16 +7,18 @@
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
-, platform ? null, config ? {}, lib ? (import ../../../lib) }:
+, platform ? null, config ? {}, lib ? (import ../../../lib)
+, customBootstrapFiles ? null }:
 
 rec {
 
   bootstrapFiles =
-    if system == "i686-linux" then import ./bootstrap/i686.nix
+    if customBootstrapFiles != null then customBootstrapFiles
+    else if system == "i686-linux" then import ./bootstrap/i686.nix
     else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
     else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
-    else if system == "armv7l-linux" then import ./bootstrap/armv6l.nix
+    else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv";
 
@@ -42,11 +44,10 @@ rec {
 
     builder = bootstrapFiles.busybox;
 
-    args =
-      if system == "armv5tel-linux" || system == "armv6l-linux"
-        || system == "armv7l-linux"
-      then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
-      else [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
+    args = if system == "armv5tel-linux" then
+        [ "ash" "-e" ./scripts/unpack-bootstrap-tools-arm.sh ]
+      else
+        [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
 
     tarball = bootstrapFiles.bootstrapTools;
 
@@ -55,6 +56,7 @@ rec {
     # Needed by the GCC wrapper.
     langC = true;
     langCC = true;
+    isGNU = true;
   };
 
 
@@ -85,10 +87,10 @@ rec {
 
         cc = if isNull gccPlain
              then "/no-such-path"
-             else lib.makeOverridable (import ../../build-support/gcc-wrapper) {
+             else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
-          gcc = gccPlain;
+          cc = gccPlain;
           libc = glibc;
           inherit binutils coreutils;
           name = name;
@@ -206,10 +208,10 @@ rec {
       # reduces the size of the stdenv closure.
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      mpc = pkgs.mpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
+      libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      gccPlain = pkgs.gcc.gcc;
+      gccPlain = pkgs.gcc.cc;
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };
@@ -229,10 +231,10 @@ rec {
       # other purposes (binutils and top-level pkgs) too.
       inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
 
-      gcc = lib.makeOverridable (import ../../build-support/gcc-wrapper) {
+      gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
-        gcc = stage4.stdenv.cc.gcc;
+        cc = stage4.stdenv.cc.cc;
         libc = stage4.pkgs.glibc;
         inherit (stage4.pkgs) binutils coreutils;
         name = "";
@@ -282,12 +284,10 @@ rec {
     allowedRequisites = with stage4.pkgs;
       [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
-        paxctl zlib pcre linuxHeaders ed gcc gcc.gcc libsigsegv
+        paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
       ];
 
     overrides = pkgs: {
-      inherit cc;
-
       gcc = cc;
 
       inherit (stage4.pkgs)
@@ -297,4 +297,52 @@ rec {
     };
   };
 
+
+  testBootstrapTools = let
+    defaultPkgs = allPackages { inherit system platform; };
+  in derivation {
+    name = "test-bootstrap-tools";
+    inherit system;
+    builder = bootstrapFiles.busybox;
+    args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
+
+    buildCommand = ''
+      export PATH=${bootstrapTools}/bin
+
+      ls -l
+      mkdir $out
+      mkdir $out/bin
+      sed --version
+      find --version
+      diff --version
+      patch --version
+      make --version
+      awk --version
+      grep --version
+      gcc --version
+      curl --version
+
+      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
+      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
+      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+
+      echo '#include <stdio.h>' >> foo.c
+      echo '#include <limits.h>' >> foo.c
+      echo 'int main() { printf("Hello World\\n"); return 0; }' >> foo.c
+      $CC -o $out/bin/foo foo.c
+      $out/bin/foo
+
+      echo '#include <iostream>' >> bar.cc
+      echo 'int main() { std::cout << "Hello World\\n"; }' >> bar.cc
+      $CXX -v -o $out/bin/bar bar.cc
+      $out/bin/bar
+
+      tar xvf ${defaultPkgs.hello.src}
+      cd hello-*
+      ./configure --prefix=$out
+      make
+      make install
+    '';
+  };
 }

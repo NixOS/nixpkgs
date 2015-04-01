@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libiconvOrNull, ocaml, findlib, ncurses}:
+{stdenv, fetchurl, libiconv, ocaml, findlib, ncurses}:
 
 stdenv.mkDerivation {
   name = "ocaml-text-0.6";
@@ -8,12 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0j8gaak0ajnlmn8knvfygqwwzs7awjv5rfn5cbj6qxqbxhjd5m6g";
   };
 
-  buildInputs = [ocaml findlib ncurses]
-    ++ stdenv.lib.optional (libiconvOrNull != null) libiconvOrNull;
+  buildInputs = [ocaml findlib ncurses libiconv];
 
-  configurePhase =
-    (stdenv.lib.optionalString (libiconvOrNull != null) "iconv_prefix=${libiconvOrNull} ")
-    + "ocaml setup.ml -configure";
+  configurePhase = "iconv_prefix=${libiconv} ocaml setup.ml -configure";
 
   createFindlibDestdir = true;
 

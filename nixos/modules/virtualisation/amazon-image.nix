@@ -7,17 +7,6 @@ in
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ];
 
-  options = {
-    ec2 = {
-      hvm = mkOption {
-        default = false;
-        description = ''
-          Whether the EC2 instance is a HVM instance.
-        '';
-      };
-    };
-  };
-
   config = {
     system.build.amazonImage =
       pkgs.vmTools.runInLinuxVM (
@@ -102,6 +91,10 @@ in
     boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.kernelModules = [ "xen-netfront" ];
 
+    # Prevent the nouveau kernel module from being loaded, as it
+    # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
+    boot.blacklistedKernelModules = [ "nouveau" ];
+
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
     boot.loader.grub.device = if cfg.hvm then "/dev/xvda" else "nodev";
@@ -172,7 +165,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need swapon in the initrd.
-        cp --remove-destination ${pkgs.utillinux}/sbin/swapon $out/bin
+        copy_bin_and_libs ${pkgs.utillinux}/sbin/swapon
       '';
 
     # Don't put old configurations in the GRUB menu.  The user has no

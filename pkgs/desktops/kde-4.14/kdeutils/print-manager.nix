@@ -9,16 +9,10 @@ kde rec {
 
   pythonPath = [ cups pyqt4 pykde4 pycups s_c_p ];
 
-  passthru.propagatedUserEnvPackages = [ s_c_p ];
+  # system-config-printer supplies some D-Bus policy that we need.
+  propagatedUserEnvPkgs = [ s_c_p ];
 
-  postInstall =
-    ''
-      wrapPythonPrograms
-
-      # "system-config-printer" supplies some D-Bus policy that we need.
-      mkdir -p $out/nix-support
-      echo ${s_c_p} > $out/nix-support/propagated-user-env-packages
-    '';
+  postInstall = "wrapPythonPrograms";
 
   meta = {
     description = "KDE printer manager";

@@ -1,6 +1,8 @@
 Nixpkgs is a collection of packages for [Nix](https://nixos.org/nix/) package
 manager.
 
+[![Build Status](https://travis-ci.org/NixOS/nixpkgs.svg?branch=master)](https://travis-ci.org/NixOS/nixpkgs) [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/pr)](http://www.issuestats.com/github/nixos/nixpkgs) [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue)](http://www.issuestats.com/github/nixos/nixpkgs)
+
 [NixOS](https://nixos.org/nixos/) linux distribution source code is located inside `nixos/` folder.
 
 * [NixOS installation instructions](https://nixos.org/nixos/manual/#ch-installation)
@@ -14,5 +16,5 @@ manager.
 
 Communication:
 
-* [Mailing list](https://lists.science.uu.nl/mailman/listinfo/nix-dev)
+* [Mailing list](http://lists.science.uu.nl/mailman/listinfo/nix-dev)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)

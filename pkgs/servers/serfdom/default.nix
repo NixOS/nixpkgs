@@ -1,26 +1,24 @@
-{ stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+with goPackages;
+
+buildGoPackage rec {
   version = "0.6.3";
   name = "serfdom-${version}";
+  goPackagePath = "github.com/hashicorp/serf";
 
-  src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
+  src = fetchFromGitHub {
+    owner = "hashicorp";
+    repo = "serf";
+    rev = "v${version}";
+    sha256 = "0ck77ji28bvm4ahzxyyi4sm17c3fxc16k0k5mihl1nlkgdd73m8y";
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ cli mapstructure memberlist logutils go-syslog mdns columnize circbuf ];
 
-  buildPhase = ''
-    export GOPATH=$src
-    go build -v -o serf github.com/hashicorp/serf
-  '';
+  dontInstallSrc = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv serf $out/bin/serf
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A service discovery and orchestration tool that is decentralized, highly available, and fault tolerant";
     homepage = http://www.serfdom.io/;
     license = licenses.mpl20;

@@ -177,6 +177,7 @@ a.composableDerivation.composableDerivation {} (fix: {
     description = "free Geographic Information System (GIS) software used for geospatial data management and analysis, image processing, graphics/maps production, spatial modeling, and visualization";
     homepage = http://grass.itc.it/index.php;
     license = [ "GPL" ];
+    broken = true;
   };
 
 })

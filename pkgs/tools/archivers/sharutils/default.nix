@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     ''
        # Fix for building on Glibc 2.16.  Won't be needed once the
        # gnulib in sharutils is updated.
-       sed -i ${stdenv.lib.optionalString (stdenv.isBSD && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
+       sed -i ${stdenv.lib.optionalString ((stdenv.isFreeBSD || stdenv.isOpenBSD || stdenv.isDarwin) && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
     '';
 
   # GNU Gettext is needed on non-GNU platforms.
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools for remote synchronization and `shell archives'";
-
     longDescription =
       '' GNU shar makes so-called shell archives out of many files, preparing
          them for transmission by electronic mail services.  A shell archive
@@ -43,11 +42,8 @@ stdenv.mkDerivation rec {
          by a copy of the shell. unshar may also process files containing
          concatenated shell archives.
       '';
-
     homepage = http://www.gnu.org/software/sharutils/;
-
     license = stdenv.lib.licenses.gpl3Plus;
-
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };

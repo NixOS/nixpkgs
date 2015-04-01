@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "340.65";
+  versionNumber = "340.76";
   /* This branch is needed for G8x, G9x, and GT2xx GPUs, and motherboard chipsets based on them.
     Ongoing support for new Linux kernels and X servers, as well as fixes for critical bugs,
     will be included in 340.* legacy releases through the end of 2019.
@@ -29,12 +29,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0wyrxhkfyjpa0l5xxpy4g9h3c34dv5bqif8nk70cm53pbm1i31g7";
+        sha256 = "1l1nn340hc8iwlzb16gcm2xvnvkw7rf84ll89bcax70094xxjacv";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0yabf3d3aq2qmlzxw99y5lasdm5y7dq2n7l3gvak8iqx0k9cihh3";
+        sha256 = "016hnsgrcm4ly0mnkcd6c1qkciy3qmbwdwy4rlwq3m6dh4ixw7jc";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -45,9 +45,9 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   glPath      = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];
-  cudaPath    = makeLibraryPath [zlib stdenv.cc.gcc];
+  cudaPath    = makeLibraryPath [zlib stdenv.cc.cc];
   openclPath  = makeLibraryPath [zlib];
-  allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.cc.gcc];
+  allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.cc.cc];
 
   programPath = optionalString (!libsOnly) (makeLibraryPath
     [ gtk atk pango glib gdk_pixbuf xlibs.libXv ] );

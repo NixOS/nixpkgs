@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://glm.g-truc.net/;
     license = licenses.mit;
+    branch = "0.9.5.4";
     platforms = platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };

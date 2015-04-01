@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, c-ares
-, pkgconfig, runCommand, which, unstableVersion ? false 
+{ stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
+, pkgconfig, runCommand, which, unstableVersion ? false
 }:
 
 let
@@ -8,20 +8,17 @@ let
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = if unstableVersion then "0.11.13" else "0.10.33";
+  version = if unstableVersion then "0.11.13" else "0.12.0";
 
-  # !!! Should we also do shared libuv?
   deps = {
-    inherit openssl zlib;
+    inherit openssl zlib libuv;
 
     # disabled system v8 because v8 3.14 no longer receives security fixes
     # we fall back to nodejs' internal v8 copy which receives backports for now
     # inherit v8
   } // (stdenv.lib.optionalAttrs (!stdenv.isDarwin) {
     inherit http-parser;
-  })
-  # Node 0.11 has patched c-ares, won't compile with system's version
-  // (if unstableVersion then {} else { cares = c-ares; });
+  });
 
   sharedConfigureFlags = name: [
     "--shared-${name}"
@@ -37,7 +34,7 @@ in stdenv.mkDerivation {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
     sha256 = if unstableVersion
              then "1642zj3sajhqflfhb8fsvy84w9mm85wagm8w8300gydd2q6fkmhm"
-             else "07h8vl750svjg8x5zhxhwjkx03jpy2m6h3fbj7fd1rj4671jdp3m";
+             else "0cifd2qhpyrbxx71a4hsagzk24qas8m5zvwcyhx69cz9yhxf404p";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
@@ -56,6 +53,8 @@ in stdenv.mkDerivation {
     ++ (optional stdenv.isLinux utillinux)
     ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
   setupHook = ./setup-hook.sh;
+
+  passthru.interpreterName = "nodejs";
 
   meta = {
     description = "Event-driven I/O framework for the V8 JavaScript engine";

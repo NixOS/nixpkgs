@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bash, pharo-vm, unzip, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.1-2014.09.29";
+  version = "0.2.4-2015.02.13";
   name = "pharo-launcher-${version}";
   src = fetchurl {
     url = "http://files.pharo.org/platform/launcher/blessed/PharoLauncher-user-${version}.zip";
-    md5 = "10945989c2b323c7f09a3b4e42ee7f2d";
+    md5 = "064f53cd20c7f189ba2d01f9e4b17d36";
   };
 
   executable-name = "pharo-launcher";

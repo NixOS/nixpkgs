@@ -11,6 +11,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [openssl expat libevent];
 
+  patches = [
+    # This patch fixes unbound 1.5.1 on linux versions previous to 3.15 which
+    # do not implement IP_PMTUDISC_OMIT.
+    #
+    # It should be discarded when this support makes it into a released
+    # version.
+    ./linux-pre-3.15-unbound-1.5.1.patch
+  ];
+
   configureFlags = [
     "--with-ssl=${openssl}"
     "--with-libexpat=${expat}"

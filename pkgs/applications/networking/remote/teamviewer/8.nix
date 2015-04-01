@@ -5,7 +5,7 @@ let
   topath = "${wineUnstable}/bin";
 
   toldpath = stdenv.lib.concatStringsSep ":" (map (x: "${x}/lib") 
-    [ stdenv.cc.gcc libX11 libXtst libXext libXdamage libXfixes wineUnstable ]);
+    [ stdenv.cc.cc libX11 libXtst libXext libXdamage libXfixes wineUnstable ]);
 in
 stdenv.mkDerivation {
   name = "teamviewer-8.0.17147";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     EOF
     chmod +x $out/bin/teamviewer
 
-    patchelf --set-rpath "${stdenv.cc.gcc}/lib64:${stdenv.cc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer8/tv_bin/teamviewerd
+    patchelf --set-rpath "${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer8/tv_bin/teamviewerd
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/teamviewer8/tv_bin/teamviewerd
     ln -s $out/share/teamviewer8/tv_bin/teamviewerd $out/bin/
   '';

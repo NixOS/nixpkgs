@@ -27,6 +27,7 @@ let
 in
 stdenv.mkDerivation {
   name = "python3-${version}";
+  pythonVersion = majorVersion;
   inherit majorVersion version;
 
   src = fetchurl {

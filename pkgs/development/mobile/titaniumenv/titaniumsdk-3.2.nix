@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out
     cd $out
-    yes y | unzip $src
+    unzip $src
     
     # Fix shebang header for python scripts
     

@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     # Some comments in files are in UTF-8, so include the locale needed by GHC runtime.
-    export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
     export LC_ALL=en_US.UTF-8
 
     # PAKCS must be build in place due to embedded filesystem references placed by swi.

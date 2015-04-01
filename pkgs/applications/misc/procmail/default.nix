@@ -15,10 +15,14 @@ stdenv.mkDerivation {
     make DESTDIR=\$out install
    ";
 
-  phases = "unpackPhase installPhase";
+  phases = "unpackPhase patchPhase installPhase";
+
+  patches = [ ./CVE-2014-3618.patch ];
 
   src = fetchurl {
     url = ftp://ftp.fu-berlin.de/pub/unix/mail/procmail/procmail-3.22.tar.gz;
     sha256 = "05z1c803n5cppkcq99vkyd5myff904lf9sdgynfqngfk9nrpaz08";
   };
+
+  meta.homepage = "http://www.procmail.org/";
 }

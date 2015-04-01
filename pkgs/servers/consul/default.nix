@@ -1,8 +1,15 @@
-{ stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub
-, ruby, rubyLibs, nodejs }:
+{ stdenv, lib, go, fetchgit, fetchhg, fetchbzr, fetchFromGitHub , ruby , nodejs
+, bundlerEnv }:
 
 let
-  version = "0.4.1";
+  version = "0.5.0";
+  # `sass` et al
+  gems = bundlerEnv {
+    name = "consul-deps";
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+  };
 in
 
 with lib;
@@ -13,13 +20,7 @@ stdenv.mkDerivation {
     inherit stdenv lib fetchgit fetchhg fetchbzr fetchFromGitHub;
   };
 
-  buildInputs = [ go ruby rubyLibs.sass nodejs ];
-
-  configurePhase = flip concatMapStrings
-    (with rubyLibs; [ execjs json minitest rake rdoc sass uglifier ])
-    (gem: ''
-      export GEM_PATH="$GEM_PATH:${gem}/${ruby.gemPath}"
-    '');
+  buildInputs = [ go ruby gems nodejs ];
 
   buildPhase = ''
     # Build consul binary
@@ -38,6 +39,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "ui" ];
 
   installPhase = ''
+    # Fix references to go-deps in the binary
+    hash=$(echo $src | sed 's,.*/\([^/-]*\).*,\1,g')
+    xs=$(printf 'x%.0s' $(seq 2 $(echo $hash | wc -c)))
+    sed -i "s,$hash,$xs,g" consul
+
     # Install consul binary
     mkdir -p $out/bin
     cp consul $out/bin

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  version = "4.46.0";
+  version = "4.47.0";
   name = "getmail-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pyropus.ca/software/getmail/old-versions/${name}.tar.gz";
-    sha256 = "15rqmm25pq6ll8aaqh8h6pfdkpqs7y6yismb3h3w1bz8j292c8zl";
+    sha256 = "0h25irimigral9xspkvjmplzddqphyn51n5fq221m7nps39wqnjb";
   };
 
   doCheck = false;
