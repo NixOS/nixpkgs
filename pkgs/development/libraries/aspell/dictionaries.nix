@@ -37,6 +37,15 @@ in {
     };
   };
 
+  da = buildDict {
+    shortName = "da-1.4.42-1";
+    fullName = "Danish";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/da/aspell5-da-1.4.42-1.tar.bz2;
+      sha256 = "1hfkmiyhgrx5lgrb2mffjbdn1hivrm73wcg7x0iid74p2yb0fjpp";
+    };
+  };
+
   de = buildDict {
     shortName = "de-20030222-1";
     fullName = "German";
