@@ -24,7 +24,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-libz=${zlib}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql}/bin/mysql_config"
+    "--with-mysql=${mysql.lib}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional

@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     sourceRoot=`pwd`/src
   '';
 
-  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer mysql
+  buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer mysql.lib
     makeWrapper ];
 
-  NIX_LDFLAGS="-L${mysql}/lib/mysql";
+  NIX_LDFLAGS="-L${mysql.lib}/lib/mysql";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/zod
