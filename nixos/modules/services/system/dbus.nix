@@ -130,6 +130,9 @@ in
         config.system.path
       ];
 
+    # Don't restart dbus-daemon. Bad things tend to happen if we do.
+    systemd.services.dbus.reloadIfChanged = true;
+
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
 
   };

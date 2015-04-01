@@ -384,9 +384,13 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
-# Signal dbus to reload its configuration before starting other units.
-# Other units may rely on newly installed policy files under /etc/dbus-1
-system("@systemd@/bin/systemctl", "reload-or-restart", "dbus.service");
+# Reload units that need it. This includes remounting changed mount
+# units.
+if (scalar(keys %unitsToReload) > 0) {
+    print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
+    system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
+    unlink($reloadListFile);
+}
 
 # Restart changed services (those that have to be restarted rather
 # than stopped and started).
@@ -406,14 +410,6 @@ print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered)
     if scalar @unitsToStartFiltered;
 system("@systemd@/bin/systemctl", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;
 unlink($startListFile);
-
-# Reload units that need it.  This includes remounting changed mount
-# units.
-if (scalar(keys %unitsToReload) > 0) {
-    print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
-    system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
-    unlink($reloadListFile);
-}
 
 
 # Print failed and new units.
