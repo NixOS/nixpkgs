@@ -707,6 +707,14 @@ self: super: {
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
+  # Hardcoded include path
+  poppler = overrideCabal super.poppler (drv: {
+    patchPhase = ''
+      sed -i -e 's,glib/poppler.h,poppler.h,' poppler.cabal
+      sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
+    '';
+  });
+
 } // {
 
   # Not on Hackage.
