@@ -461,12 +461,12 @@ let self = _self // overrides;
 
   git-commit-mode = melpaBuild rec {
     pname = "git-commit-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "git-commit-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -474,12 +474,12 @@ let self = _self // overrides;
 
   git-rebase-mode = melpaBuild rec {
     pname = "git-rebase-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "git-rebase-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -487,12 +487,12 @@ let self = _self // overrides;
 
   gitattributes-mode = melpaBuild rec {
     pname = "gitattributes-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "gitattributes-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -500,12 +500,12 @@ let self = _self // overrides;
 
   gitconfig-mode = melpaBuild rec {
     pname = "gitconfig-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "gitconfig-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -513,12 +513,12 @@ let self = _self // overrides;
 
   gitignore-mode = melpaBuild rec {
     pname = "gitignore-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "gitignore-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -695,12 +695,12 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "20141025";
+    version = "1.4.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "magit";
-      rev    = "50c08522c8a3c67e0f3b821fe4df61e8bd456ff9";
-      sha256 = "0mzyx72pidzvla1x2qszn3c60n2j0n8i5k875c4difvd1n4p0vsk";
+      rev    = version;
+      sha256 = "0x8bvfw47bfpzsv9yr98aays4idbbwvnkp0pag1q78gcn9h2k9vi";
     };
     packageRequires = [ git-commit-mode git-rebase-mode ];
     meta = { license = gpl3Plus; };
