@@ -8523,6 +8523,23 @@ let
     };
   });
 
+  pyalsa = buildPythonPackage (rec {
+    name = "pyalsa-1.0.29";
+    disabled = isPy3k;
+    buildInputs = [ pkgs.alsaLib ];
+    src = pkgs.fetchurl {
+      url = "ftp://ftp.alsa-project.org/pub/pyalsa/pyalsa-1.0.29.tar.bz2";
+      sha256 = "87ea6d8a2b7a9d7b015cdd84c898dc5e524f770ae6795e0d32ac2234311c953a";
+    };
+
+    meta = {
+      homepage = http://www.alsa-project.org;
+      description = "Python bindings for ALSA lib";
+      platforms = stdenv.lib.platforms.linux;
+      license = with stdenv.lib.licenses; [ lgpl21Plus gpl2 gpl2Plus free ];
+    };
+  });
+
   pybfd = buildPythonPackage rec {
     name = "pybfd-0.1.1";
 

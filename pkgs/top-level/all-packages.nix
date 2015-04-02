@@ -8084,6 +8084,8 @@ let
 
   psyco = callPackage ../development/python-modules/psyco { };
 
+  pyalsa = pythonPackages.pyalsa;
+
   pycairo = pythonPackages.pycairo;
 
   pycapnp = pythonPackages.pycapnp;
