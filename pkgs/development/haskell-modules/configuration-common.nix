@@ -71,12 +71,17 @@ self: super: {
   accelerate-examples = dontDistribute super.accelerate-examples;
   accelerate-fft = dontDistribute super.accelerate-fft;
   accelerate-fourier-benchmark = dontDistribute super.accelerate-fourier-benchmark;
+  AttoJson = markBroken super.AttoJson;
   bindings-yices = dontDistribute super.bindings-yices;
   cublas = dontDistribute super.cublas;
   cufft = dontDistribute super.cufft;
   gloss-accelerate = dontDistribute super.gloss-accelerate;
   gloss-raster-accelerate = dontDistribute super.gloss-raster-accelerate;
+  GoogleTranslate = dontDistribute super.GoogleTranslate;
+  GoogleDirections = dontDistribute super.GoogleDirections;
   libnvvm = dontDistribute super.libnvvm;
+  manatee-all = dontDistribute super.manatee-all;
+  manatee-ircclient = dontDistribute super.manatee-ircclient;
   Obsidian = dontDistribute super.Obsidian;
   patch-image = dontDistribute super.patch-image;
   yices = dontDistribute super.yices;
