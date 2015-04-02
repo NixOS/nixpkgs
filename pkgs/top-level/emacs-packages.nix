@@ -30,6 +30,8 @@ let self = _self // overrides;
     callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
     _self = with self; {
 
+  inherit emacs;
+
   ## START HERE
 
   ac-haskell-process = melpaBuild rec {
