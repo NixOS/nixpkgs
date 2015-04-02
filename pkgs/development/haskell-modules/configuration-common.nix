@@ -680,6 +680,13 @@ self: super: {
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
+  # https://github.com/mightybyte/snaplet-acid-state/pull/16
+  snaplet-acid-state = overrideCabal super.snaplet-acid-state (drv: { 
+    jailbreak = false;
+    buildDepends = drv.buildDepends ++ [ self.transformers self.mtl ];
+    patches = [ ./snaplet-acid-state.patch ];
+  });
+
 } // {
 
   # Not on Hackage.
