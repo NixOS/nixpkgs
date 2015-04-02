@@ -11187,10 +11187,6 @@ let
 
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
-  mozilla = callPackage ../applications/networking/browsers/mozilla {
-    inherit (gnome) libIDL;
-  };
-
   mozplugger = builderDefsPackage (import ../applications/networking/browsers/mozilla-plugins/mozplugger) {
     inherit firefox;
     inherit (xlibs) libX11 xproto;
