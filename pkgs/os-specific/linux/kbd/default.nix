@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, gzip, bzip2 }:
+{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, check, pam }:
 
 stdenv.mkDerivation rec {
-  name = "kbd-1.15.3";
+  name = "kbd-2.0.2";
 
   src = fetchurl {
     url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
-    sha256 = "1vcl2791xshjdpi4w88iy87gkb7zv0dbvi83f98v30dvqc9mfl46";
+    sha256 = "08f0nc78h6l2z39lr5jddpq7lvm365sc42597nvd6f8hc2bcgr5i";
   };
 
   /* Get the dvorak programmer keymap (present in X but not in kbd) */
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "1wlgp09wq84hml60hi4ls6d4zna7vhycyg40iipyh1279i91hsx7";
   };
 
-  configureFlags = "--disable-nls";
-
-  preConfigure = ''
-    sh autogen.sh
-  '';
+  configureFlags = [
+    "--enable-optional-progs"
+    "--enable-libkeymap"
+    "--disable-nls"
+  ];
 
   patchPhase =
     ''
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       ${gzip}/bin/gzip -c -d ${dvpSrc} > data/keymaps/i386/dvorak/dvp.map
 
       # Fix the path to gzip/bzip2.
-      substituteInPlace src/findfile.c \
+      substituteInPlace src/libkeymap/findfile.c \
         --replace gzip ${gzip}/bin/gzip \
         --replace bzip2 ${bzip2}/bin/bzip2 \
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       ''}
     '';
 
-  buildInputs = [ autoconf automake libtool ];
+  buildInputs = [ autoreconfHook pkgconfig check pam ];
 
   makeFlags = "setowner= ";
 
