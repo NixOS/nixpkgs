@@ -1,0 +1,9 @@
+--- ld10k1/gitcompile.orig	2015-04-09 16:08:26.502714229 +0000
++++ ld10k1/gitcompile	2015-04-09 16:08:40.123096202 +0000
+@@ -1,5 +1,6 @@
+ #!/bin/bash
+ 
++libtoolize --force
+ autoreconf -fi || exit 1
+ export CFLAGS='-O2 -Wall -pipe -g'
+ echo "CFLAGS=$CFLAGS"

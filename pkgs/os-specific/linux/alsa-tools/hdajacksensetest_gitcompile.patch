@@ -1,0 +1,13 @@
+--- hdajacksensetest/gitcompile.orig	1970-01-01 00:00:00.000000000 +0000
++++ hdajacksensetest/gitcompile	2015-04-09 17:56:37.960007006 +0000
+@@ -0,0 +1,10 @@
++#!/bin/bash
++
++aclocal $ACLOCAL_FLAGS || exit 1
++automake --add-missing || exit 1
++autoconf || exit 1
++echo "./configure $@"
++./configure $@ || exit 1
++if test -z "$GITCOMPILE_NO_MAKE"; then
++  make || exit 1
++fi

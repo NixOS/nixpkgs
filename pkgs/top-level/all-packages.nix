@@ -8728,6 +8728,8 @@ let
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
+  alsa-tools = callPackage ../os-specific/linux/alsa-tools { };
+
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
   alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {

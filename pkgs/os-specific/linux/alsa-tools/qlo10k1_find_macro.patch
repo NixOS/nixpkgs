@@ -1,0 +1,11 @@
+--- qlo10k1/configure.ac.orig	2015-04-09 16:38:48.653654110 +0000
++++ qlo10k1/configure.ac	2015-04-09 16:40:28.472401012 +0000
+@@ -1,7 +1,7 @@
+ AC_INIT(qlo10k1, 0.1.2p1)
+ AM_INIT_AUTOMAKE
+ AM_MAINTAINER_MODE([enable])
+-AC_CONFIG_MACRO_DIR([m4])
++AC_CONFIG_MACRO_DIRS([m4 ../ld10k1])
+ AC_CONFIG_HEADERS(config.h)
+ AC_PROG_CXX
+ AC_PROG_LD
