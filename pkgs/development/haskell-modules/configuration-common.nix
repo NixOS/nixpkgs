@@ -214,8 +214,10 @@ self: super: {
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
   # Need WebkitGTK, not just webkit.
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
+  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
   # https://github.com/jgm/zip-archive/issues/21
   zip-archive = addBuildTool super.zip-archive pkgs.zip;
@@ -644,19 +646,6 @@ self: super: {
   # We don't have the groonga package these libraries bind to.
   haroonga = markBroken super.haroonga;
   haroonga-httpd = markBroken super.haroonga-httpd;
-
-  # Cannot find pkg-config data for "webkit-1.0".
-  lambdacat = dontDistribute super.lambdacat;
-  manatee-all = dontDistribute super.manatee-all;
-  manatee-browser = dontDistribute super.manatee-browser;
-  manatee-reader = dontDistribute super.manatee-reader;
-  markup-preview = dontDistribute super.markup-preview;
-  spike = dontDistribute super.spike;
-  tianbar = dontDistribute super.tianbar;
-  web-browser-in-haskell = dontDistribute super.web-browser-in-haskell;
-  webkit = markBroken super.webkit; # .override { webkit = pkgs.webkitgtk24x; };
-  webkit-javascriptcore = dontDistribute super.webkit-javascriptcore;
-  websnap = markBroken super.websnap; # .override { webkit = pkgs.webkitgtk24x; };
 
   # Build is broken and no contact info available.
   hopenpgp-tools = markBroken super.hopenpgp-tools;
