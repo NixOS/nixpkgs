@@ -109,7 +109,12 @@ import ./make-test.nix (
       $machine->waitUntilSucceeds("${xdo "check-startup" ''
         search --sync --onlyvisible --name "startup done"
         # close first start help popup
-        key Escape
+        key -delay 1000 Escape
+        # XXX: This is to make sure the popup is closed, but we better do
+        # screenshots to detect visual changes.
+        key -delay 2000 Escape
+        key -delay 3000 Escape
+        key -delay 4000 Escape
         windowfocus --sync
         windowactivate --sync
       ''}");
