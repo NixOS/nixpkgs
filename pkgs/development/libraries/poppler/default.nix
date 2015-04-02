@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake, libiconv, libintlOrEmpty
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , qt4Support ? false, qt4 ? null, qt5
 }:
 
 let
-  version = "0.28.1"; # even major numbers are stable
-  sha256 = "01pxjdbhvpxf00ncf8d9wxc8gkcqcxz59lwrpa151ah988inxkrc";
+  version = "0.32.0"; # even major numbers are stable
+  sha256 = "162vfbvbz0frvqyk00ldsbl49h4bj8i8wn0ngfl30xg1lldy6qs9";
 
   # This is for Okular (and similar) to support subpixel rendering.
   # It's kept from upstream because of political reasons.
@@ -26,9 +26,13 @@ let
 
     propagatedBuildInputs = [ zlib cairo freetype fontconfig libjpeg lcms curl openjpeg ];
 
-    nativeBuildInputs = [ pkgconfig cmake libiconv ] ++ libintlOrEmpty;
+    nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
-    cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
+    configureFlags = [
+      "--enable-xpdf-headers"
+      "--enable-libcurl"
+      "--enable-zlib"
+    ];
 
     patches = [ ./datadir_env.patch ./poppler-glib.patch ];
 
