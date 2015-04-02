@@ -298,6 +298,7 @@ in rec {
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
