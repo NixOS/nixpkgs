@@ -65,7 +65,20 @@ self: super: {
   al = appendConfigureFlag super.al "--extra-include-dirs=${pkgs.openal}/include/AL";
 
   # Depends on code distributed under a non-free license.
+  accelerate-cublas = dontDistribute super.accelerate-cublas;
+  accelerate-cuda = dontDistribute super.accelerate-cuda;
+  accelerate-cufft  = dontDistribute super.accelerate-cufft;
+  accelerate-examples = dontDistribute super.accelerate-examples;
+  accelerate-fft = dontDistribute super.accelerate-fft;
+  accelerate-fourier-benchmark = dontDistribute super.accelerate-fourier-benchmark;
   bindings-yices = dontDistribute super.bindings-yices;
+  cublas = dontDistribute super.cublas;
+  cufft = dontDistribute super.cufft;
+  gloss-accelerate = dontDistribute super.gloss-accelerate;
+  gloss-raster-accelerate = dontDistribute super.gloss-raster-accelerate;
+  libnvvm = dontDistribute super.libnvvm;
+  Obsidian = dontDistribute super.Obsidian;
+  patch-image = dontDistribute super.patch-image;
   yices = dontDistribute super.yices;
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
@@ -444,10 +457,18 @@ self: super: {
   tz = overrideCabal super.tz (drv: { preConfigure = "export TZDIR=${pkgs.tzdata}/share/zoneinfo"; });
 
   # Deprecated upstream and doesn't compile.
-  llvm-base = markBroken super.llvm-base;
+  BASIC = dontDistribute super.BASIC;
   bytestring-arbitrary = dontDistribute (addBuildTool super.bytestring-arbitrary self.llvm);
+  llvm = dontDistribute super.llvm;
+  llvm-base = markBroken super.llvm-base;
+  llvm-base-util = dontDistribute super.llvm-base-util;
+  llvm-extra = dontDistribute super.llvm-extra;
+  llvm-tf = dontDistribute super.llvm-tf;
   objectid = dontDistribute super.objectid;
   saltine-quickcheck = dontDistribute super.saltine-quickcheck;
+  stable-tree = dontDistribute super.stable-tree;
+  synthesizer-llvm = dontDistribute super.synthesizer-llvm;
+  optimal-blocks = dontDistribute super.optimal-blocks;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
@@ -587,6 +608,8 @@ self: super: {
   # Build fails, but there seems to be no issue tracker available. :-(
   hmidi = markBrokenVersion "0.2.1.0" super.hmidi;
   padKONTROL = markBroken super.padKONTROL;
+  Bang = dontDistribute super.Bang;
+  launchpad-control = dontDistribute super.launchpad-control;
 
   # Upstream provides no issue tracker and no contact details.
   vivid = markBroken super.vivid;
@@ -623,8 +646,17 @@ self: super: {
   haroonga-httpd = markBroken super.haroonga-httpd;
 
   # Cannot find pkg-config data for "webkit-1.0".
-  webkit = markBroken super.webkit;
-  websnap = markBroken super.websnap;
+  lambdacat = dontDistribute super.lambdacat;
+  manatee-all = dontDistribute super.manatee-all;
+  manatee-browser = dontDistribute super.manatee-browser;
+  manatee-reader = dontDistribute super.manatee-reader;
+  markup-preview = dontDistribute super.markup-preview;
+  spike = dontDistribute super.spike;
+  tianbar = dontDistribute super.tianbar;
+  web-browser-in-haskell = dontDistribute super.web-browser-in-haskell;
+  webkit = markBroken super.webkit; # .override { webkit = pkgs.webkitgtk24x; };
+  webkit-javascriptcore = dontDistribute super.webkit-javascriptcore;
+  websnap = markBroken super.websnap; # .override { webkit = pkgs.webkitgtk24x; };
 
   # Build is broken and no contact info available.
   hopenpgp-tools = markBroken super.hopenpgp-tools;
@@ -648,6 +680,7 @@ self: super: {
   # https://github.com/meteficha/Hipmunk/issues/8
   Hipmunk = markBroken super.Hipmunk;
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
+  click-clack = dontDistribute super.click-clack;
 
   # https://github.com/prowdsponsor/esqueleto/issues/93
   esqueleto = dontCheck super.esqueleto;
