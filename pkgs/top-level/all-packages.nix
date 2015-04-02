@@ -7453,6 +7453,8 @@ let
 
   serf = callPackage ../development/libraries/serf {};
 
+  sfsexp = callPackage ../development/libraries/sfsexp {};
+
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
