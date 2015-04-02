@@ -45,6 +45,11 @@ cmakeConfigurePhase() {
     # nix/store directory.
     cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=$prefix/lib $cmakeFlags"
 
+    # These flags limit cmake's find* commands to searching only in
+    # paths explicitly listed in CMAKE_PREFIX_PATH. These end up being
+    # the derivation's buildInputs.
+    cmakeFlags="-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY -DCMAKE_FIND_ROOT_PATH=${CMAKE_PREFIX_PATH//:/;} $cmakeFlags"
+
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
