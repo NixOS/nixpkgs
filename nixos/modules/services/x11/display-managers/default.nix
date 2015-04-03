@@ -51,6 +51,7 @@ let
 
       ${optionalString cfg.startGnuPGAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
+            export GPG_TTY=$(${pkgs.coreutils}/bin/tty)
             # Restart this script as a child of the GnuPG agent.
             exec "${pkgs.gnupg}/bin/gpg-agent"                         \
               --enable-ssh-support --daemon                             \

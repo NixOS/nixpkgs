@@ -1781,7 +1781,7 @@ let
 
   gnupg21 = lowPrio (callPackage ../tools/security/gnupg/21.nix { });
 
-  gnupg = gnupg20;
+  gnupg = gnupg21;
 
   gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt4; };
 
