@@ -3146,6 +3146,30 @@ let
     };
   };
 
+  hovercraft = buildPythonPackage rec {
+    disabled = ! isPy3k;
+    name = "hovercraft-${version}";
+    version = "2.0b1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/hovercraft/${name}.zip";
+      sha256 = "1l88xp563miwwkahil1sxn4kz9khjcx6z85j8d6mq8gjc8rxz3j6";
+    };
+
+    propagatedBuildInputs = with self; [ docutils lxml manuel pygments svg-path watchdog ];
+
+    # one test assumes we have docutils 0.12
+    # TODO: enable tests after upgrading docutils to 0.12
+    doCheck = false;
+
+    meta = {
+      description = "A tool to make impress.js presentations from reStructuredText";
+      homepage = https://github.com/regebro/hovercraft;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
   itsdangerous = buildPythonPackage rec {
     name = "itsdangerous-0.24";
 
@@ -3269,6 +3293,22 @@ let
     };
   };
 
+  pathtools = buildPythonPackage rec {
+    name = "pathtools-${version}";
+    version = "0.1.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pathtools/${name}.tar.gz";
+      sha256 = "1h7iam33vwxk8bvslfj4qlsdprdnwf8bvzhqh3jq5frr391cadbw";
+    };
+
+    meta = {
+      description = "Pattern matching and various utilities for file systems paths";
+      homepage = http://github.com/gorakhargosh/pathtools;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
 
   paver = buildPythonPackage rec {
     version = "1.2.2";
@@ -3858,6 +3898,24 @@ let
   };
 
 
+  svg-path = buildPythonPackage rec {
+    name = "svg.path-${version}";
+    version = "2.0b1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/svg.path/${name}.zip";
+      sha256 = "038x4wqkbvcs71x6n6kzr4kn99csyv8v4gqzssr8pqylqpxi56bm";
+    };
+
+    meta = {
+      description = "SVG path objects and parser";
+      homepage = https://github.com/regebro/svg.path;
+      license = licenses.cc0;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
+
   repoze_lru = buildPythonPackage rec {
     name = "repoze.lru-0.6";
 
@@ -3916,6 +3974,28 @@ let
       maintainers = [ maintainers.goibhniu ];
     };
   };
+
+  watchdog = buildPythonPackage rec {
+    name = "watchdog-${version}";
+    version = "0.8.3";
+
+    propagatedBuildInputs = with self; [ argh pathtools pyyaml ];
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/watchdog/${name}.tar.gz";
+      sha256 = "0qj1vqszxwfx6d1s66s96jmfmy2j94bywxiqdydh6ikpvcm8hrby";
+    };
+
+    meta = {
+      description = "Python API and shell utilities to monitor file system events";
+      homepage = http://github.com/gorakhargosh/watchdog;
+      license = licenses.asl20;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
 
   zope_tales = buildPythonPackage rec {
     name = "zope.tales-4.0.2";
@@ -10683,15 +10763,16 @@ let
   };
 
   argh = buildPythonPackage rec {
-    name = "argh-0.23.3";
+    name = "argh-0.26.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/a/argh/${name}.tar.gz";
-      md5 = "25bb02c6552b42875f2c36714e0ff16c";
+      sha256 = "1nqham81ihffc9xmw85dz3rg3v90rw7h0dp3dy0bh3qkp4n499q6";
     };
 
-    preCheck = ''
+    checkPhase = ''
       export LANG="en_US.UTF-8"
+      py.test
     '';
 
     buildInputs = with self; [ pytest py mock pkgs.glibcLocales ];
