@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cups, poppler, fontconfig
+{ stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    pkgconfig cups poppler fontconfig libjpeg libpng perl
+    pkgconfig cups poppler poppler_utils fontconfig libjpeg libpng perl
     ijs qpdf dbus
   ];
 
