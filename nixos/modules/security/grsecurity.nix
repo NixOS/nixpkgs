@@ -44,53 +44,41 @@ in
 
       config = {
         mode = mkOption {
-          type = types.str;
+          type = types.enum [ "auto" "custom" ];
           default = "auto";
-          example = "custom";
           description = ''
             grsecurity configuration mode. This specifies whether
             grsecurity is auto-configured or otherwise completely
-            manually configured. Can either be
-            <literal>custom</literal> or <literal>auto</literal>.
-
-            <literal>auto</literal> is recommended.
+            manually configured.
           '';
         };
 
         priority = mkOption {
-          type = types.str;
+          type = types.enum [ "security" "performance" ];
           default = "security";
-          example = "performance";
           description = ''
             grsecurity configuration priority. This specifies whether
             the kernel configuration should emphasize speed or
-            security. Can either be <literal>security</literal> or
-            <literal>performance</literal>.
+            security.
           '';
         };
 
         system = mkOption {
-          type = types.str;
-          default = "";
-          example = "desktop";
+          type = types.enum [ "desktop" "server" ];
+          default = "desktop";
           description = ''
-            grsecurity system configuration. This specifies whether
-            the kernel configuration should be suitable for a Desktop
-            or a Server. Can either be <literal>server</literal> or
-            <literal>desktop</literal>.
+            grsecurity system configuration.
           '';
         };
 
         virtualisationConfig = mkOption {
-          type = types.str;
-          default = "none";
-          example = "host";
+          type = types.nullOr (types.enum [ "host" "guest" ]);
+          default = null;
           description = ''
             grsecurity virtualisation configuration. This specifies
             the virtualisation role of the machine - that is, whether
             it will be a virtual machine guest, a virtual machine
-            host, or neither. Can be one of <literal>none</literal>,
-            <literal>host</literal>, or <literal>guest</literal>.
+            host, or neither.
           '';
         };
 
@@ -106,17 +94,10 @@ in
         };
 
         virtualisationSoftware = mkOption {
-          type = types.str;
-          default = "";
-          example = "kvm";
+          type = types.nullOr (types.enum [ "kvm" "xen" "vmware" "virtualbox" ]);
+          default = null;
           description = ''
-            grsecurity virtualisation software. Set this to the
-            specified virtual machine technology if the machine is
-            running as a guest, or a host.
-
-            Can be one of <literal>kvm</literal>,
-            <literal>xen</literal>, <literal>vmware</literal> or
-            <literal>virtualbox</literal>.
+            Configure grsecurity for use with this virtualisation software.
           '';
         };
 
@@ -262,25 +243,13 @@ in
                    && config.boot.kernelPackages.kernel.features.grsecurity;
           message = "grsecurity enabled, but kernel doesn't have grsec support";
         }
-        { assertion = elem cfg.config.mode [ "auto" "custom" ];
-          message = "grsecurity mode must either be 'auto' or 'custom'.";
-        }
-        { assertion = cfg.config.mode == "auto" -> elem cfg.config.system [ "desktop" "server" ];
-          message = "when using auto grsec mode, system must be either 'desktop' or 'server'";
-        }
-        { assertion = cfg.config.mode == "auto" -> elem cfg.config.priority [ "performance" "security" ];
-          message = "when using auto grsec mode, priority must be 'performance' or 'security'.";
-        }
-        { assertion = cfg.config.mode == "auto" -> elem cfg.config.virtualisationConfig [ "host" "guest" "none" ];
-          message = "when using auto grsec mode, 'virt' must be 'host', 'guest' or 'none'.";
-        }
-        { assertion = (cfg.config.mode == "auto" && (elem cfg.config.virtualisationConfig [ "host" "guest" ])) ->
+        { assertion = (cfg.config.mode == "auto" && (cfg.config.virtualisationConfig != null)) ->
               cfg.config.hardwareVirtualisation != null;
           message   = "when using auto grsec mode with virtualisation, you must specify if your hardware has virtualisation extensions";
         }
-        { assertion = (cfg.config.mode == "auto" && (elem cfg.config.virtualisationConfig [ "host" "guest" ])) ->
-              elem cfg.config.virtualisationSoftware [ "kvm" "xen" "virtualbox" "vmware" ];
-          message   = "virtualisation software must be 'kvm', 'xen', 'vmware' or 'virtualbox'";
+        { assertion = (cfg.config.mode == "auto" && (cfg.config.virtualisationConfig != null)) ->
+              cfg.config.virtualisationSoftware != null;
+         message   = "grsecurity configured for virtualisation but no virtualisation software specified";
         }
       ];
 
