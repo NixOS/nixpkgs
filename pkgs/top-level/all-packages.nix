@@ -1437,6 +1437,8 @@ let
 
   gmvault = callPackage ../tools/networking/gmvault { };
 
+  gnaural = callPackage ../applications/audio/gnaural { };
+
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
     inherit intltool perl gettext libusb pkgconfig bluez readline pcsclite
       libical gtk glib;
