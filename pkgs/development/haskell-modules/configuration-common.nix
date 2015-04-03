@@ -723,8 +723,8 @@ self: super: {
     version = "20150318";
     src = pkgs.fetchgit {
       url = "http://github.com/NixOS/cabal2nix.git";
-      rev = "d131b2b2db1bc37a10bbc40c3adea3f006633a5e";
-      sha256 = "0s92mdkgjqkqby6b1lrxs5dh9ja49sj5jpdc56g5v8g03h3g9m0a";
+      rev = "33c83599330d67929bef9b3bf10131e352bd108c";
+      sha256 = "18bq66n67bx8x2bqmw5yn7nq5dzzp37c19n5w89p90a07jpxxka3";
       deepClone = true;
     };
     isLibrary = false;
