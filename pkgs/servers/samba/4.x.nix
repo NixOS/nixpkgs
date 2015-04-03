@@ -27,6 +27,11 @@
 , zlib ? null
 , ncurses ? null
 , libcap ? null
+, libunwind ? null
+, dbus ? null
+, libibverbs ? null
+, librdmacm ? null
+, systemd ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +45,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-heimdal-compat.patch
+    ./4.x-fix-ctdb-deps.patch
   ];
 
   buildInputs = [
@@ -53,7 +59,7 @@ stdenv.mkDerivation rec {
 
     gnutls libgcrypt libgpgerror
 
-    zlib ncurses libcap
+    zlib ncurses libcap libunwind dbus libibverbs librdmacm systemd
   ];
 
   postPatch = ''

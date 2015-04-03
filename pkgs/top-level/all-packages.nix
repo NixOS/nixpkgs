@@ -8517,6 +8517,16 @@ let
     libgcrypt = libgcrypt_1_6;
     python = python2;
     pythonPackages = python2Packages;
+    cups = if stdenv.isDarwin then null else cups;
+    pam = if stdenv.isDarwin then null else pam;
+    libaio = if stdenv.isDarwin then null else libaio;
+    ceph = if stdenv.isDarwin then null else ceph;
+    glusterfs = if stdenv.isDarwin then null else glusterfs;
+    libcap = if stdenv.isLinux then libcap else null;
+    dbus = if stdenv.isLinux then dbus else null;
+    libibverbs = if stdenv.isLinux then libibverbs else null;
+    librdmacm = if stdenv.isLinux then librdmacm else null;
+    systemd = if stdenv.isLinux then system else null;
   };
 
   samba = samba4;
