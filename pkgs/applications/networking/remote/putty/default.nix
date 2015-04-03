@@ -1,12 +1,13 @@
-{ stdenv, fetchsvn, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut
-, libtool }:
- 
-let
-  rev = 9690;
-in
-stdenv.mkDerivation {
-  name = "putty-${toString rev}";
-  # builder = ./builder.sh;
+{ stdenv, fetchurl, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut, libtool }:
+
+stdenv.mkDerivation rec {
+  version = "0.64";
+  name = "putty-${version}";
+
+  src = fetchurl {
+    url = "http://the.earth.li/~sgtatham/putty/latest/${name}.tar.gz";
+    sha256 = "089qbzd7w51sc9grm2x3lcbj61jdqsnakb4j4gnf6i2131xcjiia";
+  };
 
   preConfigure = ''
     perl mkfiles.pl
@@ -17,14 +18,17 @@ stdenv.mkDerivation {
     ./mkauto.sh
     cd unix
   '';
-  
-  # The hash is going to change on new snapshot.
-  # I don't know of any better URL
-  src = fetchsvn {
-    url = svn://svn.tartarus.org/sgt/putty;
-    rev = rev;
-    sha256 = "e1fb49766e0724a12776ec3d6cd0bd420e03ebdc3383a01a12dbfd30983f81ef";
-  };
 
   buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut libtool ];
+
+  meta = with stdenv.lib; {
+    description = "A Free Telnet/SSH Client";
+    longDescription = ''
+      PuTTY is a free implementation of Telnet and SSH for Windows and Unix
+      platforms, along with an xterm terminal emulator.
+      It is written and maintained primarily by Simon Tatham.
+    '';
+    homepage = http://www.chiark.greenend.org.uk/~sgtatham/putty/;
+    license = licenses.mit;
+  };
 }

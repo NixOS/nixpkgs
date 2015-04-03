@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl_ns
-, docbook_xml_dtd_42, readline, talloc, ntdb, tdb, tevent, ldb, popt, iniparser
-, pythonPackages, libbsd, nss_wrapper, socket_wrapper, uid_wrapper, libarchive
+{ stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
+, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
+, ldb, popt, iniparser, pythonPackages, libbsd, nss_wrapper, socket_wrapper
+, uid_wrapper, libarchive
 
 # source3/wscript optionals
 , kerberos ? null
@@ -27,6 +28,11 @@
 , zlib ? null
 , ncurses ? null
 , libcap ? null
+, libunwind ? null
+, dbus ? null
+, libibverbs ? null
+, librdmacm ? null
+, systemd ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -40,12 +46,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-heimdal-compat.patch
+    ./4.x-fix-ctdb-deps.patch
   ];
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl_ns docbook_xml_dtd_42
-    readline talloc ntdb tdb tevent ldb popt iniparser pythonPackages.subunit
-    libbsd nss_wrapper socket_wrapper uid_wrapper libarchive
+    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42
+    docbook_xml_dtd_45 readline talloc ntdb tdb tevent ldb popt iniparser
+    pythonPackages.subunit libbsd nss_wrapper socket_wrapper uid_wrapper
+    libarchive
 
     kerberos openldap cups pam avahi acl libaio fam ceph glusterfs
 
@@ -53,8 +61,16 @@ stdenv.mkDerivation rec {
 
     gnutls libgcrypt libgpgerror
 
-    zlib ncurses libcap
+    zlib ncurses libcap libunwind dbus libibverbs librdmacm systemd
   ];
+
+  postPatch = ''
+    # Removes absolute paths in scripts
+    sed -i 's,/sbin/,,g' ctdb/config/functions
+
+    # Fix the XML Catalog Paths
+    sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
+  '';
 
   enableParallelBuilding = true;
 
@@ -110,6 +126,25 @@ stdenv.mkDerivation rec {
   ];
 
   stripAllList = [ "bin" "sbin" ];
+
+  postInstall = ''
+    # Remove unecessary components
+    rm -r $out/{lib,share}/ctdb-tests
+    rm $out/bin/ctdb_run{_cluster,}_tests
+  '';
+
+  postFixup = ''
+    export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
+    read -r -d "" SCRIPT << EOF
+    [ -z "\$SAMBA_LIBS" ] && exit 1;
+    BIN='{}';
+    OLD_LIBS="\$(patchelf --print-rpath "\$BIN" 2>/dev/null | tr ':' '\n')";
+    ALL_LIBS="\$(echo -e "\$SAMBA_LIBS\n\$OLD_LIBS" | sort | uniq | tr '\n' ':')";
+    patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
+    patchelf --shrink-rpath "\$BIN";
+    EOF
+    find $out -type f -exec $SHELL -c "$SCRIPT" \;
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.samba.org/;

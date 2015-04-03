@@ -1,8 +1,6 @@
-{ stdenv, fetchurl, cmake, llvmPackages }:
+{ stdenv, fetchurl, cmake, llvmPackages_35 }:
 
-with llvmPackages;
-
-let version = "3.5"; in
+let version = "3.5"; in with llvmPackages_35;
 stdenv.mkDerivation rec {
   name = "include-what-you-use-${version}";
 
@@ -16,12 +14,9 @@ stdenv.mkDerivation rec {
     longDescription = ''
       For every symbol (type, function variable, or macro) that you use in
       foo.cc, either foo.cc or foo.h should #include a .h file that exports the
-      declaration of that symbol. The include-what-you-use tool is a program
-      that can be built with the clang libraries in order to analyze #includes
-      of source files to find include-what-you-use violations, and suggest
-      fixes for them. The main goal of include-what-you-use is to remove
-      superfluous #includes. It does this both by figuring out what #includes
-      are not actually needed for this file (for both .cc and .h files), and
+      declaration of that symbol.  The main goal of include-what-you-use is to
+      remove superfluous #includes, both by figuring out what #includes are not
+      actually needed for this file (for both .cc and .h files), and by
       replacing #includes with forward-declares when possible.
     '';
     homepage = http://include-what-you-use.com;

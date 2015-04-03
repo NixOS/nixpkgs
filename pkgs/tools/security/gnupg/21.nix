@@ -1,10 +1,17 @@
 { fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, npth
-, readline ? null, libusb ? null, gnutls ? null, adns ? null, openldap ? null
-, zlib ? null, bzip2 ? null, pinentry ? null, autoreconfHook, gettext
-, pcsclite
+, autoreconfHook, gettext, texinfo, pcsclite
+
+# Each of the dependencies below are optional.
+# Gnupg can be built without them at the cost of reduced functionality.
+, pinentry ? null, x11Support ? true
+, adns ? null, gnutls ? null, libusb ? null, openldap ? null
+, readline ? null, zlib ? null, bzip2 ? null
 }:
 
 with stdenv.lib;
+
+assert x11Support -> pinentry != null;
+
 stdenv.mkDerivation rec {
   name = "gnupg-2.1.2";
 
@@ -15,18 +22,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./socket-activate-2.1.1.patch ];
 
-  postPatch = ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '';
 
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba npth
+    autoreconfHook gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
-    autoreconfHook gettext
   ];
 
-  configureFlags =
-    optional (pinentry != null) "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+  configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;

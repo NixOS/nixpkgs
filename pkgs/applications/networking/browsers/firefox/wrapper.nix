@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   desktopItem = makeDesktopItem {
     name = browserName;
     exec = browserName + " %U";
-    icon = icon;
+    icon = browserName;
     comment = "";
     desktopName = desktopName;
     genericName = "Web Browser";
@@ -19,13 +19,10 @@ stdenv.mkDerivation {
       "text/html"
       "text/xml"
       "application/xhtml+xml"
+      "application/vnd.mozilla.xul+xml"
       "x-scheme-handler/http"
       "x-scheme-handler/https"
       "x-scheme-handler/ftp"
-      "x-scheme-handler/mailto"
-      "x-scheme-handler/webcal"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
     ];
   };
 
@@ -60,6 +57,9 @@ stdenv.mkDerivation {
     ln -s "$script_location" "$out/bin/${browserName}${nameSuffix}"
     ''
     }
+
+    mkdir -p $out/share/icons
+    ln -s $out/lib/${browserName}/browser/icons/mozicon128.png $out/share/icons/${browserName}.png
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications

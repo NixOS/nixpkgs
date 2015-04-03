@@ -1,3 +1,21 @@
+/*
+
+  WARNING/NOTE: whenever you want to add an option here you need to
+  either
+
+  * mark it as an optional one with `?` suffix,
+  * or make sure it works for all the versions in nixpkgs,
+  * or check for which kernel versions it will work (using kernel
+    changelog, google or whatever) and mark it with `versionOlder` or
+    `versionAtLeast`.
+
+  Then do test your change by building all the kernels (or at least
+  their configs) in nixpkgs or else you will guarantee lots and lots
+  of pain to users trying to switch to an older kernel because of some
+  hardware problems with a new one.
+
+*/
+
 { stdenv, version, kernelPlatform, extraConfig, features }:
 
 with stdenv.lib;
@@ -171,7 +189,6 @@ with stdenv.lib;
   XFS_RT? y # XFS Realtime subvolume support
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
-  UBIFS_FS_XATTR? y
   UBIFS_FS_ADVANCED_COMPR? y
   ${optionalString (versionAtLeast version "3.6") ''
     NFS_SWAP y
@@ -194,12 +211,17 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.14") ''
     CEPH_FS_POSIX_ACL y
   ''}
-  SQUASHFS_FILE_DIRECT y
-  SQUASHFS_DECOMP_MULTI_PERCPU y
+  ${optionalString (versionAtLeast version "3.13") ''
+    SQUASHFS_FILE_DIRECT y
+    SQUASHFS_DECOMP_MULTI_PERCPU y
+  ''}
   SQUASHFS_XATTR y
   SQUASHFS_ZLIB y
   SQUASHFS_LZO y
   SQUASHFS_XZ y
+  ${optionalString (versionAtLeast version "3.19") ''
+    SQUASHFS_LZ4 y
+  ''}
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
@@ -218,6 +240,16 @@ with stdenv.lib;
   SECURITY_APPARMOR y
   DEFAULT_SECURITY_APPARMOR y
 
+  # Microcode loading support
+  MICROCODE y
+  MICROCODE_INTEL y
+  MICROCODE_AMD y
+  ${optionalString (versionAtLeast version "3.11") ''
+    MICROCODE_EARLY y
+    MICROCODE_INTEL_EARLY y
+    MICROCODE_AMD_EARLY y
+  ''}
+
   # Misc. options.
   8139TOO_8129 y
   8139TOO_PIO n # PIO is slower
@@ -235,7 +267,9 @@ with stdenv.lib;
   BT_HCIUART_BCSP? y
   BT_HCIUART_H4? y # UART (H4) protocol support
   BT_HCIUART_LL? y
-  BT_RFCOMM_TTY? y # RFCOMM TTY support
+  ${optionalString (versionAtLeast version "3.4") ''
+    BT_RFCOMM_TTY? y # RFCOMM TTY support
+  ''}
   CRASH_DUMP? n
   ${optionalString (versionOlder version "3.1") ''
     DMAR? n # experimental
@@ -258,7 +292,6 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  MICROCODE_AMD y
   MODVERSIONS y
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
@@ -269,12 +302,17 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
   ''}
+  ${optionalString (versionAtLeast version "3.10") ''
+    RT2800USB_RT55XX y
+  ''}
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
   SLIP_SMART y
   THERMAL_HWMON y # Hardware monitoring support
-  USB_DEBUG? n
+  ${optionalString (versionOlder version "3.15") ''
+    USB_DEBUG? n
+  ''}
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   X86_CHECK_BIOS_CORRUPTION y
@@ -310,7 +348,9 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  UPROBE_EVENT y
+  ${optionalString (versionAtLeast version "3.10") ''
+    UPROBE_EVENT y
+  ''}
   FUNCTION_PROFILER y
   RING_BUFFER_BENCHMARK n
 

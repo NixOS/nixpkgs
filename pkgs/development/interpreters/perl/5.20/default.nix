@@ -18,9 +18,7 @@ let
 
 in
 
-with {
-  inherit (stdenv.lib) optional optionalString;
-};
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "perl-5.20.1";
@@ -79,4 +77,11 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru.libPrefix = "lib/perl5/site_perl";
+
+  meta = {
+    homepage = https://www.perl.org/;
+    description = "The standard implementation of the Perl 5 programmming language";
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
+  };
 }

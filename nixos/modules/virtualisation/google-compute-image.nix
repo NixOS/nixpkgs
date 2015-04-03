@@ -7,6 +7,9 @@ in
 {
   imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
+  # https://cloud.google.com/compute/docs/tutorials/building-images
+  networking.firewall.enable = mkDefault false;
+
   system.build.googleComputeImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "google-compute-image"
@@ -95,6 +98,7 @@ in
 
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
+  boot.kernelModules = [ "virtio_pci" "virtio_net" ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "/dev/sda";
@@ -108,6 +112,7 @@ in
   # at instance creation time.
   services.openssh.enable = true;
   services.openssh.permitRootLogin = "without-password";
+  services.openssh.passwordAuthentication = mkDefault false;
 
   # Force getting the hostname from Google Compute.
   networking.hostName = mkDefault "";
@@ -178,5 +183,79 @@ in
       serviceConfig.RemainAfterExit = true;
       serviceConfig.StandardError = "journal+console";
       serviceConfig.StandardOutput = "journal+console";
-     };
+    };
+
+  # Setings taken from https://cloud.google.com/compute/docs/tutorials/building-images#providedkernel
+  boot.kernel.sysctl = {
+    # enables syn flood protection
+    "net.ipv4.tcp_syncookies" = mkDefault "1";
+
+    # ignores source-routed packets
+    "net.ipv4.conf.all.accept_source_route" = mkDefault "0";
+
+    # ignores source-routed packets
+    "net.ipv4.conf.default.accept_source_route" = mkDefault "0";
+
+    # ignores ICMP redirects
+    "net.ipv4.conf.all.accept_redirects" = mkDefault "0";
+
+    # ignores ICMP redirects
+    "net.ipv4.conf.default.accept_redirects" = mkDefault "0";
+
+    # ignores ICMP redirects from non-GW hosts
+    "net.ipv4.conf.all.secure_redirects" = mkDefault "1";
+
+    # ignores ICMP redirects from non-GW hosts
+    "net.ipv4.conf.default.secure_redirects" = mkDefault "1";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.ip_forward" = mkDefault "0";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.conf.all.send_redirects" = mkDefault "0";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.conf.default.send_redirects" = mkDefault "0";
+
+    # reverse path filtering - IP spoofing protection
+    "net.ipv4.conf.all.rp_filter" = mkDefault "1";
+
+    # reverse path filtering - IP spoofing protection
+    "net.ipv4.conf.default.rp_filter" = mkDefault "1";
+
+    # ignores ICMP broadcasts to avoid participating in Smurf attacks
+    "net.ipv4.icmp_echo_ignore_broadcasts" = mkDefault "1";
+
+    # ignores bad ICMP errors
+    "net.ipv4.icmp_ignore_bogus_error_responses" = mkDefault "1";
+
+    # logs spoofed, source-routed, and redirect packets
+    "net.ipv4.conf.all.log_martians" = mkDefault "1";
+
+    # log spoofed, source-routed, and redirect packets
+    "net.ipv4.conf.default.log_martians" = mkDefault "1";
+
+    # implements RFC 1337 fix
+    "net.ipv4.tcp_rfc1337" = mkDefault "1";
+
+    # randomizes addresses of mmap base, heap, stack and VDSO page
+    "kernel.randomize_va_space" = mkDefault "2";
+
+    # provides protection from ToCToU races
+    "fs.protected_hardlinks" = mkDefault "1";
+
+    # provides protection from ToCToU races
+    "fs.protected_symlinks" = mkDefault "1";
+
+    # makes locating kernel addresses more difficult
+    "kernel.kptr_restrict" = mkDefault "1";
+
+    # set ptrace protections
+    "kernel.yama.ptrace_scope" = mkDefault "1";
+
+    # set perf only available to root
+    "kernel.perf_event_paranoid" = mkDefault "2";
+
+  };
+
 }

@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    rsync -av bin/* $out/bin/
+    rsync -av bin/{*,.heap} $out/bin/
+    bin/.mkexec ${smlnj}/bin/sml $out/ twelf-server twelf-server
 
     mkdir -p $out/share/emacs/site-lisp/twelf/
     rsync -av emacs/ $out/share/emacs/site-lisp/twelf/

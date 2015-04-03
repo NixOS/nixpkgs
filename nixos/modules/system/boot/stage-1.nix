@@ -39,45 +39,59 @@ let
       mkdir -p $out/bin $out/lib
       ln -s $out/bin $out/sbin
 
-      # Copy what we need from Glibc.
-      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
-      cp -pv ${pkgs.glibc}/lib/libc.so.* $out/lib
-      cp -pv ${pkgs.glibc}/lib/libm.so.* $out/lib
-      cp -pv ${pkgs.glibc}/lib/libpthread.so.* $out/lib
-      cp -pv ${pkgs.glibc}/lib/librt.so.* $out/lib
-      cp -pv ${pkgs.glibc}/lib/libdl.so.* $out/lib
-      cp -pv ${pkgs.gcc.cc}/lib*/libgcc_s.so.* $out/lib
+      copy_bin_and_libs () {
+        [ -f "$out/bin/$(basename $1)" ] && rm "$out/bin/$(basename $1)"
+        cp -pdv $1 $out/bin
+      }
 
       # Copy BusyBox.
-      cp -pvd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin/
+      for BIN in ${pkgs.busybox}/{s,}bin/*; do
+        copy_bin_and_libs $BIN
+      done
 
       # Copy some utillinux stuff.
-      cp -vf --remove-destination ${pkgs.utillinux}/sbin/blkid $out/bin
-      cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
-      cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
+      copy_bin_and_libs ${pkgs.utillinux}/sbin/blkid
 
       # Copy dmsetup and lvm.
-      cp -v ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
-      cp -v ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
-      cp -v ${pkgs.lvm2}/lib/libdevmapper.so.*.* $out/lib
-      cp -v ${pkgs.systemd}/lib/libsystemd.so.* $out/lib
+      copy_bin_and_libs ${pkgs.lvm2}/sbin/dmsetup
+      copy_bin_and_libs ${pkgs.lvm2}/sbin/lvm
 
       # Add RAID mdadm tool.
-      cp -v ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
+      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
 
       # Copy udev.
-      cp -v ${udev}/lib/systemd/systemd-udevd ${udev}/bin/udevadm $out/bin
-      cp -v ${udev}/lib/udev/*_id $out/bin
-      cp -pdv ${udev}/lib/libudev.so.* $out/lib
-      cp -v ${pkgs.kmod}/lib/libkmod.so.* $out/lib
-      cp -v ${pkgs.acl}/lib/libacl.so.* $out/lib
-      cp -v ${pkgs.attr}/lib/libattr.so.* $out/lib
+      copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd
+      copy_bin_and_libs ${udev}/bin/udevadm
+      for BIN in ${udev}/lib/udev/*_id; do
+        copy_bin_and_libs $BIN
+      done
 
       # Copy modprobe.
-      cp -v ${pkgs.kmod}/bin/kmod $out/bin/
+      copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
       ${config.boot.initrd.extraUtilsCommands}
+
+      # Copy ld manually since it isn't detected correctly
+      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
+
+      # Copy all of the needed libraries for the binaries
+      for BIN in $(find $out/{bin,sbin} -type f); do
+        echo "Copying libs for bin $BIN"
+        LDD="$(ldd $BIN)" || continue
+        LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
+        for LIB in $LIBS; do
+          [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+          while [ "$(readlink $LIB)" != "" ]; do
+            LINK="$(readlink $LIB)"
+            if [ "${LINK:0:1}" != "/" ]; then
+              LINK="$(dirname $LIB)/$LINK"
+            fi
+            LIB="$LINK"
+            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+          done
+        done
+      done
 
       # Strip binaries further than normal.
       chmod -R u+w $out
@@ -100,10 +114,11 @@ let
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
       export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --help 2>&1 | grep "BusyBox"
+      $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      $out/bin/blkid --help 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
-      $out/bin/dmsetup --version 2>&1 | tee -a log | grep "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep "LVM"
+      $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
+      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
       $out/bin/mdadm --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
@@ -205,7 +220,7 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
-    inherit (config.boot.initrd) compressor;
+    inherit (config.boot.initrd) compressor prepend;
 
     contents =
       [ { object = bootStage1;
@@ -244,6 +259,14 @@ in
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
         <literal><replaceable>resume_offset</replaceable></literal>.
+      '';
+    };
+
+    boot.initrd.prepend = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        Other initrd files to prepend to the final initrd we are building.
       '';
     };
 

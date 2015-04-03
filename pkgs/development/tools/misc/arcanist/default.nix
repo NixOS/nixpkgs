@@ -3,18 +3,18 @@
 let
   libphutil = fetchgit {
     url    = "git://github.com/phacility/libphutil.git";
-    rev    = "00f1fcdc19e0d5712f4d8cdb4e6804adc6dfa2ec";
-    sha256 = "92031c50c61a8b46b7e978566b1add50dae5849f3c4c2870826d343c4bc458ce";
+    rev    = "ce3959b4046f5dcc4f3413a59328bda2a42e76b0";
+    sha256 = "3c206b428fa5e0391868f7782db4af4d1cf2f338899831a36771cef74db14a76";
   };
   arcanist = fetchgit {
     url    = "git://github.com/phacility/arcanist.git";
-    rev    = "8173ea3eea73abe12935ffc80fdd65f2d658336b";
-    sha256 = "efcbfb42cb879e7589c94c7bf293de996981cf2175935790501c389253aa7f43";
+    rev    = "b961869edac9469be93f2c3ac7a24562d3186860";
+    sha256 = "2ae1272c76a1e2bdedd87d453ddb75f6110f9224063e7ee39e88fcb8b3b4c884";
   };
 in
 stdenv.mkDerivation rec {
   name    = "arcanist-${version}";
-  version = "20150118";
+  version = "20150318";
 
   src = [ arcanist libphutil ];
   buildInputs = [ php makeWrapper flex ];

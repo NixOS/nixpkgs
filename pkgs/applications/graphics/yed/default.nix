@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, unzip, jre }:
 
 stdenv.mkDerivation rec {
-  name = "yEd-3.14";
+  name = "yEd-3.14.1";
 
   src = fetchurl {
     url = "http://www.yworks.com/products/yed/demo/${name}.zip";
-    sha256 = "147bb081b063abee202a0019597ac960273454046afb29ebbe91e62102dd0471";
+    sha256 = "09zik3pjs5x0vc0jvndm762blk85y44lxac3vdfqqbinwd9gfnm2";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];

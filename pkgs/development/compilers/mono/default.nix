@@ -6,10 +6,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "3.8.0";
+  version = "3.12.1";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "0jraxsjn7ra6z02n4wjpbj21mxm2w50iqviqvfl0ajikbxahvf3i";
+    sha256 = "03dn68vignknzxy1rx75p16qx1ild27hixgvr5mw0j19mx9z332x";
   };
 
   buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib];
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
     platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   };
 }

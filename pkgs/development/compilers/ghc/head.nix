@@ -17,14 +17,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150118";
+  version = "7.11.20150402";
   name = "ghc-${version}";
-  rev = "6ff3db92140e3ac8cbda50d1a4aab976350ac8c4";
+  rev = "47f821a1a24553dc29b9581b1a259a9b1394c955";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "1a1r3nw7x5rd8563770zcg1phm55vi3sxs2zwr91ik026n8jjba6";
+    sha256 = "111a2z6bgn966g04a9n2ns9n2a401rd0zqgndznn2w4fv8a4qzgj";
   };
 
   postUnpack = ''

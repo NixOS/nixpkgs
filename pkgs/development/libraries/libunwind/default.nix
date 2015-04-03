@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xz}:
+{ stdenv, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
   name = "libunwind-1.1";
@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
     touch "$out/lib/libunwind-generic.so"
   '';
   
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.nongnu.org/libunwind;
     description = "A portable and efficient API to determine the call-chain of a program";
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

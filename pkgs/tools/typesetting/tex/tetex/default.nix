@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     homepage     = http://www.tug.org/tetex/;
     matintainers = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;
+    hydraPlatforms = platforms.linux;
   };
 }
 

@@ -1,22 +1,24 @@
 { stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco
-, gtk2 ? null, gtk3 ? null
+, bzip2, libcroco, libintlOrEmpty
+, gtk3 ? null
 , gobjectIntrospection ? null, enableIntrospection ? false }:
 
 # no introspection by default, it's too big
 
 stdenv.mkDerivation rec {
-  name = "librsvg-2.36.4"; # 2.37 needs pango 1.32.6, 2.40 doesn't support gtk2
+  name = "librsvg-2.40.9";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";
-    sha256 = "1hp6325gdkzx8yqn2d2r915ak3k6hfshjjh0sc54z3vr0i99688h";
+    url    = "mirror://gnome/sources/librsvg/2.40/${name}.tar.xz";
+    sha256 = "0fplymmqqr28y24vcnb01szn62pfbqhk8p1ngns54x9m6mflr5hk";
   };
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango ]
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+
+  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
 
-  propagatedBuildInputs = [ glib gdk_pixbuf cairo gtk2 gtk3 ];
+  propagatedBuildInputs = [ glib gdk_pixbuf cairo gtk3 ];
 
   nativeBuildInputs = [ pkgconfig ];
 

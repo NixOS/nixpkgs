@@ -107,7 +107,7 @@ let
         OggVorbis = libvorbis;
         OpenAL = openal;
         OpenEXR = openexr;
-        Poppler = poppler.poppler_qt4;
+        Poppler = poppler_qt4;
         Prison = prison;
         PulseAudio = pulseaudio;
         PythonLibrary = python;
@@ -241,6 +241,7 @@ let
           "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
           "-DHUPNP_ENABLED=ON"
           "-DWITH_SOLID_UDISKS2=ON"
+          "-DKDE_DEFAULT_HOME=.kde"
         ];
       };
 
@@ -281,10 +282,10 @@ let
         buildInputs = super.kremotecontrol.buildInputs ++ [xlibs.libXtst];
       };
 
-      krfb = with pkgs; super.krfb // {
+      krfb = super.krfb // {
         buildInputs =
           super.krfb.buildInputs
-          ++ [xlibs.libXtst kde4.telepathy.common_internals];
+          ++ [pkgs.xlibs.libXtst kde4.telepathy.common_internals];
       };
 
       libkdcraw = with pkgs; super.libkdcraw // {

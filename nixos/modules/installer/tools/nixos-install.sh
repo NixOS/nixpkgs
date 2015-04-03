@@ -28,9 +28,14 @@ chrootCommand=(/run/current-system/sw/bin/bash)
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
-        -I)
-            given_path="$1"; shift 1
-            extraBuildFlags+=("$i" "$given_path")
+        --max-jobs|-j|--cores|-I)
+            j="$1"; shift 1
+            extraBuildFlags+=("$i" "$j")
+            ;;
+        --option)
+            j="$1"; shift 1
+            k="$1"; shift 1
+            extraBuildFlags+=("$i" "$j" "$k")
             ;;
         --root)
             mountPoint="$1"; shift 1
@@ -128,7 +133,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/db \
     $mountPoint/nix/var/log/nix/drvs
 
-mkdir -m 1775 -p $mountPoint/nix/store
+mkdir -m 1735 -p $mountPoint/nix/store
 chown root:nixbld $mountPoint/nix/store
 
 

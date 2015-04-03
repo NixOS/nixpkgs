@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_34;
+
   # Disable GHC 7.6.x core libraries.
   array = null;
   base = null;
@@ -36,11 +39,11 @@ self: super: {
   transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # haskeline and terminfo are not core libraries for this compiler.
-  haskeline = self.haskeline_0_7_1_3;
-  terminfo = self.terminfo_0_4_0_0;
+  haskeline = self.haskeline_0_7_2_1;
+  terminfo = self.terminfo_0_4_0_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_1_1 = super.Cabal_1_22_1_1.override { binary = self.binary_0_7_4_0; };
+  Cabal_1_22_2_0 = super.Cabal_1_22_2_0.override { binary = self.binary_0_7_4_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
@@ -67,30 +70,7 @@ self: super: {
   contravariant = addBuildDepend super.contravariant self.tagged;
   reflection = dontHaddock (addBuildDepend super.reflection self.tagged);
 
-} // {
-
-  # Not on Hackage.
-  cryptol = self.mkDerivation rec {
-    pname = "cryptol";
-    version = "2.1.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "GaloisInc";
-      repo = "cryptol";
-      rev = "v${version}";
-      sha256 = "00bmad3qc7h47j26xp7hbrlb0qv0f7k9spxgsc1f6lsmpgq9axr3";
-    };
-    isLibrary = true;
-    isExecutable = true;
-    buildDepends = with self; [
-      ansi-terminal array async base containers deepseq directory
-      executable-path filepath GraphSCC haskeline monadLib mtl old-time
-      presburger pretty process QuickCheck random smtLib syb text
-      tf-random transformers utf8-string
-    ];
-    buildTools = with self; [ alex happy Cabal_1_22_1_1 ];
-    patchPhase = "sed -i -e 's|process .*,|process,|' cryptol.cabal";
-    description = "Cryptol: The Language of Cryptography";
-    license = pkgs.stdenv.lib.licenses.bsd3;
-  };
+  # The compat library is empty in the presence of mtl 2.2.x.
+  mtl-compat = dontHaddock super.mtl-compat;
 
 }

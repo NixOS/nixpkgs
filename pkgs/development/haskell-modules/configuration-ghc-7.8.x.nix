@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_34;
+
   # Disable GHC 7.8.x core libraries.
   array = null;
   base = null;
@@ -40,20 +43,25 @@ self: super: {
   # Configure build for mtl 2.1.x.
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
+  # haddock-api 2.16 requires ghc>=7.10
+  haddock-api = super.haddock-api_2_15_0_2;
+
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
+    blaze-markup = self.blaze-markup_0_6_2_0;
+    blaze-html = self.blaze-html_0_7_0_3;
+    haskeline = self.haskeline_0_7_2_1;
+    lens = self.lens_4_7;
+    mtl = super.mtl_2_2_1;
     transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
-    haskeline = self.haskeline_0_7_1_3;
-    mtl = super.mtl_2_2_1;
   })) (drv: {
-    jailbreak = true;           # idris is scared of lens 4.7
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
   # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8_1 = dontDistribute super.HStringTemplate_0_8_1;
+  HStringTemplate_0_8_3 = dontDistribute super.HStringTemplate_0_8_3;
 
   # This is part of bytestring in our compiler.
   bytestring-builder = dontHaddock super.bytestring-builder;
@@ -68,17 +76,20 @@ self: super: {
   command-qq = dontCheck super.command-qq;
 
   # Doesn't support GHC < 7.10.x.
+  bound-gen = dontDistribute super.bound-gen;
   ghc-exactprint = dontDistribute super.ghc-exactprint;
+  ghc-typelits-natnormalise = dontDistribute super.ghc-typelits-natnormalise;
 
   # Newer versions require transformers 0.4.x.
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
 
   # Need binary >= 0.7.2, but our compiler has only 0.7.1.0.
-  hosc = dontDistribute super.hosc;
-  tidal-midi = dontDistribute super.tidal-midi;
+  hosc = super.hosc.overrideScope (self: super: { binary = self.binary_0_7_4_0; });
+  tidal-midi = super.tidal-midi.overrideScope (self: super: { binary = self.binary_0_7_4_0; });
 
   # These packages need mtl 2.2.x directly or indirectly via dependencies.
+  amazonka = markBroken super.amazonka;
   apiary-purescript = markBroken super.apiary-purescript;
   clac = dontDistribute super.clac;
   highlighter2 = markBroken super.highlighter2;
@@ -98,44 +109,3 @@ self: super: {
   incremental-computing = dontCheck super.incremental-computing;
 
 }
-
-// # packages relating to amazonka
-
-(let
-  Cabal = self.Cabal_1_18_1_6.overrideScope amazonkaEnv;
-  amazonkaEnv = self: super: {
-    mkDerivation = drv: super.mkDerivation (drv // {
-      doCheck = false;
-      hyperlinkSource = false;
-      buildTools = (drv.buildTools or []) ++ [ (
-        if pkgs.stdenv.lib.elem drv.pname [
-          "Cabal"
-          "time"
-          "unix"
-          "directory"
-          "process"
-          "jailbreak-cabal"
-        ] then null else Cabal
-      ) ];
-    });
-    mtl = self.mtl_2_2_1;
-    transformers = self.transformers_0_4_3_0;
-    transformers-compat = disableCabalFlag super.transformers-compat "three";
-    hscolour = super.hscolour;
-    time = self.time_1_5_0_1;
-    unix = self.unix_2_7_1_0;
-    directory = self.directory_1_2_1_0;
-    process = overrideCabal self.process_1_2_2_0 (drv: { coreSetup = true; });
-    inherit amazonka-core amazonkaEnv amazonka amazonka-cloudwatch amazonka-glacier amazonka-ecs;
-  };
-  amazonka = super.amazonka.overrideScope amazonkaEnv;
-  amazonka-cloudwatch = super.amazonka-cloudwatch.overrideScope amazonkaEnv;
-  amazonka-core = super.amazonka-core.overrideScope amazonkaEnv;
-  amazonka-ecs = super.amazonka-ecs.overrideScope amazonkaEnv;
-  amazonka-glacier = super.amazonka-glacier.overrideScope amazonkaEnv;
-  amazonka-kms = super.amazonka-kms.overrideScope amazonkaEnv;
-  amazonka-ssm = super.amazonka-ssm.overrideScope amazonkaEnv;
-in {
-  inherit amazonkaEnv;
-  inherit amazonka amazonka-cloudwatch amazonka-core amazonka-ecs amazonka-kms amazonka-glacier amazonka-ssm;
-})

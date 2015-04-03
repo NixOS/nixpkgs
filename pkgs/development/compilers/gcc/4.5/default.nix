@@ -358,7 +358,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langVhdl
-      enableMultilib version; };
+      enableMultilib version; isGNU = true; };
 
   enableParallelBuilding = !langAda;
 

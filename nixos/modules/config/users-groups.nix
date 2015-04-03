@@ -110,7 +110,7 @@ let
 
       shell = mkOption {
         type = types.str;
-        default = "/run/current-system/sw/sbin/nologin";
+        default = "/run/current-system/sw/bin/nologin";
         description = "The path to the user's shell.";
       };
 

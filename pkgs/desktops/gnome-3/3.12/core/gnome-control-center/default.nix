@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patches = [ ./search_providers_dir.patch ];
+  patches = [ ./search_providers_dir.patch ./vpn_plugins_path.patch ];
 
   meta = with stdenv.lib; {
     description = "Single sign-on framework for GNOME";

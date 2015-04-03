@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap }:
+{ stdenv, fetchurl, libpcap, gnumake3 }:
 
 stdenv.mkDerivation rec {
   name = "ngrep-1.45";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "19rg8339z5wscw877mz0422wbsadds3mnfsvqx3ihy58glrxv9mf";
   };
 
-  buildInputs = [ libpcap ];
+  buildInputs = [ gnumake3 libpcap ];
 
   preConfigure = ''
     # Fix broken test for BPF header file

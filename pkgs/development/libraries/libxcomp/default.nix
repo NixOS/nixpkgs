@@ -1,18 +1,17 @@
-{ stdenv, fetchgit, autoconf, libjpeg, libpng12, libX11, zlib }:
+{ stdenv, fetchurl, autoconf, libjpeg, libpng12, libX11, zlib }:
 
-let version = "3.5.0-2015-02-18"; in
+let version = "3.5.0.31"; in
 stdenv.mkDerivation {
   name = "libxcomp-${version}";
 
-  src = fetchgit {
-    url = git://code.x2go.org/nx-libs.git;
-    rev = "2b2a02f93f552a38de8f72a971fa3f3ff42b3298";
-    sha256 = "11n7dv1cn9icjgyxmsbac115vmbaar47cmp8k76vd516f2x41dw9";
+  src = fetchurl {
+    url = "http://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-full.tar.gz";
+    sha256 = "0a31508wyfyblf6plag2djr4spra5kylcmgg99h83c60ylxxnc11";
   };
 
   meta = with stdenv.lib; {
     description = "NX compression library";
-    homepage = "http://code.x2go.org/gitweb?p=nx-libs.git;a=summary";
+    homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
     license = with licenses; gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];

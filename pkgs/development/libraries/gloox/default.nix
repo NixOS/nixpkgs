@@ -9,14 +9,14 @@ assert sslSupport -> openssl != null;
 assert idnSupport -> libidn != null;
 
 let
-  version = "1.0.12";
+  version = "1.0.13";
 in
 stdenv.mkDerivation rec {
   name = "gloox-${version}";
 
   src = fetchurl {
     url = "http://camaya.net/download/gloox-${version}.tar.bz2";
-    sha256 = "1aa3pkg8yz6glg2273yl7310nkx1q31wkwbmmxwk3059k0p5l4k7";
+    sha256 = "12payqyx1ly8nm3qn24bj0kyy9d08sixnjqxw7fn6rbwr7m1x7sd";
   };
 
   buildInputs = [ ]

@@ -124,9 +124,7 @@ in {
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [
-        cfg.package
-      ] ++ lib.optionals enable32BitAlsaPlugins [ pkgs_i686.pulseaudio ];
+      environment.systemPackages = [ cfg.package ];
 
       environment.etc = singleton {
         target = "asound.conf";

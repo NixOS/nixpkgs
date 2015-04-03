@@ -26,7 +26,7 @@ let
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
     HideUsers=${concatStringsSep "," dmcfg.hiddenUsers}
-    HideShells=/run/current-system/sw/sbin/nologin
+    HideShells=/run/current-system/sw/bin/nologin
 
     [XDisplay]
     MinimumVT=${toString xcfg.tty}

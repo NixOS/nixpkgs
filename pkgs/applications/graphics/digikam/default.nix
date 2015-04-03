@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
-lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, libjpeg, libtiff,
-liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost,
-shared_desktop_ontologies, marble, mysql, libpgf }:
+{ stdenv, fetchurl, automoc4, boost, shared_desktop_ontologies, cmake
+, eigen, lcms, gettext, jasper, kdelibs, kdepimlibs, lensfun
+, libgphoto2, libjpeg, libkdcraw, libkexiv2, libkipi, libpgf, libtiff
+, libusb1, liblqr1, marble, mysql, opencv, phonon, pkgconfig, qca2
+, qimageblitz, qjson, qt4, soprano
+}:
 
 stdenv.mkDerivation rec {
   name = "digikam-4.6.0";
@@ -13,20 +15,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake automoc4 pkgconfig ];
 
-  buildInputs = [ qt4 kdelibs phonon qimageblitz qca2 eigen lcms libjpeg libtiff
-    jasper libgphoto2 kdepimlibs gettext soprano liblqr1 lensfun qjson libkdcraw
-    opencv libkexiv2 libkipi boost shared_desktop_ontologies marble mysql libpgf ];
+  buildInputs = [
+    boost eigen gettext jasper kdelibs kdepimlibs lcms lensfun
+    libgphoto2 libjpeg libkdcraw libkexiv2 libkipi liblqr1 libpgf
+    libtiff marble mysql.lib opencv phonon qca2 qimageblitz qjson qt4
+    shared_desktop_ontologies soprano
+  ];
 
   # Make digikam find some FindXXXX.cmake
   KDEDIRS="${marble}:${qjson}";
+
+  # Help digiKam find libusb, otherwise gphoto2 support is disabled
+  cmakeFlags = "-DLIBUSB_LIBRARIES=${libusb1}/lib -DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0";
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Photo Management Program";
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl2;
     homepage = http://www.digikam.org;
-    maintainers = with stdenv.lib.maintainers; [ viric urkud ];
+    maintainers = with stdenv.lib.maintainers; [ goibhniu viric urkud ];
     inherit (kdelibs.meta) platforms;
   };
 }

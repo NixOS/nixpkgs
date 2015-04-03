@@ -1,18 +1,19 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
 stdenv.mkDerivation rec {
-  name = "dhcpcd-6.6.7";
+  name = "dhcpcd-6.8.1";
 
   src = fetchurl {
     url = "mirror://roy/dhcpcd/${name}.tar.bz2";
-    sha256 = "1aydp26xsn9y6acg5zmcz6pp6parywnmhcvp9ipf54vbac53mya3";
+    sha256 = "10mg68yxvl4kn1ya8ziifg2dm71c10r12sg7y7k1k0vafazhrdi7";
   };
-
-  patches = [ /* ./lxc_ro_promote_secondaries.patch */ ];
 
   buildInputs = [ pkgconfig udev ];
 
-  configureFlags = "--sysconfdir=/etc";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
 
   makeFlags = "PREFIX=\${out}";
 

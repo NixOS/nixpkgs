@@ -1,6 +1,6 @@
 { fetchurl, stdenv, python, bash }:
 
-let 
+let
   version = "22.2.4";
 in
   stdenv.mkDerivation rec {
@@ -23,6 +23,8 @@ in
       cp -v $out/share/autojump/autojump.bash "$out/etc/bash_completion.d"
 
       # FIXME: What's the right place for `autojump.zsh'?
+      # This can be used as a workaround in .zshrc:
+      # . $HOME/.nix-profile/share/autojump/autojump.zsh
     '';
 
     meta = {

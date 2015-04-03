@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ''
       substituteInPlace src/main.c --replace \
         "@path@" \
-        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin"
+        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/bin"
     '';
 
   nativeBuildInputs = [ pkgconfig intltool ];

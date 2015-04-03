@@ -2,14 +2,14 @@
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.22.0";
+  version = "0.32.0";
   name = "folly-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "12p7vbx73jmhf772nbqvd8imw4ihpi16cw6cwxq459r7qds4n0ca";
+    sha256 = "0yviih6b220bv6d1rg4lx1hqprqapnzfv4rv64cwjxbmz49ckmzh";
   };
 
   buildInputs = [ libiberty boost.lib libevent double_conversion glog google-gflags openssl ];
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "A YAML parser and emitter for C++";
-    homepage = https://code.google.com/p/yaml-cpp/;
+    description = "An open-source C++ library developed and used at Facebook";
+    homepage = https://github.com/facebook/folly;
     license = licenses.mit;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [ "x86_64-linux" ];

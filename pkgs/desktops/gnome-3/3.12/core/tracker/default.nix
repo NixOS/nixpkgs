@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace src/libtracker-sparql/Makefile.am --replace "shared-library=" "shared-library=$out/lib/"
+    sed -i -e 's,glib/poppler.h,poppler.h,' src/tracker-extract/tracker-extract-pdf.c
   '';
   
   buildInputs = [ vala pkgconfig gtk3 glib intltool itstool libxml2

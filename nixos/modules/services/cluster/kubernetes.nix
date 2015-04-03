@@ -44,6 +44,12 @@ in {
       type = types.path;
     };
 
+    dockerCfg = mkOption {
+      description = "Kubernetes contents of dockercfg file.";
+      default = "";
+      type = types.lines;
+    };
+
     apiserver = {
       enable = mkOption {
         description = "Whether to enable kubernetes apiserver.";
@@ -217,13 +223,13 @@ in {
       };
 
       machines = mkOption {
-        description = "Kubernetes apiserver list of machines to schedule to schedule onto";
+        description = "Kubernetes controller list of machines to schedule to schedule onto";
         default = [];
         type = types.listOf types.str;
       };
 
       extraOpts = mkOption {
-        description = "Kubernetes scheduler extra command line options.";
+        description = "Kubernetes controller extra command line options.";
         default = "";
         type = types.str;
       };
@@ -258,6 +264,30 @@ in {
         description = "Whether to allow kubernetes containers to request privileged mode.";
         default = false;
         type = types.bool;
+      };
+
+      apiServers = mkOption {
+        description = "Kubernetes kubelet list of Kubernetes API servers for publishing events, and reading pods and services.";
+        default = ["${cfg.apiserver.address}:${toString cfg.apiserver.port}"];
+        type = types.listOf types.str;
+      };
+
+      cadvisorPort = mkOption {
+        description = "Kubernetes kubelet local cadvisor port.";
+        default = config.services.cadvisor.port;
+        type = types.int;
+      };
+
+      clusterDns = mkOption {
+        description = "Use alternative dns.";
+        default = "";
+        type = types.str;
+      };
+
+      clusterDomain = mkOption {
+        description = "Use alternative domain.";
+        default = "";
+        type = types.str;
       };
 
       extraOpts = mkOption {
@@ -295,6 +325,7 @@ in {
       systemd.services.kubernetes-apiserver = {
         description = "Kubernetes Api Server";
         wantedBy = [ "multi-user.target" ];
+        requires = ["kubernetes-setup.service"];
         after = [ "network-interfaces.target" "etcd.service" ];
         serviceConfig = {
           ExecStart = let
@@ -306,26 +337,25 @@ in {
                 (concatImapStringsSep "\n" (i: v: v + "," + (toString i))
                     (mapAttrsToList (name: token: token + "," + name) cfg.apiserver.tokenAuth));
           in ''${cfg.package}/bin/kube-apiserver \
-            -etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
-            -address=${cfg.apiserver.address} \
-            -port=${toString cfg.apiserver.port} \
-            -read_only_port=${toString cfg.apiserver.readOnlyPort} \
-            -public_address_override=${cfg.apiserver.publicAddress} \
-            -allow_privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
+            --etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
+            --address=${cfg.apiserver.address} \
+            --port=${toString cfg.apiserver.port} \
+            --read_only_port=${toString cfg.apiserver.readOnlyPort} \
+            --public_address_override=${cfg.apiserver.publicAddress} \
+            --allow_privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
             ${optionalString (cfg.apiserver.tlsCertFile!="")
-              "-tls_cert_file=${cfg.apiserver.tlsCertFile}"} \
+              "--tls_cert_file=${cfg.apiserver.tlsCertFile}"} \
             ${optionalString (cfg.apiserver.tlsPrivateKeyFile!="")
-              "-tls_private_key_file=${cfg.apiserver.tlsPrivateKeyFile}"} \
+              "--tls_private_key_file=${cfg.apiserver.tlsPrivateKeyFile}"} \
             ${optionalString (cfg.apiserver.tokenAuth!=[])
-              "-token_auth_file=${tokenAuthFile}"} \
-            -authorization_mode=${cfg.apiserver.authorizationMode} \
+              "--token_auth_file=${tokenAuthFile}"} \
+            --authorization_mode=${cfg.apiserver.authorizationMode} \
             ${optionalString (cfg.apiserver.authorizationMode == "ABAC")
-              "-authorization_policy_file=${authorizationPolicyFile}"} \
-            ${optionalString (cfg.apiserver.tlsCertFile!="" && cfg.apiserver.tlsCertFile!="")
-              "-secure_port=${toString cfg.apiserver.securePort}"} \
-            -portal_net=${cfg.apiserver.portalNet} \
-            -logtostderr=true \
-            ${optionalString cfg.verbose "-v=6 -log_flush_frequency=1s"} \
+              "--authorization_policy_file=${authorizationPolicyFile}"} \
+            --secure_port=${toString cfg.apiserver.securePort} \
+            --portal_net=${cfg.apiserver.portalNet} \
+            --logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.apiserver.extraOpts}
           '';
           User = "kubernetes";
@@ -345,11 +375,11 @@ in {
         after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-scheduler \
-            -address=${cfg.scheduler.address} \
-            -port=${toString cfg.scheduler.port} \
-            -master=${cfg.scheduler.master} \
-            -logtostderr=true \
-            ${optionalString cfg.verbose "-v=6 -log_flush_frequency=1s"} \
+            --address=${cfg.scheduler.address} \
+            --port=${toString cfg.scheduler.port} \
+            --master=${cfg.scheduler.master} \
+            --logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.scheduler.extraOpts}
           '';
           User = "kubernetes";
@@ -364,13 +394,12 @@ in {
         after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-controller-manager \
-            -address=${cfg.controllerManager.address} \
-            -port=${toString cfg.controllerManager.port} \
-            -master=${cfg.controllerManager.master} \
-            ${optionalString (cfg.controllerManager.machines != [])
-                "-machines=${concatStringsSep "," cfg.controllerManager.machines}"} \
-            -logtostderr=true \
-            ${optionalString cfg.verbose "-v=6 -log_flush_frequency=1s"} \
+            --address=${cfg.controllerManager.address} \
+            --port=${toString cfg.controllerManager.port} \
+            --master=${cfg.controllerManager.master} \
+            --machines=${concatStringsSep "," cfg.controllerManager.machines} \
+            --logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.controllerManager.extraOpts}
           '';
           User = "kubernetes";
@@ -382,23 +411,28 @@ in {
       systemd.services.kubernetes-kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "multi-user.target" ];
+        requires = ["kubernetes-setup.service"];
         after = [ "network-interfaces.target" "etcd.service" "docker.service" ];
-        serviceConfig = {
-          ExecStart = ''${cfg.package}/bin/kubelet \
-            -etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
-            -address=${cfg.kubelet.address} \
-            -port=${toString cfg.kubelet.port} \
-            -hostname_override=${cfg.kubelet.hostname} \
-            -allow_privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
-            -root_dir=${cfg.dataDir} \
-            -logtostderr=true \
-            ${optionalString cfg.verbose "-v=6 -log_flush_frequency=1s"} \
+        script = ''
+          export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
+          exec ${cfg.package}/bin/kubelet \
+            --etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
+            --api_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
+            --address=${cfg.kubelet.address} \
+            --port=${toString cfg.kubelet.port} \
+            --hostname_override=${cfg.kubelet.hostname} \
+            --allow_privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
+            --root_dir=${cfg.dataDir} \
+            --cadvisor_port=${toString cfg.kubelet.cadvisorPort} \
+            ${optionalString (cfg.kubelet.clusterDns != "")
+                ''--cluster_dns=${cfg.kubelet.clusterDns}''} \
+            ${optionalString (cfg.kubelet.clusterDomain != "")
+                ''--cluster_domain=${cfg.kubelet.clusterDomain}''} \
+            --logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
           '';
-          User = "kubernetes";
-          PermissionsStartOnly = true;
-          WorkingDirectory = cfg.dataDir;
-        };
+        serviceConfig.WorkingDirectory = cfg.dataDir;
       };
     })
 
@@ -409,10 +443,10 @@ in {
         after = [ "network-interfaces.target" "etcd.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-proxy \
-            -etcd_servers=${concatMapStringsSep "," (s: "http://${s}") cfg.etcdServers} \
-            -bind_address=${cfg.proxy.address} \
-            -logtostderr=true \
-            ${optionalString cfg.verbose "-v=6 -log_flush_frequency=1s"} \
+            --etcd_servers=${concatMapStringsSep "," (s: "http://${s}") cfg.etcdServers} \
+            --bind_address=${cfg.proxy.address} \
+            --logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.proxy.extraOpts}
           '';
         };
@@ -427,6 +461,8 @@ in {
 
     (mkIf (any (el: el == "node") cfg.roles) {
       virtualisation.docker.enable = mkDefault true;
+      services.cadvisor.enable = mkDefault true;
+      services.cadvisor.port = mkDefault 4194;
       services.kubernetes.kubelet.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
     })
@@ -442,6 +478,16 @@ in {
         cfg.kubelet.enable ||
         cfg.proxy.enable
     ) {
+      systemd.services.kubernetes-setup = {
+        description = "Kubernetes setup.";
+        serviceConfig.Type = "oneshot";
+        script = ''
+          mkdir -p /var/run/kubernetes
+          chown kubernetes /var/run/kubernetes
+          ln -fs ${pkgs.writeText "kubernetes-dockercfg" cfg.dockerCfg} /var/run/kubernetes/.dockercfg
+        '';
+      };
+
       services.kubernetes.package = mkDefault pkgs.kubernetes;
 
       environment.systemPackages = [ cfg.package ];

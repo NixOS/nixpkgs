@@ -296,7 +296,7 @@ rec {
   pluginnames2Nix = {name, namefiles} : vim_configurable.customize {
     inherit name;
     vimrcConfig.vam.knownPlugins = vimPlugins;
-    vimrcConfig.vam.pluginDictionaries = ["github:MarcWeber/vim-addon-vim2nix"];
+    vimrcConfig.vam.pluginDictionaries = ["github:JagaJaga/vim-addon-vim2nix"]; # Using fork until patch is accepted by upstream
     vimrcConfig.customRC = ''
       " Yes - this is impure and will create the cache file and checkout vim-pi
       " into ~/.vim/vim-addons

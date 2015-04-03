@@ -1,38 +1,63 @@
-{ stdenv, autoreconfHook, fetchurl, libcap, apparmor, perl, docbook2x
-, docbook_xml_dtd_45, gnutls, pkgconfig
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, docbook2x
+, docbook_xml_dtd_45, systemd
+, libapparmor ? null, gnutls ? null, libseccomp ? null, cgmanager ? null
+, libnih ? null, dbus ? null, libcap ? null
 }:
 
+let
+  enableCgmanager = cgmanager != null && libnih != null && dbus != null;
+in
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-1.0.7";
+  name = "lxc-1.1.1";
 
-  src = fetchurl {
-    url = "http://github.com/lxc/lxc/archive/${name}.tar.gz";
-    sha256 = "1wm8n1b8j3x37757h2yyz53k3b6r2r301fmkviqf4xp0jaav1cd0";
+  src = fetchFromGitHub {
+    owner = "lxc";
+    repo = "lxc";
+    rev = name;
+    sha256 = "04zpznd364862y3dwn97klvwfw9i2b6n1lh4fkci0z74c6z9svql";
   };
 
-  buildInputs = [ libcap apparmor perl docbook2x gnutls autoreconfHook pkgconfig ];
+  buildInputs = [
+    autoreconfHook pkgconfig perl docbook2x systemd
+    libapparmor gnutls libseccomp cgmanager libnih dbus libcap
+  ];
 
-  patches = [ ./install-localstatedir-in-store.patch ./support-db2x.patch ];
+  patches = [ ./support-db2x.patch ];
 
-  preConfigure = ''
-    export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml
-    substituteInPlace doc/rootfs/Makefile.am --replace '@LXCROOTFSMOUNT@' '$out/lib/lxc/rootfs'
-    substituteInPlace configure.ac --replace '$sysconfdir/' '/etc/'
-    substituteInPlace configure.ac --replace '$${sysconfdir}/' '/etc/'
-  '';
+  XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
   configureFlags = [
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
     "--with-rootfs-path=/var/lib/lxc/rootfs"
+  ] ++ optional (libapparmor != null) "--enable-apparmor"
+    ++ optional (gnutls != null) "--enable-gnutls"
+    ++ optional (libseccomp != null) "--enable-seccomp"
+    ++ optional (enableCgmanager) "--enable-cgmanager"
+    ++ optional (libcap != null) "--enable-capabilities"
+    ++ [
     "--enable-doc"
     "--enable-tests"
-    "--enable-apparmor"
   ];
+
+  installFlags = [ "DESTDIR=\${out}" ];
+
+  postInstall = ''
+    mv $out/$out/* $out
+    DIR=$out/$out
+    while rmdir $DIR 2>/dev/null; do
+      DIR="$(dirname "$DIR")"
+    done
+
+    # Remove the unneeded var/lib directories
+    rm -rf $out/var
+  '';
 
   meta = {
     homepage = "http://lxc.sourceforge.net";
     description = "userspace tools for Linux Containers, a lightweight virtualization system";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    license = licenses.lgpl21Plus;
 
     longDescription = ''
       LXC is the userspace control package for Linux Containers, a
@@ -42,7 +67,7 @@ stdenv.mkDerivation rec {
       mechanisms to Linux’s existing process management infrastructure.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ simons wkennington ];
   };
 }

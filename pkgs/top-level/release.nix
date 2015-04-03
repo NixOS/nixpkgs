@@ -47,28 +47,18 @@ let
             ];
         };
 
-    } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
+    } // (mapTestOn ((packagePlatforms pkgs) // rec {
 
       abcde = linux;
-      apacheHttpd = linux;
       aspell = all;
-      at = linux;
       atlas = linux;
-      autoconf = all;
-      automake = all;
-      bash = all;
-      bashInteractive = all;
       bazaar = linux; # first let sqlite3 work on darwin
       binutils = linux;
       bind = linux;
       bvi = all;
       castle_combat = linux;
       cdrkit = linux;
-      cksfv = all;
       classpath = linux;
-      coreutils = all;
-      cron = linux;
-      cvs = linux;
       ddrescue = linux;
       dhcp = linux;
       dico = linux;
@@ -91,13 +81,11 @@ let
       eprover = linux;
       expect = linux;
       exult = linux;
-      findutils = all;
       flex = all;
       fontforge = linux;
       gajim = linux;
       gawk = all;
       gcc = linux;
-      gcc34 = linux;
       gcc44 = linux;
       gcj = linux;
       ghostscript = linux;
@@ -113,29 +101,16 @@ let
       gnutls = linux;
       gogoclient = linux;
       gphoto2 = linux;
-      gpm = linux;
       gpscorrelate = linux;
       gqview = gtkSupported;
-      graphviz = all;
-      grub = linux;
       gsl = linux;
       guile = linux;  # tests fail on Cygwin
-      gzip = all;
-      hddtemp = linux;
-      host = linux;
       html-tidy = all;
-      iana_etc = linux;
       icewm = linux;
-      ifplugd = linux;
       inkscape = linux;
       irssi = linux;
-      jfsutils = linux;
       jnettop = linux;
-      jwhois = linux;
-      kbd = linux;
       keen4 = ["i686-linux"];
-    #  klibc = linux;
-      less = all;
       lftp = all;
       libarchive = linux;
       libtool = all;
@@ -155,11 +130,9 @@ let
       mercurial = unix;
       mercurialFull = linux;
       mesa = mesaPlatforms;
-      mingetty = linux;
       mk = linux;
       mktemp = all;
       mod_python = linux;
-      module_init_tools = linux;
       mupen64plus = linux;
       mutt = linux;
       mysql = linux;
@@ -171,19 +144,11 @@ let
       nss_ldap = linux;
       nssmdns = linux;
       ocaml = linux;
-      pam_console = linux;
-      pam_login = linux;
-      pan = gtkSupported;
-      par2cmdline = all;
       pciutils = linux;
       pdf2xml = all;
-      perl = all;
       php = linux;
-      pinentry = linux;
       pltScheme = linux;
       pmccabe = linux;
-      portmap = linux;
-      postgresql = all;
       ppl = all;
       procps = linux;
       pthreadmanpages = linux;
@@ -194,13 +159,8 @@ let
       qt3 = linux;
       quake3demo = linux;
       reiserfsprogs = linux;
-      rlwrap = all;
-      rogue = all;
-      rpm = linux;
-      rsync = linux;
       rubber = allBut cygwin;
       rxvt_unicode = linux;
-      screen = linux ++ darwin;
       scrot = linux;
       sdparm = linux;
       seccure = linux;
@@ -211,32 +171,16 @@ let
       ssmtp = linux;
       stdenv = all;
       stlport = linux;
-      su = linux;
-      sudo = linux;
       superTuxKart = linux;
       swig = linux;
-      sysklogd = linux;
-      syslinux = ["i686-linux"];
-      sysvinit = linux;
-      sysvtools = linux;
       tahoelafs = linux;
       tangogps = linux;
       tcl = linux;
-      tcpdump = linux;
       teeworlds = linux;
-      tetex = linux;
-      texLive = linux;
-      texLiveBeamer = linux;
-      texLiveExtra = linux;
       tightvnc = linux;
       time = linux;
       tinycc = linux;
       uae = linux;
-      unrar = linux;
-      upstart = linux;
-      usbutils = linux;
-      utillinux = linux;
-      utillinuxCurses = linux;
       viking = linux;
       vice = linux;
       vim = linux;
@@ -246,7 +190,6 @@ let
       vsftpd = linux;
       w3m = all;
       weechat = linux;
-      which = all;
       wicd = linux;
       wine = ["i686-linux"];
       wirelesstools = linux;
@@ -272,7 +215,7 @@ let
         gnome_vfs = linux;
       };
 
-      haskell-ng.compiler = packagesWithMetaPlatform pkgs.haskell-ng.compiler;
+      haskell-ng.compiler = packagePlatforms pkgs.haskell-ng.compiler;
 
       strategoPackages = {
         sdf = linux;

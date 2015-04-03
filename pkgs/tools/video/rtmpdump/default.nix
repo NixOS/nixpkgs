@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ ''prefix=$(out)'' ]
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
-    ++ optional opensslSupport "CRYPTO=OPENSSL";
+    ++ optional opensslSupport "CRYPTO=OPENSSL"
+    ++ optional stdenv.isDarwin "SYS=darwin"
+    ++ optional (stdenv.cc.cc.isClang or false) "CC=clang";
 
   buildInputs = [ zlib ]
     ++ optional gnutlsSupport gnutls
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Toolkit for RTMP streams";
     homepage    = http://rtmpdump.mplayerhq.hu/;
     license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel viric ];
   };
 }

@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   patches = [ ./Makefile.in.patch ];
 
+  dontStrip = true;
+
   meta = with stdenv.lib; {
     homepage = http://www.mono-project.com/docs/gui/gtksharp/;
     description = "A .NET language binding for assorted GNOME libraries";

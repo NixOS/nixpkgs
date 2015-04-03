@@ -705,11 +705,11 @@ let
   }) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (mkDerivation "libXfont" {
-    name = "libXfont-1.5.0";
+    name = "libXfont-1.5.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont-1.5.0.tar.bz2;
-      sha256 = "0py2c498lrq6wrj9al6nj57v2ypid9cz0zzhc0hjndgrmp254g1s";
+      url = mirror://xorg/individual/lib/libXfont-1.5.1.tar.bz2;
+      sha256 = "b70898527c73f9758f551bbab612af611b8a0962202829568d94f3edf4d86098";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};

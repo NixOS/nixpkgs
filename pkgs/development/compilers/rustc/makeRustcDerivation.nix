@@ -132,7 +132,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];
 
-  enableParallelBuilding = false; # disabled due to rust-lang/rust#16305
+  enableParallelBuilding = true;
 
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 

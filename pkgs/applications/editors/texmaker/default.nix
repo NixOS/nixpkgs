@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, popplerQt4, zlib, pkgconfig, poppler}:
+{ stdenv, fetchurl, qt4, poppler_qt4, zlib, pkgconfig, poppler}:
 
 stdenv.mkDerivation rec {
   pname = "texmaker";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h5rxdq6f05wk3lnlw96fxwrb14k77cx1mwy648127h2c8nsgw4z";
   };
 
-  buildInputs = [ qt4 popplerQt4 zlib ];
+  buildInputs = [ qt4 poppler_qt4 zlib ];
 
   nativeBuildInputs = [ pkgconfig poppler ];
 

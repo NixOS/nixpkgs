@@ -3,10 +3,10 @@ let
   s = # Generated upstream information
   rec {
     baseName="eudev";
-    version="2.1.1";
+    version = "3.0";
     name="${baseName}-${version}";
     url="http://dev.gentoo.org/~blueness/eudev/eudev-${version}.tar.gz";
-    sha256="0shf5vqiz9fdxl95aa1a8vh0xjxwim3psc39wr2xr8lnahf11vva";
+    sha256 = "0afva1vh3lwhw9bryh41dxg82kfnxj1ifa91p3gjwffc2fpqmnvl";
   };
   buildInputs = [
     glib pkgconfig gperf utillinux

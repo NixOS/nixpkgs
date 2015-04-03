@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-0.9";
+  name = "libvdpau-1.1";
 
   src = fetchurl {
     url = "http://people.freedesktop.org/~aplattner/vdpau/${name}.tar.gz";
-    sha256 = "0vhfkjqghfva3zjif04w7pdp84g08c8xnwir3ah4b99m10a5fag3";
+    sha256 = "069r4qc934xw3z20hpmg0gx0al7fl1kdik1r46x2dgr0ya1yg95f";
   };
 
   buildInputs = with xorg; [ pkgconfig dri2proto libXext ];

@@ -183,6 +183,9 @@ in {
       { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";
       }
+      { source = "${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
+        target = "NetworkManager/VPN/nm-l2tp-service.name";
+      }
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
@@ -197,6 +200,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        networkmanager_l2tp
         modemmanager
         ];
 
@@ -240,6 +244,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        networkmanager_l2tp
         modemmanager
         ];
 

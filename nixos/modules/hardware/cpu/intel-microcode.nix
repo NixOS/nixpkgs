@@ -22,8 +22,7 @@ with lib;
   ###### implementation
 
   config = mkIf config.hardware.cpu.intel.updateMicrocode {
-    hardware.firmware = [ "${pkgs.microcodeIntel}/lib/firmware" ];
-    boot.kernelModules = [ "microcode" ];
+    boot.initrd.prepend = [ "${pkgs.microcodeIntel}/intel-ucode.img" ];
   };
 
 }

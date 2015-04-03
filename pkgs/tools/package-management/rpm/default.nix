@@ -15,13 +15,14 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${elfutils}/include";
 
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
-  
+
   configureFlags = "--with-external-db --without-lua --enable-python";
 
   meta = with stdenv.lib; {
     homepage = http://www.rpm.org/;
     license = licenses.gpl2;
     description = "The RPM Package Manager";
-    maintainers = with maintainers; [ mornfall ];
+    maintainers = [ maintainers.mornfall ];
+    platforms = platforms.linux;
   };
 }

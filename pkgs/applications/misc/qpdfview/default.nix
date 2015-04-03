@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, pkgconfig, popplerQt4, djvulibre, libspectre, cups
+{stdenv, fetchurl, qt4, pkgconfig, poppler_qt4, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let
@@ -11,7 +11,7 @@ let
     sha256 = "15d88xzqvrcp9szmz8d1lj65yrdx90j6fp78gia5c8kra2z8bik9";
   };
   buildInputs = [
-    qt4 popplerQt4 pkgconfig djvulibre libspectre cups file ghostscript
+    qt4 poppler_qt4 pkgconfig djvulibre libspectre cups file ghostscript
   ];
 in
 stdenv.mkDerivation {

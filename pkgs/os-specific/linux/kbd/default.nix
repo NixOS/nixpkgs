@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = ftp://ftp.altlinux.org/pub/people/legion/kbd/;
     description = "Linux keyboard utilities and keyboard maps";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

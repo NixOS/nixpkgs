@@ -229,7 +229,7 @@ index 70a5918..1926e52 100644
  
 -        cmdline[i++] = "/sbin/fsck";
 -        cmdline[i++] =  arg_repair;
-+        cmdline[i++] = "/run/current-system/sw/sbin/fsck";
++        cmdline[i++] = "/run/current-system/sw/bin/fsck";
          cmdline[i++] = "-T";
  
          /*

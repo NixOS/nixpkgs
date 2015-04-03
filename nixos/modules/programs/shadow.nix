@@ -100,7 +100,7 @@ in
         chgpasswd = { rootOK = true; };
       };
 
-    security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp"
+    security.setuidPrograms = [ "passwd" "chfn" "su" "sg" "newgrp"
       "newuidmap" "newgidmap"  # new in shadow 4.2.x
       ];
 

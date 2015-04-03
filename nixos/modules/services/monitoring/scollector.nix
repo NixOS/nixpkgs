@@ -20,6 +20,10 @@ let
           cfg.collectors)}
     '';
 
+  cmdLineOpts = concatStringsSep " " (
+    [ "-h=${cfg.bosunHost}" "-c=${collectors}" ] ++ cfg.extraOpts
+  );
+
 in {
 
   options = {
@@ -79,6 +83,15 @@ in {
         '';
       };
 
+      extraOpts = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "-d" ];
+        description = ''
+          Extra scollector command line options
+        '';
+      };
+
     };
 
   };
@@ -95,9 +108,7 @@ in {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = ''
-          ${cfg.package}/bin/scollector -h=${cfg.bosunHost} -c=${collectors}
-        '';
+        ExecStart = "${cfg.package}/bin/scollector ${cmdLineOpts}";
       };
     };
 

@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, automake, m4, pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper }:
+{ stdenv, fetchurl, python, cairomm, sparsehash, pycairo, automake, m4,
+pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper,
+gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
   version = "2.2.36";
@@ -9,6 +11,7 @@ stdenv.mkDerivation rec {
     homepage    = http://graph-tool.skewed.de/;
     license     = licenses.gpl3;
     platforms   = platforms.all;
+    maintainer  = [ stdenv.lib.maintainers.joelmo ];
   };
 
   src = fetchurl {
@@ -20,9 +23,26 @@ stdenv.mkDerivation rec {
     configureFlags="--with-python-module-path=$out/${python.sitePackages}"
   '';
 
-  buildInputs = [ python cairomm pycairo sparsehash automake m4 pkgconfig makeWrapper boost expat scipy numpy cgal lndir gmp mpfr ];
+  buildInputs = [ automake m4 pkgconfig makeWrapper ];
 
-  propagatedBuildInputs = [ numpy ];
+  propagatedBuildInputs = [
+    boost
+    cgal
+    expat
+    gmp
+    mpfr
+    python
+    scipy
+    # optional
+    sparsehash
+    # drawing
+    cairomm
+    gobjectIntrospection
+    gtk3
+    pycairo
+    matplotlib
+    pygobject3
+  ];
 
   enableParallelBuilding = false;
 }

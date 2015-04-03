@@ -346,7 +346,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need mke2fs in the initrd.
-        cp -vf --remove-destination ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
+        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/mke2fs
       '';
 
     boot.initrd.postDeviceCommands =
