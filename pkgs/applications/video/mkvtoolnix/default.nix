@@ -18,12 +18,12 @@
 assert withGUI -> wxGTK != null;
 
 stdenv.mkDerivation rec {
-  version = "7.7.0";
+  version = "7.8.0";
   name = "mkvtoolnix-${version}";
 
   src = fetchurl {
     url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
-    sha256 = "0a602d5jvq0ap4pa64p80al8nmyp37a380bi5i4sqdpvp298h78r";
+    sha256 = "0m7y9115bkfsm95hv2nq0hnd9w73jymsm071jm798w11vdskm8af";
   };
 
   buildInputs = [
