@@ -127,6 +127,12 @@ stdenv.mkDerivation rec {
 
   stripAllList = [ "bin" "sbin" ];
 
+  postInstall = ''
+    # Remove unecessary components
+    rm -r $out/{lib,share}/ctdb-tests
+    rm $out/bin/ctdb_run{_cluster,}_tests
+  '';
+
   postFixup = ''
     export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
     read -r -d "" SCRIPT << EOF
