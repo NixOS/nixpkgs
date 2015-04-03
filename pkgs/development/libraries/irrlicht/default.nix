@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0v31l3k0fzy7isdsx2sh0baaixzlml1m7vgz6cd0015d9f5n99vl";
   };
 
-  patchPhase = ''
+  patches = [ ./irrlicht-1.8.1-mesa-10.x.patch ];
+
+  postPatch = ''
     sed -i /stdcall-alias/d source/Irrlicht/Makefile
   '';
 
