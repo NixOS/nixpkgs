@@ -5294,7 +5294,7 @@ let
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
 
-  sloc = callPackage ../development/tools/sloc { };
+  sloc = nodePackages.sloc;
 
   smatch = callPackage ../development/tools/analysis/smatch {
     buildllvmsparse = false;
