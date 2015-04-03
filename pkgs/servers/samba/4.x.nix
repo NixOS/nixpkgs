@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl_ns
-, docbook_xml_dtd_42, readline, talloc, ntdb, tdb, tevent, ldb, popt, iniparser
-, pythonPackages, libbsd, nss_wrapper, socket_wrapper, uid_wrapper, libarchive
+{ stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
+, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
+, ldb, popt, iniparser, pythonPackages, libbsd, nss_wrapper, socket_wrapper
+, uid_wrapper, libarchive
 
 # source3/wscript optionals
 , kerberos ? null
@@ -49,9 +50,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl_ns docbook_xml_dtd_42
-    readline talloc ntdb tdb tevent ldb popt iniparser pythonPackages.subunit
-    libbsd nss_wrapper socket_wrapper uid_wrapper libarchive
+    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42
+    docbook_xml_dtd_45 readline talloc ntdb tdb tevent ldb popt iniparser
+    pythonPackages.subunit libbsd nss_wrapper socket_wrapper uid_wrapper
+    libarchive
 
     kerberos openldap cups pam avahi acl libaio fam ceph glusterfs
 
@@ -65,6 +67,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # Removes absolute paths in scripts
     sed -i 's,/sbin/,,g' ctdb/config/functions
+
+    # Fix the XML Catalog Paths
+    sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
   '';
 
   enableParallelBuilding = true;
