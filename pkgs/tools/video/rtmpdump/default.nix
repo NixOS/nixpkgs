@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ ''prefix=$(out)'' ]
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ optional opensslSupport "CRYPTO=OPENSSL"
-    ++ optional stdenv.isDarwin "CC=clang SYS=darwin";
+    ++ optional stdenv.isDarwin "SYS=darwin"
+    ++ optional (stdenv.cc.cc.isClang or false) "CC=clang";
 
   buildInputs = [ zlib ]
     ++ optional gnutlsSupport gnutls
