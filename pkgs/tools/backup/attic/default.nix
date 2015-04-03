@@ -5,6 +5,7 @@ python3Packages.buildPythonPackage rec {
   namePrefix = "";
 
   src = fetchzip {
+    name = "${name}-src";
     url = "https://github.com/jborg/attic/archive/0.14.tar.gz";
     sha256 = "1ij99dmd571rvk3kz97vs7wbjj2pbbd54l310lydnwywxhqs8hrv";
   };
