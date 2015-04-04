@@ -3606,6 +3606,10 @@ let
   };
   gcc-arm-embedded = gcc-arm-embedded-4_9;
 
+  gcc-armv5te-unknown-linux-gnueabi = callPackage ../development/compilers/gcc-cross/armv5te { };
+  gcc-armv6l-unknown-linux-gnueabihf = callPackage ../development/compilers/gcc-cross/armv6l { };
+  gcc-armv7l-unknown-linux-gnueabihf = callPackage ../development/compilers/gcc-cross/armv7l { };
+
   gforth = callPackage ../development/compilers/gforth {};
 
   # Haskell and GHC
