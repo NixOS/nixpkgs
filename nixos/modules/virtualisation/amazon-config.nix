@@ -1,5 +1,3 @@
-{ config, pkgs, modulesPath, ... }:
-
 {
-  imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
+  imports = [ ./amazon-image.nix ];
 }

@@ -2,27 +2,51 @@
 # configuration object (`config') from which we can retrieve option
 # values.
 
-{ system ? builtins.currentSystem
-, pkgs ? null
-, baseModules ? import ../modules/module-list.nix
-, extraArgs ? {}
+# !!! Please think twice before adding to this argument list!
+# Ideally eval-config.nix would be an extremely thin wrapper
+# around lib.evalModules, so that modular systems that have nixos configs
+# as subcomponents (e.g. the container feature, or nixops if network
+# expressions are ever made modular at the top level) can just use
+# types.submodule instead of using eval-config.nix
+{ # !!! system can be set modularly, would be nice to remove
+  system ? builtins.currentSystem
+, # !!! is this argument needed any more? The pkgs argument can
+  # be set modularly anyway.
+  pkgs ? null
+, # !!! what do we gain by making this configurable?
+  baseModules ? import ../modules/module-list.nix
+, # !!! See comment about args in lib/modules.nix
+  extraArgs ? {}
 , modules
-, check ? true
+, # !!! See comment about check in lib/modules.nix
+  check ? true
 , prefix ? []
+, lib ? import ../../lib
 }:
 
 let extraArgs_ = extraArgs; pkgs_ = pkgs; system_ = system;
     extraModules = let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
                    in if e == "" then [] else [(import (builtins.toPath e))];
+in
+
+let
+  pkgsModule = rec {
+    _file = ./eval-config.nix;
+    key = _file;
+    config = {
+      nixpkgs.system = lib.mkDefault system_;
+      _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
+    };
+  };
+
 in rec {
 
   # Merge the option definitions in all modules, forming the full
   # system configuration.
-  inherit (pkgs.lib.evalModules {
-    inherit prefix;
-    modules = modules ++ extraModules ++ baseModules;
+  inherit (lib.evalModules {
+    inherit prefix check;
+    modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
-    check = check && options.environment.checkConfigurationOptions.value;
   }) config options;
 
   # These are the extra arguments passed to every module.  In
@@ -33,40 +57,8 @@ in rec {
   # the 64-bit package anyway. However, it would be cleaner to respect
   # nixpkgs.config here.
   extraArgs = extraArgs_ // {
-    inherit pkgs modules baseModules;
-    modulesPath = ../modules;
-    pkgs_i686 = import ./nixpkgs.nix { system = "i686-linux"; config.allowUnfree = true; };
-    utils = import ./utils.nix pkgs;
+    inherit modules baseModules;
   };
 
-  # Import Nixpkgs, allowing the NixOS option nixpkgs.config to
-  # specify the Nixpkgs configuration (e.g., to set package options
-  # such as firefox.enableGeckoMediaPlayer, or to apply global
-  # overrides such as changing GCC throughout the system), and the
-  # option nixpkgs.system to override the platform type.  This is
-  # tricky, because we have to prevent an infinite recursion: "pkgs"
-  # is passed as an argument to NixOS modules, but the value of "pkgs"
-  # depends on config.nixpkgs.config, which we get from the modules.
-  # So we call ourselves here with "pkgs" explicitly set to an
-  # instance that doesn't depend on nixpkgs.config.
-  pkgs =
-    if pkgs_ != null
-    then pkgs_
-    else import ./nixpkgs.nix (
-      let
-        system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
-        nixpkgsOptions = (import ./eval-config.nix {
-          inherit system extraArgs modules prefix;
-          # For efficiency, leave out most NixOS modules; they don't
-          # define nixpkgs.config, so it's pointless to evaluate them.
-          baseModules = [ ../modules/misc/nixpkgs.nix ../modules/config/no-x-libs.nix ];
-          pkgs = import ./nixpkgs.nix { system = system_; config = {}; };
-          check = false;
-        }).config.nixpkgs;
-      in
-      {
-        inherit system;
-        inherit (nixpkgsOptions) config;
-      });
-
+  inherit (config._module.args) pkgs;
 }

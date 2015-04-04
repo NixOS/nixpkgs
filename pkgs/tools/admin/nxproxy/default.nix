@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, libxcomp }:
+{ stdenv, fetchurl, autoreconfHook, libxcomp }:
 
 let version = "3.5.0.31"; in
 stdenv.mkDerivation {
@@ -17,11 +17,10 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ autoconf libxcomp ];
+  buildInputs = [ autoreconfHook libxcomp ];
 
-  preConfigure = ''
+  preAutoreconf = ''
     cd nxproxy/
-    autoconf
   '';
 
   makeFlags = [ "exec_prefix=$(out)" ];

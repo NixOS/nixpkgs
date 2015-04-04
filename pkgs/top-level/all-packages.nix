@@ -5909,13 +5909,21 @@ let
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = gnutls32;
+  gnutls = gnutls33;
 
   gnutls32 = callPackage ../development/libraries/gnutls/3.2.nix {
     guileBindings = config.gnutls.guile or false;
+    nettle = nettle27;
   };
 
-  gnutls_with_guile = lowPrio (gnutls.override { guileBindings = true; });
+  gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
+    guileBindings = config.gnutls.guile or false;
+    nettle = nettle27;
+  };
+
+  gnutls32_with_guile = lowPrio (gnutls32.override { guileBindings = true; });
+
+  gnutls33_with_guile = lowPrio (gnutls33.override { guileBindings = true; });
 
   gpac = callPackage ../applications/video/gpac { };
 
@@ -6826,7 +6834,7 @@ let
 
   libviper = callPackage ../development/libraries/libviper { };
 
-  libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx = if stdenv.isDarwin then libvpx-git else callPackage ../development/libraries/libvpx { };
   libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
@@ -7063,6 +7071,7 @@ let
     inherit ncurses flex bison;
   };
 
+  nettle27 = callPackage ../development/libraries/nettle/27.nix { };
   nettle = callPackage ../development/libraries/nettle { };
 
   newt = callPackage ../development/libraries/newt { };
@@ -8514,19 +8523,19 @@ let
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
-    libgcrypt = libgcrypt_1_6;
     python = python2;
     pythonPackages = python2Packages;
+    kerberos = heimdal;
+    libgcrypt = libgcrypt_1_6;
     cups = if stdenv.isDarwin then null else cups;
     pam = if stdenv.isDarwin then null else pam;
     libaio = if stdenv.isDarwin then null else libaio;
     ceph = if stdenv.isDarwin then null else ceph;
     glusterfs = if stdenv.isDarwin then null else glusterfs;
-    libcap = if stdenv.isLinux then libcap else null;
     dbus = if stdenv.isLinux then dbus else null;
     libibverbs = if stdenv.isLinux then libibverbs else null;
     librdmacm = if stdenv.isLinux then librdmacm else null;
-    systemd = if stdenv.isLinux then system else null;
+    systemd = if stdenv.isLinux then systemd else null;
   };
 
   samba = samba4;
@@ -8547,6 +8556,7 @@ let
   samba4_light = lowPrio (samba4.override {
     # source3/wscript optionals
     kerberos = null;
+    zlib = null;
     openldap = null;
     cups = null;
     pam = null;
@@ -8567,9 +8577,12 @@ let
     libgpgerror = null;
 
     # other optionals
-    zlib = null;
     ncurses = null;
-    libcap = null;
+    libunwind = null;
+    dbus = null;
+    libibverbs = null;
+    librdmacm = null;
+    systemd = null;
   });
 
   samba_light = samba4_light;
@@ -9127,6 +9140,7 @@ let
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
     nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
     nvidia_x11_legacy340 = callPackage ../os-specific/linux/nvidia-x11/legacy340.nix { };
+    nvidia_x11_beta      = callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
     nvidia_x11           = callPackage ../os-specific/linux/nvidia-x11 { };
 
     openafsClient = callPackage ../servers/openafs-client { };

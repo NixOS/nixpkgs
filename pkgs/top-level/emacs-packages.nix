@@ -1067,12 +1067,12 @@ let self = _self // overrides;
 
   weechat = melpaBuild rec {
     pname   = "weechat.el";
-    version = "20141016";
+    version = "0.2.2";
     src = fetchFromGitHub {
       owner  = "the-kenny";
       repo   = pname;
-      rev    = "4cb2ced1eda5167ce774e04657d2cd077b63c706";
-      sha256 = "003sihp7irm0qqba778dx0gf8xhkxd1xk7ig5kgkryvl2jyirk28";
+      rev    = version;
+      sha256 = "0f90m2s40jish4wjwfpmbgw024r7n2l5b9q9wr6rd3vdcwks3mcl";
     };
     postPatch = lib.optionalString (!stdenv.isLinux) ''
       rm weechat-sauron.el weechat-secrets.el

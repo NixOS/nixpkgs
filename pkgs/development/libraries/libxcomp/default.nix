@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, libjpeg, libpng12, libX11, zlib }:
+{ stdenv, fetchurl, autoreconfHook, libjpeg, libpng12, libX11, zlib }:
 
 let version = "3.5.0.31"; in
 stdenv.mkDerivation {
@@ -17,11 +17,10 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ autoconf libjpeg libpng12 libX11 zlib ];
+  buildInputs = [ autoreconfHook libjpeg libpng12 libX11 zlib ];
 
-  preConfigure = ''
+  preAutoreconf = ''
     cd nxcomp/
-    autoconf
   '';
 
   enableParallelBuilding = true;
