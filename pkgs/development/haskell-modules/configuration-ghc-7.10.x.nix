@@ -134,6 +134,17 @@ self: super: {
     '';
   });
 
+  # see: https://github.com/jaspervdj/hakyll/issues/343
+  hakyll = overrideCabal super.hakyll (drv: {
+    buildDepends = drv.buildDepends ++ [ self.time-locale-compat ];
+    patches = [
+      (pkgs.fetchpatch {
+         url = "https://github.com/jaspervdj/hakyll/pull/344.patch";
+         sha256 = "130c0icw3cj209p219siaq0n8avmm0fpmph0iyjgx67w62sffrli";
+      })
+    ];
+  });
+
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
