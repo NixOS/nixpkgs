@@ -8525,7 +8525,7 @@ let
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
     pythonPackages = python2Packages;
-    kerberos = krb5;
+    kerberos = heimdal;
     libgcrypt = libgcrypt_1_6;
     cups = if stdenv.isDarwin then null else cups;
     pam = if stdenv.isDarwin then null else pam;
