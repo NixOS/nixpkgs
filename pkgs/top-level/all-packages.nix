@@ -1396,6 +1396,10 @@ let
     gtk = gtk3;
   };
 
+  garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
+
+  garmintools = callPackage ../development/libraries/garmintools {};
+
   gawk = callPackage ../tools/text/gawk { };
 
   gawkInteractive = appendToName "interactive"
