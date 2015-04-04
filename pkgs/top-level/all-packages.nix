@@ -13665,10 +13665,21 @@ let
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-
   faust = callPackage ../applications/audio/faust { };
 
-  faust-compiler = callPackage ../applications/audio/faust-compiler { };
+  faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
+
+  faust2alsa = callPackage ../applications/audio/faust/faust2alsa.nix { };
+
+  faust2csound = callPackage ../applications/audio/faust/faust2csound.nix { };
+
+  faust2firefox = callPackage ../applications/audio/faust/faust2firefox.nix { };
+
+  faust2jack = callPackage ../applications/audio/faust/faust2jack.nix { };
+
+  faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
+
+  faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
