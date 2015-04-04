@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, gettext }:
+{ stdenv, fetchurl, autoreconfHook, gettext }:
 
 stdenv.mkDerivation rec {
   name = "duff-${version}";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "149dd80f9758085ed199c37aa32ad869409fa5e2c8da8a51294bd64ca886e058";
   };
 
-  buildInputs = [ autoconf automake gettext ];
+  buildInputs = [ autoreconfHook gettext ];
 
-  preConfigure = ''
+  preAutoreconf = ''
     # duff is currently badly packaged, requiring us to do extra work here that
     # should be done upstream. If that is ever fixed, this entire phase can be
     # removed along with all buildInputs.
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     ./gettextize
     sed 's@po/Makefile.in\( .*\)po/Makefile.in@po/Makefile.in \1@' \
       -i configure.ac
-    autoreconf -i
   '';
 
   meta = with stdenv.lib; {
