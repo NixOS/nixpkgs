@@ -1,0 +1,13 @@
+diff --git a/Agda.cabal b/Agda.cabal
+index 56c6023..72300d5 100644
+--- a/Agda.cabal
++++ b/Agda.cabal
+@@ -408,7 +408,7 @@ library
+                     -fwarn-warnings-deprecations
+ 
+   if flag(cpphs)
+-    build-tools: cpphs >= 1.18.6 && < 1.19
++    build-tools: cpphs >= 1.19 && < 1.20
+     ghc-options: -pgmPcpphs -optP--cpp
+ 
+   -- The Cabal-generated module Paths_Agda triggers a warning under

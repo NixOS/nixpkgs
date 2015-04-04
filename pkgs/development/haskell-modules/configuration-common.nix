@@ -116,7 +116,6 @@ self: super: {
   network-uri = dontCheck super.network-uri;
 
   # The Haddock phase fails for one reason or another.
-  Agda = dontHaddock super.Agda;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
   bytestring-progress = dontHaddock super.bytestring-progress;
@@ -714,6 +713,9 @@ self: super: {
       sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
     '';
   });
+
+  # Bump upper bound on cpphs
+  Agda = dontHaddock (appendPatch super.Agda ./agda-bump-cpphs.patch);
 
 } // {
 
