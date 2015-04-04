@@ -8514,19 +8514,19 @@ let
   samba3 = callPackage ../servers/samba/3.x.nix { };
 
   samba4 = callPackage ../servers/samba/4.x.nix {
-    libgcrypt = libgcrypt_1_6;
     python = python2;
     pythonPackages = python2Packages;
+    kerberos = krb5;
+    libgcrypt = libgcrypt_1_6;
     cups = if stdenv.isDarwin then null else cups;
     pam = if stdenv.isDarwin then null else pam;
     libaio = if stdenv.isDarwin then null else libaio;
     ceph = if stdenv.isDarwin then null else ceph;
     glusterfs = if stdenv.isDarwin then null else glusterfs;
-    libcap = if stdenv.isLinux then libcap else null;
     dbus = if stdenv.isLinux then dbus else null;
     libibverbs = if stdenv.isLinux then libibverbs else null;
     librdmacm = if stdenv.isLinux then librdmacm else null;
-    systemd = if stdenv.isLinux then system else null;
+    systemd = if stdenv.isLinux then systemd else null;
   };
 
   samba = samba4;
@@ -8547,6 +8547,7 @@ let
   samba4_light = lowPrio (samba4.override {
     # source3/wscript optionals
     kerberos = null;
+    zlib = null;
     openldap = null;
     cups = null;
     pam = null;
@@ -8567,9 +8568,12 @@ let
     libgpgerror = null;
 
     # other optionals
-    zlib = null;
     ncurses = null;
-    libcap = null;
+    libunwind = null;
+    dbus = null;
+    libibverbs = null;
+    librdmacm = null;
+    systemd = null;
   });
 
   samba_light = samba4_light;
