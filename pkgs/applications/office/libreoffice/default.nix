@@ -24,7 +24,7 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "4";
   minor = "4";
-  patch = "1";
+  patch = "2";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
@@ -80,14 +80,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0a1p9jd9lgb1mxnj4c55yrlc7q2dsm5s9cyax6cwaya2q5m5xhnk";
+      sha256 = "0m1a09vzgh5mz0dgx2ji3fwmsqr7xymr0hhrrhf75nd1dr0blv2s";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "042xp6xz3gb75k332xclwfjyik63zgcw5135967nclim1sl8rgh7";
+      sha256 = "06i2c143dpqm4w1a9nba0gn1ayrvrhdrcm2kydzapvljgljqswkh";
     };
 
   };
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "0pa7gf29sgsl6kxs7j1x1zl4ycv682wrj1dg22qc0kb7aijhpm2f";
+    sha256 = "0dif783zbh9qb4636mm055clwwsv8j6pmb8msi9lr183drnaw73x";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
