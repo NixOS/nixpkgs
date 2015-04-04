@@ -5,15 +5,13 @@ with lib;
 let
   cfg = config.services.tarsnap;
 
-  optionalNullStr = e: v: if e == null then "" else v;
-
   configFile = cfg: ''
     cachedir ${config.services.tarsnap.cachedir}
     keyfile  ${config.services.tarsnap.keyfile}
     ${optionalString cfg.nodump "nodump"}
     ${optionalString cfg.printStats "print-stats"}
     ${optionalString cfg.printStats "humanize-numbers"}
-    ${optionalNullStr cfg.checkpointBytes "checkpoint-bytes "+cfg.checkpointBytes}
+    ${optionalString (cfg.checkpointBytes != null) ("checkpoint-bytes "+cfg.checkpointBytes)}
     ${optionalString cfg.aggressiveNetworking "aggressive-networking"}
     ${concatStringsSep "\n" (map (v: "exclude "+v) cfg.excludes)}
     ${concatStringsSep "\n" (map (v: "include "+v) cfg.includes)}
