@@ -17,6 +17,9 @@ let
     ${concatStringsSep "\n" (map (v: "include "+v) cfg.includes)}
     ${optionalString cfg.lowmem "lowmem"}
     ${optionalString cfg.verylowmem "verylowmem"}
+    ${optionalString (cfg.maxbw != null) ("maxbw "+toString cfg.maxbw)}
+    ${optionalString (cfg.maxbwRateUp != null) ("maxbw-rate-up "+toString cfg.maxbwRateUp)}
+    ${optionalString (cfg.maxbwRateDown != null) ("maxbw-rate-down "+toString cfg.maxbwRateDown)}
   '';
 in
 {
@@ -162,6 +165,33 @@ in
                   Reduce memory consumption by a factor of 2 beyond what
                   <literal>lowmem</literal> does, at the cost of significantly
                   slowing down the archiving process.
+                '';
+              };
+
+              maxbw = mkOption {
+                type = types.nullOr types.int;
+                default = null;
+                description = ''
+                  Abort archival if upstream bandwidth usage in bytes
+                  exceeds this threshold.
+                '';
+              };
+
+              maxbwRateUp = mkOption {
+                type = types.nullOr types.int;
+                default = null;
+                example = literalExample "25 * 1000";
+                description = ''
+                  Upload bandwidth rate limit in bytes.
+                '';
+              };
+
+              maxbwRateDown = mkOption {
+                type = types.nullOr types.int;
+                default = null;
+                example = literalExample "50 * 1000";
+                description = ''
+                  Download bandwidth rate limit in bytes.
                 '';
               };
             };
