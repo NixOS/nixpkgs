@@ -5916,7 +5916,14 @@ let
     nettle = nettle27;
   };
 
-  gnutls_with_guile = lowPrio (gnutls.override { guileBindings = true; });
+  gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
+    guileBindings = config.gnutls.guile or false;
+    nettle = nettle27;
+  };
+
+  gnutls32_with_guile = lowPrio (gnutls32.override { guileBindings = true; });
+
+  gnutls33_with_guile = lowPrio (gnutls33.override { guileBindings = true; });
 
   gpac = callPackage ../applications/video/gpac { };
 
