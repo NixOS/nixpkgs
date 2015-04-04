@@ -7063,7 +7063,8 @@ let
     inherit ncurses flex bison;
   };
 
-  nettle = callPackage ../development/libraries/nettle { };
+  nettle27 = callPackage ../development/libraries/nettle/27.nix { };
+  nettle = nettle27;
 
   newt = callPackage ../development/libraries/newt { };
 
