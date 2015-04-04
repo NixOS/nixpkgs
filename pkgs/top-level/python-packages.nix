@@ -8931,6 +8931,8 @@ let
       name = "${name}.tar.gz";
     };
 
+    disabled = isPyPy || isPy3k;
+
     meta = with stdenv.lib; {
       description = "Media Meta Data retrieval framework";
       homepage = http://sourceforge.net/projects/mmpython/;
@@ -8949,6 +8951,8 @@ let
     };
 
     doCheck = false;
+
+    disabled = isPyPy || isPy3k;
 
     # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
     installPhase = ''
@@ -8987,6 +8991,8 @@ let
     doCheck = false;
 
     buildInputs = [ pkgs.libdvdread ];
+
+    disabled = isPyPy || isPy3k;
 
     # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
     installPhase = ''
