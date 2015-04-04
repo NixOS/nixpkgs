@@ -12,7 +12,7 @@ stdenv.mkDerivation (rec {
   name = "libxml2-${version}";
 
   src = fetchurl {
-    url = "ftp://xmlsoft.org/libxml2/${name}.tar.gz";
+    url = "http://xmlsoft.org/sources/${name}.tar.gz";
     sha256 = "1g6mf03xcabmk5ing1lwqmasr803616gb2xhn7pll10x2l5w6y2i";
   };
 
