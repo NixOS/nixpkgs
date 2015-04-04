@@ -310,7 +310,7 @@ in rec {
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
-  tests.virtualbox = callTest tests/virtualbox.nix {};
+  tests.virtualbox = hydraJob (import tests/virtualbox.nix { system = "x86_64-linux"; });
   tests.xfce = callTest tests/xfce.nix {};
   tests.bootBiosCdrom = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosCdrom);
   tests.bootBiosUsb = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosUsb);
