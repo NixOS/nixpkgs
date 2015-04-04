@@ -455,11 +455,11 @@ let
   }) // {inherit bdftopcf mkfontdir ;};
 
   fontutil = (mkDerivation "fontutil" {
-    name = "font-util-1.3.0";
+    name = "font-util-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-util-1.3.0.tar.bz2;
-      sha256 = "15cijajwhjzpy3ydc817zz8x5z4gbkyv3fps687jbq544mbfbafz";
+      url = mirror://xorg/individual/font/font-util-1.3.1.tar.bz2;
+      sha256 = "08drjb6cf84pf5ysghjpb4i7xkd2p86k3wl2a0jxs1jif6qbszma";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -1015,11 +1015,11 @@ let
   }) // {inherit libXau ;};
 
   randrproto = (mkDerivation "randrproto" {
-    name = "randrproto-1.4.0";
+    name = "randrproto-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/randrproto-1.4.0.tar.bz2;
-      sha256 = "1kq9h93qdnniiivry8jmhlgwn9fbx9xp5r9cmzfihlx5cs62xi45";
+      url = mirror://xorg/individual/proto/randrproto-1.4.1.tar.bz2;
+      sha256 = "1p7155hsp48b0sjm4rc67wz6y1nxqrq69vyw0sjxh8h6pcpcngal";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
