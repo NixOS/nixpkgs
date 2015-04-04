@@ -12,6 +12,9 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
+  # TODO: Remove the use of the beta driver for kernel 4.0 in
+  # nixos/modules/hardware/video/nvidia.nix when this driver supports
+  # kernel 4.0
   versionNumber = "346.47";
 
   # Policy: use the highest stable version as the default (on our master).
