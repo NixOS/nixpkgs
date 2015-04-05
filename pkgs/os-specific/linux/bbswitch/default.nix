@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, fetchpatch, kernel }:
 
 let
   baseName = "bbswitch";
@@ -14,6 +14,11 @@ stdenv.mkDerivation {
     url = "https://github.com/Bumblebee-Project/${baseName}/archive/v${version}.tar.gz";
     sha256 = "0xql1nv8dafnrcg54f3jsi3ny3cd2ca9iv73pxpgxd2gfczvvjkn";
   };
+
+  patches = [ (fetchpatch {
+    url = "https://github.com/Bumblebee-Project/bbswitch/pull/102.patch";
+    sha256 = "0agq7w28pdarq18qxc9917mamyb2sq8hxl3pzc0v210h60vmx2pm";
+  }) ];
 
   preBuild = ''
     substituteInPlace Makefile \
