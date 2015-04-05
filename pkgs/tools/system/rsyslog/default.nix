@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 }
