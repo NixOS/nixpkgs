@@ -61,7 +61,7 @@ let
       ("Error: update liborcus version inside LO expression")
       (import ./libreoffice-srcs.nix));
 
-    buildInputs = [ boost mdds pkgconfig zlib libixion ];
+    buildInputs = [ boost mdds pkgconfig zlib /*libixion*/ ];
 
     configureFlags = [ "--with-boost=${boost.dev}" ];
   };
@@ -235,6 +235,8 @@ stdenv.mkDerivation rec {
     "--without-system-libpagemaker"
     "--without-system-coinmp"
     "--without-system-libgltf"
+
+    "--without-system-orcus"
   ];
 
   checkPhase = ''
@@ -253,10 +255,10 @@ stdenv.mkDerivation rec {
       gst_all_1.gst-plugins-base
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libixion
+      mdds bluez5 glibc /*libixion*/
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew
-      liborcus libodfgen
+      /*liborcus*/ libodfgen
     ];
 
   meta = with stdenv.lib; {
