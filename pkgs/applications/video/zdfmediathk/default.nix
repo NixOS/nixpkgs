@@ -5,7 +5,7 @@ with stdenv;
 mkDerivation rec {
 
   version = "9";
-  name = "zdfmediathk";
+  name = "zdfmediathk-${version}";
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/zdfmediathk/Mediathek/Mediathek%209/MediathekView_${version}.zip";
     sha256 = "1wff0igr33z9p1mjw7yvb6658smdwnp22dv8klz0y8qg116wx7a4";
