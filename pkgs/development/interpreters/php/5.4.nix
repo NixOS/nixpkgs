@@ -243,7 +243,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
     iniFile=$out/etc/php-recommended.ini
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
-    ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
+    ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out CFLAGS="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2" PHP_LDFLAGS="-pie -Wl,-z,relro,-z,now" $configureFlags
   '';
 
   installPhase = ''
