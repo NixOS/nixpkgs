@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--sysconfdir=/etc"
-    "--localstatedir=/var"
     "--exec-prefix=\${out}"
     "--enable-lockmgr"
     "--enable-dynamic-storage-backends"
@@ -62,17 +61,11 @@ stdenv.mkDerivation rec {
     ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
     ++ optional (ceph != null) "--with-cephfs=${ceph}";
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-
-    rm -rf /tmp /var
-  '';
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "working_dir=\${TMPDIR}"
+    "log_dir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.bareos.org/;
