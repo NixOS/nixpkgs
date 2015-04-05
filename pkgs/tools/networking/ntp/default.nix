@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-openssl.patch ];
 
+  preConfigure = ''
+    configureFlagsArray=(
+      CFLAGS="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2" LDFLAGS="-pie -Wl,-z,relro,-z,now"
+    )
+  '';
+
   configureFlags = ''
     --without-crypto
     ${if stdenv.isLinux then "--enable-linuxcaps" else ""}
