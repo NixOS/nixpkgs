@@ -2,32 +2,38 @@
 
 stdenv.mkDerivation rec {
   name = "syncthing-${version}";
-  version = "0.8.15";
+  version = "0.10.30";
 
   src = fetchgit {
-    url = "git://github.com/calmh/syncthing.git";
+    url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0xv8kaji60zqxws72srh5hdi9fyvaipdcsawp6gcyahhr3cz0ddq";
+    sha256 = "0sjhr9agsi4fwshm75qq1vrlfq6cgkladdk6wyjy11bcb114smdx";
   };
 
   buildInputs = [ go ];
 
+  /*
   buildPhase = ''
-    mkdir -p "./dependencies/src/github.com/calmh/syncthing"
+    mkdir -p "src/github.com/syncthing/syncthing"
+    mv * src/github.com/syncthing/syncthing
+    export GOPATH=`pwd`/src
+    cd src/github.com/syncthing/syncthing
+    go run build.go -version v${version}
+  '';
+  */
 
-    for a in auto buffers cid discover files lamport protocol scanner \
-            logger beacon config xdr upnp model osutil versioner; do
-        cp -r "./$a" "./dependencies/src/github.com/calmh/syncthing"
+  buildPhase = ''
+    mkdir -p "./dependencies/src/github.com/syncthing/syncthing/internal"
+
+    for a in `ls internal`; do
+        cp -r "./internal/$a" "./dependencies/src/github.com/syncthing/syncthing/internal"
     done
 
     export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
 
     go test -cpu=1,2,4 ./...
 
-    mkdir ./bin
-
-    go build -o ./bin/syncthing -ldflags "-w -X main.Version v${version}" ./cmd/syncthing
-    go build -o ./bin/stcli -ldflags "-w -X main.Version v${version}" ./cmd/stcli
+    go run build.go -version v${version}
   '';
 
   installPhase = ''
