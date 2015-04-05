@@ -27,16 +27,10 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
     ++ stdenv.lib.optional (qt5 != null) "--enable-liblightdm-qt5";
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  # Correct for the nested nix folder tree
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-  '';
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://launchpad.net/lightdm;
