@@ -139,6 +139,11 @@ self: super: {
     url = "https://github.com/fpco/conduit-combinators/pull/16.patch";
     sha256 = "0jpwpi3shdn5rms3lcr4srajbhhfp5dbwy7pl23c9kmlil3d9mk3";
   });
+  yesod-bin = overrideCabal (appendPatch super.yesod-bin (pkgs.fetchpatch {
+    url = "https://github.com/yesodweb/yesod/pull/966.patch";
+    sha256 = "0jxhj3ls0xsw81mmiiy3ln1yb910r6p87vkqpaw8xdczly4h98fc";
+  })) (drv: {
+    patchFlags = "-p2";
   });
 
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
