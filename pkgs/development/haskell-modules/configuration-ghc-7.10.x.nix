@@ -131,11 +131,6 @@ self: super: {
   haskell-src-meta = overrideCabal (doJailbreak (appendPatch super.haskell-src-meta ./haskell-src-meta-ghc710.patch)) (drv: {
     prePatch = "sed -i -e 's|template-haskell [^,]\\+|template-haskell|' haskell-src-meta.cabal && cat haskell-src-meta.cabal";
   });
-  persistent-template = appendPatch super.persistent-template (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/persistent/commit/4d34960bc421ec0aa353d69fbb3eb0c73585db97.patch";
-    sha256 = "1gphl0v87y2fjwkwp6j0bnksd0d9dr4pis6aw97rij477bm5mrvw";
-    stripLen = 1;
-  });
   mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
     url = "https://github.com/snoyberg/mono-traversable/pull/68.patch";
     sha256 = "11hqf6hi3sc34wl0fn4rpigdf7wfklcjv6jwp8c3129yphg8687h";
@@ -144,15 +139,6 @@ self: super: {
     url = "https://github.com/fpco/conduit-combinators/pull/16.patch";
     sha256 = "0jpwpi3shdn5rms3lcr4srajbhhfp5dbwy7pl23c9kmlil3d9mk3";
   });
-  wai-extra = appendPatch super.wai-extra (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/wai/pull/339.patch";
-    sha256 = "1rmz1ijfch143v7jg4d5r50lqq9r46zhcmdafq8p9g9pjxlyc590";
-    stripLen = 1;
-  });
-  yesod-auth = appendPatch super.yesod-auth (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/yesod/pull/941.patch";
-    sha256 = "1fycvjfr1l9wa03k30bnppl3ns99lffh9kmp9r7sr8b6yiydcajq";
-    stripLen = 1;
   });
 
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
