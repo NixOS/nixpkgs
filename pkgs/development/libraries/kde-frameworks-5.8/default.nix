@@ -69,8 +69,9 @@ let
     # packages from the nixpkgs collection
     (with pkgs;
       {
-        inherit cmake epoxy;
         Boost = boost155;
+        cmake = cmake-3_2;
+        inherit epoxy;
         GIF = giflib;
         GLIB2 = glib;
         Gpgme = gpgme;
@@ -102,7 +103,7 @@ let
       extra-cmake-modules = {
         inherit (super.extra-cmake-modules) name src;
 
-        propagatedNativeBuildInputs = [ pkgs.cmake pkgs.pkgconfig qt5.tools ];
+        propagatedNativeBuildInputs = [ scope.cmake pkgs.pkgconfig qt5.tools ];
         cmakeFlags = ["-DBUILD_TESTING=OFF"];
         patches =
           [
