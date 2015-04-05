@@ -1893,6 +1893,8 @@ let
 
   macchanger = callPackage ../os-specific/linux/macchanger { };
 
+  mailcheck = callPackage ../applications/networking/mailreaders/mailcheck { };
+
   maildrop = callPackage ../tools/networking/maildrop { };
 
   mailsend = callPackage ../tools/networking/mailsend { };
