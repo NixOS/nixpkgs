@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   inherit bash gnused gnugrep kconfig kinit kservice socat;
   inherit (xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
-  qt5 = qt5.base;
+  qt5tools = qt5.tools;
   dbus_tools = dbus.tools;
   plasmaWorkspace = plasma-workspace;
   plasmaDesktop = plasma-desktop;
