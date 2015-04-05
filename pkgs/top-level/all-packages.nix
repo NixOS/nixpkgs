@@ -6821,7 +6821,10 @@ let
   });
 
   libv4l = lowPrio (v4l_utils.override {
-    withQt4 = false;
+    alsaLib = null;
+    libX11 = null;
+    qt4 = null;
+    qt5 = null;
   });
 
   libva = callPackage ../development/libraries/libva { };
@@ -9548,7 +9551,7 @@ let
   });
 
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
-    withQt4 = true;
+    qt5 = null;
   };
 
   windows = rec {
