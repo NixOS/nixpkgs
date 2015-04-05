@@ -21,6 +21,14 @@ in
         description = "Whether to enable ejabberd server";
       };
 
+      package = mkOption {
+        default = pkgs.ejabberd;
+        type = types.package;
+        description = "
+          Ejabberd package to use.
+        ";
+      }
+
       spoolDir = mkOption {
         default = "/var/lib/ejabberd";
         description = "Location of the spooldir of ejabberd";
@@ -69,7 +77,7 @@ in
         preStart =
           ''
             PATH="$PATH:${pkgs.ejabberd}/sbin:${pkgs.ejabberd}/bin:${pkgs.coreutils}/bin:${pkgs.bash}/bin:${pkgs.gnused}/bin";
-	    
+
             # Initialise state data
             mkdir -p ${cfg.logsDir}
 
