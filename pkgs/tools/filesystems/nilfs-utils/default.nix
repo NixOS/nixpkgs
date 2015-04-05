@@ -3,7 +3,7 @@ let
   sourceInfo = rec {
     version = "2.2.3";
     url = "http://nilfs.sourceforge.net/download/nilfs-utils-${version}.tar.bz2";
-    sha256 = "17s7d2rdb6fwrfvpif573c8n0i4f21m09pzqdsc0kyy1qqdgnc1v";
+    sha256 = "1sv0p5d9ivik7lhrdynf6brma66llcvn11zhzasws12n4sfk6k6q";
     baseName = "nilfs-utils";
     name = "${baseName}-${version}";
   };
