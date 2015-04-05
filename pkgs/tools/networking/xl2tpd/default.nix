@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpcap }:
+{ stdenv, fetchFromGitHub, libpcap, ppp }:
 
 let version = "1.3.6";
 in stdenv.mkDerivation {
@@ -12,6 +12,10 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [ libpcap ];
+
+  postPatch = ''
+    substituteInPlace l2tp.h --replace /usr/sbin/pppd ${ppp}/sbin/pppd
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 
