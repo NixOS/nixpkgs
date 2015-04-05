@@ -137,12 +137,12 @@
     };
   }
   {
-    name = stdenv.lib.nameFromURL "muon-5.2.2.tar.xz" ".tar";
-    store = "/nix/store/x1lkv4pra7zd0gxqshvfk7fd6p52phgd-muon-5.2.2.tar.xz";
+    name = stdenv.lib.nameFromURL "muon-5.2.2-1.tar.xz" ".tar";
+    store = "/nix/store/kxgn4px54mw23g6zjafxx091vpx5vvw7-muon-5.2.2-1.tar.xz";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.2.2/muon-5.2.2.tar.xz";
-      sha256 = "1p4mamqd3xayffm6h40z5k5s24cda92vdagp916wzgzvqq9rxrl2";
-      name = "muon-5.2.2.tar.xz";
+      url = "${mirror}/stable/plasma/5.2.2/muon-5.2.2-1.tar.xz";
+      sha256 = "0nq0wi0fx69mrvc6aah8xvakjwsvx87ykfrarb0pd1cidjz7k698";
+      name = "muon-5.2.2-1.tar.xz";
     };
   }
   {
