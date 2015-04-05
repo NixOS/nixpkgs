@@ -1,11 +1,11 @@
-{ stdenv, fetchurlGnome, pkgconfig, gtkglext, gtkmm, gtk, mesa, gdk_pixbuf }:
+{ stdenv, fetchurl, pkgconfig, gtkglext, gtkmm, gtk, mesa, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "gtkglextmm-${minVer}.0";
+  minVer = "1.2";
 
-  src = fetchurlGnome {
-    project = "gtkglextmm";
-    major = "1"; minor = "2"; patchlevel = "0"; extension = "bz2";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gtkglextmm/${minVer}/${name}.tar.bz2";
     sha256 = "6cd4bd2a240e5eb1e3a24c5a3ebbf7ed905b522b888439778043fdeb58771fea";
   };
 
