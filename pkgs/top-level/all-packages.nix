@@ -7593,8 +7593,6 @@ let
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
-  ctdb = callPackage ../development/libraries/ctdb { };
-
   ntdb = callPackage ../development/libraries/ntdb {
     python = python2;
   };
