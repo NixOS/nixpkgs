@@ -1,15 +1,16 @@
-{ stdenv, agda, fetchurl, ghc, filemanip }:
+{ stdenv, agda, fetchgit, ghcWithPackages }:
 
 agda.mkDerivation (self: rec {
-  version = "0.9";
-  name = "Agda-stdlib-${version}";
+  version = "2.4.2.3";
+  name = "agda-stdlib-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/agda/agda-stdlib/archive/v${version}.tar.gz";
-    sha256 = "05rpmd2xra8wygq33mahdmijcjwq132l1akqyzj66n13frw4hfwj";
+  src = fetchgit {
+    url = "git://github.com/agda/agda-stdlib";
+    rev = "451446c5d849b8c5d6d34363e3551169eb126cfb";
+    sha256 = "40a55d3c22fb3462b110859f4cd63e79e086b25f23964b465768397b93c57701";
   };
 
-  buildInputs = [ filemanip ghc ];
+  nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
   preConfigure = ''
     runhaskell GenerateEverything.hs
   '';
