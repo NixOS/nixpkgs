@@ -35,7 +35,7 @@
 , testTarget ? ""
 , broken ? false
 , preUnpack ? "", postUnpack ? ""
-, patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
+, patches ? [], patchPhase ? "", prePatch ? "", postPatch ? "", patchFlags ? ""
 , preConfigure ? "", postConfigure ? ""
 , preBuild ? "", postBuild ? ""
 , preInstall ? "", postInstall ? ""
@@ -285,6 +285,7 @@ stdenv.mkDerivation ({
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
 // optionalAttrs (postPatch != "")      { inherit postPatch; }
+// optionalAttrs (patchFlags != "")     { inherit patchFlags; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
 // optionalAttrs (postConfigure != "")  { inherit postConfigure; }
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
