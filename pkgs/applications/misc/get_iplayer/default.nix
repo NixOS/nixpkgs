@@ -1,6 +1,6 @@
 {stdenv, fetchurl, flvstreamer, ffmpeg, makeWrapper, perl, buildPerlPackage, perlPackages, vlc, rtmpdump}:
 buildPerlPackage {
-  name = "get_iplayer-2.86";
+  name = "get_iplayer-2.92";
 
   buildInputs = [makeWrapper perl];
   propagatedBuildInputs = with perlPackages; [HTMLParser HTTPCookies LWP];
@@ -16,8 +16,8 @@ buildPerlPackage {
   '';  
   
   src = fetchurl {
-    url = ftp://ftp.infradead.org/pub/get_iplayer/get_iplayer-2.86.tar.gz;
-    sha256 = "0zhcw0ikxrrz1jayx7jjgxmdf7gzk4pmzfvpraxmv64xwzgc1sc1";
+    url = ftp://ftp.infradead.org/pub/get_iplayer/get_iplayer-2.92.tar.gz;
+    sha256 = "1pg4ay32ykxbnvk9dglwpbfjwhcc4ijfl8va89jzyxicbf7s6077";
   };
   
 }
