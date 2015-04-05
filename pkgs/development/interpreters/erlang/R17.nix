@@ -1,15 +1,19 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
-, wxSupport ? false, mesa ? null, wxGTK ? null, xlibs ? null }:
+, wxSupport ? true, mesa ? null, wxGTK ? null, xlibs ? null
+, javacSupport ? false, openjdk ? null
+, enableHipe ? true}:
 
 assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
 assert odbcSupport -> unixODBC != null;
+assert javacSupport ->  openjdk != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}";
+  name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
+  + "${optionalString javacSupport "-javac"}";
   version = "17.4";
 
   src = fetchurl {
@@ -20,7 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
     ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ]
-      ++ optional odbcSupport [ unixODBC ];
+      ++ optional odbcSupport [ unixODBC ]
+      ++ optional javacSupport [ openjdk ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -29,7 +34,7 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
+  configureFlags= "--with-ssl=${openssl} ${optionalString enableHipe "--enable-hipe"} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"} ${optionalString javacSupport "--with-javac"}";
 
   postInstall = let
     manpages = fetchurl {
@@ -68,6 +73,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # Note: Maintainer of prev. erlang version was simons. If he wants
     # to continue maintaining erlang I'm totally ok with that.
-    maintainers = [ maintainers.the-kenny ];
+    maintainers = [ maintainers.the-kenny maintainers.sjmackenzie ];
   };
 }
