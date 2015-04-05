@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   patches = [ (fetchpatch {
     url = "https://github.com/Bumblebee-Project/bbswitch/pull/102.patch";
-    sha256 = "0agq7w28pdarq18qxc9917mamyb2sq8hxl3pzc0v210h60vmx2pm";
+    sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
   }) ];
 
   preBuild = ''
@@ -44,8 +44,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/discrete_vga_poweroff $out/bin/discrete_vga_poweron
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
     description = "A module for powering off hybrid GPUs";
+    platforms = platforms.linux;
+    homepage = https://github.com/Bumblebee-Project/bbswitch;
+    maintainers = with maintainers; [ abbradar ];
   };
 }
