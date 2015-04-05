@@ -17,7 +17,7 @@
   </xsl:template>
 
   <!-- Add highlight and init scripts -->
-  <xsl:param name="html.script" select="'highlight/highlight.pack.js highlight/init.js'"/>
+  <xsl:param name="html.script" select="'highlight.js init.js'"/>
 
   <xsl:template name="section.heading">
     <xsl:param name="section" select="."/>

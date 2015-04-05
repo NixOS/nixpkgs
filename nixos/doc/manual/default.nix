@@ -60,6 +60,11 @@ let
       echo "${version}" > version
     '';
 
+  hljs = import ./highlight/default.nix {
+    inherit pkgs;
+    buildArgs = "nix bash json xml";
+  };
+
 in rec {
 
   # The NixOS options in JSON format.
@@ -107,7 +112,7 @@ in rec {
         --param section.autolabel 1 \
         --param section.label.includes.component.label 1 \
         --stringparam html.stylesheet "style.css \
-                                       highlight/github.css" \
+                                       highlight.css" \
         --param xref.with.number.and.title 1 \
         --param toc.section.depth 3 \
         --stringparam admon.style "" \
@@ -122,8 +127,10 @@ in rec {
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
 
+      cp ${./highlight/init.js} $dst/init.js
       cp ${./style.css} $dst/style.css
-      cp -r ${./highlight} $dst/highlight
+      cp ${hljs}/styles/github.css $dst/highlight.css
+      cp -r ${hljs}/highlight.pack.js $dst/highlight.js
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
