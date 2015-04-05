@@ -7836,30 +7836,30 @@ let
 
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
-    extension = self : super : {};
-    Agda = haskellPackages.Agda;
+    extension = self : super : { };
+    inherit (haskellngPackages) Agda;
     inherit writeScriptBin;
   };
 
-  agdaBase = callPackage ../development/libraries/agda/agda-base {};
+  agdaBase = callPackage ../development/libraries/agda/agda-base { };
 
-  agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib {};
+  agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib { };
 
-  agdaPrelude = callPackage ../development/libraries/agda/agda-prelude {};
+  agdaPrelude = callPackage ../development/libraries/agda/agda-prelude { };
 
-  AgdaStdlib = callPackage ../development/compilers/agda/stdlib.nix {
-    inherit (haskellPackages) ghc filemanip;
+  AgdaStdlib = callPackage ../development/libraries/agda/agda-stdlib {
+    inherit (haskellngPackages) ghcWithPackages;
   };
 
-  AgdaSheaves = callPackage ../development/libraries/agda/AgdaSheaves {};
+  AgdaSheaves = callPackage ../development/libraries/agda/Agda-Sheaves { };
 
-  bitvector = callPackage ../development/libraries/agda/bitvector {};
+  bitvector = callPackage ../development/libraries/agda/bitvector { };
 
-  categories = callPackage ../development/libraries/agda/categories {};
+  categories = callPackage ../development/libraries/agda/categories { };
 
-  pretty = callPackage ../development/libraries/agda/pretty {};
+  pretty = callPackage ../development/libraries/agda/pretty { };
 
-  TotalParserCombinators = callPackage ../development/libraries/agda/TotalParserCombinators {};
+  TotalParserCombinators = callPackage ../development/libraries/agda/TotalParserCombinators { };
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
