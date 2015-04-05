@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
-  version = "1.7";
+  version = "1.9";
   name    = "grc-${version}";
 
   src = fetchurl {
     url    = "http://korpus.juls.savba.sk/~garabik/software/grc/grc_${version}.orig.tar.gz";
-    sha256 = "01hpvs5915ajcswm7kg4167qsa9kbg0snxxj5k3ymkz6c567dp70";
+    sha256 = "0nsgqpijhpinnzscmpnhcjahv8yivz0g65h8zsly2md23ibnwqj1";
   };
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Yet another colouriser for beautifying your logfiles or output of commands";
     homepage    = http://korpus.juls.savba.sk/~garabik/software/grc.html;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 AndersonTorres ];
     platforms   = platforms.unix;
 
     longDescription = ''
