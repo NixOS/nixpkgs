@@ -1414,6 +1414,16 @@ let
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   }) // {inherit inputproto xorgserver xproto ;};
 
+  xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
+    name = "xf86-input-libinput-0.8.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.8.0.tar.bz2;
+      sha256 = "0fm4vrkw7azipbnwvc2l18g65z77pllsznaajd8q3zpg9ycb0li1";
+    };
+    buildInputs = [pkgconfig inputproto xorgserver xproto ];
+  }) // {inherit inputproto xorgserver xproto ;};
+
   xf86inputmouse = (mkDerivation "xf86inputmouse" {
     name = "xf86-input-mouse-1.9.1";
     builder = ./builder.sh;
@@ -1560,6 +1570,16 @@ let
     src = fetchurl {
       url = mirror://xorg/individual/driver/xf86-video-i128-1.3.6.tar.bz2;
       sha256 = "171b8lbxr56w3isph947dnw7x87hc46v6m3mcxdcz44gk167x0pq";
+    };
+    buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
+  }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
+
+  xf86videoi740 = (mkDerivation "xf86videoi740" {
+    name = "xf86-video-i740-1.3.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-i740-1.3.5.tar.bz2;
+      sha256 = "0973zzmdsvlmplcax1c91is7v78lcwy6d9mwp11npgqzl782vq0w";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};

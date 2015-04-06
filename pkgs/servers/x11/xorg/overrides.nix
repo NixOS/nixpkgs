@@ -207,6 +207,11 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
+  xf86inputlibinput = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.libinput ];
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
   xf86inputsynaptics = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
