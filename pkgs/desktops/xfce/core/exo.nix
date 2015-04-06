@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   p_name  = "exo";
   ver_maj = "0.10";
-  ver_min = "3";
+  ver_min = "4";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1g9651ra395v2fmzb943l68b9pg0rfxc19x97a62crchxwa4nw4m";
+    sha256 = "cced5fdbc0b61a5d976210ff71ecdd81b89fcd15e5860a44f50da7b83fb2deaa";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
