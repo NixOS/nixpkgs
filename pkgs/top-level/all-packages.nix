@@ -6172,6 +6172,7 @@ let
     openldap = openldap.override {
       cyrus_sasl = cyrus_sasl.override { kerberos = null; };
     };
+    inherit (darwin) bootstrap_cmds;
   };
 
   LASzip = callPackage ../development/libraries/LASzip { };
