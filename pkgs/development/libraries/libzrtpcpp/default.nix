@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
-
-  propagatedBuildInputs = [ openssl ccrtp ];
+  buildInputs = [ openssl ccrtp ];
 
   meta = { 
     description = "GNU RTP stack for the zrtp protocol developed by Phil Zimmermann";
