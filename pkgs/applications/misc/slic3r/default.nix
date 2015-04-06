@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp BoostGeometryUtils
+    EncodeLocale MathClipper ExtUtilsXSpp
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
     ExtUtilsMakeMaker OpenGL WxGLCanvas
