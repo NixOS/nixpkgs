@@ -109,4 +109,7 @@ self: super: {
   wai-middleware-preprocessor = dontCheck super.wai-middleware-preprocessor;
   incremental-computing = dontCheck super.incremental-computing;
 
+  # Newer versions require base > 4.7
+  gloss = super.gloss_1_9_2_1;
+
 }
