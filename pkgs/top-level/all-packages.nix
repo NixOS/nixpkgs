@@ -7548,9 +7548,9 @@ let
 
   srm = callPackage ../tools/security/srm { };
 
-  srtp = callPackage ../development/libraries/srtp {};
-
-  srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
+  srtp = callPackage ../development/libraries/srtp {
+    libpcap = if stdenv.isLinux then libpcap else null;
+  };
 
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
