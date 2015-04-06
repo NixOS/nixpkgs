@@ -14193,6 +14193,12 @@ let
 
   wine = wineStable;
 
+  wineStaging = callPackage_i686 ../misc/emulators/wine/staging.nix {
+    wine = pkgsi686Linux.wineUnstable;
+    # Patent issues
+    libtxc_dxtn = pkgsi686Linux.libtxc_dxtn_s2tc;
+  };
+
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
   };
