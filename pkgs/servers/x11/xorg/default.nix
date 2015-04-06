@@ -709,7 +709,7 @@ let
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/lib/libXfont-1.5.1.tar.bz2;
-      sha256 = "b70898527c73f9758f551bbab612af611b8a0962202829568d94f3edf4d86098";
+      sha256 = "1630v3sfvwwlimb2ja10c84ql6v1mw9bdfhvan7pbybkgi99h25p";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
@@ -1193,6 +1193,16 @@ let
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   }) // {inherit gperf m4 libxcb xproto ;};
+
+  xcbutilcursor = (mkDerivation "xcbutilcursor" {
+    name = "xcb-util-cursor-0.1.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.2.tar.bz2;
+      sha256 = "0fpv46zb7kz04qxwvpax4cpd2kd8yhsm2n0if1isniqdh5xkcrgd";
+    };
+    buildInputs = [pkgconfig gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ];
+  }) // {inherit gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ;};
 
   xcbutilimage = (mkDerivation "xcbutilimage" {
     name = "xcb-util-image-0.4.0";

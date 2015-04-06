@@ -7801,8 +7801,7 @@ let
 
   xbase = callPackage ../development/libraries/xbase { };
 
-  xcb-util-cursor = callPackage ../development/libraries/xcb-util-cursor { };
-
+  xcb-util-cursor = xorg.xcbutilcursor;
   xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
 
   xdo = callPackage ../tools/misc/xdo { };
