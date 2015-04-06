@@ -714,6 +714,9 @@ self: super: {
     '';
   });
 
+  # Bump upper bound on cpphs
+  Agda = dontHaddock (appendPatch super.Agda ./agda-bump-cpphs.patch);
+
 } // {
 
   # Not on Hackage.
