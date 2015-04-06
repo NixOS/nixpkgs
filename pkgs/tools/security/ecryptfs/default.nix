@@ -1,16 +1,17 @@
 { stdenv, fetchurl, pkgconfig, perl, utillinux, keyutils, nss, nspr, python, pam
 , intltool, makeWrapper, coreutils, bash, gettext, cryptsetup, lvm2, rsync, which }:
 
-stdenv.mkDerivation {
-  name = "ecryptfs-104";
+stdenv.mkDerivation rec {
+  name = "ecryptfs-${version}";
+  version = "106";
 
   src = fetchurl {
-    url = http://launchpad.net/ecryptfs/trunk/104/+download/ecryptfs-utils_104.orig.tar.gz;
-    sha256 = "0f3lzpjw97vcdqzzgii03j3knd6pgwn1y0lpaaf46iidaiv0282a";
+    url = "http://launchpad.net/ecryptfs/trunk/${version}/+download/ecryptfs-utils_${version}.orig.tar.gz";
+    sha256 = "1d5nlzcbl8ch639zi3lq6d14gkk4964j6dqhfs87i67867fhlghp";
   };
 
   #TODO: replace wrapperDir below with from <nixos> config.security.wrapperDir;
-  preConfigure = ''
+  postPatch = ''
     FILES="$(grep -r '/bin/sh' src/utils -l; find src -name \*.c)"
     for file in $FILES; do
       substituteInPlace "$file" \
