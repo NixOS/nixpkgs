@@ -13,6 +13,11 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
     makeFlags="DESTROOT=$out"
 
+    makeFlagsArray=(
+      CFLAGS="-g -I. -fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
+      LDFLAGS="-pie -z relro -z now"
+    )
+
     # We want to ignore the $glibc/include/paths.h definition of
     # sendmail path
     echo "#undef _PATH_SENDMAIL" >> pathnames.h
