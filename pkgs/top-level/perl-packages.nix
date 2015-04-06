@@ -10042,6 +10042,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  threads = buildPerlPackage {
+    name = "threads-2.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/threads-2.01.tar.gz;
+      sha256 = "429fea88757e0a347dac2cf9e414dfe8f06c8ca3c5445f6da4a95c2f883b6399";
+    };
+    meta = {
+      description = "Perl interpreter-based threads";
+      license = "perl";
+    };
+  };
+
   Throwable = buildPerlPackage rec {
     name = "Throwable-0.200010";
     src = fetchurl {
