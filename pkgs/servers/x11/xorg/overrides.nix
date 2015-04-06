@@ -55,6 +55,15 @@ in
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
   };
 
+  mkfontscale = attrs: attrs // {
+    patches = lib.singleton (args.fetchpatch {
+      name = "mkfontscale-fix-sig11.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=113951";
+      sha256 = "0i2xf768mz8kvm7i514v0myna9m6jqw82f9a03idabdpamxvwnim";
+    });
+    patchFlags = [ "-p0" ];
+  };
+
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb";
@@ -215,11 +224,6 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
-    patches = [( args.fetchpatch {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/patch/"
-        + "?id=4664412d7a5266d2b392957406b34abc5db95e48";
-      sha256 = "1gix83f1is91iq1zd66nj4k72jm24jjjd9s9l0bzpzhgc8smqdk2";
-    })];
   };
 
   xf86videoqxl = attrs: attrs // {
@@ -235,7 +239,7 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
+    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb"; 
   };
 
   xkeyboardconfig = attrs: attrs // {
@@ -291,6 +295,7 @@ in
         ];
         patches = commonPatches;
         configureFlags = [
+          "--enable-kdrive"             # not built by default
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
