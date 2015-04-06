@@ -115,8 +115,10 @@ self: super: {
   # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
   network-uri = dontCheck super.network-uri;
 
+  # Agda-2.4.2.2 needs these overrides to compile.
+  Agda = super.Agda.override { equivalence = self.equivalence_0_2_5; cpphs = self.cpphs_1_18_9; };
+
   # The Haddock phase fails for one reason or another.
-  Agda = dontHaddock super.Agda;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
   bytestring-progress = dontHaddock super.bytestring-progress;
