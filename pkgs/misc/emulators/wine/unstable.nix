@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, xlibs, flex, bison, mesa, mesa_noglu, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, gettext, fontforge
-, libxml2, libxslt, openssl, gnutls, cups, libdrm, makeWrapper
+, libxml2, libxslt, openssl, gnutls, cups, libdrm, mpg123, makeWrapper
 }:
 
 assert stdenv.isLinux;
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms gettext fontforge
-    libxml2 libxslt openssl gnutls cups makeWrapper
+    libxml2 libxslt openssl gnutls cups mpg123 makeWrapper
   ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
