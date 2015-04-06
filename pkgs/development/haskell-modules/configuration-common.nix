@@ -33,9 +33,6 @@ self: super: {
   elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
   elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
 
-  # https://github.com/acid-state/safecopy/issues/17
-  safecopy = dontCheck super.safecopy;
-
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
