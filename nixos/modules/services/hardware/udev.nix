@@ -237,7 +237,10 @@ in
 
     system.activationScripts.udevd =
       ''
-        echo "" > /proc/sys/kernel/hotplug
+        # The deprecated hotplug uevent helper is not used anymore
+        if [ -e /proc/sys/kernel/hotplug ]; then
+          echo "" > /proc/sys/kernel/hotplug
+        fi
 
         # Regenerate the hardware database /var/lib/udev/hwdb.bin
         # whenever systemd changes.
