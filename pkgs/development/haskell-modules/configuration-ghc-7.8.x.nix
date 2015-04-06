@@ -52,7 +52,7 @@ self: super: {
     blaze-markup = self.blaze-markup_0_6_2_0;
     blaze-html = self.blaze-html_0_7_0_3;
     haskeline = self.haskeline_0_7_2_1;
-    lens = self.lens_4_7;
+    lens = self.lens_4_7_0_1;
     mtl = super.mtl_2_2_1;
     transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
