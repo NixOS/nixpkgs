@@ -6917,9 +6917,6 @@ let
   libzdb = callPackage ../development/libraries/libzdb { };
 
   libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
-  libzrtpcpp_1_6 = callPackage ../development/libraries/libzrtpcpp/1.6.nix {
-    ccrtp = ccrtp_1_8;
-  };
 
   libwacom = callPackage ../development/libraries/libwacom { };
 
