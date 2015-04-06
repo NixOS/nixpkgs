@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ alsaLib libjpeg libX11 qt4 qt5 ];
+  buildInputs = [ alsaLib libX11 qt4 qt5 ];
+  
+  propagatedBuildInputs = [ libjpeg ];
 
   meta = with stdenv.lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
