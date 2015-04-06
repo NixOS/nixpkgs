@@ -7666,7 +7666,17 @@ let
 
   uthash = callPackage ../development/libraries/uthash { };
 
-  ucommon = callPackage ../development/libraries/ucommon { };
+  ucommon = ucommon_openssl;
+
+  ucommon_openssl = callPackage ../development/libraries/ucommon {
+    gnutls = null;
+  };
+
+  ucommon_gnutls = lowPrio (ucommon.override {
+    openssl = null;
+    zlib = null;
+    gnutls = gnutls;
+  });
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
