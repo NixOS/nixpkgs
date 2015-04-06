@@ -13918,11 +13918,11 @@ let
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
 
-    version = "1.11";
+    version = "1.12";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/mopidy/pyspotify/archive/v1.11.tar.gz";
-      sha256 = "089ml6pqr3f2d15n70jpzbaqjp5pjgqlyv4algkxw92xscjw2izg";
+      url = "https://github.com/mopidy/pyspotify/archive/v${version}.tar.gz";
+      sha256 = "0bj6p4hafj1yp0j5n1rxww39nvi3w6y3azadz8a8nxb3b4a8f1xn";
     };
 
     buildInputs = with self; [ pkgs.libspotify ]
