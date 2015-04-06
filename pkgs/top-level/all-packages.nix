@@ -11743,7 +11743,9 @@ let
 
   sxiv = callPackage ../applications/graphics/sxiv { };
 
-  bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
+  bittorrentSync = bittorrentSync14;
+  bittorrentSync14 = callPackage ../applications/networking/bittorrentsync/1.4.x.nix { };
+  bittorrentSync20 = callPackage ../applications/networking/bittorrentsync/2.0.x.nix { };
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
