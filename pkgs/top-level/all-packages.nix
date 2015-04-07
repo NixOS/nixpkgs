@@ -5463,6 +5463,8 @@ let
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
+  belle-sip = callPackage ../development/libraries/belle-sip { };
+
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
