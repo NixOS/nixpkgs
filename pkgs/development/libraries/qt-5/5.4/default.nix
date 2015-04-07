@@ -42,8 +42,6 @@ let
   self =
     {
 
-      qmake = callPackage ./qmake.nix { inherit (self) base; };
-
       activeqt = callPackage
         (
           { qtSubmodule, base }:
