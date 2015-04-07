@@ -5777,7 +5777,7 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
-  libgit2 = callPackage ../development/libraries/git2 { cmake = cmake-3_2; };
+  libgit2 = callPackage ../development/libraries/git2 { };
 
   glew = callPackage ../development/libraries/glew { };
 
@@ -6261,6 +6261,8 @@ let
 
   libchop = callPackage ../development/libraries/libchop { };
 
+  libclc = callPackage ../development/libraries/libclc { };
+
   libcli = callPackage ../development/libraries/libcli { };
 
   libcm = callPackage ../development/libraries/libcm { };
@@ -6661,6 +6663,8 @@ let
   liboggz = callPackage ../development/libraries/liboggz { };
 
   liboil = callPackage ../development/libraries/liboil { };
+
+  libomxil-bellagio = callPackage ../development/libraries/libomxil-bellagio { };
 
   liboop = callPackage ../development/libraries/liboop { };
 
@@ -7332,7 +7336,7 @@ let
     qtLib = qt48Full;
   };
 
-  qt5 = callPackage ../development/libraries/qt-5/5.3 {
+  qt53 = callPackage ../development/libraries/qt-5/5.3 {
     mesa = mesa_noglu;
     cups = if stdenv.isLinux then cups else null;
     # GNOME dependencies are not used unless gtkStyle == true
@@ -7342,7 +7346,9 @@ let
 
   qt54 = callPackage ../development/libraries/qt-5/5.4 {};
 
-  qt5Full = appendToName "full" (qt5.override {
+  qt5 = qt54;
+
+  qt5Full = appendToName "full" (qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
@@ -10990,9 +10996,6 @@ let
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
     kf5 = kf57;
     qt5 = qt54;
-    pkgs = pkgs // {
-      cmake = cmake-3_2;
-    };
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_stable = kdeApps_14_12;
@@ -13144,11 +13147,11 @@ let
           kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
         };
 
-      callPackageOrig = newScope (extra // { cmake = cmake-3_2; });
+      callPackageOrig = newScope extra;
 
       makePackages = extra:
         let
-          callPackage = newScope (extra // { cmake = cmake-3_2; } // self);
+          callPackage = newScope (extra // self);
           kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
           self =
             kde4
