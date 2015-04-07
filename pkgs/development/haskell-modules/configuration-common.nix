@@ -714,6 +714,9 @@ self: super: {
     '';
   });
 
+  # Uses OpenGL in testing
+  caramia = dontCheck super.caramia;
+
 } // {
 
   # Not on Hackage.
