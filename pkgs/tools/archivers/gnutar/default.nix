@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/tar/tar-${version}.tar.bz2";
     sha256 = "0qkm2k9w8z91hwj8rffpjj9v1vhpiriwz4cdj36k9vrgc3hbzr30";
   };
+
+  patches = stdenv.lib.optional stdenv.isDarwin ./gnutar-1.28-darwin.patch;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
