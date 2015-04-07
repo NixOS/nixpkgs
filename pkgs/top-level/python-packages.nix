@@ -14729,7 +14729,6 @@ let
     meta = with stdenv.lib; {
       description = "Summary";
       homepage = https://github.com/quandyfactory/dicttoxml;
-      license = unknown;
     };
   };
 
