@@ -26,6 +26,22 @@
       <replaceable>root</replaceable>
     </arg>
     <arg>
+      <group choice='req'>
+        <arg choice='plain'><option>--max-jobs</option></arg>
+        <arg choice='plain'><option>-j</option></arg>
+      </group>
+      <replaceable>number</replaceable>
+    </arg>
+    <arg>
+      <option>--cores</option>
+      <replaceable>number</replaceable>
+    </arg>
+    <arg>
+      <option>--option</option>
+      <replaceable>name</replaceable>
+      <replaceable>value</replaceable>
+    </arg>
+    <arg>
       <arg choice='plain'><option>--show-trace</option></arg>
     </arg>
     <arg>
@@ -94,6 +110,37 @@ it.</para>
         See the NIX_PATH environment variable for information on the semantics of the Nix search path.
         Paths added through <replaceable>-I</replaceable> take precedence over NIX_PATH.</para>
     </listitem>
+  </varlistentry>
+
+  <varlistentry><term><option>--max-jobs</option></term>
+    <term><option>-j</option></term>
+  
+    <listitem><para>Sets the maximum number of build jobs that Nix will
+    perform in parallel to the specified number. The default is <literal>1</literal>.
+    A higher value is useful on SMP systems or to exploit I/O latency.</para></listitem>
+  
+  </varlistentry>
+  
+  
+  <varlistentry><term><option>--cores</option></term>
+  
+    <listitem><para>Sets the value of the <envar>NIX_BUILD_CORES</envar>
+    environment variable in the invocation of builders.  Builders can
+    use this variable at their discretion to control the maximum amount
+    of parallelism.  For instance, in Nixpkgs, if the derivation
+    attribute <varname>enableParallelBuilding</varname> is set to
+    <literal>true</literal>, the builder passes the
+    <option>-j<replaceable>N</replaceable></option> flag to GNU Make.
+    The value <literal>0</literal> means that the builder should use all
+    available CPU cores in the system.</para></listitem>
+  
+  </varlistentry>
+
+  <varlistentry><term><option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable></term>
+
+    <listitem><para>Set the Nix configuration option
+    <replaceable>name</replaceable> to <replaceable>value</replaceable>.</para></listitem>
+
   </varlistentry>
 
   <varlistentry>

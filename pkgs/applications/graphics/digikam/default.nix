@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost eigen gettext jasper kdelibs kdepimlibs lcms lensfun
     libgphoto2 libjpeg libkdcraw libkexiv2 libkipi liblqr1 libpgf
-    libtiff marble mysql opencv phonon qca2 qimageblitz qjson qt4
+    libtiff marble mysql.lib opencv phonon qca2 qimageblitz qjson qt4
     shared_desktop_ontologies soprano
   ];
 

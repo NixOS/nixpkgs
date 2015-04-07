@@ -1,6 +1,19 @@
-{ runCommand, git }: src:
+{ runCommand, git, nix }: src:
 
-runCommand "local-git-export" {} ''
+let hash = import (runCommand "head-hash.nix"
+  { dummy = builtins.currentTime;
+    preferLocalBuild = true; }
+''
+  cd ${toString src}
+  (${git}/bin/git show && ${git}/bin/git diff) > $out
+  hash=$(${nix}/bin/nix-hash $out)
+  echo "\"$hash\"" > $out
+''); in
+
+runCommand "local-git-export"
+  { dummy = hash;
+    preferLocalBuild = true; }
+''
   cd ${toString src}
   mkdir -p "$out"
   for file in $(${git}/bin/git ls-files); do

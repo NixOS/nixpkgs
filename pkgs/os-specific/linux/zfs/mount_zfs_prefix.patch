@@ -16,7 +16,7 @@ diff -crN '--exclude=.git' zfs-0.60-rc11/cmd/mount_zfs/Makefile.am zfs/cmd/mount
   # Ignore the prefix for the mount helper.  It must be installed in /sbin/
   # because this path is hardcoded in the mount(8) for security reasons.
 + #
-+ # ... except on nixos, where it really is /var/run/current-system/sw/sbin,
++ # ... except on nixos, where it really is /var/run/current-system/sw/bin,
 + # which is where this will end up if we put it in ${out}/sbin.
   #
   sbin_PROGRAMS = mount.zfs

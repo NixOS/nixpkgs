@@ -282,6 +282,12 @@ let
     };
     buildInputs = [ unzip ];
 
+    preBuild = ''
+      makeFlagsArray=(CC=$CC);
+    '';
+
+    buildFlags = if stdenv.isDarwin then "macosx" else "";
+
     installPhase = ''
       mkdir -p $out/lib/lua/${lua.luaversion}
       install -p lpeg.so $out/lib/lua/${lua.luaversion}
@@ -290,7 +296,7 @@ let
 
     meta = {
       homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
-      hydraPlatforms = stdenv.lib.platforms.linux;
+      hydraPlatforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.mit;
     };
   };

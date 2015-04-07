@@ -30,6 +30,8 @@ let self = _self // overrides;
     callPackage = lib.callPackageWith (self // removeAttrs args ["overrides" "external"]);
     _self = with self; {
 
+  inherit emacs;
+
   ## START HERE
 
   ac-haskell-process = melpaBuild rec {
@@ -370,7 +372,7 @@ let self = _self // overrides;
     pname   = "evil";
     version = "20141020";
     src = fetchgit {
-      url = "https://gitorious.org/evil/evil.git";
+      url = "https://github.com/emacsmirror/evil.git";
       rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
       sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
     };
@@ -461,12 +463,12 @@ let self = _self // overrides;
 
   git-commit-mode = melpaBuild rec {
     pname = "git-commit-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "git-commit-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -474,12 +476,12 @@ let self = _self // overrides;
 
   git-rebase-mode = melpaBuild rec {
     pname = "git-rebase-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "git-rebase-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -487,12 +489,12 @@ let self = _self // overrides;
 
   gitattributes-mode = melpaBuild rec {
     pname = "gitattributes-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "gitattributes-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -500,12 +502,12 @@ let self = _self // overrides;
 
   gitconfig-mode = melpaBuild rec {
     pname = "gitconfig-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "gitconfig-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -513,12 +515,12 @@ let self = _self // overrides;
 
   gitignore-mode = melpaBuild rec {
     pname = "gitignore-mode";
-    version = "0.15.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "git-modes";
       rev    = version;
-      sha256 = "1x03276yq63cddc89n8i47k1f6p26b7a5la4hz66fdf15gmr8496";
+      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
     };
     files = [ "gitignore-mode.el" ];
     meta = { license = gpl3Plus; };
@@ -695,12 +697,12 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "20141025";
+    version = "1.4.0";
     src = fetchFromGitHub {
       owner  = "magit";
       repo   = "magit";
-      rev    = "50c08522c8a3c67e0f3b821fe4df61e8bd456ff9";
-      sha256 = "0mzyx72pidzvla1x2qszn3c60n2j0n8i5k875c4difvd1n4p0vsk";
+      rev    = version;
+      sha256 = "0x8bvfw47bfpzsv9yr98aays4idbbwvnkp0pag1q78gcn9h2k9vi";
     };
     packageRequires = [ git-commit-mode git-rebase-mode ];
     meta = { license = gpl3Plus; };
@@ -1067,12 +1069,12 @@ let self = _self // overrides;
 
   weechat = melpaBuild rec {
     pname   = "weechat.el";
-    version = "20141016";
+    version = "0.2.2";
     src = fetchFromGitHub {
       owner  = "the-kenny";
       repo   = pname;
-      rev    = "4cb2ced1eda5167ce774e04657d2cd077b63c706";
-      sha256 = "003sihp7irm0qqba778dx0gf8xhkxd1xk7ig5kgkryvl2jyirk28";
+      rev    = version;
+      sha256 = "0f90m2s40jish4wjwfpmbgw024r7n2l5b9q9wr6rd3vdcwks3mcl";
     };
     postPatch = lib.optionalString (!stdenv.isLinux) ''
       rm weechat-sauron.el weechat-secrets.el

@@ -5,13 +5,13 @@
 
 let wrappedGhc = ghcWithPackages ( self: [hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
-  version = "1.1.8.7";
+  version = "1.1.8.10";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "0dec07e9cb60e78bbca63fc101f8fec6e249269f";
-    sha256 = "0isz3qz23ihbn0rg54x8ddzwpsqlmmpkvaa66b7srfly7nciv8gl";
+    rev = "449d9578e06af1362d7f746798f0aed57ab6ca88";
+    sha256 = "0f8abhl9idbc2qlnb7ynrb11yvm3y07vksyzs1yg6snjvlhfj5az";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
@@ -41,6 +41,13 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.cs.uu.nl/wiki/UHC";
     description = "Utrecht Haskell Compiler";
     maintainers = [ maintainers.phausmann ];
-    platforms = stdenv.lib.platforms.unix;
+
+    # UHC i686 support is broken, see
+    # https://github.com/UU-ComputerScience/uhc/issues/52
+    #
+    # Darwin build is broken as well at the moment.
+    # On Darwin, the GNU libtool is used, which does not
+    # support the -static flag and thus breaks the build.
+    platforms = ["x86_64-linux"];
   };
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig nettools gettext readline openssl python
-    ncurses sqlite postgresql mysql zlib lzo acl glusterfs ceph libcap
+    ncurses sqlite postgresql mysql.lib zlib lzo acl glusterfs ceph libcap
   ];
 
   postPatch = ''
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--sysconfdir=/etc"
-    "--localstatedir=/var"
     "--exec-prefix=\${out}"
     "--enable-lockmgr"
     "--enable-dynamic-storage-backends"
@@ -55,24 +54,18 @@ stdenv.mkDerivation rec {
     ++ optional (openssl != null) "--with-openssl=${openssl}"
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (mysql != null) "--with-mysql=${mysql}"
+    ++ optional (mysql != null) "--with-mysql=${mysql.lib}"
     ++ optional (zlib != null) "--with-zlib=${zlib}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (acl != null) "--enable-acl"
     ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
     ++ optional (ceph != null) "--with-cephfs=${ceph}";
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-
-    rm -rf /tmp /var
-  '';
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "working_dir=\${TMPDIR}"
+    "log_dir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.bareos.org/;

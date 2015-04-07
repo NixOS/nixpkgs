@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/main.c --replace \
         "/sbin:/bin:/usr/sbin:/usr/bin" \
-        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin"
+        "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/bin"
     '';
 
   buildInputs =

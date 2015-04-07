@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "http://sourceforge.net/projects/libtirpc/";
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
     license = licenses.bsd3;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
     longDescription = ''
        Currently, NFS commands use the SunRPC routines provided by the

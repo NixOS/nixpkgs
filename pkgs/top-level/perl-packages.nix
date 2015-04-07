@@ -205,6 +205,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Appcpanminus = buildPerlPackage {
+    name = "App-cpanminus-1.7027";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7027.tar.gz;
+      sha256 = "6853359493f8465abbe556d7409e7c0abecd1b48b6a63d2f851af83839c34b31";
+    };
+    meta = {
+      homepage = https://github.com/miyagawa/cpanminus;
+      description = "Get, unpack, build and install modules from CPAN";
+      license = "perl";
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
   Appperlbrew = buildPerlPackage {
     name = "App-perlbrew-0.71";
     src = fetchurl {
@@ -5489,10 +5503,10 @@ let self = _self // overrides; _self = with self; {
 
 
   MathClipper = buildPerlModule rec {
-    name = "Math-Clipper-1.22";
+    name = "Math-Clipper-1.23";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
-      sha256 = "0p5iblg979v3pb6a8kyhjdv33yadr5997nhz9asjksgvww328nfa";
+      sha256 = "0i9wzvig7ayijc9nvh5x5rryk1jrcj1hcvfmlcj449rnnxx24dav";
     };
     propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsXSpp ExtUtilsTypemapsDefault TestDeep ];
   };
@@ -7043,6 +7057,15 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [IOSocketSSL DigestHMAC];
   };
 
+  NetSMTPTLSButMaintained = buildPerlPackage {
+    name = "Net-SMTP-TLS-ButMaintained-0.24";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FA/FAYLAND/Net-SMTP-TLS-ButMaintained-0.24.tar.gz;
+      sha256 = "0vi5cv7f9i96hgp3q3jpxzn1ysn802kh5xc304f8b7apf67w15bb";
+    };
+    propagatedBuildInputs = [NetSSLeay DigestHMAC IOSocketSSL];
+  };
+
   NetSNMP = buildPerlPackage rec {
     name = "Net-SNMP-6.0.1";
     src = fetchurl {
@@ -7430,12 +7453,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlMagick = buildPerlPackage rec {
-    name = "PerlMagick-6.87";
+    name = "PerlMagick-6.89-1";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/${name}.tar.gz";
-      sha256 = "1bf2g80wdny2dfrrmfgk7cqrxzflx3qp1dnd3919grvrqdviyh16";
+      sha256 = "0n9afy1z5bhf9phrbahnkwhgcmijn8jggpbzwrivw1zhliliiy68";
     };
-    buildInputs = [pkgs.imagemagick];
+    buildInputs = [ pkgs.imagemagick ];
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick}/include/ImageMagick";|' Makefile.PL

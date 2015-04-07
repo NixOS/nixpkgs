@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
+    homepage = http://ounit.forge.ocamlcore.org/;
     description = "Unit test framework for OCaml";
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms;

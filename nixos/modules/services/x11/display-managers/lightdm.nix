@@ -55,7 +55,7 @@ let
       [UserList]
       minimum-uid=500
       hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
-      hidden-shells=/run/current-system/sw/sbin/nologin
+      hidden-shells=/run/current-system/sw/bin/nologin
     '';
 
   lightdmConf = writeText "lightdm.conf"

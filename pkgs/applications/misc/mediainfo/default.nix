@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://mediaarea.net/;
     license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];
   };
 }

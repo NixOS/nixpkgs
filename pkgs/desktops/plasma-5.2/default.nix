@@ -38,7 +38,7 @@ let
     {
       LibBlueDevil = pkgs.libbluedevil;
       PolkitQt5-1 = pkgs.polkit_qt5.override { inherit qt5; };
-      PopplerQt5 = (pkgs.poppler.override { inherit qt5; }).poppler_qt5;
+      PopplerQt5 = pkgs.poppler_qt5.override { inherit qt5; };
     } //
     # packages from nixpkgs
     (with pkgs;

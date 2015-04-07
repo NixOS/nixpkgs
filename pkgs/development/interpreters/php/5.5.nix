@@ -90,13 +90,13 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       mysql = {
-        configureFlags = ["--with-mysql=${mysql}"];
-        buildInputs = [ mysql ];
+        configureFlags = ["--with-mysql=${mysql.lib}"];
+        buildInputs = [ mysql.lib ];
       };
 
       mysqli = {
-        configureFlags = ["--with-mysqli=${mysql}/bin/mysql_config"];
-        buildInputs = [ mysql];
+        configureFlags = ["--with-mysqli=${mysql.lib}/bin/mysql_config"];
+        buildInputs = [ mysql.lib ];
       };
 
       mysqli_embedded = {
@@ -106,8 +106,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       pdo_mysql = {
-        configureFlags = ["--with-pdo-mysql=${mysql}"];
-        buildInputs = [ mysql ];
+        configureFlags = ["--with-pdo-mysql=${mysql.lib}"];
+        buildInputs = [ mysql.lib ];
       };
 
       bcmath = {

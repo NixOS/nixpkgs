@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.1.0";
+  version = "2.1.3.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6";
     rev = "refs/tags/v${version}";
-    sha256 = "1x7za0b1a2i6xn06grpb5j361s9bl4524bp5mz3zcdg8s9nil50d";
+    sha256 = "0dnwkdxqjv5awdgwxci1spcx1s13y5s9wd8ccskwv1rymvpgn8b3";
   };
 
   dontDisableStatic = true;
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     "--with-lib=${execline}/lib"
     "--with-dynlib=${skalibs}/lib"
     "--with-dynlib=${execline}/lib"
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ "--disable-shared" ];
+  ] ++ [ (if stdenv.isDarwin then "--disable-shared" else "--enable-shared") ];
 
   preBuild = ''
     substituteInPlace "src/daemontools-extras/s6-log.c" \

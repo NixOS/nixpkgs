@@ -55,8 +55,9 @@ let
 
   isGhcjs = ghc.isGhcjs or false;
 
+  newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
-    url = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
+    url = newCabalFileUrl;
     sha256 = editedCabalFile;
     name = "${pname}-${version}-r${revision}.cabal";
   };
@@ -71,7 +72,7 @@ let
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
-  enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
+  enableParallelBuilding = versionOlder "7.10" ghc.version || (versionOlder "7.8" ghc.version && !hasActiveLibrary);
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
@@ -134,17 +135,17 @@ stdenv.mkDerivation ({
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
   prePatch = optionalString (editedCabalFile != null) ''
-    echo "Replacing Cabal file with edited version ${newCabalFile}."
+    echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
     cp ${newCabalFile} ${pname}.cabal
   '' + optionalString jailbreak ''
-    echo "Running jailbreak-cabal to lift version restrictions on build inputs."
+    echo "Run jailbreak-cabal to lift version restrictions on build inputs."
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + prePatch;
 
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment
 
-    echo "Building with ${ghc}."
+    echo "Build with ${ghc}."
     export PATH="${ghc}/bin:$PATH"
     ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
@@ -265,12 +266,6 @@ stdenv.mkDerivation ({
         export NIX_GHCPKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
-      '';
-      buildCommand = ''
-        echo >&2 ""
-        echo >&2 "*** Haskell 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
-        echo >&2 ""
-        exit 1
       '';
     };
 

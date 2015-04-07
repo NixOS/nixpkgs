@@ -107,7 +107,7 @@ let
         OggVorbis = libvorbis;
         OpenAL = openal;
         OpenEXR = openexr;
-        Poppler = poppler.poppler_qt4;
+        Poppler = poppler_qt4;
         Prison = prison;
         PulseAudio = pulseaudio;
         PythonLibrary = python;

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
    [ gettext gdbm libtool pam readline ncurses
-     gnutls mysql guile texinfo gnum4 ]
+     gnutls mysql.lib guile texinfo gnum4 ]
    ++ stdenv.lib.optional doCheck dejagnu;
 
   # Tests fail since gcc 4.8

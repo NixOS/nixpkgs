@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ autoconf automake libtool pkgconfig ];
   propagatedBuildInputs = [ ilmbase zlib ];
+
+  patches = [ ./bootstrap.patch ];
   
   meta = with stdenv.lib; {
     homepage = http://www.openexr.com/;

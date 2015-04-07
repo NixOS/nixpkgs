@@ -26,20 +26,17 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional useGTK2 "--with-gtk2";
 
-  installFlags = [ "DESTDIR=\${out}" ];
+  installFlags = [
+    "localstatedir=\${TMPDIR}"
+    "sysconfdir=\${out}/etc"
+  ];
 
   postInstall = ''
-      mv $out/$out/* $out
-      DIR=$out/$out
-      while rmdir $DIR 2>/dev/null; do
-        DIR="$(dirname "$DIR")"
-      done
-
-      substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
-        --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
-      wrapProgram "$out/sbin/lightdm-gtk-greeter" \
-        --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
-    '';
+    substituteInPlace "$out/share/xgreeters/lightdm-gtk-greeter.desktop" \
+      --replace "Exec=lightdm-gtk-greeter" "Exec=$out/sbin/lightdm-gtk-greeter"
+    wrapProgram "$out/sbin/lightdm-gtk-greeter" \
+      --prefix XDG_DATA_DIRS ":" "${hicolor_icon_theme}/share"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://launchpad.net/lightdm-gtk-greeter;

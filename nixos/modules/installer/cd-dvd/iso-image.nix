@@ -7,53 +7,65 @@
 with lib;
 
 let
+  # Timeout in syslinux is in units of 1/10 of a second.
+  # 0 is used to disable timeouts.
+  syslinuxTimeout = if config.boot.loader.timeout == null then
+      0
+    else
+      max (config.boot.loader.timeout * 10) 1;
 
-  # The Grub image.
-  grubImage = pkgs.runCommand "grub_eltorito" {}
+
+  max = x: y: if x > y then x else y;
+
+  # The configuration file for syslinux.
+
+  # Notes on syslinux configuration and UNetbootin compatiblity:
+  #   * Do not use '/syslinux/syslinux.cfg' as the path for this
+  #     configuration. UNetbootin will not parse the file and use it as-is.
+  #     This results in a broken configuration if the partition label does
+  #     not match the specified config.isoImage.volumeID. For this reason
+  #     we're using '/isolinux/isolinux.cfg'.
+  #   * Use APPEND instead of adding command-line arguments directly after
+  #     the LINUX entries.
+  #   * COM32 entries (chainload, reboot, poweroff) are not recognized. They
+  #     result in incorrect boot entries.
+
+  baseIsolinuxCfg =
     ''
-      ${pkgs.grub2}/bin/grub-mkimage -p /boot/grub -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain png jpeg echo gfxmenu reboot
-      cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
-    ''; # */
+    SERIAL 0 38400
+    TIMEOUT ${builtins.toString syslinuxTimeout}
+    UI vesamenu.c32
+    MENU TITLE NixOS
+    MENU BACKGROUND /isolinux/background.png
+    DEFAULT boot
 
-
-  # The configuration file for Grub.
-  grubCfg =
-    ''
-      set default=${builtins.toString config.boot.loader.grub.default}
-      set timeout=${builtins.toString config.boot.loader.grub.timeout}
-
-      if loadfont /boot/grub/unicode.pf2; then
-        set gfxmode=640x480
-        insmod gfxterm
-        insmod vbe
-        terminal_output gfxterm
-
-        insmod png
-        if background_image /boot/grub/splash.png; then
-          set color_normal=white/black
-          set color_highlight=black/white
-        else
-          set menu_color_normal=cyan/blue
-          set menu_color_highlight=white/blue
-        fi
-
-      fi
-
-      ${config.boot.loader.grub.extraEntries}
+    LABEL boot
+    MENU LABEL NixOS ${config.system.nixosVersion} Installer
+    LINUX /boot/bzImage
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+    INITRD /boot/initrd
     '';
 
+  isolinuxMemtest86Entry = ''
+    LABEL memtest
+    MENU LABEL Memtest86+
+    LINUX /boot/memtest.bin
+    APPEND ${toString config.boot.loader.grub.memtest86.params}
+  '';
+
+  isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
   # The efi boot image
   efiDir = pkgs.runCommand "efi-directory" {} ''
-    mkdir -p $out/efi/boot
-    cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/efi/boot/boot${targetArch}.efi
+    mkdir -p $out/EFI/boot
+    cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
     mkdir -p $out/loader/entries
     echo "title NixOS LiveCD" > $out/loader/entries/nixos-livecd.conf
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
     echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
     echo "default nixos-livecd" > $out/loader/loader.conf
-    echo "timeout 5" >> $out/loader/loader.conf
+    echo "timeout ${builtins.toString config.boot.loader.gummiboot.timeout}" >> $out/loader/loader.conf
   '';
 
   efiImg = pkgs.runCommand "efi-image_eltorito" { buildInputs = [ pkgs.mtools pkgs.libfaketime ]; }
@@ -163,6 +175,22 @@ in
       '';
     };
 
+    isoImage.makeUsbBootable = mkOption {
+      default = false;
+      description = ''
+        Whether the ISO image should be bootable from CD as well as USB.
+      '';
+    };
+
+    isoImage.splashImage = mkOption {
+      default = pkgs.fetchurl {
+          url = https://raw.githubusercontent.com/NixOS/nixos-artwork/5729ab16c6a5793c10a2913b5a1b3f59b91c36ee/ideas/grub-splash/grub-nixos-1.png;
+          sha256 = "43fd8ad5decf6c23c87e9026170a13588c2eba249d9013cb9f888da5e2002217";
+        };
+      description = ''
+        The splash image to use in the bootloader.
+      '';
+    };
 
   };
 
@@ -176,7 +204,7 @@ in
 
     # !!! Hack - attributes expected by other modules.
     system.boot.loader.kernelFile = "bzImage";
-    environment.systemPackages = [ pkgs.grub2 ];
+    environment.systemPackages = [ pkgs.grub2 pkgs.syslinux ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
@@ -226,7 +254,7 @@ in
         options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];
 
     boot.initrd.kernelModules = [ "loop" ];
 
@@ -246,15 +274,12 @@ in
     # Individual files to be included on the CD, outside of the Nix
     # store on the CD.
     isoImage.contents =
-      [ { source = grubImage;
-          target = "/boot/grub/grub_eltorito";
-        }
-        { source = pkgs.substituteAll  {
-            name = "grub.cfg";
-            src = pkgs.writeText "grub.cfg-in" grubCfg;
+      [ { source = pkgs.substituteAll  {
+            name = "isolinux.cfg";
+            src = pkgs.writeText "isolinux.cfg-in" isolinuxCfg;
             bootRoot = "/boot";
           };
-          target = "/boot/grub/grub.cfg";
+          target = "/isolinux/isolinux.cfg";
         }
         { source = config.boot.kernelPackages.kernel + "/bzImage";
           target = "/boot/bzImage";
@@ -262,51 +287,44 @@ in
         { source = config.system.build.initialRamdisk + "/initrd";
           target = "/boot/initrd";
         }
-        { source = "${pkgs.grub2}/share/grub/unicode.pf2";
-          target = "/boot/grub/unicode.pf2";
-        }
-        { source = config.boot.loader.grub.splashImage;
-          target = "/boot/grub/splash.png";
-        }
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
+        }
+        { source = "${pkgs.syslinux}/share/syslinux";
+          target = "/isolinux";
+        }
+        { source = config.isoImage.splashImage;
+          target = "/isolinux/background.png";
         }
       ] ++ optionals config.isoImage.makeEfiBootable [
         { source = efiImg;
           target = "/boot/efi.img";
         }
-        { source = "${efiDir}/efi";
-          target = "/efi";
+        { source = "${efiDir}/EFI";
+          target = "/EFI";
         }
         { source = "${efiDir}/loader";
           target = "/loader";
         }
-      ] ++ mapAttrsToList (n: v: { source = v; target = "/boot/${n}"; }) config.boot.loader.grub.extraFiles;
-
-    # The Grub menu.
-    boot.loader.grub.extraEntries =
-      ''
-        menuentry "NixOS ${config.system.nixosVersion} Installer" {
-          linux /boot/bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
-          initrd /boot/initrd
+      ] ++ optionals config.boot.loader.grub.memtest86.enable [
+        { source = "${pkgs.memtest86plus}/memtest.bin";
+          target = "/boot/memtest.bin";
         }
+      ];
 
-        menuentry "Boot from hard disk" {
-          set root=(hd0)
-          chainloader +1
-        }
-      '';
-
-    boot.loader.grub.timeout = 10;
+    boot.loader.timeout = 10;
 
     # Create the ISO image.
     system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
-      inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
+      inherit (pkgs) stdenv perl pathsFromGraph xorriso syslinux;
 
       inherit (config.isoImage) isoName compressImage volumeID contents;
 
       bootable = true;
-      bootImage = "/boot/grub/grub_eltorito";
+      bootImage = "/isolinux/isolinux.bin";
+    } // optionalAttrs config.isoImage.makeUsbBootable {
+      usbBootable = true;
+      isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {
       efiBootable = true;
       efiBootImage = "boot/efi.img";

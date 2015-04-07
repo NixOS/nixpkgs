@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.librelp.com/;
     description = "a reliable logging library";
     license = licenses.gpl2;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 }

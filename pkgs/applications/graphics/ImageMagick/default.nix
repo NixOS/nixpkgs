@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     (mkEnable (libcl != null)        "opencl")
     (mkWith   true                   "modules")
     (mkWith   true                   "gcc-arch=${arch}")
-    (mkEnable true                   "hdri")
+    #(mkEnable true                   "hdri") This breaks some dependencies
     (mkWith   (perl != null)         "perl")
     (mkWith   (jemalloc != null)     "jemalloc")
     (mkWith   true                   "frozenpaths")
@@ -78,6 +78,18 @@ stdenv.mkDerivation rec {
     lcms2 openjpeg liblqr1 xz openexr pango libpng librsvg libtiff libwebp
     libxml2
   ];
+
+  propagatedBuildInputs = []
+    ++ (stdenv.lib.optional (lcms2 != null) lcms2)
+    ++ (stdenv.lib.optional (liblqr1 != null) liblqr1)
+    ++ (stdenv.lib.optional (fftw != null) fftw)
+    ++ (stdenv.lib.optional (libtool != null) libtool)
+    ++ (stdenv.lib.optional (jemalloc != null) jemalloc)
+    ++ (stdenv.lib.optional (libXext != null) libXext)
+    ++ (stdenv.lib.optional (libX11 != null) libX11)
+    ++ (stdenv.lib.optional (libXt != null) libXt)
+    ++ (stdenv.lib.optional (bzip2 != null) bzip2)
+    ;
 
   postInstall = ''(cd "$out/include" && ln -s ImageMagick* ImageMagick)'';
 

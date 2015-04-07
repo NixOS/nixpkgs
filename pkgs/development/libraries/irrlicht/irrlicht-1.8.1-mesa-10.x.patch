@@ -1,0 +1,40 @@
+From 244d00280c1b082ca164f92337773e9e4e1a3898 Mon Sep 17 00:00:00 2001
+From: hiker <henrichsjoerg@mgail.com>
+Date: Wed, 26 Feb 2014 11:13:03 +1100
+Subject: [PATCH] Applied patch from jpirie for fixing mesa 10 compilation
+ problems.
+
+--- irrlicht-1.8.1/source/Irrlicht/COpenGLExtensionHandler.h
++++ irrlicht-1.8.1/source/Irrlicht/COpenGLExtensionHandler.h
+@@ -21,6 +21,7 @@
+ 	#endif
+ 	#include <GL/gl.h>
+ 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
++		typedef void (APIENTRYP PFNGLBLENDEQUATIONPROC) (GLenum mode);
+ 		#include "glext.h"
+ 	#endif
+ 	#include "wglext.h"
+@@ -35,6 +36,7 @@
+ 	#endif
+ 	#include <OpenGL/gl.h>
+ 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
++		typedef void (APIENTRYP PFNGLBLENDEQUATIONPROC) (GLenum mode);
+ 		#include "glext.h"
+ 	#endif
+ #elif defined(_IRR_COMPILE_WITH_SDL_DEVICE_) && !defined(_IRR_COMPILE_WITH_X11_DEVICE_)
+@@ -48,6 +50,7 @@
+ 	#define NO_SDL_GLEXT
+ 	#include <SDL/SDL_video.h>
+ 	#include <SDL/SDL_opengl.h>
++	typedef void (APIENTRYP PFNGLBLENDEQUATIONPROC) (GLenum mode);
+ 	#include "glext.h"
+ #else
+ 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
+@@ -60,6 +63,7 @@
+ 	#include <GL/gl.h>
+ 	#include <GL/glx.h>
+ 	#if defined(_IRR_OPENGL_USE_EXTPOINTER_)
++	typedef void (APIENTRYP PFNGLBLENDEQUATIONPROC) (GLenum mode);
+ 	#include "glext.h"
+ 	#undef GLX_ARB_get_proc_address // avoid problems with local glxext.h
+ 	#include "glxext.h"

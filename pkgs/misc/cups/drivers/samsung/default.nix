@@ -13,12 +13,15 @@
 
 {stdenv, fetchurl, cups, gcc, ghostscript, glibc, patchelf}:
 
-stdenv.mkDerivation rec {
-  name = "samsung-UnifiedLinuxDriver-0.92";
+# Do not bump lightly! Visit <http://www.bchemnet.com/suldr/supported.html>
+# to see what will break when upgrading. Consider a new versioned attribute.
+let version = "4.00.39"; in
+stdenv.mkDerivation {
+  name = "samsung-UnifiedLinuxDriver-${version}";
 
   src = fetchurl {
-    url = "http://downloadcenter.samsung.com/content/DR/200911/20091103171827750/UnifiedLinuxDriver_0.92.tar.gz";
-    sha256 = "0p2am0p8xvm339mad07c4j77gz31m63z76sy6d9hgwmxy2prbqfq";
+    url = "http://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${version}.tar.gz";
+    sha256 = "144b4xggbzjfq7ga5nza7nra2cf6qn63z5ls7ba1jybkx1vm369k";
   };
 
   buildInputs = [ cups gcc ghostscript glibc patchelf ];
@@ -28,9 +31,10 @@ stdenv.mkDerivation rec {
   builder = ./builder.sh;
 
   meta = with stdenv.lib; {
-    description = "Samsung's Linux drivers; includes binaries without source code";
-    homepage = "http://www.samsung.com/";
+    description = "Samsung's Linux printing drivers; includes binaries without source code";
+    homepage = http://www.samsung.com/;
     license = licenses.unfree;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

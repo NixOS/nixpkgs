@@ -1,11 +1,8 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, acl, gmp
-, libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
-}:
+, dbus, libusb, acl, gmp }:
 
-let version = "2.0.2"; in
+let version = "1.7.5"; in
 
-with stdenv.lib;
 stdenv.mkDerivation {
   name = "cups-${version}";
 
@@ -13,27 +10,15 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "12xild9nrhqnrzx8zqh78v3chm4mpp5gf5iamr0h9zb6dgvj11w5";
+    sha256 = "00mx4rpiqw9cwx46bd3hd5lcgmcxy63zfnmkr02smanv8xl4rjqq";
   };
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
   propagatedBuildInputs = [ openssl gmp ];
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--with-systemd=\${out}/lib/systemd/system"
-    "--enable-raw-printing"
-    "--enable-threads"
-  ] ++ optionals stdenv.isLinux [
-    "--enable-dbus"
-    "--enable-pam"
-  ] ++ optional (libusb != null) "--enable-libusb"
-    ++ optional (gnutls != null) "--enable-ssl"
-    ++ optional (avahi != null) "--enable-avahi"
-    ++ optional (libpaper != null) "--enable-libpaper";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --enable-dbus"; # --with-dbusdir
 
   installFlags =
     [ # Don't try to write in /var at build time.

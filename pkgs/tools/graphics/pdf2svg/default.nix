@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1jy6iqwwvd7drcybmdlmnc8m970f82fd7fisa8ha5zh13p49r8n2";
   };
 
-  buildInputs = [ cairo pkgconfig poppler.poppler_glib gtk ];
+  buildInputs = [ cairo pkgconfig poppler gtk ];
 
   meta = { 
     description = "PDF converter to SVG format";

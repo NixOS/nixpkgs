@@ -1,14 +1,12 @@
 { stdenv, fetchurl, valgrind }:
 
 stdenv.mkDerivation rec {
-  # The r127 source still calls itself r126 everywhere, but I'm not going to
-  # patch over such silly cosmetic oversights in an official release. -- nckx
-  version = "127";
+  version = "128";
   name = "lz4-${version}";
 
   src = fetchurl {
     url = "https://github.com/Cyan4973/lz4/archive/r${version}.tar.gz";
-    sha256 = "0hvbbr07j4hfix4dn4xw4fsmkr5s02bj596fn0i15d1i49xby2aj";
+    sha256 = "1lf7a0gqm2q7p1qs28lmajmls3pwfk2p0w3hljjlmshbkndaj26b";
   };
 
   # valgrind is required only by `make test`
@@ -20,6 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
+  checkFlags = "-j1"; # required since version 128
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";

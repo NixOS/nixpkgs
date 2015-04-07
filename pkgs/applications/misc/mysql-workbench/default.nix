@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
     libctemplate libglade libgnome libiodbc libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
-    mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
+    mysql.lib paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
     substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"

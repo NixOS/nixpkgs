@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.1.1";
+  version = "2.1.1.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/execline";
     rev = "refs/tags/v${version}";
-    sha256 = "06fn4fb8hp68pffgfc55l5raph3bk9v0gngbgxfyzkmwbb1gxhll";
+    sha256 = "0yhxyih8p6p9135nifi655qk4gnhdarjzfp1lb4pxx9ar9ay5q7w";
   };
 
   dontDisableStatic = true;

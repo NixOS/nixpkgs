@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, cups, poppler, fontconfig
+{ stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
 
 stdenv.mkDerivation rec {
@@ -10,8 +10,22 @@ stdenv.mkDerivation rec {
     sha256 = "1bq48nnrarlbf6qc93bz1n5wlh6j420gppbck3r45sinwhz5wa7m";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./longer-shell-path.patch;
+      bash = "${bash}/bin/bash";
+    })
+
+    # Fix build with poppler-0.31.0
+    (fetchurl {
+      url = "https://bugs.linuxfoundation.org/attachment.cgi?id=476";
+      name = "cups-filters-poppler-0.31.0.patch";
+      sha256 = "016pzksz4nl1sv3p5ahlnbmb7c899yrvlzq8jxic0gvdrzwd5bl4";
+    })
+  ];
+
   buildInputs = [
-    pkgconfig cups poppler fontconfig libjpeg libpng perl
+    pkgconfig cups poppler poppler_utils fontconfig libjpeg libpng perl
     ijs qpdf dbus
   ];
 
@@ -33,13 +47,6 @@ stdenv.mkDerivation rec {
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe
     '';
-
-  patches = [
-    (substituteAll {
-      src = ./longer-shell-path.patch;
-      bash = "${bash}/bin/bash";
-    })
-  ];
 
   postInstall =
     ''

@@ -278,7 +278,7 @@ let
     rmatio = [ pkgs.zlib ];
     Rmpfr = [ pkgs.gmp pkgs.mpfr ];
     Rmpi = [ pkgs.openmpi ];
-    RMySQL = [ pkgs.zlib pkgs.mysql ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
     RNetCDF = [ pkgs.netcdf pkgs.udunits ];
     RODBCext = [ pkgs.libiodbc ];
     RODBC = [ pkgs.libiodbc ];
@@ -1011,7 +1011,7 @@ let
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
       patches = [ ./patches/RMySQL.patch ];
-      MYSQL_DIR="${pkgs.mysql}";
+      MYSQL_DIR="${pkgs.mysql.lib}";
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {

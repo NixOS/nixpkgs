@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
+  preInstall = "make doc";
+
   meta = {
     homepage = https://forge.ocamlcore.org/projects/ocaml-fileutils/;
     platforms = ocaml.meta.platforms;

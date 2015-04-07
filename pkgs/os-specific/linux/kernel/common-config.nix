@@ -310,6 +310,9 @@ with stdenv.lib;
   SLIP_COMPRESSED y # CSLIP compressed headers
   SLIP_SMART y
   THERMAL_HWMON y # Hardware monitoring support
+  ${optionalString (versionAtLeast version "3.15") ''
+    UEVENT_HELPER n
+  ''}
   ${optionalString (versionOlder version "3.15") ''
     USB_DEBUG? n
   ''}

@@ -1,11 +1,11 @@
-{ stdenv, chmlib, djvulibre, ebook_tools, kde, kdelibs, libspectre, popplerQt4, qca2
+{ stdenv, chmlib, djvulibre, ebook_tools, kde, kdelibs, libspectre, poppler_qt4, qca2
 , qimageblitz, libtiff, kactivities, pkgconfig, libkexiv2 }:
 
 kde {
 
 # TODO: package activeapp, qmobipocket
 
-  buildInputs = [ kdelibs chmlib djvulibre ebook_tools libspectre popplerQt4
+  buildInputs = [ kdelibs chmlib djvulibre ebook_tools libspectre poppler_qt4
                   qca2 qimageblitz libtiff kactivities libkexiv2 ];
 
   nativeBuildInputs = [ pkgconfig ];

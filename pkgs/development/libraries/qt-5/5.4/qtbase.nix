@@ -148,7 +148,7 @@ stdenv.mkDerivation {
   # doesn't remain a runtime-dep if not used
   ++ optionals mesaSupported [ mesa mesa_glu ]
   ++ optional (cups != null) cups
-  ++ optional (mysql != null) mysql
+  ++ optional (mysql != null) mysql.lib
   ++ optional (postgresql != null) postgresql;
 
   buildInputs = [ gdb bison flex gperf ruby ];

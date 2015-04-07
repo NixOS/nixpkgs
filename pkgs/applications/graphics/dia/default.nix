@@ -1,13 +1,13 @@
-{stdenv, fetchurl, fetchurlGnome, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
+{stdenv, fetchurl, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
 , python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool, libart_lgpl
 , withGNOME ? false, libgnomeui }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "dia-${minVer}.3";
+  minVer = "0.97";
 
-  src = fetchurlGnome {
-    project = "dia";
-    major = "0"; minor = "97"; patchlevel = "3"; extension = "xz";
+  src = fetchurl {
+    url = "mirror://gnome/sources/dia/${minVer}/${name}.tar.xz";
     sha256 = "0d3x6w0l6fwd0l8xx06y1h56xf8ss31yzia3a6xr9y28xx44x492";
   };
 

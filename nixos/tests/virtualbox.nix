@@ -244,6 +244,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
         for (my $i = 0; $i <= 120; $i += 10) {
           $machine->sleep(10);
           return if checkRunning_${name};
+          eval { $_[0]->() } if defined $_[0];
         }
         die "VirtualBox VM didn't start up within 2 minutes";
       }
@@ -335,7 +336,9 @@ in {
       $machine->screenshot("gui_manager_started");
       $machine->sendKeys("ret");
       $machine->screenshot("gui_manager_sent_startup");
-      waitForStartup_simple;
+      waitForStartup_simple (sub {
+        $machine->sendKeys("ret");
+      });
       $machine->screenshot("gui_started");
       waitForVMBoot_simple;
       $machine->screenshot("gui_booted");

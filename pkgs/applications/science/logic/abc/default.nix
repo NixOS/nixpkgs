@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "abc-verifier-${version}";
-  version = "140509"; # YYMMDD
+  version = "20150406";
 
   src = fetchhg {
     url    = "https://bitbucket.org/alanmi/abc";
-    rev    = "03e221443d71e49e56cbc37f1907ee3b0ff3e7c9";
-    sha256 = "0ahrqg718y7xpv939f6x8w1kqh7wsja4pw8hca7j67j0qjdgb4lm";
+    rev    = "7d9c50a17d8676ad0c9792bb87102d7cb4b10667";
+    sha256 = "1gg5jjfjjnv0fl7jsz37hzd9dpv58r8p0q8qvms0r289fcdxalcx";
   };
 
   buildInputs = [ readline ];
   preBuild = ''
-    export buildFlags="CC=$CC CXX=$CXX LD=$LD"
+    export buildFlags="CC=$CC CXX=$CXX LD=$CXX"
   '';
   enableParallelBuilding = true;
   installPhase = ''

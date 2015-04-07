@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, bison, flex, libcli, libnet
+{ stdenv, fetchFromGitHub, bison, flex, geoip, geolite-legacy, libcli, libnet
 , libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
 , pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.9-rc4-49-g6f54288";
+  version = "v0.5.9-rc4-53-gdd5d906";
   name = "netsniff-ng-${version}";
 
   src = fetchFromGitHub rec { # Upstream recommends and supports git
     repo = "netsniff-ng";
     owner = repo;
-    rev = "6f542884d002d55d517a50dd9892068e95400b25";
-    sha256 = "0j7rqigfn9zazmzi8w3hapzi8028jr3q27lwyjw7k7lpnayj5iaa";
+    rev = "dd5d906c40db5264d8d33c37565b39540f0258c8";
+    sha256 = "0iwnfjbxiv10zk5mfpnvs2xb88f14hv1a156kn9mhasszknp0a57";
   };
 
-  buildInputs = [ bison flex libcli libnet libnl libnetfilter_conntrack
-    libpcap libsodium liburcu ncurses perl pkgconfig zlib ];
+  buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl
+    libnetfilter_conntrack libpcap libsodium liburcu ncurses perl
+    pkgconfig zlib ];
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
@@ -25,8 +26,18 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Tries to install to /etc, but they're more like /share files anyway
+  # All files installed to /etc are just static data that can go in the store
   makeFlags = "PREFIX=$(out) ETCDIR=$(out)/etc";
+
+  postInstall = ''
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat		$out/etc/netsniff-ng/country4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat		$out/etc/netsniff-ng/country6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoLiteCity.dat	$out/etc/netsniff-ng/city4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoLiteCityv6.dat	$out/etc/netsniff-ng/city6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNum.dat		$out/etc/netsniff-ng/asname4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNumv6.dat	$out/etc/netsniff-ng/asname6.dat
+    rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
+  '';
 
   meta = with stdenv.lib; {
     description = "Swiss army knife for daily Linux network plumbing";

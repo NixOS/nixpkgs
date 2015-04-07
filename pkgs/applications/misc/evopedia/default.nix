@@ -1,12 +1,13 @@
 {stdenv, fetchgit, bzip2, qt4, libX11}:
 
 stdenv.mkDerivation rec {
-  name = "evopedia-0.4.2";
+  name = "evopedia-${version}";
+  version = "0.4.4";
 
   src = fetchgit {
-    url = git://gitorious.org/evopedia/evopedia.git;
-    rev = "v0.4.2" ;
-    md5 = "a2f19ed6e4d936c28cee28d44387b682";
+    url = https://github.com/evopedia/evopedia_qt;
+    rev = "refs/tags/v${version}";
+    sha256 = "1biq9zaj8nhxx1pixidsn97iwp9qy1yslgl0znpa4d4p35jcg48g";
   };
 
   configurePhase = ''
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Offline Wikipedia Viewer";
     homepage = http://www.evopedia.info;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ qknight ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
     description = "MIT Kerberos 5";
     homepage = webpage;
     license = "MPL";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 

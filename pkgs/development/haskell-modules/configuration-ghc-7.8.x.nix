@@ -43,15 +43,20 @@ self: super: {
   # Configure build for mtl 2.1.x.
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
+  # haddock-api 2.16 requires ghc>=7.10
+  haddock-api = super.haddock-api_2_15_0_2;
+
   # Idris requires mtl 2.2.x.
   idris = overrideCabal (super.idris.overrideScope (self: super: {
     mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
+    blaze-markup = self.blaze-markup_0_6_2_0;
+    blaze-html = self.blaze-html_0_7_0_3;
+    haskeline = self.haskeline_0_7_2_1;
+    lens = self.lens_4_7_0_1;
+    mtl = super.mtl_2_2_1;
     transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
-    haskeline = self.haskeline_0_7_2_1;
-    mtl = super.mtl_2_2_1;
   })) (drv: {
-    jailbreak = true;           # idris is scared of lens 4.7
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
@@ -66,12 +71,15 @@ self: super: {
 
   # Newer versions require mtl 2.2.x.
   mtl-prelude = self.mtl-prelude_1_0_3;
+  equivalence = super.equivalence_0_2_5;        # required by Agda
 
   # The test suite pulls in mtl 2.2.x
   command-qq = dontCheck super.command-qq;
 
   # Doesn't support GHC < 7.10.x.
+  bound-gen = dontDistribute super.bound-gen;
   ghc-exactprint = dontDistribute super.ghc-exactprint;
+  ghc-typelits-natnormalise = dontDistribute super.ghc-typelits-natnormalise;
 
   # Newer versions require transformers 0.4.x.
   seqid = super.seqid_0_1_0;
@@ -100,5 +108,8 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   wai-middleware-preprocessor = dontCheck super.wai-middleware-preprocessor;
   incremental-computing = dontCheck super.incremental-computing;
+
+  # Newer versions require base > 4.7
+  gloss = super.gloss_1_9_2_1;
 
 }

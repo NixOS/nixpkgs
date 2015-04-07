@@ -57,7 +57,7 @@ in
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql zlib openssl ];
+    buildInputs = [ mysql.lib zlib openssl ];
   };
 
   ncursesw = attrs: {

@@ -55,13 +55,48 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "lib" ];
+
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
       --replace /usr/bin/libtool libtool
+    sed -i "s,SET(DEFAULT_MYSQL_HOME.*$,SET(DEFAULT_MYSQL_HOME /not/a/real/dir),g" CMakeLists.txt
+    sed -i "s,SET(PLUGINDIR.*$,SET(PLUGINDIR $lib/lib/mysql/plugin),g" CMakeLists.txt
+
+    sed -i "s,SET(pkgincludedir.*$,SET(pkgincludedir $lib/include),g" scripts/CMakeLists.txt
+    sed -i "s,SET(pkglibdir.*$,SET(pkglibdir $lib/lib),g" scripts/CMakeLists.txt
+    sed -i "s,SET(pkgplugindir.*$,SET(pkgplugindir $lib/lib/mysql/plugin),g" scripts/CMakeLists.txt
+
+    sed -i "s,set(libdir.*$,SET(libdir $lib/lib),g" storage/mroonga/vendor/groonga/CMakeLists.txt
+    sed -i "s,set(includedir.*$,SET(includedir $lib/include),g" storage/mroonga/vendor/groonga/CMakeLists.txt
+    sed -i "/\"\$[{]CMAKE_INSTALL_PREFIX}\/\$[{]GRN_RELATIVE_PLUGINS_DIR}\"/d" storage/mroonga/vendor/groonga/CMakeLists.txt
+    sed -i "s,set(GRN_PLUGINS_DIR.*$,SET(GRN_PLUGINS_DIR $lib/\$\{GRN_RELATIVE_PLUGINS_DIR}),g" storage/mroonga/vendor/groonga/CMakeLists.txt
+    sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
+
   postInstall = ''
     substituteInPlace $out/bin/mysql_install_db \
       --replace basedir=\"\" basedir=\"$out\"
+
+    # Remove superfluous files
+    rm -r $out/mysql-test $out/sql-bench $out/data
+    rm $out/share/man/man1/mysql-test-run.pl.1
+    rm $out/bin/rcmysql
+    find $out/bin -name \*test\* -exec rm {} \;
+
+    # Separate libs and includes into their own derivation
+    mkdir -p $lib
+    mv $out/lib $lib
+    mv $out/include $lib
+
+    # Add mysql_config to libs since configure scripts use it
+    mkdir -p $lib/bin
+    cp $out/bin/mysql_config $lib/bin
+    sed -i "/\(execdir\|bindir\)/ s,'[^\"']*',$lib/bin,g" $lib/bin/mysql_config
+
+    # Make sure to propagate lib for compatability
+    mkdir -p $out/nix-support
+    echo "$lib" > $out/nix-support/propagated-native-build-inputs
   '';
 
   passthru.mysqlVersion = "5.6";

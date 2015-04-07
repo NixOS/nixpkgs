@@ -2037,7 +2037,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
   pop3client = callPackage ../development/libraries/haskell/pop3-client {};
 
   poppler = callPackage ../development/libraries/haskell/poppler {
-    popplerGlib = pkgs.poppler.poppler_glib;
+    popplerGlib = pkgs.poppler;
     libc = pkgs.stdenv.cc.libc;
   };
 
