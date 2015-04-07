@@ -83,8 +83,11 @@ stdenv.mkDerivation {
     "--enable-vdpau"
     "--enable-omx"
     "--enable-va"
-    "--enable-opencl"
-    "--enable-opencl-icd"
+
+    # TODO: Figure out how to enable opencl without having a runtime dependency on clang
+    "--disable-opencl"
+    #"--enable-opencl"
+    #"--enable-opencl-icd"
 
     "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
     "--enable-shared-glapi"
