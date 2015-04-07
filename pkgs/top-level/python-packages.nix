@@ -14715,5 +14715,22 @@ let
       licences = [ licenses.mit licenses.gpl2 ];
     };
   };
+  
+  dicttoxml = buildPythonPackage rec {
+    name = "dicttoxml-1.6.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dicttoxml/dicttoxml-1.6.4.tar.gz";
+      md5 = "154b47d2b7405280b871a81502a05657";
+    };
+
+    propagatedBuildInputs = with self; [  ];
+
+    meta = with stdenv.lib; {
+      description = "Summary";
+      homepage = https://github.com/quandyfactory/dicttoxml;
+      license = unknown;
+    };
+  };
 
 }; in pythonPackages
