@@ -12828,7 +12828,11 @@ let
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
-  tbe = callPackage ../games/the-butterfly-effect {};
+  the-powder-toy = callPackage ../games/the-powder-toy {
+    lua = lua5_1;
+  };
+
+  tbe = callPackage ../games/the-butterfly-effect { };
 
   teetertorture = callPackage ../games/teetertorture { };
 
