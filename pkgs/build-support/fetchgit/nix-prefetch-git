@@ -1,5 +1,7 @@
 #! /bin/sh -e
 
+export GIT_SSL_NO_VERIFY=true
+
 url=
 rev=
 expHash=
@@ -76,6 +78,9 @@ Options:
 
 if test -z "$url"; then
     usage
+fi
+if test -z "$hashFormat"; then
+  hashFormat=--base32
 fi
 
 

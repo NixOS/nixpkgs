@@ -43,7 +43,7 @@ if test -z "$finalPath"; then
     # Perform the checkout.
     if [[ $url != /* ]]; then
       tmpClone=$tmpPath/hg-clone
-      hg clone -q -y -U "$url" $tmpClone >&2
+      hg clone --insecure -q -y -U "$url" $tmpClone >&2
     else
       tmpClone=$url
     fi
