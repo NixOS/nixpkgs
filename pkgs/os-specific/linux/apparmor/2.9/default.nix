@@ -17,7 +17,7 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "a63b8724c36c29ed438c9e3ca403bfeeb6c998a45990e300aa1b10faa23a0a22";
+    sha256 = "08ha7aigl40vm80f742rljcckdpfpw1s8g4yii1ysabcqcj8ffx6";
   };
 
   prePatchCommon = ''
