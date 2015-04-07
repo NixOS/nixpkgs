@@ -4849,7 +4849,7 @@ let
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
-  automake = automake114x;
+  automake = automake115x;
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
@@ -4860,6 +4860,8 @@ let
   automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
   automake114x = callPackage ../development/tools/misc/automake/automake-1.14.x.nix { };
+
+  automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
