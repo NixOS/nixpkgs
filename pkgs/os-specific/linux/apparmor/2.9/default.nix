@@ -54,7 +54,7 @@ let
     buildPhase = ''
       cd ./libraries/libapparmor
       ./autogen.sh
-      ./configure --prefix="$out" --with-python
+      ./configure --prefix="$out" --with-python --with-perl
       make
       '';
 
