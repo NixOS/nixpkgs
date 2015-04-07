@@ -13543,11 +13543,11 @@ let
   };
 
   translationstring = buildPythonPackage rec {
-    name = "translationstring-1.1";
+    name = "translationstring-1.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/translationstring/${name}.tar.gz";
-      md5 = "0979b46d8f0f852810c8ec4be5c26cf2";
+      md5 = "a4b62e0f3c189c783a1685b3027f7c90";
     };
 
     meta = {
