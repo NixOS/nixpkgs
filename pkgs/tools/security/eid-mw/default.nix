@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoreconfHook gtk2 pcsclite pkgconfig ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   postInstall = ''

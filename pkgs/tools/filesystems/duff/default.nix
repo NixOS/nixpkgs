@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, autoreconfHook, gettext }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
+let version = "0.5.2"; in
 stdenv.mkDerivation rec {
   name = "duff-${version}";
-  version = "0.5.2";
 
-  src = fetchurl {
-    url = "https://github.com/elmindreda/duff/archive/${version}.tar.gz";
-    sha256 = "149dd80f9758085ed199c37aa32ad869409fa5e2c8da8a51294bd64ca886e058";
+  src = fetchFromGitHub {
+    sha256 = "0yfm910wjj6z0f0cg68x59ykf4ql5m49apzy8sra00f8kv4lpn53";
+    rev = version;
+    repo = "duff";
+    owner = "elmindreda";
   };
 
   buildInputs = [ autoreconfHook gettext ];
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
     sed 's@po/Makefile.in\( .*\)po/Makefile.in@po/Makefile.in \1@' \
       -i configure.ac
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Quickly find duplicate files.";

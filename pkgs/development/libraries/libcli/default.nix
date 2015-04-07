@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
+let version = "1.9.7"; in
 stdenv.mkDerivation rec {
-  version = "1.9.7";
   name = "libcli-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/dparrish/libcli/archive/v${version}.tar.gz";
-    sha256 = "0v4867jbach5zd1nq0sspq5q95vvbpnljzm2yf64k8a4w2vadpbx";
+  src = fetchFromGitHub {
+    sha256 = "08pmjhqkwldhmcwjhi2l27slf1fk6nxxfaihnk2637pqkycy8z0c";
+    rev = "v${version}";
+    repo = "libcli";
+    owner = "dparrish";
   };
 
   enableParallelBuilding = true;
