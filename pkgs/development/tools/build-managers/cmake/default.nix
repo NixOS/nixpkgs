@@ -1,9 +1,12 @@
 { stdenv, fetchurl
 , bzip2, curl, expat, jsoncpp, libarchive, xz, zlib
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
+, wantPS ? false, ps ? null
 }:
 
 with stdenv.lib;
+
+assert wantPS -> (ps != null);
 
 let
   os = stdenv.lib.optionalString;
@@ -40,6 +43,8 @@ stdenv.mkDerivation rec {
     ++ optional (jsoncpp != null) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
+
+  propagatedBuildInputs = optional wantPS ps;
 
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
 
