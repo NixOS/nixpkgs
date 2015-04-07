@@ -14,7 +14,8 @@ pythonPackages.buildPythonPackage {
 
   buildInputs = [ unzip ];
 
-  pythonPath = [ systemd python.modules.sqlite3 gamin ];
+  pythonPath = (stdenv.lib.optional stdenv.isLinux systemd)
+    ++ [ python.modules.sqlite3 gamin ];
 
   preConfigure = ''
     substituteInPlace setup.cfg \
