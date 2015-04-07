@@ -30,7 +30,7 @@ in
 
       openFirewall = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to open ports in the firewall (if enabled) for the server.
         '';
