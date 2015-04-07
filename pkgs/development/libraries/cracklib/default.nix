@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libintlOrEmpty }:
+{ stdenv, fetchurl, libintlOrEmpty, zlib, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "cracklib-2.9.1";
+  name = "cracklib-2.9.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/cracklib/${name}.tar.gz";
-    sha256 = "0mni2sz7350d4acs7gdl8nilfmnb8qhcvmxnpf6dr5wsag10b2a0";
+    sha256 = "1xarjwga2bc4hys4fkspcp1cph699ag8gg6gmv8rjgj43llrkj61";
   };
 
-  buildInputs = libintlOrEmpty;
+  buildInputs = [ libintlOrEmpty zlib gettext ];
 
   meta = with stdenv.lib; {
     homepage    = http://sourceforge.net/projects/cracklib;
