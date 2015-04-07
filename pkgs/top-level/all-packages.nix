@@ -1373,9 +1373,7 @@ let
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
-  fuppes = callPackage ../tools/networking/fuppes {
-    ffmpeg = ffmpeg_0_5;
-  };
+  fuppes = callPackage ../tools/networking/fuppes { };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
@@ -5667,18 +5665,34 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg_0_5 = callPackage ../development/libraries/ffmpeg/0.5.nix { };
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
   ffmpeg_0_11 = callPackage ../development/libraries/ffmpeg/0.11.nix { };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
   ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
-  ffmpeg_2_5 = callPackage ../development/libraries/ffmpeg/2.5.nix { };
   ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
   # Aliases
   ffmpeg_0 = ffmpeg_0_11;
   ffmpeg_1 = ffmpeg_1_2;
-  ffmpeg_2 = ffmpeg_2_5;
+  ffmpeg_2 = ffmpeg_2_6;
   ffmpeg = ffmpeg_2;
+
+  ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
+    # The following need to be fixed on Darwin
+    frei0r = if stdenv.isDarwin then null else frei0r;
+    game-music-emu = if stdenv.isDarwin then null else game-music-emu;
+    gsm = if stdenv.isDarwin then null else gsm;
+    jack2 = if stdenv.isDarwin then null else jack2;
+    libmodplug = if stdenv.isDarwin then null else libmodplug;
+    libssh = if stdenv.isDarwin then null else libssh;
+    libvpx = if stdenv.isDarwin then null else libvpx;
+    openal = if stdenv.isDarwin then null else openal;
+    openjpeg_1 = if stdenv.isDarwin then null else openjpeg_1;
+    pulseaudio = if stdenv.isDarwin then null else pulseaudio;
+    samba = if stdenv.isDarwin then null else samba;
+    vid-stab = if stdenv.isDarwin then null else vid-stab;
+    x265 = if stdenv.isDarwin then null else x265;
+    xavs = if stdenv.isDarwin then null else xavs;
+  };
 
   ffms = callPackage ../development/libraries/ffms { };
 
@@ -12853,7 +12867,7 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
-    ffmpeg = ffmpeg_0_5;
+    ffmpeg = ffmpeg_0_10;
     lua = lua5;
   };
 
