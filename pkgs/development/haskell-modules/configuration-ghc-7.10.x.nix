@@ -229,13 +229,6 @@ self: super: {
     patchPhase = "sed -i '113iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen.hs";
   });
 
-  wl-pprint-text = overrideCabal super.wl-pprint-text (drv: {
-    patchPhase = ''
-      sed -i '71iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen/Text/Monadic.hs
-      sed -i '119iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen/Text.hs
-    '';
-  });
-
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
