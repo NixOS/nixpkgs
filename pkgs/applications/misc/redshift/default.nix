@@ -1,31 +1,33 @@
-{ fetchurl, stdenv, libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python
-, randrproto, xcbutil, xf86vidmodeproto, autoconf, automake, gettext, glib
-, GConf, dbus, dbus_glib, makeWrapper, gtk, pygtk, pyxdg, geoclue }:
+{ fetchurl, stdenv, libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python3
+, randrproto, xcbutil, xf86vidmodeproto, autoconf, automake, libtool, intltool, gettext
+, glib, GConf, dbus, dbus_glib, makeWrapper, geoclue, pygobject3, pyxdg, gtk3 }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.1";
+  version = "1.10";
   name = "redshift-${version}";
   src = fetchurl {
     url = "https://github.com/jonls/redshift/archive/v${version}.tar.gz";
-    sha256 = "0rj7lyg4ikwpk1hr1k2bgk9gjqvvv51z8hydsgpx2k2lqdv6lqri";
+    sha256 = "f7a1ca1eccf662995737e14f894c2b15193923fbbe378d151e346a8013644f16";
   };
 
   buildInputs = [
-    libX11 libXrandr libXxf86vm libxcb pkgconfig python randrproto xcbutil
-    xf86vidmodeproto autoconf automake gettext glib GConf dbus dbus_glib
-    makeWrapper gtk pygtk pyxdg geoclue
+    libX11 libXrandr libXxf86vm libxcb pkgconfig python3 randrproto xcbutil
+    xf86vidmodeproto autoconf automake libtool intltool gettext glib GConf dbus dbus_glib
+    makeWrapper geoclue pygobject3 gtk3
   ];
 
   preConfigure = ''
     ./bootstrap
   '';
 
+  configureFlags = ''--enable-gui=yes'';
+
   preInstall = ''
-    substituteInPlace src/redshift-gtk/redshift-gtk python --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
+    substituteInPlace src/redshift-gtk/redshift-gtk python --replace "/usr/bin/env python3" "${python3}/bin/${python3.executable}"
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0:${pyxdg}/lib/${python.libPrefix}/site-packages/pyxdg:$out/lib/${python.libPrefix}/site-packages
+    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH:${pygobject3}/lib/${python3.libPrefix}/site-packages/gi:${pyxdg}/lib/${python3.libPrefix}/site-packages/pyxdg:$out/lib/${python3.libPrefix}/site-packages
   '';
 
   meta = with stdenv.lib; {
