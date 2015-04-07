@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "kbd-2.0.2";
 
   src = fetchurl {
-    url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
-    sha256 = "08f0nc78h6l2z39lr5jddpq7lvm365sc42597nvd6f8hc2bcgr5i";
+    url = "mirror://kernel/linux/utils/kbd/${name}.tar.xz";
+    sha256 = "04mrms12nm5sas0nxs94yrr3hz7gmqhnmfgb9ff34bh1jszxmzcx";
   };
 
   /* Get the dvorak programmer keymap (present in X but not in kbd) */
@@ -26,7 +26,9 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
-  patchPhase =
+  patches = [ ./console-fix.patch ];
+
+  postPatch =
     ''
       mkdir -p data/keymaps/i386/neo
       cat "$neoSrc" > data/keymaps/i386/neo/neo.map
