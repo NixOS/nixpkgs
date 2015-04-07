@@ -11116,11 +11116,7 @@ let
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
-  linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
-    inherit (gnome) libglade;
-    libexosip = libexosip_3;
-    libosip = libosip_3;
-  };
+  linphone = callPackage ../applications/networking/instant-messengers/linphone rec { };
 
   linuxsampler = callPackage ../applications/audio/linuxsampler {
     bison = bison2;
