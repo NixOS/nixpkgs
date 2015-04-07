@@ -667,7 +667,7 @@ let
       md5 = "305b0036df5696d68369807835f554ae";
     };
 
-    propagatedBuildInputs = with self; [ dateutil ];
+    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
 
     meta = with stdenv.lib; {
       description = "Microsoft Azure SDK for Python";
