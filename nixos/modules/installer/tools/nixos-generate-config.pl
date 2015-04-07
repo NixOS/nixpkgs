@@ -148,7 +148,7 @@ sub pciCheck {
          $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
         ) )
      {
-        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
+        push @modulePackages, "\${config.boot.kernelPackages.broadcom_sta}";
         push @kernelModules, "wl";
      }
 
