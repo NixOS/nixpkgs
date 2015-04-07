@@ -7349,7 +7349,7 @@ let
 
   qt5 = qt54;
 
-  qt5Full = appendToName "full" (qt5.override {
+  qt5Full = appendToName "full" (qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
