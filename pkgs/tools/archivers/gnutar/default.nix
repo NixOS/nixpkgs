@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = stdenv.lib.optional stdenv.isDarwin ./gnutar-1.28-darwin.patch;
+
+  # gnutar tries to call into gettext between `fork` and `exec`,
+  # which is not safe on darwin.
+  # see http://article.gmane.org/gmane.os.macosx.fink.devel/21882
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/system.c --replace '_(' 'N_('
+  '';
+
   buildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   # May have some issues with root compilation because the bootstrap tool
