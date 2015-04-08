@@ -657,12 +657,12 @@ let self = _self // overrides;
 
   haskell-mode = melpaBuild rec {
     pname   = "haskell-mode";
-    version = "20150101";
+    version = "13.12";
     src = fetchFromGitHub {
       owner  = "haskell";
       repo   = pname;
-      rev    = "0db5efaaeb3b22e5a3fdafa600729e14c1716ee2";
-      sha256 = "0d63cgzj579cr8zbrnl0inyy35b26sxinqxr7bgrjsngpmhm52an";
+      rev    = "v${version}";
+      sha256 = "1l8sby2626hpp0li23mic3qq8w7jirsp1hd08hkx2z84gvz4j6fz";
     };
     meta = { license = gpl3Plus; };
   };
