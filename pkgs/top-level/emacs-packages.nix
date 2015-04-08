@@ -352,6 +352,22 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  evil-indent-textobject = melpaBuild rec {
+    pname   = "evil-indent-textobject";
+    version = "0.2";
+    src = fetchFromGitHub {
+      owner  = "cofi";
+      repo   = pname;
+      rev    = "70a1154a531b7cfdbb9a31d6922482791e20a3a7";
+      sha256 = "0nghisnc49ivh56mddfdlcbqv3y2vqzjvkpgwv3zp80ga6ghvdmz";
+    };
+    packageRequires = [ evil ];
+    meta = {
+      description = "Textobject for evil based on indentation";
+      license = gpl2Plus;
+    };
+  };
+
   evil-leader = melpaBuild rec {
     pname   = "evil-leader";
     version = "0.4.3";
