@@ -5782,6 +5782,10 @@ let
   gettext_0_18 = callPackage ../development/libraries/gettext { };
   gettext_0_19 = callPackage ../development/libraries/gettext/0.19.nix { };
 
+  gettextWithExpat = gettext: callPackage ../development/libraries/gettext/expat.nix {
+    inherit gettext;
+  };
+
   gd = callPackage ../development/libraries/gd { };
 
   gdal = callPackage ../development/libraries/gdal { };
