@@ -13,7 +13,7 @@
 #       package-user-dir "~/.nix-profile/share/emacs/site-lisp/elpa")
 # (package-initialize)
 
-with stdenv.lib.licences;
+with stdenv.lib.licenses;
 
 let
   melpaBuild = import ../build-support/melpa {
@@ -725,6 +725,31 @@ rec {
       rev    = "7ef26c51feaef8a5ec0929737130ab8ba326983c";
       sha256 = "075z0glain0dp56d0cp468y5y88wn82ab26aapsrdzq8hmlshwn4";
     };
+    meta = { licence = gpl3Plus; };
+  };
+
+  window-layout = melpaBuild rec {
+    pname   = "window-layout";
+    version = "1.2";
+    src = fetchFromGitHub {
+      owner  = "kiwanami";
+      repo   = "emacs-window-layout";
+      rev    = "d302b9c71ae9e2e26b0c234942eac0fed4ca6394";
+      sha256 = "11acn1wja9b0rbz705s78qlb3hsw0xy134c5r70bidpvh10dl1s6";
+    };
+    meta = { licence = gpl3Plus; };
+  };
+
+  e2wm = melpaBuild rec {
+    pname = "e2wm";
+    version = "1.2";
+    src = fetchFromGitHub {
+      owner  = "kiwanami";
+      repo   = "emacs-window-manager";
+      rev    = "531476ca3549454073ad86932ddcb040b38543dd";
+      sha256 = "1mijpq992gpky42v19mxanaib625rksazfs94m0inx9pd5pggics";
+    };
+    packageRequires = [ window-layout ];
     meta = { licence = gpl3Plus; };
   };
 }
