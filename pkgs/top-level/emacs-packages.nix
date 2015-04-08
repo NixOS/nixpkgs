@@ -780,10 +780,10 @@ let self = _self // overrides;
 
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
-    version = "20141020";
+    version = "20150406";
     src = fetchurl {
       url    = "http://orgmode.org/elpa/${pname}-${version}.tar";
-      sha256 = "02njxmdbmias2f5psvwqc115dyakcwm2g381gfdv8qz4sqav0r77";
+      sha256 = "1ny2myg4rm75ab2gl5rqrwy7h53q0vv18df8gk3zv13kljj76c6i";
     };
     buildPhase = ''
       cp $src ${pname}-${version}.tar
