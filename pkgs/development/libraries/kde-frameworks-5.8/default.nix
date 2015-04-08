@@ -70,7 +70,7 @@ let
     (with pkgs;
       {
         Boost = boost155;
-        cmake = cmake-3_2;
+        inherit cmake;
         inherit epoxy;
         GIF = giflib;
         GLIB2 = glib;
