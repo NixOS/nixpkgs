@@ -882,6 +882,21 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  rainbow-delimiters = melpaBuild rec {
+    pname = "rainbow-delimiters";
+    version = "2.1.1";
+    src = fetchFromGitHub {
+      owner = "Fanael";
+      repo = pname;
+      rev = version;
+      sha256 = "0gxc8j5a14bc9mp43cbcz41ipc0z1yvmypg52dnl8hadirry20gd";
+    };
+    meta = {
+      description = "Highlight delimiters with colors according to their depth";
+      license = gpl3Plus;
+    };
+  };
+
   request = melpaBuild rec {
     pname = "request";
     version = "0.2.0";
