@@ -102,6 +102,4 @@ rec {
   git-extras = callPackage ./git-extras { };
 
   git-cola = callPackage ./git-cola { };
-
-  git-imerge = callPackage ./git-imerge { };
 }
