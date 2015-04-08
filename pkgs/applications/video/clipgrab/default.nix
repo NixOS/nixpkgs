@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, makeDesktopItem, qt4 }:
 
 let version = "3.4.9"; in
 stdenv.mkDerivation rec {
@@ -31,12 +31,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    install -Dm755 clipgrab $out/bin
+  desktopItem = makeDesktopItem rec {
+    name = "clipgrab";
+    exec = name;
+    icon = name;
+    desktopName = "ClipGrab";
+    comment = "A friendly downloader for YouTube and other sites";
+    genericName = "Web video downloader";
+    categories = "Qt;AudioVideo;Audio;Video";
+  };
 
-    mkdir -p $out/share
+  installPhase = ''
+    install -Dm755 clipgrab $out/bin/clipgrab
     install -Dm644 icon.png $out/share/pixmaps/clipgrab.png
-    install -Dm644 ${./clipgrab.desktop} $out/share/applications/clipgrab.desktop
+    cp -r ${desktopItem}/share/applications $out/share
   '';
 }
