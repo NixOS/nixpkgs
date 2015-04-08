@@ -714,6 +714,10 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
+  llvm-general = super.llvm-general.override {
+                   llvm-config = pkgs.llvmPackages_34.llvm;
+                 };
+
 } // {
 
   # Not on Hackage.
