@@ -1,0 +1,1786 @@
+--- binutils-2.23/bfd/elf-bfd.h
++++ binutils-2.23/bfd/elf-bfd.h
+@@ -1577,6 +1577,9 @@ struct elf_obj_tdata
+   /* Segment flags for the PT_GNU_STACK segment.  */
+   unsigned int stack_flags;
+ 
++  /* Segment flags for the PT_PAX_FLAGS segment.  */
++  unsigned int pax_flags;
++
+   /* Symbol version definitions in external objects.  */
+   Elf_Internal_Verdef *verdef;
+ 
+--- binutils-2.23/bfd/elf.c
++++ binutils-2.23/bfd/elf.c
+@@ -1158,6 +1158,7 @@ get_segment_type (unsigned int p_type)
+     case PT_GNU_EH_FRAME: pt = "EH_FRAME"; break;
+     case PT_GNU_STACK: pt = "STACK"; break;
+     case PT_GNU_RELRO: pt = "RELRO"; break;
++    case PT_PAX_FLAGS: pt = "PAX_FLAGS"; break;
+     default: pt = NULL; break;
+     }
+   return pt;
+@@ -2477,6 +2478,9 @@ bfd_section_from_phdr (bfd *abfd, Elf_Internal_Phdr *hdr, int hdr_index)
+     case PT_GNU_RELRO:
+       return _bfd_elf_make_section_from_phdr (abfd, hdr, hdr_index, "relro");
+ 
++    case PT_PAX_FLAGS:
++      return _bfd_elf_make_section_from_phdr (abfd, hdr, hdr_index, "pax_flags");
++
+     default:
+       /* Check for any processor-specific program segment types.  */
+       bed = get_elf_backend_data (abfd);
+@@ -3551,6 +3555,11 @@ get_program_header_size (bfd *abfd, struct bfd_link_info *info)
+       ++segs;
+     }
+ 
++    {
++      /* We need a PT_PAX_FLAGS segment.  */
++      ++segs;
++    }
++
+   for (s = abfd->sections; s != NULL; s = s->next)
+     {
+       if ((s->flags & SEC_LOAD) != 0
+@@ -4153,6 +4162,20 @@ _bfd_elf_map_sections_to_segments (bfd *abfd, struct bfd_link_info *info)
+ 	    }
+ 	}
+ 
++    {
++      amt = sizeof (struct elf_segment_map);
++      m = bfd_zalloc (abfd, amt);
++      if (m == NULL)
++	goto error_return;
++      m->next = NULL;
++      m->p_type = PT_PAX_FLAGS;
++      m->p_flags = elf_tdata (abfd)->pax_flags;
++      m->p_flags_valid = 1;
++
++      *pm = m;
++      pm = &m->next;
++    }
++
+       free (sections);
+       elf_tdata (abfd)->segment_map = mfirst;
+     }
+@@ -5417,7 +5440,8 @@ rewrite_elf_program_header (bfd *ibfd, bfd *obfd)
+        6. PT_TLS segment includes only SHF_TLS sections.
+        7. SHF_TLS sections are only in PT_TLS or PT_LOAD segments.
+        8. PT_DYNAMIC should not contain empty sections at the beginning
+-	  (with the possible exception of .dynamic).  */
++	  (with the possible exception of .dynamic).
++       9. PT_PAX_FLAGS segments do not include any sections.  */
+ #define IS_SECTION_IN_INPUT_SEGMENT(section, segment, bed)		\
+   ((((segment->p_paddr							\
+       ? IS_CONTAINED_BY_LMA (section, segment, segment->p_paddr)	\
+@@ -5425,6 +5449,7 @@ rewrite_elf_program_header (bfd *ibfd, bfd *obfd)
+      && (section->flags & SEC_ALLOC) != 0)				\
+     || IS_NOTE (segment, section))					\
+    && segment->p_type != PT_GNU_STACK					\
++   && segment->p_type != PT_PAX_FLAGS					\
+    && (segment->p_type != PT_TLS					\
+        || (section->flags & SEC_THREAD_LOCAL))				\
+    && (segment->p_type == PT_LOAD					\
+--- binutils-2.23/bfd/elflink.c
++++ binutils-2.23/bfd/elflink.c
+@@ -5545,16 +5545,30 @@ bfd_elf_size_dynamic_sections (bfd *output_bfd,
+     return TRUE;
+ 
+   bed = get_elf_backend_data (output_bfd);
++
++  elf_tdata (output_bfd)->pax_flags = PF_NORANDEXEC;
++  if (info->execheap)
++    elf_tdata (output_bfd)->pax_flags |= PF_NOMPROTECT;
++  else if (info->noexecheap)
++    elf_tdata (output_bfd)->pax_flags |= PF_MPROTECT;
++
+   if (info->execstack)
+-    elf_tdata (output_bfd)->stack_flags = PF_R | PF_W | PF_X;
++    {
++      elf_tdata (output_bfd)->stack_flags = PF_R | PF_W | PF_X;
++      elf_tdata (output_bfd)->pax_flags |= PF_EMUTRAMP;
++    }
+   else if (info->noexecstack)
+-    elf_tdata (output_bfd)->stack_flags = PF_R | PF_W;
++    {
++      elf_tdata (output_bfd)->stack_flags = PF_R | PF_W;
++      elf_tdata (output_bfd)->pax_flags |= PF_NOEMUTRAMP;
++    }
+   else
+     {
+       bfd *inputobj;
+       asection *notesec = NULL;
+       int exec = 0;
+ 
++      elf_tdata (output_bfd)->pax_flags |= PF_NOEMUTRAMP;
+       for (inputobj = info->input_bfds;
+ 	   inputobj;
+ 	   inputobj = inputobj->link_next)
+@@ -5567,7 +5581,11 @@ bfd_elf_size_dynamic_sections (bfd *output_bfd,
+ 	  if (s)
+ 	    {
+ 	      if (s->flags & SEC_CODE)
+-		exec = PF_X;
++		{
++		  elf_tdata (output_bfd)->pax_flags &= ~PF_NOEMUTRAMP;
++		  elf_tdata (output_bfd)->pax_flags |= PF_EMUTRAMP;
++		  exec = PF_X;
++		}
+ 	      notesec = s;
+ 	    }
+ 	  else if (bed->default_execstack)
+--- binutils-2.23/binutils/readelf.c
++++ binutils-2.23/binutils/readelf.c
+@@ -2740,6 +2740,7 @@ get_segment_type (unsigned long p_type)
+ 			return "GNU_EH_FRAME";
+     case PT_GNU_STACK:	return "GNU_STACK";
+     case PT_GNU_RELRO:  return "GNU_RELRO";
++    case PT_PAX_FLAGS:  return "PAX_FLAGS";
+ 
+     default:
+       if ((p_type >= PT_LOPROC) && (p_type <= PT_HIPROC))
+--- binutils-2.23/include/bfdlink.h
++++ binutils-2.23/include/bfdlink.h
+@@ -322,6 +322,14 @@ struct bfd_link_info
+   /* TRUE if PT_GNU_RELRO segment should be created.  */
+   unsigned int relro: 1;
+ 
++  /* TRUE if PT_PAX_FLAGS segment should be created with PF_NOMPROTECT
++     flags.  */
++  unsigned int execheap: 1;
++
++  /* TRUE if PT_PAX_FLAGS segment should be created with PF_MPROTECT
++     flags.  */
++  unsigned int noexecheap: 1;
++
+   /* TRUE if .eh_frame_hdr section and PT_GNU_EH_FRAME ELF segment
+      should be created.  */
+   unsigned int eh_frame_hdr: 1;
+--- binutils-2.23/include/elf/common.h
++++ binutils-2.23/include/elf/common.h
+@@ -429,6 +429,7 @@
+ #define PT_SUNW_EH_FRAME PT_GNU_EH_FRAME      /* Solaris uses the same value */
+ #define PT_GNU_STACK	(PT_LOOS + 0x474e551) /* Stack flags */
+ #define PT_GNU_RELRO	(PT_LOOS + 0x474e552) /* Read-only after relocation */
++#define PT_PAX_FLAGS	(PT_LOOS + 0x5041580) /* PaX flags */
+ 
+ /* Program segment permissions, in program header p_flags field.  */
+ 
+@@ -439,6 +440,21 @@
+ #define PF_MASKOS	0x0FF00000	/* New value, Oct 4, 1999 Draft */
+ #define PF_MASKPROC	0xF0000000	/* Processor-specific reserved bits */
+ 
++/* Flags to control PaX behavior.  */
++
++#define PF_PAGEEXEC	(1 << 4)	/* Enable  PAGEEXEC */
++#define PF_NOPAGEEXEC	(1 << 5)	/* Disable PAGEEXEC */
++#define PF_SEGMEXEC	(1 << 6)	/* Enable  SEGMEXEC */
++#define PF_NOSEGMEXEC	(1 << 7)	/* Disable SEGMEXEC */
++#define PF_MPROTECT	(1 << 8)	/* Enable  MPROTECT */
++#define PF_NOMPROTECT	(1 << 9)	/* Disable MPROTECT */
++#define PF_RANDEXEC	(1 << 10)	/* Enable  RANDEXEC */
++#define PF_NORANDEXEC	(1 << 11)	/* Disable RANDEXEC */
++#define PF_EMUTRAMP	(1 << 12)	/* Enable  EMUTRAMP */
++#define PF_NOEMUTRAMP	(1 << 13)	/* Disable EMUTRAMP */
++#define PF_RANDMMAP	(1 << 14)	/* Enable  RANDMMAP */
++#define PF_NORANDMMAP	(1 << 15)	/* Disable RANDMMAP */
++
+ /* Values for section header, sh_type field.  */
+ 
+ #define SHT_NULL	0		/* Section header table entry unused */
+--- binutils-2.23/ld/emultempl/elf32.em
++++ binutils-2.23/ld/emultempl/elf32.em
+@@ -2285,6 +2285,16 @@ fragment <<EOF
+ 	  link_info.noexecstack = TRUE;
+ 	  link_info.execstack = FALSE;
+ 	}
++      else if (strcmp (optarg, "execheap") == 0)
++	{
++	  link_info.execheap = TRUE;
++	  link_info.noexecheap = FALSE;
++	}
++      else if (strcmp (optarg, "noexecheap") == 0)
++	{
++	  link_info.noexecheap = TRUE;
++	  link_info.execheap = FALSE;
++	}
+ EOF
+ if test x"$GENERATE_SHLIB_SCRIPT" = xyes; then
+ fragment <<EOF
+@@ -2368,6 +2378,8 @@ fragment <<EOF
+   -z defs                     Report unresolved symbols in object files.\n"));
+   fprintf (file, _("\
+   -z execstack                Mark executable as requiring executable stack\n"));
++  fprintf (file, _("\
++  -z execheap                 Mark executable as requiring executable heap\n"));
+ EOF
+ 
+ if test x"$GENERATE_SHLIB_SCRIPT" = xyes; then
+@@ -2391,6 +2403,8 @@ fragment <<EOF
+ fragment <<EOF
+   fprintf (file, _("\
+   -z noexecstack              Mark executable as not requiring executable stack\n"));
++  fprintf (file, _("\
++  -z noexecheap               Mark executable as not requiring executable heap\n"));
+ EOF
+ if test x"$GENERATE_SHLIB_SCRIPT" = xyes; then
+ fragment <<EOF
+--- binutils-2.23/ld/ldgram.y
++++ binutils-2.23/ld/ldgram.y
+@@ -1119,6 +1119,8 @@ phdr_type:
+ 			    $$ = exp_intop (0x6474e550);
+ 			  else if (strcmp (s, "PT_GNU_STACK") == 0)
+ 			    $$ = exp_intop (0x6474e551);
++			  else if (strcmp (s, "PT_PAX_FLAGS") == 0)
++			    $$ = exp_intop (0x65041580);
+ 			  else
+ 			    {
+ 			      einfo (_("\
+--- binutils-2.23/ld/testsuite/ld-alpha/tlsbin.rd
++++ binutils-2.23/ld/testsuite/ld-alpha/tlsbin.rd
+@@ -35,13 +35,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+   Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+-  PHDR +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+150 R E 0x8
++  PHDR +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+188 R E 0x8
+   INTERP +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x1
+ .*Requesting program interpreter.*
+   LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R E 0x10000
+   LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x10000
+   DYNAMIC +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RW +0x8
+   TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 3 entries:
+--- binutils-2.23/ld/testsuite/ld-alpha/tlsbinr.rd
++++ binutils-2.23/ld/testsuite/ld-alpha/tlsbinr.rd
+@@ -42,6 +42,7 @@ Program Headers:
+  +LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x10000
+  +DYNAMIC +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RW +0x8
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 2 entries:
+--- binutils-2.23/ld/testsuite/ld-alpha/tlspic.rd
++++ binutils-2.23/ld/testsuite/ld-alpha/tlspic.rd
+@@ -38,6 +38,7 @@ Program Headers:
+  +LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x10000
+  +DYNAMIC +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ RW +0x8
+  +TLS +0x0+10e0 0x0+110e0 0x0+110e0 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 7 entries:
+--- binutils-2.23/ld/testsuite/ld-elf/eh1.d
++++ binutils-2.23/ld/testsuite/ld-elf/eh1.d
+@@ -22,11 +22,11 @@ Contents of the .eh_frame section:
+   DW_CFA_nop
+   DW_CFA_nop
+ 
+-00000018 0000001c 0000001c FDE cie=00000000 pc=00400078..00400078
+-  DW_CFA_advance_loc: 0 to 00400078
++00000018 0000001c 0000001c FDE cie=00000000 pc=([0-9a-f]+)..\1
++  DW_CFA_advance_loc: 0 to [0-9a-f]+
+   DW_CFA_def_cfa_offset: 16
+   DW_CFA_offset: r6 \(rbp\) at cfa-16
+-  DW_CFA_advance_loc: 0 to 00400078
++  DW_CFA_advance_loc: 0 to [0-9a-f]+
+   DW_CFA_def_cfa_register: r6 \(rbp\)
+ 
+ 00000038 ZERO terminator
+--- binutils-2.23/ld/testsuite/ld-elf/eh2.d
++++ binutils-2.23/ld/testsuite/ld-elf/eh2.d
+@@ -22,11 +22,11 @@ Contents of the .eh_frame section:
+   DW_CFA_nop
+   DW_CFA_nop
+ 
+-00000018 0000001c 0000001c FDE cie=00000000 pc=00400078..00400078
+-  DW_CFA_advance_loc: 0 to 00400078
++00000018 0000001c 0000001c FDE cie=00000000 pc=([0-9a-f]+)..\1
++  DW_CFA_advance_loc: 0 to [0-9a-f]+
+   DW_CFA_def_cfa_offset: 16
+   DW_CFA_offset: r6 \(rbp\) at cfa-16
+-  DW_CFA_advance_loc: 0 to 00400078
++  DW_CFA_advance_loc: 0 to [0-9a-f]+
+   DW_CFA_def_cfa_register: r6 \(rbp\)
+ 
+ 00000038 ZERO terminator
+--- binutils-2.23/ld/testsuite/ld-elf/eh3.d
++++ binutils-2.23/ld/testsuite/ld-elf/eh3.d
+@@ -22,11 +22,11 @@ Contents of the .eh_frame section:
+   DW_CFA_nop
+   DW_CFA_nop
+ 
+-00000018 0000001c 0000001c FDE cie=00000000 pc=00400078..00400078
+-  DW_CFA_advance_loc: 0 to 00400078
++00000018 0000001c 0000001c FDE cie=00000000 pc=([0-9a-f]+)..\1
++  DW_CFA_advance_loc: 0 to [0-9a-f]+
+   DW_CFA_def_cfa_offset: 16
+   DW_CFA_offset: r6 \(rbp\) at cfa-16
+-  DW_CFA_advance_loc: 0 to 00400078
++  DW_CFA_advance_loc: 0 to [0-9a-f]+
+   DW_CFA_def_cfa_register: r6 \(rbp\)
+ 
+ 00000038 ZERO terminator
+--- binutils-2.23/ld/testsuite/ld-elf/orphan-region.d
++++ binutils-2.23/ld/testsuite/ld-elf/orphan-region.d
+@@ -15,7 +15,9 @@
+ Program Headers:
+   Type.*
+   LOAD[ \t]+0x[0-9a-f]+ 0x0*40000000 0x0*40000000 0x[0-9a-f]+ 0x[0-9a-f]+ RWE 0x[0-9a-f]+
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+   Segment Sections...
+    00     .text .rodata .moredata *
++   01 +
+--- binutils-2.23/ld/testsuite/ld-i386/tlsbin.rd
++++ binutils-2.23/ld/testsuite/ld-i386/tlsbin.rd
+@@ -44,6 +44,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+a0 R +0x1000
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -53,6 +54,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got .got.plt *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 9 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.23/ld/testsuite/ld-i386/tlsbindesc.rd
++++ binutils-2.23/ld/testsuite/ld-i386/tlsbindesc.rd
+@@ -42,6 +42,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+a0 R +0x1000
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -51,6 +52,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got .got.plt *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 9 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.23/ld/testsuite/ld-i386/tlsdesc.rd
++++ binutils-2.23/ld/testsuite/ld-i386/tlsdesc.rd
+@@ -39,6 +39,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+80 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -46,6 +47,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 20 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.23/ld/testsuite/ld-i386/tlsgdesc.rd
++++ binutils-2.23/ld/testsuite/ld-i386/tlsgdesc.rd
+@@ -36,12 +36,14 @@ Program Headers:
+  +LOAD.*
+  +LOAD.*
+  +DYNAMIC.*
++ +PAX_FLAGS.*
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+  +00 +.hash .dynsym .dynstr .rel.dyn .rel.plt .plt .text *
+  +01 +.dynamic .got .got.plt *
+  +02 +.dynamic *
++ +03 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 8 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.23/ld/testsuite/ld-i386/tlsnopic.rd
++++ binutils-2.23/ld/testsuite/ld-i386/tlsnopic.rd
+@@ -37,6 +37,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+ 0x0+24 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -44,6 +45,7 @@ Program Headers:
+  +01 +.dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tbss *
++ +04 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 20 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.23/ld/testsuite/ld-i386/tlspic.rd
++++ binutils-2.23/ld/testsuite/ld-i386/tlspic.rd
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+60 0x0+80 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -47,6 +48,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rel.dyn' at offset 0x[0-9a-f]+ contains 26 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name
+--- binutils-2.23/ld/testsuite/ld-ia64/merge1.d
++++ binutils-2.23/ld/testsuite/ld-ia64/merge1.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+1e0 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 c0 04 00 48 00 	            addl r12=24,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.23/ld/testsuite/ld-ia64/merge2.d
++++ binutils-2.23/ld/testsuite/ld-ia64/merge2.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+1e0 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 c0 04 00 48 00 	            addl r12=24,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.23/ld/testsuite/ld-ia64/merge3.d
++++ binutils-2.23/ld/testsuite/ld-ia64/merge3.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+210 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 40 05 00 48 00 	            addl r12=40,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.23/ld/testsuite/ld-ia64/merge4.d
++++ binutils-2.23/ld/testsuite/ld-ia64/merge4.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+240 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 40 05 00 48 00 	            addl r12=40,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.23/ld/testsuite/ld-ia64/merge5.d
++++ binutils-2.23/ld/testsuite/ld-ia64/merge5.d
+@@ -4,7 +4,7 @@
+ #objdump: -d
+ 
+ #...
+-0+270 <.text>:
++[a-f0-9]+ <.text>:
+ [ 	]*[a-f0-9]+:	0b 60 80 02 00 24 	\[MMI\]       addl r12=32,r1;;
+ [ 	]*[a-f0-9]+:	c0 40 05 00 48 00 	            addl r12=40,r1
+ [ 	]*[a-f0-9]+:	00 00 04 00       	            nop.i 0x0;;
+--- binutils-2.23/ld/testsuite/ld-ia64/tlsbin.rd
++++ binutils-2.23/ld/testsuite/ld-ia64/tlsbin.rd
+@@ -36,13 +36,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+- +PHDR +0x0+40 0x40+40 0x40+40 0x0+188 0x0+188 R E 0x8
+- +INTERP +0x0+1c8 0x40+1c8 0x40+1c8 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x1
++ +PHDR +0x0+40 0x40+40 0x40+40 (0x[0-9a-f]+) \1 R E 0x8
++ +INTERP +0x0+([0-9a-f]+) (0x40+\1) \2 0x[0-9a-f]+ 0x[0-9a-f]+ R +0x1
+ .*Requesting program interpreter.*
+  +LOAD +0x0+ 0x40+ 0x40+ 0x0+1[0-9a-f]+ 0x0+1[0-9a-f]+ R E 0x10000
+  +LOAD +0x0+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x0+0[0-9a-f]+ 0x0+0[0-9a-f]+ RW +0x10000
+  +DYNAMIC +0x0+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x0+150 0x0+150 RW +0x8
+  +TLS +0x0+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x60+1[0-9a-f]+ 0x0+60 0x0+a0 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  +IA_64_UNWIND .* R +0x8
+ #...
+ 
+--- binutils-2.23/ld/testsuite/ld-ia64/tlspic.rd
++++ binutils-2.23/ld/testsuite/ld-ia64/tlspic.rd
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD +0x0+1[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+0[0-9a-f]+ 0x0+0[0-9a-f]+ RW +0x10000
+  +DYNAMIC +0x0+1[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+140 0x0+140 RW +0x8
+  +TLS +0x0+1[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+11[0-9a-f]+ 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  +IA_64_UNWIND +0x0+1[0-9a-f]+ 0x0+1[0-9a-f]+ 0x0+1[0-9a-f]+ 0x0+18 0x0+18 R +0x8
+ #...
+ 
+--- binutils-2.23/ld/testsuite/ld-mips-elf/multi-got-no-shared.d
++++ binutils-2.23/ld/testsuite/ld-mips-elf/multi-got-no-shared.d
+@@ -8,9 +8,9 @@
+ .*: +file format.*
+ 
+ Disassembly of section \.text:
+-004000b0 <[^>]*> 3c1c0043 	lui	gp,0x43
+-004000b4 <[^>]*> 279c9ff0 	addiu	gp,gp,-24592
+-004000b8 <[^>]*> afbc0008 	sw	gp,8\(sp\)
++004000d0 <[^>]*> 3c1c0043 	lui	gp,0x43
++004000d4 <[^>]*> 279c9ff0 	addiu	gp,gp,-24592
++004000d8 <[^>]*> afbc0008 	sw	gp,8\(sp\)
+ #...
+ 00408d60 <[^>]*> 3c1c0043 	lui	gp,0x43
+ 00408d64 <[^>]*> 279c2c98 	addiu	gp,gp,11416
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-3a.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-3a.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is DYN \(Shared object file\)
+ Entry point .*
+-There are 5 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -9,6 +9,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+00000 * 0x0+00000 [^ ]+ * [^ ]+ * R E * 0x.*
+  * LOAD * [^ ]+ * 0x0+10000 * 0x0+10000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+00400 * 0x0+00400 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -18,3 +19,4 @@ Program Headers:
+  *0*2 * \.data \.got *
+  *0*3 * \.dynamic *
+  *0*4 *
++ *0*5 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-3b.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-3b.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 *\.got \.data *
+  *0*6 *\.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-4b.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-4b.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-5b.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-5b.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n32.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n32.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n64.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-n64.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 7 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -12,6 +12,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -23,3 +24,4 @@ Program Headers:
+  *0*4 * \.got \.data \.bss *
+  *0*5 * \.dynamic *
+  *0*6 *
++ *0*7 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-o32.sd
++++ binutils-2.23/ld/testsuite/ld-mips-elf/pic-and-nonpic-6-o32.sd
+@@ -1,7 +1,7 @@
+ 
+ Elf file type is EXEC \(Executable file\)
+ Entry point 0x44000
+-There are 8 program headers, starting at offset .*
++There are [0-9] program headers, starting at offset .*
+ 
+ Program Headers:
+  * Type * Offset * VirtAddr * PhysAddr * FileSiz * MemSiz * Flg * Align
+@@ -13,6 +13,7 @@ Program Headers:
+  * LOAD * [^ ]+ * 0x0+80000 * 0x0+80000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * LOAD * [^ ]+ * 0x0+a0000 * 0x0+a0000 [^ ]+ * [^ ]+ * RW  * 0x.*
+  * DYNAMIC * [^ ]+ * 0x0+42000 * 0x0+42000 .*
++ * PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+  * NULL * .*
+ 
+  *Section to Segment mapping:
+@@ -25,3 +26,4 @@ Program Headers:
+  *0*5 * \.got \.data \.bss *
+  *0*6 * \.dynamic *
+  *0*7 *
++ *0*8 *
+--- binutils-2.23/ld/testsuite/ld-mips-elf/tlsbin-o32.d
++++ binutils-2.23/ld/testsuite/ld-mips-elf/tlsbin-o32.d
+@@ -2,42 +2,42 @@
+ 
+ Disassembly of section .text:
+ 
+-004000d0 <__start>:
+-  4000d0:	3c1c0fc0 	lui	gp,0xfc0
+-  4000d4:	279c7f30 	addiu	gp,gp,32560
+-  4000d8:	0399e021 	addu	gp,gp,t9
+-  4000dc:	27bdfff0 	addiu	sp,sp,-16
+-  4000e0:	afbe0008 	sw	s8,8\(sp\)
+-  4000e4:	03a0f021 	move	s8,sp
+-  4000e8:	afbc0000 	sw	gp,0\(sp\)
+-  4000ec:	8f998018 	lw	t9,-32744\(gp\)
+-  4000f0:	27848028 	addiu	a0,gp,-32728
+-  4000f4:	0320f809 	jalr	t9
+-  4000f8:	00000000 	nop
+-  4000fc:	8fdc0000 	lw	gp,0\(s8\)
+-  400100:	00000000 	nop
+-  400104:	8f998018 	lw	t9,-32744\(gp\)
+-  400108:	27848020 	addiu	a0,gp,-32736
+-  40010c:	0320f809 	jalr	t9
+-  400110:	00000000 	nop
+-  400114:	8fdc0000 	lw	gp,0\(s8\)
+-  400118:	00401021 	move	v0,v0
+-  40011c:	3c030000 	lui	v1,0x0
+-  400120:	24638000 	addiu	v1,v1,-32768
+-  400124:	00621821 	addu	v1,v1,v0
+-  400128:	7c02283b 	rdhwr	v0,\$5
+-  40012c:	8f83801c 	lw	v1,-32740\(gp\)
+-  400130:	00000000 	nop
+-  400134:	00621821 	addu	v1,v1,v0
+-  400138:	7c02283b 	rdhwr	v0,\$5
+-  40013c:	3c030000 	lui	v1,0x0
+-  400140:	24639004 	addiu	v1,v1,-28668
+-  400144:	00621821 	addu	v1,v1,v0
+-  400148:	03c0e821 	move	sp,s8
+-  40014c:	8fbe0008 	lw	s8,8\(sp\)
+-  400150:	03e00008 	jr	ra
+-  400154:	27bd0010 	addiu	sp,sp,16
++00400[0-9a-f]{3} <__start>:
++  400[0-9a-f]{3}:	3c1c0fc0 	lui	gp,0xfc0
++  400[0-9a-f]{3}:	279c7f30 	addiu	gp,gp,32560
++  400[0-9a-f]{3}:	0399e021 	addu	gp,gp,t9
++  400[0-9a-f]{3}:	27bdfff0 	addiu	sp,sp,-16
++  400[0-9a-f]{3}:	afbe0008 	sw	s8,8\(sp\)
++  400[0-9a-f]{3}:	03a0f021 	move	s8,sp
++  400[0-9a-f]{3}:	afbc0000 	sw	gp,0\(sp\)
++  400[0-9a-f]{3}:	8f998018 	lw	t9,-32744\(gp\)
++  400[0-9a-f]{3}:	27848028 	addiu	a0,gp,-32728
++  400[0-9a-f]{3}:	0320f809 	jalr	t9
++  400[0-9a-f]{3}:	00000000 	nop
++  400[0-9a-f]{3}:	8fdc0000 	lw	gp,0\(s8\)
++  400[0-9a-f]{3}:	00000000 	nop
++  400[0-9a-f]{3}:	8f998018 	lw	t9,-32744\(gp\)
++  400[0-9a-f]{3}:	27848020 	addiu	a0,gp,-32736
++  400[0-9a-f]{3}:	0320f809 	jalr	t9
++  400[0-9a-f]{3}:	00000000 	nop
++  400[0-9a-f]{3}:	8fdc0000 	lw	gp,0\(s8\)
++  400[0-9a-f]{3}:	00401021 	move	v0,v0
++  400[0-9a-f]{3}:	3c030000 	lui	v1,0x0
++  400[0-9a-f]{3}:	24638000 	addiu	v1,v1,-32768
++  400[0-9a-f]{3}:	00621821 	addu	v1,v1,v0
++  400[0-9a-f]{3}:	7c02283b 	rdhwr	v0,\$5
++  400[0-9a-f]{3}:	8f83801c 	lw	v1,-32740\(gp\)
++  400[0-9a-f]{3}:	00000000 	nop
++  400[0-9a-f]{3}:	00621821 	addu	v1,v1,v0
++  400[0-9a-f]{3}:	7c02283b 	rdhwr	v0,\$5
++  400[0-9a-f]{3}:	3c030000 	lui	v1,0x0
++  400[0-9a-f]{3}:	24639004 	addiu	v1,v1,-28668
++  400[0-9a-f]{3}:	00621821 	addu	v1,v1,v0
++  400[0-9a-f]{3}:	03c0e821 	move	sp,s8
++  400[0-9a-f]{3}:	8fbe0008 	lw	s8,8\(sp\)
++  400[0-9a-f]{3}:	03e00008 	jr	ra
++  400[0-9a-f]{3}:	27bd0010 	addiu	sp,sp,16
+ 
+-00400158 <__tls_get_addr>:
+-  400158:	03e00008 	jr	ra
+-  40015c:	00000000 	nop
++00400[0-9a-f]{3} <__tls_get_addr>:
++  400[0-9a-f]{3}:	03e00008 	jr	ra
++  400[0-9a-f]{3}:	00000000 	nop
+--- binutils-2.23/ld/testsuite/ld-powerpc/tls.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tls.d
+@@ -9,45 +9,45 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+100000e8 <_start>:
+-    100000e8:	3c 6d 00 00 	addis   r3,r13,0
+-    100000ec:	60 00 00 00 	nop
+-    100000f0:	38 63 90 78 	addi    r3,r3,-28552
+-    100000f4:	3c 6d 00 00 	addis   r3,r13,0
+-    100000f8:	60 00 00 00 	nop
+-    100000fc:	38 63 10 00 	addi    r3,r3,4096
+-    10000100:	3c 6d 00 00 	addis   r3,r13,0
+-    10000104:	60 00 00 00 	nop
+-    10000108:	38 63 90 40 	addi    r3,r3,-28608
+-    1000010c:	3c 6d 00 00 	addis   r3,r13,0
+-    10000110:	60 00 00 00 	nop
+-    10000114:	38 63 10 00 	addi    r3,r3,4096
+-    10000118:	39 23 80 48 	addi    r9,r3,-32696
+-    1000011c:	3d 23 00 00 	addis   r9,r3,0
+-    10000120:	81 49 80 50 	lwz     r10,-32688\(r9\)
+-    10000124:	e9 22 80 10 	ld      r9,-32752\(r2\)
+-    10000128:	7d 49 18 2a 	ldx     r10,r9,r3
+-    1000012c:	3d 2d 00 00 	addis   r9,r13,0
+-    10000130:	a1 49 90 60 	lhz     r10,-28576\(r9\)
+-    10000134:	89 4d 90 68 	lbz     r10,-28568\(r13\)
+-    10000138:	3d 2d 00 00 	addis   r9,r13,0
+-    1000013c:	99 49 90 70 	stb     r10,-28560\(r9\)
+-    10000140:	3c 6d 00 00 	addis   r3,r13,0
+-    10000144:	60 00 00 00 	nop
+-    10000148:	38 63 90 00 	addi    r3,r3,-28672
+-    1000014c:	3c 6d 00 00 	addis   r3,r13,0
+-    10000150:	60 00 00 00 	nop
+-    10000154:	38 63 10 00 	addi    r3,r3,4096
+-    10000158:	f9 43 80 08 	std     r10,-32760\(r3\)
+-    1000015c:	3d 23 00 00 	addis   r9,r3,0
+-    10000160:	91 49 80 10 	stw     r10,-32752\(r9\)
+-    10000164:	e9 22 80 08 	ld      r9,-32760\(r2\)
+-    10000168:	7d 49 19 2a 	stdx    r10,r9,r3
+-    1000016c:	3d 2d 00 00 	addis   r9,r13,0
+-    10000170:	b1 49 90 60 	sth     r10,-28576\(r9\)
+-    10000174:	e9 4d 90 2a 	lwa     r10,-28632\(r13\)
+-    10000178:	3d 2d 00 00 	addis   r9,r13,0
+-    1000017c:	a9 49 90 30 	lha     r10,-28624\(r9\)
++0+10000[0-9a-f]{3} <_start>:
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 78 	addi    r3,r3,-28552
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 40 	addi    r3,r3,-28608
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++    10000[0-9a-f]{3}:	39 23 80 48 	addi    r9,r3,-32696
++    10000[0-9a-f]{3}:	3d 23 00 00 	addis   r9,r3,0
++    10000[0-9a-f]{3}:	81 49 80 50 	lwz     r10,-32688\(r9\)
++    10000[0-9a-f]{3}:	e9 22 80 10 	ld      r9,-32752\(r2\)
++    10000[0-9a-f]{3}:	7d 49 18 2a 	ldx     r10,r9,r3
++    10000[0-9a-f]{3}:	3d 2d 00 00 	addis   r9,r13,0
++    10000[0-9a-f]{3}:	a1 49 90 60 	lhz     r10,-28576\(r9\)
++    10000[0-9a-f]{3}:	89 4d 90 68 	lbz     r10,-28568\(r13\)
++    10000[0-9a-f]{3}:	3d 2d 00 00 	addis   r9,r13,0
++    10000[0-9a-f]{3}:	99 49 90 70 	stb     r10,-28560\(r9\)
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 00 	addi    r3,r3,-28672
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++    10000[0-9a-f]{3}:	f9 43 80 08 	std     r10,-32760\(r3\)
++    10000[0-9a-f]{3}:	3d 23 00 00 	addis   r9,r3,0
++    10000[0-9a-f]{3}:	91 49 80 10 	stw     r10,-32752\(r9\)
++    10000[0-9a-f]{3}:	e9 22 80 08 	ld      r9,-32760\(r2\)
++    10000[0-9a-f]{3}:	7d 49 19 2a 	stdx    r10,r9,r3
++    10000[0-9a-f]{3}:	3d 2d 00 00 	addis   r9,r13,0
++    10000[0-9a-f]{3}:	b1 49 90 60 	sth     r10,-28576\(r9\)
++    10000[0-9a-f]{3}:	e9 4d 90 2a 	lwa     r10,-28632\(r13\)
++    10000[0-9a-f]{3}:	3d 2d 00 00 	addis   r9,r13,0
++    10000[0-9a-f]{3}:	a9 49 90 30 	lha     r10,-28624\(r9\)
+ 
+-0+10000180 <\.__tls_get_addr>:
+-    10000180:	4e 80 00 20 	blr
++0+10000[0-9a-f]{3} <\.__tls_get_addr>:
++    10000[0-9a-f]{3}:	4e 80 00 20 	blr
+--- binutils-2.23/ld/testsuite/ld-powerpc/tls.g
++++ binutils-2.23/ld/testsuite/ld-powerpc/tls.g
+@@ -8,5 +8,5 @@
+ .*: +file format elf64-powerpc
+ 
+ Contents of section \.got:
+- 100101e0 00000000 100181e0 ffffffff ffff8018  .*
+- 100101f0 ffffffff ffff8058                    .*
++ 10010([0-9a-f]{3}) 00000000 10018\1 ffffffff ffff8018  .*
++ 10010[0-9a-f]{3} ffffffff ffff8058                    .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tls32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tls32.d
+@@ -9,42 +9,42 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+1800094 <_start>:
+- 1800094:	3c 62 00 00 	addis   r3,r2,0
+- 1800098:	38 63 90 3c 	addi    r3,r3,-28612
+- 180009c:	3c 62 00 00 	addis   r3,r2,0
+- 18000a0:	38 63 10 00 	addi    r3,r3,4096
+- 18000a4:	3c 62 00 00 	addis   r3,r2,0
+- 18000a8:	38 63 90 20 	addi    r3,r3,-28640
+- 18000ac:	3c 62 00 00 	addis   r3,r2,0
+- 18000b0:	38 63 10 00 	addi    r3,r3,4096
+- 18000b4:	39 23 80 24 	addi    r9,r3,-32732
+- 18000b8:	3d 23 00 00 	addis   r9,r3,0
+- 18000bc:	81 49 80 28 	lwz     r10,-32728\(r9\)
+- 18000c0:	3d 22 00 00 	addis   r9,r2,0
+- 18000c4:	a1 49 90 30 	lhz     r10,-28624\(r9\)
+- 18000c8:	89 42 90 34 	lbz     r10,-28620\(r2\)
+- 18000cc:	3d 22 00 00 	addis   r9,r2,0
+- 18000d0:	99 49 90 38 	stb     r10,-28616\(r9\)
+- 18000d4:	3c 62 00 00 	addis   r3,r2,0
+- 18000d8:	38 63 90 00 	addi    r3,r3,-28672
+- 18000dc:	3c 62 00 00 	addis   r3,r2,0
+- 18000e0:	38 63 10 00 	addi    r3,r3,4096
+- 18000e4:	91 43 80 04 	stw     r10,-32764\(r3\)
+- 18000e8:	3d 23 00 00 	addis   r9,r3,0
+- 18000ec:	91 49 80 08 	stw     r10,-32760\(r9\)
+- 18000f0:	3d 22 00 00 	addis   r9,r2,0
+- 18000f4:	b1 49 90 30 	sth     r10,-28624\(r9\)
+- 18000f8:	a1 42 90 14 	lhz     r10,-28652\(r2\)
+- 18000fc:	3d 22 00 00 	addis   r9,r2,0
+- 1800100:	a9 49 90 18 	lha     r10,-28648\(r9\)
++0+1800[0-9a-f]{3} <_start>:
++ 1800[0-9a-f]{3}:	3c 62 00 00 	addis   r3,r2,0
++ 1800[0-9a-f]{3}:	38 63 90 3c 	addi    r3,r3,-28612
++ 1800[0-9a-f]{3}:	3c 62 00 00 	addis   r3,r2,0
++ 1800[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++ 1800[0-9a-f]{3}:	3c 62 00 00 	addis   r3,r2,0
++ 1800[0-9a-f]{3}:	38 63 90 20 	addi    r3,r3,-28640
++ 1800[0-9a-f]{3}:	3c 62 00 00 	addis   r3,r2,0
++ 1800[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++ 1800[0-9a-f]{3}:	39 23 80 24 	addi    r9,r3,-32732
++ 1800[0-9a-f]{3}:	3d 23 00 00 	addis   r9,r3,0
++ 1800[0-9a-f]{3}:	81 49 80 28 	lwz     r10,-32728\(r9\)
++ 1800[0-9a-f]{3}:	3d 22 00 00 	addis   r9,r2,0
++ 1800[0-9a-f]{3}:	a1 49 90 30 	lhz     r10,-28624\(r9\)
++ 1800[0-9a-f]{3}:	89 42 90 34 	lbz     r10,-28620\(r2\)
++ 1800[0-9a-f]{3}:	3d 22 00 00 	addis   r9,r2,0
++ 1800[0-9a-f]{3}:	99 49 90 38 	stb     r10,-28616\(r9\)
++ 1800[0-9a-f]{3}:	3c 62 00 00 	addis   r3,r2,0
++ 1800[0-9a-f]{3}:	38 63 90 00 	addi    r3,r3,-28672
++ 1800[0-9a-f]{3}:	3c 62 00 00 	addis   r3,r2,0
++ 1800[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++ 1800[0-9a-f]{3}:	91 43 80 04 	stw     r10,-32764\(r3\)
++ 1800[0-9a-f]{3}:	3d 23 00 00 	addis   r9,r3,0
++ 1800[0-9a-f]{3}:	91 49 80 08 	stw     r10,-32760\(r9\)
++ 1800[0-9a-f]{3}:	3d 22 00 00 	addis   r9,r2,0
++ 1800[0-9a-f]{3}:	b1 49 90 30 	sth     r10,-28624\(r9\)
++ 1800[0-9a-f]{3}:	a1 42 90 14 	lhz     r10,-28652\(r2\)
++ 1800[0-9a-f]{3}:	3d 22 00 00 	addis   r9,r2,0
++ 1800[0-9a-f]{3}:	a9 49 90 18 	lha     r10,-28648\(r9\)
+ 
+-0+1800104 <__tls_get_addr>:
+- 1800104:	4e 80 00 20 	blr
++0+1800[0-9a-f]{3} <__tls_get_addr>:
++ 1800[0-9a-f]{3}:	4e 80 00 20 	blr
+ Disassembly of section \.got:
+ 
+-0+1810128 <_GLOBAL_OFFSET_TABLE_-0x4>:
+- 1810128:	4e 80 00 21 	blrl
++0+1810[0-9a-f]{3} <_GLOBAL_OFFSET_TABLE_-0x4>:
++ 1810[0-9a-f]{3}:	4e 80 00 21 	blrl
+ 
+-0+181012c <_GLOBAL_OFFSET_TABLE_>:
++0+1810[0-9a-f]{3} <_GLOBAL_OFFSET_TABLE_>:
+ 	\.\.\.
+--- binutils-2.23/ld/testsuite/ld-powerpc/tls32.g
++++ binutils-2.23/ld/testsuite/ld-powerpc/tls32.g
+@@ -8,4 +8,4 @@
+ .*: +file format elf32-powerpc
+ 
+ Contents of section \.got:
+- 1810128 4e800021 00000000 00000000 00000000  .*
++ 18101[0-9a-f]{2} 4e800021 00000000 00000000 00000000  .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tls32.t
++++ binutils-2.23/ld/testsuite/ld-powerpc/tls32.t
+@@ -8,5 +8,5 @@
+ .*: +file format elf32-powerpc
+ 
+ Contents of section \.tdata:
+- 1810108 12345678 23456789 3456789a 456789ab  .*
+- 1810118 56789abc 6789abcd 789abcde 00c0ffee  .*
++ 18101[0-9a-f]{2} 12345678 23456789 3456789a 456789ab  .*
++ 18101[0-9a-f]{2} 56789abc 6789abcd 789abcde 00c0ffee  .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsexe32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsexe32.d
+@@ -44,4 +44,4 @@ Disassembly of section \.got:
+ .*:	4e 80 00 21 	blrl
+ 
+ .* <_GLOBAL_OFFSET_TABLE_>:
+-.*:	01 81 02 b8 00 00 00 00 00 00 00 00  .*
++.*:	01 81 02 [bd]8 00 00 00 00 00 00 00 00  .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsexe32.g
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsexe32.g
+@@ -8,4 +8,4 @@
+ 
+ Contents of section \.got:
+ .* 00000000 00000000 00000000 4e800021  .*
+-.* 018102b8 00000000 00000000           .*
++.* 018102[bd]8 00000000 00000000           .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsexe32.r
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsexe32.r
+@@ -33,13 +33,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz MemSiz +Flg Align
+- +PHDR +0x000034 0x01800034 0x01800034 0x000c0 0x000c0 R E 0x4
+- +INTERP +0x0000f4 0x018000f4 0x018000f4 0x00011 0x00011 R +0x1
++ +PHDR +0x000034 0x01800034 0x01800034 (0x000[0-9a-f]{2}) \1 R E 0x4
++ +INTERP +0x000([0-9a-f]{3}) 0x01800\1 0x01800\1 0x00011 0x00011 R +0x1
+  +\[Requesting program interpreter: .*\]
+  +LOAD .* R E 0x10000
+  +LOAD .* RWE 0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0001c 0x00038 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -49,6 +50,7 @@ Program Headers:
+  +03 +\.tdata \.dynamic \.got \.plt 
+  +04 +\.dynamic 
+  +05 +\.tdata \.tbss 
++ +06 +
+ 
+ Relocation section '\.rela\.dyn' at offset .* contains 2 entries:
+  Offset +Info +Type +Sym\. Value +Symbol's Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsmark.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsmark.d
+@@ -9,29 +9,29 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+100000e8 <_start>:
+-    100000e8:	48 00 00 18 	b       10000100 <_start\+0x18>
+-    100000ec:	60 00 00 00 	nop
+-    100000f0:	38 63 90 00 	addi    r3,r3,-28672
+-    100000f4:	e8 83 00 00 	ld      r4,0\(r3\)
+-    100000f8:	3c 6d 00 00 	addis   r3,r13,0
+-    100000fc:	48 00 00 0c 	b       10000108 <_start\+0x20>
+-    10000100:	3c 6d 00 00 	addis   r3,r13,0
+-    10000104:	4b ff ff e8 	b       100000ec <_start\+0x4>
+-    10000108:	60 00 00 00 	nop
+-    1000010c:	38 63 10 00 	addi    r3,r3,4096
+-    10000110:	e8 83 80 00 	ld      r4,-32768\(r3\)
+-    10000114:	3c 6d 00 00 	addis   r3,r13,0
+-    10000118:	48 00 00 0c 	b       10000124 <_start\+0x3c>
+-    1000011c:	3c 6d 00 00 	addis   r3,r13,0
+-    10000120:	48 00 00 14 	b       10000134 <_start\+0x4c>
+-    10000124:	60 00 00 00 	nop
+-    10000128:	38 63 90 04 	addi    r3,r3,-28668
+-    1000012c:	e8 a3 00 00 	ld      r5,0\(r3\)
+-    10000130:	4b ff ff ec 	b       1000011c <_start\+0x34>
+-    10000134:	60 00 00 00 	nop
+-    10000138:	38 63 10 00 	addi    r3,r3,4096
+-    1000013c:	e8 a3 80 04 	ld      r5,-32764\(r3\)
++0+10000[0-9a-f]{3} <_start>:
++    10000[0-9a-f]{3}:	48 00 00 18 	b       10000[0-9a-f]{3} <_start\+0x18>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 00 	addi    r3,r3,-28672
++    10000[0-9a-f]{3}:	e8 83 00 00 	ld      r4,0\(r3\)
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       10000[0-9a-f]{3} <_start\+0x20>
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	4b ff ff e8 	b       10000[0-9a-f]{3} <_start\+0x4>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++    10000[0-9a-f]{3}:	e8 83 80 00 	ld      r4,-32768\(r3\)
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       10000[0-9a-f]{3} <_start\+0x3c>
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	48 00 00 14 	b       10000[0-9a-f]{3} <_start\+0x4c>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 04 	addi    r3,r3,-28668
++    10000[0-9a-f]{3}:	e8 a3 00 00 	ld      r5,0\(r3\)
++    10000[0-9a-f]{3}:	4b ff ff ec 	b       10000[0-9a-f]{3} <_start\+0x34>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 10 00 	addi    r3,r3,4096
++    10000[0-9a-f]{3}:	e8 a3 80 04 	ld      r5,-32764\(r3\)
+ 
+-0+10000140 <\.__tls_get_addr>:
+-    10000140:	4e 80 00 20 	blr
++0+10000[0-9a-f]{3} <\.__tls_get_addr>:
++    10000[0-9a-f]{3}:	4e 80 00 20 	blr
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsmark32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsmark32.d
+@@ -9,17 +9,17 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+1800094 <_start>:
+- 1800094:	48 00 00 14 	b       18000a8 <_start\+0x14>
+- 1800098:	38 63 90 00 	addi    r3,r3,-28672
+- 180009c:	80 83 00 00 	lwz     r4,0\(r3\)
+- 18000a0:	3c 62 00 00 	addis   r3,r2,0
+- 18000a4:	48 00 00 0c 	b       18000b0 <_start\+0x1c>
+- 18000a8:	3c 62 00 00 	addis   r3,r2,0
+- 18000ac:	4b ff ff ec 	b       1800098 <_start\+0x4>
+- 18000b0:	38 63 10 00 	addi    r3,r3,4096
+- 18000b4:	80 83 80 00 	lwz     r4,-32768\(r3\)
++0+18000[0-9a-f]{2} <_start>:
++ 18000[0-9a-f]{2}:	48 00 00 14 	b       18000[0-9a-f]{2} <_start\+0x14>
++ 18000[0-9a-f]{2}:	38 63 90 00 	addi    r3,r3,-28672
++ 18000[0-9a-f]{2}:	80 83 00 00 	lwz     r4,0\(r3\)
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	48 00 00 0c 	b       18000[0-9a-f]{2} <_start\+0x1c>
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	4b ff ff ec 	b       18000[0-9a-f]{2} <_start\+0x4>
++ 18000[0-9a-f]{2}:	38 63 10 00 	addi    r3,r3,4096
++ 18000[0-9a-f]{2}:	80 83 80 00 	lwz     r4,-32768\(r3\)
+ 
+-0+18000b8 <__tls_get_addr>:
+- 18000b8:	4e 80 00 20 	blr
+-#pass
+\ No newline at end of file
++0+18000[0-9a-f]{2} <__tls_get_addr>:
++ 18000[0-9a-f]{2}:	4e 80 00 20 	blr
++#pass
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt1.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt1.d
+@@ -9,17 +9,17 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+100000e8 <\.__tls_get_addr>:
+-    100000e8:	4e 80 00 20 	blr
++0+10000[0-9a-f]{3} <\.__tls_get_addr>:
++    10000[0-9a-f]{3}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.no_opt1:
+ 
+-0+100000ec <\.no_opt1>:
+-    100000ec:	38 62 80 08 	addi    r3,r2,-32760
+-    100000f0:	2c 24 00 00 	cmpdi   r4,0
+-    100000f4:	41 82 00 10 	beq-    .*
+-    100000f8:	4b ff ff f1 	bl      100000e8 <\.__tls_get_addr>
+-    100000fc:	60 00 00 00 	nop
+-    10000100:	48 00 00 0c 	b       .*
+-    10000104:	4b ff ff e5 	bl      100000e8 <\.__tls_get_addr>
+-    10000108:	60 00 00 00 	nop
++0+10000[0-9a-f]{3} <\.no_opt1>:
++    10000[0-9a-f]{3}:	38 62 80 08 	addi    r3,r2,-32760
++    10000[0-9a-f]{3}:	2c 24 00 00 	cmpdi   r4,0
++    10000[0-9a-f]{3}:	41 82 00 10 	beq-    .*
++    10000[0-9a-f]{3}:	4b ff ff f1 	bl      10000[0-9a-f]{3} <\.__tls_get_addr>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       .*
++    10000[0-9a-f]{3}:	4b ff ff e5 	bl      10000[0-9a-f]{3} <\.__tls_get_addr>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt1_32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt1_32.d
+@@ -9,16 +9,16 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+1800094 <__tls_get_addr>:
+- 1800094:	4e 80 00 20 	blr
++0+18000[0-9a-f]{2} <__tls_get_addr>:
++ 18000[0-9a-f]{2}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.no_opt1:
+ 
+-0+1800098 <\.no_opt1>:
+- 1800098:	38 6d ff f4 	addi    r3,r13,-12
+- 180009c:	2c 04 00 00 	cmpwi   r4,0
+- 18000a0:	41 82 00 0c 	beq-    .*
+- 18000a4:	4b ff ff f1 	bl      1800094 <__tls_get_addr>
+- 18000a8:	48 00 00 08 	b       .*
+- 18000ac:	4b ff ff e9 	bl      1800094 <__tls_get_addr>
++0+18000[0-9a-f]{2} <\.no_opt1>:
++ 18000[0-9a-f]{2}:	38 6d ff f4 	addi    r3,r13,-12
++ 18000[0-9a-f]{2}:	2c 04 00 00 	cmpwi   r4,0
++ 18000[0-9a-f]{2}:	41 82 00 0c 	beq-    .*
++ 18000[0-9a-f]{2}:	4b ff ff f1 	bl      18000[0-9a-f]{2} <__tls_get_addr>
++ 18000[0-9a-f]{2}:	48 00 00 08 	b       .*
++ 18000[0-9a-f]{2}:	4b ff ff e9 	bl      18000[0-9a-f]{2} <__tls_get_addr>
+ #pass
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt2.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt2.d
+@@ -9,15 +9,15 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+100000e8 <\.__tls_get_addr>:
+-    100000e8:	4e 80 00 20 	blr
++0+10000[0-9a-f]{3} <\.__tls_get_addr>:
++    10000[0-9a-f]{3}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.no_opt2:
+ 
+-0+100000ec <\.no_opt2>:
+-    100000ec:	38 62 80 08 	addi    r3,r2,-32760
+-    100000f0:	2c 24 00 00 	cmpdi   r4,0
+-    100000f4:	41 82 00 08 	beq-    .*
+-    100000f8:	38 62 80 08 	addi    r3,r2,-32760
+-    100000fc:	4b ff ff ed 	bl      100000e8 <\.__tls_get_addr>
+-    10000100:	60 00 00 00 	nop
++0+10000[0-9a-f]{3} <\.no_opt2>:
++    10000[0-9a-f]{3}:	38 62 80 08 	addi    r3,r2,-32760
++    10000[0-9a-f]{3}:	2c 24 00 00 	cmpdi   r4,0
++    10000[0-9a-f]{3}:	41 82 00 08 	beq-    .*
++    10000[0-9a-f]{3}:	38 62 80 08 	addi    r3,r2,-32760
++    10000[0-9a-f]{3}:	4b ff ff ed 	bl      10000[0-9a-f]{3} <\.__tls_get_addr>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt2_32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt2_32.d
+@@ -9,15 +9,15 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+1800094 <__tls_get_addr>:
+- 1800094:	4e 80 00 20 	blr
++0+18000[0-9a-f]{2} <__tls_get_addr>:
++ 18000[0-9a-f]{2}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.no_opt2:
+ 
+-0+1800098 <\.no_opt2>:
+- 1800098:	38 6d ff f4 	addi    r3,r13,-12
+- 180009c:	2c 04 00 00 	cmpwi   r4,0
+- 18000a0:	41 82 00 08 	beq-    .*
+- 18000a4:	38 6d ff f4 	addi    r3,r13,-12
+- 18000a8:	4b ff ff ed 	bl      1800094 <__tls_get_addr>
++0+18000[0-9a-f]{2} <\.no_opt2>:
++ 18000[0-9a-f]{2}:	38 6d ff f4 	addi    r3,r13,-12
++ 18000[0-9a-f]{2}:	2c 04 00 00 	cmpwi   r4,0
++ 18000[0-9a-f]{2}:	41 82 00 08 	beq-    .*
++ 18000[0-9a-f]{2}:	38 6d ff f4 	addi    r3,r13,-12
++ 18000[0-9a-f]{2}:	4b ff ff ed 	bl      18000[0-9a-f]{2} <__tls_get_addr>
+ #pass
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt3.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt3.d
+@@ -9,18 +9,18 @@
+ 
+ Disassembly of section \.text:
+ 
+-00000000100000e8 <\.__tls_get_addr>:
+-    100000e8:	4e 80 00 20 	blr
++0000000010000[0-9a-f]{3} <\.__tls_get_addr>:
++    10000[0-9a-f]{3}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.no_opt3:
+ 
+-00000000100000ec <\.no_opt3>:
+-    100000ec:	38 62 80 08 	addi    r3,r2,-32760
+-    100000f0:	48 00 00 0c 	b       .*
+-    100000f4:	38 62 80 18 	addi    r3,r2,-32744
+-    100000f8:	48 00 00 10 	b       .*
+-    100000fc:	4b ff ff ed 	bl      100000e8 <\.__tls_get_addr>
+-    10000100:	60 00 00 00 	nop
+-    10000104:	48 00 00 0c 	b       .*
+-    10000108:	4b ff ff e1 	bl      100000e8 <\.__tls_get_addr>
+-    1000010c:	60 00 00 00 	nop
++0000000010000[0-9a-f]{3} <\.no_opt3>:
++    10000[0-9a-f]{3}:	38 62 80 08 	addi    r3,r2,-32760
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       .*
++    10000[0-9a-f]{3}:	38 62 80 18 	addi    r3,r2,-32744
++    10000[0-9a-f]{3}:	48 00 00 10 	b       .*
++    10000[0-9a-f]{3}:	4b ff ff ed 	bl      10000[0-9a-f]{3} <\.__tls_get_addr>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       .*
++    10000[0-9a-f]{3}:	4b ff ff e1 	bl      10000[0-9a-f]{3} <\.__tls_get_addr>
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt3_32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt3_32.d
+@@ -9,17 +9,17 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+1800094 <__tls_get_addr>:
+- 1800094:	4e 80 00 20 	blr
++0+18000[0-9a-f]{2} <__tls_get_addr>:
++ 18000[0-9a-f]{2}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.no_opt3:
+ 
+-0+1800098 <\.no_opt3>:
+- 1800098:	38 6d ff ec 	addi    r3,r13,-20
+- 180009c:	48 00 00 0c 	b       .*
+- 18000a0:	38 6d ff f4 	addi    r3,r13,-12
+- 18000a4:	48 00 00 0c 	b       .*
+- 18000a8:	4b ff ff ed 	bl      1800094 <__tls_get_addr>
+- 18000ac:	48 00 00 08 	b       .*
+- 18000b0:	4b ff ff e5 	bl      1800094 <__tls_get_addr>
++0+18000[0-9a-f]{2} <\.no_opt3>:
++ 18000[0-9a-f]{2}:	38 6d ff ec 	addi    r3,r13,-20
++ 18000[0-9a-f]{2}:	48 00 00 0c 	b       .*
++ 18000[0-9a-f]{2}:	38 6d ff f4 	addi    r3,r13,-12
++ 18000[0-9a-f]{2}:	48 00 00 0c 	b       .*
++ 18000[0-9a-f]{2}:	4b ff ff ed 	bl      18000[0-9a-f]{2} <__tls_get_addr>
++ 18000[0-9a-f]{2}:	48 00 00 08 	b       .*
++ 18000[0-9a-f]{2}:	4b ff ff e5 	bl      18000[0-9a-f]{2} <__tls_get_addr>
+ #pass
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt4.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt4.d
+@@ -9,40 +9,40 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+100000e8 <\.__tls_get_addr>:
+-    100000e8:	4e 80 00 20 	blr
++0+10000[0-9a-f]{3} <\.__tls_get_addr>:
++    10000[0-9a-f]{3}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.opt1:
+ 
+-0+100000ec <\.opt1>:
+-    100000ec:	3c 6d 00 00 	addis   r3,r13,0
+-    100000f0:	2c 24 00 00 	cmpdi   r4,0
+-    100000f4:	41 82 00 10 	beq-    .*
+-    100000f8:	60 00 00 00 	nop
+-    100000fc:	38 63 90 10 	addi    r3,r3,-28656
+-    10000100:	48 00 00 0c 	b       .*
+-    10000104:	60 00 00 00 	nop
+-    10000108:	38 63 90 10 	addi    r3,r3,-28656
++0+10000[0-9a-f]{3} <\.opt1>:
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	2c 24 00 00 	cmpdi   r4,0
++    10000[0-9a-f]{3}:	41 82 00 10 	beq-    .*
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 10 	addi    r3,r3,-28656
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       .*
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 10 	addi    r3,r3,-28656
+ 
+ Disassembly of section \.opt2:
+ 
+-0+1000010c <\.opt2>:
+-    1000010c:	3c 6d 00 00 	addis   r3,r13,0
+-    10000110:	2c 24 00 00 	cmpdi   r4,0
+-    10000114:	41 82 00 08 	beq-    .*
+-    10000118:	3c 6d 00 00 	addis   r3,r13,0
+-    1000011c:	60 00 00 00 	nop
+-    10000120:	38 63 90 10 	addi    r3,r3,-28656
++0+10000[0-9a-f]{3} <\.opt2>:
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	2c 24 00 00 	cmpdi   r4,0
++    10000[0-9a-f]{3}:	41 82 00 08 	beq-    .*
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 10 	addi    r3,r3,-28656
+ 
+ Disassembly of section \.opt3:
+ 
+-0+10000124 <\.opt3>:
+-    10000124:	3c 6d 00 00 	addis   r3,r13,0
+-    10000128:	48 00 00 0c 	b       .*
+-    1000012c:	3c 6d 00 00 	addis   r3,r13,0
+-    10000130:	48 00 00 10 	b       .*
+-    10000134:	60 00 00 00 	nop
+-    10000138:	38 63 90 10 	addi    r3,r3,-28656
+-    1000013c:	48 00 00 0c 	b       .*
+-    10000140:	60 00 00 00 	nop
+-    10000144:	38 63 90 08 	addi    r3,r3,-28664
++0+10000[0-9a-f]{3} <\.opt3>:
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       .*
++    10000[0-9a-f]{3}:	3c 6d 00 00 	addis   r3,r13,0
++    10000[0-9a-f]{3}:	48 00 00 10 	b       .*
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 10 	addi    r3,r3,-28656
++    10000[0-9a-f]{3}:	48 00 00 0c 	b       .*
++    10000[0-9a-f]{3}:	60 00 00 00 	nop
++    10000[0-9a-f]{3}:	38 63 90 08 	addi    r3,r3,-28664
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsopt4_32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsopt4_32.d
+@@ -9,36 +9,36 @@
+ 
+ Disassembly of section \.text:
+ 
+-0+1800094 <__tls_get_addr>:
+- 1800094:	4e 80 00 20 	blr
++0+18000[0-9a-f]{2} <__tls_get_addr>:
++ 18000[0-9a-f]{2}:	4e 80 00 20 	blr
+ 
+ Disassembly of section \.opt1:
+ 
+-0+1800098 <\.opt1>:
+- 1800098:	3c 62 00 00 	addis   r3,r2,0
+- 180009c:	2c 04 00 00 	cmpwi   r4,0
+- 18000a0:	41 82 00 0c 	beq-    .*
+- 18000a4:	38 63 90 10 	addi    r3,r3,-28656
+- 18000a8:	48 00 00 08 	b       .*
+- 18000ac:	38 63 90 10 	addi    r3,r3,-28656
++0+18000[0-9a-f]{2} <\.opt1>:
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	2c 04 00 00 	cmpwi   r4,0
++ 18000[0-9a-f]{2}:	41 82 00 0c 	beq-    .*
++ 18000[0-9a-f]{2}:	38 63 90 10 	addi    r3,r3,-28656
++ 18000[0-9a-f]{2}:	48 00 00 08 	b       .*
++ 18000[0-9a-f]{2}:	38 63 90 10 	addi    r3,r3,-28656
+ 
+ Disassembly of section \.opt2:
+ 
+-0+18000b0 <\.opt2>:
+- 18000b0:	3c 62 00 00 	addis   r3,r2,0
+- 18000b4:	2c 04 00 00 	cmpwi   r4,0
+- 18000b8:	41 82 00 08 	beq-    .*
+- 18000bc:	3c 62 00 00 	addis   r3,r2,0
+- 18000c0:	38 63 90 10 	addi    r3,r3,-28656
++0+18000[0-9a-f]{2} <\.opt2>:
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	2c 04 00 00 	cmpwi   r4,0
++ 18000[0-9a-f]{2}:	41 82 00 08 	beq-    .*
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	38 63 90 10 	addi    r3,r3,-28656
+ 
+ Disassembly of section \.opt3:
+ 
+-0+18000c4 <\.opt3>:
+- 18000c4:	3c 62 00 00 	addis   r3,r2,0
+- 18000c8:	48 00 00 0c 	b       .*
+- 18000cc:	3c 62 00 00 	addis   r3,r2,0
+- 18000d0:	48 00 00 0c 	b       .*
+- 18000d4:	38 63 90 10 	addi    r3,r3,-28656
+- 18000d8:	48 00 00 08 	b       .*
+- 18000dc:	38 63 90 08 	addi    r3,r3,-28664
++0+18000[0-9a-f]{2} <\.opt3>:
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	48 00 00 0c 	b       .*
++ 18000[0-9a-f]{2}:	3c 62 00 00 	addis   r3,r2,0
++ 18000[0-9a-f]{2}:	48 00 00 0c 	b       .*
++ 18000[0-9a-f]{2}:	38 63 90 10 	addi    r3,r3,-28656
++ 18000[0-9a-f]{2}:	48 00 00 08 	b       .*
++ 18000[0-9a-f]{2}:	38 63 90 08 	addi    r3,r3,-28664
+ #pass
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsso32.d
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsso32.d
+@@ -42,5 +42,5 @@ Disassembly of section \.got:
+ #...
+ .*:	4e 80 00 21 	blrl
+ .* <_GLOBAL_OFFSET_TABLE_>:
+-.*:	00 01 03 ec .*
++.*:	00 01 [0-9a-f]{2} [0-9a-f]{2} .*
+ #pass
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsso32.g
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsso32.g
+@@ -9,5 +9,5 @@
+ Contents of section \.got:
+ .* 00000000 00000000 00000000 00000000  .*
+ .* 00000000 00000000 00000000 00000000  .*
+-.* 00000000 4e800021 000103ec 00000000  .*
++.* 00000000 4e800021 00010[0-9a-f]{3} 00000000  .*
+ .* 00000000                             .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlsso32.r
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlsso32.r
+@@ -35,6 +35,7 @@ Program Headers:
+  +LOAD .* RWE 0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+1c 0x0+38 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -42,6 +43,7 @@ Program Headers:
+  +01 +\.tdata \.dynamic \.got \.plt 
+  +02 +\.dynamic 
+  +03 +\.tdata \.tbss 
++ +04 +
+ 
+ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 18 entries:
+  Offset +Info +Type +Sym\. Value +Symbol's Name \+ Addend
+@@ -52,9 +54,9 @@ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 18 entries:
+ [0-9a-f ]+R_PPC_TPREL16 +0+30 +le0 \+ 0
+ [0-9a-f ]+R_PPC_TPREL16_HA +0+34 +le1 \+ 0
+ [0-9a-f ]+R_PPC_TPREL16_LO +0+34 +le1 \+ 0
+-[0-9a-f ]+R_PPC_TPREL16 +0+103d0 +\.tdata \+ 103e4
+-[0-9a-f ]+R_PPC_TPREL16_HA +0+103d0 +\.tdata \+ 103e8
+-[0-9a-f ]+R_PPC_TPREL16_LO +0+103d0 +\.tdata \+ 103e8
++[0-9a-f ]+R_PPC_TPREL16 +0+103[df]0 +\.tdata \+ 10[0-9a-f]{3}
++[0-9a-f ]+R_PPC_TPREL16_HA +0+103[df]0 +\.tdata \+ 10[0-9a-f]{3}
++[0-9a-f ]+R_PPC_TPREL16_LO +0+103[df]0 +\.tdata \+ 10[0-9a-f]{3}
+ [0-9a-f ]+R_PPC_DTPMOD32 +0
+ [0-9a-f ]+R_PPC_DTPREL32 +0
+ [0-9a-f ]+R_PPC_DTPMOD32 +0
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlstoc.g
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlstoc.g
+@@ -8,8 +8,8 @@
+ .*: +file format elf64-powerpc
+ 
+ Contents of section \.got:
+- 100101a0 00000000 00000001 00000000 00000000  .*
+- 100101b0 00000000 00000001 00000000 00000000  .*
+- 100101c0 00000000 00000001 00000000 00000000  .*
+- 100101d0 00000000 00000001 00000000 00000000  .*
+- 100101e0 ffffffff ffff8060 00000000 00000000  .*
++ 10010[0-9a-f]{3} 00000000 00000001 00000000 00000000  .*
++ 10010[0-9a-f]{3} 00000000 00000001 00000000 00000000  .*
++ 10010[0-9a-f]{3} 00000000 00000001 00000000 00000000  .*
++ 10010[0-9a-f]{3} 00000000 00000001 00000000 00000000  .*
++ 10010[0-9a-f]{3} ffffffff ffff8060 00000000 00000000  .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlstoc.t
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlstoc.t
+@@ -8,7 +8,7 @@
+ .*: +file format elf64-powerpc
+ 
+ Contents of section \.tdata:
+- 10010148 00c0ffee 00000000 12345678 9abcdef0  .*
+- 10010158 23456789 abcdef01 3456789a bcdef012  .*
+- 10010168 456789ab cdef0123 56789abc def01234  .*
+- 10010178 6789abcd ef012345 789abcde f0123456  .*
++ 10010180 00c0ffee 00000000 12345678 9abcdef0  .*
++ 10010190 23456789 abcdef01 3456789a bcdef012  .*
++ 100101a0 456789ab cdef0123 56789abc def01234  .*
++ 100101b0 6789abcd ef012345 789abcde f0123456  .*
+--- binutils-2.23/ld/testsuite/ld-powerpc/tlstocso.g
++++ binutils-2.23/ld/testsuite/ld-powerpc/tlstocso.g
+@@ -7,7 +7,7 @@
+ .*: +file format elf64-powerpc
+ 
+ Contents of section \.got:
+-.* 00000000 000186c0 00000000 00000000  .*
++.* 00000000 000186f8 00000000 00000000  .*
+ .* 00000000 00000000 00000000 00000000  .*
+ .* 00000000 00000000 00000000 00000000  .*
+ .* 00000000 00000000 00000000 00000000  .*
+--- binutils-2.23/ld/testsuite/ld-s390/tlsbin.rd
++++ binutils-2.23/ld/testsuite/ld-s390/tlsbin.rd
+@@ -36,6 +36,7 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+60 0x0+a0 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -52,6 +53,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rela.dyn' at offset .* contains 4 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-s390/tlsbin_64.rd
++++ binutils-2.23/ld/testsuite/ld-s390/tlsbin_64.rd
+@@ -36,6 +36,7 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+60 0x0+a0 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -52,6 +53,7 @@ Program Headers:
+  +03 +.tdata .dynamic .got *
+  +04 +.dynamic *
+  +05 +.tdata .tbss *
++ +06 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-s390/tlspic.rd
++++ binutils-2.23/ld/testsuite/ld-s390/tlspic.rd
+@@ -39,6 +39,7 @@ Program Headers:
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+60 0x0+80 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -46,6 +47,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got 
+  +02 +.dynamic 
+  +03 +.tdata .tbss 
++ +04 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+  Offset +Info +Type +Sym.Value +Sym. Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-s390/tlspic_64.rd
++++ binutils-2.23/ld/testsuite/ld-s390/tlspic_64.rd
+@@ -39,6 +39,7 @@ Program Headers:
+  +LOAD .* RW +0x1000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+60 0x0+80 R +0x20
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -46,6 +47,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-scripts/empty-aligned.d
++++ binutils-2.23/ld/testsuite/ld-scripts/empty-aligned.d
+@@ -8,7 +8,9 @@
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg +Align
+  +LOAD +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ [RWE ]+ +0x[0-9a-f]+
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+  +00 +.text 
++ +01 +
+--- binutils-2.23/ld/testsuite/ld-sh/tlsbin-2.d
++++ binutils-2.23/ld/testsuite/ld-sh/tlsbin-2.d
+@@ -44,6 +44,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS +0x[0-9a-f]+ 0x[0-9a-f]+ 0x[0-9a-f]+ 0x0+18 0x0+28 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -53,6 +54,7 @@ Program Headers:
+  +03 +\.tdata \.dynamic \.got *
+  +04 +\.dynamic *
+  +05 +\.tdata \.tbss *
++ +06 +
+ 
+ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+  Offset +Info +Type +Sym\.Value +Sym\. Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-sh/tlspic-2.d
++++ binutils-2.23/ld/testsuite/ld-sh/tlspic-2.d
+@@ -32,7 +32,7 @@ Key to Flags:
+ 
+ Elf file type is DYN \(Shared object file\)
+ Entry point 0x[0-9a-f]+
+-There are 4 program headers, starting at offset [0-9]+
++There are [0-9] program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD.*
+  +DYNAMIC.*
+  +TLS .* 0x0+18 0x0+20 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections\.\.\.
+@@ -47,6 +48,7 @@ Program Headers:
+  +01 +\.tdata \.dynamic \.got *
+  +02 +\.dynamic *
+  +03 +\.tdata \.tbss *
++ +04 +
+ 
+ Relocation section '\.rela\.dyn' at offset 0x[0-9a-f]+ contains 10 entries:
+  Offset +Info +Type +Sym\.Value +Sym\. Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-sparc/gotop32.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/gotop32.rd
+@@ -31,6 +31,7 @@ Program Headers:
+  +LOAD +0x0+ 0x0+ 0x0+ 0x0+2000 0x0+2000 R E 0x10000
+  +LOAD +0x0+2000 0x0+12000 0x0+12000 0x0+2000 0x0+2000 RW +0x10000
+  +DYNAMIC +0x0+2000 0x0+12000 0x0+12000 0x0+70 0x0+70 RW +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 1 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/gotop64.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/gotop64.rd
+@@ -31,6 +31,7 @@ Program Headers:
+  +LOAD +0x0+ 0x0+ 0x0+ 0x0+2000 0x0+2000 R E 0x100000
+  +LOAD +0x0+2000 0x0+102000 0x0+102000 0x0+2000 0x0+2000 RW +0x100000
+  +DYNAMIC +0x0+2000 0x0+102000 0x0+102000 0x0+e0 0x0+e0 RW +0x8
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 1 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/tlssunbin32.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/tlssunbin32.rd
+@@ -30,13 +30,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz MemSiz +Flg Align
+- +PHDR +0x0+34 0x0+10034 0x0+10034 0x0+c0 0x0+c0 R E 0x4
+- +INTERP +0x0+f4 0x0+100f4 0x0+100f4 0x0+11 0x0+11 R +0x1
++ +PHDR +0x0+34 0x0+10034 0x0+10034 (0x[0-9a-f]+) \1 R E 0x4
++ +INTERP +(0x[0-9a-f]+ ){3}0x0+11 0x0+11 R +0x1
+ .*Requesting program interpreter.*
+  +LOAD .* R E 0x10000
+  +LOAD .* RW +0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+1060 0x0+10a0 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/tlssunbin64.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/tlssunbin64.rd
+@@ -30,13 +30,14 @@ There are [0-9]+ program headers, starting at offset [0-9]+
+ 
+ Program Headers:
+  +Type +Offset +VirtAddr +PhysAddr +FileSiz +MemSiz +Flg Align
+- +PHDR +0x0+40 0x0+100040 0x0+100040 0x0+150 0x0+150 R E 0x8
+- +INTERP +0x0+190 0x0+100190 0x0+100190 0x0+19 0x0+19 R +0x1
++ +PHDR +0x0+40 0x0+100040 0x0+100040 (0x[0-9a-f]+) \1 R E 0x8
++ +INTERP +0x0+([0-9a-f]+) (0x0+10+\1) \2 0x0+19 0x0+19 R +0x1
+ .*Requesting program interpreter.*
+  +LOAD .* R E 0x100000
+  +LOAD .* RW +0x100000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+60 0x0+a0 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 4 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/tlssunnopic32.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/tlssunnopic32.rd
+@@ -32,6 +32,7 @@ Program Headers:
+  +LOAD .* RW +0x10000
+  +DYNAMIC .* RW +0x4
+  +TLS .* 0x0+ 0x0+24 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 12 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/tlssunnopic64.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/tlssunnopic64.rd
+@@ -32,6 +32,7 @@ Program Headers:
+  +LOAD .* RW +0x100000
+  +DYNAMIC .* RW +0x8
+  +TLS .* 0x0+ 0x0+24 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/tlssunpic32.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/tlssunpic32.rd
+@@ -36,6 +36,7 @@ Program Headers:
+  +LOAD +0x0+2000 0x0+12000 0x0+12000 0x0+184 0x0+184 RWE 0x10000
+  +DYNAMIC +0x0+2060 0x0+12060 0x0+12060 0x0+98 0x0+98 RW +0x4
+  +TLS +0x0+2000 0x0+12000 0x0+12000 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+--- binutils-2.23/ld/testsuite/ld-sparc/tlssunpic64.rd
++++ binutils-2.23/ld/testsuite/ld-sparc/tlssunpic64.rd
+@@ -36,6 +36,7 @@ Program Headers:
+  +LOAD +0x0+2000 0x0+102000 0x0+102000 0x0+3a0 0x0+3a0 RWE 0x100000
+  +DYNAMIC +0x0+2060 0x0+102060 0x0+102060 0x0+130 0x0+130 RW +0x8
+  +TLS +0x0+2000 0x0+102000 0x0+102000 0x0+60 0x0+80 R +0x4
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ #...
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+--- binutils-2.23/ld/testsuite/ld-x86-64/tlsgdesc.rd
++++ binutils-2.23/ld/testsuite/ld-x86-64/tlsgdesc.rd
+@@ -36,12 +36,14 @@ Program Headers:
+  +LOAD.*
+  +LOAD.*
+  +DYNAMIC.*
++ +PAX_FLAGS.*
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+  +00 +.hash .dynsym .dynstr .rela.dyn .rela.plt .plt .text *
+  +01 +.dynamic .got .got.plt *
+  +02 +.dynamic *
++ +03 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 8 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
+--- binutils-2.23/ld/testsuite/ld-x86-64/tlspic.rd
++++ binutils-2.23/ld/testsuite/ld-x86-64/tlspic.rd
+@@ -40,6 +40,7 @@ Program Headers:
+  +LOAD +0x0+11ac 0x0+2011ac 0x0+2011ac 0x0+244 0x0+244 RW +0x200000
+  +DYNAMIC +0x0+1210 0x0+201210 0x0+201210 0x0+130 0x0+130 RW +0x8
+  +TLS +0x0+11ac 0x0+2011ac 0x0+2011ac 0x0+60 0x0+80 R +0x1
++ +PAX_FLAGS +0x0+ 0x0+ 0x0+ 0x0+ 0x0+ +0x[48]
+ 
+  Section to Segment mapping:
+  +Segment Sections...
+@@ -47,6 +48,7 @@ Program Headers:
+  +01 +.tdata .dynamic .got .got.plt *
+  +02 +.dynamic *
+  +03 +.tdata .tbss *
++ +04 +
+ 
+ Relocation section '.rela.dyn' at offset 0x[0-9a-f]+ contains 14 entries:
+  +Offset +Info +Type +Symbol's Value +Symbol's Name \+ Addend
