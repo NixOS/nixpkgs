@@ -11284,10 +11284,6 @@ let
     pulseSupport = config.pulseaudio or false;
   } // (config.mplayer or {}));
 
-  mplayer2 = callPackage ../applications/video/mplayer2 {
-    ffmpeg = libav_9; # see https://trac.macports.org/ticket/44386
-  };
-
   MPlayerPlugin = browser:
     callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
