@@ -8462,19 +8462,14 @@ let
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
-  pgpool92 = callPackage ../servers/sql/pgpool/default.nix {
-    postgresql = postgresql92;
-  };
+  pgpool92 = pgpool.override { postgresql = postgresql92; };
+  pgpool93 = pgpool.override { postgresql = postgresql93; };
+  pgpool94 = pgpool.override { postgresql = postgresql94; };
 
-  pgpool93 = callPackage ../servers/sql/pgpool/default.nix {
-    postgresql = postgresql93;
+  pgpool = callPackage ../servers/sql/pgpool/default.nix {
+    pam = if stdenv.isLinux then pam else null;
+    libmemcached = null; # Detection is broken upstream
   };
-
-  pgpool94 = callPackage ../servers/sql/pgpool/default.nix {
-    postgresql = postgresql94;
-  };
-
-  pgpool = pgpool92;
 
   postgresql = postgresql92;
 
