@@ -9,6 +9,13 @@ import ./generic.nix (args // rec {
     sha256 = "0g2q0pnsbsfwzk9rl2ggkfhsmj9bzmy9lccclpd98zfw7kflz8ca";
   };
 
+  # FIXME: remove with the next point release.
+  kernelPatches = args.kernelPatches ++
+    [ { name = "btrfs-fix-deadlock";
+        patch = ./btrfs-fix-deadlock.patch;
+      }
+    ];
+
   features.iwlwifi = true;
   features.efiBootStub = true;
   features.needsCifsUtils = true;
