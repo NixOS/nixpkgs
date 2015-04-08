@@ -7746,6 +7746,8 @@ let
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
+  wiredtiger = callPackage ../development/libraries/wiredtiger { };
+
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
