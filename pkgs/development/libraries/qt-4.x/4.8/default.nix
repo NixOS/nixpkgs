@@ -130,7 +130,9 @@ stdenv.mkDerivation rec {
   # @vcunat has been unable to find a *reliable* fix
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin
+  NIX_CFLAGS_COMPILE =
+    "-pipe " +
+    optionalString stdenv.isDarwin
     "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin
