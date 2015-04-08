@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ClipGrab
+GenericName=Web video downloader
+Comment=A friendly downloader for YouTube and other sites
+Type=Application
+Categories=Qt;AudioVideo;Audio;Video;
+Icon=clipgrab
+Exec=clipgrab
+Terminal=false

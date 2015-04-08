@@ -10123,6 +10123,8 @@ let
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
 
+  clipgrab = callPackage ../applications/video/clipgrab { };
+
   clipit = callPackage ../applications/misc/clipit { };
 
   bomi = callPackage ../applications/video/bomi {
