@@ -270,12 +270,12 @@ let self = _self // overrides;
 
   company = melpaBuild rec {
     pname   = "company";
-    version = "0.8.6";
+    version = "0.8.12";
     src = fetchFromGitHub {
       owner  = "company-mode";
       repo   = "company-mode";
       rev    = version;
-      sha256 = "1xwxyqg5dan8m1qkdxyzm066ryf24h07karpdlm3s09izfdny33f";
+      sha256 = "08rrjfp2amgya1hswjz3vd5ja6lg2nfmm7454p0h1naz00hlmmw0";
     };
     meta = { license = gpl3Plus; };
   };
