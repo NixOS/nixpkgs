@@ -21,15 +21,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-  '';
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.openntpd.org/";
