@@ -6168,7 +6168,8 @@ let
   };
 
   kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 { });
-  kf5_latest = kf57;
+  kf58 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.8 { });
+  kf5_latest = kf58;
   kf5_stable = kf57;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
@@ -11005,8 +11006,12 @@ let
     kf5 = kf57;
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
+  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
+    kf5 = kf58;
+    kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
+  });
   kdeApps_stable = kdeApps_14_12;
-  kdeApps_latest = kdeApps_14_12;
+  kdeApps_latest = kdeApps_15_04;
 
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
