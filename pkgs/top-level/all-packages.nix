@@ -7353,7 +7353,7 @@ let
     bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
-  qt54 = callPackage ../development/libraries/qt-5/5.4 {};
+  qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
 
   qt5 = qt54;
 
