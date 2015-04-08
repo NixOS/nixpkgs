@@ -181,6 +181,7 @@ self: super: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
   esqueleto = doJailbreak super.esqueleto;
+  pointfree = doJailbreak super.pointfree;
 
   # bos/attoparsec#92
   attoparsec = dontCheck super.attoparsec;
@@ -240,9 +241,6 @@ self: super: {
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
-  haskell-src-meta = overrideCabal (doJailbreak (appendPatch super.haskell-src-meta ./haskell-src-meta-ghc710.patch)) (drv: {
-    prePatch = "sed -i -e 's|template-haskell [^,]\\+|template-haskell|' haskell-src-meta.cabal && cat haskell-src-meta.cabal";
-  });
   mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
     url = "https://github.com/snoyberg/mono-traversable/pull/68.patch";
     sha256 = "11hqf6hi3sc34wl0fn4rpigdf7wfklcjv6jwp8c3129yphg8687h";
@@ -251,10 +249,13 @@ self: super: {
     url = "https://github.com/fpco/conduit-combinators/pull/16.patch";
     sha256 = "0jpwpi3shdn5rms3lcr4srajbhhfp5dbwy7pl23c9kmlil3d9mk3";
   });
-  yesod-bin = appendPatch super.yesod-bin (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/yesod/pull/966.patch";
-    sha256 = "0mm4swyn7qh30hw7ya8ykz5qvsd4ni4vmipq364yqbsi9ysrc6nb";
-    stripLen = 1;
+  annotated-wl-pprint = appendPatch super.annotated-wl-pprint (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/david-christiansen/annotated-wl-pprint/pull/2.patch";
+    sha256 = "0n0fbq3vd7b9kfmhg089q0dy40vawq4q88il3zc9ybivhi62nwv4";
+  });
+  ghc-events = appendPatch super.ghc-events (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/haskell/ghc-events/pull/8.patch";
+    sha256 = "1k881jrvzfvs761jgfhf5nsbmbc33c9333l4s0f5088p46ff2n1l";
   });
 
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
