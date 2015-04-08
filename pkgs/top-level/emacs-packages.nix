@@ -280,6 +280,22 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  company-ghc = melpaBuild rec {
+    pname   = "company-ghc";
+    version = "0.1.10";
+    src = fetchFromGitHub {
+      owner  = "iquiw";
+      repo   = "company-ghc";
+      rev    = "v${version}";
+      sha256 = "0lzwmjf91fxhkknk4z9m2v6whk1fzpa7n1rspp61lwmyh5gakj3x";
+    };
+    packageRequires = [ company ghc-mod ];
+    meta = {
+      description = "company-mode completion backend for haskell-mode via ghc-mod";
+      license = gpl3Plus;
+    };
+  };
+
   dash = melpaBuild rec {
     pname   = "dash";
     version = "2.9.0";
