@@ -19,11 +19,18 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  # Clang generates warnings in Boost's header files
+  # -Werror causes these warnings to be interpreted as errors
+  # Simplest solution: disable -Werror
+  configureFlags = if (stdenv.cc.cc.isClang or false)
+    then [ "--disable-werror" ] else null;
+
   meta = {
     inherit (s) version;
     description = ''A base library for writing document import filters'';
     license = stdenv.lib.licenses.mpl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
