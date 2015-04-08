@@ -13207,7 +13207,7 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
-    kf5 = kf57;
+    kf5 = kf58;
   });
   plasma5_latest = plasma52;
   plasma5_stable = plasma52;
