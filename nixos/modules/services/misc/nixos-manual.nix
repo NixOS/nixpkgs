@@ -14,6 +14,7 @@ let
   versionModule =
     { system.nixosVersionSuffix = config.system.nixosVersionSuffix;
       system.nixosRevision = config.system.nixosRevision;
+      nixpkgs.system = config.nixpkgs.system;
     };
 
   eval = evalModules {

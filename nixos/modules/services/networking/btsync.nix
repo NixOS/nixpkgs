@@ -200,7 +200,6 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.bittorrentSync14;
         example = literalExample "pkgs.bittorrentSync20";
         description = ''
           Branch of bittorrent sync to use.
@@ -276,6 +275,8 @@ in
           message   = "If you're using an API key, you must enable the web server.";
         }
       ];
+
+    services.btsync.package = mkOptionDefault pkgs.bittorrentSync14;
 
     users.extraUsers.btsync = {
       description     = "Bittorrent Sync Service user";
