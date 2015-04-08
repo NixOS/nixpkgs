@@ -550,6 +550,21 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  git-timemachine = melpaBuild rec {
+    pname = "git-timemachine";
+    version = "2.3";
+    src = fetchFromGitHub {
+      owner  = "pidu";
+      repo   = pname;
+      rev    = version;
+      sha256 = "1lm6rgbzbxnwfn48xr6bg05lb716grfr4nqm8lvjm64nabh5y9bh";
+    };
+    meta = {
+      description = "Step through historic revisions of git controlled files";
+      license = gpl3Plus;
+    };
+  };
+
   gitattributes-mode = melpaBuild rec {
     pname = "gitattributes-mode";
     version = "1.0.0";
