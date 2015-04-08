@@ -1,25 +1,33 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre, snappy
-, libyamlcpp, sasl, openssl, libpcap }:
+, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+}:
 
 with stdenv.lib;
 
-let version = "2.6.8";
+let version = "3.0.1";
     system-libraries = [
       "pcre"
+      "wiredtiger"
       "boost"
       "snappy"
+      "zlib"
+      # "v8"
       # "stemmer" -- not nice to package yet (no versioning, no makefile, no shared libs)
       "yaml"
-      # "v8"
-    ] ++ optionals (!stdenv.isDarwin) [ "tcmalloc" ];
+    ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
     buildInputs = [
       sasl boost gperftools pcre snappy
-      libyamlcpp sasl openssl libpcap
+      zlib libyamlcpp sasl openssl libpcap wiredtiger
     ];
 
     other-args = concatStringsSep " " ([
+      "--c++11=on"
       "--ssl"
+      #"--rocksdb" # Don't have this packaged yet
+      "--wiredtiger=on"
+      "--js-engine=v8-3.25"
       "--use-sasl-client"
+      "--variant-dir=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
       "--extrapath=${concatStringsSep "," buildInputs}"
     ] ++ map (lib: "--use-system-${lib}") system-libraries);
 
@@ -28,29 +36,20 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "01hs65xswggy628hxka2f63qvwz5rfhqlkb05kr20wz1kl6zd5qr";
+    sha256 = "04qjw7b98h37g8rcih7va3rvg2z95ly38bg181a4nfkak50hd638";
   };
 
   nativeBuildInputs = [ scons ];
   inherit buildInputs;
 
   postPatch = ''
-    # fix yaml-cpp detection
-    sed -i -e "s/\[\"yaml\"\]/\[\"yaml-cpp\"\]/" SConstruct
-
-    # bug #482576
-    sed -i -e "/-Werror/d" src/third_party/v8/SConscript
-
-    # fix inclusion of std::swap
-    sed -i '1i #include <algorithm>' src/mongo/shell/linenoise_utf8.h
-
     # fix environment variable reading
     substituteInPlace SConstruct \
-        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
+        --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '';
 
   buildPhase = ''
-    scons all --release ${other-args}
+    scons core --release ${other-args}
   '';
 
   installPhase = ''
