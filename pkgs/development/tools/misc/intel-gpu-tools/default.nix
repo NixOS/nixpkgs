@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libpciaccess, cairo, dri2proto, udev, libX11, libXext, libXv, libXrandr, glib, bison }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-1.9";
+  name = "intel-gpu-tools-1.10";
 
   src = fetchurl {
     url = "http://xorg.freedesktop.org/archive/individual/app/${name}.tar.bz2";
-    sha256 = "1lqy1adplb2bqpddznsavjc2fxn6rvzxnndmi8cnq7pyw25c5r0x";
+    sha256 = "0x4q7gv14yaniycgdxym9nazlj6wzcvjjhg40bbm5lkw5pqvxwkd";
   };
 
   buildInputs = [ pkgconfig libdrm libpciaccess cairo dri2proto udev libX11 libXext libXv libXrandr glib bison ];
