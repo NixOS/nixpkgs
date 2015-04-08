@@ -509,6 +509,21 @@ let self = _self // overrides;
     meta = { license = bsd3; };
   };
 
+  git-auto-commit-mode = melpaBuild rec {
+    pname = "git-auto-commit-mode";
+    version = "4.4.0";
+    src = fetchFromGitHub {
+      owner  = "ryuslash";
+      repo   = pname;
+      rev    = version;
+      sha256 = "0psmr7749nzxln4b500sl3vrf24x3qijp12ir0i5z4x25k72hrlh";
+    };
+    meta = {
+      description = "Automatically commit to git after each save";
+      license = gpl3Plus;
+    };
+  };
+
   git-commit-mode = melpaBuild rec {
     pname = "git-commit-mode";
     version = "1.0.0";
