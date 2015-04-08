@@ -49,13 +49,15 @@ in stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    scons core --release ${other-args}
+    scons -j $NIX_BUILD_CORES core --release ${other-args}
   '';
 
   installPhase = ''
     mkdir -p $out/lib
-    scons install --release --prefix=$out ${other-args}
+    scons -j $NIX_BUILD_CORES install --release --prefix=$out ${other-args}
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "a scalable, high-performance, open source NoSQL database";
