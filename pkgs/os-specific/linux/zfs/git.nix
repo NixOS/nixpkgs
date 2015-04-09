@@ -9,9 +9,7 @@ callPackage ./generic.nix (args // rec {
     sha256 = "1yxpx7lylbbr6jlm8g2x6xsmh6wmzb8prfg7shks7sib750a4slx";
   };
 
-  patches = [
-    ./nix-build-git.patch
-  ];
+  patches = [ ./nix-build.patch ];
 
   spl = spl_git;
 })
