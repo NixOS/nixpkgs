@@ -2,7 +2,7 @@
 , makeWrapper, lib }:
 stdenv.mkDerivation rec {
   name = "rage-${version}";
-  version = "0.1.0";
+  version = "0.1.1";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.gz";
     sha256 = "0d87n0rl24s7b8y3bdcg6i3yrzhil5f5vmgrmh451i4y38k84swk";
