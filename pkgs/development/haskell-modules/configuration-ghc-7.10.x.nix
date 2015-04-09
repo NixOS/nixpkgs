@@ -226,6 +226,11 @@ self: super: {
     sha256 = "1lwwvxyhxcmppdapbgpfhwi7xc2z78qir03xjrpzab79p2qyq7br";
   });
 
+  wl-pprint = overrideCabal super.wl-pprint (drv: {
+    postPatch = "sed -i '113iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen.hs";
+    jailbreak = true;
+  });
+
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
