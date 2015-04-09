@@ -32,7 +32,7 @@ let
 
     grKernel = if cfg.stable
                then mkKernel pkgs.linux_3_14 stable-patch
-               else mkKernel pkgs.linux_3_17 test-patch;
+               else throw "Grsecurity is outdated here."; #mkKernel pkgs.linux_3_17 test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
