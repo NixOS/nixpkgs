@@ -95,16 +95,7 @@ self: super: {
     '';
   });
 
-  "ghcjs-dom" = self.callPackage
-    ({ mkDerivation, base, mtl, text, ghcjs-base
-     }:
-     mkDerivation {
-       pname = "ghcjs-dom";
-       version = "0.1.1.3";
-       sha256 = "0pdxb2s7fflrh8sbqakv0qi13jkn3d0yc32xhg2944yfjg5fvlly";
-       buildDepends = [ base mtl text ghcjs-base ];
-       description = "DOM library that supports both GHCJS and WebKitGTK";
-       license = pkgs.stdenv.lib.licenses.mit;
-       hydraPlatforms = pkgs.stdenv.lib.platforms.none;
-     }) {};
+  ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
+    buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
+  });
 }
