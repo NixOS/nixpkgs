@@ -5,7 +5,9 @@ let
     inherit name;
 
     src = fetchurl {
-      url = "http://swcdn.apple.com/content/downloads/00/14/031-07556/i7hoqm3awowxdy48l34uel4qvwhdq8lgam/${name}.pkg";
+      # Magic url found in:
+      # https://swscan.apple.com/content/catalogs/others/index-10.9-1.sucatalog
+      url = "http://swcdn.apple.com/content/downloads/27/02/031-06182/yiervn212jfs091cp9hwmb7gjq7ky91crs/${name}.pkg";
       inherit sha256;
     };
 
@@ -32,12 +34,12 @@ let
   };
 in rec {
   tools = pkg {
-    name   = "CLTools_Executables";
-    sha256 = "1rqrgip9pwr9d6p1hkd027lzxpymr1qm54jjnkldjjb8m4nps7bp";
+    name   = "CLTools_Executables_OSX109";
+    sha256 = "1cjdnnjny6h0dc1cc994pgrkmsa5cvk7pi5dpkxyslyicwf260fx";
   };
 
   sdk = pkg {
     name   = "DevSDK_OSX109";
-    sha256 = "0x6r61h78r5cxk9dbw6fnjpn6ydi4kcajvllpczx3mi52crlkm4x";
+    sha256 = "16b7aplha5573yl1d44nl2yxzp0w2hafihbyh7930wrcvba69iy4";
   };
 }
