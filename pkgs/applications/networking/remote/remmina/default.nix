@@ -3,8 +3,8 @@
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem }:
 
 let
-  version = "1.0.0";
-  
+  version = "1.1.2";
+
   desktopItem = makeDesktopItem {
     name = "remmina";
     desktopName = "Remmina";
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
   name = "remmina-${version}";
 
   src = fetchurl {
-    url = "https://github.com/downloads/FreeRDP/Remmina/Remmina-${version}.tar.gz";
-    sha256 = "7cd0d2d6adbd96c7139da8c4bfc4cf4821e1fa97242bb9cc9db32a53df289731";
+    url = "https://github.com/FreeRDP/Remmina/archive/v${version}.tar.gz";
+    sha256 = "214eb82e616f3158304f689692d467b45c537e295e6aed1c6d291b2d7d2e601e";
   };
 
   buildInputs = [ cmake pkgconfig makeWrapper
@@ -43,9 +43,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     license = stdenv.lib.licenses.gpl2;
-    homepage = "http://remmina.sourceforge.net/";
+    homepage = "http://freerdp.github.io/Remmina/index.html";
     description = "Remote desktop client written in GTK+";
-    maintainers = [];
+    maintainers = [ stdenv.lib.maintainers.ryantm ];
     platforms = platforms.linux;
   };
 }

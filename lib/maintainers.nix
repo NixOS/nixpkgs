@@ -174,6 +174,7 @@
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
+  ryantm = "Ryan Mulligan <ryan@ryantm.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
