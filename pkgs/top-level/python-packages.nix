@@ -7821,12 +7821,11 @@ let
 
   percol = buildPythonPackage rec {
     name = "percol-${version}";
-    version = "0.0.8";
-    disabled = isPy3k;
+    version = "0.1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/percol/${name}.tar.gz";
-      sha256 = "169s5mhw1s60qbsd6pkf9bb2x6wfgx8hn8nw9d4qgc68qnnpp2cj";
+      sha256 = "1bchvqf4prdmfm1cg6y2i76kcd3jwmzz5wmlx1zhi7f3asgksjf8";
     };
 
     propagatedBuildInputs = with self; [ modules.curses ];
