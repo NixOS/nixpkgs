@@ -3,6 +3,8 @@
 # Fetch the latest io.js release (stable/nightly) and update
 # `default.nix` in this directory.
 #
+# Call this from the root of your nixpkgs directory.
+#
 
 set -e
 
@@ -21,12 +23,13 @@ latest_log() {
 }
 
 url() {
-    nix-instantiate -A "$1" 2> /dev/null | xargs cat \
+    nix-instantiate -A "$1" \
+        | xargs cat \
         | sed 's/.*"urls","//;s/".*//'
 }
 
 hash() {
-    nix-prefetch-url "$1" 2> /dev/null
+    nix-prefetch-url "$1"
 }
 
 hash_log() {
