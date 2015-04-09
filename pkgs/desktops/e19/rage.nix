@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.1.1";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.gz";
-    sha256 = "0d87n0rl24s7b8y3bdcg6i3yrzhil5f5vmgrmh451i4y38k84swk";
+    sha256 = "0jdhbzmnvl0i2zzmjs1wgvxmnv0lm76k7h5llbb8ai34xh4yp3fi";
   };
   buildInputs = [ e19.elementary e19.efl automake autoconf libtool pkgconfig
     makeWrapper ];
