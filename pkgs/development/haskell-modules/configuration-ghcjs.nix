@@ -7,6 +7,10 @@ self: super: {
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
+  # ghcjs can not build allex or happy, but we still can build libraries that
+  # use them for preprocessing.
+  inherit (pkgs.haskell-ng.packages.ghc7101) allex happy;
+
   jailbreak-cabal = pkgs.haskell-ng.packages.ghc7101.jailbreak-cabal;
 
   # Many packages fail with:
@@ -101,6 +105,7 @@ self: super: {
      mkDerivation {
        pname = "ghcjs-dom";
        version = "0.1.1.3";
+       configureFlags = [ "--flags=+ghcjs" ];
        sha256 = "0pdxb2s7fflrh8sbqakv0qi13jkn3d0yc32xhg2944yfjg5fvlly";
        buildDepends = [ base mtl text ghcjs-base ];
        description = "DOM library that supports both GHCJS and WebKitGTK";
