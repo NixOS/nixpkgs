@@ -494,6 +494,9 @@ self: super: {
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
 
+  # https://github.com/cgaebel/stm-conduit/issues/33
+  stm-conduit = dontCheck super.stm-conduit;
+
   # https://github.com/fumieval/call/issues/3
   call = markBrokenVersion "0.1.2" super.call;
   rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
