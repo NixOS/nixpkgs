@@ -2,14 +2,17 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "blink-${version}";
-  version = "0.9.1";
+  version = "1.2.2";
   
   src = fetchurl {
     url = "http://download.ag-projects.com/BlinkQt/${name}.tar.gz";
-    sha256 = "f578e5186893c3488e7773fbb775028ae54540433a0c51aefa5af983ca2bfdae";
+    sha256 = "0z7bhfz2775cm7c7s794s5ighp5q7fb6jn8dw025m49vlgqzr78c";
   };
 
   patches = [ ./pythonpath.patch ];
+  postPatch = ''
+    sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
+  '';
 
   propagatedBuildInputs = [ pyqt4 pythonPackages.cjson pythonPackages.sipsimple twisted ];
 
