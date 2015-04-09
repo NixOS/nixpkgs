@@ -10195,6 +10195,8 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
+  
   dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
