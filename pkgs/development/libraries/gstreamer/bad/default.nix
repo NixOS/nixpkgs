@@ -5,11 +5,14 @@
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls
-, mesa
+, mesa, libintlOrEmpty
 }:
 
 assert faacSupport -> faac != null;
 
+let
+  inherit (stdenv.lib) optional optionalString;
+in
 stdenv.mkDerivation rec {
   name = "gst-plugins-bad-1.4.5";
 
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
       a real live maintainer, or some actual wide use.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ iyzsong ];
   };
 
@@ -39,7 +42,15 @@ stdenv.mkDerivation rec {
     faad2 libass libkate libmms
     libmodplug mpeg2dec mpg123
     openjpeg libopus librsvg
-    wildmidi fluidsynth libvdpau wayland
+    fluidsynth libvdpau
     libwebp xvidcore gnutls mesa
-  ] ++ stdenv.lib.optional faacSupport faac;
+  ]
+    ++ libintlOrEmpty
+    ++ optional faacSupport faac
+    ++ optional stdenv.isLinux wayland
+    # wildmidi requires apple's OpenAL
+    # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
+    ++ optional (!stdenv.isDarwin) wildmidi;
+
+  LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }
