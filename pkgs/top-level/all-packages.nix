@@ -1814,7 +1814,6 @@ let
   nodePackages = callPackage ./node-packages.nix { self = nodePackages; };
 
   iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
-  iojs-nightly = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; nightly = true; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
