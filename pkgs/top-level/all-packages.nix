@@ -9754,6 +9754,8 @@ let
 
   fira = callPackage ../data/fonts/fira { };
 
+  fira-mono = callPackage ../data/fonts/fira-mono { };
+
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   freepats = callPackage ../data/misc/freepats { };
