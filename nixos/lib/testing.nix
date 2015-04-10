@@ -47,7 +47,7 @@ rec {
         ''
           mkdir -p $out/nix-support
 
-          LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver || failed=1
+          LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
 
           # Generate a pretty-printed log.
           xsltproc --output $out/log.html ${./test-driver/log2html.xsl} $out/log.xml
@@ -63,8 +63,6 @@ rec {
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-
-          [ -z "$failed" ] || touch $out/nix-support/failed
         ''; # */
     };
 
