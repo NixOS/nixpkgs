@@ -3263,6 +3263,8 @@ let
 
   dash = callPackage ../shells/dash { };
 
+  es = callPackage ../shells/es { };
+
   fish = callPackage ../shells/fish {
     python = python27Full;
   };
