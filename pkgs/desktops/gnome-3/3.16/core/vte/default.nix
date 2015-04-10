@@ -1,8 +1,8 @@
 { stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection, vala, libxml2
-, selectTextPatch ? false }:
+, gnutls, selectTextPatch ? false }:
 
 stdenv.mkDerivation rec {
-  versionMajor = "0.38";
+  versionMajor = "0.40";
   versionMinor = "0";
   moduleName   = "vte";
 
@@ -10,12 +10,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "1llg2xnjpn630vd86ci8csbjjacj3ia6syck2bsq4kinr66z5zsw";
+    sha256 = "0lnq0bgkmsixjwmfacb2ch9qfjqjxa8zkk1hiv3l29kgca0n3nal";
   };
 
   patches = with stdenv.lib; optional selectTextPatch ./expose_select_text.0.38.0.patch;
 
-  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses vala libxml2 ];
+  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib 
+                  gnome3.gtk3 ncurses vala libxml2 ];
+
+  propagatedBuildInputs = [ gnutls ];
 
   preConfigure = "patchShebangs .";
 

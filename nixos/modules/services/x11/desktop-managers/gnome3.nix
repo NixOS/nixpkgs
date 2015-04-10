@@ -108,7 +108,7 @@ in {
           # Override default mimeapps
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
-          # Let gnome-control-center find gnome-shell search providers
+          # Let gnome-control-center find gnome-shell search providers. GNOME 3.12 compatibility.
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
 
           # Let nautilus find extensions
@@ -119,6 +119,9 @@ in {
 
           # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
+
+          # Find the mouse
+          export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
 
           ${gnome3.gnome_session}/bin/gnome-session&
           waitPID=$!
@@ -138,12 +141,11 @@ in {
         gnome3.dconf
         gnome3.gnome-backgrounds
         gnome3.gnome_control_center
-        gnome3.gnome_icon_theme
         gnome3.gnome-menus
         gnome3.gnome_settings_daemon
         gnome3.gnome_shell
         gnome3.gnome_themes_standard
-      ] ++ cfg.sessionPath ++ (removePackagesByName [
+      ] ++ gnome3.icon-themes ++ (removePackagesByName [
         gnome3.baobab
         gnome3.empathy
         gnome3.eog

@@ -34,6 +34,8 @@ with lib;
 
     services.dbus.packages = [ pkgs.geoclue2 ];
 
+    systemd.packages = [ pkgs.geoclue2 ];
+
   };
 
 }

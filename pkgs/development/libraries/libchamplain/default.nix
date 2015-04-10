@@ -2,11 +2,11 @@
 , clutter_gtk, libsoup /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
-  name = "libchamplain-0.12.2";
+  name = "libchamplain-0.12.10";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libchamplain/0.12/libchamplain-0.12.2.tar.xz;
-    sha256 = "0bkyzm378gh6qs7grr2vgzrl4z1pi99yysy8iwzdqzs0bs3rfgyj";
+    url = "mirror://gnome/sources/libchamplain/0.12/${name}.tar.xz";
+    sha256 = "019b8scnx7d3wdylmpk9ihzh06w25b63x9cn8nhj6kjx82rcwlxz";
   };
 
   buildInputs = [ pkgconfig ];
