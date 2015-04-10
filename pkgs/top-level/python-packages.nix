@@ -2983,7 +2983,9 @@ let
     propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
-  gmpy = callPackage ../development/python-modules/gmpy { };
+  gmpy = callPackage ../development/python-modules/gmpy {
+    mpc = pkgs.mpc;
+  };
 
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";

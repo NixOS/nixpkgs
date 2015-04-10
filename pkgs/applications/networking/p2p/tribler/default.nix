@@ -1,15 +1,15 @@
-{ stdenv, fetchgit, libtorrentRasterbar, libav, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchgit, libtorrentRasterbar, libav, sqlite3, gmpy, twisted, pythonPackages, makeWrapper, nettools
 , enablePlayer ? false, vlc ? null }:
 
-let ver = "6.4.0"; in
+let ver = "6.4.3"; in
 
 stdenv.mkDerivation {
   name = "tribler-${ver}";
 
   src = fetchgit {
     url = git://github.com/Tribler/tribler;
-    rev = "v${ver}";
-    sha256 = "c21fe700942df96e2f45f950d2800251e525664f0d5c39bf977a6c24499ec219";
+    rev = "refs/tags/v${ver}";
+    sha256 = "0i7pwqd4yizbv2z6ckz6897dw21parl1mvml4yvn522ry6hgvk3k";
     fetchSubmodules = true;
   };
 
@@ -17,12 +17,9 @@ stdenv.mkDerivation {
     [ pythonPackages.python pythonPackages.gmpy pythonPackages.wrapPython makeWrapper
       libav ];
 
-  pythonPath =
-    [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
-      pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
-      pythonPackages.twisted libtorrentRasterbar pythonPackages.pil pythonPackages.pyasn1
-      pythonPackages.pycrypto pythonPackages.requests pythonPackages.netifaces
-      pythonPackages.gmpy pythonPackages.cherrypy pythonPackages.feedparser
+  pythonPath = with pythonPackages; [
+      wxPython curses apsw setuptools m2crypto gmpy twisted feedparser
+      sqlite3 pil libtorrentRasterbar pyasn1 pycrypto requests netifaces cherrypy
     ];
 
   propogatedBuildInputs =
