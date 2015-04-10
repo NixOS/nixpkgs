@@ -2093,7 +2093,7 @@ let
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
-  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { dconf = gnome3.dconf; };
+  networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
@@ -5420,6 +5420,8 @@ let
 
   appstream = callPackage ../development/libraries/appstream { };
 
+  appstream-glib = callPackage ../development/libraries/appstream-glib { };
+
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
@@ -5552,16 +5554,27 @@ let
     cogl = cogl_1_18;
   };
 
+  clutter_1_22 = callPackage ../development/libraries/clutter/1.22.nix {
+    cogl = cogl_1_20;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
+
+  clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix { };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
+  clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
+    clutter = clutter_1_22;
+  };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
   cogl = callPackage ../development/libraries/cogl { };
 
   cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix { };
+
+  cogl_1_20 = callPackage ../development/libraries/cogl/1.20.nix { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
 
@@ -5760,6 +5773,8 @@ let
 
   gav = callPackage ../games/gav { };
 
+  gcab = callPackage ../development/libraries/gcab { };
+
   gsb = callPackage ../games/gsb { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
@@ -5771,6 +5786,8 @@ let
   gecode = callPackage ../development/libraries/gecode { };
 
   gegl = callPackage ../development/libraries/gegl { };
+
+  gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
 
   geoclue = callPackage ../development/libraries/geoclue {};
 
@@ -6025,10 +6042,17 @@ let
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
 
+  gtk3_16 = callPackage ../development/libraries/gtk+/3.16.nix {
+    gettext = gettextWithExpat gettext_0_19;
+  };
+
   gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
+  gtkmm3_16 = callPackage ../development/libraries/gtkmm/3.16.nix {
+    gtk3 = gtk3_16;
+  };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtk-sharp;
@@ -11978,7 +12002,7 @@ let
 
   termite = callPackage ../applications/misc/termite {
     gtk = gtk3;
-    vte = gnome3_12.vte-select-text;
+    vte = gnome3_16.vte-select-text;
    };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -13001,6 +13025,11 @@ let
 
   gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
     callPackage = pkgs.newScope pkgs.gnome3_12;
+  });
+
+  gnome3_16 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.16 {
+    callPackage = pkgs.newScope pkgs.gnome3_16;
+    self = pkgs.gnome3_16;
   });
 
   gnome3 = gnome3_12;
