@@ -494,6 +494,9 @@ self: super: {
   # https://github.com/joeyadams/haskell-stm-delay/issues/3
   stm-delay = dontCheck super.stm-delay;
 
+  # https://github.com/cgaebel/stm-conduit/issues/33
+  stm-conduit = dontCheck super.stm-conduit;
+
   # https://github.com/fumieval/call/issues/3
   call = markBrokenVersion "0.1.2" super.call;
   rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
@@ -678,9 +681,6 @@ self: super: {
   # https://github.com/prowdsponsor/esqueleto/issues/93
   esqueleto = dontCheck super.esqueleto;
 
-  # https://github.com/anchor/ceilometer-common/issues/16
-  ceilometer-common = dontCheck super.ceilometer-common;
-
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
 
@@ -713,6 +713,14 @@ self: super: {
       sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
     '';
   });
+
+  # Uses OpenGL in testing
+  caramia = dontCheck super.caramia;
+
+  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvmPackages_34.llvm; };
+
+  # Tries to run GUI in tests
+  leksah = dontCheck super.leksah;
 
 } // {
 

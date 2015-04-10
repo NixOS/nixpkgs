@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, valgrind }:
+{ stdenv, fetchFromGitHub, valgrind }:
 
+let version = "128"; in
 stdenv.mkDerivation rec {
-  version = "128";
   name = "lz4-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/Cyan4973/lz4/archive/r${version}.tar.gz";
-    sha256 = "1lf7a0gqm2q7p1qs28lmajmls3pwfk2p0w3hljjlmshbkndaj26b";
+  src = fetchFromGitHub {
+    sha256 = "00jrnic2jddj81av8jjipf4rdkx6x6cdf8zpsz3mp5kbmqzd0h9a";
+    rev = "r${version}";
+    repo = "lz4";
+    owner = "Cyan4973";
   };
 
   # valgrind is required only by `make test`

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, flac, fuse, lame, libid3tag, pkgconfig }:
 
+let version = "0.91"; in
 stdenv.mkDerivation rec {
-  version = "0.91";
   name = "mp3fs-${version}";
 
   src = fetchurl {

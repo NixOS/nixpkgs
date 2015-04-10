@@ -37,7 +37,6 @@ let
     inherit (pkgs) stdenv fetchurl;
     self = pythonPackages;
   }
-# Python packages for all python versions
 // {
 
   inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName buildPythonPackage;
@@ -661,20 +660,21 @@ let
   }));
 
   azure = buildPythonPackage rec {
-    version = "0.9.0";
+    version = "0.10.0";
     name = "azure-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/azure/${name}.zip";
-      md5 = "9616767cf45c1c00794624e2a0889f23";
+      md5 = "305b0036df5696d68369807835f554ae";
     };
 
-    propagatedBuildInputs = with self; [ dateutil ];
+    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
 
     meta = with stdenv.lib; {
       description = "Microsoft Azure SDK for Python";
       homepage = "http://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
+      maintainers = [ maintainers.olcai ];
     };
   };
 
@@ -746,11 +746,11 @@ let
   };
 
   bcdoc = buildPythonPackage rec {
-    name = "bcdoc-0.12.1";
+    name = "bcdoc-0.13.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/bcdoc/bcdoc-0.12.1.tar.gz";
-      md5 = "7c8617347c294ea4d36ec73fb5b2c26e";
+      url = "https://pypi.python.org/packages/source/b/bcdoc/bcdoc-0.13.0.tar.gz";
+      md5 = "819882458be7b642e00ddc9846073d89";
     };
 
     buildInputs = with self; [ self.docutils self.six ];
@@ -1200,12 +1200,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "0.81.0";
+    version = "0.102.0";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0mdkkk0038ng6557cw5520xy624sqgv0avjx387bc3fbgxi8bksj";
+      sha256 = "1266hwkcchzr9r2z1q1150zmk20p3d4a75p6nppi6w9bhsywxhnr";
     };
 
     propagatedBuildInputs =
@@ -1752,14 +1752,14 @@ let
 
 
   colander = buildPythonPackage rec {
-    name = "colander-1.0b1";
+    name = "colander-1.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/colander/${name}.tar.gz";
-      md5 = "89f2cf4b5c87d43f7917d6a0d4872e6a";
+      md5 = "058576123da7216288c079c9f47693f8";
     };
 
-    propagatedBuildInputs = with self; [ self.translationstring ];
+    propagatedBuildInputs = with self; [ self.translationstring self.iso8601 ];
 
     meta = {
       maintainers = [
@@ -5881,11 +5881,11 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.5.0";
+    name = "jmespath-0.6.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
-      sha256 = "1hiqqaz1a9qv1j8n02r9c2c010krr0ar2sf35j2z2kci7ywky963";
+      sha256 = "1f7nxk62yifh6zwhf34w4fgwxvyls8x2daphljgrg4lh0i2sgwgr";
     };
 
     propagatedBuildInputs = with self; [ ply ];
@@ -10983,19 +10983,19 @@ let
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "1.4.2";
+    version = "2.3.1";
     disabled = isPy3k;
 
     configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "f6e6de7ab5f20e8ae08966b8811462e4271833db4f7fbab58ffba4e5c07ab114";
+      sha256 = "1n3g1zg3zgdybikdla0qdqvpa06vn1ka2asr61lb8kk6xbvqkljv";
     };
 
-    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib];
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
 
-    buildInputs = with self; [ pkgs.alsaLib ];
+    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite ];
 
     installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
@@ -14349,14 +14349,9 @@ let
     };
   };
 
-
-# python2.7 specific packages
-} // optionalAttrs isPy27 (
-  with self;
-
-{
   boto-230 = buildPythonPackage rec {
     name = "boto-2.30.0";
+    disabled = ! isPy27;
     src = pkgs.fetchurl {
       url = https://pypi.python.org/packages/source/b/boto/boto-2.30.0.tar.gz;
       sha256 = "12gl8azmx1vv8dbv9jhnsbhjpc2dd1ng0jlbcg734k6ggwq1h6hh";
@@ -14371,6 +14366,7 @@ let
 
   gcs-oauth2-boto-plugin = buildPythonPackage rec {
     name = "gcs-oauth2-boto-plugin-1.8";
+    disabled = ! isPy27;
     src = pkgs.fetchurl {
       url = https://pypi.python.org/packages/source/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
       sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
@@ -14385,6 +14381,7 @@ let
 
   gsutil = buildPythonPackage rec {
     name = "gsutil-4.6";
+    disabled = ! isPy27;
     meta = {
       homepage = https://developers.google.com/storage/docs/gsutil;
       description = "Google Cloud Storage Tool";
@@ -14405,6 +14402,7 @@ let
   pypi2nix = self.buildPythonPackage rec {
     rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
     name = "pypi2nix-1.0_${rev}";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
@@ -14423,6 +14421,7 @@ let
 
   svg2tikz = self.buildPythonPackage {
     name = "svg2tikz-1.0.0";
+    disabled = ! isPy27;
 
     propagatedBuildInputs = with self; [lxml];
 
@@ -14443,6 +14442,7 @@ let
   syncserver = buildPythonPackage rec {
     name = "syncserver-${version}";
     version = "1.5.0";
+    disabled = ! isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/syncserver.git;
@@ -14465,6 +14465,7 @@ let
   serversyncstorage = buildPythonPackage rec {
     name = "serversyncstorage-${version}";
     version = "1.5.11";
+    disabled = ! isPy27;
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
@@ -14482,6 +14483,7 @@ let
 
   thumbor = self.buildPythonPackage rec {
     name = "thumbor-4.0.4";
+    disabled = ! isPy27;
 
     propagatedBuildInputs = with self; [
                     tornado
@@ -14513,6 +14515,7 @@ let
 
   thumborPexif = self.buildPythonPackage rec {
     name = "thumbor-pexif-0.14";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/thumbor-pexif/${name}.tar.gz";
@@ -14530,6 +14533,7 @@ let
     version  = "1.4";
     baseName = "pync";
     name     = "${baseName}-${version}";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/${baseName}/${name}.tar.gz";
@@ -14555,6 +14559,7 @@ let
 
   weboob = buildPythonPackage rec {
     name = "weboob-1.0";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://symlink.me/attachments/download/289/${name}.tar.gz";
@@ -14575,6 +14580,7 @@ let
 
   datadiff = buildPythonPackage rec {
     name = "datadiff-1.1.6";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/datadiff/datadiff-1.1.6.zip";
@@ -14592,6 +14598,7 @@ let
 
   termcolor = buildPythonPackage rec {
     name = "termcolor-1.1.0";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/termcolor/termcolor-1.1.0.tar.gz";
@@ -14607,6 +14614,7 @@ let
 
   html2text = buildPythonPackage rec {
     name = "html2text-2014.12.29";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/h/html2text/html2text-2014.12.29.tar.gz";
@@ -14622,6 +14630,7 @@ let
 
   pychart = buildPythonPackage rec {
     name = "pychart-1.39";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "http://download.gna.org/pychart/PyChart-1.39.tar.gz";
@@ -14637,6 +14646,7 @@ let
 
   parsimonious = buildPythonPackage rec {
     name = "parsimonious-0.6.0";
+    disabled = ! isPy27;
     src = pkgs.fetchurl {
       url = "https://github.com/erikrose/parsimonious/archive/0.6.tar.gz";
       sha256 = "7ad992448b69a3f3d943bac0be132bced3f13937c8ca150ba2fd1d7b6534f846";
@@ -14653,6 +14663,7 @@ let
 
   networkx = buildPythonPackage rec {
     name = "networkx-1.9.1";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/networkx/networkx-1.9.1.tar.gz";
@@ -14670,6 +14681,7 @@ let
 
   basemap = buildPythonPackage rec {
     name = "basemap-1.0.7";
+    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz";
@@ -14704,5 +14716,21 @@ let
       licences = [ licenses.mit licenses.gpl2 ];
     };
   };
+  
+  dicttoxml = buildPythonPackage rec {
+    name = "dicttoxml-1.6.4";
 
-}); in pythonPackages
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dicttoxml/dicttoxml-1.6.4.tar.gz";
+      md5 = "154b47d2b7405280b871a81502a05657";
+    };
+
+    propagatedBuildInputs = with self; [  ];
+
+    meta = with stdenv.lib; {
+      description = "Summary";
+      homepage = https://github.com/quandyfactory/dicttoxml;
+    };
+  };
+
+}; in pythonPackages

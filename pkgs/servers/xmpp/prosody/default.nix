@@ -1,11 +1,16 @@
-{ stdenv, fetchurl, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, libidn, openssl, makeWrapper, fetchhg, withLibevent ? false }:
+{ stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
+, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, luazlib ? null
+, withLibevent ? true, withZlib ? true }:
 
 assert withLibevent -> luaevent != null;
+assert withZlib -> luazlib != null;
 
 with stdenv.lib;
 
 let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ] ++ optional withLibevent luaevent;
+  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
+                ++ optional withLibevent luaevent
+                ++ optional withZlib luazlib;
   getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
   getLuaPath  = lib : getPath lib "lua";
   getLuaCPath = lib : getPath lib "so";
@@ -29,7 +34,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ]
-                ++ optional withLibevent luaevent;
+                ++ optional withLibevent luaevent
+                ++ optional withZlib luazlib;
 
   configureFlags = [
     "--ostype=linux"

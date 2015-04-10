@@ -59,8 +59,8 @@ in
     };
 
     nixpkgs.system = mkOption {
-      type = types.str;
-      default = builtins.currentSystem;
+      type = types.uniq types.str;
+      example = "i686-linux";
       description = ''
         Specifies the Nix platform type for which NixOS should be built.
         If unset, it defaults to the platform type of your host system.

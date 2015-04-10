@@ -1,3 +1,3 @@
 {
-  imports = [ ./amazon-image.nix ];
+  imports = [ <nixpkgs/nixos/modules/virtualisation/amazon-image.nix> ];
 }

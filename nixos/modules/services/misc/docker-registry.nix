@@ -30,7 +30,7 @@ in {
     storagePath = mkOption {
       type = types.path;
       default = "/var/lib/docker/registry";
-      description = "Docker registry strorage path.";
+      description = "Docker registry storage path.";
     };
 
     extraConfig = mkOption {

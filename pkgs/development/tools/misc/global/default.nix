@@ -2,11 +2,11 @@
 , pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "global-6.3.4";
+  name = "global-6.4";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "0hcplcayyjf42d8ygzla6142b5dq4ybq4wg3n3cgx3b5yfhvic85";
+    sha256 = "13i4zwx6gaibc4j79wd0hgxysw8ibxz9c018zxhydnxlyadzcnri";
   };
 
   buildInputs = [ libtool ncurses makeWrapper ];

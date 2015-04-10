@@ -1,26 +1,43 @@
-{ stdenv, fetchurl, avahi, boost, eigen, fftw, gettext, glib, glibmm, gtk
-, gtkmm, intltool, jack2, ladspaH, librdf, libsndfile, lilv, lv2
-, pkgconfig, python, serd, sord, sratom }:
+{ stdenv, fetchurl, gettext, intltool, pkgconfig, python
+, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, jack2
+, ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
+, optimizationSupport ? false # Enable support for native CPU extensions
+}:
+
+let
+  inherit (stdenv.lib) optional;
+in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.32.2";
+  version = "0.32.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.bz2";
-    sha256 = "0mh4ma48hc8kq3xw25y1zjcrwgsdb0scd36vzw50a1qmmnh74rgp";
+    sha256 = "1ybc5jk7fj6n8qh9ajzl1f6fzdmzab4nwjrh4fsylm94dn1jv0if";
   };
 
+  nativeBuildInputs = [ gettext intltool pkgconfig python ];
+
   buildInputs = [
-    avahi boost eigen fftw gettext glib glibmm gtk gtkmm intltool
-    jack2 ladspaH librdf libsndfile lilv lv2 pkgconfig python serd sord sratom
+    avahi bluez boost eigen fftw glib glibmm gtk gtkmm jack2
+    ladspaH librdf libsndfile lilv lv2 serd sord sratom
   ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configureFlags = [
+    "--shared-lib"
+    "--no-desktop-update"
+    "--no-faust" # Need to package a release of faust, 0.9.58 or 0.9.65
+    "--enable-nls"
+    "--includeresampler" # Zita-resampler not packaged, use vendored version
+    "--includeconvolver" # Zita-convolver not packaged, use vendored version
+  ] ++ optional optimizationSupport "--optimization";
 
-  buildPhase = "python waf build";
+  configurePhase = ''python waf configure --prefix=$out $configureFlags'';
 
-  installPhase = "python waf install";
+  buildPhase = ''python waf build'';
+
+  installPhase = ''python waf install'';
 
   meta = with stdenv.lib; { 
     description = "A virtual guitar amplifier for Linux running with JACK";

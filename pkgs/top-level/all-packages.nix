@@ -1806,6 +1806,7 @@ let
 
   nodejs = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
+  nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix { };
 
   nodePackages = callPackage ./node-packages.nix { self = nodePackages; };
 
@@ -2162,7 +2163,9 @@ let
 
   ntopng = callPackage ../tools/networking/ntopng { };
 
-  ntp = callPackage ../tools/networking/ntp { };
+  ntp = callPackage ../tools/networking/ntp {
+    libcap = if stdenv.isLinux then libcap else null;
+  };
 
   numdiff = callPackage ../tools/text/numdiff { };
 
@@ -5457,6 +5460,8 @@ let
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
+  belle-sip = callPackage ../development/libraries/belle-sip { };
+
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
@@ -5495,6 +5500,7 @@ let
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
+
   ccrtp_1_8 = callPackage ../development/libraries/ccrtp/1.8.nix { };
 
   celt = callPackage ../development/libraries/celt {};
@@ -6176,6 +6182,7 @@ let
     openldap = openldap.override {
       cyrus_sasl = cyrus_sasl.override { kerberos = null; };
     };
+    inherit (darwin) bootstrap_cmds;
   };
 
   LASzip = callPackage ../development/libraries/LASzip { };
@@ -6926,9 +6933,6 @@ let
   libzdb = callPackage ../development/libraries/libzdb { };
 
   libzrtpcpp = callPackage ../development/libraries/libzrtpcpp { };
-  libzrtpcpp_1_6 = callPackage ../development/libraries/libzrtpcpp/1.6.nix {
-    ccrtp = ccrtp_1_8;
-  };
 
   libwacom = callPackage ../development/libraries/libwacom { };
 
@@ -6965,6 +6969,8 @@ let
   lzo = callPackage ../development/libraries/lzo { };
 
   matio = callPackage ../development/libraries/matio { };
+
+  mbedtls = callPackage ../development/libraries/mbedtls { };
 
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
@@ -7200,9 +7206,7 @@ let
     };
   };
 
-  ortp = callPackage ../development/libraries/ortp {
-    srtp = srtp_linphone;
-  };
+  ortp = callPackage ../development/libraries/ortp { };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
@@ -7245,6 +7249,8 @@ let
   podofo = callPackage ../development/libraries/podofo { lua5 = lua5_1; };
 
   poker-eval = callPackage ../development/libraries/poker-eval { };
+
+  polarssl = mbedtls;
 
   polkit = callPackage ../development/libraries/polkit {
     spidermonkey = spidermonkey_17;
@@ -7554,9 +7560,9 @@ let
 
   srm = callPackage ../tools/security/srm { };
 
-  srtp = callPackage ../development/libraries/srtp {};
-
-  srtp_linphone = callPackage ../development/libraries/srtp/linphone.nix { };
+  srtp = callPackage ../development/libraries/srtp {
+    libpcap = if stdenv.isLinux then libpcap else null;
+  };
 
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
@@ -7674,7 +7680,17 @@ let
 
   uthash = callPackage ../development/libraries/uthash { };
 
-  ucommon = callPackage ../development/libraries/ucommon { };
+  ucommon = ucommon_openssl;
+
+  ucommon_openssl = callPackage ../development/libraries/ucommon {
+    gnutls = null;
+  };
+
+  ucommon_gnutls = lowPrio (ucommon.override {
+    openssl = null;
+    zlib = null;
+    gnutls = gnutls;
+  });
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
@@ -7739,6 +7755,8 @@ let
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   wildmidi = callPackage ../development/libraries/wildmidi { };
+
+  wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
@@ -8256,8 +8274,7 @@ let
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
-    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent;
-    withLibevent = true;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
@@ -8456,19 +8473,14 @@ let
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
-  pgpool92 = callPackage ../servers/sql/pgpool/default.nix {
-    postgresql = postgresql92;
-  };
+  pgpool92 = pgpool.override { postgresql = postgresql92; };
+  pgpool93 = pgpool.override { postgresql = postgresql93; };
+  pgpool94 = pgpool.override { postgresql = postgresql94; };
 
-  pgpool93 = callPackage ../servers/sql/pgpool/default.nix {
-    postgresql = postgresql93;
+  pgpool = callPackage ../servers/sql/pgpool/default.nix {
+    pam = if stdenv.isLinux then pam else null;
+    libmemcached = null; # Detection is broken upstream
   };
-
-  pgpool94 = callPackage ../servers/sql/pgpool/default.nix {
-    postgresql = postgresql94;
-  };
-
-  pgpool = pgpool92;
 
   postgresql = postgresql92;
 
@@ -8743,7 +8755,7 @@ let
     perl = perl516; # ${perl}/.../CORE/handy.h:124:34: error: 'bool' undeclared
   };
 
-  apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { };
+  apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { swig = swig2; };
   libapparmor = apparmor_2_9.libapparmor;
   apparmor-pam = apparmor_2_9.apparmor-pam;
   apparmor-parser = apparmor_2_9.apparmor-parser;
@@ -9234,7 +9246,7 @@ let
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_3_14;
+  linuxPackages = linuxPackages_3_18;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -9687,9 +9699,17 @@ let
 
   cacert = callPackage ../data/misc/cacert { };
 
+  caladea = callPackage ../data/fonts/caladea {};
+
   cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
 
+  carlito = callPackage ../data/fonts/carlito {};
+
+  comfortaa = callPackage ../data/fonts/comfortaa {};
+
   comic-neue = callPackage ../data/fonts/comic-neue { };
+
+  comic-relief = callPackage ../data/fonts/comic-relief {};
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
@@ -9701,6 +9721,8 @@ let
   clearlyU = callPackage ../data/fonts/clearlyU { };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
+
+  crimson = callPackage ../data/fonts/crimson {};
 
   dejavu_fonts = callPackage ../data/fonts/dejavu-fonts {
     inherit (perlPackages) FontTTF;
@@ -9735,6 +9757,8 @@ let
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
+
+  fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
 
@@ -9778,6 +9802,8 @@ let
 
   lmodern = callPackage ../data/fonts/lmodern { };
 
+  lobster-two = callPackage ../data/fonts/lobster-two {};
+
   lohit-fonts = callPackage ../data/fonts/lohit-fonts { };
 
   manpages = callPackage ../data/documentation/man-pages { };
@@ -9806,6 +9832,8 @@ let
 
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
 
+  pecita = callPackage ../data/fonts/pecita {};
+
   poly = callPackage ../data/fonts/poly { };
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
@@ -9829,6 +9857,10 @@ let
   iana_etc = callPackage ../data/misc/iana-etc { };
 
   poppler_data = callPackage ../data/misc/poppler-data { };
+
+  quattrocento = callPackage ../data/fonts/quattrocento {};
+
+  quattrocento-sans = callPackage ../data/fonts/quattrocento-sans {};
 
   r3rs = callPackage ../data/documentation/rnrs/r3rs.nix { };
 
@@ -10116,6 +10148,8 @@ let
   clawsMail = callPackage ../applications/networking/mailreaders/claws-mail {
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
+
+  clipgrab = callPackage ../applications/video/clipgrab { };
 
   clipit = callPackage ../applications/misc/clipit { };
 
@@ -11112,11 +11146,7 @@ let
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
-  linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
-    inherit (gnome) libglade;
-    libexosip = libexosip_3;
-    libosip = libosip_3;
-  };
+  linphone = callPackage ../applications/networking/instant-messengers/linphone rec { };
 
   linuxsampler = callPackage ../applications/audio/linuxsampler {
     bison = bison2;
@@ -11279,10 +11309,6 @@ let
   mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
   } // (config.mplayer or {}));
-
-  mplayer2 = callPackage ../applications/video/mplayer2 {
-    ffmpeg = libav_9; # see https://trac.macports.org/ticket/44386
-  };
 
   MPlayerPlugin = browser:
     callPackage ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
@@ -12796,6 +12822,8 @@ let
   };
 
   simutrans = callPackage ../games/simutrans { };
+  # get binaries without data built by Hydra
+  simutrans_binaries = lowPrio simutrans.binaries;
 
   soi = callPackage ../games/soi {};
 
@@ -12822,7 +12850,11 @@ let
 
   synthv1 = callPackage ../applications/audio/synthv1 { };
 
-  tbe = callPackage ../games/the-butterfly-effect {};
+  the-powder-toy = callPackage ../games/the-powder-toy {
+    lua = lua5_1;
+  };
+
+  tbe = callPackage ../games/the-butterfly-effect { };
 
   teetertorture = callPackage ../games/teetertorture { };
 

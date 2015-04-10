@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs share/extensions
+  ''
+  # Clang gets misdetected, so hardcode the right answer
+  + stdenv.lib.optionalString (stdenv.cc.cc.isClang or false) ''
+    substituteInPlace src/ui/tool/node.h \
+      --replace "#if __cplusplus >= 201103L" "#if true"
   '';
 
   propagatedBuildInputs = [

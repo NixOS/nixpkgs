@@ -102,6 +102,10 @@ import ./make-test.nix {
       subtest "shell-vars", sub {
           $machine->succeed('[ -n "$NIX_PATH" ]');
       };
+
+      subtest "nix-db", sub {
+          $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
+      };
     '';
 
 }

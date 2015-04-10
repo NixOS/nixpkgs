@@ -133,7 +133,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/db \
     $mountPoint/nix/var/log/nix/drvs
 
-mkdir -m 1735 -p $mountPoint/nix/store
+mkdir -m 1775 -p $mountPoint/nix/store
 chown root:nixbld $mountPoint/nix/store
 
 

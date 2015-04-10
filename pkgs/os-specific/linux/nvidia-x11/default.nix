@@ -12,10 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  # TODO: Remove the use of the beta driver for kernel 4.0 in
-  # nixos/modules/hardware/video/nvidia.nix when this driver supports
-  # kernel 4.0
-  versionNumber = "346.47";
+  versionNumber = "346.59";
 
   # Policy: use the highest stable version as the default (on our master).
   inherit (stdenv.lib) makeLibraryPath;
@@ -31,12 +28,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "0vkayz6nhw00kn2nvxvr9hsh4sa555nbbr9swlx5x1frziym48dv";
+        sha256 = "0a91mmv9846chyx6rbf3hx39gr344cffmgic45a9sf82rky87kv5";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "0xqnjs54i281pnkky7dnz4n7jcn2vqjba0kra8da1wnyklm6gdni";
+        sha256 = "0rz7pdzdviz1086w8ks6qiv83ah84y13h3051xr1p4wa4kll2yac";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
