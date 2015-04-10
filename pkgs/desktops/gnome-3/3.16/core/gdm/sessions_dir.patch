@@ -1,0 +1,17 @@
+diff --git a/daemon/gdm-session.c b/daemon/gdm-session.c
+index f759d2d..d154716 100644
+--- a/daemon/gdm-session.c
++++ b/daemon/gdm-session.c
+@@ -373,9 +373,12 @@ get_system_session_dirs (void)
+ #ifdef ENABLE_WAYLAND_SUPPORT
+                 DATADIR "/wayland-sessions/",
+ #endif
++                NULL,
+                 NULL
+         };
+ 
++        search_dirs[4] = getenv("GDM_SESSIONS_DIR") != NULL ? getenv("GDM_SESSIONS_DIR") : NULL;
++
+         return search_dirs;
+ }
+ 

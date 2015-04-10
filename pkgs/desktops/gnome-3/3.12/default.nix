@@ -16,6 +16,9 @@ rec {
   orbit = ORBit2;
   inherit (pkgs) libsoup;
 
+# Simplify the nixos module
+  icon-themes = [ gnome_icon_theme gnome_icon_theme_symbolic ];
+
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
   baobab = callPackage ./core/baobab { };
@@ -159,9 +162,7 @@ rec {
   };
 
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings_desktop_schemas glib_networking
-      networkmanager_openvpn networkmanager_pptp networkmanager_vpnc
-      networkmanager_openconnect;
+    inherit gnome3 gsettings_desktop_schemas glib_networking;
   };
 
   rest = callPackage ./core/rest { };
@@ -177,10 +178,6 @@ rec {
   tracker = callPackage ./core/tracker { giflib = pkgs.giflib_5_0; };
 
   vte = callPackage ./core/vte { };
-
-  vte_038 = callPackage ./core/vte/0.38.0.nix { }; # To be moved in gnome 3.14 when available
-
-  vte-select-text = vte_038.override { selectTextPatch = true; };
 
   vino = callPackage ./core/vino { };
 

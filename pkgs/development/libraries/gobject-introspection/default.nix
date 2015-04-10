@@ -5,7 +5,7 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.40";
+  ver_maj = "1.42";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "162flbzwzz0b8axab2gimc4dglpaw88fh1d177zfg0whczlpbsln";
+    sha256 = "3ba2edfad4f71d4f0de16960b5d5f2511335fa646b2c49bbb93ce5942b3f95f7";
   };
 
   buildInputs = [ flex bison pkgconfig python ]
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage    = http://live.gnome.org/GObjectIntrospection;
-    maintainers = with maintainers; [ lovek323 urkud ];
+    maintainers = with maintainers; [ lovek323 urkud lethalman ];
     platforms   = platforms.unix;
 
     longDescription = ''
