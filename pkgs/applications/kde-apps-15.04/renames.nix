@@ -2,17 +2,22 @@
 { }:
 {
 "Analitza5" = "analitza";
+"Backend" = "kde-workspace";
 "CTest" = "sweeper";
 "ECM" = "extra-cmake-modules";
+"Gpgmepp" = "kdepimlibs";
 "JDns" = "kopete";
 "KAccounts" = "kaccounts-integration";
+"KDE4Workspace" = "kde-workspace";
 "KDEGames" = "libkdegames";
+"KDeclarative" = "kdelibs";
 "KF5KMahjongglib" = "libkmahjongg";
 "KSane" = "libksane";
 "KTp" = "ktp-common-internals";
 "KastenControllers" = "okteta";
 "KastenCore" = "okteta";
 "KastenGui" = "okteta";
+"KdepimLibs" = "kdepimlibs";
 "LibKEduVocDocument" = "libkeduvocdocument";
 "LibKdeEdu" = "libkdeedu";
 "LibKompareDiff2" = "libkomparediff2";
