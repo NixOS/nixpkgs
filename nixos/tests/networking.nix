@@ -64,26 +64,26 @@ import ./make-test.nix ({ networkd, test, ... }:
             $client->fail("systemctl status dhcpcd.service");
 
             # Test vlan 1
-            $client->succeed("ping -c 1 192.168.1.1");
-            $client->succeed("ping -c 1 192.168.1.2");
-            $client->succeed("ping -c 1 192.168.1.3");
-            $client->succeed("ping -c 1 192.168.1.10");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.3");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.10");
 
-            $router->succeed("ping -c 1 192.168.1.1");
-            $router->succeed("ping -c 1 192.168.1.2");
-            $router->succeed("ping -c 1 192.168.1.3");
-            $router->succeed("ping -c 1 192.168.1.10");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.3");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.10");
 
             # Test vlan 2
-            $client->succeed("ping -c 1 192.168.2.1");
-            $client->succeed("ping -c 1 192.168.2.2");
+            $client->waitUntilSucceeds("ping -c 1 192.168.2.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.2.2");
 
-            $router->succeed("ping -c 1 192.168.2.1");
-            $router->succeed("ping -c 1 192.168.2.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.2.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.2.2");
 
             # Test default gateway
-            $router->succeed("ping -c 1 192.168.3.1");
-            $client->succeed("ping -c 1 192.168.3.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.3.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.3.1");
           '';
       };
       dhcpSimple = {
@@ -109,22 +109,22 @@ import ./make-test.nix ({ networkd, test, ... }:
             $router->waitForUnit("network.target");
 
             # Wait until we have an ip address on each interface
-            $client->succeed("while ! ip addr show dev eth1 | grep '192.168.1'; do true; done");
-            $client->succeed("while ! ip addr show dev eth2 | grep '192.168.2'; do true; done");
+            $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q '192.168.1'");
+            $client->waitUntilSucceeds("ip addr show dev eth2 | grep -q '192.168.2'");
 
             # Test vlan 1
-            $client->succeed("ping -c 1 192.168.1.1");
-            $client->succeed("ping -c 1 192.168.1.2");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
 
-            $router->succeed("ping -c 1 192.168.1.1");
-            $router->succeed("ping -c 1 192.168.1.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
 
             # Test vlan 2
-            $client->succeed("ping -c 1 192.168.2.1");
-            $client->succeed("ping -c 1 192.168.2.2");
+            $client->waitUntilSucceeds("ping -c 1 192.168.2.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.2.2");
 
-            $router->succeed("ping -c 1 192.168.2.1");
-            $router->succeed("ping -c 1 192.168.2.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.2.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.2.2");
           '';
       };
       dhcpOneIf = {
@@ -147,26 +147,27 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            # Wait for networking to come up
             $client->waitForUnit("network-interfaces.target");
             $client->waitForUnit("network.target");
             $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
 
             # Wait until we have an ip address on each interface
-            $client->succeed("while ! ip addr show dev eth1 | grep '192.168.1'; do true; done");
+            $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q '192.168.1'");
 
             # Test vlan 1
-            $client->succeed("ping -c 1 192.168.1.1");
-            $client->succeed("ping -c 1 192.168.1.2");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
 
-            $router->succeed("ping -c 1 192.168.1.1");
-            $router->succeed("ping -c 1 192.168.1.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
 
             # Test vlan 2
-            $client->succeed("ping -c 1 192.168.2.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.2.1");
             $client->fail("ping -c 1 192.168.2.2");
 
-            $router->succeed("ping -c 1 192.168.2.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.2.1");
             $router->fail("ping -c 1 192.168.2.2");
           '';
       };
@@ -195,17 +196,18 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            # Wait for networking to come up
             $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
             $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
 
             # Test bonding
-            $client1->succeed("ping -c 2 192.168.1.1");
-            $client1->succeed("ping -c 2 192.168.1.2");
+            $client1->waitUntilSucceeds("ping -c 2 192.168.1.1");
+            $client1->waitUntilSucceeds("ping -c 2 192.168.1.2");
 
-            $client2->succeed("ping -c 2 192.168.1.1");
-            $client2->succeed("ping -c 2 192.168.1.2");
+            $client2->waitUntilSucceeds("ping -c 2 192.168.1.1");
+            $client2->waitUntilSucceeds("ping -c 2 192.168.1.2");
           '';
       };
       bridge = let
@@ -240,6 +242,7 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            # Wait for networking to come up
             $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
             $client2->waitForUnit("network-interfaces.target");
@@ -248,17 +251,17 @@ import ./make-test.nix ({ networkd, test, ... }:
             $router->waitForUnit("network.target");
 
             # Test bridging
-            $client1->succeed("ping -c 1 192.168.1.1");
-            $client1->succeed("ping -c 1 192.168.1.2");
-            $client1->succeed("ping -c 1 192.168.1.3");
+            $client1->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $client1->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $client1->waitUntilSucceeds("ping -c 1 192.168.1.3");
 
-            $client2->succeed("ping -c 1 192.168.1.1");
-            $client2->succeed("ping -c 1 192.168.1.2");
-            $client2->succeed("ping -c 1 192.168.1.3");
+            $client2->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $client2->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $client2->waitUntilSucceeds("ping -c 1 192.168.1.3");
 
-            $router->succeed("ping -c 1 192.168.1.1");
-            $router->succeed("ping -c 1 192.168.1.2");
-            $router->succeed("ping -c 1 192.168.1.3");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.3");
           '';
       };
       macvlan = {
@@ -278,23 +281,28 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            # Wait for networking to come up
             $client->waitForUnit("network-interfaces.target");
             $client->waitForUnit("network.target");
             $router->waitForUnit("network-interfaces.target");
             $router->waitForUnit("network.target");
 
             # Wait until we have an ip address on each interface
-            $client->succeed("while ! ip addr show dev eth1 | grep '192.168.1'; do true; done");
-            $client->succeed("while ! ip addr show dev macvlan | grep '192.168.1'; do true; done");
+            $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q '192.168.1'");
+            $client->waitUntilSucceeds("ip addr show dev macvlan | grep -q '192.168.1'");
 
-            # Test macvlan
-            $client->succeed("ping -c 1 192.168.1.1");
-            $client->succeed("ping -c 1 192.168.1.2");
-            $client->succeed("ping -c 1 192.168.1.3");
+            # Print diagnosting information
+            $router->succeed("ip addr >&2");
+            $client->succeed("ip addr >&2");
 
-            $router->succeed("ping -c 1 192.168.1.1");
-            $router->succeed("ping -c 1 192.168.1.2");
-            $router->succeed("ping -c 1 192.168.1.3");
+            # Test macvlan creates routable ips
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $client->waitUntilSucceeds("ping -c 1 192.168.1.3");
+
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
+            $router->waitUntilSucceeds("ping -c 1 192.168.1.3");
           '';
       };
       sit = let
@@ -323,20 +331,22 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            # Wait for networking to be configured
             $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
             $client2->waitForUnit("network-interfaces.target");
             $client2->waitForUnit("network.target");
 
+            # Print diagnostic information
             $client1->succeed("ip addr >&2");
             $client2->succeed("ip addr >&2");
 
             # Test ipv6
-            $client1->succeed("ping6 -c 1 fc00::1");
-            $client1->succeed("ping6 -c 1 fc00::2");
+            $client1->waitUntilSucceeds("ping6 -c 1 fc00::1");
+            $client1->waitUntilSucceeds("ping6 -c 1 fc00::2");
 
-            $client2->succeed("ping6 -c 1 fc00::1");
-            $client2->succeed("ping6 -c 1 fc00::2");
+            $client2->waitUntilSucceeds("ping6 -c 1 fc00::1");
+            $client2->waitUntilSucceeds("ping6 -c 1 fc00::2");
           '';
       };
       vlan = let
@@ -364,6 +374,7 @@ import ./make-test.nix ({ networkd, test, ... }:
           ''
             startAll;
 
+            # Wait for networking to be configured
             $client1->waitForUnit("network-interfaces.target");
             $client1->waitForUnit("network.target");
             $client2->waitForUnit("network-interfaces.target");
