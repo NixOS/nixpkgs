@@ -8156,6 +8156,12 @@ let
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
+    ''
+    # Remove impurities
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py \
+        --replace '"/Library/Frameworks",' "" \
+        --replace '"/System/Library/Frameworks"' ""
     '';
 
     checkPhase = "${python}/bin/${python.executable} selftest.py";
@@ -8197,10 +8203,16 @@ let
               s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
               s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
               s|^TCL_ROOT=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;'
+    ''
+    # Remove impurities
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py \
+        --replace '"/Library/Frameworks",' "" \
+        --replace '"/System/Library/Frameworks"' ""
     '';
 
     meta = {
-      homepage = http://python-imaging.github.com/Pillow;
+      homepage = "https://python-pillow.github.io/";
 
       description = "Fork of The Python Imaging Library (PIL)";
 
