@@ -15,12 +15,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildFlags = "cito";
+  buildPhase = ''
+    make -j$NIX_BUILD_CORES -C src/reification
+    make -j$NIX_BUILD_CORES -C src
+  '';
 
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Bedrock
-    cp -pR src $COQLIB/user-contrib/Bedrock
+    cp -pR src/* $COQLIB/user-contrib/Bedrock
   '';
 
   meta = with stdenv.lib; {
