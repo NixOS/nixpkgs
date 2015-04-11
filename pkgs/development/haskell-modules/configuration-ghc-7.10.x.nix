@@ -287,4 +287,9 @@ self: super: {
   statestack = overrideCabal super.statestack (drv: {
     prePatch = "sed -i 's|4\.8|4.9|' statestack.cabal";
   });
+
+  # diagrams/diagrams-core#83
+  diagrams-core = overrideCabal super.diagrams-core (drv: {
+    prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
+  });
 }
