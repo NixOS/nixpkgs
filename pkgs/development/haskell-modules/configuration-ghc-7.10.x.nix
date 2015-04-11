@@ -282,4 +282,9 @@ self: super: {
   monoid-extras = overrideCabal super.monoid-extras (drv: {
     prePatch = "sed -i 's|4\.8|4.9|' monoid-extras.cabal";
   });
+
+  # diagrams/statestack#5
+  statestack = overrideCabal super.statestack (drv: {
+    prePatch = "sed -i 's|4\.8|4.9|' statestack.cabal";
+  });
 }
