@@ -80,6 +80,7 @@ let
         LibGit2 = libgit2;
         LibIntl = gettext;
         LibLZMA = lzma;
+        ModemManager = modemmanager;
         NetworkManager = networkmanager;
         Perl = perl;
         PythonInterp = python;

@@ -6,6 +6,7 @@
 "ECM" = "extra-cmake-modules";
 "KDED" = "kded";
 "KF5Activities" = "kactivities";
+"KF5ActivitiesExperimentalStats" = "kactivities";
 "KF5Archive" = "karchive";
 "KF5Attica" = "attica";
 "KF5Auth" = "kauth";
@@ -41,6 +42,7 @@
 "KF5KIO" = "kio";
 "KF5Kross" = "kross";
 "KF5MediaPlayer" = "kmediaplayer";
+"KF5ModemManagerQt" = "modemmanager-qt";
 "KF5NetworkManagerQt" = "networkmanager-qt";
 "KF5NewStuff" = "knewstuff";
 "KF5Notifications" = "knotifications";

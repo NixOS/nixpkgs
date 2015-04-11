@@ -6174,8 +6174,8 @@ let
   };
 
   kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 { });
-  kf58 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.8 { });
-  kf5_latest = kf58;
+  kf59 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.9 { });
+  kf5_latest = kf59;
   kf5_stable = kf57;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
@@ -11041,7 +11041,7 @@ let
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
-    kf5 = kf58;
+    kf5 = kf59;
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_stable = kdeApps_14_12;
@@ -13239,7 +13239,7 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
-    kf5 = kf58;
+    kf5 = kf59;
   });
   plasma5_latest = plasma52;
   plasma5_stable = plasma52;

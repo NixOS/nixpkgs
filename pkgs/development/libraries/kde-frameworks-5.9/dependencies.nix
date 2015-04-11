@@ -58,17 +58,17 @@
   };
 
   kbookmarks = {
-    buildInputs = [ "ECM" "KF5ConfigWidgets" "KF5CoreAddons" "KF5IconThemes" "KF5WidgetsAddons" "KF5XmlGui" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5QUIET" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
+    buildInputs = [ "ECM" "KF5Codecs" "KF5Config" "KF5ConfigWidgets" "KF5CoreAddons" "KF5IconThemes" "KF5WidgetsAddons" "KF5XmlGui" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5QUIET" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5ConfigWidgets" "KF5IconThemes" "KF5XmlGui" "Qt5Widgets" "Qt5Xml" ];
+    propagatedBuildInputs = [ "KF5WidgetsAddons" "Qt5Widgets" "Qt5Xml" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
 
   kcmutils = {
-    buildInputs = [ "ECM" "KF5ConfigWidgets" "KF5CoreAddons" "KF5I18n" "KF5IconThemes" "KF5ItemViews" "KF5Service" "KF5XmlGui" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5Widgets" ];
+    buildInputs = [ "ECM" "KF5ConfigWidgets" "KF5CoreAddons" "KF5Declarative" "KF5I18n" "KF5IconThemes" "KF5ItemViews" "KF5Package" "KF5Service" "KF5XmlGui" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5Qml" "Qt5Quick" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5ConfigWidgets" "KF5IconThemes" "KF5ItemViews" "KF5Service" "KF5XmlGui" ];
+    propagatedBuildInputs = [ "KF5ConfigWidgets" "KF5Service" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -100,7 +100,7 @@
   kconfigwidgets = {
     buildInputs = [ "ECM" "KF5Auth" "KF5Codecs" "KF5Config" "KF5CoreAddons" "KF5DocTools" "KF5GuiAddons" "KF5I18n" "KF5WidgetsAddons" "Qt5" "Qt5Test" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Auth" "KF5Codecs" "KF5Config" "KF5GuiAddons" "KF5I18n" "KF5WidgetsAddons" ];
+    propagatedBuildInputs = [ "KF5Auth" "KF5Codecs" "KF5Config" "KF5WidgetsAddons" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -146,9 +146,9 @@
   };
 
   kdelibs4support = {
-    buildInputs = [ "AGG" "Blitz" "BlueZ" "DocBookXML4" "ECM" "ENCHANT" "Eigen2" "FFmpeg" "Flac" "GObject" "GStreamer" "KDEWin" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5Crash" "KF5DesignerPlugin" "KF5DocTools" "KF5GlobalAccel" "KF5GuiAddons" "KF5I18n" "KF5IconThemes" "KF5KIO" "KF5Notifications" "KF5Parts" "KF5Service" "KF5TextWidgets" "KF5UnitConversion" "KF5WidgetsAddons" "KF5WindowSystem" "KF5XmlGui" "LCMS" "LibArt" "NetworkManager" "OpenEXR" "OpenSSL" "PCRE" "QCA2" "QImageBlitz" "QNtrack" "Qt5" "Qt5Concurrent" "Qt5DBus" "Qt5Designer" "Qt5NO_MODULE" "Qt5Network" "Qt5PrintSupport" "Qt5Svg" "Qt5Test" "Qt5Widgets" "Qt5X11Extras" "Sqlite" "USB" "X11" "Xine" "Xmms" ];
+    buildInputs = [ "AGG" "Blitz" "BlueZ" "DocBookXML4" "ECM" "ENCHANT" "Eigen2" "FFmpeg" "Flac" "GObject" "GStreamer" "KDEWin" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5Crash" "KF5DBusAddons" "KF5DesignerPlugin" "KF5DocTools" "KF5GlobalAccel" "KF5GuiAddons" "KF5I18n" "KF5IconThemes" "KF5KIO" "KF5Notifications" "KF5Parts" "KF5Service" "KF5TextWidgets" "KF5UnitConversion" "KF5WidgetsAddons" "KF5WindowSystem" "KF5XmlGui" "LCMS" "LibArt" "NetworkManager" "OpenEXR" "OpenSSL" "PCRE" "QCA2" "QImageBlitz" "QNtrack" "Qt5" "Qt5Concurrent" "Qt5DBus" "Qt5Designer" "Qt5NO_MODULE" "Qt5Network" "Qt5PrintSupport" "Qt5Svg" "Qt5Test" "Qt5Widgets" "Qt5X11Extras" "Sqlite" "USB" "X11" "Xine" "Xmms" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KDEWin" "KF5Auth" "KF5ConfigWidgets" "KF5CoreAddons" "KF5Crash" "KF5DesignerPlugin" "KF5DocTools" "KF5Emoticons" "KF5GuiAddons" "KF5IconThemes" "KF5Init" "KF5ItemModels" "KF5KDELibs4Support" "KF5Notifications" "KF5Parts" "KF5TextWidgets" "KF5UnitConversion" "KF5WindowSystem" "Qt5DBus" "Qt5PrintSupport" "Qt5Xml" ];
+    propagatedBuildInputs = [ "KDEWin" "KF5Archive" "KF5Auth" "KF5ConfigWidgets" "KF5CoreAddons" "KF5Crash" "KF5DBusAddons" "KF5DesignerPlugin" "KF5DocTools" "KF5Emoticons" "KF5GuiAddons" "KF5IconThemes" "KF5Init" "KF5ItemModels" "KF5KDELibs4Support" "KF5Notifications" "KF5Parts" "KF5TextWidgets" "KF5UnitConversion" "KF5WindowSystem" "Qt5DBus" "Qt5PrintSupport" "Qt5Xml" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -162,7 +162,7 @@
   };
 
   kdesu = {
-    buildInputs = [ "ECM" "KF5CoreAddons" "KF5Pty" "KF5Service" "Qt5Core" "Qt5NO_MODULE" "X11" ];
+    buildInputs = [ "ECM" "KF5CoreAddons" "KF5I18n" "KF5Pty" "KF5Service" "Qt5Core" "Qt5NO_MODULE" "X11" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "KF5Pty" ];
     propagatedNativeBuildInputs = [  ];
@@ -196,7 +196,7 @@
   kemoticons = {
     buildInputs = [ "ECM" "KF5Archive" "KF5Config" "KF5CoreAddons" "KF5Service" "Qt5" "Qt5Gui" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Archive" "KF5Service" "Qt5Gui" ];
+    propagatedBuildInputs = [ "KF5Service" "Qt5Gui" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -236,7 +236,7 @@
   kiconthemes = {
     buildInputs = [ "ECM" "KF5ConfigWidgets" "KF5I18n" "KF5ItemViews" "KF5WidgetsAddons" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5Svg" "Qt5Test" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5ConfigWidgets" "KF5I18n" "KF5ItemViews" "KF5WidgetsAddons" "Qt5Widgets" ];
+    propagatedBuildInputs = [ "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -274,7 +274,7 @@
   };
 
   kitemmodels = {
-    buildInputs = [ "ECM" "Grantlee" "Qt5" "Qt5Core" "Qt5NO_MODULE" "Qt5Script" "Qt5Test" "Qt5Widgets" ];
+    buildInputs = [ "ECM" "Grantlee" "Qt5" "Qt5Core" "Qt5NO_MODULE" "Qt5QUIET" "Qt5QuickWidgets" "Qt5Script" "Qt5Test" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "Qt5Core" ];
     propagatedNativeBuildInputs = [  ];
@@ -324,7 +324,7 @@
   knewstuff = {
     buildInputs = [ "ECM" "KF5Archive" "KF5Attica" "KF5Completion" "KF5Config" "KF5CoreAddons" "KF5I18n" "KF5IconThemes" "KF5ItemViews" "KF5KIO" "KF5TextWidgets" "KF5WidgetsAddons" "KF5XmlGui" "Qt5" "Qt5NO_MODULE" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Archive" "KF5Attica" "KF5KIO" "KF5XmlGui" "Qt5Widgets" ];
+    propagatedBuildInputs = [ "KF5Attica" "KF5XmlGui" "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -332,7 +332,7 @@
   knotifications = {
     buildInputs = [ "ECM" "KF5Codecs" "KF5Config" "KF5CoreAddons" "KF5IconThemes" "KF5Service" "KF5WindowSystem" "Phonon4Qt5" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5OPTIONAL_COMPONENTS" "Qt5QUIET" "Qt5Test" "Qt5TextToSpeech" "Qt5Widgets" "Qt5X11Extras" "X11" "dbusmenu-qt5" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5WindowSystem" "Qt5Widgets" ];
+    propagatedBuildInputs = [ "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -340,7 +340,7 @@
   knotifyconfig = {
     buildInputs = [ "ECM" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5I18n" "KF5KIO" "KF5Notifications" "KF5Service" "KF5WidgetsAddons" "KF5XmlGui" "Phonon4Qt5" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5OPTIONAL_COMPONENTS" "Qt5QUIET" "Qt5Test" "Qt5TextToSpeech" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5I18n" "KF5KIO" "Qt5Widgets" ];
+    propagatedBuildInputs = [ "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -348,7 +348,7 @@
   kpackage = {
     buildInputs = [ "ECM" "KF5Archive" "KF5Config" "KF5CoreAddons" "KF5DocTools" "KF5I18n" "Qt5" "Qt5Core" "Qt5NO_MODULE" "Qt5Test" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [  ];
+    propagatedBuildInputs = [ "KF5CoreAddons" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -356,7 +356,7 @@
   kparts = {
     buildInputs = [ "ECM" "KF5Config" "KF5CoreAddons" "KF5I18n" "KF5IconThemes" "KF5JobWidgets" "KF5KIO" "KF5Notifications" "KF5Service" "KF5TextWidgets" "KF5WidgetsAddons" "KF5XmlGui" "Qt5" "Qt5Core" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5KIO" "KF5Notifications" "KF5TextWidgets" "KF5XmlGui" ];
+    propagatedBuildInputs = [ "KF5KIO" "KF5TextWidgets" "KF5XmlGui" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -378,9 +378,9 @@
   };
 
   kpty = {
-    buildInputs = [ "ECM" "KF5CoreAddons" "KF5I18n" "Qt5" ];
+    buildInputs = [ "ECM" "KF5CoreAddons" "KF5I18n" "Qt5" "UTEMPTER" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5CoreAddons" "KF5I18n" ];
+    propagatedBuildInputs = [ "KF5CoreAddons" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -404,13 +404,13 @@
   kservice = {
     buildInputs = [ "ECM" "KF5Config" "KF5CoreAddons" "KF5Crash" "KF5DBusAddons" "KF5DocTools" "KF5I18n" "Qt5" "Qt5Concurrent" "Qt5DBus" "Qt5Test" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Config" "KF5CoreAddons" "KF5DBusAddons" "KF5I18n" ];
+    propagatedBuildInputs = [ "KF5Config" "KF5CoreAddons" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
 
   ktexteditor = {
-    buildInputs = [ "ECM" "KF5Archive" "KF5Config" "KF5GuiAddons" "KF5I18n" "KF5KIO" "KF5Parts" "KF5Sonnet" "LibGit2" "Qt5" "Qt5Core" "Qt5NO_MODULE" "Qt5PrintSupport" "Qt5Script" "Qt5Test" "Qt5Widgets" "Qt5Xml" "Qt5XmlPatterns" ];
+    buildInputs = [ "ECM" "KF5Archive" "KF5Config" "KF5GuiAddons" "KF5I18n" "KF5IconThemes" "KF5KIO" "KF5Parts" "KF5Sonnet" "LibGit2" "Qt5" "Qt5Core" "Qt5NO_MODULE" "Qt5PrintSupport" "Qt5Script" "Qt5Test" "Qt5Widgets" "Qt5Xml" "Qt5XmlPatterns" ];
     nativeBuildInputs = [ "Perl" "cmake" ];
     propagatedBuildInputs = [  ];
     propagatedNativeBuildInputs = [  ];
@@ -420,7 +420,7 @@
   ktextwidgets = {
     buildInputs = [ "ECM" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5I18n" "KF5IconThemes" "KF5Service" "KF5Sonnet" "KF5WidgetsAddons" "KF5WindowSystem" "Qt5" "Qt5DBus" "Qt5Test" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Completion" "KF5ConfigWidgets" "KF5I18n" "KF5IconThemes" "KF5Service" "KF5Sonnet" "KF5WindowSystem" "Qt5Widgets" ];
+    propagatedBuildInputs = [ "KF5I18n" "KF5Sonnet" "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -428,7 +428,7 @@
   kunitconversion = {
     buildInputs = [ "ECM" "KF5I18n" "Qt5" "Qt5Core" "Qt5Network" "Qt5Test" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Config" "KF5I18n" "Qt5Core" ];
+    propagatedBuildInputs = [ "Qt5Core" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -436,7 +436,7 @@
   kwallet = {
     buildInputs = [ "ECM" "Gpgme" "KF5Config" "KF5CoreAddons" "KF5DBusAddons" "KF5Gpgmepp" "KF5I18n" "KF5IconThemes" "KF5Notifications" "KF5Service" "KF5WidgetsAddons" "KF5WindowSystem" "LibGcrypt" "Qt5" "Qt5DBus" "Qt5Gui" "Qt5Test" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Config" "KF5WindowSystem" "Qt5Core" ];
+    propagatedBuildInputs = [ "Qt5Gui" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -460,15 +460,23 @@
   kxmlgui = {
     buildInputs = [ "ECM" "KF5Attica" "KF5Config" "KF5ConfigWidgets" "KF5GlobalAccel" "KF5I18n" "KF5IconThemes" "KF5ItemViews" "KF5TextWidgets" "KF5WidgetsAddons" "KF5WindowSystem" "Qt5" "Qt5DBus" "Qt5Network" "Qt5PrintSupport" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Attica" "KF5Config" "KF5ConfigWidgets" "KF5GlobalAccel" "KF5IconThemes" "KF5ItemViews" "KF5TextWidgets" "KF5WindowSystem" "Qt5DBus" "Qt5Xml" ];
+    propagatedBuildInputs = [ "KF5Config" "KF5ConfigWidgets" "Qt5DBus" "Qt5Widgets" "Qt5Xml" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
 
   kxmlrpcclient = {
-    buildInputs = [ "ECM" "KF5KIO" "Qt5Test" ];
+    buildInputs = [ "ECM" "KF5I18n" "KF5KIO" "Qt5Test" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "KF5KIO" ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [  ];
+  };
+
+  modemmanager-qt = {
+    buildInputs = [ "ECM" "KF5ModemManagerQt" "ModemManager" "Qt4" "Qt5" "Qt5Core" "Qt5DBus" "Qt5NO_MODULE" "Qt5Test" "Qt5Xml" ];
+    nativeBuildInputs = [ "cmake" ];
+    propagatedBuildInputs = [ "Qt5Core" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -484,7 +492,7 @@
   plasma-framework = {
     buildInputs = [ "ECM" "EGL" "Gpgme" "KActivities" "KCoreAddons" "KDE4Support" "KDESu" "KDeclarative" "KF5" "KF5Activities" "KF5Archive" "KF5Auth" "KF5Bookmarks" "KF5Codecs" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5CoreAddons" "KF5Crash" "KF5DBusAddons" "KF5Declarative" "KF5DocTools" "KF5GlobalAccel" "KF5GuiAddons" "KF5I18n" "KF5IconThemes" "KF5IdleTime" "KF5Init" "KF5ItemModels" "KF5ItemViews" "KF5JS" "KF5JobWidgets" "KF5KArchive" "KF5KAuth" "KF5KBookmarks" "KF5KCodecs" "KF5KCompletion" "KF5KConfig" "KF5KConfigWidgets" "KF5KCoreAddons" "KF5KCrash" "KF5KDBusAddons" "KF5KDE4Support" "KF5KDESu" "KF5KDeclarative" "KF5KDocTools" "KF5KF5GlobalAccel" "KF5KGuiAddons" "KF5KI18n" "KF5KIO" "KF5KIconThemes" "KF5KIdleTime" "KF5KInit" "KF5KJS" "KF5KJobWidgets" "KF5KNotifications" "KF5KParts" "KF5KService" "KF5KTextWidgets" "KF5KUnitConversion" "KF5KWallet" "KF5KWidgetsAddons" "KF5KWindowSystem" "KF5Kross" "KF5NO_MODULE" "KF5Notifications" "KF5Package" "KF5Parts" "KF5Service" "KF5Solid" "KF5Sonnet" "KF5Su" "KF5TextWidgets" "KF5ThreadWeaver" "KF5UnitConversion" "KF5Wallet" "KF5WidgetsAddons" "KF5WindowSystem" "KF5XmlGui" "KdepimLibs" "OpenGL" "QCA2" "Qt5" "Qt5Gui" "Qt5NO_MODULE" "Qt5Qml" "Qt5Quick" "Qt5Script" "Qt5Sql" "Qt5Svg" "Qt5Test" "Qt5Widgets" "Qt5X11Extras" "Solid" "X11" "XCB" ];
     nativeBuildInputs = [ "SH" "cmake" ];
-    propagatedBuildInputs = [ "KF5Package" ];
+    propagatedBuildInputs = [ "KF5Package" "KF5Service" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
