@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     }
 
     mkdir -p $out/share/icons
-    ln -s $out/lib/${browserName}/browser/icons/mozicon128.png $out/share/icons/${browserName}.png
+    ln -s $out/lib/${browserName}${nameSuffix}/browser/icons/mozicon128.png $out/share/icons/${browserName}.png
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications
