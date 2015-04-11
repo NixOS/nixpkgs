@@ -185,6 +185,9 @@ self: super: {
   esqueleto = doJailbreak super.esqueleto;
   pointfree = doJailbreak super.pointfree;
 
+  # acid-state/safecopy#25 acid-state/safecopy#26
+  safecopy = dontCheck (super.safecopy);
+
   # bos/attoparsec#92
   attoparsec = dontCheck super.attoparsec;
 
