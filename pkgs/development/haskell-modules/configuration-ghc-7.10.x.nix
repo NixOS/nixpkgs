@@ -145,6 +145,11 @@ self: super: {
     ];
   });
 
+  # ekmett/linear#74
+  linear = overrideCabal super.linear (drv: {
+    prePatch = "sed -i 's/-Werror//g' linear.cabal";
+  });
+
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
