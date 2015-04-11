@@ -77,7 +77,7 @@ let
     "toolset=gcc-cross"
     "--without-python"
   ];
-  crossB2Args = concatMapStringsSep " " (genericB2Flags ++ crossB2Flags);
+  crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
 
   builder = b2Args: ''
     ./b2 ${b2Args}
