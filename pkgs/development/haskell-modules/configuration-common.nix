@@ -214,6 +214,9 @@ self: super: {
   # sw17ch/data-clist#8
   data-clist = doJailbreak super.data-clist;
 
+  # https://github.com/tibbe/ekg-core/commit/c986d9750d026a0c049cf6e6610d69fc1f23121f, not yet in hackage
+  ekg-core = doJailbreak super.ekg-core;
+
   # https://github.com/NixOS/cabal2nix/issues/136
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
