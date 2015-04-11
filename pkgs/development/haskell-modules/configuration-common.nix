@@ -211,6 +211,9 @@ self: super: {
   # https://github.com/liamoc/wizards/issues/5
   wizards = doJailbreak super.wizards;
 
+  # sw17ch/data-clist#8
+  data-clist = doJailbreak super.data-clist;
+
   # https://github.com/NixOS/cabal2nix/issues/136
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
