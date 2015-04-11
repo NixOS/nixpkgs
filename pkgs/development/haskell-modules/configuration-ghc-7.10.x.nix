@@ -292,4 +292,10 @@ self: super: {
   diagrams-core = overrideCabal super.diagrams-core (drv: {
     prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
   });
+
+  # diagrams/diagrams-core#83
+  diagrams-lib = overrideCabal super.diagrams-lib (drv: {
+    prePatch = "sed -i 's|4\.8|4.9|' diagrams-lib.cabal";
+    patches = [ ./diagrams-lib-flexible-contexts.patch ];
+  });
 }
