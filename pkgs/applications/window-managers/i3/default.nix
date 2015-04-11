@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   checkPhase = stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
   ''
-    (cd testcases && xvfb-run ./complete-run.pl -p 1)
+    (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
     ! grep -q '^not ok' testcases/latest/complete-run.log
   '';
 
