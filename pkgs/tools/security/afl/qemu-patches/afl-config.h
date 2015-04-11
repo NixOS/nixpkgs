@@ -138,6 +138,11 @@
 
 #define TMIN_MAX_FILE       (10 * 1024 * 1024)
 
+/* Block normalization steps for afl-tmin: */
+
+#define TMIN_SET_MIN_SIZE   4
+#define TMIN_SET_STEPS      128
+
 /* Maximum dictionary token size (-x), in bytes: */
 
 #define MAX_DICT_FILE       128

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, bash, callPackage, makeWrapper }:
+{ stdenv, fetchurl, bash, callPackage, makeWrapper
+, clang, llvm, which, libcgroup }:
 
 let
   afl-qemu = callPackage ./qemu.nix {};
@@ -8,22 +9,38 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "1.58b";
+  version = "1.63b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "1szggm4x9i9bsrcb99s5vbgncagp7jvhz8cg9amkx7p6mp2x4pld";
+    sha256 = "1v3py0g52j687qacwhri8jbz2h0ggh3zqknp011z5ijf820vc09g";
   };
 
-  buildInputs  = [ makeWrapper ];
+  # Note: libcgroup isn't needed for building, just for the afl-cgroup
+  # script.
+  buildInputs  = [ makeWrapper clang llvm which ];
 
-  buildPhase   = "make PREFIX=$out";
+  buildPhase   = ''
+    make PREFIX=$out
+    cd llvm_mode && make && cd ..
+  '';
   installPhase = ''
     # Do the normal installation
     make install PREFIX=$out
 
     # Install the custom QEMU emulator for binary blob fuzzing.
     cp ${afl-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
+
+    # Install the cgroups wrapper for asan-based fuzzing.
+    cp experimental/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
+    chmod +x $out/bin/afl-cgroup
+    substituteInPlace $out/bin/afl-cgroup \
+      --replace "cgcreate" "${libcgroup}/bin/cgcreate" \
+      --replace "cgexec"   "${libcgroup}/bin/cgexec" \
+      --replace "cgdelete" "${libcgroup}/bin/cgdelete"
+
+    # Patch shebangs before wrapping
+    patchShebangs $out/bin
 
     # Wrap every program with a custom $AFL_PATH; I believe there is a
     # bug in afl which causes it to fail to find `afl-qemu-trace`

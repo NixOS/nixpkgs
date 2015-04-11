@@ -134,6 +134,12 @@ static void afl_setup(void) {
 
     if (afl_area_ptr == (void*)-1) exit(1);
 
+    /* With AFL_INST_RATIO set to a low value, we want to touch the bitmap
+       so that the parent doesn't give up on us. */
+
+    if (inst_r) afl_area_ptr[0] = 1;
+
+
   }
 
   if (getenv("AFL_INST_LIBS")) {
