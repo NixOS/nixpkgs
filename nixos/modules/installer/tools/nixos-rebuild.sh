@@ -93,9 +93,9 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
 fi
 
 
-# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
+# If ‘--upgrade’ is given, run ‘nix-channel --update’.
 if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
-    nix-channel --update nixos
+    nix-channel --update
 fi
 
 # Make sure that we use the Nix package we depend on, not something
