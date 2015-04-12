@@ -484,11 +484,11 @@ let
 
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
-    version = "0.4.4";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/a/arrow/${name}.tar.gz";
-      sha256 = "1sdr4gyjgvz86yr0ll0i11mgy8l1slndr7f0ngam87rpy78gp052";
+      sha256 = "1q3a6arjm6ysl2ff6lgdm504np7b1rbivrzspybjypq1nczcb7qy";
     };
 
     doCheck = false;
