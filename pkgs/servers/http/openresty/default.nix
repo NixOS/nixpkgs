@@ -7,11 +7,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openresty-${version}";
-  version = "1.7.7.1";
+  version = "1.7.10.1";
 
   src = fetchurl {
     url = "http://openresty.org/download/ngx_openresty-${version}.tar.gz";
-    sha256 = "1m541k2lys3155f0r94abgcmm2hgvv56q0i4fk58w6fa8n4h62z0";
+    sha256 = "0yg6pkagkkga6ly6fgmfcf557r2b4m75gyn6a7p9qcamb4zdgl2g";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ];
@@ -40,13 +40,9 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mv $out/nginx/sbin $out/bin
-    mv $out/bin/sbin $out/sbin
-
+    mv $out/nginx/sbin/nginx $out/bin
     mv $out/luajit/bin/luajit-2.1.0-alpha $out/bin/luajit-openresty
-    ln -s $out/sbin/nginx $out/sbin/openresty
-    ln -s $out/sbin/nginx $out/bin/openresty
-    ln -s $out/sbin/nginx $out/bin/nginx
+    ln -s $out/bin/nginx $out/bin/openresty
   '';
 
   preConfigure = ''
