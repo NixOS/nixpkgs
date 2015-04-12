@@ -4316,6 +4316,7 @@ let
 
   rustcAlpha  = callPackage ../development/compilers/rustc/1.0.0-alpha.nix {};
   rustcAlpha2 = callPackage ../development/compilers/rustc/1.0.0-alpha2.nix {};
+  rustcBeta   = callPackage ../development/compilers/rustc/1.0.0-beta.nix {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
   rustc = rustcAlpha2;
 
