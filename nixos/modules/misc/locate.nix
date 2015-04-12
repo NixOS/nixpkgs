@@ -6,12 +6,8 @@ let
   cfg = config.services.locate;
 in {
 
-  ###### interface
-
   options = {
-
     services.locate = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -23,11 +19,15 @@ in {
 
       period = mkOption {
         type = types.str;
-        default = "15 02 * * *";
+        default = "02:15";
+        example = "hourly";
         description = ''
-          This option defines (in the format used by cron) when the
-          locate database is updated.
-          The default is to update at 02:15 at night every day.
+          Update the locate database at this interval. Updates by
+          default at 2:15 AM every day.
+
+          The format is described in
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
 
@@ -55,15 +55,10 @@ in {
           <command>su</command>.
         '';
       };
-
     };
-
   };
 
-  ###### implementation
-
   config = {
-
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path  = [ pkgs.su ];
@@ -76,11 +71,18 @@ in {
           '';
         serviceConfig.Nice = 19;
         serviceConfig.IOSchedulingClass = "idle";
+        serviceConfig.PrivateTmp = "yes";
+        serviceConfig.PrivateNetwork = "yes";
+        serviceConfig.NoNewPrivileges = "yes";
+        serviceConfig.ReadOnlyDirectories = "/";
+        serviceConfig.ReadWriteDirectories = cfg.output;
       };
 
-    services.cron.systemCronJobs = optional config.services.locate.enable
-      "${config.services.locate.period} root ${config.systemd.package}/bin/systemctl start update-locatedb.service";
-
+    systemd.timers.update-locatedb =
+      { description = "Update timer for locate database";
+        partOf      = [ "update-locatedb.service" ];
+	wantedBy    = [ "timers.target" ];
+	timerConfig.OnCalendar = cfg.period;
+      };
   };
-
 }
