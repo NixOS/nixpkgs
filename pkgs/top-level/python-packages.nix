@@ -7798,7 +7798,7 @@ let
 
     propagatedBuildInputs = with self; [
       jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-      blinker pillow beautifulsoup4
+      blinker pillow beautifulsoup4 markupsafe
     ];
 
     meta = {
