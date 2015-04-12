@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
@@ -79,6 +79,9 @@ let
   ] ++ optionals stdenv.isCrossWin [
     "target-os=windows"
     "threadapi=win32"
+    "binary-format=pe"
+    "address-model=${if stdenv.isCross64 then "64" else "32"}"
+    "architecture=x86"
   ];
   crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
 
@@ -180,5 +183,13 @@ stdenv.mkDerivation {
     buildPhase = builder crossB2Args;
     installPhase = installer crossB2Args;
     postFixup = fixup;
+  } // optionalAttrs stdenv.isCrossWin {
+    patches = fetchurl {
+      url = "https://svn.boost.org/trac/boost/raw-attachment/ticket/7262/"
+          + "boost-mingw.patch";
+      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
+    };
+
+    patchFlags = "-p0";
   };
 }
