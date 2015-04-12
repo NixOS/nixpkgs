@@ -18,9 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  crossAttrs = let
-    isCross64 = stdenv.cross.config == "x86_64-w64-mingw32";
-  in stdenv.lib.optionalAttrs isCross64 {
+  crossAttrs = stdenv.lib.optionalAttrs stdenv.isCross64 {
     configureFlags = [ "--disable-asm" "--disable-padlock-support" ];
   };
 

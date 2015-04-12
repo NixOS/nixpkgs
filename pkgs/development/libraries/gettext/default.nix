@@ -36,7 +36,7 @@ stdenv.mkDerivation (rec {
 
   crossAttrs = {
     buildInputs = stdenv.lib.optional (
-      stdenv ? cross && stdenv.cross.libc != "msvcrt" &&
+      !stdenv.isCrossWin &&
       stdenv ? ccCross && stdenv.ccCross.libc ? libiconv
     ) stdenv.ccCross.libc.libiconv.crossDrv;
     # Gettext fails to guess the cross compiler

@@ -10,7 +10,6 @@ assert glSupport -> mesa_noglu != null;
 
 let
   inherit (stdenv.lib) optional optionals optionalAttrs;
-  isCrossWin = stdenv ? cross && stdenv.cross.libc == "msvcrt";
 
 in stdenv.mkDerivation rec {
   name = "cairo-1.14.0";
@@ -42,7 +41,7 @@ in stdenv.mkDerivation rec {
     ++ optional pdfSupport "--enable-pdf"
     ;
 
-  crossAttrs = optionalAttrs isCrossWin {
+  crossAttrs = optionalAttrs stdenv.isCrossWin {
     propagatedBuildInputs = [
       pixman.crossDrv fontconfig.crossDrv glib.crossDrv zlib.crossDrv
       libpng.crossDrv

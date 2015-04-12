@@ -12,9 +12,6 @@ let
   ver_maj = "3.12";
   ver_min = "2";
   version = "${ver_maj}.${ver_min}";
-
-  isCrossWin = stdenv ? cross && stdenv.cross.libc == "msvcrt";
-
 in
 stdenv.mkDerivation rec {
   name = "gtk+3-${version}";
@@ -34,7 +31,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ wayland ]
     ++ optional stdenv.isDarwin x11
     ++ optional xineramaSupport libXinerama
-    ++ optional (cupsSupport && !isCrossWin) cups;
+    ++ optional (cupsSupport && !stdenv.isCrossWin) cups;
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";

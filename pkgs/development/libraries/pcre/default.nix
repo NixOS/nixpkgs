@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
-  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  crossAttrs = optionalAttrs stdenv.isCrossWin {
     buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
   };
 

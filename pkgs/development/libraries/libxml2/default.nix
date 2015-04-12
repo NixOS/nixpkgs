@@ -28,7 +28,7 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  crossAttrs = stdenv.lib.optionalAttrs stdenv.isCrossWin {
     postPatch = ''
       sed -i 's/LIBXML_STATIC/_WIN32/g' include/libxml/xmlexports.h
     '';

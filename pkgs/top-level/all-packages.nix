@@ -3398,8 +3398,8 @@ let
 
   gccCrossStageStatic = let
       libcCross1 =
-        if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
-        else if stdenv.cross.libc == "libSystem" then darwin.xcode
+        if stdenv.isCrossWin then windows.mingw_w64_headers
+        else if stdenv.isCrossDarwin then darwin.xcode
         else null;
     in
       wrapGCCCross {

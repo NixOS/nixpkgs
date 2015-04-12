@@ -9,7 +9,7 @@ let
     stdenv.cross;
 
   patchesCross = isCross: let
-    isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
+    isDarwin = stdenv.isDarwin || stdenv.isCrossDarwin;
   in
     [ # Allow the location of the X509 certificate file (the CA
       # bundle) to be set through the environment variable

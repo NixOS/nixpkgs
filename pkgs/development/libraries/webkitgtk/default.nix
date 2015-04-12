@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   patches = [ ./finding-harfbuzz-icu.patch ];
 
   cmakeFlags = [ "-DPORT=GTK" ]
-    ++ optionals (stdenv ? cross && stdenv.cross.libc == "msvcrt") [
+    ++ optionals stdenv.isCrossWin [
       "-DCMAKE_SYSTEM_NAME=Windows"
     ];
 

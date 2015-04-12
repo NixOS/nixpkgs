@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     configurePhase = ''
       ./configure -prefix="$out" --with-system-zlib --with-system-libpng
     '';
-    postInstall = optional (stdenv.cross.libc == "msvcrt") ''
+    postInstall = optional stdenv.isCrossWin ''
       mv "$out"/bin/optipng "$out"/bin/optipng.exe
     '';
   };

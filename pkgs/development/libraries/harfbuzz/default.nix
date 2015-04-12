@@ -8,8 +8,7 @@
 # (icu is a ~30 MB dependency, the rest is very small in comparison)
 
 let
-  isCrossWin = stdenv ? cross && stdenv.cross.libc == "msvcrt";
-  useGraphite2 = withGraphite2 && !isCrossWin;
+  useGraphite2 = withGraphite2 && !stdenv.isCrossWin;
 
 in stdenv.mkDerivation rec {
   name = "harfbuzz-0.9.40";

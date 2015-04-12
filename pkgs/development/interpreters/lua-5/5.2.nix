@@ -54,10 +54,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-    isDarwin = stdenv.cross.libc == "libSystem";
-  in {
+  crossAttrs = {
     configurePhase = ''
       makeFlagsArray=(
         INSTALL_TOP=$out
@@ -67,19 +64,20 @@ stdenv.mkDerivation rec {
         RANLIB=${stdenv.cross.config}-ranlib
         V=${luaversion}
         R=${version}
-        ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
+        ${if stdenv.isCrossWin then "mingw"
+          else stdenv.lib.optionalString stdenv.isCrossDarwin ''
         AR="${stdenv.cross.config}-ar rcu"
         macosx
         ''}
       )
-    '' + stdenv.lib.optionalString isMingw ''
+    '' + stdenv.lib.optionalString stdenv.isCrossWin ''
       installFlagsArray=(
         TO_BIN="lua.exe luac.exe"
         TO_LIB="liblua.a lua52.dll"
         INSTALL_DATA="cp -d"
       )
     '';
-  } // stdenv.lib.optionalAttrs isDarwin {
+  } // stdenv.lib.optionalAttrs stdenv.isCrossDarwin {
     postPatch = ''
       sed -i -e 's/-Wl,-soname[^ ]* *//' src/Makefile
     '';

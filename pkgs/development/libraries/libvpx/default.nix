@@ -147,10 +147,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = let
-    isCygwin = stdenv.cross.libc == "msvcrt";
-    isDarwin = stdenv.cross.libc == "libSystem";
-  in {
+  crossAttrs = {
     dontSetConfigureCross = true;
     configureFlags = configureFlags ++ [
       #"--extra-cflags="
@@ -162,7 +159,7 @@ stdenv.mkDerivation rec {
       # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
       # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
       "--force-target=${stdenv.cross.config}${(
-              if isDarwin then (
+              if stdenv.isCrossDarwin then (
                 if stdenv.cross.osxMinVersion == "10.9"  then "13"
                 else if stdenv.cross.osxMinVersion == "10.8"  then "12"
                 else if stdenv.cross.osxMinVersion == "10.7"  then "11"
@@ -170,7 +167,7 @@ stdenv.mkDerivation rec {
                 else if stdenv.cross.osxMinVersion == "10.5"  then "9"
                 else "8")
               else "")}-gcc"
-      (if isCygwin then "--enable-static-msvcrt" else "")
+      (if stdenv.isCrossWin then "--enable-static-msvcrt" else "")
     ];
   };
 
