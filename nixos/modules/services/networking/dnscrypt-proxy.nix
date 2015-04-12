@@ -2,7 +2,6 @@
 with lib;
 
 let
-  apparmorEnabled = config.security.apparmor.enable;
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
   uid = config.ids.uids.dnscrypt-proxy;
@@ -84,8 +83,7 @@ in
   config = mkIf cfg.enable {
 
     ### AppArmor profile
-
-    security.apparmor.profiles = mkIf apparmorEnabled [
+    security.apparmor.profiles = [
       (pkgs.writeText "apparmor-dnscrypt-proxy" ''
 
         ${dnscrypt-proxy}/bin/dnscrypt-proxy {
@@ -126,8 +124,8 @@ in
 
     systemd.services.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon";
-      after = [ "network.target" ] ++ optional apparmorEnabled "apparmor.service";
-      requires = mkIf apparmorEnabled [ "apparmor.service" ];
+      after = [ "network.target" "apparmor.service" ];
+      requires = [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
