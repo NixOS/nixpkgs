@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, perl, which
-, glibc, flex, bison, python27, swig, dbus, pam
+, glibc, flex, bison, python27, swig, pam
 }:
 
 let
@@ -36,7 +36,6 @@ let
       automake
       bison
       flex
-      dbus # requires patch to dbus ...
       glibc
       libtool
       perl
