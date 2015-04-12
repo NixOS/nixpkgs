@@ -46,8 +46,18 @@ stdenv.mkDerivation rec {
     # bug in afl which causes it to fail to find `afl-qemu-trace`
     # relative to `afl-fuzz` or `afl-showmap`, so we instead set
     # $AFL_PATH as a workaround, which allows it to be found.
-    for x in `ls $out/bin/afl-*`; do
+    for x in `ls $out/bin/afl-* | grep -v afl-clang-fast`; do
       wrapProgram $x --prefix AFL_PATH : "$out/bin"
+    done
+    # Wrap afl-clang-fast(++) with a *different* AFL_PATH, because it
+    # has totally different semantics in that case(?) - and also set a
+    # proper AFL_CC and AFL_CXX so we don't pick up the wrong one out
+    # of $PATH.
+    for x in $out/bin/afl-clang-fast $out/bin/afl-clang-fast++; do
+      wrapProgram $x \
+        --prefix AFL_PATH : "$out/lib/afl" \
+        --prefix AFL_CC   : "${clang}/bin/clang" \
+        --prefix AFL_CXX  : "${clang}/bin/clang++"
     done
   '';
 
