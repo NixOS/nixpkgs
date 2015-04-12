@@ -161,7 +161,15 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "lib" ];
 
   crossAttrs = rec {
-    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
+    # Remove foreign binary from path, we only want libbz2!
+    prePhases = [ "fixPath" ];
+    fixPath = ''
+      PATH="$(IFS=:; n=$(for i in $PATH;
+        do [ "''${i##${bzip2.crossDrv}}" != "$i" ] || echo -n "$i:";
+      done); echo "''${n%:}")"
+    '';
+
+    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2 bzip2.crossDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
     # override them.
     propagatedBuildInputs = buildInputs;
