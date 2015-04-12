@@ -7456,12 +7456,12 @@ let
 
   obfsproxy = buildPythonPackage ( rec {
     name = "obfsproxy-${version}";
-    version = "0.2.12";
+    version = "0.2.13";
 
     src = pkgs.fetchgit {
       url = meta.repositories.git;
       rev = "refs/tags/${name}";
-      sha256 = "82d694aa7f3de7327fc4dc517fb262ab076f536ed6d4377573c76df8cf019dcf";
+      sha256 = "16jb8x5hbs3g4dq10y6rqc1005bnffwnlws8x7j1d96n7k9mjn8h";
     };
 
     propagatedBuildInputs = with self;
