@@ -76,6 +76,9 @@ let
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
     "--without-python"
+  ] ++ optionals stdenv.isCrossWin [
+    "target-os=windows"
+    "threadapi=win32"
   ];
   crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
 
