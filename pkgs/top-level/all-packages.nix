@@ -13760,7 +13760,7 @@ let
 
   guix = callPackage ../tools/package-management/guix { };
 
-  gxemul = callPackage ../misc/gxemul { };
+  gxemul = callPackage ../misc/emulators/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
 
