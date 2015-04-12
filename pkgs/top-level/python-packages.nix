@@ -6342,6 +6342,15 @@ let
       md5 = "81640948ff226f8c12b3277059489157";
     };
 
+    # See https://github.com/flintwork/mccabe/issues/31
+    postPatch = ''
+      cp "${pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/flintwork/mccabe/"
+            + "e8aea16d28e92bd3c62601275762fc9c16808f6c/test_mccabe.py";
+        sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
+      }}" test_mccabe.py
+    '';
+
     meta = {
       description = "McCabe checker, plugin for flake8";
       homepage = "https://github.com/flintwork/mccabe";
