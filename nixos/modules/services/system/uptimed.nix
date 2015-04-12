@@ -1,68 +1,56 @@
-{pkgs, config, lib, ...}:
+{ config, lib, pkgs, ... }:
+
+with lib;
 
 let
-
-  inherit (lib) mkOption mkIf singleton;
-
-  inherit (pkgs) uptimed;
-
-  stateDir = "/var/spool/uptimed";
-
-  uptimedUser = "uptimed";
-
+  cfg = config.services.uptimed;
 in
-
 {
-
-  ###### interface
-
   options = {
-
     services.uptimed = {
-
       enable = mkOption {
         default = false;
         description = ''
-          Uptimed allows you to track your highest uptimes.
+          Enable <literal>uptimed</literal>, allowing you to track
+          your highest uptimes.
         '';
       };
+    };
+  };
 
+  config = mkIf cfg.enable {
+    users.extraUsers.uptimed = {
+      description = "Uptimed daemon user";
+      home        = "/var/spool/uptimed";
+      createHome  = true;
+      uid         = config.ids.uids.uptimed;
     };
 
+    systemd.services.uptimed = {
+      unitConfig.Documentation = "man:uptimed(8) man:uprecords(1)";
+      description = "uptimed service";
+      wantedBy    = [ "multi-user.target" ];
+
+      serviceConfig.Restart                 = "on-failure";
+      serviceConfig.User                    = "uptimed";
+      serviceConfig.Nice                    = 19;
+      serviceConfig.IOSchedulingClass       = "idle";
+      serviceConfig.PrivateTmp              = "yes";
+      serviceConfig.PrivateNetwork          = "yes";
+      serviceConfig.NoNewPrivileges         = "yes";
+      serviceConfig.ReadWriteDirectories    = "/var/spool/uptimed";
+      serviceConfig.InaccessibleDirectories = "/home";
+
+      preStart = ''
+        mkdir -m 0755 -p /var/spool/uptimed
+        chown uptimed    /var/spool/uptimed
+
+        if ! test -f /var/spool/uptimed/bootid ; then
+          ${pkgs.uptimed}/sbin/uptimed -b
+        fi
+      '';
+      serviceConfig.ExecStart =
+        "${pkgs.uptimed}/sbin/uptimed -f -p /var/spool/uptimed/pid";
+    };
   };
-
-
-  ###### implementation
-
-  config = mkIf config.services.uptimed.enable {
-
-    environment.systemPackages = [ uptimed ];
-
-    users.extraUsers = singleton
-      { name = uptimedUser;
-        uid = config.ids.uids.uptimed;
-        description = "Uptimed daemon user";
-        home = stateDir;
-      };
-
-    jobs.uptimed =
-      { description = "Uptimed daemon";
-
-        startOn = "startup";
-
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${uptimedUser} ${stateDir}
-
-            if ! test -f ${stateDir}/bootid ; then
-              ${uptimed}/sbin/uptimed -b
-            fi
-          '';
-
-        exec = "${uptimed}/sbin/uptimed";
-      };
-
-  };
-
 }
