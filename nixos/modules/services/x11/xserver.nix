@@ -147,6 +147,19 @@ in
         '';
       };
 
+      inputClassSections = mkOption {
+        type = types.listOf types.lines;
+        default = [];
+        example = [ ''
+           Identifier      "Trackpoint Wheel Emulation"
+           MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
+           Option          "EmulateWheel"          "true
+           Option          "EmulateWheelButton"    "2"
+           Option          "Emulate3Buttons"       "false"
+	  '' ];
+        description = "Content of additional InputClass sections of the X server configuration file.";
+      };
+
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -521,6 +534,14 @@ in
           Option "XkbOptions" "${cfg.xkbOptions}"
           Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
+
+	# Additional "InputClass" sections
+        ${flip concatMapStrings cfg.inputClassSections (inputClassSection: ''
+        Section "InputClass"
+          ${inputClassSection}
+        EndSection
+        '')}
+
 
         Section "ServerLayout"
           Identifier "Layout[all]"
