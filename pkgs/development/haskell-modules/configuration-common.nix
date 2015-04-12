@@ -211,9 +211,6 @@ self: super: {
   # https://github.com/liamoc/wizards/issues/5
   wizards = doJailbreak super.wizards;
 
-  # sw17ch/data-clist#8
-  data-clist = doJailbreak super.data-clist;
-
   # https://github.com/tibbe/ekg-core/commit/c986d9750d026a0c049cf6e6610d69fc1f23121f, not yet in hackage
   ekg-core = doJailbreak super.ekg-core;
 
