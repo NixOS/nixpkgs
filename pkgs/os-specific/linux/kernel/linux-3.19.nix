@@ -1,8 +1,10 @@
 { stdenv, fetchurl, ... } @ args:
 
+let
+  patches = (import ./patches { inherit stdenv fetchurl; });
+in
 import ./generic.nix (args // rec {
-  version = "3.19.3";
-  # Remember to update grsecurity!
+  version = "3.19.3";        # Remember to update grsecurity!
   extraMeta.branch = "3.19";
 
   src = fetchurl {
@@ -12,9 +14,7 @@ import ./generic.nix (args // rec {
 
   # FIXME: remove with the next point release.
   kernelPatches = args.kernelPatches ++
-    [ { name = "btrfs-fix-deadlock";
-        patch = ./btrfs-fix-deadlock.patch;
-      }
+    [ patches.btrfs_fix_deadlock
     ];
 
   features.iwlwifi = true;

@@ -9009,93 +9009,29 @@ let
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
-  linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ];
-  };
-
-  linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-     ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-      ];
-  };
-
   linux_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
-  linux_3_10 = makeOverridable (import ../os-specific/linux/kernel/linux-3.10.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_3_12 = makeOverridable (import ../os-specific/linux/kernel/linux-3.12.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.crc_regression ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_3_14 = makeOverridable (import ../os-specific/linux/kernel/linux-3.14.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   linux_3_18 = makeOverridable (import ../os-specific/linux/kernel/linux-3.18.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   linux_3_19 = makeOverridable (import ../os-specific/linux/kernel/linux-3.19.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   linux_4_0 = makeOverridable (import ../os-specific/linux/kernel/linux-4.0.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   linux_testing = makeOverridable (import ../os-specific/linux/kernel/linux-testing.nix) {
     inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
   /* grsec configuration
@@ -9252,13 +9188,7 @@ let
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
-  linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
-  linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
-  linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
-  linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
   linuxPackages_3_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_19 linuxPackages_3_19);
   linuxPackages_4_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_0 linuxPackages_4_0);
