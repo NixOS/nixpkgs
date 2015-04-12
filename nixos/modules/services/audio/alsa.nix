@@ -44,6 +44,14 @@ in
         '';
       };
 
+      enableAlsaFirmware = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Load ALSA firmware on boot.
+        '';
+      };
+
     };
 
   };
@@ -79,6 +87,9 @@ in
           ExecStop = "${alsaUtils}/sbin/alsactl store --ignore";
         };
       };
+
+    hardware.firmware = mkIf config.sound.enableAlsaFirmware
+      [ "${pkgs.alsa-firmware}/lib/firmware" ];
 
   };
 

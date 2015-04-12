@@ -8086,6 +8086,8 @@ let
 
   psyco = callPackage ../development/python-modules/psyco { };
 
+  pyalsa = pythonPackages.pyalsa;
+
   pycairo = pythonPackages.pycairo;
 
   pycapnp = pythonPackages.pycapnp;
@@ -8727,6 +8729,8 @@ let
   alienfx = callPackage ../os-specific/linux/alienfx { };
 
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
+
+  alsa-tools = callPackage ../os-specific/linux/alsa-tools { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
