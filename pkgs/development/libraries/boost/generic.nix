@@ -173,7 +173,6 @@ stdenv.mkDerivation {
     # usual --build and --host added on cross building.
     preConfigure = ''
       export configureFlags="--without-icu ${concatStringsSep " " commonConfigureFlags}"
-      set -x
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
       EOF
