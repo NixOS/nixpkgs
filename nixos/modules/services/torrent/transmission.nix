@@ -4,12 +4,11 @@ with lib;
 
 let
   cfg = config.services.transmission;
-  apparmor = config.security.apparmor.enable;
 
   homeDir = "/var/lib/transmission";
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
-  
+
   settingsDir = "${homeDir}/.config/transmission-daemon";
   settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
@@ -76,8 +75,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
-      after = [ "local-fs.target" "network.target" ] ++ optional apparmor "apparmor.service";
-      requires = mkIf apparmor [ "apparmor.service" ];
+      after = [ "local-fs.target" "network.target" "apparmor.service" ];
+      requires = [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
 
       # 1) Only the "transmission" user and group have access to torrents.
@@ -105,7 +104,7 @@ in
     };
 
     # AppArmor profile
-    security.apparmor.profiles = mkIf apparmor [
+    security.apparmor.profiles = [
       (pkgs.writeText "apparmor-transmission-daemon" ''
         #include <tunables/global>
 
