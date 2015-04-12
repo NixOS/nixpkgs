@@ -10,7 +10,7 @@ in
      security.apparmor = {
        enable = mkOption {
          type = types.bool;
-         default = false;
+         default = true;
          description = "Enable the AppArmor Mandatory Access Control system.";
        };
        profiles = mkOption {
