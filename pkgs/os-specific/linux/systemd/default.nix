@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
-, kexectools, libmicrohttpd, linuxHeaders
+, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libapparmor
+, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, audit
+, kexectools, libmicrohttpd, linuxHeaders, libseccomp, lz4
 , pythonPackages ? null, pythonSupport ? false
 }:
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd linuxHeaders
+    [ pkgconfig intltool gperf libcap kmod xz pam acl libseccomp
+      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt lz4 audit
+      libmicrohttpd linuxHeaders libapparmor
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
   configureFlags =
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       "--with-firmware-path=/root/test-firmware:/run/current-system/firmware"
       "--with-tty-gid=3" # tty in NixOS has gid 3
       "--enable-compat-libs" # get rid of this eventually
+      "--enable-lz4"
       "--disable-tests"
 
       "--disable-hostnamed"
