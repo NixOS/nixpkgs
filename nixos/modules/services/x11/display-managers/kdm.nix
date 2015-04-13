@@ -4,13 +4,16 @@ with lib;
 
 let
 
-  dmcfg = config.services.xserver.displayManager;
+  xcfg = config.services.xserver;
+  dmcfg = xcfg.displayManager;
   cfg = dmcfg.kdm;
 
   inherit (pkgs.kde4) kdebase_workspace;
 
   defaultConfig =
     ''
+      [General]
+      ServerVTs=${toString xcfg.tty}
       [Shutdown]
       HaltCmd=${config.systemd.package}/sbin/shutdown -h now
       RebootCmd=${config.systemd.package}/sbin/shutdown -r now
