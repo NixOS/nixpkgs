@@ -28,7 +28,7 @@ stdenv.mkDerivation (rec {
 
   crossAttrs = {
     dontStrip = static;
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // stdenv.lib.optionalAttrs stdenv.isCrossWin {
     configurePhase=''
       installFlags="BINARY_PATH=$out/bin INCLUDE_PATH=$out/include LIBRARY_PATH=$out/lib"
     '';
@@ -36,7 +36,7 @@ stdenv.mkDerivation (rec {
       "-f" "win32/Makefile.gcc"
       "PREFIX=${stdenv.cross.config}-"
     ] ++ (if static then [] else [ "SHARED_MODE=1" ]);
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
+  } // stdenv.lib.optionalAttrs stdenv.isCrossDarwin {
     makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 

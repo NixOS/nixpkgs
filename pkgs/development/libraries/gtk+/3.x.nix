@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ wayland ]
     ++ optional stdenv.isDarwin x11
     ++ optional xineramaSupport libXinerama
-    ++ optional cupsSupport cups;
+    ++ optional (cupsSupport && !stdenv.isCrossWin) cups;
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";

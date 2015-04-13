@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional alsaSupport alsaLib ++
     stdenv.lib.optional pulseaudioSupport pulseaudio;
 
-  buildInputs = let
-    notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in stdenv.lib.optional notMingw audiofile;
+  buildInputs = stdenv.lib.optional (!stdenv.isCrossWin) audiofile;
 
   nativeBuildInputs = [ pkgconfig ] ++
     stdenv.lib.optional openglSupport [ mesa ];
@@ -58,7 +56,7 @@ stdenv.mkDerivation rec {
     sha1 = "3137feb503a89a8d606405373905b92dcf7e293b";
   }) ];
 
-  crossAttrs =stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
+  crossAttrs =stdenv.lib.optionalAttrs stdenv.isCrossDarwin {
     patches = let
       f = rev: sha256: fetchurl {
         url = "http://hg.libsdl.org/SDL/raw-rev/${rev}";

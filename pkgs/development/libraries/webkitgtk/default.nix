@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./finding-harfbuzz-icu.patch ];
 
-  cmakeFlags = [ "-DPORT=GTK" ];
+  cmakeFlags = [ "-DPORT=GTK" ]
+    ++ optionals stdenv.isCrossWin [
+      "-DCMAKE_SYSTEM_NAME=Windows"
+    ];
 
   nativeBuildInputs = [
     cmake perl python ruby bison gperf sqlite
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk2 wayland libwebp enchant
     libxml2 libsecret libxslt harfbuzz libpthreadstubs
     gst-plugins-base
-  ] ++ optional enableGeoLocation geoclue2;
+  ] ++ optional (enableGeoLocation && !(stdenv ? cross)) geoclue2;
 
   propagatedBuildInputs = [
     libsoup gtk3

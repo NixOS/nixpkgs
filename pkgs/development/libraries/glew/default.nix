@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
     "LD=${stdenv.cross.config}-gcc"
     "AR=${stdenv.cross.config}-ar"
     "STRIP="
-  ] ++ optional (stdenv.cross.libc == "msvcrt") "SYSTEM=mingw"
-    ++ optional (stdenv.cross.libc == "libSystem") "SYSTEM=darwin";
+  ] ++ optional stdenv.isCrossWin    "SYSTEM=mingw"
+    ++ optional stdenv.isCrossDarwin "SYSTEM=darwin";
 
   meta = with stdenv.lib; {
     description = "An OpenGL extension loading library for C(++)";

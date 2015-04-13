@@ -142,9 +142,7 @@ stdenv.mkDerivation rec {
       src/gui/kernel/qt_cocoa_helpers_mac_p.h
   '';
 
-  crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-  in {
+  crossAttrs = {
     # I've not tried any case other than i686-pc-mingw32.
     # -nomake tools:   it fails linking some asian language symbols
     # -no-svg: it fails to build on mingw64
@@ -154,7 +152,7 @@ stdenv.mkDerivation rec {
       -no-svg
       -make qmake -make libs -nomake tools
       -nomake demos -nomake examples -nomake docs
-    '' + optionalString isMingw " -xplatform win32-g++-4.6";
+    '' + optionalString stdenv.isCrossWin " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
       sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
@@ -171,7 +169,7 @@ stdenv.mkDerivation rec {
     '';
     dontSetConfigureCross = true;
     dontStrip = true;
-  } // optionalAttrs isMingw {
+  } // optionalAttrs stdenv.isCrossWin {
     propagatedBuildInputs = [ ];
   };
 

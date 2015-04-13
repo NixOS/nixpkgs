@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
 , toolset ? if stdenv.isDarwin then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
@@ -76,8 +76,14 @@ let
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
     "--without-python"
+  ] ++ optionals stdenv.isCrossWin [
+    "target-os=windows"
+    "threadapi=win32"
+    "binary-format=pe"
+    "address-model=${if stdenv.isCross64 then "64" else "32"}"
+    "architecture=x86"
   ];
-  crossB2Args = concatMapStringsSep " " (genericB2Flags ++ crossB2Flags);
+  crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
 
   builder = b2Args: ''
     ./b2 ${b2Args}
@@ -161,7 +167,15 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "lib" ];
 
   crossAttrs = rec {
-    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
+    # Remove foreign binary from path, we only want libbz2!
+    prePhases = [ "fixPath" ];
+    fixPath = ''
+      PATH="$(IFS=:; n=$(for i in $PATH;
+        do [ "''${i##${bzip2.crossDrv}}" != "$i" ] || echo -n "$i:";
+      done); echo "''${n%:}")"
+    '';
+
+    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2 bzip2.crossDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
     # override them.
     propagatedBuildInputs = buildInputs;
@@ -169,7 +183,6 @@ stdenv.mkDerivation {
     # usual --build and --host added on cross building.
     preConfigure = ''
       export configureFlags="--without-icu ${concatStringsSep " " commonConfigureFlags}"
-      set -x
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
       EOF
@@ -177,5 +190,13 @@ stdenv.mkDerivation {
     buildPhase = builder crossB2Args;
     installPhase = installer crossB2Args;
     postFixup = fixup;
+  } // optionalAttrs stdenv.isCrossWin {
+    patches = fetchurl {
+      url = "https://svn.boost.org/trac/boost/raw-attachment/ticket/7262/"
+          + "boost-mingw.patch";
+      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
+    };
+
+    patchFlags = "-p0";
   };
 }

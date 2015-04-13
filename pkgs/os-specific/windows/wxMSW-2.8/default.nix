@@ -1,7 +1,7 @@
 { stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
-assert stdenv ? cross -> stdenv.cross.libc == "msvcrt";
+assert stdenv.isCrossWin;
 
 stdenv.mkDerivation {
   name = "wxMSW-2.8.11";

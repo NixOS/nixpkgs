@@ -231,6 +231,13 @@ let
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
 
+      # Attributes for cross-building, set to false by default and only
+      # become true if we're really cross-building.
+      # Look in pkgs/stdenv/adapters.nix -> makeStdenvCross for reference.
+      isCrossWin    = false;
+      isCrossDarwin = false;
+      isCross64     = false;
+
       inherit mkDerivation;
 
       # For convenience, bring in the library functions in lib/ so

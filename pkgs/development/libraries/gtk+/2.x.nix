@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ x11 libXdamage ]
     ++ libintlOrEmpty
     ++ optional xineramaSupport libXinerama
-    ++ optionals cupsSupport [ cups ];
+    ++ optional (cupsSupport && !stdenv.isCrossWin) cups;
 
   configureFlags = if stdenv.isDarwin
     then "--disable-glibtest --disable-introspection --disable-visibility"

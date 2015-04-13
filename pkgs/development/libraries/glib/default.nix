@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [ libelf ]
+  buildInputs = [ libelf gettext ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl python ];
+  nativeBuildInputs = [ pkgconfig perl python ];
 
   propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;

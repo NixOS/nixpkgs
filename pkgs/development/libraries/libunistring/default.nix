@@ -11,10 +11,7 @@ stdenv.mkDerivation (rec {
   patches = stdenv.lib.optional stdenv.isDarwin [ ./clang.patch ];
 
   propagatedBuildInputs =
-    stdenv.lib.optional ((! (stdenv ? glibc))
-                         || (stdenv ? cross &&
-                             stdenv.cross.config == "i686-pc-mingw32"))
-     libiconv;
+    stdenv.lib.optional ((! (stdenv ? glibc)) || stdenv.isCrossWin) libiconv;
 
   # XXX: There are test failures on non-GNU systems, see
   # http://lists.gnu.org/archive/html/bug-libunistring/2010-02/msg00004.html .

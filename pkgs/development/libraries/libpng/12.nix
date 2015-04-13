@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit zlib; };
 
-  crossAttrs = stdenv.lib.optionalAttrs (stdenv.cross.libc == "libSystem") {
+  crossAttrs = stdenv.lib.optionalAttrs stdenv.isCrossDarwin {
     propagatedBuildInputs = [];
     passthru = {};
   };

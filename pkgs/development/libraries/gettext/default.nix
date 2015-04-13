@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.18.2";
+  name = "gettext-0.18.3";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "516a6370b3b3f46e2fc5a5e222ff5ecd76f3089bc956a7587a6e4f89de17714c";
+    sha256 = "0j7rp56c61j4k1bz1xdc041hzv7186yyzhbp95fmc0zq7l2c3wrn";
   };
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
@@ -35,8 +35,10 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   crossAttrs = {
-    buildInputs = stdenv.lib.optional (stdenv ? ccCross && stdenv.ccCross.libc ? libiconv)
-      stdenv.ccCross.libc.libiconv.crossDrv;
+    buildInputs = stdenv.lib.optional (
+      !stdenv.isCrossWin &&
+      stdenv ? ccCross && stdenv.ccCross.libc ? libiconv
+    ) stdenv.ccCross.libc.libiconv.crossDrv;
     # Gettext fails to guess the cross compiler
     configureFlags = "CXX=${stdenv.cross.config}-g++";
   };

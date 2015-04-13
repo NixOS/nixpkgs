@@ -115,6 +115,11 @@ rec {
     } // {
       inherit cross gccCross binutilsCross;
       ccCross = gccCross;
+
+      # Don't forget to set these to false in "pkgs/stdenv/generic/default.nix"!
+      isCrossWin    = cross.libc == "msvcrt";
+      isCrossDarwin = cross.libc == "libSystem";
+      isCross64     = stdenv.lib.hasPrefix "x86_64-" cross.config;
     };
 
 

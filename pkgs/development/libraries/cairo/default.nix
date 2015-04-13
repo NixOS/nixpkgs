@@ -8,9 +8,10 @@
 
 assert glSupport -> mesa_noglu != null;
 
-with { inherit (stdenv.lib) optional optionals; };
+let
+  inherit (stdenv.lib) optional optionals optionalAttrs;
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "cairo-1.14.0";
 
   src = fetchurl {
@@ -39,6 +40,14 @@ stdenv.mkDerivation rec {
     ++ optional glSupport "--enable-gl"
     ++ optional pdfSupport "--enable-pdf"
     ;
+
+  crossAttrs = optionalAttrs stdenv.isCrossWin {
+    propagatedBuildInputs = [
+      pixman.crossDrv fontconfig.crossDrv glib.crossDrv zlib.crossDrv
+      libpng.crossDrv
+    ];
+    configureFlags = [];
+  };
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.

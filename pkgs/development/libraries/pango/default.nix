@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isDarwin [ fontconfig ];
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ x11 glib cairo libpng fontconfig freetype harfbuzz ] ++ libintlOrEmpty;
+  propagatedBuildInputs = [ glib cairo libpng fontconfig freetype harfbuzz ]
+    ++ libintlOrEmpty ++ stdenv.lib.optional (!stdenv.isCrossWin) x11;
 
   enableParallelBuilding = true;
 

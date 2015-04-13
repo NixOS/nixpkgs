@@ -9,7 +9,7 @@ let
     stdenv.cross;
 
   patchesCross = isCross: let
-    isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
+    isDarwin = stdenv.isDarwin || stdenv.isCrossDarwin;
   in
     [ # Allow the location of the X509 certificate file (the CA
       # bundle) to be set through the environment variable
@@ -89,6 +89,7 @@ stdenv.mkDerivation {
     preConfigure=''
       # It's configure does not like --build or --host
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
+      export CC=gcc
     '';
 
     postInstall = ''
@@ -100,8 +101,6 @@ stdenv.mkDerivation {
       rm $out/bin/c_rehash $out/ssl/misc/CA.pl $out/ssl/misc/tsget
     '';
     configureScript = "./Configure";
-  } // stdenv.lib.optionalAttrs (opensslCrossSystem == "darwin64-x86_64-cc") {
-    CC = "gcc";
   };
 
   meta = {
