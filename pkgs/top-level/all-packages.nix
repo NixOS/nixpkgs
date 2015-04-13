@@ -1841,8 +1841,6 @@ let
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
 
-  libtidy = callPackage ../development/libraries/libtidy { };
-
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
@@ -14203,6 +14201,7 @@ let
   youtubeDL = youtube-dl;  # added 2014-10-26
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   htmlTidy = html-tidy;  # added 2014-12-06
+  libtidy = html-tidy;  # added 2014-12-21
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   nfsUtils = nfs-utils;  # added 2014-12-06
