@@ -7415,6 +7415,8 @@ let
 
   readosm = callPackage ../development/libraries/readosm { };
 
+  lambdabot = callPackage ../development/tools/lambdabot { };
+
   leksah = callPackage ../development/tools/leksah {
     inherit (haskellngPackages) ghcWithPackages;
   };
