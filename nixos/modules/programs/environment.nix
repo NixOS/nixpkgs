@@ -25,10 +25,10 @@ in
 
     environment.sessionVariables =
       { NIX_PATH =
-          [ "/nix/var/nix/profiles/per-user/root/channels"
-            "/nix/var/nix/profiles/per-user/root/channels/nixos"
+          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixpkgs=/etc/nixos/nixpkgs"
             "nixos-config=/etc/nixos/configuration.nix"
+            "/nix/var/nix/profiles/per-user/root/channels"
           ];
       };
 
