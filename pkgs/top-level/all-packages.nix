@@ -9034,40 +9034,6 @@ let
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
-  /* grsec configuration
-
-     We build several flavors of 'default' grsec kernels. These are
-     built by default with Hydra. If the user selects a matching
-     'default' flavor, then the pre-canned package set can be
-     chosen. Typically, users will make very basic choices like
-     'security' + 'server' or 'performance' + 'desktop' with
-     virtualisation support. These will then be picked.
-
-     Note: Xen guest kernels are included for e.g. NixOps deployments
-     to EC2, where Xen is the Hypervisor.
-  */
-
-  grFlavors = import ../build-support/grsecurity/flavors.nix;
-
-  mkGrsecurity = opts:
-    (import ../build-support/grsecurity {
-      grsecOptions = opts;
-      inherit pkgs lib;
-    });
-
-  grKernel  = opts: (mkGrsecurity opts).grsecKernel;
-  grPackage = opts: recurseIntoAttrs (mkGrsecurity opts).grsecPackage;
-
-  # Stable kernels
-  linux_grsec_stable_desktop    = grKernel grFlavors.linux_grsec_stable_desktop;
-  linux_grsec_stable_server     = grKernel grFlavors.linux_grsec_stable_server;
-  linux_grsec_stable_server_xen = grKernel grFlavors.linux_grsec_stable_server_xen;
-
-  # Testing kernels
-  linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
-  linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
-  linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
-
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -9201,17 +9167,6 @@ let
 
   # Build a kernel for Xen dom0
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
-
-  # grsecurity flavors
-  # Stable kernels
-  linuxPackages_grsec_stable_desktop    = grPackage grFlavors.linux_grsec_stable_desktop;
-  linuxPackages_grsec_stable_server     = grPackage grFlavors.linux_grsec_stable_server;
-  linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
-
-  # Testing kernels
-  linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
-  linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
-  linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
