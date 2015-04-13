@@ -62,10 +62,10 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
-  # propagate python to active setup-hook in nix-shell
-  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python ];
+  # propagate python/setuptools to active setup-hook in nix-shell
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python setuptools ];
 
-  pythonPath = [ setuptools ] ++ pythonPath;
+  pythonPath = pythonPath;
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
