@@ -634,6 +634,8 @@ let
 
   bashmount = callPackage ../tools/filesystems/bashmount {};
 
+  bastet = callPackage ../games/bastet {};
+
   bc = callPackage ../tools/misc/bc { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
