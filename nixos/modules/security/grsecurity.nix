@@ -112,9 +112,6 @@ in
             <literal>kernel.grsecurity.grsec_lock</literal> to
             non-zero as soon as all sysctl options are set. *THIS IS
             EXTREMELY IMPORTANT*!
-
-            If disabled, this also turns off the
-            <literal>systemd-sysctl</literal> service.
           '';
         };
 
@@ -229,11 +226,8 @@ in
             kernel 3.19) to continue.
           '';
         }
-        { assertion = (cfg.stable -> !cfg.testing) || (cfg.testing -> !cfg.stable);
-          message   = ''
-            You must select either the stable or testing patch, not
-            both.
-          '';
+        { assertion = !(cfg.stable && cfg.testing);
+          message   = "Select either one of the stable or testing patch";
         }
         { assertion = (cfg.config.restrictProc -> !cfg.config.restrictProcWithGroup) ||
                       (cfg.config.restrictProcWithGroup -> !cfg.config.restrictProc);
