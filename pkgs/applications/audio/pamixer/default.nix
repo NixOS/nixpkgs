@@ -1,20 +1,19 @@
-{ stdenv, fetchgit, pulseaudio, boost }:
+{ stdenv, fetchurl, unzip, pulseaudio, boost }:
 
 let
-  tag = "1.1";
+  tag = "1.2.1";
 in
 
 stdenv.mkDerivation rec {
 
   name = "pamixer-${tag}";
 
-  src = fetchgit {
-    url = git://github.com/cdemoulins/pamixer;
-    rev = "refs/tags/${tag}";
-    sha256 = "03r0sbfj85wp6yxa87pjg69ivmk0mxxa2nykr8gf2c607igmb034";
+  src = fetchurl {
+    url = "https://github.com/cdemoulins/pamixer/archive/1.2.1.zip";
+    sha256 = "2e66bb9810c853ae2d020d5e6eeb2b68cd43c6434b2298ccc423d9810f0cbd6a";
   };
 
-  buildInputs = [ pulseaudio boost ];
+  buildInputs = [ unzip pulseaudio boost ];
 
   installPhase = ''
     mkdir -p $out/bin
