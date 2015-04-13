@@ -731,6 +731,9 @@ self: super: {
   # Tries to run GUI in tests
   leksah = dontCheck super.leksah;
 
+  # Patch to consider NIX_GHC just like xmonad does
+  dyre = appendPatch super.dyre ./dyre-nix.patch;
+
 } // {
 
   # Not on Hackage.
