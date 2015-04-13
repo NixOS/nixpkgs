@@ -16,34 +16,34 @@ let
   '';
 
   moodleConfig = pkgs.writeText "config.php"
-    ''<?php
-unset($CFG);
-global $CFG;
-$CFG = new stdClass();
-$CFG->dbtype    = '${config.dbType}';
-$CFG->dblibrary = 'native';
-$CFG->dbhost    = '${config.dbHost}';
-$CFG->dbname    = '${config.dbName}';
-$CFG->dbuser    = '${config.dbUser}';
-$CFG->dbpass    = '${config.dbPassword}';
-$CFG->prefix    = '${config.dbPrefix}';
-$CFG->dboptions = array(
-    'dbpersist' => false,
-    'dbsocket'  => false,
-    'dbport'    => "${config.dbPort}",
-);
-$CFG->wwwroot   = '${config.wwwRoot}';
-$CFG->dataroot  = '${config.dataRoot}';
-$CFG->directorypermissions = 02777;
-$CFG->admin = 'admin';
-${optionalString (config.debug.noEmailEver == true) ''
-$CFG->noemailever = true;
-''}
+    ''
+      <?php
+      unset($CFG);
+      global $CFG;
+      $CFG = new stdClass();
+      $CFG->dbtype    = '${config.dbType}';
+      $CFG->dblibrary = 'native';
+      $CFG->dbhost    = '${config.dbHost}';
+      $CFG->dbname    = '${config.dbName}';
+      $CFG->dbuser    = '${config.dbUser}';
+      $CFG->dbpass    = '${config.dbPassword}';
+      $CFG->prefix    = '${config.dbPrefix}';
+      $CFG->dboptions = array(
+          'dbpersist' => false,
+          'dbsocket'  => false,
+          'dbport'    => "${config.dbPort}",
+      );
+      $CFG->wwwroot   = '${config.wwwRoot}';
+      $CFG->dataroot  = '${config.dataRoot}';
+      $CFG->directorypermissions = 02777;
+      $CFG->admin = 'admin';
+      ${optionalString (config.debug.noEmailEver == true) ''
+        $CFG->noemailever = true;
+      ''}
 
-${config.extraConfig}
-require_once(dirname(__FILE__) . '/lib/setup.php'); // Do not edit
+      ${config.extraConfig}
+      require_once(dirname(__FILE__) . '/lib/setup.php'); // Do not edit
     '';
-
   # Unpack Moodle and put the config file in its root directory.
   moodleRoot = pkgs.stdenv.mkDerivation rec {
     name= "moodle-2.8.5";
