@@ -93,9 +93,17 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
 fi
 
 
-# If ‘--upgrade’ is given, run ‘nix-channel --update’.
+# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
 if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
-    nix-channel --update
+    nix-channel --update nixos
+
+    # If there are other channels that contain a file called
+    # ".update-on-nixos-rebuild", update them as well.
+    for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
+        if [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+            nix-channel --update "$(basename "$channelpath")"
+        fi
+    done
 fi
 
 # Make sure that we use the Nix package we depend on, not something
