@@ -276,22 +276,21 @@ in
 #     };
 #   };
 
-    system.activationScripts.grsec =
-      ''
-        mkdir -p /etc/grsec
-        if [ ! -f /etc/grsec/learn_config ]; then
-          cp ${pkgs.gradm}/etc/grsec/learn_config /etc/grsec
-        fi
-        if [ ! -f /etc/grsec/policy ]; then
-          cp ${pkgs.gradm}/etc/grsec/policy /etc/grsec
-        fi
-        chmod -R 0600 /etc/grsec
-      '';
+    system.activationScripts = lib.optionalAttrs (!cfg.config.disableRBAC) { grsec = ''
+      mkdir -p /etc/grsec
+      if [ ! -f /etc/grsec/learn_config ]; then
+        cp ${pkgs.gradm}/etc/grsec/learn_config /etc/grsec
+      fi
+      if [ ! -f /etc/grsec/policy ]; then
+        cp ${pkgs.gradm}/etc/grsec/policy /etc/grsec
+      fi
+      chmod -R 0600 /etc/grsec
+    ''; };
 
     # Enable AppArmor, gradm udev rules, and utilities
     security.apparmor.enable   = true;
     boot.kernelPackages        = customGrsecPkg;
-    services.udev.packages     = [ pkgs.gradm ];
-    environment.systemPackages = [ pkgs.gradm pkgs.paxctl pkgs.pax-utils ];
+    services.udev.packages     = lib.optional (!cfg.config.disableRBAC) pkgs.gradm;
+    environment.systemPackages = [ pkgs.paxctl pkgs.pax-utils ] ++ lib.optional (!cfg.config.disableRBAC) pkgs.gradm;
   };
 }
