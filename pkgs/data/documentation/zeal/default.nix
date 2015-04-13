@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1057py3j2flzxyiks031s0mwm9h82v033iqn5cq8sycmrb3ihj2s";
   };
 
-  buildInputs = [ pkgconfig qt5 libarchive ];
+  buildInputs = [ pkgconfig qt5.base qt5.webkit libarchive ];
 
   patchPhase = ''
     substituteInPlace src/main.cpp \

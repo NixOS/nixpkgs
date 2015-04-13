@@ -53,8 +53,6 @@ let
         GTK3 = gtk3;
         Libinput = libinput;
         LibSSH = libssh;
-        ModemManager = modemmanager;
-        NetworkManager = networkmanager;
         PulseAudio = pulseaudio;
         Taglib = taglib;
         USB = libusb;
@@ -89,7 +87,7 @@ let
         name = "breeze-qt5-" + (builtins.parseDrvName super.breeze.name).version;
         buildInputs = with kf5; with plasma5;
           [
-            kcompletion kconfig kconfigwidgets kcoreaddons kdecoration
+            kcompletion kconfig kconfigwidgets kcoreaddons kdecoration kguiaddons
             frameworkintegration ki18n kwindowsystem qt5.base qt5.x11extras
           ];
         nativeBuildInputs = [ cmake kf5.extra-cmake-modules pkgconfig ];
@@ -163,5 +161,6 @@ in
     startkde = pkgs.callPackage ./startkde {
       inherit (kf5) kconfig kinit kservice;
       inherit (plasma5) plasma-desktop plasma-workspace;
+      inherit qt5;
     };
   }

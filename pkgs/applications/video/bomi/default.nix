@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-                [ libX11 libxcb qt5 mesa
+                [ libX11 libxcb mesa
+                  qt5.base qt5.quick1 qt5.x11extras
                   ffmpeg
                   libchardet
                   mpg123

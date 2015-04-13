@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  buildInputs = [ cmake boost scons qt5 openssl python pcre bzip2 ];
+  buildInputs = [ cmake boost scons qt5.base openssl python pcre bzip2 ];
 
   meta = {
     homepage = "http://robomongo.org/";

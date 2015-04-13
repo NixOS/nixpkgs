@@ -63,7 +63,7 @@ fi
 # * Then ksmserver is started which takes control of the rest of the startup sequence
 
 # We need to create config folder so we can write startupconfigkeys
-configDir=$(@qt5@/bin/qtpaths --writable-path GenericConfigLocation)
+configDir=$(@qt5tools@/bin/qtpaths --writable-path GenericConfigLocation)
 mkdir -p "$configDir"
 
 # This is basically setting defaults so we can use them with kstartupconfig5
@@ -133,7 +133,7 @@ unset DESKTOP_LOCKED # Don't want it in the environment
 if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
     eval `@dbus_tools@/bin/dbus-launch --sh-syntax --exit-with-session`
 fi
-if @qt5@/bin/qdbus >/dev/null 2>/dev/null; then
+if @qt5tools@/bin/qdbus >/dev/null 2>/dev/null; then
     : # ok
 else
     echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
@@ -170,7 +170,7 @@ fi
 # For anything else (that doesn't set env vars, or that needs a window manager),
 # better use the Autostart folder.
 
-scriptpath=$(@qt5@/bin/qtpaths --paths GenericConfigLocation | tr ':' '\n' | @gnused@/bin/sed 's,$,/plasma-workspace,g')
+scriptpath=$(@qt5tools@/bin/qtpaths --paths GenericConfigLocation | tr ':' '\n' | @gnused@/bin/sed 's,$,/plasma-workspace,g')
 
 # Add /env/ to the directory to locate the scripts to be sourced
 for prefix in `echo $scriptpath`; do
@@ -180,7 +180,7 @@ for prefix in `echo $scriptpath`; do
 done
 
 # Set the path for Qt plugins provided by KDE
-QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`@qt5@/bin/qtpaths --plugin-dir`
+QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`@qt5tools@/bin/qtpaths --plugin-dir`
 # TODO: Do we really need this?
 QT_PLUGIN_PATH=$QT_PLUGIN_PATH:$kdehome/lib/kde5/plugins/
 export QT_PLUGIN_PATH
@@ -336,13 +336,13 @@ if test x"$wait_drkonqi"x = x"true"x ; then
     # wait for remaining drkonqi instances with timeout (in seconds)
     wait_drkonqi_timeout=`@kconfig@/bin/kreadconfig5 --file startkderc --group WaitForDrKonqi --key Timeout --default 900`
     wait_drkonqi_counter=0
-    while @qt5@/bin/qdbus | @gnugrep@/bin/grep "^[^w]*org.kde.drkonqi" > /dev/null ; do
+    while @qt5tools@/bin/qdbus | @gnugrep@/bin/grep "^[^w]*org.kde.drkonqi" > /dev/null ; do
         sleep 5
         wait_drkonqi_counter=$((wait_drkonqi_counter+5))
         if test "$wait_drkonqi_counter" -ge "$wait_drkonqi_timeout" ; then
             # ask remaining drkonqis to die in a graceful way
-            @qt5@/bin/qdbus | @gnugrep@/bin/grep 'org.kde.drkonqi-' | while read address ; do
-                @qt5@/bin/qdbus "$address" "/MainApplication" "quit"
+            @qt5tools@/bin/qdbus | @gnugrep@/bin/grep 'org.kde.drkonqi-' | while read address ; do
+                @qt5tools@/bin/qdbus "$address" "/MainApplication" "quit"
             done
             break
         fi

@@ -1375,9 +1375,7 @@ let
 
   ftop = callPackage ../os-specific/linux/ftop { };
 
-  fuppes = callPackage ../tools/networking/fuppes {
-    ffmpeg = ffmpeg_0_5;
-  };
+  fuppes = callPackage ../tools/networking/fuppes { };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
@@ -4858,7 +4856,7 @@ let
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
-  automake = automake114x;
+  automake = automake115x;
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
@@ -4869,6 +4867,8 @@ let
   automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
   automake114x = callPackage ../development/tools/misc/automake/automake-1.14.x.nix { };
+
+  automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
@@ -4978,12 +4978,6 @@ let
     wantPS = stdenv.isDarwin;
     ps     = if stdenv.isDarwin then darwin.ps else null;
   };
-
-  cmake-3_2 = callPackage ../development/tools/build-managers/cmake/3.2.nix {
-    jsoncpp = jsoncpp-1_6;
-  };
-  cmake-3_0 = callPackage ../development/tools/build-managers/cmake/3.0.nix { };
-  cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
@@ -5683,18 +5677,34 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg_0_5 = callPackage ../development/libraries/ffmpeg/0.5.nix { };
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
   ffmpeg_0_11 = callPackage ../development/libraries/ffmpeg/0.11.nix { };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
   ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
-  ffmpeg_2_5 = callPackage ../development/libraries/ffmpeg/2.5.nix { };
   ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
   # Aliases
   ffmpeg_0 = ffmpeg_0_11;
   ffmpeg_1 = ffmpeg_1_2;
-  ffmpeg_2 = ffmpeg_2_5;
+  ffmpeg_2 = ffmpeg_2_6;
   ffmpeg = ffmpeg_2;
+
+  ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
+    # The following need to be fixed on Darwin
+    frei0r = if stdenv.isDarwin then null else frei0r;
+    game-music-emu = if stdenv.isDarwin then null else game-music-emu;
+    gsm = if stdenv.isDarwin then null else gsm;
+    jack2 = if stdenv.isDarwin then null else jack2;
+    libmodplug = if stdenv.isDarwin then null else libmodplug;
+    libssh = if stdenv.isDarwin then null else libssh;
+    libvpx = if stdenv.isDarwin then null else libvpx;
+    openal = if stdenv.isDarwin then null else openal;
+    openjpeg_1 = if stdenv.isDarwin then null else openjpeg_1;
+    pulseaudio = if stdenv.isDarwin then null else pulseaudio;
+    samba = if stdenv.isDarwin then null else samba;
+    vid-stab = if stdenv.isDarwin then null else vid-stab;
+    x265 = if stdenv.isDarwin then null else x265;
+    xavs = if stdenv.isDarwin then null else xavs;
+  };
 
   ffms = callPackage ../development/libraries/ffms { };
 
@@ -5778,11 +5788,11 @@ let
 
   getdata = callPackage ../development/libraries/getdata { };
 
-  gettext = gettext_0_18;
+  gettext = gettext_0_19;
 
   gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
-  gettext_0_18 = callPackage ../development/libraries/gettext { };
-  gettext_0_19 = callPackage ../development/libraries/gettext/0.19.nix { };
+  gettext_0_18 = callPackage ../development/libraries/gettext/0.18.nix { };
+  gettext_0_19 = callPackage ../development/libraries/gettext { };
 
   gd = callPackage ../development/libraries/gd { };
 
@@ -5794,7 +5804,7 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
-  libgit2 = callPackage ../development/libraries/git2 { cmake = cmake-3_2; };
+  libgit2 = callPackage ../development/libraries/git2 { };
 
   glew = callPackage ../development/libraries/glew { };
 
@@ -6153,7 +6163,6 @@ let
   json_c = callPackage ../development/libraries/json-c { };
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
-  jsoncpp-1_6 = callPackage ../development/libraries/jsoncpp/1.6.nix { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -6168,10 +6177,9 @@ let
     automake = automake111x;
   };
 
-  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 {
-    qt5 = qt54;
-  });
-  kf5_latest = kf57;
+  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 { });
+  kf59 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.9 { });
+  kf5_latest = kf59;
   kf5_stable = kf57;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
@@ -6280,6 +6288,8 @@ let
 
   libchop = callPackage ../development/libraries/libchop { };
 
+  libclc = callPackage ../development/libraries/libclc { };
+
   libcli = callPackage ../development/libraries/libcli { };
 
   libcm = callPackage ../development/libraries/libcm { };
@@ -6312,9 +6322,7 @@ let
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
-  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix {
-    qt5 = qt54;
-  };
+  libdbusmenu_qt5 = callPackage ../development/libraries/libdbusmenu-qt/qt5.nix { };
 
   libdc1394 = callPackage ../development/libraries/libdc1394 { };
 
@@ -6681,6 +6689,8 @@ let
 
   liboil = callPackage ../development/libraries/liboil { };
 
+  libomxil-bellagio = callPackage ../development/libraries/libomxil-bellagio { };
+
   liboop = callPackage ../development/libraries/liboop { };
 
   libopus = callPackage ../development/libraries/libopus { };
@@ -6983,7 +6993,8 @@ let
     # makes it slower, but during runtime we link against just mesa_drivers
     # through /run/opengl-driver*, which is overriden according to config.grsecurity
     grsecEnabled = true;
-    llvm = llvm_35;
+    libva = libva.override { mesa = null; };
+    llvmPackages = llvmPackages_36;
   });
   mesa_glu =  mesaDarwinOr (callPackage ../development/libraries/mesa-glu { });
   mesa_drivers = mesaDarwinOr (
@@ -7223,16 +7234,11 @@ let
 
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt4 {};
 
-  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 {
-    qt5 = qt54;
-  };
+  phonon_qt5 = callPackage ../development/libraries/phonon/qt5 { };
 
-  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 {
-    qt5 = qt54;
-  };
-  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 {
-    qt5 = qt54;
-  };
+  phonon_qt5_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 { };
+
+  phonon_qt5_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -7260,7 +7266,7 @@ let
 
   polkit_qt5 = callPackage ../development/libraries/polkit-qt-1 {
     withQt5 = true;
-    qt5 = qt54;
+    inherit qt5;
   };
 
   policykit = callPackage ../development/libraries/policykit { };
@@ -7274,8 +7280,8 @@ let
   };
 
   poppler_qt5 = poppler.override {
-    qt5 = qt54;
     qt5Support = true;
+    inherit qt5;
     suffix = "qt5";
   };
 
@@ -7349,7 +7355,7 @@ let
     qtLib = qt48Full;
   };
 
-  qt5 = callPackage ../development/libraries/qt-5/5.3 {
+  qt53 = callPackage ../development/libraries/qt-5/5.3 {
     mesa = mesa_noglu;
     cups = if stdenv.isLinux then cups else null;
     # GNOME dependencies are not used unless gtkStyle == true
@@ -7357,9 +7363,11 @@ let
     bison = bison2; # error: too few arguments to function 'int yylex(...
   };
 
-  qt54 = callPackage ../development/libraries/qt-5/5.4 {};
+  qt54 = recurseIntoAttrs (callPackage ../development/libraries/qt-5/5.4 {});
 
-  qt5Full = appendToName "full" (qt5.override {
+  qt5 = qt54;
+
+  qt5Full = appendToName "full" (qt53.override {
     buildDocs = true;
     buildExamples = true;
     buildTests = true;
@@ -11052,14 +11060,14 @@ let
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
     kf5 = kf57;
-    qt5 = qt54;
-    pkgs = pkgs // {
-      cmake = cmake-3_2;
-    };
+    kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
+  });
+  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
+    kf5 = kf59;
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_stable = kdeApps_14_12;
-  kdeApps_latest = kdeApps_14_12;
+  kdeApps_latest = kdeApps_15_04;
 
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
@@ -11642,7 +11650,7 @@ let
     client = false;
     withKDE = false;
     useQt5 = true;
-    qt = qt54;
+    qt = qt5;
     dconf = gnome3.dconf;
     tag = "-qt5";
   };
@@ -11823,9 +11831,7 @@ let
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
-  dropbox = callPackage ../applications/networking/dropbox {
-    qt5 = qt54;
-  };
+  dropbox = callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
@@ -11846,9 +11852,7 @@ let
 
   printrun = callPackage ../applications/misc/printrun { };
 
-  sddm = callPackage ../applications/display-managers/sddm {
-    qt5 = qt54;
-  };
+  sddm = callPackage ../applications/display-managers/sddm { };
 
   slim = callPackage ../applications/display-managers/slim {
     libpng = libpng12;
@@ -12214,8 +12218,8 @@ let
 
   vlc_qt5 = vlc.override {
     qt4 = null;
-    qt5 = qt54;
     withQt5 = true;
+    inherit qt5;
   };
 
   vmpk = callPackage ../applications/audio/vmpk { };
@@ -12912,7 +12916,7 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
-    ffmpeg = ffmpeg_0_5;
+    ffmpeg = ffmpeg_0_10;
     lua = lua5;
   };
 
@@ -13207,11 +13211,11 @@ let
           kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
         };
 
-      callPackageOrig = newScope (extra // { cmake = cmake-3_2; });
+      callPackageOrig = newScope extra;
 
       makePackages = extra:
         let
-          callPackage = newScope (extra // { cmake = cmake-3_2; } // self);
+          callPackage = newScope (extra // self);
           kde4 = callPackageOrig dir { inherit callPackage callPackageOrig; };
           self =
             kde4
@@ -13259,8 +13263,7 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
-    qt5 = qt54;
-    kf5 = kf57;
+    kf5 = kf59;
   });
   plasma5_latest = plasma52;
   plasma5_stable = plasma52;

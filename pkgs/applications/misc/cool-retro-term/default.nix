@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    sed -i -e '/qmltermwidget/d' cool-retro-term.pro 
+    sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ makeWrapper qt5 qmltermwidget ];
+  buildInputs = [ makeWrapper qt5.base qt5.quick1 qmltermwidget ];
 
   configurePhase = "qmake PREFIX=$out";
 

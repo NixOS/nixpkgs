@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0sqvpfkzamxdr87anzakf9dhkfh15lfmm5bsqajk02h1mxh3zivr";
   };
 
-  buildInputs = [ gmp ];
+  # mpfr.h requires gmp.h
+  propagatedBuildInputs = [ gmp ];
 
   CFLAGS = "-I${gmp}/include";
   LDFLAGS = if stdenv.isDarwin then "-L${gmp}/lib" else null;

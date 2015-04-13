@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qt5 gsl getdata netcdf muparser matio ];
+  buildInputs = [ qt5.base gsl getdata netcdf muparser matio ];
 
   cmakeFlags = "-Dkst_qt5=1 -Dkst_release=1";
 

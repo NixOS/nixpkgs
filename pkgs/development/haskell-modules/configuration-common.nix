@@ -633,7 +633,7 @@ self: super: {
   vivid = markBroken super.vivid;
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck super.hsqml;
+  hsqml = dontCheck (super.hsqml.override { qt5 = pkgs.qt53; });
 
   # https://github.com/lookunder/RedmineHs/issues/4
   Redmine = markBroken super.Redmine;

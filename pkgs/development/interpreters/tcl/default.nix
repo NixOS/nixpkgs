@@ -1,18 +1,18 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "tcl-8.5.15";
+  name = "tcl-8.6.4";
 
   src = fetchurl {
-    url = mirror://sourceforge/tcl/tcl8.5.15-src.tar.gz;
-    sha256 = "0kl8lbfwy4v4q4461wjmva95h0pgiprykislpw4nnpkrc7jalkpj";
+    url = mirror://sourceforge/tcl/tcl8.6.4-src.tar.gz;
+    sha256 = "13cwa4bc85ylf5gfj9vk182lvgy60qni3f7gbxghq78wk16djvly";
   };
 
   preConfigure = "cd unix";
 
   postInstall = ''
     make install-private-headers
-    ln -s $out/bin/tclsh8.5 $out/bin/tclsh
+    ln -s $out/bin/tclsh8.6 $out/bin/tclsh
   '';
   
   meta = {

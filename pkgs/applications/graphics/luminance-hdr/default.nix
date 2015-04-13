@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
-  buildInputs = [ qt5 boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr ];
+  buildInputs =
+    [
+      qt5.base qt5.declarative qt5.tools qt5.webkit
+      boost exiv2 fftwFloat gsl ilmbase lcms2 libraw libtiff openexr
+    ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 

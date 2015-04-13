@@ -12,7 +12,7 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio
+      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base pulseaudio
     ];
 
 in
