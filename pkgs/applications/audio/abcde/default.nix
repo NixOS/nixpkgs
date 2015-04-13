@@ -2,13 +2,13 @@
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
-let version = "2.5.4";
+let version = "2.6";
 in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
       url = "mirror://debian/pool/main/a/abcde/abcde_${version}.orig.tar.gz";
-      sha256 = "14g5lsgh53hza9848351kwpygc0yqpvvzp3s923aja77f2wpkdl5";
+      sha256 = "0y2cg233n2hixs0ji76dggpzgf52v4c4mnpwiai889ql2piafgk8";
     };
 
     # FIXME: This package does not support MP3 encoding (only Ogg),
