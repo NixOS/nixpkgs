@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, gettext, libidn
+{ stdenv, fetchurl, gettext, libidn, pkgconfig
 , perl, perlPackages, LWP, python3
 , libiconv, gnutls ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.16";
+  name = "wget-1.16.3";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.xz";
-    sha256 = "1rxhr3jmgbwryzl51di4avqxw9m9j1z2aak8q1npns0p184xsqcj";
+    sha256 = "0dzv5xf9qxc2bp4cyifmaghh3h464wbm73xiwcrvckf1ynqbgxv7";
   };
 
   preConfigure = stdenv.lib.optionalString doCheck
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ libidn libiconv ]
+  buildInputs = [ libidn libiconv pkgconfig ]
     ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
     ++ stdenv.lib.optional (gnutls != null) gnutls
     ++ stdenv.lib.optional stdenv.isDarwin perl;
