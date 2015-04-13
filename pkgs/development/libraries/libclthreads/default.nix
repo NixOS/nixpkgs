@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr/local@$out@" -i Makefile
     sed -e "s@/usr/bin/install@install@" -i Makefile
     sed -e "s@/sbin/ldconfig@ldconfig@" -i Makefile
-    sed -e "s@lib$(SUFFIX)@lib@" -i Makefile
+    sed -e "s@SUFFIX :=.*@SUFFIX =@" -i Makefile
   '';
 
   meta = {

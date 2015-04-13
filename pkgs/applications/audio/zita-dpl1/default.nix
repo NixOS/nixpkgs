@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -e "s@#include <clxclient.h>@#include <${libclxclient}/include>@" -i rotary.h
     sed -e "s@#include <clxclient.h>@#include <${libclxclient}/include>@" -i mainwin.h
     sed -e "s@#include <clxclient.h>@#include <${libclxclient}/include>@" -i png2img.*
-    sed -e "s@lib$(SUFFIX)@lib@" -i Makefile
+    sed -e "s@SUFFIX :=.*@SUFFIX =@" -i Makefile
   '';
 
   preBuild = ''
