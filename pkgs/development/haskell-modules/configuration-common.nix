@@ -289,7 +289,6 @@ self: super: {
   amqp-conduit = dontCheck super.amqp-conduit;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
-  directory_1_2_2_0 = dontCheck super.directory_1_2_2_0; # https://github.com/haskell/directory/issues/24
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
