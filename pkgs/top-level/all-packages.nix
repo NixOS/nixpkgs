@@ -5920,6 +5920,8 @@ let
     inherit (gnome) gtkdoc;
   };
 
+  qt-mobility = callPackage ../development/libraries/qt-mobility {};
+
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
   qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost156;};
