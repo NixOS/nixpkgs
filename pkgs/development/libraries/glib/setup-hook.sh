@@ -10,8 +10,15 @@ make_glib_find_gsettings_schemas() {
 
 envHooks+=(make_glib_find_gsettings_schemas)
 
-glibPreFixupPhase() {
-    addToSearchPath GSETTINGS_SCHEMAS_PATH "$out/share/gsettings-schemas/$name"
+glibFixupPhase() {
+    # Move gschemas in case the install flag didn't help
+    if [ -d "$prefix/share/glib-2.0/schemas" ]; then
+        mkdir -p "$prefix/share/gsettings-schemas/$name/glib-2.0"
+        mv "$prefix/share/glib-2.0/schemas" "$prefix/share/gsettings-schemas/$name/glib-2.0/"
+    fi
+
+    addToSearchPath GSETTINGS_SCHEMAS_PATH "$prefix/share/gsettings-schemas/$name"
 }
 
-preFixupPhases="$preFixupPhases glibPreFixupPhase"
+fixupOutputHooks+=(glibFixupPhase)
+
