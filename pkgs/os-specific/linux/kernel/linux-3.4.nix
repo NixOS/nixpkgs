@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ... } @ args:
+{ stdenv, fetchurl, apparmor-kernel-patches, ... } @ args:
 
 import ./generic.nix (args // rec {
   version = "3.4.106";
@@ -10,15 +10,16 @@ import ./generic.nix (args // rec {
   };
 
   kernelPatches = args.kernelPatches ++
-    [ { name = "0001-UBUNTU-SAUCE-AppArmor-Add-profile-introspection-file";
-        patch = ./apparmor-patches/3.4/0001-UBUNTU-SAUCE-AppArmor-Add-profile-introspection-file.patch;
-      }
-      { name = "0002-UBUNTU-SAUCE-AppArmor-basic-networking-rules";
-        patch = ./apparmor-patches/3.4/0002-UBUNTU-SAUCE-AppArmor-basic-networking-rules.patch;
-      }
-      { name = "0003-UBUNTU-SAUCE-apparmor-Add-the-ability-to-mediate-mou";
-        patch = ./apparmor-patches/3.4/0003-UBUNTU-SAUCE-apparmor-Add-the-ability-to-mediate-mou.patch;
-      }];
+    [ rec { name  = "0001-UBUNTU-SAUCE-AppArmor-Add-profile-introspection-file";
+            patch = "${apparmor-kernel-patches}/${extraMeta.branch}/${name}.patch";
+          }
+      rec { name  = "0002-UBUNTU-SAUCE-AppArmor-basic-networking-rules";
+            patch = "${apparmor-kernel-patches}/${extraMeta.branch}/${name}.patch";
+          }
+      rec { name  = "0003-UBUNTU-SAUCE-apparmor-Add-the-ability-to-mediate-mou";
+            patch = "${apparmor-kernel-patches}/${extraMeta.branch}/${name}.patch";
+          }
+    ];
 
   features.iwlwifi = true;
   features.efiBootStub = true;
