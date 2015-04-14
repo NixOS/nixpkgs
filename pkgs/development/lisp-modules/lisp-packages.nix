@@ -52,7 +52,7 @@ let lispPackages = rec {
     description = "A collection of portable public domain utilities";
     deps = [];
     src = pkgs.fetchgit {
-      url = "git://common-lisp.net/projects/alexandria/alexandria.git";
+      url = "https://gitlab.common-lisp.net/alexandria/alexandria.git";
       sha256 = "1d981a243f9d4d3c9fd86cc47698050507ff615b87b9a710449abdb4234e501b";
       rev = ''2b1eb4067fb34bc501e527de75d09166a8ba9ceb'';
     };
@@ -308,10 +308,10 @@ let lispPackages = rec {
     description = "A UTF-8 encoding library";
     deps = [];
     # Source type: darcs
-    src = pkgs.fetchdarcs {
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
       url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
       sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
   };
 
   cl-fuse-meta-fs = buildLispPackage rec {
