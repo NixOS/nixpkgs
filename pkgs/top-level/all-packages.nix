@@ -2645,6 +2645,10 @@ let
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
+  screencloud = callPackage ../applications/graphics/screencloud {
+    quazip = quazip.override { qt = qt4; };
+  };
+
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrolls = callPackage ../games/scrolls { };
