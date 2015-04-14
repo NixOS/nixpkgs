@@ -238,7 +238,7 @@ let lispPackages = rec {
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
 	export HOME=$PWD
 	build-with-lisp.sh sbcl \
-	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/:\2/g')" \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
 	  "$out/bin/query-fs" \
 	  "(query-fs:run-fs-with-cmdline-args)"
       '';
@@ -545,6 +545,19 @@ let lispPackages = rec {
       date = ''2014-11-15'';
       module = ''cl-smtp'';
       cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
+    };
+  };
+
+  md5 = buildLispPackage rec {
+    baseName = "md5";
+    version = "git-20150415";
+    description = "The MD5 Message-Digest Algorithm RFC 1321";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/pmai/md5'';
+      sha256 = "f64d7e36c54da649bb1d574b92cdb907291224fb3d8565b3708703a81820367b";
+      rev = ''9d6f82f7121c87fb7e3b314987ba93900d300dc6'';
     };
   };
 };
