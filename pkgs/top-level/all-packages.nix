@@ -7384,6 +7384,8 @@ let
 
   qwt6 = callPackage ../development/libraries/qwt/6.nix { };
 
+  qxt = callPackage ../development/libraries/qxt {};
+
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
