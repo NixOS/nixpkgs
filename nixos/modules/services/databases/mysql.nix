@@ -77,6 +77,14 @@ in
         description = "Location of the file which stores the PID of the MySQL server";
       };
 
+      enableSocketAccess = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to grant local processes access to the mysqld socket.
+        '';
+      };
+
       extraOptions = mkOption {
         default = "";
         example = ''
@@ -180,7 +188,8 @@ in
             chown -R ${cfg.user} ${cfg.pidDir}
 
             # Make the socket directory
-            mkdir -m 0700 -p /run/mysqld
+            mkdir -p /run/mysqld
+            chmod ${if cfg.enableSocketAccess then "0755" else "0700"} /run/mysqld
             chown -R ${cfg.user} /run/mysqld
           '';
 
