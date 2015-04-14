@@ -4,12 +4,6 @@ with lib;
 
 let
   cfg = config.security.grsecurity;
-
-  customGrsecPkg =
-    (import ../../../pkgs/build-support/grsecurity {
-      grsecOptions = cfg;
-      inherit pkgs lib;
-    }).grsecPackage;
 in
 {
   options = {
@@ -18,14 +12,24 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Enable grsecurity support. This enables advanced exploit
+          Enable grsecurity support system-wide. This enables advanced exploit
           hardening for the Linux kernel, and adds support for
           administrative Role-Based Acess Control (RBAC) via
           <literal>gradm</literal>. It also includes traditional
-          utilities for PaX.
+          utilities for PaX, and more.
         '';
       };
 
+      kernelPackages = mkOption {
+        type = types.package;
+        description = ''
+          The kernel package set to use. In order to
+          understand how to set this option appropriately, please see
+          the NixOS wiki: TODO FIXME.
+        '';
+      };
+
+      /*
       stable = mkOption {
         type = types.bool;
         default = false;
@@ -197,7 +201,7 @@ in
           description = ''
             If true, then set <literal>GRKERN_NO_RBAC
             y</literal>. This disables the
-            <literal>/dev/grsec</literal> device, which in turn
+             <literal>/dev/grsec</literal> device, which in turn
             disables the RBAC system (and <literal>gradm</literal>).
           '';
         };
@@ -214,10 +218,12 @@ in
           description = "Extra kernel configuration parameters.";
         };
       };
+      */
     };
   };
 
   config = mkIf cfg.enable {
+    /*
     assertions =
       [ { assertion = cfg.stable || cfg.testing;
           message   = ''
@@ -246,6 +252,7 @@ in
          message   = "grsecurity configured for virtualisation but no virtualisation software specified";
         }
       ];
+    */
 
     systemd.services.grsec-lock = mkIf cfg.config.sysctl {
       description     = "grsecurity sysctl-lock Service";
@@ -287,10 +294,9 @@ in
       chmod -R 0600 /etc/grsec
     ''; };
 
-    # Enable AppArmor, gradm udev rules, and utilities
-    security.apparmor.enable   = true;
-    boot.kernelPackages        = customGrsecPkg;
-    services.udev.packages     = lib.optional (!cfg.config.disableRBAC) pkgs.gradm;
-    environment.systemPackages = [ pkgs.paxctl pkgs.pax-utils ] ++ lib.optional (!cfg.config.disableRBAC) pkgs.gradm;
+    # Enable gradm udev rules and utilities
+    boot.kernelPackages        = cfg.kernelPackages;
+    services.udev.packages     = [ pkgs.gradm ];
+    environment.systemPackages = [ pkgs.paxctl pkgs.pax-utils pkgs.gradm ];
   };
 }
