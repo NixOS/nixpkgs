@@ -20,8 +20,8 @@ assert enableEchonest    -> pythonPackages.pyechonest     != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
 assert enableLastfm      -> pythonPackages.pylast         != null;
 assert enableMpd         -> pythonPackages.mpd            != null;
-assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableReplaygain  -> pythonPackages.audiotools     != null;
+assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
 
 with stdenv.lib;
@@ -42,11 +42,11 @@ let
   };
 
   pluginsWithoutDeps = [
-    "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "embedart" "freedesktop"
-    "fromfilename" "filefilter" "ftintitle" "fuzzy" "ihate" "importadded" "importfeeds"
-    "info" "inline" "keyfinder" "lyrics" "mbcollection" "mbsync" "missing"
-    "permissions" "play" "plexupdate" "random" "rewrite" "scrub" "smartplaylist"
-    "spotify" "the" "types" "zero"
+    "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "embedart"
+    "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "ihate"
+    "importadded" "importfeeds" "info" "inline" "keyfinder" "lyrics"
+    "mbcollection" "mbsync" "missing" "permissions" "play" "plexupdate" "random"
+    "rewrite" "scrub" "smartplaylist" "spotify" "the" "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -85,8 +85,8 @@ in buildPythonPackage rec {
     ++ optional enableEchonest   pythonPackages.pyechonest
     ++ optional enableLastfm     pythonPackages.pylast
     ++ optional enableMpd        pythonPackages.mpd
-    ++ optional enableThumbnails pythonPackages.pyxdg
     ++ optional enableReplaygain pythonPackages.audiotools
+    ++ optional enableThumbnails pythonPackages.pyxdg
     ++ optional enableWeb        pythonPackages.flask;
 
   buildInputs = with pythonPackages; [
