@@ -14,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   name="ceph-${version}";
-  version="0.94";
+  version="0.94.1";
 
   src = fetchgit {
     url = "git://github.com/ceph/ceph.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0xqfmfg34w8yngv2qg4kwbpv9xhc8rn9hzsrgpw68f5hrs3dfimz";
+    sha256 = "0rrl10vda4xv22al2c5ccd8v8drs26186dvkrxndvqz8p9999cjx";
   };
 
   patches = [
