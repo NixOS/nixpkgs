@@ -759,11 +759,11 @@ self: super: {
   # Not on Hackage.
   cabal2nix = self.mkDerivation {
     pname = "cabal2nix";
-    version = "20150318";
+    version = "20150414";
     src = pkgs.fetchgit {
       url = "http://github.com/NixOS/cabal2nix.git";
-      rev = "b56cc6de2c4900fb0d1dc3617591a2f536aca60d";
-      sha256 = "0pza9j3x1mfjqrzcqq6ndg0jiqx85mg0sw8n9fmq18fk5g4hzhis";
+      rev = "d08c2970e9c74948e81e7b926b64e5d7d1dd07b7";
+      sha256 = "1rqibfhvkvmfxj9k92brz87b4l40w8d7mq1s7zgfnrmay6h0956a";
       deepClone = true;
     };
     isLibrary = false;
@@ -771,12 +771,12 @@ self: super: {
     buildDepends = with self; [
       aeson base bytestring Cabal containers deepseq-generics directory
       filepath hackage-db lens monad-par monad-par-extras mtl pretty
-      prettyclass process regex-posix SHA split transformers utf8-string cartel
-    ];
+      process regex-posix SHA split transformers utf8-string cartel
+    ] ++ pkgs.lib.optional (pkgs.lib.versionOlder self.ghc.version "7.10") prettyclass;
     testDepends = with self; [
       aeson base bytestring Cabal containers deepseq deepseq-generics
       directory doctest filepath hackage-db hspec lens monad-par
-      monad-par-extras mtl pretty prettyclass process QuickCheck
+      monad-par-extras mtl pretty process QuickCheck
       regex-posix SHA split transformers utf8-string
     ];
     buildTools = [ pkgs.gitMinimal ];
