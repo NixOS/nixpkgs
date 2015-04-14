@@ -50,6 +50,32 @@ let
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
       substitutions.executable = "${python}/bin/${python.executable}";
+      substitutions.magicalSedExpression = let
+        # Looks weird? Of course, it's between single quoted shell strings.
+        # NOTE: Order DOES matter here, so single character quotes need to be
+        #       at the last position.
+        quoteVariants = [ "'\"'''\"'" "\"\"\"" "\"" "'\"'\"'" ]; # hey Vim: ''
+
+        mkStringSkipper = labelNum: quote: let
+          label = "q${toString labelNum}";
+          isSingle = elem quote [ "\"" "'\"'\"'" ];
+          endQuote = if isSingle then "[^\\\\]${quote}" else quote;
+        in ''
+          /^ *[a-z]?${quote}/ {
+            /${quote}${quote}|${quote}.*${endQuote}/{n;br}
+            :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
+          }
+        '';
+
+      in ''
+        1 {
+          /^#!/!b; :r
+          /\\$/{N;br}
+          /__future__|^ *(#.*)?$/{n;br}
+          ${concatImapStrings mkStringSkipper quoteVariants}
+          /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$i")'"'
+        }
+      '';
     }
    ../development/python-modules/generic/wrap.sh;
 
