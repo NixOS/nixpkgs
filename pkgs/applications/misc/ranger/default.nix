@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, python, fetchurl }:
 
-buildPythonPackage {
-  name = "ranger-1.6.1";
+buildPythonPackage rec {
+  name = "ranger-1.7.0";
 
   meta = {
     description = "File manager with minimalistic curses interface";
@@ -12,11 +12,9 @@ buildPythonPackage {
   };
 
   src = fetchurl {
-    url = "http://ranger.nongnu.org/ranger-1.6.1.tar.gz";
-    sha256 = "0pnvfwk2a1p35246fihm3fsr1m7r2njirbxm28ba276psajk1cnc";
+    url = "http://ranger.nongnu.org/${name}.tar.gz";
+    sha256 = "066lp1k2zcz2lnww2aj0m3fgn9g5ms67kxgclhgq66pxkjwgc4kx";
   };
-
-  doCheck = false;
 
   propagatedBuildInputs = with python.modules; [ curses ];
 }
