@@ -10318,6 +10318,8 @@ let
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
     withX = false;
+    withGTK2 = false;
+    withGTK3 = false;
   }));
 
   emacs24Macport_24_3 = lowPrio (callPackage ../applications/editors/emacs-24/macport-24.3.nix {
