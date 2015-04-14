@@ -36,11 +36,11 @@ let lispPackages = rec {
     version = "darcs-2014-11-01";
     description = "Iteration package for Common Lisp";
     deps = [];
-    src = pkgs.fetchdarcs {
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
       url = "http://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
       context = ./iterate.darcs-context;
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
     };
