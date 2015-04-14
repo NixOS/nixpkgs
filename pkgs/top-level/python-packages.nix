@@ -14,7 +14,7 @@ let
 
   callPackage = pkgs.newScope self;
 
-  buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic { });
+  buildPythonPackage = makeOverridable callPackage ../development/python-modules/generic { };
 
   # Unique python version identifier
   pythonName =
