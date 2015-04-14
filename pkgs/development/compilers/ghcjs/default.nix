@@ -39,7 +39,10 @@
 }:
 let
   version = "0.1.0";
-  libDir = "share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.version}/ghcjs";
+  ghcArch = if pkgs.stdenv.system == "i686-linux"
+    then "i386-linux"
+    else pkgs.stdenv.system;
+  libDir = "share/ghcjs/${ghcArch}-${version}-${ghc.version}/ghcjs";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
     rev = "8cd6144870470258fb037b3e04a0a2a98c2b6551"; # 7.10 branch
