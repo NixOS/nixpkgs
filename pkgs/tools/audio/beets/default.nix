@@ -164,8 +164,6 @@ in buildPythonPackage rec {
     runHook postInstallCheck
   '';
 
-  LANG = null;
-
   meta = {
     homepage = http://beets.radbox.org;
     description = "Music tagger and library organizer";
