@@ -249,10 +249,6 @@ self: super: {
     url = "https://github.com/cartazio/arithmoi/pull/3.patch";
     sha256 = "1rqs796sh81inqkg2vadskcjpp6q92j6k8zpn370990wndndzzmq";
   });
-  mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
-    url = "https://github.com/snoyberg/mono-traversable/pull/68.patch";
-    sha256 = "11hqf6hi3sc34wl0fn4rpigdf7wfklcjv6jwp8c3129yphg8687h";
-  });
   conduit-combinators = appendPatch super.conduit-combinators (pkgs.fetchpatch {
     url = "https://github.com/fpco/conduit-combinators/pull/16.patch";
     sha256 = "0jpwpi3shdn5rms3lcr4srajbhhfp5dbwy7pl23c9kmlil3d9mk3";
