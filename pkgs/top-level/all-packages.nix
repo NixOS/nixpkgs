@@ -5221,6 +5221,8 @@ let
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
+  piglit = callPackage ../development/tools/misc/piglit { };
+
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   /* Make pkgconfig always return a nativeDrv, never a proper crossDrv,
@@ -7719,6 +7721,8 @@ let
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
   };
+
+  waffle = callPackage ../development/libraries/waffle { };
 
   wavpack = callPackage ../development/libraries/wavpack { };
 

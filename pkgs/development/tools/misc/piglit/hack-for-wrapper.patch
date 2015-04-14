@@ -1,0 +1,13 @@
+diff --git a/piglit b/piglit
+index 5ae43e9..7360a99 100755
+--- a/piglit
++++ b/piglit
+@@ -89,7 +89,7 @@ def setup_module_search_path():
+     #       ${prefix}/${libdir}/${script_name}/framework -> Piglit framework module.
+     #
+     abs_bindir = abs_script_dir
+-    script_basename_noext = os.path.splitext(os.path.basename(__file__))[0]
++    script_basename_noext = 'piglit'
+     for libdir in ('lib64', 'lib32', 'lib'):
+         abs_libdir = path.normpath(path.join(abs_bindir, '..', libdir))
+         abs_data_dir = path.join(abs_libdir, script_basename_noext)
