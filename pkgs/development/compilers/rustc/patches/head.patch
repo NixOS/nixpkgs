@@ -15,7 +15,7 @@ index ca59b1c..65ee7bf 100755
  # do not fail if one of the above fails, as all we need is a working rustc!
  exit 0
 diff --git a/src/librustc_back/archive.rs b/src/librustc_back/archive.rs
-index ed44bf8..2b84627 100644
+index 9f5751c..c98828f 100644
 --- a/src/librustc_back/archive.rs
 +++ b/src/librustc_back/archive.rs
 @@ -57,7 +57,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
@@ -28,10 +28,10 @@ index ed44bf8..2b84627 100644
      let mut cmd = Command::new(ar);
  
 diff --git a/src/librustc_trans/back/link.rs b/src/librustc_trans/back/link.rs
-index 3087a8e..578448f 100644
+index ad77735..1764f71 100644
 --- a/src/librustc_trans/back/link.rs
 +++ b/src/librustc_trans/back/link.rs
-@@ -352,8 +352,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
+@@ -360,8 +360,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
  
  pub fn get_cc_prog(sess: &Session) -> String {
      match sess.opts.cg.linker {
@@ -41,3 +41,17 @@ index 3087a8e..578448f 100644
 +        None => "@ccPath@".to_string(),
      }
  }
+ 
+diff --git a/src/test/run-pass/issue-20797.rs b/src/test/run-pass/issue-20797.rs
+index 8b5e6f8..480ad79 100644
+--- a/src/test/run-pass/issue-20797.rs
++++ b/src/test/run-pass/issue-20797.rs
+@@ -97,7 +97,7 @@ impl<S: Strategy> Iterator for Subpaths<S> {
+ }
+ 
+ fn _foo() {
+-    let _walker: Subpaths<Recursive> = Subpaths::walk(&PathBuf::from("/home")).unwrap();
++    let _walker: Subpaths<Recursive> = Subpaths::walk(&PathBuf::from("/tmp")).unwrap();
+ }
+ 
+ fn main() {}
