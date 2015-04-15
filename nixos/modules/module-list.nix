@@ -149,6 +149,7 @@
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
   ./services/hardware/acpid.nix
+  ./services/hardware/actkbd.nix
   ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/freefall.nix

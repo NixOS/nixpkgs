@@ -33,6 +33,16 @@ in
         '';
       };
 
+      enableMediaKeys = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable volume and capture control with keyboard media keys.
+
+          Enabling this will turn on <option>services.actkbd</option>.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -79,6 +89,23 @@ in
           ExecStop = "${alsaUtils}/sbin/alsactl store --ignore";
         };
       };
+
+    services.actkbd = mkIf config.sound.enableMediaKeys {
+      enable = true;
+      bindings = [
+        # "Mute" media key
+        { keys = [ 113 ]; events = [ "key" ];       command = "${alsaUtils}/bin/amixer -q set Master toggle"; }
+
+        # "Lower Volume" media key
+        { keys = [ 114 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master 1- unmute"; }
+
+        # "Raise Volume" media key
+        { keys = [ 115 ]; events = [ "key" "rep" ]; command = "${alsaUtils}/bin/amixer -q set Master 1+ unmute"; }
+
+        # "Mic Mute" media key
+        { keys = [ 190 ]; events = [ "key" ];       command = "${alsaUtils}/bin/amixer -q set Capture toggle"; }
+      ];
+    };
 
   };
 
