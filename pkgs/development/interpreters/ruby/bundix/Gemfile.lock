@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/cstrahan/bundix.git
-  revision: e098b8c04087079c897aaf9542990e9fdd503bcf
-  ref: v1.0.2
+  revision: c879cf901ff8084b4c97aaacfb5ecbdb0f95cc03
+  ref: v1.0.3
   specs:
     bundix (1.0.2)
       thor (~> 0.19.1)
