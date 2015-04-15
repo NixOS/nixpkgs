@@ -3,22 +3,18 @@
 stdenv.mkDerivation rec {
   name = "lastpass-cli-${version}";
 
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "lastpass";
     repo = "lastpass-cli";
     rev = "v${version}";
-    sha256 = "1r06lifjc28sm88d6x3xwn76l9fjwjmd1wbmvr9j8rna889q0wl9";
+    sha256 = "0k2dbfizd6gwd4s8badm50qg2djrh22szd932l1a96mn79q8zb70";
   };
 
   buildInputs = [
     openssl curl libxml2 pkgconfig asciidoc docbook_xsl libxslt
   ];
-
-  prePatch = ''
-    substituteInPlace version.h --replace "0.3.0" "0.4.0"
-  '';
 
   makeFlags = "PREFIX=$(out)";
 
