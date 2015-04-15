@@ -68,9 +68,8 @@ in
       after = [ "network.target" ];
       serviceConfig = {
         User = config.users.extraUsers.ihaskell.name;
-        Group = config.users.extraUsers.ihaskell.name;
-        Restart = "always";
-        ExecStart = "${ihaskell}/bin/IHaskell notebook";
+        Group = config.users.extraGroups.ihaskell.name;
+        ExecStart = "${pkgs.stdenv.shell} -c \"cd $HOME;${ihaskell}/bin/ihaskell-notebook\"";
       };
     };
   };
