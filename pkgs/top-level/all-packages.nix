@@ -475,6 +475,8 @@ let
 
   actdiag = pythonPackages.actdiag;
 
+  actkbd = callPackage ../tools/system/actkbd { };
+
   adom = callPackage ../games/adom { };
 
   advancecomp = callPackage ../tools/compression/advancecomp {};
