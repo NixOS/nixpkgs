@@ -1,15 +1,28 @@
-{stdenv, fetchurl, x11, SDL}:
+{ stdenv, fetchurl
+, libX11, SDL }:
 
-stdenv.mkDerivation {
-  name = "atari++-1.46";
-#  builder = ./builder.sh;
+with stdenv.lib;
+stdenv.mkDerivation rec{
+  name = "atari++-${version}";
+  version = "1.73";
+
   src = fetchurl {
-    url = http://www.math.tu-berlin.de/~thor/atari++/download/atari++.tgz;
-    md5 = "0619ec6b63852233111aa0bd263c8ea2";
+    url = "http://www.xl-project.com/download/atari++_${version}.tar.gz";
+    sha256 = "1y5kwh08717jsa5agxrvxnggnwxq36irrid9rzfhca1nnvp9a45l";
   };
-#  rom = fetchurl {
-#    url = mirror://sourceforge/atari800/xf25.zip;
-#    md5 = "4dc3b6b4313e9596c4d474785a37b94d";
-#  };
-  buildInputs = [x11 SDL];
+
+  buildInputs = [ libX11 SDL ];
+  meta = {
+    homepage = http://www.xl-project.com/;
+    description = "An enhanced, cycle-accurated Atari emulator";
+    longDescription = ''
+      The Atari++ Emulator is a Unix based emulator of the Atari eight
+      bit computers, namely the Atari 400 and 800, the Atari 400XL,
+      800XL and 130XE, and the Atari 5200 game console. The emulator
+      is auto-configurable and will compile on a variety of systems
+      (Linux, Solaris, Irix).
+    '';
+    maintainers = [ maintainers.AndersonTorres ];
+    license = licenses.gpl2Plus;    
+  };    
 }
