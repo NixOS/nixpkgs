@@ -134,17 +134,6 @@ self: super: {
     '';
   });
 
-  # see: https://github.com/jaspervdj/hakyll/issues/343
-  hakyll = overrideCabal super.hakyll (drv: {
-    buildDepends = drv.buildDepends ++ [ self.time-locale-compat ];
-    patches = [
-      (pkgs.fetchpatch {
-         url = "https://github.com/jaspervdj/hakyll/pull/344.patch";
-         sha256 = "130c0icw3cj209p219siaq0n8avmm0fpmph0iyjgx67w62sffrli";
-      })
-    ];
-  });
-
   # ekmett/linear#74
   linear = overrideCabal super.linear (drv: {
     prePatch = "sed -i 's/-Werror//g' linear.cabal";
