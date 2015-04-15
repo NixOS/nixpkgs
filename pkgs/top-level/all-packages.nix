@@ -578,9 +578,7 @@ let
 
   otool = callPackage ../os-specific/darwin/otool { };
 
-  pass = callPackage ../tools/security/pass {
-    gnupg = gnupg1compat;
-  };
+  pass = callPackage ../tools/security/pass { };
 
   setfile = callPackage ../os-specific/darwin/setfile { };
 
