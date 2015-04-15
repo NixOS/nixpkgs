@@ -7,6 +7,7 @@
 , echo ? false
 , ngx_lua ? false
 , set_misc ? false
+, fluent ? false
 }:
 
 with stdenv.lib;
@@ -74,6 +75,13 @@ let
     sha256 = "1bd1isacsiay73nc2jlp0wky32l42a3sjskvfa1082l12g0p1x39";
   };
 
+  fluentd = fetchFromGitHub {
+    owner = "fluent";
+    repo = "nginx-fluentd-module";
+    rev = "8af234043059c857be27879bc547c141eafd5c13";
+    sha256 = "1ycb5zd9sw60ra53jpak1m73zwrjikwhrrh9q6266h1mlyns7zxm";
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -119,7 +127,8 @@ stdenv.mkDerivation rec {
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
     ++ optional set_misc "--add-module=${set-misc-ext}"
-    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio";
+    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
+    ++ optional fluent "--add-module=${fluentd}";
 
 
   additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
