@@ -1,4 +1,4 @@
-{ stdenv, procps, coreutils, fetchurl, openjdk8, openjre, ant, gcj, gettext }:
+{ stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 stdenv.mkDerivation rec {
   name = "i2p-0.9.19";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
     sha256 = "1q9sda1a708laxf452qnzbfv7bwfwyam5n1giw2n3z3ar602i936";
   };
-  buildInputs = [ openjdk8 ant gettext ];
+  buildInputs = [ jdk ant gettext which ];
   buildPhase = ''
     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
     ant preppkg-linux-only
@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
       -e "s#/usr/bin/tr#${coreutils}/bin/tr#" \
       -e 's#%USER_HOME#$HOME#' \
       -e "s#%SYSTEM_java_io_tmpdir#/tmp#" \
-      -e 's#JAVA=java#JAVA=${openjre}/bin/java#'
+      -e 's#JAVA=java#JAVA=${jre}/bin/java#'
+    sed -i $out/runplain.sh \
+      -e "s#nohup \(.*Launch\) .*#\1#" \
+      -e "s#echo \$\! .*##"
     mv $out/runplain.sh $out/bin/i2prouter-plain
     mv $out/man $out/share/
     chmod +x $out/bin/* $out/i2psvc
