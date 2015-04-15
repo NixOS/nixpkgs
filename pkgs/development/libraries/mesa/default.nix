@@ -118,24 +118,15 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   doCheck = false;
 
-  installFlags = [ "DESTDIR=\${out}" ];
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM;
   #   also move libOSMesa to $osmesa, as it's relatively big
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
   postInstall = with stdenv.lib; ''
-    fix_dirs () {
-      mkdir -p $1
-      mv $out/$1/* $1
-      DIR=$out/$1
-      while rmdir $DIR 2>/dev/null; do
-        DIR="$(dirname "$DIR")"
-      done
-    }
-    fix_dirs $out
-    fix_dirs $drivers
-    fix_dirs $osmesa
-
     mv -t "$drivers/lib/" \
   '' + optionalString enableExtraFeatures ''
       `#$out/lib/libXvMC*` \
