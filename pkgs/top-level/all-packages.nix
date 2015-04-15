@@ -1828,6 +1828,10 @@ let
 
   libconfig = callPackage ../development/libraries/libconfig { };
 
+  libclthreads = callPackage ../development/libraries/libclthreads { };
+
+  libclxclient = callPackage ../development/libraries/libclxclient { };
+
   libee = callPackage ../development/libraries/libee { };
 
   libestr = callPackage ../development/libraries/libestr { };
@@ -3244,6 +3248,8 @@ let
   zile = callPackage ../applications/editors/zile { };
 
   zip = callPackage ../tools/archivers/zip { };
+
+  zita-dpl1 = callPackage ../applications/audio/zita-dpl1 { };
 
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
