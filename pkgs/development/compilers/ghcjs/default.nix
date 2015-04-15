@@ -125,6 +125,5 @@ in mkDerivation (rec {
   description = "GHCJS is a Haskell to JavaScript compiler that uses the GHC API";
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
-  broken = stdenv.isi686;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
 })
