@@ -3220,6 +3220,11 @@ let
     inherit (xlibs) libXt libXaw libXtst xextproto libXi libXpm gccmakedep;
   };
 
+  # To expose more packages for Yi, override the extraPackages arg.
+  yi = callPackage ../applications/editors/yi/wrapper.nix {
+    haskellPackages = haskellngPackages;
+  };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
   zbar = callPackage ../tools/graphics/zbar {
