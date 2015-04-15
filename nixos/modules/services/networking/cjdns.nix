@@ -44,6 +44,9 @@ let
       })
     else "";
 
+  parseModules = x:
+    x // { connectTo = mapAttrs (name: value: { inherit (value) password publicKey; }) x.connectTo; };
+
   # would be nice to  merge 'cfg' with a //,
   # but the json nesting is wacky.
   cjdrouteConf = builtins.toJSON ( {
@@ -53,8 +56,8 @@ let
     };
     authorizedPasswords = map (p: { password = p; }) cfg.authorizedPasswords;
     interfaces = {
-      ETHInterface = if (cfg.ETHInterface.bind != "") then [ cfg.ETHInterface ] else [ ];
-      UDPInterface = if (cfg.UDPInterface.bind != "") then [ cfg.UDPInterface ] else [ ];
+      ETHInterface = if (cfg.ETHInterface.bind != "") then [ (parseModules cfg.ETHInterface) ] else [ ];
+      UDPInterface = if (cfg.UDPInterface.bind != "") then [ (parseModules cfg.UDPInterface) ] else [ ];
     };
 
     privateKey = "@CJDNS_PRIVATE_KEY@";
@@ -151,12 +154,14 @@ in
 
       ETHInterface = {
         bind = mkOption {
-        default = "";
-        example = "eth0";
-        description = ''
-          Bind to this device for native ethernet operation.
-        '';
-      };
+          default = "";
+          example = "eth0";
+          description =
+            ''
+              Bind to this device for native ethernet operation.
+              <literal>all</literal> is a pseudo-name which will try to connect to all devices.
+            '';
+        };
 
         beacon = mkOption {
           type = types.int;
