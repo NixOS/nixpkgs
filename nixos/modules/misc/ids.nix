@@ -215,6 +215,7 @@
       mediatomb = 187;
       rdnssd = 188;
       ihaskell = 189;
+      i2p = 190;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -407,6 +408,7 @@
       mediatomb = 187;
       #rdnssd = 188; # unused
       ihaskell = 189;
+      i2p = 190;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
