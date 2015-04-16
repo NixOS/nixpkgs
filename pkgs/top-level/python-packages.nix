@@ -4193,6 +4193,31 @@ let
 
   django = self.django_1_7;
 
+  django_1_8 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.8";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
+      sha256 = "04mlx3920r46vn69alrf4bmv1xqp7m6k1xzwgr798rjcrd1assq6";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+
   django_1_7 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.7.7";
