@@ -11825,6 +11825,8 @@ let
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
+  viber = callPackage ../applications/networking/instant-messengers/viber { };
+
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
   };
