@@ -54,6 +54,8 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
   setupHook = ./setup-hook.sh;
 
+  passthru.interpreterName = "nodejs-0.10";
+
   meta = {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
