@@ -1618,6 +1618,8 @@ let
 
   pxz = callPackage ../tools/compression/pxz { };
 
+  hans = callPackage ../tools/networking/hans { };
+
   haproxy = callPackage ../tools/networking/haproxy { };
 
   haveged = callPackage ../tools/security/haveged { };
