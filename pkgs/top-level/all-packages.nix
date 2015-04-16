@@ -13583,6 +13583,9 @@ let
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
+  lxqt = lxqt09;
+  lxqt09 = recurseIntoAttrs (import ../desktops/lxqt-0.9 { inherit pkgs newScope; });
+
   kakasi = callPackage ../tools/text/kakasi { };
 
   kde4 = recurseIntoAttrs pkgs.kde414;
