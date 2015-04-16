@@ -3,11 +3,11 @@
 assert interactive -> readline != null && ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.8.8.3";
+  name = "sqlite-3.8.9";
 
   src = fetchurl {
-    url = "http://sqlite.org/2015/sqlite-autoconf-3080803.tar.gz";
-    sha1 = "2fe3f6226a2a08a2e814b97cd53e36bb3c597112";
+    url = "http://sqlite.org/2015/sqlite-autoconf-3080900.tar.gz";
+    sha1 = "p6vwiqalhk7ybcx5p8n322vhd3idww6v";
   };
 
   buildInputs = lib.optionals interactive [ readline ncurses ];
