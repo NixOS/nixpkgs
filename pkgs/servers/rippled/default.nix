@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://ripple.com;
     maintainers = [ maintainers.emery maintainers.offline ];
     license = licenses.isc;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
