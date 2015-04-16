@@ -210,50 +210,50 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.1.0";
-    build = "135.1740770";
+    version = "1.2.0.8";
+    build = "141.1845774";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "1r2hrld3yfaxq3mw2xmzhvrrhc7w5xlv3d18rv758hy9n40c2nr1";
+      sha256 = "1l201qv1aya1l9jrybgqclv2v2fgzdpcb6qsnxszcq3npplisw9h";
     };
   };
 
   clion = buildClion rec {
-    name = "clion-${build}";
-    version = "eap";
-    build = "141.102.4";
+    name = "clion-${version}";
+    version = "1.0";
+    build = "141.353";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "0qjm8wxqn171wfd7yqf5ys1g4mwl0iyhlbry29jkgkikxp7h9dym";
+      sha256 = "0xjdx13ljp1vy51a7rsj25wg3bsvry4kxq5cdng8zrc1g2y1fqw5";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14.1";
-    build = "IC-141.177.4";
+    version = "14.1.1";
+    build = "IC-141.178.9";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "05irkxhmx6pisvghjalw8hcf9v3n4wn0n0zc92ahivzxlicylpr6";
+      sha256 = "09hrisxg7jsda4qp3abs8156x45hl3sq3w6cpax3aaj1q0j2vnrj";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14.1";
-    build = "IU-141.177.4";
+    version = "14.1.1";
+    build = "IU-141.178.9";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "10zv3m44ci7gl7163yp4wxnjy7c0g5zl34c2ibnx4c6ds6l4di2p";
+      sha256 = "1qk6xq94sqzkswifrrnv5lr0kk3lgrs00d9qpm2bcwpwc1pwcwsq";
     };
   };
 
