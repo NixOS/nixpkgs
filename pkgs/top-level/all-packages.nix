@@ -2405,6 +2405,8 @@ let
 
   plan9port = callPackage ../tools/system/plan9port { };
 
+  plex = callPackage ../servers/plex { };
+
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
   };
