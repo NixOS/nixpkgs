@@ -2,19 +2,19 @@
 
 /* Cargo binary snapshot */
 
-let snapshotDate = "2015-02-26";
+let snapshotDate = "2015-04-02";
 in
 
 with ((import ./common.nix) { inherit stdenv; version = "snapshot-${snapshotDate}"; });
 
 let snapshotHash = if stdenv.system == "i686-linux"
-      then "2a28b604d09b4a76a54a05d91f7f158692427b3a"
+      then "ba6c162680d5509d89ba2363d7cae2047f40c034"
       else if stdenv.system == "x86_64-linux"
-      then "7367f4aca86d38e209ef7236b00175df036c03e2"
+      then "94f715c9a52809a639f2ce6f8b1d5215a0c272b5"
       else if stdenv.system == "i686-darwin"
-      then "e5cabb0a4a2b4e47f7b1ae9b802e2b5d0b14eac5"
+      then "cf333f16f89bfd50e8ce461c6f81ca30d33f7f73"
       else if stdenv.system == "x86_64-darwin"
-      then "3026c60ddd46d2bcf1cb178fc801095dbfba5286"
+      then "1f7008a6ec860e2bc7580e71bdf320ac518ddeb8"
       else throw "no snapshot for platform ${stdenv.system}";
     snapshotName = "cargo-nightly-${platform}.tar.gz";
 in
@@ -35,6 +35,10 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out"
     ./install.sh "--prefix=$out"
+    rm "$out/lib/rustlib/components" \
+       "$out/lib/rustlib/install.log" \
+       "$out/lib/rustlib/rust-installer-version" \
+       "$out/lib/rustlib/uninstall.sh"
   '' + (if stdenv.isLinux then ''
     patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
              --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib}/lib" \
