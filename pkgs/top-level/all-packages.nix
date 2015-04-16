@@ -8244,6 +8244,8 @@ let
 
   apcupsd = callPackage ../servers/apcupsd { };
 
+  asterisk = callPackage ../servers/asterisk { };
+
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = callPackage ../servers/dns/bind { };
