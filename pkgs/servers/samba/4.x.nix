@@ -50,11 +50,11 @@ let
   hasInfinibandOrNull = if libibverbs != null && librdmacm != null then true else null;
 in
 stdenv.mkDerivation rec {
-  name = "samba-4.2.0";
+  name = "samba-4.2.1";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "03s9pjdgq6nlv2lcnlmxlhhj8m5drgv6z4xy9zkgwwd92mw0b9k6";
+    sha256 = "1hsakc8h6rs48xr6i55m90pd53hpxcqjjnlwq8i2rp0nq4ws5sip";
   };
 
   patches = [
