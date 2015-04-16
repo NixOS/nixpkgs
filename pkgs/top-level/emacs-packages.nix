@@ -67,7 +67,7 @@ let
                 lookupDep = dep:
                   if lib.hasAttr dep emacs-packages
                   then lib.getAttr dep emacs-packages
-                  else throw "${pname}: unknown dependency ${dep}";
+                  else builtins.trace "${pname}: unknown dependency ${dep}" null;
             in map lookupDep depNames;
 
           meta = {
