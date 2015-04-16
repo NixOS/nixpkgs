@@ -217,6 +217,7 @@
       ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
+      asterisk = 192;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -411,6 +412,7 @@
       ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
+      #asterisk = 192; # unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
