@@ -6173,10 +6173,9 @@ let
     automake = automake111x;
   };
 
-  kf57 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.7 { });
   kf59 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.9 { });
   kf5_latest = kf59;
-  kf5_stable = kf57;
+  kf5_stable = kf59;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     openldap = openldap.override {
@@ -11036,7 +11035,7 @@ let
   };
 
   kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
-    kf5 = kf57;
+    kf5 = kf59;
     kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
   kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
