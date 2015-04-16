@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   buildCommand = ''
     mkdir -p $out/bin
-    
+
     makeWrapper $mueval/bin/mueval $out/bin/mueval \
       --prefix PATH ":" "$out/bin"
 

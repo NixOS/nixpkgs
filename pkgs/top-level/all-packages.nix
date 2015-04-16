@@ -7078,7 +7078,7 @@ let
     texinfo = texinfo4;
   };
 
-  mueval = callPackage ../development/tools/mueval { };
+  mueval = callPackage ../development/tools/haskell/mueval { };
 
   muparser = callPackage ../development/libraries/muparser { };
 
@@ -7415,7 +7415,7 @@ let
 
   readosm = callPackage ../development/libraries/readosm { };
 
-  lambdabot = callPackage ../development/tools/lambdabot { };
+  lambdabot = callPackage ../development/tools/haskell/lambdabot { };
 
   leksah = callPackage ../development/tools/leksah {
     inherit (haskellngPackages) ghcWithPackages;
