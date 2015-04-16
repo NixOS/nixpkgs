@@ -4206,6 +4206,11 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
@@ -4223,6 +4228,11 @@ let
 
     # error: invalid command 'test'
     doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
 
     meta = {
       description = "A high-level Python Web framework";
@@ -4242,6 +4252,11 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
@@ -4260,6 +4275,11 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
@@ -4276,6 +4296,11 @@ let
 
     # error: invalid command 'test'
     doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
 
     meta = {
       description = "A high-level Python Web framework";
