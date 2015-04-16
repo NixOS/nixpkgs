@@ -713,7 +713,6 @@ let
     "ecospat" # requires spatstat
     "edgeRun" # requires edgeR
     "EMA" # requires siggenes, affy, multtest, gcrma, biomaRt, and AnnotationDbi
-    "EMDomics" # requires BiocParallel
     "empiricalFDR_DESeq2" # requires DESeq2, and GenomicRanges
     "epoc" # requires graph, and Rgraphviz
     "erpR" # requires rpanel
@@ -885,7 +884,6 @@ let
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
-    "rsprng" # requres sprng
     "Rsymphony" # FIXME: requires SYMPHONY
     "RVideoPoker" # requires Rpanel
     "rysgran" # requires soiltexture
