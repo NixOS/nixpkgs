@@ -8000,7 +8000,9 @@ let
     go = go_1_3;
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_3;
-    };
+      govers = go13Packages.govers;
+      inherit lib;
+   };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   });
 
@@ -8008,6 +8010,8 @@ let
     go = go_1_4;
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_4;
+      govers = go14Packages.govers;
+      inherit lib;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   });
@@ -11605,7 +11609,7 @@ let
     inherit (xorg) libXpm;
   };
 
-  pond = callPackage ../applications/networking/pond { goPackages = go13Packages; };
+  pond = callPackage ../applications/networking/pond { goPackages = go14Packages; };
 
   potrace = callPackage ../applications/graphics/potrace {};
 

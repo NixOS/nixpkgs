@@ -1,4 +1,4 @@
-{ go }:
+{ go, govers, lib }:
 
 { name, buildInputs ? []
 
@@ -9,7 +9,7 @@
 
 go.stdenv.mkDerivation ( args // {
   name = "go${go.meta.branch}-${name}";
-  buildInputs = [ go ] ++ buildInputs;
+  buildInputs = [ go ] ++ buildInputs ++ (lib.optional (args ? renameImports) govers) ;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -23,8 +23,15 @@ go.stdenv.mkDerivation ( args // {
     runHook postConfigure
   '';
 
+  renameImports = lib.optionalString (args ? renameImports)
+                    (lib.concatMapStringsSep "\n"
+                      (cmdargs: "govers -m ${cmdargs}")
+                      args.renameImports);
+
   buildPhase = args.buildPhase or ''
     runHook preBuild
+
+    runHook renameImports
 
     if [ -n "$subPackages" ] ; then
 	for p in $subPackages ; do
@@ -83,6 +90,7 @@ go.stdenv.mkDerivation ( args // {
 
   meta = meta // {
     # add an extra maintainer to every package
-    maintainers = (meta.maintainers or []) ++ [ go.stdenv.lib.maintainers.emery ];
+    maintainers = (meta.maintainers or []) ++
+                  [ lib.maintainers.emery lib.maintainers.lethalman ];
   };
 })
