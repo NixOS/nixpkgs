@@ -116,7 +116,9 @@ let
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else "install") ];
+      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else
+                          if platform.kernelTarget == "zImage" then "zinstall" else
+                          "install") ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
