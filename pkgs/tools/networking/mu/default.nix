@@ -3,12 +3,12 @@
 , gtk3, webkit, libsoup, icu, withMug ? false /* doesn't build with current gtk3 */ }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.11";
+  version = "0.9.12";
   name = "mu-${version}";
 
   src = fetchurl {
     url = "https://github.com/djcb/mu/archive/v${version}.tar.gz";
-    sha256 = "01n1lzq4pfsm5pn932p948d1z55yqc7kkm1ifjxjchb3k8lr66fh";
+    sha256 = "1bxryacmas2llj68m2dv8dr1vwx8f5k2i2azh69jajkpqx7i4wdq";
   };
 
   buildInputs =
