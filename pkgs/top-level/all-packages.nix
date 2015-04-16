@@ -2644,6 +2644,10 @@ let
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
+  screencloud = callPackage ../applications/graphics/screencloud {
+    quazip = quazip.override { qt = qt4; };
+  };
+
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrolls = callPackage ../games/scrolls { };
@@ -5926,6 +5930,8 @@ let
     inherit (gnome) gtkdoc;
   };
 
+  qt-mobility = callPackage ../development/libraries/qt-mobility {};
+
   qt_gstreamer = callPackage ../development/libraries/gstreamer/legacy/qt-gstreamer {};
 
   qt_gstreamer1 = callPackage ../development/libraries/gstreamer/qt-gstreamer { boost = boost156;};
@@ -7387,6 +7393,8 @@ let
   qwt = callPackage ../development/libraries/qwt {};
 
   qwt6 = callPackage ../development/libraries/qwt/6.nix { };
+
+  qxt = callPackage ../development/libraries/qxt {};
 
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c {};
 

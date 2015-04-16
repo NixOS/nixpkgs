@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, qt4, libX11, coreutils, bluez, perl }:
+{ stdenv, fetchFromGitHub, qt4, libX11, coreutils, bluez, perl }:
 # possible additional dependencies: pulseaudio udev networkmanager immerson qmf
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
   name = "qt-mobility-${version}";
-  download = "qt-mobility-opensource-src-${version}";
-  src = fetchurl {
-    url =  "http://get.qt.nokia.com/qt/add-ons/${download}.tar.gz";
-    sha256 = "ee3c88975e04139ac9589f76d4be646d44fcbc4c8c1cf2db621abc154cf0ba44";
+  src = fetchFromGitHub {
+    owner = "qtproject";
+    repo = "qt-mobility";
+    rev = "v${version}";
+    sha256 = "14713pbscysd6d0b9rgm7gg145jzwvgdn22778pf2v13qzvfmy1i";
   };
 
   NIX_CFLAGS_COMPILE="-fpermissive";
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     for i in connectivity contacts feedback gallery location multimedia organizer publishsubscribe sensors serviceframework systeminfo; do
       substituteInPlace plugins/declarative/$i/Makefile --replace "${qt4}/lib/qt4/imports/" "$out/lib/qt4/imports/"
+    done
   '';
 
   # Features files (*.prf) are not installed on nixos
