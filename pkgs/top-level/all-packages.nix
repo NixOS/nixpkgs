@@ -891,7 +891,9 @@ let
 
   bsdiff = callPackage ../tools/compression/bsdiff { };
 
-  btar = callPackage ../tools/backup/btar { };
+  btar = callPackage ../tools/backup/btar {
+    librsync = librsync_0_9;
+  };
 
   bud = callPackage ../tools/networking/bud {
     inherit (pythonPackages) gyp;
@@ -6743,6 +6745,8 @@ let
   librsvg = callPackage ../development/libraries/librsvg { };
 
   librsync = callPackage ../development/libraries/librsync { };
+
+  librsync_0_9 = callPackage ../development/libraries/librsync/0.9.nix { };
 
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
