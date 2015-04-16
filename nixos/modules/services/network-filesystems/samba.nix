@@ -197,7 +197,7 @@ in
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;
-              unitConfig.RequiresMountsFor = "/var/samba /var/log/samba";
+              unitConfig.RequiresMountsFor = "/var/lib/samba";
             };
           };
         };
