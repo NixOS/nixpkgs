@@ -26,7 +26,12 @@ let
 
   super = { inherit emacs; } // lib.mapAttrs package json;
 
-  json = builtins.fromJSON (builtins.readFile path);
+  json =
+    lib.mapAttrs (n: p: p // { deps = if p.deps == null then p.deps else cleanUpNames p.deps; })
+    (cleanUpNames (builtins.fromJSON (builtins.readFile path)));
+
+  cleanUpNames = lib.mapAttrs' (name:
+    lib.nameValuePair (lib.replaceChars ["@"] ["at"] name));
 
   callPackage = newScope { mkDerivation = melpaBuild; emacs-packages = self; };
 
