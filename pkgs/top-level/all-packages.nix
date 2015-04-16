@@ -7078,6 +7078,8 @@ let
     texinfo = texinfo4;
   };
 
+  mueval = callPackage ../development/tools/mueval { };
+
   muparser = callPackage ../development/libraries/muparser { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
