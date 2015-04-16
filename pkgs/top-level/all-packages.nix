@@ -7078,6 +7078,8 @@ let
     texinfo = texinfo4;
   };
 
+  mueval = callPackage ../development/tools/mueval { };
+
   muparser = callPackage ../development/libraries/muparser { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
@@ -7412,6 +7414,8 @@ let
   readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readosm = callPackage ../development/libraries/readosm { };
+
+  lambdabot = callPackage ../development/tools/lambdabot { };
 
   leksah = callPackage ../development/tools/leksah {
     inherit (haskellngPackages) ghcWithPackages;
