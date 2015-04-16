@@ -7417,7 +7417,7 @@ let
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot { };
 
-  leksah = callPackage ../development/tools/leksah {
+  leksah = callPackage ../development/tools/haskell/leksah {
     inherit (haskellngPackages) ghcWithPackages;
   };
 

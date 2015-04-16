@@ -1,7 +1,7 @@
 { stdenv, ghcWithPackages, gtk3, makeWrapper }:
 
 let
-leksahEnv = ghcWithPackages (self: [ self.leksah-server self.leksah ]);
+leksahEnv = ghcWithPackages (self: [ self.leksah-server self.leksah self.cabal-install ]);
 in stdenv.mkDerivation {
   name = "leksah";
 
