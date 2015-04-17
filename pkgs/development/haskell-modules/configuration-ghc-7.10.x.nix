@@ -246,6 +246,10 @@ self: super: {
     url = "https://patch-diff.githubusercontent.com/raw/haskell/ghc-events/pull/8.patch";
     sha256 = "1k881jrvzfvs761jgfhf5nsbmbc33c9333l4s0f5088p46ff2n1l";
   });
+  mueval = appendPatch super.mueval (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/10.patch";
+    sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
+  });
 
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
     pname = "ghcjs-prim";
