@@ -269,9 +269,6 @@ self: super: {
   cmdlib = markBroken super.cmdlib;
   laborantin-hs = dontDistribute super.laborantin-hs;
 
-  # https://github.com/koalaman/shellcheck/issues/352
-  ShellCheck = markBroken super.ShellCheck;
-
   # https://github.com/cartazio/arithmoi/issues/1
   arithmoi = markBroken super.arithmoi;
   constructible = dontDistribute super.constructible;
