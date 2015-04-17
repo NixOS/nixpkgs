@@ -242,6 +242,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
+  ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
