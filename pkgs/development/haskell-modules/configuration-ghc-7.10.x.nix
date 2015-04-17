@@ -238,10 +238,6 @@ self: super: {
     url = "https://github.com/cartazio/arithmoi/pull/3.patch";
     sha256 = "1rqs796sh81inqkg2vadskcjpp6q92j6k8zpn370990wndndzzmq";
   });
-  conduit-combinators = appendPatch super.conduit-combinators (pkgs.fetchpatch {
-    url = "https://github.com/fpco/conduit-combinators/pull/16.patch";
-    sha256 = "0jpwpi3shdn5rms3lcr4srajbhhfp5dbwy7pl23c9kmlil3d9mk3";
-  });
   annotated-wl-pprint = appendPatch super.annotated-wl-pprint (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/david-christiansen/annotated-wl-pprint/pull/2.patch";
     sha256 = "0n0fbq3vd7b9kfmhg089q0dy40vawq4q88il3zc9ybivhi62nwv4";
