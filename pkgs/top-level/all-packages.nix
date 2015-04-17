@@ -10303,8 +10303,16 @@ let
   elvis = callPackage ../applications/editors/elvis { };
 
   emacs = emacs24;
-  emacs-packages = emacs24-packages;
-  emacs-packages-unstable = emacs24-packages-unstable;
+
+  emacs-packages = recurseIntoAttrs (callPackage ./emacs-packages.nix {
+    inherit emacs;
+    path = ./emacs-packages.json;
+  });
+
+  emacs-packages-unstable = recurseIntoAttrs (callPackage ./emacs-packages.nix {
+    inherit emacs;
+    path = ./emacs-packages-unstable.json;
+  });
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
@@ -10314,6 +10322,9 @@ let
     alsaLib = null;
     imagemagick = null;
   };
+
+  emacs24-packages = emacs-packages.override { emacs = emacs24; };
+  emacs24-packages-unstable = emacs-packages-unstable.override { emacs = emacs24; };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
     withX = false;
@@ -10329,20 +10340,6 @@ let
     stdenv = pkgs.clangStdenv;
   });
   emacs24Macport = self.emacs24Macport_24_5;
-
-  emacs-packages-gen = emacs: callPackage ./emacs-packages.nix {
-    inherit emacs;
-    path = ./emacs-packages.json;
-  };
-
-  emacs-packages-unstable-gen = emacs: callPackage ./emacs-packages.nix {
-    inherit emacs;
-    path = ./emacs-packages-unstable.json;
-  };
-
-  emacs24-packages = recurseIntoAttrs (emacs-packages-gen emacs24);
-
-  emacs24-packages-unstable = recurseIntoAttrs (emacs-packages-unstable-gen emacs24);
 
   inherit (gnome3) empathy;
 
