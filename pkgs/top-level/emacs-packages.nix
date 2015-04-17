@@ -43,6 +43,8 @@ let
     inherit emacs stdenv texinfo;
   };
 
+  builtin = "";
+
   package = pname: pkg:
     let
       drv = { mkDerivation, fetchurl, stdenv, emacs-packages }:
@@ -115,6 +117,8 @@ let
 
       cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
+      cl = builtin;
+
       coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
       cryptol = callPackage ../applications/editors/emacs-modes/cryptol { };
@@ -124,6 +128,8 @@ let
       d = callPackage ../applications/editors/emacs-modes/d { };
 
       darcsum = callPackage ../applications/editors/emacs-modes/darcsum { };
+
+      ede = builtin;
 
       emacs-clang-complete-async = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
 
@@ -147,6 +153,8 @@ let
                 buildInputs = [ unzip ];
               };
         in callPackage drv {};
+
+      erc = builtin;
 
       ghc-mod =
         let drv = { mkDerivation, ghc-mod, stdenv }:
@@ -179,6 +187,8 @@ let
                 };
               };
         in callPackage drv {};
+
+      gnus = builtin;
 
       goto-chg =
         let drv = { mkDerivation, fetchurl, stdenv }:
@@ -240,6 +250,8 @@ let
 
       icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 
+      ido = builtin;
+
       jade =
         let drv = { mkDerivation, fetchFromGitHub, emacs-packages, stdenv }:
               mkDerivation {
@@ -273,6 +285,8 @@ let
       ocaml-mode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
       org = pkgs.hiPrio super.org;
+
+      project-mode = self.project;
 
       prolog-mode = callPackage ../applications/editors/emacs-modes/prolog { };
 
@@ -314,6 +328,10 @@ let
                 };
               };
         in callPackage drv {};
+
+      semantic = builtin;
+
+      sql = builtin;
 
       stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
@@ -357,6 +375,8 @@ let
                 };
               };
         in callPackage drv {};
+
+      timeclock = builtin;
   };
 
 in self
