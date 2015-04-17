@@ -8369,10 +8369,42 @@ let
   mod_python = pkgs.apacheHttpdPackages.mod_python;
   mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
 
-  mpd = callPackage ../servers/mpd {
-    aacSupport    = config.mpd.aacSupport or true;
-    ffmpegSupport = config.mpd.ffmpegSupport or true;
-  };
+  mpdOpts = opts: with builtins; listToAttrs (map
+    (name:
+      { inherit name;
+        value =
+          if hasAttr "mpd" config && hasAttr name config.mpd
+          then getAttr name config.mpd
+          else getAttr name opts;
+      }
+    ) (attrNames opts));
+
+  mpd = callPackage ../servers/mpd (mpdOpts {
+    aacSupport        = true;
+    alsaSupport       = true;
+    bzip2Support      = true;
+    audiofileSupport  = true;
+    clientSupport     = false; # Act as a proxy to another MPD instance.
+    curlSupport       = true;
+    ffmpegSupport     = true;
+    fluidsynthSupport = true;
+    flacSupport       = true;
+    gmeSupport        = true;
+    icuSupport        = true;
+    id3tagSupport     = true;
+    jackSupport       = config.jack or false;
+    madSupport        = true;
+    mikmodSupport     = true;
+    mmsSupport        = true;
+    mpg123Support     = true;
+    opusSupport       = true;
+    pulseaudioSupport = config.pulseaudio or true;
+    samplerateSupport = true;
+    shoutSupport      = true;
+    sqliteSupport     = true;
+    vorbisSupport     = true;
+    zipSupport        = true;
+  });
 
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 
@@ -10266,7 +10298,7 @@ let
   };
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
-  
+
   dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
