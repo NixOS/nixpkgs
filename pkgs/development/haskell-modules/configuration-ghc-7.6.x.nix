@@ -35,8 +35,6 @@ self: super: {
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # haskeline and terminfo are not core libraries for this compiler.
   haskeline = self.haskeline_0_7_2_1;

@@ -36,8 +36,6 @@ self: super: {
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # https://github.com/haskell/cabal/issues/2322
   Cabal_1_22_2_0 = super.Cabal_1_22_2_0.override { binary = self.binary_0_7_4_0; };
