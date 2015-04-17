@@ -11034,15 +11034,10 @@ let
     boost = boost155;
   };
 
-  kdeApps_14_12 = recurseIntoAttrs (callPackage ../applications/kde-apps-14.12 {
-    kf5 = kf59;
-    kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
-  });
   kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
     kf5 = kf59;
-    kde4 = kde4.override { inherit (kdeApps_14_12) kdelibs; };
   });
-  kdeApps_stable = kdeApps_14_12;
+  kdeApps_stable = kdeApps_15_04;
   kdeApps_latest = kdeApps_15_04;
 
   keepnote = callPackage ../applications/office/keepnote {
