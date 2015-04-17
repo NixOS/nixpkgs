@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
                   exempi networkmanager libpng libexif libgsf libuuid
                   hicolor_icon_theme gnome3.adwaita-icon-theme ];
 
+  preConfigure = ''
+    substituteInPlace src/libtracker-sparql/Makefile.in --replace "--shared-library=libtracker-sparql" "--shared-library=$out/lib/libtracker-sparql"
+  '';
+
   preFixup = ''
     for f in $out/bin/* $out/libexec/*; do
       wrapProgram $f \
