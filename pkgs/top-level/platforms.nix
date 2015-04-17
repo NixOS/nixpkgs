@@ -390,6 +390,16 @@ rec {
     uboot = null;
   };
 
+  novena = armv7l-hf-multiplatform // {
+    name = "novena";
+    #kernelHeadersBaseConfig = "imx_v6_v7_defconfig";
+    kernelBaseConfig = "imx_v6_v7_defconfig"; # "novena_defconfig";
+    kernelArch = "arm";
+    #uboot = "novena";
+    # Only for uboot = uboot :
+    #ubootConfig = "novena_config";
+  };
+
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
