@@ -255,6 +255,9 @@ self: super: {
     sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
   });
 
+  # Already applied in darcs repository.
+  gnuplot = appendPatch super.gnuplot ./gnuplot-fix-new-time.patch;
+
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
     pname = "ghcjs-prim";
     version = "0.1.0.0";
