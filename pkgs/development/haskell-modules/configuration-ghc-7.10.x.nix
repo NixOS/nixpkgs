@@ -254,52 +254,97 @@ self: super: {
 
   # contacted maintainer by e-mail
   HList = markBrokenVersion "0.3.4.1" super.HList;
-  ihaskell-rlangqq = dontDistribute super.ihaskell-rlangqq;
+  AspectAG = dontDistribute super.AspectAG;
   Rlang-QQ = dontDistribute super.Rlang-QQ;
+  SyntaxMacros = dontDistribute super.SyntaxMacros;
+  expand = dontDistribute super.expand;
+  functional-arrow = dontDistribute super.functional-arrow;
+  guess-combinator = dontDistribute super.guess-combinator;
+  ihaskell-rlangqq = dontDistribute super.ihaskell-rlangqq;
+  ipopt-hs = dontDistribute super.ipopt-hs;
+  murder = dontDistribute super.murder;
+  netcore = dontDistribute super.netcore;
+  nettle-frp = dontDistribute super.nettle-frp;
+  nettle-netkit = dontDistribute super.nettle-netkit;
+  nettle-openflow = dontDistribute super.nettle-openflow;
+  oberon0 = dontDistribute super.oberon0;
+  respond = dontDistribute super.respond;
   semi-iso = dontDistribute super.semi-iso;
   syntax = dontDistribute super.syntax;
   syntax-attoparsec = dontDistribute super.syntax-attoparsec;
   syntax-example = dontDistribute super.syntax-example;
   syntax-example-json = dontDistribute super.syntax-example-json;
+  syntax-pretty = dontDistribute super.syntax-pretty;
   syntax-printer = dontDistribute super.syntax-printer;
   tuple-hlist = dontDistribute super.tuple-hlist;
   tuple-morph = dontDistribute super.tuple-morph;
 
   # contacted maintainer by e-mail
   cmdlib = markBroken super.cmdlib;
+  darcs-fastconvert = dontDistribute super.darcs-fastconvert;
+  ivory-backend-c = dontDistribute super.ivory-backend-c;
+  ivory-bitdata = dontDistribute super.ivory-bitdata;
+  ivory-examples = dontDistribute super.ivory-examples;
+  ivory-hw = dontDistribute super.ivory-hw;
   laborantin-hs = dontDistribute super.laborantin-hs;
 
   # https://github.com/cartazio/arithmoi/issues/1
   arithmoi = markBroken super.arithmoi;
+  NTRU = dontDistribute super.NTRU;
+  arith-encode = dontDistribute super.arith-encode;
+  barchart = dontDistribute super.barchart;
   constructible = dontDistribute super.constructible;
   cyclotomic = dontDistribute super.cyclotomic;
   diagrams = dontDistribute super.diagrams;
   diagrams-contrib = dontDistribute super.diagrams-contrib;
+  enumeration = dontDistribute super.enumeration;
+  ghci-diagrams = dontDistribute super.ghci-diagrams;
   ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
   nimber = dontDistribute super.nimber;
-  NTRU = dontDistribute super.NTRU;
   quadratic-irrational = dontDistribute super.quadratic-irrational;
 
   # https://github.com/kazu-yamamoto/ghc-mod/issues/467
   ghc-mod = markBroken super.ghc-mod;
+  HaRe = dontDistribute super.HaRe;
   ghc-imported-from = dontDistribute super.ghc-imported-from;
   git-vogue = dontDistribute super.git-vogue;
+  haskell-token-utils = dontDistribute super.haskell-token-utils;
+  hbb = dontDistribute super.hbb;
   hsdev = dontDistribute super.hsdev;
 
   # http://hub.darcs.net/ivanm/graphviz/issue/5
   graphviz = markBroken super.graphviz;
   Graphalyze = dontDistribute super.Graphalyze;
+  HLearn-approximation = dontDistribute super.HLearn-approximation;
+  HLearn-classification = dontDistribute super.HLearn-classification;
+  HLearn-distributions = dontDistribute super.HLearn-distributions;
+  SourceGraph = dontDistribute super.SourceGraph;
   Zora = dontDistribute super.Zora;
   ampersand = dontDistribute super.ampersand;
   caffegraph = dontDistribute super.caffegraph;
   dot2graphml = dontDistribute super.dot2graphml;
+  dvda = dontDistribute super.dvda;
   erd = dontDistribute super.erd;
   filediff = dontDistribute super.filediff;
   fsmActions = dontDistribute super.fsmActions;
+  gbu = dontDistribute super.gbu;
+  geni-gui = dontDistribute super.geni-gui;
   ghc-vis = dontDistribute super.ghc-vis;
+  grammar-combinators = dontDistribute super.grammar-combinators;
+  llvm-analysis = dontDistribute super.llvm-analysis;
   llvm-base-types = dontDistribute super.llvm-base-types;
+  llvm-data-interop = dontDistribute super.llvm-data-interop;
+  llvm-tools = dontDistribute super.llvm-tools;
+  marxup = dontDistribute super.marxup;
   mathgenealogy = dontDistribute super.mathgenealogy;
+  optimusprime = dontDistribute super.optimusprime;
+  phybin = dontDistribute super.phybin;
+  prolog-graph = dontDistribute super.prolog-graph;
+  prolog-graph-lib = dontDistribute super.prolog-graph-lib;
+  teams = dontDistribute super.teams;
   vacuum-graphviz = dontDistribute super.vacuum-graphviz;
+  vampire = dontDistribute super.vampire;
+  visual-graphrewrite = dontDistribute super.visual-graphrewrite;
   xdot = dontDistribute super.xdot;
 
   # https://github.com/lymar/hastache/issues/47
