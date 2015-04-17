@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "14ngiqg24p3a0s6hp33zjl4i46d8qn4v9id36psycq3n3csmwyx4";
   };
 
+  patches = [ ./fix-statfs-operation.patch ];
+
   buildInputs = [ flac fuse lame libid3tag pkgconfig ];
 
   enableParallelBuilding = true;
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
       which only understands the MP3 format, or transcode files through
       simple drag-and-drop in a file browser.
     '';
-    homepage = http://khenriks.github.com/mp3fs/;
+    homepage = http://khenriks.github.io/mp3fs/;
     license = with licenses; gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
