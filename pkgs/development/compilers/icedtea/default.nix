@@ -78,7 +78,6 @@ let
 
       patch -p0 < ${./cppflags-include-fix.patch}
       patch -p0 < ${./fix-java-home.patch}
-      patch -p0 < ${./currency-date-range.patch}
     '';
 
     NIX_NO_SELF_RPATH = true;
