@@ -11511,6 +11511,8 @@ in
 
   ubootGuruplug = callPackage ../misc/uboot/guruplug.nix { };
 
+  ubootNovena = callPackage ../misc/uboot/novena.nix { };
+
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
   uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {

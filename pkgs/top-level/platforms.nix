@@ -395,7 +395,7 @@ rec {
     #kernelHeadersBaseConfig = "imx_v6_v7_defconfig";
     kernelBaseConfig = "imx_v6_v7_defconfig"; # "novena_defconfig";
     kernelArch = "arm";
-    #uboot = "novena";
+    uboot = "novena";
     # Only for uboot = uboot :
     #ubootConfig = "novena_config";
   };
