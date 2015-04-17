@@ -4,6 +4,7 @@ rec {
   inherit (pkgs) libsoup glib gtk2;
   inherit (pkgs.gnome2) ORBit2;
   gtk3 = pkgs.gtk3_16;
+  gtkmm3 = pkgs.gtkmm3_16;
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
@@ -11,6 +12,7 @@ rec {
   clutter-gst = pkgs.clutter-gst_3_0.override { inherit clutter; };
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
+  gtkmm = gtkmm3;
   vala = pkgs.vala_0_26;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
