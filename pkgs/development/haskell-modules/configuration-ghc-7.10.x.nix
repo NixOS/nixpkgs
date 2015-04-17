@@ -291,6 +291,12 @@ self: super: {
     patches = [ ./diagrams-lib-flexible-contexts.patch ];
   });
 
+  # https://github.com/mokus0/misfortune/pull/1
+  misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/mokus0/misfortune/pull/1.patch";
+    sha256 = "15frwdallm3i6k7mil26bbjd4wl6k9h20ixf3cmyris3q3jhlcfh";
+  });
+
   timezone-series = doJailbreak super.timezone-series;
   timezone-olson = doJailbreak super.timezone-olson;
   libmpd = dontCheck super.libmpd;
