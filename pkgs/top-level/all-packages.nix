@@ -1729,6 +1729,8 @@ let
 
   isync = callPackage ../tools/networking/isync { };
 
+  jaaa = callPackage ../applications/audio/jaaa { };
+
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
@@ -6296,6 +6298,10 @@ let
 
   libchop = callPackage ../development/libraries/libchop { };
 
+  libclthreads = callPackage ../development/libraries/libclthreads  { };
+
+  libclxclient = callPackage ../development/libraries/libclxclient  { };
+
   libcli = callPackage ../development/libraries/libcli { };
 
   libcm = callPackage ../development/libraries/libcm { };
@@ -7891,6 +7897,8 @@ let
   cppzmq = callPackage ../development/libraries/cppzmq {};
 
   czmq = callPackage ../development/libraries/czmq { };
+
+  zita-alsa-pcmi = callPackage ../development/libraries/zita-alsa-pcmi { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
