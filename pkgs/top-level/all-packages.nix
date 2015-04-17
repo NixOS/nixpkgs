@@ -7899,7 +7899,7 @@ let
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : { };
-    inherit (haskellngPackages) Agda;
+    inherit (haskell-ng.packages.ghc784) Agda;
     inherit writeScriptBin;
   };
 
