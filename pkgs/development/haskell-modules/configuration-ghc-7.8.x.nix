@@ -38,9 +38,11 @@ self: super: {
   xhtml = null;
 
   # mtl 2.2.x needs the latest transformers.
-  mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_3_0; };
+  mtl_2_2_1 = super.mtl.override { transformers = self.transformers_0_4_3_0; };
 
-  # Configure build for mtl 2.1.x.
+  # Configure mtl 2.1.x.
+  mtl = self.mtl_2_1_3_1;
+  transformers-compat = enableCabalFlag super.transformers-compat "three";
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
   # haddock-api 2.16 requires ghc>=7.10
@@ -53,7 +55,7 @@ self: super: {
     blaze-html = self.blaze-html_0_7_0_3;
     haskeline = self.haskeline_0_7_2_1;
     lens = self.lens_4_7_0_1;
-    mtl = super.mtl_2_2_1;
+    mtl = self.mtl_2_2_1;
     transformers = super.transformers_0_4_3_0;
     transformers-compat = disableCabalFlag super.transformers-compat "three";
   })) (drv: {

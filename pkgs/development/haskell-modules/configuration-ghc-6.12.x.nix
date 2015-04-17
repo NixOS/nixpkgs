@@ -49,8 +49,6 @@ self: super: {
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
