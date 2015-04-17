@@ -4866,6 +4866,8 @@ let
 
   automake114x = callPackage ../development/tools/misc/automake/automake-1.14.x.nix { };
 
+  automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
+
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
