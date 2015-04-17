@@ -37,5 +37,6 @@ composableDerivation.composableDerivation {} (fixed: rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # http://hydra.nixos.org/build/21344907/nixlog/1/raw
   };
 })
