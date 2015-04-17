@@ -675,6 +675,7 @@ net = buildGoPackage rec {
     "code.google.com/p/goprotobuf github.com/golang/protobuf"
   ];
   propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-4' />
+  buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-5' />
 };
 </programlisting>
 </example>
@@ -722,6 +723,12 @@ the following arguments are of special significance to the function:
       listed. Only libraries should list <varname>propagatedBuildInputs</varname>. If a standalone
       program is being build instead, use <varname>buildInputs</varname>. If a library's tests require
       additional dependencies that are not propagated, they should be listed in <varname>buildInputs</varname>.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-5'>
+    <para>
+      <varname>buildFlags</varname> is a list of flags passed to the go build command.
     </para>
   </callout>
 
