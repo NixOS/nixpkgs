@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, libsigcxx }:
 
 let
-  ver_maj = "2.42";
+  ver_maj = "2.44";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glibmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "985083d97378d234da27a7243587cc0d186897a4b2d3c1286f794089be1a3397";
+    sha256 = "1a1fczy7hcpn24fglyn4i79f4yjc8s50is70q03mb294bm1c02hv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

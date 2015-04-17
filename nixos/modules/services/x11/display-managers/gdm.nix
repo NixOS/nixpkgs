@@ -58,14 +58,14 @@ in
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";
         };
-        execCmd = "exec ${gdm}/sbin/gdm";
+        execCmd = "exec ${gdm}/bin/gdm";
       };
 
     # Because sd_login_monitor_new requires /run/systemd/machines
     systemd.services.display-manager.wants = [ "systemd-machined.service" ];
     systemd.services.display-manager.after = [ "systemd-machined.service" ];
 
-    systemd.services.display-manager.path = [ gnome3.gnome_shell gnome3.caribou ];
+    systemd.services.display-manager.path = [ gnome3.gnome_shell gnome3.caribou pkgs.xlibs.xhost pkgs.dbus_tools ];
 
     services.dbus.packages = [ gdm ];
 
