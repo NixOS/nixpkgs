@@ -42,7 +42,7 @@ self: super: {
 
   # Configure mtl 2.1.x.
   mtl = self.mtl_2_1_3_1;
-  transformers-compat = enableCabalFlag super.transformers-compat "three";
+  transformers-compat = addBuildDepend (enableCabalFlag super.transformers-compat "three") self.mtl;
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
   # haddock-api 2.16 requires ghc>=7.10
