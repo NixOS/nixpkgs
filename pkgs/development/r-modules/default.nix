@@ -938,6 +938,58 @@ let
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "zoib" # tarball is invalid on server
+    "DeducerSpatial" # depends on broken gdal
+    "EcoGenetics" # depends on broken gdal
+    "FedData" # depends on broken gdal
+    "GSIF" # depends on broken gdal
+    "M3" # depends on broken gdal
+    "MazamaSpatialUtils" # depends on broken gdal
+    "ModelMap" # depends on broken gdal
+    "OpasnetUtils" # depends on broken gdal
+    "OpenStreetMap" # depends on broken gdal
+    "PopGenReport" # depends on broken gdal
+    "SPODT" # depends on broken gdal
+    "UScancer" # depends on broken gdal
+    "birdring" # depends on broken gdal
+    "capm" # depends on broken gdal
+    "diffeR" # depends on broken gdal
+    "divagis" # depends on broken gdal
+    "drsmooth" # depends on broken gdal
+    "dynatopmodel" # depends on broken gdal
+    "fuzzyMM" # depends on broken gdal
+    "geotopbricks" # depends on broken gdal
+    "gfcanalysis" # depends on broken gdal
+    "hddtools" # depends on broken gdal
+    "hsdar" # depends on broken gdal
+    "lakemorpho" # depends on broken gdal
+    "landsat" # depends on broken gdal
+    "letsR" # depends on broken gdal
+    "mgraph" # depends on broken gdal
+    "micromap" # depends on broken gdal
+    "modiscloud" # depends on broken gdal
+    "move" # depends on broken gdal
+    "opentraj" # depends on broken gdal
+    "paleofire" # depends on broken gdal
+    "pgirmess" # depends on broken gdal
+    "plotGoogleMaps" # depends on broken gdal
+    "plotKML" # depends on broken gdal
+    "prevR" # depends on broken gdal
+    "qrfactor" # depends on broken gdal
+    "r2dRue" # depends on broken gdal
+    "rAvis" # depends on broken gdal
+    "rWBclimate" # depends on broken gdal
+    "rangeMapper" # depends on broken gdal
+    "rgdal" # depends on broken gdal
+    "rnoaa" # depends on broken gdal
+    "rnrfa" # depends on broken gdal
+    "soil_spec" # depends on broken gdal
+    "spatial_tools" # depends on broken gdal
+    "taRifx_geo" # depends on broken gdal
+    "tmap" # depends on broken gdal
+    "trajectories" # depends on broken gdal
+    "tripEstimation" # depends on broken gdal
+    "wrspathrow" # depends on broken gdal
+    "wux" # depends on broken gdal
   ];
 
   otherOverrides = old: new: {
