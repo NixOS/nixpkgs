@@ -6,11 +6,11 @@
 # use packaged gnome3.adwaita-icon-theme 
 
 stdenv.mkDerivation rec {
-  name = "gucharmap-${gnome3.version}.0";
+  name = "gucharmap-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gucharmap/${gnome3.version}/${name}.tar.xz";
-    sha256 = "1cywlrzrd4rdga12c3hanx2kzgyfdlns9p1j88ymah46iywks7zq";
+    sha256 = "1l26prbi5dmzxs62fz3vrhsif9jwqw4065qxp8hnc8bv34h59phw";
   };
 
   doCheck = true;

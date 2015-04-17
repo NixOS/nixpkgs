@@ -4,11 +4,11 @@
 , gnome3, librsvg, gdk_pixbuf, file }:
 
 stdenv.mkDerivation rec {
-  name = "gedit-${gnome3.version}.0";
+  name = "gedit-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${gnome3.version}/${name}.tar.xz";
-    sha256 = "1jq3vd3hpk4dz0qjxd3zg9d9yhkwa7kl56f5z1id1zg3ngllfikr";
+    sha256 = "0bs0vf773l0k7f4zxqlyb8z772s5dcn7ww0073hs7z3hj0l3lzrc";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];

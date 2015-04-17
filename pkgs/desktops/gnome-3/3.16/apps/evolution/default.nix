@@ -7,11 +7,11 @@
 let
   majVer = gnome3.version;
 in stdenv.mkDerivation rec {
-  name = "evolution-${majVer}.0";
+  name = "evolution-${majVer}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${majVer}/${name}.tar.xz";
-    sha256 = "16czk00qb730fkp6fn0i60y2s77kj5vaznc8wmr5qmrnia2f86mr";
+    sha256 = "1lm877rrcfy98mpp4iq7m9p8r1nr9kir916n4qin2ygas9zx0qlb";
   };
 
   doCheck = true;

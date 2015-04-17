@@ -3,14 +3,14 @@
 , libchamplain, clutter_gtk, geocode_glib
 , bash, makeWrapper, itstool, folks, libnotify, libxml2
 , gnome3, librsvg, gdk_pixbuf, file, telepathy_glib, nspr, nss
-, libsoup, vala, dbus_glib, automake114x, autoconf }:
+, libsoup, vala, dbus_glib, automake115x, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-contacts-${gnome3.version}.0";
+  name = "gnome-contacts-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${gnome3.version}/${name}.tar.xz";
-    sha256 = "1v8763g3zfr02zd6sxrgqnmvsrjnqv5nqa5xpjndvh71kgycyyfp";
+    sha256 = "09syi67ijdx9dhsx9c740mf3fhs6z3kaijdr3fyj8gd80h7a3hym";
   };
 
   doCheck = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
                   gdk_pixbuf gnome3.adwaita-icon-theme librsvg
                   libchamplain clutter_gtk geocode_glib
                   hicolor_icon_theme gnome3.adwaita-icon-theme
-                  vala automake114x autoconf db ];
+                  vala automake115x autoconf db ];
 
   preFixup = ''
     for f in "$out/bin/gnome-contacts" "$out/libexec/gnome-contacts-search-provider"; do

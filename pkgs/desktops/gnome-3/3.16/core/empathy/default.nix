@@ -14,11 +14,11 @@ let
   majorVersion = "3.12";
 in
 stdenv.mkDerivation rec {
-  name = "empathy-${majorVersion}.7";
+  name = "empathy-${majorVersion}.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/empathy/${majorVersion}/${name}.tar.xz";
-    sha256 = "abcc6e325474d158ba21dfc864183617cf832c3570ccefe9e32f275b94452794";
+    sha256 = "10z6ksia6yx7vg0wsdbk4w6vjgfg3cg3n04jf9bj2vr7kr5zvs7w";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard

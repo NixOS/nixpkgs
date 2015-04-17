@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
 
   versionMajor = gnome3.version;
-  versionMinor = "0";
+  versionMinor = "1";
 
   name = "gnome-terminal-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-terminal/${versionMajor}/${name}.tar.xz";
-    sha256 = "1s3zwqxs4crlqmh6l7s7n87pbmh2nnjdvhxlkalh58pbl0bk0qrd";
+    sha256 = "0nxlsz9hwajqfrblvqzc09599dra3van2znmcknnhjcfv3slvkkx";
   };
 
   buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte appdata-tools

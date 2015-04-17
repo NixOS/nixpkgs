@@ -10,11 +10,11 @@
 # TODO: bluetooth, wacom, printers
 
 stdenv.mkDerivation rec {
-  name = "gnome-control-center-${gnome3.version}.0";
+  name = "gnome-control-center-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${gnome3.version}/${name}.tar.xz";
-    sha256 = "04iv5lirfgywgl3zzx8n740cpjsy31hq82scnpr93vlzc7w9xjnj";
+    sha256 = "07vvmnqjjcc0cblpr6cdmg3693hihpjrq3q30mm3q68pdyfzbjgf";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];

@@ -5,14 +5,14 @@
 stdenv.mkDerivation rec {
 
   versionMajor = gnome3.version;
-  versionMinor = "0";
+  versionMinor = "1";
   moduleName   = "gsettings-desktop-schemas";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "02dp1hl38k16m9abydfca1n236mdazqdz0p3n92s7haf9mdqsf16";
+    sha256 = "0q9l9fr90pcb3s6crbxkj3wiwn7wp9zfpv7bdxkadj0hspd9zzkl";
   };
 
   buildInputs = [ glib gobjectIntrospection ];

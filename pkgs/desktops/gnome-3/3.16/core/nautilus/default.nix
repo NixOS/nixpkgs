@@ -3,11 +3,11 @@
 , libnotify, makeWrapper, exempi, librsvg, tracker }:
 
 stdenv.mkDerivation rec {
-  name = "nautilus-${gnome3.version}.0";
+  name = "nautilus-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${gnome3.version}/${name}.tar.xz";
-    sha256 = "0ydqagrkwzc7bycrjjllrin9lsdyyvkqn0vvn8j8xas2dzgmqjyn";
+    sha256 = "0y83adhfaq4ns01rdkqmrvdwj0ch2pb10hl43as98kqqzm0qxs3y";
   };
 
   buildInputs = [ pkgconfig libxml2 dbus_glib shared_mime_info libexif gtk libunique intltool exempi librsvg

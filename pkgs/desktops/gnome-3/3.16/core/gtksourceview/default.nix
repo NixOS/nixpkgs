@@ -2,11 +2,11 @@
 , libxml2Python, perl, intltool, gettext, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gtksourceview-${gnome3.version}.0";
+  name = "gtksourceview-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${gnome3.version}/${name}.tar.xz";
-    sha256 = "068d3cks7vhkhs5j4h76kqh5pfc3nkkrh9xlkx805fk5kdfy56jd";
+    sha256 = "030v7x1dmx5blqi9jcknsjd91jppbpl7f4z69k8c8kklr939i7k6";
   };
 
   buildInputs = [ pkgconfig atk cairo glib gtk3 pango

@@ -4,11 +4,11 @@
 , makeWrapper, itstool, gnome3, librsvg, gst_all_1 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-music-${gnome3.version}.0";
+  name = "gnome-music-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-music/${gnome3.version}/${name}.tar.xz";
-    sha256 = "14qa5caq4f9wpbpnpl8lp9354b9p9rxgl2m4g6pchw2vsrh8l3ci";
+    sha256 = "1pyj192kva0swad6w2kaj5shcwpgiflyda6zmsiaximsgzc4as8i";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];

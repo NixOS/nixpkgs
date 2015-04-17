@@ -4,11 +4,11 @@
 let
   majVer = "3.14";
 in stdenv.mkDerivation rec {
-  name = "gnome-online-miners-${majVer}.1";
+  name = "gnome-online-miners-${majVer}.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-miners/${majVer}/${name}.tar.xz";
-    sha256 = "117pghfnrf5wkxy8dgkqx8s908hrfpvgzik0cnhhqh495yz4hsvc";
+    sha256 = "0bbak8srcrvnw18s4ls5mqaamx9nqdi93lij6yjs0a3q320k22xl";
   };
 
   doCheck = true;

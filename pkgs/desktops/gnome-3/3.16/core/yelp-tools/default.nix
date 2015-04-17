@@ -1,13 +1,13 @@
 { stdenv, fetchurl, libxml2, libxslt, itstool, gnome3, pkgconfig }:
 
 let
-  majVer = "3.14";
+  majVer = gnome3.version;
 in stdenv.mkDerivation rec {
   name = "yelp-tools-${majVer}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp-tools/${majVer}/${name}.tar.xz";
-    sha256 = "03zn41jz6f3mvq0jd1r71g6wxdbn942r2m82yr6kknyjynx240h0";
+    sha256 = "177qzvj5w019isdp41qxqcys2kc4sq2x6dqhqn6l9ipib8a6rxml";
   };
 
   buildInputs = [ libxml2 libxslt itstool gnome3.yelp_xsl pkgconfig ];

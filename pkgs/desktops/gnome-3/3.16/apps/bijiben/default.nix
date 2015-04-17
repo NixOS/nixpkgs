@@ -5,11 +5,11 @@
 , gnome3, librsvg, gdk_pixbuf, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "bijiben-${gnome3.version}.0";
+  name = "bijiben-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${gnome3.version}/${name}.tar.xz";
-    sha256 = "0a4y1xihyr4h4s4nm2yx2rsg2achzwfyzms0ggcs0sw4054in45s";
+    sha256 = "0ndb7bv03rqxh4an44xd4cwxxp5z1wywk9xazmab01jsa0a0zx7r";
   };
 
   doCheck = true;

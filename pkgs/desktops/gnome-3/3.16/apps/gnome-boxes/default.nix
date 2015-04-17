@@ -8,11 +8,11 @@
 # TODO: ovirt (optional)
 
 stdenv.mkDerivation rec {
-  name = "gnome-boxes-${gnome3.version}.2";
+  name = "gnome-boxes-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-boxes/${gnome3.version}/${name}.tar.xz";
-    sha256 = "7bfa27a4575c3b84e5818358cc554bc1385ef717aaecdb3d7d48c34b0451ea31";
+    sha256 = "03a8x1bnbchsh2bs86gnwvddnwbf643wp5nrhyvg9j86d57axvs1";
   };
 
   enableParallelBuilding = true;

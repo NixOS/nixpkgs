@@ -4,11 +4,11 @@
 , gnome3, librsvg, gdk_pixbuf, file }:
 
 stdenv.mkDerivation rec {
-  name = "baobab-${gnome3.version}.0";
+  name = "baobab-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/baobab/${gnome3.version}/${name}.tar.xz";
-    sha256 = "db29c48892c36ea04f4f74019a24004c2fa54854a08f2d0be55f17d39ee9bf5c";
+    sha256 = "1wnf3yd3qi0xsmm37s6pk23qh095pk1fv9nhqjya1p9svwrh9r0z";
   };
 
   doCheck = true;

@@ -4,11 +4,11 @@
 , gnome3, librsvg, gdk_pixbuf, file }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-dictionary-${gnome3.version}.0";
+  name = "gnome-dictionary-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-dictionary/${gnome3.version}/${name}.tar.xz";
-    sha256 = "1jrx8hl1vdgi1yjz74y845lih6p0ma1rpqw9025k1s49l0bpv026";
+    sha256 = "17ha4pmnh9v98hxqy4pr3ri9wsck9njfjwd8qa0gycksmbyd1cag";
   };
 
   doCheck = true;

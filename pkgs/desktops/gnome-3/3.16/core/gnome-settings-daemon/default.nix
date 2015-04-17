@@ -4,11 +4,11 @@
 , docbook_xsl, docbook_xsl_ns, makeWrapper, ibus, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-settings-daemon-${gnome3.version}.0";
+  name = "gnome-settings-daemon-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${gnome3.version}/${name}.tar.xz";
-    sha256 = "1w29x2izq59125ga5ncmmaklc8kw7x7rdn6swn26bs23mah1r1g3";
+    sha256 = "1l61h497v57g3iqfmyzjh15z4c4akky3xziymphswzigb1ssv3da";
   };
 
   # fatal error: gio/gunixfdlist.h: No such file or directory

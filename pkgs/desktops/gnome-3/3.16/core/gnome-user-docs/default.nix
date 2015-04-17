@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, file, gnome3, itstool, libxml2, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-user-docs-${gnome3.version}.0";
+  name = "gnome-user-docs-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-docs/${gnome3.version}/${name}.tar.xz";
-    sha256 = "031gmqllbl9jn77c94xzx55rm1wq8i4cwkxdzdla9c8aq82xshyc";
+    sha256 = "0cck9hnp9az6qan97cv2d5lxlnzfss38h73g1a6dbspl4bnghy4n";
   };
 
   buildInputs = [ pkgconfig gnome3.yelp itstool libxml2 intltool ];

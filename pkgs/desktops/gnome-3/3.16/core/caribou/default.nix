@@ -5,11 +5,11 @@ let
   majorVersion = "0.4";
 in
 stdenv.mkDerivation rec {
-  name = "caribou-${majorVersion}.18";
+  name = "caribou-${majorVersion}.18.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/caribou/${majorVersion}/${name}.tar.xz";
-    sha256 = "8d94977f3364926600b5f711406e765a9a61aa444609f87a1d435b301e147226";
+    sha256 = "0l1ikx56ddgayvny3s2xv8hs3p23xsclw4zljs3cczv4b89dzymf";
   };
 
   buildInputs = with gnome3;

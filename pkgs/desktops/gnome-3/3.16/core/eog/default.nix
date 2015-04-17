@@ -3,11 +3,11 @@
 
 
 stdenv.mkDerivation rec {
-  name = "eog-${gnome3.version}.0";
+  name = "eog-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/eog/${gnome3.version}/${name}.tar.xz";
-    sha256 = "289f659ce593adb15868d73895634b5f4445c87fe84715eb598405d1d0e7a85e";
+    sha256 = "1ry10wvd2zq7vv4rf1qz0x1b77sdzaqlxyjbw3a0lccp4f2x2y99";
   };
 
   buildInputs = with gnome3;
