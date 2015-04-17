@@ -321,4 +321,11 @@ self: super: {
   # Sent e-mail to the maintainer.
   IOSpec = appendPatch super.IOSpec ./IOSpec-fix-ghc710.patch;
 
+  # Updated Cabal file from Hackage tightened version bounds for some reason.
+  edit-distance = let pkg = appendPatch super.edit-distance ./edit-distance-fix-boundaries.patch;
+                  in appendPatch pkg (pkgs.fetchpatch {
+                    url = "https://patch-diff.githubusercontent.com/raw/batterseapower/edit-distance/pull/3.patch";
+                    sha256 = "013x9za47vr9jx0liwgi8cdh2h2882a87h5nqvr41xqipzxfiyw1";
+                  });
+
 }
