@@ -318,4 +318,7 @@ self: super: {
   brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
   unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
 
+  # Sent e-mail to the maintainer.
+  IOSpec = appendPatch super.IOSpec ./IOSpec-fix-ghc710.patch;
+
 }
