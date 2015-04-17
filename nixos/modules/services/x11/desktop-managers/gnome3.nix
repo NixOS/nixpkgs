@@ -21,7 +21,7 @@ let
     destination = "/share/applications/mimeapps.list";
     text = ''
       [Default Applications]
-      inode/directory=nautilus.desktop
+      inode/directory=nautilus.desktop;org.gnome.Nautilus.desktop
     '';
   };
 
