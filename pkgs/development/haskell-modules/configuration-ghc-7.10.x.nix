@@ -314,4 +314,8 @@ self: super: {
   # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
   lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
 
+  # These packages don't have maintainers.
+  brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
+  unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
+
 }
