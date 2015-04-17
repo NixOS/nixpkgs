@@ -253,4 +253,64 @@ self: super: {
                     sha256 = "013x9za47vr9jx0liwgi8cdh2h2882a87h5nqvr41xqipzxfiyw1";
                   });
 
+  # https://github.com/BNFC/bnfc/issues/137
+  BNFC = markBrokenVersion "2.7.1" super.BNFC;
+  cubical = dontDistribute super.cubical;
+
+  # contacted maintainer by e-mail
+  HList = markBrokenVersion "0.3.4.1" super.HList;
+  ihaskell-rlangqq = dontDistribute super.ihaskell-rlangqq;
+  Rlang-QQ = dontDistribute super.Rlang-QQ;
+  semi-iso = dontDistribute super.semi-iso;
+  syntax = dontDistribute super.syntax;
+  syntax-attoparsec = dontDistribute super.syntax-attoparsec;
+  syntax-example = dontDistribute super.syntax-example;
+  syntax-example-json = dontDistribute super.syntax-example-json;
+  syntax-printer = dontDistribute super.syntax-printer;
+  tuple-hlist = dontDistribute super.tuple-hlist;
+  tuple-morph = dontDistribute super.tuple-morph;
+
+  # contacted maintainer by e-mail
+  cmdlib = markBroken super.cmdlib;
+  laborantin-hs = dontDistribute super.laborantin-hs;
+
+  # https://github.com/koalaman/shellcheck/issues/352
+  ShellCheck = markBroken super.ShellCheck;
+
+  # https://github.com/cartazio/arithmoi/issues/1
+  arithmoi = markBroken super.arithmoi;
+  constructible = dontDistribute super.constructible;
+  cyclotomic = dontDistribute super.cyclotomic;
+  diagrams = dontDistribute super.diagrams;
+  diagrams-contrib = dontDistribute super.diagrams-contrib;
+  ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
+  nimber = dontDistribute super.nimber;
+  NTRU = dontDistribute super.NTRU;
+  quadratic-irrational = dontDistribute super.quadratic-irrational;
+
+  # https://github.com/kazu-yamamoto/ghc-mod/issues/467
+  ghc-mod = markBroken super.ghc-mod;
+  ghc-imported-from = dontDistribute super.ghc-imported-from;
+  git-vogue = dontDistribute super.git-vogue;
+  hsdev = dontDistribute super.hsdev;
+
+  # http://hub.darcs.net/ivanm/graphviz/issue/5
+  graphviz = markBroken super.graphviz;
+  Graphalyze = dontDistribute super.Graphalyze;
+  Zora = dontDistribute super.Zora;
+  ampersand = dontDistribute super.ampersand;
+  caffegraph = dontDistribute super.caffegraph;
+  dot2graphml = dontDistribute super.dot2graphml;
+  erd = dontDistribute super.erd;
+  filediff = dontDistribute super.filediff;
+  fsmActions = dontDistribute super.fsmActions;
+  ghc-vis = dontDistribute super.ghc-vis;
+  llvm-base-types = dontDistribute super.llvm-base-types;
+  mathgenealogy = dontDistribute super.mathgenealogy;
+  vacuum-graphviz = dontDistribute super.vacuum-graphviz;
+  xdot = dontDistribute super.xdot;
+
+  # https://github.com/lymar/hastache/issues/47
+  hastache = dontCheck super.hastache;
+
 }
