@@ -6030,6 +6030,9 @@ let
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
+  gtkmm3_16 = callPackage ../development/libraries/gtkmm/3.16.nix {
+    gtk3 = gtk3_16;
+  };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtk-sharp;
