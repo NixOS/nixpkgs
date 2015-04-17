@@ -1,22 +1,22 @@
 { fetchurl, stdenv, SDL, freealut, SDL_image, openal, physfs, zlib, mesa, jam }:
 
 stdenv.mkDerivation rec {
-  name = "trigger-rally-0.6.0";
+  name = "trigger-rally-0.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/trigger-rally/${name}-src.tar.bz2";
-    sha256 = "0qm6anlcqx19iaiz0zh0bf74g9nc6gr8cy0lbsxahwgzkwsqz0fw";
+    sha256 = "1fvb6dl5bwclmx0y8ygyrfn8jczc5kxawxlyv6mp592smb5x5hjs";
   };
 
   srcData = fetchurl {
-    url = "mirror://sourceforge/trigger-rally/trigger-rally-0.6.0-data.tar.bz2";
-    sha256 = "161mfgv68my2231d8ps4zs1axisrj0lkcc4yqsr0x28w0mr19j4y";
+    url = "mirror://sourceforge/trigger-rally/${name}-data.tar.bz2";
+    sha256 = "04f9d74gz5xvfx6pnmbfxqhp0kd1p16j5lrgcq12wxvla6py4qaw";
   };
 
   buildInputs = [ SDL freealut SDL_image openal physfs zlib mesa jam ];
 
   preConfigure = ''
-    configureFlags="$configureFlags --datadir=$out/share/trigger-rally-0.6.0-data"
+    configureFlags="$configureFlags --datadir=$out/share/${name}-data"
   '';
 
   # It has some problems installing the README file, so... out.
