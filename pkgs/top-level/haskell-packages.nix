@@ -3224,6 +3224,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdoNotify = if pkgs.stdenv.isLinux then self.fdoNotify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+    gnupg1 = pkgs.gnupg1.override { gnupg = pkgs.gnupg20; };
   };
 
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
