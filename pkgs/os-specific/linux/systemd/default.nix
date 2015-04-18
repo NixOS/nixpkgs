@@ -151,14 +151,13 @@ stdenv.mkDerivation rec {
 
       rm -rf $out/etc/rpm
 
-      # Move libudev to a separate output.
-      mkdir -p $libudev/lib/pkgconfig $libudev/include
-      mv $out/lib/libudev* $libudev/lib/
-      mv $out/lib/pkgconfig/libudev*.pc $libudev/lib/pkgconfig/
-      mv $out/include/libudev.h $libudev/include/
+      # Move lib(g)udev to a separate output. TODO: maybe split them up
+      #   to avoid libudev pulling glib
+      mkdir -p "$libudev/lib"
+      mv "$out"/lib/lib{,g}udev* "$libudev/lib/"
 
-      for i in $libudev/lib/*.la $libudev/lib/pkgconfig/*.pc; do
-        substituteInPlace $i --replace $out $libudev
+      for i in "$libudev"/lib/*.la "$out"/lib/pkgconfig/*udev*.pc; do
+        substituteInPlace $i --replace "$out" "$libudev"
       done
     ''; # */
 
