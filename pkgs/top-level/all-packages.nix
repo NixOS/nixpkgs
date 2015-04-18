@@ -1757,6 +1757,8 @@ let
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
+  kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
+
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keybase-node-client = callPackage ../applications/misc/keybase-node-client { };
