@@ -5428,6 +5428,8 @@ let
 
   appstream = callPackage ../development/libraries/appstream { };
 
+  appstream-glib = callPackage ../development/libraries/appstream-glib { };
+
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
@@ -5762,6 +5764,8 @@ let
   ganv = callPackage ../development/libraries/ganv { };
 
   gav = callPackage ../games/gav { };
+
+  gcab = callPackage ../development/libraries/gcab { };
 
   gsb = callPackage ../games/gsb { };
 

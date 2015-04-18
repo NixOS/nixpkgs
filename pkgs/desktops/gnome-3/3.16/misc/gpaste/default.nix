@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, autoreconfHook, pkgconfig, vala, glib
-, pango, gtk3, gnome3, dbus, clutter, appdata-tools, makeWrapper }:
+, pango, gtk3, gnome3, dbus, clutter, appstream-glib, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "${gnome3.version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool autoreconfHook pkgconfig vala glib
                   gtk3 gnome3.gnome_control_center dbus.libs
-                  clutter pango appdata-tools makeWrapper ];
+                  clutter pango appstream-glib makeWrapper ];
 
   preConfigure = "intltoolize -f";
 
