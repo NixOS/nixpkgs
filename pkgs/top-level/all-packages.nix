@@ -1757,6 +1757,8 @@ let
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
+  kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
+
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keybase-node-client = callPackage ../applications/misc/keybase-node-client { };
@@ -2888,6 +2890,8 @@ let
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
 
   tpm-tools = callPackage ../tools/security/tpm-tools { };
+
+  trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   traceroute = callPackage ../tools/networking/traceroute { };
 

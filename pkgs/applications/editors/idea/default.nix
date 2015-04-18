@@ -63,7 +63,7 @@ let
       item=${desktopItem}
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-        --prefix PATH : "$out/libexec/${name},${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
+        --prefix PATH : "$out/libexec/${name}:${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
         --prefix JDK_HOME : "$jdk" \
         --prefix ${hiName}_JDK : "$jdk"
 
