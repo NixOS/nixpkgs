@@ -1,12 +1,12 @@
 { stdenv, fetchurl, qt4, muparser, which, boost, pkgconfig }:
 
 stdenv.mkDerivation {
-  name = "librecad-2.0.2";
+  name = "librecad-2.0.7";
 
   src = fetchurl {
-    url = https://github.com/LibreCAD/LibreCAD/tarball/2.0.2;
-    name = "librecad-2.0.2.tar.gz";
-    sha256 = "0a5rs1h4n74d4bnrj91ij6y6wzc8d6nbrg9lfwjx8icjjl6hqikm";
+    url = https://github.com/LibreCAD/LibreCAD/tarball/2.0.7;
+    name = "librecad-2.0.7.tar.gz";
+    sha256 = "0r6d7fk9jl8368rbxzk9rwv0mciw28hlv77z29jf36amc42n6z4d";
   };
 
   patchPhase = ''
