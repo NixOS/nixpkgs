@@ -41,9 +41,17 @@ let
     };
   in imap mkHead cfg.xrandrHeads;
 
-  xrandrDeviceSection = flip concatMapStrings xrandrHeads (h: ''
-    Option "monitor-${h.output}" "${h.name}"
-  '');
+  xrandrDeviceSection = let
+    monitors = flip map xrandrHeads (h: ''
+      Option "monitor-${h.output}" "${h.name}"
+    '');
+    # First option is indented through the space in the config but any
+    # subsequent options aren't so we need to apply indentation to
+    # them here
+    monitorsIndented = if length monitors > 1
+      then singleton (head monitors) ++ map (m: "  " + m) (tail monitors)
+      else monitors;
+  in concatStrings monitorsIndented;
 
   # Here we chain every monitor from the left to right, so we have:
   # m4 right of m3 right of m2 right of m1   .----.----.----.----.
