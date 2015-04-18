@@ -1,29 +1,32 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchgit, libtorrentRasterbar, libav, sqlite3, gmpy, twisted, pythonPackages, makeWrapper, nettools
 , enablePlayer ? false, vlc ? null }:
 
-let rev = "25411"; in
+let ver = "6.4.3"; in
 
 stdenv.mkDerivation {
-  name = "tribler-5.5.21-pre${rev}";
+  name = "tribler-${ver}";
 
-  src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.5.x;
-    inherit rev;
-    sha256 = "17c9svy4zjchzihk6mf0kh4lnvaxjfmgfmimyby5w0d3cwbw49zx";
+  src = fetchgit {
+    url = git://github.com/Tribler/tribler;
+    rev = "refs/tags/v${ver}";
+    sha256 = "0i7pwqd4yizbv2z6ckz6897dw21parl1mvml4yvn522ry6hgvk3k";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
+  buildInputs =
+    [ pythonPackages.python pythonPackages.gmpy pythonPackages.wrapPython makeWrapper
+      libav ];
 
-  pythonPath =
-    [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
-      pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
+  pythonPath = with pythonPackages; [
+      wxPython curses apsw setuptools m2crypto gmpy twisted feedparser
+      sqlite3 pil libtorrentRasterbar pyasn1 pycrypto requests netifaces cherrypy
     ];
+
+  propogatedBuildInputs =
+    [ pythonPackages.netifaces ];
 
   installPhase =
     ''
-      substituteInPlace Tribler/Core/NATFirewall/guessip.py \
-          --replace /bin/netstat ${nettools}/bin/netstat \
-          --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
     
       # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
       wrapPythonPrograms
