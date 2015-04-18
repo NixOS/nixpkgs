@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, self, callPackage
+{ stdenv, fetchurl, pkgconfig, self, callPackage
 , bzip2, openssl
 
 , includeModules ? false
@@ -60,12 +60,17 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]
+    [ pkgconfig bzip2 openssl ]
     ++ optionals includeModules (
         [ db gdbm ncurses sqlite readline
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
     )
     ++ optional zlibSupport zlib;
+
+  mkPaths = paths: {
+    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") buildInputs);
+    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") buildInputs);
+  };
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
@@ -76,8 +81,7 @@ let
     inherit majorVersion version src patches buildInputs preConfigure;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     configureFlags = "--enable-shared --with-threads --enable-unicode";
 
@@ -105,6 +109,8 @@ let
         paxmark E $out/bin/python${majorVersion}
 
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
+
+        rm "$out/lib/python2.7/plat-linux2/regen" # refers to glibc.dev
       '';
 
     passthru = rec {
@@ -153,8 +159,7 @@ let
 
       buildInputs = [ python ] ++ deps;
 
-      C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-      LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
       buildPhase = ''
           substituteInPlace setup.py --replace 'self.extensions = extensions' \

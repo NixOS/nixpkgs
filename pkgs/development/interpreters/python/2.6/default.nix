@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
+{ stdenv, fetchurl, pkgconfig, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
 , sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, self, callPackage }:
 
 assert zlibSupport -> zlib != null;
@@ -48,9 +48,13 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline x11 tcl tk sqlite ]
+    [ pkgconfig bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline x11 tcl tk sqlite ]
     ++ optional zlibSupport zlib;
 
+  mkPaths = paths: {
+    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") buildInputs);
+    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") buildInputs);
+  };
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
@@ -60,8 +64,7 @@ let
 
     inherit majorVersion version src patches buildInputs preConfigure;
 
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     configureFlags = "--enable-shared --with-threads --enable-unicode";
 
@@ -83,10 +86,12 @@ let
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         mv $out/share/man/man1/{python.1,python2.6.1}
         ln -s $out/share/man/man1/{python2.6.1,python.1}
-        
+
         paxmark E $out/bin/python${majorVersion}
-        
+
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
+
+        rm "$out/lib/python2.7/plat-linux2/regen" # refers to glibc.dev
       '';
 
     passthru = rec {
@@ -135,8 +140,7 @@ let
 
       buildInputs = [ python ] ++ deps;
 
-      C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-      LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
       buildPhase =
         ''
