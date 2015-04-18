@@ -119,7 +119,7 @@ stdenv.mkDerivation ({
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
-  outputs = [ "out" "dev" "bin" "static" ];
+  outputs = [ "dev" "out" "bin" "static" ];
 
   buildInputs = [ ]
     ++ stdenv.lib.optionals (cross != null) [ gccCross ]

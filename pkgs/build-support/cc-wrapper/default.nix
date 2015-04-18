@@ -28,6 +28,7 @@ let
 
   libc_bin = if nativeLibc then null else libc.bin or libc;
   libc_dev = if nativeLibc then null else libc.dev or libc;
+  libc_lib = if nativeLibc then null else libc.out or libc;
   binutils_bin = if nativeTools then null else binutils.bin or binutils;
   # The wrapper scripts use 'cat', so we may need coreutils.
   coreutils_bin = if nativeTools then null else coreutils.bin or coreutils;
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc shell libc_bin libc_dev binutils_bin coreutils_bin;
+  inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
 
   passthru = { inherit libc nativeTools nativeLibc nativePrefix; };
 
@@ -58,11 +59,11 @@ stdenv.mkDerivation {
     ''
 
     + optionalString (!nativeLibc) (if (!stdenv.isDarwin) then ''
-      dynamicLinker="${libc}/lib/$dynamicLinker"
+      dynamicLinker="${libc_lib}/lib/$dynamicLinker"
       echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-      if [ -e ${libc}/lib/32/ld-linux.so.2 ]; then
-        echo ${libc}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+      if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+        echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
       fi
 
       # The dynamic linker is passed in `ldflagsBefore' to allow
@@ -87,11 +88,11 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc}/lib/ -idirafter ${libc_dev}/include -idirafter $cc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter $cc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
-      echo "-L${libc}/lib" > $out/nix-support/libc-ldflags
+      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
 
-      echo "${libc}" > $out/nix-support/orig-libc
+      echo "${libc_lib}" > $out/nix-support/orig-libc
     ''
 
     + (if nativeTools then ''

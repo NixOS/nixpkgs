@@ -712,27 +712,29 @@ fixupPhase() {
         prefix=${!output} runHook fixupOutput
     done
 
-    # Multiple-output derivations mostly choose $dev instead of $out
-    local prOut="${propagateIntoOutput:-$out}"
+
+    # Propagate build inputs and setup hook into the development output.
 
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$prOut/nix-support"
-        echo "$propagatedBuildInputs" > "$prOut/nix-support/propagated-build-inputs"
+        mkdir -p "${!outputDev}/nix-support"
+        echo "$propagatedBuildInputs" > "${!outputDev}/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$prOut/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$prOut/nix-support/propagated-native-build-inputs"
-    fi
-
-    if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$prOut/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$prOut/nix-support/propagated-user-env-packages"
+        mkdir -p "${!outputDev}/nix-support"
+        echo "$propagatedNativeBuildInputs" > "${!outputDev}/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$prOut/nix-support"
-        substituteAll "$setupHook" "$prOut/nix-support/setup-hook"
+        mkdir -p "${!outputDev}/nix-support"
+        substituteAll "$setupHook" "${!outputDev}/nix-support/setup-hook"
+    fi
+
+    # Propagate user-env packages into the output with binaries, TODO?
+
+    if [ -n "$propagatedUserEnvPkgs" ]; then
+        mkdir -p "${!outputBin}/nix-support"
+        echo "$propagatedUserEnvPkgs" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup

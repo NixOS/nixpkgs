@@ -39,9 +39,6 @@ _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputMan "man" "doc" "$outputBin"
 _overrideFirst outputInfo "info" "doc" "$outputMan"
 
-# Make stdenv put propagated*BuildInputs into $outputDev instead of $out
-propagateIntoOutput="${!outputDev}"
-
 
 # Add standard flags to put files into the desired outputs.
 _multioutConfig() {
@@ -67,6 +64,7 @@ NIX_NO_SELF_RPATH=1
 
 
 # Move subpaths that match pattern $1 from under any output/ to the $2 output/
+# Beware: only * ? [..] patterns are accepted.
 _moveToOutput() {
     local patt="$1"
     local dstOut="$2"
@@ -108,30 +106,46 @@ _multioutDocs() {
 # Move development-only stuff to the desired outputs.
 _multioutDevs() {
     if [ "$outputs" = "out" ] || [ -z "${moveToDev-1}" ]; then return; fi;
-    echo "Looking for development-only stuff to move between outputs"
+    echo "Looking for development-only stuff to move to $outputDev"
     _moveToOutput include "${!outputInclude}"
     _moveToOutput lib/pkgconfig "${!outputDev}"
-    _moveToOutput "lib/*.la" "${!outputDev}"
+    _moveToOutput share/pkgconfig "${!outputDev}"
 
-    echo "Patching *.pc includedir to output ${!outputInclude}"
-    for f in "${!outputDev}"/lib/pkgconfig/*.pc; do
+    # don't move libtool files yet
+    #_moveToOutput "lib/*.la" "${!outputDev}"
+
+    for f in "${!outputDev}"/{lib,share}/pkgconfig/*.pc; do
+        echo "Patching '$f' includedir to output ${!outputInclude}"
         sed -i "/^includedir=/s,=\${prefix},=${!outputInclude}," "$f"
     done
 }
 
-# Make ${!outputDev} propagate other outputs needed for development
+# Make the first output (typically "dev") propagate other outputs needed for development.
+# Take the first, because that's what one gets when putting the package into buildInputs.
 # Note: during the build, probably only the "native" development packages are useful.
 # With current cross-building setup, all packages are "native" if not cross-building.
 _multioutPropagateDev() {
     if [ "$outputs" = "out" ]; then return; fi;
 
-    if [ "${!outputInclude}" != "$propagateIntoOutput" ]; then
-        mkdir -p "$propagateIntoOutput"/nix-support
-        echo -n " ${!outputInclude}" >> "$propagateIntoOutput"/nix-support/propagated-native-build-inputs
+    local outputFirst
+    for outputFirst in $outputs; do
+        break
+    done
+
+    # Default value: propagate binaries, includes and libraries
+    if [[ ! -v "$propagatedOutputs" ]]; then
+        local po_dirty="$outputBin $outputInclude $outputLib"
+        propagatedOutputs=`echo "$po_dirty" \
+            | tr -s ' ' '\n' | grep -v -F "$outputFirst" \
+            | sort -u | tr '\n' ' ' `
+
+    elif [ -z "$propagatedOutputs" ]; then
+        return # variable was explicitly set to empty
     fi
-    if [ "${!outputLib}" != "$propagateIntoOutput" ]; then
-        mkdir -p "$propagateIntoOutput"/nix-support
-        echo -n " ${!outputLib}" >> "$propagateIntoOutput"/nix-support/propagated-native-build-inputs
-    fi
+
+    mkdir -p "${!outputFirst}"/nix-support
+    for output in $propagatedOutputs; do
+        echo -n " ${!output}" >> "${!outputFirst}"/nix-support/propagated-native-build-inputs
+    done
 }
 
