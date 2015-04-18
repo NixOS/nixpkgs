@@ -18,6 +18,12 @@ composableDerivation.composableDerivation {} (fixed: rec {
     # ++ [ python pythonPackages.numpy ]
   ;
 
+  patches = [
+    # This ensures that the python package is installed into gdal's prefix,
+    # rather than trying to install into python's prefix.
+    ./python.patch
+  ];
+
   # Don't use optimization for gcc >= 4.3. That's said to be causing segfaults.
   # Unset CC and CXX as they confuse libtool.
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
@@ -37,6 +43,18 @@ composableDerivation.composableDerivation {} (fixed: rec {
     # http://hydra.nixos.org/build/21344907/nixlog/1/raw - disable for now
     #"--with-python"               # optional
   ];
+
+  # Prevent this:
+  #
+  #   Checking .pth file support in /nix/store/xkrmb8xnvqxzjwsdmasqmsdh1a5y2y99-gdal-1.11.2/lib/python2.7/site-packages/
+  #   /nix/store/pbi1lgank10fy0xpjckbdpgacqw34dsz-python-2.7.9/bin/python -E -c pass
+  #   TEST FAILED: /nix/store/xkrmb8xnvqxzjwsdmasqmsdh1a5y2y99-gdal-1.11.2/lib/python2.7/site-packages/ does NOT support .pth files
+  #   error: bad install directory or PYTHONPATH
+  preBuild = ''
+    pythonInstallDir=$out/lib/${python.libPrefix}/site-packages
+    mkdir -p $pythonInstallDir
+    export PYTHONPATH=''${PYTHONPATH:+''${PYTHONPATH}:}$pythonInstallDir
+  '';
 
   meta = {
     description = "Translator library for raster geospatial data formats";
