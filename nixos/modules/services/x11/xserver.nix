@@ -156,7 +156,7 @@ in
            Option          "EmulateWheel"          "true
            Option          "EmulateWheelButton"    "2"
            Option          "Emulate3Buttons"       "false"
-	  '' ];
+          '' ];
         description = "Content of additional InputClass sections of the X server configuration file.";
       };
 
@@ -535,7 +535,7 @@ in
           Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
-	# Additional "InputClass" sections
+        # Additional "InputClass" sections
         ${flip concatMapStrings cfg.inputClassSections (inputClassSection: ''
         Section "InputClass"
           ${inputClassSection}
