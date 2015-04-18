@@ -50,7 +50,7 @@ let
   # Which will end up in reverse ----------> | m1 | m2 | m3 | m4 |
   #                                          `----^----^----^----'
   xrandrMonitorSections = let
-    mkMonitor = previous: current: previous ++ singleton {
+    mkMonitor = previous: current: singleton {
       inherit (current) name;
       value = ''
         Section "Monitor"
@@ -60,8 +60,8 @@ let
           ''}
         EndSection
       '';
-    };
-    monitors = foldl mkMonitor [] xrandrHeads;
+    } ++ previous;
+    monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.stdenv.mkDerivation {
@@ -614,4 +614,3 @@ in
   };
 
 }
-
