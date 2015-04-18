@@ -2891,6 +2891,8 @@ let
 
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
+  trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
+
   traceroute = callPackage ../tools/networking/traceroute { };
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
