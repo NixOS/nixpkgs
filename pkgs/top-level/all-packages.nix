@@ -7525,7 +7525,9 @@ let
 
   simgear = callPackage ../development/libraries/simgear { };
 
-  sfml_git = callPackage ../development/libraries/sfml { };
+  sfml = sfml22;
+  sfml22 = callPackage ../development/libraries/sfml { };
+  sfml_git = callPackage ../development/libraries/sfml/sfml_git.nix { };
 
   skalibs = callPackage ../development/libraries/skalibs { };
 
