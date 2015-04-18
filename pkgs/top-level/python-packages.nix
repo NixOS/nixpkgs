@@ -442,6 +442,20 @@ let
     };
   };
 
+  appdirs = buildPythonPackage rec {
+    name = "appdirs-1.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/appdirs/appdirs-1.4.0.tar.gz";
+      md5 = "1d17b4c9694ab84794e228f28dc3275b";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A python module for determining appropriate platform-specific dirs";
+      homepage = http://github.com/ActiveState/appdirs;
+      license = licenses.mit;
+    };
+  };
 
   application = buildPythonPackage rec {
     name = "python-application-${version}";
@@ -996,6 +1010,24 @@ let
     meta = with stdenv.lib; {
       description = "rarfile - RAR archive reader for Python";
       homepage = https://github.com/markokr/rarfile;
+    };
+  };
+
+  proboscis = pythonPackages.buildPythonPackage rec {
+    name = "proboscis-1.2.6.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/proboscis/proboscis-1.2.6.0.tar.gz";
+      md5 = "e4b36449ef7c18f70b8243f4c8bddbca";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ nose ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A Python test framework that extends Python's built-in unittest module and Nose with features from TestNG";
+      homepage = https://github.com/rackspace/python-proboscis;
+      license = licenses.asl20;
     };
   };
 
@@ -3074,6 +3106,36 @@ let
     propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
+  gmusicapi = with pkgs; pythonPackages.buildPythonPackage rec {
+    name = "gmusicapi-4.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gmusicapi/gmusicapi-4.0.0.tar.gz";
+      md5 = "12ba66607531978b349c7035c9bab311";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      validictory
+      decorator
+      mutagen
+      protobuf
+      setuptools
+      requests
+      dateutil
+      proboscis
+      mock
+      appdirs
+      oauth2client
+    ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "An unofficial API for Google Play Music";
+      homepage = http://pypi.python.org/pypi/gmusicapi/;
+      license = licenses.bsd3;
+    };
+  };
+
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";
     src = pkgs.fetchurl {
@@ -4054,6 +4116,23 @@ let
     };
   };
 
+  validictory = pythonPackages.buildPythonPackage rec {
+    name = "validictory-1.0.0a2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/validictory/validictory-1.0.0a2.tar.gz";
+      md5 = "54c206827931cc4ed8a9b1cc78e380c5";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Validate dicts against a schema";
+      homepage = http://github.com/sunlightlabs/validictory;
+      license = licenses.mit;
+    };
+  };
 
   venusian = buildPythonPackage rec {
     name = "venusian-1.0";
@@ -4383,7 +4462,7 @@ let
     };
 
     propagatedBuildInputs = with self; [ django_1_7 ];
-    
+
     # tests appear to be broken on 0.6.1 at least
     doCheck = ( version != "0.6.1" );
 
@@ -7039,12 +7118,12 @@ let
   nameparser = buildPythonPackage rec {
     name = "nameparser-${version}";
     version = "0.3.4";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nameparser/${name}.tar.gz";
       sha256 = "1zi94m99ziwwd6kkip3w2xpnl05r2cfv9iq68inz7np81c3g8vag";
     };
-    
+
     meta = {
       description = "A simple Python module for parsing human names into their individual components";
       homepage = https://github.com/derek73/python-nameparser;
@@ -7507,6 +7586,23 @@ let
     };
   });
 
+  oauth2client = pythonPackages.buildPythonPackage rec {
+    name = "oauth2client-1.4.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/oauth2client/oauth2client-1.4.7.tar.gz";
+      md5 = "62747643d5af57e57b09e176eda1c1dd";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ httplib2 pyasn1 pyasn1-modules rsa ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A client library for OAuth 2.0";
+      homepage = http://github.com/google/oauth2client/;
+      license = licenses.bsd2;
+    };
+  };
 
   oauthlib = buildPythonPackage rec {
     version = "0.7.2";
@@ -14798,7 +14894,7 @@ let
       licences = [ licenses.mit licenses.gpl2 ];
     };
   };
-  
+
   dicttoxml = buildPythonPackage rec {
     name = "dicttoxml-1.6.4";
 
