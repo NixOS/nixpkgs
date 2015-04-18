@@ -1,26 +1,28 @@
 { stdenv, fetchurl, pkgconfig, glib, systemd, boost
-, alsaSupport ? true, alsaLib
-, flacSupport ? true, flac
-, vorbisSupport ? true, libvorbis
-, madSupport ? true, libmad
-, id3tagSupport ? true, libid3tag
-, mikmodSupport ? true, libmikmod
-, shoutSupport ? true, libshout
-, sqliteSupport ? true, sqlite
-, curlSupport ? true, curl
-, audiofileSupport ? true, audiofile
-, bzip2Support ? true, bzip2
-, ffmpegSupport ? true, ffmpeg
-, fluidsynthSupport ? true, fluidsynth
-, zipSupport ? true, zziplib
-, samplerateSupport ? true, libsamplerate
-, mmsSupport ? true, libmms
-, mpg123Support ? true, mpg123
-, aacSupport ? true, faad2
-, pulseaudioSupport ? true, pulseaudio
-, jackSupport ? true, jack2
-, gmeSupport ? true, game-music-emu
-, icuSupport ? true, icu
+, alsaSupport, alsaLib
+, flacSupport, flac
+, vorbisSupport, libvorbis
+, madSupport, libmad
+, id3tagSupport, libid3tag
+, mikmodSupport, libmikmod
+, shoutSupport, libshout
+, sqliteSupport, sqlite
+, curlSupport, curl
+, audiofileSupport, audiofile
+, bzip2Support, bzip2
+, ffmpegSupport, ffmpeg
+, fluidsynthSupport, fluidsynth
+, zipSupport, zziplib
+, samplerateSupport, libsamplerate
+, mmsSupport, libmms
+, mpg123Support, mpg123
+, aacSupport, faad2
+, pulseaudioSupport, pulseaudio
+, jackSupport, jack2
+, gmeSupport, game-music-emu
+, icuSupport, icu
+, clientSupport, mpd_clientlib
+, opusSupport, libopus
 }:
 
 let
@@ -31,9 +33,10 @@ let
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
+
   src = fetchurl {
-    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.gz";
-    sha256 = "1j3cv8b76bfj3ddpd29v3apb5025i87y5h5b4lrs2g5vqsgpvb6y";
+    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
+    sha256 = "0vzj365s4j0pw5w37lfhx3dmpkdp85driravsvx8rlrw0lii91a7";
   };
 
   buildInputs = [ pkgconfig glib boost ]
@@ -61,7 +64,9 @@ in stdenv.mkDerivation rec {
     ++ opt pulseaudioSupport pulseaudio
     ++ opt jackSupport jack2
     ++ opt gmeSupport game-music-emu
-    ++ opt icuSupport icu;
+    ++ opt icuSupport icu
+    ++ opt clientSupport mpd_clientlib
+    ++ opt opusSupport libopus;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -88,6 +93,8 @@ in stdenv.mkDerivation rec {
       (mkFlag stdenv.isDarwin "osx")
       (mkFlag icuSupport "icu")
       (mkFlag gmeSupport "gme")
+      (mkFlag clientSupport "libmpdclient")
+      (mkFlag opusSupport "opus")
       "--enable-debug"
     ]
     ++ opt stdenv.isLinux
@@ -101,7 +108,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl fuuzetsu ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu emery ];
     platforms   = platforms.unix;
 
     longDescription = ''
