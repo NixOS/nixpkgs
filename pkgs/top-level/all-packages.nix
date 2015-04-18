@@ -8373,7 +8373,10 @@ let
 
   mpd = callPackage ../servers/mpd {
     aacSupport    = config.mpd.aacSupport or true;
+    clientSupport = config.mpd.clientSupport or false;
     ffmpegSupport = config.mpd.ffmpegSupport or true;
+    opusSupport   = config.mpd.opusSupport or true;
+
   };
 
   mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
@@ -10268,7 +10271,7 @@ let
   };
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
-  
+
   dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
