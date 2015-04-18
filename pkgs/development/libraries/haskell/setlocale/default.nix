@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "setlocale";
-  version = "0.0.3";
-  sha256 = "08pd20ibmslr94p52rn6x9w3swn9jy7vjlvxzw29h8dlqgmvcrjl";
+  version = "1.0.0.1";
+  sha256 = "15dzf4hgkn5saz6qyn1xqvinvy0y571crfxfwycmcmm4az6rsqk0";
+  jailbreak = true;
   meta = {
-    description = "A Haskell interface to setlocale()";
-    license = self.stdenv.lib.licenses.publicDomain;
+    description = "Haskell bindings to setlocale";
+    license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

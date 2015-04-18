@@ -1,19 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
+{ stdenv, lib, fetchgit, makeWrapper
 , pkgconfig, cmake, libxml2, vala, intltool, libmx, gnome3, gtk3, gtk_doc
 , keybinder3, clutter_gtk, libnotify
 , libxkbcommon, xlibs, udev
 , bashInteractive
 }:
 
-let rev = "5ccde4e8f2c02a398f9172e07c25262ecf954626";
-in stdenv.mkDerivation {
-  name = "finalterm-git-${builtins.substring 0 8 rev}";
+stdenv.mkDerivation {
+  name = "finalterm-git-2014-11-15";
 
-  src = fetchFromGitHub {
-    owner = "p-e-w";
-    repo = "finalterm";
-    inherit rev;
-    sha256 = "1gw6nc19whfjd4xj0lc0fmjypn8d7nasif79671859ymnfizyq4f";
+  src = fetchgit {
+    url = "https://github.com/p-e-w/finalterm.git";
+    rev = "39b078b2a96a5c3c9e74f92b1929f383d220ca8b";
+    sha256 = "c3ec9b36692b66a3aaa3125b2947c83beda4705b6d6f4a10b9bde9d8db8367c5";
   };
 
   buildInputs = [
@@ -32,6 +30,11 @@ in stdenv.mkDerivation {
     cmakeFlagsArray=(
       -DMINIMAL_FLAGS=ON
     )
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/gsettings-schemas/$name
+    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/
   '';
 
   postFixup = ''

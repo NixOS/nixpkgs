@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.1.0";
+  name = "R-3.1.3";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "1qjzbw341bvi1h4jwbvdkvq8j0z9l3m85mpgrlfw0n2cz2806s4a";
+    sha256 = "04kk6wd55bi0f0qsp98ckjxh95q2990vkgq4j83kiajvjciq7s87";
   };
 
   buildInputs = [ blas bzip2 gfortran liblapack libX11 libXmu libXt
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       CXX=$(type -p g++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
-      LDFLAGS="-L${gfortran.gcc}/lib"
+      LDFLAGS="-L${gfortran.cc}/lib"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
     )
@@ -84,7 +84,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    platforms = stdenv.lib.platforms.all;
     hydraPlatforms = stdenv.lib.platforms.linux;
+
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
+    branch = "4";
     description = "GNU multiple precision arithmetic library";
 
     longDescription =
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = http://gmplib.org/;
     license = stdenv.lib.licenses.lgpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

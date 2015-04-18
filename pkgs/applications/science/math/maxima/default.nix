@@ -2,7 +2,7 @@
 
 let
   name    = "maxima";
-  version = "5.33.0";
+  version = "5.35.1";
 
   searchPath =
     stdenv.lib.makeSearchPath "bin"
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "13axm11xw0f3frx5b0qdidi7igkn1524fzz77s9rbpl2yy2nrbz2";
+    sha256 = "1wwqvay9z6gal7bsyyyhhcwh0fy5ak4h2a446ali0x6zmybaklcy";
   };
 
   buildInputs = [sbcl texinfo perl makeWrapper];
@@ -29,10 +29,9 @@ stdenv.mkDerivation {
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   '';
 
-  # Failures in the regression test suite are not going to abort the
-  # build process. We run the suite mostly so that potential errors show
-  # up in the build log. See also:
-  # <http://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933>.
+  # Failures in the regression test suite won't abort the build process. We run
+  # the suite only so that potential errors show up in the build log. See also:
+  # http://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933.
   doCheck = true;
 
   enableParallelBuilding = true;

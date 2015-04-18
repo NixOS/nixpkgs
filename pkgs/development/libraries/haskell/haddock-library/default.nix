@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haddock-library";
-  version = "1.1.0";
-  sha256 = "0apqm9nxgxbpvcphaim93q4z67c1cd0vdjz0i1cbr67ymffl69nd";
+  version = "1.1.1";
+  sha256 = "0sjnmbmq1pss9ikcqnhvpf57rv78lzi1r99ywpmmvj1gyva2s31m";
   buildDepends = [ deepseq ];
   testDepends = [ baseCompat deepseq hspec QuickCheck ];
   meta = {

@@ -8,14 +8,14 @@ rec {
 
 
   # Override the compiler in stdenv for specific packages.
-  overrideGCC = stdenv: gcc: stdenv.override { inherit gcc; };
+  overrideCC = stdenv: cc: stdenv.override { allowedRequisites = null; cc = cc; };
 
 
   # Add some arbitrary packages to buildInputs for specific packages.
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs:
-    stdenv.override (prev: { extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
+    stdenv.override (prev: { allowedRequisites = null; extraBuildInputs = prev.extraBuildInputs or [] ++ pkgs; });
 
 
   # Override the setup script of stdenv.  Useful for testing new
@@ -27,63 +27,6 @@ rec {
   #     stdenv = overrideSetup stdenv ../stdenv/generic/setup-latest.sh;
   #   };
   overrideSetup = stdenv: setupScript: stdenv.override { inherit setupScript; };
-
-
-  # Return a modified stdenv that uses dietlibc to create small
-  # statically linked binaries.
-  useDietLibC = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-
-        # libcompat.a contains some commonly used functions.
-        NIX_LDFLAGS = "-lcompat";
-
-        # These are added *after* the command-line flags, so we'll
-        # always optimise for size.
-        NIX_CFLAGS_COMPILE =
-          args.NIX_CFLAGS_COMPILE or ""
-          + " -Os -s -D_BSD_SOURCE=1";
-
-        configureFlags =
-          args.configureFlags or ""
-          + " --disable-shared"; # brrr...
-
-        NIX_GCC = import ../build-support/gcc-wrapper {
-          inherit stdenv;
-          libc = pkgs.dietlibc;
-          inherit (stdenv.gcc) gcc binutils nativeTools nativePrefix;
-          nativeLibc = false;
-        };
-      });
-      isDietLibC = true;
-    };
-
-
-  # Return a modified stdenv that uses klibc to create small
-  # statically linked binaries.
-  useKlibc = stdenv: klibc: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = "-static";
-
-        # These are added *after* the command-line flags, so we'll
-        # always optimise for size.
-        NIX_CFLAGS_COMPILE =
-          args.NIX_CFLAGS_COMPILE or "" + " -Os -s";
-
-        configureFlags =
-          args.configureFlags or "" + " --disable-shared"; # brrr...
-
-        NIX_GCC = pkgs.runCommand "klibc-wrapper" {} ''
-          mkdir -p $out/bin
-          ln -s ${klibc}/bin/klcc $out/bin/gcc
-          ln -s ${klibc}/bin/klcc $out/bin/cc
-          mkdir -p $out/nix-support
-          echo 'PATH=$PATH:${stdenv.gcc.binutils}/bin' > $out/nix-support/setup-hook
-        '';
-      });
-      isKlibc = true;
-      isStatic = true;
-    };
 
 
   # Return a modified stdenv that tries to build statically linked
@@ -171,6 +114,7 @@ rec {
         };
     } // {
       inherit cross gccCross binutilsCross;
+      ccCross = gccCross;
     };
 
 
@@ -285,18 +229,16 @@ rec {
     };
 
 
-  /* Modify a stdenv so that it uses the Gold linker. FIXME: should
-     use -fuse-ld=gold instead, but then the ld-wrapper won't be
-     invoked. */
-  useGoldLinker = stdenv:
-    let
-      binutils = stdenv.gcc.binutils;
-      binutils' = pkgs.runCommand "${binutils.name}-gold" { }
-        ''
-          mkdir -p $out/bin
-          ln -s ${binutils}/bin/* $out/bin/
-          ln -sfn ${binutils}/bin/ld.gold $out/bin/ld
-        ''; # */
-    in overrideGCC stdenv (stdenv.gcc.override { binutils = binutils'; });
+  /* Modify a stdenv so that it uses the Gold linker. */
+  useGoldLinker = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_COMPILE or "") + " -fuse-ld=gold";
+      });
+    };
 
+  dropCxx = drv: drv.override {
+    stdenv = if pkgs.stdenv.isDarwin
+      then pkgs.allStdenvs.stdenvDarwinNaked
+      else pkgs.stdenv;
+  };
 }

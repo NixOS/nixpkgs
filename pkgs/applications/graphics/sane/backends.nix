@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     if test "$udevSupport" = "1"; then
       mkdir -p $out/etc/udev/rules.d/
-      ./tools/sane-desc -m udev > $out/etc/udev/rules.d/60-libsane.rules || \
-      cp tools/udev/libsane.rules $out/etc/udev/rules.d/60-libsane.rules
+      ./tools/sane-desc -m udev > $out/etc/udev/rules.d/49-libsane.rules || \
+      cp tools/udev/libsane.rules $out/etc/udev/rules.d/49-libsane.rules
     fi
   '';
 

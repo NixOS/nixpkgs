@@ -1,17 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils, file, makeWrapper, zathura_icon }:
+{ stdenv, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.9";
+  version = "0.3.2";
   name = "zathura-core-${version}";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "17z05skjk95115ajp6459k1djadza1w8kck7jn1qnd697r01s1rc";
+    sha256 = "1qk5s7cyqp4l673yhma5igk9g24p5jyqyy81fdk7q7xjqlym19px";
   };
 
-  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper ];
+  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite ];
 
-  makeFlags = [ "PREFIX=$(out)" "RSTTOMAN=${docutils}/bin/rst2man.py" "VERBOSE=1" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "RSTTOMAN=${docutils}/bin/rst2man.py"
+    "VERBOSE=1"
+    "TPUT=${ncurses}/bin/tput"
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/zathura" \

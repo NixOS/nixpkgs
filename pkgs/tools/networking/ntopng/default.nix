@@ -1,36 +1,17 @@
-{ stdenv, fetchurl, libpcap, gnutls, libgcrypt, libxml2, glib, geoip, sqlite
-, which, autoreconfHook, subversion, pkgconfig, groff
+{ stdenv, fetchurl, libpcap, gnutls, libgcrypt, libxml2, glib
+, geoip, geolite-legacy, sqlite, which, autoreconfHook, subversion
+, pkgconfig, groff
 }:
 
 # ntopng includes LuaJIT, mongoose, rrdtool and zeromq in its third-party/
 # directory.
 
 stdenv.mkDerivation rec {
-  name = "ntopng-1.2.0_r8116";
-
-  geoLiteCity = fetchurl {
-    url = "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz";
-    sha256 = "1rv5yx5xgz04ymicx9pilidm19wh01ql2klwjcdakv558ndxdzd5";
-  };
-
-  geoLiteCityV6 = fetchurl {
-    url = "http://geolite.maxmind.com/download/geoip/database/GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz";
-    sha256 = "0j974qpi92wwnibq46h16vxpcz7yy8bbqc4k8kmby1yx994k33v4";
-  };
-
-  geoIPASNum = fetchurl {
-    url = "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz";
-    sha256 = "1msnbls66npq001nmf1wmkrh6vyacgi8g5phfm1c34cz7vqnh683";
-  };
-
-  geoIPASNumV6 = fetchurl {
-    url = "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNumv6.dat.gz";
-    sha256 = "126syia75mkxs6xfinfp70xcfq6a3rgfmh673pzzkwxya393lbdn";
-  };
+  name = "ntopng-1.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/ntop/ntopng/${name}.tgz";
-    sha256 = "0y7xc0l77k2qi2qalwfqiw2z361hdypirfv4k5gi652pb20jc9j6";
+    sha256 = "1db83cd1v4ivl8hxzzdvvdcgk22ji7mwrfnd5nnwll6kb11i364v";
   };
 
   patches = [
@@ -38,7 +19,8 @@ stdenv.mkDerivation rec {
     ./0002-Remove-requirement-to-have-writeable-callback-dir.patch
   ];
 
-  buildInputs = [ libpcap gnutls libgcrypt libxml2 glib geoip sqlite which autoreconfHook subversion pkgconfig groff ];
+  buildInputs = [ libpcap gnutls libgcrypt libxml2 glib geoip geolite-legacy
+    sqlite which autoreconfHook subversion pkgconfig groff ];
 
   preConfigure = ''
     find . -name Makefile.in | xargs sed -i "s|/bin/rm|rm|"
@@ -55,10 +37,8 @@ stdenv.mkDerivation rec {
         -e "s|\(#define CONST_DEFAULT_INSTALL_DIR\).*|\1 \"$out/share/ntopng\"|g" \
         -i ntop_defines.h
 
-    gunzip -c $geoLiteCity > httpdocs/geoip/GeoLiteCity.dat
-    gunzip -c $geoLiteCityV6 > httpdocs/geoip/GeoLiteCityv6.dat
-    gunzip -c $geoIPASNum > httpdocs/geoip/GeoIPASNum.dat
-    gunzip -c $geoIPASNumV6 > httpdocs/geoip/GeoIPASNumv6.dat
+    rmdir httpdocs/geoip
+    ln -s ${geolite-legacy}/share/GeoIP httpdocs/geoip
   '';
 
   meta = with stdenv.lib; {

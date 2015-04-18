@@ -10,12 +10,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.3.1";
+  version = "1.4.3";
   name = "tigervnc-${version}";
 
   src = fetchurl {
     url = "https://github.com/TigerVNC/tigervnc/archive/v${version}.tar.gz";
-    sha256 = "161bhibic777g47lbjgdnvjhkkdzxrzmxz9rw9sim3q0gcbp0vz3";
+    sha256 = "0938fmlll1vxccc65hdhzdxii7c1v65n2nbgizjddprj5gdh69hb";
   };
 
   inherit fontDirectories;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     tar xf ${xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    for a in $xorgPatches ../xserver114.patch
+    for a in $xorgPatches ../xserver116.patch
     do
       patch -p1 < $a
     done

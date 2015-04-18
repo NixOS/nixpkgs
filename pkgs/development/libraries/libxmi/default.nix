@@ -9,13 +9,13 @@ stdenv.mkDerivation {
   };
 
   # For the x86_64 GNU/Linux arch to be recognized by 'configure'
-  preConfigure = "cp ${libtool}/share/libtool/config/config.sub .";
+  preConfigure = "cp ${libtool}/share/libtool/build-aux/config.sub .";
 
   meta = {
     description = "Library for rasterizing 2-D vector graphics";
     homepage = http://www.gnu.org/software/libxmi/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

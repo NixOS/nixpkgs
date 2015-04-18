@@ -16,7 +16,7 @@ let
 
     nix = config.nix.package;
 
-    inherit (cfg) timeout;
+    timeout = if cfg.timeout != null then cfg.timeout else "";
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
@@ -31,7 +31,7 @@ in {
     };
 
     timeout = mkOption {
-      default = null;
+      default = if config.boot.loader.timeout == null then 10000 else config.boot.loader.timeout;
 
       example = 4;
 

@@ -4,11 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "pure-cdb";
-  version = "0.1";
-  sha256 = "0fxfhd73h5frnjpk617lspwf17wldsrd5a5cxar5y3a8wi0i4b8c";
+  version = "0.1.1";
+  sha256 = "1yjh7h02hkhx2vgvn7qfmfd3bp12ibpkf4znybsd2bfh0i1pzn0n";
   buildDepends = [ binary mtl vector ];
   testDepends = [ mtl testSimple Unixutils vector ];
-  doCheck = false;
   meta = {
     homepage = "https://github.com/bosu/pure-cdb";
     description = "Another pure-haskell CDB (Constant Database) implementation";

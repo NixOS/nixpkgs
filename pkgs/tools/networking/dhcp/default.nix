@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
+{ stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
+, coreutils, gnused, bind, openldap ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "dhcp-${version}";
-  version = "4.3.0";
+  version = "4.3.2";
   
   src = fetchurl {
     url = "http://ftp.isc.org/isc/dhcp/${version}/${name}.tar.gz";
-    sha256 = "12mydvj6x3zcl3gla06bywfkkrgg03g66fijs94mwb7kbiym3dm7";
+    sha256 = "0rc156qqv7293yi69gxvvc8s4cp7fspwl12iqkf6r7vmb2rwjik2";
   };
 
   patches =
@@ -32,10 +34,31 @@ stdenv.mkDerivation rec {
   # due to an uninitialized variable.
   CFLAGS = "-g -O2 -Wall";
 
-  buildInputs = [ perl makeWrapper ];
+  buildInputs = [ perl makeWrapper openldap ];
+
+  configureFlags = [
+    "--with-libbind=${bind}"
+    "--enable-failover"
+    "--enable-execute"
+    "--enable-tracing"
+    "--enable-delayed-ack"
+    "--enable-dhcpv6"
+    "--enable-paranoia"
+    "--enable-early-chroot"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+
+  installFlags = [ "DESTDIR=\${out}" ];
 
   postInstall =
     ''
+      mv $out/$out/* $out
+      DIR=$out/$out
+      while rmdir $DIR 2>/dev/null; do
+        DIR="$(dirname "$DIR")"
+      done
+
       cp client/scripts/linux $out/sbin/dhclient-script
       substituteInPlace $out/sbin/dhclient-script \
         --replace /sbin/ip ${iproute}/sbin/ip

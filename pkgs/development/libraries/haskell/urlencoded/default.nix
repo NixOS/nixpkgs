@@ -14,5 +14,6 @@ cabal.mkDerivation (self: {
     description = "Generate or process x-www-urlencoded data";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

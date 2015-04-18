@@ -110,7 +110,7 @@ in
         default = false;
         description = ''
           Print the contents of <literal>/etc/motd</literal> to screen
-          after a succesful login.
+          after a successful login.
         '';
       };
 
@@ -145,7 +145,7 @@ in
 
           When $DUO_PASSCODE is non-empty, it will override
           autopush. The SSH client will need SendEnv DUO_PASSCODE in
-          its configuration, and the SSH server will similarily need
+          its configuration, and the SSH server will similarly need
           AcceptEnv DUO_PASSCODE.
         '';
       };

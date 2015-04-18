@@ -1,27 +1,24 @@
-{ stdenv, coreutils, glibc, fetchgit, m4, libtool, ghc, uulib
-, uuagc, mtl, network, binary, llvm, fgl, syb
+{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages,
+  shuffle,
+  hashable, mtl, network, uhc-util, uulib
 }:
 
-# this check won't be needed anymore after ghc-wrapper is fixed
-# to show ghc-builtin packages in "ghc-pkg list" output.
-let binaryIsBuiltIn = builtins.compareVersions "7.2.1" ghc.version != 1;
-
-in stdenv.mkDerivation {
-  name = "uhc-svn-git20120502";
+let wrappedGhc = ghcWithPackages ( self: [hashable mtl network uhc-util uulib] );
+in stdenv.mkDerivation rec {
+  version = "1.1.8.10";
+  name = "uhc-${version}";
 
   src = fetchgit {
-     url = "https://github.com/UU-ComputerScience/uhc.git";
-     rev = "ab26d787657bb729d8a4f92ef5d067d9990f6ce3";
-     sha256 = "66c5b6d95dc80a652f6e17476a1b18fbef4b4ff6199a92d033f0055526ec97ff";
+    url = "https://github.com/UU-ComputerScience/uhc.git";
+    rev = "449d9578e06af1362d7f746798f0aed57ab6ca88";
+    sha256 = "0f8abhl9idbc2qlnb7ynrb11yvm3y07vksyzs1yg6snjvlhfj5az";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
 
-  propagatedBuildInputs = [mtl network binary fgl syb];
-  buildInputs = [coreutils m4 ghc libtool uulib uuagc];
+  buildInputs = [ m4 wrappedGhc clang libtool shuffle ];
 
-  # Can we rename this flag to "--with-cpp-uhc-options"?
-  configureFlags = "--with-cpp-ehc-options=-I${glibc}/include";
+  configureFlags = [ "--with-gcc=${clang}/bin/clang" ];
 
   # UHC builds packages during compilation; these are by default
   # installed in the user-specific package config file. We do not
@@ -34,15 +31,23 @@ in stdenv.mkDerivation {
     sed -i "s|-fglasgow-exts|-fglasgow-exts -package-conf=$p|g" mk/shared.mk.in
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/dist.mk
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/config.mk.in
-  '' + stdenv.lib.optionalString binaryIsBuiltIn ''
-    sed -i "s|ghcLibBinary=no|ghcLibBinaryExists=yes|" configure
+    sed -i "s|--make|--make -package-db=$p|g" src/ehc/files2.mk
+    sed -i "s|--make|--make -package-db=$p|g" src/gen/files.mk
   '';
 
-  meta = {
+  inherit clang;
+
+  meta = with stdenv.lib; {
     homepage = "http://www.cs.uu.nl/wiki/UHC";
     description = "Utrecht Haskell Compiler";
-    platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = stdenv.lib.platforms.none;
-    broken = true;
+    maintainers = [ maintainers.phausmann ];
+
+    # UHC i686 support is broken, see
+    # https://github.com/UU-ComputerScience/uhc/issues/52
+    #
+    # Darwin build is broken as well at the moment.
+    # On Darwin, the GNU libtool is used, which does not
+    # support the -static flag and thus breaks the build.
+    platforms = ["x86_64-linux"];
   };
 }

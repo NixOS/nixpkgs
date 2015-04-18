@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    qmake librecad.pro PREFIX=$out MUPARSER_DIR=${muparser} BOOST_DIR=${boost}
+    qmake librecad.pro PREFIX=$out MUPARSER_DIR=${muparser} BOOST_DIR=${boost.dev}
   '';
 
   installPhase = ''

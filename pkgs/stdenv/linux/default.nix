@@ -7,16 +7,18 @@
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
-, platform ? null, config ? {}, lib }:
+, platform ? null, config ? {}, lib ? (import ../../../lib)
+, customBootstrapFiles ? null }:
 
 rec {
 
   bootstrapFiles =
-    if system == "i686-linux" then import ./bootstrap/i686.nix
+    if customBootstrapFiles != null then customBootstrapFiles
+    else if system == "i686-linux" then import ./bootstrap/i686.nix
     else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
     else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
-    else if system == "armv7l-linux" then import ./bootstrap/armv6l.nix
+    else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
     else abort "unsupported platform for the pure Linux stdenv";
 
@@ -40,51 +42,34 @@ rec {
   bootstrapTools = derivation {
     name = "bootstrap-tools";
 
-    builder = bootstrapFiles.sh;
+    builder = bootstrapFiles.busybox;
 
-    args =
-      if system == "armv5tel-linux" || system == "armv6l-linux"
-        || system == "armv7l-linux"
-      then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
-      else [ ./scripts/unpack-bootstrap-tools.sh ];
+    args = if system == "armv5tel-linux" then
+        [ "ash" "-e" ./scripts/unpack-bootstrap-tools-arm.sh ]
+      else
+        [ "ash" "-e" ./scripts/unpack-bootstrap-tools.sh ];
 
-    # FIXME: get rid of curl.
-    inherit (bootstrapFiles) bzip2 mkdir curl cpio;
-
-    tarball = import <nix/fetchurl.nix> {
-      inherit (bootstrapFiles.bootstrapTools) url sha256;
-    };
+    tarball = bootstrapFiles.bootstrapTools;
 
     inherit system;
 
     # Needed by the GCC wrapper.
     langC = true;
     langCC = true;
+    isGNU = true;
   };
-
-
-  # A helper function to call gcc-wrapper.
-  wrapGCC =
-    { gcc, libc, binutils, coreutils, name }:
-
-    lib.makeOverridable (import ../../build-support/gcc-wrapper) {
-      nativeTools = false;
-      nativeLibc = false;
-      inherit gcc binutils coreutils libc name;
-      stdenv = stage0.stdenv;
-    };
 
 
   # This function builds the various standard environments used during
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun =
-    {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? []}:
+    {gccPlain, glibc, binutils, coreutils, name, overrides ? (pkgs: {}), extraBuildInputs ? []}:
 
     let
 
       thisStdenv = import ../generic {
-        inherit system config;
+        inherit system config extraBuildInputs;
         name = "stdenv-linux-boot";
         preHook =
           ''
@@ -94,15 +79,33 @@ rec {
             ${commonPreHook}
           '';
         shell = "${bootstrapTools}/bin/sh";
-        initialPath = [bootstrapTools] ++ extraPath;
+        initialPath = [bootstrapTools];
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl = bootstrapTools;
         };
-        inherit gcc;
-        # Having the proper 'platform' in all the stdenvs allows getting proper
-        # linuxHeaders for example.
-        extraAttrs = extraAttrs // { inherit platform; };
+
+        cc = if isNull gccPlain
+             then "/no-such-path"
+             else lib.makeOverridable (import ../../build-support/cc-wrapper) {
+          nativeTools = false;
+          nativeLibc = false;
+          cc = gccPlain;
+          libc = glibc;
+          inherit binutils coreutils;
+          name = name;
+          stdenv = stage0.stdenv;
+        };
+
+        extraAttrs = {
+          # Having the proper 'platform' in all the stdenvs allows getting proper
+          # linuxHeaders for example.
+          inherit platform;
+
+          # stdenv.glibc is used by GCC build to figure out the system-level
+          # /usr/include directory.
+          inherit glibc;
+        };
         overrides = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -117,7 +120,11 @@ rec {
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
   stage0 = stageFun {
-    gcc = "/no-such-path";
+    gccPlain = null;
+    glibc = null;
+    binutils = null;
+    coreutils = null;
+    name = null;
 
     overrides = pkgs: {
       # The Glibc include directory cannot have the same prefix as the
@@ -148,17 +155,23 @@ rec {
   # simply re-export those packages in the middle stage(s) using the
   # overrides attribute and the inherit syntax.
   stage1 = stageFun {
-    gcc = wrapGCC {
-      gcc = bootstrapTools;
-      libc = stage0.pkgs.glibc;
-      binutils = bootstrapTools;
-      coreutils = bootstrapTools;
-      name = "bootstrap-gcc-wrapper";
-    };
+    gccPlain = bootstrapTools;
+    inherit (stage0.pkgs) glibc;
+    binutils = bootstrapTools;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
     # Rebuild binutils to use from stage2 onwards.
     overrides = pkgs: {
       binutils = pkgs.binutils.override { gold = false; };
       inherit (stage0.pkgs) glibc;
+
+      # A threaded perl build needs glibc/libpthread_nonshared.a,
+      # which is not included in bootstrapTools, so disable threading.
+      # This is not an issue for the final stdenv, because this perl
+      # won't be included in the final stdenv and won't be exported to
+      # top-level pkgs as an override either.
+      perl = pkgs.perl.override { enableThreading = false; };
     };
   };
 
@@ -166,13 +179,12 @@ rec {
   # 2nd stdenv that contains our own rebuilt binutils and is used for
   # compiling our own Glibc.
   stage2 = stageFun {
-    gcc = wrapGCC {
-      gcc = bootstrapTools;
-      libc = stage1.pkgs.glibc;
-      binutils = stage1.pkgs.binutils;
-      coreutils = bootstrapTools;
-      name = "bootstrap-gcc-wrapper";
-    };
+    gccPlain = bootstrapTools;
+    inherit (stage1.pkgs) glibc;
+    binutils = stage1.pkgs.binutils;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
     overrides = pkgs: {
       inherit (stage1.pkgs) perl binutils paxctl;
       # This also contains the full, dynamically linked, final Glibc.
@@ -184,46 +196,53 @@ rec {
   # one uses the rebuilt Glibc from stage2.  It still uses the recent
   # binutils and rest of the bootstrap tools, including GCC.
   stage3 = stageFun {
-    gcc = wrapGCC {
-      gcc = bootstrapTools;
-      libc = stage2.pkgs.glibc;
-      binutils = stage2.pkgs.binutils;
-      coreutils = bootstrapTools;
-      name = "bootstrap-gcc-wrapper";
-    };
+    gccPlain = bootstrapTools;
+    inherit (stage2.pkgs) glibc binutils;
+    coreutils = bootstrapTools;
+    name = "bootstrap-gcc-wrapper";
+
     overrides = pkgs: {
-      inherit (stage2.pkgs) binutils glibc perl;
+      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      mpc = pkgs.mpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
+      libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
+      gccPlain = pkgs.gcc.cc;
     };
-    extraAttrs = {
-      glibc = stage2.pkgs.glibc;  # Required by gcc47 build
-    };
-    extraPath = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
+    extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };
 
 
   # Construct a fourth stdenv that uses the new GCC.  But coreutils is
   # still from the bootstrap tools.
   stage4 = stageFun {
-    gcc = wrapGCC {
-      gcc = stage3.pkgs.gcc.gcc;
-      libc = stage3.pkgs.glibc;
-      binutils = stage3.pkgs.binutils;
-      coreutils = bootstrapTools;
-      name = "";
-    };
-    extraPath = [ stage2.pkgs.patchelf stage3.pkgs.xz ];
+    inherit (stage3.pkgs) gccPlain glibc binutils;
+    coreutils = bootstrapTools;
+    name = "";
+
     overrides = pkgs: {
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc;
+      # Zlib has to be inherited and not rebuilt in this stage,
+      # because gcc (since JAR support) already depends on zlib, and
+      # then if we already have a zlib we want to use that for the
+      # other purposes (binutils and top-level pkgs) too.
+      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
+
+      gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
+        nativeTools = false;
+        nativeLibc = false;
+        cc = stage4.stdenv.cc.cc;
+        libc = stage4.pkgs.glibc;
+        inherit (stage4.pkgs) binutils coreutils;
+        name = "";
+        stdenv = stage4.stdenv;
+        shell = stage4.pkgs.bash + "/bin/bash";
+      };
     };
+    extraBuildInputs = [ stage3.pkgs.patchelf stage3.pkgs.xz ];
   };
 
 
@@ -250,14 +269,9 @@ rec {
 
     extraBuildInputs = [ stage4.pkgs.patchelf stage4.pkgs.paxctl ];
 
-    shell = stage4.pkgs.bash + "/bin/bash";
+    cc = stage4.pkgs.gcc;
 
-    gcc = (wrapGCC rec {
-      gcc = stage4.stdenv.gcc.gcc;
-      libc = stage4.pkgs.glibc;
-      inherit (stage4.pkgs) binutils coreutils;
-      name = "";
-    }).override { inherit shell; };
+    shell = cc.shell;
 
     inherit (stage4.stdenv) fetchurlBoot;
 
@@ -267,13 +281,70 @@ rec {
       shellPackage = stage4.pkgs.bash;
     };
 
+    /* outputs TODO
+    allowedRequisites = with stage4.pkgs;
+      [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+        glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
+        paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
+      ];
+      */
+
     overrides = pkgs: {
-      inherit gcc;
+      gcc = cc;
+
       inherit (stage4.pkgs)
         gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf
-        attr acl paxctl;
+        attr acl paxctl zlib pcre;
     };
   };
 
+
+  testBootstrapTools = let
+    defaultPkgs = allPackages { inherit system platform; };
+  in derivation {
+    name = "test-bootstrap-tools";
+    inherit system;
+    builder = bootstrapFiles.busybox;
+    args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
+
+    buildCommand = ''
+      export PATH=${bootstrapTools}/bin
+
+      ls -l
+      mkdir $out
+      mkdir $out/bin
+      sed --version
+      find --version
+      diff --version
+      patch --version
+      make --version
+      awk --version
+      grep --version
+      gcc --version
+      curl --version
+
+      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
+      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
+      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
+
+      echo '#include <stdio.h>' >> foo.c
+      echo '#include <limits.h>' >> foo.c
+      echo 'int main() { printf("Hello World\\n"); return 0; }' >> foo.c
+      $CC -o $out/bin/foo foo.c
+      $out/bin/foo
+
+      echo '#include <iostream>' >> bar.cc
+      echo 'int main() { std::cout << "Hello World\\n"; }' >> bar.cc
+      $CXX -v -o $out/bin/bar bar.cc
+      $out/bin/bar
+
+      tar xvf ${defaultPkgs.hello.src}
+      cd hello-*
+      ./configure --prefix=$out
+      make
+      make install
+    '';
+  };
 }

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.opensc-project.org/engine_pkcs11/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsdOriginal;
     description = "Engine for OpenSSL to use smart cards in PKCS#11 format";
   };
 }

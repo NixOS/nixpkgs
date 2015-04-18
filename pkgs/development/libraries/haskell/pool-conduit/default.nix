@@ -14,5 +14,7 @@ cabal.mkDerivation (self: {
     description = "Resource pool allocations via ResourceT. (deprecated)";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
+    broken = true;
   };
 })

@@ -57,12 +57,13 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   name = namePrefix + name;
 
   buildInputs = [
-    python wrapPython setuptools
+    wrapPython setuptools
     (distutils-cfg.override { extraCfg = distutilsExtraCfg; })
   ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
-  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
+  # propagate python to active setup-hook in nix-shell
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python ];
 
   pythonPath = [ setuptools ] ++ pythonPath;
 
@@ -117,7 +118,7 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
     # work as expected
 
     # --old-and-unmanagable:
-    # instruct setuptools not to use eggs but fallback to plan package install 
+    # instruct setuptools not to use eggs but fallback to plan package install
     # this also reduces one .pth file in the chain, but the main reason is to
     # force install process to install only scripts for the package we are
     # installing (otherwise it will install scripts also for dependencies)
@@ -142,14 +143,6 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   postFixup = attrs.postFixup or ''
       wrapPythonPrograms
 
-      # If a user installs a Python package, they probably also wants its
-      # dependencies in the user environment profile (only way to find the
-      # dependencies is to have them in the PYTHONPATH variable).
-      # Allows you to do: $ PYTHONPATH=~/.nix-profile/lib/python2.7/site-packages python
-      if test -e $out/nix-support/propagated-build-inputs; then
-          ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
-      fi
-
       # TODO: document
       createBuildInputsPth build-inputs "$buildInputStrings"
       for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
@@ -161,11 +154,12 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
 
   shellHook = attrs.shellHook or ''
     if test -e setup.py; then
-       mkdir -p /tmp/$name/lib/${python.libPrefix}/site-packages
+       tmp_path=/tmp/`pwd | md5sum | cut -f 1 -d " "`-$name
+       mkdir -p $tmp_path/lib/${python.libPrefix}/site-packages
        ${preShellHook}
-       export PATH="/tmp/$name/bin:$PATH"
-       export PYTHONPATH="/tmp/$name/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-       ${python}/bin/${python.executable} setup.py develop --prefix /tmp/$name
+       export PATH="$tmp_path/bin:$PATH"
+       export PYTHONPATH="$tmp_path/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+       ${python}/bin/${python.executable} setup.py develop --prefix $tmp_path
        ${postShellHook}
     fi
   '';

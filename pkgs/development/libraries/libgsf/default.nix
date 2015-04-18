@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python, gdk_pixbuf, libiconvOrEmpty, libintlOrEmpty }:
+, python, gdk_pixbuf, libiconv, libintlOrEmpty }:
 
 with { inherit (stdenv.lib) optionals; };
 
@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext bzip2 zlib python ];
 
-  propagatedBuildInputs = [ libxml2 glib gdk_pixbuf ]
-    ++ libiconvOrEmpty
+  propagatedBuildInputs = [ libxml2 glib gdk_pixbuf libiconv ]
     ++ libintlOrEmpty;
 
   doCheck = true;

@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, m4, perl, lzma }:
+{ stdenv, fetchurl, m4, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "libtool-2.4.2";
+  name = "libtool-2.4.6";
 
   src = fetchurl {
     url = "mirror://gnu/libtool/${name}.tar.gz";
-    sha256 = "0649qfpzkswgcj9vqkkr9rn4nlcx80faxpyqscy2k1x9c94f93dk";
+    sha256 = "1qq61k6lp1fp75xs398yzi6wvbx232l7xbyn3p13cnh27mflvgg3";
   };
 
   outputs = [ "out" "lib" ];
 
-  nativeBuildInputs = [ lzma m4 perl ];
+  propagatedNativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ perl help2man ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

@@ -19,12 +19,13 @@ in
 {
   imports = [ ./amazon-base-config.nix ];
   ec2.hvm = true;
-  boot.loader.grub.device = lib.mkOverride 0 "nodev";
+  boot.loader.grub.device = lib.mkOverride 0 "/dev/xvdg";
+  boot.kernelParams = [ "console=ttyS0" ];
 
   boot.initrd.extraUtilsCommands = ''
-    cp -v ${pkgs.gawk}/bin/gawk $out/bin/gawk
-    cp -v ${pkgs.gnused}/bin/sed $out/bin/gnused
-    cp -v ${pkgs.utillinux}/sbin/sfdisk $out/bin/sfdisk
+    copy_bin_and_libs ${pkgs.gawk}/bin/gawk
+    copy_bin_and_libs ${pkgs.gnused}/bin/sed
+    copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
     cp -v ${growpart} $out/bin/growpart
   '';
   boot.initrd.postDeviceCommands = ''

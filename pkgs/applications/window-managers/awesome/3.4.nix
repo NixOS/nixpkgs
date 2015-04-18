@@ -47,4 +47,9 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };
+
+  passthru = {
+    inherit lua;
+  };
+
 }

@@ -1,0 +1,60 @@
+diff --git a/dynconfig/wscript b/dynconfig/wscript
+index aa4e66e..d53f433 100755
+--- a/dynconfig/wscript
++++ b/dynconfig/wscript
+@@ -379,9 +379,9 @@ def build(bld):
+                         cflags=cflags)
+ 
+     # install some extra empty directories
+-    bld.INSTALL_DIRS("", "${CONFIGDIR} ${PRIVATE_DIR} ${LOGFILEBASE}");
+-    bld.INSTALL_DIRS("", "${PRIVATE_DIR} ${PRIVILEGED_SOCKET_DIR}")
+-    bld.INSTALL_DIRS("", "${STATEDIR} ${CACHEDIR}");
++    #bld.INSTALL_DIRS("", "${CONFIGDIR} ${PRIVATE_DIR} ${LOGFILEBASE}");
++    #bld.INSTALL_DIRS("", "${PRIVATE_DIR} ${PRIVILEGED_SOCKET_DIR}")
++    #bld.INSTALL_DIRS("", "${STATEDIR} ${CACHEDIR}");
+ 
+     # these might be on non persistent storage
+-    bld.INSTALL_DIRS("", "${LOCKDIR} ${PIDDIR} ${SOCKET_DIR}")
++    #bld.INSTALL_DIRS("", "${LOCKDIR} ${PIDDIR} ${SOCKET_DIR}")
+diff --git a/ctdb/wscript b/ctdb/wscript
+index 3e2a992..1b93a4d 100755
+--- a/ctdb/wscript
++++ b/ctdb/wscript
+@@ -473,10 +473,10 @@ def build(bld):
+     for t in etc_subdirs:
+         files = SUBDIR_MODE('%s/%s' % (configdir, t), trim_path=configdir)
+         for fmode in files:
+-            bld.INSTALL_FILES(bld.env.CTDB_ETCDIR, 'config/%s' % fmode[0],
++            bld.INSTALL_FILES('${EXEC_PREFIX}${CTDB_ETCDIR}', 'config/%s' % fmode[0],
+                               destname=fmode[0], chmod=fmode[1])
+ 
+-    bld.INSTALL_FILES(bld.env.CTDB_ETCDIR, 'config/functions',
++    bld.INSTALL_FILES('${EXEC_PREFIX}${CTDB_ETCDIR}', 'config/functions',
+                       destname='functions')
+ 
+     etc_scripts = [
+@@ -489,18 +489,18 @@ def build(bld):
+     ]
+ 
+     for t in etc_scripts:
+-        bld.INSTALL_FILES(bld.env.CTDB_ETCDIR, 'config/%s' % t,
++        bld.INSTALL_FILES('${EXEC_PREFIX}${CTDB_ETCDIR}', 'config/%s' % t,
+                           destname=t, chmod=0755)
+ 
+-    bld.INSTALL_FILES('${SYSCONFDIR}/sudoers.d', 'config/ctdb.sudoers',
++    bld.INSTALL_FILES('${EXEC_PREFIX}${SYSCONFDIR}/sudoers.d', 'config/ctdb.sudoers',
+                       destname='ctdb')
+ 
+-    bld.INSTALL_FILES('${CTDB_ETCDIR}/notify.d', 'config/notify.d.README',
++    bld.INSTALL_FILES('${EXEC_PREFIX}${CTDB_ETCDIR}/notify.d', 'config/notify.d.README',
+                       destname='README')
+ 
+-    bld.install_dir(bld.env.CTDB_LOGDIR)
+-    bld.install_dir(bld.env.CTDB_RUNDIR)
+-    bld.install_dir(bld.env.CTDB_VARDIR)
++    #bld.install_dir(bld.env.CTDB_LOGDIR)
++    #bld.install_dir(bld.env.CTDB_RUNDIR)
++    #bld.install_dir(bld.env.CTDB_VARDIR)
+ 
+     sed_expr = 's/@PACKAGE_VERSION@/%s/g' % VERSION
+     t = bld.SAMBA_GENERATOR('ctdb-pc',

@@ -11,14 +11,14 @@ stdenv.mkDerivation {
   preBuild = ''
     ${gnused}/bin/sed 's/getline/cdecl_getline/g' -i cdecl.c;
     makeFlagsArray=(CFLAGS="-DBSD -DUSE_READLINE -std=gnu89" LIBS=-lreadline);
-    makeFlags="$makeFlags PREFIX=$out BINDIR=$out/bin MANDIR=$out/man1 CATDIR=$out/cat1";
+    makeFlags="$makeFlags PREFIX=$out BINDIR=$out/bin MANDIR=$out/man1 CATDIR=$out/cat1 CC=$CC";
     mkdir -p $out/bin;
   '';
   buildInputs = [yacc flex readline ncurses];
 
   meta = {
     description = "Translator English -- C/C++ declarations";
-    license = "Public Domain";
+    license = stdenv.lib.licenses.publicDomain;
     maintainers = with stdenv.lib.maintainers; [viric joelteon];
     platforms = stdenv.lib.platforms.unix;
   };

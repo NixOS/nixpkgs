@@ -34,10 +34,6 @@ in
             # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
             export GTK_DATA_PREFIX=${config.system.path}
 
-            # Necessary to get xfce4-mixer to find GST's ALSA plugin.
-            # Ugly.
-            export GST_PLUGIN_PATH=${config.system.path}/lib
-
             exec ${pkgs.stdenv.shell} ${pkgs.xfce.xinitrc}
           '';
       };
@@ -50,7 +46,6 @@ in
         pkgs.which # Needed by the xfce's xinitrc script.
         pkgs.xfce.exo
         pkgs.xfce.gtk_xfce_engine
-        pkgs.xfce.libxfcegui4 # For the icons.
         pkgs.xfce.mousepad
         pkgs.xfce.ristretto
         pkgs.xfce.terminal
@@ -60,6 +55,7 @@ in
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
         pkgs.xfce.xfce4mixer
+        pkgs.xfce.xfce4volumed
         pkgs.xfce.xfce4screenshooter
         pkgs.xfce.xfconf
         pkgs.xfce.xfdesktop

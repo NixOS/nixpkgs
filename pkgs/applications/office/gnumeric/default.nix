@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, goffice, makeWrapper, gtk3, gnome_icon_theme
+, goffice, makeWrapper, gtk3, gnome_icon_theme, gnome3
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.12";
+  name = "gnumeric-1.12.18";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "096i9x6b4i6x24vc4lsxx8fg2n2pjs2jb6x3bkg3ppa2c60w1jq0";
+    sha256 = "402224f858cfa4e91503ab1be0491fa3322713dabe56b6eae171def8b736d9e9";
   };
 
   preConfigure = ''sed -i 's/\(SUBDIRS.*\) doc/\1/' Makefile.in''; # fails when installing docs
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for f in "$out"/bin/gnumeric-*; do
       wrapProgram $f \
-        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
     done
     rm $out/share/icons/hicolor/icon-theme.cache
   '';

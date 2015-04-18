@@ -16,7 +16,6 @@ let
       [ p.mesa_drivers
         p.mesa_noglu # mainly for libGL
         (if cfg.s3tcSupport then p.libtxc_dxtn else p.libtxc_dxtn_s2tc)
-        p.udev
       ];
   };
 
@@ -46,7 +45,8 @@ in
       description = ''
         On 64-bit systems, whether to support Direct Rendering for
         32-bit applications (such as Wine).  This is currently only
-        supported for the <literal>nvidia</literal> driver and for
+        supported for the <literal>nvidia</literal> and 
+        <literal>ati_unfree</literal> drivers, as well as
         <literal>Mesa</literal>.
       '';
     };
@@ -104,22 +104,9 @@ in
     environment.sessionVariables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" "/run/opengl-driver-32/lib" ];
 
-    # FIXME: move this into card-specific modules.
-    hardware.opengl.package = mkDefault
-      (if elem "ati_unfree" videoDrivers then
-        kernelPackages.ati_drivers_x11
-      else
-        makePackage pkgs);
-
+    hardware.opengl.package = mkDefault (makePackage pkgs);
     hardware.opengl.package32 = mkDefault (makePackage pkgs_i686);
 
-    boot.extraModulePackages =
-      optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions ++
-      optional (elem "ati_unfree" videoDrivers) kernelPackages.ati_drivers_x11;
-
-    environment.etc =
-      optionalAttrs (elem "ati_unfree" videoDrivers) {
-        "ati".source = "${kernelPackages.ati_drivers_x11}/etc/ati";
-      };
+    boot.extraModulePackages = optional (elem "virtualbox" videoDrivers) kernelPackages.virtualboxGuestAdditions;
   };
 }

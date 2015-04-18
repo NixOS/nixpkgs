@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , gawk, alsaLib, ncurses
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -28,7 +28,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doUnpack" "killUsrBin" "doConfigure" "doMakeInstall" "doDeploy" "fixPaths"];
-      
+
   killUsrBin = a.fullDepEntry ''
     sed -e s@/usr/bin/@@g -i $( grep -rl '/usr/bin/' . )
     sed -re 's@/bin/(rm|printf|uname)@\1@g' -i $( grep -rl '/bin/' . )
@@ -55,7 +55,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
   };
   passthru = {
     updateInfo = {
@@ -63,4 +63,3 @@ rec {
     };
   };
 }) x
-

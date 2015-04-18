@@ -19,6 +19,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://larswm.fnurt.net/;
     description = "9wm-like tiling window manager";
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

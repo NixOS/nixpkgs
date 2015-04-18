@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.sentex.net/~mwandel/jhead/;
     description = "Exif Jpeg header manipulation tool";
-    license = "free";
+    license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];
   };
 }

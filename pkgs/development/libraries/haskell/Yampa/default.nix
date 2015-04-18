@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Yampa";
-  version = "0.9.5";
-  sha256 = "0r6fm2ccls7gbc5s0vbrzrqv6marnzlzc7zr4afkgfk9jsqfmqjh";
+  version = "0.9.6";
+  sha256 = "0a1m0sb0i3kkxbp10vpqd6iw83ksm4alavrg04arzrv71p3skyg0";
   buildDepends = [ random ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Yampa";

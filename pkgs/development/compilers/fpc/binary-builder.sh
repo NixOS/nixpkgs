@@ -1,6 +1,7 @@
 source $stdenv/setup
 
 tar xf $src
+cd */
 tarballdir=$(pwd)
 for i in *.tar; do tar xvf $i; done
 echo "Deploying binaries.."

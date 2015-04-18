@@ -21,12 +21,14 @@ stdenv.mkDerivation rec {
     sha256 = "1l45nd7ln2pnrf99vdki3l7an5wrzkbak11hnnj1w6r3fkm4xmv1";
   };
 
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
   buildInputs = [ libxkbcommon ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
-    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor wayland ]
+    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optionals stdenv.isLinux [ wayland ]
     ++ optional stdenv.isDarwin x11
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;

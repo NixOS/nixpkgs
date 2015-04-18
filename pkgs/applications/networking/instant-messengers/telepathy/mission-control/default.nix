@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, telepathy_glib, libxslt, makeWrapper, upower }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-5.16.2";
+  name = "${pname}-5.16.3";
   pname = "telepathy-mission-control";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
-    sha256 = "1sk8f9jfaxgbsniz0n5hmrcwvxla3x8axjcnjbppg7nidk9gijrx";
+    sha256 = "0zcbx69k0d3p2pjh3g7sa3q2zkd5xchxkqsmlfn3fwxaz0pmsmvi";
   };
 
-  buildInputs = [ telepathy_glib makeWrapper upower ]; # ToDo: optional stuff missing
+  buildInputs = [ telepathy_glib makeWrapper /*upower*/ ]; # ToDo: optional stuff missing
+  # 5.16.3 won't build with upower-0.99. Arch and Debian choose to disable it
 
   nativeBuildInputs = [ pkgconfig libxslt ];
 

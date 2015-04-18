@@ -52,6 +52,7 @@ let
     #!/bin/sh
     if test "$2" = "up"; then
       ${config.systemd.package}/bin/systemctl start ip-up.target
+      ${config.systemd.package}/bin/systemctl start network-online.target
     fi
   '';
 
@@ -69,6 +70,13 @@ let
     ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
     ${coreutils}/bin/rm -f $tmp $tmp.ns
   '';
+
+  # pre-up and pre-down hooks were added in NM 0.9.10, but we still use 0.9.0
+  dispatcherTypesSubdirMap = {
+    "basic" = "";
+    /*"pre-up" = "pre-up.d/";
+    "pre-down" = "pre-down.d/";*/
+  };
 
 in {
 
@@ -117,6 +125,30 @@ in {
         '';
       };
 
+      dispatcherScripts = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            source = mkOption {
+              type = types.str;
+              description = ''
+                A script source.
+              '';
+            };
+
+            type = mkOption {
+              type = types.enum (attrNames dispatcherTypesSubdirMap); 
+              default = "basic";
+              description = ''
+                Dispatcher hook type. Only basic hooks are currently available.
+              '';
+            };
+          };
+        });
+        default = [];
+        description = ''
+          A list of scripts which will be executed in response to  network  events.
+        '';
+      };
     };
   };
 
@@ -151,16 +183,24 @@ in {
       { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";
       }
+      { source = "${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
+        target = "NetworkManager/VPN/nm-l2tp-service.name";
+      }
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
-           };
+           }
+      ++ lib.imap (i: s: {
+        text = s.source;
+        target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+      }) cfg.dispatcherScripts;
 
     environment.systemPackages = cfg.packages ++ [
         networkmanager_openvpn
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        networkmanager_l2tp
         modemmanager
         ];
 
@@ -177,8 +217,8 @@ in {
     systemd.services."networkmanager-init" = {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
-      wants = [ "NetworkManager.service" ];
-      before = [ "NetworkManager.service" ];
+      wants = [ "network-manager.service" ];
+      before = [ "network-manager.service" ];
       script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
         mkdir -m 755 -p ${stateDirs}
@@ -193,7 +233,7 @@ in {
     };
 
     powerManagement.resumeCommands = ''
-      systemctl restart NetworkManager
+      ${config.systemd.package}/bin/systemctl restart network-manager
     '';
 
     security.polkit.extraConfig = polkitConf;
@@ -204,6 +244,7 @@ in {
         networkmanager_vpnc
         networkmanager_openconnect
         networkmanager_pptp
+        networkmanager_l2tp
         modemmanager
         ];
 

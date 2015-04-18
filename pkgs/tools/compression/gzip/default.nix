@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
         is just a bonus.
       '';
 
+    platforms = stdenv.lib.platforms.all;
+
     license = stdenv.lib.licenses.gpl3Plus;
   };
 }

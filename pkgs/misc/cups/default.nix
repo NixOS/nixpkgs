@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, libusb, acl }:
+, dbus, libusb, acl, gmp }:
 
-let version = "1.5.4"; in
+let version = "1.7.5"; in
 
 stdenv.mkDerivation {
   name = "cups-${version}";
@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   passthru = { inherit version; };
 
   src = fetchurl {
-    url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    md5 = "de3006e5cf1ee78a9c6145ce62c4e982";
+    url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
+    sha256 = "00mx4rpiqw9cwx46bd3hd5lcgmcxy63zfnmkr02smanv8xl4rjqq";
   };
 
   # FIXME: Split off the cups client library.
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
-  propagatedBuildInputs = [ openssl ];
+  propagatedBuildInputs = [ openssl gmp ];
 
-  configureFlags = "--localstatedir=/var --enable-dbus"; # --with-dbusdir
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --enable-dbus"; # --with-dbusdir
 
   installFlags =
     [ # Don't try to write in /var at build time.
@@ -34,6 +34,7 @@ stdenv.mkDerivation {
       "DBUSDIR=$(out)/etc/dbus-1"
       "INITDIR=$(out)/etc/rc.d"
       "XINETD=$(out)/etc/xinetd.d"
+      "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.
       "MENUDIR=$(out)/share/applications"
       "ICONDIR=$(out)/share/icons"
@@ -43,6 +44,9 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
+      # Delete obsolete stuff that conflicts with cups-filters.
+      rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+
       mkdir $dev/bin
       mv $out/bin/cups-config $dev/bin/
     '';

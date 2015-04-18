@@ -7,13 +7,14 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-cairo";
-  version = "1.2.0.1";
-  sha256 = "0y7llxxs34i814nc3c79ykv75znplzqq7njvq7a5fyxl81ji0z4c";
+  version = "1.2.0.4";
+  sha256 = "1yg6ja5jha499b6j5fsgdl4f3l2ff1gp6cl7ixzj9y26m7a10bqq";
   buildDepends = [
     cairo colour dataDefaultClass diagramsCore diagramsLib filepath
     hashable JuicyPixels lens mtl optparseApplicative pango split
     statestack time transformers vector
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Cairo backend for diagrams drawing EDSL";

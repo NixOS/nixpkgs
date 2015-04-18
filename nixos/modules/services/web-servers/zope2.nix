@@ -24,7 +24,7 @@ let
       http_address = mkOption {
         default = "localhost:8080";
         type = types.string;
-        description = "Give a port and adress for the HTTP server.";
+        description = "Give a port and address for the HTTP server.";
       };
 
       user = mkOption {

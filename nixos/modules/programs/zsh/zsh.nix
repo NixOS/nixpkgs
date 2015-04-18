@@ -100,7 +100,7 @@ in
         export HISTSIZE=2000
         export HISTFILE=$HOME/.zsh_history
 
-        setopt HIST_IGNORE_DUPS SHARE_HISTORY
+        setopt HIST_IGNORE_DUPS SHARE_HISTORY HIST_FCNTL_LOCK
       '';
 
     };

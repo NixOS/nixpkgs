@@ -32,6 +32,12 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
+
+  # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
+  postConfigure = ''
+    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") || getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
+  '';
+
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
@@ -43,7 +49,6 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = linkStatic;
 
-  CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   LDFLAGS = if linkStatic then "-static" else "";
   CXX = "g++";
   CXXCPP = "g++ -E";

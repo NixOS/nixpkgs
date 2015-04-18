@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bytestring-trie";
-  version = "0.2.3";
-  sha256 = "1zb4s7fd951swc648szrpx0ldailmdinapgbcg1zajb5c5jq57ga";
+  version = "0.2.4";
+  sha256 = "1fv3xh52hqhzdbq78c3lrgx5vd49cabwp9ww5ki1888zlq29pyck";
   buildDepends = [ binary ];
   meta = {
     homepage = "http://code.haskell.org/~wren/";

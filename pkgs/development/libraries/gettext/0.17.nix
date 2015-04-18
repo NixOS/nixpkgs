@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "gettext-0.17";
-  
+
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
     sha256 = "1fipjpaxxwifdw6cbr7mkxp1yvy643i38nhlh7124bqnisxki5i0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
-  
+
   meta = {
     description = "GNU gettext, a well integrated set of translation tools and documentation";
 
@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/gettext/;
 
     maintainers = [ ];
+    branch = "0.17";
   };
 }

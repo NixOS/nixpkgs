@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, SDL, openal, zlib, libpng, python, libvorbis }:
 
-assert stdenv.gcc.libc != null;
+assert stdenv.cc.libc != null;
 
 stdenv.mkDerivation rec {
   name = "gemrb-0.8.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl reqs) optional
 
   # Necessary to find libdl.
-  CMAKE_LIBRARY_PATH = "${stdenv.gcc.libc}/lib";
+  CMAKE_LIBRARY_PATH = "${stdenv.cc.libc}/lib";
 
   # Can't have -werror because of the Vorbis header files.
   cmakeFlags = "-DDISABLE_WERROR=ON -DCMAKE_VERBOSE_MAKEFILE=ON";

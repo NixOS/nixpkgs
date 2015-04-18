@@ -161,6 +161,7 @@ in
         # systemd kills it with SIGKILL.
         TimeoutStopSec = 5;
       };
+      unitConfig.Documentation = "man:apcupsd(8)";
     };
 
     # A special service to tell the UPS to power down/hibernate just before the

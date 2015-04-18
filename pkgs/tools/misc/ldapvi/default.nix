@@ -12,11 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openldap openssl popt glib ncurses readline pkgconfig cyrus_sasl autoconf automake ];
 
-  setSourceRoot = ''
-    sourceRoot=git-export/ldapvi
-  '';
- 
   preConfigure = ''
+    cd ldapvi
     ./autogen.sh
   '';
 

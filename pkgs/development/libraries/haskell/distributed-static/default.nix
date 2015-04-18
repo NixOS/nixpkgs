@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "distributed-static";
-  version = "0.3.0.0";
-  sha256 = "1g8jr01jxlfshsz3mrpzl21q290whwz4va3zjp1h0d1pnfwz6jcj";
+  version = "0.3.1.0";
+  sha256 = "190b6vjcipgrvnfl72c0ssw8crza02gfw9kwyvwg043jcznihj08";
   buildDepends = [ binary rank1dynamic ];
   meta = {
     homepage = "http://haskell-distributed.github.com";

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out
     cd $out
-    yes y | unzip $src
+    unzip $src
     
     # Fix shebang header for python scripts
     
@@ -45,16 +45,18 @@ stdenv.mkDerivation {
     
     ${if stdenv.system == "i686-linux" then
       ''
-        patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux.so.2 titanium_prep.linux32
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 titanium_prep.linux32
       ''
       else if stdenv.system == "x86_64-linux" then
       ''
-        patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2 titanium_prep.linux64
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 titanium_prep.linux64
       ''
       else ""}
     
-    # Wrap builder script
+    # Fix zipalign compatibility issue with newer Android SDKs
+    sed -i -e 's|zipalign = self.sdk.get_zipalign()|zipalign = "zipalign"|' builder.py
     
+    # Wrap builder script
     mv builder.py .builder.py
     cat > builder.py <<EOF
     #!${python}/bin/python
@@ -62,7 +64,7 @@ stdenv.mkDerivation {
     import os, sys
     
     os.environ['PYTHONPATH'] = '$(echo ${python.modules.sqlite3}/lib/python*/site-packages)'
-    os.environ['JAVA_HOME'] = '${if stdenv.system == "x86_64-darwin" then jdk else "${jdk}/lib/openjdk"}'
+    os.environ['JAVA_HOME'] = '${jdk.home}'
     
     os.execv('$(pwd)/.builder.py', sys.argv)
     EOF

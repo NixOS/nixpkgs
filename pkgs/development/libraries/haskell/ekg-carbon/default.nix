@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ekg-carbon";
-  version = "1.0.1";
-  sha256 = "1slaykn1a6f09dzn78v2aqw8snmidycvaw5cfyr4f0ndd88vi77d";
+  version = "1.0.2";
+  sha256 = "0m8cv2hsn1745f7pj552rp9sjsyfh7fbgjw6k2ippqcbxmhqmf4i";
   buildDepends = [
     ekgCore network networkCarbon text time unorderedContainers vector
   ];

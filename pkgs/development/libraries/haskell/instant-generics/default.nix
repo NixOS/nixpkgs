@@ -4,15 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "instant-generics";
-  version = "0.4";
-  sha256 = "14z6135jvmry9b52p21cqnwgp2w0g6frh1fm7z5byph06xls9r7l";
+  version = "0.4.1";
+  sha256 = "1jcs6spa3g8mazgpivn61gz4c740ks19rkz9sh24ns6n4q53zdvq";
   buildDepends = [ syb ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/InstantGenerics";
     description = "Generic programming library with a sum of products view";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

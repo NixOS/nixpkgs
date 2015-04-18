@@ -7,12 +7,12 @@
 , enableShared ? true
 }:
 stdenv.mkDerivation rec {
-  version = "1.8.13";
-  name = "hdf5-${version}-patch1";
+  version = "1.8.14";
+  name = "hdf5-${version}";
   src = fetchurl {
-    url = "http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-${version}.tar.gz";
-    sha256 = "1h9qdl321gzm3ihdhlijbl9sh9qcdrw94j7izg64yfqhxj7b7xl2";  			
-  };
+    url = "http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-${version}/src/hdf5-${version}.tar.gz";
+    sha256 = "0f86gv32pjrrphvamgims1dd7f3bp46hjarbcdy8k4gmyzpgxghx";
+ };
 
   passthru = {
     mpiSupport = (mpi != null);

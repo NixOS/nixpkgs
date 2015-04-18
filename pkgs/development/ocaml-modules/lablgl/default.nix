@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut } :
+{stdenv, fetchurl, ocaml, lablgtk, findlib, mesa, freeglut, camlp4 } :
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -14,15 +14,16 @@ stdenv.mkDerivation {
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };
 
-  buildInputs = [ocaml findlib lablgtk mesa freeglut ];
+  buildInputs = [ocaml findlib lablgtk freeglut camlp4];
+  propagatedBuildInputs = [ mesa ];
 
-  patches = [ ./Makefile.config.patch ];
+  patches = [ ./Makefile.config.patch ./META.patch ];
 
   preConfigure = ''
     substituteInPlace Makefile.config \
       --subst-var-by BINDIR $out/bin \
       --subst-var-by INSTALLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl \
-      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl/stublibs \
+      --subst-var-by DLLDIR $out/lib/ocaml/${ocaml_version}/site-lib/lablgl \
       --subst-var-by TKINCLUDES "" \
       --subst-var-by XINCLUDES ""
   '';
@@ -35,10 +36,10 @@ stdenv.mkDerivation {
     cp ./META $out/lib/ocaml/${ocaml_version}/site-lib/lablgl
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html;
     description = "OpenGL bindings for ocaml";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.pSub ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub vbgl ];
   };
 }

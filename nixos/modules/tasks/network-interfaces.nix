@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
+with utils;
 
 let
 
@@ -9,6 +10,64 @@ let
   hasVirtuals = any (i: i.virtual) interfaces;
   hasSits = cfg.sits != { };
   hasBonds = cfg.bonds != { };
+
+  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges);
+
+  slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
+
+  rstpBridges = flip filterAttrs cfg.bridges (_: { rstp, ... }: rstp);
+
+  needsMstpd = rstpBridges != { };
+
+  bridgeStp = optional needsMstpd (pkgs.writeTextFile {
+    name = "bridge-stp";
+    executable = true;
+    destination = "/bin/bridge-stp";
+    text = ''
+      #!${pkgs.stdenv.shell} -e
+      export PATH="${pkgs.mstpd}/bin"
+
+      BRIDGES=(${concatStringsSep " " (attrNames rstpBridges)})
+      for BRIDGE in $BRIDGES; do
+        if [ "$BRIDGE" = "$1" ]; then
+          if [ "$2" = "start" ]; then
+            mstpctl addbridge "$BRIDGE"
+            exit 0
+          elif [ "$2" = "stop" ]; then
+            mstpctl delbridge "$BRIDGE"
+            exit 0
+          fi
+          exit 1
+        fi
+      done
+      exit 1
+    '';
+  });
+
+  # We must escape interfaces due to the systemd interpretation
+  subsystemDevice = interface:
+    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+
+  addrOpts = v:
+    assert v == 4 || v == 6;
+    {
+      address = mkOption {
+        type = types.str;
+        description = ''
+          IPv${toString v} address of the interface.  Leave empty to configure the
+          interface using DHCP.
+        '';
+      };
+
+      prefixLength = mkOption {
+        type = types.addCheck types.int (n: n >= 0 && n <= (if v == 4 then 32 else 128));
+        description = ''
+          Subnet mask of the interface, specified as the number of
+          bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
+        '';
+      };
+    };
 
   interfaceOpts = { name, ... }: {
 
@@ -20,10 +79,46 @@ let
         description = "Name of the interface.";
       };
 
+      useDHCP = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = ''
+          Whether this interface should be configured with dhcp.
+          Null implies the old behavior which depends on whether ip addresses
+          are specified or not.
+        '';
+      };
+
+      ip4 = mkOption {
+        default = [ ];
+        example = [
+          { address = "10.0.0.1"; prefixLength = 16; }
+          { address = "192.168.1.1"; prefixLength = 24; }
+        ];
+        type = types.listOf types.optionSet;
+        options = addrOpts 4;
+        description = ''
+          List of IPv4 addresses that will be statically assigned to the interface.
+        '';
+      };
+
+      ip6 = mkOption {
+        default = [ ];
+        example = [
+          { address = "fdfd:b3f0:482::1"; prefixLength = 48; }
+          { address = "2001:1470:fffd:2098::e006"; prefixLength = 64; }
+        ];
+        type = types.listOf types.optionSet;
+        options = addrOpts 6;
+        description = ''
+          List of IPv6 addresses that will be statically assigned to the interface.
+        '';
+      };
+
       ipAddress = mkOption {
         default = null;
         example = "10.0.0.1";
-        type = types.nullOr (types.str);
+        type = types.nullOr types.str;
         description = ''
           IP address of the interface.  Leave empty to configure the
           interface using DHCP.
@@ -41,27 +136,23 @@ let
       };
 
       subnetMask = mkOption {
-        default = "";
-        example = "255.255.255.0";
-        type = types.str;
+        default = null;
         description = ''
-          Subnet mask of the interface, specified as a bitmask.
-          This is deprecated; use <option>prefixLength</option>
-          instead.
+          Defunct, supply the prefix length instead.
         '';
       };
 
       ipv6Address = mkOption {
         default = null;
         example = "2001:1470:fffd:2098::e006";
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         description = ''
           IPv6 address of the interface.  Leave empty to configure the
           interface using NDP.
         '';
       };
 
-      ipv6prefixLength = mkOption {
+      ipv6PrefixLength = mkOption {
         default = 64;
         example = 64;
         type = types.int;
@@ -96,8 +187,6 @@ let
           Whether this interface is virtual and should be created by tunctl.
           This is mainly useful for creating bridges between a host a virtual
           network such as VPN or a virtual machine.
-
-          Defaults to tap device, unless interface contains "tun" in its name.
         '';
       };
 
@@ -106,6 +195,15 @@ let
         type = types.str;
         description = ''
           In case of a virtual device, the user who owns it.
+        '';
+      };
+
+      virtualType = mkOption {
+        default = null;
+        type = types.nullOr (types.addCheck types.str (v: v == "tun" || v == "tap"));
+        description = ''
+          The explicit type of interface to create. Accepts tun or tap strings.
+          Also accepts null to implicitly detect the type of device.
         '';
       };
 
@@ -135,6 +233,10 @@ let
 
   };
 
+  hexChars = stringToCharacters "0123456789abcdef";
+
+  isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
+
 in
 
 {
@@ -145,24 +247,54 @@ in
 
     networking.hostName = mkOption {
       default = "nixos";
+      type = types.str;
       description = ''
         The name of the machine.  Leave it empty if you want to obtain
         it from a DHCP server (if using DHCP).
       '';
     };
 
+    networking.hostId = mkOption {
+      default = null;
+      example = "4e98920d";
+      type = types.nullOr types.str;
+      description = ''
+        The 32-bit host ID of the machine, formatted as 8 hexadecimal characters.
+
+        You should try to make this ID unique among your machines. You can
+        generate a random 32-bit ID using the following commands:
+
+        <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
+        
+        (this derives it from the machine-id that systemd generates) or
+        
+        <literal>head -c4 /dev/urandom | od -A none -t x4</literal>
+      '';
+    };
+
     networking.enableIPv6 = mkOption {
       default = true;
+      type = types.bool;
       description = ''
         Whether to enable support for IPv6.
       '';
     };
 
     networking.defaultGateway = mkOption {
-      default = "";
+      default = null;
       example = "131.211.84.1";
+      type = types.nullOr types.str;
       description = ''
         The default gateway.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
+    networking.defaultGateway6 = mkOption {
+      default = null;
+      example = "2001:4d0:1e04:895::1";
+      type = types.nullOr types.str;
+      description = ''
+        The default ipv6 gateway.  It can be left empty if it is auto-detected through DHCP.
       '';
     };
 
@@ -194,8 +326,9 @@ in
     };
 
     networking.domain = mkOption {
-      default = "";
+      default = null;
       example = "home";
+      type = types.nullOr types.str;
       description = ''
         The domain.  It can be left empty if it is auto-detected through DHCP.
       '';
@@ -224,10 +357,10 @@ in
     networking.interfaces = mkOption {
       default = {};
       example =
-        { eth0 = {
-            ipAddress = "131.211.84.78";
-            subnetMask = "255.255.255.128";
-          };
+        { eth0.ip4 = [ {
+            address = "131.211.84.78";
+            prefixLength = 25;
+          } ];
         };
       description = ''
         The configuration for each network interface.  If
@@ -264,6 +397,13 @@ in
             "The physical network interfaces connected by the bridge.";
         };
 
+        rstp = mkOption {
+          example = true;
+          default = false;
+          type = types.bool;
+          description = "Whether the bridge interface should enable rstp.";
+        };
+
       };
 
     };
@@ -291,8 +431,18 @@ in
 
         interfaces = mkOption {
           example = [ "enp4s0f0" "enp4s0f1" "wlan0" ];
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           description = "The interfaces to bond together";
+        };
+
+        lacp_rate = mkOption {
+          default = null;
+          example = "fast";
+          type = types.nullOr types.str;
+          description = ''
+            Option specifying the rate in which we'll ask our link partner
+            to transmit LACPDU packets in 802.3ad mode.
+          '';
         };
 
         miimon = mkOption {
@@ -310,13 +460,54 @@ in
         mode = mkOption {
           default = null;
           example = "active-backup";
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           description = ''
             The mode which the bond will be running. The default mode for
             the bonding driver is balance-rr, optimizing for throughput.
             More information about valid modes can be found at
             https://www.kernel.org/doc/Documentation/networking/bonding.txt
           '';
+        };
+
+        xmit_hash_policy = mkOption {
+          default = null;
+          example = "layer2+3";
+          type = types.nullOr types.str;
+          description = ''
+            Selects the transmit hash policy to use for slave selection in
+            balance-xor, 802.3ad, and tlb modes.
+          '';
+        };
+
+      };
+    };
+
+    networking.macvlans = mkOption {
+      type = types.attrsOf types.optionSet;
+      default = { };
+      example = {
+        wan = {
+          interface = "enp2s0";
+          mode = "vepa";
+        };
+      };
+      description = ''
+        This option allows you to define macvlan interfaces which should
+        be automatically created.
+      '';
+      options = {
+
+        interface = mkOption {
+          example = "enp4s0";
+          type = types.string;
+          description = "The interface the macvlan will transmit packets through.";
+        };
+
+        mode = mkOption {
+          default = null;
+          type = types.nullOr types.str;
+          example = "vepa";
+          description = "The mode of the macvlan device.";
         };
 
       };
@@ -431,12 +622,36 @@ in
       '';
     };
 
+    networking.useNetworkd = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether we should use networkd as the network configuration backend or
+        the legacy script based system. Note that this option is experimental,
+        enable at your own risk.
+      '';
+    };
+
   };
 
 
   ###### implementation
 
   config = {
+
+    assertions =
+      (flip map interfaces (i: {
+        assertion = i.subnetMask == null;
+        message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
+      })) ++ (flip map slaveIfs (i: {
+        assertion = i.ip4 == [ ] && i.ipAddress == null && i.ip6 == [ ] && i.ipv6Address == null;
+        message = "The networking.interfaces.${i.name} must not have any defined ips when it is a slave.";
+      })) ++ [
+        {
+          assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);
+          message = "Invalid value given to the networking.hostId option.";
+        }
+      ];
 
     boot.kernelModules = [ ]
       ++ optional cfg.enableIPv6 "ipv6"
@@ -449,6 +664,45 @@ in
       # from being created.
       optionalString hasBonds "options bonding max_bonds=0";
 
+    boot.kernel.sysctl = {
+      "net.net.ipv4.conf.all.promote_secondaries" = true;
+      "net.ipv6.conf.all.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
+      "net.ipv4.conf.all_forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
+      "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
+    } // listToAttrs (concatLists (flip map (filter (i: i.proxyARP) interfaces)
+        (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true))
+      ));
+
+    security.setuidPrograms = [ "ping" "ping6" ];
+
+    # Set the host and domain names in the activation script.  Don't
+    # clear it if it's not configured in the NixOS configuration,
+    # since it may have been set by dhcpcd in the meantime.
+    system.activationScripts.hostname =
+      optionalString (cfg.hostName != "") ''
+        hostname "${cfg.hostName}"
+      '';
+    system.activationScripts.domain =
+      optionalString (cfg.domain != null) ''
+        domainname "${cfg.domain}"
+      '';
+
+    environment.etc = mkIf (cfg.hostId != null)
+      [
+        {
+          target = "hostid";
+          source = pkgs.runCommand "gen-hostid" {} ''
+            hi="${cfg.hostId}"
+            ${if pkgs.stdenv.isBigEndian then ''
+              echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
+            '' else ''
+              echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out
+            ''}
+          '';
+        }
+      ];
+
     environment.systemPackages =
       [ pkgs.host
         pkgs.iproute
@@ -458,324 +712,56 @@ in
         pkgs.iw
         pkgs.rfkill
         pkgs.openresolv
-      ]
-      ++ optional (cfg.bridges != {}) pkgs.bridge_utils
-      ++ optional hasVirtuals pkgs.tunctl
-      ++ optional cfg.enableIPv6 pkgs.ndisc6;
-
-    security.setuidPrograms = [ "ping" "ping6" ];
+      ] ++ bridgeStp;
 
     systemd.targets."network-interfaces" =
       { description = "All Network Interfaces";
         wantedBy = [ "network.target" ];
+        before = [ "network.target" ];
+        after = [ "network-pre.target" ];
         unitConfig.X-StopOnReconfiguration = true;
       };
 
-    systemd.services =
-      let
+    systemd.services = {
+      network-local-commands = {
+        description = "Extra networking commands.";
+        before = [ "network.target" ];
+        wantedBy = [ "network.target" ];
+        after = [ "network-pre.target" ];
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+        path = [ pkgs.iproute ];
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
+        script = ''
+          # Run any user-specified commands.
+          ${cfg.localCommands}
+        '';
+      };
+    } // (listToAttrs (flip map interfaces (i:
+      nameValuePair "network-link-${i.name}"
+      { description = "Link configuration of ${i.name}";
+        wantedBy = [ "network-interfaces.target" ];
+        before = [ "network-interfaces.target" ];
+        bindsTo = [ (subsystemDevice i.name) ];
+        after = [ (subsystemDevice i.name) "network-pre.target" ];
+        path = [ pkgs.iproute ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script =
+          ''
+            echo "Configuring link..."
+          '' + optionalString (i.macAddress != null) ''
+            echo "setting MAC address to ${i.macAddress}..."
+            ip link set "${i.name}" address "${i.macAddress}"
+          '' + optionalString (i.mtu != null) ''
+            echo "setting MTU to ${toString i.mtu}..."
+            ip link set "${i.name}" mtu "${toString i.mtu}"
+          '';
+      })));
 
-        networkSetup =
-          { description = "Networking Setup";
-
-            after = [ "network-interfaces.target" ];
-            before = [ "network.target" ];
-            wantedBy = [ "network.target" ];
-
-            unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-
-            path = [ pkgs.iproute ];
-
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
-
-            script =
-              ''
-                # Set the static DNS configuration, if given.
-                ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
-                  domain ${cfg.domain}
-                ''}
-                ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
-                ${flip concatMapStrings cfg.nameservers (ns: ''
-                  nameserver ${ns}
-                '')}
-                EOF
-
-                # Disable or enable IPv6.
-                ${optionalString (!config.boot.isContainer) ''
-                  if [ -e /proc/sys/net/ipv6/conf/all/disable_ipv6 ]; then
-                    echo ${if cfg.enableIPv6 then "0" else "1"} > /proc/sys/net/ipv6/conf/all/disable_ipv6
-                  fi
-                ''}
-
-                # Set the default gateway.
-                ${optionalString (cfg.defaultGateway != "") ''
-                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default via "${cfg.defaultGateway}" ${
-                    optionalString (cfg.defaultGatewayWindowSize != null)
-                      "window ${cfg.defaultGatewayWindowSize}"} || true
-                ''}
-
-                # Turn on forwarding if any interface has enabled proxy_arp.
-                ${optionalString (any (i: i.proxyARP) interfaces) ''
-                  echo 1 > /proc/sys/net/ipv4/ip_forward
-                ''}
-
-                # Run any user-specified commands.
-                ${cfg.localCommands}
-              '';
-          };
-
-        # For each interface <foo>, create a job ‘<foo>-cfg.service"
-        # that performs static configuration.  It has a "wants"
-        # dependency on ‘<foo>.service’, which is supposed to create
-        # the interface and need not exist (i.e. for hardware
-        # interfaces).  It has a binds-to dependency on the actual
-        # network device, so it only gets started after the interface
-        # has appeared, and it's stopped when the interface
-        # disappears.
-        configureInterface = i: nameValuePair "${i.name}-cfg"
-          (let mask =
-                if i.prefixLength != null then toString i.prefixLength else
-                if i.subnetMask != "" then i.subnetMask else "32";
-               staticIPv6 = cfg.enableIPv6 && i.ipv6Address != null;
-          in
-          { description = "Configuration of ${i.name}";
-            wantedBy = [ "network-interfaces.target" ];
-            bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            after = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute pkgs.gawk ];
-            script =
-              ''
-                echo "bringing up interface..."
-                ip link set "${i.name}" up
-              ''
-              + optionalString (i.macAddress != null)
-                ''
-                  echo "setting MAC address to ${i.macAddress}..."
-                  ip link set "${i.name}" address "${i.macAddress}"
-                ''
-              + optionalString (i.mtu != null)
-                ''
-                  echo "setting MTU to ${toString i.mtu}..."
-                  ip link set "${i.name}" mtu "${toString i.mtu}"
-                ''
-              + optionalString (i.ipAddress != null)
-                ''
-                  cur=$(ip -4 -o a show dev "${i.name}" | awk '{print $4}')
-                  # Only do a flush/add if it's necessary.  This is
-                  # useful when the Nix store is accessed via this
-                  # interface (e.g. in a QEMU VM test).
-                  if [ "$cur" != "${i.ipAddress}/${mask}" ]; then
-                    echo "configuring interface..."
-                    ip -4 addr flush dev "${i.name}"
-                    ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
-                    restart_network_setup=true
-                  else
-                    echo "skipping configuring interface"
-                  fi
-                ''
-              + optionalString (staticIPv6)
-                ''
-                  # Only do a flush/add if it's necessary.  This is
-                  # useful when the Nix store is accessed via this
-                  # interface (e.g. in a QEMU VM test).
-                  if ! ip -6 -o a show dev "${i.name}" | grep "${i.ipv6Address}/${toString i.ipv6prefixLength}"; then
-                    echo "configuring interface..."
-                    ip -6 addr flush dev "${i.name}"
-                    ip -6 addr add "${i.ipv6Address}/${toString i.ipv6prefixLength}" dev "${i.name}"
-                    restart_network_setup=true
-                  else
-                    echo "skipping configuring interface"
-                  fi
-                ''
-              + optionalString (i.ipAddress != null || staticIPv6)
-                ''
-                  if [ restart_network_setup = true ]; then
-                    # Ensure that the default gateway remains set.
-                    # (Flushing this interface may have removed it.)
-                    ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
-                  fi
-                  ${config.systemd.package}/bin/systemctl start ip-up.target
-                ''
-              + optionalString i.proxyARP
-                ''
-                  echo 1 > /proc/sys/net/ipv4/conf/${i.name}/proxy_arp
-                ''
-              + optionalString (i.proxyARP && cfg.enableIPv6)
-                ''
-                  echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
-                '';
-          });
-
-        createTunDevice = i: nameValuePair "${i.name}"
-          { description = "Virtual Network Interface ${i.name}";
-            requires = [ "dev-net-tun.device" ];
-            after = [ "dev-net-tun.device" ];
-            wantedBy = [ "network.target" ];
-            requiredBy = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            serviceConfig =
-              { Type = "oneshot";
-                RemainAfterExit = true;
-                ExecStart = "${pkgs.tunctl}/bin/tunctl -t '${i.name}' -u '${i.virtualOwner}'";
-                ExecStop = "${pkgs.tunctl}/bin/tunctl -d '${i.name}'";
-              };
-          };
-
-        createBridgeDevice = n: v:
-          let
-            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
-          in
-          { description = "Bridge Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
-            bindsTo = deps;
-            after = deps;
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.bridge_utils pkgs.iproute ];
-            script =
-              ''
-                # Remove Dead Interfaces
-                ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-
-                brctl addbr "${n}"
-
-                # Set bridge's hello time to 0 to avoid startup delays.
-                brctl setfd "${n}" 0
-
-                ${flip concatMapStrings v.interfaces (i: ''
-                  brctl addif "${n}" "${i}"
-                  ip link set "${i}" up
-                  ip addr flush dev "${i}"
-
-                  echo "bringing up network device ${n}..."
-                  ip link set "${n}" up
-                '')}
-
-                # !!! Should delete (brctl delif) any interfaces that
-                # no longer belong to the bridge.
-              '';
-            postStop =
-              ''
-                ip link set "${n}" down
-                brctl delbr "${n}"
-              '';
-          };
-
-        createBondDevice = n: v:
-          let
-            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
-          in
-          { description = "Bond Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
-            bindsTo = deps;
-            after = deps;
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.ifenslave pkgs.iproute ];
-            script = ''
-              # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-
-              ip link add "${n}" type bond
-
-              # !!! There must be a better way to wait for the interface
-              while [ ! -d /sys/class/net/${n} ]; do sleep 0.1; done;
-
-              # Set the miimon and mode options
-              ${optionalString (v.miimon != null)
-                "echo ${toString v.miimon} > /sys/class/net/${n}/bonding/miimon"}
-              ${optionalString (v.mode != null)
-                "echo \"${v.mode}\" > /sys/class/net/${n}/bonding/mode"}
-
-              # Bring up the bridge and enslave the specified interfaces
-              ip link set "${n}" up
-              ${flip concatMapStrings v.interfaces (i: ''
-                ifenslave "${n}" "${i}"
-              '')}
-            '';
-            postStop = ''
-              ip link set "${n}" down
-              ifenslave -d "${n}"
-              ip link delete "${n}"
-            '';
-          };
-
-        createSitDevice = n: v:
-          let
-            deps = optional (v.dev != null) "sys-subsystem-net-devices-${v.dev}.device";
-          in
-          { description = "6-to-4 Tunnel Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
-            bindsTo = deps;
-            after = deps;
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
-            script = ''
-              # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-              ip link add "${n}" type sit \
-                ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
-                ${optionalString (v.local != null) "local \"${v.local}\""} \
-                ${optionalString (v.ttl != null) "ttl ${toString v.ttl}"} \
-                ${optionalString (v.dev != null) "dev \"${v.dev}\""}
-              ip link set "${n}" up
-            '';
-            postStop = ''
-              ip link delete "${n}"
-            '';
-          };
-
-        createVlanDevice = n: v:
-          let
-            deps = [ "sys-subsystem-net-devices-${v.interface}.device" ];
-          in
-          { description = "Vlan Interface ${n}";
-            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
-            bindsTo = deps;
-            after = deps;
-            serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
-            script = ''
-              # Remove Dead Interfaces
-              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
-              ip link add link "${v.interface}" "${n}" type vlan id "${toString v.id}"
-              ip link set "${n}" up
-            '';
-            postStop = ''
-              ip link delete "${n}"
-            '';
-          };
-
-      in listToAttrs (
-           map configureInterface interfaces ++
-           map createTunDevice (filter (i: i.virtual) interfaces))
-         // mapAttrs createBridgeDevice cfg.bridges
-         // mapAttrs createBondDevice cfg.bonds
-         // mapAttrs createSitDevice cfg.sits
-         // mapAttrs createVlanDevice cfg.vlans
-         // { "network-setup" = networkSetup; };
-
-    # Set the host and domain names in the activation script.  Don't
-    # clear it if it's not configured in the NixOS configuration,
-    # since it may have been set by dhcpcd in the meantime.
-    system.activationScripts.hostname =
-      optionalString (config.networking.hostName != "") ''
-        hostname "${config.networking.hostName}"
-      '';
-    system.activationScripts.domain =
-      optionalString (config.networking.domain != "") ''
-        domainname "${config.networking.domain}"
-      '';
-
-    services.udev.extraRules =
-      ''
-        KERNEL=="tun", TAG+="systemd"
-      '';
+    services.mstpd = mkIf needsMstpd { enable = true; };
 
   };
 

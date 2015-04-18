@@ -3,16 +3,15 @@
 
 stdenv.mkDerivation rec {
   p_name  = "xfwm4";
-  ver_maj = "4.10";
-  ver_min = "1";
+  ver_maj = "4.12";
+  ver_min = "2";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0h57gwjs3j5f8ly0gmhl620338fg4qvlzs8gpqs9wxzblvxl831q";
+    sha256 = "5bb5f72b41060d10bd3823f8b69abcd462bbd8853fdf9c82041450ae68e7d75a";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  #TODO: kde systray, docs
   buildInputs =
     [ pkgconfig intltool gtk libglade libxfce4util libxfce4ui xfconf
       libwnck libstartup_notification

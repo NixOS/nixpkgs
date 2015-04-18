@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc }:
+{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "0i7h3hx8iszli3d4kphw79sz9m07f2lc2c9hr9smdps5s7wpllmg";
+    sha256 = "1pgnz5lapm4qk48a13k9698jaswybzlbz2nyc621d852ldf0vhn6";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses libiconv ];
 
   # Required binaries during execution
   # Python: Autocompletion generated from manpages and config editing
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Smart and user-friendly command line shell";
     homepage = "http://fishshell.com/";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ocharles ];
   };
 }

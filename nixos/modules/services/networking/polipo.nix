@@ -103,12 +103,8 @@ in
       description = "caching web proxy";
       after = [ "network.target" "nss-lookup.target" ];
       wantedBy = [ "multi-user.target"];
-      preStart = ''
-         ${pkgs.coreutils}/bin/chown polipo:polipo /var/cache/polipo -R
-      '';
       serviceConfig = {
         ExecStart  = "${pkgs.polipo}/bin/polipo -c ${polipoConfig}";
-        ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         User = "polipo";
       };
     };

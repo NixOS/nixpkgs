@@ -15,11 +15,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="compiz";
-    version="0.9.11.2";
+    version="0.9.12.1";
     name="${baseName}-${version}";
-    hash="1czk4snv9j9l7b587nwf2y305lkn112zspm7f9l7yfk7jmkx1hqy";
-    url="https://launchpad.net/compiz/0.9.11/0.9.11.2/+download/compiz-0.9.11.2.tar.bz2";
-    sha256="1czk4snv9j9l7b587nwf2y305lkn112zspm7f9l7yfk7jmkx1hqy";
+    hash="0kl5im3zq0rjlxbgz5cyk38qzssahrljc67z1n16pjc1qmr6m7cb";
+    url="https://launchpad.net/compiz/0.9.12/0.9.12.1/+download/compiz-0.9.12.1.tar.bz2";
+    sha256="0kl5im3zq0rjlxbgz5cyk38qzssahrljc67z1n16pjc1qmr6m7cb";
   };
   buildInputs = [cmake pkgconfig
     libXrender renderproto gtk libwnck pango cairo

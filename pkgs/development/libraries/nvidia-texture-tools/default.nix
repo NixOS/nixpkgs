@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A set of cuda-enabled texture tools and compressors";
     homepage = "http://developer.nvidia.com/object/texture_tools.html";
-    license = "MIT";
+    license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
   };
 }

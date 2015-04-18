@@ -2,7 +2,7 @@ a :
 let 
   s = import ./src-for-default.nix;
   buildInputs = with a; [
-    openssl gmp
+    openssl gmp zlib
   ];
 in
 rec {

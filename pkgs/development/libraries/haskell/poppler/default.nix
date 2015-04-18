@@ -12,6 +12,10 @@ cabal.mkDerivation (self: {
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc ];
   pkgconfigDepends = [ cairo gdk_pixbuf glib gtk pango popplerGlib ];
+  patchPhase = ''
+    sed -i -e 's,glib/poppler.h,poppler.h,' poppler.cabal
+    sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
+  '';
   meta = {
     homepage = "http://www.haskell.org/gtk2hs/";
     description = "Binding to the Poppler";

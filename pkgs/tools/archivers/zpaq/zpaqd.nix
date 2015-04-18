@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 let
   s = # Generated upstream information
   rec {
@@ -12,7 +12,7 @@ let
   buildInputs = [
     unzip
   ];
-  isUnix = stdenv.isLinux || stdenv.isGNU || stdenv.isDarwin || stdenv.isBSD;
+  isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
   isx86 = stdenv.isi686 || stdenv.isx86_64;
   compileFlags = ""
     + (stdenv.lib.optionalString isUnix " -Dunix -pthread ")

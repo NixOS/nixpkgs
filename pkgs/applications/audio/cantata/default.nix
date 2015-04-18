@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake
-, withQt4 ? true, qt4
-, withQt5 ? false, qt5
+, withQt4 ? false, qt4
+, withQt5 ? true, qt5
 
 # I'm unable to make KDE work here, crashes at runtime so I simply
 # make Qt4 the default until someone who wants KDE can figure it out.
@@ -39,7 +39,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "1.4.1";
+  version = "1.5.1";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -50,14 +50,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit name;
-    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60eXhuZ1Z3bGM2bjQ";
-    sha256 = "b0d5a1798efd275d72dffb87bc0f016fc865dbd1384b7c9af039cebdffe0cca3";
+    url = "https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60UktwaTRMTjRIUW8";
+    sha256 = "0y7y3nbiqgh1ghb47n4lfyp163wvazvhavlshb1c18ik03fkn5sp";
   };
 
   buildInputs =
     [ cmake ]
     ++ stdenv.lib.optional withQt4 qt4
-    ++ stdenv.lib.optional withQt5 qt5
+    ++ stdenv.lib.optionals withQt5 (with qt5; [ base svg tools ])
     ++ stdenv.lib.optional withKDE4 kde4.kdelibs
     ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
     ++ stdenv.lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://code.google.com/p/cantata/";
-    description = "A graphical client for MPD.";
+    homepage = http://code.google.com/p/cantata/;
+    description = "A graphical client for MPD";
     license = licenses.gpl3;
 
     # Technically Cantata can run on Windows so if someone wants to

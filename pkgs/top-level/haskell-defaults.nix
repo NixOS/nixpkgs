@@ -15,19 +15,26 @@
   # Older compilers inherit the overrides from newer ones.
 
   ghcHEADPrefs = self : super : super // {
-    cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = null; };
+    cabalInstall_1_20_0_6 = super.cabalInstall_1_20_0_6.override { Cabal = null; };
     mtl = self.mtl_2_2_1;
-    transformersCompat = super.transformersCompat_0_3_3;
   };
 
-  ghc783Prefs = self : super : ghcHEADPrefs self super // {
-    cabalInstall_1_20_0_3 = super.cabalInstall_1_20_0_3.override { Cabal = self.Cabal_1_20_0_2; };
-    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_2; }; };
-    MonadRandom = self.MonadRandom_0_1_13; # requires transformers >= 0.4.x
-    mtl = self.mtl_2_1_2;
+  ghc784Prefs = self : super : ghcHEADPrefs self super // {
+    cabalInstall_1_20_0_6 = super.cabalInstall_1_20_0_6.override { Cabal = self.Cabal_1_20_0_3; };
+    codex = super.codex.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_20_0_3; }; };
+    jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_20_0_3; };
+    MonadRandom = self.MonadRandom_0_2_0_1; # newer versions require transformers >= 0.4.x
+    mtl = self.mtl_2_1_3_1;
+    xhtml = null;
+    transformersCompat = super.transformersCompat.override { cabal = self.cabal.override {
+      extension = self: super: { configureFlags = "-fthree " + super.configureFlags or ""; };
+    }; };
   };
 
-  ghc763Prefs = self : super : ghc783Prefs self super // {
+  ghc763Prefs = self : super : ghc784Prefs self super // {
+    Cabal_1_22_0_0 = super.Cabal_1_22_0_0.override {
+      binary = self.binary_0_7_2_2.override { cabal = self.cabal.override { extension = self: super: { doCheck = false; }; }; };
+    };
     aeson = self.aeson_0_7_0_4;
     ariadne = super.ariadne.override {
       haskellNames = self.haskellNames.override {
@@ -35,22 +42,26 @@
       };
     };
     attoparsec = self.attoparsec_0_11_3_1;
-    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_1; };
-    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_1; }; };
+    binaryConduit = super.binaryConduit.override { binary = self.binary_0_7_2_2; };
+    bson = super.bson.override { dataBinaryIeee754 = self.dataBinaryIeee754.override { binary = self.binary_0_7_2_2; }; };
+    cabal2nix = super.cabal2nix.override { hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_18_1_3; }; };
+    cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2.override {
+      HTTP = self.HTTP.override { network = self.network_2_5_0_0; };
+      network = self.network_2_5_0_0;
+    };
     criterion = super.criterion.override {
       statistics = self.statistics.override {
-        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_1; };
+        vectorBinaryInstances = self.vectorBinaryInstances.override { binary = self.binary_0_7_2_2; };
       };
     };
-    Elm = super.Elm.override { pandoc = self.pandoc.override { zipArchive = self.zipArchive.override { binary = self.binary_0_7_2_1; }; }; };
+    entropy = super.entropy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_18_1_3; }; };
     gloss = null;                       # requires base >= 4.7
-    haddock = self.haddock_2_13_2;
     modularArithmetic = null;           # requires base >= 4.7
-    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_1; };
-    rank1dynamic = super.rank1dynamic.override { binary = self.binary_0_7_2_1; };
-    distributedStatic = super.distributedStatic.override { binary = self.binary_0_7_2_1; };
-    networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_1; };
-    distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_1; };
+    pipesBinary = super.pipesBinary.override { binary = self.binary_0_7_2_2; };
+    rank1dynamic = super.rank1dynamic.override { binary = self.binary_0_7_2_2; };
+    distributedStatic = super.distributedStatic.override { binary = self.binary_0_7_2_2; };
+    networkTransport = super.networkTransport.override { binary = self.binary_0_7_2_2; };
+    distributedProcess = super.distributedProcess.override { binary = self.binary_0_7_2_2; };
     scientific = self.scientific_0_2_0_2;
     singletons = null;                  # requires base >= 4.7
     transformers = self.transformers_0_3_0_0; # core packagen in ghc > 7.6.x
@@ -59,32 +70,25 @@
 
   ghc742Prefs = self : super : ghc763Prefs self super // {
     aeson = self.aeson_0_7_0_4.override { blazeBuilder = self.blazeBuilder; };
-    cabalInstall_0_14_0 = super.cabalInstall_0_14_0.override {
-      HTTP = self.HTTP.override { network = self.network_2_3_0_13; };
-      network = self.network_2_3_0_13;
-    };
     extensibleExceptions = null;        # core package in ghc <= 7.4.x
     hackageDb = super.hackageDb.override { Cabal = self.Cabal_1_16_0_3; };
-    haddock = self.haddock_2_11_0;
     haskeline = super.haskeline.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    primitive = self.primitive_0_5_3_0; # later versions don't compile
     random = self.random_1_0_1_1;       # requires base >= 4.6.x
-    shelly = self.shelly_0_15_4_1;
   };
 
   ghc722Prefs = self : super : ghc742Prefs self super // {
+    cabalInstall = self.cabalInstall_1_20_0_6;
     caseInsensitive = self.caseInsensitive_1_0_0_1;
     deepseq = self.deepseq_1_3_0_2;
     DrIFT = null;                       # doesn't compile with old GHC versions
-    haddock = self.haddock_2_9_4;
     syb = self.syb_0_4_0;
   };
 
   ghc704Prefs = self : super : ghc722Prefs self super // {
-    binary = self.binary_0_7_2_1;       # core package in ghc >= 7.2.2
+    binary = self.binary_0_7_2_2;       # core package in ghc >= 7.2.2
     caseInsensitive = super.caseInsensitive; # undo the override from ghc 7.2.2
-    haddock = self.haddock_2_9_2.override { alex = self.alex_2_3_5; };
     HsSyck = self.HsSyck_0_51;
-    jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
     random = null;                      # core package in ghc <= 7.0.x
   };
 
@@ -97,7 +101,7 @@
     deepseq = self.deepseq_1_2_0_1;
     dlist = super.dlist.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     exceptions = null;                  # none of our versions compile
-    haddock = self.haddock_2_7_2;
+    jailbreakCabal = super.jailbreakCabal.override { Cabal = self.Cabal_1_16_0_3; };
     logict = super.logict.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     monadPar = self.monadPar_0_1_0_3;
     nats = null;                        # none of our versions compile
@@ -111,6 +115,7 @@
     syb = null;                         # core package in ghc < 7
     tagged = super.tagged.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     temporary = null;                   # none of our versions compile
+    vector = super.vector_0_10_9_3;
     vectorAlgorithms = super.vectorAlgorithms.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
   };
 
@@ -118,10 +123,9 @@
     alex = self.alex_2_3_5.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     async = null;                       # none of our versions compile
     attoparsec = null;                  # none of our versions compile
-    binary = super.binary_0_7_2_1.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    binary = super.binary_0_7_2_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    cabalInstall_1_16_0_2 = super.cabalInstall_1_16_0_2;
     caseInsensitive = super.caseInsensitive.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
-    GLUT = self.GLUT_2_2_2_1;
-    haddock = self.haddock_2_4_2;
     happy = super.happy.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashable = super.hashable.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     hashtables = super.hashtables.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
@@ -129,34 +133,31 @@
     HTTP = super.HTTP.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     HUnit = super.HUnit.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     network = super.network_2_2_1_7.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
-    OpenGLRaw = self.OpenGLRaw_1_3_0_0;
-    OpenGL = self.OpenGL_2_6_0_1;
+    parsec = super.parsec.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     QuickCheck = super.QuickCheck.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     stm = self.stm_2_4_2.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     systemFilepath = super.systemFilepath.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     systemFileio = super.systemFileio.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     tar = super.tar.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     text = self.text_0_11_2_3.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
+    tfRandom = null;                    # does not compile
     time = self.time_1_1_2_4.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
     zlib = super.zlib.override { cabal = self.cabal.override { Cabal = self.Cabal_1_16_0_3; }; };
  };
 
   # Abstraction for Haskell packages collections
   packagesFun = makeOverridable
-   ({ ghcPath
-    , ghcBinary ? ghc6101Binary
+   ({ ghc
     , prefFun
     , extension ? (self : super : {})
     , profExplicit ? false, profDefault ? false
     , modifyPrio ? lowPrio
-    , extraArgs ? {}
     } :
     let haskellPackagesClass = import ./haskell-packages.nix {
-          inherit pkgs newScope modifyPrio;
+          inherit pkgs newScope ghc modifyPrio;
           enableLibraryProfiling =
             if profExplicit then profDefault
                             else config.cabal.libraryProfiling or profDefault;
-          ghc = callPackage ghcPath ({ ghc = ghcBinary; } // extraArgs);
         };
         haskellPackagesPrefsClass = self : let super = haskellPackagesClass self; in super // prefFun self super;
         haskellPackagesExtensionClass = self : let super = haskellPackagesPrefsClass self; in super // extension self super;
@@ -180,85 +181,43 @@
                                                           modifyPrio   = defaultVersionPrioFun true; };
                              };
 
-  # Binary versions of GHC
-  #
-  # GHC binaries are around for bootstrapping purposes
-
-  ghc6101Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.1-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc6102Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.2-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc6121Binary = lowPrio (callPackage ../development/compilers/ghc/6.12.1-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc704Binary = lowPrio (callPackage ../development/compilers/ghc/7.0.4-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc742Binary = lowPrio (callPackage ../development/compilers/ghc/7.4.2-binary.nix {
-    gmp = pkgs.gmp4;
-  });
-
-  ghc6101BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
-  ghc6121BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
-
   # Compiler configurations
   #
   # Here, we associate compiler versions with bootstrap compiler versions and
   # preference functions.
 
-  packages_ghcHEAD =
-    packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = pkgs.haskellPackages.ghcPlain;
-               prefFun = ghcHEADPrefs;
-               extraArgs = {
-                 happy = pkgs.haskellPackages.happy;
-                 alex = pkgs.haskellPackages.alex;
-               };
-             };
-
-  packages_ghc783 =
-    packages { ghcPath = ../development/compilers/ghc/7.8.3.nix;
-               ghcBinary = ghc742Binary;
-               prefFun = ghc783Prefs;
+  packages_ghc784 =
+    packages { ghc = pkgs.haskell-ng.compiler.ghc784;
+               prefFun = ghc784Prefs;
              };
 
   packages_ghc763 =
-    packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
-               ghcBinary = ghc704Binary;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc763;
                prefFun = ghc763Prefs;
              };
 
   packages_ghc742 =
-    packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
-               ghcBinary = ghc6121BinaryDarwin;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc742;
                prefFun = ghc742Prefs;
              };
 
   packages_ghc722 =
-    packages { ghcPath = ../development/compilers/ghc/7.2.2.nix;
-               ghcBinary = ghc6121BinaryDarwin;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc722;
                prefFun = ghc722Prefs;
              };
 
   packages_ghc704 =
-    packages { ghcPath = ../development/compilers/ghc/7.0.4.nix;
-               ghcBinary = ghc6101BinaryDarwin;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc704;
                prefFun = ghc704Prefs;
              };
 
   packages_ghc6123 =
-    packages { ghcPath = ../development/compilers/ghc/6.12.3.nix;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc6123;
                prefFun = ghc6123Prefs;
              };
 
   packages_ghc6104 =
-    packages { ghcPath = ../development/compilers/ghc/6.10.4.nix;
+    packages { ghc = pkgs.haskell-ng.compiler.ghc6104;
                prefFun = ghc6104Prefs;
              };
 

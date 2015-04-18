@@ -1,48 +1,70 @@
-{ stdenv, fetchurl, scons, boost, gperftools, pcre, snappy }:
+{ stdenv, fetchurl, scons, boost, gperftools, pcre, snappy
+, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+}:
 
-let version = "2.6.4";
+with stdenv.lib;
+
+let version = "3.0.1";
     system-libraries = [
-      "tcmalloc"
       "pcre"
+      "wiredtiger"
       "boost"
       "snappy"
-      # "v8"      -- mongo still bundles 3.12 and does not work with 3.15+
+      "zlib"
+      # "v8"
       # "stemmer" -- not nice to package yet (no versioning, no makefile, no shared libs)
-      # "yaml"    -- it seems nixpkgs' yamlcpp (0.5.1) is problematic for mongo
+      "yaml"
+    ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+    buildInputs = [
+      sasl boost gperftools pcre snappy
+      zlib libyamlcpp sasl openssl libpcap wiredtiger
     ];
-    system-lib-args = stdenv.lib.concatStringsSep " "
-                          (map (lib: "--use-system-${lib}") system-libraries);
+
+    other-args = concatStringsSep " " ([
+      "--c++11=on"
+      "--ssl"
+      #"--rocksdb" # Don't have this packaged yet
+      "--wiredtiger=on"
+      "--js-engine=v8-3.25"
+      "--use-sasl-client"
+      "--variant-dir=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
+      "--extrapath=${concatStringsSep "," buildInputs}"
+    ] ++ map (lib: "--use-system-${lib}") system-libraries);
 
 in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1h4rrgcb95234ryjma3fjg50qsm1bnxjx5ib0c3p9nzmc2ji2m07";
+    sha256 = "04qjw7b98h37g8rcih7va3rvg2z95ly38bg181a4nfkak50hd638";
   };
 
-  nativeBuildInputs = [ scons boost gperftools pcre snappy ];
+  nativeBuildInputs = [ scons ];
+  inherit buildInputs;
 
   postPatch = ''
+    # fix environment variable reading
     substituteInPlace SConstruct \
-        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
+        --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '';
 
   buildPhase = ''
-    scons all --release ${system-lib-args}
+    scons -j $NIX_BUILD_CORES core --release ${other-args}
   '';
 
   installPhase = ''
     mkdir -p $out/lib
-    scons install --release --prefix=$out ${system-lib-args}
+    scons -j $NIX_BUILD_CORES install --release --prefix=$out ${other-args}
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "a scalable, high-performance, open source NoSQL database";
     homepage = http://www.mongodb.org;
-    license = stdenv.lib.licenses.agpl3;
+    license = licenses.agpl3;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ bluescreen303 offline wkennington ];
+    platforms = platforms.unix;
   };
 }

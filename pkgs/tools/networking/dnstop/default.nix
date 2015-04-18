@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = { 
     description = "libpcap application that displays DNS traffic on your network";
-    homepage = "http://dns.measurement-factory.com/tools/dnstop";
-    license = "BSD";
+    homepage = http://dns.measurement-factory.com/tools/dnstop;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

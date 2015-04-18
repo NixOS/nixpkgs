@@ -7,9 +7,9 @@
 
 # OSS is no longer supported, for it's much crappier than ALSA and
 # PulseAudio.
-assert alsaSupport || pulseaudioSupport;
+assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 
-assert openglSupport -> (mesa != null && x11Support);
+assert openglSupport -> (stdenv.isDarwin || mesa != null && x11Support);
 assert x11Support -> (x11 != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> pulseaudio != null;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     description = "A cross-platform multimedia library";
     homepage = http://www.libsdl.org/;
     license = stdenv.lib.licenses.zlib;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.page ];
   };
 }

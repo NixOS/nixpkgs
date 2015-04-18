@@ -18,15 +18,6 @@ rec {
     export NIX_ENFORCE_PURITY=
   '';
 
-  prehookDarwin = ''
-    ${prehookBase}
-    export NIX_DONT_SET_RPATH=1
-    export NIX_NO_SELF_RPATH=1
-    dontFixLibtool=1
-    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    xargsFlags=" "
-  '';
-
   prehookFreeBSD = ''
     ${prehookBase}
 
@@ -35,9 +26,6 @@ rec {
     alias sed=gsed
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookOpenBSD = ''
@@ -52,9 +40,6 @@ rec {
 
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookNetBSD = ''
@@ -65,9 +50,6 @@ rec {
     alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
-
-    # Filter out stupid GCC warnings (in gcc-wrapper).
-    export NIX_GCC_NEEDS_GREP=1
   '';
 
   prehookCygwin = ''
@@ -84,11 +66,10 @@ rec {
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { gcc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
+    { cc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
 
     import ../generic {
       preHook =
-        if system == "x86_64-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "x86_64-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
@@ -99,18 +80,18 @@ rec {
 
       fetchurlBoot = fetchurl;
 
-      inherit system shell gcc overrides config;
+      inherit system shell cc overrides config;
     };
 
 
   stdenvBoot0 = makeStdenv {
-    gcc = "/no-such-path";
+    cc = "/no-such-path";
     fetchurl = null;
   };
 
 
-  gcc = import ../../build-support/gcc-wrapper {
-    name = "gcc-native";
+  cc = import ../../build-support/cc-wrapper {
+    name = "cc-native";
     nativeTools = true;
     nativeLibc = true;
     nativePrefix = if system == "i686-solaris" then "/usr/gnu" else if system == "x86_64-solaris" then "/opt/local/gcc47" else "/usr";
@@ -127,7 +108,7 @@ rec {
 
   # First build a stdenv based only on tools outside the store.
   stdenvBoot1 = makeStdenv {
-    inherit gcc fetchurl;
+    inherit cc fetchurl;
   } // {inherit fetchurl;};
 
   stdenvBoot1Pkgs = allPackages {
@@ -140,7 +121,7 @@ rec {
   # systems don't have, so we mustn't rely on the native environment
   # providing it).
   stdenvBoot2 = makeStdenv {
-    inherit gcc fetchurl;
+    inherit cc fetchurl;
     extraPath = [ stdenvBoot1Pkgs.xz ];
     overrides = pkgs: { inherit (stdenvBoot1Pkgs) xz; };
   };

@@ -6,52 +6,34 @@ let
 
   cfg = config.services.samba;
 
-  user = "smbguest";
-  group = "smbguest";
-
-  logDir = "/var/log/samba";
-  privateDir = "/var/samba/private";
-
-  inherit (pkgs) samba;
+  samba = cfg.package;
 
   setupScript =
     ''
-      if ! test -d /home/smbd ; then
-        mkdir -p /home/smbd
-        chown ${user} /home/smbd
-        chmod a+rwx /home/smbd
-      fi
-
-      if ! test -d /var/samba ; then
-        mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
-      fi
-
-      passwdFile="$(${pkgs.gnused}/bin/sed -n 's/^.*smb[ ]\+passwd[ ]\+file[ ]\+=[ ]\+\(.*\)/\1/p' ${configFile})"
-      if [ -n "$passwdFile" ]; then
-        echo 'INFO: [samba] creating directory containing passwd file'
-        mkdir -p "$(dirname "$passwdFile")"
-      fi
-
-      mkdir -p ${logDir}
-      mkdir -p ${privateDir}
+      mkdir -p /var/lock/samba /var/log/samba /var/cache/samba /var/lib/samba/private
     '';
+
+  shareConfig = name:
+    let share = getAttr name cfg.shares; in
+    "[${name}]\n " + (toString (
+       map
+         (key: "${key} = ${toString (getAttr key share)}\n")
+         (attrNames share)
+    ));
 
   configFile = pkgs.writeText "smb.conf"
+    (if cfg.configText != null then cfg.configText else
     ''
       [ global ]
-      log file = ${logDir}/log.%m
-      private dir = ${privateDir}
-      ${optionalString cfg.syncPasswordsByPam "pam password change = true"}
-
-      ${if cfg.defaultShare.enable then ''
-      [default]
-      path = /home/smbd
-      read only = ${if cfg.defaultShare.writeable then "no" else "yes"}
-      guest ok = ${if cfg.defaultShare.guest then "yes" else "no"}
-      ''else ""}
+      security = ${cfg.securityType}
+      passwd program = /var/setuid-wrappers/passwd %u
+      pam password change = ${if cfg.syncPasswordsByPam then "yes" else "no"}
+      invalid users = ${toString cfg.invalidUsers}
 
       ${cfg.extraConfig}
-    '';
+
+      ${toString (map shareConfig (attrNames cfg.shares))}
+    '');
 
   # This may include nss_ldap, needed for samba if it has to use ldap.
   nssModulesPath = config.system.nssModules.path;
@@ -88,86 +70,65 @@ in
     services.samba = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = "
+        description = ''
           Whether to enable Samba, which provides file and print
           services to Windows clients through the SMB/CIFS protocol.
-        ";
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.samba;
+        example = pkgs.samba4;
+        description = ''
+          Defines which package should be used for the samba server.
+        '';
       };
 
       syncPasswordsByPam = mkOption {
+        type = types.bool;
         default = false;
-        description = "
-          enabling this will add a line directly after pam_unix.so.
+        description = ''
+          Enabling this will add a line directly after pam_unix.so.
           Whenever a password is changed the samba password will be updated as well.
           However you still yave to add the samba password once using smbpasswd -a user
           If you don't want to maintain an extra pwd database you still can send plain text
           passwords which is not secure.
-        ";
+        '';
+      };
+
+      invalidUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "root" ];
+        description = ''
+          List of users who are denied to login via Samba.
+        '';
       };
 
       extraConfig = mkOption {
-        # !!! Bad default.
-        default = ''
-          # [global] continuing global section here, section is started by nix to set pids etc
-
-            smb passwd file = /etc/samba/passwd
-
-            # is this useful ?
-            domain master = auto
-
-            encrypt passwords = Yes
-            client plaintext auth = No
-
-            # yes: if you use this you probably also want to enable syncPasswordsByPam
-            # no: You can still use the pam password database. However
-            # passwords will be sent plain text on network (discouraged)
-
-            workgroup = Users
-            server string = %h
-            comment = Samba
-            log file = /var/log/samba/log.%m
-            log level = 10
-            max log size = 50000
-            security = ${cfg.securityType}
-
-            client lanman auth = Yes
-            dns proxy = no
-            invalid users = root
-            passdb backend = tdbsam
-            passwd program = /usr/bin/passwd %u
+        type = types.lines;
+        default = "";
+        description = ''
+          Additional global section and extra section lines go in here.
         '';
-
-        description = "
-          additional global section and extra section lines go in here.
-        ";
       };
 
-      configFile = mkOption {
-        description = "
-          internal use to pass filepath to samba pam module
-        ";
-      };
-
-      defaultShare = {
-        enable = mkOption {
-          description = "Whether to share /home/smbd as 'default'.";
-          default = false;
-        };
-        writeable = mkOption {
-          description = "Whether to allow write access to default share.";
-          default = false;
-        };
-        guest = mkOption {
-          description = "Whether to allow guest access to default share.";
-          default = true;
-        };
+      configText = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Verbatim contents of smb.conf. If null (default), use the
+          autogenerated file from NixOS instead.
+        '';
       };
 
       securityType = mkOption {
-        description = "Samba security type";
+        type = types.str;
         default = "user";
         example = "share";
+        description = "Samba security type";
       };
 
       nsswins = mkOption {
@@ -178,6 +139,22 @@ in
           Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.
           Windows machine names) by transparently querying the winbindd daemon.
         '';
+      };
+
+      shares = mkOption {
+        default = {};
+        description = ''
+          A set describing shared resources.
+          See <command>man smb.conf</command> for options.
+        '';
+        type = types.attrsOf (types.attrsOf types.unspecified);
+        example =
+          { srv =
+             { path = "/srv";
+               "read only" = "yes";
+                comment = "Public samba share.";
+             };
+          };
       };
 
     };
@@ -199,14 +176,6 @@ in
 
       (mkIf config.services.samba.enable {
 
-        users.extraUsers.smbguest = {
-          description = "Samba service user";
-          group = group;
-          uid = config.ids.uids.smbguest;
-        };
-
-        users.extraGroups.smbguest.gid = config.ids.uids.smbguest;
-
         system.nssModules = optional cfg.nsswins samba;
 
         systemd = {
@@ -224,7 +193,7 @@ in
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;
-              unitConfig.RequiresMountsFor = "/home/smbd /var/samba /var/log/samba";
+              unitConfig.RequiresMountsFor = "/var/samba /var/log/samba";
             };
           };
         };

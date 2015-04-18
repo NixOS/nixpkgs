@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-core";
-  version = "0.32";
-  sha256 = "130kz1gsrbamw8gs4vc0fqfjh1gi7i52xxmj4fg1vl2dr77gf6my";
+  version = "0.34.0.3";
+  sha256 = "0jcbnzw0hxq1f7f0frsji3ybdlapmps8dv19ni6rq0bvmiip2i19";
   buildDepends = [
     aeson aesonUtils either errors fclabels hxt hxtPickleUtils
     jsonSchema mtl multipart random restStringmap restTypes safe split
@@ -18,10 +18,10 @@ cabal.mkDerivation (self: {
   testDepends = [
     HUnit mtl testFramework testFrameworkHunit unorderedContainers
   ];
-  jailbreak = true;
   meta = {
     description = "Rest API library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

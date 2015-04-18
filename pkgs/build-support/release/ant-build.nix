@@ -9,7 +9,7 @@
 , antBuildInputs ? []
 , buildfile ? "build.xml"
 , ant ? pkgs.ant
-, jre ? pkgs.openjdk
+, jre ? pkgs.jdk
 , hydraAntLogger ? pkgs.hydraAntLogger
 , zip ? pkgs.zip
 , unzip ? pkgs.unzip
@@ -108,7 +108,7 @@ stdenv.mkDerivation (
       . ${./functions.sh}
 
       origSrc=$src
-      src=$(findTarballs $src | head -1)
+      src=$(findTarball $src)
     ''; 
   }
 )

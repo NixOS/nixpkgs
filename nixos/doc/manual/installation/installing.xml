@@ -11,14 +11,9 @@
   <listitem><para>Boot from the CD.</para></listitem>
 
   <listitem><para>The CD contains a basic NixOS installation.  (It
-  also contains Memtest86+, useful if you want to test new hardware.)
+  also contains Memtest86+, useful if you want to test new hardware).
   When it’s finished booting, it should have detected most of your
-  hardware and brought up networking (check
-  <command>ifconfig</command>).  Networking is necessary for the
-  installer, since it will download lots of stuff (such as source
-  tarballs or Nixpkgs channel binaries).  It’s best if you have a DHCP
-  server on your network.  Otherwise configure networking manually
-  using <command>ifconfig</command>.</para></listitem>
+  hardware.</para></listitem>
 
   <listitem><para>The NixOS manual is available on virtual console 8
   (press Alt+F8 to access).</para></listitem>
@@ -28,6 +23,16 @@
 
   <listitem><para>If you downloaded the graphical ISO image, you can
   run <command>start display-manager</command> to start KDE.</para></listitem>
+
+  <listitem><para>The boot process should have brought up networking (check
+  <command>ip a</command>).  Networking is necessary for the
+  installer, since it will download lots of stuff (such as source
+  tarballs or Nixpkgs channel binaries).  It’s best if you have a DHCP
+  server on your network. Otherwise configure networking manually
+  using <command>ifconfig</command>.</para>
+  <para>To manually configure the network on the graphical installer,
+  first disable network-manager with
+  <command>systemctl stop network-manager</command>.</para></listitem>
 
   <listitem><para>The NixOS installer doesn’t do any partitioning or
   formatting yet, so you need to that yourself.  Use the following

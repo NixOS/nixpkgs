@@ -3,8 +3,8 @@
 stdenv.mkDerivation {
   name = "lesstif-0.95.0-p2";
   src = fetchurl {
-    url = mirror://sourceforge/lesstif/lesstif-0.95.0.tar.bz2;
-    md5 = "ab895165c149d7f95843c7584b1c7ad4";
+    url = mirror://sourceforge/lesstif/lesstif-0.95.2.tar.bz2;
+    sha256 = "1qzpxjjf7ri1jzv71mvq5m9g8hfaj5yzwp30rwxlm6n2b24a6jpb";
   };
   buildInputs = [xlibsWrapper];
   propagatedBuildInputs = [libXp libXau];
@@ -15,11 +15,7 @@ stdenv.mkDerivation {
   # in Debian, so we assume they have been sent upstream.
   #
   patches = [
-    ./c-bad_integer_cast.patch    
-    ./c-linkage.patch             
-    ./c-unsigned_int.patch
     ./c-missing_xm_h.patch        
-    ./c-xim_chained_list_crash.patch
     ./c-render_table_crash.patch 
     ./c-xpmpipethrough.patch
     ];

@@ -45,6 +45,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Falling Sand Game - a cellular automata engine tuned towards the likes of Falling Sand";
+    description = "Cellular automata engine tuned towards the likes of Falling Sand";
+    maintainers = [stdenv.lib.maintainers.raskin];
   };
 }

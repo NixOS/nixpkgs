@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="intltool";
-    version="0.50.2";
-    name="intltool-0.50.2";
-    hash="01j4yd7i84n9nk4ccs6yifg84pp68nr9by57jdbhj7dpdxf5rwk7";
-    url="https://launchpad.net/intltool/trunk/0.50.2/+download/intltool-0.50.2.tar.gz";
-    sha256="01j4yd7i84n9nk4ccs6yifg84pp68nr9by57jdbhj7dpdxf5rwk7";
+    version="0.51.0";
+    name="${baseName}-${version}";
+    hash="1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
+    url="https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz";
+    sha256="1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
   propagatedBuildInputs = [perl perlXMLParser];
   buildInputs = [];

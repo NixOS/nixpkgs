@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "2.1";
+  version = "7.0";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "1m8qjvj5bfbphdags5s6pgmvk3xnw509lgdlq9whkq5a9mgxf8m7";
+    sha256 = "0qg07f035agwcz9m0p3kgdjs18xpl3h00rv28aqsfdyz1wm1m76x";
   };
 
   buildInputs = [ python wrapPython distutils-cfg ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       wrapPythonPrograms
     '';
 
-  doCheck = stdenv.system != "x86_64-darwin";
+  doCheck = false;  # requires pytest
 
   checkPhase = ''
     ${python}/bin/${python.executable} setup.py test

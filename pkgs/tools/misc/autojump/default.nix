@@ -1,7 +1,7 @@
 { fetchurl, stdenv, python, bash }:
 
-let 
-  version = "21.6.9";
+let
+  version = "22.2.4";
 in
   stdenv.mkDerivation rec {
     name = "autojump-${version}";
@@ -9,23 +9,22 @@ in
     src = fetchurl {
       url = "http://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
       name = "autojump-${version}.tar.gz";
-      sha256 = "0js6jp9l83zxhd9bn8hjn4yf8gydnldrlmafgvlg3rd4i1v82649";
+      sha256 = "816badb0721f735e2b86bdfa8b333112f3867343c7c2263c569f75b4ec91f475";
     };
 
     buildInputs = [ python bash ];
     dontBuild = true;
 
     installPhase = ''
-      # don't check shell support (we're running with bash anyway)
-      sed -i -e 150,153d install.sh
-
-      bash ./install.sh -d $out -p ""
+      python ./install.py -d $out -p ""
       chmod +x $out/etc/profile.d/*
 
       mkdir -p "$out/etc/bash_completion.d"
-      cp -v $out/etc/profile.d/autojump.bash "$out/etc/bash_completion.d"
+      cp -v $out/share/autojump/autojump.bash "$out/etc/bash_completion.d"
 
       # FIXME: What's the right place for `autojump.zsh'?
+      # This can be used as a workaround in .zshrc:
+      # . $HOME/.nix-profile/share/autojump/autojump.zsh
     '';
 
     meta = {
@@ -42,7 +41,7 @@ in
         works by maintaining a database of the directories you use the
         most from the command line.  The jstat command shows you the
         current contents of the database.  You need to work a little
-        bit before the database becomes useable.  Once your database
+        bit before the database becomes usable.  Once your database
         is reasonably complete, you can “jump” to a directory by
         typing "j dirspec", where dirspec is a few characters of the
         directory you want to jump to.  It will jump to the most used

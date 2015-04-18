@@ -1,14 +1,16 @@
 { fetchurl, stdenv, libgpgerror }:
 
 stdenv.mkDerivation (rec {
-  name = "libgcrypt-1.5.3";
+  name = "libgcrypt-1.5.4";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "1lar8y3lh61zl5flljpz540d78g99h4d5idfwrfw8lm3gm737xdw";
+    sha256 = "d5f88d9f41a46953dc250cdb8575129b37ee2208401b7fa338c897f667c7fb33";
   };
 
   propagatedBuildInputs = [ libgpgerror ];
+
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-asm";
 
   doCheck = stdenv.system != "i686-linux"; # "basic" test fails after stdenv+glibc-2.18
 
@@ -17,6 +19,8 @@ stdenv.mkDerivation (rec {
     LD_LIBRARY_PATH="${libgpgerror}/lib:$LD_LIBRARY_PATH" \
     make check
   '';
+
+  patches = [ ./no-build-timestamp.patch ];
 
   meta = {
     description = "General-pupose cryptographic library";

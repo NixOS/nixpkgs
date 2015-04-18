@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libdaemon, bison, flex, check }:
 
 stdenv.mkDerivation rec {
-  name = "radvd-2.5";
+  name = "radvd-2.10";
   
   src = fetchurl {
     url = "http://www.litech.org/radvd/dist/${name}.tar.xz";
-    sha256 = "0hsa647l236q9rhrwjb44xqmjfz4fxzcixlbf2chk4lzh8lzwjp0";
+    sha256 = "0wwpzdkk6lpsai11iwsrwiblmf9x19rds0wdqcnf82hj0j1yxkkn";
   };
 
   buildInputs = [ pkgconfig libdaemon bison flex check ];

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "solr-${version}";
-  version = "4.7.0";
+  version = "4.10.3";
 
   src = fetchurl {
     url = "mirror://apache/lucene/solr/${version}/solr-${version}.tgz";
-    sha256 = "0qm3pnhpfqjxdl0xiwffrcchp79q3ja5w5d278bkkxglc2y1y4xc";
+    sha256 = "1dp269jka4q62qhv47j91wsrsnbxfn23lsx6qcycbijrlyh28w5c";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -17,14 +17,12 @@ stdenv.mkDerivation rec {
     cp -r example/lib/ext $out/lib/ext
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://lucene.apache.org/solr/";
-    description = ''
-      Open source enterprise search platform from the Apache Lucene project
-    '';
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    description = "Open source enterprise search platform from the Apache Lucene project";
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rickynils maintainers.iElectric ];
   };
 
 }

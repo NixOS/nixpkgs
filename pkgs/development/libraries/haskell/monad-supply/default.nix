@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-supply";
-  version = "0.4";
-  sha256 = "0qvv9j55hw1lrfqnz1aric4mvg62c2vqaf5wirn69gvh74slqyj8";
+  version = "0.6";
+  sha256 = "1gg4r7fwaq2fa0lz8pz301mk3q16xpbs7qv54hhggxrv3i1h33ir";
   buildDepends = [ mtl ];
   meta = {
     description = "Stateful supply monad";

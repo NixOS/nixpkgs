@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, autoconf, automake, cairo, docbook_xsl, gtk
-, libdrm, libpng , libtool, libxslt, makeWrapper, pango, pkgconfig
-, udev
+{ stdenv, fetchurl, autoreconfHook, cairo, docbook_xsl, gtk
+, libdrm, libpng, libxslt, makeWrapper, pango, pkgconfig, udev
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake cairo docbook_xsl gtk libdrm libpng libtool
+    autoreconfHook cairo docbook_xsl gtk libdrm libpng
     libxslt makeWrapper pango pkgconfig udev
   ];
 
@@ -22,23 +21,23 @@ stdenv.mkDerivation rec {
       -i configure.ac
   '';
 
-  configurePhase = ''
-    ./configure \
-      --prefix=$out \
-      -bindir=$out/bin \
-      -sbindir=$out/sbin \
-      --exec-prefix=$out \
-      --libdir=$out/lib \
-      --libexecdir=$out/lib \
-      --sysconfdir=$out/etc \
-      --localstatedir=/var \
-      --with-log-viewer \
-      --without-system-root-install \
-      --without-rhgb-compat-link \
-      --enable-tracing \
-      --enable-systemd-integration \
-      --enable-pango \
-      --enable-gtk
+  postPatch = ''
+    configureFlags="
+      --prefix=$out
+      --bindir=$out/bin
+      --sbindir=$out/sbin
+      --exec-prefix=$out
+      --libdir=$out/lib
+      --libexecdir=$out/lib
+      --sysconfdir=$out/etc
+      --localstatedir=/var
+      --with-log-viewer
+      --without-system-root-install
+      --without-rhgb-compat-link
+      --enable-tracing
+      --enable-systemd-integration
+      --enable-pango
+      --enable-gtk"
   '';
 
   meta = with stdenv.lib; {

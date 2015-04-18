@@ -20,5 +20,6 @@ cabal.mkDerivation (self: {
     description = "Enumerator interface for lzma/xz compression";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    broken = self.stdenv.isi686;
   };
 })

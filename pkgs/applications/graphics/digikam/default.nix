@@ -1,32 +1,40 @@
-{ stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
-lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, libjpeg, libtiff,
-liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost,
-shared_desktop_ontologies, marble, mysql }:
+{ stdenv, fetchurl, automoc4, boost, shared_desktop_ontologies, cmake
+, eigen, lcms, gettext, jasper, kdelibs, kdepimlibs, lensfun
+, libgphoto2, libjpeg, libkdcraw, libkexiv2, libkipi, libpgf, libtiff
+, libusb1, liblqr1, marble, mysql, opencv, phonon, pkgconfig, qca2
+, qimageblitz, qjson, qt4, soprano
+}:
 
 stdenv.mkDerivation rec {
-  name = "digikam-3.5.0";
+  name = "digikam-4.6.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/digikam/${name}.tar.bz2";
-    sha256 = "0an4awlg0b8pwl6v8p5zfl3aghgnxck2pc322cyk6i6yznj2mgap";
+    sha256 = "0id3anikki8c3rzqzapdbg00h577qwybknvkbz1kdq0348bs6ixh";
   };
 
   nativeBuildInputs = [ cmake automoc4 pkgconfig ];
 
-  buildInputs = [ qt4 kdelibs phonon qimageblitz qca2 eigen lcms libjpeg libtiff
-    jasper libgphoto2 kdepimlibs gettext soprano liblqr1 lensfun qjson libkdcraw
-    opencv libkexiv2 libkipi boost shared_desktop_ontologies marble mysql ];
+  buildInputs = [
+    boost eigen gettext jasper kdelibs kdepimlibs lcms lensfun
+    libgphoto2 libjpeg libkdcraw libkexiv2 libkipi liblqr1 libpgf
+    libtiff marble mysql.lib opencv phonon qca2 qimageblitz qjson qt4
+    shared_desktop_ontologies soprano
+  ];
 
   # Make digikam find some FindXXXX.cmake
   KDEDIRS="${marble}:${qjson}";
+
+  # Help digiKam find libusb, otherwise gphoto2 support is disabled
+  cmakeFlags = "-DLIBUSB_LIBRARIES=${libusb1}/lib -DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0";
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Photo Management Program";
-    license = "GPL";
+    license = stdenv.lib.licenses.gpl2;
     homepage = http://www.digikam.org;
-    maintainers = with stdenv.lib.maintainers; [ viric urkud ];
+    maintainers = with stdenv.lib.maintainers; [ goibhniu viric urkud ];
     inherit (kdelibs.meta) platforms;
   };
 }

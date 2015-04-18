@@ -9,9 +9,11 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ networkUri text utf8String ];
+  jailbreak = true;
   meta = {
     description = "Unicode aware uri-encoding";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

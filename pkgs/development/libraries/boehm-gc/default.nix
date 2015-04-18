@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, enableLargeConfig ? false }:
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-7.2f";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
-  configureFlags = "--enable-cplusplus";
+  configureFlags =
+    [ "--enable-cplusplus" ]
+    ++ lib.optional enableLargeConfig "--enable-large-config";
 
   doCheck = true;
 
@@ -43,12 +45,12 @@ stdenv.mkDerivation rec {
       C or C++ programs, though that is not its primary goal.
     '';
 
-    homepage = http://www.hpl.hp.com/personal/Hans_Boehm/gc/;
+    homepage = http://hboehm.info/gc/;
 
     # non-copyleft, X11-style license
-    license = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/license.txt";
+    license = http://hboehm.info/gc/license.txt;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

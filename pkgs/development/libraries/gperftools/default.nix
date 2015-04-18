@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libunwind }:
+{ stdenv, fetchurl, unzip, libunwind }:
 
 stdenv.mkDerivation rec {
-  name = "gperftools-2.1";
+  name = "gperftools-2.4";
 
   src = fetchurl {
-    url = "https://gperftools.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0ks9gsnhxrs2vccc6ha9m8xmj83lmw09xcws4zc0k57q4jcy5bgk";
+    url = "https://googledrive.com/host/0B6NtGsLhIcf7MWxMMF9JdTN3UVk/gperftools-2.4.tar.gz";
+    sha256 = "0b8aqgch8dyapzw2zd9g89x6gsnm2ml0gf169rql0bxldqi3falq";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isLinux libunwind;
+  buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isLinux libunwind;
 
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://code.google.com/p/gperftools/;
     description = "Fast, multi-threaded malloc() and nifty performance analysis tools";
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

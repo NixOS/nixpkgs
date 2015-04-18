@@ -3,24 +3,23 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-    name = "abduco-0.1";
+    name = "abduco-0.4";
 
     meta = {
         homepage = http://brain-dump.org/projects/abduco;
         license = licenses.isc;
         description = "Allows programs to be run independently from its controlling terminal";
+        maintainers = with maintainers; [ pSub ];
         platforms = with platforms; linux;
     };
 
     src = fetchurl {
         url = "http://www.brain-dump.org/projects/abduco/${name}.tar.gz";
-        sha256 = "b4ef297cb7cc81170dc7edf75385cb1c55e024a52f90c1dd0bc0e9862e6f39b5";
+        sha256 = "1fxwg2s5w183p0rwzsxizy9jdnilv5qqs647l3wl3khny6fp58xx";
     };
 
     configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
     preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
-
-    buildInputs = [];
 
     installPhase = ''
       make PREFIX=$out install

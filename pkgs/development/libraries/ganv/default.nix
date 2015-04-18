@@ -1,13 +1,12 @@
-{ stdenv, fetchsvn, graphviz, gtk, gtkmm, pkgconfig, python }:
+{ stdenv, fetchurl, graphviz, gtk, gtkmm, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "ganv-svn-${rev}";
-  rev = "5318";
+  name = "ganv-${version}";
+  version = "1.4.2";
 
-  src = fetchsvn {
-    url = "http://svn.drobilla.net/lad/trunk/ganv";
-    rev = rev;
-    sha256 = "0wi87ks2xjma979d9hy82wmlm06g4sr0pm3b1n3zv27y52wrf7fl";
+  src = fetchurl {
+    url = "http://download.drobilla.net/${name}.tar.bz2";
+    sha256 = "0g7s5mp14qgbfjdql0k1s8464r21g47ssn5dws6jazsnw6njhl0l";
   };
 
   buildInputs = [ graphviz gtk gtkmm pkgconfig python ];

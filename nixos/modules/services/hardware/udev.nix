@@ -28,9 +28,11 @@ let
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
+    preferLocalBuild = true;
     buildCommand = ''
       mkdir -p $out
       shopt -s nullglob
+      set +o pipefail
 
       # Set a reasonable $PATH for programs called by udev rules.
       echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
@@ -87,7 +89,7 @@ let
       done
 
       ${optionalString config.networking.usePredictableInterfaceNames ''
-        cp ${./80-net-name-slot.rules} $out/80-net-name-slot.rules
+        cp ${./80-net-setup-link.rules} $out/80-net-setup-link.rules
       ''}
 
       # If auto-configuration is disabled, then remove
@@ -168,7 +170,6 @@ in
     hardware.firmware = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = [ "/root/my-firmware" ];
       description = ''
         List of directories containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
@@ -177,10 +178,10 @@ in
         firmware file with the same name, the first path in the list
         takes precedence.  Note that you must rebuild your system if
         you add files to any of these directories.  For quick testing,
-        put firmware files in /root/test-firmware and add that
-        directory to the list.
-        Note that you can also add firmware packages to this
-        list as these are directories in the nix store.
+        put firmware files in <filename>/root/test-firmware</filename>
+        and add that directory to the list.  Note that you can also
+        add firmware packages to this list as these are directories in
+        the nix store.
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";
@@ -236,13 +237,21 @@ in
 
     system.activationScripts.udevd =
       ''
-        echo "" > /proc/sys/kernel/hotplug
+        # The deprecated hotplug uevent helper is not used anymore
+        if [ -e /proc/sys/kernel/hotplug ]; then
+          echo "" > /proc/sys/kernel/hotplug
+        fi
 
         # Regenerate the hardware database /var/lib/udev/hwdb.bin
         # whenever systemd changes.
         if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${config.systemd.package} ]; then
           echo "regenerating udev hardware database..."
           ${config.systemd.package}/bin/udevadm hwdb --update && ln -sfn ${config.systemd.package} /var/lib/udev/prev-systemd
+        fi
+
+        # Allow the kernel to find our firmware.
+        if [ -e /sys/module/firmware_class/parameters/path ]; then
+          echo -n "${config.hardware.firmware}" > /sys/module/firmware_class/parameters/path
         fi
       '';
 

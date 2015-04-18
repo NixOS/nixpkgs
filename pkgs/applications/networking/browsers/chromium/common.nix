@@ -8,12 +8,12 @@
 , libusb1, libexif, pciutils
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, krb5
+, nspr, udev, kerberos
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
-, protobuf, speechd, libXdamage
+, protobuf, speechd, libXdamage, cups
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -25,8 +25,9 @@
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
-, cupsSupport ? false
+, cupsSupport ? true
 , pulseSupport ? false, pulseaudio ? null
+, hiDPISupport ? false
 
 , source
 , plugins
@@ -68,7 +69,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false;
-    use_system_protobuf = true;
+    use_system_protobuf = false; # needs newer protobuf
 
     use_system_harfbuzz = false;
     use_system_icu = false; # Doesn't support ICU 52 yet.
@@ -108,7 +109,7 @@ let
       nspr udev
       (if useOpenSSL then openssl else nss)
       utillinux alsaLib
-      bison gperf krb5
+      bison gperf kerberos
       glib gtk dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
@@ -116,7 +117,7 @@ let
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
-      ++ optional cupsSupport libgcrypt
+      ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport pulseaudio;
 
     # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
@@ -134,14 +135,20 @@ let
         -exec chmod u+w {} +
     '';
 
-    postPatch = ''
+    postPatch = optionalString (versionOlder version "42.0.0.0") ''
       sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
         sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
       ' sandbox/linux/suid/client/setuid_sandbox_client.cc
-
+    '' + ''
       sed -i -e '/module_path *=.*libexif.so/ {
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
+
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${udev}/lib/\1!' \
+        device/udev_linux/udev?_loader.cc
+
+      sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
+        gpu/config/gpu_info_collector_linux.cc
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -159,9 +166,12 @@ let
       use_openssl = useOpenSSL;
       selinux = enableSELinux;
       use_cups = cupsSupport;
+    } // optionalAttrs (versionOlder version "42.0.0.0") {
       linux_sandbox_chrome_path="${libExecPath}/${packageName}";
+    } // {
       werror = "";
       clang = false;
+      enable_hidpi = hiDPISupport;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
@@ -184,6 +194,9 @@ let
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
+      # Precompile .pyc files to prevent race conditions during build
+      python -m compileall -q -f . || : # ignore errors
+
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}

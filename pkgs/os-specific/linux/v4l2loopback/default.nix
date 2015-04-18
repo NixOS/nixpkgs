@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sed -i '/depmod/d' Makefile
     export PATH=${kmod}/sbin:$PATH
   '';
+
+  patches = [ ./kernel-3.18-fix.patch ];
   
   buildInputs = [ kmod ];
   

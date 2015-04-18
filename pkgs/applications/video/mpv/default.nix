@@ -20,7 +20,7 @@
 # For screenshots
 , libpngSupport ? true, libpng ? null
 # for Youtube support
-, quviSupport ? false, libquvi ? null
+, youtubeSupport ? false, youtubeDL ? null
 , cacaSupport ? false, libcaca ? null
 , vaapiSupport ? false, libva ? null
 }:
@@ -41,7 +41,7 @@ assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
-assert quviSupport -> libquvi != null;
+assert youtubeSupport -> youtubeDL != null;
 assert cacaSupport -> libcaca != null;
 
 # Purity problem: Waf needed to be is downloaded by bootstrap.py
@@ -50,23 +50,24 @@ assert cacaSupport -> libcaca != null;
 
 let
   waf = fetchurl {
-    url = https://waf.googlecode.com/files/waf-1.7.15;
-    sha256 = "e5ae7028f9b2d8ce1acb9fe1092e8010a90ba764d3ac065ea4e846743290b1d6";
+    url = http://ftp.waf.io/pub/release/waf-1.8.5;
+    sha256 = "0gh266076pd9fzwkycskyd3kkv2kds9613blpxmn9w4glkiwmmh5";
   };
 
 in
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.5.0";
+  version = "0.8.3";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "17mmc6xm8yir2p379h00q3wy7rplz2s31h6sxswmzbh72xf10g96";
+    sha256 = "1kw9hr957cxqgm2i94bgqc6sskm6bwhm0akzckilhs460b43h409";
   };
 
-  buildInputs = with stdenv.lib;
-    [ waf freetype pkgconfig ffmpeg libass docutils which libpthreadstubs lua5_sockets ]
+  buildInputs = 
+    [ python3 lua perl freetype pkgconfig ffmpeg libass docutils which libpthreadstubs lua5_sockets ]
     ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
@@ -82,14 +83,11 @@ stdenv.mkDerivation rec {
     ++ optional speexSupport speex
     ++ optional bs2bSupport libbs2b
     ++ optional libpngSupport libpng
-    ++ optional quviSupport libquvi
+    ++ optional youtubeSupport youtubeDL
     ++ optional sdl2Support SDL2
     ++ optional cacaSupport libcaca
     ++ optional vaapiSupport libva
     ;
-
-  nativeBuildInputs = [ python3 lua perl ];
-
 
 # There are almost no need of "configure flags", but some libraries
 # weren't detected; see the TODO comments below
@@ -114,21 +112,20 @@ stdenv.mkDerivation rec {
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
     '';
 
-  meta = {
+  meta = with stdenv.lib;{
     description = "A movie player that supports many video formats (MPlayer and mplayer2 fork)";
     longDescription = ''
-    mpv is a free and open-source general-purpose video player, based on the MPlayer and mplayer2 projects, with great improvements above both.
+      mpv is a free and open-source general-purpose video player,
+      based on the MPlayer and mplayer2 projects, with great
+      improvements above both.
     '';
-    homepage = "http://mpv.io";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://mpv.io;
+    license = licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ AndersonTorres fuuzetsu ];
+    platforms = platforms.linux;
   };
 }
 
-# Many thanks @matejc for this update: 0.5.0 and vaapi (experimental)
-
 # TODO: Wayland support
-# TODO: investigate libquvi problems (related to Youtube support)
 # TODO: investigate caca support
 # TODO: investigate lua5_sockets bug

@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, getopt, lua, boost }:
-        
+{ stdenv, fetchurl, getopt, lua, boost, pkgconfig }:
+
 stdenv.mkDerivation rec {
-  name = "highlight-3.9";
+  name = "highlight-3.18";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "1vysj34zz8gk5yhlzm7g6lbphb8y6zfbd9smfgsgwkyawfargrja";
+    sha256 = "0jsq78qb75sawwggbpx5pdqxk00wgjr1a0la0w8wihmamsjzgijm";
   };
 
-  buildInputs = [ getopt lua boost ];
+  buildInputs = [ getopt lua boost pkgconfig ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "conf_dir=$(out)/etc/highlight/"
-  ];
+  preConfigure = ''makeFlags="PREFIX=$out conf_dir=$out/etc/highlight"'';
 
   meta = {
     description = "Source code highlighting tool";

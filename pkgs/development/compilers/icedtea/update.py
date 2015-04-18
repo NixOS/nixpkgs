@@ -3,7 +3,7 @@
 import subprocess, urllib.request, re, os, tarfile
 from html.parser import HTMLParser
 
-HG_URL = 'http://icedtea.classpath.org/hg/release/icedtea{}-forest-{}'
+URL = 'http://icedtea.classpath.org/download/drops/icedtea{}/{}'
 DOWNLOAD_URL = 'http://icedtea.wildebeest.org/download/source/'
 DOWNLOAD_HTML = DOWNLOAD_URL + '?C=M;O=D'
 
@@ -81,7 +81,7 @@ def get_latest_version_url(major):
 
 def get_old_bundle_attrs(jdk, bundle):
 	attrs = {}
-	for attr in ('changeset', 'url', 'sha256'):
+	for attr in ('url', 'sha256'):
 		attrs[attr] = get_jdk_attr(jdk, 'bundles.{}.{}'.format(bundle, attr))
 
 	return attrs
@@ -89,7 +89,7 @@ def get_old_bundle_attrs(jdk, bundle):
 def get_old_attrs(jdk):
 	attrs = {}
 
-	for attr in ('branch', 'version', 'url', 'sha256'):
+	for attr in ('version', 'url', 'sha256'):
 		attrs[attr] = get_jdk_attr(jdk, attr)
 
 	attrs['bundles'] = {}
@@ -128,8 +128,8 @@ def get_new_bundle_attr(makefile, bundle, attr):
 
 	return m.group(1)
 
-def get_new_bundle_attrs(jdk, branch, path):
-	hg_url = HG_URL.format(jdk, branch)
+def get_new_bundle_attrs(jdk, version, path):
+	url = URL.format(jdk, version)
 
 	attrs = {}
 
@@ -137,31 +137,22 @@ def get_new_bundle_attrs(jdk, branch, path):
 	tar = tarfile.open(name = path, mode = 'r:xz')
 
 	makefile = get_member_file(tar, 'Makefile.am')
-	hotspot_map = get_member_file(tar, 'hotspot.map')
+	hotspot_map = get_member_file(tar, 'hotspot.map.in')
+
+	hotspot_map = hotspot_map.replace('@ICEDTEA_RELEASE@', version)
 
 	for bundle in BUNDLES:
 		battrs = {}
 
+		battrs['url'] = '{}/{}.tar.bz2'.format(url, bundle)
 		if bundle == 'hotspot':
-			m = re.search(r'^default (.*?) (.*?) (.*?)$', hotspot_map, re.MULTILINE)
+			m = re.search(r'^default (.*?) (.*?) (.*?) (.*?)$', hotspot_map, re.MULTILINE)
 			if m == None:
-				raise Exception('Could not find info for hotspot bundle in hotspot.map')
+				raise Exception('Could not find info for hotspot bundle in hotspot.map.in')
 
-			battrs['url'] = '{}/archive/{}.tar.gz'.format(m.group(1), m.group(2))
-			battrs['changeset'] = m.group(2)
-			battrs['sha256'] = m.group(3)
-
-			attrs[bundle] = battrs
-			continue
-
-		changeset = get_new_bundle_attr(makefile, bundle, 'changeset')
-		battrs['changeset'] = changeset
-		battrs['sha256'] = get_new_bundle_attr(makefile, bundle, 'sha256sum')
-
-		if bundle == 'openjdk':
-			battrs['url'] = '{}/archive/{}.tar.gz'.format(hg_url, changeset)
+			battrs['sha256'] = m.group(4)
 		else:
-			battrs['url'] = '{}/{}/archive/{}.tar.gz'.format(hg_url, bundle, changeset)
+			battrs['sha256'] = get_new_bundle_attr(makefile, bundle, 'sha256sum')
 
 		attrs[bundle] = battrs
 
@@ -193,7 +184,6 @@ def get_new_attrs(jdk):
 	print('Update available, generating new attributes for JDK {}...'.format(jdk))
 
 	attrs['version'] = version
-	attrs['branch'] = '.'.join(version.split('.')[:2])
 	attrs['url'] = url
 
 	print('Downloading tarball from url "{}"...'.format(url))
@@ -203,7 +193,7 @@ def get_new_attrs(jdk):
 
 	print('Inspecting tarball for bundle information...')
 
-	attrs['bundles'] = get_new_bundle_attrs(jdk, attrs['branch'], path)
+	attrs['bundles'] = get_new_bundle_attrs(jdk, attrs['version'], path)
 
 	print('Done!')
 
@@ -212,21 +202,19 @@ def get_new_attrs(jdk):
 def generate_jdk(jdk):
 	attrs = get_new_attrs(jdk)
 
-	branch = attrs['branch']
-	src_version = attrs['version'].replace(branch, '${branch}')
-	src_url = attrs['url'].replace(attrs['version'], '${version}')
+	version = attrs['version']
+	src_url = attrs['url'].replace(version, '${version}')
 
-	hg_url = HG_URL.format(jdk, branch)
-	src_hg_url = HG_URL.format(jdk, '${branch}')
+	common_url = URL.format(jdk, version)
+	src_common_url = URL.format(jdk, '${version}')
 
 	src =  '  icedtea{} = rec {{\n'.format(jdk)
-	src += '    branch = "{}";\n'.format(branch)
-	src += '    version = "{}";\n'.format(src_version)
+	src += '    version = "{}";\n'.format(version)
 	src += '\n'
 	src += '    url = "{}";\n'.format(src_url)
 	src += '    sha256 = "{}";\n'.format(attrs['sha256'])
 	src += '\n'
-	src += '    hg_url = "{}";\n'.format(src_hg_url)
+	src += '    common_url = "{}";\n'.format(src_common_url)
 	src += '\n'
 	src += '    bundles = {\n'
 
@@ -234,11 +222,9 @@ def generate_jdk(jdk):
 		battrs = attrs['bundles'][bundle]
 
 		b_url = battrs['url']
-		b_url = b_url.replace(hg_url, '${hg_url}')
-		b_url = b_url.replace(battrs['changeset'], '${changeset}')
+		b_url = b_url.replace(common_url, '${common_url}')
 
 		src += '      {} = rec {{\n'.format(bundle)
-		src += '        changeset = "{}";\n'.format(battrs['changeset'])
 		src += '        url = "{}";\n'.format(b_url)
 		src += '        sha256 = "{}";\n'.format(battrs['sha256'])
 		src += '      };\n'

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A userspace helper that runs x86 code in an emulated environment";
     homepage = http://dev.gentoo.org/~spock/projects/uvesafb/;
-    license = "BSD";
+    license = stdenv.lib.licenses.gpl2;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "iodine-0.6.0-rc1";
+  name = "iodine-0.7.0";
 
   src = fetchurl {
     url = "http://code.kryo.se/iodine/${name}.tar.gz";
-    sha256 = "dacf950198b68fd1dae09fe980080155b0c75718f581c08e069eee0c1b6c5e60";
+    sha256 = "0gh17kcxxi37k65zm4gqsvbk3aw7yphcs3c02pn1c4s2y6n40axd";
   };
 
   buildInputs = [ zlib ];
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://code.kryo.se/iodine/;
     description = "Tool to tunnel IPv4 data through a DNS server";
-    license = "ISC";
+    license = stdenv.lib.licenses.isc;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

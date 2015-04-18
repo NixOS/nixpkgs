@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, flex, bison, ncurses }:
+{ stdenv, fetchurl, automake, autoconf, libtool, flex, bison, ncurses, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "gpm-1.20.6";
-  
+  name = "gpm-1.20.7";
+
   src = fetchurl {
     url = "http://www.nico.schottelius.org/software/gpm/archives/${name}.tar.bz2";
-    sha256 = "1990i19ddzn8gg5xwm53yn7d0mya885f48sd2hyvr7dvzyaw7ch8";
+    sha256 = "13d426a8h403ckpc8zyf7s2p5rql0lqbg2bv0454x0pvgbfbf4gh";
   };
 
-  nativeBuildInputs = [ flex bison ];
-  buildInputs = [ ncurses ];
+  buildInputs = [ automake autoconf libtool flex bison ncurses texinfo ];
 
-  preConfigure =
-    ''
-      sed -e 's/[$](MKDIR)/mkdir -p /' -i doc/Makefile.in
-    '';
+  preConfigure = ''
+    ./autogen.sh
+    sed -e 's/[$](MKDIR)/mkdir -p /' -i doc/Makefile.in
+  '';
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
 
   # Its configure script does not allow --disable-static
   # Disabling this, we make cross-builds easier, because having
@@ -28,5 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.nico.schottelius.org/software/gpm/;
     description = "A daemon that provides mouse support on the Linux console";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

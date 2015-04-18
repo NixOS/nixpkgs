@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "units";
-  version = "2.1";
-  sha256 = "1qrjc57j15ras0v43cpd7qhh9nzh9dbnkaik6s4c8aj8nkhgd8vs";
+  version = "2.2";
+  sha256 = "1hd7klv0h2rsq971rbghvgy2921bf0zxikdsl26qw08yb0zirvza";
   buildDepends = [
     mtl multimap parsec singletons syb thDesugar vectorSpace
   ];
@@ -16,7 +16,7 @@ cabal.mkDerivation (self: {
     thDesugar vectorSpace
   ];
   meta = {
-    homepage = "http://www.cis.upenn.edu/~eir/packages/units";
+    homepage = "https://github.com/goldfirere/units";
     description = "A domain-specific type system for dimensional analysis";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

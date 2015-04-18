@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sed -i 57d texk/kpathsea/c-std.h
   '';
 
-  patches = [ ./environment.patch ./getline.patch ];
+  patches = [ ./environment.patch ./getline.patch ./clang.patch ];
 
   setupHook = ./setup-hook.sh;
 
@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     homepage     = http://www.tug.org/tetex/;
     matintainers = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;
+    hydraPlatforms = platforms.linux;
   };
 }
 

@@ -1,19 +1,19 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python
+{ fetchurl, stdenv, pkgconfig, gnome3, python, sqlite
 , intltool, libsoup, libxml2, libsecret, icu
 , p11_kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true, vala }:
 
 
 stdenv.mkDerivation rec {
-  name = "evolution-data-server-3.12.2";
+  name = "evolution-data-server-3.12.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/3.12/${name}.tar.xz";
-    sha256 = "91c95e17a8c1cd1086dafcd99a40bdf8f5993770f251f8b0a10e5395e3f5a3b6";
+    sha256 = "d3a2f832f823cb2a41467926dcaec984a15b2cb51ef89cf41267e337ca750811";
   };
 
   buildInputs = with gnome3;
     [ pkgconfig glib python intltool libsoup libxml2 gtk gnome_online_accounts libsecret
-      gcr p11_kit db nspr nss libgweather libical libgdata gperf makeWrapper icu ]
+      gcr p11_kit db nspr nss libgweather libical libgdata gperf makeWrapper icu sqlite ]
     ++ stdenv.lib.optional valaSupport vala;
 
   # uoa irrelevant for now
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
+    maintainers = [ maintainers.lethalman ];
   };
 
 }

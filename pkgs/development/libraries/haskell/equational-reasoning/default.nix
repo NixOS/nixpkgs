@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.2.0.4";
   sha256 = "1f94y6h7qg7rck7rxf6j8sygkh1xmfk0z1lr71inx6s74agjyc9j";
   buildDepends = [ singletons tagged void ];
+  jailbreak = true;
   meta = {
     description = "Proof assistant for Haskell using DataKinds & PolyKinds";
     license = self.stdenv.lib.licenses.bsd3;

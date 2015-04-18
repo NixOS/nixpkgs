@@ -14,6 +14,10 @@ stdenv.mkDerivation {
     makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man CC=${stdenv.cross.config}-gcc";
   };
 
+  preBuild = ''
+    sed -e "s@/bin/mv@$(type -P mv)@" -i replace.h
+  '';
+
   preInstall = "mkdir -p \$out/share/man";
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 

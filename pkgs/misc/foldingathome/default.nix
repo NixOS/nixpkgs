@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   installPhase = ''
     BINFILES="fah6 mpiexec";
     for a in $BINFILES; do 
-      patchelf --set-interpreter $(cat $NIX_GCC/nix-support/dynamic-linker) $a
+      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $a
     done
     mkdir -p $out/bin
     cp $BINFILES $out/bin

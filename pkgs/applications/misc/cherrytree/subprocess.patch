@@ -1,0 +1,15 @@
+diff -Naur cherrytree-0.35.6-orig/setup.py cherrytree-0.35.6/setup.py
+--- cherrytree-0.35.6-orig/setup.py     2014-05-30 23:25:11.000000000 +0200
++++ cherrytree-0.35.6/setup.py  2015-01-29 07:35:32.785904009 +0100
+@@ -205,4 +205,9 @@
+           },
+        distclass=CherryTreeDist
+     )
+-    subprocess.call("update-desktop-database")
++    try:
++        subprocess.check_call(['update-desktop-database'])
++    except subprocess.CalledProcessError:
++        pass # handle errors in the called executable
++    except OSError:
++        pass # executable not found
+

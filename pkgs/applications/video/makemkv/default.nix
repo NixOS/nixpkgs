@@ -1,28 +1,28 @@
 { stdenv, fetchurl
-, openssl, qt4, mesa, zlib
+, openssl, qt4, mesa, zlib, pkgconfig, libav
 }:
 
 stdenv.mkDerivation rec {
   name = "makemkv-${ver}";
-  ver = "1.8.0";
+  ver = "1.9.2";
   builder = ./builder.sh;
 
   src_bin = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz";
-    sha256 = "1f465rdv5ibnh5hnfmvmlid0yyzkansjw8l1mi5qd3bc6ca4k30c";
+    sha256 = "0hjby7imja9sg2h68al81n4zl72mc3y3fqmf61sf1sad4njs9bkj";
   };
 
-  src_oss = fetchurl { 
+  src_oss = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz";
-    sha256 = "0kj1mpkzz2cvi0ibdgdzfwbh9k2jfj3ra5m3hd7iyc5ng21v4sk3";
+    sha256 = "074scfz835jynzmb28i8q44hc6ixvfg3crgirmy02bbpxakyp1v6";
   };
 
-  buildInputs = [openssl qt4 mesa zlib];
+  buildInputs = [openssl qt4 mesa zlib pkgconfig libav];
 
-  libPath = stdenv.lib.makeLibraryPath [stdenv.gcc.gcc openssl mesa qt4 zlib ] 
-          + ":" + stdenv.gcc.gcc + "/lib64";
+  libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc openssl mesa qt4 zlib ]
+          + ":" + stdenv.cc.cc + "/lib64";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "convert blu-ray and dvd to mkv";
     longDescription = ''
       makemkv is a one-click QT application that transcodes an encrypted
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
       can always download the latest version from makemkv.com that will reset the
       expiration date.
     '';
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
     homepage = http://makemkv.com;
+    maintainers = [ maintainers.titanous ];
   };
 }

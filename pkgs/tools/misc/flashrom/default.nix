@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libftdi pciutils ];
 
-  makeFlags = ["PREFIX=$out"];
+  preConfigure = "export PREFIX=$out";
 
   meta = {
     homepage = "http://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = "GPLv2";
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.funfunctor ];
     platforms = with stdenv.lib.platforms; linux;
   };

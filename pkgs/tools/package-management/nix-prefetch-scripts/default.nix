@@ -17,6 +17,7 @@ stdenv.mkDerivation {
         wrapArgs="$wrapArgs --prefix PATH : $dep/bin"
       done
       wrapArgs="$wrapArgs --prefix PATH : ${gnused}/bin"
+      wrapArgs="$wrapArgs --set HOME : /homeless-shelter"
       wrapProgram $out/bin/$name $wrapArgs
     }
 

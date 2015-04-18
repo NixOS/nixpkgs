@@ -1,8 +1,9 @@
-{ sslSupport ? true
-, gpgSupport ? false
-, stdenv, fetchurl, pkgconfig, gtk
+{ stdenv, fetchurl, pkgconfig, gtk
+
 , openssl ? null
 , gpgme ? null
+, sslSupport ? true
+, gpgSupport ? true
 }:
 
 with stdenv.lib;
@@ -25,7 +26,8 @@ stdenv.mkDerivation {
     ++ optional sslSupport openssl
     ++ optional gpgSupport gpgme;
 
-  configureFlags = optionalString sslSupport "--enable-ssl";
+  configureFlags = optional sslSupport "--enable-ssl"
+                ++ optional gpgSupport "--enable-gpgme";
 
   meta = {
     homepage = http://sylpheed.sraoss.jp/en/;

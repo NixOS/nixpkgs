@@ -39,11 +39,20 @@ in
           as retain options.
         '';
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.rsnapshot;
+        example = literalExample "pkgs.rsnapshotGit";
+        description = ''
+          RSnapshot package to use.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable (let
-    myRsnapshot = pkgs.rsnapshot.override { configFile = rsnapshotCfg; };
+    myRsnapshot = cfg.package.override { configFile = rsnapshotCfg; };
     rsnapshotCfg = with pkgs; writeText "gen-rsnapshot.conf" (''
         config_version	1.2
         cmd_cp	${coreutils}/bin/cp

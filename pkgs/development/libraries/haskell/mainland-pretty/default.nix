@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.2.7";
   sha256 = "1g4s2xscj6dpkcghs5lws658ki0rhriivpdr5ilcycvr28k3l35q";
   buildDepends = [ srcloc text ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "Pretty printing designed for printing source code";

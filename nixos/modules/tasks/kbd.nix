@@ -22,6 +22,7 @@ in
     # FIXME: still needed?
     boot.extraTTYs = mkOption {
       default = [];
+      type = types.listOf types.string;
       example = ["tty8" "tty9"];
       description = ''
         Tty (virtual console) devices, in addition to the consoles on

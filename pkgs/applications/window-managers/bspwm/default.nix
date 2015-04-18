@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tiling window manager based on binary space partitioning";
-    homepage = "http://github.com/baskerville/bspwm";
-    maintainers = stdenv.lib.maintainers.meisternu;
-    license = "BSD";
+    homepage = http://github.com/baskerville/bspwm;
+    maintainers = [ stdenv.lib.maintainers.meisternu ];
+    license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
   };
 }

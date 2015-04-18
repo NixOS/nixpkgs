@@ -7,12 +7,14 @@ stdenv.mkDerivation rec {
     sha256 = "0p5nx387857w3v2jbgvps2p6mlm0chajcdw5sfrddcglsxkwvmis";
   };
   buildInputs = [lesstif ncurses libX11 libXt];
-	configureFlags = "--with-x";
+  configureFlags = "--with-x";
 
   patches = [ ./gcc44.patch ];
-	meta = {
-	  homepage = http://www.gnu.org/software/ddd;
-		description = "Graphical front-end for command-line debuggers";
-		license = stdenv.lib.licenses.gpl2;
-	};
+
+  meta = {
+    homepage = http://www.gnu.org/software/ddd;
+    description = "Graphical front-end for command-line debuggers";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -17,11 +17,10 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A high-level and functional interface to the Format module of the OCaml standard library";
     homepage = "${webpage}";
-    license = "bsd";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
   };
 }
-
-

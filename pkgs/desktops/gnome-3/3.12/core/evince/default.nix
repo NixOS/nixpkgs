@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "evince-3.12.1";
+  name = "evince-3.12.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/3.12/${name}.tar.xz";
-    sha256 = "ef22cc29a7cbe70d2e7ce8c0b5b7ee774187ea69f3ae49a64c6d4a91559ef137";
+    sha256 = "30c243bbfde56338c25a39003b4848143be42157177e2163a368f14139909f7d";
   };
 
   buildInputs = [
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/evince" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   doCheck = false; # would need pythonPackages.dogTail, which is missing

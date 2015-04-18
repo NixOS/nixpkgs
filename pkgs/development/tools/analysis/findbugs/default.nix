@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "findbugs-2.0.3";
+stdenv.mkDerivation rec {
+  name = "findbugs-3.0.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/findbugs/findbugs-2.0.3.tar.gz;
-    sha256 = "17s93vszc5s2b7pwi0yk8d6w54gandxrr7vflhzmpbl6sxj2mfjr";
+    url = "mirror://sourceforge/findbugs/${name}.tar.gz";
+    sha256 = "06b46fz4nid7qvm36r66zw01fr87y4jyz21ixw27b8hkqah0s3p8";
   };
 
   buildPhase = ''
@@ -34,8 +34,9 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A static analysis tool to find bugs in Java programs automatically";
     homepage = http://findbugs.sourceforge.net/;
+    maintainers = with maintainers; [ pSub ];
   };
 }

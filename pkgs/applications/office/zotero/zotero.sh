@@ -1,3 +1,3 @@
 #!@bash@/bin/bash
 
-exec "@xulrunner@/bin/xulrunner" "@out@/libexec/zotero/application.ini" "${@}"
+exec "@firefox@/bin/firefox" -app "@out@/libexec/zotero/application.ini" "${@}"

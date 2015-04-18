@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "cv-2014-07-20";
+  name = "cv-${version}";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "Xfennec";
     repo = "cv";
-    rev = "7441de974cc13f3b07903bb86c41be4e45c8e81b";
-    sha256 = "19ky88b52a8zcv7lx802y4zi3sp0cdhya08cnax0yvlwwq43w6x9";
+    rev = "v${version}";
+    sha256 = "0nhhgkaghfp8rw23013j17yn9bqcwcrz0fylwkvx1krp5r8dalis";
   };
 
-  buildInputs = [ ];
+  buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

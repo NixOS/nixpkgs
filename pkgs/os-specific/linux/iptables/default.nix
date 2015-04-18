@@ -1,7 +1,8 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iptables-1.4.21";
+  name = "iptables-${version}";
+  version = "1.4.21";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
@@ -17,5 +18,8 @@ stdenv.mkDerivation rec {
     description = "A program to configure the Linux IP packet filtering ruleset";
     homepage = http://www.netfilter.org/projects/iptables/index.html;
     platforms = stdenv.lib.platforms.linux;
+    downloadPage = "http://www.netfilter.org/projects/iptables/files/";
+    updateWalker = true;
+    inherit version;
   };
 }

@@ -1,13 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "super-3.30.0";
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "http://ftp.ucolick.org/pub/users/will/${name}-tar.gz";
-    sha256 = "1sxgixx1yg7h8g9799v79rk15gb39gn7p7fx032c078wxx38qwq4";
+    url = "http://www.ucolick.org/~will/RUE/super/${name}-tar.gz";
+    sha256 = "0k476f83w7f45y9jpyxwr00ikv1vhjiq0c26fgjch9hnv18icvwy";
   };
+
+  patches = [
+   (fetchpatch { url = http://anonscm.debian.org/cgit/users/robert/super.git/plain/debian/patches/14-Fix-unchecked-setuid-call.patch;
+                 sha256 = "08m9hw4kyfjv0kqns1cqha4v5hkgp4s4z0q1rgif1fnk14xh7wqh";
+               })
+  ];
 
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
@@ -16,7 +22,7 @@ stdenv.mkDerivation rec {
   installFlags = "sysconfdir=$(out)/etc localstatedir=$(TMPDIR)";
 
   meta = {
-    homepage = http://ftp.ucolick.org/pub/users/will/;
+    homepage = http://www.ucolick.org/~will/;
     description = "Allows users to execute scripts as if they were root";
     longDescription =
       ''

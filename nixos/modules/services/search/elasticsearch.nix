@@ -135,6 +135,11 @@ in {
         rm ${cfg.dataDir}/plugins || true
         ln -s ${esPlugins}/plugins ${cfg.dataDir}/plugins
       '';
+      postStart = mkBefore ''
+        until ${pkgs.curl}/bin/curl -s -o /dev/null ${cfg.host}:${toString cfg.port}; do
+          sleep 1
+        done
+      '';
     };
 
     environment.systemPackages = [ pkgs.elasticsearch ];

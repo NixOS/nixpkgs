@@ -1,13 +1,21 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.14.17";
+  version = "3.14.37";
+  # Remember to update grsecurity!
   extraMeta.branch = "3.14";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-    sha256 = "1dl9skwd1xvkdm9gblidcawkck6x5slb41gbx0i8jxby2k6w6i5n";
+    sha256 = "1pq4i97vys38rl8ylx4s08qgh9yz3cl840j1f70yzakmc2017byc";
   };
+
+  # FIXME: remove with the next point release.
+  kernelPatches = args.kernelPatches ++
+    [ { name = "btrfs-fix-deadlock";
+        patch = ./btrfs-fix-deadlock.patch;
+      }
+    ];
 
   features.iwlwifi = true;
   features.efiBootStub = true;

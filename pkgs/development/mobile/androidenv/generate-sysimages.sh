@@ -17,9 +17,7 @@ in
 {
 EOF
 
-xsltproc generate-sysimages.xsl repository-8.xml >> sysimages.nix
-xsltproc --stringparam abi x86 generate-sysimages-others.xsl sys-img-x86.xml >> sysimages.nix
-xsltproc --stringparam abi mips generate-sysimages-others.xsl sys-img-mips.xml >> sysimages.nix
+xsltproc generate-sysimages.xsl sys-img.xml >> sysimages.nix
 
 cat >> sysimages.nix << "EOF"
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "scala-mode2-2014-06-05";
+  name = "scala-mode2-2014-07-01";
 
   src = fetchurl {
-    url = "https://github.com/hvesalai/scala-mode2/archive/af2dc30226c890ff7d49d727450f8006b90781df.zip";
-    sha256 = "1jj08li9lfg5291jzj170wa3cmyf3g2a0j80cy5307l0mdawp9vx";
+    url = "https://github.com/hvesalai/scala-mode2/archive/c154f1623f4696d26e1c88d19170e67bf6825837.zip";
+    sha256 = "0fyxdpwz55n4c87v4ijqlbv6w1rybg5qrgsc40f6bs6sd747scy5";
   };
 
   buildInputs = [ unzip emacs ];

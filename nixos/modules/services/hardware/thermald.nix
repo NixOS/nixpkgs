@@ -19,6 +19,8 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
+    services.dbus.packages = [ pkgs.thermald ];
+
     systemd.services.thermald = {
       description = "Thermal Daemon Service";
       wantedBy = [ "multi-user.target" ];

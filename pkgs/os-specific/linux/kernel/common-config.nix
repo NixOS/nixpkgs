@@ -1,27 +1,54 @@
+/*
+
+  WARNING/NOTE: whenever you want to add an option here you need to
+  either
+
+  * mark it as an optional one with `?` suffix,
+  * or make sure it works for all the versions in nixpkgs,
+  * or check for which kernel versions it will work (using kernel
+    changelog, google or whatever) and mark it with `versionOlder` or
+    `versionAtLeast`.
+
+  Then do test your change by building all the kernels (or at least
+  their configs) in nixpkgs or else you will guarantee lots and lots
+  of pain to users trying to switch to an older kernel because of some
+  hardware problems with a new one.
+
+*/
+
 { stdenv, version, kernelPlatform, extraConfig, features }:
 
 with stdenv.lib;
 
 ''
-  # Power management and debugging.
+  # Debugging.
   DEBUG_KERNEL y
-  PM_ADVANCED_DEBUG y
-  PM_RUNTIME y
   TIMER_STATS y
-  ${optionalString (versionOlder version "3.10") ''
-    USB_SUSPEND y
-  ''}
   BACKTRACE_SELF_TEST n
   CPU_NOTIFIER_ERROR_INJECT? n
   DEBUG_DEVRES n
   DEBUG_NX_TEST n
   DEBUG_STACK_USAGE n
-  ${optionalString (!(features.grsecurity or true)) ''
+  ${optionalString (!(features.grsecurity or false)) ''
     DEBUG_STACKOVERFLOW n
   ''}
   RCU_TORTURE_TEST n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  # Power management.
+  ${optionalString (versionOlder version "3.19") ''
+    PM_RUNTIME y
+  ''}
+  PM_ADVANCED_DEBUG y
+  ${optionalString (versionAtLeast version "3.10") ''
+    X86_INTEL_PSTATE y
+  ''}
+  INTEL_IDLE y
+  CPU_FREQ_DEFAULT_GOV_PERFORMANCE y
+  ${optionalString (versionOlder version "3.10") ''
+    USB_SUSPEND y
+  ''}
 
   # Support drivers that need external firmware.
   STANDALONE n
@@ -44,8 +71,6 @@ with stdenv.lib;
   NUMA? y
 
   # Disable some expensive (?) features.
-  FTRACE n
-  KPROBES n
   PM_TRACE_RTC n
 
   # Enable various subsystems.
@@ -59,6 +84,7 @@ with stdenv.lib;
   ''}
   SCSI_LOWLEVEL y # enable lots of SCSI devices
   SCSI_LOWLEVEL_PCMCIA y
+  SCSI_SAS_ATA y  # added to enable detection of hard drive
   SPI y # needed for many devices
   SPI_MASTER y
   WAN y
@@ -66,7 +92,7 @@ with stdenv.lib;
   # Networking options.
   IP_PNP n
   ${optionalString (versionOlder version "3.13") ''
-  IPV6_PRIVACY y
+    IPV6_PRIVACY y
   ''}
   NETFILTER_ADVANCED y
   IP_VS_PROTO_TCP y
@@ -76,6 +102,9 @@ with stdenv.lib;
   IP_DCCP_CCID3 n # experimental
   CLS_U32_PERF y
   CLS_U32_MARK y
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    BPF_JIT y
+  ''}
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -139,10 +168,13 @@ with stdenv.lib;
 
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
+  FANOTIFY y
   EXT2_FS_XATTR y
   EXT2_FS_POSIX_ACL y
   EXT2_FS_SECURITY y
-  EXT2_FS_XIP y # Ext2 execute in place support
+  ${optionalString (versionOlder version "4.0") ''
+    EXT2_FS_XIP y # Ext2 execute in place support
+  ''}
   EXT3_FS_POSIX_ACL y
   EXT3_FS_SECURITY y
   EXT4_FS_POSIX_ACL y
@@ -157,7 +189,6 @@ with stdenv.lib;
   XFS_RT? y # XFS Realtime subvolume support
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
-  UBIFS_FS_XATTR? y
   UBIFS_FS_ADVANCED_COMPR? y
   ${optionalString (versionAtLeast version "3.6") ''
     NFS_SWAP y
@@ -174,6 +205,23 @@ with stdenv.lib;
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
+  ${optionalString (versionAtLeast version "3.12") ''
+    CEPH_FSCACHE y
+  ''}
+  ${optionalString (versionAtLeast version "3.14") ''
+    CEPH_FS_POSIX_ACL y
+  ''}
+  ${optionalString (versionAtLeast version "3.13") ''
+    SQUASHFS_FILE_DIRECT y
+    SQUASHFS_DECOMP_MULTI_PERCPU y
+  ''}
+  SQUASHFS_XATTR y
+  SQUASHFS_ZLIB y
+  SQUASHFS_LZO y
+  SQUASHFS_XZ y
+  ${optionalString (versionAtLeast version "3.19") ''
+    SQUASHFS_LZ4 y
+  ''}
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
@@ -192,6 +240,16 @@ with stdenv.lib;
   SECURITY_APPARMOR y
   DEFAULT_SECURITY_APPARMOR y
 
+  # Microcode loading support
+  MICROCODE y
+  MICROCODE_INTEL y
+  MICROCODE_AMD y
+  ${optionalString (versionAtLeast version "3.11") ''
+    MICROCODE_EARLY y
+    MICROCODE_INTEL_EARLY y
+    MICROCODE_AMD_EARLY y
+  ''}
+
   # Misc. options.
   8139TOO_8129 y
   8139TOO_PIO n # PIO is slower
@@ -209,7 +267,9 @@ with stdenv.lib;
   BT_HCIUART_BCSP? y
   BT_HCIUART_H4? y # UART (H4) protocol support
   BT_HCIUART_LL? y
-  BT_RFCOMM_TTY? y # RFCOMM TTY support
+  ${optionalString (versionAtLeast version "3.4") ''
+    BT_RFCOMM_TTY? y # RFCOMM TTY support
+  ''}
   CRASH_DUMP? n
   ${optionalString (versionOlder version "3.1") ''
     DMAR? n # experimental
@@ -232,22 +292,30 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  MICROCODE_AMD y
   MODVERSIONS y
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
   NET_FC y # Fibre Channel driver support
   PPP_MULTILINK y # PPP multilink support
+  PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
+  ''}
+  ${optionalString (versionAtLeast version "3.10") ''
+    RT2800USB_RT55XX y
   ''}
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
   SLIP_SMART y
   THERMAL_HWMON y # Hardware monitoring support
-  USB_DEBUG? n
+  ${optionalString (versionAtLeast version "3.15") ''
+    UEVENT_HELPER n
+  ''}
+  ${optionalString (versionOlder version "3.15") ''
+    USB_DEBUG? n
+  ''}
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   X86_CHECK_BIOS_CORRUPTION y
@@ -278,9 +346,16 @@ with stdenv.lib;
 
   # Tracing.
   FTRACE y
+  KPROBES y
   FUNCTION_TRACER y
   FTRACE_SYSCALLS y
   SCHED_TRACER y
+  STACK_TRACER y
+  ${optionalString (versionAtLeast version "3.10") ''
+    UPROBE_EVENT y
+  ''}
+  FUNCTION_PROFILER y
+  RING_BUFFER_BENCHMARK n
 
   # Devtmpfs support.
   DEVTMPFS y
@@ -303,10 +378,34 @@ with stdenv.lib;
   ''}
   XEN? y
   XEN_DOM0? y
+  ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
+    PCI_XEN? y
+    HVC_XEN? y
+    HVC_XEN_FRONTEND? y
+    XEN_SYS_HYPERVISOR? y
+    SWIOTLB_XEN? y
+    XEN_BACKEND? y
+    XEN_BALLOON? y
+    XEN_BALLOON_MEMORY_HOTPLUG? y
+    XEN_EFI? y
+    XEN_HAVE_PVMMU? y
+    XEN_MCE_LOG? y
+    XEN_PVH? y
+    XEN_PVHVM? y
+    XEN_SAVE_RESTORE? y
+    XEN_SCRUB_PAGES? y
+    XEN_SELFBALLOONING? y
+    XEN_STUB? y
+    XEN_TMEM? y
+  ''}
   KSM y
   ${optionalString (!stdenv.is64bit) ''
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
   ''}
+  ${optionalString (versionAtLeast version "3.9" && stdenv.is64bit) ''
+    VFIO_PCI_VGA y
+  ''}
+  VIRT_DRIVERS y
 
   # Media support.
   ${optionalString (versionAtLeast version "3.6") ''
@@ -332,13 +431,19 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_ALWAYS? n
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
-  # zram support (e.g for in-memory compressed swap)
+  # zram support (e.g for in-memory compressed swap).
   ${optionalString (versionAtLeast version "3.4") ''
     ZSMALLOC y
   ''}
   ZRAM m
-  
+
   ${optionalString (versionAtLeast version "3.17") "NFC? n"}
+
+  # Enable firmware loading via udev. Only needed for non-declarative
+  # firmware in /root/test-firmware.
+  ${optionalString (versionAtLeast version "3.17") ''
+    FW_LOADER_USER_HELPER_FALLBACK y
+  ''}
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

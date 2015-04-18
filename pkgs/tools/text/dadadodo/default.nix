@@ -1,32 +1,22 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl }:
 
-  version = a.lib.attrByPath ["version"] "1.04" a; 
-  buildInputs = with a; [
-    
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "dadadodo-${version}";
+  version = "1.04";
+
   src = fetchurl {
-    url = "http://www.jwz.org/dadadodo/dadadodo-${version}.tar.gz";
+    url = "http://www.jwz.org/dadadodo/${name}.tar.gz";
     sha256 = "1pzwp3mim58afjrc92yx65mmgr1c834s1v6z4f4gyihwjn8bn3if";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doMake" "doDeploy"];
-  installFlags = "PREFIX=$out";
-
-  doDeploy = a.fullDepEntry (''
+  installPhase = ''
     mkdir -p $out/bin
     cp dadadodo $out/bin
-  '') [ "minInit" "doMake" "defEnsureDir"];
-      
-  name = "dadadodo-" + version;
-  meta = {
+  '';
+
+  meta = with stdenv.lib; {
     description = "Markov chain-based text generator";
+    homepage = http://www.jwz.org/dadadodo;
+    maintainers = with maintainers; [ pSub ];
   };
 }

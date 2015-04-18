@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "webkit";
-  version = "0.13.0.0";
-  sha256 = "152rbb01fq9cxjxqm26s1qcv3nashzymkbjy52ql06y7s1n5i3q5";
+  version = "0.13.1.1";
+  sha256 = "0652as9wq0ajaqmcx14y2svishccgrywyagrbzga7m06r3h94dz5";
   buildDepends = [ cairo glib gtk mtl pango text ];
   buildTools = [ gtk2hsBuildtools ];
   pkgconfigDepends = [ webkit ];

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, libX11, xextproto, libXtst, imake, libXi, libXext }:
+{ stdenv, fetchurl, pkgconfig, libX11, xextproto, libXtst, libXi, libXext
+, libXinerama, glib, cairo, xdotool }:
 
 stdenv.mkDerivation rec {
-  name = "keynav-20070903";
+  name = "keynav-0.20110708.0";
 
   src = fetchurl {
-    url = "http://www.semicomplete.com/files/keynav/${name}.tar.gz";
-    sha256 = "037mbgm78jwy0qd0z691pgx4zcpkk5544fx8ajm2mx4y80k2d9kk";
+    url = "https://semicomplete.googlecode.com/files/${name}.tar.gz";
+    sha256 = "1gizjhji3yspxxxvb90js3z1bv18rbf5phxg8rciixpj3cccff8z";
   };
 
-  buildInputs = [libX11 xextproto libXtst imake libXi libXext];
-
-  NIX_LDFLAGS = "-lXext";
+  buildInputs = [ pkgconfig libX11 xextproto libXtst libXi libXext libXinerama
+                  glib cairo xdotool ];
 
   installPhase =
     ''
@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
       cp keynavrc $out/share/keynav/doc
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Generate X11 mouse clicks from keyboard";
+    homepage = http://www.semicomplete.com/projects/keynav/;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
   };
 }

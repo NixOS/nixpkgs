@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://github.com/downloads/rvoicilas/inotify-tools/inotify-tools-${version}.tar.gz";
-    sha256 = "0icl4bx041axd5dvhg89kilfkysjj86hjakc7bk8n49cxjn4cha6";
+    sha256 = "0by9frv1k59f76cx08sn06sk6lmdxsfb6zr0rshzhyrxi6lcqar2";
   };
 
   meta = with stdenv.lib; {

@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://xiph.org/tremor/;
     description = "Fixed-point version of the Ogg Vorbis decoder";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
   };
 }

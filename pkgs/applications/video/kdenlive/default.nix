@@ -1,16 +1,16 @@
 { stdenv, fetchurl, frei0r, lib, cmake, qt4, perl, kdelibs, automoc4
 , phonon , makeWrapper, mlt, gettext , qimageblitz, qjson
 , shared_mime_info, soprano, pkgconfig, shared_desktop_ontologies
-, libv4l
+, libv4l, oxygen_icons
 }:
 
 stdenv.mkDerivation rec {
   name = "kdenlive-${version}";
-  version = "0.9.8";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "mirror://kde/stable/kdenlive/${version}/src/${name}.tar.bz2";
-    sha256 = "17x5srgywcwlbpbs598jwwc62l8313n4dbqx3sdk7p6lyvwk3jln";
+    sha256 = "0qxpxnfbr8g6xq0h32skgqqi2xylrv2bnmyx5x1cws9y2wwxp3zn";
   };
 
   buildInputs = [
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     phonon pkgconfig qimageblitz qjson qt4 shared_desktop_ontologies
     shared_mime_info soprano
   ];
+
+  propagatedUserEnvPkgs = [ oxygen_icons ];
 
   enableParallelBuilding = true;
 

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl, gettext }:
 
-stdenv.mkDerivation {
-  name = "dos2unix-6.0.5";
+stdenv.mkDerivation rec {
+  name = "dos2unix-7.2.1";
   
   src = fetchurl {
-    url = http://waterlan.home.xs4all.nl/dos2unix/dos2unix-6.0.5.tar.gz;
-    sha256 = "13w5blhv0i473y9lyrxh4axz4niyrxcpj4v2qiq3w5kamyp20czx";
+    url = "http://waterlan.home.xs4all.nl/dos2unix/${name}.tar.gz";
+    sha256 = "1ws5d66gjs3iqc92d0qxwivixl9092540kxqq2gr6jdzmflqm4jk";
   };
 
   configurePhase = ''

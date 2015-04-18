@@ -7,11 +7,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "openresty-${version}";
-  version = "1.7.4.1rc1";
+  version = "1.7.7.1";
 
   src = fetchurl {
     url = "http://openresty.org/download/ngx_openresty-${version}.tar.gz";
-    sha256 = "1j976kmbdv07j3n7bwkpdrjs8hlm13mzzdmfbsfwyxpnk034v0j1";
+    sha256 = "1m541k2lys3155f0r94abgcmm2hgvv56q0i4fk58w6fa8n4h62z0";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ];
@@ -41,13 +41,17 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/nginx/sbin $out/bin
-    ln -s $out/bin/nginx $out/bin/openresty
+    mv $out/bin/sbin $out/sbin
+
     mv $out/luajit/bin/luajit-2.1.0-alpha $out/bin/luajit-openresty
+    ln -s $out/sbin/nginx $out/sbin/openresty
+    ln -s $out/sbin/nginx $out/bin/openresty
+    ln -s $out/sbin/nginx $out/bin/nginx
   '';
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
-    export PATH="$PATH:${stdenv.gcc.libc}/sbin"
+    export PATH="$PATH:${stdenv.cc.libc}/sbin"
     patchShebangs .
   '';
 

@@ -9,7 +9,7 @@
 assert withEditor -> wxGTK != null;
 
 let
-  version = "0.0.16";
+  version = "0.0.17";
 
   releaseType = "alpha";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-${releaseType}-unix-build.tar.xz";
-    sha256 = "cb965ef7e292bc3a2f1f598a9695e16ff4d786398f384a1ec7d5f9bfe2626de5";
+    sha256 = "ef144d44fe8a8abd29a4642999a58a596b8f0d0e1f310065f5ce1dfbe29c3aeb";
   };
 
   buildInputs = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
       --bindir="$out"/bin \
       --libdir="$out"/lib/0ad \
       --datadir="$out"/share/0ad \
+      --without-tests \
       gmake
     popd
   '';
@@ -116,6 +117,5 @@ stdenv.mkDerivation rec {
     homepage = "http://wildfiregames.com/0ad/";
     license = [ "GPLv2" "LGPLv2.1" "MIT" "CC BY-SA 3.0" "zlib" ];
     platforms = [ "x86_64-linux" "i686-linux" ];
-    broken = true;
   };
 }

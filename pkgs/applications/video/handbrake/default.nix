@@ -52,8 +52,7 @@ stdenv.mkDerivation rec {
 
 
   src = fetchurl {
-    name = "HandBrake-${version}.tar.bz2";
-    url = "http://handbrake.fr/rotation.php?file=HandBrake-${version}.tar.bz2";
+    url = "http://download.handbrake.fr/releases/${version}/HandBrake-${version}.tar.bz2";
     sha256 = "1crmm1c32vx60jfl2bqzg59q4qqx6m83b08snp7h1njc21sdf7d7";
   };
 

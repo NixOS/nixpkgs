@@ -2,14 +2,12 @@
 
 buildPythonPackage rec {
     namePrefix = "";
-    name = "mcomix-0.98";
+    name = "mcomix-1.01";
 
     src = fetchurl {
       url = "mirror://sourceforge/mcomix/${name}.tar.bz2";
-      sha256 = "93805b6c8540bd673ac4a6ef6e952f00f8fc10e59a63c7e163324a64db2a6b03";
+      sha256 = "0k3pqbvk08kb1nr0qldaj9bc7ca6rvcycgfi2n7gqmsirq5kscys";
     };
-
-    doCheck = false;
 
     pythonPath = [ pygtk pil python27Packages.sqlite3 ];
 
@@ -28,7 +26,7 @@ buildPythonPackage rec {
       '';
 
       homepage = http://mcomix.sourceforge.net/;
-
       license = stdenv.lib.licenses.gpl2;
+      maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     };
 }

@@ -31,6 +31,23 @@ rec {
     type = lib.types.bool;
   };
 
+  # This option accept anything, but it does not produce any result.  This
+  # is useful for sharing a module across different module sets without
+  # having to implement similar features as long as the value of the options
+  # are not expected.
+  mkSinkUndeclaredOptions = attrs: mkOption ({
+    internal = true;
+    visible = false;
+    default = false;
+    description = "Sink for option definitions.";
+    type = mkOptionType {
+      name = "sink";
+      check = x: true;
+      merge = loc: defs: false;
+    };
+    apply = x: throw "Option value is not readable because the option is not declared.";
+  } // attrs);
+
   mergeDefaultOption = loc: defs:
     let list = getValues defs; in
     if length list == 1 then head list
@@ -79,10 +96,11 @@ rec {
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible = opt.visible or true;
+          type = opt.type.name or null;
         }
-        // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
-        // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }
-        // optionalAttrs (opt ? defaultText) { default = opt.defaultText; };
+        // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
+        // (if opt ? default then { default = scrubOptionValue opt.default; } else {})
+        // (if opt ? defaultText then { default = opt.defaultText; } else {});
 
         subOptions =
           let ss = opt.type.getSubOptions opt.loc;

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cmake, boost, gmp, mpfr }:
 
 stdenv.mkDerivation rec {
-  version = "4.3";
+  version = "4.5";
 
   name = "cgal-${version}";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/32995/CGAL-${version}.tar.xz";
-    sha256 = "015vw57dmy43bf63mg3916cgcsbv9dahwv24bnmiajyanj2mhiyc";
+    url = "https://gforge.inria.fr/frs/download.php/34139/CGAL-${version}.tar.xz";
+    sha256 = "00shds5yph4s09lqdrb6n60wnw9kpiwa25ghg9mbsgq3fnr8p7kr";
   };
 
   buildInputs = [ cmake boost gmp mpfr ];

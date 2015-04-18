@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
+{ stdenv, fetchurl, python, pythonPackages, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
-let version = "4.10.2"; # kde410.pykde4 doesn't build with 4.10.3
+let version = "4.11.3";
 in
 stdenv.mkDerivation {
   name = "PyQt-x11-gpl-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt4/PyQt-${version}/PyQt-x11-gpl-${version}.tar.gz";
-    sha256 = "1zp69caqq195ymp911d0cka8619q78hzmfxvj7c51w2y53zg4z3l";
+    sha256 = "11jnfjw79s0b0qdd9s6kd69w87vf16dhagbhbmwbmrp2vgf80dw5";
   };
 
   configurePhase = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ python pkgconfig makeWrapper qt4 lndir ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ pythonPackages.sip_4_16 ];
 
   postInstall = ''
     for i in $out/bin/*; do

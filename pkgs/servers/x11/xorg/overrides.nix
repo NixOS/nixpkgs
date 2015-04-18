@@ -49,10 +49,25 @@ in
     inherit (xorg) xorgcffiles;
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch];
+    setupHook = if stdenv.isDarwin then ./darwin-imake-setup-hook.sh else null;
+    CFLAGS = [ "-DIMAKE_COMPILETIME_CPP=\\\"${if stdenv.isDarwin
+      then "${args.tradcpp}/bin/cpp"
+      else "gcc"}\\\""
+    ];
+    tradcpp = if stdenv.isDarwin then args.tradcpp else null;
   };
 
   mkfontdir = attrs: attrs // {
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
+  };
+
+  mkfontscale = attrs: attrs // {
+    patches = lib.singleton (args.fetchpatch {
+      name = "mkfontscale-fix-sig11.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=113951";
+      sha256 = "0i2xf768mz8kvm7i514v0myna9m6jqw82f9a03idabdpamxvwnim";
+    });
+    patchFlags = [ "-p0" ];
   };
 
   libxcb = attrs : attrs // {
@@ -65,18 +80,25 @@ in
     nativeBuildInputs = [ args.python ];
   };
 
+  libxkbfile = attrs: attrs // {
+    patches = lib.optional (stdenv.cc.cc.isClang or false) ./libxkbfile-clang36.patch;
+  };
+
   libpciaccess = attrs : attrs // {
     patches = [ ./libpciaccess-apple.patch ];
   };
 
   libX11 = attrs: attrs // {
     outputs = [ "dev" "out" "man" ];
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     postInstall =
       ''
         # Remove useless DocBook XML files.
         rm -rf $out/share/doc
       '';
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   libXau = attrs: attrs // {
@@ -105,8 +127,11 @@ in
   # Note: most of these are in Requires.private, so maybe builder.sh
   # should propagate them automatically.
   libXt = attrs: attrs // {
-    preConfigure = setMalloc0ReturnsNullCrossCompiling;
+    preConfigure = setMalloc0ReturnsNullCrossCompiling + ''
+      sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
+    '';
     propagatedBuildInputs = [ xorg.libSM ];
+    CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -201,9 +226,14 @@ in
     buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
+  xcbutilcursor = attrs: attrs // {
+    meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
+  };
+
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
+    buildInputs = attrs.buildInputs ++ [ args.mtdev args.libevdev ];
   };
 
   xf86inputmouse = attrs: attrs // {
@@ -214,8 +244,13 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
+  xf86inputlibinput = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.libinput ];
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
   xf86inputsynaptics = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [args.mtdev];
+    buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
 
@@ -225,6 +260,11 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
+    patches = [( args.fetchpatch {
+      url = "http://cgit.freedesktop.org/xorg/driver/xf86-input-vmmouse/patch/"
+        + "?id=1cbbc03c4b37d57760c57bd2e0b0f89d744a5795";
+      sha256 = "1qkhwj2yal0cz15lv9557d10ylvxlq05ibq43pm2rrvqdg3mb6h4";
+    })];
   };
 
   xf86videoati = attrs: attrs // {
@@ -255,7 +295,7 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
+    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb"; 
   };
 
   xkeyboardconfig = attrs: attrs // {
@@ -285,10 +325,11 @@ in
         dmxproto /*libdmx not used*/ xf86vidmodeproto
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
-        libpciaccess inputproto xextproto randrproto renderproto
-        dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
+        libpciaccess inputproto xextproto randrproto renderproto presentproto
+        dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ];
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ]
+                   ++ lib.optional isDarwin ./fix-clang.patch;
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
       darwinOtherX = overrideDerivation xorgserver (oldAttrs: {
@@ -311,6 +352,7 @@ in
         ];
         patches = commonPatches;
         configureFlags = [
+          "--enable-kdrive"             # not built by default
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
@@ -327,7 +369,7 @@ in
           url = mirror://xorg/individual/xserver/xorg-server-1.14.6.tar.bz2;
           sha256 = "0c57vp1z0p38dj5gfipkmlw6bvbz1mrr0sb3sbghdxxdyq4kzcz8";
         };
-        buildInputs = commonBuildInputs;
+        buildInputs = commonBuildInputs ++ [ args.bootstrap_cmds ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
         ];
@@ -391,6 +433,7 @@ in
 
   xinit = attrs: attrs // {
     stdenv = if isDarwin then args.clangStdenv else stdenv;
+    buildInputs = attrs.buildInputs ++ lib.optional isDarwin args.bootstrap_cmds;
     configureFlags = [
       "--with-xserver=${xorg.xorgserver}/bin/X"
     ] ++ lib.optionals isDarwin [
@@ -398,7 +441,8 @@ in
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
-    propagatedBuildInputs = [ xorg.xauth ];
+    propagatedBuildInputs = [ xorg.xauth ]
+                         ++ lib.optionals isDarwin [ xorg.libX11 xorg.xproto ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, popt, libuuid, liburcu, lttng-ust, kmod }:
+{ stdenv, fetchurl, popt, libuuid, liburcu, lttng-ust, kmod, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "lttng-tools-2.4.1";
+  name = "lttng-tools-2.5.2";
 
   src = fetchurl {
     url = "https://lttng.org/files/lttng-tools/${name}.tar.bz2";
-    sha256 = "1v9f7a3c2shwgn4g759bblgr27h9ql9sfq71r1mbkf8rd235g2jr";
+    sha256 = "0g931f90pl9bfgsxihrj0zlw9ivyaplbiw28axkscmjvzd1d6lhz";
   };
 
-  buildInputs = [ popt libuuid liburcu lttng-ust ];
+  buildInputs = [ popt libuuid liburcu lttng-ust libxml2 ];
 
   prePatch = ''
     sed -e "s|/sbin/modprobe|${kmod}/sbin/modprobe|g" \

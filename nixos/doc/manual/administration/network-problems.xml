@@ -12,9 +12,9 @@ pre-built binary.  That is, whenever a command like
 <command>nixos-rebuild</command> needs a path in the Nix store, Nix
 will try to download that path from the Internet rather than build it
 from source.  The default binary cache is
-<uri>http://cache.nixos.org/</uri>.  If this cache is unreachable, Nix
-operations may take a long time due to HTTP connection timeouts.  You
-can disable the use of the binary cache by adding <option>--option
+<uri>https://cache.nixos.org/</uri>.  If this cache is unreachable,
+Nix operations may take a long time due to HTTP connection timeouts.
+You can disable the use of the binary cache by adding <option>--option
 use-binary-caches false</option>, e.g.
 
 <screen>

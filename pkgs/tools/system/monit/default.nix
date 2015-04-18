@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openssl, bison, flex, pam, usePAM ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
-  name = "monit-5.8.1";
+  name = "monit-5.10";
   
   src = fetchurl {
     url = "${meta.homepage}dist/${name}.tar.gz";
-    sha256 = "1rbhr3aff8pbiz60r73607hci4yngv5xq1b6yjx9xhks4mwlnpm2";
+    sha256 = "0lwlils6b59kr6zg328q113c7mrpggqydpq4l6j52sqv3dd1b49p";
   };
 
   nativeBuildInputs = [ bison flex ];

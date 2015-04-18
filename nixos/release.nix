@@ -3,19 +3,19 @@
 , supportedSystems ? [ "x86_64-linux" "i686-linux" ]
 }:
 
+with import ../lib;
+
 let
 
   version = builtins.readFile ../.version;
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  forAllSystems = pkgs.lib.genAttrs supportedSystems;
+  forAllSystems = genAttrs supportedSystems;
 
-  callTest = fn: args: forAllSystems (system: import fn ({ inherit system; } // args));
+  callTest = fn: args: forAllSystems (system: hydraJob (import fn ({ inherit system; } // args)));
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
-
-  lib = pkgs.lib;
 
 
   versionModule =
@@ -40,10 +40,10 @@ let
 
     in
       # Declare the ISO as a build product so that it shows up in Hydra.
-      runCommand "nixos-iso-${config.system.nixosVersion}"
+      hydraJob (runCommand "nixos-iso-${config.system.nixosVersion}"
         { meta = {
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
-            maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
+            maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit iso;
           passthru = { inherit config; };
@@ -51,7 +51,7 @@ let
         ''
           mkdir -p $out/nix-support
           echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''; # */
+        ''); # */
 
 
   makeSystemTarball =
@@ -72,20 +72,23 @@ let
       tarball //
         { meta = {
             description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
-            maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
+            maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
         };
 
 
-  makeClosure = module: forAllSystems (system: (import ./lib/eval-config.nix {
+  makeClosure = module: buildFromConfig module (config: config.system.build.toplevel);
+
+
+  buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ module ] ++ lib.singleton
+    modules = [ module versionModule ] ++ singleton
       ({ config, lib, ... }:
-      { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
-        boot.loader.grub.device = lib.mkDefault "/dev/sda";
+      { fileSystems."/".device  = mkDefault "/dev/sda1";
+        boot.loader.grub.device = mkDefault "/dev/sda";
       });
-  }).config.system.build.toplevel);
+  }).config));
 
 
 in rec {
@@ -122,9 +125,14 @@ in rec {
     };
 
 
-  manual = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manual);
-  manualPDF = iso_minimal.x86_64-linux.config.system.build.manual.manualPDF;
-  manpages = forAllSystems (system: (builtins.getAttr system iso_minimal).config.system.build.manual.manpages);
+  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
+  manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
+  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
+  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
+
+
+  # Build the initial ramdisk so Hydra can keep track of its size over time.
+  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
 
   iso_minimal = forAllSystems (system: makeIso {
@@ -147,12 +155,6 @@ in rec {
     inherit system;
   });
 
-  iso_graphical_new_kernel = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-new-kernel.nix;
-    type = "graphical-new-kernel";
-    inherit system;
-  });
-
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forAllSystems (system:
@@ -171,10 +173,10 @@ in rec {
 
     in
       # Declare the OVA as a build product so that it shows up in Hydra.
-      runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
+      hydraJob (runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
         { meta = {
             description = "NixOS VirtualBox appliance (${system})";
-            maintainers = lib.maintainers.eelco;
+            maintainers = maintainers.eelco;
           };
           ova = config.system.build.virtualBoxOVA;
         }
@@ -182,9 +184,22 @@ in rec {
           mkdir -p $out/nix-support
           fn=$(echo $ova/*.ova)
           echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '' # */
+        '') # */
 
   );
+
+
+  # Ensure that all packages used by the minimal NixOS config end up in the channel.
+  dummy = forAllSystems (system: pkgs.runCommand "dummy"
+    { toplevel = (import lib/eval-config.nix {
+        inherit system;
+        modules = singleton ({ config, pkgs, ... }:
+          { fileSystems."/".device  = mkDefault "/dev/sda1";
+            boot.loader.grub.device = mkDefault "/dev/sda";
+          });
+      }).config.system.build.toplevel;
+    }
+    "mkdir $out; ln -s $toplevel $out/dummy");
 
 
   # Provide a tarball that can be unpacked into an SD card, and easily
@@ -193,6 +208,12 @@ in rec {
   # in a machine faster than the sheevpalug
   system_tarball_pc = forAllSystems (system: makeSystemTarball {
     module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
+    inherit system;
+  });
+
+  # Provide container tarball for lxc, libvirt-lxc, docker-lxc, ...
+  containerTarball = forAllSystems (system: makeSystemTarball {
+    module = ./modules/virtualisation/lxc-container.nix;
     inherit system;
   });
 
@@ -218,30 +239,70 @@ in rec {
   # ‘nix-build tests/login.nix -A result’.
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
+  tests.blivet = callTest tests/blivet.nix {};
+  tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
+  tests.chromium = callTest tests/chromium.nix {};
+  tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
+  tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
+  tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
+  tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
+  tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
+  #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.installer = with pkgs.lib;
-    let installer = import tests/installer.nix; in
-    flip mapAttrs (installer { }) (name: _:
-      forAllSystems (system: (installer { system = system; }).${name}.test)
-    );
+  tests.i3wm = callTest tests/i3wm.nix {};
+  tests.installer.grub1 = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).grub1.test);
+  tests.installer.lvm = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).lvm.test);
+  tests.installer.rebuildCD = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).rebuildCD.test);
+  tests.installer.separateBoot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.simple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simple.test);
+  tests.installer.simpleLabels = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleLabels.test);
+  tests.installer.simpleProvided = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleProvided.test);
+  tests.installer.swraid = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).swraid.test);
+  tests.installer.btrfsSimple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSimple.test);
+  tests.installer.btrfsSubvols = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSubvols.test);
+  tests.installer.btrfsSubvolDefault = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).btrfsSubvolDefault.test);
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
+  tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
   tests.login = callTest tests/login.nix {};
-  tests.logstash = callTest tests/logstash.nix {};
+  #tests.logstash = callTest tests/logstash.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
-  tests.nat = callTest tests/nat.nix {};
+  tests.nat.firewall = callTest tests/nat.nix { withFirewall = true; };
+  tests.nat.standalone = callTest tests/nat.nix { withFirewall = false; };
+  tests.networking.networkd.static = callTest tests/networking.nix { networkd = true; test = "static"; };
+  tests.networking.networkd.dhcpSimple = callTest tests/networking.nix { networkd = true; test = "dhcpSimple"; };
+  tests.networking.networkd.dhcpOneIf = callTest tests/networking.nix { networkd = true; test = "dhcpOneIf"; };
+  tests.networking.networkd.bond = callTest tests/networking.nix { networkd = true; test = "bond"; };
+  tests.networking.networkd.bridge = callTest tests/networking.nix { networkd = true; test = "bridge"; };
+  tests.networking.networkd.macvlan = callTest tests/networking.nix { networkd = true; test = "macvlan"; };
+  tests.networking.networkd.sit = callTest tests/networking.nix { networkd = true; test = "sit"; };
+  tests.networking.networkd.vlan = callTest tests/networking.nix { networkd = true; test = "vlan"; };
+  tests.networking.scripted.static = callTest tests/networking.nix { networkd = false; test = "static"; };
+  tests.networking.scripted.dhcpSimple = callTest tests/networking.nix { networkd = false; test = "dhcpSimple"; };
+  tests.networking.scripted.dhcpOneIf = callTest tests/networking.nix { networkd = false; test = "dhcpOneIf"; };
+  tests.networking.scripted.bond = callTest tests/networking.nix { networkd = false; test = "bond"; };
+  tests.networking.scripted.bridge = callTest tests/networking.nix { networkd = false; test = "bridge"; };
+  tests.networking.scripted.macvlan = callTest tests/networking.nix { networkd = false; test = "macvlan"; };
+  tests.networking.scripted.sit = callTest tests/networking.nix { networkd = false; test = "sit"; };
+  tests.networking.scripted.vlan = callTest tests/networking.nix { networkd = false; test = "vlan"; };
+  # TODO: put in networking.nix after the test becomes more complete
+  tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
+  tests.nfs4 = callTest tests/nfs.nix { version = 4; };
+  tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
+  tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
+  tests.peerflix = callTest tests/peerflix.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quake3 = callTest tests/quake3.nix {};
@@ -249,7 +310,12 @@ in rec {
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
+  tests.virtualbox = hydraJob (import tests/virtualbox.nix { system = "x86_64-linux"; });
   tests.xfce = callTest tests/xfce.nix {};
+  tests.bootBiosCdrom = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosCdrom);
+  tests.bootBiosUsb = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosUsb);
+  tests.bootUefiCdrom = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootUefiCdrom);
+  tests.bootUefiUsb = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootUefiUsb);
 
 
   /* Build a bunch of typical closures so that Hydra can keep track of

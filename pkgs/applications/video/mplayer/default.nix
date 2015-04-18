@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, freetype, yasm
+, aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
@@ -21,6 +22,7 @@
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
+, libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
 }:
 
@@ -46,6 +48,7 @@ assert jackaudioSupport -> jack2 != null;
 assert pulseSupport -> pulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
+assert libjpegSupport -> libjpeg != null;
 
 let
 
@@ -101,6 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib;
     [ pkgconfig freetype ]
+    ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext mesa ]
@@ -121,6 +125,7 @@ stdenv.mkDerivation rec {
     ++ optional vdpauSupport libvdpau
     ++ optional speexSupport speex
     ++ optional libpngSupport libpng
+    ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
     ;
 
@@ -149,7 +154,7 @@ stdenv.mkDerivation rec {
       ${if speexSupport then "--enable-speex" else "--disable-speex"}
       ${if theoraSupport then "--enable-theora" else "--disable-theora"}
       ${if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc"}
-      ${if jackaudioSupport then "--enable-jack" else "--disable-jack"}
+      ${if jackaudioSupport then "" else "--disable-jack"}
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}

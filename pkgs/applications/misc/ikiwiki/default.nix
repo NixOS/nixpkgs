@@ -23,7 +23,7 @@ assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20140227";
+  version = "3.20150107";
 
   lib = stdenv.lib;
 in
@@ -31,8 +31,8 @@ stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "1bbpqs4c1la1yqcxcxj3xip3wadjnjq0wawv19j6d6baymm66cr3";
+    url = "https://github.com/joeyh/ikiwiki/archive/debian/${version}.tar.gz";
+    sha256 = "12kiqjxrh93gysdp7bhglnks2md9davl8jgzqlj0m8xs5rf1972n";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     sed -i /ENV{PATH}/d ikiwiki.in
     # State the gcc dependency, and make the cgi use our wrapper
     sed -i -e 's@$0@"'$out/bin/ikiwiki'"@' \
-        -e "s@'cc'@'${stdenv.gcc}/bin/gcc'@" IkiWiki/Wrapper.pm
+        -e "s@'cc'@'${stdenv.cc}/bin/gcc'@" IkiWiki/Wrapper.pm
   '';
 
   configurePhase = "perl Makefile.PL PREFIX=$out";

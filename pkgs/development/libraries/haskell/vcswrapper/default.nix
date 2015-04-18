@@ -4,11 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "vcswrapper";
-  version = "0.0.4";
-  sha256 = "130pmzxdsqv703k2g197vd5rl60fwkqqv2xck66ygb932wsq3fnk";
+  version = "0.1.1";
+  sha256 = "056gdgmyprvbz61gfffkpwfyh4m7f9fnglk69jp4xh4jfx1wr7ni";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath hxt mtl parsec split text ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/forste/haskellVCSWrapper";
     description = "Wrapper for source code management systems";

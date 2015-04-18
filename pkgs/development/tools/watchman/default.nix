@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "watchman-${version}";
 
-  version = "2.9.8";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "196d71ci7ki4p6xx49w55cqd0bqrx19nf79na3a91mrfa6f22sp6";
+    sha256 = "0sf0cp9p7savlgmzqj5m9fkpfa5a15pv98rkilxnbmx9wrjvypwk";
   };
 
   buildInputs = [ autoconf automake pcre ];

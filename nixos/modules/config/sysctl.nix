@@ -64,6 +64,6 @@ in
     #
     # Removed under grsecurity.
     boot.kernel.sysctl."kernel.kptr_restrict" =
-      if config.security.grsecurity.enable then null else 1;
+      if (config.boot.kernelPackages.kernel.features.grsecurity or false) then null else 1;
   };
 }

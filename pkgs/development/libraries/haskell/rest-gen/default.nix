@@ -2,28 +2,30 @@
 
 { cabal, aeson, blazeHtml, Cabal, codeBuilder, fclabels, filepath
 , hashable, haskellSrcExts, hslogger, HStringTemplate, HUnit, hxt
-, jsonSchema, restCore, safe, scientific, split, tagged
+, jsonSchema, restCore, safe, scientific, semigroups, split, tagged
 , testFramework, testFrameworkHunit, text, uniplate
 , unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "rest-gen";
-  version = "0.14.2.1";
-  sha256 = "1dvcs25ndmzwdann5yq4567zjirirzskf9v31gkrki0im8mi9x14";
+  version = "0.16.1.3";
+  sha256 = "1nh3rjnn36v13ikvvxc7xahrj3gsswhiq2w54xclrxjl2fzsqz3a";
   buildDepends = [
     aeson blazeHtml Cabal codeBuilder fclabels filepath hashable
     haskellSrcExts hslogger HStringTemplate hxt jsonSchema restCore
-    safe scientific split tagged text uniplate unorderedContainers
-    vector
+    safe scientific semigroups split tagged text uniplate
+    unorderedContainers vector
   ];
   testDepends = [
-    haskellSrcExts HUnit restCore testFramework testFrameworkHunit
+    fclabels haskellSrcExts HUnit restCore testFramework
+    testFrameworkHunit
   ];
   jailbreak = true;
   meta = {
     description = "Documentation and client generation from rest definition";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

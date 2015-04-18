@@ -19,7 +19,7 @@ buildPythonPackage rec {
       to the gpodder.net web services.
     '';
     homepage = "https://thp.io/2010/mygpoclient/";
-    license = "GPLv3";
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.skeidel ];
   };

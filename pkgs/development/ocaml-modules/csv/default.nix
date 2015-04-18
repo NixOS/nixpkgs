@@ -1,4 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib}:
+
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.11";
+
 stdenv.mkDerivation {
 
   name = "ocaml-csv-1.3.3";
@@ -18,10 +21,11 @@ stdenv.mkDerivation {
 
   installPhase = "ocaml setup.ml -install";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A pure OCaml library to read and write CSV files";
     homepage = "https://forge.ocamlcore.org/projects/csv/";
-    license = stdenv.lib.licenses.lgpl21;
+    license = licenses.lgpl21;
+    maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms;
   };
 }

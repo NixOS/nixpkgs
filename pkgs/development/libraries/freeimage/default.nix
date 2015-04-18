@@ -10,9 +10,12 @@ stdenv.mkDerivation {
       sed -e s@/usr/@$out/@ \
         -e 's@-o root -g root@@' \
         -e 's@ldconfig@echo not running ldconfig@' \
-        -i Makefile.gnu
+        -i Makefile.gnu Makefile.fip
   '';
+
+  postBuild = "make -f Makefile.fip";
   preInstall = "mkdir -p $out/include $out/lib";
+  postInstall = "make -f Makefile.fip install";
 
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";

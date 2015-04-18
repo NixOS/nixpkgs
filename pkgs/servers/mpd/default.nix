@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, systemd
+{ stdenv, fetchurl, pkgconfig, glib, systemd, boost
 , alsaSupport ? true, alsaLib
 , flacSupport ? true, flac
 , vorbisSupport ? true, libvorbis
@@ -18,22 +18,25 @@
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
 , pulseaudioSupport ? true, pulseaudio
+, jackSupport ? true, jack2
+, gmeSupport ? true, game-music-emu
+, icuSupport ? true, icu
 }:
 
 let
-
   opt = stdenv.lib.optional;
-
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
+  major = "0.19";
+  minor = "9";
 
 in stdenv.mkDerivation rec {
-  name = "mpd-0.18.12";
+  name = "mpd-${major}.${minor}";
   src = fetchurl {
-    url    = "http://www.musicpd.org/download/mpd/stable/${name}.tar.gz";
-    sha256 = "09qphjcpqcs2jn5d8ga1skhif2mj5qk1ix9li76z2gyq3lf0rpz6";
+    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.gz";
+    sha256 = "1j3cv8b76bfj3ddpd29v3apb5025i87y5h5b4lrs2g5vqsgpvb6y";
   };
 
-  buildInputs = [ pkgconfig glib ]
+  buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
     ++ opt flacSupport flac
@@ -55,7 +58,10 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt pulseaudioSupport pulseaudio;
+    ++ opt pulseaudioSupport pulseaudio
+    ++ opt jackSupport jack2
+    ++ opt gmeSupport game-music-emu
+    ++ opt icuSupport icu;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -78,7 +84,10 @@ in stdenv.mkDerivation rec {
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
       (mkFlag pulseaudioSupport "pulse")
+      (mkFlag jackSupport "jack")
       (mkFlag stdenv.isDarwin "osx")
+      (mkFlag icuSupport "icu")
+      (mkFlag gmeSupport "gme")
       "--enable-debug"
     ]
     ++ opt stdenv.isLinux
@@ -92,7 +101,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu ];
     platforms   = platforms.unix;
 
     longDescription = ''

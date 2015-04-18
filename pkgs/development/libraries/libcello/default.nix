@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://libcello.org/";
+    homepage = http://libcello.org/;
     description = "Higher level programming in C";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
   };
 }

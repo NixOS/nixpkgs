@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dict protocol server and client";
-    maintainers = maintainers.mornfall;
+    maintainers = [ maintainers.mornfall ];
     platforms = platforms.linux;
   };
 }

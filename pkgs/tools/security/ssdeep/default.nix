@@ -1,16 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, patchelf }:
 
 stdenv.mkDerivation rec {
   name    = "ssdeep-${version}";
-  version = "2.10";
+  version = "2.12";
 
   src = fetchurl {
     url    = "mirror://sourceforge/ssdeep/${name}.tar.gz";
-    sha256 = "1p7dgchq8hgadnxz5qh95ay17k5j74l4qyd15wspc54lb603p2av";
+    sha256 = "1pjb3qpcn6slfqjv23jf7i8zf7950b7h27b0v0dva5pxmn3rw149";
   };
 
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/ssdeep):$out/lib" $out/bin/ssdeep
+  # For some reason (probably a build system bug), the binary isn't
+  # properly linked to $out/lib to find libfuzzy.so
+  postFixup = ''
+    rp=$(patchelf --print-rpath $out/bin/ssdeep)
+    patchelf --set-rpath $rp:$out/lib $out/bin/ssdeep
   '';
 
   meta = {

@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "clutter-gtk-0.10.8";
 
   src = fetchurl {
-    url = "http://source.clutter-project.org/sources/clutter-gtk/0.10/${name}.tar.bz2";
+    urls = [
+      "http://download.gnome.org/sources/clutter-gtk/0.10/${name}.tar.bz2"
+      "http://source.clutter-project.org/sources/clutter-gtk/0.10/${name}.tar.bz2"
+      ];
     sha256 = "0508x1jfnlq0zhgscysvfa7i7ljkzm23d2myikvdjwc8ar8zjrvq";
   };
 

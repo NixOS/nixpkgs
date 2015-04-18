@@ -23,6 +23,7 @@ let inherit (builtins) head tail trace; in
                 else if hasSuffixHack ".tar.Z" s then "tZ" 
                 else if hasSuffixHack ".tar.lzma" s then "tar.lzma"
                 else if hasSuffixHack ".tar.xz" s then "tar.xz"
+                else if hasSuffixHack ".rar" s then "rar"
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
                 else if hasSuffixHack "-cvs-export" s then "cvs-dir"
                 else if hasSuffixHack "-git-export" s then "git-dir"
@@ -100,13 +101,13 @@ let inherit (builtins) head tail trace; in
                 ${stdenv.preHook}
                 
                 set -e
-                NIX_GCC=${stdenv.gcc}
+                NIX_CC=${stdenv.cc}
                 export SHELL=${stdenv.shell}
                 PATH_DELIMITER=':'
                 
                 # Set up the initial path.
                 PATH=
-                for i in \$NIX_GCC ${toString stdenv.initialPath}; do
+                for i in \$NIX_CC ${toString stdenv.initialPath}; do
                     PATH=\$PATH\${PATH:+\"\${PATH_DELIMITER}\"}\$i/bin
                 done
 
@@ -138,7 +139,7 @@ let inherit (builtins) head tail trace; in
                 }
 
                 pkgs=\"\"
-                for i in \$NIX_GCC ${toString realBuildInputs}; do
+                for i in \$NIX_CC ${toString realBuildInputs}; do
                     findInputs \$i
                 done
 
@@ -213,6 +214,9 @@ let inherit (builtins) head tail trace; in
         " else if (archiveType s) == "tar.xz" then "
                 xz -d -c <'${s}' | tar xv
                 cd \"\$(xz -d -c <'${s}' | tar t | head -1 | sed -e 's@/.*@@' )\"
+        " else if (archiveType s) == "rar" then "
+                unrar x '${s}'
+                cd \"$(unrar lb '${s}' | tail -1 | sed -e 's@/.*@@' )\"
         " else if (archiveType s) == "zip" then "
                 unzip '${s}'
                 cd \"$( unzip -lqq '${s}' | tail -1 | 

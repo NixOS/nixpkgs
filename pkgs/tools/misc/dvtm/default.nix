@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "dvtm-0.12";
+  name = "dvtm-0.14";
 
   meta = {
     description = "Dynamic virtual terminal manager";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/${name}.tar.gz";
-    sha256 = "0qcwsxhg738rq3bh4yid15nz2rrjc9k7ay6c1qv15c3gkw86zc3f";
+    sha256 = "0ykl8dz7ivjgdzhmhlgidnp2ffh5gxq9lbg276w7iid4z10v76wa";
   };
 
   buildInputs = [ ncurses ];

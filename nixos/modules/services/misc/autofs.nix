@@ -84,7 +84,7 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        path = [ pkgs.nfsUtils pkgs.sshfsFuse ];
+        path = [ pkgs.nfs-utils pkgs.sshfsFuse ];
 
         preStop =
           ''

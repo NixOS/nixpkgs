@@ -10,19 +10,19 @@ assert withKerberos -> kerberos != null;
 let
 
   hpnSrc = fetchurl {
-    url = mirror://sourceforge/hpnssh/openssh-6.3p1-hpnssh14v2.diff.gz;
-    sha256 = "1jldqjwry9qpxxzb3mikfmmmv90mfb7xkmcfdbvwqac6nl3r7bi3";
+    url = mirror://sourceforge/hpnssh/openssh-6.6p1-hpnssh14v5.diff.gz;
+    sha256 = "682b4a6880d224ee0b7447241b684330b731018585f1ba519f46660c10d63950";
   };
   optionalString = stdenv.lib.optionalString;
 
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-6.6p1";
+  name = "openssh-6.8p1";
 
   src = fetchurl {
-    url = "http://ftp.nluug.nl/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1fq3w86q05y5nn6z878wm312k0svaprw8k007188fd259dkg1ha8";
+    url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
+    sha256 = "03hnrqvjq6ghg1mp3gkarfxh6g3x1n1vjrzpbc5lh9717vklrxiz";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
@@ -31,17 +31,7 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [
-    ./locale_archive.patch
-    (fetchurl {
-      name = "CVE-2014-2653.patch";
-      url = "http://anonscm.debian.org/gitweb/?p=pkg-ssh/openssh.git;a=blobdiff_plain;"
-        + "f=sshconnect.c;h=324f5e0a396a4da9885d121bbbef87f6ccf2b149;"
-        + "hp=87c3770c0fd5c7ff41227c45b4528985eaea54a6;hb=63d5fa28e16d96db6bac2dbe3fcecb65328f8966;"
-        + "hpb=9cbb60f5e4932634db04c330c88abc49cc5567bd";
-      sha256 = "160c434igl2r8q4cavhdlwvnbqizx444sjrhg98f997pyhz524h9";
-    })
-  ];
+  patches = [ ./locale_archive.patch ];
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ stdenv.lib.optional withKerberos [ kerberos ];
@@ -56,6 +46,7 @@ stdenv.mkDerivation rec {
       ${if pam != null then "--with-pam" else "--without-pam"}
       ${optionalString (etcDir != null) "--sysconfdir=${etcDir}"}
       ${optionalString withKerberos "--with-kerberos5=${kerberos}"}
+      ${optionalString stdenv.isDarwin "--disable-libutil"}
     '';
 
   preConfigure =
@@ -63,6 +54,8 @@ stdenv.mkDerivation rec {
       configureFlags="$configureFlags --with-privsep-path=$out/empty"
       mkdir -p $out/empty
     '';
+
+  enableParallelBuilding = true;
 
   postInstall =
     ''
@@ -80,9 +73,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://www.openssh.org/";
     description = "An implementation of the SSH protocol";
-    license = "bsd"; # multi BSD GPL-2
+    license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ eelco ];
-    broken = hpnSupport; # cf. https://github.com/NixOS/nixpkgs/pull/1640
+    broken = hpnSupport; # probably after 6.7 update
   };
 }

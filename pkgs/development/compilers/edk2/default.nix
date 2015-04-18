@@ -10,12 +10,12 @@ else
   throw "Unsupported architecture";
 
 edk2 = stdenv.mkDerivation {
-  name = "edk2-2014-02-01";
+  name = "edk2-2014-12-10";
   
   src = fetchgit {
     url = git://github.com/tianocore/edk2;
-    rev = "2818c158de6a164d012e6afb0fc145656aed4e4b";
-    sha256 = "a756b5de3a3e71d82ce1de8c7832bc69d2affb98d704894b26540571f9f5e214";
+    rev = "684a565a04";
+    sha256 = "1l46396f48v91z5b8lh3b0f0lcd7z5f86i1nrpc7l5gf7gx3117j";
   };
 
   buildInputs = [ libuuid pythonFull ];
@@ -33,8 +33,8 @@ edk2 = stdenv.mkDerivation {
 
   meta = {
     description = "Intel EFI development kit";
-    homepage = http://sourceforge.net/apps/mediawiki/tianocore/index.php?title=EDK2;
-    license = "BSD";
+    homepage = http://sourceforge.net/projects/edk2/;
+    license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = ["x86_64-linux" "i686-linux"];
   };

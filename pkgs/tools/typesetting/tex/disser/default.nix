@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , unzip, texLive, texLiveCMSuper, texLiveAggregationFun
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["texLive" "texLiveCMSuper" "texLiveAggregationFun"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -12,11 +12,11 @@ let
     ++ [(a.texLiveAggregationFun {paths=[a.texLive a.texLiveCMSuper];})];
   sourceInfo = rec {
     baseName="disser";
-    version="1.1.8";
+    version="1.3.0";
     name="${baseName}-${version}";
     project="${baseName}";
     url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.zip";
-    hash="15509hfcvkk5kfcza149c74qpamwgw88dg0ra749axs8xj8qmlw8";
+    hash="1iab3va6xw53l8xzmd83kbnzqah9f6imzzfd3c2054q53p0ndlim";
   };
 in
 rec {
@@ -36,7 +36,7 @@ rec {
   '';
 
   makeFlags = ["DESTDIR=$out/share/texmf-dist"];
-      
+
   meta = {
     description = "Russian PhD thesis LaTeX package";
     maintainers = with a.lib.maintainers;
@@ -45,7 +45,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux; # platform-independent
-    license = "free"; # LaTeX Project Public License
+    license = a.lib.licenses.free; # LaTeX Project Public License
   };
   passthru = {
     updateInfo = {
@@ -53,4 +53,3 @@ rec {
     };
   };
 }) x
-

@@ -36,6 +36,8 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "mesa";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
+$pcMap{"\$DRI3PROTO"} = "dri3proto";
+$pcMap{"\$DRI2PROTO"} = "dri2proto";
 
 
 my $downloadCache = "./download-cache";
@@ -207,6 +209,7 @@ while (<>) {
     process \@requires, $1 while $file =~ /XDMCP_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /ivo_requires=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
     push @requires, "libxslt" if $pkg =~ /libxcb/;

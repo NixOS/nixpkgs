@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Basic Linear Algebra Subprograms";
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
     homepage = "http://www.netlib.org/blas/";
   };
 }

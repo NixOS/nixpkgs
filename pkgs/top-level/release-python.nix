@@ -38,6 +38,7 @@ let
   pygame = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pygobject = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pygtk = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
+  pygtksourceview = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pyGtkGlade = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pyIRCt = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pyMAILt = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

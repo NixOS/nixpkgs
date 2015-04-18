@@ -21,11 +21,13 @@ stdenv.mkDerivation {
 
   dontDisableStatic = true;
 
+  NIX_CFLAGS_COMPILE = "-D__USE_BSD";
+
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";
     description = "Library for manipulation of term data structures in C";
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = stdenv.lib.maintainers.eelco;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

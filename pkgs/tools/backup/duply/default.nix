@@ -1,13 +1,13 @@
 { stdenv, fetchurl, coreutils, python, duplicity, gawk, gnupg1, bash
-, gnugrep, txt2man, makeWrapper
+, gnugrep, txt2man, makeWrapper, which
 }:
 
 stdenv.mkDerivation {
-  name = "duply-1.7.3";
+  name = "duply-1.9.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.7.x/duply_1.7.3.tgz";
-    sha256 = "1lq5gwz69l8g4ki4anvmjdngbs9nin124j1zb9kbcnqj0s5jkbp0";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.9.x/duply_1.9.1.tgz";
+    sha256 = "1igg8nc0i1xn8k1xxmphsg019b1yx8ln86hhqm6f4pd565d1rwg5";
   };
 
   buildInputs = [ txt2man makeWrapper ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sed -i 's|/usr/bin/env bash|${bash}/bin/bash|' duply
     mv duply "$out/bin"
     wrapProgram "$out/bin/duply" --set PATH \
-        "${coreutils}/bin:${python}/bin:${duplicity}/bin:${gawk}/bin:${gnupg1}/bin:${bash}/bin:${gnugrep}/bin:${txt2man}/bin"
+        "${coreutils}/bin:${python}/bin:${duplicity}/bin:${gawk}/bin:${gnupg1}/bin:${bash}/bin:${gnugrep}/bin:${txt2man}/bin:${which}/bin"
     "$out/bin/duply" txt2man | gzip -c > "$out/share/man/man1/duply.1.gz"
   '';
 

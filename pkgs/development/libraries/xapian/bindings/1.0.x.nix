@@ -42,7 +42,6 @@ composableDerivation.composableDerivation {} rec {
            name = "ruby";
            enable = {
              buildInputs = [ ruby ];
-             # export same env vars as in rubyLibs 
              preConfigure = ''
                export RUBY_LIB=$out/${ruby.libPath}
                export RUBY_LIB_ARCH=$RUBY_LIB

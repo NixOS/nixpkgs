@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "json-rpc";
-  version = "0.2.0.1";
-  sha256 = "0kk2wpgnkdhphf9za2whmn4f6qlly5hzr071bx7xjqwqbpfhwplm";
+  version = "0.2.1.1";
+  sha256 = "0h6dkb1rgd6qxzcxvqvgwilmibkdbqpjvflijwf54fx2z687fjld";
   buildDepends = [
     aeson async conduit conduitExtra deepseq hashable mtl stm
     stmConduit text unorderedContainers
@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     stm stmConduit testFramework testFrameworkQuickcheck2 text
     unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/xenog/json-rpc";
     description = "Fully-featured JSON-RPC 2.0 library";

@@ -1,0 +1,46 @@
+--- a/CMake/FindMagick.cmake	2014-10-13 19:24:30.000000000 +0200
++++ b/CMake/FindMagick.cmake	2014-12-27 18:54:19.611759021 +0100
+@@ -19,28 +19,11 @@
+ SET(MAGICK++_FOUND "NO" )
+ 
+ FIND_PATH( MAGICK_INCLUDE_DIR magick/magick.h
+-  "$ENV{MAGICK_LOCATION}/magick"
+-  "$ENV{MAGICK_LOCATION}/include/magick"
+-  "$ENV{MAGICK_HOME}/include/magick"
+-  /usr/include/magick
+-  /usr/include/
+-  /usr/include/GraphicsMagick
+-  /opt/local/include/GraphicsMagick/magick
+-  /opt/local/include/GraphicsMagick
++  "$ENV{MAGICK_LOCATION}"
+   )
+ 
+ FIND_PATH( MAGICK++_INCLUDE_DIR Magick++.h
+-  "$ENV{MAGICK++_LOCATION}/Magick++"
+-  "$ENV{MAGICK++_LOCATION}/include/"
+-  "$ENV{MAGICK_LOCATION}/Magick++"
+-  "$ENV{MAGICK_LOCATION}/include/Magick++"
+-  "$ENV{MAGICK_LOCATION}/include/"
+-  "$ENV{MAGICK_HOME}/include/"
+-  /usr/include/Magick++
+-  /usr/include/GraphicsMagick
+-  /usr/include/
+-  /opt/local/include/GraphicsMagick/Magick++
+-  /opt/local/include/GraphicsMagick
++  "$ENV{MAGICK_LOCATION}"
+   )
+   
+ FIND_LIBRARY( Magick GraphicsMagick
+@@ -55,12 +38,7 @@
+ 
+ FIND_LIBRARY( Magick++ GraphicsMagick++
+   PATHS 
+-  "$ENV{MAGICK++_LOCATION}/.libs"
+-  "$ENV{MAGICK_LOCATION}/.libs"
+-  "$ENV{MAGICK++_LOCATION}/lib"
+   "$ENV{MAGICK_LOCATION}/lib"
+-  "$ENV{MAGICK_HOME}/lib"
+-  /opt/local/lib
+   DOC   "GraphicsMagick Magick++ library"
+ )
+ 

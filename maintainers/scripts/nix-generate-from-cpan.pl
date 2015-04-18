@@ -100,7 +100,7 @@ sub get_deps {
     foreach my $n (keys %{$deps}) {
         next if $n eq "perl";
         # Hacky way to figure out if this module is part of Perl.
-        if ($n !~ /^JSON/ && $n !~ /^YAML/) {
+        if ($n !~ /^JSON/ && $n !~ /^YAML/ && $n !~ /^Module::Pluggable/) {
             eval "use $n;";
             if (!$@) {
                 print STDERR "skipping Perl-builtin module $n\n";

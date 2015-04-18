@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
                 "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
                 "-DPREFER_STATIC_LIBS:BOOL=OFF"];
 
-  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL 
+  buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL
     xlibs.libX11 xlibs.libXcursor mesa glew asciidoc libxslt docbook_xsl curl makeWrapper
     docbook_xsl_ns systemd ]
     ++ stdenv.lib.optional withAI jdk
@@ -28,9 +28,11 @@ stdenv.mkDerivation rec {
   # reported upstream http://springrts.com/mantis/view.php?id=4305
   #enableParallelBuilding = true; # occasionally missing generated files on Hydra
 
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib::${systemd}/lib"
+      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc}/lib::${systemd}/lib"
   '';
 
   meta = with stdenv.lib; {
@@ -38,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "A powerful real-time strategy (RTS) game engine";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom maintainers.qknight maintainers.iElectric ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.linux;
   };
 }

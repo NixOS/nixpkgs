@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pointfree";
-  version = "1.0.4.7";
-  sha256 = "0jwql0ka01cr53ayjc4dpaci11i7r1y3b9gcbh3rlamb1mnfcqvl";
+  version = "1.0.4.8";
+  sha256 = "0nb3mqp6zwnnq6fs27xhcqv4w8h6sr5k01hldkqnkgwz0yyy7ljy";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ haskellSrcExts transformers ];

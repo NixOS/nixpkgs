@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bert";
-  version = "1.2.2.2";
-  sha256 = "0bjrqgm0dpsrk1nivxmw2wvx33v7z7swgy3p5fb51vg7y81776cz";
+  version = "1.2.2.3";
+  sha256 = "1waq40hd9wqavzhnvfk1i6wjqkmfb4pl17h4acfzzyz8bj76alkq";
   buildDepends = [
     binary binaryConduit conduit conduitExtra mtl network parsec time
     void

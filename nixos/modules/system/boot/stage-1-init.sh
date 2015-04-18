@@ -7,6 +7,8 @@ export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
 
+# Stop LVM complaining about fd3
+export LVM_SUPPRESS_FD_WARNINGS=true
 
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
@@ -34,7 +36,7 @@ EOF
     read reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
-        exec setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console"
+        exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
     elif [ -n "$allowShell" -a "$reply" = i ]; then
         echo "Starting interactive shell..."
         setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
@@ -56,9 +58,10 @@ echo
 
 
 # Mount special file systems.
-mkdir -p /etc
+mkdir -p /etc/udev
 touch /etc/fstab # to shut up mount
 touch /etc/mtab # to shut up mke2fs
+touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 mkdir -p /proc
 mount -t proc proc /proc
@@ -122,6 +125,9 @@ for o in $(cat /proc/cmdline); do
     esac
 done
 
+# Set hostid before modules are loaded.
+# This is needed by the spl/zfs modules.
+@setHostId@
 
 # Load the required kernel modules.
 mkdir -p /lib
@@ -168,9 +174,28 @@ if test -e /sys/power/tuxonice/resume; then
     fi
 fi
 
-if test -n "@resumeDevice@" -a -e /sys/power/resume -a -e /sys/power/disk; then
-    echo "@resumeDevice@" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
-    echo shutdown > /sys/power/disk
+if test -e /sys/power/resume -a -e /sys/power/disk; then
+    if test -n "@resumeDevice@"; then
+        resumeDev="@resumeDevice@"
+        resumeInfo="$(udevadm info -q property "$resumeDev" )"
+    else
+        for sd in @resumeDevices@; do
+            # Try to detect resume device. According to Ubuntu bug:
+            # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
+            # When there are multiple swap devices, we can't know where will hibernate
+            # image reside. We can check all of them for swsuspend blkid.
+            resumeInfo="$(udevadm info -q property "$sd" )"
+            if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
+                resumeDev="$sd"
+                break
+            fi
+        done
+    fi
+    if test -e "$resumeDev"; then
+        resumeMajor="$(echo "$resumeInfo" | sed -n 's/^MAJOR=//p')"
+        resumeMinor="$(echo "$resumeInfo" | sed -n 's/^MINOR=//p')"
+        echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+    fi
 fi
 
 
@@ -196,6 +221,9 @@ checkFS() {
 
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
+
+    # Skip fsck for inherently readonly filesystems.
+    if [ "$fsType" = squashfs ]; then return 0; fi
 
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
@@ -328,7 +356,8 @@ while read -u 3 mountPoint; do
     # that we don't properly recognise.
     if test -z "$pseudoDevice" -a ! -e $device; then
         echo -n "waiting for device $device to appear..."
-        for try in $(seq 1 20); do
+        try=20
+        while [ $try -gt 0 ]; do
             sleep 1
             # also re-try lvm activation now that new block devices might have appeared
             lvm vgchange -ay
@@ -336,8 +365,12 @@ while read -u 3 mountPoint; do
             udevadm trigger --action=add
             if test -e $device; then break; fi
             echo -n "."
+            try=$((try - 1))
         done
         echo
+        if [ $try -eq 0 ]; then
+          echo "Timed out waiting for device $device, trying to mount anyway."
+        fi
     fi
 
     # Wait once more for the udev queue to empty, just in case it's
@@ -351,6 +384,18 @@ exec 3>&-
 
 
 @postMountCommands@
+
+
+# Emit a udev rule for /dev/root to prevent systemd from complaining.
+if [ -e /mnt-root/iso ]; then
+    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=/mnt-root/iso || true)
+else
+    eval $(udevadm info --export --export-prefix=ROOT_ --device-id-of-file=$targetRoot || true)
+fi
+if [ "$ROOT_MAJOR" -a "$ROOT_MINOR" -a "$ROOT_MAJOR" != 0 ]; then
+    mkdir -p /run/udev/rules.d
+    echo 'ACTION=="add|change", SUBSYSTEM=="block", ENV{MAJOR}=="'$ROOT_MAJOR'", ENV{MINOR}=="'$ROOT_MINOR'", SYMLINK+="root"' > /run/udev/rules.d/61-dev-root-link.rules
+fi
 
 
 # Stop udevd.
@@ -371,7 +416,7 @@ echo /sbin/modprobe > /proc/sys/kernel/modprobe
 # Start stage 2.  `switch_root' deletes all files in the ramfs on the
 # current root.  Note that $stage2Init might be an absolute symlink,
 # in which case "-e" won't work because we're not in the chroot yet.
-if ! test -e "$targetRoot/$stage2Init" -o -L "$targetRoot/$stage2Init"; then
+if ! test -e "$targetRoot/$stage2Init" -o ! -L "$targetRoot/$stage2Init"; then
     echo "stage 2 init script ($targetRoot/$stage2Init) not found"
     fail
 fi

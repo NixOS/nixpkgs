@@ -13,6 +13,7 @@ let
     stdenv.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
+      preferLocalBuild = true;
     } // mirrors);
 
   # Names of the master sites that are mirrored (i.e., "sourceforge",
@@ -81,16 +82,16 @@ assert builtins.isList urls;
 assert urls != [] -> url == "";
 assert url != "" -> urls == [];
 
-assert showURLs || (outputHash != "" && outputHashAlgo != "")
-    || md5 != "" || sha1 != "" || sha256 != "";
 
 let
 
+  hasHash = showURLs || (outputHash != "" && outputHashAlgo != "")
+    || md5 != "" || sha1 != "" || sha256 != "";
   urls_ = if urls != [] then urls else [url];
 
 in
 
-stdenv.mkDerivation {
+if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${stdenv.lib.concatStringsSep ", " urls_}" else stdenv.mkDerivation {
   name =
     if showURLs then "urls"
     else if name != "" then name

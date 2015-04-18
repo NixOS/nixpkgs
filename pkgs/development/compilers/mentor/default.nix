@@ -18,7 +18,7 @@ let
         tar --strip-components=1 -xjf "$src" -C "$out"
 
         # Patch binaries
-        interpreter="$(cat "$NIX_GCC"/nix-support/dynamic-linker)"
+        interpreter="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
         for file in "$out"/bin/* "$out"/libexec/gcc/*/*/* "$out"/*/bin/*; do
             # Skip non-executable files
             case "$file" in

@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.4.31";
+  version = "5.4.39";
 
   name = "php-${version}";
 
@@ -41,8 +41,12 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       curl = {
-        configureFlags = ["--with-curl=${curl}" "--with-curlwrappers"];
+        configureFlags = ["--with-curl=${curl}"];
         buildInputs = [curl openssl];
+      };
+
+      curlWrappers = {
+        configureFlags = ["--with-curlwrappers"];
       };
 
       zlib = {
@@ -83,13 +87,13 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       mysql = {
-        configureFlags = ["--with-mysql=${mysql}"];
-        buildInputs = [ mysql ];
+        configureFlags = ["--with-mysql=${mysql.lib}"];
+        buildInputs = [ mysql.lib ];
       };
 
       mysqli = {
-        configureFlags = ["--with-mysqli=${mysql}/bin/mysql_config"];
-        buildInputs = [ mysql];
+        configureFlags = ["--with-mysqli=${mysql.lib}/bin/mysql_config"];
+        buildInputs = [ mysql.lib ];
       };
 
       mysqli_embedded = {
@@ -99,8 +103,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       pdo_mysql = {
-        configureFlags = ["--with-pdo-mysql=${mysql}"];
-        buildInputs = [ mysql ];
+        configureFlags = ["--with-pdo-mysql=${mysql.lib}"];
+        buildInputs = [ mysql.lib ];
       };
 
       bcmath = {
@@ -181,16 +185,18 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [freetds];
       };
 
+      zts = {
+        configureFlags = ["--enable-maintainer-zts"];
+      };
+
+      calendar = {
+        configureFlags = ["--enable-calendar"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
          Xdebug could be put in its own derivation.
-      * /
-        meta = {
-                description = "debugging support for PHP";
-                homepage = http://xdebug.org;
-                license = "based on the PHP license - as is";
-                };
       */
     };
 
@@ -205,6 +211,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     bcmathSupport = config.php.bcmath or true;
     socketsSupport = config.php.sockets or true;
     curlSupport = config.php.curl or true;
+    curlWrappersSupport = config.php.curlWrappers or false;
     gettextSupport = config.php.gettext or true;
     pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
@@ -225,6 +232,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     ftpSupport = config.php.ftp or true;
     fpmSupport = config.php.fpm or true;
     mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
+    ztsSupport = config.php.zts or false;
+    calendarSupport = config.php.calendar or false;
   };
 
   configurePhase = ''
@@ -249,15 +258,16 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://www.php.net/distributions/php-${version}.tar.bz2";
-    sha256 = "0kci0yir923fc7dv7j9qrc10pj05v82jnxjxjbgrj7gx64a4k3jy";
+    sha256 = "0znpd6pgri5vah4j4wwamhqc60awila43bhh699p973hir9pdsvw";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An HTML-embedded scripting language";
     homepage = http://www.php.net/;
-    license = "PHP-3";
+    license = stdenv.lib.licenses.php301;
+    maintainers = with maintainers; [ globin ];
   };
 
-  patches = [ ./fix-5.4.patch ];
+  patches = [ ./fix-paths.patch ];
 
 })

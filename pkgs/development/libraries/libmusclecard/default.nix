@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Library for MUSCLE smartcard applications";
     homepage = http://pcsclite.alioth.debian.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
     broken = true;

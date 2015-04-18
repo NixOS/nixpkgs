@@ -1,10 +1,10 @@
 { stdenv, fetchurl, glib, gtk, intltool, libfm, libX11, pango, pkgconfig }:
 
 stdenv.mkDerivation {
-  name = "pcmanfm-1.2.0";
+  name = "pcmanfm-1.2.3";
   src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/pcmanfm-1.2.0.tar.xz";
-    sha256 = "1cmskj7dpjgrrn89z7cc1h1nsmd6qq3bakf207ldrhrxxv3fxl2j";
+    url = "mirror://sourceforge/pcmanfm/pcmanfm-1.2.3.tar.xz";
+    sha256 = "1033rw5jd7nlzbcdpx3bik7347kyh1sg1gkla424gq9vqqpxia6g";
   };
 
   buildInputs = [ glib gtk intltool libfm libX11 pango pkgconfig ];

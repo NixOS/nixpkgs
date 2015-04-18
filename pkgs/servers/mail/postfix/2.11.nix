@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "2.11.1";
+  version = "2.11.4";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "1ql9cifjcfhfi81lrf6zvk0r3spgcp01xwna16a7k9cm7fkrhzs8";
+    sha256 = "07h3rdfgs449hb49rxcx4iapib0l0zchnhscgn4h00wcnlflq5gl";
   };
 
   patches = [ ./postfix-2.11.0.patch ];
@@ -33,8 +33,9 @@ stdenv.mkDerivation rec {
     export sendmail_path=$out/bin/sendmail
 
     make makefiles \
-      CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl' \
-      AUXLIBS='-ldb -lnsl -lresolv -lsasl2 -lcrypto -lssl'
+      CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl \
+              -fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2' \
+      AUXLIBS='-ldb -lnsl -lresolv -lsasl2 -lcrypto -lssl -pie -Wl,-z,relro,-z,now'
   '';
 
   installTargets = [ "non-interactive-package" ];

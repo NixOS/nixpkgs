@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools, polkit
+{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools
 , intltool, libxslt, docbook_xsl, udev, libusb1, pmutils
 , useSystemd ? true, systemd, gobjectIntrospection
 }:
@@ -6,15 +6,15 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "upower-0.99.0";
+  name = "upower-0.99.2";
 
   src = fetchurl {
     url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "189rd8j5czy4fs7imxvr38icjh9vlgdz6ki2h08v530h96clndaz";
+    sha256 = "0vwlh20jmaf01m38kfn8yx2869a3clmkzlycrj99rf4nvwx4bp79";
   };
 
   buildInputs =
-    [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 gobjectIntrospection ]
+    [ dbus_glib intltool libxslt docbook_xsl udev libusb1 gobjectIntrospection ]
     ++ stdenv.lib.optional useSystemd systemd;
 
   nativeBuildInputs = [ pkgconfig ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional useSystemd
     [ "--enable-systemd"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
+      "--with-systemdutildir=$(out)/lib/systemd"
       "--with-udevrulesdir=$(out)/lib/udev/rules.d"
     ];
 

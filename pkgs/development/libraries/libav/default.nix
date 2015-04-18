@@ -26,17 +26,17 @@ with { inherit (stdenv.lib) optional optionals; };
 
 let
   result = {
-    libav_0_8 = libavFun "0.8.13" "1fr3rzykrlm1cla0csm9hqa3gcqp19hf5rgn70nyb9w92r67v685";
-    libav_9   = libavFun   "9.16" "18378gdgzqsxaacc9vl7ligwndbdvy95wbn50hs8xvdqn1rn916a";
-    libav_10  = libavFun  "10.4"  "1zzvjfdlv9swhq7dzvli1pk8cn02q1076ax9m3cx9ipilbg21639";
+    libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
+    libav_9   = libavFun   "9.18" "e10cde4587c4d4d3bb11d30c7b47e953664cd714";
+    libav_11  = libavFun  "11.3"  "d9d4fd0ffeda7a244b31968c01d72f0042a56f7a";
   };
 
-  libavFun = version : sha256 : stdenv.mkDerivation rec {
+  libavFun = version : sha1 : stdenv.mkDerivation rec {
     name = "libav-${version}";
 
     src = fetchurl {
       url = "${meta.homepage}/releases/${name}.tar.xz";
-      inherit sha256;
+      inherit sha1; # upstream directly provides sha1 of releases over https
     };
     configureFlags =
       assert stdenv.lib.all (x: x!=null) buildInputs;
@@ -77,12 +77,12 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "dev" "out" "bin" ];
+    outputs = [ "dev" "out" "bin" ]; #TODO: re-check
 
+    # move avplay to get rid of the SDL dependency in the main output
     postInstall = ''
       mkdir -p "$bin/bin"
       mv "$out/bin/avplay" "$bin/bin"
-      cp -s "$out"/bin/* "$bin/bin/"
     '';
 
     doInstallCheck = false; # fails randomly

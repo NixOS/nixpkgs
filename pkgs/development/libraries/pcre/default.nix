@@ -5,24 +5,20 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pcre-8.34";
+  name = "pcre-8.36";
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "0gsqmsp0q0n3q0ba32gkjvgcsdy6nwidqa7sbxkbw817zzhkl15n";
+    sha256 = "1fs5p1z67m9f4xnyil3s4lhgyld78f7m4d1yawpyhh0cvrbk90zg";
   };
 
   outputs = [ "dev" "out" "bin" "doc" "man" ];
 
-  # The compiler on Darwin crashes with an internal error while building the
-  # C++ interface. Disabling optimizations on that platform remedies the
-  # problem. In case we ever update the Darwin GCC version, the exception for
-  # that platform ought to be removed.
   configureFlags = ''
     --enable-jit
     ${if unicodeSupport then "--enable-unicode-properties" else ""}
     ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '' + optionalString stdenv.isDarwin "CXXFLAGS=-O0";
+  '';
 
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin

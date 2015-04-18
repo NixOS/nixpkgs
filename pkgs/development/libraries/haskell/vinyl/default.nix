@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vinyl";
-  version = "0.4.3";
-  sha256 = "1npcpvr94l2gpk9z4y527raf2p3d6099m231vw0myci37ljnjgdf";
+  version = "0.5";
+  sha256 = "0jm31cynhl8ggmi6ndj7lhfm85cqml67svxm4v3kc8mnw5gj3c59";
   testDepends = [ doctest lens singletons ];
   meta = {
     description = "Extensible Records";

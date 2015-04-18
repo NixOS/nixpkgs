@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kszffgg3zpf319lmzlmdba5gq8kdr5xwb69xwy4s2abc9nvwvbi";
   };
 
+  patches = [ ./CVE-2014-8600.diff ];
+
   buildInputs = [ kdelibs ];
 
   meta = with stdenv.lib; {

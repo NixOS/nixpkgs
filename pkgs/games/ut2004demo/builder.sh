@@ -25,5 +25,5 @@ mkdir $out
 
 # Set the ELF interpreter to our own Glibc.
 for i in "$out/System/ucc-bin" "$out/System/ut2004-bin"; do
-    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" "$i"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"
 done

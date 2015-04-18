@@ -1,12 +1,12 @@
-{ stdenv, fetchgit, unzip, xulrunner, makeWrapper }:
+{ stdenv, fetchgit, unzip, firefox, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "conkeror-1.0pre-20140616";
+  name = "conkeror-1.0pre-20150319";
 
   src = fetchgit {
     url = git://repo.or.cz/conkeror.git;
-    rev = "8a26fff5896a3360549e2adfbf06b1d57e909266";
-    sha256 = "56f1c71ca1753a63d7599d3e8bf52277711b2693e7709ed7c146f34940441cb4";
+    rev = "6450632b3f0c315f79e7a9856658083fe8fc9c29";
+    sha256 = "18cqz1n2n6aimmgd69mdrgmkjf4207k7yz11wihka6b5z1hfiv64";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
     mkdir -p $out/libexec/conkeror
     cp -r * $out/libexec/conkeror
 
-    makeWrapper ${xulrunner}/bin/xulrunner $out/bin/conkeror \
-      --add-flags $out/libexec/conkeror/application.ini
+    makeWrapper ${firefox}/bin/firefox $out/bin/conkeror \
+      --add-flags "-app $out/libexec/conkeror/application.ini"
   '';
 
   meta = {

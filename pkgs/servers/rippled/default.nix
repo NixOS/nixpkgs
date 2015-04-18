@@ -1,32 +1,34 @@
-{ stdenv, fetchurl, scons, pkgconfig, openssl, protobuf, boost155, zlib}:
+{ stdenv, fetchFromGitHub, scons, pkgconfig, openssl, protobuf, boost, zlib}:
 
 stdenv.mkDerivation rec {
   name = "rippled-${version}";
-  version = "0.23.0";
+  version = "0.27.3-sp2";
 
-  src = fetchurl {
-    url = "https://github.com/ripple/rippled/archive/${version}.tar.gz";
-    sha256 = "0js734sk11jn19fyp403mk6p62azlc6s9kyhr5jfg466fiak537p";
+  src = fetchFromGitHub {
+    owner = "ripple";
+    repo = "rippled";
+    rev = version;
+    sha256 = "1q4i87cc7yks9slpgrfnlimngm45n3h035ssjvywmfwhhh7r9m3y";
   };
 
-  patches = [ ./scons-env.patch ];
+  postPatch = ''
+    sed -i -e "s@ENV = dict.*@ENV = os.environ@g" SConstruct
+  '';
 
-  buildInputs = [ scons pkgconfig openssl protobuf boost155 zlib ];
+  buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
 
-  RIPPLED_BOOST_HOME = boost155.out;
-  RIPPLED_ZLIB_HOME = zlib.out;
   buildPhase = "scons build/rippled";
 
   installPhase = ''
-    mkdir -p $out/bin    
+    mkdir -p $out/bin
     cp build/rippled $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ripple P2P payment network reference server";
-    homepage = "https://ripple.com";
-    maintainers = stdenv.lib.maintainers.emery;
-    license = stdenv.lib.licenses.isc;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://ripple.com;
+    maintainers = [ maintainers.emery maintainers.offline ];
+    license = licenses.isc;
+    platforms = platforms.linux;
   };
 }

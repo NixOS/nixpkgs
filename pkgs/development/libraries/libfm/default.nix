@@ -1,17 +1,23 @@
-{ stdenv, fetchurl, glib, gtk, intltool, menu-cache, pango, pkgconfig, vala }:
-
+{ stdenv, fetchurl, glib, gtk, intltool, menu-cache, pango, pkgconfig, vala
+, extraOnly ? false }:
+let
+    inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation {
-  name = "libfm-1.2.0";
+  name = if extraOnly then "libfm-extra-1.2.3" else "libfm-1.2.3";
   src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/libfm-1.2.0.tar.xz";
-    sha256 = "08pwdrmfm9rl41lj2niyjqq2bdvydxk7v2shjxh5gk1xwj238lgh";
+    url = "mirror://sourceforge/pcmanfm/libfm-1.2.3.tar.xz";
+    sha256 = "1ygvw52262r3jp1f45m9cdpx5xgvd4rkyfszslfqvg2c99ig34n6";
   };
 
-  buildInputs = [ glib gtk intltool menu-cache pango pkgconfig vala ];
+  buildInputs = [ glib gtk intltool pango pkgconfig vala ]
+                ++ optional (!extraOnly) menu-cache;
+
+  configureFlags = optional extraOnly "--with-extra-only";
 
   meta = with stdenv.lib; {
     homepage = "http://blog.lxde.org/?cat=28/";
-    license = licenses.gpl2Plus;
+    license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchurl, python, buildPythonPackage, mpi, openssh, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
   name = "mpi4py-1.3.1";
@@ -11,6 +11,16 @@ buildPythonPackage rec {
   passthru = {
     inherit mpi;
   };
+
+  # The tests in the `test_spawn` module fail in the chroot build environment.
+  # However, they do pass in a pure, or non-pure nix-shell. Hence, we
+  # deactivate these particular tests.
+  # Unfortunately, the command-line arguments to `./setup.py test` are not
+  # correctly passed to the test-runner. Hence, these arguments are patched
+  # directly into `setup.py`.
+  patchPhase = ''
+    sed 's/err = main(cmd.args or \[\])/err = main(cmd.args or ["-v", "-e", "test_spawn"])/' -i setup.py
+  '';
 
   configurePhase = "";
 
@@ -35,10 +45,11 @@ buildPythonPackage rec {
   # if openssh is not present. E.g. h5py with mpi support.
   propagatedBuildInputs = [ openssh ];
 
+  disabled = isPy3k || isPyPy;
+
   meta = {
-    description = "
-      Provides Python bindings for the Message Passing Interface standard.
-    ";
+    description =
+      "Python bindings for the Message Passing Interface standard";
     homepage = "http://code.google.com/p/mpi4py/";
     license = stdenv.lib.licenses.bsd3;
   };

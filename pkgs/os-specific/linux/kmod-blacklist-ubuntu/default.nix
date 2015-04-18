@@ -19,8 +19,8 @@ stdenv.mkDerivation {
 
     substituteInPlace "$out"/modprobe.conf \
       --replace /sbin/lsmod /run/booted-system/sw/bin/lsmod \
-      --replace /sbin/rmmod /run/booted-system/sw/sbin/rmmod \
-      --replace /sbin/modprobe /run/booted-system/sw/sbin/modprobe \
+      --replace /sbin/rmmod /run/booted-system/sw/bin/rmmod \
+      --replace /sbin/modprobe /run/booted-system/sw/bin/modprobe \
       --replace " grep " " ${gnugrep}/bin/grep " \
       --replace " xargs " " ${findutils}/bin/xargs "
   '';

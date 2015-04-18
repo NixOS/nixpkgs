@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Haskell bindings for the Apache Thrift RPC system";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
+    broken = true;
   };
 })

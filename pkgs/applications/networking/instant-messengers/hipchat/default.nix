@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libtool, xlibs, freetype, fontconfig, openssl, glib
 , mesa, gstreamer, gst_plugins_base, dbus, alsaLib, zlib, libuuid
 , libxml2, libxslt, sqlite, libogg, libvorbis, xz, libcanberra
-, makeWrapper, libredirect, xkeyboard_config }:
+, makeWrapper, libredirect, xkeyboard_config, xcbutilkeysyms }:
 
 let
 
-  version = "2.2.1107";
+  version = "2.2.1287";
 
   rpath = stdenv.lib.makeSearchPath "lib" [
     stdenv.glibc
@@ -40,18 +40,19 @@ let
     libvorbis
     xz
     libcanberra
-  ] + ":${stdenv.gcc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}";
+    xcbutilkeysyms
+  ] + ":${stdenv.cc.cc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/x86_64/hipchat-${version}-x86_64.pkg.tar.xz";
-        sha256 = "0lf780pxbh40m2i48cki072lrm75924cz3zgkmaxddmar3y13bwa";
+        sha256 = "170izy3v18rgriz84h4gyf9354jvjrsbkgg53czq9l0scyz8x55b";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/i686/hipchat-${version}-i686.pkg.tar.xz";
-        sha256 = "1k33670rpigdpy9jcacryc1i05ykp5yffcplmbm5q29ng54cn0zv";
+        sha256 = "150q7pxg5vs14is5qf36yfsf7r70g49q9xr1d1rknmc5m4qa5rc5";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
@@ -74,10 +75,8 @@ stdenv.mkDerivation {
     mv opt/HipChat/lib/ $d
     mv usr/share $out
 
-    patchShebangs $out/bin
-
     for file in $(find $d -type f); do
-        patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $file || true
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file || true
         patchelf --set-rpath ${rpath}:\$ORIGIN $file || true
     done
 

@@ -80,7 +80,7 @@ stdenv.mkDerivation {
 
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ ludo ];
+    maintainers = [ ];
 
     # Build fails on Cygwin and Darwin:
     # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.

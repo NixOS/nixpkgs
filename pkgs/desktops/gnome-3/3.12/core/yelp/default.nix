@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, hicolor_icon_theme, gnome3, gdk_pixbuf
+, file, librsvg, hicolor_icon_theme, gnome3, gdk_pixbuf, sqlite
 , bash, makeWrapper, itstool, libxml2, libxslt, icu }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
                   libxml2 libxslt icu file makeWrapper gnome3.yelp_xsl
                   librsvg gdk_pixbuf gnome3.gnome_icon_theme
                   hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
-                  gnome3.gsettings_desktop_schemas ];
+                  gnome3.gsettings_desktop_schemas sqlite ];
 
   preFixup = ''
     wrapProgram "$out/bin/yelp" \
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Yelp;
-    description = "Yelp is the help viewer in Gnome.";
+    description = "The help viewer in Gnome";
     maintainers = with maintainers; [ lethalman ];
     license = licenses.gpl2;
     platforms = platforms.linux;

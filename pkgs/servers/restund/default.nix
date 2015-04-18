@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, openssl, libre, librem, mysql}:
+{ stdenv, fetchurl, zlib, openssl, libre, librem, mysql }:
 stdenv.mkDerivation rec {
   version = "0.4.2";
   name = "restund-${version}";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://www.creytiv.com/pub/restund-${version}.tar.gz";
     sha256 = "db5260939d40cb2ce531075bef02b9d6431067bdd52f3168a6f25246bdf7b9f2";
   };
-  buildInputs = [zlib openssl libre librem mysql];
+  buildInputs = [ zlib openssl libre librem mysql.lib ];
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "LIBRE_INC=${libre}/include/re"
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     ''PREFIX=$(out)''
     "USE_MYSQL=1"
   ]
-  ++ stdenv.lib.optional (stdenv.gcc.gcc != null) "SYSROOT_ALT=${stdenv.gcc.gcc}"
-  ++ stdenv.lib.optional (stdenv.gcc.libc != null) "SYSROOT=${stdenv.gcc.libc}"
+  ++ stdenv.lib.optional (stdenv.cc.cc != null) "SYSROOT_ALT=${stdenv.cc.cc}"
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "SYSROOT=${stdenv.cc.libc}"
   ;
-  NIX_LDFLAGS='' -L${mysql}/lib/mysql '';
+  NIX_LDFLAGS='' -L${mysql.lib}/lib/mysql '';
   meta = {
     homepage = "http://www.creytiv.com/restund.html";
     platforms = with stdenv.lib.platforms; linux;
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;
     downloadURLRegexp = "/restund-.*[.]tar[.]";
+    broken = true; # probably due to glibc-2.20
   };
 }

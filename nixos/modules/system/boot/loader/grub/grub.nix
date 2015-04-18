@@ -6,8 +6,11 @@ let
 
   cfg = config.boot.loader.grub;
 
+  efi = config.boot.loader.efi;
+
   realGrub = if cfg.version == 1 then pkgs.grub
-    else pkgs.grub2.override { zfsSupport = cfg.zfsSupport; };
+    else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
+    else pkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -16,21 +19,31 @@ let
     then null
     else realGrub;
 
+  grubEfi =
+    # EFI version of Grub v2
+    if (cfg.devices != ["nodev"]) && cfg.efiSupport && (cfg.version == 2)
+    then realGrub.override { efiSupport = cfg.efiSupport; }
+    else null;
+
   f = x: if x == null then "" else "" + x;
 
   grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
+      grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.stdenv.shell}";
       fullVersion = (builtins.parseDrvName realGrub.name).version;
+      grubEfi = f grubEfi;
+      grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
+      inherit (efi) efiSysMountPoint canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices fsIdentifier;
-      path = (makeSearchPath "bin" [
+        default devices fsIdentifier efiSupport;
+      path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
-        pkgs.utillinux
-      ]) + ":" + (makeSearchPath "sbin" [
+        pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
+      )) + ":" + (makeSearchPath "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
     });
@@ -166,6 +179,7 @@ in
       };
 
       splashImage = mkOption {
+        type = types.nullOr types.path;
         example = literalExample "./my-background.png";
         description = ''
           Background image used for GRUB.  It must be a 640x480,
@@ -196,7 +210,7 @@ in
       };
 
       timeout = mkOption {
-        default = 5;
+        default = if (config.boot.loader.timeout != null) then config.boot.loader.timeout else -1;
         type = types.int;
         description = ''
           Timeout (in seconds) until GRUB boots the default menu item.
@@ -231,6 +245,27 @@ in
         type = types.bool;
         description = ''
           Whether grub should be build against libzfs.
+          ZFS support is only available for GRUB v2.
+          This option is ignored for GRUB v1.
+        '';
+      };
+
+      efiSupport = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether grub should be build with EFI support.
+          EFI support is only available for GRUB v2.
+          This option is ignored for GRUB v1.
+        '';
+      };
+
+      enableCryptodisk = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable support for encrypted partitions. Grub should automatically
+          unlock the correct encrypted partition and look for filesystems.
         '';
       };
 
@@ -260,7 +295,8 @@ in
         if cfg.devices == [] then
           throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
         else
-          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])} " +
+          (if cfg.enableCryptodisk then "GRUB_ENABLE_CRYPTODISK=y " else "") +
           "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
 
       system.build.grub = grub;
@@ -277,7 +313,11 @@ in
         '') config.boot.loader.grub.extraFiles);
 
     assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
-                    message = "Only grub version 2 provides zfs support";}];
+                    message = "Only grub version 2 provides zfs support";}]
+      ++ flip map cfg.devices (dev: {
+        assertion = dev == "nodev" || hasPrefix "/" dev;
+        message = "Grub devices must be absolute paths, not ${dev}";
+      });
 
     })
 

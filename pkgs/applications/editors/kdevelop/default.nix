@@ -1,19 +1,21 @@
 { stdenv, fetchurl, kdevplatform, cmake, pkgconfig, automoc4, shared_mime_info,
-  kdebase_workspace, gettext, perl, okteta, qjson }:
+  kdebase_workspace, gettext, perl, okteta, qjson, kate, konsole, kde_runtime, oxygen_icons }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "4.6.0";
+  version = "4.7.1";
   pname = "kdevelop";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1ee9e7b8c46f575dd29d920cfd6284130f2e738a2e1f52dfd97b075fab2e4c73";
+    sha256 = "e3ad5377f53739a67216d37cda3f88c03f8fbb0c96e2a9ef4056df3c124e95c1";
   };
 
   buildInputs = [ kdevplatform kdebase_workspace okteta qjson ];
 
   nativeBuildInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
+
+  propagatedUserEnvPkgs = [ kdevplatform kate konsole kde_runtime oxygen_icons ];
 
   NIX_CFLAGS_COMPILE = "-I${okteta}/include/KDE";
 

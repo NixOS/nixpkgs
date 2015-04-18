@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = http://pkgs.fedoraproject.org/repo/pkgs/gummiboot/gummiboot-45.tar.xz/5d4957390e959cb9f325b87712ddd3f1/gummiboot-45.tar.xz;
-    md5 = "5d4957390e959cb9f325b87712ddd3f1";
+    sha256 = "15227d6abi90vg7rs234fm13af511nsd6dv87c3jvsjhgb9ib0hm";
   };
 
   meta = {

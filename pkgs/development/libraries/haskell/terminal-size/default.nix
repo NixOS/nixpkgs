@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "terminal-size";
-  version = "0.2.1.0";
-  sha256 = "0d41af1is3vdb1kgd8dk82fags86bgs67vkbzpdhjdwa3aimsxgn";
+  version = "0.3.0";
+  sha256 = "0g8v08d20hlfsah9dlgv2v2pzj0m4dva0zp6zi4jrkxjhg6vi7bw";
   meta = {
     description = "Get terminal window height and width";
     license = self.stdenv.lib.licenses.bsd3;

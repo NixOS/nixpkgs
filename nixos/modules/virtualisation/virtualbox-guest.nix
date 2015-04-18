@@ -6,7 +6,7 @@ with lib;
 
 let
 
-  cfg = config.services.virtualbox;
+  cfg = config.services.virtualboxGuest;
   kernel = config.boot.kernelPackages;
 
 in
@@ -17,7 +17,7 @@ in
 
   options = {
 
-    services.virtualbox = {
+    services.virtualboxGuest = {
 
       enable = mkOption {
         default = false;

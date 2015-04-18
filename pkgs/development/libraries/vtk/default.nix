@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, mesa, libX11, xproto, libXt
+{ stdenv, fetchurl, fetchpatch, cmake, mesa, libX11, xproto, libXt
 , qtLib ? null }:
 
 with stdenv.lib;
@@ -6,7 +6,7 @@ with stdenv.lib;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "5.10";
-  minorVersion = "0";
+  minorVersion = "1";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -14,8 +14,11 @@ stdenv.mkDerivation rec {
   name = "vtk-${os (qtLib != null) "qvtk-"}${version}";
   src = fetchurl {
     url = "${meta.homepage}files/release/${majorVersion}/vtk-${version}.tar.gz";
-    md5 = "a0363f78910f466ba8f1bd5ab5437cb9";
+    sha256 = "1fxxgsa7967gdphkl07lbfr6dcbq9a72z5kynlklxn7hyp0l18pi";
   };
+
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1138466
+  postPatch = "sed '/^#define GL_GLEXT_LEGACY/d' -i ./Rendering/vtkOpenGL.h";
 
   buildInputs = [ cmake mesa libX11 xproto libXt ]
     ++ optional (qtLib != null) qtLib;
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = http://www.vtk.org/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ viric bbenoist ];
     platforms = with stdenv.lib.platforms; linux;
   };

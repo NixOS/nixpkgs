@@ -128,6 +128,6 @@ in {
     boot.loader.grub.version = 2;
     boot.loader.grub.device = "/dev/sda";
   
-    services.virtualbox.enable = true;
+    services.virtualboxGuest.enable = true;
   };
 }

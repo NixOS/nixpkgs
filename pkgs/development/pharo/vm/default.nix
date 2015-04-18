@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xlibs, alsaLib }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xlibs, alsaLib, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "pharo-vm-core-i386-2014.06.25";
+
+  version = "2014.11.29";
+
+  name = "pharo-vm-core-i386-${version}";
   system = "x86_32-linux";
   src = fetchurl {
-    url = http://files.pharo.org/vm/src/vm-unix-sources/pharo-vm-2014.06.25.tar.bz2;
-    md5 = "4d80d8169c2f2f0355c43ee90bbad23f";
+    url = "http://files.pharo.org/vm/src/vm-unix-sources/blessed/pharo-vm-${version}.tar.bz2";
+    md5 = "529cff4639cee313ddf55fd377bd6fb3";
   };
 
   sources10Zip = fetchurl {
@@ -73,9 +76,7 @@ stdenv.mkDerivation rec {
     unzip ${sources30Zip} -d $prefix/lib/pharo-vm/
   '';
 
-  patches = [ patches/pharo-is-not-squeak.patch patches/fix-executable-name.patch patches/fix-cmake-root-directory.patch ];
- 
-  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xlibs.libX11 xlibs.libICE xlibs.libSM alsaLib ];
+  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xlibs.libX11 xlibs.libICE xlibs.libSM alsaLib cairo ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

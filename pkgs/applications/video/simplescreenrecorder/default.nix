@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "simplescreenrecorder-${version}";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchurl {
     url = "https://github.com/MaartenBaert/ssr/archive/${version}.tar.gz";
-    sha256 = "0caal8jq47d56ld57cdf2lr1ji350v09j5chgvgxv2pbqmqga4p5";
+    sha256 = "09mcmvqbzq2blv404pklv6fc8ci3a9090p42rdsgmlr775bdyxfb";
   };
 
   buildInputs = [

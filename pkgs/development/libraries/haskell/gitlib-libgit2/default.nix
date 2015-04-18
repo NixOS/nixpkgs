@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gitlib-libgit2";
-  version = "3.1.0";
-  sha256 = "1kjwc36fd14j2ipw53j8hdsy29gxir1qrm54wxgpp5n4q2kcs9pq";
+  version = "3.1.0.1";
+  sha256 = "0rqx1cqj7rciy7kr5dfzh4crvjk0s6amm3d5nzyawkkkdda54dcs";
   buildDepends = [
     conduit conduitCombinators exceptions fastLogger filepath gitlib
     hlibgit2 liftedAsync liftedBase missingForeign mmorph monadControl

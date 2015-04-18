@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   version = "1.0.5";
   sha256 = "1vf6y8xbl48giq1p6d62294rfvfdw62l1q4dspy990ii0v5gkyck";
   buildDepends = [ aeson indexed indexedFree lens lensAeson text ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/ocharles/json-assertions.git";
     description = "Test that your (Aeson) JSON encoding matches your expectations";

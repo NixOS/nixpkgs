@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     description = "OCaml bindings for gtkmathview";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
+    broken = true;
   };
 }

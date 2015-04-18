@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional useSystemd
     [ "--enable-systemd"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
+      "--with-systemdutildir=$(out)/lib/systemd"
       "--with-udevrulesdir=$(out)/lib/udev/rules.d"
     ];
 

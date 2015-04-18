@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , mesa, SDL, cmake, eigen
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     [];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -35,8 +35,8 @@ rec {
 
   setVars = a.noDepEntry ''
     export EIGENDIR=${a.eigen}/include/eigen2
-  ''; 
-      
+  '';
+
   meta = {
     description = "A physics-based puzzle game";
     maintainers = with a.lib.maintainers;
@@ -45,7 +45,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
     broken = true;
   };
   passthru = {

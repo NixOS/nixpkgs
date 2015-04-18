@@ -5,7 +5,7 @@ with lib;
 let
 
   cfg = config.services.tomcat;
-  tomcat = pkgs.tomcat6;
+  tomcat = cfg.package;
 in
 
 {
@@ -19,6 +19,15 @@ in
       enable = mkOption {
         default = false;
         description = "Whether to enable Apache Tomcat";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.tomcat7;
+        example = lib.literalExample "pkgs.tomcat8";
+        description = ''
+          Which tomcat package to use.
+        '';
       };
 
       baseDir = mkOption {

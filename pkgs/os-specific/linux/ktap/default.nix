@@ -1,5 +1,7 @@
 { stdenv, fetchgit, kernel, useFFI ? false }:
 
+assert builtins.substring 0 4 kernel.version != "3.18";
+
 let
   ffiArgs = stdenv.lib.optionalString useFFI "FFI=1";
 in
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A lightweight script-based dynamic tracing tool for Linux.";
+    description = "A lightweight script-based dynamic tracing tool for Linux";
     homepage    = "http://www.ktap.org";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;

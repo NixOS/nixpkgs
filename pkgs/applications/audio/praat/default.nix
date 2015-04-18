@@ -1,11 +1,12 @@
 { stdenv, fetchurl, alsaLib, gtk, pkgconfig }:
 
+let version = "5401"; in
 stdenv.mkDerivation {
-  name = "praat-5365";
+  name = "praat-${version}";
 
   src = fetchurl {
-    url = http://www.fon.hum.uva.nl/praat/praat5365_sources.tar.gz;
-    sha256 = "1w3mcq0mipx88i7ckhvzhmdj0p67nhppnn7kbkp21d01yyyz5rgq";
+    url = "http://www.fon.hum.uva.nl/praat/praat${version}_sources.tar.gz";
+    sha256 = "1hx0simc0hp5w5scyaiw8h8lrpafra4h1zy1jn1kzb0299yd06n3";
   };
 
   configurePhase = ''

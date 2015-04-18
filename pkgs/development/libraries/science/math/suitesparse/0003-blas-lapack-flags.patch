@@ -1,0 +1,27 @@
+From a99cca30cfd965683564ae024e8ecc615c61697a Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Mon, 15 Dec 2014 10:24:08 -0600
+Subject: [PATCH 3/3] blas lapack flags
+
+---
+ SuiteSparse_config/SuiteSparse_config.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/SuiteSparse_config/SuiteSparse_config.mk b/SuiteSparse_config/SuiteSparse_config.mk
+index f1046a6..1710162 100644
+--- a/SuiteSparse_config/SuiteSparse_config.mk
++++ b/SuiteSparse_config/SuiteSparse_config.mk
+@@ -119,8 +119,8 @@ INSTALL_INCLUDE = @out@/include
+ # naming the BLAS and LAPACK library (*.a or *.so) files.
+ 
+ # This is probably slow ... it might connect to the Standard Reference BLAS:
+-  BLAS = -lblas -lgfortran
+-  LAPACK = -llapack
++  BLAS = @blasFlags@
++  LAPACK = @lapackFlags@
+ 
+ # MKL 
+ # BLAS = -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm
+-- 
+2.1.3
+

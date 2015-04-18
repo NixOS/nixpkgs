@@ -50,8 +50,10 @@ echo "booting system configuration $systemConfig" > /dev/kmsg
 # Make /nix/store a read-only bind mount to enforce immutability of
 # the Nix store.  Note that we can't use "chown root:nixbld" here
 # because users/groups might not exist yet.
-chown 0:30000 /nix/store
-chmod 1775 /nix/store
+# Silence chown/chmod to fail gracefully on a readonly filesystem
+# like squashfs.
+chown -f 0:30000 /nix/store
+chmod -f 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
     if ! readonly-mountpoint /nix/store; then
         mount --bind /nix/store /nix/store
@@ -91,6 +93,7 @@ mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log /var/lib /var/db
 mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
+chmod 0700 /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
 mkdir -m 0755 -p /etc/nixos
@@ -141,8 +144,6 @@ fi
 # Use /etc/resolv.conf supplied by systemd-nspawn, if applicable.
 if [ -n "@useHostResolvConf@" -a -e /etc/resolv.conf ]; then
     cat /etc/resolv.conf | resolvconf -m 1000 -a host
-else
-    touch /etc/resolv.conf
 fi
 
 

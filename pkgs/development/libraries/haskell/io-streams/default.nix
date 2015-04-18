@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "io-streams";
-  version = "1.1.4.6";
-  sha256 = "0vn6vlgfapmyd9y87i9i0y480w8w81xd3lnhh66a6lalskd4bjdw";
+  version = "1.2.1.1";
+  sha256 = "1pvrscyw7wcv910p8d9j4a9jdm0vm7m74g5kgzpc5hnxdfibhqj1";
   buildDepends = [
     attoparsec blazeBuilder network primitive text time transformers
     vector zlibBindings

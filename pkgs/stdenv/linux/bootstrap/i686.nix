@@ -1,39 +1,12 @@
-let
-
-  fetch = { file, sha256 }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-linux/i686/r24519/${file}";
-    inherit sha256;
+{
+  busybox = import <nix/fetchurl.nix> {
+    url = http://tarballs.nixos.org/stdenv-linux/i686/8d66a51a872af1ab58edc68a2ebddcc79958b563/busybox;
+    sha256 = "9278001d11bb0359d0cc1b30bd5c9823f0b9c65db127d6dfcc1f6bbc000d15a0";
     executable = true;
   };
 
-in {
-  sh = fetch {
-    file = "sh";
-    sha256 = "1l6sdhyqjlh4m5gj3pfpi8aisp1m012lpwxfcc4v1x8g429mflmy";
-  };
-
-  bzip2 = fetch {
-    file = "bzip2";
-    sha256 = "1p5nkrdn52jm6rsx8x3wwjpsh83f2qsjl1qckkgnkplwhj23zjp7";
-  };
-
-  mkdir = fetch {
-    file = "mkdir";
-    sha256 = "02ff7i9ph9ahiapsg2v9c3pwr7sl73sk4n7ic112ljkrgwkail33";
-  };
-
-  cpio = fetch {
-    file = "cpio";
-    sha256 = "046if3aqqramyhrn2yxrjf4bfkl8x1bcqxhvi7ml9nrv9smx8irg";
-  };
-
-  curl = fetch {
-    file = "curl.bz2";
-    sha256 = "1v0yfb4gcdyqpl2fxlxjh337r28c23iqm7vwck4p4643xd55di7q";
-  };
-
-  bootstrapTools = {
-    url = http://tarballs.nixos.org/stdenv-linux/i686/r24519/bootstrap-tools.cpio.bz2;
-    sha256 = "0imypaxy6piwbk8ff2y1nr7yk49pqmdgdbv6g8miq1zs5yfip6ij";
+  bootstrapTools = import <nix/fetchurl.nix> {
+    url = http://tarballs.nixos.org/stdenv-linux/i686/8d66a51a872af1ab58edc68a2ebddcc79958b563/bootstrap-tools.tar.xz;
+    sha256 = "6bc27ce9b08adcca0298f5fe80fe67f5bbb2dffdd1d8666fd44cb76ace198a25";
   };
 }

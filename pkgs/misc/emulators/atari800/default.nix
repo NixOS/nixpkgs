@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   rom = fetchurl {
     url = mirror://sourceforge/atari800/xf25.zip;
-    md5 = "4dc3b6b4313e9596c4d474785a37b94d";
+    sha256 = "12jbawxs04i0wm3910n7f3phsybdp8nndxc0xlsnzp8k0k8hmblq";
   };
   buildInputs = [unzip zlib SDL];
   configureFlags = "--target=sdl";

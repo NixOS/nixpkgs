@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     license = "unknown";
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ "Daniel Bergey <bergey@teallabs.org>" ];
+    maintainers = with stdenv.lib.maintainers; [ bergey ];
   };
 }

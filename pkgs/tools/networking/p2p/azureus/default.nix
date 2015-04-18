@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   src = fetchurl {
     url = http://tarballs.nixos.org/Azureus2.3.0.6.jar;
-    md5 = "84f85b144cdc574338c2c84d659ca620";
+    sha256 = "1hwrh3n0b0jbpsdk15zrs7pw175418phhmg6pn4xi1bvilxq1wrd";
   };
 #  buildInputs = [unzip];
   inherit jdk swt;

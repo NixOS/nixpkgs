@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     export SYBASE=${freetds}
     '';
 
-  buildInputs = [ 
-    freetds 
+  buildInputs = [
+    freetds
     readline
   ];
 

@@ -3,11 +3,11 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-moped-${version}";
 
-  version = "0.3.3";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/martijnboland/moped/archive/v${version}.tar.gz";
-    sha256 = "19f3asqx7wmla53nhrxzdwj6qlkjv2rcwh34jxp27bz7nkhn0ihv";
+    sha256 = "1bkx0c4yi48nxm1vzacdil9scn0ilwkbd1rgiga34p77lcg16qb2";
   };
 
   propagatedBuildInputs = [ mopidy ];

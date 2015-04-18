@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , jre
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["jre"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -39,7 +39,7 @@ rec {
     sed -e 's@[.]/lib/welkin[.]jar@"'"$out"'/share/welkin/lib/welkin.jar"@' -i "$out/share/welkin/welkin.sh"
     chmod a+x "$out/bin/welkin"
   '' ["minInit" "defEnsureDir"];
-      
+
   meta = {
     description = "An RDF visualizer";
     maintainers = with a.lib.maintainers;
@@ -47,7 +47,7 @@ rec {
       raskin
     ];
     hydraPlatforms = [];
-    license = "free-noncopyleft";
+    license = a.lib.licenses.free;
   };
   passthru = {
     updateInfo = {
@@ -55,4 +55,3 @@ rec {
     };
   };
 }) x
-

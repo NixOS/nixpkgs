@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${name}.tar.gz";
-    md5 = "f4824d0a75bdeeef1e45cc88de7bb58a";
+    sha256 = "1i9qly13bwwmgj68vma766hgvsd1m75236haqsp9zgh5znlmkm3z";
   };
 
   meta = {

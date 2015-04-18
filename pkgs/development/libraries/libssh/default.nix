@@ -1,23 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, cmake, zlib, libgcrypt }:
+{ stdenv, fetchurl, pkgconfig, cmake, zlib, libgcrypt, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.6.3";
+  name = "libssh-0.6.4";
 
   src = fetchurl {
-    url = "https://red.libssh.org/attachments/download/87/${name}.tar.xz";
-    sha256 = "1jyaj9h1iglvn02hrvcchbx8ycjpj8b91h8mi459k7q5jp2xgd9b";
+    url = "https://red.libssh.org/attachments/download/107/${name}.tar.gz";
+    sha256 = "0lkb45sc7w0wd67p46yh8rsprglssnkqar1sp0impwsvx7i0acky";
   };
 
-  buildInputs = [ zlib libgcrypt ];
+  # option we don't provide (yet): use libgcrypt instead of openssl
+  buildInputs = [ zlib /*libgcrypt*/ openssl ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  cmakeFlags = "-DWITH_GCRYPT=ON";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "SSH client library";
-    license = "LGPL";
+    license = licenses.lgpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ sander urkud ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

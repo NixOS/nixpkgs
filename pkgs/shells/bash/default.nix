@@ -3,7 +3,7 @@
 assert interactive -> readline != null;
 
 let
-  realName = "bash-4.2";
+  realName = "bash-4.3";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
 in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
-    sha256 = "a27a1179ec9c0830c65c6aa5d7dab60f7ce1a2a608618570f96bfa72e95ab3d8";
+    sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
   };
 
   NIX_CFLAGS_COMPILE = ''
@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches =
-    let
+    (let
       patch = nr: sha256:
         fetchurl {
-          url = "mirror://gnu/bash/bash-4.2-patches/bash42-${nr}";
+          url = "mirror://gnu/bash/bash-4.3-patches/bash43-${nr}";
           inherit sha256;
         };
     in
-      import ./bash-4.2-patches.nix patch;
+      import ./bash-4.3-patches.nix patch);
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.gpl3Plus;
+
+    platforms = stdenv.lib.platforms.all;
 
     maintainers = [ stdenv.lib.maintainers.simons ];
   };

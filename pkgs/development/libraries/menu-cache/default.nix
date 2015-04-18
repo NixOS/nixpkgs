@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, glib, pkgconfig }:
+{ stdenv, fetchurl, glib, pkgconfig, libfm-extra }:
 
+let name = "menu-cache-0.7.0";
+in
 stdenv.mkDerivation {
-  name = "menu-cache-0.5.1";
+  inherit name;
   src = fetchurl {
-    url = "mirror://sourceforge/lxde/menu-cache-0.5.1.tar.gz";
-    sha256 = "08m1msgbl6j7j72cwcg18klb99jif8h1phkcnbplxkdf3w15irh8";
+    url = "mirror://sourceforge/lxde/${name}.tar.xz";
+    sha256 = "0wwkk4jrcl2sp11bspabplchh4ipi1zyn39j3skyzgbm8k40gkhk";
   };
 
-  buildInputs = [ glib pkgconfig ];
+  buildInputs = [ glib pkgconfig libfm-extra ];
 
   meta = with stdenv.lib; {
     homepage = "http://blog.lxde.org/?tag=menu-cache";

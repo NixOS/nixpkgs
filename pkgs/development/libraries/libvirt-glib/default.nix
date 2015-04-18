@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libvirt-glib-0.1.8";
+  name = "libvirt-glib-0.2.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "0ld7g9vlpdzx8rm90i8y1gnpygkn20x5z12gvsgms7dy5nala3ns";
+    sha256 = "02saqkk4wzsimsan7s9yc5bx05xn7j00hnxhq4sczkgr4krf1drh";
   };
 
   buildInputs = [

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kxf8s5bw7y50x0ksb77d3kv0dwadixhybl818w27y6mlw26hq1b";
   };
 
+  patches = [ ./bash-4.3.patch ];
+
   doCheck = true;
 
   meta = {

@@ -8,7 +8,7 @@ let
   gitBase = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
-      tk makeWrapper subversionClient gzip;
+      tk makeWrapper subversionClient gzip libiconv;
     texinfo = texinfo5;
     svnSupport = false;		# for git-svn support
     guiSupport = false;		# requires tcl/tk
@@ -46,7 +46,7 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   };
 
-  gitAnnex = pkgs.haskellPackages.gitAnnex;
+  gitAnnex = pkgs.haskellngPackages.git-annex;
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
@@ -68,13 +68,12 @@ rec {
     inherit stdenv fetchurl;
   };
 
-  tig = import ./tig {
-    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl docbook_xml_dtd_45 readline;
-  };
+  tig = callPackage ./tig { };
 
   hub = import ./hub {
-    inherit (rubyLibs) rake;
-    inherit stdenv fetchurl groff makeWrapper;
+    inherit go;
+    inherit stdenv fetchgit;
+    inherit (darwin) Security;
   };
 
   gitFastExport = import ./fast-export {
@@ -98,4 +97,9 @@ rec {
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
+
+  git-extras = callPackage ./git-extras { };
+
+  git-cola = callPackage ./git-cola { };
 }

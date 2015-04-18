@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, zlib, glib, libpng, freetype, xorg, fontconfig, alsaLib, makeWrapper, xlibs
-,  qt5, pulseaudio ? null, qt4, xkeyboard_config, libredirect }:
+{ stdenv, fetchurl, makeWrapper, zlib, glib, libpng, freetype, xorg
+, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, pulseaudio ? null
+, libredirect, quazip, less, which
+}:
 
 let
 
@@ -9,8 +11,8 @@ let
 
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
-      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama xlibs.libxcb
-      fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio
+      xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
+      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base pulseaudio
     ];
 
 in
@@ -31,11 +33,11 @@ stdenv.mkDerivation rec {
                 else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper less which ];
 
   unpackPhase =
     ''
-      yes | sh $src
+      echo -e 'q\ny' | sh -xe $src
       cd TeamSpeak*
     '';
 
@@ -44,8 +46,8 @@ stdenv.mkDerivation rec {
       mv ts3client_linux_${arch} ts3client
       echo "patching ts3client..."
       patchelf \
-        --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_GCC/nix-support/orig-gcc)/${libDir} \
+        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         ts3client
     '';
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
       # Delete unecessary libraries - these are provided by nixos.
-      rm libQt*.so.*
+      rm *.so.*
       rm qt.conf
 
       # Install files.
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
       ln -s $out/lib/teamspeak/ts3client $out/bin/ts3client
 
       wrapProgram $out/bin/ts3client \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:$out/lib/teamspeak/libquazip.so.1" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so:${quazip}/lib/libquazip.so" \
         --set QT_PLUGIN_PATH "$out/lib/teamspeak/platforms" \
         --set NIX_REDIRECTS /usr/share/X11/xkb=${xkeyboard_config}/share/X11/xkb
     '';

@@ -1,16 +1,13 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, pkgconfig, libusb1}:
 
 stdenv.mkDerivation {
-  name = "libusb-0.1.12";
+  name = "libusb-compat-0.1.5";
 
-  # On non-linux, we get warnings compiling, and we don't want the
-  # build to break.
-  patchPhase = ''
-    sed -i s/-Werror// Makefile.in
-  '';
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ libusb1 ];
 
   src = fetchurl {
-    url = mirror://sourceforge/libusb/libusb-0.1.12.tar.gz;
-    md5 = "caf182cbc7565dac0fd72155919672e6";
+    url = mirror://sourceforge/libusb/libusb-compat-0.1.5.tar.bz2;
+    sha256 = "0nn5icrfm9lkhzw1xjvaks9bq3w6mjg86ggv3fn7kgi4nfvg8kj0";
   };
 }

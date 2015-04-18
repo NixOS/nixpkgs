@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-events-analyze";
-  version = "0.2.0";
-  sha256 = "04px1p0pnx54414m7sdpmdhj2dpsi1z8bjm8jq2yzh66854xiyh4";
+  version = "0.2.1";
+  sha256 = "0lf063p2wj2d1hxb5hx4bcid3a3ni3g9x8sglm5q5kfbmdk7awj4";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

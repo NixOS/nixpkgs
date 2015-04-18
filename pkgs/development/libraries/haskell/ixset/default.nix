@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "ixset";
-  version = "1.0.5";
-  sha256 = "1hznn7f8f13x5125n76dchayi16z72050qbwifnkrca54nf9q2ns";
+  version = "1.0.6";
+  sha256 = "097f9fkm9a2n67bzagr9h2v7acdn8h1ayv9c83n7nv1dh157bpyv";
   buildDepends = [ safecopy syb sybWithClass ];
   meta = {
     homepage = "http://happstack.com";
     description = "Efficient relational queries on Haskell sets";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

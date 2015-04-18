@@ -1,24 +1,45 @@
-{ stdenv, fetchurl, ncurses, curl, taglib, fftw, mpd_clientlib, pkgconfig
-, libiconvOrEmpty }:
+{ stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
+, libiconv
+, outputsSupport ? false # outputs screen
+, visualizerSupport ? false, fftw ? null # visualizer screen
+, clockSupport ? false # clock screen
+, unicodeSupport ? true # utf8 support
+, curlSupport ? true, curl ? null # allow fetching lyrics from the internet
+, taglibSupport ? true, taglib ? null # tag editor
+}:
 
+assert visualizerSupport -> (fftw != null);
+assert curlSupport -> (curl != null);
+assert taglibSupport -> (taglib != null);
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "0.5.10";
   name = "ncmpcpp-${version}";
+  version = "0.6.3";
 
   src = fetchurl {
-    url = "http://ncmpcpp.rybczak.net/stable/ncmpcpp-${version}.tar.bz2";
-    sha256 = "ff6d5376a2d9caba6f5bb78e68af77cefbdb2f04cd256f738e39f8ac9a79a4a8";
+    url = "http://ncmpcpp.rybczak.net/stable/${name}.tar.bz2";
+    sha256 = "00r2f7psd2jym2lxf3q3lz2lskz7091pz9glnxqam2bznwnlyxyp";
   };
 
-  buildInputs = [ ncurses curl taglib fftw mpd_clientlib pkgconfig ]
-    ++ libiconvOrEmpty;
+  configureFlags = [ "BOOST_LIB_SUFFIX=" ]
+    ++ optional outputsSupport "--enable-outputs"
+    ++ optional visualizerSupport "--enable-visualizer --with-fftw"
+    ++ optional clockSupport "--enable-clock"
+    ++ optional unicodeSupport "--enable-unicode"
+    ++ optional curlSupport "--with-curl"
+    ++ optional taglibSupport "--with-taglib";
 
-  meta = with stdenv.lib; {
-    description = "Curses-based interface for MPD (music player daemon)";
-    homepage    = http://unkart.ovh.org/ncmpcpp/;
+  buildInputs = [ boost mpd_clientlib ncurses pkgconfig readline libiconv ]
+    ++ optional curlSupport curl
+    ++ optional visualizerSupport fftw
+    ++ optional taglibSupport taglib;
+
+  meta = {
+    description = "A featureful ncurses based MPD client inspired by ncmpc";
+    homepage    = http://ncmpcpp.rybczak.net/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 mornfall ];
+    maintainers = with maintainers; [ lovek323 mornfall koral ];
     platforms   = platforms.all;
   };
 }
-

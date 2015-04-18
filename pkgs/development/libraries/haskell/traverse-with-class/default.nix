@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "traverse-with-class";
-  version = "0.1.1.1";
-  sha256 = "0agdgnibv8q65av2fkr2qm0air8zqmygwpkl30wmay5mqqknzxiq";
+  version = "0.2.0.3";
+  sha256 = "0snms19w3n9ni1wmf4ikwpp298nc6qk6phrjxi5g023ihqqdvr6g";
   buildDepends = [ transformers ];
   meta = {
     description = "Generic applicative traversals";

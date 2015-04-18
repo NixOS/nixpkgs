@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk }:
+{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   name = "gnome-icon-theme-3.12.0";
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "359e720b9202d3aba8d477752c4cd11eced368182281d51ffd64c8572b4e503a";
   };
 
-  setupHook = ./setup-hook.sh;
-
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
+
+  propagatedBuildInputs = [ hicolor_icon_theme ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

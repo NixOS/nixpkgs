@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, bison, flex, unixODBC
-, openssl, openldap, cyrus_sasl, krb5, expat, SDL, libdv, libv4l, alsaLib }:
+, openssl, openldap, cyrus_sasl, kerberos, expat, SDL, libdv, libv4l, alsaLib }:
 
 stdenv.mkDerivation rec {
   name = "ptlib-2.10.10";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig bison flex unixODBC openssl openldap 
-                  cyrus_sasl krb5 expat SDL libdv libv4l alsaLib ];
+                  cyrus_sasl kerberos expat SDL libdv libv4l alsaLib ];
 
   enableParallelBuilding = true;
 

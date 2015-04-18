@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://storm-project.net";
     description = "Distributed realtime computation system";
-    license = "Eclipse Public License 1.0";
+    license = stdenv.lib.licenses.epl10;
     maintainers = [ lib.maintainers.vizanto ];
   };
 }

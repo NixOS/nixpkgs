@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace "src/cflow.h"					\
       --replace "/usr/bin/cpp"						\
-                "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/bin/cpp"
+                "$(cat ${stdenv.cc}/nix-support/orig-cc)/bin/cpp"
   '';
 
   buildInputs = [ gettext ] ++
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/cflow/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
 
     /* On Darwin, build fails with:
 

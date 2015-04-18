@@ -10,6 +10,7 @@ let
     isExecutable = true;
     src = ./nixos-container.pl;
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+    su = "${pkgs.shadow.su}/bin/su";
     inherit (pkgs) utillinux;
   };
 
@@ -51,6 +52,14 @@ in
       description = ''
         Whether this NixOS machine is a lightweight container running
         in another NixOS system.
+      '';
+    };
+
+    boot.enableContainers = mkOption {
+      type = types.bool;
+      default = !config.boot.isContainer;
+      description = ''
+        Whether to enable support for nixos containers.
       '';
     };
 
@@ -111,6 +120,13 @@ in
               '';
             };
 
+            autoStart = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Wether the container is automatically started at boot-time.
+              '';
+            };
           };
 
           config = mkMerge
@@ -157,7 +173,7 @@ in
   };
 
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf (config.boot.enableContainers) {
 
     systemd.services."container@" =
       { description = "Container '%i'";
@@ -187,7 +203,7 @@ in
         script =
           ''
             mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-            mkdir -p -m 0700 "$root/var/lib/private"
+            mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/containers
             if ! [ -e "$root/etc/os-release" ]; then
               touch "$root/etc/os-release"
             fi
@@ -196,7 +212,7 @@ in
               "/nix/var/nix/profiles/per-container/$INSTANCE" \
               "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
-            cp -f /etc/resolv.conf "$root/etc/resolv.conf"
+            cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --network-veth"
@@ -246,16 +262,20 @@ in
               fi
             fi
 
-            # This blocks until the container-startup-done service
-            # writes something to this pipe.  FIXME: it also hangs
-            # until the start timeout expires if systemd-nspawn exits.
-            read x < $root/var/lib/startup-done
-            rm -f $root/var/lib/startup-done
+            # Get the leader PID so that we can signal it in
+            # preStop. We can't use machinectl there because D-Bus
+            # might be shutting down. FIXME: in systemd 219 we can
+            # just signal systemd-nspawn to do a clean shutdown.
+            machinectl show "$INSTANCE" | sed 's/Leader=\(.*\)/\1/;t;d' > "/run/containers/$INSTANCE.pid"
           '';
 
         preStop =
           ''
-            machinectl poweroff "$INSTANCE" || true
+            pid="$(cat /run/containers/$INSTANCE.pid)"
+            if [ -n "$pid" ]; then
+              kill -RTMIN+4 "$pid"
+            fi
+            rm -f "/run/containers/$INSTANCE.pid"
           '';
 
         restartIfChanged = false;
@@ -277,9 +297,12 @@ in
 
           NotifyAccess = "all";
 
-          # Note that on reboot, systemd-nspawn returns 10, so this
+          # Note that on reboot, systemd-nspawn returns 133, so this
           # unit will be restarted. On poweroff, it returns 0, so the
           # unit won't be restarted.
+          RestartForceExitStatus = "133";
+          SuccessExitStatus = "133";
+
           Restart = "on-failure";
 
           # Hack: we don't want to kill systemd-nspawn, since we call
@@ -308,10 +331,11 @@ in
                 LOCAL_ADDRESS=${cfg.localAddress}
               ''}
             ''}
+           ${optionalString cfg.autoStart ''
+             AUTO_START=1
+           ''}
           '';
       }) config.containers;
-
-    # FIXME: auto-start containers.
 
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)

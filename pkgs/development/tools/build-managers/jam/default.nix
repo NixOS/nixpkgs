@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://public.perforce.com/wiki/Jam;
-    license = "free";
+    license = stdenv.lib.licenses.free;
     description = "Just Another Make";
   };
 }

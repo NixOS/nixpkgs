@@ -1,64 +1,52 @@
 { stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
-, platformTools, buildTools, support, platforms, sysimages, addons
+, platformTools, buildTools, support, supportRepository, platforms, sysimages, addons
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
 , freetype, fontconfig, glib, gtk, atk, file, jdk
 }:
-{platformVersions, abiVersions, useGoogleAPIs}:
+{platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs?false, useGooglePlayServices?false}:
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "22.6.2";
-  
+  version = "24.0.1";
+
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      md5 = "ff1541418a44d894bedc5cef10622220";
+      sha1 = "fb46b9afa04e09d3c33fa9bfee5c99e9ec6a9523";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      md5 = "2a319c862dd1dcf450bfe2a6b3d9c608";
+      sha1 = "7097c09c72645d7ad33c81a37b1a1363a9df2a54";
     }
     else throw "platform not ${stdenv.system} supported!";
-  
+
   buildCommand = ''
     mkdir -p $out/libexec
     cd $out/libexec
-    unpackFile $src;
-    
+    unpackFile $src
     cd android-sdk-*/tools
     
     ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     ''
       # There are a number of native binaries. We must patch them to let them find the interpreter and libstdc++
-    
-      for i in dmtracedump emulator emulator-arm emulator-mips emulator-x86 hprof-conv mksdcard sqlite3
+      
+      for i in emulator emulator-arm emulator-mips emulator-x86 mksdcard
       do
-          patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
-          patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib $i
+          patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+          patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
       done
-    
+      
       ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
         # We must also patch the 64-bit emulator instances, if needed
         
         for i in emulator64-arm emulator64-mips emulator64-x86
         do
-            patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.gcc.gcc}/lib64 $i
+            patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-rpath ${stdenv.cc.cc}/lib64 $i
         done
       ''}
-      
-      # These tools also need zlib in addition to libstdc++
-    
-      for i in etc1tool zipalign
-      do
-          patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
-          patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib:${zlib_32bit}/lib $i
-      done
-    
-      # The android script has a hardcoded reference to /bin/ls that must be patched
-      sed -i -e "s|/bin/ls|ls|" android
       
       # The android script used SWT and wants to dynamically load some GTK+ stuff.
       # The following wrapper ensures that they can be found:
@@ -92,11 +80,11 @@ stdenv.mkDerivation rec {
         # The monitor requires some more patching
         
         cd lib/monitor-x86
-        patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux.so.2 monitor
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 monitor
         patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.gcc.gcc}/lib
+          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib
 
         cd ../..
       ''
@@ -105,11 +93,11 @@ stdenv.mkDerivation rec {
         # The monitor requires some more patching
         
         cd lib/monitor-x86_64
-        patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2 monitor
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 monitor
         patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.gcc.gcc}/lib
+          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib
 
         cd ../..
       ''
@@ -138,6 +126,27 @@ stdenv.mkDerivation rec {
       else ""}
       
     cd ..
+
+    # Symlink required extras
+
+    mkdir -p extras/android
+    cd extras/android
+
+    ln -s ${supportRepository}/m2repository
+
+    ${if useExtraSupportLibs then
+       "ln -s ${addons.android_support_extra}/support ."
+     else ""}
+
+    cd ..
+    mkdir -p google
+    cd google
+
+    ${if useGooglePlayServices then
+       "ln -s ${addons.google_play_services}/google-play-services google_play_services"
+     else ""}
+      
+    cd ../..
 
     # Symlink required platforms
    
@@ -189,6 +198,14 @@ stdenv.mkDerivation rec {
     done
     
     for i in $out/libexec/android-sdk-*/platform-tools/*
+    do
+        if [ ! -d $i ] && [ -x $i ]
+        then
+            ln -sf $i $out/bin/$(basename $i)
+        fi
+    done
+
+    for i in $out/libexec/android-sdk-*/build-tools/android-*/*
     do
         if [ ! -d $i ] && [ -x $i ]
         then

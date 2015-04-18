@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
 , libart_lgpl, qt4, python, cups, fontconfig, libjpeg
-, zlib, libpng, xorg, cairo, podofo, aspell, boostHeaders, cmake }:
+, zlib, libpng, xorg, cairo, podofo, aspell, boost, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "scribus-1.4.3";
+  name = "scribus-1.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/scribus/scribus/${name}.tar.xz";
-    sha256 = "1zxgl2g299rllfy5ihs5skicpv7zcmz149ahraami69gqcag6bn7";
+    sha256 = "1bhp09x8rgdhyq8b516226nn0p7pxd2arkfkf2vvvklca5arsfx4";
   };
 
   enableParallelBuilding = true;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ pkgconfig cmake freetype lcms libtiff libxml2 libart_lgpl qt4
       python cups fontconfig
       libjpeg zlib libpng podofo aspell cairo
-      boostHeaders # for internal 2geom library
+      boost # for internal 2geom library
       libXaw libXext libX11 libXtst libXi libXinerama
       libpthreadstubs libXau libXdmcp
     ];

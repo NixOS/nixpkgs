@@ -12,16 +12,15 @@ let
   sourceInfo = rec {
     baseName="Regina-REXX";
     pname="regina-rexx";
-    version="3.5";
+    version = "3.9.0";
     name="${baseName}-${version}";
     url="mirror://sourceforge/${pname}/${pname}/${version}/${name}.tar.gz";
-    hash="0gh0k6lbhfixs44adha7lxirl3a08jabdylzr6m7mh5q5fhzv5f8";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "051w6i5xyjq7j9yrhw4r14kw105gpylby6z5x9v31f5g824n4mfr";
   };
 
   inherit (sourceInfo) name version;
@@ -43,11 +42,8 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.lgpl2;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/regina-rexx/files/regina-rexx/";
-    };
+    downloadPage = "http://sourceforge.net/projects/regina-rexx/files/regina-rexx/";
+    inherit version;
   };
 }) x
 

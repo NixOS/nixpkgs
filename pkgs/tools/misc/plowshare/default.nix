@@ -4,12 +4,12 @@ stdenv.mkDerivation rec {
 
   name = "plowshare4-${version}";
 
-  version = "20140714.0x5s0zn8";
+  version = "1.1.0";
 
   src = fetchgit {
     url = "https://code.google.com/p/plowshare/";
-    rev = "0b67463ca8684c3e9c93bd8164c461a41538e99f";
-    sha256 = "0x5s0zn88w2h0740n4yms6fhwbb19kjwbhaj3k9wrnz4m3112s1m";
+    rev = "87bd955e681ddda05009ca8594d727260989d5ed";
+    sha256 = "0cbsnalmr6fa1ijsn1j1p9fdqi3ii96bx3xabgvvbbqkl7q938f9";
   };
 
   buildInputs = [ makeWrapper ];

@@ -3,22 +3,6 @@
 let
   goDeps = [
     {
-      root = "code.google.com/p/go.net";
-      src = fetchhg {
-        url = "http://code.google.com/p/go.net";
-        rev = "134";
-        sha256 = "1jycpgrfwgkfac60zjbx6babcz7sgyn9xgy6cr3l811j6k8r2pbv";
-      };
-    }
-    {
-      root = "code.google.com/p/go.text";
-      src = fetchhg {
-        url = "http://code.google.com/p/go.text";
-        rev = "85";
-        sha256 = "1x8h6vq9g5gbi7iiwla6dkaaqqf7wmkdm4szj7wvzlsijf2x8dwr";
-      };
-    }
-    {
       root = "github.com/armon/circbuf";
       src = fetchFromGitHub {
         owner = "armon";
@@ -28,12 +12,30 @@ let
       };
     }
     {
+      root = "github.com/armon/consul-api";
+      src = fetchFromGitHub {
+        owner = "armon";
+        repo = "consul-api";
+        rev = "dcfedd50ed5334f96adee43fc88518a4f095e15c";
+        sha256 = "1k3yl34j4d8y6xxqdm70pjrbdcnp11dbf8i1mp60480xg0cwpb6d";
+      };
+    }
+    {
       root = "github.com/armon/go-metrics";
       src = fetchFromGitHub {
         owner = "armon";
         repo = "go-metrics";
-        rev = "02567bbc4f518a43853d262b651a3c8257c3f141";
-        sha256 = "08fk3zmw0ywmdfp2qhrpv0vrk1y97hzqczrgr3y2yip3x8sr37ar";
+        rev = "88b7658f24511c4b885942b26e9ea7a61ee37ebc";
+        sha256 = "18f7nr6khirdmcsy5mic1yggwc189wfiqvms8i7yfcvfns5nq9cc";
+      };
+    }
+    {
+      root = "github.com/armon/go-radix";
+      src = fetchFromGitHub {
+        owner = "armon";
+        repo = "go-radix";
+        rev = "e39d623f12e8e41c7b5529e9a9dd67a1e2261f80";
+        sha256 = "10vhgr35dfbsm90q8aqp82vhdf4izqrx8bzzgn0h3vrx94c2pnq1";
       };
     }
     {
@@ -41,17 +43,17 @@ let
       src = fetchFromGitHub {
         owner = "armon";
         repo = "gomdb";
-        rev = "a8e036c4dabe7437014ecf9dbc03c6f6f0766ef8";
-        sha256 = "0hiw5qkkyfd22v291w7rbnlrb4kraqzbkjfx2dvl7rqchkb0hv68";
+        rev = "151f2e08ef45cb0e57d694b2562f351955dff572";
+        sha256 = "02wdhgfarmmwfbc75snd1dh6p9k9c1y2135apdm6mkr062qlxx61";
       };
     }
     {
-      root = "github.com/armon/mdns";
+      root = "github.com/golang/protobuf";
       src = fetchFromGitHub {
-        owner = "armon";
-        repo = "mdns";
-        rev = "70462deb060d44247356ee238ebafd7699ddcffe";
-        sha256 = "0xkm3d0hsixdm1yrkx9c39723kfjkb3wvrzrmx3np9ylcwn6h5p5";
+        owner = "golang";
+        repo = "protobuf";
+        rev = "c22ae3cf020a21ebb7ae566dccbe90fc8ea4f9ea";
+        sha256 = "1ab605jw0cprq0kbp0b5iyjw805wk08r3p9mvcyland7v4gfqys2";
       };
     }
     {
@@ -59,8 +61,44 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "consul";
-        rev = "441d613e1bd96254c78c46ee7c1b35c161fc7295";
-        sha256 = "1v06ygzsvc9c02yxpxnnm407kd30fc46b2146k5zrk1v8lq0f91j";
+        rev = "a022dfcb32246274adc8fb383882353c056d1da3";
+        sha256 = "1al6bc62c8qygq4yhr8rq9jkx51ijv11816kipphylw73kyyrzg5";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-multierror";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-multierror";
+        rev = "fcdddc395df1ddf4247c69bd436e84cfa0733f7e";
+        sha256 = "1gvrm2bqi425mfg55m01z9gppfd7v4ljz1z8bykmh2sc82fj25jz";
+      };
+    }
+    {
+      root = "github.com/hashicorp/consul-template";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "consul-template";
+        rev = "v0.7.0";
+        sha256 = "0xaym2mi8j3hw1waplhqfypnxv32fi81xxx3clfzk0a6bjmaihfx";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-checkpoint";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-checkpoint";
+        rev = "88326f6851319068e7b34981032128c0b1a6524d";
+        sha256 = "1npasn9lmvx57nw3wkswwvl5k0wmn01jpalbwv832x5wq4r0nsz4";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-msgpack";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-msgpack";
+        rev = "71c2886f5a673a35f909803f38ece5810165097b";
+        sha256 = "157f24xnkhclrjwwa1b7lmpj112ynlbf7g1cfw0c657iqny5720j";
       };
     }
     {
@@ -68,8 +106,26 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "go-syslog";
-        rev = "ac3963b72ac367e48b1e68a831e62b93fb69091c";
-        sha256 = "1r9s1gsa4azcs05gx1179ixk7qvrkrik3v92wr4s8gwm00m0gf81";
+        rev = "42a2b573b664dbf281bd48c3cc12c086b17a39ba";
+        sha256 = "1j53m2wjyczm9m55znfycdvm4c8vfniqgk93dvzwy8vpj5gm6sb3";
+      };
+    }
+    {
+      root = "github.com/hashicorp/golang-lru";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "golang-lru";
+        rev = "f09f965649501e2ac1b0c310c632a7bebdbdc1d4";
+        sha256 = "0yjnmk2d2x0kqvkg1sdfkl3jr408yl76rpyqzkkbpkvdcjrz554c";
+      };
+    }
+    {
+      root = "github.com/hashicorp/hcl";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "hcl";
+        rev = "513e04c400ee2e81e97f5e011c08fb42c6f69b84";
+        sha256 = "041js0k8bj7qsgr79p207m6r3nkpw7839gq31747618sap6w3g8c";
       };
     }
     {
@@ -77,8 +133,8 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "logutils";
-        rev = "8e0820fe7ac5eb2b01626b1d99df47c5449eb2d8";
-        sha256 = "033rbkc066g657r0dnzysigjz2bs4biiz0kmiypd139d34jvslwz";
+        rev = "23b0af5510a2d1442103ef83ffcf53eb82f3debc";
+        sha256 = "018bfknmc2qdk0br1ri6dgd45sx308j3qd77sxnzxsyaivw1mm0d";
       };
     }
     {
@@ -86,8 +142,17 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "memberlist";
-        rev = "17d39b695094be943bfb98442a80b082e6b9ac47";
-        sha256 = "0nvgjnwmfqhv2wvr77d2q5mq1bfw4xbpil6wgyj4fyrmhsfzrv3g";
+        rev = "3d05e25e06bbb9e2b0e0afbd0b1c7dcebdd29cab";
+        sha256 = "1pjknjfvbs692y6laizgd4fmd4pqn039vvnmnag7q362mrpf5aj4";
+      };
+    }
+    {
+      root = "github.com/hashicorp/net-rpc-msgpackrpc";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "net-rpc-msgpackrpc";
+        rev = "d377902b7aba83dd3895837b902f6cf3f71edcb2";
+        sha256 = "05q8qlf42ygafcp8zdyx7y7kv9vpjrxnp8ak4qcszz9kgl2cg969";
       };
     }
     {
@@ -95,8 +160,8 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "raft";
-        rev = "8bdafd1e83e7d85ffeb5dc8f0857dbddd61edba5";
-        sha256 = "1yv3v0vhw5hgqqhh20jhyba2lpkkmmj80lfgf7v4vgjb0y3jqy6x";
+        rev = "a88bfa8385bc52c1f25d0fc02d1b55a2708d04ab";
+        sha256 = "02kr7919m6iv7l26wnihalfi4lydz886j6x75a53vgchdcsbv7ai";
       };
     }
     {
@@ -104,8 +169,17 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "raft-mdb";
-        rev = "70e1c88f4b6fb06fc94cc02109243160a443609d";
-        sha256 = "1031yqgb91ch79m41gl8prrymlh4y4k9yklmbv3qvxkfqirdv247";
+        rev = "4ec3694ffbc74d34f7532e70ef2e9c3546a0c0b0";
+        sha256 = "15l4n6zygwn3h118m2945h9jxkryaxxcgy8xij2rxjhzrzpfyj3i";
+      };
+    }
+    {
+      root = "github.com/hashicorp/scada-client";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "scada-client";
+        rev = "c26580cfe35393f6f4bf1b9ba55e6afe33176bae";
+        sha256 = "0s8xg49fa7d2d0vv8pi37f43rjrgkb7w6x6ydkikz1v8ccg05p3b";
       };
     }
     {
@@ -113,8 +187,17 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "serf";
-        rev = "83f220b4faa0614f49649156118b750b5b12fafb";
-        sha256 = "144a4g5yfcjv1jnl3mi4jcwy4cd970h1924cdas2s7bcdx6kpnv4";
+        rev = "f1fd5030d6a55d3edc6916d2ba58e933c21314de";
+        sha256 = "0w84iw255aray7acasacwn8njm36aqbxiyalnjqwfsn0pwfjla0b";
+      };
+    }
+    {
+      root = "github.com/hashicorp/terraform";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "terraform";
+        rev = "v0.3.7";
+        sha256 = "04cs6sjwysg95l5cfsmnpnx3d126bv86qbkg91gj8h98knk5bs6z";
       };
     }
     {
@@ -122,8 +205,8 @@ let
       src = fetchFromGitHub {
         owner = "hashicorp";
         repo = "yamux";
-        rev = "35417c7dfab4085d7c921b33e4d5ea6cf9ceef65";
-        sha256 = "02pk30dgjmp0zz5g3dcll6lf7izmpfh6fw2rp13al7771vaziqyl";
+        rev = "b4f943b3f25da97dec8e26bee1c3269019de070d";
+        sha256 = "18ivpiix006f0g085a11gra8z0n6bq344rrgc5rphn7nmnghqchz";
       };
     }
     {
@@ -136,12 +219,21 @@ let
       };
     }
     {
+      root = "github.com/matttproud/golang_protobuf_extensions";
+      src = fetchFromGitHub {
+        owner = "matttproud";
+        repo = "golang_protobuf_extensions";
+        rev = "ba7d65ac66e9da93a714ca18f6d1bc7a0c09100c";
+        sha256 = "1vz6zj94v90x8mv9h6qfp1211kmzn60ri5qh7p9fzpjkhga5k936";
+      };
+    }
+    {
       root = "github.com/miekg/dns";
       src = fetchFromGitHub {
         owner = "miekg";
         repo = "dns";
-        rev = "05cfaca9f0712f44206ecbfa65a6769434164e7a";
-        sha256 = "1qc12v5yqlsi1mg18i10pvz9g4a5diqzp73q5n4m00gyk41q855j";
+        rev = "6427527bba3ea8fdf2b56fba43d20d1e3e76336d";
+        sha256 = "1zszpn44kak4cs5lmy9i7sslizqngldgb0ixn0la9x9gxf16h9zn";
       };
     }
     {
@@ -149,8 +241,8 @@ let
       src = fetchFromGitHub {
         owner = "mitchellh";
         repo = "cli";
-        rev = "975a7477b1507ea6bb888c48108e05d26fb30434";
-        sha256 = "0gxjizg8pf5p3zj04k7cpkwf8l2q9j1j270j2bw0wv2d2pgn6z5l";
+        rev = "e3c2e3d39391e9beb9660ccd6b4bd9a2f38dd8a0";
+        sha256 = "1fwf7wmlhri19bl2yyjd4zlgndgwwqrdry45clpszzjsr8b5wfgm";
       };
     }
     {
@@ -158,8 +250,35 @@ let
       src = fetchFromGitHub {
         owner = "mitchellh";
         repo = "mapstructure";
-        rev = "6fb2c832bcac61d01212ab1d172f7a14a8585b07";
-        sha256 = "0mx855lwhv0rk461wmbnbzbpkhmq5p2ipmrm5bhzimagrr1w17hw";
+        rev = "442e588f213303bec7936deba67901f8fc8f18b1";
+        sha256 = "076svhy5jlnw4jykm3dsrx2dswifajrpr7d09mz9y6g3lg901rqd";
+      };
+    }
+    {
+      root = "github.com/prometheus/client_golang";
+      src = fetchFromGitHub {
+        owner = "prometheus";
+        repo = "client_golang";
+        rev = "0.2.0";
+        sha256 = "0iq2hlmdazwmpjq2k9gvpv2zprzxzmyzsc89c2kalrwl52ksg250";
+      };
+    }
+    {
+      root = "github.com/prometheus/client_model";
+      src = fetchFromGitHub {
+        owner = "prometheus";
+        repo = "client_model";
+        rev = "fa8ad6fec33561be4280a8f0514318c79d7f6cb6";
+        sha256 = "11a7v1fjzhhwsl128znjcf5v7v6129xjgkdpym2lial4lac1dhm9";
+      };
+    }
+    {
+      root = "github.com/prometheus/procfs";
+      src = fetchFromGitHub {
+        owner = "prometheus";
+        repo = "procfs";
+        rev = "6c34ef819e19b4e16f410100ace4aa006f0e3bf8";
+        sha256 = "1n48jhx50bhnjznxds4nmz04digbbbbjq3hkvvl29js1grylda0i";
       };
     }
     {
@@ -167,7 +286,7 @@ let
       src = fetchFromGitHub {
         owner = "ryanuber";
         repo = "columnize";
-        rev = "785d943a7b6886e0bb2f139a60487b823dd8d9de";
+        rev = "v2.0.1";
         sha256 = "1h3sxzhiwz65vf3cvclirlf6zhdr97v01dpn5cmf3m09rxxpnp3f";
       };
     }
@@ -176,51 +295,8 @@ let
       src = fetchFromGitHub {
         owner = "ugorji";
         repo = "go";
-        rev = "71c2886f5a673a35f909803f38ece5810165097b";
-        sha256 = "157f24xnkhclrjwwa1b7lmpj112ynlbf7g1cfw0c657iqny5720j";
-      };
-    }
-    {
-      root = "github.com/ugorji/go-msgpack";
-      src = fetchFromGitHub {
-        owner = "ugorji";
-        repo = "go-msgpack";
-        rev = "75092644046c5e38257395b86ed26c702dc95b92";
-        sha256 = "1bmqi16bfiqw7qhb3d5hbh0dfzhx2bbq1g15nh2pxwxckwh80x98";
-      };
-    }
-    {
-      root = "github.com/vmihailenco/bufio";
-      src = fetchFromGitHub {
-        owner = "vmihailenco";
-        repo = "bufio";
-        rev = "24e7e48f60fc2d9e99e43c07485d9fff42051e66";
-        sha256 = "0x46qnf2f15v7m0j2dcb16raxjamk5rdc7hqwgyxfr1sqmmw3983";
-      };
-    }
-    {
-      root = "github.com/vmihailenco/msgpack";
-      src = fetchFromGitHub {
-        owner = "vmihailenco";
-        repo = "msgpack";
-        rev = "20c1b88a6c7fc5432037439f4e8c582e236fb205";
-        sha256 = "1dj5scpfhgnw0yrh0w6jlrb9d03halvsv4l3wgjhazrrimdqf0q0";
-      };
-    }
-    {
-      root = "launchpad.net/gocheck";
-      src = fetchbzr {
-        url = "https://launchpad.net/gocheck";
-        rev = "87";
-        sha256 = "1y9fa2mv61if51gpik9isls48idsdz87zkm1p3my7swjdix7fcl0";
-      };
-    }
-    {
-      root = "launchpad.net/mgo";
-      src = fetchbzr {
-        url = "https://launchpad.net/mgo";
-        rev = "2";
-        sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
+        rev = "c8676e5e9db1226325ca0ed7771633fb0109878b";
+        sha256 = "18r1iajmc9a461kx0pz3lpv91lzlfg93cjw0k0j7ffk6901m0084";
       };
     }
   ];

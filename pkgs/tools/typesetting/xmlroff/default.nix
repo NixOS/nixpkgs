@@ -1,27 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, popt
-, glib, pango, libgnomeprint, pangoxsl, gtk}:
+{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, popt, perl
+, glib, pango, pangoxsl, gtk, libtool, autoconf, automake }:
 
-stdenv.mkDerivation {
-  #name = "xmlroff-0.3.5";
-  name = "xmlroff-0.3.98";
+stdenv.mkDerivation rec {
+  name = "xmlroff-${version}";
+  version = "0.6.2";
+
   src = fetchurl {
-    url = mirror://sourceforge/xmlroff/xmlroff-0.3.98.tar.gz;
-    md5 = "6c1d05b6480e98870751bf9102ea68e2";
+    url = "https://github.com/xmlroff/xmlroff/archive/v${version}.tar.gz";
+    sha256 = "1sczn6xjczsfdxlbjqv4xqlki2a95y2s8ih2nl9v1vhqfk17fiww";
   };
 
   buildInputs = [
     pkgconfig
+    autoconf
+    automake
     libxml2
     libxslt
+    libtool
     glib
     pango
-    libgnomeprint
     pangoxsl
     gtk
     popt
   ];
 
-  configureFlags = "--disable-pangoxsl";
+  configureScript = "./autogen.sh";
+
+  configureFlags = "--disable-pangoxsl --disable-gp";
+
+  preBuild = ''
+    substituteInPlace tools/insert-file-as-string.pl --replace "/usr/bin/perl" "${perl}/bin/perl"
+    substituteInPlace Makefile --replace "docs" ""
+  '';
+
+  sourceRoot = "${name}/xmlroff/";
 
   patches = [./xmlroff.patch];
 }

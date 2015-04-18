@@ -53,6 +53,7 @@ rec {
 
   # GnuPG.
   gnupg = [
+    http://gd.tuwien.ac.at/privacy/gnupg/
     ftp://gd.tuwien.ac.at/privacy/gnupg/
     ftp://gnupg.x-zone.org/pub/gnupg/
     ftp://ftp.gnupg.cz/pub/gcrypt/
@@ -136,6 +137,11 @@ rec {
     http://www.centervenus.com/mirrors/nongnu/
   ];
 
+  samba = [
+    http://samba.org/ftp/
+    http://ftp.riken.jp/net/samba
+  ];
+
   # BitlBee mirrors, see http://www.bitlbee.org/main.php/mirrors.html .
   bitlbee = [
     http://get.bitlbee.org/
@@ -147,10 +153,10 @@ rec {
 
   # ImageMagick mirrors, see http://www.imagemagick.org/script/download.php.
   imagemagick = [
-    http://ftp.nluug.nl/pub/ImageMagick/
-    ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
+    ftp://ftp.nluug.nl/pub/ImageMagick/
     ftp://ftp.imagemagick.org/pub/ImageMagick/
     ftp://ftp.imagemagick.net/pub/ImageMagick/
+    ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
   ];
 
   # CPAN mirrors.
@@ -173,6 +179,7 @@ rec {
     ftp://ftp.nl.debian.org/debian/
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
+    http://ftp.debian.org/debian/
     http://archive.debian.org/debian-archive/debian/
     ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/
   ];
@@ -188,7 +195,7 @@ rec {
   # Fedora (please only add full mirrors that carry old Fedora distributions as well).
   # See: https://mirrors.fedoraproject.org/publiclist (but not all carry old content).
   fedora = [
-    http://archives.fedoraproject.org/pub/archive/fedora/
+    http://archives.fedoraproject.org/pub/fedora/
     http://fedora.osuosl.org/
     http://ftp.nluug.nl/pub/os/Linux/distr/fedora/
     http://ftp.funet.fi/pub/mirrors/ftp.redhat.com/pub/fedora/
@@ -197,6 +204,7 @@ rec {
     http://ftp.linux.cz/pub/linux/fedora/
     http://ftp.heanet.ie/pub/fedora/
     http://mirror.1000mbps.com/fedora/
+    http://archives.fedoraproject.org/pub/archive/fedora/
   ];
 
   # Old SUSE distributions.  Unfortunately there is no master site,
@@ -260,7 +268,6 @@ rec {
 
   # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
-    http://apache.cs.uu.nl/dist/
     http://www.eu.apache.org/dist/
     ftp://ftp.inria.fr/pub/Apache/
     http://apache.cict.fr/
@@ -270,12 +277,13 @@ rec {
     http://www.apache.org/dist/
     http://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
+    http://apache.cs.uu.nl/dist/
   ];
 
   postgresql = [
+    http://ftp.postgresql.org/pub/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
-    http://ftp.postgresql.org/pub/
   ];
 
   metalab = [
@@ -288,19 +296,20 @@ rec {
   cran = [
     http://cran.r-project.org/
     http://cran.rstudio.com/
+    http://cran.usthb.dz/
     http://mirror.fcaglp.unlp.edu.ar/CRAN/
-    http://r.mirror.mendoza-conicet.gob.ar/
     http://cran.csiro.au/
     http://cran.ms.unimelb.edu.au/
     http://cran.at.r-project.org/
     http://www.freestatistics.org/cran/
+    http://nbcgib.uesc.br/mirrors/cran/
     http://cran-r.c3sl.ufpr.br/
     http://cran.fiocruz.br/
     http://www.vps.fmvz.usp.br/CRAN/
     http://brieger.esalq.usp.br/CRAN/
     http://cran.stat.sfu.ca/
     http://mirror.its.dal.ca/cran/
-    http://probability.ca/cran/
+    http://cran.utstat.utoronto.ca/
     http://cran.skazkaforyou.com/
     http://cran.parentingamerica.com/
     http://dirichlet.mat.puc.cl/
@@ -310,30 +319,38 @@ rec {
     http://mirrors.xmu.edu.cn/CRAN/
     http://www.laqee.unal.edu.co/CRAN/
     http://www.icesi.edu.co/CRAN/
+    http://mirrors.nic.cz/R/
     http://mirrors.dotsrc.org/cran/
     http://cran.espol.edu.ec/
+    http://cran.salud.gob.sv/
+    http://ftp.eenet.ee/pub/cran/
     http://cran.univ-lyon1.fr/
     http://mirror.ibcp.fr/pub/CRAN/
     http://ftp.igh.cnrs.fr/pub/CRAN/
     http://cran.irsn.fr/
     http://cran.univ-paris1.fr/
+    http://cran.cardse.net/
     http://mirrors.softliste.de/cran/
-    http://cran.r-mirror.de/
     http://ftp5.gwdg.de/pub/misc/cran/
-    http://cran.cc.uoc.gr/
+    http://cran.sciserv.eu/
+    http://cran.uni-muenster.de/
+    http://cran.cc.uoc.gr/mirrors/CRAN/
     http://cran.rapporter.net/
+    http://cran.hafro.is/
     http://ftp.iitm.ac.in/cran/
     http://cran.repo.bppt.go.id/
+    http://cran.unej.ac.id/
     http://cran.um.ac.ir/
     http://ftp.heanet.ie/mirrors/cran.r-project.org/
     http://cran.mirror.garr.it/mirrors/CRAN/
     http://cran.stat.unipd.it/
     http://dssm.unipa.it/CRAN/
-    http://essrc.hyogo-u.ac.jp/cran/
-    http://cran.md.tsukuba.ac.jp/
     http://cran.ism.ac.jp/
+    http://cran.md.tsukuba.ac.jp/
     http://cran.nexr.com/
-    http://biostat.cau.ac.kr/CRAN/
+    http://healthstat.snu.ac.kr/CRAN/
+    http://cran.biodisk.org/
+    http://rmirror.lau.edu.lb/
     http://cran.itam.mx/
     http://www.est.colpos.mx/R-mirror/
     http://cran.xl-mirror.nl/
@@ -348,15 +365,18 @@ rec {
     http://cran.fyxm.net/
     http://r.adu.org.za/
     http://cran.mirror.ac.za/
+    http://ftp.cixug.es/CRAN/
     http://cran.es.r-project.org/
     http://ftp.sunet.se/pub/lang/CRAN/
     http://stat.ethz.ch/CRAN/
-    http://cran.cs.pu.edu.tw/
+    http://ftp.yzu.edu.tw/CRAN/
     http://cran.csie.ntu.edu.tw/
     http://mirrors.psu.ac.th/pub/cran/
     http://cran.pau.edu.tr/
     http://www.stats.bris.ac.uk/R/
+    http://mirrors.ebi.ac.uk/CRAN/
     http://cran.ma.imperial.ac.uk/
+    http://mirror.mdx.ac.uk/R/
     http://star-www.st-andrews.ac.uk/cran/
     http://cran.cnr.berkeley.edu/
     http://cran.stat.ucla.edu/
@@ -376,7 +396,6 @@ rec {
     http://cran.cs.wwu.edu/
     http://camoruco.ing.uc.edu.ve/cran/
     http://cran.vinastat.com/
-    http://lib.stat.cmu.edu/
   ];
 
   # Hackage mirrors
@@ -385,4 +404,58 @@ rec {
     http://hdiff.luite.com/packages/archive/package/
   ];
 
+  # Roy marples mirrors
+  roy = [
+    http://roy.marples.name/downloads/
+    http://roy.aydogan.net/
+    http://cflags.cc/roy/
+  ];
+
+  # Sage mirrors (http://www.sagemath.org/mirrors.html)
+  sagemath = [
+    http://boxen.math.washington.edu/home/sagemath/sage-mirror/src/
+    http://echidna.maths.usyd.edu.au/sage/src/
+    http://ftp.iitm.ac.in/sage/src/
+    http://ftp.kaist.ac.kr/sage/src/
+    http://ftp.riken.jp/sagemath/src/
+    http://ftp.tsukuba.wide.ad.jp/software/sage/src/
+    http://jambu.spms.ntu.edu.sg/sage/src/
+    http://linorg.usp.br/sage/src/
+    http://mirror.aarnet.edu.au/pub/sage/src/
+    http://mirror.clibre.uqam.ca/sage/src/
+    http://mirror.hust.edu.cn/sagemath/src/
+    http://mirror.switch.ch/mirror/sagemath/src/
+    http://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/
+    http://mirrors.fe.up.pt/pub/sage/src/
+    http://mirrors.hustunique.com/sagemath/src/
+    http://mirrors.ustc.edu.cn/sagemath/src/
+    http://mirrors.xmission.com/sage/src/
+    http://sage.asis.io/src/
+    http://sage.mirror.garr.it/mirrors/sage/src/
+    http://sage.yasar.edu.tr/src/
+    http://sagemath.c3sl.ufpr.br/src/
+    http://sagemath.polytechnic.edu.na/src/
+    http://sunsite.rediris.es/mirror/sagemath/src/
+    http://www-ftp.lip6.fr/pub/math/sagemath/src/
+    http://www.mirrorservice.org/sites/www.sagemath.org/src/
+
+    # Old versions
+    http://www.cecm.sfu.ca/sage/src/
+    http://sagemath.org/src-old/
+  ];
+
+  # MySQL mirrors
+  mysql = [
+    http://mysql.mirrors.pair.com/Downloads/
+    http://cdn.mysql.com/Downloads/
+  ];
+
+  # OpenBSD mirrors
+  openbsd = [
+    http://ftp.openbsd.org/pub/OpenBSD/
+    ftp://ftp.nluug.nl/pub/OpenBSD/
+    ftp://ftp-stud.fht-esslingen.de/pub/OpenBSD/
+    ftp://ftp.halifax.rwth-aachen.de/pub/OpenBSD/
+    ftp://mirror.switch.ch/pub/OpenBSD/
+  ];
 }

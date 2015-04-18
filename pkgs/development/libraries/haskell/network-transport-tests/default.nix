@@ -4,15 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "network-transport-tests";
-  version = "0.1.0.1";
-  sha256 = "15vdkjq10mm378iyci1lpj6b77m7sil5mk3yhzf6vcbfj54pwca6";
+  version = "0.2.1.0";
+  sha256 = "17qf52a76an9ignhb85alz92j9vk3p0ydmaqys8b1ss5mkqipm64";
   buildDepends = [ ansiTerminal mtl networkTransport random ];
+  jailbreak = true;
   meta = {
-    homepage = "http://github.com/haskell-distributed/distributed-process";
+    homepage = "http://haskell-distributed.github.com";
     description = "Unit tests for Network.Transport implementations";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
-    broken = true;
   };
 })

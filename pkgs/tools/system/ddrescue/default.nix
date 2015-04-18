@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lzip }:
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.18.1";
+  name = "ddrescue-1.19";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.lz";
-    sha256 = "1ad1ifby89wys8lxh4d24y5lih6hkz54jhv6sf6bs1i7sd7lnqaq";
+    sha256 = "1f278w7i9sx45jk6fsw1kyzx743k3alx1c4w1q8sk05ckafhr3gd";
   };
 
   buildInputs = [ lzip ];

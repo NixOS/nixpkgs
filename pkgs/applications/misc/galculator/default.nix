@@ -1,6 +1,5 @@
 { stdenv, fetchurl
-, intltool, pkgconfig, gtk
- }:
+, intltool, pkgconfig, gtk }:
 
 stdenv.mkDerivation rec {
   
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool pkgconfig gtk ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A GTK 2/3 algebraic and RPN calculator";
     longDescription = ''
       galculator is a GTK 2 / GTK 3 based calculator. Its main features include:
@@ -29,7 +28,8 @@ stdenv.mkDerivation rec {
       - Quad-precision floating point arithmetic, and 112-bit binary arithmetic
     '';
     homepage = http://galculator.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }

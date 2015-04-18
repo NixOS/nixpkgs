@@ -3,18 +3,21 @@
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
 , jackaudioSupport ? false, jack2
-, cudaSupport ? false, cudatoolkit6
+, cudaSupport ? false, cudatoolkit65
+, colladaSupport ? true, opencollada
 }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.71";
+  name = "blender-2.74";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "12aqdrpl86xjk2xdwj2nbfcmdzyv61n443gw6j2japffm1kmlz8x";
+    sha256 = "178i19pz7jl79b4wn92869j6qymawsa0kaw1dxaprbjnqsvcx8qc";
   };
+
+  patches = [ ./sm52.patch ];
 
   buildInputs =
     [ SDL boost cmake ffmpeg gettext glew ilmbase libXi
@@ -22,7 +25,8 @@ stdenv.mkDerivation rec {
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ]
     ++ optional jackaudioSupport jack2
-    ++ optional cudaSupport cudatoolkit6;
+    ++ optional cudaSupport cudatoolkit65
+    ++ optional colladaSupport opencollada;
 
   postUnpack =
     ''
@@ -30,19 +34,23 @@ stdenv.mkDerivation rec {
     '';
 
   cmakeFlags =
-    [ "-DOPENEXR_INC=${openexr}/include/OpenEXR"
-      "-DWITH_OPENCOLLADA=OFF"
-      "-DWITH_MOD_OCEANSIM=ON"
+    [ "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
+      "-DWITH_FFTW3=ON"
+      "-DWITH_SDL=ON"
+      "-DWITH_GAMEENGINE=ON"
+      "-DWITH_OPENCOLORIO=ON"
+      "-DWITH_PLAYER=ON"
       "-DPYTHON_LIBRARY=python${python.majorVersion}m"
       "-DPYTHON_LIBPATH=${python}/lib"
       "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
       "-DPYTHON_VERSION=${python.majorVersion}"
     ]
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
-    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON";
+    ++ optional cudaSupport "-DWITH_CYCLES_CUDA_BINARIES=ON"
+    ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 

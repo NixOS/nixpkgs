@@ -6,7 +6,7 @@ pythonPackages.buildPythonPackage rec {
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/v/vnc2flv/${name}.tar.gz";
-    md5 = "8492e46496e187b49fe5569b5639804e";
+    sha256 = "14d4nm8yim0bm0nd3wyj7z4zdsg5zk3d9bhhvwdc36x03r8d0sbq";
   };
 
   # error: invalid command 'test'

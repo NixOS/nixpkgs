@@ -26,7 +26,6 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-libgeoip"
     "--with-libiconv"
-    "--with-boost=${boost}"
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"
@@ -34,7 +33,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf automake libtool pkgconfig python
-    boost db openssl geoip libiconv miniupnpc
+    boost db openssl geoip miniupnpc libiconv
   ];
 
   postPatch = ''

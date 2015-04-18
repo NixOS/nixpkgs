@@ -9,9 +9,10 @@
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
-, enablePepperPDF ? false
-, cupsSupport ? false
+, enableWideVine ? false
+, cupsSupport ? true
 , pulseSupport ? false
+, hiDPISupport ? false
 }:
 
 let
@@ -27,14 +28,14 @@ let
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl useOpenSSL gnomeSupport
               gnomeKeyringSupport proprietaryCodecs cupsSupport
-              pulseSupport;
+              pulseSupport hiDPISupport;
     };
 
     browser = callPackage ./browser.nix { };
     sandbox = callPackage ./sandbox.nix { };
 
     plugins = callPackage ./plugins.nix {
-      inherit enablePepperFlash enablePepperPDF;
+      inherit enablePepperFlash enableWideVine;
     };
   };
 
@@ -54,26 +55,37 @@ let
       "x-scheme-handler/ftp"
       "x-scheme-handler/mailto"
       "x-scheme-handler/webcal"
+      "x-scheme-handler/about"
+      "x-scheme-handler/unknown"
     ];
     categories = "Network;WebBrowser";
   };
 
-in stdenv.mkDerivation {
-  name = "chromium-${channel}-${chromium.browser.version}";
+  suffix = if channel != "stable" then "-" + channel else "";
 
-  buildInputs = [ makeWrapper ];
+in stdenv.mkDerivation {
+  name = "chromium${suffix}-${chromium.browser.version}";
+
+  buildInputs = [ makeWrapper ] ++ chromium.plugins.enabledPlugins;
 
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     sandboxBinary = "${chromium.sandbox}/bin/chromium-sandbox";
-  in ''
+    mkEnvVar = key: val: "--set '${key}' '${val}'";
+    envVars = chromium.plugins.settings.envVars or {};
+    isVer42 = !stdenv.lib.versionOlder chromium.browser.version "42.0.0.0";
+    flags = chromium.plugins.settings.flags or [];
+    setBinPath = "--set CHROMIUM_SANDBOX_BINARY_PATH \"${sandboxBinary}\"";
+  in with stdenv.lib; ''
     mkdir -p "$out/bin" "$out/share/applications"
 
     ln -s "${chromium.browser}/share" "$out/share"
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --set CHROMIUM_SANDBOX_BINARY_PATH "${sandboxBinary}" \
-      --add-flags "${chromium.plugins.flagsEnabled}"
+      ${optionalString (!isVer42) setBinPath} \
+      ${concatStrings (mapAttrsToList mkEnvVar envVars)} \
+      --add-flags "${concatStringsSep " " flags}"
 
+    ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
     ln -s "${chromium.browser}/share/icons" "$out/share/icons"
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';

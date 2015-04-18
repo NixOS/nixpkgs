@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, gettext, perl, LWP, gnutls ? null }:
+{ stdenv, fetchurl, gettext, libidn, pkgconfig
+, perl, perlPackages, LWP, python3
+, libiconv, gnutls ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.15";
+  name = "wget-1.16.3";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.xz";
-    sha256 = "1yw0sk4mrs7bvga3c79rkbhxivmw8cs3b5wq3cglp1f9ai1mz2ni";
+    sha256 = "0dzv5xf9qxc2bp4cyifmaghh3h464wbm73xiwcrvckf1ynqbgxv7";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./iri-test.patch;
-
   preConfigure = stdenv.lib.optionalString doCheck
-    '' for i in "doc/texi2pod.pl" "tests/run-px" "util/rmold.pl"
+    '' for i in "doc/texi2pod.pl" "util/rmold.pl"
        do
          sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
        done
@@ -21,21 +21,24 @@ stdenv.mkDerivation rec {
        do
          sed -i "$i" -e's/localhost/127.0.0.1/g'
        done
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+       export LIBS="-liconv -lintl"
     '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs =
-    stdenv.lib.optionals doCheck [ perl LWP ]
-    ++ stdenv.lib.optional (gnutls != null) gnutls;
+  buildInputs = [ libidn libiconv pkgconfig ]
+    ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
+    ++ stdenv.lib.optional (gnutls != null) gnutls
+    ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags =
     if gnutls != null
     then "--with-ssl=gnutls"
     else "--without-ssl";
 
-  doCheck = (perl != null);
+  doCheck = (perl != null && python3 != null && !stdenv.isDarwin);
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
 
     longDescription =
@@ -45,11 +48,11 @@ stdenv.mkDerivation rec {
          scripts, cron jobs, terminals without X-Windows support, etc.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/wget/;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.all;
   };
 }

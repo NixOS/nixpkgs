@@ -2,6 +2,8 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
+assert !stdenv.isDarwin;
+
 let basename = "binutils-2.23.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -36,9 +38,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "info" ];
 
-  buildInputs =
-    [ zlib ]
-    ++ optional gold bison;
+  nativeBuildInputs = optional gold bison;
+  buildInputs = [ zlib ];
 
   inherit noSysDirs;
 

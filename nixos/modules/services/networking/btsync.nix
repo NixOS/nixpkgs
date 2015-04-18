@@ -4,6 +4,9 @@ with lib;
 
 let
   cfg = config.services.btsync;
+
+  bittorrentSync = cfg.package;
+
   listenAddr = cfg.httpListenAddr + ":" + (toString cfg.httpListenPort);
 
   boolStr = x: if x then "true" else "false";
@@ -57,7 +60,7 @@ let
     ''
       {
         "device_name":     "${cfg.deviceName}",
-        "storage_path":    "/var/lib/btsync",
+        "storage_path":    "${cfg.storagePath}",
         "listening_port":  ${toString cfg.listeningPort},
         "use_gui":         false,
 
@@ -88,7 +91,7 @@ in
           use <literal>systemctl start btsync@user</literal> to start
           the daemon only for user <literal>user</literal>, using the
           configuration file located at
-          <literal>$HOME/.config/btsync.conf</literal>
+          <literal>$HOME/.config/btsync.conf</literal>.
         '';
       };
 
@@ -195,6 +198,23 @@ in
           '';
       };
 
+      package = mkOption {
+        type = types.package;
+        example = literalExample "pkgs.bittorrentSync20";
+        description = ''
+          Branch of bittorrent sync to use.
+        '';
+      };
+
+      storagePath = mkOption {
+        type = types.path;
+        default = "/var/lib/btsync";
+        example = "/var/lib/btsync";
+        description = ''
+          Where to store the bittorrent sync files.
+        '';
+      };
+
       apiKey = mkOption {
         type = types.str;
         default = "";
@@ -223,6 +243,21 @@ in
           --generate-secret</literal>. Note that this secret will be
           put inside the Nix store, so it is realistically not very
           secret.
+
+          If you would like to be able to modify the contents of this
+          directories, it is recommended that you make your user a
+          member of the <literal>btsync</literal> group.
+
+          Directories in this list should be in the
+          <literal>btsync</literal> group, and that group must have
+          write access to the directory. It is also recommended that
+          <literal>chmod g+s</literal> is applied to the directory
+          so that any sub directories created will also belong to
+          the <literal>btsync</literal> group. Also,
+          <literal>setfacl -d -m group:btsync:rwx</literal> and
+          <literal>setfacl -m group:btsync:rwx</literal> should also
+          be applied so that the sub directories are writable by
+          the group.
         '';
       };
     };
@@ -241,12 +276,19 @@ in
         }
       ];
 
+    services.btsync.package = mkOptionDefault pkgs.bittorrentSync14;
+
     users.extraUsers.btsync = {
       description     = "Bittorrent Sync Service user";
-      home            = "/var/lib/btsync";
+      home            = cfg.storagePath;
       createHome      = true;
       uid             = config.ids.uids.btsync;
+      group           = "btsync";
     };
+
+    users.extraGroups = [
+      { name = "btsync";
+      }];
 
     systemd.services.btsync = with pkgs; {
       description = "Bittorrent Sync Service";
@@ -254,6 +296,7 @@ in
       after       = [ "network.target" ];
       serviceConfig = {
         Restart   = "on-abort";
+        UMask     = "0002";
         User      = "btsync";
         ExecStart =
           "${bittorrentSync}/bin/btsync --nodaemon --config ${configFile}";
@@ -271,6 +314,6 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.bittorrentSync ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

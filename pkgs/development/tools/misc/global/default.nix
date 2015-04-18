@@ -1,29 +1,38 @@
-{ fetchurl, stdenv, libtool, ncurses }:
+{ fetchurl, stdenv, libtool, ncurses, ctags, sqlite
+, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "global-6.2.12";
+  name = "global-6.4";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "05jkhya1cs6yqhkf8nw5x56adkxxrqyga7sq7hx44dbf7alczwfa";
+    sha256 = "13i4zwx6gaibc4j79wd0hgxysw8ibxz9c018zxhydnxlyadzcnri";
   };
 
-  buildInputs = [ libtool ncurses ];
+  buildInputs = [ libtool ncurses makeWrapper ];
+  propagatedBuildInputs = [ pythonPackages.pygments ];
 
   configurePhase =
     '' ./configure --prefix="$out" --disable-static ''
     + ''--with-posix-sort=$(type -p sort) ''
     + ''--with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib ''
-    + ''--with-ncurses=${ncurses}'';
+    + ''--with-ncurses=${ncurses} ''
+    + ''--with-sqlite3=${sqlite} ''
+    + ''--with-exuberant-ctags=${ctags}/bin/ctags'';
 
   doCheck = true;
 
   postInstall = ''
     mkdir -p "$out/share/emacs/site-lisp"
     cp -v *.el "$out/share/emacs/site-lisp"
+
+    wrapProgram $out/bin/gtags \
+      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+    wrapProgram $out/bin/global \
+      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Source code tag system";
 
     longDescription = ''
@@ -37,11 +46,11 @@ stdenv.mkDerivation rec {
       operating system like GNU and BSD.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
     homepage = http://www.gnu.org/software/global/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.unix;
   };
 }

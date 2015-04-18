@@ -80,7 +80,7 @@ had booted this nixos. Run:
 *  `grep local-cmds run/current-system/init`
 
 Then you can proceed normally subscribing to a nixos channel:
-  nix-channel --add http://nixos.org/channels/nixos-unstable
+  nix-channel --add https://nixos.org/channels/nixos-unstable
   nix-channel --update
 
 Testing:

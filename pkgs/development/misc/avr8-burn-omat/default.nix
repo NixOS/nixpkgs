@@ -1,14 +1,14 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
-  name = "avr8-burn-omat-2.0.1";
+  name = "avr8-burn-omat-2.1.2";
 
   src = fetchurl {
-    url = http://avr8-burn-o-mat.brischalle.de/AVR8_Burn-O-Mat_2_0_1.zip;
-    sha256 = "0nqlrbsx7z5r3b9y9wb6b7wawa3yxwx07zn7l4g4s59scxah2skk";
+    url = http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_2_1_2.zip;
+    sha256 = "1sik243xqx7kbdddcq3va8h8q2wijf9ffhgp752hx725x3pjh9ss";
   };
 
-  buildInputs = [unzip];
+  buildInputs = [ unzip ];
 
   phases = "unpackPhase installPhase";
 
@@ -24,9 +24,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/avr8-burn-omat
   '';
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "GUI tool for avrdude";
-    homepage = http://avr8-burn-o-mat.brischalle.de/avr8_burn_o_mat_avrdude_gui_en.html;
+    homepage = http://avr8-burn-o-mat.aaabbb.de/avr8_burn_o_mat_avrdude_gui_en.html;
     license = stdenv.lib.licenses.gpl3;
+    platforms = platforms.all;
   };
 }

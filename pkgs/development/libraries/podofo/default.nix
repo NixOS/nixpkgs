@@ -11,12 +11,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ lua5 stdenv.gcc.libc ];
+  buildInputs = [ lua5 stdenv.cc.libc ];
 
   crossAttrs = {
     propagatedBuildInputs = [ zlib.crossDrv freetype.crossDrv libjpeg.crossDrv
       libtiff.crossDrv fontconfig.crossDrv openssl.crossDrv libpng.crossDrv
-      lua5.crossDrv stdenv.gccCross.libc ];
+      lua5.crossDrv stdenv.ccCross.libc ];
   };
 
   # fix finding freetype-2.5

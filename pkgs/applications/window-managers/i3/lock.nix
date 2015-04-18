@@ -14,13 +14,17 @@ stdenv.mkDerivation rec {
 
   makeFlags = "all";
   installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc";
+  postInstall = ''
+    mkdir -p $out/share/man/man1
+    cp *.1 $out/share/man/man1
+  '';
 
-  meta = {
-    description = "i3 is a tiling window manager";
-    homepage = http://i3wm.org;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+  meta = with stdenv.lib; {
+    description = "i3lock is a simple screen locker like slock";
+    homepage = http://i3wm.org/i3lock/;
+    maintainers = with maintainers; [ garbas malyn ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 
 }

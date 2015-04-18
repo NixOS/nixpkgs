@@ -23,27 +23,27 @@ stdenv.mkDerivation {
     cd bin
     for f in launcher_$arch libQtCoreUnigine_$arch.so.4 OilRush_$arch
     do
-      patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $f
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
     done
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXrender}/lib:${fontconfig}/lib:${freetype}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXrender}/lib:${fontconfig}/lib:${freetype}/lib\
              launcher_$arch
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib\
              libNetwork_$arch.so
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib\
              libQtCoreUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXrender}/lib:${fontconfig}/lib:${freetype}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXrender}/lib:${fontconfig}/lib:${freetype}/lib\
              libQtGuiUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib\
              libQtNetworkUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXrender}/lib:${fontconfig}/lib:${freetype}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXrender}/lib:${fontconfig}/lib:${freetype}/lib\
              libQtWebKitUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib\
              libQtXmlUnigine_$arch.so.4
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib\
              libRakNet_$arch.so
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXinerama}/lib:${libXrandr}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXinerama}/lib:${libXrandr}/lib\
              libUnigine_$arch.so
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXext}/lib:${libXinerama}/lib:${libXrandr}/lib\
+    patchelf --set-rpath ${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXinerama}/lib:${libXrandr}/lib\
              OilRush_$arch
   '';
   installPhase = ''

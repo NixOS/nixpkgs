@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/dex4er/fakechroot/archive/${version}.tar.gz";
-    md5 = "e614f62972efa4654fc780ae7e4affad";
+    sha256 = "0z4cxj4lb8cfb63sw82dbc31hf082fv3hshbmhk49cqkc0f673q3";
   };
 
   meta = with stdenv.lib; {

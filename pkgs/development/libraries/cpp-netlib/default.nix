@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A collection of open-source libraries for high level network programming";
     homepage    = http://cpp-netlib.org;
-    license     = stdenv.lib.licenses.boost;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-    platforms   = stdenv.lib.platforms.all;
+    license     = licenses.boost;
+    maintainers = with maintainers; [ shlevy ];
+    platforms   = platforms.all;
   };
 }

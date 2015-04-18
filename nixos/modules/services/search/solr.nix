@@ -22,7 +22,7 @@ let
       cp common/lib/*.jar $out/lib/
       ln -s ${pkgs.ant}/lib/ant/lib/ant.jar $out/lib/
       ln -s ${cfg.solrPackage}/lib/ext/* $out/lib/
-      ln -s ${pkgs.openjdk}/lib/openjdk/lib/tools.jar $out/lib/
+      ln -s ${pkgs.jdk.home}/lib/tools.jar $out/lib/
     '' + optionalString (cfg.extraJars != []) ''
       for f in ${concatStringsSep " " cfg.extraJars}; do
          cp $f $out/lib
@@ -44,7 +44,7 @@ in {
 
       javaPackage = mkOption {
         type = types.package;
-        default = pkgs.openjre;
+        default = pkgs.jre;
         description = ''
           Which Java derivation to use for running solr.
         '';

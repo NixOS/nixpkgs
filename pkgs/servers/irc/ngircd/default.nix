@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, openssl, pam, libiconvOrNull }:
+{ stdenv, fetchurl, zlib, openssl, pam, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "ngircd-21";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--with-iconv"
   ];
 
-  buildInputs = [ zlib pam openssl libiconvOrNull ];
+  buildInputs = [ zlib pam openssl libiconv ];
 
   meta = {
     description = "Next Generation IRC Daemon";

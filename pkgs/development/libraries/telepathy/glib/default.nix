@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig libxslt] ++ stdenv.lib.optional valaSupport vala;
 
+  preConfigure = ''
+    substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires
+  '';
+
   meta = {
     homepage = http://telepathy.freedesktop.org;
   };

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, emacs, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "ess-13.09";
+  name = "ess-14.09";
 
   src = fetchurl {
     url = "http://ess.r-project.org/downloads/ess/${name}.tgz";
-    sha256 = "1lki3vb6p7cw98zqq0gaia68flpqrjkd6dcl85fs0cc8qf55yqnh";
+    sha256 = "0wa507jfmq3k7x0vigd2yzb4j2190ix4wnnpv7ql4bjy0vfvmwdn";
   };
 
   buildInputs = [ emacs texinfo ];

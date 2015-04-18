@@ -12,9 +12,9 @@ let
       sha256 = hash;
     };
 
-    configurePhase = "make dep";
+    configurePhase = "make dep CC=$CC";
 
-    buildPhase = "make OPTIM='-DNDEBUG -O3'";
+    buildPhase = "make OPTIM='-DNDEBUG -O3' CC=$CC";
 
     installPhase = ''
       make INSTBASEDIR=$out install

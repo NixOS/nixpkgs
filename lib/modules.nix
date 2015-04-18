@@ -9,28 +9,72 @@ rec {
 
   /* Evaluate a set of modules.  The result is a set of two
      attributes: ‘options’: the nested set of all option declarations,
-     and ‘config’: the nested set of all option values. */
-  evalModules = { modules, prefix ? [], args ? {}, check ? true }:
+     and ‘config’: the nested set of all option values.
+     !!! Please think twice before adding to this argument list! The more
+     that is specified here instead of in the modules themselves the harder
+     it is to transparently move a set of modules to be a submodule of another
+     config (as the proper arguments need to be replicated at each call to
+     evalModules) and the less declarative the module set is. */
+  evalModules = { modules
+                , prefix ? []
+                , # This would be remove in the future, Prefer _module.args option instead.
+                  args ? {}
+                , # This would be remove in the future, Prefer _module.check option instead.
+                  check ? true
+                }:
     let
-      args' = args // { lib = import ./.; } // result;
-      closed = closeModules modules args';
+      # This internal module declare internal options under the `_module'
+      # attribute.  These options are fragile, as they are used by the
+      # module system to change the interpretation of modules.
+      internalModule = rec {
+        _file = ./modules.nix;
+
+        key = _file;
+
+        options = {
+          _module.args = mkOption {
+            type = types.attrsOf types.unspecified;
+            internal = true;
+            description = "Arguments passed to each module.";
+          };
+
+          _module.check = mkOption {
+            type = types.uniq types.bool;
+            internal = true;
+            default = check;
+            description = "Whether to check whether all option definitions have matching declarations.";
+          };
+        };
+
+        config = {
+          _module.args = args;
+        };
+      };
+
+      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
+
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
       options = mergeModules prefix (reverseList closed);
+
       # Traverse options and extract the option values into the final
       # config set.  At the same time, check whether all option
       # definitions have matching declarations.
+      # !!! _module.check's value can't depend on any other config values
+      # without an infinite recursion. One way around this is to make the
+      # 'config' passed around to the modules be unconditionally unchecked,
+      # and only do the check in 'result'.
       config = yieldConfig prefix options;
       yieldConfig = prefix: set:
         let res = removeAttrs (mapAttrs (n: v:
           if isOption v then v.value
           else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
         in
-        if check && set ? _definedNames then
+        if options._module.check.value && set ? _definedNames then
           fold (m: res:
             fold (name: res:
-              if hasAttr name set then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
+              if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
               res m.names)
             res set._definedNames
         else
@@ -43,7 +87,7 @@ rec {
     let
       toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || isFunction x then
-          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (applyIfFunction x args)
+          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (unpackSubmodule applyIfFunction x args)
         else
           unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
     in
@@ -58,7 +102,7 @@ rec {
     if m ? config || m ? options then
       let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file"]; in
       if badAttrs != {} then
-        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'."
+        throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
         { file = m._file or file;
           key = toString m.key or key;
@@ -74,7 +118,39 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg: if isFunction f then f arg else f;
+  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+    let
+      # Module arguments are resolved in a strict manner when attribute set
+      # deconstruction is used.  As the arguments are now defined with the
+      # config._module.args option, the strictness used on the attribute
+      # set argument would cause an infinite loop, if the result of the
+      # option is given as argument.
+      #
+      # To work-around the strictness issue on the deconstruction of the
+      # attributes set argument, we create a new attribute set which is
+      # constructed to satisfy the expected set of attributes.  Thus calling
+      # a module will resolve strictly the attributes used as argument but
+      # not their values.  The values are forwarding the result of the
+      # evaluation of the option.
+      requiredArgs = builtins.attrNames (builtins.functionArgs f);
+      extraArgs = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = config._module.args.${name};
+      }) requiredArgs);
+    in f (extraArgs // arg)
+  else
+    f;
+
+  /* We have to pack and unpack submodules. We cannot wrap the expected
+     result of the function as we would no longer be able to list the arguments
+     of the submodule. (see applyIfFunction) */
+  unpackSubmodule = unpack: m: args:
+    if isType "submodule" m then
+      { _file = m.file; } // (unpack m.submodule args)
+    else unpack m args;
+
+  packSubmodule = file: m:
+    { _type = "submodule"; file = file; submodule = m; };
 
   /* Merge a list of modules.  This will recurse over the option
      declarations in all modules, combining them into a single set.
@@ -94,24 +170,21 @@ rec {
           loc = prefix ++ [name];
           # Get all submodules that declare ‘name’.
           decls = concatLists (map (m:
-            if hasAttr name m.options
-              then [ { inherit (m) file; options = getAttr name m.options; } ]
+            if m.options ? ${name}
+              then [ { inherit (m) file; options = m.options.${name}; } ]
               else []
             ) options);
           # Get all submodules that define ‘name’.
           defns = concatLists (map (m:
-            if hasAttr name m.config
+            if m.config ? ${name}
               then map (config: { inherit (m) file; inherit config; })
-                (pushDownProperties (getAttr name m.config))
+                (pushDownProperties m.config.${name})
               else []
             ) configs);
           nrOptions = count (m: isOption m.options) decls;
-          # Process mkMerge and mkIf properties.
-          defns' = concatMap (m:
-            if hasAttr name m.config
-              then map (m': { inherit (m) file; value = m'; }) (dischargeProperties (getAttr name m.config))
-              else []
-            ) configs;
+          # Extract the definitions for this loc
+          defns' = map (m: { inherit (m) file; value = m.config.${name}; })
+            (filter (m: m.config ? ${name}) configs);
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -132,20 +205,41 @@ rec {
      The exception is the ‘options’ attribute, which specifies
      sub-options.  These can be specified multiple times to allow one
      module to add sub-options to an option declared somewhere else
-     (e.g. multiple modules define sub-options for ‘fileSystems’). */
+     (e.g. multiple modules define sub-options for ‘fileSystems’).
+
+     'loc' is the list of attribute names where the option is located.
+
+     'opts' is a list of modules.  Each module has an options attribute which
+     correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls = loc: opts:
     fold (opt: res:
       if opt.options ? default && res ? default ||
          opt.options ? example && res ? example ||
          opt.options ? description && res ? description ||
          opt.options ? apply && res ? apply ||
-         opt.options ? type && res ? type
+         # Accept to merge options which have identical types.
+         opt.options ? type && res ? type && opt.options.type.name != res.type.name
       then
         throw "The option `${showOption loc}' in `${opt.file}' is already declared in ${showFiles res.declarations}."
       else
-        opt.options // res //
+        let
+          /* Add the modules of the current option to the list of modules
+             already collected.  The options attribute except either a list of
+             submodules or a submodule. For each submodule, we add the file of the
+             current option declaration as the file use for the submodule.  If the
+             submodule defines any filename, then we ignore the enclosing option file. */
+          options' = toList opt.options.options;
+          coerceOption = file: opt:
+            if isFunction opt then packSubmodule file opt
+            else packSubmodule file { options = opt; };
+          getSubModules = opt.options.type.getSubModules or null;
+          submodules =
+            if getSubModules != null then map (packSubmodule opt.file) getSubModules ++ res.options
+            else if opt.options ? options then map (coerceOption opt.file) options' ++ res.options
+            else res.options;
+        in opt.options // res //
           { declarations = [opt.file] ++ res.declarations;
-            options = if opt.options ? options then [(toList opt.options.options ++ res.options)] else [];
+            options = submodules;
           }
     ) { inherit loc; declarations = []; options = []; } opts;
 
@@ -153,27 +247,17 @@ rec {
      config value. */
   evalOptionValue = loc: opt: defs:
     let
-      # Process mkOverride properties, adding in the default
-      # value specified in the option declaration (if any).
-      defsFinal' = filterOverrides
-        ((if opt ? default then [{ file = head opt.declarations; value = mkOptionDefault opt.default; }] else []) ++ defs);
-      # Sort mkOrder properties.
-      defsFinal =
-        # Avoid sorting if we don't have to.
-        if any (def: def.value._type or "" == "order") defsFinal'
-        then sortProperties defsFinal'
-        else defsFinal';
+      # Add in the default value for this option, if any.
+      defs' = (optional (opt ? default)
+        { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+
+      # Handle properties, check types, and merge everything together
+      inherit (mergeDefinitions loc opt.type defs') isDefined defsFinal mergedValue;
       files = map (def: def.file) defsFinal;
-      # Type-check the remaining definitions, and merge them if
-      # possible.
       merged =
-        if defsFinal == [] then
-          throw "The option `${showOption loc}' is used but not defined."
-        else
-          fold (def: res:
-            if opt.type.check def.value then res
-            else throw "The option value `${showOption loc}' in `${def.file}' is not a ${opt.type.name}.")
-            (opt.type.merge loc defsFinal) defsFinal;
+        if isDefined then mergedValue
+        else throw "The option `${showOption loc}' is used but not defined.";
+
       # Finally, apply the ‘apply’ function to the merged
       # value.  This allows options to yield a value computed
       # from the definitions.
@@ -181,9 +265,41 @@ rec {
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
         definitions = map (def: def.value) defsFinal;
-        isDefined = defsFinal != [];
-        inherit files;
+        inherit isDefined files;
       };
+
+    # Merge definitions of a value of a given type
+    mergeDefinitions = loc: type: defs: rec {
+      defsFinal =
+        let
+          # Process mkMerge and mkIf properties
+          processIfAndMerge = defs: concatMap (m:
+            map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
+          ) defs;
+
+          # Process mkOverride properties
+          processOverride = defs: filterOverrides defs;
+
+          # Sort mkOrder properties
+          processOrder = defs:
+            # Avoid sorting if we don't have to.
+            if any (def: def.value._type or "" == "order") defs
+            then sortProperties defs
+            else defs;
+        in
+          processOrder (processOverride (processIfAndMerge defs));
+
+        # Type-check the remaining definitions, and merge them
+        mergedValue = fold (def: res:
+          if type.check def.value then res
+          else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
+          (type.merge loc defsFinal) defsFinal;
+
+        isDefined = defsFinal != [];
+        optionalValue =
+          if isDefined then { value = mergedValue; }
+          else {};
+    };
 
   /* Given a config set, expand mkMerge properties, and push down the
      other properties into the children.  The result is a list of
@@ -254,7 +370,7 @@ rec {
     let
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
-      min = x: y: if builtins.lessThan x y then x else y;
+      min = x: y: if x < y then x else y;
       highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
@@ -273,23 +389,24 @@ rec {
     in sort compare defs';
 
   /* Hack for backward compatibility: convert options of type
-     optionSet to configOf.  FIXME: remove eventually. */
+     optionSet to options of type submodule.  FIXME: remove
+     eventually. */
   fixupOptionType = loc: opt:
     let
-      options' = opt.options or
-        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute.");
-      coerce = x:
-        if isFunction x then x
-        else { config, ... }: { options = x; };
-      options = map coerce (flatten options');
+      options = opt.options or
+        (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
       f = tp:
-        if tp.name == "option set" then types.submodule options
+        if tp.name == "option set" || tp.name == "submodule" then
+          throw "The option ${showOption loc} uses submodules without a wrapping type, in ${showFiles opt.declarations}."
         else if tp.name == "attribute set of option sets" then types.attrsOf (types.submodule options)
         else if tp.name == "list or attribute set of option sets" then types.loaOf (types.submodule options)
         else if tp.name == "list of option sets" then types.listOf (types.submodule options)
         else if tp.name == "null or option set" then types.nullOr (types.submodule options)
         else tp;
-    in opt // { type = f (opt.type or types.unspecified); };
+    in
+      if opt.type.getSubModules or null == null
+      then opt // { type = f (opt.type or types.unspecified); }
+      else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
   /* Properties. */
@@ -330,6 +447,31 @@ rec {
 
   mkBefore = mkOrder 500;
   mkAfter = mkOrder 1500;
+
+  # Convenient property used to transfer all definitions and their
+  # properties from one option to another. This property is useful for
+  # renaming options, and also for including properties from another module
+  # system, including sub-modules.
+  #
+  #   { config, options, ... }:
+  #
+  #   {
+  #     # 'bar' might not always be defined in the current module-set.
+  #     config.foo.enable = mkAliasDefinitions (options.bar.enable or {});
+  #
+  #     # 'barbaz' has to be defined in the current module-set.
+  #     config.foobar.paths = mkAliasDefinitions options.barbaz.paths;
+  #   }
+  #
+  # Note, this is different than taking the value of the option and using it
+  # as a definition, as the new definition will not keep the mkOverride /
+  # mkDefault properties of the previous option.
+  #
+  mkAliasDefinitions = mkAliasAndWrapDefinitions id;
+  mkAliasAndWrapDefinitions = wrap: option:
+    mkMerge
+      (optional (isOption option && option.isDefined)
+        (wrap (mkMerge option.definitions)));
 
 
   /* Compatibility. */

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.4.1";
+  version = "1.4.4";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "0gkmf2jj1rab81y10dp8cirr90kv9dpr3ww4wb06j8cvgapy7b0z";
+    sha256 = "1xykqb5bx2dzffxhvm4cbn1nf72f7zcdz8hy25i5wky4hfw31x3h";
   };
 
   buildInputs = [ SDL libpng pkgconfig xz zlib freetype fontconfig ];
@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-zlib=${zlib}/lib/libz.a"
     "--without-liblzo2"
+  ];
+
+  # NOTE: Remove this patch in 1.4.5 or greater
+  patches = [
+    # Adapted from svn r27079
+    ./fix-freetype-1.4.4.patch
   ];
 
   makeFlags = "INSTALL_PERSONAL_DIR=";
@@ -32,7 +38,7 @@ stdenv.mkDerivation rec {
 
       In multiplayer networked mode, players may:
         - play competitively as different businesses
-        - play cooperatively controling the same business
+        - play cooperatively controlling the same business
         - observe as spectators
     '';
     homepage = http://www.openttd.org/;

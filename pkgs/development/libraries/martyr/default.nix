@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 	builder = ./builder.sh;
 	src = fetchurl {
 		url = "mirror://sourceforge/martyr/martyr-0.3.9.tar.gz";
-		md5 = "b716a6aaabd5622b65d6126438766260";
+		sha256 = "1ks8j413bcby345kmq1i7av8kwjvz5vxdn1zpv0p7ywxq54i4z59";
 	};
 	inherit stdenv apacheAnt;
 }

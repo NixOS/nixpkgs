@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
     libctemplate libglade libgnome libiodbc libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
-    mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
+    mysql.lib paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
     substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/mysql-workbench" \
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64" \
+      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64" \
       --prefix PATH : "${gnome_keyring}/bin" \
       --prefix PATH : "${python}/bin" \
       --set PYTHONPATH $PYTHONPATH \

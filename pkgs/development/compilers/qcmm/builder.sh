@@ -16,7 +16,7 @@ installPhase() {
     mv $file ${file%.opt}
   done
 
-  find $out/man -type f -exec gzip -9 {} \;
+  find $out/man -type f -exec gzip -9n {} \;
 
   find $out -name \*.a -exec echo stripping {} \; \
             -exec strip -S {} \;

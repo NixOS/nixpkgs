@@ -1,21 +1,31 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, enableThreading ? stdenv ? glibc }:
+
+# We can only compile perl with threading on platforms where we have a
+# real glibc in the stdenv.
+#
+# Instead of silently building an unthreaded perl if this is not the
+# case, we force callers to disableThreading explicitly, therefore
+# documenting the platforms where the perl is not threaded.
+#
+# In the case of stdenv linux boot stage1 it's not possible to use
+# threading because of the simpleness of the bootstrap glibc, so we
+# use enableThreading = false there.
+assert enableThreading -> (stdenv ? glibc);
 
 let
 
-  libc = if stdenv.gcc.libc or null != null then stdenv.gcc.libc else "/usr";
+  libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
 
 in
 
-with {
-  inherit (stdenv.lib) optional optionalString;
-};
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "perl-5.20.0";
+  name = "perl-5.20.2";
 
   src = fetchurl {
-    url = "mirror://cpan/src/${name}.tar.gz";
-    sha256 = "00ndpgw4bjing9gy2y6jvs3q46mv2ll6zrxjkhpr12fcdsnji32f";
+    url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
+    sha256 = "17cvplgpxbm1hshxlkra2fldn4da1iap1lsnb04hdm8ply93k95i";
   };
 
   patches =
@@ -32,14 +42,14 @@ stdenv.mkDerivation rec {
   # Miniperl needs -lm. perl needs -lrt.
   configureFlags =
     [ "-de"
-      "-Dcc=gcc"
+      "-Dcc=cc"
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
       "-Dlocincpth=${libc}/include"
       "-Dloclibpth=${libc}/lib"
     ]
-    ++ optional (stdenv ? glibc) "-Dusethreads";
+    ++ optional enableThreading "-Dusethreads";
 
   configureScript = "${stdenv.shell} ./Configure";
 
@@ -54,9 +64,11 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isArm ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
       ''}
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
     '';
 
-  preBuild = optionalString (!(stdenv ? gcc && stdenv.gcc.nativeTools))
+  preBuild = optionalString (!(stdenv ? cc && stdenv.cc.nativeTools))
     ''
       # Make Cwd work on NixOS (where we don't have a /bin/pwd).
       substituteInPlace dist/PathTools/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
@@ -65,4 +77,11 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru.libPrefix = "lib/perl5/site_perl";
+
+  meta = {
+    homepage = https://www.perl.org/;
+    description = "The standard implementation of the Perl 5 programmming language";
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
+  };
 }

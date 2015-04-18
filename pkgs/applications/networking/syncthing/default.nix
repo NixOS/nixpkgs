@@ -1,45 +1,32 @@
-{ stdenv, fetchurl, fetchgit, go }:
+{ lib, fetchgit, goPackages }:
 
-stdenv.mkDerivation rec {
+with goPackages;
+
+buildGoPackage rec {
   name = "syncthing-${version}";
-  version = "0.8.15";
-
+  version = "0.10.30";
+  goPackagePath = "github.com/syncthing/syncthing";
   src = fetchgit {
-    url = "git://github.com/calmh/syncthing.git";
+    url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0xv8kaji60zqxws72srh5hdi9fyvaipdcsawp6gcyahhr3cz0ddq";
+    sha256 = "bd554d42586c85e0a5e766b6a6e87ccc6047f30e189753a1e68e44fd54ca506a";
   };
 
-  buildInputs = [ go ];
+  subPackages = [ "cmd/syncthing" ];
 
-  buildPhase = ''
-    mkdir -p "./dependencies/src/github.com/calmh/syncthing"
+  buildFlagsArray = "-ldflags=-w -X main.Version v${version}";
 
-    for a in auto buffers cid discover files lamport protocol scanner \
-            logger beacon config xdr upnp model osutil versioner; do
-        cp -r "./$a" "./dependencies/src/github.com/calmh/syncthing"
-    done
+  preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
 
-    export GOPATH="`pwd`/Godeps/_workspace:`pwd`/dependencies"
+  doCheck = true;
 
-    go test -cpu=1,2,4 ./...
-
-    mkdir ./bin
-
-    go build -o ./bin/syncthing -ldflags "-w -X main.Version v${version}" ./cmd/syncthing
-    go build -o ./bin/stcli -ldflags "-w -X main.Version v${version}" ./cmd/stcli
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r ./bin $out
-  '';
+  dontInstallSrc = true;
 
   meta = {
     homepage = http://syncthing.net/;
     description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
-    license = with stdenv.lib.licenses; mit;
-    maintainers = with stdenv.lib.maintainers; [ matejc ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [ matejc ];
+    platforms = with lib.platforms; unix;
   };
 }

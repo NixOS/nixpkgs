@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   name = "transmission-" + optionalString enableGTK3 "gtk-" + version;
 
   src = fetchurl {
-    url = "http://download.transmissionbt.com/files/transmission-${version}.tar.xz";
+    url = "https://transmission.cachefly.net/transmission-${version}.tar.xz";
     sha256 = "1sxr1magqb5s26yvr5yhs1f7bmir8gl09niafg64lhgfnhv1kz59";
   };
 

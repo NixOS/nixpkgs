@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
 
     homepage = http://www.gnu.org/software/guix;

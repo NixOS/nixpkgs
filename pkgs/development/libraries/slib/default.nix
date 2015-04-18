@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       provides a platform independent framework for using packages of Scheme
       procedures and syntax.  As distributed, SLIB contains useful packages
       for all Scheme implementations.  Its catalog can be transparently
-      extended to accomodate packages specific to a site, implementation,
+      extended to accommodate packages specific to a site, implementation,
       user, or directory.
 
       SLIB supports Bigloo, Chez, ELK 3.0, Gambit 4.0, Guile, JScheme, Kawa,
@@ -52,10 +52,10 @@ stdenv.mkDerivation rec {
     '';
 
     # Public domain + permissive (non-copyleft) licensing of some files.
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
 
     homepage = http://people.csail.mit.edu/jaffer/SLIB;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
   };
 }

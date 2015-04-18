@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "formatting";
-  version = "5.2";
-  sha256 = "0lmbzm98idy7bzpvaqnk9j6181vakk553smqkf959gn5jdj95z3k";
+  version = "5.4";
+  sha256 = "017fm3pqr2nqpcqmpldr74cvb641hxvybhvnwv8a8vv4ry1vdrk9";
   buildDepends = [ scientific text textFormat time ];
   meta = {
     description = "Combinator-based type-safe formatting (like printf() or FORMAT)";

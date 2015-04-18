@@ -1,6 +1,6 @@
 
 { stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, libxslt, gtk3, libnotify,
-gnome-menus, libxml2, systemd, upower, cinnamon-settings-daemon, colord, polkit, ibus, libcanberra_gtk3, pulseaudio, isocodes, krb5,
+gnome-menus, libxml2, systemd, upower, cinnamon-settings-daemon, colord, polkit, ibus, libcanberra_gtk3, pulseaudio, isocodes, kerberos,
 libxkbfile}:
 
 let
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     libnotify gnome-menus libxml2 systemd
     upower cinnamon-settings-daemon colord
     polkit ibus libcanberra_gtk3 pulseaudio
-    isocodes krb5 libxkbfile ];
+    isocodes kerberos libxkbfile ];
 
   preBuild = "patchShebangs ./scripts";
 

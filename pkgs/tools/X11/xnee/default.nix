@@ -2,11 +2,12 @@
 , gtk, libXi, inputproto, pkgconfig, recordproto, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "xnee-3.12";
+  version = "3.19";
+  name = "xnee-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/xnee/${name}.tar.gz";
-    sha256 = "10vxn0in0l2jir6x90grx5jc64x63l3b0f8liladdbplc8za8zmw";
+    sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 
   patchPhase =
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/xnee/;
 
-    maintainers = [ ];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

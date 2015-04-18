@@ -10,6 +10,8 @@
 , sqlite
 , tcl, tk
 , zlib
+, callPackage
+, self
 }:
 
 assert readline != null -> ncurses != null;
@@ -18,7 +20,8 @@ with stdenv.lib;
 
 let
   majorVersion = "3.4";
-  version = "${majorVersion}.1";
+  pythonVersion = majorVersion;
+  version = "${majorVersion}.3";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
@@ -27,11 +30,12 @@ let
 in
 stdenv.mkDerivation {
   name = "python3-${fullVersion}";
+  pythonVersion = majorVersion;
   inherit majorVersion version;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "1i7dgbzyvj24i6gfhb5q2zwr9nn1ni6w1ig1rcgh96a321is35f5";
+    sha256 = "1f4nm4z08sy0kqwisvv95l02crv6dyysdmx44p1mz3bn6csrdcxm";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
@@ -40,7 +44,10 @@ stdenv.mkDerivation {
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-    ${optionalString stdenv.isDarwin ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"''}
+    ${optionalString stdenv.isDarwin ''
+       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
+       export MACOSX_DEPLOYMENT_TARGET=10.6
+     ''}
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${p}/include") buildInputs)}"
@@ -52,9 +59,18 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
-    rm -rf "$out/lib/python${majorVersion}/test"
-    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
+    # needed for some packages, especially packages that backport functionality
+    # to 2.x from 3.x
+    for item in $out/lib/python${majorVersion}/test/*; do
+      if [[ "$item" != */test_support.py* ]]; then
+        rm -rf "$item"
+      else
+        echo $item
+      fi
+    done
+    touch $out/lib/python${majorVersion}/test/__init__.py
 
+    ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
     paxmark E $out/bin/python${majorVersion}
   '';
 
@@ -67,10 +83,12 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.4m";
+    buildEnv = callPackage ../wrapper.nix { python = self; };
     isPy3 = true;
     isPy34 = true;
     is_py3k = true;  # deprecated
     sitePackages = "lib/${libPrefix}/site-packages";
+    interpreter = "${self}/bin/${executable}";
   };
 
   enableParallelBuilding = true;

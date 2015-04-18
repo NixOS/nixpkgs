@@ -21,3 +21,6 @@ mount --rbind /run $chrootenvDest/run
 
 # Bind mount the host system's /etc
 mount --bind /etc $chrootenvDest/host-etc
+
+# Bind mount /tmp
+mount --bind /tmp/chrootenv-@name@ $chrootenvDest/tmp

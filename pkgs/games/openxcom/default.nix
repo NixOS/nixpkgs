@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, mesa, zlib, openssl, libyamlcpp, boostHeaders
+{stdenv, fetchurl, cmake, mesa, zlib, openssl, libyamlcpp, boost
 , SDL, SDL_image, SDL_mixer, SDL_gfx }:
 
 let version = "1.0.0"; in
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     name = "openxcom-${version}.tar.gz";
   };
 
-  buildInputs = [ cmake mesa zlib openssl libyamlcpp boostHeaders
+  buildInputs = [ cmake mesa zlib openssl libyamlcpp boost
     SDL SDL_image SDL_mixer SDL_gfx ];
 
   meta = {

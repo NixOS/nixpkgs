@@ -1,0 +1,5 @@
+kcminputrc Mouse cursorTheme 'breeze_cursors'
+kcminputrc Mouse cursorSize ''
+ksplashrc KSplash Theme Breeze
+ksplashrc KSplash Engine KSplashQML
+kcmfonts General forceFontDPI 0

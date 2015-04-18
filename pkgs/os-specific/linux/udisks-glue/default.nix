@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     description = "A tool to associate udisks events to user-defined actions";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [pSub];
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "ats-${version}";
-  version = "0.2.11";
+  version = "0.2.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/ats-lang/ats-lang-anairiats-${version}.tgz";
-    sha256 = "0rqykyx5whichx85jr4l4c9fdan0qsdd4kwd7a81k3l07zbd9fc6";
+    sha256 = "0l2kj1fzhxwsklwmn5yj2vp9rmw4jg0b18bzwqz72bfi8i39736k";
   };
 
   # this is necessary because atxt files usually include some .hats files
@@ -17,7 +17,9 @@ stdenv.mkDerivation rec {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
     license     = stdenv.lib.licenses.gpl3Plus;
-    platforms   = stdenv.lib.platforms.unix;
+    # TODO: it looks like ATS requires gcc specifically. Someone with more knowledge
+    # will need to experiment.
+    platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

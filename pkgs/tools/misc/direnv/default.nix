@@ -1,14 +1,14 @@
 { fetchurl, stdenv, go }:
 
 let
-  version = "2.4.0";
+  version = "2.6.0";
 in
 stdenv.mkDerivation {
   name = "direnv-${version}";
   src = fetchurl {
     url = "http://github.com/zimbatm/direnv/archive/v${version}.tar.gz";
     name = "direnv-${version}.tar.gz";
-    sha256 = "aab8028cc1d68461dd1f6c3c9d000eef10273c52399fe5d1dd917f2f4a1a349a";
+    sha256 = "b85aac4d6a4ddf2daf193aabb3b2faf89e56507d33d763ab74cc7eb0b524ac03";
   };
 
   buildInputs = [ go ];

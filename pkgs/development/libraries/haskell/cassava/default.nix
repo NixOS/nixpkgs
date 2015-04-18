@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cassava";
-  version = "0.4.1.0";
-  sha256 = "0whky3mavmprr8cgnzlg2ich99w09bdlks8rg6z9m1x86q66ivw2";
+  version = "0.4.2.0";
+  sha256 = "1v1izdjd4maqrlpm4cf2xpackpjp1i4vg1s7mzq90dwa6r9572x3";
   buildDepends = [
     attoparsec blazeBuilder deepseq text unorderedContainers vector
   ];

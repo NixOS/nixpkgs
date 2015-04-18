@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "byobu-5.68";
+  name = "byobu-5.87";
 
   src = fetchurl {
-    url = "https://launchpad.net/byobu/trunk/5.68/+download/byobu_5.68.orig.tar.gz";
-    sha256 = "1xf2m18zx3075c0qvx4fzvn5afm274j5dl0jps7p2lbaq4k1lyhm";
+    url = "https://launchpad.net/byobu/trunk/5.87/+download/byobu_5.87.orig.tar.gz";
+    sha256 = "08v9y5hxb92caf5zp83fiq0jfwi167vw1ylf42s65x1ng8rvryqh";
   };
 
   doCheck = true;

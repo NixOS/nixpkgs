@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0bxqxzd5sd7siz57vhzb8bmiz1ddhgdv49gcsmwwfmd16mj4cryi";
   };
 
-  buildInputs = [ ocaml findlib ocamlPackages.lablgtk ];
+  buildInputs = [ ocaml findlib ocamlPackages.lablgtk ocamlPackages.camlp4 ];
 
   patches = ./destdir.patch;
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://ocamlgraph.lri.fr/;
     description = "Graph library for Objective Caml";
-    license = "GNU Library General Public License version 2, with the special exception on linking described in file LICENSE";
+    license = stdenv.lib.licenses.gpl2Oss;
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.kkallio

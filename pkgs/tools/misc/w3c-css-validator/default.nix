@@ -1,6 +1,6 @@
 { stdenv, fetchurl, sourceFromHead, apacheAnt, tomcat, jre }:
 
-let 
+let
 
   sources =
     [ (fetchurl {
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     homepage = http://dev.w3.org/cvsweb/2002/css-validator/;
     # dependencies ship their own license files
     # I think all .java files are covered by this license (?)
-    license = "w3c"; # http://www.w3.org/Consortium/Legal/ 
+    license = stdenv.lib.licenses.w3c;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
     broken = true;

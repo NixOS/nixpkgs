@@ -7,6 +7,9 @@ in
 {
   imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
+  # https://cloud.google.com/compute/docs/tutorials/building-images
+  networking.firewall.enable = mkDefault false;
+
   system.build.googleComputeImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "google-compute-image"
@@ -63,11 +66,12 @@ in
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-              chroot /mnt ${config.nix.package}/bin/nix-store --load-db
+              chroot /mnt ${config.nix.package}/bin/nix-store --load-db --option build-users-group ""
 
           # Create the system profile to allow nixos-rebuild to work.
           chroot /mnt ${config.nix.package}/bin/nix-env \
-              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
+              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} \
+              --option build-users-group ""
 
           # `nixos-rebuild' requires an /etc/NIXOS.
           mkdir -p /mnt/etc
@@ -94,6 +98,7 @@ in
 
   boot.kernelParams = [ "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "virtio_scsi" ];
+  boot.kernelModules = [ "virtio_pci" "virtio_net" ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "/dev/sda";
@@ -107,6 +112,7 @@ in
   # at instance creation time.
   services.openssh.enable = true;
   services.openssh.permitRootLogin = "without-password";
+  services.openssh.passwordAuthentication = mkDefault false;
 
   # Force getting the hostname from Google Compute.
   networking.hostName = mkDefault "";
@@ -119,6 +125,8 @@ in
     169.254.169.254 metadata.google.internal metadata
   '';
 
+  services.ntp.servers = [ "metadata.google.internal" ];
+
   networking.usePredictableInterfaceNames = false;
 
   systemd.services.fetch-ssh-keys =
@@ -126,18 +134,18 @@ in
 
       wantedBy = [ "sshd.service" ];
       before = [ "sshd.service" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "ip-up.target" ];
+      wants = [ "network-online.target" "ip-up.target" ];
 
-      path  = [ pkgs.wget ];
-      script =
+      script = let wget = "${pkgs.wget}/bin/wget --retry-connrefused -t 15 --waitretry=10 --header='Metadata-Flavor: Google'"; in
         ''
-          wget="wget --retry-connrefused -t 6 --waitretry=10"
+          # When dealing with cryptographic keys, we want to keep things private.
+          umask 077
           # Don't download the SSH key if it has already been downloaded
           if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
-                mkdir -p /root/.ssh
-                $wget -O /root/authorized-keys-metadata http://metadata/0.1/meta-data/authorized-keys
+                mkdir -m 0700 -p /root/.ssh
+                ${wget} -O /root/authorized-keys-metadata http://metadata.google.internal/0.1/meta-data/authorized-keys
                 if [ $? -eq 0 -a -e /root/authorized-keys-metadata ]; then
                     cat /root/authorized-keys-metadata | cut -d: -f2- > /root/key.pub
                     if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
@@ -145,29 +153,109 @@ in
                         echo "new key added to authorized_keys"
                     fi
                     chmod 600 /root/.ssh/authorized_keys
-                    rm -f /root/key.pub /root/authorized-keys-metadata
                 fi
+                rm -f /root/key.pub /root/authorized-keys-metadata
           fi
 
-          echo "obtaining SSH private host key..."
-          $wget -O /root/ssh_host_ecdsa_key  http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key
-          if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key ]; then
-              mv -f /root/ssh_host_ecdsa_key /etc/ssh/ssh_host_ecdsa_key
-              echo "downloaded ssh_host_ecdsa_key"
-              chmod 600 /etc/ssh/ssh_host_ecdsa_key
-          fi
+          countKeys=0
+          ${flip concatMapStrings config.services.openssh.hostKeys (k :
+            let kName = baseNameOf k.path; in ''
+              echo "trying to obtain SSH private host key ${kName}"
+              ${wget} -O /root/${kName} http://metadata.google.internal/0.1/meta-data/attributes/${kName} && :
+              if [ $? -eq 0 -a -e /root/${kName} ]; then
+                  countKeys=$((countKeys+1))
+                  mv -f /root/${kName} ${k.path}
+                  echo "downloaded ${k.path}"
+                  chmod 600 ${k.path}
+                  ${config.programs.ssh.package}/bin/ssh-keygen -y -f ${k.path} > ${k.path}.pub
+                  chmod 644 ${k.path}.pub
+              fi
+              rm -f /root/${kName}
+            ''
+          )}
 
-          echo "obtaining SSH public host key..."
-          $wget -O /root/ssh_host_ecdsa_key.pub http://metadata/0.1/meta-data/attributes/ssh_host_ecdsa_key_pub
-          if [ $? -eq 0 -a -e /root/ssh_host_ecdsa_key.pub ]; then
-              mv -f /root/ssh_host_ecdsa_key.pub /etc/ssh/ssh_host_ecdsa_key.pub
-              echo "downloaded ssh_host_ecdsa_key.pub"
-              chmod 644 /etc/ssh/ssh_host_ecdsa_key.pub
+          if [[ $countKeys -le 0 ]]; then
+             echo "failed to obtain any SSH private host keys."
+             false
           fi
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
       serviceConfig.StandardError = "journal+console";
       serviceConfig.StandardOutput = "journal+console";
-     };
+    };
+
+  # Setings taken from https://cloud.google.com/compute/docs/tutorials/building-images#providedkernel
+  boot.kernel.sysctl = {
+    # enables syn flood protection
+    "net.ipv4.tcp_syncookies" = mkDefault "1";
+
+    # ignores source-routed packets
+    "net.ipv4.conf.all.accept_source_route" = mkDefault "0";
+
+    # ignores source-routed packets
+    "net.ipv4.conf.default.accept_source_route" = mkDefault "0";
+
+    # ignores ICMP redirects
+    "net.ipv4.conf.all.accept_redirects" = mkDefault "0";
+
+    # ignores ICMP redirects
+    "net.ipv4.conf.default.accept_redirects" = mkDefault "0";
+
+    # ignores ICMP redirects from non-GW hosts
+    "net.ipv4.conf.all.secure_redirects" = mkDefault "1";
+
+    # ignores ICMP redirects from non-GW hosts
+    "net.ipv4.conf.default.secure_redirects" = mkDefault "1";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.ip_forward" = mkDefault "0";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.conf.all.send_redirects" = mkDefault "0";
+
+    # don't allow traffic between networks or act as a router
+    "net.ipv4.conf.default.send_redirects" = mkDefault "0";
+
+    # reverse path filtering - IP spoofing protection
+    "net.ipv4.conf.all.rp_filter" = mkDefault "1";
+
+    # reverse path filtering - IP spoofing protection
+    "net.ipv4.conf.default.rp_filter" = mkDefault "1";
+
+    # ignores ICMP broadcasts to avoid participating in Smurf attacks
+    "net.ipv4.icmp_echo_ignore_broadcasts" = mkDefault "1";
+
+    # ignores bad ICMP errors
+    "net.ipv4.icmp_ignore_bogus_error_responses" = mkDefault "1";
+
+    # logs spoofed, source-routed, and redirect packets
+    "net.ipv4.conf.all.log_martians" = mkDefault "1";
+
+    # log spoofed, source-routed, and redirect packets
+    "net.ipv4.conf.default.log_martians" = mkDefault "1";
+
+    # implements RFC 1337 fix
+    "net.ipv4.tcp_rfc1337" = mkDefault "1";
+
+    # randomizes addresses of mmap base, heap, stack and VDSO page
+    "kernel.randomize_va_space" = mkDefault "2";
+
+    # provides protection from ToCToU races
+    "fs.protected_hardlinks" = mkDefault "1";
+
+    # provides protection from ToCToU races
+    "fs.protected_symlinks" = mkDefault "1";
+
+    # makes locating kernel addresses more difficult
+    "kernel.kptr_restrict" = mkDefault "1";
+
+    # set ptrace protections
+    "kernel.yama.ptrace_scope" = mkDefault "1";
+
+    # set perf only available to root
+    "kernel.perf_event_paranoid" = mkDefault "2";
+
+  };
+
 }

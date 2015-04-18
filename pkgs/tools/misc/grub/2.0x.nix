@@ -1,45 +1,56 @@
-{ stdenv, fetchurl, autogen, flex, bison, python, autoconf, automake
+{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
-, linuxPackages ? null
+, zfs ? null
 , efiSupport ? false
-, zfsSupport ? false
+, zfsSupport ? true
 }:
 
 with stdenv.lib;
 let
+  pcSystems = {
+    "i686-linux".target = "i386";
+    "x86_64-linux".target = "i386";
+  };
+
   efiSystems = {
     "i686-linux".target = "i386";
     "x86_64-linux".target = "x86_64";
   };
 
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
+  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  prefix = "grub${if efiSupport then "-efi" else ""}";
-
-  version = "2.02-beta2";
+  version = "2.02-git-2ae9457";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
     sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
   };
+
+  po_src = fetchurl {
+    name = "grub-2.02-beta2.tar.gz";
+    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
+    sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
+  };
+
 in (
 
 assert efiSupport -> canEfi;
-assert zfsSupport -> linuxPackages != null && linuxPackages.zfs != null;
+assert zfsSupport -> zfs != null;
 
 stdenv.mkDerivation rec {
-  name = "${prefix}-${version}";
+  name = "grub-${version}";
 
-  src = fetchurl {
-    name = "grub-2.02-beta2.tar.xz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.xz";
-    sha256 = "13a13fhc0wf473dn73zhga15mjvkg6vqp4h25dxg4n7am2r05izn";
+  src = fetchgit {
+    url = "git://git.savannah.gnu.org/grub.git";
+    rev = "2ae9457e6eb4c352051fb32bc6fc931a22528ab2";
+    sha256 = "1ik60qgkymg0xdns5az1hbxasspah2vzxg334rpbk2yy3h3nx5ln";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu
-    ++ optional zfsSupport linuxPackages.zfs;
+    ++ optional zfsSupport zfs;
 
   preConfigure =
     '' for i in "tests/util/"*.in
@@ -61,7 +72,10 @@ stdenv.mkDerivation rec {
     '';
 
   prePatch =
-    '' sh autogen.sh
+    '' tar zxf ${po_src} grub-2.02~beta2/po
+       rm -rf po
+       mv grub-2.02~beta2/po po
+       sh autogen.sh
        gunzip < "${unifont_bdf}" > "unifont.bdf"
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
@@ -71,6 +85,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional zfsSupport "--enable-libzfs"
     ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystems.${stdenv.system}.target}" "--program-prefix=" ];
+
+  # save target that grub is compiled for
+  grubTarget = if efiSupport
+               then "${efiSystems.${stdenv.system}.target}-efi"
+               else if inPCSystems
+                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    else "";
 
   doCheck = false;
   enableParallelBuilding = true;

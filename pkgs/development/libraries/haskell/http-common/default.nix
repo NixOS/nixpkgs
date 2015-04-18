@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-common";
-  version = "0.7.1.1";
-  sha256 = "1a0szaqs1halrv4kx57g2hd4vcdhks7pfal0hyq19af2pncaz1h8";
+  version = "0.7.2.0";
+  sha256 = "0w83qz35aaxc2k3qqpamh8anqxr7w3vym5qh40w1a8n4x00pm960";
   buildDepends = [
     base64Bytestring blazeBuilder caseInsensitive mtl network text
     transformers unorderedContainers

@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://unichrome.sourceforge.net/";
     description = "Xorg video driver for the S3 Unichrome family of integrated graphics devices";
-    license = "free";
+    license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
     broken = true;

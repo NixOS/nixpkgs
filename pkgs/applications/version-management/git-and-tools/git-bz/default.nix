@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       git-bz is a tool for integrating the Git command line with the
       Bugzilla bug-tracking system. Operations such as attaching patches to
       bugs, applying patches in bugs to your current tree, and closing bugs
-      once you've pushed the fixes publically can be done completely from
+      once you've pushed the fixes publicly can be done completely from
       the command line without having to go to your web browser.
 
       Authentication for git-bz is done by reading the cookies for the

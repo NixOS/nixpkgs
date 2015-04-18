@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-lens";
-  version = "0.1.6.1";
-  sha256 = "093grvlpm19l3g10ka82xpzl2wr0gli71kfkbvk4gvg3194fkw4h";
+  version = "0.1.6.2";
+  sha256 = "14x3xz4rydl8x7ddznz90n3z5csy12c7l0r7bms8s7yqv4qzf6hz";
   buildDepends = [ lens text xmlConduit ];
   jailbreak = true;
   meta = {

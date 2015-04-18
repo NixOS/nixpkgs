@@ -4,15 +4,16 @@
 
 stdenv.mkDerivation rec {
   name = "oiio-${version}";
-  version = "1.4";
+  version = "1.4.15";
 
   src = fetchurl {
-    url = "https://github.com/OpenImageIO/oiio/archive/RB-${version}.zip";
-    sha256 = "0ldj3hwpz363l1zyzf6c62wc5d2cpbiszlpjvv5w6rrsx2ddbbn1";
+    url = "https://github.com/OpenImageIO/oiio/archive/Release-${version}.zip";
+    sha256 = "1fc5v3qmrzf9qx765fd15r2dc3ccrz4xf4f9q4cwsrspmaxqyqzs";
   };
 
   buildInputs = [
-    boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr unzip
+    boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr
+    unzip
   ];
 
   cmakeFlags = [

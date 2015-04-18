@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libogg, libvorbis, tremor, autoconf, automake, libtool}:
+{stdenv, fetchurl, libogg, libvorbis, tremor, autoconf, automake, libtool, pkgconfig}:
 
 stdenv.mkDerivation ({
   name = "libtheora-1.1.1";
@@ -7,11 +7,27 @@ stdenv.mkDerivation ({
     sha256 = "0swiaj8987n995rc7hw0asvpwhhzpjiws8kr3s6r44bqqib2k5a0";
   };
 
+  buildInputs = [pkgconfig];
+
   propagatedBuildInputs = [libogg libvorbis];
+
+  # GCC's -fforce-addr flag is not supported by clang
+  # It's just an optimization, so it's safe to simply remove it
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace "-fforce-addr" ""
+  '';
 
   crossAttrs = {
     propagatedBuildInputs = [libogg.crossDrv tremor.crossDrv];
     configureFlags = "--disable-examples";
+  };
+
+  meta = with stdenv.lib; {
+    homepage = http://www.theora.org/;
+    description = "Library for Theora, a free and open video compression format";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.spwhitt ];
+    platforms = platforms.unix;
   };
 }
 

@@ -13,6 +13,6 @@ cabal.mkDerivation (self: {
     description = "computes the internal rate of return of an investment";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = with self.stdenv.lib.maintainers; [ simons ];
+    broken = true;
   };
 })

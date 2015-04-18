@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "concurrencykit-${version}";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchurl {
     url    = "http://concurrencykit.org/releases/ck-${version}.tar.gz";
-    sha256 = "1fjdvbj6wazblg6qy0gdqs3kach2y2p6xrcvssmcvxr0nfyaadg2";
+    sha256 = "0mh3z8ibiwidc6qvrv8bx9slgcycxwy06kfngfzfza6nihrymzl9";
   };
 
   enableParallelBuilding = true;

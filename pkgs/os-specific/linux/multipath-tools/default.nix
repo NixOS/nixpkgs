@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   preBuild =
     ''
-      makeFlagsArray=(GZIP="${gzip}/bin/gzip -9 -c" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
+      makeFlagsArray=(GZIP="${gzip}/bin/gzip -9n -c" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
       
       substituteInPlace multipath/Makefile --replace /etc $out/etc
       substituteInPlace kpartx/Makefile --replace /etc $out/etc

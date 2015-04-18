@@ -8,14 +8,14 @@ assert withMesa -> mesa != null;
 with stdenv.lib;
 
 let
-  version = "3.0.1";
+  version = "3.0.2";
 in
 stdenv.mkDerivation {
   name = "wxwidgets-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";
-    sha256 = "1xf5s8cnq6xr0r6l0y9cn1pjg961xbycl4afhjrqzbsnxiwinrxx";
+    sha256 = "0paq27brw4lv8kspxh9iklpa415mxi8zc117vbbbhfjgapf7js1l";
   };
 
   buildInputs =
@@ -55,4 +55,8 @@ stdenv.mkDerivation {
   passthru = {inherit gtk compat24 compat26 unicode;};
 
   enableParallelBuilding = true;
+  
+  meta = {
+    platforms = stdenv.lib.platforms.all;
+  };
 }

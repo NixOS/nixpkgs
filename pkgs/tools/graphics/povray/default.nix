@@ -1,6 +1,5 @@
-{stdenv, fetchgit, autoconf, automake, boost149, zlib, libpng, libjpeg, libtiff}:
+{stdenv, fetchgit, autoconf, automake, boost, zlib, libpng, libjpeg, libtiff}:
 
-let boost = boost149; in
 stdenv.mkDerivation {
   name = "povray-3.7";
 
@@ -24,8 +23,10 @@ stdenv.mkDerivation {
                  sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
                '';
 
-  configureFlags = "COMPILED_BY='nix' --with-boost-libdir=${boost}/lib --with-boost-includedir=${boost}/include";
+  configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" ];
 
+  enableParallelBuilding = true;
+  
   preInstall = ''
     mkdir "$TMP/bin"
     for i in chown chgrp; do
@@ -34,10 +35,11 @@ stdenv.mkDerivation {
       PATH="$TMP/bin:$PATH"
     done
   '';
-  
-  meta = {
+
+  meta = with stdenv.lib; {
     homepage = http://www.povray.org/;
     description = "Persistence of Vision Raytracer";
-    license = "free";
+    license = licenses.free;
+	platforms = platforms.linux;
   };
 }

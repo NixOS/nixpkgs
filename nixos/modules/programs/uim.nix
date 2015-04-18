@@ -1,20 +1,22 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
-with pkgs.lib;
+with lib;
 
 let
   cfg = config.uim;
 in
 {
   options = {
+
     uim = {
       enable = mkOption {
         type = types.bool;
         default = false;
         example = true;
-        description = "enable UIM input method";
+        description = "Enable UIM input method";
       };
     };
+
   };
 
   config = mkIf cfg.enable {

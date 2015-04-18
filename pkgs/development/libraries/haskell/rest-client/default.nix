@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-client";
-  version = "0.4";
-  sha256 = "18mvmp4c5zznph8q5ash6224wig5kwvb6v19dkn39n4l72cdq7wm";
+  version = "0.4.0.5";
+  sha256 = "11rsy9an7ck94ijafqd2ddichz0xgb01w2ybyg3iiwy5ckiy384s";
   buildDepends = [
     aesonUtils caseInsensitive dataDefault exceptionTransformers
     httpConduit httpTypes hxt hxtPickleUtils monadControl mtl primitive
@@ -19,5 +19,6 @@ cabal.mkDerivation (self: {
     description = "Utility library for use in generated API client libraries";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

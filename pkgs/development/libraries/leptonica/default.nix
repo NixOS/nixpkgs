@@ -14,6 +14,6 @@ stdenv.mkDerivation {
     description = "Image processing and analysis library";
     homepage = http://www.leptonica.org/;
     # Its own license: http://www.leptonica.org/about-the-license.html
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 }

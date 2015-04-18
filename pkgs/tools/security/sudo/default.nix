@@ -1,22 +1,29 @@
-{ stdenv, fetchurl, coreutils, pam, groff }:
+{ stdenv, fetchurl, coreutils, pam, groff
+, sendmailPath ? "/var/setuid-wrappers/sendmail"
+}:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.10p3";
+  name = "sudo-1.8.13";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "002l6h27pnhb77b65frhazbhknsxvrsnkpi43j7i0qw1lrgi7nkf";
+    sha256 = "09asw1hpxc39a6hhydr8n33m2pni1b5m37vaj7b00761ybnyax73";
   };
 
   configureFlags = [
     "--with-env-editor"
     "--with-editor=/run/current-system/sw/bin/nano"
-    "--with-rundir=/var/run"
+    "--with-rundir=/run/sudo"
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
+    "--with-sendmail=${sendmailPath}"
+  ];
+
+  configureFlagsArray = [
+    "--with-passprompt=[sudo] password for %p: "  # intentional trailing space
   ];
 
   postConfigure =
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = 
+  postInstall =
     ''
     rm -f $out/share/doc/sudo/ChangeLog
     '';
@@ -41,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A command to run commands as root";
 
-    longDescription = 
+    longDescription =
       ''
       Sudo (su "do") allows a system administrator to delegate
       authority to give certain users (or groups of users) the ability
@@ -54,5 +61,7 @@ stdenv.mkDerivation rec {
     license = http://www.sudo.ws/sudo/license.html;
 
     maintainers = [ stdenv.lib.maintainers.eelco ];
+
+    platforms = stdenv.lib.platforms.linux;
   };
 }

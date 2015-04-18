@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, openssl, db, zlib, uwimap, htmlTidy, pam}:
+{ stdenv, fetchurl, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
 
 let
   ssl = stdenv.lib.optionals uwimap.withSSL
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "135fjbxjn385b6cjys6qhbwfw61mdcl2akkll4jfpdzfvhbxlyda";
   };
 
-  buildInputs = [ openssl db zlib uwimap htmlTidy pam ];
+  buildInputs = [ openssl db zlib uwimap html-tidy pam ];
   nativeBuildInputs = [ perl ];
 
   NIX_LDFLAGS = "-lpam";

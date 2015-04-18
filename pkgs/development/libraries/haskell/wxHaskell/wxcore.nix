@@ -6,18 +6,15 @@
 
 cabal.mkDerivation (self: {
   pname = "wxcore";
-  version = "0.90.1.1";
-  sha256 = "1ma6vjf87b493vz3sj6hxzifqixk62n6b5gvixpfzfig1lysddgp";
+  version = "0.91.0.0";
+  sha256 = "01pvaysihyijklyw129vcafjqyh8bpafjzvscxvzll1g86qbqlkz";
   buildDepends = [ filepath parsec stm time wxc wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
-  patchPhase = ''
-    sed -i -e 's|array >= .*,|array,|' wxcore.cabal
-  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
   };
 })

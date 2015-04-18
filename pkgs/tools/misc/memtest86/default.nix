@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "memtest86-4.3.3";
+  name = "memtest86-4.3.6";
   
   src = fetchurl {
-    url = http://www.memtest86.com/downloads/memtest86-4.3.3-src.tar.gz;
-    sha256 = "1fzpk0s97lx8h1wbv2bgr6m8v4ag8i58kzr8fa25bvwyl8hks9sl";
+    url = http://www.memtest86.com/downloads/memtest86-4.3.6-src.tar.gz;
+    sha256 = "0qbksyl2hmkm12n7zbmf2m2n3q811skhykxx6a9a7y6r7k8y5qmv";
   };
 
   preBuild = ''

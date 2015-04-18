@@ -26,7 +26,8 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|dry-run|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+        if [ "$i" = dry-run ]; then i=dry-build; fi
         action="$i"
         ;;
       --install-grub)
@@ -137,7 +138,7 @@ fi
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
-if [ -n "$rollback" -o "$action" = dry-run ]; then
+if [ -n "$rollback" -o "$action" = dry-build ]; then
     buildNix=
 fi
 
@@ -148,15 +149,15 @@ if [ -n "$buildNix" ]; then
             if ! nix-build '<nixpkgs>' -A nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
                 machine="$(uname -m)"
                 if [ "$machine" = x86_64 ]; then
-                    nixStorePath=/nix/store/d34q3q2zj9nriq4ifhn3dnnngqvinjb3-nix-1.7
+                    nixStorePath=/nix/store/ffig6yaggbh12dh9y5pnf1grf5lqyipz-nix-1.8
                 elif [[ "$machine" =~ i.86 ]]; then
-                    nixStorePath=/nix/store/qlah0darpcn6sf3lr2226rl04l1gn4xz-nix-1.7
+                    nixStorePath=/nix/store/lglhfp4mimfa5wzjjf1kqz6f5wlsj2mn-nix-1.8
                 else
                     echo "$0: unsupported platform"
                     exit 1
                 fi
                 if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
-                    --option extra-binary-caches http://cache.nixos.org/; then
+                    --option extra-binary-caches https://cache.nixos.org/; then
                     echo "warning: don't know how to get latest Nix" >&2
                 fi
                 # Older version of nix-store -r don't support --add-root.
@@ -180,7 +181,7 @@ if [ -n "$canRun" ]; then
 fi
 
 
-if [ "$action" = dry-run ]; then
+if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
 fi
 
@@ -193,14 +194,14 @@ if [ -z "$rollback" ]; then
     if [ "$action" = switch -o "$action" = boot ]; then
         nix-env "${extraBuildFlags[@]}" -p "$profile" -f '<nixpkgs/nixos>' --set -A system
         pathToConfig="$profile"
-    elif [ "$action" = test -o "$action" = build -o "$action" = dry-run ]; then
-        nix-build '<nixpkgs/nixos>' -A system -K -k "${extraBuildFlags[@]}" > /dev/null
+    elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
+        nix-build '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
-        nix-build '<nixpkgs/nixos>' -A vm -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm-with-bootloader ]; then
-        nix-build '<nixpkgs/nixos>' -A vmWithBootLoader -K -k "${extraBuildFlags[@]}" > /dev/null
+        nix-build '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     else
         showSyntax
@@ -224,9 +225,9 @@ fi
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
+if [ "$action" = switch -o "$action" = boot -o "$action" = test -o "$action" = dry-activate ]; then
     if ! $pathToConfig/bin/switch-to-configuration "$action"; then
-        echo "warning: there were error switching to the new configuration" >&2
+        echo "warning: error(s) occured while switching to the new configuration" >&2
         exit 1
     fi
 fi

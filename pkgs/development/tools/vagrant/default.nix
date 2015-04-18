@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, rubyLibs, libiconv
+{ stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
 , libxml2, libxslt }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
+let
+  version = "1.6.5";
+  rake = buildRubyGem {
+    inherit ruby;
+    name = "rake-10.3.2";
+    sha256 = "0nvpkjrpsk8xxnij2wd1cdn6arja9q11sxx4aq4fz18bc6fss15m";
+  };
+
+in
 stdenv.mkDerivation rec {
-  name = "vagrant-1.6.3";
+  name = "vagrant-${version}";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url    = https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb;
-        sha256 = "1gmdg92dw7afnvpji0wg4nzr7vhk8mrmcqk3hcrkwscby2f2bhqg";
+        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_x86_64.deb";
+        sha256 = "12m2mnpnfzqv2s4j58cnzg4h4i5nkk5nb4irsvmm3i9a0dnsziz2";
       }
     else
       fetchurl {
-        url    = https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_i686.deb;
-        sha256 = "1z26b6yghqgx8jbi2igf4kk4h6rzy869gli2vj7ayl7vbqdfvb60";
+        url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_i686.deb";
+        sha256 = "1d4w0ni6mkb378v6rd7b188fw38vi8qql7pkwzsykr6389krbkbq";
       };
 
   meta = with stdenv.lib; {
@@ -56,7 +65,7 @@ stdenv.mkDerivation rec {
     ln -s ${ruby}/bin/erb opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/gem opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/irb opt/vagrant/embedded/bin
-    ln -s ${rubyLibs.rake}/bin/rake opt/vagrant/embedded/bin
+    ln -s ${rake}/bin/rake opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/rdoc opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ri opt/vagrant/embedded/bin
     ln -s ${ruby}/bin/ruby opt/vagrant/embedded/bin
@@ -84,10 +93,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.2/lib/bundler/templates/Executable
+    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
+    chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   postFixup = ''
-    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.2/lib/bundler/templates/Executable
+    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.6.6/lib/bundler/templates/Executable
+    chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-1.6.5/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 }

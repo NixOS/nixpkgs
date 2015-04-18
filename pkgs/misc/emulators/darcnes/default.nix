@@ -2,7 +2,7 @@
 
 assert stdenv.system == "i686-linux";
 
-stdenv.mkDerivation { 
+stdenv.mkDerivation {
   name = "darcnes-9b0401";
   src = fetchurl {
     url = http://www.dridus.com/~nyef/darcnes/download/dn9b0401.tgz;
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     homepage = http://www.dridus.com/~nyef/darcnes/;
     description = "Multi-System emulator, specially for NES";
     /* Prohibited commercial use, credit required. */
-    license = "free";
+    license = stdenv.lib.licenses.free;
   };
 
 }

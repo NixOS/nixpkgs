@@ -7,17 +7,6 @@ in
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ];
 
-  options = {
-    ec2 = {
-      hvm = mkOption {
-        default = false;
-        description = ''
-          Whether the EC2 instance is a HVM instance.
-        '';
-      };
-    };
-  };
-
   config = {
     system.build.amazonImage =
       pkgs.vmTools.runInLinuxVM (
@@ -70,10 +59,10 @@ in
 
             # Register the paths in the Nix database.
             printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-                chroot /mnt ${config.nix.package}/bin/nix-store --load-db
+                chroot /mnt ${config.nix.package}/bin/nix-store --load-db --option build-users-group ""
 
             # Create the system profile to allow nixos-rebuild to work.
-            chroot /mnt ${config.nix.package}/bin/nix-env \
+            chroot /mnt ${config.nix.package}/bin/nix-env --option build-users-group "" \
                 -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
 
             # `nixos-rebuild' requires an /etc/NIXOS.
@@ -101,6 +90,10 @@ in
 
     boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.kernelModules = [ "xen-netfront" ];
+
+    # Prevent the nouveau kernel module from being loaded, as it
+    # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
+    boot.blacklistedKernelModules = [ "nouveau" ];
 
     # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
     boot.loader.grub.version = if cfg.hvm then 2 else 1;
@@ -172,7 +165,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need swapon in the initrd.
-        cp --remove-destination ${pkgs.utillinux}/sbin/swapon $out/bin
+        copy_bin_and_libs ${pkgs.utillinux}/sbin/swapon
       '';
 
     # Don't put old configurations in the GRUB menu.  The user has no
@@ -191,10 +184,5 @@ in
     environment.systemPackages = [ pkgs.cryptsetup ];
 
     boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
-
-    # Prevent logging in as root without a password.  This doesn't really matter,
-    # since the only PAM services that allow logging in with a null
-    # password are local ones that are inaccessible on EC2 machines.
-    security.initialRootPassword = mkDefault "!";
   };
 }

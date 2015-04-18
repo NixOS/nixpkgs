@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://zsync.moria.org.uk/;
     description = "File distribution system using the rsync algorithm";
-    license = "free";
+    license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; all;
   };

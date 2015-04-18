@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.freerdp.com/;
 
-    license = "free-non-copyleft";
+    license = stdenv.lib.licenses.free;
   };
 }

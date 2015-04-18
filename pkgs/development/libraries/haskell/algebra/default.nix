@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "algebra";
-  version = "4.1";
-  sha256 = "1wcwpngaqnr9w89p5dycmpsaihdwqqrs2vjap6jfwrscq16yyyc6";
+  version = "4.2";
+  sha256 = "1b74c55326qsnpyqzyhyq87j61wp3zrpsqhipgw8db8nm2lq9nhs";
   buildDepends = [
     adjunctions distributive mtl nats semigroupoids semigroups tagged
     transformers void

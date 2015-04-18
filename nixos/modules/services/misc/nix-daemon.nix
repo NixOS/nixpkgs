@@ -20,6 +20,8 @@ let
       extraGroups = [ "nixbld" ];
     };
 
+  nixbldUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
+
   nixConf =
     let
       # If we're using a chroot for builds, then provide /bin/sh in
@@ -36,10 +38,15 @@ let
         # /etc/nixos/configuration.nix.  Do not edit it!
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
+        build-cores = ${toString (cfg.buildCores)}
         build-use-chroot = ${if cfg.useChroot then "true" else "false"}
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
+        binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
+        ${optionalString cfg.requireSignedBinaryCaches ''
+          signed-binary-caches = *
+        ''}
         $extraOptions
         END
       '';
@@ -66,12 +73,26 @@ in
         type = types.int;
         default = 1;
         example = 64;
-        description = "
+        description = ''
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
           set it to the number of CPUs in your system (e.g., 2 on an Athlon
           64 X2).
-        ";
+        '';
+      };
+
+      buildCores = mkOption {
+        type = types.int;
+        default = 1;
+        example = 64;
+        description = ''
+          This option defines the maximum number of concurrent tasks during
+          one build. It affects, e.g., -j option for make. The default is 1.
+          The special value 0 means that the builder should use all
+          available CPU cores in the system. Some builds may become
+          non-deterministic with this option; use with care! Packages will
+          only be affected if enableParallelBuilding is set for them.
+        '';
       };
 
       useChroot = mkOption {
@@ -179,17 +200,6 @@ in
         '';
       };
 
-      proxy = mkOption {
-        type = types.str;
-        default = "";
-        description = ''
-          This option specifies the proxy to use for fetchurl. The real effect
-          is just exporting http_proxy, https_proxy and ftp_proxy with that
-          value.
-        '';
-        example = "http://127.0.0.1:3128";
-      };
-
       # Environment variables for running Nix.
       envVars = mkOption {
         type = types.attrs;
@@ -200,7 +210,6 @@ in
 
       nrBuildUsers = mkOption {
         type = types.int;
-        default = 10;
         description = ''
           Number of <literal>nixbld</literal> user accounts created to
           perform secure concurrent builds.  If you receive an error
@@ -222,7 +231,7 @@ in
 
       binaryCaches = mkOption {
         type = types.listOf types.str;
-        default = [ http://cache.nixos.org/ ];
+        default = [ https://cache.nixos.org/ ];
         description = ''
           List of binary cache URLs used to obtain pre-built binaries
           of Nix packages.
@@ -241,6 +250,33 @@ in
         '';
       };
 
+      requireSignedBinaryCaches = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If enabled, Nix will only download binaries from binary
+          caches if they are cryptographically signed with any of the
+          keys listed in
+          <option>nix.binaryCachePublicKeys</option>. If disabled (the
+          default), signatures are neither required nor checked, so
+          it's strongly recommended that you use only trustworthy
+          caches and https to prevent man-in-the-middle attacks.
+        '';
+      };
+
+      binaryCachePublicKeys = mkOption {
+        type = types.listOf types.str;
+        example = [ "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs=" ];
+        description = ''
+          List of public keys used to sign binary caches. If
+          <option>nix.requireSignedBinaryCaches</option> is enabled,
+          then Nix will use a binary from a binary cache if and only
+          if it is signed by <emphasis>any</emphasis> of the keys
+          listed here. By default, only the key for
+          <uri>cache.nixos.org</uri> is included.
+        '';
+      };
+
     };
 
   };
@@ -249,6 +285,8 @@ in
   ###### implementation
 
   config = {
+
+    nix.binaryCachePublicKeys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
 
     environment.etc."nix/nix.conf".source = nixConf;
 
@@ -278,7 +316,9 @@ in
       { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
-        environment = cfg.envVars // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; };
+        environment = cfg.envVars
+          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; }
+          // config.networking.proxy.envVars;
 
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;
@@ -303,13 +343,6 @@ in
         NIX_BUILD_HOOK = "${nix}/libexec/nix/build-remote.pl";
         NIX_REMOTE_SYSTEMS = "/etc/nix/machines";
         NIX_CURRENT_LOAD = "/run/nix/current-load";
-      }
-
-      # !!! These should not be defined here, but in some general proxy configuration module!
-      // optionalAttrs (cfg.proxy != "") {
-        http_proxy = cfg.proxy;
-        https_proxy = cfg.proxy;
-        ftp_proxy = cfg.proxy;
       };
 
     # Set up the environment variables for running Nix.
@@ -324,7 +357,11 @@ in
         fi
       '';
 
-    users.extraUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
+    nix.nrBuildUsers = mkDefault (lib.max 10 cfg.maxJobs);
+
+    users.extraUsers = nixbldUsers;
+
+    services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
@@ -342,9 +379,6 @@ in
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \
           /nix/var/nix/gcroots/tmp
-
-        ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
-        ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
       '';
 
   };

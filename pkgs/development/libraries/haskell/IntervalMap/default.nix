@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "IntervalMap";
-  version = "0.3.0.3";
-  sha256 = "11lxsjq9nw9mmj5ga0x03d8rgcx2s85kzi17d9cm7m28mq4dqdag";
+  version = "0.4.0.1";
+  sha256 = "0cq0dmmawrss4jjkz3br0lhp37d4k7rd3cinbcyf0bf39dfk6mrf";
   buildDepends = [ deepseq ];
   testDepends = [ Cabal deepseq QuickCheck ];
   meta = {

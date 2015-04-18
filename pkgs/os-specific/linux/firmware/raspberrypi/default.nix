@@ -18,10 +18,10 @@ in stdenv.mkDerivation {
     cp -R hardfp/opt/vc/* $out
     cp opt/vc/LICENCE $out/share/raspberrypi
   '';
-  
+
   meta = {
     description = "Firmware for the Raspberry Pi board";
     homepage = https://github.com/raspberrypi;
-    license = "non-free";
+    license = stdenv.lib.licenses.unfree;
   };
 }

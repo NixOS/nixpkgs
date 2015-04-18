@@ -1,4 +1,4 @@
-import ./make-test.nix ({ version, ... }:
+import ./make-test.nix ({ version ? 4, ... }:
 
 let
 
@@ -38,7 +38,8 @@ in
   testScript =
     ''
       $server->waitForUnit("nfsd");
-      $server->waitForUnit("network.target");
+      $server->succeed("systemctl start network-online.target");
+      $server->waitForUnit("network-online.target");
 
       startAll;
 

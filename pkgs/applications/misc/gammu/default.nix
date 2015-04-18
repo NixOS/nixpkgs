@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bashcomp-dir.patch ];
 
-  buildInputs = [ python pkgconfig cmake bluez libusb1 curl libiconv
-    gettext sqlite ];
+  buildInputs = [ python pkgconfig cmake bluez libusb1 curl gettext sqlite libiconv ];
 
   enableParallelBuilding = true;
 

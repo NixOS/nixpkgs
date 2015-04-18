@@ -1,7 +1,8 @@
 { stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
+, gst_plugins_good, gst_plugins_bad, gst_plugins_ugly, gst_ffmpeg
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
 , usbmuxd, libmtp, gvfs, libcdio, protobuf, libspotify, qca2, pkgconfig
-, sparsehash, config }:
+, sparsehash, config, makeWrapper }:
 
 let withSpotify = config.clementine.spotify or false;
 in
@@ -13,7 +14,11 @@ stdenv.mkDerivation {
     sha256 = "1gx1109i4pylz6x7gvp4rdzc6dvh0w6in6hfbygw01d08l26bxbx";
   };
 
-  patches = [ ./clementine-1.2.1-include-paths.patch ];
+  patches =
+    [
+      ./clementine-1.2.1-include-paths.patch
+      ./clementine-dbus-namespace.patch
+    ];
 
   buildInputs = [
     boost
@@ -22,6 +27,9 @@ stdenv.mkDerivation {
     gettext
     glew
     gst_plugins_base
+    gst_plugins_good
+    gst_plugins_ugly
+    gst_ffmpeg
     gstreamer
     gvfs
     libcdio
@@ -29,6 +37,7 @@ stdenv.mkDerivation {
     liblastfm
     libmtp
     libplist
+    makeWrapper
     pkgconfig
     protobuf
     qca2
@@ -41,6 +50,11 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional withSpotify libspotify;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/clementine \
+      --set GST_PLUGIN_SYSTEM_PATH "$GST_PLUGIN_SYSTEM_PATH"
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.clementine-player.org";

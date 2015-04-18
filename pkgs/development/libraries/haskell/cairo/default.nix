@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cairo";
-  version = "0.13.0.0";
-  sha256 = "1sw1f50kmqln1mkvrr6g85b46dn0ipwnvyl13kxzhq5g581rra92";
+  version = "0.13.0.5";
+  sha256 = "0ak6hzfrcyxajx7qybsmd5g26blqb6zxvv8r2a8bnylvm5sdj70r";
   buildDepends = [ mtl text utf8String ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ cairo libc pkgconfig zlib ];

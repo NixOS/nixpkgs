@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "suil-${version}";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0y5sbgaivb03vmr3jcpzj16wqxa5h744ml4w3ylzglbxs2bqgl7n";
+    sha256 = "1s3adyiw7sa5gfvm5wasa61qa23629kprxyv6w8hbxdiwp0hhxkq";
   };
 
   buildInputs = [ gtk lv2 pkgconfig python qt4 serd sord sratom ];

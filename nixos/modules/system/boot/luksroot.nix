@@ -203,7 +203,7 @@ in
       description = ''
         Unless enabled, encryption keys can be easily recovered by an attacker with physical
         access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
-        More information: http://en.wikipedia.org/wiki/DMA_attack
+        More information is available at <link xlink:href="http://en.wikipedia.org/wiki/DMA_attack"/>.
 
         This option blacklists FireWire drivers, but doesn't remove them. You can manually
         load the drivers if you need to use a FireWire device, but don't forget to unload them!
@@ -342,40 +342,39 @@ in
               description = "Path where the ramfs used to update the LUKS key will be mounted in stage-1";
             };
 
-            storage = mkOption {
-              type = types.optionSet;
-              description = "Options related to the storing the salt";
+            /* TODO: Add to the documentation of the current module:
 
-              options = {
-                device = mkOption {
-                  default = "/dev/sda1";
-                  type = types.path;
-                  description = ''
-                    An unencrypted device that will temporarily be mounted in stage-1.
-                    Must contain the current salt to create the challenge for this LUKS device.
-                  '';
-                };
+               Options related to the storing the salt.
+            */
+            storage = {
+              device = mkOption {
+                default = "/dev/sda1";
+                type = types.path;
+                description = ''
+                  An unencrypted device that will temporarily be mounted in stage-1.
+                  Must contain the current salt to create the challenge for this LUKS device.
+                '';
+              };
 
-                fsType = mkOption {
-                  default = "vfat";
-                  type = types.string;
-                  description = "The filesystem of the unencrypted device";
-                };
+              fsType = mkOption {
+                default = "vfat";
+                type = types.string;
+                description = "The filesystem of the unencrypted device";
+              };
 
-                mountPoint = mkOption {
-                  default = "/crypt-storage";
-                  type = types.string;
-                  description = "Path where the unencrypted device will be mounted in stage-1";
-                };
+              mountPoint = mkOption {
+                default = "/crypt-storage";
+                type = types.string;
+                description = "Path where the unencrypted device will be mounted in stage-1";
+              };
 
-                path = mkOption {
-                  default = "/crypt-storage/default";
-                  type = types.string;
-                  description = ''
-                    Absolute path of the salt on the unencrypted device with
-                    that device's root directory as "/".
-                  '';
-                };
+              path = mkOption {
+                default = "/crypt-storage/default";
+                type = types.string;
+                description = ''
+                  Absolute path of the salt on the unencrypted device with
+                  that device's root directory as "/".
+                '';
               };
             };
           };
@@ -406,29 +405,19 @@ in
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
-      cp -pdv ${pkgs.cryptsetup}/sbin/cryptsetup $out/bin
-
-      cp -pdv ${pkgs.libgcrypt}/lib/libgcrypt*.so.* $out/lib
-      cp -pdv ${pkgs.libgpgerror}/lib/libgpg-error*.so.* $out/lib
-      cp -pdv ${pkgs.cryptsetup}/lib/libcryptsetup*.so.* $out/lib
-      cp -pdv ${pkgs.popt}/lib/libpopt*.so.* $out/lib
+      copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
 
       ${optionalString luks.yubikeySupport ''
-      cp -pdv ${pkgs.ykpers}/bin/ykchalresp $out/bin
-      cp -pdv ${pkgs.ykpers}/bin/ykinfo $out/bin
-      cp -pdv ${pkgs.openssl}/bin/openssl $out/bin
+        copy_bin_and_libs ${pkgs.ykpers}/bin/ykchalresp
+        copy_bin_and_libs ${pkgs.ykpers}/bin/ykinfo
+        copy_bin_and_libs ${pkgs.openssl}/bin/openssl
 
-      cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o $out/bin/pbkdf2-sha512 -lcrypto
-      strip -s $out/bin/pbkdf2-sha512
+        cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
+        strip -s pbkdf2-sha512
+        copy_bin_and_libs pbkdf2-sha512
 
-      cp -pdv ${pkgs.libusb1}/lib/libusb*.so.* $out/lib
-      cp -pdv ${pkgs.ykpers}/lib/libykpers*.so.* $out/lib
-      cp -pdv ${pkgs.libyubikey}/lib/libyubikey*.so.* $out/lib
-      cp -pdv ${pkgs.openssl}/lib/libssl*.so.* $out/lib
-      cp -pdv ${pkgs.openssl}/lib/libcrypto*.so.* $out/lib
-
-      mkdir -p $out/etc/ssl
-      cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
+        mkdir -p $out/etc/ssl
+        cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
 
       cat > $out/bin/openssl-wrap <<EOF
 #!$out/bin/sh

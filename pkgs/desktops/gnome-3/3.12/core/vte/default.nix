@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection }:
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, ncurses, gobjectIntrospection
+, selectTextPatch ? false }:
 
 stdenv.mkDerivation rec {
-
   versionMajor = "0.36";
-  versionMinor = "2";
+  versionMinor = "3";
   moduleName   = "vte";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "f45eed3aed823068c7563345ea947be0e6ddb3dacd74646e6d7d26a921e04345";
+    sha256 = "54e5b07be3c0f7b158302f54ee79d4de1cb002f4259b6642b79b1e0e314a959c";
   };
+
+  patches = with stdenv.lib; optional selectTextPatch ./expose_select_text.patch;
 
   buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib gnome3.gtk3 ncurses ];
 

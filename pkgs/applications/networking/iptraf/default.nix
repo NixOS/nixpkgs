@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = ftp://iptraf.seul.org/pub/iptraf/iptraf-3.0.1.tar.gz;
-    md5 = "004c2c005a1b78739e22bc49d33e244d";
+    sha256 = "12n059j9iihhpf6spmlaspqzxz3wqan6kkpnhmlj08jdijpnk84m";
   };
 
   patchPhase = ''

@@ -1,15 +1,17 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "fping-3.8";
+  name = "fping-3.10";
 
   src = fetchurl {
     url = "http://www.fping.org/dist/${name}.tar.gz";
-    sha256 = "04iwj4x3wns09wp777mb3kwfi7ypb4m9m73p0s2y699px77hcx67";
+    sha256 = "1n2psfxgww6wg5rz8rly06xkghgp8lshx2lx6rramrigyd1fhiyd";
   };
 
   meta = {
     homepage = "http://fping.org/";
     description = "Send ICMP echo probes to network hosts";
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    platforms = with stdenv.lib.platforms; all;
   };
 }

@@ -1,17 +1,26 @@
-{ fetchurl, stdenv, gnutls, pkgconfig, zlib, libgcrypt }:
+{ stdenv, fetchurl, pkgconfig
+, openssl ? null, zlib ? null, gnutls ? null
+}:
+
+let
+  xor = a: b: (a || b) && (!(a && b));
+in
+
+assert xor (openssl != null) (gnutls != null);
+assert !(xor (openssl != null) (zlib != null));
 
 stdenv.mkDerivation rec {
-  name = "ucommon-6.0.7";
+  name = "ucommon-6.3.1";
 
   src = fetchurl {
-    url = mirror://gnu/commoncpp/ucommon-6.0.7.tar.gz;
-    sha256 = "1rlvchmg6qq8jq79qjgv0l0wqi1dqhmm4ng1qj9f012dbhwcap3x";
+    url = "mirror://gnu/commoncpp/${name}.tar.gz";
+    sha256 = "1marbwbqnllhm9nh22lvyfjy802pgy1wx7j7kkpkasbm9r0sb6mm";
   };
 
-  buildInputs = [ pkgconfig gnutls zlib ];
+  buildInputs = [ pkgconfig ];
 
-  # Propagate libgcrypt because it appears in `ucommon.pc'.
-  propagatedBuildInputs = [ libgcrypt ];
+  # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
+  propagatedBuildInputs = [ openssl zlib gnutls ];
 
   doCheck = true;
 

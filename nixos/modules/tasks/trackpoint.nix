@@ -16,7 +16,7 @@ with lib;
           Enable sensitivity and speed configuration for trackpoints.
         '';
       };
-  
+
       sensitivity = mkOption {
         default = 128;
         example = 255;
@@ -44,7 +44,7 @@ with lib;
           Enable scrolling while holding the middle mouse button.
         '';
       };
-      
+
     };
 
   };
@@ -70,7 +70,7 @@ with lib;
         ''
           Section "InputClass"
             Identifier "Trackpoint Wheel Emulation"
-            MatchProduct "TPPS/2 IBM TrackPoint|DualPoint Stick|Synaptics Inc. Composite TouchPad / TrackPoint|ThinkPad USB Keyboard with TrackPoint|USB Trackpoint pointing device|Composite TouchPad / TrackPoint"
+            MatchProduct "Elantech PS/2 TrackPoint|TPPS/2 IBM TrackPoint|DualPoint Stick|Synaptics Inc. Composite TouchPad / TrackPoint|ThinkPad USB Keyboard with TrackPoint|USB Trackpoint pointing device|Composite TouchPad / TrackPoint"
             MatchDevicePath "/dev/input/event*"
             Option "EmulateWheel" "true"
             Option "EmulateWheelButton" "2"

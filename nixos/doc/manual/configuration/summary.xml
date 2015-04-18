@@ -60,7 +60,7 @@ manual</link> for the rest.</para>
         <entry>A nested set, equivalent to <literal>{ foo = { bar = 1; }; }</literal></entry>
       </row>
       <row>
-        <entry><literal>rec { x = "bla"; y = x + "bar"; }</literal></entry>
+        <entry><literal>rec { x = "foo"; y = x + "bar"; }</literal></entry>
         <entry>A recursive set, equivalent to <literal>{ x = "foo"; y = "foobar"; }</literal></entry>
       </row>
       <row>

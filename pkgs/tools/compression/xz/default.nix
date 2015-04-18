@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "xz-5.0.5";
+  name = "xz-5.2.1";
 
   src = fetchurl {
     url = "http://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "1404i59bp6rzxya0br1q9njdv32z4sggyfrkjr7vq695hk94hv0n";
+    sha256 = "101a1kih58s1ysqfncqw69qnwx1zlbjxwhnfmp0z5gz0jzs4i4b7";
   };
 
   outputs = [ "dev" "out" "bin" "man" "doc" ];
@@ -13,10 +13,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
-  # The preHook hack no longer worked, no idea why.
-  postFixup = ''
-    sed '1s:#!${stdenv.shell}:#!/usr/bin/env sh:' -i "$bin"/bin/*
-  '';
+  preConfigure = "unset CONFIG_SHELL";
+
+  postInstall = "rm -rf $out/share/doc";
 
   meta = {
     homepage = http://tukaani.org/xz/;

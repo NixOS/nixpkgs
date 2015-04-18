@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchurl, coreutils, twisted }:
 
 buildPythonPackage (rec {
-  name = "buildbot-slave-0.8.8";
+  name = "buildbot-slave-0.8.10";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://buildbot.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1k1pk3y0rk6j01wc491jblryr4ajqg1ing9m3sjaw9s5sga34xcb";
+    url = "https://pypi.python.org/packages/source/b/buildbot-slave/${name}.tar.gz";
+    sha256 = "09pncw44c7vqrl7zyn1nvfismiqi9s51axk9cqxn9gq7jhj38mpg";
   };
 
   patchPhase = ''

@@ -15,12 +15,12 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = "a Scheme shell";
+    description = "A Scheme shell";
     longDescription = ''
       SCSH is an implementation of the Scheme shell.  It is implemented as
       a heap image which is interpreted by the Scheme 48 virtual machine.
     '';
     homepage = http://www.scsh.net/;
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
   };
 }

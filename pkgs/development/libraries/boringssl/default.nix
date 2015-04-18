@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake perl ];
   enableParallelBuilding = true;
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   installPhase = ''
     mkdir -p $out/bin $out/include $out/lib

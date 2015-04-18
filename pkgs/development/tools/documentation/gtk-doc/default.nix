@@ -1,12 +1,13 @@
 { stdenv, fetchurl, pkgconfig, perl, python, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome_doc_utils, dblatex, gettext }:
+, docbook_xml_dtd_43, docbook_xsl, gnome_doc_utils, dblatex, gettext, itstool }:
 
-stdenv.mkDerivation {
-  name = "gtk-doc-1.18";
+stdenv.mkDerivation rec {
+  name = "gtk-doc-${version}";
+  version = "1.21";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gtk-doc/1.18/gtk-doc-1.18.tar.xz;
-    sha256 = "084scak99ppgqk5lkziskhcsd3jmcgf7a98ddwhciq8vaqf5jnvq";
+    url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
+    sha256 = "0gpfh25qxsic7n25pfl74mjp38hdm3pr4islhlaxv3p05q0lv4sx";
   };
 
   # maybe there is a better way to pass the needed dtd and xsl files
@@ -27,6 +28,13 @@ stdenv.mkDerivation {
 
   buildInputs =
    [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-     gnome_doc_utils dblatex gettext which
+     gnome_doc_utils dblatex gettext which itstool
    ];
+
+  meta = with stdenv.lib; {
+    homepage = http://www.gtk.org/gtk-doc;
+    description = "Tools to extract documentation embedded in GTK+ and GNOME source code";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
+  };
 }

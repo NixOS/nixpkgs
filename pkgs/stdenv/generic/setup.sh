@@ -1,4 +1,5 @@
 set -e
+set -o pipefail
 
 : ${outputs:=out}
 
@@ -101,7 +102,7 @@ exitHandler() {
         if [ -n "$succeedOnFailure" ]; then
             echo "build failed with exit code $exitCode (ignored)"
             mkdir -p "$out/nix-support"
-            echo -n $exitCode > "$out/nix-support/failed"
+            printf "%s" $exitCode > "$out/nix-support/failed"
             exit 0
         fi
 
@@ -184,11 +185,13 @@ fi
 
 # Check that the pre-hook initialised SHELL.
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
+BASH="$SHELL"
+export CONFIG_SHELL="$SHELL"
 
 
 # Execute the pre-hook.
-export CONFIG_SHELL="$SHELL"
 if [ -z "$shell" ]; then export shell=$SHELL; fi
+runHook preHook
 
 
 # Allow the caller to augment buildInputs (it's not always possible to
@@ -227,12 +230,12 @@ findInputs() {
 }
 
 crossPkgs=""
-for i in $buildInputs $propagatedBuildInputs; do
+for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
     findInputs $i crossPkgs propagated-build-inputs
 done
 
 nativePkgs=""
-for i in $nativeBuildInputs $propagatedNativeBuildInputs; do
+for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
     findInputs $i nativePkgs propagated-native-build-inputs
 done
 
@@ -339,7 +342,7 @@ substitute() {
     local n p pattern replacement varName content
 
     # a slightly hacky way to keep newline at the end
-    content="$(cat $input; echo -n X)"
+    content="$(cat "$input"; printf "%s" X)"
     content="${content%X}"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
@@ -367,10 +370,8 @@ substitute() {
         content="${content//"$pattern"/$replacement}"
     done
 
-    # !!! This doesn't work properly if $content is "-n".
-    echo -n "$content" > "$output".tmp
-    if [ -x "$output" ]; then chmod +x "$output".tmp; fi
-    mv -f "$output".tmp "$output"
+    if [ -e "$output" ]; then chmod +w "$output"; fi
+    printf "%s" "$content" > "$output"
 }
 
 
@@ -386,7 +387,7 @@ substituteAll() {
     local output="$2"
 
     # Select all environment variables that start with a lowercase character.
-    for envVar in $(env | sed "s/^[^a-z].*//" | sed "s/^\([^=]*\)=.*/\1/"); do
+    for envVar in $(env | sed -e $'s/^\([a-z][^=]*\)=.*/\\1/; t \n d'); do
         if [ "$NIX_DEBUG" = "1" ]; then
             echo "$envVar -> ${!envVar}"
         fi
@@ -463,7 +464,9 @@ _defaultUnpack() {
     if [ -d "$fn" ]; then
 
         stripHash "$fn"
-        cp -prd --no-preserve=timestamps "$fn" $strippedName
+        # We can't preserve hardlinks because they may have been introduced by
+        # store optimization, which might break things in the build
+        cp -pr --reflink=auto --no-preserve=timestamps "$fn" $strippedName
 
     else
 
@@ -570,7 +573,7 @@ patchPhase() {
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
-        case $i in
+        case "$i" in
             *.gz)
                 uncompress="gzip -d"
                 ;;
@@ -585,7 +588,7 @@ patchPhase() {
                 ;;
         esac
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
-        $uncompress < $i 2>&1 | patch ${patchFlags:--p1}
+        $uncompress < "$i" 2>&1 | patch ${patchFlags:--p1}
         stopNest
     done
 

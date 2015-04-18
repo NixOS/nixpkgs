@@ -3,11 +3,12 @@
 let
   inherit (lib) mkOption mkIf optionals literalExample;
   cfg = config.services.xserver.windowManager.xmonad;
-  xmonadEnv = cfg.haskellPackages.ghcWithPackages(self: [
-    self.xmonad
-  ] ++ optionals cfg.enableContribAndExtras [ self.xmonadContrib self.xmonadExtras]
-    ++ optionals (cfg.extraPackages != null) (cfg.extraPackages self));
-  xmessage = pkgs.xlibs.xmessage;
+  xmonad = pkgs.xmonad-with-packages.override {
+    ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
+    packages = self: cfg.extraPackages self ++
+                     optionals cfg.enableContribAndExtras
+                     [ self.xmonad-contrib self.xmonad-extras ];
+  };
 in
 {
   options = {
@@ -19,9 +20,9 @@ in
       };
 
       haskellPackages = mkOption {
-        default = pkgs.haskellPackages;
-        defaultText = "pkgs.haskellPackages";
-        example = literalExample "pkgs.haskellPackages_ghc701";
+        default = pkgs.haskellngPackages;
+        defaultText = "pkgs.haskellngPackages";
+        example = literalExample "pkgs.haskell-ng.packages.ghc784";
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
@@ -31,17 +32,17 @@ in
       };
 
       extraPackages = mkOption {
-        default = null;
+        default = self: [];
         example = literalExample ''
           haskellPackages: [
-            haskellPackages.xmonadContrib
-            haskellPackages.monadLogger
+            haskellPackages.xmonad-contrib
+            haskellPackages.monad-logger
           ]
         '';
         description = ''
           Extra packages available to ghc when rebuilding Xmonad. The
           value must be a function which receives the attrset defined
-          in <varname>haskellpackages</varname> as the sole argument.
+          in <varname>haskellPackages</varname> as the sole argument.
         '';
       };
 
@@ -58,12 +59,12 @@ in
       session = [{
         name = "xmonad";
         start = ''
-          XMONAD_GHC=${xmonadEnv}/bin/ghc XMONAD_XMESSAGE=${xmessage}/bin/xmessage xmonad &
+          ${xmonad}/bin/xmonad &
           waitPID=$!
         '';
       }];
     };
 
-    environment.systemPackages = [ cfg.haskellPackages.xmonad ];
+    environment.systemPackages = [ xmonad ];
   };
 }

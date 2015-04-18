@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qgn5psfyhbrnap275xjfrzppf5a83fb67gpql0kfqv37al869gm";
   };
 
+  patchPhase = ''
+    patch interfaces/cc/aspell.h < ${./clang.patch}
+  '';
+
   buildInputs = [ perl ];
 
   doCheck = true;
@@ -31,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://aspell.net/;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ ];
+    platforms = with stdenv.lib.platforms; all;
   };
 }

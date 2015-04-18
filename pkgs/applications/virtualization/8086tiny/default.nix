@@ -1,7 +1,6 @@
 { stdenv, fetchurl
 , localBios ? true, nasm ? null
-, sdlSupport ? true, SDL ? null
-}:
+, sdlSupport ? true, SDL ? null }:
 
 assert sdlSupport -> (SDL != null);
 

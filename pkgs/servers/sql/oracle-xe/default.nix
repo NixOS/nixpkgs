@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, requireFile, patchelf, rpm, cpio, libaio }:
+{ stdenv, makeWrapper, requireFile, patchelf, rpmextract, libaio }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = ''
     (mkdir -p "${name}" && cd "${name}" &&
-      ${rpm}/bin/rpm2cpio "$curSrc" | ${cpio}/bin/cpio -id)
+      ${rpmextract}/bin/rpmextract "$curSrc")
   '';
 
   buildPhase = let
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       \( -name '*.sh' \
       -o -path "$basedir/bin/*" \
       \) -print -exec "${patchelf}/bin/patchelf" \
-           --interpreter "$(cat "$NIX_GCC/nix-support/dynamic-linker")" \
+           --interpreter "$(cat "$NIX_CC/nix-support/dynamic-linker")" \
            --set-rpath "${libs}:$out/libexec/oracle/lib" \
            --force-rpath '{}' \;
   '';

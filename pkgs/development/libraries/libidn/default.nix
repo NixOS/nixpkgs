@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libidn-1.28";
+  name = "libidn-1.29";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/${name}.tar.gz";
-    sha256 = "1yxbfdiwr3l91m79sksn6v5mgpl4lfj8i82zgryckas9hjb7ldfx";
+    sha256 = "fb82747dbbf9b36f703ed27293317d818d7e851d4f5773dedf3efa4db32a7c7c";
   };
 
   doCheck = ! stdenv.isDarwin;
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       included.
     '';
 
+    repositories.git = git://git.savannah.gnu.org/libidn.git;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

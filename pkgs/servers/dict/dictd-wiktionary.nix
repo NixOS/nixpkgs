@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/dictd/
     cd $out/share/dictd
 
-    export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
     python -O ${convert} ${data}
     dictzip wiktionary-en.dict
     echo en_US.UTF-8 > locale

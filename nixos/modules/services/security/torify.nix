@@ -5,13 +5,13 @@ let
   cfg = config.services.tor;
 
   torify = pkgs.writeTextFile {
-    name = "torify";
+    name = "tsocks";
     text = ''
         #!${pkgs.stdenv.shell}
-        TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.torify.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
+        TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.tsocks.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
     '';
     executable = true;
-    destination = "/bin/torify";
+    destination = "/bin/tsocks";
   };
 
 in
@@ -22,12 +22,12 @@ in
   
   options = {
   
-    services.tor.torify = {
+    services.tor.tsocks = {
 
       enable = mkOption {
-        default = cfg.client.enable;
+        default = cfg.enable && cfg.client.enable;
         description = ''
-          Whether to build torify scipt to relay application traffic via TOR.
+          Whether to build tsocks wrapper script to relay application traffic via TOR.
         '';
       };
 
@@ -53,13 +53,13 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.torify.enable {
+  config = mkIf cfg.tsocks.enable {
 
     environment.systemPackages = [ torify ];  # expose it to the users
 
-    services.tor.torify.config = ''
-      server = ${toString(head (splitString ":" cfg.torify.server))}
-      server_port = ${toString(tail (splitString ":" cfg.torify.server))}
+    services.tor.tsocks.config = ''
+      server = ${toString(head (splitString ":" cfg.tsocks.server))}
+      server_port = ${toString(tail (splitString ":" cfg.tsocks.server))}
 
       local = 127.0.0.0/255.128.0.0
       local = 127.128.0.0/255.192.0.0

@@ -55,7 +55,7 @@ rec {
     ];
     platforms = with a.lib.platforms;
       linux;
-    license = "BSD";
+    license = a.lib.licenses.bsd3;
     inherit (sourceInfo) version;
     homepage = "http://page.mi.fu-berlin.de/cbenzmueller/leo/";
     downloadPage = "http://page.mi.fu-berlin.de/cbenzmueller/leo/download.html";

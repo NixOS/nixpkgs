@@ -1,0 +1,15 @@
+diff -Naur a/src/wl/sys/wl_linux.c b/src/wl/sys/wl_linux.c
+--- a/src/wl/sys/wl_linux.c	2014-06-26 06:42:08.000000000 -0400
++++ b/src/wl/sys/wl_linux.c	2014-10-13 12:00:04.446122588 -0400
+@@ -1307,7 +1307,11 @@
+ 	dev->priv = priv_link;
+ #else
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 17, 0)
++	dev = alloc_netdev(sizeof(priv_link_t), intf_name, NET_NAME_UNKNOWN, ether_setup);
++#else
+ 	dev = alloc_netdev(sizeof(priv_link_t), intf_name, ether_setup);
++#endif
+ 	if (!dev) {
+ 		WL_ERROR(("wl%d: %s: alloc_netdev failed\n",
+ 			(wl->pub)?wl->pub->unit:wlif->subunit, __FUNCTION__));

@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "v3-5" a; 
+  version = a.lib.attrByPath ["version"] "v6-5" a; 
   buildInputs = with a; [
     sbcl
   ];
@@ -10,7 +10,7 @@ in
 rec {
   src = fetchurl {
     url = "http://www.cs.utexas.edu/users/moore/acl2/${version}/distrib/acl2.tar.gz";
-    sha256 = "0zmh1njpp7n7azcyjlygr0h0k51d18s1jkj0dr1jn2bh7mpysajk";
+    sha256 = "19kfclgpdyms016s06pjf3icj3mx9jlcj8vfgpbx2ac4ls0ir36g";
     name = "acl2-${version}.tar.gz";
   };
 
@@ -26,8 +26,8 @@ rec {
   doDeploy = (a.simplyShare installSuffix);
   doBuild = a.fullDepEntry (''
     cd $out/share/${installSuffix}
-    make LISP=${a.sbcl}/bin/sbcl
-    make LISP=${a.sbcl}/bin/sbcl regression
+    make LISP='${a.sbcl}/bin/sbcl --dynamic-space-size 2000'
+    make LISP='${a.sbcl}/bin/sbcl --dynamic-space-size 2000' regression
     mkdir -p "$out/bin"
     cp saved_acl2 "$out/bin/acl2"
   '') ["doDeploy" "addInputs" "defEnsureDir"];

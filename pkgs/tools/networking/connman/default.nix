@@ -2,12 +2,13 @@
   openvpn, vpnc, glib, dbus, iptables, gnutls, policykit, polkit,
   wpa_supplicant, readline6, pptp, ppp, tree }:
 
-stdenv.mkDerivation {
-  name = "connman-1.24";
+stdenv.mkDerivation rec {
+  name = "connman-${version}";
+  version = "1.28";
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/network/connman/connman.git";
-    rev = "11b8a873988ab5fc3f360c5b6fb25a6761fe7683";
-    sha256 = "12z1krm5qnjyamc3qr2px7wvz7qkss7jk5brnmhyalqmcnkwcbrm";
+    rev = "refs/tags/${version}";
+    sha256 = "13c374bfj7dzlx7zvnnigmk0ck5cy601aqi18n77mcrq9yyxw5y9";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig openconnect polkit

@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
       need revise only that one document.  The Texinfo system is
       well-integrated with GNU Emacs.
     '';
+    branch = "5.2";
   };
 }

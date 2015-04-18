@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "doc" ];
 
-  buildInputs = [ flex bison glib pkgconfig python ]
+  buildInputs = [ flex bison pkgconfig python ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin otool;
-  propagatedBuildInputs = [ libffi ];
+  propagatedBuildInputs = [ libffi glib ];
 
   # Tests depend on cairo, which is undesirable (it pulls in lots of
   # other dependencies).

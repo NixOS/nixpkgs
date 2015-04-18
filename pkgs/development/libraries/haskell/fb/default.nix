@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fb";
-  version = "1.0.4";
-  sha256 = "1sp0x5p9l02i2ynvynazhgs5lqqwih997c2fyfp0xi24qsc7ilr2";
+  version = "1.0.8";
+  sha256 = "1cv722kkp6lbxajv3ka4088x2491yy41cfypqqkq753mm59x6s9m";
   buildDepends = [
     aeson attoparsec base16Bytestring base64Bytestring cereal conduit
     conduitExtra cryptoApi cryptohash cryptohashCryptoapi dataDefault
@@ -22,7 +22,6 @@ cabal.mkDerivation (self: {
     aeson conduit dataDefault hspec httpConduit HUnit liftedBase
     monadControl QuickCheck resourcet text time transformers
   ];
-  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/prowdsponsor/fb";

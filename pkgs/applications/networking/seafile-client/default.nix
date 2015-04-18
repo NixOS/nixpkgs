@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec
 {
-  version = "3.0.4";
+  version = "4.0.6";
   name = "seafile-client-${version}";
 
   src = fetchurl
   {
     url = "https://github.com/haiwen/seafile-client/archive/v${version}.tar.gz";
-    sha256 = "10iz45y8j5f9smi0srxw62frb97vhr0w938v8w3rsjcw9qq366a2";
+    sha256 = "0hx8zjmgj4ki2p5fkdyz32fy8db60p6rvi3my9l59j7fslv71k1z";
   };
 
   buildInputs = [ pkgconfig cmake qt4 seafile-shared makeWrapper ];

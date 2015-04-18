@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, popplerQt4, zlib}:
+{ stdenv, fetchurl, qt4, poppler_qt4, zlib}:
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "167d78nfk265jjvl129nr70v8ladb2rav2qyhw7ngr6m54gak831";
   };
 
-  buildInputs = [ qt4 popplerQt4 zlib ];
+  buildInputs = [ qt4 poppler_qt4 zlib ];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${popplerQt4}/include/poppler/qt4) "
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${poppler_qt4}/include/poppler/qt4) "
     qmake PREFIX=$out texstudio.pro
   '';
 

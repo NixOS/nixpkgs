@@ -1,0 +1,21 @@
+Found on a random place http://web.archiveorange.com/archive/v/CcRuxYExfvTxfKcBFLah
+Nicolas Viéville, Oct 27 2014
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_248.orig/src/wl/sys/wl_cfg80211_hybrid.c	2014-09-10 19:27:13.301316000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_248/src/wl/sys/wl_cfg80211_hybrid.c	2014-10-27 11:21:58.213536239 +0100
+@@ -2025,7 +2025,15 @@
+ 	notify_ie = (u8 *)bi + le16_to_cpu(bi->ie_offset);
+ 	notify_ielen = le32_to_cpu(bi->ie_length);
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 18, 0)
++	cbss = cfg80211_inform_bss(wiphy, channel,
++		(mgmt_type == IEEE80211_STYPE_PROBE_RESP) ? CFG80211_BSS_FTYPE_PRESP : CFG80211_BSS_FTYPE_BEACON,
++		(const u8 *)(bi->BSSID.octet),
++		0, beacon_proberesp->capab_info, beacon_proberesp->beacon_int,
++		(const u8 *)notify_ie, notify_ielen, signal, GFP_KERNEL);
++#else
+ 	cbss = cfg80211_inform_bss(wiphy, channel, (const u8 *)(bi->BSSID.octet),
+ 		0, beacon_proberesp->capab_info, beacon_proberesp->beacon_int,
+ 		(const u8 *)notify_ie, notify_ielen, signal, GFP_KERNEL);
++#endif
+ 	if (unlikely(!cbss))
+ 		return -ENOMEM;

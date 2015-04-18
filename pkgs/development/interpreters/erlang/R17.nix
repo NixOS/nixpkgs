@@ -1,23 +1,31 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
-, wxSupport ? false, mesa ? null, wxGTK ? null, xlibs ? null }:
+, odbcSupport ? false, unixODBC ? null
+, wxSupport ? true, mesa ? null, wxGTK ? null, xlibs ? null
+, javacSupport ? false, openjdk ? null
+, enableHipe ? true}:
 
 assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
+assert odbcSupport -> unixODBC != null;
+assert javacSupport ->  openjdk != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "erlang-" + version;
-  version = "17.1";
+  name = "erlang-" + version + "${optionalString odbcSupport "-odbc"}"
+  + "${optionalString javacSupport "-javac"}";
+  version = "17.5";
 
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
-    sha256 = "0mn3p5rwvjfsxjnn1vrm0lxdq40wq9bmd9nibl6hqbfcnnrga1mq";
+    sha256 = "0x34hj1a4j3rphqdaapdld7la4sqiqillamcz06wac0vk0684a1w";
   };
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ];
+    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ]
+      ++ optional odbcSupport [ unixODBC ]
+      ++ optional javacSupport [ openjdk ];
 
   patchPhase = '' sed -i "s@/bin/rm@rm@" lib/odbc/configure erts/configure '';
 
@@ -26,12 +34,12 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
+  configureFlags= "--with-ssl=${openssl} ${optionalString enableHipe "--enable-hipe"} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"} ${optionalString javacSupport "--with-javac"}";
 
   postInstall = let
     manpages = fetchurl {
       url = "http://www.erlang.org/download/otp_doc_man_${version}.tar.gz";
-      sha256 = "1aza6hxhh7ag2frsa0hg6il6ancjrbazvgz7jc2p7qrmy5vh48sa";
+      sha256 = "1hspm285bl7i9a0d4r6j6lm5yk4sb5d9xzpia3simh0z06hv5cc5";
     };
   in ''
     ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
@@ -65,6 +73,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # Note: Maintainer of prev. erlang version was simons. If he wants
     # to continue maintaining erlang I'm totally ok with that.
-    maintainers = [ maintainers.the-kenny ];
+    maintainers = [ maintainers.the-kenny maintainers.sjmackenzie ];
   };
 }

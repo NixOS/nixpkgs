@@ -3,7 +3,7 @@
 
 let
   buildPlatform = args:
-    stdenv.mkDerivation (args // {   
+    stdenv.mkDerivation (args // {
       buildInputs = [ unzip ];
       buildCommand = ''
         mkdir -p $out
@@ -219,16 +219,26 @@ in
   };
     
   platform_19 = buildPlatform {
-    name = "android-platform-4.4";
+    name = "android-platform-4.4.2";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/android-19_r01.zip;
-      sha1 = "96281811998272dce46e8285d15fce444a3d5a96";
+      url = https://dl-ssl.google.com/android/repository/android-19_r03.zip;
+      sha1 = "5f33d8fd36a384fe2b170035e04a29c274a9ef95";
     };
     meta = {
-      description = "Android SDK Platform 4.4";
+      description = "Android SDK Platform 4.4.2";
       
     };
   };
-    
+
+  platform_21 = buildPlatform {
+    name = "android-platform-5.0.1";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/android-21_r02.zip;
+      sha1 = "53536556059bb29ae82f414fd2e14bc335a4eb4c";
+    };
+    meta = {
+      description = "Android SDK Platform 5.0.1";
+    };
+  };
+
 }
-  

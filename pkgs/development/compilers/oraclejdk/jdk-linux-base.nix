@@ -143,7 +143,7 @@ let result = stdenv.mkDerivation rec {
 
     # set all the dynamic linkers
     find $out -type f -perm +100 \
-        -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "$rpath" {} \;
 
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
@@ -173,12 +173,14 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.gcc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf atk] ++
-    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.gcc.gcc] else []);
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xlibs.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf atk] ++
+    (if swingSupport then [xlibs.libX11 xlibs.libXext xlibs.libXtst xlibs.libXi xlibs.libXp xlibs.libXt xlibs.libXrender stdenv.cc.cc] else []);
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
   passthru.jre = result; # FIXME: use multiple outputs or return actual JRE package
+
+  passthru.home = result;
 
   meta.license = stdenv.lib.licenses.unfree;
 

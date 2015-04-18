@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open, royalty-free, highly versatile audio codec";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     homepage = http://www.opus-codec.org/;
   };
 }

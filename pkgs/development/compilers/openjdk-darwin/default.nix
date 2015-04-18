@@ -31,7 +31,12 @@ let
       EOF
     '';
 
-    passthru.jre = jdk;
+    passthru = {
+      jre = jdk;
+      home = jdk;
+    };
+
+    meta.platforms = stdenv.lib.platforms.darwin;
 
   };
 in jdk

@@ -1,46 +1,38 @@
-{ fetchgit, stdenv, cmake, boost, ogre, mygui, ois, SDL, libvorbis, pkgconfig
+{ fetchgit, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
 , makeWrapper, enet, libXcursor }:
 
 stdenv.mkDerivation rec {
-  name = "stunt-rally-1.8";
+  name = "stunt-rally-${version}";
+  version = "2.5";
 
   src = fetchgit {
     url = git://github.com/stuntrally/stuntrally.git;
-    rev = "refs/tags/1.8";
-    sha256 = "0p8p83xx8q33kymsqnmxqca4jdfyg9rwrsac790z56gdbc7gnahm";
+    rev = "refs/tags/${version}";
+    sha256 = "1lsh7z7sjfwpdybg6vbwqx1zxsgbfp2n60n7xl33v225p32qh1qf";
   };
 
   tracks = fetchgit {
     url = git://github.com/stuntrally/tracks.git;
-    rev = "refs/tags/1.8";
-    sha256 = "1gcrs21nn0v3hvhrw8dc0wh1knn5qh66cjx7a1igiciiadmi2s3l";
+    rev = "refs/tags/${version}";
+    sha256 = "1614j6q1d2f69l58kkqndndvf6svcghhw8pzc2s1plf6k87h67mg";
   };
 
-  patchPhase = ''
-    sed -i 's/materials/materials material_templates/' data/CMakeLists.txt
-  '';
-
   preConfigure = ''
-    mkdir data/tracks
-    cp -R $tracks/* data/tracks
+    cp -R ${tracks} data/tracks
+    chmod u+rwX -R data
   '';
 
-  buildInputs = [ cmake boost ogre mygui ois SDL libvorbis pkgconfig makeWrapper enet
-    libXcursor
+  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis pkgconfig 
+    makeWrapper enet libXcursor
   ];
-
-  # I think they suppose cmake should give them OGRE_PLUGIN_DIR defined, but
-  # the cmake code I saw is not ready for that. Therefore, we use the env var.
-  postInstall = ''
-    wrapProgram $out/bin/stuntrally --set OGRE_PLUGIN_DIR ${ogre}/lib/OGRE
-    wrapProgram $out/bin/sr-editor --set OGRE_PLUGIN_DIR ${ogre}/lib/OGRE
-  '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
     homepage = http://code.google.com/p/vdrift-ogre/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.linux;
   };
 }

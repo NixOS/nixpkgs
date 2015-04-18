@@ -11,11 +11,11 @@
 # TODO: enable more features
 
 stdenv.mkDerivation rec {
-  name = "empathy-3.12.2";
+  name = "empathy-3.12.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/empathy/3.12/${name}.tar.xz";
-    sha256 = "414d0c6b1a30b1afbf35ad04b0b9ff3ada3e06fab797a50a7147cdfe0905e7cd";
+    sha256 = "0rhgpiv75aafmdh6r7d4ci59lnxqmmwg9hvsa5b3mk7j2d2pma86";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard
@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

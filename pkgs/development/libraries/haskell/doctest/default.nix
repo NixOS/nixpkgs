@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "doctest";
-  version = "0.9.11";
-  sha256 = "04y6y5hixqh8awl37wrss20c2drvx070w7wd6icfx7r0jqds97jr";
+  version = "0.9.11.1";
+  sha256 = "1gzzzwr7f7281mlbfbk74nxr28l70lwfaws4xjfx2v06xazl99db";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ deepseq filepath ghcPaths syb transformers ];
@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
   doCheck = false;
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.4";
   meta = {
-    homepage = "https://github.com/sol/doctest-haskell#readme";
+    homepage = "https://github.com/sol/doctest#readme";
     description = "Test interactive Haskell examples";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;

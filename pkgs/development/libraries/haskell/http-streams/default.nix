@@ -3,27 +3,28 @@
 { cabal, aeson, aesonPretty, attoparsec, base64Bytestring
 , blazeBuilder, caseInsensitive, HsOpenSSL, hspec
 , hspecExpectations, httpCommon, HUnit, ioStreams
-, MonadCatchIOTransformers, mtl, network, opensslStreams, snapCore
-, snapServer, systemFileio, systemFilepath, text, transformers
-, unorderedContainers
+, MonadCatchIOTransformers, mtl, network, networkUri
+, opensslStreams, snapCore, snapServer, systemFileio
+, systemFilepath, text, transformers, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-streams";
-  version = "0.7.2.0";
-  sha256 = "0h7fjnpday34skhafv2v0ybhfv0x915prfb4qa0ld4gm50scsinz";
+  version = "0.7.2.4";
+  sha256 = "1hs2d5qiq5vq6qjxxx061w1iigr05chkv28xvlvxfz0wc7nlipzz";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeBuilder caseInsensitive
-    HsOpenSSL httpCommon ioStreams mtl network opensslStreams text
-    transformers unorderedContainers
+    HsOpenSSL httpCommon ioStreams mtl network networkUri
+    opensslStreams text transformers unorderedContainers
   ];
   testDepends = [
     aeson aesonPretty attoparsec base64Bytestring blazeBuilder
     caseInsensitive HsOpenSSL hspec hspecExpectations httpCommon HUnit
-    ioStreams MonadCatchIOTransformers mtl network opensslStreams
-    snapCore snapServer systemFileio systemFilepath text transformers
-    unorderedContainers
+    ioStreams MonadCatchIOTransformers mtl network networkUri
+    opensslStreams snapCore snapServer systemFileio systemFilepath text
+    transformers unorderedContainers
   ];
+  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://research.operationaldynamics.com/projects/http-streams/";

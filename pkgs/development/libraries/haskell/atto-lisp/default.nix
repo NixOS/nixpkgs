@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "atto-lisp";
-  version = "0.2.1.2";
-  sha256 = "0xl5b0gblab3v2sfaxvx3z96660r9xp1m2n3ri6aph3kldbpkfcg";
+  version = "0.2.2";
+  sha256 = "13lhdalam4gn9faa58c3c7nssdwp2y0jsfl1lnnvr3dx6wzp0jhc";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual deepseq text
   ];

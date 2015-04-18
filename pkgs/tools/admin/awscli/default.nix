@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchzip, pythonPackages, groff }:
 
 pythonPackages.buildPythonPackage rec {
   name = "awscli-${version}";
-  version = "1.2.13";
+  version = "1.7.21";
   namePrefix = "";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/aws/aws-cli/archive/${version}.tar.gz";
-    sha256 = "1mpy1q9y5qiq1fr2xc98sn1njx0p0b1g21p0rdh4ccsf9w7i0rpb";
+    sha256 = "1hm2m5ycsyn4lap8549d6glryp9b9mvar9xwbpmpdcf698lcxzsj";
   };
 
-  propagatedBuildInputs = [ 
+  propagatedBuildInputs = [
     pythonPackages.botocore
     pythonPackages.bcdoc
     pythonPackages.six
@@ -18,5 +18,13 @@ pythonPackages.buildPythonPackage rec {
     pythonPackages.docutils
     pythonPackages.rsa
     pythonPackages.pyasn1
+    groff
   ];
+
+  meta = {
+    homepage = https://aws.amazon.com/cli/;
+    description = "Unified tool to manage your AWS services";
+    license = stdenv.lib.licenses.asl20;
+    maintainers = with stdenv.lib.maintainers; [ muflax ];
+  };
 }

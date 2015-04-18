@@ -8,17 +8,22 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "3.26.8";
+  version = "3.30.33.16";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/"
         + "${name}.tar.bz2";
-    sha256 = "0w8mfy8jlqvp958c0zhsfwf0s3m6kw53jhcyg6aiwh877g6s21iz";
+    sha256 = "1azf1b36gqj4z5x0k9wq2dkp99zfyhwb0d6i2cl5fjm3k6js7l45";
   };
+
+  patchPhase = ''
+    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,' build/gyp_v8
+  '';
 
   configurePhase = ''
     PYTHONPATH="tools/generate_shim_headers:$PYTHONPATH" \
-      ${gyp}/bin/gyp \
+    PYTHONPATH="$(toPythonPath ${gyp}):$PYTHONPATH" \
+      build/gyp_v8 \
         -f make \
         --generator-output="out" \
         -Dflock_index=0 \
@@ -26,9 +31,7 @@ stdenv.mkDerivation rec {
         -Duse_system_icu=1 \
         -Dconsole=readline \
         -Dcomponent=shared_library \
-        -Dv8_target_arch=${arch} \
-        --depth=. -Ibuild/standalone.gypi \
-        build/all.gyp
+        -Dv8_target_arch=${arch}
   '';
 
   nativeBuildInputs = [ which ];
@@ -54,13 +57,13 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = if stdenv.isDarwin then ''
-    install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/bin/d8
-    install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
+    install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc}/lib/libgcc_s.1.dylib $out/bin/d8
+    install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
   '' else null;
 
   meta = with stdenv.lib; {
     description = "Google's open source JavaScript engine";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with platforms; linux;
     license = licenses.bsd3;
   };
 }

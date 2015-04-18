@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gtksourceview2";
-  version = "0.13.0.0";
-  sha256 = "0md4dwg68cgq5qj80rjvsrckwn2ap9d1xp0hy8w1iiyii8dfqcnn";
+  version = "0.13.1.1";
+  sha256 = "09439drmwfy5bqni1clcn0nng30irn9x43fjak9jljggg1yij9xw";
   buildDepends = [ glib gtk mtl text ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];

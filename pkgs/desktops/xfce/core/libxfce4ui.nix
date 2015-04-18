@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   p_name  = "libxfce4ui";
-  ver_maj = "4.10";
-  ver_min = "0";
+  ver_maj = "4.12";
+  ver_min = "1";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "1qm31s6568cz4c8rl9fsfq0xmf7pldxm0ki62gx1cpybihlgmfd2";
+    sha256 = "3d619811bfbe7478bb984c16543d980cadd08586365a7bc25e59e3ca6384ff43";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.xfce.org/;
     description = "Basic GUI library for Xfce";
     license = stdenv.lib.licenses.lgpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

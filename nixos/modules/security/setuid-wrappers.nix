@@ -76,8 +76,7 @@ in
 
   config = {
 
-    security.setuidPrograms =
-      [ "fusermount" "wodim" "cdrdao" "growisofs" ];
+    security.setuidPrograms = [ "fusermount" ];
 
     system.activationScripts.setuid =
       let

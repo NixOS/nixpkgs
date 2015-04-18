@@ -1,23 +1,20 @@
-{ stdenv, fetchurl, xz, pcre, libiconv ? null }:
+{ stdenv, fetchurl, xz, pcre, libiconv }:
 
-let version = "2.14"; in
+let version = "2.21"; in
 
 stdenv.mkDerivation {
   name = "gnugrep-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "1qbjb1l7f9blckc5pqy8jlf6482hpx4awn2acmhyf5mv9wfq03p7";
+    sha256 = "1pp5n15qwxrw1pibwjhhgsibyv5cafhamf8lwzjygs6y00fa2i2j";
   };
+
+  patches = [ ./cve-2015-1345.patch ];
 
   #outputs = [ "out" "doc" ]; ToDo
 
-  buildInputs = [ pcre xz.bin ]
-    ++ stdenv.lib.optional (libiconv != null) libiconv;
-
-  patches = [ ./test-localeconv.patch ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString (libiconv != null) "-L${libiconv}/lib -liconv";
+  buildInputs = [ pcre xz.bin libiconv ];
 
   doCheck = !stdenv.isDarwin;
 
@@ -26,6 +23,18 @@ stdenv.mkDerivation {
   preConfigure = ''
     export MKDIR_P="mkdir -p"
   '';
+
+  # Fix reference to sh in bootstrap-tools, and invoke grep via
+  # absolute path rather than looking at argv[0].
+  postInstall =
+    ''
+      rm $out/bin/egrep $out/bin/fgrep
+      echo "#! /bin/sh" > $out/bin/egrep
+      echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+      echo "#! /bin/sh" > $out/bin/fgrep
+      echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+      chmod +x $out/bin/egrep $out/bin/fgrep
+    '';
 
   meta = {
     homepage = http://www.gnu.org/software/grep/;
@@ -39,7 +48,7 @@ stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 

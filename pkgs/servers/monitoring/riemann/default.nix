@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "riemann-${version}";
-  version = "0.2.6";
+  version = "0.2.8";
 
   src = fetchurl {
     url = "http://aphyr.com/riemann/${name}.tar.bz2";
-    sha256 = "1m1vkvdcpcc93ipzpdlq0lig81yw172qfiqbxlrbjyb0x6j1984d";
+    sha256 = "1p2pdkxy2xc5zlj6kadf4z8l0f0r4bvdgipqf52193l7rdm6dfzm";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -17,10 +17,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://riemann.io/";
-    description = ''
-      A network monitoring system.
-    '';
+    homepage = http://riemann.io/;
+    description = "A network monitoring system";
     license = licenses.epl10;
     platforms = platforms.all;
     maintainers = [ maintainers.rickynils ];

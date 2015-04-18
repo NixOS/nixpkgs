@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , fuse, samba, pkgconfig
+  , fuse, samba, pkgconfig, glib
   , ...}:
 builderDefsPackage
 (a :  
@@ -12,17 +12,16 @@ let
   sourceInfo = rec {
     baseName="smbnetfs";
     dirBaseName="SMBNetFS";
-    version="0.5.3a";
+    version = "0.6.0";
     name="${baseName}-${version}";
     project="${baseName}";
     url="mirror://sourceforge/project/${project}/${baseName}/${dirBaseName}-${version}/${name}.tar.bz2";
-    hash="0fzlw11y2vkxmjzz3qcypqlvz074v6a3pl4pyffbniqal64qgrsw";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "16sikr81ipn8v1a1zrqgnsy2as3zcaxbzkr0bm5vxy012bq0plkd";
   };
 
   inherit (sourceInfo) name version;
@@ -40,11 +39,9 @@ rec {
     platforms = with a.lib.platforms;
       linux;
     license = a.lib.licenses.gpl2;
-  };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
-    };
+    downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
+    updateWalker = true;
+    inherit version;
   };
 }) x
 

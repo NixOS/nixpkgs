@@ -28,9 +28,13 @@ stdenv.mkDerivation rec {
                       --replace "which %s" "${which}/bin/which %s"
   '';
   configureFlags = "--with-backend=qt --with-distributor=NixOS";
+
+  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+
   postInstall = []
     ++ stdenv.lib.optional withVideos "cp ${sequences_src} $out/share/warzone2100/sequences.wz";
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "A free RTS game, originally developed by Pumpkin Studios";
     longDescription = ''
         Warzone 2100 is an open source real-time strategy and real-time tactics
@@ -44,8 +48,8 @@ stdenv.mkDerivation rec {
       variety of possible units and tactics. 
     '';
     homepage = http://wz2100.net;
-    license = [ "GPLv2+" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.astsmtl ];
+    platforms = platforms.linux;
   };
 }

@@ -8,14 +8,28 @@ let
 
   cfg = config.networking.dhcpcd;
 
+  interfaces = attrValues config.networking.interfaces;
+
+  enableDHCP = config.networking.useDHCP || any (i: i.useDHCP == true) interfaces;
+
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: i.ipAddress != null) (attrValues config.networking.interfaces))
+    map (i: i.name) (filter (i: if i.useDHCP != null then !i.useDHCP else i.ip4 != [ ] || i.ipAddress != null) interfaces)
     ++ mapAttrsToList (i: _: i) config.networking.sits
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bonds))
     ++ config.networking.dhcpcd.denyInterfaces;
+
+  arrayAppendOrNull = a1: a2: if a1 == null && a2 == null then null
+    else if a1 == null then a2 else if a2 == null then a1
+      else a1 ++ a2;
+
+  # If dhcp is disabled but explicit interfaces are enabled,
+  # we need to provide dhcp just for those interfaces.
+  allowInterfaces = arrayAppendOrNull cfg.allowInterfaces
+    (if !config.networking.useDHCP && enableDHCP then
+      map (i: i.name) (filter (i: i.useDHCP == true) interfaces) else null);
 
   # Config file adapted from the one that ships with dhcpcd.
   dhcpcdConf = pkgs.writeText "dhcpcd.conf"
@@ -41,7 +55,7 @@ let
       denyinterfaces ${toString ignoredInterfaces} lo peth* vif* tap* tun* virbr* vnet* vboxnet* sit*
 
       # Use the list of allowed interfaces if specified
-      ${optionalString (cfg.allowInterfaces != null) "allowinterfaces ${toString cfg.allowInterfaces}"}
+      ${optionalString (allowInterfaces != null) "allowinterfaces ${toString allowInterfaces}"}
 
       ${cfg.extraConfig}
     '';
@@ -54,8 +68,10 @@ let
           # will actually do something: if ntpd cannot resolve the
           # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
-          # it"), so we silently lose time synchronisation.
+          # it"), so we silently lose time synchronisation. This also
+          # applies to openntpd.
           ${config.systemd.package}/bin/systemctl try-restart ntpd.service
+          ${config.systemd.package}/bin/systemctl try-restart openntpd.service
 
           ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
@@ -64,7 +80,7 @@ let
       #    ${config.systemd.package}/bin/systemctl start ip-down.target
       #fi
 
-      ${config.networking.dhcpcd.runHook}
+      ${cfg.runHook}
     '';
 
 in
@@ -74,6 +90,18 @@ in
   ###### interface
 
   options = {
+
+    networking.dhcpcd.persistent = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+          Whenever to leave interfaces configured on dhcpcd daemon
+          shutdown. Set to true if you have your root or store mounted
+          over the network or this machine accepts SSH connections
+          through DHCP interfaces and clients should be notified when
+          it shuts down.
+      '';
+    };
 
     networking.dhcpcd.denyInterfaces = mkOption {
       type = types.listOf types.str;
@@ -120,12 +148,15 @@ in
 
   ###### implementation
 
-  config = mkIf config.networking.useDHCP {
+  config = mkIf enableDHCP {
 
     systemd.services.dhcpcd =
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];
+        # Work-around to deal with problems where the kernel would remove &
+        # re-create Wifi interfaces early during boot.
+        after = [ "network-interfaces.target" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -139,7 +170,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };
@@ -153,7 +184,7 @@ in
         }
       ];
 
-    powerManagement.resumeCommands =
+    powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
         ${config.systemd.package}/bin/systemctl reload dhcpcd.service

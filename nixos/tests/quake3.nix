@@ -15,14 +15,14 @@ in
 rec {
   name = "quake3";
 
-  makeCoverageReport = true;
+  # TODO: lcov doesn't work atm
+  #makeCoverageReport = true;
 
   client =
     { config, pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
       hardware.opengl.driSupport = true;
-      services.xserver.defaultDepth = pkgs.lib.mkOverride 0 16;
       environment.systemPackages = [ pkgs.quake3demo ];
       nixpkgs.config.packageOverrides = overrides;
     };

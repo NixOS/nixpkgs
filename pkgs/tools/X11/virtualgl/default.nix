@@ -28,6 +28,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.virtualgl.org/;
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
-    license = "free"; # many parts under different free licenses
+    license = stdenv.lib.licenses.free; # many parts under different free licenses
   };
 }

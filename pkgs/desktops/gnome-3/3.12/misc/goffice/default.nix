@@ -2,11 +2,11 @@
 , libgsf, libxml2, libxslt, cairo, pango, librsvg, libspectre }:
 
 stdenv.mkDerivation rec {
-  name = "goffice-0.10.12";
+  name = "goffice-0.10.18";
 
   src = fetchurl {
     url = "mirror://gnome/sources/goffice/0.10/${name}.tar.xz";
-    sha256 = "0vh0sdig5n8sxzh4xx82lm8y8d0jcdhc2ipb1kq02qs142zs74ff";
+    sha256 = "4743a148d4452743f3484ed28285a6889adb4af2a61b72448e0ddfe7d5142c64";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

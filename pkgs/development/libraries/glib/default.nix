@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, python
-, libiconvOrEmpty, libintlOrEmpty, zlib, libffi, pcre, libelf
+, libiconv, libintlOrEmpty, zlib, libffi, pcre, libelf
 
 # this is just for tests (not in closure of any regular package)
 , coreutils, dbus_daemon, libxml2, tzdata, desktop_file_utils, shared_mime_info, doCheck ? false
@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-assert stdenv.gcc.gcc != null;
+assert !stdenv.isDarwin -> stdenv.cc.cc.isGNU or false;
 
 # TODO:
 # * Add gio-module-fam
@@ -39,7 +39,7 @@ let
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.40";
+  ver_maj = "2.44";
   ver_min = "0";
 in
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "1d98mbqjmc34s8095lkw1j1bwvnnkw9581yfvjaikjvfjsaz29qd";
+    sha256 = "1fgmjv3yzxgbks31h42201x2izpw0sd84h8dfw0si3x00sqn5lzj";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -62,8 +62,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ pcre zlib libffi ]
-    ++ optional (!stdenv.isDarwin) libiconvOrEmpty
+  propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
   configureFlags =
@@ -79,12 +78,11 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+  DETERMINISTIC_BUILD = 1;
 
   inherit doCheck;
   preCheck = optionalString doCheck
-    # libgcc_s.so.1 must be installed for pthread_cancel to work
-    # also point to the glib/.libs path
-    '' export LD_LIBRARY_PATH="${stdenv.gcc.gcc}/lib:$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
+    '' export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
        export TZDIR="${tzdata}/share/zoneinfo"
        export XDG_CACHE_HOME="$TMP"
        export XDG_RUNTIME_HOME="$TMP"

@@ -193,8 +193,9 @@ in
         "ohci_hcd"
         "ohci_pci"
         "xhci_hcd"
+        "xhci_pci"
         "usbhid"
-        "hid_generic"
+        "hid_generic" "hid_lenovo"
         "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"
 
         # Unix domain sockets (needed by udev).

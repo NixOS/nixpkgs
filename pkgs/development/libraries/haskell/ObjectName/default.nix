@@ -4,10 +4,10 @@
 
 cabal.mkDerivation (self: {
   pname = "ObjectName";
-  version = "1.0.0.0";
-  sha256 = "0yr1aa0ail2h9qsq2bslcwwq6cxl2lzajmc1laj19r7ks62p32rm";
+  version = "1.0.1.0";
+  sha256 = "1aw221i1cisk7jpgchs16f3br0ddllh0n0idhw5v6n6ysv4vv155";
   meta = {
-    homepage = "http://www.haskell.org/HOpenGL/";
+    homepage = "https://github.com/haskell-opengl/ObjectName";
     description = "Explicitly handled object names";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

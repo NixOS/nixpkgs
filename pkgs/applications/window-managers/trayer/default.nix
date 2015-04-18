@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "A lightweight GTK2-based systray for UNIX desktop";
     platforms = platforms.linux;
-    maintainer = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub ];
   };
 }
 

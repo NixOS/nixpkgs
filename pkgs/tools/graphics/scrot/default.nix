@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://linuxbrit.co.uk/scrot/;
     description = "A command-line screen capture utility";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

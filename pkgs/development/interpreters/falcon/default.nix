@@ -1,34 +1,21 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, pcre, zlib, sqlite }:
 
-  version = a.lib.attrByPath ["version"] "0.9.2" a; 
-  buildInputs = with a; [
-    cmake 
-  ];
-in
-rec {
-  src = fetchurl {
-    url = "http://www.falconpl.org/project_dl/_official_rel/Falcon-${version}.tar.gz";
-    sha256 = "0p32syiz2nc6lmmzi0078g4nzariw5ymdjkmhw6iamc0lkkb9x3i";
+stdenv.mkDerivation rec {
+  name = "faclon-${version}";
+  version = "2013-09-19";
+
+  src = fetchFromGitHub {
+    owner = "falconpl";
+    repo = "falcon";
+    rev = "095141903c4ebab928ce803055f9bda363215c37";
+    sha256 = "1x3gdcz1gqhi060ngqi0ghryf69v8bn50yrbzfad8bhblvhzzdlf";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ cmake pkgconfig pcre zlib sqlite ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doDeploy"];
-
-  doDeploy = a.fullDepEntry (''
-    ./build.sh -i -p $out
-  '') ["minInit" "addInputs" "doFixInterpreter" "defEnsureDir"];
-     
-  doFixInterpreter = a.fullDepEntry (''
-    sed -e "s@/bin/bash@$shell@" -i build.sh
-  '') ["minInit" "doUnpack"];
-
-  name = "falcon-" + version;
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programming language with macros and syntax at once";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
   };
 }

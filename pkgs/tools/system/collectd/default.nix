@@ -33,17 +33,17 @@ stdenv.mkDerivation rec {
     sha256 = "1q365zx6d1wyhv7n97bagfxqnqbhj2j14zz552nhmjviy8lj2ibm";
   };
 
-  NIX_LDFLAGS = "-lgcc_s"; # for pthread_cancel
-
   buildInputs = [
     pkgconfig curl iptables libcredis libdbi libgcrypt libmemcached cyrus_sasl
     libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
-    lm_sensors libxml2 lvm2 mysql postgresql protobufc rabbitmq-c rrdtool
+    lm_sensors libxml2 lvm2 mysql.lib postgresql protobufc rabbitmq-c rrdtool
     varnish yajl
   ];
 
   # for some reason libsigrok isn't auto-detected
   configureFlags = stdenv.lib.optional (libsigrok != null) "--with-libsigrok";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";

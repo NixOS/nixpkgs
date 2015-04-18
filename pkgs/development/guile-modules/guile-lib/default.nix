@@ -1,6 +1,6 @@
 {stdenv, fetchurl, guile, texinfo}:
 
-assert stdenv ? gcc && stdenv.gcc ? gcc && stdenv.gcc.gcc != null;
+assert stdenv ? cc && stdenv.cc.cc.isGNU or false;
 
 stdenv.mkDerivation rec {
   name = "guile-lib-0.2.2";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preCheck =
     # Make `libgcc_s.so' visible for `pthread_cancel'.
-    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib*/libgcc_s.so)):$LD_LIBRARY_PATH"
+    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.cc.cc}/lib*/libgcc_s.so)):$LD_LIBRARY_PATH"
     '';
 
   meta = {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.nongnu.org/guile-lib/;
     license = stdenv.lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }

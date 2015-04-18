@@ -1,41 +1,45 @@
-x@{builderDefsPackage,
-  wxGTK, perl, python, zlib
-  , ...}:
-builderDefsPackage
-(a :
+{stdenv, fetchurl, wxGTK, perl, python, zlib}:
 let
-  s = import ./src-for-default.nix;
-  helperArgNames = ["builderDefsPackage"] ++
-    [];
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
+  s = # Generated upstream information
+  rec {
+    baseName="golly";
+    version="2.6";
+    name="${baseName}-${version}";
+    hash="1n1k3yf23ymlwq4k6p4v2g04qd29pg2rabr4l7m9bj2b2j1zkqhz";
+    url="mirror://sourceforge/project/golly/golly/golly-2.6/golly-2.6-src.tar.gz";
+    sha256="1n1k3yf23ymlwq4k6p4v2g04qd29pg2rabr4l7m9bj2b2j1zkqhz";
+  };
+  buildInputs = [
+    wxGTK perl python zlib
+  ];
 in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
-
-  inherit (s) name;
+stdenv.mkDerivation rec {
+  inherit (s) name version;
   inherit buildInputs;
+  src = fetchurl {
+    inherit (s) url sha256;
+  };
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doConfigure" "doMakeInstall"];
-  setVars = a.noDepEntry ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lperl -L$(echo "${perl}"/lib/perl5/5*/*/CORE)"
-    pythonLib="$(echo "${python}"/lib/libpython*.so)"
-    pythonLib="''${pythonLib##*/lib}"
-    pythonLib="''${pythonLib%%.so}"
-    export NIX_LDFLAGS="$NIX_LDFLAGS -l$pythonLib"
-    echo "Flags: $NIX_LDFLAGS"
+  sourceRoot="${name}-src/gui-wx/configure";
+
+  # Link against Python explicitly as it is needed for scripts
+  makeFlags=[
+    "AM_LDFLAGS="
+  ];
+  NIX_LDFLAGS="-lpython${python.majorVersion} -lperl";
+  preConfigure=''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L$(dirname "$(find ${perl} -name libperl.so)")"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE
+      -DPYTHON_SHLIB=$(basename "$(
+        readlink -f ${python}/lib/libpython*.so)")"
   '';
 
   meta = {
+    inherit (s) version;
     description = "Cellular automata simulation program";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = with a.lib.licenses;
-      gpl2;
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
+    downloadPage = "http://sourceforge.net/projects/golly/files/golly";
   };
-}) x
+}

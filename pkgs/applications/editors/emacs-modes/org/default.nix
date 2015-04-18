@@ -2,11 +2,11 @@
 , texLiveAggregationFun }:
 
 stdenv.mkDerivation rec {
-  name = "org-8.2.7c";
+  name = "org-8.2.10";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "0qqf58xqw1kkgjxm9z40s6h7xd209rx3933klla22lryv3yclc1k";
+    sha256 = "1xm8n8zwr3676rl4pd32k61rd7rimlihhrw5a7r4z7r154c4a2fz";
   };
 
   buildInputs = [ emacs ];

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
-, mesa, openal, alsaOss }:
+, mesa, openal, alsaOss, pulseaudioSupport ? false, pulseaudio }:
 
 assert jre ? architecture;
 
@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
     # wrapper for minecraft
     export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${jre}/lib/${jre.architecture}/:${libX11}/lib/:${libXext}/lib/:${libXcursor}/lib/:${libXrandr}/lib/:${libXxf86vm}/lib/:${mesa}/lib/:${openal}/lib/
-    ${alsaOss}/bin/aoss ${jre}/bin/java -jar $out/minecraft.jar
+    ${if pulseaudioSupport then "${pulseaudio}/bin/padsp" else "${alsaOss}/bin/aoss" } \
+      ${jre}/bin/java -jar $out/minecraft.jar
     EOF
 
     chmod +x $out/bin/minecraft
@@ -33,6 +34,6 @@ stdenv.mkDerivation {
       description = "A sandbox-building game";
       homepage = http://www.minecraft.net;
       maintainers = [ stdenv.lib.maintainers.page ];
-      license = "unfree-redistributable";
+      license = stdenv.lib.licenses.unfreeRedistributable;
   };
 }

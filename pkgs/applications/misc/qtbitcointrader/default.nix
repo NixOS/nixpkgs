@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchFromGitHub, qt }:
 
 let
-  version = "1.07.98";
+  version = "1.08.03";
 in
 stdenv.mkDerivation {
   name = "qtbitcointrader-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/bitcointrader/SRC/QtBitcoinTrader-${version}.tar.gz";
-    sha256 = "1irz17q71fx64dfkmgajlyva7d1wifv4bxgb2iwz7d69rvhzaqzx";
+  src = fetchFromGitHub {
+    owner = "JulyIGHOR";
+    repo = "QtBitcoinTrader";
+    rev = "ee30cf158fa8535f2155a387558d3b8994728c28";
+    sha256 = "0kxb0n11agqid0nyqdspfndm03b8l0nl8x4yx2hsrizs6m5z08h4";
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ qt ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
@@ -23,11 +25,11 @@ stdenv.mkDerivation {
         QtBitcoinTrader_Desktop.pro
   '';
 
-  meta = {
-    description = "Secure bitcoin trading client";
-    homepage = http://qtopentrader.com;
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;  # arbitrary choice
-    maintainers = [ stdenv.lib.maintainers.emery ];
-  };
+  meta = with stdenv.lib;
+    { description = "Secure bitcoin trading client";
+      homepage = https://centrabit.com/;
+      license = licenses.lgpl3;
+      platforms = qt.meta.platforms;
+      maintainers = [ maintainers.emery ];
+    };
 }

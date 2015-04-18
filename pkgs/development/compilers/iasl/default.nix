@@ -23,6 +23,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Intel ACPI Compiler";
     homepage = http://www.acpica.org/;
-    license = "iasl"; # FIXME: is this a free software license?
+    license = stdenv.lib.licenses.iasl;
   };
 }

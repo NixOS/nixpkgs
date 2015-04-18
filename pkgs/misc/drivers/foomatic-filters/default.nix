@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, cups, dbus }:
+{ stdenv, fetchurl, pkgconfig, perl, cups, dbus, enscript }:
 
 stdenv.mkDerivation rec {
   name = "foomatic-filters-4.0.17";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qrkgbm5jay2r7sh9qbyf0aiyrsl1mdc844hxf7fhw95a0zfbqm2";
   };
 
-  buildInputs = [ pkgconfig perl cups dbus ];
+  buildInputs = [ pkgconfig perl cups dbus enscript ];
 
   preConfigure =
     ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Foomatic printing filters";
-    maintainers = stdenv.lib.maintainers.raskin;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

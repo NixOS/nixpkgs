@@ -70,7 +70,6 @@ in
       pkgs.btrfsProgs
 
       # Some compression/archiver tools.
-      pkgs.unrar
       pkgs.unzip
       pkgs.zip
       pkgs.xz
@@ -99,7 +98,7 @@ in
 
   boot.initrd.extraUtilsCommands =
     ''
-      cp ${pkgs.utillinux}/sbin/hwclock $out/bin
+      copy_bin_and_libs ${pkgs.utillinux}/sbin/hwclock
     '';
 
   boot.initrd.postDeviceCommands =

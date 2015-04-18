@@ -38,7 +38,7 @@ let
       ''} 
 
       [X-*-Greeter]
-      HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10
+      HiddenUsers=root,${concatStringsSep "," dmcfg.hiddenUsers}
       PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so
       ${optionalString (cfg.themeDirectory != null)
       ''
@@ -150,6 +150,9 @@ in
         uid = config.ids.uids.kdm;
         description = "KDM user";
       };
+
+    environment.systemPackages =
+      [ pkgs.kde4.kde_wallpapers ]; # contains kdm's default background
 
   };
 

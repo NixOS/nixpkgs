@@ -40,7 +40,7 @@ in
             socket    = /run/fail2ban/fail2ban.sock
             pidfile   = /run/fail2ban/fail2ban.pid
           '';
-        type = types.string;
+        type = types.lines;
         description =
           ''
             The contents of Fail2ban's main configuration file.  It's
@@ -64,7 +64,7 @@ in
                 maxretry = 5
               '';
           };
-        type = types.attrsOf types.string;
+        type = types.attrsOf types.lines;
         description =
           ''
             The configuration of each Fail2ban “jail”.  A jail
@@ -95,7 +95,7 @@ in
     environment.etc."fail2ban/filter.d".source = "${pkgs.fail2ban}/etc/fail2ban/filter.d/*.conf";
 
     systemd.services.fail2ban =
-      { description = "Fail2ban intrusion prevention system";
+      { description = "Fail2ban Intrusion Prevention System";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];

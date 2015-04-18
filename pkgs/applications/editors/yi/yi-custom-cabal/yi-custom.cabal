@@ -1,0 +1,17 @@
+name:           yi-custom
+version:        0.0.0.1
+category:       Yi
+synopsis:       Convenience wrapper for nix
+description:    Convenience wrapper for nix
+license:        PublicDomain
+license-file:   LICENSE
+author:         Mateusz Kowalczyk
+maintainer:     fuuzetsu@fuuzetsu.co.uk
+Cabal-Version:  >= 1.10
+build-type:     Simple
+
+library
+  hs-source-dirs: .
+  default-language: Haskell2010
+  build-depends: base, yi
+  ghc-options: -threaded

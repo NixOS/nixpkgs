@@ -19,7 +19,7 @@ let
     org.neo4j.server.webadmin.rrdb.location=${cfg.dataDir}/data/rrd
     org.neo4j.server.webadmin.data.uri=/db/data/
     org.neo4j.server.webadmin.management.uri=/db/manage/
-    org.neo4j.server.db.tuning.properties=${pkgs.neo4j}/share/neo4j/conf/neo4j.properties
+    org.neo4j.server.db.tuning.properties=${cfg.package}/share/neo4j/conf/neo4j.properties
     org.neo4j.server.manage.console_engines=shell
     ${cfg.extraServerConfig}
   '';
@@ -44,6 +44,12 @@ in {
       description = "Whether to enable neo4j.";
       default = false;
       type = types.uniq types.bool;
+    };
+
+    package = mkOption {
+      description = "Neo4j package to use.";
+      default = pkgs.neo4j;
+      type = types.package;
     };
 
     host = mkOption {
@@ -119,7 +125,7 @@ in {
       after = [ "network-interfaces.target" ];
       environment = { NEO4J_INSTANCE = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = "${pkgs.neo4j}/bin/neo4j console";
+        ExecStart = "${cfg.package}/bin/neo4j console";
         User = "neo4j";
         PermissionsStartOnly = true;
       };

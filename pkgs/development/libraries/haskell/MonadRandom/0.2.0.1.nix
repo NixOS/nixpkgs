@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Random-number generation monad";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
+    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

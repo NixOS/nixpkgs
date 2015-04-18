@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ xmlm ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = "${webpage}";
     platforms = ocaml.meta.platforms;
-    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
+    license = licenses.bsd3;
   };
 }

@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="librevenge";
-    version="0.0.1";
+    version="0.0.2";
     name="${baseName}-${version}";
-    hash="0zgfxvbqf11pypyc0vmcan73x197f7ia1ywin9qqy9hvvmrjgchc";
-    url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.1/librevenge-0.0.1.tar.xz";
-    sha256="0zgfxvbqf11pypyc0vmcan73x197f7ia1ywin9qqy9hvvmrjgchc";
+    hash="03ygxyb0vfjv8raif5q62sl33b54wkr5rzgadb8slijm6k281wpn";
+    url="mirror://sourceforge/project/libwpd/librevenge/librevenge-0.0.2/librevenge-0.0.2.tar.xz";
+    sha256="03ygxyb0vfjv8raif5q62sl33b54wkr5rzgadb8slijm6k281wpn";
   };
   buildInputs = [
     boost pkgconfig cppunit zlib
@@ -19,11 +19,18 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  # Clang generates warnings in Boost's header files
+  # -Werror causes these warnings to be interpreted as errors
+  # Simplest solution: disable -Werror
+  configureFlags = if (stdenv.cc.cc.isClang or false)
+    then [ "--disable-werror" ] else null;
+
   meta = {
     inherit (s) version;
     description = ''A base library for writing document import filters'';
     license = stdenv.lib.licenses.mpl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rest-snap";
-  version = "0.1.17.13";
-  sha256 = "13c143dzxhfrshn19ylqfmhnxjirixfif8d1fmzagz1v893narkz";
+  version = "0.1.17.16";
+  sha256 = "02dh2wjhaabg2aabsf7gl5w65kqpb3jigawwh9n2dr4hz6jhvwia";
   buildDepends = [
     caseInsensitive restCore safe snapCore unorderedContainers
     uriEncode utf8String
@@ -16,5 +16,7 @@ cabal.mkDerivation (self: {
     description = "Rest driver for Snap";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })
+

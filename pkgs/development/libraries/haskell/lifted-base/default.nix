@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lifted-base";
-  version = "0.2.3.0";
-  sha256 = "0wbh9l7hsbgvfplxyamvpb8nq6w147zsd2yskylfmpw7kyz6yp9n";
+  version = "0.2.3.3";
+  sha256 = "1n015i21pyh1ksrdiy105c9sw3gm3yvmlwv1sajy7nvpxb2xdjc3";
   buildDepends = [ monadControl transformersBase ];
   testDepends = [
     HUnit monadControl testFramework testFrameworkHunit transformers

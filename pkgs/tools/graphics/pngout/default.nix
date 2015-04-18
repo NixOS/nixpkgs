@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A tool that agressively optimizes the sizes of PNG images";
+    description = "A tool that aggressively optimizes the sizes of PNG images";
     license = stdenv.lib.licenses.unfree;
     homepage = http://advsys.net/ken/utils.htm;
     maintainers = [ stdenv.lib.maintainers.sander ];

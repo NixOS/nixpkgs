@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "socket-io";
-  version = "1.1.0";
-  sha256 = "1ffip6jlp3i6pz8gbk8m2ra2q8568mgwgi988yh046w787yf9kpw";
+  version = "1.2.0";
+  sha256 = "1271qmd83q669dcs6ni0f84i5kgvh8vgr4xgx2lcprirbzkx0gdl";
   buildDepends = [
     aeson attoparsec engineIo mtl stm text transformers
     unorderedContainers vector

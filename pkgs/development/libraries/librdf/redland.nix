@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "redland-1.0.16";
+  name = "redland-1.0.17";
 
   src = fetchurl {
     url = "http://download.librdf.org/source/${name}.tar.gz";
-    sha256 = "1gcx0h5dxa3c4xhhjk3gr0708zjj0n6zpslvbjfi2qbf13y798nr";
+    sha256 = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681";
   };
 
   nativeBuildInputs = [ perl pkgconfig ];

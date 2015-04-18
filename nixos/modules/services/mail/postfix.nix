@@ -96,9 +96,9 @@ let
     #  -o smtpd_sasl_auth_enable=yes
     #  -o smtpd_client_restrictions=permit_sasl_authenticated,reject
     #  -o milter_macro_daemon_name=ORIGINATING
-    pickup    fifo  n       -       n       60      1       pickup
+    pickup    unix  n       -       n       60      1       pickup
     cleanup   unix  n       -       n       -       0       cleanup
-    qmgr      fifo  n       -       n       300     1       qmgr
+    qmgr      unix  n       -       n       300     1       qmgr
     tlsmgr    unix  -       -       n       1000?   1       tlsmgr
     rewrite   unix  -       -       n       -       -       trivial-rewrite
     bounce    unix  -       -       n       -       0       bounce

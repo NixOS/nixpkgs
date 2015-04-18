@@ -1,28 +1,39 @@
-{ stdenv, lib, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc }:
-
-assert stdenv.gcc.gcc != null;
+{ stdenv, lib, fetchurl, fetchhg, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
   loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
   loaderArm = "${glibc}/lib/ld-linux.so.3";
+  srcs = {
+    golang = fetchurl {
+      url = https://storage.googleapis.com/golang/go1.3.3.src.tar.gz;
+      sha1 = "b54b7deb7b7afe9f5d9a3f5dd830c7dede35393a";
+    };
+    tools = fetchhg {
+      url = https://code.google.com/p/go.tools/;
+      rev = "e1c276c4e679";
+      sha256 = "0x62njflwkd99i2ixbksg6mjppl1wfg86f0g3swn350l1h0xzp76";
+    };
+  };
 in
 
 stdenv.mkDerivation {
-  name = "go-1.3.1";
+  name = "go-1.3.3";
 
-  src = fetchurl {
-    url = https://storage.googleapis.com/golang/go1.3.1.src.tar.gz;
-    sha256 = "fdfa148cc12f1e4ea45a5565261bf43d8a2e7d1fad4a16aed592d606223b93a8";
-  };
+  src = srcs.golang;
 
-  buildInputs = [ bison bash makeWrapper ] ++ lib.optionals stdenv.isLinux [ glibc ] ;
+  # perl is used for testing go vet
+  buildInputs = [ bison bash makeWrapper perl ] ++ lib.optionals stdenv.isLinux [ glibc ] ;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
   preUnpack = ''
     mkdir -p $out/share
     cd $out/share
+  '';
+  postUnpack = ''
+    mkdir -p $out/share/go/src/pkg/code.google.com/p/
+    cp -rv --no-preserve=mode,ownership ${srcs.tools} $out/share/go/src/pkg/code.google.com/p/go.tools
   '';
 
   prePatch = ''
@@ -46,6 +57,8 @@ stdenv.mkDerivation {
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
     sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/pkg/net/lookup_unix.go
+    # ParseInLocation fails the test
+    sed -i '/TestParseInSydney/areturn' src/pkg/time/format_test.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/pkg/time/zoneinfo_unix.go
     sed -i 's,/lib/ld-linux.so.3,${loaderArm},' src/cmd/5l/asm.c
@@ -63,17 +76,12 @@ stdenv.mkDerivation {
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
+  CGO_ENABLED = if stdenv.isDarwin then 0 else 1;
 
   installPhase = ''
     export CC=cc
-
-    # http://lists.science.uu.nl/pipermail/nix-dev/2013-October/011891.html
-    # Fix for "libgcc_s.so.1 must be installed for pthread_cancel to work"
-    # during tests:
-    export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.gcc.gcc}/lib/libgcc_s.so))"
-
     mkdir -p "$out/bin"
+    unset GOPATH
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"
     export PATH="$GOBIN:$PATH"
@@ -81,12 +89,21 @@ stdenv.mkDerivation {
     ./all.bash
     cd -
 
+    # Build extra tooling
+    # TODO: Fix godoc tests
+    TOOL_ROOT=code.google.com/p/go.tools/cmd
+    go install -v $TOOL_ROOT/cover $TOOL_ROOT/vet $TOOL_ROOT/godoc
+    go test -v    $TOOL_ROOT/cover $TOOL_ROOT/vet # $TOOL_ROOT/godoc
+
     # Copy the emacs configuration for Go files.
     mkdir -p "$out/share/emacs/site-lisp"
     cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
+    branch = "1.3";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = "BSD";

@@ -6,13 +6,16 @@
 
 let
     py = pythonPackages;
-    version = "2.0.28";
+    version = "2.0.32";
 in
 stdenv.mkDerivation rec {
     name = "anki-${version}";
     src = fetchurl {
-      url = "http://ankisrs.net/download/mirror/${name}.tgz";
-      sha256 = "0dj33mlc23y982kcl4h0aganb4fy70rl28mpj2mbcfphykzkv05s";
+      urls = [
+        "http://ankisrs.net/download/mirror/${name}.tgz"
+        "http://ankisrs.net/download/mirror/archive/${name}.tgz"
+      ];
+      sha256 = "0g5rmg0yqh40a3g8ci3y3if7vw4jl5nrpq8ki1a13a3xmgch13rr";
     };
 
     pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy py.pyaudio ]

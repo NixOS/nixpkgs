@@ -1,65 +1,81 @@
-{ stdenv, fetchurl, cairo, file, pango, glib, gtk
-, which, libtool, makeWrapper, libjpeg, libpng
-, fontconfig, liberation_ttf, sqlite, openssl } :
+{ stdenv, fetchurl, makeFontsConf, makeWrapper
+, cairo, coreutils, fontconfig, freefont_ttf
+, glib, gmp, gtk, libffi, libjpeg, libpng
+, libtool, mpfr, openssl, pango, poppler
+, readline, sqlite
+}:
+
+let
+
+  fontsConf = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  };
+
+  libPath = stdenv.lib.makeLibraryPath [
+    cairo
+    fontconfig
+    glib
+    gmp
+    gtk
+    libjpeg
+    libpng
+    mpfr
+    openssl
+    pango
+    poppler
+    readline
+    sqlite
+  ];
+
+in
 
 stdenv.mkDerivation rec {
-  pname = "racket";
-  version = "6.0.1";
-  name = "${pname}-${version}";
+  name = "racket-${version}";
+  version = "6.1.1";
 
   src = fetchurl {
     url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "e2bc0d4d0fcdfc3327a58c931f203c07a06d4724703f9708ba2e4c8ea0f9694d";
+    sha256 = "090269522d20e7a5ce85d2251a126745746ebf5e87554c05efe03f3b7173da75";
   };
 
-  # Various racket executables do run-time searches for these.
-  ffiSharedLibs = "${glib}/lib:${cairo}/lib:${pango}/lib:${gtk}/lib:${libjpeg}/lib:${libpng}/lib:${sqlite}/lib:${openssl}/lib";
+  FONTCONFIG_FILE = fontsConf;
+  LD_LIBRARY_PATH = libPath;
+  NIX_LDFLAGS = "-lgcc_s";
 
-  buildInputs = [ file libtool which makeWrapper fontconfig liberation_ttf sqlite ];
+  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
 
   preConfigure = ''
-    export LD_LIBRARY_PATH=${ffiSharedLibs}:$LD_LIBRARY_PATH
-
-    # Chroot builds do not have access to /etc/fonts/fonts.conf, but the Racket bootstrap
-    # needs a working fontconfig, so here a simple standin is used.
-    mkdir chroot-fontconfig
-    cat ${fontconfig}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
-    sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
-    echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
-    echo "</fontconfig>" >> chroot-fontconfig/fonts.conf
-
-    export FONTCONFIG_FILE=$(pwd)/chroot-fontconfig/fonts.conf
-
-    cd src
-    sed -e 's@/usr/bin/uname@'"$(which uname)"'@g' -i configure
-    sed -e 's@/usr/bin/file@'"$(which file)"'@g' -i foreign/libffi/configure 
+    substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    mkdir src/build
+    cd src/build
   '';
 
   configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ];
 
-  NIX_LDFLAGS = "-lgcc_s";
+  configureScript = "../configure";
+
+  enableParallelBuilding = false;
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --prefix LD_LIBRARY_PATH ":" "${ffiSharedLibs}" ;
+      wrapProgram $out/bin/$p --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}";
     done
   '';
 
-  meta = {
-    description = "Programming language derived from Scheme (formerly called PLT Scheme)";
+  meta = with stdenv.lib; {
+    description = "A programmable programming language";
     longDescription = ''
-      Racket (formerly called PLT Scheme) is a programming language derived
-      from Scheme. The Racket project has four primary components: the
-      implementation of Racket, a JIT compiler; DrRacket, the Racket program
-      development environment; the TeachScheme! outreach, an attempt to turn
-      Computing and Programming into "an indispensable part of the liberal
-      arts curriculum"; and PLaneT, Racket's web-based package
-      distribution system for user-contributed packages.
+      Racket is a full-spectrum programming language. It goes beyond
+      Lisp and Scheme with dialects that support objects, types,
+      laziness, and more. Racket enables programmers to link
+      components written in different dialects, and it empowers
+      programmers to create new, project-specific dialects. Racket's
+      libraries support applications from web servers and databases to
+      GUIs and charts.
     '';
-
     homepage = http://racket-lang.org/;
-    license = stdenv.lib.licenses.lgpl2Plus; # and licenses of contained libraries
-    maintainers = [ stdenv.lib.maintainers.kkallio ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ kkallio henrytill ];
+    platforms = platforms.linux;
   };
 }

@@ -9,7 +9,10 @@
   boot.loader.grub.device = "nodev";
   boot.loader.grub.extraPerEntryConfig = "root (hd0)";
 
-  boot.initrd.kernelModules = [ "xen-blkfront" ];
+  boot.initrd.kernelModules =
+    [ "xen-blkfront" "xen-tpmfront" "xen-kbdfront" "xen-fbfront"
+      "xen-netfront" "xen-pcifront" "xen-scsifront"
+    ];
 
   # Send syslog messages to the Xen console.
   services.syslogd.tty = "hvc0";

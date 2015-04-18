@@ -31,13 +31,9 @@ let inherit (args.composableDerivation) composableDerivation edf;
   '';
 in
 composableDerivation {
-  # use gccApple to compile on darwin
-  mkDerivation = ( if stdenv.isDarwin
-                   then stdenvAdapters.overrideGCC stdenv gccApple
-                   else stdenv ).mkDerivation;
 } (fix: {
 
-    name = "vim_configurable-7.4.335";
+    name = "vim_configurable-7.4.516";
 
     enableParallelBuilding = true; # test this
 
@@ -46,9 +42,9 @@ composableDerivation {
       "default" =
         # latest release
       args.fetchhg {
-            url = "https://vim.googlecode.com/hg/";
-            rev = "v7-4-335";
-            sha256 = "0qnpzfcbi6fhz82pj68l4vrnigca1akq2ksrxz6krwlfhns6jhhj";
+            url = "http://vim.googlecode.com/hg/";
+            rev = "v7-4-516";
+            sha256 = "0a3b5qaywfn7jjr7fjpl8y8jx4wjj2630wxfjnmn3hi1l7iiz4z8";
       };
 
       "vim-nox" =
@@ -91,7 +87,7 @@ composableDerivation {
       // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
-      // edf { name = "mzscheme"; } #Include MzScheme interpreter.
+      // edf { name = "mzscheme"; feat = "mzschemeinterp";} #Include MzScheme interpreter.
       // edf { name = "perl"; feat = "perlinterp"; enable = { nativeBuildInputs = [perl]; };} #Include Perl interpreter.
 
       // edf {
@@ -106,7 +102,20 @@ composableDerivation {
         };
       }
 
-      // edf { name = "tcl"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
+      // edf {
+        name = "python3";
+        feat = "python3interp";
+        enable = {
+          nativeBuildInputs = [ pkgs.python3 ];
+        } // lib.optionalAttrs stdenv.isDarwin {
+          configureFlags
+            = [ "--enable-python3interp=yes"
+                "--with-python3-config-dir=${pkgs.python3}/lib"
+                "--disable-pythoninterp" ];
+        };
+      }
+
+      // edf { name = "tcl"; feat = "tclinterp"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf {
         name = "lua";
@@ -135,11 +144,12 @@ composableDerivation {
   cfg = {
     luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
+    python3Support   = config.vim.python3 or false;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
-    cscopeSupport    = config.vim.cscope or false;
+    cscopeSupport    = config.vim.cscope or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
 
     # by default, compile with darwin support if we're compiling on darwin, but

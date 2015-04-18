@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An implementation of the C++ Standard Library";
     homepage = http://sourceforge.net/projects/stlport/;
-    license = "free"; # seems BSD-like
+    license = stdenv.lib.licenses.free; # seems BSD-like
+    broken = true; # probably glibc-2.20 -related issue
   };
 }

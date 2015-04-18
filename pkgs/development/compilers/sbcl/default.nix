@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, sbclBootstrap, clisp}:
+{ stdenv, fetchurl, sbclBootstrap, clisp, which}:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.2.0";
+  version = "1.2.10";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "13k20sys1v4lvgis8cnbczww6zs93rw176vz07g4jx06418k53x2";
+    sha256 = "11gn25knjk0zdyi3s6w0blcnrxjgyj4iifg5h07pv2r7hm83s92m";
   };
 
-  buildInputs = [ ]
+  buildInputs = [ which ]
     ++ (stdenv.lib.optional stdenv.isDarwin sbclBootstrap)
     ++ (stdenv.lib.optional stdenv.isLinux clisp)
     ;
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     sed -i src/code/target-load.lisp -e \
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
+    # Fix software version retrieval
+    sed -e "s@/bin/uname@$(which uname)@g" -i src/code/*-os.lisp
+
     # Fix the tests
     sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
     sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
@@ -47,6 +50,12 @@ stdenv.mkDerivation rec {
 
     sed -e '5,$d' -i contrib/sb-bsd-sockets/tests.lisp
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
+
+    # Use whatever `cc` the stdenv provides
+    substituteInPlace src/runtime/Config.x86-64-darwin --replace gcc cc
+
+    substituteInPlace src/runtime/Config.x86-64-darwin \
+      --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
   '';
 
   preBuild = ''

@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "Tensor";
-  version = "1.0.0.1";
-  sha256 = "10arhk5gkn5jxpb53r80bblpk0afdax1fc2mik40hj5g5g960cp9";
+  version = "1.1.0.0";
+  sha256 = "1vn409805p5b47v5mf7rk0gypqag5bn1pzlsmsp9blr3jyj6dgph";
   meta = {
-    homepage = "http://www.haskell.org/HOpenGL/";
+    homepage = "https://github.com/haskell-opengl/Tensor";
     description = "Tensor data types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    hydraPlatforms = self.stdenv.lib.platforms.none;
   };
 })

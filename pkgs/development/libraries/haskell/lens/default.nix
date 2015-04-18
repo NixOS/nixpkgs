@@ -6,18 +6,18 @@
 , QuickCheck, reflection, semigroupoids, semigroups, simpleReflect
 , split, tagged, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, testFrameworkTh, text, transformers
-, transformersCompat, unorderedContainers, vector, void, zlib
+, transformersCompat, unorderedContainers, vector, void
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "4.4.0.1";
-  sha256 = "0d1z6jix58g7x9r1jvm335hg2psflqc7w6sq54q486wil55c5vrw";
+  version = "4.6.0.1";
+  sha256 = "099hhkca39zxfj9xavd2rafzgm2r4nm8clngcsgcrn1qsy8knvz2";
   buildDepends = [
     bifunctors comonad contravariant distributive exceptions filepath
     free hashable mtl parallel primitive profunctors reflection
     semigroupoids semigroups split tagged text transformers
-    transformersCompat unorderedContainers vector void zlib
+    transformersCompat unorderedContainers vector void
   ];
   testDepends = [
     deepseq doctest filepath genericDeriving hlint HUnit mtl nats

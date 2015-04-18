@@ -12,17 +12,17 @@ let
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="1.2.3";
+    version="1.2.4";
     baseName="vacuum-im";
     name="${baseName}-${version}";
-    url="http://vacuum-im.googlecode.com/files/vacuum-${version}.tar.xz";
-    hash="037k2b2kkp2ywkrshqa0fj18mkd2jq60x4x62kzbrsvb85qcbbxh";
+    url="https://googledrive.com/host/0B7A5K_290X8-d1hjQmJaSGZmTTA/vacuum-1.2.4.tar.gz";
+    sha256="10qxpfbbaagqcalhk0nagvi5irbbz5hk31w19lba8hxf6pfylrhf";
   };
 in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = sourceInfo.sha256;
   };
 
   inherit (sourceInfo) name version;

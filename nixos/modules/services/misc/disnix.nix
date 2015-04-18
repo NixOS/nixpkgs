@@ -132,7 +132,7 @@ in
 
           restartIfChanged = false;
           
-          path = [ pkgs.nix pkgs.disnix dysnomia ];
+          path = [ pkgs.nix pkgs.disnix dysnomia "/run/current-system/sw" ];
           
           environment = {
             HOME = "/root";

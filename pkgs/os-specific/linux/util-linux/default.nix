@@ -1,14 +1,25 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.25";
+  name = "util-linux-2.26.1";
 
   src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.25/${name}.tar.xz";
-    sha256 = "02lqww6ck4p47wzc883zdjb1gnwm59hsay4hd5i55mfdv25mmfj7";
+    url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
+    sha256 = "0vmvk5khfwf71xbsnplvmk9ikwnlbhysc96mnkgwpqk2faairp12";
   };
 
+  patches = [ ./rtcwake-search-PATH-for-shutdown.patch
+            ];
   outputs = [ "dev" "out" "bin" ]; # ToDo: problems with e2fsprogs
+
+
+  #FIXME: make it also work on non-nixos?
+  postPatch = ''
+    # Substituting store paths would create a circular dependency on systemd
+    substituteInPlace include/pathnames.h \
+      --replace "/bin/login" "/run/current-system/sw/bin/login" \
+      --replace "/sbin/shutdown" "/run/current-system/sw/bin/shutdown"
+  '';
 
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
@@ -23,9 +34,8 @@ stdenv.mkDerivation rec {
     --enable-write
     --enable-last
     --enable-mesg
-    --enable-ddate
     --disable-use-tty-group
-    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
+    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
@@ -47,7 +57,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
 

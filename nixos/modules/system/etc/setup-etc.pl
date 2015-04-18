@@ -12,8 +12,8 @@ sub atomicSymlink {
     my ($source, $target) = @_;
     my $tmp = "$target.tmp";
     unlink $tmp;
-    symlink $source, $tmp or return 1;
-    rename $tmp, $target or return 1;
+    symlink $source, $tmp or return 0;
+    rename $tmp, $target or return 0;
     return 1;
 }
 

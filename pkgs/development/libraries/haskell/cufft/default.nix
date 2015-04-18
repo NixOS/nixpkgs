@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cufft";
-  version = "0.1.0.3";
-  sha256 = "1jj1ixacmhwjcb2syv4fglawpya5vmdhdk2xqrw4wwfxw4wc9ypi";
+  version = "0.1.1.0";
+  sha256 = "0d13nf61698gzh0hcycx1z9bm2xpikkg27bjymsjhfwimvqn7z8h";
   buildDepends = [ cuda ];
   buildTools = [ c2hs ];
   meta = {

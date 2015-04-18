@@ -22,6 +22,6 @@ for i in $libraries; do
     rpath=$rpath${rpath:+:}$i/lib
 done
 find $out -type f -perm +100 \
-    -exec patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" {} \;
+    -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
 find $out -type f -perm +100 \
     -exec patchelf --set-rpath "$rpath" {} \;

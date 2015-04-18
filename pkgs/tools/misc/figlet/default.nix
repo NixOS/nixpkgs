@@ -13,12 +13,12 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     mkdir -p $out/{man/man6,bin}
-    makeFlags="DESTDIR=$out/bin MANDIR=$out/man/man6 DEFAULTFONTDIR=$out/share/figlet"
+    makeFlags="DESTDIR=$out/bin MANDIR=$out/man/man6 DEFAULTFONTDIR=$out/share/figlet CC=cc LD=cc"
   '';
 
-  meta = { 
+  meta = {
     description = "Program for making large letters out of ordinary text";
     homepage = http://www.figlet.org/;
-    license = "AFL-2.1";
+    license = stdenv.lib.licenses.afl21;
   };
 }

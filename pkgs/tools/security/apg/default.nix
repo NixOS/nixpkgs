@@ -1,9 +1,9 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "apg-2.2.3";
+  name = "apg-2.3.0b";
   src = fetchurl {
     url = "http://www.adel.nursat.kz/apg/download/${name}.tar.gz";
-    sha256 = "1fkxpaifv925i385krsyslrig42ksws5y19hfq5asn1rwv6zmjb9";
+    sha256 = "14lbq81xrcsmpk1b9qmqyz7n6ypf08zcxvcvp6f7ybcyf0lj1rfi";
   };
   configurePhase = ''
     substituteInPlace Makefile --replace /usr/local "$out"

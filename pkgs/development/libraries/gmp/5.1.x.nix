@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
+{ stdenv, fetchurl, m4, cxx ? true, withStatic ? true }:
 
 with { inherit (stdenv.lib) optional; };
 
@@ -14,19 +14,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 ];
 
+  patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
+
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
     # See <http://hydra.nixos.org/build/2760931>, for instance.
+    #
+    # no darwin because gmp uses ASM that clang doesn't like
     optional (!stdenv.isSunOS) "--enable-fat"
     ++ (if cxx then [ "--enable-cxx"  ]
                else [ "--disable-cxx" ])
     ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
+    ++ optional stdenv.isDarwin "ABI=64"
     ++ optional stdenv.is64bit "--with-pic"
     ;
-  dontDisableStatic = withStatic;
 
   doCheck = true;
+
+  dontDisableStatic = withStatic;
 
   enableParallelBuilding = true;
 
@@ -61,4 +67,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.simons ];
   };
 }
-

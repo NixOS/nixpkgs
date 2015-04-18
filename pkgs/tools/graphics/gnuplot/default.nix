@@ -14,18 +14,18 @@
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
-, withQt ? false, qt4 }:
+, withQt ? false, qt }:
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
-  name = "gnuplot-4.6.5";
+  name = "gnuplot-5.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
-    sha256 = "0bcsa5b33msddjs6mj0rhi81cs19h9p3ykixkkl70ifhqwqg0l75";
+    sha256 = "1bqg6zbsin9w9m53rbf6adzv0j2gs66z2p5pkd060jlipk2lnza1";
   };
 
   buildInputs =
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withTeXLive texLive
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
-    ++ lib.optional withQt [ qt4 ]
+    ++ lib.optional withQt [ qt.base ]
     # compiling with wxGTK causes a malloc (double free) error on darwin
     ++ lib.optional (withWxGTK && !stdenv.isDarwin) wxGTK;
 

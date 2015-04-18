@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "AES encrypting or decrypting pipe";
     homepage = http://loop-aes.sourceforge.net/aespipe.README;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = stdenv.lib.maintainers.goibhniu;
+    maintainers = [ stdenv.lib.maintainers.goibhniu ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,18 +1,18 @@
-{stdenv, fetchurl, which, automake, autoconf, pkgconfig, libtool, vala, python, intltool, fuse, ccnet}:
+{stdenv, fetchurl, which, automake, autoconf, pkgconfig, curl, libtool, vala, python, intltool, fuse, ccnet}:
 
 stdenv.mkDerivation rec
 {
-  version = "3.0.4";
+  version = "4.0.6";
   name = "seafile-shared-${version}";
 
   src = fetchurl
   {
     url = "https://github.com/haiwen/seafile/archive/v${version}.tar.gz";
-    sha256 = "0a0yj9k2rr3q42swwzn1js3r8bld9wcysw6p9415rw5jabcm1af0";
+    sha256 = "1vs1ckxkh0kg1wjklpwdz87d5z60r80q27xv1s6yl7ir65s6zq0i";
   };
 
   buildInputs = [ which automake autoconf pkgconfig libtool vala python intltool fuse ];
-  propagatedBuildInputs = [ ccnet ];
+  propagatedBuildInputs = [ ccnet curl ];
 
   preConfigure = ''
   sed -ie 's|/bin/bash|/bin/sh|g' ./autogen.sh

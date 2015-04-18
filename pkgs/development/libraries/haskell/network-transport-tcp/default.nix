@@ -6,19 +6,16 @@
 
 cabal.mkDerivation (self: {
   pname = "network-transport-tcp";
-  version = "0.4.0";
-  sha256 = "1jjf1dj67a7l3jg3qgbg0hrjfnx1kr9n7hfvqssq7kr8sq1sc49v";
+  version = "0.4.1";
+  sha256 = "11fj0f2yrvdqn3sivfb4p0chs74bx26a0yc49fh160kkcmk42yaf";
   buildDepends = [ dataAccessor network networkTransport ];
   testDepends = [ network networkTransport networkTransportTests ];
   doCheck = false;
-  patchPhase = ''
-    sed -i -e 's|network >=.*,|network,|' -e 's|network >=.*|network|' network-transport-tcp.cabal
-  '';
   meta = {
     homepage = "http://haskell-distributed.github.com";
     description = "TCP instantiation of Network.Transport";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = with self.stdenv.lib.maintainers; [ andres ];
   };
 })

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pipes-text";
-  version = "0.0.0.12";
-  sha256 = "18xf0rhshbl03js50n98k96692w98j0j0dfyi67780i08c39dq6m";
+  version = "0.0.0.15";
+  sha256 = "10906gdb9gjhxxmxvmib6kw7py6fl2r4df5bryqvbjvr1afcc3x9";
   buildDepends = [
     pipes pipesBytestring pipesGroup pipesParse pipesSafe
     streamingCommons text transformers
@@ -18,5 +18,6 @@ cabal.mkDerivation (self: {
     description = "Text pipes";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = with self.stdenv.lib.maintainers; [ aycanirican ];
   };
 })

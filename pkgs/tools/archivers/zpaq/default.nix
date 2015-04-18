@@ -1,18 +1,18 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 let
   s = # Generated upstream information
   rec {
     baseName="zpaq";
-    version="655";
+    version="704";
     name="${baseName}-${version}";
-    hash="09wjss6vbziwvfmcngb64xd2yih79z1ypgrn4ni7ag8cifx9257c";
-    url="http://mattmahoney.net/dc/zpaq655.zip";
-    sha256="09wjss6vbziwvfmcngb64xd2yih79z1ypgrn4ni7ag8cifx9257c";
+    hash="0ffs2br5sjsd5pvy2x476fakbpvcf7yf0agzys0cfcib8pw9bd91";
+    url="http://mattmahoney.net/dc/zpaq704.zip";
+    sha256="0ffs2br5sjsd5pvy2x476fakbpvcf7yf0agzys0cfcib8pw9bd91";
   };
   buildInputs = [
     unzip
   ];
-  isUnix = stdenv.isLinux || stdenv.isGNU || stdenv.isDarwin || stdenv.isBSD;
+  isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
   isx86 = stdenv.isi686 || stdenv.isx86_64;
   compileFlags = ""
     + (stdenv.lib.optionalString isUnix " -Dunix -pthread ")
@@ -29,14 +29,14 @@ stdenv.mkDerivation {
   };
   sourceRoot = ".";
   buildPhase = ''
-    g++ -shared -O3 libzpaq.cpp ${compileFlags} -o libzpaq.so
-    g++ -O3 -L. -L"$out/lib" -lzpaq divsufsort.c zpaq.cpp -o zpaq
+	  g++ -O3 -march=native -Dunix libzpaq.cpp -pthread --shared -o libzpaq.so -fPIC
+	  g++ -O3 -march=native -Dunix zpaq.cpp -lzpaq -L. -L"$out/lib" -pthread -o zpaq
   '';
   installPhase = ''
     mkdir -p "$out"/{bin,include,lib,share/doc/zpaq}
     cp libzpaq.so "$out/lib"
     cp zpaq "$out/bin"
-    cp libzpaq.h divsufsort.h "$out/include"
+    cp libzpaq.h "$out/include"
     cp readme.txt "$out/share/doc/zpaq"
   '';
   meta = {

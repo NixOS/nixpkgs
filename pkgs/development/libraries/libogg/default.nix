@@ -1,10 +1,7 @@
 { stdenv, fetchurl }:
 
-let
+stdenv.mkDerivation rec {
   name = "libogg-1.3.2";
-in
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/ogg/${name}.tar.xz";

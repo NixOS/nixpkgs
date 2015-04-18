@@ -1,55 +1,41 @@
-{stdenv, fetchurl, skalibs, execline}:
+{ stdenv, execline, fetchgit, skalibs }:
 
 let
 
-  version = "1.1.3.2";
+  version = "2.1.3.0";
 
 in stdenv.mkDerivation rec {
 
   name = "s6-${version}";
 
-  src = fetchurl {
-    url = "http://www.skarnet.org/software/s6/${name}.tar.gz";
-    sha256 = "0djxdd3d3mlp63sjqqs0ilf8p68m86c1s98d82fl0kgaaibpsikp";
+  src = fetchgit {
+    url = "git://git.skarnet.org/s6";
+    rev = "refs/tags/v${version}";
+    sha256 = "0dnwkdxqjv5awdgwxci1spcx1s13y5s9wd8ccskwv1rymvpgn8b3";
   };
 
-  buildInputs = [ skalibs execline ];
+  dontDisableStatic = true;
 
-  sourceRoot = "admin/${name}";
+  enableParallelBuilding = true;
 
-  configurePhase = ''
-    pushd conf-compile
-
-    printf "$out/bin"           > conf-install-command
-    printf "$out/include"       > conf-install-include
-    printf "$out/lib"           > conf-install-library
-    printf "$out/lib"           > conf-install-library.so
-    printf "$out/sysdeps"       > conf-install-sysdeps
-
-    # let nix builder strip things, cross-platform
-    truncate --size 0 conf-stripbins
-    truncate --size 0 conf-striplibs
-
-    printf "${skalibs}/sysdeps" > import
-    printf "%s\n%s" "${skalibs}/include" "${execline}/include" > path-include
-    printf "%s\n%s" "${skalibs}/lib"     "${execline}/lib"     > path-library
-
-    rm -f flag-slashpackage
-    touch flag-allstatic
-
-    popd
-  '';
+  configureFlags = [
+    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs}/include"
+    "--with-include=${execline}/include"
+    "--with-lib=${skalibs}/lib"
+    "--with-lib=${execline}/lib"
+    "--with-dynlib=${skalibs}/lib"
+    "--with-dynlib=${execline}/lib"
+  ] ++ [ (if stdenv.isDarwin then "--disable-shared" else "--enable-shared") ];
 
   preBuild = ''
     substituteInPlace "src/daemontools-extras/s6-log.c" \
       --replace '"execlineb"' '"${execline}/bin/execlineb"'
-
-    patchShebangs src/sys
   '';
 
   meta = {
     homepage = http://www.skarnet.org/software/s6/;
-    description = "skarnet.org's small & secure supervision software suite.";
+    description = "skarnet.org's small & secure supervision software suite";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
   };

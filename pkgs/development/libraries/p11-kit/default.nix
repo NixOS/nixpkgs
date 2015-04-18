@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--without-libtasn1";
 
-  buildInputs = [ libiconv pkgconfig libffi libtasn1 ];
+  buildInputs = [ pkgconfig libffi libtasn1 libiconv ];
 
   meta = {
     homepage = http://p11-glue.freedesktop.org/;

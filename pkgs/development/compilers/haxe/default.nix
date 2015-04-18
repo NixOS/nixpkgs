@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     sed -i -e 's|com.class_path <- \[|&"'"$out/lib/haxe/std/"'";|' main.ml
   '';
 
+  patches = [ ./haxelib-nix.patch ];
+
   buildFlags = [ "all" "tools" ];
 
   installPhase = ''
@@ -25,6 +27,8 @@ stdenv.mkDerivation {
     install -vt "$out/bin" haxe haxelib
     cp -vr std "$out/lib/haxe"
   '';
+
+  setupHook = ./setup-hook.sh;
 
   dontStrip = true;
 

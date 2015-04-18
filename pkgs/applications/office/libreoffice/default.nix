@@ -10,22 +10,22 @@
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg
 , openssl, gperf, cppunit, GConf, ORBit2, poppler
-, librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
+, librsvg, gnome_vfs, mesa
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus_glib, glibc, qt4, kde4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, saneBackends, mythes, libexttextcat, libvisio
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
-, libatomic_ops, graphite2, harfbuzz
-, librevenge, libe-book, libmwaw, glm, glew
+, libatomic_ops, graphite2, harfbuzz, libodfgen
+, librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
 }:
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "4";
-  minor = "3";
-  patch = "0";
-  tweak = "4";
+  minor = "4";
+  patch = "2";
+  tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
@@ -40,9 +40,9 @@ let
        sha256 = "10amvz7fzr1kcy3svfspkdykmspqgpjdmk44cyr406wi7v4lwnf9";
      };
 
-     configureFlags = "--with-boost=${boost}";
-
      buildInputs = [ boost mdds pkgconfig ];
+
+     configureFlags = [ "--with-boost=${boost.dev}" ];
   };
 
   fetchThirdParty = {name, md5, brief, subDir ? ""}: fetchurl {
@@ -60,9 +60,10 @@ let
       (x: x.name == "${name}.tar.bz2")
       ("Error: update liborcus version inside LO expression")
       (import ./libreoffice-srcs.nix));
-    configureFlags = "--with-boost=${boost}";
 
-    buildInputs = [ boost mdds pkgconfig zlib libixion ];
+    buildInputs = [ boost mdds pkgconfig zlib /*libixion*/ ];
+
+    configureFlags = [ "--with-boost=${boost.dev}" ];
   };
 
   fetchSrc = {name, sha256}: fetchurl {
@@ -79,14 +80,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1l445284mih0c7d6v3ps1piy5pbjvisyrjjvlrqizvwxqm7bxpr1";
+      sha256 = "0m1a09vzgh5mz0dgx2ji3fwmsqr7xymr0hhrrhf75nd1dr0blv2s";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0avsc11d4nmycsxvadr0xcd8z9506sjcc89hgmliqlmhmw48ax7y";
+      sha256 = "06i2c143dpqm4w1a9nba0gn1ayrvrhdrcm2kydzapvljgljqswkh";
     };
 
   };
@@ -96,7 +97,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1r605nwjdq20qd96chqic1bjkw7y36wmpg2lzzvv5sz6gw12rzi8";
+    sha256 = "0dif783zbh9qb4636mm055clwwsv8j6pmb8msi9lr183drnaw73x";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -113,9 +114,7 @@ stdenv.mkDerivation rec {
   '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
-    tar xf $sourceRoot/src/${srcs.help.name} -C $sourceRoot/../
-    ln -sv ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
-    tar xf $sourceRoot/src/${srcs.translations.name} -C $sourceRoot/../
+    ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
   '';
 
   patchPhase = ''
@@ -177,12 +176,19 @@ stdenv.mkDerivation rec {
 
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
     for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" --replace "Exec=libreoffice4.0" "Exec=$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=$out/bin/soffice"
       substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=$out/bin/soffice"
     done
+
+    mkdir -p "$out/share/desktop"
+    cp -r sysui/desktop/icons  "$out/share/desktop"
+    sed -re 's@Icon=libreofficedev[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
   '';
 
   configureFlags = [
+    "--with-boost=${boost.dev}"
+    "--with-boost-libdir=${boost.lib}/lib"
     "--with-vendor=NixOS"
 
     # Without these, configure does not finish
@@ -198,7 +204,6 @@ stdenv.mkDerivation rec {
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-openldap"
-    "--with-boost-libdir=${boost}/lib"
     "--without-system-libwps"  # TODO
     "--without-doxygen"
 
@@ -206,13 +211,12 @@ stdenv.mkDerivation rec {
     # Modified on every upgrade, though
     "--disable-kde"
     "--disable-postgresql-sdbc"
-    "--with-package-format=native"
+    "--with-package-format=installed"
     "--enable-epm"
-    "--with-jdk-home=${jdk}/lib/openjdk"
+    "--with-jdk-home=${jdk.home}"
     "--with-ant-home=${ant}/lib/ant"
     "--without-fonts"
     "--without-myspell-dicts"
-    "--without-ppds"
     "--without-system-beanshell"
     "--without-system-hsqldb"
     "--without-system-jars"
@@ -223,11 +227,16 @@ stdenv.mkDerivation rec {
 
     "--without-system-libetonyek"
     "--without-system-libfreehand"
-    "--without-system-libodfgen"
     "--without-system-libabw"
     "--without-system-firebird"
     "--without-system-liblangtag"
     "--without-system-libmspub"
+
+    "--without-system-libpagemaker"
+    "--without-system-coinmp"
+    "--without-system-libgltf"
+
+    "--without-system-orcus"
   ];
 
   checkPhase = ''
@@ -238,17 +247,18 @@ stdenv.mkDerivation rec {
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
+      freetype GConf getopt gnome_vfs gperf gtk
       hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs mesa mythes
+      libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer 
+      gst_all_1.gst-plugins-base
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libixion
+      mdds bluez5 glibc /*libixion*/
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew
-      liborcus
+      /*liborcus*/ libodfgen
     ];
 
   meta = with stdenv.lib; {

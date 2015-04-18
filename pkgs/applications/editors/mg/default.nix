@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://homepage.boetes.org/software/mg/;
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
-    license = "public domain";
+    license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.all;
   };
 }

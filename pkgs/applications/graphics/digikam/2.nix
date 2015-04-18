@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 kdelibs phonon qimageblitz qca2 eigen lcms libjpeg libtiff
     jasper libgphoto2 kdepimlibs gettext soprano liblqr1 lensfun qjson libkdcraw
-    opencv libkexiv2 libkipi boost shared_desktop_ontologies marble mysql ];
+    opencv libkexiv2 libkipi boost shared_desktop_ontologies marble mysql.lib ];
 
   # Make digikam find some FindXXXX.cmake
   KDEDIRS="${marble}:${qjson}";

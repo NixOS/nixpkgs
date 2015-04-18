@@ -49,8 +49,13 @@ let
 
   referencesOf = drv: getAttr (discard (toString drv)) references;
 
-  dependsOnOld = drv: elem oldStorepath (referencesOf drv) ||
-    any dependsOnOld (referencesOf drv);
+  dependsOnOldMemo = listToAttrs (map
+    (drv: { name = discard (toString drv);
+            value = elem oldStorepath (referencesOf drv) ||
+                    any dependsOnOld (referencesOf drv);
+          }) (builtins.attrNames references));
+
+  dependsOnOld = drv: getAttr (discard (toString drv)) dependsOnOldMemo;
 
   drvName = drv:
     discard (substring 33 (stringLength (builtins.baseNameOf drv)) (builtins.baseNameOf drv));
@@ -65,15 +70,12 @@ let
 
   rewrittenDeps = listToAttrs [ {name = discard (toString oldDependency); value = newDependency;} ];
 
-  rewrittenDerivations = drv:
-    if dependsOnOld drv
-      then listToAttrs [ {
-        name = discard (toString drv);
+  rewriteMemo = listToAttrs (map
+    (drv: { name = discard (toString drv);
+            value = rewriteHashes (builtins.storePath drv)
+              (filterAttrs (n: v: builtins.elem (builtins.storePath (discard (toString n))) (referencesOf drv)) rewriteMemo);
+          })
+    (filter dependsOnOld (builtins.attrNames references))) // rewrittenDeps;
 
-        value = rewriteHashes drv (rewrittenDeps // (fold (drv: acc:
-          (rewrittenDerivations drv) // acc
-        ) {} (referencesOf drv)));
-      } ]
-      else {};
 in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));
-getAttr (discard (toString drv)) (rewrittenDerivations drv)
+getAttr (discard (toString drv)) rewriteMemo

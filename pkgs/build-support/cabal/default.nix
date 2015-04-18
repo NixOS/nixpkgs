@@ -1,13 +1,14 @@
 # generic builder for Cabal packages
 
 { stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, glibcLocales
-, gnugrep, coreutils, hscolour
+, gnugrep, coreutils, hscolour, cpphs
 , enableLibraryProfiling ? false
 , enableSharedLibraries ? false
 , enableSharedExecutables ? false
 , enableStaticLibraries ? true
 , enableCheckPhase ? stdenv.lib.versionOlder "7.4" ghc.version
 , enableHyperlinkSource ? true
+, enableCpphs ? false
 , extension ? (self : super : {})
 }:
 
@@ -56,7 +57,15 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
                 propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
                 doCheck               = enableCheckPhase && x.doCheck;
+                useCpphs              = enableCpphs && x.useCpphs;
                 hyperlinkSource       = enableHyperlinkSource && x.hyperlinkSource;
+                # Disable Darwin builds: <https://github.com/NixOS/nixpkgs/issues/2689>.
+                meta                  = let meta = x.meta or {};
+                                            hydraPlatforms = meta.hydraPlatforms or meta.platforms or [];
+                                            noElem         = p: ps: !stdenv.lib.elem p ps;
+                                            noDarwin       = p: noElem p stdenv.lib.platforms.darwin;
+                                        in
+                                        meta // { hydraPlatforms = filter noDarwin hydraPlatforms; };
               };
 
         defaults =
@@ -98,6 +107,7 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             extraBuildInputs = self.buildTools ++
                                (optionals self.doCheck self.testDepends) ++
                                (optional self.hyperlinkSource hscolour) ++
+                               (optional self.useCpphs cpphs) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
@@ -146,6 +156,10 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             # and run any regression test suites the package might have
             doCheck = enableCheckPhase;
 
+            # force cpphs instead of the C compiler's preprocessor; sometimes
+            # needed due to clang's wacky behavior
+            useCpphs = false;
+
             # pass the '--hyperlink-source' flag to ./Setup haddock
             hyperlinkSource = enableHyperlinkSource;
 
@@ -182,12 +196,21 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
             configurePhase = ''
               eval "$preConfigure"
 
-              ${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              ${let newCabalFile = fetchurl {
+                      url = "http://hackage.haskell.org/package/${self.fname}/${self.pname}.cabal";
+                      sha256 = self.editedCabalFile;
+                    };
+                in
+                  optionalString (self.editedCabalFile or "" != "") ''
+                    echo "Replace Cabal file with edited version ${newCabalFile}."
+                    cp ${newCabalFile} ${self.pname}.cabal
+                  ''
+              }${optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
 
               for i in Setup.hs Setup.lhs ${defaultSetupHs}; do
                 test -f $i && break
               done
-              ghc --make -o Setup -odir $TMPDIR $i
+              ghc --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
@@ -204,14 +227,23 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
                 done
               done
 
+              configureFlags+=" --with-gcc=$CC"
+
               ${optionalString (self.enableSharedExecutables && self.stdenv.isLinux) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.ghc.name}/${self.pname}-${self.version}"
               ''}
               ${optionalString (self.enableSharedExecutables && self.stdenv.isDarwin) ''
                 configureFlags+=" --ghc-option=-optl=-Wl,-headerpad_max_install_names"
               ''}
-              ${optionalString (versionOlder "7.8" ghc.version) ''
+              ${optionalString (versionOlder "7.8" ghc.version && !self.isLibrary) ''
                 configureFlags+=" --ghc-option=-j$NIX_BUILD_CORES"
+              ''}
+              ${optionalString self.useCpphs ''
+                configureFlags+=" --ghc-option=-pgmPcpphs --ghc-option=-optP--cpp"
+              ''}
+
+              ${optionalString self.stdenv.isDarwin ''
+                configureFlags+=" --with-gcc=clang"
               ''}
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
@@ -236,7 +268,11 @@ assert !enableStaticLibraries -> versionOlder "7.7" ghc.version;
 
               export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               test -n "$noHaddock" || ./Setup haddock --html --hoogle \
-                  ${optionalString self.hyperlinkSource "--hyperlink-source"}
+                  ${optionalString (stdenv.lib.versionOlder "6.12" ghc.version) "--ghc-options=-optP-P"} \
+                  ${optionalString self.hyperlinkSource "--hyperlink-source"} \
+                  ${optionalString self.useCpphs ''
+                    --haddock-options="--optghc=-pgmPcpphs --optghc=-optP--cpp"
+                  ''}
 
               eval "$postBuild"
             '';

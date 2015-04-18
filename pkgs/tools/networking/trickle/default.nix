@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight userspace bandwidth shaper";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
     homepage = http://monkey.org/~marius/pages/?page=trickle;
     platforms = stdenv.lib.platforms.linux;
   };

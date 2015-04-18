@@ -1,0 +1,26 @@
+{ config, pkgs, lib, ... }:
+
+with lib;
+
+{
+  imports = [
+    ../profiles/container.nix
+  ];
+
+  # Allow the user to login as root without password.
+  users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
+
+  # Some more help text.
+  services.mingetty.helpLine =
+    ''
+
+      Log in as "root" with an empty password.
+    '';
+
+  # Containers should be light-weight, so start sshd on demand.
+  services.openssh.enable = mkDefault true;
+  services.openssh.startWhenNeeded = mkDefault true;
+
+  # Allow ssh connections
+  networking.firewall.allowedTCPPorts = [ 22 ];
+}

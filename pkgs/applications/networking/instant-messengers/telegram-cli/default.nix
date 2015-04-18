@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libconfig lua5_2 openssl readline zlib ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # CPPFunction
+
   installPhase = ''
     mkdir -p $out/bin
     cp ./telegram $out/bin/telegram-wo-key

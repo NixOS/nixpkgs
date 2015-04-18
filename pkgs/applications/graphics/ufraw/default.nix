@@ -2,12 +2,12 @@
 , libjpeg, libtiff, cfitsio, exiv2, lcms, gtkimageview, lensfun }:
 
 stdenv.mkDerivation rec {
-  name = "ufraw-0.19.2";
+  name = "ufraw-0.20";
 
   src = fetchurl {
     # XXX: These guys appear to mutate uploaded tarballs!
     url = "mirror://sourceforge/ufraw/${name}.tar.gz";
-    sha256 = "1lxba7pb3vcsq94dwapg9bk9mb3ww6r3pvvcyb0ah5gh2sgzxgkk";
+    sha256 = "1q51p0ynzayxwfpilj0s38aapgkfga00gbl7xi0ndx9q6bvk1kbd";
   };
 
   buildInputs =

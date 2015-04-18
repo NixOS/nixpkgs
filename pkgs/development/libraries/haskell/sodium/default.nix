@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sodium";
-  version = "0.10.0.2";
-  sha256 = "0rm1blh0br4gdnqb6ixvql6nrxzcjxjkwp4lmqmsisa2b68gbzqy";
+  version = "0.11.0.2";
+  sha256 = "0m3ig6nqkw0m6xh6ijgr2w06i4ydyfwx7rsbkrrxflichadm9r2g";
   buildDepends = [ mtl ];
   meta = {
     description = "Sodium Reactive Programming (FRP) System";

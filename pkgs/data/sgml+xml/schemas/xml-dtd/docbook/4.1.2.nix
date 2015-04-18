@@ -21,4 +21,7 @@ import ./generic.nix {
   postInstall = "
     sed 's|V4.2|V4.1.2|g' < ${docbook42catalog} > catalog.xml
   ";
+  meta = {
+    branch = "4.1.2";
+  };
 }

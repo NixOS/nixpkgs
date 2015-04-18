@@ -14,6 +14,8 @@
 , unixODBC
 , xlibs
 , zlib
+, libxml2
+, libuuid
 }:
 
 let
@@ -24,17 +26,18 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
+  version = "10.0.2";
 
-  name = "mathematica-9.0.0";
+  name = "mathematica-${version}";
 
   src = requireFile rec {
-    name = "Mathematica_9.0.0_LINUX.sh";
+    name = "Mathematica_${version}_LINUX.sh";
     message = '' 
-      This nix expression requires that Mathematica_9.0.0_LINUX.sh is
+      This nix expression requires that ${name} is
       already part of the store. Find the file on your Mathematica CD
       and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
     '';
-    sha256 = "106zfaplhwcfdl9rdgs25x83xra9zcny94gb22wncbfxvrsk3a4q";
+    sha256 = "1d2yaiaikzcacjamlw64g3xkk81m3pb4vz4an12cv8nb7kb20x9l";
   };
 
   buildInputs = [
@@ -44,13 +47,15 @@ stdenv.mkDerivation rec {
     coreutils
     fontconfig
     freetype
-    gcc.gcc
+    gcc.cc
     gcc.libc
     glib
     ncurses
     opencv
     openssl
     unixODBC
+    libxml2
+    libuuid
   ] ++ (with xlibs; [
     libX11
     libXext
@@ -59,6 +64,11 @@ stdenv.mkDerivation rec {
     libXmu
     libXrender
     libxcb
+    libXcursor
+    libXfixes
+    libXrandr
+    libICE
+    libSM
   ]);
 
   ldpath = stdenv.lib.makeLibraryPath buildInputs
@@ -92,11 +102,13 @@ stdenv.mkDerivation rec {
         :
       elif [ "$type" == "EXEC" ]; then
         echo "patching $f executable <<"
-        patchelf \
-            --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-            --set-rpath "${ldpath}" \
-            "$f"
         patchelf --shrink-rpath "$f"
+        patchelf \
+	  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          --set-rpath "$(patchelf --print-rpath "$f"):${ldpath}" \
+          "$f" \
+          && patchelf --shrink-rpath "$f" \
+          || echo unable to patch ... ignoring 1>&2
       elif [ "$type" == "DYN" ]; then
         echo "patching $f library <<"
         patchelf \

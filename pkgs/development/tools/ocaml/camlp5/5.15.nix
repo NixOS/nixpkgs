@@ -8,6 +8,8 @@ let
   metafile = ./META;
 in
 
+assert !stdenv.lib.versionOlder "4.00" ocaml_version;
+
 stdenv.mkDerivation {
 
   name = "${pname}${if transitional then "_transitional" else ""}-${version}";
@@ -35,7 +37,8 @@ stdenv.mkDerivation {
       It also provides parsing and printing tools.
     '';
     homepage = "${webpage}";
-    license = "BSD";
+    license = stdenv.lib.licenses.bsd3;
+    branch = "5";
     platforms = ocaml.meta.platforms;
     maintainers = [
       stdenv.lib.maintainers.z77z

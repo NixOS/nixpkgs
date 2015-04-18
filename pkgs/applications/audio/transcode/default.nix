@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Suite of command line utilities for transcoding video and audio codecs, and for converting beween different container formats";
+    description = "Suite of command line utilities for transcoding video and audio codecs, and for converting between different container formats";
     homepage = http://www.transcoding.org/;
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
