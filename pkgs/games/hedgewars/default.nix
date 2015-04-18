@@ -1,23 +1,22 @@
+
 { SDL_image, SDL_ttf, SDL_net, fpc, qt4 , ghc, ffmpeg, freeglut, network, vector
 , stdenv, makeWrapper, fetchurl, cmake, pkgconfig, lua5_1, SDL, SDL_mixer
-, utf8String, bytestringShow, hslogger, random, dataenc, zlib, libpng, mesa
+, utf8String, bytestringShow, hslogger, random, dataenc, zlib, libpng, mesa, haskellPackages, physfs
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.20.5";
+  version = "0.9.21.1";
   name = "hedgewars-${version}";
   src = fetchurl {
     url = "http://download.gna.org/hedgewars/hedgewars-src-${version}.tar.bz2";
-    sha256 = "1k5dq14s9pshrqlz8vnix237bcapfif4k3rc4yj4cmwdx1pqkl56";
+    sha256 = "1y7k87594z13hy4krqbn7mq661ldsbzfsfgbsm85ag0js9c982jr";
   };
 
   buildInputs = [
     SDL_ttf SDL_net network vector utf8String bytestringShow hslogger random
     cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc qt4 ghc ffmpeg freeglut
-    dataenc makeWrapper
+    dataenc makeWrapper haskellPackages.SHA haskellPackages.entropy haskellPackages.zlib physfs
   ];
-
-  patches = [ ./fix-ghc-7.8-build-failure.diff ];
 
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL_image}/lib
@@ -29,6 +28,7 @@ stdenv.mkDerivation rec {
                                      -rpath ${lua5_1}/lib
                                      -rpath ${mesa}/lib
                                      -rpath ${zlib}/lib
+                                     -rpath ${physfs}/lib
                                      "
   '';
 
