@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   ] ++ optional stdenv.isLinux
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        inherit udev;
+        inherit (udev) libudev;
       });
 
   postPatch = ''

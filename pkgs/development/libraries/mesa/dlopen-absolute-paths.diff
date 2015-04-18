@@ -7,7 +7,7 @@ index 666d015..4d7a9be 100644
  {
     if (!udev_handle) {
 -      udev_handle = dlopen("libudev.so.1", RTLD_LOCAL | RTLD_LAZY);
-+      udev_handle = dlopen("@udev@/lib/libudev.so.1", RTLD_LOCAL | RTLD_LAZY);
++      udev_handle = dlopen("@libudev@/lib/libudev.so.1", RTLD_LOCAL | RTLD_LAZY);
  
        if (!udev_handle) {
           /* libudev.so.1 changed the return types of the two unref functions
