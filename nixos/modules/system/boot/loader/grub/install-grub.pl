@@ -468,8 +468,8 @@ sub getEfiTarget {
         if ($grubTargetEfi eq "") { die }
         else {return "only" }
     } else {
-        # at least one grub target has to be given
-        die
+        # prevent an installation if neither grub nor grubEfi is given
+        return "neither"
     }
 }
 
