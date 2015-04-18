@@ -53,21 +53,21 @@ index 20ee1d1..39834e6 100644
 -
 -list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
 -  /usr/pkg/bin
-+  "@glibc@"
++  "@glibc_bin@"
    )
  
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
-+  "@glibc@/lib"
++  "@glibc_lib@/lib"
    )
  
  list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  "@glibc@/include"
++  "@glibc_dev@/include"
    )
  list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  "@glibc@/include"
++  "@glibc_dev@/include"
    )
  
  # Enable use of lib64 search path variants by default.
