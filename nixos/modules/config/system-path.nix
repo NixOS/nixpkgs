@@ -40,7 +40,6 @@ let
       pkgs.ncurses
       pkgs.netcat
       pkgs.openssh
-      pkgs.pciutils
       pkgs.perl
       pkgs.procps
       pkgs.rsync
@@ -48,7 +47,6 @@ let
       pkgs.sysvtools
       pkgs.su
       pkgs.time
-      pkgs.usbutils
       pkgs.utillinux
       extraManpages
     ];

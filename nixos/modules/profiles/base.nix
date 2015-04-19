@@ -29,6 +29,8 @@
     pkgs.hdparm
     pkgs.dmraid
     pkgs.smartmontools # for diagnosing hard disks
+    pkgs.pciutils
+    pkgs.usbutils
 
     # Tools to create / manipulate filesystems.
     pkgs.ntfsprogs # for resizing NTFS partitions
