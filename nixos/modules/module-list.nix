@@ -414,6 +414,9 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
+  ./system/boot/networkd.nix
+  ./system/boot/resolved.nix
+  ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix
   ./system/upstart/upstart.nix
