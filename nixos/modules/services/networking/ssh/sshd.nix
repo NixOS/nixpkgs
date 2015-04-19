@@ -281,10 +281,8 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = "sshd";
-        uid = config.ids.uids.sshd;
-        description = "SSH privilege separation user";
+    users.extraUsers.sshd =
+      { description = "SSH privilege separation user";
         home = "/var/empty";
       };
 
