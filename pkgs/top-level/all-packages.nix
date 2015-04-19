@@ -2725,10 +2725,6 @@ let
 
   spiped = callPackage ../tools/networking/spiped { };
 
-  sproxy = haskellPackages.callPackage ../tools/networking/sproxy { };
-
-  sproxy-web = haskellPackages.callPackage ../tools/networking/sproxy-web { };
-
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
