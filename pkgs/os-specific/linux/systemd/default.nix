@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
+, glib, kbd, libxslt, coreutils, libgcrypt
 , kexectools, libmicrohttpd, linuxHeaders
 , pythonPackages ? null, pythonSupport ? false
 }:
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${sysvtools}/sbin/sulogin \
+          --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
           --replace /sbin/kexec ${kexectools}/sbin/kexec
       done
 
