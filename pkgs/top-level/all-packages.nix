@@ -11802,6 +11802,8 @@ let
 
   rtl-sdr = callPackage ../applications/misc/rtl-sdr { };
 
+  rtv = callPackage ../applications/misc/rtv { };
+
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
   rxvt = callPackage ../applications/misc/rxvt { };
