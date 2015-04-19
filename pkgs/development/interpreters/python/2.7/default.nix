@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, self, callPackage
+{ stdenv, fetchurl, self, callPackage
 , bzip2, openssl
 
 , includeModules ? false
@@ -60,7 +60,7 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ pkgconfig bzip2 openssl ]
+    [ bzip2 openssl ]
     ++ optionals includeModules (
         [ db gdbm ncurses sqlite readline
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
@@ -68,8 +68,8 @@ let
     ++ optional zlibSupport zlib;
 
   mkPaths = paths: {
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") buildInputs);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") buildInputs);
+    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
+    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") paths);
   };
 
   # Build the basic Python interpreter without modules that have
@@ -110,7 +110,7 @@ let
 
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
 
-        rm "$out/lib/python2.7/plat-linux2/regen" # refers to glibc.dev
+        rm "$out"/lib/python*/plat-linux2/regen # refers to glibc.dev
       '';
 
     passthru = rec {

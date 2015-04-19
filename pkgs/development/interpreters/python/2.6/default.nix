@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
+{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, includeModules ? false
 , sqlite, tcl, tk, x11, openssl, readline, db, ncurses, gdbm, self, callPackage }:
 
 assert zlibSupport -> zlib != null;
@@ -48,12 +48,12 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ pkgconfig bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline x11 tcl tk sqlite ]
+    [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline x11 tcl tk sqlite ]
     ++ optional zlibSupport zlib;
 
   mkPaths = paths: {
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") buildInputs);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") buildInputs);
+    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
+    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") paths);
   };
 
   # Build the basic Python interpreter without modules that have
@@ -90,8 +90,6 @@ let
         paxmark E $out/bin/python${majorVersion}
 
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
-
-        rm "$out/lib/python2.7/plat-linux2/regen" # refers to glibc.dev
       '';
 
     passthru = rec {
