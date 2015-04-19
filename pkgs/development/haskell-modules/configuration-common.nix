@@ -426,6 +426,7 @@ self: super: {
   Rlang-QQ = dontCheck super.Rlang-QQ;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
+  sdl2-ttf = dontCheck super.sdl2-ttf # as of version 0.2.1, the test suite requires user intervention
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
@@ -756,11 +757,11 @@ self: super: {
 
   # Fix problems with GHC >=7.8 (in compatible way)
   mueval = let pkg = appendPatch super.mueval (pkgs.fetchpatch {
-                       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
-                       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
-                     });
-           # Nix-specific workaround
-           in appendPatch pkg ./mueval-nix.patch;
+		       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
+		       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
+		     });
+	   # Nix-specific workaround
+	   in appendPatch pkg ./mueval-nix.patch;
 
 } // {
 
