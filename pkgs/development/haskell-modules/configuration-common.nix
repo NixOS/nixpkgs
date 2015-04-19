@@ -22,6 +22,10 @@ self: super: {
   statistics = dontCheck super.statistics;
   text = dontCheck super.text;
 
+  # https://github.com/bartavelle/hruby/issues/10
+  # https://github.com/bartavelle/hruby/issues/9
+  hruby = addExtraLibrary (dontCheck super.hruby) pkgs.ruby_2_1;
+
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
 
