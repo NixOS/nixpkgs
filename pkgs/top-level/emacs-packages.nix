@@ -890,12 +890,12 @@ let self = _self // overrides;
 
   popup = melpaBuild rec {
     pname   = "popup";
-    version = "0.5.0";
+    version = "0.5.2";
     src = fetchFromGitHub {
       owner  = "auto-complete";
       repo   = "${pname}-el";
       rev    = "v${version}";
-      sha256 = "0836ayyz1syvd9ry97ya06l8mpr88c6xbgb4d98szj6iwbypcj7b";
+      sha256 = "0aazkczrzpp75793bpi0pz0cs7vinhdrpxfdlzi0cr39njird2yj";
     };
     meta = { license = gpl3Plus; };
   };
