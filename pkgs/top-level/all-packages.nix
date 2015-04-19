@@ -8900,7 +8900,7 @@ let
       });
     })
     else if stdenv.isLinux
-    then e2fsprogs
+    then utillinux
     else null;
 
   light = callPackage ../os-specific/linux/light { };

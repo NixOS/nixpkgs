@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
+{ stdenv, fetchurl, pkgconfig, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
   name = "util-linux-2.26.1";
@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./rtcwake-search-PATH-for-shutdown.patch
             ];
-  outputs = [ "dev" "out" "bin" ]; # ToDo: problems with e2fsprogs
+
+  outputs = [ "bin" "out" "man" ]; # TODO: $bin is kept the first for now
+  # due to lots of ${utillinux}/bin occurences and headers being rather small
+  outputDev = "bin";
 
 
   #FIXME: make it also work on non-nixos?
@@ -41,13 +44,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs =
     [ zlib pam ]
     ++ stdenv.lib.optional (ncurses != null) ncurses
     ++ stdenv.lib.optional (perl != null) perl;
 
   postInstall = ''
-    sed "s,$out$out,$out,g" -i "$dev"/lib/pkgconfig/*.pc
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)
   '';
 
@@ -60,4 +63,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-
