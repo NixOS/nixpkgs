@@ -430,6 +430,7 @@
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/jfs.nix
   ./tasks/filesystems/nfs.nix
+  ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vfat.nix
