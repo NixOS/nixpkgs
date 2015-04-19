@@ -337,4 +337,7 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/11
   bloomfilter = dontHaddock (appendConfigureFlag super.bloomfilter "--ghc-option=-XFlexibleContexts");
 
+  # https://github.com/ocharles/tasty-rerun/issues/5
+  tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
+
 }
