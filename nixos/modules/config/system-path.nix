@@ -43,7 +43,6 @@ let
       pkgs.procps
       pkgs.rsync
       pkgs.strace
-      pkgs.sysvtools
       pkgs.su
       pkgs.time
       pkgs.utillinux
