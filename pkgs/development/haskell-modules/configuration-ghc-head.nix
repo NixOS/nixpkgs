@@ -73,10 +73,6 @@ self: super: {
   # Version 1.19.5 fails its test suite.
   happy = dontCheck super.happy;
 
-  # Test suite hangs silently without consuming any CPU.
-  # https://github.com/ndmitchell/extra/issues/4
-  extra = dontCheck super.extra;
-
   # Workaround for a workaround, see comment for "ghcjs" flag.
   jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
