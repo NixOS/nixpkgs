@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 let version = "3.0.9"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "xdelta-${version}";
   
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     cd xdelta3
-
+  '' + stdenv.lib.optionalString doCheck ''
     mkdir tmp
     substituteInPlace testing/file.h --replace /tmp tmp
     substituteInPlace xdelta3-test.h --replace /tmp $PWD/tmp
