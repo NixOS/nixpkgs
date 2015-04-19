@@ -342,4 +342,7 @@ self: super: {
   # https://github.com/lymar/hastache/issues/47
   hastache = dontCheck super.hastache;
 
+  # The compat library is empty in the presence of mtl 2.2.x.
+  mtl-compat = dontHaddock super.mtl-compat;
+
 }
