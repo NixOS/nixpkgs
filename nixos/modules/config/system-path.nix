@@ -23,7 +23,6 @@ let
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils
-      pkgs.eject # HAL depends on it anyway
       pkgs.findutils
       pkgs.gawk
       pkgs.glibc # for ldd, getent
