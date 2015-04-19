@@ -334,4 +334,7 @@ self: super: {
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
 
+  # https://github.com/bos/bloomfilter/issues/11
+  bloomfilter = dontHaddock (appendConfigureFlag super.bloomfilter "--ghc-option=-XFlexibleContexts");
+
 }
