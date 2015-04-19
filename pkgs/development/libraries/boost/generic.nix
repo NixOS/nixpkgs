@@ -159,6 +159,7 @@ stdenv.mkDerivation {
   postFixup = fixup;
 
   outputs = [ "out" "dev" "lib" ];
+  setOutputFlags = false;
 
   crossAttrs = rec {
     buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
