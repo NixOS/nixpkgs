@@ -45,10 +45,6 @@ in {
       ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 
-  # Disable some features that are not useful in a container.
-  sound.enable = mkDefault false;
-  services.udisks2.enable = mkDefault false;
-
   # Install new init script
   system.activationScripts.installInitScript = ''
     ln -fs $systemConfig/init /init
