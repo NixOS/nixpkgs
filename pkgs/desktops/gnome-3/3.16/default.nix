@@ -72,6 +72,8 @@ rec {
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
+  gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
+
   gnome-contacts = callPackage ./core/gnome-contacts { };
 
   gnome_control_center = callPackage ./core/gnome-control-center { };

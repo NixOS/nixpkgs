@@ -80,6 +80,7 @@ in {
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
+    hardware.bluetooth.enable = mkDefault true;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
@@ -156,6 +157,7 @@ in {
         gnome3.totem
         gnome3.vino
         gnome3.yelp
+        gnome3.gnome-bluetooth
         gnome3.gnome-calculator
         gnome3.gnome-contacts
         gnome3.gnome-font-viewer

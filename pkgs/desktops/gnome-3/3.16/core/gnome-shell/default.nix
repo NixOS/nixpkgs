@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter pulseaudio caribou evolution_data_server
       libical libtool nss gobjectIntrospection gtk gstreamer makeWrapper gdm gnome_control_center
-      hicolor_icon_theme adwaita-icon-theme sqlite
+      hicolor_icon_theme adwaita-icon-theme sqlite gnome3.gnome-bluetooth
       libgweather # not declared at build time, but typelib is needed at runtime
       gnome3.gnome-clocks # schemas needed
       at_spi2_core upower ibus gnome_session gnome_desktop telepathy_logger gnome3.gnome_settings_daemon ];
