@@ -126,19 +126,8 @@ self: super: {
   # Test suite fails in "/tokens_bytestring_unicode.g.bin".
   alex = dontCheck super.alex;
 
-  # TODO: should eventually update the versions in hackage-packages.nix
-  haddock-library = overrideCabal super.haddock-library (drv: {
-    version = "1.2.0";
-    sha256 = "0kf8qihkxv86phaznb3liq6qhjs53g3iq0zkvz5wkvliqas4ha56";
-  });
-  haddock-api = overrideCabal super.haddock-api (drv: {
-    version = "2.16.0";
-    sha256 = "0hk42w6fbr6xp8xcpjv00bhi9r75iig5kp34vxbxdd7k5fqxr1hj";
-  });
-  haddock = overrideCabal super.haddock (drv: {
-    version = "2.16.0";
-    sha256 = "1afb96w1vv3gmvha2f1h3p8zywpdk8dfk6bgnsa307ydzsmsc3qa";
-  });
+  # TODO: update generation code in cabal2nix
+  haddock-library = self.haddock-library_1_2_0;
 
   # Upstream was notified about the over-specified constraint on 'base'
   # but refused to do anything about it because he "doesn't want to
