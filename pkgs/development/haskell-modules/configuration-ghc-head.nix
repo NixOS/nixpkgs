@@ -43,14 +43,6 @@ self: super: {
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
 
-  # These used to be core packages in GHC 7.8.x.
-  old-locale = self.old-locale_1_0_0_7;
-  old-time = self.old-time_1_1_0_3;
-
-  # We have transformers 4.x
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
-
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
 

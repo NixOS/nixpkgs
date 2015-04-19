@@ -67,73 +67,6 @@ self: super: {
    ];
   });
 
-  # should be fixed in versions > 1.13.2
-  pandoc = overrideCabal super.pandoc (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/693f9ab.patch";
-         sha256 = "1niyrigs47ia1bhk6yrnzf0sq7hz5b7xisc8ph42wkp5sl8x9h1y";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/9c68017.patch";
-         sha256 = "0zccb6l5vmfyq7p8ii88fgggfhrff32hj43f5pp3w88l479f1qlh";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/dbe1b38.patch";
-         sha256 = "0d80692liyjx2y56w07k23adjcxb57w6vzcylmc4cfswzy8agrgy";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/5ea3856.patch";
-         sha256 = "1z15lc0ix9fv278v1xmfw3a6gl85ydahgs8kz61sfvh4jdiacabw";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/c80c9ac.patch";
-         sha256 = "0fk3j53zx0x88jmh0ism0aghs2w5qf87zcp9cwbfcgg5izh3b344";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/8b9bded.patch";
-         sha256 = "0f1dh1jmhq55mlv4dawvx3ck330y82qmys06bfkqcpl0jsyd9x1a";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/e4c7894.patch";
-         sha256 = "1rfdaq6swrl3m9bmbf6yhqq57kv3l3f4927xya3zq29dpvkmmi4z";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/2a6f68f.patch";
-         sha256 = "0sbh2x9jqvis9ln8r2dr6ihkjdn480mjskm4ny91870vg852228c";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/4e3281c.patch";
-         sha256 = "0zafhxxijli2mf1h0j7shp7kd7fxqbvlswm1m8ikax3aknvjxymi";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/cd5b1fe.patch";
-         sha256 = "0nxq7c0gpdiycgdrcj3llbfwxdni6k7hqqniwsbn2ha3h03i8hg1";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/ed7606d.patch";
-         sha256 = "0gchm46ziyj7vw6ibn3kk49cjzsc78z2lm8k7892g79q2livlc1f";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/b748833.patch";
-         sha256 = "03gj4qn9c5zyqrxyrw4xh21xlvbx9rbvw6gh8msgf5xk53ibs68b";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/10d5398.patch";
-         sha256 = "1nhp5b07vywk917bfap6pzahhqnwvvlbbfg5336a2nvb0c8iq6ih";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc/commit/f18ceb1.patch";
-         sha256 = "1vxsy5fn4nscvim9wcx1n78q7yh05x0z8p812csi3v3z79lbabhq";
-      })
-    ];
-    # jailbreak-cabal omits part of the file
-    # https://github.com/peti/jailbreak-cabal/issues/9
-    postPatch = ''
-      sed -i '420i\ \ \ \ \ \ \ \ \ \ \ \ buildable: False' pandoc.cabal
-    '';
-  });
-
   # ekmett/linear#74
   linear = overrideCabal super.linear (drv: {
     prePatch = "sed -i 's/-Werror//g' linear.cabal";
@@ -154,14 +87,6 @@ self: super: {
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
-
-  # These used to be core packages in GHC 7.8.x.
-  old-locale = self.old-locale_1_0_0_7;
-  old-time = self.old-time_1_1_0_3;
-
-  # We have transformers 4.x
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
@@ -225,23 +150,10 @@ self: super: {
     sha256 = "1lwwvxyhxcmppdapbgpfhwi7xc2z78qir03xjrpzab79p2qyq7br";
   });
 
-  wl-pprint = overrideCabal super.wl-pprint (drv: {
-    postPatch = "sed -i '113iimport Prelude hiding ((<$>))' Text/PrettyPrint/Leijen.hs";
-    jailbreak = true;
-  });
-
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
-  arithmoi = appendPatch super.arithmoi (pkgs.fetchpatch {
-    url = "https://github.com/cartazio/arithmoi/pull/3.patch";
-    sha256 = "1rqs796sh81inqkg2vadskcjpp6q92j6k8zpn370990wndndzzmq";
-  });
-  annotated-wl-pprint = appendPatch super.annotated-wl-pprint (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/david-christiansen/annotated-wl-pprint/pull/2.patch";
-    sha256 = "0n0fbq3vd7b9kfmhg089q0dy40vawq4q88il3zc9ybivhi62nwv4";
-  });
   ghc-events = appendPatch super.ghc-events (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/haskell/ghc-events/pull/8.patch";
     sha256 = "1k881jrvzfvs761jgfhf5nsbmbc33c9333l4s0f5088p46ff2n1l";
@@ -314,7 +226,7 @@ self: super: {
   # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
   lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
 
-  # These packages don't have maintainers.
+  # https://github.com/haskell-infra/hackage-trustees/issues/24
   brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
   unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
 
@@ -327,5 +239,107 @@ self: super: {
                     url = "https://patch-diff.githubusercontent.com/raw/batterseapower/edit-distance/pull/3.patch";
                     sha256 = "013x9za47vr9jx0liwgi8cdh2h2882a87h5nqvr41xqipzxfiyw1";
                   });
+
+  # https://github.com/BNFC/bnfc/issues/137
+  BNFC = markBrokenVersion "2.7.1" super.BNFC;
+  cubical = dontDistribute super.cubical;
+
+  # contacted maintainer by e-mail
+  HList = markBrokenVersion "0.3.4.1" super.HList;
+  AspectAG = dontDistribute super.AspectAG;
+  Rlang-QQ = dontDistribute super.Rlang-QQ;
+  SyntaxMacros = dontDistribute super.SyntaxMacros;
+  expand = dontDistribute super.expand;
+  functional-arrow = dontDistribute super.functional-arrow;
+  guess-combinator = dontDistribute super.guess-combinator;
+  ihaskell-rlangqq = dontDistribute super.ihaskell-rlangqq;
+  ipopt-hs = dontDistribute super.ipopt-hs;
+  murder = dontDistribute super.murder;
+  netcore = dontDistribute super.netcore;
+  nettle-frp = dontDistribute super.nettle-frp;
+  nettle-netkit = dontDistribute super.nettle-netkit;
+  nettle-openflow = dontDistribute super.nettle-openflow;
+  oberon0 = dontDistribute super.oberon0;
+  respond = dontDistribute super.respond;
+  semi-iso = dontDistribute super.semi-iso;
+  syntax = dontDistribute super.syntax;
+  syntax-attoparsec = dontDistribute super.syntax-attoparsec;
+  syntax-example = dontDistribute super.syntax-example;
+  syntax-example-json = dontDistribute super.syntax-example-json;
+  syntax-pretty = dontDistribute super.syntax-pretty;
+  syntax-printer = dontDistribute super.syntax-printer;
+  tuple-hlist = dontDistribute super.tuple-hlist;
+  tuple-morph = dontDistribute super.tuple-morph;
+
+  # contacted maintainer by e-mail
+  cmdlib = markBroken super.cmdlib;
+  darcs-fastconvert = dontDistribute super.darcs-fastconvert;
+  ivory-backend-c = dontDistribute super.ivory-backend-c;
+  ivory-bitdata = dontDistribute super.ivory-bitdata;
+  ivory-examples = dontDistribute super.ivory-examples;
+  ivory-hw = dontDistribute super.ivory-hw;
+  laborantin-hs = dontDistribute super.laborantin-hs;
+
+  # https://github.com/cartazio/arithmoi/issues/1
+  arithmoi = markBroken super.arithmoi;
+  NTRU = dontDistribute super.NTRU;
+  arith-encode = dontDistribute super.arith-encode;
+  barchart = dontDistribute super.barchart;
+  constructible = dontDistribute super.constructible;
+  cyclotomic = dontDistribute super.cyclotomic;
+  diagrams = dontDistribute super.diagrams;
+  diagrams-contrib = dontDistribute super.diagrams-contrib;
+  enumeration = dontDistribute super.enumeration;
+  ghci-diagrams = dontDistribute super.ghci-diagrams;
+  ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
+  nimber = dontDistribute super.nimber;
+  quadratic-irrational = dontDistribute super.quadratic-irrational;
+
+  # https://github.com/kazu-yamamoto/ghc-mod/issues/467
+  ghc-mod = markBroken super.ghc-mod;
+  HaRe = dontDistribute super.HaRe;
+  ghc-imported-from = dontDistribute super.ghc-imported-from;
+  git-vogue = dontDistribute super.git-vogue;
+  haskell-token-utils = dontDistribute super.haskell-token-utils;
+  hbb = dontDistribute super.hbb;
+  hsdev = dontDistribute super.hsdev;
+
+  # http://hub.darcs.net/ivanm/graphviz/issue/5
+  graphviz = markBroken super.graphviz;
+  Graphalyze = dontDistribute super.Graphalyze;
+  HLearn-approximation = dontDistribute super.HLearn-approximation;
+  HLearn-classification = dontDistribute super.HLearn-classification;
+  HLearn-distributions = dontDistribute super.HLearn-distributions;
+  SourceGraph = dontDistribute super.SourceGraph;
+  Zora = dontDistribute super.Zora;
+  ampersand = dontDistribute super.ampersand;
+  caffegraph = dontDistribute super.caffegraph;
+  dot2graphml = dontDistribute super.dot2graphml;
+  dvda = dontDistribute super.dvda;
+  erd = dontDistribute super.erd;
+  filediff = dontDistribute super.filediff;
+  fsmActions = dontDistribute super.fsmActions;
+  gbu = dontDistribute super.gbu;
+  geni-gui = dontDistribute super.geni-gui;
+  ghc-vis = dontDistribute super.ghc-vis;
+  grammar-combinators = dontDistribute super.grammar-combinators;
+  llvm-analysis = dontDistribute super.llvm-analysis;
+  llvm-base-types = dontDistribute super.llvm-base-types;
+  llvm-data-interop = dontDistribute super.llvm-data-interop;
+  llvm-tools = dontDistribute super.llvm-tools;
+  marxup = dontDistribute super.marxup;
+  mathgenealogy = dontDistribute super.mathgenealogy;
+  optimusprime = dontDistribute super.optimusprime;
+  phybin = dontDistribute super.phybin;
+  prolog-graph = dontDistribute super.prolog-graph;
+  prolog-graph-lib = dontDistribute super.prolog-graph-lib;
+  teams = dontDistribute super.teams;
+  vacuum-graphviz = dontDistribute super.vacuum-graphviz;
+  vampire = dontDistribute super.vampire;
+  visual-graphrewrite = dontDistribute super.visual-graphrewrite;
+  xdot = dontDistribute super.xdot;
+
+  # https://github.com/lymar/hastache/issues/47
+  hastache = dontCheck super.hastache;
 
 }

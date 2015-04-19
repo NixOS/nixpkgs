@@ -3726,7 +3726,7 @@ let
   haskellPackages = haskellPackages_ghc784;
 
   haskell-ng = callPackage ./haskell-ng.nix { };
-  haskellngPackages = haskell-ng.packages.ghc784.override {
+  haskellngPackages = haskell-ng.packages.ghc7101.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
     provideOldAttributeNames = config.provideOldHaskellAttributeNames or false;
   };

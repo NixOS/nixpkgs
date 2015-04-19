@@ -794,4 +794,7 @@ self: super: {
     license = pkgs.stdenv.lib.licenses.bsd3;
   };
 
+  # Test suite won't compile against tasty 0.10.x.
+  zlib_0_6_0_0 = dontCheck super.zlib_0_6_0_0;
+
 }
