@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "lib" ];
+  setOutputFlags = false;
+  moveToDev = false;
 
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
