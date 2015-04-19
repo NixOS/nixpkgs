@@ -18,6 +18,8 @@ with lib;
 
   config = mkIf config.services.timesyncd.enable {
 
+    systemd.additionalUpstreamSystemUnits = [ "systemd-timesyncd.service" ];
+
     systemd.services.systemd-timesyncd = {
       wantedBy = [ "sysinit.target" ];
       restartTriggers = [ config.environment.etc."systemd/timesyncd.conf".source ];
