@@ -97,12 +97,6 @@ let
       "systemd-modules-load.service"
       "kmod-static-nodes.service"
 
-      # Networking
-      "systemd-networkd.service"
-      "systemd-networkd-wait-online.service"
-      "systemd-resolved.service"
-      "systemd-timesyncd.service"
-
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"

@@ -624,6 +624,9 @@ in
 
   config = mkIf config.systemd.network.enable {
 
+    systemd.additionalUpstreamSystemUnits =
+      [ "systemd-networkd.service" "systemd-networkd-wait-online.service" ];
+
     systemd.network.units =
       mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs

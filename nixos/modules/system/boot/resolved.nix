@@ -18,6 +18,8 @@ with lib;
 
   config = mkIf config.services.resolved.enable {
 
+    systemd.additionalUpstreamSystemUnits = [ "systemd-resolved.service" ];
+
     systemd.services.systemd-resolved = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."systemd/resolved.conf".source ];
