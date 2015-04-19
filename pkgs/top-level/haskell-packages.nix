@@ -2379,6 +2379,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   speculation = callPackage ../development/libraries/haskell/speculation {};
 
+  spock = callPackage ../development/libraries/haskell/spock {};
+  
   spoon = callPackage ../development/libraries/haskell/spoon {};
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
