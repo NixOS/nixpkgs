@@ -90,9 +90,17 @@ stdenv.mkDerivation rec {
       export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
+  makeFlags = [
+    "udevlibexecdir=$(libudev)/lib"
+    # udev rules refer to $out, and anything but libs should probably go to $out
+    "udevrulesdir=$(out)/lib"
+    "udevhomedir=$(out)/lib"
+    "udevhwdbdir=$(out)/lib"
+  ];
+
   # This is needed because systemd uses the gold linker, which doesn't
   # yet have the wrapper script to add rpath flags automatically.
-  NIX_LDFLAGS = "-rpath ${pam}/lib -rpath ${libcap}/lib -rpath ${acl}/lib -rpath ${stdenv.cc.cc}/lib";
+  NIX_LDFLAGS = "-rpath ${pam.out}/lib -rpath ${libcap.out}/lib -rpath ${acl.out}/lib -rpath ${stdenv.cc.cc}/lib";
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
@@ -109,13 +117,6 @@ stdenv.mkDerivation rec {
 
       "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
     ];
-
-  # Use /var/lib/udev rather than /etc/udev for the generated hardware
-  # database.  Upstream doesn't want this (see commit
-  # 1e1954f53386cb773e2a152748dd31c4d36aa2d8) because using /var is
-  # forbidden in early boot, but in NixOS the initrd guarantees that
-  # /var is mounted.
-  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
 
   enableParallelBuilding = true;
 
