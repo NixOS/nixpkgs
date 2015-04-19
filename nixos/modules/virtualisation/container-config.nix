@@ -9,6 +9,7 @@ with lib;
     # Disable some features that are not useful in a container.
     sound.enable = mkDefault false;
     services.udisks2.enable = mkDefault false;
+    powerManagement.enable = mkDefault false;
 
     networking.useHostResolvConf = true;
 
@@ -19,6 +20,8 @@ with lib;
     system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
 
     systemd.services.systemd-remount-fs.enable = false;
+
+    systemd.services.systemd-random-seed.enable = false;
 
   };
 
