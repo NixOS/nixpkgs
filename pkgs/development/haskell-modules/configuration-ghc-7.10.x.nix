@@ -154,10 +154,6 @@ self: super: {
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
-  annotated-wl-pprint = appendPatch super.annotated-wl-pprint (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/david-christiansen/annotated-wl-pprint/pull/2.patch";
-    sha256 = "0n0fbq3vd7b9kfmhg089q0dy40vawq4q88il3zc9ybivhi62nwv4";
-  });
   ghc-events = appendPatch super.ghc-events (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/haskell/ghc-events/pull/8.patch";
     sha256 = "1k881jrvzfvs761jgfhf5nsbmbc33c9333l4s0f5088p46ff2n1l";
