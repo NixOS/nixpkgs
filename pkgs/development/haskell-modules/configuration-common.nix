@@ -757,11 +757,11 @@ self: super: {
 
   # Fix problems with GHC >=7.8 (in compatible way)
   mueval = let pkg = appendPatch super.mueval (pkgs.fetchpatch {
-                       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
-                       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
-                     });
-           # Nix-specific workaround
-           in appendPatch pkg ./mueval-nix.patch;
+		       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
+		       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
+		     });
+	   # Nix-specific workaround
+	   in appendPatch pkg ./mueval-nix.patch;
 
 } // {
 
