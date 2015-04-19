@@ -49,16 +49,11 @@ self: super: {
   haddock-api = super.haddock-api_2_15_0_2;
 
   # Idris needs special version of some libraries
-  idris = overrideCabal (super.idris.overrideScope (self: super: {
-    mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
+  idris = let super1 = super; in overrideCabal (super.idris.overrideScope (self: super: {
     annotated-wl-pprint = self.annotated-wl-pprint_0_5_3;
     blaze-html = self.blaze-html_0_7_0_3;
     blaze-markup = self.blaze-markup_0_6_2_0;
-    haskeline = self.haskeline_0_7_2_1;
     lens = self.lens_4_7_0_1;
-    mtl = self.mtl_2_2_1;
-    transformers = self.transformers_0_4_3_0;
-    transformers-compat = disableCabalFlag super.transformers-compat "three";
   })) (drv: {
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
