@@ -67,4 +67,7 @@ self: super: {
   # Newer versions require a more recent compiler.
   control-monad-free = super.control-monad-free_0_5_3;
 
+  # Needs hashable on pre 7.10.x compilers.
+  nats = addBuildDepend super.nats self.hashable;
+
 }

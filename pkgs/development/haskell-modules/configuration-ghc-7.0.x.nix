@@ -61,4 +61,7 @@ self: super: {
   # Setup: Can't find transitive deps for haddock
   doctest = dontHaddock super.doctest;
 
+  # Needs hashable on pre 7.10.x compilers.
+  nats = addBuildDepend super.nats self.hashable;
+
 }

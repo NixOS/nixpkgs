@@ -79,4 +79,7 @@ self: super: {
   stm = addBuildTool super.stm self.Cabal_1_18_1_6;
   split = super.split_0_1_4_3;
 
+  # Needs hashable on pre 7.10.x compilers.
+  nats = addBuildDepend super.nats self.hashable;
+
 }
