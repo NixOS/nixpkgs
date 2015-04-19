@@ -64,4 +64,7 @@ self: super: {
   # Choose appropriate flags for our version of 'bytestring'.
   bytestring-builder = disableCabalFlag super.bytestring-builder "bytestring_has_builder";
 
+  # Newer versions require a more recent compiler.
+  control-monad-free = super.control-monad-free_0_5_3;
+
 }

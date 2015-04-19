@@ -71,4 +71,7 @@ self: super: {
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
 
+  # Newer versions require a more recent compiler.
+  control-monad-free = super.control-monad-free_0_5_3;
+
 }
