@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../profiles/container.nix
+    ../profiles/docker-container.nix # FIXME, shouldn't include something from profiles/
   ];
 
   boot.postBootCommands =
