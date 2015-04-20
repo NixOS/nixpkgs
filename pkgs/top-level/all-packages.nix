@@ -1349,6 +1349,8 @@ let
     withGTK = true;
   };
 
+  foremost = callPackage ../tools/system/foremost { };
+
   forktty = callPackage ../os-specific/linux/forktty {};
 
   fortune = callPackage ../tools/misc/fortune { };
