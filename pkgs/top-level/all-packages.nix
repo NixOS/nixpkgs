@@ -3393,7 +3393,7 @@ let
 
   rcm = callPackage ../tools/misc/rcm {};
 
-  tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
+  tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tidy-html5 = callPackage ../tools/text/tidy-html5 { };
 
@@ -6354,7 +6354,9 @@ let
 
   freeglut = callPackage ../development/libraries/freeglut { };
 
-  freenect = callPackage ../development/libraries/freenect { };
+  freenect = callPackage ../development/libraries/freenect {
+      inherit (xlibs) libXi libXmu;
+  };
 
   freetype = callPackage ../development/libraries/freetype { };
 
@@ -15604,6 +15606,7 @@ aliases = with self; rec {
   youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   youtubeDL = youtube-dl;  # added 2014-10-26
   pidginlatexSF = pidginlatex; # added 2014-11-02
+  tftp_hpa = tftp-hpa; # added 2015-04-03
 };
 
 tweakAlias = _n: alias: with lib;
