@@ -5,7 +5,7 @@
 , zfs ? null
 
 # Version specific arguments
-, version, src
+, version, src, patches ? []
 , ...
 }:
 
@@ -16,12 +16,12 @@ let
     + " --prefix PATH : \"$out/bin\""
     + " --prefix LD_LIBRARY_PATH : \"$out/lib\"";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name="ceph-${version}";
 
   inherit src;
 
-  patches = [
+  patches = patches ++ [
     ./0001-Makefile-env-Don-t-force-sbin.patch
   ];
 

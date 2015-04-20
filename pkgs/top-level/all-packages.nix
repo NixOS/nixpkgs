@@ -937,6 +937,7 @@ let
   # Only ever add ceph LTS releases
   # The default should always be symlinked to the latest LTS
   # Dev should always point to the latest versioned release
+  ceph-0_80 = callPackage ../tools/filesystems/ceph/0.80.nix { };
   ceph-0_94 = callPackage ../tools/filesystems/ceph/0.94.nix { };
   ceph = callPackage ../tools/filesystems/ceph { };
   ceph-dev = callPackage ../tools/filesystems/ceph/dev.nix { };
