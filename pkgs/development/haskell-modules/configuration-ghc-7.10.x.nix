@@ -282,6 +282,7 @@ self: super: {
   ghci-diagrams = dontDistribute super.ghci-diagrams;
   ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
   nimber = dontDistribute super.nimber;
+  pell = dontDistribute super.pell;
   quadratic-irrational = dontDistribute super.quadratic-irrational;
 
   # https://github.com/kazu-yamamoto/ghc-mod/issues/467
