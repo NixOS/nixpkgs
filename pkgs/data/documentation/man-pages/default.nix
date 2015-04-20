@@ -1,19 +1,18 @@
 { stdenv, fetchurl }:
 
+let version = "3.83"; in
 stdenv.mkDerivation rec {
-  name = "man-pages-3.82";
+  name = "man-pages-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
-    sha256 = "1c8q618shf469nfp55qrwjv9630fgq5abfk946xya9hw1bfp6wjl";
+    sha256 = "1wksxxfvn8avfl01qk0i61zzgkkay29lpmbfal26a542yahydz3j";
   };
 
-  preBuild =
-    ''
-      makeFlagsArray=(MANDIR=$out/share/man)
-    '';
+  makeFlags = "MANDIR=$(out)/share/man";
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Linux development manual pages";
     homepage = http://www.kernel.org/doc/man-pages/;
     repositories.git = http://git.kernel.org/pub/scm/docs/man-pages/man-pages;
