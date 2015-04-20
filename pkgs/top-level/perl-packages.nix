@@ -7347,6 +7347,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ParseDebControl = buildPerlPackage rec {
+    name = "Parse-DebControl-2.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JA/JAYBONCI/${name}.tar.gz";
+      sha256 = "0ad78qri4sg9agghqdm83xsjgks94yvffs23kppy7mqjy8gwwjxn";
+    };
+    buildInputs = [ TestPod LWPUserAgent ];
+    propagatedBuildInputs = [ IOStringy ];
+    meta = with stdenv.lib; {
+      homepage = http://search.cpan.org/~jaybonci/Parse-DebControl;
+      license = with licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
   ParseRecDescent = buildPerlPackage rec {
     name = "Parse-RecDescent-1.967009";
     src = fetchurl {
