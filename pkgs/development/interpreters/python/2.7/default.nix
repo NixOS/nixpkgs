@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 { stdenv, fetchurl, self, callPackage
 , bzip2, openssl, expat, libffi
 
@@ -78,6 +77,7 @@ let
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
     )
     ++ optional zlibSupport zlib;
+    #[ expat libffi ]
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
