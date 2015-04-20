@@ -6945,6 +6945,14 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.pkgconfig pkgs.dbus XMLTwig ];
   };
 
+  NetNetmask = buildPerlPackage {
+    name = "Net-Netmask-1.9021";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NL/NLNETLABS/Net-Netmask-1.9021.tar.gz;
+      sha256 = "146wd6vkm8nvfcbddyrr6xfmj0zzs6jq9va95v112mblhy88qycq";
+    };
+  };
+
   NetDNS = buildPerlPackage {
     name = "Net-DNS-0.74";
     src = fetchurl {
@@ -8458,6 +8466,14 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Rewrite strings based on a set of known prefixes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  StringRandom = buildPerlPackage {
+    name = "String-Random-0.20";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RO/ROSCH/String-Random-0.20.tar.gz;
+      sha256 = "01gjd13lnjv3niv08g8jppghydgd2m3v4i23r4i0rfnhbzama8i3";
     };
   };
 
