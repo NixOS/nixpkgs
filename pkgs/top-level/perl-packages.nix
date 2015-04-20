@@ -8182,6 +8182,15 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ParseRecDescent OLEStorageLight FileTemp ];
   };
 
+  SpreadsheetXLSX = buildPerlPackage rec {
+    name = "Spreadsheet-XLSX-0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMOW/${name}.tar.gz";
+      sha256 = "1y2f9hzz7r6xm3ax5gcp1f5li4a4g06azzl6mz4mgdc3qb8s4xga";
+    };
+    propagatedBuildInputs = [ ArchiveZip SpreadsheetParseExcel ];
+  };
+
   SQLAbstract = buildPerlPackage {
     name = "SQL-Abstract-1.80";
     src = fetchurl {
