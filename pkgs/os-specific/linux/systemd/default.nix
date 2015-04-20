@@ -93,9 +93,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "udevlibexecdir=$(libudev)/lib"
     # udev rules refer to $out, and anything but libs should probably go to $out
-    "udevrulesdir=$(out)/lib"
-    "udevhomedir=$(out)/lib"
-    "udevhwdbdir=$(out)/lib"
+    "udevrulesdir=$(out)/lib/rules.d"
+    "udevhwdbdir=$(out)/lib/hwdb.d"
   ];
 
   # This is needed because systemd uses the gold linker, which doesn't
