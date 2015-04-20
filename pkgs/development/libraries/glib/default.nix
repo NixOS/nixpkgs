@@ -53,20 +53,21 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
 
-  #outputs = [ "dev" "out" "bin" ]; # ToDo: no idea what's wrong! docs? 
+  outputs = [ "dev" "out" "doc" ];
+  outputBin = "dev";
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [ /*stdenv.hookLib.multiout*/ libelf ]
+  buildInputs = [ libelf setupHook/*get the gtk-doc hook*/ ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ pcre zlib libffi libiconv ]
+  propagatedBuildInputs = [ zlib libffi libiconv /*pcre*/ ]
     ++ libintlOrEmpty;
 
-  configureFlags =
-    optional stdenv.isDarwin "--disable-compile-warnings"
+  configureFlags = [ ] # [ "--with-pcre=system" ] # internal pcre only adds <200kB
+    ++ optional stdenv.isDarwin "--disable-compile-warnings"
     ++ optional stdenv.isSunOS "--disable-modular-tests";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
@@ -79,6 +80,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   DETERMINISTIC_BUILD = 1;
+
+  postInstall = ''
+    _moveToOutput "share/glib-2.0" "$dev"
+    substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
+  '';
 
   inherit doCheck;
   preCheck = optionalString doCheck
