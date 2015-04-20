@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "00gjdfaznpnspb4jmjc19axiz6snd9drvqmzpq4sw0xh1ysgpncv";
   };
 
+  # Needed to find /etc/NetworkManager/VPN
+  configureFlags = [ "--sysconfdir=/etc" ];
+
   buildInputs = with gnome3;
     [ gsettings_desktop_schemas gnome_keyring gnome-menus glib gcr json_glib accountsservice
       libcroco intltool libsecret pkgconfig python3 libsoup polkit libcanberra gdk_pixbuf librsvg
