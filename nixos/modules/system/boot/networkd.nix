@@ -2,6 +2,7 @@
 
 with lib;
 with import ./systemd-unit-options.nix { inherit config lib; };
+with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
 
@@ -631,6 +632,9 @@ in
       mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
       // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
+
+    environment.etc."systemd/network".source =
+      generateUnits "network" cfg.units [] [];
 
     users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
     users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
