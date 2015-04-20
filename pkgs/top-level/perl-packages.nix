@@ -9791,6 +9791,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextCSV_XS = buildPerlPackage rec {
+    name = "Text-CSV_XS-1.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/${name}.tgz";
+      sha256 = "1cf3kfciw07bqbr92s9l516bqv0vcc07f5ckii2b6r3yaaf3zpyw";
+    };
+    buildInputs = [ TestMore ];
+  };
+
   TextDiff = buildPerlPackage {
     name = "Text-Diff-1.41";
     src = fetchurl {
