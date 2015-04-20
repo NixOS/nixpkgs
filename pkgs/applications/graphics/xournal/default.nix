@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://xournal.sourceforge.net/;
     description = "note-taking application (supposes stylus)";
     maintainers = [ stdenv.lib.maintainers.guibert ];
+    license = stdenv.lib.licenses.gpl2;
   };
 }
