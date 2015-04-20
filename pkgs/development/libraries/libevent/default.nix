@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchFromGitHub, autoreconfHook, python }:
 
-let version = "2.0.21"; in
+let version = "2.0.22"; in
 stdenv.mkDerivation {
   name = "libevent-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/downloads/libevent/libevent/libevent-${version}-stable.tar.gz";
-    sha256 = "1xblymln9vihdmf1aqkp8chwvnhpdch3786bh30bj75slnl31992";
+  src = fetchFromGitHub {
+    owner = "libevent";
+    repo = "libevent";
+    rev = "release-${version}-stable";
+    sha256 = "1x2437af9j870i7l37dav1i2g9z93lbz406kyimx4nq5qcx5463p";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ python ];
+
   patchPhase = ''
-    substituteInPlace event_rpcgen.py \
-      --replace "/usr/bin/env python2" "${python}/bin/python"
+    patchShebangs event_rpcgen.py
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Event notification library";
 
     longDescription =
@@ -29,7 +33,8 @@ stdenv.mkDerivation {
          the event loop.
       '';
 
-    license = "mBSD";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
