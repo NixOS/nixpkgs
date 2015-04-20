@@ -15,13 +15,16 @@ stdenv.mkDerivation rec {
     sha256 = "1x14rnjvqslpa1q19fp1qalz5sxds72amsgjk8m7769rwk511jr0";
   };
 
-  outputs = [ "dev" "out" "bin" "doc" ];
+  outputs = [ "dev" "out" "doc" ];
+  outputBin = "dev";
 
   enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (libintlOrEmpty != []) "-lintl";
 
-  nativeBuildInputs = [ perl pkgconfig gettext ];
+  setupHook = ./setup-hook.sh;
+
+  nativeBuildInputs = [ setupHook perl pkgconfig gettext ];
 
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ glib cairo pango gdk_pixbuf atk ]
@@ -36,6 +39,10 @@ stdenv.mkDerivation rec {
   configureFlags = if stdenv.isDarwin
     then "--disable-glibtest --disable-introspection --disable-visibility"
     else "--with-xinput=yes";
+
+  postInstall = ''
+    _moveToOutput share/gtk-2.0/demo "$doc"
+  '';
 
   passthru = {
     gtkExeEnvPostBuild = ''
