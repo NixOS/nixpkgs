@@ -1,0 +1,80 @@
+diff --git a/configure b/configure
+index 4d825cf..34431e1 100755
+--- a/configure
++++ b/configure
+@@ -8859,73 +8859,8 @@ else
+ fi
+ 
+ 
+-if test "$cross_compiling" != "yes"; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ps style" >&5
+-$as_echo_n "checking for ps style... " >&6; }
+-    pcp_ps_all_flags=''
+-    if $pcp_ps_prog -ef >conftest.out 2>/dev/null
+-    then
+-	ans=`$awk <conftest.out '
+-NR == 1			{ if ($1 != "UID" && $1 != "USER") exit
+-			  if ($2 != "PID") exit
+-			}
+-# Unix variants
+-$2 == 1 && / init/	{ print "OK"; exit }
+-$2 == 1 && / \/etc\/init/ { print "OK"; exit }
+-# Fedora 9
+-$2 == 1 && / \/sbin\/init/ { print "OK"; exit }
+-# Fedora 15
+-$2 == 1 && / \/bin\/systemd/ { print "OK"; exit }
+-# Fedora 17
+-$2 == 1 && / \/usr\/lib\/systemd\/systemd/ { print "OK"; exit }
+-# Debian sid
+-$2 == 1 && / \/lib\/systemd\/systemd/ { print "OK"; exit }'`
+-	if test "$ans" = OK
+-	then
+-	    pcp_ps_have_bsd=false
+-	    pcp_ps_all_flags=-ef
+-	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: SysV" >&5
+-$as_echo "SysV" >&6; }
+-	fi
+-    fi
+-
+-    if test -z "$pcp_ps_all_flags" && $pcp_ps_prog auxww >conftest.out 2>/dev/null
+-    then
+-	ans=`$awk <conftest.out '
+-NR == 1			{ if ($1 != "UID" && $1 != "USER") exit
+-			  if ($2 != "PID") exit
+-			}
+-$2 == 1 && / init/	{ print "OK"; exit }
+-$2 == 1 && / \/sbin\/init/ { print "OK"; exit }
+-$2 == 1 && / \/sbin\/launchd/ { print "OK"; exit }
+-$2 == 1 && / \/init/	{ print "OK"; exit }'`
+-	if test "$ans" = OK
+-	then
+-	    pcp_ps_have_bsd=true
+-	    pcp_ps_all_flags=auxww
+-	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: BSD" >&5
+-$as_echo "BSD" >&6; }
+-	fi
+-    fi
+-
+-        if $pcp_ps_prog ${pcp_ps_all_flags}w >/dev/null 2>&1
+-    then
+-	if test $target_os != solaris
+-	then
+-	    pcp_ps_all_flags=${pcp_ps_all_flags}w
+-	fi
+-    fi
+-fi
+-
+-if test -z "$pcp_ps_all_flags"
+-then
+-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: unknown" >&5
+-$as_echo "unknown" >&6; }
+-    echo "FATAL ERROR: could not determine how to get the \"all processes with arguments\""
+-    echo "format output from your ps(1)."
+-    rm -rf conftest conftest.*
+-    exit 1
+-fi
++pcp_ps_have_bsd=@PCP_PS_HAVE_BSD@
++pcp_ps_all_flags=@PCP_PS_ALL_FLAGS@
+ 
+ 
+ 
