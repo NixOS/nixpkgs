@@ -38,7 +38,7 @@ self: super: {
   transformers = self.transformers_0_4_3_0;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_2_0 = super.Cabal_1_22_2_0.override { binary = self.binary_0_7_4_0; };
+  Cabal_1_22_3_0 = super.Cabal_1_22_3_0.override { binary = self.binary_0_7_4_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
