@@ -46,10 +46,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "LD_LIBRARY_PATH=`pwd` make test";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Crypto++, a free C++ class library of cryptographic schemes";
     homepage = http://cryptopp.com/;
-    license = stdenv.lib.licenses.boost;
+    license = licenses.boost;
+    platforms = platforms.all;
     maintainers = [ ];
   };
 }

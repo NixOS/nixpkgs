@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://www.openfabrics.org/;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ freebsd;
     license = licenses.bsd2;
     maintainers = with maintainers; [ wkennington ];
   };
