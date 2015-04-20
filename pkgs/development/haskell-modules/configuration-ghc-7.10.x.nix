@@ -335,4 +335,20 @@ self: super: {
   # https://github.com/ocharles/tasty-rerun/issues/5
   tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
 
+  # Broken with GHC 7.10.x.
+  aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
+  annotated-wl-pprint_0_5_3 = markBroken super.annotated-wl-pprint_0_5_3;
+  c2hs_0_20_1 = markBroken super.c2hs_0_20_1;
+  Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
+  cabal-install_1_18_0_8 = markBroken super.cabal-install_1_18_0_8;
+  containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
+  control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
+  equivalence_0_2_5 = markBroken super.equivalence_0_2_5;
+  haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
+  lens_4_7_0_1 = markBroken super.lens_4_7_0_1;
+  optparse-applicative_0_10_0 = markBroken super.optparse-applicative_0_10_0;
+  QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
+  seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
+  vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
+
 }

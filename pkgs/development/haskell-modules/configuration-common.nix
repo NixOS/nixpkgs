@@ -767,6 +767,12 @@ self: super: {
            # Nix-specific workaround
            in appendPatch pkg ./mueval-nix.patch;
 
+  # Test suite won't compile against tasty-hunit 0.9.x.
+  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
+
+  # Jailbreaking breaks the build.
+  QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
+
 } // {
 
   # Not on Hackage.
@@ -798,8 +804,5 @@ self: super: {
     description = "Convert Cabal files into Nix build instructions";
     license = pkgs.stdenv.lib.licenses.bsd3;
   };
-
-  # Test suite won't compile against tasty 0.10.x.
-  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
 
 }
