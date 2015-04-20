@@ -938,6 +938,13 @@ let
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "zoib" # tarball is invalid on server
+    "DiffCorr" # misses undeclared dependencies 'pcaMethods', 'multtest'
+    "TROM" # misses undeclared dependencies topGO', 'AnnotationDbi', 'GO.db'
+    "lfe" # fails to compile
+    "mongolite" # doesn't find OpenSSL
+    "quanteda" # fails to build
+    "statar" # depends on broken lfe
+    "hsdar" # fails to build
   ];
 
   otherOverrides = old: new: {
