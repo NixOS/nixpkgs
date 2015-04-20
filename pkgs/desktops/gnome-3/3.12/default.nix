@@ -16,6 +16,8 @@ rec {
   orbit = ORBit2;
   inherit (pkgs) libsoup;
 
+  version = "3.12";
+
 # Simplify the nixos module and gnome packages
   defaultIconTheme = gnome_icon_theme_symbolic;
 
@@ -54,6 +56,8 @@ rec {
   };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
+
+  gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
 
