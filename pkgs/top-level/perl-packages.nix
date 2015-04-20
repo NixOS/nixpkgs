@@ -8172,6 +8172,16 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOStringy OLEStorageLight ];
   };
 
+  SpreadsheetWriteExcel = buildPerlPackage rec {
+    name = "Spreadsheet-WriteExcel-2.40";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/${name}.tar.gz";
+      sha256 = "0zn0sqm043g8yff8x1q4bb0l6x0rkabhxvk829rkbwbchvbalmp3";
+    };
+
+    propagatedBuildInputs = [ ParseRecDescent OLEStorageLight FileTemp ];
+  };
+
   SQLAbstract = buildPerlPackage {
     name = "SQL-Abstract-1.80";
     src = fetchurl {
