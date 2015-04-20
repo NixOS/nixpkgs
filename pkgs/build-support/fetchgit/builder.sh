@@ -9,6 +9,7 @@ header "exporting $url (rev $rev) into $out"
 $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${leaveDotGit:+--leave-dotGit} \
   ${deepClone:+--deepClone} \
-  ${fetchSubmodules:+--fetch-submodules}
+  ${fetchSubmodules:+--fetch-submodules} \
+  ${branchName:+--branch-name "$branchName"}
 
 stopNest
