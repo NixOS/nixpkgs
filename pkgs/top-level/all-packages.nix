@@ -1670,6 +1670,8 @@ let
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  hwinfo = callPackage ../tools/system/hwinfo { };
+
   i2p = callPackage ../tools/networking/i2p {};
 
   i2pd = callPackage ../tools/networking/i2pd {};
@@ -1868,6 +1870,8 @@ let
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
+
+  libx86emu = callPackage ../development/libraries/libx86emu { };
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
