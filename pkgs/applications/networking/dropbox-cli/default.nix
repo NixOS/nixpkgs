@@ -1,13 +1,14 @@
 { stdenv, pkgconfig, fetchurl, python, dropbox }:
 let
-  version = "1.6.2";
+  version = "2015.02.12";
+  dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
   name = "dropbox-cli-${version}";
 
   src = fetchurl {
     url = "https://linux.dropbox.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    sha256 = "1r1kqvnf5a0skby6rr8bmxg128z97fz4gb1n7zlc1vyhqw4k3mb3";
+    sha256 = "12md01ymxsly1rdhdi2sw3aiwykd4y8z8isipc8mjfk8bbp55q86";
   };
 
   buildInputs = [ pkgconfig python ];
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
       --replace '@DESKTOP_FILE_DIR@' "$out/share/applications" \
       --replace '@IMAGEDATA16@' '"too-lazy-to-fix"' \
       --replace '@IMAGEDATA64@' '"too-lazy-to-fix"'
-
+    sed -i 's:db_path = .*:db_path = "${dropboxd}":' $out/bin/dropbox
     chmod +x "$out/bin/"*
     patchShebangs "$out/bin"
   '';
