@@ -107,7 +107,7 @@ in
             ips = interfaceIps i;
           in
           nameValuePair "network-addresses-${i.name}"
-          { description = "Addresss configuration of ${i.name}";
+          { description = "Address configuration of ${i.name}";
             wantedBy = [ "network-interfaces.target" ];
             before = [ "network-interfaces.target" ];
             bindsTo = [ (subsystemDevice i.name) ];
