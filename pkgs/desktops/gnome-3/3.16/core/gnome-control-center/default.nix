@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     substituteInPlace panels/datetime/test-endianess.c --replace "/usr/share/locale/" "$out/share/locale/"
   '';
 
+  patches = [ ./vpn_plugins_path.patch ];
+
   preFixup = with gnome3; ''
     wrapProgram $out/bin/gnome-control-center \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \

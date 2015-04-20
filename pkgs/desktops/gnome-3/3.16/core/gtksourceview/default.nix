@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "030v7x1dmx5blqi9jcknsjd91jppbpl7f4z69k8c8kklr939i7k6";
   };
 
-  buildInputs = [ pkgconfig atk cairo glib gtk3 pango
+  propagatedBuildInputs = [ gtk3 ];
+
+  buildInputs = [ pkgconfig atk cairo glib pango
                   libxml2Python perl intltool gettext ];
 
   preBuild = ''
