@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://oss.linbit.com/drbd/8.4/${name}.tar.gz";
-    sha256 = "0hm1cnd7vsccyc22sg85f9aj48nijl2f1kgbvl5crv414ihv5giq";
+    sha256 = "1w4889h1ak7gy9w33kd4fgjlfpgmp6hzfya16p1pkc13bjf22mm0";
   };
 
   patches = [ ./pass-force.patch ];
