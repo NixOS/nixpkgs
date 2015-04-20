@@ -1066,6 +1066,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
+  graphCore = callPackage ../development/libraries/haskell/graphCore {};
+
   graphmod = callPackage ../development/tools/haskell/graphmod {};
 
   graphviz = callPackage ../development/libraries/haskell/graphviz { systemGraphviz = pkgs.graphviz; };
@@ -2217,6 +2219,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   repr = callPackage ../development/libraries/haskell/repr {};
 
+  reroute = callPackage ../development/libraries/haskell/reroute {};
+  
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
   resourcePoolCatchio = callPackage ../development/libraries/haskell/resource-pool-catchio {};
@@ -2379,6 +2383,8 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   speculation = callPackage ../development/libraries/haskell/speculation {};
 
+  spock = callPackage ../development/libraries/haskell/spock {};
+  
   spoon = callPackage ../development/libraries/haskell/spoon {};
 
   srcloc = callPackage ../development/libraries/haskell/srcloc {};
