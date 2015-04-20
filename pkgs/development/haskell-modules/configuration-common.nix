@@ -800,6 +800,6 @@ self: super: {
   };
 
   # Test suite won't compile against tasty 0.10.x.
-  zlib_0_6_0_0 = dontCheck super.zlib_0_6_0_0;
+  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
 
 }
