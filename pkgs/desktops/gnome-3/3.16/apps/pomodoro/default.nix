@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, automake113x, intltool, pkgconfig, libtool, makeWrapper,
-  dbus_glib, libcanberra, gst_all_1, upower, vala, gnome3_12, gtk3, gst_plugins_base,
+  dbus_glib, libcanberra, gst_all_1, upower, vala, gnome3, gtk3, gst_plugins_base,
   glib, gobjectIntrospection, hicolor_icon_theme
 }:
 
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     which automake113x intltool glib gobjectIntrospection pkgconfig libtool
     makeWrapper dbus_glib libcanberra upower vala gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    gnome3_12.gsettings_desktop_schemas gnome3_12.gnome_desktop
-    gnome3_12.gnome_common gnome3_12.gnome_shell hicolor_icon_theme gtk3
+    gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
+    gnome3.gnome_common gnome3.gnome_shell hicolor_icon_theme gtk3
   ];
 
   preBuild = ''
     sed -i \
         -e 's|/usr\(/share/gir-1.0/UPowerGlib\)|${upower}\1|' \
-        -e 's|/usr\(/share/gir-1.0/GnomeDesktop\)|${gnome3_12.gnome_desktop}\1|' \
+        -e 's|/usr\(/share/gir-1.0/GnomeDesktop\)|${gnome3.gnome_desktop}\1|' \
         vapi/Makefile
   '';
 
