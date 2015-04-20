@@ -55,9 +55,9 @@ let
 
   preConfigure = ''
       # Purity.
-      sed-i setup.py -e 's,/(usr|sw|opt|pkg),/no-such-path,'
+      sed -i"" setup.py -e 's,/(usr|sw|opt|pkg),/no-such-path,'
     '' + optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
-      sed-i Lib/plat-*/regen -e 's,/usr/include/,${stdenv.cc.libc}/include/,'
+      sed -i"" Lib/plat-*/regen -e 's,/usr/include/,${stdenv.cc.libc}/include/,'
     '';
 
   configureFlags = [
@@ -98,7 +98,7 @@ let
     setupHook = ./setup-hook.sh;
 
     postConfigure = if stdenv.isCygwin then ''
-      sed-i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
+      sed -i"" Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
     '' else null;
 
     postInstall =

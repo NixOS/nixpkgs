@@ -25,7 +25,6 @@ rec {
     alias make=gmake
     alias tar=gtar
     alias sed=gsed
-    alias sed-i='gsed -i""'
     export MAKE=gmake
     shopt -s expand_aliases
   '';
@@ -38,7 +37,6 @@ rec {
     alias mv=gmv
     alias ln=gln
     alias sed=gsed
-    alias sed-i='gsed -i""'
     alias tar=gtar
 
     export MAKE=gmake
@@ -50,7 +48,6 @@ rec {
 
     alias make=gmake
     alias sed=gsed
-    alias sed-i='gsed -i""'
     alias tar=gtar
     export MAKE=gmake
     shopt -s expand_aliases
@@ -60,7 +57,6 @@ rec {
   preHookCygwin = ''
     ${preHookBase}
 
-    alias sed-i='sed -i""'
     shopt -s expand_aliases
 
     # prevent libtool from failing to find dynamic libraries

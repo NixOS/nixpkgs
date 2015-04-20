@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString graphicsSupport " --enable-image=x11,fb";
 
   preConfigure = ''
-    sed-i ./configure -e "s,/lib|/usr/lib|/usr/local/lib|/usr/ucblib|/usr/ccslib|/usr/ccs/lib|/lib64|/usr/lib64,/no-such-path,"
-    sed-i ./configure -e "s,/usr,/no-such-path,"
+    sed -i"" ./configure -e "s,/lib|/usr/lib|/usr/local/lib|/usr/ucblib|/usr/ccslib|/usr/ccs/lib|/lib64|/usr/lib64,/no-such-path,"
+    sed -i"" ./configure -e "s,/usr,/no-such-path,"
   '';
 
   enableParallelBuilding = false;

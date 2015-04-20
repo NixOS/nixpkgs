@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
   '' + lib.optionalString stdenv.isCygwin ''
-    sed-i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
+    sed -i"" -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
   selfNativeBuildInput = true;

@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
       configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
     fi
   '' + stdenv.lib.optionalString stdenv.isCygwin ''
-    sed-i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
+    sed -i"" -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
   buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;

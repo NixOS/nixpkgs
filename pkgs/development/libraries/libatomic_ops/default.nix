@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   };
 
   preConfigure = if stdenv.isCygwin then ''
-      sed-i -e "/libatomic_ops_gpl_la_SOURCES/a libatomic_ops_gpl_la_LIBADD = libatomic_ops.la" src/Makefile.am
+      sed -i"" -e "/libatomic_ops_gpl_la_SOURCES/a libatomic_ops_gpl_la_LIBADD = libatomic_ops.la" src/Makefile.am
       ./autogen.sh
   '' else null;
 
