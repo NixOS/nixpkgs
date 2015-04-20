@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [
-    ./darwin-new-sections.patch
     ./at-fdcwd.patch
   ];
 
