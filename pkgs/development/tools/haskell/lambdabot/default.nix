@@ -11,6 +11,7 @@
     ++ referencePlugins
     ++ socialPlugins
 ''
+, configuration ? "[]"
 }:
 
 # FIXME: fix hoogle search
@@ -29,6 +30,7 @@ let allPkgs = pkgs: mueval.defaultPkgs pkgs ++ [ pkgs.lambdabot-trusted ] ++ pac
                                      ++ lib.optional (aspell != null) aspell
                                     );
     modulesStr = lib.replaceChars ["\n"] [" "] ("corePlugins ++ " + modules);
+    configStr = lib.replaceChars ["\n"] [" "] configuration;
 
 in lib.overrideDerivation haskellngPackages.lambdabot (self: {
   postPatch = (self.postPatch or "") + ''
@@ -36,6 +38,9 @@ in lib.overrideDerivation haskellngPackages.lambdabot (self: {
     # not via sed to avoid escaping issues
     substituteInPlace src/Modules.hs \
       --replace '@modules@' '${modulesStr}'
+    sed -i 's/\[dataDir :=> dir\]/@config@ ++ \0/' src/Main.hs
+    substituteInPlace src/Main.hs \
+      --replace '@config@' '${configStr}'
   '';
 
   buildInputs = self.buildInputs ++ [ makeWrapper ];
