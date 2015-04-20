@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "${if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome"}"
     "--disable-static"
+    "--localstatedir=/" # needed for the management socket under /run/NetworkManager
   ];
 
   preConfigure = ''
