@@ -186,12 +186,6 @@ self: super: {
     prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
   });
 
-  # diagrams/diagrams-core#83
-  diagrams-lib = overrideCabal super.diagrams-lib (drv: {
-    prePatch = "sed -i 's|4\.8|4.9|' diagrams-lib.cabal";
-    patches = [ ./diagrams-lib-flexible-contexts.patch ];
-  });
-
   # https://github.com/mokus0/misfortune/pull/1
   misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/mokus0/misfortune/pull/1.patch";
