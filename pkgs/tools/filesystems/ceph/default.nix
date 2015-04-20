@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost btrfsProgs cryptopp curl expat fcgi fuse gperftools keyutils
     libatomic_ops leveldb libaio libedit libuuid linuxHeaders openssl python
-    snappy udev xfsprogs.lib xz zfs
+    snappy udev xfsprogs xz zfs
   ];
 
   preConfigure = ''
