@@ -52,9 +52,18 @@ in
       script = ''
         mkdir -p ~/.lambdabot
         cd ~/.lambdabot
-        exec ${cfg.package}/bin/lambdabot -e 'rc ${rc}'
+        mkfifo /run/lambdabot/offline
+        (
+          echo 'rc ${rc}'
+          while true; do
+            cat /run/lambdabot/offline
+          done
+        ) | ${cfg.package}/bin/lambdabot
       '';
-      serviceConfig.User = "lambdabot";
+      serviceConfig = {
+        User = "lambdabot";
+        RuntimeDirectory = [ "lambdabot" ];
+      };
     };
 
     users.extraUsers.lambdabot = {
