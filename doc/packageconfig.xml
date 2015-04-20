@@ -4,8 +4,6 @@
 
 <title><filename>~/.nixpkgs/config.nix</filename>: global configuration</title>
 
-<section><title>Allow unfree software</title>
-
     <para>
       Nix packages can be configured to allow or deny certain options.
     </para>
@@ -68,37 +66,18 @@
 	A complete list of licenses can be found in the file
 	<filename>lib/licenses.nix</filename> of the nix package tree.
     </para>
-</section>
 
-<section><title>Overriding existing packages</title>
+<section><title>Modify packages via<literal>packageOverrides</literal></title>
 
 <para>
   <filename>~/.nixpkgs/config.nix</filename> enables the user to
-  override package names without creating a fork of the Nixpkgs.
-  This is accomplished by defining a function called
-  <varname>packageOverrides</varname>.  It takes the set of
-  packages, usually called <varname>pkgs</varname>, and returns a
-  modified set of packages.
+  override package names without creating a fork of Nixpkgs.  This is
+  accomplished by defining a function called
+  <varname>packageOverrides</varname>.  It is expected to take the set
+  of packages, usually called <varname>pkgs</varname>, and returns a
+  modified set of packages.  It is called when evaluating any nix
+  expression in the <varname>pkgs</varname> set.
 </para>
-<para>
-  Here is an example.  Say we want to install
-  <varname>xbmc</varname> but we want to use another Python
-  version when running <varname>xbmc</varname>.
-
-<programlisting>
-packageOverrides = pkgs: rec {
-  xbmc = pkgs.xbmc.override {
-    python = pkgs.python26;
-  };
-};
-</programlisting>
-
-  Further information is available at the <command
-  xlink:href="https://nixos.org/wiki/Nix_Modifying_Packages">Nix
-  wiki</command>
-
-</para>
-
 </section>
 
 </chapter>
