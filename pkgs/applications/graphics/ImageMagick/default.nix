@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     pkgconfig libtool libcl perl jemalloc bzip2 zlib libX11 libXext libXt fftw
     libfpx djvulibre fontconfig freetype ghostscript graphviz jbigkit libjpeg
     lcms2 openjpeg liblqr1 xz openexr pango libpng librsvg libtiff libwebp
-    libxml2
+    libxml2 (stdenv.cc.cc.lib or null)
   ];
 
   propagatedBuildInputs = []

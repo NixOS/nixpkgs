@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "10h9mzjxnwlsjziah4lri85scc05rlajz39nqf3mbh4vja8dw34g";
   };
 
+  buildInputs = [ (stdenv.cc.cc.lib or null) ];
+
   configureFlags =
     [ "--enable-shared" "--disable-static"
       "--enable-threads"

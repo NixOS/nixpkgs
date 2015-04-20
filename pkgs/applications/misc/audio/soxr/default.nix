@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/build/src
   '';
 
-  buildInputs = [ cmake ];
+  buildInputs = [ cmake (stdenv.cc.cc.lib or null) ];
+  # outputs TODO: gcc.lib might become a problem;
+  # here -out/lib/*.a got found and -lib/lib/*.so didn't
 
   meta = {
     description = "An audio resampling library";
