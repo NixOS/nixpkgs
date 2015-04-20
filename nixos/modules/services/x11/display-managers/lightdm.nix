@@ -19,7 +19,7 @@ let
     '';
 
   theme = pkgs.gnome3.gnome_themes_standard;
-  icons = pkgs.gnome3.gnome_icon_theme;
+  icons = pkgs.gnome3.defaultIconTheme;
 
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with

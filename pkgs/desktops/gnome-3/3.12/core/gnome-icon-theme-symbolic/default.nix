@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gnome3.gnome_icon_theme ];
 
+  propagatedUserEnvPkgs = [ gnome3.gnome_icon_theme ];
+
   meta = with stdenv.lib; {
     platforms = platforms.linux;
   };

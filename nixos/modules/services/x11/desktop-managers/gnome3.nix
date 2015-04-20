@@ -146,7 +146,8 @@ in {
         gnome3.gnome_settings_daemon
         gnome3.gnome_shell
         gnome3.gnome_themes_standard
-      ] ++ gnome3.icon-themes ++ cfg.sessionPath ++ (removePackagesByName [
+        gnome3.defaultIconTheme
+      ] ++ cfg.sessionPath ++ (removePackagesByName [
         gnome3.baobab
         gnome3.empathy
         gnome3.eog

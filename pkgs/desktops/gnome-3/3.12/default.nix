@@ -16,8 +16,8 @@ rec {
   orbit = ORBit2;
   inherit (pkgs) libsoup;
 
-# Simplify the nixos module
-  icon-themes = [ gnome_icon_theme gnome_icon_theme_symbolic ];
+# Simplify the nixos module and gnome packages
+  defaultIconTheme = gnome_icon_theme_symbolic;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
