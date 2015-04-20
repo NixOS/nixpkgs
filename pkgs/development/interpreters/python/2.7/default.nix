@@ -71,13 +71,12 @@ let
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl expat libffi  ]
+    [ bzip2 openssl expat libffi ]
     ++ optionals includeModules (
         [ db gdbm ncurses sqlite readline
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
     )
     ++ optional zlibSupport zlib;
-    #[ expat libffi ]
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
