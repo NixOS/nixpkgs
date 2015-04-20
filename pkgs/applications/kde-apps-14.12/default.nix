@@ -220,7 +220,7 @@ let
 
       kdelibs = with pkgs; super.kdelibs // {
         buildInputs =
-          super.kdelibs.buildInputs ++ [ attr libxslt polkit_qt4 xz ];
+          super.kdelibs.buildInputs ++ [ attr libxslt polkit_qt4 xz pcre ];
 
         nativeBuildInputs =
           super.kdelibs.nativeBuildInputs ++ [ pkgconfig ];
