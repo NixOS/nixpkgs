@@ -67,16 +67,20 @@
 	<filename>lib/licenses.nix</filename> of the nix package tree.
     </para>
 
-<section><title>Modify packages via<literal>packageOverrides</literal></title>
+<section><title>Modify packages via <literal>packageOverrides</literal></title>
 
 <para>
-  <filename>~/.nixpkgs/config.nix</filename> enables the user to
-  override package names without creating a fork of Nixpkgs.  This is
-  accomplished by defining a function called
-  <varname>packageOverrides</varname>.  It is expected to take the set
-  of packages, usually called <varname>pkgs</varname>, and returns a
-  modified set of packages.  It is called when evaluating any nix
-  expression in the <varname>pkgs</varname> set.
+
+  You can define a function called <varname>packageOverrides</varname>
+  in your local <filename>~/.nixpkgs/config</filename> to overide nix
+  packages.  It must be a function that takes pkgs as an argument and
+  return modified set of packages.
+
+  <programlisting>{
+  packageOverrides = pkgs: rec {
+    foo = pkgs.foo.override { ... };
+  };
+}</programlisting>
 </para>
 </section>
 
