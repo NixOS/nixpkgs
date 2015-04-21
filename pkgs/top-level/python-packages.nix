@@ -8956,7 +8956,13 @@ let
       md5 = "9f5acfd87d04432bf8df5f9710a17358";
     };
 
-    PYENCHANT_LIBRARY_PATH="${pkgs.enchant}/lib/libenchant.so";
+    propagatedBuildInputs = with pythonPackages; [ pkgs.enchant ];
+
+    patchPhase = let
+      path_hack_script = "s|LoadLibrary(e_path)|LoadLibrary('${pkgs.enchant}/lib/' + e_path)|";
+    in ''
+      sed -i "${path_hack_script}" enchant/_enchant.py
+    '';
 
     # dictionaries needed for tests
     doCheck = false;
