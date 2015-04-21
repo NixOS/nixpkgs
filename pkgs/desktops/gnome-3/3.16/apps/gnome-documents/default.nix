@@ -29,10 +29,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup =
-    let
-      libPath = stdenv.lib.makeLibraryPath
-        [ evince gtk3 gnome3.tracker gnome3.gnome_online_accounts ];
-    in
     ''
     substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib}/bin/gapplication"
 
@@ -40,7 +36,6 @@ stdenv.mkDerivation rec {
       wrapProgram "$f" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix LD_LIBRARY_PATH ":" "${libPath}" \
         --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --run "if [ -z \"\$XDG_CACHE_DIR\" ]; then XDG_CACHE_DIR=\$HOME/.cache; fi; if [ -w \"\$XDG_CACHE_DIR/..\" ]; then mkdir -p \"\$XDG_CACHE_DIR/gnome-documents\"; fi"
     done

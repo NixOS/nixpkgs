@@ -18,10 +18,12 @@ stdenv.mkDerivation rec {
 
   preAutoreconf = ''
     sed '/disable-settings/d' -i configure.ac
+    sed "/if HAVE_INTROSPECTION/a INTROSPECTION_COMPILER_ARGS = --shared-library=$out/lib/libgoa-1.0.so" -i src/goa/Makefile.am
   '';
 
   buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common makeWrapper
-                  libsecret dbus_glib telepathy_glib intltool icu libsoup docbook_xsl_ns docbook_xsl];
+                  libsecret dbus_glib telepathy_glib intltool icu libsoup autoreconfHook
+                  docbook_xsl_ns docbook_xsl ];
 
   preFixup = ''
     for f in "$out/libexec/"*; do
