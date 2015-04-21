@@ -623,6 +623,8 @@ let
 
   pass = callPackage ../tools/security/pass { };
 
+  oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
+
   setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
