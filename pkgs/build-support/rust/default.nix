@@ -39,9 +39,16 @@ in stdenv.mkDerivation (args // {
   '' + (args.prePatch or "");
 
   buildPhase = args.buildPhase or ''
-    echo "Running cargo build"
+    echo "Running cargo build --release"
     cargo build --release
   '';
+
+  checkPhase = args.checkPhase or ''
+    echo "Running cargo test"
+    cargo test
+  '';
+
+  doCheck = args.doCheck or true;
 
   installPhase = args.installPhase or ''
     mkdir -p $out/bin

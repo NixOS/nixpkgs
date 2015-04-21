@@ -25,6 +25,10 @@ buildRustPackage rec {
 
   buildPhase = "make";
 
+  # Disable check phase as there are lots of failures (some probably due to
+  # trying to access the network).
+  doCheck = false;
+
   installPhase = ''
     make install
     ${postInstall}

@@ -15,6 +15,10 @@ buildRustPackage rec {
 
   buildInputs = [ makeWrapper ];
 
+  preCheck = ''
+    export RUST_SRC_PATH="${rustc.src}/src"
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp -p target/release/racer $out/bin/
