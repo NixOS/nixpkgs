@@ -15,5 +15,6 @@ required for the test.</para>
 
 <xi:include href="writing-nixos-tests.xml" />
 <xi:include href="running-nixos-tests.xml" />
+<xi:include href="running-nixos-tests-interactively.xml" />
 
 </chapter>
