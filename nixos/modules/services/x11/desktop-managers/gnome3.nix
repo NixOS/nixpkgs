@@ -180,6 +180,13 @@ in {
         gnome3.nautilus-sendto
       ] config.environment.gnome3.excludePackages);
 
+    # Use the correct gnome3 packageSet
+    networking.networkmanager.basePackages =
+      { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
+        inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
+                         networkmanager_openconnect networkmanager_pptp
+                         networkmanager_l2tp; };
+
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];
 

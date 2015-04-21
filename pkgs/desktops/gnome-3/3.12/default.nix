@@ -165,6 +165,10 @@ rec {
     inherit gnome3;
   };
 
+  networkmanager_l2tp = pkgs.networkmanager_l2tp.override {
+    inherit gnome3;
+  };
+
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
     inherit gnome3 gsettings_desktop_schemas glib_networking;
   };
