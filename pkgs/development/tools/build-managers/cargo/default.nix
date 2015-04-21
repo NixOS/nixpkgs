@@ -20,7 +20,7 @@ buildRustPackage rec {
   buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
 
   configurePhase = ''
-    ./configure --prefix=$out --local-cargo=${cargo}/bin/cargo
+    ./configure --enable-optimize --prefix=$out --local-cargo=${cargo}/bin/cargo
   '';
 
   buildPhase = "make";
