@@ -6764,6 +6764,8 @@ let
 
   librsync_0_9 = callPackage ../development/libraries/librsync/0.9.nix { };
 
+  libs3 = callPackage ../development/libraries/libs3 { };
+
   libsearpc = callPackage ../development/libraries/libsearpc { };
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
