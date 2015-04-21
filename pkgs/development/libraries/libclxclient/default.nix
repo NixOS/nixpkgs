@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr/local@$out@" -i Makefile
     sed -e "s@#include <clthreads.h>@#include <${libclthreads}/include>@" -i clxclient.h
     sed -e "s@ldconfig@@" -i Makefile
-    sed -e "s@lib$(SUFFIX)@lib@" -i Makefile
-
+    sed -e "s@SUFFIX :=.*@SUFFIX =@" -i Makefile
   '';
 
   fixupPhase = ''
