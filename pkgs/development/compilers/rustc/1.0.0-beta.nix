@@ -12,4 +12,5 @@ callPackage ./makeRustcDerivation.nix {
   patches = [
     ./patches/beta.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
+  configureFlags = [ "--release-channel=beta" ];
 }
