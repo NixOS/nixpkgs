@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
 , readline ? null, openssl ? null, python ? null, ncurses ? null
 , sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
-, acl ? null, glusterfs ? null, ceph ? null, libcap ? null
+, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
 
 assert sqlite != null || postgresql != null || mysql != null;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig nettools gettext readline openssl python
-    ncurses sqlite postgresql mysql.lib zlib lzo acl glusterfs ceph libcap
+    ncurses sqlite postgresql mysql.lib zlib lzo acl glusterfs libceph libcap
   ];
 
   postPatch = ''

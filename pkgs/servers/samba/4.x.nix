@@ -13,7 +13,7 @@
 , acl ? null
 , libaio ? null
 , fam ? null
-, ceph ? null
+, libceph ? null
 , glusterfs ? null
 
 # buildtools/wafsamba/wscript optionals
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     pythonPackages.subunit libbsd nss_wrapper socket_wrapper uid_wrapper
     libarchive
 
-    kerberos zlib openldap cups pam avahi acl libaio fam ceph glusterfs
+    kerberos zlib openldap cups pam avahi acl libaio fam libceph glusterfs
 
     libiconv gettext
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     (mkWith   (libarchive != null) "libarchive"        null)
     (mkWith   true                 "cluster-support"   null)
     (mkWith   (ncurses != null)    "regedit"           null)
-    (mkWith   ceph                 "libcephfs"         ceph)
+    (mkWith   libceph              "libcephfs"         libceph)
     (mkEnable (glusterfs != null)  "glusterfs"         null)
 
     # dynconfig/wscript options
