@@ -121,6 +121,7 @@ self: super: {
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
+  BNFC-meta = dontHaddock super.BNFC-meta;
   bytestring-progress = dontHaddock super.bytestring-progress;
   comonads-fd = dontHaddock super.comonads-fd;
   comonad-transformers = dontHaddock super.comonad-transformers;
