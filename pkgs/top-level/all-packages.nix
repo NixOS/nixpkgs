@@ -937,6 +937,7 @@ let
   # Only ever add ceph LTS releases
   # The default should always be symlinked to the latest LTS
   # Dev should always point to the latest versioned release
+  libceph = ceph;
   ceph-0_80 = callPackage ../tools/filesystems/ceph/0.80.nix { };
   ceph-0_94 = callPackage ../tools/filesystems/ceph/0.94.nix { };
   ceph = callPackage ../tools/filesystems/ceph { };
@@ -3208,6 +3209,7 @@ let
   xflux = callPackage ../tools/misc/xflux { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
+  libxfs = xfsprogs.lib;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
@@ -8496,6 +8498,7 @@ let
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix { };
 
   mysql = mariadb;
+  libmysql = mysql.lib;
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
