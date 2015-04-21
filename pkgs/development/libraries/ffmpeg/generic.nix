@@ -513,7 +513,7 @@ stdenv.mkDerivation rec {
       No matter if they were designed by some standards committee, the community or 
       a corporation. 
     '';
-    licenses = (
+    license = (
       if nonfreeLicensing then
         licenses.unfreeRedistributable
       else if version3Licensing then

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = https://apitrace.github.io;
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
-    licenses = with licenses; mit;
+    license = with licenses; mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
