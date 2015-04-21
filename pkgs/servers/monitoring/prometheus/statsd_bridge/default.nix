@@ -20,7 +20,7 @@ goPackages.buildGoPackage rec {
   meta = with lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";
     homepage = https://github.com/prometheus/statsd_bridge;
-    licenses = licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };

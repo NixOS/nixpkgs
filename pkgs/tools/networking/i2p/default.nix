@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://geti2p.net";
     description = "Applications and router for I2P, anonymity over the Internet";
     maintainers = [ stdenv.lib.maintainers.joelmo ];
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
     # TODO: support other systems, just copy appropriate lib/wrapper.. to $out
     platforms = [ "x86_64-linux" ];
   };

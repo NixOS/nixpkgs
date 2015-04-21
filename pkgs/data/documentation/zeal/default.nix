@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       app), available for Linux and Windows.
     '';
     homepage = "http://zealdocs.org/";
-    licenses = with stdenv.lib.licenses; [ gpl3 ];
+    license = with stdenv.lib.licenses; [ gpl3 ];
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       eye-candy, customizable, and reasonably lightweight.
     '';
     homepage = "https://github.com/Swordifish90/cool-retro-term";
-    licenses = with stdenv.lib.licenses; [ gpl2 gpl3 ];
+    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };
