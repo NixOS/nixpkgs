@@ -1636,6 +1636,8 @@ let
 
   hashcat = callPackage ../tools/security/hashcat { };
 
+  hal-flash = callPackage ../os-specific/linux/hal-flash { };
+
   halibut = callPackage ../tools/typesetting/halibut { };
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
