@@ -8,4 +8,6 @@ callPackage ./generic.nix (args // rec {
     rev = "refs/tags/v${version}";
     sha256 = "0rrl10vda4xv22al2c5ccd8v8drs26186dvkrxndvqz8p9999cjx";
   };
+
+  patches = [ ./fix-pgrefdebugging.patch ];
 })
