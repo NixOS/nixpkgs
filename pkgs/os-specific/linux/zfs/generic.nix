@@ -77,6 +77,9 @@ stdenv.mkDerivation rec {
     for i in $out/etc/systemd/system/*; do
       substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
     done
+
+    # Fix pkgconfig
+    ln -s ../share/pkgconfig $out/lib/pkgconfig
   '';
 
   meta = {
