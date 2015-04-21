@@ -1,0 +1,15 @@
+diff --git a/configure.ac b/configure.ac
+index 6ce6b6b..180bad2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -115,9 +115,7 @@ if test "$enable_debug" = "yes"; then
+ 		   -fno-omit-frame-pointer -O0 -D_REENTRANT -D_GNU_SOURCE"
+ else
+ 	AC_DEFINE([NDEBUG],[],[No-debug Mode])
+-	AM_CFLAGS="$AM_CFLAGS -g -ggdb -Wall -Werror -Wpadded -Wdeclaration-after-statement \
+-		  -Wsign-compare -Wc++-compat \
+-		  -O3 -D_REENTRANT -D_GNU_SOURCE"
++	AM_CFLAGS="$AM_CFLAGS -O3 -D_REENTRANT -D_GNU_SOURCE"
+ fi
+ 
+ AC_CACHE_CHECK(whether ld accepts --version-script, ac_cv_version_script,

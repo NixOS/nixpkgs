@@ -5431,6 +5431,8 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
+  accelio = callPackage ../development/libraries/accelio { };
+
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
@@ -9203,6 +9205,8 @@ let
 
   linuxPackagesFor = kernel: self: let callPackage = newScope self; in rec {
     inherit kernel;
+
+    accelio = callPackage ../development/libraries/accelio { };
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
