@@ -6200,6 +6200,8 @@ let
   kf5_latest = kf57;
   kf5_stable = kf57;
 
+  kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
+
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     openldap = openldap.override {
       cyrus_sasl = cyrus_sasl.override { kerberos = null; };
