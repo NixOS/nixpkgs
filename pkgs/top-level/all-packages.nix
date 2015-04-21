@@ -5767,6 +5767,11 @@ let
 
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
 
+  geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
+    drvName = "geoip-tools";
+    geoipDatabase = geolite-legacy;
+  };
+
   geoip = callPackage ../development/libraries/geoip { };
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
