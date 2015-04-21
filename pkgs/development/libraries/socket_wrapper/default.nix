@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b3sfjy7418gg52qkdblfi5x57g4m44n7434xhacz9isyl5m52vn";
   };
 
-  buildInputs = [ cmake pkgconfig ];
+  buildInputs = [ cmake pkgconfig (stdenv.cc.libc.out or null) ];
 
   meta = with stdenv.lib; {
     description = "a library passing all socket communications through unix sockets";
