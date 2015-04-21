@@ -374,6 +374,7 @@
   ./services/security/haveged.nix
   ./services/security/hologram.nix
   ./services/security/munge.nix
+  ./services/security/physlock.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
