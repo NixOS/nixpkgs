@@ -6342,7 +6342,7 @@ let
   libdbi = callPackage ../development/libraries/libdbi { };
 
   libdbiDriversBase = callPackage ../development/libraries/libdbi-drivers {
-    mysql = null;
+    libmysql = null;
     sqlite = null;
   };
 
