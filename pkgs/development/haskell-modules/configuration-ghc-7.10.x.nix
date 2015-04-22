@@ -107,6 +107,9 @@ self: super: {
   # acid-state/safecopy#25 acid-state/safecopy#26
   safecopy = dontCheck (super.safecopy);
 
+  # test suite broken, some instance is declared twice.
+  AttoBencode = dontCheck super.AttoBencode;
+
   # bos/attoparsec#92
   attoparsec = dontCheck super.attoparsec;
 
