@@ -1738,6 +1738,8 @@ let
 
   isync = callPackage ../tools/networking/isync { };
 
+  jaaa = callPackage ../applications/audio/jaaa { };
+
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
@@ -6314,6 +6316,10 @@ let
 
   libcli = callPackage ../development/libraries/libcli { };
 
+  libclthreads = callPackage ../development/libraries/libclthreads  { };
+
+  libclxclient = callPackage ../development/libraries/libclxclient  { };
+
   libcm = callPackage ../development/libraries/libcm { };
 
   inherit (gnome3) libcroco;
@@ -7911,6 +7917,8 @@ let
   cppzmq = callPackage ../development/libraries/cppzmq {};
 
   czmq = callPackage ../development/libraries/czmq { };
+
+  zita-alsa-pcmi = callPackage ../development/libraries/zita-alsa-pcmi { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
