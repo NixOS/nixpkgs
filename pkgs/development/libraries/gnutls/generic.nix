@@ -23,8 +23,10 @@ stdenv.mkDerivation rec {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ gmp zlib lzo lzip nettle libtasn1 libidn p11_kit unbound trousers ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit ]
     ++ stdenv.lib.optional guileBindings guile;
+  # The paths for these libraries are not specified in the .la and .pc files
+  propagatedBuildInputs = [ zlib gmp trousers unbound ];
 
   nativeBuildInputs = [ perl pkgconfig autoreconfHook ];
 
