@@ -808,7 +808,7 @@ let
     krb5 = null;
     systemd = null;
     jemalloc = null;
-    mysql = null;
+    libmysql = null;
     postgresql = null;
     libdbi = null;
     net_snmp = null;

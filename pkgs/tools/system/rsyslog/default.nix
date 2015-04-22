@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libestr, json_c, zlib, pythonPackages
-, krb5 ? null, systemd ? null, jemalloc ? null, mysql ? null, postgresql ? null
+, krb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libestr json_c zlib pythonPackages.docutils
-    krb5 jemalloc postgresql libdbi net_snmp libuuid curl gnutls
+    krb5 jemalloc libmysql postgresql libdbi net_snmp libuuid curl gnutls
     libgcrypt liblognorm openssl librelp libgt liblogging libnet hadoop rdkafka
     libmongo-client czmq rabbitmq-c hiredis
-  ] ++ stdenv.lib.optional stdenv.isLinux systemd ++ stdenv.lib.optional (mysql != null) mysql.lib;
+  ] ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     (mkFlag (jemalloc != null)        "jemalloc")
     (mkFlag true                      "unlimited-select")
     (mkFlag true                      "usertools")
-    (mkFlag (mysql != null)           "mysql")
+    (mkFlag (libmysql != null)        "mysql")
     (mkFlag (postgresql != null)      "pgsql")
     (mkFlag (libdbi != null)          "libdbi")
     (mkFlag (net_snmp != null)        "snmp")
