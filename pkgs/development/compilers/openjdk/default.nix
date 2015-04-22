@@ -65,6 +65,7 @@ let
       ./paxctl.patch
       ./read-truststore-from-env.patch
       ./currency-date-range.patch
+      ./linux-4.0.patch
     ];
 
     NIX_NO_SELF_RPATH = true;
