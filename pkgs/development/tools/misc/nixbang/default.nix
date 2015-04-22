@@ -1,14 +1,15 @@
-{ lib, pythonPackages, fetchgit }:
+{ lib, pythonPackages, fetchFromGitHub }:
 
-let version = "0.1.1"; in
+let version = "0.1.2"; in
 pythonPackages.buildPythonPackage {
   name = "nixbang-${version}";
   namePrefix = "";
 
-  src = fetchgit {
-    url = "git://github.com/madjar/nixbang.git";
-    rev = "refs/tags/${version}";
-    sha256 = "1n8jq32r2lzk3g0d95ksfq7vdqciz34jabribrr4hcnz4nlijshf";
+  src = fetchFromGitHub {
+    owner = "madjar";
+    repo = "nixbang";
+    rev = version;
+    sha256 = "1kzk53ry60i814wa6n9y2ni0bcxhbi9p8gdv10b974gf23mhi8vc";
   };
 
   meta = {
