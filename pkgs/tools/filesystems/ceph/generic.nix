@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, makeWrapper, pkgconfig, libtool, which
-, boost, python, pythonPackages, libxml2
+, boost, python, pythonPackages, libxml2, git
 
 # Optional Dependencies
 , snappy ? null, leveldb ? null, yasm ? null, fcgi ? null, expat ? null
@@ -80,7 +80,8 @@ stdenv.mkDerivation {
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
     boost python libxml2 yasm libatomic_ops libs3 malloc pythonPackages.flask
   ] ++ optional (versionAtLeast version "0.95") [
-    pythonPackages.sphinx
+    git                   # Used for the gitversion string
+    pythonPackages.sphinx # Used for docs
   ] ++ optional stdenv.isLinux [
     linuxHeaders libuuid udev keyutils libaio libxfs zfs
   ] ++ optional hasServer [
