@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
 , readline ? null, openssl ? null, python ? null, ncurses ? null
 , sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
-, acl ? null, glusterfs ? null, libceph ? null, libcap ? null, ceph ? null
+, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
 
 assert sqlite != null || postgresql != null || mysql != null;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (acl != null) "--enable-acl"
     ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
-    ++ optional (ceph != null) "--with-cephfs=${ceph}";
+    ++ optional (libceph != null) "--with-cephfs=${libceph}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
