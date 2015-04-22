@@ -45,6 +45,7 @@ let
   hasRadosgw = fcgi != null && expat != null && curl != null && libedit != null;
 
   hasXio = (stdenv.isLinux || stdenv.isFreebsd) &&
+    stdenv.lib.versionAtLeast version "0.94" &&
     accelio != null && libibverbs != null && librdmacm != null;
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
