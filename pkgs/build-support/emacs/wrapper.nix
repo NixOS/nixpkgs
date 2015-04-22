@@ -57,8 +57,6 @@ stdenv.mkDerivation {
       addToEmacsPaths $pkg
     done
 
-    echo "(package-initialize)" >>"$siteStart"
-
     # Byte-compiling improves start-up time only slightly, but costs nothing.
     emacs --batch -f batch-byte-compile "$siteStart"
 
