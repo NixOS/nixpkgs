@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://p11-glue.freedesktop.org/;
     platforms = platforms.all;
     maintainers = with maintainers; [ urkud wkennington ];
-    license = license.mit;
+    license = licenses.mit;
   };
 }
