@@ -19,7 +19,7 @@
 , zfs ? null
 
 # Version specific arguments
-, version, src, patches ? []
+, version, src, patches ? [], buildInputs ? []
 , ...
 }:
 
@@ -35,9 +35,6 @@ let
   mkWith = mkFlag "with-" "without-";
   mkOther = mkFlag "" "" true;
 
-  # TODO: Backport patches to support xio
-  accelio = null;
-
   hasServer = snappy != null && leveldb != null;
   hasMon = hasServer;
   hasMds = hasServer;
@@ -45,8 +42,13 @@ let
   hasRadosgw = fcgi != null && expat != null && curl != null && libedit != null;
 
   hasXio = (stdenv.isLinux || stdenv.isFreebsd) &&
-    stdenv.lib.versionAtLeast version "0.94" &&
+    versionAtLeast version "0.95" &&
     accelio != null && libibverbs != null && librdmacm != null;
+
+  hasRocksdb = versionAtLeast version "0.95" && rocksdb != null;
+
+  # TODO: Reenable when kinetic support is fixed
+  hasKinetic = versionAtLeast version "0.95" && kinetic-cpp-client != null && false;
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
   malloc = if jemalloc != null then jemalloc else gperftools;
@@ -59,11 +61,6 @@ let
     cryptopp = [ cryptopp ];
     none = [ ];
   };
-
-  # TODO: Fix Rocksdb which is currently too new
-  rocksdb = null;
-  # TODO: Fix Kinetic which is also in a mismatched state
-  kinetic-cpp-client = null;
 
   wrapArgs = "--prefix PYTHONPATH : \"$(toPythonPath $lib)\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${python.modules.readline})\""
@@ -80,16 +77,22 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
-  buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-    boost python libxml2 yasm libatomic_ops kinetic-cpp-client rocksdb libs3 malloc
-  ] ++ stdenv.lib.optional stdenv.isLinux [
+  buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
+    boost python libxml2 yasm libatomic_ops libs3 malloc pythonPackages.flask
+  ] ++ optional (versionAtLeast version "0.95") [
+    pythonPackages.sphinx
+  ] ++ optional stdenv.isLinux [
     linuxHeaders libuuid udev keyutils libaio libxfs zfs
-  ] ++ stdenv.lib.optional hasServer [
+  ] ++ optional hasServer [
     snappy leveldb
-  ] ++ stdenv.lib.optional hasRadosgw [
+  ] ++ optional hasRadosgw [
     fcgi expat curl fuse libedit
-  ] ++ stdenv.lib.optional hasXio [
+  ] ++ optional hasXio [
     accelio libibverbs librdmacm
+  ] ++ optional hasRocksdb [
+    rocksdb
+  ] ++ optional hasKinetic [
+    kinetic-cpp-client
   ];
 
   postPatch = ''
@@ -145,8 +148,8 @@ stdenv.mkDerivation {
     (mkEnable hasXio                       "xio"               null)
     (mkWith   (libatomic_ops != null)      "libatomic-ops"     null)
     (mkWith   true                         "ocf"               null)
-    (mkWith   (kinetic-cpp-client != null) "kinetic"           null)
-    (mkWith   (rocksdb != null)            "librocksdb"        null)
+    (mkWith   hasKinetic                   "kinetic"           null)
+    (mkWith   hasRocksdb                   "librocksdb"        null)
     (mkWith   false                        "librocksdb-static" null)
     (mkWith   (libs3 != null)              "system-libs3"      null)
     (mkWith   true                         "rest-bench"        null)
@@ -175,9 +178,13 @@ stdenv.mkDerivation {
     # Fix the python library loading
     find $lib/lib -name \*.pyc -or -name \*.pyd -exec rm {} \;
     for PY in $(find $lib/lib -name \*.py); do
-      LIB="$(sed -n "s/.*find_library('\([^)]*\)').*/\1/p" "$PY")"
-      REALLIB="$lib/lib/lib$LIB.so"
-      sed -i "s,\(library_path[ ]*=[ ]*\).*,\1'$REALLIB',g" "$PY"
+      LIBS="$(sed -n "s/.*find_library('\([^)]*\)').*/\1/p" "$PY")"
+
+      # Fix each find_library call
+      for LIB in $LIBS; do
+        REALLIB="$lib/lib/lib$LIB.so"
+        sed -i "s,find_library('$LIB'),'$REALLIB',g" "$PY"
+      done
 
       # Reapply compilation optimizations
       NAME=$(basename -s .py "$PY")
