@@ -17,6 +17,15 @@ mounts = [ ['/nix/store', nil],
 mkdirs = ['tmp',
          ]
 
+# Propagate environment variables
+envvars = [ 'TERM',
+            'DISPLAY',
+            'HOME',
+            'XDG_RUNTIME_DIR',
+            'LANG',
+            'SSL_CERT_FILE',
+          ]
+
 require 'tmpdir'
 require 'fileutils'
 require 'pathname'
@@ -120,12 +129,7 @@ if $cpid == 0
   link_swdir.call swdir, Pathname.new('')
 
   # New environment
-  ENV.replace({ 'TERM' => ENV['TERM'],
-                'DISPLAY' => ENV['DISPLAY'],
-                'HOME' => ENV['HOME'],
-                'XDG_RUNTIME_DIR' => ENV['XDG_RUNTIME_DIR'],
-                'LANG' => ENV['LANG'],
-              })
+  ENV.replace(Hash[ envvars.map { |x| [x, ENV[x]] } ])
 
   # Finally, exec!
   exec *execp
