@@ -2,7 +2,7 @@
 
 let
   version = "16"; # see ${src}/util/version/Version.h
-  date = "20150308";
+  date = "20150422";
 in
 stdenv.mkDerivation {
   name = "cjdns-${version}-${date}";
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "cjdelisle";
     repo = "cjdns";
-    rev = "dc7eaf676cb83f13ba3e76a1bd0f2e093e6d6e1b";
-    sha256 = "1llhv9kflh4rzv9b9qq9zhrckcc6a7xs0dp147adwmaxqjj8v601";
+    rev = "78e13484b6639adacefc62eb7cf93ef7db4a936f";
+    sha256 = "1l1c43r11mj4c8is24988yfycw74flgv7qvc2cfhlisz7fhgfkds";
   };
 
   buildInputs = [ which python27 nodejs ] ++
