@@ -4553,11 +4553,11 @@ let
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-0.11";
+    name = "docutils-0.12";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "1jbybs5a396nrjy9m13pgvsxdwaj7jw7nsawkhl4fi1nvxm1dx4s";
+      md5 = "4622263b62c5c771c03502afa3157768";
     };
 
     # error: invalid command 'test'
