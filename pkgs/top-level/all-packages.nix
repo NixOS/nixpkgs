@@ -8833,6 +8833,8 @@ let
 
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
+  b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
+
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
