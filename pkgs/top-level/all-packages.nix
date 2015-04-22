@@ -941,7 +941,8 @@ let
   ceph-0_80 = callPackage ../tools/filesystems/ceph/0.80.nix { };
   ceph-0_94 = callPackage ../tools/filesystems/ceph/0.94.nix { };
   ceph = callPackage ../tools/filesystems/ceph { };
-  ceph-dev = callPackage ../tools/filesystems/ceph/dev.nix { };
+  ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
+  ceph-git = lowPrio (callPackage ../tools/filesystems/ceph/git.nix { });
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex ffmpeg;
