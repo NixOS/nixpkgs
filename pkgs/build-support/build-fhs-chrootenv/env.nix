@@ -150,7 +150,7 @@ let
     mkdir -m0755 lib
 
     # copy content of targetPaths
-    cp -rsf ${staticUsrProfileTarget}/lib/* lib/ && chmod u+w -R lib/
+    cp -rsf ${staticUsrProfileTarget}/lib/* lib/
   '';
 
   # setup /lib, /lib32 and /lib64
@@ -160,7 +160,7 @@ let
     ln -s lib lib32
 
     # copy glibc stuff
-    cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/
+    cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/ && chmod u+w -R lib/
 
     # copy content of multiPaths (32bit libs)
     [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/ && chmod u+w -R lib/
