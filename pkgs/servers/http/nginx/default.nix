@@ -13,17 +13,17 @@
 with stdenv.lib;
 
 let
-  version = "1.6.3";
+  version = "1.8.0";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "0mz7nx1ffw4f024yb4w9kpjd33z1f16zmq9iyd160kbf6rdyk60a";
+    sha256 = "1mgkkmmwkhmpn68sdvbd73ssv6lpqhh864fsyvc1ij4hk4is3k13";
   };
 
   rtmp-ext = fetchFromGitHub {
     owner = "arut";
     repo = "nginx-rtmp-module";
-    rev = "v1.1.5";
-    sha256 = "1d9ws4prxz22yq3nhh5h18jrs331zivrdh784l6wznc1chg3gphn";
+    rev = "v1.1.7";
+    sha256 = "0i0fa1znkj7cipy5nlkw4k40klhp9jzk28wxy2vrvd2jvh91x3ma";
   };
 
   dav-ext = fetchFromGitHub {
@@ -43,15 +43,36 @@ let
   moreheaders-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "headers-more-nginx-module";
-    rev = "v0.25";
-    sha256 = "1d71y1i0smi4gkzz731fhn58gr03b3s6jz6ipnfzxxaizmgxm3rb";
+    rev = "v0.26";
+    sha256 = "01wkqhk8mk8jgmzi7jbzmg5kamffx3lmhj5yfwryvnvs6xqs74wn";
   };
 
   echo-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "echo-nginx-module";
-    rev = "v0.56";
-    sha256 = "03vaf1ffhkj2s089f90h45n079h3zw47h6y5zpk752f4ydiagpgd";
+    rev = "v0.57";
+    sha256 = "1q0f0zprcn0ypl2qh964cq186l3f40p0z7n7x22m8cxj367vf000";
+  };
+
+  lua-ext = fetchFromGitHub {
+    owner = "openresty";
+    repo = "lua-nginx-module";
+    rev = "v0.9.15";
+    sha256 = "0kicfs0gyfb5fhjmrwr6p09c5x6g0jwsh0wg5bsp3p209rnbq94q";
+  };
+
+  set-misc-ext = fetchFromGitHub {
+    owner = "openresty";
+    repo = "set-misc-nginx-module";
+    rev = "v0.28";
+    sha256 = "1vixj60q0liri7k5ax85grj7q9vvgybkx421bwphbhai5xrjip96";
+  };
+
+  fluentd = fetchFromGitHub {
+    owner = "fluent";
+    repo = "nginx-fluentd-module";
+    rev = "8af234043059c857be27879bc547c141eafd5c13";
+    sha256 = "1ycb5zd9sw60ra53jpak1m73zwrjikwhrrh9q6266h1mlyns7zxm";
   };
 
   develkit-ext = fetchFromGitHub {
@@ -61,26 +82,6 @@ let
     sha256 = "1cqcasp4lc6yq5pihfcdw4vp4wicngvdc3nqg3bg52r63c1qrz76";
   };
 
-  lua-ext = fetchFromGitHub {
-    owner = "openresty";
-    repo = "lua-nginx-module";
-    rev = "v0.9.12";
-    sha256 = "0r07q1n3nvi7m3l8zk7nfk0z9kjhqknav61ys9lshh2ylsmz1lf4";
-  };
-
-  set-misc-ext = fetchFromGitHub {
-    owner = "openresty";
-    repo = "set-misc-nginx-module";
-    rev = "v0.27";
-    sha256 = "1bd1isacsiay73nc2jlp0wky32l42a3sjskvfa1082l12g0p1x39";
-  };
-
-  fluentd = fetchFromGitHub {
-    owner = "fluent";
-    repo = "nginx-fluentd-module";
-    rev = "8af234043059c857be27879bc547c141eafd5c13";
-    sha256 = "1ycb5zd9sw60ra53jpak1m73zwrjikwhrrh9q6266h1mlyns7zxm";
-  };
 
 in
 
@@ -99,6 +100,11 @@ stdenv.mkDerivation rec {
   patches = if syslog then [ "${syslog-ext}/syslog-1.5.6.patch" ] else [];
 
   configureFlags = [
+    "--with-select_module"
+    "--with-poll_module"
+    "--with-aio_module"
+    "--with-threads"
+    "--with-file-aio"
     "--with-http_ssl_module"
     "--with-http_spdy_module"
     "--with-http_realip_module"
@@ -135,10 +141,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
-  '';
-
-  postInstall = ''
-    mv $out/sbin $out/bin
   '';
 
   meta = {
