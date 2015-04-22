@@ -100,7 +100,7 @@ if $cpid == 0
   write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
 
   # Do mkdirs
-  mkdirs.each { |x| FileUtils.mkdir_p x }
+  mkdirs.each { |x| FileUtils.mkdir_p "#{root}/#{x}" }
 
   # Do rbind mounts.
   mounts.each do |x|
