@@ -108,6 +108,7 @@ self: super: {
   safecopy = dontCheck (super.safecopy);
 
   # test suite broken, some instance is declared twice.
+  # https://bitbucket.org/FlorianHartwig/attobencode/issue/1
   AttoBencode = dontCheck super.AttoBencode;
 
   # bos/attoparsec#92
