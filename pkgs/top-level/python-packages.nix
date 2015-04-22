@@ -280,6 +280,22 @@ let
   };
 
 
+  alabaster = buildPythonPackage rec {
+    name = "alabaster-0.7.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/alabaster/${name}.tar.gz";
+      md5 = "67428d1383fd833f1282fed5deba0898";
+    };
+
+    meta = {
+      homepage = https://github.com/bitprophet/alabaster;
+      description = "a Sphinx theme";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+
   alembic = buildPythonPackage rec {
     name = "alembic-0.6.6";
 
