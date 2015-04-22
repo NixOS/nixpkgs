@@ -10583,7 +10583,9 @@ let
     };
 
     external = {
-      inherit (haskellngPackages) ghc-mod structured-haskell-mode Agda;
+      # FIXME: revert when Agda and ghc-mod are fixed on 7.10
+      inherit (haskell-ng.packages.ghc784) ghc-mod Agda;
+      inherit (haskellngPackages) structured-haskell-mode;
     };
   };
 
