@@ -64,8 +64,10 @@ let
 
       makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
         --prefix PATH : "$out/libexec/${name}:${jdk}/bin:${coreutils}/bin:${gnugrep}/bin:${which}/bin:${git}/bin" \
-        --prefix JDK_HOME : "$jdk" \
-        --prefix ${hiName}_JDK : "$jdk"
+        --set JDK_HOME "$jdk" \
+        --set ${hiName}_JDK "$jdk" \
+        --set ANDROID_JAVA_HOME "$jdk" \
+        --set JAVA_HOME "$jdk"
 
       ln -s "$item/share/applications" $out/share
     '';
