@@ -11,7 +11,7 @@ mounts = [ ['/nix/store', nil],
            ['/var', nil],
            ['/run', nil],
            ['/root', nil],
-         ].map! { |x| [ x[0], x[1].nil? ? x[0].sub(/^\/*/, '') : x[1] ] }
+         ]
 
 # Create directories
 mkdirs = ['tmp',
@@ -67,6 +67,9 @@ $mount = make_fcall 'mount', [Fiddle::TYPE_VOIDP,
 abort "Usage: chrootenv swdir program args..." unless ARGV.length >= 2
 swdir = Pathname.new ARGV[0]
 execp = ARGV.drop 1
+
+# Set destination paths for mounts
+mounts.map! { |x| [x[0], x[1].nil? ? x[0].sub(/^\/*/, '') : x[1]] }
 
 # Create temporary directory for root and chdir
 root = Dir.mktmpdir 'chrootenv'
