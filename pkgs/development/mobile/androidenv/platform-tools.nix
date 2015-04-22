@@ -32,6 +32,12 @@ stdenv.mkDerivation {
             patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
         done
     ''}
+
+    mkdir -p $out/bin
+    for i in adb fastboot
+    do
+        ln -sf $out/platform-tools/$i $out/bin/$i
+    done
   '';
   
   buildInputs = [ unzip ];
