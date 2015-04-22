@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
 , readline ? null, openssl ? null, python ? null, ncurses ? null
 , sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
-, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
+, acl ? null, glusterfs ? null, libceph ? null, libcap ? null, ceph ? null
 }:
 
 assert sqlite != null || postgresql != null || mysql != null;
