@@ -32,6 +32,7 @@ self: super: {
   template-haskell = null;
   time = null;
   unix = null;
+  xhtml = null;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
