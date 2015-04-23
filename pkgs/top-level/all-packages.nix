@@ -10128,6 +10128,8 @@ let
 
   backintime = backintime-qt4;
 
+  bandwidth = callPackage ../tools/misc/bandwidth { };
+
   bar = callPackage ../applications/window-managers/bar { };
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
