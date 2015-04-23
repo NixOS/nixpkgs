@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, asciidoc, libxslt }:
+{ stdenv, fetchgit, asciidoc, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
   name    = "trace-cmd-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ asciidoc libxslt ];
 
   configurePhase = "true";
-  buildPhase     = "make prefix=$out all doc";
+  buildPhase     = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl all doc";
   installPhase   = "make prefix=$out install install_doc";
 
   meta = {
