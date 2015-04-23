@@ -14,6 +14,8 @@ let
 in stdenv.mkDerivation (args // {
   inherit cargoDeps rustRegistry cargoUpdateHook;
 
+  patchRegistryDeps = ./patch-registry-deps;
+
   buildInputs = [ git cargo rustc ] ++ buildInputs;
 
   configurePhase = args.configurePhase or "true";
@@ -41,14 +43,20 @@ in stdenv.mkDerivation (args // {
     )
   '' + (args.postUnpack or "");
 
-  # TODO: Probably not the best way to do this, but it should work for now
   prePatch = ''
-    for dir in ../deps/registry/src/*/pkg-config-*; do
-        [ -d "$dir" ] || continue
+    # Patch registry dependencies, using the scripts in $patchRegistryDeps
+    (
+        cd ../deps/registry/src/*
 
-        substituteInPlace "$dir/src/lib.rs" \
-            --replace '"/usr"' '"/nix/store/"'
-    done
+        set -euo pipefail
+
+        for script in $patchRegistryDeps/*; do
+          # Run in a subshell so that directory changes and shell options don't
+          # affect any following commands
+
+          ( . $script)
+        done
+    )
   '' + (args.prePatch or "");
 
   buildPhase = args.buildPhase or ''
