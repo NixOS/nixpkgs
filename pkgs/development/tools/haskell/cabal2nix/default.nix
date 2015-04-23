@@ -11,7 +11,7 @@ mkDerivation rec {
   src = fetchgit {
     url = "http://github.com/NixOS/cabal2nix.git";
     rev = "8cfe61c222bd2750ef29f991a2a3ee353444e458";
-    sha256 = "10g7ppcflg1sgkxg8cp90p0mfqyk1ly375hicrb5s58m5w8ij086";
+    sha256 = "07n5am1ca00291qaarvwgzbkhwqc4f4wwhffycwwxaq46by34l7b";
     deepClone = true;
   };
   isExecutable = true;
