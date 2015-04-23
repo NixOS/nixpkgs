@@ -340,6 +340,7 @@
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix
+  ./services/security/hologram.nix
   ./services/security/munge.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
