@@ -41,7 +41,7 @@ let
   hasOsd = hasServer;
   hasRadosgw = fcgi != null && expat != null && curl != null && libedit != null;
 
-  hasXio = (stdenv.isLinux || stdenv.isFreebsd) &&
+  hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
     versionAtLeast version "0.95" &&
     accelio != null && libibverbs != null && librdmacm != null;
 
