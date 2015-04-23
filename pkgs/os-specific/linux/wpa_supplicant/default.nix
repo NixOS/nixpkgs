@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  patches = [];
+  patches = [ ./0001-P2P-Validate-SSID-element-length-before-copying-it-C.patch ];
 
   postInstall = ''
     mkdir -p $out/share/man/man5 $out/share/man/man8
