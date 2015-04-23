@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
       (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
       (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
       (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
+      ./0013-xdg_config_dirs.patch
     ];
 
   preConfigure = ''
