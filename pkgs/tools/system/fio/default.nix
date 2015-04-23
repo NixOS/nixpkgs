@@ -1,15 +1,25 @@
-{ stdenv, fetchgit, libaio }:
+{ stdenv, fetchFromGitHub, libaio, zlib }:
+
+let version = "2.2.7"; in
 
 stdenv.mkDerivation rec {
-  name = "fio-2.0.8";
-  
-  src = fetchgit {
-    url = git://git.kernel.dk/fio.git;
-    rev = "cf9a74c8bd63d9db5256f1362885c740e11a1fe5";
-    sha256 = "b34de480bbbb9cde221d0c4557ead91790feb825a1e31c4013e222ee7f43e937";
+  name = "fio-${version}";
+
+  src = fetchFromGitHub {
+    owner = "axboe";
+    repo = "fio";
+    rev = "fio-${version}";
+    sha256 = "02k528n97xp1ly3d0mdn0lgwqlpn49b644696m75kcr0hn07382v";
   };
-  
-  buildInputs = [ libaio ];
+
+  buildInputs = [ libaio zlib ];
+
+  enableParallelBuilding = true;
+
+  configurePhase = ''
+    substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
+    ./configure
+  '';
 
   installPhase = ''
     make install prefix=$out
