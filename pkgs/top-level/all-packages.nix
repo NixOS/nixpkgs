@@ -6347,7 +6347,7 @@ let
   };
 
   libdbiDrivers = libdbiDriversBase.override {
-    inherit sqlite mysql;
+    inherit sqlite libmysql;
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
