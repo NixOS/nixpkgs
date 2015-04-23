@@ -702,6 +702,8 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
+  cabal2nix = haskellngPackages.callPackage ../development/tools/haskell/cabal2nix {};
+
   capstone = callPackage ../development/libraries/capstone { };
 
   catdoc = callPackage ../tools/text/catdoc { };

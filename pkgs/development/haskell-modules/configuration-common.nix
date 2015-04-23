@@ -773,36 +773,7 @@ self: super: {
   # Jailbreaking breaks the build.
   QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
 
-} // {
-
-  # Not on Hackage.
-  cabal2nix = self.mkDerivation {
-    pname = "cabal2nix";
-    version = "20150414";
-    src = pkgs.fetchgit {
-      url = "http://github.com/NixOS/cabal2nix.git";
-      rev = "d08c2970e9c74948e81e7b926b64e5d7d1dd07b7";
-      sha256 = "1rqibfhvkvmfxj9k92brz87b4l40w8d7mq1s7zgfnrmay6h0956a";
-      deepClone = true;
-    };
-    isLibrary = false;
-    isExecutable = true;
-    buildDepends = with self; [
-      aeson base bytestring Cabal containers deepseq-generics directory
-      filepath hackage-db lens monad-par monad-par-extras mtl pretty
-      process regex-posix SHA split transformers utf8-string cartel
-    ] ++ pkgs.lib.optional (pkgs.lib.versionOlder self.ghc.version "7.10") prettyclass;
-    testDepends = with self; [
-      aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory doctest filepath hackage-db hspec lens monad-par
-      monad-par-extras mtl pretty process QuickCheck
-      regex-posix SHA split transformers utf8-string
-    ];
-    buildTools = [ pkgs.gitMinimal ];
-    preConfigure = "runhaskell $setupCompileFlags generate-cabal-file >cabal2nix.cabal";
-    homepage = "http://github.com/NixOS/cabal2nix";
-    description = "Convert Cabal files into Nix build instructions";
-    license = pkgs.stdenv.lib.licenses.bsd3;
-  };
+  # Override the obsolete version from Hackage with our more up-to-date copy.
+  cabal2nix = pkgs.cabal2nix;
 
 }

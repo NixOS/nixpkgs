@@ -3157,7 +3157,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabalDb = callPackage ../development/tools/haskell/cabal-db {};
 
-  cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
+  cabal2nix = pkgs.cabal2nix;
 
   # Build a cabal package given a local .cabal file
   buildLocalCabalWithArgs = { src
