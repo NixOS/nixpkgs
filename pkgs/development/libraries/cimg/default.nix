@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = http://cimg.sourceforge.net/;
     license = licenses.cecill-c;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
