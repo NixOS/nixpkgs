@@ -1,6 +1,8 @@
-#! /bin/sh -eu
+#! /bin/sh
 
-set -o pipefail
+source $stdenv/setup
+
+set -euo pipefail
 
 src=$(realpath $1)
 out=$(realpath $2)
@@ -38,6 +40,15 @@ EOF
 
 export CARGO_HOME=$out
 cd $src
+
+set +u
+substituteInPlace Cargo.lock \
+    --replace "registry+https://github.com/rust-lang/crates.io-index" \
+              "registry+file:///proc/self/cwd/cargo-rust-registry"
+set -u
+
+eval "$cargoUpdateHook"
+
 cargo fetch --verbose
 
 # TODO: check that Cargo.lock exists, and hasn't changed

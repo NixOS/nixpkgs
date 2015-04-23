@@ -15,7 +15,15 @@ buildRustPackage rec {
     leaveDotGit = true;
   };
 
-  depsSha256 = "1yi39asmnrya8w83jrjxym658cf1a5ffp8ym8502rqqvx30y0yx4";
+  cargoUpdateHook = ''
+    # Updating because version 2.1.4 has an invalid Cargo.toml
+    cargo update -p libressl-pnacl-sys --precise 2.1.5
+
+    # Updating because version 0.1.3 has a build failure with recent rustc
+    cargo update -p threadpool --precise 0.1.4
+  '';
+
+  depsSha256 = "12d2v4b85qabagrypvqiam2iybd4jwcg0sky0gqarfhjh2dhwfm6";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
 

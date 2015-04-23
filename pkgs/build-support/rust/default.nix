@@ -1,5 +1,5 @@
 { stdenv, cacert, git, rustc, cargo, rustRegistry }:
-{ name, src, depsSha256, buildInputs ? [], ... } @ args:
+{ name, src, depsSha256, buildInputs ? [], cargoUpdateHook ? "", ... } @ args:
 
 let
   fetchDeps = import ./fetchcargo.nix {
@@ -7,12 +7,12 @@ let
   };
 
   cargoDeps = fetchDeps {
-    inherit name src;
+    inherit name src cargoUpdateHook;
     sha256 = depsSha256;
   };
 
 in stdenv.mkDerivation (args // {
-  inherit cargoDeps rustRegistry;
+  inherit cargoDeps rustRegistry cargoUpdateHook;
 
   buildInputs = [ git cargo rustc ] ++ buildInputs;
 
@@ -23,8 +23,15 @@ in stdenv.mkDerivation (args // {
     (
         cd $sourceRoot
         ln -s $rustRegistry ./cargo-rust-registry
-        cargo clean
+
+        substituteInPlace Cargo.lock \
+            --replace "registry+https://github.com/rust-lang/crates.io-index" \
+                      "registry+file:///proc/self/cwd/cargo-rust-registry"
+
+        eval "$cargoUpdateHook"
+
         cargo fetch
+        cargo clean
     )
   '' + (args.postUnpack or "");
 
