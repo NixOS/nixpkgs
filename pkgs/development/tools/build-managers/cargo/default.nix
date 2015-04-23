@@ -23,7 +23,7 @@ buildRustPackage rec {
     cargo update -p threadpool --precise 0.1.4
   '';
 
-  depsSha256 = "12d2v4b85qabagrypvqiam2iybd4jwcg0sky0gqarfhjh2dhwfm6";
+  depsSha256 = "1gj3mnjj17h5p0r1jcm3m3pm3p3l1rbfdz3l7v1cykng78dsabnq";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
 

@@ -11,8 +11,16 @@ let
     sha256 = depsSha256;
   };
 
+  # The following is the directory name cargo creates when the registry index
+  # URL is file:///dev/null
+  #
+  # It's OK to use /dev/null as the URL because by the time we do this, cargo
+  # won't attempt to update the registry anymore, so the URL is more or less
+  # irrelevant
+  registryIndexDirName = "-ba82b75dd6681d6f";
+
 in stdenv.mkDerivation (args // {
-  inherit cargoDeps rustRegistry cargoUpdateHook;
+  inherit cargoDeps rustRegistry;
 
   patchRegistryDeps = ./patch-registry-deps;
 
@@ -22,21 +30,26 @@ in stdenv.mkDerivation (args // {
 
   postUnpack = ''
     echo "Using cargo deps from $cargoDeps"
-    cp -r $cargoDeps deps
+
+    cp -r "$cargoDeps" deps
     chmod +w deps -R
 
-    export CARGO_HOME=$(realpath deps)
+    cat <<EOF > deps/config
+    [registry]
+    index = "file:///dev/null"
+    EOF
 
     echo "Using rust registry from $rustRegistry"
+
+    ln -s "$rustRegistry" "deps/registry/index/${registryIndexDirName}"
+
+    export CARGO_HOME="$(realpath deps)"
+
+    # Retrieved the Cargo.lock file which we saved during the fetch
+    mv deps/Cargo.lock $sourceRoot/
+
     (
         cd $sourceRoot
-        ln -s $rustRegistry ./cargo-rust-registry
-
-        substituteInPlace Cargo.lock \
-            --replace "registry+https://github.com/rust-lang/crates.io-index" \
-                      "registry+file:///proc/self/cwd/cargo-rust-registry"
-
-        eval "$cargoUpdateHook"
 
         cargo fetch
         cargo clean
@@ -46,9 +59,9 @@ in stdenv.mkDerivation (args // {
   prePatch = ''
     # Patch registry dependencies, using the scripts in $patchRegistryDeps
     (
-        cd ../deps/registry/src/*
-
         set -euo pipefail
+
+        cd ../deps/registry/src/*
 
         for script in $patchRegistryDeps/*; do
           # Run in a subshell so that directory changes and shell options don't

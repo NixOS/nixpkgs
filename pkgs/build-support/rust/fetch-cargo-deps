@@ -12,52 +12,108 @@ echo "Fetching $src to $out"
 mkdir $out
 
 # Configure cargo to fetch from a local copy of the crates.io registry
-#
-# Unfortunately, `cargo fetch` will create an output directory named after a
-# hash of the registry index URL.
-#
-# This makes things difficult for us because we don't want our output to change
-# just because the path to the registry changed, otherwise we'd have to update
-# all deps' SHA256 hashes whenever we simply update the registry to a newer
-# commit.
-#
-# Also, since cargo doesn't seem to support relative URLs in the format
-# file://../path, we use a hack to make sure the registry index path/URL is
-# always the same: we'll create a symlink in the current working directory to
-# the real registry path, while pointing cargo to the following fixed absolute
-# path:
-#
-# file:///proc/self/cwd/symlink-name
 
-ln -s $rustRegistry $src/cargo-rust-registry
+echo "Using rust registry from $rustRegistry"
 
-# TODO: replace /proc/self/cwd hack with normal relative path. Probably
-# needs cargo fix.
 cat <<EOF > $out/config
 [registry]
-index = "file:///proc/self/cwd/cargo-rust-registry"
+index = "file://$rustRegistry"
 EOF
 
 export CARGO_HOME=$out
 cd $src
 
+if [[ ! -f Cargo.lock ]]; then
+    echo "ERROR: The Cargo.lock file doesn't exist"
+    echo
+    echo "Cargo.lock is needed to make sure that depsSha256 doesn't change"
+    echo "when the registry is updated."
+
+    exit 1
+fi
+
+# We need to do the following string replacement so that 'cargo fetch'
+# doesn't ignore the versions specified in Cargo.lock
 set +u
 substituteInPlace Cargo.lock \
     --replace "registry+https://github.com/rust-lang/crates.io-index" \
-              "registry+file:///proc/self/cwd/cargo-rust-registry"
+              "registry+file://$rustRegistry"
 set -u
 
+# Do any possible 'cargo update -p <pkgName> --precise <version>' ad-hoc updates
 eval "$cargoUpdateHook"
 
+# Do the fetch
 cargo fetch --verbose
 
-# TODO: check that Cargo.lock exists, and hasn't changed
-# TODO: this should be done by cargo itself
+# Now that we have fetched everything, let's make the output deterministic
 
-# Make it deterministic
+# Cargo uses the following directory structure for fetched data, where
+# $indexHash is a hash of the registry index URL:
+#
+#
+# /config:
+#
+#     Cargo config file. We'll delete this because it's not deterministic,
+#     and instead recreate it just before running 'cargo build'.
+#
+# /registry/cache/$indexHash/:
+#
+#     This is where tarballs of registry package dependencies are kept
+#     We'll need to keep this, but make sure $indexHash is a fixed name.
+#
+# /registry/index/$indexHash/:
+#
+#     A copy of the registry index is kept here. We can delete this, and
+#     instead, just before running 'cargo build', we'll symlink this
+#     directory to our static copy of the registry in the Nix store.
+#
+# /registry/src/$indexHash/{pkgName-pkgVersion}/:
+#
+#     Here cargo keeps extracted sources of the cached tarballs.
+#     We'll just delete this because cargo will re-populate them from the
+#     tarballs.
+#
+# /git/db/{domain-hash}/:
+#
+#     Here cargo keeps the `.git` directories of git dependencies.
+#     We'll need to keep these, but make them deterministic.
+#
+# /git/checkouts/{domain-hash}/{branchName}/:
+#
+#     Here cargo keeps checked-out sources of the git dependencies.
+#     We can delete this, because cargo will re-populate them from the above
+#     `.git` directories.
+#
+# Let's start
+
+# Remove cargo config file, which points to the ever-changing registry
+rm $out/config
+
+# Save the Cargo.lock file into the output, so that we don't have to do another
+# 'cargo update' during the build (which would try to access the network) for
+# any ad-hoc package updates (through $cargoUpdateHook).
+#
+# We need to replace the rustRegistry URL with something deterministic.
+# Since the URL won't actually be accessed anymore, it's fine to use /dev/null.
+
+set +u
+substituteInPlace Cargo.lock \
+    --replace "registry+file://$rustRegistry" \
+              "registry+file:///dev/null"
+set -u
+mv Cargo.lock $out/
+
+# The following is the $indexHash cargo uses for the registry index when
+# its URL is file:///dev/null, which is the registry index URL we use to make
+# sure our output is deterministic.
+
+registryIndexDirName="-ba82b75dd6681d6f"
+mv $out/registry/cache/* $out/registry/cache/$registryIndexDirName
 
 # The registry index changes all the time, so it's not deterministic
-rm -rf $out/registry/index
+# We'll symlink it before running 'cargo build'
+rm -rf $out/registry/index/*
 
 # Make git DBs deterministic
 # TODO: test with git submodules
@@ -83,31 +139,22 @@ rm -rf $out/registry/index
             git branch -rD "$branch" >&2
         done
 
-        # Remove tags that don't point to any HEAD
+        # Remove all tags
         git tag | while read tag; do
-            rev="$(git rev-parse $tag)"
-            if [[ $revs != *" $rev"* ]]; then
-                git tag -d "$tag" >&2
-            fi
+            git tag -d "$tag" >&2
         done
 
-        # Remove branches that don't point to any HEAD
+        # Remove all local branches
         branchrefs=()
         eval "$(git for-each-ref --shell --format='branchrefs+=(%(refname))' refs/heads/)"
 
         for branchref in "${branchrefs[@]}"; do
-            echo "Examining $branchref"
-            rev="$(git rev-parse "$branchref")"
-            echo "Has rev $rev"
-            echo "List of revs: $revs"
-            if [[ $revs != *" $rev"* ]]; then
-                echo "Deleting $branchref"
-                git update-ref -d "$branchref" >&2
-            fi
+            git update-ref -d "$branchref" >&2
         done
 
+        # Create ad-hoc branches for the revs we need
         echo "$revs" | while read rev; do
-            echo "git branch b_$rev $rev"
+            echo "Creating git branch b_$rev $rev"
             git branch b_$rev $rev
         done
 
