@@ -20,7 +20,7 @@ let snapshotHash = if stdenv.system == "i686-linux"
 in
 
 stdenv.mkDerivation {
-  inherit name version meta setupHook;
+  inherit name version meta;
 
   src = fetchurl {
     url = "https://static-rust-lang-org.s3.amazonaws.com/cargo-dist/${snapshotDate}/${snapshotName}";

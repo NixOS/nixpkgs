@@ -6,7 +6,7 @@ with ((import ./common.nix) { inherit stdenv; version = "2015-04-14"; });
 with rustPlatform;
 
 buildRustPackage rec {
-  inherit name version meta setupHook;
+  inherit name version meta;
 
   src = fetchgit {
     url = "https://github.com/rust-lang/cargo.git";

@@ -29,6 +29,4 @@
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux;
   };
-
-  setupHook = ./setup-hook.sh;
 }

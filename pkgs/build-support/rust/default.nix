@@ -19,6 +19,12 @@ in stdenv.mkDerivation (args // {
   configurePhase = args.configurePhase or "true";
 
   postUnpack = ''
+    echo "Using cargo deps from $cargoDeps"
+    cp -r $cargoDeps deps
+    chmod +w deps -R
+
+    export CARGO_HOME=$(realpath deps)
+
     echo "Using rust registry from $rustRegistry"
     (
         cd $sourceRoot
