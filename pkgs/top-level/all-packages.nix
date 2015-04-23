@@ -3749,8 +3749,7 @@ let
 
   uhc = callPackage ../development/compilers/uhc/default.nix ({
     stdenv = clangStdenv;
-    ghcWithPackages = haskellngPackages.ghcWithPackages;
-    inherit (haskellngPackages) shuffle hashable mtl network uhc-util uulib;
+    inherit (haskellPackages) ghcWithPackages;
   });
 
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
