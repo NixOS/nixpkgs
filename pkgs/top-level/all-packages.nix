@@ -8565,6 +8565,7 @@ let
     pythonPackages = python2Packages;
     kerberos = heimdal;
     libgcrypt = libgcrypt_1_6;
+    gnutls = gnutls33;
     cups = if stdenv.isDarwin then null else cups;
     pam = if stdenv.isDarwin then null else pam;
     libaio = if stdenv.isDarwin then null else libaio;
