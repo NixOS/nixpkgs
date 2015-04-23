@@ -12524,6 +12524,8 @@ let
 
   compton = callPackage ../applications/window-managers/compton { };
 
+  compton-git = callPackage ../applications/window-managers/compton/git.nix { };
+
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
