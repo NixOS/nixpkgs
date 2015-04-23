@@ -7,13 +7,13 @@
 { runCommand, fetchgit, git }:
 
 let
-  version = "2015-04-20";
+  version = "2015-04-23";
 
   src = fetchgit {
       url = git://github.com/rust-lang/crates.io-index.git;
 
-      rev = "c7112fed5f973e438bb600946016c5083e66b1c9";
-      sha256 = "0vyrz7d6zvh79hx5fg557g93r9qm40wx1g4hx7304lina4smk30h";
+      rev = "965b634156cc5c6f10c7a458392bfd6f27436e7e";
+      sha256 = "1hbl3g1d6yz6x2fm76dxmcn8rdrmri4l9n6flvv0pkn4hsid7zw1";
 
       # cargo needs the 'master' branch to exist
       leaveDotGit = true;
