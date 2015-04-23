@@ -728,7 +728,7 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
-  cabal2nix = haskellngPackages.callPackage ../development/tools/haskell/cabal2nix {};
+  cabal2nix = haskellPackages.callPackage ../development/tools/haskell/cabal2nix {};
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -1736,7 +1736,7 @@ let
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (pythonPackages) ipython;
-    inherit (haskellngPackages) ihaskell ghcWithPackages;
+    inherit (haskellPackages) ihaskell ghcWithPackages;
     packages = config.ihaskell.packages or (self: []);
   };
 
@@ -2362,9 +2362,9 @@ let
 
   pal = callPackage ../tools/misc/pal { };
 
-  pandoc = haskell-ng.lib.overrideCabal haskellngPackages.pandoc (drv: {
+  pandoc = haskell.lib.overrideCabal haskellPackages.pandoc (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
-    buildTools = drv.buildTools or [] ++ [haskellngPackages.hsb2hs];
+    buildTools = drv.buildTools or [] ++ [haskellPackages.hsb2hs];
     enableSharedExecutables = false;
     enableSharedLibraries = false;
     isLibrary = false;
@@ -3302,9 +3302,7 @@ let
   };
 
   # To expose more packages for Yi, override the extraPackages arg.
-  yi = callPackage ../applications/editors/yi/wrapper.nix {
-    haskellPackages = haskellngPackages;
-  };
+  yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
   youtube-dl = callPackage ../tools/misc/youtube-dl { };
 
@@ -3445,7 +3443,7 @@ let
 
   compcert = callPackage ../development/compilers/compcert {};
 
-  cryptol = haskellngPackages.cryptol;
+  cryptol = haskellPackages.cryptol;
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
@@ -7510,7 +7508,7 @@ let
   lambdabot = callPackage ../development/tools/haskell/lambdabot { };
 
   leksah = callPackage ../development/tools/haskell/leksah {
-    inherit (haskellngPackages) ghcWithPackages;
+    inherit (haskellPackages) ghcWithPackages;
   };
 
   librdf_raptor = callPackage ../development/libraries/librdf/raptor.nix { };
@@ -7989,7 +7987,7 @@ let
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : { };
-    inherit (haskell-ng.packages.ghc784) Agda;
+    inherit (haskell.packages.ghc784) Agda;
     inherit writeScriptBin;
   };
 
@@ -8000,7 +7998,7 @@ let
   agdaPrelude = callPackage ../development/libraries/agda/agda-prelude { };
 
   AgdaStdlib = callPackage ../development/libraries/agda/agda-stdlib {
-    inherit (haskellngPackages) ghcWithPackages;
+    inherit (haskellPackages) ghcWithPackages;
   };
 
   AgdaSheaves = callPackage ../development/libraries/agda/Agda-Sheaves { };
@@ -10385,7 +10383,7 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskell-ng.lib.overrideCabal haskellngPackages.darcs (drv: {
+  darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
     isLibrary = false;
@@ -10675,8 +10673,8 @@ let
 
     external = {
       # FIXME: revert when Agda and ghc-mod are fixed on 7.10
-      inherit (haskell-ng.packages.ghc784) ghc-mod Agda;
-      inherit (haskellngPackages) structured-haskell-mode;
+      inherit (haskell.packages.ghc784) ghc-mod Agda;
+      inherit (haskellPackages) structured-haskell-mode;
     };
   };
 
@@ -12676,7 +12674,7 @@ let
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
-    inherit (haskellngPackages) ghcWithPackages;
+    inherit (haskellPackages) ghcWithPackages;
     packages = self: [];
   };
 
