@@ -90,6 +90,7 @@
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hinton = "Tom Hinton <t@larkery.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
