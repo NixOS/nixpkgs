@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/mysql_install_db \
       --replace basedir=\"\" basedir=\"$out\"
+
+    # Remove superfluous files
+    rm -r $out/mysql-test $out/sql-bench $out/data # Don't need testing data
+    rm $out/share/man/man1/mysql-test-run.pl.1
+    rm $out/bin/rcmysql # Not needed with nixos units
+    rm $out/bin/mysqlbug # Encodes a path to gcc and not really useful
+    find $out/bin -name \*test\* -exec rm {} \;
   '';
 
   passthru.mysqlVersion = "5.5";
