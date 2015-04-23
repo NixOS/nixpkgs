@@ -34,7 +34,6 @@ stdenv.mkDerivation {
     pkgconfig
   ];
 
-  buildFlagsArray = ["CFLAGS=-O3 -fomit-frame-pointer"];
   installFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {
