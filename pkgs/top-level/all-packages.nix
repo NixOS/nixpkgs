@@ -3744,8 +3744,7 @@ let
   };
 
   jhc = callPackage ../development/compilers/jhc {
-    inherit (haskellPackages_ghc763) ghc binary zlib utf8String readline fgl
-      regexCompat HsSyck random;
+    inherit (haskell.packages.ghc763) ghcWithPackages;
   };
 
   uhc = callPackage ../development/compilers/uhc/default.nix ({
