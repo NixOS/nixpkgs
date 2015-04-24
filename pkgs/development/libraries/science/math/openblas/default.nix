@@ -3,22 +3,27 @@
 with stdenv.lib;
 
 let local = config.openblas.preferLocalBuild or false;
+    binary =
+      {
+        i686-linux = "32";
+        x86_64-linux = "64";
+      }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
     genericFlags =
       [
         "DYNAMIC_ARCH=1"
-        "TARGET=GENERIC"
         "NUM_THREADS=64"
+        "BINARY=${binary}"
       ];
     localFlags = config.openblas.flags or
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
 in
 stdenv.mkDerivation rec {
-  version = "0.2.12";
+  version = "0.2.14";
 
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
-    sha256 = "0389dnybfvag8zms5w1xlwcknq2l2am1vcfssjkax49r1rq2f5qg";
+    sha256 = "0av3pd96j8rx5i65f652xv9wqfkaqn0w4ma1gvbyz73i6j2hi9db";
     name = "openblas-${version}.tar.gz";
   };
 
