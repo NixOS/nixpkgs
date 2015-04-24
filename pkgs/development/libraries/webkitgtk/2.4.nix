@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mqlq4ivh921k92xjsp5pdvbg9vf75qjliqmx81qwrm2sjl4mvvg";
   };
 
-  patches = [ ./webcore-svg-libxml-cflags.patch ];
+  patches = [ ./webcore-svg-libxml-cflags.patch ./webkitgtk-2.4-gmutexlocker.patch ];
 
   CC = "cc";
 
