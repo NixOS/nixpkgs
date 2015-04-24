@@ -9926,6 +9926,8 @@ let
 
   posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
+  powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
+
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   pthreadmanpages = callPackage ../data/documentation/pthread-man-pages {
