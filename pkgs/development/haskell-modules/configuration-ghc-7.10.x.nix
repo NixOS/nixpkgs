@@ -33,40 +33,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # should be fixed in versions > 0.6
-  pandoc-citeproc = overrideCabal super.pandoc-citeproc (drv: {
-    patches = [
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/4e4f9c2.patch";
-         sha256 = "18b08k56g5q4zz6jxczkrddblyn52vmd0811n1icfdpzqhgykn4p";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/34cc147.patch";
-         sha256 = "09vrdvg5w14qckn154zlxvk6i2ikmmhpsl9mxycxkql3rl4dqam3";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/8242c70.patch";
-         sha256 = "1lqpwxzz2www81w4mym75z36bsavqfj67hyvzn20ffvxq42yw7ry";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/e59f88d.patch";
-         sha256 = "05699hj3qa2vrfdnikj7rzmc2ajrkd7p8yd4cjlhmqq9asq90xzb";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/ae6ca86.patch";
-         sha256 = "19cag39k5s7iqagpvss9c2ny5g0lwnrawaqcc0labihc1a181k8l";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/f5a9fc7.patch";
-         sha256 = "08lsinh3mkjpz3cqj5i1vcnzkyl07jp38qcjcwcw7m2b7gsjbpvm";
-      })
-      (pkgs.fetchpatch {
-         url = "https://github.com/jgm/pandoc-citeproc/commit/780a554.patch";
-         sha256 = "1kfn0mcp3vp32c9w8gyz0p0jv0xn90as9mxm8a2lmjng52jlzvy4";
-      })
-   ];
-  });
-
   # ekmett/linear#74
   linear = overrideCabal super.linear (drv: {
     prePatch = "sed -i 's/-Werror//g' linear.cabal";
