@@ -49,6 +49,15 @@ was accordingly renamed to <literal>bomi</literal>
     </para>
 </listitem>
 
+<listitem>Elm has been updated to v0.15, bringing significant
+changes. <literal>elm-server</literal> has been replaced by
+<literal>elm-reactor</literal>; <literal>elm-get</literal> by
+<literal>elm-package</literal>; and <literal>elm-package</literal> now
+contains the standalone <literal>elm</literal> command. See the
+announcements for Elm <link xlink:href="http://elm-lang.org/blog/announce/0.14.elm">v0.14</link>
+and <link xlink:href="http://elm-lang.org/blog/announce/0.15.elm">v0.15</link>
+for migration details.</listitem>
+
 </itemizedlist>
 </para>
 

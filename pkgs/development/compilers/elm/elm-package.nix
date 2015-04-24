@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "elm-package";
-  version = "0.4";
-  sha256 = "0vsq87imyvs1sa2n4z41b6qswy2cknxsg4prhwc9r7lvyljkmn03";
+  version = "0.5";
+  sha256 = "08wsl42gf5wf9pmsnld38p2m675ljihpzkrvn3dzh6zf0dwblm5n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

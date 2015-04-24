@@ -764,9 +764,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
 
-  Elm = callPackage ../development/compilers/elm/elm.nix {};
-
-  elmCompiler = callPackage ../development/compilers/elm/elm-compiler.nix {};
+  elmCompiler = callPackage ../development/compilers/elm/elm-compiler.nix {
+    cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
+  };
 
   elmMake = callPackage ../development/compilers/elm/elm-make.nix {
     optparseApplicative = self.optparseApplicative_0_10_0;
@@ -774,17 +774,12 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   elmPackage = callPackage ../development/compilers/elm/elm-package.nix {
     optparseApplicative = self.optparseApplicative_0_10_0;
+    cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
   };
-
-  elmServer = callPackage ../development/compilers/elm/elm-server.nix {};
 
   elmRepl = callPackage ../development/compilers/elm/elm-repl.nix {};
 
   elmReactor = callPackage ../development/compilers/elm/elm-reactor.nix {};
-
-  elmGet = callPackage ../development/compilers/elm/elm-get.nix {
-    optparseApplicative = self.optparseApplicative_0_10_0;
-  };
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 

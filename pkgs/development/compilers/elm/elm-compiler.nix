@@ -4,27 +4,28 @@
 , cmdargs, filemanip, filepath, HUnit, indents, languageEcmascript
 , languageGlsl, mtl, parsec, QuickCheck, testFramework
 , testFrameworkHunit, testFrameworkQuickcheck2, text, transformers
-, unionFind, unorderedContainers
+, unionFind, unorderedContainers, editDistance
 }:
 
 cabal.mkDerivation (self: {
   pname = "elm-compiler";
-  version = "0.14.1";
-  sha256 = "0my04mipgia5qw02nzzrzc4kq3vl7bv75rzrsmd2bdb2wll1k94f";
+  version = "0.15";
+  sha256 = "1g3q1z6bji1vx36kfkn8qayidds29b0jkk7k70sip4055jr4jc5n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson aesonPretty binary blazeHtml blazeMarkup cmdargs filepath
     indents languageEcmascript languageGlsl mtl parsec text
-    transformers unionFind unorderedContainers
+    transformers unionFind unorderedContainers editDistance
   ];
   testDepends = [
     aeson aesonPretty binary blazeHtml blazeMarkup cmdargs filemanip
     filepath HUnit indents languageEcmascript languageGlsl mtl parsec
     QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text transformers unionFind
-    unorderedContainers
+    unorderedContainers 
   ];
+  doCheck = false;
   meta = {
     homepage = "http://elm-lang.org";
     description = "Values to help with elm-package, elm-make, and elm-lang.org.";
