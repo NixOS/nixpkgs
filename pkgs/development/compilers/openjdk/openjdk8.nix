@@ -138,7 +138,7 @@ let
     homepage = http://openjdk.java.net/;
     license = licenses.gpl2;
     description = "The open-source Java Development Kit";
-    maintainers = with maintainers; [ cocreature edwtjo ];
+    maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;
   };
 

@@ -49,7 +49,6 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
-  cocreature = "Moritz Kiefer <moritz.kiefer@purelyfunctional.org>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
   copumpkin = "Dan Peebles <pumpkingod@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
