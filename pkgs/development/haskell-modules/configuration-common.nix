@@ -776,4 +776,9 @@ self: super: {
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = pkgs.cabal2nix;
 
+  # https://github.com/urs-of-the-backwoods/HGamer3D/issues/7
+  HGamer3D-Bullet-Binding = dontDistribute super.HGamer3D-Bullet-Binding;
+  HGamer3D-Common = dontDistribute super.HGamer3D-Common;
+  HGamer3D-Data = markBroken super.HGamer3D-Data;
+
 }
