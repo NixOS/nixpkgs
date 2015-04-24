@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
-let version = "2015c"; in
+let version = "2015c";
 
-stdenv.mkDerivation rec {
+self = stdenv.mkDerivation rec {
   name = "tzdata-${version}";
 
   srcs =
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     ];
 
   sourceRoot = ".";
-  outputs = [ "out" "lib" ];
+  #outputs = [ "out" "lib" ]; # TODO: maybe resurrect, and maybe install man pages?
 
-  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(lib)/lib MANDIR=$(TMPDIR)/man AWK=awk CFLAGS=-DHAVE_LINK=0";
+  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(out)/lib MANDIR=$(TMPDIR)/man AWK=awk CFLAGS=-DHAVE_LINK=0";
 
   postInstall =
     ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       ln -s . $out/share/zoneinfo/posix
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
 
-      mkdir -p "$lib/include"
-      cp tzfile.h "$lib/include/tzfile.h"
+      mkdir -p "$out/include"
+      cp tzfile.h "$out/include/tzfile.h"
     '';
 
   meta = {
@@ -37,3 +37,6 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+;in self // { lib = self; }
+
