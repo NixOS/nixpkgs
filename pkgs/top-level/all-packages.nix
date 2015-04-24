@@ -9604,6 +9604,8 @@ let
     guile = guile_1_8;
   };
 
+  trinity = callPackage ../os-specific/linux/trinity { };
+
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
   ubootChooser = name : if name == "upstream" then ubootUpstream
