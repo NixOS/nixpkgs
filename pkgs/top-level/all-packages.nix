@@ -7838,8 +7838,6 @@ let
 
   x265 = callPackage ../development/libraries/x265 { };
 
-  x265-hg = callPackage ../development/libraries/x265/hg.nix { };
-
   xapian = callPackage ../development/libraries/xapian { };
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
