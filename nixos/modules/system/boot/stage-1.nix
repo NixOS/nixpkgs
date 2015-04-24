@@ -60,9 +60,9 @@ let
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
 
       # Copy udev.
-      copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd
-      copy_bin_and_libs ${udev}/bin/udevadm
-      for BIN in ${udev}/lib/udev/*_id; do
+      copy_bin_and_libs ${udev.out}/lib/systemd/systemd-udevd
+      copy_bin_and_libs ${udev.out}/bin/udevadm
+      for BIN in ${udev.libudev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
       done
 
@@ -73,7 +73,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries for the binaries
       for BIN in $(find $out/{bin,sbin} -type f); do
@@ -140,9 +140,9 @@ let
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
-      cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
-      cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
+      cp -v ${udev.out}/lib/udev/rules.d/60-cdrom_id.rules $out/
+      cp -v ${udev.out}/lib/udev/rules.d/60-persistent-storage.rules $out/
+      cp -v ${udev.out}/lib/udev/rules.d/80-drivers.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       ${config.boot.initrd.extraUdevRulesCommands}
 

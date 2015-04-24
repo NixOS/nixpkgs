@@ -21,15 +21,15 @@ buildPythonPackage rec {
     sed -i -e 's|"multipath"|"${multipath_tools}/sbin/multipath"|' \
       blivet/devicelibs/mpath.py blivet/devices.py
     sed -i -e '/"wipefs"/ {
-      s|wipefs|${utillinux}/sbin/wipefs|
+      s|wipefs|${utillinux.bin}/sbin/wipefs|
       s/-f/--force/
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
-    sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
+    sed -i -r -e 's|"(u?mount)"|"${utillinux.bin}/bin/\1"|' blivet/util.py
     sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '' + (if useNixUdev then ''
     sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${udev}/lib/libudev.so.1"
+      c libudev = "${udev.libudev}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '' else ''
     sed -i \

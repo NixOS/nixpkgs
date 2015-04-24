@@ -79,8 +79,8 @@ stdenv.mkDerivation {
       ln -s ${nss}/lib/libsmime3.so $libdir/libsmime3.so.1d
 
       ${if stdenv.system == "x86_64-linux" then ''
-      ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
-      ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+      ln -s ${openssl.out}/lib/libssl.so $libdir/libssl.so.1.0.0
+      ln -s ${openssl.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
       ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
       '' else ''
@@ -91,7 +91,7 @@ stdenv.mkDerivation {
       ''}
 
       # Work around Spotify trying to open libudev.so.1 (which we don't have)
-      ln -s ${udev}/lib/libudev.so.1 $libdir/libudev.so.1
+      ln -s ${udev.libudev}/lib/libudev.so.1 $libdir/libudev.so.1
 
       mkdir -p $out/bin
 

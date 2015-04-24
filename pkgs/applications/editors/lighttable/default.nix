@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       --set-rpath ${libPath}:${stdenv.cc.cc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
       $out/LightTable/ltbin
 
-    ln -sf ${udev}/lib/libudev.so.1 $out/LightTable/libudev.so.0
+    ln -sf ${udev.libudev}/lib/libudev.so.1 $out/LightTable/libudev.so.0
 
     makeWrapper $out/LightTable/ltbin $out/bin/lighttable \
       --prefix "LD_LIBRARY_PATH" : $out/LightTable

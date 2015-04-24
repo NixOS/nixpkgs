@@ -144,7 +144,7 @@ let
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
 
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${udev}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${udev.libudev}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
