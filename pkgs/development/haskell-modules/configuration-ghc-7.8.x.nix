@@ -129,4 +129,7 @@ self: super: {
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
+  # needs mtl-compat to build with mtl 2.1.x
+  cgi = addBuildDepend super.cgi self.mtl-compat;
+
 }
