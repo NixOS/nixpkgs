@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "163l1y4p2a564d4ynfq3k3xf53j2v5s81blb6cvpn1y7rpxyccd0";
   };
 
-  outputs = [ "dev" "out" "libudev" "doc" ];
+  outputs = [ "out" "libudev" "doc" ]; # TODO: "dev"
+  # note: there are many references to ${systemd}/...
+  outputDev = "out";
+  propagatedOutputs = "libudev";
 
   patches =
     [ # These are all changes between upstream and
@@ -91,15 +94,15 @@ stdenv.mkDerivation rec {
     '';
 
   makeFlags = [
-    "udevlibexecdir=$(libudev)/lib"
+    "udevlibexecdir=$(libudev)/lib/udev"
     # udev rules refer to $out, and anything but libs should probably go to $out
-    "udevrulesdir=$(out)/lib/rules.d"
-    "udevhwdbdir=$(out)/lib/hwdb.d"
+    "udevrulesdir=$(out)/lib/udev/rules.d"
+    "udevhwdbdir=$(out)/lib/udev/hwdb.d"
   ];
 
   # This is needed because systemd uses the gold linker, which doesn't
   # yet have the wrapper script to add rpath flags automatically.
-  NIX_LDFLAGS = "-rpath ${pam.out}/lib -rpath ${libcap.out}/lib -rpath ${acl.out}/lib -rpath ${stdenv.cc.cc}/lib";
+  NIX_LDFLAGS = "-rpath ${pam.out}/lib -rpath ${libcap.out}/lib -rpath ${acl.out}/lib -rpath ${stdenv.cc.cc.lib}/lib";
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
@@ -134,6 +137,9 @@ stdenv.mkDerivation rec {
       # sysinit.target).
       mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/
 
+      mkdir -p $out/example/systemd
+      mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+      mv $out/lib/systemd/{system,user} $out/example/systemd
 
       rm -rf $out/etc/systemd/system
 
@@ -156,8 +162,11 @@ stdenv.mkDerivation rec {
       mkdir -p "$libudev/lib"
       mv "$out"/lib/lib{,g}udev* "$libudev/lib/"
 
-      for i in "$libudev"/lib/*.la "$out"/lib/pkgconfig/*udev*.pc; do
+      for i in "$libudev"/lib/*.la; do
         substituteInPlace $i --replace "$out" "$libudev"
+      done
+      for i in "$out"/lib/pkgconfig/{libudev,gudev-1.0}.pc; do
+        substituteInPlace $i --replace "libdir=$out" "libdir=$libudev"
       done
     ''; # */
 
@@ -168,12 +177,6 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath `patchelf --print-rpath "$f"`':${extraLibs}' "$f"
       done
     '';
-
-  # propagate the libudev output
-  postPhases = "postPostFixup";
-  postPostFixup = ''
-    echo -n " $libudev" >> "$dev"/nix-support/propagated-*build-inputs
-  '';
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
@@ -190,3 +193,5 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
   };
 }
+
+
