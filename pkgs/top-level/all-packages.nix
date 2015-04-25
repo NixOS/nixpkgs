@@ -7600,7 +7600,9 @@ let
 
   speech_tools = callPackage ../development/libraries/speech-tools {};
 
-  speex = callPackage ../development/libraries/speex { };
+  speex = callPackage ../development/libraries/speex {
+    fftw = fftwFloat;
+  };
 
   speexdsp = callPackage ../development/libraries/speexdsp {
     fftw = fftwFloat;
