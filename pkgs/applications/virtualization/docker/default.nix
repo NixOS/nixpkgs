@@ -3,11 +3,11 @@ btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "0j1wlh0jj84ly3iykp2iqvm01g5il5v56fvlrfvx6qsslyrs35yg";
+    sha256 = "03nzhikxp60falshzyk6ip8g9fhrczhvnvgmzqr8bny6w8x1v84b";
   };
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs ./project
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="c78088f"
-    ./project/make.sh dynbinary
+    export DOCKER_GITCOMMIT="03nzhikx"
+    ./hack/make.sh dynbinary
   '';
 
   installPhase = ''
