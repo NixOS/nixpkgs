@@ -6279,6 +6279,8 @@ let
     automake = automake112x; # fails with 13 and 14
   };
 
+  libasyncns = callPackage ../development/libraries/libasyncns { };
+
   libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
 
   libav = libav_11; # branch 11 is API-compatible with branch 10
