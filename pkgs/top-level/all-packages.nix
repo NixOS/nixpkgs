@@ -3878,7 +3878,6 @@ let
   julia02 = callPackage ../development/compilers/julia/0.2.nix {
     liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
-    openblas = openblas_0_2_2;
     suitesparse = suitesparse_4_2;
   };
 
@@ -13439,16 +13438,9 @@ let
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
-  # julia is pinned to specific versions of openblas, so keep old versions
-  # until they aren't needed. The un-versioned attribute may continue to track
-  # upstream development.
   openblas = callPackage ../development/libraries/science/math/openblas {
     liblapack = liblapack_3_5_0;
   };
-  openblas_0_2_10 = callPackage ../development/libraries/science/math/openblas/0.2.10.nix {
-    liblapack = liblapack_3_5_0;
-  };
-  openblas_0_2_2 = callPackage ../development/libraries/science/math/openblas/0.2.2.nix { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
