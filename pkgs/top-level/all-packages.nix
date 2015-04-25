@@ -1050,6 +1050,12 @@ let
 
   cudatoolkit = cudatoolkit5;
 
+  curlFull = curl.override {
+    idnSupport = true;
+    ldapSupport = true;
+    gssSupport = true;
+  };
+
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
     zlibSupport = true;
@@ -10227,7 +10233,7 @@ let
   };
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
-  
+
   dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
 
   deadbeef = callPackage ../applications/audio/deadbeef {
