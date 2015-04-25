@@ -7602,6 +7602,10 @@ let
 
   speex = callPackage ../development/libraries/speex { };
 
+  speexdsp = callPackage ../development/libraries/speexdsp {
+    fftw = fftwFloat;
+  };
+
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
   sphinxsearch = callPackage ../servers/search/sphinxsearch { };
