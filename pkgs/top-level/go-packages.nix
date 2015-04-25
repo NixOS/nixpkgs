@@ -192,6 +192,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  confd = buildGoPackage rec {
+    rev = "v0.9.0";
+    name = "confd-${rev}";
+    goPackagePath = "github.com/kelseyhightower/confd";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kelseyhightower";
+      repo = "confd";
+      sha256 = "0rz533575hdcln8ciqaz79wbnga3czj243g7fz8869db6sa7jwlr";
+    };
+    subPackages = [ "./" ];
+  };
+
   dbus = buildGoPackage rec {
     rev = "88765d85c0fdadcd98a54e30694fa4e4f5b51133";
     name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
@@ -679,6 +693,20 @@ let self = _self // overrides; _self = with self; {
       repo = "go-vhost";
       sha256 = "1rway6sls6fl2s2jk20ajj36rrlzh9944ncc9pdd19kifix54z32";
     };
+  };
+
+  grafana = buildGoPackage rec {
+    version = "2.0.0-beta1";
+    name = "grafana-v${version}";
+    goPackagePath = "github.com/grafana/grafana";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    src = fetchFromGitHub {
+      rev = "v${version}";
+      owner = "grafana";
+      repo = "grafana";
+      sha256 = "1b263qj7n72xc5qn0hhrlivqrd0zc8746c9ic11kdxyf81nx4lza";
+    };
+    subPackages = [ "./" ];
   };
 
   hologram = buildGoPackage rec {
@@ -1175,6 +1203,20 @@ let self = _self // overrides; _self = with self; {
       sha256 = "01k0c2g395j65vm1w37mmrfkg6nm900khjrrizzpmx8f8yf20dky";
     };
     buildInputs = [ pkgconfig libusb ];
+  };
+
+  vulcand = buildGoPackage rec {
+    rev = "v0.8.0-beta.3";
+    name = "vulcand-${rev}";
+    goPackagePath = "github.com/mailgun/vulcand";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mailgun";
+      repo = "vulcand";
+      sha256 = "08mal9prwlsav63r972q344zpwqfql6qw6v4ixbn1h3h32kk3ic6";
+    };
+    subPackages = [ "./" ];
   };
 
   websocket = buildGoPackage rec {
