@@ -103,6 +103,10 @@ let
           + " -I${pango}/include/pango-1.0";
       };
 
+      kfilemetadata = super.kfilemetadata // {
+        buildInputs = with pkgs; super.kfilemetadata.buildInputs ++ [ attr ];
+      };
+
       kwin = with pkgs; super.kwin // {
         buildInputs = with xlibs;
           super.kwin.buildInputs ++ [ libICE libSM libXcursor ];
@@ -146,6 +150,10 @@ let
 
       sddm-kcm = with pkgs; super.sddm-kcm // {
         buildInputs = with xlibs; super.sddm-kcm.buildInputs ++ [libXcursor];
+      };
+
+      user-manager = super.user-manager // {
+        buildInputs = with pkgs; super.user-manager.buildInputs ++ [ libpwquality ];
       };
 
     };
