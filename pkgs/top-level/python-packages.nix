@@ -2605,11 +2605,11 @@ let
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-0.4.0";
+    name = "docker-py-1.1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      md5 = "21ab8fd729105487e6423b654d6c0860";
+      md5 = "b44f34530a21ed1129887f9a8b01ecec";
     };
 
     propagatedBuildInputs = with self; [ six requests websocket_client ];
@@ -4786,27 +4786,27 @@ let
     };
   });
 
-  fig = buildPythonPackage rec {
-    name = "fig-1.0.1";
+  docker_compose = buildPythonPackage rec {
+    name = "docker-compose-1.2.0rc2";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/f/fig/${name}.tar.gz";
-      md5 = "e1c82296fe2362fae21b3cb0dfee8cb2";
+      url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
+      md5 = "311ec5023e51097ca3acbf37fac062bd";
     };
 
     propagatedBuildInputs = with self; [
-      six requests2 pyyaml texttable docopt
+      six requests pyyaml texttable docopt docker
+      (requests2.override {
+        src = pkgs.fetchurl {
+          url = "https://pypi.python.org/packages/source/r/requests/requests-2.5.3.tar.gz";
+          md5 = "23bf4fcc89ea8d353eb5353bb4a475b1";
+        };
+      })
       (dockerpty.override {
         src = pkgs.fetchurl {
           url = "https://pypi.python.org/packages/source/d/dockerpty/dockerpty-0.3.2.tar.gz";
           md5 = "1f97b24d2f4b2c345f176f91655002dd";
-        };
-      })
-      (docker.override {
-        src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/d/docker-py/docker-py-0.5.3.tar.gz";
-          md5 = "809b7b8c144f5e37787e72b030ee353f";
         };
       })
       (websocket_client.override {
