@@ -7259,6 +7259,8 @@ let
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
+  pcg_c = callPackage ../development/libraries/pcg-c { };
+
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
   };
