@@ -5323,6 +5323,24 @@ let
     };
   };
 
+  gmpy = buildPythonPackage rec {
+    name = "gmpy-1.17";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gmpy/gmpy-1.17.zip";
+      md5 = "2bf419076b06e107167e219f60ac6d27";
+    };
+
+    buildInputs = [ pkgs.gmp ];
+
+    meta = with stdenv.lib; {
+      description = "General MultiPrecision arithmetic for Python";
+      license     = licenses.lgpl;
+      maintainers = with maintainers; [ offline ];
+      platforms   = platforms.unix;
+    };
+  };
+
   goobook = buildPythonPackage rec {
     name = "goobook-1.5";
     disabled = isPy3k;
