@@ -4307,7 +4307,7 @@ let
     };
 
     propagatedBuildInputs = with self; [ django_1_7 ];
-    
+
     # tests appear to be broken on 0.6.1 at least
     doCheck = ( version != "0.6.1" );
 
@@ -6956,12 +6956,12 @@ let
   nameparser = buildPythonPackage rec {
     name = "nameparser-${version}";
     version = "0.3.4";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nameparser/${name}.tar.gz";
       sha256 = "1zi94m99ziwwd6kkip3w2xpnl05r2cfv9iq68inz7np81c3g8vag";
     };
-    
+
     meta = {
       description = "A simple Python module for parsing human names into their individual components";
       homepage = https://github.com/derek73/python-nameparser;
@@ -13867,6 +13867,26 @@ let
     };
   };
 
+  graphite_beacon = buildPythonPackage rec {
+    name = "graphite_beacon-0.22.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/graphite_beacon/${name}.tar.gz";
+      md5 = "3d7b2bf8a41b6c3ec5ba2c14db321096";
+    };
+
+    propagatedBuildInputs = [ self.tornado ];
+
+    preBuild = "> requirements.txt";
+
+    meta = {
+      description = "A simple alerting application for Graphite metrics";
+      homepage = https://github.com/klen/graphite-beacon;
+      maintainers = [ maintainers.offline ];
+      license = licenses.mit;
+    };
+  };
+
   graphite_influxdb = buildPythonPackage rec {
     name = "graphite-influxdb-0.3";
 
@@ -14715,7 +14735,7 @@ let
       licences = [ licenses.mit licenses.gpl2 ];
     };
   };
-  
+
   dicttoxml = buildPythonPackage rec {
     name = "dicttoxml-1.6.4";
 
