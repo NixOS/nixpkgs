@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rippled-${version}";
-  version = "0.27.3-sp2";
+  version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "ripple";
     repo = "rippled";
     rev = version;
-    sha256 = "1q4i87cc7yks9slpgrfnlimngm45n3h035ssjvywmfwhhh7r9m3y";
+    sha256 = "13xg2baqcf2h1ww2yk371r27726iq8xb4brsj9rqv692aviblqs3";
   };
 
   postPatch = ''
