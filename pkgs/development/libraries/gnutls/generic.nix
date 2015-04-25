@@ -23,16 +23,22 @@ stdenv.mkDerivation rec {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp trousers unbound ]
     ++ stdenv.lib.optional guileBindings guile;
-  # The paths for these libraries are not specified in the .la and .pc files
-  propagatedBuildInputs = [ zlib gmp trousers unbound ];
 
   nativeBuildInputs = [ perl pkgconfig autoreconfHook ];
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+
+  # Fixup broken libtool and pkgconfig files
+  preFixup = ''
+    sed -e 's,-ltspi,-L${trousers}/lib -ltspi,' \
+        -e 's,-lz,-L${zlib}/lib -lz,' \
+        -e 's,-lgmp,-L${gmp}/lib -lgmp,' \
+        -i $out/lib/libgnutls.la $out/lib/pkgconfig/gnutls.pc
+  '';
 
   meta = with stdenv.lib; {
     description = "The GNU Transport Layer Security Library";
