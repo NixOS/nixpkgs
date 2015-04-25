@@ -50,6 +50,11 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9921
   mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
 
+  Extra = appendPatch super.Extra (pkgs.fetchpatch {
+    url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
+    sha256 = "193i1xmq6z0jalwmq0mhqk1khz6zz0i1hs6lgfd7ybd6qyaqnf5f";
+  });
+
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
