@@ -7822,6 +7822,8 @@ let
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
+  webrtc-audio-processing = callPackage ../development/libraries/webrtc-audio-processing { };
+
   wildmidi = callPackage ../development/libraries/wildmidi { };
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
