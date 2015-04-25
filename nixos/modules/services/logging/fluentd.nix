@@ -33,6 +33,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.fluentd}/bin/fluentd -c ${pkgs.writeText "fluentd.conf" cfg.config}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
   };
