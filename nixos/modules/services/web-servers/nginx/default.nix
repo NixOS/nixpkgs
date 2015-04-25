@@ -102,6 +102,7 @@ in
         '';
       serviceConfig = {
         ExecStart = "${nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
         RestartSec = "10s";
         StartLimitInterval = "1min";
