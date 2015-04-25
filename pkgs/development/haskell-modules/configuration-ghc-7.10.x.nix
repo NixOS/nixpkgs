@@ -126,6 +126,16 @@ self: super: {
     url = "https://patch-diff.githubusercontent.com/raw/mokus0/dependent-sum-template/pull/4.patch";
     sha256 = "1yb1ny4ckl4d3sf4xnvpbsa9rw2dficzgipijs5s3729dnsc3rb0";
   });
+  gitlib-libgit2 = appendPatch super.gitlib-libgit2 (pkgs.fetchpatch {
+    url = "https://github.com/mdorman/gitlib/commit/9acc64e97a7faefdae7d73bdc62ff6acaacda6fc.patch";
+    sha256 = "14gvavhnqf10n8b4f8pnr2zbq7smpkrvnkkl7ib5ix61i08ir89a";
+    stripLen = 1;
+  });
+  git-monitor = appendPatch super.git-monitor (pkgs.fetchpatch {
+    url = "https://github.com/mdorman/gitlib/commit/4f0944db2b4725e52b615ead8c28a1a925ce6c4a.patch";
+    sha256 = "14r8mqdrf7db6fcayf9i23lmrqm7ix2p5hjr77zs6zipb3k5ybxi";
+    stripLen = 1;
+  });
   mueval = appendPatch super.mueval (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/10.patch";
     sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
