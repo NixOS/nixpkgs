@@ -130,6 +130,10 @@ self: super: {
     url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/10.patch";
     sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
   });
+  present = appendPatch super.present (pkgs.fetchpatch {
+    url = "https://github.com/chrisdone/present/commit/6a61f099bf01e2127d0c68f1abe438cd3eaa15f7.patch";
+    sha256 = "1vn3xm38v2f4lzyzkadvq322f3s2yf8c88v56wpdpzfxmvlzaqr8";
+  });
 
   # Already applied in darcs repository.
   gnuplot = appendPatch super.gnuplot ./gnuplot-fix-new-time.patch;
