@@ -7631,7 +7631,7 @@ let
 
   libwpg = callPackage ../development/libraries/libwpg { };
 
-  libx86 = builderDefsPackage ../development/libraries/libx86 {};
+  libx86 = callPackage ../development/libraries/libx86 {};
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
