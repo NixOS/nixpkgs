@@ -195,6 +195,10 @@ let
         patches = [ ./ktexteditor/0001-no-qcoreapplication.patch ];
       };
 
+      networkmanager-qt = super.networkmanager-qt // {
+        propagatedBuildInputs = with pkgs; super.networkmanager-qt.propagatedBuildInputs ++ [ networkmanager ];
+      };
+
     };
 
   kf5 = generateCollection ./. {
