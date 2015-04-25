@@ -196,7 +196,7 @@ self: super: {
   edit-distance = let pkg = appendPatch super.edit-distance ./edit-distance-fix-boundaries.patch;
                   in appendPatch pkg (pkgs.fetchpatch {
                     url = "https://patch-diff.githubusercontent.com/raw/batterseapower/edit-distance/pull/3.patch";
-                    sha256 = "013x9za47vr9jx0liwgi8cdh2h2882a87h5nqvr41xqipzxfiyw1";
+                    sha256 = "0v47pa5ymh9f23bqpkdv3k7vnb6h3ssccdmjdylhs2ybarqzrcwh";
                   });
 
   # https://github.com/BNFC/bnfc/issues/137
