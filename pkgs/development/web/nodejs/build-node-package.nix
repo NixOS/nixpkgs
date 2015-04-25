@@ -64,7 +64,7 @@ let
             stdenv.lib.platforms.${removePrefix "!" entry} or [];
         in
           # Ignore unknown platforms
-          if filterPlatforms == [] then platforms
+          if filterPlatforms == [] then (if platforms == [] then nodejs.meta.platforms else platforms)
           else
             if hasPrefix "!" entry then
               subtractLists (intersectLists filterPlatforms nodejs.meta.platforms) platforms
