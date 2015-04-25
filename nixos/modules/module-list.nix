@@ -225,6 +225,7 @@
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/dd-agent.nix
+  ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
