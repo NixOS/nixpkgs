@@ -16,6 +16,8 @@ GEM
       elasticsearch
       fluentd (>= 0.10.43)
       patron (~> 0)
+    fluent-plugin-record-reformer (0.6.0)
+      fluentd
     fluentd (0.12.6)
       cool.io (>= 1.2.2, < 2.0.0)
       http_parser.rb (>= 0.5.1, < 0.7.0)
@@ -46,4 +48,5 @@ PLATFORMS
 
 DEPENDENCIES
   fluent-plugin-elasticsearch
+  fluent-plugin-record-reformer
   fluentd
