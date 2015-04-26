@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.celt-codec.org/;
     license     = licenses.bsd2;
     maintainers = with maintainers; [ codyopel raskin ];
-    platform    = platforms.unix;
+    platforms   = platforms.unix;
   };
 }
