@@ -8826,9 +8826,7 @@ let
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
 
-  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins {
-    jack2 = null;
-  };
+  alsaPlugins = callPackage ../os-specific/linux/alsa-plugins { };
 
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
 
