@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.ffado.org;
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = with maintainers; [ goibhniu wkennington ];
     platforms = platforms.linux;
   };
 }
