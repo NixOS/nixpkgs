@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, audiofile
+{ stdenv, fetchurl, pkgconfig, audiofile, libcap
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, x11 ? null, libXrandr ? null
@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in stdenv.lib.optional notMingw audiofile;
+  in [ libcap ]
+    ++ (stdenv.lib.optional notMingw audiofile);
 
   nativeBuildInputs = [ pkgconfig ] ++
     stdenv.lib.optional openglSupport [ mesa ];
