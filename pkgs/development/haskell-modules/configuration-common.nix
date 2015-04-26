@@ -782,4 +782,7 @@ self: super: {
   HGamer3D-Common = dontDistribute super.HGamer3D-Common;
   HGamer3D-Data = markBroken super.HGamer3D-Data;
 
+  # https://github.com/ndmitchell/shake/issues/206
+  shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
+
 }
