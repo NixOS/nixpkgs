@@ -8484,7 +8484,7 @@ let
     xlibs = null;
     coreaudio = null;
     esound = null;
-    jack2 = null;
+    libjack2 = null;
     avahi = null;
     lirc = null;
     bluez5 = null;
