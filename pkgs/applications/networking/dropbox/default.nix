@@ -96,7 +96,7 @@ in stdenv.mkDerivation {
     rm -fr "$out/${appdir}/plugins"
 
     find "$out/${appdir}" -type f -a -perm +0100 \
-      -print -exec patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} {} \;
+      -print -exec patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} {} \;
 
     RPATH=${ldpath}:${gcc.cc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"

@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   # wrappers add the glibc include as "-idirafter", the only way
   # we can make the glibc take priority is to -include errno.h.
   postPatch = if stdenv ? glibc && stdenv.glibc != null then ''
-    sed -i 's,$(HOSTCPPFLAGS),-include ${stdenv.glibc}/include/errno.h $(HOSTCPPFLAGS),' config.mk
+    sed -i 's,$(HOSTCPPFLAGS),-include ${stdenv.glibc.dev}/include/errno.h $(HOSTCPPFLAGS),' config.mk
   '' else "";
 
   patches = [ ./sheevaplug-sdio.patch ./sheevaplug-config.patch ];

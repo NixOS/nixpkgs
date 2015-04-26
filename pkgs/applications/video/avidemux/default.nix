@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     lame faad2 libvorbis yasm libvpx xvidcore libva
   ] ++ stdenv.lib.optional faacSupport faac;
 
-  cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include" +
+  cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc.dev}/include" +
     " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
     " -DSDL_INCLUDE_DIR=${SDL}/include/SDL";
 

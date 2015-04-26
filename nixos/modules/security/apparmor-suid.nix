@@ -28,7 +28,7 @@ with lib;
         capability setuid,
         network inet raw,
 
-        ${pkgs.glibc}/lib/*.so mr,
+        ${pkgs.glibc.out}/lib/*.so mr,
         ${pkgs.libcap}/lib/libcap.so* mr,
         ${pkgs.attr}/lib/libattr.so* mr,
 

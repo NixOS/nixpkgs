@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
-  postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc}/sbin/ldconfig";
+  postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
     ++ optional contribPlugins "--with-contrib-plugins";
 

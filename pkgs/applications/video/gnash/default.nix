@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     for lib in $libs; do
       echo -n "$lib " >> macros/libslist
     done
-    echo -n "${stdenv.glibc}/lib" >> macros/libslist
+    echo -n "${stdenv.glibc.out}/lib" >> macros/libslist
 
     # Make sure to honor $TMPDIR, for chroot builds.
     for file in configure gui/Makefile.in Makefile.in

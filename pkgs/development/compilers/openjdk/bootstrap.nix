@@ -20,7 +20,7 @@ runCommand "openjdk-bootstrap" {} ''
   mv openjdk-bootstrap $out
 
   for i in $out/bin/*; do
-    patchelf --set-interpreter ${glibc}/lib/ld-linux*.so.2 $i
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux*.so.2 $i
   done
 
   # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:

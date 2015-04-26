@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     ensureDir "$out/bin"
     rm "$out/usr/bin/SpiderOak"
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/opt/SpiderOak/lib/SpiderOak"
 
     RPATH=$out/opt/SpiderOak/lib:${ldpath}

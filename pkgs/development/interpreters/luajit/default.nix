@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString (stdenv.cc.libc != null)
   ''
     substituteInPlace Makefile \
-      --replace ldconfig ${stdenv.cc.libc}/sbin/ldconfig
+      --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig
   '';
 
   configurePhase = false;

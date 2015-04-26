@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       "--with-statedir=/var/lib/nfs"
       "--with-tirpcinclude=${libtirpc}/include/tirpc"
     ]
-    ++ stdenv.lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc}/bin/rpcgen";
+    ++ stdenv.lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
 
   patchPhase =
     ''

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       
       for i in emulator emulator-arm emulator-mips emulator-x86 mksdcard
       do
-          patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+          patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
           patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
       done
       
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
         
         for i in emulator64-arm emulator64-mips emulator64-x86
         do
-            patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
             patchelf --set-rpath ${stdenv.cc.cc}/lib64 $i
         done
       ''}
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
         # The monitor requires some more patching
         
         cd lib/monitor-x86
-        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 monitor
+        patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux.so.2 monitor
         patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
         # The monitor requires some more patching
         
         cd lib/monitor-x86_64
-        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 monitor
+        patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 monitor
         patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
         
         wrapProgram `pwd`/monitor \

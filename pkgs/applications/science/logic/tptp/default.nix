@@ -65,7 +65,7 @@ rec {
   '' ["defEnsureDir" "minInit"];
 
   patchBinaries = a.fullDepEntry ''
-    patchelf --set-interpreter "${pkgsi686Linux.glibc}"/lib/ld-linux.so.* \
+    patchelf --set-interpreter "${pkgsi686Linux.glibc.out}"/lib/ld-linux.so.* \
       "Scripts/tptp4X"
   '' ["addInputs"];
       

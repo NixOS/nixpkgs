@@ -28,7 +28,7 @@ stdenv.mkDerivation {
       ''
         for i in adb fastboot
         do
-            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
             patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib $i
         done
     ''}

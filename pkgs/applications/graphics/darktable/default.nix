@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include"
-    "-DPTHREAD_LIBRARY=${stdenv.glibc}/lib/libpthread.so"
+    "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc.dev}/include"
+    "-DPTHREAD_LIBRARY=${stdenv.glibc.out}/lib/libpthread.so"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBINARY_PACKAGE_BUILD=1"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"

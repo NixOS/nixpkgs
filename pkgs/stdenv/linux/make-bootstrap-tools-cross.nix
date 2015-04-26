@@ -130,20 +130,20 @@ rec {
         mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
-        cp -d ${glibc}/lib/ld-*.so* $out/lib
-        cp -d ${glibc}/lib/libc*.so* $out/lib
-        cp -d ${glibc}/lib/libc_nonshared.a $out/lib
-        cp -d ${glibc}/lib/libm*.so* $out/lib
-        cp -d ${glibc}/lib/libdl*.so* $out/lib
-        cp -d ${glibc}/lib/librt*.so*  $out/lib
-        cp -d ${glibc}/lib/libpthread*.so* $out/lib
-        cp -d ${glibc}/lib/libnsl*.so* $out/lib
-        cp -d ${glibc}/lib/libutil*.so* $out/lib
-        cp -d ${glibc}/lib/libnss*.so* $out/lib
-        cp -d ${glibc}/lib/libresolv*.so* $out/lib
-        cp -d ${glibc}/lib/crt?.o $out/lib
+        cp -d ${glibc.out}/lib/ld-*.so* $out/lib
+        cp -d ${glibc.out}/lib/libc*.so* $out/lib
+        cp -d ${glibc.out}/lib/libc_nonshared.a $out/lib
+        cp -d ${glibc.out}/lib/libm*.so* $out/lib
+        cp -d ${glibc.out}/lib/libdl*.so* $out/lib
+        cp -d ${glibc.out}/lib/librt*.so*  $out/lib
+        cp -d ${glibc.out}/lib/libpthread*.so* $out/lib
+        cp -d ${glibc.out}/lib/libnsl*.so* $out/lib
+        cp -d ${glibc.out}/lib/libutil*.so* $out/lib
+        cp -d ${glibc.out}/lib/libnss*.so* $out/lib
+        cp -d ${glibc.out}/lib/libresolv*.so* $out/lib
+        cp -d ${glibc.out}/lib/crt?.o $out/lib
         
-        cp -rL ${glibc}/include $out
+        cp -rL ${glibc.dev}/include $out
         chmod -R u+w $out/include
         
         # Hopefully we won't need these.

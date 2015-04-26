@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
     ln -s "$out/${appdir}/CopyConsole" "$out/bin/copy_console"
     ln -s "$out/${appdir}/CopyAgent" "$out/bin/copy_agent"
     ln -s "$out/${appdir}/CopyCmd" "$out/bin/copy_cmd"
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/${appdir}/CopyConsole"
 
     RPATH=${gcc.cc}/lib:$out/${appdir}

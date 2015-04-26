@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       "-Dinstallstyle=lib/perl5"
       "-Duseshrplib"
       "-Dlocincpth=${libc}/include"
-      "-Dloclibpth=${libc}/lib"
+      "-Dloclibpth=${libc.out}/lib"
     ]
     ++ lib.optional enableThreading "-Dusethreads";
 

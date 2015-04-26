@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     cp $permission $out/share/df_linux/nix_permission
 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 $out/share/df_linux/libs/Dwarf_Fortress
 
     # Store new hash for dwarf-therapist
     echo $(md5sum $out/share/df_linux/libs/Dwarf_Fortress | cut -c1-8) > $out/share/df_linux/hash.md5.patched

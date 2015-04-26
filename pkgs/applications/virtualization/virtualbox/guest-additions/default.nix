@@ -63,10 +63,10 @@ stdenv.mkDerivation {
     for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} lib/VBoxGuestAdditions/mount.vboxsf
     do
         ${if stdenv.system == "i686-linux" then ''
-          patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $i
+          patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $i
         ''
         else if stdenv.system == "x86_64-linux" then ''
-          patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $i
+          patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 $i
         ''
         else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
         }

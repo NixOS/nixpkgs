@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs . contrib
 
-    export PATH="$PATH:${stdenv.cc.libc}/sbin"
+    export PATH="$PATH:${stdenv.cc.libc.bin}/bin"
 
     # ldconfig doesn't seem to ever work on NixOS; system-wide ldconfig cache
     # is probably not what we want anyway on non-NixOS

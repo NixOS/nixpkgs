@@ -104,7 +104,7 @@ in
           /dev/null rw,
           /dev/urandom r,
 
-          ${pkgs.glibc}/lib/*.so mr,
+          ${pkgs.glibc.out}/lib/*.so mr,
           ${pkgs.tzdata}/share/zoneinfo/** r,
 
           ${dnscrypt-proxy}/share/dnscrypt-proxy/** r,

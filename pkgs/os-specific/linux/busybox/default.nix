@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
     make oldconfig
   '' + lib.optionalString useUclibc ''
-    makeFlagsArray+=("CC=gcc -isystem ${uclibc}/include -B${uclibc}/lib -L${uclibc}/lib")
+    makeFlagsArray+=("CC=gcc -isystem ${uclibc}/include -B${uclibc.out}/lib -L${uclibc.out}/lib")
   '';
 
   crossAttrs = {

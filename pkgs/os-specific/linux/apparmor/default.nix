@@ -17,17 +17,17 @@ stdenv.mkDerivation rec {
     LocaleGettext pam TermReadKey RpcXML swig makeWrapper python ];
 
   prePatch = ''
-    substituteInPlace libraries/libapparmor/src/Makefile.in --replace "/usr/include" "${glibc}/include"
-    substituteInPlace libraries/libapparmor/src/Makefile.am --replace "/usr/include" "${glibc}/include"
+    substituteInPlace libraries/libapparmor/src/Makefile.in --replace "/usr/include" "${glibc.dev}/include"
+    substituteInPlace libraries/libapparmor/src/Makefile.am --replace "/usr/include" "${glibc.dev}/include"
     substituteInPlace common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
     substituteInPlace common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
-    substituteInPlace common/Make.rules --replace "cpp -dM" "cpp -dM -I${glibc}/include"
+    substituteInPlace common/Make.rules --replace "cpp -dM" "cpp -dM -I${glibc.dev}/include"
 
     substituteInPlace parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
     substituteInPlace parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
-    substituteInPlace parser/Makefile --replace "/usr/include/bits/socket.h" "${glibc}/include/bits/socket.h"
-    substituteInPlace parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
-    #substituteInPlace parser/utils/vim/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
+    substituteInPlace parser/Makefile --replace "/usr/include/bits/socket.h" "${glibc.dev}/include/bits/socket.h"
+    substituteInPlace parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc.dev}/include/linux/capability.h"
+    #substituteInPlace parser/utils/vim/Makefile --replace "/usr/include/linux/capability.h" "${glibc.dev}/include/linux/capability.h"
 
     # for some reason pdf documentation doesn't build
     substituteInPlace parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"

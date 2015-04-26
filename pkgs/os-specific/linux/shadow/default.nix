@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   preBuild = assert glibc != null;
     ''
-      substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc}/sbin/nscd
+      substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';
 
   postInstall =

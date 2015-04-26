@@ -25,7 +25,7 @@ rec {
     mkdir -p $PWD/builddir
     cd builddir
     export NIX_LDFLAGS="$NIX_LDFLAGS -ldl -L$out/lib"
-    cmake .. -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=$out -DDL_LIB=${libc}/lib
+    cmake .. -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=$out -DDL_LIB=${libc.out}/lib
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
       
   needLib64 = a.stdenv.system == "x86_64-linux";

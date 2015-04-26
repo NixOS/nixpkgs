@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       substituteInPlace extras/keymap/Makefile.in \
-        --replace /usr/include ${stdenv.glibc}/include
+        --replace /usr/include ${stdenv.glibc.dev}/include
     '';
 
   postInstall =
