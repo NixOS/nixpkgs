@@ -6,7 +6,7 @@
 , alsaLib ? null, esound ? null, glib ? null, gtk3 ? null, gconf ? null
 , avahi ? null, libjack2 ? null, libasyncns ? null, lirc ? null, dbus ? null
 , sbc ? null, bluez5 ? null, udev ? null, openssl ? null, fftw ? null
-, speex ? null, systemd ? null, webrtc-audio-processing ? null
+, speexdsp ? null, systemd ? null, webrtc-audio-processing ? null
 
 # Database selection
 , tdb ? null, gdbm ? null
@@ -29,7 +29,7 @@ let
 
   hasXlibs = xlibs != null;
 
-  optLibcap = if libOnly then null else shouldUsePkg libcap;
+  optLibcap = shouldUsePkg libcap;
   hasCaps = optLibcap != null || stdenv.isFreeBSD; # Built-in on FreeBSD
 
   optOss = if libOnly then null else shouldUsePkg oss;
@@ -51,8 +51,8 @@ let
     else shouldUsePkg bluez5;
   optUdev = if libOnly then null else shouldUsePkg udev;
   optOpenssl = if libOnly then null else shouldUsePkg openssl;
-  optFftw = if libOnly then null else shouldUsePkg fftw;
-  optSpeex = if libOnly then null else shouldUsePkg speex;
+  optFftw = shouldUsePkg fftw;
+  optSpeexdsp = shouldUsePkg speexdsp;
   optSystemd = shouldUsePkg systemd;
   optWebrtc-audio-processing = if libOnly then null else shouldUsePkg webrtc-audio-processing;
   hasWebrtc = if libOnly then null else optWebrtc-audio-processing != null;
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
 
     optLibcap valgrind optOss optCoreaudio optAlsaLib optEsound optGlib
     optGtk3 optGconf optAvahi optLibjack2 optLibasyncns optLirc optDbus optUdev
-    optOpenssl optFftw optSpeex optSystemd optWebrtc-audio-processing
+    optOpenssl optFftw optSpeexdsp optSystemd optWebrtc-audio-processing
   ] ++ stdenv.lib.optionals hasXlibs (with xlibs; [
       libX11 libxcb libICE libSM libXtst xextproto libXi
     ]) ++ stdenv.lib.optionals (optBluez5 != null) [ optBluez5 optSbc ];
@@ -105,9 +105,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-
+    (mkOther                          "localstatedir"              "/var")
+    (mkOther                          "sysconfdir"                 "/etc")
     (mkEnable false                   "atomic-arm-memory-barrier"  null)         # TODO: Enable on armv8
     (mkEnable false                   "neon-opt"                   null)         # TODO: Enable on armv8
     (mkEnable hasXlibs                "x11"                        null)
@@ -140,7 +139,7 @@ stdenv.mkDerivation rec {
     (mkEnable true                    "ipv6"                       null)
     (mkEnable (optOpenssl != null)    "openssl"                    null)
     (mkWith   (optFftw != null)       "fftw"                       null)
-    (mkWith   (optSpeex != null)      "speex"                      null)
+    (mkWith   (optSpeexdsp != null)   "speex"                      null)
     (mkEnable false                   "xen"                        null)
     (mkEnable false                   "gcov"                       null)
     (mkEnable (optSystemd != null)    "systemd-daemon"             null)
