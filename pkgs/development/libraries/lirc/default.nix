@@ -25,7 +25,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "m4dir=$(out)/m4" ];
 
-  installFlags = [ "sysconfdir=\${out}/etc" ];
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     description = "Allows to receive and send infrared signals";
