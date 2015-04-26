@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, unzip, elasticsearch }:
+{ pkgs,  stdenv, fetchurl, fetchFromGitHub, unzip, elasticsearch }:
 
 with pkgs.lib;
 
@@ -89,6 +89,21 @@ in {
       maintainers = [ maintainers.edwtjo ];
       platforms = elasticsearch.meta.platforms;
     };
-
   };
+
+  elasticsearch_kopf = esPlugin rec {
+    name = "elasticsearch-kopf-${version}";
+    pluginName = "elasticsearch-kopf";
+    version = "1.4.7";
+    src = fetchurl {
+      url = "https://github.com/lmenezes/elasticsearch-kopf/archive/v${version}.zip";
+      sha256 = "17r9mmfjnraswij1glmglljga4i4mfiraivxmai6giwmm2grwlz3";
+    };
+    meta = {
+      homepage = https://github.com/lmenezes/elasticsearch-kopf;
+      description = "Web administration tool for ElasticSearch";
+      license = licenses.mit;
+    };
+  };
+
 }
