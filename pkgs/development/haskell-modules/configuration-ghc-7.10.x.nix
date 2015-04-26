@@ -219,6 +219,7 @@ self: super: {
   nettle-netkit = dontDistribute super.nettle-netkit;
   nettle-openflow = dontDistribute super.nettle-openflow;
   oberon0 = dontDistribute super.oberon0;
+  poly-arity = dontDistribute super.poly-arity;
   respond = dontDistribute super.respond;
   semi-iso = dontDistribute super.semi-iso;
   syntax = dontDistribute super.syntax;
