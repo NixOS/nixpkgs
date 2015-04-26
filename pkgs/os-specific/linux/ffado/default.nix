@@ -1,54 +1,87 @@
-{ stdenv, fetchurl, dbus, dbus_cplusplus, expat, glibmm, libconfig
-, libavc1394, libiec61883, libraw1394, libxmlxx, makeWrapper, pkgconfig
-, pyqt4, python, pythonDBus, qt4, scons }:
+{ stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python
+, expat, libraw1394, libconfig, libavc1394, libiec61883
 
+# Optional dependencies
+, libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
+, pyqt4 ? null, xdg_utils ? null
+
+, glibmm
+, pythonDBus, qt4
+
+# Other Flags
+, prefix ? ""
+}:
+
+let
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
+  libOnly = prefix == "lib";
+
+  optLibjack2 = shouldUsePkg libjack2;
+  optDbus = shouldUsePkg dbus;
+  optDbus_cplusplus = shouldUsePkg dbus_cplusplus;
+  optAlsaLib = shouldUsePkg alsaLib;
+  optPyqt4 = shouldUsePkg pyqt4;
+  optXdg_utils = shouldUsePkg xdg_utils;
+in
 stdenv.mkDerivation rec {
-  name = "libffado-${version}";
+  name = "${prefix}ffado-${version}";
   version = "2.2.1";
 
   src = fetchurl {
-    url = "http://www.ffado.org/files/${name}.tgz";
+    url = "http://www.ffado.org/files/libffado-${version}.tgz";
     sha256 = "1ximic90l0av91njb123ra2zp6mg23yg5iz8xa5371cqrn79nacz";
   };
 
-  buildInputs =
-    [ dbus dbus_cplusplus expat glibmm libavc1394 libconfig
-      libiec61883 libraw1394 libxmlxx makeWrapper pkgconfig pyqt4
-      python pythonDBus qt4 scons
-    ];
+  nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
 
-  patches = [ ./enable-mixer-and-dbus.patch ];
+  buildInputs = [
+    expat libraw1394 libconfig libavc1394 libiec61883
+  ] ++ stdenv.lib.optionals (!libOnly) [
+    optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
+    optXdg_utils
+    # dbus dbus_cplusplus glibmm
+    # pyqt4
+    # python pythonDBus qt4
+  ];
 
-  # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
-  # Let's just skip this and tell it which to build
-  postPatch = if stdenv.isi686 then ''
+  patches = [ ./build-fix.patch ];
+
+  postPatch = ''
+    # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
+    # Let's just skip this and tell it which to build
     sed '/def is_userspace_32bit(cpuinfo):/a\
-        return True' -i SConstruct
-  ''
-  else ''
-    sed '/def is_userspace_32bit(cpuinfo):/a\
-        return False' -i SConstruct
+        return ${if stdenv.is64bit then "False" else "True"}' -i SConstruct
+
+    # Lots of code is missing random headers to exist
+    sed -i '1i #include <memory>' \
+      src/ffadodevice.h src/bebob/bebob_dl_mgr.cpp tests/scan-devreg.cpp
+    sed -i -e '1i #include <stdlib.h>' \
+      -e '1i #include "version.h"' \
+      src/libutil/serialize_expat.cpp
   '';
 
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
   buildPhase = ''
-    export PYLIBSUFFIX=lib/${python.libPrefix}/site-packages
-    scons PYPKGDIR=$out/$PYLIBSUFFIX DEBUG=False
-    sed -e "s#/usr/local#$out#" -i support/mixer-qt4/ffado/config.py
-    '';
+    export PYDIR=$out/lib/${python.libPrefix}/site-packages
 
-  installPhase = ''
-    scons PREFIX=$out LIBDIR=$out/lib SHAREDIR=$out/share/libffado \
-      PYPKGDIR=$out/$PYLIBSUFFIX UDEVDIR=$out/lib/udev/rules.d install
+    scons PYPKGDIR=$PYDIR DEBUG=False \
+      ENABLE_ALL=True \
+      SERIALIZE_USE_EXPAT=True \
+  '';
 
-    sed -e "s#/usr/local#$out#g" -i $out/bin/ffado-diag
+  installPhase = if libOnly then ''
+    scons PREFIX=$TMPDIR UDEVDIR=$TMPDIR \
+      LIBDIR=$out/lib INCLUDEDIR=$out/include install
+  '' else ''
+    scons PREFIX=$out PYPKGDIR=$PYDIR UDEVDIR=$out/lib/udev/rules.d install
 
-    PYDIR=$out/$PYLIBSUFFIX
     wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
       $PYTHONPATH:$PYDIR:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:
     wrapProgram $out/bin/ffado-diag --prefix PYTHONPATH : \
       $PYTHONPATH:$PYDIR:$out/share/libffado/python:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:
-    '';
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.ffado.org;
