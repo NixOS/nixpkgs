@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fixedPoint ? false, withCustomModes ? false }:
+{ stdenv, fetchurl, fixedPoint ? false, withCustomModes ? true }:
 
 let
   version = "1.1";
@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open, royalty-free, highly versatile audio codec";
     license = stdenv.lib.licenses.bsd3;
     homepage = http://www.opus-codec.org/;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
