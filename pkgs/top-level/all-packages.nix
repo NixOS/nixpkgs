@@ -1050,6 +1050,12 @@ let
 
   cudatoolkit = cudatoolkit5;
 
+  curlFull = curl.override {
+    idnSupport = true;
+    ldapSupport = true;
+    gssSupport = true;
+  };
+
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
     zlibSupport = true;
