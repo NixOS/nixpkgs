@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "QuickCheck";
-  version = "2.7.6";
-  sha256 = "09y5l0062l9i5jp9v6811kvkk4zpy0mizwaw44abgz0x1h59gn40";
+  version = "2.8.1";
+  sha256 = "0fvnfl30fxmj5q920l13641ar896d53z0z6z66m7c1366lvalwvh";
   buildDepends = [ random tfRandom transformers ];
   testDepends = [ testFramework ];
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "6.11";
