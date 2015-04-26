@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ps, ncurses, zlib, perl, openssl }:
+{ stdenv, fetchurl, ps, ncurses, zlib, perl, openssl, nettools }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
