@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gnum4, libtool
-, json_c, libsndfile, gettext, intltool, check
+{ stdenv, fetchurl, pkgconfig, intltool, automake, autoconf, libtool
+, json_c, libsndfile, gettext, check
 
 # Optional Dependencies
 , xlibs ? null, libcap ? null, valgrind ? null, oss ? null, coreaudio ? null
@@ -75,9 +75,11 @@ stdenv.mkDerivation rec {
     sha256 = "1xpnfxa0d8pgf6b4qdgnkcvrvdxbbbjd5ync19h0f5hbp3h401mm";
   };
 
-  nativeBuildInputs = [ pkgconfig gnum4 libtool ];
+  patches = [ ./caps-fix.patch ];
+
+  nativeBuildInputs = [ pkgconfig intltool automake autoconf libtool ];
   buildInputs = [
-    json_c libsndfile gettext intltool check database
+    json_c libsndfile gettext check database
 
     optLibcap valgrind optOss optCoreaudio optAlsaLib optEsound optGlib
     optGtk3 optGconf optAvahi optLibjack2 optLibasyncns optLirc optDbus optUdev
@@ -87,6 +89,11 @@ stdenv.mkDerivation rec {
     ]) ++ stdenv.lib.optionals (optBluez5 != null) [ optBluez5 optSbc ];
 
   preConfigure = ''
+    # Performs and autoreconf
+    export NOCONFIGURE="yes"
+    patchShebangs bootstrap.sh
+    ./bootstrap.sh
+
     # Move the udev rules under $(prefix).
     sed -i "src/Makefile.in" \
         -e "s|udevrulesdir[[:blank:]]*=.*$|udevrulesdir = $out/lib/udev/rules.d|g"
@@ -104,7 +111,7 @@ stdenv.mkDerivation rec {
     (mkEnable false                   "atomic-arm-memory-barrier"  null)         # TODO: Enable on armv8
     (mkEnable false                   "neon-opt"                   null)         # TODO: Enable on armv8
     (mkEnable hasXlibs                "x11"                        null)
-    (mkWith   hasCaps                 "caps"                       null)
+    (mkWith   hasCaps                 "caps"                       optLibcap)
     (mkEnable true                    "tests"                      null)
     (mkEnable false                   "samplerate"                 null)         # Deprecated
     (mkWith   true                    "database"                   databaseName)
