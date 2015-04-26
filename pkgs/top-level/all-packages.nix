@@ -11683,6 +11683,10 @@ let
 
   toxprpl = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tox-prpl { };
 
+  pithos = callPackage ../applications/audio/pithos {
+    pythonPackages = python34Packages;
+  };
+
   pinfo = callPackage ../applications/misc/pinfo { };
 
   pinpoint = callPackage ../applications/office/pinpoint {};
