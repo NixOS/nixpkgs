@@ -10,12 +10,12 @@ let
   };
 
 in nodePackages.buildNodePackage rec {
-  name = "keybase-node-client-${version}";
-  version = "0.7.7";
+  name = "keybase-${version}";
+  version = "0.7.8";
 
   src = [(fetchurl {
     url = "https://github.com/keybase/node-client/archive/v${version}.tar.gz";
-    sha256 = "1p2plxz4lf5pbrvl5sql00lk459lnxcz7cxc4cdhfzc6h4ql425f";
+    sha256 = "1ak27bd7jwyss85i7plnfr5al33ykfifqknncyx1ir2r2ldagzc7";
   })];
 
   deps = (filter (v: nixType v == "derivation") (attrValues nodePackages));

@@ -1777,7 +1777,7 @@ let
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
-  keybase-node-client = callPackage ../applications/misc/keybase-node-client { };
+  keybase = callPackage ../applications/misc/keybase { };
 
   keychain = callPackage ../tools/misc/keychain { };
 
