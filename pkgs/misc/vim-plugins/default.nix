@@ -439,6 +439,20 @@ rec {
     };
   };
 
+  vim-jinja = buildVimPlugin {
+    name = "vim-jinja-git-2014-06-11";
+    src = fetchFromGitHub {
+      owner = "lepture";
+      repo = "vim-jinja";
+      rev = "4412484b41";
+      sha256="1z5ya953nn7233jjjs0ay61x5hfrfddx9xz31grq52cfd0ipy335";
+    };
+   meta = {
+    homepage = "https://github.com/lepture/vim-jinja";
+    maintainers = [ stdenv.lib.maintainers.hbunke ];
+    };
+  };
+
   vimproc = buildVimPlugin {
     name = "vimproc-git-2015-02-23";
     src = fetchgit {

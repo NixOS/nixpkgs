@@ -12,7 +12,7 @@ let
     path=${db.path}
     ${optionalString (db.compression != null) ("compression=${b2i db.compression}") }
     ${optionalString (db.onlineDelete != null) ("online_delete=${toString db.onlineDelete}")}
-    ${optionalString (db.advisoryDelete != null) ("advisory_delete=${toString db.advisoryDelete}")}
+    ${optionalString (db.advisoryDelete != null) ("advisory_delete=${b2i db.advisoryDelete}")}
     ${db.extraOpts}
   '';
 
@@ -70,6 +70,13 @@ let
 
     [sntp_servers]
     ${concatStringsSep "\n" cfg.sntpServers}
+
+    ${optionalString cfg.statsd.enable ''
+    [insight]
+    server=statsd
+    address=${cfg.statsd.address}
+    prefix=${cfg.statsd.prefix}
+    ''}
 
     [rpc_startup]
     { "command": "log_level", "severity": "${cfg.logLevel}" }
@@ -142,7 +149,6 @@ let
 	  default = null;
 	  type = types.nullOr types.path;
 	};
-
       };
     };
   };
@@ -150,7 +156,7 @@ let
   dbOptions = {
     type = mkOption {
       description = "Rippled database type.";
-      type = types.enum ["rocksdb" "nudb" "sqlite"];
+      type = types.enum ["rocksdb" "nudb" "sqlite" "hyperleveldb"];
       default = "rocksdb";
     };
 
@@ -317,7 +323,7 @@ in
 	  Path to the ripple database.
 	'';
 	type = types.path;
-	default = "/var/lib/rippled/db";
+	default = "/var/lib/rippled";
       };
 
       validationQuorum = mkOption {
@@ -366,6 +372,22 @@ in
 	default = "error";
       };
 
+      statsd = {
+        enable = mkEnableOption "Whether enable statsd monitoring for rippled";
+
+        address = mkOption {
+          description = "The UDP address and port of the listening StatsD server.";
+          default = "127.0.0.1:8125";
+          type = types.str;
+        };
+
+        prefix = mkOption {
+          description = "A string prepended to each collected metric.";
+          default = "";
+          type = types.str;
+        };
+      };
+
       extraConfig = mkOption {
         default = "";
 	description = ''
@@ -400,6 +422,8 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/rippled --fg --conf ${cfg.config}";
         User = "rippled";
+	Restart = "on-failure";
+	LimitNOFILE=10000;
       };
     };
 

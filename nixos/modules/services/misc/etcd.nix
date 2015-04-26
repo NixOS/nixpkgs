@@ -11,7 +11,7 @@ in {
     enable = mkOption {
       description = "Whether to enable etcd.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     name = mkOption {

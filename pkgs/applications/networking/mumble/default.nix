@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pkgconfig
 , avahi, boost, libopus, libsndfile, protobuf, qt4, speex
-, jackSupport ? false, jack2 ? null
+, jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 }:
 
-assert jackSupport -> jack2 != null;
+assert jackSupport -> libjack2 != null;
 assert speechdSupport -> speechd != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 
 let
   optional = stdenv.lib.optional;
   optionalString = stdenv.lib.optionalString;
 in
 stdenv.mkDerivation rec {
-  name = "mumble-" + version;
+  name = "mumble-${version}";
   version = "1.2.8";
 
   src = fetchurl {
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ avahi boost libopus libsndfile protobuf qt4 speex ]
-    ++ optional jackSupport jack2
+    ++ optional jackSupport libjack2
     ++ optional speechdSupport speechd
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport libpulseaudio;
 
   installPhase = ''
     mkdir -p $out

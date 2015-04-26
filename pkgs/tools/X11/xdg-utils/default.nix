@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "xdg-utils-1.1.0-rc3p7";
 
   src = fetchgit {
-    url = "git://anongit.freedesktop.org/xdg/xdg-utils";
+    url = "http://anongit.freedesktop.org/git/xdg/xdg-utils.git";
     rev = "e8ee3b18d16e41b95148111b920a0c8beed3ac6c";
     sha256 = "0qy9h7vh6sw7wmadjvasw4sdhb9fvv7bn32ifgasdx7ag3r3939w";
   };

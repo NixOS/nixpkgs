@@ -670,7 +670,12 @@ net = buildGoPackage rec {
     url = "https://${goPackagePath}";
     sha256 = "1lkz4c9pyz3yz2yz18hiycvlfhgy3jxp68bs7mv7bcfpaj729qav";
   };
-  propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-3' />
+  renameImports = [ <co xml:id='ex-buildGoPackage-3' />
+    "code.google.com/p/go.crypto golang.org/x/crypto"
+    "code.google.com/p/goprotobuf github.com/golang/protobuf"
+  ];
+  propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-4' />
+  buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-5' />
 };
 </programlisting>
 </example>
@@ -698,12 +703,32 @@ the following arguments are of special significance to the function:
     </para>
   </callout>
 
-  <callout arearefs='ex-buildGoPackage-3'>
+  <callout arearefs='ex-buildGoPackage-4'>
+    <para>
+      <varname>renameImports</varname> is a list of import paths to be renamed before
+      building the package. The path to be renamed can be a regular expression.
+    </para>
+    <para>
+      In this example imports will be renamed from
+      <literal>code.google.com/p/go.crypto</literal> to
+      <literal>golang.org/x/crypto</literal> and from
+      <literal>code.google.com/p/goprotobuf</literal> to
+      <literal>github.com/golang/protobuf</literal>.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-4'>
     <para>
       <varname>propagatedBuildInputs</varname> is where the dependencies of a Go library are
       listed. Only libraries should list <varname>propagatedBuildInputs</varname>. If a standalone
       program is being build instead, use <varname>buildInputs</varname>. If a library's tests require
       additional dependencies that are not propagated, they should be listed in <varname>buildInputs</varname>.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-5'>
+    <para>
+      <varname>buildFlags</varname> is a list of flags passed to the go build command.
     </para>
   </callout>
 

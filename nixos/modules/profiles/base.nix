@@ -29,6 +29,8 @@
     pkgs.hdparm
     pkgs.dmraid
     pkgs.smartmontools # for diagnosing hard disks
+    pkgs.pciutils
+    pkgs.usbutils
 
     # Tools to create / manipulate filesystems.
     pkgs.ntfsprogs # for resizing NTFS partitions
@@ -50,6 +52,6 @@
   ];
 
   # Include support for various filesystems.
-  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" ];
+  boot.supportedFilesystems = [ "btrfs" "reiserfs" "vfat" "f2fs" "zfs" "ntfs" "cifs" ];
 
 }

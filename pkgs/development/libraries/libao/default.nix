@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, pulseaudio, alsaLib
+{ lib, stdenv, fetchurl, pkgconfig, pulseaudio, alsaLib, libcap
 , usePulseAudio }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig ] ++
+    [ pkgconfig libcap ] ++
     lib.optional stdenv.isLinux (if usePulseAudio then [ pulseaudio ] else [ alsaLib ]);
 
   meta = {

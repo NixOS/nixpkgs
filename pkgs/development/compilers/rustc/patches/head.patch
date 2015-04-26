@@ -41,15 +41,3 @@ index 3087a8e..578448f 100644
 +        None => "@ccPath@".to_string(),
      }
  }
- 
-diff --git a/src/test/run-pass/issue-20797.rs b/src/test/run-pass/issue-20797.rs
-index 049e08d..30b9d2a 100644
---- a/src/test/run-pass/issue-20797.rs
-+++ b/src/test/run-pass/issue-20797.rs
-@@ -90,5 +90,5 @@ impl<S: Strategy> Iterator for Subpaths<S> {
- }
- 
- fn main() {
--  let mut walker: Subpaths<Recursive> = Subpaths::walk(&Path::new("/home")).unwrap();
-+  let mut walker: Subpaths<Recursive> = Subpaths::walk(&Path::new("/tmp")).unwrap();
- }

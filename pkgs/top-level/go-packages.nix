@@ -192,15 +192,45 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  confd = buildGoPackage rec {
+    rev = "v0.9.0";
+    name = "confd-${rev}";
+    goPackagePath = "github.com/kelseyhightower/confd";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kelseyhightower";
+      repo = "confd";
+      sha256 = "0rz533575hdcln8ciqaz79wbnga3czj243g7fz8869db6sa7jwlr";
+    };
+    subPackages = [ "./" ];
+  };
+
+  dbus = buildGoPackage rec {
+    rev = "88765d85c0fdadcd98a54e30694fa4e4f5b51133";
+    name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/godbus/dbus";
+    preBuild = ''
+      cd "go/src/$goPackagePath"
+      rm -r _examples
+    '';
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "godbus";
+      repo = "dbus";
+      sha256 = "0k80wzdx8091y3012nd4giwgc08n1pj6lcr9i44dsapcjnb80jkn";
+    };
+  };
+
   dns = buildGoPackage rec {
-    rev = "0bd3fb7026404936cf18204ea527d27f067923cf";
+    rev = "fd694e564b3ceaf34a8bbe9ef18f65c64df8ed03";
     name = "dns-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/miekg/dns";
     src = fetchFromGitHub {
       inherit rev;
       owner = "miekg";
       repo = "dns";
-      sha256 = "1hv2ikpd9gr9idf7zh8nyqgdbnnffs057wsdpd7m44mllbmzhdxn";
+      sha256 = "1g15l00jypjac0fd2j39lifw1j3md49vk6fq35mv8kc8ighhvxaq";
     };
   };
 
@@ -437,6 +467,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  go-etcd = buildGoPackage rec {
+    rev = "4734e7aca379f0d7fcdf04fbb2101696a4b45ce8";
+    name = "go-etcd-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/coreos/go-etcd";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "coreos";
+      repo = "go-etcd";
+      sha256 = "0zqr7mzd5kq0rnxj3zx5x5wwbmjkg365farwv72hzrsvq6g8zczr";
+    };
+    buildInputs = [ pkgs.etcd ];
+  };
+
   go-fuse = buildGoPackage rec {
     rev = "5d16aa11eef4643de2d91e88a64dcb6138705d58";
     name = "go-fuse-${stdenv.lib.strings.substring 0 7 rev}";
@@ -484,6 +527,19 @@ let self = _self // overrides; _self = with self; {
       repo   = "go-ini";
       sha256 = "1l1isi3czis009d9k5awsj4xdxgbxn4n9yqjc1ac7f724x6jacfa";
     };
+  };
+
+  go-log = buildGoPackage rec {
+    rev = "70d039bee4b0e389e5be560491d8291708506f59";
+    name = "go-log-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/coreos/go-log";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "coreos";
+      repo = "go-log";
+      sha256 = "1s95xmmhcgw4ascf4zr8c4ij2n4s3mr881nxcpmc61g0gb722b13";
+    };
+    buildInputs = [ go-systemd osext ];
   };
 
   rcrowley.go-metrics = buildGoPackage rec {
@@ -597,7 +653,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1r9s1gsa4azcs05gx1179ixk7qvrkrik3v92wr4s8gwm00m0gf81";
     };
   };
- 
+
+  go-systemd = buildGoPackage rec {
+    rev = "2d21675230a81a503f4363f4aa3490af06d52bb8";
+    name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/coreos/go-systemd";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "coreos";
+      repo = "go-systemd";
+      sha256 = "07g5c8khlcjnr86gniw3zr7l8jwrb9fhrj18zm5n6ccj24nidwam";
+    };
+    subPackages = [ "activation" "daemon" "dbus" "journal" "login1" ];
+    buildInputs = [ dbus ];
+  };
+
   go-update = buildGoPackage rec {
     rev = "c1385108bc3a016f1c88b75ea7d2e2a356a1571d";
     name = "go-update-${stdenv.lib.strings.substring 0 7 rev}";
@@ -623,6 +693,20 @@ let self = _self // overrides; _self = with self; {
       repo = "go-vhost";
       sha256 = "1rway6sls6fl2s2jk20ajj36rrlzh9944ncc9pdd19kifix54z32";
     };
+  };
+
+  grafana = buildGoPackage rec {
+    version = "2.0.0-beta1";
+    name = "grafana-v${version}";
+    goPackagePath = "github.com/grafana/grafana";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    src = fetchFromGitHub {
+      rev = "v${version}";
+      owner = "grafana";
+      repo = "grafana";
+      sha256 = "1b263qj7n72xc5qn0hhrlivqrd0zc8746c9ic11kdxyf81nx4lza";
+    };
+    subPackages = [ "./" ];
   };
 
   hologram = buildGoPackage rec {
@@ -781,7 +865,7 @@ let self = _self // overrides; _self = with self; {
 
   mgo = buildGoPackage rec {
     rev = "2";
-    name = "mgo-${rev}"; 
+    name = "mgo-${rev}";
     goPackagePath = "launchpad.net/mgo";
     src = fetchbzr {
       inherit rev;
@@ -1119,6 +1203,20 @@ let self = _self // overrides; _self = with self; {
       sha256 = "01k0c2g395j65vm1w37mmrfkg6nm900khjrrizzpmx8f8yf20dky";
     };
     buildInputs = [ pkgconfig libusb ];
+  };
+
+  vulcand = buildGoPackage rec {
+    rev = "v0.8.0-beta.3";
+    name = "vulcand-${rev}";
+    goPackagePath = "github.com/mailgun/vulcand";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "mailgun";
+      repo = "vulcand";
+      sha256 = "08mal9prwlsav63r972q344zpwqfql6qw6v4ixbn1h3h32kk3ic6";
+    };
+    subPackages = [ "./" ];
   };
 
   websocket = buildGoPackage rec {

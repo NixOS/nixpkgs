@@ -1,18 +1,19 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "kexec-tools-2.0.4";
+  name = "kexec-tools-2.0.9";
 
   src = fetchurl {
     url = "http://horms.net/projects/kexec/kexec-tools/${name}.tar.xz";
-    sha256 = "1ikqm4w125h060dsvg9brri6ma51qn76mjjff6s1bss6sw0apxg5";
+    sha256 = "0wag8pxn13i0j91x2bszpmi5i88xnndcmqz1w5a0jdbnxff4mqwa";
   };
 
   buildInputs = [ zlib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://horms.net/projects/kexec/kexec-tools;
     description = "Tools related to the kexec Linux feature";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

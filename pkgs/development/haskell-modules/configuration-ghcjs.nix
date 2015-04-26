@@ -71,7 +71,7 @@ self: super: {
       cat >> src/Reactive/Banana/Switch.hs <<EOF
       instance Functor (AnyMoment Identity) where
         fmap = liftM
-        
+
       instance Applicative (AnyMoment Identity) where
         pure = return
         (<*>) = ap
@@ -98,4 +98,5 @@ self: super: {
   ghcjs-dom = overrideCabal super.ghcjs-dom (drv: {
     buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
   });
+
 }

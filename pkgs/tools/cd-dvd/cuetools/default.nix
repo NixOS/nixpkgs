@@ -1,22 +1,25 @@
-{stdenv, fetchurl, automake, autoconf, flex, bison }:
+{ stdenv, fetchurl, autoreconfHook
+, bison, flac, flex, id3v2, vorbisTools
+}:
 
-stdenv.mkDerivation {
-  name = "cuetools-1.3.1";
+stdenv.mkDerivation rec {
+  name = "cuetools-${version}";
+  version = "1.4.1";
 
   src = fetchurl {
-    url = https://github.com/svend/cuetools/archive/cuetools-1.3.1.tar.gz;
-    sha256 = "1cap3wl0mlcqrjywpz46003w8jws05rr3r87pzqkz1g89v9459dg";
+    url = "https://github.com/svend/cuetools/archive/${version}.tar.gz";
+    sha256 = "01xi3rvdmil9nawsha04iagjylqr1l9v9vlzk99scs8c207l58i4";
   };
 
-  preConfigure = "autoreconf -fiv";
+  nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ automake autoconf flex bison ]; 
+  buildInputs = [ bison flac flex id3v2 vorbisTools ];
 
-  meta = {
-    description = "cd/dvd cue and toc file parsers and utilities";
+  meta = with stdenv.lib; {
+    description = "A set of utilities for working with cue files and toc files";
     homepage = https://github.com/svend/cuetools;
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ codyopel jcumming ];
+    platforms = platforms.all;
   };
 }

@@ -11,11 +11,20 @@ mounts = [ ['/nix/store', nil],
            ['/var', nil],
            ['/run', nil],
            ['/root', nil],
-         ].map! { |x| [ x[0], x[1].nil? ? x[0].sub(/^\/*/, '') : x[1] ] }
+         ]
 
 # Create directories
 mkdirs = ['tmp',
          ]
+
+# Propagate environment variables
+envvars = [ 'TERM',
+            'DISPLAY',
+            'HOME',
+            'XDG_RUNTIME_DIR',
+            'LANG',
+            'SSL_CERT_FILE',
+          ]
 
 require 'tmpdir'
 require 'fileutils'
@@ -59,6 +68,9 @@ abort "Usage: chrootenv swdir program args..." unless ARGV.length >= 2
 swdir = Pathname.new ARGV[0]
 execp = ARGV.drop 1
 
+# Set destination paths for mounts
+mounts.map! { |x| [x[0], x[1].nil? ? x[0].sub(/^\/*/, '') : x[1]] }
+
 # Create temporary directory for root and chdir
 root = Dir.mktmpdir 'chrootenv'
 
@@ -88,7 +100,7 @@ if $cpid == 0
   write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
 
   # Do mkdirs
-  mkdirs.each { |x| FileUtils.mkdir_p x }
+  mkdirs.each { |x| FileUtils.mkdir_p "#{root}/#{x}" }
 
   # Do rbind mounts.
   mounts.each do |x|
@@ -120,12 +132,7 @@ if $cpid == 0
   link_swdir.call swdir, Pathname.new('')
 
   # New environment
-  ENV.replace({ 'TERM' => ENV['TERM'],
-                'DISPLAY' => ENV['DISPLAY'],
-                'HOME' => ENV['HOME'],
-                'XDG_RUNTIME_DIR' => ENV['XDG_RUNTIME_DIR'],
-                'LANG' => ENV['LANG'],
-              })
+  ENV.replace(Hash[ envvars.map { |x| [x, ENV[x]] } ])
 
   # Finally, exec!
   exec *execp

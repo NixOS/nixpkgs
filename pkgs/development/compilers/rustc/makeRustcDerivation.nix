@@ -6,6 +6,7 @@
 , snapshotHashLinux686, snapshotHashLinux64
 , snapshotHashDarwin686, snapshotHashDarwin64
 , snapshotDate, snapshotRev
+, configureFlags ? []
 
 , patches
 }:
@@ -113,7 +114,8 @@ stdenv.mkDerivation {
     '' else "");
   };
 
-  configureFlags = [ "--enable-local-rust" "--local-rust-root=$snapshot" ]
+  configureFlags = configureFlags
+                ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" ]
                 ++ stdenv.lib.optional (stdenv.cc ? clang) "--enable-clang";
 
   inherit patches;

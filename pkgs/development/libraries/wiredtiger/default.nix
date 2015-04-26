@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://wiredtiger.com/;
     description = "";
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = intersectLists platforms.unix platforms.x86_64;
     maintainers = with maintainers; [ wkennington ];
   };
 }

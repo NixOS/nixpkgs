@@ -22,7 +22,7 @@ let honcho = buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A Python clone of Foreman, a tool for managing Procfile-based applications.";
     license = licenses.mit;
-    homePage = https://github.com/nickstenning/honcho;
+    homepage = https://github.com/nickstenning/honcho;
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };

@@ -13,11 +13,11 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.2";
+  name = "gnupg-2.1.3";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "14k7c5spai3yppz6izf1ggbnffskl54ln87v1wgy9pwism1mlks0";
+    sha256 = "1vf8fmwcq81abzw2mypz5j7m4xy0vl4z6lri5lxfbd2bsyq7ygi1";
   };
 
   patches = [ ./socket-activate-2.1.1.patch ];

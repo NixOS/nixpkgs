@@ -11,7 +11,7 @@ in
 {
   config = {
 
-    system.fsPackages = [ pkgs.cifs_utils ];
+    system.fsPackages = mkIf (any (fs: fs == "cifs") config.boot.supportedFilesystems) [ pkgs.cifs_utils ];
 
     boot.initrd.availableKernelModules = mkIf inInitrd
       [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" "sha256" ];

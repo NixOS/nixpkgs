@@ -39,11 +39,14 @@
 }:
 let
   version = "0.1.0";
-  libDir = "share/ghcjs/${pkgs.stdenv.system}-${version}-${ghc.version}/ghcjs";
+  ghcArch = if pkgs.stdenv.system == "i686-linux"
+    then "i386-linux"
+    else pkgs.stdenv.system;
+  libDir = "share/ghcjs/${ghcArch}-${version}-${ghc.version}/ghcjs";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "8cd6144870470258fb037b3e04a0a2a98c2b6551"; # 7.10 branch
-    sha256 = "16cbncx179n5khf8hkj9r221wf73rc8isffk8rv3n9psshv1jiji";
+    rev = "8bf1a2c665d42a66354f17220c7dfb1c8b44c0ea"; # 7.10 branch
+    sha256 = "18bm6sfa9c9kwsmv3lz6j27ng6jl0ck3ifgqbwwa8myfy7fw4il7";
     fetchSubmodules = true;
   };
   shims = fetchgit {
@@ -56,8 +59,8 @@ in mkDerivation (rec {
   inherit version;
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "35a59743c4027f26a227635cb24a6246bd851f8d"; # master branch
-    sha256 = "107sh36ji3psdl3py84vxgqbywjyzglj3p0akzpvcmbarxwfr1mw";
+    rev = "64c3768186d73d8c185b42d4d14dfb943919ee56"; # master branch
+    sha256 = "1w7rwcqzihg6h2j0khar7kjn8vdjg9ngjk6bndpiqcgf3kwfmvhf";
   };
   isLibrary = true;
   isExecutable = true;
@@ -122,7 +125,5 @@ in mkDerivation (rec {
   description = "GHCJS is a Haskell to JavaScript compiler that uses the GHC API";
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
-  maintainers = with stdenv.lib.maintainers; [
-    jwiegley cstrahan
-  ];
+  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
 })

@@ -18,11 +18,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-driver=devinput"
-    "--sysconfdir=$(out)/etc"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
     "--enable-sandboxed"
   ];
 
   makeFlags = [ "m4dir=$(out)/m4" ];
+
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     description = "Allows to receive and send infrared signals";

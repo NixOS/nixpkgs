@@ -23,7 +23,6 @@ let
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils
-      pkgs.eject # HAL depends on it anyway
       pkgs.findutils
       pkgs.gawk
       pkgs.glibc # for ldd, getent
@@ -40,15 +39,12 @@ let
       pkgs.ncurses
       pkgs.netcat
       pkgs.openssh
-      pkgs.pciutils
       pkgs.perl
       pkgs.procps
       pkgs.rsync
       pkgs.strace
-      pkgs.sysvtools
       pkgs.su
       pkgs.time
-      pkgs.usbutils
       pkgs.utillinux
       extraManpages
     ];

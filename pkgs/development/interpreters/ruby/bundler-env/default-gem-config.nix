@@ -31,7 +31,7 @@ in
 
 {
   charlock_holmes = attrs: {
-    buildInputs = [ which icu ];
+    buildInputs = [ which icu zlib ];
   };
 
   ffi = attrs: {

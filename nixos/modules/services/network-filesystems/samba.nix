@@ -4,6 +4,10 @@ with lib;
 
 let
 
+  smbToString = x: if builtins.typeOf x == "bool"
+                   then (if x then "true" else "false")
+                   else toString x;
+
   cfg = config.services.samba;
 
   samba = cfg.package;
@@ -15,9 +19,9 @@ let
 
   shareConfig = name:
     let share = getAttr name cfg.shares; in
-    "[${name}]\n " + (toString (
+    "[${name}]\n " + (smbToString (
        map
-         (key: "${key} = ${toString (getAttr key share)}\n")
+         (key: "${key} = ${smbToString (getAttr key share)}\n")
          (attrNames share)
     ));
 
@@ -27,12 +31,12 @@ let
       [ global ]
       security = ${cfg.securityType}
       passwd program = /var/setuid-wrappers/passwd %u
-      pam password change = ${if cfg.syncPasswordsByPam then "yes" else "no"}
-      invalid users = ${toString cfg.invalidUsers}
+      pam password change = ${smbToString cfg.syncPasswordsByPam}
+      invalid users = ${smbToString cfg.invalidUsers}
 
       ${cfg.extraConfig}
 
-      ${toString (map shareConfig (attrNames cfg.shares))}
+      ${smbToString (map shareConfig (attrNames cfg.shares))}
     '');
 
   # This may include nss_ldap, needed for samba if it has to use ldap.
@@ -151,7 +155,7 @@ in
         example =
           { srv =
              { path = "/srv";
-               "read only" = "yes";
+               "read only" = true;
                 comment = "Public samba share.";
              };
           };
@@ -193,7 +197,7 @@ in
             "samba-setup" = {
               description = "Samba Setup Task";
               script = setupScript;
-              unitConfig.RequiresMountsFor = "/var/samba /var/log/samba";
+              unitConfig.RequiresMountsFor = "/var/lib/samba";
             };
           };
         };

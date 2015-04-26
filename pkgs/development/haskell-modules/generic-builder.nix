@@ -137,10 +137,12 @@ stdenv.mkDerivation ({
   prePatch = optionalString (editedCabalFile != null) ''
     echo "Replace Cabal file with edited version from ${newCabalFileUrl}."
     cp ${newCabalFile} ${pname}.cabal
-  '' + optionalString jailbreak ''
+  '' + prePatch;
+
+  postPatch = optionalString jailbreak ''
     echo "Run jailbreak-cabal to lift version restrictions on build inputs."
     ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
-  '' + prePatch;
+  '' + postPatch;
 
   setupCompilerEnvironmentPhase = ''
     runHook preSetupCompilerEnvironment

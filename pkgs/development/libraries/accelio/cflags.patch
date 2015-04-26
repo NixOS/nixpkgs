@@ -1,0 +1,21 @@
+diff --git a/configure.ac b/configure.ac
+index 6ce6b6b..72d2e65 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -110,14 +110,10 @@ AC_MSG_RESULT([$enable_debug])
+ 
+ if test "$enable_debug" = "yes"; then
+ 	AC_DEFINE([DEBUG],[],[Debug Mode])
+-	AM_CFLAGS="$AM_CFLAGS -g -ggdb -Wall -Werror -Wdeclaration-after-statement \
+-		  -Wsign-compare -Wc++-compat \
+-		   -fno-omit-frame-pointer -O0 -D_REENTRANT -D_GNU_SOURCE"
++	AM_CFLAGS="$AM_CFLAGS -g -ggdb -fno-omit-frame-pointer -O0 -D_REENTRANT -D_GNU_SOURCE"
+ else
+ 	AC_DEFINE([NDEBUG],[],[No-debug Mode])
+-	AM_CFLAGS="$AM_CFLAGS -g -ggdb -Wall -Werror -Wpadded -Wdeclaration-after-statement \
+-		  -Wsign-compare -Wc++-compat \
+-		  -O3 -D_REENTRANT -D_GNU_SOURCE"
++	AM_CFLAGS="$AM_CFLAGS -O3 -D_REENTRANT -D_GNU_SOURCE"
+ fi
+ 
+ AC_CACHE_CHECK(whether ld accepts --version-script, ac_cv_version_script,

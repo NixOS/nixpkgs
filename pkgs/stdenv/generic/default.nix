@@ -220,7 +220,8 @@ let
              || system == "x86_64-darwin"
              || system == "x86_64-freebsd"
              || system == "x86_64-openbsd"
-             || system == "x86_64-solaris";
+             || system == "x86_64-solaris"
+             || system == "mips64el-linux";
       isMips = system == "mips-linux"
             || system == "mips64el-linux";
       isArm = system == "armv5tel-linux"

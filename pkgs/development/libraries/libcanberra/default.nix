@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk ? null
+{ stdenv, fetchurl, pkgconfig, libtool, gtk ? null, libcap
 , alsaLib, pulseaudio, gstreamer, gst_plugins_base, libvorbis }:
 
 stdenv.mkDerivation rec {
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
-  buildInputs = # ToDo: gstreamer not found (why?), add (g)udev?
-    [ pkgconfig libtool alsaLib pulseaudio /*gstreamer gst_plugins_base*/ libvorbis gtk ];
+  buildInputs = [
+    pkgconfig libtool alsaLib pulseaudio libvorbis gtk libcap
+    /*gstreamer gst_plugins_base*/      # ToDo: gstreamer not found (why?), add (g)udev?
+  ];
 
   configureFlags = "--disable-oss";
 

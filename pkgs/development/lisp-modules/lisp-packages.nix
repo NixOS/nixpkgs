@@ -36,11 +36,11 @@ let lispPackages = rec {
     version = "darcs-2014-11-01";
     description = "Iteration package for Common Lisp";
     deps = [];
-    src = pkgs.fetchdarcs {
-      url = "http://common-lisp.net/project/iterate/darcs/iterate";
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
+      url = "https://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
       context = ./iterate.darcs-context;
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
     };
@@ -52,7 +52,7 @@ let lispPackages = rec {
     description = "A collection of portable public domain utilities";
     deps = [];
     src = pkgs.fetchgit {
-      url = "git://common-lisp.net/projects/alexandria/alexandria.git";
+      url = "https://gitlab.common-lisp.net/alexandria/alexandria.git";
       sha256 = "1d981a243f9d4d3c9fd86cc47698050507ff615b87b9a710449abdb4234e501b";
       rev = ''2b1eb4067fb34bc501e527de75d09166a8ba9ceb'';
     };
@@ -238,7 +238,7 @@ let lispPackages = rec {
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
 	export HOME=$PWD
 	build-with-lisp.sh sbcl \
-	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/:\2/g')" \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
 	  "$out/bin/query-fs" \
 	  "(query-fs:run-fs-with-cmdline-args)"
       '';
@@ -308,10 +308,10 @@ let lispPackages = rec {
     description = "A UTF-8 encoding library";
     deps = [];
     # Source type: darcs
-    src = pkgs.fetchdarcs {
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
       url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
       sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
   };
 
   cl-fuse-meta-fs = buildLispPackage rec {
@@ -545,6 +545,19 @@ let lispPackages = rec {
       date = ''2014-11-15'';
       module = ''cl-smtp'';
       cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
+    };
+  };
+
+  md5 = buildLispPackage rec {
+    baseName = "md5";
+    version = "git-20150415";
+    description = "The MD5 Message-Digest Algorithm RFC 1321";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/pmai/md5'';
+      sha256 = "f64d7e36c54da649bb1d574b92cdb907291224fb3d8565b3708703a81820367b";
+      rev = ''9d6f82f7121c87fb7e3b314987ba93900d300dc6'';
     };
   };
 };

@@ -227,6 +227,22 @@ let self = _self // overrides;
     };
   };
 
+  button-lock = melpaBuild rec {
+    pname   = "button-lock";
+    version = "1.0.2";
+    src = fetchFromGitHub {
+      owner  = "rolandwalker";
+      repo   = pname;
+      rev    = "v${version}";
+      sha256 = "1kqcc1d56jz107bswlzvdng6ny6qwp93yck2i2j921msn62qvbb2";
+    };
+    meta = {
+      description = "Mouseable text in Emacs";
+      homepage = "https://github.com/rolandwalker/button-lock";
+      license  = bsd2;
+    };
+  };
+
   caml = melpaBuild rec {
     pname   = "caml";
     version = "4.2.1"; # TODO: emacs doesn't seem to like 02 as a version component..
@@ -874,12 +890,12 @@ let self = _self // overrides;
 
   popup = melpaBuild rec {
     pname   = "popup";
-    version = "0.5.0";
+    version = "0.5.2";
     src = fetchFromGitHub {
       owner  = "auto-complete";
       repo   = "${pname}-el";
       rev    = "v${version}";
-      sha256 = "0836ayyz1syvd9ry97ya06l8mpr88c6xbgb4d98szj6iwbypcj7b";
+      sha256 = "0aazkczrzpp75793bpi0pz0cs7vinhdrpxfdlzi0cr39njird2yj";
     };
     meta = { license = gpl3Plus; };
   };

@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
 , readline ? null, openssl ? null, python ? null, ncurses ? null
-, sqlite ? null, postgresql ? null, mysql ? null, zlib ? null, lzo ? null
-, acl ? null, glusterfs ? null, ceph ? null, libcap ? null
+, sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
+, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
 
-assert sqlite != null || postgresql != null || mysql != null;
+assert sqlite != null || postgresql != null || libmysql != null;
 
 with stdenv.lib;
 let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig nettools gettext readline openssl python
-    ncurses sqlite postgresql mysql.lib zlib lzo acl glusterfs ceph libcap
+    ncurses sqlite postgresql libmysql zlib lzo acl glusterfs libceph libcap
   ];
 
   postPatch = ''
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     ++ optional (openssl != null) "--with-openssl=${openssl}"
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
-    ++ optional (mysql != null) "--with-mysql=${mysql.lib}"
+    ++ optional (libmysql != null) "--with-mysql=${libmysql}"
     ++ optional (zlib != null) "--with-zlib=${zlib}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (acl != null) "--enable-acl"
     ++ optional (glusterfs != null) "--with-glusterfs=${glusterfs}"
-    ++ optional (ceph != null) "--with-cephfs=${ceph}";
+    ++ optional (libceph != null) "--with-cephfs=${libceph}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

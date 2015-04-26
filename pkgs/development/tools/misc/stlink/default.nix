@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, libusb1 }:
+{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, libusb1 }:
 
 # IMPORTANT: You need permissions to access the stlink usb devices. Here are
 # example udev rules for stlink v1 and v2 so you don't need to have root
@@ -7,13 +7,15 @@
 # SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3744", MODE:="0666", SYMLINK+="stlinkv1_%n"
 # SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3748", MODE:="0666", SYMLINK+="stlinkv2_%n"
 
+let
+  version = "1.1.0";
+in
 stdenv.mkDerivation {
-  name = "stlink-20130306";
+  name = "stlink-${version}";
 
-  src = fetchgit {
-    url = git://github.com/texane/stlink.git;
-    rev = "5be889e3feb75fc7f594012c4855b4dc16940050";
-    sha256 = "1xbfr1kz4k6hhl0xpqn1vi83fdynjxx3ymn9gb7b0pb7h6ncjcyr";
+  src = fetchurl {
+    url = "https://github.com/texane/stlink/archive/${version}.tar.gz";
+    sha256 = "0b38a32ids9dpnz5h892l279fz8y1zzqk1qsnyhl1nm03p7xzi1s";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig libusb1 ];

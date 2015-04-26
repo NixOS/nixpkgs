@@ -1,16 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "glog-0.3.3";
+  name = "glog-${version}";
+  version = "0.3.4";
   
-  src = fetchurl {
-    url = "http://google-glog.googlecode.com/files/${name}.tar.gz";
-    sha1 = "ed40c26ecffc5ad47c618684415799ebaaa30d65";
+  src = fetchFromGitHub {
+    owner = "Google";
+    repo = "glog";
+    rev = "v${version}";
+    sha256 = "0ym5g15m7c8kjfr2c3zq6bz08ghin2d1r1nb6v2vnkfh1vn945x1";
   };
 
-  meta = {
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with stdenv.lib; {
     homepage = http://code.google.com/p/google-glog/;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     description = "Library for application-level logging";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

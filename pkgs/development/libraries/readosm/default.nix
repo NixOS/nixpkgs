@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An open source library to extract valid data from within an Open Street Map input file";
     homepage = https://www.gaia-gis.it/fossil/readosm;
-    license = [ "GPLv2+" "LGPLv2+" "MPL1.1" ];
-    licenses = with stdenv.lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
+    license = with stdenv.lib.licenses; [ mpl11 gpl2Plus lgpl21Plus ];
   };
 }

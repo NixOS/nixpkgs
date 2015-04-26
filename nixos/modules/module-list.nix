@@ -193,6 +193,7 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
+  ./services/misc/ihaskell.nix
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix
   ./services/misc/mesos-slave.nix
@@ -202,6 +203,7 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
+  ./services/misc/plex.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
@@ -241,6 +243,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/aiccu.nix
   ./services/networking/amuled.nix
+  ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
@@ -272,6 +275,7 @@
   ./services/networking/iodined.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
+  ./services/networking/lambdabot.nix
   ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
   ./services/networking/mstpd.nix
@@ -336,6 +340,7 @@
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/haveged.nix
+  ./services/security/hologram.nix
   ./services/security/munge.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
@@ -410,6 +415,9 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
+  ./system/boot/networkd.nix
+  ./system/boot/resolved.nix
+  ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix
   ./system/upstart/upstart.nix
@@ -423,6 +431,7 @@
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/jfs.nix
   ./tasks/filesystems/nfs.nix
+  ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vfat.nix

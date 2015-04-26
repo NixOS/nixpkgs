@@ -35,6 +35,20 @@ and old <literal>steam</literal> package -- to <literal>steamOriginal</literal>.
 was accordingly renamed to <literal>bomi</literal>
 </para></listitem>
 
+<listitem>
+    <para>
+        The default <literal>NIX_PATH</literal> for NixOS now includes
+        <literal>/nix/var/nix/profiles/per-user/root/channels</literal>, so it's
+        easy to add custom channels.
+    </para>
+    <para>
+        Moreover, whenever a <command>nixos-rebuild &lt;action&gt;
+        --upgrade</command> is issued, every channel that includes a file
+        called <filename>.update-on-nixos-rebuild</filename> will be upgraded
+        alongside of the <literal>nixos</literal> channel.
+    </para>
+</listitem>
+
 </itemizedlist>
 </para>
 

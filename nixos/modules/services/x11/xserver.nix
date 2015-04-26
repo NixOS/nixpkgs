@@ -41,16 +41,24 @@ let
     };
   in imap mkHead cfg.xrandrHeads;
 
-  xrandrDeviceSection = flip concatMapStrings xrandrHeads (h: ''
-    Option "monitor-${h.output}" "${h.name}"
-  '');
+  xrandrDeviceSection = let
+    monitors = flip map xrandrHeads (h: ''
+      Option "monitor-${h.output}" "${h.name}"
+    '');
+    # First option is indented through the space in the config but any
+    # subsequent options aren't so we need to apply indentation to
+    # them here
+    monitorsIndented = if length monitors > 1
+      then singleton (head monitors) ++ map (m: "  " + m) (tail monitors)
+      else monitors;
+  in concatStrings monitorsIndented;
 
   # Here we chain every monitor from the left to right, so we have:
   # m4 right of m3 right of m2 right of m1   .----.----.----.----.
   # Which will end up in reverse ----------> | m1 | m2 | m3 | m4 |
   #                                          `----^----^----^----'
   xrandrMonitorSections = let
-    mkMonitor = previous: current: previous ++ singleton {
+    mkMonitor = previous: current: singleton {
       inherit (current) name;
       value = ''
         Section "Monitor"
@@ -60,8 +68,8 @@ let
           ''}
         EndSection
       '';
-    };
-    monitors = foldl mkMonitor [] xrandrHeads;
+    } ++ previous;
+    monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.stdenv.mkDerivation {
@@ -145,6 +153,19 @@ in
         description = ''
           Whether to allow the X server to accept TCP connections.
         '';
+      };
+
+      inputClassSections = mkOption {
+        type = types.listOf types.lines;
+        default = [];
+        example = [ ''
+           Identifier      "Trackpoint Wheel Emulation"
+           MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
+           Option          "EmulateWheel"          "true
+           Option          "EmulateWheelButton"    "2"
+           Option          "Emulate3Buttons"       "false"
+          '' ];
+        description = "Content of additional InputClass sections of the X server configuration file.";
       };
 
       modules = mkOption {
@@ -522,6 +543,14 @@ in
           Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
+        # Additional "InputClass" sections
+        ${flip concatMapStrings cfg.inputClassSections (inputClassSection: ''
+        Section "InputClass"
+          ${inputClassSection}
+        EndSection
+        '')}
+
+
         Section "ServerLayout"
           Identifier "Layout[all]"
           ${cfg.serverLayoutSection}
@@ -593,4 +622,3 @@ in
   };
 
 }
-

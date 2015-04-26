@@ -1,34 +1,33 @@
-{ stdenv, fetchFromGitHub, writeScript
+{ stdenv, fetchFromGitHub, writeScript, glibcLocales
 , buildPythonPackage, pythonPackages, python
 
 , enableAcoustid   ? true
-, enableBeatport   ? true
 , enableDiscogs    ? true
 , enableEchonest   ? true
 , enableFetchart   ? true
 , enableLastfm     ? true
 , enableMpd        ? true
 , enableReplaygain ? true
+, enableThumbnails ? true
 , enableWeb        ? true
 
 , bashInteractive, bashCompletion
 }:
 
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
-assert enableBeatport    -> pythonPackages.responses      != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableEchonest    -> pythonPackages.pyechonest     != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
 assert enableLastfm      -> pythonPackages.pylast         != null;
 assert enableMpd         -> pythonPackages.mpd            != null;
 assert enableReplaygain  -> pythonPackages.audiotools     != null;
+assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
 
 with stdenv.lib;
 
 let
   optionalPlugins = {
-    beatport = enableBeatport;
     chroma = enableAcoustid;
     discogs = enableDiscogs;
     echonest = enableEchonest;
@@ -38,15 +37,16 @@ let
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
     replaygain = enableReplaygain;
+    thumbnails = enableThumbnails;
     web = enableWeb;
   };
 
   pluginsWithoutDeps = [
-    "bench" "bpd" "bpm" "bucket" "convert" "duplicates" "embedart" "freedesktop"
-    "fromfilename" "ftintitle" "fuzzy" "ihate" "importadded" "importfeeds"
-    "info" "inline" "keyfinder" "lyrics" "mbcollection" "mbsync" "missing"
-    "permissions" "play" "plexupdate" "random" "rewrite" "scrub" "smartplaylist"
-    "spotify" "the" "types" "zero"
+    "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "embedart"
+    "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "ihate"
+    "importadded" "importfeeds" "info" "inline" "keyfinder" "lyrics"
+    "mbcollection" "mbsync" "missing" "permissions" "play" "plexupdate" "random"
+    "rewrite" "scrub" "smartplaylist" "spotify" "the" "types" "zero"
   ];
 
   enabledOptionalPlugins = attrNames (filterAttrs (_: id) optionalPlugins);
@@ -59,14 +59,14 @@ let
 
 in buildPythonPackage rec {
   name = "beets-${version}";
-  version = "1.3.10";
+  version = "1.3.11";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "sampsyo";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "136rvzpygjym6hxq19qwiri5jxx718bbmi471mvc3vibrb7xj1sr";
+    sha256 = "16jb1frds9vl40n9hy18x9xipxfzln3ym823vx8jymhv3by8p62m";
   };
 
   propagatedBuildInputs = [
@@ -74,18 +74,20 @@ in buildPythonPackage rec {
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
+    pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
     python.modules.sqlite3
     python.modules.readline
-  ] ++ optional enableAcoustid                     pythonPackages.pyacoustid
-    ++ optional (enableBeatport || enableFetchart) pythonPackages.requests2
-    ++ optional enableDiscogs                      pythonPackages.discogs_client
-    ++ optional enableEchonest                     pythonPackages.pyechonest
-    ++ optional enableLastfm                       pythonPackages.pylast
-    ++ optional enableMpd                          pythonPackages.mpd
-    ++ optional enableReplaygain                   pythonPackages.audiotools
-    ++ optional enableWeb                          pythonPackages.flask;
+  ] ++ optional enableAcoustid   pythonPackages.pyacoustid
+    ++ optional enableFetchart   pythonPackages.requests2
+    ++ optional enableDiscogs    pythonPackages.discogs_client
+    ++ optional enableEchonest   pythonPackages.pyechonest
+    ++ optional enableLastfm     pythonPackages.pylast
+    ++ optional enableMpd        pythonPackages.mpd
+    ++ optional enableReplaygain pythonPackages.audiotools
+    ++ optional enableThumbnails pythonPackages.pyxdg
+    ++ optional enableWeb        pythonPackages.flask;
 
   buildInputs = with pythonPackages; [
     beautifulsoup4
@@ -134,6 +136,8 @@ in buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
+    LANG=en_US.UTF-8 \
+    LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
     HOME="$(mktemp -d)" \
@@ -164,6 +168,6 @@ in buildPythonPackage rec {
     homepage = http://beets.radbox.org;
     description = "Music tagger and library organizer";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ iElectric aszlig ];
+    maintainers = with stdenv.lib.maintainers; [ iElectric aszlig pjones ];
   };
 }

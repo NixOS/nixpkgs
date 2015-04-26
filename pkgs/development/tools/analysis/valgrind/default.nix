@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk"
       + "/valgrind-3.9.0-glibc-2.21.patch?h=packages/valgrind&id=41e87313b69";
     sha256 = "14sgsvjjalbcqpcayyv5cndc9hfm5bigkp684b6cr6virksmlk19";
-  })];
+  }) ./linux-4.0.patch];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
