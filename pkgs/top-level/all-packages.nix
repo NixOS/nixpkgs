@@ -4385,6 +4385,8 @@ let
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
 
+  squeak = callPackage ../development/compilers/squeak { };
+
   stalin = callPackage ../development/compilers/stalin { };
 
   strategoPackages = recurseIntoAttrs strategoPackages018;
