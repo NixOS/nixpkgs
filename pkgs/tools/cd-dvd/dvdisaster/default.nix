@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./
+    sed -i 's/dvdisaster48.png/dvdisaster/' contrib/dvdisaster.desktop
   '';
 
   # Explicit --docdir= is required for on-line help to work:
@@ -27,6 +28,16 @@ stdenv.mkDerivation rec {
     pkgconfig which gettext intltool
     glib gtk2
   ];
+
+  postInstall = ''
+    mkdir -pv $out/share/applications
+    cp contrib/dvdisaster.desktop $out/share/applications/
+
+    for size in 16 24 32 48 64; do
+      mkdir -pv $out/share/icons/hicolor/"$size"x"$size"/apps/
+      cp contrib/dvdisaster"$size".png $out/share/icons/hicolor/"$size"x"$size"/apps/dvdisaster.png
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://dvdisaster.net/;
