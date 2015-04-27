@@ -499,6 +499,8 @@ let
 
   afl = callPackage ../tools/security/afl { };
 
+  aha = callPackage ../tools/text/aha { };
+
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
   aiccu = callPackage ../tools/networking/aiccu { };
