@@ -13531,6 +13531,11 @@ let
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
+  coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
+    inherit (ocamlPackages) findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
     inherit (ocamlPackages_3_12_1) ocaml findlib;
     camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
@@ -13577,7 +13582,21 @@ let
 
   };
 
+  mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
+
+    mathcomp = callPackage ../development/coq-modules/mathcomp/1.5.nix {
+      coq = coq_8_5;
+      ssreflect = ssreflect;
+    };
+
+    ssreflect = callPackage ../development/coq-modules/ssreflect/1.5.nix {
+      coq = coq_8_5;
+    };
+
+  };
+
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
+  coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages);
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
