@@ -9278,6 +9278,8 @@ let
 
     frandom = callPackage ../os-specific/linux/frandom { };
 
+    fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
+
     ktap = callPackage ../os-specific/linux/ktap { };
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
