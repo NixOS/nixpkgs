@@ -51,7 +51,7 @@ let
       # tkinter hints
       substituteInPlace lib_pypy/_tkinter/tklib.py \
         --replace "'/usr/include/tcl'" "'${tk}/include', '${tcl}/include'" \
-        --replace "linklibs=['tcl', 'tk']" "linklibs=['tcl8.5', 'tk8.5']" \
+        --replace "linklibs=['tcl', 'tk']" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
       sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3.py
