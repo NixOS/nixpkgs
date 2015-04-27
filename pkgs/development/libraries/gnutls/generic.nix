@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   # Fixup broken libtool and pkgconfig files
   preFixup = ''
     sed -e 's,-ltspi,-L${trousers}/lib -ltspi,' \
-        -e 's,-lz,-L${zlib}/lib -lz,' \
+        -e 's,-lz,-L${zlib.out}/lib -lz,' \
         -e 's,-lgmp,-L${gmp}/lib -lgmp,' \
         -i $out/lib/libgnutls.la $out/lib/pkgconfig/gnutls.pc
   '';
