@@ -4791,7 +4791,9 @@ let
 
   sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
 
-  tcl = callPackage ../development/interpreters/tcl { };
+  tcl = tcl-8_6;
+  tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
+  tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
 
   xulrunner = callPackage ../development/interpreters/xulrunner {
     inherit (gnome) libIDL;
