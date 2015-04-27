@@ -57,7 +57,8 @@ with lib;
   };
 
   sslServerChain = mkOption {
-    type = types.path;
+    type = types.nullOr types.path;
+    default = null;
     example = "/var/ca.pem";
     description = "Path to server SSL chain file.";
   };
