@@ -29,7 +29,8 @@ let
 
   hasXlibs = xlibs != null;
 
-  optLibcap = shouldUsePkg libcap;
+  optLibcap = shouldUsePkg libcap.out;
+  optLibcapDev = shouldUsePkg libcap.dev;
   hasCaps = optLibcap != null || stdenv.isFreeBSD; # Built-in on FreeBSD
 
   optOss = if libOnly then null else shouldUsePkg oss;
@@ -81,7 +82,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     json_c libsndfile gettext check database
 
-    optLibcap valgrind optOss optCoreaudio optAlsaLib optEsound optGlib
+    optLibcap optLibcapDev valgrind optOss optCoreaudio optAlsaLib optEsound optGlib
     optGtk3 optGconf optAvahi optLibjack2 optLibasyncns optLirc optDbus optUdev
     optOpenssl optFftw optSpeexdsp optSystemd optWebrtc-audio-processing
   ] ++ stdenv.lib.optionals hasXlibs (with xlibs; [
