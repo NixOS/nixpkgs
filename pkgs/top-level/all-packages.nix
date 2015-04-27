@@ -7519,7 +7519,7 @@ let
     packages = [];
   };
 
-  rPackages = import ../development/r-modules {
+  rPackages = callPackage ../development/r-modules {
     inherit pkgs;
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   };

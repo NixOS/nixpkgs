@@ -1,11 +1,11 @@
 /* This file defines the composition for CRAN (R) packages. */
 
-{ pkgs, overrides }:
+{ R, pkgs, overrides }:
 
 let
-  inherit (pkgs) R fetchurl stdenv lib xvfb_run utillinux;
+  inherit (pkgs) fetchurl stdenv lib;
 
-  buildRPackage = import ./generic-builder.nix { inherit R xvfb_run utillinux ; };
+  buildRPackage = pkgs.callPackage ./generic-builder.nix { inherit R; };
 
   # Package template
   #
@@ -23,7 +23,7 @@ let
     src = fetchurl {
       urls = [
         "mirror://cran/src/contrib/${name}_${version}.tar.gz"
-        "mirror://cran/src/contrib/Archive/${name}/${name}_${version}.tar.gz"
+        "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
       ];
       inherit sha256;
     };
@@ -51,17 +51,11 @@ let
   #   });
   # }
   overrideNativeBuildInputs = overrides: old:
-    let
-      attrNames = builtins.attrNames overrides;
-      nameValuePairs = map (name: rec {
-        inherit name;
-        nativeBuildInputs = builtins.getAttr name overrides;
-        value = (builtins.getAttr name old).overrideDerivation (attrs: {
-          nativeBuildInputs = attrs.nativeBuildInputs ++ nativeBuildInputs;
-        });
-      }) attrNames;
-    in
-      builtins.listToAttrs nameValuePairs;
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+      })
+    ) overrides;
 
   # Overrides package definitions with buildInputs.
   # For example,
@@ -78,17 +72,34 @@ let
   #   });
   # }
   overrideBuildInputs = overrides: old:
-    let
-      attrNames = builtins.attrNames overrides;
-      nameValuePairs = map (name: rec {
-        inherit name;
-        buildInputs = builtins.getAttr name overrides;
-        value = (builtins.getAttr name old).overrideDerivation (attrs: {
-          buildInputs = attrs.buildInputs ++ buildInputs;
-        });
-      }) attrNames;
-    in
-      builtins.listToAttrs nameValuePairs;
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        buildInputs = attrs.buildInputs ++ value;
+      })
+    ) overrides;
+
+  # Overrides package definitions with new R dependencies.
+  # For example,
+  #
+  # overrideRDepends {
+  #   foo = [ self.bar ]
+  # } old
+  #
+  # results in
+  #
+  # {
+  #   foo = old.foo.overrideDerivation (attrs: {
+  #     nativeBuildInputs = attrs.nativeBuildInputs ++ [ self.bar ];
+  #     propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ [ self.bar ];
+  #   });
+  # }
+  overrideRDepends = overrides: old:
+    lib.mapAttrs (name: value:
+      (builtins.getAttr name old).overrideDerivation (attrs: {
+        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs ++ value;
+      })
+    ) overrides;
 
   # Overrides package definition requiring X running to install.
   # For example,
@@ -170,10 +181,11 @@ let
     let
       old1 = old0 // (overrideRequireX packagesRequireingX old0);
       old2 = old1 // (overrideSkipCheck packagesToSkipCheck old1);
-      old3 = old2 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old2);
-      old4 = old3 // (overrideBuildInputs packagesWithBuildInputs old3);
-      old5 = old4 // (overrideBroken brokenPackages old4);
-      old = old5;
+      old3 = old2 // (overrideRDepends packagesWithRDepends old2);
+      old4 = old3 // (overrideNativeBuildInputs packagesWithNativeBuildInputs old3);
+      old5 = old4 // (overrideBuildInputs packagesWithBuildInputs old4);
+      old6 = old5 // (overrideBroken brokenPackages old5);
+      old = old6;
     in old // (otherOverrides old new);
 
   # Recursive override pattern.
@@ -185,134 +197,150 @@ let
 
   # tweaks for the individual packages and "in self" follow
 
+  packagesWithRDepends = {
+    FactoMineR = [ self.car ];
+  };
+
   packagesWithNativeBuildInputs = {
-    # sort -t '=' -k 2
-    RAppArmor = [ pkgs.apparmor ];
-    SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
-    curl = [ pkgs.curl pkgs.openldap ];
-    Rssa = [ pkgs.fftw ];
-    fftw = [ pkgs.fftw ];
-    fftwtools = [ pkgs.fftw ];
-    kza = [ pkgs.fftw ];
-    mwaved = [ pkgs.fftw ];
-    spate = [ pkgs.fftw ];
-    chebpol = [ pkgs.fftw ];
-    seewave = [ pkgs.fftw pkgs.libsndfile ];
-    rgeos = [ pkgs.geos ];
-    Rglpk = [ pkgs.glpk ];
-    RCA = [ pkgs.gmp ];
-    gmp = [ pkgs.gmp ];
-    rcdd = [ pkgs.gmp ];
-    igraph = [ pkgs.gmp ];
-    glpkAPI = [ pkgs.gmp pkgs.glpk ];
-    sdcTable = [ pkgs.gmp pkgs.glpk ];
-    Rmpfr = [ pkgs.gmp pkgs.mpfr ];
-    BNSP = [ pkgs.gsl ];
+    abn = [ pkgs.gsl ];
+    adimpro = [ pkgs.imagemagick ];
+    audio = [ pkgs.portaudio ];
     BayesSAE = [ pkgs.gsl ];
     BayesVarSel = [ pkgs.gsl ];
-    HiCseg = [ pkgs.gsl ];
-    KFKSDS = [ pkgs.gsl ];
-    R2GUESS = [ pkgs.gsl ];
-    RcppZiggurat = [ pkgs.gsl ];
-    SemiCompRisks = [ pkgs.gsl ];
-    VBLPCM = [ pkgs.gsl ];
-    abn = [ pkgs.gsl ];
+    BayesXsrc = [ pkgs.readline pkgs.ncurses ];
+    bigGP = [ pkgs.openmpi ];
+    bnpmr = [ pkgs.gsl ];
+    BNSP = [ pkgs.gsl ];
+    cairoDevice = [ pkgs.gtk2 ];
+    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
+    CARramps = [ pkgs.linuxPackages.nvidia_x11 pkgs.liblapack ];
+    chebpol = [ pkgs.fftw ];
     cit = [ pkgs.gsl ];
+    curl = [ pkgs.curl pkgs.openldap ];
+    devEMF = [ pkgs.xlibs.libXft ];
+    diversitree = [ pkgs.gsl pkgs.fftw ];
+    EMCluster = [ pkgs.liblapack ];
+    fftw = [ pkgs.fftw ];
+    fftwtools = [ pkgs.fftw ];
+    Formula = [ pkgs.gmp ];
+    geoCount = [ pkgs.gsl ];
+    git2r = [ pkgs.zlib ];
+    glpkAPI = [ pkgs.gmp pkgs.glpk ];
+    gmp = [ pkgs.gmp ];
+    graphscan = [ pkgs.gsl ];
+    gsl = [ pkgs.gsl ];
+    HiCseg = [ pkgs.gsl ];
+    igraph = [ pkgs.gmp ];
+    JavaGD = [ pkgs.jdk ];
+    jpeg = [ pkgs.libjpeg ];
+    KFKSDS = [ pkgs.gsl ];
+    kza = [ pkgs.fftw ];
     libamtrack = [ pkgs.gsl ];
     mixcat = [ pkgs.gsl ];
-    outbreaker = [ pkgs.gsl ];
-    pcaPA = [ pkgs.gsl ];
-    ridge = [ pkgs.gsl ];
-    simplexreg = [ pkgs.gsl ];
-    stsm = [ pkgs.gsl ];
-    survSNP = [ pkgs.gsl ];
-    topicmodels = [ pkgs.gsl ];
-    RcppGSL = [ pkgs.gsl ];
-    bnpmr = [ pkgs.gsl ];
-    geoCount = [ pkgs.gsl ];
-    gsl = [ pkgs.gsl ];
     mvabund = [ pkgs.gsl ];
-    diversitree = [ pkgs.gsl pkgs.fftw ];
-    VBmix = [ pkgs.gsl pkgs.fftw pkgs.qt4 ];
-    RGtk2 = [ pkgs.gtk2 ];
-    cairoDevice = [ pkgs.gtk2 ];
-    adimpro = [ pkgs.imagemagick ];
-    rjags = [ pkgs.jags ];
-    runjags = [ pkgs.jags ];
-    JavaGD = [ pkgs.jdk ];
-    RODBC = [ pkgs.libiodbc ];
-    RODBCext = [ pkgs.libiodbc ];
-    jpeg = [ pkgs.libjpeg ];
-    EMCluster = [ pkgs.liblapack ];
-    png = [ pkgs.libpng ];
-    rtiff = [ pkgs.libtiff ];
-    tiff = [ pkgs.libtiff ];
-    Cairo = [ pkgs.libtiff pkgs.libjpeg pkgs.cairo ];
-    XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
-    rpud = [ pkgs.linuxPackages.nvidia_x11 ];
-    CARramps = [ pkgs.linuxPackages.nvidia_x11 pkgs.liblapack ];
-    rgl = [ pkgs.mesa pkgs.x11 ];
-    ncdf = [ pkgs.netcdf ];
+    mwaved = [ pkgs.fftw ];
     ncdf4 = [ pkgs.netcdf ];
-    pbdNCDF4 = [ pkgs.netcdf ];
-    RNetCDF = [ pkgs.netcdf pkgs.udunits ];
+    ncdf = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
-    npRmpi = [ pkgs.openmpi ];
-    pbdPROF = [ pkgs.openmpi ];
-    sprint = [ pkgs.openmpi ];
-    Rmpi = [ pkgs.openmpi ];
     openssl = [ pkgs.openssl ];
+    outbreaker = [ pkgs.gsl ];
+    pbdMPI = [ pkgs.openmpi ];
+    pbdNCDF4 = [ pkgs.netcdf ];
+    pbdPROF = [ pkgs.openmpi ];
     PKI = [ pkgs.openssl ];
+    png = [ pkgs.libpng ];
+    PopGenome = [ pkgs.zlib ];
+    proj4 = [ pkgs.proj ];
+    qtbase = [ pkgs.qt4 ];
+    qtpaint = [ pkgs.qt4 ];
+    R2GUESS = [ pkgs.gsl ];
+    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    RAppArmor = [ pkgs.libapparmor ];
+    rbamtools = [ pkgs.zlib ];
+    RCA = [ pkgs.gmp ];
+    rcdd = [ pkgs.gmp ];
+    RcppCNPy = [ pkgs.zlib ];
+    RcppGSL = [ pkgs.gsl ];
+    RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
+    RcppZiggurat = [ pkgs.gsl ];
+    rgdal = [ pkgs.proj pkgs.gdal ];
+    rgeos = [ pkgs.geos ];
+    rgl = [ pkgs.mesa pkgs.x11 ];
+    Rglpk = [ pkgs.glpk ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
+    RGtk2 = [ pkgs.gtk2 ];
+    Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
+    ridge = [ pkgs.gsl ];
+    RJaCGH = [ pkgs.zlib ];
+    rjags = [ pkgs.jags ];
+    rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
+    Rlibeemd = [ pkgs.gsl ];
+    rmatio = [ pkgs.zlib ];
+    Rmpfr = [ pkgs.gmp pkgs.mpfr ];
+    Rmpi = [ pkgs.openmpi ];
+    RMySQL = [ pkgs.zlib pkgs.mysql.lib ];
+    RNetCDF = [ pkgs.netcdf pkgs.udunits ];
+    RODBCext = [ pkgs.libiodbc ];
+    RODBC = [ pkgs.libiodbc ];
+    rpg = [ pkgs.postgresql ];
+    rphast = [ pkgs.pcre pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    Rpoppler = [ pkgs.poppler ];
+    RPostgreSQL = [ pkgs.postgresql ];
+    RProtoBuf = [ pkgs.protobuf ];
+    rpud = [ pkgs.linuxPackages.nvidia_x11 ];
+    rPython = [ pkgs.python ];
     RSclient = [ pkgs.openssl ];
     Rserve = [ pkgs.openssl ];
-    Rpoppler = [ pkgs.poppler ];
-    audio = [ pkgs.portaudio ];
-    rpg = [ pkgs.postgresql ];
-    RPostgreSQL = [ pkgs.postgresql ];
-    ssanv = [ pkgs.proj ];
-    proj4 = [ pkgs.proj ];
-    rgdal = [ pkgs.proj pkgs.gdal ];
-    RProtoBuf = [ pkgs.protobuf ];
-    rPython = [ pkgs.python ];
-    qtpaint = [ pkgs.qt4 ];
-    qtbase = [ pkgs.qt4 ];
-    BayesXsrc = [ pkgs.readline pkgs.ncurses ];
-    udunits2 = [ pkgs.udunits pkgs.expat ];
-    tkrplot = [ pkgs.xlibs.libX11 ];
-    rzmq = [ pkgs.zeromq2 ];
-    PopGenome = [ pkgs.zlib ];
-    RJaCGH = [ pkgs.zlib ];
-    RcppCNPy = [ pkgs.zlib ];
-    Rniftilib = [ pkgs.zlib ];
-    WhopGenome = [ pkgs.zlib ];
-    devEMF = [ pkgs.zlib ];
-    gdsfmt = [ pkgs.zlib ];
-    rbamtools = [ pkgs.zlib ];
-    rmatio = [ pkgs.zlib ];
+    Rssa = [ pkgs.fftw ];
+    rtfbs = [ pkgs.zlib pkgs.pcre pkgs.bzip2 pkgs.gzip pkgs.readline ];
+    rtiff = [ pkgs.libtiff ];
+    runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib pkgs.boost ];
-    seqminer = [ pkgs.zlib pkgs.bzip2 ];
-    rphast = [ pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
-    rtfbs = [ pkgs.zlib pkgs.bzip2 pkgs.gzip pkgs.readline ];
-    Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
+    rzmq = [ pkgs.zeromq3 ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
-    RcppOctave = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.octave ];
-    rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
-    R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
-    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    sdcTable = [ pkgs.gmp pkgs.glpk ];
+    seewave = [ pkgs.fftw pkgs.libsndfile ];
+    SemiCompRisks = [ pkgs.gsl ];
+    seqinr = [ pkgs.zlib ];
+    seqminer = [ pkgs.zlib pkgs.bzip2 ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
+    simplexreg = [ pkgs.gsl ];
+    SOD = [ pkgs.cudatoolkit ]; # requres CL/cl.h
+    spate = [ pkgs.fftw ];
+    sprint = [ pkgs.openmpi ];
+    ssanv = [ pkgs.proj ];
+    stsm = [ pkgs.gsl ];
+    survSNP = [ pkgs.gsl ];
+    sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
+    TAQMNGR = [ pkgs.zlib ];
+    tiff = [ pkgs.libtiff ];
+    TKF = [ pkgs.gsl ];
+    tkrplot = [ pkgs.xlibs.libX11 ];
+    topicmodels = [ pkgs.gsl ];
+    udunits2 = [ pkgs.udunits pkgs.expat ];
+    V8 = [ pkgs.v8 ];
+    VBLPCM = [ pkgs.gsl ];
+    VBmix = [ pkgs.gsl pkgs.fftw pkgs.qt4 ];
+    WhopGenome = [ pkgs.zlib ];
     XBRL = [ pkgs.zlib pkgs.libxml2 ];
-    RMySQL = [ pkgs.zlib pkgs.mysql ];
+    XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
   };
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    svKomodo = [ pkgs.which ];
+    nat = [ pkgs.which ];
+    nat_nblast = [ pkgs.which ];
+    nat_templatebrains = [ pkgs.which ];
+    RMark = [ pkgs.which ];
+    RPushbullet = [ pkgs.which ];
     qtpaint = [ pkgs.cmake ];
     qtbase = [ pkgs.cmake pkgs.perl ];
     gmatrix = [ pkgs.cudatoolkit ];
     WideLM = [ pkgs.cudatoolkit ];
     RCurl = [ pkgs.curl ];
-    Rgnuplot = [ pkgs.gnuplot ];
     R2SWF = [ pkgs.pkgconfig ];
+    rggobi = [ pkgs.pkgconfig ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
@@ -331,10 +359,12 @@ let
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
+    ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
-    tikzDevice = [ pkgs.texLive ];
+    tikzDevice = [ pkgs.which pkgs.texLive ];
     rPython = [ pkgs.which ];
     CARramps = [ pkgs.which pkgs.cudatoolkit ];
+    gridGraphics = [ pkgs.which ];
     gputools = [ pkgs.which pkgs.cudatoolkit ];
     rpud = [ pkgs.which pkgs.cudatoolkit ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
@@ -364,6 +394,8 @@ let
     "DeducerPlugInScaling"
     "DeducerSpatial"
     "DeducerSurvival"
+    "HomoPolymer"
+    "MetSizeR"
     "DeducerText"
     "Demerelate"
     "DescTools"
@@ -393,7 +425,6 @@ let
     "LS2Wstat"
     "MAR1"
     "MTurkR"
-    "MVPARTwrap"
     "MareyMap"
     "MergeGUI"
     "Meth27QC"
@@ -405,8 +436,7 @@ let
     "PBSadmb"
     "PBSmodelling"
     "PCPS"
-    "PKmodelFinder"
-    "PoMoS"
+    "PKgraph"
     "PopGenReport"
     "PredictABEL"
     "PrevMap"
@@ -432,7 +462,6 @@ let
     "RcmdrPlugin_KMggplot2"
     "RcmdrPlugin_MA"
     "RcmdrPlugin_MPAStats"
-    "RcmdrPlugin_NMBU"
     "RcmdrPlugin_ROC"
     "RcmdrPlugin_SCDA"
     "RcmdrPlugin_SLC"
@@ -474,7 +503,6 @@ let
     "TestScorer"
     "VIMGUI"
     "VecStatGraphs3D"
-    "VisuClust"
     "WMCapacity"
     "accrual"
     "ade4TkGUI"
@@ -581,7 +609,6 @@ let
     "ripa"
     "rite"
     "rnbn"
-    "rriskDistributions"
     "rsgcc"
     "sdcMicroGUI"
     "sharpshootR"
@@ -616,306 +643,320 @@ let
   packagesToSkipCheck = [
     "Rmpi" # tries to run MPI processes
     "gmatrix" # requires CUDA runtime
-    "npRmpi" # tries to run MPI processes
     "sprint" # tries to run MPI processes
+    "pbdMPI" # tries to run MPI processes
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
-    # sort -t '#' -k 2
-
-    "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
-    "MigClim" # SDMTools.So: Undefined Symbol: X
-    "PatternClass" # SDMTools.So: Undefined Symbol: X
+    "ACNE" # requires aroma_affymetrix
     "Actigraphy" # SDMTools.so: undefined symbol: X
-    "lefse" # SDMTools.so: undefined symbol: X
-    "raincpc" # SDMTools.so: undefined symbol: X
-    "rainfreq" # SDMTools.so: undefined symbol: X
-    "CARrampsOcl" # depends on OpenCL
-    "RGA" # jsonlite.so: undefined symbol: XXX
-    "RSiteCatalyst" # jsonlite.so: undefined symbol: XXX
-    "RSocrata" # jsonlite.so: undefined symbol: XXX
-    "SGP" # jsonlite.so: undefined symbol: XXX
-    "SocialMediaMineR" # jsonlite.so: undefined symbol: XXX
-    "WikipediR" # jsonlite.so: undefined symbol: XXX
-    "alm" # jsonlite.so: undefined symbol: XXX
-    "archivist" # jsonlite.so: undefined symbol: XXX
-    "bold" # jsonlite.so: undefined symbol: XXX
-    "enigma" # jsonlite.so: undefined symbol: XXX
-    "exCon" # jsonlite.so: undefined symbol: XXX
-    "gender" # jsonlite.so: undefined symbol: XXX
-    "jSonarR" # jsonlite.so: undefined symbol: XXX
-    "leafletR" # jsonlite.so: undefined symbol: XXX
-    "opencpu" # jsonlite.so: undefined symbol: XXX
-    "pdfetch" # jsonlite.so: undefined symbol: XXX
-    "polidata" # jsonlite.so: undefined symbol: XXX
-    "pollstR" # jsonlite.so: undefined symbol: XXX
-    "rHealthDataGov" # jsonlite.so: undefined symbol: XXX
-    "rWBclimate" # jsonlite.so: undefined symbol: XXX
-    "rbison" # jsonlite.so: undefined symbol: XXX
-    "rinat" # jsonlite.so: undefined symbol: XXX
-    "rjstat" # jsonlite.so: undefined symbol: XXX
-    "rmongodb" # jsonlite.so: undefined symbol: XXX
-    "rnoaa" # jsonlite.so: undefined symbol: XXX
-    "rsunlight" # jsonlite.so: undefined symbol: XXX
-    "slackr" # jsonlite.so: undefined symbol: XXX
-    "webutils" # jsonlite.so: undefined symbol: XXX
-    "msarc" # requires AnnotationDbi
-    "MetaLandSim" # requires Biobase
-    "RobLox" # requires Biobase
-    "RobLoxBioC" # requires Biobase
-    "compendiumdb" # requires Biobase
-    "ktspair" # requires Biobase
-    "permGPU" # requires Biobase
-    "propOverlap" # requires Biobase
-    "GExMap" # requires Biobase and multtest
-    "IsoGene" # requires Biobase, and affy
-    "mGSZ" # requires Biobase, and limma
-    "netweavers" # requires BiocGenerics, Biobase, and limma
-    "NCmisc" # requires BiocInstaller
-    "EMDomics" # requires BiocParallel
-    "RADami" # requires Biostrings
-    "ionflows" # requires Biostrings
-    "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
-    "SimRAD" # requires Biostrings, and ShortRead
-    "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
-    "OpenCL" # requires CL/opencl.h
-    "cplexAPI" # requires CPLEX
-    "empiricalFDR_DESeq2" # requires DESeq2, and GenomicRanges
-    "CHAT" # requires DNAcopy
-    "PSCBS" # requires DNAcopy
-    "ParDNAcopy" # requires DNAcopy
-    "Rcell" # requires EBImage
-    "RockFab" # requires EBImage
-    "gitter" # requires EBImage
-    "rggobi" # requires GGobi
-    "PANDA" # requires GO.db
-    "BiSEp" # requires GOSemSim, GO.db, and org.Hs.eg.db
-    "PubMedWordcloud" # requires GOsummaries
-    "ExomeDepth" # requires GenomicRanges, and Rsamtools
-    "HTSDiff" # requires HTSCluster
-    "RAM" # requires Heatplus
-    "RcppRedis" # requires Hiredis
-    "MSIseq" # requires IRanges
-    "SNPtools" # requires IRanges, GenomicRanges, Biostrings, and Rsamtools
-    "interval" # requires Icens
-    "PhViD" # requires LBE
-    "rLindo" # requires LINDO API
-    "magma" # requires MAGMA
-    "HiPLARM" # requires MAGMA or PLASMA
-    "bigGP" # requires MPI running. HELP WANTED!
-    "doMPI" # requires MPI running. HELP WANTED!
-    "metaMix" # requires MPI running. HELP WANTED!
-    "pbdMPI" # requires MPI running. HELP WANTED!
-    "pmclust" # requires MPI running. HELP WANTED!
-    "MSeasyTkGUI" # requires MSeasyTkGUI
-    "bigpca" # requires NCmisc
-    "reader" # requires NCmisc
-    "ROracle" # requires OCI
-    "BRugs" # requires OpenBUGS
-    "smart" # requires PMA
+    "adaptsmoFMRI" # requires spatstat
+    "ads" # requires spatstat
+    "agridat" # requires pcaMethods
+    "aLFQ" # requires protiq
+    "AntWeb" # requires leafletR
+    "aoristic" # requires spatstat
+    "apmsWAPP" # requires genefilter, Biobase, multtest, edgeR, DESeq, and aroma.light
+    "aroma_affymetrix" # requires aroma_core
     "aroma_cn" # requires PSCBS
     "aroma_core" # requires PSCBS
-    "RQuantLib" # requires QuantLib
-    "RSeed" # requires RBGL, and graph
-    "gRbase" # requires RBGL, and graph
-    "ora" # requires ROracle
-    "semiArtificial" # requires RSNNS
-    "branchLars" # requires Rgraphviz
-    "gcExplorer" # requires Rgraphviz
-    "hasseDiagram" # requires Rgraphviz
-    "hpoPlot" # requires Rgraphviz
-    "strum" # requires Rgraphviz
-    "dagbag" # requires Rlapack
-    "ltsk" # requires Rlapack and Rblas
-    "REBayes" # requires Rmosek
-    "cqrReg" # requires Rmosek
-    "LinRegInteractive" # requires Rpanel
-    "RVideoPoker" # requires Rpanel
     "ArrayBin" # requires SAGx
-    "RSAP" # requires SAPNWRFCSDK
-    "DBKGrad" # requires SDD
-    "pubmed_mineR" # requires SSOAP
-    "ENA" # requires WGCNA
-    "GOGANPA" # requires WGCNA
-    "nettools" # requires WGCNA
-    "rneos" # requires XMLRPC
-    "demi" # requires affy, affxparser, and oligo
-    "KANT" # requires affy, and Biobase
-    "pathClass" # requires affy, and Biobase
-    "ACNE" # requires aroma_affymetrix
-    "NSA" # requires aroma_core
-    "aroma_affymetrix" # requires aroma_core
-    "calmate" # requires aroma_core
-    "beadarrayFilter" # requires beadarray
-    "PepPrep" # requires biomaRt
-    "snplist" # requires biomaRt
-    "FunctionalNetworks" # requires breastCancerVDX, and Biobase
-    "rJPSGCS" # requires chopsticks
-    "clpAPI" # requires clp
-    "pcaL1" # requires clp
-    "bmrm" # requires clpAPI
-    "sequenza" # requires copynumber
-    "Rcplex" # requires cplexAPI
-    "dcGOR" # requires dnet
-    "bcool" # requires doMPI
-    "GSAgm" # requires edgeR
-    "HTSCluster" # requires edgeR
-    "QuasiSeq" # requires edgeR
-    "SimSeq" # requires edgeR
     "babel" # requires edgeR
-    "edgeRun" # requires edgeR
+    "BACA" # requires RDAVIDWebService
     "BcDiag" # requires fabia
-    "superbiclust" # requires fabia
-    "curvHDR" # requires flowCore
-    "RbioRXN" # requires fmcsR, and KEGGREST
-    "D2C" # requires gRbase
-    "LogisticDx" # requires gRbase
-    "gRain" # requires gRbase
-    "gRc" # requires gRbase
-    "gRim" # requires gRbase
-    "topologyGSA" # requires gRbase
-    "qdap" # requires gender
-    "orQA" # requires genefilter
-    "apmsWAPP" # requires genefilter, Biobase, multtest, edgeR, DESeq, and aroma.light
-    "miRtest" # requires globaltest, GlobalAncova, and limma
-    "PairViz" # requires graph
-    "eulerian" # requires graph
-    "gRapHD" # requires graph
-    "msSurv" # requires graph
-    "QuACN" # requires graph, RBGL
-    "RnavGraph" # requires graph, and RBGL
-    "iRefR" # requires graph, and RBGL
-    "pcalg" # requires graph, and RBGL
-    "protiq" # requires graph, and RBGL
-    "classGraph" # requires graph, and Rgraphviz
-    "epoc" # requires graph, and Rgraphviz
-    "gridGraphviz" # requires graph, and Rgraphviz
-    "ddepn" # requires graph, and genefilter
-    "gridDebug" # requires gridGraphviz
-    "FAMT" # requires impute
-    "PMA" # requires impute
-    "WGCNA" # requires impute
-    "moduleColor" # requires impute
-    "samr" # requires impute
-    "swamp" # requires impute
-    "MetaDE" # requires impute, and Biobase
-    "FHtest" # requires interval
-    "RefFreeEWAS" # requires isva
-    "AntWeb" # requires leafletR
-    "ecoengine" # requires leafletR
-    "spocc" # requires leafletR
-    "sybilSBML" # requires libSBML
-    "RDieHarder" # requires libdieharder
-    "CORM" # requires limma
-    "DAAGbio" # requires limma
-    "DCGL" # requires limma
-    "SQDA" # requires limma
-    "metaMA" # requires limma
-    "plmDE" # requires limma
-    "RPPanalyzer" # requires limma, and Biobase
-    "PerfMeas" # requires limma, graph, and RBGL
-    "MAMA" # requires metaMA
-    "Rmosek" # requires mosek
-    "PCS" # requires multtest
-    "TcGSA" # requires multtest
-    "hddplot" # requires multtest
-    "mutoss" # requires multtest
-    "structSSI" # requires multtest
-    "mutossGUI" # requires mutoss
+    "beadarrayMSV" # requires Biobase, geneplotter, andlimma
+    "bdvis" # requres taxize
+    "beadarrayFilter" # requires beadarray
+    "bigGP" # requires MPI running. HELP WANTED!
+    "bigpca" # requires NCmisc
     "Biograph" # requires mvna
+    "biotools" # requires rpanel
+    "BiSEp" # requires GOSemSim, GO.db, and org.Hs.eg.db
+    "BLCOP" # depends on broken fPortfolio
+    "bmrm" # requires clpAPI
+    "branchLars" # requires Rgraphviz
+    "BRugs" # requires OpenBUGS
+    "calmate" # requires aroma_core
+    "CARrampsOcl" # depends on OpenCL
+    "CHAT" # requires DNAcopy
+    "ChemoSpec" # depends on broken speaq
+    "Crossover" # fails self-test
+    "classGraph" # requires graph, and Rgraphviz
+    "clpAPI" # requires clp
+    "compendiumdb" # requires Biobase
+    "CORM" # requires limma
+    "cplexAPI" # requires CPLEX
+    "crmn" # requires pcaMethods, and Biobase
+    "CrypticIBDcheck" # requires rJPSGCS
+    "cudaBayesreg" # requres Rmath
+    "curvHDR" # requires flowCore
+    "D2C" # requires gRbase
+    "DAAGbio" # requires limma
+    "daff" # requires V8 to build
+    "dagbag" # requires Rlapack
+    "DBKGrad" # requires SDD
+    "dbmss" # requires spatstat
+    "DCGL" # requires limma
+    "dcGOR" # requires dnet
+    "demi" # requires affy, affxparser, and oligo
+    "DepthProc" # requires samr
+    "DiagrammeR" # requires V8 to build
+    "Digiroo2" # requires spatstat
+    "dixon" # requires spatstat
+    "dnet" # requires supraHex, graph, Rgraphviz, and Biobase
+    "doMPI" # requires MPI running. HELP WANTED!
+    "dpcR" # requires spatstat
+    "DSpat" # requires spatstat
+    "ecespa" # requires spatstat
+    "ecoengine" # requires leafletR
+    "ecospat" # requires spatstat
+    "edgeRun" # requires edgeR
+    "EMA" # requires siggenes, affy, multtest, gcrma, biomaRt, and AnnotationDbi
+    "empiricalFDR_DESeq2" # requires DESeq2, and GenomicRanges
+    "epoc" # requires graph, and Rgraphviz
+    "erpR" # requires rpanel
+    "ETAS" # requires spatstat
+    "eulerian" # requires graph
+    "evobiR" # requres taxiz
+    "evora" # requires qvalue
+    "ExomeDepth" # requires GenomicRanges, and Rsamtools
+    "FAMT" # requires impute
+    "fdrDiscreteNull" # requires edgeR
+    "FHtest" # requires interval
+    "flexCWM" # depends on broken mixture
+    "fPortfolio" # requires rneos
+    "FunctionalNetworks" # requires breastCancerVDX, and Biobase
+    "gamlss_demo" # requires rpanel
+    "GeneticTools" # requires snpStats
+    "GExMap" # requires Biobase and multtest
+    "gitter" # requires EBImage
+    "glmgraph" # test suite says: "undefined symbol: dgemv_"
+    "gmatrix" # depends on proprietary cudatoolkit
+    "GOGANPA" # requires WGCNA
+    "gputools" # depends on proprietary cudatoolkit
+    "gMCP" # fails self-test
+    "gRain" # requires gRbase
+    "gRapHD" # requires graph
+    "gRbase" # requires RBGL, and graph
+    "gRc" # requires gRbase
+    "gridDebug" # requires gridGraphviz
+    "gridGraphviz" # requires graph, and Rgraphviz
+    "GriegSmith" # requires spatstat
+    "gRim" # requires gRbase
+    "GSAgm" # requires edgeR
+    "GUIDE" # requires rpanel
+    "h2o" # tries to download some h2o.jar during its build
+    "hasseDiagram" # requires Rgraphviz
+    "hddplot" # requires multtest
+    "HierO" # requires rneos
+    "HiPLARM" # requires MAGMA or PLASMA
+    "hpoPlot" # requires Rgraphviz
+    "HTSCluster" # requires edgeR
+    "iFes" # depends on proprietary cudatoolkit
+    "imputeLCMD" # requires pcaMethods, and impute
+    "intamapInteractive" # requires spatstat
+    "interval" # requires Icens
+    "ionflows" # requires Biostrings
+    "iRefR" # requires graph, and RBGL
+    "IsoGene" # requires Biobase, and affy
+    "isva" # requires qvalue
+    "jomo" # linking errors
+    "js" # requires broken V8
+    "KANT" # requires affy, and Biobase
+    "ktspair" # requires Biobase
+    "latticeDensity" # requires spatstat
+    "leapp" # requires sva
+    "lefse" # SDMTools.so: undefined symbol: X
+    "lgcp" # requires rpanel
+    "LinRegInteractive" # requires Rpanel
+    "LogisticDx" # requires gRbase
+    "LOST" # requires pcaMethods
+    "ltsk" # requires Rlapack and Rblas
+    "magma" # requires MAGMA
+    "MAMA" # requires metaMA
+    "MEET" # requires pcaMethods, and seqLogo
+    "metabolomics" # depends on broken crmn
+    "MetaDE" # requires impute, and Biobase
+    "MetaLandSim" # requires Biobase
+    "metaMA" # requires limma
+    "metaMix" # requires MPI running. HELP WANTED!
+    "mGSZ" # requires Biobase, and limma
+    "MigClim" # SDMTools.So: Undefined Symbol: X
+    "minimist" # requires broken V8
+    "miRtest" # requires globaltest, GlobalAncova, and limma
+    "mixture" # mixture.so: undefined symbol: dtrmm_
+    "moduleColor" # requires impute
+    "msarc" # requires AnnotationDbi
     "MSeasy" # requires mzR, and xcms
-    "x_ent" # requires opencpu
+    "MSeasyTkGUI" # requires MSeasyTkGUI
+    "MSIseq" # requires IRanges
+    "msSurv" # requires graph
+    "multiDimBio" # requires pcaMethods
+    "mutossGUI" # requires mutoss
+    "mutoss" # requires multtest
+    "MXM" # depends on broken gRbase
+    "NBPSeq" # requires qvalue
+    "NCmisc" # requires BiocInstaller
+    "netClass" # requires samr
+    "nettools" # requires WGCNA
+    "NORRRM" # can't load SDMTools properly
+    "netweavers" # requires BiocGenerics, Biobase, and limma
+    "NLPutils" # requires qdap
+    "NSA" # requires aroma_core
+    "OpenCL" # FIXME: requires CL/opencl.h
+    "optBiomarker" # requires rpanel
+    "ora" # requires ROracle
+    "orQA" # requires genefilter
+    "pRF" # requires multtest
+    "PBSmapping" # fails its test suite for unclear reasons
+    "PBSddesolve" # fails its test suite for unclear reasons
+    "PairViz" # requires graph
+    "PANDA" # requires GO.db
+    "ParDNAcopy" # requires DNAcopy
+    "pathClass" # requires affy, and Biobase
+    "PatternClass" # SDMTools.So: Undefined Symbol: X
     "pbdBASE" # requires pbdMPI
     "pbdDEMO" # requires pbdMPI
     "pbdDMAT" # requires pbdMPI
     "pbdSLAP" # requires pbdMPI
-    "LOST" # requires pcaMethods
-    "agridat" # requires pcaMethods
-    "multiDimBio" # requires pcaMethods
-    "crmn" # requires pcaMethods, and Biobase
-    "imputeLCMD" # requires pcaMethods, and impute
-    "MEET" # requires pcaMethods, and seqLogo
-    "qtlnet" # requires pcalg
-    "SigTree" # requires phyloseq
-    "saps" # requires piano, and survcomp
-    "surveillance" # requires polyCub
-    "aLFQ" # requires protiq
-    "NLPutils" # requires qdap
-    "NBPSeq" # requires qvalue
-    "RSNPset" # requires qvalue
-    "evora" # requires qvalue
-    "isva" # requires qvalue
-    "pi0" # requires qvalue
-    "CrypticIBDcheck" # requires rJPSGCS
-    "PKgraph" # requires rggobi
-    "SeqGrapheR" # requires rggobi
-    "beadarrayMSV" # requires rggobi
-    "clusterfly" # requires rggobi
-    "HierO" # requires rneos
-    "fPortfolio" # requires rneos
-    "GUIDE" # requires rpanel
-    "SDD" # requires rpanel
-    "biotools" # requires rpanel
-    "erpR" # requires rpanel
-    "gamlss_demo" # requires rpanel
-    "lgcp" # requires rpanel
-    "optBiomarker" # requires rpanel
-    "soilphysics" # requires rpanel
-    "vows" # requires rpanel
+    "pcaL1" # requires clp
+    "pcalg" # requires graph, and RBGL
     "PCGSE" # requires safe
-    "DepthProc" # requires samr
-    "netClass" # requires samr
-    "RcmdrPlugin_seeg" # requires seeg
-    "EMA" # requires siggenes, affy, multtest, gcrma, biomaRt, and AnnotationDbi
-    "GeneticTools" # requires snpStats
-    "snpEnrichment" # requires snpStats
-    "snpStatsWriter" # requires snpStats
-    "wgsea" # requires snpStats
-    "rysgran" # requires soiltexture
-    "DSpat" # requires spatstat
-    "Digiroo2" # requires spatstat
-    "ETAS" # requires spatstat
-    "GriegSmith" # requires spatstat
-    "RImageJROI" # requires spatstat
-    "SGCS" # requires spatstat
-    "SpatialVx" # requires spatstat
-    "adaptsmoFMRI" # requires spatstat
-    "ads" # requires spatstat
-    "aoristic" # requires spatstat
-    "dbmss" # requires spatstat
-    "dixon" # requires spatstat
-    "dpcR" # requires spatstat
-    "ecespa" # requires spatstat
-    "ecospat" # requires spatstat
-    "intamapInteractive" # requires spatstat
-    "latticeDensity" # requires spatstat
+    "PCS" # requires multtest
+    "PepPrep" # requires biomaRt
+    "PerfMeas" # requires limma, graph, and RBGL
+    "permGPU" # requires Biobase
+    "PhViD" # requires LBE
+    "pi0" # requires qvalue
+    "plmDE" # requires limma
+    "plsRcox" # requires survcomp
+    "PMA" # requires impute
+    "pmcgd" # depends on broken mixture
+    "pmclust" # requires MPI running. HELP WANTED!
     "polyCub" # requires spatstat
+    "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
+    "propOverlap" # requires Biobase
+    "protiq" # requires graph, and RBGL
+    "PSCBS" # requires DNAcopy
+    "pubmed_mineR" # requires SSOAP
+    "PubMedWordcloud" # requires GOsummaries
+    "qdap" # requires gender
+    "qtlnet" # requires pcalg
+    "qtpaint" # can't find QtCore libraries
+    "QuACN" # requires graph, RBGL
+    "QuasiSeq" # requires edgeR
+    "RADami" # requires Biostrings
+    "raincpc" # SDMTools.so: undefined symbol: X
+    "rainfreq" # SDMTools.so: undefined symbol: X
+    "RAM" # requires Heatplus
+    "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
+    "RapidPolygonLookup" # depends on broken PBSmapping
+    "RbioRXN" # requires fmcsR, and KEGGREST
+    "RcppAPT" # configure script depends on /bin/sh
+    "RcmdrPlugin_seeg" # requires seeg
+    "Rcplex" # requires cplexAPI
+    "RcppRedis" # requires Hiredis
+    "rDEA" # no such file or directory
+    "RDieHarder" # requires libdieharder
+    "reader" # requires NCmisc
+    "REBayes" # requires Rmosek
+    "RefFreeEWAS" # requires isva
+    "retistruct" # depends on broken RImageJROI
+    "RImageJROI" # requires spatstat
+    "rjade" # requires V8 to build
+    "rJPSGCS" # requires chopsticks
+    "rLindo" # requires LINDO API
+    "Rmosek" # requires mosek
+    "RnavGraph" # requires graph, and RBGL
+    "rneos" # requires XMLRPC
+    "RNeXML" # requres taxize
+    "RobLoxBioC" # requires Biobase
+    "RobLox" # requires Biobase
+    "RockFab" # requires EBImage
+    "ROI_plugin_symphony" # depends on broken Rsymphony
+    "ROracle" # requires OCI
+    "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
+    "RQuantLib" # requires QuantLib
+    "RSAP" # requires SAPNWRFCSDK
+    "rgp" # fails self-test
+    "rgpui" # depends on broken rgp
+    "RSeed" # requires RBGL, and graph
+    "rsig" # requires survcomp
+    "RSNPset" # requires qvalue
+    "Rsymphony" # FIXME: requires SYMPHONY
+    "RVideoPoker" # requires Rpanel
+    "rysgran" # requires soiltexture
+    "samr" # requires impute
+    "saps" # requires piano, and survcomp
+    "SDD" # requires rpanel
     "seeg" # requires spatstat
+    "selectspm" # depends on broken ecespa
+    "semiArtificial" # requires RSNNS
+    "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
+    "sequenza" # requires copynumber
+    "SGCS" # requires spatstat
     "siar" # requires spatstat
+    "SID" # requires pcalg
+    "SimRAD" # requires Biostrings, and ShortRead
+    "SimSeq" # requires edgeR
     "siplab" # requires spatstat
+    "smart" # requires PMA
+    "snpEnrichment" # requires snpStats
+    "snplist" # requires biomaRt
+    "snpStatsWriter" # requires snpStats
+    "SNPtools" # requires IRanges, GenomicRanges, Biostrings, and Rsamtools
+    "SOD" # depends on proprietary cudatoolkit
+    "soilphysics" # requires rpanel
     "sparr" # requires spatstat
     "spatialsegregation" # requires spatstat
+    "SpatialVx" # requires spatstat
+    "speaq" # requires MassSpecWavelet
+    "spocc" # requires leafletR
+    "SQDA" # requires limma
+    "Statomica" # requires Biobase, multtest
+    "stagePop" # depends on broken PBSddesolve
+    "SeqGrapheR" # depends on Biostrings
     "stpp" # requires spatstat
-    "trip" # requires spatstat
-    "dnet" # requires supraHex, graph, Rgraphviz, and Biobase
-    "plsRcox" # requires survcomp
-    "rsig" # requires survcomp
-    "leapp" # requires sva
-    "ttScreening" # requires sva, and limma
-    "cudaBayesreg" # requres Rmath
+    "structSSI" # requires multtest
+    "strum" # requires Rgraphviz
+    "superbiclust" # requires fabia
+    "surveillance" # requires polyCub
+    "swamp" # requires impute
+    "sybilSBML" # requires libSBML
     "taxize" # requres bold
-    "rsprng" # requres sprng
-    "evobiR" # requres taxiz
-    "RNeXML" # requres taxize
+    "TcGSA" # requires multtest
+    "topologyGSA" # requires gRbase
     "TR8" # requres taxize
-    "bdvis" # requres taxize
-    "h2o" # tries to download some h2o.jar during its build
-    "jvmr" # tries to download files during its build
-    "qtbase" # the smokegen binary cannot find libQtCore.so.4 etc. at runtime
+    "trip" # requires spatstat
+    "ttScreening" # requires sva, and limma
+    "V8" # compilation error
+    "vows" # requires rpanel
+    "vmsbase" # depends on broken PBSmapping
+    "WGCNA" # requires impute
+    "wgsea" # requires snpStats
+    "WideLM" # depends on proprietary cudatoolkit
+    "x_ent" # requires opencpu
+    "zoib" # tarball is invalid on server
+    "DiffCorr" # misses undeclared dependencies 'pcaMethods', 'multtest'
+    "TROM" # misses undeclared dependencies topGO', 'AnnotationDbi', 'GO.db'
+    "lfe" # fails to compile
+    "mongolite" # doesn't find OpenSSL
+    "quanteda" # fails to build
+    "statar" # depends on broken lfe
+    "hsdar" # fails to build
   ];
 
   otherOverrides = old: new: {
+    curl = old.curl.overrideDerivation (attrs: {
+      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
+    });
+
+    iFes = old.iFes.overrideDerivation (attrs: {
+      patches = [ ./patches/iFes.patch ];
+      CUDA_HOME = "${pkgs.cudatoolkit}";
+    });
+
     RcppArmadillo = old.RcppArmadillo.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -956,12 +997,6 @@ let
       ];
     });
 
-    npRmpi = old.npRmpi.overrideDerivation (attrs: {
-      configureFlags = [
-        "--with-Rmpi-type=OPENMPI"
-      ];
-    });
-
     Rmpfr = old.Rmpfr.overrideDerivation (attrs: {
       configureFlags = [
         "--with-mpfr-include=${pkgs.mpfr}/include"
@@ -976,13 +1011,16 @@ let
 
     RAppArmor = old.RAppArmor.overrideDerivation (attrs: {
       patches = [ ./patches/RAppArmor.patch ];
-      LIBAPPARMOR_HOME = "${pkgs.apparmor}";
+      LIBAPPARMOR_HOME = "${pkgs.libapparmor}";
     });
 
     RMySQL = old.RMySQL.overrideDerivation (attrs: {
-      configureFlags = [
-        "--with-mysql-dir=${pkgs.mysql}"
-      ];
+      patches = [ ./patches/RMySQL.patch ];
+      MYSQL_DIR="${pkgs.mysql.lib}";
+    });
+
+    devEMF = old.devEMF.overrideDerivation (attrs: {
+      NIX_CFLAGS_LINK = "-L${pkgs.xlibs.libXft}/lib -lXft";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
@@ -1043,8 +1081,7 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      patches = [ ./patches/openssl.patch ];
-      OPENSSL_HOME = "${pkgs.openssl}";
+      OPENSSL_INCLUDES = "${pkgs.openssl}/include";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {
@@ -1061,21 +1098,6 @@ let
       ];
     });
 
-    # Depends on broken ecespa package.
-    selectspm = old.selectspm.override { hydraPlatforms = stdenv.lib.platforms.none; };
-
-    # Depends on broken qtbase package.
-    qtutils = old.qtutils.override { hydraPlatforms = stdenv.lib.platforms.none; };
-    qtpaint = old.qtpaint.override { hydraPlatforms = stdenv.lib.platforms.none; };
-    bamboo = old.bamboo.override { hydraPlatforms = stdenv.lib.platforms.none; };
-
-    # Obsolete package that I keep around temporarily because some
-    # existing code depends on it.
-    Defaults = derive {
-      name="Defaults";
-      version="1.1-1";
-      sha256="0ikgd5mswlky327pzp09cz93bn3mq7qnybq1r64y19c2brbax00d";
-    };
   };
 in
   self
