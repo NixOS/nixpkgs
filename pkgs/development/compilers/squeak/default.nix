@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, coreutils, freetype, gnused, pkgconfig, which }:
+{ stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
+, libpthreadstubs, pango, pkgconfig, pulseaudio, which }:
 
 let version = "4.10.2.2614"; in
 stdenv.mkDerivation rec {
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cmake coreutils freetype gnused pkgconfig which ];
+  buildInputs = [ cmake coreutils dbus freetype glib gnused libpthreadstubs
+    pango pkgconfig pulseaudio which ];
 
   postPatch = ''
     for i in squeak.in squeak.sh.in; do
