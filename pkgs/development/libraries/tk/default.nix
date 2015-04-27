@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, tcl, libXft, fontconfig }:
 
 stdenv.mkDerivation {
-  name = "tk-8.6.4";
+  name = "tk-${tcl.version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tcl/tk8.6.4-src.tar.gz";
+    url = "mirror://sourceforge/tcl/tk${tcl.version}-src.tar.gz";
     sha256 = "1h96vp15zl5xz0d4qp6wjyrchqmrmdm3q5k22wkw9jaxbvw9vy88";
   };
 
@@ -25,8 +25,10 @@ stdenv.mkDerivation {
 
   inherit tcl;
 
-  passthru = {
-    libPrefix = "tk8.6";
+  passthru = rec {
+    inherit (tcl) release version;
+    libPrefix = "tk${tcl.release}";
+    libdir = "lib/${libPrefix}";
   };
 
   meta = {
