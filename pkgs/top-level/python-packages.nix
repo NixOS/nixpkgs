@@ -6578,6 +6578,10 @@ let
       md5 = "9f0aafd177b039ef67b90ea350497a54";
     };
 
+    # Check is disabled due to this issue:
+    # https://bitbucket.org/zzzeek/mako/issue/238
+    doCheck = !isPyPy;
+
     buildInputs = with self; [ markupsafe nose mock ];
     propagatedBuildInputs = with self; [ markupsafe ];
 
