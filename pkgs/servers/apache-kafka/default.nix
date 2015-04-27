@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     # allow us the specify logging directory using env
     substituteInPlace $out/bin/kafka-run-class.sh \
-      --replace 'LOG_DIR=$base_dir/logs' 'LOG_DIR=$KAFKA_LOG_DIR'
+      --replace 'LOG_DIR="$base_dir/logs"' 'LOG_DIR="$KAFKA_LOG_DIR"'
 
     for p in $out/bin\/*.sh; do
       wrapProgram $p \
