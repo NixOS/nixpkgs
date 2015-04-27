@@ -10125,8 +10125,12 @@ let
 
   alock = callPackage ../misc/screensavers/alock { };
 
-  alpine = callPackage ../applications/networking/mailreaders/alpine {};
-  realpine = callPackage ../applications/networking/mailreaders/realpine {};
+  alpine = callPackage ../applications/networking/mailreaders/alpine {
+    tcl = tcl-8_5;
+  };
+  realpine = callPackage ../applications/networking/mailreaders/realpine {
+    tcl = tcl-8_5;
+  };
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
