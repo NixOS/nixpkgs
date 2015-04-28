@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus.libs acl ] ;
+    ++ optionals stdenv.isLinux [ pam dbus.libs acl ] ;
 
   propagatedBuildInputs = [ openssl gmp ];
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = "http://www.cups.org/";
+    homepage = https://cups.org/;
     description = "A standards-based printing system for UNIX";
-    license = stdenv.lib.licenses.gpl2; # actually LGPL for the library and GPL for the rest
-    maintainers = [ stdenv.lib.maintainers.urkud stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
+    maintainers = with maintainers; [ urkud simons jgeerds ];
+    platforms = platforms.linux;
   };
 }
