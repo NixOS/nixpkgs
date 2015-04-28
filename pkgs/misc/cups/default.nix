@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
-, dbus, acl, gmp
+, dbus, acl, gmp, xdg_utils
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls avahi libpaper ]
-    ++ optionals stdenv.isLinux [ pam dbus.libs acl ] ;
+    ++ optionals stdenv.isLinux [ pam dbus.libs acl xdg_utils ] ;
 
   propagatedBuildInputs = [ openssl gmp ];
 
