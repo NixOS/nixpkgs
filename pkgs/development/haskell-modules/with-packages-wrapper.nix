@@ -1,6 +1,7 @@
-{ stdenv, lib, ghc, llvmPackages, packages, buildEnv
-, makeWrapper
-, ignoreCollisions ? false, withLLVM ? false }:
+{ stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper
+, ignoreCollisions ? false, withLLVM ? false
+, postBuild ? ""
+}:
 
 # This wrapper works only with GHC 6.12 or later.
 assert lib.versionOlder "6.12" ghc.version || ghc.isGhcjs;
@@ -89,7 +90,7 @@ buildEnv {
 
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
     $out/bin/${ghcCommand}-pkg check
-  '';
+  '' + postBuild;
 } // {
   preferLocalBuild = true;
   inherit (ghc) version meta;
