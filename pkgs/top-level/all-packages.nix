@@ -1722,6 +1722,8 @@ let
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  innoextract = callPackage ../tools/archivers/innoextract {};
+
   ioping = callPackage ../tools/system/ioping {};
 
   iodine = callPackage ../tools/networking/iodine { };
