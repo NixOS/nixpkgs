@@ -16,7 +16,7 @@ rec {
     gnome-shell-extensions gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto
+    nautilus-sendto dconf-editor
   ];
 
   inherit (pkgs) libsoup glib gtk2;
@@ -66,6 +66,7 @@ rec {
   caribou = callPackage ./core/caribou { };
 
   dconf = callPackage ./core/dconf { };
+  dconf-editor = callPackage ./core/dconf-editor { };
 
   empathy = callPackage ./core/empathy { 
     webkitgtk = webkitgtk24x;
