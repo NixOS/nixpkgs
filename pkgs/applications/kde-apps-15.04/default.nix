@@ -30,6 +30,7 @@ let
       ["Backend" "CTest"])
     // {
       "KDE4" = "kdelibs";
+      "KF5KDEGames" = "libkdegames";
       "Kexiv2" = "libkexiv2";
       "Kdcraw" = "libkdcraw";
       "Kipi" = "libkipi";
