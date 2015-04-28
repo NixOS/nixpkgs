@@ -34,7 +34,7 @@ let self = with self; {
   };
 
   apc = buildPecl {
-    name = "apc-3.1.13";
+    name = "APC-3.1.13";
 
     sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
   };
