@@ -58,6 +58,19 @@ stdenv.mkDerivation {
     ''
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+
+      # Rename systemd files provided by CUPS
+      for f in $out/lib/systemd/system/*; do
+        substituteInPlace "$f" \
+          --replace "org.cups.cupsd" "cups" \
+          --replace "org.cups." ""
+
+        if [[ "$f" =~ .*cupsd\..* ]]; then
+          mv "$f" "''${f/org\.cups\.cupsd/cups}"
+        else
+          mv "$f" "''${f/org\.cups\./}"
+        fi
+      done
     '';
 
   meta = {
