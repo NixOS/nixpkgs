@@ -1,6 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{pkgs, source ? "default", ...}: with args;
+args@{pkgs, source ? "default",
+extraFlags ? [], extraInputs ? [], ...}: with args;
 
 
 let inherit (args.composableDerivation) composableDerivation edf;
@@ -29,6 +30,11 @@ let inherit (args.composableDerivation) composableDerivation edf;
       source /etc/vim/vimrc
     endif
   '';
+  pythonVersion =
+    if (builtins.compareVersions args.python.version "3") > -1 then
+      { enable = "3"; disable = ""; }
+    else
+      { enable = ""; disable = "3"; };
 in
 composableDerivation {
 } (fix: {
@@ -62,15 +68,17 @@ composableDerivation {
     # if darwin support is enabled, we want to make sure we're not building with
     # OS-installed python framework
     patches = stdenv.lib.optionals
-      (stdenv.isDarwin && (config.vim.darwin or true))
+      (stdenv.isDarwin && (config.vim.darwin or true) && pythonVersion.disable == "3")
       [ ./python_framework.patch ];
 
     configureFlags
-      = [ "--enable-gui=${args.gui}" "--with-features=${args.features}" ];
+      = [ "--with-features=${args.features}"
+          "--enable-gui=${args.gui}" ]
+        ++ extraFlags;
 
     nativeBuildInputs
-      = [ ncurses pkgconfig gtk libX11 libXext libSM libXpm libXt libXaw libXau
-          libXmu glib libICE ];
+      = [ ncurses pkgconfig ]
+        ++ extraInputs;
 
     # most interpreters aren't tested yet.. (see python for example how to do it)
     flags = {
@@ -91,27 +99,24 @@ composableDerivation {
       // edf { name = "perl"; feat = "perlinterp"; enable = { nativeBuildInputs = [perl]; };} #Include Perl interpreter.
 
       // edf {
-        name = "python";
-        feat = "pythoninterp";
+        name = "gui";
         enable = {
-          nativeBuildInputs = [ python ];
-        } // lib.optionalAttrs stdenv.isDarwin {
-          configureFlags
-            = [ "--enable-pythoninterp=yes"
-                "--with-python-config-dir=${python}/lib" ];
+          nativeBuildInputs = args.X11;
+          configureFlags = [];
         };
+        disable = { configureFlags = []; };
       }
 
       // edf {
-        name = "python3";
-        feat = "python3interp";
+        name = "python";
+        feat = "python${pythonVersion.enable}interp";
         enable = {
-          nativeBuildInputs = [ pkgs.python3 ];
+          nativeBuildInputs = [ args.python ];
         } // lib.optionalAttrs stdenv.isDarwin {
           configureFlags
-            = [ "--enable-python3interp=yes"
-                "--with-python3-config-dir=${pkgs.python3}/lib"
-                "--disable-pythoninterp" ];
+            = [ "--enable-python${pythonVersion.enable}interp=yes"
+                "--with-python${pythonVersion.enable}-config-dir=${args.python}/lib"
+                "--disable-python${pythonVersion.disable}interp" ];
         };
       }
 
@@ -144,12 +149,12 @@ composableDerivation {
   cfg = {
     luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
-    python3Support   = config.vim.python3 or false;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
     multibyteSupport = config.vim.multibyte or false;
     cscopeSupport    = config.vim.cscope or true;
+    guiSupport       = config.vim.gui or true;
     netbeansSupport  = config.netbeans or true; # eg envim is using it
 
     # by default, compile with darwin support if we're compiling on darwin, but
