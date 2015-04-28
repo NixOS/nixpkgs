@@ -375,10 +375,29 @@ let
     inherit sha256;
   };
 
+  # gitorious example
   fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name;
     url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
     inherit sha256;
+  };
+
+  # cgit example, snapshot support is optional in cgit
+  fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
+  };
+
+  # gitlab example
+  fetchFromGitLab = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
+  };
+
+  # gitweb example, snapshot support is optional in gitweb
+  fetchFromRepoOrCz = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
   };
 
   resolveMirrorURLs = {url}: fetchurl {
