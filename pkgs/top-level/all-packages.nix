@@ -11524,6 +11524,8 @@ let
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
+  pig = callPackage ../applications/networking/cluster/pig { };
+
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
 
   smplayer = callPackage ../applications/video/smplayer { };
