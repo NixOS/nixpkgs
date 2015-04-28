@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "kmod-blacklist-${version}";
 
   src = fetchurl {
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/k/kmod/kmod_9-${version}.debian.tar.gz";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_9-${version}.debian.tar.gz";
     sha256 = "0h6h0zw2490iqj9xa2sz4309jyfmcc50jdvkhxa1nw90npxglp67";
   };
 
