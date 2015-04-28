@@ -13429,14 +13429,11 @@ let
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
-  plasma52 = recurseIntoAttrs (callPackage ../desktops/plasma-5.2 {
-    kf5 = kf59;
-  });
   plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
     kf5 = kf59;
   });
   plasma5_latest = plasma53;
-  plasma5_stable = plasma52;
+  plasma5_stable = plasma53;
 
   kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 
