@@ -1,6 +1,24 @@
 { callPackage, pkgs, self }:
 
 rec {
+  corePackages = with gnome3; [
+    pkgs.desktop_file_utils pkgs.ibus
+    pkgs.shared_mime_info # for update-mime-database
+    gtk3 # for gtk-update-icon-cache
+    glib_networking gvfs dconf gnome-backgrounds gnome_control_center
+    gnome-menus gnome_settings_daemon gnome_shell
+    gnome_themes_standard defaultIconTheme
+  ];
+
+  optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
+    gucharmap nautilus totem vino yelp gnome-bluetooth
+    gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
+    gnome-shell-extensions gnome-system-log gnome-system-monitor
+    gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
+    gnome-clocks gnome-music gnome-tweak-tool gnome-photos
+    nautilus-sendto
+  ];
+
   inherit (pkgs) libsoup glib gtk2;
   inherit (pkgs.gnome2) ORBit2;
   gtk3 = pkgs.gtk3_16;
