@@ -2637,6 +2637,8 @@ let
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
+  rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
+
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rtorrent-git = callPackage ../tools/networking/p2p/rtorrent/git.nix { };
