@@ -4842,7 +4842,7 @@ let
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby165 = callPackage ../development/interpreters/jruby { };
-  
+
   jython = callPackage ../development/interpreters/jython {};
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
@@ -9495,6 +9495,8 @@ let
   golint = callPackage ../development/tools/golint { goPackages = go13Packages; };
 
   godep = callPackage ../development/tools/godep { };
+
+  goimports = callPackage ../development/tools/goimports { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
