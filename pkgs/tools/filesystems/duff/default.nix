@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "Quickly find duplicate files.";
+    description = "Quickly find duplicate files";
     homepage = http://duff.dreda.org/;
     license = with licenses; zlib;
     longDescription = ''

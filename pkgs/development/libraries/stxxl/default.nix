@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/stxxl/stxxl;
-    description = "STXXL is an implementation of the C++ standard template library STL for external memory (out-of-core) computations.";
+    description = "An implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     license = stdenv.lib.licenses.boost;
   };
 }

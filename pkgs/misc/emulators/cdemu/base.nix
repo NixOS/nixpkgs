@@ -17,7 +17,7 @@ in stdenv.mkDerivation ({
     cmake ../${name} -DCMAKE_INSTALL_PREFIX=$out -DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_RPATH=ON
   '';
   meta = {
-    description = "CDemu is a software suite designed to emulate an optical drive and disc (including CD-ROMs and DVD-ROMs) on the Linux operating system.";
+    description = "A Software suite designed to emulate an optical drive and disc (including CD-ROMs and DVD-ROMs) on the Linux operating system";
     longDescription = ''
       CDEmu consists of:
 

@@ -9,7 +9,7 @@ bundlerEnv {
   gemset = ./gemset.nix;
 
   meta = with lib; {
-    description = "A command-line power tool for Twitter.";
+    description = "A command-line power tool for Twitter";
     homepage    = http://sferik.github.io/t/;
     license     = with licenses; asl20;
     maintainers = with maintainers; [ offline ];

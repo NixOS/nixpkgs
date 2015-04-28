@@ -435,7 +435,7 @@ let
 
     meta = {
       homepage = http://github.com/celery/py-amqp;
-      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project.";
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
       license = licenses.lgpl21;
     };
   };
@@ -668,7 +668,7 @@ let
     };
 
     meta = {
-      description = "Utilities and Python modules for handling audio.";
+      description = "Utilities and Python modules for handling audio";
       homepage = "http://audiotools.sourceforge.net/";
       license = stdenv.lib.licenses.gpl2Plus;
     };
@@ -794,7 +794,7 @@ let
 
     meta = {
       homepage = http://pypi.python.org/pypi/babelfish;
-      description = "A module to work with countries and languages.";
+      description = "A module to work with countries and languages";
       license = stdenv.lib.licenses.bsd3;
     };
   };
@@ -1172,7 +1172,7 @@ let
     propagatedBuildInputs = with self; [ six html5lib ];
 
     meta = with stdenv.lib; {
-      description = "An easy, HTML5, whitelisting HTML sanitizer.";
+      description = "An easy, HTML5, whitelisting HTML sanitizer";
       longDescription = ''
         Bleach is an HTML sanitizing library that escapes or strips markup and
         attributes based on a white list. Bleach can also linkify text safely,
@@ -5784,7 +5784,7 @@ let
     meta = {
       homepage = http://pypi.python.org/pypi/guessit;
       license = stdenv.lib.licenses.lgpl3;
-      description = "A library for guessing information from video files.";
+      description = "A library for guessing information from video files";
     };
   };
 
@@ -6227,7 +6227,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = http://maebert.github.io/jrnl/;
-      description = "A simple command line journal application that stores your journal in a plain text file.";
+      description = "A simple command line journal application that stores your journal in a plain text file";
       license = licenses.mit;
     };
   };
@@ -6775,7 +6775,7 @@ let
 
     meta = with stdenv.lib; {
       description = ''
-        A content management platform built using the Django framework.
+        A content management platform built using the Django framework
       '';
       longDescription = ''
         Mezzanine is a powerful, consistent, and flexible content management
@@ -7713,8 +7713,8 @@ let
     };
 
     meta = {
-      homepage = "http://code.google.com/p/oauth";
-      description = "Library for OAuth version 1.0a.";
+      homepage = http://code.google.com/p/oauth;
+      description = "Library for OAuth version 1.0a";
       license = licenses.mit;
       platforms = stdenv.lib.platforms.all;
     };
@@ -9490,7 +9490,7 @@ let
 
     meta = {
       homepage = http://pyparsing.wikispaces.com/;
-      description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
+      description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
     };
   };
 
@@ -11636,7 +11636,7 @@ let
     propagatedBuildInputs = with self; [ docutils jinja2 pygments sphinx_rtd_theme alabaster Babel snowballstemmer  six ];
 
     meta = with stdenv.lib; {
-      description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";
+      description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
       license = licenses.bsd3;
       platforms = platforms.unix;
@@ -13004,7 +13004,7 @@ let
     propagatedBuildInputs = with pythonPackages; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
 
     meta = with stdenv.lib; {
-      description = "Willie is a simple, lightweight, open source, easy-to-use IRC utility bot, written in Python.";
+      description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
       homepage = http://willie.dftba.net/;
       license = licenses.efl20;
     };
@@ -14796,8 +14796,8 @@ let
     propagatedBuildInputs = with self; [ nose ];
 
     meta = {
-      homepage = "https://more-itertools.readthedocs.org";
-      description = "Expansion of the itertools module.";
+      homepage = https://more-itertools.readthedocs.org;
+      description = "Expansion of the itertools module";
       license = licenses.mit;
     };
   };
@@ -14830,7 +14830,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      description = "Collection of fancy functional tools focused on practicality.";
+      description = "Collection of fancy functional tools focused on practicality";
       homepage = "http://funcy.readthedocs.org/";
       license = stdenv.lib.licenses.bsd3;
 

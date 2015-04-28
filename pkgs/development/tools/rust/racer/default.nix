@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A utility intended to provide Rust code completion for editors and IDEs.";
+    description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/phildawes/racer;
     license = stdenv.lib.licenses.mit;
     maintainers = [ maintainers.jagajaga ];

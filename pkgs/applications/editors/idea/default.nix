@@ -227,7 +227,7 @@ in
     name = "clion-${version}";
     version = "1.0";
     build = "141.353";
-    description  = "C/C++ IDE. New. Intelligent. Cross-platform.";
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";

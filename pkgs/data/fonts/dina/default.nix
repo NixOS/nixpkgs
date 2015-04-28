@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
 
   meta = with stdenv.lib; {
-    description = "A monospace bitmap font aimed at programmers.";
+    description = "A monospace bitmap font aimed at programmers";
     longDescription = ''
       Dina is a monospace bitmap font, primarily aimed at programmers. It is
       relatively compact to allow a lot of code on screen, while (hopefully)

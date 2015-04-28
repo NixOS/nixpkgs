@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   '';
   
   meta = with stdenv.lib; {
-    description = "HTTP benchmarking tool.";
+    description = "HTTP benchmarking tool";
     homepage = http://github.com/wg/wrk;
     longDescription = ''
       wrk is a modern HTTP benchmarking tool capable of generating

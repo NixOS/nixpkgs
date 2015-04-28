@@ -74,7 +74,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = http://luaforge.net/projects/luaevent/;
-      description = "Binding of libevent to Lua.";
+      description = "Binding of libevent to Lua";
       license = licenses.mit;
       maintainers = [ maintainers.koral ];
     };
