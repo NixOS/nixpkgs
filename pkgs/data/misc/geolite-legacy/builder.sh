@@ -16,4 +16,5 @@ for var in "${!src@}"; do
 	cp "$src" "$dest"
 done
 
-gunzip -v *.gz
+gzip -dv *.gz
+xz -dv *.xz
