@@ -260,8 +260,6 @@ in
         SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         Browsing On
-        BrowseOrder allow,deny
-        BrowseAllow @LOCAL
 
         DefaultAuthType Basic
 
