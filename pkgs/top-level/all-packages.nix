@@ -12718,6 +12718,8 @@ let
 
   ykpers = callPackage ../applications/misc/ykpers {};
 
+  ynab = callPackage ../applications/office/ynab {};
+
   yoshimi = callPackage ../applications/audio/yoshimi {
     fltk = fltk13;
   };
