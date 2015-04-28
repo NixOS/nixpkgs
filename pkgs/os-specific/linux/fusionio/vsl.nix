@@ -1,13 +1,12 @@
 { stdenv, fetchurl, kernel }:
 
+let
+  srcs = import ./srcs.nix { inherit fetchurl; };
+in
 stdenv.mkDerivation rec {
-  name = "fusionio-iomemory-vsl-3.2.10";
+  name = "fusionio-iomemory-vsl-${srcs.version}";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://drive.google.com/uc?export=download&id=0B7U0_ZBLoB2WbXFMbExEMUFCcWM";
-    sha256 = "1zm20aa1jmmqcqkb4p9r4jsgbg371zr1abdz32rw02i9687fsgcc";
-  };
+  src = srcs.vsl;
 
   prePatch = ''
     cd root/usr/src/iomemory-vsl-*
