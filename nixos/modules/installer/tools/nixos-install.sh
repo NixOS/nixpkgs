@@ -45,7 +45,9 @@ while [ "$#" -gt 0 ]; do
             ;;
         --chroot)
             runChroot=1
-            chrootCommand=("$@")
+            if [[ "$@" != "" ]]; then
+                chrootCommand=("$@")
+            fi
             break
             ;;
         --help)
