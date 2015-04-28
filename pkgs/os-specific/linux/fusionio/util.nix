@@ -19,7 +19,16 @@ stdenv.mkDerivation {
     for BIN in $(find $out/bin -type f); do
       echo Patching $BIN
       patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" --set-rpath "${glibc}/lib:${gcc.cc}/lib:${libuuid}/lib:$out/lib" $BIN
-      $BIN --help >/dev/null 2>&1 || [ "$?" -lt "128" ] || { echo "Failed testing $BIN"; exit 1; }
+
+      # Test our binary to see if it was correctly patched
+      set +e
+      $BIN --help >/dev/null 2>&1
+      ST="$?"
+      set -e
+      if [ "$ST" -ge "10" ]; then
+        echo "Failed testing $BIN"
+        exit 1;
+      fi
     done
   '';
 
