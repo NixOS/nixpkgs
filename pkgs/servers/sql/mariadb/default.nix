@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ncurses, openssl, pcre, boost, judy, bison, libxml2
+{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "04ckq67qgkghh7yzrbzwidk7wn7yjml15gzj2c5p1hs2k7lr9lww";
   };
 
-  buildInputs = [ cmake ncurses openssl pcre libxml2 boost judy bison libevent ]
+  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
 
