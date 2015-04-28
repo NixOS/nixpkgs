@@ -90,6 +90,11 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib
     mv $out/include $lib
 
+    # Fix the mysql_config
+    sed -i $out/bin/mysql_config \
+      -e 's,-lz,-L${zlib}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl}/lib -lssl,g'
+
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin
     cp $out/bin/mysql_config $lib/bin
