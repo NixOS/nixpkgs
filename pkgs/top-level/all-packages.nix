@@ -1553,6 +1553,11 @@ let
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
+  gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
+    # Using pypy provides significant performance improvements (~2x)
+    pythonPackages = pypyPackages;
+  };
+
   graphviz = callPackage ../tools/graphics/graphviz { };
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
