@@ -224,7 +224,7 @@ in {
 
       machines = mkOption {
         description = "Kubernetes controller list of machines to schedule to schedule onto";
-        default = [];
+        default = [config.networking.hostName];
         type = types.listOf types.str;
       };
 
@@ -310,6 +310,12 @@ in {
         type = types.str;
       };
 
+      master = mkOption {
+        description = "Kubernetes apiserver address";
+        default = "${cfg.apiserver.address}:${toString cfg.apiserver.port}";
+        type = types.str;
+      };
+
       extraOpts = mkOption {
         description = "Kubernetes proxy extra command line options.";
         default = "";
@@ -355,6 +361,7 @@ in {
             --secure_port=${toString cfg.apiserver.securePort} \
             --portal_net=${cfg.apiserver.portalNet} \
             --logtostderr=true \
+            --runtime_config=api/v1beta3 \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.apiserver.extraOpts}
           '';
@@ -416,7 +423,6 @@ in {
         script = ''
           export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
           exec ${cfg.package}/bin/kubelet \
-            --etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
             --api_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
@@ -443,7 +449,7 @@ in {
         after = [ "network-interfaces.target" "etcd.service" ];
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-proxy \
-            --etcd_servers=${concatMapStringsSep "," (s: "http://${s}") cfg.etcdServers} \
+            --master=${cfg.proxy.master} \
             --bind_address=${cfg.proxy.address} \
             --logtostderr=true \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
