@@ -72,6 +72,13 @@ let
   postResolve = super:
     (builtins.removeAttrs super ["breeze"]) // {
 
+      bluez-qt = super.bluez-qt // {
+        preConfigure = ''
+          substituteInPlace CMakeLists.txt \
+            --replace /lib/udev/rules.d "$out/lib/udev/rules.d"
+        '';
+      };
+
       breeze-qt4 = with pkgs; super.breeze // {
         name = "breeze-qt4-" + (builtins.parseDrvName super.breeze.name).version;
         buildInputs = [ xlibs.xproto kde4.kdelibs qt4 ];
@@ -152,9 +159,11 @@ let
         buildInputs = with xlibs; super.sddm-kcm.buildInputs ++ [libXcursor];
       };
 
+      /*
       user-manager = super.user-manager // {
         buildInputs = with pkgs; super.user-manager.buildInputs ++ [ libpwquality ];
       };
+      */
 
     };
 
