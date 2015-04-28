@@ -1,29 +1,29 @@
-{ fetchurl, stdenv, dejagnu }:
+{ stdenv, fetchurl, autoreconfHook, texinfo, dejagnu }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libffi-3.0.13";
+  name = "libffi-${version}";
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "ftp://sourceware.org/pub/libffi/${name}.tar.gz";
-    sha256 = "077ibkf84bvcd6rw1m6jb107br63i2pp301rkmsbgg6300adxp8x";
+    url = "https://github.com/atgreen/libffi/archive/v${version}.tar.gz";
+    sha256 = "08xyzr86i782ilcyk58qab28s0b43y0a7jcal6hywar6dzp8vl4n";
   };
 
-  patches = stdenv.lib.optional (stdenv.needsPax) ./libffi-3.0.13-emutramp_pax_proc.patch;
-
-  buildInputs = stdenv.lib.optional doCheck dejagnu;
+  buildInputs = [ autoreconfHook texinfo ] ++ optional doCheck dejagnu;
 
   configureFlags = [
-    "--with-gcc-arch=generic" # no detection of -march= or -mtune=
-  ] ++ stdenv.lib.optional (stdenv.needsPax) "--enable-pax_emutramp";
+    "--with-gcc-arch=generic"
+  ] ++ optional (stdenv.needsPax) "--enable-pax_emutramp";
 
   #doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
-  doCheck = false;
+  doCheck = false; # currently failing
 
-  dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv ? cross;
 
-  # Install headers in the right place.
   postInstall = ''
-    ln -s${if (stdenv.isFreeBSD || stdenv.isOpenBSD || stdenv.isDarwin) then "" else "r"}v "$out/lib/"libffi*/include "$out/include"
+    (cd "$out" && ln -s lib/libffi*/include .)
   '';
 
   meta = {
@@ -42,10 +42,9 @@ stdenv.mkDerivation rec {
       interface.  A layer must exist above libffi that handles type
       conversions for values passed between the two languages.
     '';
-    homepage = http://sourceware.org/libffi/;
-    # See http://github.com/atgreen/libffi/blob/master/LICENSE .
-    license = stdenv.lib.licenses.free;
+    homepage = https://sourceware.org/libffi/;
+    license = licenses.mit;
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }
