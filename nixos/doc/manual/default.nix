@@ -120,8 +120,8 @@ in rec {
         --param chunk.section.depth 0 \
         --param chunk.first.sections 1 \
         --param use.id.as.filename 1 \
-        --stringparam generate.toc "book toc chapter toc appendix toc" \
-        --nonet --xinclude --output $dst/index.html \
+        --stringparam generate.toc "book toc chapter appendix toc" \
+        --nonet --xinclude --output $dst/ \
         ${./html-customization-layer.xsl} ./manual.xml
 
       mkdir -p $dst/images/callouts

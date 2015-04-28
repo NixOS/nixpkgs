@@ -5,7 +5,26 @@
     xmlns:d="http://docbook.org/ns/docbook"
     version="1.0">
 
-  <xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/xhtml/docbook.xsl"/>
+  <xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/xhtml/chunk.xsl"/>
+
+  <!-- Chunking  -->
+  <xsl:param name="onechunk" select="1"/>
+  <xsl:param name="suppress.navigation">1</xsl:param>
+
+  <xsl:template match="d:appendix">
+    <xsl:call-template name="process-chunk"/>
+  </xsl:template>
+
+  <xsl:template name="chunk">
+    <xsl:param name="node" select="."/>
+    <!-- returns 1 if $node is a chunk -->
+    <xsl:choose>
+      <xsl:when test="$node/parent::*/processing-instruction('dbhtml')[normalize-space(.) = 'stop-chunking']">0</xsl:when>
+      <xsl:when test="not($node/parent::*)">1</xsl:when>
+      <xsl:when test="local-name($node)='appendix'">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <!-- Allow to manually set language in snippet -->
   <xsl:template match="d:programlisting" mode="class.value">
