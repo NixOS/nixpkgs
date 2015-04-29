@@ -65,10 +65,10 @@ rec {
   };
 
   grsecurity_stable = grsecPatch
-    { kversion  = "3.14.39";
-      revision  = "201504190814";
+    { kversion  = "3.14.40";
+      revision  = "201504290821";
       branch    = "stable";
-      sha256    = "0pjq0ggifh6hp5y62dl0ydskpmsmzj1cxxjaaqs6fpwn5ndsdji7";
+      sha256    = "0382ydr1dshjmwggx5a6ywrdr7qv52w178ify60qw59lrphbdkls";
     };
 
   grsecurity_unstable = grsecPatch
