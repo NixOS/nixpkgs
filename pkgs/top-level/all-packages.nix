@@ -6961,6 +6961,8 @@ let
 
   libusb1 = callPackage ../development/libraries/libusb1 { };
 
+  libusbmuxd = callPackage ../development/libraries/libusbmuxd { };
+
   libunwind = if stdenv.isDarwin
     then callPackage ../development/libraries/libunwind/native.nix {}
     else callPackage ../development/libraries/libunwind { };
