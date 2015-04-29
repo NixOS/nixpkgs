@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python3}:
+{ stdenv, fetchurl, python3, which }:
 
 let version = "0.10"; in
 stdenv.mkDerivation rec {
@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0q0cv2bsgf76wypz18v2acgj1crcdqhrhlsij3r53glsyv86xyra";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [ python3 which ];
+
+  postPatch = ''
+    substituteInPlace power-usage-report \
+      --replace "'which'" "'${which}/bin/which'"
+  '';
 
   makeFlagsArray = "PREFIX=$(out)";
 
