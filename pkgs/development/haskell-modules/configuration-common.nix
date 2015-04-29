@@ -22,8 +22,8 @@ self: super: {
   statistics = dontCheck super.statistics;
   text = dontCheck super.text;
 
-  # https://github.com/bartavelle/hruby/issues/10
-  hruby = addExtraLibrary super.hruby pkgs.ruby_2_1;
+  # The package doesn't compile with ruby 1.9, which is our default at the moment.
+  hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
@@ -155,9 +155,11 @@ self: super: {
     patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
   });
 
-  # The test suite imposes too narrow restrictions on the version of
-  # Cabal that can be used to build this package.
-  cabal-test-quickcheck = dontCheck super.cabal-test-quickcheck;
+  # Needs the latest version of QuickCheck to compile.
+  cabal-test-quickcheck = super.cabal-test-quickcheck.override { QuickCheck = self.QuickCheck_2_8_1; };
+
+  # https://github.com/massysett/rainbox/issues/1
+  rainbox = dontCheck super.rainbox;
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;

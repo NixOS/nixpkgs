@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = "scons --prefix=$out install";
 
   meta = {
-    description = "Extremely fast tool to remove duplicates and other lint from your filesystem.";
+    description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
     homepage = http://rmlint.readthedocs.org;
     platforms = platforms.linux;
     license = licenses.gpl3;

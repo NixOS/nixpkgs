@@ -436,7 +436,7 @@ let
 
     meta = {
       homepage = http://github.com/celery/py-amqp;
-      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project.";
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
       license = licenses.lgpl21;
     };
   };
@@ -456,6 +456,23 @@ let
     meta = {
       homepage = http://code.google.com/p/py-amqplib/;
       description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    };
+  };
+
+  apipkg = buildPythonPackage rec {
+    name = "apipkg-1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/apipkg/${name}.tar.gz";
+      md5 = "17e5668601a2322aff41548cb957e7c8";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "namespace control and lazy-import mechanism";
+      homepage = "http://bitbucket.org/hpk42/apipkg";
+      license = stdenv.lib.licenses.mit;
     };
   };
 
@@ -652,7 +669,7 @@ let
     };
 
     meta = {
-      description = "Utilities and Python modules for handling audio.";
+      description = "Utilities and Python modules for handling audio";
       homepage = "http://audiotools.sourceforge.net/";
       license = stdenv.lib.licenses.gpl2Plus;
     };
@@ -778,7 +795,7 @@ let
 
     meta = {
       homepage = http://pypi.python.org/pypi/babelfish;
-      description = "A module to work with countries and languages.";
+      description = "A module to work with countries and languages";
       license = stdenv.lib.licenses.bsd3;
     };
   };
@@ -1156,7 +1173,7 @@ let
     propagatedBuildInputs = with self; [ six html5lib ];
 
     meta = with stdenv.lib; {
-      description = "An easy, HTML5, whitelisting HTML sanitizer.";
+      description = "An easy, HTML5, whitelisting HTML sanitizer";
       longDescription = ''
         Bleach is an HTML sanitizing library that escapes or strips markup and
         attributes based on a white list. Bleach can also linkify text safely,
@@ -3389,12 +3406,118 @@ let
     };
   };
 
+  mwlib = buildPythonPackage rec {
+    version = "0.15.15";
+    name = "mwlib-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.pediapress.com/packages/mirror/${name}.tar.gz";
+      sha256 = "1dnmnkc21zdfaypskbpvkwl0wpkpn0nagj1fc338w64mbxrk8ny7";
+    };
+
+    commonDeps = with self;
+      [
+        apipkg
+        bottle
+        gevent
+        lxml
+        odfpy
+        pillow
+        py
+        pyPdf
+        pyparsing1
+        qserve
+        roman
+        simplejson
+        sqlite3dbm
+        timelib
+      ];
+
+    pythonPath = commonDeps ++
+      [
+        modules.sqlite3
+      ];
+
+    propagatedBuildInputs = commonDeps;
+
+    buildInputs = with self;
+      [
+        pil
+      ] ++ propagatedBuildInputs;
+
+    meta = {
+      description = "Library for parsing MediaWiki articles and converting them to different output formats";
+      homepage = "http://pediapress.com/code/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+  mwlib-ext = buildPythonPackage rec {
+    version = "0.13.2";
+    name = "mwlib.ext-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
+      md5 = "36193837359204d3337b297ba0f20bc8";
+    };
+
+    meta = {
+      description = "dependencies for mwlib markup";
+      homepage = "http://pediapress.com/code/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+  mwlib-rl = buildPythonPackage rec {
+    version = "0.14.6";
+    name = "mwlib.rl-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
+      md5 = "49d72b0172f69cbe039f62dd4efb65ea";
+    };
+
+    buildInputs = with self;
+      [
+        mwlib
+        mwlib-ext
+        pygments
+      ];
+
+    meta = {
+      description = "generate pdfs from mediawiki markup";
+      homepage = "http://pediapress.com/code/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   logster = buildPythonPackage {
     name = "logster-7475c53822";
     src = pkgs.fetchgit {
       url = git://github.com/etsy/logster;
       rev = "7475c53822";
       sha256 = "1ls007qmziwb50c5iikxhqin0xbn673gbd25m5k09861435cknvr";
+    };
+  };
+
+  odfpy = buildPythonPackage rec {
+    version = "0.9.6";
+    name = "odfpy-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/odfpy/${name}.tar.gz";
+      md5 = "3f570ead2b5f5eb6eab97eecce22d491";
+    };
+
+    buildInputs = with self; with pkgs; [ ];
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "Python API and tools to manipulate OpenDocument files";
+      homepage = "https://joinup.ec.europa.eu/software/odfpy/home";
+      license = stdenv.lib.licenses.asl20;
     };
   };
 
@@ -3784,6 +3907,26 @@ let
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  roman = buildPythonPackage rec {
+    version = "2.0.0";
+    name = "roman-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/roman/${name}.zip";
+      md5 = "aa71d131eec16d45c030fd06a27c9d17";
+    };
+
+    buildInputs = with self; with pkgs; [ ];
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "Integer to Roman numerals converter";
+      homepage = "https://pypi.python.org/pypi/roman";
+      license = stdenv.lib.licenses.psfl;
     };
   };
 
@@ -5496,7 +5639,7 @@ let
   };
 
   goobook = buildPythonPackage rec {
-    name = "goobook-1.5";
+    name = "goobook-1.6";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -5504,7 +5647,7 @@ let
       sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
     };
 
-    buildInputs = with self; [ six ];
+    buildInputs = with self; [ ];
 
     preConfigure = ''
       sed -i '/distribute/d' setup.py
@@ -5514,11 +5657,11 @@ let
       description = "Search your google contacts from the command-line or mutt";
       homepage    = https://pypi.python.org/pypi/goobook;
       license     = licenses.gpl3;
-      maintainers = with maintainers; [ lovek323 ];
+      maintainers = with maintainers; [ lovek323 hbunke ];
       platforms   = platforms.unix;
     };
 
-    propagatedBuildInputs = with self; [ gdata hcs_utils keyring simplejson ];
+    propagatedBuildInputs = with self; [ gdata hcs_utils keyring simplejson six];
   };
 
   google_api_python_client = buildPythonPackage rec {
@@ -5642,7 +5785,7 @@ let
     meta = {
       homepage = http://pypi.python.org/pypi/guessit;
       license = stdenv.lib.licenses.lgpl3;
-      description = "A library for guessing information from video files.";
+      description = "A library for guessing information from video files";
     };
   };
 
@@ -6085,7 +6228,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = http://maebert.github.io/jrnl/;
-      description = "A simple command line journal application that stores your journal in a plain text file.";
+      description = "A simple command line journal application that stores your journal in a plain text file";
       license = licenses.mit;
     };
   };
@@ -6633,7 +6776,7 @@ let
 
     meta = with stdenv.lib; {
       description = ''
-        A content management platform built using the Django framework.
+        A content management platform built using the Django framework
       '';
       longDescription = ''
         Mezzanine is a powerful, consistent, and flexible content management
@@ -7571,8 +7714,8 @@ let
     };
 
     meta = {
-      homepage = "http://code.google.com/p/oauth";
-      description = "Library for OAuth version 1.0a.";
+      homepage = http://code.google.com/p/oauth;
+      description = "Library for OAuth version 1.0a";
       license = licenses.mit;
       platforms = stdenv.lib.platforms.all;
     };
@@ -9348,6 +9491,21 @@ let
 
     meta = {
       homepage = http://pyparsing.wikispaces.com/;
+      description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
+    };
+  };
+
+  pyparsing1 = buildPythonPackage rec {
+    name = "pyparsing-1.5.7";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
+      md5 = "9be0fcdcc595199c646ab317c1d9a709";
+    };
+
+    meta = {
+      homepage = http://pyparsing.wikispaces.com/;
       description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
     };
   };
@@ -9703,6 +9861,22 @@ let
     };
   };
 
+  pyPdf = buildPythonPackage rec {
+    name = "pyPdf-1.13";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyPdf/${name}.tar.gz";
+      md5 = "7a75ef56f227b78ae62d6e38d4b6b1da";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "Pure-Python PDF toolkit";
+      homepage = "http://pybrary.net/pyPdf/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
 
   pyopengl = buildPythonPackage rec {
     name = "pyopengl-${version}";
@@ -10209,6 +10383,24 @@ let
     meta = {
       homepage = https://github.com/pnpnpn/retry-decorator;
       license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  qserve = buildPythonPackage rec {
+    name = "qserve-0.2.8";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/q/qserve/${name}.zip";
+      md5 = "d481f0dad66a93d0479022fe0487e8ee";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "job queue server";
+      homepage = "https://github.com/pediapress/qserve";
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 
@@ -10959,6 +11151,24 @@ let
     };
   };
 
+  sqlite3dbm = buildPythonPackage rec {
+    name = "sqlite3dbm-0.1.4";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sqlite3dbm/${name}.tar.gz";
+      md5 = "fc2f8fb09a4bbc0260b97e835b369184";
+    };
+
+    buildInputs = with self; [ modules.sqlite3 ];
+
+    meta = with stdenv.lib; {
+      description = "sqlite-backed dictionary";
+      homepage = "http://github.com/Yelp/sqlite3dbm";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   pgpdump = self.buildPythonPackage rec {
     name = "pgpdump-1.5";
 
@@ -11032,6 +11242,23 @@ let
       description = "Manage dynamic plugins for Python applications";
       homepage = "https://pypi.python.org/pypi/stevedore";
       license = licenses.asl20;
+    };
+  };
+
+  timelib = buildPythonPackage rec {
+    name = "timelib-0.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/timelib/${name}.zip";
+      md5 = "400e316f81001ec0842fa9b2cef5ade9";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "parse english textual date descriptions";
+      homepage = "https://github.com/pediapress/timelib/";
+      license = stdenv.lib.licenses.zlib;
     };
   };
 
@@ -11410,7 +11637,7 @@ let
     propagatedBuildInputs = with self; [ docutils jinja2 pygments sphinx_rtd_theme alabaster Babel snowballstemmer  six ];
 
     meta = with stdenv.lib; {
-      description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";
+      description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
       license = licenses.bsd3;
       platforms = platforms.unix;
@@ -12778,7 +13005,7 @@ let
     propagatedBuildInputs = with pythonPackages; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
 
     meta = with stdenv.lib; {
-      description = "Willie is a simple, lightweight, open source, easy-to-use IRC utility bot, written in Python.";
+      description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
       homepage = http://willie.dftba.net/;
       license = licenses.efl20;
     };
@@ -14570,8 +14797,8 @@ let
     propagatedBuildInputs = with self; [ nose ];
 
     meta = {
-      homepage = "https://more-itertools.readthedocs.org";
-      description = "Expansion of the itertools module.";
+      homepage = https://more-itertools.readthedocs.org;
+      description = "Expansion of the itertools module";
       license = licenses.mit;
     };
   };
@@ -14604,7 +14831,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      description = "Collection of fancy functional tools focused on practicality.";
+      description = "Collection of fancy functional tools focused on practicality";
       homepage = "http://funcy.readthedocs.org/";
       license = stdenv.lib.licenses.bsd3;
 
@@ -14992,6 +15219,97 @@ let
     meta = with stdenv.lib; {
       description = "Summary";
       homepage = https://github.com/quandyfactory/dicttoxml;
+    };
+  };
+
+  
+  markdown2 = buildPythonPackage rec {
+    name = "markdown2-${version}";
+    version = "2.3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/markdown2/${name}.zip";
+      sha256 = "073zyx3caqa9zlzxa82k9k2nhhn8c5imqpgp5nwqnh0fgaj9pqn8";
+    };
+    propagatedBuildInputs = with self; [];
+    meta = with stdenv.lib; {
+      description = "A fast and complete Python implementation of Markdown";
+      homepage =  https://github.com/trentm/python-markdown2;
+      license = licenses.mit;
+      maintainers = with maintainers; [ hbunke ];
+    };
+  };
+  
+  
+  evernote = buildPythonPackage rec {
+    name = "evernote-${version}";
+    version = "1.25.0";
+    disabled = ! isPy27; #some dependencies do not work with py3
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/evernote/${name}.tar.gz";
+      sha256 = "1lwlg6fpi3530245jzham1400a5b855bm4sbdyck229h9kg1v02d";
+    };
+
+     propagatedBuildInputs = with self; [ oauth2 ];
+
+     meta = with stdenv.lib; {
+      description = "Evernote SDK for Python";
+      homepage = http://dev.evernote.com;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hbunke ];
+     };
+  };
+    
+  thrift = buildPythonPackage rec {
+    name = "thrift-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thrift/${name}.tar.gz";
+      sha256 = "1yla6wg18x2a0l0lrvkp1v464hqhff98ck8pnv8d5j9kn3j6bxh8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Python bindings for the Apache Thrift RPC system";
+      homepage = http://thrift.apache.org/;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hbunke ];
+
+    };
+  };
+  
+  geeknote = buildPythonPackage rec {
+    version = "2015-03-02";
+    name = "geeknote-${version}";
+    disabled = ! isPy27; 
+
+    src = pkgs.fetchFromGitHub {
+      owner = "VitaliyRodnenko";
+      repo = "geeknote";
+      rev = "7ea2255bb6";
+      sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
+    };
+
+    /* build with tests fails with "Can not create application dirictory : 
+     /homeless-shelter/.geeknotebuilder". */
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ 
+        thrift 
+        beautifulsoup4 
+        markdown2
+        sqlalchemy
+        html2text
+        evernote
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Work with Evernote from command line";
+      homepage = http://www.geeknote.me;
+      license = licenses.gpl1;
+      maintainers = with maintainers; [ hbunke ];
+
     };
   };
 

@@ -448,7 +448,7 @@ let self = _self // overrides; _self = with self; {
 
     meta = with stdenv.lib; {
       homepage    = "https://github.com/jteeuwen/go-bindata";
-      description = "A small utility which generates Go code from any file. Useful for embedding binary data in a Go program.";
+      description = "A small utility which generates Go code from any file, useful for embedding binary data in a Go program";
       maintainers = with maintainers; [ cstrahan ];
       license     = licenses.cc0 ;
       platforms   = platforms.all;

@@ -25,7 +25,6 @@
 
 let
   v8 = v8_3_16_14;
-  mysql = assert false; (import <nixpkgs> {}).mysql;
 
 in
 

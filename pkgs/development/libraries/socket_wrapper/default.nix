@@ -1,12 +1,11 @@
-{ stdenv, fetchgit, cmake, pkgconfig }:
+{ stdenv, fetchurl, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "socket_wrapper-1.1.3";
 
-  src = fetchgit {
-    url = "git://git.samba.org/socket_wrapper.git";
-    rev = "refs/tags/${name}";
-    sha256 = "0b3sfjy7418gg52qkdblfi5x57g4m44n7434xhacz9isyl5m52vn";
+  src = fetchurl {
+    url = "mirror://samba/cwrap/${name}.tar.gz";
+    sha256 = "04xfa4yhcaj63ymagmlx77fakrx3wb8ss42m15pmwjaiyi2xndx3";
   };
 
   buildInputs = [ cmake pkgconfig ];

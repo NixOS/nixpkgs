@@ -23,7 +23,7 @@ let
     { tarball = import ./make-tarball.nix { inherit nixpkgs officialRelease; };
 
       manual = import ../../doc;
-      lib.tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
+      lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
@@ -31,7 +31,7 @@ let
           constituents =
             [ jobs.tarball
               jobs.manual
-              jobs.lib.tests
+              jobs.lib-tests
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
@@ -40,10 +40,8 @@ let
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
-              /* not ready yet
               jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
               jobs.glib-tested.i686-linux
-              */
             ];
         };
 

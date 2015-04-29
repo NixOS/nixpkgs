@@ -375,10 +375,29 @@ let
     inherit sha256;
   };
 
+  # gitorious example
   fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name;
     url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
     inherit sha256;
+  };
+
+  # cgit example, snapshot support is optional in cgit
+  fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
+  };
+
+  # gitlab example
+  fetchFromGitLab = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
+  };
+
+  # gitweb example, snapshot support is optional in gitweb
+  fetchFromRepoOrCz = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
   };
 
   resolveMirrorURLs = {url}: fetchurl {
@@ -475,6 +494,8 @@ let
 
   actdiag = pythonPackages.actdiag;
 
+  actkbd = callPackage ../tools/system/actkbd { };
+
   adom = callPackage ../games/adom { };
 
   advancecomp = callPackage ../tools/compression/advancecomp {};
@@ -496,6 +517,8 @@ let
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
   afl = callPackage ../tools/security/afl { };
+
+  aha = callPackage ../tools/text/aha { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
@@ -1722,6 +1745,8 @@ let
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  innoextract = callPackage ../tools/archivers/innoextract {};
+
   ioping = callPackage ../tools/system/ioping {};
 
   iodine = callPackage ../tools/networking/iodine { };
@@ -1995,7 +2020,6 @@ let
 
   minecraft = callPackage ../games/minecraft {
     pulseaudioSupport = config.pulseaudio or true;
-    pulseaudio = pulseaudio.override { ossWrapper = true; };
   };
 
   minecraft-server = callPackage ../games/minecraft-server { };
@@ -2636,6 +2660,8 @@ let
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
+
+  rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
@@ -3704,9 +3730,9 @@ let
     sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
   };
   gcc-arm-embedded-4_9 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
-    version = "4.9-2014q4-20141203";
-    releaseType = "major";
-    sha256 = "a440bcf68e36b291697567816e756877cd3b5782298e3e3c44eb0812a471980f";
+    version = "4.9-2015q1-20150306";
+    releaseType = "update";
+    sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
   };
   gcc-arm-embedded = gcc-arm-embedded-4_9;
 
@@ -4163,6 +4189,8 @@ let
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
+    magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
+
     magick = callPackage ../development/ocaml-modules/magick { };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
@@ -4386,6 +4414,8 @@ let
   smlnj = callPackage_i686 ../development/compilers/smlnj { };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
+
+  squeak = callPackage ../development/compilers/squeak { };
 
   stalin = callPackage ../development/compilers/stalin { };
 
@@ -4837,6 +4867,8 @@ let
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby165 = callPackage ../development/interpreters/jruby { };
+  
+  jython = callPackage ../development/interpreters/jython {};
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
 
@@ -7311,6 +7343,8 @@ let
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
+  pcg_c = callPackage ../development/libraries/pcg-c { };
+
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
   };
@@ -9058,6 +9092,8 @@ let
 
   fuse = callPackage ../os-specific/linux/fuse { };
 
+  fusionio-util = callPackage ../os-specific/linux/fusionio/util.nix { };
+
   fxload = callPackage ../os-specific/linux/fxload { };
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
@@ -9312,6 +9348,8 @@ let
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
+
+    fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
     ktap = callPackage ../os-specific/linux/ktap { };
 
@@ -10403,6 +10441,8 @@ let
 
   diffuse = callPackage ../applications/version-management/diffuse { };
 
+  dirt = callPackage ../applications/audio/dirt {};
+
   distrho = callPackage ../applications/audio/distrho {};
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
@@ -10825,6 +10865,11 @@ let
     inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
       libXfixes libXinerama libXrender libXt;
   };
+
+  firestr = callPackage ../applications/networking/p2p/firestr
+    { boost = boost155;
+      inherit (xlibs) libXScrnSaver;
+    };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -12486,7 +12531,8 @@ let
           ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
-             (with xlibs; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]);
+             (with xlibs; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash;
       gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly gst_ffmpeg ];
       gtk_modules = [ libcanberra ];
     };
@@ -13569,6 +13615,11 @@ let
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
+  coq_8_5 = callPackage ../applications/science/logic/coq/8.5.nix {
+    inherit (ocamlPackages) findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
     inherit (ocamlPackages_3_12_1) ocaml findlib;
     camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
@@ -13615,7 +13666,21 @@ let
 
   };
 
+  mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
+
+    mathcomp = callPackage ../development/coq-modules/mathcomp/1.5.nix {
+      coq = coq_8_5;
+      ssreflect = ssreflect;
+    };
+
+    ssreflect = callPackage ../development/coq-modules/ssreflect/1.5.nix {
+      coq = coq_8_5;
+    };
+
+  };
+
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
+  coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages);
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
   cvc4 = callPackage ../applications/science/logic/cvc4 {};

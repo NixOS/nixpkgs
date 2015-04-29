@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub }:
 
-let version = "115"; in
+let version = "116"; in
 stdenv.mkDerivation {
   name = "mcelog-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "13m9y4xfd3klzj2xrwwwwg31pnjfwd0rbrr2845sf557iyqrshki";
+    sha256 = "0nr3b924ardz9c1skna8finrjq22ac2vihp3zck9jixc9d5mvrmf";
     rev = "v${version}";
     repo = "mcelog";
     owner = "andikleen";

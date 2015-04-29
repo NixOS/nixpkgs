@@ -1,12 +1,11 @@
-{ stdenv, fetchgit, cmake, pkgconfig }:
+{ stdenv, fetchurl, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "nss_wrapper-1.0.3";
 
-  src = fetchgit {
-    url = "git://git.samba.org/nss_wrapper.git";
-    rev = "refs/tags/${name}";
-    sha256 = "1jka6d873vhvfr7k378xvgxmbpka87w33iq6b91ynwg36pz53ifw";
+  src = fetchurl {
+    url = "mirror://samba/cwrap/${name}.tar.gz";
+    sha256 = "0bysdijvi9n0jk74iklbfhbp0kvv81a727lcfd5q03q2hkzjfm18";
   };
 
   buildInputs = [ cmake pkgconfig ];

@@ -30,7 +30,7 @@ cabal.mkDerivation (self: {
   configureFlags = "-fpango -fvty";
   noHaddock = self.stdenv.lib.versionOlder self.ghc.version "7.8";
   meta = {
-    homepage = "http://haskell.org/haskellwiki/Yi";
+    homepage = http://haskell.org/haskellwiki/Yi;
     description = "The Haskell-Scriptable Editor";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;

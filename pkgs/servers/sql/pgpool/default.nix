@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://pgpool.net/mediawiki/index.php;
-    description = "a middleware that works between postgresql servers and postgresql clients.";
+    description = "A middleware that works between postgresql servers and postgresql clients";
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

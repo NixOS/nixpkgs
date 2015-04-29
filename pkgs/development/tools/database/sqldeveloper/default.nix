@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Oracle's Oracle DB GUI client.";
+    description = "Oracle's Oracle DB GUI client";
     longDescription = ''
       Oracle SQL Developer is a free integrated development environment that
       simplifies the development and management of Oracle Database in both

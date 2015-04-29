@@ -14,7 +14,7 @@ pythonPackages.buildPythonPackage rec {
   
   meta = {
     homepage = "http://offog.org/code/rawdog/";
-    description = "an RSS Aggregator Without Delusions Of Grandeur.";
+    description = "An RSS Aggregator Without Delusions Of Grandeur";
     license = stdenv.lib.licenses.gpl2;
     platform = stdenv.lib.platforms.unix;
   };
