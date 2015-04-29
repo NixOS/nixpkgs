@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "source-sans-pro-1.050";
+  name = "source-sans-pro-2.010";
   src = fetchurl {
-    url = "mirror://sourceforge/sourcesans.adobe/SourceSansPro_FontsOnly-1.050.zip";
-    sha256 = "002z7kx8jxp5pfrilqaxbwbr5yp9fl3zsp0imawmf5wqagpzayf3";
+    url = "https://github.com/adobe-fonts/source-sans-pro/archive/2.010R-ro/1.065R-it.tar.gz";
+    sha256 = "1s3rgia6x9fxc2pvlwm203grqkb49px6q0xnh8kbqxqsgna615p2";
   };
-
-  buildInputs = [ unzip ];
 
   phases = "unpackPhase installPhase";
 
