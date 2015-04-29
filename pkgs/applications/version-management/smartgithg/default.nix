@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "smartgithg-${the_version}";
 
   src = fetchurl {
-    url = "http://www.syntevo.com/download/smartgit/" +
+    url = "http://www.syntevo.com/downloads/smartgit/" +
           "smartgit-generic-${the_version}.tar.gz";
     sha256 = "0db4dxp0dl173z9r8n25zdl1il240p751d2f77cw0nmyibik7q4l";
   };
