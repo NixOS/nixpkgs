@@ -1,0 +1,12 @@
+diff --git a/language-glsl.cabal b/language-glsl.cabal
+index c72c278..aa5675c 100644
+--- a/language-glsl.cabal
++++ b/language-glsl.cabal
+@@ -36,7 +36,6 @@ executable glsl-pprint
+   build-depends:       base < 5,
+                        language-glsl,
+                        parsec,
+-                       pretty,
+                        prettyclass
+   ghc-options:         -Wall
+ 

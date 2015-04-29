@@ -33,6 +33,34 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # test-suite broken, haddock requires -XFlexibleContexts
+  elm-compiler = dontHaddock (dontCheck (
+    appendPatch (appendConfigureFlag super.elm-compiler "--ghc-option=-XFlexibleContexts")
+                ./elm-compiler.patch
+  ));
+
+  # port to optparse-applicative-0.11.x
+  elm-package = appendPatch
+    (super.elm-package.override { optparse-applicative = super.optparse-applicative; })
+    ./elm-package.patch;
+
+  # port to optparse-applicative-0.11.x
+  elm-make = super.elm-make.override { optparse-applicative = super.optparse-applicative; };
+
+  # does not contain frontend directory, added from GitHub
+  elm-reactor = appendPatch
+    (overrideCabal super.elm-reactor (drv:
+       { preBuild = "export HOME=./";
+         buildDepends = drv.buildDepends ++ [ self.elm-make ]; }
+    ))
+    ./elm-reactor.patch;
+
+  # requires -XFlexibleContexts
+  elm-repl = appendConfigureFlag super.elm-repl "--ghc-option=-XFlexibleContexts";
+
+  # pretty and prettyclass provide the same module
+  language-glsl = appendPatch super.language-glsl ./language-glsl.patch;
+
   # ekmett/linear#74
   linear = overrideCabal super.linear (drv: {
     prePatch = "sed -i 's/-Werror//g' linear.cabal";

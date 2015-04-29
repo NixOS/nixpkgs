@@ -1,0 +1,21 @@
+diff -rupN elm-package-0.5-old/src/CommandLine/Arguments.hs elm-package-0.5/src/CommandLine/Arguments.hs
+--- elm-package-0.5-old/src/CommandLine/Arguments.hs	2015-04-29 01:34:10.764470289 +0200
++++ elm-package-0.5/src/CommandLine/Arguments.hs	2015-04-29 01:52:28.899897295 +0200
+@@ -163,7 +163,7 @@ installInfo =
+ 
+ package :: Opt.Parser N.Name
+ package =
+-    Opt.argument N.fromString $
++    Opt.argument (maybe (Opt.readerError "package") return . N.fromString =<< Opt.str) $
+         mconcat
+         [ Opt.metavar "PACKAGE"
+         , Opt.help "A specific package name (e.g. evancz/automaton)"
+@@ -171,7 +171,7 @@ package =
+ 
+ version :: Opt.Parser V.Version
+ version =
+-    Opt.argument V.fromString $
++    Opt.argument (maybe (Opt.readerError "version") return . V.fromString =<< Opt.str) $
+         mconcat
+         [ Opt.metavar "VERSION"
+         , Opt.help "Specific version of a package (e.g. 1.2.0)"

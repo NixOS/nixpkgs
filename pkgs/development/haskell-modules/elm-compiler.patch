@@ -1,0 +1,12 @@
+diff -rupN elm-compiler-0.15-old/src/Docs.hs elm-compiler-0.15/src/Docs.hs
+--- elm-compiler-0.15-old/src/Docs.hs	2015-04-20 08:38:30.000000000 +0200
++++ elm-compiler-0.15/src/Docs.hs	2015-04-29 00:57:35.996207144 +0200
+@@ -124,7 +124,7 @@ docComment =
+       contents <- Parse.closeComment
+ 
+       let reversed =
+-              dropWhile (`elem` " \n\r") . drop 2 $ reverse contents
++              dropWhile (`elem` (" \n\r" :: String)) . drop 2 $ reverse contents
+ 
+       return $ dropWhile (==' ') (reverse reversed)
+ 
