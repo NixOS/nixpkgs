@@ -40,10 +40,8 @@ let
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
-              /* not ready yet
               jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
               jobs.glib-tested.i686-linux
-              */
             ];
         };
 
