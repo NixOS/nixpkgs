@@ -10392,6 +10392,8 @@ let
 
   distrho = callPackage ../applications/audio/distrho {};
 
+  dirt = callPackage ../applications/audio/dirt {};
+
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
   djvu2pdf = callPackage ../tools/typesetting/djvu2pdf { };
