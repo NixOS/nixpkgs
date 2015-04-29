@@ -21,7 +21,7 @@ let
 
   grubEfi =
     # EFI version of Grub v2
-    if (cfg.devices != ["nodev"]) && cfg.efiSupport && (cfg.version == 2)
+    if cfg.efiSupport && (cfg.version == 2)
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
