@@ -10390,9 +10390,9 @@ let
 
   diffuse = callPackage ../applications/version-management/diffuse { };
 
-  distrho = callPackage ../applications/audio/distrho {};
-
   dirt = callPackage ../applications/audio/dirt {};
+
+  distrho = callPackage ../applications/audio/distrho {};
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
