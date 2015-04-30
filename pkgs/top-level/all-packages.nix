@@ -544,6 +544,10 @@ let
 
   arandr = callPackage ../tools/X11/arandr { };
 
+  arangodb = callPackage ../servers/nosql/arangodb {
+    inherit (pythonPackages) gyp;
+  };
+
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
   arduino = arduino-core.override { withGui = true; };
