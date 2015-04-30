@@ -3618,6 +3618,25 @@ let
       else null;
   }));
 
+  gcc51 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5.1 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
+
+    isl = isl_0_14;
+  }));
+
   gfortran = gfortran48;
 
   gfortran48 = wrapCC (gcc48.cc.override {
