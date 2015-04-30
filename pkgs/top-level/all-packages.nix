@@ -9100,7 +9100,9 @@ let
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
-  gpm = callPackage ../servers/gpm { };
+  gpm = callPackage ../servers/gpm {
+    ncurses = null;  # Keep curses disabled for lack of value
+  };
 
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
