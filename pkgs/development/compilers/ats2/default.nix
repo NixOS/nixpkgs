@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gmp ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
