@@ -138,12 +138,39 @@ meta-attributes</title>
 
   <varlistentry>
     <term><varname>license</varname></term>
-    <listitem><para>The license for the package. One from the
-    attribute set defined in <link
-    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
-    <filename>nixpkgs/lib/licenses.nix</filename></link>.  Example:
-    <literal>stdenv.lib.licenses.gpl3</literal>. For details, see
-    <xref linkend='sec-meta-license'/>.</para></listitem>
+    <listitem>
+      <para>
+        The license, or licenses, for the package. One from the attribute set
+        defined in <link
+          xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/licenses.nix">
+          <filename>nixpkgs/lib/licenses.nix</filename></link>. At this moment
+        using both a list of licenses and a single license is valid. If the
+        license field is in the form of a list representation, then it means
+        that parts of the package are licensed differently.  Each license
+        should preferably be referenced by their attribute. The non-list
+        attribute value can also be a space delimited string representation of
+        the contained attribute shortNames or spdxIds. The following are all valid
+        examples:
+        <itemizedlist>
+          <listitem><para>Single license referenced by attribute (preferred)
+              <literal>stdenv.lib.licenses.gpl3</literal>.
+          </para></listitem>
+          <listitem><para>Single license referenced by its attribute shortName (frowned upon)
+              <literal>"gpl3"</literal>.
+          </para></listitem>
+          <listitem><para>Single license referenced by its attribute spdxId (frowned upon)
+              <literal>"GPL-3.0"</literal>.
+          </para></listitem>
+          <listitem><para>Multiple licenses referenced by attribute (preferred)
+              <literal>with stdenv.lib.licenses; [ asl20 free ofl ]</literal>.
+          </para></listitem>
+          <listitem><para>Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon)
+              <literal>"asl20 free ofl"</literal>.
+          </para></listitem>
+        </itemizedlist>
+        For details, see <xref linkend='sec-meta-license'/>.
+      </para>
+    </listitem>
   </varlistentry>
 
   <varlistentry>
