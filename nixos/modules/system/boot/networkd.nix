@@ -132,7 +132,7 @@ let
   commonNetworkOptions = {
 
     enable = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description = ''
         Whether to manage network configuration using <command>systemd-network</command>.
