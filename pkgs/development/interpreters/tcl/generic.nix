@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   inherit src;
 
-  preConfigure = "cd unix";
+  preConfigure = ''
+    cd unix
+  '';
 
   postInstall = ''
     make install-private-headers
@@ -22,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.tcl.tk/;
     license = licenses.tcltk;
     platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
   
   passthru = rec {

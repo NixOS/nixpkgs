@@ -14,9 +14,13 @@ stdenv.mkDerivation {
     ln -s $out/bin/wish* $out/bin/wish
   '';
 
-  configureFlags = "--with-tcl=${tcl}/lib";
+  preConfigure = ''
+    cd unix
+  '';
 
-  preConfigure = "cd unix";
+  configureFlags = [
+    "--with-tcl=${tcl}/lib"
+  ];
 
   buildInputs = [ pkgconfig tcl libXft ]
     ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
@@ -31,11 +35,11 @@ stdenv.mkDerivation {
     libdir = "lib/${libPrefix}";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = http://www.tcl.tk/;
-    license = stdenv.lib.licenses.tcltk;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.tcltk;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ lovek323 wkennington ];
   };
 }
