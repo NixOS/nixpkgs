@@ -492,11 +492,11 @@ let
 
   application = buildPythonPackage rec {
     name = "python-application-${version}";
-    version = "1.4.1";
+    version = "1.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-application/${name}.tar.gz";
-      sha256 = "3ae188e9dfd4bd63c9b43aebbf1d9de5df03fb5ac01e72f3bff5b41007570275";
+      sha256 = "9bc00c2c639bf633e2c5e08d4bf1bb5d7edaad6ccdd473692f0362df08f8aafc";
     };
   };
 
@@ -2919,11 +2919,11 @@ let
 
   eventlib = buildPythonPackage rec {
     name = "python-eventlib-${version}";
-    version = "0.2.0";
+    version = "0.2.1";
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
-      sha256 = "0fld5lb85ql4a5bgc38sdxi5pgzqljysp1p8f7abxnd6vymh4rgi";
+      sha256 = "25224794420f430946fe46932718b521a6264903fe8c0ed3563dfdb844c623e7";
     };
 
     propagatedBuildInputs = with self; [ greenlet ];
@@ -7058,11 +7058,11 @@ let
 
   msrplib = buildPythonPackage rec {
     name = "python-msrplib-${version}";
-    version = "0.15.0";
+    version = "0.17.0";
 
     src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
-      sha256 = "1sm03jcz663xkbhfmrk7rr5l3wlkydn8xs56fvqjxyapx0m5sw6f";
+      url = "http://download.ag-projects.com/MSRP/${name}.tar.gz";
+      sha256 = "fe6ee541fbb4380a5708d08f378724dbc93438ff35c0cd0400e31b070fce73c4";
     };
 
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
@@ -11450,14 +11450,14 @@ let
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "2.3.1";
+    version = "2.4.0";
     disabled = isPy3k;
 
     configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "1n3g1zg3zgdybikdla0qdqvpa06vn1ka2asr61lb8kk6xbvqkljv";
+      sha256 = "f66543c680f22aa3cf86f55373a01a2bb699366a1be5e257c417d018696b6840";
     };
 
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
@@ -13059,11 +13059,11 @@ let
 
   xcaplib = buildPythonPackage rec {
     name = "python-xcaplib-${version}";
-    version = "1.0.17";
+    version = "1.1.0";
 
     src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
-      sha256 = "1bf8n9ghmgxz8kjgnwy4y7ajijy5hi7viabgh0pvzkhz9gfvck86";
+      url = "http://download.ag-projects.com/XCAP/${name}.tar.gz";
+      sha256 = "2f8ea6fe7d005104ef1d854aa87bd8ee85ca242a70cde42f409f8e5557f864b3";
     };
 
     propagatedBuildInputs = with self; [ eventlib application ];
