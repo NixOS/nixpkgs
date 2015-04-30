@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://dvdisaster.net/;
-    description = "data loss/scratch/aging protection for CD/DVD media";
+    description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''
-      dvdisaster provides a margin of safety against data loss on CD and
+      Dvdisaster provides a margin of safety against data loss on CD and
       DVD media caused by scratches or aging media. It creates error correction
       data which is used to recover unreadable sectors if the disc becomes
       damaged at a later time.
