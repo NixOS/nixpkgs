@@ -482,6 +482,11 @@ let
     };
   };
 
+  commonMatchText = def: ''
+    [Match]
+    ${attrsToSection def.matchConfig}
+  '';
+
   linkToUnit = name: def:
     { inherit (def) enable;
       text = commonMatchText def +
