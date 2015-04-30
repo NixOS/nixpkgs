@@ -11,32 +11,33 @@
 */
 
 { stdenv, ghcWithPackages, makeWrapper, diagrams-builder, extraPackages ? (self: []) }:
+
 let
+
   # Used same technique as for the yiCustom package.
-  w = ghcWithPackages 
+  wrappedGhc = ghcWithPackages 
     (self: [ diagrams-builder ] ++ extraPackages self);
-  wrappedGhc = w.override { ignoreCollisions = true; };
-  ghcVersion = w.version;
+  ghcVersion = wrappedGhc.version;
+
+  exeWrapper = backend : ''
+    makeWrapper \
+    "${diagrams-builder}/bin/diagrams-builder-${backend}" "$out/bin/diagrams-builder-${backend}" \
+      --set NIX_GHC ${wrappedGhc}/bin/ghc \
+      --set NIX_GHC_LIBDIR ${wrappedGhc}/lib/ghc-${ghcVersion}
+  '';
+  
+  backends = ["svg" "cairo" "ps"];
+
 in
+
 stdenv.mkDerivation {
   name = "diagrams-builder";
+
   buildInputs = [ makeWrapper ];
-  buildCommand = ''
-    makeWrapper \
-    "${diagrams-builder}/bin/diagrams-builder-svg" "$out/bin/diagrams-builder-svg" \
-      --set NIX_GHC ${wrappedGhc}/bin/ghc \
-      --set NIX_GHC_LIBDIR ${wrappedGhc}/lib/ghc-${ghcVersion}
 
-    makeWrapper \
-    "${diagrams-builder}/bin/diagrams-builder-cairo" "$out/bin/diagrams-builder-cairo" \
-      --set NIX_GHC ${wrappedGhc}/bin/ghc \
-      --set NIX_GHC_LIBDIR ${wrappedGhc}/lib/ghc-${ghcVersion}
+  buildCommand = with stdenv.lib; 
+    concatStrings (intersperse "\n" (map exeWrapper backends));
 
-    makeWrapper \
-    "${diagrams-builder}/bin/diagrams-builder-ps" "$out/bin/diagrams-builder-ps" \
-    --set NIX_GHC ${wrappedGhc}/bin/ghc \
-    --set NIX_GHC_LIBDIR ${wrappedGhc}/lib/ghc-${ghcVersion}
-  '';
   # Will be faster to build the wrapper locally then to fetch it from a binary cache.
   preferLocalBuild = true;
   meta = diagrams-builder.meta;
