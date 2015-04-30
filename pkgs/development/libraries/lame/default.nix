@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "LAME is a high quality MPEG Audio Layer III (MP3) encoder";
+    description = "A high quality MPEG Audio Layer III (MP3) encoder";
     homepage    = http://lame.sourceforge.net;
     license     = licenses.lgpl2;
     maintainers = with maintainers; [ codyopel ];
