@@ -4222,6 +4222,27 @@ let
     };
   };
 
+
+  setuptools-git = buildPythonPackage rec {
+    name = "setuptools-git-${version}";
+    version = "1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/setuptools-git/${name}.tar.gz";
+      md5 = "7b5967e9527c789c3113b07a1f196f6e";
+    };
+
+    propagatedBuildInputs = [ pkgs.git ];
+    doCheck = false;
+
+    meta = {
+      description = "Setuptools revision control system plugin for Git";
+      homepage = https://pypi.python.org/pypi/setuptools-git;
+      license = licenses.bsd3;
+    };
+  };
+
+
   watchdog = buildPythonPackage rec {
     name = "watchdog-${version}";
     version = "0.8.3";
@@ -8311,6 +8332,26 @@ let
     buildInputs = with self; [ nose mock pyyaml ];
 
     propagatedBuildInputs = with self; [ unittest2 ];
+  };
+
+
+  python-jenkins = buildPythonPackage rec {
+    name = "python-jenkins-${version}";
+    version = "0.4.5";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-jenkins/${name}.tar.gz";
+      md5 = "10f1c24d45afe9cadd43f8d60b37d04c";
+    };
+
+    buildInputs = with self; [ pbr pip ];
+    pythonPath = with self; [ pyyaml six ];
+    doCheck = false;
+
+    meta = {
+      description = "Python bindings for the remote Jenkins API";
+      homepage = https://pypi.python.org/pypi/python-jenkins;
+      license = licenses.bsd3;
+    };
   };
 
 
