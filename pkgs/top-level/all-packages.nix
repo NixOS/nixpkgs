@@ -13992,6 +13992,10 @@ let
     x11Support = true;
   });
 
+  gnuk = callPackage ../misc/gnuk { };
+  gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
+  gnuk-git = callPackage ../misc/gnuk/git.nix { };
+
   guix = callPackage ../tools/package-management/guix { };
 
   gxemul = callPackage ../misc/emulators/gxemul { };
