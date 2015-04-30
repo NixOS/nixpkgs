@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://help.yandex.com/disk/cli-clients.xml;
-    description = "Yandex.Disk is a free cloud file storage service";
+    description = "A free cloud file storage service";
     maintainers = with stdenv.lib.maintainers; [smironov];
     platforms = ["i686-linux" "x86_64-linux"];
     license = stdenv.lib.licenses.unfree;

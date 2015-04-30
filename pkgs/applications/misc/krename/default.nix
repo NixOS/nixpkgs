@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.krename.net;
-    description = "KRename is a powerful batch renamer for KDE";
+    description = "A powerful batch renamer for KDE";
     inherit (kdelibs.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };

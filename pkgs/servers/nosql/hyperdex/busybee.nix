@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = "autoreconf -i";
 
   meta = with stdenv.lib; {
-    description = "BusyBee is a high-performance messaging layer.";
+    description = "A high-performance messaging layer";
     homepage = https://github.com/rescrv/busybee;
     license = licenses.bsd3;
   };

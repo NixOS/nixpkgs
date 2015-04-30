@@ -100,7 +100,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Storebackup is a backup suite that stores files on other disks";
+    description = "A backup suite that stores files on other disks";
     homepage = http://savannah.nongnu.org/projects/storebackup;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];

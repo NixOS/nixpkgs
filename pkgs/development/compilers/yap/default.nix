@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
-    description = "Yap Prolog System is a ISO-compatible high-performance Prolog compiler";
+    description = "A ISO-compatible high-performance Prolog compiler";
     license = stdenv.lib.licenses.artistic2;
 
     maintainers = [ stdenv.lib.maintainers.simons ];
