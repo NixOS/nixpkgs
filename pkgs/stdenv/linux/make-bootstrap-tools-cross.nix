@@ -92,11 +92,7 @@ rec {
     aclSupport = false;
   })).crossDrv;
   
-  curlMinimal = (pkgs.curl.override {
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  }).crossDrv;
+  curl-light = pkgs.curl-light.crossDrv;
   
   busyboxMinimal = (pkgs.busybox.override {
     # TBD: uClibc is broken.
@@ -170,8 +166,8 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
+        cp ${curl-light}/bin/curl $out/bin
+        cp -d ${curl-light}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
         
