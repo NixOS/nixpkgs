@@ -8,9 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1mvq9p85khsl818i4vbszyfab0fd45mdrwrxjkzw05mk1xcyc1br";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.digip.org/jansson/";
     description = "C library for encoding, decoding and manipulating JSON data";
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }
