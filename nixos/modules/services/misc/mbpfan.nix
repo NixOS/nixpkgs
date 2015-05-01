@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.mbpfan;
+  verbose = if cfg.verbose then "v" else "";
 
 in {
   options.services.mbpfan = {
@@ -69,12 +70,18 @@ in {
         The polling interval.
       '';
     };
+
+    verbose = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If true, sets the log level to verbose.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     boot.kernelModules = [ "coretemp" "applesmc" ];
-
-    security.setuidPrograms = [ "mbpfan" ];
 
     environment = {
       etc."mbpfan.conf".text = ''
@@ -96,7 +103,7 @@ in {
       restartTriggers = [ config.environment.etc."mbpfan.conf".source ];
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${cfg.package}/bin/mbpfan -fv";
+        ExecStart = "${cfg.package}/bin/mbpfan -f${verbose}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         PIDFile = "/var/run/mbpfan.pid";
         Restart = "always";
