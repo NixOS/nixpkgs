@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "CamlIDL is a stub code generator and COM binding for Objective Caml";
+    description = "A stub code generator and COM binding for Objective Caml";
     homepage = "${webpage}";
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.roconnor ];

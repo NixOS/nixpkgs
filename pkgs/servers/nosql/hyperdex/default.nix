@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   preConfigure = "autoreconf -fi";
 
   meta = with stdenv.lib; {
-    description = "HyperDex is a scalable, searchable key-value store";
+    description = "A scalable, searchable key-value store";
     homepage = http://hyperdex.org;
     license = licenses.bsd3;
   };

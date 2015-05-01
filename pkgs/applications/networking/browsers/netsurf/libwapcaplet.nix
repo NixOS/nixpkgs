@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [];
 
   meta = { 
-    description = "LibWapcaplet is a string internment library, written in C";
+    description = "A string internment library, written in C";
     homepage = http://www.netsurf-browser.org/projects/libwapcaplet/;
     license = stdenv.lib.licenses.mit;
     maintainers = [args.lib.maintainers.marcweber];

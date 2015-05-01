@@ -276,19 +276,6 @@ let
     };
   };
 
-  toOption = x:
-    if x == true then "true"
-    else if x == false then "false"
-    else toString x;
-
-  attrsToSection = as:
-    concatStrings (concatLists (mapAttrsToList (name: value:
-      map (x: ''
-          ${name}=${toOption x}
-        '')
-        (if isList value then value else [value]))
-        as));
-
   commonUnitText = def: ''
       [Unit]
       ${attrsToSection def.unitConfig}
@@ -368,11 +355,6 @@ let
           ${attrsToSection def.automountConfig}
         '';
     };
-
-  commonMatchText = def: ''
-      [Match]
-      ${attrsToSection def.matchConfig}
-    '';
 
 in
 

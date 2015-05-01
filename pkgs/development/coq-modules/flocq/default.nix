@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://flocq.gforge.inria.fr/;
-    description = "Flocq (Floats for Coq) is a floating-point formalization for the Coq system";
+    description = "A floating-point formalization for the Coq system";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

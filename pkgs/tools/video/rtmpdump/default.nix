@@ -1,6 +1,6 @@
 { stdenv, fetchgit, zlib
-, gnutlsSupport ? true, gnutls ? null
-, opensslSupport ? false, openssl ? null
+, gnutlsSupport ? false, gnutls ? null
+, opensslSupport ? true, openssl ? null
 }:
 
 # Must have an ssl library enabled

@@ -98,7 +98,7 @@ let lispPackages = rec {
   clx-truetype = buildLispPackage rec {
     baseName = "clx-truetype";
     version = "git-20141112";
-    description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension";
+    description = "A pure Common Lisp solution for antialiased TrueType font rendering using CLX and the XRender extension";
     deps = [cl-fad cl-store cl-vectors clx trivial-features zpb-ttf];
     # Source type: git
     src = pkgs.fetchgit {

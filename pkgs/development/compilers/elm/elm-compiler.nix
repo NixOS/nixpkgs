@@ -27,7 +27,7 @@ cabal.mkDerivation (self: {
   ];
   meta = {
     homepage = "http://elm-lang.org";
-    description = "Values to help with elm-package, elm-make, and elm-lang.org.";
+    description = "Values to help with elm-package, elm-make, and elm-lang.org";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

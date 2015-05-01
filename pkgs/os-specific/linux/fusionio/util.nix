@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://fusionio.com;
-    description = "Fusionio command line utilities.";
+    description = "Fusionio command line utilities";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     broken = stdenv.system != "x86_64-linux";
