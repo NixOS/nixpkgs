@@ -6,7 +6,7 @@
 
 cabal.mkDerivation (self: rec {
   pname = "elm-reactor";
-  version = "0.3";
+  version = "0.3.1";
   isLibrary = false;
   isExecutable = true;
   buildTools = [ unzip ];
@@ -14,43 +14,44 @@ cabal.mkDerivation (self: rec {
   src = fetchFromGitHub {
     owner = "elm-lang";
 	repo = "elm-reactor";
-	rev = "176ff8e05e4bb7474752da1b3455c83d6181d594";
-	sha256 = "1marjqlmmq3a74g9f3ngk90h9mkhillcdwfsys6x0nqj6qirw4ph";
+	rev = "ec35c68d075cf1a6712cd3c01fc343deb6b897bd";
+	sha256 = "0wbnxradp9bidca6vhp7hqhc22nxhs9im74v0crgpi67pysk7nn5";
   };
   elmLangCore = fetchurl {
-    url = "https://github.com/elm-lang/core/archive/1.1.0.zip";
-    sha256 = "1fhvghjsay1p82k13039wbd02k439yplv2rh9zr77zvcbih6a31j";
+    url = "https://github.com/elm-lang/core/archive/2.0.0.zip";
+    sha256 = "1h1zbsmav25lbkdbm3zrc1n7ad04b7nhc4qqdnjps17f44rsc828";
   };
   elmHtml = fetchurl {
-	url = "https://github.com/evancz/elm-html/archive/1.1.0.zip";
-    sha256 = "01wshabxsdrxcxs2nn3dhk7n8720sp3prpkahhx36vvprdh05l4q";
+	url = "https://github.com/evancz/elm-html/archive/3.0.0.zip";
+    sha256 = "0yysaqn6bxk13bggmdimkb3jx28k2hkrnii8wfhjhlf3khz9m7kg";
   };
   elmMarkdown = fetchurl {
-	url = "https://github.com/evancz/elm-markdown/archive/1.1.2.zip";
-	sha256 = "14y1wp28za50zypdzyvl5d57hkm0v3rgnzm5klv3jcbd625kr9bg";
+	url = "https://github.com/evancz/elm-markdown/archive/1.1.4.zip";
+	sha256 = "0az1a2z7yndpx1jijlnw1k2zslq4b2wy7q2z4rlvxy99m4mygxjm";
   };
   virtualDom = fetchurl {
-	url = "https://github.com/evancz/virtual-dom/archive/1.1.0.zip";
-	sha256 = "08dr7q0x1ycgj5b15s2kn1a45iw350gzq65c3lxp47xfffq1vz91";
+	url = "https://github.com/evancz/virtual-dom/archive/1.2.3.zip";
+	sha256 = "07zkr5pk7925lhmzllnnzp1vda6k2iildwd8m404m4sfz6zyr7qp";
   };
+
   elmStuff = ./elm-reactor-exact-dependencies.json;
 
   preConfigure = ''
 	unzip -d $TEMPDIR -q ${elmLangCore}
-	mkdir -p elm-stuff/packages/elm-lang/core/1.1.0
-	cp -pr $TEMPDIR/core-1.1.0/* elm-stuff/packages/elm-lang/core/1.1.0/
+	mkdir -p elm-stuff/packages/elm-lang/core/2.0.0
+	cp -pr $TEMPDIR/core-2.0.0/* elm-stuff/packages/elm-lang/core/2.0.0/
 
 	unzip -d $TEMPDIR -q ${elmHtml}
-	mkdir -p elm-stuff/packages/evancz/elm-html/1.1.0
-	cp -pr $TEMPDIR/elm-html-1.1.0/* elm-stuff/packages/evancz/elm-html/1.1.0
+	mkdir -p elm-stuff/packages/evancz/elm-html/3.0.0
+	cp -pr $TEMPDIR/elm-html-3.0.0/* elm-stuff/packages/evancz/elm-html/3.0.0
 
 	unzip -d $TEMPDIR -q ${elmMarkdown}
-	mkdir -p elm-stuff/packages/evancz/elm-markdown/1.1.2
-	cp -pr $TEMPDIR/elm-markdown-1.1.2/* elm-stuff/packages/evancz/elm-markdown/1.1.2
+	mkdir -p elm-stuff/packages/evancz/elm-markdown/1.1.4
+	cp -pr $TEMPDIR/elm-markdown-1.1.4/* elm-stuff/packages/evancz/elm-markdown/1.1.4
 
 	unzip -d $TEMPDIR -q ${virtualDom}
-	mkdir -p elm-stuff/packages/evancz/virtual-dom/1.1.0
-	cp -pr $TEMPDIR/virtual-dom-1.1.0/* elm-stuff/packages/evancz/virtual-dom/1.1.0
+	mkdir -p elm-stuff/packages/evancz/virtual-dom/1.2.3
+	cp -pr $TEMPDIR/virtual-dom-1.2.3/* elm-stuff/packages/evancz/virtual-dom/1.2.3
 
     cp ${elmStuff} elm-stuff/exact-dependencies.json
   '';
