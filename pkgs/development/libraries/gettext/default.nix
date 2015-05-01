@@ -1,23 +1,29 @@
 { stdenv, fetchurl, libiconv, xz }:
 
+let
+  inherit (stdenv) isCygwin isDarwin isLinux isSunOS;
+  inherit (stdenv.lib) optional optionals optionalAttrs;
+in
+
 stdenv.mkDerivation (rec {
-  name = "gettext-0.18.2";
+  name = "gettext-0.18.3.2";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "516a6370b3b3f46e2fc5a5e222ff5ecd76f3089bc956a7587a6e4f89de17714c";
+    sha256 = "1my5njl7mp663abpdn8qsm5i462wlhlnb5q50fmhgd0fsr9f996i";
   };
 
-  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
+  LDFLAGS = if isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
-  configureFlags = [ "--disable-csharp" "--with-xz" ]
-     ++ (stdenv.lib.optionals stdenv.isCygwin
-          [ # We have a static libiconv, so we can only build the static lib.
-            "--disable-shared" "--enable-static"
-
-            # Share the cache among the various `configure' runs.
-            "--config-cache"
-          ]);
+  configureFlags = [
+    "--disable-csharp"
+    "--with-xz"
+  ] ++ (optionals isCygwin [
+    # We have a static libiconv on Cygwin, so we can only build the static lib.
+    "--disable-shared" "--enable-static"
+    # Share the cache among the various `configure' runs.
+    "--config-cache"
+  ]);
 
   # On cross building, gettext supposes that the wchar.h from libc
   # does not fulfill gettext needs, so it tries to work with its
@@ -30,20 +36,19 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
-  buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ xz ] ++ optional (!isLinux) libiconv;
 
   enableParallelBuilding = true;
 
   crossAttrs = {
-    buildInputs = stdenv.lib.optional (stdenv ? ccCross && stdenv.ccCross.libc ? libiconv)
+    buildInputs = optional (stdenv ? ccCross && stdenv.ccCross.libc ? libiconv)
       stdenv.ccCross.libc.libiconv.crossDrv;
     # Gettext fails to guess the cross compiler
     configureFlags = "CXX=${stdenv.cross.config}-g++";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Well integrated set of translation tools and documentation";
-
     longDescription = ''
       Usually, programs are written and documented in English, and use
       English at execution time for interacting with users.  Using a common
@@ -62,19 +67,18 @@ stdenv.mkDerivation (rec {
       utilities are a set of tools that provides a framework to help other
       GNU packages produce multi-lingual messages.
     '';
-
     homepage = http://www.gnu.org/software/gettext/;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
   };
 }
 
-// stdenv.lib.optionalAttrs stdenv.isDarwin {
+// optionalAttrs isDarwin {
   makeFlags = "CFLAGS=-D_FORTIFY_SOURCE=0";
 }
 
-// stdenv.lib.optionalAttrs stdenv.isCygwin {
+// optionalAttrs isCygwin {
   patchPhase =
    # Make sure `error.c' gets compiled and is part of `libgettextlib.la'.
    # This fixes:
