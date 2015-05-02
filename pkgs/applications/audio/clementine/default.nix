@@ -65,11 +65,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional withSpotify libspotify;
 
   installPhase = ''
-    mkdir -p $out
-    cp -a ${wrapped}/* $out
-    chmod -R u+w-t $out
-
-    wrapProgram "$out/bin/${wrappedExeName}" \
+    mkdir -p $out/bin
+    makeWrapper "${unwrapped}/bin/${exeName}" "$out/bin/${exeName}" \
         --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
   '';
 
