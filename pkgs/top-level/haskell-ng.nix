@@ -9,13 +9,11 @@ rec {
     ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix { gmp = pkgs.gmp4; };
     ghc704Binary = callPackage ../development/compilers/ghc/7.0.4-binary.nix ({
       gmp = pkgs.gmp4;
-      ncurses = pkgs.ncurses5;
     } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
     ghc742Binary = callPackage ../development/compilers/ghc/7.4.2-binary.nix ({
       gmp = pkgs.gmp4;
-      ncurses = pkgs.ncurses5;
     } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
