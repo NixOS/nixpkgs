@@ -6,8 +6,6 @@
 let
   version = "1.2.3";
 
-  withSpotify = config.clementine.spotify or false;
-
   exeName = "clementine";
 
   unwrapped = stdenv.mkDerivation {
@@ -61,8 +59,7 @@ stdenv.mkDerivation {
   buildInputs = [
     unwrapped
     makeWrapper
-  ] ++ gst_plugins
-    ++ stdenv.lib.optional withSpotify libspotify;
+  ] ++ gst_plugins;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -77,15 +74,11 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "http://www.clementine-player.org";
     description = "A multiplatform music player"
-      + " ("
-      + concatStrings (optionals (withSpotify) ["with spotify, "])
-      + "with gstreamer plugins: "
+      + " (with gstreamer plugins: "
       + concatStrings (intersperse ", " (map (x: x.name) gst_plugins))
       + ")";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.ttuegel ];
-    # libspotify is unfree
-    hydraPlatforms = optionals (!withSpotify) platforms.linux;
   };
 }
