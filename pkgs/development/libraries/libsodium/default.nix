@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Version of NaCl with hardware tests at runtime, not build time";
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.isc;
+    maintainers = with maintainers; [ viric wkennington ];
+    platforms = platforms.all;
   };
 }
