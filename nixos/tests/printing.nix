@@ -48,7 +48,7 @@ import ./make-test.nix ({pkgs, ... }: {
 
       # Do some status checks.
       $client->succeed("lpstat -a") =~ /DeskjetRemote accepting requests/ or die;
-      $client->succeed("lpstat -h server -a") =~ /DeskjetLocal accepting requests/ or die;
+      $client->succeed("lpstat -h server:631 -a") =~ /DeskjetLocal accepting requests/ or die;
       $client->succeed("cupsdisable DeskjetRemote");
       $client->succeed("lpq") =~ /DeskjetRemote is not ready.*no entries/s or die;
       $client->succeed("cupsenable DeskjetRemote");
