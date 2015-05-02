@@ -4477,6 +4477,8 @@ let
 
   vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
 
+  vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
+
   visualcpp = callPackage ../development/compilers/visual-c++ { };
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
