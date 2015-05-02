@@ -6903,7 +6903,9 @@ let
 
   libssh = callPackage ../development/libraries/libssh { };
 
-  libssh2 = callPackage ../development/libraries/libssh2 { };
+  libssh2 = callPackage ../development/libraries/libssh2 {
+    fetchurl = fetchurlBoot;
+  };
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
