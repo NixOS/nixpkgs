@@ -3,7 +3,7 @@
 , usbmuxd, libmtp, gvfs, libcdio, protobuf, libspotify, qca2, pkgconfig
 , sparsehash, config, makeWrapper, gst_plugins }:
 
-let 
+let
   version = "1.2.3";
 
   withSpotify = config.clementine.spotify or false;
@@ -18,7 +18,10 @@ let
       sha256 = "1gx1109i4pylz6x7gvp4rdzc6dvh0w6in6hfbygw01d08l26bxbx";
     };
 
-    patches = [ ./clementine-1.2.1-include-paths.patch ];
+    patches = [
+      ./clementine-1.2.1-include-paths.patch
+      ./clementine-dbus-namespace.patch
+    ];
 
     buildInputs = [
       boost
@@ -54,11 +57,6 @@ stdenv.mkDerivation {
   name = "clementine-${version}";
 
   src = ./.;
-
-  patches = [
-    ./clementine-1.2.1-include-paths.patch
-    ./clementine-dbus-namespace.patch
-  ];
 
   buildInputs = [
     wrapped
