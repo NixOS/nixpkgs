@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang.patch ];
 
-  buildInputs = [ gpm ];
+  buildInputs = [ optGpm ];
 
   configureFlags = [
     (mkWith   true        "cxx"         null)
