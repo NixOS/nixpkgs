@@ -6191,7 +6191,6 @@ let
     openldap = openldap.override {
       cyrus_sasl = cyrus_sasl.override { kerberos = null; };
     };
-    cyrus_sasl = cyrus_sasl.override { kerberos = null; };
   };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
