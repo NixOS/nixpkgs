@@ -5521,8 +5521,7 @@ let
 
   check = callPackage ../development/libraries/check { };
 
-  chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
-    inherit cmake freeglut mesa;
+  chipmunk = callPackage ../development/libraries/chipmunk {
     inherit (xlibs) libX11 xproto inputproto libXi libXmu;
   };
 
