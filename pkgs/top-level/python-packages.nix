@@ -13850,13 +13850,13 @@ let
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-3.2";
+    name = "tornado-4.1";
 
     propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      md5 = "bd83cee5f1a5c5e139e87996d00b251b";
+      sha256 = "0a12f00h277zbifibnj46wf14801f573irvf6hwkgja5vspd7awr";
     };
 
     doCheck = false;
