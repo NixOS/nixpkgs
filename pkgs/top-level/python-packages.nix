@@ -13979,10 +13979,10 @@ let
   };
 
   pyzmq = buildPythonPackage rec {
-    name = "pyzmq-13.0.0";
+    name = "pyzmq-14.5.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyzmq/pyzmq-13.0.0.zip";
-      md5 = "fa2199022e54a393052d380c6e1a0934";
+      url = "http://pypi.python.org/packages/source/p/pyzmq/${name}.tar.gz";
+      sha256 = "1gbpgz4ngfw5x6zlsa1k0jwy5vd5wg9iz1shdx4zav256ib08vjx";
     };
     buildInputs = with self; [ pkgs.zeromq3 ];
     doCheck = false;
