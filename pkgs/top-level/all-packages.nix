@@ -6371,8 +6371,6 @@ let
 
   libass = callPackage ../development/libraries/libass { };
 
-  libassuan1 = callPackage ../development/libraries/libassuan1 { };
-
   libassuan = callPackage ../development/libraries/libassuan { };
 
   libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix {
