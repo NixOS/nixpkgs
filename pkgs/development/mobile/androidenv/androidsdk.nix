@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "24.0.1";
+  version = "24.1.2";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      sha1 = "fb46b9afa04e09d3c33fa9bfee5c99e9ec6a9523";
+      sha1 = "a46298bjpgzsnchhpcm1i86c4r50x638";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      sha1 = "7097c09c72645d7ad33c81a37b1a1363a9df2a54";
+      sha1 = "as109624lgrn8krylmyvm33yapqkzr00";
     }
     else throw "platform not ${stdenv.system} supported!";
 
