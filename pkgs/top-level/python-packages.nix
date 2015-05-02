@@ -13850,13 +13850,13 @@ let
 
 
   tornado = buildPythonPackage rec {
-    name = "tornado-3.2";
+    name = "tornado-4.1";
 
     propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      md5 = "bd83cee5f1a5c5e139e87996d00b251b";
+      md5 = "a06ea343375f2247344257ef691641f9";
     };
 
     doCheck = false;
@@ -13979,10 +13979,10 @@ let
   };
 
   pyzmq = buildPythonPackage rec {
-    name = "pyzmq-13.0.0";
+    name = "pyzmq-14.5.0";
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyzmq/pyzmq-13.0.0.zip";
-      md5 = "fa2199022e54a393052d380c6e1a0934";
+      url = "http://pypi.python.org/packages/source/p/pyzmq/${name}.tar.gz";
+      md5 = "8d3351a8ca2ca2a272a3f96bcb963e41";
     };
     buildInputs = with self; [ pkgs.zeromq3 ];
     doCheck = false;
