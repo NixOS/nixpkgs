@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, openssl, zlib, python, gyp, bash, go, readline }:
+{ stdenv, fetchFromGitHub, openssl, zlib, python, gyp, bash, go, readline }:
 
 stdenv.mkDerivation rec {
-  version = "2.5.2";
+  version = "2.5.3";
   name    = "arangodb-${version}";
 
-  src = fetchgit {
-    url = https://github.com/arangodb/arangodb.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "04l9palmh0jwbylapsss7d1s0h54wb6kng30zqsl3dq9l91ii6s0";
+  src = fetchFromGitHub {
+    repo = "arangodb";
+    owner = "arangodb";
+    rev = "67d995aa22ea341129398326fa10c5f6c14e94e9";
+    sha256 = "1v07fghf2jd2mvkfqhag0xblf6sxw7kx9kmhs2xpyrpns58lirvc";
   };
 
   buildInputs = [
