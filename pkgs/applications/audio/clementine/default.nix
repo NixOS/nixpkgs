@@ -8,10 +8,10 @@ let
 
   withSpotify = config.clementine.spotify or false;
 
-  wrappedExeName = "clementine";
+  exeName = "clementine";
 
-  wrapped = stdenv.mkDerivation {
-    name = "clementine-wrapped-${version}";
+  unwrapped = stdenv.mkDerivation {
+    name = "clementine-unwrapped-${version}";
 
     src = fetchurl {
       url = https://github.com/clementine-player/Clementine/archive/1.2.3.tar.gz;
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   src = ./.;
 
   buildInputs = [
-    wrapped
+    unwrapped
     makeWrapper
   ] ++ gst_plugins
     ++ stdenv.lib.optional withSpotify libspotify;
