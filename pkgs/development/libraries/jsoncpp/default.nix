@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, cmake, python }:
+{ stdenv, fetchFromGitHub, cmake, python }:
 
-let
-  basename = "jsoncpp";
-  version = "1.6.0";
-in
 stdenv.mkDerivation rec {
-  name = "${basename}-${version}";
-  src = fetchurl {
-    url = "https://github.com/open-source-parsers/${basename}/archive/${version}.tar.gz";
-    sha256 = "0ff1niks3y41gr6z13q9m391na70abqyi9rj4z3y2fz69cwm6sgz";
+  name = "jsoncpp-${version}";
+  version = "1.6.2";
+
+  src = fetchFromGitHub {
+    owner = "open-source-parsers";
+    repo = "jsoncpp";
+    rev = version;
+    sha256 = "0p92i0hx2k3g8mwrcy339b56bfq8qgpb65id8xllkgd2ns4wi9zi";
   };
 
-  nativeBuildInputs =
-    [
-      # cmake can be built with the system jsoncpp, or its own bundled version.
-      # Obviously we cannot build it against the system jsoncpp that doesn't yet exist, so
-      # we make a bootstrapping build with the bundled version.
-      (cmake.override { jsoncpp = null; })
-      python
-    ];
+  nativeBuildInputs = [
+    # cmake can be built with the system jsoncpp, or its own bundled version.
+    # Obviously we cannot build it against the system jsoncpp that doesn't yet exist, so
+    # we make a bootstrapping build with the bundled version.
+    (cmake.override { jsoncpp = null; })
+    python
+  ];
+
+  cmakeFlags = [
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=1"
+  ];
 
   meta = {
     inherit version;
