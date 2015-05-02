@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
 , usbmuxd, libmtp, gvfs, libcdio, protobuf, libspotify, qca2, pkgconfig
-, sparsehash, config, makeWrapper, gst_plugins }:
+, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
 
 let
   version = "1.2.3";
@@ -51,26 +51,11 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "clementine-${version}";
-
-  src = ./.;
-
-  buildInputs = [
-    unwrapped
-    makeWrapper
-  ] ++ gst_plugins;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    makeWrapper "${unwrapped}/bin/${exeName}" "$out/bin/${exeName}" \
-        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
-  '';
-
-  preferLocalBuild = true;
+runCommand "clementine-${version}"
+{
+  buildInputs = [ unwrapped makeWrapper ] ++ gst_plugins;
   dontPatchELF = true;
   dontStrip = true;
-
   meta = with stdenv.lib; {
     homepage = "http://www.clementine-player.org";
     description = "A multiplatform music player"
@@ -82,3 +67,8 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.ttuegel ];
   };
 }
+''
+  mkdir -p $out/bin
+  makeWrapper "${unwrapped}/bin/${exeName}" "$out/bin/${exeName}" \
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+''
