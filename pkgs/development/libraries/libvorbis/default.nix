@@ -13,6 +13,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Fix header reference
+  postInstall = ''
+    sed -i $out/include/vorbis/codec.h \
+      -e 's,#include <ogg/ogg.h>,#include "${libogg}/include/ogg/ogg.h",g'
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://xiph.org/vorbis/;
     license = licenses.bsd3;
