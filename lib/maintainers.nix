@@ -132,6 +132,7 @@
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";

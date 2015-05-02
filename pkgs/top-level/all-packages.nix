@@ -14449,4 +14449,6 @@ let
 
   hbase = callPackage ../servers/hbase {};
 
+  heroku-toolbelt = callPackage ../development/tools/heroku-toolbelt {};
+
 }; in self; in pkgs
