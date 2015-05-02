@@ -5,6 +5,7 @@
 
 # Extra Options
 , unicode ? true
+, abiVersion ? null
 }:
 
 let
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     (mkEnable unicode     "widec"       null)
     (mkEnable true        "ext-colors"  null)
     (mkEnable true        "ext-mouse"   null)
-  ];
+  ] ++ stdenv.lib.optional (abiVersion != null) (mkWith true "abi-version" abiVersion);
 
   # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
   # directory doesn't exist, the configure script will disable installation of

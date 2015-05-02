@@ -7241,6 +7241,10 @@ let
 
   ncurses = callPackage ../development/libraries/ncurses { };
 
+  ncurses5 = callPackage ../development/libraries/ncurses {
+    abiVersion = "5";
+  };
+
   neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
     sslSupport = true;
