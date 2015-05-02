@@ -1,5 +1,5 @@
 { stdenv, autoconf, automake, makeWrapper, pkgconfig, libtool, which
-, boost, python, pythonPackages, libxml2, git
+, boost, python, pythonPackages, libxml2, git, zlib
 
 # Optional Dependencies
 , snappy ? null, leveldb ? null, yasm ? null, fcgi ? null, expat ? null
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
-    boost python libxml2 yasm libatomic_ops libs3 malloc pythonPackages.flask
+    boost python libxml2 yasm libatomic_ops libs3 malloc pythonPackages.flask zlib
   ] ++ optional (versionAtLeast version "0.95") [
     git                   # Used for the gitversion string
     pythonPackages.sphinx # Used for docs
