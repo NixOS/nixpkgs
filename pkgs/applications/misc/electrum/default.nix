@@ -33,7 +33,7 @@ pythonPackages.buildPythonPackage rec {
 
   preInstall = ''
     mkdir -p $out/share
-    sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
+    sed -i 's,\(usr_share\) = .*,\1 = os.getenv("out")+"/share",' setup.py
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
   '';
 
