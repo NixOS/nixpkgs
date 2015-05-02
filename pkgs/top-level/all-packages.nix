@@ -10243,9 +10243,7 @@ let
 
   bazaar = callPackage ../applications/version-management/bazaar { };
 
-  bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
-    inherit bazaar;
-  };
+  bazaarTools = callPackage ../applications/version-management/bazaar/tools.nix { };
 
   beast = callPackage ../applications/audio/beast {
     inherit (gnome) libgnomecanvas libart_lgpl;
