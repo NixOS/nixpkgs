@@ -10,6 +10,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip curl ];
 
+  # Allow to use "clang++", commented in Makefile
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/dmd/posix.mak --replace g++ clang++
+  '';
+
   buildPhase = ''
       cd src/dmd
       make -f posix.mak INSTALL_DIR=$out
@@ -34,8 +39,9 @@ stdenv.mkDerivation {
 
       cd ../phobos
       mkdir $out/lib
-      ${let bits = if stdenv.is64bit then "64" else "32"; in
-      "cp generated/linux/release/${bits}/libphobos2.a $out/lib"
+      ${let bits = if stdenv.is64bit then "64" else "32";
+            osname = if stdenv.isDarwin then "osx" else "linux"; in
+      "cp generated/${osname}/release/${bits}/libphobos2.a $out/lib"
       }
 
       cp -r std $out/include/d2
@@ -55,4 +61,3 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
   };
 }
-
