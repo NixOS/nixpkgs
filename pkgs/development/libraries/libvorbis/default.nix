@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ libogg ];
+  buildInputs = [ libogg ];
 
   doCheck = true;
 
