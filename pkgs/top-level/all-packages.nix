@@ -827,7 +827,6 @@ let
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
 
   rsyslog = callPackage ../tools/system/rsyslog {
-    libgcrypt = libgcrypt_1_6;
     czmq = null; # Currently Broken
     hadoop = null; # Currently Broken
   };
@@ -1512,13 +1511,9 @@ let
   # use config.packageOverrides if you prefer original gnupg1
   gnupg1 = gnupg1compat;
 
-  gnupg20 = callPackage ../tools/security/gnupg/20.nix {
-    libgcrypt = libgcrypt_1_6;
-  };
+  gnupg20 = callPackage ../tools/security/gnupg/20.nix { };
 
-  gnupg21 = callPackage ../tools/security/gnupg/21.nix {
-    libgcrypt = libgcrypt_1_6;
-  };
+  gnupg21 = callPackage ../tools/security/gnupg/21.nix { };
 
   gnupg = gnupg20;
 
@@ -6602,8 +6597,6 @@ let
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
-  libgcrypt_1_6 = lowPrio (callPackage ../development/libraries/libgcrypt/1.6.nix { });
-
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
   libgksu = callPackage ../development/libraries/libgksu { };
@@ -6848,9 +6841,7 @@ let
 
   libosmpbf = callPackage ../development/libraries/libosmpbf {};
 
-  libotr = callPackage ../development/libraries/libotr {
-    libgcrypt = libgcrypt_1_6;
-  };
+  libotr = callPackage ../development/libraries/libotr { };
 
   libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
 
@@ -8762,7 +8753,6 @@ let
     python = python2;
     pythonPackages = python2Packages;
     kerberos = heimdal;
-    libgcrypt = libgcrypt_1_6;
     gnutls = gnutls33;
     cups = if stdenv.isDarwin then null else cups;
     pam = if stdenv.isDarwin then null else pam;
@@ -9014,9 +9004,7 @@ let
 
   criu = callPackage ../os-specific/linux/criu { };
 
-  cryptsetup = callPackage ../os-specific/linux/cryptsetup {
-    libgcrypt = libgcrypt_1_6;
-  };
+  cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
 
@@ -11042,13 +11030,9 @@ let
     inherit (gnome3) goffice gnome_icon_theme;
   };
 
-  gnunet = callPackage ../applications/networking/p2p/gnunet {
-    libgcrypt = libgcrypt_1_6;
-  };
+  gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
-  gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix {
-    libgcrypt = libgcrypt_1_6;
-  });
+  gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix { });
 
   gocr = callPackage ../applications/graphics/gocr { };
 
