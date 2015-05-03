@@ -1880,9 +1880,9 @@ let
   nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
 
   nodePackages = if stdenv.system == "armv5tel-linux" then
-    nodePackages-0_10
+    nodePackages_0_10
   else
-    nodePackages-0_12;
+    nodePackages_0_12;
 
   iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
 
