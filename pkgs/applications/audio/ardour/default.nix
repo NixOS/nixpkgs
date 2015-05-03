@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
+{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, dbus, fftw
 , fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = 
-    [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
+    [ alsaLib aubio boost cairomm curl dbus fftw fftwSinglePrec flac glibc
       glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
   '';
 
-  configurePhase = "python waf configure --optimize --prefix=$out";
+  configurePhase = "python waf configure --with-backend=alsa,jack --optimize --prefix=$out";
 
   buildPhase = "python waf";
 
