@@ -5,8 +5,6 @@ let
   diskSize = "4096";
 in
 {
-  imports = [ ../profiles/headless.nix ];
-
   system.build.azureImage =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "azure-image"
@@ -62,64 +60,75 @@ in
           echo "copying everything (will take a while)..."
           cp -prd $storePaths /mnt/nix/store/
 
-          # Register the paths in the Nix database.
+          echo Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
-              chroot /mnt ${config.nix.package}/bin/nix-store --load-db
+              chroot /mnt ${config.nix.package}/bin/nix-store --load-db --option build-users-group ""
 
-          # Create the system profile to allow nixos-rebuild to work.
+          echo Create the system profile to allow nixos-rebuild to work.
           chroot /mnt ${config.nix.package}/bin/nix-env \
-              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
+              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} --option build-users-group ""
 
-          # `nixos-rebuild' requires an /etc/NIXOS.
+          echo nixos-rebuild requires an /etc/NIXOS.
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
 
-          # `switch-to-configuration' requires a /bin/sh
+          echo switch-to-configuration requires a /bin/sh
           mkdir -p /mnt/bin
           ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
 
-          # Install a configuration.nix.
+          echo Install a configuration.nix.
           mkdir -p /mnt/etc/nixos /mnt/boot/grub
           cp ${./azure-config.nix} /mnt/etc/nixos/configuration.nix
 
-          # Generate the GRUB menu.
+          echo Generate the GRUB menu.
           ln -s vda /dev/sda
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
+          echo Almost done
           umount /mnt/proc /mnt/dev /mnt/sys
           umount /mnt
         ''
     );
 
-  fileSystems."/".device = "/dev/disk/by-label/nixos";
+  imports = [ ./azure-common.nix ];
 
   # Azure metadata is available as a CD-ROM drive.
   fileSystems."/metadata".device = "/dev/sr0";
 
-  boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
-  boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
+  systemd.services.fetch-ssh-keys =
+    { description = "Fetch host keys and authorized_keys for root user";
 
-  # Generate a GRUB menu. 
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.version = 2;
-  boot.loader.grub.timeout = 0;
+      wantedBy = [ "sshd.service" ];
+      before = [ "sshd.service" ];
+      after = [ "local-fs.target" ];
 
-  # Don't put old configurations in the GRUB menu.  The user has no
-  # way to select them anyway.
-  boot.loader.grub.configurationLimit = 0;
+      path  = [ pkgs.coreutils ];
+      script =
+        ''
+          eval "$(base64 --decode /metadata/CustomData.bin)"
+          if ! [ -z "$ssh_host_ecdsa_key" ]; then
+            echo "downloaded ssh_host_ecdsa_key"
+            echo "$ssh_host_ecdsa_key" > /etc/ssh/ssh_host_ecdsa_key
+            chmod 600 /etc/ssh/ssh_host_ecdsa_key
+          fi
 
-  # Allow root logins only using the SSH key that the user specified
-  # at instance creation time.
-  services.openssh.enable = true;
-  services.openssh.permitRootLogin = "without-password";
+          if ! [ -z "$ssh_host_ecdsa_key_pub" ]; then
+            echo "downloaded ssh_host_ecdsa_key_pub"
+            echo "$ssh_host_ecdsa_key_pub" > /etc/ssh/ssh_host_ecdsa_key.pub
+            chmod 644 /etc/ssh/ssh_host_ecdsa_key.pub
+          fi
 
-  # Force getting the hostname from Azure
-  networking.hostName = mkDefault "";
+          if ! [ -z "$ssh_root_auth_key" ]; then
+            echo "downloaded ssh_root_auth_key"
+            mkdir -m 0700 -p /root/.ssh
+            echo "$ssh_root_auth_key" > /root/.ssh/authorized_keys
+            chmod 600 /root/.ssh/authorized_keys
+          fi
+        '';
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.StandardError = "journal+console";
+      serviceConfig.StandardOutput = "journal+console";
+     };
 
-  # Always include cryptsetup so that NixOps can use it.
-  environment.systemPackages = [ pkgs.cryptsetup ];
-
-  networking.usePredictableInterfaceNames = false;
-
-  users.extraUsers.root.openssh.authorizedKeys.keys = [ (builtins.readFile <ssh-pub-key>) ];
 }
