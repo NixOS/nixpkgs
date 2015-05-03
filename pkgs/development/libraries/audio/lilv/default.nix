@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, lv2, pkgconfig, python, serd, sord, sratom }:
+{ stdenv, fetchsvn, lv2, pkgconfig, python, serd, sord, sratom }:
 
 stdenv.mkDerivation rec {
-  name = "lilv-${version}";
-  version = "0.20.0";
+  name = "lilv-svn-${rev}";
+  rev = "5675";
 
-  src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0aj2plkx56iar8vzjbq2l7hi7sp0ml99m0h44rgwai2x4vqkk2j2";
+  src = fetchsvn {
+    url = "http://svn.drobilla.net/lad/trunk/lilv";
+    rev = rev;
+    sha256 = "1wr61sivgbh0j271ix058sncsrgh9p2rh7af081s2z9ml8szgraq";
   };
 
   buildInputs = [ lv2 pkgconfig python serd sord sratom ];

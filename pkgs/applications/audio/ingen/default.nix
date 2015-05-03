@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation  rec {
   name = "ingen-svn-${rev}";
-  rev = "5490";
+  rev = "5675";
 
   src = fetchsvn {
     url = "http://svn.drobilla.net/lad/trunk/ingen";
     rev = rev;
-    sha256 = "09h2mrkzpwzhhyqy21xr7jhfbl82gmqfyj0lzhnjsrab8z56yzk6";
+    sha256 = "1dk56rzbc0rwlbzr90rv8bh5163xwld32nmkvcz7ajfchi4fnv86";
   };
 
   buildInputs = [
@@ -18,7 +18,10 @@ stdenv.mkDerivation  rec {
     python raul serd sord sratom suil
   ];
 
-  configurePhase = "python waf configure --prefix=$out";
+  configurePhase = ''
+    sed -e "s@{PYTHONDIR}/'@out/'@" -i wscript
+    python waf configure --prefix=$out
+  '';
 
   propagatedBuildInputs = [ rdflib ];
 

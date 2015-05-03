@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, python, serd }:
+{ stdenv, fetchsvn, pkgconfig, python, serd }:
 
 stdenv.mkDerivation rec {
-  name = "sord-${version}";
-  version = "0.12.2";
+  name = "sord-svn-${rev}";
+  rev = "327";
 
-  src = fetchurl {
-    url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0rq7vafdv4vsxi6xk9zf5shr59w3kppdhqbj78185rz5gp9kh1dx";
+  src = fetchsvn {
+    url = "http://svn.drobilla.net/sord/trunk";
+    rev = rev;
+    sha256 = "09lf6xmwfg8kbmz1b7d3hrpz0qqr8prdjqrp91aw70cgclx2pwc4";
   };
 
   buildInputs = [ pkgconfig python serd ];
