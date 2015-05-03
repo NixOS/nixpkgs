@@ -40,7 +40,7 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk;
+    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk coreutils;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
     
     inherit platformTools buildTools support supportRepository platforms sysimages addons;
