@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   # When we do build separate interactive version, it makes sense to always include docs.
-  outputs = stdenv.lib.optionals (!interactive) [ "out" "doc" ]; #ToDo
+  outputs = [ "out" ] ++ stdenv.lib.optional (!interactive) "doc"; #ToDo
 
   # Currently broken due to locale tests failing
   #doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
@@ -23,11 +23,9 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
     ++ [(if interactive then "--with-readline=${readline}" else "--without-readline")];
 
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
-
   postInstall = "rm $out/bin/gawk-*";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/gawk/;
     description = "GNU implementation of the Awk programming language";
 
@@ -45,8 +43,11 @@ stdenv.mkDerivation rec {
       lines of code.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+
+    platforms = platforms.unix;
 
     maintainers = [ ];
   };
 }
+
