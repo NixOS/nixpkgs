@@ -787,4 +787,7 @@ self: super: {
   # https://github.com/ndmitchell/shake/issues/206
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
 
+  # https://github.com/nushio3/doctest-prop/issues/1
+  doctest-prop = dontCheck super.doctest-prop;
+
 }
