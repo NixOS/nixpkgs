@@ -9946,6 +9946,8 @@ let
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
+  font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
+
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
   freepats = callPackage ../data/misc/freepats { };
