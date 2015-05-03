@@ -309,13 +309,13 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "9.0.3";
-    build = "139.1112";
+    version = "10.0.2";
+    build = "141.728";
     description = "Professional IDE for Web and JavaScript devlopment";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "e4cfe7b5f1220b68d880c4f236df9c9df2b1efcc04775afad6149d949f45f0aa";
+      sha256 = "0ghv1r145qb5kmp2x375f5674b86d51w024fz390znlnniclizqx";
     };
   };
 
