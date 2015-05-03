@@ -333,5 +333,6 @@ self: super: {
   wreq = markBrokenVersion "0.3.0.1" (dontCheck super.wreq);
   wreq-sb = dontDistribute (dontCheck super.wreq-sb);
   hipbot = dontDistribute super.hipbot;
+  bitcoin-api = dontDistribute super.bitcoin-api;
 
 }
