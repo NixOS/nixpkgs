@@ -5152,9 +5152,7 @@ let
       binutils = binutils;
     };
 
-  docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
-    inherit python pil makeWrapper;
-  };
+  docutils = pythonPackages.docutils;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
