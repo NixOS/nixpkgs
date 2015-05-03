@@ -3622,7 +3622,7 @@ let
       else null;
   }));
 
-  gcc51 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5.1 {
+  gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
     inherit noSysDirs;
 
     # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
