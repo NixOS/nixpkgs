@@ -8791,6 +8791,8 @@ let
 
   samba_light = samba4_light;
 
+  shairport-sync = callPackage ../servers/shairport-sync { };
+
   serfdom = callPackage ../servers/serfdom { };
 
   seyren = callPackage ../servers/monitoring/seyren { };
