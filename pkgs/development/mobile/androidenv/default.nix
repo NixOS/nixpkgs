@@ -40,7 +40,7 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk;
+    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk coreutils;
     inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
     
     inherit platformTools buildTools support supportRepository platforms sysimages addons;
@@ -137,6 +137,20 @@ rec {
   androidsdk_5_0_1_extras = androidsdk {
     platformVersions = [ "21" ];
     abiVersions = [ "armeabi-v7a" "x86" ];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+  };
+
+  androidsdk_5_1_1 = androidsdk {
+    platformVersions = [ "22" ];
+    abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_5_1_1_extras = androidsdk {
+    platformVersions = [ "22" ];
+    abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
     useGoogleAPIs = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
