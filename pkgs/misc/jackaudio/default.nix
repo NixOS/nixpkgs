@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, python, makeWrapper
-, bash, libsamplerate, readline
+, bash, libsamplerate, libsndfile, readline
 
 # Optional Dependencies
 , dbus ? null, pythonDBus ? null, libffado ? null, alsaLib ? null
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python
 
-    libsamplerate readline
+    libsamplerate libsndfile readline
 
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ];
