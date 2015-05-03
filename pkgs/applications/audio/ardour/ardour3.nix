@@ -78,7 +78,13 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
-      Also read "The importance of Paying Something" on their homepage, please!
+      Ardour is a digital audio workstation (DAW), You can use it to
+      record, edit and mix multi-track audio and midi. Produce your
+      own CDs. Mix video soundtracks. Experiment with new ideas about
+      music and sound.
+
+      Please consider supporting the ardour project financially:
+      https://community.ardour.org/node/8288
     '';
     homepage = http://ardour.org/;
     license = licenses.gpl2;
