@@ -36,6 +36,16 @@ let
         '';
       };
 
+      u2fAuth = mkOption {
+        default = config.security.pam.enableU2F;
+        type = types.bool;
+        description = ''
+          If set, users listed in
+          <filename>~/.yubico/u2f_keys</filename> are able to log in
+          with the associated U2F key.
+        '';
+      };
+
       usbAuth = mkOption {
         default = config.security.pam.usb.enable;
         type = types.bool;
@@ -209,6 +219,8 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
+          ${optionalString cfg.u2fAuth
+              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${optionalString cfg.unixAuth
@@ -364,6 +376,13 @@ in
       '';
     };
 
+    security.pam.enableU2F = mkOption {
+      default = false;
+      description = ''
+        Enable the U2F PAM module.
+      '';
+    };
+
     security.pam.enableEcryptfs = mkOption {
       default = false;
       description = ''
@@ -392,6 +411,7 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.enableOATH [ pkgs.oathToolkit ]
+      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
       ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
 
     security.setuidPrograms =
