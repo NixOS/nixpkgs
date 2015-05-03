@@ -10158,10 +10158,16 @@ let
 
   antiword = callPackage ../applications/office/antiword {};
 
-  ardour = ardour3;
 
-  ardour3 =  lowPrio (callPackage ../applications/audio/ardour {
+  ardour = ardour4;
+
+  ardour3 =  lowPrio (callPackage ../applications/audio/ardour3 {
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
+  });
+
+  ardour4 =  lowPrio (callPackage ../applications/audio/ardour4 {
+    inherit (gnome) libgnomecanvas libgnomecanvasmm;
+    inherit (vamp) vampSDK;
   });
 
   ario = callPackage ../applications/audio/ario { };
