@@ -800,6 +800,8 @@ let
     linuxHeaders = linuxHeaders_3_14;
   };
 
+  ecdsautils = callPackage ../tools/security/ecdsautils { };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   enca = callPackage ../tools/text/enca { };
@@ -1324,6 +1326,8 @@ let
   fakeroot = callPackage ../tools/system/fakeroot { };
 
   fakechroot = callPackage ../tools/system/fakechroot { };
+
+  fastd = callPackage ../tools/networking/fastd { };
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
@@ -6927,6 +6931,8 @@ let
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
   libu2f-host = callPackage ../development/libraries/libu2f-host { };
+
+  libuecc = callPackage ../development/libraries/libuecc { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
