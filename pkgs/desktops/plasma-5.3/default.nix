@@ -139,15 +139,25 @@ let
       };
 
       plasma-workspace = with pkgs; super.plasma-workspace // {
+        patches = [
+          (substituteAll {
+            src = ./plasma-workspace/0001-startkde-NixOS-patches.patch;
+            inherit (pkgs) bash gnused gnugrep socat;
+            inherit (kf5) kconfig kinit kservice;
+            inherit (pkgs.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
+            qt5tools = qt5.tools;
+            dbus_tools = pkgs.dbus.tools;
+          })
+        ];
         buildInputs = with xlibs;
           super.plasma-workspace.buildInputs ++ [ libSM libXcursor pam ];
         postPatch = ''
           substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
             --replace kdostartupconfig5 $out/bin/kdostartupconfig5
         '';
-        postInstall = ''
-          # We use a custom startkde script
-          rm $out/bin/startkde
+        preConfigure = ''
+          substituteInPlace startkde/startkde.cmake \
+            --subst-var-by plasmaWorkspace "$out"
         '';
       };
 
@@ -175,9 +185,4 @@ let
 in
   plasma5 // {
     inherit kf5 scope;
-    startkde = pkgs.callPackage ./startkde {
-      inherit (kf5) kconfig kinit kservice;
-      inherit (plasma5) plasma-desktop plasma-workspace;
-      inherit qt5;
-    };
   }
