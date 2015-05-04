@@ -5267,6 +5267,8 @@ let
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
+  jenkins-job-builder = callPackage ../development/tools/continuous-integration/jenkins-job-builder { };
+
   lcov = callPackage ../development/tools/analysis/lcov { };
 
   leiningen = callPackage ../development/tools/build-managers/leiningen { };
