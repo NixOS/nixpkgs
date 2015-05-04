@@ -13,18 +13,7 @@
     options = {
       services.mldonkey = {
       
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            If enabled, run mldonkey, a multi-platform multi-network 
-            peer-to-peer client, as a daemon.
-            
-            Mldonkey daemon can be controlled via telnet ( 127.0.0.1:4000 
-            by default), the WebUI (127.0.0.1:4080 by default) or via an 
-            external GUI.
-        '';
-        };
+        enable = mkEnableOption "mldonkey daemon";
                
         allowedIps = mkOption {
           type = types.str;
