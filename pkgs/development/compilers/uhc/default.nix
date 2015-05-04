@@ -1,9 +1,6 @@
-{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages,
-  shuffle,
-  hashable, mtl, network, uhc-util, uulib
-}:
+{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages }:
 
-let wrappedGhc = ghcWithPackages ( self: [hashable mtl network uhc-util uulib] );
+let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [shuffle hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
   version = "1.1.8.10";
   name = "uhc-${version}";
@@ -16,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
 
-  buildInputs = [ m4 wrappedGhc clang libtool shuffle ];
+  buildInputs = [ m4 wrappedGhc clang libtool ];
 
   configureFlags = [ "--with-gcc=${clang}/bin/clang" ];
 
