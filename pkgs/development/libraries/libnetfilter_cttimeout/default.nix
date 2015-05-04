@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libmnl ];
 
   meta = {
-    description = "Userspace library that provides the programming interface to the connection tracking timeout infrastructure.";
+    description = "Userspace library that provides the programming interface to the connection tracking timeout infrastructure";
     longDescription = ''
       libnetfilter_cttimeout is the userspace library that provides the programming
       interface to the fine-grain connection tracking timeout infrastructure.

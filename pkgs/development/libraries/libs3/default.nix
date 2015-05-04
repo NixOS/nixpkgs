@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, curl, libxml2 }:
+{ stdenv, fetchFromGitHub, curl, libxml2 }:
 
 stdenv.mkDerivation {
   name = "libs3-2015-01-09";
 
-  src = fetchgit {
-    url = "git://github.com/bji/libs3.git";
+  src = fetchFromGitHub {
+    owner = "bji";
+    repo = "libs3";
     rev = "4d21fdc0857b88c964649b321057d7105d1e4da3";
-    sha256 = "058sixppk078mdn9ii3swg87nbpgl86llz9mdhj5km5m53a7dnjw";
+    sha256 = "1c33h8lzlpmsbkymd2dac9g8hqhd6j6yzdjrhha8bcqyys6vcpy3";
   };
 
   buildInputs = [ curl libxml2 ];

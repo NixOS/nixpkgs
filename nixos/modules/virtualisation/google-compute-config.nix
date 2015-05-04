@@ -1,5 +1,5 @@
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [ "${modulesPath}/virtualisation/google-compute-image.nix" ];
+  imports = [ <nixpkgs/nixos/modules/virtualisation/google-compute-image.nix> ];
 }

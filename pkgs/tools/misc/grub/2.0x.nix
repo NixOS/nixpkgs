@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
+{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , zfs ? null
 , efiSupport ? false
@@ -41,10 +41,10 @@ assert zfsSupport -> zfs != null;
 stdenv.mkDerivation rec {
   name = "grub-${version}";
 
-  src = fetchgit {
-    url = "git://git.savannah.gnu.org/grub.git";
+  src = fetchFromSavannah {
+    repo = "grub";
     rev = "70b002de55abbfd6b2d2f2ea4408078d93c9e0de";
-    sha256 = "1170413b4d9kwqwgi1dcsnbwn8mb3snbid858wyfv84910kbrs2d";
+    sha256 = "1bhm1yxjmckzn45v70lzmz0qpj5prhb4iyiyqqw8rvyykcixw5qk";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];

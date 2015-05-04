@@ -439,6 +439,21 @@ rec {
     };
   };
 
+  vim-buffergator = buildVimPlugin {
+    name = "vim-buffergator-2015-03-31";
+    src = fetchFromGitHub {
+      owner = "jeetsukumaran";
+      repo = "vim-buffergator";
+      rev = "77cfdd127f";
+      sha256 = "11r9845kplwahf2d41whs2lg3bzy0dahs0mvmdbckp7ckq3gd3y4";
+      };
+     meta = with stdenv.lib; {
+      description = "Vim plugin to list, select and switch between buffers";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ hbunke ];
+     };
+  };
+
   vim-jinja = buildVimPlugin {
     name = "vim-jinja-git-2014-06-11";
     src = fetchFromGitHub {
@@ -450,6 +465,21 @@ rec {
    meta = {
     homepage = "https://github.com/lepture/vim-jinja";
     maintainers = [ stdenv.lib.maintainers.hbunke ];
+    };
+  };
+
+  vim-nerdtree-tabs = buildVimPlugin {
+    name = "vim-nerdtree-tabs-2014-09-25";
+    src = fetchFromGitHub {
+      owner = "jistr";
+      repo = "vim-nerdtree-tabs";
+      rev = "0decec122e";
+      sha256 = "0m51vpxq0d3mxy9i18hczsbqsqi7vlzwgjnpryb8gb5wmy999d6l";
+    };
+    meta = with stdenv.lib; {
+      description = "NERDTree and tabs together in Vim, painlessly";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hbunke ];
     };
   };
 
@@ -497,11 +527,11 @@ rec {
   };
 
   wakatime = buildVimPlugin {
-    name = "wakatime-3.0.9";
+    name = "wakatime-4.0.0";
 
     src = fetchFromGitHub {
-      sha256 = "0qq2h5ysbixypz1ga5j3yrh8sd5h1npqkd59dpl5c1mvjlc30fpk";
-      rev = "f5848439ffdf63db3859f692df1d8fa64b1b3edf";
+      sha256 = "0yfqcln1ah7a9hs6vl8llfyg5rzg1zbsf3y431wdgb0zvp9dlk25";
+      rev = "a7d48d3507499b8667bfca0b12f8865c01b26678";
       repo = "vim-wakatime";
       owner = "wakatime";
     };

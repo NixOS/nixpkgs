@@ -45,7 +45,7 @@ let
       '';
 
       meta = {
-        description = "Python bindings and utilities for Geant4.";
+        description = "Python bindings and utilities for Geant4";
         longDescription = ''
           Geant4 is a toolkit for the simulation of the passage of particles through matter.      
           Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.

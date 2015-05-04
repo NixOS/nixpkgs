@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libmnl ];
 
   meta = {
-    description = "Userspace library that provides the programming interface to the user-space connection tracking helper infrastructure.";
+    description = "Userspace library that provides the programming interface to the user-space connection tracking helper infrastructure";
     longDescription = ''
       libnetfilter_cthelper is the userspace library that provides the programming interface
       to the user-space helper infrastructure available since Linux kernel 3.6. With this

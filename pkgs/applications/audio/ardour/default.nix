@@ -1,9 +1,11 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
+{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, dbus, fftw
 , fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
-, perl, pkgconfig, python, serd, sord, sratom, suil }:
+, perl, pkgconfig, python, rubberband, serd, sord, sratom, suil, taglib
+, vampSDK
+}:
 
 let
 
@@ -15,11 +17,11 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "3.5.403";
+  tag = "4.0";
 
   # Version info that is built into the binary. Keep in sync with 'tag'. The
   # last 8 digits is a (fake) commit id.
-  revision = "3.5-403-00000000";
+  revision = "4.0-e1aa66cb3f";
 
 in
 
@@ -28,17 +30,18 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = git://git.ardour.org/ardour/ardour.git;
-    rev = "refs/tags/${tag}";
-    sha256 = "0k1z8sbjf88dqn12kf9cykrqj38vkr879n2g6b4adk6cghn8wz3x";
+    rev = "e1aa66cb3f";
+    sha256 = "396668fb9116a68f5079f0d880930e890fd0cdf7ee5f3b97fcf44b88cf840b4c";
   };
 
-  buildInputs = 
-    [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
-      glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
-      libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
-      makeWrapper pango perl pkgconfig python serd sord sratom suil
-    ];
+  buildInputs = [
+    alsaLib aubio boost cairomm curl dbus fftw fftwSinglePrec flac
+    glibc glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
+    libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
+    libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
+    makeWrapper pango perl pkgconfig python rubberband serd sord
+    sratom suil taglib vampSDK
+  ];
 
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${revision}\"; }\n' > libs/ardour/revision.cc
@@ -47,7 +50,7 @@ stdenv.mkDerivation rec {
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
   '';
 
-  configurePhase = "python waf configure --optimize --prefix=$out";
+  configurePhase = "python waf configure --with-backend=alsa,jack --optimize --prefix=$out";
 
   buildPhase = "python waf";
 
@@ -57,17 +60,17 @@ stdenv.mkDerivation rec {
     python waf install
     mkdir -pv $out/gtk2/engines
     cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
-    wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
+    wrapProgram $out/bin/ardour4 --prefix GTK_PATH : $out/gtk2
 
     # Install desktop file
     mkdir -p "$out/share/applications"
     cat > "$out/share/applications/ardour.desktop" << EOF
     [Desktop Entry]
-    Name=Ardour 3
+    Name=Ardour 4
     GenericName=Digital Audio Workstation
     Comment=Multitrack harddisk recorder
-    Exec=$out/bin/ardour3
-    Icon=$out/share/ardour3/icons/ardour_icon_256px.png
+    Exec=$out/bin/ardour4
+    Icon=$out/share/ardour4/icons/ardour_icon_256px.png
     Terminal=false
     Type=Application
     X-MultipleArgs=false
@@ -78,7 +81,13 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Multi-track hard disk recording software";
     longDescription = ''
-      Also read "The importance of Paying Something" on their homepage, please!
+      Ardour is a digital audio workstation (DAW), You can use it to
+      record, edit and mix multi-track audio and midi. Produce your
+      own CDs. Mix video soundtracks. Experiment with new ideas about
+      music and sound.
+
+      Please consider supporting the ardour project financially:
+      https://community.ardour.org/node/8288
     '';
     homepage = http://ardour.org/;
     license = licenses.gpl2;

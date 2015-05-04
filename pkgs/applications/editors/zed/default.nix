@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Zed is a fully offline-capable, open source, keyboard-focused, text and code editor for power users";
+    description = "A fully offline-capable, open source, keyboard-focused, text and code editor for power users";
     license = stdenv.lib.licenses.mit;
     homepage = http://zedapp.org/;
     maintainers = [ stdenv.lib.maintainers.matejc ];

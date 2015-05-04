@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Analyzes resource usage and performance characteristics of running docker containers.";
+    description = "Analyzes resource usage and performance characteristics of running docker containers";
     homepage = https://github.com/google/cadvisor;
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ];

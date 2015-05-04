@@ -375,10 +375,29 @@ let
     inherit sha256;
   };
 
+  # gitorious example
   fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name;
     url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
     inherit sha256;
+  };
+
+  # cgit example, snapshot support is optional in cgit
+  fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
+  };
+
+  # gitlab example
+  fetchFromGitLab = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
+  };
+
+  # gitweb example, snapshot support is optional in gitweb
+  fetchFromRepoOrCz = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name sha256;
+    url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
   };
 
   resolveMirrorURLs = {url}: fetchurl {
@@ -696,6 +715,9 @@ let
 
   brasero = callPackage ../tools/cd-dvd/brasero { };
 
+  brltty = callPackage ../tools/misc/brltty {
+    alsaSupport = (!stdenv.isDarwin);
+  };
   bro = callPackage ../applications/networking/ids/bro { };
 
   bsod = callPackage ../misc/emulators/bsod { };
@@ -976,6 +998,7 @@ let
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost156;
+    gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
   };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
@@ -1534,6 +1557,11 @@ let
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
+  gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
+    # Using pypy provides significant performance improvements (~2x)
+    pythonPackages = pypyPackages;
+  };
+
   graphviz = callPackage ../tools/graphics/graphviz { };
 
   graphviz-nox = callPackage ../tools/graphics/graphviz {
@@ -1722,6 +1750,8 @@ let
 
   inetutils = callPackage ../tools/networking/inetutils { };
 
+  innoextract = callPackage ../tools/archivers/innoextract {};
+
   ioping = callPackage ../tools/system/ioping {};
 
   iodine = callPackage ../tools/networking/iodine { };
@@ -1744,6 +1774,7 @@ let
 
   isl = callPackage ../development/libraries/isl { };
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
+  isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
 
   isync = callPackage ../tools/networking/isync { };
 
@@ -1835,15 +1866,23 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; };
+  nodejs-0_12 = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix { };
 
-  nodePackages_0_12 = callPackage ./node-packages.nix { self = nodePackages_0_12; };
+  nodejs = if stdenv.system == "armv5tel-linux" then
+    nodejs-0_10
+  else
+    nodejs-0_12;
+
+  nodePackages_0_12 = callPackage ./node-packages.nix { self = nodePackages_0_12; nodejs = nodejs-0_12; };
 
   nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
 
-  nodePackages = nodePackages_0_12;
+  nodePackages = if stdenv.system == "armv5tel-linux" then
+    nodePackages_0_10
+  else
+    nodePackages_0_12;
 
   iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
 
@@ -1995,7 +2034,6 @@ let
 
   minecraft = callPackage ../games/minecraft {
     pulseaudioSupport = config.pulseaudio or true;
-    pulseaudio = pulseaudio.override { ossWrapper = true; };
   };
 
   minecraft-server = callPackage ../games/minecraft-server { };
@@ -2562,6 +2600,7 @@ let
   redmine = callPackage ../applications/version-management/redmine { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
+  rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
@@ -3345,6 +3384,7 @@ let
 
   ats = callPackage ../development/compilers/ats { };
   ats2 = callPackage ../development/compilers/ats2 { };
+  ats-extsolve = callPackage ../development/compilers/ats-extsolve { };
 
   avra = callPackage ../development/compilers/avra { };
 
@@ -3591,6 +3631,25 @@ let
       else null;
   }));
 
+  gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
+
+    isl = isl_0_14;
+  }));
+
   gfortran = gfortran48;
 
   gfortran48 = wrapCC (gcc48.cc.override {
@@ -3706,9 +3765,9 @@ let
     sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
   };
   gcc-arm-embedded-4_9 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
-    version = "4.9-2014q4-20141203";
-    releaseType = "major";
-    sha256 = "a440bcf68e36b291697567816e756877cd3b5782298e3e3c44eb0812a471980f";
+    version = "4.9-2015q1-20150306";
+    releaseType = "update";
+    sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
   };
   gcc-arm-embedded = gcc-arm-embedded-4_9;
 
@@ -4427,6 +4486,8 @@ let
 
   vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
 
+  vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
+
   visualcpp = callPackage ../development/compilers/visual-c++ { };
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
@@ -5100,9 +5161,7 @@ let
       binutils = binutils;
     };
 
-  docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
-    inherit python pil makeWrapper;
-  };
+  docutils = pythonPackages.docutils;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
@@ -5575,8 +5634,7 @@ let
 
   check = callPackage ../development/libraries/check { };
 
-  chipmunk = builderDefsPackage (import ../development/libraries/chipmunk) {
-    inherit cmake freeglut mesa;
+  chipmunk = callPackage ../development/libraries/chipmunk {
     inherit (xlibs) libX11 xproto inputproto libXi libXmu;
   };
 
@@ -6870,6 +6928,8 @@ let
 
   libu2f-host = callPackage ../development/libraries/libu2f-host { };
 
+  libu2f-server = callPackage ../development/libraries/libu2f-server { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
@@ -7167,6 +7227,12 @@ let
   nettle = callPackage ../development/libraries/nettle { };
 
   newt = callPackage ../development/libraries/newt { };
+
+  nghttp2 = callPackage ../development/libraries/nghttp2 { };
+  libnghttp2 = nghttp2.override {
+    prefix = "lib";
+    fetchurl = fetchurlBoot;
+  };
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {
     nix = pkgs.nixUnstable;
@@ -8725,6 +8791,8 @@ let
 
   samba_light = samba4_light;
 
+  shairport-sync = callPackage ../servers/shairport-sync { };
+
   serfdom = callPackage ../servers/serfdom { };
 
   seyren = callPackage ../servers/monitoring/seyren { };
@@ -9462,6 +9530,8 @@ let
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
+  mbpfan = callPackage ../os-specific/linux/mbpfan { };
+
   mdadm = callPackage ../os-specific/linux/mdadm { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -9514,6 +9584,8 @@ let
   pam_mount = callPackage ../os-specific/linux/pam_mount { };
 
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
+
+  pam_u2f = callPackage ../os-specific/linux/pam_u2f { };
 
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
@@ -9792,11 +9864,7 @@ let
 
   xf86_video_nouveau = xorg.xf86videonouveau;
 
-  xmoto = builderDefsPackage (import ../games/xmoto) {
-    inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
-      freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
-      lua5 ode libxdg_basedir libxml2;
-  };
+  xmoto = callPackage ../games/xmoto { };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
 
@@ -9891,6 +9959,8 @@ let
   fira = callPackage ../data/fonts/fira { };
 
   fira-mono = callPackage ../data/fonts/fira-mono { };
+
+  font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
@@ -10105,11 +10175,16 @@ let
 
   antiword = callPackage ../applications/office/antiword {};
 
-  ardour = ardour3;
+  ardour = ardour4;
 
-  ardour3 =  lowPrio (callPackage ../applications/audio/ardour {
+  ardour3 =  callPackage ../applications/audio/ardour/ardour3.nix {
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
-  });
+  };
+
+  ardour4 =  callPackage ../applications/audio/ardour {
+    inherit (gnome) libgnomecanvas libgnomecanvasmm;
+    inherit (vamp) vampSDK;
+  };
 
   ario = callPackage ../applications/audio/ario { };
 
@@ -10188,9 +10263,7 @@ let
 
   bazaar = callPackage ../applications/version-management/bazaar { };
 
-  bazaarTools = builderDefsPackage (import ../applications/version-management/bazaar/tools.nix) {
-    inherit bazaar;
-  };
+  bazaarTools = callPackage ../applications/version-management/bazaar/tools.nix { };
 
   beast = callPackage ../applications/audio/beast {
     inherit (gnome) libgnomecanvas libart_lgpl;
@@ -10369,6 +10442,8 @@ let
   };
 
   diffuse = callPackage ../applications/version-management/diffuse { };
+
+  dirt = callPackage ../applications/audio/dirt {};
 
   distrho = callPackage ../applications/audio/distrho {};
 
@@ -11522,6 +11597,8 @@ let
   };
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
+
+  pig = callPackage ../applications/networking/cluster/pig { };
 
   shotcut = callPackage ../applications/video/shotcut { mlt = mlt-qt5; };
 
@@ -13934,6 +14011,10 @@ let
   ghostscriptX = appendToName "with-X" (ghostscript.override {
     x11Support = true;
   });
+
+  gnuk = callPackage ../misc/gnuk { };
+  gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
+  gnuk-git = callPackage ../misc/gnuk/git.nix { };
 
   guix = callPackage ../tools/package-management/guix { };
 

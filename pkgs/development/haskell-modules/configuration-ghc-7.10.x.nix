@@ -329,4 +329,9 @@ self: super: {
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
   vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
 
+  # https://github.com/bos/wreq/issues/61
+  wreq = markBrokenVersion "0.3.0.1" (dontCheck super.wreq);
+  wreq-sb = dontDistribute (dontCheck super.wreq-sb);
+  hipbot = dontDistribute super.hipbot;
+
 }

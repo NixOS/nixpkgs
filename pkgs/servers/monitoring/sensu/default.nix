@@ -9,8 +9,7 @@
     gemset = ./gemset.nix;
 
     meta = with lib; {
-      description = "A monitoring framework that aims to be simple, malleable,
-and scalable.";
+      description = "A monitoring framework that aims to be simple, malleable, and scalable";
       homepage    = http://sensuapp.org/;
       license     = with licenses; mit;
       maintainers = with maintainers; [ theuni ];

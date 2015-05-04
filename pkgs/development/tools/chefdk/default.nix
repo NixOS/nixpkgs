@@ -11,7 +11,7 @@ bundlerEnv {
   buildInputs = [ perl ];
 
   meta = with lib; {
-    description = "A streamlined development and deployment workflow for Chef platform.";
+    description = "A streamlined development and deployment workflow for Chef platform";
     homepage    = https://downloads.chef.io/chef-dk/;
     license     = with licenses; asl20;
     maintainers = with maintainers; [ offline ];

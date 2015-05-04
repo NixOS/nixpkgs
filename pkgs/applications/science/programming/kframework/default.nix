@@ -90,7 +90,7 @@ releaseTools.mvnBuild rec {
   '';
 
   meta = {
-    description = "The K Framework is a rewrite-based executable semantic framework in which programming languages, type systems and formal analysis tools can be defined.";
+    description = "A rewrite-based executable semantic framework in which programming languages, type systems and formal analysis tools can be defined";
     homepage = http://www.kframework.org;
     license = stdenv.lib.licenses.bsd3;     # technically it is the UIUC/NCSA license
                                             # but LLVM uses that license as well and

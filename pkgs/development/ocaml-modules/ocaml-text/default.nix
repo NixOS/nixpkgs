@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://ocaml-text.forge.ocamlcore.org/";
-    description = "OCaml-Text is a library for dealing with ``text'', i.e. sequence of unicode characters, in a convenient way. ";
+    description = "A library for convenient text manipulation";
     license = stdenv.lib.licenses.bsd3;
     platforms = ocaml.meta.platforms;
   };

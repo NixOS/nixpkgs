@@ -6727,7 +6727,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0s0albdw0zvg3w37s7is7gddr4mqwicjxxsy400n1p96l7ipnw4x";
     };
     meta = {
-      description = "Mozilla's ldap client library.";
+      description = "Mozilla's ldap client library";
       license = "unknown";
     };
   };
