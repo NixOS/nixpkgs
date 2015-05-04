@@ -13,49 +13,61 @@ patchHeaders() {
 
     header "patching header files in $dir"
 
-    # Figure out what system header directories are available
-    local extractHeaders='i{print;i=0} /-isystem/{i=1}; /-I/{print substr($0,3)}'
-    local includeDirs=()
-    readarray -t includeDirs <<< "$(echo "$NIX_CFLAGS_COMPILE" | \
-      tr ' ' '\n' | awk "${extractHeaders}")"
-
-    # We must include ourself as a system directory
-    includeDirs+=("$dir/include")
-
     # Iterate over every file and replace headers
     rm -f $TMPDIR/patch-headers.awk
     for file in $(find $dir/include -type f); do
+      # Determine what paths to search for includes
+      # CPP is the most reliable way to parse the environment as
+      # it gives us system and libc includes as well.
+      local rawCpp="$(cpp -v -M $NIX_CFLAGS_COMPILE $file 2>&1)"
+      if [ "$?" -ne "0" ]; then
+        echo "Failed to process: $file"
+        continue
+      fi
+
+      # Parse the cpp output into useful header location lists
+      local systemIncludes="$(echo "$rawCpp" | awk '/End/{f=0};f{print $1};/#include </{f=1};')"
+      local localIncludes="$(echo "$rawCpp" | awk '/#include </{f=0};f{print $1};/#include "/{f=1};')"
+      local tmpComb="$(dirname "$file")"$'\n'"$localIncludes"$'\n'"$systemIncludes"
+      local localAndSystemIncludes="$(echo "$tmpComb" | grep -v '^[ \r]*$')"
+      local headerPath="$(readlink -f "$(dirname "$file")")"
+      local nextIncludes="$(for includeDir in $localAndSystemIncludes; do
+        [ "$(readlink -f "$includeDir")" != "$headerPath" ] && echo "$includeDir"; done)"
+
       # Build the script awk uses to fix headers
       echo '{' > $TMPDIR/patch-headers.awk
+
+      # There are multiple types of includes we need to consider
+      # #include "" which uses local paths
+      # #include <> which is system paths only
+      # #include_next [<"][>"] which looks only at the next paths in the list
+      # include_next in this context would effectively exclude any cwd
       local headerTuples
       readarray -t headerTuples <<< \
-        "$(sed -n 's,.*\(#include \(<\|"\)\([^/>][^>]*\)\(>\|"\)\).*,\3 \1,p' $file)"
+        "$(sed -n 's,.*\(#[ ]*include\?\(_next\)[ ]*\(<\|"\)\([^/>][^>]*\)\(>\|"\)\).*,\4 \1,p' $file)"
+
+      # Determine where each of the includes resides and build an expression to patch it
       for headerTuple in "${headerTuples[@]}"; do
         [ -z "$headerTuple" ] && continue
         local header="$(echo "$headerTuple" | cut -d' ' -f1)"
         local includeStmt="$(echo "$headerTuple" | cut -d' ' -f2-)"
 
-        # If we are not doing a system include the include can
-        # reside relative to the current working directory of the
-        # header we are fixing.
-        local canReferToPwd=0
-        if echo "$includeStmt" | grep -q '#include "'; then
-          canReferToPwd=1
-          includeDirs+=("$(dirname "$file")")
+        # Determine directory list based on the type of include
+        if echo "$includeStmt" | grep -q '_next'; then
+          local includeDirs="$nextIncludes"
+        elif echo "$includeStmt" | grep -q '"'; then
+          local includeDirs="$localAndSystemIncludes"
+        else
+          local includeDirs="$systemIncludes"
         fi
 
         # Determine which include path holds the header
         # we are trying to include
         local absolute=""
-        for includeDir in "${includeDirs[@]}"; do
+        for includeDir in $includeDirs; do
           local tmpName="$(readlink -f "$includeDir/$header")"
           [ -f "$tmpName" ] && absolute="$tmpName"
         done
-
-        # Unroll the includeDirs array if we added a cwd
-        if [ "$canReferToPwd" -eq "1" ]; then
-          includeDirs=("${includeDirs[@]:0:${#includeDirs[@]}-1}")
-        fi
 
         # Generate the expression used for fixing the header file
         if [ -n "$absolute" ]; then
