@@ -13848,11 +13848,23 @@ let
     };
   };
 
+  # Remove tornado 3.x once pythonPackages.thumbor is updated to 5.x
+  tornado_3 = buildPythonPackage rec {
+    name = "tornado-3.2.2";
 
+    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
+      sha256 = "13mq6nx98999zql8p2zlg4sj2hr2sxq9w11mqzi7rjfjs0z2sn8i";
+    };
+
+    doCheck = false;
+  };
   tornado = buildPythonPackage rec {
     name = "tornado-4.1";
 
-    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 ];
+    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
@@ -14994,20 +15006,22 @@ let
     disabled = ! isPy27;
 
     propagatedBuildInputs = with self; [
-                    tornado
-                    pycrypto
-                    pycurl
-                    pillow
-                    derpconf
-                    python_magic
-                    thumborPexif
-                    (pkgs.opencv.override {
-                        gtk = null;
-                        glib = null;
-                        xineLib = null;
-                        gstreamer = null;
-                        ffmpeg = null;
-                    }) ];
+      # Remove pythonPackages.tornado 3.x once thumbor is updated to 5.x
+      tornado_3
+      pycrypto
+      pycurl
+      pillow
+      derpconf
+      python_magic
+      thumborPexif
+      (pkgs.opencv.override {
+        gtk = null;
+        glib = null;
+        xineLib = null;
+        gstreamer = null;
+        ffmpeg = null;
+      })
+    ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/thumbor/${name}.tar.gz";
