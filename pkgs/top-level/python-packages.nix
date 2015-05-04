@@ -4689,7 +4689,7 @@ let
     name = "httpretty-${version}";
     version = "0.8.3";
     disabled = isPy3k;
-    doCheck = !isPyPy;
+    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
@@ -4699,8 +4699,6 @@ let
     buildInputs = with self; [ tornado requests httplib2 sure nose coverage ];
 
     propagatedBuildInputs = with self; [ urllib3 ];
-
-    doCheck = false;
 
     postPatch = ''
       sed -i -e 's/==.*$//' *requirements.txt
