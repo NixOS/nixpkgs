@@ -232,7 +232,7 @@ rec {
   /* Modify a stdenv so that it uses the Gold linker. */
   useGoldLinker = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_COMPILE or "") + " -fuse-ld=gold";
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
       });
     };
 
