@@ -35,8 +35,8 @@ with lib;
 
             wget="wget -q --retry-connrefused -O -"
 
-            echo "setting host name..."
             ${optionalString (config.networking.hostName == "") ''
+              echo "setting host name..."
               ${pkgs.nettools}/bin/hostname $($wget http://169.254.169.254/1.0/meta-data/hostname)
             ''}
 
@@ -69,14 +69,18 @@ with lib;
             fi
 
             ${optionalString (! config.ec2.metadata) ''
-            # Since the user data is sensitive, prevent it from being
-            # accessed from now on.
-            ip route add blackhole 169.254.169.254/32
+              # Since the user data is sensitive, prevent it from
+              # being accessed from now on. FIXME: remove at some
+              # point, since current NixOps no longer relies on
+              # metadata secrecy.
+              ip route add blackhole 169.254.169.254/32
             ''}
           '';
 
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
+
+        restartIfChanged = false;
       };
 
     systemd.services."print-host-key" =
