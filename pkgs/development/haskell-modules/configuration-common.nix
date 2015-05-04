@@ -118,6 +118,9 @@ self: super: {
   # Agda-2.4.2.2 needs these overrides to compile.
   Agda = super.Agda.override { equivalence = self.equivalence_0_2_5; cpphs = self.cpphs_1_18_9; };
 
+  # Help libconfig find it's C language counterpart.
+  libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
