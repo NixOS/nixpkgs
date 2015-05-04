@@ -5770,6 +5770,8 @@ let
   ffmpeg_2 = ffmpeg_2_5;
   ffmpeg = ffmpeg_2;
 
+  ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
+
   ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw { };
