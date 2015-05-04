@@ -12756,6 +12756,8 @@ let
     fltk = fltk13;
   };
 
+  zam-plugins = callPackage ../applications/audio/zam-plugins { inherit (xlibs) libX11; };
+
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
       import ../applications/misc/zathura {
