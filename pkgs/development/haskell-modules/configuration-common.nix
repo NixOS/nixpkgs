@@ -794,4 +794,12 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
+  # https://github.com/goldfirere/singletons/issues/116
+  # https://github.com/goldfirere/singletons/issues/117
+  # https://github.com/goldfirere/singletons/issues/118
+  singletons = markBroken super.singletons;
+  singleton-nats = dontDistribute super.singleton-nats;
+  hgeometry = dontDistribute super.hgeometry;
+  hipe = dontDistribute super.hipe;
+
 }
