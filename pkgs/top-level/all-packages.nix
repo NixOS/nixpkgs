@@ -5135,6 +5135,8 @@ let
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
+  egypt = callPackage ../development/tools/analysis/egypt { };
+
   elfutils = callPackage ../development/tools/misc/elfutils { };
 
   epm = callPackage ../development/tools/misc/epm { };
