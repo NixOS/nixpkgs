@@ -1,8 +1,13 @@
-{ SDL_image, SDL_ttf, SDL_net, fpc, qt4 , ghc, ffmpeg, freeglut, network, vector
+{ SDL_image, SDL_ttf, SDL_net, fpc, qt4, ghcWithPackages, ffmpeg, freeglut
 , stdenv, makeWrapper, fetchurl, cmake, pkgconfig, lua5_1, SDL, SDL_mixer
-, utf8String, bytestringShow, hslogger, random, dataenc, zlib, libpng, mesa
+, zlib, libpng, mesa
 }:
 
+let
+  ghc = ghcWithPackages (pkgs: with pkgs; [
+          network vector utf8-string bytestring-show random hslogger dataenc
+        ]);
+in
 stdenv.mkDerivation rec {
   version = "0.9.20.5";
   name = "hedgewars-${version}";
@@ -12,9 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL_ttf SDL_net network vector utf8String bytestringShow hslogger random
-    cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc qt4 ghc ffmpeg freeglut
-    dataenc makeWrapper
+    SDL_ttf SDL_net cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc
+    qt4 ghc ffmpeg freeglut makeWrapper
   ];
 
   patches = [ ./fix-ghc-7.8-build-failure.diff ];
@@ -64,6 +68,6 @@ stdenv.mkDerivation rec {
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
     maintainers = maintainers.kragniz;
-    platforms = platforms.all;
+    platforms = ghc.meta.platforms;
   };
 }
