@@ -6008,7 +6008,7 @@ let
     name = "httpretty-${version}";
     version = "0.8.3";
     disabled = isPy3k;
-    doCheck = !isPyPy;
+    doCheck = false;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/h/httpretty/${name}.tar.gz";
