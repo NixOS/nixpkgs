@@ -249,6 +249,8 @@ in
       script = ''
         mkdir -p -m 0755 ${dirOf cfg.cachedir}
         mkdir -p -m 0700 ${cfg.cachedir}
+        chown root:root ${cfg.cachedir}
+        chmod 0700 ${cfg.cachedir}
         DIRS=`cat /etc/tarsnap/$1.dirs`
         exec tarsnap --configfile /etc/tarsnap/$1.conf -c -f $1-$(date +"%Y%m%d%H%M%S") $DIRS
       '';
