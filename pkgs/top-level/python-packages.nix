@@ -4700,6 +4700,8 @@ let
 
     propagatedBuildInputs = with self; [ urllib3 ];
 
+    doCheck = false;
+
     postPatch = ''
       sed -i -e 's/==.*$//' *requirements.txt
       # XXX: Drop this after version 0.8.4 is released.
