@@ -4683,6 +4683,8 @@ let
 
   php56 = callPackage ../development/interpreters/php/5.6.nix { };
 
+  picoc = callPackage ../development/interpreters/picoc {};
+
   picolisp = callPackage ../development/interpreters/picolisp {};
 
   pltScheme = racket; # just to be sure
