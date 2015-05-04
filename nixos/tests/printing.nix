@@ -9,6 +9,7 @@ import ./make-test.nix ({pkgs, ... }: {
       { config, pkgs, ... }:
       { services.printing.enable = true;
         services.printing.listenAddresses = [ "*:631" ];
+        services.printing.defaultShared = true;
         services.printing.extraConf =
           ''
             <Location />
