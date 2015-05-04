@@ -1,5 +1,5 @@
-{ stdenv, fetchsvn, boost, ganv, glibmm, gtk, gtkmm, jack2, lilv
-, lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
+{ stdenv, fetchsvn, boost, ganv, glibmm, gtk, gtkmm, jack2, lilv-svn
+, lv2, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord-svn, sratom
 , suil
 }:
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    boost ganv glibmm gtk gtkmm jack2 lilv lv2 makeWrapper pkgconfig
-    python raul serd sord sratom suil
+    boost ganv glibmm gtk gtkmm jack2 lilv-svn lv2 makeWrapper pkgconfig
+    python raul serd sord-svn sratom suil
   ];
 
   configurePhase = ''
