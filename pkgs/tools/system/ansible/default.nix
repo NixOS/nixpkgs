@@ -20,7 +20,7 @@ pythonPackages.buildPythonPackage rec {
   dontPatchShebangs = true;
 
   propagatedBuildInputs = with pythonPackages; [
-    paramiko jinja2 pyyaml httplib2 boto
+    paramiko jinja2 pyyaml httplib2 boto six
   ];
 
   postFixup = ''
