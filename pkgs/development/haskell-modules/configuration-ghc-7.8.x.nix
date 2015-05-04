@@ -132,4 +132,8 @@ self: super: {
   # needs mtl-compat to build with mtl 2.1.x
   cgi = addBuildDepend super.cgi self.mtl-compat;
 
+  # Ugly hack that triggers a re-build to get rid of the broken version served
+  # by Hydra: http://hydra.cryp.to/build/794273/nixlog/98/raw.
+  void = appendConfigureFlag super.void "-fignore-me";
+
 }
