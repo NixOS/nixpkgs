@@ -286,8 +286,8 @@ in
           type = types.bool;
           description = ''
             Whether to allow TRIM requests to the underlying device. This option
-            has security implications, please read the LUKS documentation before
-            activating in.
+            has security implications; please read the LUKS documentation before
+            activating it.
           '';
         };
 
