@@ -76,4 +76,8 @@ self: super: {
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
+  # Ugly hack that triggers a re-build to get rid of the broken version served
+  # by Hydra: http://hydra.cryp.to/build/794276/nixlog/41/raw.
+  void = appendConfigureFlag super.void "-fignore-me-3";
+
 }
