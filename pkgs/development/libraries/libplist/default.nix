@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, cmake, libxml2, swig2, python, glib }:
+{ stdenv, fetchurl, pkgconfig, libxml2, swig2, python, glib }:
 
 stdenv.mkDerivation rec {
-  name = "libplist-1.3";
+  name = "libplist-1.12";
 
-  nativeBuildInputs = [ cmake swig2 ];
+  nativeBuildInputs = [ pkgconfig swig2 ];
 
-  patches = [ ./swig.patch ];
+  #patches = [ ./swig.patch ];
 
   propagatedBuildInputs = [ libxml2 glib python ];
 
   passthru.swig = swig2;
 
   src = fetchurl {
-    url = "http://github.com/downloads/JonathanBeck/libplist/${name}.tar.bz2";
-    sha256 = "1c5nwp9jbsp5kx8avmmsr5g7qdngnqlplh2sjbygmhydb6n8lb4q";
+    url = "http://www.libimobiledevice.org/downloads/${name}.tar.bz2";
+    sha256 = "1gj4nv0bvdm5y2sqm2vj2rn44k67ahw3mh6q614qq4nyngfdxzqf";
   };
 
   meta = {

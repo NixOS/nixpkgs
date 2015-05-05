@@ -112,9 +112,6 @@ in
             <literal>kernel.grsecurity.grsec_lock</literal> to
             non-zero as soon as all sysctl options are set. *THIS IS
             EXTREMELY IMPORTANT*!
-
-            If disabled, this also turns off the
-            <literal>systemd-sysctl</literal> service.
           '';
         };
 
@@ -229,11 +226,8 @@ in
             kernel 3.19) to continue.
           '';
         }
-        { assertion = (cfg.stable -> !cfg.testing) || (cfg.testing -> !cfg.stable);
-          message   = ''
-            You must select either the stable or testing patch, not
-            both.
-          '';
+        { assertion = !(cfg.stable && cfg.testing);
+          message   = "Select either one of the stable or testing patch";
         }
         { assertion = (cfg.config.restrictProc -> !cfg.config.restrictProcWithGroup) ||
                       (cfg.config.restrictProcWithGroup -> !cfg.config.restrictProc);
@@ -282,22 +276,21 @@ in
 #     };
 #   };
 
-    system.activationScripts.grsec =
-      ''
-        mkdir -p /etc/grsec
-        if [ ! -f /etc/grsec/learn_config ]; then
-          cp ${pkgs.gradm}/etc/grsec/learn_config /etc/grsec
-        fi
-        if [ ! -f /etc/grsec/policy ]; then
-          cp ${pkgs.gradm}/etc/grsec/policy /etc/grsec
-        fi
-        chmod -R 0600 /etc/grsec
-      '';
+    system.activationScripts = lib.optionalAttrs (!cfg.config.disableRBAC) { grsec = ''
+      mkdir -p /etc/grsec
+      if [ ! -f /etc/grsec/learn_config ]; then
+        cp ${pkgs.gradm}/etc/grsec/learn_config /etc/grsec
+      fi
+      if [ ! -f /etc/grsec/policy ]; then
+        cp ${pkgs.gradm}/etc/grsec/policy /etc/grsec
+      fi
+      chmod -R 0600 /etc/grsec
+    ''; };
 
     # Enable AppArmor, gradm udev rules, and utilities
     security.apparmor.enable   = true;
     boot.kernelPackages        = customGrsecPkg;
-    services.udev.packages     = [ pkgs.gradm ];
-    environment.systemPackages = [ pkgs.gradm pkgs.paxctl pkgs.pax-utils ];
+    services.udev.packages     = lib.optional (!cfg.config.disableRBAC) pkgs.gradm;
+    environment.systemPackages = [ pkgs.paxctl pkgs.pax-utils ] ++ lib.optional (!cfg.config.disableRBAC) pkgs.gradm;
   };
 }

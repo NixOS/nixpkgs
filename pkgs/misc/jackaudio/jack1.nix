@@ -1,8 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, db, libuuid
-, firewireSupport ? false, ffado ? null }:
+{ stdenv, fetchurl, pkgconfig
 
-assert firewireSupport -> ffado != null;
+# Optional Dependencies
+, alsaLib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
+}:
 
+let
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
+  optAlsaLib = shouldUsePkg alsaLib;
+  optDb = shouldUsePkg db;
+  optLibuuid = shouldUsePkg libuuid;
+  optLibffado = shouldUsePkg libffado;
+  optCelt = shouldUsePkg celt;
+in
 stdenv.mkDerivation rec {
   name = "jack1-${version}";
   version = "0.124.1";
@@ -12,19 +22,18 @@ stdenv.mkDerivation rec {
     sha256 = "1mk1wnx33anp6haxfjjkfhwbaknfblsvj35nxvz0hvspcmhdyhpb";
   };
   
-  preBuild = "echo ok";
-
   configureFlags = ''
-    ${if firewireSupport then "--enable-firewire" else ""}
+    ${if (optLibffado != null) then "--enable-firewire" else ""}
   '';
 
-  buildInputs = 
-    [ pkgconfig alsaLib db libuuid
-    ] ++ (stdenv.lib.optional firewireSupport ffado);
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ optAlsaLib optDb optLibuuid optLibffado optCelt ];
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "JACK audio connection kit";
     homepage = "http://jackaudio.org";
     license = "GPL";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

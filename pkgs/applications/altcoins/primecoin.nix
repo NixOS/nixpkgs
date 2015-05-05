@@ -30,7 +30,7 @@ stdenv.mkDerivation rec{
     else "install -D bitcoind $out/bin/primecoind";
 
   meta = {
-    description = "A new type cryptocurrency which is proof-of-work based on searching for prime numbers.";
+    description = "A new type cryptocurrency which is proof-of-work based on searching for prime numbers";
     longDescription= ''
       Primecoin is an innovative cryptocurrency, a form of digital
       currency secured by cryptography and issued through a

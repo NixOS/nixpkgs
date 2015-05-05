@@ -3139,13 +3139,9 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   wordTrie = callPackage ../development/libraries/haskell/word-trie {};
 
-  # This is an unwrapped version of Yi, it will not behave well (no
-  # M-x or reload). Use ‘yiCustom’ instead.
+  # This is an unwrapped version of Yi, it will not behave well. Use
+  # ‘yi’ from all-packages.nix instead.
   yi = callPackage ../applications/editors/yi/yi.nix { };
-
-  yiCustom = callPackage ../applications/editors/yi/yi-custom.nix {
-    extraPackages = pkgs: [];
-  };
 
   yiFuzzyOpen = callPackage ../development/libraries/haskell/yi-fuzzy-open {};
 
@@ -3161,7 +3157,7 @@ self : let callPackage = x : y : modifyPrio (newScope self x y); in
 
   cabalDb = callPackage ../development/tools/haskell/cabal-db {};
 
-  cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
+  cabal2nix = pkgs.cabal2nix;
 
   # Build a cabal package given a local .cabal file
   buildLocalCabalWithArgs = { src

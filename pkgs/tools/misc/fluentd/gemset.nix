@@ -60,6 +60,16 @@
       "patron"
     ];
   };
+  "fluent-plugin-record-reformer" = {
+    version = "0.6.0";
+    source = {
+      type = "gem";
+      sha256 = "1h43xx7dypbrhdw22c28jsp3054g4imic2wd12rl5nf1k85phfkk";
+    };
+    dependencies = [
+      "fluentd"
+    ];
+  };
   "fluentd" = {
     version = "0.12.6";
     source = {

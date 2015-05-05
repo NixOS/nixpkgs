@@ -9,4 +9,5 @@ sudo chroot --userspec "$USER:${GROUPS[0]}" --groups "${GROUPS[0]}" $chrootenvDe
      HOME="$HOME" \
      XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
      LANG="$LANG" \
+     SSL_CERT_FILE="$SSL_CERT_FILE" \
      /bin/bash --login

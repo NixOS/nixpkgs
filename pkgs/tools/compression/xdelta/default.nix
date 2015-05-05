@@ -1,24 +1,44 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "xdelta-3.0z";
+let version = "3.0.9"; in
+stdenv.mkDerivation rec {
+  name = "xdelta-${version}";
   
-  src = fetchurl {
-    url = http://xdelta.googlecode.com/files/xdelta3.0z.tar.gz;
-    sha256 = "1rpk4n3yz8x81vakzn3n75h79a2ycm06p5v72djklx0wn9gb412m";
+  src = fetchFromGitHub {
+    sha256 = "1pd7dyq44dbggmwkrr8251anqsf2an67zbvrk4vfnc92jkmjp17i";
+    rev = "v${version}";
+    repo = "xdelta-devel";
+    owner = "jmacd";
   };
 
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      cp xdelta3 $out/bin/
+  buildInputs = [ autoreconfHook ];
 
-      mkdir -p $out/share/man/man1
-      cp xdelta3.1 $out/share/man/man1/
-    '';
+  postPatch = ''
+    cd xdelta3
+  '' + stdenv.lib.optionalString doCheck ''
+    mkdir tmp
+    substituteInPlace testing/file.h --replace /tmp tmp
+    substituteInPlace xdelta3-test.h --replace /tmp $PWD/tmp
+  '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  doCheck = true;
+  checkPhase = ''
+    ./xdelta3regtest
+  '';
+
+  installPhase = ''
+    install -D -m755 xdelta3 $out/bin/xdelta3
+    install -D -m644 xdelta3.1 $out/share/man/man1/xdelta3.1
+  '';
+
+  meta = with stdenv.lib; {
+    inherit version;
+    description = "Binary differential compression in VCDIFF (RFC 3284) format";
     homepage = http://xdelta.org/;
-    description = "A binary diff tool that uses the VCDIFF (RFC 3284) format and compression";
+    license = with licenses; gpl2Plus;
+    platforms = with platforms; linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

@@ -50,6 +50,32 @@ let
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
       substitutions.executable = "${python}/bin/${python.executable}";
+      substitutions.magicalSedExpression = let
+        # Looks weird? Of course, it's between single quoted shell strings.
+        # NOTE: Order DOES matter here, so single character quotes need to be
+        #       at the last position.
+        quoteVariants = [ "'\"'''\"'" "\"\"\"" "\"" "'\"'\"'" ]; # hey Vim: ''
+
+        mkStringSkipper = labelNum: quote: let
+          label = "q${toString labelNum}";
+          isSingle = elem quote [ "\"" "'\"'\"'" ];
+          endQuote = if isSingle then "[^\\\\]${quote}" else quote;
+        in ''
+          /^ *[a-z]?${quote}/ {
+            /${quote}${quote}|${quote}.*${endQuote}/{n;br}
+            :${label}; n; /^${quote}/{n;br}; /${endQuote}/{n;br}; b${label}
+          }
+        '';
+
+      in ''
+        1 {
+          /^#!/!b; :r
+          /\\$/{N;br}
+          /__future__|^ *(#.*)?$/{n;br}
+          ${concatImapStrings mkStringSkipper quoteVariants}
+          /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$i")'"'
+        }
+      '';
     }
    ../development/python-modules/generic/wrap.sh;
 
@@ -255,6 +281,22 @@ let
   };
 
 
+  alabaster = buildPythonPackage rec {
+    name = "alabaster-0.7.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/alabaster/${name}.tar.gz";
+      md5 = "67428d1383fd833f1282fed5deba0898";
+    };
+
+    meta = {
+      homepage = https://github.com/bitprophet/alabaster;
+      description = "a Sphinx theme";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+
   alembic = buildPythonPackage rec {
     name = "alembic-0.6.6";
 
@@ -394,7 +436,7 @@ let
 
     meta = {
       homepage = http://github.com/celery/py-amqp;
-      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project.";
+      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
       license = licenses.lgpl21;
     };
   };
@@ -417,6 +459,37 @@ let
     };
   };
 
+  apipkg = buildPythonPackage rec {
+    name = "apipkg-1.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/apipkg/${name}.tar.gz";
+      md5 = "17e5668601a2322aff41548cb957e7c8";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "namespace control and lazy-import mechanism";
+      homepage = "http://bitbucket.org/hpk42/apipkg";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+  appdirs = buildPythonPackage rec {
+    name = "appdirs-1.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/appdirs/appdirs-1.4.0.tar.gz";
+      md5 = "1d17b4c9694ab84794e228f28dc3275b";
+    };
+
+    meta = with stdenv.lib; {
+      description = "A python module for determining appropriate platform-specific dirs";
+      homepage = http://github.com/ActiveState/appdirs;
+      license = licenses.mit;
+    };
+  };
 
   application = buildPythonPackage rec {
     name = "python-application-${version}";
@@ -485,11 +558,11 @@ let
 
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
-    version = "0.4.4";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/a/arrow/${name}.tar.gz";
-      sha256 = "1sdr4gyjgvz86yr0ll0i11mgy8l1slndr7f0ngam87rpy78gp052";
+      sha256 = "1q3a6arjm6ysl2ff6lgdm504np7b1rbivrzspybjypq1nczcb7qy";
     };
 
     doCheck = false;
@@ -596,7 +669,7 @@ let
     };
 
     meta = {
-      description = "Utilities and Python modules for handling audio.";
+      description = "Utilities and Python modules for handling audio";
       homepage = "http://audiotools.sourceforge.net/";
       license = stdenv.lib.licenses.gpl2Plus;
     };
@@ -722,7 +795,7 @@ let
 
     meta = {
       homepage = http://pypi.python.org/pypi/babelfish;
-      description = "A module to work with countries and languages.";
+      description = "A module to work with countries and languages";
       license = stdenv.lib.licenses.bsd3;
     };
   };
@@ -974,6 +1047,24 @@ let
     };
   };
 
+  proboscis = pythonPackages.buildPythonPackage rec {
+    name = "proboscis-1.2.6.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/proboscis/proboscis-1.2.6.0.tar.gz";
+      md5 = "e4b36449ef7c18f70b8243f4c8bddbca";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ nose ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A Python test framework that extends Python's built-in unittest module and Nose with features from TestNG";
+      homepage = https://github.com/rackspace/python-proboscis;
+      license = licenses.asl20;
+    };
+  };
+
   pyechonest = self.buildPythonPackage rec {
     name = "pyechonest-8.0.2";
 
@@ -1082,7 +1173,7 @@ let
     propagatedBuildInputs = with self; [ six html5lib ];
 
     meta = with stdenv.lib; {
-      description = "An easy, HTML5, whitelisting HTML sanitizer.";
+      description = "An easy, HTML5, whitelisting HTML sanitizer";
       longDescription = ''
         Bleach is an HTML sanitizing library that escapes or strips markup and
         attributes based on a white list. Bleach can also linkify text safely,
@@ -2386,11 +2477,11 @@ let
 
 
   deform = buildPythonPackage rec {
-    name = "deform-0.9.9";
+    name = "deform-2.0a2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/deform/${name}.tar.gz";
-      sha256 = "0ympsjhxz5v8h4hi1mv811h064221bh26d68l9hv1x6m7sxbxpd0";
+      md5 = "7a90d41f7fbc18002ce74f39bd90a5e4";
     };
 
     buildInputs = with self; [] ++ optional isPy26 unittest2;
@@ -2532,11 +2623,11 @@ let
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-0.4.0";
+    name = "docker-py-1.1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      md5 = "21ab8fd729105487e6423b654d6c0860";
+      md5 = "b44f34530a21ed1129887f9a8b01ecec";
     };
 
     propagatedBuildInputs = with self; [ six requests websocket_client ];
@@ -3049,6 +3140,36 @@ let
     propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
+  gmusicapi = with pkgs; pythonPackages.buildPythonPackage rec {
+    name = "gmusicapi-4.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gmusicapi/gmusicapi-4.0.0.tar.gz";
+      md5 = "12ba66607531978b349c7035c9bab311";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [
+      validictory
+      decorator
+      mutagen
+      protobuf
+      setuptools
+      requests
+      dateutil
+      proboscis
+      mock
+      appdirs
+      oauth2client
+    ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "An unofficial API for Google Play Music";
+      homepage = http://pypi.python.org/pypi/gmusicapi/;
+      license = licenses.bsd3;
+    };
+  };
+
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";
     src = pkgs.fetchurl {
@@ -3285,12 +3406,118 @@ let
     };
   };
 
+  mwlib = buildPythonPackage rec {
+    version = "0.15.15";
+    name = "mwlib-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.pediapress.com/packages/mirror/${name}.tar.gz";
+      sha256 = "1dnmnkc21zdfaypskbpvkwl0wpkpn0nagj1fc338w64mbxrk8ny7";
+    };
+
+    commonDeps = with self;
+      [
+        apipkg
+        bottle
+        gevent
+        lxml
+        odfpy
+        pillow
+        py
+        pyPdf
+        pyparsing1
+        qserve
+        roman
+        simplejson
+        sqlite3dbm
+        timelib
+      ];
+
+    pythonPath = commonDeps ++
+      [
+        modules.sqlite3
+      ];
+
+    propagatedBuildInputs = commonDeps;
+
+    buildInputs = with self;
+      [
+        pil
+      ] ++ propagatedBuildInputs;
+
+    meta = {
+      description = "Library for parsing MediaWiki articles and converting them to different output formats";
+      homepage = "http://pediapress.com/code/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+  mwlib-ext = buildPythonPackage rec {
+    version = "0.13.2";
+    name = "mwlib.ext-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
+      md5 = "36193837359204d3337b297ba0f20bc8";
+    };
+
+    meta = {
+      description = "dependencies for mwlib markup";
+      homepage = "http://pediapress.com/code/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
+  mwlib-rl = buildPythonPackage rec {
+    version = "0.14.6";
+    name = "mwlib.rl-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
+      md5 = "49d72b0172f69cbe039f62dd4efb65ea";
+    };
+
+    buildInputs = with self;
+      [
+        mwlib
+        mwlib-ext
+        pygments
+      ];
+
+    meta = {
+      description = "generate pdfs from mediawiki markup";
+      homepage = "http://pediapress.com/code/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   logster = buildPythonPackage {
     name = "logster-7475c53822";
     src = pkgs.fetchgit {
       url = git://github.com/etsy/logster;
       rev = "7475c53822";
       sha256 = "1ls007qmziwb50c5iikxhqin0xbn673gbd25m5k09861435cknvr";
+    };
+  };
+
+  odfpy = buildPythonPackage rec {
+    version = "0.9.6";
+    name = "odfpy-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/odfpy/${name}.tar.gz";
+      md5 = "3f570ead2b5f5eb6eab97eecce22d491";
+    };
+
+    buildInputs = with self; with pkgs; [ ];
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "Python API and tools to manipulate OpenDocument files";
+      homepage = "https://joinup.ec.europa.eu/software/odfpy/home";
+      license = stdenv.lib.licenses.asl20;
     };
   };
 
@@ -3354,11 +3581,11 @@ let
 
 
   peppercorn = buildPythonPackage rec {
-    name = "peppercorn-0.4";
+    name = "peppercorn-0.5";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/peppercorn/${name}.tar.gz";
-      md5 = "464d6f2342eaf704dfb52046c1f5c320";
+      md5 = "f08efbca5790019ab45d76b7244abd40";
     };
 
     meta = {
@@ -3438,11 +3665,11 @@ let
 
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.5.1";
+    name = "pyramid-1.5.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid/${name}.tar.gz";
-      md5 = "8a1ab3b773d8e22437828f7df22852c1";
+      md5 = "d56b140b41d42f818f4349d94d968c9a";
     };
 
     preCheck = ''
@@ -3582,11 +3809,11 @@ let
 
 
   pyramid_tm = buildPythonPackage rec {
-    name = "pyramid_tm-0.7";
+    name = "pyramid_tm-0.10";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid_tm/${name}.tar.gz";
-      md5 = "6dc917d262c69366630c542bd21859a3";
+      md5 = "89a293488093d6c30036345fa46184d2";
     };
 
     # tests are failing in version 0.7 but are fixed in trunk
@@ -3680,6 +3907,26 @@ let
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  roman = buildPythonPackage rec {
+    version = "2.0.0";
+    name = "roman-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/roman/${name}.zip";
+      md5 = "aa71d131eec16d45c030fd06a27c9d17";
+    };
+
+    buildInputs = with self; with pkgs; [ ];
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "Integer to Roman numerals converter";
+      homepage = "https://pypi.python.org/pypi/roman";
+      license = stdenv.lib.licenses.psfl;
     };
   };
 
@@ -4011,11 +4258,11 @@ let
 
 
   zope_deprecation = buildPythonPackage rec {
-    name = "zope.deprecation-3.5.1";
+    name = "zope.deprecation-4.1.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.deprecation/${name}.tar.gz";
-      md5 = "836cfea5fad548cd5a0d9af1300ec05e";
+      md5 = "e9a663ded58f4f9f7881beb56cae2782";
     };
 
     buildInputs = with self; [ zope_testing ];
@@ -4029,13 +4276,30 @@ let
     };
   };
 
+  validictory = pythonPackages.buildPythonPackage rec {
+    name = "validictory-1.0.0a2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/validictory/validictory-1.0.0a2.tar.gz";
+      md5 = "54c206827931cc4ed8a9b1cc78e380c5";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [  ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Validate dicts against a schema";
+      homepage = http://github.com/sunlightlabs/validictory;
+      license = licenses.mit;
+    };
+  };
 
   venusian = buildPythonPackage rec {
-    name = "venusian-1.0a7";
+    name = "venusian-1.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/v/venusian/${name}.tar.gz";
-      md5 = "6f67506dd3cf77116f1c01682a6c3f27";
+      md5 = "dccf2eafb7113759d60c86faf5538756";
     };
 
     # TODO: https://github.com/Pylons/venusian/issues/23
@@ -4168,6 +4432,31 @@ let
 
   django = self.django_1_7;
 
+  django_1_8 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.8";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
+      sha256 = "04mlx3920r46vn69alrf4bmv1xqp7m6k1xzwgr798rjcrd1assq6";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+
   django_1_7 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.7.7";
@@ -4180,6 +4469,11 @@ let
 
     # error: invalid command 'test'
     doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
 
     meta = {
       description = "A high-level Python Web framework";
@@ -4199,6 +4493,11 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
@@ -4216,6 +4515,11 @@ let
 
     # error: invalid command 'test'
     doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
 
     meta = {
       description = "A high-level Python Web framework";
@@ -4235,6 +4539,11 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
@@ -4251,6 +4560,11 @@ let
 
     # error: invalid command 'test'
     doCheck = false;
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
 
     meta = {
       description = "A high-level Python Web framework";
@@ -4308,7 +4622,7 @@ let
     };
 
     propagatedBuildInputs = with self; [ django_1_7 ];
-    
+
     # tests appear to be broken on 0.6.1 at least
     doCheck = ( version != "0.6.1" );
 
@@ -4399,11 +4713,11 @@ let
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-0.11";
+    name = "docutils-0.12";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "1jbybs5a396nrjy9m13pgvsxdwaj7jw7nsawkhl4fi1nvxm1dx4s";
+      md5 = "4622263b62c5c771c03502afa3157768";
     };
 
     # error: invalid command 'test'
@@ -4616,27 +4930,27 @@ let
     };
   });
 
-  fig = buildPythonPackage rec {
-    name = "fig-1.0.1";
+  docker_compose = buildPythonPackage rec {
+    name = "docker-compose-1.2.0rc2";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/f/fig/${name}.tar.gz";
-      md5 = "e1c82296fe2362fae21b3cb0dfee8cb2";
+      url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
+      md5 = "311ec5023e51097ca3acbf37fac062bd";
     };
 
     propagatedBuildInputs = with self; [
-      six requests2 pyyaml texttable docopt
+      six requests pyyaml texttable docopt docker
+      (requests2.override {
+        src = pkgs.fetchurl {
+          url = "https://pypi.python.org/packages/source/r/requests/requests-2.5.3.tar.gz";
+          md5 = "23bf4fcc89ea8d353eb5353bb4a475b1";
+        };
+      })
       (dockerpty.override {
         src = pkgs.fetchurl {
           url = "https://pypi.python.org/packages/source/d/dockerpty/dockerpty-0.3.2.tar.gz";
           md5 = "1f97b24d2f4b2c345f176f91655002dd";
-        };
-      })
-      (docker.override {
-        src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/d/docker-py/docker-py-0.5.3.tar.gz";
-          md5 = "809b7b8c144f5e37787e72b030ee353f";
         };
       })
       (websocket_client.override {
@@ -4686,11 +5000,11 @@ let
   };
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-2.1.0";
+    name = "flake8-2.3.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "cf326cfb88a1db6c5b29a3a6d9efb257";
+      md5 = "488d6166f6b9ef9fe9d433b95e77dc07";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -5299,14 +5613,14 @@ let
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.1";
+    version = "2.3";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "1bgr7lif0bpnz39arcdrsfdy7ra4c3ay2pxz1lvh4fqxyxwp3gm6";
+      sha256 = "09x9g4wzfxfhpby3aa1fbhw3iqv1vyd6h526nrm9612ba5d0myh9";
     };
 
     doCheck = false;
@@ -5325,7 +5639,7 @@ let
   };
 
   goobook = buildPythonPackage rec {
-    name = "goobook-1.5";
+    name = "goobook-1.6";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -5333,7 +5647,7 @@ let
       sha256 = "05vpriy391l5i05ckl5ja5bswqyvl3rwrbmks9pi46w1813j7p5z";
     };
 
-    buildInputs = with self; [ six ];
+    buildInputs = with self; [ ];
 
     preConfigure = ''
       sed -i '/distribute/d' setup.py
@@ -5343,11 +5657,11 @@ let
       description = "Search your google contacts from the command-line or mutt";
       homepage    = https://pypi.python.org/pypi/goobook;
       license     = licenses.gpl3;
-      maintainers = with maintainers; [ lovek323 ];
+      maintainers = with maintainers; [ lovek323 hbunke ];
       platforms   = platforms.unix;
     };
 
-    propagatedBuildInputs = with self; [ gdata hcs_utils keyring simplejson ];
+    propagatedBuildInputs = with self; [ gdata hcs_utils keyring simplejson six];
   };
 
   google_api_python_client = buildPythonPackage rec {
@@ -5471,7 +5785,7 @@ let
     meta = {
       homepage = http://pypi.python.org/pypi/guessit;
       license = stdenv.lib.licenses.lgpl3;
-      description = "A library for guessing information from video files.";
+      description = "A library for guessing information from video files";
     };
   };
 
@@ -5914,7 +6228,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = http://maebert.github.io/jrnl/;
-      description = "A simple command line journal application that stores your journal in a plain text file.";
+      description = "A simple command line journal application that stores your journal in a plain text file";
       license = licenses.mit;
     };
   };
@@ -6336,14 +6650,21 @@ let
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.2.1";
+    name = "mccabe-0.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
-      md5 = "5a3f3fa6a4bad126c88aaaa7dab682f5";
+      md5 = "81640948ff226f8c12b3277059489157";
     };
 
-    buildInputs = with self; [ ];
+    # See https://github.com/flintwork/mccabe/issues/31
+    postPatch = ''
+      cp "${pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/flintwork/mccabe/"
+            + "e8aea16d28e92bd3c62601275762fc9c16808f6c/test_mccabe.py";
+        sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
+      }}" test_mccabe.py
+    '';
 
     meta = {
       description = "McCabe checker, plugin for flake8";
@@ -6455,7 +6776,7 @@ let
 
     meta = with stdenv.lib; {
       description = ''
-        A content management platform built using the Django framework.
+        A content management platform built using the Django framework
       '';
       longDescription = ''
         Mezzanine is a powerful, consistent, and flexible content management
@@ -6500,11 +6821,11 @@ let
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
-    version = "1.1.6";
+    version = "1.2.5";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/r/rainbowstream/${name}.tar.gz";
-      sha256 = "04i2a8a5k6n6lgfpa9bzzbkhvywgd4bn3qlspl97pn8ply9kgszm";
+      sha256 = "1fch1vckzf4nmq67fk2jgfxpvyygviavx8di4xhjq2mib9nfc3mr";
     };
 
     doCheck = false;
@@ -6957,12 +7278,12 @@ let
   nameparser = buildPythonPackage rec {
     name = "nameparser-${version}";
     version = "0.3.4";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nameparser/${name}.tar.gz";
       sha256 = "1zi94m99ziwwd6kkip3w2xpnl05r2cfv9iq68inz7np81c3g8vag";
     };
-    
+
     meta = {
       description = "A simple Python module for parsing human names into their individual components";
       homepage = https://github.com/derek73/python-nameparser;
@@ -7393,8 +7714,8 @@ let
     };
 
     meta = {
-      homepage = "http://code.google.com/p/oauth";
-      description = "Library for OAuth version 1.0a.";
+      homepage = http://code.google.com/p/oauth;
+      description = "Library for OAuth version 1.0a";
       license = licenses.mit;
       platforms = stdenv.lib.platforms.all;
     };
@@ -7425,6 +7746,23 @@ let
     };
   });
 
+  oauth2client = pythonPackages.buildPythonPackage rec {
+    name = "oauth2client-1.4.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/oauth2client/oauth2client-1.4.7.tar.gz";
+      md5 = "62747643d5af57e57b09e176eda1c1dd";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ httplib2 pyasn1 pyasn1-modules rsa ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A client library for OAuth 2.0";
+      homepage = http://github.com/google/oauth2client/;
+      license = licenses.bsd2;
+    };
+  };
 
   oauthlib = buildPythonPackage rec {
     version = "0.7.2";
@@ -7450,12 +7788,12 @@ let
 
   obfsproxy = buildPythonPackage ( rec {
     name = "obfsproxy-${version}";
-    version = "0.2.12";
+    version = "0.2.13";
 
     src = pkgs.fetchgit {
       url = meta.repositories.git;
       rev = "refs/tags/${name}";
-      sha256 = "82d694aa7f3de7327fc4dc517fb262ab076f536ed6d4377573c76df8cf019dcf";
+      sha256 = "16jb8x5hbs3g4dq10y6rqc1005bnffwnlws8x7j1d96n7k9mjn8h";
     };
 
     propagatedBuildInputs = with self;
@@ -7792,7 +8130,7 @@ let
 
     propagatedBuildInputs = with self; [
       jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-      blinker pillow beautifulsoup4
+      blinker pillow beautifulsoup4 markupsafe
     ];
 
     meta = {
@@ -7877,11 +8215,11 @@ let
 
 
   pg8000 = buildPythonPackage rec {
-    name = "pg8000-1.9.14";
+    name = "pg8000-1.10.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pg8000/${name}.tar.gz";
-      sha256 = "1vandvfaf1m3a1fbc7nbm6syfqr9bazhzsnmai0jpjkbmb349izs";
+      md5 = "173275fd76628b0e0cbed70ed9ce9eb9";
     };
 
     propagatedBuildInputs = with self; [ pytz ];
@@ -7978,6 +8316,12 @@ let
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = libinclude("${pkgs.freetype}")|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = libinclude("${pkgs.libjpeg}")|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = libinclude("${pkgs.zlib}")|g ;'
+    ''
+    # Remove impurities
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py \
+        --replace '"/Library/Frameworks",' "" \
+        --replace '"/System/Library/Frameworks"' ""
     '';
 
     checkPhase = "${python}/bin/${python.executable} selftest.py";
@@ -8019,10 +8363,16 @@ let
               s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
               s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
               s|^TCL_ROOT=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;'
+    ''
+    # Remove impurities
+    + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py \
+        --replace '"/Library/Frameworks",' "" \
+        --replace '"/System/Library/Frameworks"' ""
     '';
 
     meta = {
-      homepage = http://python-imaging.github.com/Pillow;
+      homepage = "https://python-pillow.github.io/";
 
       description = "Fork of The Python Imaging Library (PIL)";
 
@@ -9141,6 +9491,21 @@ let
 
     meta = {
       homepage = http://pyparsing.wikispaces.com/;
+      description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
+    };
+  };
+
+  pyparsing1 = buildPythonPackage rec {
+    name = "pyparsing-1.5.7";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
+      md5 = "9be0fcdcc595199c646ab317c1d9a709";
+    };
+
+    meta = {
+      homepage = http://pyparsing.wikispaces.com/;
       description = "The pyparsing module is an alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions.";
     };
   };
@@ -9238,6 +9603,22 @@ let
       maintainers = [ maintainers.koral ];
     };
   };
+
+  PyStemmer = buildPythonPackage (rec {
+    name = "PyStemmer-1.3.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PyStemmer/${name}.tar.gz";
+      md5 = "46ee623eeeba5a7cc0d95cbfa7e18abd";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Snowball stemming algorithms, for information retrieval";
+      homepage = http://snowball.tartarus.org/;
+      license = licenses.mit;
+      platforms = platforms.unix;
+    };
+  });
 
   pyro3 = buildPythonPackage (rec {
     name = "Pyro-3.16";
@@ -9480,6 +9861,22 @@ let
     };
   };
 
+  pyPdf = buildPythonPackage rec {
+    name = "pyPdf-1.13";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyPdf/${name}.tar.gz";
+      md5 = "7a75ef56f227b78ae62d6e38d4b6b1da";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "Pure-Python PDF toolkit";
+      homepage = "http://pybrary.net/pyPdf/";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
 
   pyopengl = buildPythonPackage rec {
     name = "pyopengl-${version}";
@@ -9989,6 +10386,24 @@ let
     };
   };
 
+  qserve = buildPythonPackage rec {
+    name = "qserve-0.2.8";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/q/qserve/${name}.zip";
+      md5 = "d481f0dad66a93d0479022fe0487e8ee";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "job queue server";
+      homepage = "https://github.com/pediapress/qserve";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
 
@@ -10163,13 +10578,13 @@ let
   };
 
   robotframework = buildPythonPackage rec {
-    version = "2.8.6";
+    version = "2.8.7";
     name = "robotframework-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/robotframework/${name}.tar.gz";
-      sha256 = "0hl44pwfkagr5272s90y0bkfllj0q1l4yw4rvkdrc6ikn6l61d9v";
+      sha256 = "0mfd0s989j3jrpl8q0lb4wsjy1x280chfr9r74m2dyi9c7rxzc58";
     };
 
     # error: invalid command 'test'
@@ -10718,6 +11133,42 @@ let
     };
   };
 
+  snowballstemmer = buildPythonPackage rec {
+    name = "snowballstemmer-1.2.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/snowballstemmer/${name}.tar.gz";
+      md5 = "51f2ef829db8129dd0f2354f0b209970";
+    };
+
+    propagatedBuildInputs = with self; [ PyStemmer ];
+
+    meta = with stdenv.lib; {
+      description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";
+      homepage = http://sigal.saimon.org/en/latest/index.html;
+      license = licenses.bsd3;
+      platforms = platforms.unix;
+    };
+  };
+
+  sqlite3dbm = buildPythonPackage rec {
+    name = "sqlite3dbm-0.1.4";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sqlite3dbm/${name}.tar.gz";
+      md5 = "fc2f8fb09a4bbc0260b97e835b369184";
+    };
+
+    buildInputs = with self; [ modules.sqlite3 ];
+
+    meta = with stdenv.lib; {
+      description = "sqlite-backed dictionary";
+      homepage = "http://github.com/Yelp/sqlite3dbm";
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+
   pgpdump = self.buildPythonPackage rec {
     name = "pgpdump-1.5";
 
@@ -10791,6 +11242,23 @@ let
       description = "Manage dynamic plugins for Python applications";
       homepage = "https://pypi.python.org/pypi/stevedore";
       license = licenses.asl20;
+    };
+  };
+
+  timelib = buildPythonPackage rec {
+    name = "timelib-0.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/timelib/${name}.zip";
+      md5 = "400e316f81001ec0842fa9b2cef5ade9";
+    };
+
+    buildInputs = with self; [ ];
+
+    meta = {
+      description = "parse english textual date descriptions";
+      homepage = "https://github.com/pediapress/timelib/";
+      license = stdenv.lib.licenses.zlib;
     };
   };
 
@@ -11159,21 +11627,42 @@ let
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.2.3";
+    name = "Sphinx-1.3.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "a98c93124035b4cd7183604aec656cb3";
+      md5 = "8786a194acf9673464c5455b11fd4332";
     };
 
-    propagatedBuildInputs = with self; [docutils jinja2 pygments];
+    propagatedBuildInputs = with self; [ docutils jinja2 pygments sphinx_rtd_theme alabaster Babel snowballstemmer  six ];
 
-    meta = {
-      description = "Sphinx is a tool that makes it easy to create intelligent and beautiful documentation for Python projects.";
-
+    meta = with stdenv.lib; {
+      description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
+      license = licenses.bsd3;
+      platforms = platforms.unix;
+    };
+  });
 
-      license = "BSD";
+
+  sphinx_rtd_theme = buildPythonPackage (rec {
+    name = "sphinx_rtd_theme-0.1.7";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sphinx_rtd_theme/${name}.tar.gz";
+      md5 = "3ffe014445195705968d899c38b305fd";
+    };
+
+    postPatch = ''
+      rm requirements.txt
+      touch requirements.txt
+    '';
+
+    meta = with stdenv.lib; {
+      description = "ReadTheDocs.org theme for Sphinx, 2013 version";
+      homepage = https://github.com/snide/sphinx_rtd_theme/;
+      license = licenses.bsd3;
+      platforms = platforms.unix;
     };
   });
 
@@ -11952,11 +12441,11 @@ let
 
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.22";
+    name = "turses-0.2.23";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      sha256 = "1dqgvdqly4c4d6819mbkqy4g8r7zch4dkmxicfwck7q8h96wmyx3";
+      md5 = "71b9e3ab12d9186798e739b5273d1438";
     };
 
     propagatedBuildInputs = with self; [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
@@ -11980,7 +12469,7 @@ let
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      sha256 = "0wcj5g21brcqr1g7m4by4rs72lfiib4scg19qynn2wz1x77jyrzp";
+      md5 = "065c80d244360988c61d64b5dfb7e229";
     };
 
     meta = {
@@ -12173,14 +12662,14 @@ let
 
 
   urwid = buildPythonPackage (rec {
-    name = "urwid-1.2.1";
+    name = "urwid-1.3.0";
 
     # multiple:  NameError: name 'evl' is not defined
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/u/urwid/${name}.tar.gz";
-      md5 = "6a05ada11b87e7b026b01fc5150855b0";
+      md5 = "a989acd54f4ff1a554add464803a9175";
     };
 
     meta = {
@@ -12325,11 +12814,11 @@ let
   });
 
   waitress = buildPythonPackage rec {
-    name = "waitress-0.8.7";
+    name = "waitress-0.8.9";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/w/waitress/${name}.tar.gz";
-      md5 = "714f3d458d82a47f12fb168460de8366";
+      md5 = "da3f2e62b3676be5dd630703a68e2a04";
     };
 
     doCheck = false;
@@ -12516,7 +13005,7 @@ let
     propagatedBuildInputs = with pythonPackages; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname_3_4_0_2 ];
 
     meta = with stdenv.lib; {
-      description = "Willie is a simple, lightweight, open source, easy-to-use IRC utility bot, written in Python.";
+      description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
       homepage = http://willie.dftba.net/;
       license = licenses.efl20;
     };
@@ -13545,11 +14034,11 @@ let
   };
 
   translationstring = buildPythonPackage rec {
-    name = "translationstring-1.1";
+    name = "translationstring-1.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/t/translationstring/${name}.tar.gz";
-      md5 = "0979b46d8f0f852810c8ec4be5c26cf2";
+      md5 = "a4b62e0f3c189c783a1685b3027f7c90";
     };
 
     meta = {
@@ -14308,8 +14797,8 @@ let
     propagatedBuildInputs = with self; [ nose ];
 
     meta = {
-      homepage = "https://more-itertools.readthedocs.org";
-      description = "Expansion of the itertools module.";
+      homepage = https://more-itertools.readthedocs.org;
+      description = "Expansion of the itertools module";
       license = licenses.mit;
     };
   };
@@ -14342,7 +14831,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      description = "Collection of fancy functional tools focused on practicality.";
+      description = "Collection of fancy functional tools focused on practicality";
       homepage = "http://funcy.readthedocs.org/";
       license = stdenv.lib.licenses.bsd3;
 
@@ -14716,7 +15205,7 @@ let
       licences = [ licenses.mit licenses.gpl2 ];
     };
   };
-  
+
   dicttoxml = buildPythonPackage rec {
     name = "dicttoxml-1.6.4";
 
@@ -14730,6 +15219,97 @@ let
     meta = with stdenv.lib; {
       description = "Summary";
       homepage = https://github.com/quandyfactory/dicttoxml;
+    };
+  };
+
+  
+  markdown2 = buildPythonPackage rec {
+    name = "markdown2-${version}";
+    version = "2.3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/markdown2/${name}.zip";
+      sha256 = "073zyx3caqa9zlzxa82k9k2nhhn8c5imqpgp5nwqnh0fgaj9pqn8";
+    };
+    propagatedBuildInputs = with self; [];
+    meta = with stdenv.lib; {
+      description = "A fast and complete Python implementation of Markdown";
+      homepage =  https://github.com/trentm/python-markdown2;
+      license = licenses.mit;
+      maintainers = with maintainers; [ hbunke ];
+    };
+  };
+  
+  
+  evernote = buildPythonPackage rec {
+    name = "evernote-${version}";
+    version = "1.25.0";
+    disabled = ! isPy27; #some dependencies do not work with py3
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/evernote/${name}.tar.gz";
+      sha256 = "1lwlg6fpi3530245jzham1400a5b855bm4sbdyck229h9kg1v02d";
+    };
+
+     propagatedBuildInputs = with self; [ oauth2 ];
+
+     meta = with stdenv.lib; {
+      description = "Evernote SDK for Python";
+      homepage = http://dev.evernote.com;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hbunke ];
+     };
+  };
+    
+  thrift = buildPythonPackage rec {
+    name = "thrift-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/thrift/${name}.tar.gz";
+      sha256 = "1yla6wg18x2a0l0lrvkp1v464hqhff98ck8pnv8d5j9kn3j6bxh8";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Python bindings for the Apache Thrift RPC system";
+      homepage = http://thrift.apache.org/;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ hbunke ];
+
+    };
+  };
+  
+  geeknote = buildPythonPackage rec {
+    version = "2015-03-02";
+    name = "geeknote-${version}";
+    disabled = ! isPy27; 
+
+    src = pkgs.fetchFromGitHub {
+      owner = "VitaliyRodnenko";
+      repo = "geeknote";
+      rev = "7ea2255bb6";
+      sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
+    };
+
+    /* build with tests fails with "Can not create application dirictory : 
+     /homeless-shelter/.geeknotebuilder". */
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ 
+        thrift 
+        beautifulsoup4 
+        markdown2
+        sqlalchemy
+        html2text
+        evernote
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Work with Evernote from command line";
+      homepage = http://www.geeknote.me;
+      license = licenses.gpl1;
+      maintainers = with maintainers; [ hbunke ];
+
     };
   };
 

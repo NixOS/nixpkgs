@@ -1,7 +1,7 @@
 { system ? builtins.currentSystem }:
 
 let
-  inherit (import <nixpkgs> {
+  inherit (import ../../../../../../. {
     inherit system;
   }) lib writeText stdenv;
 

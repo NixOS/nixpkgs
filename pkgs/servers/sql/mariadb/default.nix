@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ncurses, openssl, pcre, boost, judy, bison, libxml2
+{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "04ckq67qgkghh7yzrbzwidk7wn7yjml15gzj2c5p1hs2k7lr9lww";
   };
 
-  buildInputs = [ cmake ncurses openssl pcre libxml2 boost judy bison libevent ]
+  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
 
@@ -81,15 +81,21 @@ stdenv.mkDerivation rec {
       --replace basedir=\"\" basedir=\"$out\"
 
     # Remove superfluous files
-    rm -r $out/mysql-test $out/sql-bench $out/data
+    rm -r $out/mysql-test $out/sql-bench $out/data # Don't need testing data
     rm $out/share/man/man1/mysql-test-run.pl.1
-    rm $out/bin/rcmysql
+    rm $out/bin/rcmysql # Not needed with nixos units
+    rm $out/bin/mysqlbug # Encodes a path to gcc and not really useful
     find $out/bin -name \*test\* -exec rm {} \;
 
     # Separate libs and includes into their own derivation
     mkdir -p $lib
     mv $out/lib $lib
     mv $out/include $lib
+
+    # Fix the mysql_config
+    sed -i $out/bin/mysql_config \
+      -e 's,-lz,-L${zlib}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl}/lib -lssl,g'
 
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin

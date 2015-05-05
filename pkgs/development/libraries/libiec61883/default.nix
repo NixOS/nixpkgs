@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig ];
-  
+
   propagatedBuildInputs = [ libraw1394 ];
 
-  meta = { 
+  meta = with stdenv.lib; {
     homepage = http://www.linux1394.org;
-    license = "LGPL";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

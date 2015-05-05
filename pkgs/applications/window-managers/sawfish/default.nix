@@ -1,17 +1,25 @@
-{ stdenv, fetchgit, pkgconfig, which, autoreconfHook, rep-gtk, pango, gdk_pixbuf, libXinerama, libXrandr, libXtst, imlib, gettext, texinfo, makeWrapper }:
+{ stdenv, fetchgit, pkgconfig, which, autoreconfHook, rep-gtk, pango
+, gdk_pixbuf, libXinerama, libXrandr, libXtst, imlib, gettext, texinfo
+, makeWrapper
+}:
 
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
 
-  name = "sawfish-git-2015-02-15";
+  name = "sawfish-${version}";
+  version = "1.11.90";
 
   src = fetchgit {
     url = "https://github.com/SawfishWM/sawfish.git";
-    rev = "44729f44017e6779b4b66a7ecdbd63a98731f668";
-    sha256 = "bd3f42f1604f37ecb2515008341cac4f6965840b2d6a6639dd1f3f2459f68e73";
+    rev = "b121f832571c9aebd228691c32604146e49f5e55";
+    sha256 = "0y7rmjzp7ha5qj9q1dasw50gd6jiaxc0qsjbvyfzxvwssl3i9hsc";
   };
 
-  buildInputs = [ pkgconfig which autoreconfHook rep-gtk pango gdk_pixbuf libXinerama libXrandr libXtst imlib gettext texinfo makeWrapper ];
+  buildInputs =
+    [ pkgconfig which autoreconfHook rep-gtk pango gdk_pixbuf libXinerama
+      libXrandr libXtst imlib gettext texinfo makeWrapper
+    ];
 
   patchPhase = ''
     sed -e 's|REP_DL_LOAD_PATH=|REP_DL_LOAD_PATH=$(REP_DL_LOAD_PATH):|g' -i Makedefs.in
@@ -25,7 +33,7 @@ stdenv.mkDerivation rec {
 	--set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
-  
+
   meta = {
     description = "An extensible, Lisp-based window manager";
     longDescription = ''

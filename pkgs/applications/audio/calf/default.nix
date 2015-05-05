@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "calf-${version}";
-  version = "0.0.19";
+  version = "0.0.60";
 
   src = fetchurl {
     url = "mirror://sourceforge/calf/${name}.tar.gz";
-    sha256 = "1v1cjbxv5wg6rsa2nfz1f8r7cykcpx6jm5ccqmzx866dggiff1hi";
+    sha256 = "019fwg00jv217a5r767z7szh7vdrarybac0pr2sk26xp81kibrx9";
   };
 
   buildInputs = [ 

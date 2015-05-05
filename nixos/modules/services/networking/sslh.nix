@@ -81,7 +81,7 @@ in
       description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.sslh}/bin/sslh -F ${configFile}";
+      serviceConfig.ExecStart = "${pkgs.sslh}/bin/sslh -F${configFile}";
       serviceConfig.KillMode = "process";
       serviceConfig.PIDFile = "${cfg.pidfile}";
     };

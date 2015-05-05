@@ -68,7 +68,7 @@ EOF
       a host of other features.
     '';
     license = "MIT-like";
-    homePage = "http://www.zsh.org/";
+    homepage = "http://www.zsh.org/";
     maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = stdenv.lib.platforms.unix;
   };

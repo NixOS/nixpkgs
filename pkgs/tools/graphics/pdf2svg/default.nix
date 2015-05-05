@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     homepage = http://www.cityinthesky.co.uk/opensource/pdf2svg;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.ianwookim ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

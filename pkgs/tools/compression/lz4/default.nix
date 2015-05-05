@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Cyan4973";
   };
 
-  # valgrind is required only by `make test`
-  buildInputs = [ valgrind ];
+  buildInputs = stdenv.lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 

@@ -1,15 +1,10 @@
 {stdenv, fetchgit, perl, yasm
-, vp8Support ? true # VP8
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
-, vp9Support ? true # VP9
 , vp9DecoderSupport ? true # VP9 decoder
 , vp9EncoderSupport ? true # VP9 encoder
 , extraWarningsSupport ? false # emit non-fatal warnings
 , werrorSupport ? false # treat warnings as errors (not available with all compilers)
-, installBinsSupport ? true # install binaries (vpxdec & vpxenc)
-, installLibsSupport ? true # install libraries
-, installSrcsSupport ? false # install sources
 , debugSupport ? false # debug mode
 , gprofSupport ? false # gprof profiling instrumentation
 , gcovSupport ? false # gcov coverage instrumentation
@@ -17,13 +12,10 @@
 , optimizationsSupport ? true # compiler optimization flags
 , runtimeCpuDetectSupport ? true # detect cpu capabilities at runtime
 , thumbSupport ? false # build arm assembly in thumb mode
-, libsSupport ? true # build librares
 , examplesSupport ? true # build examples (vpxdec & vpxenc are part of examples)
 , fastUnalignedSupport ? true # use unaligned accesses if supported by hardware
-, codecSrcsSupport ? false # codec library source code
 , debugLibsSupport ? false # include debug version of each library
 , postprocSupport ? true # postprocessing
-, vp9PostprocSupport ? true # VP9 specific postprocessing
 , multithreadSupport ? true # multithreaded decoding & encoding
 , internalStatsSupport ? false # output of encoder internal stats for debug, if supported (encoders)
 , memTrackerSupport ? false # track memory usage
@@ -40,7 +32,6 @@
 , encodePerfTestsSupport ? false # build encoder perf tests with unit tests
 , multiResEncodingSupport ? false # multiple-resolution encoding
 , temporalDenoisingSupport ? true # use temporal denoising instead of spatial denoising
-, vp9TemporalDenoisingSupport ? true # VP9 specific temporal denoising
 , coefficientRangeCheckingSupport ? false # decoder checks if intermediate transform coefficients are in valid range
 , vp9HighbitdepthSupport ? true # 10/12 bit color support in VP9
 , experimentalSupport ? false # experimental features
@@ -50,118 +41,109 @@
 , experimentalEmulateHardwareSupport ? false
 }:
 
-assert (vp8Support || vp9Support);
-assert (vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport);
-assert vp8DecoderSupport -> vp8Support;
-assert vp8EncoderSupport -> vp8Support;
-assert vp9DecoderSupport -> vp9Support;
-assert vp9EncoderSupport -> vp9Support;
-assert installLibsSupport -> libsSupport;
-# libvpx will not build binaries if examplesSupport is not enabled (ie. vpxdec & vpxenc)
-assert installBinsSupport -> examplesSupport;
-assert vp9PostprocSupport -> (vp9Support && postprocSupport);
-assert (internalStatsSupport && vp9Support) -> vp9PostprocSupport;
+let
+  inherit (stdenv) isi686 isx86_64 isArm is64bit isMips isDarwin isCygwin;
+  inherit (stdenv.lib) enableFeature optional optionals;
+in
+
+assert isi686 || isx86_64 || isArm || isMips; # Requires ARM with floating point support
+
+assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
+assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postprocSupport;
 /* If spatialResamplingSupport not enabled, build will fail with undeclared variable errors.
    Variables called in vpx_scale/generic/vpx_scale.c are declared by vpx_scale/vpx_scale_rtcd.pl,
    but is only executed if spatialResamplingSupport is enabled */
 assert spatialResamplingSupport;
 assert postprocVisualizerSupport -> postprocSupport;
-assert (postprocVisualizerSupport && vp9Support) -> vp9PostprocSupport;
-assert unitTestsSupport -> ((curl != null) && (coreutils != null));
-assert vp9TemporalDenoisingSupport -> (vp9Support && temporalDenoisingSupport);
-assert vp9HighbitdepthSupport -> vp9Support;
-assert (experimentalSpatialSvcSupport || experimentalFpMbStatsSupport || experimentalEmulateHardwareSupport) -> experimentalSupport;
-assert stdenv.isCygwin -> (unitTestsSupport && webmIOSupport && libyuvSupport);
+assert unitTestsSupport -> curl != null && coreutils != null;
+assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
+assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libvpx-git";
+  name = "libvpx-git-${version}";
+  version = "2015-2-12";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/webm/libvpx";
   /* DO NOT under any circumstance ever just bump the git commit without
      confirming changes have not been made to the configure system */
-    rev = "f4c29ae9ea16c502c980a81ca9683327d5051929"; # 2015-2-12
+    rev = "f4c29ae9ea16c502c980a81ca9683327d5051929";
     sha256 = "1d5m3dryfdrsf3mi6bcbsndyhihzksqalzfvi21fbxxkk1imsb9x";
   };
 
-  patchPhase = ''
-    patchShebangs .
-  '';
+  patchPhase = ''patchShebangs .'';
+
+  configureFlags = [
+    (enableFeature (vp8EncoderSupport || vp8DecoderSupport) "vp8")
+    (enableFeature vp8EncoderSupport "vp8-encoder")
+    (enableFeature vp8DecoderSupport "vp8-decoder")
+    (enableFeature (vp9EncoderSupport || vp9DecoderSupport) "vp9")
+    (enableFeature vp9EncoderSupport "vp9-encoder")
+    (enableFeature vp9DecoderSupport "vp9-decoder")
+    (enableFeature extraWarningsSupport "extra-warnings")
+    (enableFeature werrorSupport "werror")
+    "--disable-install-docs"
+    (enableFeature examplesSupport "install-bins")
+    "--enable-install-libs"
+    "--disable-install-srcs"
+    (enableFeature debugSupport "debug")
+    (enableFeature gprofSupport "gprof")
+    (enableFeature gcovSupport "gcov")
+    # Required to build shared libraries
+    (enableFeature (!isCygwin) "pic")
+    (enableFeature (isi686 || isx86_64) "use-x86inc")
+    (enableFeature optimizationsSupport "optimizations")
+    (enableFeature runtimeCpuDetectSupport "runtime-cpu-detect")
+    (enableFeature thumbSupport "thumb")
+    "--enable-libs"
+    (enableFeature examplesSupport "examples")
+    "--disable-docs"
+    "--as=yasm"
+    # Limit default decoder max to WHXGA
+    (if sizeLimitSupport then "--size-limit=5120x3200" else null)
+    (enableFeature fastUnalignedSupport "fast-unaligned")
+    "--disable-codec-srcs"
+    (enableFeature debugLibsSupport "debug-libs")
+    (enableFeature isMips "dequant-tokens")
+    (enableFeature isMips "dc-recon")
+    (enableFeature postprocSupport "postproc")
+    (enableFeature (postprocSupport && (vp9DecoderSupport || vp9EncoderSupport)) "vp9-postproc")
+    (enableFeature multithreadSupport "multithread")
+    (enableFeature internalStatsSupport "internal-stats")
+    (enableFeature memTrackerSupport "mem-tracker")
+    (enableFeature spatialResamplingSupport "spatial-resampling")
+    (enableFeature realtimeOnlySupport "realtime-only")
+    (enableFeature ontheflyBitpackingSupport "onthefly-bitpacking")
+    (enableFeature errorConcealmentSupport "error-concealment")
+    # Shared libraries are only supported on ELF platforms
+    (if isDarwin || isCygwin then
+       "--enable-static --disable-shared"
+     else
+       "--disable-static --enable-shared")
+    (enableFeature smallSupport "small")
+    (enableFeature postprocVisualizerSupport "postproc-visualizer")
+    (enableFeature unitTestsSupport "unit-tests")
+    (enableFeature webmIOSupport "webm-io")
+    (enableFeature libyuvSupport "libyuv")
+    (enableFeature decodePerfTestsSupport "decode-perf-tests")
+    (enableFeature encodePerfTestsSupport "encode-perf-tests")
+    (enableFeature multiResEncodingSupport "multi-res-encoding")
+    (enableFeature temporalDenoisingSupport "temporal-denoising")
+    (enableFeature (temporalDenoisingSupport && (vp9DecoderSupport || vp9EncoderSupport)) "vp9-temporal-denoising")
+    (enableFeature coefficientRangeCheckingSupport "coefficient-range-checking")
+    (enableFeature (vp9HighbitdepthSupport && is64bit) "vp9-highbitdepth")
+    (enableFeature (experimentalSpatialSvcSupport ||
+                    experimentalFpMbStatsSupport ||
+                    experimentalEmulateHardwareSupport) "experimental")
+    # Experimental features
+  ] ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
+    ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
+    ++ optional experimentalEmulateHardwareSupport "--enable-emulate-hardware";
 
   nativeBuildInputs = [ perl yasm ];
 
   buildInputs = [ ]
-    ++ optional unitTestsSupport coreutils
-    ++ optional unitTestsSupport curl;
-
-  configureFlags = [
-    (mkFlag vp8Support "vp8")
-    (mkFlag vp8EncoderSupport "vp8-encoder")
-    (mkFlag vp8DecoderSupport "vp8-decoder")
-    (mkFlag vp9Support "vp9")
-    (mkFlag vp9EncoderSupport "vp9-encoder")
-    (mkFlag vp9DecoderSupport "vp9-decoder")
-    (mkFlag extraWarningsSupport "extra-warnings")
-    (mkFlag werrorSupport "werror")
-    "--disable-install-docs"
-    (mkFlag installBinsSupport "install-bins")
-    (mkFlag installLibsSupport "install-libs")
-    (mkFlag installSrcsSupport "install-srcs")
-    (mkFlag debugSupport "debug")
-    (mkFlag gprofSupport "gprof")
-    (mkFlag gcovSupport "gcov")
-    # Required to build shared libraries
-    (mkFlag (!stdenv.isDarwin && !stdenv.isCygwin) "pic")
-    (mkFlag (stdenv.isi686 || stdenv.isx86_64) "use-x86inc")
-    (mkFlag optimizationsSupport "optimizations")
-    (mkFlag runtimeCpuDetectSupport "runtime-cpu-detect")
-    (mkFlag thumbSupport "thumb")
-    (mkFlag libsSupport "libs")
-    (mkFlag examplesSupport "examples")
-    "--disable-docs"
-    "--as=yasm"
-    # Limit default decoder max to WHXGA
-    (if sizeLimitSupport then "--size-limit=5120x3200" else "")
-    (mkFlag fastUnalignedSupport "fast-unaligned")
-    (mkFlag codecSrcsSupport "codec-srcs")
-    (mkFlag debugLibsSupport "debug-libs")
-    (mkFlag stdenv.isMips "dequant-tokens")
-    (mkFlag stdenv.isMips "dc-recon")
-    (mkFlag postprocSupport "postproc")
-    (mkFlag vp9PostprocSupport "vp9-postproc")
-    (mkFlag multithreadSupport "multithread")
-    (mkFlag internalStatsSupport "internal-stats")
-    (mkFlag memTrackerSupport "mem-tracker")
-    (mkFlag spatialResamplingSupport "spatial-resampling")
-    (mkFlag realtimeOnlySupport "realtime-only")
-    (mkFlag ontheflyBitpackingSupport "onthefly-bitpacking")
-    (mkFlag errorConcealmentSupport "error-concealment")
-    # Shared libraries are only supported on ELF platforms
-    (mkFlag (stdenv.isDarwin || stdenv.isCygwin) "static")
-    (mkFlag (!stdenv.isDarwin && !stdenv.isCygwin) "shared")
-    (mkFlag smallSupport "small")
-    (mkFlag postprocVisualizerSupport "postproc-visualizer")
-    (mkFlag unitTestsSupport "unit-tests")
-    (mkFlag webmIOSupport "webm-io")
-    (mkFlag libyuvSupport "libyuv")
-    (mkFlag decodePerfTestsSupport "decode-perf-tests")
-    (mkFlag encodePerfTestsSupport "encode-perf-tests")
-    (mkFlag multiResEncodingSupport "multi-res-encoding")
-    (mkFlag temporalDenoisingSupport "temporal-denoising")
-    (mkFlag vp9TemporalDenoisingSupport "vp9-temporal-denoising")
-    (mkFlag coefficientRangeCheckingSupport "coefficient-range-checking")
-    (mkFlag (vp9HighbitdepthSupport && !stdenv.isi686) "vp9-highbitdepth")
-    (mkFlag experimentalSupport "experimental")
-    # Experimental features
-    (mkFlag experimentalSpatialSvcSupport "spatial-svc")
-    (mkFlag experimentalFpMbStatsSupport "fp-mb-stats")
-    (mkFlag experimentalEmulateHardwareSupport "emulate-hardware")
-  ];
+    ++ optionals unitTestsSupport [ coreutils curl ];
 
   enableParallelBuilding = true;
 
@@ -193,7 +175,7 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = http://www.webmproject.org/;
     license     = licenses.bsd3;

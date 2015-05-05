@@ -20,7 +20,7 @@ let lispPackages = rec {
   clx = buildLispPackage rec {
     baseName = "clx";
     version = "git-20150117";
-    description = "An implementation of the X Window System protocol in Lisp.";
+    description = "An implementation of the X Window System protocol in Lisp";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -36,11 +36,11 @@ let lispPackages = rec {
     version = "darcs-2014-11-01";
     description = "Iteration package for Common Lisp";
     deps = [];
-    src = pkgs.fetchdarcs {
-      url = "http://common-lisp.net/project/iterate/darcs/iterate";
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
+      url = "https://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
       context = ./iterate.darcs-context;
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
     };
@@ -52,7 +52,7 @@ let lispPackages = rec {
     description = "A collection of portable public domain utilities";
     deps = [];
     src = pkgs.fetchgit {
-      url = "git://common-lisp.net/projects/alexandria/alexandria.git";
+      url = "https://gitlab.common-lisp.net/alexandria/alexandria.git";
       sha256 = "1d981a243f9d4d3c9fd86cc47698050507ff615b87b9a710449abdb4234e501b";
       rev = ''2b1eb4067fb34bc501e527de75d09166a8ba9ceb'';
     };
@@ -98,7 +98,7 @@ let lispPackages = rec {
   clx-truetype = buildLispPackage rec {
     baseName = "clx-truetype";
     version = "git-20141112";
-    description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.";
+    description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension";
     deps = [cl-fad cl-store cl-vectors clx trivial-features zpb-ttf];
     # Source type: git
     src = pkgs.fetchgit {
@@ -178,7 +178,7 @@ let lispPackages = rec {
   trivial-features = buildLispPackage rec {
     baseName = "trivial-features";
     version = "git-20141112";
-    description = "Ensures consistent *FEATURES* across multiple CLs.";
+    description = "Ensures consistent *FEATURES* across multiple CLs";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -238,7 +238,7 @@ let lispPackages = rec {
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
 	export HOME=$PWD
 	build-with-lisp.sh sbcl \
-	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/:\2/g')" \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
 	  "$out/bin/query-fs" \
 	  "(query-fs:run-fs-with-cmdline-args)"
       '';
@@ -280,7 +280,7 @@ let lispPackages = rec {
   babel = buildLispPackage rec {
     baseName = "babel";
     version = "git-20141113";
-    description = "Babel, a charset conversion library.";
+    description = "A charset conversion library";
     deps = [alexandria trivial-features];
     # Source type: git
     src = pkgs.fetchgit {
@@ -308,10 +308,10 @@ let lispPackages = rec {
     description = "A UTF-8 encoding library";
     deps = [];
     # Source type: darcs
-    src = pkgs.fetchdarcs {
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
       url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
       sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
   };
 
   cl-fuse-meta-fs = buildLispPackage rec {
@@ -408,7 +408,7 @@ let lispPackages = rec {
   trivial-gray-streams = buildLispPackage rec {
     baseName = "trivial-gray-streams";
     version = "git-20141113";
-    description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams).";
+    description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams)";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -421,7 +421,7 @@ let lispPackages = rec {
   cl-ssl = buildLispPackage rec {
     baseName = "cl+ssl";
     version = "git-20141113";
-    description = "Common Lisp interface to OpenSSL.";
+    description = "Common Lisp interface to OpenSSL";
     deps = [bordeaux-threads cffi flexi-streams trivial-garbage trivial-gray-streams];
     # Source type: git
     src = pkgs.fetchgit {
@@ -448,7 +448,7 @@ let lispPackages = rec {
   trivial-garbage = buildLispPackage rec {
     baseName = "trivial-garbage";
     version = "git-20141113";
-    description = "Portable finalizers, weak hash-tables and weak pointers.";
+    description = "Portable finalizers, weak hash-tables and weak pointers";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -461,7 +461,7 @@ let lispPackages = rec {
   cl-base64 = buildLispPackage rec {
     baseName = "cl-base64";
     version = "git-20141113";
-    description = "Base64 encoding and decoding with URI support.";
+    description = "Base64 encoding and decoding with URI support";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -545,6 +545,19 @@ let lispPackages = rec {
       date = ''2014-11-15'';
       module = ''cl-smtp'';
       cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
+    };
+  };
+
+  md5 = buildLispPackage rec {
+    baseName = "md5";
+    version = "git-20150415";
+    description = "The MD5 Message-Digest Algorithm RFC 1321";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/pmai/md5'';
+      sha256 = "f64d7e36c54da649bb1d574b92cdb907291224fb3d8565b3708703a81820367b";
+      rev = ''9d6f82f7121c87fb7e3b314987ba93900d300dc6'';
     };
   };
 };

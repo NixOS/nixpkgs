@@ -3,6 +3,9 @@
 
 { config, lib, pkgs, ... }:
 
+with lib;
+
 {
-  environment.noXlibs = true;
+  environment.noXlibs = mkDefault true;
+  i18n.supportedLocales = [ config.i18n.defaultLocale ];
 }

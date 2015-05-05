@@ -293,7 +293,7 @@ in
     systemd.services.btsync = with pkgs; {
       description = "Bittorrent Sync Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
         UMask     = "0002";
@@ -305,7 +305,7 @@ in
 
     systemd.services."btsync@" = with pkgs; {
       description = "Bittorrent Sync Service for %i";
-      after       = [ "network.target" ];
+      after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
         User      = "%i";

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib;
     { description = "Auditory binaural-beat generator";
       homepage = http://gnaural.sourceforge.net/;
-      licenses = licenses.gpl2;
+      license = licenses.gpl2;
       maintainers = [ maintainers.emery ];
       platforms = platforms.linux;
     };

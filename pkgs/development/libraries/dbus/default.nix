@@ -76,6 +76,7 @@ let
     # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
     NIX_CFLAGS_COMPILE = "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
     buildInputs = [ systemdOrEmpty ];
+    meta.platforms = with stdenv.lib.platforms; allBut darwin;
   };
 
 

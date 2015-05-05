@@ -19,7 +19,7 @@ let
     '';
 
   theme = pkgs.gnome3.gnome_themes_standard;
-  icons = pkgs.gnome3.gnome_icon_theme;
+  icons = pkgs.gnome3.defaultIconTheme;
 
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
@@ -69,6 +69,7 @@ let
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
+      ${cfg.extraSeatDefaults}
     '';
 
   gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
@@ -107,6 +108,15 @@ in
         description = ''
           The background image or color to use.
         '';
+      };
+
+      extraSeatDefaults = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          greeter-show-manual-login=true
+        '';
+        description = "Extra lines to append to SeatDefaults section.";
       };
 
     };

@@ -74,14 +74,17 @@ in
 
   config = {
 
-    environment.systemPackages = [ glibcLocales ];
+    environment.systemPackages =
+      optional (config.i18n.supportedLocales != []) glibcLocales;
 
     environment.sessionVariables =
       { LANG = config.i18n.defaultLocale;
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       };
 
-    systemd.globalEnvironment.LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+    systemd.globalEnvironment = mkIf (config.i18n.supportedLocales != []) {
+      LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+    };
 
     # ‘/etc/locale.conf’ is used by systemd.
     environment.etc = singleton

@@ -1,11 +1,11 @@
 { fetchurl, stdenv, expect, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "dejagnu-1.5.2";
+  name = "dejagnu-1.5.3";
 
   src = fetchurl {
     url = "mirror://gnu/dejagnu/${name}.tar.gz";
-    sha256 = "18ikblg4x4y5fkw8sg0c2zmqgxdqqycswmws17sxx8m4sz6g7dch";
+    sha256 = "069z3qrdv35cm2sbnfr5yjzplrqj9f61cchxis7j9mm19hv8x6q9";
   };
 
   patches = [ ./wrapped-runtest-program-name.patch ];

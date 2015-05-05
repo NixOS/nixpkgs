@@ -1,0 +1,27 @@
+diff --git a/doc/manpages/Makefile.am b/doc/manpages/Makefile.am
+index 8e793d3..68de757 100644
+--- a/doc/manpages/Makefile.am
++++ b/doc/manpages/Makefile.am
+@@ -134,11 +134,8 @@ APIMANS += gnutls_certificate_get_peers.3
+ APIMANS += gnutls_certificate_get_peers_subkey_id.3
+ APIMANS += gnutls_certificate_get_trust_list.3
+ APIMANS += gnutls_certificate_get_verify_flags.3
+-APIMANS += gnutls_certificate_get_verify_flags.3
+-APIMANS += gnutls_certificate_get_x509_crt.3
+ APIMANS += gnutls_certificate_get_x509_crt.3
+ APIMANS += gnutls_certificate_get_x509_key.3
+-APIMANS += gnutls_certificate_get_x509_key.3
+ APIMANS += gnutls_certificate_send_x509_rdn_sequence.3
+ APIMANS += gnutls_certificate_server_set_request.3
+ APIMANS += gnutls_certificate_set_dh_params.3
+@@ -1101,7 +1098,7 @@ compare-makefile:
+ 	@echo "******************************************************************************"
+ 	@echo "If the following step fails copy $(srcdir)/doc/manpages/tmp-compare-makefile to doc/manpages/Makefile.am"
+ 	@echo "******************************************************************************"
+-	FUNCS=`cat $(top_srcdir)/lib/includes/gnutls/*.h | $(top_srcdir)/doc/scripts/getfuncs.pl|sort -d`; \
++	FUNCS=`cat $(top_srcdir)/lib/includes/gnutls/*.h | $(top_srcdir)/doc/scripts/getfuncs.pl|sort -d|uniq`; \
+ 	MANS=""; \
+ 	for i in $$FUNCS; do \
+ 		MANS="$$MANS\nAPIMANS += $$i.3"; \
+--
+libgit2 0.21.4

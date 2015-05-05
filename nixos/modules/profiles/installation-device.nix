@@ -26,15 +26,14 @@ with lib;
     # Disable some other stuff we don't need.
     security.sudo.enable = false;
 
-    # Include only the en_US locale.  This saves 75 MiB or so compared to
-    # the full glibcLocales package.
-    i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
+    # Automatically log in at the virtual consoles.
+    services.mingetty.autologinUser = "root";
 
     # Some more help text.
     services.mingetty.helpLine =
       ''
 
-        Log in as "root" with an empty password.  ${
+        The "root" account has an empty password.  ${
           optionalString config.services.xserver.enable
             "Type `start display-manager' to\nstart the graphical user interface."}
       '';

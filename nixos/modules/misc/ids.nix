@@ -203,17 +203,20 @@
       sddm = 175;
       tss = 176;
       memcached = 177;
-      nscd = 178;
       ntp = 179;
       zabbix = 180;
       redis = 181;
-      sshd = 182;
       unifi = 183;
       uptimed = 184;
       zope2 = 185;
       ripple-data-api = 186;
       mediatomb = 187;
       rdnssd = 188;
+      ihaskell = 189;
+      i2p = 190;
+      lambdabot = 191;
+      asterisk = 192;
+      plex = 193;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -394,17 +397,20 @@
       sddm = 175;
       tss = 176;
       #memcached = 177; # unused
-      #nscd = 178; # unused
       #ntp = 179; # unused
       #zabbix = 180; # unused
       #redis = 181; # unused
-      #sshd = 182; # unused
       #unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
       #ripple-data-api = 186; #unused
       mediatomb = 187;
       #rdnssd = 188; # unused
+      ihaskell = 189;
+      i2p = 190;
+      lambdabot = 191;
+      #asterisk = 192; # unused
+      plex = 193;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

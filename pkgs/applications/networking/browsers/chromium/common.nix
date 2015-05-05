@@ -3,7 +3,7 @@
 # default dependencies
 , bzip2, flac, speex, icu, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt
+, libpng, libxml2, libxslt, libcap
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, libexif, pciutils
 
@@ -86,7 +86,7 @@ let
   defaultDependencies = [
     bzip2 flac speex icu opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt
+    libpng libxml2 libxslt libcap
     xdg_utils yasm minizip libwebp
     libusb1 libexif
   ];

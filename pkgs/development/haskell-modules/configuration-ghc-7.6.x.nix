@@ -33,23 +33,20 @@ self: super: {
   time = null;
   unix = null;
 
-  # transformers is not a core library for this compiler.
-  transformers = self.transformers_0_4_3_0;
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
-
-  # haskeline and terminfo are not core libraries for this compiler.
+  # These packages are core libraries in GHC 7.10.x, but not here.
   haskeline = self.haskeline_0_7_2_1;
   terminfo = self.terminfo_0_4_0_1;
+  transformers = self.transformers_0_4_3_0;
+  xhtml = self.xhtml_3000_2_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_2_0 = super.Cabal_1_22_2_0.override { binary = self.binary_0_7_4_0; };
+  Cabal_1_22_3_0 = super.Cabal_1_22_3_0.override { binary = self.binary_0_7_4_0; };
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
 
   # Needs Cabal >= 1.18.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_18_1_6; };
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
@@ -72,5 +69,11 @@ self: super: {
 
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
+
+  # Newer versions require a more recent compiler.
+  control-monad-free = super.control-monad-free_0_5_3;
+
+  # Needs hashable on pre 7.10.x compilers.
+  nats = addBuildDepend super.nats self.hashable;
 
 }

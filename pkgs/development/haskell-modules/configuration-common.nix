@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_2_0 = dontCheck super.Cabal_1_22_2_0;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_2_0; });
+  Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; });
 
   # Break infinite recursions.
   digest = super.digest.override { inherit (pkgs) zlib; };
@@ -21,6 +21,9 @@ self: super: {
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   text = dontCheck super.text;
+
+  # The package doesn't compile with ruby 1.9, which is our default at the moment.
+  hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
@@ -118,6 +121,7 @@ self: super: {
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
+  BNFC-meta = dontHaddock super.BNFC-meta;
   bytestring-progress = dontHaddock super.bytestring-progress;
   comonads-fd = dontHaddock super.comonads-fd;
   comonad-transformers = dontHaddock super.comonad-transformers;
@@ -151,9 +155,11 @@ self: super: {
     patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
   });
 
-  # The test suite imposes too narrow restrictions on the version of
-  # Cabal that can be used to build this package.
-  cabal-test-quickcheck = dontCheck super.cabal-test-quickcheck;
+  # Needs the latest version of QuickCheck to compile.
+  cabal-test-quickcheck = super.cabal-test-quickcheck.override { QuickCheck = self.QuickCheck_2_8_1; };
+
+  # https://github.com/massysett/rainbox/issues/1
+  rainbox = dontCheck super.rainbox;
 
   # https://github.com/techtangents/ablist/issues/1
   ABList = dontCheck super.ABList;
@@ -210,6 +216,15 @@ self: super: {
 
   # https://github.com/liamoc/wizards/issues/5
   wizards = doJailbreak super.wizards;
+
+  # https://github.com/tibbe/ekg-core/commit/c986d9750d026a0c049cf6e6610d69fc1f23121f, not yet in hackage
+  ekg-core = doJailbreak super.ekg-core;
+
+  # https://github.com/tibbe/ekg/commit/95018646f48f60d9ccf6209cc86747e0f132e737, not yet in hackage
+  ekg = doJailbreak super.ekg;
+
+  # https://github.com/diagrams/diagrams-rasterific/commit/2758e5760c64f8ca2528628bd11de502f354ab15, not yet in hackage
+  diagrams-rasterific = doJailbreak super.diagrams-rasterific;
 
   # https://github.com/NixOS/cabal2nix/issues/136
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
@@ -280,7 +295,6 @@ self: super: {
   amqp-conduit = dontCheck super.amqp-conduit;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
-  directory_1_2_2_0 = dontCheck super.directory_1_2_2_0; # https://github.com/haskell/directory/issues/24
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
@@ -298,6 +312,7 @@ self: super: {
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
+  wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -418,6 +433,7 @@ self: super: {
   Rlang-QQ = dontCheck super.Rlang-QQ;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
+  sdl2-ttf = dontCheck super.sdl2-ttf; # as of version 0.2.1, the test suite requires user intervention
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
   shake-language-c = dontCheck super.shake-language-c;
@@ -532,9 +548,30 @@ self: super: {
   # Upstream notified by e-mail.
   MonadCompose = markBrokenVersion "0.2.0.0" super.MonadCompose;
 
+  # no haddock since this is an umbrella package.
+  cloud-haskell = dontHaddock super.cloud-haskell;
+
+  # Disable tests which couldn't be built.
+  distributed-process-async = dontCheck super.distributed-process-async;
+
+  # Disable tests which couldn't be built.
+  distributed-process-client-server = dontCheck super.distributed-process-client-server;
+
+  # Disable tests which couldn't be built.
+  distributed-process-extras = dontCheck super.distributed-process-extras;
+
   # Make distributed-process-platform compile until next version
   distributed-process-platform = overrideCabal super.distributed-process-platform (drv: {
     patchPhase = "mv Setup.hs Setup.lhs";
+    doCheck = false;
+    doHaddock = false;
+  });
+
+  # Disable tests due to a failure (Sequential Shutdown Ordering test.)
+  distributed-process-supervisor = dontCheck super.distributed-process-supervisor;
+
+  # Disable network test and errorneous haddock.
+  distributed-process-tests = overrideCabal super.distributed-process-tests (drv: {
     doCheck = false;
     doHaddock = false;
   });
@@ -722,36 +759,32 @@ self: super: {
   # Tries to run GUI in tests
   leksah = dontCheck super.leksah;
 
-} // {
+  # Patch to consider NIX_GHC just like xmonad does
+  dyre = appendPatch super.dyre ./dyre-nix.patch;
 
-  # Not on Hackage.
-  cabal2nix = self.mkDerivation {
-    pname = "cabal2nix";
-    version = "20150318";
-    src = pkgs.fetchgit {
-      url = "http://github.com/NixOS/cabal2nix.git";
-      rev = "b56cc6de2c4900fb0d1dc3617591a2f536aca60d";
-      sha256 = "0pza9j3x1mfjqrzcqq6ndg0jiqx85mg0sw8n9fmq18fk5g4hzhis";
-      deepClone = true;
-    };
-    isLibrary = false;
-    isExecutable = true;
-    buildDepends = with self; [
-      aeson base bytestring Cabal containers deepseq-generics directory
-      filepath hackage-db lens monad-par monad-par-extras mtl pretty
-      prettyclass process regex-posix SHA split transformers utf8-string cartel
-    ];
-    testDepends = with self; [
-      aeson base bytestring Cabal containers deepseq deepseq-generics
-      directory doctest filepath hackage-db hspec lens monad-par
-      monad-par-extras mtl pretty prettyclass process QuickCheck
-      regex-posix SHA split transformers utf8-string
-    ];
-    buildTools = [ pkgs.gitMinimal ];
-    preConfigure = "runhaskell $setupCompileFlags generate-cabal-file >cabal2nix.cabal";
-    homepage = "http://github.com/NixOS/cabal2nix";
-    description = "Convert Cabal files into Nix build instructions";
-    license = pkgs.stdenv.lib.licenses.bsd3;
-  };
+  # Fix problems with GHC >=7.8 (in compatible way)
+  mueval = let pkg = appendPatch super.mueval (pkgs.fetchpatch {
+                       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
+                       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
+                     });
+           # Nix-specific workaround
+           in appendPatch pkg ./mueval-nix.patch;
+
+  # Test suite won't compile against tasty-hunit 0.9.x.
+  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
+
+  # Jailbreaking breaks the build.
+  QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
+
+  # Override the obsolete version from Hackage with our more up-to-date copy.
+  cabal2nix = pkgs.cabal2nix;
+
+  # https://github.com/urs-of-the-backwoods/HGamer3D/issues/7
+  HGamer3D-Bullet-Binding = dontDistribute super.HGamer3D-Bullet-Binding;
+  HGamer3D-Common = dontDistribute super.HGamer3D-Common;
+  HGamer3D-Data = markBroken super.HGamer3D-Data;
+
+  # https://github.com/ndmitchell/shake/issues/206
+  shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
 
 }

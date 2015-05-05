@@ -38,24 +38,22 @@ self: super: {
   xhtml = null;
 
   # mtl 2.2.x needs the latest transformers.
-  mtl_2_2_1 = super.mtl_2_2_1.override { transformers = self.transformers_0_4_3_0; };
+  mtl_2_2_1 = super.mtl.override { transformers = self.transformers_0_4_3_0; };
 
-  # Configure build for mtl 2.1.x.
+  # Configure mtl 2.1.x.
+  mtl = self.mtl_2_1_3_1;
+  transformers-compat = addBuildDepend (enableCabalFlag super.transformers-compat "three") self.mtl;
   mtl-compat = addBuildDepend (enableCabalFlag super.mtl-compat "two-point-one") self.transformers-compat;
 
   # haddock-api 2.16 requires ghc>=7.10
   haddock-api = super.haddock-api_2_15_0_2;
 
-  # Idris requires mtl 2.2.x.
-  idris = overrideCabal (super.idris.overrideScope (self: super: {
-    mkDerivation = drv: super.mkDerivation (drv // { doCheck = false; });
-    blaze-markup = self.blaze-markup_0_6_2_0;
+  # Idris needs special version of some libraries
+  idris = let super1 = super; in overrideCabal (super.idris.overrideScope (self: super: {
+    annotated-wl-pprint = self.annotated-wl-pprint_0_5_3;
     blaze-html = self.blaze-html_0_7_0_3;
-    haskeline = self.haskeline_0_7_2_1;
+    blaze-markup = self.blaze-markup_0_6_2_0;
     lens = self.lens_4_7_0_1;
-    mtl = super.mtl_2_2_1;
-    transformers = super.transformers_0_4_3_0;
-    transformers-compat = disableCabalFlag super.transformers-compat "three";
   })) (drv: {
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
@@ -119,5 +117,19 @@ self: super: {
 
   # Newer versions require base > 4.7
   gloss = super.gloss_1_9_2_1;
+
+  # Workaround for a workaround, see comment for "ghcjs" flag.
+  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
+            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
+                                          self.webkitgtk3-javascriptcore ];
+
+  # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
+  lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
+
+  # Needs hashable on pre 7.10.x compilers.
+  nats = addBuildDepend super.nats self.hashable;
+
+  # needs mtl-compat to build with mtl 2.1.x
+  cgi = addBuildDepend super.cgi self.mtl-compat;
 
 }

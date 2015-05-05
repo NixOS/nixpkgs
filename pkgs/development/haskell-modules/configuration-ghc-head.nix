@@ -43,14 +43,6 @@ self: super: {
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
 
-  # These used to be core packages in GHC 7.8.x.
-  old-locale = self.old-locale_1_0_0_7;
-  old-time = self.old-time_1_1_0_3;
-
-  # We have transformers 4.x
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
-
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
 
@@ -81,8 +73,12 @@ self: super: {
   # Version 1.19.5 fails its test suite.
   happy = dontCheck super.happy;
 
-  # Test suite hangs silently without consuming any CPU.
-  # https://github.com/ndmitchell/extra/issues/4
-  extra = dontCheck super.extra;
+  # Workaround for a workaround, see comment for "ghcjs" flag.
+  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
+            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
+                                          self.webkitgtk3-javascriptcore ];
+
+  # The compat library is empty in the presence of mtl 2.2.x.
+  mtl-compat = dontHaddock super.mtl-compat;
 
 }

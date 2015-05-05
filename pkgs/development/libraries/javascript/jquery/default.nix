@@ -3,17 +3,17 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "jquery-1.11.1";
+  name = "jquery-1.11.2";
 
   src = if compressed then
     fetchurl {
       url = "http://code.jquery.com/${name}.min.js";
-      sha256 = "0hgly37jhg0n5cqlx3ylmwcxkxmbkvv07f9z9pm94jyxq7gcc2sl";
+      sha256 = "1h09zz6cjm66g30wa7c41by1jswx9gjpgqgbxln0dv2v55fjkk9f";
     }
     else
     fetchurl {
       url = "http://code.jquery.com/${name}.js";
-      sha256 = "1g7nhy8dwzzai7h7m800fsig4gzw34kjxxbpqdac2y8ch9586a9h";
+      sha256 = "098gnzndmmjygpsfywxgmb0vi42b882pwpby77gqkrd2nwsp1hjq";
     };
 
   unpackPhase = "true";

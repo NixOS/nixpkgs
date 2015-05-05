@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   #TODO add emacs support
-  name = "racer-git-2015-02-28";
+  name = "racer-git-2015-04-12";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "2e1d718fae21431de4493c238196466e9d4996bc";
-    sha256 = "0lvp494kg2hlbbdrwxmmxkyhjw53y9wjdml9z817pwj3fwmrjsx0";
+    rev = "5437e2074d87dfaab75a0f1bd2597bed61c0bbf1";
+    sha256 = "0a768gvjry86l0xa5q0122iyq7zn2h9adfniglsgrbs4fan49xyn";
   };
 
   buildInputs = [ rustc cargo makeWrapper ];
 
   buildPhase = ''
-    cargo build --release
+    CARGO_HOME="$NIX_BUILD_TOP/.cargo" cargo build --release
   '';
 
   installPhase = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A utility intended to provide Rust code completion for editors and IDEs.";
+    description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/phildawes/racer;
     license = stdenv.lib.licenses.mit;
     maintainers = [ maintainers.jagajaga ];

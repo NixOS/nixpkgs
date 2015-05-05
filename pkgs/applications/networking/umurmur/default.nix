@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "umurmur-${version}";
-  version = "0.2.15";
+  version = "0.2.16";
   
   src = fetchFromGitHub {
     owner = "fatbob313";
     repo = "umurmur";
     rev = version;
-    sha256 = "0q0apnnb3pszhpsbadw52k6mhdc0hk38rk7vnn7dl4fsisfhgmx2";
+    sha256 = "0njvdqvjda13v1a2yyjn47mb0l0cdfb2bfvb5s13wpgwy2xxk0px";
   };
   
   buildInputs = [ autoreconfHook openssl protobufc libconfig ];

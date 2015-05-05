@@ -10,6 +10,15 @@ with lib;
 
     services.mingetty = {
 
+      autologinUser = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Username of the account that will be automatically logged in at the console.
+          If unspecified, a login prompt is shown as usual.
+        '';
+      };
+
       greetingLine = mkOption {
         type = types.str;
         default = ''<<< Welcome to NixOS ${config.system.nixosVersion} (\m) - \l >>>'';
@@ -46,28 +55,30 @@ with lib;
 
   ###### implementation
 
-  config = {
-
+  config = let
+    autologinArg = optionalString (config.services.mingetty.autologinUser != null) "--autologin ${config.services.mingetty.autologinUser}";
+    gettyCmd = extraArgs: "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
+  in {
     systemd.services."getty@" =
-      { serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud %I 115200,38400,9600 $TERM";
+      { serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud %I 115200,38400,9600 $TERM";
         restartIfChanged = false;
       };
 
     systemd.services."serial-getty@" =
       { serviceConfig.ExecStart =
           let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
-          in "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I ${speeds} $TERM";
+          in gettyCmd "%I ${speeds} $TERM";
         restartIfChanged = false;
       };
 
     systemd.services."container-getty@" =
       { unitConfig.ConditionPathExists = "/dev/pts/%I"; # Work around being respawned when "machinectl login" exits.
-        serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud pts/%I 115200,38400,9600 $TERM";
+        serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud pts/%I 115200,38400,9600 $TERM";
         restartIfChanged = false;
       };
 
     systemd.services."console-getty" =
-      { serviceConfig.ExecStart = "@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login --keep-baud console 115200,38400,9600 $TERM";
+      { serviceConfig.ExecStart = gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM";
         serviceConfig.Restart = "always";
         restartIfChanged = false;
 	enable = mkDefault config.boot.isContainer;

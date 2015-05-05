@@ -713,7 +713,6 @@ let
     "ecospat" # requires spatstat
     "edgeRun" # requires edgeR
     "EMA" # requires siggenes, affy, multtest, gcrma, biomaRt, and AnnotationDbi
-    "EMDomics" # requires BiocParallel
     "empiricalFDR_DESeq2" # requires DESeq2, and GenomicRanges
     "epoc" # requires graph, and Rgraphviz
     "erpR" # requires rpanel
@@ -885,7 +884,6 @@ let
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
-    "rsprng" # requres sprng
     "Rsymphony" # FIXME: requires SYMPHONY
     "RVideoPoker" # requires Rpanel
     "rysgran" # requires soiltexture
@@ -940,6 +938,13 @@ let
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "zoib" # tarball is invalid on server
+    "DiffCorr" # misses undeclared dependencies 'pcaMethods', 'multtest'
+    "TROM" # misses undeclared dependencies topGO', 'AnnotationDbi', 'GO.db'
+    "lfe" # fails to compile
+    "mongolite" # doesn't find OpenSSL
+    "quanteda" # fails to build
+    "statar" # depends on broken lfe
+    "hsdar" # fails to build
   ];
 
   otherOverrides = old: new: {

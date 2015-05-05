@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gtkmm.org/;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = "Philip Lykke Carlsen <plcplc@gmail.com>";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 
 }

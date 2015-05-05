@@ -433,6 +433,14 @@
     propagatedUserEnvPkgs = [  ];
   };
 
+  kde-l10n-eo = {
+    buildInputs = [ "ECM" "Gettext" "KDE4" "KF5DocTools" "KF5I18n" ];
+    nativeBuildInputs = [ "cmake" ];
+    propagatedBuildInputs = [  ];
+    propagatedNativeBuildInputs = [  ];
+    propagatedUserEnvPkgs = [  ];
+  };
+
   kde-l10n-es = {
     buildInputs = [ "ECM" "Gettext" "KDE4" "KF5DocTools" "KF5I18n" ];
     nativeBuildInputs = [ "cmake" ];

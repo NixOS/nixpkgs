@@ -1,4 +1,6 @@
 { stdenv, fetchurl
+, idnSupport ? false, libidn ? null
+, ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
 , sslSupport ? false, openssl ? null
 , scpSupport ? false, libssh2 ? null
@@ -6,23 +8,27 @@
 , c-aresSupport ? false, c-ares ? null
 }:
 
+assert idnSupport -> libidn != null;
+assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.41.0";
+  name = "curl-7.42.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1slbbxp2k8m34mdzrl5qhafr5zhhcv7fgjhs2mcxjmswvimm92wz";
+    sha256 = "13yhcqfksy2vwc4sjv97nv3cbd2pb2a8lnvv8g46qp1gail7sm9j";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs = with stdenv.lib;
+    optional idnSupport libidn ++
+    optional ldapSupport openldap ++
     optional zlibSupport zlib ++
     optional gssSupport gss ++
     optional c-aresSupport c-ares ++
@@ -43,6 +49,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
+      ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
+      ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
+      ( if idnSupport then "--with-libidn=${libidn}" else "--without-libidn" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";

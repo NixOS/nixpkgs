@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.mega-nerd.com/libsndfile/;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platfomrs   = platforms.unix;
+    platforms   = platforms.unix;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

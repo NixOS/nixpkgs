@@ -1,7 +1,7 @@
 { args, xorg }:
 
 let
-  inherit (args) stdenv;
+  inherit (args) stdenv makeWrapper;
   inherit (stdenv) lib isDarwin;
   inherit (lib) overrideDerivation;
 
@@ -346,13 +346,14 @@ in
     in
       if (!isDarwin)
       then {
-        buildInputs = commonBuildInputs;
+        buildInputs = [ makeWrapper ] ++ commonBuildInputs;
         propagatedBuildInputs = commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
         patches = commonPatches;
         configureFlags = [
           "--enable-kdrive"             # not built by default
+          "--enable-xephyr"
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
@@ -360,6 +361,9 @@ in
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
           ln -s /var/tmp $out/share/X11/xkb/compiled
+          wrapProgram $out/bin/Xephyr \
+            --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
+            --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {

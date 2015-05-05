@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, openjdk, cacert, perl } :
+{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, openjdk, cacert, perl, liberation_ttf, fontconfig } :
 let
   update = "40";
   build = "25";
@@ -39,12 +39,12 @@ let
           };
   openjdk8 = stdenv.mkDerivation {
   name = "openjdk-8u${update}b${build}";
-  srcs = [jdk8 langtools hotspot corba jdk jaxws jaxp nashorn];
+  srcs = [ jdk8 langtools hotspot corba jdk jaxws jaxp nashorn ];
   outputs = [ "out" "jre" ];
   buildInputs = [ cpio file which unzip zip
                   xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
                   xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-                  cups freetype alsaLib openjdk perl ];
+                  cups freetype alsaLib openjdk perl liberation_ttf fontconfig ];
   setSourceRoot = ''
     sourceRoot="jdk8u${update}-jdk8u${update}-b${build}";
   '';
@@ -77,18 +77,19 @@ let
     "--with-build-number=b${build}"
     "--with-milestone=fcs"
   ];
+  NIX_LDFLAGS= "-lfontconfig";
   buildFlags = "DEBUG_BINARIES=true all";
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
-    cp -av build/*/images/j2sdk-image/* $out/lib/openjdk
+    cp -av build"/"*/images/j2sdk-image"/"* $out/lib/openjdk
 
     # Move some stuff to top-level.
     mv $out/lib/openjdk/include $out/include
     mv $out/lib/openjdk/man $out/share/man
 
     # jni.h expects jni_md.h to be in the header search path.
-    ln -s $out/include/linux/*_md.h $out/include/
+    ln -s $out/include/linux"/"*_md.h $out/include/
 
     # Remove some broken manpages.
     rm -rf $out/share/man/ja*
@@ -96,16 +97,18 @@ let
     # Remove crap from the installation.
     rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
 
-    # Move the JRE to a separate output.
+    # Move the JRE to a separate output and setup fallback fonts
     mv $out/lib/openjdk/jre $jre/lib/openjdk/
     mkdir $out/lib/openjdk/jre
+    mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
+    lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
     lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
     rm -rf $out/lib/openjdk/jre/bina
     ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
 
     # Set PaX markings
-    exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+    exes=$(file $out/lib/openjdk/bin"/"* $jre/lib/openjdk/jre/bin"/"* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
     echo "to mark: *$exes*"
     for file in $exes; do
       echo "marking *$file*"
@@ -128,15 +131,16 @@ let
 
     ln -s $out/lib/openjdk/bin $out/bin
     ln -s $jre/lib/openjdk/jre/bin $jre/bin
+
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://openjdk.java.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
     description = "The open-source Java Development Kit";
-    maintainers = [ stdenv.lib.maintainers.cocreature ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = platforms.linux;
   };
-  
+
   passthru.home = "${openjdk8}/lib/openjdk";
 }; in openjdk8

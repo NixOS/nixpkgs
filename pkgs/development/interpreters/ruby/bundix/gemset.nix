@@ -4,8 +4,8 @@
     source = {
       type = "git";
       url = "https://github.com/cstrahan/bundix.git";
-      rev = "e098b8c04087079c897aaf9542990e9fdd503bcf";
-      sha256 = "0www8srjqlxy1pzn2b6himy5y768dni54m7rv67gj8yvx48vd803";
+      rev = "c879cf901ff8084b4c97aaacfb5ecbdb0f95cc03";
+      sha256 = "05kmdnq4qa5h8l3asv05cjpnyplnqqx6hrqybj2cjlzmdxnkkgyj";
       fetchSubmodules = false;
     };
     dependencies = [

@@ -281,10 +281,8 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = "sshd";
-        uid = config.ids.uids.sshd;
-        description = "SSH privilege separation user";
+    users.extraUsers.sshd =
+      { description = "SSH privilege separation user";
         home = "/var/empty";
       };
 
@@ -379,7 +377,7 @@ in
           Port ${toString port}
         '') cfg.ports}
 
-        ${concatMapStrings ({ port, addr }: ''
+        ${concatMapStrings ({ port, addr, ... }: ''
           ListenAddress ${addr}${if port != null then ":" + toString port else ""}
         '') cfg.listenAddresses}
 
@@ -418,7 +416,7 @@ in
                     (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       })
-      ++ flip map cfg.listenAddresses ({ addr, port }: {
+      ++ flip map cfg.listenAddresses ({ addr, port, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });

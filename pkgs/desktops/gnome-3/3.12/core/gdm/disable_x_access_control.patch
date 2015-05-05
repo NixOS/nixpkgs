@@ -1,7 +1,7 @@
-diff --git a/daemon/gdm-slave.c b/daemon/gdm-slave.c
+diff --git a/daemon/gdm-display.c b/daemon/gdm-display.c
 index 1afe48e..e3d1ec2 100644
---- a/daemon/gdm-slave.c
-+++ b/daemon/gdm-slave.c
+--- a/daemon/gdm-display.c
++++ b/daemon/gdm-display.c
 @@ -291,9 +291,10 @@ gdm_slave_connect_to_x11_display (GdmSlave *slave)
 
                  gdm_error_trap_push ();
