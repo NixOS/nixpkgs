@@ -7,6 +7,8 @@ kde {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  patches = [ ./commit-846cf02 ];
+
   meta = {
     description = "KDE Frontend to Mathematical Software";
   };
