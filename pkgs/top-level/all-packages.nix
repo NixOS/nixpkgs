@@ -3252,7 +3252,7 @@ let
   xflux = callPackage ../tools/misc/xflux { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
-  libxfs = xfsprogs.lib;
+  libxfs = xfsprogs.dev; # outputs TODO
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
@@ -7136,7 +7136,7 @@ let
   );
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
-    paths = [ mesa_noglu mesa_glu ];
+    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
   });
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {

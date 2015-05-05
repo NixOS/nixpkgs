@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "05smn9hqdp7iscc1dj4cxp1mrlad7b50lhlnlqisfzf493i2f2jy";
   };
 
+  # outputs TODO: some modules are "corrupt", even without splitting vlc
+
   buildInputs =
     [ xz bzip2 perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
       libbluray dbus fribidi libvorbis libtheora speex lua5 libgcrypt

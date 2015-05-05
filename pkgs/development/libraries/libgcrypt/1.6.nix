@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pq2nwfqgggrsh8rk84659d80vfnlkbphwqjwahccd5fjdxr3d21";
   };
 
-  nativeBuildInputs = [ transfig ghostscript texinfo ];
+  # transfig broke with multiple outputs, and it doesn't seem important here
+  nativeBuildInputs = [ /*transfig*/ ghostscript texinfo ];
 
   propagatedBuildInputs = [ libgpgerror ];
 
