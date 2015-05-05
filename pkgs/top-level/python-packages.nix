@@ -4998,7 +4998,7 @@ let
       sha256 = "12l6fqavykjinq286i9pgbbbrv5lq2mmiji91g0m05lfdx9pg4y1";
     };
 
-    propagatedBuildInputs = with self; [ simplejson ];
+    propagatedBuildInputs = with self; [ simplejson psutil ];
 
     meta = {
       homepage = "https://github.com/logentries/le";
