@@ -47,7 +47,9 @@ rec {
 
   # Construct a library search path (such as RPATH) containing the
   # libraries for a set of packages, e.g. "${pkg1}/lib:${pkg2}/lib:...".
-  makeLibraryPath = makeSearchPath "lib";
+  makeLibraryPath = pkgs: makeSearchPath "lib"
+    # try to guess the right output of each pkg
+    (map (pkg: pkg.lib or (pkg.out or pkg)) pkgs);
 
 
   # Idem for Perl search paths.

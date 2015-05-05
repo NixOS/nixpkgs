@@ -115,7 +115,15 @@ in
 
     system.path = pkgs.buildEnv {
       name = "system-path";
-      paths = config.environment.systemPackages;
+      paths = let
+        #outputs TODO: make it user-customizable?
+        pkgOutputFun = pkg: lib.filter (p: p!=null) [
+          (pkg.bin or (pkg.out or pkg))
+          (pkg.man or null)
+          (pkg.info or null)
+          (pkg.doc or null)
+        ];
+        in lib.concatMap pkgOutputFun config.environment.systemPackages;
       inherit (config.environment) pathsToLink;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
