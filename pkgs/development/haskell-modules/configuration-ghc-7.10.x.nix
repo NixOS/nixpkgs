@@ -119,10 +119,6 @@ self: super: {
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
-  ghc-events = appendPatch super.ghc-events (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/haskell/ghc-events/pull/8.patch";
-    sha256 = "1k881jrvzfvs761jgfhf5nsbmbc33c9333l4s0f5088p46ff2n1l";
-  });
   dependent-sum-template = appendPatch super.dependent-sum-template (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/mokus0/dependent-sum-template/pull/4.patch";
     sha256 = "1yb1ny4ckl4d3sf4xnvpbsa9rw2dficzgipijs5s3729dnsc3rb0";
