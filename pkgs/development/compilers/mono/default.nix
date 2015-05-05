@@ -6,10 +6,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "3.12.1";
+  version = "4.0.1";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "03dn68vignknzxy1rx75p16qx1ild27hixgvr5mw0j19mx9z332x";
+    sha256 = "1kjv1zhcmd2qfr89vkaas6541n5jfzisn3y030l6lg6lp3ria7zz";
   };
 
   buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib];
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
-  #Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
-  #Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
-  #http://www.mono-project.com/Config_DllMap
+  # Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
+  # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
+  # http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | while read i; do
         sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
