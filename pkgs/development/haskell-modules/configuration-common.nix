@@ -811,4 +811,7 @@ self: super: {
   # https://github.com/ivanperez-keera/Yampa/issues/10
   Yampa = dontCheck super.Yampa;
 
+  # https://github.com/adamwalker/sdr/issues/1
+  sdr = dontCheck super.sdr;
+
 }
