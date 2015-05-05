@@ -513,8 +513,8 @@ script) if it exists.</para>
     <term><varname>dontAddPrefix</varname></term>
     <listitem><para>By default, the flag
     <literal>--prefix=$prefix</literal> is added to the configure
-    flags.  If this is undesirable, set this variable to a non-empty
-    value.</para></listitem>
+    flags.  If this is undesirable, set this variable to
+    true.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -530,8 +530,7 @@ script) if it exists.</para>
     <listitem><para>By default, the flag
     <literal>--disable-dependency-tracking</literal> is added to the
     configure flags to speed up Automake-based builds.  If this is
-    undesirable, set this variable to a non-empty
-    value.</para></listitem>
+    undesirable, set this variable to true.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -544,7 +543,7 @@ script) if it exists.</para>
     variables in the Libtool script to prevent Libtool from using
     libraries in <filename>/usr/lib</filename> and
     such.</para></footnote>.  If this is undesirable, set this
-    variable to a non-empty value.</para></listitem>
+    variable to true.</para></listitem>
   </varlistentry>
   
   <varlistentry>
@@ -552,8 +551,8 @@ script) if it exists.</para>
     <listitem><para>By default, when the configure script has
     <option>--enable-static</option>, the option
     <option>--disable-static</option> is added to the configure flags.</para>
-    <para></para>If this is undesirable, set this variable to a non-empty
-    value.</para></listitem>
+    <para></para>If this is undesirable, set this variable to
+    true.</para></listitem>
   </varlistentry>
 
   <varlistentry>
