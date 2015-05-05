@@ -4866,7 +4866,7 @@ let
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby165 = callPackage ../development/interpreters/jruby { };
-  
+
   jython = callPackage ../development/interpreters/jython {};
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
@@ -13111,8 +13111,6 @@ let
   };
 
   unvanquished = callPackage ../games/unvanquished { };
-
-  uqm = callPackage ../games/uqm { };
 
   urbanterror = callPackage ../games/urbanterror { };
 
