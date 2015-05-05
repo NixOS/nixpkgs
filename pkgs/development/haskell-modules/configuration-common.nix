@@ -802,4 +802,9 @@ self: super: {
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
 
+  # https://github.com/anton-k/temporal-music-notation/issues/1
+  temporal-music-notation = markBroken super.temporal-music-notation;
+  temporal-music-notation-demo = dontDistribute super.temporal-music-notation-demo;
+  temporal-music-notation-western = dontDistribute super.temporal-music-notation-western;
+
 }
