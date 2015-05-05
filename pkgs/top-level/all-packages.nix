@@ -5165,6 +5165,8 @@ let
   flex_2_5_39 = callPackage ../development/tools/parsing/flex/2.5.39.nix { };
   flex = flex_2_5_39;
 
+  flexcpp = callPackage ../development/tools/parsing/flexc++ { };
+
   m4 = gnum4;
 
   geis = callPackage ../development/libraries/geis { };
