@@ -5551,6 +5551,8 @@ let
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
+  bobcat = callPackage ../development/libraries/bobcat { };
+
   boehmgc = callPackage ../development/libraries/boehm-gc { };
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
