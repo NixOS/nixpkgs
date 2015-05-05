@@ -73,4 +73,7 @@ self: super: {
   # Test suite won't compile.
   unix-time = dontCheck super.unix-time;
 
+  # Avoid depending on tasty-golden.
+  monad-par = dontCheck super.monad-par;
+
 }
