@@ -801,6 +801,7 @@ self: super: {
   singleton-nats = dontDistribute super.singleton-nats;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
+  clash-lib = dontDistribute super.clash-lib;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
