@@ -70,4 +70,7 @@ self: super: {
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
+  # Test suite won't compile.
+  unix-time = dontCheck super.unix-time;
+
 }
