@@ -131,6 +131,10 @@ let
         patches = [
           ./plasma-desktop/plasma-desktop-hwclock.patch
           ./plasma-desktop/plasma-desktop-zoneinfo.patch
+          (substituteAll {
+            src = ./plasma-desktop/plasma-desktop-xkb-rules.patch;
+            xkb = pkgs.xkeyboard_config;
+          })
         ];
         preConfigure = ''
           substituteInPlace kcms/dateandtime/helper.cpp \
