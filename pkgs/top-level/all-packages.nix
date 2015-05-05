@@ -1553,6 +1553,8 @@ let
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+
   gource = callPackage ../applications/version-management/gource { };
 
   gparted = callPackage ../tools/misc/gparted { };
