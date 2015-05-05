@@ -411,6 +411,7 @@
       lambdabot = 191;
       #asterisk = 192; # unused
       plex = 193;
+      sabnzbd = 194;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
