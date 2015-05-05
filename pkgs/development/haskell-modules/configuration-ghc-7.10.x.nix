@@ -331,4 +331,7 @@ self: super: {
   hipbot = dontDistribute super.hipbot;
   bitcoin-api = dontDistribute super.bitcoin-api;
 
+  # https://github.com/HugoDaniel/RFC3339/issues/14
+  timerep = dontCheck super.timerep;
+
 }
