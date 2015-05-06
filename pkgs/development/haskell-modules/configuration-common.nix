@@ -808,9 +808,6 @@ self: super: {
   temporal-music-notation-demo = dontDistribute super.temporal-music-notation-demo;
   temporal-music-notation-western = dontDistribute super.temporal-music-notation-western;
 
-  # https://github.com/ivanperez-keera/Yampa/issues/10
-  Yampa = dontCheck super.Yampa;
-
   # https://github.com/adamwalker/sdr/issues/1
   sdr = dontCheck super.sdr;
 
