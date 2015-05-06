@@ -6366,6 +6366,8 @@ let
 
   libaal = callPackage ../development/libraries/libaal { };
 
+  libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
+
   libao = callPackage ../development/libraries/libao {
     usePulseAudio = config.pulseaudio or true;
   };
