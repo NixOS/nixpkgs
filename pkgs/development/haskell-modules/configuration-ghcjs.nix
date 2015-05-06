@@ -99,4 +99,8 @@ self: super: {
     buildDepends = [ self.base self.mtl self.text self.ghcjs-base ];
   });
 
+  ghc-paths = overrideCabal super.ghc-paths (drv: {
+    patches = [ ./ghc-paths-nix-ghcjs.patch ];
+  });
+
 }
