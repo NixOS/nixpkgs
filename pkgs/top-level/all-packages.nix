@@ -7994,7 +7994,9 @@ let
 
   czmq = callPackage ../development/libraries/czmq { };
 
-  zita-alsa-pcmi = callPackage ../development/libraries/zita-alsa-pcmi { };
+  zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
+
+  zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
@@ -11197,6 +11199,8 @@ let
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
   irssi_otr = callPackage ../applications/networking/irc/irssi/otr { };
+
+  ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   bip = callPackage ../applications/networking/irc/bip { };
 
