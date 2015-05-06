@@ -5508,6 +5508,8 @@ let
 
   accelio = callPackage ../development/libraries/accelio { };
 
+  accounts-qt = callPackage ../development/libraries/accounts-qt { };
+
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
