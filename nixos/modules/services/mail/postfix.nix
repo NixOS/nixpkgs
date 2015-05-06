@@ -266,6 +266,10 @@ in
         default = "";
         description = "
           Additional entries to put verbatim into aliases file.
+          man aliases: 
+            The aliases table provides a system-wide mechanism to 
+            redirect mail for local recipients. The redirections are 
+            processed by the Postfix local(8) delivery agent. 
         ";
       };
 
@@ -303,6 +307,11 @@ in
         default = "";
         description = "
           Entries for the virtual alias map.
+          man virtual: 
+            The optional virtual alias table specifies address alias- 
+            ing for arbitrary local or non-local recipient addresses. 
+            Virtual aliasing is recursive, and is done by the Postfix 
+            cleanup(8) daemon. 
         ";
       };
 
