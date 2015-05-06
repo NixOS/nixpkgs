@@ -125,6 +125,7 @@ let
         TIFF = libtiff;
         Taglib = taglib;
         TelepathyQt4 = telepathy_qt;
+        TelepathyQt5 = telepathy_qt5;
         TunePimp = libtunepimp;
         UDev = udev;
         USB = libusb;

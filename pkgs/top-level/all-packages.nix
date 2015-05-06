@@ -7804,6 +7804,8 @@ let
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
+  telepathy_qt5 = callPackage ../development/libraries/telepathy/qt5 { };
+
   tevent = callPackage ../development/libraries/tevent {
     python = python2;
   };
