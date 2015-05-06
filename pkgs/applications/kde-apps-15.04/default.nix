@@ -12,7 +12,7 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, symlinkJoin, kde4, kf5, pkgs, qt4, qt5, stdenv, debug ? false }:
+{ autonix, symlinkJoin, kde4, kf5, pkgs, qt4, qt5, stdenv, callPackage, debug ? false }:
 
 with stdenv.lib; with autonix;
 
@@ -191,6 +191,14 @@ let
         nativeBuildInputs = super.ffmpegthumbs.nativeBuildInputs ++ [pkgconfig];
       };
 
+      kaccounts-integration =
+        let accounts-qt = pkgs.accounts-qt.override { inherit qt5; };
+            signon = pkgs.signon.override { inherit qt5; };
+        in super.kaccounts-integration // {
+          buildInputs = super.kaccounts-integration.buildInputs
+            ++ [ accounts-qt signon ];
+        };
+
       kaccounts-providers = super.kaccounts-providers // {
         buildInputs = super.kaccounts-providers.buildInputs
           ++ (with pkgs; [ intltool libaccounts-glib ]);
@@ -327,6 +335,13 @@ let
 
       libksane = with pkgs; super.libksane // {
         buildInputs = super.libksane.buildInputs ++ [scope.KDE4 saneBackends];
+      };
+
+      marble = super.marble // {
+        preConfigure = ''
+          ${super.preConfigure or ""}
+          cmakeFlags="$cmakeFlags -DCMAKE_MODULES_INSTALL_PATH=$out/lib/cmake"
+        '';
       };
 
     };
