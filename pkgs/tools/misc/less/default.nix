@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.greenwoodsoftware.com/less/${name}.tar.gz";
-    sha256 = "1w7d10h6hzgz5zww8g4aja2fbl7xwx30vd07hcg1fcy7hm8yc1q2";
+    sha256 = "16703m6g5l97af3jwpypgac7gpmh3yjkdpqygf5a2scfip0hxm2g";
   };
 
   # Look for ‘sysless’ in /etc.
