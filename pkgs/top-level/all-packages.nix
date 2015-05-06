@@ -1884,7 +1884,7 @@ let
   else
     nodePackages_0_12;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_0; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_2; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
@@ -6935,6 +6935,8 @@ let
   libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
     automake = automake113x; # fails with 14
   });
+
+  libuv = libuvVersions.v1_4_2;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
