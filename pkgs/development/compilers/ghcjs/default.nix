@@ -59,8 +59,8 @@ in mkDerivation (rec {
   inherit version;
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "64c3768186d73d8c185b42d4d14dfb943919ee56"; # master branch
-    sha256 = "1w7rwcqzihg6h2j0khar7kjn8vdjg9ngjk6bndpiqcgf3kwfmvhf";
+    rev = "d4322c2ae4467420b28eca99f0c0abd00caf5d4a"; # master branch
+    sha256 = "12mvl4l1i993j86n9wkwcs567jm13javghbxapjjsc7493xpmya5";
   };
   isLibrary = true;
   isExecutable = true;
