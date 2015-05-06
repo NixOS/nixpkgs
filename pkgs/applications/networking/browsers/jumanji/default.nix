@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "jumanji-${version}";
-  version = "20140622";
+  version = "20150107";
 
   src = fetchgit {
     url = git://pwmt.org/jumanji.git;
-    rev = "8f40487304a6a931487c411b25001f2bb5cf8d4f";
-    sha256 = "1hdk09rayyv2knxzn4n7d41dvh34gdk9ra75x7g9n985w13pkinv";
+    rev = "f8e04e5b5a9fec47d49ca63a096e5d35be281151";
+    sha256 = "1xq06iabr4y76faf4w1cx6fhwdksfsxggz1ndny7icniwjzk98h9";
   };
 
   buildInputs = [ girara pkgconfig gtk webkitgtk makeWrapper ];
