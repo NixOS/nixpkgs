@@ -205,6 +205,14 @@ let
         nativeBuildInputs = super.kalzium.nativeBuildInputs ++ [pkgconfig];
       };
 
+      kate = super.kate // {
+        buildInputs =
+          super.kate.buildInputs
+          ++ (with kf5; [ kconfig kguiaddons kiconthemes ki18n kinit kjobwidgets
+                          kio kparts ktexteditor kwindowsystem kxmlgui ]);
+        nativeBuildInputs = super.kate.nativeBuildInputs ++ (with kf5; [ kdoctools ]);
+      };
+
       kde-runtime = with pkgs; super.kde-runtime // {
         buildInputs =
           super.kde-runtime.buildInputs ++ [libcanberra];
