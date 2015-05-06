@@ -830,6 +830,7 @@ let
     libgcrypt = libgcrypt_1_6;
     czmq = null; # Currently Broken
     hadoop = null; # Currently Broken
+    hiredis = null; # Currently Broken
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
