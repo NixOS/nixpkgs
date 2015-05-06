@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-P2P-Validate-SSID-element-length-before-copying-it-C.patch
     ./build-fix.patch
+    ./p2p-fix.patch
   ];
 
   postInstall = ''
