@@ -1063,6 +1063,9 @@ let
   };
 
   cloog = callPackage ../development/libraries/cloog { };
+  cloog_0_18_0 = callPackage ../development/libraries/cloog/0.18.0.nix {
+    isl = isl_0_11;
+  };
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
@@ -1766,6 +1769,7 @@ let
   ised = callPackage ../tools/misc/ised {};
 
   isl = callPackage ../development/libraries/isl { };
+  isl_0_11 = callPackage ../development/libraries/isl/0.11.1.nix { };
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
   isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
 
@@ -3613,6 +3617,10 @@ let
       if crossSystem != null && crossSystem.config == "i586-pc-gnu"
       then gnu.libpthreadCross
       else null;
+
+    isl = isl_0_11;
+
+    cloog = cloog_0_18_0;
   }));
 
   gcc51 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5.1 {
