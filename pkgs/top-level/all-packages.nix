@@ -8240,6 +8240,8 @@ let
 
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
+  zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
+
   zziplib = callPackage ../development/libraries/zziplib { };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
