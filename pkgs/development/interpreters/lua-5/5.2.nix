@@ -3,7 +3,7 @@
 let
   dsoPatch = fetchurl {
     url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/liblua.so.patch?h=packages/lua";
-    sha256 = "1n53869fshazj1w52kdh582nwyg2rqf2ssvnjqvdlb9s89vkrj1c";
+    sha256 = "1by1dy4ql61f5c6njq9ibf9kaqm3y633g2q8j54iyjr4cxvqwqz9";
     name = "lua-arch.patch";
   };
 in
