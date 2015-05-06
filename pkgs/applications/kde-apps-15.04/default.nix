@@ -191,6 +191,16 @@ let
         nativeBuildInputs = super.ffmpegthumbs.nativeBuildInputs ++ [pkgconfig];
       };
 
+      kaccounts-providers = super.kaccounts-providers // {
+        buildInputs = super.kaccounts-providers.buildInputs
+          ++ (with pkgs; [ intltool libaccounts-glib ]);
+        preConfigure = ''
+          ${super.kaccounts-providers.preConfigure or ""}
+          substituteInPlace webkit-options/CMakeLists.txt \
+            --replace "/etc/signon-ui/webkit-options.d/" "$out/etc/signon-ui/webkit-options.d/"
+        '';
+      };
+
       kalzium = with pkgs; super.kalzium // {
         nativeBuildInputs = super.kalzium.nativeBuildInputs ++ [pkgconfig];
       };
