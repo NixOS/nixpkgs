@@ -48,8 +48,8 @@ self: super: {
 
   # Newer versions don't compile.
   Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;
-  cabal-install_1_18_0_8 = super.cabal-install_1_18_0_8.override { Cabal = self.Cabal_1_18_1_6; };
-  cabal-install = self.cabal-install_1_18_0_8;
+  cabal-install_1_18_1_0 = super.cabal-install_1_18_1_0.override { Cabal = self.Cabal_1_18_1_6; };
+  cabal-install = self.cabal-install_1_18_1_0;
 
   # Needs Cabal >= 1.18.x.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };

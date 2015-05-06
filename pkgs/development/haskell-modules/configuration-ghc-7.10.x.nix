@@ -314,7 +314,7 @@ self: super: {
   annotated-wl-pprint_0_5_3 = markBroken super.annotated-wl-pprint_0_5_3;
   c2hs_0_20_1 = markBroken super.c2hs_0_20_1;
   Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
-  cabal-install_1_18_0_8 = markBroken super.cabal-install_1_18_0_8;
+  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
   control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
   equivalence_0_2_5 = markBroken super.equivalence_0_2_5;
