@@ -7709,6 +7709,8 @@ let
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
+  signon = callPackage ../development/libraries/signon { };
+
   spandsp = callPackage ../development/libraries/spandsp {};
 
   spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
