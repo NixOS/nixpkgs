@@ -49,7 +49,8 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ];
+  ] ++ stdenv.lib.optionals (stdenv.platform ? kernelMakeFlags)
+    stdenv.platform.kernelMakeFlags;
 
   drvAttrs = config_: platform: kernelPatches: configfile:
     let

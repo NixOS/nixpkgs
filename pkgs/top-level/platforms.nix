@@ -25,7 +25,7 @@ rec {
     name = "sheevaplug";
     kernelMajor = "2.6";
     kernelHeadersBaseConfig = "kirkwood_defconfig";
-    kernelBaseConfig = "kirkwood_defconfig";
+    kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
     kernelExtraConfig =
@@ -123,10 +123,12 @@ rec {
         KGDB_SERIAL_CONSOLE y
         KGDB_KDB y
       '';
+    kernelMakeFlags = [ "LOADADDR=0x0200000" ];
     kernelTarget = "uImage";
     uboot = "sheevaplug";
     # Only for uboot = uboot :
     ubootConfig = "sheevaplug_config";
+    kernelDTB = true; # Beyond 3.10
   };
 
   raspberrypi = {
