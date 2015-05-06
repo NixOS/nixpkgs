@@ -2338,6 +2338,8 @@ let
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
+  open-pdf-presenter = callPackage ../applications/misc/open-pdf-presenter { };
+
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
   optipng = callPackage ../tools/graphics/optipng {
