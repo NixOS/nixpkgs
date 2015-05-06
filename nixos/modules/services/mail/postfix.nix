@@ -265,7 +265,7 @@ in
       extraAliases = mkOption {
         default = "";
         description = "
-          Additional entries to put verbatim into aliases file.
+          Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
         ";
       };
 
@@ -302,7 +302,7 @@ in
       virtual = mkOption {
         default = "";
         description = "
-          Entries for the virtual alias map.
+          Entries for the virtual alias map, cf. man-page virtual(8).
         ";
       };
 
