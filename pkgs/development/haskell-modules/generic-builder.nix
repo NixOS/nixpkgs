@@ -114,7 +114,7 @@ let
 
   ghcEnv = ghc.withPackages (p: haskellBuildInputs);
 
-  setupBuilder = if isGhcjs then "${ghc.nativeGhc}/bin/ghc" else "ghc";
+  setupCommand = if isGhcjs then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js" else "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
 
 in
@@ -186,7 +186,7 @@ stdenv.mkDerivation ({
     done
 
     echo setupCompileFlags: $setupCompileFlags
-    ${setupBuilder} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
+    ${ghcCommand} $setupCompileFlags --make -o Setup -odir $TMPDIR -hidir $TMPDIR $i
 
     runHook postCompileBuildDriver
   '';
@@ -197,7 +197,7 @@ stdenv.mkDerivation ({
     unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
 
     echo configureFlags: $configureFlags
-    ./Setup configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
+    ${setupCommand} configure $configureFlags 2>&1 | ${coreutils}/bin/tee "$NIX_BUILD_TOP/cabal-configure.log"
     if ${gnugrep}/bin/egrep -q '^Warning:.*depends on multiple versions' "$NIX_BUILD_TOP/cabal-configure.log"; then
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
       exit 1
@@ -210,20 +210,20 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ./Setup build ${buildTarget}
+    ${setupCommand} build ${buildTarget}
     runHook postBuild
   '';
 
   checkPhase = ''
     runHook preCheck
-    ./Setup test ${testTarget}
+    ${setupCommand} test ${testTarget}
     runHook postCheck
   '';
 
   haddockPhase = ''
     runHook preHaddock
     ${optionalString (doHaddock && hasActiveLibrary) ''
-      ./Setup haddock --html \
+      ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
         ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
     ''}
@@ -233,12 +233,12 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !hasActiveLibrary then "./Setup install" else ''
-      ./Setup copy
+    ${if !hasActiveLibrary then "${setupCommand} install" else ''
+      ${setupCommand} copy
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
-      ./Setup register --gen-pkg-config=$packageConfFile
+      ${setupCommand} register --gen-pkg-config=$packageConfFile
       local pkgId=$( ${gnused}/bin/sed -n -e 's|^id: ||p' $packageConfFile )
       mv $packageConfFile $packageConfDir/$pkgId.conf
     ''}

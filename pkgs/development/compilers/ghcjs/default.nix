@@ -39,10 +39,6 @@
 }:
 let
   version = "0.1.0";
-  ghcArch = if pkgs.stdenv.system == "i686-linux"
-    then "i386-linux"
-    else pkgs.stdenv.system;
-  libDir = "share/ghcjs/${ghcArch}-${version}-${ghc.version}/ghcjs";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
     rev = "ab8765edcb507b8b810e3c324fd5bd5af2b69d8f"; # 7.10 branch
@@ -84,14 +80,19 @@ in mkDerivation (rec {
   ];
   patches = [ ./ghcjs.patch ];
   postPatch = ''
-    substituteInPlace Setup.hs --replace "/usr/bin/env" "${coreutils}/bin/env"
-    substituteInPlace src/Compiler/Info.hs --replace "@PREFIX@" "$out"
+    substituteInPlace Setup.hs \
+      --replace "/usr/bin/env" "${coreutils}/bin/env"
+
+    substituteInPlace src/Compiler/Info.hs \
+      --replace "@PREFIX@" "$out"          \
+      --replace "@VERSION@" "${version}"
+
     substituteInPlace src-bin/Boot.hs \
       --replace "@PREFIX@" "$out"     \
       --replace "@CC@"     "${stdenv.cc}/bin/cc"
   '';
   preBuild = ''
-    local topDir=$out/${libDir}
+    local topDir=$out/lib/ghcjs-${version}
     mkdir -p $topDir
 
     cp -r ${ghcjsBoot} $topDir/ghcjs-boot
@@ -116,9 +117,9 @@ in mkDerivation (rec {
         --with-gmp-libraries ${gmp}/lib
   '';
   passthru = {
-    inherit libDir;
     isGhcjs = true;
     nativeGhc = ghc;
+    inherit nodejs;
   };
 
   homepage = "https://github.com/ghcjs/ghcjs";
