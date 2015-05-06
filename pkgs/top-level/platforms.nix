@@ -483,4 +483,22 @@ rec {
       float = "hard";
     };
   };
+
+  armv7l-hf-multiplatform = {
+    name = "armv7l-hf-multiplatform";
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "multi_v7_defconfig";
+    kernelBaseConfig = "multi_v7_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    kernelExtraConfig = "";
+    kernelTarget = "zImage";
+    kernelDTB = true;
+    uboot = null;
+    gcc = {
+      arch = "armv7-a";
+      fpu = "vfpv3-d16";
+      float = "hard";
+    };
+  };
 }
