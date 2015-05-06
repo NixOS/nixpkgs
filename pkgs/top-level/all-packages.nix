@@ -4640,6 +4640,7 @@ let
     sasl = cyrus_sasl;
     inherit (pythonPackages) python boto setuptools distutils-cfg wrapPython;
     pythonProtobuf = pythonPackages.protobuf2_5;
+    perf = linuxPackages.perf;
   };
 
   mesos-dns = callPackage ../servers/dns/mesos-dns { };
