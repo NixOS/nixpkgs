@@ -7190,9 +7190,7 @@ let
     qt = qt4;
   };
 
-  mlt-qt5 = callPackage ../development/libraries/mlt {
-    qt = qt5;
-  };
+  mlt-qt5 = callPackage ../development/libraries/mlt/qt5.nix { };
 
   movit = callPackage ../development/libraries/movit { };
 
