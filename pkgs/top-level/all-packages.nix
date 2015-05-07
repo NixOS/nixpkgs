@@ -6824,6 +6824,8 @@ let
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
+  libpsl = callPackage ../development/libraries/libpsl { };
+
   libpst = callPackage ../development/libraries/libpst { };
 
   libpwquality = callPackage ../development/libraries/libpwquality { };
