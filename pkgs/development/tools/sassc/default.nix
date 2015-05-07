@@ -1,32 +1,26 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, libsass }:
+{ stdenv, fetchurl, autoreconfHook, libsass }:
 
 stdenv.mkDerivation rec {
-  name = "sassc";
-  version = "3.1.0";
+  name = "sassc-${version}";
+  version = "3.2.1";
 
-  src = fetchFromGitHub {
-    owner = "sass";
-    repo = "sassc";
-    rev = version;
-    sha256 = "0lpilmsir9b9292a4b8kq3zzg5cfh031p0krgam5rmsn39i6ivs4";
+  src = fetchurl {
+    url = "https://github.com/sass/sassc/archive/${version}.tar.gz";
+    sha256 = "18pp7ylcwfvfagvnpw660cdvv7cjl7pl9v8x7xr05fp2l6133rxw";
   };
 
-  preConfigure = ''
-    export SASSC_VERSION="3.1.0"
-    autoreconf --force --install
+  patchPhase = ''
+    export SASSC_VERSION=${version}
   '';
 
-  buildInputs = [ autoconf automake libtool libsass ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp sassc $out/bin/
-  '';
+  buildInputs = [ libsass ];
 
   meta = with stdenv.lib; {
     description = "A front-end for libsass";
-    license = licenses.mit;
     homepage = https://github.com/sass/sassc/;
+    license = licenses.mit;
     maintainers = with maintainers; [ pjones ];
     platforms = platforms.unix;
   };
