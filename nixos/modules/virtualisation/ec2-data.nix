@@ -79,8 +79,6 @@ with lib;
 
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
-
-        restartIfChanged = false;
       };
 
     systemd.services."print-host-key" =
