@@ -13,7 +13,7 @@ rec {
     ["/" "/usr" "/usr/local"];
 
 
-  preHookBase = ''
+  prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
     # libraries outside the Nix store (like the C library).
     export NIX_ENFORCE_PURITY=
@@ -29,8 +29,8 @@ rec {
     shopt -s expand_aliases
   '';
 
-  preHookOpenBSD = ''
-    ${preHookBase}
+  prehookOpenBSD = ''
+    ${prehookBase}
 
     alias make=gmake
     alias grep=ggrep
@@ -43,8 +43,8 @@ rec {
     shopt -s expand_aliases
   '';
 
-  preHookNetBSD = ''
-    ${preHookBase}
+  prehookNetBSD = ''
+    ${prehookBase}
 
     alias make=gmake
     alias sed=gsed
@@ -54,8 +54,8 @@ rec {
   '';
 
   # Only used to build stdenvCygwin, check cygwin/default.nix.
-  preHookCygwin = ''
-    ${preHookBase}
+  prehookCygwin = ''
+    ${prehookBase}
 
     shopt -s expand_aliases
 
@@ -83,8 +83,8 @@ rec {
         if system == "x86_64-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
         if system == "i686-netbsd" then prehookNetBSD else
-        if system == "i686-cygwin" then preHookCygwin else
-        if system == "x86_64-cygwin" then preHookCygwin else
+        if system == "i686-cygwin" then prehookCygwin else
+        if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
 
       extraBuildInputs =
