@@ -1,12 +1,12 @@
-{ buildRubyGem, coreutils, fetchFromGitHub }:
+{ buildRubyGem, coreutils, fetchgit }:
 
 buildRubyGem {
   name = "bundler-HEAD";
-  src = fetchFromGitHub {
-    owner  = "bundler";
-    repo   = "bundler";
-    rev    = "a2343c9eabf5403d8ffcbca4dea33d18a60fc157";
-    sha256 = "05275drvlrrlbync39qdw9nrsabb5yxcns7a7rk5c0ggsfc6hsnb";
+  src = fetchgit {
+    url = "https://github.com/bundler/bundler.git";
+    rev = "a2343c9eabf5403d8ffcbca4dea33d18a60fc157";
+    sha256 = "0q7cjmz1fsrw3yfsr3h274qjamwnw01xgaqq3h5cjbqlrni4iq7k";
+    leaveDotGit = true;
   };
   dontPatchShebangs = true;
   postInstall = ''
