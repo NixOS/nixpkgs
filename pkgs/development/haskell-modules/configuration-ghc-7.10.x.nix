@@ -189,13 +189,6 @@ self: super: {
   brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
   unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
 
-  # Updated Cabal file from Hackage tightened version bounds for some reason.
-  edit-distance = let pkg = appendPatch super.edit-distance ./edit-distance-fix-boundaries.patch;
-                  in appendPatch pkg (pkgs.fetchpatch {
-                    url = "https://patch-diff.githubusercontent.com/raw/batterseapower/edit-distance/pull/3.patch";
-                    sha256 = "0v47pa5ymh9f23bqpkdv3k7vnb6h3ssccdmjdylhs2ybarqzrcwh";
-                  });
-
   # https://github.com/BNFC/bnfc/issues/137
   BNFC = markBrokenVersion "2.7.1" super.BNFC;
   cubical = dontDistribute super.cubical;
