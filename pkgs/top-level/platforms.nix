@@ -217,7 +217,7 @@ rec {
   raspberrypi2 = {
     name = "raspberrypi2";
     kernelMajor = "3.14";
-    kernelHeadersBaseConfig = "kirkwood_defconfig";
+    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "bcm2709_defconfig";
     kernelArch = "arm";
     kernelDTB = true;
@@ -470,7 +470,7 @@ rec {
   beaglebone = {
     name = "beaglebone";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "omap2plus_defconfig";
+    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "omap2plus_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
