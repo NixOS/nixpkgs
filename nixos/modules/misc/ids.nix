@@ -481,6 +481,7 @@
       cfdyndns = 227;
       pdnsd = 229;
       octoprint = 230;
+      taskserver = 231;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
