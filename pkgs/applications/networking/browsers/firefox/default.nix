@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
+{ lib, stdenv, fetchurl, pkgconfig, gtk, gtk3, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
+, enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
       gstreamer gst_plugins_base icu
-    ];
+    ]
+    ++ lib.optional enableGTK3 gtk3;
 
   configureFlags =
     [ "--enable-application=browser"
@@ -64,6 +66,7 @@ stdenv.mkDerivation rec {
       "--disable-updater"
       "--disable-pulseaudio"
     ]
+    ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
