@@ -7879,6 +7879,10 @@ let
     inherit (pythonPackages) gyp;
   };
 
+  v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
+    inherit (pythonPackages) gyp;
+  };
+
   v8 = callPackage ../development/libraries/v8 {
     inherit (pythonPackages) gyp;
   };
@@ -8470,6 +8474,10 @@ let
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
+
+  eventstore = callPackage ../servers/nosql/eventstore {
+    v8 = v8_3_24_10;
+  };
 
   etcdctl = callPackage ../development/tools/etcdctl { };
 
