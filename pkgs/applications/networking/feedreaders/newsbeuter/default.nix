@@ -2,11 +2,11 @@
 , gettext, libiconv, makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
-  name = "newsbeuter-2.8";
+  name = "newsbeuter-2.9";
 
   src = fetchurl {
     url = "http://www.newsbeuter.org/downloads/${name}.tar.gz";
-    sha256 = "013qi8yghpms2qq1b3xbrlmfgpj0ybgk0qhj245ni4kpxila0wn8";
+    sha256 = "1j1x0hgwxz11dckk81ncalgylj5y5fgw5bcmp9qb5hq9kc0vza3l";
 
   };
 
@@ -22,14 +22,13 @@ stdenv.mkDerivation rec {
     export LDFLAGS=-lncursesw
   '';
 
-  installPhase = ''
-    DESTDIR=$out prefix=\"\" make install
-  ''
-    + stdenv.lib.optionalString stdenv.isDarwin ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-      done
-    '';
+  installFlags = [ "DESTDIR=$(out)" "prefix=" ];
+
+  installPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
+    done
+  '';
 
   meta = {
     homepage    = http://www.newsbeuter.org;
@@ -39,4 +38,3 @@ stdenv.mkDerivation rec {
     platforms   = stdenv.lib.platforms.unix;
   };
 }
-

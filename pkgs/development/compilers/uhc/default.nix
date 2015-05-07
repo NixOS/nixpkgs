@@ -1,22 +1,19 @@
-{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages,
-  shuffle,
-  hashable, mtl, network, uhc-util, uulib
-}:
+{ stdenv, coreutils, fetchgit, m4, libtool, clang, ghcWithPackages }:
 
-let wrappedGhc = ghcWithPackages ( self: [hashable mtl network uhc-util uulib] );
+let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [shuffle hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
-  version = "1.1.8.10";
+  version = "1.1.9.0";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "449d9578e06af1362d7f746798f0aed57ab6ca88";
-    sha256 = "0f8abhl9idbc2qlnb7ynrb11yvm3y07vksyzs1yg6snjvlhfj5az";
+    rev = "0363bbcf4cf8c47d30c3a188e3e53b3f8454bbe4";
+    sha256 = "0sa9b341mm5ggmbydc33ja3h7k9w65qnki9gsaagb06gkvvqc7c2";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
 
-  buildInputs = [ m4 wrappedGhc clang libtool shuffle ];
+  buildInputs = [ m4 wrappedGhc clang libtool ];
 
   configureFlags = [ "--with-gcc=${clang}/bin/clang" ];
 
@@ -25,8 +22,8 @@ in stdenv.mkDerivation rec {
   # want that, and hack the build process to use a temporary package
   # configuration file instead.
   preConfigure = ''
-    p=`pwd`/uhc-local-packages
-    echo '[]' > $p
+    p=`pwd`/uhc-local-packages/
+    ghc-pkg init $p
     sed -i "s|--user|--package-db=$p|g" mk/shared.mk.in
     sed -i "s|-fglasgow-exts|-fglasgow-exts -package-conf=$p|g" mk/shared.mk.in
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/dist.mk

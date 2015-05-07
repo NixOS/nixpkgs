@@ -148,11 +148,12 @@ stdenv.mkDerivation rec {
     (mkEnable true                    "manpages"                   null)
     (mkEnable hasWebrtc               "webrtc-aec"                 null)
     (mkEnable true                    "adrian-aec"                 null)
-    (mkWith   true                    "system-user"                "pulseaudio")
-    (mkWith   true                    "system-group"               "pulseaudio")
+    (mkWith   true                    "system-user"                "pulse")
+    (mkWith   true                    "system-group"               "pulse")
     (mkWith   true                    "access-group"               "audio")
-    "--with-systemduserunitdir=\${out}/lib/systemd/user"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-mac-sysroot=/";
+    (mkWith   true                    "systemduserunitdir"         "\${out}/lib/systemd/user")
+    (mkWith   stdenv.isDarwin         "mac-sysroot"                "/")
+  ];
 
   enableParallelBuilding = true;
 

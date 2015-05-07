@@ -212,14 +212,14 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.2.0.8";
-    build = "141.1845774";
+    version = "1.2.0.12";
+    build = "141.1890965";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "1l201qv1aya1l9jrybgqclv2v2fgzdpcb6qsnxszcq3npplisw9h";
+      sha256 = "01k96rql192ksnprc4yai97fcals7msf06m9bx1q7asn46887h7n";
     };
   };
 
@@ -309,13 +309,13 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "9.0.3";
-    build = "139.1112";
+    version = "10.0.2";
+    build = "141.728";
     description = "Professional IDE for Web and JavaScript devlopment";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "e4cfe7b5f1220b68d880c4f236df9c9df2b1efcc04775afad6149d949f45f0aa";
+      sha256 = "0ghv1r145qb5kmp2x375f5674b86d51w024fz390znlnniclizqx";
     };
   };
 

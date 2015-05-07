@@ -11,7 +11,7 @@ rec {
   });
 
   busyboxMinimal = busybox.override {
-    useUclibc = true;
+    useMusl = true;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''

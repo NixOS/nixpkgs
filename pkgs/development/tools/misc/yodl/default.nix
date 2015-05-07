@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, icmake }:
+{ stdenv, fetchurl, perl, icmake, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "yodl-${version}";
@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts/.
-    sed -i 's;/usr;;g' INSTALL.im
-    substituteInPlace build --replace /usr/bin/icmake ${icmake}/bin/icmake
+    substituteInPlace INSTALL.im --replace /usr $out
+    patchShebangs ./build
     substituteInPlace macros/rawmacros/startdoc.pl --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace scripts/yodl2whatever.in --replace getopt ${utillinux}/bin/getopt
   '';
 
   buildPhase = ''
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ./build install programs $out
-    ./build install macros $out
-    ./build install man $out
+    ./build install programs
+    ./build install macros
+    ./build install man
   '';
 
   meta = with stdenv.lib; {

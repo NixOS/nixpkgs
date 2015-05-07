@@ -132,4 +132,8 @@ self: super: {
   # needs mtl-compat to build with mtl 2.1.x
   cgi = addBuildDepend super.cgi self.mtl-compat;
 
+  # Newer versions always trigger the non-deterministic library ID bug
+  # and are virtually impossible to compile on Hydra.
+  conduit = super.conduit_1_2_4_1;
+
 }

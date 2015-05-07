@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
 cat > sysimages.nix << "EOF"
+# This file is generated from generate-sysimages.sh. DO NOT EDIT.
+# Execute generate-sysimages.sh or fetch.sh to update the file.
 {stdenv, fetchurl, unzip}:
 
 let
