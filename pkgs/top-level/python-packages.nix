@@ -8501,13 +8501,12 @@ let
 
 
   powerline = buildPythonPackage rec {
-    rev  = "db80fc95ed01d2c559c4bdc7da8514ed3cc7fcd9";
-    name = "powerline-beta_${rev}";
-
+    rev  = "8164f42fb924f38dc5b9dd6d32063e8c3d41e504";
+    name = "powerline-2.1";
     src = pkgs.fetchurl {
-      url    = "https://github.com/Lokaltog/powerline/tarball/${rev}";
+      url    = "https://github.com/powerline/powerline/tarball/${rev}";
       name   = "${name}.tar.bz";
-      sha256 = "1csd4vasy0avwfxrpdr61plj6k1nzf36f6qvd9kl15s3lnspsfaz";
+      sha256 = "0xrasj1lh9ypz1q6q4k997rfym9r16bclfbpzjqj8qfkp4i62lz6";
     };
 
     propagatedBuildInputs = with self; [ pkgs.git pkgs.mercurial pkgs.bazaar self.psutil self.pygit2 ];
@@ -8532,7 +8531,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage    = https://github.com/Lokaltog/powerline;
+      homepage    = https://github.com/powerline/powerline;
       description = "The ultimate statusline/prompt utility";
       license     = licenses.mit;
       maintainers = with maintainers; [ lovek323 ];
