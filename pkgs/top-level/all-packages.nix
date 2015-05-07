@@ -13126,6 +13126,8 @@ let
 
   unvanquished = callPackage ../games/unvanquished { };
 
+  uqm = callPackage ../games/uqm { };
+
   urbanterror = callPackage ../games/urbanterror { };
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
