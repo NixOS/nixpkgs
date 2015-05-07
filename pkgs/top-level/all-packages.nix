@@ -4771,7 +4771,7 @@ let
   };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
   bundler_HEAD = import ../development/interpreters/ruby/bundler-head.nix {
-    inherit buildRubyGem coreutils fetchgit;
+    inherit buildRubyGem coreutils fetchFromGitHub;
   };
   defaultGemConfig = callPackage ../development/interpreters/ruby/bundler-env/default-gem-config.nix { };
   buildRubyGem = callPackage ../development/interpreters/ruby/gem.nix { };
