@@ -786,6 +786,10 @@ let
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
+    inherit (haskellngPackages) ghcWithPackages diagrams-builder;
+  };
+
   direnv = callPackage ../tools/misc/direnv { };
 
   discount = callPackage ../tools/text/discount { };
