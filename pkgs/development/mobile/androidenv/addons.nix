@@ -1,4 +1,6 @@
 
+# This file is generated from generate-addons.sh. DO NOT EDIT.
+# Execute generate-addons.sh or fetch.sh to update the file.
 {stdenv, fetchurl, unzip}:
 
 let
@@ -13,7 +15,7 @@ let
     });
 in
 {
-    
+
   google_apis_3 = buildGoogleApis {
     name = "google_apis-3";
       src = fetchurl {
@@ -25,7 +27,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_4 = buildGoogleApis {
     name = "google_apis-4";
       src = fetchurl {
@@ -37,7 +39,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_5 = buildGoogleApis {
     name = "google_apis-5";
       src = fetchurl {
@@ -49,7 +51,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_6 = buildGoogleApis {
     name = "google_apis-6";
       src = fetchurl {
@@ -61,7 +63,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_7 = buildGoogleApis {
     name = "google_apis-7";
       src = fetchurl {
@@ -73,7 +75,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_8 = buildGoogleApis {
     name = "google_apis-8";
       src = fetchurl {
@@ -85,7 +87,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_9 = buildGoogleApis {
     name = "google_apis-9";
       src = fetchurl {
@@ -97,7 +99,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_10 = buildGoogleApis {
     name = "google_apis-10";
       src = fetchurl {
@@ -109,7 +111,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_11 = buildGoogleApis {
     name = "google_apis-11";
       src = fetchurl {
@@ -121,7 +123,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_12 = buildGoogleApis {
     name = "google_apis-12";
       src = fetchurl {
@@ -133,7 +135,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_13 = buildGoogleApis {
     name = "google_apis-13";
       src = fetchurl {
@@ -145,7 +147,7 @@ in
         url = http://developer.android.com/;
       };
     };
-    
+
   google_apis_14 = buildGoogleApis {
     name = "google_apis-14";
       src = fetchurl {
@@ -154,10 +156,10 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        
+
       };
     };
-    
+
   google_apis_15 = buildGoogleApis {
     name = "google_apis-15";
       src = fetchurl {
@@ -166,10 +168,10 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        
+
       };
     };
-    
+
   google_apis_16 = buildGoogleApis {
     name = "google_apis-16";
       src = fetchurl {
@@ -178,10 +180,10 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        
+
       };
     };
-    
+
   google_apis_17 = buildGoogleApis {
     name = "google_apis-17";
       src = fetchurl {
@@ -190,10 +192,10 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        
+
       };
     };
-    
+
   google_apis_18 = buildGoogleApis {
     name = "google_apis-18";
       src = fetchurl {
@@ -202,38 +204,63 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        
+
       };
     };
-    
+
   google_apis_19 = buildGoogleApis {
     name = "google_apis-19";
       src = fetchurl {
-        url = https://dl-ssl.google.com/android/repository/google_apis-19_r07.zip;
-        sha1 = "150f5a3fec4f03313ca770b90126605619bd713c";
+        url = https://dl-ssl.google.com/android/repository/google_apis-19_r13.zip;
+        sha1 = "75c8af27f1fdf83dc28057537b5bd62b794365cc";
       };
       meta = {
         description = "Android + Google APIs";
-        
+
       };
     };
-  
+
+  google_apis_21 = buildGoogleApis {
+    name = "google_apis-21";
+      src = fetchurl {
+        url = https://dl-ssl.google.com/android/repository/google_apis-21_r01.zip;
+        sha1 = "66a754efb24e9bb07cc51648426443c7586c9d4a";
+      };
+      meta = {
+        description = "Android + Google APIs";
+
+      };
+    };
+
+  google_apis_22 = buildGoogleApis {
+    name = "google_apis-22";
+      src = fetchurl {
+        url = https://dl-ssl.google.com/android/repository/google_apis-22_r01.zip;
+        sha1 = "5def0f42160cba8acff51b9c0c7e8be313de84f5";
+      };
+      meta = {
+        description = "Android + Google APIs";
+
+      };
+    };
+
   android_support_extra = buildGoogleApis {
     name = "android_support_extra";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/support_r20.zip;
-      sha1 = "719c260dc3eb950712988f987daaf91afa9e36af";
+      url = https://dl-ssl.google.com/android/repository/support_r22.1.1.zip;
+      sha1 = "88bdc7b4074065ed28681f39e6b32c4f7ab45d94";
     };
     meta = {
       description = "Android Support Library";
       url = http://developer.android.com/;
     };
   };
+
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl-ssl.google.com/android/repository/google_play_services_3265130_r12.zip;
-      sha1 = "92558dbc380bba3d55d0ec181167fb05ce7c79d9";
+      url = https://dl-ssl.google.com/android/repository/google_play_services_7327000_r24.zip;
+      sha1 = "9dc5092c1043d6d9c162d481e668b95fc2f36782";
     };
     meta = {
       description = "Google Play services client library and sample code";
@@ -241,6 +268,4 @@ in
     };
   };
 
-  
 }
-  

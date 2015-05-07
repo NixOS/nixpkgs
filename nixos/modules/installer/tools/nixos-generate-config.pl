@@ -352,7 +352,7 @@ EOF
     if ($fsType eq "btrfs") {
         my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
         if ($status != 0 || join("", @msg) =~ /ERROR:/) {
-            die "Failed to retreive subvolume info for $mountPoint\n";
+            die "Failed to retrieve subvolume info for $mountPoint\n";
         }
         my @ids = join("", @id_info) =~ m/Object ID:[ \t\n]*([^ \t\n]*)/;
         if ($#ids > 0) {

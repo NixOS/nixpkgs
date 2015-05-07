@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  patches = [
+    # Fix user pkg db location for GHCJS: 
+    # https://ghc.haskell.org/trac/ghc/ticket/10232
+    (fetchpatch {
+      url = "https://git.haskell.org/ghc.git/patch/c46e4b184e0abc158ad8f1eff6b3f0421acaf984";
+      sha256 = "0fkdyqd4bqp742rydwmqq8d2n7gf61bgdhaiw8xf7jy0ix7lr60w";
+    })
+  ];
+
   postPatch = ''
     pushd libraries/Cabal
     patch -p1 < ${cabalPatch}

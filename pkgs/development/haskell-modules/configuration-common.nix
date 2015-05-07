@@ -118,6 +118,9 @@ self: super: {
   # Agda-2.4.2.2 needs these overrides to compile.
   Agda = super.Agda.override { equivalence = self.equivalence_0_2_5; cpphs = self.cpphs_1_18_9; };
 
+  # Help libconfig find it's C language counterpart.
+  libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
@@ -349,6 +352,7 @@ self: super: {
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
+  data-hash = dontCheck super.data-hash;
   Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
   DigitalOcean = dontCheck super.DigitalOcean;
   directory-layout = dontCheck super.directory-layout;
@@ -786,5 +790,28 @@ self: super: {
 
   # https://github.com/ndmitchell/shake/issues/206
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
+
+  # https://github.com/nushio3/doctest-prop/issues/1
+  doctest-prop = dontCheck super.doctest-prop;
+
+  # https://github.com/goldfirere/singletons/issues/116
+  # https://github.com/goldfirere/singletons/issues/117
+  # https://github.com/goldfirere/singletons/issues/118
+  singletons = markBroken super.singletons;
+  singleton-nats = dontDistribute super.singleton-nats;
+  hgeometry = dontDistribute super.hgeometry;
+  hipe = dontDistribute super.hipe;
+  clash-lib = dontDistribute super.clash-lib;
+
+  # https://github.com/anton-k/temporal-music-notation/issues/1
+  temporal-music-notation = markBroken super.temporal-music-notation;
+  temporal-music-notation-demo = dontDistribute super.temporal-music-notation-demo;
+  temporal-music-notation-western = dontDistribute super.temporal-music-notation-western;
+
+  # https://github.com/ivanperez-keera/Yampa/issues/10
+  Yampa = dontCheck super.Yampa;
+
+  # https://github.com/adamwalker/sdr/issues/1
+  sdr = dontCheck super.sdr;
 
 }

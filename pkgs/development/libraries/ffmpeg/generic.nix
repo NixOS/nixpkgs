@@ -109,7 +109,7 @@
 , openjpeg_1 ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
 , pulseaudio ? null # Pulseaudio input support
-, rtmpdump ? null # RTMP[E] support
+, rtmpdump_gnutls ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
 , sambaExtlib ? false, samba ? null # Samba protocol
 #, schroedinger ? null # Dirac de/encoder
@@ -410,7 +410,7 @@ stdenv.mkDerivation rec {
     (mkFlag (opensslExtlib && gplLicensing) "0.9" "openssl")
     (mkFlag (disDarwinFix (pulseaudio != null)) "0.9" "libpulse")
     #(mkFlag quvi         "2.0" "libquvi")
-    (mkFlag (disDarwinFix (rtmpdump != null)) "0.6" "librtmp")
+    (mkFlag (disDarwinFix (rtmpdump_gnutls != null)) "0.6" "librtmp")
     #(mkFlag (schroedinger != null) "0.5" "libschroedinger")
     #(mkFlag (shine != null) "2.0" "libshine")
     (mkFlag (disDarwinFix (sambaExtlib && gplLicensing && version3Licensing)) "2.3" "libsmbclient")
@@ -457,7 +457,7 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ faac faad2 fdk_aac openssl ]
     ++ optionals (!isDarwin) [
       frei0r /* game-music-emu gsm jack2 */ libmodplug libssh libvpx /* openal */
-      openjpeg_1 pulseaudio rtmpdump vid-stab wavpack x265 /* xavs */
+      openjpeg_1 pulseaudio rtmpdump_gnutls vid-stab wavpack x265 /* xavs */
   ] ++ optional (!isDarwin && !isCygwin) libva
     ++ optionals isLinux [ alsaLib libraw1394 /* v4l_utils */ ];
 

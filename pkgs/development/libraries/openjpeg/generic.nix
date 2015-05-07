@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     (mkFlag jp3dSupport "BUILD_JP3D")
     (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
     (mkFlag testsSupport "BUILD_TESTING")
+  ] ++ stdenv.lib.optionals stdenv.isDarwin
+  [ "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
   ];
 
   nativebuildInputs = [ pkgconfig ];

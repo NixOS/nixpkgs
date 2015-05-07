@@ -412,6 +412,7 @@
       lambdabot = 191;
       #asterisk = 192; # unused
       plex = 193;
+      sabnzbd = 194;
 
       mldonkey = 195;
 

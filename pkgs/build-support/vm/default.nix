@@ -113,6 +113,9 @@ rec {
     mkdir -p /fs/dev
     mount -o bind /dev /fs/dev
 
+    mkdir -p /fs/dev /fs/dev/shm
+    mount -t tmpfs -o "mode=1777" none /fs/dev/shm
+
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
     mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
