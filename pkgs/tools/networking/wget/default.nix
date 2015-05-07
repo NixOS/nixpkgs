@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, libidn
 , perl, perlPackages, LWP, python3
-, libiconv, gnutls ? null }:
+, libiconv, libpsl, gnutls ? null }:
 
 stdenv.mkDerivation rec {
   name = "wget-1.16";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ gettext ];
-  buildInputs = [ libidn libiconv ]
+  buildInputs = [ libidn libiconv libpsl ]
     ++ stdenv.lib.optionals doCheck [ perl perlPackages.IOSocketSSL LWP python3 ]
     ++ stdenv.lib.optional (gnutls != null) gnutls
     ++ stdenv.lib.optional stdenv.isDarwin perl;
