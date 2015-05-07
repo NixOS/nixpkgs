@@ -273,6 +273,12 @@ let
         ];
       };
 
+      kdenlive =
+        let mlt = pkgs.mlt-qt5.override { inherit qt5; };
+        in super.kdenlive // {
+          buildInputs = super.kdenlive.buildInputs ++ [ mlt ];
+        };
+
       kdepim = with pkgs; super.kdepim // {
         buildInputs =
           super.kdepim.buildInputs ++ [ gpgme libassuan ];
