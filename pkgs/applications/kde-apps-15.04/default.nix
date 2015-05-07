@@ -350,6 +350,17 @@ let
         '';
       };
 
+      signon-kwallet-extension =
+        let signon = pkgs.signon.override { inherit qt5; };
+        in super.signon-kwallet-extension // {
+          buildInputs = super.signon-kwallet-extension.buildInputs ++ [ signon ];
+          preConfigure = ''
+            ${super.signon-kwallet-extension.preConfigure or ""}
+            sed -e "s,\''${SIGNONEXTENSION_PLUGINDIR},$out/lib/signon/extensions," \
+                -i src/CMakeLists.txt
+          '';
+        };
+
     };
 
   l10nManifest =
