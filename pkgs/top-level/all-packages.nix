@@ -12595,6 +12595,8 @@ let
 
   x2vnc = callPackage ../tools/X11/x2vnc { };
 
+  x42-plugins = callPackage ../applications/audio/x42-plugins { };
+
   xaos = builderDefsPackage (import ../applications/graphics/xaos) {
     inherit (xlibs) libXt libX11 libXext xextproto xproto;
     inherit gsl aalib zlib intltool gettext perl;
