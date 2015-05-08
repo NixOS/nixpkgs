@@ -560,6 +560,10 @@ let
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  artyFX = callPackage ../applications/audio/artyFX {
+    inherit (xlibs) libpthreadstubs;
+  };
+
   ascii = callPackage ../tools/text/ascii { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
@@ -785,6 +789,10 @@ let
   datamash = callPackage ../tools/misc/datamash { };
 
   ddate = callPackage ../tools/misc/ddate { };
+
+  diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
+    inherit (haskellngPackages) ghcWithPackages diagrams-builder;
+  };
 
   direnv = callPackage ../tools/misc/direnv { };
 
@@ -2958,6 +2966,8 @@ let
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   traceroute = callPackage ../tools/networking/traceroute { };
+
+  tracebox = callPackage ../tools/networking/tracebox { };
 
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
@@ -6415,6 +6425,8 @@ let
 
   libchardet = callPackage ../development/libraries/libchardet { };
 
+  libcrafter = callPackage ../development/libraries/libcrafter { };
+
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
@@ -6864,6 +6876,8 @@ let
   };
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
+
+  libpsl = callPackage ../development/libraries/libpsl { };
 
   libpst = callPackage ../development/libraries/libpst { };
 
@@ -7616,11 +7630,6 @@ let
     alsaSupport = (!stdenv.isDarwin);
     x11Support = true;
     pulseaudioSupport = (!stdenv.isDarwin);
-
-    # resolve the unrecognized -fpascal-strings option error
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };

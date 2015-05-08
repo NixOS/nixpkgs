@@ -189,13 +189,6 @@ self: super: {
   brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
   unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
 
-  # Updated Cabal file from Hackage tightened version bounds for some reason.
-  edit-distance = let pkg = appendPatch super.edit-distance ./edit-distance-fix-boundaries.patch;
-                  in appendPatch pkg (pkgs.fetchpatch {
-                    url = "https://patch-diff.githubusercontent.com/raw/batterseapower/edit-distance/pull/3.patch";
-                    sha256 = "0v47pa5ymh9f23bqpkdv3k7vnb6h3ssccdmjdylhs2ybarqzrcwh";
-                  });
-
   # https://github.com/BNFC/bnfc/issues/137
   BNFC = markBrokenVersion "2.7.1" super.BNFC;
   cubical = dontDistribute super.cubical;
@@ -314,7 +307,7 @@ self: super: {
   annotated-wl-pprint_0_5_3 = markBroken super.annotated-wl-pprint_0_5_3;
   c2hs_0_20_1 = markBroken super.c2hs_0_20_1;
   Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
-  cabal-install_1_18_0_8 = markBroken super.cabal-install_1_18_0_8;
+  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
   control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
   equivalence_0_2_5 = markBroken super.equivalence_0_2_5;
@@ -330,8 +323,13 @@ self: super: {
   wreq-sb = dontDistribute (dontCheck super.wreq-sb);
   hipbot = dontDistribute super.hipbot;
   bitcoin-api = dontDistribute super.bitcoin-api;
+  bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
+
+  # Ugly hack that triggers a rebuild to fix the broken package on Hydra.
+  cabal-lenses = appendConfigureFlag super.cabal-lenses "-fignore-me-1";
+  text = appendConfigureFlag super.text "-fignore-me-1";
 
 }
