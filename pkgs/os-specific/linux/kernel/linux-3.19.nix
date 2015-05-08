@@ -2,7 +2,6 @@
 
 import ./generic.nix (args // rec {
   version = "3.19.7";
-  # Remember to update grsecurity!
   extraMeta.branch = "3.19";
 
   src = fetchurl {
