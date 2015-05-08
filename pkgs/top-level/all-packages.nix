@@ -7579,11 +7579,6 @@ let
     alsaSupport = (!stdenv.isDarwin);
     x11Support = true;
     pulseaudioSupport = (!stdenv.isDarwin);
-
-    # resolve the unrecognized -fpascal-strings option error
-    stdenv = if stdenv.isDarwin
-      then clangStdenv
-      else stdenv;
   };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
