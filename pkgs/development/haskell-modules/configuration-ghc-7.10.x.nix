@@ -323,6 +323,7 @@ self: super: {
   wreq-sb = dontDistribute (dontCheck super.wreq-sb);
   hipbot = dontDistribute super.hipbot;
   bitcoin-api = dontDistribute super.bitcoin-api;
+  bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
