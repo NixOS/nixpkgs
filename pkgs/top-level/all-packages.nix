@@ -9676,6 +9676,8 @@ let
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
+  s3ql = callPackage ../tools/backup/s3ql { };
+
   sassc = callPackage ../development/tools/sassc { };
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
