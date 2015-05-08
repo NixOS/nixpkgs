@@ -413,7 +413,6 @@
       #asterisk = 192; # unused
       plex = 193;
       sabnzbd = 194;
-
       mldonkey = 195;
 
       # When adding a gid, make sure it doesn't match an existing
