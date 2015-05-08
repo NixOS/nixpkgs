@@ -11078,6 +11078,8 @@ let
 
   guvcview = callPackage ../os-specific/linux/guvcview { };
 
+  hackrf = callPackage ../applications/misc/hackrf { };
+
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
