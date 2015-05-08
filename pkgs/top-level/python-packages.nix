@@ -903,6 +903,32 @@ let
     };
   };
 
+  beets = buildPythonPackage rec {
+    version = "1.3.13";
+    name = "beets-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
+      sha256 = "0n9cbf3m9mzrffv4akyrplabpy83gjlp3xw1savj56q7hhs3r5vd";
+    };
+
+    buildInputs = with self;
+      [ beautifulsoup4 enum34 flask jellyfish munkres
+        musicbrainzngs mutagen pathlib pyechonest
+        pylast pyxdg pyyaml rarfile responses unidecode
+      ];
+
+    # AttributeError: 'module' object has no attribute 'testall'
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Music tagger and library organizer";
+      homepage = http://beets.radbox.org/;
+      maintainers = [ maintainers.koral ];
+      license = licenses.mit;
+    };
+  };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
@@ -6187,6 +6213,24 @@ let
       maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   });
+
+  jellyfish = buildPythonPackage rec {
+    version = "0.5.0";
+    name = "jellyfish-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jellyfish/${name}.tar.gz";
+      sha256 = "04p80gwwlhxjp8zpjf70a62x69l9rlvnz1pwi5ar52gyajn8z6z1";
+    };
+
+    buildInputs = with self; [ pytest unicodecsv ];
+
+    meta = with stdenv.lib; {
+      homepage = http://github.com/sunlightlabs/jellyfish;
+      description = "Approximate and phonetic matching of strings";
+      maintainers = [ maintainers.koral ];
+    };
+  };
 
   jinja2 = buildPythonPackage rec {
     name = "Jinja2-2.7.3";
@@ -12667,6 +12711,27 @@ let
       description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
       homepage = https://github.com/esnme/ultramemcache;
       license = licenses.bsdOriginal;
+    };
+  };
+
+  unicodecsv = buildPythonPackage rec {
+    version = "0.12.0";
+    name = "unicodecsv-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/u/unicodecsv/${name}.tar.gz";
+      sha256 = "012yvwza38bq84z9p8xzlxn7bkz0gf5y2nm5js7cyn766cy53dxh";
+    };
+
+    # ImportError: No module named runtests
+    #buildInputs = with self; [ unittest2 ];
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
+      homepage = https://github.com/jdunck/python-unicodecsv;
+      maintainers = [ maintainers.koral ];
     };
   };
 
