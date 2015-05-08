@@ -103,4 +103,12 @@ self: super: {
     patches = [ ./ghc-paths-nix-ghcjs.patch ];
   });
 
+  reflex-dom = overrideCabal super.reflex-dom (drv: {
+    buildDepends = [
+      self.aeson self.base self.bytestring self.containers self.data-default
+      self.dependent-map self.dependent-sum self.ghcjs-dom self.lens self.mtl
+      self.ref-tf self.reflex self.safe self.semigroups self.text self.these
+      self.time self.transformers
+    ];
+  });
 }
