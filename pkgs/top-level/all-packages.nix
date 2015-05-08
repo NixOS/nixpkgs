@@ -560,6 +560,10 @@ let
 
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
+  artyFX = callPackage ../applications/audio/artyFX {
+    inherit (xlibs) libpthreadstubs;
+  };
+
   ascii = callPackage ../tools/text/ascii { };
 
   asymptote = callPackage ../tools/graphics/asymptote {
