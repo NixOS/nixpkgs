@@ -1004,6 +1004,28 @@ let
     };
   };
 
+  defusedxml = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "defusedxml";
+    version = "0.4.1";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/${pname}/${name}.tar.gz";
+      sha256 = "0y147zy3jqmk6ly7fbhqmzn1hf41xcb53f2vcc3m8x4ba5d1smfd";
+    };
+  };
+
+  dugong = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "dugong";
+    version = "3.5";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/${pname}/${name}.tar.bz2";
+      sha256 = "0y0rdxbiwm03zv6vpvapqilrird3h8ijz7xmb0j7ds5j4p6q3g24";
+    };
+
+    disabled = pythonOlder "3.3";	# Library does not support versions older than 3.3
+  };
+
   iowait = buildPythonPackage rec {
     name = "iowait-0.2";
 
