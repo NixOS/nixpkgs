@@ -9374,6 +9374,8 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
+    phc-intel = callPackage ../os-specific/linux/phc-intel { };
+
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
     psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
