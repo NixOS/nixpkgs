@@ -2989,6 +2989,8 @@ let
 
   ttysnoop = callPackage ../os-specific/linux/ttysnoop {};
 
+  ttylog = callPackage ../tools/misc/ttylog { };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
 
   txt2man = callPackage ../tools/misc/txt2man { };
