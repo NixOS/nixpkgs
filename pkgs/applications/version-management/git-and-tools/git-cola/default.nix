@@ -30,7 +30,7 @@ pythonPackages.buildPythonPackage rec {
     homepage = https://github.com/git-cola/git-cola;
     description = "A sleek and powerful Git GUI";
     license = licenses.gpl2;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }
