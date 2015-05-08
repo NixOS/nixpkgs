@@ -51,7 +51,7 @@ assert editedCabalFile != null -> revision != null;
 let
 
   inherit (stdenv.lib) optional optionals optionalString versionOlder
-                       concatStringsSep enableFeature optionalAttrs;
+                       concatStringsSep enableFeature optionalAttrs toUpper;
 
   isGhcjs = ghc.isGhcjs or false;
 
@@ -116,6 +116,7 @@ let
 
   setupCommand = if isGhcjs then "${ghc.nodejs}/bin/node ./Setup.jsexe/all.js" else "./Setup";
   ghcCommand = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommandCaps = toUpper ghcCommand;
 
 in
 stdenv.mkDerivation ({
@@ -264,10 +265,10 @@ stdenv.mkDerivation ({
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
-        export NIX_GHC="${ghcEnv}/bin/${ghcCommand}"
-        export NIX_GHCPKG="${ghcEnv}/bin/${ghcCommand}-pkg"
-        export NIX_GHC_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_GHC_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
+        export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
+        export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
+        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
       '';
     };
 
