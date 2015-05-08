@@ -140,15 +140,7 @@ rec {
     echo "127.0.0.1 localhost" > /fs/etc/hosts
 
     echo "starting stage 2 ($command)"
-    test -n "$command"
-
-    set +e
-    chroot /fs $command $out
-    echo $? > /fs/tmp/xchg/in-vm-exit
-
-    mount -o remount,ro dummy /fs
-
-    poweroff -f
+    exec switch_root /fs $command $out
   '';
 
 
@@ -181,12 +173,27 @@ rec {
       ${coreutils}/bin/ln -s ${bash}/bin/sh /bin/sh
     fi
 
+    # Set up automatic kernel module loading.
+    export MODULE_DIR=${linux}/lib/modules/
+    ${coreutils}/bin/cat <<EOF > /run/modprobe
+    #! /bin/sh
+    export MODULE_DIR=$MODULE_DIR
+    exec ${kmod}/bin/modprobe "\$@"
+    EOF
+    ${coreutils}/bin/chmod 755 /run/modprobe
+    echo /run/modprobe > /proc/sys/kernel/modprobe
+
     # For debugging: if this is the second time this image is run,
     # then don't start the build again, but instead drop the user into
     # an interactive shell.
     if test -n "$origBuilder" -a ! -e /.debug; then
       ${coreutils}/bin/touch /.debug
-      exec $origBuilder $origArgs
+      $origBuilder $origArgs
+      echo $? > /tmp/xchg/in-vm-exit
+
+      ${busybox}/bin/mount -o remount,ro dummy /
+
+      ${busybox}/bin/poweroff -f
     else
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
