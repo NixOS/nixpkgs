@@ -4912,6 +4912,8 @@ let
 
   ### DEVELOPMENT / TOOLS
 
+  alloy = callPackage ../development/tools/alloy { };
+
   augeas = callPackage ../tools/system/augeas { };
 
   ansible = callPackage ../tools/system/ansible { };
