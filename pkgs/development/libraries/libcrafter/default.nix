@@ -22,5 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/pellegre/libcrafter;
     description = "High level C++ network packet sniffing and crafting library";
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ maintainers.lethalman ];
   };
 }
