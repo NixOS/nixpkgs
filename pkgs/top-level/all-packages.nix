@@ -6070,11 +6070,6 @@ let
 
   gnutls = gnutls34;
 
-  gnutls32 = callPackage ../development/libraries/gnutls/3.2.nix {
-    guileBindings = config.gnutls.guile or false;
-    nettle = nettle27;
-  };
-
   gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
     guileBindings = config.gnutls.guile or false;
     nettle = nettle27;
@@ -6083,8 +6078,6 @@ let
   gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
     guileBindings = config.gnutls.guile or false;
   };
-
-  gnutls32_with_guile = lowPrio (gnutls32.override { guileBindings = true; });
 
   gnutls33_with_guile = lowPrio (gnutls33.override { guileBindings = true; });
 
