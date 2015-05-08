@@ -120,8 +120,10 @@ rec {
     mkdir -p /fs/nix/store
     mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
-    mkdir -p /fs/tmp
+    mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
+    mount -t tmpfs -o "mode=755" none /fs/run
+    ln -sfn /run /fs/var/run
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
