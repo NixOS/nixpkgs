@@ -2970,6 +2970,8 @@ let
 
   traceroute = callPackage ../tools/networking/traceroute { };
 
+  tracebox = callPackage ../tools/networking/tracebox { };
+
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trickle = callPackage ../tools/networking/trickle {};
@@ -6375,6 +6377,8 @@ let
   };
 
   libchardet = callPackage ../development/libraries/libchardet { };
+
+  libcrafter = callPackage ../development/libraries/libcrafter { };
 
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
