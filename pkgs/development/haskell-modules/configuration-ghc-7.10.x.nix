@@ -319,7 +319,9 @@ self: super: {
   vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
 
   # https://github.com/bos/wreq/issues/61
-  wreq = markBrokenVersion "0.3.0.1" (dontCheck super.wreq);
+  wreq = appendPatch (dontCheck super.wreq)
+    (pkgs.fetchpatch { url = "https://github.com/bos/wreq/commit/28c3b40c1e0b50a3c2a341e57c1569dd627706b0.patch";
+                       sha256 = "187v8h80j6lnz5d6n9szm09gmwm6x46pw7krny86gsh2myl42k2s"; });
   wreq-sb = dontDistribute (dontCheck super.wreq-sb);
   hipbot = dontDistribute super.hipbot;
   bitcoin-api = dontDistribute super.bitcoin-api;
