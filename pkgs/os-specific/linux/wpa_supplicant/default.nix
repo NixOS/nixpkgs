@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, openssl, pkgconfig, libnl
+{ stdenv, fetchpatch, fetchurl, lib, openssl, pkgconfig, libnl
 , dbus_libs ? null, readline ? null, pcsclite ? null
 }:
 
@@ -79,6 +79,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-P2P-Validate-SSID-element-length-before-copying-it-C.patch
     ./build-fix.patch
+    (fetchpatch {
+      name = "p2p-fix.patch";
+      url = "http://w1.fi/cgit/hostap/patch/?id=8a78e227df1ead19be8e12a4108e448887e64d6f";
+      sha256 = "1k2mcq1jv8xzi8061ixcz6j56n4i8wbq0vxcvml204q1syy2ika0";
+    })
   ];
 
   postInstall = ''
