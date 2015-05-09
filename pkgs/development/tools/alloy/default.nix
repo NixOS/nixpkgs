@@ -38,11 +38,24 @@ stdenv.mkDerivation rec {
     categories = "Development;IDE;Education;";
   };
 
-
   buildInputs = [ jre ];
-  inherit jre;
 
-  icon = ./icon.png;
+  phases = [ "installPhase" ];
 
-  builder = ./builder.sh;
+  installPhase = ''
+    jar=`basename ${src}`
+    jar=$out/share/alloy/alloy${version}.jar
+
+    install -Dm644 ${src} $jar
+
+    cat << EOF > alloy
+    #!${stdenv.shell}
+    exec ${jre}/bin/java -jar $jar "\''${@}"
+    EOF
+
+    install -Dm755 alloy $out/bin/alloy
+
+    install -Dm644 ${./icon.png} $out/share/pixmaps/alloy.png
+    cp -r ${desktopItem}/share/applications $out/share
+  '';
 }
