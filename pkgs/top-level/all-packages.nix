@@ -5043,6 +5043,8 @@ let
     ruby = ruby_2_0_0;
   };
 
+  cfr = callPackage ../development/tools/java/cfr { };
+
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome.GConf; };
 
   chrpath = callPackage ../development/tools/misc/chrpath { };
