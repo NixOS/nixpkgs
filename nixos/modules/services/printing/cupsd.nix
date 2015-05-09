@@ -80,7 +80,7 @@ in
         '';
       };
 
-      browsing = mkOption {
+      advertise = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -285,7 +285,7 @@ in
 
         DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
 
-        Browsing ${if cfg.browsing then "Yes" else "No"}
+        Browsing ${if cfg.advertise then "Yes" else "No"}
 
         WebInterface ${if cfg.webInterface then "Yes" else "No"}
 
