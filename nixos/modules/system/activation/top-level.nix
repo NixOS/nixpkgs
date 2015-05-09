@@ -64,7 +64,6 @@ let
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
-      ln -s ${pkgs.stdenv} $out/stdenv
 
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
