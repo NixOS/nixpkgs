@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "Version of NaCl with hardware tests at runtime, not build time";
+    description = "A modern and easy-to-use crypto library";
+    homepage = http://doc.libsodium.org/;
     license = licenses.isc;
-    maintainers = with maintainers; [ viric wkennington ];
+    maintainers = with maintainers; [ raskin viric wkennington ];
     platforms = platforms.all;
   };
 }
