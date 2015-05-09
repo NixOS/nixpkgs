@@ -66,19 +66,6 @@ self: super: {
     '';
   });
 
-  reactive-banana = overrideCabal super.reactive-banana (drv: {
-    patchPhase = ''
-      cat >> src/Reactive/Banana/Switch.hs <<EOF
-      instance Functor (AnyMoment Identity) where
-        fmap = liftM
-
-      instance Applicative (AnyMoment Identity) where
-        pure = return
-        (<*>) = ap
-      EOF
-    '';
-  });
-
   transformers-compat = overrideCabal super.transformers-compat (drv: {
     configureFlags = [];
   });
