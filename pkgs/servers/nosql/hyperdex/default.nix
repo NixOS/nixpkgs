@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, unzip, autoconf, automake, libtool,
-  python, sodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
+  python, libsodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
   flex, pandoc, help2man, autoconf-archive, callPackage }:
 
 assert stdenv.isLinux;
