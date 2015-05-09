@@ -735,6 +735,7 @@ let
   azure = buildPythonPackage rec {
     version = "0.10.2";
     name = "azure-${version}";
+    disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/azure/${name}.zip";
