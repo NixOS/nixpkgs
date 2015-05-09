@@ -69,22 +69,22 @@ in
 
         # configurePhase is idempotent
         configurePhase = ''
-          eval "$preConfigure"
+          runHook preConfigure
           export PATH="${self.agdaWrapper}/bin:$PATH"
-          eval "$postConfigure"
+          runHook postConfigure
         '';
 
         buildPhase = ''
-          eval "$preBuild"
+          runHook preBuild
           ${Agda}/bin/agda ${self.buildFlags} ${self.everythingFile}
-          eval "$postBuild"
+          runHook postBuild
         '';
 
         installPhase = ''
-          eval "$preInstall"
+          runHook preInstall
           mkdir -p $out/share/agda
           cp -pR ${unwords self.sourceDirectories} ${mapInside self.topSourceDirectories} $out/share/agda
-          eval "$postInstall"
+          runHook postInstall
         '';
       };
     in stdenv.mkDerivation
