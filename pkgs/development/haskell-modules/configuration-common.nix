@@ -811,4 +811,7 @@ self: super: {
   # https://github.com/adamwalker/sdr/issues/1
   sdr = dontCheck super.sdr;
 
+  # https://github.com/Porges/email-validate-hs/issues/12
+  email-validate = dontCheck super.email-validate;
+
 }
