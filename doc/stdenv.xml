@@ -545,13 +545,13 @@ script) if it exists.</para>
     such.</para></footnote>.  If this is undesirable, set this
     variable to true.</para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>dontDisableStatic</varname></term>
     <listitem><para>By default, when the configure script has
     <option>--enable-static</option>, the option
     <option>--disable-static</option> is added to the configure flags.</para>
-    <para></para>If this is undesirable, set this variable to
+    <para>If this is undesirable, set this variable to
     true.</para></listitem>
   </varlistentry>
 
