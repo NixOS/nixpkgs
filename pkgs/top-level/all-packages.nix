@@ -13768,6 +13768,7 @@ let
   yices = callPackage ../applications/science/logic/yices {};
 
   z3 = callPackage ../applications/science/logic/z3 {};
+  z3_opt = callPackage ../applications/science/logic/z3_opt {};
 
   boolector   = boolector15;
   boolector15 = callPackage ../applications/science/logic/boolector {};
