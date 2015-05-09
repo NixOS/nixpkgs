@@ -70,7 +70,6 @@ in
         # configurePhase is idempotent
         configurePhase = ''
           eval "$preConfigure"
-          export AGDA_PACKAGE_PATH=${self.AGDA_PACKAGE_PATH};
           export PATH="${self.agdaWrapper}/bin:$PATH"
           eval "$postConfigure"
         '';
