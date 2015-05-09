@@ -80,4 +80,9 @@ self: super: {
   # and are virtually impossible to compile on Hydra.
   conduit = super.conduit_1_2_4_1;
 
+  # https://github.com/magthe/sandi/issues/7
+  sandi = overrideCabal super.sandi (drv: {
+    patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
+  );
+
 }
