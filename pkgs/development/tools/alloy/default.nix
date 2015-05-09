@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    jar=`basename ${src}`
     jar=$out/share/alloy/alloy${version}.jar
 
     install -Dm644 ${src} $jar
