@@ -811,7 +811,4 @@ self: super: {
   # https://github.com/adamwalker/sdr/issues/1
   sdr = dontCheck super.sdr;
 
-  # Reported upstream by e-mail.
-  smaoin = dontCheck super.smaoin;
-
 }
