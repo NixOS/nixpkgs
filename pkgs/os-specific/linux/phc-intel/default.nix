@@ -1,8 +1,10 @@
 { stdenv, fetchurl, kernel, which }:
 
 assert stdenv.isLinux;
-# don't bother with older versions, though some would probably work:
+# Don't bother with older versions, though some would probably work:
 assert stdenv.lib.versionAtLeast kernel.version "4.0";
+# Disable on grsecurity kernels, which break module building:
+assert !kernel.features ? grsecurity;
 
 let version = "0.4.0-rev17"; in
 stdenv.mkDerivation rec {
