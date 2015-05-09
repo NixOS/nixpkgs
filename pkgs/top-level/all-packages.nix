@@ -8371,6 +8371,8 @@ let
   bosun = callPackage ../servers/monitoring/bosun {};
   scollector = callPackage ../servers/monitoring/bosun/scollector.nix {};
 
+  charybdis = callPackage ../servers/irc/charybdis {};
+
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
     python = python27;
