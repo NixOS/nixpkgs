@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libsndfile qt5 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
+    [ libsndfile qt5.base fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
       serd
       sord

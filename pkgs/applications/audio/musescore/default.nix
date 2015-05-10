@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper cmake qt5 pkgconfig alsaLib portaudio jack2 lame libsndfile libvorbis
+    makeWrapper cmake qt5.base pkgconfig alsaLib portaudio jack2 lame libsndfile libvorbis
   ];
 
   patchPhase = ''
