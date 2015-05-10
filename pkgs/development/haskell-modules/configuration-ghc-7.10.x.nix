@@ -323,11 +323,11 @@ self: super: {
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
   vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
 
-  # https://github.com/bos/wreq/issues/61
-  wreq = markBrokenVersion "0.3.0.1" (dontCheck super.wreq);
-  wreq-sb = dontDistribute (dontCheck super.wreq-sb);
+  # https://github.com/purefn/hipbot/issues/1
   hipbot = dontDistribute super.hipbot;
-  bitcoin-api = dontDistribute super.bitcoin-api;
+
+  # https://github.com/solatis/haskell-bitcoin-api/issues/1
+  bitcoin-api = markBroken super.bitcoin-api;
   bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
