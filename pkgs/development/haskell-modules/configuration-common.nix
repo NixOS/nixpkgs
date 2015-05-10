@@ -723,9 +723,6 @@ self: super: {
   call = dontDistribute super.call;
   rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;
 
-  # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
-  stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
-
   # https://github.com/GaloisInc/cryptol/issues/197
   cryptol = overrideCabal super.cryptol (drv: {
     postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
