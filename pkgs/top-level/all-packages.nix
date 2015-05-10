@@ -14461,16 +14461,10 @@ let
   };
   wineStable = wine.override { wineRelease = "stable"; };
   wineUnstable = wine.override { wineRelease = "unstable"; };
+  wineStaging = wine.override { wineRelease = "staging"; };
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
-  };
-
-  ### FIXME integrate wineStaging into 64bit
-  wineStaging = callPackage_i686 ../misc/emulators/wine/staging.nix {
-    wine = pkgsi686Linux.wineUnstable;
-    # Patent issues
-    libtxc_dxtn = pkgsi686Linux.libtxc_dxtn_s2tc;
   };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };

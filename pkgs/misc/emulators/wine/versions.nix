@@ -22,4 +22,8 @@
     #monoVersion = "0.0.8";
     #monoSha256 = "00jl24qp7vh3hlqv7wsw1s529lr5p0ybif6s73jy85chqaxj7z1x";
   };
+  staging = {
+    version = "1.7.42";
+    sha256 = "1qi1hf1w97n17vmj137p7da75g01ky84a3xvs50xrmxb7f62sm17";
+  };
 }
