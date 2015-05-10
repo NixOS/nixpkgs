@@ -2001,11 +2001,11 @@ let
   };
 
   coverage = buildPythonPackage rec {
-    name = "coverage-3.7";
+    name = "coverage-3.7.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "055d82e6849d882ec6cf2ae1faca8e56";
+      sha256 = "0knlbq79g2ww6xzsyknj9rirrgrgc983dpa2d9nkdf31mb2a3bni";
     };
 
     meta = {
@@ -2087,7 +2087,7 @@ let
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six self.cffi  ];
+    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi; 
   };
 
   cryptography_vectors = buildPythonPackage rec {
@@ -3153,7 +3153,7 @@ let
       sha256 = "00jaf7x1ji9y46fbkww2sg6r6almrqfsprydz3q2swr4jrnrsx9x";
     };
 
-    patchPhase = ''
+    prePatch = ''
       substituteInPlace setup.py \
         --replace "httplib2==0.8" "httplib2" \
         --replace "iso8601==0.1.4" "iso8601"
@@ -6663,6 +6663,8 @@ let
     buildInputs = with self; [ markupsafe nose mock ];
     propagatedBuildInputs = with self; [ markupsafe ];
 
+    doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
+
     meta = {
       description = "Super-fast templating language";
       homepage = http://www.makotemplates.org;
@@ -7277,8 +7279,8 @@ let
     };
   };
 
-  MySQL_python = buildPythonPackage {
-    name = "MySQL-python-1.2.3";
+  MySQL_python = buildPythonPackage rec {
+    name = "MySQL-python-1.2.5";
 
     disabled = isPy3k;
 
@@ -7286,13 +7288,13 @@ let
     doCheck = false;
 
     src = pkgs.fetchurl {
-      url = mirror://sourceforge/mysql-python/MySQL-python-1.2.3.tar.gz;
-      sha256 = "0vkyg9dmj29hzk7fy77f42p7bfj28skyzsjsjry4wqr3z6xnzrkx";
+      url = "http://pypi.python.org/packages/source/M/MySQL-python/${name}.zip";
+      sha256 = "0x0c2jg0bb3pp84njaqiic050qkyd7ymwhfvhipnimg58yv40441";
     };
 
     buildInputs = with self; [ nose pkgs.openssl ];
 
-    propagatedBuildInputs = with self; [ pkgs.mysql pkgs.zlib ];
+    propagatedBuildInputs = with self; [ pkgs.mysql.lib pkgs.zlib ];
 
     meta = {
       description = "MySQL database binding for Python";
@@ -11072,11 +11074,11 @@ let
 
 
   scikitlearn = buildPythonPackage {
-    name = "scikit-learn-0.15.2";
+    name = "scikit-learn-0.16.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
-      md5 = "d9822ad0238e17b382a3c756ea94fe0d";
+      sha256 = "19jzmbi3j4ix8418i80ayl595dwyi4gy474kb2nc1v8kdwgqi2hs";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
