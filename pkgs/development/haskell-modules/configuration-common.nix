@@ -723,11 +723,6 @@ self: super: {
   call = dontDistribute super.call;
   rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;
 
-  # https://github.com/GaloisInc/cryptol/issues/197
-  cryptol = overrideCabal super.cryptol (drv: {
-    postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
-  });
-
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
 
