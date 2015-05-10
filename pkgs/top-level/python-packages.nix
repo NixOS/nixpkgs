@@ -732,12 +732,13 @@ let
   }));
 
   azure = buildPythonPackage rec {
-    version = "0.10.0";
+    version = "0.10.2";
     name = "azure-${version}";
+    disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/azure/${name}.zip";
-      md5 = "305b0036df5696d68369807835f554ae";
+      md5 = "8eaa0f8e649b21b6527a5ee801cef33a";
     };
 
     propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
