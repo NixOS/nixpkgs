@@ -40,10 +40,10 @@ in {
 
       extraCmdLineOptions = mkOption {
         description = ''
-	  Extra command line options for Mesos Master.
+          Extra command line options for Mesos Master.
 
-	  See https://mesos.apache.org/documentation/latest/configuration/
-	'';
+          See https://mesos.apache.org/documentation/latest/configuration/
+        '';
         default = [ "" ];
         type = types.listOf types.string;
         example = [ "--credentials=VALUE" ];
@@ -82,20 +82,20 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
       serviceConfig = {
-	ExecStart = ''
-	  ${pkgs.mesos}/bin/mesos-master \
-	    --port=${toString cfg.port} \
-	    --zk=${cfg.zk} \
-	    ${if cfg.quorum == 0 then "--registry=in_memory" else "--registry=replicated_log --quorum=${toString cfg.quorum}"} \
-	    --work_dir=${cfg.workDir} \
-	    --logging_level=${cfg.logLevel} \
-	    ${toString cfg.extraCmdLineOptions}
-	'';
-	Restart = "on-failure";
-	PermissionsStartOnly = true;
+        ExecStart = ''
+          ${pkgs.mesos}/bin/mesos-master \
+            --port=${toString cfg.port} \
+            --zk=${cfg.zk} \
+            ${if cfg.quorum == 0 then "--registry=in_memory" else "--registry=replicated_log --quorum=${toString cfg.quorum}"} \
+            --work_dir=${cfg.workDir} \
+            --logging_level=${cfg.logLevel} \
+            ${toString cfg.extraCmdLineOptions}
+        '';
+        Restart = "on-failure";
+        PermissionsStartOnly = true;
       };
       preStart = ''
-	mkdir -m 0700 -p ${cfg.workDir}
+        mkdir -m 0700 -p ${cfg.workDir}
       '';
     };
   };
