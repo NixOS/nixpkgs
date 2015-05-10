@@ -14345,25 +14345,23 @@ let
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
-  # Wine cannot be built in 64-bit; use a 32-bit build instead.
-  wineStable = callPackage_i686 ../misc/emulators/wine/stable.nix {
-    bison = bison2;
+  # Wine defaults to a mixed 64 / 32 build on x86_64 and to pure 32 on x86
+  wine = callPackage ../misc/emulators/wine {
+    wineRelease = config.wine.release or "stable";
+    wineBuild = config.wine.build or (if system == "x86_64-linux" then "wineWow" else "wine32");
+  };
+  wineStable = wine.override { wineRelease = "stable"; };
+  wineUnstable = wine.override { wineRelease = "unstable"; };
+
+  winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
+    inherit (gnome2) zenity;
   };
 
-  wineUnstable = lowPrio (callPackage_i686 ../misc/emulators/wine/unstable.nix {
-    bison = bison2;
-  });
-
-  wine = wineStable;
-
+  ### FIXME integrate wineStaging into 64bit
   wineStaging = callPackage_i686 ../misc/emulators/wine/staging.nix {
     wine = pkgsi686Linux.wineUnstable;
     # Patent issues
     libtxc_dxtn = pkgsi686Linux.libtxc_dxtn_s2tc;
-  };
-
-  winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
-    inherit (gnome2) zenity;
   };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
