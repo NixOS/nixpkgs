@@ -214,12 +214,9 @@ rec {
     };
   };
 
-  raspberrypi2 = {
+  raspberrypi2 = armv7l-hf-multiplatform // {
     name = "raspberrypi2";
-    kernelMajor = "3.14";
-    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "bcm2709_defconfig";
-    kernelArch = "arm";
     kernelDTB = true;
     kernelAutoModules = false;
     kernelExtraConfig =
@@ -294,16 +291,6 @@ rec {
       '';
     kernelTarget = "zImage";
     uboot = null;
-    gcc = {
-      # For gcc 4.8, the best for rpi2 would be:
-      #   cpu = "cortex-a7";
-      #   fpu = "neon-vfpv4";
-      # But we prefer compatibility with the beaglebone, so both
-      # can run the same built store paths.
-      arch = "armv7-a";
-      fpu = "vfpv3-d16";
-      float = "hard";
-    };
   };
 
   guruplug = sheevaplug // {
@@ -467,38 +454,47 @@ rec {
     gcc.arch = "loongson2f";
   };
   
-  beaglebone = {
+  beaglebone = armv7l-hf-multiplatform // {
     name = "beaglebone";
-    kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "omap2plus_defconfig";
-    kernelArch = "arm";
     kernelAutoModules = false;
     kernelExtraConfig = ""; # TBD kernel config
     kernelTarget = "zImage";
     uboot = null;
-    gcc = {
-      arch = "armv7-a";
-      fpu = "vfpv3-d16";
-      float = "hard";
-    };
   };
 
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
-    kernelMajor = "2.6";
+    kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
     kernelHeadersBaseConfig = "multi_v7_defconfig";
     kernelBaseConfig = "multi_v7_defconfig";
     kernelArch = "arm";
+    kernelDTB = true;
     kernelAutoModules = false;
     kernelExtraConfig = "";
-    kernelTarget = "zImage";
-    kernelDTB = true;
     uboot = null;
+    kernelTarget = "zImage";
     gcc = {
+      # Some table about fpu flags:
+      # http://community.arm.com/servlet/JiveServlet/showImage/38-1981-3827/blogentry-103749-004812900+1365712953_thumb.png
+      # Cortex-A5: -mfpu=neon-fp16
+      # Cortex-A7 (rpi2): -mfpu=neon-vfpv4
+      # Cortex-A8 (beaglebone): -mfpu=neon
+      # Cortex-A9: -mfpu=neon-fp16
+      # Cortex-A15: -mfpu=neon-vfpv4
+
+      # More about FPU:
+       #https://wiki.debian.org/ArmHardFloatPort/VfpComparison
+
+      # We try to be compatible with beaglebone by now
       arch = "armv7-a";
-      fpu = "vfpv3-d16";
+      fpu = "neon";
       float = "hard";
+
+      # For Raspberry Pi the 2 the best would be:
+      #   cpu = "cortex-a7";
+      #   fpu = "neon-vfpv4";
     };
   };
+
 }
