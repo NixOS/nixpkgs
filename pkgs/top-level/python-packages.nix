@@ -6061,16 +6061,16 @@ let
   };
 
   icalendar = buildPythonPackage rec {
-    version = "3.8.4";
+    version = "3.9.0";
     name = "icalendar-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/i/icalendar/${name}.zip";
-      md5 = "d700e6e75613fd1ee882c4b11c58940c";
+      url = "https://pypi.python.org/packages/source/i/icalendar/${name}.tar.gz";
+      md5 = "072c67a4c461864abd604631d7cf67e7";
     };
 
     buildInputs = with self; [ setuptools ];
-    propagatedBuildInputs = with self; [ pytz ];
+    propagatedBuildInputs = with self; [ dateutil pytz ];
 
     meta = with stdenv.lib; {
       description = "A parser/generator of iCalendar files";
