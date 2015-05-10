@@ -12085,26 +12085,13 @@ let
     };
   };
 
-  subunit = stdenv.mkDerivation rec {
-    name = "subunit-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "https://launchpad.net/subunit/trunk/${version}/+download/${name}.tar.gz";
-      sha256 = "1fnhrrwww90746an2nz2kn9qdf9pklmaf5lm22gssl6648f2rp2m";
-    };
-
-    buildInputs = (with pkgs; [ pkgconfig check cppunit perl ]) ++ [ self.wrapPython ];
+  subunit = buildPythonPackage rec {
+    name = pkgs.subunit.name;
+    src = pkgs.subunit.src;
 
     propagatedBuildInputs = with self; [ testtools testscenarios ];
 
-    postFixup = "wrapPythonPrograms";
-
-    meta = {
-      description = "A streaming protocol for test results";
-      homepage = https://launchpad.net/subunit;
-      license = licenses.asl20;
-    };
+    meta = pkgs.subunit.meta;
   };
 
 

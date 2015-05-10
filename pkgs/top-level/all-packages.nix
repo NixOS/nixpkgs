@@ -8770,7 +8770,6 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    pythonPackages = python2Packages;
     kerberos = heimdal;
     gnutls = gnutls33;
     cups = if stdenv.isDarwin then null else cups;
@@ -12183,6 +12182,8 @@ let
     perlBindings = true;
     pythonBindings = true;
   });
+
+  subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/misc/surf {
     webkit = webkitgtk2;
