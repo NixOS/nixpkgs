@@ -9155,6 +9155,8 @@ let
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
+  kbdlight = callPackage ../os-specific/linux/kbdlight { };
+
   kmscon = callPackage ../os-specific/linux/kmscon { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
