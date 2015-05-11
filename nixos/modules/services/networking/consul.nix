@@ -144,6 +144,8 @@ in
 
     environment = {
       etc."consul.json".text = builtins.toJSON configOptions;
+      # We need consul.d to exist for consul to start
+      etc."consul.d/dummy.json".text = "{ }";
       systemPackages = with pkgs; [ consul ];
     };
 
@@ -151,10 +153,12 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ] ++ systemdDevices;
       bindsTo = systemdDevices;
-      restartTriggers = [ config.environment.etc."consul.json".source ];
+      restartTriggers = [ config.environment.etc."consul.json".source ]
+        ++ mapAttrsToList (_: d: d.source)
+          (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
       serviceConfig = {
-        ExecStart = "@${pkgs.consul}/bin/consul consul agent"
+        ExecStart = "@${pkgs.consul}/bin/consul consul agent -config-dir /etc/consul.d"
           + concatMapStrings (n: " -config-file ${n}") configFiles;
         ExecReload = "${pkgs.consul}/bin/consul reload";
         PermissionsStartOnly = true;
