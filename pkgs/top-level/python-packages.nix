@@ -11892,7 +11892,7 @@ let
       md5 = "470ca4da4a0081efc830f0d90dd91682";
     };
 
-    buildInputs = with self; [ nose mock ];
+    buildInputs = with self; [ nose mock pysqlite ];
 
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
 
