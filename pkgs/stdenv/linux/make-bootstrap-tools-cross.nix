@@ -34,7 +34,7 @@ let
     };
   };
   
-  beagleboneCrossSystem = {
+  armv7l-hf-multiplatform-crossSystem = {
     crossSystem = rec {
       config = "armv7l-unknown-linux-gnueabi";  
       bigEndian = false;
@@ -43,7 +43,7 @@ let
       fpu = "vfpv3-d16";
       withTLS = true;
       libc = "glibc";
-      platform = pkgsNoParams.platforms.beaglebone;
+      platform = pkgsNoParams.platforms.armv7l-hf-multiplatform;
       openssl.system = "linux-generic32";
       inherit (platform) gcc;
     };
@@ -52,7 +52,7 @@ let
   selectedCrossSystem =
     if toolsArch == "armv5tel" then sheevaplugCrossSystem else
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
-    if toolsArch == "armv7l" then beagleboneCrossSystem else null;
+    if toolsArch == "armv7l" then armv7l-hf-multiplatform-crossSystem else null;
 
   pkgs = pkgsFun ({inherit system;} // selectedCrossSystem);
 
@@ -92,11 +92,7 @@ rec {
     aclSupport = false;
   })).crossDrv;
   
-  curlMinimal = (pkgs.curl.override {
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  }).crossDrv;
+  curl-light = pkgs.curl-light.crossDrv;
   
   busyboxMinimal = (pkgs.busybox.override {
     # TBD: uClibc is broken.
@@ -170,8 +166,8 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
+        cp ${curl-light}/bin/curl $out/bin
+        cp -d ${curl-light}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
         

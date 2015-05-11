@@ -11,7 +11,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.6.5";
+  version = "2.8.0";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "14vmqq6hr3jzphay49984kj22vlqhpsjmwh1krdm9k57rqbq0rdi";
+    sha256 = "05b8mkr1mv1w5vi5vyczzirgf5nr6qavrdwbcaiv0dghylwx5yh5";
   };
 
   patches = [ ./finding-harfbuzz-icu.patch ];
@@ -47,5 +47,5 @@ stdenv.mkDerivation rec {
     libsoup gtk3
   ];
 
-  # enableParallelBuilding = true; # build problems on Hydra
+  enableParallelBuilding = true; # build problems on Hydra
 }

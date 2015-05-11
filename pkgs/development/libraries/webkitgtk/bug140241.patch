@@ -1,0 +1,59 @@
+@@ -, +, @@ 
+        REGRESSION(r177885): [GTK][WK1] Cannot compile 2.4.8 when WK2 is disabled
+        https://bugs.webkit.org/show_bug.cgi?id=140241
+        Reviewed by NOBODY (OOPS!).
+        We have to compile the PluginPackageNone.cpp and PluginViewNone.cpp
+        just when WebKit2 is enabled and we are not building for X11.
+        * GNUmakefile.list.am:
+---
+ Source/WebCore/ChangeLog           | 12 ++++++++++++
+ Source/WebCore/GNUmakefile.list.am |  8 ++++++++
+ 2 files changed, 20 insertions(+)
+--- a/Source/WebCore/ChangeLog	
++++ a/Source/WebCore/ChangeLog	
+@@ -1,3 +1,15 @@ 
++2015-01-16  Tomas Popela  <tpopela@redhat.com>
++
++        REGRESSION(r177885): [GTK][WK1] Cannot compile 2.4.8 when WK2 is disabled
++        https://bugs.webkit.org/show_bug.cgi?id=140241
++
++        Reviewed by NOBODY (OOPS!).
++
++        We have to compile the PluginPackageNone.cpp and PluginViewNone.cpp
++        just when WebKit2 is enabled and we are not building for X11.
++
++        * GNUmakefile.list.am:
++
+ 2014-11-10  Csaba Osztrogonác  <ossy@webkit.org>
+ 
+         Crash in WebCore::Node::getFlag
+--- a/Source/WebCore/GNUmakefile.list.am	
++++ a/Source/WebCore/GNUmakefile.list.am	
+@@ -6254,9 +6254,13 @@ endif # END USE_GLX
+ endif # END TARGET_X11
+ 
+ if TARGET_WAYLAND
++if !TARGET_X11
++if ENABLE_WEBKIT2
+ webcore_sources += \
+ 	Source/WebCore/plugins/PluginPackageNone.cpp \
+ 	Source/WebCore/plugins/PluginViewNone.cpp
++endif # END ENABLE_WEBKIT2
++endif # END !TARGET_X11
+ endif # END TARGET_WAYLAND
+ 
+ if TARGET_X11_OR_WAYLAND
+@@ -6305,9 +6309,13 @@ webcoregtk_sources += \
+ endif # END TARGET_WIN32
+ 
+ if TARGET_QUARTZ
++if !TARGET_X11
++if ENABLE_WEBKIT2
+ webcore_sources += \
+ 	Source/WebCore/plugins/PluginPackageNone.cpp \
+ 	Source/WebCore/plugins/PluginViewNone.cpp
++endif # END ENABLE_WEBKIT2
++endif # END !TARGET_X11
+ platformgtk_sources += \
+ 	Source/WebCore/platform/cairo/WidgetBackingStoreCairo.h \
+ 	Source/WebCore/platform/cairo/WidgetBackingStoreCairo.cpp

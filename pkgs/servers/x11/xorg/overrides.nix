@@ -189,6 +189,10 @@ in
     buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
+  xcbutilcursor = attrs: attrs // {
+    meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
+  };
+
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
@@ -200,6 +204,11 @@ in
   };
 
   xf86inputjoystick = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
+  xf86inputlibinput = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.libinput ];
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 

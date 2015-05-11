@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
     description = "MOD playing library";
     homepage    = "http://modplug-xmms.sourceforge.net/";
     license     = licenses.publicDomain;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ raskin ];
   };
 

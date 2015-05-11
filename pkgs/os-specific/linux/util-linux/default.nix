@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.26";
+  name = "util-linux-2.26.1";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
-    sha256 = "a23c6f39dea0ed215ccd589509ffc7bb6f706f6e1a04760f493fb0fd7e93c489";
+    sha256 = "0vmvk5khfwf71xbsnplvmk9ikwnlbhysc96mnkgwpqk2faairp12";
   };
 
   patches = [ ./rtcwake-search-PATH-for-shutdown.patch
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     --enable-write
     --enable-last
     --enable-mesg
-    --enable-ddate
     --disable-use-tty-group
     --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}

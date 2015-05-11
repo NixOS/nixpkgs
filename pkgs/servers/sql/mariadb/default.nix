@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ncurses, openssl, pcre, boost, judy, bison, libxml2
+{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xcs391cm0vnl9bvx1470v8z4d77zqv16n6iaqi12jm0ma8fwvv8";
   };
 
-  buildInputs = [ cmake ncurses openssl pcre libxml2 boost judy bison libevent ]
+  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
 
@@ -89,6 +89,11 @@ stdenv.mkDerivation rec {
     mkdir -p $lib
     mv $out/lib $lib
     mv $out/include $lib
+
+    # Fix the mysql_config
+    sed -i $out/bin/mysql_config \
+      -e 's,-lz,-L${zlib}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl}/lib -lssl,g'
 
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin

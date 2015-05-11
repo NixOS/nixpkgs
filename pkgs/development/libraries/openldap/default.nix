@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
 
   dontPatchELF = 1; # !!!
 
+  # Fixup broken libtool
+  preFixup = ''
+    sed -e 's,-lsasl2,-L${cyrus_sasl}/lib -lsasl2,' \
+        -e 's,-lssl,-L${openssl}/lib -lssl,' \
+        -i $out/lib/libldap.la -i $out/lib/libldap_r.la
+  '';
+
   meta = with stdenv.lib; {
     homepage    = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";

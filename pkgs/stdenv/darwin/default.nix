@@ -12,7 +12,7 @@ rec {
 
     name    = "trivial-bootstrap-tools";
     builder = "/bin/sh";
-    args    = [ ./trivialBootstrap.sh ];
+    args    = [ ./trivial-bootstrap.sh ];
 
     mkdir   = "/bin/mkdir";
     ln      = "/bin/ln";
@@ -50,7 +50,11 @@ rec {
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
     xargsFlags=" "
     export MACOSX_DEPLOYMENT_TARGET=10.7
-    export SDKROOT=$(/usr/bin/xcrun --sdk macosx$(/usr/bin/xcrun --show-sdk-version) --show-sdk-path 2> /dev/null || echo /)
+    # Use the 10.9 SDK if we're running on 10.9, and 10.10 if we're
+    # running on 10.10. We need to use the 10.10 headers for functions
+    # like readlinkat() that are dynamically detected by configure
+    # scripts. Very impure, obviously.
+    export SDKROOT=$(/usr/bin/xcrun --sdk macosx"$(/usr/bin/sw_vers -productVersion | /usr/bin/cut -d. -f1,2)" --show-sdk-path 2> /dev/null || echo /)
     export NIX_CFLAGS_COMPILE+=" --sysroot=/var/empty -idirafter $SDKROOT/usr/include -F$SDKROOT/System/Library/Frameworks -Wno-multichar -Wno-deprecated-declarations"
     export NIX_LDFLAGS_AFTER+=" -L$SDKROOT/usr/lib"
     export CMAKE_OSX_ARCHITECTURES=x86_64

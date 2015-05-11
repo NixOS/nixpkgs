@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ fftw qt5 ];
+  buildInputs = [ fftw qt5.base ];
   propagatedBuildInputs = [ boost ];
 
   patchPhase = ''

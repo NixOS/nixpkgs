@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i config.h \
-      -e 's|.*#define.*TKGATE_TCLTK_VERSIONS.*|#define TKGATE_TCLTK_VERSIONS "8.5"|' \
+      -e 's|.*#define.*TKGATE_TCLTK_VERSIONS.*|#define TKGATE_TCLTK_VERSIONS "${tcl.release}"|' \
       -e 's|.*#define.*TKGATE_INCDIRS.*|#define TKGATE_INCDIRS "${tcl}/include ${tk}/include ${libiconvInc} ${libX11}/include"|' \
       -e 's|.*#define.*TKGATE_LIBDIRS.*|#define TKGATE_LIBDIRS "${tcl}/lib ${tk}/lib ${libiconvLib} ${libX11}/lib"|' \
       \
