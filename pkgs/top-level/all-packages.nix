@@ -8625,6 +8625,10 @@ let
     bluez5 = null;
     tdb = null;
     gdbm = null;
+    gtk3 = null;
+    webrtc-audio-processing = null;
+    gconf = null;
+    libasyncns = null;
   };
 
   pulseaudioFull = callPackage ../servers/pulseaudio {
