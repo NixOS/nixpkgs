@@ -2088,7 +2088,7 @@ let
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi; 
+    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi;
   };
 
   cryptography_vectors = buildPythonPackage rec {
@@ -15367,7 +15367,7 @@ let
     };
   };
 
-  
+
   markdown2 = buildPythonPackage rec {
     name = "markdown2-${version}";
     version = "2.3.0";
@@ -15384,8 +15384,8 @@ let
       maintainers = with maintainers; [ hbunke ];
     };
   };
-  
-  
+
+
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";
     version = "1.25.0";
@@ -15405,7 +15405,7 @@ let
       maintainers = with maintainers; [ hbunke ];
      };
   };
-    
+
   thrift = buildPythonPackage rec {
     name = "thrift-${version}";
     version = "0.9.2";
@@ -15423,11 +15423,11 @@ let
 
     };
   };
-  
+
   geeknote = buildPythonPackage rec {
     version = "2015-03-02";
     name = "geeknote-${version}";
-    disabled = ! isPy27; 
+    disabled = ! isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "VitaliyRodnenko";
@@ -15436,13 +15436,13 @@ let
       sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
     };
 
-    /* build with tests fails with "Can not create application dirictory : 
+    /* build with tests fails with "Can not create application dirictory :
      /homeless-shelter/.geeknotebuilder". */
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ 
-        thrift 
-        beautifulsoup4 
+    propagatedBuildInputs = with self; [
+        thrift
+        beautifulsoup4
         markdown2
         sqlalchemy
         html2text
