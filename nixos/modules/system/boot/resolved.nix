@@ -30,9 +30,6 @@ with lib;
       DNS=${concatStringsSep " " config.networking.nameservers}
     '';
 
-    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
-    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
-
   };
 
 }
