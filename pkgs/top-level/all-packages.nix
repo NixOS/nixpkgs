@@ -9011,6 +9011,7 @@ let
   };
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
+  riak2 = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   influxdb = callPackage ../servers/nosql/influxdb { };
 
