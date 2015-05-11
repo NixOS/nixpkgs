@@ -1,11 +1,12 @@
 { stdenv, fetchurl, makeDesktopItem, qt4 }:
 
-let version = "3.4.9"; in
+let version = "3.4.11"; in
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
 
   src = fetchurl {
-    sha256 = "0valq3cgx7yz11zcscz1vdjmppwbicvg0id61dcar22pyp2zkap1";
+    sha256 = "10xxcnib7xkvrx7wma2vbya5fz5s5f6syc9dmr395c83lpcwpxs8";
+    # The "Download" button is a .tar.gz, but there's a .tar.bz2 further down:
     url = "http://download.clipgrab.de/${name}.tar.bz2";
   };
 
