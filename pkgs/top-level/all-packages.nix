@@ -3508,7 +3508,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc       = gcc48;
+  gcc       = gcc5;
   gcc_multi = gcc48_multi;
 
   gccApple = throw "gccApple is no longer supported";
