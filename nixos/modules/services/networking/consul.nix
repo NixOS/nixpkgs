@@ -6,11 +6,9 @@ let
   dataDir = "/var/lib/consul";
   cfg = config.services.consul;
 
-  configOptions = {
-    data_dir = dataDir;
-  }
-  // (if cfg.webUi then { ui_dir = "${pkgs.consul.ui}"; } else { })
-  // cfg.extraConfig;
+  configOptions = { data_dir = dataDir; } //
+    (if cfg.webUi then { ui_dir = "${pkgs.consul.ui}"; } else { }) //
+    cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
     ++ cfg.extraConfigFiles;
@@ -49,23 +47,6 @@ in
           it from the cluster. You probably don't want this option unless you
           are running a node which going offline in a permanent / semi-permanent
           fashion.
-        '';
-      };
-
-      joinNodes = mkOption {
-        type = types.listOf types.str;
-        default = [ ];
-        description = ''
-          A list of addresses of nodes which should be joined at startup if the
-          current node is in a left state.
-        '';
-      };
-
-      joinRetries = mkOption {
-        type = types.int;
-        default = 10;
-        description = ''
-          The number of times to retry connecting to the join nodes.
         '';
       };
 
@@ -218,18 +199,6 @@ in
         ''))
       + ''
         echo "}" >> /etc/consul-addrs.json
-      '';
-      postStart = ''
-        # Issues joins to nodes which we statically connect to
-        ${flip concatMapStrings cfg.joinNodes (addr: ''
-          for i in {0..${toString cfg.joinRetries}}; do
-            # Try to join the other nodes ${toString cfg.joinRetries} times before failing
-            consul join "${addr}" && break
-            sleep 1
-          done &
-        '')}
-        wait
-        exit 0
       '';
     };
 
