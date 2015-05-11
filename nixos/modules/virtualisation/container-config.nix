@@ -19,10 +19,6 @@ with lib;
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
 
-    systemd.services.systemd-remount-fs.enable = false;
-
-    systemd.services.systemd-random-seed.enable = false;
-
   };
 
 }
