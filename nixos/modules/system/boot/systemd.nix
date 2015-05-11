@@ -750,6 +750,10 @@ in
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
 
+    # Don't bother with certain units in containers.
+    systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
+    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
+
   };
 
 }
