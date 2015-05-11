@@ -103,24 +103,30 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix all broken refernces to dependencies in .la and .pc files
-  postInstall = optionalString (optZlib != null) ''
-    sed -i 's,\(-lz\),-L${optZlib}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+  postInstall = ''
+    sed -i \
+  '' + optionalString (optZlib != null) ''
+      -e 's,\(-lz\),-L${optZlib}/lib \1,' \
   '' + optionalString (optOpenssl != null) ''
-    sed -i 's,\(-lssl\|-lcrypto\),-L${optOpenssl}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+      -e 's,\(-lssl\|-lcrypto\),-L${optOpenssl}/lib \1,' \
   '' + optionalString (optLibssh2 != null) ''
-    sed -i 's,\(-lssh2\),-L${optLibssh2}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+      -e 's,\(-lssh2\),-L${optLibssh2}/lib \1,' \
   '' + optionalString (optLibnghttp2 != null) ''
-    sed -i 's,\(-lnghttp2\),-L${optLibnghttp2}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+      -e 's,\(-lnghttp2\),-L${optLibnghttp2}/lib \1,' \
   '' + optionalString (optC-ares != null) ''
-    sed -i 's,\(-lcares\),-L${optC-ares}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+      -e 's,\(-lcares\),-L${optC-ares}/lib \1,' \
   '' + optionalString (optGss != null) ''
-    sed -i 's,\(-lgss\),-L${optGss}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+      -e 's,\(-lgss\),-L${optGss}/lib \1,' \
   '' + optionalString (optRtmpdump != null) ''
-    sed -i 's,\(-lrtmp\),-L${optRtmpdump}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+      -e 's,\(-lrtmp\),-L${optRtmpdump}/lib \1,' \
   '' + optionalString (optOpenldap != null) ''
-    sed -i 's,\(-lgss\),-L${optOpenldap}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+      -e 's,\(-lgss\),-L${optOpenldap}/lib \1,' \
   '' + optionalString (optLibidn != null) ''
-    sed -i 's,\(-lidn\),-L${optLibidn}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+      -e 's,\(-lidn\),-L${optLibidn}/lib \1,' \
+  '' + optionalString (!stdenv.isDarwin) ''
+    $out/lib/libcurl.la \
+  '' + ''
+    $out/lib/pkgconfig/libcurl.pc
   '';
 
   meta = {
