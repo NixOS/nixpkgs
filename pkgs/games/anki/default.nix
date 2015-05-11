@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     postInstall = ''
       mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-      ln -s $out/share/anki/* $out/lib/${python.libPrefix}/site-packages/
+      ln -s "$out/share/anki/"* $out/lib/${python.libPrefix}/site-packages/
       export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
       wrapPythonPrograms
     '';
