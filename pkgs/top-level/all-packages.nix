@@ -1349,6 +1349,8 @@ let
     plugins = [ ];
   };
 
+  fcppt = callPackage ../development/libraries/fcppt/default.nix { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
