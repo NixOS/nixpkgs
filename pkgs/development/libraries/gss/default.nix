@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # Fixup .la files
-  postInstall = stdenv.lib.optionalString (shishi != null) ''
+  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin && shishi != null) ''
     sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
   '';
 
