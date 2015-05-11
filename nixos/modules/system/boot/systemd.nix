@@ -747,7 +747,6 @@ in
     systemd.services."systemd-rfkill@".restartIfChanged = false;
     systemd.services."user@".restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
-    systemd.services.systemd-journald.restartIfChanged = false; # FIXME: shouldn't be necessary with systemd 219
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
