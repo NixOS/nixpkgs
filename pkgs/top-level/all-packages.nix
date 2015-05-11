@@ -808,6 +808,8 @@ let
     linuxHeaders = linuxHeaders_3_14;
   };
 
+  edac-utils = callPackage ../os-specific/linux/edac-utils { };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   enca = callPackage ../tools/text/enca { };
