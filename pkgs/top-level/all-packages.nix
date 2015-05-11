@@ -6763,7 +6763,10 @@ let
 
   libmemcached = callPackage ../development/libraries/libmemcached { };
 
-  libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
+  libmicrohttpd = callPackage ../development/libraries/libmicrohttpd {
+    openssl = null;
+    gnutls = null;
+  };
 
   libmikmod = callPackage ../development/libraries/libmikmod { };
 
