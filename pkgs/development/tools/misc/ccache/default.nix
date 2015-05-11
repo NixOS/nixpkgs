@@ -1,12 +1,16 @@
 {stdenv, fetchurl, runCommand, gcc, zlib}:
 
 let
+  name = "ccache-${version}";
+  version = "3.2.2";
+  sha256 = "1jm0qb3h5sypllaiyj81zp6m009vm50hzjnx994ril94kxlrj3ag";
+
   ccache =
 stdenv.mkDerivation {
-  name = "ccache-3.2.1";
+  inherit name;
   src = fetchurl {
-    url = mirror://samba/ccache/ccache-3.2.1.tar.xz;
-    sha256 = "17dxb0adha2bqzb2r8rcc3kl9mk7y6vrvlh181liivrc3m7g6al7";
+    inherit sha256;
+    url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
   buildInputs = [ zlib ];
@@ -37,8 +41,10 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = http://ccache.samba.org/;
+    downloadPage = https://ccache.samba.org/download.html;
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ nckx ];
   };
