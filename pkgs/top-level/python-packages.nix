@@ -11866,7 +11866,6 @@ let
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
-    buildInputs = [self.pysqlite];
   };
 
   sqlalchemy8 = self.sqlalchemy9.override rec {
@@ -11881,7 +11880,6 @@ let
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
-    buildInputs = [self.pysqlite];
   };
 
   sqlalchemy9 = buildPythonPackage rec {
