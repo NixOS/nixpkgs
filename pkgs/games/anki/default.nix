@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     meta = {
       homepage = http://ankisrs.net/;
       description = "Spaced repetition flashcard program";
-      # Copy-pasted from the homepage
+      license = stdenv.lib.licenses.gpl3;
+
       longDescription = ''
         Anki is a program which makes remembering things easy. Because it is a lot
         more efficient than traditional study methods, you can either greatly
@@ -60,15 +61,11 @@ stdenv.mkDerivation rec {
         Anyone who needs to remember things in their daily life can benefit from
         Anki. Since it is content-agnostic and supports images, audio, videos and
         scientific markup (via LaTeX), the possibilities are endless. For example:
-
-        * learning a language
-        * studying for medical and law exams
-        * memorizing people's names and faces
-        * brushing up on geography
-        * mastering long poems
-        * even practicing guitar chords!
+        learning a language, studying for medical and law exams, memorizing
+        people's names and faces, brushing up on geography, mastering long poems,
+        or even practicing guitar chords!
       '';
-      license = stdenv.lib.licenses.gpl3;
+
       maintainers = with stdenv.lib.maintainers; [ the-kenny ];
       platforms = stdenv.lib.platforms.mesaPlatforms;
     };
