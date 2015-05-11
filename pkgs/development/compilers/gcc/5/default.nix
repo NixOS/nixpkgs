@@ -33,6 +33,7 @@
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , gnused ? null
+, binutils ? null
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -46,6 +47,9 @@ assert libelf != null -> zlib != null;
 
 # Make sure we get GNU sed.
 assert stdenv.isDarwin -> gnused != null;
+
+# Need c++filt on darwin
+assert stdenv.isDarwin -> binutils != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -285,6 +289,7 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional stdenv.isDarwin gnused)
+    ++ (optional stdenv.isDarwin binutils)
     ;
 
   NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
