@@ -116,6 +116,7 @@
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
   kragniz = "Louis Taylor <kragniz@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
+  lassulus = "Lassulus <lassulus@gmail.com>";
   lethalman = "Luca Bruno <lucabru@src.gnome.org>";
   lhvwb = "Nathaniel Baxter <nathaniel.baxter@gmail.com>";
   linquize = "Linquize <linquize@yahoo.com.hk>";

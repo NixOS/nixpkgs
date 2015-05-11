@@ -253,6 +253,7 @@
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
   ./services/networking/btsync.nix
+  ./services/networking/charybdis.nix
   ./services/networking/chrony.nix
   ./services/networking/cjdns.nix
   ./services/networking/cntlm.nix
