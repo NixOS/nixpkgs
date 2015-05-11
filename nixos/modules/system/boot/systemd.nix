@@ -69,6 +69,7 @@ let
       "systemd-journal-flush.service"
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
+      "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
       "syslog.socket"
 

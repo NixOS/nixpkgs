@@ -10,25 +10,27 @@ assert stdenv.isLinux;
 assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  version = "217";
+  version = "219";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "163l1y4p2a564d4ynfq3k3xf53j2v5s81blb6cvpn1y7rpxyccd0";
+    sha256 = "1ngj0d2wg6r58m4zycd2w0zkmkz71abbv0dl1h6h8z73ahs12msw";
   };
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v217.
+      # https://github.com/edolstra/systemd/tree/nixos-v219.
       ./fixes.patch
     ];
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap kmod xz pam acl
+    [ pkgconfig intltool gperf kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd linuxHeaders
+      libmicrohttpd linuxHeaders kexectools
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
+
+  propagatedBuildInputs = [ libcap ];
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -56,6 +58,10 @@ stdenv.mkDerivation rec {
       "--disable-localed"
       "--enable-resolved"
       "--disable-split-usr"
+      "--disable-libcurl"
+      "--disable-libidn"
+      "--disable-quotacheck"
+      "--disable-ldconfig"
 
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="
@@ -66,7 +72,7 @@ stdenv.mkDerivation rec {
     ''
       # FIXME: patch this in systemd properly (and send upstream).
       # FIXME: use sulogin from util-linux once updated.
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
         test -e $i
         substituteInPlace $i \
           --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
@@ -76,8 +82,7 @@ stdenv.mkDerivation rec {
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
-          --replace /sbin/kexec ${kexectools}/sbin/kexec
+          --replace /sbin/sulogin ${utillinux}/sbin/sulogin
       done
 
       substituteInPlace src/journal/catalog.c \
