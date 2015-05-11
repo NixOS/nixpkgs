@@ -55,6 +55,11 @@ self: super: {
     sha256 = "193i1xmq6z0jalwmq0mhqk1khz6zz0i1hs6lgfd7ybd6qyaqnf5f";
   });
 
+  language-glsl = appendPatch super.language-glsl (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/noteed/language-glsl/pull/10.patch";
+    sha256 = "1d8dmfqw9y7v7dlszb7l3wp0vj77j950z2r3r0ar9mcvyrmfm4in";
+  });
+
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
@@ -140,8 +145,8 @@ self: super: {
     version = "0.1.0.0";
     src = fetchgit {
       url = git://github.com/ghcjs/ghcjs-prim.git;
-      rev = "ca08e46257dc276e01d08fb47a693024bae001fa"; # ghc-7.10 branch
-      sha256 = "0w7sqzp5p70yhmdhqasgkqbf3b61wb24djlavwil2j8ry9y472w3";
+      rev = "dfeaab2aafdfefe46bf12960d069f28d2e5f1454"; # ghc-7.10 branch
+      sha256 = "19kyb26nv1hdpp0kc2gaxkq5drw5ib4za0641py5i4bbf1g58yvy";
     };
     buildDepends = [ primitive ];
     license = pkgs.stdenv.lib.licenses.bsd3;
@@ -318,11 +323,11 @@ self: super: {
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
   vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
 
-  # https://github.com/bos/wreq/issues/61
-  wreq = markBrokenVersion "0.3.0.1" (dontCheck super.wreq);
-  wreq-sb = dontDistribute (dontCheck super.wreq-sb);
+  # https://github.com/purefn/hipbot/issues/1
   hipbot = dontDistribute super.hipbot;
-  bitcoin-api = dontDistribute super.bitcoin-api;
+
+  # https://github.com/solatis/haskell-bitcoin-api/issues/1
+  bitcoin-api = markBroken super.bitcoin-api;
   bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
