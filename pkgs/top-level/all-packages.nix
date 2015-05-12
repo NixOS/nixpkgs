@@ -10949,6 +10949,8 @@ let
     inherit pkgconfig autoconf automake gettext;
   };
 
+  fomp = callPackage ../applications/audio/fomp { };
+
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost156;
     opencascade = opencascade_6_5;
