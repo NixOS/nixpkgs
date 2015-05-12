@@ -125,7 +125,7 @@ self: super: {
 
   # Until the changes have been pushed to Hackage
   mueval = appendPatch super.mueval (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/10.patch";
+    url = "https://github.com/gwern/mueval/commit/c41aa40ed63b74c069d1e4e3caa8c8d890cde960.patch";
     sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
   });
   present = appendPatch super.present (pkgs.fetchpatch {
