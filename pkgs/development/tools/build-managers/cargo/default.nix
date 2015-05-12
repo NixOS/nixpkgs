@@ -1,7 +1,7 @@
 { stdenv, fetchgit, rustPlatform, file, curl, python, pkgconfig, openssl
 , cmake, zlib }:
 
-with ((import ./common.nix) { inherit stdenv; version = "2015-04-14"; });
+with ((import ./common.nix) { inherit stdenv; version = "2015-05-11"; });
 
 with rustPlatform;
 
@@ -10,20 +10,12 @@ buildRustPackage rec {
 
   src = fetchgit {
     url = "https://github.com/rust-lang/cargo.git";
-    rev = "d49b44358ed800351647571144257d35ac0886cf";
-    sha256 = "1kaims28237mvp1qpw2cfgb3684jr54ivkdag0lw8iv9xap4i35y";
+    rev = "a078e01ffab70738eafb7401704d1eaf90b94de2";
+    sha256 = "0vw62kxlmkajyix6n4cdz7w9l26dspjiw2fk4xkj33gzzc8rq9g8";
     leaveDotGit = true;
   };
 
-  cargoUpdateHook = ''
-    # Updating because version 2.1.4 has an invalid Cargo.toml
-    cargo update -p libressl-pnacl-sys --precise 2.1.5
-
-    # Updating because version 0.1.3 has a build failure with recent rustc
-    cargo update -p threadpool --precise 0.1.4
-  '';
-
-  depsSha256 = "1gj3mnjj17h5p0r1jcm3m3pm3p3l1rbfdz3l7v1cykng78dsabnq";
+  depsSha256 = "1sk79w2wxvpgfkxr0nbrqqxdih4abiqvawdd88r2p9cqzrkdg8by";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
 
