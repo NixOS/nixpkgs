@@ -11875,6 +11875,8 @@ let
     gtksharp = gtk-sharp;
   };
 
+  plugin-torture = callPackage ../applications/audio/plugin-torture { };
+
   pommed = callPackage ../os-specific/linux/pommed {
     inherit (xorg) libXpm;
   };
