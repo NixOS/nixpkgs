@@ -239,7 +239,7 @@ let
   # just the plain stdenv.
   stdenv_32bit = lowPrio (
     if system == "x86_64-linux" then
-      overrideCC stdenv gcc48_multi
+      overrideCC stdenv gcc_multi
     else
       stdenv);
 
@@ -3469,8 +3469,20 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc       = gcc48;
-  gcc_multi = gcc48_multi;
+  gcc = gcc49;
+
+  gcc_multi =
+    if system == "x86_64-linux" then lowPrio (
+      wrapCCWith (import ../build-support/cc-wrapper) glibc_multi (gcc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi gcc.cc);
+        profiledCompiler = false;
+        enableMultilib = true;
+      }))
+    else throw "Multilib gcc not supported on ‘${system}’";
+
+  gcc_debug = lowPrio (wrapCC (gcc.cc.override {
+    stripped = false;
+  }));
 
   gccApple = throw "gccApple is no longer supported";
 
@@ -3599,24 +3611,6 @@ let
       if crossSystem != null && crossSystem.config == "i586-pc-gnu"
       then gnu.libpthreadCross
       else null;
-  }));
-
-  gcc48_multi =
-    if system == "x86_64-linux" then lowPrio (
-      wrapCCWith (import ../build-support/cc-wrapper) glibc_multi (gcc48.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi gcc.cc);
-        profiledCompiler = false;
-        enableMultilib = true;
-      }))
-    else throw "Multilib gcc not supported on ‘${system}’";
-
-  gcc48_debug = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
-    stripped = false;
-
-    inherit noSysDirs;
-    cross = null;
-    libcCross = null;
-    binutilsCross = null;
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
