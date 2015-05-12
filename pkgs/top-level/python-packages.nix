@@ -643,6 +643,23 @@ let
     };
   });
 
+  attrdict = buildPythonPackage (rec {
+    name = "attrdict-2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/attrdict/${name}.tar.gz";
+      md5 = "8a7c1a4e737fe9e2b2b8844c0f7746f8";
+    };
+
+    propagatedBuildInputs = with self; [ coverage nose six ];
+
+    meta = {
+      description = "A dict with attribute-style access";
+      homepage = https://github.com/bcj/AttrDict;
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
   audioread = buildPythonPackage rec {
     name = "audioread-1.2.1";
 
