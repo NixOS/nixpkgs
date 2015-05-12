@@ -3085,6 +3085,8 @@ let
 
   rcm = callPackage ../tools/misc/rcm {};
 
+  terraform = callPackage ../tools/admin/terraform {};
+
   tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
 
   tigervnc = callPackage ../tools/admin/tigervnc {
