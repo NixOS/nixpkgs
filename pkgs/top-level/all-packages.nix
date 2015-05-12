@@ -4397,6 +4397,24 @@ let
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
   rustc = rustcBeta;
 
+  rustPlatform = rustStable;
+
+  rustStable = recurseIntoAttrs (makeRustPlatform rustc cargo rustStable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster cargo rustUnstable);
+
+  # rust platform to build cargo itself (with cargoSnapshot)
+  rustCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot rustCargoPlatform;
+
+  makeRustPlatform = rustc: cargo: self:
+    let
+      callPackage = newScope self;
+    in {
+      inherit rustc cargo;
+
+      rustRegistry = callPackage ./rust-packages.nix { };
+
+      buildRustPackage = callPackage ../build-support/rust { };
+    };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
@@ -5011,6 +5029,11 @@ let
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
+  cargo = callPackage ../development/tools/build-managers/cargo {
+    # cargo needs to be built with rustCargoPlatform, which uses cargoSnapshot
+    rustPlatform = rustCargoPlatform;
+  };
+
   cargoSnapshot = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
 
   casperjs = callPackage ../development/tools/casperjs { };
@@ -5338,8 +5361,8 @@ let
   premake = premake4;
 
   racerRust = callPackage ../development/tools/rust/racer {
-    rustc = rustcMaster;
-    cargo = cargoSnapshot;
+    # racerRust still uses unstable features from the standard library
+    rustPlatform = rustUnstable;
   };
 
   radare = callPackage ../development/tools/analysis/radare {
