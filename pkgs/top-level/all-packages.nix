@@ -4220,6 +4220,8 @@ let
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    comparelib = callPackage ../development/ocaml-modules/comparelib { };
+
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
