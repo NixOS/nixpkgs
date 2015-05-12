@@ -36,6 +36,7 @@ let
       "Kipi" = "libkipi";
       "LibKMahjongg" = "libkmahjongg";
       "LibKonq" = "kde-baseapps";
+      "Marble" = "marble";
     };
 
   mkDerivation = drv: kf5.mkDerivation (drv // {
@@ -336,19 +337,20 @@ let
         buildInputs = super.libkface.buildInputs ++ [scope.KDE4 opencv];
       };
 
+      libkgeomap = super.libkgeomap // {
+        cmakeFlags =
+          (super.libkgeomap.cmakeFlags or [])
+          ++ [
+            "-DCMAKE_MODULE_PATH=${kdeApps.marble}/share/apps/cmake/modules"
+          ];
+      };
+
       libkipi = with pkgs; super.libkipi // {
         buildInputs = super.libkipi.buildInputs ++ [scope.KDE4];
       };
 
       libksane = with pkgs; super.libksane // {
         buildInputs = super.libksane.buildInputs ++ [scope.KDE4 saneBackends];
-      };
-
-      marble = super.marble // {
-        preConfigure = ''
-          ${super.preConfigure or ""}
-          cmakeFlags="$cmakeFlags -DCMAKE_MODULES_INSTALL_PATH=$out/lib/cmake"
-        '';
       };
 
       rocs = super.rocs // {
