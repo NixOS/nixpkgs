@@ -4294,9 +4294,13 @@ let
     };
 
     typeconv_108_08_00 = callPackage ../development/ocaml-modules/typeconv/108.08.00.nix { };
+    typeconv_109_60_01 = callPackage ../development/ocaml-modules/typeconv/109.60.01.nix { };
+    typeconv_112_01_01 = callPackage ../development/ocaml-modules/typeconv/112.01.01.nix { };
     ocaml_typeconv =
-      if lib.versionOlder "4.00" ocaml_version
-      then callPackage ../development/ocaml-modules/typeconv { }
+      if lib.versionOlder "4.02" ocaml_version
+      then typeconv_112_01_01
+      else if lib.versionOlder "4.00" ocaml_version
+      then typeconv_109_60_01
       else if lib.versionOlder "3.12" ocaml_version
       then typeconv_108_08_00
       else null;
