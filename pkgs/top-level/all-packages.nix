@@ -3474,10 +3474,6 @@ let
 
   gccApple = throw "gccApple is no longer supported";
 
-  gcc34 = wrapCC (import ../development/compilers/gcc/3.4 {
-    inherit fetchurl stdenv noSysDirs;
-  });
-
   gcc48_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
     (callPackage ../development/compilers/gcc/4.8 {
       inherit noSysDirs;
