@@ -1812,7 +1812,6 @@ let
   isl = callPackage ../development/libraries/isl { };
   isl_0_11 = callPackage ../development/libraries/isl/0.11.1.nix { };
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
-  isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
 
   isync = callPackage ../tools/networking/isync { };
 
@@ -3694,8 +3693,6 @@ let
       if crossSystem != null && crossSystem.config == "i586-pc-gnu"
       then gnu.libpthreadCross
       else null;
-
-    isl = isl_0_14;
   }));
 
   gfortran = gfortran48;
