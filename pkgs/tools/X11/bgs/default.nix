@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "bgs-${version}";
-  version = "0.7";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "https://github.com/Gottox/bgs/archive/v${version}.tar.gz";
-    sha256 = "1w1zz9nzj0a0r9rlnq5psjj7n2ff1zfghcs6j268i5c7nkyaw28a";
+    sha256 = "1kgm139daz4xrymx11whbmwzsnps9yn4g34a17s34ihi0raf70w8";
   };
 
   buildInputs = [ libX11 libXinerama imlib2 ];
