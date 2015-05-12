@@ -4100,6 +4100,8 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
+    bin_prot = callPackage ../development/ocaml-modules/bin_prot { };
+
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
     ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
