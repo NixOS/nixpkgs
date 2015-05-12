@@ -4,14 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   #TODO add emacs support
-  name = "racer-git-2015-04-12";
+  name = "racer-git-2015-05-04";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "5437e2074d87dfaab75a0f1bd2597bed61c0bbf1";
-    sha256 = "0a768gvjry86l0xa5q0122iyq7zn2h9adfniglsgrbs4fan49xyn";
+    rev = "bf2373ec08b0be03598283bd610c5b61bdb8738c";
+    sha256 = "0ldf05d19ghxk3fslxrc87j18zg8bam2y0ygdy456h37y2p1d1ck";
   };
 
-  depsSha256 = "13rnxr5inrfnmg5mg2vap17fd2jp32g2a70pfi1sshi6vjr8kpap";
+  patches = [ ./pr-232.patch ];
+
+  depsSha256 = "0rinyh365znx39aygxyyxmi496pw0alblf2dl7l8fbmz63nkhfv2";
 
   buildInputs = [ makeWrapper ];
 
