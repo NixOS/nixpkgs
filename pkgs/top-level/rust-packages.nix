@@ -7,24 +7,21 @@
 { runCommand, fetchgit, git }:
 
 let
-  version = "2015-04-23";
+  version = "2015-05-12";
 
   src = fetchgit {
       url = git://github.com/rust-lang/crates.io-index.git;
 
-      rev = "965b634156cc5c6f10c7a458392bfd6f27436e7e";
-      sha256 = "1hbl3g1d6yz6x2fm76dxmcn8rdrmri4l9n6flvv0pkn4hsid7zw1";
-
-      # cargo needs the 'master' branch to exist
-      leaveDotGit = true;
-      branchName = "master";
+      rev = "9bf9e7f2b242552ccec879b47b2225a76c7c79b0";
+      sha256 = "14rrpm6and52qasn7fv5fkflhnkyr86xy0k9pjgw407k7xms0cmw";
   };
 
 in
 
 runCommand "rustRegistry-${version}-${builtins.substring 0 7 src.rev}" {} ''
   # For some reason, cargo doesn't like fetchgit's git repositories, not even
-  # if we clone them (tested with registry rev
+  # if we set leaveDotGit to true, set the fetchgit branch to 'master' and clone
+  # the repository (tested with registry rev
   # 965b634156cc5c6f10c7a458392bfd6f27436e7e), failing with the message:
   #
   # "Target OID for the reference doesn't exist on the repository"
