@@ -4124,6 +4124,8 @@ let
 
     csv = callPackage ../development/ocaml-modules/csv { };
 
+    custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
+
     deriving = callPackage ../development/tools/ocaml/deriving { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
