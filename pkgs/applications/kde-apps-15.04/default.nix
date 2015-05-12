@@ -90,6 +90,7 @@ let
         Gpgme = gpgme;
         Gphoto2 = libgphoto2;
         Grantlee = grantlee;
+        Grantlee5 = grantlee5;
         GSL = gsl;
         HUNSPELL = hunspell;
         HUpnp = herqq;
@@ -348,6 +349,10 @@ let
           ${super.preConfigure or ""}
           cmakeFlags="$cmakeFlags -DCMAKE_MODULES_INSTALL_PATH=$out/lib/cmake"
         '';
+      };
+
+      rocs = super.rocs // {
+        buildInputs = super.rocs.buildInputs ++ (with kf5; [ kdelibs4support ]);
       };
 
       signon-kwallet-extension =

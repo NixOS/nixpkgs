@@ -6099,6 +6099,8 @@ let
 
   grantlee = callPackage ../development/libraries/grantlee { };
 
+  grantlee5 = callPackage ../development/libraries/grantlee/5.x.nix { };
+
   gsasl = callPackage ../development/libraries/gsasl { };
 
   gsl = callPackage ../development/libraries/gsl { };
