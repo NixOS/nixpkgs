@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed }:
+{ stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed, automake }:
 
 stdenv.mkDerivation {
   name = "tetex-3.0";
@@ -21,6 +21,10 @@ stdenv.mkDerivation {
   '';
 
   patches = [ ./environment.patch ./getline.patch ./clang.patch ];
+
+  preConfigure = stdenv.lib.optionalString stdenv.isCygwin ''
+    find ./ -name "config.guess" -exec rm {} \; -exec ln -s ${automake}/share/automake-*/config.guess {} \;
+  '';
 
   setupHook = ./setup-hook.sh;
 
