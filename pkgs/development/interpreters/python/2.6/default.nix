@@ -144,6 +144,7 @@ let
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
           python ./setup.py build_ext
+          [ -z "$(find build -name '*_failed.so' -print)" ]
         '';
 
       installPhase =
