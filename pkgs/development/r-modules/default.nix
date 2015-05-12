@@ -224,7 +224,7 @@ let
     fftwtools = [ pkgs.fftw ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl ];
-    git2r = [ pkgs.zlib ];
+    git2r = [ pkgs.zlib pkgs.openssl ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp ];
     graphscan = [ pkgs.gsl ];
@@ -888,7 +888,6 @@ let
     "RVideoPoker" # requires Rpanel
     "rysgran" # requires soiltexture
     "samr" # requires impute
-    "saps" # requires piano, and survcomp
     "SDD" # requires rpanel
     "seeg" # requires spatstat
     "selectspm" # depends on broken ecespa
