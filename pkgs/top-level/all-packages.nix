@@ -4511,27 +4511,6 @@ let
       inherit stdenv gcc binutils libc shell name cross;
     });
 
-  /* Alternative GCC wrapper that uses the standard -I include flag instead of
-   * -isystem. The -isystem flag can change the search order specified by prior
-   * -I flags. For KDE 5 packages, we don't want to interfere with the include
-   * search path order specified by the build system. Some packages depend on
-   * Qt 4 and Qt 5 simultaneously; because the two Qt versions provide headers
-   * with the same filenames, we must respect the search order specified by the
-   * build system so that the Qt 4 components find the Qt 4 headers and the Qt 5
-   * components find the Qt 5 headers.
-   */
-  wrapGCCStdInc = glibc: baseGCC: (import ../build-support/cc-wrapper) {
-    nativeTools = stdenv.cc.nativeTools or false;
-    nativeLibc = stdenv.cc.nativeLibc or false;
-    nativePrefix = stdenv.cc.nativePrefix or "";
-    cc = baseGCC;
-    libc = glibc;
-    inherit stdenv binutils coreutils zlib;
-    setupHook = ../build-support/cc-wrapper/setup-hook-stdinc.sh;
-  };
-
-  gccStdInc = wrapGCCStdInc glibc gcc.cc;
-
   # prolog
   yap = callPackage ../development/compilers/yap { };
 

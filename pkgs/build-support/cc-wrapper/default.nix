@@ -9,7 +9,6 @@
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? []
 , dyld ? null # TODO: should this be a setup-hook on dyld?
-, setupHook ? ./setup-hook.sh
 }:
 
 with stdenv.lib;
@@ -226,7 +225,7 @@ stdenv.mkDerivation {
     ''
 
     + ''
-      substituteAll ${setupHook} $out/nix-support/setup-hook.tmp
+      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook.tmp
       cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
       rm $out/nix-support/setup-hook.tmp
 
