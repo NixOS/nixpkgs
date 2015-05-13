@@ -669,7 +669,7 @@ self: super: {
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
-  # https://github.com/megantti/rtorrent-rpc/issues/1
+  # https://github.com/megantti/rtorrent-rpc/issues/2
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 
   # https://github.com/PaulJohnson/geodetics/issues/1
