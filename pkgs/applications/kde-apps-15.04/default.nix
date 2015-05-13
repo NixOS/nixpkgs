@@ -64,6 +64,7 @@ let
     (with pkgs;
       {
         ACL = acl;
+        AccountsQt5 = accounts-qt.override { inherit qt5; };
         Akonadi = kde4.akonadi;
         Alsa = alsaLib;
         Automoc4 = automoc4;
@@ -95,6 +96,7 @@ let
         GSL = gsl;
         HUNSPELL = hunspell;
         HUpnp = herqq;
+        Intltool = intltool;
         Jasper = jasper;
         KActivities = kde4.kactivities;
         LCMS2 = lcms2;
@@ -122,6 +124,7 @@ let
         Samba = samba;
         Sasl2 = cyrus_sasl;
         SharedDesktopOntologies = shared_desktop_ontologies;
+        SignOnQt5 = signon.override { inherit qt5; };
         SndFile = libsndfile;
         Speechd = speechd;
         TIFF = libtiff;
@@ -193,17 +196,9 @@ let
         nativeBuildInputs = super.ffmpegthumbs.nativeBuildInputs ++ [pkgconfig];
       };
 
-      kaccounts-integration =
-        let accounts-qt = pkgs.accounts-qt.override { inherit qt5; };
-            signon = pkgs.signon.override { inherit qt5; };
-        in super.kaccounts-integration // {
-          buildInputs = super.kaccounts-integration.buildInputs
-            ++ [ accounts-qt signon ];
-        };
-
       kaccounts-providers = super.kaccounts-providers // {
         buildInputs = super.kaccounts-providers.buildInputs
-          ++ (with pkgs; [ intltool libaccounts-glib ]);
+          ++ (with pkgs; [ libaccounts-glib ]);
         preConfigure = ''
           ${super.kaccounts-providers.preConfigure or ""}
           substituteInPlace webkit-options/CMakeLists.txt \
@@ -322,6 +317,18 @@ let
         buildInputs =
           super.krfb.buildInputs
           ++ [pkgs.xlibs.libXtst kde4.telepathy.common_internals];
+      };
+
+      ktp-accounts-kcm = super.ktp-accounts-kcm // {
+        buildInputs =
+          super.ktp-accounts-kcm.buildInputs
+          ++ [ pkgs.libaccounts-glib ];
+      };
+
+      ktp-common-internals = super.ktp-common-internals // {
+        buildInputs =
+          super.ktp-common-internals.buildInputs
+          ++ (with kf5; [ kdelibs4support kparts ]);
       };
 
       libkdcraw = with pkgs; super.libkdcraw // {
