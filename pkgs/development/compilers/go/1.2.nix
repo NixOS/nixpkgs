@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha1 = "3ce0ac4db434fc1546fec074841ff40dc48c1167";
   };
 
-  buildInputs = [ bison glibc bash makeWrapper ];
+  buildInputs = [ bison glibc bash makeWrapper libgpgerror ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
