@@ -317,10 +317,6 @@ self: super: {
   # https://github.com/purefn/hipbot/issues/1
   hipbot = dontDistribute super.hipbot;
 
-  # https://github.com/solatis/haskell-bitcoin-api/issues/1
-  bitcoin-api = markBroken super.bitcoin-api;
-  bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
-
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
