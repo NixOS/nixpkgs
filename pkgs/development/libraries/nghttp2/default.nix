@@ -34,12 +34,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}nghttp2-${version}";
-  version = "0.7.13";
+  version = "0.7.14";
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
-    url = "http://pub.wak.io/nixos/tarballs/nghttp2-0.7.13.tar.xz";
-    sha256 = "1nz14hmfhsxljmf7f3763q9kpn9prfdivrvdr7c74x72s75bzwli";
+    url = "http://pub.wak.io/nixos/tarballs/nghttp2-${version}.tar.bz2";
+    sha256 = "000d50yzyysbr9ldhvnbpzn35vplqm08dnmh55wc5zk273gy383f";
   };
 
   nativeBuildInputs = [ pkgconfig ];
