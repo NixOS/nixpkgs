@@ -11384,11 +11384,13 @@ let
 
   lash = callPackage ../applications/audio/lash { };
 
-  ladspaH = callPackage ../applications/audio/ladspa-plugins/ladspah.nix { };
+  ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
     fftw = fftwSinglePrec;
   };
+
+  ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   caps = callPackage ../applications/audio/caps { };
 
