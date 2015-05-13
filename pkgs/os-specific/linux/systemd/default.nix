@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ''
       # FIXME: patch this in systemd properly (and send upstream).
       # FIXME: use sulogin from util-linux once updated.
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
         test -e $i
         substituteInPlace $i \
           --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
