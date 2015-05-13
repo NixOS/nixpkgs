@@ -77,7 +77,6 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  esqueleto = doJailbreak super.esqueleto;
   pointfree = doJailbreak super.pointfree;
 
   # acid-state/safecopy#25 acid-state/safecopy#26
@@ -124,12 +123,8 @@ self: super: {
   unix-time = dontCheck super.unix-time;
 
   # Until the changes have been pushed to Hackage
-  dependent-sum-template = appendPatch super.dependent-sum-template (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/mokus0/dependent-sum-template/pull/4.patch";
-    sha256 = "1yb1ny4ckl4d3sf4xnvpbsa9rw2dficzgipijs5s3729dnsc3rb0";
-  });
   mueval = appendPatch super.mueval (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/10.patch";
+    url = "https://github.com/gwern/mueval/commit/c41aa40ed63b74c069d1e4e3caa8c8d890cde960.patch";
     sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
   });
   present = appendPatch super.present (pkgs.fetchpatch {
@@ -167,9 +162,8 @@ self: super: {
     prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
   });
 
-  # https://github.com/mokus0/misfortune/pull/1
   misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/mokus0/misfortune/pull/1.patch";
+    url = "https://github.com/mokus0/misfortune/commit/9e0a38cf8d59a0de9ae1156034653f32099610e4.patch";
     sha256 = "15frwdallm3i6k7mil26bbjd4wl6k9h20ixf3cmyris3q3jhlcfh";
   });
 
@@ -187,10 +181,7 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
-  lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
-
-  # https://github.com/haskell-infra/hackage-trustees/issues/24
+  # FIXME: remove with the next Hackage update
   brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
   unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
 
@@ -325,10 +316,6 @@ self: super: {
 
   # https://github.com/purefn/hipbot/issues/1
   hipbot = dontDistribute super.hipbot;
-
-  # https://github.com/solatis/haskell-bitcoin-api/issues/1
-  bitcoin-api = markBroken super.bitcoin-api;
-  bitcoin-api-extra = dontDistribute super.bitcoin-api-extra;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;

@@ -20,7 +20,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   at = linux;
   atlas = linux;
   aterm25 = all;
-  aterm28 = all;
   autoconf = all;
   automake = all;
   avahi = allBut cygwin;  # Cygwin builds fail

@@ -4399,6 +4399,24 @@ let
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
   rustc = rustcBeta;
 
+  rustPlatform = rustStable;
+
+  rustStable = recurseIntoAttrs (makeRustPlatform rustc cargo rustStable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster cargo rustUnstable);
+
+  # rust platform to build cargo itself (with cargoSnapshot)
+  rustCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot rustCargoPlatform;
+
+  makeRustPlatform = rustc: cargo: self:
+    let
+      callPackage = newScope self;
+    in {
+      inherit rustc cargo;
+
+      rustRegistry = callPackage ./rust-packages.nix { };
+
+      buildRustPackage = callPackage ../build-support/rust { };
+    };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {
@@ -5013,6 +5031,11 @@ let
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
+  cargo = callPackage ../development/tools/build-managers/cargo {
+    # cargo needs to be built with rustCargoPlatform, which uses cargoSnapshot
+    rustPlatform = rustCargoPlatform;
+  };
+
   cargoSnapshot = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
 
   casperjs = callPackage ../development/tools/casperjs { };
@@ -5339,10 +5362,7 @@ let
 
   premake = premake4;
 
-  racerRust = callPackage ../development/tools/rust/racer {
-    rustc = rustcMaster;
-    cargo = cargoSnapshot;
-  };
+  racerRust = callPackage ../development/tools/rust/racer { };
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
@@ -6100,6 +6120,8 @@ let
   };
 
   grantlee = callPackage ../development/libraries/grantlee { };
+
+  grantlee5 = callPackage ../development/libraries/grantlee/5.x.nix { };
 
   gsasl = callPackage ../development/libraries/gsasl { };
 
@@ -7203,6 +7225,8 @@ let
 
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
+    qt5 = null;
+    legacyGUI = false;
     wxGTK = null;
   };
 
@@ -11362,11 +11386,13 @@ let
 
   lash = callPackage ../applications/audio/lash { };
 
-  ladspaH = callPackage ../applications/audio/ladspa-plugins/ladspah.nix { };
+  ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
     fftw = fftwSinglePrec;
   };
+
+  ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   caps = callPackage ../applications/audio/caps { };
 
@@ -11849,6 +11875,8 @@ let
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtk-sharp;
   };
+
+  plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
   pommed = callPackage ../os-specific/linux/pommed {
     inherit (xorg) libXpm;
@@ -13886,7 +13914,7 @@ let
 
   maxima = callPackage ../applications/science/math/maxima { };
 
-  wxmaxima = callPackage ../applications/science/math/wxmaxima { };
+  wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari {};
 

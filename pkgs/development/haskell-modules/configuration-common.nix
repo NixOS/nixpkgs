@@ -669,7 +669,7 @@ self: super: {
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
-  # https://github.com/megantti/rtorrent-rpc/issues/1
+  # https://github.com/megantti/rtorrent-rpc/issues/2
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 
   # https://github.com/PaulJohnson/geodetics/issues/1
@@ -714,9 +714,6 @@ self: super: {
   Hipmunk = markBroken super.Hipmunk;
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
   click-clack = dontDistribute super.click-clack;
-
-  # https://github.com/prowdsponsor/esqueleto/issues/93
-  esqueleto = dontCheck super.esqueleto;
 
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;

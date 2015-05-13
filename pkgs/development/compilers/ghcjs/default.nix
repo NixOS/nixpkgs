@@ -41,8 +41,8 @@ let
   version = "0.1.0";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "ab8765edcb507b8b810e3c324fd5bd5af2b69d8f"; # 7.10 branch
-    sha256 = "63b69a1d131cf3c7088e0f28d14750c81361dcc276fa113ad80dcccf73df5343";
+    rev = "19620b69257115a69306eec505a97ac843055e92"; # 7.10 branch
+    sha256 = "027md1glfakniccqq0z1pyrz5w4fy0myxmbl0h789rbcxz9ybv6n";
     fetchSubmodules = true;
   };
   shims = fetchgit {

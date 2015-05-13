@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   # Use pkgconfig only when necessary
   nativeBuildInputs = optional (!isLight) pkgconfig;
-  buildInputs = [
+  propagatedBuildInputs = [
     optZlib optOpenssl optLibssh2 optLibnghttp2 optC-ares
     optGss optRtmpdump optOpenldap optLibidn
   ];
@@ -101,33 +101,6 @@ stdenv.mkDerivation rec {
     (mkEnable true                    "cookies"           null)
     (mkEnable (optC-ares != null)     "ares"              null)
   ];
-
-  # Fix all broken refernces to dependencies in .la and .pc files
-  postInstall = ''
-    sed -i \
-  '' + optionalString (optZlib != null) ''
-      -e 's,\(-lz\),-L${optZlib}/lib \1,' \
-  '' + optionalString (optOpenssl != null) ''
-      -e 's,\(-lssl\|-lcrypto\),-L${optOpenssl}/lib \1,' \
-  '' + optionalString (optLibssh2 != null) ''
-      -e 's,\(-lssh2\),-L${optLibssh2}/lib \1,' \
-  '' + optionalString (optLibnghttp2 != null) ''
-      -e 's,\(-lnghttp2\),-L${optLibnghttp2}/lib \1,' \
-  '' + optionalString (optC-ares != null) ''
-      -e 's,\(-lcares\),-L${optC-ares}/lib \1,' \
-  '' + optionalString (optGss != null) ''
-      -e 's,\(-lgss\),-L${optGss}/lib \1,' \
-  '' + optionalString (optRtmpdump != null) ''
-      -e 's,\(-lrtmp\),-L${optRtmpdump}/lib \1,' \
-  '' + optionalString (optOpenldap != null) ''
-      -e 's,\(-lgss\),-L${optOpenldap}/lib \1,' \
-  '' + optionalString (optLibidn != null) ''
-      -e 's,\(-lidn\),-L${optLibidn}/lib \1,' \
-  '' + optionalString (!stdenv.isDarwin) ''
-    $out/lib/libcurl.la \
-  '' + ''
-    $out/lib/pkgconfig/libcurl.pc
-  '';
 
   meta = {
     description = "A command line tool for transferring files with URL syntax";

@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     getopt
     git
     gnupg
+    pwgen
     tree
     which
   ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);

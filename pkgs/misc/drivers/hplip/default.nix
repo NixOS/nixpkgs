@@ -33,12 +33,14 @@ stdenv.mkDerivation {
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
-    find . -type f -exec sed -i s,/etc/hp,$out/etc/hp, {} \;
-    find . -type f -exec sed -i s,/etc/sane.d,$out/etc/sane.d, {} \;
-    find . -type f -exec sed -i s,/usr/include/libusb-1.0,${libusb1}/include/libusb-1.0, {} \;
-    find . -type f -exec sed -i s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, {} \;
-    find . -type f -exec sed -i s,/usr/lib/systemd/system,$out/lib/systemd/system, {} \;
-    find . -type f -exec sed -i s,/var/lib/hp,$out/var/lib/hp, {} \;
+    find . -type f -exec sed -i \
+      -e s,/etc/hp,$out/etc/hp, \
+      -e s,/etc/sane.d,$out/etc/sane.d, \
+      -e s,/usr/include/libusb-1.0,${libusb1}/include/libusb-1.0, \
+      -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
+      -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
+      -e s,/var/lib/hp,$out/var/lib/hp, \
+      {} +
   '';
 
   preConfigure = ''

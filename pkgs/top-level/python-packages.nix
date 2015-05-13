@@ -643,6 +643,23 @@ let
     };
   });
 
+  attrdict = buildPythonPackage (rec {
+    name = "attrdict-2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/attrdict/${name}.tar.gz";
+      md5 = "8a7c1a4e737fe9e2b2b8844c0f7746f8";
+    };
+
+    propagatedBuildInputs = with self; [ coverage nose six ];
+
+    meta = {
+      description = "A dict with attribute-style access";
+      homepage = https://github.com/bcj/AttrDict;
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
   audioread = buildPythonPackage rec {
     name = "audioread-1.2.1";
 
@@ -11892,9 +11909,13 @@ let
       md5 = "470ca4da4a0081efc830f0d90dd91682";
     };
 
-    buildInputs = with self; [ nose mock pysqlite ];
-
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
+    # acceptable reason to make all dependents unavailable on Python 3 as well
+    doCheck = !isPy3k;
 
     checkPhase = ''
       ${python.executable} sqla_nose.py
