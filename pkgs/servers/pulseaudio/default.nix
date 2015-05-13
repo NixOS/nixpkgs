@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     (mkEnable false                   "samplerate"                 null)         # Deprecated
     (mkWith   true                    "database"                   databaseName)
     (mkEnable hasOss                  "oss-output"                 null)
-    (mkEnable hasOss                  "oss-wrapper"                null)
+    (mkEnable true                    "oss-wrapper"                null)         # Does not use OSS
     (mkEnable (optCoreaudio != null)  "coreaudio-output"           null)
     (mkEnable (optAlsaLib != null)    "alsa"                       null)
     (mkEnable (optEsound != null)     "esound"                     null)
