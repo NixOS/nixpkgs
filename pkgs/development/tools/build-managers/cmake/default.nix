@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, bzip2, curl, expat, jsoncpp, libarchive, xz, zlib
+, bzip2, curl, expat, libarchive, xz, zlib
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
 , wantPS ? false, ps ? null
 }:
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ bzip2 curl expat libarchive xz zlib ]
-    ++ optional (jsoncpp != null) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -53,8 +52,8 @@ stdenv.mkDerivation rec {
       "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
       "--system-libs"
+      "--no-system-jsoncpp"
     ]
-    ++ optional (jsoncpp == null) "--no-system-jsoncpp"
     ++ optional useQt4 "--qt-gui";
 
   setupHook = ./setup-hook.sh;
