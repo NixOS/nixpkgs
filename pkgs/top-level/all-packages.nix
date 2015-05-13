@@ -869,6 +869,8 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
+  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
+
   mstflint = callPackage ../tools/misc/mstflint { };
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
