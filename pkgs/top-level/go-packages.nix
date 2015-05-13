@@ -282,6 +282,18 @@ let self = _self // overrides; _self = with self; {
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
+  gls = buildGoPackage rec {
+    rev = "9a4a02dbe491bef4bab3c24fd9f3087d6c4c6690";
+    name = "gls-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/jtolds/gls";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "jtolds";
+      repo = "gls";
+      sha256 = "1gvgkx7llklz6plapb95fcql7d34i6j7anlvksqhdirpja465jnm";
+    };
+  };
+
   goamz = buildGoPackage rec {
     rev = "2a8fed5e89ab9e16210fc337d1aac780e8c7bbb7";
     name = "goamz-${rev}";
