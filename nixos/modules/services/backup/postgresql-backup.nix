@@ -3,9 +3,9 @@
 with lib;
 
 let
-  inherit (pkgs) postgresql gzip;
+  inherit (pkgs) gzip;
 
-  location = config.services.postgresqlBackup.location ;
+  location = config.services.postgresqlBackup.location;
 
   postgresqlBackupCron = db:
     ''
