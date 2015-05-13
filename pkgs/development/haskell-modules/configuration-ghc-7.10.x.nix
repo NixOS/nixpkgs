@@ -77,7 +77,6 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  esqueleto = doJailbreak super.esqueleto;
   pointfree = doJailbreak super.pointfree;
 
   # acid-state/safecopy#25 acid-state/safecopy#26
