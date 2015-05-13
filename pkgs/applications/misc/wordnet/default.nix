@@ -37,5 +37,6 @@ stdenv.mkDerivation {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    broken = true;  # we'd need older tk/tcl
   };
 }
