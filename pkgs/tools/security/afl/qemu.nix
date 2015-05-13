@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 let
-  n = "qemu-2.2.0";
+  n = "qemu-2.3.0";
 
   aflHeaderFile = writeText "afl-qemu-cpu-inl.h"
     (builtins.readFile ./qemu-patches/afl-qemu-cpu-inl.h);
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
+    sha256 = "120m53c3p28qxmfzllicjzr8syjv6v4d9rsyrgkp7gnmcgvvgfmn";
   };
 
   buildInputs =
