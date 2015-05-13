@@ -209,6 +209,8 @@ stdenv.mkDerivation ({
 
   builder = ../builder.sh;
 
+  outputs = [ "out" "info" ];
+
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
     sha256 = "15c6gwm6dzsaagamxkak5smdkf1rdfbqqjs9jdbrp3lbg4ism02a";
