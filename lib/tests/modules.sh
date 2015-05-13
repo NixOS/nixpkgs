@@ -107,6 +107,10 @@ set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-loaOfSub-
 checkConfigError 'The option .* defined in .* does not exist.' "$@"
 checkConfigOutput "true" "$@" ./define-module-check.nix
 
+# Check importsArgs with a default value.
+set -- config.enable ./declare-enable.nix
+checkConfigOutput "true" "$@" ./default-imports-define-enable.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
