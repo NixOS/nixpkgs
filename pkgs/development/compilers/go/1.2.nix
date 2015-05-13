@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc }:
+{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc
+, libgpgerror }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
