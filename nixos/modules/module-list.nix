@@ -460,5 +460,6 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
+  ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
 ]
