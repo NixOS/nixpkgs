@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ groff ];
 
+  # https://gcc.gnu.org/gcc-5/porting_to.html, search for
+  # "Different semantics for inline functions"
+  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+
   preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile";
 
   # Force mdadm to use /var/run/mdadm.map for its map file (or
