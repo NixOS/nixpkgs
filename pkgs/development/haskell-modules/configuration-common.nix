@@ -715,9 +715,6 @@ self: super: {
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
   click-clack = dontDistribute super.click-clack;
 
-  # https://github.com/prowdsponsor/esqueleto/issues/93
-  esqueleto = dontCheck super.esqueleto;
-
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
   call = dontDistribute super.call;
