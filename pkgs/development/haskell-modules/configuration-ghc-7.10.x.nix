@@ -320,8 +320,4 @@ self: super: {
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
-  # Ugly hack that triggers a rebuild to fix the broken package on Hydra.
-  cabal-lenses = appendConfigureFlag super.cabal-lenses "-fignore-me-1";
-  text = appendConfigureFlag super.text "-fignore-me-1";
-
 }
