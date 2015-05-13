@@ -25,12 +25,10 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs =
-    [ pkgconfig intltool gperf kmod xz pam acl
+    [ pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
       libmicrohttpd linuxHeaders kexectools
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
-
-  propagatedBuildInputs = [ libcap ];
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -150,6 +148,8 @@ stdenv.mkDerivation rec {
       done
 
       rm -rf $out/etc/rpm
+
+      rm $out/lib/*.la
     ''; # */
 
   enableParallelBuilding = true;
