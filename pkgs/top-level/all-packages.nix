@@ -6346,9 +6346,9 @@ let
     automake = automake111x;
   };
 
-  kf59 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.9 { });
-  kf5_latest = kf59;
-  kf5_stable = kf59;
+  kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
+  kf5_latest = kf510;
+  kf5_stable = kf510;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
@@ -11355,7 +11355,7 @@ let
   };
 
   kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
-    kf5 = kf59;
+    kf5 = kf510;
   });
   kdeApps_stable = kdeApps_15_04;
   kdeApps_latest = kdeApps_15_04;
@@ -13585,7 +13585,7 @@ let
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
   plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
-    kf5 = kf59;
+    kf5 = kf510;
   });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;

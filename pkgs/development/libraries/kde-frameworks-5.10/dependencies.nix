@@ -18,7 +18,7 @@
   };
 
   frameworkintegration = {
-    buildInputs = [ "ECM" "KF5Config" "KF5ConfigWidgets" "KF5I18n" "KF5IconThemes" "KF5KIO" "KF5Notifications" "KF5WidgetsAddons" "OxygenFont" "Qt5" "Qt5DBus" "Qt5QUIET" "Qt5Test" "Qt5Widgets" "Qt5X11Extras" "X11" "XCB" ];
+    buildInputs = [ "ECM" "KF5Config" "KF5ConfigWidgets" "KF5I18n" "KF5IconThemes" "KF5KIO" "KF5Notifications" "KF5WidgetsAddons" "OxygenFont" "Qt5" "Qt5DBus" "Qt5QUIET" "Qt5Qml" "Qt5Test" "Qt5Widgets" "Qt5X11Extras" "X11" "XCB" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "KF5ConfigWidgets" "KF5IconThemes" ];
     propagatedNativeBuildInputs = [  ];
@@ -322,9 +322,9 @@
   };
 
   knewstuff = {
-    buildInputs = [ "ECM" "KF5Archive" "KF5Attica" "KF5Completion" "KF5Config" "KF5CoreAddons" "KF5I18n" "KF5IconThemes" "KF5ItemViews" "KF5KIO" "KF5TextWidgets" "KF5WidgetsAddons" "KF5XmlGui" "Qt5" "Qt5NO_MODULE" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
+    buildInputs = [ "ECM" "KF5Archive" "KF5Attica" "KF5Completion" "KF5Config" "KF5CoreAddons" "KF5I18n" "KF5IconThemes" "KF5ItemViews" "KF5KIO" "KF5Service" "KF5TextWidgets" "KF5WidgetsAddons" "KF5XmlGui" "Qt5" "Qt5NO_MODULE" "Qt5Test" "Qt5Widgets" "Qt5Xml" ];
     nativeBuildInputs = [ "cmake" ];
-    propagatedBuildInputs = [ "KF5Attica" "KF5XmlGui" "Qt5Widgets" ];
+    propagatedBuildInputs = [ "KF5Attica" "KF5Service" "KF5XmlGui" "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
     propagatedUserEnvPkgs = [  ];
   };
@@ -338,7 +338,7 @@
   };
 
   knotifyconfig = {
-    buildInputs = [ "ECM" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5I18n" "KF5KIO" "KF5Notifications" "KF5Service" "KF5WidgetsAddons" "KF5XmlGui" "Phonon4Qt5" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5OPTIONAL_COMPONENTS" "Qt5QUIET" "Qt5Test" "Qt5TextToSpeech" "Qt5Widgets" ];
+    buildInputs = [ "ECM" "KF5Completion" "KF5Config" "KF5ConfigWidgets" "KF5I18n" "KF5KIO" "KF5Notifications" "KF5WidgetsAddons" "KF5XmlGui" "Phonon4Qt5" "Qt5" "Qt5DBus" "Qt5NO_MODULE" "Qt5OPTIONAL_COMPONENTS" "Qt5QUIET" "Qt5Test" "Qt5TextToSpeech" "Qt5Widgets" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "Qt5Widgets" ];
     propagatedNativeBuildInputs = [  ];
@@ -482,7 +482,7 @@
   };
 
   networkmanager-qt = {
-    buildInputs = [ "ECM" "KF5NetworkManagerQt" "NetworkManager" "Qt4" "Qt5" "Qt5Core" "Qt5DBus" "Qt5NO_MODULE" "Qt5Network" "Qt5Test" ];
+    buildInputs = [ "ECM" "NetworkManager" "Qt4" "Qt5" "Qt5Core" "Qt5DBus" "Qt5NO_MODULE" "Qt5Network" "Qt5Test" ];
     nativeBuildInputs = [ "cmake" ];
     propagatedBuildInputs = [ "Qt5Core" ];
     propagatedNativeBuildInputs = [  ];
