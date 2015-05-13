@@ -384,6 +384,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  gopass = buildGoPackage rec {
+    rev = "2c70fa70727c953c51695f800f25d6b44abb368e";
+    name = "gopass-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/howeyc/gopass";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "howeyc";
+      repo = "gopass";
+      sha256 = "152lrkfxk205rlxiign0w5wb0fmfh910yz4jhlv4f4l1qr1h2lx8";
+    };
+    buildInputs = [ crypto ];
+  };
+
   gosnappy = buildGoPackage rec {
     rev = "ce8acff4829e0c2458a67ead32390ac0a381c862";
     name = "gosnappy-${stdenv.lib.strings.substring 0 7 rev}";
