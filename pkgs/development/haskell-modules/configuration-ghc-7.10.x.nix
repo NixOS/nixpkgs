@@ -181,10 +181,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # FIXME: remove with the next Hackage update
-  brainfuck = appendPatch super.brainfuck ./brainfuck-fix-ghc710.patch;
-  unlambda = appendPatch super.unlambda ./unlambda-fix-ghc710.patch;
-
   # https://github.com/BNFC/bnfc/issues/137
   BNFC = markBrokenVersion "2.7.1" super.BNFC;
   cubical = dontDistribute super.cubical;
