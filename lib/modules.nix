@@ -87,9 +87,11 @@ rec {
     let
       toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || isFunction x then
-          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (unpackSubmodule applyIfFunction x args)
+          let key = "${parentKey}:anon-${toString n}"; in
+          unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
         else
-          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
+          let file = toString x; key = toString x; in
+          unifyModuleSyntax file key (applyIfFunction key (import x) args));
     in
       builtins.genericClosure {
         startSet = toClosureList unknownModule "" modules;
@@ -118,7 +120,7 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+  applyIfFunction = key: f: args@{config, options, lib}: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -133,11 +135,13 @@ rec {
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       requiredArgs = builtins.attrNames (builtins.functionArgs f);
+      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = builtins.listToAttrs (map (name: {
         inherit name;
-        value = config._module.args.${name};
+        value = addErrorContext (context name) config._module.args.${name};
       }) requiredArgs);
-    in f (extraArgs // arg)
+
+    in f (extraArgs // args)
   else
     f;
 

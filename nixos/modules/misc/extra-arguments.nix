@@ -2,7 +2,7 @@
 
 {
   _module.args = {
-    modulesPath = ../.;
+    modulesPath = ../..;
 
     pkgs_i686 = import ../../lib/nixpkgs.nix {
       system = "i686-linux";
