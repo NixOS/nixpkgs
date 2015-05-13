@@ -107,6 +107,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  assertions = buildGoPackage rec {
+    version = "1.5.0";
+    name = "assertions-${version}";
+    goPackagePath = "github.com/smartystreets/assertions";
+    src = fetchurl {
+      name = "${name}.tar.gz";
+      url = "https://github.com/smartystreets/assertions/archive/${version}.tar.gz";
+      sha256 = "1s4b0v49yv7jmy4izn7grfqykjrg7zg79dg5hsqr3x40d5n7mk02";
+    };
+    buildInputs = [ oglematchers ];
+    propagatedBuildInputs = [ goconvey ];
+    # subPackages = [];
+    doCheck = false;
+  };
+
   binarydist = buildGoPackage rec {
     rev = "9955b0ab8708602d411341e55fffd7e0700f86bd";
     name = "binarydist-${stdenv.lib.strings.substring 0 7 rev}";
