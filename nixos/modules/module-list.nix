@@ -62,6 +62,7 @@
   ./programs/environment.nix
   ./programs/info.nix
   ./programs/ibus.nix
+  ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
