@@ -68,6 +68,7 @@ import ./make-test.nix ({pkgs, ... }: {
 
               # Print the file on the client.
               $client->succeed("lp $file");
+              $client->sleep(10);
               $client->succeed("lpq") =~ /active.*root.*$fn/ or die;
 
               # Ensure that a raw PCL file appeared in the server's queue
@@ -75,11 +76,13 @@ import ./make-test.nix ({pkgs, ... }: {
               # course, since there is no actual USB printer attached, the
               # file will stay in the queue forever.
               $server->waitForFile("/var/spool/cups/d00001-001");
+              $server->sleep(10);
               $server->succeed("lpq -a") =~ /$fn/ or die;
 
               # Delete the job on the client.  It should disappear on the
               # server as well.
               $client->succeed("lprm");
+              $client->sleep(10);
               $client->succeed("lpq -a") =~ /no entries/;
               Machine::retry sub {
                 return 1 if $server->succeed("lpq -a") =~ /no entries/;
