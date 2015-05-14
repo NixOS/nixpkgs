@@ -100,19 +100,6 @@ index 95dc9a7..39170bc 100644
      size_t cchBufLeft = strlen(szPath);
      szPath[cchBufLeft++] = RTPATH_DELIMITER;
      szPath[cchBufLeft] = 0;
-diff --git a/src/VBox/Main/src-server/NATNetworkServiceRunner.cpp b/src/VBox/Main/src-server/NATNetworkServiceRunner.cpp
-index 090018e..7dcfc7a 100644
---- a/src/VBox/Main/src-server/NATNetworkServiceRunner.cpp
-+++ b/src/VBox/Main/src-server/NATNetworkServiceRunner.cpp
-@@ -75,7 +75,7 @@ int NATNetworkServiceRunner::start()
- 
-     /* get the path to the executable */
-     char exePathBuf[RTPATH_MAX];
--    const char *exePath = RTProcGetExecutablePath(exePathBuf, RTPATH_MAX);
-+    const char *exePath = RTProcGetSuidPath(exePathBuf, RTPATH_MAX);
-     char *substrSl = strrchr(exePathBuf, '/');
-     char *substrBs = strrchr(exePathBuf, '\\');
-     char *suffix = substrSl ? substrSl : substrBs;
 diff --git a/src/VBox/Main/src-server/NetworkServiceRunner.cpp b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
 index e9e1ba62..4d1c1e1 100644
 --- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
