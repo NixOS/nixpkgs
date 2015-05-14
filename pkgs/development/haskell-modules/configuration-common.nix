@@ -801,4 +801,7 @@ self: super: {
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
 
+  # GNUTLS 3.4 causes linker errors: http://hydra.cryp.to/build/839563/nixlog/2/raw
+  gnutls = super.gnutls.override { gnutls = pkgs.gnutls33; };
+
 }
