@@ -225,13 +225,13 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "1.0";
-    build = "141.353";
+    version = "1.0.1";
+    build = "141.870";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "0xjdx13ljp1vy51a7rsj25wg3bsvry4kxq5cdng8zrc1g2y1fqw5";
+      sha256 = "17hdna6w7y9n3vqncqifw7jvys3rydgg0mz97nzax817fl4kjf1r";
     };
   };
 
@@ -261,13 +261,13 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "7.0.4";
-    build = "139.1231";
+    version = "7.1.2";
+    build = "141.1119";
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "08b0iwccb5w9b1yk0kbs99r5mxkcyxqs9mkr57wb5j71an80yx38";
+      sha256 = "1gz14lv5jhnrnshp7lkx3wgrdf0y60abs4q78yhv2x9dc6ld1gmj";
     };
   };
 
