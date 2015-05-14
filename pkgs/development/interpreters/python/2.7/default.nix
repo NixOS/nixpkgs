@@ -196,7 +196,7 @@ let
     crypt = buildInternalPythonModule {
       moduleName = "crypt";
       internalName = "crypt";
-      deps = [ stdenv.glibc ];
+      deps = optional (stdenv ? glibc) stdenv.glibc;
     };
 
     gdbm = buildInternalPythonModule {
