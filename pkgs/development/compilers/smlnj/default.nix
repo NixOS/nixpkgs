@@ -60,11 +60,11 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Standard ML of New Jersey, a compiler";
     homepage    = http://smlnj.org;
-    license     = stdenv.lib.licenses.bsd3;
+    license     = licenses.bsd3;
     platforms   = [ "i686-linux" ];
-    maintainers = stdenv.lib.maintainers.thoughtpolice;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }
