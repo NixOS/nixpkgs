@@ -216,6 +216,7 @@ let
               || system == "x86_64-freebsd"
               || system == "x86_64-openbsd"
               || system == "x86_64-solaris";
+      isX86 = isi686 || isx86_64;
       is64bit = system == "x86_64-linux"
              || system == "x86_64-darwin"
              || system == "x86_64-freebsd"
