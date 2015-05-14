@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper }:
 assert stdenv.isLinux;
-assert stdenv.cc.cc.isGNU or false;
+assert stdenv.cc.isGNU;
 let
 version = "0.7";
 debianPatch = fetchurl {

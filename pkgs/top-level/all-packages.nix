@@ -3437,6 +3437,7 @@ let
 
   clangWrapSelf = build: (import ../build-support/cc-wrapper) {
     cc = build;
+    isClang = true;
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
@@ -4497,6 +4498,8 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
     libc = libc;
+    isGNU = baseCC.isGNU or false;
+    isClang = baseCC.isClang or false;
     inherit stdenv binutils coreutils zlib;
   };
 
@@ -4536,6 +4539,7 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseGCC;
     libc = glibc;
+    isGNU = true;
     inherit stdenv binutils coreutils zlib;
     setupHook = ../build-support/cc-wrapper/setup-hook-stdinc.sh;
   };

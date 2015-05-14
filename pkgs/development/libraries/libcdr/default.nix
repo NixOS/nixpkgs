@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = if (stdenv.cc.cc.isClang or false)
+  configureFlags = if stdenv.cc.isClang
     then [ "--disable-werror" ] else null;
 
   CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
