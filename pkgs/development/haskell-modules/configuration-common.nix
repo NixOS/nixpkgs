@@ -155,7 +155,7 @@ self: super: {
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
+    patchPhase = "sed -i -e 's|attoparsec.*,|attoparsec,|' darcs.cabal";
   });
 
   # Needs the latest version of QuickCheck to compile.
