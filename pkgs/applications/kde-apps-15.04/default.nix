@@ -101,6 +101,7 @@ let
         Intltool = intltool;
         Jasper = jasper;
         KActivities = kde4.kactivities;
+        KDEGames = kde4.libkdegames;
         LCMS2 = lcms2;
         Ldap = openldap;
         LibAttica = attica;
