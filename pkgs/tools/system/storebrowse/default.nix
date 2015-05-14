@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchhg, go, sqlite}:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
+assert stdenv.isLinux && (stdenv.isX86 || stdenv.isArm);
 
 stdenv.mkDerivation rec {
   name = "storebrowse-20130318212204";
