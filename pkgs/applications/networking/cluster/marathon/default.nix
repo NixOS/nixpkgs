@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, jdk, mesos, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "marathon-v${version}";
+  name = "marathon-${version}";
   version = "0.8.1";
 
   src = fetchurl {

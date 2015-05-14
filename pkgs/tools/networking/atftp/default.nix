@@ -9,7 +9,7 @@ debianPatch = fetchurl {
 };
 in
 stdenv.mkDerivation {
-  name = "atftp";
+  name = "atftp-${version}";
   inherit version;
   src = fetchurl {
     url = "mirror://debian/pool/main/a/atftp/atftp_${version}.dfsg.orig.tar.gz";

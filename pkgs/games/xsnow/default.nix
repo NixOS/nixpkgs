@@ -3,10 +3,10 @@
 stdenv.mkDerivation rec {
 
   version = "1.42";
-  name = "xsnow";
+  name = "xsnow-${version}";
 
   src = fetchurl {
-    url = "http://dropmix.xs4all.nl/rick/Xsnow/xsnow-${version}.tar.gz";
+    url = "http://dropmix.xs4all.nl/rick/Xsnow/${name}.tar.gz";
     sha256 = "06jnbp88wc9i9dbmy7kggplw4hzlx2bhghxijmlhkjlizgqwimyh";
   };
 
