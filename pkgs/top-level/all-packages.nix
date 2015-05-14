@@ -13040,6 +13040,8 @@ let
 
   gtypist = callPackage ../games/gtypist { };
 
+  gzdoom = callPackage ../games/gzdoom { };
+
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
