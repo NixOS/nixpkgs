@@ -1,7 +1,5 @@
 { stdenv, fetchurl, attr, perl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
   version = "2.24";
