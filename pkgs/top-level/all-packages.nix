@@ -6535,8 +6535,12 @@ let
   libdvdcss = callPackage ../development/libraries/libdvdcss { };
 
   libdvdnav = callPackage ../development/libraries/libdvdnav { };
+  libdvdnav_4_2_1 = callPackage ../development/libraries/libdvdnav/4.2.1.nix {
+    libdvdread = libdvdread_4_9_9;
+  };
 
   libdvdread = callPackage ../development/libraries/libdvdread { };
+  libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
 
   libdwarf = callPackage ../development/libraries/libdwarf { };
 
@@ -11623,6 +11627,7 @@ let
 
   mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
+    libdvdnav = libdvdnav_4_2_1;
   } // (config.mplayer or {}));
 
   MPlayerPlugin = browser:
