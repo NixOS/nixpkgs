@@ -321,7 +321,7 @@ let
       krfb = super.krfb // {
         buildInputs =
           super.krfb.buildInputs
-          ++ [pkgs.xlibs.libXtst kde4.telepathy.common_internals];
+          ++ [pkgs.xlibs.libXtst kdeApps.ktp-common-internals];
       };
 
       kstars = super.kstars // {
