@@ -5,7 +5,14 @@
 # Go import path of the package
 , goPackagePath
 
-, meta ? {}, ... } @ args:
+# Extra sources to include in the gopath
+, extraSrcs ? [ ]
+
+, meta ? {}, ... } @ args':
+
+let
+  args = lib.filterAttrs (name: _: name != "extraSrcs") args';
+in
 
 go.stdenv.mkDerivation ( args // {
   name = "go${go.meta.branch}-${name}";
@@ -14,10 +21,20 @@ go.stdenv.mkDerivation ( args // {
   configurePhase = args.configurePhase or ''
     runHook preConfigure
 
+    # Extract the source
     cd "$NIX_BUILD_TOP"
     mkdir -p "go/src/$(dirname "$goPackagePath")"
     mv "$sourceRoot" "go/src/$goPackagePath"
 
+  '' + lib.flip lib.concatMapStrings extraSrcs ({ src, goPackagePath }: ''
+    mkdir extraSrc
+    (cd extraSrc; unpackFile "${src}")
+    mkdir -p "go/src/$(dirname "${goPackagePath}")"
+    chmod -R u+w extraSrc/*
+    mv extraSrc/* "go/src/${goPackagePath}"
+    rmdir extraSrc
+
+  '') + ''
     GOPATH=$NIX_BUILD_TOP/go:$GOPATH
 
     runHook postConfigure
