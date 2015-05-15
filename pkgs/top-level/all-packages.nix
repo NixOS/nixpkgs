@@ -9644,7 +9644,7 @@ let
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
-  open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { 
+  open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (xlibs) libXinerama libXi libXrender libXrandr libXtst;
     inherit (gnome) gtk gtkmm;
   };
