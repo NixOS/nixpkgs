@@ -6214,7 +6214,7 @@ let
 
   gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
 
-  gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
+  gwenhywfar = callPackage ../development/libraries/gwenhywfar { gnutls = gnutls33; };
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
