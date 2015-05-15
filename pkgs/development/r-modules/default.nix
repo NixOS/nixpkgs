@@ -947,6 +947,10 @@ let
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "zoib" # tarball is invalid on server
+    "timeSeq" # depends on missing edgeR
+    "survJamda" # depends on missing survcomp
+    "ssizeRNA" # depends on missing 'Biobase', 'edgeR', 'limma', 'qvalue'
+    "h5" # depends on missing h5 system library
   ];
 
   otherOverrides = old: new: {
