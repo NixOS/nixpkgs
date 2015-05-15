@@ -950,6 +950,13 @@ let
   ];
 
   otherOverrides = old: new: {
+    xml2 = old.xml2.overrideDerivation (attrs: {
+      preConfigure = ''
+        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
+        export LIBXML_LIBDIR=${pkgs.libxml2}/lib
+      '';
+    });
+
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
     });
