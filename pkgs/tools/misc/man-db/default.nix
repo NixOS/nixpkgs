@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "03ly0hbpgjnag576rgccanaisn7f6422q5qxrj64vyzslc2651y4";
   };
   
-  buildInputs = [ pkgconfig libpipeline db groff ];
+  buildInputs = [ pkgconfig ]
+             ++ stdenv.lib.optional (!stdenv.isDarwin) libpipeline
+             ++ [ db groff ];
   
   configureFlags = [
     "--disable-setuid"
