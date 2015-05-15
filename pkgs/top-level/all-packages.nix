@@ -4333,6 +4333,8 @@ let
 
     pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
 
+    pa_test = callPackage ../development/ocaml-modules/pa_test { };
+
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
