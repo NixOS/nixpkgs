@@ -3840,7 +3840,7 @@ let
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
-  hugs = callPackage ../development/compilers/hugs { };
+  hugs = callPackage ../development/interpreters/hugs { };
 
   path64 = callPackage ../development/compilers/path64 { };
 
