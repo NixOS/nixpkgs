@@ -57,7 +57,13 @@ go.stdenv.mkDerivation ( args // {
     else
         (cd go/src
         find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq | while read d; do
-            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d
+            local OUT;
+            if ! OUT="$(go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d 2>&1)"; then
+                if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
+                    echo "$OUT" >&2
+                    exit 1
+                fi
+            fi
         done)
     fi
 
