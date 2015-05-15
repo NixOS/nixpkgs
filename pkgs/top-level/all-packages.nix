@@ -4053,6 +4053,8 @@ let
 
     async_unix = callPackage ../development/ocaml-modules/async_unix { };
 
+    async = callPackage ../development/ocaml-modules/async { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
