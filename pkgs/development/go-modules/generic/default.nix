@@ -5,8 +5,13 @@
 # Go import path of the package
 , goPackagePath
 
+# Go package aliases
+, goPackageAliases ? [ ]
+
 # Extra sources to include in the gopath
 , extraSrcs ? [ ]
+
+, dontRenameImports ? false
 
 , meta ? {}, ... } @ args':
 
@@ -14,9 +19,11 @@ let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';
 in
 
-go.stdenv.mkDerivation ( args // {
+go.stdenv.mkDerivation (
+  (builtins.removeAttrs args [ "goPackageAliases" ]) // {
+
   name = "go${go.meta.branch}-${name}";
-  buildInputs = [ go ] ++ buildInputs ++ (lib.optional (args ? renameImports) govers) ;
+  buildInputs = [ go ] ++ buildInputs ++ (lib.optional (!dontRenameImports) govers) ;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -40,10 +47,12 @@ go.stdenv.mkDerivation ( args // {
     runHook postConfigure
   '';
 
-  renameImports = lib.optionalString (args ? renameImports)
-                    (lib.concatMapStringsSep "\n"
-                      (cmdargs: "govers -m ${cmdargs}")
-                      args.renameImports);
+  renameImports = args.renameImports or (
+    let
+      inputsWithAliases = lib.filter (x: x ? goPackageAliases) buildInputs;
+      rename = to: from: "echo Renaming '${from}' to '${to}'; govers -m ${from} ${to}";
+      renames = p: lib.concatMapStringsSep "\n" (rename p.goPackagePath) p.goPackageAliases;
+    in lib.concatMapStringsSep "\n" renames inputsWithAliases);
 
   buildPhase = args.buildPhase or ''
     runHook preBuild
@@ -106,6 +115,8 @@ go.stdenv.mkDerivation ( args // {
 
     runHook postInstall
   '';
+
+  passthru = lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
   meta = meta // {
     # add an extra maintainer to every package

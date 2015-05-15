@@ -662,18 +662,16 @@ standard Go packages.
 <programlisting>
 net = buildGoPackage rec {
   name = "go.net-${rev}";
-  goPackagePath = "code.google.com/p/go.net"; <co xml:id='ex-buildGoPackage-1' />
+  goPackagePath = "golang.org/x/net"; <co xml:id='ex-buildGoPackage-1' />
   subPackages = [ "ipv4" "ipv6" ]; <co xml:id='ex-buildGoPackage-2' />
-  rev = "28ff664507e4";
-  src = fetchhg {
+  rev = "e0403b4e005";
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://${goPackagePath}";
-    sha256 = "1lkz4c9pyz3yz2yz18hiycvlfhgy3jxp68bs7mv7bcfpaj729qav";
+    owner = "golang";
+    repo = "net";
+    sha256 = "1g7cjzw4g4301a3yqpbk8n1d4s97sfby2aysl275x04g0zh8jxqp";
   };
-  renameImports = [ <co xml:id='ex-buildGoPackage-3' />
-    "code.google.com/p/go.crypto golang.org/x/crypto"
-    "code.google.com/p/goprotobuf github.com/golang/protobuf"
-  ];
+  goPackageAliases = [ "code.google.com/p/go.net" ]; <co xml:id='ex-buildGoPackage-3' />
   propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-4' />
   buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-5' />
 };
@@ -703,17 +701,18 @@ the following arguments are of special significance to the function:
     </para>
   </callout>
 
-  <callout arearefs='ex-buildGoPackage-4'>
+  <callout arearefs='ex-buildGoPackage-3'>
     <para>
-      <varname>renameImports</varname> is a list of import paths to be renamed before
-      building the package. The path to be renamed can be a regular expression.
+      <varname>goPackageAliases</varname> is a list of alternative import paths
+      that are valid for this library.
+      Packages that depend on this library will automatically rename
+      import paths that match any of the aliases to <literal>goPackagePath</literal>.
     </para>
     <para>
       In this example imports will be renamed from
-      <literal>code.google.com/p/go.crypto</literal> to
-      <literal>golang.org/x/crypto</literal> and from
-      <literal>code.google.com/p/goprotobuf</literal> to
-      <literal>github.com/golang/protobuf</literal>.
+      <literal>code.google.com/p/go.net</literal> to
+      <literal>golang.org/x/net</literal> in every package that depend on the
+      <literal>go.net</literal> library.
     </para>
   </callout>
 

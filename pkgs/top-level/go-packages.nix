@@ -13,6 +13,7 @@ let self = _self // overrides; _self = with self; {
     rev = "4d48e5fa3d62b5e6e71260571bf76c767198ca02";
     name = "go-crypto-${rev}";
     goPackagePath = "golang.org/x/crypto";
+    goPackageAliases = [ "code.google.com/p/go.crypto" ];
 
     src = fetchFromGitHub {
       inherit rev;
@@ -49,6 +50,7 @@ let self = _self // overrides; _self = with self; {
     rev = "e0403b4e005737430c05a57aac078479844f919c";
     name = "net-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "golang.org/x/net";
+    goPackageAliases = [ "code.google.com/p/go.net" ];
 
     src = fetchFromGitHub {
       inherit rev;
@@ -84,6 +86,7 @@ let self = _self // overrides; _self = with self; {
     rev = "efd7476481382c195beb33acd8ec2f1527167fb4";
     name = "goprotobuf-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/golang/protobuf";
+    goPackageAliases = [ "code.google.com/p/goprotobuf" ];
 
     src = fetchFromGitHub {
       inherit rev;
@@ -409,6 +412,7 @@ let self = _self // overrides; _self = with self; {
     rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
     name = "govers-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/rogpeppe/govers";
+    dontRenameImports = true;
     src = fetchFromGitHub {
       inherit rev;
       owner = "rogpeppe";
