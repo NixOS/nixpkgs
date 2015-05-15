@@ -103,10 +103,6 @@ self: super: {
   # Test suite fails in "/tokens_bytestring_unicode.g.bin".
   alex = dontCheck super.alex;
 
-  # https://github.com/haskell/haddock/issues/378
-  haddock-library_1_2_0 = dontCheck super.haddock-library_1_2_0;
-  haddock-library = self.haddock-library_1_2_0;
-
   # Upstream was notified about the over-specified constraint on 'base'
   # but refused to do anything about it because he "doesn't want to
   # support a moving target". Go figure.
