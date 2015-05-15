@@ -4047,6 +4047,8 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
+    async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
