@@ -5088,6 +5088,11 @@ let
 
   ctodo = callPackage ../applications/misc/ctodo { };
 
+  cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
+    wantPS = stdenv.isDarwin;
+    ps     = if stdenv.isDarwin then darwin.ps else null;
+  };
+
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
     ps     = if stdenv.isDarwin then darwin.ps else null;
@@ -10479,6 +10484,7 @@ let
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
     libpng = libpng12;
+    cmake = cmake-2_8;
   };
 
   codeblocks = callPackage ../applications/editors/codeblocks { };
@@ -11001,7 +11007,9 @@ let
     ffmpeg = ffmpeg_1;
   };
 
-  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
+  freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
+    cmake = cmake-2_8;
+  };
 
   freicoin = callPackage ../applications/misc/freicoin { };
 
