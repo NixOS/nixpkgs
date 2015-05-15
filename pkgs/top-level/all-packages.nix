@@ -4043,6 +4043,8 @@ let
 
     acgtk = callPackage ../applications/science/logic/acgtk { };
 
+    alcotest = callPackage ../development/ocaml-modules/alcotest {};
+
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
