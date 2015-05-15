@@ -4126,6 +4126,10 @@ let
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
+    cohttp = callPackage ../development/ocaml-modules/cohttp {
+      lwt = ocaml_lwt;
+    };
+
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
     cpdf = callPackage ../development/ocaml-modules/cpdf { };
