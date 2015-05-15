@@ -350,6 +350,12 @@ let
           ++ [ pkgs.libotr ]; # needed for ktp-text-ui
       };
 
+      lokalize = super.lokalize // {
+        buildInputs =
+          super.lokalize.buildInputs
+          ++ [ kf5.kdbusaddons ];
+      };
+
       libkdcraw = with pkgs; super.libkdcraw // {
         buildInputs = super.libkdcraw.buildInputs ++ [scope.KDE4 libraw];
         nativeBuildInputs = super.libkdcraw.nativeBuildInputs ++ [pkgconfig];
