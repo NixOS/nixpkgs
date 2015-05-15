@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "SYS=darwin"
     ++ optional stdenv.cc.isClang "CC=clang";
 
-  buildInputs = [ zlib ]
+  propagatedBuildInputs = [ zlib ]
     ++ optional gnutlsSupport gnutls
     ++ optional opensslSupport openssl;
 
