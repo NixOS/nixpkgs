@@ -300,6 +300,9 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
+  ${optionalString (versionAtLeast version "3.15") ''
+    MLX4_EN_VXLAN y
+  ''}
   MODVERSIONS y
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
