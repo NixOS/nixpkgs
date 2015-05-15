@@ -2,11 +2,6 @@
 
 with goPackages;
 
-let
-  goconvey = callPackage ./goconvey.nix {};
-  openssl  = callPackage ./openssl.nix {};
-  oglematchers = callPackage ./oglematchers.nix {};
-in
 buildGoPackage rec {
   version = "r3.1.2";
   name = "mongodb-tools";
