@@ -10,6 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [tcl tk x11 makeWrapper];
 
+  patchPhase = ''
+    sed "13i#define USE_INTERP_RESULT 1" -i src/stubs.c
+  '';
+
   # Needs the path to `tclConfig.sh' and `tkConfig.sh'.
   configureFlags = "--with-tcl=" + tcl + "/lib " +
                    "--with-tk="  + tk  + "/lib";
@@ -37,6 +41,5 @@ stdenv.mkDerivation {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
-    broken = true;  # we'd need older tk/tcl
   };
 }
