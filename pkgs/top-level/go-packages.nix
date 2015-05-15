@@ -14,7 +14,7 @@ let
 
   crypto = buildGoPackage rec {
     rev = "4d48e5fa3d62b5e6e71260571bf76c767198ca02";
-    name = "go-crypto-${rev}";
+    name = "crypto-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "golang.org/x/crypto";
     goPackageAliases = [ "code.google.com/p/go.crypto" ];
     disabled = isGo13;
@@ -29,8 +29,9 @@ let
 
   glog = buildGoPackage rec {
     rev = "44145f04b68cf362d9c4df2182967c2275eaefed";
-    name = "glog-${rev}";
+    name = "glog-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/golang/glog";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "golang";
@@ -40,18 +41,20 @@ let
   };
 
   image = buildGoPackage rec {
-    rev = "490b1ad139b3";
-    name = "go.image-${rev}";
-    goPackagePath = "code.google.com/p/go.image";
-    src = fetchhg {
+    rev = "d8e202c6ce59fad0017414839b6648851d10767e";
+    name = "image-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "golang.org/x/image";
+
+    src = fetchFromGitHub {
       inherit rev;
-      url = "https://${goPackagePath}";
-      sha256 = "02m6ifwby2fi88njarbbb6dimwg0pd2b6llkgyadh4b9wzp2vy4r";
+      owner = "golang";
+      repo = "image";
+      sha256 = "0cxymm28rgbzsk76d19wm8fwp40dkwxhzmmdjnbkw5541272339l";
     };
   };
 
   net = buildGoPackage rec {
-    rev = "e0403b4e005737430c05a57aac078479844f919c";
+    rev = "d1d694760b7a3a9fa32e4d1c49e08b2d672221d8";
     name = "net-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "golang.org/x/net";
     goPackageAliases = [ "code.google.com/p/go.net" ];
@@ -60,7 +63,7 @@ let
       inherit rev;
       owner = "golang";
       repo = "net";
-      sha256 = "1g7cjzw4g4301a3yqpbk8n1d4s97sfby2aysl275x04g0zh8jxqp";
+      sha256 = "1fk62vjxsyca8hmlpca9rkgy8wqg9zw920d56ib442sjn9ys3zic";
     };
 
     propagatedBuildInputs = [ text ];
@@ -87,8 +90,8 @@ let
 
 
   protobuf = buildGoPackage rec {
-    rev = "efd7476481382c195beb33acd8ec2f1527167fb4";
-    name = "goprotobuf-${stdenv.lib.strings.substring 0 7 rev}";
+    rev = "39e27fc0f226450c58e11eda145b542bc5dff3fe";
+    name = "protobuf-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/golang/protobuf";
     goPackageAliases = [ "code.google.com/p/goprotobuf" ];
 
@@ -96,10 +99,8 @@ let
       inherit rev;
       owner = "golang";
       repo = "protobuf";
-      sha256 = "1wc3m4jpsdmmqdcf2isc9913mmwfyv791c0rd26kpjjwynh5dhdm";
+      sha256 = "12l036ix0dc8hg35xrqmdcr3bpwncrdkgqkhp3s90w6a3qpva3gs";
     };
-
-    subPackages = [ "proto" "protoc-gen-go" ];
   };
 
   text = buildGoPackage rec {
@@ -117,15 +118,16 @@ let
 
 
   tools = buildGoPackage rec {
-    rev = "140fcaadc5860b1a014ec69fdeec807fe3b787e8";
-    name = "go.tools-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "code.google.com/p/go.tools";
-    src = fetchhg {
+    rev = "7d75e8b219c3efda2d08ae38acd6b42f8da4f5f9";
+    name = "tools-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "golang.org/x/tools";
+
+    src = fetchFromGitHub {
       inherit rev;
-      url = "http://code.google.com/p/go.tools";
-      sha256 = "1vgz4kxy0p56qh6pfbs2c68156hakgx4cmrci9jbg7lnrdaz4y56";
+      owner = "golang";
+      repo = "tools";
+      sha256 = "0vq0l3pjhgsp97v6ndlr3jcs029r5zilwai30snwfq74s580sriq";
     };
-    subPackages = [ "go/vcs" ];
   };
 
   ## THIRD PARTY
