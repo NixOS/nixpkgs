@@ -87,10 +87,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    # Copy the wpa_priv binary which is not installed
-    mkdir -p $out/bin
-    cp -v wpa_priv $out/bin
-
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v "doc/docbook/"*.5 $out/share/man/man5/
     cp -v "doc/docbook/"*.8 $out/share/man/man8/
@@ -99,6 +95,7 @@ stdenv.mkDerivation rec {
     sed -e "s@/sbin/wpa_supplicant@$out&@" -i "$out/share/dbus-1/system-services/"*
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
     cp -v "systemd/"*.service $out/etc/systemd/system
+    rm $out/share/man/man8/wpa_priv.8
   '';
 
   meta = with stdenv.lib; {
