@@ -4108,6 +4108,10 @@ let
     };
     camlimages = camlimages_4_1;
 
+    conduit = callPackage ../development/ocaml-modules/conduit {
+       lwt = ocaml_lwt;
+    };
+
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
     bin_prot = callPackage ../development/ocaml-modules/bin_prot { };
