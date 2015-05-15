@@ -34,7 +34,6 @@ let
       "Kexiv2" = "libkexiv2";
       "Kdcraw" = "libkdcraw";
       "Kipi" = "libkipi";
-      "LibKMahjongg" = "libkmahjongg";
       "LibKonq" = "kde-baseapps";
       "Marble" = "marble";
     };
@@ -106,6 +105,7 @@ let
         Ldap = openldap;
         LibAttica = attica;
         LibGcrypt = libgcrypt;
+        LibKMahjongg = kde4.libkmahjongg;
         LibSSH = libssh;
         LibSpectre = libspectre;
         LibVNCServer = libvncserver;
