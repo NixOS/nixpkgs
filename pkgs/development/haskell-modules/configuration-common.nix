@@ -157,9 +157,6 @@ self: super: {
     patchPhase = "sed -i -e 's|attoparsec.*,|attoparsec,|' darcs.cabal";
   });
 
-  # Needs the latest version of QuickCheck to compile.
-  cabal-test-quickcheck = super.cabal-test-quickcheck.override { QuickCheck = self.QuickCheck_2_8_1; };
-
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
 
@@ -762,10 +759,7 @@ self: super: {
            in appendPatch pkg ./mueval-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
-  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
-
-  # Jailbreaking breaks the build.
-  QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
+  zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = pkgs.cabal2nix;
