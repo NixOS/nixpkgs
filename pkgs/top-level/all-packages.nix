@@ -7516,6 +7516,8 @@ let
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
+  qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
+
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
   qjson = callPackage ../development/libraries/qjson { };
