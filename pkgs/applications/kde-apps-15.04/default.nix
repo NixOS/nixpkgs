@@ -339,7 +339,8 @@ let
       ktp-common-internals = super.ktp-common-internals // {
         buildInputs =
           super.ktp-common-internals.buildInputs
-          ++ (with kf5; [ kdelibs4support kparts ]);
+          ++ (with kf5; [ kdelibs4support kparts ])
+          ++ [ pkgs.libotr ]; # needed for ktp-text-ui
       };
 
       libkdcraw = with pkgs; super.libkdcraw // {
