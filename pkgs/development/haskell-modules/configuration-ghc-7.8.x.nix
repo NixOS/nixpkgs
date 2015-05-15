@@ -58,9 +58,6 @@ self: super: {
     patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
   });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
 
-  # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8_3 = dontDistribute super.HStringTemplate_0_8_3;
-
   # This is part of bytestring in our compiler.
   bytestring-builder = dontHaddock super.bytestring-builder;
 

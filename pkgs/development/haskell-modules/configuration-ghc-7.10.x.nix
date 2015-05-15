@@ -41,8 +41,6 @@ self: super: {
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
-  HStringTemplate = self.HStringTemplate_0_8_3;
-
   # We have Cabal 1.22.x.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
