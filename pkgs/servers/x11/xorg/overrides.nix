@@ -222,6 +222,13 @@ in
     })];
   };
 
+  xf86videoopenchrome = attrs: attrs // {
+    patches = [( args.fetchpatch {
+      url = "http://www.calculate-linux.org/packages/x11-drivers/xf86-video-openchrome/files/xf86-video-openchrome-0.3.3-glibc-2.20.patch?format=raw";
+      sha256 = "01sm4ajfc0xlrywk91hckfj156pqjgbiigvypnkp4q9sq12ffsf6";
+    })];
+  };
+
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
   };
