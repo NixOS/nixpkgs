@@ -802,4 +802,7 @@ self: super: {
   testpack = markBroken super.testpack;
   MissingH = dontCheck super.MissingH;
 
+  # Obsolete for GHC versions after GHC 6.10.x.
+  utf8-prelude = markBroken super.utf8-prelude;
+
 }
