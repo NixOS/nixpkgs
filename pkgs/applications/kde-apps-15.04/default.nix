@@ -121,6 +121,7 @@ let
         PythonLibrary = python;
         Qalculate = libqalculate;
         QCA2 = qca2;
+        Qca-qt5 = qca-qt5.override { inherit qt5; };
         QImageBlitz = qimageblitz;
         QJSON = qjson;
         Qt4 = qt4;
