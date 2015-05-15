@@ -55,12 +55,10 @@ go.stdenv.mkDerivation ( args // {
             go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p
         done
     else
-        find . -type d | while read d; do
-            for i in $d/*.go; do
-                go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d
-                break
-            done
-        done
+        (cd go/src
+        find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq | while read d; do
+            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d
+        done)
     fi
 
     runHook postBuild
@@ -74,12 +72,10 @@ go.stdenv.mkDerivation ( args // {
             go test -p $NIX_BUILD_CORES -v $goPackagePath/$p
         done
     else
-        find . -type d | while read d; do
-            for i in $d/*_test.go; do
-                go test -p $NIX_BUILD_CORES -v $d
-                break
-            done
-        done
+        (cd go/src
+        find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq | while read d; do
+            go test -p $NIX_BUILD_CORES -v $d
+        done)
     fi
 
     runHook postCheck
