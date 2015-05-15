@@ -151,6 +151,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  assertions = buildGoPackage rec {
+    version = "1.5.0";
+    name = "assertions-${version}";
+    goPackagePath = "github.com/smartystreets/assertions";
+    src = fetchurl {
+      name = "${name}.tar.gz";
+      url = "https://github.com/smartystreets/assertions/archive/${version}.tar.gz";
+      sha256 = "1s4b0v49yv7jmy4izn7grfqykjrg7zg79dg5hsqr3x40d5n7mk02";
+    };
+    buildInputs = [ oglematchers ];
+    propagatedBuildInputs = [ goconvey ];
+    doCheck = false;
+  };
+
   aws-sdk-go = buildGoPackage rec {
     rev = "5e038f730cbb99b144eeb1dbf92cd06c2d00b503";
     name = "aws-sdk-go-${stdenv.lib.strings.substring 0 7 rev}";
@@ -356,6 +370,18 @@ let self = _self // overrides; _self = with self; {
     subPackages = [ "./" ];  # don't try to build test fixtures
   };
 
+  gls = buildGoPackage rec {
+    rev = "9a4a02dbe491bef4bab3c24fd9f3087d6c4c6690";
+    name = "gls-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/jtolds/gls";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "jtolds";
+      repo = "gls";
+      sha256 = "1gvgkx7llklz6plapb95fcql7d34i6j7anlvksqhdirpja465jnm";
+    };
+  };
+
   goamz = buildGoPackage rec {
     rev = "2a8fed5e89ab9e16210fc337d1aac780e8c7bbb7";
     name = "goamz-${rev}";
@@ -459,6 +485,19 @@ let self = _self // overrides; _self = with self; {
       repo = "gomega";
       sha256 = "1rf6cxn50d1pji3pv4q372s395r5nxwcgp405z2r2mfdkri4v3w4";
     };
+  };
+
+  gopass = buildGoPackage rec {
+    rev = "2c70fa70727c953c51695f800f25d6b44abb368e";
+    name = "gopass-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/howeyc/gopass";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "howeyc";
+      repo = "gopass";
+      sha256 = "152lrkfxk205rlxiign0w5wb0fmfh910yz4jhlv4f4l1qr1h2lx8";
+    };
+    buildInputs = [ crypto ];
   };
 
   google-api-go-client = buildGoPackage rec {
@@ -574,6 +613,18 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0zqr7mzd5kq0rnxj3zx5x5wwbmjkg365farwv72hzrsvq6g8zczr";
     };
     buildInputs = [ pkgs.etcd ];
+  };
+
+  go-flags = buildGoPackage rec {
+    rev = "5e118789801496c93ba210d34ef1f2ce5a9173bd";
+    name = "go-flags-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/jessevdk/go-flags";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "jessevdk";
+      repo = "go-flags";
+      sha256 = "1davr5h936fhc8zy7digp5yqxr216d1mshksr7iiad5xb3r8r9ja";
+    };
   };
 
   go-fuse = buildGoPackage rec {
@@ -943,6 +994,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  flagfile = buildGoPackage rec {
+    rev = "871ce569c29360f95d7596f90aa54d5ecef75738";
+    name = "flagfile-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/spacemonkeygo/flagfile";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "spacemonkeygo";
+      repo = "flagfile";
+      sha256 = "1y6wf1s51c90qc1aki8qikkw1wqapzjzr690xrmnrngsfpdyvkrc";
+    };
+  };
+
   iochan = buildGoPackage rec {
     rev = "b584a329b193e206025682ae6c10cdbe03b0cd77";
     name = "iochan-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1050,14 +1113,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   mgo = buildGoPackage rec {
-    rev = "2";
+    rev = "c6a7dce14133ccac2dcac3793f1d6e2ef048503a";
     name = "mgo-${rev}";
-    goPackagePath = "launchpad.net/mgo";
-    src = fetchbzr {
+    goPackagePath = "gopkg.in/mgo.v2";
+    src = fetchFromGitHub {
       inherit rev;
-      url = "https://${goPackagePath}";
-      sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
+      owner = "go-mgo";
+      repo = "mgo";
+      sha256 ="0rg232q1bkq3y3kd5816hgk1jpf7i38aha5q5ia7j6p9xashz7vj";
     };
+
+    buildInputs = [ pkgs.cyrus_sasl ];
   };
 
   mousetrap = buildGoPackage rec {
@@ -1160,6 +1226,19 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ oglemock oglematchers ];
     doCheck = false; # check this again
+  };
+
+  openssl = buildGoPackage rec {
+    rev = "84b5df477423634115e53fb171a66007cece19f5";
+    name = "openssl-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/spacemonkeygo/openssl";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "spacemonkeygo";
+      repo = "openssl";
+      sha256 = "1l0cyazxp8bwmi151djyr6pknj9jv8n53lgfhgj6l0zj32p5kh1v";
+    };
+    buildInputs = [ spacelog pkgconfig pkgs.openssl ];
   };
 
   osext = buildGoPackage rec {
@@ -1355,6 +1434,19 @@ let self = _self // overrides; _self = with self; {
       url = "http://code.google.com/p/snappy-go";
       sha256 = "0ywa52kcii8g2a9lbqcx8ghdf6y56lqq96sl5nl9p6h74rdvmjr7";
     };
+  };
+
+  spacelog = buildGoPackage rec {
+    rev = "ae95ccc1eb0c8ce2496c43177430efd61930f7e4";
+    name = "spacelog-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/spacemonkeygo/spacelog";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "spacemonkeygo";
+      repo = "spacelog";
+      sha256 = "1i1awivsix0ch0vg6rwvx0536ziyw6phcx45b1rmrclp6b6dyacy";
+    };
+    buildInputs = [ flagfile ];
   };
 
   stathat = buildGoPackage rec {
