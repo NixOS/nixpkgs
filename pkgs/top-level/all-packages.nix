@@ -3757,15 +3757,6 @@ let
     };
   };
 
-  jhc = callPackage ../development/compilers/jhc {
-    inherit (haskell.packages.ghc763) ghcWithPackages;
-  };
-
-  uhc = callPackage ../development/compilers/uhc/default.nix ({
-    stdenv = clangStdenv;
-    inherit (haskellPackages) ghcWithPackages;
-  });
-
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
     version = "4.7-2013q3-20130916";
     releaseType = "update";
@@ -14577,6 +14568,7 @@ let
   rssglx = rss-glx; #added 2015-03-25
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
+  inherit (haskell.compiler) jhc uhc;   # 2015-05-15
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
