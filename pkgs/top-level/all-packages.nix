@@ -4134,6 +4134,8 @@ let
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
+    ctypes = callPackage ../development/ocaml-modules/ctypes { };
+
     deriving = callPackage ../development/tools/ocaml/deriving { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
