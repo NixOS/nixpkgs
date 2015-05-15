@@ -303,6 +303,12 @@ let
         buildInputs = super.kgpg.buildInputs ++ [boost];
       };
 
+      khangman = super.khangman // {
+        buildInputs =
+          super.khangman.buildInputs
+          ++ [ kf5.kio ];
+      };
+
       kmix = with pkgs; super.kmix // {
         nativeBuildInputs = super.kmix.nativeBuildInputs ++ [pkgconfig];
         cmakeFlags = [ "-DKMIX_KF5_BUILD=ON" ];
