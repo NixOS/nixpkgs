@@ -4355,6 +4355,8 @@ let
 
     twt = callPackage ../development/ocaml-modules/twt { };
 
+    typerep = callPackage ../development/ocaml-modules/typerep { };
+
     utop = callPackage ../development/tools/ocaml/utop { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
