@@ -327,7 +327,8 @@ let
       kstars = super.kstars // {
         buildInputs =
           super.kstars.buildInputs
-          ++ (with kf5; [ kparts ]);
+          ++ (with kf5; [ kparts ])
+          ++ [ pkgs.cfitsio ];
       };
 
       ktp-accounts-kcm = super.ktp-accounts-kcm // {
