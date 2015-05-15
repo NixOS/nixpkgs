@@ -32,6 +32,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.haskell.org/hugs;
     description = "Haskell interpreter";
-    license = "as-is"; # gentoo is calling it this way
+    license = "as-is";                          # gentoo labels it this way
+    platforms = stdenv.lib.platforms.unix;      # arbitrary choice
   };
 }
