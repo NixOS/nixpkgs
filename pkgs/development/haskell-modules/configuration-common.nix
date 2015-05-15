@@ -11,7 +11,6 @@ self: super: {
   cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; });
 
   # Break infinite recursions.
-  digest = super.digest.override { inherit (pkgs) zlib; };
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
