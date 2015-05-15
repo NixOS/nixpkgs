@@ -4335,6 +4335,8 @@ let
 
     pa_test = callPackage ../development/ocaml-modules/pa_test { };
 
+    pipebang = callPackage ../development/ocaml-modules/pipebang { };
+
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
