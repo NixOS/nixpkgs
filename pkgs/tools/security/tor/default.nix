@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # ./configure time check for any of this.
   buildInputs = [ libevent openssl zlib torsocks ];
 
-  CFLAGS = stdenv.lib.optionalString (stdenv.cc.cc.isGNU or false) "-lgcc_s";
+  CFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   # Patch 'torify' to point directly to torsocks.
   patchPhase = ''

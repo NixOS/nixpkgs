@@ -225,49 +225,49 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "1.0";
-    build = "141.353";
+    version = "1.0.1";
+    build = "141.870";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "0xjdx13ljp1vy51a7rsj25wg3bsvry4kxq5cdng8zrc1g2y1fqw5";
+      sha256 = "17hdna6w7y9n3vqncqifw7jvys3rydgg0mz97nzax817fl4kjf1r";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14.1.2";
-    build = "IC-141.713.2";
+    version = "14.1.3";
+    build = "IC-141.1010.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "1skxbax7gsxxf7519qasxwp9q0v9ff755ibqr1w47dv2al47kjzq";
+      sha256 = "104ba057p49l41g9gdcgbywdxyqzkm4rfm7yivkcsddh5drsk4jv";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14.1.2";
-    build = "IU-141.713.2";
+    version = "14.1.3";
+    build = "IU-141.1010.3";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1ddy0f83rs3yx3w8v49cmlhkc8qxapdh702g26gzlapbpvfw58ay";
+      sha256 = "1flg3rpb86xfcxlys5rxywa0z9c6j9h3qd8mkadx5pnay1f97pwi";
     };
   };
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "7.0.4";
-    build = "139.1231";
+    version = "7.1.2";
+    build = "141.1119";
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "08b0iwccb5w9b1yk0kbs99r5mxkcyxqs9mkr57wb5j71an80yx38";
+      sha256 = "1gz14lv5jhnrnshp7lkx3wgrdf0y60abs4q78yhv2x9dc6ld1gmj";
     };
   };
 

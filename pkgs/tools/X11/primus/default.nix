@@ -30,6 +30,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/amonakov/primus;
     description = "Faster OpenGL offloading for Bumblebee";
-    maintainers = maintainers.coconnor;
+    maintainers = with maintainers; [ coconnor ];
   };
 }

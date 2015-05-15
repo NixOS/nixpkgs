@@ -223,6 +223,7 @@
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
   wjlroe = "William Roe <willroe@gmail.com>";
+  womfoo = "Kranium Gikos Mendoza <kranium@gikos.net>";
   wkennington = "William A. Kennington III <william@wkennington.com>";
   wmertens = "Wout Mertens <Wout.Mertens@gmail.com>";
   wscott = "Wayne Scott <wsc9tt@gmail.com>";

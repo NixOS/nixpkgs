@@ -62,6 +62,7 @@
   ./programs/environment.nix
   ./programs/info.nix
   ./programs/ibus.nix
+  ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
@@ -289,6 +290,7 @@
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
+  ./services/networking/nix-serve.nix
   ./services/networking/notbit.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix

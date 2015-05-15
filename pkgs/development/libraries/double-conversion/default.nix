@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/floitsch/double-conversion;
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -5,7 +5,14 @@
 # Go import path of the package
 , goPackagePath
 
-, meta ? {}, ... } @ args:
+# Extra sources to include in the gopath
+, extraSrcs ? [ ]
+
+, meta ? {}, ... } @ args':
+
+let
+  args = lib.filterAttrs (name: _: name != "extraSrcs") args';
+in
 
 go.stdenv.mkDerivation ( args // {
   name = "go${go.meta.branch}-${name}";
@@ -14,10 +21,20 @@ go.stdenv.mkDerivation ( args // {
   configurePhase = args.configurePhase or ''
     runHook preConfigure
 
+    # Extract the source
     cd "$NIX_BUILD_TOP"
     mkdir -p "go/src/$(dirname "$goPackagePath")"
     mv "$sourceRoot" "go/src/$goPackagePath"
 
+  '' + lib.flip lib.concatMapStrings extraSrcs ({ src, goPackagePath }: ''
+    mkdir extraSrc
+    (cd extraSrc; unpackFile "${src}")
+    mkdir -p "go/src/$(dirname "${goPackagePath}")"
+    chmod -R u+w extraSrc/*
+    mv extraSrc/* "go/src/${goPackagePath}"
+    rmdir extraSrc
+
+  '') + ''
     GOPATH=$NIX_BUILD_TOP/go:$GOPATH
 
     runHook postConfigure
@@ -34,16 +51,20 @@ go.stdenv.mkDerivation ( args // {
     runHook renameImports
 
     if [ -n "$subPackages" ] ; then
-	for p in $subPackages ; do
+        for p in $subPackages ; do
             go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p
-	done
+        done
     else
-	find . -type d | while read d; do
-            for i in $d/*.go; do
-                go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d
-                break
-	    done
-	done
+        (cd go/src
+        find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq | while read d; do
+            local OUT;
+            if ! OUT="$(go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d 2>&1)"; then
+                if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
+                    echo "$OUT" >&2
+                    exit 1
+                fi
+            fi
+        done)
     fi
 
     runHook postBuild
@@ -53,16 +74,14 @@ go.stdenv.mkDerivation ( args // {
     runHook preCheck
 
     if [ -n "$subPackages" ] ; then
-	for p in $subPackages ; do
+        for p in $subPackages ; do
             go test -p $NIX_BUILD_CORES -v $goPackagePath/$p
-	done
+        done
     else
-	find . -type d | while read d; do
-            for i in $d/*_test.go; do
-                go test -p $NIX_BUILD_CORES -v $d
-                break
-	    done
-	done
+        (cd go/src
+        find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq | while read d; do
+            go test -p $NIX_BUILD_CORES -v $d
+        done)
     fi
 
     runHook postCheck

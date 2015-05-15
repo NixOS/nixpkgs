@@ -80,7 +80,7 @@ in
   };
 
   libxkbfile = attrs: attrs // {
-    patches = lib.optional (stdenv.cc.cc.isClang or false) ./libxkbfile-clang36.patch;
+    patches = lib.optional stdenv.cc.isClang ./libxkbfile-clang36.patch;
   };
 
   libpciaccess = attrs : attrs // {

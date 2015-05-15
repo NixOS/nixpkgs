@@ -544,6 +544,10 @@ let
 
   arandr = callPackage ../tools/X11/arandr { };
 
+  arangodb = callPackage ../servers/nosql/arangodb {
+    inherit (pythonPackages) gyp;
+  };
+
   arcanist = callPackage ../development/tools/misc/arcanist {};
 
   arduino = arduino-core.override { withGui = true; };
@@ -1893,7 +1897,7 @@ let
   else
     nodePackages_0_12;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_4_2; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_5_0; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
@@ -3435,6 +3439,7 @@ let
 
   clangWrapSelf = build: (import ../build-support/cc-wrapper) {
     cc = build;
+    isClang = true;
     stdenv = clangStdenv;
     libc = glibc;
     binutils = binutils;
@@ -4495,6 +4500,8 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
     libc = libc;
+    isGNU = baseCC.isGNU or false;
+    isClang = baseCC.isClang or false;
     inherit stdenv binutils coreutils zlib;
   };
 
@@ -4534,6 +4541,7 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseGCC;
     libc = glibc;
+    isGNU = true;
     inherit stdenv binutils coreutils zlib;
     setupHook = ../build-support/cc-wrapper/setup-hook-stdinc.sh;
   };
@@ -7029,7 +7037,7 @@ let
     automake = automake113x; # fails with 14
   });
 
-  libuv = libuvVersions.v1_4_2;
+  libuv = libuvVersions.v1_5_0;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
@@ -9231,6 +9239,8 @@ let
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
+
+  kbdlight = callPackage ../os-specific/linux/kbdlight { };
 
   kmscon = callPackage ../os-specific/linux/kmscon { };
 
@@ -13039,6 +13049,8 @@ let
   gnugo = callPackage ../games/gnugo { };
 
   gtypist = callPackage ../games/gtypist { };
+
+  gzdoom = callPackage ../games/gzdoom { };
 
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;

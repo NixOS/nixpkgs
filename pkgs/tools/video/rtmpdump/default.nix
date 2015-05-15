@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ optional opensslSupport "CRYPTO=OPENSSL"
     ++ optional stdenv.isDarwin "SYS=darwin"
-    ++ optional (stdenv.cc.cc.isClang or false) "CC=clang";
+    ++ optional stdenv.cc.isClang "CC=clang";
 
   buildInputs = [ zlib ]
     ++ optional gnutlsSupport gnutls

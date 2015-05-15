@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [ "x86_64-linux" ];
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

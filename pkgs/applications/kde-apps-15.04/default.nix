@@ -72,9 +72,10 @@ let
         BISON = bison;
         Baloo = kde4.baloo;
         Boost = boost156;
+        CFitsio = cfitsio;
+        CUPS = cups;
         Canberra = libcanberra;
         Cdparanoia = cdparanoia;
-        CUPS = cups;
         DBusMenuQt = libdbusmenu_qt;
         DjVuLibre = djvulibre;
         ENCHANT = enchant;
@@ -96,9 +97,11 @@ let
         GSL = gsl;
         HUNSPELL = hunspell;
         HUpnp = herqq;
+        INDI = indilib;
         Intltool = intltool;
         Jasper = jasper;
         KActivities = kde4.kactivities;
+        KDEGames = kde4.libkdegames;
         LCMS2 = lcms2;
         Ldap = openldap;
         LibAttica = attica;
@@ -134,6 +137,7 @@ let
         TunePimp = libtunepimp;
         UDev = udev;
         USB = libusb;
+        Xplanet = xplanet;
         Xscreensaver = xscreensaver;
         Xsltproc = libxslt;
       }
@@ -317,6 +321,12 @@ let
         buildInputs =
           super.krfb.buildInputs
           ++ [pkgs.xlibs.libXtst kde4.telepathy.common_internals];
+      };
+
+      kstars = super.kstars // {
+        buildInputs =
+          super.kstars.buildInputs
+          ++ (with kf5; [ kparts ]);
       };
 
       ktp-accounts-kcm = super.ktp-accounts-kcm // {
