@@ -4172,6 +4172,8 @@ let
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
+    ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
+
     javalib = callPackage ../development/ocaml-modules/javalib {
       extlib = ocaml_extlib_maximal;
     };
@@ -4255,8 +4257,6 @@ let
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
     ocamlify = callPackage ../development/tools/ocaml/ocamlify { };
-
-    ocaml_ipaddr = callPackage ../development/ocaml-modules/ocaml-ipaddr { };
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
 
