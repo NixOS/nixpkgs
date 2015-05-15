@@ -3,6 +3,11 @@
 stdenv.mkDerivation rec {
   name = "libev-${version}";
   version="4.19";
+
+  # Clang defaults to the c11 standard witch breaks libev since
+  # it uses incompatible syntax.
+  CFLAGS = if stdenv.isDarwin then "-std=gnu99" else null;
+
   src = fetchurl {
     url = "http://dist.schmorp.de/libev/${name}.tar.gz";
     sha256 = "1jyw7qbl0spxqa0dccj9x1jsw7cj7szff43cq4acmklnra4mzz48";
