@@ -4315,6 +4315,8 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    re2 = callPackage ../development/ocaml-modules/re2 { };
+
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
