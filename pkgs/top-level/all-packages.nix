@@ -4202,6 +4202,11 @@ let
 
     hex = callPackage ../development/ocaml-modules/hex { };
 
+    jingoo = callPackage ../development/ocaml-modules/jingoo {
+      batteries = ocaml_batteries;
+      pcre = ocaml_pcre;
+    };
+
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { };
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
