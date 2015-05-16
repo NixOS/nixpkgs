@@ -1795,6 +1795,8 @@ let
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
+  jekyll = callPackage ../applications/misc/jekyll { };
+
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
   jhead = callPackage ../tools/graphics/jhead { };
