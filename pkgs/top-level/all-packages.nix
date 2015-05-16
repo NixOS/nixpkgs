@@ -6699,7 +6699,11 @@ let
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
 
-  libnatspec = callPackage ../development/libraries/libnatspec { };
+  libnatspec = callPackage ../development/libraries/libnatspec (
+    stdenv.lib.optionalAttrs stdenv.isDarwin {
+      inherit (darwin) libiconv;
+    }
+  );
 
   libndp = callPackage ../development/libraries/libndp { };
 
