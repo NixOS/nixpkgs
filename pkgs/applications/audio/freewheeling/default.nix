@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls, freetype
+{ stdenv, fetchsvn, pkgconfig, autoconf, automake, gnutls33, freetype
 , SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, jack2, libvorbis
 , libsndfile, libogg
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    pkgconfig autoconf automake gnutls freetype SDL SDL_gfx SDL_ttf
+    pkgconfig autoconf automake gnutls33 freetype SDL SDL_gfx SDL_ttf
     liblo libxml2 jack2 alsaLib libvorbis libsndfile libogg
   ];
 
