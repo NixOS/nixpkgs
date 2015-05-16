@@ -4476,6 +4476,11 @@ let
       sha256 = "1zlmsygjw69xlq56vz1z5ivzy9bwc7knjaykn2yy2hv4w2j4yb7k";
     };
 
+    # see https://github.com/python-greenlet/greenlet/issues/85
+    preCheck = ''
+      rm tests/test_leaks.py
+    '';
+
     meta = with stdenv.lib; {
       homepage = http://pypi.python.org/pypi/greenlet;
       description = "Module for lightweight in-process concurrent programming";
