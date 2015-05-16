@@ -678,8 +678,11 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2045
-  pandoc = dontCheck super.pandoc;
+  # https://github.com/jgm/pandoc/issues/2156
+  pandoc = overrideCabal (dontJailbreak super.pandoc) (drv: {
+    doCheck = false;    # https://github.com/jgm/pandoc/issues/2036
+    patchPhase = "sed -i -e 's|zlib .*,|zlib,|' -e 's|QuickCheck .*,|QuickCheck,|' pandoc.cabal";
+  });
 
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
