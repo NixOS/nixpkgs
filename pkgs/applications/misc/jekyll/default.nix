@@ -14,7 +14,7 @@ bundlerEnv {
     description = "Simple, blog aware, static site generator";
     homepage    =  http://jekyllrb.com/;
     license     = with licenses; mit;
-    # maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ pesterhazy ];
     platforms   = platforms.unix;
   };
 }
