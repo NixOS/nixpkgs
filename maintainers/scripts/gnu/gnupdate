@@ -696,7 +696,6 @@ Return #t if the signature was good, #f otherwise."
     "bison23"
     "bison24"
     "bison" ;; = 2.4
-    "ccrtp_1_8"
     "emacs22"
     "emacsSnapshot"
     "gcc295"
