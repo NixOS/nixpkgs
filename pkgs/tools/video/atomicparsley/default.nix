@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with pkgs; [ unzip ];
   patches = [ ./casts.patch ];
-  setSourceRoot = "sourceRoot=${name}-source-${version}";
+  setSourceRoot = "sourceRoot=${product}-source-${version}";
   buildPhase = "bash build";
   installPhase = "install -D AtomicParsley $out/bin/AtomicParsley";
 
