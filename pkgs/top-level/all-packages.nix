@@ -7660,7 +7660,6 @@ let
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rubberband = callPackage ../development/libraries/rubberband {
-    fftw = fftwSinglePrec;
     inherit (vamp) vampSDK;
   };
 
