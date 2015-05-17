@@ -87,6 +87,8 @@ stdenv.mkDerivation {
 
       # Remove originals. Knows a little too much about wrapPythonProgramsIn.
       rm -f $out/bin/.*-wrapped
+
+      wrapPythonPrograms $out/lib "$out $pythonPath"
     ''
     + (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
