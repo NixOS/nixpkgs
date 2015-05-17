@@ -11085,11 +11085,11 @@ let
 
 
   scipy = buildPythonPackage rec {
-    name = "scipy-0.14.0";
+    name = "scipy-0.15.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      md5 = "d7c7f4ccf8b07b08d6fe49d5cd51f85d";
+      sha256 = "16i5iksaas3m0hgbxrxpgsyri4a9ncbwbiazlhx5d6lynz1wn4m2";
     };
 
     buildInputs = [ pkgs.gfortran ];
