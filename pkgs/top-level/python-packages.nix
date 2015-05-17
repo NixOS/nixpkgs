@@ -588,15 +588,15 @@ let
   }));
 
   azure = buildPythonPackage rec {
-    version = "0.9.0";
+    version = "0.11.0";
     name = "azure-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/azure/${name}.zip";
-      md5 = "9616767cf45c1c00794624e2a0889f23";
+      md5 = "5499efd85c54c757c0e757b5407ee47f";
     };
 
-    propagatedBuildInputs = with self; [ dateutil ];
+    propagatedBuildInputs = with self; [ dateutil futures pyopenssl ];
 
     meta = with stdenv.lib; {
       description = "Microsoft Azure SDK for Python";
