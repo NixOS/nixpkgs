@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     Description: An Extensible Extension Language
     Version: ${version}
     Requires:
-    Libs: -L$out/lib -llua.${version} -lm
+    Libs: -L$out/lib -llua -lm
     Cflags: -I$out/include
     EOF
   '';
