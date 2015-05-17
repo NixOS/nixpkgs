@@ -1014,6 +1014,8 @@ let
     gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
   };
 
+  clementineFree = clementine.free;
+
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
   cmst = callPackage ../tools/networking/cmst { };
