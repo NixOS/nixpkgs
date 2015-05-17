@@ -112,4 +112,9 @@ runCommand "clementine-${version}"
   makeWrapper "$free/bin/${exeName}" "$out/bin/${exeName}" \
       ${optionalString withSpotify "--set CLEMENTINE_SPOTIFYBLOB \"$blob/libexec/clementine\""} \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+
+  mkdir -p $out/share
+  for dir in applications icons kde4; do
+      ln -s "$free/share/$dir" "$out/share/$dir"
+  done
 ''
