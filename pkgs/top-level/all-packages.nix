@@ -1792,6 +1792,8 @@ let
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
+  i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
+
   i2p = callPackage ../tools/networking/i2p {};
 
   i2pd = callPackage ../tools/networking/i2pd {};
