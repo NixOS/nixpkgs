@@ -2684,6 +2684,8 @@ let
 
   privateer = callPackage ../games/privateer { };
 
+  read-edid = callPackage ../os-specific/linux/read-edid { };
+
   redmine = callPackage ../applications/version-management/redmine { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
