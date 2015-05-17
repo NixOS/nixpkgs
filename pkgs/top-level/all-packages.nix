@@ -13273,6 +13273,10 @@ let
 
   vessel = callPackage_i686 ../games/vessel { };
 
+  voxelands = callPackage ../games/voxelands {
+    libpng = libpng12;
+  };
+
   warmux = callPackage ../games/warmux { };
 
   warsow = callPackage ../games/warsow {
