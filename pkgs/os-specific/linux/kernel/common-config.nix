@@ -396,7 +396,7 @@ with stdenv.lib;
     KVM_COMPAT y
   ''}
   ${optionalString (versionAtLeast version "3.10") ''
-    KVM_DEVICE_ASSIGNMENT y
+    KVM_DEVICE_ASSIGNMENT? y
   ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
