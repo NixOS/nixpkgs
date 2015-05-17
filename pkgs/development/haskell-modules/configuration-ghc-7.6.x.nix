@@ -85,4 +85,7 @@ self: super: {
     patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
   );
 
+  # blaze-builder requires an additional build input on older compilers.
+  blaze-builder = addBuildDepend super.blaze-builder super.bytestring-builder;
+
 }
