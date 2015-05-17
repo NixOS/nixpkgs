@@ -11563,9 +11563,7 @@ let
   };
 
   midoriWrapper = wrapFirefox
-    { browser = midori; browserName = "midori"; desktopName = "Midori";
-      icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
-    };
+    { browser = midori; browserName = "midori"; desktopName = "Midori"; };
 
   mikmod = callPackage ../applications/audio/mikmod { };
 
@@ -12629,7 +12627,7 @@ let
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
-    , icon ? "${browser}/lib/${browser.name}/browser/icons/mozicon128.png" }:
+    , icon ? browserName }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
