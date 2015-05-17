@@ -2,15 +2,20 @@
 
 
 stdenv.mkDerivation rec {
-  name = "irrlicht-${version}-svn-${revision}";
-  version = "1.8";
-  revision = "5104"; # newest revision as of 05-16-15
+  # Version 3843 is required for supertuxkart
+  name = "irrlicht-1.8-svn-3843";
 
   src = fetchsvn {
-    url = "https://svn.code.sf.net/p/irrlicht/code/branches/releases/${version}"; # get 1.8 release (same regardless of rev)
-    rev = "${revision}";
-    sha256 = "18xvlrjf113mphf29iy24hmrkh7xff6j9cz0chrxjqbr9xk9h1yq";
+    url = https://irrlicht.svn.sourceforge.net/svnroot/irrlicht/trunk;
+    rev = 3843;
+    sha256 = "0v31l3k0fzy7isdsx2sh0baaixzlml1m7vgz6cd0015d9f5n99vl";
   };
+
+  patches = [ ./irrlicht-1.8.1-mesa-10.x.patch ];
+
+  postPatch = ''
+    sed -i /stdcall-alias/d source/Irrlicht/Makefile
+  '';
 
   preConfigure = ''
     cd source/Irrlicht
@@ -23,6 +28,11 @@ stdenv.mkDerivation rec {
   preInstall = ''
     sed -i s,/usr/local/lib,$out/lib, Makefile
     mkdir -p $out/lib
+  '';
+
+  postInstall = ''
+    ln -s libIrrlicht.so.1.8.0-SVN $out/lib/libIrrlicht.so.1.8
+    ln -s libIrrlicht.so.1.8.0-SVN $out/lib/libIrrlicht.so
   '';
 
   buildInputs = [ unzip mesa libXrandr libX11 libXxf86vm ];

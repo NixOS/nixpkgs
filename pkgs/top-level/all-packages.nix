@@ -6212,7 +6212,8 @@ let
 
   intltool = callPackage ../development/tools/misc/intltool { };
 
-  irrlicht3843 = callPackage ../development/libraries/irrlicht { };
+  irrlicht = callPackage ../development/libraries/irrlicht { };
+  irrlicht3843 = callPackage ../development/libraries/irrlicht/irrlicht3843.nix { };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
