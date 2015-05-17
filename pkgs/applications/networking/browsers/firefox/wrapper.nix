@@ -43,7 +43,7 @@ stdenv.mkDerivation {
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
         --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
-        --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}*")"
+        --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}"*)"
 
     ${ lib.optionalString libtrick
     ''
