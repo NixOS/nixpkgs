@@ -39,6 +39,6 @@ in stdenv.mkDerivation {
     description = "Infinite-world block sandbox game";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ jgeerds c0dehero ];
   };
 }
