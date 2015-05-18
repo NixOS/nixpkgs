@@ -10792,6 +10792,8 @@ let
     gconf = null;
     alsaLib = null;
     imagemagick = null;
+    acl = null;
+    gpm = null;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
