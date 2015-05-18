@@ -1,8 +1,8 @@
-Only in vte-0.38.0.new: expose_select_text.patch
-diff -aur vte-0.38.0/src/vteaccess.c vte-0.38.0.new/src/vteaccess.c
---- vte-0.38.0/src/vteaccess.c	2014-08-13 08:00:38.000000000 -0400
-+++ vte-0.38.0.new/src/vteaccess.c	2014-09-21 17:05:23.934641193 -0400
-@@ -1427,7 +1427,7 @@
+Only in vte-0.40.0.new: .git
+diff --unified -aur vte-0.40.0/src/vteaccess.c vte-0.40.0.new/src/vteaccess.c
+--- vte-0.40.0/src/vteaccess.c	2015-03-16 06:34:37.000000000 -0400
++++ vte-0.40.0.new/src/vteaccess.c	2015-04-10 00:08:53.146853382 -0400
+@@ -1444,7 +1444,7 @@
  	*start_offset = offset_from_xy (priv, start_x, start_y);
  	_vte_terminal_get_end_selection (terminal, &end_x, &end_y);
  	*end_offset = offset_from_xy (priv, end_x, end_y);
@@ -11,10 +11,10 @@ diff -aur vte-0.38.0/src/vteaccess.c vte-0.38.0.new/src/vteaccess.c
  }
  
  static gboolean
-diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
---- vte-0.38.0/src/vte.c	2014-09-13 03:23:47.000000000 -0400
-+++ vte-0.38.0.new/src/vte.c	2014-09-21 17:03:04.671656749 -0400
-@@ -122,7 +122,6 @@
+diff --unified -aur vte-0.40.0/src/vte.c vte-0.40.0.new/src/vte.c
+--- vte-0.40.0/src/vte.c	2015-03-18 12:38:09.000000000 -0400
++++ vte-0.40.0.new/src/vte.c	2015-04-10 00:08:53.150186722 -0400
+@@ -123,7 +123,6 @@
  						 gpointer data,
  						 GArray *attributes,
  						 gboolean include_trailing_spaces);
@@ -22,7 +22,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  static void _vte_terminal_disconnect_pty_write(VteTerminal *terminal);
  static void vte_terminal_stop_processing (VteTerminal *terminal);
  
-@@ -3267,9 +3266,10 @@
+@@ -3344,9 +3343,10 @@
  	_vte_debug_print (VTE_DEBUG_IO, "removed poll of vte_terminal_io_read\n");
  	terminal->pvt->pty_input_source = 0;
  }
@@ -35,7 +35,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  	if (terminal->pvt->pty_channel == NULL) {
  		return;
  	}
-@@ -3321,9 +3321,10 @@
+@@ -3398,9 +3398,10 @@
  	}
  }
  
@@ -48,7 +48,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  	if (terminal->pvt->pty_input_source != 0) {
  		_vte_debug_print (VTE_DEBUG_IO, "disconnecting poll of vte_terminal_io_read\n");
  		g_source_remove(terminal->pvt->pty_input_source);
-@@ -6154,6 +6155,28 @@
+@@ -6302,6 +6303,28 @@
  	}
  }
  
@@ -67,8 +67,8 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
 +	g_return_if_fail(VTE_IS_TERMINAL(terminal));
 +
 +	_vte_invalidate_cursor_once(terminal, FALSE);
-+	terminal->pvt->screen->cursor_current.col = column;
-+	terminal->pvt->screen->cursor_current.row = row;
++	terminal->pvt->cursor.col = column;
++	terminal->pvt->cursor.row = row;
 +	_vte_invalidate_cursor_once(terminal, FALSE);
 +	_vte_check_cursor_blink(terminal);
 +	vte_terminal_queue_cursor_moved(terminal);
@@ -77,7 +77,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  static GtkClipboard *
  vte_terminal_clipboard_get(VteTerminal *terminal, GdkAtom board)
  {
-@@ -6319,7 +6342,7 @@
+@@ -6465,7 +6488,7 @@
          vte_terminal_extend_selection(terminal, x, y, FALSE, TRUE);
  
  	/* Temporarily stop caring about input from the child. */
@@ -86,7 +86,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  }
  
  static gboolean
-@@ -6336,7 +6359,7 @@
+@@ -6482,7 +6505,7 @@
  		terminal->pvt->selecting = FALSE;
  
  		/* Reconnect to input from the child if we paused it. */
@@ -95,7 +95,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  
  		return TRUE;
  	}
-@@ -6834,6 +6857,50 @@
+@@ -6982,6 +7005,50 @@
  	vte_terminal_deselect_all (terminal);
  }
  
@@ -146,7 +146,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  /* Autoscroll a bit. */
  static gboolean
  vte_terminal_autoscroll(VteTerminal *terminal)
-@@ -8476,7 +8543,7 @@
+@@ -8631,7 +8698,7 @@
  #endif
  		kill(terminal->pvt->pty_pid, SIGHUP);
  	}
@@ -155,7 +155,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  	_vte_terminal_disconnect_pty_write(terminal);
  	if (terminal->pvt->pty_channel != NULL) {
  		g_io_channel_unref (terminal->pvt->pty_channel);
-@@ -12533,7 +12600,7 @@
+@@ -12188,7 +12255,7 @@
          g_object_freeze_notify(object);
  
          if (pvt->pty != NULL) {
@@ -164,7 +164,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
                  _vte_terminal_disconnect_pty_write(terminal);
  
                  if (terminal->pvt->pty_channel != NULL) {
-@@ -12588,7 +12655,7 @@
+@@ -12243,7 +12310,7 @@
          _vte_terminal_setup_utf8 (terminal);
  
          /* Open channels to listen for input on. */
@@ -173,7 +173,7 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  
          g_object_notify(object, "pty");
  
-@@ -12623,7 +12690,7 @@
+@@ -12276,7 +12343,7 @@
  }
  
  char *
@@ -182,10 +182,9 @@ diff -aur vte-0.38.0/src/vte.c vte-0.38.0.new/src/vte.c
  {
  	g_return_val_if_fail(VTE_IS_TERMINAL(terminal), NULL);
  
-Only in vte-0.38.0.new/src: .vte.c.swp
-diff -aur vte-0.38.0/src/vteint.h vte-0.38.0.new/src/vteint.h
---- vte-0.38.0/src/vteint.h	2014-05-16 13:51:26.000000000 -0400
-+++ vte-0.38.0.new/src/vteint.h	2014-09-21 17:05:44.934589281 -0400
+diff --unified -aur vte-0.40.0/src/vteint.h vte-0.40.0.new/src/vteint.h
+--- vte-0.40.0/src/vteint.h	2014-05-28 08:22:48.000000000 -0400
++++ vte-0.40.0.new/src/vteint.h	2015-04-10 00:08:53.153520062 -0400
 @@ -25,7 +25,6 @@
  G_BEGIN_DECLS
  
@@ -194,10 +193,10 @@ diff -aur vte-0.38.0/src/vteint.h vte-0.38.0.new/src/vteint.h
  void _vte_terminal_get_start_selection(VteTerminal *terminal, long *x, long *y);
  void _vte_terminal_get_end_selection(VteTerminal *terminal, long *x, long *y);
  void _vte_terminal_select_text(VteTerminal *terminal, long start_x, long start_y, long end_x, long end_y, int start_offset, int end_offset);
-diff -aur vte-0.38.0/src/vteterminal.h vte-0.38.0.new/src/vteterminal.h
---- vte-0.38.0/src/vteterminal.h	2014-09-13 03:23:47.000000000 -0400
-+++ vte-0.38.0.new/src/vteterminal.h	2014-09-21 17:03:39.094903032 -0400
-@@ -170,6 +170,18 @@
+diff --unified -aur vte-0.40.0/src/vteterminal.h vte-0.40.0.new/src/vteterminal.h
+--- vte-0.40.0/src/vteterminal.h	2015-03-18 12:38:09.000000000 -0400
++++ vte-0.40.0.new/src/vteterminal.h	2015-04-10 00:08:53.150186722 -0400
+@@ -169,6 +169,18 @@
  
  void vte_terminal_select_all(VteTerminal *terminal) _VTE_GNUC_NONNULL(1);
  void vte_terminal_unselect_all(VteTerminal *terminal) _VTE_GNUC_NONNULL(1);
@@ -214,9 +213,9 @@ diff -aur vte-0.38.0/src/vteterminal.h vte-0.38.0.new/src/vteterminal.h
 +void vte_terminal_disconnect_pty_read(VteTerminal *vte);
 +void vte_terminal_connect_pty_read(VteTerminal *vte);
  
- /* Set the terminal's size. */
- void vte_terminal_set_size(VteTerminal *terminal,
-@@ -276,6 +288,8 @@
+ /* By-word selection */
+ void vte_terminal_set_word_char_exceptions(VteTerminal *terminal,
+@@ -280,6 +292,8 @@
  void vte_terminal_get_cursor_position(VteTerminal *terminal,
  				      glong *column,
                                        glong *row) _VTE_GNUC_NONNULL(1);
