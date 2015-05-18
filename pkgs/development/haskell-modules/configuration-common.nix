@@ -813,4 +813,9 @@ self: super: {
   cheapskate = markBrokenVersion "0.1.0.3" super.cheapskate;
   lit = dontDistribute super.lit;
 
+  # https://github.com/snapframework/snap/issues/148
+  snap = overrideCabal super.snap (drv: {
+    patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
+  });
+
 }
