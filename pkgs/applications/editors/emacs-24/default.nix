@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo, acl, gpm
+, alsaLib, cairo, acl, gpm, ghostscript
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
@@ -19,6 +19,21 @@ let
     if withGTK3 then "gtk3"
     else if withGTK2 then "gtk2"
     else "lucid";
+  addExecPath = stdenv.lib.filter
+    (p: p != null)
+    (stdenv.lib.optionals withX [
+      ghostscript
+    ]);
+  addSiteLisp = stdenv.lib.optionalString
+    (0 < (stdenv.lib.length addExecPath))
+    ''
+      ;; Where to find additional programs on NixOS
+      (setq exec-path (append exec-path '(
+        ${stdenv.lib.strings.concatMapStringsSep
+          "\n"
+          (p: ''"${p}/bin"'')
+          addExecPath})))
+    '';
 in
 
 stdenv.mkDerivation rec {
@@ -54,9 +69,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";
 
+  inherit addSiteLisp;
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
-    cp ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
+    echo "$addSiteLisp" | cat ${./site-start.el} - > $out/share/emacs/site-lisp/site-start.el
   '';
 
   doCheck = true;
