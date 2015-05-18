@@ -106,7 +106,7 @@ go.stdenv.mkDerivation (
   installPhase = args.installPhase or ''
     runHook preInstall
 
-    mkdir $out
+    mkdir -p $out
 
     if [ -z "$dontInstallSrc" ]; then
         local dir
