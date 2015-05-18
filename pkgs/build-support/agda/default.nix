@@ -21,7 +21,6 @@ in
         sourceDirectories = filter (y: !(y == null)) x.sourceDirectories;
         propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
         propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
-        extraBuildFlags = filter (y : ! (y == null)) x.extraBuildFlags;
         everythingFile = if x.everythingFile == "" then "Everything.agda" else x.everythingFile;
       };
 
@@ -50,11 +49,11 @@ in
         # would make a direct copy of the whole thing.
         topSourceDirectories = [ "src" ];
 
-        # Extra stuff to pass to the Agda binary.
-        extraBuildFlags = [ "-i ." ];
-        buildFlags = let r = map (x: "-i " + x + "/share/agda") self.buildDepends;
-                         d = map (x : "-i " + x) (self.sourceDirectories ++ self.topSourceDirectories);
-                     in unwords (r ++ d ++ self.extraBuildFlags);
+        # FIXME: `dirOf self.everythingFile` is what we really want, not hardcoded "./"
+        includeDirs = let r = map (x: x + "/share/agda") self.buildDepends;
+                          d = self.sourceDirectories ++ self.topSourceDirectories;
+                      in r ++ d ++ [ "." ];
+        buildFlags = unwords (map (x: "-i " + x) self.includeDirs);
 
         # We expose this as a mere convenience for any tools.
         AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDepends;
