@@ -46,7 +46,8 @@ let
       };
 
       mkScope = scope: pkgs // pkgs.xlibs // pkgs.gnome // scope;
-      callPackage = drv: args: callPackageWithScope (mkScope self) drv args;
+      defaultScope = mkScope self;
+      callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
