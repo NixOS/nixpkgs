@@ -113,6 +113,9 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "${ldpath}"
+
+    mkdir -p "$out/share/icons"
+    ln -s "$out/${appdir}/images/hicolor" "$out/share/icons/hicolor"
   '';
 
   meta = {
