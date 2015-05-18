@@ -375,6 +375,12 @@ let
     inherit sha256;
   };
 
+  fetchFromBitbucket = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
+    inherit name;
+    url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
+    inherit sha256;
+  };
+
   # gitorious example
   fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name;
