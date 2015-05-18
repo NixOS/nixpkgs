@@ -347,6 +347,100 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    Any use of module argument such as <varname>pkgs</varname> to access
+    library functions, or to define <literal>imports</literal> attributes
+    will now lead to an infinite loop at the time of the evaluation.
+  </para>
+
+  <para>
+    In case of infinite loop, use the <command>--show-trace</command>
+    command line argument and read the line just above the error message.
+
+<screen>
+$ nixos-rebuild build --show-trace
+…
+while evaluating the module argument `pkgs' in "/etc/nixos/my-module.nix":
+infinite recursion encountered
+</screen>
+  </para>
+
+
+  <para>
+    Any use of <literal>pkgs.lib</literal>, should be replaced by
+    <varname>lib</varname>, after adding it as argument of the module.  The
+    following module
+
+<programlisting>
+{ config, pkgs, ... }:
+
+with pkgs.lib;
+
+{
+  options = {
+    foo = mkOption { … };
+  };
+  config = mkIf config.foo { … };
+}
+</programlisting>
+
+   should be modified to look like:
+
+<programlisting>
+{ config, pkgs, lib, ... }:
+
+with lib;
+
+{
+  options = {
+    foo = mkOption { <replaceable>option declaration</replaceable> };
+  };
+  config = mkIf config.foo { <replaceable>option definition</replaceable> };
+}
+</programlisting>
+  </para>
+
+  <para>
+    When <varname>pkgs</varname> is used to download other projects to
+    import their modules, and only in such cases, it should be replaced by
+    <literal>(import &lt;nixpkgs&gt; {})</literal>.  The following module
+
+<programlisting>
+{ config, pkgs, ... }:
+
+let
+  myProject = pkgs.fetchurl {
+    src = <replaceable>url</replaceable>;
+    sha256 = <replaceable>hash</replaceable>;
+  };
+in
+
+{
+  imports = [ "${myProject}/module.nix" ];
+}
+</programlisting>
+
+    should be modified to look like:
+
+<programlisting>
+{ config, pkgs, ... }:
+
+let
+  myProject = (import &lt;nixpkgs&gt; {}).fetchurl {
+    src = <replaceable>url</replaceable>;
+    sha256 = <replaceable>hash</replaceable>;
+  };
+in
+
+{
+  imports = [ "${myProject}/module.nix" ];
+}
+</programlisting>
+  </para>
+
+</listitem>
+
 </itemizedlist>
 </para>
 
