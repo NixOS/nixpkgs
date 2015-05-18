@@ -5,7 +5,7 @@
 
 let
 
-  version = "2.2.1287";
+  version = "2.2.1373";
 
   rpath = stdenv.lib.makeSearchPath "lib" [
     stdenv.glibc
@@ -47,12 +47,12 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/x86_64/hipchat-${version}-x86_64.pkg.tar.xz";
-        sha256 = "170izy3v18rgriz84h4gyf9354jvjrsbkgg53czq9l0scyz8x55b";
+        sha256 = "0mxjzigncp8sh5w2rpr7kvkiahagm3adss1zv6rqk8hc1awrnd8n";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://downloads.hipchat.com/linux/arch/i686/hipchat-${version}-i686.pkg.tar.xz";
-        sha256 = "150q7pxg5vs14is5qf36yfsf7r70g49q9xr1d1rknmc5m4qa5rc5";
+        sha256 = "1f4cjbazgifxpyr6589frs417h4wpxbykf46w5qiw0m2wiqpqff5";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
@@ -92,10 +92,11 @@ stdenv.mkDerivation {
     mv opt/HipChat/bin/linuxbrowserlaunch $out/libexec/hipchat/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Desktop client for HipChat services";
     homepage = http://www.hipchat.com;
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ jgeerds ];
   };
 }
