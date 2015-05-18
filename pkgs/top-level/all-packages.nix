@@ -6422,6 +6422,8 @@ let
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
+  libbdplus = callPackage ../development/libraries/libbdplus { };
+
   libbluray = callPackage ../development/libraries/libbluray { };
 
   libbs2b = callPackage ../development/libraries/audio/libbs2b { };
