@@ -309,4 +309,8 @@ self: super: {
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
+  # Upstream has no issue tracker.
+  harp = markBrokenVersion "0.4" super.harp;
+  happstack-authenticate = dontDistribute super.happstack-authenticate;
+
 }
