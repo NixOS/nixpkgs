@@ -22,6 +22,9 @@ in
         propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
         propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
         everythingFile = if x.everythingFile == "" then "Everything.agda" else x.everythingFile;
+
+        passthru = { inherit (x) extras; };
+        extras = null;
       };
 
       defaults = self : {
@@ -63,25 +66,11 @@ in
                       ++ [ "." ];
         buildFlags = unwords (map (x: "-i " + x) self.includeDirs);
 
-        # We expose this as a mere convenience for any tools.
-        AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDependsAgdaShareAgda;
-
-        # Makes a wrapper available to the user. Very useful in
-        # nix-shell where all dependencies are -i'd.
-        agdaWrapper = writeScriptBin "agda" ''
-          ${Agda}/bin/agda ${self.buildFlags} "$@"
-        '';
-
-        # configurePhase is idempotent
-        configurePhase = ''
-          runHook preConfigure
-          export PATH="${self.agdaWrapper}/bin:$PATH"
-          runHook postConfigure
-        '';
+        agdaWithArgs = "${Agda}/bin/agda ${self.buildFlags}";
 
         buildPhase = ''
           runHook preBuild
-          ${Agda}/bin/agda ${self.buildFlags} ${self.everythingFile}
+          ${self.agdaWithArgs} ${self.everythingFile}
           runHook postBuild
         '';
 
@@ -91,6 +80,24 @@ in
           cp -pR ${unwords self.sourceDirectories} ${mapInside self.topSourceDirectories} $out/share/agda
           runHook postInstall
         '';
+
+        # Optionally-built conveniences
+        extras = {
+          # Makes a wrapper available to the user. Very useful in
+          # nix-shell where all dependencies are -i'd.
+          agdaWrapper = writeScriptBin "agda" ''
+            ${self.agdaWithArgs} "$@"
+          '';
+
+          # Use this to stick `agdaWrapper` at the front of the PATH:
+          #
+          # agda.mkDerivation (self: { PATH = self.extras.agdaWrapperPATH; })
+          #
+          # Not sure this is the best way to handle conflicts....
+          agdaWrapperPATH = "${self.extras.agdaWrapper}/bin:$PATH";
+
+          AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDependsAgdaShareAgda;
+        };
       };
     in stdenv.mkDerivation
          (postprocess (let super = defaults self // args self;
