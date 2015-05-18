@@ -10211,6 +10211,8 @@ let
 
   ucsFonts = callPackage ../data/fonts/ucs-fonts { };
 
+  uni-vga = callPackage ../data/fonts/uni-vga { };
+
   unifont = callPackage ../data/fonts/unifont { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
