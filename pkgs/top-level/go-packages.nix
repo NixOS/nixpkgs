@@ -122,12 +122,26 @@ let
     name = "tools-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "golang.org/x/tools";
 
+    preConfigure = ''
+      # Make the builtin tools available here
+      mkdir -p $out/bin
+      eval $(go env | grep GOTOOLDIR)
+      find $GOTOOLDIR -type f | while read x; do
+        ln -sv "$x" "$out/bin"
+      done
+      export GOTOOLDIR=$out/bin
+    '';
+
+    excludedPackages = "testdata";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "golang";
       repo = "tools";
       sha256 = "0vq0l3pjhgsp97v6ndlr3jcs029r5zilwai30snwfq74s580sriq";
     };
+
+    buildInputs = [ net ];
   };
 
   ## THIRD PARTY
