@@ -37,7 +37,7 @@ in
 
         everythingFile = "Everything.agda";
 
-        propagatedBuildInputs = self.buildDepends ++ self.buildTools;
+        propagatedBuildInputs = self.buildDepends;
         propagatedUserEnvPkgs = self.buildDepends;
 
         # Immediate source directories under which modules can be found.
@@ -49,8 +49,6 @@ in
         # *contents* copied over as opposed to sourceDirectories which
         # would make a direct copy of the whole thing.
         topSourceDirectories = [ "src" ];
-
-        buildTools = [];
 
         # Extra stuff to pass to the Agda binary.
         extraBuildFlags = [ "-i ." ];
