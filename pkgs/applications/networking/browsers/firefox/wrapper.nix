@@ -60,7 +60,7 @@ stdenv.mkDerivation {
 
     if [ -e "${browser}/share/icons" ]; then
         mkdir -p "$out/share"
-        ln "${browser}/share/icons" "$out/share/icons"
+        ln -s "${browser}/share/icons" "$out/share/icons"
     else
         mkdir -p "$out/share/icons/hicolor/128x128/apps"
         ln -s "$out/lib/$libdirbasename/browser/icons/mozicon128.png" \
