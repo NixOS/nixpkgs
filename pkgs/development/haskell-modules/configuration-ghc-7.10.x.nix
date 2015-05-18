@@ -241,39 +241,6 @@ self: super: {
   hbb = dontDistribute super.hbb;
   hsdev = dontDistribute super.hsdev;
 
-  Graphalyze = dontDistribute super.Graphalyze;
-  HLearn-approximation = dontDistribute super.HLearn-approximation;
-  HLearn-classification = dontDistribute super.HLearn-classification;
-  HLearn-distributions = dontDistribute super.HLearn-distributions;
-  SourceGraph = dontDistribute super.SourceGraph;
-  Zora = dontDistribute super.Zora;
-  ampersand = dontDistribute super.ampersand;
-  caffegraph = dontDistribute super.caffegraph;
-  dot2graphml = dontDistribute super.dot2graphml;
-  dvda = dontDistribute super.dvda;
-  erd = dontDistribute super.erd;
-  filediff = dontDistribute super.filediff;
-  fsmActions = dontDistribute super.fsmActions;
-  gbu = dontDistribute super.gbu;
-  geni-gui = dontDistribute super.geni-gui;
-  ghc-vis = dontDistribute super.ghc-vis;
-  grammar-combinators = dontDistribute super.grammar-combinators;
-  llvm-analysis = dontDistribute super.llvm-analysis;
-  llvm-base-types = dontDistribute super.llvm-base-types;
-  llvm-data-interop = dontDistribute super.llvm-data-interop;
-  llvm-tools = dontDistribute super.llvm-tools;
-  marxup = dontDistribute super.marxup;
-  mathgenealogy = dontDistribute super.mathgenealogy;
-  optimusprime = dontDistribute super.optimusprime;
-  phybin = dontDistribute super.phybin;
-  prolog-graph = dontDistribute super.prolog-graph;
-  prolog-graph-lib = dontDistribute super.prolog-graph-lib;
-  teams = dontDistribute super.teams;
-  vacuum-graphviz = dontDistribute super.vacuum-graphviz;
-  vampire = dontDistribute super.vampire;
-  visual-graphrewrite = dontDistribute super.visual-graphrewrite;
-  xdot = dontDistribute super.xdot;
-
   # https://github.com/lymar/hastache/issues/47
   hastache = dontCheck super.hastache;
 
@@ -312,5 +279,33 @@ self: super: {
   # Upstream has no issue tracker.
   harp = markBrokenVersion "0.4" super.harp;
   happstack-authenticate = dontDistribute super.happstack-authenticate;
+
+  # Upstream has no issue tracker.
+  llvm-base-types = markBroken super.llvm-base-types;
+  llvm-analysis = dontDistribute super.llvm-analysis;
+  llvm-data-interop = dontDistribute super.llvm-data-interop;
+  llvm-tools = dontDistribute super.llvm-tools;
+
+  # Upstream has no issue tracker.
+  MaybeT = markBroken super.MaybeT;
+  grammar-combinators = dontDistribute super.grammar-combinators;
+
+  # Required to fix version 0.91.0.0.
+  wx = dontHaddock (appendConfigureFlag super.wx "--ghc-option=-XFlexibleContexts");
+
+  # Upstream has no issue tracker.
+  Graphalyze = markBroken super.Graphalyze;
+  gbu = dontDistribute super.gbu;
+  SourceGraph = dontDistribute super.SourceGraph;
+
+  # Upstream has no issue tracker.
+  markBroken = super.protocol-buffers;
+  caffegraph = dontDistribute super.caffegraph;
+
+  # Deprecated: https://github.com/mikeizbicki/ConstraintKinds/issues/8
+  ConstraintKinds = markBroken super.ConstraintKinds;
+  HLearn-approximation = dontDistribute super.HLearn-approximation;
+  HLearn-distributions = dontDistribute super.HLearn-distributions;
+  HLearn-classification = dontDistribute super.HLearn-classification;
 
 }
