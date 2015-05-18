@@ -18,19 +18,25 @@
 # them with our own.
 
 let
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
-    else if stdenv.system == "i686-linux" then "x86"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
-
-  interpreter = if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
-    else if stdenv.system == "i686-linux" then "ld-linux.so.2"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
-
-  # NOTE: When updating, please also update in current stable, as older versions stop working  
+  # NOTE: When updating, please also update in current stable, as older versions stop working
   version = "3.4.6";
-  sha256 = if stdenv.system == "x86_64-linux" then "0crhv21q48lwa86qcqgbcd9g73biibfrc2vgbavi67cwxvzcskky"
-    else if stdenv.system == "i686-linux" then "0kli84kzg1wcwszjni948zb4qih8mynmyqhdwyiv1l7v5lrhb8k2"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+  sha256 =
+    {
+      "x86_64-linux" = "0crhv21q48lwa86qcqgbcd9g73biibfrc2vgbavi67cwxvzcskky";
+      "i686-linux" = "0kli84kzg1wcwszjni948zb4qih8mynmyqhdwyiv1l7v5lrhb8k2";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+
+  arch =
+    {
+      "x86_64-linux" = "x86_64";
+      "i686-linux" = "x86";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+
+  interpreter =
+    {
+      "x86_64-linux" = "ld-linux-x86-64.so.2";
+      "i686-linux" = "ld-linux.so.2";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
