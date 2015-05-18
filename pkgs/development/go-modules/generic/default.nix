@@ -25,7 +25,7 @@ let
 in
 
 go.stdenv.mkDerivation (
-  (builtins.removeAttrs args [ "goPackageAliases" ]) // {
+  (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
   name = "go${go.meta.branch}-${name}";
   buildInputs = [ go ] ++ buildInputs ++ (lib.optional (!dontRenameImports) govers) ;
