@@ -823,4 +823,7 @@ self: super: {
   gitlib-sample = dontDistribute super.gitlib-sample;
   gitlib-test = dontDistribute super.gitlib-test;
 
+  # https://github.com/yaccz/saturnin/issues/3
+  Saturnin = dontCheck super.Saturnin;
+
 }
