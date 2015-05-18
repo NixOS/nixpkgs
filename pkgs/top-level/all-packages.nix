@@ -11068,8 +11068,10 @@ let
     gconf = gnome2.GConf;
     guile = guile_1_8;
     slibGuile = slibGuile.override { scheme = guile_1_8; };
-    goffice = gnome3.goffice_0_8;
+    goffice = goffice_0_8;
   };
+
+  goffice_0_8 = gnome3.goffice_0_8;
 
   idea = recurseIntoAttrs (callPackage ../applications/editors/idea { androidsdk = androidsdk_4_4; });
 
