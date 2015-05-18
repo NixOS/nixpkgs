@@ -54,8 +54,9 @@ go.stdenv.mkDerivation (
 
   renameImports = args.renameImports or (
     let
-      inputsWithAliases = lib.filter (x: x ? goPackageAliases) buildInputs;
-      rename = to: from: "echo Renaming '${from}' to '${to}'; govers -m ${from} ${to}";
+      inputsWithAliases = lib.filter (x: x ? goPackageAliases)
+        (buildInputs ++ (args.propagatedBuildInputs or [ ]));
+      rename = to: from: "echo Renaming '${from}' to '${to}'; govers -d -m ${from} ${to}";
       renames = p: lib.concatMapStringsSep "\n" (rename p.goPackagePath) p.goPackageAliases;
     in lib.concatMapStringsSep "\n" renames inputsWithAliases);
 
