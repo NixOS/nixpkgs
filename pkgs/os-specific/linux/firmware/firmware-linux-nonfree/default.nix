@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2015-05-13";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+    url = "http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
     rev = "3161bfa479d5e9ed4f46b57df9bcecbbc4f8eb3c";
     sha256 = "0np6vwcnas3pzp38man3cs8j5ijs0p3skyzla19sfxzpwmjvfpjq";
   };
