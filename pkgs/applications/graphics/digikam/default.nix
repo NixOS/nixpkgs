@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   KDEDIRS="${marble}:${qjson}";
 
   # Help digiKam find libusb, otherwise gphoto2 support is disabled
-  cmakeFlags = "-DLIBUSB_LIBRARIES=${libusb1}/lib -DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0";
+  cmakeFlags = "-DLIBUSB_LIBRARIES=${libusb1}/lib -DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0 -DDIGIKAMSC_COMPILE_LIBKFACE=ON";
 
   enableParallelBuilding = true;
 
