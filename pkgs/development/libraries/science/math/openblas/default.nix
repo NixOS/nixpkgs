@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils, clang }:
+{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils }:
 
 with stdenv.lib;
 
@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     ++
     [
       "FC=gfortran"
+      # Note that clang is available through the stdenv on OSX and
+      # thus is not an explicit dependency.
       "CC=${if stdenv.isDarwin then "clang" else "gcc"}"
       ''PREFIX="''$(out)"''
       "INTERFACE64=1"
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = with platforms; all;
+    platforms = with platforms; unix;
     maintainers = with maintainers; [ ttuegel ];
   };
 }
