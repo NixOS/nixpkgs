@@ -26,4 +26,8 @@
     version = "1.7.43";
     sha256 = "01b7npa8hc2nrv4hm16r9ikic4wd34nbz1lvfhy0ali2jbcsaqqb";
   };
+  winetricks = {
+    version = "20150416";
+    sha256 = "0467cn5hqry6fscjskpvxw0y00lr059jmldv1csicbav4l0dxx8k";
+  };
 }
