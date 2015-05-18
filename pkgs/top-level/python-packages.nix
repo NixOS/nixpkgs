@@ -7728,11 +7728,11 @@ let
   };
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.8.2";
+    name = "numpy-1.9.2";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "1gcxlk3mf43pzpxvbw8kcfg173g4105j9szsfc1kxwablail6myf";
+      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
     };
 
     disabled = isPyPy;  # WIP
