@@ -2,6 +2,9 @@
 
 { name, buildInputs ? []
 
+# Disabled flag
+, disabled ? false
+
 # Go import path of the package
 , goPackagePath
 
@@ -14,6 +17,8 @@
 , dontRenameImports ? false
 
 , meta ? {}, ... } @ args':
+
+if disabled then throw "${name} not supported for go ${go.meta.branch}" else
 
 let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';

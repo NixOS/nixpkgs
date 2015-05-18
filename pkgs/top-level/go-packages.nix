@@ -3,7 +3,10 @@
 { overrides, stdenv, go, buildGoPackage, git, pkgconfig, libusb
 , fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchbzr, pkgs }:
 
-let self = _self // overrides; _self = with self; {
+let
+  isGo13 = go.meta.branch == "1.3";
+  isGo14 = go.meta.branch == "1.4";
+  self = _self // overrides; _self = with self; {
 
   inherit go buildGoPackage;
 
@@ -14,6 +17,7 @@ let self = _self // overrides; _self = with self; {
     name = "go-crypto-${rev}";
     goPackagePath = "golang.org/x/crypto";
     goPackageAliases = [ "code.google.com/p/go.crypto" ];
+    disabled = isGo13;
 
     src = fetchFromGitHub {
       inherit rev;
