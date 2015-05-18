@@ -41,6 +41,8 @@ let
       ./deterministic-build.patch
     ];
 
+  configureFlags = "--enable-shared --with-threads --enable-unicode=ucs4";
+
   preConfigure = ''
       # Purity.
       for i in /usr /sw /opt /pkg; do
@@ -74,12 +76,11 @@ let
     pythonVersion = majorVersion;
 
     inherit majorVersion version src patches buildInputs preConfigure;
+    inherit configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-
-    configureFlags = "--enable-shared --with-threads --enable-unicode=ucs4";
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
@@ -150,6 +151,7 @@ let
       name = "python-${moduleName}-${python.version}";
 
       inherit src patches preConfigure;
+      inherit configureFlags;
 
       buildInputs = [ python ] ++ deps;
 
