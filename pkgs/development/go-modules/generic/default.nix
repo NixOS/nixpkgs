@@ -80,7 +80,9 @@ go.stdenv.mkDerivation (
                     exit 1
                 fi
             fi
-            echo "$OUT" >&2
+            if [ -n "$OUT" ]; then
+              echo "$OUT" >&2
+            fi
         done)
     fi
 
