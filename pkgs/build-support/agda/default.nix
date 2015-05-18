@@ -28,16 +28,24 @@ in
         # There is no Hackage for Agda so we require src.
         inherit (self) src name;
 
+        isAgdaPackage = true;
+
         buildInputs = [ Agda ] ++ self.buildDepends;
         buildDepends = [];
+
+        buildDependsAgda = filter
+          (dep: dep ? isAgdaPackage && dep.isAgdaPackage)
+          self.buildDepends;
+        buildDependsAgdaShareAgda = map (x: x + "/share/agda") self.buildDependsAgda;
+
         # Not much choice here ;)
         LANG = "en_US.UTF-8";
         LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
         everythingFile = "Everything.agda";
 
-        propagatedBuildInputs = self.buildDepends;
-        propagatedUserEnvPkgs = self.buildDepends;
+        propagatedBuildInputs = self.buildDependsAgda;
+        propagatedUserEnvPkgs = self.buildDependsAgda;
 
         # Immediate source directories under which modules can be found.
         sourceDirectories = [ ];
@@ -50,13 +58,13 @@ in
         topSourceDirectories = [ "src" ];
 
         # FIXME: `dirOf self.everythingFile` is what we really want, not hardcoded "./"
-        includeDirs = let r = map (x: x + "/share/agda") self.buildDepends;
-                          d = self.sourceDirectories ++ self.topSourceDirectories;
-                      in r ++ d ++ [ "." ];
+        includeDirs = self.buildDependsAgdaShareAgda
+                      ++ self.sourceDirectories ++ self.topSourceDirectories
+                      ++ [ "." ];
         buildFlags = unwords (map (x: "-i " + x) self.includeDirs);
 
         # We expose this as a mere convenience for any tools.
-        AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDepends;
+        AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDependsAgdaShareAgda;
 
         # Makes a wrapper available to the user. Very useful in
         # nix-shell where all dependencies are -i'd.
