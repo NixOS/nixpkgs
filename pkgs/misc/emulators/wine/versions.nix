@@ -1,7 +1,7 @@
 {
   unstable = {
-    wineVersion = "1.7.42";
-    wineSha256  = "18iv4dsx2p7bk5qhiqqc6fpnnzny9rx8vgbjlpnf3gr0n615qzss";
+    wineVersion = "1.7.43";
+    wineSha256  = "08kqj02m8xc1ppzhs5y83zzykjnz0qliq495rx1n90ybzyd9pm2k";
     geckoVersion = "2.36";
     geckoSha256 = "12hjks32yz9jq4w3xhk3y1dy2g3iakqxd7aldrdj51cqiz75g95g";
     gecko64Version = "2.36";
@@ -23,7 +23,7 @@
     #monoSha256 = "00jl24qp7vh3hlqv7wsw1s529lr5p0ybif6s73jy85chqaxj7z1x";
   };
   staging = {
-    version = "1.7.42";
-    sha256 = "1qi1hf1w97n17vmj137p7da75g01ky84a3xvs50xrmxb7f62sm17";
+    version = "1.7.43";
+    sha256 = "01b7npa8hc2nrv4hm16r9ikic4wd34nbz1lvfhy0ali2jbcsaqqb";
   };
 }
