@@ -11068,14 +11068,8 @@ let
     gconf = gnome2.GConf;
     guile = guile_1_8;
     slibGuile = slibGuile.override { scheme = guile_1_8; };
-    goffice = goffice_0_8;
+    goffice = gnome3.goffice_0_8;
   };
-
-  goffice_0_8 = callPackage ../desktops/gnome-3/3.12/misc/goffice/0.8.nix {
-    inherit (gnome2) libglade libgnomeui;
-    gconf = gnome2.GConf;
-    libart = gnome2.libart_lgpl;
-  }; # latest version: gnome3.goffice
 
   idea = recurseIntoAttrs (callPackage ../applications/editors/idea { androidsdk = androidsdk_4_4; });
 
