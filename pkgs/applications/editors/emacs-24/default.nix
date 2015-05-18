@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo
+, alsaLib, cairo, acl, gpm
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo ]
+    [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm ]
     ++ stdenv.lib.optional stdenv.isLinux dbus
     ++ stdenv.lib.optionals withX
       [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
