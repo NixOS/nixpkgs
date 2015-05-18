@@ -826,4 +826,7 @@ self: super: {
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
 
+  # https://github.com/kolmodin/binary/issues/74
+  binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
+
 }
