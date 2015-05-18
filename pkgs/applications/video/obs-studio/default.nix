@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/jp9000/obs-studio/archive/${version}.tar.gz";
-    sha256 = "198ymfdrg58i3by58fs68df835rkpnpagnvyzlilmn9ypvpa8h81";
+    sha256 = "1xms48gl20pr9g8bv8ygykh6m99c3wjphsavr4hb1d5263r9f4in";
   };
 
   buildInputs = [ cmake
