@@ -813,4 +813,20 @@ self: super: {
   cheapskate = markBrokenVersion "0.1.0.3" super.cheapskate;
   lit = dontDistribute super.lit;
 
+  # https://github.com/snapframework/snap/issues/148
+  snap = overrideCabal super.snap (drv: {
+    patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
+  });
+
+  # https://github.com/jwiegley/gitlib/issues/46
+  gitlib = markBroken super.gitlib;
+  gitlib-sample = dontDistribute super.gitlib-sample;
+  gitlib-test = dontDistribute super.gitlib-test;
+
+  # https://github.com/yaccz/saturnin/issues/3
+  Saturnin = dontCheck super.Saturnin;
+
+  # https://github.com/kolmodin/binary/issues/74
+  binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
+
 }

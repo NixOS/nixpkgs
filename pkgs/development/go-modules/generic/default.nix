@@ -2,6 +2,9 @@
 
 { name, buildInputs ? []
 
+# Disabled flag
+, disabled ? false
+
 # Go import path of the package
 , goPackagePath
 
@@ -15,12 +18,14 @@
 
 , meta ? {}, ... } @ args':
 
+if disabled then throw "${name} not supported for go ${go.meta.branch}" else
+
 let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';
 in
 
 go.stdenv.mkDerivation (
-  (builtins.removeAttrs args [ "goPackageAliases" ]) // {
+  (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
 
   name = "go${go.meta.branch}-${name}";
   buildInputs = [ go ] ++ buildInputs ++ (lib.optional (!dontRenameImports) govers) ;
@@ -66,13 +71,15 @@ go.stdenv.mkDerivation (
     else
         (cd go/src
         find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq | while read d; do
-            local OUT;
+            [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && continue
+            local OUT
             if ! OUT="$(go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d 2>&1)"; then
                 if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
                     echo "$OUT" >&2
                     exit 1
                 fi
             fi
+            echo "$OUT" >&2
         done)
     fi
 
@@ -99,7 +106,7 @@ go.stdenv.mkDerivation (
   installPhase = args.installPhase or ''
     runHook preInstall
 
-    mkdir $out
+    mkdir -p $out
 
     if [ -z "$dontInstallSrc" ]; then
         local dir

@@ -97,6 +97,12 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
-  meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux"];
+  meta = {
+    homepage = "http://haskell.org/ghc";
+    description = "The Glasgow Haskell Compiler";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = ["x86_64-linux" "i686-linux"];
+    broken = true;              # https://github.com/NixOS/nixpkgs/issues/7810
+  };
+
 }

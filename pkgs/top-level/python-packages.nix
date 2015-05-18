@@ -10955,6 +10955,22 @@ let
 
   });
 
+  rpy2 = buildPythonPackage rec {
+    name = "rpy2-2.5.6";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rpy2/${name}.tar.gz";
+      md5 = "a36e758b633ce6aec6a5f450bfee980f";
+    };
+    buildInputs = with pkgs; [ readline R pcre lzma bzip2 zlib icu ];
+    propagatedBuildInputs = [ self.singledispatch ];
+    meta = {
+      homepage = http://rpy.sourceforge.net/rpy2;
+      description = "Python interface to R";
+      license = stdenv.lib.licenses.gpl2Plus;
+      maintainers = [ stdenv.lib.maintainers.joelmo ];
+    };
+  };
+
   rpyc = buildPythonPackage rec {
     name = "rpyc-${version}";
     version = "3.3.0";

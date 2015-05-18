@@ -48,16 +48,6 @@ self: super: {
   # haddock-api 2.16 requires ghc>=7.10
   haddock-api = super.haddock-api_2_15_0_2;
 
-  # Idris needs special version of some libraries
-  idris = let super1 = super; in overrideCabal (super.idris.overrideScope (self: super: {
-    annotated-wl-pprint = self.annotated-wl-pprint_0_5_3;
-    blaze-html = self.blaze-html_0_7_0_3;
-    blaze-markup = self.blaze-markup_0_6_2_0;
-    lens = self.lens_4_7_0_1;
-  })) (drv: {
-    patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
-  });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
-
   # This is part of bytestring in our compiler.
   bytestring-builder = dontHaddock super.bytestring-builder;
 

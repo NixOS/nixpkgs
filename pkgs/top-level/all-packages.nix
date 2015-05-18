@@ -873,6 +873,8 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
+  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
+
   mstflint = callPackage ../tools/misc/mstflint { };
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
@@ -1013,6 +1015,8 @@ let
     boost = boost156;
     gst_plugins = [ gst_plugins_base gst_plugins_good gst_plugins_ugly gst_ffmpeg ];
   };
+
+  clementineFree = clementine.free;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
@@ -3409,6 +3413,8 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  colm = callPackage ../development/compilers/colm { };
+
   fetchegg = callPackage ../build-support/fetchegg { };
 
   eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
@@ -5687,10 +5693,6 @@ let
 
   clutter = callPackage ../development/libraries/clutter { };
 
-  clutter_1_18 = callPackage ../development/libraries/clutter/1.18.nix {
-    cogl = cogl_1_18;
-  };
-
   clutter_1_22 = callPackage ../development/libraries/clutter/1.22.nix {
     cogl = cogl_1_20;
   };
@@ -5708,8 +5710,6 @@ let
   cminpack = callPackage ../development/libraries/cminpack { };
 
   cogl = callPackage ../development/libraries/cogl { };
-
-  cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix { };
 
   cogl_1_20 = callPackage ../development/libraries/cogl/1.20.nix { };
 
@@ -6181,9 +6181,7 @@ let
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
-
-  gtk3_16 = callPackage ../development/libraries/gtk+/3.16.nix {
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
     gettext = gettextWithExpat gettext_0_19;
   };
 
@@ -6191,9 +6189,6 @@ let
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
-  gtkmm3_16 = callPackage ../development/libraries/gtkmm/3.16.nix {
-    gtk3 = gtk3_16;
-  };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtk-sharp;
@@ -6299,7 +6294,8 @@ let
 
   intltool = callPackage ../development/tools/misc/intltool { };
 
-  irrlicht3843 = callPackage ../development/libraries/irrlicht { };
+  irrlicht = callPackage ../development/libraries/irrlicht { };
+  irrlicht3843 = callPackage ../development/libraries/irrlicht/irrlicht3843.nix { };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
@@ -6425,6 +6421,8 @@ let
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
+
+  libbdplus = callPackage ../development/libraries/libbdplus { };
 
   libbluray = callPackage ../development/libraries/libbluray { };
 
@@ -10213,6 +10211,8 @@ let
 
   ucsFonts = callPackage ../data/fonts/ucs-fonts { };
 
+  uni-vga = callPackage ../data/fonts/uni-vga { };
+
   unifont = callPackage ../data/fonts/unifont { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
@@ -10473,7 +10473,7 @@ let
 
   bomi = callPackage ../applications/video/bomi {
     stdenv = overrideCC stdenv gcc49;
-    pulseSupport = config.pulseaudio or false;
+    pulseSupport = config.pulseaudio or true;
   };
 
   cmus = callPackage ../applications/audio/cmus { };
@@ -11077,11 +11077,7 @@ let
     goffice = goffice_0_8;
   };
 
-  goffice_0_8 = callPackage ../desktops/gnome-3/3.12/misc/goffice/0.8.nix {
-    inherit (gnome2) libglade libgnomeui;
-    gconf = gnome2.GConf;
-    libart = gnome2.libart_lgpl;
-  }; # latest version: gnome3.goffice
+  goffice_0_8 = gnome3.goffice_0_8;
 
   idea = recurseIntoAttrs (callPackage ../applications/editors/idea { androidsdk = androidsdk_4_4; });
 
@@ -11560,9 +11556,7 @@ let
   };
 
   midoriWrapper = wrapFirefox
-    { browser = midori; browserName = "midori"; desktopName = "Midori";
-      icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
-    };
+    { browser = midori; browserName = "midori"; desktopName = "Midori"; };
 
   mikmod = callPackage ../applications/audio/mikmod { };
 
@@ -12326,7 +12320,7 @@ let
 
   termite = callPackage ../applications/misc/termite {
     gtk = gtk3;
-    vte = gnome3_16.vte-select-text;
+    vte = gnome3.vte-select-text;
    };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -12626,7 +12620,7 @@ let
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
-    , icon ? "${browser}/lib/${browser.name}/browser/icons/mozicon128.png" }:
+    , icon ? browserName }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
@@ -13272,6 +13266,10 @@ let
 
   vessel = callPackage_i686 ../games/vessel { };
 
+  voxelands = callPackage ../games/voxelands {
+    libpng = libpng12;
+  };
+
   warmux = callPackage ../games/warmux { };
 
   warsow = callPackage ../games/warsow {
@@ -13355,16 +13353,12 @@ let
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
-    callPackage = pkgs.newScope pkgs.gnome3_12;
-  });
-
   gnome3_16 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.16 {
     callPackage = pkgs.newScope pkgs.gnome3_16;
     self = pkgs.gnome3_16;
   });
 
-  gnome3 = gnome3_12;
+  gnome3 = gnome3_16;
 
   gnome = recurseIntoAttrs gnome2;
 

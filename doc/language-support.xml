@@ -674,6 +674,7 @@ net = buildGoPackage rec {
   goPackageAliases = [ "code.google.com/p/go.net" ]; <co xml:id='ex-buildGoPackage-3' />
   propagatedBuildInputs = [ goPackages.text ]; <co xml:id='ex-buildGoPackage-4' />
   buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-5' />
+  disabled = isGo13;<co xml:id='ex-buildGoPackage-6' />
 };
 </programlisting>
 </example>
@@ -728,6 +729,18 @@ the following arguments are of special significance to the function:
   <callout arearefs='ex-buildGoPackage-5'>
     <para>
       <varname>buildFlags</varname> is a list of flags passed to the go build command.
+    </para>
+  </callout>
+
+  <callout arearefs='ex-buildGoPackage-6'>
+    <para>
+      If <varname>disabled</varname> is <literal>true</literal>,
+      nix will refuse to build this package.
+    </para>
+    <para>
+      In this example the package will not be built for go 1.3. The <literal>isGo13</literal>
+      is an utility function that returns <literal>true</literal> if go used to build the
+      package has version 1.3.x.
     </para>
   </callout>
 

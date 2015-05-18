@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, json_glib, libcroco, intltool, libsecret
 , python3, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns, at_spi2_core
 , libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip
-, hicolor_icon_theme, sqlite, libgweather
+, sqlite, libgweather, libcanberra_gtk3
 , pulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, librsvg }:
 
@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
       libcroco intltool libsecret pkgconfig python3 libsoup polkit libcanberra gdk_pixbuf librsvg
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter pulseaudio caribou evolution_data_server
-      libical libtool nss gobjectIntrospection gtk gstreamer makeWrapper gdm gnome_control_center
-      hicolor_icon_theme adwaita-icon-theme sqlite gnome3.gnome-bluetooth
+      libical libtool nss gobjectIntrospection gtk gstreamer makeWrapper gdm
+      libcanberra_gtk3 gnome_control_center
+      defaultIconTheme sqlite gnome3.gnome-bluetooth
       libgweather # not declared at build time, but typelib is needed at runtime
       gnome3.gnome-clocks # schemas needed
       at_spi2_core upower ibus gnome_session gnome_desktop telepathy_logger gnome3.gnome_settings_daemon ];

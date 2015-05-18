@@ -1,7 +1,7 @@
 { stdenv, fetchurl, automake, pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
-, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
-, withPlugin ? false, substituteAll
+, polkit, qtSupport ? true, qt4, pyqt4, net_snmp
+, withPlugin ? false, substituteAll, makeWrapper
 }:
 
 let
@@ -74,7 +74,21 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-    wrapPythonPrograms
+      # Wrap the user-facing Python scripts in /bin without turning the ones
+      # in /share into shell scripts (they need to be importable).
+      # Complicated by the fact that /bin contains just symlinks to /share.
+      for bin in $out/bin/*; do
+        py=`readlink -m $bin`
+        rm $bin
+        cp $py $bin
+        wrapPythonProgramsIn $bin "$out $pythonPath"
+        sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
+      done
+
+      # Remove originals. Knows a little too much about wrapPythonProgramsIn.
+      rm -f $out/bin/.*-wrapped
+
+      wrapPythonPrograms $out/lib "$out $pythonPath"
     ''
     + (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
@@ -130,8 +144,8 @@ stdenv.mkDerivation {
     ] ++ stdenv.lib.optional qtSupport qt4;
 
   pythonPath = with pythonPackages; [
+      dbus
       pillow
-      pythonDBus
       pygobject
       recursivePthLoader
       reportlab
@@ -144,6 +158,6 @@ stdenv.mkDerivation {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ ttuegel jgeerds ];
+    maintainers = with maintainers; [ ttuegel jgeerds nckx ];
   };
 }
