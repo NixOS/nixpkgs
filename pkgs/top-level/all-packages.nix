@@ -5691,10 +5691,6 @@ let
 
   clutter = callPackage ../development/libraries/clutter { };
 
-  clutter_1_18 = callPackage ../development/libraries/clutter/1.18.nix {
-    cogl = cogl_1_18;
-  };
-
   clutter_1_22 = callPackage ../development/libraries/clutter/1.22.nix {
     cogl = cogl_1_20;
   };
@@ -5712,8 +5708,6 @@ let
   cminpack = callPackage ../development/libraries/cminpack { };
 
   cogl = callPackage ../development/libraries/cogl { };
-
-  cogl_1_18 = callPackage ../development/libraries/cogl/1.18.nix { };
 
   cogl_1_20 = callPackage ../development/libraries/cogl/1.20.nix { };
 
@@ -6185,9 +6179,7 @@ let
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
-
-  gtk3_16 = callPackage ../development/libraries/gtk+/3.16.nix {
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
     gettext = gettextWithExpat gettext_0_19;
   };
 
@@ -6195,9 +6187,6 @@ let
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
-  gtkmm3_16 = callPackage ../development/libraries/gtkmm/3.16.nix {
-    gtk3 = gtk3_16;
-  };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtk-sharp;
@@ -12329,7 +12318,7 @@ let
 
   termite = callPackage ../applications/misc/termite {
     gtk = gtk3;
-    vte = gnome3_16.vte-select-text;
+    vte = gnome3.vte-select-text;
    };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -13362,16 +13351,12 @@ let
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3_12 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.12 {
-    callPackage = pkgs.newScope pkgs.gnome3_12;
-  });
-
   gnome3_16 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.16 {
     callPackage = pkgs.newScope pkgs.gnome3_16;
     self = pkgs.gnome3_16;
   });
 
-  gnome3 = gnome3_12;
+  gnome3 = gnome3_16;
 
   gnome = recurseIntoAttrs gnome2;
 
