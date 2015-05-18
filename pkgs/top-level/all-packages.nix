@@ -10471,7 +10471,7 @@ let
 
   bomi = callPackage ../applications/video/bomi {
     stdenv = overrideCC stdenv gcc49;
-    pulseSupport = config.pulseaudio or false;
+    pulseSupport = config.pulseaudio or true;
   };
 
   cmus = callPackage ../applications/audio/cmus { };
