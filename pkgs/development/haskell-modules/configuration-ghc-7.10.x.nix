@@ -241,8 +241,6 @@ self: super: {
   hbb = dontDistribute super.hbb;
   hsdev = dontDistribute super.hsdev;
 
-  # http://hub.darcs.net/ivanm/graphviz/issue/5
-  graphviz = markBroken super.graphviz;
   Graphalyze = dontDistribute super.Graphalyze;
   HLearn-approximation = dontDistribute super.HLearn-approximation;
   HLearn-classification = dontDistribute super.HLearn-classification;
@@ -287,6 +285,9 @@ self: super: {
 
   # https://github.com/ocharles/tasty-rerun/issues/5
   tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
+
+  # http://hub.darcs.net/ivanm/graphviz/issue/5
+  graphviz = appendPatch super.graphviz ./graphviz-fix-ghc710.patch;
 
   # Broken with GHC 7.10.x.
   aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
