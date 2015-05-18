@@ -359,6 +359,27 @@ let
     buildInputs = [ raft raft-boltdb raft-mdb ];
   };
 
+  consul-template = buildGoPackage rec {
+    rev = "v0.9.0";
+    name = "consul-template-${rev}";
+    goPackagePath = "github.com/hashicorp/consul-template";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hashicorp";
+      repo = "consul-template";
+      sha256 = "1k64rjskzn7cxn7rxab978847jq8gr4zj4cnzgznhn44nzasgymj";
+    };
+
+    # We just want the consul api not all of consul and vault
+    extraSrcs = [
+      { inherit (consul) src goPackagePath; }
+      { inherit (vault) src goPackagePath; }
+    ];
+
+    buildInputs = [ go-multierror go-syslog hcl logutils mapstructure ];
+  };
+
   dbus = buildGoPackage rec {
     rev = "88765d85c0fdadcd98a54e30694fa4e4f5b51133";
     name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";

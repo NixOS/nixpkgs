@@ -764,7 +764,7 @@ let
 
   consul-alerts = callPackage ../servers/consul/alerts.nix { };
 
-  consul-template = callPackage ../servers/consul/template.nix { };
+  consul-template = goPackages.consul-template;
 
   corosync = callPackage ../servers/corosync { };
 
