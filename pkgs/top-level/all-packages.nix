@@ -3413,6 +3413,8 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  colm = callPackage ../development/compilers/colm { };
+
   fetchegg = callPackage ../build-support/fetchegg { };
 
   eggDerivation = callPackage ../development/compilers/chicken/eggDerivation.nix { };
