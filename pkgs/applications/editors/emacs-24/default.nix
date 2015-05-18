@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm, ghostscript
@@ -19,20 +19,18 @@ let
     if withGTK3 then "gtk3"
     else if withGTK2 then "gtk2"
     else "lucid";
-  addExecPath = stdenv.lib.filter
+  addExecPath = lib.filter
     (p: p != null)
-    (stdenv.lib.optionals withX [
+    (lib.optionals withX [
       ghostscript
     ]);
-  addSiteLisp = stdenv.lib.optionalString
-    (0 < (stdenv.lib.length addExecPath))
+  addSiteLisp = lib.optionalString
+    (0 < (lib.length addExecPath))
     ''
       ;; Where to find additional programs on NixOS
       (setq exec-path (append exec-path '(
-        ${stdenv.lib.strings.concatMapStringsSep
-          "\n"
-          (p: ''"${p}/bin"'')
-          addExecPath})))
+        ${lib.strings.concatMapStringsSep "\n"
+          (p: ''"${p}/bin"'') addExecPath})))
     '';
 in
 
@@ -46,19 +44,19 @@ stdenv.mkDerivation rec {
     sha256 = "0kn3rzm91qiswi0cql89kbv6mqn27rwsyjfb8xmwy9m5s8fxfiyx";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./at-fdcwd.patch
   ];
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib pkgconfig texinfo acl gpm ]
-    ++ stdenv.lib.optional stdenv.isLinux dbus
-    ++ stdenv.lib.optionals withX
+    ++ lib.optional stdenv.isLinux dbus
+    ++ lib.optionals withX
       [ x11 libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
         imagemagick gconf ]
-    ++ stdenv.lib.optional (withX && withGTK2) [ gtk2 ]
-    ++ stdenv.lib.optional (withX && withGTK3) [ gtk3 ]
-    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
+    ++ lib.optional (withX && withGTK2) gtk2
+    ++ lib.optional (withX && withGTK3) gtk3
+    ++ lib.optional (stdenv.isDarwin && withX) cairo;
 
   configureFlags =
     if withX
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
+  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";
 
   inherit addSiteLisp;
@@ -77,7 +75,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU Emacs 24, the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
