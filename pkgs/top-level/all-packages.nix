@@ -758,11 +758,9 @@ let
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
-  consul = callPackage ../servers/consul {
-   # inherit ruby;
-  };
+  consul = goPackages.consul;
 
-  consul_ui = consul.ui;
+  consul-ui = callPackage ../servers/consul/ui.nix { };
 
   consul-alerts = callPackage ../servers/consul/alerts.nix { };
 

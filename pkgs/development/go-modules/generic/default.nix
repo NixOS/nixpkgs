@@ -1,6 +1,6 @@
 { go, govers, lib }:
 
-{ name, buildInputs ? []
+{ name, buildInputs ? [], passthru ? {}
 
 # Disabled flag
 , disabled ? false
@@ -126,7 +126,7 @@ go.stdenv.mkDerivation (
     runHook postInstall
   '';
 
-  passthru = lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
+  passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
   meta = meta // {
     # add an extra maintainer to every package
