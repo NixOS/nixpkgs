@@ -234,7 +234,7 @@ with stdenv.lib;
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  ${optionalString (!features.grsecurity or true) ''
+  ${optionalString (!(features.grsecurity or false)) ''
     DEVKMEM n # Disable /dev/kmem
   ''}
   ${if versionOlder version "3.14" then ''
@@ -380,7 +380,7 @@ with stdenv.lib;
 
   # Virtualisation.
   PARAVIRT? y
-  ${optionalString (!features.grsecurity or true)
+  ${optionalString (!(features.grsecurity or false))
     (if versionAtLeast version "3.10" then ''
       HYPERVISOR_GUEST y
     '' else ''
