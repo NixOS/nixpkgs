@@ -818,4 +818,9 @@ self: super: {
     patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
   });
 
+  # https://github.com/jwiegley/gitlib/issues/46
+  gitlib = markBroken super.gitlib;
+  gitlib-sample = dontDistribute super.gitlib-sample;
+  gitlib-test = dontDistribute super.gitlib-test;
+
 }
