@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack, config }:
+{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils, clang }:
 
 with stdenv.lib;
 
@@ -7,6 +7,7 @@ let local = config.openblas.preferLocalBuild or false;
       {
         i686-linux = "32";
         x86_64-linux = "64";
+        x86_64-darwin = "64";
       }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
     genericFlags =
       [
@@ -29,14 +30,16 @@ stdenv.mkDerivation rec {
 
   preBuild = "cp ${liblapack.src} lapack-${liblapack.meta.version}.tgz";
 
-  nativeBuildInputs = [gfortran perl];
+  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl];
 
   makeFlags =
     (if local then localFlags else genericFlags)
     ++
+    optionals stdenv.isDarwin ["MACOSX_DEPLOYMENT_TARGET=10.9"]
+    ++
     [
       "FC=gfortran"
-      "CC=gcc"
+      "CC=${if stdenv.isDarwin then "clang" else "gcc"}"
       ''PREFIX="''$(out)"''
       "INTERFACE64=1"
     ];
@@ -45,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = with platforms; linux;
+    platforms = with platforms; all;
     maintainers = with maintainers; [ ttuegel ];
   };
 }
