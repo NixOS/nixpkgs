@@ -768,7 +768,7 @@ let
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
 
-  consul-alerts = callPackage ../servers/consul/alerts.nix { };
+  consul-alerts = goPackages.consul-alerts;
 
   consul-template = goPackages.consul-template;
 

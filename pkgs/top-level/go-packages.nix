@@ -1,7 +1,7 @@
 /* This file defines the composition for Go packages. */
 
 { overrides, stdenv, go, buildGoPackage, git, pkgconfig, libusb
-, fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchbzr, pkgs }:
+, fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchFromBitbucket, fetchbzr, pkgs }:
 
 let
   isGo13 = go.meta.branch == "1.3";
@@ -149,6 +149,19 @@ let
 
   ## THIRD PARTY
 
+  airbrake-go = buildGoPackage rec {
+    rev = "5b5e269e1bc398d43f67e43dafff3414a59cd5a2";
+    name = "airbrake-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/tobi/airbrake-go";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "tobi";
+      repo   = "airbrake-go";
+      sha256 = "1bps4y3vpphpj63mshjg2aplh579cvqac0hz7qzvac0d1fqcgkdz";
+    };
+  };
+
   ansicolor = buildGoPackage rec {
     rev = "8368d3b31cf6f2c2464c7a91675342c9a0ac6658";
     name = "ansicolor-${stdenv.lib.strings.substring 0 7 rev}";
@@ -242,6 +255,21 @@ let
     };
   };
 
+  bugsnag-go = buildGoPackage rec {
+    rev = "v1.0.3";
+    name = "bugsnag-go-${rev}";
+    goPackagePath = "github.com/bugsnag/bugsnag-go";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "bugsnag";
+      repo   = "bugsnag-go";
+      sha256 = "1ymi5hrvd2nyfwfd12xll43gn00ii3bjb5ma9dfhaaxv2asi3ajx";
+    };
+
+    propagatedBuildInputs = [ panicwrap revel ];
+  };
+
   check-v1 = buildGoPackage rec {
     rev = "871360013c92e1c715c2de6d06b54899468a8a2d";
     name = "check-v1-${stdenv.lib.strings.substring 0 7 rev}";
@@ -321,6 +349,19 @@ let
     subPackages = [ "./" ];
   };
 
+  config = buildGoPackage rec {
+    rev = "0f78529c8c7e3e9a25f15876532ecbc07c7d99e6";
+    name = "config-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/robfig/config";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "robfig";
+      repo = "config";
+      sha256 = "0xmxy8ay0wzd307x7xba3rmigvr6rjlpfk9fmn6ir2nc97ifv3i0";
+    };
+  };
+
   consul = buildGoPackage rec {
     rev = "v0.5.1";
     name = "consul-${rev}";
@@ -344,6 +385,36 @@ let
     passthru.ui = pkgs.consul-ui;
   };
 
+  consul-alerts = buildGoPackage rec {
+    rev = "7dff28aa4c8c883a65106f8ec22796e1a589edab";
+    name = "consul-alerts-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/AcalephStorage/consul-alerts";
+
+    renameImports = ''
+      # Remove all references to included dependency store
+      rm -rf go/src/${goPackagePath}/Godeps
+      govers -d -m github.com/AcalephStorage/consul-alerts/Godeps/_workspace/src/ ""
+
+      # Fix references to consul-api
+      govers -d -m github.com/armon/consul-api github.com/hashicorp/consul/api
+      sed -i 's,consulapi,api,g' go/src/${goPackagePath}/consul/client.go
+    '';
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "AcalephStorage";
+      repo = "consul-alerts";
+      sha256 = "1vwybkvjgyilxk3l6avzivd31l8gnk8d0v7bl10qll0cd068fabq";
+    };
+
+    # We just want the consul api not all of consul
+    extraSrcs = [
+      { inherit (consul) src goPackagePath; }
+    ];
+
+    buildInputs = [ logrus consul-skipper docopt-go hipchat-go influxdb gopherduty ];
+  };
+
   consul-migrate = buildGoPackage rec {
     rev = "4977886fc950a0db1a6f0bbadca56dfabf170f9c";
     name = "consul-migrate-${stdenv.lib.strings.substring 0 7 rev}";
@@ -357,6 +428,31 @@ let
     };
 
     buildInputs = [ raft raft-boltdb raft-mdb ];
+  };
+
+  consul-skipper = buildGoPackage rec {
+    rev = "729b4fdcc7f572f7c083673595f939256b80b76f";
+    name = "consul-skipper-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/darkcrux/consul-skipper";
+
+    renameImports = ''
+      govers -d -m github.com/armon/consul-api github.com/hashicorp/consul/api
+      sed -i 's,consulapi,api,g' go/src/${goPackagePath}/skipper.go
+    '';
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "darkcrux";
+      repo = "consul-skipper";
+      sha256 = "0shqvihbmq1w5ddnkn62qd4k6gs5zalq6k4alacjz92bwf6d2x6x";
+    };
+
+    # We just want the consul api not all of consul
+    extraSrcs = [
+      { inherit (consul) src goPackagePath; }
+    ];
+
+    buildInputs = [ logrus ];
   };
 
   consul-template = buildGoPackage rec {
@@ -409,6 +505,19 @@ let
     };
   };
 
+  docopt-go = buildGoPackage rec {
+    rev = "854c423c810880e30b9fecdabb12d54f4a92f9bb";
+    name = "docopt-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/docopt/docopt-go";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "docopt";
+      repo = "docopt-go";
+      sha256 = "1sddkxgl1pwlipfvmv14h8vg9b9wq1km427j1gjarhb5yfqhh3l1";
+    };
+  };
+
   ed25519 = buildGoPackage rec {
     rev = "d2b94fd789ea21d12fac1a4443dd3a3f79cda72c";
     name = "ed25519-${stdenv.lib.strings.substring 0 7 rev}";
@@ -420,15 +529,16 @@ let
     };
   };
 
-  fsnotify = buildGoPackage rec {
-    rev = "4894fe7efedeeef21891033e1cce3b23b9af7ad2";
-    name = "fsnotify-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/howeyc/fsnotify";
+  fsnotify.v1 = buildGoPackage rec {
+    rev = "v1.2.0";
+    name = "fsnotify.v1-${rev}";
+    goPackagePath = "gopkg.in/fsnotify.v1";
+
     src = fetchFromGitHub {
       inherit rev;
-      owner = "howeyc";
+      owner = "go-fsnotify";
       repo = "fsnotify";
-      sha256 = "09r3h200nbw8a4d3rn9wxxmgma2a8i6ssaplf3zbdc2ykizsq7mn";
+      sha256 = "1308z1by82fbymcra26wjzw7lpjy91kbpp2skmwqcq4q1iwwzvk2";
     };
   };
 
@@ -537,6 +647,19 @@ let
     };
   };
 
+  gocolorize = buildGoPackage rec {
+    rev = "v1.0.0";
+    name = "gocolorize-${rev}";
+    goPackagePath = "github.com/agtorre/gocolorize";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "agtorre";
+      repo = "gocolorize";
+      sha256 = "1dj7s8bgw9qky344d0k9gz661c0m317a08a590184drw7m51hy9p";
+    };
+  };
+
   goconvey = buildGoPackage rec {
     version = "1.5.0";
     name = "goconvey-${version}";
@@ -617,6 +740,19 @@ let
     propagatedBuildInputs = [ ginkgo gomega gosnappy ];
   };
 
+  gollectd = buildGoPackage rec {
+    rev = "cf6dec97343244b5d8a5485463675d42f574aa2d";
+    name = "gollectd-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/kimor79/gollectd";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kimor79";
+      repo = "gollectd";
+      sha256 = "1f3ml406cprzjc192csyr2af4wcadkc74kg8n4c0zdzglxxfsqxa";
+    };
+  };
+
   gomega = buildGoPackage rec {
     rev = "8adf9e1730c55cdc590de7d49766cb2acc88d8f2";
     name = "gomega-${stdenv.lib.strings.substring 0 7 rev}";
@@ -626,6 +762,19 @@ let
       owner = "onsi";
       repo = "gomega";
       sha256 = "1rf6cxn50d1pji3pv4q372s395r5nxwcgp405z2r2mfdkri4v3w4";
+    };
+  };
+
+  gomemcache = buildGoPackage rec {
+    rev = "72a68649ba712ee7c4b5b4a943a626bcd7d90eb8";
+    name = "gomemcache-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bradfitz/gomemcache";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bradfitz";
+      repo = "gomemcache";
+      sha256 = "1r8fpzwhakq8fsppc33n4iivq1pz47xhs0h6bv4x5qiip5mswwvg";
     };
   };
 
@@ -659,6 +808,19 @@ let
       sha256 = "152lrkfxk205rlxiign0w5wb0fmfh910yz4jhlv4f4l1qr1h2lx8";
     };
     buildInputs = [ crypto ];
+  };
+
+  gopherduty = buildGoPackage rec {
+    rev = "f4906ce7e59b33a50bfbcba93e2cf58778c11fb9";
+    name = "gopherduty-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/darkcrux/gopherduty";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "darkcrux";
+      repo = "gopherduty";
+      sha256 = "11w1yqc16fxj5q1y5ha5m99j18fg4p9lyqi542x2xbrmjqqialcf";
+    };
   };
 
   gosnappy = buildGoPackage rec {
@@ -729,6 +891,35 @@ let
       maintainers = with maintainers; [ cstrahan ];
       license     = licenses.cc0 ;
       platforms   = platforms.all;
+    };
+  };
+
+  pmylund.go-cache = buildGoPackage rec {
+    rev = "93d85800f2fa6bd0a739e7bd612bfa3bc008b72d";
+    name = "go-cache-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/pmylund/go-cache";
+    goPackageAliases = [
+      "github.com/robfig/go-cache"
+    ];
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "pmylund";
+      repo = "go-cache";
+      sha256 = "08wfwm7nk381lv6a95p0hfgqwaksn0vhzz1xxdncjdw6w71isyy7";
+    };
+  };
+
+  robfig.go-cache = buildGoPackage rec {
+    rev = "9fc39e0dbf62c034ec4e45e6120fc69433a3ec51";
+    name = "go-cache-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/robfig/go-cache";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "robfig";
+      repo = "go-cache";
+      sha256 = "032nh3y43bpzpcm7bdkxfh55aydvzc2jzhigvy5gd9f648m4j9ha";
     };
   };
 
@@ -858,7 +1049,7 @@ let
       sha256 = "07dc74kiam8v5my7rhi3yxqrpnaapladhk8b3qbnrpjk3shvnx5f";
     };
 
-    buildInputs = [ influxdb-go stathat ];
+    buildInputs = [ influxdb stathat ];
   };
 
   armon.go-metrics = buildGoPackage rec {
@@ -1091,6 +1282,21 @@ let
     buildInputs = [ go-multierror ];
   };
 
+  hipchat-go = buildGoPackage rec {
+    rev = "1dd13e154219c15e2611fe46adbb6bf65db419b7";
+    name = "hipchat-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/tbruyelle/hipchat-go";
+
+    excludedPackages = "examples";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "tbruyelle";
+      repo = "hipchat-go";
+      sha256 = "060wg5yjlh28v03mvm80kwgxyny6cyj7zjpcdg032b8b1sz9z81s";
+    };
+  };
+
   hologram = buildGoPackage rec {
     rev  = "2bf08f0edee49297358bd06a0c9bf44ba9051e9c";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1131,16 +1337,22 @@ let
     };
   };
 
-  influxdb-go = buildGoPackage rec {
-    rev = "63c9a5f67dcb633d05164bf8442160c9e2e402f7";
-    name = "influxdb-go-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/influxdb/influxdb-go";
+  influxdb = buildGoPackage rec {
+    rev = "d80ef2286d476d9e306548305e47c3ba967f5bc2";
+    name = "influxdb-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/influxdb/influxdb";
+    goPackageAliases = [
+      "github.com/influxdb/influxdb-go"
+    ];
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "influxdb";
-      repo = "influxdb-go";
-      sha256 = "16in1xhx94pir06aw166inn0hzpb7836xbws16laabs1p2np7bld";
+      repo = "influxdb";
+      sha256 = "0p3s0pbn5x294qg2r0qgysb5wmspsvjxhccxh2hs6hc24dl6y93b";
     };
+
+    buildInputs = [ bolt crypto statik liner toml pat gollectd ];
   };
 
   eckardt.influxdb-go = buildGoPackage rec {
@@ -1192,6 +1404,19 @@ let
     subPackages = [ "./" ];
   };
 
+  liner = buildGoPackage rec {
+    rev = "1bb0d1c1a25ed393d8feb09bab039b2b1b1fbced";
+    name = "liner-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/peterh/liner";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "peterh";
+      repo   = "liner";
+      sha256 = "05ihxpmp6x3hw71xzvjdgxnyvyx2s4lf23xqnfjj16s4j4qidc48";
+    };
+  };
+
   log4go = buildGoPackage rec {
     rev = "48";
     name = "log4go-${rev}";
@@ -1204,6 +1429,23 @@ let
     };
 
     subPackages = [ "./" ]; # don't build examples
+  };
+
+  logrus = buildGoPackage rec {
+    rev = "v0.7.3";
+    name = "logrus-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/Sirupsen/logrus";
+
+    excludedPackages = "examples";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "Sirupsen";
+      repo = "logrus";
+      sha256 = "1sxksbarllmqb8wz5b2wbwr6q2i32vqasf7bpz4djywy3ig7jwk8";
+    };
+
+    propagatedBuildInputs = [ airbrake-go bugsnag-go raven-go ];
   };
 
   logutils = buildGoPackage rec {
@@ -1434,14 +1676,60 @@ let
   };
 
   osext = buildGoPackage rec {
-    rev = "10";
-    name = "osext-${rev}";
-    goPackagePath = "bitbucket.org/kardianos/osext";
-    src = fetchhg {
+    rev = "8fef92e41e22a70e700a96b29f066cda30ea24ef";
+    name = "osext-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/kardianos/osext";
+    goPackageAliases = [
+      "github.com/bugsnag/osext"
+    ];
+
+    src = fetchFromGitHub {
       inherit rev;
-      url = "https://${goPackagePath}";
-      sha256 = "1sj9r5pm28l9sqx6354fwp032n53znx9k8495k3dfnyqjrkvlw6n";
+      owner = "kardianos";
+      repo = "osext";
+      sha256 = "1md9c0qlmfhwcwgqg92vfykcy95snci4n815plb15mgj5cf8dm7d";
     };
+  };
+
+  pat = buildGoPackage rec {
+    rev = "b8a35001b773c267eb260a691f4e5499a3531600";
+    name = "pat-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bmizerany/pat";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bmizerany";
+      repo = "pat";
+      sha256 = "11zxd45rvjm6cn3wzbi18wy9j4vr1r1hgg6gzlqnxffiizkycxmz";
+    };
+  };
+
+  pathtree = buildGoPackage rec {
+    rev = "41257a1839e945fce74afd070e02bab2ea2c776a";
+    name = "pathtree-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/robfig/pathtree";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "robfig";
+      repo = "pathtree";
+      sha256 = "087hvskjx1zw815h1617i135vwsn5288v579mz6yral91wbn0kvi";
+    };
+  };
+
+  panicwrap = buildGoPackage rec {
+    rev = "e5f9854865b9778a45169fc249e99e338d4d6f27";
+    name = "panicwrap-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/bugsnag/panicwrap";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "bugsnag";
+      repo = "panicwrap";
+      sha256 = "01afviklmgm25i82c0z9xkjgbrh0j1fm9a1adqfd2jqv0cm41k9d";
+    };
+
+    propagatedBuildInputs = [ osext ];
   };
 
   perks = buildGoPackage rec {
@@ -1624,6 +1912,51 @@ let
     };
   };
 
+  raven-go = buildGoPackage rec {
+    rev = "c8f8fb7c415203f52ca882e2661d21bc6dcb54d7";
+    name = "raven-go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/getsentry/raven-go";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "getsentry";
+      repo   = "raven-go";
+      sha256 = "052avpl8xsqlcmjmi3v00nm23lhs95af6vpaw2sh5xckln0lfbxh";
+    };
+  };
+
+  redigo = buildGoPackage rec {
+    rev = "535138d7bcd717d6531c701ef5933d98b1866257";
+    name = "redigo-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/garyburd/redigo";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "garyburd";
+      repo   = "redigo";
+      sha256 = "1m7nc1gvv5yqnq8ii75f33485il6y6prf8gxl97dimsw94qccc5v";
+    };
+  };
+
+  revel = buildGoPackage rec {
+    rev = "v0.12.0";
+    name = "revel-${rev}";
+    goPackagePath = "github.com/revel/revel";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "revel";
+      repo   = "revel";
+      sha256 = "1g88fw5lqh3a9qmx182s64zk3h1s1mx8bljyghissmd9z505pbzf";
+    };
+
+    # Using robfig's old go-cache due to compilation errors.
+    # Try to switch to pmylund.go-cache after v0.12.0
+    propagatedBuildInputs = [
+      gocolorize config net pathtree fsnotify.v1 robfig.go-cache redigo gomemcache
+    ];
+  };
+
   rgbterm = buildGoPackage rec {
     rev = "c07e2f009ed2311e9c35bca12ec00b38ccd48283";
     name = "rgbterm-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1731,6 +2064,21 @@ let
     };
   };
 
+  statik = buildGoPackage rec {
+    rev = "274df120e9065bdd08eb1120e0375e3dc1ae8465";
+    name = "statik-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/rakyll/statik";
+
+    excludedPackages = "example";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "rakyll";
+      repo = "statik";
+      sha256 = "0llk7bxmk66wdiy42h32vj1jfk8zg351xq21hwhrq7gkfljghffp";
+    };
+  };
+
   termbox-go = buildGoPackage rec {
     rev = "9aecf65084a5754f12d27508fa2e6ed56851953b";
     name = "termbox-go-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1786,14 +2134,15 @@ let
   };
 
   toml = buildGoPackage rec {
-    rev = "f87ce853111478914f0bcffa34d43a93643e6eda";
+    rev = "056c9bc7be7190eaa7715723883caffa5f8fa3e4";
     name = "toml-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/BurntSushi/toml";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "BurntSushi";
       repo = "toml";
-      sha256 = "0g8203y9ycf34j2q3ymxb8nh4habgwdrjn9vdgrginllx73yq565";
+      sha256 = "0gkgkw04ndr5y7hrdy0r4v2drs5srwfcw2bs1gyas066hwl84xyw";
     };
   };
 
@@ -1822,6 +2171,7 @@ let
       sha256 = "0q6wlw0s9dig11mzcfg25fh2wz7g70zxkqm7c5f58fncxdby2nqj";
     };
 
+    # We just want the consul api not all of consul
     extraSrcs = [
       { inherit (consul) src goPackagePath; }
     ];
