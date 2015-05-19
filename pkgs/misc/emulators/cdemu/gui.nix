@@ -5,7 +5,8 @@ let pkg = import ./base.nix {
   pkgSha256 = "1m5ab325r586v2y2d93a817phn6wck67y5mfkf948mph40ks0mqk";
 };
 in callPackage pkg {
-  buildInputs = [ python pygobject3 gtk3 glib libnotify intltool makeWrapper gnome3.gnome_icon_theme_symbolic gnome3.gnome_icon_theme gdk_pixbuf librsvg ];
+  buildInputs = [ python pygobject3 gtk3 glib libnotify intltool makeWrapper
+                  gnome3.defaultIconTheme gdk_pixbuf librsvg ];
   drvParams = {
     postFixup = ''
       wrapProgram $out/bin/gcdemu \

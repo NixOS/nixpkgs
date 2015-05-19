@@ -2208,9 +2208,7 @@ let
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
-  pasystray = callPackage ../tools/audio/pasystray {
-    inherit (gnome3) gnome_icon_theme;
-  };
+  pasystray = callPackage ../tools/audio/pasystray { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
 
