@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./clang.patch ];
+  # gcc-5 patch from https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-libs/ncurses/files/ncurses-5.9-gcc-5.patch?revision=1.1&view=markup
+  patches = [ ./clang.patch ./gcc-5.patch ];
 
   buildInputs = [ optGpm ];
 
