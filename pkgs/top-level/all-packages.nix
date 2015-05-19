@@ -3676,7 +3676,8 @@ let
     isl = isl_0_14;
   }));
 
-  gfortran = gfortran48;
+  gfortran = if !stdenv.isDarwin then gfortran48
+             else callPackage ../development/compilers/gcc/gfortran-darwin.nix {};
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
