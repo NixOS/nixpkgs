@@ -180,35 +180,7 @@ self: super: {
   cubical = dontDistribute super.cubical;
 
   # contacted maintainer by e-mail
-  HList = markBrokenVersion "0.3.4.1" super.HList;
-  AspectAG = dontDistribute super.AspectAG;
-  Rlang-QQ = dontDistribute super.Rlang-QQ;
-  SyntaxMacros = dontDistribute super.SyntaxMacros;
-  expand = dontDistribute super.expand;
-  functional-arrow = dontDistribute super.functional-arrow;
-  guess-combinator = dontDistribute super.guess-combinator;
-  ihaskell-rlangqq = dontDistribute super.ihaskell-rlangqq;
-  ipopt-hs = dontDistribute super.ipopt-hs;
-  murder = dontDistribute super.murder;
-  netcore = dontDistribute super.netcore;
-  nettle-frp = dontDistribute super.nettle-frp;
-  nettle-netkit = dontDistribute super.nettle-netkit;
-  nettle-openflow = dontDistribute super.nettle-openflow;
-  oberon0 = dontDistribute super.oberon0;
-  poly-arity = dontDistribute super.poly-arity;
-  respond = dontDistribute super.respond;
-  semi-iso = dontDistribute super.semi-iso;
-  syntax = dontDistribute super.syntax;
-  syntax-attoparsec = dontDistribute super.syntax-attoparsec;
-  syntax-example = dontDistribute super.syntax-example;
-  syntax-example-json = dontDistribute super.syntax-example-json;
-  syntax-pretty = dontDistribute super.syntax-pretty;
-  syntax-printer = dontDistribute super.syntax-printer;
-  tuple-hlist = dontDistribute super.tuple-hlist;
-  tuple-morph = dontDistribute super.tuple-morph;
-
-  # contacted maintainer by e-mail
-  cmdlib = markBroken super.cmdlib;
+  cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
   darcs-fastconvert = dontDistribute super.darcs-fastconvert;
   ivory-backend-c = dontDistribute super.ivory-backend-c;
   ivory-bitdata = dontDistribute super.ivory-bitdata;
