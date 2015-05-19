@@ -48,6 +48,19 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9921
   mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
 
+  idris =
+    let idris' = overrideCabal super.idris (drv: {
+      # "idris" binary cannot find Idris library otherwise while building.
+      # After installing it's completely fine though.
+      # Seems like Nix-specific issue so not reported.
+      preBuild = ''
+        export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH
+      '';
+    });
+    in idris'.overrideScope (self: super: {
+      zlib = self.zlib_0_5_4_2;
+    });
+
   Extra = appendPatch super.Extra (pkgs.fetchpatch {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
     sha256 = "193i1xmq6z0jalwmq0mhqk1khz6zz0i1hs6lgfd7ybd6qyaqnf5f";

@@ -78,6 +78,9 @@ self: super: {
   ghc-exactprint = dontDistribute super.ghc-exactprint;
   ghc-typelits-natnormalise = dontDistribute super.ghc-typelits-natnormalise;
 
+  # Needs directory >= 1.2.2.0.
+  idris = markBroken super.idris;
+
   # Newer versions require transformers 0.4.x.
   seqid = super.seqid_0_1_0;
   seqid-streams = super.seqid-streams_0_1_0;
