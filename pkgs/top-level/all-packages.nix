@@ -11114,9 +11114,7 @@ let
     inherit (gnome) GConf;
   };
 
-  gnumeric = callPackage ../applications/office/gnumeric {
-    inherit (gnome3) goffice gnome_icon_theme;
-  };
+  gnumeric = callPackage ../applications/office/gnumeric { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
 

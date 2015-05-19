@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, goffice, makeWrapper, gtk3, gnome_icon_theme, gnome3
+, gnome3, makeWrapper, gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # ToDo: optional libgda, python, introspection?
   buildInputs = [
     pkgconfig intltool perl perlXMLParser
-    goffice gtk3 makeWrapper
+    gnome3.goffice gtk3 makeWrapper gnome3.defaultIconTheme
   ];
 
   preFixup = ''
