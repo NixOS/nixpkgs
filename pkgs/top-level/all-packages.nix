@@ -11615,9 +11615,7 @@ let
     inherit (xlibs) libX11 xproto;
   };
 
-  easytag = callPackage ../applications/audio/easytag {
-    inherit (gnome3) gnome_icon_theme dconf;
-  };
+  easytag = callPackage ../applications/audio/easytag { };
 
   mp3gain = callPackage ../applications/audio/mp3gain { };
 
