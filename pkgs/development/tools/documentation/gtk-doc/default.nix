@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
-  version = "1.21";
+  version = "1.23";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "0gpfh25qxsic7n25pfl74mjp38hdm3pr4islhlaxv3p05q0lv4sx";
+    sha256 = "1i0q0zaj3f2xg478nxyfhaivkhi6mj0dn0s6qzshzhb625qj6p0b";
   };
 
   # maybe there is a better way to pass the needed dtd and xsl files
