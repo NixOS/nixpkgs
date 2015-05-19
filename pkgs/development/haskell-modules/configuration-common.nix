@@ -807,10 +807,6 @@ self: super: {
   # Obsolete for GHC versions after GHC 6.10.x.
   utf8-prelude = markBroken super.utf8-prelude;
 
-  # https://github.com/jgm/cheapskate/issues/11
-  cheapskate = markBrokenVersion "0.1.0.3" super.cheapskate;
-  lit = dontDistribute super.lit;
-
   # https://github.com/snapframework/snap/issues/148
   snap = overrideCabal super.snap (drv: {
     patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
