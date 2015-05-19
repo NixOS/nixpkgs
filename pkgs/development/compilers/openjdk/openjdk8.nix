@@ -50,13 +50,16 @@ let
   '';
   prePatch = ''
     # despite --with-override-jdk the build still searchs here
-    # GNU Patch bug, follow symlinks only follow the last symlink..
+    # GNU Patch bug, --follow-symlinks only follow the last dir part symlink
     mv "../jdk-${repover}" "jdk";
     mv "../hotspot-${repover}" "hotspot";
   '';
   postPatch = ''
     mv jdk "../jdk-${repover}";
     mv hotspot "../hotspot-${repover}";
+    # Patching is over, lets re-add the links
+    ln -s "../jdk-${repover}" "jdk"
+    ln -s "../hotspot-${repover}" "hotspot"
   '';
   patches = [
     ./fix-java-home-jdk8.patch
@@ -83,7 +86,7 @@ let
     "--with-milestone=fcs"
   ];
   NIX_LDFLAGS= "-lfontconfig";
-  buildFlags = "DEBUG_BINARIES=true all";
+  buildFlags = "all";
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
