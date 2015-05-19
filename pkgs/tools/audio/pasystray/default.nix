@@ -1,5 +1,5 @@
 {stdenv, fetchurl, unzip, autoconf, automake, makeWrapper, pkgconfig
-, avahi, gtk3, libnotify, pulseaudio, x11}:
+, gnome3, avahi, gtk3, libnotify, pulseaudio, x11}:
 
 stdenv.mkDerivation rec {
   name = "pasystray-0.4.0";
