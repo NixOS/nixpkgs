@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
       url = "https://git.haskell.org/ghc.git/patch/c46e4b184e0abc158ad8f1eff6b3f0421acaf984";
       sha256 = "0fkdyqd4bqp742rydwmqq8d2n7gf61bgdhaiw8xf7jy0ix7lr60w";
     })
+    # Fix TH + indirect symbol resolution on OSX (or any system using gold linker)
+    # https://phabricator.haskell.org/D852
+    ./osx-dylib-resolver.patch
   ];
 
   postPatch = ''
