@@ -15,7 +15,7 @@ buildRustPackage rec {
     leaveDotGit = true;
   };
 
-  depsSha256 = "0s9f00kg7q9dxd8g98k3z4qv404p9ra73l1bzxs6qzk54qhg44dp";
+  depsSha256 = "1b0mpdxmp7inkg59n2phjwzpz5gx22wqg9rfd1s01a5ylara37jw";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
 

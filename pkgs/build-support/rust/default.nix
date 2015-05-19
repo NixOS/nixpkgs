@@ -11,14 +11,6 @@ let
     sha256 = depsSha256;
   };
 
-  # The following is the directory name cargo creates when the registry index
-  # URL is file:///dev/null
-  #
-  # It's OK to use /dev/null as the URL because by the time we do this, cargo
-  # won't attempt to update the registry anymore, so the URL is more or less
-  # irrelevant
-  registryIndexDirName = "-ba82b75dd6681d6f";
-
 in stdenv.mkDerivation (args // {
   inherit cargoDeps rustRegistry;
 
@@ -34,18 +26,34 @@ in stdenv.mkDerivation (args // {
     cp -r "$cargoDeps" deps
     chmod +w deps -R
 
+    # It's OK to use /dev/null as the URL because by the time we do this, cargo
+    # won't attempt to update the registry anymore, so the URL is more or less
+    # irrelevant
+
     cat <<EOF > deps/config
     [registry]
     index = "file:///dev/null"
     EOF
 
-    echo "Using rust registry from $rustRegistry"
-
-    ln -s "$rustRegistry" "deps/registry/index/${registryIndexDirName}"
-
     export CARGO_HOME="$(realpath deps)"
 
+    # Let's find out which $indexHash cargo uses for file:///dev/null
+    (cd $sourceRoot && cargo fetch &>/dev/null)
+    cd deps
+    indexHash="$(basename $(echo registry/index/*))"
+
+    echo "Using indexHash '$indexHash'"
+
+    rm -rf -- "registry/cache/$indexHash" \
+              "registry/index/$indexHash"
+
+    mv registry/cache/HASH "registry/cache/$indexHash"
+
+    echo "Using rust registry from $rustRegistry"
+    ln -s "$rustRegistry" "registry/index/$indexHash"
+
     # Retrieved the Cargo.lock file which we saved during the fetch
+    cd ..
     mv deps/Cargo.lock $sourceRoot/
 
     (
