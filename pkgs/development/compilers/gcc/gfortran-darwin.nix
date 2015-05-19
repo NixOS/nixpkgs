@@ -18,5 +18,5 @@ stdenv.mkDerivation rec {
     --with-mpfr=${mpfr}
     --with-mpc=${libmpc}
   '';
-  makeFlags = ["CC=/usr/bin/gcc"];
+  makeFlags = ["CC=clang"];
 }
