@@ -50,11 +50,16 @@ let
   '';
   prePatch = ''
     # despite --with-override-jdk the build still searchs here
-    ln -s "../jdk-${repover}" "jdk";
-    ln -s "../hotspot-${repover}" "hotspot";
+    # GNU Patch bug, follow symlinks only follow the last symlink..
+    mv "../jdk-${repover}" "jdk";
+    mv "../hotspot-${repover}" "hotspot";
+  '';
+  postPatch = ''
+    mv jdk "../jdk-${repover}";
+    mv hotspot "../hotspot-${repover}";
   '';
   patches = [
-    ./fix-java-home.patch
+    ./fix-java-home-jdk8.patch
     ./read-truststore-from-env-jdk8.patch
     ./currency-date-range-jdk8.patch
   ];
