@@ -37,10 +37,6 @@ rec {
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
 
-# Backward compatibility, must be removed in favor of defaultIconTheme
-  gnome_icon_theme = adwaita-icon-theme;
-  gnome_icon_theme_symbolic = adwaita-icon-theme;
-
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
   adwaita-icon-theme = callPackage ./core/adwaita-icon-theme { };
