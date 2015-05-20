@@ -113,12 +113,12 @@ go.stdenv.mkDerivation (
     mkdir -p $out
 
     if [ -z "$dontInstallSrc" ]; then
-        local dir
-        for d in pkg src; do
-            mkdir -p $out/share/go
-            dir="$NIX_BUILD_TOP/go/$d"
-            [ -e "$dir" ] && cp -r $dir $out/share/go
-        done
+        (cd "$NIX_BUILD_TOP/go"
+        find . -type f | while read f; do
+          echo "$f" | grep -q '^./\(src\|pkg/[^/]*\)/${goPackagePath}' || continue
+          mkdir -p "$(dirname "$out/share/go/$f")"
+          cp $NIX_BUILD_TOP/go/$f $out/share/go/$f
+        done)
     fi
 
     dir="$NIX_BUILD_TOP/go/bin"
