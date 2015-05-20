@@ -60,7 +60,7 @@ in
     virtualisation.libvirtd.extraOptions =
       mkOption {
         type = types.listOf types.str;
-        default = [ "--verbose" ];  # for historical reasons, should be empty
+        default = [ ];
         example = [ "--verbose" ];
         description =
           ''
