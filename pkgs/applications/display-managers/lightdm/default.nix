@@ -4,15 +4,15 @@
 }:
 
 let
-  ver_branch = "1.14";
-  version = "1.14.0";
+  ver_branch = "1.15";
+  version = "1.15.0";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "0fkbzqncx34dhylrg5328fih7xywmsqj2p40smnx33nyf047jdgc";
+    sha256 = "0f0c2irb7qq49dabxhh99bwyvkxpfpscy4vynm7y800sz15lm2hs";
   };
 
   buildInputs = [
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (qt5 != null) qt5.base;
 
   configureFlags = [
-    "--enable-liblightdm-gobject"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
