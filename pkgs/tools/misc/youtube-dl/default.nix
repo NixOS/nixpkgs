@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
-  version = "2015.04.03";
+  version = "2015.05.15";
 
   src = fetchurl {
     url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "0ndzswv6vq5ld5p1ny23sh76cx6acf8yli9gi9r21dm94ida2885";
+    sha256 = "0b4fnlgfnwdh1z8avydbc8rr75jpcyvfpvs39ln1gh7m8vyxwjz6";
   };
 
   buildInputs = [ python makeWrapper zip pandoc ];
