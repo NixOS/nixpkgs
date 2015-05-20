@@ -30,7 +30,8 @@ with lib;
   networking.hostName = mkDefault "";
 
   # Always include cryptsetup so that NixOps can use it.
-  environment.systemPackages = [ pkgs.cryptsetup ];
+  # sg_scan is needed to finalize disk removal on older kernels
+  environment.systemPackages = [ pkgs.cryptsetup pkgs.sg3_utils ];
 
   networking.usePredictableInterfaceNames = false;
 
