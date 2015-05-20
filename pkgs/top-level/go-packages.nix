@@ -435,6 +435,7 @@ let
       # Fix references to consul-api
       govers -d -m github.com/armon/consul-api github.com/hashicorp/consul/api
       sed -i 's,consulapi,api,g' go/src/${goPackagePath}/consul/client.go
+      sed -i 's,consulapi,api,g' go/src/${consul-skipper.goPackagePath}/skipper.go
     '';
 
     src = fetchFromGitHub {
@@ -447,9 +448,11 @@ let
     # We just want the consul api not all of consul
     extraSrcs = [
       { inherit (consul) src goPackagePath; }
+      { inherit (influxdb8) src goPackagePath; }
+      { inherit (consul-skipper) src goPackagePath; }
     ];
 
-    buildInputs = [ logrus consul-skipper docopt-go hipchat-go influxdb gopherduty ];
+    buildInputs = [ logrus docopt-go hipchat-go gopherduty ];
   };
 
   consul-migrate = buildGoPackage rec {
@@ -1435,6 +1438,24 @@ let
     };
 
     propagatedBuildInputs = [ bolt crypto statik liner toml pat gollectd ];
+  };
+
+  influxdb8 = buildGoPackage rec {
+    rev = "v0.8.8";
+    name = "influxdb-${rev}";
+    goPackagePath = "github.com/influxdb/influxdb";
+    goPackageAliases = [
+      "github.com/influxdb/influxdb-go"
+    ];
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "influxdb";
+      repo = "influxdb";
+      sha256 = "0xpigp76rlsxqj93apjzkbi98ha5g4678j584l6hg57p711gqsdv";
+    };
+
+    buildInputs = [ statik crypto protobuf log4go toml pmylund.go-cache ];
   };
 
   eckardt.influxdb-go = buildGoPackage rec {
