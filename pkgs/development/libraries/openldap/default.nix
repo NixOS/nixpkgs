@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl cyrus_sasl db groff ];
 
+  # http://www.openldap.org/its/index.cgi/Build?id=8056;page=1
+  patches = [ ./gcc-5.patch ];
+
   configureFlags =
     [ "--enable-overlays"
       "--disable-dependency-tracking"   # speeds up one-time build
