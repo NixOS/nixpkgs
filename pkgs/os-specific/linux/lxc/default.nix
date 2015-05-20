@@ -41,18 +41,13 @@ stdenv.mkDerivation rec {
     "--enable-tests"
   ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-
-    # Remove the unneeded var/lib directories
-    rm -rf $out/var
-  '';
+  installFlags = [
+    "localstatedir=\${TMPDIR}"
+    "sysconfdir=\${out}/etc"
+    "sysconfigdir=\${out}/etc/default"
+    "READMEdir=\${TMPDIR}/var/lib/lxc/rootfs"
+    "LXCPATH=\${TMPDIR}/var/lib/lxc"
+  ];
 
   meta = {
     homepage = "http://lxc.sourceforge.net";
