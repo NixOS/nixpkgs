@@ -53,6 +53,9 @@ let requireSource = version: part: hash: (requireFile rec {
     done
   '';
 
+  dontStrip = true;
+  dontPatchELF = true;
+
   meta = with stdenv.lib; {
     description = "Oracle instant client libraries and sqlplus CLI.";
     longDescription = ''
