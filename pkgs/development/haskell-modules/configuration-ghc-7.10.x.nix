@@ -66,11 +66,6 @@ self: super: {
     sha256 = "193i1xmq6z0jalwmq0mhqk1khz6zz0i1hs6lgfd7ybd6qyaqnf5f";
   });
 
-  language-glsl = appendPatch super.language-glsl (pkgs.fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/noteed/language-glsl/pull/10.patch";
-    sha256 = "1d8dmfqw9y7v7dlszb7l3wp0vj77j950z2r3r0ar9mcvyrmfm4in";
-  });
-
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
