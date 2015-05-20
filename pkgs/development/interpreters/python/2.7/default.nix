@@ -58,6 +58,8 @@ let
       touch $out/include/python${majorVersion}/pyconfig.h
     '';
 
+  configureFlags = "--enable-shared --with-threads --enable-unicode=ucs4";
+
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl ]
@@ -73,13 +75,12 @@ let
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs preConfigure;
+    inherit majorVersion version src patches buildInputs preConfigure
+            configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
     LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-
-    configureFlags = "--enable-shared --with-threads --enable-unicode";
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
     DETERMINISTIC_BUILD = 1;
@@ -149,7 +150,7 @@ let
     if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches preConfigure;
+      inherit src patches preConfigure configureFlags;
 
       buildInputs = [ python ] ++ deps;
 
@@ -161,6 +162,7 @@ let
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
           python ./setup.py build_ext
+          [ -z "$(find build -name '*_failed.so' -print)" ]
         '';
 
       installPhase =
@@ -194,7 +196,7 @@ let
     crypt = buildInternalPythonModule {
       moduleName = "crypt";
       internalName = "crypt";
-      deps = [ ];
+      deps = optional (stdenv ? glibc) stdenv.glibc;
     };
 
     gdbm = buildInternalPythonModule {

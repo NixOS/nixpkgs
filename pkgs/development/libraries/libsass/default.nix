@@ -1,27 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool }:
+{ stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libsass-${version}";
-  version = "3.1.0";
+  version = "3.2.2";
 
-  src = fetchFromGitHub {
-    owner = "sass";
-    repo = "libsass";
-    rev = version;
-    sha256 = "1k9a6hiybqk7xx4k2cb9vhdqskrrzhi60dvwp3gx39jhjqjfl96p";
+  src = fetchurl {
+    url = "https://github.com/sass/libsass/archive/${version}.tar.gz";
+    sha256 = "022rvsnqslds1ss6ls1x1w93mrhq7nigd00wjlnd07qhfqpbnwax";
   };
 
-  preConfigure = ''
-    autoreconf --force --install
+  patchPhase = ''
+    export LIBSASS_VERSION=${version}
   '';
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A C/C++ implementation of a Sass compiler";
-    license = licenses.mit;
     homepage = https://github.com/sass/libsass;
+    license = licenses.mit;
     maintainers = with maintainers; [ offline ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

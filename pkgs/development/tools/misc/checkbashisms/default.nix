@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://sourceforge.net/projects/checkbaskisms/;
-    description = "Performs basic checks on shell scripts for the presence of non portable syntax";
+    description = "Check shell scripts for non-portable syntax";
     license = stdenv.lib.licenses.gpl2;
   };
 

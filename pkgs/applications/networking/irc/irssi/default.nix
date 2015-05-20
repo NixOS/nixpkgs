@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig ncurses glib openssl perl libintlOrEmpty ];
   
-  NIX_LDFLAGS = "-lncurses";
+  NIX_LDFLAGS = ncurses.ldflags;
   
   configureFlags = "--with-proxy --with-ncurses --enable-ssl --with-perl=yes";
 

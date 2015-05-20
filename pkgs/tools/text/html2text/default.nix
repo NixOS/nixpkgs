@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "A command line utility, written in C++, that converts HTML documents into plain text";
+    description = "Convert HTML to plain text";
     homepage = http://www.mbayer.de/html2text/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

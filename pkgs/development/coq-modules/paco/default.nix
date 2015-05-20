@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://plv.mpi-sws.org/paco/;
-    description = "Paco is a Coq library implementing parameterized coinduction";
+    description = "A Coq library implementing parameterized coinduction";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
   };

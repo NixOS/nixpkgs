@@ -1,11 +1,11 @@
 { stdenv, fetchurl, attr }:
 
-let version = "0.04.00"; in
+let version = "0.04.02"; in
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
 
   src = fetchurl {
-    sha256 = "1rivmqa3qy9saxcz7mg211imcfyfwdhyhl2z6k1zc55vhnjdwhih";
+    sha256 = "1k7h58axycwwxbr5bqqpz1ypsqvv4k2knk2fpw402l4xx9643bqv";
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
   };
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
       bugs that only occur when a system is being thrashed hard.
     '';
     homepage = http://kernel.ubuntu.com/~cking/stress-ng;
+    downloadPage = http://kernel.ubuntu.com/~cking/tarballs/stress-ng/;
     license = with licenses; gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];

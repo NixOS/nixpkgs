@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, python27
 , pkgconfig, spidermonkey_24, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openalSoft, mesa, xproto, libX11, libXcursor, nspr, SDL
+, openal, mesa, xproto, libX11, libXcursor, nspr, SDL
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zeroadData python27 pkgconfig spidermonkey_24 boost icu
     libxml2 libpng libjpeg zlib curl libogg libvorbis enet
-    miniupnpc openalSoft mesa xproto libX11 libXcursor nspr
+    miniupnpc openal mesa xproto libX11 libXcursor nspr
     SDL gloox nvidia-texture-tools
   ] ++ stdenv.lib.optional withEditor wxGTK;
 

@@ -1,12 +1,12 @@
 { stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "tinc-1.1pre-2015-03-14";
+  name = "tinc-1.1pre-2015-05-15";
 
   src = fetchgit {
     url = "git://tinc-vpn.org/tinc";
-    rev = "6568cffd52d4803effaf52a9bb9c98d69cf7922a";
-    sha256 = "1nh0yjv6gf8p5in67kdq68xlai69f34ks0j610i8d8nw2mfm9x4a";
+    rev = "613c121cdceec0199dc4d056857be021ed1d21de";
+    sha256 = "1l99bvqmb35hwb63fcy9gbjxasxnrgqw3i9f14f26dq3sz2j035l";
   };
 
   buildInputs = [ autoreconfHook texinfo ncurses readline zlib lzo openssl ];

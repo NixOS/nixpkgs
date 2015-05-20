@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in [ libcap ]
+  in stdenv.lib.optional stdenv.isLinux libcap
     ++ (stdenv.lib.optional notMingw audiofile);
 
   nativeBuildInputs = [ pkgconfig ] ++

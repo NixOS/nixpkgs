@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.10";
+  version = "0.15";
 
   src = fetchgit {
-    url = "git://github.com/vathpela/efivar.git";
+    url = "git://github.com/rhinstaller/efivar.git";
     rev = "refs/tags/${version}";
-    sha256 = "04fznbmrf860b4d4i8rshx3mgwbx06v187wf1rddvxxnpkq8920w";
+    sha256 = "1k5krjghb2r04wv6kxnhs1amqwzk7khzm7bsh0wnbsz7qn92masr";
   };
 
   buildInputs = [ popt ];

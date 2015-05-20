@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jagajaga ];
+    broken = true;
   };
 
 }

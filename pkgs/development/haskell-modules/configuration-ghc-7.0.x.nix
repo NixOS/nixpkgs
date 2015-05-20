@@ -46,8 +46,12 @@ self: super: {
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
 
+  # Newer versions don't compile.
+  Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;
+  cabal-install = self.cabal-install_1_18_1_0;
+
   # Needs Cabal >= 1.18.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_18_1_6; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;

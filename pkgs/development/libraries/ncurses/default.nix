@@ -1,14 +1,30 @@
-{ lib, stdenv, fetchurl, unicode ? true }:
+{ stdenv, fetchurl
+
+# Optional Dependencies
+, gpm ? null
+
+# Extra Options
+, abiVersion ? "5"
+, unicode ? true
+}:
 
 let
-  /* C++ bindings fail to build on `i386-pc-solaris2.11' with GCC 3.4.3:
-     <http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6395191>.
-     It seems that it could be worked around by #including <wchar.h> in the
-     right place, according to
-     <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
-     but this is left as an exercise to the reader.
-     So disable them for now.  */
-  cxx = !stdenv.isSunOS;
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg_: let
+    pkg = (builtins.tryEval pkg_).value;
+  in if stdenv.lib.any (x: x == stdenv.system) (pkg.meta.platforms or [])
+    then pkg
+    else null;
+
+  buildShared = !stdenv.isDarwin;
+
+  optGpm = shouldUsePkg gpm;
 in
 stdenv.mkDerivation rec {
   name = "ncurses-5.9";
@@ -18,12 +34,34 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./patch-ac ./clang.patch ];
+  patches = [ ./clang.patch ];
 
-  configureFlags = ''
-    --with-shared --without-debug --enable-pc-files --enable-symlinks
-    ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
-  '';
+  buildInputs = [ optGpm ];
+
+  configureFlags = [
+    (mkWith   true        "abi-version" abiVersion)
+    (mkWith   true        "cxx"         null)
+    (mkWith   true        "cxx-binding" null)
+    (mkWith   false       "ada"         null)
+    (mkWith   true        "manpages"    null)
+    (mkWith   true        "progs"       null)
+    (mkWith   doCheck     "tests"       null)
+    (mkWith   true        "curses-h"    null)
+    (mkEnable true        "pc-files"    null)
+    (mkWith   buildShared "shared"      null)
+    (mkWith   true        "normal"      null)
+    (mkWith   false       "debug"       null)
+    (mkWith   false       "termlib"     null)
+    (mkWith   false       "ticlib"      null)
+    (mkWith   optGpm      "gpm"         null)
+    (mkEnable true        "overwrite"   null)
+    (mkEnable true        "database"    null)
+    (mkWith   true        "xterm-new"   null)
+    (mkEnable true        "symlinks"    null)
+    (mkEnable unicode     "widec"       null)
+    (mkEnable true        "ext-colors"  null)
+    (mkEnable true        "ext-mouse"   null)
+  ];
 
   # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
   # directory doesn't exist, the configure script will disable installation of
@@ -32,7 +70,6 @@ stdenv.mkDerivation rec {
   # the place we want to put *.pc files from other packages anyway. So we must
   # tell it explicitly where to install with PKG_CONFIG_LIBDIR.
   preConfigure = ''
-    export configureFlags="$configureFlags --includedir=$out/include"
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
   '';
@@ -41,33 +78,48 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preBuild =
-    # On Darwin, we end up using the native `sed' during bootstrap, and it
-    # fails to run this command, which isn't needed anyway.
-    lib.optionalString (!stdenv.isDarwin)
-      ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
+  doCheck = false;
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
   postInstall = if unicode then ''
-    ${if cxx then "chmod 644 $out/lib/libncurses++w.a" else ""}
-    for lib in curses ncurses form panel menu; do
-      if test -e $out/lib/lib''${lib}w.a; then
-        rm -f $out/lib/lib$lib.so
-        echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
-        ln -svf lib''${lib}w.a $out/lib/lib$lib.a
-        ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
-        ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
-      fi
-    done;
+    # Create a non-abi versioned config
+    cfg=$(basename $out/bin/ncurses*-config)
+    ln -svf $cfg $out/bin/ncursesw-config
+    ln -svf $cfg $out/bin/ncurses-config
+
+    # Allow for end users who #include <ncurses?w/*.h>
     ln -svf . $out/include/ncursesw
-    ln -svf ncursesw5-config $out/bin/ncurses5-config
-  '' else "";
+    ln -svf . $out/include/ncurses
 
-  postFixup = lib.optionalString stdenv.isDarwin "rm $out/lib/*.so";
+    # Create non-unicode compatability
+    libs="$(find $out/lib -name \*w.a | sed 's,.*lib\(.*\)w.a.*,\1,g')"
+    for lib in $libs; do
+      if [ -e "$out/lib/lib''${lib}w.so" ]; then
+        echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
+      fi
+      ln -svf lib''${lib}w.a $out/lib/lib$lib.a
+      ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
+    done
 
-  meta = {
+    # Create curses compatability
+    echo "INPUT(-lncursesw)" > $out/lib/libcursesw.so
+    echo "INPUT(-lncursesw)" > $out/lib/libcurses.so
+    ln -svf libncurses
+  '' else ''
+    # Create a non-abi versioned config
+    cfg=$(basename $out/bin/ncurses*-config)
+    ln -svf $cfg $out/bin/ncurses-config
+
+    # Allow for end users who #include <ncurses/*.h>
+    ln -svf . $out/include/ncurses
+
+    # Create curses compatability
+    echo "INPUT(-lncurses)" > $out/lib/libcurses.so
+  '';
+
+  meta = with stdenv.lib; {
     description = "Free software emulation of curses in SVR4 and more";
 
     longDescription = ''
@@ -86,9 +138,10 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/ncurses/;
 
-    license = lib.licenses.mit;
-
-    maintainers = [ ];
-    platforms = lib.platforms.all;
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
+
+  passthru.ldflags = if unicode then "-lncursesw" else "-lncurses";
 }

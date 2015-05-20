@@ -1,24 +1,26 @@
-{stdenv, fetchurl, ncurses, libevent, pkgconfig}:
+{ stdenv, fetchurl, ncurses, libevent, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  pname = "tmux";
-  version = "1.9a";
-  name = "${pname}-${version}";
+  name = "tmux-2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "1x9k4wfd4l5jg6fh7xkr3yyilizha6ka8m5b1nr0kw8wj0mv5qy5";
+    url = "mirror://sourceforge/tmux/${name}.tar.gz";
+    sha256 = "0qnkda8kb747vmbldjpb23ksv9pq3s65xhh1ja5rdsmh8r24npvr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ ncurses libevent ];
 
-  postInstall =
-    ''
-      mkdir -p $out/etc/bash_completion.d
-      cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
-    '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/etc/bash_completion.d
+    cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
+  '';
 
   meta = {
     homepage = http://tmux.sourceforge.net/;

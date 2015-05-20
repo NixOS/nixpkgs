@@ -49,7 +49,8 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ];
+  ] ++ stdenv.lib.optionals (stdenv.platform ? kernelMakeFlags)
+    stdenv.platform.kernelMakeFlags;
 
   drvAttrs = config_: platform: kernelPatches: configfile:
     let
@@ -124,7 +125,8 @@ let
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
  	make $makeFlags "''${makeFlagsArray[@]}" dtbs
-        cp $buildRoot/arch/$karch/boot/dts/*dtb $out
+        mkdir -p $out/dtbs
+        cp $buildRoot/arch/$karch/boot/dts/*.dtb $out/dtbs
       '' else "") + (if isModular then ''
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"

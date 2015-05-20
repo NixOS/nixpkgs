@@ -2,7 +2,7 @@
 
 let
   pname = "icu4c";
-  version = "53.1";
+  version = "55.1";
 in
 stdenv.mkDerivation {
   name = pname + "-" + version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "0a4sg9w054640zncb13lhrcjqn7yg1qilwd1mczc4w60maslz9vg";
+    sha256 = "0ys5f5spizg45qlaa31j2lhgry0jka2gfha527n4ndfxxz5j4sz1";
   };
 
   makeFlags = stdenv.lib.optionalString stdenv.isDarwin

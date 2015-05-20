@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libxml2 itstool intltool glib gtk3 pep8 python
-    gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
+    gnome3.defaultIconTheme
     makeWrapper pygobject3 libwnck3
   ];
 

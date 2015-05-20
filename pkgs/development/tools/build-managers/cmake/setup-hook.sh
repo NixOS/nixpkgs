@@ -36,6 +36,15 @@ cmakeConfigurePhase() {
         cmakeFlags="-DCMAKE_CXX_COMPILER=$crossConfig-g++ -DCMAKE_C_COMPILER=$crossConfig-gcc $cmakeFlags"
     fi
 
+    # This installs shared libraries with a fully-specified install
+    # name. By default, cmake installs shared libraries with just the
+    # basename as the install name, which means that, on Darwin, they
+    # can only be found by an executable at runtime if the shared
+    # libraries are in a system path or in the same directory as the
+    # executable. This flag makes the shared library accessible from its
+    # nix/store directory.
+    cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=$prefix/lib $cmakeFlags"
+
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"

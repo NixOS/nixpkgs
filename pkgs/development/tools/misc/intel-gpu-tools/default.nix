@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libdrm libpciaccess cairo dri2proto udev libX11 libXext libXv libXrandr glib bison ];
 
+  patches = [ ./compile-fix.patch ];
+
   meta = with stdenv.lib; {
     homepage = https://01.org/linuxgraphics/;
     description = "Tools for development and testing of the Intel DRM driver";

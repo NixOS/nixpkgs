@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "efibootmgr-${version}";
-  version = "0.7.0";
+  version = "0.11.0";
 
   buildInputs = [ perl efivar pciutils zlib ];
 
   src = fetchgit {
-    url = "git://github.com/vathpela/efibootmgr.git";
+    url = "git://github.com/rhinstaller/efibootmgr.git";
     rev = "refs/tags/${name}";
-    sha256 = "1nazmqxppx2xa8clv4bjdb1b6gyyimgjdj85n2hmf1smqr8krrmz";
+    sha256 = "1di7cipi6jh4qaiq1ckyk6aimgpagb85yr37k3c1kj1m9p5qra4j";
   };
 
   postPatch = ''

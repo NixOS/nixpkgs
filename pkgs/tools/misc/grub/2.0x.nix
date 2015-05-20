@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, autogen, flex, bison, python, autoconf, automake
+{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
 , gettext, ncurses, libusb, freetype, qemu, devicemapper
 , zfs ? null
 , efiSupport ? false
@@ -20,7 +20,7 @@ let
   canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystems);
   inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
-  version = "2.02-git-2015-04-24";
+  version = "2.02-git-2015-05-14";
 
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
@@ -41,10 +41,10 @@ assert zfsSupport -> zfs != null;
 stdenv.mkDerivation rec {
   name = "grub-${version}";
 
-  src = fetchgit {
-    url = "git://git.savannah.gnu.org/grub.git";
-    rev = "70b002de55abbfd6b2d2f2ea4408078d93c9e0de";
-    sha256 = "1170413b4d9kwqwgi1dcsnbwn8mb3snbid858wyfv84910kbrs2d";
+  src = fetchFromSavannah {
+    repo = "grub";
+    rev = "5370dcfdae66b60cff3507ad925300a679fe4117";
+    sha256 = "1v4a3shcgfxjifwddmn3d0lyg3db1d3k87x5nchy7cyiss55jx1s";
   };
 
   nativeBuildInputs = [ autogen flex bison python autoconf automake ];

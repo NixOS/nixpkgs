@@ -21,6 +21,6 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://libtom.org/?page=features&newsitems=5&whatfile=crypt";
-    description = "LibTomCrypt is a fairly comprehensive, modular and portable cryptographic toolkit";
+    description = "A fairly comprehensive, modular and portable cryptographic toolkit";
   };
 }

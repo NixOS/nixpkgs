@@ -48,19 +48,6 @@ self: super: {
   # haddock-api 2.16 requires ghc>=7.10
   haddock-api = super.haddock-api_2_15_0_2;
 
-  # Idris needs special version of some libraries
-  idris = let super1 = super; in overrideCabal (super.idris.overrideScope (self: super: {
-    annotated-wl-pprint = self.annotated-wl-pprint_0_5_3;
-    blaze-html = self.blaze-html_0_7_0_3;
-    blaze-markup = self.blaze-markup_0_6_2_0;
-    lens = self.lens_4_7_0_1;
-  })) (drv: {
-    patchPhase = "find . -name '*.hs' -exec sed -i -s 's|-Werror||' {} +";
-  });                           # warning: "Module ‘Control.Monad.Error’ is deprecated"
-
-  # Depends on time == 0.1.5, which we don't have.
-  HStringTemplate_0_8_3 = dontDistribute super.HStringTemplate_0_8_3;
-
   # This is part of bytestring in our compiler.
   bytestring-builder = dontHaddock super.bytestring-builder;
 
@@ -123,13 +110,19 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
-  lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
-
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
   # needs mtl-compat to build with mtl 2.1.x
   cgi = addBuildDepend super.cgi self.mtl-compat;
+
+  # Newer versions always trigger the non-deterministic library ID bug
+  # and are virtually impossible to compile on Hydra.
+  conduit = super.conduit_1_2_4_1;
+
+  # https://github.com/magthe/sandi/issues/7
+  sandi = overrideCabal super.sandi (drv: {
+    patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
+  );
 
 }

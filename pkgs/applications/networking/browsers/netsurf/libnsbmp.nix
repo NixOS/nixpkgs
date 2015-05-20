@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [];
 
   meta = { 
-    description = "Libnsbmp is a decoding library for BMP and ICO image file formats"; # used by netsurf
+    description = "A decoding library for BMP and ICO image file formats"; # used by netsurf
     homepage = http://www.netsurf-browser.org/projects/libnsbmp/;
     license = stdenv.lib.licenses.mit;
     maintainers = [args.lib.maintainers.marcweber];

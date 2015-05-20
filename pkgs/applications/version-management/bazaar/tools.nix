@@ -1,20 +1,22 @@
-args : with args; 
+{ stdenv, fetchurl, makeWrapper, python2, bazaar }:
 
-rec {
-  version = "2.5";
+stdenv.mkDerivation rec {
+  name = "bzr-tools-${version}";
+  version = "2.6.0";
+  
   src = fetchurl {
     url = "http://launchpad.net/bzrtools/stable/${version}/+download/bzrtools-${version}.tar.gz";
-    sha256 = "0gzh63vl9006cpklszwmsymrq5ddxxrnxwbv5bwi740jlvxzdkxw";
+    sha256 = "0n3zzc6jf5866kfhmrnya1vdr2ja137a45qrzsz8vz6sc6xgn5wb";
   };
 
-  buildInputs = [];
-  configureFlags = [];
+  buildInputs = [ makeWrapper python2 ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = [(simplyShare "bzrtools")];
+  installPhase = ''
+    ${python2}/bin/python ./setup.py install --prefix=$out
+  '';
       
-  name = "bzr-tools-${version}";
   meta = {
     description = "Bazaar plugins";
+    homepage = http://wiki.bazaar.canonical.com/BzrTools;
   };
 }

@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="cl-launch";
-    version="4.1.2";
+    version="4.1.3.1";
     name="${baseName}-${version}";
-    hash="13fgcvg71s1yp3r7jf1cs3kkpfw0pwykgmj7zryh24mw2269rx90";
-    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.1.2.tar.gz";
-    sha256="13fgcvg71s1yp3r7jf1cs3kkpfw0pwykgmj7zryh24mw2269rx90";
+    hash="0l5iwffrzmaxbpfh2h5y8lz6yap3q8xi14z080lhl193p8f3rk0z";
+    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.1.3.1.tar.gz";
+    sha256="0l5iwffrzmaxbpfh2h5y8lz6yap3q8xi14z080lhl193p8f3rk0z";
   };
   buildInputs = [
   ];
@@ -22,6 +22,10 @@ stdenv.mkDerivation {
   preConfigure = ''
     export makeFlags="$makeFlags PREFIX='$out'"
     mkdir -p "$out/bin"
+  '';
+
+  preBuild = ''
+    sed -e 's/\t\t@/\t\t/g' -i Makefile
   '';
 
   meta = {

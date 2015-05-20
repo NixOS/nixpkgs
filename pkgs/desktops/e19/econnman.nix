@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Econnman is a user interface for the connman network connection manager";
+    description = "A user interface for the connman network connection manager";
     homepage = http://enlightenment.org/;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
     platforms = stdenv.lib.platforms.linux;

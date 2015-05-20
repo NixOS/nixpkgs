@@ -7,7 +7,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchzip {
     name = "${name}-src";
     url = "https://github.com/jborg/attic/archive/0.15.tar.gz";
-    sha256 = "0bing5zg82mwvdi27jl77ardw65zaq4996k4677gz2lq7p7b4gd7";
+    sha256 = "0c5rsxxcg897a619cbv75hzi1ahpkym8dccf6y3jlcs98z11vm5d";
   };
 
   propagatedBuildInputs = with python3Packages;

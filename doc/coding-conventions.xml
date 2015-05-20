@@ -169,8 +169,8 @@ stdenv.mkDerivation { ...
 args: with args; <replaceable>...</replaceable>
 </programlisting>
 
-  or 
-  
+  or
+
 <programlisting>
 { stdenv, fetchurl, perl, ... }: <replaceable>...</replaceable>
 </programlisting>
@@ -598,6 +598,51 @@ evaluate correctly.</para>
 </section>
 
 </section>
-
-
+<section xml:id="sec-sources"><title>Fetching Sources</title>
+  <para>There are multiple ways to fetch a package source in nixpkgs. The
+    general guidline is that you should package sources with a high degree of
+    availability. Right now there is only one fetcher which has mirroring
+    support and that is <literal>fetchurl</literal>. Note that you should also
+    prefer protocols which have a corresponding proxy environment variable.
+  </para>
+  <para>You can find many source fetch helpers in <literal>pkgs/build-support/fetch*</literal>.
+  </para>
+  <para>In the file <literal>pkgs/top-level/all-packages.nix</literal> you can
+    find fetch helpers, these have names on the form
+    <literal>fetchFrom*</literal>. The intention of these are to provide
+    snapshot fetches but using the same api as some of the version controlled
+    fetchers from <literal>pkgs/build-support/</literal>. As an example going
+    from bad to good:
+    <itemizedlist>
+      <listitem><para>Uses <literal>git://</literal> which won't be proxied.
+        <programlisting>
+          src = fetchgit {
+            url = "git://github.com/NixOS/nix.git";
+            rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+            sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+          }
+        </programlisting></para>
+      </listitem>
+      <listitem><para>This is ok, but an archive fetch will still be faster.
+        <programlisting>
+          src = fetchgit {
+            url = "https://github.com/NixOS/nix.git";
+            rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+            sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+          }
+        </programlisting></para>
+      </listitem>
+      <listitem><para>Fetches a snapshot archive and you get the rev you want.
+        <programlisting>
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+            sha256 = "04yri911rj9j19qqqn6m82266fl05pz98inasni0vxr1cf1gdgv9";
+          }
+        </programlisting></para>
+      </listitem>
+    </itemizedlist>
+  </para>
+</section>
 </chapter>

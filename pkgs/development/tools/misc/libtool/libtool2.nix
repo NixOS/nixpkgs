@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "libtool-2.4.5";
+  name = "libtool-2.4.6";
 
   src = fetchurl {
     url = "mirror://gnu/libtool/${name}.tar.gz";
-    sha256 = "11v9gl8ancavx7179n6zk4k8hwa0zl4wz4w9z3mffk71gnfb972h";
+    sha256 = "1qq61k6lp1fp75xs398yzi6wvbx232l7xbyn3p13cnh27mflvgg3";
   };
 
   propagatedNativeBuildInputs = [ m4 ];

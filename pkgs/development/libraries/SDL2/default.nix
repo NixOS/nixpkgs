@@ -19,6 +19,7 @@ let
         --disable-oss --disable-x11-shared
         --disable-pulseaudio-shared --disable-alsa-shared
         ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
+        ${if (!x11Support) then "--without-x" else ""}
       '';
 in
 stdenv.mkDerivation rec {

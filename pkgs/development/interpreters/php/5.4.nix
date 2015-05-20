@@ -1,6 +1,6 @@
 { callPackage, apacheHttpd }:
-callPackage ./makePhpDerivation.nix {
-  phpVersion = "5.4.39";
-  sha = "0znpd6pgri5vah4j4wwamhqc60awila43bhh699p973hir9pdsvw";
+callPackage ./generic.nix {
+  phpVersion = "5.4.41";
+  sha = "0wl27f5z6vymajm2bzfp440zsp1jdxqn71avryiq1zw029db9i2v";
   apacheHttpd = apacheHttpd;
 }

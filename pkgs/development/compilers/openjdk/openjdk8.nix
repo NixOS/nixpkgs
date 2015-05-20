@@ -1,41 +1,41 @@
 { stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, openjdk, cacert, perl, liberation_ttf, fontconfig } :
 let
   update = "40";
-  build = "25";
+  build = "27";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u40";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "05s5j0rq45n8piymv9c1n0hxr4bk3j8lz6fw2wbp0m8kam6zzpza";
+             sha256 = "0ra05jngvvy2g1da5b9anrp86m812g2wlkxpijc82kxv6c3h6g28";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0p1z38szm63cf5f83697awbqwpf7b8q1ymrqc0v6r9hb5yf0p22r";
+             sha256 = "0r9zdq13kgqqm8rgr36qf03h23psxcwzvdqffsncd4jvbfap3n5f";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "0sl0ima3zlbd1ai7qrg4msy5ibg64qpwdrv7z4l8cpalwby26y6p";
+             sha256 = "07v3z38v5fdsx3g28c4pkdq76cdmnc4qflf1wb3lz46lhy230hkd";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "1ahvhap8av519813yf20v3hbvg82j9bq3gnqlayng1qggfivsb5s";
+             sha256 = "0y20468f2yi14lijbd732f2mlgrn718pyfji3279l2rm4ad7r7pl";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "0n86fcy1z4z22jcgfnn9agzfi949709hn2x6s8wyhwwa055rjd1a";
+             sha256 = "1sgfxmkq6z3vj9yq9kszr42b1ijvsknlss353jpcmyr1lljhyvfg";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "0hp19hq0dw3j8zz4mxd6bjk9zqlyr56fhwzgjwmm56b6pwkcmsn7";
+             sha256 = "08p3657d0871pz0g5fg157az9q38r5h2zs49dm7512sc9qrn5c06";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "037za0hjiwvzvbzsckfxnrrbak1vbd52pmrnd855vxkik08jxp8c";
+             sha256 = "1f1vlrvlvnjbyh8d168smizvmkcm076zc496sxk6njqamby16ip2";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "1np8hkg2fmj5s6ipd1vb8x0z6xy00kbi2ipqca9pxzib58caj6b2";
+             sha256 = "1llf3l4483kd8m1a77n7y9fgvm6fa63nim3qhp5z4gnw68ldbhra";
           };
   openjdk8 = stdenv.mkDerivation {
   name = "openjdk-8u${update}b${build}";
@@ -50,11 +50,19 @@ let
   '';
   prePatch = ''
     # despite --with-override-jdk the build still searchs here
-    ln -s "../jdk-${repover}" "jdk";
-    ln -s "../hotspot-${repover}" "hotspot";
+    # GNU Patch bug, --follow-symlinks only follow the last dir part symlink
+    mv "../jdk-${repover}" "jdk";
+    mv "../hotspot-${repover}" "hotspot";
+  '';
+  postPatch = ''
+    mv jdk "../jdk-${repover}";
+    mv hotspot "../hotspot-${repover}";
+    # Patching is over, lets re-add the links
+    ln -s "../jdk-${repover}" "jdk"
+    ln -s "../hotspot-${repover}" "hotspot"
   '';
   patches = [
-    ./fix-java-home.patch
+    ./fix-java-home-jdk8.patch
     ./read-truststore-from-env-jdk8.patch
     ./currency-date-range-jdk8.patch
   ];
@@ -78,7 +86,7 @@ let
     "--with-milestone=fcs"
   ];
   NIX_LDFLAGS= "-lfontconfig";
-  buildFlags = "DEBUG_BINARIES=true all";
+  buildFlags = "all";
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 

@@ -263,7 +263,7 @@ export NIX_PATH=$NIX_PATH:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix
 
 
 # Ask the user to set a root password.
-if [ "$(chroot $mountPoint nix-instantiate --eval '<nixpkgs/nixos>' -A config.users.mutableUsers)" = true ] && [ -t 1 ] ; then
+if [ "$(chroot $mountPoint nix-instantiate --eval '<nixpkgs/nixos>' -A config.users.mutableUsers)" = true ] && [ -t 0 ] ; then
     echo "setting root password..."
     chroot $mountPoint /var/setuid-wrappers/passwd
 fi

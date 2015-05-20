@@ -1,6 +1,6 @@
 { stdenv, fetchgit, zlib
-, gnutlsSupport ? true, gnutls ? null
-, opensslSupport ? false, openssl ? null
+, gnutlsSupport ? false, gnutls ? null
+, opensslSupport ? true, openssl ? null
 }:
 
 # Must have an ssl library enabled
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
     ++ optional gnutlsSupport "CRYPTO=GNUTLS"
     ++ optional opensslSupport "CRYPTO=OPENSSL"
     ++ optional stdenv.isDarwin "SYS=darwin"
-    ++ optional (stdenv.cc.cc.isClang or false) "CC=clang";
+    ++ optional stdenv.cc.isClang "CC=clang";
 
-  buildInputs = [ zlib ]
+  propagatedBuildInputs = [ zlib ]
     ++ optional gnutlsSupport gnutls
     ++ optional opensslSupport openssl;
 

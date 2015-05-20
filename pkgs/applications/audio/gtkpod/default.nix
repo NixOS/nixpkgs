@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig makeWrapper intltool curl gettext perl perlXMLParser
     flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf libglade gnome.anjuta
-    gnome.gdl gnome.gnome_icon_theme_symbolic gnome.gnome_icon_theme
+    gnome.gdl gnome.defaultIconTheme
     hicolor_icon_theme ];
 
   patchPhase = ''

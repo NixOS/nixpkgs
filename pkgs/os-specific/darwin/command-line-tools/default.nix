@@ -7,7 +7,7 @@ let
     src = fetchurl {
       # Magic url found in:
       # https://swscan.apple.com/content/catalogs/others/index-10.9-1.sucatalog
-      url = "http://swcdn.apple.com/content/downloads/27/02/031-06182/yiervn212jfs091cp9hwmb7gjq7ky91crs/${name}.pkg";
+      url = "http://swcdn.apple.com/content/downloads/27/02/031-06182/xxog8vxu8i6af781ivf4uhy6yt1lslex34/${name}.pkg";
       inherit sha256;
     };
 

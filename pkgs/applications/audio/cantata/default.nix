@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake ]
     ++ stdenv.lib.optional withQt4 qt4
-    ++ stdenv.lib.optional withQt5 qt5
+    ++ stdenv.lib.optionals withQt5 (with qt5; [ base svg tools ])
     ++ stdenv.lib.optional withKDE4 kde4.kdelibs
     ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
     ++ stdenv.lib.optionals withReplaygain [ ffmpeg speex mpg123 ]

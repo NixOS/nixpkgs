@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = stdenv.lib.optional stdenv.isLinux "--enable-udev"
+  configureFlags = [ "--enable-freedreno" ]
+    ++ stdenv.lib.optional stdenv.isLinux "--enable-udev"
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];

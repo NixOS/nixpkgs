@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Yices is a high-performance theorem prover and SMT solver";
+    description = "A high-performance theorem prover and SMT solver";
     homepage    = "http://yices.csl.sri.com";
     license     = stdenv.lib.licenses.unfreeRedistributable;
     platforms   = stdenv.lib.platforms.linux;

@@ -1,14 +1,19 @@
 { stdenv, fetchurl, unzip, curl }:
 
 stdenv.mkDerivation {
-  name = "dmd-2.067.0";
+  name = "dmd-2.067.1";
 
   src = fetchurl {
-    url = http://downloads.dlang.org/releases/2015/dmd.2.067.0.zip;
-    sha256 = "0b1b65694846ef3430de1de341c8cf353151a1a39656e6a1065fe56bc90fb60b";
+    url = http://downloads.dlang.org/releases/2015/dmd.2.067.1.zip;
+    sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
   };
 
   buildInputs = [ unzip curl ];
+
+  # Allow to use "clang++", commented in Makefile
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/dmd/posix.mak --replace g++ clang++
+  '';
 
   buildPhase = ''
       cd src/dmd
@@ -34,8 +39,9 @@ stdenv.mkDerivation {
 
       cd ../phobos
       mkdir $out/lib
-      ${let bits = if stdenv.is64bit then "64" else "32"; in
-      "cp generated/linux/release/${bits}/libphobos2.a $out/lib"
+      ${let bits = if stdenv.is64bit then "64" else "32";
+            osname = if stdenv.isDarwin then "osx" else "linux"; in
+      "cp generated/${osname}/release/${bits}/libphobos2.a $out/lib"
       }
 
       cp -r std $out/include/d2
@@ -55,4 +61,3 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
   };
 }
-

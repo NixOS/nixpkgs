@@ -8,10 +8,10 @@ self: super: {
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
   Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; });
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; zlib = self.zlib_0_5_4_2; });
+  cabal-install_1_18_1_0 = dontCheck (super.cabal-install_1_18_1_0.override { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Break infinite recursions.
-  digest = super.digest.override { inherit (pkgs) zlib; };
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
@@ -118,6 +118,9 @@ self: super: {
   # Agda-2.4.2.2 needs these overrides to compile.
   Agda = super.Agda.override { equivalence = self.equivalence_0_2_5; cpphs = self.cpphs_1_18_9; };
 
+  # Help libconfig find it's C language counterpart.
+  libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
@@ -149,14 +152,11 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
-  darcs = overrideCabal super.darcs (drv: {
+  # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
+  darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
-  });
-
-  # Needs the latest version of QuickCheck to compile.
-  cabal-test-quickcheck = super.cabal-test-quickcheck.override { QuickCheck = self.QuickCheck_2_8_1; };
+    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' darcs.cabal";
+  })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
@@ -293,6 +293,8 @@ self: super: {
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
+  bitcoin-api = dontCheck super.bitcoin-api;
+  bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
@@ -349,6 +351,7 @@ self: super: {
   conduit-connection = dontCheck super.conduit-connection;
   craftwerk = dontCheck super.craftwerk;
   damnpacket = dontCheck super.damnpacket;              # http://hydra.cryp.to/build/496923/log
+  data-hash = dontCheck super.data-hash;
   Deadpan-DDP = dontCheck super.Deadpan-DDP;            # http://hydra.cryp.to/build/496418/log/raw
   DigitalOcean = dontCheck super.DigitalOcean;
   directory-layout = dontCheck super.directory-layout;
@@ -399,7 +402,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
-  influxdb = dontCheck super.influxdb;
+  influxdb = dontCheck (dontJailbreak super.influxdb);
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -512,10 +515,6 @@ self: super: {
 
   # https://github.com/cgaebel/stm-conduit/issues/33
   stm-conduit = dontCheck super.stm-conduit;
-
-  # https://github.com/fumieval/call/issues/3
-  call = markBrokenVersion "0.1.2" super.call;
-  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
 
   # The install target tries to run lots of commands as "root". WTF???
   hannahci = markBroken super.hannahci;
@@ -661,7 +660,7 @@ self: super: {
   vivid = markBroken super.vivid;
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck super.hsqml;
+  hsqml = dontCheck (super.hsqml.override { qt5 = pkgs.qt53; });
 
   # https://github.com/lookunder/RedmineHs/issues/4
   Redmine = markBroken super.Redmine;
@@ -669,7 +668,7 @@ self: super: {
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
-  # https://github.com/megantti/rtorrent-rpc/issues/1
+  # https://github.com/megantti/rtorrent-rpc/issues/2
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 
   # https://github.com/PaulJohnson/geodetics/issues/1
@@ -681,8 +680,11 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2045
-  pandoc = dontCheck super.pandoc;
+  # https://github.com/jgm/pandoc/issues/2156
+  pandoc = overrideCabal (dontJailbreak super.pandoc) (drv: {
+    doCheck = false;    # https://github.com/jgm/pandoc/issues/2036
+    patchPhase = "sed -i -e 's|zlib .*,|zlib,|' -e 's|QuickCheck .*,|QuickCheck,|' pandoc.cabal";
+  });
 
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
@@ -715,19 +717,10 @@ self: super: {
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
   click-clack = dontDistribute super.click-clack;
 
-  # https://github.com/prowdsponsor/esqueleto/issues/93
-  esqueleto = dontCheck super.esqueleto;
-
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
-
-  # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
-  stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
-
-  # https://github.com/GaloisInc/cryptol/issues/197
-  cryptol = overrideCabal super.cryptol (drv: {
-    postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
-  });
+  call = dontDistribute super.call;
+  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;
 
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
@@ -771,10 +764,7 @@ self: super: {
            in appendPatch pkg ./mueval-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
-  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
-
-  # Jailbreaking breaks the build.
-  QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
+  zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = pkgs.cabal2nix;
@@ -786,5 +776,58 @@ self: super: {
 
   # https://github.com/ndmitchell/shake/issues/206
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
+
+  # https://github.com/nushio3/doctest-prop/issues/1
+  doctest-prop = dontCheck super.doctest-prop;
+
+  # https://github.com/goldfirere/singletons/issues/116
+  # https://github.com/goldfirere/singletons/issues/117
+  # https://github.com/goldfirere/singletons/issues/118
+  singletons = markBroken super.singletons;
+  singleton-nats = dontDistribute super.singleton-nats;
+  hgeometry = dontDistribute super.hgeometry;
+  hipe = dontDistribute super.hipe;
+  clash-lib = dontDistribute super.clash-lib;
+
+  # https://github.com/anton-k/temporal-music-notation/issues/1
+  temporal-music-notation = markBroken super.temporal-music-notation;
+  temporal-music-notation-demo = dontDistribute super.temporal-music-notation-demo;
+  temporal-music-notation-western = dontDistribute super.temporal-music-notation-western;
+
+  # https://github.com/adamwalker/sdr/issues/1
+  sdr = dontCheck super.sdr;
+
+  # https://github.com/bos/aeson/issues/253
+  aeson = dontCheck super.aeson;
+
+  # GNUTLS 3.4 causes linker errors: http://hydra.cryp.to/build/839563/nixlog/2/raw
+  gnutls = super.gnutls.override { gnutls = pkgs.gnutls33; };
+
+  # Won't compile with recent versions of QuickCheck.
+  testpack = markBroken super.testpack;
+  MissingH = dontCheck super.MissingH;
+
+  # Obsolete for GHC versions after GHC 6.10.x.
+  utf8-prelude = markBroken super.utf8-prelude;
+
+  # https://github.com/jgm/cheapskate/issues/11
+  cheapskate = markBrokenVersion "0.1.0.3" super.cheapskate;
+  lit = dontDistribute super.lit;
+
+  # https://github.com/snapframework/snap/issues/148
+  snap = overrideCabal super.snap (drv: {
+    patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
+  });
+
+  # https://github.com/jwiegley/gitlib/issues/46
+  gitlib = markBroken super.gitlib;
+  gitlib-sample = dontDistribute super.gitlib-sample;
+  gitlib-test = dontDistribute super.gitlib-test;
+
+  # https://github.com/yaccz/saturnin/issues/3
+  Saturnin = dontCheck super.Saturnin;
+
+  # https://github.com/kolmodin/binary/issues/74
+  binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
 
 }

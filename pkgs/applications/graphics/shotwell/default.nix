@@ -51,8 +51,7 @@ in stdenv.mkDerivation rec {
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base gnome3.libgee which udev gnome3.gexiv2
                   libraw rest json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
                   makeWrapper gnome_doc_utils
-                  gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
-                  hicolor_icon_theme ];
+                  gnome3.defaultIconTheme ];
 
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";

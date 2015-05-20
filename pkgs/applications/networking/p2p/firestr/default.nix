@@ -4,7 +4,7 @@
 stdenv.mkDerivation {
   name = "firestr-0.8";
 
-  buildInputs = [ cmake boost botan snappy libopus libuuid qt5 libXScrnSaver openssl ];
+  buildInputs = [ cmake boost botan snappy libopus libuuid qt5.base libXScrnSaver openssl ];
 
   src = fetchFromGitHub {
     owner  = "mempko";

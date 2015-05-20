@@ -276,19 +276,6 @@ let
     };
   };
 
-  toOption = x:
-    if x == true then "true"
-    else if x == false then "false"
-    else toString x;
-
-  attrsToSection = as:
-    concatStrings (concatLists (mapAttrsToList (name: value:
-      map (x: ''
-          ${name}=${toOption x}
-        '')
-        (if isList value then value else [value]))
-        as));
-
   commonUnitText = def: ''
       [Unit]
       ${attrsToSection def.unitConfig}
@@ -368,11 +355,6 @@ let
           ${attrsToSection def.automountConfig}
         '';
     };
-
-  commonMatchText = def: ''
-      [Match]
-      ${attrsToSection def.matchConfig}
-    '';
 
 in
 
@@ -754,10 +736,18 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
+    # Some overrides to upstream units.
+    systemd.services."systemd-backlight@".restartIfChanged = false;
+    systemd.services."systemd-rfkill@".restartIfChanged = false;
     systemd.services."user@".restartIfChanged = false;
-
-    systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
+    systemd.services.systemd-journald.restartIfChanged = false; # FIXME: shouldn't be necessary with systemd 219
+    systemd.services.systemd-random-seed.restartIfChanged = false;
+    systemd.services.systemd-remount-fs.restartIfChanged = false;
+    systemd.services.systemd-update-utmp.restartIfChanged = false;
+    systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
 
   };
 

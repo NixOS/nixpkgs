@@ -37,6 +37,9 @@ buildGoPackage rec {
   (
     cd "go/src/$goPackagePath"
     go-bindata ./resources/
+    ${govers}/bin/govers -d -m github.com/matttproud/golang_protobuf_extensions/ext github.com/matttproud/golang_protobuf_extensions/pbutil
+    substituteInPlace handler/push.go \
+      --replace ext.ReadDelimited pbutil.ReadDelimited
   )
   '';
 

@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     sed -i -e 's@which which >/dev/null || exit 1@alias which="type -p"@' update-smart-drivedb.in
   '';
 
-  meta = {
-    description = "Tools for monitoring the health of hard drivers";
-    homepage = "http://smartmontools.sourceforge.net/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+  meta = with stdenv.lib; {
+    description = "Tools for monitoring the health of hard drives";
+    homepage = http://smartmontools.sourceforge.net/;
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = [ maintainers.simons ];
   };
 }

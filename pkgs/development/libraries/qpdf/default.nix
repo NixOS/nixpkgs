@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://qpdf.sourceforge.net/; 
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = licenses.artistic2;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
   };
 }

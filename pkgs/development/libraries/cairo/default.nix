@@ -11,18 +11,12 @@ assert glSupport -> mesa_noglu != null;
 with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.0";
+  name = "cairo-1.14.2";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha1 = "53cf589b983412ea7f78feee2e1ba9cea6e3ebae";
+    sha1 = "c8da68aa66ca0855b5d0ff552766d3e8679e1d24";
   };
-
-  patches = [(fetchpatch {
-    name = "fix-racket.diff";
-    url = "http://cgit.freedesktop.org/cairo/patch/?id=2de69581c28bf115852037ca41eba13cb7335976";
-    sha256 = "0mk2fd9fwxqzravlmnbbrzwak15wqspn7609y0yn6qh87va5i0x4";
-  })];
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 

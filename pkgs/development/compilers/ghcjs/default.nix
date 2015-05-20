@@ -39,14 +39,10 @@
 }:
 let
   version = "0.1.0";
-  ghcArch = if pkgs.stdenv.system == "i686-linux"
-    then "i386-linux"
-    else pkgs.stdenv.system;
-  libDir = "share/ghcjs/${ghcArch}-${version}-${ghc.version}/ghcjs";
   ghcjsBoot = fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "8bf1a2c665d42a66354f17220c7dfb1c8b44c0ea"; # 7.10 branch
-    sha256 = "18bm6sfa9c9kwsmv3lz6j27ng6jl0ck3ifgqbwwa8myfy7fw4il7";
+    rev = "19620b69257115a69306eec505a97ac843055e92"; # 7.10 branch
+    sha256 = "027md1glfakniccqq0z1pyrz5w4fy0myxmbl0h789rbcxz9ybv6n";
     fetchSubmodules = true;
   };
   shims = fetchgit {
@@ -59,8 +55,8 @@ in mkDerivation (rec {
   inherit version;
   src = fetchgit {
     url = git://github.com/ghcjs/ghcjs.git;
-    rev = "64c3768186d73d8c185b42d4d14dfb943919ee56"; # master branch
-    sha256 = "1w7rwcqzihg6h2j0khar7kjn8vdjg9ngjk6bndpiqcgf3kwfmvhf";
+    rev = "d4322c2ae4467420b28eca99f0c0abd00caf5d4a"; # master branch
+    sha256 = "12mvl4l1i993j86n9wkwcs567jm13javghbxapjjsc7493xpmya5";
   };
   isLibrary = true;
   isExecutable = true;
@@ -84,14 +80,19 @@ in mkDerivation (rec {
   ];
   patches = [ ./ghcjs.patch ];
   postPatch = ''
-    substituteInPlace Setup.hs --replace "/usr/bin/env" "${coreutils}/bin/env"
-    substituteInPlace src/Compiler/Info.hs --replace "@PREFIX@" "$out"
+    substituteInPlace Setup.hs \
+      --replace "/usr/bin/env" "${coreutils}/bin/env"
+
+    substituteInPlace src/Compiler/Info.hs \
+      --replace "@PREFIX@" "$out"          \
+      --replace "@VERSION@" "${version}"
+
     substituteInPlace src-bin/Boot.hs \
       --replace "@PREFIX@" "$out"     \
       --replace "@CC@"     "${stdenv.cc}/bin/cc"
   '';
   preBuild = ''
-    local topDir=$out/${libDir}
+    local topDir=$out/lib/ghcjs-${version}
     mkdir -p $topDir
 
     cp -r ${ghcjsBoot} $topDir/ghcjs-boot
@@ -116,13 +117,13 @@ in mkDerivation (rec {
         --with-gmp-libraries ${gmp}/lib
   '';
   passthru = {
-    inherit libDir;
     isGhcjs = true;
     nativeGhc = ghc;
+    inherit nodejs;
   };
 
   homepage = "https://github.com/ghcjs/ghcjs";
-  description = "GHCJS is a Haskell to JavaScript compiler that uses the GHC API";
+  description = "A Haskell to JavaScript compiler that uses the GHC API";
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];

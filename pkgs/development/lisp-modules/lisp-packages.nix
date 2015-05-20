@@ -98,7 +98,7 @@ let lispPackages = rec {
   clx-truetype = buildLispPackage rec {
     baseName = "clx-truetype";
     version = "git-20141112";
-    description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension";
+    description = "A pure Common Lisp solution for antialiased TrueType font rendering using CLX and the XRender extension";
     deps = [cl-fad cl-store cl-vectors clx trivial-features zpb-ttf];
     # Source type: git
     src = pkgs.fetchgit {
@@ -190,15 +190,18 @@ let lispPackages = rec {
 
   clsql = buildLispPackage rec {
     baseName = "clsql";
-    version = "git-20141112";
+    version = "git-20150514";
     description = "Common Lisp SQL Interface library";
     deps = [uffi];
     buildInputs = [pkgs.mysql.lib pkgs.zlib];
     # Source type: git
     src = pkgs.fetchgit {
-      url = ''http://git.b9.com/clsql.git'';
-      sha256 = "dacd56bc9a0348e8101184bf154b971407a98f3a753d7cce34c7a44b4b19f8fd";
-      rev = ''180b52cb686a87487e12e87b13bafe131e6c3bef'';
+      url =
+        #''http://git.b9.com/clsql.git''
+	"http://repo.or.cz/r/clsql.git"
+	;
+      sha256 = "1wzc7qsnq8hk0j0h9jmj4xczmh7h6njafwab2zylh8wxmfzwp2nw";
+      rev = ''a646f558b54191eda1d64f2926eee7b4fa763f89'';
     };
     overrides = x:{
       preConfigure = ''

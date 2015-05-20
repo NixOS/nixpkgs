@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, wine, perl, which, coreutils, zenity, curl
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
-let version = "20150316";
+let v = (import ./versions.nix).winetricks;
 in stdenv.mkDerivation rec {
-  name = "winetricks-${version}";
+  name = "winetricks-${v.version}";
 
   src = fetchFromGitHub {
     owner = "Winetricks";
     repo = "winetricks";
-    rev = version;
-    sha256 = "00c55jpca6l3v3p02xc0gy5l4xb17gf90282hq5h85nh72kqsbrh";
+    rev = v.version;
+    sha256 = v.sha256;
   };
 
   buildInputs = [ perl which ];

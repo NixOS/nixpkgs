@@ -286,8 +286,8 @@ in
           type = types.bool;
           description = ''
             Whether to allow TRIM requests to the underlying device. This option
-            has security implications, please read the LUKS documentation before
-            activating in.
+            has security implications; please read the LUKS documentation before
+            activating it.
           '';
         };
 
@@ -303,43 +303,43 @@ in
             twoFactor = mkOption {
               default = true;
               type = types.bool;
-              description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false)";
+              description = "Whether to use a passphrase and a Yubikey (true), or only a Yubikey (false).";
             };
 
             slot = mkOption {
               default = 2;
               type = types.int;
-              description = "Which slot on the Yubikey to challenge";
+              description = "Which slot on the Yubikey to challenge.";
             };
 
             saltLength = mkOption {
               default = 16;
               type = types.int;
-              description = "Length of the new salt in byte (64 is the effective maximum)";
+              description = "Length of the new salt in byte (64 is the effective maximum).";
             };
 
             keyLength = mkOption {
               default = 64;
               type = types.int;
-              description = "Length of the LUKS slot key derived with PBKDF2 in byte";
+              description = "Length of the LUKS slot key derived with PBKDF2 in byte.";
             };
 
             iterationStep = mkOption {
               default = 0;
               type = types.int;
-              description = "How much the iteration count for PBKDF2 is increased at each successful authentication";
+              description = "How much the iteration count for PBKDF2 is increased at each successful authentication.";
             };
 
             gracePeriod = mkOption {
               default = 2;
               type = types.int;
-              description = "Time in seconds to wait before attempting to find the Yubikey";
+              description = "Time in seconds to wait before attempting to find the Yubikey.";
             };
 
             ramfsMountPoint = mkOption {
               default = "/crypt-ramfs";
               type = types.string;
-              description = "Path where the ramfs used to update the LUKS key will be mounted in stage-1";
+              description = "Path where the ramfs used to update the LUKS key will be mounted during early boot.";
             };
 
             /* TODO: Add to the documentation of the current module:
@@ -359,13 +359,13 @@ in
               fsType = mkOption {
                 default = "vfat";
                 type = types.string;
-                description = "The filesystem of the unencrypted device";
+                description = "The filesystem of the unencrypted device.";
               };
 
               mountPoint = mkOption {
                 default = "/crypt-storage";
                 type = types.string;
-                description = "Path where the unencrypted device will be mounted in stage-1";
+                description = "Path where the unencrypted device will be mounted during early boot.";
               };
 
               path = mkOption {
@@ -419,10 +419,10 @@ in
         mkdir -p $out/etc/ssl
         cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
 
-      cat > $out/bin/openssl-wrap <<EOF
-#!$out/bin/sh
-EOF
-      chmod +x $out/bin/openssl-wrap
+        cat > $out/bin/openssl-wrap <<EOF
+        #!$out/bin/sh
+        EOF
+        chmod +x $out/bin/openssl-wrap
       ''}
     '';
 
@@ -432,10 +432,10 @@ EOF
         $out/bin/ykchalresp -V
         $out/bin/ykinfo -V
         cat > $out/bin/openssl-wrap <<EOF
-#!$out/bin/sh
-export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
-$out/bin/openssl "\$@"
-EOF
+        #!$out/bin/sh
+        export OPENSSL_CONF=$out/etc/ssl/openssl.cnf
+        $out/bin/openssl "\$@"
+        EOF
         $out/bin/openssl-wrap version
       ''}
     '';

@@ -15,7 +15,7 @@ buildGoPackage rec {
     sha256 = "1bnc9r22kwvmn1bgz7zaidkjqm7pmw99bn5n87r76vcrd7n2a9pd";
   };
 
-  buildInputs = with goPackages; [ go-etcd rcrowley.go-metrics influxdb-go go-systemd go-log dns stathat osext etcd ];
+  buildInputs = with goPackages; [ go-etcd rcrowley.go-metrics influxdb go-systemd go-log dns stathat osext etcd ];
   dontInstallSrc = true;
 
   subPackages = [ "." ];

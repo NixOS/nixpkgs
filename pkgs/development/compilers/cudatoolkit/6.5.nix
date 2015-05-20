@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, patchelf, perl, ncurses, expat, python, zlib
-, xlibs, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib
+, xlibs, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
 
 let version = "6.5.19"; in
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   runtimeDependencies = [
+    glibc
     ncurses expat python zlib
     xlibs.libX11 xlibs.libXext xlibs.libXrender xlibs.libXt xlibs.libXtst xlibs.libXi xlibs.libXext
     gtk2 glib fontconfig freetype unixODBC alsaLib
@@ -54,6 +55,9 @@ stdenv.mkDerivation rec {
     rm $out/tools/CUDA_Occupancy_Calculator.xls
     perl ./install-sdk-linux.pl --prefix="$sdk" --cudaprefix="$out"
     mv $out/include $out/usr_include
+
+    # let's remove the 32-bit libraries, they confuse the lib64->lib mover
+    rm -rf $out/lib
   '';
 
   setupHook = ./setup-hook.sh;

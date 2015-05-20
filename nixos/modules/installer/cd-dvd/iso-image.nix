@@ -105,7 +105,7 @@ in
   options = {
 
     isoImage.isoName = mkOption {
-      default = "${config.isoImage.isoName}.iso";
+      default = "${config.isoImage.isoBaseName}.iso";
       description = ''
         Name of the generated ISO image file.
       '';

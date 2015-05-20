@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, cmake, ncurses, openssl, pcre, boost, judy, bison, libxml2
+{ stdenv, fetchurl, cmake, ncurses, zlib, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, perl, fixDarwinDylibNames
 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.17";
+  version = "10.0.18";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "04ckq67qgkghh7yzrbzwidk7wn7yjml15gzj2c5p1hs2k7lr9lww";
+    sha256 = "1xcs391cm0vnl9bvx1470v8z4d77zqv16n6iaqi12jm0ma8fwvv8";
   };
 
-  buildInputs = [ cmake ncurses openssl pcre libxml2 boost judy bison libevent ]
+  buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
     ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames ];
 
@@ -89,6 +89,11 @@ stdenv.mkDerivation rec {
     mkdir -p $lib
     mv $out/lib $lib
     mv $out/include $lib
+
+    # Fix the mysql_config
+    sed -i $out/bin/mysql_config \
+      -e 's,-lz,-L${zlib}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl}/lib -lssl,g'
 
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin

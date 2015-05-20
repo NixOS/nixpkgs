@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     description = "Open source multimedia framework";
     homepage = "http://gstreamer.freedesktop.org";
     license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 
