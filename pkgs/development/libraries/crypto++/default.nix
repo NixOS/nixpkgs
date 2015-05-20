@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unzip, libtool }:
+{ fetchurl, stdenv, unzip }:
 
 stdenv.mkDerivation rec {
   name = "crypto++-5.6.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patches = (stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch)
             ++ (stdenv.lib.optional stdenv.isDarwin ./GNUmakefile.patch);
 
-  buildInputs = [ unzip libtool ];
+  buildInputs = [ unzip ];
 
   # Unpack the thing in a subdirectory.
   unpackPhase = ''
