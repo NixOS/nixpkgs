@@ -140,7 +140,7 @@ in
             done
           ''; # */
 
-        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon --verbose'';
+        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon'';
         serviceConfig.Type = "forking";
         serviceConfig.KillMode = "process"; # when stopping, leave the VMs alone
 
