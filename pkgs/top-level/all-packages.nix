@@ -7818,6 +7818,8 @@ let
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
+  sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
+
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; });
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
