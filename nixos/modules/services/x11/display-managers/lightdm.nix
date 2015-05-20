@@ -65,7 +65,7 @@ let
       greeters-directory = ${cfg.greeter.package}
       sessions-directory = ${dmcfg.session.desktops}
 
-      [SeatDefaults]
+      [Seat:*]
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
@@ -123,6 +123,11 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    assertions = [ {
+      assertion = !config.services.accounts-daemon.enable;
+      message = "Lightdm does not properly support gnome accountservice";
+    } ];
 
     services.xserver.displayManager.slim.enable = false;
 
