@@ -52,6 +52,10 @@ let
       ./2.7.3-no-libm.patch
     ];
 
+  postConfigure = if stdenv.isCygwin then ''
+    sed -i"" Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
+  '' else null;
+
   preConfigure = ''
       # Purity.
       sed -i"" setup.py -e 's,/(usr|sw|opt|pkg),/no-such-path,'
@@ -84,7 +88,7 @@ let
     pythonVersion = majorVersion;
 
     inherit majorVersion version src patches buildInputs preConfigure
-            configureFlags;
+            postConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
@@ -94,10 +98,6 @@ let
     DETERMINISTIC_BUILD = 1;
 
     setupHook = ./setup-hook.sh;
-
-    postConfigure = if stdenv.isCygwin then ''
-      sed -i"" Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
-    '' else null;
 
     postInstall =
       ''
