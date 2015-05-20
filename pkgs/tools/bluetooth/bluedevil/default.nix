@@ -3,6 +3,8 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "bluedevil";
+  # bluedevil must have the same major version (x.y) as libbluedevil!
+  # do not update this package without checking libbluedevil
   version = "2.1.1";
 
   src = fetchurl {
