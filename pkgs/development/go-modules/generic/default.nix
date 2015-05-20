@@ -72,6 +72,7 @@ go.stdenv.mkDerivation (
     else
         (cd go/src
         find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq | while read d; do
+            echo "$d" | grep -q "/_" && continue
             [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && continue
             local OUT
             if ! OUT="$(go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $d 2>&1)"; then
