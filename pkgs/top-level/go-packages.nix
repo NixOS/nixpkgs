@@ -179,6 +179,9 @@ let
     rev = "295c7b21db5d9525ad959e3382610f3aff029663";
     name = "asn1-ber-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/vanackere/asn1-ber";
+    goPackageAliases = [
+      "github.com/nmcclain/asn1-ber"
+    ];
 
     src = fetchFromGitHub {
       inherit rev;
@@ -511,18 +514,17 @@ let
   };
 
   dbus = buildGoPackage rec {
-    rev = "88765d85c0fdadcd98a54e30694fa4e4f5b51133";
+    rev = "a5942dec6340eb0d57f43f2003c190ce06e43dea";
     name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/godbus/dbus";
-    preBuild = ''
-      cd "go/src/$goPackagePath"
-      rm -r _examples
-    '';
+
+    excludedPackages = "examples";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "godbus";
       repo = "dbus";
-      sha256 = "0k80wzdx8091y3012nd4giwgc08n1pj6lcr9i44dsapcjnb80jkn";
+      sha256 = "1vk31wal7ncvjwvnb8q1myrkihv1np46f3q8dndi5k0csflbxxdf";
     };
   };
 
@@ -947,6 +949,7 @@ let
     goPackagePath = "github.com/pmylund/go-cache";
     goPackageAliases = [
       "github.com/robfig/go-cache"
+      "github.com/influxdb/go-cache"
     ];
 
     src = fetchFromGitHub {
@@ -980,6 +983,19 @@ let
       owner = "hashicorp";
       repo = "go-checkpoint";
       sha256 = "1npasn9lmvx57nw3wkswwvl5k0wmn01jpalbwv832x5wq4r0nsz4";
+    };
+  };
+
+  go-colortext = buildGoPackage rec {
+    rev = "13eaeb896f5985a1ab74ddea58707a73d875ba57";
+    name = "go-colortext-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/daviddengcn/go-colortext";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "daviddengcn";
+      repo = "go-colortext";
+      sha256 = "0618xs9lc5xfp5zkkb5j47dr7i30ps3zj5fj0zpv8afqh2cc689x";
     };
   };
 
@@ -1076,13 +1092,15 @@ let
     rev = "70d039bee4b0e389e5be560491d8291708506f59";
     name = "go-log-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-log";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "coreos";
       repo = "go-log";
       sha256 = "1s95xmmhcgw4ascf4zr8c4ij2n4s3mr881nxcpmc61g0gb722b13";
     };
-    buildInputs = [ go-systemd osext ];
+
+    propagatedBuildInputs = [ osext go-systemd ];
   };
 
   rcrowley.go-metrics = buildGoPackage rec {
@@ -1229,16 +1247,19 @@ let
   };
 
   go-systemd = buildGoPackage rec {
-    rev = "2d21675230a81a503f4363f4aa3490af06d52bb8";
+    rev = "2688e91251d9d8e404e86dd8f096e23b2f086958";
     name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-systemd";
+
+    excludedPackages = "examples";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "coreos";
       repo = "go-systemd";
-      sha256 = "07g5c8khlcjnr86gniw3zr7l8jwrb9fhrj18zm5n6ccj24nidwam";
+      sha256 = "0c1k3y5msc1xplhx0ksa7g08yqjaavns8s5zrfg4ig8az30gwlpa";
     };
-    subPackages = [ "activation" "daemon" "dbus" "journal" "login1" ];
+
     buildInputs = [ dbus ];
   };
 
@@ -1361,13 +1382,14 @@ let
     rev  = "2bf08f0edee49297358bd06a0c9bf44ba9051e9c";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/AdRoll/hologram";
+
     src = fetchFromGitHub {
       inherit rev;
       owner  = "copumpkin";
       repo   = "hologram";
       sha256 = "1ra6rdniqh3pi84fm29zam4irzv52a1dd2sppaqngk07f7rkkhi4";
     };
-    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir nmcclain.ldap g2s gox ];
+    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir vanackere.ldap g2s gox ];
   };
 
   http2 = buildGoPackage rec {
@@ -1412,7 +1434,7 @@ let
       sha256 = "0p3s0pbn5x294qg2r0qgysb5wmspsvjxhccxh2hs6hc24dl6y93b";
     };
 
-    buildInputs = [ bolt crypto statik liner toml pat gollectd ];
+    propagatedBuildInputs = [ bolt crypto statik liner toml pat gollectd ];
   };
 
   eckardt.influxdb-go = buildGoPackage rec {
@@ -1450,25 +1472,13 @@ let
     };
   };
 
-  nmcclain.ldap = buildGoPackage rec {
-    rev = "469fe5a802d61523b40dbb29bb8012a6b99b06b5";
-    name = "ldap-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/nmcclain/ldap";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner  = "nmcclain";
-      repo   = "ldap";
-      sha256 = "0xq5dc03ym0wlg9mvf4gbrmj74l4c8bgkls8fd7c98a128qw2srk";
-    };
-
-    propagatedBuildInputs = [ asn1-ber ];
-  };
-
   vanackere.ldap = buildGoPackage rec {
     rev = "e29b797d1abde6567ccb4ab56236e033cabf845a";
     name = "ldap-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/vanackere/ldap";
+    goPackageAliases = [
+      "github.com/nmcclain/ldap"
+    ];
 
     src = fetchFromGitHub {
       inherit rev;
@@ -1494,17 +1504,24 @@ let
   };
 
   log4go = buildGoPackage rec {
-    rev = "48";
-    name = "log4go-${rev}";
-    goPackagePath = "code.google.com/p/log4go";
+    rev = "cb4cc51cd03958183d3b637d0750497d88c2f7a8";
+    name = "log4go-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/ccpaging/log4go";
+    goPackageAliases = [
+      "github.com/alecthomas/log4go"
+      "code.google.com/p/log4go"
+    ];
 
-    src = fetchhg {
+    excludedPackages = "examples";
+
+    src = fetchFromGitHub {
       inherit rev;
-      url = "https://${goPackagePath}";
-      sha256 = "0q906sxrmwir295virfibqvdzlaj340qh2r4ysx1ccjrjazc0q5p";
+      owner = "ccpaging";
+      repo = "log4go";
+      sha256 = "0l9f86zzhla9hq35q4xhgs837283qrm4gxbp5lrwwls54ifiq7k2";
     };
 
-    subPackages = [ "./" ]; # don't build examples
+    propagatedBuildInputs = [ go-colortext ];
   };
 
   logrus = buildGoPackage rec {
@@ -1621,14 +1638,15 @@ let
   };
 
   msgpack = buildGoPackage rec {
-    rev = "20c1b88a6c7fc5432037439f4e8c582e236fb205";
+    rev = "9dbd4ac30c0b67927f0fb5557fb8341047bd35f7";
     name = "msgpack-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/vmihailenco/msgpack";
+    goPackagePath = "gopkg.in/vmihailenco/msgpack.v2";
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "vmihailenco";
       repo = "msgpack";
-      sha256 = "1dj5scpfhgnw0yrh0w6jlrb9d03halvsv4l3wgjhazrrimdqf0q0";
+      sha256 = "0nq9yb85hi3c35kwyl38ywv95vd8n7aywmj78wwylglld22nfmw2";
     };
   };
 
@@ -1757,6 +1775,7 @@ let
     goPackagePath = "github.com/kardianos/osext";
     goPackageAliases = [
       "github.com/bugsnag/osext"
+      "bitbucket.org/kardianos/osext"
     ];
 
     src = fetchFromGitHub {
