@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
     ]
+    # https://rt.perl.org/Ticket/Display.html?id=125223
+    ++ optional (stdenv.cc.cc.isGNU or false) ./gcc-5.patch
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ] ;
 

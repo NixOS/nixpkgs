@@ -1,0 +1,12 @@
+diff -Naur perl-5.20.2-orig/ext/Errno/Errno_pm.PL perl-5.20.2/ext/Errno/Errno_pm.PL
+--- perl-5.20.2-orig/ext/Errno/Errno_pm.PL	2015-01-31 14:48:53.000000000 -0500
++++ perl-5.20.2/ext/Errno/Errno_pm.PL	2015-05-20 07:39:49.255478199 -0400
+@@ -239,7 +239,7 @@
+ 		or die "Cannot exec $cpp";
+         } else {
+ 	    my $cpp = default_cpp();
+-	    open(CPPO,"$cpp < errno.c |")
++	    open(CPPO,"$cpp -P < errno.c |")
+ 		or die "Cannot exec $cpp";
+ 	}
+ 
