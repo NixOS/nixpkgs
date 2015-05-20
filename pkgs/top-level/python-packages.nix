@@ -8716,11 +8716,11 @@ let
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
-    version = "2.1.1";
+    version = "2.2.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/psutil/${name}.tar.gz";
-      sha256 = "14smqj57yjrm6hjz5n2annkgv0kmxckdhqvfx784f4d4lr52m0dz";
+      sha256 = "088msr52k4zrrrg649hj1xfsk8svm07ajvw0rg8ip6fhrbkwjp5i";
     };
 
     # failed tests: https://code.google.com/p/psutil/issues/detail?id=434
