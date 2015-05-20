@@ -830,4 +830,6 @@ self: super: {
   # https://github.com/kolmodin/binary/issues/74
   binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
 
+  # https://github.com/ekmett/lens-action/issues/5
+  lens-action = appendPatch super.lens-action ./lens-action.patch;
 }
