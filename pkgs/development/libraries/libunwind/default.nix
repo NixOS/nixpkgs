@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib"
     touch "$out/lib/libunwind-generic.so"
   '';
+
+  postInstall = ''
+    find $out -name \*.la | while read file; do
+      sed -i 's,-llzma,${xz}/lib/liblzma.la,' $file
+    done
+  '';
   
   meta = with stdenv.lib; {
     homepage = http://www.nongnu.org/libunwind;
