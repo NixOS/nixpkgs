@@ -842,6 +842,15 @@ let
 
   mpdcron = callPackage ../tools/audio/mpdcron { };
 
+  mpdris2 = callPackage ../tools/audio/mpdris2 {
+    python = pythonFull;
+    wrapPython = pythonPackages.wrapPython;
+    mpd = pythonPackages.mpd;
+    pygtk = pythonPackages.pygtk;
+    dbus = pythonPackages.dbus;
+    pynotify = pythonPackages.notify;
+  };
+
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
