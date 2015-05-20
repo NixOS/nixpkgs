@@ -1,7 +1,7 @@
 {stdenv, gcc, glibc, fetchurl, fetchgit, libtool, autoconf, automake, file, gnumake, which, zsh, m4, pkgconfig, perl, gnome, pango, sqlite, libxml2, zlib, gmp, smlnj }:
 
 stdenv.mkDerivation {
-  name = "aliceml-1.4-493cd356";
+  name = "aliceml-1.4-7d44dc8e";
 
   src = fetchgit {
     url = "https://github.com/aliceml/aliceml";
