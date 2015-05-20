@@ -41,8 +41,8 @@ self: super: {
   # Cabal_1_22_1_1 requires filepath >=1 && <1.4
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
-  # We have Cabal 1.22.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
+  jailbreak-cabal = pkgs.haskell.packages.ghc784.jailbreak-cabal;
 
   # GHC 7.10.x's Haddock binary cannot generate hoogle files.
   # https://ghc.haskell.org/trac/ghc/ticket/9921

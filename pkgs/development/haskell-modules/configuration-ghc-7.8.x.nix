@@ -37,6 +37,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # https://github.com/peti/jailbreak-cabal/issues/9
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
+
   # mtl 2.2.x needs the latest transformers.
   mtl_2_2_1 = super.mtl.override { transformers = self.transformers_0_4_3_0; };
 
