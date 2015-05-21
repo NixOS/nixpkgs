@@ -7474,7 +7474,9 @@ let
 
   physfs = callPackage ../development/libraries/physfs { };
 
-  pipelight = callPackage ../tools/misc/pipelight { };
+  pipelight = callPackage ../tools/misc/pipelight {
+    wineStaging = pkgsi686Linux.wineStaging;
+  };
 
   pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
