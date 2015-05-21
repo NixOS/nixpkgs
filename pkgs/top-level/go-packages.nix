@@ -292,6 +292,22 @@ let
     propagatedBuildInputs = [ panicwrap revel ];
   };
 
+  cascadia = buildGoPackage rec {
+    rev = "54abbbf07a45a3ef346ebe903e0715d9a3c19352"; #master
+    name = "cascadia-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/andybalholm/cascadia";
+    goPackageAliases = [ "code.google.com/p/cascadia" ];
+    propagatedBuildInputs = [ net ];
+    buildInputs = propagatedBuildInputs;
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "andybalholm";
+      repo = "cascadia";
+      sha256 = "1z21w6p5bp7mi2pvicvcqc871k9s8a6262pkwyjm2qfc859c203m";
+    };
+  };
+
   check-v1 = buildGoPackage rec {
     rev = "871360013c92e1c715c2de6d06b54899468a8a2d";
     name = "check-v1-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1303,6 +1319,20 @@ let
       owner = "samuel";
       repo = "go-zookeeper";
       sha256 = "0v6g14ygnjl1l2fykyfjyvnab82a70jy0zzmsn5swlyy45b9gq2d";
+    };
+  };
+
+  goquery = buildGoPackage rec {
+    rev = "f065786d418c9d22a33cad33decd59277af31471"; #tag v.0.3.2
+    name = "goquery-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/PuerkitoBio/goquery";
+    propagatedBuildInputs = [ cascadia net ];
+    buildInputs = [ cascadia net ];
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "PuerkitoBio";
+      repo = "goquery";
+      sha256 = "0bskm3nja1v3pmg7g8nqjkmpwz5p72h1h81y076x1z17zrjaw585";
     };
   };
 
