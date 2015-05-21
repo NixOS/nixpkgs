@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    configureFlags="--with-python-module-path=$out/${python.sitePackages}"
+    configureFlags="--with-python-module-path=$out/${python.sitePackages} --enable-openmp"
   '';
 
   buildInputs = [ automake m4 pkgconfig makeWrapper ];
