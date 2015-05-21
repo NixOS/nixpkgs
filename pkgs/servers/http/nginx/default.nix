@@ -102,9 +102,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-select_module"
     "--with-poll_module"
-    "--with-aio_module"
     "--with-threads"
-    "--with-file-aio"
     "--with-http_ssl_module"
     "--with-http_spdy_module"
     "--with-http_realip_module"
@@ -133,7 +131,8 @@ stdenv.mkDerivation rec {
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
     ++ optional set_misc "--add-module=${set-misc-ext}"
-    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
+    ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd)) 
+        [ "--with-file-aio" "--with-aio_module" ]
     ++ optional fluent "--add-module=${fluentd}";
 
 
