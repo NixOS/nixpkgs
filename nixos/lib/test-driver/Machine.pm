@@ -9,6 +9,7 @@ use FileHandle;
 use Cwd;
 use File::Basename;
 use File::Path qw(make_path);
+use File::Slurp;
 
 
 my $showGraphics = defined $ENV{'DISPLAY'};
@@ -490,6 +491,30 @@ sub screenshot {
             or die "cannot convert screenshot";
         unlink $tmp;
     }, { image => $name } );
+}
+
+
+# Take a screenshot and return the result as text using optical character
+# recognition.
+sub getScreenText {
+    my ($self) = @_;
+
+    my $text;
+    $self->nest("performing optical character recognition", sub {
+        my $tmpbase = Cwd::abs_path(".")."/ocr";
+        my $tmpin = $tmpbase."in.ppm";
+        my $tmpout = "$tmpbase.ppm";
+
+        $self->sendMonitorCommand("screendump $tmpin");
+        system("ppmtopgm $tmpin | pamscale 4 -filter=lanczos > $tmpout") == 0
+            or die "cannot scale screenshot";
+        unlink $tmpin;
+        system("tesseract $tmpout $tmpbase") == 0 or die "OCR failed";
+        unlink $tmpout;
+        $text = read_file("$tmpbase.txt");
+        unlink "$tmpbase.txt";
+    });
+    return $text;
 }
 
 
