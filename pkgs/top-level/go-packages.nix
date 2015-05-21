@@ -299,6 +299,7 @@ let
     goPackageAliases = [ "code.google.com/p/cascadia" ];
     propagatedBuildInputs = [ net ];
     buildInputs = propagatedBuildInputs;
+    doCheck = true;
 
     src = fetchFromGitHub {
       inherit rev;
@@ -1328,6 +1329,7 @@ let
     goPackagePath = "github.com/PuerkitoBio/goquery";
     propagatedBuildInputs = [ cascadia net ];
     buildInputs = [ cascadia net ];
+    doCheck = true;
     src = fetchFromGitHub {
       inherit rev;
       owner = "PuerkitoBio";
