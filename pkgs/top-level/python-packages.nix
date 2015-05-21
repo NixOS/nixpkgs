@@ -5811,23 +5811,25 @@ let
   };
 
   gyp = buildPythonPackage rec {
-    rev = "1977";
-    name = "gyp-r${rev}";
+    name = "gyp-${version}";
+    version = "2015-05-15";
 
-    src = pkgs.fetchsvn {
-      url = "http://gyp.googlecode.com/svn/trunk";
-      inherit rev;
-      sha256 = "0vnr75yd3bidysiwl9lljvf1dv6v9m9xqdnx0hdgyl92w689n9j8";
+    src = pkgs.fetchgit {
+      url = "https://chromium.googlesource.com/external/gyp.git";
+      rev = "9f594095c5b14f8bc518081a660e77890c294861";
+      sha256 = "1xqi44alnw9c31jg2hz7flz5nabq003b4jyin12h3s9zl82y6vd5";
     };
 
     patches = optionals pkgs.stdenv.isDarwin [
       ../development/python-modules/gyp/no-darwin-cflags.patch
     ];
 
-    meta = {
-      homepage = http://code.google.com/p/gyp;
-      license = stdenv.lib.licenses.bsd3;
-      description = "Generate Your Projects";
+    meta = with stdenv.lib; {
+      description = "A tool to generate native build files";
+      homepage = https://chromium.googlesource.com/external/gyp/+/master/README.md;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ codyopel ];
+      platforms = platforms.all;
     };
   };
 
