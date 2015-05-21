@@ -35,8 +35,10 @@ stdenv.mkDerivation rec {
     sha256 = "0as07vz3h5qa14ysvgsddb90m1qh605p6ccv6kf1sr1k3wsbql85";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ optHeimdal optZlib optLibsodium crypto ];
+  postPatch = ''
+    # Fix headers to use libsodium instead of NaCl
+    sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
+  '';
 
   cmakeFlags = [
     "-DWITH_GSSAPI=${if optHeimdal != null then "ON" else "OFF"}"
@@ -56,13 +58,12 @@ stdenv.mkDerivation rec {
     "-DWITH_EXAMPLES=OFF"
     "-DWITH_NACL=${if optLibsodium != null then "ON" else "OFF"}"
   ] ++ stdenv.lib.optionals (optLibsodium != null) [
-    "-DNACL_LIBRARY=${optLibsodium}/lib"
+    "-DNACL_LIBRARY=${optLibsodium}/lib/libsodium.so"
     "-DNACL_INCLUDE_DIR=${optLibsodium}/include"
   ];
 
-  postPatch = ''
-    sed -i 's,nacl/,sodium/,g' include/libssh/curve25519.h src/curve25519.c
-  '';
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ optHeimdal optZlib optLibsodium crypto ];
 
   meta = with stdenv.lib; {
     description = "SSH client library";
