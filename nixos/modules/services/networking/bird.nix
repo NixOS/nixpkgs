@@ -24,7 +24,7 @@ in
         type = types.string;
         description = ''
           BIRD Internet Routing Daemon configuration file.
-          http://bird.network.cz/?get_doc&f=bird-3.html
+          <link xlink:href='http://bird.network.cz/'/>
         '';
       };
 
