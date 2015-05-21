@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
       alsaLib nspr nss libnotify xlibs.pixman yasm mesa
       xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
-      xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
+      xlibs.libXext xlibs.xextproto /* sqlite */ unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
       gstreamer gst_plugins_base icu
     ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
-      "--enable-system-sqlite"
+      #"--enable-system-sqlite"
       "--enable-system-cairo"
       "--enable-gstreamer"
       "--enable-startup-notification"
