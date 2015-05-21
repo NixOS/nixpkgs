@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f0c2irb7qq49dabxhh99bwyvkxpfpscy4vynm7y800sz15lm2hs";
   };
 
+  patches = [ ./fix-paths.patch ];
+
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
     qt4
