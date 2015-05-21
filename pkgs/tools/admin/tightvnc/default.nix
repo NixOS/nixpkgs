@@ -1,5 +1,5 @@
 { stdenv, fetchurl, x11, zlib, libjpeg, imake, gccmakedep, libXmu
-, libXaw, libXpm, libXp , perl, xauth, fontDirectories }:
+, libXaw, libXpm, libXp , perl, xauth, fontDirectories, openssh }:
 
 stdenv.mkDerivation {
   name = "tightvnc-1.3.10";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   gcc = stdenv.cc.cc;
 
   buildInputs = [ x11 zlib libjpeg imake gccmakedep libXmu libXaw
-                  libXpm libXp xauth ];
+                  libXpm libXp xauth openssh ];
 
   patchPhase = ''
     fontPath=
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
         addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
       done
     done
+
+    sed -i "s@/usr/bin/ssh@${openssh}/bin/ssh@g" vncviewer/vncviewer.h
   '';
 
   buildPhase = ''
