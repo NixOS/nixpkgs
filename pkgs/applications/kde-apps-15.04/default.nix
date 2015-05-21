@@ -385,6 +385,12 @@ let
         buildInputs = super.libksane.buildInputs ++ [scope.KDE4 saneBackends];
       };
 
+      okular = super.okular // {
+        nativeBuildInputs =
+          super.okular.nativeBuildInputs
+          ++ [ pkgs.pkgconfig ];
+      };
+
       rocs = super.rocs // {
         buildInputs = super.rocs.buildInputs ++ (with kf5; [ kdelibs4support ]);
       };
