@@ -6658,7 +6658,9 @@ let
 
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
-  libgcrypt = callPackage ../development/libraries/libgcrypt { };
+  libgcrypt = callPackage ../development/libraries/libgcrypt {
+    libcap = if stdenv.isDarwin then null else pkgs.libcap;
+  };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
