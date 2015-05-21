@@ -256,6 +256,12 @@ bound to the variable name <varname>e2fsprogs</varname> in
   a package named <literal>hello-svn</literal> by
   <command>nix-env</command>.</para></listitem>
 
+  <listitem><para>If package is fetched from git's commit then
+  the version part of the name <emphasis>must</emphasis> be the date of that 
+  (fetched) commit. The date must be in <literal>"YYYY-MM-DD"</literal> format.
+  Also add <literal>"git"</literal> to the name - e.g.,
+  <literal>"pkgname-git-2014-09-23"</literal>.</para></listitem>
+
   <listitem><para>Dashes in the package name should be preserved
   in new variable names, rather than converted to underscores
   (which was convention up to around 2013 and most names
