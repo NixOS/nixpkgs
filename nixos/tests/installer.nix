@@ -366,7 +366,7 @@ in {
       '';
       preBootCommands = ''
         $machine->start;
-        sleep 60; # XXX: Hopefully this is long enough :-/
+        $machine->waitForText(qr/Enter passphrase/);
         $machine->sendChars("supersecret\n");
       '';
     };
