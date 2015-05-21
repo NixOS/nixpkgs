@@ -45,7 +45,8 @@ let
 
   # The configuration to install.
   makeConfig = { testChannel, grubVersion, grubDevice, grubIdentifier
-    , readOnly ? true, forceGrubReinstallCount ? 0 }:
+               , extraConfig, readOnly ? true, forceGrubReinstallCount ? 0
+               }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
@@ -70,6 +71,7 @@ let
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
 
         nix.binaryCaches = [ http://cache.nixos.org/ ];
+        ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
 
@@ -106,7 +108,9 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice, grubIdentifier }:
+  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice
+                  , grubIdentifier, extraConfig
+                  }:
     let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
       iface = if grubVersion == 1 then "scsi" else "virtio";
@@ -172,7 +176,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -210,7 +214,7 @@ let
 
       # We need to a writable nix-store on next boot
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -227,7 +231,7 @@ let
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
@@ -241,13 +245,16 @@ let
 
 
   makeInstallerTest = name:
-    { createPartitions, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid" }:
+    { createPartitions, testChannel ? false, grubVersion ? 2
+    , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", extraConfig ? ""
+    }:
     makeTest {
       inherit iso;
       name = "installer-" + name;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions testChannel grubVersion grubDevice grubIdentifier;
+        inherit createPartitions testChannel grubVersion grubDevice
+                grubIdentifier extraConfig;
       };
     };
 
