@@ -334,6 +334,43 @@ in {
         '';
     };
 
+  # Boot off an encrypted root partition
+  luksroot = makeInstallerTest "luksroot"
+    { createPartitions = ''
+        $machine->succeed(
+          "parted /dev/vda mklabel msdos",
+          "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+          "parted /dev/vda -- mkpart primary linux-swap 50M 1024M",
+          "parted /dev/vda -- mkpart primary 1024M -1s", # LUKS
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n supersecret | cryptsetup luksFormat -q /dev/vda3 -",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+        );
+      '';
+      # XXX: Currently, generate-config doesn't detect LUKS yet.
+      extraConfig = ''
+        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        boot.initrd.luks.devices = lib.singleton {
+          name = "cryptroot";
+          device = "/dev/vda3";
+          preLVM = true;
+        };
+      '';
+      preBootCommands = ''
+        $machine->start;
+        sleep 60; # XXX: Hopefully this is long enough :-/
+        $machine->sendChars("supersecret\n");
+      '';
+    };
+
   swraid = makeInstallerTest "swraid"
     { createPartitions =
         ''
