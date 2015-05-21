@@ -109,7 +109,7 @@ let
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
   testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice
-                  , grubIdentifier, extraConfig
+                  , grubIdentifier, preBootCommands, extraConfig
                   }:
     let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
@@ -194,6 +194,9 @@ let
       # Now see if we can boot the installation.
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
 
+      # For example to enter LUKS passphrase
+      ${preBootCommands}
+
       # Did /boot get mounted?
       $machine->waitForUnit("local-fs.target");
 
@@ -229,6 +232,7 @@ let
 
       # Check whether a writable store build works
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      ${preBootCommands}
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
           "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 2; } }",
@@ -239,22 +243,24 @@ let
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      ${preBootCommands}
       $machine->waitForUnit("network.target");
       $machine->shutdown;
     '';
 
 
   makeInstallerTest = name:
-    { createPartitions, testChannel ? false, grubVersion ? 2
-    , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", extraConfig ? ""
+    { createPartitions, preBootCommands ? "", extraConfig ? ""
+    , testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda"
+    , grubIdentifier ? "uuid"
     }:
     makeTest {
       inherit iso;
       name = "installer-" + name;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions testChannel grubVersion grubDevice
-                grubIdentifier extraConfig;
+        inherit createPartitions preBootCommands testChannel grubVersion
+                grubDevice grubIdentifier extraConfig;
       };
     };
 
