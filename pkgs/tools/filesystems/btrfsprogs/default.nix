@@ -3,7 +3,7 @@
 
 let version = "4.0"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
@@ -28,4 +28,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin wkennington ];
     platforms = platforms.linux;
   };
-}
+} // (if stdenv.isArm then {
+  # gcc bug with -O1 on ARM
+  patchPhase = "sed -i s/-O1/-O2/ configure";
+} else {}))

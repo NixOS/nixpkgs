@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, wine, perl, autoconf, utillinux
 , pulseaudio, libtxc_dxtn }:
 
-let version = "1.7.40";
+let version = "1.7.42";
     patch = fetchFromGitHub {
       owner = "wine-compholio";
       repo = "wine-staging";
       rev = "v${version}";
-      sha256 = "0l14yy6wbvbs2xrnn9z3a35lbnpl8ibkmc0vh983fimf9nxckpan";
+      sha256 = "1qi1hf1w97n17vmj137p7da75g01ky84a3xvs50xrmxb7f62sm17";
     };
 
 in assert (builtins.parseDrvName wine.name).version == version;

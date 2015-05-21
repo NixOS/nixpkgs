@@ -39,7 +39,7 @@ let
   optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
   optEsound = if libOnly then null else shouldUsePkg esound;
   optGlib = if libOnly then null else shouldUsePkg glib;
-  optGtk3 = if libOnly || hasXlibs then null else shouldUsePkg gtk3;
+  optGtk3 = if libOnly || !hasXlibs then null else shouldUsePkg gtk3;
   optGconf = if libOnly then null else shouldUsePkg gconf;
   optAvahi = if libOnly then null else shouldUsePkg avahi;
   optLibjack2 = if libOnly then null else shouldUsePkg libjack2;

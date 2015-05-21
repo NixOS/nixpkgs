@@ -1,0 +1,26 @@
+From 3f354d69881424c7c902408d22f9138412a872b4 Mon Sep 17 00:00:00 2001
+From: Ricardo Martins <ricardo@scarybox.net>
+Date: Sat, 9 May 2015 17:12:55 +0100
+Subject: [PATCH] Use `Vec::extend` instead of binary operation `+`.
+
+---
+ src/racer/nameres.rs | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/racer/nameres.rs b/src/racer/nameres.rs
+index 60636c6..ad1e01c 100644
+--- a/src/racer/nameres.rs
++++ b/src/racer/nameres.rs
+@@ -620,9 +620,9 @@ pub fn search_scope(start: usize, point: usize, src: &str,
+         }
+ 
+         // There's a good chance of a match. Run the matchers
+-        out = out + &*run_matchers_on_blob(src, start+blobstart, start+blobend,
+-                                      searchstr,
+-                                      filepath, search_type, local, namespace);
++        out.extend(run_matchers_on_blob(src, start+blobstart, start+blobend,
++                                        searchstr,
++                                        filepath, search_type, local, namespace));
+         if let ExactMatch = search_type {
+             if !out.is_empty() {
+                 return out.into_iter();

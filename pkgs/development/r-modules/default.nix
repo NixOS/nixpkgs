@@ -224,7 +224,7 @@ let
     fftwtools = [ pkgs.fftw ];
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl ];
-    git2r = [ pkgs.zlib ];
+    git2r = [ pkgs.zlib pkgs.openssl ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp ];
     graphscan = [ pkgs.gsl ];
@@ -665,9 +665,9 @@ let
     "babel" # requires edgeR
     "BACA" # requires RDAVIDWebService
     "BcDiag" # requires fabia
-    "beadarrayMSV" # requires Biobase, geneplotter, andlimma
     "bdvis" # requres taxize
     "beadarrayFilter" # requires beadarray
+    "beadarrayMSV" # requires Biobase, geneplotter, andlimma
     "bigGP" # requires MPI running. HELP WANTED!
     "bigpca" # requires NCmisc
     "Biograph" # requires mvna
@@ -681,13 +681,13 @@ let
     "CARrampsOcl" # depends on OpenCL
     "CHAT" # requires DNAcopy
     "ChemoSpec" # depends on broken speaq
-    "Crossover" # fails self-test
     "classGraph" # requires graph, and Rgraphviz
     "clpAPI" # requires clp
     "compendiumdb" # requires Biobase
     "CORM" # requires limma
     "cplexAPI" # requires CPLEX
     "crmn" # requires pcaMethods, and Biobase
+    "Crossover" # fails self-test
     "CrypticIBDcheck" # requires rJPSGCS
     "cudaBayesreg" # requres Rmath
     "curvHDR" # requires flowCore
@@ -702,6 +702,7 @@ let
     "demi" # requires affy, affxparser, and oligo
     "DepthProc" # requires samr
     "DiagrammeR" # requires V8 to build
+    "DiffCorr" # misses undeclared dependencies 'pcaMethods', 'multtest'
     "Digiroo2" # requires spatstat
     "dixon" # requires spatstat
     "dnet" # requires supraHex, graph, Rgraphviz, and Biobase
@@ -729,13 +730,14 @@ let
     "FunctionalNetworks" # requires breastCancerVDX, and Biobase
     "gamlss_demo" # requires rpanel
     "GeneticTools" # requires snpStats
+    "geojsonio" # requires V8 to build
     "GExMap" # requires Biobase and multtest
     "gitter" # requires EBImage
     "glmgraph" # test suite says: "undefined symbol: dgemv_"
     "gmatrix" # depends on proprietary cudatoolkit
+    "gMCP" # fails self-test
     "GOGANPA" # requires WGCNA
     "gputools" # depends on proprietary cudatoolkit
-    "gMCP" # fails self-test
     "gRain" # requires gRbase
     "gRapHD" # requires graph
     "gRbase" # requires RBGL, and graph
@@ -752,6 +754,7 @@ let
     "HierO" # requires rneos
     "HiPLARM" # requires MAGMA or PLASMA
     "hpoPlot" # requires Rgraphviz
+    "hsdar" # fails to build
     "HTSCluster" # requires edgeR
     "iFes" # depends on proprietary cudatoolkit
     "imputeLCMD" # requires pcaMethods, and impute
@@ -768,6 +771,7 @@ let
     "latticeDensity" # requires spatstat
     "leapp" # requires sva
     "lefse" # SDMTools.so: undefined symbol: X
+    "lfe" # fails to compile
     "lgcp" # requires rpanel
     "LinRegInteractive" # requires Rpanel
     "LogisticDx" # requires gRbase
@@ -785,13 +789,16 @@ let
     "MigClim" # SDMTools.So: Undefined Symbol: X
     "minimist" # requires broken V8
     "miRtest" # requires globaltest, GlobalAncova, and limma
+    "MixGHD" # requires mixture to build
     "mixture" # mixture.so: undefined symbol: dtrmm_
     "moduleColor" # requires impute
+    "mongolite" # doesn't find OpenSSL
     "msarc" # requires AnnotationDbi
     "MSeasy" # requires mzR, and xcms
     "MSeasyTkGUI" # requires MSeasyTkGUI
     "MSIseq" # requires IRanges
     "msSurv" # requires graph
+    "muir" # requires DiagrammeR to build
     "multiDimBio" # requires pcaMethods
     "mutossGUI" # requires mutoss
     "mutoss" # requires multtest
@@ -800,17 +807,14 @@ let
     "NCmisc" # requires BiocInstaller
     "netClass" # requires samr
     "nettools" # requires WGCNA
-    "NORRRM" # can't load SDMTools properly
     "netweavers" # requires BiocGenerics, Biobase, and limma
     "NLPutils" # requires qdap
+    "NORRRM" # can't load SDMTools properly
     "NSA" # requires aroma_core
     "OpenCL" # FIXME: requires CL/opencl.h
     "optBiomarker" # requires rpanel
     "ora" # requires ROracle
     "orQA" # requires genefilter
-    "pRF" # requires multtest
-    "PBSmapping" # fails its test suite for unclear reasons
-    "PBSddesolve" # fails its test suite for unclear reasons
     "PairViz" # requires graph
     "PANDA" # requires GO.db
     "ParDNAcopy" # requires DNAcopy
@@ -820,6 +824,8 @@ let
     "pbdDEMO" # requires pbdMPI
     "pbdDMAT" # requires pbdMPI
     "pbdSLAP" # requires pbdMPI
+    "PBSddesolve" # fails its test suite for unclear reasons
+    "PBSmapping" # fails its test suite for unclear reasons
     "pcaL1" # requires clp
     "pcalg" # requires graph, and RBGL
     "PCGSE" # requires safe
@@ -836,6 +842,7 @@ let
     "pmclust" # requires MPI running. HELP WANTED!
     "polyCub" # requires spatstat
     "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
+    "pRF" # requires multtest
     "propOverlap" # requires Biobase
     "protiq" # requires graph, and RBGL
     "PSCBS" # requires DNAcopy
@@ -845,17 +852,18 @@ let
     "qtlnet" # requires pcalg
     "qtpaint" # can't find QtCore libraries
     "QuACN" # requires graph, RBGL
+    "quanteda" # fails to build
     "QuasiSeq" # requires edgeR
     "RADami" # requires Biostrings
     "raincpc" # SDMTools.so: undefined symbol: X
     "rainfreq" # SDMTools.so: undefined symbol: X
     "RAM" # requires Heatplus
-    "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
     "RapidPolygonLookup" # depends on broken PBSmapping
+    "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
     "RbioRXN" # requires fmcsR, and KEGGREST
-    "RcppAPT" # configure script depends on /bin/sh
     "RcmdrPlugin_seeg" # requires seeg
     "Rcplex" # requires cplexAPI
+    "RcppAPT" # configure script depends on /bin/sh
     "RcppRedis" # requires Hiredis
     "rDEA" # no such file or directory
     "RDieHarder" # requires libdieharder
@@ -863,6 +871,8 @@ let
     "REBayes" # requires Rmosek
     "RefFreeEWAS" # requires isva
     "retistruct" # depends on broken RImageJROI
+    "rgp" # fails self-test
+    "rgpui" # depends on broken rgp
     "RImageJROI" # requires spatstat
     "rjade" # requires V8 to build
     "rJPSGCS" # requires chopsticks
@@ -879,8 +889,6 @@ let
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
     "RQuantLib" # requires QuantLib
     "RSAP" # requires SAPNWRFCSDK
-    "rgp" # fails self-test
-    "rgpui" # depends on broken rgp
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
@@ -888,12 +896,12 @@ let
     "RVideoPoker" # requires Rpanel
     "rysgran" # requires soiltexture
     "samr" # requires impute
-    "saps" # requires piano, and survcomp
     "SDD" # requires rpanel
     "seeg" # requires spatstat
     "selectspm" # depends on broken ecespa
     "semiArtificial" # requires RSNNS
     "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
+    "SeqGrapheR" # depends on Biostrings
     "sequenza" # requires copynumber
     "SGCS" # requires spatstat
     "siar" # requires spatstat
@@ -914,9 +922,9 @@ let
     "speaq" # requires MassSpecWavelet
     "spocc" # requires leafletR
     "SQDA" # requires limma
-    "Statomica" # requires Biobase, multtest
     "stagePop" # depends on broken PBSddesolve
-    "SeqGrapheR" # depends on Biostrings
+    "statar" # depends on broken lfe
+    "Statomica" # requires Biobase, multtest
     "stpp" # requires spatstat
     "structSSI" # requires multtest
     "strum" # requires Rgraphviz
@@ -929,25 +937,30 @@ let
     "topologyGSA" # requires gRbase
     "TR8" # requres taxize
     "trip" # requires spatstat
+    "TROM" # misses undeclared dependencies topGO', 'AnnotationDbi', 'GO.db'
     "ttScreening" # requires sva, and limma
     "V8" # compilation error
-    "vows" # requires rpanel
     "vmsbase" # depends on broken PBSmapping
+    "vows" # requires rpanel
     "WGCNA" # requires impute
     "wgsea" # requires snpStats
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "zoib" # tarball is invalid on server
-    "DiffCorr" # misses undeclared dependencies 'pcaMethods', 'multtest'
-    "TROM" # misses undeclared dependencies topGO', 'AnnotationDbi', 'GO.db'
-    "lfe" # fails to compile
-    "mongolite" # doesn't find OpenSSL
-    "quanteda" # fails to build
-    "statar" # depends on broken lfe
-    "hsdar" # fails to build
+    "timeSeq" # depends on missing edgeR
+    "survJamda" # depends on missing survcomp
+    "ssizeRNA" # depends on missing 'Biobase', 'edgeR', 'limma', 'qvalue'
+    "h5" # depends on missing h5 system library
   ];
 
   otherOverrides = old: new: {
+    xml2 = old.xml2.overrideDerivation (attrs: {
+      preConfigure = ''
+        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
+        export LIBXML_LIBDIR=${pkgs.libxml2}/lib
+      '';
+    });
+
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
     });

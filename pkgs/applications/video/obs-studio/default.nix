@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
                   jansson
                   libv4l
                   libxkbcommon
-                  qt5
+                  qt5.base
                   x264
                 ];
 

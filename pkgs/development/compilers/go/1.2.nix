@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc }:
+{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc
+, libgpgerror }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -14,7 +15,7 @@ stdenv.mkDerivation {
     sha1 = "3ce0ac4db434fc1546fec074841ff40dc48c1167";
   };
 
-  buildInputs = [ bison glibc bash makeWrapper ];
+  buildInputs = [ bison glibc bash makeWrapper libgpgerror ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 

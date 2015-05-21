@@ -1,4 +1,8 @@
-{ fetchurl, stdenv, shishi }:
+{ stdenv, fetchurl
+
+# Optional Dependencies
+, shishi ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "gss-1.0.2";
@@ -10,22 +14,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ shishi ];
 
+  configureFlags = [
+    "--${if shishi != null then "enable" else "disable"}-kereberos5"
+  ];
+
   doCheck = true;
 
-  meta = {
-    description = "Generic Security Service";
+  # Fixup .la files
+  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin && shishi != null) ''
+    sed -i 's,\(-lshishi\),-L${shishi}/lib \1,' $out/lib/libgss.la
+  '';
 
-    longDescription =
-      '' GSS is an implementation of the Generic Security Service Application
-	 Program Interface (GSS-API). GSS-API is used by network servers to
-	 provide security services, e.g., to authenticate SMTP/IMAP clients
-	 against SMTP/IMAP servers.
-       '';
-
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/gss/;
-    license = stdenv.lib.licenses.gpl3Plus;
-
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
+    description = "Generic Security Service";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ bjg wkennington ];
+    platforms = platforms.all;
   };
 }

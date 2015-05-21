@@ -282,8 +282,8 @@ in
   config = mkIf cfg.enable {
 
     users.extraUsers.sshd =
-      { description = "SSH privilege separation user";
-        home = "/var/empty";
+      { isSystemUser = true;
+        description = "SSH privilege separation user";
       };
 
     environment.etc = authKeysFiles ++ [

@@ -1,32 +1,43 @@
-{ stdenv, fetchurl, scons}:
+{ stdenv, fetchFromGitHub, cmake, python }:
 
-let
-  basename = "jsoncpp";
-  version = "0.6.0-rc2";
-  pkgname = "${basename}-src-${version}.tar.gz";
-in 
 stdenv.mkDerivation rec {
-  name = "${basename}-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/${basename}/${pkgname}";
-    sha256 = "10xj15nziqpwc6r3yznpb49wm4jqc5wakjsmj65v087mcg8r7lfl";
+  name = "jsoncpp-${version}";
+  version = "1.6.2";
+
+  src = fetchFromGitHub {
+    owner = "open-source-parsers";
+    repo = "jsoncpp";
+    rev = version;
+    sha256 = "0p92i0hx2k3g8mwrcy339b56bfq8qgpb65id8xllkgd2ns4wi9zi";
   };
 
-  buildInputs = [ scons ];
-
-  buildPhase = ''
-    mkdir -p $out
-    scons platform=linux-gcc check
+  /* During darwin bootstrap, we have a cp that doesn't understand the
+   * --reflink=auto flag, which is used in the default unpackPhase for dirs
+   */
+  unpackPhase = ''
+    cp -a ${src} ${src.name}
+    chmod -R +w ${src.name}
+    export sourceRoot=${src.name}
   '';
 
-  installPhase = ''
-    cp -r include $out
-    cp -r libs/* $out/lib
-  '';
+  nativeBuildInputs = [
+    # cmake can be built with the system jsoncpp, or its own bundled version.
+    # Obviously we cannot build it against the system jsoncpp that doesn't yet exist, so
+    # we make a bootstrapping build with the bundled version.
+    (cmake.override { jsoncpp = null; })
+    python
+  ];
+
+  cmakeFlags = [
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=1"
+  ];
 
   meta = {
-    homepage = http://jsoncpp.sourceforge.net;
-    repositories.svn = svn://svn.code.sf.net/p/jsoncpp/code;
+    inherit version;
+    homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A simple API to manipulate JSON data in C++";
+    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    license = with stdenv.lib.licenses; [ mit ];
+    branch = "1.6";
   };
 }

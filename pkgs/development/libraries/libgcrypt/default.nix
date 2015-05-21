@@ -1,44 +1,55 @@
-{ fetchurl, stdenv, libgpgerror }:
+{ stdenv, fetchurl
+, libgpgerror
 
-stdenv.mkDerivation (rec {
-  name = "libgcrypt-1.5.4";
+# Optional Dependencies
+, libcap ? null, pth ? null
+}:
+
+let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
+  optLibcap = shouldUsePkg libcap;
+  #optPth = shouldUsePkg pth;
+  optPth = null; # Broken as of 1.6.3
+in
+stdenv.mkDerivation rec {
+  name = "libgcrypt-1.6.3";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "d5f88d9f41a46953dc250cdb8575129b37ee2208401b7fa338c897f667c7fb33";
+    sha256 = "0pq2nwfqgggrsh8rk84659d80vfnlkbphwqjwahccd5fjdxr3d21";
   };
 
-  propagatedBuildInputs = [ libgpgerror ];
+  buildInputs = [ libgpgerror optLibcap optPth ];
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-asm";
+  configureFlags = [
+    (mkWith   (optLibcap != null) "capabilities"  null)
+    (mkEnable (optPth != null)    "random-daemon" null)
+  ];
 
-  doCheck = stdenv.system != "i686-linux"; # "basic" test fails after stdenv+glibc-2.18
-
-  # For some reason the tests don't find `libgpg-error.so'.
-  checkPhase = ''
-    LD_LIBRARY_PATH="${libgpgerror}/lib:$LD_LIBRARY_PATH" \
-    make check
+  # Make sure libraries are correct for .pc and .la files
+  # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
+  postInstall = ''
+    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/gcrypt.h
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin && optLibcap != null) ''
+    sed -i 's,\(-lcap\),-L${optLibcap}/lib \1,' $out/lib/libgcrypt.la
   '';
 
-  patches = [ ./no-build-timestamp.patch ];
+  doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = https://www.gnu.org/software/libgcrypt/;
     description = "General-pupose cryptographic library";
-
-    longDescription = ''
-      GNU Libgcrypt is a general purpose cryptographic library based on
-      the code from GnuPG.  It provides functions for all
-      cryptographic building blocks: symmetric ciphers, hash
-      algorithms, MACs, public key algorithms, large integer
-      functions, random numbers and a lot of supporting functions.
-    '';
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    homepage = http://gnupg.org/;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
+    repositories.git = git://git.gnupg.org/libgcrypt.git;
   };
-} # old "as" problem, see #616 and http://gnupg.10057.n7.nabble.com/Fail-to-build-on-freebsd-7-3-td30245.html
-  // stdenv.lib.optionalAttrs (stdenv.isFreeBSD && stdenv.isi686)
-    { configureFlags = [ "--disable-aesni-support" ]; }
-)
+}

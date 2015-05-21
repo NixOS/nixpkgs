@@ -59,11 +59,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.8.3";
+  version = "0.9.1";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1kw9hr957cxqgm2i94bgqc6sskm6bwhm0akzckilhs460b43h409";
+    sha256 = "17hpx8wb4b6hjhc208jn71p02s0gd6665vzyyy249k6jfn2nh8sx";
   };
 
   buildInputs = 

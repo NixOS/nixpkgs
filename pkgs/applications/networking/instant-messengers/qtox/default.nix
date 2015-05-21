@@ -28,7 +28,12 @@ in stdenv.mkDerivation rec {
     sha256 = "0a7zkhl4w2r5ifzs7vwws2lpplp6q5c4jllyf4ld64njgiz6jzip";
   };
 
-  buildInputs = [ pkgconfig libtoxcore qt5 openalSoft opencv libsodium filteraudio libXScrnSaver ];
+  buildInputs =
+    [
+      libtoxcore openalSoft opencv libsodium filteraudio
+      qt5.base qt5.tools libXScrnSaver
+    ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configurePhase = "qmake";
 

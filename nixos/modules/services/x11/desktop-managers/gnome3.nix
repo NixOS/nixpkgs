@@ -21,7 +21,7 @@ let
     destination = "/share/applications/mimeapps.list";
     text = ''
       [Default Applications]
-      inode/directory=nautilus.desktop
+      inode/directory=nautilus.desktop;org.gnome.Nautilus.desktop
     '';
   };
 
@@ -80,6 +80,7 @@ in {
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
+    hardware.bluetooth.enable = mkDefault true;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
@@ -108,7 +109,7 @@ in {
           # Override default mimeapps
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
-          # Let gnome-control-center find gnome-shell search providers
+          # Let gnome-control-center find gnome-shell search providers. GNOME 3.12 compatibility.
           export GNOME_SEARCH_PROVIDERS_DIR=${config.system.path}/share/gnome-shell/search-providers/
 
           # Let nautilus find extensions
@@ -120,6 +121,9 @@ in {
           # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
+          # Find the mouse
+          export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
+
           ${gnome3.gnome_session}/bin/gnome-session&
           waitPID=$!
         '';
@@ -128,52 +132,15 @@ in {
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
                                                 "${gnome3.glib_networking}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];
-    environment.systemPackages =
-      [ pkgs.desktop_file_utils
-        gnome3.glib_networking
-        gnome3.gtk3 # for gtk-update-icon-cache
-        pkgs.ibus
-        pkgs.shared_mime_info # for update-mime-database
-        gnome3.gvfs
-        gnome3.dconf
-        gnome3.gnome-backgrounds
-        gnome3.gnome_control_center
-        gnome3.gnome_icon_theme
-        gnome3.gnome-menus
-        gnome3.gnome_settings_daemon
-        gnome3.gnome_shell
-        gnome3.gnome_themes_standard
-      ] ++ cfg.sessionPath ++ (removePackagesByName [
-        gnome3.baobab
-        gnome3.empathy
-        gnome3.eog
-        gnome3.epiphany
-        gnome3.evince
-        gnome3.gucharmap
-        gnome3.nautilus
-        gnome3.totem
-        gnome3.vino
-        gnome3.yelp
-        gnome3.gnome-calculator
-        gnome3.gnome-contacts
-        gnome3.gnome-font-viewer
-        gnome3.gnome-screenshot
-        gnome3.gnome-shell-extensions
-        gnome3.gnome-system-log
-        gnome3.gnome-system-monitor
-        gnome3.gnome_terminal
-        gnome3.gnome-user-docs
+    environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
+      ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages);
 
-        gnome3.bijiben
-        gnome3.evolution
-        gnome3.file-roller
-        gnome3.gedit
-        gnome3.gnome-clocks
-        gnome3.gnome-music
-        gnome3.gnome-tweak-tool
-        gnome3.gnome-photos
-        gnome3.nautilus-sendto
-      ] config.environment.gnome3.excludePackages);
+    # Use the correct gnome3 packageSet
+    networking.networkmanager.basePackages =
+      { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
+        inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
+                         networkmanager_openconnect networkmanager_pptp
+                         networkmanager_l2tp; };
 
     # Needed for themes and backgrounds
     environment.pathsToLink = [ "/share" ];

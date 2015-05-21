@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
 , docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
-, ldb, popt, iniparser, pythonPackages, libbsd, nss_wrapper, socket_wrapper
+, ldb, popt, iniparser, subunit, libbsd, nss_wrapper, socket_wrapper
 , uid_wrapper, libarchive
 
 # source3/wscript optionals
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42
     docbook_xml_dtd_45 readline talloc ntdb tdb tevent ldb popt iniparser
-    pythonPackages.subunit libbsd nss_wrapper socket_wrapper uid_wrapper
+    subunit libbsd nss_wrapper socket_wrapper uid_wrapper
     libarchive
 
     kerberos zlib openldap cups pam avahi acl libaio fam libceph glusterfs

@@ -1,22 +1,27 @@
 { stdenv, fetchurl, libiconv, pkgconfig, libffi, libtasn1 }:
 
 stdenv.mkDerivation rec {
-  name = "p11-kit-0.20.2";
+  name = "p11-kit-0.23.1";
 
   src = fetchurl {
     url = "${meta.homepage}releases/${name}.tar.gz";
-    sha256 = "0z7gwmsj9hcmpk3ai2lwla59y3h9jc13xmqk5rijnv645zcm3v84";
+    sha256 = "1i3a1wdpagm0p3y1bwaz5x5rjhcpqbcrnhkcp10p259vkxk72wz5";
   };
-
-  postInstall = "rm -frv $out/share/gtk-doc";
-
-  configureFlags = "--without-libtasn1";
 
   buildInputs = [ pkgconfig libffi libtasn1 libiconv ];
 
-  meta = {
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--without-trust-paths"
+  ];
+
+  installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
+
+  meta = with stdenv.lib; {
     homepage = http://p11-glue.freedesktop.org/;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = platforms.all;
+    maintainers = with maintainers; [ urkud wkennington ];
+    license = licenses.mit;
   };
 }

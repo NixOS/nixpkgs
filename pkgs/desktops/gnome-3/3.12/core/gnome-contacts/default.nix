@@ -2,7 +2,7 @@
 , pkgconfig, gtk3, glib, hicolor_icon_theme, libsecret
 , bash, makeWrapper, itstool, folks, libnotify, libxml2
 , gnome3, librsvg, gdk_pixbuf, file, telepathy_glib, nspr, nss
-, libsoup, vala, dbus_glib, automake, autoconf }:
+, libsoup, vala, dbus_glib, automake114x, autoconf }:
 
 stdenv.mkDerivation rec {
   name = "gnome-contacts-3.12.0";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
                   libxml2 libsoup gnome3.gnome_online_accounts nspr nss
                   gdk_pixbuf gnome3.gnome_icon_theme librsvg
                   hicolor_icon_theme gnome3.gnome_icon_theme_symbolic
-                  vala automake autoconf db ];
+                  vala automake114x autoconf db ];
 
   preFixup = ''
     for f in "$out/bin/gnome-contacts" "$out/libexec/gnome-contacts-search-provider"; do

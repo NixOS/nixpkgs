@@ -155,7 +155,7 @@ self: super: {
   # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
+    patchPhase = "sed -i -e 's|attoparsec.*,|attoparsec,|' darcs.cabal";
   });
 
   # Needs the latest version of QuickCheck to compile.
@@ -517,10 +517,6 @@ self: super: {
   # https://github.com/cgaebel/stm-conduit/issues/33
   stm-conduit = dontCheck super.stm-conduit;
 
-  # https://github.com/fumieval/call/issues/3
-  call = markBrokenVersion "0.1.2" super.call;
-  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;     # depends on call
-
   # The install target tries to run lots of commands as "root". WTF???
   hannahci = markBroken super.hannahci;
 
@@ -665,7 +661,7 @@ self: super: {
   vivid = markBroken super.vivid;
 
   # Test suite wants to connect to $DISPLAY.
-  hsqml = dontCheck super.hsqml;
+  hsqml = dontCheck (super.hsqml.override { qt5 = pkgs.qt53; });
 
   # https://github.com/lookunder/RedmineHs/issues/4
   Redmine = markBroken super.Redmine;
@@ -673,7 +669,7 @@ self: super: {
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
-  # https://github.com/megantti/rtorrent-rpc/issues/1
+  # https://github.com/megantti/rtorrent-rpc/issues/2
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 
   # https://github.com/PaulJohnson/geodetics/issues/1
@@ -719,19 +715,10 @@ self: super: {
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
   click-clack = dontDistribute super.click-clack;
 
-  # https://github.com/prowdsponsor/esqueleto/issues/93
-  esqueleto = dontCheck super.esqueleto;
-
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
-
-  # https://github.com/alephcloud/hs-stm-queue-extras/issues/2
-  stm-queue-extras = overrideCabal super.stm-queue-extras (drv: { editedCabalFile = null; });
-
-  # https://github.com/GaloisInc/cryptol/issues/197
-  cryptol = overrideCabal super.cryptol (drv: {
-    postUnpack = "rm -v ${drv.pname}-${drv.version}/Setup.hs";
-  });
+  call = dontDistribute super.call;
+  rhythm-game-tutorial = dontDistribute super.rhythm-game-tutorial;
 
   # https://github.com/haskell/haddock/issues/378
   haddock-library = dontCheck super.haddock-library;
@@ -811,7 +798,10 @@ self: super: {
   # https://github.com/adamwalker/sdr/issues/1
   sdr = dontCheck super.sdr;
 
-  # https://github.com/Porges/email-validate-hs/issues/12
-  email-validate = dontCheck super.email-validate;
+  # https://github.com/bos/aeson/issues/253
+  aeson = dontCheck super.aeson;
+
+  # GNUTLS 3.4 causes linker errors: http://hydra.cryp.to/build/839563/nixlog/2/raw
+  gnutls = super.gnutls.override { gnutls = pkgs.gnutls33; };
 
 }

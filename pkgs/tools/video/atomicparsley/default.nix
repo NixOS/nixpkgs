@@ -1,11 +1,12 @@
 { stdenv, pkgs, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "AtomicParsley";
+  name = "${product}-${version}";
+  product = "AtomicParsley";
   version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/atomicparsley/${name}-source-${version}.zip";
+    url = "mirror://sourceforge/atomicparsley/${product}-source-${version}.zip";
     sha256 = "de83f219f95e6fe59099b277e3ced86f0430ad9468e845783092821dff15a72e";
   };
 

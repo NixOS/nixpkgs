@@ -1,6 +1,24 @@
 { callPackage, pkgs }:
 
 rec {
+  corePackages = with gnome3; [
+    pkgs.desktop_file_utils pkgs.ibus
+    pkgs.shared_mime_info # for update-mime-database
+    gtk3 # for gtk-update-icon-cache
+    glib_networking gvfs dconf gnome-backgrounds gnome_control_center
+    gnome-menus gnome_settings_daemon gnome_shell
+    gnome_themes_standard defaultIconTheme
+  ];
+
+  optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
+    gucharmap nautilus totem vino yelp gnome-bluetooth
+    gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
+    gnome-shell-extensions gnome-system-log gnome-system-monitor
+    gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
+    gnome-clocks gnome-music gnome-tweak-tool gnome-photos
+    nautilus-sendto
+  ];
+
   inherit (pkgs) glib gtk2 gtk3 gnome2;
   gnome3 = pkgs.gnome3_12 // { recurseForDerivations = false; };
 
@@ -15,6 +33,11 @@ rec {
   inherit (pkgs.gnome2) ORBit2;
   orbit = ORBit2;
   inherit (pkgs) libsoup;
+
+  version = "3.12";
+
+# Simplify the nixos module and gnome packages
+  defaultIconTheme = gnome_icon_theme_symbolic;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -51,6 +74,8 @@ rec {
   };
 
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
+
+  gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
 
   gnome-contacts = callPackage ./core/gnome-contacts { };
 
@@ -158,10 +183,12 @@ rec {
     inherit gnome3;
   };
 
+  networkmanager_l2tp = pkgs.networkmanager_l2tp.override {
+    inherit gnome3;
+  };
+
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings_desktop_schemas glib_networking
-      networkmanager_openvpn networkmanager_pptp networkmanager_vpnc
-      networkmanager_openconnect;
+    inherit gnome3 gsettings_desktop_schemas glib_networking;
   };
 
   rest = callPackage ./core/rest { };
@@ -177,10 +204,6 @@ rec {
   tracker = callPackage ./core/tracker { giflib = pkgs.giflib_5_0; };
 
   vte = callPackage ./core/vte { };
-
-  vte_038 = callPackage ./core/vte/0.38.0.nix { }; # To be moved in gnome 3.14 when available
-
-  vte-select-text = vte_038.override { selectTextPatch = true; };
 
   vino = callPackage ./core/vino { };
 

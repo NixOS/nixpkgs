@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, tcl, libXft, fontconfig }:
 
 stdenv.mkDerivation {
-  name = "tk-8.5.15";
+  name = "tk-${tcl.version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tcl/tk8.5.15-src.tar.gz";
-    sha256 = "0grj0k0hljvwiz913pafqibz18fzk9xjxf0nzqrd9zdls036fp41";
+    url = "mirror://sourceforge/tcl/tk${tcl.version}-src.tar.gz";
+    sha256 = "1h96vp15zl5xz0d4qp6wjyrchqmrmdm3q5k22wkw9jaxbvw9vy88";
   };
 
   patches = [ ./different-prefix-with-tcl.patch ];
@@ -14,9 +14,13 @@ stdenv.mkDerivation {
     ln -s $out/bin/wish* $out/bin/wish
   '';
 
-  configureFlags = "--with-tcl=${tcl}/lib";
+  preConfigure = ''
+    cd unix
+  '';
 
-  preConfigure = "cd unix";
+  configureFlags = [
+    "--with-tcl=${tcl}/lib"
+  ];
 
   buildInputs = [ pkgconfig tcl libXft ]
     ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
@@ -25,15 +29,17 @@ stdenv.mkDerivation {
 
   inherit tcl;
 
-  passthru = {
-    libPrefix = "tk8.5";
+  passthru = rec {
+    inherit (tcl) release version;
+    libPrefix = "tk${tcl.release}";
+    libdir = "lib/${libPrefix}";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A widget toolkit that provides a library of basic elements for building a GUI in many different programming languages";
     homepage = http://www.tcl.tk/;
-    license = stdenv.lib.licenses.tcltk;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.tcltk;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ lovek323 wkennington ];
   };
 }

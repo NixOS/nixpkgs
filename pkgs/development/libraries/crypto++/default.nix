@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x1mqpz1v071cfrw4grbw7z734cxnpry1qh2b6rsmcx6nkyd5gsw";
   };
 
-  patches = stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch;
+  patches = (stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch)
+            ++ (stdenv.lib.optional stdenv.isDarwin ./GNUmakefile.patch);
 
   buildInputs = [ unzip libtool ];
 

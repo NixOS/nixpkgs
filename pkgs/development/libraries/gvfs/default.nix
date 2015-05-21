@@ -5,15 +5,15 @@
 , gnomeSupport ? false, gnome,libgnome_keyring, gconf, makeWrapper }:
 
 let
-  ver_maj = "1.18";
-  version = "${ver_maj}.3";
+  ver_maj = "1.22";
+  version = "${ver_maj}.2";
 in
 stdenv.mkDerivation rec {
   name = "gvfs-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${ver_maj}/${name}.tar.xz";
-    sha256 = "0b27vidnrwh6yb2ga9a1k9qlrz6lrzsaz2hcxqbc1igivhb9g0hx";
+    sha256 = "8d08c4927b6c20d990498c23280017e7033b31a386f09b4c3ce5bedd20316250";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libtool ];
@@ -35,8 +35,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/libexec/gvfsd --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = {
-    description = "Virtual Filesystem support library" + stdenv.lib.optionalString gnomeSupport " (full GNOME support)";
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
+    platforms = platforms.linux;
+    maintainers = [ maintainers.lethalman ];
   };
 }

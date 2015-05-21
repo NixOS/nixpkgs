@@ -19,11 +19,8 @@ let snapshotHash = if stdenv.system == "i686-linux"
     snapshotName = "cargo-nightly-${platform}.tar.gz";
 in
 
-
 stdenv.mkDerivation {
-  inherit name;
-  inherit version;
-  inherit meta;
+  inherit name version meta;
 
   src = fetchurl {
     url = "https://static-rust-lang-org.s3.amazonaws.com/cargo-dist/${snapshotDate}/${snapshotName}";
@@ -35,10 +32,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p "$out"
     ./install.sh "--prefix=$out"
-    rm "$out/lib/rustlib/components" \
-       "$out/lib/rustlib/install.log" \
-       "$out/lib/rustlib/rust-installer-version" \
-       "$out/lib/rustlib/uninstall.sh"
+
+    ${postInstall}
   '' + (if stdenv.isLinux then ''
     patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
              --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/:${zlib}/lib" \

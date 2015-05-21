@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
-    qt4 qt5
-  ];
+    qt4
+  ] ++ stdenv.lib.optional (qt5 != null) qt5.base;
 
   configureFlags = [
     "--enable-liblightdm-gobject"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
-    ++ stdenv.lib.optional (qt5 != null) "--enable-liblightdm-qt5";
+    ++ stdenv.lib.optional ((qt5.base or null) != null) "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

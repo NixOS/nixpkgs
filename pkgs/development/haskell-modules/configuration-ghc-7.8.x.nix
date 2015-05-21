@@ -123,9 +123,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # Fix evaluation in GHC >=7.8: https://github.com/lambdabot/lambdabot/issues/116
-  lambdabot = appendPatch super.lambdabot ./lambdabot-fix-ghc78.patch;
-
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 

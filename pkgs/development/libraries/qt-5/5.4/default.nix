@@ -30,7 +30,7 @@ let
     importManifest ./manifest.nix { mirror = "http://download.qt.io"; };
   srcs = mapAttrs (name: manifest: manifest.src) manifest;
 
-  version = "5.4.0";
+  version = "5.4.1";
 
   callPackage = newScope (self // { inherit qtSubmodule; });
 
