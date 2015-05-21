@@ -7,7 +7,7 @@ let
   thrustEnv = buildEnv {
     name = "env-thrust";
     paths = [
-      stdenv.cc.gcc glib dbus gtk atk pango freetype fontconfig gdk_pixbuf
+      stdenv.cc.cc glib dbus gtk atk pango freetype fontconfig gdk_pixbuf
       cairo cups expat alsaLib nspr gconf nss xlibs.libXrender xlibs.libX11
       xlibs.libXext xlibs.libXdamage xlibs.libXtst xlibs.libXcomposite
       xlibs.libXi xlibs.libXfixes xlibs.libXrandr xlibs.libXcursor libcap
