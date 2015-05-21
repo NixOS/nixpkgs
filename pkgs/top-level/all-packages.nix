@@ -12449,7 +12449,9 @@ let
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
-  vanubi = callPackage ../applications/editors/vanubi { vala = vala_0_26; };
+  vanubi = callPackage ../applications/editors/vanubi {
+    vala = vala_0_26;
+  };
 
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
