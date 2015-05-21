@@ -518,6 +518,17 @@ sub getScreenText {
 }
 
 
+# Wait until a specific regexp matches the textual contents of the screen.
+sub waitForText {
+    my ($self, $regexp) = @_;
+    $self->nest("waiting for $regexp to appear on the screen", sub {
+        retry sub {
+            return 1 if $self->getScreenText =~ /$regexp/;
+        }
+    });
+}
+
+
 # Wait until it is possible to connect to the X server.  Note that
 # testing the existence of /tmp/.X11-unix/X0 is insufficient.
 sub waitForX {

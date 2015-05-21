@@ -245,6 +245,13 @@ startAll;
   </varlistentry>
 
   <varlistentry>
+    <term><methodname>waitForText</methodname></term>
+    <listitem><para>Wait until the supplied regular expressions matches
+    the textual contents of the screen by using optical character recognition
+    (see <methodname>getScreenText</methodname>).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><methodname>waitForWindow</methodname></term>
     <listitem><para>Wait until an X11 window has appeared whose name
     matches the given regular expression, e.g.,
