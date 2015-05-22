@@ -4331,6 +4331,8 @@ let
 
     pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
 
+    pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
+
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
