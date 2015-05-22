@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       cp contrib/ssh-copy-id.1 $out/share/man/man1/
 
       mkdir -p $out/etc/ssh
-      cp moduli $out/etc/ssh/
+      [ $(awk '$5 > 2000' moduli |wc -l) -gt 10 ] && ( awk '$5 > 2000' moduli > $out/etc/ssh/moduli ) || cp moduli $out/etc/ssh/
     '';
 
   installTargets = "install-nosysconf";
