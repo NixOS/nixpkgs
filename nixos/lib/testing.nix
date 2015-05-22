@@ -27,7 +27,7 @@ rec {
         cp ${./test-driver/Logger.pm} $libDir/Logger.pm
 
         wrapProgram $out/bin/nixos-test-driver \
-          --prefix PATH : "${qemu_kvm}/bin:${vde2}/bin:${netpbm}/bin:${coreutils}/bin:${tesseract}/bin" \
+          --prefix PATH : "${qemu_kvm}/bin:${vde2}/bin:${netpbm}/bin:${coreutils}/bin" \
           --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
@@ -68,7 +68,12 @@ rec {
 
 
   makeTest =
-    { testScript, makeCoverageReport ? false, name ? "unnamed", ... } @ t:
+    { testScript
+    , makeCoverageReport ? false
+    , enableOCR ? false
+    , name ? "unnamed"
+    , ...
+    } @ t:
 
     let
       testDriverName = "nixos-test-driver-${name}";
@@ -102,12 +107,14 @@ rec {
           vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "$vms" \
+            ${lib.optionalString enableOCR "--prefix PATH : '${tesseract}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
             --set testScript '"$testScript"' \
             --set VLANS '"${toString vlans}"'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "$vms" \
+            ${lib.optionalString enableOCR "--prefix PATH : '${tesseract}/bin'"} \
             --set tests '"startAll; joinAll;"' \
             --set VLANS '"${toString vlans}"' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}

@@ -158,7 +158,9 @@ startAll;
     <term><methodname>getScreenText</methodname></term>
     <listitem><para>Return a textual representation of what is currently
     visible on the machine's screen using optical character
-    recognition.</para></listitem>
+    recognition.</para>
+    <note><para>This requires passing <option>enableOCR</option> to the test
+    attribute set.</para></note></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -248,7 +250,9 @@ startAll;
     <term><methodname>waitForText</methodname></term>
     <listitem><para>Wait until the supplied regular expressions matches
     the textual contents of the screen by using optical character recognition
-    (see <methodname>getScreenText</methodname>).</para></listitem>
+    (see <methodname>getScreenText</methodname>).</para>
+    <note><para>This requires passing <option>enableOCR</option> to the test
+    attribute set.</para></note></listitem>
   </varlistentry>
 
   <varlistentry>

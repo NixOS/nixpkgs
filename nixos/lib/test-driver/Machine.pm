@@ -499,6 +499,9 @@ sub screenshot {
 sub getScreenText {
     my ($self) = @_;
 
+    system("type -P tesseract &> /dev/null") == 0
+        or die "getScreenText used but enableOCR is false";
+
     my $text;
     $self->nest("performing optical character recognition", sub {
         my $tmpbase = Cwd::abs_path(".")."/ocr";

@@ -252,12 +252,13 @@ let
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
     , testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda"
-    , grubIdentifier ? "uuid"
+    , grubIdentifier ? "uuid", enableOCR ? false
     }:
     makeTest {
       inherit iso;
       name = "installer-" + name;
       nodes = if testChannel then { inherit webserver; } else { };
+      inherit enableOCR;
       testScript = testScriptFun {
         inherit createPartitions preBootCommands testChannel grubVersion
                 grubDevice grubIdentifier extraConfig;
@@ -364,6 +365,7 @@ in {
           preLVM = true;
         };
       '';
+      enableOCR = true;
       preBootCommands = ''
         $machine->start;
         $machine->waitForText(qr/Enter passphrase/);
