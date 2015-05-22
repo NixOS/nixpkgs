@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat lethalman ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux; # Temporary until fixed for darwin
   };
 }
