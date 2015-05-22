@@ -808,11 +808,6 @@ self: super: {
   # Obsolete for GHC versions after GHC 6.10.x.
   utf8-prelude = markBroken super.utf8-prelude;
 
-  # https://github.com/jwiegley/gitlib/issues/46
-  gitlib = markBroken super.gitlib;
-  gitlib-sample = dontDistribute super.gitlib-sample;
-  gitlib-test = dontDistribute super.gitlib-test;
-
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
 
