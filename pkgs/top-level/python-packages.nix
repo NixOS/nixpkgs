@@ -3532,6 +3532,30 @@ let
     };
   };
 
+  natsort = buildPythonPackage rec {
+    name = "natsort-4.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/natsort/${name}.tar.gz";
+      md5 = "38cc0bb27c95bf549fe737d9f267f453";
+    };
+
+    buildInputs = with self;
+      [
+        hypothesis
+        pytestcov
+        pytestflakes
+        pytestpep8
+        covCore
+      ];
+
+    meta = with stdenv.lib; {
+      description = "Natural sorting for python";
+      homepage = https://github.com/SethMMorton/natsort;
+      license = licenses.mit;
+    };
+  };
+
   logster = buildPythonPackage {
     name = "logster-7475c53822";
     src = pkgs.fetchgit {
@@ -3657,6 +3681,46 @@ let
       maintainers = [ maintainers.berdario ];
     };
   };
+
+  pies = buildPythonPackage rec {
+    name = "pies-2.6.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pies/${name}.tar.gz";
+      md5 = "caba1ce15d312bf68d65a5d2cf9ccff2";
+    };
+
+    deps = if !isPy3k then [ self.pies2overrides self.enum34 ]
+           else if isPy33 then [ self.enum34 ]
+           else [];
+
+    propagatedBuildInputs = deps;
+
+    meta = with stdenv.lib; {
+      description = "The simplest way to write one program that runs on both Python 2 and Python 3";
+      homepage = https://github.com/timothycrosley/pies;
+      license = licenses.mit;
+    };
+  };
+
+  pies2overrides = pythonPackages.buildPythonPackage rec {
+    name = "pies2overrides-2.6.5";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pies2overrides/${name}.tar.gz";
+      md5 = "e73716454a2560341edf99d8f6fe5135";
+    };
+
+    propagatedBuildInputs = with self; [ ipaddress ];
+
+    meta = with stdenv.lib; {
+      description = "Defines override classes that should be included with pies only if running on Python2";
+      homepage = https://github.com/timothycrosley/pies;
+      license = licenses.mit;
+    };
+  };
+
 
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
@@ -6209,6 +6273,21 @@ let
     };
   };
 
+  ipaddress = buildPythonPackage rec {
+    name = "ipaddress-1.0.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipaddress/${name}.tar.gz";
+      md5 = "5d9ecf415cced476f7781cf5b9ef70c4";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Port of the 3.3+ ipaddress module to 2.6, 2.7, and 3.2";
+      homepage = https://github.com/phihag/ipaddress;
+      license = licenses.psfl;
+    };
+  };
+
   ipdb = buildPythonPackage rec {
     name = "ipdb-0.8";
     disabled = isPyPy;  # setupterm: could not find terminfo database
@@ -6239,6 +6318,25 @@ let
       homepage = https://bitbucket.org/micktwomey/pyiso8601/;
       description = "Simple module to parse ISO 8601 dates";
       maintainers = [ stdenv.lib.maintainers.phreedom ];
+    };
+  };
+
+  isort = buildPythonPackage rec {
+    name = "isort-3.9.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/isort/${name}.tar.gz";
+      md5 = "c0f4a7b16fde265f2ff4842c3e1cdd05";
+    };
+
+    buildInputs = with self; [ mock pytest ];
+
+    propagatedBuildInputs = with self; [ natsort pies ];
+
+    meta = with stdenv.lib; {
+      description = "A Python utility / library to sort Python imports";
+      homepage = https://github.com/timothycrosley/isort;
+      license = licenses.mit;
     };
   };
 
