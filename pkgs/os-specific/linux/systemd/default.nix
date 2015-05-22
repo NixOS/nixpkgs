@@ -10,24 +10,24 @@ assert stdenv.isLinux;
 assert pythonSupport -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
-  version = "219";
+  version = "220";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1ngj0d2wg6r58m4zycd2w0zkmkz71abbv0dl1h6h8z73ahs12msw";
+    sha256 = "0ck38kmhscbd7w0n1rbvw7drc9zpj5a77h02fljyf7i28265hn9n";
   };
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v219.
+      # https://github.com/edolstra/systemd/tree/nixos-v220.
       ./fixes.patch
     ];
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap kmod xz pam acl
+    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
-      libmicrohttpd linuxHeaders kexectools
+      libmicrohttpd kexectools
     ] ++ stdenv.lib.optionals pythonSupport [pythonPackages.python pythonPackages.lxml];
 
   configureFlags =
@@ -85,11 +85,9 @@ stdenv.mkDerivation rec {
 
       substituteInPlace src/journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
-    '';
 
-  # This is needed because systemd uses the gold linker, which doesn't
-  # yet have the wrapper script to add rpath flags automatically.
-  NIX_LDFLAGS = "-rpath ${pam}/lib -rpath ${libcap}/lib -rpath ${acl}/lib -rpath ${stdenv.cc.cc}/lib";
+      rm src/journal/audit_type-to-name.h src/udev/keyboard-keys-from-name.gperf
+    '';
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 

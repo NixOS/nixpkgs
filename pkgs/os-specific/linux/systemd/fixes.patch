@@ -1,134 +1,23 @@
-diff --git a/hwdb/60-keyboard.hwdb b/hwdb/60-keyboard.hwdb
-index 1b7d871..9f99ca8 100644
---- a/hwdb/60-keyboard.hwdb
-+++ b/hwdb/60-keyboard.hwdb
-@@ -259,7 +259,7 @@ keyboard:dmi:bvn*:bvr*:bd*:svnDell*:pnXPS*:pvr*
- # Dell XPS12 9Q33
- keyboard:dmi:bvn*:bvr*:bd*:svnDell*:pnXPS12-9Q33*:pvr*
-  KEYBOARD_KEY_88=wlan
-- KEYBOARD_KEY_65=switchvideomode                        # Screen Rotate
-+ KEYBOARD_KEY_65=direction                              # Screen Rotate
- 
- # Dell Latitude microphone mute
- keyboard:name:Dell WMI hotkeys:dmi:bvn*:bvr*:bd*:svnDell*:pnLatitude*
-@@ -586,7 +586,6 @@ keyboard:dmi:bvn*:bvr*:bd*:svnLENOVO*:pnS10-*:pvr*
-  KEYBOARD_KEY_f3=f21
- 
- # Thinkpad X200_Tablet
--keyboard:dmi:bvn*:bvr*:bd*:svnLENOVO*:pnThinkPad*X2*Tablet*:pvr*
- keyboard:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:pvrThinkPad*X2*Tablet*
-  KEYBOARD_KEY_5d=menu
-  KEYBOARD_KEY_63=fn
-@@ -596,7 +595,7 @@ keyboard:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:pvrThinkPad*X2*Tablet*
-  KEYBOARD_KEY_6c=direction                              # rotate screen
- 
- # ThinkPad X6 Tablet
--keyboard:dmi:bvn*:bvr*:bd*:svnLENOVO*:pnThinkPad*X6*:pvr*
-+keyboard:dmi:bvn*:bvr*:bd*:svnLENOVO*:pn*:pvrThinkPad*X6*Tablet*
-  KEYBOARD_KEY_6c=direction                              # rotate
-  KEYBOARD_KEY_68=leftmeta                               # toolbox
-  KEYBOARD_KEY_6b=esc                                    # escape
-@@ -1010,6 +1009,12 @@ keyboard:dmi:bvn*:bvr*:bd*:svn[sS][aA][mM][sS][uU][nN][gG]*:pn*7[34]0U3E*:pvr*
-  KEYBOARD_KEY_b3=!prog3                                 # Fn+F11 fan/cooling mode changer
-  KEYBOARD_KEY_d5=!wlan                                  # Fn+F12 wlan/airplane switch
- 
-+# ATIV Book 6 / 8
-+evdev:atkbd:dmi:bvn*:bvr*:bd*:svn[sS][aA][mM][sS][uU][nN][gG]*:pn*[68][78]0Z*:pvr*
-+ KEYBOARD_KEY_ce=!prog1                                 # Fn+F1 launch settings
-+ KEYBOARD_KEY_96=!kbdillumup                            # Fn+F10 keyboard backlight up
-+ KEYBOARD_KEY_97=!kbdillumdown                          # Fn+F9 keyboard backlight down
-+
- # SQ1US
- keyboard:dmi:bvn*:bvr*:bd*:svn[sS][aA][mM][sS][uU][nN][gG]*:pnSQ1US:pvr*
-  KEYBOARD_KEY_d4=menu
-diff --git a/rules/42-usb-hid-pm.rules b/rules/42-usb-hid-pm.rules
-index 4c300da..3721219 100644
---- a/rules/42-usb-hid-pm.rules
-+++ b/rules/42-usb-hid-pm.rules
-@@ -28,9 +28,9 @@ ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="14dd", ATTR{idProduct}=="0002"
- 
- # USB HID devices that are internal to the machine should also be safe to autosuspend
- 
--ACTION=="add", SUBSYSTEM=="usb", SUBSYSTEMS=="usb", ATTRS{removable}=="removable", GOTO="usb_hid_pm_end"
--ACTION=="add", SUBSYSTEM=="usb", SUBSYSTEMS=="usb", ATTRS{removable}=="unknown", GOTO="usb_hid_pm_end"
-+ACTION=="add", SUBSYSTEM=="usb", SUBSYSTEMS=="usb", ATTR{../removable}=="removable", GOTO="usb_hid_pm_end"
-+ACTION=="add", SUBSYSTEM=="usb", SUBSYSTEMS=="usb", ATTR{../removable}=="unknown", GOTO="usb_hid_pm_end"
- 
--ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="03", ATTRS{removable}=="fixed", TEST=="../power/control", ATTR{../power/control}="auto"
-+ACTION=="add", SUBSYSTEM=="usb", ATTR{bInterfaceClass}=="03", ATTR{../removable}=="fixed", TEST=="../power/control", ATTR{../power/control}="auto"
- 
- LABEL="usb_hid_pm_end"
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
-index b66d727..bb14135 100644
+index 10b90b8..db63c11 100644
 --- a/rules/99-systemd.rules.in
 +++ b/rules/99-systemd.rules.in
-@@ -14,10 +14,6 @@ KERNEL=="vport*", TAG+="systemd"
- SUBSYSTEM=="block", KERNEL!="ram*", TAG+="systemd"
- SUBSYSTEM=="block", KERNEL!="ram*", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}="0"
+@@ -13,10 +13,6 @@ KERNEL=="vport*", TAG+="systemd"
+ SUBSYSTEM=="block", TAG+="systemd"
+ SUBSYSTEM=="block", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}="0"
  
 -# Ignore encrypted devices with no identified superblock on it, since
 -# we are probably still calling mke2fs or mkswap on it.
--SUBSYSTEM=="block", KERNEL!="ram*", ENV{DM_UUID}=="CRYPT-*", ENV{ID_PART_TABLE_TYPE}=="", ENV{ID_FS_USAGE}=="", ENV{SYSTEMD_READY}="0"
+-SUBSYSTEM=="block", ENV{DM_UUID}=="CRYPT-*", ENV{ID_PART_TABLE_TYPE}=="", ENV{ID_FS_USAGE}=="", ENV{SYSTEMD_READY}="0"
 -
  # Ignore raid devices that are not yet assembled and started
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", TEST!="md/array_state", ENV{SYSTEMD_READY}="0"
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0"
-diff --git a/src/cgtop/cgtop.c b/src/cgtop/cgtop.c
-index 3c7ad40..f951c37 100644
---- a/src/cgtop/cgtop.c
-+++ b/src/cgtop/cgtop.c
-@@ -447,7 +447,7 @@ static int display(Hashmap *a) {
-         Group *g;
-         Group **array;
-         signed path_columns;
--        unsigned rows, n = 0, j, maxtcpu = 0, maxtpath = 0;
-+        unsigned rows, n = 0, j, maxtcpu = 0, maxtpath = 3; /* 3 for ellipsize() to work properly */
-         char buffer[MAX3(21, FORMAT_BYTES_MAX, FORMAT_TIMESPAN_MAX)];
- 
-         assert(a);
-diff --git a/src/core/load-fragment.c b/src/core/load-fragment.c
-index 90bf563..c614f77 100644
---- a/src/core/load-fragment.c
-+++ b/src/core/load-fragment.c
-@@ -1213,17 +1213,15 @@ int config_parse_exec_mount_flags(const char *unit,
-                         flags = MS_SHARED;
-                 else if (streq(t, "slave"))
-                         flags = MS_SLAVE;
--                else if (streq(word, "private"))
-+                else if (streq(t, "private"))
-                         flags = MS_PRIVATE;
-                 else {
--                        log_syntax(unit, LOG_ERR, filename, line, EINVAL,
--                                   "Failed to parse mount flag %s, ignoring: %s", t, rvalue);
-+                        log_syntax(unit, LOG_ERR, filename, line, EINVAL, "Failed to parse mount flag %s, ignoring: %s", t, rvalue);
-                         return 0;
-                 }
-         }
-         if (!isempty(state))
--                log_syntax(unit, LOG_ERR, filename, line, EINVAL,
--                           "Trailing garbage, ignoring.");
-+                log_syntax(unit, LOG_ERR, filename, line, EINVAL, "Trailing garbage, ignoring.");
- 
-         c->mount_flags = flags;
-         return 0;
-diff --git a/src/core/manager.c b/src/core/manager.c
-index 4775219..bc9b7ec 100644
---- a/src/core/manager.c
-+++ b/src/core/manager.c
-@@ -961,7 +961,7 @@ int manager_enumerate(Manager *m) {
-                 int q;
- 
-                 if (unit_vtable[c]->supported && !unit_vtable[c]->supported(m)) {
--                        log_info("Unit type .%s is not supported on this system.", unit_type_to_string(c));
-+                        log_debug("Unit type .%s is not supported on this system.", unit_type_to_string(c));
-                         continue;
-                 }
- 
 diff --git a/src/core/mount.c b/src/core/mount.c
-index f3977e6..52aa30a 100644
+index ba1dcf1..b700ce7 100644
 --- a/src/core/mount.c
 +++ b/src/core/mount.c
-@@ -357,7 +357,9 @@ static bool should_umount(Mount *m) {
+@@ -367,7 +367,9 @@ static bool should_umount(Mount *m) {
          MountParameters *p;
  
          if (path_equal(m->where, "/") ||
@@ -139,7 +28,7 @@ index f3977e6..52aa30a 100644
                  return false;
  
          p = get_mount_parameters(m);
-@@ -385,6 +387,8 @@ static int mount_add_default_dependencies(Mount *m) {
+@@ -395,6 +397,8 @@ static int mount_add_default_dependencies(Mount *m) {
           * virtual, and hence not worth the effort. */
          if (path_equal(m->where, "/") ||
              path_equal(m->where, "/usr") ||
@@ -149,10 +38,10 @@ index f3977e6..52aa30a 100644
              path_startswith(m->where, "/sys") ||
              path_startswith(m->where, "/dev"))
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index d5b86bf..9c66e7b 100644
+index ac52b30..d2e28f4 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
-@@ -14,8 +14,8 @@ systemduserunitdir=@userunitdir@
+@@ -13,8 +13,8 @@ systemduserunitdir=@userunitdir@
  systemduserpresetdir=@userpresetdir@
  systemdsystemconfdir=@pkgsysconfdir@/system
  systemduserconfdir=@pkgsysconfdir@/user
@@ -164,10 +53,10 @@ index d5b86bf..9c66e7b 100644
  systemdusergeneratordir=@usergeneratordir@
  systemdsleepdir=@systemsleepdir@
 diff --git a/src/core/umount.c b/src/core/umount.c
-index dd7df19..5bc0b12 100644
+index bee267a..dc88e17 100644
 --- a/src/core/umount.c
 +++ b/src/core/umount.c
-@@ -391,6 +391,8 @@ static int mount_points_list_umount(MountPoint **head, bool *changed, bool log_e
+@@ -392,6 +392,8 @@ static int mount_points_list_umount(MountPoint **head, bool *changed, bool log_e
                   * anyway, since we are running from it. They have
                   * already been remounted ro. */
                  if (path_equal(m->path, "/")
@@ -177,280 +66,37 @@ index dd7df19..5bc0b12 100644
                      || path_equal(m->path, "/usr")
  #endif
 diff --git a/src/core/unit.c b/src/core/unit.c
-index ee8e607..2d87702 100644
+index e380276..a875df7 100644
 --- a/src/core/unit.c
 +++ b/src/core/unit.c
-@@ -1648,12 +1648,15 @@ static void unit_check_binds_to(Unit *u) {
-                         continue;
- 
-                 stop = true;
-+                break;
+@@ -1676,7 +1676,8 @@ static void unit_check_binds_to(Unit *u) {
          }
  
-         if (!stop)
-                 return;
- 
--        log_unit_info(u->id, "Unit %s is bound to inactive unit. Stopping, too.", u->id);
-+        assert(other);
+         assert(other);
+-        log_unit_info(u, "Unit is bound to inactive unit %s. Stopping, too.", other->id);
 +        if (u->type != UNIT_MOUNT || detect_container(NULL) <= 0)
-+                log_unit_info(u->id, "Unit %s is bound to inactive unit %s. Stopping, too.", u->id, other->id);
++                log_unit_info(u, "Unit is bound to inactive unit %s. Stopping, too.", other->id);
  
          /* A unit we need to run is gone. Sniff. Let's stop this. */
-         manager_add_job(u->manager, JOB_STOP, u, JOB_FAIL, true, NULL, NULL);
+         r = manager_add_job(u->manager, JOB_STOP, u, JOB_FAIL, true, NULL, NULL);
 diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
-index 78ceeb6..9400496 100644
+index 9bbe9ff..d8a2889 100644
 --- a/src/fsck/fsck.c
 +++ b/src/fsck/fsck.c
-@@ -318,8 +318,7 @@ int main(int argc, char *argv[]) {
-                         return EXIT_FAILURE;
-                 }
+@@ -412,7 +412,7 @@ int main(int argc, char *argv[]) {
+                 } else
+                         dash_c[0] = 0;
  
--        cmdline[i++] = "/sbin/fsck";
--        cmdline[i++] =  arg_repair;
-+        cmdline[i++] = "/run/current-system/sw/sbin/fsck";
-         cmdline[i++] = "-T";
+-                cmdline[i++] = "/sbin/fsck";
++                cmdline[i++] = "/run/current-system/sw/sbin/fsck";
+                 cmdline[i++] =  arg_repair;
+                 cmdline[i++] = "-T";
  
-         /*
-diff --git a/src/journal-remote/journal-remote-parse.c b/src/journal-remote/journal-remote-parse.c
-index d9dea8d..afded7e 100644
---- a/src/journal-remote/journal-remote-parse.c
-+++ b/src/journal-remote/journal-remote-parse.c
-@@ -344,22 +344,25 @@ int process_data(RemoteSource *source) {
-                    LLLLLLLL0011223344...\n
-                 */
-                 sep = memchr(line, '=', n);
--                if (sep)
-+                if (sep) {
-                         /* chomp newline */
-                         n--;
--                else
-+
-+                        r = iovw_put(&source->iovw, line, n);
-+                        if (r < 0)
-+                                return r;
-+                } else {
-                         /* replace \n with = */
-                         line[n-1] = '=';
--                log_trace("Received: %.*s", (int) n, line);
- 
--                r = iovw_put(&source->iovw, line, n);
--                if (r < 0) {
--                        log_error("Failed to put line in iovect");
--                        return r;
-+                        source->field_len = n;
-+                        source->state = STATE_DATA_START;
-+
-+                        /* we cannot put the field in iovec until we have all data */
-                 }
- 
--                if (!sep)
--                        source->state = STATE_DATA_START;
-+                log_trace("Received: %.*s (%s)", (int) n, line, sep ? "text" : "binary");
-+
-                 return 0; /* continue */
-         }
- 
-@@ -382,6 +385,7 @@ int process_data(RemoteSource *source) {
- 
-         case STATE_DATA: {
-                 void *data;
-+                char *field;
- 
-                 assert(source->data_size > 0);
- 
-@@ -396,11 +400,12 @@ int process_data(RemoteSource *source) {
- 
-                 assert(data);
- 
--                r = iovw_put(&source->iovw, data, source->data_size);
--                if (r < 0) {
--                        log_error("failed to put binary buffer in iovect");
-+                field = (char*) data - sizeof(uint64_t) - source->field_len;
-+                memmove(field + sizeof(uint64_t), field, source->field_len);
-+
-+                r = iovw_put(&source->iovw, field + sizeof(uint64_t), source->field_len + source->data_size);
-+                if (r < 0)
-                         return r;
--                }
- 
-                 source->state = STATE_DATA_FINISH;
- 
-diff --git a/src/journal-remote/journal-remote-parse.h b/src/journal-remote/journal-remote-parse.h
-index 8499f4e..22db550 100644
---- a/src/journal-remote/journal-remote-parse.h
-+++ b/src/journal-remote/journal-remote-parse.h
-@@ -42,7 +42,9 @@ typedef struct RemoteSource {
-         size_t offset;     /* offset to the beginning of live data in the buffer */
-         size_t scanned;    /* number of bytes since the beginning of data without a newline */
-         size_t filled;     /* total number of bytes in the buffer */
--        size_t data_size;  /* size of the binary data chunk being processed */
-+
-+        size_t field_len;  /* used for binary fields: the field name length */
-+        size_t data_size;  /* and the size of the binary data chunk being processed */
- 
-         struct iovec_wrapper iovw;
- 
-diff --git a/src/journal-remote/microhttpd-util.c b/src/journal-remote/microhttpd-util.c
-index 34d9337..a95fff1 100644
---- a/src/journal-remote/microhttpd-util.c
-+++ b/src/journal-remote/microhttpd-util.c
-@@ -179,6 +179,7 @@ static int verify_cert_authorized(gnutls_session_t session) {
-                 return log_error_errno(r, "gnutls_certificate_verification_status_print failed: %m");
- 
-         log_info("Certificate status: %s", out.data);
-+        gnutls_free(out.data);
- 
-         return status == 0 ? 0 : -EPERM;
- }
-@@ -238,10 +239,14 @@ static int get_auth_dn(gnutls_x509_crt_t client_cert, char **buf) {
-         return 0;
- }
- 
-+static inline void gnutls_x509_crt_deinitp(gnutls_x509_crt_t *p) {
-+        gnutls_x509_crt_deinit(*p);
-+}
-+
- int check_permissions(struct MHD_Connection *connection, int *code, char **hostname) {
-         const union MHD_ConnectionInfo *ci;
-         gnutls_session_t session;
--        gnutls_x509_crt_t client_cert;
-+        _cleanup_(gnutls_x509_crt_deinitp) gnutls_x509_crt_t client_cert = NULL;
-         _cleanup_free_ char *buf = NULL;
-         int r;
- 
-diff --git a/src/journal/journal-file.c b/src/journal/journal-file.c
-index 2845e05..9c9838f 100644
---- a/src/journal/journal-file.c
-+++ b/src/journal/journal-file.c
-@@ -2611,8 +2611,8 @@ int journal_file_open(
-                  * shouldn't be too bad, given that we do our own
-                  * checksumming). */
-                 r = chattr_fd(f->fd, true, FS_NOCOW_FL);
--                if (r < 0)
--                        log_warning_errno(errno, "Failed to set file attributes: %m");
-+                if (r < 0 && r != -ENOTTY)
-+                        log_warning_errno(r, "Failed to set file attributes: %m");
- 
-                 /* Let's attach the creation time to the journal file,
-                  * so that the vacuuming code knows the age of this
-@@ -2653,10 +2653,8 @@ int journal_file_open(
-         }
- 
-         r = mmap_cache_get(f->mmap, f->fd, f->prot, CONTEXT_HEADER, true, 0, PAGE_ALIGN(sizeof(Header)), &f->last_stat, &h);
--        if (r < 0) {
--                r = -errno;
-+        if (r < 0)
-                 goto fail;
--        }
- 
-         f->header = h;
- 
-diff --git a/src/libsystemd/sd-bus/bus-message.c b/src/libsystemd/sd-bus/bus-message.c
-index 2959303..c8402a2 100644
---- a/src/libsystemd/sd-bus/bus-message.c
-+++ b/src/libsystemd/sd-bus/bus-message.c
-@@ -441,7 +441,7 @@ int bus_message_from_header(
-                 size_t extra,
-                 sd_bus_message **ret) {
- 
--        sd_bus_message *m;
-+        _cleanup_free_ sd_bus_message *m = NULL;
-         struct bus_header *h;
-         size_t a, label_sz;
- 
-@@ -460,15 +460,13 @@ int bus_message_from_header(
-                 return -EBADMSG;
- 
-         h = header;
--        if (h->version != 1 &&
--            h->version != 2)
-+        if (!IN_SET(h->version, 1, 2))
-                 return -EBADMSG;
- 
-         if (h->type == _SD_BUS_MESSAGE_TYPE_INVALID)
-                 return -EBADMSG;
- 
--        if (h->endian != BUS_LITTLE_ENDIAN &&
--            h->endian != BUS_BIG_ENDIAN)
-+        if (!IN_SET(h->endian, BUS_LITTLE_ENDIAN, BUS_BIG_ENDIAN))
-                 return -EBADMSG;
- 
-         /* Note that we are happy with unknown flags in the flags header! */
-@@ -557,6 +555,7 @@ int bus_message_from_header(
- 
-         m->bus = sd_bus_ref(bus);
-         *ret = m;
-+        m = NULL;
- 
-         return 0;
- }
-diff --git a/src/libudev/libudev-monitor.c b/src/libudev/libudev-monitor.c
-index 3f1fee7..d0486e3 100644
---- a/src/libudev/libudev-monitor.c
-+++ b/src/libudev/libudev-monitor.c
-@@ -749,12 +749,20 @@ int udev_monitor_send_device(struct udev_monitor *udev_monitor,
-          * If we send to a multicast group, we will get
-          * ECONNREFUSED, which is expected.
-          */
--        if (destination != NULL)
-+        if (destination)
-                 smsg.msg_name = &destination->snl;
-         else
-                 smsg.msg_name = &udev_monitor->snl_destination;
-         smsg.msg_namelen = sizeof(struct sockaddr_nl);
-         count = sendmsg(udev_monitor->sock, &smsg, 0);
-+        if (count < 0) {
-+                if (!destination && errno == ECONNREFUSED) {
-+                        log_debug("passed unknown number of bytes to netlink monitor %p", udev_monitor);
-+                        return 0;
-+                } else
-+                        return -errno;
-+        }
-+
-         log_debug("passed %zi bytes to netlink monitor %p", count, udev_monitor);
-         return count;
- }
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index fb67251..5c15398 100644
+index 5009363..72c6887 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -827,10 +827,7 @@ static int mount_all(const char *dest) {
-         int r = 0;
- 
-         for (k = 0; k < ELEMENTSOF(mount_table); k++) {
--                _cleanup_free_ char *where = NULL;
--#ifdef HAVE_SELINUX
--                _cleanup_free_ char *options = NULL;
--#endif
-+                _cleanup_free_ char *where = NULL, *options = NULL;
-                 const char *o;
-                 int t;
- 
-@@ -3627,7 +3624,7 @@ int main(int argc, char *argv[]) {
-                 }
- 
-                 if (arg_ephemeral) {
--                        char *np;
-+                        _cleanup_free_ char *np = NULL;
- 
-                         /* If the specified path is a mount point we
-                          * generate the new snapshot immediately
-@@ -3657,13 +3654,13 @@ int main(int argc, char *argv[]) {
- 
-                         r = btrfs_subvol_snapshot(arg_directory, np, arg_read_only, true);
-                         if (r < 0) {
--                                free(np);
-                                 log_error_errno(r, "Failed to create snapshot %s from %s: %m", np, arg_directory);
-                                 goto finish;
-                         }
- 
-                         free(arg_directory);
-                         arg_directory = np;
-+                        np = NULL;
- 
-                         remove_subvol = true;
- 
-@@ -3700,6 +3697,7 @@ int main(int argc, char *argv[]) {
+@@ -4589,6 +4589,7 @@ int main(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -458,7 +104,7 @@ index fb67251..5c15398 100644
                          const char *p;
  
                          p = strjoina(arg_directory,
-@@ -3709,6 +3707,7 @@ int main(int argc, char *argv[]) {
+@@ -4598,6 +4599,7 @@ int main(int argc, char *argv[]) {
                                  r = -EINVAL;
                                  goto finish;
                          }
@@ -466,135 +112,11 @@ index fb67251..5c15398 100644
                  }
  
          } else {
-diff --git a/src/shared/acl-util.c b/src/shared/acl-util.c
-index a4ff1ab..cbe09d7 100644
---- a/src/shared/acl-util.c
-+++ b/src/shared/acl-util.c
-@@ -282,6 +282,77 @@ int parse_acl(char *text, acl_t *acl_access, acl_t *acl_default, bool want_mask)
-         return 0;
- }
- 
-+static int acl_entry_equal(acl_entry_t a, acl_entry_t b) {
-+        acl_tag_t tag_a, tag_b;
-+
-+        if (acl_get_tag_type(a, &tag_a) < 0)
-+                return -errno;
-+
-+        if (acl_get_tag_type(b, &tag_b) < 0)
-+                return -errno;
-+
-+        if (tag_a != tag_b)
-+                return false;
-+
-+        switch (tag_a) {
-+        case ACL_USER_OBJ:
-+        case ACL_GROUP_OBJ:
-+        case ACL_MASK:
-+        case ACL_OTHER:
-+                /* can have only one of those */
-+                return true;
-+        case ACL_USER: {
-+                _cleanup_(acl_free_uid_tpp) uid_t *uid_a, *uid_b;
-+
-+                uid_a = acl_get_qualifier(a);
-+                if (!uid_a)
-+                        return -errno;
-+
-+                uid_b = acl_get_qualifier(b);
-+                if (!uid_b)
-+                        return -errno;
-+
-+                return *uid_a == *uid_b;
-+        }
-+        case ACL_GROUP: {
-+                _cleanup_(acl_free_gid_tpp) gid_t *gid_a, *gid_b;
-+
-+                gid_a = acl_get_qualifier(a);
-+                if (!gid_a)
-+                        return -errno;
-+
-+                gid_b = acl_get_qualifier(b);
-+                if (!gid_b)
-+                        return -errno;
-+
-+                return *gid_a == *gid_b;
-+        }
-+        default:
-+                assert_not_reached("Unknown acl tag type");
-+        }
-+}
-+
-+static int find_acl_entry(acl_t acl, acl_entry_t entry, acl_entry_t *out) {
-+        acl_entry_t i;
-+        int r;
-+
-+        for (r = acl_get_entry(acl, ACL_FIRST_ENTRY, &i);
-+             r > 0;
-+             r = acl_get_entry(acl, ACL_NEXT_ENTRY, &i)) {
-+
-+                r = acl_entry_equal(i, entry);
-+                if (r < 0)
-+                        return r;
-+                if (r > 0) {
-+                        *out = i;
-+                        return 1;
-+                }
-+        }
-+        if (r < 0)
-+                return -errno;
-+        return 0;
-+}
-+
- int acls_for_file(const char *path, acl_type_t type, acl_t new, acl_t *acl) {
-         _cleanup_(acl_freep) acl_t old;
-         acl_entry_t i;
-@@ -297,8 +368,12 @@ int acls_for_file(const char *path, acl_type_t type, acl_t new, acl_t *acl) {
- 
-                 acl_entry_t j;
- 
--                if (acl_create_entry(&old, &j) < 0)
--                        return -errno;
-+                r = find_acl_entry(old, i, &j);
-+                if (r < 0)
-+                        return r;
-+                if (r == 0)
-+                        if (acl_create_entry(&old, &j) < 0)
-+                                return -errno;
- 
-                 if (acl_copy_entry(j, i) < 0)
-                         return -errno;
-diff --git a/src/shared/acl-util.h b/src/shared/acl-util.h
-index 90e88ff..fdb9006 100644
---- a/src/shared/acl-util.h
-+++ b/src/shared/acl-util.h
-@@ -41,5 +41,9 @@ int acls_for_file(const char *path, acl_type_t type, acl_t new, acl_t *acl);
- DEFINE_TRIVIAL_CLEANUP_FUNC(acl_t, acl_free);
- #define acl_free_charp acl_free
- DEFINE_TRIVIAL_CLEANUP_FUNC(char*, acl_free_charp);
-+#define acl_free_uid_tp acl_free
-+DEFINE_TRIVIAL_CLEANUP_FUNC(uid_t*, acl_free_uid_tp);
-+#define acl_free_gid_tp acl_free
-+DEFINE_TRIVIAL_CLEANUP_FUNC(gid_t*, acl_free_gid_tp);
- 
- #endif
-diff --git a/src/shared/barrier.c b/src/shared/barrier.c
-index f65363a..b7dca75 100644
---- a/src/shared/barrier.c
-+++ b/src/shared/barrier.c
-@@ -178,7 +178,7 @@ void barrier_set_role(Barrier *b, unsigned int role) {
-         assert(b);
-         assert(role == BARRIER_PARENT || role == BARRIER_CHILD);
-         /* make sure this is only called once */
--        assert(b->pipe[1] >= 0 && b->pipe[1] >= 0);
-+        assert(b->pipe[0] >= 0 && b->pipe[1] >= 0);
- 
-         if (role == BARRIER_PARENT)
-                 b->pipe[1] = safe_close(b->pipe[1]);
 diff --git a/src/shared/path-lookup.c b/src/shared/path-lookup.c
-index 291a2f4..468fb07 100644
+index f6a1271..9bec8e9 100644
 --- a/src/shared/path-lookup.c
 +++ b/src/shared/path-lookup.c
-@@ -113,17 +113,14 @@ static char** user_dirs(
+@@ -111,17 +111,14 @@ static char** user_dirs(
          const char * const config_unit_paths[] = {
                  USER_CONFIG_UNIT_PATH,
                  "/etc/systemd/user",
@@ -613,7 +135,7 @@ index 291a2f4..468fb07 100644
                  NULL
          };
  
-@@ -290,13 +287,11 @@ int lookup_paths_init(
+@@ -288,13 +285,11 @@ int lookup_paths_init(
                                          STRV_IFNOTNULL(generator_early),
                                          USER_CONFIG_UNIT_PATH,
                                          "/etc/systemd/user",
@@ -629,7 +151,7 @@ index 291a2f4..468fb07 100644
                                          STRV_IFNOTNULL(generator_late),
                                          NULL);
                  } else
-@@ -306,14 +301,11 @@ int lookup_paths_init(
+@@ -304,14 +299,11 @@ int lookup_paths_init(
                                  STRV_IFNOTNULL(generator_early),
                                  SYSTEM_CONFIG_UNIT_PATH,
                                  "/etc/systemd/system",
@@ -646,82 +168,8 @@ index 291a2f4..468fb07 100644
                                  STRV_IFNOTNULL(generator_late),
                                  NULL);
  
-diff --git a/src/shared/path-util.c b/src/shared/path-util.c
-index b9db7f1..5b7fed5 100644
---- a/src/shared/path-util.c
-+++ b/src/shared/path-util.c
-@@ -456,9 +456,9 @@ int path_is_mount_point(const char *t, bool allow_symlink) {
- 
-         union file_handle_union h = FILE_HANDLE_INIT;
-         int mount_id = -1, mount_id_parent = -1;
--        _cleanup_free_ char *parent = NULL;
-         struct stat a, b;
-         int r;
-+        _cleanup_close_ int fd = -1;
-         bool nosupp = false;
- 
-         /* We are not actually interested in the file handles, but
-@@ -468,7 +468,15 @@ int path_is_mount_point(const char *t, bool allow_symlink) {
-         if (path_equal(t, "/"))
-                 return 1;
- 
--        r = name_to_handle_at(AT_FDCWD, t, &h.handle, &mount_id, allow_symlink ? AT_SYMLINK_FOLLOW : 0);
-+        fd = openat(AT_FDCWD, t, O_RDONLY|O_NONBLOCK|O_DIRECTORY|O_CLOEXEC|(allow_symlink ? 0 : O_PATH));
-+        if (fd < 0) {
-+                if (errno == ENOENT)
-+                        return 0;
-+
-+                return -errno;
-+        }
-+
-+        r = name_to_handle_at(fd, "", &h.handle, &mount_id, AT_EMPTY_PATH);
-         if (r < 0) {
-                 if (errno == ENOSYS)
-                         /* This kernel does not support name_to_handle_at()
-@@ -485,12 +493,9 @@ int path_is_mount_point(const char *t, bool allow_symlink) {
-                         return -errno;
-         }
- 
--        r = path_get_parent(t, &parent);
--        if (r < 0)
--                return r;
- 
-         h.handle.handle_bytes = MAX_HANDLE_SZ;
--        r = name_to_handle_at(AT_FDCWD, parent, &h.handle, &mount_id_parent, AT_SYMLINK_FOLLOW);
-+        r = name_to_handle_at(fd, "..", &h.handle, &mount_id_parent, 0);
-         if (r < 0)
-                 if (errno == EOPNOTSUPP)
-                         if (nosupp)
-@@ -509,10 +514,7 @@ int path_is_mount_point(const char *t, bool allow_symlink) {
-                 return mount_id != mount_id_parent;
- 
- fallback:
--        if (allow_symlink)
--                r = stat(t, &a);
--        else
--                r = lstat(t, &a);
-+        r = fstatat(fd, "", &a, AT_EMPTY_PATH);
- 
-         if (r < 0) {
-                 if (errno == ENOENT)
-@@ -521,14 +523,8 @@ fallback:
-                 return -errno;
-         }
- 
--        free(parent);
--        parent = NULL;
--
--        r = path_get_parent(t, &parent);
--        if (r < 0)
--                return r;
- 
--        r = stat(parent, &b);
-+        r = fstatat(fd, "..", &b, 0);
-         if (r < 0)
-                 return -errno;
- 
 diff --git a/src/shared/path-util.h b/src/shared/path-util.h
-index bd0d324..be74c46 100644
+index 4f45cfd..e015606 100644
 --- a/src/shared/path-util.h
 +++ b/src/shared/path-util.h
 @@ -26,7 +26,7 @@
@@ -733,162 +181,11 @@ index bd0d324..be74c46 100644
  #define DEFAULT_PATH_SPLIT_USR DEFAULT_PATH_NORMAL ":/sbin:/bin"
  
  #ifdef HAVE_SPLIT_USR
-diff --git a/src/shared/selinux-util.c b/src/shared/selinux-util.c
-index a2233e0..a46ddf8 100644
---- a/src/shared/selinux-util.c
-+++ b/src/shared/selinux-util.c
-@@ -117,6 +117,7 @@ void mac_selinux_finish(void) {
-                 return;
- 
-         selabel_close(label_hnd);
-+        label_hnd = NULL;
- #endif
- }
- 
-diff --git a/src/systemctl/systemctl.c b/src/systemctl/systemctl.c
-index 21cb898..51d79b8 100644
---- a/src/systemctl/systemctl.c
-+++ b/src/systemctl/systemctl.c
-@@ -2881,6 +2881,9 @@ static int check_inhibitors(sd_bus *bus, enum action a) {
-                 if (!sv)
-                         return log_oom();
- 
-+                if ((pid_t) pid < 0)
-+                        return log_error_errno(ERANGE, "Bad PID %"PRIu32": %m", pid);
-+
-                 if (!strv_contains(sv,
-                                   a == ACTION_HALT ||
-                                   a == ACTION_POWEROFF ||
-@@ -2892,7 +2895,7 @@ static int check_inhibitors(sd_bus *bus, enum action a) {
-                 user = uid_to_name(uid);
- 
-                 log_warning("Operation inhibited by \"%s\" (PID "PID_FMT" \"%s\", user %s), reason is \"%s\".",
--                            who, pid, strna(comm), strna(user), why);
-+                            who, (pid_t) pid, strna(comm), strna(user), why);
- 
-                 c++;
-         }
-diff --git a/src/sysv-generator/sysv-generator.c b/src/sysv-generator/sysv-generator.c
-index 6e39b44..71c5cba 100644
---- a/src/sysv-generator/sysv-generator.c
-+++ b/src/sysv-generator/sysv-generator.c
-@@ -166,7 +166,7 @@ static int generate_unit_file(SysvStub *s) {
-         /* We might already have a symlink with the same name from a Provides:,
-          * or from backup files like /etc/init.d/foo.bak. Real scripts always win,
-          * so remove an existing link */
--        if (is_symlink(unit)) {
-+        if (is_symlink(unit) > 0) {
-                 log_warning("Overwriting existing symlink %s with real service", unit);
-                 (void) unlink(unit);
-         }
-diff --git a/src/timedate/timedatectl.c b/src/timedate/timedatectl.c
-index 4d89886..1cf46bb 100644
---- a/src/timedate/timedatectl.c
-+++ b/src/timedate/timedatectl.c
-@@ -109,14 +109,21 @@ static void print_status_info(const StatusInfo *i) {
- 
-         /* Enforce the values of /etc/localtime */
-         if (getenv("TZ")) {
--                fprintf(stderr, "Warning: Ignoring the TZ variable. Reading the system's time zone setting only.\n\n");
-+                fprintf(stderr, "Warning: Ignoring the TZ variable.\n\n");
-                 unsetenv("TZ");
-         }
- 
-+        r = setenv("TZ", i->timezone, false);
-+        if (r < 0) {
-+                log_error_errno(errno, "Failed to set TZ environment variable: %m");
-+                exit(EXIT_FAILURE);
-+        }
-+        tzset();
-+
-         if (i->time != 0) {
-                 sec = (time_t) (i->time / USEC_PER_SEC);
-                 have_time = true;
--        } else if (arg_transport == BUS_TRANSPORT_LOCAL) {
-+        } else if (IN_SET(arg_transport, BUS_TRANSPORT_REMOTE, BUS_TRANSPORT_MACHINE)) {
-                 sec = time(NULL);
-                 have_time = true;
-         } else
-diff --git a/src/tmpfiles/tmpfiles.c b/src/tmpfiles/tmpfiles.c
-index c948d4d..7c5772c 100644
---- a/src/tmpfiles/tmpfiles.c
-+++ b/src/tmpfiles/tmpfiles.c
-@@ -689,7 +689,7 @@ static int get_acls_from_arg(Item *item) {
-          * afterwards, so the mask can be added now if necessary. */
-         r = parse_acl(item->argument, &item->acl_access, &item->acl_default, !item->force);
-         if (r < 0)
--                log_warning_errno(errno, "Failed to parse ACL \"%s\": %m. Ignoring",
-+                log_warning_errno(r, "Failed to parse ACL \"%s\": %m. Ignoring",
-                                   item->argument);
- #else
-         log_warning_errno(ENOSYS, "ACLs are not supported. Ignoring");
-@@ -1205,8 +1205,6 @@ static int create_item(Item *i) {
-                 break;
-         }
- 
--        log_debug("%s created successfully.", i->path);
--
-         return 0;
- }
- 
-diff --git a/src/udev/udevadm-settle.c b/src/udev/udevadm-settle.c
-index fff5de7..e60c462 100644
---- a/src/udev/udevadm-settle.c
-+++ b/src/udev/udevadm-settle.c
-@@ -56,6 +56,7 @@ static int adm_settle(struct udev *udev, int argc, char *argv[]) {
-                 { "quiet",          no_argument,       NULL, 'q' }, /* removed */
-                 {}
-         };
-+        usec_t deadline;
-         const char *exists = NULL;
-         unsigned int timeout = 120;
-         struct pollfd pfd[1] = { {.fd = -1}, };
-@@ -105,6 +106,8 @@ static int adm_settle(struct udev *udev, int argc, char *argv[]) {
-                 return EXIT_FAILURE;
-         }
- 
-+        deadline = now(CLOCK_MONOTONIC) + timeout * USEC_PER_SEC;
-+
-         /* guarantee that the udev daemon isn't pre-processing */
-         if (getuid() == 0) {
-                 struct udev_ctrl *uctrl;
-@@ -146,6 +149,9 @@ static int adm_settle(struct udev *udev, int argc, char *argv[]) {
-                         break;
-                 }
- 
-+                if (timeout > 0 && now(CLOCK_MONOTONIC) >= deadline)
-+                        break;
-+
-                 /* wake up when queue is empty */
-                 if (poll(pfd, 1, MSEC_PER_SEC) > 0 && pfd[0].revents & POLLIN)
-                         udev_queue_flush(queue);
-diff --git a/src/vconsole/90-vconsole.rules.in b/src/vconsole/90-vconsole.rules.in
-index 0620096..35b9ad5 100644
---- a/src/vconsole/90-vconsole.rules.in
-+++ b/src/vconsole/90-vconsole.rules.in
-@@ -5,7 +5,6 @@
- #  the Free Software Foundation; either version 2.1 of the License, or
- #  (at your option) any later version.
- 
--# Kernel resets vconsole state when changing console drivers so run
--# systemd-vconsole-setup when fbcon loads
--
--ACTION=="add", SUBSYSTEM=="graphics", KERNEL=="fbcon", RUN+="@rootlibexecdir@/systemd-vconsole-setup"
-+# Each vtcon keeps its own state of fonts.
-+#
-+ACTION=="add", SUBSYSTEM=="vtconsole", KERNEL=="vtcon*", RUN+="@rootlibexecdir@/systemd-vconsole-setup"
 diff --git a/units/console-getty.service.m4.in b/units/console-getty.service.m4.in
-index 8ac51a4..972b86a 100644
+index 413d940..972b86a 100644
 --- a/units/console-getty.service.m4.in
 +++ b/units/console-getty.service.m4.in
-@@ -9,13 +9,13 @@
- Description=Console Getty
- Documentation=man:agetty(8)
- After=systemd-user-sessions.service plymouth-quit-wait.service
-+ConditionPathExists=/dev/console
- m4_ifdef(`HAVE_SYSV_COMPAT',
- After=rc-local.service
- )m4_dnl
+@@ -16,7 +16,6 @@ After=rc-local.service
  Before=getty.target
  
  [Service]
@@ -909,7 +206,7 @@ index e126f3a..925af72 100644
  Restart=always
  RestartSec=0
 diff --git a/units/emergency.service.in b/units/emergency.service.in
-index 2695d7b..a8b7a2e 100644
+index 52b9b1c..a3efec2 100644
 --- a/units/emergency.service.in
 +++ b/units/emergency.service.in
 @@ -16,7 +16,6 @@ Before=shutdown.target
@@ -918,7 +215,7 @@ index 2695d7b..a8b7a2e 100644
  WorkingDirectory=/root
 -ExecStartPre=-/bin/plymouth quit
  ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" or ^D to\\ntry again to boot into default mode.'
- ExecStart=-/bin/sh -c "@SULOGIN@; @SYSTEMCTL@ --fail --no-block default"
+ ExecStart=-/bin/sh -c "@SULOGIN@; @SYSTEMCTL@ --job-mode=fail --no-block default"
  Type=idle
 diff --git a/units/getty@.service.m4 b/units/getty@.service.m4
 index 46164ab..f194a31 100644
@@ -952,7 +249,7 @@ index 0934a87..7e30c9e 100644
  [Service]
  Type=oneshot
 diff --git a/units/rescue.service.in b/units/rescue.service.in
-index de73fee..25617ba 100644
+index 432e4f3..66bdf87 100644
 --- a/units/rescue.service.in
 +++ b/units/rescue.service.in
 @@ -16,7 +16,6 @@ Before=shutdown.target
@@ -961,7 +258,7 @@ index de73fee..25617ba 100644
  WorkingDirectory=/root
 -ExecStartPre=-/bin/plymouth quit
  ExecStartPre=-/bin/echo -e 'Welcome to emergency mode! After logging in, type "journalctl -xb" to view\\nsystem logs, "systemctl reboot" to reboot, "systemctl default" or ^D to\\nboot into default mode.'
- ExecStart=-/bin/sh -c "@SULOGIN@; @SYSTEMCTL@ --fail --no-block default"
+ ExecStart=-/bin/sh -c "@SULOGIN@; @SYSTEMCTL@ --job-mode=fail --no-block default"
  Type=idle
 diff --git a/units/serial-getty@.service.m4 b/units/serial-getty@.service.m4
 index 4522d0d..96daa5c 100644

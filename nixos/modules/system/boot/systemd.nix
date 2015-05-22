@@ -110,8 +110,6 @@ let
       "systemd-hibernate.service"
       "systemd-suspend.service"
       "systemd-hybrid-sleep.service"
-      "systemd-shutdownd.socket"
-      "systemd-shutdownd.service"
 
       # Reboot stuff.
       "reboot.target"
