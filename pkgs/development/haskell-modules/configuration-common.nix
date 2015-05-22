@@ -817,10 +817,6 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # https://github.com/ekmett/lens-action/issues/5
-  lens-action = markBroken super.lens-action;
-  aws-kinesis-client = markBroken super.aws-kinesis-client;
-
   # https://github.com/haskell-servant/servant-server/issues/45
   servant-server = markBroken super.servant-server;
   servant-client = dontDistribute super.servant-client;
