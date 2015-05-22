@@ -212,26 +212,26 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.2.0.12";
-    build = "141.1890965";
+    version = "1.2.1.1";
+    build = "141.1903250";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "01k96rql192ksnprc4yai97fcals7msf06m9bx1q7asn46887h7n";
+      sha256 = "17n0hsw0655b2w7a3avj5hw6njhv4gayxnsj1bwi9p3dgzr5d5zp";
     };
   };
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "1.0.2";
-    build = "141.871";
+    version = "1.0.3";
+    build = "141.873";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "1b9lsgl71pbcr5br0vkr2gn09b98dl9ykdxlqwzqpwnv7ckqcb69";
+      sha256 = "0ksxpml6fzj91hnzy59wlgz7q76dhc3715jalacq748y0i1jdh3f";
     };
   };
 
