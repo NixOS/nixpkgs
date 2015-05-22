@@ -4325,6 +4325,8 @@ let
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
+    pa_ounit = callPackage ../development/ocaml-modules/pa_ounit { };
+
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
