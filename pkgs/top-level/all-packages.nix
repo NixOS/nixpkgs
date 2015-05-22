@@ -805,7 +805,7 @@ let
   dtrx = callPackage ../tools/compression/dtrx { };
 
   duperemove = callPackage ../tools/filesystems/duperemove {
-    linuxHeaders = linuxHeaders_3_14;
+    linuxHeaders = linuxHeaders_3_18;
   };
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
@@ -9242,7 +9242,7 @@ let
 
   linuxHeaders_3_12 = callPackage ../os-specific/linux/kernel-headers/3.12.nix { };
 
-  linuxHeaders_3_14 = callPackage ../os-specific/linux/kernel-headers/3.14.nix { };
+  linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
 
   # We can choose:
   linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
@@ -9751,7 +9751,7 @@ let
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd {
-    linuxHeaders = linuxHeaders_3_14;
+    linuxHeaders = linuxHeaders_3_18;
   };
 
   systemtap = callPackage ../development/tools/profiling/systemtap {
