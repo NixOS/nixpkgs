@@ -17,6 +17,7 @@
 
 <itemizedlist>
 <listitem><para><literal>brltty</literal></para></listitem>
+<listitem><para><literal>marathon</literal></para></listitem>
 </itemizedlist>
 </para>
 
@@ -58,6 +59,15 @@ was accordingly renamed to <literal>bomi</literal>
 	Local printers are no longer shared or advertised by default. This behavior
 	can be changed by enabling <literal>services.printing.defaultShared</literal>
 	or <literal>services.printing.browsing</literal> respectively.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    HPLIP (printer, scanner, and fax drivers for HP devices) has
+    been updated to version <literal>3.15.4</literal>. This release
+    adds support for the <literal>arm6l-linux</literal> and
+    <literal>arm7l-linux</literal> platforms.
   </para>
 </listitem>
 

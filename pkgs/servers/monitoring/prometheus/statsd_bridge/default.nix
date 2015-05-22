@@ -13,7 +13,7 @@ goPackages.buildGoPackage rec {
   };
 
   buildInputs = with goPackages; [
-    fsnotify
+    fsnotify.v1
     prometheus.client_golang
   ];
 

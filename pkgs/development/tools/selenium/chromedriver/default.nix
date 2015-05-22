@@ -7,10 +7,12 @@
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
-  name = "chromedriver_linux64";
+  product = "chromedriver_linux64";
+  name = "${product}-2.14";
+  version = "2.14";
 
   src = fetchurl {
-    url = "http://chromedriver.storage.googleapis.com/2.14/${name}.zip";
+    url = "http://chromedriver.storage.googleapis.com/${version}/${product}.zip";
     sha256 = "18kpky1v5pc3fv6kv9i2mf4wr4qicmfhf27h9zqy18gh16rlwrin";
   };
 

@@ -2,7 +2,7 @@
 , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
 , libffi, cyrus_sasl, intltool, perl, perlPackages, pulseaudio
 , kbproto, libX11, libXext, xextproto, pygobject, libgcrypt, gtk3, vala
-, pygobject3, libogg, enableGTK3 ? false }:
+, pygobject3, libogg, enableGTK3 ? false, libgpgerror }:
 
 stdenv.mkDerivation rec {
   name = "gtk-vnc-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python gnutls cairo libtool pkgconfig glib libffi libgcrypt
     intltool cyrus_sasl pulseaudio perl perlPackages.TextCSV
-    gobjectIntrospection libogg
+    gobjectIntrospection libogg libgpgerror
   ] ++ (if enableGTK3 then [ gtk3 vala pygobject3 ] else [ gtk pygtk pygobject ]);
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";

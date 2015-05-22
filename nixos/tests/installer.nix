@@ -45,7 +45,8 @@ let
 
   # The configuration to install.
   makeConfig = { testChannel, grubVersion, grubDevice, grubIdentifier
-    , readOnly ? true, forceGrubReinstallCount ? 0 }:
+               , extraConfig, readOnly ? true, forceGrubReinstallCount ? 0
+               }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
@@ -70,6 +71,7 @@ let
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
 
         nix.binaryCaches = [ http://cache.nixos.org/ ];
+        ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
 
@@ -106,7 +108,9 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice, grubIdentifier }:
+  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice
+                  , grubIdentifier, preBootCommands, extraConfig
+                  }:
     let
       # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
       iface = if grubVersion == 1 then "scsi" else "virtio";
@@ -172,7 +176,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -189,6 +193,9 @@ let
 
       # Now see if we can boot the installation.
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+
+      # For example to enter LUKS passphrase
+      ${preBootCommands}
 
       # Did /boot get mounted?
       $machine->waitForUnit("local-fs.target");
@@ -210,7 +217,7 @@ let
 
       # We need to a writable nix-store on next boot
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -225,9 +232,10 @@ let
 
       # Check whether a writable store build works
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      ${preBootCommands}
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier; readOnly = false; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
@@ -235,19 +243,25 @@ let
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
+      ${preBootCommands}
       $machine->waitForUnit("network.target");
       $machine->shutdown;
     '';
 
 
   makeInstallerTest = name:
-    { createPartitions, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid" }:
+    { createPartitions, preBootCommands ? "", extraConfig ? ""
+    , testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda"
+    , grubIdentifier ? "uuid", enableOCR ? false
+    }:
     makeTest {
       inherit iso;
       name = "installer-" + name;
       nodes = if testChannel then { inherit webserver; } else { };
+      inherit enableOCR;
       testScript = testScriptFun {
-        inherit createPartitions testChannel grubVersion grubDevice grubIdentifier;
+        inherit createPartitions preBootCommands testChannel grubVersion
+                grubDevice grubIdentifier extraConfig;
       };
     };
 
@@ -319,6 +333,44 @@ in {
               "mount LABEL=nixos /mnt",
           );
         '';
+    };
+
+  # Boot off an encrypted root partition
+  luksroot = makeInstallerTest "luksroot"
+    { createPartitions = ''
+        $machine->succeed(
+          "parted /dev/vda mklabel msdos",
+          "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+          "parted /dev/vda -- mkpart primary linux-swap 50M 1024M",
+          "parted /dev/vda -- mkpart primary 1024M -1s", # LUKS
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "modprobe dm_mod dm_crypt",
+          "echo -n supersecret | cryptsetup luksFormat -q /dev/vda3 -",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda3 cryptroot",
+          "mkfs.ext3 -L nixos /dev/mapper/cryptroot",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+        );
+      '';
+      # XXX: Currently, generate-config doesn't detect LUKS yet.
+      extraConfig = ''
+        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        boot.initrd.luks.devices = lib.singleton {
+          name = "cryptroot";
+          device = "/dev/vda3";
+          preLVM = true;
+        };
+      '';
+      enableOCR = true;
+      preBootCommands = ''
+        $machine->start;
+        $machine->waitForText(qr/Enter passphrase/);
+        $machine->sendChars("supersecret\n");
+      '';
     };
 
   swraid = makeInstallerTest "swraid"

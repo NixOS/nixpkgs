@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
   postInstall = ''
     sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/gcrypt.h
-  '' + stdenv.lib.optionalString (optLibcap != null) ''
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin && optLibcap != null) ''
     sed -i 's,\(-lcap\),-L${optLibcap}/lib \1,' $out/lib/libgcrypt.la
   '';
 

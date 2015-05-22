@@ -53,6 +53,7 @@ in rec {
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
         (all nixos.tests.installer.lvm)
+        (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
         (all nixos.tests.installer.simple)
         (all nixos.tests.installer.simpleLabels)

@@ -62,10 +62,10 @@ let
     none = [ ];
   };
 
-  wrapArgs = "--prefix PYTHONPATH : \"$(toPythonPath $lib)\""
+  wrapArgs = "--set PYTHONPATH : \"$(toPythonPath $lib)\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${python.modules.readline})\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${pythonPackages.flask})\""
-    + " --prefix PATH : \"$out/bin\"";
+    + " --set PATH : \"$out/bin\"";
 in
 stdenv.mkDerivation {
   name="ceph-${version}";
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
     boost python libxml2 yasm libatomic_ops libs3 malloc pythonPackages.flask zlib
-  ] ++ optional (versionAtLeast version "0.95") [
+  ] ++ optional (versionAtLeast version "9.0.0") [
     git                   # Used for the gitversion string
     pythonPackages.sphinx # Used for docs
   ] ++ optional stdenv.isLinux [
@@ -158,6 +158,10 @@ stdenv.mkDerivation {
     (mkWith   (libaio != null)             "libaio"            null)
     (mkWith   (libxfs != null)             "libxfs"            null)
     (mkWith   (zfs != null)                "libzfs"            null)
+  ] ++ optional (versionAtLeast version "10.0.0") [
+    (mkWith   true                         "man-pages"         null)
+    (mkWith   false                        "tcmalloc-minimal"  null)
+    (mkWith   false                        "valgrind"          null)
   ];
 
   installFlags = [ "sysconfdir=\${out}/etc" ];

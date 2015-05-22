@@ -62,6 +62,7 @@
   ./programs/environment.nix
   ./programs/info.nix
   ./programs/ibus.nix
+  ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
@@ -251,6 +252,7 @@
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
+  ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
   ./services/networking/btsync.nix
   ./services/networking/charybdis.nix
@@ -289,6 +291,7 @@
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
+  ./services/networking/nix-serve.nix
   ./services/networking/notbit.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
@@ -461,5 +464,6 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
+  ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
 ]

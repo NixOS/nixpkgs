@@ -17,7 +17,7 @@ buildGoPackage rec {
   buildInputs = [
     goPackages.glog
     goPackages.protobuf
-    goPackages.fsnotify
+    goPackages.fsnotify.v1
     goPackages.httprouter
     goPackages.prometheus.client_golang
     goPackages.pushover

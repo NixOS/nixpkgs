@@ -9,13 +9,13 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-1.1.1";
+  name = "lxc-1.1.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = name;
-    sha256 = "04zpznd364862y3dwn97klvwfw9i2b6n1lh4fkci0z74c6z9svql";
+    sha256 = "149nq630h9bg87hb3cn086ci0cz29l7fp3i6qf1mqxv7hnildm8p";
   };
 
   buildInputs = [
@@ -41,18 +41,13 @@ stdenv.mkDerivation rec {
     "--enable-tests"
   ];
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-
-    # Remove the unneeded var/lib directories
-    rm -rf $out/var
-  '';
+  installFlags = [
+    "localstatedir=\${TMPDIR}"
+    "sysconfdir=\${out}/etc"
+    "sysconfigdir=\${out}/etc/default"
+    "READMEdir=\${TMPDIR}/var/lib/lxc/rootfs"
+    "LXCPATH=\${TMPDIR}/var/lib/lxc"
+  ];
 
   meta = {
     homepage = "http://lxc.sourceforge.net";

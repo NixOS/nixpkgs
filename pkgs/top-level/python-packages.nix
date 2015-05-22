@@ -643,6 +643,23 @@ let
     };
   });
 
+  attrdict = buildPythonPackage (rec {
+    name = "attrdict-2.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/attrdict/${name}.tar.gz";
+      md5 = "8a7c1a4e737fe9e2b2b8844c0f7746f8";
+    };
+
+    propagatedBuildInputs = with self; [ coverage nose six ];
+
+    meta = {
+      description = "A dict with attribute-style access";
+      homepage = https://github.com/bcj/AttrDict;
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
   audioread = buildPythonPackage rec {
     name = "audioread-1.2.1";
 
@@ -733,13 +750,13 @@ let
   }));
 
   azure = buildPythonPackage rec {
-    version = "0.10.2";
+    version = "0.11.0";
     name = "azure-${version}";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/azure/${name}.zip";
-      md5 = "8eaa0f8e649b21b6527a5ee801cef33a";
+      md5 = "5499efd85c54c757c0e757b5407ee47f";
     };
 
     propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
@@ -2088,7 +2105,7 @@ let
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi; 
+    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi;
   };
 
   cryptography_vectors = buildPythonPackage rec {
@@ -5756,13 +5773,18 @@ let
 
   greenlet = buildPythonPackage rec {
     name = "greenlet-${version}";
-    version = "0.4.5";
+    version = "0.4.7";
     disabled = isPyPy;  # builtin for pypy
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/greenlet/${name}.zip";
-      sha256 = "1gidivqcpn6i6k01bf3hgcn0m68h4b9srhpff9kgnk0c287z145r";
+      sha256 = "1zlmsygjw69xlq56vz1z5ivzy9bwc7knjaykn2yy2hv4w2j4yb7k";
     };
+
+    # see https://github.com/python-greenlet/greenlet/issues/85
+    preCheck = ''
+      rm tests/test_leaks.py
+    '';
 
     meta = with stdenv.lib; {
       homepage = http://pypi.python.org/pypi/greenlet;
@@ -5789,6 +5811,30 @@ let
   };
 
   gyp = buildPythonPackage rec {
+    name = "gyp-${version}";
+    version = "2015-05-15";
+
+    src = pkgs.fetchgit {
+      url = "https://chromium.googlesource.com/external/gyp.git";
+      rev = "9f594095c5b14f8bc518081a660e77890c294861";
+      sha256 = "1xqi44alnw9c31jg2hz7flz5nabq003b4jyin12h3s9zl82y6vd5";
+    };
+
+    patches = optionals pkgs.stdenv.isDarwin [
+      ../development/python-modules/gyp/no-darwin-cflags.patch
+    ];
+
+    meta = with stdenv.lib; {
+      description = "A tool to generate native build files";
+      homepage = https://chromium.googlesource.com/external/gyp/+/master/README.md;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ codyopel ];
+      platforms = platforms.all;
+    };
+  };
+
+  # Needed to build Chromium until #7402 is fixed.
+  gyp_svn1977 = pkgs.lowPrio (buildPythonPackage rec {
     rev = "1977";
     name = "gyp-r${rev}";
 
@@ -5807,7 +5853,7 @@ let
       license = stdenv.lib.licenses.bsd3;
       description = "Generate Your Projects";
     };
-  };
+  });
 
   guessit = buildPythonPackage rec {
     version = "0.9.4";
@@ -7706,11 +7752,11 @@ let
   };
 
   numpy = buildPythonPackage ( rec {
-    name = "numpy-1.8.2";
+    name = "numpy-1.9.2";
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/numpy/${name}.tar.gz";
-      sha256 = "1gcxlk3mf43pzpxvbw8kcfg173g4105j9szsfc1kxwablail6myf";
+      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
     };
 
     disabled = isPyPy;  # WIP
@@ -9055,6 +9101,28 @@ let
       license = "BSD";
     };
   };
+
+  pyblosxom = buildPythonPackage rec {
+    name = "pyblosxom-${version}";
+    disabled = isPy3k;
+    version = "1.5.3";
+    # FAIL:test_generate_entry and test_time
+    # both tests fail due to time issue that doesn't seem to matter in practice
+    doCheck = false; 
+    src = pkgs.fetchurl {
+      url = "https://github.com/pyblosxom/pyblosxom/archive/v${version}.tar.gz";
+      sha256 = "0de9a7418f4e6d1c45acecf1e77f61c8f96f036ce034493ac67124626fd0d885";
+    };
+  
+    propagatedBuildInputs = with self; [ pygments markdown ];
+
+    meta = with stdenv.lib; {
+      homepage = "http://pyblosxom.github.io";
+      description = "File-based blogging engine";
+      license = licenses.mit;
+    };
+  };
+
 
   pycapnp = buildPythonPackage rec {
     name = "pycapnp-0.5.1";
@@ -10687,7 +10755,7 @@ let
 
     # Remove Windows .bat files
     postInstall = ''
-      rm "$out"/bin/*.bat
+      rm "$out/bin/"*.bat
     '';
 
     meta = with stdenv.lib; {
@@ -10911,6 +10979,22 @@ let
 
   });
 
+  rpy2 = buildPythonPackage rec {
+    name = "rpy2-2.5.6";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rpy2/${name}.tar.gz";
+      md5 = "a36e758b633ce6aec6a5f450bfee980f";
+    };
+    buildInputs = with pkgs; [ readline R pcre lzma bzip2 zlib icu ];
+    propagatedBuildInputs = [ self.singledispatch ];
+    meta = {
+      homepage = http://rpy.sourceforge.net/rpy2;
+      description = "Python interface to R";
+      license = stdenv.lib.licenses.gpl2Plus;
+      maintainers = [ stdenv.lib.maintainers.joelmo ];
+    };
+  };
+
   rpyc = buildPythonPackage rec {
     name = "rpyc-${version}";
     version = "3.3.0";
@@ -11046,11 +11130,11 @@ let
 
 
   scipy = buildPythonPackage rec {
-    name = "scipy-0.14.0";
+    name = "scipy-0.15.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      md5 = "d7c7f4ccf8b07b08d6fe49d5cd51f85d";
+      sha256 = "16i5iksaas3m0hgbxrxpgsyri4a9ncbwbiazlhx5d6lynz1wn4m2";
     };
 
     buildInputs = [ pkgs.gfortran ];
@@ -11892,9 +11976,13 @@ let
       md5 = "470ca4da4a0081efc830f0d90dd91682";
     };
 
-    buildInputs = with self; [ nose mock ];
-
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
+    # acceptable reason to make all dependents unavailable on Python 3 as well
+    doCheck = !isPy3k;
 
     checkPhase = ''
       ${python.executable} sqla_nose.py
@@ -14829,7 +14917,7 @@ let
     propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
 
     preFixup = ''
-        wrapProgram $out/bin/* \
+        wrapProgram "$out/bin/"* \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
     '';
 
@@ -15365,7 +15453,7 @@ let
     };
   };
 
-  
+
   markdown2 = buildPythonPackage rec {
     name = "markdown2-${version}";
     version = "2.3.0";
@@ -15382,8 +15470,8 @@ let
       maintainers = with maintainers; [ hbunke ];
     };
   };
-  
-  
+
+
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";
     version = "1.25.0";
@@ -15403,7 +15491,7 @@ let
       maintainers = with maintainers; [ hbunke ];
      };
   };
-    
+
   thrift = buildPythonPackage rec {
     name = "thrift-${version}";
     version = "0.9.2";
@@ -15421,11 +15509,11 @@ let
 
     };
   };
-  
+
   geeknote = buildPythonPackage rec {
     version = "2015-03-02";
     name = "geeknote-${version}";
-    disabled = ! isPy27; 
+    disabled = ! isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "VitaliyRodnenko";
@@ -15434,13 +15522,13 @@ let
       sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
     };
 
-    /* build with tests fails with "Can not create application dirictory : 
+    /* build with tests fails with "Can not create application dirictory :
      /homeless-shelter/.geeknotebuilder". */
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ 
-        thrift 
-        beautifulsoup4 
+    propagatedBuildInputs = with self; [
+        thrift
+        beautifulsoup4
         markdown2
         sqlalchemy
         html2text

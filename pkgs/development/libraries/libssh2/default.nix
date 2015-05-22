@@ -55,13 +55,17 @@ stdenv.mkDerivation rec {
     (mkEnable false                      "examples-build" null)
   ];
 
-  postInstall = optionalString (optZlib != null) ''
-    sed -i 's,\(-lz\),-L${optZlib}/lib \1,' $out/lib/libssh2.la
+  postInstall = optionalString (!stdenv.isDarwin) (''
+    sed -i \
+  '' + optionalString (optZlib != null) ''
+      -e 's,\(-lz\),-L${optZlib}/lib \1,' \
   '' + optionalString (cryptoStr == "openssl") ''
-    sed -i 's,\(-lssl\|-lcrypto\),-L${openssl}/lib \1,' $out/lib/libssh2.la
+      -e 's,\(-lssl\|-lcrypto\),-L${openssl}/lib \1,' \
   '' + optionalString (cryptoStr == "libgcrypt") ''
-    sed -i 's,\(-lgcrypt\),-L${libgcrypt}/lib \1,' $out/lib/libssh2.la
-  '';
+      -e 's,\(-lgcrypt\),-L${libgcrypt}/lib \1,' \
+  '' + ''
+      $out/lib/libssh2.la
+  '');
 
   meta = {
     description = "A client-side C library implementing the SSH2 protocol";

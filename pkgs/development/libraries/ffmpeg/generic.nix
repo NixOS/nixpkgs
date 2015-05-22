@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
       "--disable-stripping"
     # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
-  ] ++ optional (stdenv.cc.cc.isClang or false) "--cc=clang";
+  ] ++ optional stdenv.cc.isClang "--cc=clang";
 
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
 

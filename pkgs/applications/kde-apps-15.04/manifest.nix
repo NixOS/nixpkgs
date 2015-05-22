@@ -2036,6 +2036,2040 @@
     };
   }
   {
+    name = stdenv.lib.nameFromURL "okular-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0j337gxam8fflqmaq9ggjgdjqmz53ank-okular-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/okular-15.04.1.tar.xz";
+      sha256 = "0yg9ivscx8nrdb9gq6xq6fm3y8lksnkcjdi0908axmqr8gxnh5c5";
+      name = "okular-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktux-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/909abb7a2m5zlw96wycw77ry7na2y6fc-ktux-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktux-15.04.1.tar.xz";
+      sha256 = "07v559yw4dpryfi7x4c7305dac9i5pkaj0m5dxbgsvsyc5qmmv18";
+      name = "ktux-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kcalc-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/gy0khp88rwah803y4r9q6jfghkjf857h-kcalc-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kcalc-15.04.1.tar.xz";
+      sha256 = "1w279713fipi82skai7f31q5yzn6yjm3bhd236igd9a24blzr2xa";
+      name = "kcalc-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kollision-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/sr1wh5xb0kj4yw5qy5qqf5mfrbwva980-kollision-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kollision-15.04.1.tar.xz";
+      sha256 = "0pq8pvqjynfmkafaxx9hl4dd8i0blq8vkzpnkhn3zkd450bwjdpc";
+      name = "kollision-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kgamma-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/3nifa51gknij2kxwlhsi70qz5xmc36dg-kgamma-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kgamma-15.04.1.tar.xz";
+      sha256 = "1w0sb9yk3wj38jqhbr1g72jagy99v2ihrm81r4wp274i602h9s2s";
+      name = "kgamma-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kapptemplate-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/illwb8qn9c9s67m5y4f5cx0d5f3l860k-kapptemplate-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kapptemplate-15.04.1.tar.xz";
+      sha256 = "09s0bk8kp338iy2bpq3gaa3sa52qk42zw4wxccgvxj9hjhh894nk";
+      name = "kapptemplate-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kalgebra-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0dz4823nkpmlvxby7ki3vb0ppfshwz45-kalgebra-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kalgebra-15.04.1.tar.xz";
+      sha256 = "17qxij5kdk0vymqfq1csmp071sscjc19pw9y39g59njk4bbdih3m";
+      name = "kalgebra-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "oxygen-icons-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ck0pb49q3kv6jzkmwliw1sdp8qbpzplr-oxygen-icons-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/oxygen-icons-15.04.1.tar.xz";
+      sha256 = "0asr2k1i0bm8pm9kj12c9s5bkwvz25pgsv167hb2cvfgm8ahyvlj";
+      name = "oxygen-icons-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdesdk-kioslaves-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/6w7jbq7m0kfjc37rnd6yf0ww3xdmb27x-kdesdk-kioslaves-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdesdk-kioslaves-15.04.1.tar.xz";
+      sha256 = "1pb258bhqikc9nmzs10y98gzd6na0sqyhgfzm1rq1hkmg4dkslwa";
+      name = "kdesdk-kioslaves-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "pairs-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ky762jidy4zxzwbllfxz46h7bq76v2df-pairs-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/pairs-15.04.1.tar.xz";
+      sha256 = "078j19w99v50zck64mrir0pr1r45k136lprdndxrpdmxq3zx36px";
+      name = "pairs-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "svgpart-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qgdyrm00y38n3xidjc5hqyi1aid7hn0y-svgpart-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/svgpart-15.04.1.tar.xz";
+      sha256 = "0mwbbx490i1z038jxkl8pyjaisks2k18nn5ccs1d65k5p67pcf3b";
+      name = "svgpart-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "amor-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qjyg81gbsdbdwc4vzxhfwvbc2r5jqbxc-amor-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/amor-15.04.1.tar.xz";
+      sha256 = "071wnfp1p9xd6asir4ssvb19jcfbwqg472znl5bw7n09qp5i7w9m";
+      name = "amor-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-bs-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zi9amimbp5ag5frcx0myg5ksc25whknc-kde-l10n-bs-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-bs-15.04.1.tar.xz";
+      sha256 = "1il3l1fmavigjndy8pwb0m9jvz0wzm39p0pm10b12vv394623i5f";
+      name = "kde-l10n-bs-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-he-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zs5dds7lhag23vwc2f83bd9wchi6k0zh-kde-l10n-he-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-he-15.04.1.tar.xz";
+      sha256 = "1jn8b5m4i9gxyfi2acjxjqcq0rzp9b70miji17vjc8q1a7241pmg";
+      name = "kde-l10n-he-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ug-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/8nlrz9m17ljb459zm6zq5nx8nnpwly16-kde-l10n-ug-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ug-15.04.1.tar.xz";
+      sha256 = "184xqway79p33fi8mc1xx6h0lply1r8xsj4qjjqnd30sg5hzn0lp";
+      name = "kde-l10n-ug-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-nb-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zgij63xalg6c9i3nm1bc6ap6zvspm8p2-kde-l10n-nb-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-nb-15.04.1.tar.xz";
+      sha256 = "1zlarins81lj11ljr1k1ma27wy6jyl7q33p2xisjwqi4qw6jmhza";
+      name = "kde-l10n-nb-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-de-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xy0x7in8bkpn6z6ac2v6cx3rvzij2jma-kde-l10n-de-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-de-15.04.1.tar.xz";
+      sha256 = "0gki5x7nlpvhxqwg6gqajh5swql6vvi9c37lys7ng2hpqc5xy7pf";
+      name = "kde-l10n-de-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-it-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/pr9ckm8k6y78gqb5y33ny8zm6hgbm6iy-kde-l10n-it-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-it-15.04.1.tar.xz";
+      sha256 = "1grfxlcc896zgq74q6cqy6l878bkyhchr4n8jcjiqzl7xn3p2q5c";
+      name = "kde-l10n-it-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-sv-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/rqbgin8gv0jy20hgl2j0pp56k93k4hp6-kde-l10n-sv-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-sv-15.04.1.tar.xz";
+      sha256 = "1wzpisiqdcsw698j1bf22gzjqawwmmcpslx6yhmrn8462k5iq0d7";
+      name = "kde-l10n-sv-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ja-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/5vbrfwv9s2klrxw3k6vz4833qvldarp0-kde-l10n-ja-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ja-15.04.1.tar.xz";
+      sha256 = "0jsnx9sjs1wz2f8i9bbl2v59f56azggqbl610idj0xdjn7zhk311";
+      name = "kde-l10n-ja-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-lv-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/j9mbwhpxw612xc9bilzhdgsayi9bqwjl-kde-l10n-lv-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-lv-15.04.1.tar.xz";
+      sha256 = "1c6g0rkd209j2q9m2q5rcf8j24gnc1g11kq87cjyj88jvidc0jpl";
+      name = "kde-l10n-lv-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-mr-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wziwfgk9xh3k79xz9pvpfjvjavjalc37-kde-l10n-mr-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-mr-15.04.1.tar.xz";
+      sha256 = "02hd8p6fzralbhz622nzxyn13p1lqxzyi229vc8ni7qz9mqia02k";
+      name = "kde-l10n-mr-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-nds-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vg6xw3206sf0nys7179l6a04ymiwqy3w-kde-l10n-nds-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-nds-15.04.1.tar.xz";
+      sha256 = "10hija63jh38pqm9j9lln2n705sfm13zn2h3rv4jl0q7m75hdl0m";
+      name = "kde-l10n-nds-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-zh_CN-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/2fk00654fxijdpmzqpf5qwbbxdlfxs25-kde-l10n-zh_CN-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-zh_CN-15.04.1.tar.xz";
+      sha256 = "16rsjrwfafvrgl48dnpbd2lnzja186zq7sq83dafg9hs636md6ff";
+      name = "kde-l10n-zh_CN-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ca-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/i30703ryicxz0zf6fk08mzpcr7wvyps8-kde-l10n-ca-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ca-15.04.1.tar.xz";
+      sha256 = "1008mb8ygak03dg0xxwsb54px0qashh1nnrpj0wwfqvgfbqa19fm";
+      name = "kde-l10n-ca-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-nl-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/mdcybgna88hx6jlmyj2m6ss32yw4i7z3-kde-l10n-nl-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-nl-15.04.1.tar.xz";
+      sha256 = "1s6zrnbhnpqwpb1mgrnayqvzggb1wrmc4w166y8j9bvjc0jahlfp";
+      name = "kde-l10n-nl-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-sr-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k179rl7a4avlv20w4spxzl19mk567jv3-kde-l10n-sr-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-sr-15.04.1.tar.xz";
+      sha256 = "1k6q4l7xllrs26xvrhfp8lbq0rgp49aq3r9y85crdmf5xy1zk4bc";
+      name = "kde-l10n-sr-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ro-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/8i9bjzsxfxh4n5w385k0figmm9cwfy65-kde-l10n-ro-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ro-15.04.1.tar.xz";
+      sha256 = "1svqhp23y5xmnmrba8vzamac6zf4lz02gfck9xi8kq5zhs1zky7w";
+      name = "kde-l10n-ro-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-hr-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vd6ihrlxp8m0hf7x3b05sglmn9xggjy1-kde-l10n-hr-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-hr-15.04.1.tar.xz";
+      sha256 = "00rn1947pw57cl4lwyx3hm7ic4w45lsh82m3sr3l8wa26qm6qz17";
+      name = "kde-l10n-hr-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-pl-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/8rp1dba5nc9b2b2m4dvl51rd74xrnkdn-kde-l10n-pl-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-pl-15.04.1.tar.xz";
+      sha256 = "09rs6abbm4bj0wy2s0y7b44lacraq1ypxvmil5cxj95apk6qy4sa";
+      name = "kde-l10n-pl-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-cs-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/bnwiza33rhdlnc61bvfx521cy02d8scc-kde-l10n-cs-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-cs-15.04.1.tar.xz";
+      sha256 = "1xl397n7vdfcpzg5qfcdbmw92p6ail90s15vvbxq2c4didysgrcz";
+      name = "kde-l10n-cs-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-is-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/7mxx0v3fd90vi123hw0k9hinmzxh4z1z-kde-l10n-is-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-is-15.04.1.tar.xz";
+      sha256 = "0c03jsb4lbp5wn0inzv3z86as0din40ypjh5jwj6zparjgg7v017";
+      name = "kde-l10n-is-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-hi-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/lwqhr1l80ki47ysz51ckiz05z9wxfphv-kde-l10n-hi-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-hi-15.04.1.tar.xz";
+      sha256 = "0gwin6w51iskb9wss97mg3pvwbfca67jqisz3v6qljy770p8d16j";
+      name = "kde-l10n-hi-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-es-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/iqfv8rf2qlaif5k6km6i68qpdha2p8ib-kde-l10n-es-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-es-15.04.1.tar.xz";
+      sha256 = "00j195zzqmirq3d64sq86n11fhp4gzd8wq7bvr4byg76crv1wsqv";
+      name = "kde-l10n-es-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-eo-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zkjp2bbs8d6j6k3wgwij5q1zaiaxvzhi-kde-l10n-eo-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-eo-15.04.1.tar.xz";
+      sha256 = "1kpd83bf72hjp8dir6cv75rb9wjnljdwxk4ff1mp2ph7rzhm8hxf";
+      name = "kde-l10n-eo-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-zh_TW-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/09hg9zfgwdgvdaxx985kk1xf9hky3r7h-kde-l10n-zh_TW-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-zh_TW-15.04.1.tar.xz";
+      sha256 = "1k4f9031572mxkg5rk2i98angr9rqcbqkp3zrg7blfpndbqbhzzl";
+      name = "kde-l10n-zh_TW-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-sk-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/5lzgd16vdwbziizylnx114dpaycm0xmy-kde-l10n-sk-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-sk-15.04.1.tar.xz";
+      sha256 = "1j96parls7psj0nr0305wdpdjxdrh8bqgbs89mrbk8wgzj9agsh8";
+      name = "kde-l10n-sk-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ru-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/hf6x95pyziykm6j2kxlaavr4585l19x5-kde-l10n-ru-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ru-15.04.1.tar.xz";
+      sha256 = "1lqc7fvw4spca4va4id24ni19s4gzxzf5qrzfqgav4xf6hwndi3c";
+      name = "kde-l10n-ru-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ga-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/x29ma96kp1mf389k6kjpl65fwqbkkjzk-kde-l10n-ga-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ga-15.04.1.tar.xz";
+      sha256 = "1m1dihyak0z5h6932rmb09q3hhbyzkck0gwnp3gdqa84m1b8kmid";
+      name = "kde-l10n-ga-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-kk-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/iacgwmkzrc75y7xf281zcfz7fha9c740-kde-l10n-kk-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-kk-15.04.1.tar.xz";
+      sha256 = "1lcan2x6f7v159zmix2h730pj21rlqmqxvizcd0jrwmnqxf9ww1k";
+      name = "kde-l10n-kk-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-pt-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/lk6ncn5aa4p373igs7j8g6mwa4a2iqma-kde-l10n-pt-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-pt-15.04.1.tar.xz";
+      sha256 = "07pqq7yggq2cjsn60wygbzz37dprp30dhabqj6il6gahl9y5y1fj";
+      name = "kde-l10n-pt-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-pt_BR-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/adcsrsz6kj7605a7whakszmsjrb3r0nc-kde-l10n-pt_BR-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-pt_BR-15.04.1.tar.xz";
+      sha256 = "0c5z73pr7m4pq52pjk7q097755g2kswjzjcq5pwc94za0yj055l2";
+      name = "kde-l10n-pt_BR-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ko-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/i9kc413jrn1l9rywv7vsbhgsvz7lffis-kde-l10n-ko-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ko-15.04.1.tar.xz";
+      sha256 = "1i34awq71si561p6ggahk6phav9p7rlyc34lg38w7mlqb0d6bjqq";
+      name = "kde-l10n-ko-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-da-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/s9rqm9a1rvwx7zikmm5fwydsaggsgk25-kde-l10n-da-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-da-15.04.1.tar.xz";
+      sha256 = "0h5784ba12yh5szyilbw6l4alac4kvgq9bmzpmga032jpc0g9k0l";
+      name = "kde-l10n-da-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-et-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/4pxnpsmz3siicy40i3m1x4ji852ps53s-kde-l10n-et-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-et-15.04.1.tar.xz";
+      sha256 = "0x208lv7qrhflgz5qmpp64wqx4avb3mbjr625nqpk8c5w9swqify";
+      name = "kde-l10n-et-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-fa-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0bdylm7gbn4ddfw95mz3zwvpizjfflgz-kde-l10n-fa-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-fa-15.04.1.tar.xz";
+      sha256 = "11lsciiys8dk6mzvd5fp4kypk2355ppdd20fkqd99vp2z3rknv9r";
+      name = "kde-l10n-fa-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-nn-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/1pxdddwrqh1lwq69ybfc3bq4wqyp4wsp-kde-l10n-nn-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-nn-15.04.1.tar.xz";
+      sha256 = "1vn9bcjba6wcym0cvfwhzyn7n4aa9jc3w7apahc72sqzq1irjapl";
+      name = "kde-l10n-nn-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-en_GB-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k8jamljw1l6zrpqwl4ai6103rcxlkxr6-kde-l10n-en_GB-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-en_GB-15.04.1.tar.xz";
+      sha256 = "10gypxkclg037crrv5ifyrj5yahjmfr8x7h41b2zrxy2mvibfpw8";
+      name = "kde-l10n-en_GB-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-gl-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/cr32nv49a2k622v9g0x8c3wbq0ydv9g4-kde-l10n-gl-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-gl-15.04.1.tar.xz";
+      sha256 = "1wjw21vifqzr35rpmffavxljbw6h9ci7awllj447sgqyw2c59pls";
+      name = "kde-l10n-gl-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ar-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/kxabywd2fc6249jy9pwqkjmbigi11hca-kde-l10n-ar-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ar-15.04.1.tar.xz";
+      sha256 = "0ngff802m80bi28khp9m60j5j2fh8f3nghp81l8a27kmlzl0np9j";
+      name = "kde-l10n-ar-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-eu-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/7xgibrqzv5gsvswx0k5y52pawd5fd14k-kde-l10n-eu-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-eu-15.04.1.tar.xz";
+      sha256 = "0fpfahmlniyhsxlx7p1ln9ldy3zjxak8cqi24p2rv8xcm3238dlf";
+      name = "kde-l10n-eu-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-tr-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/fk5q2f8nwj9cw94k036yf1fgn5kg4g1c-kde-l10n-tr-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-tr-15.04.1.tar.xz";
+      sha256 = "1r40gg4cz5s7g5c54a8c6mmx6v27lqx1sbygm5cb9xsqqp0il1yi";
+      name = "kde-l10n-tr-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ca_valencia-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/j3xp083a1ggngx4rkbg7jzvci8nmpwkh-kde-l10n-ca_valencia-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ca@valencia-15.04.1.tar.xz";
+      sha256 = "0gm5aljn22jf5vpanvmhxviyqr3wbi5rn3m6dkx552j2rw2qkazd";
+      name = "kde-l10n-ca_valencia-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-km-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zqkgqclj5c9ssqnzycg6449740s6n1rm-kde-l10n-km-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-km-15.04.1.tar.xz";
+      sha256 = "0prmwyjjmw5mimbi5dkzcmgynazi5lvrjkinfl9z49l2dcqmwkks";
+      name = "kde-l10n-km-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-pa-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/hicn3pxa99ihaj704v6f1l1kfmxdfm98-kde-l10n-pa-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-pa-15.04.1.tar.xz";
+      sha256 = "1civainv5170xvn20vx8rmghkfdlc6554nncq22l55q2f78pgg29";
+      name = "kde-l10n-pa-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-fi-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/m08cm6y7gnpyhdszbza3id8j08v1qvsn-kde-l10n-fi-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-fi-15.04.1.tar.xz";
+      sha256 = "1q3b25h983y2jin4llml0s4wm5ja0rplsczr5zci99vyi1jv2i3w";
+      name = "kde-l10n-fi-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-id-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/c5ssvbyi0gdr7da99a3mg0snwwmqzi1c-kde-l10n-id-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-id-15.04.1.tar.xz";
+      sha256 = "0gs7l2i71hzwyn12gjrdqr5lm996vglrbqbvn0jmzyp6zjzha6ah";
+      name = "kde-l10n-id-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-lt-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/hslbisaanz2z17mvspp4jbsx95pgwsgh-kde-l10n-lt-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-lt-15.04.1.tar.xz";
+      sha256 = "02qmdg0gkcmcgj9gffawij8c64fjs7s70yysnlnp3wmb7vy4ppqh";
+      name = "kde-l10n-lt-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-wa-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/3lzxjwp4rrgp3rn6f3x42ylfk1qf4g12-kde-l10n-wa-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-wa-15.04.1.tar.xz";
+      sha256 = "139v2k0jvm7xndwhgrs0x15l1plb49qpzbdny928gjymxq5x66ar";
+      name = "kde-l10n-wa-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-fr-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/yzfn0nlwhlm1q6x04ydz4p4rdinwazpn-kde-l10n-fr-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-fr-15.04.1.tar.xz";
+      sha256 = "1x36334bi1q4sii7j24xr39jxw6k22p4m1c2mz43s0ix0gzyx6n0";
+      name = "kde-l10n-fr-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-bg-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/v3qlbc9qq7m6pa8m1iz6qw3wam7c8qh4-kde-l10n-bg-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-bg-15.04.1.tar.xz";
+      sha256 = "1frd276wzvhwczdws589xy4bpg58yill263lfg8bjvg1v00pr6j8";
+      name = "kde-l10n-bg-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-uk-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/sjnpw624x3hm8spj91lfy2aqilfn9vv4-kde-l10n-uk-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-uk-15.04.1.tar.xz";
+      sha256 = "041zhdfmdbca74cgc69dzspn670i9cv32mhb8319q85xp1jr3wbs";
+      name = "kde-l10n-uk-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-sl-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k5f977w8bgbi72wcf00p1wng4wr58y2q-kde-l10n-sl-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-sl-15.04.1.tar.xz";
+      sha256 = "078r48vgbi72wrx5hnjbgkakp108v79lyb6jpllcn7a8sd71cm6s";
+      name = "kde-l10n-sl-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-hu-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/rck5qqcnw6id22p4ak703wbpygwxl3gx-kde-l10n-hu-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-hu-15.04.1.tar.xz";
+      sha256 = "1vbbv0lmim0368kc328x430s69fybsg3mh5wnadfrkmlzliigh3l";
+      name = "kde-l10n-hu-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-el-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ydwfc2skbipdis45li6vj1qahaxdqxxj-kde-l10n-el-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-el-15.04.1.tar.xz";
+      sha256 = "131064jjxqqi50ywljic71fdismqpqg9h1yjyv8wxs9rl1mb8s90";
+      name = "kde-l10n-el-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ia-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/l89gan31lfivzmmjq1wvqgk6jaqvi6bw-kde-l10n-ia-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-l10n/kde-l10n-ia-15.04.1.tar.xz";
+      sha256 = "092s5b2abb8amiqcvg95p84b91jncxcmbad3yhkxw2lkzllrl83y";
+      name = "kde-l10n-ia-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksystemlog-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/42gd0z1f41kc9jfk2sdqyx7lr5dzyh6l-ksystemlog-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksystemlog-15.04.1.tar.xz";
+      sha256 = "0zf7vzlxvby6kf8ccydy4dxwwkmr3lhhpklgiywz6m26i4iapjdg";
+      name = "ksystemlog-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkdeedu-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/8pcp0gamz0v2vfjgvjr2avgchwzrs128-libkdeedu-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkdeedu-15.04.1.tar.xz";
+      sha256 = "1y3zmhbbwl98cm8whkpafsrk4n9pn7ass6pyn9pnwz8g1lc853ig";
+      name = "libkdeedu-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kcharselect-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/gwccqzp4a5glln0zpp179j932l9cdwbd-kcharselect-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kcharselect-15.04.1.tar.xz";
+      sha256 = "1v4j2jn05vynnzpk11r2vg79v8ih945vkv37xw4isvfcicd5bjjh";
+      name = "kcharselect-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "krfb-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k67yxmxak82q0bigh94har3zd57g8ijb-krfb-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/krfb-15.04.1.tar.xz";
+      sha256 = "0mscrcvbhmhm7a330rwxywxpk09h4255j0ah3f5lq08zwhrpzd9r";
+      name = "krfb-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "palapeli-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zyqcyz9b4g57ww1cwz6hmhga1nwhmcjd-palapeli-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/palapeli-15.04.1.tar.xz";
+      sha256 = "17xxsmrksxvf4km7a1dbcx2fsbiiwkhszdr17gywlz6b1k2rpybj";
+      name = "palapeli-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kwalletmanager-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/c7m3wis5dcxivjswlzcw8pp216pq813a-kwalletmanager-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kwalletmanager-15.04.1.tar.xz";
+      sha256 = "0j197d8cmmgv8mz1scgp9qdq87sx318nkb7jymc28cc6d49mrwgx";
+      name = "kwalletmanager-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kgeography-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/bzaka1rvr5lr71h054w8zw10xlqpgd70-kgeography-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kgeography-15.04.1.tar.xz";
+      sha256 = "0g4wxd3qzsp99m4h5aga5cwky1xffwpys3lm29083agl8gvyrs0p";
+      name = "kgeography-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "blinken-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wdnknychhn65zahmpka1x60n082mqjfg-blinken-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/blinken-15.04.1.tar.xz";
+      sha256 = "0vavcjbsc4lx0a715pwqshc5l03h3nlpk8lpbbswik47rs10k156";
+      name = "blinken-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "rocs-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/im5b97nl4p7f5f1pkzrhjbqbhx6p5ap7-rocs-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/rocs-15.04.1.tar.xz";
+      sha256 = "1cplxlv8a7vsa18j7m629h06v4a0z123mhmg8blzqwh0wwsj71r8";
+      name = "rocs-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdepimlibs-4.14.8.tar.xz" ".tar";
+    store = "/nix/store/mxcxsdllc81x1w8y4p40b1s5gkkbzsqm-kdepimlibs-4.14.8.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdepimlibs-4.14.8.tar.xz";
+      sha256 = "0522aby3gm99n18g7p59vi0rzz0ysj9rzljlci5j873mv7yff242";
+      name = "kdepimlibs-4.14.8.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "knetwalk-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/kmp1kna6sixbxjdzcnn1agarx8xq9ps4-knetwalk-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/knetwalk-15.04.1.tar.xz";
+      sha256 = "1hq7cldh4n9kbfhc1bj3mra9dgafk6hkn5pazp2rfipmfmxj3w3b";
+      name = "knetwalk-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "marble-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/klfb6qwspc6raf7kw49s3y5xgdxn9l77-marble-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/marble-15.04.1.tar.xz";
+      sha256 = "0aqgh7s07ryhyz0a62pzj3a73ip26df1cw9g103x5iapia5lyp3p";
+      name = "marble-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kolf-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xd8id5gbv47bg5jrk8qammqviv861s60-kolf-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kolf-15.04.1.tar.xz";
+      sha256 = "1r8zqlmwz2dr3pgh921z3j8pvcry7366qyr6kybkjhyjqr1rmhdh";
+      name = "kolf-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kbounce-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vhp18ifxb0v5nnfna3z8qnkpdksc51bd-kbounce-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kbounce-15.04.1.tar.xz";
+      sha256 = "0qxmvkwcanm50w8jd2fcf0q557ywz198ifgsx8piyxmjg8j0hal6";
+      name = "kbounce-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "audiocd-kio-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/3ma0rszdvi8hsz0r5f27yafarzmbr1l0-audiocd-kio-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/audiocd-kio-15.04.1.tar.xz";
+      sha256 = "1gxr9ny09sqb80bhkd21wfl902j8kl5qlgvs9amasabgq7450rbq";
+      name = "audiocd-kio-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kwordquiz-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/l1yn11z138jfwx11qz2hdvklsvray4ml-kwordquiz-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kwordquiz-15.04.1.tar.xz";
+      sha256 = "0xjk9ihlvs8v79mwqry91lzr5kqnj80wfg84gab8djz7gsixgp0y";
+      name = "kwordquiz-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmousetool-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wwv9f44nhm3rqhw2x67yb9fvxsc31shf-kmousetool-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmousetool-15.04.1.tar.xz";
+      sha256 = "1833yjmgky80w8l06k31j5fd607kada5pi85rcc1730i3g18mqys";
+      name = "kmousetool-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdesdk-strigi-analyzers-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zsx5r10khmay1jfph7202zd9k0kqk68f-kdesdk-strigi-analyzers-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdesdk-strigi-analyzers-15.04.1.tar.xz";
+      sha256 = "1yhaixb6dqpw02v1y0zqj6yl2i4lr1m69ns20bb2qaz44kbril7k";
+      name = "kdesdk-strigi-analyzers-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksaneplugin-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/6jdycwm8ads0midd532mh8g4rc3zis63-ksaneplugin-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksaneplugin-15.04.1.tar.xz";
+      sha256 = "0wlirj6dqigdnz2xy5yab0cf6npzvx91zbyg9plfqig4h0m5vjrw";
+      name = "ksaneplugin-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kaccessible-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/f7ik0yppcn93na9m9dm7qxkfykm7n0im-kaccessible-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kaccessible-15.04.1.tar.xz";
+      sha256 = "01jnaz0n81vyy8wghy21h5ignx4sllv56g3dpck86cj16dh2ymiz";
+      name = "kaccessible-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kqtquickcharts-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ypf8qvq4gmys2llq8v7nzayi7nw782lj-kqtquickcharts-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kqtquickcharts-15.04.1.tar.xz";
+      sha256 = "0spg0hfhsngipbdbm8c6yxfw538jk5rdfs83rp2hk7zhhkqvphmj";
+      name = "kqtquickcharts-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kbreakout-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/i08nk9biny2fqal1kkzs9lwpxxp2rwf5-kbreakout-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kbreakout-15.04.1.tar.xz";
+      sha256 = "0fg6z8b2p43c0p11ijbha2f6dycc4f0z487sg6y8jr6vqszqwm6q";
+      name = "kbreakout-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksnakeduel-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/r12i36mznnvlgwxm6x3vazwnvargpc60-ksnakeduel-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksnakeduel-15.04.1.tar.xz";
+      sha256 = "00b0ssad8cvjbp30n5lif41ni1515r892xxfvmyl50ajn0s484g1";
+      name = "ksnakeduel-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kreversi-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qqw2j0bsr3s5rn9s0a32ia15ciqa0ggj-kreversi-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kreversi-15.04.1.tar.xz";
+      sha256 = "0czkvks9i7i4nl64afml9g029ahp9xxqyfv2jqphhyrz7al36l81";
+      name = "kreversi-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkdcraw-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xca9i6zvlnrnn6cqvab1dj91id7ns8bz-libkdcraw-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkdcraw-15.04.1.tar.xz";
+      sha256 = "115b8m4f588mxmq8f4chg10nbb3wry3zvxgmji7pac49aszvdgj0";
+      name = "libkdcraw-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "artikulate-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/b5ybam6zgslfklbmr1nvj8xxb2n0ay27-artikulate-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/artikulate-15.04.1.tar.xz";
+      sha256 = "1498gndm0w96s7v109f8fc9y4bkb6bl9c0jaw24i1wn97hiiwigf";
+      name = "artikulate-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkipi-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/czagm2ybdwy6z3672z5ck07pqjjkdh7z-libkipi-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkipi-15.04.1.tar.xz";
+      sha256 = "12rmhva1kcjvcb21rhb5r6kx5bhs3zp66zg05zp0r4r5kbcf7rir";
+      name = "libkipi-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kiriki-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/4dv1qqm1cvl2lym8yppwgiqj3bxbas7k-kiriki-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kiriki-15.04.1.tar.xz";
+      sha256 = "0fqx790jz7pfajqjhpza2fz3vr7q8mxixx6nvv8shfsqxaqi1xf8";
+      name = "kiriki-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kremotecontrol-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/4wd2nryy9gg0x5p1vm5fv3hxl48bxcw2-kremotecontrol-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kremotecontrol-15.04.1.tar.xz";
+      sha256 = "1nrnq46qa2m5rh4lj9sxrqb130jljfwafw6asz8gm32202xg4fqi";
+      name = "kremotecontrol-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kigo-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/s7my7ndzl4cf3nkxhp23krf8cc0rxpb6-kigo-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kigo-15.04.1.tar.xz";
+      sha256 = "0a2a39x1249vjgwc7sxvf1kxmkjd6nq97rhh7cp7j3ssa2gggspn";
+      name = "kigo-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "jovie-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/9dhsv2hxy8pwh8i6sp9dmirz3d7hlk77-jovie-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/jovie-15.04.1.tar.xz";
+      sha256 = "051ycpgifz9si8301167rr7h50qcnkhffk0wyr59iqxyyf69aqbf";
+      name = "jovie-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdf-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/m088jnlvz3b3fabza6hcy3dh57mbs3f5-kdf-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdf-15.04.1.tar.xz";
+      sha256 = "0by7dn3r22cx9slibc2jplbi6k498xiizidymaxkf6wa9f6m76yn";
+      name = "kdf-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kapman-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/4lnw56hhsqbrgp60fwwcf62wdxb3k2aq-kapman-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kapman-15.04.1.tar.xz";
+      sha256 = "1pwbxc9pbhr2cbr4n48hsnja7fghr2af02aifvrsj6jgcxzryfgd";
+      name = "kapman-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kanagram-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/kgjhkp3h6gaz1pi62mmyg8z0xyb1h4lz-kanagram-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kanagram-15.04.1.tar.xz";
+      sha256 = "1i9z5hyqj326iim43mlrvvpl47b4244s1spk3xf8a3a929bwlf9l";
+      name = "kanagram-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-send-file-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/5bs3g1zqj5b13h4flvy9v4m620lcw7lf-ktp-send-file-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-send-file-15.04.1.tar.xz";
+      sha256 = "0dzyvsnnxi6n3hy3rwyng4pszx4ghcgry3cvw6d3jrzlg4y3afmz";
+      name = "ktp-send-file-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmines-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/rqnvyiybcn99da45q2bvl8dwpa4y764z-kmines-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmines-15.04.1.tar.xz";
+      sha256 = "1g02fbyqz8nb0qlz49dqn5jay4kdafpdmjx127n0p8wmkw4lh261";
+      name = "kmines-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "bovo-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/yrgnwbhl85qivg7hglzgaqqv0hwm91rv-bovo-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/bovo-15.04.1.tar.xz";
+      sha256 = "10y1px3vk9iv19m6m4jlh6bxky10vhyd1r0q7s50rhr44i3ibwml";
+      name = "bovo-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kruler-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vhls9fra4la0ymwa2s387mw5n119hf47-kruler-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kruler-15.04.1.tar.xz";
+      sha256 = "0vhwg4qqiv4gflvqspjibm7zh2zgaxql5xmaylpr90hyc1k3vykl";
+      name = "kruler-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-desktop-applets-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/a7lgl9rd9bpmh8yqdibk0zym25mfc3gm-ktp-desktop-applets-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-desktop-applets-15.04.1.tar.xz";
+      sha256 = "19rzq0k2dklzrlpn1qkad1x0v72dk6szya8fsfgxcv1047cczrma";
+      name = "ktp-desktop-applets-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kpat-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/r4n7jrlw47j1mvipzyfw9mx6cksk3rpy-kpat-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kpat-15.04.1.tar.xz";
+      sha256 = "1aa6m64slfg12zg02an8sbv51k5jnq9bs95y666bc1697yij8sag";
+      name = "kpat-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkcompactdisc-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vnpm0h4amj9pxqbrgn8m7xjl04x2ybb7-libkcompactdisc-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkcompactdisc-15.04.1.tar.xz";
+      sha256 = "0lis8llzl684z12yzvrc74zckxxbi06fn1krqkiawhpafl0kc8qs";
+      name = "libkcompactdisc-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kgpg-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/6ampb59zxfj4qm8a7fxs0kqchwcxv5kl-kgpg-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kgpg-15.04.1.tar.xz";
+      sha256 = "013z6ryq1khk1hwird678n4rfikgyl173j5chkqpgw7nrz93770c";
+      name = "kgpg-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdenetwork-filesharing-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/7ajx21aws82z92wiqc041jmbysna95cn-kdenetwork-filesharing-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdenetwork-filesharing-15.04.1.tar.xz";
+      sha256 = "1f26z4zm0bzkbsanj9rw704s25iq0ahw3mi51sgj4ak8gb9r6ibb";
+      name = "kdenetwork-filesharing-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kubrick-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/clxa7535xdqii03b5rp3p8vs2xpc6263-kubrick-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kubrick-15.04.1.tar.xz";
+      sha256 = "0anysvrnyj5pafy7svgszqaj68ryvgbmc8s9xcaw7xpqxxjv2bvd";
+      name = "kubrick-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kfourinline-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xk72vmcz1gl5w05wsv0f5qw182hy72vf-kfourinline-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kfourinline-15.04.1.tar.xz";
+      sha256 = "1qg8cg4w207f9ir9saraxyvrhz7y0hr8di9yjv3i32hhmi36v35a";
+      name = "kfourinline-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkeduvocdocument-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/b0381wzz8yr0g7a5f89cxq0ay0vvskq7-libkeduvocdocument-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkeduvocdocument-15.04.1.tar.xz";
+      sha256 = "0lky05kb4yqggfzwips4jagfsmi7lc5fwp1zv4mlgh0w68rbzq0f";
+      name = "libkeduvocdocument-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "mplayerthumbs-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/7wjw21kqy746kxq8ciprhc2jn9sda1qw-mplayerthumbs-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/mplayerthumbs-15.04.1.tar.xz";
+      sha256 = "0a5w3cz6pdsj6vn1zzsjx61x52lqmfnblad0gjv29h7rzxx4p8vr";
+      name = "mplayerthumbs-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdegraphics-thumbnailers-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/9i6281xfgc9xs8r16kvj96r3f5sq4sx2-kdegraphics-thumbnailers-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdegraphics-thumbnailers-15.04.1.tar.xz";
+      sha256 = "1lpr7k7mhlrl4f8psixkp64j5igv0kbmfyml618pydbdbkyzy7wb";
+      name = "kdegraphics-thumbnailers-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-dev-scripts-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/gplbfp23pqx6kklb57j6p4pw2hnfy98h-kde-dev-scripts-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-dev-scripts-15.04.1.tar.xz";
+      sha256 = "0yg2xw7ni25i1dvnfd18p0vdpli66xx9dn351av22k313wa7dyw2";
+      name = "kde-dev-scripts-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kblocks-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/9rkp8602jhay2myxc1wm1s3511ivf1ix-kblocks-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kblocks-15.04.1.tar.xz";
+      sha256 = "19dhccamka291p75brd03a3r5zll7yfzk9hd9dr52xr45lpbhqd9";
+      name = "kblocks-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "klines-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/1hb2447kzfdymip921a3k08rdvls1b10-klines-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/klines-15.04.1.tar.xz";
+      sha256 = "1yb4qya06b3ld0xmnvqxzn6lgvxr8nyfwihgi4ldysxap6v629ra";
+      name = "klines-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdenetwork-strigi-analyzers-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/z1pwkj78q3vrjh6yvs5p8wdikl67skgm-kdenetwork-strigi-analyzers-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdenetwork-strigi-analyzers-15.04.1.tar.xz";
+      sha256 = "03dc3h6r06dzl6z7nagmsahrzivylyiqlnwin9qjm1jw7wvcfdvk";
+      name = "kdenetwork-strigi-analyzers-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdeartwork-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/3aj5jpa1s6hzqiwlws6vg00qkn7m49jd-kdeartwork-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdeartwork-15.04.1.tar.xz";
+      sha256 = "023d74d1k6lriy7hg1xigp2dv053dc6cnf74kxj4sgglg8qqnph3";
+      name = "kdeartwork-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-common-internals-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/83s2nk00gahqlc1akhv6gv72w165ab4j-ktp-common-internals-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-common-internals-15.04.1.tar.xz";
+      sha256 = "1g7ms93b756iksjimf0vmrrv1cva0956yjyrxa6zx86z2gsqai0m";
+      name = "ktp-common-internals-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "granatier-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vs49yw5vjlplwgsskrwv1i6dva0x12x6-granatier-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/granatier-15.04.1.tar.xz";
+      sha256 = "09dazsxch26kh7pvakqzdcmb1vwx5dakq693v692payxgsrbd9zv";
+      name = "granatier-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kspaceduel-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/flf9jk3v67l044291iscpc7yxqynr8s0-kspaceduel-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kspaceduel-15.04.1.tar.xz";
+      sha256 = "1ypiyj7vz4g8dpzd2lygnlrv4gmzfjwbqflzkqq6gsx2a5v671v8";
+      name = "kspaceduel-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "lskat-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/2rrzkyrqqmxphhcszdii2qrfag7y91bg-lskat-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/lskat-15.04.1.tar.xz";
+      sha256 = "1nyjhispwf7brg4a1a50br3k583jh734vqj8v8gwjq68q7sig1an";
+      name = "lskat-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkcddb-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/s34in46wqxw0pyf0fgzmagbi9r18r1i5-libkcddb-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkcddb-15.04.1.tar.xz";
+      sha256 = "1fp8zq00nijwygap3571lpcyy3qn318djv0gj6vjyzfxlkijl745";
+      name = "libkcddb-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdegraphics-mobipocket-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/yrpx93448287fy645dnvwkc21c5fw41y-kdegraphics-mobipocket-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdegraphics-mobipocket-15.04.1.tar.xz";
+      sha256 = "1y4ci3l837l3pi308jzh1mvw9rxhyjdx8hgz29vca2gpwyp0v6zi";
+      name = "kdegraphics-mobipocket-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkface-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/7pmab8n861ng48b8483d2l71qy7prm75-libkface-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkface-15.04.1.tar.xz";
+      sha256 = "1iannhmn3gh7j3q8x9dm4jvkilrnpkvzhqz4rs4cksr1q49hh8ah";
+      name = "libkface-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kbruch-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/n7n2q3a4r9par2kc13nixqidwl5z1qwg-kbruch-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kbruch-15.04.1.tar.xz";
+      sha256 = "0d747mv9mwp0kk6q2bx0h3bn1km99wcxljhsz62kd9g3myzga6sj";
+      name = "kbruch-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "cantor-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/5dbbmdm1w5r7hsy2z999aj8b7amy5mz8-cantor-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/cantor-15.04.1.tar.xz";
+      sha256 = "0rlldfww4rzhxvsq3yl2a5ybcd4h4xihcy4924dbjzp15zgxjzyb";
+      name = "cantor-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksnapshot-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xya1fmdi09yiq9xvvpqp5bks628n6yqz-ksnapshot-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksnapshot-15.04.1.tar.xz";
+      sha256 = "0bmq7qvi5522qcj1ksjy9m7pf3yr6n8hf809isvbamvqk285vln6";
+      name = "ksnapshot-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kopete-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qq5dm0qrnb40nk2lhdyhhwxwnm2w73ry-kopete-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kopete-15.04.1.tar.xz";
+      sha256 = "195vdbnk9azfhk7i3vq5zbw1c8f7wz3xdjm2n5g2sv3gnmgm598q";
+      name = "kopete-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kteatime-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/cgc2v9iffy7a48sn95rr9x05xwi6h1cy-kteatime-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kteatime-15.04.1.tar.xz";
+      sha256 = "0sxdnk9v1p5mcwp8wka60saiqdm4r9bfpyh40qksd89jkjzw7aj9";
+      name = "kteatime-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdelibs-4.14.8.tar.xz" ".tar";
+    store = "/nix/store/jwibw4jpjfxxhkv6kps17yqmaljsymi0-kdelibs-4.14.8.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdelibs-4.14.8.tar.xz";
+      sha256 = "1fwvqgxxwy9ka6wq4ysn5x6blqw8wqrfnh6hk6m65jdknflshpvh";
+      name = "kdelibs-4.14.8.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kajongg-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/r34lymfzw7s9j1j30llnkj9b0nn0pxr3-kajongg-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kajongg-15.04.1.tar.xz";
+      sha256 = "15yn5ixkwmwg1hvkdr6sl26zch5rdmjq0iqmc1kyrdipdhdp5mzm";
+      name = "kajongg-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "print-manager-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/7a9mkd04lsih0rq5dld1mnsx3cxrkr1z-print-manager-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/print-manager-15.04.1.tar.xz";
+      sha256 = "05dpx0cwlpy17x2knq98kf6s1bh72lfn8i5l5xzf4bxil9s2fir9";
+      name = "print-manager-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-baseapps-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/lz0chc1pimbj5ddi5bkp2nlrlbvgi5l1-kde-baseapps-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-baseapps-15.04.1.tar.xz";
+      sha256 = "0970mw5ywjimrmhcfskwiwc048w1rvjffs3d2a9v74yvv64irkgv";
+      name = "kde-baseapps-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kiten-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/f02ixhrvj27hwwsswk7p8n9hdwfrlyms-kiten-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kiten-15.04.1.tar.xz";
+      sha256 = "0l85ccy71ag6nn8fn7b3yr8pjikzivrq6dxka2342nfqidhfpzfh";
+      name = "kiten-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "krdc-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/kcp6bc4c7vwnrvpjgvlwx0q3ss74f3ay-krdc-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/krdc-15.04.1.tar.xz";
+      sha256 = "1d1cjy9b5sx533j1aayw503b65gg7pc5wk3n9hy3x9f1a2yywv1i";
+      name = "krdc-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "superkaramba-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/akzfq1iqi1p5zyy4ha003jxq93hx41bk-superkaramba-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/superkaramba-15.04.1.tar.xz";
+      sha256 = "1ncvmmvsfs4jp67ij1vs87sjg59x960pqqxblq49m0l6vmp0l6j8";
+      name = "superkaramba-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "katomic-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xqifvkcnpvncp34cz72axncvfm4ar17r-katomic-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/katomic-15.04.1.tar.xz";
+      sha256 = "1lpsvi2hnf4f5ngdkcg56j73qwjzm8zahl2pm5l0r53i95kxlqyd";
+      name = "katomic-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "killbots-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/rzm4an2qh22q4d8gxn7hf2lc1h8apblj-killbots-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/killbots-15.04.1.tar.xz";
+      sha256 = "1wrdwjcpr75lwbrb6ijbwi8ghkgdlp3sv5sbbmws9p77xa13scyk";
+      name = "killbots-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkgeomap-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/2sprrk9f1bp0i1pyprzkbfx93p44qr3h-libkgeomap-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkgeomap-15.04.1.tar.xz";
+      sha256 = "1zj7wimigjlrg2sq3288wc1h5by155ngascwbbn1x9zy86akb5dj";
+      name = "libkgeomap-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "konsole-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/6p788sim5alh13lbgfc4095nas0rav9m-konsole-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/konsole-15.04.1.tar.xz";
+      sha256 = "0fddv6ag23m5ks1cj8rrfbd2xcifxwijkypx6dhxk4pbgkhy0m8m";
+      name = "konsole-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kuser-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0z7jv74ig27pxaf6fw9sq33r4xvanm4k-kuser-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kuser-15.04.1.tar.xz";
+      sha256 = "1gvpqazrij2ipdfhyfbsw1vgv4173j4r4qnbp2sd8kjibryqcm76";
+      name = "kuser-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-kded-module-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/8krkra77y0vck4pki2r25zivig521cqk-ktp-kded-module-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-kded-module-15.04.1.tar.xz";
+      sha256 = "0hyyz9f8qjzcqj6g92a4g4a3xp7fgyfgznir65mx2kka6fq7532s";
+      name = "ktp-kded-module-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-accounts-kcm-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/lbvr1zi1lipmmdx5pkga2k06isy0kk5y-ktp-accounts-kcm-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-accounts-kcm-15.04.1.tar.xz";
+      sha256 = "0s2nny6l744fvf45yczzbcrx1win47b0xvxgf16s29q3y2l51y3s";
+      name = "ktp-accounts-kcm-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "klettres-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xdqivsid3wvc73mxnwzn7ayva3002l3a-klettres-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/klettres-15.04.1.tar.xz";
+      sha256 = "1shlhdmzmis0szafk6kvjy0w25xr7p261zj1fi4gz5hr7262lirz";
+      name = "klettres-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "signon-kwallet-extension-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ayi379ldyhmq5cn53nf89lmvwwfyp9gm-signon-kwallet-extension-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/signon-kwallet-extension-15.04.1.tar.xz";
+      sha256 = "0nk1gjz2bw6kssv09kwksj8p5qpzz90plpnd4nd19qnhgz0a0v7r";
+      name = "signon-kwallet-extension-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-runtime-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wg7pzsw9s8lm35cxihc08fs9jd21jm13-kde-runtime-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-runtime-15.04.1.tar.xz";
+      sha256 = "178n0zfjzzfpr1shqxyixlb2swmkz2n17xhnmf04hql2l4yj3khp";
+      name = "kde-runtime-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kaccounts-providers-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k0ph8jkjq43ym4851swr12csj53vdh6m-kaccounts-providers-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kaccounts-providers-15.04.1.tar.xz";
+      sha256 = "1bd9v89r6y90r8bkm9m46p8yzpbv1zyf4bg0c3scbaqkviqihi09";
+      name = "kaccounts-providers-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "bomber-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/sczdf7d6q8qr4kjlyk1q4s573mr7g0fd-bomber-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/bomber-15.04.1.tar.xz";
+      sha256 = "0mzik0cfz6v0jd31z5q9hkfxsynrhiwm704ns4pgb8qsww41yzrf";
+      name = "bomber-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkexiv2-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qc76hz1v7rawy1xb3d7dlf4yxw9d6clz-libkexiv2-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkexiv2-15.04.1.tar.xz";
+      sha256 = "0f3ljs8n2gc9frn3j0cjy60hp8wq0f66ry2qpmdaypdswr7vx04n";
+      name = "libkexiv2-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-auth-handler-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/lmzsbajhy53ay7swff47gsq3il629wfj-ktp-auth-handler-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-auth-handler-15.04.1.tar.xz";
+      sha256 = "1ixxvf5lvy0isv0gqc6sw2pfjqz139kcd0pncq4i89kwqnca8jkp";
+      name = "ktp-auth-handler-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdepim-runtime-4.14.8.tar.xz" ".tar";
+    store = "/nix/store/xxnnkp49p5s0hc4sgsb0id14mnfsd6f5-kdepim-runtime-4.14.8.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdepim-runtime-4.14.8.tar.xz";
+      sha256 = "1c9lmacadkxdl8kaxn823a7r07w67hrzdypijvvz3ms7k5i84k0z";
+      name = "kdepim-runtime-4.14.8.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "klickety-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wffyflkf9im135fdalll1x68cm523rgm-klickety-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/klickety-15.04.1.tar.xz";
+      sha256 = "0igw7rm7ii30x3971gg5zjpzljlr1ajxbk5bjylizxbl960dx0kw";
+      name = "klickety-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkomparediff2-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/rmzhngxxfnvbr76mm85zgp4zlqbjid9z-libkomparediff2-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkomparediff2-15.04.1.tar.xz";
+      sha256 = "16fkixmpvxn7459v41418rs49n6knnf1lpfz1mjidaz6q7ii5y8p";
+      name = "libkomparediff2-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-contact-list-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/c6yg7sc1xnla574r1bc122gp63y8wvyp-ktp-contact-list-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-contact-list-15.04.1.tar.xz";
+      sha256 = "1vmcs0ww4hv7ckb9nddkpci57ha7j6wqrwiikq4rxcvq9a4z1g7x";
+      name = "ktp-contact-list-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-contact-runner-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/v7wjiq2vwpv0r1c6rqfxhjsdcvcr9ffd-ktp-contact-runner-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-contact-runner-15.04.1.tar.xz";
+      sha256 = "19hin3qmcznxlp1lypka7h1nqj4n40hys6sxf6m74fx0myk6jia9";
+      name = "ktp-contact-runner-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kcolorchooser-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/al6rmbszcmx8m2fk4i2ihxxp4wk2n06p-kcolorchooser-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kcolorchooser-15.04.1.tar.xz";
+      sha256 = "1q1ipvvd02kgrvz322m7gn6rwxdnpkkj4575yrn6vpxx616q1pf7";
+      name = "kcolorchooser-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kfloppy-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/4zgqikwm771c85nkd20xw9lplpyqhycf-kfloppy-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kfloppy-15.04.1.tar.xz";
+      sha256 = "1rqccsiyfazsbfjs8mpjsqbbw9pd6fakdb076q0mj2syrlm7xr36";
+      name = "kfloppy-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-wallpapers-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/277d4282d2h3cqrjrrlh6w6z0f9sp12l-kde-wallpapers-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-wallpapers-15.04.1.tar.xz";
+      sha256 = "0nbv456714vr5mp125bdza3czgxzhbv2wglsmxj0sqc1k6fiadfi";
+      name = "kde-wallpapers-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksirk-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vzxblpcsa0jrzcwcp5a9pnax60dkjwav-ksirk-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksirk-15.04.1.tar.xz";
+      sha256 = "1v56n78cxd9201r5pz3vn4mkpry2rihy138ar7kpqvcp7radipr6";
+      name = "ksirk-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmag-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ir7qgza1smfbnwdxf1aj60p1xqmgb44p-kmag-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmag-15.04.1.tar.xz";
+      sha256 = "0xh66mpddlriivcqg931nd5bbqvrylq1gpccqbajahhr0jbp6lzf";
+      name = "kmag-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-text-ui-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xli6mjyym1qql8id8fwjvx9yils6kihx-ktp-text-ui-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-text-ui-15.04.1.tar.xz";
+      sha256 = "00nbzyh2m9gg401krcnm5p38xj6xyp8n6v4lh779hdx63d755myw";
+      name = "ktp-text-ui-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "okteta-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/gxnx1dmd8964wj7cz37c50i382sg2gbp-okteta-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/okteta-15.04.1.tar.xz";
+      sha256 = "17jvf6ca27xj1vv7yss2886imdaws2xpkibz13aicjvw23xhxhvj";
+      name = "okteta-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmix-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0wvrlr0afl9j7mwn6qp59qb5662bnjv4-kmix-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmix-15.04.1.tar.xz";
+      sha256 = "0gf1a63ycz8hmlzz7xm361hszzr4l7dibwam9pwg4wipankdipxh";
+      name = "kmix-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kget-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0yx4x1f5rxhk7wg1fj9ck54z5b9wim8q-kget-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kget-15.04.1.tar.xz";
+      sha256 = "0qckya9r4gic6axq4fi5r5qv4wj31jahbyv1jlyi468wv16cxmnq";
+      name = "kget-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kate-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0ky72glm45d5p7knpg00xzjp08shjc1b-kate-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kate-15.04.1.tar.xz";
+      sha256 = "0ykppas7fnnslj71y77y2p2qv4jnnv8gdmmfaz5plxkcdjk63a87";
+      name = "kate-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kamera-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/331lhb9vdk6jr5bcd9z9kdg0nsy74sha-kamera-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kamera-15.04.1.tar.xz";
+      sha256 = "1g1lq4g1gk9cw6l1pxaaxzqy4qrqr0f4idkg9bkqbhj20xrl51xd";
+      name = "kamera-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kstars-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/29wwk2c90zcifni2hra686nwqlxjqh4m-kstars-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kstars-15.04.1.tar.xz";
+      sha256 = "1r2sf1ifgkmg8f59jj1j41js538h2x9nr2j6bppd16bbp8gzs2na";
+      name = "kstars-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmouth-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vwkzr7jkym3x2lhilv4vp92pzsc7zj69-kmouth-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmouth-15.04.1.tar.xz";
+      sha256 = "0qq45lmgxy5wn24wwi8d5p1vc8h25a70xzaw2gdhj1m2vq37sn5p";
+      name = "kmouth-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "poxml-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/nfm24h17jvwp3sbl9r4wyjqhm1ly853h-poxml-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/poxml-15.04.1.tar.xz";
+      sha256 = "0by57c11p2g82cbl4pmv281dnkdky2943bzcy4yb0qnhihpl99nh";
+      name = "poxml-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdegraphics-strigi-analyzer-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/zcadi1mwn8qb0s4j9y33cm46z07wlnlv-kdegraphics-strigi-analyzer-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdegraphics-strigi-analyzer-15.04.1.tar.xz";
+      sha256 = "1xp7k0m2blm6nfzv6pf8vqc2wfdw1pp08dfgg9qvvl4ar80wi62v";
+      name = "kdegraphics-strigi-analyzer-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksudoku-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/iz57bv4hld01cxkdm6dv2i0n72ckv8g9-ksudoku-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksudoku-15.04.1.tar.xz";
+      sha256 = "1x81q0bya702dcksn86pi8qzw13zb8x558nw3wv8q3z4cp7bzwba";
+      name = "ksudoku-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-dev-utils-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/33kal7ji8dw5a89n6m7wpfpf519kdwbp-kde-dev-utils-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-dev-utils-15.04.1.tar.xz";
+      sha256 = "01ivnsjvpbl1i55zgrcz01hzcn02mrvr14a0nz8bi5s5l53r88sy";
+      name = "kde-dev-utils-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kompare-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/if8mcxgb9bf6i7hmrvlgmwjvjq92p6k1-kompare-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kompare-15.04.1.tar.xz";
+      sha256 = "1h9xvd48kixrffr89kj3lr6nwbj4jvrw5nqz05jl7q6a4rd11p47";
+      name = "kompare-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kppp-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k2vyy51405ds24y3mm1dz8y8yifwk60x-kppp-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kppp-15.04.1.tar.xz";
+      sha256 = "0d4mk303yw1f17sw517ni8g0lqr3wdl9r2whz2l3pznnd3hh447q";
+      name = "kppp-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "dragon-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/nk9ya7riashh1gaw9jnqwypdalr5sq2l-dragon-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/dragon-15.04.1.tar.xz";
+      sha256 = "1kmp3klp86mmkgvdy973cpnqw9ghbvvs7iqbsqkg19gqg5p3qi6n";
+      name = "dragon-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkdegames-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/kl3yj4xk86l67vl3lahdzq4x6gi8w8yv-libkdegames-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkdegames-15.04.1.tar.xz";
+      sha256 = "0jwvywzamfnjv9lfyxbvki9j1y8ksk6x54v4p16k7mkz7dx7qmd7";
+      name = "libkdegames-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kgoldrunner-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/bfyd2yxzm5y2bc8mvchpa5scd297lx5h-kgoldrunner-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kgoldrunner-15.04.1.tar.xz";
+      sha256 = "19aiabdyyyfsc8vdgvh26sh9i2cg4lcvgfca296ch0wdlbs8xdd3";
+      name = "kgoldrunner-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdewebdev-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/l3hf3r3q9a0mas8i2br6ajlq1h1wnm9h-kdewebdev-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdewebdev-15.04.1.tar.xz";
+      sha256 = "00av449nc04mascih5ii17hbjxxpanr8gbdimjjhdp2z9dvgnb0h";
+      name = "kdewebdev-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "knavalbattle-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/vkm47y3nws18va3cz13isi02g1wrkf6p-knavalbattle-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/knavalbattle-15.04.1.tar.xz";
+      sha256 = "0d94bmd2jvd6jzjxzdbc4rgq1k1a22md4azddqm6z1yc1n41qkyc";
+      name = "knavalbattle-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmahjongg-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/n5dxy147bwqxx9i49h2lia68846f1zwg-kmahjongg-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmahjongg-15.04.1.tar.xz";
+      sha256 = "0zl0z3p07hxyiy5p894cf0rai0ad0i4sihxgj8n23cqs653wglb7";
+      name = "kmahjongg-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ark-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/shl563g5w7cn13zynzpbm94ri1ccy6lm-ark-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ark-15.04.1.tar.xz";
+      sha256 = "077xvn6symzzr9jb5cdfvzf1xbpliq2krnw1ab1c9a251x90zclw";
+      name = "ark-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "gwenview-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ccy2m84g722ihs95n2kindl14n93ir6n-gwenview-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/gwenview-15.04.1.tar.xz";
+      sha256 = "07vvcamksgvk8xgj872ql8a7ml7drw3pbv4z7zgrprzracniapwr";
+      name = "gwenview-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ksquares-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/n63xlpj38d1ziy7fg5y5fa0smw12whpa-ksquares-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ksquares-15.04.1.tar.xz";
+      sha256 = "0i6rf5x6wsij05xgv9rzizax7j029am7xgwrzzjdk7anph1mx6i9";
+      name = "ksquares-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "umbrello-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/g91s71jw5mbiy8y2gdknkqnxyklm39wj-umbrello-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/umbrello-15.04.1.tar.xz";
+      sha256 = "1sp8f2bjgp5gv9834csa42531psx0sq43ldjgsgygrnbggzmv8nw";
+      name = "umbrello-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kblackbox-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/w1s27mkqknc6q7ni39641vgviyqgnxk0-kblackbox-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kblackbox-15.04.1.tar.xz";
+      sha256 = "02b9kfqm64qz0jnyviag02rd0h36ajmfbnswwgin3i7zbvd5xph0";
+      name = "kblackbox-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kolourpaint-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/xsvwhyp6j478pjbjslilb62s89ljdfrd-kolourpaint-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kolourpaint-15.04.1.tar.xz";
+      sha256 = "04vamlgbsmpkfw4g3hrm9mm6imnrk3gk994pqb35ajvz8089prwp";
+      name = "kolourpaint-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "step-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/gjcms2qdl726gv00644ljmsl6ddyywwl-step-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/step-15.04.1.tar.xz";
+      sha256 = "1sy42yxpp1qkpcj151xpi2576j59s0cznig3bj65klm5iamiar48";
+      name = "step-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kcachegrind-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/3x1mlqph515m8nf31pdk8wxhhrcbj444-kcachegrind-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kcachegrind-15.04.1.tar.xz";
+      sha256 = "16fvs27gbpsras3q2qva9x9sc4r056rk2q5b0jijqpncha51wnr2";
+      name = "kcachegrind-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ffmpegthumbs-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/x3hq5g8vcvm5a9npa7amn5w492rh9fhw-ffmpegthumbs-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ffmpegthumbs-15.04.1.tar.xz";
+      sha256 = "196hc96ifqq1m5jja8gkl83a23206l304kqh9rngqbqx2xqbis7g";
+      name = "ffmpegthumbs-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "parley-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qj4bmbkiah1jrf0arh2r1ygd6ki0vi6q-parley-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/parley-15.04.1.tar.xz";
+      sha256 = "1mz2s4l3bzdpz3jd2rkamwvjiqx133sq7agmrg3ssmhl583bgyln";
+      name = "parley-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kmplot-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/4s3kx66a51gj19imxp7y73q59dx3dsb1-kmplot-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kmplot-15.04.1.tar.xz";
+      sha256 = "1rz7l1lggpprmanyr6d1hpyjw6c3z1gdpcf475573y5gip1sylvj";
+      name = "kmplot-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kturtle-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/6irgf5syddcsvyn8jpfmzjmdccy9mp3j-kturtle-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kturtle-15.04.1.tar.xz";
+      sha256 = "0qkaspwdb60cqizf3ph9w245nqg7rarb7riwzdpf007kcpx16905";
+      name = "kturtle-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kaccounts-integration-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/2xabxjp756c62b9l4iaqjb2hn6jm57bn-kaccounts-integration-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kaccounts-integration-15.04.1.tar.xz";
+      sha256 = "0rm4i69b63vmcjcdvgc5bj3sygdjxkk5bx12vm70h2wx72zi7bmm";
+      name = "kaccounts-integration-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktouch-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/889f6956q1d0k0m9n1j9bx36y446zaqd-ktouch-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktouch-15.04.1.tar.xz";
+      sha256 = "040xb5bpc848g4m7lpgh2qp7zn3x88pi8lx49rvd7cwy9r0yypxg";
+      name = "ktouch-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "analitza-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ci7yardryphabk0561gfqv9w3bg2dld9-analitza-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/analitza-15.04.1.tar.xz";
+      sha256 = "0ndz76kdk0x63269324c516d7vyssni8q89im62hkcvsjv0y1wb5";
+      name = "analitza-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "cervisia-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/6v595hx7jz5v0k6pvmxixva0pz9a86c2-cervisia-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/cervisia-15.04.1.tar.xz";
+      sha256 = "01j8ai5s5gqh5wb6c74yrpr6x8652zdmh25dchpafih5sm5y1s8l";
+      name = "cervisia-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "filelight-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/kxzx5vxg5cl6v99c2q0dx6svzq66lmq3-filelight-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/filelight-15.04.1.tar.xz";
+      sha256 = "1pi3j10h23s7ianr5dhf17skdspnxgqfv9hxzfi0pyy3z9yfhs9r";
+      name = "filelight-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktimer-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/bfgk2rpkifs0kmmg8a9cw2sbcw9x4acj-ktimer-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktimer-15.04.1.tar.xz";
+      sha256 = "0avscwyksa6rba9ppp6pcd332phd2zwsvpbprn0sbsias63mx7rb";
+      name = "ktimer-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "picmi-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/adzmd2pnn5lss9fm35x6hqvb6jfb3dc5-picmi-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/picmi-15.04.1.tar.xz";
+      sha256 = "06v2cxdlg8366r122gfs03y2zfhcml2bp0q79a357b4aj14xah76";
+      name = "picmi-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "dolphin-plugins-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/g7mzrah5zhp760dw67z836yjb9ycscqb-dolphin-plugins-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/dolphin-plugins-15.04.1.tar.xz";
+      sha256 = "1zw626gzrc0sxbif1y2mnqm96s2yap3fnh3ij1cv81v43yy12jsk";
+      name = "dolphin-plugins-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libkmahjongg-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/9awn6c5akngz6f7h9xbwvnxfjh7k4k6c-libkmahjongg-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libkmahjongg-15.04.1.tar.xz";
+      sha256 = "1lw9k7h2cli65738lp06wwn763aggqdaqm52gf4s25ia6sqa1vs2";
+      name = "libkmahjongg-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-base-artwork-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wygvvlqqdcah3ilsr18n32jbidb3vjp2-kde-base-artwork-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-base-artwork-15.04.1.tar.xz";
+      sha256 = "1jxmg1s11kj1qiwlh5jji2bhcgn2d0sx6lljh65snwxg26liwz6v";
+      name = "kde-base-artwork-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kscd-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k6bz5mzppxksahygjg51bfyr2lmb56vq-kscd-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kscd-15.04.1.tar.xz";
+      sha256 = "17spvnflbq2wq80awk6y895ls214n8h0ssk87r7qmr03pvzhnyaa";
+      name = "kscd-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "sweeper-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/s35plhhx4ic5ghzqa9v3ivsvr1rynang-sweeper-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/sweeper-15.04.1.tar.xz";
+      sha256 = "0vzqpyhi5kn2p6waj2pn1myaz44v7dw2ll0hz8vp0rfh9qnwq70l";
+      name = "sweeper-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-workspace-4.11.19.tar.xz" ".tar";
+    store = "/nix/store/lxglid45py66valnl34y41z7ny1zyla3-kde-workspace-4.11.19.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kde-workspace-4.11.19.tar.xz";
+      sha256 = "1hn5q86p1wpv6y4wia0sxfn83iya00d6y70gdq3svmhj1bdjj50w";
+      name = "kde-workspace-4.11.19.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "konquest-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/wags5sgprgy7cngppjj2n9b29625yp1r-konquest-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/konquest-15.04.1.tar.xz";
+      sha256 = "078503rf9r7rb161xi5j22d08imk2b1g4ma5xyaap8j7jr8qykak";
+      name = "konquest-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kig-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/pii50yzi2wkj384pvswiqcqf3m6w2b22-kig-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kig-15.04.1.tar.xz";
+      sha256 = "07dw82q68akjzc3v1igx1ah1j4b53ph4pgpkrxzh3468nrhkrxqc";
+      name = "kig-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-approver-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/0z3zii1zjnnjk34x0i94nc41i2cdi0gw-ktp-approver-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-approver-15.04.1.tar.xz";
+      sha256 = "158c93kmwffnsx78qr84qqjb34p7czynrqbz3iyj29s79kkx4ix0";
+      name = "ktp-approver-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kalzium-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/f4jk61d6sgcx57k7ppjql6qml9q2pazn-kalzium-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kalzium-15.04.1.tar.xz";
+      sha256 = "1islh3c67hlar51hf2hx31c1pg8kkw6h7c6vl3mv442wl468ilvl";
+      name = "kalzium-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kcron-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/q6dydf2sgx486rf4rfm3sfbbbsrcns89-kcron-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kcron-15.04.1.tar.xz";
+      sha256 = "0ppdydcasrigqmpldjgvrxmjffizf9gnqbxrjypwirhsay2z5clv";
+      name = "kcron-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktuberling-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/z7nqzkmyfc7fw4a2c4kwh8flvx9309pb-ktuberling-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktuberling-15.04.1.tar.xz";
+      sha256 = "1nm0g089c22nc06xi7446drsgllsxrsfd68r7mm5p38fdh1rmxll";
+      name = "ktuberling-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "juk-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/k9pq6074j197y1hz9hr3xdcla9pcqhic-juk-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/juk-15.04.1.tar.xz";
+      sha256 = "158mxy9c73g27i3plndik4zw8p527zgqq7rj1mrdlj2sic1jd6df";
+      name = "juk-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdiamond-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/266jwjlfnq0njn09f26xnif9bl3v12h8-kdiamond-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdiamond-15.04.1.tar.xz";
+      sha256 = "0kkprlaghidb0skmra1ja9vwncg0zsvawvnjrzb0fgi065iz6bc2";
+      name = "kdiamond-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "ktp-filetransfer-handler-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/cw3cr2nrhmid0miwp6nfh7c3kqwf072k-ktp-filetransfer-handler-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/ktp-filetransfer-handler-15.04.1.tar.xz";
+      sha256 = "1dzkbgpv9fbkwxlzdch0axc722m5kq6viy33isihv2j0hcxvjjzy";
+      name = "ktp-filetransfer-handler-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdepim-4.14.8.tar.xz" ".tar";
+    store = "/nix/store/2jiwn6rshw66kv3v058w34qv45qgkrna-kdepim-4.14.8.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdepim-4.14.8.tar.xz";
+      sha256 = "19z3pfmb8d6gsr9njyfyrjl4llzkk7q6fcl0ng0k0w1q4i4igd2j";
+      name = "kdepim-4.14.8.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdesdk-thumbnailers-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/3hz1jgliry4xb27cbn4khkynvz42asfm-kdesdk-thumbnailers-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdesdk-thumbnailers-15.04.1.tar.xz";
+      sha256 = "104wyrapk77mi11a72p03liln0qh0mq84hbgklyf3rwxbdsmysz9";
+      name = "kdesdk-thumbnailers-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdeedu-data-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/c4kzdj7sq4557wcmhwf2cg566b04x617-kdeedu-data-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdeedu-data-15.04.1.tar.xz";
+      sha256 = "1fvvam4wilijvmlfklqwgvl47ffy7w7lhp61hjgn6chjhrk3wxd1";
+      name = "kdeedu-data-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "libksane-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/l09dwrlxm13fl8qnk7cpgs66537287cb-libksane-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/libksane-15.04.1.tar.xz";
+      sha256 = "1wlp09c2djprwwsbip0i1jx3d9cj16axbvbyn1hhc1hzaim3wnsc";
+      name = "libksane-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kshisen-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/2mb9v1738cif1qwwkfqyqgbs3lysg0ij-kshisen-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kshisen-15.04.1.tar.xz";
+      sha256 = "0vgh980plqrd0r8s4pp79xy39j7n6z2xjrj62z6bna65wywv8cim";
+      name = "kshisen-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kjumpingcube-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ap7dpxkmh50bay925x93hhchdvga0zc0-kjumpingcube-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kjumpingcube-15.04.1.tar.xz";
+      sha256 = "0lsd14qpb1c6hs9ff9fwpmrbdn7khk6lwdar82l9dwvzd9zk9vpd";
+      name = "kjumpingcube-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "zeroconf-ioslave-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/ncrdk952fj4sg748lqfdm9xf5wi5rm2d-zeroconf-ioslave-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/zeroconf-ioslave-15.04.1.tar.xz";
+      sha256 = "181q88i8ygqp2g4c78qr2flwbrnwphix0ksm2qrinrchbc7v7mxm";
+      name = "zeroconf-ioslave-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kdenlive-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/qcwij9xp4fv8s5zgizij3rmb220r7193-kdenlive-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/kdenlive-15.04.1.tar.xz";
+      sha256 = "0v4qx1r5kkkiqvxzdvr2467dhx0ndylvwl1vd723lbdi9vk9gg4q";
+      name = "kdenlive-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "khangman-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/g1f0f255pjr3wd2jh10q05xjkgm3340h-khangman-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/khangman-15.04.1.tar.xz";
+      sha256 = "1jnc5cjij32sbxcq2bvmzkdsj2f7w194lwkj48gdkkwfplbn4kwc";
+      name = "khangman-15.04.1.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "lokalize-15.04.1.tar.xz" ".tar";
+    store = "/nix/store/1j2l2qhfkxrgqbwiglg8mn60480sanfy-lokalize-15.04.1.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.1/src/lokalize-15.04.1.tar.xz";
+      sha256 = "0h46kf14i4gd17k2fad629b7yq66mcy2cp5w0ir0f071z2s9jvg3";
+      name = "lokalize-15.04.1.tar.xz";
+    };
+  }
+  {
     name = stdenv.lib.nameFromURL "kaccessible-15.04.0.tar.xz" ".tar";
     store = "/nix/store/51djz0y5i1mr90pv9fmxi0vwzrrj2ygq-kaccessible-15.04.0.tar.xz";
     src = fetchurl {
@@ -2411,6 +4445,15 @@
       url = "${mirror}/stable/applications/15.04.0/src/kde-l10n/kde-l10n-ar-15.04.0.tar.xz";
       sha256 = "04djbcdq3z4iysbvdiai2qd7wm9zx5fp400k3zsw36150g93ar7q";
       name = "kde-l10n-ar-15.04.0.tar.xz";
+    };
+  }
+  {
+    name = stdenv.lib.nameFromURL "kde-l10n-ca_valencia-15.04.0.tar.xz" ".tar";
+    store = "/nix/store/vaih1nkjz81vm6vgfy25iqd8dxrivsqc-kde-l10n-ca_valencia-15.04.0.tar.xz";
+    src = fetchurl {
+      url = "${mirror}/stable/applications/15.04.0/src/kde-l10n/kde-l10n-ca_valencia-15.04.0.tar.xz";
+      sha256 = "0ij9xp47mv63hgdbri7cmvld3zgg0sfgip0gg7iqinzkj1cifj9f";
+      name = "kde-l10n-ca_valencia-15.04.0.tar.xz";
     };
   }
   {

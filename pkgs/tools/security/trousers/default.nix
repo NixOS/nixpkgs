@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lgcc_s";
 
   # Fix broken libtool file
-  preFixup = ''
+  preFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed 's,-lcrypto,-L${openssl}/lib -lcrypto,' -i $out/lib/libtspi.la
   '';
 

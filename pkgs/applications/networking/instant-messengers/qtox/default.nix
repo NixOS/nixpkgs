@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, qt5, openalSoft, opencv
+{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, qt5, openal, opencv
 , libsodium, libXScrnSaver }:
 
 let
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      libtoxcore openalSoft opencv libsodium filteraudio
+      libtoxcore openal opencv libsodium filteraudio
       qt5.base qt5.tools libXScrnSaver
     ];
   nativeBuildInputs = [ pkgconfig ];

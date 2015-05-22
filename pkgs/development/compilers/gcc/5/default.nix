@@ -65,12 +65,12 @@ let version = "5.1.0";
     enableParallelBuilding = true;
 
     patches = [ ]
-      ++ optional (cross != null) ./libstdc++-target.patch
-      ++ optional noSysDirs ./no-sys-dirs.patch
+      ++ optional (cross != null) ../libstdc++-target.patch
+      ++ optional noSysDirs ../no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
-      ++ optional langAda ./gnat-cflags.patch
-      ++ optional langFortran ./gfortran-driving.patch;
+      ++ optional langAda ../gnat-cflags.patch
+      ++ optional langFortran ../gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -157,7 +157,6 @@ let version = "5.1.0";
           " --disable-libssp --disable-nls" +
           " --without-headers" +
           " --disable-threads " +
-          " --disable-libmudflap " +
           " --disable-libgomp " +
           " --disable-libquadmath" +
           " --disable-shared" +
@@ -207,7 +206,7 @@ assert x11Support -> (filter (x: x == null) ([ gtk libart_lgpl ] ++ xlibs)) == [
 stdenv.mkDerivation ({
   name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
 
-  builder = ./builder.sh;
+  builder = ../builder.sh;
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";

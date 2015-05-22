@@ -8,10 +8,10 @@ self: super: {
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
   Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; });
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; zlib = self.zlib_0_5_4_2; });
+  cabal-install_1_18_1_0 = dontCheck (super.cabal-install_1_18_1_0.override { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Break infinite recursions.
-  digest = super.digest.override { inherit (pkgs) zlib; };
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
@@ -152,14 +152,11 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
-  darcs = overrideCabal super.darcs (drv: {
+  # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
+  darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
-  });
-
-  # Needs the latest version of QuickCheck to compile.
-  cabal-test-quickcheck = super.cabal-test-quickcheck.override { QuickCheck = self.QuickCheck_2_8_1; };
+    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' darcs.cabal";
+  })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
@@ -296,6 +293,8 @@ self: super: {
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
+  bitcoin-api = dontCheck super.bitcoin-api;
+  bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
@@ -316,6 +315,7 @@ self: super: {
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
+  wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -403,7 +403,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
-  influxdb = dontCheck super.influxdb;
+  influxdb = dontCheck (dontJailbreak super.influxdb);
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -669,7 +669,7 @@ self: super: {
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
-  # https://github.com/megantti/rtorrent-rpc/issues/1
+  # https://github.com/megantti/rtorrent-rpc/issues/2
   rtorrent-rpc = markBroken super.rtorrent-rpc;
 
   # https://github.com/PaulJohnson/geodetics/issues/1
@@ -681,7 +681,7 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2045
+  # https://github.com/jgm/pandoc/issues/2036
   pandoc = dontCheck super.pandoc;
 
   # Broken by GLUT update.
@@ -714,9 +714,6 @@ self: super: {
   Hipmunk = markBroken super.Hipmunk;
   HipmunkPlayground = dontDistribute super.HipmunkPlayground;
   click-clack = dontDistribute super.click-clack;
-
-  # https://github.com/prowdsponsor/esqueleto/issues/93
-  esqueleto = dontCheck super.esqueleto;
 
   # https://github.com/fumieval/audiovisual/issues/1
   audiovisual = markBroken super.audiovisual;
@@ -765,10 +762,7 @@ self: super: {
            in appendPatch pkg ./mueval-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
-  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
-
-  # Jailbreaking breaks the build.
-  QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
+  zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = pkgs.cabal2nix;
@@ -801,7 +795,46 @@ self: super: {
   # https://github.com/adamwalker/sdr/issues/1
   sdr = dontCheck super.sdr;
 
-  # https://github.com/Porges/email-validate-hs/issues/12
-  email-validate = dontCheck super.email-validate;
+  # https://github.com/bos/aeson/issues/253
+  aeson = dontCheck super.aeson;
+
+  # GNUTLS 3.4 causes linker errors: http://hydra.cryp.to/build/839563/nixlog/2/raw
+  gnutls = super.gnutls.override { gnutls = pkgs.gnutls33; };
+
+  # Won't compile with recent versions of QuickCheck.
+  testpack = markBroken super.testpack;
+  MissingH = dontCheck super.MissingH;
+
+  # Obsolete for GHC versions after GHC 6.10.x.
+  utf8-prelude = markBroken super.utf8-prelude;
+
+  # https://github.com/snapframework/snap/issues/148
+  snap = overrideCabal super.snap (drv: {
+    patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
+  });
+
+  # https://github.com/jwiegley/gitlib/issues/46
+  gitlib = markBroken super.gitlib;
+  gitlib-sample = dontDistribute super.gitlib-sample;
+  gitlib-test = dontDistribute super.gitlib-test;
+
+  # https://github.com/yaccz/saturnin/issues/3
+  Saturnin = dontCheck super.Saturnin;
+
+  # https://github.com/kolmodin/binary/issues/74
+  binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
+
+  # https://github.com/kkardzis/curlhs/issues/6
+  curlhs = dontCheck super.curlhs;
+
+  # https://github.com/ekmett/lens-action/issues/5
+  lens-action = markBroken super.lens-action;
+  aws-kinesis-client = markBroken super.aws-kinesis-client;
+
+  # https://github.com/haskell-servant/servant-server/issues/45
+  servant-server = markBroken super.servant-server;
+  servant-client = dontDistribute super.servant-client;
+  servant-jquery = dontDistribute super.servant-jquery;
+  language-puppet = dontDistribute super.language-puppet;
 
 }

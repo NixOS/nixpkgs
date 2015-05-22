@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "3.2.68";
+  version = "3.2.69";
   extraMeta.branch = "3.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-    sha256 = "0yz3k3qqr13r6fa2f8i83rryiawy4rrd7qk2zx6jxq6byfd31ba2";
+    sha256 = "0fs7aj3vn51dlx7yfgkx05qpki2msh6j2irwajd9bw0l26cbycd3";
   };
 
   # We don't provide these patches if grsecurity is enabled, because

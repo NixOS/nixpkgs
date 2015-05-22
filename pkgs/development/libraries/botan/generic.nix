@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python bzip2 zlib gmp openssl boost ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
   '';
 
   enableParallelBuilding = true;

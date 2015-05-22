@@ -16,7 +16,11 @@ let
   mkWith = mkFlag "with-" "without-";
   mkOther = mkFlag "" "" true;
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+  shouldUsePkg = pkg_: let
+    pkg = (builtins.tryEval pkg_).value;
+  in if stdenv.lib.any (x: x == stdenv.system) (pkg.meta.platforms or [])
+    then pkg
+    else null;
 
   buildShared = !stdenv.isDarwin;
 

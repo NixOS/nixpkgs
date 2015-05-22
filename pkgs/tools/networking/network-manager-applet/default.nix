@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "0liia390bhkl09lvk2rplcwhmfbxpjffa1xszfawc0h00v9fivaz";
+    sha256 = "1afri2zln5p59660hqzbwm2r8phx9inrm2bgp5scynzs8ddzh2kn";
   };
+
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
@@ -29,6 +31,11 @@ stdenv.mkDerivation rec {
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
+
+  preInstall =
+    ''
+      installFlagsArray=( "sysconfdir=$out/etc" )
+    '';
 
   preFixup = ''
     wrapProgram "$out/bin/nm-applet" \

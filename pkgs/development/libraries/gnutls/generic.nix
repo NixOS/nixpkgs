@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp trousers unbound ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp ]
+    ++ stdenv.lib.optional stdenv.isLinux trousers
+    ++ [ unbound ]
     ++ stdenv.lib.optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkgconfig autoreconfHook ];
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
   # Fixup broken libtool and pkgconfig files
-  preFixup = ''
+  preFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -e 's,-ltspi,-L${trousers}/lib -ltspi,' \
         -e 's,-lz,-L${zlib}/lib -lz,' \
         -e 's,-lgmp,-L${gmp}/lib -lgmp,' \

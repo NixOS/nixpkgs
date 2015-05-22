@@ -120,8 +120,10 @@ rec {
     mkdir -p /fs/nix/store
     mount -t 9p store /fs/nix/store -o trans=virtio,version=9p2000.L,msize=262144,cache=loose
 
-    mkdir -p /fs/tmp
+    mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
+    mount -t tmpfs -o "mode=755" none /fs/run
+    ln -sfn /run /fs/var/run
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
@@ -138,15 +140,7 @@ rec {
     echo "127.0.0.1 localhost" > /fs/etc/hosts
 
     echo "starting stage 2 ($command)"
-    test -n "$command"
-
-    set +e
-    chroot /fs $command $out
-    echo $? > /fs/tmp/xchg/in-vm-exit
-
-    mount -o remount,ro dummy /fs
-
-    poweroff -f
+    exec switch_root /fs $command $out
   '';
 
 
@@ -179,12 +173,27 @@ rec {
       ${coreutils}/bin/ln -s ${bash}/bin/sh /bin/sh
     fi
 
+    # Set up automatic kernel module loading.
+    export MODULE_DIR=${linux}/lib/modules/
+    ${coreutils}/bin/cat <<EOF > /run/modprobe
+    #! /bin/sh
+    export MODULE_DIR=$MODULE_DIR
+    exec ${kmod}/bin/modprobe "\$@"
+    EOF
+    ${coreutils}/bin/chmod 755 /run/modprobe
+    echo /run/modprobe > /proc/sys/kernel/modprobe
+
     # For debugging: if this is the second time this image is run,
     # then don't start the build again, but instead drop the user into
     # an interactive shell.
     if test -n "$origBuilder" -a ! -e /.debug; then
       ${coreutils}/bin/touch /.debug
-      exec $origBuilder $origArgs
+      $origBuilder $origArgs
+      echo $? > /tmp/xchg/in-vm-exit
+
+      ${busybox}/bin/mount -o remount,ro dummy /
+
+      ${busybox}/bin/poweroff -f
     else
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
@@ -1557,6 +1566,40 @@ rec {
           (fetchurl {
             url = mirror://ubuntu/dists/utopic/universe/binary-amd64/Packages.bz2;
             sha256 = "2acf0e39e64b4fd6d2b68b55c598fc167d7c3cabae233fc31a1e6b69eb6ecc63";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1504i386 = {
+      name = "ubuntu-15.04-vivid-i386";
+      fullName = "Ubuntu 15.04 Vivid (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/vivid/main/binary-i386/Packages.bz2;
+            sha256 = "0bf587152fa3fc3524bf3a3caaf46ea43cc640a27b2b448577232f014a3ec1e4";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/vivid/universe/binary-i386/Packages.bz2;
+            sha256 = "3452cff96eb715ca36b73d4d0cdffbf06064cbc30b1097e334a2e493b94c7fac";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1504x86_64 = {
+      name = "ubuntu-15.04-vivid-amd64";
+      fullName = "Ubuntu 15.04 Vivid (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/vivid/main/binary-amd64/Packages.bz2;
+            sha256 = "8f22c9bd389822702e65713e816250aa0d5829d6b3d75fd34f068de5f93de1d9";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/vivid/universe/binary-amd64/Packages.bz2;
+            sha256 = "feb88768e245a63ee04b0f3bcfc8899a1f03b2f831646dc2a59e4e58884b5cb9";
           })
         ];
       urlPrefix = mirror://ubuntu;

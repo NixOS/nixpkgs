@@ -39,7 +39,7 @@ let
   optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
   optEsound = if libOnly then null else shouldUsePkg esound;
   optGlib = if libOnly then null else shouldUsePkg glib;
-  optGtk3 = if libOnly || hasXlibs then null else shouldUsePkg gtk3;
+  optGtk3 = if libOnly || !hasXlibs then null else shouldUsePkg gtk3;
   optGconf = if libOnly then null else shouldUsePkg gconf;
   optAvahi = if libOnly then null else shouldUsePkg avahi;
   optLibjack2 = if libOnly then null else shouldUsePkg libjack2;
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     (mkEnable false                   "samplerate"                 null)         # Deprecated
     (mkWith   true                    "database"                   databaseName)
     (mkEnable hasOss                  "oss-output"                 null)
-    (mkEnable hasOss                  "oss-wrapper"                null)
+    (mkEnable true                    "oss-wrapper"                null)         # Does not use OSS
     (mkEnable (optCoreaudio != null)  "coreaudio-output"           null)
     (mkEnable (optAlsaLib != null)    "alsa"                       null)
     (mkEnable (optEsound != null)     "esound"                     null)
