@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.4.8";
+  version = "2.4.9";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
@@ -21,10 +21,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "08xxqsxpa63nzgbsz63vrdxdxgpysyiy7jdcjb57k1hprdcibwb8";
+    sha256 = "0r651ar3p0f8zwl7764kyimxk5hy88cwy116pv8cl5l8hbkjkpxg";
   };
-
-  patches = [ ./webkitgtk-2.4-gmutexlocker.patch ./bug140241.patch ];
 
   CC = "cc";
 
@@ -46,7 +44,7 @@ stdenv.mkDerivation rec {
   dontAddDisableDepTrack = true;
 
   nativeBuildInputs = [
-    autoreconfHook/*bug140241.patch*/ perl python ruby bison gperf flex
+    autoreconfHook perl python ruby bison gperf flex
     pkgconfig which gettext gobjectIntrospection
   ];
 
