@@ -837,4 +837,7 @@ self: super: {
   servant-jquery = dontDistribute super.servant-jquery;
   language-puppet = dontDistribute super.language-puppet;
 
+  # This needs the latest version of errors to compile.
+  pipes-errors_0_3 = super.pipes-errors_0_3.override { errors = self.errors_2_0_0; };
+
 }
