@@ -417,7 +417,7 @@ let
   };
 
   consul = buildGoPackage rec {
-    rev = "v0.5.1";
+    rev = "v0.5.2";
     name = "consul-${rev}";
     goPackagePath = "github.com/hashicorp/consul";
 
@@ -425,7 +425,7 @@ let
       inherit rev;
       owner = "hashicorp";
       repo = "consul";
-      sha256 = "0glmvw52mgf3gwqr0f8v19ip5i6csiimv25jh30ilkig29k7027k";
+      sha256 = "0p3lc1p346a5ipvkf15l94gn1ml3m7zz6bx0viark3hsv0a7iij7";
     };
 
     buildInputs = [
