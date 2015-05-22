@@ -1572,6 +1572,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1504i386 = {
+      name = "ubuntu-15.04-vivid-i386";
+      fullName = "Ubuntu 15.04 Vivid (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/vivid/main/binary-i386/Packages.bz2;
+            sha256 = "0bf587152fa3fc3524bf3a3caaf46ea43cc640a27b2b448577232f014a3ec1e4";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/vivid/universe/binary-i386/Packages.bz2;
+            sha256 = "3452cff96eb715ca36b73d4d0cdffbf06064cbc30b1097e334a2e493b94c7fac";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1504x86_64 = {
+      name = "ubuntu-15.04-vivid-amd64";
+      fullName = "Ubuntu 15.04 Vivid (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/vivid/main/binary-amd64/Packages.bz2;
+            sha256 = "8f22c9bd389822702e65713e816250aa0d5829d6b3d75fd34f068de5f93de1d9";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/vivid/universe/binary-amd64/Packages.bz2;
+            sha256 = "feb88768e245a63ee04b0f3bcfc8899a1f03b2f831646dc2a59e4e58884b5cb9";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
