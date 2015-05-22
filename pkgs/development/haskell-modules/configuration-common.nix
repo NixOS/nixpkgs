@@ -808,11 +808,6 @@ self: super: {
   # Obsolete for GHC versions after GHC 6.10.x.
   utf8-prelude = markBroken super.utf8-prelude;
 
-  # https://github.com/snapframework/snap/issues/148
-  snap = overrideCabal super.snap (drv: {
-    patchPhase = "sed -i -e 's|attoparsec.*>=.*,|attoparsec,|' -e 's|lens.*>=.*|lens|' snap.cabal";
-  });
-
   # https://github.com/jwiegley/gitlib/issues/46
   gitlib = markBroken super.gitlib;
   gitlib-sample = dontDistribute super.gitlib-sample;
