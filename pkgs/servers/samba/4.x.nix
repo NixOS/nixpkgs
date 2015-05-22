@@ -37,18 +37,12 @@
 assert kerberos != null -> zlib != null;
 
 let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
   bundledLibs = if kerberos != null && kerberos.implementation == "heimdal" then "NONE" else "com_err";
   hasGnutls = gnutls != null && libgcrypt != null && libgpgerror != null;
   isKrb5OrNull = if kerberos != null && kerberos.implementation == "krb5" then true else null;
   hasInfinibandOrNull = if libibverbs != null && librdmacm != null then true else null;
 in
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "samba-4.2.1";
 
@@ -60,7 +54,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-fix-ctdb-deps.patch
-  ] ++ stdenv.lib.optional (kerberos != null) ./4.x-heimdal-compat.patch;
+  ] ++ optional (kerberos != null) ./4.x-heimdal-compat.patch;
 
   buildInputs = [
     python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42
@@ -162,7 +156,7 @@ stdenv.mkDerivation rec {
     find $out -type f -exec $SHELL -c "$SCRIPT" \;
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://www.samba.org/;
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;

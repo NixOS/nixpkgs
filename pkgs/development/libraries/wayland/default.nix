@@ -6,10 +6,6 @@
 # Require the optional to be enabled until upstream fixes or removes the configure flag
 assert expat != null;
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "wayland-${version}";
@@ -21,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag (expat != null) "scanner")
+    (mkEnable (expat != null) "scanner" null)
   ];
 
   nativeBuildInputs = [ pkgconfig ];

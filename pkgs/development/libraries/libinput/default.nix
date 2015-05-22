@@ -9,10 +9,6 @@ assert documentationSupport -> doxygen != null && graphviz != null;
 assert eventGUISupport -> cairo != null && glib != null && gtk3 != null;
 assert testsSupport -> check != null && valgrind != null;
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libinput-0.15.0";
@@ -23,9 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag documentationSupport "documentation")
-    (mkFlag eventGUISupport "event-gui")
-    (mkFlag testsSupport "tests")
+    (mkEnable documentationSupport "documentation" null)
+    (mkEnable eventGUISupport      "event-gui"     null)
+    (mkEnable testsSupport         "tests"         null)
   ];
 
   nativeBuildInputs = [ pkgconfig ];
