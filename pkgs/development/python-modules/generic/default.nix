@@ -47,11 +47,24 @@
 # Execute after shell hook
 , postShellHook ? ""
 
+# Environment variables to set in wrapper scripts, in addition to
+# PYTHONPATH and PATH.
+, setEnvVars ? []
+
 , ... } @ attrs:
 
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled then throw "${name} not supported for interpreter ${python.executable}" else python.stdenv.mkDerivation (attrs // {
+if disabled
+then throw "${name} not supported for interpreter ${python.executable}"
+else
+
+let
+  inherit (builtins) hasAttr;
+  inherit (lib) mapAttrs concatStringsSep optionals hasSuffix;
+in
+
+python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   name = namePrefix + name;
