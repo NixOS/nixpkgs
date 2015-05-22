@@ -277,6 +277,16 @@ in
         };
       };
 
+      moduliFile = mkOption {
+        example = "services.openssh.moduliFile = /etc/my-local-ssh-moduli;";
+        type = types.path;
+        description = ''
+          Path to <literal>moduli</literal> file to install in
+          <literal>/etc/ssh/moduli</literal>. If this option is unset, then
+          the <literal>moduli</literal> file shipped with OpenSSH will be used.
+        '';
+      };
+
     };
 
     users.extraUsers = mkOption {
@@ -297,8 +307,10 @@ in
         home = "/var/empty";
       };
 
+    services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
+
     environment.etc = authKeysFiles ++ [
-      { source = "${cfgc.package}/etc/ssh/moduli";
+      { source = cfg.moduliFile;
         target = "ssh/moduli";
       }
       { source = knownHostsFile;
