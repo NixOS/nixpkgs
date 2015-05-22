@@ -129,7 +129,10 @@ go.stdenv.mkDerivation (
 
   passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
-  meta = meta // {
+  meta = {
+    # Add default meta information
+    platforms = lib.platforms.all;
+  } // meta // {
     # add an extra maintainer to every package
     maintainers = (meta.maintainers or []) ++
                   [ lib.maintainers.emery lib.maintainers.lethalman ];
