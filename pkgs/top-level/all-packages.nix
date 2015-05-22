@@ -5427,6 +5427,8 @@ let
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  rman = callPackage ../development/tools/misc/rman { };
+
   rr = callPackage ../development/tools/analysis/rr { };
 
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
