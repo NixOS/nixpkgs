@@ -59,11 +59,6 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-let
-  inherit (builtins) hasAttr;
-  inherit (lib) mapAttrs concatStringsSep optionals hasSuffix;
-in
-
 python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
