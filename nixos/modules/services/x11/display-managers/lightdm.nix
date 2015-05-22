@@ -124,11 +124,6 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [ {
-      assertion = !config.services.accounts-daemon.enable;
-      message = "Lightdm does not properly support gnome accountservice";
-    } ];
-
     services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job = {
@@ -148,8 +143,26 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    security.pam.services.lightdm = { allowNullPassword = true; startSession = true; };
-    security.pam.services.lightdm-greeter = { allowNullPassword = true; startSession = true; };
+    security.pam.services.lightdm = {
+      allowNullPassword = true;
+      startSession = true;
+    };
+    security.pam.services.lightdm-greeter = {
+      allowNullPassword = true;
+      startSession = true;
+      text = ''
+        auth     required pam_env.so
+        auth     required pam_permit.so
+
+        account  required pam_permit.so
+
+        password required pam_deny.so
+
+        session  required pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required pam_unix.so
+        session  optional ${pkgs.systemd}/lib/security/pam_systemd.so
+      '';
+    };
 
     users.extraUsers.lightdm = {
       createHome = true;
