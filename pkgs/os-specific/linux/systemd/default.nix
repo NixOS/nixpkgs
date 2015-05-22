@@ -147,6 +147,9 @@ stdenv.mkDerivation rec {
       rm -rf $out/etc/rpm
 
       rm $out/lib/*.la
+
+      # "kernel-install" shouldn't be used on NixOS.
+      find $out -name "*kernel-install*" -exec rm {} \;
     ''; # */
 
   enableParallelBuilding = true;
