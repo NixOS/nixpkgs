@@ -6782,6 +6782,8 @@ let
 
   libidn = callPackage ../development/libraries/libidn { };
 
+  idnkit = callPackage ../development/libraries/idnkit { };
+
   libiec61883 = callPackage ../development/libraries/libiec61883 { };
 
   libinfinity = callPackage ../development/libraries/libinfinity {
