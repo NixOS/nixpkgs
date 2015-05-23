@@ -835,4 +835,7 @@ self: super: {
     sha256 = "1rk5rgb5lsykpvylz77hzxyflxzlmi3fi06rf0yqg2vvrnri83f1";
   });
 
+  # https://github.com/alphaHeavy/lzma-enumerator/issues/3
+  lzma-enumerator = dontCheck super.lzma-enumerator;
+
 }
