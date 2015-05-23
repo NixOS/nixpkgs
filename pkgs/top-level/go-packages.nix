@@ -598,6 +598,20 @@ let
     };
   };
 
+  fsnotify.v0 = buildGoPackage rec {
+    rev = "v0.9.3";
+    name = "fsnotify.v0-${rev}";
+    goPackagePath = "gopkg.in/fsnotify.v0";
+    goPackageAliases = [ "github.com/howeyc/fsnotify" ];
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "go-fsnotify";
+      repo = "fsnotify";
+      sha256 = "15wqjpkfzsxnaxbz6y4r91hw6812g3sc4ipagxw1bya9klbnkdc9";
+    };
+  };
+
   fsnotify.v1 = buildGoPackage rec {
     rev = "v1.2.0";
     name = "fsnotify.v1-${rev}";

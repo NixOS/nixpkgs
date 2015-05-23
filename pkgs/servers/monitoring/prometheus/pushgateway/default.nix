@@ -3,16 +3,15 @@
 with goPackages;
 
 buildGoPackage rec {
-  name = "prometheus-pushgateway-${version}";
-  version = "0.1.0";
+  name = "prometheus-pushgateway-${rev}";
+  rev = "0.1.1";
   goPackagePath = "github.com/prometheus/pushgateway";
-  rev = "3f1d42dade342ddb88381607358bae61a0a6b6c7";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "1wqxbl9rlnxszp9ylvdbx6f5lyj2z0if3x099fnjahbqmz8yhnf4";
+    sha256 = "17q5z9msip46wh3vxcsq9lvvhbxg75akjjcr2b29zrky8bp2m230";
   };
 
   buildInputs = [
@@ -25,7 +24,7 @@ buildGoPackage rec {
 
   buildFlagsArray = ''
     -ldflags=
-        -X main.buildVersion ${version}
+        -X main.buildVersion ${rev}
         -X main.buildRev ${rev}
         -X main.buildBranch master
         -X main.buildUser nix@nixpkgs
@@ -37,9 +36,6 @@ buildGoPackage rec {
   (
     cd "go/src/$goPackagePath"
     go-bindata ./resources/
-    ${govers}/bin/govers -d -m github.com/matttproud/golang_protobuf_extensions/ext github.com/matttproud/golang_protobuf_extensions/pbutil
-    substituteInPlace handler/push.go \
-      --replace ext.ReadDelimited pbutil.ReadDelimited
   )
   '';
 
