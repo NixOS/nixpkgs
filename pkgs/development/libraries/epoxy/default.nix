@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/anholt/libepoxy;
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
