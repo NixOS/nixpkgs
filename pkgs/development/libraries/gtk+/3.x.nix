@@ -25,11 +25,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxkbcommon epoxy ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
-    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor wayland ]
-    ++ optional stdenv.isDarwin x11
+    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optionals stdenv.isLinux [ wayland ]
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
@@ -64,6 +65,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ urkud raskin vcunat lethalman ];
-    platforms = stdenv.lib.platforms.linux; # Temporary until fixed for darwin
+    platforms = stdenv.lib.platforms.all;
   };
 }
