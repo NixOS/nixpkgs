@@ -168,7 +168,6 @@ self: super: {
   ASN1 = dontDistribute super.ASN1;                             # NewBinary
   frame-markdown = dontDistribute super.frame-markdown;         # frame
   hails-bin = dontDistribute super.hails-bin;                   # Hails
-  hbro-contrib = dontDistribute super.hbro-contrib;             # hbro
   lss = markBrokenVersion "0.1.0.0" super.lss;                  # https://github.com/dbp/lss/issues/2
   snaplet-lss = markBrokenVersion "0.1.0.0" super.snaplet-lss;  # https://github.com/dbp/lss/issues/2
 
