@@ -7,11 +7,11 @@ let
 
   buildRPackage = pkgs.callPackage ./generic-builder.nix { inherit R; };
 
-  # Package template
+  # Generates package templates given per-repository settings
   #
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
-  derive = lib.makeOverridable ({
+  mkDerive = {mkHomepage, mkUrls}: lib.makeOverridable ({
         name, version, sha256,
         depends ? [],
         doCheck ? true,
@@ -21,20 +21,32 @@ let
       }: buildRPackage {
     name = "${name}-${version}";
     src = fetchurl {
-      urls = [
-        "mirror://cran/src/contrib/${name}_${version}.tar.gz"
-        "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
-      ];
       inherit sha256;
+      urls = mkUrls { inherit name version; };
     };
     inherit doCheck requireX;
     propagatedBuildInputs = depends;
     nativeBuildInputs = depends;
-    meta.homepage = "http://cran.r-project.org/web/packages/${name}/";
+    meta.homepage = mkHomepage name;
     meta.platforms = R.meta.platforms;
     meta.hydraPlatforms = hydraPlatforms;
     meta.broken = broken;
   });
+
+  # Templates for generating Bioconductor and CRAN packages
+  # from the name, version, sha256, and optional per-package arguments above
+  #
+  deriveBioc = mkDerive {
+    mkHomepage = name: "http://cran.r-project.org/web/packages/${name}/";
+    mkUrls = {name, version}: [ "mirror://bioc/src/contrib/${name}_${version}.tar.gz" ];
+  };
+  deriveCran = mkDerive {
+    mkHomepage = name: "http://bioconductor.org/packages/release/bioc/html/${name}.html";
+    mkUrls = {name, version}: [
+      "mirror://cran/src/contrib/${name}_${version}.tar.gz"
+      "mirror://cran/src/contrib/00Archive/${name}/${name}_${version}.tar.gz"
+    ];
+  };
 
   # Overrides package definitions with nativeBuildInputs.
   # For example,
@@ -193,7 +205,8 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self = import ./cran-packages.nix { inherit self derive; };
+  _self = import ./cran-packages.nix { inherit self; derive = deriveCran; }
+       // import ./bioc-packages.nix { inherit self; derive = deriveBioc; };
 
   # tweaks for the individual packages and "in self" follow
 
@@ -738,13 +751,8 @@ let
     "CosmoPhotoz" # Requires Nlopt
     "cp4p" # build is broken
     "cplexAPI" # requires CPLEX
-    "crmn" # requires pcaMethods, and Biobase
     "Crossover" # fails self-test
-    "CrypticIBDcheck" # requires rJPSGCS
     "cudaBayesreg" # requres Rmath
-    "curvHDR" # requires flowCore
-    "D2C" # requires gRbase
-    "DAAGbio" # requires limma
     "daff" # requires V8 to build
     "dagbag" # requires Rlapack
     "DAMisc" # Requires Nlopt
@@ -814,6 +822,7 @@ let
     "fPortfolio" # requires rneos
     "freqweights" # requires nlopt
     "fscaret" # requires nlopt
+    "FunctionalNetworks" # requires breastCancerVDX
     "FunctionalNetworks" # requires breastCancerVDX, and Biobase
     "fxregime" # requires nlopt
     "gamclass" # requires nlopt
@@ -829,6 +838,7 @@ let
     "gitter" # requires EBImage
     "glmgraph" # test suite says: "undefined symbol: dgemv_"
     "gmatrix" # depends on proprietary cudatoolkit
+    "gmatrix" # requires CUDA runtime
     "gMCP" # fails self-test
     "GOGANPA" # requires WGCNA
     "gplm" # requires nlopt
@@ -903,6 +913,7 @@ let
     "longpower" # requires nlopt
     "LOST" # requires pcaMethods
     "ltsk" # requires Rlapack and Rblas
+    "magma" # requires MAGMA
     "MAMA" # requires metaMA
     "marked" # requires nlopt
     "MaxPro" # Requires Nlopt
@@ -1018,6 +1029,7 @@ let
     "polytomous" # requires nlopt
     "pomp" # requires nlopt
     "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
+    "ppiPre" # requires GO.db
     "predictmeans" # requires nlopt
     "pRF" # requires multtest
     "prLogistic" # requires nlopt
@@ -1103,7 +1115,6 @@ let
     "rgbif" # requires V8 to build
     "rgp" # fails self-test
     "rgpui" # depends on broken rgp
-    "RImageJROI" # requires spatstat
     "rjade" # requires V8 to build
     "rJPSGCS" # requires chopsticks
     "rLindo" # requires LINDO API
@@ -1130,6 +1141,7 @@ let
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
+    "rsprng" # requres sprng
     "Rsymphony" # FIXME: requires SYMPHONY
     "rugarch" # requires nlopt
     "RVAideMemoire" # Requires Nlopt
