@@ -226,14 +226,14 @@ let lispPackages = rec {
 
   query-fs = buildLispPackage rec {
     baseName = "query-fs";
-    version = "git-20141113";
+    version = "git-20150523";
     description = "High-level virtual FS using CL-Fuse-Meta-FS to represent results of queries";
     deps = [bordeaux-threads cl-fuse cl-fuse-meta-fs cl-ppcre command-line-arguments iterate trivial-backtrace];
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/fb08af68/query-fs'';
-      sha256 = "4ed66f255e50d2c9ea9f0b3fbaa92bde9b8acf6a5fafb0d7f12b254be9de99e9";
-      rev = ''831f0180967f09b1dd345fef82144f48334279c3'';
+      sha256 = "19h6hscza7p93bc7jvb6ya7ghg96dr1c1v4imlxpjqfdhhdpxsq6";
+      rev = ''0f28e3f31a4cd3636a8edb346230482e68af86c2'';
     };
     overrides = x: {
       linkedSystems = [];
@@ -319,14 +319,14 @@ let lispPackages = rec {
 
   cl-fuse-meta-fs = buildLispPackage rec {
     baseName = "cl-fuse-meta-fs";
-    version = "git-20141113";
+    version = "git-20150523";
     description = "CFFI bindings to FUSE (Filesystem in user space)";
     deps = [bordeaux-threads cl-fuse iterate pcall];
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/fb08af68/cl-fuse-meta-fs'';
-      sha256 = "259303effea61baf293ffc5d080cb071ef15bed8fa1c76f0c1631f68d2aa3c85";
-      rev = ''d3d332471ce9330e3eaebf9d6cecdd2014c3599b'';
+      sha256 = "0cpxwsc0ma1ypl54n3n37wbgdxhz5j67h28q6rhghjn96dgy4ac9";
+      rev = ''6ab92ebbb8e6f1f69d179214032915e3744d8c03'';
     };
   };
 
