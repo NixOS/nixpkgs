@@ -24,7 +24,13 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  doCheck = stdenv.system == "x86_64-linux";
+  # Tests have been failing (at least for some people in some cases)
+  # and have been disabled until someone wants to fix them. Some
+  # initial digging uncovers that the tests call out to `git`, which
+  # they shouldn't, and then even once that's fixed have some
+  # perl-related errors later on. For more, see
+  # https://github.com/NixOS/nixpkgs/issues/7957
+  doCheck = false; # stdenv.system == "x86_64-linux";
 
   checkPhase = stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
   ''
@@ -60,4 +66,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-
