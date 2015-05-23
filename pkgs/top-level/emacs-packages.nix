@@ -1093,14 +1093,14 @@ let self = _self // overrides;
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.4.0";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "1skgw84j5a59ds86bpdcaf3c8iq2m0fz720chjh91ixhkavvdd87";
+      sha256 = "1a28vignwpcn62xk46w5p5wjfrbcmvs0gz1jgn4ba7ibmn4cmnnm";
     };
-    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" ];
+    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = { license = gpl3Plus; };
   };
 
