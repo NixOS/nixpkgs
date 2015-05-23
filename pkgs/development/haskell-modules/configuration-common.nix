@@ -829,4 +829,10 @@ self: super: {
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
+  # https://github.com/kawu/text-binary/issues/2
+  text-binary = appendPatch super.text-binary (pkgs.fetchpatch {
+    url = "https://github.com/RyanGlScott/text-binary/commit/608e0ce86a9a7591dbfe83f7cbb36b8d8ebd07b8.patch";
+    sha256 = "1rk5rgb5lsykpvylz77hzxyflxzlmi3fi06rf0yqg2vvrnri83f1";
+  });
+
 }
