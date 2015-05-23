@@ -1,5 +1,6 @@
 { stdenv, fetchgit, fetchurl, unzip, callPackage, ncurses, gettext, pkgconfig,
-cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop }:
+cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop, libtermkey,
+libvterm, unibilium }:
 
 stdenv.mkDerivation rec {
   name = "neovim-nightly";
@@ -8,8 +9,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/neovim/neovim";
-    rev = "68fcd8b696dae33897303c9f8265629a31afbf17";
-    sha256 = "0hxkcy641jpn4qka44gfvhmb6q3dkjx6lvn9748lcl2gx2d36w4i";
+    rev = "8c27b0dd45731b1eb70edeafd9729b4d25b07f87";
+    sha256 = "5df4ed304451cab35619c5b8c55fe165997f2a3f4aacb68706f77222daa8cd18";
   };
 
   libmsgpack = stdenv.mkDerivation rec {
@@ -46,6 +47,9 @@ stdenv.mkDerivation rec {
     luaMessagePack
     luabitop
     libmsgpack
+    libtermkey
+    libvterm
+    unibilium
   ];
   nativeBuildInputs = [ gettext ];
 
