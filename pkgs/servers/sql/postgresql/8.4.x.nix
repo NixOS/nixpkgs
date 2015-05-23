@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit readline; };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
-    license = stdenv.lib.licenses.postgresql;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    license = licenses.postgresql;
+    maintainers = with maintaiers; [ ocharles ];
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux;
   };
 }
