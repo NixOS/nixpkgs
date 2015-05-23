@@ -11558,6 +11558,8 @@ let
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
+  mediathekview = callPackage ../applications/video/mediathekview { };
+
   meld = callPackage ../applications/version-management/meld { };
 
   mcomix = callPackage ../applications/graphics/mcomix { };
