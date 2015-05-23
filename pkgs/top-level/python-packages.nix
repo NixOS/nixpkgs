@@ -7908,13 +7908,13 @@ let
   };
 
   livestreamer = buildPythonPackage rec {
-    version = "1.11.1";
+    version = "1.12.2";
     name = "livestreamer-${version}";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
-      sha256 = "1hic3z5any64gn2b0gs1b7m34bzgzv71inr8wgjq59pwf8mbrqk9";
+      sha256 = "1fp3d3z2grb1ls97smjkraazpxnvajda2d1g1378s6gzmda2jvjd";
     };
 
     buildInputs = with self; [ pkgs.makeWrapper ];
@@ -7930,6 +7930,7 @@ let
         services and pipes them into a video player of choice.
       '';
       license = stdenv.lib.licenses.bsd2;
+      maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     };
   };
 
