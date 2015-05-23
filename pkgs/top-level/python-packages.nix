@@ -4258,15 +4258,13 @@ let
   };
 
   gevent = buildPythonPackage rec {
-    name = "gevent-1.0.1";
+    name = "gevent-1.0.2";
     disabled = isPy3k || isPyPy;  # see https://github.com/surfly/gevent/issues/248
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gevent/${name}.tar.gz";
-      sha256 = "0hyzfb0gcx9pm5c2igan8y57hqy2wixrwvdjwsaivxsqs0ay49s6";
+      sha256 = "0cds7yvwdlqmd590i59vzxaviwxk4js6dkhnmdxb3p1xac7wmq9s";
     };
- 
-    patches = [ ../development/python-modules/gevent_sslwrap.patch ];
 
     buildInputs = with self; [ pkgs.libev ];
     propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
