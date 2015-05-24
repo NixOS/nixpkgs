@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/christophgysin/pasystray/archive/${name}.zip";
-    sha256 = "1gpb7yqcxqglv50iqbkg2lg3r0z07jm4ir2zqmvns6sgddks590w";
+    sha256 = "0n41qm04kilhc827yx8y1ijslmajg2dxykaf3s3aq6s6bjzzw8bh";
   };
 
   buildInputs = [ unzip autoconf automake makeWrapper pkgconfig 
