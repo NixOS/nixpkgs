@@ -4047,6 +4047,8 @@ let
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
 
+    async_extra = callPackage ../development/ocaml-modules/async_extra { };
+
     async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
 
     async_unix = callPackage ../development/ocaml-modules/async_unix { };
