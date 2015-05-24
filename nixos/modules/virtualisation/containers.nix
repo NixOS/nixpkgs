@@ -127,6 +127,27 @@ in
                 Wether the container is automatically started at boot-time.
               '';
             };
+
+            extraBindsRO = mkOption {
+              type = types.listOf types.str;
+	      default = [];
+	      example = [ "/home/alice" ];
+              description =
+	        ''
+                  An extra list of directories that is bound to the container with read-only permission. 
+                '';
+            };
+
+            extraBindsRW = mkOption {
+              type = types.listOf types.str;
+	      default = [];
+	      example = [ "/home/alice" ];
+              description =
+	        ''
+                  An extra list of directories that is bound to the container with read-only permission. 
+                '';
+            };
+
           };
 
           config = mkMerge
@@ -230,12 +251,15 @@ in
               fi
             ''}
 
+
+
             # Run systemd-nspawn without startup notification (we'll
             # wait for the container systemd to signal readiness).
             EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
+	      $EXTRABINDS \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
@@ -334,6 +358,9 @@ in
            ${optionalString cfg.autoStart ''
              AUTO_START=1
            ''}
+
+           EXTRABINDS="${concatMapStrings (d: " --bind-ro=${d}") cfg.extraBindsRO + concatMapStrings (d: " --bind=${d}") cfg.extraBindsRW}"
+
           '';
       }) config.containers;
 
