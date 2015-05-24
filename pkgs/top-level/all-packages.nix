@@ -8808,6 +8808,8 @@ let
     callPackage ../servers/monitoring/prometheus/alertmanager { };
   prometheus-cli =
     callPackage ../servers/monitoring/prometheus/cli { };
+  prometheus-collectd-exporter =
+    callPackage ../servers/monitoring/prometheus/collectd_exporter { };
   prometheus-haproxy-exporter =
     callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
   prometheus-mesos-exporter =
