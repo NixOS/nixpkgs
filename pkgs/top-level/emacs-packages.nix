@@ -1,17 +1,35 @@
 # package.el-based emacs packages
+
+## FOR USERS
 #
-## add this at the start your init.el:
-# (require 'package)
+# Recommended way: simply use `emacsWithPackages` from
+# `all-packages.nix` with the packages you want.
 #
-# ;; optional. makes unpure packages archives unavailable
-# (setq package-archives nil)
+# Possible way: use `emacs` from `all-packages.nix`, install
+# everything to a system or user profile and then add this at the
+# start your `init.el`:
+/*
+  (require 'package)
+
+  ;; optional. makes unpure packages archives unavailable
+  (setq package-archives nil)
+
+  ;; optional. use this if you install emacs packages to the system profile
+  (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
+
+  ;; optional. use this if you install emacs packages to user profiles (with nix-env)
+  (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
+
+  (package-initialize)
+*/
+
+## FOR CONTRIBUTORS
 #
-# (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
-#
-# ;; optional. use this if you install emacs packages to user profiles (with nix-env)
-# (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
-#
-# (package-initialize)
+# When adding a new package here please note that
+# * lib.licenses are `with`ed on top of the file here
+# * both trivialBuild and melpaBuild will automatically derive a
+#   `meta` with `platforms` and `homepage` set to something you are
+#   unlikely to want to override for most packages
 
 { overrides
 
