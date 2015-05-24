@@ -4051,6 +4051,8 @@ let
 
     async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
 
+    async_ssl = callPackage ../development/ocaml-modules/async_ssl { };
+
     async_unix = callPackage ../development/ocaml-modules/async_unix { };
 
     async = callPackage ../development/ocaml-modules/async { };
