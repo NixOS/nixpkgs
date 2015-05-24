@@ -764,6 +764,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  cli53 = callPackage ../tools/admin/cli53 { };
+
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
   consul = goPackages.consul;
