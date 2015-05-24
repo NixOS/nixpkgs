@@ -1,23 +1,25 @@
 { stdenv, lib, goPackages, fetchFromGitHub, protobuf, vim }:
 
-with goPackages;
-
-buildGoPackage rec {
+goPackages.buildGoPackage rec {
    name = "prometheus-${version}";
-   version = "0.12.0";
+   version = "0.13.4";
    goPackagePath = "github.com/prometheus/prometheus";
-   rev = "55dcb55498b43bafe94915a4de7907d6d66b4427";
+   rev = "612da96c46f0b7ea6cc28a3fc614f14eae0189d0";
 
    src = fetchFromGitHub {
      inherit rev;
      owner = "prometheus";
      repo = "prometheus";
-     sha256 = "17bbdk9axr91m2947ddbnzqwaap2vrzsbknbrlpdsmlsjhc8h7cb";
+     sha256 = "1r3pcnxs1cdh18lmqd60r3nh614cw543wzd4slkr2nzr73pn5x4j";
    };
 
    buildInputs = [
-     dns glog goleveldb prometheus.client_golang
+     goPackages.dns
+     goPackages.glog
      goPackages.protobuf
+     goPackages.goleveldb
+     goPackages.net
+     goPackages.prometheus.client_golang
      protobuf  # the non-golang package, for protoc
      vim  # for xxd, used in embed-static.sh
    ];
@@ -30,7 +32,7 @@ buildGoPackage rec {
          -X main.buildBranch master
          -X main.buildUser nix@nixpkgs
          -X main.buildDate 20150101-00:00:00
-         -X main.goVersion ${lib.getVersion go}
+         -X main.goVersion ${lib.getVersion goPackages.go}
    '';
 
    preBuild = ''

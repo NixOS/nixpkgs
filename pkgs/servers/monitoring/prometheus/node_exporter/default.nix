@@ -3,14 +3,15 @@
 with goPackages;
 
 buildGoPackage rec {
-  name = "prometheus-node-exporter-0.8.0";
+  name = "prometheus-node-exporter-${rev}";
+  rev = "0.8.1";
   goPackagePath = "github.com/prometheus/node_exporter";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "node_exporter";
-    rev = "aaf01e52e25883671fd67234b415df7abd0e4eac";
-    sha256 = "0j1qvgsc2hcv50l9lyfivkzsyjkjp3w1yyqvd1gzfybk7hi59dya";
+    inherit rev;
+    sha256 = "15vp88w0b7h6sryy61qk369yjr3p4qvpch1nbxd9rm51bdgsqyys";
   };
 
   buildInputs = [
