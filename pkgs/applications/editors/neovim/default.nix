@@ -57,6 +57,31 @@ stdenv.mkDerivation rec {
     };
   };
 
+  libtermkey = stdenv.mkDerivation rec {
+    version = "latest";
+    name = "libtermkey-${version}";
+
+    src = fetchgit {
+      url = "https://github.com/neovim/libtermkey";
+      rev = "8c0cb7108cc63218ea19aa898968eede19e19603";
+      sha256 = "216cf8ed79f8528d747349de2de080a6e3bb69a96b0bcd54b53badd36779401a";
+    };
+
+    buildInputs = [ libtool ncurses ];
+
+    installPhase = ''
+      make install PREFIX=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "neovim fork of libtermkey";
+      homepage = https://github.com/neovim/libtermkey;
+      maintainers = [ maintainers.matthiasbeyer ];
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
   enableParallelBuilding = true;
 
   buildInputs = [
