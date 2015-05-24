@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   name = "libssh-0.7.0";
 
   src = fetchurl {
-    url = "https://red.libssh.org/attachments/download/140/libssh-0.7.0.tar.xz";
-    sha256 = "0as07vz3h5qa14ysvgsddb90m1qh605p6ccv6kf1sr1k3wsbql85";
+    url = "https://git.libssh.org/projects/libssh.git/snapshot/libssh-0.7.0.tar.gz";
+    sha256 = "1wfrdqhv97f4ycd9bcpgb6gw47kr7b2iq8cz5knk8a6n9c6870k0";
   };
 
   postPatch = ''
