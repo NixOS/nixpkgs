@@ -4226,6 +4226,8 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
+    core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
+
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
