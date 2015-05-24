@@ -775,11 +775,11 @@ let
   }) // {inherit libX11 libXext xextproto xproto libXt ;};
 
   libXrandr = (mkDerivation "libXrandr" {
-    name = "libXrandr-1.4.2";
+    name = "libXrandr-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXrandr-1.4.2.tar.bz2;
-      sha256 = "1b95p3l84ppv6j7dbbmg0zrz6k8xdwvnag1l6ajm3gk9qwdb79ya";
+      url = mirror://xorg/individual/lib/libXrandr-1.5.0.tar.bz2;
+      sha256 = "0n6ycs1arf4wb1cal9il6v7vbxbf21qhs9sbfl8xndgwnxclk1kg";
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
   }) // {inherit randrproto renderproto libX11 libXext xextproto xproto libXrender ;};
@@ -1015,11 +1015,11 @@ let
   }) // {inherit libXau ;};
 
   randrproto = (mkDerivation "randrproto" {
-    name = "randrproto-1.4.1";
+    name = "randrproto-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/proto/randrproto-1.4.1.tar.bz2;
-      sha256 = "1p7155hsp48b0sjm4rc67wz6y1nxqrq69vyw0sjxh8h6pcpcngal";
+      url = mirror://xorg/individual/proto/randrproto-1.5.0.tar.bz2;
+      sha256 = "0s4496z61y5q45q20gldwpf788b9nsa8hb13gnck1mwwwwrmarsc";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};

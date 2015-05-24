@@ -75,7 +75,7 @@ mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libxkbfile-1.0.8.tar.bz2
 mirror://xorg/individual/lib/libXmu-1.1.2.tar.bz2
 mirror://xorg/individual/lib/libXpm-3.5.11.tar.bz2
-mirror://xorg/individual/lib/libXrandr-1.4.2.tar.bz2
+mirror://xorg/individual/lib/libXrandr-1.5.0.tar.bz2
 mirror://xorg/individual/lib/libXrender-0.9.8.tar.bz2
 mirror://xorg/individual/lib/libXres-1.0.7.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.2.2.tar.bz2
@@ -89,7 +89,7 @@ mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2
 mirror://xorg/individual/util/makedepend-1.0.5.tar.bz2
 mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2
 mirror://xorg/individual/app/mkfontscale-1.1.2.tar.bz2
-mirror://xorg/individual/proto/randrproto-1.4.1.tar.bz2
+mirror://xorg/individual/proto/randrproto-1.5.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/recordproto-1.14.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/renderproto-0.11.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/resourceproto-1.2.0.tar.bz2
