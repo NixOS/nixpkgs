@@ -1,44 +1,11 @@
-{ stdenv, fetchurl, zlib, readline, libossp_uuid, openssl}:
+{ callPackage, fetchurl, ... } @ args:
 
-with stdenv.lib;
-
-let version = "9.3.6"; in
-
-stdenv.mkDerivation rec {
-  name = "postgresql-${version}";
+callPackage ./generic.nix (args // rec {
+  psqlSchema = "9.3";
+  version = "${psqlSchema}.7";
 
   src = fetchurl {
-    url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "056ass7nnfyv7blv02anv795kgpz77gipdpxggd835cdwrhwns13";
+    url = "mirror://postgresql/source/v${version}/postgresql-${version}.tar.bz2";
+    sha256 = "09iqr9sldiq7jz1rdnywp2wv36lxy5m8kch3vpchd1s4fz75c7aw";
   };
-
-  buildInputs = [ zlib readline openssl ]
-                ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
-
-  enableParallelBuilding = true;
-
-  makeFlags = [ "world" ];
-
-  configureFlags = [ "--with-openssl" ]
-                   ++ optional (!stdenv.isDarwin) "--with-ossp-uuid";
-
-  patches = [ ./disable-resolve_symlinks.patch ./less-is-more.patch ];
-
-  installTargets = [ "install-world" ];
-
-  LC_ALL = "C";
-
-  passthru = {
-    inherit readline;
-    psqlSchema = "9.3";
-  };
-
-  meta = with stdenv.lib; {
-    homepage = http://www.postgresql.org/;
-    description = "A powerful, open source object-relational database system";
-    license = licenses.postgresql;
-    maintainers = with maintaiers; [ ocharles ];
-    platforms = platforms.unix;
-    hydraPlatforms = platforms.linux;
-  };
-}
+})
