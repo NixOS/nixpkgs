@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/neovim/neovim";
-    rev = "8c27b0dd45731b1eb70edeafd9729b4d25b07f87";
-    sha256 = "5df4ed304451cab35619c5b8c55fe165997f2a3f4aacb68706f77222daa8cd18";
+    rev = "8ef5a61dd6bcaa24d26e450041bcba821fa3dbc7";
+    sha256 = "3bc707febe8bedc430b79a9c3d3717abc93d85ded33bcc32268e4f49f75635ff";
   };
 
   libmsgpack = stdenv.mkDerivation rec {
