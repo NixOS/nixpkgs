@@ -4250,6 +4250,8 @@ let
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
+    core_extended = callPackage ../development/ocaml-modules/core_extended { };
+
     core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
 
     core = callPackage ../development/ocaml-modules/core { };
