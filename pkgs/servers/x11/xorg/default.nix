@@ -1405,11 +1405,11 @@ let
   }) // {inherit inputproto kbproto xorgserver xproto ;};
 
   xf86inputkeyboard = (mkDerivation "xf86inputkeyboard" {
-    name = "xf86-input-keyboard-1.8.0";
+    name = "xf86-input-keyboard-1.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-keyboard-1.8.0.tar.bz2;
-      sha256 = "0nyb61w30z32djrllgr2s1i13di3vsl6hg4pqjhxdal71971ria1";
+      url = mirror://xorg/individual/driver/xf86-input-keyboard-1.8.1.tar.bz2;
+      sha256 = "04d27kwqq03fc26an6051hs3i0bff8albhnngzyd59wxpwwzzj0s";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   }) // {inherit inputproto xorgserver xproto ;};
@@ -1455,11 +1455,11 @@ let
   }) // {inherit inputproto randrproto xorgserver xproto ;};
 
   xf86inputvoid = (mkDerivation "xf86inputvoid" {
-    name = "xf86-input-void-1.4.0";
+    name = "xf86-input-void-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-void-1.4.0.tar.bz2;
-      sha256 = "01bmk324fq48wydvy1qrnxbw6qz0fjd0i80g0n4cqr1c4mjmif9a";
+      url = mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2;
+      sha256 = "171k8b8s42s3w73l7ln9jqwk88w4l7r1km2blx1vy898c854yvpr";
     };
     buildInputs = [pkgconfig xorgserver xproto ];
   }) // {inherit xorgserver xproto ;};
@@ -1535,11 +1535,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ;};
 
   xf86videogeode = (mkDerivation "xf86videogeode" {
-    name = "xf86-video-geode-2.11.16";
+    name = "xf86-video-geode-2.11.17";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.16.tar.bz2;
-      sha256 = "19y13xl7yfrgyis92rmxi0ld95ajgr5il0n9j1dridwzw9aizz1q";
+      url = mirror://xorg/individual/driver/xf86-video-geode-2.11.17.tar.bz2;
+      sha256 = "0h9w6cfj7s86rg72c6qci8f733hg4g7paan5fwmmj7p74ckd9d07";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
@@ -1595,11 +1595,11 @@ let
   }) // {inherit dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ;};
 
   xf86videomach64 = (mkDerivation "xf86videomach64" {
-    name = "xf86-video-mach64-6.9.4";
+    name = "xf86-video-mach64-6.9.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-mach64-6.9.4.tar.bz2;
-      sha256 = "0pl582vnc6hdxqhf5c0qdyanjqxb4crnhqlmxxml5a60syw0iwcp";
+      url = mirror://xorg/individual/driver/xf86-video-mach64-6.9.5.tar.bz2;
+      sha256 = "07xlf5nsjm0x18ij5gyy4lf8hwpl10i8chi3skpqjh84drdri61y";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
@@ -1625,11 +1625,11 @@ let
   }) // {inherit fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ;};
 
   xf86videoneomagic = (mkDerivation "xf86videoneomagic" {
-    name = "xf86-video-neomagic-1.2.8";
+    name = "xf86-video-neomagic-1.2.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.8.tar.bz2;
-      sha256 = "0x48sxs1p3kmwk3pq1j7vl93y59gdmgkq1x5xbnh0yal0angdash";
+      url = mirror://xorg/individual/driver/xf86-video-neomagic-1.2.9.tar.bz2;
+      sha256 = "1whb2kgyqaxdjim27ya404acz50izgmafwnb6y9m89q5n6b97y3j";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess xorgserver xproto ;};
@@ -1685,31 +1685,31 @@ let
   }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xf86dgaproto xorgserver xproto ;};
 
   xf86videor128 = (mkDerivation "xf86videor128" {
-    name = "xf86-video-r128-6.9.2";
+    name = "xf86-video-r128-6.10.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-r128-6.9.2.tar.bz2;
-      sha256 = "1q3fsc603k2yinphx5rrcl5356qkpywwz8axlw277l2231gjjbcb";
+      url = mirror://xorg/individual/driver/xf86-video-r128-6.10.0.tar.bz2;
+      sha256 = "0g9m1n5184h05mq14vb6k288zm6g81a9m048id00l8v8f6h33mc0";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ;};
 
   xf86videosavage = (mkDerivation "xf86videosavage" {
-    name = "xf86-video-savage-2.3.7";
+    name = "xf86-video-savage-2.3.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-savage-2.3.7.tar.bz2;
-      sha256 = "0i2aqp68rfkrz9c1p6d7ny9x7bjrlnby7q56zf01fb12r42l4784";
+      url = mirror://xorg/individual/driver/xf86-video-savage-2.3.8.tar.bz2;
+      sha256 = "0qzshncynjdmyhavhqw4x5ha3gwbygi0zbsy158fpg1jcnla9kpx";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videosiliconmotion = (mkDerivation "xf86videosiliconmotion" {
-    name = "xf86-video-siliconmotion-1.7.7";
+    name = "xf86-video-siliconmotion-1.7.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.7.tar.bz2;
-      sha256 = "1an321kqvsxq0z35acwl99lc8hpdkayw0q180744ypcl8ffvbf47";
+      url = mirror://xorg/individual/driver/xf86-video-siliconmotion-1.7.8.tar.bz2;
+      sha256 = "1sqv0y31mi4zmh9yaxqpzg7p8y2z01j6qys433hb8n4yznllkm79";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess videoproto xextproto xorgserver xproto ;};
