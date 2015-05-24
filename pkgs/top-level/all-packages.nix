@@ -3343,6 +3343,8 @@ let
 
   welkin = callPackage ../tools/graphics/welkin {};
 
+  whois = callPackage ../tools/networking/whois { };
+
   wsmancli = callPackage ../tools/system/wsmancli {};
 
   wolfebin = callPackage ../tools/networking/wolfebin {
