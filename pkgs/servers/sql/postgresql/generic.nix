@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
     (mkWith   (optLibxml2 != null)      "libxml"            null)
     (mkWith   (optLibxslt != null)      "libxslt"           null)
     (mkWith   (optZlib != null)         "zlib"              null)
+  ] ++ optionals (versionAtLeast version "9.1.0") [
+    (mkWith   false                     "selinux"           null)
   ];
 
   meta = with stdenv.lib; {
