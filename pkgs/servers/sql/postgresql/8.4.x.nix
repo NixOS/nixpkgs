@@ -1,7 +1,8 @@
 { callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "8.4.22";
+  psqlSchema = "8.4";
+  version = "${psqlSchema}.22";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/postgresql-${version}.tar.bz2";
