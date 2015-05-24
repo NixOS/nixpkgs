@@ -14,13 +14,12 @@ stdenv.mkDerivation rec {
   };
 
   libmsgpack = stdenv.mkDerivation rec {
-    version = "0.5.9";
+    version = "1.1.0";
     name = "libmsgpack-${version}";
 
-    src = fetchgit {
-      rev = "ecf4b09acd29746829b6a02939db91dfdec635b4";
-      url = "https://github.com/msgpack/msgpack-c";
-      sha256 = "076ygqgxrc3vk2l20l8x2cgcv05py3am6mjjkknr418pf8yav2ww";
+    src = fetchurl {
+      url = "https://github.com/msgpack/msgpack-c/archive/cpp-${version}.tar.gz";
+      sha256 = "0a73dmhk0jhwcip1wkvz50cyxsi3alzm6ak187xdai0zdxcck6cd";
     };
 
     buildInputs = [ cmake ];
