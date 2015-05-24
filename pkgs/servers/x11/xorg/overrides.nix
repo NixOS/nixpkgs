@@ -173,6 +173,9 @@ in
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
 
+  libXpresent = attrs: attrs
+    // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
+
   setxkbmap = attrs: attrs // {
     postInstall =
       ''

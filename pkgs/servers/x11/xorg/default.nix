@@ -774,6 +774,16 @@ let
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
   }) // {inherit libX11 libXext xextproto xproto libXt ;};
 
+  libXpresent = (mkDerivation "libXpresent" {
+    name = "libXpresent-1.0.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libXpresent-1.0.0.tar.bz2;
+      sha256 = "12kvvar3ihf6sw49h6ywfdiwmb8i1gh8wasg1zhzp6hs2hay06n1";
+    };
+    buildInputs = [pkgconfig presentproto libX11 xextproto xproto ];
+  }) // {inherit presentproto libX11 xextproto xproto ;};
+
   libXrandr = (mkDerivation "libXrandr" {
     name = "libXrandr-1.5.0";
     builder = ./builder.sh;
@@ -1203,6 +1213,16 @@ let
     };
     buildInputs = [pkgconfig gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ];
   }) // {inherit gperf m4 libxcb xcbutilimage xcbutilrenderutil xproto ;};
+
+  xcbutilerrors = (mkDerivation "xcbutilerrors" {
+    name = "xcb-util-errors-1.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = http://xcb.freedesktop.org/dist/xcb-util-errors-1.0.tar.bz2;
+      sha256 = "158rm913dg3hxrrhyvvxr8bcm0pjy5jws70dhy2s12w1krv829k8";
+    };
+    buildInputs = [pkgconfig gperf m4 libxcb xcbproto xproto ];
+  }) // {inherit gperf m4 libxcb xcbproto xproto ;};
 
   xcbutilimage = (mkDerivation "xcbutilimage" {
     name = "xcb-util-image-0.4.0";
