@@ -15,6 +15,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 let
 
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
+  noThrowOnBrokenOrUnfree = config.noThrowOnBrokenOrUnfree or false || builtins.getEnv "NIXPKGS_NO_THROW_ON_BROKEN_OR_UNFREE" == "1";
 
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
@@ -103,6 +104,8 @@ let
 
       throwEvalHelp = unfreeOrBroken: whatIsWrong:
         assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
+
+        if noThrowOnBrokenOrUnfree then false else
 
         throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${whatIsWrong}, refusing to evaluate."
         + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''

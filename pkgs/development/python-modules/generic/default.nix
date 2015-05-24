@@ -3,9 +3,17 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, unzip, wrapPython, lib, recursivePthLoader, distutils-cfg }:
-
-{ name
+{ python
+, setuptools
+, unzip
+, wrapPython
+, lib
+, recursivePthLoader
+, distutils-cfg
+, config
+}: let
+  noThrowOnDisabled = config.noThrowOnBrokenOrUnfree or false || builtins.getEnv "NIXPKGS_NO_THROW_ON_BROKEN_OR_UNFREE" == "1";
+in { name
 
 # by default prefix `name` e.g. "python3.3-${name}"
 , namePrefix ? python.libPrefix + "-"
@@ -51,7 +59,7 @@
 
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled then throw "${name} not supported for interpreter ${python.executable}" else python.stdenv.mkDerivation (attrs // {
+if disabled && !noThrowOnDisabled then throw "${name} not supported for interpreter ${python.executable}" else assert !disabled; python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   name = namePrefix + name;
