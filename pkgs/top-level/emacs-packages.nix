@@ -62,7 +62,10 @@ let self = _self // overrides;
       sha256 = "0dlrhc1dmzgrjvcnlqvm6clyv0r6zray6qqliqngy14880grghbm";
     };
     packageRequires = [ auto-complete haskell-mode ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Haskell code completion for auto-complete Emacs framework";
+      license = gpl3Plus;
+    };
   };
 
   ace-jump-mode = melpaBuild rec {
@@ -90,7 +93,10 @@ let self = _self // overrides;
       sha256 = "19y5w9m2flp4as54q8yfngrkri3kd7fdha9pf2xjgx6ryflqx61k";
     };
     packageRequires = [ dash s ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Search using ag from inside Emacs";
+      license = gpl3Plus;
+    };
   };
 
   agda2-mode = with external; trivialBuild {
@@ -126,7 +132,10 @@ let self = _self // overrides;
       sha256 = "1vpc3q40m6dcrslki4bg725j4kv6c6xfxwjjl1ilg7la49fwwf26";
     };
     packageRequires = [ gntp log4e ];
-    meta = { license = gpl2Plus; };
+    meta = {
+      description = "A Growl-like alerts notifier for Emacs";
+      license = gpl2Plus;
+    };
   };
 
   anzu = melpaBuild rec {
@@ -181,7 +190,10 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1j6mbvvbnm2m1gpsy9ipxiv76b684nn57yssbqdyiwyy499cma6q";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Asynchronous processing in Emacs";
+      license = gpl3Plus;
+    };
   };
 
   auctex = melpaBuild rec {
@@ -194,7 +206,11 @@ let self = _self // overrides;
     buildPhase = ''
       cp $src ${pname}-${version}.tar
     '';
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+      homepage = https://www.gnu.org/software/auctex/;
+      license = gpl3Plus;
+    };
   };
 
   auto-complete = melpaBuild rec {
@@ -237,7 +253,10 @@ let self = _self // overrides;
       sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
     };
     files = [ "bind-key.el" ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "A simple way to manage personal keybindings";
+      license = gpl3Plus;
+    };
   };
 
   browse-kill-ring = melpaBuild rec {
@@ -281,7 +300,10 @@ let self = _self // overrides;
     };
     fileSpecs = [ "emacs/*.el" ];
     configurePhase = "true";
-    meta = { license = gpl2Plus; };
+    meta = {
+      description = "OCaml code editing commands for Emacs";
+      license = gpl2Plus;
+    };
   };
 
   change-inner = melpaBuild rec {
@@ -294,7 +316,10 @@ let self = _self // overrides;
       sha256 = "1fv8630bqbmfr56zai08f1q4dywksmghhm70084bz4vbs6rzdsbq";
     };
     packageRequires = [ expand-region ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Change contents based on semantic units in Emacs";
+      license = gpl3Plus;
+    };
   };
 
   circe = melpaBuild rec {
@@ -308,7 +333,10 @@ let self = _self // overrides;
     };
     packageRequires = [ lcs lui ];
     fileSpecs = [ "lisp/circe*.el" ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "IRC client for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   company = melpaBuild rec {
@@ -320,7 +348,10 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "08rrjfp2amgya1hswjz3vd5ja6lg2nfmm7454p0h1naz00hlmmw0";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Modular text completion framework for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   company-ghc = melpaBuild rec {
@@ -348,7 +379,10 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "A modern list library for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   deferred = melpaBuild rec {
@@ -382,7 +416,11 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
+      homepage = http://www.eskimo.com/~seldon/;
+      license = gpl3Plus;
+    };
   };
 
   epl = melpaBuild rec {
@@ -995,7 +1033,7 @@ let self = _self // overrides;
         Org-trello is an emacs minor mode that extends org-mode with
         Trello abilities.
       '';
-      homepage = https://org-trello.github.io;
+      homepage = https://org-trello.github.io/;
       license = gpl3Plus;
     };
   };
@@ -1128,7 +1166,10 @@ let self = _self // overrides;
       sha256 = "0kvhy4mgs9llihwsb1a9n5a85xzjiyiyawxnz0axy2bvwcxnp20k";
     };
     packageRequires = [ dash ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line.";
+      license = gpl3Plus;
+    };
   };
 
   s = melpaBuild rec {
