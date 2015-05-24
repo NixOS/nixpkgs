@@ -4049,6 +4049,8 @@ let
 
     async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
 
+    async_unix = callPackage ../development/ocaml-modules/async_unix { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
