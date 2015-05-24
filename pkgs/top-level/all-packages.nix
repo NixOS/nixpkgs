@@ -4228,6 +4228,8 @@ let
 
     core_kernel = callPackage ../development/ocaml-modules/core_kernel { };
 
+    core = callPackage ../development/ocaml-modules/core { };
+
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
