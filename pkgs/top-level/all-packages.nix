@@ -370,40 +370,43 @@ let
   fetchzip = import ../build-support/fetchzip { inherit lib fetchurl unzip; };
 
   fetchFromGitHub = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name;
+    inherit name sha256;
     url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
-    inherit sha256;
+    meta.homepage = "https://github.com/${owner}/${repo}/";
   };
 
   fetchFromBitbucket = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name;
+    inherit name sha256;
     url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
-    inherit sha256;
+    meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
   };
 
   # gitorious example
   fetchFromGitorious = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name;
+    inherit name sha256;
     url = "https://gitorious.org/${owner}/${repo}/archive/${rev}.tar.gz";
-    inherit sha256;
+    meta.homepage = "https://gitorious.org/${owner}/${repo}/";
   };
 
   # cgit example, snapshot support is optional in cgit
   fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name sha256;
     url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
+    meta.homepage = "http://git.savannah.gnu.org/cgit/${repo}.git/";
   };
 
   # gitlab example
   fetchFromGitLab = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name sha256;
     url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
+    meta.homepage = "https://gitlab.com/${owner}/${repo}/";
   };
 
   # gitweb example, snapshot support is optional in gitweb
   fetchFromRepoOrCz = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name sha256;
     url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
+    meta.homepage = "http://repo.or.cz/${repo}.git/";
   };
 
   resolveMirrorURLs = {url}: fetchurl {
