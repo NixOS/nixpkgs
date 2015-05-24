@@ -11078,6 +11078,7 @@ let
 
   rpy2 = buildPythonPackage rec {
     name = "rpy2-2.5.6";
+    disabled = isPyPy;
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/r/rpy2/${name}.tar.gz";
       md5 = "a36e758b633ce6aec6a5f450bfee980f";
