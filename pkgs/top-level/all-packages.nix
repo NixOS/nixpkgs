@@ -4118,7 +4118,6 @@ let
 
     cstruct = callPackage ../development/ocaml-modules/cstruct {
       lwt = ocaml_lwt;
-      sexplib = ocaml_sexplib;
     };
 
     csv = callPackage ../development/ocaml-modules/csv { };
@@ -4141,7 +4140,6 @@ let
 
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
-      sexplib = ocaml_sexplib;
     };
 
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
@@ -4307,7 +4305,7 @@ let
     sexplib_111_25_00 = callPackage ../development/ocaml-modules/sexplib/111.25.00.nix { };
     sexplib_112_24_01 = callPackage ../development/ocaml-modules/sexplib/112.24.01.nix { };
 
-    ocaml_sexplib =
+    sexplib =
       if lib.versionOlder "4.02" ocaml_version
       then sexplib_112_24_01
       else if lib.versionOlder "4.00" ocaml_version
@@ -4349,9 +4347,7 @@ let
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
 
-    uri = callPackage ../development/ocaml-modules/uri {
-      sexplib = ocaml_sexplib;
-    };
+    uri = callPackage ../development/ocaml-modules/uri { };
 
     uuseg = callPackage ../development/ocaml-modules/uuseg { };
     uutf = callPackage ../development/ocaml-modules/uutf { };
