@@ -13217,7 +13217,7 @@ let
     # XXX: skipping two tests fails in python2.6
     doCheck = ! isPy26;
 
-    buildInputs = optionals isPy26 [ self.ordereddict unittest2 ];
+    buildInputs = with self; optionals isPy26 [ ordereddict unittest2 ];
 
     propagatedBuildInputs = with self; [
       nose
