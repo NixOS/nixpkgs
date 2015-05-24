@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
     license = licenses.postgresql;
-    maintainers = with maintaiers; [ ocharles ];
+    maintainers = with maintaiers; [ ocharles wkennington ];
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux;
   };
