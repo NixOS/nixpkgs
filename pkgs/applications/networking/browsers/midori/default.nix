@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake pkgconfig intltool vala makeWrapper
-    webkitgtk librsvg libnotify
+    webkitgtk librsvg libnotify gsettings_desktop_schemas
   ];
 
   cmakeFlags = ''
