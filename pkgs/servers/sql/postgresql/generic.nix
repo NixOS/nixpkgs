@@ -10,7 +10,7 @@
 , walBlockSizeKB ? 8, walSegmentSizeMB ? 16
 
 # Version specific arguments
-, version, src, psqlSchema
+, psqlSchema , version, src, patches ? [ ]
 , ...
 }:
 
@@ -25,6 +25,8 @@ let
   optLibxml2 = shouldUsePkg libxml2;
   optLibxslt = shouldUsePkg libxslt;
   optZlib = shouldUsePkg zlib;
+
+  patches' = [ ./less-is-more.patch ] ++ patches;
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -32,15 +34,13 @@ stdenv.mkDerivation rec {
 
   inherit src;
 
-  patches = [ ./less-is-more.patch ];
+  patches = patches';
 
   nativeBuildInputs = [ bison flex ];
   buildInputs = [
     gettext optKerberos optPam optOpenldap optOpenssl optReadline
     optLibossp_uuid optLibxml2 optLibxslt optZlib
   ];
-
-  #LC_ALL = "C";
 
   configureFlags = [
     (mkOther                            "sysconfdir"        "/etc")
@@ -80,6 +80,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals (versionAtLeast version "9.1.0") [
     (mkWith   false                     "selinux"           null)
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.postgresql.org/;
