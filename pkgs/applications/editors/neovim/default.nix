@@ -82,6 +82,30 @@ stdenv.mkDerivation rec {
     };
   };
 
+  unibilium = stdenv.mkDerivation rec {
+    version = "1.1.0";
+    name = "unibilium-${version}";
+
+    src = fetchurl {
+      url = "https://github.com/neovim/unibilium/archive/v1.1.0.tar.gz";
+      sha256 = "1qdviq887977nw4iay9a0fdqqpd799zrjxb7v1s1dx3ygi1njy2y";
+    };
+
+    buildInputs = [ libtool ];
+
+    installPhase = ''
+      make install PREFIX=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "neovim fork of unibilium";
+      homepage = https://github.com/neovim/unibilium;
+      maintainers = [ maintainers.matthiasbeyer ];
+      license = licenses.lgpl-3;
+      platforms = platforms.all;
+    };
+  };
+
   enableParallelBuilding = true;
 
   buildInputs = [
