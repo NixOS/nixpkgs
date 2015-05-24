@@ -10,7 +10,7 @@
 , walBlockSizeKB ? 8, walSegmentSizeMB ? 16
 
 # Version specific arguments
-, psqlSchema , version, src, patches ? [ ]
+, psqlSchema , version, src
 , ...
 }:
 
@@ -25,8 +25,6 @@ let
   optLibxml2 = shouldUsePkg libxml2;
   optLibxslt = shouldUsePkg libxslt;
   optZlib = shouldUsePkg zlib;
-
-  patches' = [ ./less-is-more.patch ] ++ patches;
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -34,7 +32,13 @@ stdenv.mkDerivation rec {
 
   inherit src;
 
-  patches = patches';
+  patches = [
+    ./less-is-more.patch
+  ] ++ optionals (versionOlder version "9.4.0") [
+    ./disable-resolve_symlinks.patch
+  ] ++ optionals (versionAtLeast version "9.4.0") [
+    ./disable-resolve_symlinks-94.patch
+  ];
 
   nativeBuildInputs = [ bison flex ];
   buildInputs = [
