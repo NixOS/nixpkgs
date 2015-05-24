@@ -4051,6 +4051,8 @@ let
 
     async_extra = callPackage ../development/ocaml-modules/async_extra { };
 
+    async_find = callPackage ../development/ocaml-modules/async_find { };
+
     async_kernel = callPackage ../development/ocaml-modules/async_kernel { };
 
     async_shell = callPackage ../development/ocaml-modules/async_shell { };
