@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # due to an uninitialized variable.
   CFLAGS = "-g -O2 -Wall";
 
-  buildInputs = [ perl makeWrapper openldap ];
+  buildInputs = [ perl makeWrapper openldap bind ];
 
   configureFlags = [
     "--with-libbind=${bind}"
