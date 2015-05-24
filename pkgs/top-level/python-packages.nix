@@ -837,14 +837,14 @@ let
   };
 
   bcdoc = buildPythonPackage rec {
-    name = "bcdoc-0.13.0";
+    name = "bcdoc-0.14.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/bcdoc/bcdoc-0.13.0.tar.gz";
-      md5 = "819882458be7b642e00ddc9846073d89";
+      url = "https://pypi.python.org/packages/source/b/bcdoc/${name}.tar.gz";
+      sha256 = "1s2kdqs1n2mj7wq3w0pq30zs7vxq0l3abik2clqnc4hm2j7crbk8";
     };
 
-    buildInputs = with self; [ self.docutils self.six ];
+    buildInputs = with self; [ docutils six ];
 
     meta = {
       homepage = https://github.com/botocore/bcdoc;
@@ -1331,12 +1331,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "0.102.0";
+    version = "1.0.0a1";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "1266hwkcchzr9r2z1q1150zmk20p3d4a75p6nppi6w9bhsywxhnr";
+      sha256 = "0fybr48l0fvpc57n71khynpb4j0ibzn35bzybw6g1q9063xfwnxm";
     };
 
     propagatedBuildInputs =
@@ -6399,17 +6399,17 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.6.1";
+    name = "jmespath-0.7.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
-      sha256 = "1f7nxk62yifh6zwhf34w4fgwxvyls8x2daphljgrg4lh0i2sgwgr";
+      sha256 = "1lazbx65imassd7h24z49za001rvx1lmx8r0l21h4izs7pp14nnd";
     };
 
     propagatedBuildInputs = with self; [ ply ];
 
     meta = {
-      homepage = "https://github.com/boto/jmespath";
+      homepage = https://github.com/boto/jmespath;
       description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
       license = "BSD";
     };
