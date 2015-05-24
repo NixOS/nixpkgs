@@ -127,7 +127,6 @@ let self = _self // overrides;
         mode which displays current match and total matches information
         in the mode-line in various search mode.
       '';
-      homepage = https://github.com/syohex/emacs-anzu/;
       license = gpl3Plus;
     };
   };
@@ -194,7 +193,6 @@ let self = _self // overrides;
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
       license = gpl3Plus;
-      platforms = lib.platforms.all;
     };
   };
 
@@ -235,7 +233,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Interactively insert items from Emacs kill-ring";
-      homepage = https://github.com/browse-kill-ring/browse-kill-ring/;
       license = gpl2Plus;
     };
   };
@@ -251,7 +248,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Mouseable text in Emacs";
-      homepage = "https://github.com/rolandwalker/button-lock";
       license  = bsd2;
     };
   };
@@ -355,7 +351,6 @@ let self = _self // overrides;
         The API and implementations were translated from JSDeferred (by cho45)
          and Mochikit.Async (by Bob Ippolito) in JavaScript.
       '';
-      homepage =  https://github.com/kiwanami/emacs-deferred;
       license = gpl3Plus;
     };
   };
@@ -770,7 +765,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Does what you expected ido-everywhere to do in Emacs";
-      homepage = https://github.com/DarwinAwardWinner/ido-ubiquitous/;
       license = gpl3Plus;
     };
   };
@@ -949,7 +943,9 @@ let self = _self // overrides;
     };
   };
 
-  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
+  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {
+    inherit lib;
+  };
 
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
@@ -1211,7 +1207,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "M-x enhancement for Emacs build on top of Ido";
-      homepage = https://github.com/nonsequitur/smex/;
       license = emacs.meta.license; # should be "same as Emacs"
     };
   };
@@ -1224,7 +1219,6 @@ let self = _self // overrides;
     fileSpecs = [ "elisp/*.el" ];
 
     meta = {
-      homepage = "https://github.com/chrisdone/structured-haskell-mode";
       description = "Structured editing Emacs mode for Haskell";
       license = bsd3;
       platforms = external.structured-haskell-mode.meta.platforms;
