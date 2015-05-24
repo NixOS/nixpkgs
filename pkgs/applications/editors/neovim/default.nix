@@ -1,6 +1,5 @@
 { stdenv, fetchgit, fetchurl, unzip, callPackage, ncurses, gettext, pkgconfig,
-cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop, libtermkey,
-libvterm, unibilium }:
+cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop, libtool, perl }:
 
 stdenv.mkDerivation rec {
   name = "neovim-nightly";
@@ -29,6 +28,31 @@ stdenv.mkDerivation rec {
       homepage = http://msgpack.org;
       maintainers = [ maintainers.manveru ];
       license = licenses.asl20;
+      platforms = platforms.all;
+    };
+  };
+
+  libvterm = stdenv.mkDerivation rec {
+    version = "latest";
+    name = "libvterm-${version}";
+
+    src = fetchgit {
+      url = "https://github.com/neovim/libvterm";
+      rev = "20ad1396c178c72873aeeb2870bd726f847acb70";
+      sha256 = "85314aafc3d599537e363b0b9ca1254fca45c943b29fb23548de919e25395044";
+    };
+
+    buildInputs = [ libtool perl ];
+
+    installPhase = ''
+      make install PREFIX=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "neovim fork of libvterm";
+      homepage = https://github.com/neovim/libvterm;
+      maintainers = [ maintainers.matthiasbeyer ];
+      license = licenses.mit;
       platforms = platforms.all;
     };
   };
