@@ -7,7 +7,7 @@ in
 assert stdenv.lib.versionOlder "3.12" ocaml_version;
 
 stdenv.mkDerivation {
-  name = "ocaml-typeconv-108.08.00";
+  name = "ocaml-type_conv-108.08.00";
 
   src = fetchurl {
     url = https://ocaml.janestreet.com/ocaml-core/108.08.00/individual/type_conv-108.08.00.tar.gz;

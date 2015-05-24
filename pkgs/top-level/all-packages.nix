@@ -4133,9 +4133,7 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
-    enumerate = callPackage ../development/ocaml-modules/enumerate {
-      type_conv = ocaml_typeconv;
-    };
+    enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
@@ -4293,21 +4291,20 @@ let
       camlp5 = camlp5_transitional;
     };
 
-    typeconv_108_08_00 = callPackage ../development/ocaml-modules/typeconv/108.08.00.nix { };
-    typeconv_109_60_01 = callPackage ../development/ocaml-modules/typeconv/109.60.01.nix { };
-    typeconv_112_01_01 = callPackage ../development/ocaml-modules/typeconv/112.01.01.nix { };
-    ocaml_typeconv =
+    type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
+    type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
+    type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
+    type_conv =
       if lib.versionOlder "4.02" ocaml_version
-      then typeconv_112_01_01
+      then type_conv_112_01_01
       else if lib.versionOlder "4.00" ocaml_version
-      then typeconv_109_60_01
+      then type_conv_109_60_01
       else if lib.versionOlder "3.12" ocaml_version
-      then typeconv_108_08_00
+      then type_conv_108_08_00
       else null;
 
-    sexplib_108_08_00 = callPackage ../development/ocaml-modules/sexplib/108.08.00.nix {
-      typeconv = typeconv_108_08_00;
-    };
+    sexplib_108_08_00 = callPackage ../development/ocaml-modules/sexplib/108.08.00.nix { };
+
     ocaml_sexplib =
       if lib.versionOlder "4.00" ocaml_version
       then callPackage ../development/ocaml-modules/sexplib { }
