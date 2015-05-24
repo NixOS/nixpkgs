@@ -118,7 +118,7 @@ mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-evdev-2.9.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-keyboard-1.8.1.tar.bz2
-mirror://xorg/individual/driver/xf86-input-libinput-0.8.0.tar.bz2
+mirror://xorg/individual/driver/xf86-input-libinput-0.10.0.tar.bz2
 mirror://xorg/individual/driver/xf86-input-mouse-1.9.1.tar.bz2
 mirror://xorg/individual/driver/xf86-input-synaptics-1.8.2.tar.bz2
 mirror://xorg/individual/driver/xf86-input-vmmouse-13.0.0.tar.bz2
@@ -128,7 +128,7 @@ mirror://xorg/individual/driver/xf86-video-ast-0.98.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ati-7.5.0.tar.bz2
 mirror://xorg/individual/driver/glamor-egl-0.6.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nouveau-1.0.11.tar.bz2
-mirror://xorg/individual/driver/xf86-video-cirrus-1.5.2.tar.bz2
+mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-dummy-0.3.7.tar.bz2
 mirror://xorg/individual/driver/xf86-video-fbdev-0.4.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-geode-2.11.17.tar.bz2

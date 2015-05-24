@@ -1415,11 +1415,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.8.0";
+    name = "xf86-input-libinput-0.10.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.8.0.tar.bz2;
-      sha256 = "0fm4vrkw7azipbnwvc2l18g65z77pllsznaajd8q3zpg9ycb0li1";
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.10.0.tar.bz2;
+      sha256 = "1w1v83qlr7n4iqgd7grmhx0gbz1fhsnpk88j4a136dk4xmc069x4";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   }) // {inherit inputproto xorgserver xproto ;};
@@ -1505,11 +1505,11 @@ let
   }) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videocirrus = (mkDerivation "xf86videocirrus" {
-    name = "xf86-video-cirrus-1.5.2";
+    name = "xf86-video-cirrus-1.5.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-cirrus-1.5.2.tar.bz2;
-      sha256 = "1mycqgjp18b6adqj2h90vp324xh8ysyi5migfmjc914vbnkf2q9k";
+      url = mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2;
+      sha256 = "1asifc6ld2g9kap15vfhvsvyl69lj7pw3d9ra9mi4najllh7pj7d";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
