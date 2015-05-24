@@ -47,9 +47,9 @@
 # Execute after shell hook
 , postShellHook ? ""
 
-# Environment variables to set in wrapper scripts, in addition to
-# PYTHONPATH and PATH.
-, setEnvVars ? []
+# Additional arguments to pass to the makeWrapper function, which wraps
+# generated binaries.
+, makeWrapperArgs ? []
 
 , ... } @ attrs:
 

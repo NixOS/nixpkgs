@@ -45,11 +45,10 @@ wrapPythonProgramsIn() {
                                  --prefix PYTHONPATH ':' $program_PYTHONPATH \
                                  --prefix PATH ':' $program_PATH"
 
-                # Add any additional environment variables to propagate.
-                for env_var in $setEnvVars; do
-                    # Look up the value of this variable
-                    local value=$(eval "echo \$$env_var")
-                    wrap_args="$wrap_args --set $env_var $value"
+                # Add any additional arguments provided by makeWrapperArgs
+                # argument to buildPythonPackage.
+                for arg in $makeWrapperArgs; do
+                    wrap_args="$wrap_args $arg"
                 done
                 wrapProgram $wrap_args
             fi
