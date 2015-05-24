@@ -69,14 +69,12 @@ stdenv.mkDerivation rec {
     (mkWith   false                     "perl"              null)  # Maybe enable some day
     (mkWith   false                     "python"            null)  # Maybe enable some day
     (mkWith   (optKerberos != null)     "gssapi"            null)
-    (mkWith   false                     "krb5"              null)
     (mkWith   (optPam != null)          "pam"               null)
     (mkWith   (optOpenldap != null)     "ldap"              null)
     (mkWith   false                     "bonjour"           null)
     (mkWith   (optOpenssl != null)      "openssl"           null)
     (mkWith   (optReadline != null)     "readline"          null)
     (mkWith   false                     "libedit-preferred" null)
-    (mkWith   (optLibossp_uuid != null) "ossp-uuid"         null)
     (mkWith   (optLibxml2 != null)      "libxml"            null)
     (mkWith   (optLibxslt != null)      "libxslt"           null)
     (mkWith   (optZlib != null)         "zlib"              null)
@@ -84,6 +82,12 @@ stdenv.mkDerivation rec {
     (mkWith   false                     "selinux"           null)
   ] ++ optionals (versionOlder version "9.3.0") [
     (mkEnable true                      "shared"            null)
+  ] ++ optionals (versionAtLeast version "9.4.0") [
+    (mkEnable false                     "tap-tests"         null)
+    (mkWith   (optLibossp_uuid != null) "uuid"              "ossp")
+  ] ++ optionals (versionOlder version "9.4.0") [
+    (mkWith   false                     "krb5"              null)
+    (mkWith   (optLibossp_uuid != null) "ossp-uuid"         null)
   ];
 
   enableParallelBuilding = true;
