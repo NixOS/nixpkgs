@@ -8802,15 +8802,20 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
+  prom2json = callPackage ../servers/monitoring/prometheus/prom2json { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager =
     callPackage ../servers/monitoring/prometheus/alertmanager { };
   prometheus-cli =
     callPackage ../servers/monitoring/prometheus/cli { };
+  prometheus-collectd-exporter =
+    callPackage ../servers/monitoring/prometheus/collectd_exporter { };
   prometheus-haproxy-exporter =
     callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
   prometheus-mesos-exporter =
     callPackage ../servers/monitoring/prometheus/mesos_exporter { };
+  prometheus-mysqld-exporter =
+    callPackage ../servers/monitoring/prometheus/mysqld_exporter { };
   prometheus-node-exporter =
     callPackage ../servers/monitoring/prometheus/node_exporter { };
   prometheus-pushgateway =
