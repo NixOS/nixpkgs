@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   configurePhase = "export CC=${CC}";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A console front-end for Pandora.com";
     homepage = "http://6xq.net/projects/pianobar/";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit; # expat version
-    maintainers = stdenv.lib.maintainers.eduarrrd;
+    platforms = platforms.linux;
+    license = licenses.mit; # expat version
+    maintainers = with maintainers; [ eduarrrd ];
   };
 }

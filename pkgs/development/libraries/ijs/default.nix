@@ -1,13 +1,13 @@
 { stdenv, fetchurl, autoreconfHook }:
 
-let version = "9.15";
+let version = "9.16";
 in
 stdenv.mkDerivation {
   name = "ijs-${version}";
 
   src = fetchurl {
     url = "http://downloads.ghostscript.com/public/ghostscript-${version}.tar.bz2";
-    sha256 = "0p1isp6ssfay141klirn7n9s8b546vcz6paksfmksbwy0ljsypg6";
+    sha256 = "0vdqbjkickb0109lk6397bb2zjmg1s46dac5p5j4gfxa4pwl8b9y";
   };
 
   prePatch = "cd ijs";

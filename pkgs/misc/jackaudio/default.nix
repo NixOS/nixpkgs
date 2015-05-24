@@ -9,10 +9,9 @@
 , prefix ? ""
 }:
 
+with stdenv;
 with stdenv.lib;
 let
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
   libOnly = prefix == "lib";
 
   optDbus = shouldUsePkg dbus;

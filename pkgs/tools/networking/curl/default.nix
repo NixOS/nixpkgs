@@ -8,19 +8,12 @@
 , suffix ? ""
 }:
 
+with stdenv;
+with stdenv.lib;
 let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
   isLight = suffix == "light";
   isFull = suffix == "full";
-  nameSuffix = stdenv.lib.optionalString (suffix != "") "-${suffix}";
+  nameSuffix = optionalString (suffix != "") "-${suffix}";
 
   # Normal Depedencies
   optZlib = if isLight then null else shouldUsePkg zlib;
@@ -35,7 +28,6 @@ let
   optOpenldap = if !isFull then null else shouldUsePkg openldap;
   optLibidn = if !isFull then null else shouldUsePkg libidn;
 in
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "curl${nameSuffix}-${version}";
   version = "7.42.1";
@@ -47,7 +39,7 @@ stdenv.mkDerivation rec {
 
   # Use pkgconfig only when necessary
   nativeBuildInputs = optional (!isLight) pkgconfig;
-  buildInputs = [
+  propagatedBuildInputs = [
     optZlib optOpenssl optLibssh2 optLibnghttp2 optC-ares
     optGss optRtmpdump optOpenldap optLibidn
   ];
@@ -101,27 +93,6 @@ stdenv.mkDerivation rec {
     (mkEnable true                    "cookies"           null)
     (mkEnable (optC-ares != null)     "ares"              null)
   ];
-
-  # Fix all broken refernces to dependencies in .la and .pc files
-  postInstall = optionalString (optZlib != null) ''
-    sed -i 's,\(-lz\),-L${optZlib}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
-  '' + optionalString (optOpenssl != null) ''
-    sed -i 's,\(-lssl\|-lcrypto\),-L${optOpenssl}/lib \1,' $out/lib/pkgconfig/libcurl.pc
-  '' + optionalString (optLibssh2 != null) ''
-    sed -i 's,\(-lssh2\),-L${optLibssh2}/lib \1,' $out/lib/pkgconfig/libcurl.pc
-  '' + optionalString (optLibnghttp2 != null) ''
-    sed -i 's,\(-lnghttp2\),-L${optLibnghttp2}/lib \1,' $out/lib/pkgconfig/libcurl.pc
-  '' + optionalString (optC-ares != null) ''
-    sed -i 's,\(-lcares\),-L${optC-ares}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
-  '' + optionalString (optGss != null) ''
-    sed -i 's,\(-lgss\),-L${optGss}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
-  '' + optionalString (optRtmpdump != null) ''
-    sed -i 's,\(-lrtmp\),-L${optRtmpdump}/lib \1,' $out/lib/pkgconfig/libcurl.pc
-  '' + optionalString (optOpenldap != null) ''
-    sed -i 's,\(-lgss\),-L${optOpenldap}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
-  '' + optionalString (optLibidn != null) ''
-    sed -i 's,\(-lidn\),-L${optLibidn}/lib \1,' $out/lib/pkgconfig/libcurl.pc
-  '';
 
   meta = {
     description = "A command line tool for transferring files with URL syntax";

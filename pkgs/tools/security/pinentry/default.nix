@@ -3,9 +3,6 @@
 }:
 
 let
-  mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
-  mkEnable = mkFlag "enable" "disable";
-  mkWith = mkFlag "with" "without";
   hasX = gtk2 != null || qt4 != null;
 in
 with stdenv.lib;
@@ -20,12 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libcap gtk2 ncurses qt4 ];
 
   configureFlags = [
-    (mkWith   (libcap != null)  "libcap")
-    (mkWith   (hasX)            "x")
-    (mkEnable (ncurses != null) "pinentry-curses")
-    (mkEnable true              "pinentry-tty")
-    (mkEnable (gtk2 != null)    "pinentry-gtk2")
-    (mkEnable (qt4 != null)     "pinentry-qt4")
+    (mkWith   (libcap != null)  "libcap"          null)
+    (mkWith   (hasX)            "x"               null)
+    (mkEnable (ncurses != null) "pinentry-curses" null)
+    (mkEnable true              "pinentry-tty"    null)
+    (mkEnable (gtk2 != null)    "pinentry-gtk2"   null)
+    (mkEnable (qt4 != null)     "pinentry-qt4"    null)
   ];
 
   nativeBuildInputs = [ pkgconfig ];

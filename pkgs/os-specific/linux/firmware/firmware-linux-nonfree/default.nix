@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";
-  version = "2015-03-20";
+  version = "2015-05-13";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = "f404336ba808cbd57547196e13367079a23b822c";
-    sha256 = "0avz5vxax2b3s4gafib47vih1lbq78agdmpjcjnnnykw2kschkwa";
+    url = "http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+    rev = "3161bfa479d5e9ed4f46b57df9bcecbbc4f8eb3c";
+    sha256 = "0np6vwcnas3pzp38man3cs8j5ijs0p3skyzla19sfxzpwmjvfpjq";
   };
 
   preInstall = ''

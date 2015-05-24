@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 libXaw ];
   buildFlags = "without_doc";
 
-  postInstall = "chmod +x $out/lib/*.so.*"; # ??
+  postInstall = stdenv.lib.optional (!stdenv.isDarwin) "chmod +x $out/lib/*.so.*"; # ??
 
 }
 

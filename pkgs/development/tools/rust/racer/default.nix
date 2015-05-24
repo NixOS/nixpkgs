@@ -1,18 +1,22 @@
-{stdenv, fetchgit, rustc, cargo, makeWrapper }:
+{stdenv, fetchgit, rustPlatform, makeWrapper }:
 
-stdenv.mkDerivation rec {
+with rustPlatform;
+
+buildRustPackage rec {
   #TODO add emacs support
-  name = "racer-git-2015-04-12";
+  name = "racer-git-2015-05-18";
   src = fetchgit {
     url = https://github.com/phildawes/racer;
-    rev = "5437e2074d87dfaab75a0f1bd2597bed61c0bbf1";
-    sha256 = "0a768gvjry86l0xa5q0122iyq7zn2h9adfniglsgrbs4fan49xyn";
+    rev = "c2d31ed49baa11f06ffc0c7bc8f95dd00037d035";
+    sha256 = "0g420cbqpknhl61a4mpk3bbia8agf657d9vzzcqr338lmni80qz7";
   };
 
-  buildInputs = [ rustc cargo makeWrapper ];
+  depsSha256 = "0s951apqcr96lvc1jamk6qw3631gwnlnfgcx55vlznfm7shnmywn";
 
-  buildPhase = ''
-    CARGO_HOME="$NIX_BUILD_TOP/.cargo" cargo build --release
+  buildInputs = [ makeWrapper ];
+
+  preCheck = ''
+    export RUST_SRC_PATH="${rustc.src}/src"
   '';
 
   installPhase = ''

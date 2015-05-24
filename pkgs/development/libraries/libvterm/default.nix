@@ -1,4 +1,5 @@
-{stdenv, fetchurl, pkgconfig, glib, ncurses}:
+{ stdenv, fetchurl, pkgconfig, glib, ncurses }:
+
 stdenv.mkDerivation rec {
   name = "libvterm-0.99.7";
 
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://libvterm.sourceforge.net/;
     description = "Terminal emulator library to mimic both vt100 and rxvt";
-    license="GPLv2+";
+    license = "GPLv2+";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

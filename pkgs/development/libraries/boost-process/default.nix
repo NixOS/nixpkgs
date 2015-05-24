@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     description = "Library to manage system processes";
     license = "boost-license";
     platforms = platforms.unix;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

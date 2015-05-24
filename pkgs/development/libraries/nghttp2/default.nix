@@ -8,16 +8,9 @@
 , prefix ? ""
 }:
 
+with stdenv;
+with stdenv.lib;
 let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
   isLib = prefix == "lib";
 
   optOpenssl = if isLib then null else shouldUsePkg openssl;
@@ -34,17 +27,23 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}nghttp2-${version}";
-  version = "0.7.13";
+  version = "0.7.14";
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
-    url = "http://pub.wak.io/nixos/tarballs/nghttp2-0.7.13.tar.xz";
-    sha256 = "1nz14hmfhsxljmf7f3763q9kpn9prfdivrvdr7c74x72s75bzwli";
+    url = "http://pub.wak.io/nixos/tarballs/nghttp2-${version}.tar.bz2";
+    sha256 = "000d50yzyysbr9ldhvnbpzn35vplqm08dnmh55wc5zk273gy383f";
   };
+
+  # Configure script searches for a symbol which does not exist in jemalloc on Darwin
+  # Reported upstream in https://github.com/tatsuhiro-t/nghttp2/issues/233
+  postPatch = if (stdenv.isDarwin && optJemalloc != null) then ''
+    substituteInPlace configure --replace "malloc_stats_print" "je_malloc_stats_print"
+  '' else null;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ optJansson optBoost optLibxml2 optJemalloc ]
-    ++ stdenv.lib.optionals hasApp [ optOpenssl optLibev optZlib ];
+    ++ optionals hasApp [ optOpenssl optLibev optZlib ];
 
   configureFlags = [
     (mkEnable false                 "werror"          null)
@@ -62,7 +61,7 @@ stdenv.mkDerivation rec {
     (mkWith   false                 "cython"          null)
   ];
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://nghttp2.org/;
     description = "an implementation of HTTP/2 in C";
     license = licenses.mit;

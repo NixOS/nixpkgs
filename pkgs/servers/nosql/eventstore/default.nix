@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     ln -s ${icu}/lib/libicui18n.so src/libs/libicui18n.so
     ln -s ${icu}/lib/libicuuc.so src/libs/libicuuc.so
 
+    patchShebangs build.sh
     ./build.sh js1
     ./build.sh quick ${version}
   '';

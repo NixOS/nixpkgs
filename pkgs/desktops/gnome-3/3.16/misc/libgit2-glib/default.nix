@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "8a0a6f65d86f2c8cb9bcb20c5e0ea6fd02271399292a71fc7e6852f13adbbdb8";
   };
 
-  configureScript = "sh ./autogen.sh";
-
   buildInputs = [ gnome3.gnome_common libtool pkgconfig vala
                   gtk_doc gobjectIntrospection libgit2 glib ];
 

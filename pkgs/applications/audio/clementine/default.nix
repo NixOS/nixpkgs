@@ -46,8 +46,8 @@ let
     usbmuxd
   ];
 
-  unwrapped = stdenv.mkDerivation {
-    name = "clementine-unwrapped-${version}";
+  free = stdenv.mkDerivation {
+    name = "clementine-free-${version}";
     inherit patches src buildInputs;
     enableParallelBuilding = true;
     meta = with stdenv.lib; {
@@ -91,7 +91,7 @@ with stdenv.lib;
 
 runCommand "clementine-${version}"
 {
-  inherit blob unwrapped;
+  inherit blob free;
   buildInputs = [ makeWrapper ] ++ gst_plugins; # for the setup-hooks
   dontPatchELF = true;
   dontStrip = true;
@@ -109,7 +109,12 @@ runCommand "clementine-${version}"
 }
 ''
   mkdir -p $out/bin
-  makeWrapper "$unwrapped/bin/${exeName}" "$out/bin/${exeName}" \
+  makeWrapper "$free/bin/${exeName}" "$out/bin/${exeName}" \
       ${optionalString withSpotify "--set CLEMENTINE_SPOTIFYBLOB \"$blob/libexec/clementine\""} \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+
+  mkdir -p $out/share
+  for dir in applications icons kde4; do
+      ln -s "$free/share/$dir" "$out/share/$dir"
+  done
 ''

@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, jdk, mesos, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "marathon-v${version}";
+  name = "marathon-${version}";
   version = "0.8.1";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jdk.jre}/bin/java $out/bin/marathon \
       --add-flags "-Xmx512m -jar $out/libexec/marathon/${name}.jar" \
-      --prefix "MESOS_NATIVE_LIBRARY" : "$MESOS_NATIVE_LIBRARY"
+      --prefix "MESOS_NATIVE_JAVA_LIBRARY" : "$MESOS_NATIVE_JAVA_LIBRARY"
     '';
 
   meta = with stdenv.lib; {

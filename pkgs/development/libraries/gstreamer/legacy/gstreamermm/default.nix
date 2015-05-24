@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "C++ bindings for the GStreamer streaming multimedia library";
     homepage = http://www.gtkmm.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = "Philip Lykke Carlsen <plcplc@gmail.com>";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ plcplc ];
+    platforms = platforms.unix;
   };
 
 }

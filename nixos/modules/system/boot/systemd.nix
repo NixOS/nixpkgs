@@ -736,10 +736,18 @@ in
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
 
+    # Some overrides to upstream units.
+    systemd.services."systemd-backlight@".restartIfChanged = false;
+    systemd.services."systemd-rfkill@".restartIfChanged = false;
     systemd.services."user@".restartIfChanged = false;
-
-    systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-journal-flush.restartIfChanged = false;
+    systemd.services.systemd-journald.restartIfChanged = false; # FIXME: shouldn't be necessary with systemd 219
+    systemd.services.systemd-random-seed.restartIfChanged = false;
+    systemd.services.systemd-remount-fs.restartIfChanged = false;
+    systemd.services.systemd-update-utmp.restartIfChanged = false;
+    systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
+    systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
 
   };
 

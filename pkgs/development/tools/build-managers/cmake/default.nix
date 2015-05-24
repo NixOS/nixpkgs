@@ -55,7 +55,9 @@ stdenv.mkDerivation rec {
       "--system-libs"
     ]
     ++ optional (jsoncpp == null) "--no-system-jsoncpp"
-    ++ optional useQt4 "--qt-gui";
+    ++ optional useQt4 "--qt-gui"
+    ++ ["--"]
+    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
 
   setupHook = ./setup-hook.sh;
 

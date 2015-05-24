@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   # Clang generates warnings in Boost's header files
   # -Werror causes these warnings to be interpreted as errors
   # Simplest solution: disable -Werror
-  configureFlags = if (stdenv.cc.cc.isClang or false)
+  configureFlags = if stdenv.cc.isClang
     then [ "--disable-werror" ] else null;
 
   meta = {

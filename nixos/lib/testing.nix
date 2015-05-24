@@ -28,7 +28,7 @@ rec {
 
         wrapProgram $out/bin/nixos-test-driver \
           --prefix PATH : "${qemu_kvm}/bin:${vde2}/bin:${netpbm}/bin:${coreutils}/bin" \
-          --prefix PERL5LIB : "${lib.makePerlPath [ perlPackages.TermReadLineGnu perlPackages.XMLWriter perlPackages.IOTty ]}:$out/lib/perl5/site_perl"
+          --prefix PERL5LIB : "${with perlPackages; lib.makePerlPath [ TermReadLineGnu XMLWriter IOTty FileSlurp ]}:$out/lib/perl5/site_perl"
       '';
   };
 
@@ -68,7 +68,12 @@ rec {
 
 
   makeTest =
-    { testScript, makeCoverageReport ? false, name ? "unnamed", ... } @ t:
+    { testScript
+    , makeCoverageReport ? false
+    , enableOCR ? false
+    , name ? "unnamed"
+    , ...
+    } @ t:
 
     let
       testDriverName = "nixos-test-driver-${name}";
@@ -86,6 +91,8 @@ rec {
 
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
+      ocrProg = tesseract.override { enableLanguages = [ "eng" ]; };
+
       # Generate onvenience wrappers for running the test driver
       # interactively with the specified network, and for starting the
       # VMs from the command line.
@@ -102,12 +109,14 @@ rec {
           vms="$(for i in ${toString vms}; do echo $i/bin/run-*-vm; done)"
           wrapProgram $out/bin/nixos-test-driver \
             --add-flags "$vms" \
+            ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
             --set testScript '"$testScript"' \
             --set VLANS '"${toString vlans}"'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "$vms" \
+            ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --set tests '"startAll; joinAll;"' \
             --set VLANS '"${toString vlans}"' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}

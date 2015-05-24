@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
-, libcanberra, accountsservice, libpwquality, pulseaudio, fontconfig
+, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, pulseaudio, fontconfig
 , gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, krb5, networkmanagerapplet, networkmanager
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
       gnome_online_accounts libsoup colord pulseaudio fontconfig colord-gtk libpwquality
       accountsservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
-      gdk_pixbuf gnome3.adwaita-icon-theme librsvg clutter clutter_gtk
-      hicolor_icon_theme gnome3.adwaita-icon-theme gnome3.vino udev
+      gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
+      gnome3.vino udev libcanberra_gtk3
       networkmanager modemmanager makeWrapper gnome3.gnome-bluetooth ];
 
   preBuild = ''

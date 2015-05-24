@@ -17,7 +17,7 @@ assert sndfileFileIOSupport -> (libsndfile != null);
 #assert mp3xSupport -> (analyzerHooksSupport && (gtk1 != null));
 
 let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
+  sndfileFileIO = if sndfileFileIOSupport then "sndfile" else "lame";
 in
 
 with stdenv.lib;
@@ -39,17 +39,18 @@ stdenv.mkDerivation rec {
     ++ optional sndfileFileIOSupport libsndfile;
 
   configureFlags = [
-    (mkFlag nasmSupport "nasm")
-    (mkFlag cpmlSupport "cpml")
-    #(mkFlag efenceSupport "efence")
-    (if sndfileFileIOSupport then "--with-fileio=sndfile" else "--with-fileio=lame")
-    (mkFlag analyzerHooksSupport "analyzer-hooks")
-    (mkFlag decoderSupport "decoder")
-    (mkFlag frontendSupport "frontend")
-    (mkFlag frontendSupport "dynamic-frontends")
-    #(mkFlag mp3xSupport "mp3x")
-    (mkFlag mp3rtpSupport "mp3rtp")
-    (if debugSupport then "--enable-debug=alot" else "")
+    (mkEnable nasmSupport          "nasm"              null)
+    (mkEnable cpmlSupport          "cpml"              null)
+    #(mkEnable efenceSupport        "efence"            null)
+    (mkWith   true                 "fileio"            sndfileFileIO)
+    (mkEnable analyzerHooksSupport "analyzer-hooks"    null)
+    (mkEnable decoderSupport       "decoder"           null)
+    (mkEnable frontendSupport      "frontend"          null)
+    (mkEnable frontendSupport      "dynamic-frontends" null)
+    #(mkEnable mp3xSupport          "mp3x"              null)
+    (mkEnable mp3rtpSupport        "mp3rtp"            null)
+  ] ++ optional debugSupport [
+    (mkEnable true                 "debug"             "alot")
   ];
 
   meta = {

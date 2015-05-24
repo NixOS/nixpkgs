@@ -37,11 +37,20 @@ rec {
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix ({ inherit (packages.ghc784) ghc alex happy; } // stdenv.lib.optionalAttrs stdenv.isDarwin {
       libiconv = pkgs.darwin.libiconv;
     });
-    ghc = compiler.ghc784;
 
     ghcjs = packages.ghc7101.callPackage ../development/compilers/ghcjs {
       ghc = compiler.ghc7101;
     };
+
+    jhc = callPackage ../development/compilers/jhc {
+      inherit (packages.ghc763) ghcWithPackages;
+    };
+
+    uhc = callPackage ../development/compilers/uhc/default.nix ({
+      stdenv = pkgs.clangStdenv;
+      inherit (pkgs.haskellPackages) ghcWithPackages;
+    });
+
   };
 
   packages = {

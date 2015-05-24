@@ -20,10 +20,6 @@ assert jpegSupport -> (libjpeg != null);
 assert tiffSupport -> (libtiff != null);
 assert gifSupport -> (giflib != null);
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libwebp-${version}";
@@ -35,19 +31,19 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag threadingSupport "threading")
-    (mkFlag openglSupport "gl")
-    (mkFlag pngSupport "png")
-    (mkFlag jpegSupport "jpeg")
-    (mkFlag tiffSupport "tiff")
-    (mkFlag gifSupport "gif")
-    #(mkFlag (wicSupport && stdenv.isCygwin) "wic")
-    (mkFlag alignedSupport "aligned")
-    (mkFlag swap16bitcspSupport "swap-16bit-csp")
-    (mkFlag experimentalSupport "experimental")
-    (mkFlag libwebpmuxSupport "libwebpmux")
-    (mkFlag libwebpdemuxSupport "libwebpdemux")
-    (mkFlag libwebpdecoderSupport "libwebpdecoder")
+    (mkEnable threadingSupport "threading" null)
+    (mkEnable openglSupport "gl" null)
+    (mkEnable pngSupport "png" null)
+    (mkEnable jpegSupport "jpeg" null)
+    (mkEnable tiffSupport "tiff" null)
+    (mkEnable gifSupport "gif" null)
+    #(mkEnable (wicSupport && stdenv.isCygwin) "wic" null)
+    (mkEnable alignedSupport "aligned" null)
+    (mkEnable swap16bitcspSupport "swap-16bit-csp" null)
+    (mkEnable experimentalSupport "experimental" null)
+    (mkEnable libwebpmuxSupport "libwebpmux" null)
+    (mkEnable libwebpdemuxSupport "libwebpdemux" null)
+    (mkEnable libwebpdecoderSupport "libwebpdecoder" null)
   ];
 
   buildInputs = [ ]

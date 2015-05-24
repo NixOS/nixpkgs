@@ -182,11 +182,11 @@ stdenv.mkDerivation {
 
   passthru = { inherit libdrm version driverLink; };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
     homepage = http://www.mesa3d.org/;
     license = "bsd";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = with stdenv.lib.maintainers; [ eduarrrd simons vcunat ];
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ eduarrrd simons vcunat ];
   };
 }

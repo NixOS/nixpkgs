@@ -13,10 +13,6 @@ assert encaSupport -> (enca != null);
 assert fontconfigSupport -> (fontconfig != null);
 assert harfbuzzSupport -> (harfbuzz != null);
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libass-${version}";
@@ -28,11 +24,11 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    (mkFlag encaSupport "enca")
-    (mkFlag fontconfigSupport "fontconfig")
-    (mkFlag harfbuzzSupport "harfbuzz")
-    (mkFlag rasterizerSupport "rasterizer")
-    (mkFlag largeTilesSupport "large-tiles")
+    (mkEnable encaSupport       "enca"        null)
+    (mkEnable fontconfigSupport "fontconfig"  null)
+    (mkEnable harfbuzzSupport   "harfbuzz"    null)
+    (mkEnable rasterizerSupport "rasterizer"  null)
+    (mkEnable largeTilesSupport "large-tiles" null)
   ];
 
   nativeBuildInputs = [ pkgconfig yasm ];
