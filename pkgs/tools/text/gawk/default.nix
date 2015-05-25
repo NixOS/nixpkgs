@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.2";
+  name = "gawk-4.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "10glh5amry76v8fzhp4phi4119zwjwzjg9ybzq971qjfhg2m72za";
+    sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1

@@ -20,13 +20,18 @@ rec {
     }:
     runCommand name
       { inherit text executable;
+        passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
       }
       ''
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
-        echo -n "$text" > "$n"
+        if [ -e "$textPath" ]; then
+          mv "$textPath" "$n"
+        else
+          echo -n "$text" > "$n"
+        fi
         (test -n "$executable" && chmod +x "$n") || true
       '';
 

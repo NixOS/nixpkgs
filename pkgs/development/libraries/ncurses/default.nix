@@ -85,16 +85,16 @@ stdenv.mkDerivation rec {
     libs="$(find $out/lib -name \*w.a | sed 's,.*lib\(.*\)w.a.*,\1,g')"
     for lib in $libs; do
       if [ -e "$out/lib/lib''${lib}w.so" ]; then
-        echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
+        ln -svf lib''${lib}w.so $out/lib/lib$lib.so
+        ln -svf lib''${lib}w.so.${abiVersion} $out/lib/lib$lib.so.${abiVersion}
       fi
       ln -svf lib''${lib}w.a $out/lib/lib$lib.a
       ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
     done
 
     # Create curses compatability
-    echo "INPUT(-lncursesw)" > $out/lib/libcursesw.so
-    echo "INPUT(-lncursesw)" > $out/lib/libcurses.so
-    ln -svf libncurses
+    ln -svf libncursesw.so $out/lib/libcursesw.so
+    ln -svf libncursesw.so $out/lib/libcurses.so
   '' else ''
     # Create a non-abi versioned config
     cfg=$(basename $out/bin/ncurses*-config)
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     ln -svf . $out/include/ncurses
 
     # Create curses compatability
-    echo "INPUT(-lncurses)" > $out/lib/libcurses.so
+    ln -svf libncurses.so $out/lib/libcurses.so
   '';
 
   meta = {
