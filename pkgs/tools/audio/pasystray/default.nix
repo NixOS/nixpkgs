@@ -2,11 +2,11 @@
 , gnome3, avahi, gtk3, libnotify, pulseaudio, x11}:
 
 stdenv.mkDerivation rec {
-  name = "pasystray-0.4.0";
+  name = "pasystray-0.5.2";
 
   src = fetchurl {
     url = "https://github.com/christophgysin/pasystray/archive/${name}.zip";
-    sha256 = "0n41qm04kilhc827yx8y1ijslmajg2dxykaf3s3aq6s6bjzzw8bh";
+    sha256 = "084jld5zk89h4akll73bwhfav6mpg55zmdd5kvlg396rqi9lqkj4";
   };
 
   buildInputs = [ unzip autoconf automake makeWrapper pkgconfig 
