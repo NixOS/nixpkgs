@@ -41,6 +41,9 @@ let
 
   system = config.nixpkgs.system;
 
+  mkBindFlag = d: if d.isReadOnly then " --bind-ro=${d.host}:${d.container}" else " --bind=${d.host}:${d.container}";
+  mkBindFlags = bs: concatMapStrings mkBindFlag bs;
+
 in
 
 {
@@ -128,25 +131,28 @@ in
               '';
             };
 
-            extraBindsRO = mkOption {
-              type = types.listOf types.str;
+            extraBinds = mkOption {
+              type = types.listOf types.attrs;
 	      default = [];
-	      example = [ "/home/alice" ];
+	      example = [ { host = "/home/alice";
+                            container = "/home";
+			    isReadOnly = false; }
+                        ];
               description =
 	        ''
-                  An extra list of directories that is bound to the container with read-only permission. 
+                  An extra list of directories that is bound to the container.
                 '';
             };
 
-            extraBindsRW = mkOption {
-              type = types.listOf types.str;
-	      default = [];
-	      example = [ "/home/alice" ];
-              description =
-	        ''
-                  An extra list of directories that is bound to the container with read-only permission. 
-                '';
-            };
+            #extraBindsRW = mkOption {
+            #  type = types.listOf types.str;
+	    # default = [];
+	    #  example = [ "/home/alice" ];
+            #  description =
+	    #    ''
+            #      An extra list of directories that is bound to the container with read-only permission. 
+            #    '';
+            #};
 
           };
 
@@ -359,10 +365,13 @@ in
              AUTO_START=1
            ''}
 
-           EXTRABINDS="${concatMapStrings (d: " --bind-ro=${d}") cfg.extraBindsRO + concatMapStrings (d: " --bind=${d}") cfg.extraBindsRW}"
+           EXTRABINDS="${mkBindFlags cfg.extraBinds}"
 
           '';
       }) config.containers;
+
+    #"${concatMapStrings (d: " --bind-ro=${d}") cfg.extraBindsRO + concatMapStrings (d: " --bind=${d}") cfg.extraBindsRW}"
+
 
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
