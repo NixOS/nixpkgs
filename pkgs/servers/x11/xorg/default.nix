@@ -1874,6 +1874,16 @@ let
     buildInputs = [pkgconfig libX11 xproto libXxf86vm ];
   }) // {inherit libX11 xproto libXxf86vm ;};
 
+  xgc = (mkDerivation "xgc" {
+    name = "xgc-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xgc-1.0.5.tar.bz2;
+      sha256 = "0pigvjd3i9fchmj1inqy151aafz3dr0vq1h2zizdb2imvadqv0hl";
+    };
+    buildInputs = [pkgconfig libXaw libXt ];
+  }) // {inherit libXaw libXt ;};
+
   xhost = (mkDerivation "xhost" {
     name = "xhost-1.0.7";
     builder = ./builder.sh;
@@ -1993,6 +2003,16 @@ let
     };
     buildInputs = [pkgconfig libxcb ];
   }) // {inherit libxcb ;};
+
+  xmag = (mkDerivation "xmag" {
+    name = "xmag-1.0.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xmag-1.0.6.tar.bz2;
+      sha256 = "0qg12ifbbk9n8fh4jmyb625cknn8ssj86chd6zwdiqjin8ivr8l7";
+    };
+    buildInputs = [pkgconfig libX11 libXaw libXmu libXt ];
+  }) // {inherit libX11 libXaw libXmu libXt ;};
 
   xmessage = (mkDerivation "xmessage" {
     name = "xmessage-1.0.4";
