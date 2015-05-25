@@ -26,7 +26,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|dry-build|dry-run|dry-activate|build-ova|build-vm|build-vm-with-bootloader)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         action="$i"
         ;;
@@ -208,6 +208,9 @@ if [ -z "$rollback" ]; then
         pathToConfig="$profile"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
         nix-build '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}" > /dev/null
+        pathToConfig=./result
+    elif [ "$action" = build-ova ]; then
+        nix-build '<nixpkgs/nixos>' -A ova -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
         nix-build '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}" > /dev/null

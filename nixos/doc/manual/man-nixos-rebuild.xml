@@ -24,6 +24,7 @@
       <arg choice='plain'><option>build</option></arg>
       <arg choice='plain'><option>dry-build</option></arg>
       <arg choice='plain'><option>dry-activate</option></arg>
+      <arg choice='plain'><option>build-ova</option></arg>
       <arg choice='plain'><option>build-vm</option></arg>
       <arg choice='plain'><option>build-vm-with-bootloader</option></arg>
     </group>
@@ -138,6 +139,14 @@ $ nix-build /path/to/nixpkgs/nixos -A system
       instance, this command will print which systemd units would be
       restarted. The list of changes is not guaranteed to be
       complete.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>build-ova</option></term>
+    <listitem>
+      <para>Like <option>build-vm</option> but builds a OVA that can be 
+        imported at other hosts.</para>
     </listitem>
   </varlistentry>
 

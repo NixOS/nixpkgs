@@ -27,12 +27,22 @@ let
       ];
   }).config;
 
+  ovaConfig = (import lib/eval-config.nix {
+      inherit system;
+      modules = 
+        [ configuration
+          ./modules/virtualisation/virtualbox-image.nix
+        ];
+  }).config;
+
 in
 
 {
   inherit (eval) config options;
 
   system = eval.config.system.build.toplevel;
+
+  ova = ovaConfig.system.build.virtualBoxOVA;
 
   vm = vmConfig.system.build.vm;
 
