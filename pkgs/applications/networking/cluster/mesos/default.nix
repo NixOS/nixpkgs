@@ -1,28 +1,32 @@
-{ stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
-, automake114x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
+{ stdenv, lib, makeWrapper, fetchFromGitHub, curl, sasl, openssh, autoconf
+, automake113x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, distutils-cfg, boto, pythonProtobuf, apr, subversion
-, leveldb, glog, perf, utillinux, libnl, iproute
+, leveldb, glog, perf, utillinux, libnl, iproute, which, cacert
 }:
 
 let
-  mavenRepo = import ./mesos-deps.nix { inherit stdenv curl; };
+
+  version = "0.22.1";
+  sha256 = "1i1y77vlq1isp8xiy6ln1ap0cfp4pgm0jawx4z46q3d6b8kadgd5";
+
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.22.1";
   name = "mesos-${version}";
+
+  src = fetchFromGitHub {
+    inherit sha256;
+    owner = "apache";
+    repo = "mesos";
+    rev = version;
+  };
 
   dontDisableStatic = true;
 
-  src = fetchurl {
-    url = "http://www.apache.org/dist/mesos/${version}/mesos-${version}.tar.gz";
-    sha256 = "0ry0ppzgpab68fz5bzd7ry5rjbg8xjz73x1x4c5id42cpsqnn7x5";
-  };
-
   buildInputs = [
-    makeWrapper autoconf automake114x libtool curl sasl jdk maven
+    makeWrapper autoconf automake113x libtool curl sasl jdk maven
     python wrapPython boto distutils-cfg setuptools leveldb
-    subversion apr glog
+    subversion apr glog which cacert
   ] ++ lib.optionals stdenv.isLinux [
     libnl
   ];
@@ -31,9 +35,11 @@ in stdenv.mkDerivation rec {
     pythonProtobuf
   ];
 
-  preConfigure = ''
-    export MAVEN_OPTS="-Dmaven.repo.local=${mavenRepo}"
+  preferLocalBuild = true;
 
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  patchPhase = ''
     substituteInPlace src/launcher/fetcher.cpp \
       --replace '"tar' '"${gnutar}/bin/tar'    \
       --replace '"unzip' '"${unzip}/bin/unzip'
@@ -65,12 +71,16 @@ in stdenv.mkDerivation rec {
       --replace '/bin/sh' "${stdenv.shell}"
   '';
 
+  preConfigure = ''
+    patchShebangs ./
+    ./bootstrap
+  '';
+
   configureFlags = [
     "--sbindir=\${out}/bin"
     "--with-apr=${apr}"
     "--with-svn=${subversion}"
     "--with-leveldb=${leveldb}"
-    "--with-glog=${glog}"
     "--with-glog=${glog}"
     "--enable-optimize"
     "--disable-python-dependency-install"
@@ -78,12 +88,26 @@ in stdenv.mkDerivation rec {
     "--with-network-isolator"
   ];
 
+  buildPhase = ''
+    export M2_REPO=$TMPDIR/repository
+    # Travis doesn't seem to like the $MAVEN_OPTS environment variable
+    # so we have to override the local repo using commandline flags.
+    for FILE in src/Makefile src/Makefile.am; do
+      sed -i 's@\$(MVN)@\$(MVN) -Dmaven.repo.local=\$M2_REPO@' $FILE
+    done
+
+    # Build
+    make
+  '';
+
   postInstall = ''
     rm -rf $out/var
     rm $out/bin/*.sh
 
     mkdir -p $out/share/java
     cp src/java/target/mesos-*.jar $out/share/java
+    # The .egg files are needed by the Aurora Themos Executor
+    find . -name "*.egg" -exec cp -v {} $out/lib/python*/site-packages/ \;
 
     MESOS_NATIVE_JAVA_LIBRARY=$out/lib/libmesos.${soext}
 

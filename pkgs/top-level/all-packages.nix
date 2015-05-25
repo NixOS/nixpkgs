@@ -10498,6 +10498,8 @@ let
 
   antiword = callPackage ../applications/office/antiword {};
 
+  aurora = callPackage ../applications/networking/cluster/aurora { };
+
   ardour = ardour4;
 
   ardour3 =  callPackage ../applications/audio/ardour/ardour3.nix {
