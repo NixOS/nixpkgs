@@ -27,7 +27,7 @@ let
 
   f = x: if x == null then "" else "" + x;
 
-  grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
+  grubConfig = args: pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
@@ -35,11 +35,14 @@ let
       fullVersion = (builtins.parseDrvName realGrub.name).version;
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
-      inherit (efi) efiSysMountPoint canTouchEfiVariables;
+      bootPath = args.path;
+      efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+      inherit (args) devices;
+      inherit (efi) canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default devices fsIdentifier efiSupport;
+        default fsIdentifier efiSupport;
       path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
@@ -47,6 +50,9 @@ let
         pkgs.mdadm pkgs.utillinux
       ]);
     });
+
+  bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
+    (concatMap (args: args.devices) cfg.mirroredBoots);
 
 in
 
@@ -99,6 +105,53 @@ in
           installed. Can be used instead of <literal>device</literal> to
           install grub into multiple devices (e.g., if as softraid arrays holding /boot).
         '';
+      };
+
+      mirroredBoots = mkOption {
+        default = [ ];
+        example = [
+          { path = "/boot1"; devices = [ "/dev/sda" ]; }
+          { path = "/boot2"; devices = [ "/dev/sdb" ]; }
+        ];
+        description = ''
+          Mirror the boot configuration to multiple partitions and install grub
+          to the respective devices corresponding to those partitions.
+        '';
+
+        type = types.listOf types.optionSet;
+
+        options = {
+
+          path = mkOption {
+            example = "/boot1";
+            type = types.str;
+            description = ''
+              The path to the boot directory where grub will be written. Generally
+              this boot parth should double as an efi path.
+            '';
+          };
+
+          efiSysMountPoint = mkOption {
+            default = null;
+            example = "/boot1/efi";
+            type = types.nullOr types.str;
+            description = ''
+              The path to the efi system mount point. Usually this is the same
+              partition as the above path and can be left as null.
+            '';
+          };
+
+          devices = mkOption {
+            default = [ ];
+            example = [ "/dev/sda" "/dev/sdb" ];
+            type = types.listOf types.str;
+            description = ''
+              The path to the devices which will have the grub mbr written.
+              Note these are typically device paths and not paths to partitions.
+            '';
+          };
+
+        };
       };
 
       configurationName = mkOption {
@@ -291,13 +344,18 @@ in
 
       boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
 
-      system.build.installBootLoader =
-        if cfg.devices == [] then
-          throw "You must set the option ‘boot.loader.grub.device’ to make the system bootable."
-        else
-          "PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])} " +
-          (if cfg.enableCryptodisk then "GRUB_ENABLE_CRYPTODISK=y " else "") +
-          "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
+      boot.loader.grub.mirroredBoots = optionals (cfg.devices != [ ]) [
+        { path = "/boot"; inherit (cfg) devices; inherit (efi) efiSysMountPoint; }
+      ];
+
+      system.build.installBootLoader = pkgs.writeScript "install-grub.sh" (''
+        #!${pkgs.stdenv.shell}
+        set -e
+        export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
+        ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
+      '' + flip concatMapStrings cfg.mirroredBoots (args: ''
+        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args}
+      ''));
 
       system.build.grub = grub;
 
@@ -312,13 +370,37 @@ in
           ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
         '') config.boot.loader.grub.extraFiles);
 
-    assertions = [{ assertion = !cfg.zfsSupport || cfg.version == 2;
-                    message = "Only grub version 2 provides zfs support";}]
-      ++ flip map cfg.devices (dev: {
-        assertion = dev == "nodev" || hasPrefix "/" dev;
-        message = "Grub devices must be absolute paths, not ${dev}";
-      });
-
+      assertions = [
+        {
+          assertion = !cfg.zfsSupport || cfg.version == 2;
+          message = "Only grub version 2 provides zfs support";
+        }
+        {
+          assertion = cfg.mirroredBoots != [ ];
+          message = "You must set the option ‘boot.loader.grub.devices’ or "
+            + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
+        }
+        {
+          assertion = all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
+          message = "You cannot have duplicated devices in mirroredBoots";
+        }
+      ] ++ flip concatMap cfg.mirroredBoots (args: [
+        {
+          assertion = args.devices != [ ];
+          message = "A boot path cannot have an empty devices string in ${arg.path}";
+        }
+        {
+          assertion = hasPrefix "/" args.path;
+          message = "Boot paths must be absolute, not ${args.path}";
+        }
+        {
+          assertion = hasPrefix "/" args.efiSysMountPoint;
+          message = "Efi paths must be absolute, not ${args.efiSysMountPoint}";
+        }
+      ] ++ flip map args.devices (device: {
+        assertion = device == "nodev" || hasPrefix "/" device;
+        message = "Grub devices must be absolute paths, not ${dev} in ${args.path}";
+      }));
     })
 
   ];
