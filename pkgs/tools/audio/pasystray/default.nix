@@ -1,12 +1,14 @@
-{stdenv, fetchzip, autoconf, automake, makeWrapper, pkgconfig
+{stdenv, fetchFromGitHub, autoconf, automake, makeWrapper, pkgconfig
 , gnome3, avahi, gtk3, libnotify, pulseaudio, x11}:
 
 stdenv.mkDerivation rec {
   name = "pasystray-0.5.2";
 
-  src = fetchzip {
-    url = "https://github.com/christophgysin/pasystray/archive/${name}.zip";
-    sha256 = "084jld5zk89h4akll73bwhfav6mpg55zmdd5kvlg396rqi9lqkj4";
+  src = fetchFromGitHub {
+    owner = "christophgysin";
+    repo = "pasystray";
+    rev = "6709fc1e9f792baf4f7b4507a887d5876b2cfa70";
+    sha256 = "1z21wassdiwfnlcrkpdqh8ylblpd1xxjxcmib5mwix9va2lykdfv";
   };
 
   buildInputs = [ autoconf automake makeWrapper pkgconfig 
