@@ -1,0 +1,1627 @@
+{
+    "load-dir": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "62e8f3238ad3623dda424fcef36b4dc01ac074b91515d1403ed59efc0c6bb970",
+        "desc": "",
+        "ver": [
+            0,
+            0,
+            3
+        ]
+    },
+    "w3": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "6be119e18fb6d4130be22f3aafc7d75b91b0b6ee3b28ed3b42a2f3371619c306",
+        "desc": "",
+        "ver": [
+            4,
+            0,
+            49
+        ]
+    },
+    "diff-hl": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                2
+            ]
+        },
+        "sha256": "4171f2da46fc33e51010875555477e86962976780a66e8b388ca8237fba43681",
+        "desc": "",
+        "ver": [
+            1,
+            7,
+            0
+        ]
+    },
+    "sml-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "3db9673b7c23e3ee58d8f0e748871700125fa0e44cdf14754a3ed6787aaf2d10",
+        "desc": "",
+        "ver": [
+            6,
+            7
+        ]
+    },
+    "gnugo": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "ascii-art-to-unicode": [
+                1,
+                5
+            ],
+            "xpm": [
+                1,
+                0,
+                1
+            ]
+        },
+        "sha256": "fd082e88944bf607c6bf115753d0670f6c21a5bc33595c271f02e4d8f19a242d",
+        "desc": "",
+        "ver": [
+            3,
+            0,
+            0
+        ]
+    },
+    "vlf": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "f9745db50c845954d9e3ed1a00b24018038dc6d0e9e3ccb935b9c6af4b6eff00",
+        "desc": "",
+        "ver": [
+            1,
+            7
+        ]
+    },
+    "minimap": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "68edade04864f7d04a7777922fc0cac3d3999caf73c49c298915ed7a7c6f9ded",
+        "desc": "",
+        "ver": [
+            1,
+            2
+        ]
+    },
+    "load-relative": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "3c66e3d491892b94833c0e9bca3a242aa70899af490e2f2608cb7e580055ae6e",
+        "desc": "",
+        "ver": [
+            1,
+            2
+        ]
+    },
+    "quarter-plane": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "b5f2fbdffb9000f9035aac89c9bb78f9daacc2f1a977ed8244b000f79b564342",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "context-coloring": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "js2-mode": [
+                20150126
+            ],
+            "emacs": [
+                24
+            ]
+        },
+        "sha256": "b8064b0cdcfde6dbf94f70dd78c829366b6207a4f018dfed4970985081307cde",
+        "desc": "",
+        "ver": [
+            6,
+            3,
+            0
+        ]
+    },
+    "svg-clock": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "svg": [
+                0,
+                1
+            ],
+            "emacs": [
+                25,
+                0
+            ]
+        },
+        "sha256": "f77585ea5e3b3172e9bc471addda9d65f3ba7a49b0ed63cd328c33eced61e7c4",
+        "desc": "",
+        "ver": [
+            0,
+            5
+        ]
+    },
+    "osc": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "4b5bdd2c622b3b3f0ec3211c1071e88c6267de327b71c543aa32bbbeff5adf26",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "electric-spacing": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "db3be647b3573da463377711d7b7bbb91df85f3e9393afbfa41259f009da66ca",
+        "desc": "",
+        "ver": [
+            5,
+            0
+        ]
+    },
+    "ada-ref-man": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "a87b85d74ecd87c17e0352c6772283b084288688e4bdeed8513d3404454227bd",
+        "desc": "",
+        "ver": [
+            2012,
+            0
+        ]
+    },
+    "rudel": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "017ae4a70f24084fff5ce623c0ab03e93df65e18ac5259af0b7fc1a312533e10",
+        "desc": "",
+        "ver": [
+            0,
+            3
+        ]
+    },
+    "tiny": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "38e09e8e5f09073c1770508968692312c114a66ab8f3728a9aa4da277f8b3e12",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "coffee-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "9f6af34af971bce2eec6a17e4f5f48ee2aa3e37bd988d54e2a74b08a336acec9",
+        "desc": "",
+        "ver": [
+            0,
+            4,
+            1,
+            1
+        ]
+    },
+    "sisu-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "7968afd4acddd75a79cff197fe494b86e7fe5b3840005fd370a3f4d1a383c92b",
+        "desc": "",
+        "ver": [
+            3,
+            0,
+            3
+        ]
+    },
+    "lmc": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "370096f5eb2c02c4f35baa8c143e5aecce2c493b367c700e83cb2df7f49cad68",
+        "desc": "",
+        "ver": [
+            1,
+            3
+        ]
+    },
+    "temp-buffer-browse": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "9cd50b8e1450b3de78e3b72c9c26ea38fdccc0975041d366f8488b852a3cbf14",
+        "desc": "",
+        "ver": [
+            1,
+            4
+        ]
+    },
+    "org": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "2e227150b9d1f9ce0ac5f450d3c2bc36505040472850e5aab2786eb3e9500d36",
+        "desc": "",
+        "ver": [
+            20150525
+        ]
+    },
+    "bug-hunter": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "seq": [
+                1,
+                3
+            ]
+        },
+        "sha256": "cb40fcc907b0b618655df50df37a360538013f80e9a0cad05e53e29c4625a20e",
+        "desc": "",
+        "ver": [
+            0,
+            2
+        ]
+    },
+    "test-simple": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0
+            ]
+        },
+        "sha256": "9caa26d95aa6b368742843ea37da5166101d9f152eaaec8060c11a05f2341969",
+        "desc": "",
+        "ver": [
+            1,
+            1
+        ]
+    },
+    "notes-mode": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "26a7099f9a67e111944981330421d3bcd4f17299c8ecf68ef0605aa01cdd11ab",
+        "desc": "",
+        "ver": [
+            1,
+            30
+        ]
+    },
+    "nlinum": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "9cdd586dfd5078951b9ec1211071da688b5b09a2cd59d191f6cc01bcbae225c3",
+        "desc": "",
+        "ver": [
+            1,
+            6
+        ]
+    },
+    "sokoban": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "8127798c25bb19ae8d9a4d8d9d3e24b43a5a1ec45b0c79f1003a66991157d3f9",
+        "desc": "",
+        "ver": [
+            1,
+            4
+        ]
+    },
+    "tNFA": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "queue": [
+                0,
+                1
+            ]
+        },
+        "sha256": "ba691bbbed5328939ca3a562a9231640502dd657f99c2f68295338f428bac406",
+        "desc": "",
+        "ver": [
+            0,
+            1,
+            1
+        ]
+    },
+    "js2-mode": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "cb36404352cadc406a906ad5573dbfa83f535fdcd0e032be46fee3b401358bef",
+        "desc": "",
+        "ver": [
+            20150202
+        ]
+    },
+    "flylisp": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                4
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "6693ed3b4ca7914470326619302bc568520243c83611a8a9289bf21e3c4e0042",
+        "desc": "",
+        "ver": [
+            0,
+            2
+        ]
+    },
+    "yasnippet": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "f9d6957e91cd9ae8c5c9844a9a7d35f897ba68200bf5a8a0dc84af6e984ecbeb",
+        "desc": "",
+        "ver": [
+            0,
+            8,
+            0
+        ]
+    },
+    "cl-lib": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "24a5c6ca95c3d702939f4e8d370eb9bbd496db86d4a022caefaba4753a738efc",
+        "desc": "",
+        "ver": [
+            0,
+            5
+        ]
+    },
+    "djvu": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "52e3f98512c3b1425a1e1c7e36c6b435446b071cb21ca91c2c5fbbaa23d9fef2",
+        "desc": "",
+        "ver": [
+            0,
+            5
+        ]
+    },
+    "javaimp": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "6d85bae143e632144157bbe5a5654f143b8f5da77dab9c6323112af7220d4ff5",
+        "desc": "",
+        "ver": [
+            0,
+            5
+        ]
+    },
+    "loc-changes": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "231bae732e7417b03c54b1e6094c9f7b596393aad628b472705e698537b20ef5",
+        "desc": "",
+        "ver": [
+            1,
+            2
+        ]
+    },
+    "scroll-restore": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "164e232bcdf72fdd0fae9c5b742888c4f863c9a168ef67da66f5d759e9d7a540",
+        "desc": "",
+        "ver": [
+            1,
+            0
+        ]
+    },
+    "web-server": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "emacs": [
+                24,
+                3
+            ]
+        },
+        "sha256": "5690e943312b312b4be3f419a3c292b73d2ccfe6f045da988f84aac23174a1e0",
+        "desc": "",
+        "ver": [
+            0,
+            1,
+            1
+        ]
+    },
+    "debbugs": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "e2ec926e0f6dbdb3569542263f4c561c510e8893e4d1febe6211297547a76f5d",
+        "desc": "",
+        "ver": [
+            0,
+            7
+        ]
+    },
+    "pabbrev": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "530118458c1340e3a48b8efe0f365aa360c7764c3d39d8ae215cdeb3078ddef5",
+        "desc": "",
+        "ver": [
+            4,
+            2
+        ]
+    },
+    "jgraph-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "1469d74235c64e6baa2e48183b1167bb6afc029d8e0efaace9e9e4f2658ee910",
+        "desc": "",
+        "ver": [
+            1,
+            1
+        ]
+    },
+    "wpuzzle": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "720a03df4a09437790c222effd7fb461b09fdd8be34c85ac90db01d642204ff2",
+        "desc": "",
+        "ver": [
+            1,
+            1
+        ]
+    },
+    "darkroom": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "5399b8c7c5f7c7121772736bca1022c5951995755027924c78a71f18aa432e3a",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "let-alist": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "bd82ea7e27649b16784d17c4bd2d8999bc8f61f8b8375d25f0fec3c36465c18a",
+        "desc": "",
+        "ver": [
+            1,
+            0,
+            3
+        ]
+    },
+    "cl-generic": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "e3261768c03d5cbc43cc9f6fc05d4c155fb357db0eac09cba4cd91e048085e2c",
+        "desc": "",
+        "ver": [
+            0,
+            2
+        ]
+    },
+    "undo-tree": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "67b4842cc3cafa5a8b15adc89e6db37e8367f5078fd2d4d5df723ade7d3f492f",
+        "desc": "",
+        "ver": [
+            0,
+            6,
+            5
+        ]
+    },
+    "muse": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "a95a06f38b111c9852ab653e216577a3db381dc53d0e79f88d39d4d61f74af44",
+        "desc": "",
+        "ver": [
+            3,
+            20
+        ]
+    },
+    "aumix-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "bbbeb2e900a98ac7ce3abf898171974494556d42e85e165ec39dfd3b9ee0d263",
+        "desc": "",
+        "ver": [
+            7
+        ]
+    },
+    "avy": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "76e357f0b6a4cf2ec4d0025414a31fdafb0842732e21968d5473b215b2df7f1f",
+        "desc": "",
+        "ver": [
+            0,
+            2,
+            1
+        ]
+    },
+    "markchars": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "1b12ffda377f5769ec13f6ea674b492779f79e9669a0c261e7057bf665dac9f2",
+        "desc": "",
+        "ver": [
+            0,
+            2,
+            0
+        ]
+    },
+    "hydra": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "a8ed69eaf6833700cbec621993a202442e2e1737a812c1e2825208008a21a07a",
+        "desc": "",
+        "ver": [
+            0,
+            13,
+            2
+        ]
+    },
+    "dismal": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0
+            ]
+        },
+        "sha256": "e610562530756e0714155643d9ee1d8847fe082b79237ea5cb9a4ec10c371aee",
+        "desc": "",
+        "ver": [
+            1,
+            5
+        ]
+    },
+    "xclip": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "8724069facb86870058c1a6d2e321dfb2e6df3252bb1a29ed408157435c998fe",
+        "desc": "",
+        "ver": [
+            1,
+            3
+        ]
+    },
+    "register-list": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "506a53515bca5e4bf512484f7a4451ed21195df8cb557a315ee2c2ed4975efab",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "f90-interface-browser": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "3a0e064d2e826c727c063108baf3f047e6cbfd0a41910ce620cbb0b70417c355",
+        "desc": "",
+        "ver": [
+            1,
+            1
+        ]
+    },
+    "ediprolog": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "dc983af90f17ee4181f67d5d7f75e95cc837556d749a552d282bfac8d8032b0f",
+        "desc": "",
+        "ver": [
+            1,
+            0
+        ]
+    },
+    "queue": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "210daf744931abd007e2ad0caae0990ecfa09b6509402b9c6238398bbb23824b",
+        "desc": "",
+        "ver": [
+            0,
+            1,
+            1
+        ]
+    },
+    "iterators": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "emacs": [
+                25
+            ]
+        },
+        "sha256": "445e093982c49259418004efa808ca6534b7c617ad35229f858b212455c39266",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "all": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "23c200460cb8ebcbc03e781562277e550b8c6bb075593de0d70840dbc165049e",
+        "desc": "",
+        "ver": [
+            1,
+            0
+        ]
+    },
+    "docbook": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "668706d1d52744295cce5c850f4de273eb256eea109b59d3fdb5180e1b7aa007",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "dict-tree": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "tNFA": [
+                0,
+                1,
+                1
+            ],
+            "heap": [
+                0,
+                3
+            ],
+            "trie": [
+                0,
+                2,
+                5
+            ]
+        },
+        "sha256": "457b6b3a0a103616ba54cfb48381e9a42f6a685a9164477ef88e25acb08b4a22",
+        "desc": "",
+        "ver": [
+            0,
+            12,
+            8
+        ]
+    },
+    "memory-usage": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "92bf00d1f12cde4367ccd85ed6afddfc0642a185f0bcb1fb5601b67cf5591c0f",
+        "desc": "",
+        "ver": [
+            0,
+            2
+        ]
+    },
+    "ggtags": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "emacs": [
+                24
+            ]
+        },
+        "sha256": "975b36cb0a04c4a0f260be39149bdcfe2f708b63dd32aa8852d73c183f08fa9c",
+        "desc": "",
+        "ver": [
+            0,
+            8,
+            9
+        ]
+    },
+    "ack": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "e319e9a1ef22ca42d705829598b8bc2168317b6c2b834506546261e2a8e04fbc",
+        "desc": "",
+        "ver": [
+            1,
+            3
+        ]
+    },
+    "wisi": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                4
+            ],
+            "emacs": [
+                24,
+                2
+            ]
+        },
+        "sha256": "797845efd2358d76d5281f45c19e521a7c7121549128eb43250b3d3b4f8e7791",
+        "desc": "",
+        "ver": [
+            1,
+            1,
+            1
+        ]
+    },
+    "names": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "5d685f1aadefba108153e4f8aa8947a5ebe02767ecdcebbdd9f699661114b457",
+        "desc": "",
+        "ver": [
+            20150115,
+            1
+        ]
+    },
+    "dbus-codegen": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "fc571aa29a09063995e1df525e001b1196f5193b8bbb1f007c141a9b0d9327be",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "heap": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "661abebe40c39a38038b791a3b0f0939b411dc0876d7b82af41fa16d0dd0878c",
+        "desc": "",
+        "ver": [
+            0,
+            3
+        ]
+    },
+    "uni-confusables": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "f703f4b69d425c32b32a6e2dc4076f9b557692bb9a3985c17c6f9106ff667a68",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "enwc": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "1eedd7238722c71d6686afd636d36daabbbf2ecf5ee9562affcf33651f9bb2a6",
+        "desc": "",
+        "ver": [
+            1,
+            0
+        ]
+    },
+    "ascii-art-to-unicode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "bba9e158f755a3d74705a08ded026b20ded7e0a1bab38ec2688de880fa74cf51",
+        "desc": "",
+        "ver": [
+            1,
+            9
+        ]
+    },
+    "company": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "1d3fa3da08ab2f8aee740176d22899686e0d15292362a7ed7c8d68994740f8e4",
+        "desc": "",
+        "ver": [
+            0,
+            8,
+            12
+        ]
+    },
+    "seq": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "644bad7ff339207e70b75d0e017a5e6a68f490c70e7fdff187f54d0152882c6c",
+        "desc": "",
+        "ver": [
+            1,
+            7
+        ]
+    },
+    "company-statistics": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "company": [
+                0,
+                8,
+                5
+            ],
+            "emacs": [
+                24,
+                3
+            ]
+        },
+        "sha256": "9497e79f47eb25968812baa96a2ac433c2dccd1ccbb229cc3551a57a530657cf",
+        "desc": "",
+        "ver": [
+            0,
+            1,
+            1
+        ]
+    },
+    "metar": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "28c4e562ee7a98eaa0b57f92c34b1f095dafb7e68b9cd2552f5008a0eff73f69",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "caps-lock": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "6a5fba4a7fb30ce50050477639ed34bb76f2e374a7083417c88ddc80aae290c4",
+        "desc": "",
+        "ver": [
+            1,
+            0
+        ]
+    },
+    "wcheck-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "87591c2cdde0f83bff1850de4e626e2a64fcb3f6b06950d7cc6491976b92fe61",
+        "desc": "",
+        "ver": [
+            2014,
+            6,
+            21
+        ]
+    },
+    "ahungry-theme": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "emacs": [
+                24
+            ]
+        },
+        "sha256": "ae4364a1f58a4c101d20e052c1820283cb2cafddf65065b1c6e9ec49a69ec61a",
+        "desc": "",
+        "ver": [
+            1,
+            0,
+            6
+        ]
+    },
+    "swiper": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "48082d7f5c642470a13a317892c4f83cb162f380a5076b0547b20cc3b90618aa",
+        "desc": "",
+        "ver": [
+            0,
+            4,
+            1
+        ]
+    },
+    "eldoc-eval": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "29bca7ec12e5154cc2b70e33759ee77fc1b1457a15fb40128e83c06475ebd0d6",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "ada-mode": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                4
+            ],
+            "wisi": [
+                1,
+                1,
+                1
+            ],
+            "emacs": [
+                24,
+                2
+            ]
+        },
+        "sha256": "c6b328e1af168be4e8b4caf84b860a4e73dbcc8cfdeaa497160a93c923adb404",
+        "desc": "",
+        "ver": [
+            5,
+            1,
+            8
+        ]
+    },
+    "svg": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "emacs": [
+                25
+            ]
+        },
+        "sha256": "65af4fc190d066c35865c6b23380e6917d30354984af5ca952526e69b562476c",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "omn-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "65d1293e6ffdc53cc8f617be9a84d2ee1a3aa4725aea93dac2c4b55ea3606a12",
+        "desc": "",
+        "ver": [
+            1,
+            0
+        ]
+    },
+    "trie": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "tNFA": [
+                0,
+                1,
+                1
+            ],
+            "heap": [
+                0,
+                3
+            ]
+        },
+        "sha256": "3112d165951b4bb84e64214373ae7f19eebf8948b0ee8b6158839582610b71e0",
+        "desc": "",
+        "ver": [
+            0,
+            2,
+            6
+        ]
+    },
+    "websocket": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "80011f0aeb5ac53c11aa32336441386cd8e2a2b293e1f5662d908910e311c1d0",
+        "desc": "",
+        "ver": [
+            1,
+            4
+        ]
+    },
+    "aggressive-indent": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "names": [
+                20150125,
+                9
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "37691a13047138af958ec4f757c462b7c46d671e97ec0ba7a2c57da80483b774",
+        "desc": "",
+        "ver": [
+            1,
+            0,
+            2
+        ]
+    },
+    "xpm": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "e45281a2a361790fc1a7b17e360ab2c04a6032026d911d79448f7dde475a9361",
+        "desc": "",
+        "ver": [
+            1,
+            0,
+            3
+        ]
+    },
+    "oauth2": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "ca7ae1ca38cc2ea6c541e555a651308596dd2de8ad969638f6e03684d6aa9d66",
+        "desc": "",
+        "ver": [
+            0,
+            10
+        ]
+    },
+    "spinner": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "06e12c872be3202f02aa0db9c8336758075f6faeca23014a52b610534b211854",
+        "desc": "",
+        "ver": [
+            1,
+            3,
+            1
+        ]
+    },
+    "ergoemacs-mode": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "undo-tree": [
+                0,
+                6,
+                5
+            ],
+            "emacs": [
+                24,
+                1
+            ]
+        },
+        "sha256": "20c584f44b403bbf6f71574dd4796cddb3c0e464700292919687a76fb8cd1853",
+        "desc": "",
+        "ver": [
+            5,
+            14,
+            7,
+            3
+        ]
+    },
+    "minibuffer-line": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "345e7d38063c949d270535b5d53e652dd3eecca6fd398e4228ca1a71738cc4db",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "rainbow-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "72ed06fb4f2f3ab1d5e2a9aac10864bce1d45f1923e52ee9a8e6d8f2930e16a5",
+        "desc": "",
+        "ver": [
+            0,
+            11
+        ]
+    },
+    "csv-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "1b4744aed40eeeb074289adc746fa017a72b563b1a5f868495579e0db8f17304",
+        "desc": "",
+        "ver": [
+            1,
+            4
+        ]
+    },
+    "adjust-parens": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "ef3febb45ed9a4291bec226ce7d7d641b75a7c3f2e197382894763efdacbf599",
+        "desc": "",
+        "ver": [
+            3,
+            0
+        ]
+    },
+    "crisp": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "11589f5526680d76d6aa8d0ac7ce1bef3bb1e05bc2cf92adfe29114efb7176f5",
+        "desc": "",
+        "ver": [
+            1,
+            3,
+            4
+        ]
+    },
+    "poker": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "e0bd037d3119a203973910c1207b42eb0617db4bbea17db23107e8656a2a753d",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "auto-overlays": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "97840d265d7656e8e1488dcd08d2f037017d0afae1a46a430ab19e36d7b8122b",
+        "desc": "",
+        "ver": [
+            0,
+            10,
+            9
+        ]
+    },
+    "adaptive-wrap": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "fefa54ba670b84360d2602fae477642b27ca4c2312983a7d24b4e6bcd1ad2f3b",
+        "desc": "",
+        "ver": [
+            0,
+            5
+        ]
+    },
+    "num3-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "a8ad0b2181a6024fdff2cff93c6d03dcc95dc430eb1d3215c1d9685caef4a3da",
+        "desc": "",
+        "ver": [
+            1,
+            2
+        ]
+    },
+    "gnorb": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "aadf76a504dcf0acfa0884178376dc6006162d4257c9e447bca9b66b2d7b22da",
+        "desc": "",
+        "ver": [
+            1,
+            1,
+            1
+        ]
+    },
+    "auctex": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "cc2608cbb55b72d78193fe885c237bc3d205ca88ff8e1b37ed334ad9208ab3de",
+        "desc": "",
+        "ver": [
+            11,
+            88,
+            6
+        ]
+    },
+    "windresize": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "7d448781cc2a717127c2f905494e9bf5a95b43ded8bd5f803e775a838c76ab2c",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "timerfunctions": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "854bc3716a77db2bc5f7f264166f6156e7a3b3c3296e1adface15f04b6455888",
+        "desc": "",
+        "ver": [
+            1,
+            4,
+            2
+        ]
+    },
+    "chess": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ]
+        },
+        "sha256": "5a16dbd56432be81f1c313fc88972ac690c2dc5a82c1035da37b8472ab5c01eb",
+        "desc": "",
+        "ver": [
+            2,
+            0,
+            4
+        ]
+    },
+    "ace-window": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "avy": [
+                0,
+                1,
+                0
+            ]
+        },
+        "sha256": "962c8c97473dbca13cde0fec4e7927cda32c9c5cd2d0c99c7ef1d44336f7c852",
+        "desc": "",
+        "ver": [
+            0,
+            8,
+            1
+        ]
+    },
+    "shen-mode": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "7f02bb977db4ce95e46043f035ceb1c4722bff4e14f2eef2361912a8e62422b7",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "easy-kill": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": {
+            "cl-lib": [
+                0,
+                5
+            ],
+            "emacs": [
+                24
+            ]
+        },
+        "sha256": "0b5b37c0187061ab2da077b4fa290117303f807ea085c7bb3a07bd4a5f05dc9e",
+        "desc": "",
+        "ver": [
+            0,
+            9,
+            3
+        ]
+    },
+    "jumpc": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "ca548fdf39d8a3e5314e3a1633902ec9158ccb5bd20487a81a03ab5f077f0fee",
+        "desc": "",
+        "ver": [
+            3,
+            0
+        ]
+    },
+    "epoch-view": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "dd6d15ce3d847af00102aab889e1d7353d7323bfa27a8907dac4a5e77d2ec2f3",
+        "desc": "",
+        "ver": [
+            0,
+            0,
+            1
+        ]
+    },
+    "nhexl-mode": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "3271fe2fbf215c599f44781d15c9997363d65c5264d7dc3be12ac98c5aa19340",
+        "desc": "",
+        "ver": [
+            0,
+            1
+        ]
+    },
+    "lex": {
+        "broken": null,
+        "dist": "tar",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "672dfebb43ea57cf05718b3bd9a72ce7967d5b3dc6f36aa18dcf8a25e688d9c4",
+        "desc": "",
+        "ver": [
+            1,
+            1
+        ]
+    },
+    "ioccur": {
+        "broken": null,
+        "dist": "single",
+        "archive": "http://elpa.gnu.org/packages",
+        "deps": null,
+        "sha256": "e9066da9429bcf86ab089f9e5d5fc4a0db5976ba75df78c49fb844fde66851c7",
+        "desc": "",
+        "ver": [
+            2,
+            4
+        ]
+    }
+}

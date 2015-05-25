@@ -21,6 +21,15 @@
     (`(,package ,version . ,files)
      (melpa2nix-package-build-archive package version files))))
 
+(defun melpa2nix-build-package-from-recipe ()
+  (if (not noninteractive)
+      (error "`melpa2nix-build-package-from-recipe' is to be used only with -batch"))
+  (pcase command-line-args-left
+    (`(,recipe-file ,package-name ,version)
+     (let* ((recipe (cdr (pb/read-from-file recipe-file)))
+            (files (pb/config-file-list recipe)))
+       (melpa2nix-package-build-archive package-name version files)))))
+
 (defun melpa2nix-package-build-archive (name version files)
   "Build a package archive for package NAME."
   (pb/message "\n;;; %s\n" name)
