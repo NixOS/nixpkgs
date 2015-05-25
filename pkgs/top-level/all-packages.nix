@@ -748,6 +748,8 @@ let
 
   capstone = callPackage ../development/libraries/capstone { };
 
+  catch = callPackage ../development/libraries/catch { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
@@ -4498,7 +4500,7 @@ let
   teyjus = callPackage ../development/compilers/teyjus {
     omake = omake_rc1;
   };
-  
+
   thrust = callPackage ../development/tools/thrust {
     gconf = pkgs.gnome.GConf;
   };
