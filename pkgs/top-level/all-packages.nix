@@ -10595,6 +10595,8 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  das_watchdog = callPackage ../tools/system/das_watchdog { };
+
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
   dd-agent = callPackage ../tools/networking/dd-agent { inherit (pythonPackages) tornado; };
