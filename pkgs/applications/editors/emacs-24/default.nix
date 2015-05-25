@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo, acl, gpm, ghostscript
+, alsaLib, cairo, acl, gpm, ghostscript, aspell
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
@@ -21,9 +21,11 @@ let
     else "lucid";
   addExecPath = lib.filter
     (p: p != null)
-    (lib.optionals withX [
-      ghostscript
-    ]);
+    ((lib.optionals withX [
+       ghostscript
+     ]) ++ [
+       aspell
+     ]);
   addSiteLisp = lib.optionalString
     (0 < (lib.length addExecPath))
     ''

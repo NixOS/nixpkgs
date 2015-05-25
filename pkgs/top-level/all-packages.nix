@@ -10635,6 +10635,7 @@ let
     imagemagick = null;
     acl = null;
     gpm = null;
+    aspell = null;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
