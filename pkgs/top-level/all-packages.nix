@@ -4063,6 +4063,7 @@ let
 
     async = callPackage ../development/ocaml-modules/async { };
 
+    atd = callPackage ../development/ocaml-modules/atd { };
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
