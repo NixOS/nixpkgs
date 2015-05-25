@@ -3228,10 +3228,6 @@ let
 
   wavemon = callPackage ../tools/networking/wavemon { };
 
-  w3cCSSValidator = callPackage ../tools/misc/w3c-css-validator {
-    tomcat = tomcat6;
-  };
-
   wdfs = callPackage ../tools/filesystems/wdfs { };
 
   wdiff = callPackage ../tools/text/wdiff { };
