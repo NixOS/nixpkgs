@@ -19,14 +19,6 @@ in {
       '';
     };
 
-    httpPort = mkOption {
-      type = types.int;
-      default = 8080;
-      description = ''
-	Marathon listening port for HTTP connections.
-      '';
-    };
-
     master = mkOption {
       type = types.str;
       default = "zk://${concatStringsSep "," cfg.zookeeperHosts}/mesos";
@@ -42,6 +34,25 @@ in {
       example = [ "1.2.3.4:2181" "2.3.4.5:2181" "3.4.5.6:2181" ];
       description = ''
 	ZooKeeper hosts' addresses.
+      '';
+    };
+
+    user = mkOption {
+      type = types.str;
+      default = "marathon";
+      example = "root";
+      description = ''
+	The user that the Marathon framework will be launched as. If the user doesn't exist it will be created.
+	If you want to run apps that require root access or you want to launch apps using arbitrary users, that
+	is using the `--mesos_user` flag then you need to change this to `root`.
+      '';
+    };
+
+    httpPort = mkOption {
+      type = types.int;
+      default = 8080;
+      description = ''
+	Marathon listening port for HTTP connections.
       '';
     };
 
@@ -76,14 +87,12 @@ in {
 
       serviceConfig = {
         ExecStart = "${pkgs.marathon}/bin/marathon --master ${cfg.master} --zk zk://${concatStringsSep "," cfg.zookeeperHosts}/marathon --http_port ${toString cfg.httpPort} ${concatStringsSep " " cfg.extraCmdLineOptions}";
-        User = "marathon";
+        User = cfg.user;
         Restart = "always";
         RestartSec = "2";
       };
     };
 
-    users.extraUsers.marathon = {
-      description = "Marathon mesos framework user";
-    };
+    users.extraUsers.${cfg.user} = { };
   };
 }
