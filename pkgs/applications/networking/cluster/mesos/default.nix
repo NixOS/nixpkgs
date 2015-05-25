@@ -1,11 +1,11 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
-, automake114x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
+, automake113x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, distutils-cfg, boto, pythonProtobuf, apr, subversion
-, leveldb, glog, perf, utillinux, libnl, iproute
+, leveldb, glog, perf, utillinux, libnl, iproute, which, cacert
 }:
 
 let
-  mavenRepo = import ./mesos-deps.nix { inherit stdenv curl; };
+
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
@@ -25,9 +25,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    makeWrapper autoconf automake114x libtool curl sasl jdk maven
+    makeWrapper autoconf automake113x libtool curl sasl jdk maven
     python wrapPython boto distutils-cfg setuptools leveldb
-    subversion apr glog
+    subversion apr glog which cacert
   ] ++ lib.optionals stdenv.isLinux [
     libnl
   ];
@@ -36,9 +36,11 @@ in stdenv.mkDerivation rec {
     pythonProtobuf
   ];
 
-  preConfigure = ''
-    export MAVEN_OPTS="-Dmaven.repo.local=${mavenRepo}"
+  preferLocalBuild = true;
 
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  patchPhase = ''
     substituteInPlace src/launcher/fetcher.cpp \
       --replace '"tar' '"${gnutar}/bin/tar'    \
       --replace '"unzip' '"${unzip}/bin/unzip'
@@ -70,12 +72,16 @@ in stdenv.mkDerivation rec {
       --replace '/bin/sh' "${stdenv.shell}"
   '';
 
+  preConfigure = ''
+    patchShebangs ./
+    ./bootstrap
+  '';
+
   configureFlags = [
     "--sbindir=\${out}/bin"
     "--with-apr=${apr}"
     "--with-svn=${subversion}"
     "--with-leveldb=${leveldb}"
-    "--with-glog=${glog}"
     "--with-glog=${glog}"
     "--enable-optimize"
     "--disable-python-dependency-install"
@@ -83,12 +89,26 @@ in stdenv.mkDerivation rec {
     "--with-network-isolator"
   ];
 
+  buildPhase = ''
+    export M2_REPO=$TMPDIR/repository
+    # Travis doesn't seem to like the $MAVEN_OPTS environment variable
+    # so we have to override the local repo using commandline flags.
+    for FILE in src/Makefile src/Makefile.am; do
+      sed -i 's@\$(MVN)@\$(MVN) -Dmaven.repo.local=\$M2_REPO@' $FILE
+    done
+
+    # Build
+    make
+  '';
+
   postInstall = ''
     rm -rf $out/var
     rm $out/bin/*.sh
 
     mkdir -p $out/share/java
     cp src/java/target/mesos-*.jar $out/share/java
+    # The .egg files are needed by the Aurora Themos Executor
+    find . -name "*.egg" -exec cp -v {} $out/lib/python*/site-packages/ \;
 
     MESOS_NATIVE_JAVA_LIBRARY=$out/lib/libmesos.${soext}
 
