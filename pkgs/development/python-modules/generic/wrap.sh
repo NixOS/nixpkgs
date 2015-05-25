@@ -41,9 +41,16 @@ wrapPythonProgramsIn() {
                 # wrapProgram creates the executable shell script described
                 # above. The script will set PYTHONPATH and PATH variables.!
                 # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
-                wrapProgram $f \
-                              --prefix PYTHONPATH ':' $program_PYTHONPATH \
-                              --prefix PATH ':' $program_PATH
+                local wrap_args="$f \
+                                 --prefix PYTHONPATH ':' $program_PYTHONPATH \
+                                 --prefix PATH ':' $program_PATH"
+
+                # Add any additional arguments provided by makeWrapperArgs
+                # argument to buildPythonPackage.
+                for arg in $makeWrapperArgs; do
+                    wrap_args="$wrap_args $arg"
+                done
+                wrapProgram $wrap_args
             fi
         fi
     done
