@@ -406,6 +406,7 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
