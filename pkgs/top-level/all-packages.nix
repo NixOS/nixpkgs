@@ -6410,8 +6410,6 @@ let
 
   lesstif = callPackage ../development/libraries/lesstif { };
 
-  lesstif93 = callPackage ../development/libraries/lesstif-0.93 { };
-
   leveldb = callPackage ../development/libraries/leveldb { };
 
   levmar = callPackage ../development/libraries/levmar { };
@@ -13697,10 +13695,6 @@ let
 
   alliance = callPackage ../applications/science/electronics/alliance {
     motif = lesstif;
-  };
-
-  arb = callPackage ../applications/science/biology/arb {
-    lesstif = lesstif93;
   };
 
   archimedes = callPackage ../applications/science/electronics/archimedes { };
