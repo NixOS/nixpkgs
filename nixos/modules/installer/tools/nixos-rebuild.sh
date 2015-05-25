@@ -30,6 +30,10 @@ while [ "$#" -gt 0 ]; do
         if [ "$i" = dry-run ]; then i=dry-build; fi
         action="$i"
         ;;
+      --configuration|--config|-c)
+        j="$1"; shift 1
+        extraBuildFlags+=("--arg" "configuration" "$j")
+        ;;
       --install-grub)
         export NIXOS_INSTALL_GRUB=1
         ;;

@@ -28,6 +28,13 @@
       <arg choice='plain'><option>build-vm-with-bootloader</option></arg>
     </group>
     <sbr />
+    <arg>
+      <group choice='opt'>
+        <arg choice='plain'><option>--configuration</option></arg>
+        <arg choice='plain'><option>-c</option></arg>
+      </group>
+      <replaceable>path</replaceable>
+    </arg>
     <arg><option>--upgrade</option></arg>
     <arg><option>--install-grub</option></arg>
     <arg><option>--no-build-nix</option></arg>
@@ -202,6 +209,17 @@ $ ./result/bin/run-*-vm
 <para>This command accepts the following options:</para>
 
 <variablelist>
+
+  <varlistentry>
+    <term><option>--configuration</option></term>
+    <term><option>-c</option></term>
+    <listitem>
+      <para>Specifies path to configuration. This is a shortcut for setting -I
+        nixos-config=<replaceable>path</replaceable> or specifying a
+        NIXOS_CONFIG variable.
+      </para>
+    </listitem>
+  </varlistentry>
 
   <varlistentry>
     <term><option>--upgrade</option></term>
