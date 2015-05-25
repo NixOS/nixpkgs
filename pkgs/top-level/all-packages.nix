@@ -748,6 +748,8 @@ let
 
   capstone = callPackage ../development/libraries/capstone { };
 
+  catch = callPackage ../development/libraries/catch { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
@@ -3120,6 +3122,8 @@ let
 
   tftp_hpa = callPackage ../tools/networking/tftp-hpa {};
 
+  tidy-html5 = callPackage ../tools/text/tidy-html5 { };
+
   tigervnc = callPackage ../tools/admin/tigervnc {
     fontDirectories = [ xorg.fontadobe75dpi xorg.fontmiscmisc xorg.fontcursormisc
       xorg.fontbhlucidatypewriter75dpi ];
@@ -3698,7 +3702,8 @@ let
     isl = isl_0_14;
   }));
 
-  gfortran = gfortran48;
+  gfortran = if !stdenv.isDarwin then gfortran48
+             else callPackage ../development/compilers/gcc/gfortran-darwin.nix {};
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
@@ -4497,7 +4502,7 @@ let
   teyjus = callPackage ../development/compilers/teyjus {
     omake = omake_rc1;
   };
-  
+
   thrust = callPackage ../development/tools/thrust {
     gconf = pkgs.gnome.GConf;
   };
@@ -8802,15 +8807,20 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
+  prom2json = callPackage ../servers/monitoring/prometheus/prom2json { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager =
     callPackage ../servers/monitoring/prometheus/alertmanager { };
   prometheus-cli =
     callPackage ../servers/monitoring/prometheus/cli { };
+  prometheus-collectd-exporter =
+    callPackage ../servers/monitoring/prometheus/collectd_exporter { };
   prometheus-haproxy-exporter =
     callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
   prometheus-mesos-exporter =
     callPackage ../servers/monitoring/prometheus/mesos_exporter { };
+  prometheus-mysqld-exporter =
+    callPackage ../servers/monitoring/prometheus/mysqld_exporter { };
   prometheus-node-exporter =
     callPackage ../servers/monitoring/prometheus/node_exporter { };
   prometheus-pushgateway =
@@ -9803,7 +9813,7 @@ let
 
   smem = callPackage ../os-specific/linux/smem { };
 
-  statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
+  statifier = callPackage ../os-specific/linux/statifier { };
 
   spl = callPackage ../os-specific/linux/spl {
     configFile = "user";
@@ -13669,8 +13679,8 @@ let
     guile = guile_1_8;
   };
 
-  tetgen = callPackage ../applications/science/geometry/tetgen { };
-
+  tetgen = callPackage ../applications/science/geometry/tetgen { }; # AGPL3+
+  tetgen_1_4 = callPackage ../applications/science/geometry/tetgen/1.4.nix { }; # MIT
 
   ### SCIENCE/BIOLOGY
 
