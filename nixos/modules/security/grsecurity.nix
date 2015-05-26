@@ -223,6 +223,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      [ { assertion = config.boot.kernelPackages.kernel.features.grsecurity or false;
+          message = "the selected kernel does not support grsecurity";
+        }
+      ];
+
     /*
     assertions =
       [ { assertion = cfg.stable || cfg.testing;
