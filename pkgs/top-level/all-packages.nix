@@ -10398,6 +10398,10 @@ let
     cairo = cairo.override { xcbSupport = true; };
     luaPackages = luaPackages.override { inherit lua; };
   };
+  awesome-git = callPackage ../applications/window-managers/awesome/git.nix {
+    cairo = cairo.override { xcbSupport = true; };
+    luaPackages = luaPackages.override { inherit lua; };
+  };
   awesome = awesome-3-5;
 
   inherit (gnome3) baobab;
