@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wfrdqhv97f4ycd9bcpgb6gw47kr7b2iq8cz5knk8a6n9c6870k0";
   };
 
+  patches = [ ./0001-Reintroduce-ssh_forward_listen-Fixes-194.patch ];
+
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
