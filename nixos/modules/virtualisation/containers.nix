@@ -41,8 +41,40 @@ let
 
   system = config.nixpkgs.system;
 
-  mkBindFlag = d: if d.isReadOnly then " --bind-ro=${d.host}:${d.container}" else " --bind=${d.host}:${d.container}";
-  mkBindFlags = bs: concatMapStrings mkBindFlag bs;
+  bindMountOpts = { name, config, ... }: {
+  
+    options = {
+      mountPoint = mkOption {
+        example = "/mnt/usb";
+        type = types.str;
+        description = "Location of the mounted in the container file systems";
+      };
+      hostPath = mkOption {
+        default = null;
+        example = "/home/alice";
+        type = types.uniq (types.nullOr types.string);
+        description = "Location of the host path to be mounted";
+      };
+      isReadOnly = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Determine whether the mounted path will be accessed in read-only mode";
+      };
+    };
+    
+    config = {
+      mountPoint = mkDefault name;
+    };
+    
+  };
+  
+  mkBindFlag = d:
+               let flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
+                   mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
+               in flagPrefix + mountstr ;
+
+  mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
 
 in
 
@@ -131,28 +163,19 @@ in
               '';
             };
 
-            extraBinds = mkOption {
-              type = types.listOf types.attrs;
-	      default = [];
-	      example = [ { host = "/home/alice";
-                            container = "/home";
-			    isReadOnly = false; }
-                        ];
+            bindMounts = mkOption {
+              type = types.loaOf types.optionSet;
+              options = [ bindMountOpts ];
+              default = {};
+              example = { "/home" = { hostPath = "/home/alice";
+                                      isReadOnly = false; };
+                        };
+                        
               description =
-	        ''
+                ''
                   An extra list of directories that is bound to the container.
                 '';
             };
-
-            #extraBindsRW = mkOption {
-            #  type = types.listOf types.str;
-	    # default = [];
-	    #  example = [ "/home/alice" ];
-            #  description =
-	    #    ''
-            #      An extra list of directories that is bound to the container with read-only permission. 
-            #    '';
-            #};
 
           };
 
@@ -265,7 +288,7 @@ in
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
-	      $EXTRABINDS \
+              $EXTRABINDS \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
@@ -365,13 +388,10 @@ in
              AUTO_START=1
            ''}
 
-           EXTRABINDS="${mkBindFlags cfg.extraBinds}"
+           EXTRABINDS="${mkBindFlags cfg.bindMounts}"
 
           '';
       }) config.containers;
-
-    #"${concatMapStrings (d: " --bind-ro=${d}") cfg.extraBindsRO + concatMapStrings (d: " --bind=${d}") cfg.extraBindsRW}"
-
 
     # Generate /etc/hosts entries for the containers.
     networking.extraHosts = concatStrings (mapAttrsToList (name: cfg: optionalString (cfg.localAddress != null)
