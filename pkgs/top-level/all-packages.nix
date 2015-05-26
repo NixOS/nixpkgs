@@ -12384,6 +12384,8 @@ let
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
+  tetraproc = callPackage ../applications/audio/tetraproc { };
+
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
