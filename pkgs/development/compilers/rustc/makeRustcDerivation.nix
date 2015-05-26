@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit, which, file, perl, curl, python27, makeWrapper
-, tzdata, git, valgrind, procps, coreutils
+{ stdenv, fetchurl, fetchgit, fetchzip, which, file, perl, curl, python27
+, makeWrapper, tzdata, git, valgrind, procps, coreutils
 
 , shortVersion, isRelease
 , srcSha, srcRev ? ""
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
   inherit meta;
 
   src = if isRelease then
-      fetchurl {
+      fetchzip {
         url = "http://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
         sha256 = srcSha;
       }
