@@ -4768,7 +4768,9 @@ let
   pure = callPackage ../development/interpreters/pure {
     llvm = llvm_35;
   };
-  pure-gsl = callPackage ../development/pure-modules/pure-gsl { };
+  purePackages = recurseIntoAttrs (import ./pure-packages.nix {
+    inherit callPackage;
+  });
 
   python = python2;
   python2 = python27;
