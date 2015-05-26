@@ -6151,6 +6151,8 @@ let
 
   libpfm = callPackage ../development/libraries/libpfm { };
 
+  libpqxx = callPackage ../development/libraries/libpqxx { };
+
   libproxy = callPackage ../development/libraries/libproxy {
     stdenv = if stdenv.isDarwin
       then overrideGCC stdenv gcc
