@@ -8417,10 +8417,10 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.16.3";
+    version = "0.17.0";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "12zizpj3fqbf90kj43zylpaqi3hhlihfg9xpzqa0aysiqri0ydx2";
+      sha256 = "0fnzhsir1m7a2rlh3iqinrz5i38ssfg9p7s60bkyy55614l146yg";
       rev = "v${version}";
       repo = "pgcli";
       owner = "amjith";
