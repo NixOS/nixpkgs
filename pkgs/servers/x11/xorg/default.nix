@@ -1294,6 +1294,16 @@ let
     buildInputs = [pkgconfig libX11 ];
   }) // {inherit libX11 ;};
 
+  xcompmgr = (mkDerivation "xcompmgr" {
+    name = "xcompmgr-1.1.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xcompmgr-1.1.7.tar.bz2;
+      sha256 = "14k89mz13jxgp4h2pz0yq0fbkw1lsfcb3acv8vkknc9i4ld9n168";
+    };
+    buildInputs = [pkgconfig libXcomposite libXdamage libXext libXfixes libXrender ];
+  }) // {inherit libXcomposite libXdamage libXext libXfixes libXrender ;};
+
   xcursorgen = (mkDerivation "xcursorgen" {
     name = "xcursorgen-1.0.6";
     builder = ./builder.sh;

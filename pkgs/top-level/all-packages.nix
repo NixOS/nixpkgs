@@ -12807,7 +12807,7 @@ let
 
   xchm = callPackage ../applications/misc/xchm { };
 
-  xcompmgr = callPackage ../applications/window-managers/xcompmgr { };
+  inherit (xorg) xcompmgr;
 
   compton = callPackage ../applications/window-managers/compton { };
 
