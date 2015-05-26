@@ -108,9 +108,6 @@ with lib;
     boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
     */
 
-  # Since Nova allows VNC access to instances, it's nice to start to
-  # start a few virtual consoles.
-
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.
   services.openssh.enable = true;
