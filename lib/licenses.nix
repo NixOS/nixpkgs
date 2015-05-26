@@ -403,6 +403,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "The Unlicense";
   };
 
+  vim = spdx {
+    spdxId = "Vim";
+    fullName = "Vim License";
+  };
+
   vsl10 = spdx {
     spdxId = "VSL-1.0";
     fullName = "Vovida Software License v1.0";
