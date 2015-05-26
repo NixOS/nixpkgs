@@ -266,6 +266,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
+  ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix
