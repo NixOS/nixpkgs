@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchurl, unzip, callPackage, ncurses, gettext, pkgconfig,
-cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop }:
+cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop, libtool, perl }:
 
 stdenv.mkDerivation rec {
   name = "neovim-nightly";
@@ -8,18 +8,17 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/neovim/neovim";
-    rev = "68fcd8b696dae33897303c9f8265629a31afbf17";
-    sha256 = "0hxkcy641jpn4qka44gfvhmb6q3dkjx6lvn9748lcl2gx2d36w4i";
+    rev = "8ef5a61dd6bcaa24d26e450041bcba821fa3dbc7";
+    sha256 = "3bc707febe8bedc430b79a9c3d3717abc93d85ded33bcc32268e4f49f75635ff";
   };
 
   libmsgpack = stdenv.mkDerivation rec {
-    version = "0.5.9";
+    version = "1.1.0";
     name = "libmsgpack-${version}";
 
-    src = fetchgit {
-      rev = "ecf4b09acd29746829b6a02939db91dfdec635b4";
-      url = "https://github.com/msgpack/msgpack-c";
-      sha256 = "076ygqgxrc3vk2l20l8x2cgcv05py3am6mjjkknr418pf8yav2ww";
+    src = fetchurl {
+      url = "https://github.com/msgpack/msgpack-c/archive/cpp-${version}.tar.gz";
+      sha256 = "0a73dmhk0jhwcip1wkvz50cyxsi3alzm6ak187xdai0zdxcck6cd";
     };
 
     buildInputs = [ cmake ];
@@ -29,6 +28,80 @@ stdenv.mkDerivation rec {
       homepage = http://msgpack.org;
       maintainers = [ maintainers.manveru ];
       license = licenses.asl20;
+      platforms = platforms.all;
+    };
+  };
+
+  libvterm = stdenv.mkDerivation rec {
+    version = "latest";
+    name = "libvterm-${version}";
+
+    src = fetchgit {
+      url = "https://github.com/neovim/libvterm";
+      rev = "20ad1396c178c72873aeeb2870bd726f847acb70";
+      sha256 = "85314aafc3d599537e363b0b9ca1254fca45c943b29fb23548de919e25395044";
+    };
+
+    buildInputs = [ libtool perl ];
+
+    installPhase = ''
+      make install PREFIX=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "neovim fork of libvterm";
+      homepage = https://github.com/neovim/libvterm;
+      maintainers = [ maintainers.matthiasbeyer ];
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
+  libtermkey = stdenv.mkDerivation rec {
+    version = "latest";
+    name = "libtermkey-${version}";
+
+    src = fetchgit {
+      url = "https://github.com/neovim/libtermkey";
+      rev = "8c0cb7108cc63218ea19aa898968eede19e19603";
+      sha256 = "216cf8ed79f8528d747349de2de080a6e3bb69a96b0bcd54b53badd36779401a";
+    };
+
+    buildInputs = [ libtool ncurses ];
+
+    installPhase = ''
+      make install PREFIX=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "neovim fork of libtermkey";
+      homepage = https://github.com/neovim/libtermkey;
+      maintainers = [ maintainers.matthiasbeyer ];
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
+  unibilium = stdenv.mkDerivation rec {
+    version = "1.1.0";
+    name = "unibilium-${version}";
+
+    src = fetchurl {
+      url = "https://github.com/neovim/unibilium/archive/v1.1.0.tar.gz";
+      sha256 = "1qdviq887977nw4iay9a0fdqqpd799zrjxb7v1s1dx3ygi1njy2y";
+    };
+
+    buildInputs = [ libtool ];
+
+    installPhase = ''
+      make install PREFIX=$out
+    '';
+
+    meta = with stdenv.lib; {
+      description = "neovim fork of unibilium";
+      homepage = https://github.com/neovim/unibilium;
+      maintainers = [ maintainers.matthiasbeyer ];
+      license = licenses.lgpl-3;
       platforms = platforms.all;
     };
   };
@@ -46,6 +119,9 @@ stdenv.mkDerivation rec {
     luaMessagePack
     luabitop
     libmsgpack
+    libtermkey
+    libvterm
+    unibilium
   ];
   nativeBuildInputs = [ gettext ];
 
