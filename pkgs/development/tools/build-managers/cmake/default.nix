@@ -36,10 +36,14 @@ stdenv.mkDerivation rec {
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    });
+    }) ++ stdenv.lib.optional stdenv.isCygwin ./2.8.11-cygwin.patch;
+    # fix cmake detection of openssl libs
+    # see: http://public.kitware.com/Bug/bug_relationship_graph.php?bug_id=15386
+    #      and http://www.cmake.org/gitweb?p=cmake.git;a=commitdiff;h=c5d9a8283cfac15b4a5a07f18d5eb10c1f388505#patch1
+    # [./cmake_find_openssl_for_openssl-1.0.1m_and_up.patch] ++
 
   buildInputs =
-    [ bzip2 curl expat libarchive xz zlib ]
+    (optionals (!stdenv.isCygwin) [ bzip2 curl expat libarchive xz zlib ])
     ++ optional (jsoncpp != null) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
@@ -52,8 +56,8 @@ stdenv.mkDerivation rec {
     [
       "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
-      "--system-libs"
     ]
+    ++ optional (!stdenv.isCygwin) "--system-libs"
     ++ optional (jsoncpp == null) "--no-system-jsoncpp"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]

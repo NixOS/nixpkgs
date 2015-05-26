@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional doCheck dejagnu;
 
+  patches = stdenv.lib.optionals stdenv.isCygwin [
+    ./3.2.1-cygwin.patch
+  ];
+
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"

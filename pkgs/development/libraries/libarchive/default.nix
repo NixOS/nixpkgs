@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
 
+  preBuild = stdenv.lib.optionalString stdenv.isCygwin ''
+    echo "#include <windows.h>" >> config.h
+  '';
+
   meta = {
     description = "Multi-format archive and compression library";
     longDescription = ''

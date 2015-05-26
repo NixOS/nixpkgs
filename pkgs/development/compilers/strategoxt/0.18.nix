@@ -25,7 +25,6 @@ rec {
     };
   } // ( if stdenv.system == "i686-cygwin" then { CFLAGS = "-O2 -Wl,--stack=0x2300000"; } else {} ) ) ;
 
-  
   strategoxt = stdenv.mkDerivation rec {
     name = "strategoxt-1.8pre24429";
 

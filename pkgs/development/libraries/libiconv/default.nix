@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "04q6lgl3kglmmhw59igq1n7v3rp1rpkypl366cy1k1yn2znlvckj";
   };
 
+  patches = stdenv.lib.optionals stdenv.isCygwin [
+    ./libiconv-1.14-reloc.patch
+    ./libiconv-1.14-wchar.patch
+  ];
+
   # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
   # (Windows' linker would need to be used somehow to produce an actual
   # DLL.)  Thus, build the static library too, and this is what Gettext

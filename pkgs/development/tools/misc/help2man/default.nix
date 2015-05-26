@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false;                                # target `check' is missing
 
+  patches = stdenv.lib.optionals stdenv.isCygwin [
+    ./1.40.4-cygwin-nls.patch 
+  ];
+
   postInstall =
     '' wrapProgram "$out/bin/help2man" \
          --prefix PERL5LIB : "$(echo ${LocaleGettext}/lib/perl*/site_perl)"

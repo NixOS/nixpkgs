@@ -4734,7 +4734,7 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  perl = if system != "i686-cygwin" then perl520 else sysPerl;
+  perl = perl520;
 
   php = php56;
 
@@ -4891,8 +4891,6 @@ let
   };
 
   supercollider_scel = supercollider.override { useSCEL = true; };
-
-  sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
 
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
@@ -6781,7 +6779,9 @@ let
   # standalone libiconv, just in case you want it
   libiconv = if stdenv.isGlibc then stdenv.cc.libc else libiconvReal;
 
-  libiconvReal = callPackage ../development/libraries/libiconv { };
+  libiconvReal = callPackage ../development/libraries/libiconv {
+    fetchurl = fetchurlBoot;
+  };
 
   # On non-GNU systems we need GNU Gettext for libintl.
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;

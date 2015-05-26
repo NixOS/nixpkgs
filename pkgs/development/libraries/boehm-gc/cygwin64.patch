@@ -1,0 +1,24 @@
+--- a/include/gc.h	2014-10-23 22:29:02.218800000 +0200
++++ b/include/gc.h	2014-10-23 22:40:39.882000000 +0200
+@@ -1593,6 +1593,13 @@
+ /* to GC_malloc() or GC_malloc_atomic().                                */
+ 
+ #if defined(__CYGWIN32__) || defined(__CYGWIN__)
++#ifdef __x86_64__
++  extern int __data_start__[], __data_end__[], __bss_start__[], __bss_end__[];
++# define GC_DATASTART ((GC_word)__data_start__ < (GC_word)__bss_start__ ? \
++                       (void *)__data_start__ : (void *)__bss_start__)
++# define GC_DATAEND ((GC_word)__data_end__ > (GC_word)__bss_end__ ? \
++                     (void *)__data_end__ : (void *)__bss_end__)
++#else
+   /* Similarly gnu-win32 DLLs need explicit initialization from the     */
+   /* main program, as does AIX.                                         */
+   extern int _data_start__[], _data_end__[], _bss_start__[], _bss_end__[];
+@@ -1600,6 +1607,7 @@
+                        (void *)_data_start__ : (void *)_bss_start__)
+ # define GC_DATAEND ((GC_word)_data_end__ > (GC_word)_bss_end__ ? \
+                      (void *)_data_end__ : (void *)_bss_end__)
++#endif
+ # define GC_INIT_CONF_ROOTS GC_add_roots(GC_DATASTART, GC_DATAEND); \
+                                  GC_gcollect() /* For blacklisting. */
+         /* Required at least if GC is in a DLL.  And doesn't hurt. */

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, enableNLS ? true, libnatspec ? null }:
+{ stdenv, fetchurl, enableNLS ? true, libnatspec ? null, libiconv }:
 
 assert enableNLS -> libnatspec != null;
 
@@ -13,13 +13,13 @@ stdenv.mkDerivation {
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
 
-  buildFlags="-f unix/Makefile generic";
+  makeFlags="-f unix/Makefile ${if stdenv.isCygwin then "cygwin" else "generic"}";
 
   installFlags="-f unix/Makefile prefix=$(out) INSTALL=cp";
 
-  patches = if enableNLS then [ ./natspec-gentoo.patch.bz2 ] else [];
+  patches = stdenv.lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
 
-  buildInputs = if enableNLS then [ libnatspec ] else [];
+  buildInputs = [ libiconv ] ++ stdenv.lib.optional enableNLS libnatspec;
 
   meta = {
     description = "Compressor/archiver for creating and modifying zipfiles";
