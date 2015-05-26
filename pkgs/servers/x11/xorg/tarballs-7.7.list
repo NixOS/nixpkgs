@@ -49,7 +49,7 @@ mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2
 mirror://xorg/individual/proto/glproto-1.4.17.tar.bz2
 mirror://xorg/individual/app/iceauth-1.0.7.tar.bz2
 mirror://xorg/individual/proto/inputproto-2.3.1.tar.bz2
-mirror://xorg/X11R7.7/src/everything/kbproto-1.0.6.tar.bz2
+mirror://xorg/individual/proto/kbproto-1.0.7.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libAppleWM-1.4.1.tar.bz2
 mirror://xorg/individual/lib/libdmx-1.1.3.tar.bz2
 mirror://xorg/individual/lib/libxshmfence-1.2.tar.bz2
@@ -177,7 +177,7 @@ mirror://xorg/individual/app/xlsclients-1.1.3.tar.bz2
 mirror://xorg/individual/app/xlsfonts-1.0.5.tar.bz2
 mirror://xorg/individual/app/xmag-1.0.6.tar.bz2
 mirror://xorg/individual/app/xmodmap-1.0.9.tar.bz2
-mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2
+mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2
 mirror://xorg/individual/xserver/xorg-server-1.16.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2

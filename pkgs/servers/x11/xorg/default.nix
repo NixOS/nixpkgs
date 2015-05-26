@@ -545,11 +545,11 @@ let
   }) // {inherit ;};
 
   kbproto = (mkDerivation "kbproto" {
-    name = "kbproto-1.0.6";
+    name = "kbproto-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/kbproto-1.0.6.tar.bz2;
-      sha256 = "0yal11hhpiisy3w8wmacsdzzzcnc3xwnswxz8k7zri40xc5aqz03";
+      url = mirror://xorg/individual/proto/kbproto-1.0.7.tar.bz2;
+      sha256 = "0mxqj1pzhjpz9495vrjnpi10kv2n1s4vs7di0sh3yvipfq5j30pq";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
@@ -2055,11 +2055,11 @@ let
   }) // {inherit ;};
 
   xorgdocs = (mkDerivation "xorgdocs" {
-    name = "xorg-docs-1.7";
+    name = "xorg-docs-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2;
-      sha256 = "0prphdba6kgr1bxk7r07wxxx6x6pqjw6prr5qclypsb5sf5r3cdr";
+      url = mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2;
+      sha256 = "0jrc4jmb4raqawx0j9jmhgasr0k6sxv0bm2hrxjh9hb26iy6gf14";
     };
     buildInputs = [pkgconfig ];
   }) // {inherit ;};
