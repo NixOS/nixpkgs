@@ -10435,6 +10435,8 @@ let
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
+  bitmeter = callPackage ../applications/audio/bitmeter { };
+
   blender = callPackage  ../applications/misc/blender {
     python = python34;
   };
