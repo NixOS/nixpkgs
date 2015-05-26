@@ -1,62 +1,69 @@
-{ stdenv, fetchFromGitHub, unzip, ncurses, gettext, pkgconfig
-, cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop }:
+{ stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack
+, libtermkey, libtool, libuv, lpeg, lua, luajit, luaMessagePack
+, luabitop, ncurses, perl, pkgconfig, unibilium
+, withJemalloc ? true, jemalloc }:
 
-let version = "2014-11-26"; in
+let version = "2015-05-26"; in
 stdenv.mkDerivation rec {
   name = "neovim-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1bcmv0h3ln736xdv7r7v97vim2yqfdnkvpbckwdxi69p4d6lfms6";
-    rev = "68fcd8b696dae33897303c9f8265629a31afbf17";
+    sha256 = "0sszpqlq0yp6r62zgcjcmnllc058wzzh9ccvgb2jh9k19ksszyhc";
+    rev = "5a9ad68b258f33ebd7fa0a5da47b308f50f1e5e7";
     repo = "neovim";
     owner = "neovim";
   };
 
-  libmsgpack = stdenv.mkDerivation rec {
-    version = "0.5.9";
-    name = "libmsgpack-${version}";
+  # FIXME: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
+  neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation rec {
+    name = "neovim-libvterm-${version}";
 
     src = fetchFromGitHub {
-      sha256 = "12np3c2q346963mdgwa61y5dfnb91avq2hy4r6i6bdjwa7w6waq4";
-      rev = "ecf4b09acd29746829b6a02939db91dfdec635b4";
-      repo = "msgpack-c";
-      owner = "msgpack";
+      sha256 = "0i2h74jrx4fy90sv57xj8g4lbjjg4nhrq2rv6rz576fmqfpllcc5";
+      rev = "20ad1396c178c72873aeeb2870bd726f847acb70";
+      repo = "libvterm";
+      owner = "neovim";
     };
 
-    buildInputs = [ cmake ];
+    buildInputs = [ libtool perl ];
+
+    makeFlags = "PREFIX=$(out)";
 
     enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      description = "MessagePack implementation for C and C++";
-      homepage = http://msgpack.org;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ manveru nckx ];
-      platforms = platforms.all;
+      description = "VT220/xterm/ECMA-48 terminal emulator library";
+      homepage = http://www.leonerd.org.uk/code/libvterm/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ nckx ];
+      platforms = platforms.unix;
     };
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [
-    ncurses
-    pkgconfig
     cmake
-    pkgs.libuvVersions.v0_11_29
+    glib
+    libtermkey
+    libuv
     luajit
     lua
     lpeg
     luaMessagePack
     luabitop
     libmsgpack
+    ncurses
+    neovimLibvterm
+    pkgconfig
+    unibilium
+  ] ++ stdenv.lib.optional withJemalloc jemalloc;
+  nativeBuildInputs = [
+    gettext
   ];
-  nativeBuildInputs = [ gettext ];
 
   LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
   LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
-  cmakeFlags = [
-    "-DUSE_BUNDLED_MSGPACK=ON"
-  ];
 
   meta = with stdenv.lib; {
     description = "Vim text editor fork focused on extensibility and agility";
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
         modifications to the core source
       - Improve extensibility with a new plugin architecture
     '';
-    homepage    = http://www.neovim.org;
+    homepage    = http://www.neovim.io;
     # "Contributions committed before b17d96 by authors who did not sign the
     # Contributor License Agreement (CLA) remain under the Vim license.
     # Contributions committed after b17d96 are licensed under Apache 2.0 unless
