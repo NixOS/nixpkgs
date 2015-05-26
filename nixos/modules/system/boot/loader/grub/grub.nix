@@ -394,7 +394,7 @@ in
           message = "Boot paths must be absolute, not ${args.path}";
         }
         {
-          assertion = hasPrefix "/" args.efiSysMountPoint;
+          assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
           message = "Efi paths must be absolute, not ${args.efiSysMountPoint}";
         }
       ] ++ flip map args.devices (device: {
