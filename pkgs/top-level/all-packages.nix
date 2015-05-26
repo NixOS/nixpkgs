@@ -10893,6 +10893,8 @@ let
 
   inherit (gnome3) epiphany;
 
+  eq10q = callPackage ../applications/audio/eq10q { };
+
   espeak = callPackage ../applications/audio/espeak { };
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
