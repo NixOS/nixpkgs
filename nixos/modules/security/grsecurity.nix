@@ -20,15 +20,6 @@ in
         '';
       };
 
-      kernelPackages = mkOption {
-        type = types.package;
-        description = ''
-          The kernel package set to use. In order to
-          understand how to set this option appropriately, please see
-          the NixOS wiki: TODO FIXME.
-        '';
-      };
-
       /*
       stable = mkOption {
         type = types.bool;
