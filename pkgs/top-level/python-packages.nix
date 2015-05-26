@@ -3897,9 +3897,6 @@ let
       md5 = "89a293488093d6c30036345fa46184d2";
     };
 
-    # tests are failing in version 0.7 but are fixed in trunk
-    doCheck = false;
-
     propagatedBuildInputs = with self; [ transaction pyramid ];
     meta = {
       maintainers = with maintainers; [ garbas iElectric matejc ];
