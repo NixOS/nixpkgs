@@ -13881,6 +13881,8 @@ let
     };
   };
 
+  gappa = callPackage ../applications/science/logic/gappa { };
+
   ginac = callPackage ../applications/science/math/ginac { };
 
   hol = callPackage ../applications/science/logic/hol { };
