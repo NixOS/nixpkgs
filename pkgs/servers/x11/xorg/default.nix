@@ -2004,6 +2004,16 @@ let
     buildInputs = [pkgconfig libxcb ];
   }) // {inherit libxcb ;};
 
+  xlsfonts = (mkDerivation "xlsfonts" {
+    name = "xlsfonts-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xlsfonts-1.0.5.tar.bz2;
+      sha256 = "1yi774g6r1kafsbnxbkrwyndd3i60362ck1fps9ywz076pn5naa0";
+    };
+    buildInputs = [pkgconfig libX11 xproto ];
+  }) // {inherit libX11 xproto ;};
+
   xmag = (mkDerivation "xmag" {
     name = "xmag-1.0.6";
     builder = ./builder.sh;

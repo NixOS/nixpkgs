@@ -11049,7 +11049,7 @@ let
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
-  xlsfonts = callPackage ../applications/misc/xlsfonts { };
+  inherit (xorg) xlsfonts;
 
   freerdp = callPackage ../applications/networking/remote/freerdp {
     ffmpeg = ffmpeg_1;
