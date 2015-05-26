@@ -47,7 +47,7 @@ let
       mountPoint = mkOption {
         example = "/mnt/usb";
         type = types.str;
-        description = "Location of the mounted in the container file systems";
+        description = "Mount point on the container file system";
       };
       hostPath = mkOption {
         default = null;
@@ -56,7 +56,7 @@ let
         description = "Location of the host path to be mounted";
       };
       isReadOnly = mkOption {
-        default = false;
+        default = true;
         example = true;
         type = types.bool;
         description = "Determine whether the mounted path will be accessed in read-only mode";
@@ -288,7 +288,7 @@ in
             exec ${config.systemd.package}/bin/systemd-nspawn \
               --keep-unit \
               -M "$INSTANCE" -D "$root" $extraFlags \
-              $EXTRABINDS \
+              $EXTRA_NSPAWN_FLAGS \
               --bind-ro=/nix/store \
               --bind-ro=/nix/var/nix/db \
               --bind-ro=/nix/var/nix/daemon-socket \
@@ -384,12 +384,10 @@ in
                 LOCAL_ADDRESS=${cfg.localAddress}
               ''}
             ''}
-           ${optionalString cfg.autoStart ''
-             AUTO_START=1
-           ''}
-
-           EXTRABINDS="${mkBindFlags cfg.bindMounts}"
-
+            ${optionalString cfg.autoStart ''
+              AUTO_START=1
+            ''}
+            EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
           '';
       }) config.containers;
 
