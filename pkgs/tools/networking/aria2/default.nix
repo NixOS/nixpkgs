@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "aria2-${version}";
-  version = "1.18.10";
+  version = "1.19.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/aria2/stable/${name}/${name}.tar.bz2";
-    sha256 = "1vvc3pv1100xb4293bmgqpxvy3pdvivnz415b9q78n7190kag3a5";
+    url = "mirror://sourceforge/aria2/stable/${name}/${name}.tar.xz";
+    sha256 = "0xm4fmap9gp2pz6z01mnnpmazw6pnhzs8qc58181m5ai4gy5ksp2";
   };
 
   buildInputs = [ pkgconfig c-ares openssl libxml2 sqlite zlib ];
