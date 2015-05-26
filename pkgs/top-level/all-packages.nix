@@ -5287,6 +5287,8 @@ let
     inherit (perlPackages) LocaleGettext;
   };
 
+  heroku = callPackage ../development/tools/heroku { };
+
   hyenae = callPackage ../tools/networking/hyenae { };
 
   icmake = callPackage ../development/tools/build-managers/icmake { };
