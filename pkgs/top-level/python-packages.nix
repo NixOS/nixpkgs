@@ -7824,22 +7824,20 @@ let
       runHook preCheck
 
       _python=${python}/bin/${python.executable}
-      test_dir=$(mktemp -d /tmp/numpy-test-XXX)
-      install_root=$(mktemp -d /tmp/numpy-test-install-XXX)
-      install_dir="$install_root/lib/${python.libPrefix}/site-packages"
+      install_dir="$TMPDIR/test_install/lib/${python.libPrefix}/site-packages"
       mkdir -p $install_dir
       export PYTHONPATH="$install_dir:$PYTHONPATH"
 
       $_python setup.py install \
         --install-lib=$install_dir \
         --old-and-unmanageable \
-        --prefix="$install_root"
+        --prefix="$TMPDIR/test_install"
 
-      pushd $test_dir
+      mkdir $TMPDIR/run_tests
+      pushd $TMPDIR/run_tests
       $_python -c 'import numpy; numpy.test("full", verbose=10)'
       popd
-      rm -r $test_dir
-      rm -r $install_dir
+
       runHook postCheck
   '';
 
