@@ -43,7 +43,6 @@ assert md5 != "" || sha256 != "";
 assert deepClone -> leaveDotGit;
 
 stdenv.mkDerivation {
-  inherit name;
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
   buildInputs = [git];
@@ -53,6 +52,12 @@ stdenv.mkDerivation {
   outputHash = if sha256 == "" then md5 else sha256;
 
   inherit url rev leaveDotGit fetchSubmodules deepClone branchName;
+
+  # Append non-default options to name, to make the derivation depend on it.
+  name = if leaveDotGit && !fetchSubmodules then name + "-opt-+dotgit-sm"
+    else if leaveDotGit then name + "-opt-+dotgit"
+    else if !fetchSubmodules then name + "-opt--sm"
+    else name;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ca-bundle.crt";
 
