@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ m4 perl ];
 
-  # CYGWINTODO
-
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.

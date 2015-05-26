@@ -4965,8 +4965,6 @@ let
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
-  # CYGWINTODO
-
   windowssdk = (
     import ../development/misc/windows-sdk {
       inherit fetchurl stdenv cabextract;
@@ -9939,8 +9937,6 @@ let
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
     qt5 = null;
   };
-
-  # CYGWINTODO
 
   windows = rec {
     cygwinSetup = callPackage ../os-specific/windows/cygwin-setup { };

@@ -12,9 +12,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake expat ];
 
-  # CYGWINTODO: check patches
-
-
   postPatch = ''
     sed -i -e 's/-std=c++0x/-std=c++11 -fpermissive/' CMakeLists.txt
 

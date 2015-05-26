@@ -1,7 +1,5 @@
 {stdenv, fetchurl, visualcpp, windowssdk}:
 
-# CYGWINTODO
-
 assert stdenv.system == "i686-cygwin";
 
 stdenv.mkDerivation {

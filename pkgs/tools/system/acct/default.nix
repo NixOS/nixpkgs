@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ pSub ];
 
-  # CYGWINTODO
-
     platforms = with platforms; allBut cygwin;
   };
 }

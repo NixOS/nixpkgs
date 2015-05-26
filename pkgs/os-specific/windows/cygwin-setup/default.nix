@@ -4,8 +4,6 @@
 
 with stdenv.lib;
 
-  # CYGWINTODO
-
 stdenv.mkDerivation rec {
   name = "cygwin-setup-${version}";
   version = "20131101";

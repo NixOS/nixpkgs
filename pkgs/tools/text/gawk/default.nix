@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
-  # CYGWINTODO
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
   buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv

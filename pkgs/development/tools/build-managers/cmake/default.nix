@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # CYGWINTODO: check patches, they remove cygwin stuff
-
   patches =
     # Don't search in non-Nix locations such as /usr, but do search in
     # Nixpkgs' Glibc.

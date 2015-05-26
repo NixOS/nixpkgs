@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # CYGWINTODO
-
   preConfigure =
     ''
       configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"

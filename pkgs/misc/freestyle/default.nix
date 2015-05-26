@@ -1,8 +1,6 @@
 { stdenv, fetchurl, qt4, libpng, lib3ds, freeglut, libXi, libQGLViewer
 , swig, python }:
 
-  # CYGWINTODO: see patches
-
 stdenv.mkDerivation {
   name = "freestyle-2.2.0";
 
