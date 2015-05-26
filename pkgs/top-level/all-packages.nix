@@ -10935,6 +10935,8 @@ let
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
+  foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
+
   fossil = callPackage ../applications/version-management/fossil { };
 
   freewheeling = callPackage ../applications/audio/freewheeling { };
