@@ -4974,6 +4974,8 @@ let
 
   ### DEVELOPMENT / TOOLS
 
+  activator = callPackage ../development/tools/activator { };
+
   alloy = callPackage ../development/tools/alloy { };
 
   augeas = callPackage ../tools/system/augeas { };
