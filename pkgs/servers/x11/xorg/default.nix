@@ -1145,14 +1145,14 @@ let
   }) // {inherit ;};
 
   x11perf = (mkDerivation "x11perf" {
-    name = "x11perf-1.5.4";
+    name = "x11perf-1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/x11perf-1.5.4.tar.bz2;
-      sha256 = "111iwpxhnxjiq44w96zf0kszg5zpgv1g3ayx18v4nhdzl9bqivi4";
+      url = mirror://xorg/individual/app/x11perf-1.6.0.tar.bz2;
+      sha256 = "0lb716yfdb8f11h4cz93d1bapqdxf1xplsb21kbp4xclq7g9hw78";
     };
-    buildInputs = [pkgconfig libX11 libXext libXft libXmu libXrender ];
-  }) // {inherit libX11 libXext libXft libXmu libXrender ;};
+    buildInputs = [pkgconfig libX11 libXext libXft libXmu xproto libXrender ];
+  }) // {inherit libX11 libXext libXft libXmu xproto libXrender ;};
 
   xauth = (mkDerivation "xauth" {
     name = "xauth-1.0.9";

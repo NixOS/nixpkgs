@@ -102,7 +102,7 @@ mirror://xorg/individual/app/twm-1.0.9.tar.bz2
 mirror://xorg/individual/util/util-macros-1.19.0.tar.bz2
 mirror://xorg/individual/proto/videoproto-2.3.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2
-mirror://xorg/X11R7.7/src/everything/x11perf-1.5.4.tar.bz2
+mirror://xorg/individual/app/x11perf-1.6.0.tar.bz2
 mirror://xorg/individual/app/xauth-1.0.9.tar.bz2
 mirror://xorg/individual/app/xbacklight-1.2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2
