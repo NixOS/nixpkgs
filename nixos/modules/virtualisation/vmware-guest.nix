@@ -4,11 +4,20 @@ with lib;
 
 let
   cfg = config.services.vmwareGuest;
-  open-vm-tools = pkgs.open-vm-tools;
+  open-vm-tools = pkgs.open-vm-tools.override {
+    kernel = if cfg.enableModules then config.boot.kernelPackages.kernel else null;
+  };
 in
 {
   options = {
-    services.vmwareGuest.enable = mkEnableOption "Enable VMWare Guest Support";
+    services.vmwareGuest = { 
+      enable = mkEnableOption "Enable VMWare Guest Support";
+
+      enableModules = mkOption {
+        default = false;
+        description = "Enable kernel modules to support additional hardware and shared folders";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -16,6 +25,11 @@ in
       assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.system}";
     } ];
+
+    boot = mkIf cfg.enableModules {
+       extraModulePackages = [ open-vm-tools ];
+       kernelModules = [ "vmhgfs" ];
+    };
 
     environment.systemPackages = [ open-vm-tools ];
 
