@@ -7818,26 +7818,39 @@ let
     preConfigure = ''
       sed -i 's/-faltivec//' numpy/distutils/system_info.py
       sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
-      # Create a site.cfg with openblas info
-      cat << EOF > site.cfg
-      [openblas]
-      libraries = openblas
-      library_dirs = ${pkgs.openblas}/lib
-      include_dirs = ${pkgs.openblas}/include
-      EOF
     '';
 
+    checkPhase = ''
+      runHook preCheck
+
+      _python=${python}/bin/${python.executable}
+      test_dir=$(mktemp -d /tmp/numpy-test-XXX)
+      install_root=$(mktemp -d /tmp/numpy-test-install-XXX)
+      install_dir="$install_root/lib/${python.libPrefix}/site-packages"
+      mkdir -p $install_dir
+      export PYTHONPATH="$install_dir:$PYTHONPATH"
+
+      $_python setup.py install \
+        --install-lib=$install_dir \
+        --old-and-unmanageable \
+        --prefix="$install_root"
+
+      pushd $test_dir
+      $_python -c 'import numpy; numpy.test("full", verbose=10)'
+      popd
+      rm -r $test_dir
+      rm -r $install_dir
+      runHook postCheck
+  '';
+
     preBuild = ''
-      export BLAS=${pkgs.openblas} LAPACK=${pkgs.openblas}
+      export BLAS=${pkgs.atlas} LAPACK=${pkgs.atlas}
     '';
 
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
-    # error: invalid command 'test'
-    doCheck = false;
-
-    buildInputs = with self; [ pkgs.gfortran ];
-    propagatedBuildInputs = with self; [  pkgs.openblas ];
+    buildInputs = with self; [ pkgs.gfortran nose ];
+    propagatedBuildInputs = with self; [  pkgs.atlas ];
 
     meta = {
       description = "Scientific tools for Python";
