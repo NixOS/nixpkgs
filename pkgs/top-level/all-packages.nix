@@ -11353,6 +11353,8 @@ let
     gtk = gtk3;
   };
 
+  ht = callPackage ../applications/editors/ht { };
+
   htmldoc = callPackage ../applications/misc/htmldoc {
     fltk = fltk13;
   };
