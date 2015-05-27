@@ -11353,8 +11353,6 @@ let
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
-  hiew = callPackage ../applications/editors/hiew { };
-
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
   homebank = callPackage ../applications/office/homebank {
