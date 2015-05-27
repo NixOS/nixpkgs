@@ -11345,7 +11345,11 @@ let
 
   hexchat = callPackage ../applications/networking/irc/hexchat { };
 
+  hexcurse = callPackage ../applications/editors/hexcurse { };
+
   hexedit = callPackage ../applications/editors/hexedit { };
+
+  hiew = callPackage ../applications/editors/hiew { };
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
 
