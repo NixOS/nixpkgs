@@ -15,3 +15,6 @@
 ;;; NOTE: You might want to add 
 (eval-after-load 'tramp
   '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
+
+;; Path for executables, that emacs shells out to
+(setq exec-path (append exec-path '(@nixExecPath@)))

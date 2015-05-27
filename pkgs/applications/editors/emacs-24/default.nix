@@ -26,17 +26,7 @@ let
      ]) ++ [
        aspell
      ]);
-  addSiteLisp = lib.optionalString
-    (0 < (lib.length addExecPath))
-    ''
-      ;; Where to find additional programs on NixOS
-      (setq exec-path (append exec-path '(
-        ${lib.strings.concatMapStringsSep "\n"
-          (p: ''"${p}/bin"'') addExecPath})))
-    '';
-in
-
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "emacs-24.5";
 
   builder = ./builder.sh;
@@ -69,10 +59,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo}/include/cairo";
 
-  inherit addSiteLisp;
+  nixExecPath = map (p: ''"${p}/bin"'') addExecPath;
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
-    echo "$addSiteLisp" | cat ${./site-start.el} - > $out/share/emacs/site-lisp/site-start.el
+    substituteAll ${./site-start.el} $out/share/emacs/site-lisp/site-start.el
   '';
 
   doCheck = true;
