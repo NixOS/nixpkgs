@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, avahi, alsaLib, libdaemon, autoconf, automake, libtool, popt, unzip, pkgconfig, libconfig, pulseaudio }:
+{ stdenv, fetchurl, openssl, avahi, alsaLib, libdaemon, autoconf, automake, libtool, popt, unzip, pkgconfig, libconfig, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   version = "2.3.0";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     popt
     unzip
     libconfig
-    pulseaudio
+    libpulseaudio
   ];
 
   enableParallelBuilding = true;

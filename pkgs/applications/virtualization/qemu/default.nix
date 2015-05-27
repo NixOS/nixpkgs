@@ -13,16 +13,6 @@
 # Audio libraries
 , libpulseaudio ? null, alsaLib ? null
 
-#, pixman ? null
-#, python, zlib, glib, ncurses, perl
-#, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
-#, libseccomp, libaio, libcap_ng, gnutls
-#, makeWrapper
-#, pulseSupport ? true, pulseaudio
-#, sdlSupport ? true, SDL
-#, vncSupport ? true, libjpeg, libpng
-#, spiceSupport ? true, spice, spice_protocol, usbredir
-
 # Extra options
 , type ? ""
 }:

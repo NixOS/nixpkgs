@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gcc
-, mesa_glu, libX11, libXext, libXcursor, pulseaudio
+, mesa_glu, libX11, libXext, libXcursor, libpulseaudio
 }:
 stdenv.mkDerivation {
   name = "scrolls-2014-03-08";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     libX11
     libXext
     libXcursor
-    pulseaudio
+    libpulseaudio
   ];
 
   phases = [ "unpackPhase" "installPhase" ];

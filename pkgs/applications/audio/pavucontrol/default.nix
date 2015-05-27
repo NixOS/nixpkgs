@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, intltool, pulseaudio, gtkmm3
+{ fetchurl, stdenv, pkgconfig, intltool, libpulseaudio, gtkmm3
 , libcanberra_gtk3, makeWrapper, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
   '';
 
-  buildInputs = [ pulseaudio gtkmm3 libcanberra_gtk3 makeWrapper
+  buildInputs = [ libpulseaudio gtkmm3 libcanberra_gtk3 makeWrapper
                   gnome3.defaultIconTheme ];
 
   nativeBuildInputs = [ pkgconfig intltool ];

@@ -23,7 +23,7 @@
 # TODO: would be nice to have nfsSupport (needs libnfs library)
 # TODO: librtmp
 , libvdpau ? null, vdpauSupport ? true
-, pulseaudio ? null, pulseSupport ? true
+, libpulseaudio ? null, pulseSupport ? true
 , libcec ? null, cecSupport ? true
 }:
 
@@ -32,7 +32,7 @@ assert udevSupport  -> udev != null;
 assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
 assert sambaSupport -> samba != null;
 assert vdpauSupport -> libvdpau != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 assert cecSupport   -> libcec != null;
 
 let
@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional usbSupport libusb
     ++ lib.optional sambaSupport samba
     ++ lib.optional vdpauSupport libvdpau
-    ++ lib.optional pulseSupport pulseaudio
+    ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional cecSupport libcec;
 
     dontUseCmakeConfigure = true;

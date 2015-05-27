@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libtheora, libva, libvdpau, libvorbis, libvpx, lzma, pulseaudio, SDL, soxr
+, libtheora, libva, libvdpau, libvorbis, libvpx, lzma, libpulseaudio, SDL, soxr
 , x264, xvidcore, zlib
 , openglSupport ? false, mesa ? null
 # Build options
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
     libvdpau libvorbis lzma SDL soxr x264 xvidcore zlib
   ] ++ optional openglSupport mesa
-    ++ optionals (!isDarwin) [ libvpx pulseaudio ] # Need to be fixed on Darwin
+    ++ optionals (!isDarwin) [ libvpx libpulseaudio ] # Need to be fixed on Darwin
     ++ optional (isLinux || isFreeBSD) libva
     ++ optional isLinux alsaLib;
 

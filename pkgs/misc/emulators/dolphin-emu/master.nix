@@ -1,7 +1,7 @@
 { stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
 , gettext, git, libpthreadstubs, libXrandr, libXext, readline
 , openal, libXdmcp, portaudio, SDL, wxGTK30, fetchgit, libusb
-, pulseaudio ? null }:
+, libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
   name = "dolphin-emu-20150421";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
-                  git libXdmcp portaudio SDL wxGTK30 libusb pulseaudio ];
+                  git libXdmcp portaudio SDL wxGTK30 libusb libpulseaudio ];
 
   meta = {
     homepage = http://dolphin-emu.org/;

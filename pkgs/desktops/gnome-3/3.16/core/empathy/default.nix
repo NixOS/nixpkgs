@@ -2,7 +2,7 @@
 , file, librsvg, hicolor_icon_theme, gnome3, gdk_pixbuf
 , dbus_glib, dbus_libs, telepathy_glib, telepathy_farstream
 , clutter_gtk, clutter-gst, gst_all_1, cogl, gnome_online_accounts
-, gcr, libsecret, folks, pulseaudio, telepathy_mission_control
+, gcr, libsecret, folks, libpulseaudio, telepathy_mission_control
 , telepathy_logger, libnotify, clutter, libsoup, gnutls
 , evolution_data_server
 , libcanberra_gtk3, p11_kit, farstream, libtool, shared_mime_info
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
                   libxml2 libxslt icu file makeWrapper
                   telepathy_glib clutter_gtk clutter-gst cogl
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
-                  gcr libsecret pulseaudio gnome3.yelp_xsl gdk_pixbuf
+                  gcr libsecret libpulseaudio gnome3.yelp_xsl gdk_pixbuf
                   libnotify clutter libsoup gnutls libgee p11_kit
                   libcanberra_gtk3 telepathy_farstream farstream
                   gnome3.adwaita-icon-theme hicolor_icon_theme 

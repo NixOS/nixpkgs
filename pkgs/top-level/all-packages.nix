@@ -5959,7 +5959,7 @@ let
     libvpx = if stdenv.isDarwin then null else libvpx;
     openal = if stdenv.isDarwin then null else openal;
     openjpeg_1 = if stdenv.isDarwin then null else openjpeg_1;
-    pulseaudio = if stdenv.isDarwin then null else pulseaudio;
+    libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;

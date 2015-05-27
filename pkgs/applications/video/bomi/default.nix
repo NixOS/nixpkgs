@@ -13,7 +13,7 @@
 , libbluray
 , jackSupport ? false, jack ? null
 , portaudioSupport ? false, portaudio ? null
-, pulseSupport ? true, pulseaudio ? null
+, pulseSupport ? true, libpulseaudio ? null
 , cddaSupport ? false, libcdda ? null
 , youtubeSupport ? true, youtube-dl ? null
 }:
@@ -22,7 +22,7 @@ with stdenv.lib;
 
 assert jackSupport -> jack != null;
 assert portaudioSupport -> portaudio != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 assert cddaSupport -> libcdda != null;
 assert youtubeSupport -> youtube-dl != null;
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
                 ]
                 ++ optional jackSupport jack
                 ++ optional portaudioSupport portaudio
-                ++ optional pulseSupport pulseaudio
+                ++ optional pulseSupport libpulseaudio
                 ++ optional cddaSupport libcdda
                 ;
 

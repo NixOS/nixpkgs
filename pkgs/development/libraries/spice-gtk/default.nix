@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, spice_protocol, intltool, celt_0_5_1
-, openssl, pulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
+, openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python, pygtk, autoconf, automake, libtool, usbredir, libsoup
 , gtk3, enableGTK3 ? false }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    spice_protocol celt_0_5_1 openssl pulseaudio pixman gobjectIntrospection
+    spice_protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir
   ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk ]);
 

@@ -5,7 +5,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 }:
 
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
       pkgconfig which libXmu nukeReferences ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport libpulseaudio;
 
   prePatch = ''
     set -x
