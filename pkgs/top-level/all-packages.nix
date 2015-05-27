@@ -1766,6 +1766,8 @@ let
 
   icecast = callPackage ../servers/icecast { };
 
+  darkice = callPackage ../tools/audio/darkice { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
