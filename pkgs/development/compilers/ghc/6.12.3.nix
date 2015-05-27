@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
     inherit (ghc.meta) license;
-    broken = true;              # https://github.com/NixOS/nixpkgs/issues/7810
   };
 }
