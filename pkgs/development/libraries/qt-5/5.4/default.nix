@@ -20,6 +20,7 @@
 
 # options
 , developerBuild ? false
+, decryptSslTraffic ? false
 }:
 
 with autonix;
@@ -61,7 +62,7 @@ let
         # GNOME dependencies are not used unless gtkStyle == true
         inherit (gnome) libgnomeui GConf gnome_vfs;
         bison = bison2; # error: too few arguments to function 'int yylex(...
-        inherit developerBuild srcs version;
+        inherit developerBuild srcs version decryptSslTraffic;
       };
 
       connectivity = callPackage
