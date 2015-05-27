@@ -198,6 +198,19 @@ let self = _self // overrides;
     };
   };
 
+  autotetris = melpaBuild {
+    pname = "autotetris-mode";
+    version = "20141114.846";
+    src = fetchFromGitHub {
+      owner = "skeeto";
+      repo = "autotetris-mode";
+      rev = "7d348d33829bc89ddbd2b4d5cfe5073c3b0cbaaa";
+      sha256 = "14pjsb026mgjf6l3dggy255knr7c1vfmgb6kgafmkzvr96aglcdc";
+    };
+    files = [ "autotetris-mode.el" ];
+    meta =  { license = unlicense; };
+  };
+
   bind-key = melpaBuild {
     pname   = "bind-key";
     version = "20150317";
@@ -1210,13 +1223,13 @@ let self = _self // overrides;
       rev    = "67259f16bfaec5c006a53533b8feeba7771e1365";
       sha256 = "16zcnwm7wnbl1xbsx7rr5rr697ax141akfx2lknwirx18vqmkijj";
     };
-    
+
     meta = {
       description = "Web template editing mode for emacs";
       license = gpl2;
     };
   };
-  
+
   weechat = melpaBuild rec {
     pname   = "weechat.el";
     version = "0.2.2";
