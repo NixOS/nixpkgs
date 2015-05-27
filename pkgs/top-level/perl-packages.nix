@@ -3977,12 +3977,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FinanceQuote = buildPerlPackage rec {
-    name = "Finance-Quote-1.35";
+    name = "Finance-Quote-1.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EC/ECOCODE/${name}.tar.gz";
-      sha256 = "0mxfhi1ndckj4w7fw20rwy6ymalg2yncnp9xn0v2bnk5ibqj439w";
+      sha256 = "1b6pbh7f76fb5sa4f0lhx085xy55pprz5v7z7li7pqiyw7i4f4bf";
     };
-    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
+    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc DateTime JSON ];
     meta = with stdenv.lib; {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
