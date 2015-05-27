@@ -11341,6 +11341,8 @@ let
 
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
+  heme = callPackage ../applications/editors/heme { };
+
   herbstluftwm = callPackage ../applications/window-managers/herbstluftwm { };
 
   hexchat = callPackage ../applications/networking/irc/hexchat { };
