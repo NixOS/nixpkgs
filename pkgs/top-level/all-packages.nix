@@ -11749,6 +11749,8 @@ let
 
   moc = callPackage ../applications/audio/moc { };
 
+  mod-distortion = callPackage ../applications/audio/mod-distortion { };
+
   monero = callPackage ../applications/misc/monero { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
