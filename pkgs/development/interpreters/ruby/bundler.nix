@@ -1,4 +1,4 @@
-{ buildRubyGem, coreutils }:
+{ buildRubyGem, makeWrapper, ruby, coreutils }:
 
 buildRubyGem {
   name = "bundler-1.9.2";
@@ -10,5 +10,8 @@ buildRubyGem {
       substituteInPlace $f \
          --replace "/usr/bin/env" "${coreutils}/bin/env"
     done
+
+    wrapProgram $out/bin/bundler \
+      --prefix PATH ":" ${ruby}/bin
   '';
 }
