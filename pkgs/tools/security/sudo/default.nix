@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
     "--with-sendmail=${sendmailPath}"
+    "--with-all-insults"
+    "--with-insults=disabled"
   ];
 
   configureFlagsArray = [
