@@ -9354,6 +9354,32 @@ let
     };
   };
 
+
+  pyev = buildPythonPackage rec {
+    name = "pyev-0.9.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyev/${name}.tar.gz";
+      sha256 = "0rf603lc0s6zpa1nb25vhd8g4y337wg2wyz56i0agsdh7jchl0sx";
+    };
+
+    buildInputs = [ pkgs.libev ];
+
+    postPatch = ''
+      libev_so=${pkgs.libev}/lib/libev.so.4
+      test -f "$libev_so" || { echo "ERROR: File $libev_so does not exist, please fix nix expression for pyev"; exit 1; }
+      sed -i -e "s|libev_dll_name = find_library(\"ev\")|libev_dll_name = \"$libev_so\"|" setup.py
+    '';
+
+    meta = {
+      description = "Python bindings for libev";
+      homepage = https://code.google.com/p/pyev/;
+      license = licenses.gpl3;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
