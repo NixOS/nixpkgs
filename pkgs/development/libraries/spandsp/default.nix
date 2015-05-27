@@ -1,21 +1,22 @@
-{stdenv, fetchurl, audiofile, libtiff}:
+{ stdenv, fetchurl, audiofile, libtiff }:
+
 stdenv.mkDerivation rec {
-  version = "0.0.6";
-  name = "spandsp-${version}";
+  name = "spandsp-0.0.6";
+
   src=fetchurl {
-    url = "http://www.soft-switch.org/downloads/spandsp/spandsp-${version}.tar.gz";
+    url = "http://www.soft-switch.org/downloads/spandsp/${name}.tar.gz";
     sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
   };
-  buildInputs = [];
-  propagatedBuildInputs = [audiofile libtiff];
-  meta = {
-    homepage = "http://www.creytiv.com/baresip.html";
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    license = with stdenv.lib.licenses; gpl2;
-    downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
-    inherit version;
-    updateWalker = true;
+
+  buildInputs = [ audiofile ];
+
+  propagatedBuildInputs = [ libtiff ];
+
+  meta = with stdenv.lib; {
+    description = "SpanDSP is a library of DSP functions for telephony";
+    homepage = http://www.soft-switch.org/;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
   };
 }
-
