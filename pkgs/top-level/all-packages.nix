@@ -10530,6 +10530,8 @@ let
 
   bvi = callPackage ../applications/editors/bvi { };
 
+  bviplus = callPackage ../applications/editors/bviplus { };
+
   calf = callPackage ../applications/audio/calf {
       inherit (gnome) libglade;
   };
