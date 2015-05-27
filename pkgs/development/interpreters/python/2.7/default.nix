@@ -51,7 +51,6 @@ let
       ./2.7.3-dylib.patch
       ./2.7.3-getpath-exe-extension.patch
       ./2.7.3-no-libm.patch
-      ./2.7.5-export-PyNode_SizeOf.patch
     ];
 
   preConfigure = ''
