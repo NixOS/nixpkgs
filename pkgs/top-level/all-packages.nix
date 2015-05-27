@@ -1764,6 +1764,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  lolcat = callPackage ../tools/misc/lolcat {};
+
   icecast = callPackage ../servers/icecast { };
 
   darkice = callPackage ../tools/audio/darkice { };
