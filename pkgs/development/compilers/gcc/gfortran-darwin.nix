@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     --with-mpc=${libmpc}
   '';
   makeFlags = ["CC=clang"];
+  passthru.cc = stdenv.cc.cc;
   meta = with stdenv.lib; {
     description = "GNU Fortran compiler, part of the GNU Compiler Collection.";
     homepage    = "https://gcc.gnu.org/fortran/";
