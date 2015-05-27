@@ -2,6 +2,7 @@
 
 buildRubyGem {
   name = "bundler-1.9.2";
+  namePrefix = "";
   sha256 = "0ck9bnqg7miimggj1d6qlabrsa5h9yaw241fqn15cvqh915209zk";
   dontPatchShebangs = true;
   postInstall = ''
