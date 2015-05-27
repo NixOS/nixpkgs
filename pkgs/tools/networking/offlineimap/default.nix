@@ -1,13 +1,13 @@
 { pkgs, fetchurl, buildPythonPackage, sqlite3 }:
 
 buildPythonPackage rec {
-  version = "6.5.6";
+  version = "6.5.7";
   name = "offlineimap-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/OfflineIMAP/offlineimap/archive/v${version}.tar.gz";
-    sha256 = "1hr8yxb6r8lmdzzly4hafa1l1z9pfx14rsgc8qiy2zxfpg6ijcn2";
+    sha256 = "18whwc4f8nk8gi3mjw9153c9cvwd3i9i7njmpdbhcplrv33m5pmp";
   };
 
   doCheck = false;

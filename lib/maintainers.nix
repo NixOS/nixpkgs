@@ -8,6 +8,7 @@
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akc = "Anders Claesson <akc@akc.is>";
@@ -71,6 +72,7 @@
   eikek = "Eike Kettner <eike.kettner@posteo.de>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
   emery = "Emery Hemingway <emery@vfemail.net>";
+  ericbmerritt = "Eric Merritt <eric@afiniate.com>";
   ertes = "Ertugrul Söylemez <ertesx@gmx.de>";
   exlevan = "Alexey Levan <exlevan@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
@@ -98,6 +100,7 @@
   iand675 = "Ian Duncan <ian@iankduncan.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   iElectric = "Domen Kozar <domen@dev.si>";
+  ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
   iyzsong = "Song Wenwu <iyzsong@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
@@ -111,6 +114,7 @@
   joelteon = "Joel Taylor <me@joelt.io>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
+  jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
@@ -134,6 +138,7 @@
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mornfall = "Petr Ročkai <me@mornfall.net>";

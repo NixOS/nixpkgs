@@ -127,7 +127,7 @@ self: super: {
   # Until the changes have been pushed to Hackage
   mueval = appendPatch super.mueval (pkgs.fetchpatch {
     url = "https://github.com/gwern/mueval/commit/c41aa40ed63b74c069d1e4e3caa8c8d890cde960.patch";
-    sha256 = "1gs8p89d1qsrd1qycbhf6kv4qw0sbb8m6dy106dqkmdzcjzcyq74";
+    sha256 = "0h1lx4z15imq009k0qmwkn5l3hmigw463ahvwffdnszi2n618kpg";
   });
   present = appendPatch super.present (pkgs.fetchpatch {
     url = "https://github.com/chrisdone/present/commit/6a61f099bf01e2127d0c68f1abe438cd3eaa15f7.patch";
@@ -166,7 +166,7 @@ self: super: {
 
   misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
     url = "https://github.com/mokus0/misfortune/commit/9e0a38cf8d59a0de9ae1156034653f32099610e4.patch";
-    sha256 = "15frwdallm3i6k7mil26bbjd4wl6k9h20ixf3cmyris3q3jhlcfh";
+    sha256 = "01m1l199ihq85j9pyc3n0wqv1z4my453hhhcvg3yz3gpz3lf224r";
   });
 
   timezone-series = doJailbreak super.timezone-series;

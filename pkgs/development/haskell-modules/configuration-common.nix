@@ -115,9 +115,6 @@ self: super: {
   # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
   network-uri = dontCheck super.network-uri;
 
-  # Agda-2.4.2.2 needs these overrides to compile.
-  Agda = super.Agda.override { equivalence = self.equivalence_0_2_5; cpphs = self.cpphs_1_18_9; };
-
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 

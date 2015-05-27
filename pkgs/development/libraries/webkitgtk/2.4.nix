@@ -59,8 +59,7 @@ stdenv.mkDerivation rec {
     (if withGtk2 then gtk2 else gtk3)
   ];
 
-  # Probably OK now, see:
-  # https://bugs.webkit.org/show_bug.cgi?id=79498
-  enableParallelBuilding = true;
-}
+  # Still fails with transient errors in version 2.4.9.
+  enableParallelBuilding = false;
 
+}

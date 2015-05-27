@@ -120,7 +120,7 @@ let
       hdFlags =''hda => "harddisk", hdaInterface => "${iface}", '';
     in
     ''
-      createDisk("harddisk", 4 * 1024);
+      createDisk("harddisk", 8 * 1024);
 
       my $machine = createMachine({ ${hdFlags}
         cdrom => glob("${iso}/iso/*.iso"),

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
-  src = fetch "libcxx" "1dzvhyrzj54v823biadag5lwxfz37gm8a65aq72pjsh8n211x719";
+  src = fetch "libcxx" "1yf0ns4cvvirp1ml5a8h29lysnw5c23715b09x68v5zkxhxnap2s";
 
   # instead of allowing libc++ to link with /usr/lib/libc++abi.dylib,
   # force it to link with our copy

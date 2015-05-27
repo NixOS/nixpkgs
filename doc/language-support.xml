@@ -245,14 +245,14 @@ are provided with all modules included.</para>
         Name of the folder in <literal>${python}/lib/</literal> for corresponding interpreter.
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>interpreter</varname></term>
     <listitem><para>
         Alias for <literal>${python}/bin/${executable}.</literal>
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>buildEnv</varname></term>
     <listitem><para>
@@ -260,29 +260,29 @@ are provided with all modules included.</para>
         See <xref linkend="python-build-env" /> for usage and documentation.
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>sitePackages</varname></term>
     <listitem><para>
       Alias for <literal>lib/${libPrefix}/site-packages</literal>.
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term><varname>executable</varname></term>
     <listitem><para>
       Name of the interpreter executable, ie <literal>python3.4</literal>.
     </para></listitem>
   </varlistentry>
-  
+
 </variablelist>
 <section xml:id="build-python-package"><title><varname>buildPythonPackage</varname> function</title>
-  
+
   <para>
   The function is implemented in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix">
   <filename>pkgs/development/python-modules/generic/default.nix</filename></link>.
   Example usage:
-  
+
 <programlisting language="nix">
 twisted = buildPythonPackage {
   name = "twisted-8.1.0";
@@ -308,27 +308,27 @@ twisted = buildPythonPackage {
   <varname>python27Packages</varname>, <varname>python32Packages</varname>, <varname>python33Packages</varname>,
   <varname>python34Packages</varname> and <varname>pypyPackages</varname>.
   </para>
-  
+
   <para>
     <function>buildPythonPackage</function> mainly does four things:
-      
+
     <orderedlist>
       <listitem><para>
         In the <varname>configurePhase</varname>, it patches
         <literal>setup.py</literal> to always include setuptools before
         distutils for monkeypatching machinery to take place.
       </para></listitem>
-    
+
       <listitem><para>
-        In the <varname>buildPhase</varname>, it calls 
+        In the <varname>buildPhase</varname>, it calls
         <literal>${python.interpreter} setup.py build ...</literal>
       </para></listitem>
-      
+
       <listitem><para>
-        In the <varname>installPhase</varname>, it calls 
+        In the <varname>installPhase</varname>, it calls
         <literal>${python.interpreter} setup.py install ...</literal>
       </para></listitem>
-      
+
       <listitem><para>
         In the <varname>postFixup</varname> phase, <literal>wrapPythonPrograms</literal>
         bash function is called to wrap all programs in <filename>$out/bin/*</filename>
@@ -337,23 +337,23 @@ twisted = buildPythonPackage {
       </para></listitem>
     </orderedlist>
   </para>
-  
-  <para>By default <varname>doCheck = true</varname> is set and tests are run with 
+
+  <para>By default <varname>doCheck = true</varname> is set and tests are run with
   <literal>${python.interpreter} setup.py test</literal> command in <varname>checkPhase</varname>.</para>
-  
+
   <para><varname>propagatedBuildInputs</varname> packages are propagated to user environment.</para>
-    
+
   <para>
     By default <varname>meta.platforms</varname> is set to the same value
     as the interpreter unless overriden otherwise.
   </para>
-  
+
   <variablelist>
     <title>
       <varname>buildPythonPackage</varname> parameters
       (all parameters from <varname>mkDerivation</varname> function are still supported)
     </title>
-  
+
     <varlistentry>
       <term><varname>namePrefix</varname></term>
       <listitem><para>
@@ -363,7 +363,7 @@ twisted = buildPythonPackage {
         if you're packaging an application or a command line tool.
       </para></listitem>
     </varlistentry>
-  
+
     <varlistentry>
       <term><varname>disabled</varname></term>
       <listitem><para>
@@ -373,21 +373,21 @@ twisted = buildPythonPackage {
         for examples.
       </para></listitem>
     </varlistentry>
-      
+
     <varlistentry>
       <term><varname>setupPyInstallFlags</varname></term>
       <listitem><para>
         List of flags passed to <command>setup.py install</command> command.
       </para></listitem>
     </varlistentry>
-     
+
     <varlistentry>
       <term><varname>setupPyBuildFlags</varname></term>
       <listitem><para>
         List of flags passed to <command>setup.py build</command> command.
       </para></listitem>
     </varlistentry>
-     
+
     <varlistentry>
       <term><varname>pythonPath</varname></term>
       <listitem><para>
@@ -396,21 +396,21 @@ twisted = buildPythonPackage {
         (contrary to <varname>propagatedBuildInputs</varname>).
       </para></listitem>
     </varlistentry>
-     
+
     <varlistentry>
       <term><varname>preShellHook</varname></term>
       <listitem><para>
         Hook to execute commands before <varname>shellHook</varname>.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>postShellHook</varname></term>
       <listitem><para>
         Hook to execute commands after <varname>shellHook</varname>.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>distutilsExtraCfg</varname></term>
       <listitem><para>
@@ -419,15 +419,29 @@ twisted = buildPythonPackage {
         configuration).
       </para></listitem>
     </varlistentry>
-  
+
+    <varlistentry>
+      <term><varname>makeWrapperArgs</varname></term>
+      <listitem><para>
+        A list of strings. Arguments to be passed to
+        <varname>makeWrapper</varname>, which wraps generated binaries. By
+        default, the arguments to <varname>makeWrapper</varname> set
+        <varname>PATH</varname> and <varname>PYTHONPATH</varname> environment
+        variables before calling the binary. Additional arguments here can
+        allow a developer to set environment variables which will be
+        available when the binary is run. For example,
+        <varname>makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]</varname>.
+      </para></listitem>
+    </varlistentry>
+
   </variablelist>
-  
+
 </section>
 
 <section xml:id="python-build-env"><title><function>python.buildEnv</function> function</title>
   <para>
     Create Python environments using low-level <function>pkgs.buildEnv</function> function. Example <filename>default.nix</filename>:
-    
+
 <programlisting language="nix">
 <![CDATA[with import <nixpkgs> {};
 
@@ -436,31 +450,31 @@ python.buildEnv.override {
   ignoreCollisions = true;
 }]]>
 </programlisting>
-    
+
     Running <command>nix-build</command> will create
     <filename>/nix/store/cf1xhjwzmdki7fasgr4kz6di72ykicl5-python-2.7.8-env</filename>
     with wrapped binaries in <filename>bin/</filename>.
   </para>
-  
+
   <variablelist>
     <title>
       <function>python.buildEnv</function> arguments
     </title>
-  
+
     <varlistentry>
       <term><varname>extraLibs</varname></term>
       <listitem><para>
         List of packages installed inside the environment.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>postBuild</varname></term>
       <listitem><para>
         Shell command executed after the build of environment.
       </para></listitem>
     </varlistentry>
-    
+
     <varlistentry>
       <term><varname>ignoreCollisions</varname></term>
       <listitem><para>
@@ -504,13 +518,13 @@ exist in community to help save time. No tool is preferred at the moment.
     additional logic inside <varname>shellPhase</varname> to run
     <command>${python.interpreter} setup.py develop</command> for the package.
   </para>
-  
+
   <warning><para><varname>shellPhase</varname> is executed only if <filename>setup.py</filename>
   exists.</para></warning>
-  
+
   <para>
     Given a <filename>default.nix</filename>:
-    
+
 <programlisting language="nix">
 <![CDATA[with import <nixpkgs> {};
 
@@ -522,18 +536,18 @@ buildPythonPackage {
   src = ./.;
 }]]>
 </programlisting>
-    
+
     Running <command>nix-shell</command> with no arguments should give you
     the environment in which the package would be build with
     <command>nix-build</command>.
   </para>
-  
+
   <para>
     Shortcut to setup environments with C headers/libraries and python packages:
-    
+
     <programlisting language="bash">$ nix-shell -p pythonPackages.pyramid zlib libjpeg git</programlisting>
   </para>
-  
+
   <note><para>
     There is a boolean value <varname>lib.inNixShell</varname> set to
     <varname>true</varname> if nix-shell is invoked.
@@ -562,12 +576,12 @@ buildPythonPackage {
       Known bug in setuptools <varname>install_data</varname> does not respect --prefix</link>. Example of
       such package using the feature is <filename>pkgs/tools/X11/xpra/default.nix</filename>. As workaround
       install it as an extra <varname>preInstall</varname> step:
-      
+
       <programlisting>${python.interpreter} setup.py install_data --install-dir=$out --root=$out
 sed -i '/ = data_files/d' setup.py</programlisting>
     </para></listitem>
   </varlistentry>
-  
+
   <varlistentry>
     <term>Rationale of non-existent global site-packages</term>
     <listitem><para>
@@ -616,7 +630,7 @@ sed -i '/ = data_files/d' setup.py</programlisting>
   this into a nix expression that contains all Gem dependencies automatically.</para>
 
   <para>For example, to package sensu, we did:</para>
-  
+
 <screen>
 <![CDATA[$ cd pkgs/servers/monitoring
 $ mkdir sensu
@@ -876,7 +890,7 @@ fileSystem = buildLuaPackage {
   src = fetchurl {
     url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
     sha256 = "1n8qdwa20ypbrny99vhkmx8q04zd2jjycdb5196xdhgvqzk10abz";
-  };  
+  };
   meta = {
     homepage = "https://github.com/keplerproject/luafilesystem";
     hydraPlatforms = stdenv.lib.platforms.linux;
@@ -887,7 +901,7 @@ fileSystem = buildLuaPackage {
 </para>
 
 <para>
-  Though, more complicated package should be placed in a seperate file in 
+  Though, more complicated package should be placed in a seperate file in
   <link
   xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules"><filename>pkgs/development/lua-modules</filename></link>.
 </para>
