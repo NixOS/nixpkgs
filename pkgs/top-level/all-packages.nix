@@ -1885,6 +1885,8 @@ let
 
   logstash-forwarder = callPackage ../tools/misc/logstash-forwarder { };
 
+  lolcat = callPackage ../tools/misc/lolcat { };
+
   lsdvd = callPackage ../tools/cd-dvd/lsdvd {};
 
   kippo = callPackage ../servers/kippo { };
