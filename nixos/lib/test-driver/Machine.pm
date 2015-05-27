@@ -43,8 +43,6 @@ sub new {
         $startCommand .= "-bios $args->{bios} "
             if defined $args->{bios};
         $startCommand .= $args->{qemuFlags} || "";
-    } else {
-        $startCommand = Cwd::abs_path $startCommand;
     }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
