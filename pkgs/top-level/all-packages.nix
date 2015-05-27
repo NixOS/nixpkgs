@@ -9789,6 +9789,8 @@ let
 
   godep = callPackage ../development/tools/godep { };
 
+  goimports = callPackage ../development/tools/goimports { };
+
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
