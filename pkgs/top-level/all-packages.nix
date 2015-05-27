@@ -6859,7 +6859,9 @@ let
   # standalone libiconv, just in case you want it
   libiconv = if stdenv.isGlibc then stdenv.cc.libc else libiconvReal;
 
-  libiconvReal = callPackage ../development/libraries/libiconv { };
+  libiconvReal = callPackage ../development/libraries/libiconv {
+    fetchurl = fetchurlBoot;
+  };
 
   # On non-GNU systems we need GNU Gettext for libintl.
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;
