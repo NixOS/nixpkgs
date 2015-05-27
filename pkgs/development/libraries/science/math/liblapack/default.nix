@@ -3,6 +3,7 @@ let
   atlasMaybeShared = atlas.override { inherit shared; };
   usedLibExtension = if shared then ".so" else ".a";
   version = "3.4.1";
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "liblapack-${version}";
@@ -21,7 +22,10 @@ stdenv.mkDerivation rec {
     "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
   ]
-  ++ (stdenv.lib.optional shared "-DBUILD_SHARED_LIBS=ON")
+  ++ (optional shared "-DBUILD_SHARED_LIBS=ON")
+  # If we're on darwin, CMake will automatically detect impure paths. This switch
+  # prevents that.
+  ++ (optional stdenv.isDarwin "-DCMAKE_OSX_SYSROOT:PATH=''")
   ;
 
   doCheck = ! shared;
