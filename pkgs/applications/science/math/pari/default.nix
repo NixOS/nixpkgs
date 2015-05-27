@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp} " +
     "--with-readline=${readline}";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Computer algebra system for high-performance number theory computations";
     homepage    = "http://pari.math.u-bordeaux.fr/";
-    license     = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [ertes raskin];
-    platforms   = stdenv.lib.platforms.linux;
+    license     = with licenses; gpl2Plus;
+    maintainers = with maintainers; [ ertes raskin ];
+    platforms   = platforms.linux;
 
     inherit version;
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";

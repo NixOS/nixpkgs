@@ -101,12 +101,12 @@ stdenv.mkDerivation rec {
     sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
   '';
 
-  meta = {
-    license     = "Ruby";
+  meta = with stdenv.lib; {
+    license     = with licenses; [ ruby ];
     homepage    = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    platforms   = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.all;
   };
 
   passthru = rec {

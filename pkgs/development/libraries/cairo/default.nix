@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     '' + glib.flattenInclude
     );
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
 
     homepage = http://cairographics.org/;
 
-    license = [ "LGPLv2+" "MPLv1" ];
+    license = with licenses; [ lgpl2Plus mpl10 ];
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

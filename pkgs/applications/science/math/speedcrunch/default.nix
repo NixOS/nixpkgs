@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   buildFlags = "VERBOSE=1";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage    = "http://speedcrunch.digitalfanatics.org";
-    license     = "GPLv2+";
+    license     = with licenses; gpl2Plus;
     description = "A fast power user calculator";
     longDescription = ''
       SpeedCrunch is a fast, high precision and powerful desktop calculator.

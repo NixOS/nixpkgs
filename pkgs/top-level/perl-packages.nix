@@ -33,12 +33,12 @@ let self = _self // overrides; _self = with self; {
     # use gnused so that the preCheck command passes
     buildInputs = stdenv.lib.optional stdenv.isDarwin [ gnused ];
     propagatedBuildInputs = [ FileNext ];
-    meta = {
+    meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage    = http://betterthangrep.com/;
-      license     = "free";  # Artistic 2.0
+      license     = with licenses; artistic2;
       maintainers = with maintainers; [ lovek323 ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms   = platforms.unix;
     };
     # tests fails on nixos and hydra because of different purity issues
     doCheck = false;
@@ -3721,9 +3721,9 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs =
       [ ClassLoad ListMoreUtils ModulePluggable Moose MooseXParamsValidate MooseXSemiAffordanceAccessor namespaceautoclean ]
       ++ stdenv.lib.optional stdenv.isLinux LinuxInotify2;
-    meta = {
+    meta = with stdenv.lib; {
       description = "Watch for changes to files, cross-platform style";
-      license = "artistic_2";
+      license = with licenses; artistic2;
     };
   };
 
@@ -3983,10 +3983,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0mxfhi1ndckj4w7fw20rwy6ymalg2yncnp9xn0v2bnk5ibqj439w";
     };
     propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc JSON ];
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
-      license = "gpl";
+      license = with licenses; gpl2;
     };
   };
 
@@ -4158,9 +4158,9 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ pkgs.graphviz ];
     propagatedBuildInputs = [ IPCRun TestMore ];
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Perl interface to the GraphViz graphing tool";
-      license = [ "Artistic" ];
+      license = with licenses; artistic2;
       maintainers = [ ];
     };
   };
@@ -4861,7 +4861,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1f37pi7a6fcphp0kkhj7yr9b5c95m2wvy5jcwjq1xdiq74gdi16c";
     };
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "ExifTool, a tool to read, write and edit EXIF meta information";
       homepage = http://www.sno.phy.queensu.ca/~phil/exiftool/;
 
@@ -4877,10 +4877,10 @@ let self = _self // overrides; _self = with self; {
         Sigma/Foveon and Sony.
       '';
 
-      license = [ "GPLv1+" /* or */ "Artistic" ];
+      license = with licenses; [ gpl1Plus /* or */ artistic2 ];
 
       maintainers = [ ];
-      platforms = stdenv.lib.platforms.unix;
+      platforms = platforms.unix;
     };
   };
 
@@ -7810,10 +7810,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "c5da0e390b58655934e1df57937d29d7de13b99f5638fe44833832a5b39c8aa5";
     };
     propagatedBuildInputs = [ FileFindIterator IPCRun constantdefer libintlperl ];
-    meta = {
+    meta = with stdenv.lib; {
       homepage = http://user42.tuxfamily.org/podlinkcheck/index.html;
       description = "Check POD L<> link references";
-      license = "gpl";
+      license = with licenses; gpl3Plus;
     };
   };
 
@@ -7921,9 +7921,9 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/A/AB/ABIGAIL/Regexp-Common-2013031301.tar.gz;
       sha256 = "729a8198d264aa64ecbb233ff990507f97fbb66bda746b95f3286f50f5f25c84";
     };
-    meta = {
+    meta = with stdenv.lib; {
       description = "Provide commonly requested regular expressions";
-      license = "mit";
+      license = with licenses; mit;
     };
   };
 
@@ -8433,9 +8433,9 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0mlwm0rirv46gj4h072q8gdync5zxxsxy8p028gdyrhczl942dc3";
     };
     propagatedBuildInputs = [ ParamsUtil SubExporter ];
-    meta = {
+    meta = with stdenv.lib; {
       description = "Build sprintf-like functions of your own";
-      license = "gpl";
+      license = with licenses; gpl2;
     };
   };
 
@@ -9333,11 +9333,11 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ClassInspector TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase FatalException Moose namespaceclean TestAssert ];
-    meta = {
+    meta = with stdenv.lib; {
       description = "Simulating other classes";
-      license = "lgpl";
+      license = with licenses; lgpl2Plus;
       maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms   = platforms.unix;
     };
   };
 

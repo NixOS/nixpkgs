@@ -7437,12 +7437,12 @@ let
     meta = {
       homepage = http://namebench.googlecode.com/;
       description = "Find fastest DNS servers available";
-      license = [
-        "Apache-2.0"
+      license = with licenses; [
+        asl20
         # third-party program licenses (embedded in the sources)
         "LGPL" # Crystal_Clear
-        "free" # dns
-        "Apache-2.0" # graphy
+        free # dns
+        asl20 # graphy
         "BSD" # jinja2
       ];
       longDescription = ''
@@ -8058,7 +8058,7 @@ let
         not a large parsing framework or a component of some larger system.
       '';
 
-      license = "revised-BSD";
+      license = with licenses; bsd3;
 
       maintainers = [ ];
     };
@@ -10164,7 +10164,7 @@ let
 
     meta = {
       homepage    = "https://github.com/rackspace/pyrax";
-      license     = "MIT";
+      license     = with licenses; mit;
       description = "Python API to interface with Rackspace";
     };
 
@@ -10240,7 +10240,7 @@ let
 
     meta = {
       homepage = "http://github.com/mongodb/mongo-python-driver";
-      license = [ "Apache-2.0" ];
+      license = with licenses; [ asl20 ];
       description = "Python driver for MongoDB ";
     };
   };
@@ -10308,7 +10308,7 @@ let
         in Python.
       '';
 
-      license = "revised BSD";
+      license = with licenses; bsd3;
 
       maintainers = [ ];
     };

@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     blas = atlas;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    license = "revised-BSD";
+    license = with licenses; bsd3;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.simons ];
   };
 }

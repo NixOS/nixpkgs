@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ cairo x11 fontconfig freetype libsigcxx ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";
 
     longDescription = ''
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://cairographics.org/;
 
-    license = [ "LGPLv2+" "MPLv1" ];
+    license = with licenses; [ lgpl2Plus mpl10 ];
   };
 }

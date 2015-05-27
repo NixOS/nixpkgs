@@ -59,12 +59,12 @@ rec {
       sed -e 's,^\(GIMP_PLUGIN_DIR=\).*,\1'"$out/${gimp.name}-plugins", \
        -e 's,^\(GIMP_DATA_DIR=\).*,\1'"$out/share/${gimp.name}", -i configure
     '';
-    meta = {
+    meta = with stdenv.lib; {
       description = "The GIMP Animation Package";
       homepage = http://www.gimp.org;
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".
-      license = [ "GPLv3" "free" ];
+      license = with licenses; [ gpl3 free ];
     };
   };
 
