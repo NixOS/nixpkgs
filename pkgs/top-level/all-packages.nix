@@ -11808,8 +11808,6 @@ let
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
     vaapiSupport = config.mpv.vaapiSupport or false;
-    # YouTube needs network support and potentially openssl/tls
-    ffmpeg = if youtubeSupport then ffmpeg-full else ffmpeg;
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
