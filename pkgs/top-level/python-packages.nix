@@ -1298,7 +1298,7 @@ let
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "f2659f9b9d4f183a997ad0fc87f99f8cd3998df887fdadd3b776dada2b1df550";
+      sha256 = "0l7m3lmxmnknnz9svzc7z26rklwckzwqgz6hgackl62gkndryrgj";
     };
 
     checkPhase = ''
