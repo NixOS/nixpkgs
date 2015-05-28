@@ -14090,19 +14090,18 @@ let
 
   mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
 
-    mathcomp = callPackage ../development/coq-modules/mathcomp/1.5.nix {
-      coq = coq_8_5;
-      ssreflect = ssreflect;
-    };
+    inherit callPackage;
 
-    ssreflect = callPackage ../development/coq-modules/ssreflect/1.5.nix {
-      coq = coq_8_5;
-    };
+    coq = coq_8_5;
+
+    mathcomp = callPackage ../development/coq-modules/mathcomp/1.5.nix { };
+
+    ssreflect = callPackage ../development/coq-modules/ssreflect { };
 
   };
 
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
-  coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages);
+  coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages_8_5);
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
   cvc4 = callPackage ../applications/science/logic/cvc4 {};

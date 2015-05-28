@@ -1,48 +1,27 @@
-{ stdenv, fetchurl, coq
-, graphviz, withDoc ? true
-}:
+{ callPackage, fetchurl, coq }:
 
-assert coq.coq-version == "8.4";
+if coq.coq-version == "8.4" then
 
-stdenv.mkDerivation {
-
-  name = "coq-ssreflect-1.5";
+callPackage ./generic.nix {
 
   src = fetchurl {
     url = http://ssr.msr-inria.inria.fr/FTP/ssreflect-1.5.tar.gz;
     sha256 = "0hm1ha7sxqfqhc7iwhx6zdz3nki4rj5nfd3ab24hmz8v7mlpinds";
   };
 
-  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
-  buildInputs = [ coq.ocaml coq.camlp5 ];
-  propagatedBuildInputs = [ coq ];
+}
 
-  enableParallelBuilding = true;
+else if coq.coq-version == "8.5" then
 
-  patchPhase = ''
-    # Permit building of the ssrcoq statically-bound executable
-    sed -i 's/^#-custom/-custom/' Make
-    sed -i 's/^#SSRCOQ/SSRCOQ/' Make
-  '';
+callPackage ./generic.nix {
 
-  buildFlags = stdenv.lib.optionalString withDoc "doc";
-
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
-
-  postInstall = ''
-    mkdir -p $out/bin
-    cp -p bin/ssrcoq $out/bin
-    cp -p bin/ssrcoq.byte $out/bin
-  '' + stdenv.lib.optionalString withDoc ''
-    mkdir -p $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
-    cp -r html $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://ssr.msr-inria.inria.fr/;
-    license = licenses.cecill-b;
-    maintainers = with maintainers; [ vbgl jwiegley ];
-    platforms = coq.meta.platforms;
+  src = fetchurl {
+    url = http://ssr.msr-inria.inria.fr/FTP/ssreflect-1.5.coq85beta2.tar.gz;
+    sha256 = "084l9xd5vgb8jml0dkm66g8cil5rsf04w821pjhn2qk9mdbwaagf";
   };
 
+  patches = [ ./threads.patch ];
+
 }
+
+else throw "No ssreflect package for Coq version ${coq.coq-version}"
