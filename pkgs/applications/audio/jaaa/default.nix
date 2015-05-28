@@ -25,29 +25,20 @@ stdenv.mkDerivation rec {
     "-I${zita-alsa-pcmi}/include"
   ];
 
-  patchPhase = ''
-    cd source/
-    sed -i "s@clthreads.h@${libclthreads}/include@g" $(find . -name '*.cc')
-    sed -i "s@clxclient.h@${libclxclient}/include@g" $(find . -name '*.cc')
-    sed -i "s@clthreads.h@${libclthreads}/include@g" $(find . -name '*.h')
-    sed -i "s@clxclient.h@${libclxclient}/include@g" $(find . -name '*.h')
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SUFFIX=''"
+  ];
 
-  buildlPhase = ''
-    make PREFIX="$out"
-  '';
-
-  installPhase = ''
-    echo zita= ${zita-alsa-pcmi}
-    make PREFIX="$out" install
-    install -Dm644 ../README "$out/README"
+  preConfigure = ''
+    cd ./source/
   '';
 
   meta = with stdenv.lib; {
     homepage = http://kokkinizita.linuxaudio.org/linuxaudio/index.html;
     description = "JACK and ALSA Audio Analyser";
     license = licenses.gpl2;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = with maintainers; [ magnetophon ];
     platforms = platforms.linux;
   };
 }
