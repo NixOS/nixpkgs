@@ -739,7 +739,9 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvmPackages_34.llvm; };
+  # Needs help finding LLVM.
+  llvm-general = super.llvm-general.override { llvm-config = self.llvmPackages.llvm; };
+  spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
   leksah = dontCheck super.leksah;
