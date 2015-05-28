@@ -10,9 +10,9 @@ stdenv.mkDerivation rec{
   version = core_version;
 
   src = fetchurl {
-    url = [ "https://bitcoin.org/bin/bitcoin-core-${core_version}/bitcoin-${version}.tar.gz"
-            "mirror://sourceforge/bitcoin/Bitcoin/bitcoin-${core_version}/bitcoin-${version}.tar.gz"
-          ];
+    urls = [ "https://bitcoin.org/bin/bitcoin-core-${core_version}/bitcoin-${version}.tar.gz"
+             "mirror://sourceforge/bitcoin/Bitcoin/bitcoin-${core_version}/bitcoin-${version}.tar.gz"
+           ];
     sha256 = "cddf96c71d0a35524fde93380981cf0cf0b51441454a3a68b9be491b9239bfec";
   };
 
