@@ -1,6 +1,6 @@
 { composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
-
+, cfg ? {}
 , automake, autoconf, libtool
 }:
 
@@ -48,7 +48,7 @@ composableDerivation.composableDerivation {} {
     localpngSupport = false;
     sharedSupport = true;
     threadsSupport = true;
-  };
+  } // cfg;
 
   meta = {
     description = "A C++ cross-platform light-weight GUI library binding";

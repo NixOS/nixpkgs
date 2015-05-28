@@ -4782,7 +4782,7 @@ let
   };
 
   octave = callPackage ../development/interpreters/octave {
-    fltk = fltk13;
+    fltk = fltk13.override { cfg.xftSupport = true; };
     qt = null;
     ghostscript = null;
     llvm = null;
@@ -4792,7 +4792,7 @@ let
     jdk = null;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
-    fltk = fltk13;
+    fltk = fltk13.override { cfg.xftSupport = true; };
     qt = qt4;
   }));
 
