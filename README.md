@@ -18,8 +18,8 @@ custom changes on top of one of the channels, e.g. `nixos-14.12` for the latest
 release and `nixos-unstable` for the latest successful build of master:
 
 ```
-%  git remote update channels
-%  git rebase channels/nixos-14.12
+% git remote update channels
+% git rebase channels/nixos-14.12
 ```
 
 For pull-requests, please rebase onto nixpkgs `master`.
