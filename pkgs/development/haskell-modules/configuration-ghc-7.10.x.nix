@@ -238,7 +238,6 @@ self: super: {
 
   # Broken with GHC 7.10.x.
   aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
-  c2hs_0_20_1 = markBroken super.c2hs_0_20_1;
   Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
   cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
