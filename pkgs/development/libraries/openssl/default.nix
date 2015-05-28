@@ -43,8 +43,8 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     urls = [
-      "https://www.openssl.org/source/${name}.tar.gz"
-      "https://openssl.linux-mirror.org/source/${name}.tar.gz"
+      "http://www.openssl.org/source/${name}.tar.gz"
+      "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
     sha256 = "0jijgzf72659pikms2bc5w31h78xrd1h5zp2r01an2h340y3kdhm";
   };
