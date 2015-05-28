@@ -143,6 +143,7 @@ in {
         '';
         User = "apache-kafka";
         PermissionsStartOnly = true;
+        SuccessExitStatus = "0 143";
       };
       preStart = ''
         mkdir -m 0700 -p ${concatStringsSep " " cfg.logDirs}
