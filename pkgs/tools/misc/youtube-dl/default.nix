@@ -1,6 +1,5 @@
 { stdenv, fetchurl, makeWrapper, python, zip, pandoc, ffmpeg }:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
   version = "2015.05.20";
@@ -10,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1crfada7vq3d24062wr06sfam66cf14j06wnhg7w5ljzrbynvpll";
   };
 
-  buildInputs = [ python makeWrapper zip pandoc ];
+  nativeBuildInputs = [ pandoc ];
+
+  buildInputs = [ python makeWrapper zip ];
 
   patchPhase = ''
     rm youtube-dl
@@ -20,12 +21,12 @@ stdenv.mkDerivation rec {
     makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc PYTHON=${python}/bin/python )
   '';
 
+  # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   postInstall = ''
-    # ffmpeg is used for post-processing and fixups
     wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://rg3.github.com/youtube-dl/";
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
