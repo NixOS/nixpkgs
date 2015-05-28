@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/anjuta/${major}/${name}.tar.xz";
-    sha256 = "b1aac2d4c35891b23c9bc3f168bf2845e02d0a438742478c98e450950d82b5e5";
+    sha256 = "0g4lv6rzkwfz2wp4fg97qlbvyfh2k9gl7k7lidazaikvnc0jlhvp";
   };
 
   enableParallelBuilding = true;
