@@ -6464,6 +6464,9 @@ let
     };
     inherit (darwin) bootstrap_cmds;
   };
+  libkrb5 = krb5.override {
+    prefix = "lib";
+  };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
