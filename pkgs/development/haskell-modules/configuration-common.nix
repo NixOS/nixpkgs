@@ -457,9 +457,6 @@ self: super: {
   # https://bitbucket.org/wuzzeb/webdriver-utils/issue/1/hspec-webdriver-101-cant-compile-its-test
   hspec-webdriver = markBroken super.hspec-webdriver;
 
-  # The build fails with the most recent version of c2hs.
-  ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
-
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
