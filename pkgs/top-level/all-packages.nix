@@ -7508,7 +7508,7 @@ let
   opal = callPackage ../development/libraries/opal {};
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
-  openjpeg_2_0_1 = callPackage ../development/libraries/openjpeg/2.0.1.nix { };
+  openjpeg_2_0 = callPackage ../development/libraries/openjpeg/2.0.nix { };
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
@@ -11884,7 +11884,7 @@ let
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
   mupdf = callPackage ../applications/misc/mupdf {
-    openjpeg = openjpeg_2_0_1;
+    openjpeg = openjpeg_2_0;
   };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
