@@ -747,13 +747,8 @@ self: super: {
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
-  # Fix problems with GHC >=7.8 (in compatible way)
-  mueval = let pkg = appendPatch super.mueval (pkgs.fetchpatch {
-                       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
-                       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
-                     });
-           # Nix-specific workaround
-           in appendPatch pkg ./mueval-nix.patch;
+  # https://github.com/gwern/mueval/issues/9
+  mueval = markBrokenVersion "0.9.1.1" super.mueval;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
