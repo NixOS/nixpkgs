@@ -827,4 +827,7 @@ self: super: {
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
 
+  # https://github.com/BNFC/bnfc/issues/140
+  BNFC = dontCheck super.BNFC;
+
 }

@@ -183,10 +183,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # https://github.com/BNFC/bnfc/issues/137
-  BNFC = markBrokenVersion "2.7.1" super.BNFC;
-  cubical = dontDistribute super.cubical;
-
   # contacted maintainer by e-mail
   cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
   darcs-fastconvert = dontDistribute super.darcs-fastconvert;
