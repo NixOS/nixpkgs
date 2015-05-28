@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "15d5icr7q0nq1a7718fsj4s1l29aa4qdxvmkgmjadxz5pm9ph0b6";
+    sha256 = "66017853bde5f7a6647db3eede30512a091a3491daa1708e0ad8027c328ba595";
   };
 
   prePatch = "patchShebangs .";
