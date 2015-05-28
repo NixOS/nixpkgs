@@ -3,7 +3,7 @@
 , libctemplate, libglade
 , libiodbc
 , libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
-, pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
+, pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite, sudo
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +29,16 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    patchShebangs $out/share/mysql-workbench/extras/build_freetds.sh
+
+    for i in $out/lib/mysql-workbench/modules/wb_utils_grt.py \
+             $out/lib/mysql-workbench/modules/wb_server_management.py \
+             $out/lib/mysql-workbench/modules/wb_admin_grt.py; do
+      substituteInPlace $i \
+        --replace "/bin/bash" ${stdenv.shell} \
+        --replace "/usr/bin/sudo" ${sudo}/bin/sudo
+    done
+
     wrapProgram "$out/bin/mysql-workbench" \
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
       --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64" \
