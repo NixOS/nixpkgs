@@ -1,4 +1,6 @@
-{stdenv, fetchurl, coq}:
+{ stdenv, fetchurl, coq
+, graphviz, withDoc ? true
+}:
 
 assert coq.coq-version == "8.4";
 
@@ -11,6 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0hm1ha7sxqfqhc7iwhx6zdz3nki4rj5nfd3ab24hmz8v7mlpinds";
   };
 
+  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
@@ -22,12 +25,17 @@ stdenv.mkDerivation {
     sed -i 's/^#SSRCOQ/SSRCOQ/' Make
   '';
 
+  buildFlags = stdenv.lib.optionalString withDoc "doc";
+
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   postInstall = ''
     mkdir -p $out/bin
     cp -p bin/ssrcoq $out/bin
     cp -p bin/ssrcoq.byte $out/bin
+  '' + stdenv.lib.optionalString withDoc ''
+    mkdir -p $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
+    cp -r html $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
   '';
 
   meta = with stdenv.lib; {
