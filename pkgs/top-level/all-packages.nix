@@ -8722,6 +8722,8 @@ let
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
+  microHttpd = callPackage ../servers/http/micro-httpd { };
+
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
