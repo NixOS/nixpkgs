@@ -36,7 +36,7 @@ let self = _self // overrides; _self = with self; {
     meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
       homepage    = http://betterthangrep.com/;
-      license     = with licenses; artistic2;
+      license     = licenses.artistic2;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
     };
@@ -607,7 +607,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the cairo 2d vector graphics library";
       maintainers = with maintainers; [ nckx ];
-      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -3723,7 +3723,7 @@ let self = _self // overrides; _self = with self; {
       ++ stdenv.lib.optional stdenv.isLinux LinuxInotify2;
     meta = with stdenv.lib; {
       description = "Watch for changes to files, cross-platform style";
-      license = with licenses; artistic2;
+      license = licenses.artistic2;
     };
   };
 
@@ -3986,7 +3986,7 @@ let self = _self // overrides; _self = with self; {
     meta = with stdenv.lib; {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
-      license = with licenses; gpl2;
+      license = licenses.gpl2;
     };
   };
 
@@ -4105,7 +4105,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl wrappers for the GLib utility and Object libraries";
       maintainers = with maintainers; [ nckx ];
-      license = with stdenv.lib.licenses; [ lgpl3Plus ];
+      license = stdenv.lib.licenses.lgpl3Plus;
     };
   };
 
@@ -4160,7 +4160,7 @@ let self = _self // overrides; _self = with self; {
 
     meta = with stdenv.lib; {
       description = "Perl interface to the GraphViz graphing tool";
-      license = with licenses; artistic2;
+      license = licenses.artistic2;
       maintainers = [ ];
     };
   };
@@ -4185,7 +4185,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Perl interface to the 2.x series of the Gimp Toolkit library";
       maintainers = with maintainers; [ nckx ];
-      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -7273,7 +7273,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://gtk2-perl.sourceforge.net/;
       description = "Layout and render international text";
       maintainers = with maintainers; [ nckx ];
-      license = with stdenv.lib.licenses; [ lgpl21Plus ];
+      license = stdenv.lib.licenses.lgpl21Plus;
     };
   };
 
@@ -7813,7 +7813,7 @@ let self = _self // overrides; _self = with self; {
     meta = with stdenv.lib; {
       homepage = http://user42.tuxfamily.org/podlinkcheck/index.html;
       description = "Check POD L<> link references";
-      license = with licenses; gpl3Plus;
+      license = licenses.gpl3Plus;
     };
   };
 
@@ -7923,7 +7923,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = with stdenv.lib; {
       description = "Provide commonly requested regular expressions";
-      license = with licenses; mit;
+      license = licenses.mit;
     };
   };
 
@@ -8435,7 +8435,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ParamsUtil SubExporter ];
     meta = with stdenv.lib; {
       description = "Build sprintf-like functions of your own";
-      license = with licenses; gpl2;
+      license = licenses.gpl2;
     };
   };
 
@@ -9335,7 +9335,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ExceptionBase FatalException Moose namespaceclean TestAssert ];
     meta = with stdenv.lib; {
       description = "Simulating other classes";
-      license = with licenses; lgpl2Plus;
+      license = licenses.lgpl2Plus;
       maintainers = with maintainers; [ ocharles ];
       platforms   = platforms.unix;
     };

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       game, or that they are extremely delicious.
     '';
     homepage = http://worldofgoo.com;
-    license = with licenses; unfree;
+    license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
   };
 

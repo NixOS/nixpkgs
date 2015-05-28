@@ -540,7 +540,7 @@ rec {
     meta = with stdenv.lib; {
       description = "Analytics about your programming";
       homepage = https://wakatime.com;
-      license = with licenses; bsd3;
+      license = licenses.bsd3;
       platforms = with platforms; linux;
       maintainers = with maintainers; [ nckx ];
     };

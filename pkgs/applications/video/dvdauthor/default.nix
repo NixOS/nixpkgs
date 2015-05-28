@@ -21,6 +21,6 @@ stdenv.mkDerivation rec{
   meta = with stdenv.lib; {
     description = "Tools for generating DVD files to be played on standalone DVD players";
     homepage = http://dvdauthor.sourceforge.net/;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
   };
 }

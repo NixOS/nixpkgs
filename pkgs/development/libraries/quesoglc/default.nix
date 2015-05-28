@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       platform that supports both FreeType and the OpenGL API.
     '';
     homepage = http://quesoglc.sourceforge.net/;
-    license = with licenses; [ lgpl21Plus ];
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
   };

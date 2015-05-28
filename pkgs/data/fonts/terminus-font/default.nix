@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       EGA/VGA-bold for 8x14 and 8x16.
     '';
     homepage = http://www.is-vn.bg/hamster/;
-    license = with licenses; [ gpl2Plus ];
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
   };

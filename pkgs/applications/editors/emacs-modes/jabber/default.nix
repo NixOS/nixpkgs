@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       a special case of text editing.
     '';
     homepage = http://emacs-jabber.sourceforge.net/;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
   };

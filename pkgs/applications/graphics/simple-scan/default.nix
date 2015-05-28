@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = https://launchpad.net/simple-scan;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

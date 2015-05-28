@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://tools.suckless.org/tabbed;
     description = "Simple generic tabbed fronted to xembed aware applications";
-    license = with licenses; mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ viric ];
     platforms = with platforms; linux;
   };

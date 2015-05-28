@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/tm";
     description = "terminal mixer - multiplexer for the i/o of terminal applications";
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = with platforms; all;
   };

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://eaglemode.sourceforge.net";
     description = "Zoomable User Interface";
-    license = with licenses; gpl3;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ viric ];
     platforms = with platforms; linux;
   };

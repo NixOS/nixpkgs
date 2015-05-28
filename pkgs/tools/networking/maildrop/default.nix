@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.courier-mta.org/maildrop/;
     description = "Mail filter/mail delivery agent that is used by the Courier Mail Server";
-    license = with licenses; gpl3;
+    license = licenses.gpl3;
   };
 }

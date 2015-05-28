@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/exfat/;
     description = "A FUSE-based filesystem that allows read and write access to exFAT devices";
     platforms = with platforms; linux;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nckx ];
   };
 }

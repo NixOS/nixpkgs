@@ -113,6 +113,6 @@ stdenv.mkDerivation rec {
       connect at startup to any preferred network within range.
     '';
     maintainers = [ maintainers.roconnor ];
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
   };
 }

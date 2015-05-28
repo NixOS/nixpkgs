@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
     homepage = http://clipgrab.org/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

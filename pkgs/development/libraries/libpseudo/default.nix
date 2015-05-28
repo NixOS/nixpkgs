@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://libpseudo.sourceforge.net/;
     description = "Simple, thread-safe messaging between threads";
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 }

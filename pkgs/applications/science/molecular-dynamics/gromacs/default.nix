@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage    = "http://www.gromacs.org";
-    license     = with licenses; gpl2;
+    license     = licenses.gpl2;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,

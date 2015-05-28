@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.linux-phc.org/;
     downloadPage = "http://www.linux-phc.org/forum/viewtopic.php?f=7&t=267";
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

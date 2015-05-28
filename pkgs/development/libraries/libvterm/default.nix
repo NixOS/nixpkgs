@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://libvterm.sourceforge.net/;
     description = "Terminal emulator library to mimic both vt100 and rxvt";
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

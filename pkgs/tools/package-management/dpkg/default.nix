@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mornfall nckx ];
   };
