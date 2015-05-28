@@ -5280,6 +5280,8 @@ let
       binutils = binutils;
     };
 
+  doclifter = callPackage ../development/tools/misc/doclifter { };
+
   docutils = pythonPackages.docutils;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
