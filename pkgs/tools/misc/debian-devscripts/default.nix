@@ -3,11 +3,11 @@
 , perlPackages
 }:
 stdenv.mkDerivation rec {
-  version = "2.15.3";
+  version = "2.15.4";
   name = "debian-devscripts-${version}";
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "f589e2e02c5e9a46a77b2516155631ac3ddfd8a39bcfc16c920862583850bc7d";
+    sha256 = "03ldbx07ga9df7z9yiq6grb6cms1dr8hlbis2hvbmfcs6gcr3q72";
   };
   buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
     FileDesktopEntry libxslt python3 setuptools makeWrapper
@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     sed -re "s@/usr( |$|/)@$out\\1@" -i Makefile* */Makefile*
     sed -re "s@/etc( |$|/)@$out/etc\\1@" -i Makefile* */Makefile*
+
+    # Completion currently spams every shell startup with an error. Disable for now:
+    sed "/\/bash_completion\.d/d" -i scripts/Makefile
   '';
   postInstall = ''
     sed -re 's@(^|[ !`"])/bin/bash@\1${stdenv.shell}@g' -i "$out/bin"/*
