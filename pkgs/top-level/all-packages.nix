@@ -14048,6 +14048,8 @@ let
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
 
+    inherit callPackage;
+
     bedrock = callPackage ../development/coq-modules/bedrock {};
 
     contribs =
@@ -14094,7 +14096,7 @@ let
 
     coq = coq_8_5;
 
-    mathcomp = callPackage ../development/coq-modules/mathcomp/1.5.nix { };
+    mathcomp = callPackage ../development/coq-modules/mathcomp { };
 
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
 

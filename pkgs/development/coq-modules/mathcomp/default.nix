@@ -1,35 +1,24 @@
-{ stdenv, fetchurl, coq, ssreflect
-, graphviz, ocaml, withDoc ? true
-}:
+{ callPackage, coq, fetchurl }:
 
-stdenv.mkDerivation {
+let src = 
+  if coq.coq-version == "8.4" then
 
-  name = "coq-mathcomp-1.5";
+    fetchurl {
+      url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.5.tar.gz;
+      sha256 = "1297svwi18blrlyd8vsqilar2h5nfixlvlifdkbx47aljq4m5bam";
+    }
 
-  src = fetchurl {
-    url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.5.tar.gz;
-    sha256 = "1297svwi18blrlyd8vsqilar2h5nfixlvlifdkbx47aljq4m5bam";
-  };
+  else if coq.coq-version == "8.5" then
 
-  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ocaml ];
-  propagatedBuildInputs = [ coq ssreflect ];
+    fetchurl {
+      url = http://ssr.msr-inria.inria.fr/FTP/mathcomp-1.5.coq85beta2.tar.gz;
+      sha256 = "03bnq44ym43x8shi7whc02l0g5vy6rx8f1imjw478chlgwcxazqy";
+    }
 
-  enableParallelBuilding = true;
+  else throw "No mathcomp package for Coq version ${coq.coq-version}";
 
-  buildFlags = stdenv.lib.optionalString withDoc "doc";
+in
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
-
-  postInstall = stdenv.lib.optionalString withDoc ''
-    make -f Makefile.coq install-doc DOCDIR=$out/share/coq/${coq.coq-version}/
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://ssr.msr-inria.inria.fr/;
-    license = licenses.cecill-b;
-    maintainers = [ maintainers.vbgl maintainers.jwiegley ];
-    platforms = coq.meta.platforms;
-    hydraPlatforms = [];
-  };
-
+callPackage ./generic.nix {
+  inherit src;
 }
