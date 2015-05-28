@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       replacing #includes with forward-declares when possible.
     '';
     homepage = http://include-what-you-use.com;
-    license = with licenses; bsd3;
+    license = licenses.bsd3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

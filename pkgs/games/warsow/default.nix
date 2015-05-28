@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.warsow.net;
     # Engine is under GPLv2, everything else is under
-    license = with licenses; unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = with platforms; linux;
   };

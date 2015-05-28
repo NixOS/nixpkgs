@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       efficient workflow tool.
     '';
     homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://red.planetarena.org;
     # Engine is under GPLv2, everything else is under
-    license = with licenses; unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
     hydraPlatforms = [];

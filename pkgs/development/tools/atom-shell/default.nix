@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Cross platform desktop application shell";
     homepage = https://github.com/atom/atom-shell;
-    license = [ licenses.mit ];
+    license = licenses.mit;
     maintainers = [ maintainers.fluffynukeit ];
     platforms = [ "x86_64-linux" ];
   };

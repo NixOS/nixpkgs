@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://lwn.net/Articles/421072/";
     description = "cat replacement";
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight ];
     platforms = with platforms; all;
   };

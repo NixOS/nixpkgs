@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     homepage = http://cassandra.apache.org/;
     description = "A massively scalable open source NoSQL database";
     platforms = with platforms; all;
-    license = with licenses; asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ nckx rushmorem ];
   };
 }

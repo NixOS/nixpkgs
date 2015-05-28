@@ -26,6 +26,6 @@ trivialBuild rec {
   meta = with lib; {
     description = "An analog indicator of the position in the buffer";
     homepage = https://github.com/TeMPOraL/nyan-mode/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
   };
 }

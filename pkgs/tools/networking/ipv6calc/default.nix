@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       Now only one utiltity is needed to do a lot.
     '';
     homepage = http://www.deepspace6.net/projects/ipv6calc.html;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

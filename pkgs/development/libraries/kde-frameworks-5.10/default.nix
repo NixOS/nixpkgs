@@ -113,7 +113,7 @@ let
         meta =
           let inherit (builtins.parseDrvName super.extra-cmake-modules.name) version; in
           {
-            license = with stdenv.lib.licenses; [ bsd2 ];
+            license = stdenv.lib.licenses.bsd2;
             platforms = stdenv.lib.platforms.linux;
             maintainers = with stdenv.lib.maintainers; [ ttuegel ];
             homepage = "http://www.kde.org";

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.creytiv.com/baresip.html";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
-    license = with stdenv.lib.licenses; gpl2;
+    license = stdenv.lib.licenses.gpl2;
     downloadPage = "http://www.soft-switch.org/downloads/spandsp/";
     inherit version;
     updateWalker = true;

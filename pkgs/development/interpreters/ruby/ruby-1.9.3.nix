@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    license     = with licenses; [ ruby ];
+    license     = licenses.ruby;
     homepage    = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
     maintainers = with maintainers; [ lovek323 ];

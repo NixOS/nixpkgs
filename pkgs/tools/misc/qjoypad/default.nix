@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       experience just a little bit nicer.
     '';
     homepage = http://qjoypad.sourceforge.net;
-    license = with stdenv.lib.licenses; gpl2;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = with stdenv.lib.platforms; linux;
   };

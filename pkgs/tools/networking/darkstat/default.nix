@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       - Supports IPv6.
     '';
     homepage = http://unix4lyfe.org/darkstat;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ nckx ];
   };
 }

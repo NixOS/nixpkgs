@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Qt 5 Cryptographic Architecture";
     homepage = http://delta.affinix.com/qca;
     maintainers = with maintainers; [ ttuegel ];
-    license = with licenses; [ lgpl21Plus ];
+    license = licenses.lgpl21Plus;
   };
 }

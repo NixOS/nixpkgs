@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       to life, and all the consequences that ensue.
     '';
     homepage = http://www.strangeloopgames.com;
-    license = with licenses; unfree;
+    license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
   };
 

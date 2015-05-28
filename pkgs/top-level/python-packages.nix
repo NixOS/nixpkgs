@@ -1766,7 +1766,7 @@ let
         A Python package for creating beautiful command line interfaces in a
         composable way, with as little code as necessary.
       '';
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -5412,7 +5412,7 @@ let
         It's just one file and is implemented using ctypes.
       '';
       homepage = http://github.com/terencehonles/fusepy;
-      license = with licenses; isc;
+      license = licenses.isc;
       platforms = with platforms; linux;
       maintainers = with maintainers; [ nckx ];
     };
@@ -5513,7 +5513,7 @@ let
         - Allow for the same file at multiple paths.
       '';
       homepage = https://github.com/dsoprea/GDriveFS;
-      license = with licenses; gpl2;
+      license = licenses.gpl2;
       platforms = with platforms; linux;
       maintainers = with maintainers; [ nckx ];
     };
@@ -5664,7 +5664,7 @@ let
         anywhere within your gevent-powered application.
       '';
       homepage = http://gehrcke.de/gipc;
-      license = with licenses; mit;
+      license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -8058,7 +8058,7 @@ let
         not a large parsing framework or a component of some larger system.
       '';
 
-      license = with licenses; bsd3;
+      license = licenses.bsd3;
 
       maintainers = [ ];
     };
@@ -8432,7 +8432,7 @@ let
         syntax highlighting.
       '';
       homepage = http://pgcli.com;
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -8742,7 +8742,7 @@ let
         with a nice interactive Python shell (called ptpython) built on top.
       '';
       homepage = https://github.com/jonathanslenders/python-prompt-toolkit;
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -9047,7 +9047,7 @@ let
     meta = {
       homepage = https://pypi.python.org/pypi/pygit2;
       description = "A set of Python bindings to the libgit2 shared library";
-      license = with licenses; gpl2;
+      license = licenses.gpl2;
       platforms = with platforms; all;
     };
   };
@@ -9489,7 +9489,7 @@ let
     meta = {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
-      license = with licenses; [ bsd2 ];
+      license = licenses.bsd2;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -10190,7 +10190,7 @@ let
 
     meta = {
       homepage    = "https://github.com/rackspace/pyrax";
-      license     = with licenses; mit;
+      license     = licenses.mit;
       description = "Python API to interface with Rackspace";
     };
 
@@ -10266,7 +10266,7 @@ let
 
     meta = {
       homepage = "http://github.com/mongodb/mongo-python-driver";
-      license = with licenses; [ asl20 ];
+      license = licenses.asl20;
       description = "Python driver for MongoDB ";
     };
   };
@@ -10334,7 +10334,7 @@ let
         in Python.
       '';
 
-      license = with licenses; bsd3;
+      license = licenses.bsd3;
 
       maintainers = [ ];
     };
@@ -10726,7 +10726,7 @@ let
     meta = {
       description = "Check the status of code repositories under a root directory";
       homepage = https://github.com/kynikos/repocheck;
-      license = with licenses; gpl3Plus;
+      license = licenses.gpl3Plus;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -12144,7 +12144,7 @@ let
         Provides support for parsing, splitting and formatting SQL statements.
       '';
       homepage = https://github.com/andialbrecht/sqlparse;
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -13182,7 +13182,7 @@ let
         no 3rd-party dependencies.
       '';
       homepage = https://github.com/jquast/wcwidth;
-      license = with licenses; [ mit ];
+      license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
     };
   };

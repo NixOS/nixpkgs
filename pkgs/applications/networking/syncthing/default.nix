@@ -25,7 +25,7 @@ buildGoPackage rec {
   meta = {
     homepage = http://syncthing.net/;
     description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
-    license = with lib.licenses; mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matejc ];
     platforms = with lib.platforms; unix;
   };

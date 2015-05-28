@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     inherit version;
     description = "Log machine checks (memory, IO, and CPU hardware errors)";
     homepage = http://mcelog.org/;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ nckx ];
   };
 }

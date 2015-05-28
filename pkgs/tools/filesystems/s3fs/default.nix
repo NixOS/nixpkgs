@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   
   meta = with stdenv.lib; {
     description = "Mount an S3 bucket as filesystem through FUSE";
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
   };
 }

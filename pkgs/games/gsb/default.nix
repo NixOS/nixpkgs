@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       battle (or at least blow to bits in aesthetically pleasing ways).
     '';
     homepage = http://www.positech.co.uk/gratuitousspacebattles/index.html;
-    license = with licenses; unfree;
+    license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
     platforms = [ "x86_64-linux" "i686-linux" ] ;
   };

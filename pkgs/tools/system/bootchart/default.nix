@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.bootchart.org/;
     description = "Performance analysis and visualization of the GNU/Linux boot process";
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
   };
 
 }

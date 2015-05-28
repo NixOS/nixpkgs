@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    license = with licenses; bsd3;
+    license = licenses.bsd3;
 
     platforms = platforms.all;
     maintainers = [ maintainers.simons ];

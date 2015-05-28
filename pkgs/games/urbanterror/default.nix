@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       realism". This results in a very unique, enjoyable and addictive game.
     '';
     homepage = http://www.urbanterror.net;
-    license = with licenses; unfreeRedistributable;
+    license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;
     hydraPlatforms = [];

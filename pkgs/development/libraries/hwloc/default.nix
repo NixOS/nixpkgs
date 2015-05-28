@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     '';
 
     # http://www.open-mpi.org/projects/hwloc/license.php
-    license = with licenses; bsd3;
+    license = licenses.bsd3;
 
     homepage = http://www.open-mpi.org/projects/hwloc/;
 
