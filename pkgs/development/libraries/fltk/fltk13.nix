@@ -15,6 +15,12 @@ composableDerivation.composableDerivation {} {
     sha256 = "15qd7lkz5d5ynz70xhxhigpz3wns39v9xcf7ggkl0792syc8sfgq";
   };
 
+  # http://www.fltk.org/str.php?L3156
+  postPatch = ''
+    substituteInPlace FL/x.H \
+      --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
+  '';
+
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
   enableParallelBilding = true;
