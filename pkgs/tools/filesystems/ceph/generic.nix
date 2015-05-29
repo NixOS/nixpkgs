@@ -63,13 +63,13 @@ let
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
   hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
-    versionAtLeast version "0.95" &&
+    versionAtLeast version "9.0.0" &&
     optAccelio != null && optLibibverbs != null && optLibrdmacm != null;
 
-  hasRocksdb = versionAtLeast version "0.95" && optRocksdb != null;
+  hasRocksdb = versionAtLeast version "9.0.0" && optRocksdb != null;
 
   # TODO: Reenable when kinetic support is fixed
-  #hasKinetic = versionAtLeast version "0.95" && optKinetic-cpp-client != null;
+  #hasKinetic = versionAtLeast version "9.0.0" && optKinetic-cpp-client != null;
   hasKinetic = false;
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
@@ -124,6 +124,9 @@ stdenv.mkDerivation {
 
     # Fix seagate kinetic linking
     sed -i 's,libcrypto.a,-lcrypto,g' src/os/Makefile.am
+  '' + optionalString (versionAtLeast version "9.0.0") ''
+    # Fix gmock
+    patchShebangs src/gmock
   '';
 
   preConfigure = ''
@@ -185,6 +188,10 @@ stdenv.mkDerivation {
     (mkWith   false                        "tcmalloc-minimal"  null)
     (mkWith   false                        "valgrind"          null)
   ];
+
+  preBuild = optionalString (versionAtLeast version "9.0.0") ''
+    (cd src/gmock; make -j $NIX_BUILD_CORES)
+  '';
 
   installFlags = [ "sysconfdir=\${out}/etc" ];
 
