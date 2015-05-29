@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, python, utillinux, openssl, http-parser, zlib, libuv }:
+{ stdenv, fetchurl, python, utillinux, openssl_1_0_2, http-parser, zlib, libuv }:
 
 let
-  version = "1.6.4";
+  version = "2.1.0";
   inherit (stdenv.lib) optional maintainers licenses platforms;
 in stdenv.mkDerivation {
   name = "iojs-${version}";
 
   src = fetchurl {
     url = "https://iojs.org/dist/v${version}/iojs-v${version}.tar.gz";
-    sha256 = "1qzvf7g457dppzxn23wppjcm09vh1n6bhsvz5szhwgjvl0iv2pc7";
+    sha256 = "0v6jzsrq3ym0nqy7nb9chn8ij79agifwdvsp5nysgr609na7617i";
   };
 
   prePatch = ''
@@ -17,7 +17,11 @@ in stdenv.mkDerivation {
 
   configureFlags = [ "--shared-openssl" "--shared-http-parser" "--shared-zlib" "--shared-libuv" ];
 
-  buildInputs = [ python openssl http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
+  # iojs has --enable-static but no --disable-static. Automatically adding --disable-static
+  # causes configure to fail, so don't add --disable-static.
+  dontDisableStatic = true;
+
+  buildInputs = [ python openssl_1_0_2 http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
   setupHook = ../nodejs/setup-hook.sh;
 
   passthru.interpreterName = "iojs";
