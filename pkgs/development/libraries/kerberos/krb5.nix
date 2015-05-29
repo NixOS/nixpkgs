@@ -3,7 +3,7 @@
 
 # Optional Dependencies
 , libedit ? null, readline ? null, ncurses ? null, libverto ? null
-, openldap ? null, db ? null
+, openldap ? null
 
 # Crypto Dependencies
 , openssl ? null, nss ? null, nspr ? null
@@ -24,7 +24,6 @@ let
   optNcurses = if libOnly then null else shouldUsePkg ncurses;
   optLibverto = shouldUsePkg libverto;
   optOpenldap = if libOnly then null else shouldUsePkg openldap;
-  optDb = if libOnly then null else shouldUsePkg db;
 
   # Prefer the openssl implementation
   cryptoStr = if optOpenssl != null then "openssl"
@@ -94,7 +93,7 @@ stdenv.mkDerivation rec {
     (mkWith   (optLibverto != null)         "system-verto"        null)
     (mkWith   (optOpenldap != null)         "ldap"                null)
     (mkWith   false                         "tcl"                 null)
-    (mkWith   (optDb != null)               "system-db"           null)
+    (mkWith   false                         "system-db"           null)  # Requires db v1.85
   ];
 
   buildPhase = optionalString libOnly ''
@@ -106,11 +105,14 @@ stdenv.mkDerivation rec {
 
   installPhase = optionalString libOnly ''
     mkdir -p $out/{bin,include/{gssapi,gssrpc,kadm5,krb5},lib/pkgconfig,sbin,share/{et,man/man1}}
+
     (cd util; make install)
     (cd include; make install)
     (cd lib; make install)
     (cd build-tools; make install)
-    rm -rf $out/{bin,sbin,share}
+
+    rm -rf $out/{sbin,share}
+    find $out/bin -type f | grep -v 'krb5-config' | xargs rm
   '';
 
   enableParallelBuilding = true;
