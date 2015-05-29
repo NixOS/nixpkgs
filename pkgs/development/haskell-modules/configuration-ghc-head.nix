@@ -81,4 +81,7 @@ self: super: {
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
 
+  # Won't work with LLVM 3.5.
+  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
+
 }
