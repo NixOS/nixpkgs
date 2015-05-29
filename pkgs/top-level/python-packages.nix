@@ -1308,8 +1308,6 @@ let
     buildInputs = [ self.nose self.mock ];
     propagatedBuildInputs = [ self.requests self.httpretty ];
 
-    patches = [ ../development/python-modules/boto/content-length-str.patch ];
-
     meta = {
       homepage = https://github.com/boto/boto;
 
