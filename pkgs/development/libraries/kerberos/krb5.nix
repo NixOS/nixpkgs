@@ -3,7 +3,7 @@
 
 # Optional Dependencies
 , libedit ? null, readline ? null, ncurses ? null, libverto ? null
-, openldap ? null, db ? null
+, openldap ? null
 
 # Crypto Dependencies
 , openssl ? null, nss ? null, nspr ? null
@@ -24,7 +24,6 @@ let
   optNcurses = if libOnly then null else shouldUsePkg ncurses;
   optLibverto = shouldUsePkg libverto;
   optOpenldap = if libOnly then null else shouldUsePkg openldap;
-  optDb = if libOnly then null else shouldUsePkg db;
 
   # Prefer the openssl implementation
   cryptoStr = if optOpenssl != null then "openssl"
@@ -94,7 +93,8 @@ stdenv.mkDerivation rec {
     (mkWith   (optLibverto != null)         "system-verto"        null)
     (mkWith   (optOpenldap != null)         "ldap"                null)
     (mkWith   false                         "tcl"                 null)
-    (mkWith   (optDb != null)               "system-db"           null)
+    # krb5 is only compatible with db 1.85 api
+    (mkWith   false                         "system-db"           null)
   ];
 
   buildPhase = optionalString libOnly ''
