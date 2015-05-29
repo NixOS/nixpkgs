@@ -3392,6 +3392,7 @@ let
 
   bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
+    interactive = stdenv.isCygwin; # patch for cygwin requires readline support
   });
 
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
