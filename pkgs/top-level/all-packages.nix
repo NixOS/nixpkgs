@@ -8973,7 +8973,7 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    kerberos = heimdal;
+    kerberos = libheimdal;
     gnutls = gnutls33;
     cups = if stdenv.isDarwin then null else cups;
     pam = if stdenv.isDarwin then null else pam;
