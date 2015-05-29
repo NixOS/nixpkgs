@@ -5109,6 +5109,8 @@ let
 
   bazel = callPackage ../development/tools/build-managers/bazel { jdk = oraclejdk8; };
 
+  bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
+
   binutils = if stdenv.isDarwin
     then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
     else callPackage ../development/tools/misc/binutils {
