@@ -832,4 +832,7 @@ self: super: {
   # https://github.com/BNFC/bnfc/issues/140
   BNFC = dontCheck super.BNFC;
 
+  # FPCO's fork of Cabal won't succeed its test suite.
+  Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
+
 }
