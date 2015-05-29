@@ -7540,6 +7540,14 @@ let
     };
   };
 
+  openssl_1_0_2 = callPackage ../development/libraries/openssl/1.0.2.x.nix {
+    fetchurl = fetchurlBoot;
+    cryptodevHeaders = linuxPackages.cryptodev.override {
+      fetchurl = fetchurlBoot;
+      onlyHeaders = true;
+    };
+  };
+
   ortp = callPackage ../development/libraries/ortp { };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
