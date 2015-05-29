@@ -8794,7 +8794,9 @@ let
     prefix = "lib";
   };
 
-  pulseaudio = pulseaudioFull.override {
+  # Name is changed to prevent use in packages
+  # please use libpulseaudio instead
+  pulseaudioLight = pulseaudioFull.override {
     # The following are disabled in the default build, because if this
     # functionality is desired, they are only needed in the PulseAudio
     # server.
