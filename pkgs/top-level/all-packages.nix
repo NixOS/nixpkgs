@@ -11622,6 +11622,10 @@ let
     fftw = fftwSinglePrec;
   };
 
+  ladspaPlugins-git = callPackage ../applications/audio/ladspa-plugins/git.nix {
+    fftw = fftwSinglePrec;
+  };
+
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   caps = callPackage ../applications/audio/caps { };
