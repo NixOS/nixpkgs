@@ -22,7 +22,7 @@ in
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = literalExample "[ \"\${pkgs.cacert}/etc/ca-bundle.crt\" ]";
+      example = literalExample "[ \"\${pkgs.cacert}/ca-bundle.crt\" ]";
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -53,7 +53,7 @@ in
 
   config = {
 
-    security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ca-bundle.crt" ];
+    security.pki.certificateFiles = [ "${pkgs.cacert}/ca-bundle.crt" ];
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
