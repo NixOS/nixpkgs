@@ -6328,9 +6328,9 @@ let
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
-  # TODO : Add MIT Kerberos and let admin choose.
-  # TODO : Fix kerberos on Darwin
-  kerberos = if stdenv.isDarwin then null else heimdal;
+  # TODO : Add Heimdal Kerberos and let admin choose.
+  # Modularize heimdal into a library first
+  kerberos = libkrb5;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     openldap = openldap.override {
@@ -6464,9 +6464,6 @@ let
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
-    openldap = openldap.override {
-      cyrus_sasl = cyrus_sasl.override { kerberos = null; };
-    };
     inherit (darwin) bootstrap_cmds;
   };
   libkrb5 = krb5.override {
