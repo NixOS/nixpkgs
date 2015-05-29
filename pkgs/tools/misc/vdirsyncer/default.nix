@@ -10,10 +10,9 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0jrxmq8lq0dvqflmh42hhyvc3jjrg1cg3gzfhdcsskj9zz0m6wai";
   };
 
-  pythonPath = with pythonPackages; [
+  propagatedBuildInputs = with pythonPackages; [
     icalendar
     click
-    requests
     lxml
     setuptools
     requests_toolbelt
