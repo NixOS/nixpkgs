@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, openssl, db, pam
+, libasr, libevent, zlib, openssl, db, pam, cacert
 }:
 
 stdenv.mkDerivation rec {

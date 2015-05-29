@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libsoup, gobjectIntrospection, cacerts }:
+{ stdenv, fetchurl, pkgconfig, glib, libsoup, gobjectIntrospection, cacert }:
 
 stdenv.mkDerivation rec {
   name = "rest-0.7.92";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib libsoup gobjectIntrospection];
 
-  configureFlags = "--with-ca-certificates=${cacerts}/ca-bundle.crt";
+  configureFlags = "--with-ca-certificates=${cacert}/ca-bundle.crt";
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

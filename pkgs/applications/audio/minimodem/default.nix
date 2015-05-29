@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fftw, fftwSinglePrec, alsaLib, libsndfile, linbpulseaudio }:
+{ stdenv, fetchurl, pkgconfig, fftw, fftwSinglePrec, alsaLib, libsndfile, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   version = "0.19";
