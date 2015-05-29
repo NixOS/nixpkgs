@@ -14,7 +14,7 @@ with lib;
 
   # Don't put old configurations in the GRUB menu.  The user has no
   # way to select them anyway.
-  boot.loader.grub.configurationLimit = 0;
+  boot.loader.grub.configurationLimit = 1;
 
   fileSystems."/".device = "/dev/disk/by-label/nixos";
 
