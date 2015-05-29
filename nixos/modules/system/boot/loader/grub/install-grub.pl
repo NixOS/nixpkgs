@@ -11,7 +11,7 @@ require List::Compare;
 use POSIX;
 use Cwd;
 
-my $defaultConfig = $ARGV[0] or die;
+my $defaultConfig = $ARGV[1] or die;
 
 my $dom = XML::LibXML->load_xml(location => $ARGV[0]);
 

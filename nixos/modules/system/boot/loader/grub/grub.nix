@@ -354,7 +354,7 @@ in
         export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args}
+        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args} $@
       ''));
 
       system.build.grub = grub;
