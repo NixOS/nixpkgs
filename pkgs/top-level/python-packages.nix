@@ -7802,50 +7802,13 @@ let
     };
   };
 
-  # Special check phase for numpy and scipy, following the same set of steps:
-  # First "install" the package, then import what was installed, and call the
-  # .test() function, which will run the test suite.
-  numpyScipyCheckPhase = python: pkgName: ''
-    runHook preCheck
-
-    _python=${python}/bin/${python.executable}
-
-    # We will "install" into a temp directory, so that we can run the numpy
-    # tests (see below).
-    install_dir="$TMPDIR/test_install"
-    install_lib="$install_dir/lib/${python.libPrefix}/site-packages"
-    mkdir -p $install_dir
-    $_python setup.py install \
-      --install-lib=$install_lib \
-      --old-and-unmanageable \
-      --prefix=$install_dir > /dev/null
-
-    # Create a directory in which to run tests (you get an error if you try to
-    # import the package when you're in the current directory).
-    mkdir $TMPDIR/run_tests
-    pushd $TMPDIR/run_tests > /dev/null
-    # Temporarily add the directory we installed in to the python path
-    # (not permanently, or this pythonpath will wind up getting exported),
-    # and run the test suite.
-    PYTHONPATH="$install_lib:$PYTHONPATH" $_python -c \
-      'import ${pkgName}; ${pkgName}.test("fast", verbose=10)'
-    popd > /dev/null
-
-    runHook postCheck
-  '';
-
-  # Special prebuild step for numpy and scipy. Creates a site.cfg telling
-  # the setup script where to find depended-on math libraries.
-  numpyScipyPrebuild = ''
-    echo "Creating site.cfg file..."
-    cat << EOF > site.cfg
-    [atlas]
-    include_dirs = ${pkgs.atlasWithLapack}/include
-    library_dirs = ${pkgs.atlasWithLapack}/lib
-    EOF
-  '';
-
-  numpy = buildPythonPackage ( rec {
+  numpy = let
+    support = import ./python-support/numpy-scipy-support.nix {
+      inherit python;
+      atlas = atlasWithLapack;
+      pkgName = "numpy";
+    };
+  in buildPythonPackage ( rec {
     name = "numpy-1.9.2";
 
     src = pkgs.fetchurl {
@@ -7860,14 +7823,12 @@ let
       sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
-    preBuild = self.numpyScipyPrebuild;
+    inherit (support) preBuild checkPhase;
 
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
     propagatedBuildInputs = [ pkgs.atlas ];
-
-    checkPhase = self.numpyScipyCheckPhase python "numpy";
 
     meta = {
       description = "Scientific tools for Python";
@@ -11219,7 +11180,13 @@ let
   };
 
 
-  scipy = buildPythonPackage rec {
+  scipy = let
+    support = import ./python-support/numpy-scipy-support.nix {
+      inherit python;
+      atlas = atlasWithLapack;
+      pkgName = "numpy";
+    };
+  in buildPythonPackage rec {
     name = "scipy-0.15.1";
 
     src = pkgs.fetchurl {
@@ -11230,16 +11197,13 @@ let
     buildInputs = [ pkgs.gfortran self.nose ];
     propagatedBuildInputs = [ self.numpy ];
 
-    # TODO: add ATLAS=${pkgs.atlas}
     preConfigure = ''
       sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
-    preBuild = self.numpyScipyPrebuild;
+    inherit (support) preBuild checkPhase;
 
     setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
-
-    checkPhase = self.numpyScipyCheckPhase python "scipy";
 
     meta = {
       description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
