@@ -12432,9 +12432,7 @@ let
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
- vdirsyncer = callPackage ../tools/misc/vdirsyncer {
-   pythonPackages = python3Packages;
- };
+  vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
