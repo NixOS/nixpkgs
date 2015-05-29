@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "yodl-${version}";
-  version = "3.05.00";
+  version = "3.05.01";
 
   buildInputs = [ perl icmake ];
 
   src = fetchurl {
     url = "mirror://sourceforge/yodl/yodl_${version}.orig.tar.gz";
-    sha256 = "12hv5ghrsk6kdi414glg888v3qk3m1nmicl8f0h5k4szm1i00dig";
+    sha256 = "0ghdzr3lzgfzvfymnjbj4mw8vpq098swvipxghhqgfmv58dhwgas";
   };
 
   preConfigure = ''

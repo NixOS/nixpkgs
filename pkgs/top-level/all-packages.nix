@@ -769,6 +769,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  cli53 = callPackage ../tools/admin/cli53 { };
+
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
   consul = goPackages.consul;
@@ -866,7 +868,7 @@ let
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
-    krb5 = null;
+    libkrb5 = null;
     systemd = null;
     jemalloc = null;
     libmysql = null;
@@ -3390,6 +3392,7 @@ let
 
   bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
+    interactive = stdenv.isCygwin; # patch for cygwin requires readline support
   });
 
   bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
@@ -4777,10 +4780,12 @@ let
 
   nix-exec = callPackage ../development/interpreters/nix-exec {
     git = gitMinimal;
+
+    nix = nixUnstable;
   };
 
   octave = callPackage ../development/interpreters/octave {
-    fltk = fltk13;
+    fltk = fltk13.override { cfg.xftSupport = true; };
     qt = null;
     ghostscript = null;
     llvm = null;
@@ -4790,7 +4795,7 @@ let
     jdk = null;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
-    fltk = fltk13;
+    fltk = fltk13.override { cfg.xftSupport = true; };
     qt = qt4;
   }));
 
@@ -4805,7 +4810,7 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  perl = if system != "i686-cygwin" then perl520 else sysPerl;
+  perl = perl520;
 
   php = php56;
 
@@ -4962,8 +4967,6 @@ let
   };
 
   supercollider_scel = supercollider.override { useSCEL = true; };
-
-  sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
 
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
@@ -5279,6 +5282,8 @@ let
       gccRaw = gcc.cc;
       binutils = binutils;
     };
+
+  doclifter = callPackage ../development/tools/misc/doclifter { };
 
   docutils = pythonPackages.docutils;
 
@@ -5954,7 +5959,7 @@ let
     libvpx = if stdenv.isDarwin then null else libvpx;
     openal = if stdenv.isDarwin then null else openal;
     openjpeg_1 = if stdenv.isDarwin then null else openjpeg_1;
-    pulseaudio = if stdenv.isDarwin then null else pulseaudio;
+    libpulseaudio = if stdenv.isDarwin then null else libpulseaudio;
     samba = if stdenv.isDarwin then null else samba;
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
@@ -6464,6 +6469,9 @@ let
     };
     inherit (darwin) bootstrap_cmds;
   };
+  libkrb5 = krb5.override {
+    prefix = "lib";
+  };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
@@ -6856,7 +6864,9 @@ let
   # standalone libiconv, just in case you want it
   libiconv = if stdenv.isGlibc then stdenv.cc.libc else libiconvReal;
 
-  libiconvReal = callPackage ../development/libraries/libiconv { };
+  libiconvReal = callPackage ../development/libraries/libiconv {
+    fetchurl = fetchurlBoot;
+  };
 
   # On non-GNU systems we need GNU Gettext for libintl.
   libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;
@@ -7169,6 +7179,10 @@ let
   libva = callPackage ../development/libraries/libva { };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
+
+  libverto = callPackage ../development/libraries/libverto {
+    glib = null; # Don't include fairly heavy dependency
+  };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
@@ -7506,7 +7520,7 @@ let
   opal = callPackage ../development/libraries/opal {};
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
-  openjpeg_2_0_1 = callPackage ../development/libraries/openjpeg/2.0.1.nix { };
+  openjpeg_2_0 = callPackage ../development/libraries/openjpeg/2.0.nix { };
   openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
   openjpeg = openjpeg_2_1;
 
@@ -7522,6 +7536,14 @@ let
   boringssl = callPackage ../development/libraries/boringssl { };
 
   openssl = callPackage ../development/libraries/openssl {
+    fetchurl = fetchurlBoot;
+    cryptodevHeaders = linuxPackages.cryptodev.override {
+      fetchurl = fetchurlBoot;
+      onlyHeaders = true;
+    };
+  };
+
+  openssl_1_0_2 = callPackage ../development/libraries/openssl/1.0.2.x.nix {
     fetchurl = fetchurlBoot;
     cryptodevHeaders = linuxPackages.cryptodev.override {
       fetchurl = fetchurlBoot;
@@ -8220,6 +8242,8 @@ let
 
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
+  zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
+
   zziplib = callPackage ../development/libraries/zziplib { };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
@@ -8530,9 +8554,7 @@ let
 
   ### SERVERS
 
-  "389-ds-base" = callPackage ../servers/ldap/389 {
-    kerberos = krb5;
-  };
+  "389-ds-base" = callPackage ../servers/ldap/389 { };
 
   rdf4store = callPackage ../servers/http/4store { };
 
@@ -8720,6 +8742,8 @@ let
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
+  microHttpd = callPackage ../servers/http/micro-httpd { };
+
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
   mlmmj = callPackage ../servers/mail/mlmmj { };
@@ -8770,7 +8794,9 @@ let
     prefix = "lib";
   };
 
-  pulseaudio = pulseaudioFull.override {
+  # Name is changed to prevent use in packages
+  # please use libpulseaudio instead
+  pulseaudioLight = pulseaudioFull.override {
     # The following are disabled in the default build, because if this
     # functionality is desired, they are only needed in the PulseAudio
     # server.
@@ -9155,7 +9181,13 @@ let
 
   atop = callPackage ../os-specific/linux/atop { };
 
-  audit = callPackage ../os-specific/linux/audit { };
+  audit = callPackage ../os-specific/linux/audit {
+    python = null;
+    go = null;
+  };
+  libaudit = audit.override {
+    prefix = "lib";
+  };
 
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
@@ -11797,8 +11829,6 @@ let
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
     vaapiSupport = config.mpv.vaapiSupport or false;
-    # YouTube needs network support and potentially openssl/tls
-    ffmpeg = if youtubeSupport then ffmpeg-full else ffmpeg;
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
@@ -11880,7 +11910,7 @@ let
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
   mupdf = callPackage ../applications/misc/mupdf {
-    openjpeg = openjpeg_2_0_1;
+    openjpeg = openjpeg_2_0;
   };
 
   mypaint = callPackage ../applications/graphics/mypaint { };

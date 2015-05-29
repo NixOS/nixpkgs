@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libsepol, libselinux, ustr, bzip2, bison, flex, audit }:
+{ stdenv, fetchurl, libsepol, libselinux, ustr, bzip2, bison, flex, libaudit }:
 stdenv.mkDerivation rec {
 
   name = "libsemanage-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   NIX_CFLAGS_LINK = "-lsepol";
 
-  buildInputs = [ libsepol libselinux ustr bzip2 bison flex audit ];
+  buildInputs = [ libsepol libselinux ustr bzip2 bison flex libaudit ];
 
   meta = with stdenv.lib; {
     inherit (libsepol.meta) homepage platforms maintainers;

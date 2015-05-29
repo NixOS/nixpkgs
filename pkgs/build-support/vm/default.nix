@@ -694,7 +694,17 @@ rec {
     runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
-        bunzip2 < $i >> ./Packages
+        case $i in
+          *.xz | *.lzma)
+            xz -d < $i >> ./Packages
+            ;;
+          *.bz2)
+            bunzip2 < $i >> ./Packages
+            ;;
+          *.gz)
+            gzip -dc < $i >> ./Packages
+            ;;
+        esac
       done
 
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
@@ -1698,6 +1708,27 @@ rec {
       packages = commonDebianPackages;
     };
 
+    debian8i386 = {
+      name = "debian-8.0-jessie-i386";
+      fullName = "Debian 8.0 Jessie (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
+        sha256 = "0lrv1lnd595c346ci7z8ja2b0rm2gx5r4hwp0wbp9lzxi8k5nk1d";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian8x86_64 = {
+      name = "debian-8.0-jessie-amd64";
+      fullName = "Debian 8.0 Jessie (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
+        sha256 = "0hhagvybciy89wr1cy9dgdfki668dvcywgbz4w01qwivyd6dsia4";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
   };
 
 

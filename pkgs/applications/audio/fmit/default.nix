@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       ALSA or JACK as sound input library.
     '';
     homepage = http://home.gna.org/fmit/index.html;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

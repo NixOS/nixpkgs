@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = ''Simple Theorem Prover'';
     maintainers = with stdenv.lib.maintainers; [mornfall];
     platforms = with stdenv.lib.platforms; linux;
-    license = with stdenv.lib.licenses; mit;
+    license = stdenv.lib.licenses.mit;
   };
 }

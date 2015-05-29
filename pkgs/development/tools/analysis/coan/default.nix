@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       application of this sort.
     '';
     homepage = http://coan2.sourceforge.net/;
-    license = with licenses; bsd3;
+    license = licenses.bsd3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

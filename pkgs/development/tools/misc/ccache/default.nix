@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = http://ccache.samba.org/;
     downloadPage = https://ccache.samba.org/download.html;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nckx ];
   };
 };

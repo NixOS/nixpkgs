@@ -12,6 +12,8 @@ let
   attribsArg = optionalString (cfg.attributes != {})
                               "--attributes=${mkAttributes cfg.attributes}";
 
+  containerizers = [ "mesos" ] ++ (optional cfg.withDocker "docker");
+
 in {
 
   options.services.mesos = {
@@ -22,8 +24,14 @@ in {
         type = types.uniq types.bool;
       };
 
+      ip = mkOption {
+        description = "IP address to listen on.";
+        default = "0.0.0.0";
+        type = types.string;
+      };
+
       port = mkOption {
-        description = "Mesos Slave port";
+        description = "Port to listen on.";
         default = 5051;
         type = types.int;
       };
@@ -40,6 +48,12 @@ in {
       withHadoop = mkOption {
         description = "Add the HADOOP_HOME to the slave.";
         default = false;
+        type = types.bool;
+      };
+
+      withDocker = mkOption {
+        description = "Enable the docker containerizer.";
+        default = config.virtualisation.docker.enable;
         type = types.bool;
       };
 
@@ -92,17 +106,18 @@ in {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      environment.MESOS_CONTAINERIZERS = "docker,mesos";
+      environment.MESOS_CONTAINERIZERS = concatStringsSep "," containerizers;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.mesos}/bin/mesos-slave \
+            --ip=${cfg.ip} \
             --port=${toString cfg.port} \
             --master=${cfg.master} \
-            ${optionalString cfg.withHadoop "--hadoop-home=${pkgs.hadoop}"} \
-            ${attribsArg} \
             --work_dir=${cfg.workDir} \
             --logging_level=${cfg.logLevel} \
-            --docker=${pkgs.docker}/libexec/docker/docker \
+            ${attribsArg} \
+            ${optionalString cfg.withHadoop "--hadoop-home=${pkgs.hadoop}"} \
+            ${optionalString cfg.withDocker "--docker=${pkgs.docker}/libexec/docker/docker"} \
             ${toString cfg.extraCmdLineOptions}
         '';
         PermissionsStartOnly = true;

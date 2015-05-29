@@ -26,7 +26,7 @@
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 , hiDPISupport ? false
 
 , source
@@ -118,7 +118,7 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport pulseaudio;
+      ++ optional pulseSupport libpulseaudio;
 
     # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
     #      be fixed, then try again to unbundle everything into separate

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
+  patches = if stdenv.isCygwin then [ ./3.2.1-cygwin.patch ] else null;
+
   buildInputs = stdenv.lib.optional doCheck dejagnu;
 
   configureFlags = [

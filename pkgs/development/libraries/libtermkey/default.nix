@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Terminal keypress reading library";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
   };
 }

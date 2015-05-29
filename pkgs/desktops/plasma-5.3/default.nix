@@ -53,7 +53,7 @@ let
         GTK3 = gtk3;
         Libinput = libinput;
         LibSSH = libssh;
-        PulseAudio = pulseaudio;
+        PulseAudio = libpulseaudio;
         Taglib = taglib;
         USB = libusb;
         Wayland = wayland;

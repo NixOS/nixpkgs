@@ -1,33 +1,43 @@
-{ stdenv, fetchurl, jack2, libclthreads, libclxclient, fftwFloat, libsndfile, freetype, x11
+{ stdenv, fetchurl, makeWrapper
+, expat, fftwFloat, fontconfig, freetype, jack2, libclthreads, libclxclient
+, libsndfile, libxcb, xlibs
 }:
 
 stdenv.mkDerivation rec {
   name = "tetraproc-${version}";
   version = "0.8.2";
+
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
     sha256 = "17y3vbm5f6h5cmh3yfxjgqz4xhfwpkla3lqfspnbm4ndlzmfpykv";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [
-   jack2 libclthreads libclxclient fftwFloat libsndfile freetype x11
+    expat jack2 libclthreads libclxclient fftwFloat fontconfig libsndfile freetype
+    libxcb xlibs.libX11 xlibs.libXau xlibs.libXdmcp xlibs.libXft xlibs.libXrender
   ];
 
-  patchPhase = ''
-    cd source
-    sed -e "s@#include <clthreads.h>@#include <${libclthreads}/include>@" -i tetraproc.cc
-    sed -e "s@#include <clxclient.h>@#include <${libclxclient}/include>@" -i *.h
-    sed -e "s@#include <clthreads.h>@#include <${libclthreads}/include>@" -i *.h
-    sed -e "s@#include <clxclient.h>@#include <${libclxclient}/include>@" -i png2img.*
-    sed -e "s@/usr/local@$out@" -i Makefile
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SUFFIX=''"
+  ];
+
+  preConfigure = ''
+    cd ./source/
   '';
 
-  meta = {
+  postInstall = ''
+    # Make sure Jack is avalable in $PATH for tetraproc
+    wrapProgram $out/bin/tetraproc --prefix PATH : "${jack2}/bin"
+  '';
+
+  meta = with stdenv.lib; {
     description = "Converts the A-format signals from a tetrahedral Ambisonic microphone into B-format signals ready for recording";
-    version = "${version}";
-    homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://kokkinizita.linuxaudio.org/linuxaudio/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ magnetophon ];
+    platforms = platforms.linux;
   };
 }

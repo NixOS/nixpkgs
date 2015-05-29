@@ -9,14 +9,14 @@
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
-, pulseaudioSupport ? true, pulseaudio ? null
+, pulseaudioSupport ? true, libpulseaudio ? null
 , portaudioSupport ? false, portaudio ? null }:
 
 assert spellcheckSupport -> (hunspell != null);
 assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
 assert alsaSupport -> (alsaLib != null);
-assert pulseaudioSupport -> (pulseaudio != null);
+assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
 with stdenv.lib;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ++ optional automationSupport lua
     ++ optional openalSupport openal
     ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport pulseaudio
+    ++ optional pulseaudioSupport libpulseaudio
     ++ optional portaudioSupport portaudio
     ;
 

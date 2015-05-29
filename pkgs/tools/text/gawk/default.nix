@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
-  buildInputs = [ libsigsegv ]
+  buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
     ++ stdenv.lib.optional readlineSupport readline;
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
+  configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
     ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
       # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
     ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";

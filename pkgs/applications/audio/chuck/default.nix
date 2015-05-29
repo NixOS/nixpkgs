@@ -1,12 +1,12 @@
 { stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5.0";
+  version = "1.3.5.1";
   name = "chuck-${version}";
 
   src = fetchurl {
     url = "http://chuck.cs.princeton.edu/release/files/chuck-${version}.tgz";
-    sha256 = "0rj2l5k6ncm4jaiq0igwfc2bzryzchk1is1jhk1n7wifxcf3d3k5";
+    sha256 = "0lqzkphfd91kz95nf1wqy0z17r1m70c8inwvnb9fscbiaihwlhfi";
   };
 
   buildInputs = [ bison flex libsndfile which ]

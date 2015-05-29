@@ -17,7 +17,7 @@
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
-, pulseaudioSupport ? true, pulseaudio
+, pulseaudioSupport ? true, libpulseaudio
 , jackSupport ? true, jack2
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt pulseaudioSupport pulseaudio
+    ++ opt pulseaudioSupport libpulseaudio
     ++ opt jackSupport jack2
     ++ opt gmeSupport game-music-emu
     ++ opt icuSupport icu

@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
       unmount the file system with `fusermount -u mountpoint`.
     '';
     homepage = https://github.com/drotiro/boxfs2;
-    license = with licenses; gpl3;
+    license = licenses.gpl3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

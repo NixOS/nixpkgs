@@ -117,7 +117,7 @@ let
         OpenEXR = openexr;
         Poppler = poppler_qt4;
         Prison = prison;
-        PulseAudio = pulseaudio;
+        PulseAudio = libpulseaudio;
         PythonLibrary = python;
         Qalculate = libqalculate;
         QCA2 = qca2;

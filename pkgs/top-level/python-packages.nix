@@ -1294,11 +1294,11 @@ let
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.36.0";
+    version = "2.38.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "1zrlmri89q2090yh9ylx798q4yk54y39v7w7xj101fnwc1r6jlqr";
+      sha256 = "0l7m3lmxmnknnz9svzc7z26rklwckzwqgz6hgackl62gkndryrgj";
     };
 
     checkPhase = ''
@@ -1307,8 +1307,6 @@ let
 
     buildInputs = [ self.nose self.mock ];
     propagatedBuildInputs = [ self.requests self.httpretty ];
-
-    patches = [ ../development/python-modules/boto/content-length-str.patch ];
 
     meta = {
       homepage = https://github.com/boto/boto;
@@ -1766,7 +1764,7 @@ let
         A Python package for creating beautiful command line interfaces in a
         composable way, with as little code as necessary.
       '';
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -5412,7 +5410,7 @@ let
         It's just one file and is implemented using ctypes.
       '';
       homepage = http://github.com/terencehonles/fusepy;
-      license = with licenses; isc;
+      license = licenses.isc;
       platforms = with platforms; linux;
       maintainers = with maintainers; [ nckx ];
     };
@@ -5513,7 +5511,7 @@ let
         - Allow for the same file at multiple paths.
       '';
       homepage = https://github.com/dsoprea/GDriveFS;
-      license = with licenses; gpl2;
+      license = licenses.gpl2;
       platforms = with platforms; linux;
       maintainers = with maintainers; [ nckx ];
     };
@@ -5664,7 +5662,7 @@ let
         anywhere within your gevent-powered application.
       '';
       homepage = http://gehrcke.de/gipc;
-      license = with licenses; mit;
+      license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -7437,12 +7435,12 @@ let
     meta = {
       homepage = http://namebench.googlecode.com/;
       description = "Find fastest DNS servers available";
-      license = [
-        "Apache-2.0"
+      license = with licenses; [
+        asl20
         # third-party program licenses (embedded in the sources)
         "LGPL" # Crystal_Clear
-        "free" # dns
-        "Apache-2.0" # graphy
+        free # dns
+        asl20 # graphy
         "BSD" # jinja2
       ];
       longDescription = ''
@@ -8058,7 +8056,7 @@ let
         not a large parsing framework or a component of some larger system.
       '';
 
-      license = "revised-BSD";
+      license = licenses.bsd3;
 
       maintainers = [ ];
     };
@@ -8432,7 +8430,7 @@ let
         syntax highlighting.
       '';
       homepage = http://pgcli.com;
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -8742,7 +8740,7 @@ let
         with a nice interactive Python shell (called ptpython) built on top.
       '';
       homepage = https://github.com/jonathanslenders/python-prompt-toolkit;
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -9047,7 +9045,7 @@ let
     meta = {
       homepage = https://pypi.python.org/pypi/pygit2;
       description = "A set of Python bindings to the libgit2 shared library";
-      license = with licenses; gpl2;
+      license = licenses.gpl2;
       platforms = with platforms; all;
     };
   };
@@ -9354,6 +9352,32 @@ let
     };
   };
 
+
+  pyev = buildPythonPackage rec {
+    name = "pyev-0.9.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyev/${name}.tar.gz";
+      sha256 = "0rf603lc0s6zpa1nb25vhd8g4y337wg2wyz56i0agsdh7jchl0sx";
+    };
+
+    buildInputs = [ pkgs.libev ];
+
+    postPatch = ''
+      libev_so=${pkgs.libev}/lib/libev.so.4
+      test -f "$libev_so" || { echo "ERROR: File $libev_so does not exist, please fix nix expression for pyev"; exit 1; }
+      sed -i -e "s|libev_dll_name = find_library(\"ev\")|libev_dll_name = \"$libev_so\"|" setup.py
+    '';
+
+    meta = {
+      description = "Python bindings for libev";
+      homepage = https://code.google.com/p/pyev/;
+      license = licenses.gpl3;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
     name = stdenv.lib.nameFromURL url ".tar";
@@ -9463,7 +9487,7 @@ let
     meta = {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
-      license = with licenses; [ bsd2 ];
+      license = licenses.bsd2;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -10164,7 +10188,7 @@ let
 
     meta = {
       homepage    = "https://github.com/rackspace/pyrax";
-      license     = "MIT";
+      license     = licenses.mit;
       description = "Python API to interface with Rackspace";
     };
 
@@ -10240,7 +10264,7 @@ let
 
     meta = {
       homepage = "http://github.com/mongodb/mongo-python-driver";
-      license = [ "Apache-2.0" ];
+      license = licenses.asl20;
       description = "Python driver for MongoDB ";
     };
   };
@@ -10308,7 +10332,7 @@ let
         in Python.
       '';
 
-      license = "revised BSD";
+      license = licenses.bsd3;
 
       maintainers = [ ];
     };
@@ -10700,7 +10724,7 @@ let
     meta = {
       description = "Check the status of code repositories under a root directory";
       homepage = https://github.com/kynikos/repocheck;
-      license = with licenses; gpl3Plus;
+      license = licenses.gpl3Plus;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -12118,7 +12142,7 @@ let
         Provides support for parsing, splitting and formatting SQL statements.
       '';
       homepage = https://github.com/andialbrecht/sqlparse;
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -13156,7 +13180,7 @@ let
         no 3rd-party dependencies.
       '';
       homepage = https://github.com/jquast/wcwidth;
-      license = with licenses; [ mit ];
+      license = licenses.mit;
       maintainers = with maintainers; [ nckx ];
     };
   };
@@ -14964,21 +14988,21 @@ let
     };
   };
 
-  pythonefl_1_13 = buildPythonPackage rec {
+  pythonefl_1_14 = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.13.0";
+    version = "1.14.0";
     src = pkgs.fetchurl {
-      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.bz2";
-      sha256 = "0yy4v0f04dgdz21wd2c09x9w6lzsbq6g12s8895laln44l5aqd82";
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
+      sha256 = "1pns5mdyc069z6j1pywjasdd6v9xka5kjdl2yxpd6ds948dia0q0";
     };
     preConfigure = ''
-      export NIX_CFLAGS_COMPILE="-I${pkgs.e19.efl}/include/eo-1 -I${pkgs.e19.efl}/include/eina-1 -I${pkgs.e19.efl}/include/eina-1/eina -I${pkgs.e19.efl}/include/evas-1 -I${self.dbus}/include/dbus-1.0 -I${pkgs.e19.efl}/include/efl-1 -I${pkgs.e19.efl}/include/eet-1 -I${pkgs.e19.efl}/include/ecore-1 -I${pkgs.e19.efl}/include/ecore-evas-1 -I${pkgs.e19.efl}/include/ecore-file-1 -I${pkgs.e19.efl}/include/ecore-input-1 -I${pkgs.e19.efl}/include/ecore-imf-1 -I${pkgs.e19.efl}/include/ecore-con-1 -I${pkgs.e19.efl}/include/edje-1 -I${pkgs.e19.efl}/include/eldbus-1 -I${pkgs.e19.efl}/include/efreet-1 -I${pkgs.e19.efl}/include/ethumb-client-1 -I${pkgs.e19.efl}/include/ethumb-1 -I${pkgs.e19.efl}/include/ecore-x-1 $NIX_CFLAGS_COMPILE"
+      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
     '';
     buildInputs = with self; [ pkgs.pkgconfig pkgs.e19.efl pkgs.e19.elementary ];
     meta = {
       description = "Python bindings for EFL and Elementary";
       homepage = http://enlightenment.org/;
-      maintainers = with maintainers; [ matejc tstrobel ];
+      maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx ];
       platforms = platforms.linux;
       license = licenses.gpl3;
     };

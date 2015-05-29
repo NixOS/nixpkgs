@@ -337,7 +337,7 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else ./winkler-gnu-blue-640x480.png);
+        else "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png");
     }
 
     (mkIf cfg.enable {
@@ -354,7 +354,7 @@ in
         export PERL5LIB=${makePerlPath (with pkgs.perlPackages; [ FileSlurp XMLLibXML XMLSAX ListCompare ])}
         ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
       '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args}
+        ${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig args} $@
       ''));
 
       system.build.grub = grub;

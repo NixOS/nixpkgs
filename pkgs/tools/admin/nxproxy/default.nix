@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "NX compression proxy";
     homepage = "http://wiki.x2go.org/doku.php/wiki:libs:nx-libs";
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

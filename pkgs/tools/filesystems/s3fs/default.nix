@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   preConfigure = "./autogen.sh";
   buildInputs = [ autoconf automake pkgconfig curl openssl libxml2 fuse ];
   
-  meta = {
+  meta = with stdenv.lib; {
     description = "Mount an S3 bucket as filesystem through FUSE";
-    license = "GPLv2";
+    license = licenses.gpl2;
   };
 }

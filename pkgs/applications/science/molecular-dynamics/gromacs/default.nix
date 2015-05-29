@@ -19,9 +19,9 @@ stdenv.mkDerivation {
     ${if singlePrec then "-DGMX_DOUBLE=OFF" else "-DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF"}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage    = "http://www.gromacs.org";
-    license     = "GPLv2";
+    license     = licenses.gpl2;
     description = "Molecular dynamics software package";
     longDescription = ''
       GROMACS is a versatile package to perform molecular dynamics,

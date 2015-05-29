@@ -108,7 +108,7 @@
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg_1 ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
-, pulseaudio ? null # Pulseaudio input support
+, libpulseaudio ? null # Pulseaudio input support
 , rtmpdump ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
@@ -361,7 +361,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (openh264 != null) "openh264")
     (enableFeature (openjpeg_1 != null) "libopenjpeg")
     (enableFeature (opensslExtlib && gplLicensing) "openssl")
-    (enableFeature (pulseaudio != null) "libpulse")
+    (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
@@ -399,7 +399,7 @@ stdenv.mkDerivation rec {
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     jack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXext libXfixes libXv lzma openal openjpeg_1 pulseaudio rtmpdump
+    libxcb libXext libXfixes libXv lzma openal openjpeg_1 libpulseaudio rtmpdump
     samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
   ] ++ optional openglExtlib mesa
     ++ optionals x11grabExtlib [ libXext libXfixes ]

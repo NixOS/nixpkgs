@@ -11,7 +11,7 @@ require List::Compare;
 use POSIX;
 use Cwd;
 
-my $defaultConfig = $ARGV[0] or die;
+my $defaultConfig = $ARGV[1] or die;
 
 my $dom = XML::LibXML->load_xml(location => $ARGV[0]);
 
@@ -254,10 +254,15 @@ else {
           set timeout=$timeout
         fi
 
+        # Setup the graphics stack for bios and efi systems
+        insmod vbe
+        insmod efi_gop
+        insmod efi_uga
+        insmod font
         if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
-          set gfxmode=640x480
           insmod gfxterm
-          insmod vbe
+          set gfxmode=auto
+          set gfxpayload=keep
           terminal_output gfxterm
         fi
     ";

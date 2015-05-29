@@ -11,7 +11,7 @@ bundlerEnv {
   meta = with lib; {
     description = "Manage complex tmux sessions easily";
     homepage    = https://github.com/tmuxinator/tmuxinator;
-    license     = with licenses; mit;
+    license     = licenses.mit;
     maintainers = with maintainers; [ auntie ];
     platforms   = platforms.unix;
   };

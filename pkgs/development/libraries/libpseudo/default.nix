@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [pkgconfig glib ncurses];
+  buildInputs = [ pkgconfig glib ncurses ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libpseudo.sourceforge.net/;
     description = "Simple, thread-safe messaging between threads";
-    license="GPLv2+";
+    license = licenses.gpl2Plus;
   };
 }

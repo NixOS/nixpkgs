@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://code.google.com/p/re2/;
     description = "An efficient, principled regular expression library";
-    license = with stdenv.lib.licenses; bsd3;
+    license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; all;
   };
 }
