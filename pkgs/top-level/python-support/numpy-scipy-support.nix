@@ -16,7 +16,7 @@
 
     _python=${python}/bin/${python.executable}
 
-    # We will "install" into a temp directory, so that we can run the numpy
+    # We will "install" into a temp directory, so that we can run the
     # tests (see below).
     install_dir="$TMPDIR/test_install"
     install_lib="$install_dir/lib/${python.libPrefix}/site-packages"

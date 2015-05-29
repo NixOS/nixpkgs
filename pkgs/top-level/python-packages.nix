@@ -7805,7 +7805,7 @@ let
   numpy = let
     support = import ./python-support/numpy-scipy-support.nix {
       inherit python;
-      atlas = atlasWithLapack;
+      atlas = pkgs.atlasWithLapack;
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
@@ -11183,7 +11183,7 @@ let
   scipy = let
     support = import ./python-support/numpy-scipy-support.nix {
       inherit python;
-      atlas = atlasWithLapack;
+      atlas = pkgs.atlasWithLapack;
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
