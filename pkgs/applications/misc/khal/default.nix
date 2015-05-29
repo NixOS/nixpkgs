@@ -22,6 +22,7 @@ pythonPackages.buildPythonPackage rec {
     requests_toolbelt
     tzlocal
     urwid
+    python.modules.sqlite3
   ];
 
   meta = {
