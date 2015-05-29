@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl
-, yacc, bootstrap_cmds
+, yacc, gawk, bootstrap_cmds
 
 # Optional Dependencies
 , libedit ? null, readline ? null, ncurses ? null, libverto ? null
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "AWK=${gawk}/bin/gawk"
     (mkOther                                "sysconfdir"          "/etc")
     (mkOther                                "localstatedir"       "/var")
     (mkEnable false                         "athena"              null)
@@ -110,7 +111,9 @@ stdenv.mkDerivation rec {
     (cd include; make install)
     (cd lib; make install)
     (cd build-tools; make install)
-    rm -rf $out/{bin,sbin,share}
+
+    # we should keep $out/bin due  bin/krb5-config
+    rm -rf $out/{sbin,share/man}
   '';
 
   enableParallelBuilding = true;
