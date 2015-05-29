@@ -13835,11 +13835,13 @@ let
 
   jags = callPackage ../applications/science/math/jags { };
 
-  liblapack = callPackage ../development/libraries/science/math/liblapack { };
+  liblapack = callPackage ../development/libraries/science/math/liblapack { 
+    atlas = null;
+  };
 
   liblapackWithAtlas = liblapack.override { inherit atlas; };
 
-  liblapack_3_5_0 = liblapack.override { version = "3.5.0"; };
+  liblapack_3_5_0 = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix { };
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 

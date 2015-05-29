@@ -13,14 +13,14 @@ let
   usedLibExtension = if shared then ".so" else ".a";
   inherit (stdenv.lib) optional optionals concatStringsSep;
   inherit (builtins) hasAttr attrNames;
-  version = "3.4.1";
+  version = "3.5.0";
 in
 
 stdenv.mkDerivation rec {
   name = "liblapack-${version}";
   src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${version}.tgz";
-    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
+    sha256 = "0lk3f97i9imqascnlf6wr5mjpyxqcdj73pgj97dj2mgvyg9z1n4s";
   };
 
   propagatedBuildInputs = [ atlasMaybeShared ];
