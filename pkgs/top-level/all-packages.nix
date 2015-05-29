@@ -3443,6 +3443,8 @@ let
 
   avra = callPackage ../development/compilers/avra { };
 
+  azulZulu = callPackage ../development/compilers/azul-zulu { };
+
   bigloo = callPackage ../development/compilers/bigloo { };
 
   colm = callPackage ../development/compilers/colm { };
