@@ -337,7 +337,7 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else ./winkler-gnu-blue-640x480.png);
+        else "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png");
     }
 
     (mkIf cfg.enable {
