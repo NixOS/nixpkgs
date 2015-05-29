@@ -1,11 +1,11 @@
 { callPackage, fetchgit, git, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "2015-04-22";
+  version = "2015-05-29";
 
   src = fetchgit {
     url = "git://github.com/ceph/ceph.git";
-    rev = "89262abc53e324f3ef4d504473a4f1d6eb337c20";
-    sha256 = "0d6hlk1nwgx9cdhvppggz6sbjc1jl8j26l9739qspw1sviac5lcb";
+    rev = "64096b870960d021ab5001b6a5cf3a999a9abeb7";
+    sha256 = "18lcn4misyvgjh7r0vkal480x23yr8pcjwzl4k4hbrpqmm97znp9";
   };
 })
