@@ -142,7 +142,7 @@ let
       # Generate certificates.
       pushd $jre/lib/openjdk/jre/lib/security
       rm cacerts
-      perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ca-bundle.crt
+      perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/ca-bundle.crt
       popd
 
       ln -s $out/lib/openjdk/bin $out/bin

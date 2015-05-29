@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ cacert ];
 
-  configureFlags = [ "--with-ca-bundle=${cacert}/etc/ca-bundle.crt" ];
+  configureFlags = [ "--with-ca-bundle=${cacert}/ca-bundle.crt" ];
 
   meta = with stdenv.lib; {
     homepage = http://aria2.sourceforge.net/;
