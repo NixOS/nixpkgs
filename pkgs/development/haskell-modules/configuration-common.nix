@@ -676,7 +676,13 @@ self: super: {
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
   # https://github.com/jgm/pandoc/issues/2190
-  pandoc = disableSharedExecutables super.pandoc;
+  pandoc = overrideCabal super.pandoc (drv: {
+    enableSharedExecutables = false;
+    postInstall = ''            # install man pages
+      mv man $out/
+      find $out/man -type f ! -name "*.[0-9]" -exec rm {} +
+    '';
+  });
 
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
