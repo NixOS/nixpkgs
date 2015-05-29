@@ -281,4 +281,7 @@ self: super: {
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
+  # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
+  crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
+
 }
