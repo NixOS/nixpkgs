@@ -821,7 +821,7 @@ self: super: {
   language-puppet = dontDistribute super.language-puppet;
 
   # This needs the latest version of errors to compile.
-  pipes-errors_0_3 = super.pipes-errors_0_3.override { errors = self.errors_2_0_0; };
+  pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
 
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
