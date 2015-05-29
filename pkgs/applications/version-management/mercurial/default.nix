@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, makeWrapper, docutils, unzip
-, guiSupport ? false, tk ? null, curses }:
+, guiSupport ? false, tk ? null, curses, cacert }:
 
 let
   version = "3.3.3";
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       mkdir -p $out/etc/mercurial
       cat >> $out/etc/mercurial/hgrc << EOF
       [web]
-      cacerts = /etc/ssl/certs/ca-bundle.crt
+      cacerts = ${cacert}/ca-bundle.crt
       EOF
 
       # copy hgweb.cgi to allow use in apache
