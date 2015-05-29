@@ -1723,7 +1723,7 @@ rec {
       name = "debian-8.0-jessie-amd64";
       fullName = "Debian 8.0 Jessie (amd64)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.xz;
+        url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
         sha256 = "0hhagvybciy89wr1cy9dgdfki668dvcywgbz4w01qwivyd6dsia4";
       };
       urlPrefix = mirror://debian;
