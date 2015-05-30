@@ -1592,7 +1592,7 @@ let
   };
 
   logrus = buildGoPackage rec {
-    rev = "v0.7.3";
+    rev = "v0.8.2";
     name = "logrus-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/Sirupsen/logrus";
 
@@ -1602,7 +1602,7 @@ let
       inherit rev;
       owner = "Sirupsen";
       repo = "logrus";
-      sha256 = "1sxksbarllmqb8wz5b2wbwr6q2i32vqasf7bpz4djywy3ig7jwk8";
+      sha256 = "0isihf185bw54yc72mbkf3cgfh7xj0x8ky04fs52xpj6vrmd72bv";
     };
 
     propagatedBuildInputs = [ airbrake-go bugsnag-go raven-go ];
