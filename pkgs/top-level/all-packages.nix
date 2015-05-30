@@ -12535,7 +12535,7 @@ let
   tig = gitAndTools.tig;
 
   tilda = callPackage ../applications/misc/tilda {
-    vte = gnome3.vte;
+    vte = gnome3.vte_290;
     gtk = gtk3;
   };
 
