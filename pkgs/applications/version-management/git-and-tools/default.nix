@@ -47,6 +47,7 @@ rec {
   };
 
   inherit (pkgs.haskellPackages) git-annex;
+  gitAnnex = git-annex;
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
