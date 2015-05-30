@@ -7800,7 +7800,13 @@ let
     };
   };
 
-  numpy = buildPythonPackage ( rec {
+  numpy = let
+    support = import ./python-support/numpy-scipy-support.nix {
+      inherit python;
+      atlas = pkgs.atlasWithLapack;
+      pkgName = "numpy";
+    };
+  in buildPythonPackage ( rec {
     name = "numpy-1.9.2";
 
     src = pkgs.fetchurl {
@@ -7815,17 +7821,12 @@ let
       sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
-    preBuild = ''
-      export BLAS=${pkgs.openblas} LAPACK=${pkgs.openblas}
-    '';
+    inherit (support) preBuild checkPhase;
 
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
-    # error: invalid command 'test'
-    doCheck = false;
-
-    buildInputs = with self; [ pkgs.gfortran ];
-    propagatedBuildInputs = with self; [  pkgs.openblas ];
+    buildInputs = [ pkgs.gfortran self.nose ];
+    propagatedBuildInputs = [ pkgs.atlas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -11203,7 +11204,13 @@ let
   };
 
 
-  scipy = buildPythonPackage rec {
+  scipy = let
+    support = import ./python-support/numpy-scipy-support.nix {
+      inherit python;
+      atlas = pkgs.atlasWithLapack;
+      pkgName = "numpy";
+    };
+  in buildPythonPackage rec {
     name = "scipy-0.15.1";
 
     src = pkgs.fetchurl {
@@ -11211,19 +11218,16 @@ let
       sha256 = "16i5iksaas3m0hgbxrxpgsyri4a9ncbwbiazlhx5d6lynz1wn4m2";
     };
 
-    buildInputs = [ pkgs.gfortran ];
-    propagatedBuildInputs = with self; [ numpy ];
+    buildInputs = [ pkgs.gfortran self.nose ];
+    propagatedBuildInputs = [ self.numpy ];
 
-    # TODO: add ATLAS=${pkgs.atlas}
     preConfigure = ''
-      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
       sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
     '';
 
-    setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+    inherit (support) preBuild checkPhase;
 
-    # error: invalid command 'test'
-    doCheck = false;
+    setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
 
     meta = {
       description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
