@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  checkFlags = "-j1"; # required since version 128
+  checkFlags = "-j1 -C programs"; # -j1 required since version 128, -C should be temporary
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
