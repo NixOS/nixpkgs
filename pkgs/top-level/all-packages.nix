@@ -5813,7 +5813,9 @@ let
 
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
-  clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix { };
+  clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
+    clutter = clutter_1_22;
+  };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
