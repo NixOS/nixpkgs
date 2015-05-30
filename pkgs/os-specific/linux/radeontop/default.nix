@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
 
-let version = "v0.8-8-g2499679"; in
+let version = "2015-05-28"; in
 stdenv.mkDerivation {
   name = "radeontop-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "112zf6ms0qpmr9h3l4lg5wik5j206mgij0nypba5lnqzksxh2f88";
-    rev = "2499679fda60c3f6239886296fd2a74155f45f77";
+    sha256 = "0s281fblqbvl7vgaqiwh3s16y0bah3z0i1ssf4mbwl2iayj1cliq";
+    rev = "b9428f18ea4631fdd5f9ccee81570aa7ac472c07";
     repo = "radeontop";
     owner = "clbr";
   };
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   patchPhase = ''
-    substituteInPlace getver.sh --replace ver=unknown ver=${version}
+    substituteInPlace getver.sh --replace ver=unknown ver=${version}-git
   '';
 
   makeFlags = "PREFIX=$(out)";
