@@ -116,11 +116,6 @@ self: super: {
   # support a moving target". Go figure.
   barecheck = doJailbreak super.barecheck;
 
-  syb-with-class = appendPatch super.syb-with-class (pkgs.fetchpatch {
-    url = "https://github.com/seereason/syb-with-class/compare/adc86a9...719e567.patch";
-    sha256 = "1lwwvxyhxcmppdapbgpfhwi7xc2z78qir03xjrpzab79p2qyq7br";
-  });
-
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
