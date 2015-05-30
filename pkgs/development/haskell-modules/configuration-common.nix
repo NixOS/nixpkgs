@@ -830,4 +830,6 @@ self: super: {
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
+  # https://github.com/vincenthz/hs-cipher-aes/issues/35
+  cipher-aes = dontCheck super.cipher-aes;
 }
