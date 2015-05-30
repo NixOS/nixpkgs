@@ -13851,7 +13851,7 @@ let
     # great feature, but it's of limited use with pre-built binaries
     # coming from a central build farm.
     tolerateCpuTimingInaccuracy = true;
-    liblapack = liblapack_3_5_0;
+    liblapack = liblapack_3_5_0WithoutAtlas;
     withLapack = false;
   };
 
@@ -13867,8 +13867,17 @@ let
 
   jags = callPackage ../applications/science/math/jags { };
 
-  liblapack = callPackage ../development/libraries/science/math/liblapack { };
-  liblapack_3_5_0 = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix { };
+
+  # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
+  # and with or without atlas as a dependency. The default `liblapack` is 3.4.1
+  # with atlas. Atlas, when built with liblapack as a dependency, uses 3.5.0
+  # without atlas. Etc.
+  liblapackWithAtlas = callPackage ../development/libraries/science/math/liblapack {};
+  liblapackWithoutAtlas = liblapackWithAtlas.override { atlas = null; };
+  liblapack_3_5_0WithAtlas = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix {};
+  liblapack_3_5_0WithoutAtlas = liblapack_3_5_0WithAtlas.override { atlas = null; };
+  liblapack = liblapackWithAtlas;
+  liblapack_3_5_0 = liblapack_3_5_0WithAtlas;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
