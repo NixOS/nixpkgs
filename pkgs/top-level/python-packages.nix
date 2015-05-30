@@ -8100,19 +8100,67 @@ let
       sha256 = "1w3wjnn3v37hf3hrd24lfgk6vpykarv9mihhpcfq6y7rg586bgjk";
     };
 
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ dateutil numpy pytz modules.sqlite3 ];
+    buildInputs = [ self.nose ];
+    propagatedBuildInputs = with self; [ 
+      dateutil 
+      numpy
+      scipy
+      numexpr
+      pytz
+      xlrd
+      bottleneck
+      sqlalchemy9
+      lxml
+      modules.sqlite3 
+    ];
 
-    # Tests require networking to pass
-    doCheck = false;
+    preCheck = ''
+      # Need to do this patch or tests will fail (swaps 1st and 2nd lines).
+      # See: https://github.com/pydata/pandas/commit/c4bcc2054bfd2f89b640bea0c9a109b0184d6710
+      first=$(sed -n '1p' < pandas/tests/test_format.py)
+      second=$(sed -n '2p' < pandas/tests/test_format.py)
+      rest=$(tail -n +3 pandas/tests/test_format.py)
+      echo $second > pandas/tests/test_format.py
+      echo $first >> pandas/tests/test_format.py
+      echo "$rest" >> pandas/tests/test_format.py
+    '';
+
+    checkPhase = ''
+      runHook preCheck
+      
+      # The flag `-A 'not network'` will disable tests that use internet.
+      # The `-e` flag disables a few problematic tests.
+      python setup.py nosetests -A 'not network' --stop -e 'test_clipboard|test_series' --verbosity=3
+
+      runHook postCheck
+    '';
 
     meta = {
       homepage = "http://pandas.pydata.org/";
       description = "Python Data Analysis Library";
       license = licenses.bsd3;
       maintainers = with maintainers; [ raskin ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
+  };
+
+  xlrd = buildPythonPackage rec {
+    name = "xlrd-${version}";
+    version = "0.9.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xlrd/xlrd-${version}.tar.gz";
+      md5 = "6f3325132f246594988171bc72e1a385";
+    };
+  };
+
+  bottleneck = buildPythonPackage rec {
+    name = "Bottleneck-${version}";
+    version = "1.0.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/B/Bottleneck/Bottleneck-${version}.tar.gz";
+      md5 = "380fa6f275bd24f27e7cf0e0d752f5d2";
+    };
+    propagatedBuildInputs = [self.numpy];
   };
 
   parsedatetime = buildPythonPackage rec {
