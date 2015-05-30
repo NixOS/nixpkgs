@@ -4,6 +4,11 @@ with lib;
 
 let
   cfg = config.security.grsecurity;
+
+  # Convert an attrset of grsecurity tunables to a sequence of sysctl
+  # calls. Use sysctl -e because sysctls may be compiled-in or disabled.
+  grsecSysctlFromAttrs = attrs: lib.concatStringsSep ";" (lib.mapAttrsFlatten (k: v:
+    "sysctl -e kernel.grsecurity.${k}=${toString v}") attrs);
 in
 {
   options = {
@@ -19,13 +24,16 @@ in
           utilities for PaX, and more.
         '';
       };
-
-      kernelPackages = mkOption {
-        type = types.package;
+      tunables = mkOption {
+        type = types.attrs;
+        default = {
+          chroot_caps = 0;
+          chroot_deny_chmod = 0;
+        };
         description = ''
-          The kernel package set to use. In order to
-          understand how to set this option appropriately, please see
-          the NixOS wiki: TODO FIXME.
+          A set of grsecurity run-time tunables. Each attribute maps directly
+          to a corresponding sysctl tunable, without the "kernel.grsecurity"
+          prefix.
         '';
       };
 
@@ -223,6 +231,12 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      [ { assertion = config.boot.kernelPackages.kernel.features.grsecurity or false;
+          message = "the selected kernel does not support grsecurity";
+        }
+      ];
+
     /*
     assertions =
       [ { assertion = cfg.stable || cfg.testing;
@@ -254,22 +268,37 @@ in
       ];
     */
 
-    systemd.services.grsec-lock = mkIf cfg.config.sysctl {
-      description     = "grsecurity sysctl-lock Service";
-      requires        = [ "systemd-sysctl.service" ];
-      wantedBy        = [ "multi-user.target" ];
-      serviceConfig.Type = "oneshot";
-      serviceConfig.RemainAfterExit = "yes";
-      unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel/grsecurity/grsec_lock";
+    systemd.services.grsec-sysctl = let ctl = "/proc/sys/kernel/grsecurity/grsec_lock"; in {
+      requiredBy = [ "multi-user.target" ];
+
+      wants = [ "systemd-sysctl.service" ];
+      after = [ "systemd-sysctl.service" ];
+
+      path = [ pkgs.coreutils pkgs.procps ];
+
+      restartIfChanged = false;
+
       script = ''
-        locked=`cat /proc/sys/kernel/grsecurity/grsec_lock`
-        if [ "$locked" == "0" ]; then
-            echo 1 > /proc/sys/kernel/grsecurity/grsec_lock
-            echo grsecurity sysctl lock - enabled
-        else
-            echo grsecurity sysctl lock already enabled - doing nothing
-        fi
+        # Exit immediately if lock is already in effect
+        grep -Fq 1 ${ctl} && exit 0
+
+        ${grsecSysctlFromAttrs cfg.tunables}
+
+        # Lock
+        echo 1 > ${ctl}
+
+        # Ensure that grsec_lock was in fact toggled
+        grep -Fq 1 ${ctl}
       '';
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      unitConfig = {
+        ConditionPathIsReadWrite = ctl;
+        DefaultDependencies = false;
+      };
     };
 
 #   systemd.services.grsec-learn = {
