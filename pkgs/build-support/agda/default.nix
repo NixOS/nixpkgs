@@ -7,12 +7,12 @@
 , extension ? (self: super: {})
 }:
 
+with stdenv.lib.strings;
+
 let
   optionalString = stdenv.lib.optionalString;
   filter = stdenv.lib.filter;
-  concatMapStringsSep = stdenv.lib.strings.concatMapStringsSep;
-  concatMapStrings = stdenv.lib.strings.concatMapStrings;
-  unwords = stdenv.lib.strings.concatStringsSep " ";
+  unwords = concatStringsSep " ";
   mapInside = xs: unwords (map (x: x + "/*") xs);
 
   defaults = self : {
