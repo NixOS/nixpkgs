@@ -14203,7 +14203,9 @@ let
 
   stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
-  tulip = callPackage ../applications/science/misc/tulip { };
+  tulip = callPackage ../applications/science/misc/tulip {
+    cmake = cmake-2_8;
+  };
 
   vite = enableDebugging (callPackage ../applications/science/misc/vite { });
 
