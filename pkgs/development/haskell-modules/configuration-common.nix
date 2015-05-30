@@ -815,12 +815,6 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # https://github.com/haskell-servant/servant-server/issues/45
-  servant-server = markBroken super.servant-server;
-  servant-client = dontDistribute super.servant-client;
-  servant-jquery = dontDistribute super.servant-jquery;
-  language-puppet = dontDistribute super.language-puppet;
-
   # This needs the latest version of errors to compile.
   pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
 
