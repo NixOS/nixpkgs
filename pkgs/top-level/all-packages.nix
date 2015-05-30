@@ -13096,7 +13096,7 @@ let
   ykpers = callPackage ../applications/misc/ykpers {};
 
   yoshimi = callPackage ../applications/audio/yoshimi {
-    fltk = fltk13;
+    fltk = fltk13.override { cfg.xftSupport = true; };
   };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { inherit (xlibs) libX11; };
