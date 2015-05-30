@@ -10,11 +10,6 @@
 with stdenv.lib.strings;
 
 let
-  optionalString = stdenv.lib.optionalString;
-  filter = stdenv.lib.filter;
-  unwords = concatStringsSep " ";
-  mapInside = xs: unwords (map (x: x + "/*") xs);
-
   defaults = self : {
     # There is no Hackage for Agda so we require src.
     inherit (self) src name;
@@ -24,14 +19,16 @@ let
     buildInputs = [ Agda ] ++ self.buildDepends;
     buildDepends = [];
 
-    buildDependsAgda = filter
+    buildDependsAgda = stdenv.lib.filter
       (dep: dep ? isAgdaPackage && dep.isAgdaPackage)
       self.buildDepends;
     buildDependsAgdaShareAgda = map (x: x + "/share/agda") self.buildDependsAgda;
 
     # Not much choice here ;)
     LANG = "en_US.UTF-8";
-    LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = stdenv.lib.optionalString
+      stdenv.isLinux
+      "${glibcLocales}/lib/locale/locale-archive";
 
     everythingFile = "Everything.agda";
 
@@ -52,7 +49,7 @@ let
     includeDirs = self.buildDependsAgdaShareAgda
                   ++ self.sourceDirectories ++ self.topSourceDirectories
                   ++ [ "." ];
-    buildFlags = unwords (map (x: "-i " + x) self.includeDirs);
+    buildFlags = concatStringsSep " " (map (x: "-i " + x) self.includeDirs);
 
     agdaWithArgs = "${Agda}/bin/agda ${self.buildFlags}";
 
@@ -62,10 +59,13 @@ let
       runHook postBuild
     '';
 
-    installPhase = ''
+    installPhase = let
+      srcFiles = self.sourceDirectories
+                 ++ map (x: x + "/*") self.topSourceDirectories;
+    in ''
       runHook preInstall
       mkdir -p $out/share/agda
-      cp -pR ${unwords self.sourceDirectories} ${mapInside self.topSourceDirectories} $out/share/agda
+      cp -pR ${concatStringsSep " " srcFiles} $out/share/agda
       runHook postInstall
     '';
 
@@ -84,16 +84,9 @@ let
       };
     };
   };
-
-  postprocess = x: x // {
-    sourceDirectories = filter (y: !(y == null)) x.sourceDirectories;
-    propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
-    propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
-    everythingFile = if x.everythingFile == "" then "Everything.agda" else x.everythingFile;
-  };
 in
 { mkDerivation = args: let
       super = defaults self // args self;
       self  = super // extension self super;
-    in stdenv.mkDerivation (postprocess self);
+    in stdenv.mkDerivation self;
 }
