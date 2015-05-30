@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, wmctrl, xprop, xdotool}:
+{ stdenv, fetchgit, rofi, wmctrl, xprop, xdotool}:
 
 stdenv.mkDerivation rec {
   name = "rofi-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "17k9jmmckqaw75i0qsay2gc8mrjrs6jjfwfxaggspj912sflmjng";
   };
 
-  buildInputs = [ wmctrl xprop xdotool ];
+  buildInputs = [ rofi wmctrl xprop xdotool ];
 
   dontBuild = true;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-      description = "Rofi script to work with password-store";
+      description = "A script to make rofi work with password-store";
       homepage = https://github.com/carnager/rofi-pass;
       maintainers = [stdenv.lib.maintainers._1126];
   };
