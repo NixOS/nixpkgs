@@ -1674,8 +1674,6 @@ let
       repo = "mesos_stats";
       sha256 = "18ggyjf4nyn77gkn16wg9krp4dsphgzdgcr3mdflv6mvbr482ar4";
     };
-
-    propagatedBuildInputs = [ prometheus.client_golang glog ];
   };
 
   mgo = buildGoPackage rec {
