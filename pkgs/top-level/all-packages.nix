@@ -10165,7 +10165,13 @@ let
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
-  cacert = callPackage ../data/misc/cacert { };
+  cacert = callPackage ../data/misc/cacert {
+    nss = nss.override { fetchurl = fetchurlBoot; };
+    perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
+      pkgs = pkgs // { fetchurl = fetchurlBoot; };
+      overrides = (config.perlPackageOverrides or (p: {})) pkgs;
+    });
+  };
 
   caladea = callPackage ../data/fonts/caladea {};
 
