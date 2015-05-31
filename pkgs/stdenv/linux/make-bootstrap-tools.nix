@@ -80,6 +80,9 @@ rec {
         cp ${patchelf}/bin/* $out/bin
         cp ${curl-light}/bin/curl $out/bin
 
+        # Add ca certificates for curl
+        mkdir -p $out/etc/ssl/certs
+        cp -d ${cacert}/ca-bundle.crt $out/etc/ssl/certs
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc}/bin/gcc $out/bin

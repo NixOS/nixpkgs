@@ -17,7 +17,7 @@ let
 
   # Normal Depedencies
   optZlib = if isLight then null else shouldUsePkg zlib;
-  optOpenssl = if isLight then null else shouldUsePkg openssl;
+  optOpenssl = shouldUsePkg openssl;
   optLibssh2 = if isLight then null else shouldUsePkg libssh2;
   optLibnghttp2 = if isLight then null else shouldUsePkg libnghttp2;
   optC-ares = if isLight then null else shouldUsePkg c-ares;
