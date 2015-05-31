@@ -358,6 +358,7 @@ let
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
     inherit curl stdenv;
+    ca_cert_file = "${cacert}/ca-bundle.crt";
   };
 
   # fetchurlBoot is used for curl and its dependencies in order to
