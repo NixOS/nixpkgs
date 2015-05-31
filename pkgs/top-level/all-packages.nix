@@ -12228,6 +12228,8 @@ let
     automake = automake114x;
   };
 
+  rofi-pass = callPackage ../applications/misc/rofi/pass.nix { };
+
   rstudio = callPackage ../applications/editors/rstudio { };
 
   rsync = callPackage ../applications/networking/sync/rsync {
