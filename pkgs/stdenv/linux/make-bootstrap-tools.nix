@@ -78,9 +78,7 @@ rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
         cp ${curl-light}/bin/curl $out/bin
-        cp -d ${curl-light}/lib/libcurl* $out/lib
 
-        cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc}/bin/gcc $out/bin
@@ -105,17 +103,28 @@ rec {
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
 
-        cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
-        cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
-        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
-        cp -d ${zlib}/lib/libz.so* $out/lib
-        cp -d ${libelf}/lib/libelf.so* $out/lib
-
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
         done
-        cp -d ${binutils}/lib/lib*.so* $out/lib
+
+        # Copy all of the needed libraries for the binaries
+        for BIN in $(find $out/bin -type f); do
+          echo "Copying libs for bin $BIN"
+          LDD="$(ldd $BIN)" || continue
+          LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
+          for LIB in $LIBS; do
+            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+            while [ "$(readlink $LIB)" != "" ]; do
+              LINK="$(readlink $LIB)"
+              if [ "${LINK:0:1}" != "/" ]; then
+                LINK="$(dirname $LIB)/$LINK"
+              fi
+              LIB="$LINK"
+              [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+            done
+          done
+        done
 
         chmod -R u+w $out
 
