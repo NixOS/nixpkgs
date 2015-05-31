@@ -2935,6 +2935,8 @@ let
 
   t1utils = callPackage ../tools/misc/t1utils { };
 
+  talkfilters = callPackage ../misc/talkfilters {};
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
