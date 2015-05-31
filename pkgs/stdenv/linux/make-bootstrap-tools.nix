@@ -4,27 +4,6 @@ with import ../../top-level/all-packages.nix {inherit system;};
 
 rec {
 
-
-  # We want coreutils without ACL support.
-  coreutilsMinimal = coreutils.override (args: {
-    aclSupport = false;
-  });
-
-  busyboxMinimal = busybox.override {
-    useMusl = true;
-    enableStatic = true;
-    enableMinimal = true;
-    extraConfig = ''
-      CONFIG_ASH y
-      CONFIG_ASH_BUILTIN_ECHO y
-      CONFIG_ASH_BUILTIN_TEST y
-      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
-      CONFIG_MKDIR y
-      CONFIG_TAR y
-      CONFIG_UNXZ y
-    '';
-  };
-
   build =
 
     stdenv.mkDerivation {
@@ -150,7 +129,7 @@ rec {
 
         mkdir $out/on-server
         tar cvfJ $out/on-server/bootstrap-tools.tar.xz -C $out/pack .
-        cp ${busyboxMinimal}/bin/busybox $out/on-server
+        cp ${busyboxBootstrap}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
       ''; # */

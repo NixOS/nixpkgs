@@ -85,6 +85,7 @@ let
   curl-light = pkgs.curl-light.crossDrv;
   xz = pkgs.xz.crossDrv;
   cacert = pkgs.cacert.crossDrv;
+  busyboxBootstrap = pkgs.busyboxBootstrap.crossDrv;
 
 in
 
@@ -94,22 +95,6 @@ rec {
   coreutilsMinimal = (pkgs.coreutils.override (args: {
     aclSupport = false;
   })).crossDrv;
-  
-  busyboxMinimal = (pkgs.busybox.override {
-    # TBD: uClibc is broken.
-    # useUclibc = true;
-    enableStatic = true;
-    enableMinimal = true;
-    extraConfig = ''
-      CONFIG_ASH y
-      CONFIG_ASH_BUILTIN_ECHO y
-      CONFIG_ASH_BUILTIN_TEST y
-      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
-      CONFIG_MKDIR y
-      CONFIG_TAR y
-      CONFIG_UNXZ y
-    '';
-  }).crossDrv;
   
   inherit pkgs;
 
@@ -240,7 +225,7 @@ rec {
 
         mkdir $out/on-server
         tar cvfJ $out/on-server/bootstrap-tools.tar.xz -C $out/pack .
-        cp ${busyboxMinimal}/bin/busybox $out/on-server
+        cp ${busyboxBootstrap}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
       ''; # */
