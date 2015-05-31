@@ -26,10 +26,10 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
         $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
 
-for i in $out/lib/librt-*.so $out/lib/libpcre*; do
+for i in $out/lib/lib*.so*; do
     if [ -L "$i" ]; then continue; fi
     echo patching "$i"
-    $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
+    $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i" || true
 done
 
 # Fix the libc linker script.
@@ -55,9 +55,4 @@ echo "#! $out/bin/sh" > $out/bin/egrep
 echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
 echo "#! $out/bin/sh" > $out/bin/fgrep
 echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
-
-# Provide xz (actually only xz -d will work).
-echo "#! $out/bin/sh" > $out/bin/xz
-echo "exec $builder unxz \"\$@\"" >> $out/bin/xz
-
-chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/xz
+chmod +x $out/bin/egrep $out/bin/fgrep
