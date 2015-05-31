@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     sha256 = "1gpkgw05dwsf2wk5cy3skgss3kw6mqh7iv3fadrxqxfc1za1xmyl";
-    rev = "${version}";
+    rev = version;
     repo = "libaccounts-qt";
     owner = "accounts-sso";
   };
