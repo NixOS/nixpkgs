@@ -9221,7 +9221,7 @@ let
   busybox = callPackage ../os-specific/linux/busybox { };
 
   busyboxBootstrap = busybox.override {
-    useMusl = true;
+    useMusl = false; # Broken for all systems except x86_64-linux
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
