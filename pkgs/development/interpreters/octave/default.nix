@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.2";
+  version = "4.0.0";
   name = "octave-${version}";
   src = fetchurl {
-    url = "mirror://gnu/octave/${name}.tar.bz2";
-    sha256 = "83bbd701aab04e7e57d0d5b8373dd54719bebb64ce0a850e69bf3d7454f33bae";
+    url = "mirror://gnu/octave/${name}.tar.xz";
+    sha256 = "0x64b2lna4vrlm4wwx6h1qdlmki6s2b9q90yjxldlvvrqvxf4syg";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
