@@ -23,6 +23,7 @@ rec {
     fetchurl = import ../../build-support/fetchurl {
       inherit stdenv;
       curl = bootstrapTools;
+      ca_cert_file = "${bootstrapTools}/etc/ssl/certs/ca-bundle.crt";
     };
 
     stdenv = import ../generic {
