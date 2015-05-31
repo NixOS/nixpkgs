@@ -1,4 +1,4 @@
-{ stdenv, curl }: # Note that `curl' may be `null', in case of the native stdenv.
+{ stdenv, curl, ca_cert_file ? null, insecure ? false }: # Note that `curl' may be `null', in case of the native stdenv.
 
 let
 
@@ -103,6 +103,10 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
   builder = ./builder.sh;
 
   buildInputs = [ curl ];
+
+  SSL_CERT_FILE = ca_cert_file;
+
+  INSECURE_FLAG = if insecure then "--insecure" else "";
 
   urls = urls_;
 
