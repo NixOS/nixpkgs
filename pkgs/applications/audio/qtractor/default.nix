@@ -4,12 +4,12 @@
 , sord, sratom, stdenv, suil }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.6";
+  version = "0.6.7";
   name = "qtractor-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qtractor/${name}.tar.gz";
-    sha256 = "1n70hs4bx4hq3cp2p35jq5vlcans4fk2c35w72244vlqlajx05c0";
+    sha256 = "0h5nblfkl4s412c9f02b40nb8c8jq8ypz67z2qn3hkvhx6i9yxsg";
   };
 
   buildInputs =
