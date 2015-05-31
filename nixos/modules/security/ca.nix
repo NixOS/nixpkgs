@@ -67,8 +67,6 @@ in
     environment.sessionVariables =
       { SSL_CERT_FILE          = "/etc/ssl/certs/ca-certificates.crt";
         # FIXME: unneeded - remove eventually.
-        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-        # FIXME: unneeded - remove eventually.
         GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-certificates.crt";
       };
 
