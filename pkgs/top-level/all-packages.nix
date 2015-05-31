@@ -11601,6 +11601,8 @@ let
 
   caps = callPackage ../applications/audio/caps { };
 
+  LazyLimiter = callPackage ../applications/audio/LazyLimiter { };
+
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
