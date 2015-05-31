@@ -39,7 +39,7 @@ rec {
         mv $out/include $out/include-glibc
 
         # Copy coreutils, bash, etc.
-        cp ${coreutilsMinimal}/bin/* $out/bin
+        cp ${coreutils}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
         cp ${bash}/bin/bash $out/bin

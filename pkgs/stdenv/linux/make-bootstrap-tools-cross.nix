@@ -85,16 +85,12 @@ let
   curl-light = pkgs.curl-light.crossDrv;
   xz = pkgs.xz.crossDrv;
   cacert = pkgs.cacert.crossDrv;
+  coreutils = pkgs.coreutils.crossDrv;
   busyboxBootstrap = pkgs.busyboxBootstrap.crossDrv;
 
 in
 
 rec {
-
-  # We want coreutils without ACL support.
-  coreutilsMinimal = (pkgs.coreutils.override (args: {
-    aclSupport = false;
-  })).crossDrv;
   
   inherit pkgs;
 
@@ -135,7 +131,7 @@ rec {
         mv $out/include $out/include-glibc
 
         # Copy coreutils, bash, etc.
-        cp ${coreutilsMinimal}/bin/* $out/bin
+        cp ${coreutils}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
         cp ${bash}/bin/bash $out/bin
