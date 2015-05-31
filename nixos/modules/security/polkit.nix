@@ -15,7 +15,7 @@ in
     security.polkit.enable = mkOption {
       type = types.bool;
       default = true;
-      description = "Whether to enable PolKit.";
+      description = "Whether to enable PolKit. Set `nixpkgs.config.polkit = false` to disable polkit dependency in packages";
     };
 
     security.polkit.extraConfig = mkOption {

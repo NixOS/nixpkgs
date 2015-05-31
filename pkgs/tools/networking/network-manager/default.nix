@@ -1,7 +1,9 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
-, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup }:
+, gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
+, polkitSupport ? true
+, lib }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -42,10 +44,11 @@ stdenv.mkDerivation rec {
     "--with-modem-manager-1"
     "--with-nmtui"
     "--with-libsoup=yes"
+    (lib.optional (!polkitSupport) "--enable-polkit=disabled")
   ];
 
-  buildInputs = [ wirelesstools udev libgudev libnl libuuid polkit ppp libndp
-                  xz bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
+  buildInputs = [ wirelesstools udev libgudev libnl libuuid ppp libndp
+                  xz bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ] ++ lib.optional polkitSupport polkit;
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret dbus_glib gsettings_desktop_schemas
-    polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
+    isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
