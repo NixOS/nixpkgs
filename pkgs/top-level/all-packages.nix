@@ -11275,8 +11275,6 @@ let
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
-  qjackctl = callPackage ../applications/audio/qjackctl { };
-
   gkrellm = callPackage ../applications/misc/gkrellm { };
 
   gmu = callPackage ../applications/audio/gmu { };
@@ -12139,6 +12137,10 @@ let
   };
 
   qemu-nix = qemu.override { type = "nix"; };
+
+  qjackctl = callPackage ../applications/audio/qjackctl { };
+
+  QmidiNet = callPackage ../applications/audio/QmidiNet { };
 
   qmmp = callPackage ../applications/audio/qmmp { };
 
