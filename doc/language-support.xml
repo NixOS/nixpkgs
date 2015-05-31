@@ -13,7 +13,7 @@ in Nixpkgs to easily build packages for other programming languages,
 such as Perl or Haskell.  These are described in this chapter.</para>
 
 
-<section xml:id="ssec-language-perl"><title>Perl</title>
+<section xml:id="sec-language-perl"><title>Perl</title>
 
 <para>Nixpkgs provides a function <varname>buildPerlPackage</varname>,
 a generic package builder function for any Perl package that has a
@@ -151,7 +151,7 @@ ClassC3Componentised = buildPerlPackage rec {
 
 </para>
 
-<section><title>Generation from CPAN</title>
+<section xml:id="ssec-generation-from-CPAN"><title>Generation from CPAN</title>
 
 <para>Nix expressions for Perl packages can be generated (almost)
 automatically from CPAN.  This is done by the program
@@ -191,7 +191,7 @@ you need it.</para>
 </section>
 
 
-<section xml:id="python"><title>Python</title>
+<section xml:id="sec-python"><title>Python</title>
 
 <para>
   Currently supported interpreters are <varname>python26</varname>, <varname>python27</varname>,
@@ -276,7 +276,7 @@ are provided with all modules included.</para>
   </varlistentry>
 
 </variablelist>
-<section xml:id="build-python-package"><title><varname>buildPythonPackage</varname> function</title>
+<section xml:id="ssec-build-python-package"><title><varname>buildPythonPackage</varname> function</title>
 
   <para>
   The function is implemented in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/python-modules/generic/default.nix">
@@ -438,7 +438,7 @@ twisted = buildPythonPackage {
 
 </section>
 
-<section xml:id="python-build-env"><title><function>python.buildEnv</function> function</title>
+<section xml:id="ssec-python-build-env"><title><function>python.buildEnv</function> function</title>
   <para>
     Create Python environments using low-level <function>pkgs.buildEnv</function> function. Example <filename>default.nix</filename>:
 
@@ -484,7 +484,7 @@ python.buildEnv.override {
   </variablelist>
 </section>
 
-<section xml:id="python-tools"><title>Tools</title>
+<section xml:id="ssec-python-tools"><title>Tools</title>
 
 <para>Packages inside nixpkgs are written by hand. However many tools
 exist in community to help save time. No tool is preferred at the moment.
@@ -511,7 +511,7 @@ exist in community to help save time. No tool is preferred at the moment.
 
 </section>
 
-<section xml:id="python-development"><title>Development</title>
+<section xml:id="ssec-python-development"><title>Development</title>
 
   <para>
     To develop Python packages <function>buildPythonPackage</function> has
@@ -555,7 +555,7 @@ buildPythonPackage {
 
 </section>
 
-<section xml:id="python-faq"><title>FAQ</title>
+<section xml:id="ssec-python-faq"><title>FAQ</title>
 
 <variablelist>
 
@@ -597,7 +597,7 @@ sed -i '/ = data_files/d' setup.py</programlisting>
 </section>
 
 
-<section xml:id="python-contrib"><title>Contributing guidelines</title>
+<section xml:id="ssec-python-contrib"><title>Contributing guidelines</title>
 <para>
   Following rules are desired to be respected:
 </para>
@@ -625,7 +625,7 @@ sed -i '/ = data_files/d' setup.py</programlisting>
 </section>
 
 
-<section xml:id="ssec-language-ruby"><title>Ruby</title>
+<section xml:id="sec-language-ruby"><title>Ruby</title>
   <para>There currently is support to bundle applications that are packaged as Ruby gems. The utility "bundix" allows you to write a <filename>Gemfile</filename>, let bundler create a <filename>Gemfile.lock</filename>, and then convert
   this into a nix expression that contains all Gem dependencies automatically.</para>
 
@@ -666,7 +666,7 @@ and scalable.";
 
 </section>
 
-<section xml:id="ssec-language-go"><title>Go</title>
+<section xml:id="sec-language-go"><title>Go</title>
 
 <para>The function <varname>buildGoPackage</varname> builds
 standard Go packages.
@@ -787,7 +787,7 @@ done
 </section>
 
 
-<section xml:id="ssec-language-java"><title>Java</title>
+<section xml:id="sec-language-java"><title>Java</title>
 
 <para>Ant-based Java packages are typically built from source as follows:
 
@@ -868,7 +868,7 @@ Runtime) instead of the OpenJRE.</para>
 </section>
 
 
-<section xml:id="ssec-language-lua"><title>Lua</title>
+<section xml:id="sec-language-lua"><title>Lua</title>
 
 <para>
   Lua packages are built by the <varname>buildLuaPackage</varname> function.  This function is
@@ -915,7 +915,7 @@ fileSystem = buildLuaPackage {
 
 </section>
 
-<section xml:id="ssec-language-coq"><title>Coq</title>
+<section xml:id="sec-language-coq"><title>Coq</title>
   <para>
     Coq libraries should be installed in
     <literal>$(out)/lib/coq/${coq.coq-version}/user-contrib/</literal>.

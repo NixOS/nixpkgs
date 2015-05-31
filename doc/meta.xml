@@ -82,7 +82,8 @@ hello-2.3  A program that produces a familiar, friendly greeting
 </para>
 
 
-<section><title>Standard meta-attributes</title>
+<section xml:id="sec-standard-meta-attributes"><title>Standard
+meta-attributes</title>
 
 <para>It is expected that each meta-attribute is one of the following:</para>
 
