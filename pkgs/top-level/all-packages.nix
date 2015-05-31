@@ -3079,6 +3079,8 @@ let
 
   vcsh = callPackage ../applications/version-management/vcsh { };
 
+  verilator = callPackage ../applications/science/electronics/verilator {};
+
   verilog = callPackage ../applications/science/electronics/verilog {};
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
