@@ -12742,6 +12742,8 @@ let
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
+  VoiceOfFaust = callPackage ../applications/audio/VoiceOfFaust { };
+
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
   vue = callPackage ../applications/misc/vue { };
