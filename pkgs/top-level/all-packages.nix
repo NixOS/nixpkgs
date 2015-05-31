@@ -10451,6 +10451,8 @@ let
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
+  antimony = callPackage ../applications/graphics/antimony {};
+
   antiword = callPackage ../applications/office/antiword {};
 
   ardour = ardour4;
