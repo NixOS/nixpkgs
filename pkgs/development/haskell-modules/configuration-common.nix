@@ -832,4 +832,8 @@ self: super: {
 
   # https://github.com/vincenthz/hs-cipher-aes/issues/35
   cipher-aes = dontCheck super.cipher-aes;
+
+  # https://github.com/DanielG/cabal-helper/issues/2
+  cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
+
 }
