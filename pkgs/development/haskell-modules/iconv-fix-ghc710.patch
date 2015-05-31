@@ -1,0 +1,41 @@
+Running command 'diff -urN old-iconv new-iconv'
+Fri May 29 00:42:30 CEST 2015  Robert Helgesson <robert@rycee.net>
+  * Add Functor and Applicative instances for IConv
+  
+  This makes iconv successfully build under GHC 7.10.
+diff -urN old-iconv/Codec/Text/IConv/Internal.hs new-iconv/Codec/Text/IConv/Internal.hs
+--- old-iconv/Codec/Text/IConv/Internal.hs	2015-05-31 11:26:06.410968449 +0200
++++ new-iconv/Codec/Text/IConv/Internal.hs	2015-05-31 11:26:06.410968449 +0200
+@@ -49,6 +49,7 @@
+ import System.IO.Unsafe (unsafeInterleaveIO, unsafePerformIO)
+ import System.IO (hPutStrLn, stderr)
+ import Control.Exception (assert)
++import Control.Monad (ap, liftM)
+ 
+ import Prelude hiding (length)
+ 
+@@ -192,8 +193,8 @@
+  -}
+ 
+ 
+-----------------------------
+--- IConv monad
++----------------------------------------
++-- IConv functor, applicative, and monad
+ --
+ 
+ newtype IConv a = I {
+@@ -202,6 +203,13 @@
+         -> IO (Buffers, a)
+   }
+ 
++instance Functor IConv where
++  fmap = liftM
++
++instance Applicative IConv where
++  pure = return
++  (<*>) = ap
++
+ instance Monad IConv where
+   (>>=)  = bindI
+ --  m >>= f = (m `bindI` \a -> consistencyCheck `thenI` returnI a) `bindI` f
