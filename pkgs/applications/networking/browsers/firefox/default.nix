@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc
+, cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
-      gstreamer gst_plugins_base icu libpng
-      jemalloc
+      gstreamer gst_plugins_base icu libpng jemalloc
+      libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3;
 
@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-      "--disable-pulseaudio"
       "--enable-jemalloc"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
