@@ -114,10 +114,6 @@ in
       ''
         # Various log/runtime directories.
 
-        touch /run/utmp # must exist
-        chgrp ${toString config.ids.gids.utmp} /run/utmp
-        chmod 664 /run/utmp
-
         mkdir -m 0755 -p /run/nix/current-load # for distributed builds
         mkdir -m 0700 -p /run/nix/remote-stores
 
