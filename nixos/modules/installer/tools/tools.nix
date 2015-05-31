@@ -1,7 +1,7 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, ... }:
 
 let
 

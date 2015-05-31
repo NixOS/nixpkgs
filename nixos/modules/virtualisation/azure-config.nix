@@ -1,5 +1,5 @@
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [ "${modulesPath}/virtualisation/azure-image.nix" ];
+  imports = [ <nixpkgs/nixos/modules/virtualisation/azure-image.nix> ];
 }

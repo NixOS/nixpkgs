@@ -1,5 +1,5 @@
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, ... }:
 
 {
-  imports = [ "${modulesPath}/virtualisation/nova-image.nix" ];
+  imports = [ <nixpkgs/nixos/modules/virtualisation/nova-image.nix> ];
 }

@@ -48,7 +48,7 @@ let
                , extraConfig, readOnly ? true, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
-      { config, lib, pkgs, modulesPath, ... }:
+      { config, lib, pkgs, ... }:
 
       { imports =
           [ ./hardware-configuration.nix
