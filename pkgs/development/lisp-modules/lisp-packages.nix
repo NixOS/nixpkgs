@@ -40,7 +40,7 @@ let lispPackages = rec {
       url = "https://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
       context = ./iterate.darcs-context;
-    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/ca-bundle.crt";}));
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
     };
@@ -314,7 +314,7 @@ let lispPackages = rec {
     src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
       url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
       sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
-    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/ca-bundle.crt";}));
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ca-bundle.crt";}));
   };
 
   cl-fuse-meta-fs = buildLispPackage rec {
@@ -563,5 +563,19 @@ let lispPackages = rec {
       rev = ''9d6f82f7121c87fb7e3b314987ba93900d300dc6'';
     };
   };
+
+  clx-xkeyboard = buildLispPackage rec {
+    baseName = "clx-xkeyboard";
+    version = "git-20150523";
+    description = "CLX support for X Keyboard extensions";
+    deps = [clx];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/filonenko-mikhail/clx-xkeyboard'';
+      sha256 = "11b34da7d354a709a24774032e85a8947be023594f8a333eaff6d4aa79f2b3db";
+      rev = ''11455d36283ef31c498bd58ffebf48c0f6b86ea6'';
+    };
+  };
+
 };
 in lispPackages
