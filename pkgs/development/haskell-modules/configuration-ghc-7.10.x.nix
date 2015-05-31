@@ -284,4 +284,7 @@ self: super: {
   # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
   crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
 
+  # Fix compilation under GHC 7.10, patch has been sent upstream.
+  iconv = appendPatch super.iconv ./iconv-fix-ghc710.patch;
+
 }
