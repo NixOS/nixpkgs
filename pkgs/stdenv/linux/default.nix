@@ -80,6 +80,7 @@ rec {
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl = bootstrapTools;
+          ca_cert_file = "${bootstrapTools}/etc/ssl/certs/ca-bundle.crt";
         };
 
         cc = if isNull gccPlain
