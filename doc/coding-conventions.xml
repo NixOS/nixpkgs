@@ -5,7 +5,7 @@
 <title>Coding conventions</title>
 
 
-<section><title>Syntax</title>
+<section xml:id="sec-syntax"><title>Syntax</title>
 
 <itemizedlist>
 
@@ -207,7 +207,7 @@ args.stdenv.mkDerivation (args // {
 </section>
 
 
-<section><title>Package naming</title>
+<section xml:id="sec-package-naming"><title>Package naming</title>
 
 <para>In Nixpkgs, there are generally three different names associated with a package:
 
@@ -292,7 +292,7 @@ dashes between words — not in camel case.  For instance, it should be
 <filename>allPackages.nix</filename> or
 <filename>AllPackages.nix</filename>.</para>
 
-<section><title>Hierarchy</title>
+<section xml:id="sec-hierarchy"><title>Hierarchy</title>
 
 <para>Each package should be stored in its own directory somewhere in
 the <filename>pkgs/</filename> tree, i.e. in
