@@ -4,7 +4,6 @@
   /* Add your name and email address here.  Keep the list
      alphabetically sorted.  */
 
-  _1126 = "Christian Lask <mail@elfsechsundzwanzig.de>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
@@ -95,6 +94,7 @@
   guibert = "David Guibert <david.guibert@gmail.com>";
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
+  hiberno = "Christian Lask <mail@elfsechsundzwanzig.de>";
   hinton = "Tom Hinton <t@larkery.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
