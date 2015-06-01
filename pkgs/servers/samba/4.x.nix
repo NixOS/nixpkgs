@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     find $out -type f -exec $SHELL -c "$SCRIPT" \;
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.samba.org/;
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
