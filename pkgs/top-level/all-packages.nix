@@ -4104,7 +4104,10 @@ let
 
     async_unix = callPackage ../development/ocaml-modules/async_unix { };
 
-    async = callPackage ../development/ocaml-modules/async { };
+    async =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/async { }
+      else null;
 
     atd = callPackage ../development/ocaml-modules/atd { };
 
