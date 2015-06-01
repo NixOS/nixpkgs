@@ -1125,6 +1125,8 @@ let
 
   cpio = callPackage ../tools/archivers/cpio { };
 
+  crackxls = callPackage ../tools/security/crackxls { };
+
   cromfs = callPackage ../tools/archivers/cromfs { };
 
   cron = callPackage ../tools/system/cron { };
