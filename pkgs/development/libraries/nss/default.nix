@@ -79,9 +79,8 @@ in stdenv.mkDerivation rec {
     find $out/bin -type f \( -name nss-config -o -delete \)
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = https://developer.mozilla.org/en-US/docs/NSS;
     description = "A set of libraries for development of security-enabled client and server applications";
-    platforms = platforms.all;
   };
 }

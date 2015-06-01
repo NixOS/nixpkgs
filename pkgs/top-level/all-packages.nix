@@ -9896,7 +9896,7 @@ let
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
-  qemu_kvm = lowPrio (qemu.override { type = "kvm-only"; });
+  qemu_kvm = lowPrio (qemu.override { x86Only = true; });
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
@@ -12144,14 +12144,7 @@ let
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
-  qemu = callPackage ../applications/virtualization/qemu {
-    gtk = gtk3;
-    bluez = bluez5;
-    libusb = libusb1;
-    mesa = mesa_noglu;
-  };
-
-  qemu-nix = qemu.override { type = "nix"; };
+  qemu = callPackage ../applications/virtualization/qemu { };
 
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
