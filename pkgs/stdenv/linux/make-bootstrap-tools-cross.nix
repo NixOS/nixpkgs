@@ -88,6 +88,8 @@ let
   coreutils = pkgs.coreutils.crossDrv;
   busyboxBootstrap = pkgs.busyboxBootstrap.crossDrv;
 
+  readelf = "${binutilsCross}/bin/${selectedCrossSystem.crossSystem.config}-readelf";
+
 in
 
 rec {
@@ -184,21 +186,42 @@ rec {
         done
 
         # Copy all of the needed libraries for the binaries
-        for BIN in $(find $out/bin -type f); do
-          echo "Copying libs for bin $BIN"
-          LDD="$(ldd $BIN)" || continue
-          LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
+        copy_libs_in_elf() {
+          local BIN=$1
+
+          # Determine what libraries are needed by the elf
+          RELF="$(${readelf} -a $BIN 2>&1)" || continue
+          RPATH="$(echo "$RELF" | grep rpath | sed 's,.*\[\([^]]*\)\].*,\1,')"
+          LIBS="$(echo "$RELF" | grep 'Shared library' | sed 's,.*\[\([^]]*\)\].*,\1,')"
           for LIB in $LIBS; do
-            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-            while [ "$(readlink $LIB)" != "" ]; do
-              LINK="$(readlink $LIB)"
-              if [ "${LINK:0:1}" != "/" ]; then
-                LINK="$(dirname $LIB)/$LINK"
+            # Find the libraries on the system
+            for LIBPATH in $(echo "$RPATH" | tr ':' ' '); do
+              if [ -f "$LIBPATH/$LIB" ]; then
+                LIB="$LIBPATH/$LIB"
+                break
               fi
-              LIB="$LINK"
-              [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
+            done
+
+            # Copy the library and possibly symlinks
+            while [ ! -f "$out/lib/$(basename $LIB)" ]; do
+              LINK="$(readlink $LIB)" || true
+              if [ -z "$LINK" ]; then
+                cp -pdv $LIB $out/lib
+                copy_libs_in_elf $LIB
+                break
+              else
+                ln -sv "$(basename $LINK)" "$out/lib/$(basename $LIB)"
+                if [ "${LINK:0:1}" != "/" ]; then
+                  LINK="$(dirname $LIB)/$LINK"
+                fi
+                LIB="$LINK"
+              fi
             done
           done
+        }
+        for BIN in $(find $out/bin -type f); do
+          echo "Copying libs for bin $BIN"
+          copy_libs_in_elf $BIN
         done
 
         chmod -R u+w $out
