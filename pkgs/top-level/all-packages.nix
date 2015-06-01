@@ -988,6 +988,8 @@ let
 
   cadaver = callPackage ../tools/networking/cadaver { };
 
+  davix = callPackage ../tools/networking/davix { };
+
   cantata = callPackage ../applications/audio/cantata { };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
