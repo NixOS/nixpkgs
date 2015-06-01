@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       # FIXME: patch this in systemd properly (and send upstream).
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c; do
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
         test -e $i
         substituteInPlace $i \
           --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
@@ -79,7 +79,8 @@ stdenv.mkDerivation rec {
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${utillinux}/sbin/sulogin
+          --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
+          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
       done
 
       substituteInPlace src/journal/catalog.c \
