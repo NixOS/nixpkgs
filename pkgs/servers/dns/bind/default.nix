@@ -55,11 +55,6 @@ stdenv.mkDerivation rec {
     optReadline optLibcap optIdnkit optLibiconv optPostgresql optLibmysql
     optDb optOpenldap
   ];
-  # TODO(wkennington): Remove this hack once we fix header / .la  / .pc files
-  propagatedBuildInputs = [
-    optKerberos optOpenssl optLibxml2 optJson_c
-    optLibseccomp optLibcap
-  ];
 
   configureFlags = [
     (mkOther                          "localstatedir"       "/var")
