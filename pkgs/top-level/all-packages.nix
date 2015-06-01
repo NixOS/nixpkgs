@@ -11732,6 +11732,8 @@ let
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
+  minitube = callPackage ../applications/video/minitube { };
+
   mimms = callPackage ../applications/audio/mimms {};
 
   mirage = callPackage ../applications/graphics/mirage {};
