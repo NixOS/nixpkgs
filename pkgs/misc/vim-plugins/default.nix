@@ -527,12 +527,12 @@ rec {
     '';
   };
 
-  wakatime = buildVimPlugin {
-    name = "wakatime-4.0.0";
+  vim-wakatime = buildVimPlugin {
+    name = "vim-wakatime-4.0.1";
 
     src = fetchFromGitHub {
-      sha256 = "0yfqcln1ah7a9hs6vl8llfyg5rzg1zbsf3y431wdgb0zvp9dlk25";
-      rev = "a7d48d3507499b8667bfca0b12f8865c01b26678";
+      sha256 = "0vhnfjl9qv6qwfvf106cw4mg4xss2nsafz5k2jadkryss6f3ga10";
+      rev = "1e2ba90f708965719ed52c4ea2728bc3cfa32f6d";
       repo = "vim-wakatime";
       owner = "wakatime";
     };
@@ -540,7 +540,7 @@ rec {
     meta = with stdenv.lib; {
       description = "Analytics about your programming";
       homepage = https://wakatime.com;
-      license = with licenses; bsd3;
+      license = licenses.bsd3;
       platforms = with platforms; linux;
       maintainers = with maintainers; [ nckx ];
     };

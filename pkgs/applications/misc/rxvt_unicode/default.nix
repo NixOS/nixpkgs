@@ -45,6 +45,11 @@ stdenv.mkDerivation (rec {
       ln -s $out/{lib/urxvt,lib/perl5/site_perl}
     '';
 
+  postInstall = ''
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
+
   meta = {
     description = "A clone of the well-known terminal emulator rxvt";
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";

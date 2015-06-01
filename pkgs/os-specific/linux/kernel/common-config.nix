@@ -190,18 +190,26 @@ with stdenv.lib;
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
   UBIFS_FS_ADVANCED_COMPR? y
-  ${optionalString (versionAtLeast version "3.6") ''
-    NFS_SWAP y
-  ''}
-  ${optionalString (versionAtLeast version "3.11") ''
-    NFS_V4_1 y  # NFSv4.1 client support
-    NFS_V4_2 y
+  ${optionalString (versionAtLeast version "4.0") ''
+    NFSD_PNFS y
   ''}
   NFSD_V2_ACL y
   NFSD_V3 y
   NFSD_V3_ACL y
   NFSD_V4 y
+  ${optionalString (versionAtLeast version "3.11") ''
+    NFSD_V4_SECURITY_LABEL y
+  ''}
   NFS_FSCACHE y
+  ${optionalString (versionAtLeast version "3.6") ''
+    NFS_SWAP y
+  ''}
+  NFS_V3_ACL y
+  ${optionalString (versionAtLeast version "3.11") ''
+    NFS_V4_1 y  # NFSv4.1 client support
+    NFS_V4_2 y
+    NFS_V4_SECURITY_LABEL y
+  ''}
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
@@ -226,7 +234,9 @@ with stdenv.lib;
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  DEVKMEM? n # Disable /dev/kmem
+  ${optionalString (!(features.grsecurity or false)) ''
+    DEVKMEM n # Disable /dev/kmem
+  ''}
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
@@ -292,6 +302,9 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
+  ${optionalString (versionAtLeast version "3.15") ''
+    MLX4_EN_VXLAN y
+  ''}
   MODVERSIONS y
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
@@ -367,14 +380,33 @@ with stdenv.lib;
 
   # Virtualisation.
   PARAVIRT? y
-  ${if versionAtLeast version "3.10" then ''
-    HYPERVISOR_GUEST? y
-  '' else ''
-    PARAVIRT_GUEST? y
-  ''}
-  KVM_GUEST? y
+  ${optionalString (!(features.grsecurity or false))
+    (if versionAtLeast version "3.10" then ''
+      HYPERVISOR_GUEST y
+    '' else ''
+      PARAVIRT_GUEST? y
+    '')
+  }
+  KVM_APIC_ARCHITECTURE y
+  KVM_ASYNC_PF y
   ${optionalString (versionOlder version "3.7") ''
     KVM_CLOCK? y
+  ''}
+  ${optionalString (versionAtLeast version "4.0") ''
+    KVM_COMPAT y
+  ''}
+  ${optionalString (versionAtLeast version "3.10") ''
+    KVM_DEVICE_ASSIGNMENT? y
+  ''}
+  ${optionalString (versionAtLeast version "4.0") ''
+    KVM_GENERIC_DIRTYLOG_READ_PROTECT y
+  ''}
+  ${optionalString (!features.grsecurity or true) ''
+    KVM_GUEST y
+  ''}
+  KVM_MMIO y
+  ${optionalString (versionAtLeast version "3.13") ''
+    KVM_VFIO y
   ''}
   XEN? y
   XEN_DOM0? y

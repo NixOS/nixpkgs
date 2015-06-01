@@ -1,6 +1,5 @@
 { stdenv, fetchurl, pkgconfig, yasm
-, freetype ? null
-, fribidi ? null
+, freetype, fribidi
 , encaSupport ? true, enca ? null # enca support
 , fontconfigSupport ? true, fontconfig ? null # fontconfig support
 , harfbuzzSupport ? true, harfbuzz ? null # harfbuzz support
@@ -8,31 +7,26 @@
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
 }:
 
-assert ((freetype != null) && (fribidi != null));
-assert encaSupport -> (enca != null);
-assert fontconfigSupport -> (fontconfig != null);
-assert harfbuzzSupport -> (harfbuzz != null);
-
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
+assert encaSupport -> enca != null;
+assert fontconfigSupport -> fontconfig != null;
+assert harfbuzzSupport -> harfbuzz != null;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libass-${version}";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1mwj2nk9g6cq6f8m1hf0ijg1299rghhy9naahqq43sc2whblb1l7";
+    sha256 = "1qzibgqmnnqk2r116lpk1br764g0v74f2zp12y5id0p1plaing37";
   };
 
   configureFlags = [
-    (mkFlag encaSupport "enca")
-    (mkFlag fontconfigSupport "fontconfig")
-    (mkFlag harfbuzzSupport "harfbuzz")
-    (mkFlag rasterizerSupport "rasterizer")
-    (mkFlag largeTilesSupport "large-tiles")
+    (mkEnable encaSupport       "enca"        null)
+    (mkEnable fontconfigSupport "fontconfig"  null)
+    (mkEnable harfbuzzSupport   "harfbuzz"    null)
+    (mkEnable rasterizerSupport "rasterizer"  null)
+    (mkEnable largeTilesSupport "large-tiles" null)
   ];
 
   nativeBuildInputs = [ pkgconfig yasm ];

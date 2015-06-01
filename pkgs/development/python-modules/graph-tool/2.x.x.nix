@@ -3,7 +3,7 @@ pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir, makeWrapper,
 gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.36";
+  version = "2.2.42";
   name = "${python.libPrefix}-graph-tool-${version}";
 
   meta = with stdenv.lib; {
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "0wp81dp2kd4bzsl6f3gxjmf11hiqr7rz7g0wa1j38fc0chq31q71";
+    sha256 = "124qmd0mgam7hm87gscp3836ymhhwwnlfm2c5pzpml06da1w0xg9";
   };
 
   preConfigure = ''
-    configureFlags="--with-python-module-path=$out/${python.sitePackages}"
+    configureFlags="--with-python-module-path=$out/${python.sitePackages} --enable-openmp"
   '';
 
   buildInputs = [ automake m4 pkgconfig makeWrapper ];

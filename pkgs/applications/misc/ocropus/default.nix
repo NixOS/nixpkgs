@@ -41,7 +41,7 @@ pythonPackages.buildPythonPackage {
   '';
 
   checkPhase = ''
-    patchShebangs ./run-test
+    patchShebangs .
     substituteInPlace ./run-test \
       --replace 'ocropus-rpred' 'ocropus-rpred -Q $NIX_BUILD_CORES'
     PATH=".:$PATH" ./run-test

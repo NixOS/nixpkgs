@@ -1,103 +1,127 @@
-{ stdenv, fetchurl, pkgconfig, flex, yacc
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, python, perl, yacc, flex
+, texinfo ? null, perlPackages
 
 # Optional Dependencies
 , openldap ? null, libcap_ng ? null, sqlite ? null, openssl ? null, db ? null
 , readline ? null, libedit ? null, pam ? null
 
-#, readline, openldap, libcap_ng
-#, sqlite, db, ncurses, openssl, cyrus_sasl
+# Extra Args
+, prefix ? ""
 }:
 
+with stdenv;
 let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
+  libOnly = prefix == "lib";
 
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
-  optOpenldap = shouldUsePkg openldap;
+  optTexinfo = if libOnly then null else shouldUsePkg texinfo;
+  optOpenldap = if libOnly then null else shouldUsePkg openldap;
   optLibcap_ng = shouldUsePkg libcap_ng;
   optSqlite = shouldUsePkg sqlite;
   optOpenssl = shouldUsePkg openssl;
   optDb = shouldUsePkg db;
   optReadline = shouldUsePkg readline;
   optLibedit = shouldUsePkg libedit;
-  optPam = shouldUsePkg pam;
-in
-stdenv.mkDerivation rec {
-  name = "heimdal-1.5.3";
+  optPam = if libOnly then null else shouldUsePkg pam;
 
-  src = fetchurl {
-    urls = [
-      "http://www.h5l.org/dist/src/${name}.tar.gz"
-      "http://ftp.pdc.kth.se/pub/heimdal/src/${name}.tar.gz"
-    ];
-    sha256 = "19gypf9vzfrs2bw231qljfl4cqc1riyg0ai0xmm1nd1wngnpphma";
+  lineParserStr = if optLibedit != null then "libedit"
+    else if optReadline != null then "readline"
+    else "no";
+
+  lineParserInputs = {
+    "libedit" = [ optLibedit ];
+    "readline" = [ optReadline ];
+    "no" = [ ];
+  }.${lineParserStr};
+in
+with stdenv.lib;
+stdenv.mkDerivation rec {
+  name = "${prefix}heimdal-${version}";
+  version = "2015-05-26";
+
+  src = fetchFromGitHub {
+    owner = "heimdal";
+    repo = "heimdal";
+    rev = "50e2a5ce95f42d4963d359c27a832e61991a12b1";
+    sha256 = "10104vm192r1i7ccs1fan16h9n31saaswsmywmrb0cxc7jv3rj8x";
   };
 
-  nativeBuildInputs = [ pkgconfig flex yacc ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig python perl yacc flex optTexinfo ]
+    ++ (with perlPackages; [ JSON ]);
   buildInputs = [
-    optOpenldap optLibcap_ng optSqlite optOpenssl optDb optReadline optLibedit
-    optPam
-  ];
+    optOpenldap optLibcap_ng optSqlite optOpenssl optDb optPam
+  ] ++ lineParserInputs;
 
   configureFlags = [
-    (mkOther                         "sysconfdir"            "/etc")
-    (mkOther                         "localstatedir"         "/var")
-    (mkWith   (optOpenldap != null)  "openldap"              optOpenldap)
-    (mkEnable (optOpenldap != null)  "hdb-openldap-module"   null)
-    (mkEnable true                   "pk-init"               null)
-    (mkEnable true                   "digest"                null)
-    (mkEnable true                   "kx509"                 null)
-    (mkWith   (optLibcap_ng != null) "capng"                 null)
-    (mkWith   (optSqlite != null)    "sqlite3"               sqlite)
-    (mkEnable (optSqlite != null)    "sqlite-cache"          null)
-    (mkWith   false                  "libintl"               null)               # TODO libintl fix
-    (mkWith   true                   "hdbdir"                "/var/lib/heimdal")
-    (mkWith   (optOpenssl != null)   "openssl"               optOpenssl)
-    (mkEnable true                   "pthread-support"       null)
-    (mkEnable false                  "dce"                   null)               # TODO: Add support
-    (mkEnable true                   "afs-support"           null)
-    (mkWith   (optDb != null)        "berkeley-db"           optDb)
-    (mkEnable false                  "nmdb"                  null)
-    (mkEnable false                  "developer"             null)
-    (mkWith   true                   "ipv6"                  null)
-    (mkEnable false                  "socket-wrapper"        null)
-    (mkEnable true                   "otp"                   null)
-    (mkEnable false                  "osfc2"                 null)
-    (mkEnable true                   "mmap"                  null)
-    (mkEnable true                   "afs-string-to-key"     null)
-    (mkWith   (optReadline != null)  "readline"              optReadline)
-    (mkWith   (optLibedit != null)   "libedit"               optLibedit)
-    (mkWith   false                  "x"                     null)
-    (mkEnable true                   "kcm"                   null)
-    (mkEnable true                   "heimdal-documentation" null)
+    (mkOther                                "sysconfdir"            "/etc")
+    (mkOther                                "localstatedir"         "/var")
+    (mkWith   (optOpenldap != null)         "openldap"              optOpenldap)
+    (mkEnable (optOpenldap != null)         "hdb-openldap-module"   null)
+    (mkEnable true                          "pk-init"               null)
+    (mkEnable true                          "digest"                null)
+    (mkEnable true                          "kx509"                 null)
+    (mkWith   (optLibcap_ng != null)        "capng"                 null)
+    (mkWith   (optSqlite != null)           "sqlite3"               sqlite)
+    (mkEnable (optSqlite != null)           "sqlite-cache"          null)
+    (mkWith   false                         "libintl"               null)               # TODO libintl fix
+    (mkWith   true                          "hdbdir"                "/var/lib/heimdal")
+    (mkEnable false                         "dce"                   null)               # TODO: Add support
+    (mkEnable (!libOnly)                    "afs-support"           null)
+    (mkEnable true                          "mmap"                  null)
+    (mkEnable (!libOnly)                    "afs-string-to-key"     null)
+    (mkWith   (lineParserStr == "readline") "readline"              optReadline)
+    (mkWith   (lineParserStr == "libedit")  "libedit"               optLibedit)
+    (mkWith   false                         "hesiod"                null)
+    (mkEnable (!libOnly)                    "kcm"                   null)
+    (mkEnable (optTexinfo != null)          "heimdal-documentation" null)
+    (mkWith   true                          "ipv6"                  null)
+    (mkEnable true                          "pthread-support"       null)
+    (mkEnable false                         "osfc2"                 null)
+    (mkEnable false                         "socket-wrapper"        null)
+    (mkEnable (!libOnly)                    "otp"                   null)
+    (mkEnable false                         "developer"             null)
+    (mkWith   (optDb != null)               "berkeley-db"           optDb)
+    (mkEnable true                          "ndbm-db"               null)
+    (mkEnable false                         "mdb-db"                null)
+    (mkWith   (optOpenssl != null)          "openssl"               optOpenssl)
   ];
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -pthread"
+  buildPhase = optionalString libOnly ''
+    (cd include; make -j $NIX_BUILD_CORES)
+    (cd lib; make -j $NIX_BUILD_CORES)
+    (cd tools; make -j $NIX_BUILD_CORES)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
+  '';
+
+  installPhase = optionalString libOnly ''
+    (cd include; make -j $NIX_BUILD_CORES install)
+    (cd lib; make -j $NIX_BUILD_CORES install)
+    (cd tools; make -j $NIX_BUILD_CORES install)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
+    rm -rf $out/{libexec,sbin,share}
+    find $out/bin -type f | grep -v 'krb5-config' | xargs rm
   '';
 
   # We need to build hcrypt for applications like samba
   postBuild = ''
-    (cd lib/hcrypto; make)
-    (cd include/hcrypto; make)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
   '';
 
   postInstall = ''
     # Install hcrypto
-    (cd lib/hcrypto; make install)
-    (cd include/hcrypto; make install)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
 
     # Doesn't succeed with --libexec=$out/sbin, so
     mv "$out/libexec/"* $out/sbin/
     rmdir $out/libexec
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = {
     description = "an implementation of Kerberos 5 (and some more stuff) largely written in Sweden";
     license = licenses.bsd3;
     platforms = platforms.linux;

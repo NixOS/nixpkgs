@@ -3,6 +3,7 @@
 source $stdenv/setup
 
 unpackPhase
+cd $TMP/$sourceRoot
 patchPhase
 
 configureScript=$TMP/$sourceRoot/configure

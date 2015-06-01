@@ -1,16 +1,16 @@
 { stdenv, fetchurl, automake, pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
-, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
-, withPlugin ? false, substituteAll
+, polkit, qtSupport ? true, qt4, pyqt4, net_snmp
+, withPlugin ? false, substituteAll, makeWrapper
 }:
 
 let
 
-  name = "hplip-3.15.2";
+  name = "hplip-3.15.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0z7n62vdbr0p0kls1m2sr3nhvkhx3rawcbzd0zdl0lnq8fkyq0jz";
+    sha256 = "0s1yiifp002n8qy0i4cv6j0hq9ikp4jabki5w3xzlaqgd4bjz1x3";
   };
 
   hplip_state =
@@ -21,9 +21,17 @@ let
         version = (builtins.parseDrvName name).version;
       };
 
+  hplip_arch =
+    {
+      "i686-linux" = "x86_32";
+      "x86_64-linux" = "x86_64";
+      "arm6l-linux" = "arm32";
+      "arm7l-linux" = "arm32";
+    }."${stdenv.system}" or (abort "Unsupported platform ${stdenv.system}");
+
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "0j8z8m3ygwahka7jv3hpzvfz187lh3kzzjhcy7grgaw2k01v5frm";
+    sha256 = "00zhaq48m7p6nrxfy16086hzghf2pfr32s53sndbpp2514v2j392";
   };
 
 in
@@ -66,7 +74,21 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-    wrapPythonPrograms
+      # Wrap the user-facing Python scripts in /bin without turning the ones
+      # in /share into shell scripts (they need to be importable).
+      # Complicated by the fact that /bin contains just symlinks to /share.
+      for bin in $out/bin/*; do
+        py=`readlink -m $bin`
+        rm $bin
+        cp $py $bin
+        wrapPythonProgramsIn $bin "$out $pythonPath"
+        sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
+      done
+
+      # Remove originals. Knows a little too much about wrapPythonProgramsIn.
+      rm -f $out/bin/.*-wrapped
+
+      wrapPythonPrograms $out/lib "$out $pythonPath"
     ''
     + (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
@@ -122,8 +144,8 @@ stdenv.mkDerivation {
     ] ++ stdenv.lib.optional qtSupport qt4;
 
   pythonPath = with pythonPackages; [
+      dbus
       pillow
-      pythonDBus
       pygobject
       recursivePthLoader
       reportlab
@@ -135,7 +157,7 @@ stdenv.mkDerivation {
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel jgeerds ];
+    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
+    maintainers = with maintainers; [ ttuegel jgeerds nckx ];
   };
 }

@@ -23,7 +23,7 @@ else
 */
 
 let
-  version = "10.5.4";
+  version = "10.5.6";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
   clang = if llvmPackages ? clang-unwrapped then llvmPackages.clang-unwrapped else llvmPackages.clang;
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "00v89jna7m6r2w1yrnx09isc97r2bd1hkn4jib445n1078zp47mm";
+    sha256 = "66017853bde5f7a6647db3eede30512a091a3491daa1708e0ad8027c328ba595";
   };
 
   prePatch = "patchShebangs .";
@@ -167,11 +167,11 @@ stdenv.mkDerivation {
 
   passthru = { inherit libdrm version driverLink; };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An open source implementation of OpenGL";
     homepage = http://www.mesa3d.org/;
     license = "bsd";
-    platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = with stdenv.lib.maintainers; [ eduarrrd simons vcunat ];
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ eduarrrd simons vcunat ];
   };
 }

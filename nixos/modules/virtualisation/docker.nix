@@ -45,7 +45,7 @@ in
       };
     extraOptions =
       mkOption {
-        type = types.str;
+        type = types.separatedString " ";
         default = "";
         description =
           ''

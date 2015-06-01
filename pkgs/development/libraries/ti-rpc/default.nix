@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, kerberos }:
+{ fetchurl, stdenv, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-0.2.5";
+  name = "libtirpc-0.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "1nq2w227j9nh8qsz7b3c1pha00k5yvzf2c3pfmlcb1l65iydxyb2";
+    sha256 = "07d1wlfzf3ia09mjn3f3ay8isk7yx4a6ckfkzx5khnqlc7amkzna";
   };
 
-  buildInputs = [ kerberos ];
+  propagatedBuildInputs = [ libkrb5 ];
 
   # http://www.sourcemage.org/projects/grimoire/repository/revisions/d6344b6a3a94b88ed67925a474de5930803acfbf
   preConfigure = ''

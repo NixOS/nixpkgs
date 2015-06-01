@@ -198,6 +198,19 @@ let self = _self // overrides;
     };
   };
 
+  autotetris = melpaBuild {
+    pname = "autotetris-mode";
+    version = "20141114.846";
+    src = fetchFromGitHub {
+      owner = "skeeto";
+      repo = "autotetris-mode";
+      rev = "7d348d33829bc89ddbd2b4d5cfe5073c3b0cbaaa";
+      sha256 = "14pjsb026mgjf6l3dggy255knr7c1vfmgb6kgafmkzvr96aglcdc";
+    };
+    files = [ "autotetris-mode.el" ];
+    meta =  { license = unlicense; };
+  };
+
   bind-key = melpaBuild {
     pname   = "bind-key";
     version = "20150317";
@@ -902,12 +915,12 @@ let self = _self // overrides;
 
   projectile = melpaBuild rec {
     pname   = "projectile";
-    version = "20141020";
+    version = "0.12.0";
     src = fetchFromGitHub {
       owner  = "bbatsov";
       repo   = pname;
-      rev    = "13580d83374e0c17c55b3a680b816dfae407657e";
-      sha256 = "10c28h2g53sg68lwamhak0shdhh26h5xaipipz3n4281sr1fwg58";
+      rev    = "v${version}";
+      sha256 = "1bl5wpkyv9xlf5v5hzkj8si1z4hjn3yywrjs1mx0g4irmq3mk29m";
     };
     packageRequires = [ dash helm s pkg-info epl ];
     meta = { license = gpl3Plus; };
@@ -1093,14 +1106,14 @@ let self = _self // overrides;
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.4.0";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "1skgw84j5a59ds86bpdcaf3c8iq2m0fz720chjh91ixhkavvdd87";
+      sha256 = "1a28vignwpcn62xk46w5p5wjfrbcmvs0gz1jgn4ba7ibmn4cmnnm";
     };
-    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" ];
+    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = { license = gpl3Plus; };
   };
 
@@ -1198,6 +1211,22 @@ let self = _self // overrides;
     meta = {
       description = "E-Mail client for Emacs";
       license = gpl3Plus; # probably
+    };
+  };
+
+  web-mode = melpaBuild rec {
+    pname   = "web-mode";
+    version = "11.1.12";
+    src = fetchFromGitHub {
+      owner  = "fxbois";
+      repo   = pname;
+      rev    = "67259f16bfaec5c006a53533b8feeba7771e1365";
+      sha256 = "16zcnwm7wnbl1xbsx7rr5rr697ax141akfx2lknwirx18vqmkijj";
+    };
+
+    meta = {
+      description = "Web template editing mode for emacs";
+      license = gpl2;
     };
   };
 

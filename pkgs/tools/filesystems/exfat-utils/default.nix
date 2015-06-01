@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       Unix-like systems.
     '';
     homepage = https://code.google.com/p/exfat;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

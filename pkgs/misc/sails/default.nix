@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       Sails is a simulator designed to test the AI of autonomous sailing
       robots. It emulates the basic physics of sailing a small single sail
       boat'';
-    maintainers = maintainers.kragniz;
+    maintainers = with maintainers; [ kragniz ];
     platforms = platforms.all;
   };
 }

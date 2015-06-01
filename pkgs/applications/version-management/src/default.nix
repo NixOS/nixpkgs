@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.catb.org/~esr/src/;
 
-    license = [ stdenv.lib.licenses.bsd3 ];
+    license = stdenv.lib.licenses.bsd3;
 
     maintainers = [ stdenv.lib.maintainers.shlevy ];
 

@@ -176,7 +176,7 @@ a.composableDerivation.composableDerivation {} (fix: {
   meta = {
     description = "free Geographic Information System (GIS) software used for geospatial data management and analysis, image processing, graphics/maps production, spatial modeling, and visualization";
     homepage = http://grass.itc.it/index.php;
-    license = [ "GPL" ];
+    license = "GPL";
     broken = true;
   };
 

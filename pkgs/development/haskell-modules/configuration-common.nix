@@ -8,10 +8,10 @@ self: super: {
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
   Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = self.Cabal_1_22_3_0; });
+  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_3_0; zlib = self.zlib_0_5_4_2; });
+  cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Break infinite recursions.
-  digest = super.digest.override { inherit (pkgs) zlib; };
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
@@ -27,6 +27,7 @@ self: super: {
 
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
+  hslua_0_4_0 = super.hslua_0_4_0.override { lua = pkgs.lua5_1; };
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
@@ -115,9 +116,6 @@ self: super: {
   # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
   network-uri = dontCheck super.network-uri;
 
-  # Agda-2.4.2.2 needs these overrides to compile.
-  Agda = super.Agda.override { equivalence = self.equivalence_0_2_5; cpphs = self.cpphs_1_18_9; };
-
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 
@@ -152,14 +150,11 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
-  darcs = overrideCabal super.darcs (drv: {
+  # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
+  darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|random.*==.*|random|' -e 's|text.*>=.*,|text,|' -e s'|terminfo == .*|terminfo|' darcs.cabal";
-  });
-
-  # Needs the latest version of QuickCheck to compile.
-  cabal-test-quickcheck = super.cabal-test-quickcheck.override { QuickCheck = self.QuickCheck_2_8_1; };
+    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' darcs.cabal";
+  })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
@@ -171,7 +166,6 @@ self: super: {
   ASN1 = dontDistribute super.ASN1;                             # NewBinary
   frame-markdown = dontDistribute super.frame-markdown;         # frame
   hails-bin = dontDistribute super.hails-bin;                   # Hails
-  hbro-contrib = dontDistribute super.hbro-contrib;             # hbro
   lss = markBrokenVersion "0.1.0.0" super.lss;                  # https://github.com/dbp/lss/issues/2
   snaplet-lss = markBrokenVersion "0.1.0.0" super.snaplet-lss;  # https://github.com/dbp/lss/issues/2
 
@@ -296,6 +290,8 @@ self: super: {
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
   amqp-conduit = dontCheck super.amqp-conduit;
+  bitcoin-api = dontCheck super.bitcoin-api;
+  bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
@@ -313,9 +309,11 @@ self: super: {
   scotty-binding-play = dontCheck super.scotty-binding-play;
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
+  textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
+  wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -403,7 +401,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
-  influxdb = dontCheck super.influxdb;
+  influxdb = dontCheck (dontJailbreak super.influxdb);
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -459,9 +457,6 @@ self: super: {
 
   # https://bitbucket.org/wuzzeb/webdriver-utils/issue/1/hspec-webdriver-101-cant-compile-its-test
   hspec-webdriver = markBroken super.hspec-webdriver;
-
-  # The build fails with the most recent version of c2hs.
-  ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
 
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
@@ -681,8 +676,14 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2045
-  pandoc = dontCheck super.pandoc;
+  # https://github.com/jgm/pandoc/issues/2190
+  pandoc = overrideCabal super.pandoc (drv: {
+    enableSharedExecutables = false;
+    postInstall = ''            # install man pages
+      mv man $out/
+      find $out/man -type f ! -name "*.[0-9]" -exec rm {} +
+    '';
+  });
 
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
@@ -745,7 +746,9 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvmPackages_34.llvm; };
+  # Needs help finding LLVM.
+  llvm-general = super.llvm-general.override { llvm-config = self.llvmPackages.llvm; };
+  spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
   leksah = dontCheck super.leksah;
@@ -753,19 +756,11 @@ self: super: {
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
-  # Fix problems with GHC >=7.8 (in compatible way)
-  mueval = let pkg = appendPatch super.mueval (pkgs.fetchpatch {
-                       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
-                       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
-                     });
-           # Nix-specific workaround
-           in appendPatch pkg ./mueval-nix.patch;
+  # https://github.com/gwern/mueval/issues/9
+  mueval = markBrokenVersion "0.9.1.1" super.mueval;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
-  zlib_0_6_1_0 = dontCheck super.zlib_0_6_1_0;
-
-  # Jailbreaking breaks the build.
-  QuickCheck_2_8_1 = dontJailbreak super.QuickCheck_2_8_1;
+  zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = pkgs.cabal2nix;
@@ -801,4 +796,40 @@ self: super: {
   # https://github.com/bos/aeson/issues/253
   aeson = dontCheck super.aeson;
 
+  # GNUTLS 3.4 causes linker errors: http://hydra.cryp.to/build/839563/nixlog/2/raw
+  gnutls = super.gnutls.override { gnutls = pkgs.gnutls33; };
+
+  # Won't compile with recent versions of QuickCheck.
+  testpack = markBroken super.testpack;
+  MissingH = dontCheck super.MissingH;
+
+  # Obsolete for GHC versions after GHC 6.10.x.
+  utf8-prelude = markBroken super.utf8-prelude;
+
+  # https://github.com/yaccz/saturnin/issues/3
+  Saturnin = dontCheck super.Saturnin;
+
+  # https://github.com/kolmodin/binary/issues/74
+  binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
+
+  # https://github.com/kkardzis/curlhs/issues/6
+  curlhs = dontCheck super.curlhs;
+
+  # This needs the latest version of errors to compile.
+  pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
+
+  # https://github.com/hvr/token-bucket/issues/3
+  token-bucket = dontCheck super.token-bucket;
+
+  # https://github.com/alphaHeavy/lzma-enumerator/issues/3
+  lzma-enumerator = dontCheck super.lzma-enumerator;
+
+  # https://github.com/BNFC/bnfc/issues/140
+  BNFC = dontCheck super.BNFC;
+
+  # FPCO's fork of Cabal won't succeed its test suite.
+  Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
+
+  # https://github.com/vincenthz/hs-cipher-aes/issues/35
+  cipher-aes = dontCheck super.cipher-aes;
 }

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gst_plugins_base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
-, libiec61883, libavc1394, taglib, pulseaudio, gdk_pixbuf, orc
+, libiec61883, libavc1394, taglib, libpulseaudio, gdk_pixbuf, orc
 , glib, gstreamer, bzip2, libsoup, libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig glib gstreamer gst_plugins_base ]
-    ++ stdenv.lib.optional stdenv.isLinux [ pulseaudio ]
+    ++ stdenv.lib.optional stdenv.isLinux [ libpulseaudio ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex

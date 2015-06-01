@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
-, alsaLib, bzip2, fontconfig, freetype, libiconv, lame, libass, libogg, libtheora
-, libva, libvdpau, libvorbis, libvpx, lzma, pulseaudio, SDL, soxr, x264
-, xvidcore, zlib
+, alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
+, libtheora, libva, libvdpau, libvorbis, libvpx, lzma, libpulseaudio, SDL, soxr
+, x264, xvidcore, zlib
 , openglSupport ? false, mesa ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
        else
          "--disable-pthreads --disable-w32threads")
       (ifMinVer "0.9" "--disable-os2threads") # We don't support OS/2
+      "--enable-network"
       (ifMinVer "2.4" "--enable-pixelutils")
     # Executables
       "--enable-ffmpeg"
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" "--disable-doc")
     # External Libraries
       "--enable-bzlib"
+      "--enable-gnutls"
       (ifMinVer "1.0" "--enable-fontconfig")
       (ifMinVer "0.7" "--enable-libfreetype")
       "--enable-libmp3lame"
@@ -129,15 +131,15 @@ stdenv.mkDerivation rec {
       "--disable-stripping"
     # Disable mmx support for 0.6.90
       (verFix null "0.6.90" "--disable-mmx")
-  ] ++ optional (stdenv.cc.cc.isClang or false) "--cc=clang";
+  ] ++ optional stdenv.cc.isClang "--cc=clang";
 
   nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
 
   buildInputs = [
-    bzip2 fontconfig freetype libiconv lame libass libogg libtheora libvdpau
-    libvorbis lzma SDL soxr x264 xvidcore zlib
+    bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
+    libvdpau libvorbis lzma SDL soxr x264 xvidcore zlib
   ] ++ optional openglSupport mesa
-    ++ optionals (!isDarwin) [ libvpx pulseaudio ] # Need to be fixed on Darwin
+    ++ optionals (!isDarwin) [ libvpx libpulseaudio ] # Need to be fixed on Darwin
     ++ optional (isLinux || isFreeBSD) libva
     ++ optional isLinux alsaLib;
 

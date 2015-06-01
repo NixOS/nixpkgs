@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     export PREFIX=$out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://pauillac.inria.fr/~fpottier/menhir/;
     description = "A LR(1) parser generator for OCaml";
     longDescription = ''
@@ -41,10 +41,11 @@ stdenv.mkDerivation {
       to OCaml code.  Menhir was designed and implemented by François Pottier
       and Yann Régis-Gianas.
     '';
-    license = [ "QPL" /* generator */ "LGPLv2" /* library */ ];
-    platforms = ocaml.meta.platforms;
-    maintainers = [
-      stdenv.lib.maintainers.z77z
+    license = with licenses; [
+      qpl /* generator */
+      lgpl2 /* library */
     ];
+    platforms = ocaml.meta.platforms;
+    maintainers = with maintainers; [ z77z ];
   };
 }

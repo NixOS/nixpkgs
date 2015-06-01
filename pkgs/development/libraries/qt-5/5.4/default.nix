@@ -147,14 +147,14 @@ let
       multimedia = callPackage
         (
           { qtSubmodule, base, declarative
-          , alsaLib, gstreamer, gst_plugins_base, pulseaudio
+          , alsaLib, gstreamer, gst_plugins_base, libpulseaudio
           }:
 
           qtSubmodule {
             name = "qtmultimedia";
             qtInputs = [ base declarative ];
             buildInputs = [
-              alsaLib gstreamer gst_plugins_base pulseaudio
+              alsaLib gstreamer gst_plugins_base libpulseaudio
             ];
           }
         )

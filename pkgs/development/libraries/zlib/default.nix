@@ -40,8 +40,8 @@ stdenv.mkDerivation (rec {
     makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
-  # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
-  cygwinConfigureEnableShared = true;
+  # CYGXXX: This is not needed anymore and non-functional, but left not to trigger rebuilds
+  cygwinConfigureEnableShared = if (!stdenv.isCygwin) then true else null;
 
   passthru.version = version;
 

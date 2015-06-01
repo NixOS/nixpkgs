@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, xorg, alsaLib, mesa, aalib
 , libvorbis, libtheora, speex, zlib, libdvdcss, perl, ffmpeg
-, flac, libcaca, pulseaudio, libmng, libcdio, libv4l, vcdimager
+, flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext
     alsaLib mesa aalib libvorbis libtheora speex perl ffmpeg flac
-    libcaca pulseaudio libmng libcdio libv4l vcdimager libmpcdec
+    libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
   ];
 
   NIX_LDFLAGS = "-rpath ${libdvdcss}/lib -L${libdvdcss}/lib -ldvdcss";

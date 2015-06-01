@@ -104,12 +104,9 @@ substituteInPlace Cargo.lock \
 set -u
 mv Cargo.lock $out/
 
-# The following is the $indexHash cargo uses for the registry index when
-# its URL is file:///dev/null, which is the registry index URL we use to make
-# sure our output is deterministic.
 
-registryIndexDirName="-ba82b75dd6681d6f"
-mv $out/registry/cache/* $out/registry/cache/$registryIndexDirName
+# Let's replace $indexHash with something more deterministic
+mv $out/registry/cache/* $out/registry/cache/HASH
 
 # The registry index changes all the time, so it's not deterministic
 # We'll symlink it before running 'cargo build'

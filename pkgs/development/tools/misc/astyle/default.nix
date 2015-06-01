@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1b0f4wm1qmgcswmixv9mwbp86hbdqxk754hml8cjv5vajvqwdpzv";
   };
 
-  sourceRoot = if (stdenv.cc.cc.isClang or false)
+  sourceRoot = if stdenv.cc.isClang
     then "astyle/build/clang"
     else "astyle/build/gcc";
 

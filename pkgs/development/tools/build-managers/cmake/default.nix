@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    });
+    }) ++ stdenv.lib.optional stdenv.isCygwin ./2.8.11-cygwin.patch;
 
   buildInputs =
     [ bzip2 curl expat libarchive xz zlib ]
@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
 
   configureFlags =
-    [
-      "--docdir=/share/doc/${name}"
+    [ "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
-      "--system-libs"
       "--no-system-jsoncpp"
-    ]
-    ++ optional useQt4 "--qt-gui";
+    ++ optional (!stdenv.isCygwin) "--system-libs"
+    ++ optional useQt4 "--qt-gui"
+    ++ ["--"]
+    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
 
   setupHook = ./setup-hook.sh;
 

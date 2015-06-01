@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage    = https://github.com/atheme/charybdis;
     license     = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lassulus ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms   = stdenv.lib.platforms.linux;
   };
 
 

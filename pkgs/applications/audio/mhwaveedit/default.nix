@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL , alsaLib, gtk, jack2, ladspaH
-, ladspaPlugins, libsamplerate, libsndfile, pkgconfig, pulseaudio }:
+, ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio }:
 
 stdenv.mkDerivation  rec {
   name = "mhwaveedit-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs =
    [ SDL alsaLib gtk jack2 ladspaH libsamplerate libsndfile
-     pkgconfig pulseaudio
+     pkgconfig libpulseaudio
    ];
 
   configureFlags = "--with-default-ladspa-path=${ladspaPlugins}/lib/ladspa";

@@ -15,16 +15,8 @@
 , prefix ? ""
 }:
 
+with stdenv;
 let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
   libOnly = prefix == "lib";
 
   hasXlibs = xlibs != null;
@@ -38,7 +30,7 @@ let
   optCoreaudio = if libOnly then null else shouldUsePkg coreaudio;
   optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
   optEsound = if libOnly then null else shouldUsePkg esound;
-  optGlib = if libOnly then null else shouldUsePkg glib;
+  optGlib = shouldUsePkg glib;
   optGtk3 = if libOnly || !hasXlibs then null else shouldUsePkg gtk3;
   optGconf = if libOnly then null else shouldUsePkg gconf;
   optAvahi = if libOnly then null else shouldUsePkg avahi;
@@ -66,6 +58,7 @@ let
     simple = null;
   }.${databaseName};
 in
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${prefix}pulseaudio-${version}";
   version = "6.0";
@@ -84,9 +77,9 @@ stdenv.mkDerivation rec {
     optLibcap valgrind optOss optCoreaudio optAlsaLib optEsound optGlib
     optGtk3 optGconf optAvahi optLibjack2 optLibasyncns optLirc optDbus optUdev
     optOpenssl optFftw optSpeexdsp optSystemd optWebrtc-audio-processing
-  ] ++ stdenv.lib.optionals hasXlibs (with xlibs; [
+  ] ++ optionals hasXlibs (with xlibs; [
       libX11 libxcb libICE libSM libXtst xextproto libXi
-    ]) ++ stdenv.lib.optionals (optBluez5 != null) [ optBluez5 optSbc ];
+    ]) ++ optionals (optBluez5 != null) [ optBluez5 optSbc ];
 
   preConfigure = ''
     # Performs and autoreconf
@@ -115,7 +108,7 @@ stdenv.mkDerivation rec {
     (mkEnable false                   "samplerate"                 null)         # Deprecated
     (mkWith   true                    "database"                   databaseName)
     (mkEnable hasOss                  "oss-output"                 null)
-    (mkEnable hasOss                  "oss-wrapper"                null)
+    (mkEnable true                    "oss-wrapper"                null)         # Does not use OSS
     (mkEnable (optCoreaudio != null)  "coreaudio-output"           null)
     (mkEnable (optAlsaLib != null)    "alsa"                       null)
     (mkEnable (optEsound != null)     "esound"                     null)
@@ -162,7 +155,7 @@ stdenv.mkDerivation rec {
   # the alternative is to copy the files from /usr/include to src, but there are
   # probably a large number of files that would need to be copied (I stopped
   # after the seventh)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin
+  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin
     "-I/usr/include";
 
   installFlags = [
@@ -170,11 +163,11 @@ stdenv.mkDerivation rec {
     "pulseconfdir=$(out)/etc/pulse"
   ];
 
-  postInstall = stdenv.lib.optionalString libOnly ''
+  postInstall = optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Sound server for POSIX and Win32 systems";
     homepage    = http://www.pulseaudio.org/;
     # Note: Practically, the server is under the GPL due to the

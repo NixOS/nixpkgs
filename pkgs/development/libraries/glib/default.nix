@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-assert !stdenv.isDarwin -> stdenv.cc.cc.isGNU or false;
+assert !stdenv.isDarwin -> stdenv.cc.isGNU;
 
 # TODO:
 # * Add gio-module-fam
@@ -40,7 +40,7 @@ let
   '';
 
   ver_maj = "2.44";
-  ver_min = "0";
+  ver_min = "1";
 in
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "1fgmjv3yzxgbks31h42201x2izpw0sd84h8dfw0si3x00sqn5lzj";
+    sha256 = "01yabrfp64i11mrks3p1gcks99lw0zm7f5vhkc53sl4amyndw4c8";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -63,8 +63,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
-  configureFlags =
-    optional stdenv.isDarwin "--disable-compile-warnings"
+  # Static is necessary for qemu-nix to support static userspace translators
+  configureFlags = [ "--enable-static" ]
+    ++ optional stdenv.isDarwin "--disable-compile-warnings"
     ++ optional stdenv.isSunOS "--disable-modular-tests";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
@@ -74,6 +75,8 @@ stdenv.mkDerivation rec {
     ''
       export MACOSX_DEPLOYMENT_TARGET=
     '';
+
+  dontDisableStatic = true;
 
   enableParallelBuilding = true;
   DETERMINISTIC_BUILD = 1;

@@ -40,11 +40,14 @@ self: super: {
   # https://github.com/haskell/cabal/issues/2322
   Cabal_1_22_3_0 = super.Cabal_1_22_3_0.override { binary = self.binary_0_7_4_0; };
 
+  # Avoid inconsistent 'binary' versions from 'text' and 'Cabal'.
+  cabal-install = super.cabal-install.overrideScope (self: super: { binary = self.binary_0_7_4_0; });
+
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
 
-  # Needs Cabal >= 1.18.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_18_1_6; };
+  # https://github.com/peti/jailbreak-cabal/issues/9
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = dontJailbreak self.Cabal_1_20_0_3; };
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;

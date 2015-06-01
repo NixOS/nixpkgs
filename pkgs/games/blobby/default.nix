@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ''A blobby volleyball game'';
-    license = with stdenv.lib.licenses; bsd3;
+    license = stdenv.lib.licenses.bsd3;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     homepage = "http://blobby.sourceforge.net/";

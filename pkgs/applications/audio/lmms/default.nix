@@ -1,6 +1,6 @@
 { stdenv, fetchurl, SDL, alsaLib, cmake, fftwSinglePrec, fluidsynth
 , fltk13, jack2, libvorbis , libsamplerate, libsndfile, pkgconfig
-, pulseaudio, qt4, freetype
+, libpulseaudio, qt4, freetype
 }:
 
 stdenv.mkDerivation  rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [
     SDL alsaLib cmake fftwSinglePrec fltk13 fluidsynth jack2
-    libsamplerate libsndfile libvorbis pkgconfig pulseaudio qt4
+    libsamplerate libsndfile libvorbis pkgconfig libpulseaudio qt4
   ];
 
   enableParallelBuilding = true;

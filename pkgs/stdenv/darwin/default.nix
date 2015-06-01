@@ -90,6 +90,7 @@ rec {
           cc      = "/usr";
           outPath = nativePrefix;
         };
+        isClang      = true;
       };
     };
     pkgs = allPackages {
@@ -129,13 +130,14 @@ rec {
 
     cc = import ../../build-support/cc-wrapper {
       inherit stdenv;
-      nativeTools  = false;
-      nativeLibc   = true;
-      binutils  = pkgs.darwin.cctools;
-      cc        = pkgs.llvmPackages.clang-unwrapped;
-      coreutils = pkgs.coreutils;
-      shell     = "${pkgs.bash}/bin/bash";
+      nativeTools   = false;
+      nativeLibc    = true;
+      binutils      = pkgs.darwin.cctools;
+      cc            = pkgs.llvmPackages.clang-unwrapped;
+      coreutils     = pkgs.coreutils;
+      shell         = "${pkgs.bash}/bin/bash";
       extraPackages = [ pkgs.libcxx ];
+      isClang       = true;
     };
 
     shell = "${pkgs.bash}/bin/bash";

@@ -1,15 +1,15 @@
 { stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt5, icu, sqlite
+, imagemagick, libjpeg, fontconfig, podofo, qt53, icu, sqlite
 , pil, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-2.27.0";
+  name = "calibre-2.29.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "13id1r2q6alw4wzb4z0njkyr6lsmzs2fjp3cflqavx3qk25darv5";
+    sha256 = "1n3cfnjnghhhsgzcbcvbr0gh191lhl6az09q1s68jhlcc2lski6l";
   };
 
   inherit python;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
-      fontconfig podofo qt5.base pil chmlib icu sqlite libusb1 libmtp xdg_utils
+      fontconfig podofo qt53 pil chmlib icu sqlite libusb1 libmtp xdg_utils
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
       pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw

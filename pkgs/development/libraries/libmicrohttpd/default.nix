@@ -5,16 +5,8 @@
 , openssl ? null, zlib ? null, libgcrypt ? null, gnutls ? null
 }:
 
+with stdenv;
 let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
-  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
-
   optOpenssl = shouldUsePkg openssl;
   optZlib = shouldUsePkg zlib;
   hasSpdy = optOpenssl != null && optZlib != null;
@@ -25,11 +17,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.9.41";
+  name = "libmicrohttpd-0.9.42";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "0z3s3aplgxj8cj947i4rxk9wzvg68b8hbn71fyipc7aagmivx64p";
+    sha256 = "0nvxmm6z6wcq1vl6l92rids0i0va184y86bkc10dl0vh6rrj0d80";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -41,6 +33,7 @@ stdenv.mkDerivation rec {
     (mkWith   true                 "threads"       "posix")
     (mkEnable true                 "doc"           null)
     (mkEnable false                "examples"      null)
+    (mkEnable true                 "poll"          "auto")
     (mkEnable true                 "epoll"         "auto")
     (mkEnable doCheck              "curl"          null)
     (mkEnable hasSpdy              "spdy"          null)

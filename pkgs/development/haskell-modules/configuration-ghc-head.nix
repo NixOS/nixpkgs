@@ -33,8 +33,8 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # We have Cabal 1.22.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
+  jailbreak-cabal = pkgs.haskell.packages.ghc784.jailbreak-cabal;
 
   # GHC 7.10.x's Haddock binary cannot generate hoogle files.
   # https://ghc.haskell.org/trac/ghc/ticket/9921
@@ -80,5 +80,8 @@ self: super: {
 
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
+
+  # Won't work with LLVM 3.5.
+  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
 }

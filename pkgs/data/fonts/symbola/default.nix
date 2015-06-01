@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode";
-    # In lieu of a licence:
+    # In lieu of a license:
     # Fonts in this site are offered free for any use;
     # they may be installed, embedded, opened, edited, modified, regenerated, posted, packaged and redistributed.
     license = stdenv.lib.licenses.free;

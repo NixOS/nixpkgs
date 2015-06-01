@@ -62,6 +62,7 @@
   ./programs/environment.nix
   ./programs/info.nix
   ./programs/ibus.nix
+  ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/nano.nix
   ./programs/screen.nix
@@ -201,6 +202,7 @@
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix
   ./services/misc/mesos-slave.nix
+  ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
@@ -221,6 +223,7 @@
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
+  ./services/monitoring/das_watchdog.nix
   ./services/monitoring/dd-agent.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
@@ -251,6 +254,7 @@
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
+  ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
   ./services/networking/btsync.nix
   ./services/networking/charybdis.nix
@@ -264,6 +268,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
+  ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix
@@ -289,6 +294,7 @@
   ./services/networking/nat.nix
   ./services/networking/networkmanager.nix
   ./services/networking/ngircd.nix
+  ./services/networking/nix-serve.nix
   ./services/networking/notbit.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
@@ -303,6 +309,7 @@
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
   ./services/networking/quassel.nix
+  ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
@@ -403,12 +410,14 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
+  ./system/boot/loader/generic-extlinux-compatible
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/ipxe.nix
   ./system/boot/loader/grub/memtest.nix
@@ -433,6 +442,7 @@
   ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
+  ./tasks/filesystems/exfat.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/jfs.nix
@@ -461,5 +471,6 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
+  ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
 ]

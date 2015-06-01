@@ -158,4 +158,27 @@ rec {
       drv' = (lib.head outputsList).value;
     in lib.deepSeq drv' drv';
 
+
+  /* Tests whether a derivation can be used by the current platform
+     Returns the derivation if true, otherwise null. */
+  shouldUsePkgSystem = system: pkg_: let pkg = (builtins.tryEval pkg_).value;
+    in if lib.any (x: x == system) (pkg.meta.platforms or [])
+      then pkg
+      else null;
+
+  /* Returns a configure flag string in an autotools format
+     trueStr: Prepended when cond is true
+     falseStr: Prepended when cond is false
+     cond: The condition for the prepended string type and value
+     name: The flag name
+     val: The value of the flag only set when cond is true */
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}"
+      + "${if val != null && cond != false then "=${val}" else ""}";
+
+  /* Flag setting helpers for autotools like packages */
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
 }

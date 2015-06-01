@@ -115,6 +115,7 @@ stdenv.mkDerivation {
     -xcb
     -qpa xcb
     -${optionalString (cups == null) "no-"}cups
+    -${optionalString (!gtkStyle) "no-"}gtkstyle
 
     -no-eglfs
     -no-directfb
@@ -150,7 +151,8 @@ stdenv.mkDerivation {
   ++ optionals mesaSupported [ mesa mesa_glu ]
   ++ optional (cups != null) cups
   ++ optional (mysql != null) mysql.lib
-  ++ optional (postgresql != null) postgresql;
+  ++ optional (postgresql != null) postgresql
+  ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
   buildInputs = [ gdb bison flex gperf ruby ];
 

@@ -80,7 +80,7 @@ in
   };
 
   libxkbfile = attrs: attrs // {
-    patches = lib.optional (stdenv.cc.cc.isClang or false) ./libxkbfile-clang36.patch;
+    patches = lib.optional stdenv.cc.isClang ./libxkbfile-clang36.patch;
   };
 
   libpciaccess = attrs : attrs // {
@@ -172,6 +172,9 @@ in
   libXpm = attrs: attrs // {
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
+
+  libXpresent = attrs: attrs
+    // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
 
   setxkbmap = attrs: attrs // {
     postInstall =

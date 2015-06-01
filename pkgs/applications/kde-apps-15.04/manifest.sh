@@ -9,6 +9,7 @@ if [ $# -eq 0 ]; then
   # from recursing over the whole server! (No, it's not a bug.)
   $(nix-build ../../.. -A autonix.manifest) \
       "${KDE_MIRROR}/stable/applications/15.04.0/" \
+      "${KDE_MIRROR}/stable/applications/15.04.1/" \
       $MANIFEST_EXTRA_ARGS -A '*.tar.xz'
 
 else

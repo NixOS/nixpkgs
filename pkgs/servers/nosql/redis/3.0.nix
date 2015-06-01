@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.0-rc3";
+  version = "3.0.1";
   name = "redis-${version}";
 
   src = fetchurl {
     url = "https://github.com/antirez/redis/archive/${version}.tar.gz";
-    sha256 = "1695fa532eafc14c95f45add5d8a71d07e0e87b5c8f06c29dfa06313322d27b7";
+    sha256 = "1m34s60qvj1xyqw7x7ar0graw52wypx47dhvfb0br67vfb62l8sl";
   };
 
   makeFlags = "PREFIX=$(out)";

@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     export makeFlags="PREFIX=$out"
   '';
  
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://tools.suckless.org/tabbed;
     description = "Simple generic tabbed fronted to xembed aware applications";
-    license="MIT";
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ viric ];
+    platforms = with platforms; linux;
   };
 }

@@ -10,31 +10,9 @@ let
 
   patchesCross = isCross: let
     isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
-  in
-    [ # Allow the location of the X509 certificate file (the CA
-      # bundle) to be set through the environment variable
-      # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
-      # default location ($out/ssl/cert.pem) doesn't exist, and
-      # hardcoding something like /etc/ssl/cert.pem is impure and
-      # cannot be overriden per-process.  For security, the
-      # environment variable is ignored for setuid binaries.
-      # FIXME: drop this patch; it really isn't necessary, because
-      # OpenSSL already supports a ‘SSL_CERT_FILE’ variable.
-      ./cert-file.patch
-    ]
+  in stdenv.lib.optional isDarwin ./darwin-arch.patch;
 
-    ++ stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
-         [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
-           ./gnu.patch                # submitted upstream
-         ]
-
-    ++ stdenv.lib.optionals (stdenv.system == "x86_64-kfreebsd-gnu")
-        [ ./gnu.patch
-          ./kfreebsd-gnu.patch
-        ]
-
-    ++ stdenv.lib.optional isDarwin ./darwin-arch.patch;
-
+  extraPatches = stdenv.lib.optional stdenv.isCygwin ./1.0.1-cygwin64.patch;
 in
 
 stdenv.mkDerivation {
@@ -48,7 +26,7 @@ stdenv.mkDerivation {
     sha256 = "0x7gvyybmqm4lv62mlhlm80f1rn7il2qh8224rahqv0i15xhnpq9";
   };
 
-  patches = patchesCross false;
+  patches = (patchesCross false) ++ extraPatches;
 
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
@@ -62,12 +40,11 @@ stdenv.mkDerivation {
     else "./config";
 
   configureFlags = "shared --libdir=lib --openssldir=etc/ssl" +
-    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS" +
-    stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") " no-asm";
+    stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
 
-  preBuild = stdenv.lib.optionalString (stdenv.system == "x86_64-cygwin") ''
-    sed -i -e "s|-march=i486|-march=x86-64|g" Makefile
-  '';
+  # CYGXXX: used to be set for cygwin with optionalString. Not needed
+  # anymore but kept to prevent rebuild.
+  preBuild = "";
 
   makeFlags = "MANDIR=$(out)/share/man";
 
@@ -81,6 +58,9 @@ stdenv.mkDerivation {
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib)" ]; then
           rm $out/lib/*.a
       fi
+
+      # remove dependency on Perl at runtime
+      rm -rf $out/etc/ssl/misc
     ''; # */
 
   crossAttrs = {

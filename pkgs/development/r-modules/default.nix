@@ -947,9 +947,20 @@ let
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "zoib" # tarball is invalid on server
+    "timeSeq" # depends on missing edgeR
+    "survJamda" # depends on missing survcomp
+    "ssizeRNA" # depends on missing 'Biobase', 'edgeR', 'limma', 'qvalue'
+    "h5" # depends on missing h5 system library
   ];
 
   otherOverrides = old: new: {
+    xml2 = old.xml2.overrideDerivation (attrs: {
+      preConfigure = ''
+        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
+        export LIBXML_LIBDIR=${pkgs.libxml2}/lib
+      '';
+    });
+
     curl = old.curl.overrideDerivation (attrs: {
       preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
     });

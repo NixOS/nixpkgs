@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
-, automake, libtool, unzip, gnutar, jdk, maven, python, wrapPython
+, automake114x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, distutils-cfg, boto, pythonProtobuf, apr, subversion
 , leveldb, glog, perf, utillinux, libnl, iproute
 }:
@@ -9,18 +9,18 @@ let
   soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
 
 in stdenv.mkDerivation rec {
-  version = "0.22.0";
+  version = "0.22.1";
   name = "mesos-${version}";
 
   dontDisableStatic = true;
 
   src = fetchurl {
     url = "http://www.apache.org/dist/mesos/${version}/mesos-${version}.tar.gz";
-    sha256 = "0z8c1vr7b06l3nqgbxq8ydcz79ayw75y2szipfqkw17c7gv6d7v8";
+    sha256 = "0ry0ppzgpab68fz5bzd7ry5rjbg8xjz73x1x4c5id42cpsqnn7x5";
   };
 
   buildInputs = [
-    makeWrapper autoconf automake libtool curl sasl jdk maven
+    makeWrapper autoconf automake114x libtool curl sasl jdk maven
     python wrapPython boto distutils-cfg setuptools leveldb
     subversion apr glog
   ] ++ lib.optionals stdenv.isLinux [
@@ -129,7 +129,7 @@ in stdenv.mkDerivation rec {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan offline ];
+    maintainers = with maintainers; [ cstrahan offline rushmorem ];
     platforms   = with platforms; linux;
   };
 }

@@ -19,10 +19,8 @@ rec {
     nautilus-sendto dconf-editor
   ];
 
-  inherit (pkgs) libsoup glib gtk2;
+  inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
-  gtk3 = pkgs.gtk3_16;
-  gtkmm3 = pkgs.gtkmm3_16;
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
@@ -34,28 +32,10 @@ rec {
   vala = pkgs.vala_0_26;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
-  # Due to gtk 3.12 -> 3.16 transition
-  libcanberra_gtk3 = pkgs.libcanberra_gtk3.override { inherit gtk; }; 
-  libcanberra = libcanberra_gtk3;
-  ibus = pkgs.ibus.override { inherit gnome3; };
-  colord-gtk = pkgs.colord-gtk.override { inherit gtk3; };
-  webkitgtk24x = pkgs.webkitgtk24x.override { inherit gtk3; };
-  webkitgtk = pkgs.webkitgtk.override { inherit gtk3; };
-  libwnck3 = pkgs.libwnck3.override { inherit gtk3; };
-  gtkspell3 = pkgs.gtkspell3.override { inherit gtk3; };
-  librsvg = pkgs.librsvg.override { inherit gtk3; };
-  iconnamingutils = pkgs.iconnamingutils.override { inherit librsvg; };
-  libchamplain = pkgs.libchamplain.override { inherit gtk3 clutter_gtk; };
-  djvulibre = pkgs.djvulibre.override { inherit librsvg; };
-
   version = "3.16";
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
-
-# Backward compatibility, must be removed in favor of defaultIconTheme
-  gnome_icon_theme = adwaita-icon-theme;
-  gnome_icon_theme_symbolic = adwaita-icon-theme;
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
@@ -294,6 +274,12 @@ rec {
   gfbgraph = callPackage ./misc/gfbgraph { };
 
   goffice = callPackage ./misc/goffice { };
+
+  goffice_0_8 = callPackage ./misc/goffice/0.8.nix { 
+    inherit (pkgs.gnome2) libglade libgnomeui;
+    gconf = pkgs.gnome2.GConf;
+    libart = pkgs.gnome2.libart_lgpl;
+  };
 
   gitg = callPackage ./misc/gitg { 
     webkitgtk = webkitgtk24x;

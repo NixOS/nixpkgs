@@ -2,7 +2,7 @@
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, x11 ? null, libXrandr ? null
-, pulseaudioSupport ? true, pulseaudio ? null
+, pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
 # OSS is no longer supported, for it's much crappier than ALSA and
@@ -12,7 +12,7 @@ assert (stdenv.isLinux && !(stdenv ? cross)) -> alsaSupport || pulseaudioSupport
 assert openglSupport -> (mesa != null && x11Support);
 assert x11Support -> (x11 != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
-assert pulseaudioSupport -> pulseaudio != null;
+assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   version = "1.2.15";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   propagatedNativeBuildInputs =
     stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
     stdenv.lib.optional alsaSupport alsaLib ++
-    stdenv.lib.optional pulseaudioSupport pulseaudio;
+    stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";

@@ -43,7 +43,7 @@ in mkTkabber (main // {
   postPatch = ''
     substituteInPlace login.tcl --replace \
       "custom::defvar loginconf(sslcacertstore) \"\"" \
-      "custom::defvar loginconf(sslcacertstore) \$env(OPENSSL_X509_CERT_FILE)"
+      "custom::defvar loginconf(sslcacertstore) \$env(SSL_CERT_FILE)"
   '' + optionalString (theme != null) ''
     themePath="$out/share/doc/tkabber/examples/xrdb/${theme}.xrdb"
     sed -i '/^if.*load_default_xrdb/,/^}$/ {

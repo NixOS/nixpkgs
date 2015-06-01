@@ -2,16 +2,17 @@
 , deepseq, deepseq-generics, directory, doctest, filepath, gitMinimal
 , hackage-db, hspec, lens, monad-par, monad-par-extras, mtl, pretty
 , process, QuickCheck, regex-posix, SHA, split, stdenv, transformers
-, utf8-string, cartel, nix-prefetch-scripts, makeWrapper
+, utf8-string, cartel, nix-prefetch-scripts, optparse-applicative
+, makeWrapper
 }:
 
 mkDerivation rec {
   pname = "cabal2nix";
-  version = "20150505";
+  version = "20150531";
   src = fetchgit {
     url = "http://github.com/NixOS/cabal2nix.git";
-    rev = "db53ac3a644eebda581c9f036ccd55a19ff3c629";
-    sha256 = "1bimja9qsq865dmpjpy5wxxz43rc8wk9yva58l7hydmm87a4ch8y";
+    rev = "513a5fce6cfabe0b062424f6deb191a12f7e2187";
+    sha256 = "1j4x85cqj823d9swi473b4i9rz9wlm9m7c1il73h02dq5i67wida";
     deepClone = true;
   };
   isExecutable = true;
@@ -21,6 +22,7 @@ mkDerivation rec {
     aeson base bytestring Cabal containers deepseq-generics directory
     filepath hackage-db lens monad-par monad-par-extras mtl pretty
     process regex-posix SHA split transformers utf8-string cartel
+    optparse-applicative
   ];
   testDepends = [
     aeson base bytestring Cabal containers deepseq deepseq-generics
@@ -35,6 +37,8 @@ mkDerivation rec {
     install -D $out/bin/cabal2nix $exe
     rm -rf $out/{bin,lib,share}
     makeWrapper $exe $out/bin/cabal2nix --prefix PATH ":" "${nix-prefetch-scripts}/bin"
+    mkdir -p $out/share/bash-completion/completions
+    $exe --bash-completion-script $out/bin/cabal2nix >$out/share/bash-completion/completions/cabal2nix
   '';
   homepage = "http://github.com/NixOS/cabal2nix/";
   description = "Convert Cabal files into Nix build instructions";

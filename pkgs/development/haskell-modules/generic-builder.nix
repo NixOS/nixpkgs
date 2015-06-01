@@ -244,7 +244,7 @@ stdenv.mkDerivation ({
       mv $packageConfFile $packageConfDir/$pkgId.conf
     ''}
 
-    ${optionalString (enableSharedExecutables && isExecutable && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
+    ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
       for exe in "$out/bin/"* ; do
         install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done

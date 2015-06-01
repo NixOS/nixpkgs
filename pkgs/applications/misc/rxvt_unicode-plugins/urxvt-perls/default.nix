@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     description = "Perl extensions for the rxvt-unicode terminal emulator";
     homepage = "https://github.com/muennich/urxvt-perls";
     license = licenses.gpl2;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

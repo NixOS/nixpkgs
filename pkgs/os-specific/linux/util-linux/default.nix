@@ -1,15 +1,16 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.26.1";
+  name = "util-linux-2.26.2";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
-    sha256 = "0vmvk5khfwf71xbsnplvmk9ikwnlbhysc96mnkgwpqk2faairp12";
+    sha256 = "0rlnzmiqdannzf81fbh41541lrck63v9zhskm6h4i2jj8ahvsa8f";
   };
 
-  patches = [ ./rtcwake-search-PATH-for-shutdown.patch
-            ];
+  patches = [
+    ./rtcwake-search-PATH-for-shutdown.patch
+  ];
 
   #FIXME: make it also work on non-nixos?
   postPatch = ''

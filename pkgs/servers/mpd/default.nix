@@ -17,7 +17,7 @@
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
-, pulseaudioSupport ? true, pulseaudio
+, pulseaudioSupport ? true, libpulseaudio
 , jackSupport ? true, jack2
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
@@ -25,13 +25,13 @@
 , opusSupport ? true, libopus
 }:
 
+with stdenv.lib;
 let
-  opt = stdenv.lib.optional;
-  mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
+  opt = optional;
   major = "0.19";
   minor = "9";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt pulseaudioSupport pulseaudio
+    ++ opt pulseaudioSupport libpulseaudio
     ++ opt jackSupport jack2
     ++ opt gmeSupport game-music-emu
     ++ opt icuSupport icu
@@ -68,33 +68,33 @@ in stdenv.mkDerivation rec {
     ++ opt opusSupport libopus;
 
   configureFlags =
-    [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
-      (mkFlag flacSupport "flac")
-      (mkFlag vorbisSupport "vorbis")
-      (mkFlag vorbisSupport "vorbis-encoder")
-      (mkFlag (!stdenv.isDarwin && madSupport) "mad")
-      (mkFlag mikmodSupport "mikmod")
-      (mkFlag id3tagSupport "id3")
-      (mkFlag shoutSupport "shout")
-      (mkFlag sqliteSupport "sqlite")
-      (mkFlag curlSupport "curl")
-      (mkFlag audiofileSupport "audiofile")
-      (mkFlag bzip2Support "bzip2")
-      (mkFlag ffmpegSupport "ffmpeg")
-      (mkFlag fluidsynthSupport "fluidsynth")
-      (mkFlag zipSupport "zzip")
-      (mkFlag samplerateSupport "lsr")
-      (mkFlag mmsSupport "mms")
-      (mkFlag mpg123Support "mpg123")
-      (mkFlag aacSupport "aac")
-      (mkFlag pulseaudioSupport "pulse")
-      (mkFlag jackSupport "jack")
-      (mkFlag stdenv.isDarwin "osx")
-      (mkFlag icuSupport "icu")
-      (mkFlag gmeSupport "gme")
-      (mkFlag clientSupport "libmpdclient")
-      (mkFlag opusSupport "opus")
-      "--enable-debug"
+    [ (mkEnable (!stdenv.isDarwin && alsaSupport) "alsa" null)
+      (mkEnable flacSupport "flac" null)
+      (mkEnable vorbisSupport "vorbis" null)
+      (mkEnable vorbisSupport "vorbis-encoder" null)
+      (mkEnable (!stdenv.isDarwin && madSupport) "mad" null)
+      (mkEnable mikmodSupport "mikmod" null)
+      (mkEnable id3tagSupport "id3" null)
+      (mkEnable shoutSupport "shout" null)
+      (mkEnable sqliteSupport "sqlite" null)
+      (mkEnable curlSupport "curl" null)
+      (mkEnable audiofileSupport "audiofile" null)
+      (mkEnable bzip2Support "bzip2" null)
+      (mkEnable ffmpegSupport "ffmpeg" null)
+      (mkEnable fluidsynthSupport "fluidsynth" null)
+      (mkEnable zipSupport "zzip" null)
+      (mkEnable samplerateSupport "lsr" null)
+      (mkEnable mmsSupport "mms" null)
+      (mkEnable mpg123Support "mpg123" null)
+      (mkEnable aacSupport "aac" null)
+      (mkEnable pulseaudioSupport "pulse" null)
+      (mkEnable jackSupport "jack" null)
+      (mkEnable stdenv.isDarwin "osx" null)
+      (mkEnable icuSupport "icu" null)
+      (mkEnable gmeSupport "gme" null)
+      (mkEnable clientSupport "libmpdclient" null)
+      (mkEnable opusSupport "opus" null)
+      (mkEnable true "debug" null)
     ]
     ++ opt stdenv.isLinux
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system";
@@ -103,7 +103,7 @@ in stdenv.mkDerivation rec {
     ${if shoutSupport then "-lshout" else ""}
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       detects a new entry it'll emit only that new entry.
     '';
     homepage = http://www.vanheusden.com/rsstail/;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

@@ -135,7 +135,7 @@ let
       # Generate certificates.
       pushd $jre/lib/icedtea/jre/lib/security
       rm cacerts
-      perl ${./generate-cacerts.pl} $jre/lib/icedtea/jre/bin/keytool ${cacert}/etc/ca-bundle.crt
+      perl ${./generate-cacerts.pl} $jre/lib/icedtea/jre/bin/keytool ${cacert}/ca-bundle.crt
       popd
 
       ln -s $out/lib/icedtea/bin $out/bin

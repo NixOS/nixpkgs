@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre }:
 
-let version = "0_100"; in
+let version = "0_101"; in
 stdenv.mkDerivation rec {
   name = "cfr-${version}";
 
   src = fetchurl {
-    sha256 = "0q5kh5qdksykz339p55jz0q5cjqvxdzv3a7r4kkijgbfjm1ldr5f";
+    sha256 = "0zwl3whypdm2qrw3hwaqjnifkb4wcdn8fx9scrjkli54bhr6dqch";
     url = "http://www.benf.org/other/cfr/cfr_${version}.jar";
   };
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
       entirely in Java 6.
     '';
     homepage = http://www.benf.org/other/cfr/;
-    license = with licenses; mit;
-    platforms = with platforms; linux;
+    license = licenses.mit;
+    platforms = with platforms; all;
     maintainers = with maintainers; [ nckx ];
   };
 

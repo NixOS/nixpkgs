@@ -12,11 +12,13 @@ stdenv.mkDerivation (rec {
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
-          [ # We have a static libiconv, so we can only build the static lib.
-            "--disable-shared" "--enable-static"
-
+          [ "--disable-java"
+            "--disable-native-java"
             # Share the cache among the various `configure' runs.
             "--config-cache"
+            "--with-included-gettext"
+            "--with-included-glib"
+            "--with-included-libcroco"
           ]);
 
   # On cross building, gettext supposes that the wchar.h from libc
@@ -28,6 +30,8 @@ stdenv.mkDerivation (rec {
       echo gl_cv_func_wcwidth_works=yes > cachefile
       configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
     fi
+  '' + stdenv.lib.optionalString stdenv.isCygwin ''
+    sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
   buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;

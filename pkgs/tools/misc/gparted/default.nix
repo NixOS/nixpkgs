@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       while preserving the partition contents.
     '';
     homepage = http://gparted.sourceforge.net;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

@@ -3,7 +3,7 @@
 , withQt ? true, qt4
 , withLibvisual ? false, libvisual, SDL
 , withJack ? false, jack2
-, withPulseAudio ? true, pulseaudio
+, withPulseAudio ? true, libpulseaudio
 }:
 
 assert withJack       -> withQt;
@@ -46,6 +46,6 @@ stdenv.mkDerivation {
     ++ optional withQt qt4
     ++ optionals withLibvisual [ libvisual SDL ]
     ++ optional withJack jack2
-    ++ optional withPulseAudio pulseaudio
+    ++ optional withPulseAudio libpulseaudio
     ;
 }

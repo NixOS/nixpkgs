@@ -108,7 +108,7 @@
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg_1 ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
-, pulseaudio ? null # Pulseaudio input support
+, libpulseaudio ? null # Pulseaudio input support
 , rtmpdump ? null # RTMP[E] support
 #, libquvi ? null # Quvi input support
 , samba ? null # Samba protocol
@@ -231,11 +231,11 @@ assert x11grabExtlib -> libX11 != null && libXv != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-${version}";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "1hf77va46r8s05g5a5m7xx8b9vjzmqca0ajxsflsnbgf0s3kixm4";
+    sha256 = "1yqc3vm1xrwf866q262qd4nr9d6ifp4gg183pjdc4sl9np0rissr";
   };
 
   patchPhase = ''patchShebangs .'';
@@ -361,7 +361,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (openh264 != null) "openh264")
     (enableFeature (openjpeg_1 != null) "libopenjpeg")
     (enableFeature (opensslExtlib && gplLicensing) "openssl")
-    (enableFeature (pulseaudio != null) "libpulse")
+    (enableFeature (libpulseaudio != null) "libpulse")
     #(enableFeature quvi "libquvi")
     (enableFeature (rtmpdump != null) "librtmp")
     #(enableFeature (schroedinger != null) "libschroedinger")
@@ -399,7 +399,7 @@ stdenv.mkDerivation rec {
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     jack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXext libXfixes libXv lzma openal openjpeg_1 pulseaudio rtmpdump
+    libxcb libXext libXfixes libXv lzma openal openjpeg_1 libpulseaudio rtmpdump
     samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib
   ] ++ optional openglExtlib mesa
     ++ optionals x11grabExtlib [ libXext libXfixes ]

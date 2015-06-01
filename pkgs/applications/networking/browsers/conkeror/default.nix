@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       --add-flags "-app $out/libexec/conkeror/application.ini"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A keyboard-oriented, customizable, extensible web browser";
     longDescription = ''
       Conkeror is a keyboard-oriented, highly-customizable, highly-extensible
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
       self-documenting, featuring a powerful interactive help system.
     '';
     homepage = http://conkeror.org/;
-    license = [ "MPLv1.1" "GPLv2" "LGPLv2.1" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl chaoflow ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = with licenses; [ mpl11 gpl2 lgpl21 ];
+    maintainers = with maintainers; [ astsmtl chaoflow ];
+    platforms = with platforms; linux;
   };
 }

@@ -5,7 +5,7 @@
 , gdk_pixbuf, python, gdb, xlibs, libX11, libxcb, xcbutil, xcbutilimage
 , xcbutilkeysyms, xcbutilwm, udev, libxml2, libxslt, pcre, libxkbcommon
 , alsaLib, gstreamer, gst_plugins_base
-, pulseaudio, bison, flex, gperf, ruby, libwebp, libXcursor
+, libpulseaudio, bison, flex, gperf, ruby, libwebp, libXcursor
 , flashplayerFix ? false
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 , buildDocs ? false
@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
       (substituteAll { src = ./0010-dlopen-libXcursor.patch; inherit libXcursor; })
       (substituteAll { src = ./0011-dlopen-openssl.patch; inherit openssl; })
       (substituteAll { src = ./0012-dlopen-dbus.patch; dbus_libs = dbus; })
+      ./0013-qtwebkit-glib-2.44.patch
     ];
 
   preConfigure = ''
@@ -118,6 +119,7 @@ stdenv.mkDerivation rec {
     -xcb
     -qpa xcb
     -${optionalString (cups == null) "no-"}cups
+    -${optionalString (!gtkStyle) "no-"}gtkstyle
 
     -no-eglfs
     -no-directfb
@@ -146,7 +148,7 @@ stdenv.mkDerivation rec {
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
     fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
     zlib libjpeg libpng libtiff sqlite icu
-    libwebp alsaLib gstreamer gst_plugins_base pulseaudio
+    libwebp alsaLib gstreamer gst_plugins_base libpulseaudio
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
   # Qt doesn't directly need GLU (just GL), but many apps use, it's small and
@@ -154,7 +156,8 @@ stdenv.mkDerivation rec {
   ++ optionals mesaSupported [ mesa mesa_glu ]
   ++ optional (cups != null) cups
   ++ optional (mysql != null) mysql.lib
-  ++ optional (postgresql != null) postgresql;
+  ++ optional (postgresql != null) postgresql
+  ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
   buildInputs = [ gdb bison flex gperf ruby ];
 

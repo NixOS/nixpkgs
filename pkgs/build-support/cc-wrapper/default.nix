@@ -9,6 +9,7 @@
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? []
 , dyld ? null # TODO: should this be a setup-hook on dyld?
+, isGNU ? false, isClang ? false
 }:
 
 with stdenv.lib;
@@ -40,7 +41,7 @@ stdenv.mkDerivation {
   # The wrapper scripts use 'cat', so we may need coreutils.
   coreutils = if nativeTools then null else coreutils;
 
-  passthru = { inherit nativeTools nativeLibc nativePrefix; };
+  passthru = { inherit nativeTools nativeLibc nativePrefix isGNU isClang; };
 
   buildCommand =
     ''
