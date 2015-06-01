@@ -7,8 +7,9 @@
 , openssl ? null, libgcrypt ? null
 }:
 
-with stdenv;
 let
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
   # Prefer openssl
   cryptoStr = if shouldUsePkg openssl != null then "openssl"
     else if shouldUsePkg libgcrypt != null then "libgcrypt"

@@ -8,9 +8,16 @@
 #, sqlite, db, ncurses, openssl, cyrus_sasl
 }:
 
-with stdenv;
-with stdenv.lib;
 let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
   optOpenldap = shouldUsePkg openldap;
   optLibcap_ng = shouldUsePkg libcap_ng;
   optSqlite = shouldUsePkg sqlite;
@@ -90,7 +97,7 @@ stdenv.mkDerivation rec {
     rmdir $out/libexec
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "an implementation of Kerberos 5 (and some more stuff) largely written in Sweden";
     license = licenses.bsd3;
     platforms = platforms.linux;

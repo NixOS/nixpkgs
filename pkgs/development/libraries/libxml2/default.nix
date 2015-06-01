@@ -6,8 +6,16 @@
 
 #TODO: share most stuff between python and non-python builds, perhaps via multiple-output
 
-with stdenv;
 let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
   optIcu = shouldUsePkg icu;
   optPython = shouldUsePkg python;
   optReadline = shouldUsePkg readline;
@@ -17,7 +25,6 @@ let
   sitePackages = if optPython == null then null else
     "\${out}/lib/${python.libPrefix}/site-packages";
 in
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libxml2-${version}";
   version = "2.9.2";

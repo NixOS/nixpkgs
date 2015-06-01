@@ -8,11 +8,23 @@
 , unicode ? true
 }:
 
-with stdenv.lib;
 let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg_: let
+    pkg = (builtins.tryEval pkg_).value;
+  in if stdenv.lib.any (x: x == stdenv.system) (pkg.meta.platforms or [])
+    then pkg
+    else null;
+
   buildShared = !stdenv.isDarwin;
 
-  optGpm = stdenv.shouldUsePkg gpm;
+  optGpm = shouldUsePkg gpm;
 in
 stdenv.mkDerivation rec {
   name = "ncurses-5.9";
@@ -124,7 +136,7 @@ stdenv.mkDerivation rec {
     ln -svf libncurses.so $out/lib/libcurses.so
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Free software emulation of curses in SVR4 and more";
 
     longDescription = ''

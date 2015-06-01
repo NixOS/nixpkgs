@@ -7,8 +7,16 @@
 , openssl ? null, libgcrypt ? null
 }:
 
-with stdenv;
 let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
   # Prefer openssl
   cryptoStr = if shouldUsePkg openssl != null then "openssl"
     else if shouldUsePkg libgcrypt != null then "libgcrypt"

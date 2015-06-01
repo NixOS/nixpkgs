@@ -8,9 +8,16 @@
 , prefix ? ""
 }:
 
-with stdenv;
-with stdenv.lib;
 let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
   isLib = prefix == "lib";
 
   optOpenssl = if isLib then null else shouldUsePkg openssl;
@@ -43,7 +50,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ optJansson optBoost optLibxml2 optJemalloc ]
-    ++ optionals hasApp [ optOpenssl optLibev optZlib ];
+    ++ stdenv.lib.optionals hasApp [ optOpenssl optLibev optZlib ];
 
   configureFlags = [
     (mkEnable false                 "werror"          null)
@@ -61,7 +68,7 @@ stdenv.mkDerivation rec {
     (mkWith   false                 "cython"          null)
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://nghttp2.org/;
     description = "an implementation of HTTP/2 in C";
     license = licenses.mit;

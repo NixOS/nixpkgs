@@ -17,60 +17,65 @@
 , type ? ""
 }:
 
-with stdenv;
 with stdenv.lib;
 let
   n = "qemu-2.3.0";
 
-  isKvmOnly = type == "kvm-only";
-  isNix = type == "nix";
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
 
-  optSDL2 = if isNix then null else shouldUsePkg SDL2;
-  optGtk = if isNix then null else shouldUsePkg gtk;
-  optLibcap = if isNix then null else shouldUsePkg libcap;
-  optAttr = if isNix then null else shouldUsePkg attr;
-  optGnutls = if isNix then null else shouldUsePkg gnutls;
-  optCyrus_sasl = if isNix then null else shouldUsePkg cyrus_sasl;
-  optLibjpeg = if isNix then null else shouldUsePkg libjpeg;
-  optLibpng = if isNix then null else shouldUsePkg libpng;
-  optNcurses = if isNix then null else shouldUsePkg ncurses;
-  optCurl = if isNix then null else shouldUsePkg curl;
-  optBluez = if isNix then null else shouldUsePkg bluez;
-  optLibibverbs = if isNix then null else shouldUsePkg libibverbs;
-  optLibrdmacm = if isNix then null else shouldUsePkg librdmacm;
-  optLibuuid = if isNix then null else shouldUsePkg libuuid;
-  optVde2 = if isNix then null else shouldUsePkg vde2;
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
+  optSDL2 = if type == "nix" then null else shouldUsePkg SDL2;
+  optGtk = if type == "nix" then null else shouldUsePkg gtk;
+  optLibcap = if type == "nix" then null else shouldUsePkg libcap;
+  optAttr = if type == "nix" then null else shouldUsePkg attr;
+  optGnutls = if type == "nix" then null else shouldUsePkg gnutls;
+  optCyrus_sasl = if type == "nix" then null else shouldUsePkg cyrus_sasl;
+  optLibjpeg = if type == "nix" then null else shouldUsePkg libjpeg;
+  optLibpng = if type == "nix" then null else shouldUsePkg libpng;
+  optNcurses = if type == "nix" then null else shouldUsePkg ncurses;
+  optCurl = if type == "nix" then null else shouldUsePkg curl;
+  optBluez = if type == "nix" then null else shouldUsePkg bluez;
+  optLibibverbs = if type == "nix" then null else shouldUsePkg libibverbs;
+  optLibrdmacm = if type == "nix" then null else shouldUsePkg librdmacm;
+  optLibuuid = if type == "nix" then null else shouldUsePkg libuuid;
+  optVde2 = if type == "nix" then null else shouldUsePkg vde2;
   optLibaio = shouldUsePkg libaio;
   optLibcap_ng = shouldUsePkg libcap_ng;
-  optSpice = if isNix then null else shouldUsePkg spice;
-  optSpice_protocol = if isNix then null else shouldUsePkg spice_protocol;
-  optLibceph = if isNix then null else shouldUsePkg libceph;
-  optLibxfs = if isNix then null else shouldUsePkg libxfs;
-  optNss = if isNix then null else shouldUsePkg nss;
-  optNspr = if isNix then null else shouldUsePkg nspr;
-  optLibusb = if isNix then null else shouldUsePkg libusb;
-  optUsbredir = if isNix then null else shouldUsePkg usbredir;
-  optMesa = if isNix then null else shouldUsePkg mesa;
-  optLzo = if isNix then null else shouldUsePkg lzo;
-  optSnappy = if isNix then null else shouldUsePkg snappy;
-  optBzip2 = if isNix then null else shouldUsePkg bzip2;
-  optLibseccomp = if isNix then null else shouldUsePkg libseccomp;
-  optGlusterfs = if isNix then null else shouldUsePkg glusterfs;
-  optLibssh2 = if isNix then null else shouldUsePkg libssh2;
-  optNumactl = if isNix then null else shouldUsePkg numactl;
+  optSpice = if type == "nix" then null else shouldUsePkg spice;
+  optSpice_protocol = if type == "nix" then null else shouldUsePkg spice_protocol;
+  optLibceph = if type == "nix" then null else shouldUsePkg libceph;
+  optLibxfs = if type == "nix" then null else shouldUsePkg libxfs;
+  optNss = if type == "nix" then null else shouldUsePkg nss;
+  optNspr = if type == "nix" then null else shouldUsePkg nspr;
+  optLibusb = if type == "nix" then null else shouldUsePkg libusb;
+  optUsbredir = if type == "nix" then null else shouldUsePkg usbredir;
+  optMesa = if type == "nix" then null else shouldUsePkg mesa;
+  optLzo = if type == "nix" then null else shouldUsePkg lzo;
+  optSnappy = if type == "nix" then null else shouldUsePkg snappy;
+  optBzip2 = if type == "nix" then null else shouldUsePkg bzip2;
+  optLibseccomp = if type == "nix" then null else shouldUsePkg libseccomp;
+  optGlusterfs = if type == "nix" then null else shouldUsePkg glusterfs;
+  optLibssh2 = if type == "nix" then null else shouldUsePkg libssh2;
+  optNumactl = if type == "nix" then null else shouldUsePkg numactl;
 
   hasSDLAbi = if optSDL2 != null then true else null;
 
   hasVirtfs = stdenv.isLinux && optLibcap != null && optAttr != null;
 
-  hasVnc = !isNix;
+  hasVnc = type != "nix";
   hasVncTls = hasVnc && optGnutls != null;
   hasVncSasl = hasVnc && optCyrus_sasl != null;
   hasVncJpeg = hasVnc && optLibjpeg != null;
   hasVncPng = hasVnc && optLibpng != null;
   hasVncWs = hasVnc && optGnutls != null;
 
-  hasFdt = !isNix;
+  hasFdt = type != "nix";
 
   hasRdma = optLibibverbs != null && optLibrdmacm != null;
 
@@ -80,8 +85,8 @@ let
 
   hasNss = optNss != null && optNspr != null;
 
-  optLibpulseaudio = if isNix then null else shouldUsePkg libpulseaudio;
-  optAlsaLib = if isNix then null else shouldUsePkg alsaLib;
+  optLibpulseaudio = if type == "nix" then null else shouldUsePkg libpulseaudio;
+  optAlsaLib = if type == "nix" then null else shouldUsePkg alsaLib;
   audio = concatStringsSep "," (
        optional (optSDL2 != null) "sdl"
     ++ optional (optLibpulseaudio != null) "pa"
@@ -164,9 +169,9 @@ stdenv.mkDerivation rec {
     (mkEnable (optBluez != null)      "bluez"               null)
     (mkEnable stdenv.isLinux          "kvm"                 null)
     (mkEnable hasRdma                 "rdma"                null)
-    (mkEnable (!isNix)                "system"              null)
-    (mkEnable (!isKvmOnly)            "user"                null)
-    (mkEnable (!isKvmOnly)            "guest-base"          null)
+    (mkEnable (type != "nix")         "system"              null)
+    (mkEnable (type != "kvm-only")    "user"                null)
+    (mkEnable (type != "kvm-only")    "guest-base"          null)
     (mkEnable true                    "pie"                 null)
     (mkEnable (optLibuuid != null)    "uuid"                null)
     (mkEnable (optVde2 != null)       "vde"                 null)
@@ -174,7 +179,7 @@ stdenv.mkDerivation rec {
     (mkEnable hasLinuxAio             "linux-aio"           null)
     (mkEnable (optLibcap_ng != null)  "cap-ng"              null)
     (mkEnable (optAttr != null)       "attr"                null)
-    (mkEnable (!isNix)                "docs"                null)
+    (mkEnable (type != "nix")         "docs"                null)
     (mkEnable stdenv.isLinux          "vhost-net"           null)
     (mkEnable hasSpice                "spice"               null)
     (mkEnable (optLibceph != null)    "rbd"                 null)
@@ -197,7 +202,7 @@ stdenv.mkDerivation rec {
     (mkEnable (optLibuuid != null)    "vhdx"                null)
     (mkEnable (optGnutls != null)     "quorum"              null)
     (mkEnable (optNumactl != null)    "numa"                null)
-  ] ++ optionals isKvmOnly [
+  ] ++ optionals (type == "kvm-only") [
     (mkOther                          "target-list"         targetList)
   ];
 
@@ -220,6 +225,6 @@ stdenv.mkDerivation rec {
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric shlevy eelco wkennington ];
-    platforms = if isKvmOnly then platforms.linux else platforms.all;
+    platforms = if type == "kvm-only" then platforms.linux else platforms.all;
   };
 }
