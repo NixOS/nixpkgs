@@ -1,12 +1,12 @@
 {
   busybox = import <nix/fetchurl.nix> {
-    url = "http://vicerveza.homeunix.net/~viric/tmp/nix/busybox";
-    sha256 = "1vfadk3d2v0bsvmbaz1pvpn4g1vm7p751hkdxya1lkn5n1a9px5m";
+    url = "https://www.dropbox.com/s/j8czx0avy9phrbc/busybox?dl=1";
+    sha256 = "1czw6hsh8dcqkvahwr73g3yg2g9wyc2v62fpz3ikfgnlnma4v9pk";
     executable = true;
   };
 
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = "http://vicerveza.homeunix.net/~viric/tmp/nix/bootstrap-tools.tar.xz";
-    sha256 = "39df65053bab50bc2975060c4da177266e263f30c2afba231a97d23f4c471eb8";
+    url = "https://www.dropbox.com/s/hll4bt74tyscro0/bootstrap-tools.tar.xz?dl=1";
+    sha256 = "d9a207ce74c3e05d71b6bbbf9a045b2af3c53b4f33e708a6869fbc011723f3c1";
   };
 }
