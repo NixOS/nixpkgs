@@ -92,9 +92,6 @@ self: super: {
   # https://bitbucket.org/FlorianHartwig/attobencode/issue/1
   AttoBencode = dontCheck super.AttoBencode;
 
-  # bos/attoparsec#92
-  attoparsec = dontCheck super.attoparsec;
-
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
   syb = dontCheck super.syb;
@@ -282,7 +279,18 @@ self: super: {
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
   # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
+  asn1-encoding = appendConfigureFlag super.asn1-encoding "-fignore-me-1";
+  asn1-types = appendConfigureFlag super.asn1-types "-fignore-me-1";
+  cmdargs = appendConfigureFlag super.cmdargs "-fignore-me-1";
   crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
+  crypto-pubkey-types = appendConfigureFlag super.crypto-pubkey-types "-fignore-me-1";
+  hourglass = appendConfigureFlag super.hourglass "-fignore-me-1";
+  math-functions = appendConfigureFlag super.math-functions "-fignore-me-1";
+  tagsoup = appendConfigureFlag super.tagsoup "-fignore-me-1";
+  X11 = appendConfigureFlag super.X11 "-fignore-me-1";
+  x509 = appendConfigureFlag super.x509 "-fignore-me-1";
+  x509-store = appendConfigureFlag super.x509-store "-fignore-me-1";
+  x509-system = appendConfigureFlag super.x509-system "-fignore-me-1";
 
   # Fix compilation under GHC 7.10, patch has been sent upstream.
   iconv = appendPatch super.iconv ./iconv-fix-ghc710.patch;
