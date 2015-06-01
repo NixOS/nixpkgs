@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     [ "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
       "--no-system-jsoncpp"
+    ]
     ++ optional (!stdenv.isCygwin) "--system-libs"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]
