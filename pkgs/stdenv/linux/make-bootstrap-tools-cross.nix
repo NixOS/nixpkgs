@@ -219,7 +219,7 @@ rec {
             done
           done
         }
-        for BIN in $(find $out/bin -type f); do
+        for BIN in $out/bin/* $out/libexec/gcc/*/*/*; do
           echo "Copying libs for bin $BIN"
           copy_libs_in_elf $BIN
         done
