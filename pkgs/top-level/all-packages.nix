@@ -868,7 +868,7 @@ let
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
-    libkrb5 = null;
+    krb5 = null;
     systemd = null;
     jemalloc = null;
     libmysql = null;
