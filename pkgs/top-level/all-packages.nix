@@ -12641,16 +12641,41 @@ let
 
   vim_configurable = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
     inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
-      composableDerivation lib config glib gtk python perl tcl ruby;
+      composableDerivation lib config glib gtk perl tcl ruby;
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu
       libICE;
 
     features = "huge"; # one of  tiny, small, normal, big or huge
     lua = pkgs.lua5_1;
+    python = pkgs.python;
     gui = config.vim.gui or "auto";
+    X11 = [ gtk
+            pkgs.xlibs.libX11
+            pkgs.xlibs.libXext
+            pkgs.xlibs.libSM
+            pkgs.xlibs.libXpm
+            pkgs.xlibs.libXt
+            pkgs.xlibs.libXaw
+            pkgs.xlibs.libXau
+            pkgs.xlibs.libXmu
+            pkgs.xlibs.libICE ];
 
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
+  });
+
+  vim_configurable_nogui = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
+    inherit (pkgs) fetchurl fetchhg stdenv ncurses pkgconfig gettext
+      composableDerivation lib config glib perl tcl ruby;
+
+    features = "huge"; # one of  tiny, small, normal, big or huge
+    lua = pkgs.lua5_1;
+    python = pkgs.python;
+    gui = "no";
+    X11 = [];
+
+    # optional features by flags
+    flags = [ "python" ];
   });
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
