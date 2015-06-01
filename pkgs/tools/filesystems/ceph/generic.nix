@@ -98,8 +98,7 @@ stdenv.mkDerivation {
     ./0001-Makefile-env-Don-t-force-sbin.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ]
-    ++ optionals (versionAtLeast version "10.0.0") [ pythonPackages.setuptools ];
+  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
     boost python libxml2 optYasm optLibatomic_ops optLibs3 malloc pythonPackages.flask zlib
   ] ++ optional (versionAtLeast version "9.0.0") [
@@ -152,43 +151,42 @@ stdenv.mkDerivation {
     "--libdir=\${lib}/lib"
     "--includedir=\${lib}/include"
 
-    (mkWith   true                         "rbd"                 null)
-    (mkWith   true                         "cephfs"              null)
-    (mkWith   hasRadosgw                   "radosgw"             null)
-    (mkWith   true                         "radosstriper"        null)
-    (mkWith   hasServer                    "mon"                 null)
-    (mkWith   hasServer                    "osd"                 null)
-    (mkWith   hasServer                    "mds"                 null)
-    (mkEnable true                         "client"              null)
-    (mkEnable hasServer                    "server"              null)
-    (mkWith   (cryptoStr == "cryptopp")    "cryptopp"            null)
-    (mkWith   (cryptoStr == "nss")         "nss"                 null)
-    (mkEnable false                        "root-make-check"     null)
-    (mkWith   false                        "profiler"            null)
-    (mkWith   false                        "debug"               null)
-    (mkEnable false                        "coverage"            null)
-    (mkWith   (optFuse != null)            "fuse"                null)
-    (mkWith   (malloc == optJemalloc)      "jemalloc"            null)
-    (mkWith   (malloc == optGperftools)    "tcmalloc"            null)
-    (mkEnable false                        "pgrefdebugging"      null)
-    (mkEnable false                        "cephfs-java"         null)
-    (mkEnable hasXio                       "xio"                 null)
-    (mkWith   (optLibatomic_ops != null)   "libatomic-ops"       null)
-    (mkWith   true                         "ocf"                 null)
-    (mkWith   hasKinetic                   "kinetic"             null)
-    (mkWith   hasRocksdb                   "librocksdb"          null)
-    (mkWith   false                        "librocksdb-static"   null)
-    (mkWith   (optLibs3 != null)           "system-libs3"        null)
-    (mkWith   true                         "rest-bench"          null)
+    (mkWith   true                         "rbd"               null)
+    (mkWith   true                         "cephfs"            null)
+    (mkWith   hasRadosgw                   "radosgw"           null)
+    (mkWith   true                         "radosstriper"      null)
+    (mkWith   hasServer                    "mon"               null)
+    (mkWith   hasServer                    "osd"               null)
+    (mkWith   hasServer                    "mds"               null)
+    (mkEnable true                         "client"            null)
+    (mkEnable hasServer                    "server"            null)
+    (mkWith   (cryptoStr == "cryptopp")    "cryptopp"          null)
+    (mkWith   (cryptoStr == "nss")         "nss"               null)
+    (mkEnable false                        "root-make-check"   null)
+    (mkWith   false                        "profiler"          null)
+    (mkWith   false                        "debug"             null)
+    (mkEnable false                        "coverage"          null)
+    (mkWith   (optFuse != null)            "fuse"              null)
+    (mkWith   (malloc == optJemalloc)      "jemalloc"          null)
+    (mkWith   (malloc == optGperftools)    "tcmalloc"          null)
+    (mkEnable false                        "pgrefdebugging"    null)
+    (mkEnable false                        "cephfs-java"       null)
+    (mkEnable hasXio                       "xio"               null)
+    (mkWith   (optLibatomic_ops != null)   "libatomic-ops"     null)
+    (mkWith   true                         "ocf"               null)
+    (mkWith   hasKinetic                   "kinetic"           null)
+    (mkWith   hasRocksdb                   "librocksdb"        null)
+    (mkWith   false                        "librocksdb-static" null)
+    (mkWith   (optLibs3 != null)           "system-libs3"      null)
+    (mkWith   true                         "rest-bench"        null)
   ] ++ optional stdenv.isLinux [
-    (mkWith   (optLibaio != null)          "libaio"              null)
-    (mkWith   (optLibxfs != null)          "libxfs"              null)
-    (mkWith   (optZfs != null)             "libzfs"              null)
+    (mkWith   (optLibaio != null)             "libaio"            null)
+    (mkWith   (optLibxfs != null)             "libxfs"            null)
+    (mkWith   (optZfs != null)                "libzfs"            null)
   ] ++ optional (versionAtLeast version "10.0.0") [
-    (mkWith   true                         "man-pages"           null)
-    (mkWith   false                        "tcmalloc-minimal"    null)
-    (mkWith   false                        "valgrind"            null)
-    (mkWith   true                         "systemd-libexec-dir" "\${TMPDIR}")
+    (mkWith   true                         "man-pages"         null)
+    (mkWith   false                        "tcmalloc-minimal"  null)
+    (mkWith   false                        "valgrind"          null)
   ];
 
   preBuild = optionalString (versionAtLeast version "9.0.0") ''
