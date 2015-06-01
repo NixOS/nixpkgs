@@ -7259,11 +7259,11 @@ let
   libxmi = callPackage ../development/libraries/libxmi { };
 
   libxml2 = callPackage ../development/libraries/libxml2 {
-    python = null;
+    pythonSupport = false;
   };
 
   libxml2Python = lowPrio (libxml2.override {
-    inherit python;
+    pythonSupport = true;
   });
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
