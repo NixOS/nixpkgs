@@ -292,7 +292,4 @@ self: super: {
   x509-store = appendConfigureFlag super.x509-store "-fignore-me-1";
   x509-system = appendConfigureFlag super.x509-system "-fignore-me-1";
 
-  # Fix compilation under GHC 7.10, patch has been sent upstream.
-  iconv = appendPatch super.iconv ./iconv-fix-ghc710.patch;
-
 }
