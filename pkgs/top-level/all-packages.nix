@@ -8588,7 +8588,7 @@ let
   ### SERVERS
 
   "389-ds-base" = callPackage ../servers/ldap/389 {
-    kerberos = libkrb5;
+    kerberos = krb5;
   };
 
   rdf4store = callPackage ../servers/http/4store { };
