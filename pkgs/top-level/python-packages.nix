@@ -10584,16 +10584,17 @@ let
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.6.0";
+    version = "2.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      sha256 = "0xadnw27m257scrhjcc66zm4z3ikg8n9h6g9akpkavr31qgyvnqw";
+      sha256 = "0gdr9dxm24amxpbyqpbh3lbwxc2i42hnqv50sigx568qssv3v2ir";
     };
 
     meta = {
       description = "An Apache2 licensed HTTP library, written in Python, for human beings";
       homepage = http://docs.python-requests.org/en/latest/;
+      license = licenses.asl20;
     };
   };
 
