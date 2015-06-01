@@ -2008,6 +2008,23 @@ let
     };
   };
 
+  cookies = buildPythonPackage rec {
+    name = "cookies-2.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cookies/${name}.tar.gz";
+      sha256 = "13pfndz8vbk4p2a44cfbjsypjarkrall71pgc97glk5fiiw9idnn";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Friendlier RFC 6265-compliant cookie parser/renderer";
+      homepage = https://github.com/sashahart/cookies;
+      license = licenses.mit;
+    };
+  };
+
   coverage = buildPythonPackage rec {
     name = "coverage-3.7.1";
 
