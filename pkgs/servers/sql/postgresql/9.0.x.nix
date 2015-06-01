@@ -8,6 +8,4 @@ callPackage ./generic.nix (args // rec {
     url = "mirror://postgresql/source/v${version}/postgresql-${version}.tar.bz2";
     sha256 = "0vxa90d1ghv6vg4c6kxvm2skypahvlq4sd968q7l9ff3dl145z02";
   };
-
-  patches = [ ./disable-resolve_symlinks.patch ];
 })
