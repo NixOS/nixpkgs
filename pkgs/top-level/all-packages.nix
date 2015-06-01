@@ -7213,10 +7213,6 @@ let
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
-  libverto = callPackage ../development/libraries/libverto {
-    glib = null; # Don't include fairly heavy dependency
-  };
-
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
