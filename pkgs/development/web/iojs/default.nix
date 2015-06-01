@@ -31,5 +31,6 @@ in stdenv.mkDerivation {
     homepage = https://iojs.org/;
     license = licenses.mit;
     platforms = platforms.linux;
+    maintainers = [ maintainers.havvy ];
   };
 }
