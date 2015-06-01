@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     (mkEnable true                      "integer-datetimes" null)
     (mkEnable true                      "nls"               null)
     (mkWith   true                      "pgport"            "5432")
+    (mkEnable true                      "shared"            null)
     (mkEnable true                      "rpath"             null)
     (mkEnable true                      "spinlocks"         null)
     (mkEnable false                     "debug"             null)
@@ -82,8 +83,6 @@ stdenv.mkDerivation rec {
     (mkWith   (optZlib != null)         "zlib"              null)
   ] ++ optionals (versionAtLeast version "9.1.0") [
     (mkWith   false                     "selinux"           null)
-  ] ++ optionals (versionOlder version "9.3.0") [
-    (mkEnable true                      "shared"            null)
   ];
 
   enableParallelBuilding = true;
