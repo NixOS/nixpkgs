@@ -9298,19 +9298,17 @@ let
 
   # -- Linux kernel expressions ------------------------------------------------
 
-  linuxHeaders = linuxHeaders_3_12;
+  linuxHeaders = linuxHeaders_3_18;
 
   linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
 
-  linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/3.12.nix {
+  linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/3.18.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
-
-  linuxHeaders_3_12 = callPackage ../os-specific/linux/kernel-headers/3.12.nix { };
 
   linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
 
