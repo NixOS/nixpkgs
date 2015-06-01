@@ -27,6 +27,7 @@ in stdenv.mkDerivation rec {
     description = "A set of tiny general Unix utilities optimized for simplicity and small size";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

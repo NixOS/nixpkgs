@@ -30,6 +30,7 @@ in stdenv.mkDerivation rec {
     description = "A set of general-purpose C programming libraries";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

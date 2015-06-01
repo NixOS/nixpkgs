@@ -32,6 +32,7 @@ in stdenv.mkDerivation rec {
     description = "A suite of DNS client programs and libraries for Unix systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }
