@@ -2935,6 +2935,8 @@ let
 
   t1utils = callPackage ../tools/misc/t1utils { };
 
+  talkfilters = callPackage ../misc/talkfilters {};
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
@@ -3078,6 +3080,8 @@ let
   vboot_reference = callPackage ../tools/system/vboot_reference { };
 
   vcsh = callPackage ../applications/version-management/vcsh { };
+
+  verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {};
 
@@ -5109,6 +5113,8 @@ let
 
   bazel = callPackage ../development/tools/build-managers/bazel { jdk = oraclejdk8; };
 
+  bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
+
   binutils = if stdenv.isDarwin
     then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
     else callPackage ../development/tools/misc/binutils {
@@ -5813,7 +5819,9 @@ let
 
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
-  clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix { };
+  clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
+    clutter = clutter_1_22;
+  };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
@@ -11254,7 +11262,9 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
-  linssid = callPackage ../applications/networking/linssid { };
+  linssid = callPackage ../applications/networking/linssid {
+    qt5 = qt53;
+  };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
@@ -11266,8 +11276,6 @@ let
   };
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
-
-  qjackctl = callPackage ../applications/audio/qjackctl { };
 
   gkrellm = callPackage ../applications/misc/gkrellm { };
 
@@ -11593,6 +11601,8 @@ let
 
   caps = callPackage ../applications/audio/caps { };
 
+  LazyLimiter = callPackage ../applications/audio/LazyLimiter { };
+
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
@@ -11695,6 +11705,8 @@ let
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
+  MBdistortion = callPackage ../applications/audio/MBdistortion { };
+
   mcpp = callPackage ../development/compilers/mcpp { };
 
   mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
@@ -11756,6 +11768,8 @@ let
   mmex = callPackage ../applications/office/mmex { };
 
   moc = callPackage ../applications/audio/moc { };
+
+  mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   monero = callPackage ../applications/misc/monero { };
 
@@ -12126,6 +12140,10 @@ let
 
   qemu-nix = qemu.override { type = "nix"; };
 
+  qjackctl = callPackage ../applications/audio/qjackctl { };
+
+  QmidiNet = callPackage ../applications/audio/QmidiNet { };
+
   qmmp = callPackage ../applications/audio/qmmp { };
 
   qrcode = callPackage ../tools/graphics/qrcode {};
@@ -12212,6 +12230,8 @@ let
     automake = automake114x;
   };
 
+  rofi-pass = callPackage ../applications/misc/rofi/pass.nix { };
+
   rstudio = callPackage ../applications/editors/rstudio { };
 
   rsync = callPackage ../applications/networking/sync/rsync {
@@ -12246,7 +12266,7 @@ let
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins;
 
   sakura = callPackage ../applications/misc/sakura {
-    inherit (gnome3) vte;
+    vte = gnome3.vte_290;
   };
 
   sbagen = callPackage ../applications/misc/sbagen { };
@@ -12527,7 +12547,7 @@ let
   tig = gitAndTools.tig;
 
   tilda = callPackage ../applications/misc/tilda {
-    vte = gnome3.vte;
+    vte = gnome3.vte_290;
     gtk = gtk3;
   };
 
@@ -12733,6 +12753,8 @@ let
   vmpk = callPackage ../applications/audio/vmpk { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
+
+  VoiceOfFaust = callPackage ../applications/audio/VoiceOfFaust { };
 
   vorbisTools = callPackage ../applications/audio/vorbis-tools { };
 
@@ -13088,7 +13110,7 @@ let
   ykpers = callPackage ../applications/misc/ykpers {};
 
   yoshimi = callPackage ../applications/audio/yoshimi {
-    fltk = fltk13;
+    fltk = fltk13.override { cfg.xftSupport = true; };
   };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { inherit (xlibs) libX11; };
@@ -13373,6 +13395,7 @@ let
 
   spring = callPackage ../games/spring {
     boost = boost155;
+    cmake = cmake-2_8;
   };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
@@ -13847,7 +13870,7 @@ let
     # great feature, but it's of limited use with pre-built binaries
     # coming from a central build farm.
     tolerateCpuTimingInaccuracy = true;
-    liblapack = liblapack_3_5_0;
+    liblapack = liblapack_3_5_0WithoutAtlas;
     withLapack = false;
   };
 
@@ -13863,8 +13886,17 @@ let
 
   jags = callPackage ../applications/science/math/jags { };
 
-  liblapack = callPackage ../development/libraries/science/math/liblapack { };
-  liblapack_3_5_0 = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix { };
+
+  # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
+  # and with or without atlas as a dependency. The default `liblapack` is 3.4.1
+  # with atlas. Atlas, when built with liblapack as a dependency, uses 3.5.0
+  # without atlas. Etc.
+  liblapackWithAtlas = callPackage ../development/libraries/science/math/liblapack {};
+  liblapackWithoutAtlas = liblapackWithAtlas.override { atlas = null; };
+  liblapack_3_5_0WithAtlas = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix {};
+  liblapack_3_5_0WithoutAtlas = liblapack_3_5_0WithAtlas.override { atlas = null; };
+  liblapack = liblapackWithAtlas;
+  liblapack_3_5_0 = liblapack_3_5_0WithAtlas;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
@@ -14186,7 +14218,9 @@ let
 
   stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
-  tulip = callPackage ../applications/science/misc/tulip { };
+  tulip = callPackage ../applications/science/misc/tulip {
+    cmake = cmake-2_8;
+  };
 
   vite = enableDebugging (callPackage ../applications/science/misc/vite { });
 

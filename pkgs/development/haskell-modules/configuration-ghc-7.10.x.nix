@@ -116,11 +116,6 @@ self: super: {
   # support a moving target". Go figure.
   barecheck = doJailbreak super.barecheck;
 
-  syb-with-class = appendPatch super.syb-with-class (pkgs.fetchpatch {
-    url = "https://github.com/seereason/syb-with-class/compare/adc86a9...719e567.patch";
-    sha256 = "1lwwvxyhxcmppdapbgpfhwi7xc2z78qir03xjrpzab79p2qyq7br";
-  });
-
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
@@ -183,10 +178,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # https://github.com/BNFC/bnfc/issues/137
-  BNFC = markBrokenVersion "2.7.1" super.BNFC;
-  cubical = dontDistribute super.cubical;
-
   # contacted maintainer by e-mail
   cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
   darcs-fastconvert = dontDistribute super.darcs-fastconvert;
@@ -238,7 +229,6 @@ self: super: {
 
   # Broken with GHC 7.10.x.
   aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
-  c2hs_0_20_1 = markBroken super.c2hs_0_20_1;
   Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
   cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
@@ -287,5 +277,14 @@ self: super: {
   HLearn-approximation = dontDistribute super.HLearn-approximation;
   HLearn-distributions = dontDistribute super.HLearn-distributions;
   HLearn-classification = dontDistribute super.HLearn-classification;
+
+  # Won't work with LLVM 3.5.
+  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
+
+  # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
+  crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
+
+  # Fix compilation under GHC 7.10, patch has been sent upstream.
+  iconv = appendPatch super.iconv ./iconv-fix-ghc710.patch;
 
 }

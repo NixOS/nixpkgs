@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
     platforms = [ "x86_64-linux" ];
 
-    licence = stdenv.lib.licenses.unfree;
+    license = stdenv.lib.licenses.unfree;
   };
 
   src = fetchurl {

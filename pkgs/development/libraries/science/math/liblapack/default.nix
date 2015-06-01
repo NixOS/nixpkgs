@@ -1,10 +1,21 @@
-{ stdenv, fetchurl, gfortran, atlas, cmake, python, shared ? false }:
+{
+  stdenv,
+  fetchurl,
+  gfortran,
+  cmake,
+  python,
+  atlas ? null,
+  shared ? false
+}:
 let
-  atlasMaybeShared = atlas.override { inherit shared; };
+  atlasMaybeShared = if atlas != null then atlas.override { inherit shared; }
+                     else null;
   usedLibExtension = if shared then ".so" else ".a";
+  inherit (stdenv.lib) optional optionals concatStringsSep;
+  inherit (builtins) hasAttr attrNames;
   version = "3.4.1";
-  inherit (stdenv.lib) optional;
 in
+
 stdenv.mkDerivation rec {
   name = "liblapack-${version}";
   src = fetchurl {
@@ -18,10 +29,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_OPTIMIZED_BLAS=ON"
-    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
-    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
   ]
+  ++ (optionals (atlas != null) [
+    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
+    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
+  ])
   ++ (optional shared "-DBUILD_SHARED_LIBS=ON")
   # If we're on darwin, CMake will automatically detect impure paths. This switch
   # prevents that.

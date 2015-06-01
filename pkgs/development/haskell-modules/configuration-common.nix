@@ -27,6 +27,7 @@ self: super: {
 
   # Doesn't compile with lua 5.2.
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
+  hslua_0_4_0 = super.hslua_0_4_0.override { lua = pkgs.lua5_1; };
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
@@ -457,9 +458,6 @@ self: super: {
   # https://bitbucket.org/wuzzeb/webdriver-utils/issue/1/hspec-webdriver-101-cant-compile-its-test
   hspec-webdriver = markBroken super.hspec-webdriver;
 
-  # The build fails with the most recent version of c2hs.
-  ncurses = super.ncurses.override { c2hs = self.c2hs_0_20_1; };
-
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
@@ -678,8 +676,14 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2036
-  pandoc = dontCheck super.pandoc;
+  # https://github.com/jgm/pandoc/issues/2190
+  pandoc = overrideCabal super.pandoc (drv: {
+    enableSharedExecutables = false;
+    postInstall = ''            # install man pages
+      mv man $out/
+      find $out/man -type f ! -name "*.[0-9]" -exec rm {} +
+    '';
+  });
 
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
@@ -742,7 +746,9 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvmPackages_34.llvm; };
+  # Needs help finding LLVM.
+  llvm-general = super.llvm-general.override { llvm-config = self.llvmPackages.llvm; };
+  spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
   leksah = dontCheck super.leksah;
@@ -750,13 +756,8 @@ self: super: {
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
-  # Fix problems with GHC >=7.8 (in compatible way)
-  mueval = let pkg = appendPatch super.mueval (pkgs.fetchpatch {
-                       url = "https://patch-diff.githubusercontent.com/raw/gwern/mueval/pull/4.patch";
-                       sha256 = "1l0jn2lbzbhx9ifbpb5g617qa0fc8fwa6kyr87pjqfxpqminsgp5";
-                     });
-           # Nix-specific workaround
-           in appendPatch pkg ./mueval-nix.patch;
+  # https://github.com/gwern/mueval/issues/9
+  mueval = markBrokenVersion "0.9.1.1" super.mueval;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
@@ -814,25 +815,21 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # https://github.com/haskell-servant/servant-server/issues/45
-  servant-server = markBroken super.servant-server;
-  servant-client = dontDistribute super.servant-client;
-  servant-jquery = dontDistribute super.servant-jquery;
-  language-puppet = dontDistribute super.language-puppet;
-
   # This needs the latest version of errors to compile.
-  pipes-errors_0_3 = super.pipes-errors_0_3.override { errors = self.errors_2_0_0; };
+  pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
 
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
-  # https://github.com/kawu/text-binary/issues/2
-  text-binary = appendPatch super.text-binary (pkgs.fetchpatch {
-    url = "https://github.com/RyanGlScott/text-binary/commit/608e0ce86a9a7591dbfe83f7cbb36b8d8ebd07b8.patch";
-    sha256 = "1rk5rgb5lsykpvylz77hzxyflxzlmi3fi06rf0yqg2vvrnri83f1";
-  });
-
   # https://github.com/alphaHeavy/lzma-enumerator/issues/3
   lzma-enumerator = dontCheck super.lzma-enumerator;
 
+  # https://github.com/BNFC/bnfc/issues/140
+  BNFC = dontCheck super.BNFC;
+
+  # FPCO's fork of Cabal won't succeed its test suite.
+  Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
+
+  # https://github.com/vincenthz/hs-cipher-aes/issues/35
+  cipher-aes = dontCheck super.cipher-aes;
 }

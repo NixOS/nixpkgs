@@ -6,12 +6,12 @@
 , libXcursor, libXi, libXinerama }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4";
+  version = "3.0.4.1";
   name = "dillo-${version}";
 
   src = fetchurl {
     url = "http://www.dillo.org/download/${name}.tar.bz2";
-    sha256 = "0ffz481vgl7f12f575pmbagm8swgxgv9s9c0p8c7plhd04jsnazf";
+    sha256 = "0iw617nnrz3541jkw5blfdlk4x8jxb382pshi8nfc7xd560c95zd";
   };
 
   buildInputs = with stdenv.lib;

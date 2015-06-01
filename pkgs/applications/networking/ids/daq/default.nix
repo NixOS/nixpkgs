@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "http://www.snort.org/downloads/snort/${name}.tar.gz";
+    url = "mirror://sourceforge/snort/${name}.tar.gz";
     sha256 = "0vdwb0r9kdlgj4g0i0swafbc7qik0zmks17mhqji8cl7hpdva13p";
   };
 

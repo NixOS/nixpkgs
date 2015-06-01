@@ -12,7 +12,11 @@ goPackages.buildGoPackage rec {
     sha256 = "059az73j717gd960g4jigrxnvqrjh9jw1c324xpwaafa0bf10llm";
   };
 
-  buildInputs = [ goPackages.mesos-stats ];
+  buildInputs = [
+    goPackages.mesos-stats
+    goPackages.prometheus.client_golang
+    goPackages.glog
+  ];
 
   meta = with lib; {
     description = "Export Mesos metrics to Prometheus";

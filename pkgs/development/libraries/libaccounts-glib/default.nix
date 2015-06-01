@@ -1,15 +1,25 @@
-{ stdenv, fetchurl, glib, libxml2, libxslt, pkgconfig, sqlite }:
+{ stdenv, fetchFromGitLab, autoconf, automake, glib
+, gtk_doc, libtool, libxml2, libxslt, pkgconfig, sqlite }:
 
+let version = "1.18"; in
 stdenv.mkDerivation rec {
-  name = "libaccounts-glib-1.16";
-  src = fetchurl {
-    url = "https://accounts-sso.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0hgvk9rdfvk47c54rvcp3hq74yy7v6w1ql71q2mik8lmsx22354a";
+  name = "libaccounts-glib-${version}";
+
+  src = fetchFromGitLab {
+    sha256 = "02p23vrqhw2l2w6nrwlk4bqxf7z9kplkc2d43716x9xakxr291km";
+    rev = version;
+    repo = "libaccounts-glib";
+    owner = "accounts-sso";
   };
 
   buildInputs = [ glib libxml2 libxslt sqlite ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoconf automake gtk_doc libtool pkgconfig ];
 
-  configurePhase = ''HAVE_GCOV_FALSE='#' ./configure $configureFlags --prefix=$out'';
+  postPatch = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
+  configurePhase = ''
+    HAVE_GCOV_FALSE="#" ./configure $configureFlags --prefix=$out
+  '';
 }

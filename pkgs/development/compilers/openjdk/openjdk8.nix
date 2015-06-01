@@ -65,6 +65,8 @@ let
     ./fix-java-home-jdk8.patch
     ./read-truststore-from-env-jdk8.patch
     ./currency-date-range-jdk8.patch
+    ./JDK-8074312-hotspot.patch
+
   ];
   preConfigure = ''
     chmod +x configure
