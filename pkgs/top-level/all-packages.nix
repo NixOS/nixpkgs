@@ -8939,6 +8939,8 @@ let
     callPackage ../servers/monitoring/prometheus/mesos_exporter { };
   prometheus-mysqld-exporter =
     callPackage ../servers/monitoring/prometheus/mysqld_exporter { };
+  prometheus-nginx-exporter =
+    callPackage ../servers/monitoring/prometheus/nginx_exporter { };
   prometheus-node-exporter =
     callPackage ../servers/monitoring/prometheus/node_exporter { };
   prometheus-pushgateway =

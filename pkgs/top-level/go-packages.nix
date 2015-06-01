@@ -1991,6 +1991,19 @@ let
     buildInputs = [ protobuf ];
   };
 
+  prometheus.log = buildGoPackage rec {
+    name = "prometheus-log-${version}";
+    version = "git-2015-05-29";
+    goPackagePath = "github.com/prometheus/log";
+    src = fetchFromGitHub {
+      rev = "439e5db48fbb50ebbaf2c816030473a62f505f55";
+      owner = "prometheus";
+      repo = "log";
+      sha256 = "1fl23gsw2hn3c1y91qckr661sybqcw2gqnd1gllxn3hp6p2w6hxv";
+    };
+    propagatedBuildInputs = [ logrus ];
+  };
+
   prometheus.procfs = buildGoPackage rec {
     rev = "351fbfac67c8ae8bcacd468f678f5e8d5a585d3d";
     name = "prometheus-procfs-${stdenv.lib.strings.substring 0 7 rev}";
