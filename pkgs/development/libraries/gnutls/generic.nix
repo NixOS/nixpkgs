@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   inherit src patches;
 
   configureFlags = [
+    # FIXME: perhaps use $SSL_CERT_FILE instead
+    "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
     "--disable-dependency-tracking"
     "--enable-fast-install"
   ] ++ stdenv.lib.optional guileBindings
