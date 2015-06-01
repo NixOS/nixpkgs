@@ -10,7 +10,7 @@
 , walBlockSizeKB ? 8, walSegmentSizeMB ? 16
 
 # Version specific arguments
-, version, src, psqlSchema
+, version, src
 , ...
 }:
 
@@ -90,7 +90,5 @@ stdenv.mkDerivation rec {
     hydraPlatforms = platforms.linux;
   };
 
-  passthru = {
-    inherit readline psqlSchema;
-  };
+  passthru = { inherit readline; };
 }
