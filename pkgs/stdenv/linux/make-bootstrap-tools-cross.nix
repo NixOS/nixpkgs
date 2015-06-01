@@ -195,7 +195,7 @@ rec {
           LIBS="$(echo "$RELF" | grep 'Shared library' | sed 's,.*\[\([^]]*\)\].*,\1,')"
           for LIB in $LIBS; do
             # Find the libraries on the system
-            for LIBPATH in $(echo "$RPATH" | tr ':' ' '); do
+            for LIBPATH in $(echo "$RPATH:${libmpc}/lib" | tr ':' ' '); do
               if [ -f "$LIBPATH/$LIB" ]; then
                 LIB="$LIBPATH/$LIB"
                 break
