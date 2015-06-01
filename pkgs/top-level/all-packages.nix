@@ -9190,13 +9190,7 @@ let
 
   atop = callPackage ../os-specific/linux/atop { };
 
-  audit = callPackage ../os-specific/linux/audit {
-    python = null;
-    go = null;
-  };
-  libaudit = audit.override {
-    prefix = "lib";
-  };
+  audit = callPackage ../os-specific/linux/audit { };
 
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
