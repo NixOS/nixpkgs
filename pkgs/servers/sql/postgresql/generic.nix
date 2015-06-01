@@ -93,7 +93,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    inherit psqlSchema;
-    readline = optReadline;
+    inherit readline psqlSchema;
   };
 }
