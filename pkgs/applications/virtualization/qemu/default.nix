@@ -41,7 +41,7 @@ let
   optLibuuid = if isNix then null else shouldUsePkg libuuid;
   optVde2 = if isNix then null else shouldUsePkg vde2;
   optLibaio = shouldUsePkg libaio;
-  optLibcap_ng = if isNix then null else shouldUsePkg libcap_ng;
+  optLibcap_ng = shouldUsePkg libcap_ng;
   optSpice = if isNix then null else shouldUsePkg spice;
   optSpice_protocol = if isNix then null else shouldUsePkg spice_protocol;
   optLibceph = if isNix then null else shouldUsePkg libceph;
@@ -95,8 +95,6 @@ let
   targetList = if stdenv.system == "x86_64-linux" then "x86_64-softmmu,i386-softmmu"
     else if stdenv.system == "i686-linux" then "i386-softmmu"
     else null;
-
-  hasModules = if isNix then null else true;
 in
 
 stdenv.mkDerivation rec {
@@ -140,7 +138,7 @@ stdenv.mkDerivation rec {
     (mkOther                          "smbd"                "smbd")
     (mkOther                          "sysconfdir"          "/etc")
     (mkOther                          "localstatedir"       "/var")
-    (mkEnable hasModules              "modules"             null)
+    (mkEnable true                    "modules"             null)
     (mkEnable false                   "debug-tcg"           null)
     (mkEnable false                   "debug-info"          null)
     (mkEnable false                   "sparse"              null)
@@ -169,7 +167,7 @@ stdenv.mkDerivation rec {
     (mkEnable (!isNix)                "system"              null)
     (mkEnable (!isKvmOnly)            "user"                null)
     (mkEnable (!isKvmOnly)            "guest-base"          null)
-    (mkEnable (!isNix)                "pie"                 null)
+    (mkEnable true                    "pie"                 null)
     (mkEnable (optLibuuid != null)    "uuid"                null)
     (mkEnable (optVde2 != null)       "vde"                 null)
     (mkEnable false                   "netmap"              null)  # TODO(wkennington): Add Support
@@ -201,8 +199,6 @@ stdenv.mkDerivation rec {
     (mkEnable (optNumactl != null)    "numa"                null)
   ] ++ optionals isKvmOnly [
     (mkOther                          "target-list"         targetList)
-  ] ++ optionals isNix [
-    "--static"
   ];
 
   installFlags = [

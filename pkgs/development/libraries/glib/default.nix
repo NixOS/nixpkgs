@@ -63,9 +63,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ pcre zlib libffi libiconv ]
     ++ libintlOrEmpty;
 
-  # Static is necessary for qemu-nix to support static userspace translators
-  configureFlags = [ "--enable-static" ]
-    ++ optional stdenv.isDarwin "--disable-compile-warnings"
+  configureFlags =
+    optional stdenv.isDarwin "--disable-compile-warnings"
     ++ optional stdenv.isSunOS "--disable-modular-tests";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
@@ -75,8 +74,6 @@ stdenv.mkDerivation rec {
     ''
       export MACOSX_DEPLOYMENT_TARGET=
     '';
-
-  dontDisableStatic = true;
 
   enableParallelBuilding = true;
   DETERMINISTIC_BUILD = 1;
