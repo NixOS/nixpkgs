@@ -21,6 +21,17 @@
         below, in the list of backwards-incompatible changes.
       </para>
     </listitem>
+
+    <listitem>
+      <para>
+        Users running an SSH server who worry about the quality of their
+        <literal>/etc/ssh/moduli</literal> file with respect to the <link
+        xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html">vulnerabilities
+        discovered in the Diffie-Hellman key exchange</link> can now replace OpenSSH's
+        default version with one they generated themselves using the new
+        <literal>services.openssh.moduliFile</literal> option.
+      </para>
+    </listitem>
   </itemizedlist>
 
 </para>
