@@ -1,10 +1,34 @@
-{ callPackage, fetchurl, ... } @ args:
+{ stdenv, fetchurl, zlib, readline, openssl }:
 
-callPackage ./generic.nix (args // rec {
-  version = "9.0.20";
+let version = "9.0.19"; in
+
+stdenv.mkDerivation rec {
+  name = "postgresql-${version}";
 
   src = fetchurl {
-    url = "mirror://postgresql/source/v${version}/postgresql-${version}.tar.bz2";
-    sha256 = "0vxa90d1ghv6vg4c6kxvm2skypahvlq4sd968q7l9ff3dl145z02";
+    url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+    sha256 = "1h45jdbzdcvprdsi9gija81s3ny46h3faf9f007gza4vm6y15bak";
   };
-})
+
+  buildInputs = [ zlib readline openssl ];
+
+  LC_ALL = "C";
+
+  configureFlags = [ "--with-openssl" ];
+
+  patches = [ ./less-is-more.patch ];
+
+  passthru = {
+    inherit readline;
+    psqlSchema = "9.0";
+  };
+
+  meta = with stdenv.lib; {
+    homepage = http://www.postgresql.org/;
+    description = "A powerful, open source object-relational database system";
+    license = licenses.postgresql;
+    maintainers = with maintaiers; [ ocharles ];
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux;
+  };
+}
