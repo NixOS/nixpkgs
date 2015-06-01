@@ -8642,9 +8642,6 @@ let
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = callPackage ../servers/dns/bind { };
-  dnsutils = bind.override {
-    suffix = "tools";
-  };
 
   bird = callPackage ../servers/bird { };
 
