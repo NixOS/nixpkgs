@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
-  version = "2015.05.20";
+  version = "2015.05.29";
 
   src = fetchurl {
     url = "http://youtube-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "1crfada7vq3d24062wr06sfam66cf14j06wnhg7w5ljzrbynvpll";
+    sha256 = "0lgxir2i5ipplg57wk8gnbbsdrk7szqnyb1bxr97f3h0rbm4dfij";
   };
 
   nativeBuildInputs = [ pandoc ];
