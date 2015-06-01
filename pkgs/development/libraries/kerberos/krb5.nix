@@ -97,19 +97,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = optionalString libOnly ''
-    (cd util; make -j $NIX_BUILD_CORES)
-    (cd include; make -j $NIX_BUILD_CORES)
-    (cd lib; make -j $NIX_BUILD_CORES)
-    (cd build-tools; make -j $NIX_BUILD_CORES)
+    (cd util; make)
+    (cd include; make)
+    (cd lib; make)
+    (cd build-tools; make)
   '';
 
   installPhase = optionalString libOnly ''
     mkdir -p $out/{bin,include/{gssapi,gssrpc,kadm5,krb5},lib/pkgconfig,sbin,share/{et,man/man1}}
 
-    (cd util; make -j $NIX_BUILD_CORES install)
-    (cd include; make -j $NIX_BUILD_CORES install)
-    (cd lib; make -j $NIX_BUILD_CORES install)
-    (cd build-tools; make -j $NIX_BUILD_CORES install)
+    (cd util; make install)
+    (cd include; make install)
+    (cd lib; make install)
+    (cd build-tools; make install)
 
     rm -rf $out/{sbin,share}
     find $out/bin -type f | grep -v 'krb5-config' | xargs rm
