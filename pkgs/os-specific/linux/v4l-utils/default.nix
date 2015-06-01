@@ -16,11 +16,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "v4l-utils-1.6.2";
+  name = "v4l-utils-1.6.3";
 
   src = fetchurl {
     url = "http://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "0zdyjrja2mkqlijpdb4gz1vw0g7pslswmgqqsgri3yq408gypmnk";
+    sha256 = "0k46z5gqjzg702m2vs4sv6sxynq1sj14m0pgwvl2gkgg3dfbyjhn";
   };
 
   configureFlags = [
