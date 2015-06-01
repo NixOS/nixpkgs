@@ -8101,8 +8101,8 @@ let
     };
 
     buildInputs = [ self.nose ];
-    propagatedBuildInputs = with self; [ 
-      dateutil 
+    propagatedBuildInputs = with self; [
+      dateutil
       numpy
       scipy
       numexpr
@@ -8111,7 +8111,7 @@ let
       bottleneck
       sqlalchemy9
       lxml
-      modules.sqlite3 
+      modules.sqlite3
     ];
 
     preCheck = ''
@@ -8127,7 +8127,7 @@ let
 
     checkPhase = ''
       runHook preCheck
-      
+
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
       python setup.py nosetests -A 'not network' --stop -e 'test_clipboard|test_series' --verbosity=3
@@ -8149,7 +8149,7 @@ let
     version = "0.9.3";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xlrd/xlrd-${version}.tar.gz";
-      md5 = "6f3325132f246594988171bc72e1a385";
+      sha256 = "174ks80h0g9p67ahnakf0y7di3gvbhxvb1jlk097gvd7gpi3aflk";
     };
   };
 
@@ -8158,7 +8158,7 @@ let
     version = "1.0.0";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/B/Bottleneck/Bottleneck-${version}.tar.gz";
-      md5 = "380fa6f275bd24f27e7cf0e0d752f5d2";
+      sha256 = "15dl0ll5xmfzj2fsvajzwxsb9dbw5i9fx9i4r6n4i5nzzba7m6wd";
     };
     propagatedBuildInputs = [self.numpy];
   };
@@ -9204,12 +9204,12 @@ let
     version = "1.5.3";
     # FAIL:test_generate_entry and test_time
     # both tests fail due to time issue that doesn't seem to matter in practice
-    doCheck = false; 
+    doCheck = false;
     src = pkgs.fetchurl {
       url = "https://github.com/pyblosxom/pyblosxom/archive/v${version}.tar.gz";
       sha256 = "0de9a7418f4e6d1c45acecf1e77f61c8f96f036ce034493ac67124626fd0d885";
     };
-  
+
     propagatedBuildInputs = with self; [ pygments markdown ];
 
     meta = {
