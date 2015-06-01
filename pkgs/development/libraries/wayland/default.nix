@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkgconfig
 , libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
@@ -6,7 +6,6 @@
 # Require the optional to be enabled until upstream fixes or removes the configure flag
 assert expat != null;
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "wayland-${version}";
   version = "1.7.0";
@@ -16,9 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "173w0pqzk2m7hjlg15bymrx7ynxgq1ciadg03hzybxwnvfi4gsmx";
   };
 
-  configureFlags = [
-    (mkEnable (expat != null) "scanner" null)
-  ];
+  configureFlags = "--with-scanner";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -27,9 +24,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Reference implementation of the wayland protocol";
     homepage    = http://wayland.freedesktop.org/;
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ codyopel wkennington ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ codyopel wkennington ];
   };
 
   passthru.version = version;
