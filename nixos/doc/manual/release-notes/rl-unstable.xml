@@ -8,9 +8,21 @@
 
 <para>In addition to numerous new and upgraded packages, this release has the following highlights:
 
-<!--<itemizedlist>
+  <itemizedlist>
+    <listitem>
+      <para>
+        The Haskell packages infrastructure has been re-designed from the ground up.
+        NixOS now distributes the latest version of every single package registered on
+        <link xlink:href="http://hackage.haskell.org/">Hackage</link>, i.e. well over
+        8000 Haskell packages. Further information and usage instructions for the
+        improved infrastructure are available at <link
+        xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>.
+        Users migrating from an earlier release will find also find helpful information
+        below, in the list of backwards-incompatible changes.
+      </para>
+    </listitem>
+  </itemizedlist>
 
-</itemizedlist>-->
 </para>
 
 <para>Following new services were added since the last release:
