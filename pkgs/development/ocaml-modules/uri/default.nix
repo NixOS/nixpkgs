@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, ocaml, findlib, re, sexplib, stringext }:
+{ stdenv, fetchzip, ocaml, findlib, re, sexplib, stringext }:
 
-let version = "1.7.2"; in
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
+
+let version = "1.9.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml-uri-${version}";
 
-  src = fetchgit {
-    url = https://github.com/mirage/ocaml-uri.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "19rq68dzvqzpqc2zvrk5sj1iklknnyrlbcps2vb8iw4cjlrnnaa1";
+  src = fetchzip {
+    url = "https://github.com/mirage/ocaml-uri/archive/v${version}.tar.gz";
+    sha256 = "13vbv6q7npl2bvvqfw03mav90jcrrvjbdpdp4y8mcjz0iax5ww9b";
   };
 
   buildInputs = [ ocaml findlib ];
