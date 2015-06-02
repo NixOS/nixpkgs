@@ -1519,7 +1519,7 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  git-hub = callPackage ../applications/version-management/git-hub { };
+  git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 
   gitlab = callPackage ../applications/version-management/gitlab {
     ruby = ruby_2_1_3;
