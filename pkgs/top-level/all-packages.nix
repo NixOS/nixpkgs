@@ -1145,12 +1145,18 @@ let
 
   cudatoolkit = cudatoolkit5;
 
-  curl-light = curl.override { suffix = "light"; };
-  curl = curl-full.override {
-    fetchurl = fetchurlBoot;
-    suffix = "";
+  curlFull = curl.override {
+    idnSupport = true;
+    ldapSupport = true;
+    gssSupport = true;
   };
-  curl-full = callPackage ../tools/networking/curl { suffix = "full"; };
+
+  curl = callPackage ../tools/networking/curl rec {
+    fetchurl = fetchurlBoot;
+    zlibSupport = true;
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+  };
 
   curl3 = callPackage ../tools/networking/curl/7.15.nix rec {
     zlibSupport = true;
