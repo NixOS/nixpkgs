@@ -7821,7 +7821,7 @@ let
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ pkgs.atlas ];
+    propagatedBuildInputs = [ support.atlas ];
 
     meta = {
       description = "Scientific tools for Python";
