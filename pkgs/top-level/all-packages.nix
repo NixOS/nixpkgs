@@ -1674,6 +1674,8 @@ let
 
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
+  gtdialog = callPackage ../development/libraries/gtdialog {};
+
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
