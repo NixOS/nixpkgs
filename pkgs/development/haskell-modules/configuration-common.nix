@@ -827,9 +827,6 @@ self: super: {
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
-  # https://github.com/vincenthz/hs-cipher-aes/issues/35
-  cipher-aes = dontCheck super.cipher-aes;
-
   # https://github.com/DanielG/cabal-helper/issues/2
   cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
 
