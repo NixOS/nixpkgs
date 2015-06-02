@@ -12017,6 +12017,12 @@ let
   pdftk = callPackage ../tools/typesetting/pdftk { };
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
+  pdfpc = callPackage ../applications/misc/pdfpc {
+    vala = vala_0_26;
+    inherit (gnome3) libgee;
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  };
+
   photoqt = callPackage ../applications/graphics/photoqt { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
