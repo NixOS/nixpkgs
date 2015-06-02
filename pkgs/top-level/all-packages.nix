@@ -2977,6 +2977,8 @@ let
 
   texstudio = callPackage ../applications/editors/texstudio { };
 
+  textadept = callPackage ../applications/editors/textadept { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   tiled = callPackage ../applications/editors/tiled { qt = qt4; };
