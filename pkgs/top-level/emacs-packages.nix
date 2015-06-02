@@ -888,6 +888,18 @@ let self = _self // overrides;
     };
   };
 
+  perspective = melpaBuild rec {
+    pname   = "perspective";
+    version = "1.12";
+    src = fetchFromGitHub {
+      owner  = "nex3";
+      repo   = "${pname}-el";
+      rev    = version;
+      sha256 = "12c2rrhysrcl2arc6hpzv6lxbb1r3bzlvdp23hnp9sci6yc10k3q";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   pkg-info = melpaBuild rec {
     pname   = "pkg-info";
     version = "20140610";
