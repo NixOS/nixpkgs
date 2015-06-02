@@ -1519,6 +1519,8 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
+  git-hub = callPackage ../applications/version-management/git-hub { };
+
   gitlab = callPackage ../applications/version-management/gitlab {
     ruby = ruby_2_1_3;
   };
