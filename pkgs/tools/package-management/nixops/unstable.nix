@@ -22,8 +22,8 @@ pythonPackages.buildPythonPackage rec {
 
   src = fetchgit {
     url = https://github.com/NixOS/nixops;
-    rev = "7489764a2cc59d29b66b2cf5eea83b467affd982";
-    sha256 = "1qahqaj6536mnbz6xjj559j3zvsf2cwzhv7jmxcbib6ycxk2v7r0";
+    rev = "5c7663dfe1e2af9c0396c5c86d995452ef2efc8a";
+    sha256 = "01n2ykszrnqr3kqqdg1n2l8wm38yhri7r3d7b0abklsslz9dlvmy";
   };
 
   buildInputs = [ pythonPackages.nose pythonPackages.coverage ];
