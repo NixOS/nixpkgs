@@ -77,10 +77,6 @@ stdenv.mkDerivation rec {
     (mkEnable true                   "heimdal-documentation" null)
   ];
 
-  preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -pthread"
-  '';
-
   # We need to build hcrypt for applications like samba
   postBuild = ''
     (cd lib/hcrypto; make)
