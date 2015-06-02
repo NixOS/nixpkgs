@@ -934,7 +934,24 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1bl5wpkyv9xlf5v5hzkj8si1z4hjn3yywrjs1mx0g4irmq3mk29m";
     };
-    packageRequires = [ dash helm s pkg-info epl ];
+    fileSpecs = [ "projectile.el" ];
+    packageRequires = [ dash helm pkg-info ];
+    meta = { license = gpl3Plus; };
+  };
+  helm-projectile = melpaBuild rec {
+    pname   = "helm-projectile";
+    version = projectile.version;
+    src     = projectile.src;
+    fileSpecs = [ "helm-projectile.el" ];
+    packageRequires = [ helm projectile ];
+    meta = { license = gpl3Plus; };
+  };
+  persp-projectile = melpaBuild rec {
+    pname   = "persp-projectile";
+    version = projectile.version;
+    src     = projectile.src;
+    fileSpecs = [ "persp-projectile.el" ];
+    packageRequires = [ perspective projectile ];
     meta = { license = gpl3Plus; };
   };
 
