@@ -5772,6 +5772,8 @@ let
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
+  cdk = callPackage ../development/libraries/cdk {};
+
   cimg = callPackage  ../development/libraries/cimg { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
