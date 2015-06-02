@@ -7826,7 +7826,7 @@ let
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ pkgs.atlas ];
+    propagatedBuildInputs = [ support.atlas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -9156,12 +9156,12 @@ let
     version = "1.5.3";
     # FAIL:test_generate_entry and test_time
     # both tests fail due to time issue that doesn't seem to matter in practice
-    doCheck = false; 
+    doCheck = false;
     src = pkgs.fetchurl {
       url = "https://github.com/pyblosxom/pyblosxom/archive/v${version}.tar.gz";
       sha256 = "0de9a7418f4e6d1c45acecf1e77f61c8f96f036ce034493ac67124626fd0d885";
     };
-  
+
     propagatedBuildInputs = with self; [ pygments markdown ];
 
     meta = {
