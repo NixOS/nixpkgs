@@ -36,8 +36,9 @@ with lib;
             wget="wget -q --retry-connrefused -O -"
 
             ${optionalString (config.networking.hostName == "") ''
-              echo "setting host name..."
-              ${pkgs.nettools}/bin/hostname $($wget http://169.254.169.254/1.0/meta-data/hostname)
+              declare hostName="$($wget http://169.254.169.254/1.0/meta-data/hostname)"
+              echo "setting host name to $hostName ..."
+              ${pkgs.nettools}/bin/hostname $hostName || echo "host name set failed with code $?"
             ''}
 
             # Don't download the SSH key if it has already been injected
