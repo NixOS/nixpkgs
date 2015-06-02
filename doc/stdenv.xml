@@ -59,7 +59,7 @@ build.  To make this easier, the standard environment breaks the
 package build into a number of <emphasis>phases</emphasis>, all of
 which can be overridden or modified individually: unpacking the
 sources, applying patches, configuring, building, and installing.
-(There are some others; see <xref linkend="ssec-stdenv-phases"/>.)
+(There are some others; see <xref linkend="sec-stdenv-phases"/>.)
 For instance, a package that doesn’t supply a makefile but instead has
 to be compiled “manually” could be handled like this:
 
