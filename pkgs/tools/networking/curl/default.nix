@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   # Use pkgconfig only when necessary
   nativeBuildInputs = optional (!isLight) pkgconfig;
-  propagatedBuildInputs = [
+  buildInputs = [
     optZlib optOpenssl optLibssh2 optLibnghttp2 optC-ares
     optGss optRtmpdump optOpenldap optLibidn
   ];
@@ -101,6 +101,27 @@ stdenv.mkDerivation rec {
     (mkEnable true                    "cookies"           null)
     (mkEnable (optC-ares != null)     "ares"              null)
   ];
+
+  # Fix all broken refernces to dependencies in .la and .pc files
+  postInstall = optionalString (optZlib != null) ''
+    sed -i 's,\(-lz\),-L${optZlib}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+  '' + optionalString (optOpenssl != null) ''
+    sed -i 's,\(-lssl\|-lcrypto\),-L${optOpenssl}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+  '' + optionalString (optLibssh2 != null) ''
+    sed -i 's,\(-lssh2\),-L${optLibssh2}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+  '' + optionalString (optLibnghttp2 != null) ''
+    sed -i 's,\(-lnghttp2\),-L${optLibnghttp2}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+  '' + optionalString (optC-ares != null) ''
+    sed -i 's,\(-lcares\),-L${optC-ares}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+  '' + optionalString (optGss != null) ''
+    sed -i 's,\(-lgss\),-L${optGss}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+  '' + optionalString (optRtmpdump != null) ''
+    sed -i 's,\(-lrtmp\),-L${optRtmpdump}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+  '' + optionalString (optOpenldap != null) ''
+    sed -i 's,\(-lgss\),-L${optOpenldap}/lib \1,' $out/lib/{libcurl.la,pkgconfig/libcurl.pc}
+  '' + optionalString (optLibidn != null) ''
+    sed -i 's,\(-lidn\),-L${optLibidn}/lib \1,' $out/lib/pkgconfig/libcurl.pc
+  '';
 
   meta = {
     description = "A command line tool for transferring files with URL syntax";
