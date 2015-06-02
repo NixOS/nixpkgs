@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     (mkWith   (optLibcap_ng != null) "capng"                 null)
     (mkWith   (optSqlite != null)    "sqlite3"               sqlite)
     (mkEnable (optSqlite != null)    "sqlite-cache"          null)
-    (mkWith   false                  "libintl"               null)               # TODO libintl fix
+    #(mkWith  true                   "libintl"               glibc)              # TODO libintl fix
     (mkWith   true                   "hdbdir"                "/var/lib/heimdal")
     (mkWith   (optOpenssl != null)   "openssl"               optOpenssl)
     (mkEnable true                   "pthread-support"       null)
-    (mkEnable false                  "dce"                   null)               # TODO: Add support
+    (mkEnable true                   "dce"                   null)
     (mkEnable true                   "afs-support"           null)
     (mkWith   (optDb != null)        "berkeley-db"           optDb)
     (mkEnable false                  "nmdb"                  null)
