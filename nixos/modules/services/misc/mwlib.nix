@@ -230,7 +230,7 @@ in
       environment = {
         PYTHONPATH = concatMapStringsSep ":"
           (m: "${pypkgs.${m}}/lib/${python.libPrefix}/site-packages")
-          [ "mwlib-rl" "mwlib-ext" "pygments" ];
+          [ "mwlib-rl" "mwlib-ext" "pygments" "pyfribidi" ];
       };
 
       serviceConfig = {
