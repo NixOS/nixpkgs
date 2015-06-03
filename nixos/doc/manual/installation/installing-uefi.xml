@@ -41,10 +41,6 @@ changes:
     <option>boot.loader.efi</option> and <option>boot.loader.gummiboot</option>
     as well.</para>
   </listitem>
-  <listitem>
-    <para>To see console messages during early boot, add <literal>"fbcon"</literal>
-    to your <option>boot.initrd.kernelModules</option>.</para>
-  </listitem>
 </itemizedlist>
 </para>
 

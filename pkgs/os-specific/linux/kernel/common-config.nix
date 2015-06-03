@@ -131,6 +131,8 @@ with stdenv.lib;
   FB_SIS_300 y
   FB_SIS_315 y
   FB_3DFX_ACCEL y
+  FB_VESA y
+  FRAMEBUFFER_CONSOLE y
   ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
     FB_GEODE y
   ''}
