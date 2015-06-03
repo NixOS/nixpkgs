@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "PGP Tools is a collection for all kinds of pgp related things, including signing scripts, party preparation scripts etc.";
     homepage = http://pgp-tools.alioth.debian.org;
     platforms = gnupg.meta.platforms;
-    licence = stdenv.lib.licences.gpl2;
+    license = stdenv.lib.licenses.gpl2;
   };
 }
