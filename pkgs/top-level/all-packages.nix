@@ -1639,6 +1639,12 @@ let
     ghostscript = null;
   };
 
+  calamares = callPackage ../tools/misc/calamares rec {
+    python = python3;
+    boost = callPackage ../development/libraries/boost/1.57.nix { python=python3; };
+    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+  };
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
     automake = automake112x; # fails with 13 and 14
