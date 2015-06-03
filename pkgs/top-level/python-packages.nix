@@ -5011,6 +5011,22 @@ let
     };
   });
 
+  pyfribidi = buildPythonPackage rec {
+    version = "0.11.0";
+    name = "pyfribidi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyfribidi/${name}.zip";
+      md5 = "a3fc1f9d34571305782d1a54ee36f904";
+    };
+
+    meta = {
+      description = "simple wrapper around fribidi.";
+      homepage = "https://github.com/pediapress/pyfribidi";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   docker_compose = buildPythonPackage rec {
     name = "docker-compose-1.2.0rc2";
     disabled = isPy3k || isPyPy;
