@@ -834,4 +834,7 @@ self: super: {
   # https://github.com/jgm/gitit/issues/494
   gitit = markBroken super.gitit;
 
+  # https://github.com/ekmett/comonad/issues/25
+  comonad = dontCheck super.comonad;
+
 }
