@@ -3994,13 +3994,8 @@ let
     suitesparse = suitesparse_4_2;
   };
 
-  julia03 = let
-    liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.nix {
-    inherit liblapack;
-    suitesparse = suitesparse_4_2.override {
-      inherit liblapack;
-    };
+  julia03 = callPackage ../development/compilers/julia/0.3.nix {
+    suitesparse = suitesparse_4_2;
     llvm = llvm_33;
   };
   julia = julia03;
