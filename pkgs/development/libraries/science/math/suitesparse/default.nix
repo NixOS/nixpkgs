@@ -15,7 +15,6 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    substituteAllInPlace SuiteSparse_config/SuiteSparse_config.mk
     mkdir -p $out/lib
     mkdir -p $out/include
 
