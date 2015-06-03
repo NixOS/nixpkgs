@@ -1973,6 +1973,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CryptOpenSSLAES = buildPerlPackage {
+    name = "Crypt-OpenSSL-AES-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TT/TTAR/${name}.tar.gz";
+      sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
+    };
+    makeMakerFlags = "LIBS=-L${pkgs.openssl}/lib INC=-I${pkgs.openssl}/include";
+    meta = with stdenv.lib; {
+      homepage = https://metacpan.org/release/Crypt-OpenSSL-AES;
+      description = "Perl wrapper around OpenSSL's AES library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ rycee ];
+      platforms = stdenv.lib.platforms.unix;
+    };
+  };
+
   CryptOpenSSLBignum = buildPerlPackage rec {
     name = "Crypt-OpenSSL-Bignum-0.04";
     src = fetchurl {
