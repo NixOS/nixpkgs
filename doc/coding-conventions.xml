@@ -620,33 +620,39 @@ evaluate correctly.</para>
     fetchers from <literal>pkgs/build-support/</literal>. As an example going
     from bad to good:
     <itemizedlist>
-      <listitem><para>Uses <literal>git://</literal> which won't be proxied.
-        <programlisting>
-          src = fetchgit {
-            url = "git://github.com/NixOS/nix.git";
-            rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-            sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
-          }
-        </programlisting></para>
+      <listitem>
+        <para>Uses <literal>git://</literal> which won't be proxied.
+<programlisting>
+src = fetchgit {
+  url = "git://github.com/NixOS/nix.git";
+  rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+  sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+}
+</programlisting>
+        </para>
       </listitem>
-      <listitem><para>This is ok, but an archive fetch will still be faster.
-        <programlisting>
-          src = fetchgit {
-            url = "https://github.com/NixOS/nix.git";
-            rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-            sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
-          }
-        </programlisting></para>
+      <listitem>
+        <para>This is ok, but an archive fetch will still be faster.
+<programlisting>
+src = fetchgit {
+  url = "https://github.com/NixOS/nix.git";
+  rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+  sha256 = "1cw5fszffl5pkpa6s6wjnkiv6lm5k618s32sp60kvmvpy7a2v9kg";
+}
+</programlisting>
+        </para>
       </listitem>
-      <listitem><para>Fetches a snapshot archive and you get the rev you want.
-        <programlisting>
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
-            sha256 = "04yri911rj9j19qqqn6m82266fl05pz98inasni0vxr1cf1gdgv9";
-          }
-        </programlisting></para>
+      <listitem>
+        <para>Fetches a snapshot archive and you get the rev you want.
+<programlisting>
+src = fetchFromGitHub {
+  owner = "NixOS";
+  repo = "nix";
+  rev = "1f795f9f44607cc5bec70d1300150bfefcef2aae";
+  sha256 = "04yri911rj9j19qqqn6m82266fl05pz98inasni0vxr1cf1gdgv9";
+}
+</programlisting>
+        </para>
       </listitem>
     </itemizedlist>
   </para>
