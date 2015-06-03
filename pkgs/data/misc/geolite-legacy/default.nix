@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   srcGeoIPv6 = fetchDB "GeoIPv6.dat.gz"
     "1vi82p41vas18yp17yk236pn1xamsi9662aav79fa0hm43i3ydx3";
   srcGeoLiteCity = fetchDB "GeoLiteCity.dat.xz"
-    "12j44586jmvk1jnxs345lgdgl9izn51xgh1m2jm7lklsyw13b2nk";
+    "1z87ng2a2zmqnvxhcmapnarc9w2ycb18vpivvzx893y7fh39h34s";
   srcGeoLiteCityv6 = fetchDB "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz"
     "0xjzg76vdsayxyy1yyw64w781vad4c9nbhw61slh2qmazdr360g9";
   srcGeoIPASNum = fetchDB "asnum/GeoIPASNum.dat.gz"
