@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils }:
+{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils
+# Most packages depending on openblas expect integer width to match pointer width,
+# but some expect to use 32-bit integers always (for compatibility with reference BLAS).
+, blas64 ? null
+}:
 
 with stdenv.lib;
 
 let local = config.openblas.preferLocalBuild or false;
     binary =
-      {
-        i686-linux = "32";
+      { i686-linux = "32";
         x86_64-linux = "64";
         x86_64-darwin = "64";
       }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
     genericFlags =
-      [
-        "DYNAMIC_ARCH=1"
-        "NUM_THREADS=64"
-        "BINARY=${binary}"
-        "USE_OPENMP=1"
+      [ "DYNAMIC_ARCH=1"
         "NUM_THREADS=64"
       ];
     localFlags = config.openblas.flags or
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
+    blas64Orig = blas64;
 in
 stdenv.mkDerivation rec {
   version = "0.2.14";
@@ -45,8 +45,12 @@ stdenv.mkDerivation rec {
       # thus is not an explicit dependency.
       "CC=${if stdenv.isDarwin then "clang" else "gcc"}"
       ''PREFIX="''$(out)"''
-      "INTERFACE64=1"
+      "BINARY=${binary}"
+      "USE_OPENMP=1"
+      "INTERFACE64=${if blas64 then "1" else "0"}"
     ];
+
+  blas64 = if blas64Orig != null then blas64Orig else hasPrefix "x86_64" stdenv.system;
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
