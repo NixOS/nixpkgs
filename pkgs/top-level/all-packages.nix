@@ -14677,6 +14677,8 @@ let
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
+  wavegain = callPackage ../applications/audio/wavegain { };
+
   # Wine defaults to a mixed 64 / 32 build on x86_64 and to pure 32 on x86
   wine = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
