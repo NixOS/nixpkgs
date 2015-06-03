@@ -357,6 +357,7 @@ let
     stringi = [ pkgs.pkgconfig ];
     sysfonts = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
+    commonmark = [pkgs.curl];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
     ecoretriever = [ pkgs.which ];
@@ -777,7 +778,6 @@ let
     "LogisticDx" # requires gRbase
     "LOST" # requires pcaMethods
     "ltsk" # requires Rlapack and Rblas
-    "magma" # requires MAGMA
     "MAMA" # requires metaMA
     "MEET" # requires pcaMethods, and seqLogo
     "metabolomics" # depends on broken crmn
@@ -959,10 +959,6 @@ let
         export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
         export LIBXML_LIBDIR=${pkgs.libxml2}/lib
       '';
-    });
-
-    curl = old.curl.overrideDerivation (attrs: {
-      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
     });
 
     iFes = old.iFes.overrideDerivation (attrs: {
