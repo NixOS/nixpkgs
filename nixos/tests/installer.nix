@@ -98,12 +98,6 @@ let
   channelContents = [ pkgs.rlwrap ];
 
 
-  efiBios = pkgs.runCommand "ovmf-bios" {} ''
-    mkdir $out
-    ln -s ${pkgs.OVMF}/FV/OVMF.fd $out/bios.bin
-  '';
-
-
   # The test script boots the CD, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
