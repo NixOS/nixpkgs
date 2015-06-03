@@ -14,6 +14,8 @@ let local = config.openblas.preferLocalBuild or false;
         "DYNAMIC_ARCH=1"
         "NUM_THREADS=64"
         "BINARY=${binary}"
+        "USE_OPENMP=1"
+        "NUM_THREADS=64"
       ];
     localFlags = config.openblas.flags or
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
