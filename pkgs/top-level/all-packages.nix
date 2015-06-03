@@ -2817,6 +2817,9 @@ let
 
   sigil = callPackage ../applications/editors/sigil { };
 
+  # aka., gpg-tools
+  signing-party = callPackage ../tools/security/signing-party { };
+
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
   silc_server = callPackage ../servers/silc-server { };
