@@ -12,7 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "05flcbzpnmhf6qskkccbfk957sl9hhydlp4p5vqhs62hkpwmqwan";
   };
 
-  buildInputs = [ python unzip makeWrapper pythonPackages.psycopg2 pythonPackages.ntplib pythonPackages.simplejson pythonPackages.pyyaml pythonPackages.requests ];
+  buildInputs = [
+    python
+    unzip
+    makeWrapper
+    pythonPackages.psycopg2
+    pythonPackages.psutil
+    pythonPackages.ntplib
+    pythonPackages.simplejson
+    pythonPackages.pyyaml
+    pythonPackages.requests
+  ];
   propagatedBuildInputs = [ python tornado ];
 
   buildCommand = ''
