@@ -3990,7 +3990,6 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   julia02 = callPackage ../development/compilers/julia/0.2.nix {
-    liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
     suitesparse = suitesparse_4_2;
   };
