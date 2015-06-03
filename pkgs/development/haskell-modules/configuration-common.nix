@@ -402,6 +402,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
+  influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -832,9 +833,5 @@ self: super: {
 
   # https://github.com/jgm/gitit/issues/494
   gitit = markBroken super.gitit;
-
-  # https://github.com/maoe/influxdb-haskell/issues/26
-  influxdb = markBroken (dontCheck super.influxdb);
-  snaplet-influxdb = dontDistribute super.snaplet-influxdb;
 
 }
