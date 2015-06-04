@@ -780,11 +780,12 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/116
   # https://github.com/goldfirere/singletons/issues/117
   # https://github.com/goldfirere/singletons/issues/118
-  singletons = markBroken super.singletons;
-  singleton-nats = dontDistribute super.singleton-nats;
+  clash-lib = dontDistribute super.clash-lib;
+  clash-verilog = dontDistribute super.clash-verilog;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
-  clash-lib = dontDistribute super.clash-lib;
+  singleton-nats = dontDistribute super.singleton-nats;
+  singletons = markBroken super.singletons;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
