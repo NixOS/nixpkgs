@@ -131,4 +131,7 @@ self: super: {
     patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
   );
 
+  # Overriding mtl 2.2.x is fine here because ghc-events is an stand-alone executable.
+  ghc-events = super.ghc-events.override { mtl = self.mtl_2_2_1; };
+
 }
