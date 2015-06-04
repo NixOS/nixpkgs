@@ -8923,8 +8923,6 @@ let
 
   postgresql = postgresql92;
 
-  postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
-
   postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
 
   postgresql91 = callPackage ../servers/sql/postgresql/9.1.x.nix { };
