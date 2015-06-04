@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-
     sed -i 's@/bin/echo@echo@g' configure
     sed -i -e 's/^   /\t/' docs/{libs,plugins}/Makefile.in
+
+    patch -p1 < ${./gcc-4.9.patch}
   '';
 
   # TODO : v4l, libvisual
