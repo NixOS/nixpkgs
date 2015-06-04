@@ -3223,6 +3223,8 @@ let
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xsettingsd = callPackage ../tools/X11/xsettingsd { };
+
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   unarj = callPackage ../tools/archivers/unarj { };
