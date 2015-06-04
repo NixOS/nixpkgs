@@ -6662,27 +6662,6 @@ let
     propagatedBuildInputs = with self; [ unittest2 six ];
   };
 
-  loxodo = buildPythonPackage {
-    name = "loxodo-0.20150124";
-    disabled = isPy3k;
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/sommer/loxodo.git";
-      rev = "6c56efb4511fd6f645ad0f8eb3deafc8071c5795";
-      sha256 = "02whmv4am8cz401rplplqzbipkyf0wd69z43sd3yw05rh7f3xbs2";
-    };
-
-    propagatedBuildInputs = with self; [ wxPython modules.readline ];
-    postInstall = "mv $out/bin/loxodo.py $out/bin/loxodo";
-
-    meta = {
-      description = "A Password Safe V3 compatible password vault";
-      homepage = http://www.christoph-sommer.de/loxodo/;
-      license = licenses.gpl2Plus;
-      platforms = platforms.linux;
-    };
-  };
-
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.3.6";
 
