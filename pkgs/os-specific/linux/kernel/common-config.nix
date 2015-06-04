@@ -54,6 +54,7 @@ with stdenv.lib;
   STANDALONE n
 
   # Make /proc/config.gz available.
+  IKCONFIG y
   IKCONFIG_PROC y
 
   # Optimize with -O2, not -Os.
