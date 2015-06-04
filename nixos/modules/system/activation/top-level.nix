@@ -81,6 +81,8 @@ let
       substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
+      echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
+
       ${config.system.extraSystemBuilderCmds}
     '';
 
@@ -185,6 +187,16 @@ in
       default = "";
       description = ''
         This code will be added to the builder creating the system store path.
+      '';
+    };
+
+    system.extraDependencies = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      description = ''
+        A list of packages that should be included in the system
+        closure but not otherwise made available to users. This is
+        primarily used by the installation tests.
       '';
     };
 
