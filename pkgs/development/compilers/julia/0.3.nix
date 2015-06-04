@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
 , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
-, ncurses, libunistring, patchelf, openblas
+, ncurses, libunistring, patchelf, openblas, arpack
 , tcl, tk, xproto, libX11, git, mpfr, which
 }:
 
@@ -17,7 +17,6 @@ let
 
   dsfmt_ver = "2.2";
   grisu_ver = "1.1.1";
-  arpack_ver = "3.1.5";
   utf8proc_ver = "1.1.6";
 
   dsfmt_src = fetchurl {
@@ -29,11 +28,6 @@ let
     url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
     md5 = "29b533ed4311161267bff1a9a97e2953";
   };
-  arpack_src = fetchurl rec {
-    url = "https://github.com/opencollab/arpack-ng/archive/${arpack_ver}.tar.gz";
-    md5 = "d84e1b6108d9ee67c0d21aba7099e953";
-    name = "arpack-ng-${arpack_ver}.tar.gz";
-  };
   utf8proc_src = fetchurl {
     url = "http://www.public-software-group.org/pub/projects/utf8proc/v${utf8proc_ver}/utf8proc-v${utf8proc_ver}.tar.gz";
     md5 = "2462346301fac2994c34f5574d6c3ca7";
@@ -44,7 +38,7 @@ stdenv.mkDerivation rec {
   version = "0.3.6";
   name = "${pname}-${version}";
 
-  extraSrcs = [ dsfmt_src grisu_src arpack_src utf8proc_src ];
+  extraSrcs = [ dsfmt_src grisu_src utf8proc_src ];
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
@@ -57,7 +51,7 @@ stdenv.mkDerivation rec {
     [
       gfortran perl m4 gmp pcre llvm readline zlib
       fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-      openblas tcl tk xproto libX11 git mpfr which
+      arpack openblas tcl tk xproto libX11 git mpfr which
     ];
 
   makeFlags =
@@ -65,6 +59,7 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_BLAS=1"
       "USE_SYSTEM_LAPACK=1"
+      "USE_SYSTEM_ARPACK=1"
       "ARCH=${arch}"
       "MARCH=${march}"
       "JULIA_CPU_TARGET=${march}"
@@ -126,6 +121,7 @@ stdenv.mkDerivation rec {
     ln -s "${openblas}/lib/libopenblas.so" "$out/lib/julia/libblas.so"
     ln -s "${openblas}/lib/libopenblas.so" "$out/lib/julia/liblapack.so"
     ln -s "${suitesparse}/lib/libsuitesparse.so" "$out/lib/julia/libsuitesparse.so"
+    ln -s "${arpack}/lib/libarpack.so" "$out/lib/julia/libarpack.so"
     for i in umfpack cholmod amd camd colamd spqr; do
       ln -s libsuitesparse.so "$out/lib/julia/lib$i.so";
     done
