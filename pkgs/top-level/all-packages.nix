@@ -13877,6 +13877,10 @@ let
     liblapack = liblapack_3_5_0;
   };
 
+  # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
+  # standard BLAS and LAPACK.
+  openblasCompat = openblas.override { blas64 = false; };
+
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
 
