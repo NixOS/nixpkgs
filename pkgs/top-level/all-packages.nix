@@ -3995,7 +3995,6 @@ let
   };
 
   julia03 = callPackage ../development/compilers/julia/0.3.nix {
-    suitesparse = suitesparse_4_2;
     llvm = llvm_33;
   };
   julia = julia03;
@@ -13880,6 +13879,7 @@ let
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
+  suitesparse = suitesparse_4_4;
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
