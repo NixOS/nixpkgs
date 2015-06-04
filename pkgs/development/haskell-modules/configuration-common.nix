@@ -119,6 +119,11 @@ self: super: {
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 
+  hmatrix = overrideCabal super.hmatrix (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [ "-fopenblas" ];
+    extraLibraries = [ pkgs.openblasCompat ];
+  });
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;
