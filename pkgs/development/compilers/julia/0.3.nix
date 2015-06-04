@@ -1,14 +1,11 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
 , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
 , ncurses, patchelf, openblas, arpack
-, tcl, tk, xproto, libX11, git, mpfr, which, utf8proc
+, git, mpfr, which, utf8proc
 }:
 
 with stdenv.lib;
 
-let
-  realGcc = stdenv.cc.cc;
-in
 stdenv.mkDerivation rec {
   pname = "julia";
   version = "0.3.9";
@@ -43,7 +40,7 @@ stdenv.mkDerivation rec {
     [
       gfortran gmp pcre llvm readline zlib
       fftw fftwSinglePrec libunwind suitesparse glpk ncurses
-      arpack openblas tcl tk xproto libX11 mpfr utf8proc
+      arpack openblas mpfr utf8proc
     ];
 
   nativeBuildInputs = [ patchelf perl m4 which git ];
