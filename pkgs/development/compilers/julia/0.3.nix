@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
   makeFlags =
     [
       "USE_SYSTEM_PATCHELF=1"
-      "USE_SYSTEM_OPENBLAS=1"
       "USE_SYSTEM_BLAS=1"
       "USE_SYSTEM_LAPACK=1"
       "ARCH=${arch}"
@@ -122,25 +121,13 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    # Link dynamically loaded shared libraries into output so they are found at runtime.
     mkdir -p "$out/lib"
     ln -s "${openblas}/lib/libopenblas.so" "$out/lib/libblas.so"
     ln -s "${openblas}/lib/libopenblas.so" "$out/lib/liblapack.so"
-
-    mkdir -p usr/lib
-
-    echo "$out"
-    mkdir -p "$out/lib"
-    (
-    cd "$(mktemp -d)"
-    for i in "${suitesparse}"/lib/lib*.a; do
-      ar -x $i
-    done
-    gcc *.o --shared -o "$out/lib/libsuitesparse.so"
-    )
-    cp "$out/lib/libsuitesparse.so" usr/lib
+    ln -s "${suitesparse}/lib/libsuitesparse.so" "$out/lib/libsuitesparse.so"
     for i in umfpack cholmod amd camd colamd spqr; do
-      ln -s libsuitesparse.so "$out"/lib/lib$i.so;
-      ln -s libsuitesparse.so "usr"/lib/lib$i.so;
+      ln -s libsuitesparse.so "$out/lib/lib$i.so";
     done
   '';
 

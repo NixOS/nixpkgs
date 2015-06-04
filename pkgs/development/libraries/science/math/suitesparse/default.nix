@@ -36,6 +36,18 @@ stdenv.mkDerivation {
   NIX_CFLAGS = "-fPIC";
 
   postInstall = ''
+    # Build and install shared library
+    (
+        cd "$(mktemp -d)"
+        for i in "$out"/lib/lib*.a; do
+          ar -x $i
+        done
+        gcc *.o --shared -o "$out/lib/libsuitesparse.so"
+    )
+    for i in umfpack cholmod amd camd colamd spqr; do
+      ln -s libsuitesparse.so "$out"/lib/lib$i.so;
+    done
+
     # Install documentation
     outdoc=$out/share/doc/${name}
     mkdir -p $outdoc
