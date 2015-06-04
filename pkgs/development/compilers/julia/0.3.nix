@@ -1,7 +1,7 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
 , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
-, ncurses, libunistring, patchelf, openblas, arpack
-, tcl, tk, xproto, libX11, git, mpfr, which
+, ncurses, patchelf, openblas, arpack
+, tcl, tk, xproto, libX11, git, mpfr, which, utf8proc
 }:
 
 with stdenv.lib;
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     let
       dsfmt_ver = "2.2";
       grisu_ver = "1.1.1";
-      utf8proc_ver = "1.1.6";
 
       dsfmt_src = fetchurl {
         url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmt_ver}.tar.gz";
@@ -38,18 +37,16 @@ stdenv.mkDerivation rec {
         url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
         md5 = "29b533ed4311161267bff1a9a97e2953";
       };
-      utf8proc_src = fetchurl {
-        url = "http://www.public-software-group.org/pub/projects/utf8proc/v${utf8proc_ver}/utf8proc-v${utf8proc_ver}.tar.gz";
-        md5 = "2462346301fac2994c34f5574d6c3ca7";
-      };
-    in [ dsfmt_src grisu_src utf8proc_src ];
+    in [ dsfmt_src grisu_src ];
 
   buildInputs =
     [
-      gfortran perl m4 gmp pcre llvm readline zlib
-      fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-      arpack openblas tcl tk xproto libX11 git mpfr which
+      gfortran gmp pcre llvm readline zlib
+      fftw fftwSinglePrec libunwind suitesparse glpk ncurses
+      arpack openblas tcl tk xproto libX11 mpfr utf8proc
     ];
+
+  nativeBuildInputs = [ patchelf perl m4 which git ];
 
   makeFlags =
     let
@@ -78,6 +75,8 @@ stdenv.mkDerivation rec {
       "LIBLAPACKNAME=libopenblas"
 
       "USE_SYSTEM_ARPACK=1"
+
+      "USE_SYSTEM_UTF8PROC=1"
     ];
 
   GLPK_PREFIX = "${glpk}/include";
@@ -109,7 +108,6 @@ stdenv.mkDerivation rec {
     "-lopenblas"
     "-lpcre"
     "-lsuitesparse"
-    "-lunistring"
     "-lz"
   ];
 
