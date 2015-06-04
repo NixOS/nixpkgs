@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gfortran, openblas }:
 
 let
-  version = "4.4.1";
+  version = "4.4.4";
   name = "suitesparse-${version}";
 
   int_t = if openblas.blas64 then "int64_t" else "int32_t";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
-    sha256 = "0y8i6dizrr556xggpjyc7wijjv4jbizhssmjj4jv8n1s7zxy2z0n";
+    sha256 = "1zdn1y0ij6amj7smmcslkqgbqv9yy5cwmbyzqc9v6drzdzllgbpj";
   };
 
   preConfigure = ''
