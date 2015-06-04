@@ -16,6 +16,16 @@ py.buildPythonPackage rec {
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo
+    mkdir -p $out/share/applications
+    cat > $out/share/applications/loxodo.desktop <<EOF
+    [Desktop Entry]
+    Type=Application
+    Exec=$out/bin/loxodo
+    Icon=$out/lib/${python.libPrefix}/site-packages/resources/loxodo-icon.png
+    Name=Loxodo
+    GenericName=Password Vault
+    Categories=Application;Other;
+    EOF
   '';
 
   meta = with stdenv.lib; {
