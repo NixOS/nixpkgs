@@ -838,4 +838,7 @@ self: super: {
   # https://github.com/ekmett/comonad/issues/25
   comonad = dontCheck super.comonad;
 
+  # https://github.com/ekmett/semigroupoids/issues/35
+  semigroupoids = disableCabalFlag super.semigroupoids "doctests";
+
 }
