@@ -122,12 +122,12 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     # Link dynamically loaded shared libraries into output so they are found at runtime.
-    mkdir -p "$out/lib"
-    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/libblas.so"
-    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/liblapack.so"
-    ln -s "${suitesparse}/lib/libsuitesparse.so" "$out/lib/libsuitesparse.so"
+    mkdir -p "$out/lib/julia"
+    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/julia/libblas.so"
+    ln -s "${openblas}/lib/libopenblas.so" "$out/lib/julia/liblapack.so"
+    ln -s "${suitesparse}/lib/libsuitesparse.so" "$out/lib/julia/libsuitesparse.so"
     for i in umfpack cholmod amd camd colamd spqr; do
-      ln -s libsuitesparse.so "$out/lib/lib$i.so";
+      ln -s libsuitesparse.so "$out/lib/julia/lib$i.so";
     done
   '';
 
