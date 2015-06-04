@@ -1,7 +1,11 @@
-{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
-, readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
-, ncurses, patchelf, openblas, arpack
-, git, mpfr, which, utf8proc
+{ stdenv, fetchgit, fetchurl
+# build tools
+, gfortran, git, m4, patchelf, perl, which
+# libjulia dependencies
+, libunwind, llvm, readline, utf8proc, zlib
+# standard library dependencies
+, double_conversion, fftwSinglePrec, fftw, glpk, gmp, mpfr, pcre
+, openblas, arpack, suitesparse
 }:
 
 with stdenv.lib;
@@ -23,34 +27,28 @@ stdenv.mkDerivation rec {
   extraSrcs =
     let
       dsfmt_ver = "2.2";
-      grisu_ver = "1.1.1";
 
       dsfmt_src = fetchurl {
         url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmt_ver}.tar.gz";
         name = "dsfmt-${dsfmt_ver}.tar.gz";
         md5 = "cb61be3be7254eae39684612c524740d";
       };
-      grisu_src = fetchurl {
-        url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
-        md5 = "29b533ed4311161267bff1a9a97e2953";
-      };
-    in [ dsfmt_src grisu_src ];
+    in [ dsfmt_src ];
 
   buildInputs =
-    [
-      gfortran gmp pcre llvm readline zlib
-      fftw fftwSinglePrec libunwind suitesparse glpk ncurses
-      arpack openblas mpfr utf8proc
+    [ libunwind llvm readline utf8proc zlib
+      double_conversion fftw fftwSinglePrec glpk gmp mpfr pcre
+      openblas arpack suitesparse
     ];
 
-  nativeBuildInputs = [ patchelf perl m4 which git ];
+  nativeBuildInputs = [ gfortran git m4 patchelf perl which ];
 
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
       march =
-        {
-          "x86_64-linux" = "x86-64";
+        { "x86_64-linux" = "x86-64";
+          "x86_64-darwin" = "x86-64";
           "i686-linux" = "i686";
         }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
     in [
@@ -61,8 +59,6 @@ stdenv.mkDerivation rec {
       "prefix=$(out)"
       "SHELL=${stdenv.shell}"
 
-      "USE_SYSTEM_PATCHELF=1"
-
       "USE_SYSTEM_BLAS=1"
       "LIBBLAS=-lopenblas"
       "LIBBLASNAME=libopenblas"
@@ -72,7 +68,8 @@ stdenv.mkDerivation rec {
       "LIBLAPACKNAME=libopenblas"
 
       "USE_SYSTEM_ARPACK=1"
-
+      "USE_SYSTEM_GRISU=1"
+      "USE_SYSTEM_PATCHELF=1"
       "USE_SYSTEM_UTF8PROC=1"
     ];
 
@@ -81,8 +78,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-fPIC" ];
 
   postPatch = ''
-    sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
-    sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
+    sed -i deps/Makefile \
+        -e "s@/usr/local/lib@$out/lib@g" \
+        -e "s@/usr/lib@$out/lib@g" \
+        -e "s@/usr/include/double-conversion@${double_conversion}/include/double-conversion@g"
 
     patchShebangs . contrib
 
