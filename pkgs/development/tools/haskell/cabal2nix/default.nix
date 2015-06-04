@@ -31,7 +31,10 @@ mkDerivation rec {
     split transformers utf8-string
   ];
   buildTools = [ gitMinimal makeWrapper ];
-  preConfigure = "runhaskell $setupCompileFlags generate-cabal-file --release >cabal2nix.cabal";
+  preConfigure = ''
+    sed -i -e 's|, "--dirty"||' generate-cabal-file.hs
+    runhaskell $setupCompileFlags generate-cabal-file --release >cabal2nix.cabal
+  '';
   postInstall = ''
     exe=$out/libexec/${pname}-${version}/cabal2nix
     install -D $out/bin/cabal2nix $exe
