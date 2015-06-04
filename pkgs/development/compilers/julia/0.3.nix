@@ -35,6 +35,29 @@ stdenv.mkDerivation rec {
       };
     in [ dsfmt_src ];
 
+  prePatch = ''
+    copy_kill_hash(){
+      cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
+    }
+
+    for i in $extraSrcs; do
+      copy_kill_hash "$i" deps
+    done
+  '';
+
+  postPatch = ''
+    sed -i deps/Makefile \
+        -e "s@/usr/local/lib@$out/lib@g" \
+        -e "s@/usr/lib@$out/lib@g" \
+        -e "s@/usr/include/double-conversion@${double_conversion}/include/double-conversion@g"
+
+    patchShebangs . contrib
+
+    # ldconfig doesn't seem to ever work on NixOS; system-wide ldconfig cache
+    # is probably not what we want anyway on non-NixOS
+    sed -e "s@/sbin/ldconfig@true@" -i src/ccall.*
+  '';
+
   buildInputs =
     [ libunwind llvm readline utf8proc zlib
       double_conversion fftw fftwSinglePrec glpk gmp mpfr pcre
@@ -68,27 +91,24 @@ stdenv.mkDerivation rec {
       "LIBLAPACKNAME=libopenblas"
 
       "USE_SYSTEM_ARPACK=1"
+      "USE_SYSTEM_FFTW=1"
+      "USE_SYSTEM_GLPK=1"
+      "USE_SYSTEM_GMP=1"
       "USE_SYSTEM_GRISU=1"
+      "USE_SYSTEM_LIBUNWIND=1"
+      "USE_SYSTEM_LLVM=1"
+      "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_PATCHELF=1"
+      "USE_SYSTEM_PCRE=1"
+      "USE_SYSTEM_READLINE=1"
+      "USE_SYSTEM_SUITESPARSE=1"
       "USE_SYSTEM_UTF8PROC=1"
+      "USE_SYSTEM_ZLIB=1"
     ];
 
   GLPK_PREFIX = "${glpk}/include";
 
   NIX_CFLAGS_COMPILE = [ "-fPIC" ];
-
-  postPatch = ''
-    sed -i deps/Makefile \
-        -e "s@/usr/local/lib@$out/lib@g" \
-        -e "s@/usr/lib@$out/lib@g" \
-        -e "s@/usr/include/double-conversion@${double_conversion}/include/double-conversion@g"
-
-    patchShebangs . contrib
-
-    # ldconfig doesn't seem to ever work on NixOS; system-wide ldconfig cache
-    # is probably not what we want anyway on non-NixOS
-    sed -e "s@/sbin/ldconfig@true@" -i src/ccall.*
-  '';
 
   # Julia tries to load these libraries dynamically at runtime, but they can't be found.
   # Easier by far to link against them as usual.
@@ -107,20 +127,7 @@ stdenv.mkDerivation rec {
     "-lz"
   ];
 
-  configurePhase = ''
-    for i in GMP LLVM PCRE READLINE FFTW LIBUNWIND SUITESPARSE GLPK ZLIB MPFR;
-    do
-      makeFlags="$makeFlags USE_SYSTEM_$i=1 "
-    done
-
-    copy_kill_hash(){
-      cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
-    }
-
-    for i in $extraSrcs; do
-      copy_kill_hash "$i" deps
-    done
-
+  preConfigure = ''
     export PATH="$PATH:${stdenv.cc.libc}/sbin"
   '';
 
