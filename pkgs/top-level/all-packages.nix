@@ -11674,6 +11674,8 @@ let
 
   lmms = callPackage ../applications/audio/lmms { };
 
+  loxodo = callPackage ../applications/misc/loxodo { };
+
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
   luakit = callPackage ../applications/networking/browsers/luakit {
