@@ -18,7 +18,6 @@ let
   dsfmt_ver = "2.2";
   grisu_ver = "1.1.1";
   arpack_ver = "3.1.5";
-  patchelf_ver = "0.8";
   utf8proc_ver = "1.1.6";
 
   dsfmt_src = fetchurl {
@@ -34,10 +33,6 @@ let
     url = "https://github.com/opencollab/arpack-ng/archive/${arpack_ver}.tar.gz";
     md5 = "d84e1b6108d9ee67c0d21aba7099e953";
     name = "arpack-ng-${arpack_ver}.tar.gz";
-  };
-  patchelf_src = fetchurl {
-    url = "http://hydra.nixos.org/build/1524660/download/2/patchelf-${patchelf_ver}.tar.bz2";
-    md5 = "5087261514b4b5814a39c3d3a36eb6ef";
   };
   utf8proc_src = fetchurl {
     url = "http://www.public-software-group.org/pub/projects/utf8proc/v${utf8proc_ver}/utf8proc-v${utf8proc_ver}.tar.gz";
