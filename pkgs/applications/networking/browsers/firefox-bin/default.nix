@@ -143,7 +143,7 @@ stdenv.mkDerivation {
       [Desktop Entry]
       Type=Application
       Exec=$out/bin/firefox
-      Icon=$out/lib/firefox-bin-${version}/chrome/icons/default/default256.png
+      Icon=$out/usr/lib/firefox-bin-${version}/browser/icons/mozicon128.png
       Name=Firefox
       GenericName=Web Browser
       Categories=Application;Network;
