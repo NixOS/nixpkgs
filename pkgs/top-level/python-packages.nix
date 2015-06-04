@@ -7798,7 +7798,7 @@ let
   numpy = let
     support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
-      atlas = pkgs.atlasWithLapack;
+      openblas = pkgs.openblasCompat;
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
@@ -7821,7 +7821,7 @@ let
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ support.atlas ];
+    propagatedBuildInputs = [ support.openblas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -11260,7 +11260,7 @@ let
   scipy = let
     support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
-      atlas = pkgs.atlasWithLapack;
+      openblas = pkgs.openblasCompat;
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
