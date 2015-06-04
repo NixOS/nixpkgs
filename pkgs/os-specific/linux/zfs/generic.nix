@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences, coreutils
 , configFile ? "all"
 
 # Userspace dependencies
@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
     substituteInPlace ./cmd/zed/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
     substituteInPlace ./module/Makefile.in        --replace "/bin/cp"                 "cp"
-
+    substituteInPlace ./etc/systemd/system/zfs-share.service.in \
+        --replace "@bindir@/rm " "${coreutils}/bin/rm "
     ./autogen.sh
   '';
 
