@@ -6787,6 +6787,8 @@ let
     libcap = null;
   };
 
+  libgcrypt_1_5 = lowPrio (callPackage ../development/libraries/libgcrypt/1.5.nix { });
+
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
   libgksu = callPackage ../development/libraries/libgksu { };
@@ -12417,6 +12419,7 @@ let
 
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
+    libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
   };
 
