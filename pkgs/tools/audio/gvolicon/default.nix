@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, alsaLib, pkgconfig, fetchgit, gnome3, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation {
-  name = "gvolicon";
+  name = "gvolicon-2014-04-28";
   src = fetchgit {
     url = "https://github.com/Unia/gvolicon";
     rev = "c04cafb88124e1e5edc61dd52f76bf13381d5167";

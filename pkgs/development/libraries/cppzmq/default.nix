@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "cppzmq";
+  name = "cppzmq-2015-03-05";
 
   src = fetchgit {
     url = "git://github.com/zeromq/cppzmq";
