@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, utillinux
+{ stdenv, fetchFromGitHub, autoreconfHook, utillinux, nukeReferences
 , configFile ? "all"
 
 # Userspace dependencies
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   inherit version src patches;
 
-  buildInputs = [ autoconf automake libtool ]
+  buildInputs = [ autoreconfHook nukeReferences ]
     ++ optionals buildKernel [ spl ]
     ++ optionals buildUser [ zlib libuuid python ];
 
@@ -68,8 +68,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Remove provided services as they are buggy
-  postInstall = optionalString buildUser ''
+  postInstall = ''
+    # Prevent kernel modules from depending on the Linux -dev output.
+    nuke-refs $(find $out -name "*.ko")
+  '' + optionalString buildUser ''
+    # Remove provided services as they are buggy
     rm $out/etc/systemd/system/zfs-import-*.service
 
     sed -i '/zfs-import-scan.service/d' $out/etc/systemd/system/*
@@ -78,7 +81,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
     done
 
-    # Fix pkgconfig
+    # Fix pkgconfig.
     ln -s ../share/pkgconfig $out/lib/pkgconfig
   '';
 
