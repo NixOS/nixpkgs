@@ -8556,6 +8556,7 @@ let
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
+    openblas = openblasCompat;
     withRecommendedPackages = false;
   };
 
