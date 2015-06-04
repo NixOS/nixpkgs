@@ -44,11 +44,6 @@
     pkgs.zip
     pkgs.dar # disk archiver
     pkgs.cabextract
-
-    # Some editors.
-    pkgs.vim
-    pkgs.bvi # binary editor
-    pkgs.joe
   ];
 
   # Include support for various filesystems.
