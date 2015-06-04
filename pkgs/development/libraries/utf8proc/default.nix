@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ryjlcnpfm7fpkq6444ybi576hbnh2l0w7kjhbqady5lxwjyg3pf";
   };
 
-  installPhase = ''
-    make install prefix=$out
-  '';
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A clean C library for processing UTF-8 Unicode data";
