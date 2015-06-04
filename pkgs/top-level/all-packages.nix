@@ -6787,13 +6787,9 @@ let
 
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
-  libgcrypt = callPackage ../development/libraries/libgcrypt {
-    # Breaks packages that expect to have elevated privileges
-    # Ex. Lightdm, cryptsetup
-    libcap = null;
-  };
+  libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
-  libgcrypt_1_5 = lowPrio (callPackage ../development/libraries/libgcrypt/1.5.nix { });
+  libgcrypt_1_5 = callPackage ../development/libraries/libgcrypt/1.5.nix { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
