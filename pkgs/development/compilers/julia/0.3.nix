@@ -11,15 +11,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.3.6";
+  version = "0.3.9";
   name = "${pname}-${version}";
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
     rev = "refs/tags/v${version}";
-    md5 = "d28e8f428485219f756d80c011d5dd32";
+    sha256 = "ad0820affefd04eb6fba7deb2603756974711846a251900a9202b8d2665a37cf";
     name = "julia-git-v${version}";
   };
+
+  patches = [ ./0001-work-around-buggy-wcwidth.patch ];
 
   extraSrcs =
     let
