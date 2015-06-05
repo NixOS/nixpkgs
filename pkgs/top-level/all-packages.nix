@@ -9907,6 +9907,8 @@ let
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
+  stringer = callPackage ../development/tools/stringer { };
+
   spl = callPackage ../os-specific/linux/spl {
     configFile = "user";
   };
