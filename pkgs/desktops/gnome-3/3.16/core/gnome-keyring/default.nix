@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool docbook_xsl_ns docbook_xsl ];
 
   configureFlags = [
-    "--with-ca-certificates=${cacert}/ca-bundle.crt" # NixOS hardcoded path
+    "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt" # NixOS hardcoded path
     "--with-pkcs11-config=$$out/etc/pkcs11/" # installation directories
     "--with-pkcs11-modules=$$out/lib/pkcs11/"
   ];
