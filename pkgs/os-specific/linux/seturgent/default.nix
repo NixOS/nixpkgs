@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libX11, xproto, xdotool, unzip }:
 
 stdenv.mkDerivation {
-  name = "seturgent";
+  name = "seturgent-2012-08-17";
 
   src = fetchurl {
     url = "https://github.com/hiltjo/seturgent/archive/ada70dcb15865391e5cdcab27a0739a304a17e03.zip";
