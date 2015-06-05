@@ -113,21 +113,26 @@ in
           #include <abstractions/base>
           #include <abstractions/nameservice>
 
-          ${pkgs.glibc}/lib/*.so               mr,
-          ${pkgs.libevent}/lib/libevent*.so*   mr,
-          ${pkgs.curl}/lib/libcurl*.so*        mr,
-          ${pkgs.openssl}/lib/libssl*.so*      mr,
-          ${pkgs.openssl}/lib/libcrypto*.so*   mr,
-          ${pkgs.zlib}/lib/libz*.so*           mr,
-          ${pkgs.libssh2}/lib/libssh2*.so*     mr,
-          ${pkgs.systemd}/lib/libsystemd*.so*  mr,
-          ${pkgs.xz}/lib/liblzma*.so*          mr,
-          ${pkgs.libgcrypt}/lib/libgcrypt*.so* mr,
+          ${pkgs.glibc}/lib/*.so                    mr,
+          ${pkgs.libevent}/lib/libevent*.so*        mr,
+          ${pkgs.curl}/lib/libcurl*.so*             mr,
+          ${pkgs.openssl}/lib/libssl*.so*           mr,
+          ${pkgs.openssl}/lib/libcrypto*.so*        mr,
+          ${pkgs.zlib}/lib/libz*.so*                mr,
+          ${pkgs.libssh2}/lib/libssh2*.so*          mr,
+          ${pkgs.systemd}/lib/libsystemd*.so*       mr,
+          ${pkgs.xz}/lib/liblzma*.so*               mr,
+          ${pkgs.libgcrypt}/lib/libgcrypt*.so*      mr,
           ${pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
+          ${pkgs.libnghttp2}/lib/libnghttp2*.so*    mr,
+          ${pkgs.c-ares}/lib/libcares*.so*          mr,
+          ${pkgs.libcap}/lib/libcap*.so*            mr,
+          ${pkgs.attr}/lib/libattr*.so*             mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,
 
+          ${pkgs.openssl}/etc/**                     r,
           ${pkgs.transmission}/share/transmission/** r,
 
           owner ${settingsDir}/** rw,
