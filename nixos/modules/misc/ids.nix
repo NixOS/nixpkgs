@@ -444,6 +444,7 @@
       #dnschain = 209; #unused
       lxd = 210; # unused
       #kibana = 211;
+      mpdscribble = 212;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
