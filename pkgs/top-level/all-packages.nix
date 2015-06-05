@@ -243,6 +243,10 @@ let
     else
       stdenv);
 
+  ### AI2
+
+  ai2NodeJs = callPackage ../ai2/nodejs {};
+
 
   ### BUILD SUPPORT
 
