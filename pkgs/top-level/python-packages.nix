@@ -9697,21 +9697,14 @@ let
     };
   };
 
-  pyinotify = pkgs.stdenv.mkDerivation rec {
-    name = "python-pyinotify-${version}";
-    version = "0.9.3";
+  pyinotify = buildPythonPackage rec {
+    name = "pyinotify";
+    version = "0.9.5";
 
-    src = pkgs.fetchgit {
-      url = "git://github.com/seb-m/pyinotify.git";
-      rev = "refs/tags/${version}";
-      sha256 = "d38ce95e4af00391e58246a8d7fe42bdb51d63054b09809600b2faef2a803472";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${name}/${name}-${version}.tar.gz";
+      sha256 = "06yblnif9v05xwsbs089n0bj60ndb4lzkv1i15fprqnf6sgjmig7";
     };
-
-    buildInputs = with self; [ python ];
-
-    installPhase = ''
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
 
     meta = {
       homepage = https://github.com/seb-m/pyinotify/wiki;
