@@ -13031,6 +13031,8 @@ let
     inherit (gnome) libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
+  apvlv = callPackage ../applications/misc/apvlv { };
+
   xpdf = callPackage ../applications/misc/xpdf {
     motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
