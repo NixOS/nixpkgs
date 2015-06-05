@@ -1,11 +1,11 @@
 { stdenv, fetchzip, ocaml, findlib }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-re-1.3.1";
+  name = "ocaml-re-1.4.0";
 
   src = fetchzip {
     url = "https://github.com/ocaml/ocaml-re/archive/${name}.tar.gz";
-    sha256 = "11d4k43pc97kvdbjgjcxpc0gq6yal4galkxlrfdp1iypwdcni92g";
+    sha256 = "1xcfmhjgd7prqx2g1addlrk84xpfafmqnpjkqrvg7mw0hn1p7v2m";
   };
 
   buildInputs = [ ocaml findlib ];
