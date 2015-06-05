@@ -98,6 +98,7 @@
   ./services/audio/icecast.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
+  ./services/audio/mpdscribble.nix
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
