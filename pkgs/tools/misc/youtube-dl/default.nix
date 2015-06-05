@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, python, zip, pandoc, ffmpeg }:
+{ manuals ? true
+, stdenv, fetchurl, makeWrapper, python, zip, 
+pandoc ? null 
+, ffmpeg }:
+
+assert manuals -> pandoc != null;
 
 stdenv.mkDerivation rec {
   name = "youtube-dl-${version}";
@@ -9,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0lgxir2i5ipplg57wk8gnbbsdrk7szqnyb1bxr97f3h0rbm4dfij";
   };
 
-  nativeBuildInputs = [ pandoc ];
+  nativeBuildInputs = [ ]
+    ++ stdenv.lib.optional manuals pandoc;
 
   buildInputs = [ python makeWrapper zip ];
 
