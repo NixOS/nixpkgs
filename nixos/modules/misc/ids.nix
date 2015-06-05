@@ -420,6 +420,7 @@
       #skydns = 197; #unused
       #ripple-rest = 198; #unused
       #nix-serve = 199; #unused
+      mpdscribble = 200;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
