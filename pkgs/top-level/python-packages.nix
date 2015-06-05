@@ -1057,16 +1057,16 @@ let
   };
 
   responses = self.buildPythonPackage rec {
-    name = "responses-0.2.2";
-
-    propagatedBuildInputs = with self; [ requests mock six pytest flake8 ];
-
-    doCheck = false;
+    name = "responses-0.4.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/r/responses/responses-0.2.2.tar.gz";
-      md5 = "5d79fd425cf8d858dfc8afa6475395d3";
+      url = "https://pypi.python.org/packages/source/r/responses/${name}.tar.gz";
+      sha256 = "0fs7a4cf4f12mjhcjd5vfh0f3ixcy2nawzxpgsfr3ahf0rg7ppx5";
     };
+
+    propagatedBuildInputs = with self; [ cookies mock requests2 six ];
+
+    doCheck = false;
 
   };
 
@@ -2005,6 +2005,23 @@ let
     src = pkgs.fetchurl rec {
       url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
       md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
+  cookies = buildPythonPackage rec {
+    name = "cookies-2.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cookies/${name}.tar.gz";
+      sha256 = "13pfndz8vbk4p2a44cfbjsypjarkrall71pgc97glk5fiiw9idnn";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Friendlier RFC 6265-compliant cookie parser/renderer";
+      homepage = https://github.com/sashahart/cookies;
+      license = licenses.mit;
     };
   };
 
@@ -10620,16 +10637,17 @@ let
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.6.0";
+    version = "2.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      sha256 = "0xadnw27m257scrhjcc66zm4z3ikg8n9h6g9akpkavr31qgyvnqw";
+      sha256 = "0gdr9dxm24amxpbyqpbh3lbwxc2i42hnqv50sigx568qssv3v2ir";
     };
 
     meta = {
       description = "An Apache2 licensed HTTP library, written in Python, for human beings";
       homepage = http://docs.python-requests.org/en/latest/;
+      license = licenses.asl20;
     };
   };
 
