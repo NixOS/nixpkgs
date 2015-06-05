@@ -3385,8 +3385,10 @@ let
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
   youtube-dl = callPackage ../tools/misc/youtube-dl {
-  	manuals = false;
-   };
+    # Release versions don't need pandoc because the formatted man page
+    # is included in the tarball.
+    pandoc = null;
+  };
 
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
