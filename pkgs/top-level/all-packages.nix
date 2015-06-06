@@ -6340,7 +6340,11 @@ let
   # Modularize heimdal into a library first
   kerberos = libkrb5;
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
+    openldap = openldap.override {
+      cyrus_sasl = cyrus_sasl.override { kerberos = null; };
+    };
+  };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
   harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
