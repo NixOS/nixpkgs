@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   # Nixos default ca bundle
   patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,${cacert}/ca-bundle.crt, src/config.def.h
+    sed -i s,/etc/ssl/certs/ca-certificates.crt,${cacert}/etc/ssl/certs/ca-bundle.crt, src/config.def.h
   '';
 
   buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];

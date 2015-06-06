@@ -1,7 +1,7 @@
 { buildRubyGem, coreutils, fetchgit }:
 
 buildRubyGem {
-  name = "bundler-HEAD";
+  name = "bundler-2015-01-11";
   src = fetchgit {
     url = "https://github.com/bundler/bundler.git";
     rev = "a2343c9eabf5403d8ffcbca4dea33d18a60fc157";

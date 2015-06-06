@@ -121,6 +121,7 @@ self: super: {
 
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
+  base-noprelude = dontHaddock super.base-noprelude;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
   BNFC-meta = dontHaddock super.BNFC-meta;
   bytestring-progress = dontHaddock super.bytestring-progress;
@@ -401,7 +402,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
-  influxdb = dontCheck (dontJailbreak super.influxdb);
+  influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -779,11 +780,12 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/116
   # https://github.com/goldfirere/singletons/issues/117
   # https://github.com/goldfirere/singletons/issues/118
-  singletons = markBroken super.singletons;
-  singleton-nats = dontDistribute super.singleton-nats;
+  clash-lib = dontDistribute super.clash-lib;
+  clash-verilog = dontDistribute super.clash-verilog;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
-  clash-lib = dontDistribute super.clash-lib;
+  singleton-nats = dontDistribute super.singleton-nats;
+  singletons = markBroken super.singletons;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
@@ -809,9 +811,6 @@ self: super: {
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
 
-  # https://github.com/kolmodin/binary/issues/74
-  binary_0_7_4_0 = dontCheck super.binary_0_7_4_0;
-
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
@@ -830,6 +829,16 @@ self: super: {
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
-  # https://github.com/vincenthz/hs-cipher-aes/issues/35
-  cipher-aes = dontCheck super.cipher-aes;
+  # https://github.com/DanielG/cabal-helper/issues/2
+  cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
+
+  # https://github.com/jgm/gitit/issues/494
+  gitit = markBroken super.gitit;
+
+  # https://github.com/ekmett/comonad/issues/25
+  comonad = dontCheck super.comonad;
+
+  # https://github.com/ekmett/semigroupoids/issues/35
+  semigroupoids = disableCabalFlag super.semigroupoids "doctests";
+
 }

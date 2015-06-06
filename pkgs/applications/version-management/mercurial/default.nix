@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       mkdir -p $out/etc/mercurial
       cat >> $out/etc/mercurial/hgrc << EOF
       [web]
-      cacerts = ${cacert}/ca-bundle.crt
+      cacerts = ${cacert}/etc/ssl/certs/ca-bundle.crt
       EOF
 
       # copy hgweb.cgi to allow use in apache

@@ -1,4 +1,4 @@
-{ stdenv, nss, curl-full, perl, perlPackages }:
+{ stdenv, nss, curl, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "nss-cacert-${nss.version}";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = nss.src;
 
   postPatch = ''
-    unpackFile ${curl-full.src};
+    unpackFile ${curl.src};
   '';
 
   nativeBuildInputs = [ perl ] ++ (with perlPackages; [ LWP ]);
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -pv $out
-    cp -v ca-bundle.crt $out
+    mkdir -pv $out/etc/ssl/certs
+    cp -v ca-bundle.crt $out/etc/ssl/certs
   '';
 
   meta = with stdenv.lib; {

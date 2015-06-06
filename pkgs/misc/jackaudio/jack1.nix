@@ -4,8 +4,9 @@
 , alsaLib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
 }:
 
-with stdenv;
 let
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
   optAlsaLib = shouldUsePkg alsaLib;
   optDb = shouldUsePkg db;
   optLibuuid = shouldUsePkg libuuid;

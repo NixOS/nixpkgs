@@ -232,8 +232,6 @@ let
            || system == "armv7l-linux";
       isBigEndian = system == "powerpc-linux";
 
-      shouldUsePkg = lib.shouldUsePkgSystem system;
-
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
 

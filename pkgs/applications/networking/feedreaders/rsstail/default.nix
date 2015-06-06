@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, cppcheck, libmrss }:
 
-let version = "1.9"; in
+let version = "1.9.1"; in
 stdenv.mkDerivation rec {
   name = "rsstail-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0igkkhwzhi2cxbfirmq5xgaidnv0gdhmh2w7052xqpyvzg069faf";
-    rev = "aab4fbcc5cdf82e439ea6abe562e9b648fc1a6ef";
+    sha256 = "0jhf7vr7y56r751wy4ix80iwhgxhk6mbbin8gnx59i457gf6sjl1";
+    rev = "1220d63aaa233961636f859d9a406536fffb64f4";
     repo = "rsstail";
     owner = "flok99";
   };

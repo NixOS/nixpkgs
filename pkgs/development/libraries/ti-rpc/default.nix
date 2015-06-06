@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libkrb5 }:
+{ fetchurl, stdenv, krb5 }:
 
 stdenv.mkDerivation rec {
   name = "libtirpc-0.3.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "07d1wlfzf3ia09mjn3f3ay8isk7yx4a6ckfkzx5khnqlc7amkzna";
   };
 
-  propagatedBuildInputs = [ libkrb5 ];
+  propagatedBuildInputs = [ krb5 ];
 
   # http://www.sourcemage.org/projects/grimoire/repository/revisions/d6344b6a3a94b88ed67925a474de5930803acfbf
   preConfigure = ''

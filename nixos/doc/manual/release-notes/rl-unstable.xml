@@ -8,9 +8,32 @@
 
 <para>In addition to numerous new and upgraded packages, this release has the following highlights:
 
-<!--<itemizedlist>
+  <itemizedlist>
+    <listitem>
+      <para>
+        The Haskell packages infrastructure has been re-designed from the ground up.
+        NixOS now distributes the latest version of every single package registered on
+        <link xlink:href="http://hackage.haskell.org/">Hackage</link>, i.e. well over
+        8000 Haskell packages. Further information and usage instructions for the
+        improved infrastructure are available at <link
+        xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>.
+        Users migrating from an earlier release will find also find helpful information
+        below, in the list of backwards-incompatible changes.
+      </para>
+    </listitem>
 
-</itemizedlist>-->
+    <listitem>
+      <para>
+        Users running an SSH server who worry about the quality of their
+        <literal>/etc/ssh/moduli</literal> file with respect to the <link
+        xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html">vulnerabilities
+        discovered in the Diffie-Hellman key exchange</link> can now replace OpenSSH's
+        default version with one they generated themselves using the new
+        <literal>services.openssh.moduliFile</literal> option.
+      </para>
+    </listitem>
+  </itemizedlist>
+
 </para>
 
 <para>Following new services were added since the last release:
@@ -71,6 +94,64 @@ was accordingly renamed to <literal>bomi</literal>
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    Haskell packages can no longer be found by name, i.e. the commands
+    <literal>nix-env -qa cabal-install</literal> and <literal>nix-env -i
+    ghc</literal> will fail, even though we <emphasis>do</emphasis> ship
+    both <literal>cabal-install</literal> and <literal>ghc</literal>.
+    The reason for this inconvenience is the sheer size of the Haskell
+    package set: name-based lookups such as these would become much
+    slower than they are today if we'd add the entire Hackage database
+    into the top level attribute set. Instead, the list of Haskell
+    packages can be displayed by
+  </para>
+  <programlisting>
+nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A haskellPackages
+</programlisting>
+  <para>
+    and packages can be installed with:
+  </para>
+  <programlisting>
+nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
+</programlisting>
+</listitem>
+
+<listitem>
+  <para>
+    Previous versions of NixOS come with a feature called
+    <literal>ghc-wrapper</literal>, a small wrapper script that allows
+    GHC to transparently pick up on libraries installed in the user's
+    profile. This feature has been deprecated;
+    <literal>ghc-wrapper</literal> was removed from the distribution.
+    The proper way to register Haskell libraries with the compiler now
+    is the <literal>haskellPackages.ghcWithPackages</literal>
+    function.
+    <link xlink:href="https://nixos.org/wiki/Haskell">https://nixos.org/wiki/Haskell</link>
+    provides much information about this subject.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    All Haskell builds that have been generated with version 1.x of
+    the <literal>cabal2nix</literal> utility are now invalid and need
+    to be re-generated with a current version of
+    <literal>cabal2nix</literal> to function. The most recent version
+    of this tool can be installed by running
+    <literal>nix-env -i cabal2nix</literal>.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The <literal>haskellPackages</literal> set in Nixpkgs used to have a
+    function attribute called <literal>extension</literal> that users
+    could override in their <literal>~/.nixpkgs/config.nix</literal>
+    files to configure additional attributes, etc. That function still
+    exists, but it's now called <literal>overrides</literal>.
+  </para>
+</listitem>
 
 </itemizedlist>
 </para>

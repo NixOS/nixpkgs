@@ -13,18 +13,6 @@ stdenv.mkDerivation rec {
     alsaLib libclthreads libclxclient libX11 libXft libXrender fftwFloat jack2 zita-alsa-pcmi
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${xlibs.xproto}/include"
-    "-I${libX11}/include"
-    "-I${libXft}/include"
-    "-I${freetype}/include"
-    "-I${fontconfig}/include"
-    "-I${libXrender}/include"
-    "-I${xlibs.renderproto}/include"
-    "-I${alsaLib}/include"
-    "-I${zita-alsa-pcmi}/include"
-  ];
-
   makeFlags = [
     "PREFIX=$(out)"
     "SUFFIX=''"
@@ -38,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage = http://kokkinizita.linuxaudio.org/linuxaudio/index.html;
     description = "JACK and ALSA Audio Analyser";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = [ maintainers.magnetophon ];
     platforms = platforms.linux;
   };
 }

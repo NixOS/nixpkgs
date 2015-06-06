@@ -226,10 +226,11 @@ in
         chmod -Rc u=rwX,go= '${cfg.nslave.cachedir}'
       '';
 
+      path = with pkgs; [ imagemagick ];
       environment = {
         PYTHONPATH = concatMapStringsSep ":"
           (m: "${pypkgs.${m}}/lib/${python.libPrefix}/site-packages")
-          [ "mwlib-rl" "mwlib-ext" "pygments" ];
+          [ "mwlib-rl" "mwlib-ext" "pygments" "pyfribidi" ];
       };
 
       serviceConfig = {

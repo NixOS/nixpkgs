@@ -92,9 +92,6 @@ self: super: {
   # https://bitbucket.org/FlorianHartwig/attobencode/issue/1
   AttoBencode = dontCheck super.AttoBencode;
 
-  # bos/attoparsec#92
-  attoparsec = dontCheck super.attoparsec;
-
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
   syb = dontCheck super.syb;
@@ -280,11 +277,5 @@ self: super: {
 
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
-
-  # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
-  crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
-
-  # Fix compilation under GHC 7.10, patch has been sent upstream.
-  iconv = appendPatch super.iconv ./iconv-fix-ghc710.patch;
 
 }

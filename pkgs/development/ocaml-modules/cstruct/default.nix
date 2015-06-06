@@ -1,9 +1,7 @@
 {stdenv, writeText, fetchurl, ocaml, ocplib-endian, sexplib, findlib,
  async ? null, lwt ? null, camlp4}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-in
+assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
 stdenv.mkDerivation {
   name = "ocaml-cstruct-1.6.0";

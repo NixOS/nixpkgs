@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, boost, fftw, qt5 }:
 
-stdenv.mkDerivation rec {
-  version = "0.11.0-20141105";
+let version = "0.11"; in
+stdenv.mkDerivation {
   name = "libkeyfinder-${version}";
 
   src = fetchFromGitHub {
+    sha256 = "0674gykdi1nffvba5rv6fsp0zw02w1gkpn9grh8w983xf13ykbz9";
+    rev = "v${version}";
     repo = "libKeyFinder";
     owner = "ibsh";
-    rev = "592ef1f3d3ada489f80814d5ccfbc8de6029dc9d";
-    sha256 = "0xcqpizwbn6wik3w7h9k1lvgrp3r3w6yyy55flvnwwwgvkry48as";
   };
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Musical key detection for digital audio (C++ library)";
     homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
     license = licenses.gpl3Plus;

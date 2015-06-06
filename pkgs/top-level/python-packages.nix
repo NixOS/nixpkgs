@@ -1057,16 +1057,16 @@ let
   };
 
   responses = self.buildPythonPackage rec {
-    name = "responses-0.2.2";
-
-    propagatedBuildInputs = with self; [ requests mock six pytest flake8 ];
-
-    doCheck = false;
+    name = "responses-0.4.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/r/responses/responses-0.2.2.tar.gz";
-      md5 = "5d79fd425cf8d858dfc8afa6475395d3";
+      url = "https://pypi.python.org/packages/source/r/responses/${name}.tar.gz";
+      sha256 = "0fs7a4cf4f12mjhcjd5vfh0f3ixcy2nawzxpgsfr3ahf0rg7ppx5";
     };
+
+    propagatedBuildInputs = with self; [ cookies mock requests2 six ];
+
+    doCheck = false;
 
   };
 
@@ -2005,6 +2005,23 @@ let
     src = pkgs.fetchurl rec {
       url = "https://pypi.python.org/packages/source/c/contextlib2/${name}.tar.gz";
       md5 = "ea687207db25f65552061db4a2c6727d";
+    };
+  };
+
+  cookies = buildPythonPackage rec {
+    name = "cookies-2.2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cookies/${name}.tar.gz";
+      sha256 = "13pfndz8vbk4p2a44cfbjsypjarkrall71pgc97glk5fiiw9idnn";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Friendlier RFC 6265-compliant cookie parser/renderer";
+      homepage = https://github.com/sashahart/cookies;
+      license = licenses.mit;
     };
   };
 
@@ -5011,6 +5028,22 @@ let
     };
   });
 
+  pyfribidi = buildPythonPackage rec {
+    version = "0.11.0";
+    name = "pyfribidi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyfribidi/${name}.zip";
+      md5 = "a3fc1f9d34571305782d1a54ee36f904";
+    };
+
+    meta = {
+      description = "simple wrapper around fribidi.";
+      homepage = "https://github.com/pediapress/pyfribidi";
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
+
   docker_compose = buildPythonPackage rec {
     name = "docker-compose-1.2.0rc2";
     disabled = isPy3k || isPyPy;
@@ -6646,27 +6679,6 @@ let
     propagatedBuildInputs = with self; [ unittest2 six ];
   };
 
-  loxodo = buildPythonPackage {
-    name = "loxodo-0.20150124";
-    disabled = isPy3k;
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/sommer/loxodo.git";
-      rev = "6c56efb4511fd6f645ad0f8eb3deafc8071c5795";
-      sha256 = "02whmv4am8cz401rplplqzbipkyf0wd69z43sd3yw05rh7f3xbs2";
-    };
-
-    propagatedBuildInputs = with self; [ wxPython modules.readline ];
-    postInstall = "mv $out/bin/loxodo.py $out/bin/loxodo";
-
-    meta = {
-      description = "A Password Safe V3 compatible password vault";
-      homepage = http://www.christoph-sommer.de/loxodo/;
-      license = licenses.gpl2Plus;
-      platforms = platforms.linux;
-    };
-  };
-
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.3.6";
 
@@ -7801,7 +7813,7 @@ let
   };
 
   numpy = let
-    support = import ./python-support/numpy-scipy-support.nix {
+    support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
       atlas = pkgs.atlasWithLapack;
       pkgName = "numpy";
@@ -7826,7 +7838,7 @@ let
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ pkgs.atlas ];
+    propagatedBuildInputs = [ support.atlas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -8100,19 +8112,77 @@ let
       sha256 = "1w3wjnn3v37hf3hrd24lfgk6vpykarv9mihhpcfq6y7rg586bgjk";
     };
 
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ dateutil numpy pytz modules.sqlite3 ];
+    buildInputs = [ self.nose ];
+    propagatedBuildInputs = with self; [
+      dateutil
+      numpy
+      scipy
+      numexpr
+      pytz
+      xlrd
+      bottleneck
+      sqlalchemy9
+      lxml
+      modules.sqlite3
+    ];
 
-    # Tests require networking to pass
-    doCheck = false;
+    preCheck = ''
+      # Need to do this patch or tests will fail (swaps 1st and 2nd lines).
+      # See: https://github.com/pydata/pandas/commit/c4bcc2054bfd2f89b640bea0c9a109b0184d6710
+      first=$(sed -n '1p' < pandas/tests/test_format.py)
+      second=$(sed -n '2p' < pandas/tests/test_format.py)
+      rest=$(tail -n +3 pandas/tests/test_format.py)
+      echo $second > pandas/tests/test_format.py
+      echo $first >> pandas/tests/test_format.py
+      echo "$rest" >> pandas/tests/test_format.py
+
+      # Need to skip this test; insert a line here... hacky but oh well.
+      badtest=pandas/tseries/tests/test_timezones.py
+      fixed=$TMPDIR/fixed_test_timezones.py
+      touch $fixed
+      head -n 602 $badtest > $fixed
+      echo '        raise nose.SkipTest("Not working")' >> $fixed
+      tail -n +603 $badtest >> $fixed
+      mv $fixed $badtest
+    '';
+
+    checkPhase = ''
+      runHook preCheck
+
+      # The flag `-A 'not network'` will disable tests that use internet.
+      # The `-e` flag disables a few problematic tests.
+      ${python.executable} setup.py nosetests -A 'not network' --stop \
+        -e 'test_clipboard|test_series' --verbosity=3
+
+      runHook postCheck
+    '';
 
     meta = {
       homepage = "http://pandas.pydata.org/";
       description = "Python Data Analysis Library";
       license = licenses.bsd3;
       maintainers = with maintainers; [ raskin ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
+  };
+
+  xlrd = buildPythonPackage rec {
+    name = "xlrd-${version}";
+    version = "0.9.3";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xlrd/xlrd-${version}.tar.gz";
+      sha256 = "174ks80h0g9p67ahnakf0y7di3gvbhxvb1jlk097gvd7gpi3aflk";
+    };
+  };
+
+  bottleneck = buildPythonPackage rec {
+    name = "Bottleneck-${version}";
+    version = "1.0.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/B/Bottleneck/Bottleneck-${version}.tar.gz";
+      sha256 = "15dl0ll5xmfzj2fsvajzwxsb9dbw5i9fx9i4r6n4i5nzzba7m6wd";
+    };
+    propagatedBuildInputs = [self.numpy];
   };
 
   parsedatetime = buildPythonPackage rec {
@@ -8424,6 +8494,10 @@ let
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
       description = "Command-line interface for PostgreSQL";
       longDescription = ''
@@ -8722,11 +8796,11 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.38";
+    version = "0.39";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
-      sha256 = "0rjy5n79h8sc6wpw6nwys52rin7i4qlfy51y7vws303mficjkvkc";
+      sha256 = "1046fhgqd1171n8xyzcxwzcxgkcwa77r08g7iih8k5x7z59l94lb";
     };
 
     buildInputs = with self; [ jedi ipython pygments ];
@@ -9156,12 +9230,12 @@ let
     version = "1.5.3";
     # FAIL:test_generate_entry and test_time
     # both tests fail due to time issue that doesn't seem to matter in practice
-    doCheck = false; 
+    doCheck = false;
     src = pkgs.fetchurl {
       url = "https://github.com/pyblosxom/pyblosxom/archive/v${version}.tar.gz";
       sha256 = "0de9a7418f4e6d1c45acecf1e77f61c8f96f036ce034493ac67124626fd0d885";
     };
-  
+
     propagatedBuildInputs = with self; [ pygments markdown ];
 
     meta = {
@@ -9627,21 +9701,14 @@ let
     };
   };
 
-  pyinotify = pkgs.stdenv.mkDerivation rec {
-    name = "python-pyinotify-${version}";
-    version = "0.9.3";
+  pyinotify = buildPythonPackage rec {
+    name = "pyinotify";
+    version = "0.9.5";
 
-    src = pkgs.fetchgit {
-      url = "git://github.com/seb-m/pyinotify.git";
-      rev = "refs/tags/${version}";
-      sha256 = "d38ce95e4af00391e58246a8d7fe42bdb51d63054b09809600b2faef2a803472";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${name}/${name}-${version}.tar.gz";
+      sha256 = "06yblnif9v05xwsbs089n0bj60ndb4lzkv1i15fprqnf6sgjmig7";
     };
-
-    buildInputs = with self; [ python ];
-
-    installPhase = ''
-      ${python}/bin/${python.executable} setup.py install --prefix=$out
-    '';
 
     meta = {
       homepage = https://github.com/seb-m/pyinotify/wiki;
@@ -10567,16 +10634,17 @@ let
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.6.0";
+    version = "2.7.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      sha256 = "0xadnw27m257scrhjcc66zm4z3ikg8n9h6g9akpkavr31qgyvnqw";
+      sha256 = "0gdr9dxm24amxpbyqpbh3lbwxc2i42hnqv50sigx568qssv3v2ir";
     };
 
     meta = {
       description = "An Apache2 licensed HTTP library, written in Python, for human beings";
       homepage = http://docs.python-requests.org/en/latest/;
+      license = licenses.asl20;
     };
   };
 
@@ -11205,7 +11273,7 @@ let
 
 
   scipy = let
-    support = import ./python-support/numpy-scipy-support.nix {
+    support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
       atlas = pkgs.atlasWithLapack;
       pkgName = "numpy";

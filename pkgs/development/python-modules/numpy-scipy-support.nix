@@ -8,6 +8,9 @@
 }:
 
 {
+  # Re-export atlas here so that it can be sure that the same one will be used
+  # in the propagatedBuildInputs.
+  inherit atlas;
 
   # First "install" the package, then import what was installed, and call the
   # .test() function, which will run the test suite.
@@ -40,7 +43,7 @@
     runHook postCheck
   '';
 
-  # Creates a site.cfg telling the setup script where to find depended-on 
+  # Creates a site.cfg telling the setup script where to find depended-on
   # math libraries.
   preBuild = ''
     echo "Creating site.cfg file..."

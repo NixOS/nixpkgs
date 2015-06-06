@@ -257,7 +257,7 @@ are provided with all modules included.</para>
     <term><varname>buildEnv</varname></term>
     <listitem><para>
         Function to build python interpreter environments with extra packages bundled together.
-        See <xref linkend="python-build-env" /> for usage and documentation.
+        See <xref linkend="ssec-python-build-env" /> for usage and documentation.
     </para></listitem>
   </varlistentry>
 
@@ -587,7 +587,7 @@ sed -i '/ = data_files/d' setup.py</programlisting>
     <listitem><para>
       There is no need to have global site-packages in Nix. Each package has isolated
       dependency tree and installing any python package will only populate <varname>$PATH</varname>
-      inside user environment. See <xref linkend="python-build-env" /> to create self-contained
+      inside user environment. See <xref linkend="ssec-python-build-env" /> to create self-contained
       interpreter with a set of packages.
     </para></listitem>
   </varlistentry>
@@ -876,7 +876,7 @@ Runtime) instead of the OpenJRE.</para>
   in <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/lua-modules/generic/default.nix">
   <filename>pkgs/development/lua-modules/generic/default.nix</filename></link>
   and works similarly to <varname>buildPerlPackage</varname>. (See
-  <xref linkend="ssec-language-perl"/> for details.)
+  <xref linkend="sec-language-perl"/> for details.)
 </para>
 
 <para>

@@ -31,14 +31,17 @@ mkDerivation rec {
     split transformers utf8-string
   ];
   buildTools = [ gitMinimal makeWrapper ];
-  preConfigure = "runhaskell $setupCompileFlags generate-cabal-file --release >cabal2nix.cabal";
+  preConfigure = ''
+    git reset --hard # Re-create the index that fetchgit destroyed in the name of predictable hashes.
+    runhaskell $setupCompileFlags generate-cabal-file --release >cabal2nix.cabal
+  '';
   postInstall = ''
     exe=$out/libexec/${pname}-${version}/cabal2nix
     install -D $out/bin/cabal2nix $exe
     rm -rf $out/{bin,lib,share}
     makeWrapper $exe $out/bin/cabal2nix --prefix PATH ":" "${nix-prefetch-scripts}/bin"
     mkdir -p $out/share/bash-completion/completions
-    $exe --bash-completion-script $out/bin/cabal2nix >$out/share/bash-completion/completions/cabal2nix
+    $exe --bash-completion-script $exe >$out/share/bash-completion/completions/cabal2nix
   '';
   homepage = "http://github.com/NixOS/cabal2nix/";
   description = "Convert Cabal files into Nix build instructions";

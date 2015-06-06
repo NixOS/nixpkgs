@@ -686,12 +686,12 @@ let self = _self // overrides;
 
   haskell-mode = melpaBuild rec {
     pname   = "haskell-mode";
-    version = "13.12";
+    version = "13.14";
     src = fetchFromGitHub {
       owner  = "haskell";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "1l8sby2626hpp0li23mic3qq8w7jirsp1hd08hkx2z84gvz4j6fz";
+      sha256 = "1mxr2cflgafcr8wkvgbq8l3wmc9qhhb7bn9zl1bkf10zspw9m58z";
     };
     meta = { license = gpl3Plus; };
   };
@@ -888,6 +888,18 @@ let self = _self // overrides;
     };
   };
 
+  perspective = melpaBuild rec {
+    pname   = "perspective";
+    version = "1.12";
+    src = fetchFromGitHub {
+      owner  = "nex3";
+      repo   = "${pname}-el";
+      rev    = version;
+      sha256 = "12c2rrhysrcl2arc6hpzv6lxbb1r3bzlvdp23hnp9sci6yc10k3q";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   pkg-info = melpaBuild rec {
     pname   = "pkg-info";
     version = "20140610";
@@ -922,7 +934,24 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1bl5wpkyv9xlf5v5hzkj8si1z4hjn3yywrjs1mx0g4irmq3mk29m";
     };
-    packageRequires = [ dash helm s pkg-info epl ];
+    fileSpecs = [ "projectile.el" ];
+    packageRequires = [ dash helm pkg-info ];
+    meta = { license = gpl3Plus; };
+  };
+  helm-projectile = melpaBuild rec {
+    pname   = "helm-projectile";
+    version = projectile.version;
+    src     = projectile.src;
+    fileSpecs = [ "helm-projectile.el" ];
+    packageRequires = [ helm projectile ];
+    meta = { license = gpl3Plus; };
+  };
+  persp-projectile = melpaBuild rec {
+    pname   = "persp-projectile";
+    version = projectile.version;
+    src     = projectile.src;
+    fileSpecs = [ "persp-projectile.el" ];
+    packageRequires = [ perspective projectile ];
     meta = { license = gpl3Plus; };
   };
 

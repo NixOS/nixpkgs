@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libestr, json_c, zlib, pythonPackages
-, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
+, krb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
@@ -7,6 +7,9 @@
 }:
 
 with stdenv.lib;
+let
+  mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
+in
 stdenv.mkDerivation rec {
   name = "rsyslog-8.9.0";
 
@@ -17,76 +20,76 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig libestr json_c zlib pythonPackages.docutils
-    libkrb5 jemalloc libmysql postgresql libdbi net_snmp libuuid curl gnutls
+    krb5 jemalloc libmysql postgresql libdbi net_snmp libuuid curl gnutls
     libgcrypt liblognorm openssl librelp libgt liblogging libnet hadoop rdkafka
     libmongo-client czmq rabbitmq-c hiredis
   ] ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   configureFlags = [
-    (mkOther                            "sysconfdir"           "/etc")
-    (mkOther                            "localstatedir"        "/var")
-    (mkWith   true                      "systemdsystemunitdir" "\${out}/etc/systemd/system")
-    (mkEnable true                      "largefile"            null)
-    (mkEnable true                      "regexp"               null)
-    (mkEnable (libkrb5 != null)         "gssapi-krb5"          null)
-    (mkEnable true                      "klog"                 null)
-    (mkEnable true                      "kmsg"                 null)
-    (mkEnable (systemd != null)         "imjournal"            null)
-    (mkEnable true                      "inet"                 null)
-    (mkEnable (jemalloc != null)        "jemalloc"             null)
-    (mkEnable true                      "unlimited-select"     null)
-    (mkEnable true                      "usertools"            null)
-    (mkEnable (libmysql != null)        "mysql"                null)
-    (mkEnable (postgresql != null)      "pgsql"                null)
-    (mkEnable (libdbi != null)          "libdbi"               null)
-    (mkEnable (net_snmp != null)        "snmp"                 null)
-    (mkEnable (libuuid != null)         "uuid"                 null)
-    (mkEnable (curl != null)            "elasticsearch"        null)
-    (mkEnable (gnutls != null)          "gnutls"               null)
-    (mkEnable (libgcrypt != null)       "libgcrypt"            null)
-    (mkEnable true                      "rsyslogrt"            null)
-    (mkEnable true                      "rsyslogd"             null)
-    (mkEnable true                      "mail"                 null)
-    (mkEnable (liblognorm != null)      "mmnormalize"          null)
-    (mkEnable true                      "mmjsonparse"          null)
-    (mkEnable true                      "mmaudit"              null)
-    (mkEnable true                      "mmanon"               null)
-    (mkEnable true                      "mmutf8fix"            null)
-    (mkEnable true                      "mmcount"              null)
-    (mkEnable true                      "mmsequence"           null)
-    (mkEnable true                      "mmfields"             null)
-    (mkEnable true                      "mmpstrucdata"         null)
-    (mkEnable (openssl != null)         "mmrfc5424addhmac"     null)
-    (mkEnable (librelp != null)         "relp"                 null)
-    (mkEnable (libgt != null)           "guardtime"            null)
-    (mkEnable (liblogging != null)      "liblogging-stdlog"    null)
-    (mkEnable (liblogging != null)      "rfc3195"              null)
-    (mkEnable true                      "imfile"               null)
-    (mkEnable false                     "imsolaris"            null)
-    (mkEnable true                      "imptcp"               null)
-    (mkEnable true                      "impstats"             null)
-    (mkEnable true                      "omprog"               null)
-    (mkEnable (libnet != null)          "omudpspoof"           null)
-    (mkEnable true                      "omstdout"             null)
-    (mkEnable (systemd != null)         "omjournal"            null)
-    (mkEnable true                      "pmlastmsg"            null)
-    (mkEnable true                      "pmcisconames"         null)
-    (mkEnable true                      "pmciscoios"           null)
-    (mkEnable true                      "pmaixforwardedfrom"   null)
-    (mkEnable true                      "pmsnare"              null)
-    (mkEnable true                      "omruleset"            null)
-    (mkEnable true                      "omuxsock"             null)
-    (mkEnable true                      "mmsnmptrapd"          null)
-    (mkEnable (hadoop != null)          "omhdfs"               null)
-    (mkEnable (rdkafka != null)         "omkafka"              null)
-    (mkEnable (libmongo-client != null) "ommongodb"            null)
-    (mkEnable (czmq != null)            "imzmq3"               null)
-    (mkEnable (czmq != null)            "imczmq"               null)
-    (mkEnable (czmq != null)            "omzmq3"               null)
-    (mkEnable (czmq != null)            "omczmq"               null)
-    (mkEnable (rabbitmq-c != null)      "omrabbitmq"           null)
-    (mkEnable (hiredis != null)         "omhiredis"            null)
-    (mkEnable true                      "generate-man-pages"   null)
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
+    (mkFlag true                      "largefile")
+    (mkFlag true                      "regexp")
+    (mkFlag (krb5 != null)            "gssapi-krb5")
+    (mkFlag true                      "klog")
+    (mkFlag true                      "kmsg")
+    (mkFlag (systemd != null)         "imjournal")
+    (mkFlag true                      "inet")
+    (mkFlag (jemalloc != null)        "jemalloc")
+    (mkFlag true                      "unlimited-select")
+    (mkFlag true                      "usertools")
+    (mkFlag (libmysql != null)        "mysql")
+    (mkFlag (postgresql != null)      "pgsql")
+    (mkFlag (libdbi != null)          "libdbi")
+    (mkFlag (net_snmp != null)        "snmp")
+    (mkFlag (libuuid != null)         "uuid")
+    (mkFlag (curl != null)            "elasticsearch")
+    (mkFlag (gnutls != null)          "gnutls")
+    (mkFlag (libgcrypt != null)       "libgcrypt")
+    (mkFlag true                      "rsyslogrt")
+    (mkFlag true                      "rsyslogd")
+    (mkFlag true                      "mail")
+    (mkFlag (liblognorm != null)      "mmnormalize")
+    (mkFlag true                      "mmjsonparse")
+    (mkFlag true                      "mmaudit")
+    (mkFlag true                      "mmanon")
+    (mkFlag true                      "mmutf8fix")
+    (mkFlag true                      "mmcount")
+    (mkFlag true                      "mmsequence")
+    (mkFlag true                      "mmfields")
+    (mkFlag true                      "mmpstrucdata")
+    (mkFlag (openssl != null)         "mmrfc5424addhmac")
+    (mkFlag (librelp != null)         "relp")
+    (mkFlag (libgt != null)           "guardtime")
+    (mkFlag (liblogging != null)      "liblogging-stdlog")
+    (mkFlag (liblogging != null)      "rfc3195")
+    (mkFlag true                      "imfile")
+    (mkFlag false                     "imsolaris")
+    (mkFlag true                      "imptcp")
+    (mkFlag true                      "impstats")
+    (mkFlag true                      "omprog")
+    (mkFlag (libnet != null)          "omudpspoof")
+    (mkFlag true                      "omstdout")
+    (mkFlag (systemd != null)         "omjournal")
+    (mkFlag true                      "pmlastmsg")
+    (mkFlag true                      "pmcisconames")
+    (mkFlag true                      "pmciscoios")
+    (mkFlag true                      "pmaixforwardedfrom")
+    (mkFlag true                      "pmsnare")
+    (mkFlag true                      "omruleset")
+    (mkFlag true                      "omuxsock")
+    (mkFlag true                      "mmsnmptrapd")
+    (mkFlag (hadoop != null)          "omhdfs")
+    (mkFlag (rdkafka != null)         "omkafka")
+    (mkFlag (libmongo-client != null) "ommongodb")
+    (mkFlag (czmq != null)            "imzmq3")
+    (mkFlag (czmq != null)            "imczmq")
+    (mkFlag (czmq != null)            "omzmq3")
+    (mkFlag (czmq != null)            "omczmq")
+    (mkFlag (rabbitmq-c != null)      "omrabbitmq")
+    (mkFlag (hiredis != null)         "omhiredis")
+    (mkFlag true                      "generate-man-pages")
   ];
 
   meta = {

@@ -187,6 +187,7 @@ rec {
     # then don't start the build again, but instead drop the user into
     # an interactive shell.
     if test -n "$origBuilder" -a ! -e /.debug; then
+      exec < /dev/null
       ${coreutils}/bin/touch /.debug
       $origBuilder $origArgs
       echo $? > /tmp/xchg/in-vm-exit

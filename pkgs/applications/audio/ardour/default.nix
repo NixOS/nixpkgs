@@ -1,11 +1,9 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, dbus, fftw
-, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jack2
+{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
+, fftwSinglePrec, flac, glibc, glibmm, graphviz, gtk, gtkmm, jack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
-, perl, pkgconfig, python, rubberband, serd, sord, sratom, suil, taglib
-, vampSDK
-}:
+, libusb, libuuid, libxml2, libxslt, lilv-svn, lv2, makeWrapper, pango
+, perl, pkgconfig, python, rubberband, serd, sord-svn, sratom, suil, taglib, vampSDK }:
 
 let
 
@@ -34,33 +32,26 @@ stdenv.mkDerivation rec {
     sha256 = "396668fb9116a68f5079f0d880930e890fd0cdf7ee5f3b97fcf44b88cf840b4c";
   };
 
-  buildInputs = [
-    alsaLib aubio boost cairomm curl dbus fftw fftwSinglePrec flac
-    glibc glibmm gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
-    libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-    libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
-    makeWrapper pango perl pkgconfig python rubberband serd sord
-    sratom suil taglib vampSDK
-  ];
+  buildInputs = 
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+      glibmm graphviz gtk gtkmm jack2 libgnomecanvas libgnomecanvasmm liblo
+      libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv-svn lv2
+      makeWrapper pango perl pkgconfig python rubberband serd sord-svn sratom suil taglib vampSDK
+    ];
 
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${revision}\"; }\n' > libs/ardour/revision.cc
     sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
-    sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
-    sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
+    patchShebangs ./tools/
   '';
 
-  configurePhase = "python waf configure --with-backend=alsa,jack --optimize --prefix=$out";
+  configurePhase = "python waf configure --optimize --docs --with-backends=jack,alsa --prefix=$out";
 
   buildPhase = "python waf";
 
-  # For the custom ardour clearlooks gtk-engine to work, it must be
-  # moved to a directory called "engines" and added to GTK_PATH
   installPhase = ''
     python waf install
-    mkdir -pv $out/gtk2/engines
-    cp build/libs/clearlooks-newer/libclearlooks.so $out/gtk2/engines/
-    wrapProgram $out/bin/ardour4 --prefix GTK_PATH : $out/gtk2
 
     # Install desktop file
     mkdir -p "$out/share/applications"

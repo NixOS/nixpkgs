@@ -868,7 +868,7 @@ let
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
-    libkrb5 = null;
+    krb5 = null;
     systemd = null;
     jemalloc = null;
     libmysql = null;
@@ -1125,6 +1125,8 @@ let
 
   cpio = callPackage ../tools/archivers/cpio { };
 
+  crackxls = callPackage ../tools/security/crackxls { };
+
   cromfs = callPackage ../tools/archivers/cromfs { };
 
   cron = callPackage ../tools/system/cron { };
@@ -1143,12 +1145,18 @@ let
 
   cudatoolkit = cudatoolkit5;
 
-  curl-light = curl.override { suffix = "light"; };
-  curl = curl-full.override {
-    fetchurl = fetchurlBoot;
-    suffix = "";
+  curlFull = curl.override {
+    idnSupport = true;
+    ldapSupport = true;
+    gssSupport = true;
   };
-  curl-full = callPackage ../tools/networking/curl { suffix = "full"; };
+
+  curl = callPackage ../tools/networking/curl rec {
+    fetchurl = fetchurlBoot;
+    zlibSupport = true;
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+  };
 
   curl3 = callPackage ../tools/networking/curl/7.15.nix rec {
     zlibSupport = true;
@@ -1517,6 +1525,8 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
+  git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
+
   gitlab = callPackage ../applications/version-management/gitlab {
     ruby = ruby_2_1_3;
   };
@@ -1672,6 +1682,8 @@ let
 
   gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
 
+  gtdialog = callPackage ../development/libraries/gtdialog {};
+
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
@@ -1759,6 +1771,8 @@ let
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
+
+  hwinfo = callPackage ../tools/system/hwinfo { };
 
   i2p = callPackage ../tools/networking/i2p {};
 
@@ -1984,6 +1998,8 @@ let
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
+
+  libx86emu = callPackage ../development/libraries/libx86emu { };
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
@@ -2807,6 +2823,9 @@ let
 
   sigil = callPackage ../applications/editors/sigil { };
 
+  # aka., gpg-tools
+  signing-party = callPackage ../tools/security/signing-party { };
+
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
   silc_server = callPackage ../servers/silc-server { };
@@ -2968,6 +2987,8 @@ let
   texmaker = callPackage ../applications/editors/texmaker { };
 
   texstudio = callPackage ../applications/editors/texstudio { };
+
+  textadept = callPackage ../applications/editors/textadept { };
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
@@ -3208,6 +3229,8 @@ let
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xsettingsd = callPackage ../tools/X11/xsettingsd { };
+
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   unarj = callPackage ../tools/archivers/unarj { };
@@ -3361,7 +3384,11 @@ let
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
-  youtube-dl = callPackage ../tools/misc/youtube-dl { };
+  youtube-dl = callPackage ../tools/misc/youtube-dl {
+    # Release versions don't need pandoc because the formatted man page
+    # is included in the tarball.
+    pandoc = null;
+  };
 
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
@@ -4098,7 +4125,10 @@ let
 
     async_unix = callPackage ../development/ocaml-modules/async_unix { };
 
-    async = callPackage ../development/ocaml-modules/async { };
+    async =
+      if lib.versionOlder "4.02" ocaml_version
+      then callPackage ../development/ocaml-modules/async { }
+      else null;
 
     atd = callPackage ../development/ocaml-modules/atd { };
 
@@ -4739,6 +4769,10 @@ let
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
   lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix { };
   lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
+    compat = true;
+  };
+  lua5_3 = callPackage ../development/interpreters/lua-5/5.3.nix { };
+  lua5_3_compat = callPackage ../development/interpreters/lua-5/5.3.nix {
     compat = true;
   };
   lua5 = lua5_2_compat;
@@ -5761,6 +5795,8 @@ let
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
+  cdk = callPackage ../development/libraries/cdk {};
+
   cimg = callPackage  ../development/libraries/cimg { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
@@ -6344,6 +6380,7 @@ let
     openldap = openldap.override {
       cyrus_sasl = cyrus_sasl.override { kerberos = null; };
     };
+    cyrus_sasl = cyrus_sasl.override { kerberos = null; };
   };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
@@ -6476,9 +6513,6 @@ let
       cyrus_sasl = cyrus_sasl.override { kerberos = null; };
     };
     inherit (darwin) bootstrap_cmds;
-  };
-  libkrb5 = krb5.override {
-    prefix = "lib";
   };
 
   LASzip = callPackage ../development/libraries/LASzip { };
@@ -6757,11 +6791,9 @@ let
 
   libftdi1 = callPackage ../development/libraries/libftdi/1.x.nix { };
 
-  libgcrypt = callPackage ../development/libraries/libgcrypt {
-    # Breaks packages that expect to have elevated privileges
-    # Ex. Lightdm, cryptsetup
-    libcap = null;
-  };
+  libgcrypt = callPackage ../development/libraries/libgcrypt { };
+
+  libgcrypt_1_5 = callPackage ../development/libraries/libgcrypt/1.5.nix { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
@@ -6927,10 +6959,7 @@ let
 
   libmemcached = callPackage ../development/libraries/libmemcached { };
 
-  libmicrohttpd = callPackage ../development/libraries/libmicrohttpd {
-    openssl = null;
-    gnutls = null;
-  };
+  libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
   libmikmod = callPackage ../development/libraries/libmikmod { };
 
@@ -7086,9 +7115,7 @@ let
 
   libssh = callPackage ../development/libraries/libssh { };
 
-  libssh2 = callPackage ../development/libraries/libssh2 {
-    fetchurl = fetchurlBoot;
-  };
+  libssh2 = callPackage ../development/libraries/libssh2 { };
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
@@ -7188,10 +7215,6 @@ let
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
-  libverto = callPackage ../development/libraries/libverto {
-    glib = null; # Don't include fairly heavy dependency
-  };
-
   libvirt = callPackage ../development/libraries/libvirt { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
@@ -7238,11 +7261,11 @@ let
   libxmi = callPackage ../development/libraries/libxmi { };
 
   libxml2 = callPackage ../development/libraries/libxml2 {
-    python = null;
+    pythonSupport = false;
   };
 
   libxml2Python = lowPrio (libxml2.override {
-    inherit python;
+    pythonSupport = true;
   });
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
@@ -8562,7 +8585,9 @@ let
 
   ### SERVERS
 
-  "389-ds-base" = callPackage ../servers/ldap/389 { };
+  "389-ds-base" = callPackage ../servers/ldap/389 {
+    kerberos = krb5;
+  };
 
   rdf4store = callPackage ../servers/http/4store { };
 
@@ -8615,9 +8640,6 @@ let
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = callPackage ../servers/dns/bind { };
-  dnsutils = bind.override {
-    suffix = "tools";
-  };
 
   bird = callPackage ../servers/bird { };
 
@@ -8750,7 +8772,7 @@ let
 
   mpdscribble = callPackage ../tools/misc/mpdscribble { };
 
-  microHttpd = callPackage ../servers/http/micro-httpd { };
+  micro-httpd = callPackage ../servers/http/micro-httpd { };
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
@@ -8798,37 +8820,21 @@ let
 
   pshs = callPackage ../servers/http/pshs { };
 
-  libpulseaudio = pulseaudioFull.override {
-    prefix = "lib";
-  };
+  libpulseaudio = callPackage ../servers/pulseaudio { libOnly = true; };
 
-  # Name is changed to prevent use in packages
-  # please use libpulseaudio instead
-  pulseaudioLight = pulseaudioFull.override {
-    # The following are disabled in the default build, because if this
-    # functionality is desired, they are only needed in the PulseAudio
-    # server.
-    xlibs = null;
-    coreaudio = null;
-    esound = null;
-    libjack2 = null;
-    avahi = null;
-    lirc = null;
-    bluez5 = null;
-    tdb = null;
-    gdbm = null;
-    gtk3 = null;
-    webrtc-audio-processing = null;
-    gconf = null;
-    libasyncns = null;
-  };
+  # Name is changed to prevent use in packages;
+  # please use libpulseaudio instead.
+  pulseaudioLight = callPackage ../servers/pulseaudio { };
 
   pulseaudioFull = callPackage ../servers/pulseaudio {
     gconf = gnome3.gconf;
-    fftw = fftwFloat;
-
-    # Disabled unless debugging
-    valgrind = null;
+    x11Support = true;
+    jackaudioSupport = true;
+    airtunesSupport = true;
+    gconfSupport = true;
+    bluetoothSupport = true;
+    remoteControlSupport = true;
+    zeroconfSupport = true;
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -8905,8 +8911,6 @@ let
 
   postgresql = postgresql92;
 
-  postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
-
   postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
 
   postgresql91 = callPackage ../servers/sql/postgresql/9.1.x.nix { };
@@ -8933,6 +8937,8 @@ let
     callPackage ../servers/monitoring/prometheus/mesos_exporter { };
   prometheus-mysqld-exporter =
     callPackage ../servers/monitoring/prometheus/mysqld_exporter { };
+  prometheus-nginx-exporter =
+    callPackage ../servers/monitoring/prometheus/nginx_exporter { };
   prometheus-node-exporter =
     callPackage ../servers/monitoring/prometheus/node_exporter { };
   prometheus-pushgateway =
@@ -8986,15 +8992,7 @@ let
     python = python2;
     kerberos = heimdal;
     gnutls = gnutls33;
-    cups = if stdenv.isDarwin then null else cups;
-    pam = if stdenv.isDarwin then null else pam;
-    libaio = if stdenv.isDarwin then null else libaio;
-    libceph = if stdenv.isDarwin then null else libceph;
-    glusterfs = if stdenv.isDarwin then null else glusterfs;
-    dbus = if stdenv.isLinux then dbus else null;
-    libibverbs = if stdenv.isLinux then libibverbs else null;
-    librdmacm = if stdenv.isLinux then librdmacm else null;
-    systemd = if stdenv.isLinux then systemd else null;
+    # enableLDAP
   };
 
   samba = samba4;
@@ -9012,39 +9010,19 @@ let
     libunwind = null;
   });
 
-  samba4_light = lowPrio (samba4.override {
-    # source3/wscript optionals
-    kerberos = null;
-    zlib = null;
-    openldap = null;
-    cups = null;
-    pam = null;
-    avahi = null;
-    acl = null;
-    libaio = null;
-    fam = null;
-    libceph = null;
-    glusterfs = null;
-
-    # buildtools/wafsamba/wscript optionals
-    libiconv = null;
-    gettext = null;
-
-    # source4/lib/tls/wscript optionals
-    gnutls = null;
-    libgcrypt = null;
-    libgpgerror = null;
-
-    # other optionals
-    ncurses = null;
-    libunwind = null;
-    dbus = null;
-    libibverbs = null;
-    librdmacm = null;
-    systemd = null;
+  samba4Full = lowPrio (samba4.override {
+    enableKerberos  = true;
+    enableInfiniband = true;
+    enableLDAP = true;
+    enablePrinting = true;
+    enableMDNS = true;
+    enableDomainController = true;
+    enableRegedit = true;
+    enableCephFS = true;
+    enableGlusterFS = true;
   });
 
-  samba_light = samba4_light;
+  sambaFull = samba4Full;
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
@@ -9189,13 +9167,7 @@ let
 
   atop = callPackage ../os-specific/linux/atop { };
 
-  audit = callPackage ../os-specific/linux/audit {
-    python = null;
-    go = null;
-  };
-  libaudit = audit.override {
-    prefix = "lib";
-  };
+  audit = callPackage ../os-specific/linux/audit { };
 
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
@@ -9894,7 +9866,7 @@ let
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
-  qemu_kvm = lowPrio (qemu.override { type = "kvm-only"; });
+  qemu_kvm = lowPrio (qemu.override { x86Only = true; });
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
@@ -10461,6 +10433,7 @@ let
 
   ardour3 =  callPackage ../applications/audio/ardour/ardour3.nix {
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
+    inherit (vamp) vampSDK;
   };
 
   ardour4 =  callPackage ../applications/audio/ardour {
@@ -11675,6 +11648,8 @@ let
 
   lmms = callPackage ../applications/audio/lmms { };
 
+  loxodo = callPackage ../applications/misc/loxodo { };
+
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
   luakit = callPackage ../applications/networking/browsers/luakit {
@@ -12035,6 +12010,12 @@ let
   pdftk = callPackage ../tools/typesetting/pdftk { };
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
+  pdfpc = callPackage ../applications/misc/pdfpc {
+    vala = vala_0_26;
+    inherit (gnome3) libgee;
+    inherit (gst_all_1) gstreamer gst-plugins-base;
+  };
+
   photoqt = callPackage ../applications/graphics/photoqt { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
@@ -12133,14 +12114,7 @@ let
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
-  qemu = callPackage ../applications/virtualization/qemu {
-    gtk = gtk3;
-    bluez = bluez5;
-    libusb = libusb1;
-    mesa = mesa_noglu;
-  };
-
-  qemu-nix = qemu.override { type = "nix"; };
+  qemu = callPackage ../applications/virtualization/qemu { };
 
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
@@ -12412,6 +12386,7 @@ let
 
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
+    libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
   };
 
@@ -14674,6 +14649,8 @@ let
   nip2 = callPackage ../tools/graphics/nip2 { };
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
+
+  wavegain = callPackage ../applications/audio/wavegain { };
 
   # Wine defaults to a mixed 64 / 32 build on x86_64 and to pure 32 on x86
   wine = callPackage ../misc/emulators/wine {

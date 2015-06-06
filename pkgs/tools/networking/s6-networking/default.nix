@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.1.0.0";
+  version = "2.1.0.1";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-networking";
     rev = "refs/tags/v${version}";
-    sha256 = "057xwh1dpwg2dz47s0badqhi66nhxgs5ps0xwn7s6hvba0lwyy4c";
+    sha256 = "0jdjxwqrp7lzdb85sp1gdkm7s478wyl7wqxb3jfxflgh2bgdgvy2";
   };
 
   dontDisableStatic = true;
@@ -39,6 +39,7 @@ in stdenv.mkDerivation rec {
     description = "A suite of small networking utilities for Unix systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

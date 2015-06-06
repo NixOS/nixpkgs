@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libsndfile, libsamplerate, liblo, jack2 }:
 
 stdenv.mkDerivation rec {
-  name = "dirt-git";
+  name = "dirt-2015-04-28";
   src = fetchFromGitHub {
     repo = "Dirt";
     owner = "tidalcycles";

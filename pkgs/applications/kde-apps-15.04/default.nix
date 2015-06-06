@@ -350,6 +350,12 @@ let
           ++ [ pkgs.libotr ]; # needed for ktp-text-ui
       };
 
+      ktp-text-ui = super.ktp-text-ui // {
+        buildInputs =
+          super.ktp-text-ui.buildInputs
+          ++ (with kf5; [ kdbusaddons ]);
+      };
+
       lokalize = super.lokalize // {
         buildInputs =
           super.lokalize.buildInputs

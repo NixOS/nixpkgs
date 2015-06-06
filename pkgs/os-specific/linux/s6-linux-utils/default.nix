@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
     description = "A set of minimalistic Linux-specific system utilities";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

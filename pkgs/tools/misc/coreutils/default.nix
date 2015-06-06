@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
-, autoconf, automake114x
+, autoconf, automake114x, texinfo
 }:
 
 assert aclSupport -> acl != null;
@@ -29,7 +29,7 @@ let
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
-      ++ optionals stdenv.isCygwin [ autoconf automake114x ]   # due to patch
+      ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {

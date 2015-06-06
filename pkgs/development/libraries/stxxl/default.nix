@@ -2,6 +2,10 @@
 , parallel ? true
 }:
 
+let
+  mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
+in
+
 stdenv.mkDerivation rec {
   name = "stxxl-${version}";
   version = "1.4.1";
@@ -17,7 +21,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DUSE_GNU_PARALLEL=${if parallel then "ON" else "OFF"}"
+    (mkFlag parallel "USE_GNU_PARALLEL")
   ];
 
   passthru = {

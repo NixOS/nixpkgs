@@ -13,7 +13,7 @@ let
       sha256 = "0fmg7fq5fx0jg3ryk71kwdkspsvj42acxy9imk7vznkqj29a9zqn";
     };
     
-    configureFlags = "--with-ca-certificates=${cacert}/ca-bundle.crt";
+    configureFlags = "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt";
     
     buildInputs = [ pkgconfig glib libsoup ];
   };
