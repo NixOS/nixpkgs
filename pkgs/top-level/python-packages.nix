@@ -8494,6 +8494,10 @@ let
 
     propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
       description = "Command-line interface for PostgreSQL";
       longDescription = ''
@@ -8792,11 +8796,11 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.38";
+    version = "0.39";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
-      sha256 = "0rjy5n79h8sc6wpw6nwys52rin7i4qlfy51y7vws303mficjkvkc";
+      sha256 = "1046fhgqd1171n8xyzcxwzcxgkcwa77r08g7iih8k5x7z59l94lb";
     };
 
     buildInputs = with self; [ jedi ipython pygments ];
