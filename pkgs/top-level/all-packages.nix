@@ -6341,9 +6341,6 @@ let
   kerberos = libkrb5;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
-  libheimdal = heimdal.override {
-    prefix = "lib";
-  };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
   harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
