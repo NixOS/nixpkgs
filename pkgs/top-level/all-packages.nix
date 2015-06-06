@@ -285,6 +285,10 @@ let
     dotnetfx = dotnetfx40;
   };
 
+  dotnetbuildhelpers = import ../build-support/dotnetbuildhelpers {
+    inherit mono helperFunctions pkgconfig;
+  };
+
   scatterOutputHook = makeSetupHook {} ../build-support/setup-hooks/scatter_output.sh;
 
   vsenv = callPackage ../build-support/vsenv {
@@ -408,6 +412,9 @@ let
     url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
     meta.homepage = "http://repo.or.cz/${repo}.git/";
   };
+
+  fetchNuGet = import ../build-support/fetchnuget { inherit stdenv fetchurl buildDotnetPackage unzip; };
+  buildDotnetPackage = import ../build-support/build-dotnet-package { inherit stdenv lib makeWrapper mono pkgconfig dotnetbuildhelpers; };
 
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
@@ -3871,6 +3878,8 @@ let
   falcon = callPackage ../development/interpreters/falcon { };
 
   fsharp = callPackage ../development/compilers/fsharp {};
+
+  dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { inherit stdenv fetchNuGet; });
 
   go_1_0 = callPackage ../development/compilers/go { };
 
