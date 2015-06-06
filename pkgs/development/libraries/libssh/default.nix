@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, cmake
 
 # Optional Dependencies
-, libheimdal ? null, zlib ? null, libsodium ? null
+, heimdal ? null, zlib ? null, libsodium ? null
 
 # Crypto Dependencies
 , openssl ? null, libgcrypt ? null
@@ -19,7 +19,7 @@ let
     none = null;
   }.${cryptoStr};
 
-  optLibheimdal = shouldUsePkg libheimdal;
+  optHeimdal = shouldUsePkg heimdal;
   optZlib = shouldUsePkg zlib;
   optLibsodium = shouldUsePkg libsodium;
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DWITH_GSSAPI=${if optLibheimdal != null then "ON" else "OFF"}"
+    "-DWITH_GSSAPI=${if optHeimdal != null then "ON" else "OFF"}"
     "-DWITH_ZLIB=${if optZlib != null then "ON" else "OFF"}"
     "-DWITH_SSH1=OFF"
     "-DWITH_SFTP=ON"
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ optLibheimdal optZlib optLibsodium crypto ];
+  buildInputs = [ optHeimdal optZlib optLibsodium crypto ];
 
   meta = with stdenv.lib; {
     description = "SSH client library";
