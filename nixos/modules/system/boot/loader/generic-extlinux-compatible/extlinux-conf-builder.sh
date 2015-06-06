@@ -106,8 +106,9 @@ cat > $tmpFile <<EOF
 DEFAULT nixos-default
 
 TIMEOUT $timeout
-$(addEntry $default default)
 EOF
+
+addEntry $default default >> $tmpFile
 
 # Add up to $numGenerations generations of the system profile to the menu,
 # in reverse (most recent to least recent) order.
