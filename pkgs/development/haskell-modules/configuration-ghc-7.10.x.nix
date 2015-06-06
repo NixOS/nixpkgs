@@ -278,18 +278,4 @@ self: super: {
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
-  # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
-  asn1-encoding = appendConfigureFlag super.asn1-encoding "-fignore-me-1";
-  asn1-types = appendConfigureFlag super.asn1-types "-fignore-me-1";
-  cmdargs = appendConfigureFlag super.cmdargs "-fignore-me-1";
-  crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
-  crypto-pubkey-types = appendConfigureFlag super.crypto-pubkey-types "-fignore-me-1";
-  hourglass = appendConfigureFlag super.hourglass "-fignore-me-1";
-  math-functions = appendConfigureFlag super.math-functions "-fignore-me-1";
-  tagsoup = appendConfigureFlag super.tagsoup "-fignore-me-1";
-  X11 = appendConfigureFlag super.X11 "-fignore-me-1";
-  x509 = appendConfigureFlag super.x509 "-fignore-me-1";
-  x509-store = appendConfigureFlag super.x509-store "-fignore-me-1";
-  x509-system = appendConfigureFlag super.x509-system "-fignore-me-1";
-
 }
