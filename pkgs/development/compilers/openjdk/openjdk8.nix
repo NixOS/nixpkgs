@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, openjdk, cacert, perl, liberation_ttf, fontconfig } :
+{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig } :
 let
   update = "40";
   build = "27";
@@ -44,7 +44,7 @@ let
   buildInputs = [ cpio file which unzip zip
                   xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
                   xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-                  cups freetype alsaLib openjdk perl liberation_ttf fontconfig ];
+                  cups freetype alsaLib perl liberation_ttf fontconfig bootjdk ];
   setSourceRoot = ''
     sourceRoot="jdk8u${update}-jdk8u${update}-b${build}";
   '';
@@ -82,10 +82,11 @@ let
     "--with-override-jaxws=../jaxws-${repover}"
     "--with-override-jaxp=../jaxp-${repover}"
     "--with-override-nashorn=../nashorn-${repover}"
-    "--with-boot-jdk=${openjdk}/lib/openjdk/"
+    "--with-boot-jdk=${bootjdk.home}"
     "--with-update-version=${update}"
     "--with-build-number=b${build}"
     "--with-milestone=fcs"
+    "--disable-debug-symbols"
   ];
   NIX_LDFLAGS= "-lfontconfig";
   buildFlags = "all";

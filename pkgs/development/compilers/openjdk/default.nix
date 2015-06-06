@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, zip, procps, coreutils, alsaLib, ant, freetype
-, which, jdk, nettools, xorg, file
+, which, bootjdk, nettools, xorg, file
 , fontconfig, cpio, cacert, perl, setJavaClassPath }:
 
 let
@@ -15,7 +15,7 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "65";
+  update = "80";
 
   build = "32";
 
@@ -81,7 +81,7 @@ let
       "COMPILER_PATH="
       "DEVTOOLS_PATH="
       "UNIXCOMMAND_PATH="
-      "BOOTDIR=${jdk}"
+      "BOOTDIR=${bootjdk.home}"
       "STATIC_CXX=false"
       "UNLIMITED_CRYPTO=1"
       "FULL_DEBUG_SYMBOLS=0"
