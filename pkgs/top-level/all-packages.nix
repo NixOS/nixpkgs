@@ -6927,9 +6927,8 @@ let
 
   libmemcached = callPackage ../development/libraries/libmemcached { };
 
-  libmicrohttpd-full = callPackage ../development/libraries/libmicrohttpd { };
-
-  libmicrohttpd = libmicrohttpd-full.override {
+  libmicrohttpd = callPackage ../development/libraries/libmicrohttpd {
+    openssl = null;
     gnutls = null;
   };
 

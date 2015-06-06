@@ -17,11 +17,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-0.9.42";
+  name = "libmicrohttpd-0.9.41";
 
   src = fetchurl {
     url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "0nvxmm6z6wcq1vl6l92rids0i0va184y86bkc10dl0vh6rrj0d80";
+    sha256 = "0z3s3aplgxj8cj947i4rxk9wzvg68b8hbn71fyipc7aagmivx64p";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     (mkWith   true                 "threads"       "posix")
     (mkEnable true                 "doc"           null)
     (mkEnable false                "examples"      null)
-    (mkEnable true                 "poll"          "auto")
     (mkEnable true                 "epoll"         "auto")
     (mkEnable doCheck              "curl"          null)
     (mkEnable hasSpdy              "spdy"          null)
