@@ -124,7 +124,6 @@ let
 
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = pkgs: overrides:
-    with helperFunctions;
     let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
     self_ = with self; helperFunctions // {
 
