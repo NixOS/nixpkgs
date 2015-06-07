@@ -25,13 +25,14 @@ stdenv.mkDerivation rec {
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedNativeBuildInputs =
+    stdenv.lib.optional stdenv.isLinux libcap ++
     stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
     stdenv.lib.optional alsaSupport alsaLib ++
     stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   buildInputs = let
     notMingw = !(stdenv ? cross) || stdenv.cross.libc != "msvcrt";
-  in stdenv.lib.optional stdenv.isLinux libcap
+  in []
     ++ (stdenv.lib.optional notMingw audiofile);
 
   nativeBuildInputs = [ pkgconfig ] ++
