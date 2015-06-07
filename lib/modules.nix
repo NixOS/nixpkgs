@@ -51,7 +51,7 @@ rec {
         };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
+      closed = closeModules (modules ++ [ internalModule ]) (args // { inherit config options; lib = import ./.; });
 
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
@@ -87,9 +87,11 @@ rec {
     let
       toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || isFunction x then
-          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (unpackSubmodule applyIfFunction x args)
+          let key = "${parentKey}:anon-${toString n}"; in
+          unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
         else
-          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
+          let file = toString x; key = toString x; in
+          unifyModuleSyntax file key (applyIfFunction key (import x) args));
     in
       builtins.genericClosure {
         startSet = toClosureList unknownModule "" modules;
@@ -100,7 +102,7 @@ rec {
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file"]; in
+      let badAttrs = removeAttrs m ["imports" "importsArgs" "options" "config" "key" "_file"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
@@ -118,7 +120,7 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+  applyIfFunction = key: f: args@{config, ...}: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -133,11 +135,33 @@ rec {
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       requiredArgs = builtins.attrNames (builtins.functionArgs f);
-      extraArgs = builtins.listToAttrs (map (name: {
-        inherit name;
-        value = config._module.args.${name};
-      }) requiredArgs);
-    in f (extraArgs // arg)
+      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
+
+      stage = except: rec {
+        configArgs = subtractLists except requiredArgs;
+        extraArgs = builtins.listToAttrs (map (name: {
+          inherit name;
+          value = addErrorContext (context name) config._module.args.${name};
+        }) configArgs);
+
+        result = f (extraArgs // args);
+      };
+
+      # In order to work-around reflexivity issues, such as default values,
+      # we have to ask the module if some of its arguments are necessary for
+      # importing another module.
+      #
+      # To solve this issue, we evaluate a module a first time to look for
+      # the importsArgs within the module, then we re-evaluate the same
+      # function but with the correct set of arguments.
+      stage1 = (stage []).result;
+      stage2 =
+        if stage1 ? importsArgs then
+          (stage stage1.importsArgs).result
+        else
+          stage1;
+
+    in stage2
   else
     f;
 
