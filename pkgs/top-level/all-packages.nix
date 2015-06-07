@@ -1491,6 +1491,8 @@ let
 
   fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
 
+  fuse-7z-ng = callPackage ../os-specific/linux/fuse-7z-ng { };
+
   fuse_exfat = callPackage ../tools/filesystems/fuse-exfat { };
 
   dos2unix = callPackage ../tools/text/dos2unix { };
