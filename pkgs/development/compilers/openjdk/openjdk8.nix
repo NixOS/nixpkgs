@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig } :
+{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig
+
+, minimal ? false } :
 let
   update = "40";
   build = "27";
@@ -66,7 +68,6 @@ let
     ./read-truststore-from-env-jdk8.patch
     ./currency-date-range-jdk8.patch
     ./JDK-8074312-hotspot.patch
-
   ];
   preConfigure = ''
     chmod +x configure
@@ -84,11 +85,11 @@ let
     "--with-override-nashorn=../nashorn-${repover}"
     "--with-boot-jdk=${bootjdk.home}"
     "--with-update-version=${update}"
-    "--with-build-number=b${build}"
+    "--with-build-number=${build}"
     "--with-milestone=fcs"
     "--disable-debug-symbols"
-  ];
-  NIX_LDFLAGS= "-lfontconfig";
+  ] ++ stdenv.lib.optional minimal "--disable-headful";
+  NIX_LDFLAGS= if minimal then null else "-lfontconfig";
   buildFlags = "all";
   installPhase = ''
     mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
@@ -142,7 +143,6 @@ let
 
     ln -s $out/lib/openjdk/bin $out/bin
     ln -s $jre/lib/openjdk/jre/bin $jre/bin
-
   '';
 
   meta = with stdenv.lib; {

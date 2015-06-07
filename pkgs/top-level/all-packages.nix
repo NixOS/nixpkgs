@@ -3933,6 +3933,10 @@ let
 
   openjdk-bootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { };
 
+  openjdk-make-bootstrap = callPackage ../development/compilers/openjdk/make-bootstrap.nix {
+    openjdk = openjdk.override { minimal = true; };
+  };
+
   openjdk-darwin = callPackage ../development/compilers/openjdk-darwin { };
 
   openjdk7 = callPackage ../development/compilers/openjdk {
