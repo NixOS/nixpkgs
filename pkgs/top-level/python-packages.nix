@@ -13466,6 +13466,19 @@ let
     };
   });
 
+  youtube-dl = callPackage ../tools/misc/youtube-dl {
+    # Release versions don't need pandoc because the formatted man page
+    # is included in the tarball.
+    pandoc = null;
+  };
+
+  youtube-dl-light = callPackage ../tools/misc/youtube-dl {
+    # Release versions don't need pandoc because the formatted man page
+    # is included in the tarball.
+    ffmpeg = null;
+    pandoc = null;
+  };
+
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 

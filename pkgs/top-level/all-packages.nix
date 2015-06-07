@@ -3391,12 +3391,6 @@ let
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
-  youtube-dl = callPackage ../tools/misc/youtube-dl {
-    # Release versions don't need pandoc because the formatted man page
-    # is included in the tarball.
-    pandoc = null;
-  };
-
   zbar = callPackage ../tools/graphics/zbar {
     pygtk = lib.overrideDerivation pygtk (x: {
       gtk = gtk2;
@@ -14774,6 +14768,7 @@ let
   lttngUst = lttng-ust;  # added 2014-07-31
   jquery_ui = jquery-ui;  # added 2014-09-07
   youtubeDL = youtube-dl;  # added 2014-10-26
+  youtube-dl = pythonPackages.youtube-dl; # added 2015-06-07
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   htmlTidy = html-tidy;  # added 2014-12-06
   libtidy = html-tidy;  # added 2014-12-21
