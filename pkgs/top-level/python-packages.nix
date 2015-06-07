@@ -974,6 +974,32 @@ let
     };
   };
 
+  buttersink = buildPythonPackage rec {
+    name = "buttersink-0.6.6";
+
+    src = pkgs.fetchurl {
+      sha256 = "1vi0pz8r3d17bsn5g7clkyph7sc0rjzbzqk6rwglaxcah7sfj2mj";
+      url = "https://pypi.python.org/packages/source/b/buttersink/${name}.tar.gz";
+    };
+
+    meta = {
+      description = "Synchronise btrfs snapshots";
+      longDescription = ''
+        ButterSink is like rsync, but for btrfs subvolumes instead of files,
+        which makes it much more efficient for things like archiving backup
+        snapshots. It is built on top of btrfs send and receive capabilities.
+        Sources and destinations can be local btrfs file systems, remote btrfs
+        file systems over SSH, or S3 buckets.
+      '';
+      homepage = https://github.com/AmesCornish/buttersink/wiki;
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ nckx ];
+    };
+
+    propagatedBuildInputs = with self; [ boto crcmod psutil ];
+  };
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
