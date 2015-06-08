@@ -343,26 +343,25 @@ in {
                 (concatImapStringsSep "\n" (i: v: v + "," + (toString i))
                     (mapAttrsToList (name: token: token + "," + name) cfg.apiserver.tokenAuth));
           in ''${cfg.package}/bin/kube-apiserver \
-            --etcd_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
-            --address=${cfg.apiserver.address} \
-            --port=${toString cfg.apiserver.port} \
-            --read_only_port=${toString cfg.apiserver.readOnlyPort} \
-            --public_address_override=${cfg.apiserver.publicAddress} \
-            --allow_privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
+            --etcd-servers=${concatMapStringsSep "," (f: "http://${f}") cfg.etcdServers} \
+            --insecure-bind-address=${cfg.apiserver.address} \
+            --insecure-port=${toString cfg.apiserver.port} \
+            --read-only-port=${toString cfg.apiserver.readOnlyPort} \
+            --bind-address=${cfg.apiserver.publicAddress} \
+            --allow-privileged=${if cfg.apiserver.allowPrivileged then "true" else "false"} \
             ${optionalString (cfg.apiserver.tlsCertFile!="")
-              "--tls_cert_file=${cfg.apiserver.tlsCertFile}"} \
+              "--tls-cert-file=${cfg.apiserver.tlsCertFile}"} \
             ${optionalString (cfg.apiserver.tlsPrivateKeyFile!="")
-              "--tls_private_key_file=${cfg.apiserver.tlsPrivateKeyFile}"} \
+              "--tls-private-key-file=${cfg.apiserver.tlsPrivateKeyFile}"} \
             ${optionalString (cfg.apiserver.tokenAuth!=[])
-              "--token_auth_file=${tokenAuthFile}"} \
-            --authorization_mode=${cfg.apiserver.authorizationMode} \
+              "--token-auth-file=${tokenAuthFile}"} \
+            --authorization-mode=${cfg.apiserver.authorizationMode} \
             ${optionalString (cfg.apiserver.authorizationMode == "ABAC")
-              "--authorization_policy_file=${authorizationPolicyFile}"} \
-            --secure_port=${toString cfg.apiserver.securePort} \
-            --portal_net=${cfg.apiserver.portalNet} \
+              "--authorization-policy-file=${authorizationPolicyFile}"} \
+            --secure-port=${toString cfg.apiserver.securePort} \
+            --service-cluster-ip-range=${cfg.apiserver.portalNet} \
             --logtostderr=true \
-            --runtime_config=api/v1beta3 \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.apiserver.extraOpts}
           '';
           User = "kubernetes";
@@ -386,7 +385,7 @@ in {
             --port=${toString cfg.scheduler.port} \
             --master=${cfg.scheduler.master} \
             --logtostderr=true \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.scheduler.extraOpts}
           '';
           User = "kubernetes";
@@ -406,7 +405,7 @@ in {
             --master=${cfg.controllerManager.master} \
             --machines=${concatStringsSep "," cfg.controllerManager.machines} \
             --logtostderr=true \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.controllerManager.extraOpts}
           '';
           User = "kubernetes";
@@ -423,17 +422,17 @@ in {
         script = ''
           export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
           exec ${cfg.package}/bin/kubelet \
-            --api_servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
+            --api-servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
-            --hostname_override=${cfg.kubelet.hostname} \
-            --allow_privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
-            --root_dir=${cfg.dataDir} \
+            --hostname-override=${cfg.kubelet.hostname} \
+            --allow-privileged=${if cfg.kubelet.allowPrivileged then "true" else "false"} \
+            --root-dir=${cfg.dataDir} \
             --cadvisor_port=${toString cfg.kubelet.cadvisorPort} \
             ${optionalString (cfg.kubelet.clusterDns != "")
-                ''--cluster_dns=${cfg.kubelet.clusterDns}''} \
+                ''--cluster-dns=${cfg.kubelet.clusterDns}''} \
             ${optionalString (cfg.kubelet.clusterDomain != "")
-                ''--cluster_domain=${cfg.kubelet.clusterDomain}''} \
+                ''--cluster-domain=${cfg.kubelet.clusterDomain}''} \
             --logtostderr=true \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
@@ -450,9 +449,9 @@ in {
         serviceConfig = {
           ExecStart = ''${cfg.package}/bin/kube-proxy \
             --master=${cfg.proxy.master} \
-            --bind_address=${cfg.proxy.address} \
+            --bind-address=${cfg.proxy.address} \
             --logtostderr=true \
-            ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.proxy.extraOpts}
           '';
         };
