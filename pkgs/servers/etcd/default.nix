@@ -3,14 +3,14 @@
 with goPackages;
 
 buildGoPackage rec {
-  version = "2.0.0";
+  version = "2.0.9";
   name = "etcd-${version}";
   goPackagePath = "github.com/coreos/etcd";
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "etcd";
     rev = "v${version}";
-    sha256 = "1s3jilzlqyh2i81pv79cgap6dfj7qrfrwcv4w9lic5ivznz413vc";
+    sha256 = "0da5jcm3z6r3cyh709hdn6i0mfkkwj82w3df0j34g5fxwf9kxx2q";
   };
 
   subPackages = [ "./" ];
