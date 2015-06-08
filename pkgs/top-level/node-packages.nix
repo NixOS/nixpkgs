@@ -40,6 +40,7 @@ in rec {
     bipio = (p: {
       patchPhase = ''
         substituteInPlace src/bootstrap.js --replace "memwatch = require('memwatch')," ""
+        substituteInPlace tools/setup.js --replace "__dirname + '/../'" "'.'"
         ${self.json}/bin/json -I -f package.json -e 'this.scripts.install=""'
         ${self.json}/bin/json -I -f package.json -e 'delete this.dependencies.sleep'
         ${self.json}/bin/json -I -f package.json -e 'delete this.dependencies.memwatch'
