@@ -8991,7 +8991,7 @@ let
     boost = boost155;
   };
 
-  ripple-data-api = callPackage ../servers/rippled/data-api.nix { };
+  ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
   s6 = callPackage ../servers/s6 { };
 
