@@ -318,6 +318,7 @@
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
+  ./services/networking/skydns.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
