@@ -10400,6 +10400,8 @@ let
 
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
+  carddav-util = callPackage ../tools/networking/carddav-util { };
+
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
