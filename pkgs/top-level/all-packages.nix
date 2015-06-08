@@ -8988,7 +8988,7 @@ let
   };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost155;
+    boost = boost157;
   };
 
   ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };

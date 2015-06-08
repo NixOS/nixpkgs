@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "rippled-${version}";
-  version = "0.27.4";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "ripple";
     repo = "rippled";
     rev = version;
-    sha256 = "13xg2baqcf2h1ww2yk371r27726iq8xb4brsj9rqv692aviblqs3";
+    sha256 = "0wh8dwdg0gp7smcx40cpqanl2m2hihmx3irqh692svakbl3df3vz";
   };
 
   postPatch = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ scons pkgconfig openssl protobuf boost zlib ];
 
-  buildPhase = "scons build/rippled";
+  buildPhase = "scons";
 
   installPhase = ''
     mkdir -p $out/bin
