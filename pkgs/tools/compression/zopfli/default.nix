@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
       '';
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.asl20;
-    maintainers = with maintainers; [ roconnor bobvanderlinden ];
+    maintainers = with maintainers; [ bobvanderlinden ];
   };
 }
