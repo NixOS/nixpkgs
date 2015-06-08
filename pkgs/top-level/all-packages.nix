@@ -7841,9 +7841,9 @@ let
 
   SDL = callPackage ../development/libraries/SDL {
     openglSupport = mesaSupported;
-    alsaSupport = (!stdenv.isDarwin);
-    x11Support = true;
-    pulseaudioSupport = (!stdenv.isDarwin);
+    alsaSupport = stdenv.isLinux;
+    x11Support = !stdenv.isCygwin;
+    pulseaudioSupport = stdenv.isLinux;
   };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
@@ -7862,8 +7862,8 @@ let
 
   SDL2 = callPackage ../development/libraries/SDL2 {
     openglSupport = mesaSupported;
-    alsaSupport = (!stdenv.isDarwin);
-    x11Support = (!stdenv.isDarwin);
+    alsaSupport = stdenv.isLinux;
+    x11Support = !stdenv.isCygwin;
     pulseaudioSupport = false; # better go through ALSA
   };
 
