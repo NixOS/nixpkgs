@@ -150,6 +150,32 @@ let
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
     '';
 
+    postFixup = ''
+      # Build the set of output library directories to rpath against
+      LIBDIRS=""
+      for output in $outputs; do
+        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \; | sort | uniq | tr '\n' ':'):$LIBDIRS"
+      done
+
+      # Add the local library paths to remove dependencies on the bootstrap
+      for output in $outputs; do
+        OUTPUTDIR="$(eval echo \$$output)"
+        BINLIBS="$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)"
+        echo "$BINLIBS" | while read i; do
+          patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+          patchelf --shrink-rpath "$i" || true
+        done
+      done
+
+      # Test to make sure that we don't depend on the bootstrap
+      for output in $outputs; do
+        if grep -q -r '${bootjdk}' $(eval echo \$$output); then
+          echo "Extraneous references to ${bootjdk} detected"
+          exit 1
+        fi
+      done
+    '';
+
     meta = with stdenv.lib; {
       homepage = http://openjdk.java.net/;
       license = licenses.gpl2;
