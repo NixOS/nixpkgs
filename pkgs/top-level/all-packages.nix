@@ -243,11 +243,6 @@ let
     else
       stdenv);
 
-  ### AI2
-
-  ai2NodeJs = callPackage ../ai2/nodejs {};
-
-
   ### BUILD SUPPORT
 
   attrSetToDir = arg: import ../build-support/upstream-updater/attrset-to-dir.nix {
@@ -13013,5 +13008,10 @@ let
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
   hbase = callPackage ../servers/hbase {};
+
+
+  ### Custom packages.
+
+  nodejs12 = callPackage ../ai2/nodejs {};
 
 }; in self; in pkgs
