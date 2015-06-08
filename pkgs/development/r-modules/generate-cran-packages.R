@@ -1,5 +1,6 @@
 library(data.table)
 library(parallel)
+library(jsonlite)
 cl <- makeCluster(10)
 options(repos=structure(c(CRAN="http://cran.rstudio.com/")))
 
@@ -13,9 +14,28 @@ nixPrefetch <- function(name, version) {
     # system(paste0("nix-hash --flat --base32 --type sha256 /nix/store/*", name, "_", version, ".tar.gz", "| head -n 1"), intern=TRUE)
 }
 
+unlines <- function(x) paste(x, collapse = "\n")
+render <- function(x) {
+  header <-
+    unlines(
+      c("# This file is generated from generate-cran-packages.R. DO NOT EDIT."
+       ,"# Execute the following command to update the file."
+       ,"#"
+       ,"# Rscript generate-cran-packages.R > cran-packages.nix"
+       ,""))
+  nixExr <-
+    unlines(
+      c("{ self, derive }: with self; {"
+       ,unlines(x)
+       ,"}"
+        )
+    )
+}
+
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo, knownPackages) {
     attr <- gsub(".", "_", name, fixed=TRUE)
     if (is.na(depends)) depends <- "";
+    if (is.na(imports)) imports <- "";
     depends <- unlist(strsplit(depends, split="[ \t\n]*,[ \t\n]*", fixed=FALSE))
     depends <- c(depends, unlist(strsplit(imports, split="[ \t\n]*,[ \t\n]*", fixed=FALSE)))
     depends <- c(depends, unlist(strsplit(linkingTo, split="[ \t\n]*,[ \t\n]*", fixed=FALSE)))
@@ -34,15 +54,8 @@ pkgs <- pkgs[order(Package)]
 pkgs$sha256 <- parApply(cl, pkgs, 1, function(p) nixPrefetch(p[1], p[2]))
 knownPackages <- unique(pkgs$Package)
 
-nix <- apply(pkgs, 1, function(p) formatPackage(p[1], p[2], p[18], p[4], p[5], p[6], knownPackages))
+nix <- apply(pkgs, 1, function(p) formatPackage(p[[1]], p[[2]], p[[18]], p[[4]], p[[5]], p[[6]], knownPackages))
 
-cat("# This file is generated from generate-cran-packages.R. DO NOT EDIT.\n")
-cat("# Execute the following command to update the file.\n")
-cat("#\n")
-cat("# Rscript generate-cran-packages.R > cran-packages.nix\n")
-cat("\n")
-cat("{ self, derive }: with self; {\n")
-cat(paste(nix, collapse="\n"), "\n")
-cat("}\n")
+cat(render(nix))
 
 stopCluster(cl)
