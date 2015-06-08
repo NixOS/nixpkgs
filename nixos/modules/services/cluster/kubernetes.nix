@@ -286,7 +286,7 @@ in {
 
       clusterDomain = mkOption {
         description = "Use alternative domain.";
-        default = "";
+        default = "kubernetes.io";
         type = types.str;
       };
 
@@ -322,13 +322,35 @@ in {
         type = types.str;
       };
     };
+
+    kube2sky = {
+      enable = mkEnableOption "Whether to enable kube2sky dns service.";
+
+      domain = mkOption  {
+        description = "Kuberntes kube2sky domain under which all DNS names will be hosted.";
+        default = cfg.kubelet.clusterDomain;
+        type = types.str;
+      };
+
+      master = mkOption {
+        description = "Kubernetes apiserver address";
+        default = "${cfg.apiserver.address}:${toString cfg.apiserver.port}";
+        type = types.str;
+      };
+
+      extraOpts = mkOption {
+        description = "Kubernetes kube2sky extra command line options.";
+        default = "";
+        type = types.str;
+      };
+    };
   };
 
   ###### implementation
 
   config = mkMerge [
     (mkIf cfg.apiserver.enable {
-      systemd.services.kubernetes-apiserver = {
+      systemd.services.kube-apiserver = {
         description = "Kubernetes Api Server";
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
@@ -375,7 +397,7 @@ in {
     })
 
     (mkIf cfg.scheduler.enable {
-      systemd.services.kubernetes-scheduler = {
+      systemd.services.kube-scheduler = {
         description = "Kubernetes Scheduler Service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
@@ -394,7 +416,7 @@ in {
     })
 
     (mkIf cfg.controllerManager.enable {
-      systemd.services.kubernetes-controller-manager = {
+      systemd.services.kube-controller-manager = {
         description = "Kubernetes Controller Manager Service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" "kubernetes-apiserver.service" ];
@@ -414,7 +436,7 @@ in {
     })
 
     (mkIf cfg.kubelet.enable {
-      systemd.services.kubernetes-kubelet = {
+      systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "multi-user.target" ];
         requires = ["kubernetes-setup.service"];
@@ -442,7 +464,7 @@ in {
     })
 
     (mkIf cfg.proxy.enable {
-      systemd.services.kubernetes-proxy = {
+      systemd.services.kube-proxy = {
         description = "Kubernetes Proxy Service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" "etcd.service" ];
@@ -458,10 +480,33 @@ in {
       };
     })
 
+    (mkIf cfg.kube2sky.enable {
+      systemd.services.kube2sky = {
+        description = "Kubernetes Dns Bridge Service";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "skydns.service" "etcd.service" "kubernetes-apiserver.service" ];
+        serviceConfig = {
+          ExecStart = ''${cfg.package}/bin/kube2sky \
+            -etcd-server=http://${head cfg.etcdServers} \
+            -domain=${cfg.kube2sky.domain} \
+            -kube_master_url=http://${cfg.kube2sky.master} \
+            -logtostderr=true \
+            ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
+            ${cfg.kube2sky.extraOpts}
+          '';
+          User = "kubernetes";
+        };
+      };
+
+      services.skydns.enable = mkDefault true;
+      services.skydns.domain = mkDefault cfg.kubelet.clusterDomain;
+    })
+
     (mkIf (any (el: el == "master") cfg.roles) {
       services.kubernetes.apiserver.enable = mkDefault true;
       services.kubernetes.scheduler.enable = mkDefault true;
       services.kubernetes.controllerManager.enable = mkDefault true;
+      services.kubernetes.kube2sky.enable = mkDefault true;
     })
 
     (mkIf (any (el: el == "node") cfg.roles) {
