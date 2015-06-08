@@ -220,6 +220,7 @@
       grafana = 196;
       skydns = 197;
       ripple-rest = 198;
+      gitit = 199;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -418,6 +419,7 @@
       #grafana = 196; #unused
       #skydns = 197; #unused
       #ripple-rest = 198; #unused
+      gitit = 199;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
