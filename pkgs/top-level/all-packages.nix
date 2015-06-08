@@ -3923,29 +3923,38 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
-  openjdk-bootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { };
+  openjdk7-bootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
+  openjdk8-bootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
 
-  openjdk-make-bootstrap = callPackage ../development/compilers/openjdk/make-bootstrap.nix {
-    openjdk = openjdk.override { minimal = true; };
+  openjdk7-make-bootstrap = callPackage ../development/compilers/openjdk/make-bootstrap.nix {
+    openjdk = openjdk7.override { minimal = true; };
+  };
+  openjdk8-make-bootstrap = callPackage ../development/compilers/openjdk/make-bootstrap.nix {
+    openjdk = openjdk8.override { minimal = true; };
   };
 
   openjdk-darwin = callPackage ../development/compilers/openjdk-darwin { };
 
   openjdk7 = callPackage ../development/compilers/openjdk {
-    bootjdk = openjdk-bootstrap;
+    bootjdk = openjdk7-bootstrap;
   };
+  openjdk7_jre = openjdk7.jre;
 
   openjdk8 = callPackage ../development/compilers/openjdk/openjdk8.nix {
-    bootjdk = openjdk-bootstrap;
+    bootjdk = openjdk8-bootstrap;
   };
+  openjdk8_jre = openjdk8.jre;
 
   openjdk = if stdenv.isDarwin then openjdk-darwin else openjdk8;
 
   jdk7 = openjdk7;
+  jre7 = jdk7.jre;
 
   jdk8 = openjdk8;
+  jre8 = jdk8.jre;
 
   jdk = if stdenv.isDarwin then openjdk-darwin else jdk8;
+  jre = jdk.jre;
 
   oraclejdk = pkgs.jdkdistro true false;
 
