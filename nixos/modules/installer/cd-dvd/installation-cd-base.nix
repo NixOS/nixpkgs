@@ -30,8 +30,8 @@ with lib;
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.  Archive::Cpio is needed for the
-  # initrd builder.
-  isoImage.storeContents = [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio ];
+  # initrd builder.  nixos-artwork is needed for the GRUB background.
+  isoImage.storeContents = [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio pkgs.nixos-artwork ];
 
   # EFI booting
   isoImage.makeEfiBootable = true;
