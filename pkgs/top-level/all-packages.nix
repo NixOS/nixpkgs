@@ -10437,6 +10437,8 @@ let
     tcl = tcl-8_5;
   };
 
+  AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
+
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
