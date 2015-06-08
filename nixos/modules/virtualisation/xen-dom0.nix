@@ -6,7 +6,6 @@ with lib;
 
 let
   cfg = config.virtualisation.xen;
-  xen = pkgs.xen;
 in
 
 {
@@ -88,9 +87,9 @@ in
       message = "Xen currently does not support EFI boot";
     } ];
 
-    virtualisation.xen.stored = mkDefault "${xen}/bin/oxenstored";
+    virtualisation.xen.stored = mkDefault "${pkgs.xen}/bin/oxenstored";
 
-    environment.systemPackages = [ xen ];
+    environment.systemPackages = [ pkgs.xen ];
 
     # Make sure Domain 0 gets the required configuration
     #boot.kernelPackages = pkgs.boot.kernelPackages.override { features={xen_dom0=true;}; };
@@ -122,7 +121,7 @@ in
 
     system.extraSystemBuilderCmds =
       ''
-        ln -s ${xen}/boot/xen.gz $out/xen.gz
+        ln -s ${pkgs.xen}/boot/xen.gz $out/xen.gz
         echo "${toString cfg.bootParams}" > $out/xen-params
       '';
 
@@ -158,13 +157,16 @@ in
 
 
     environment.etc =
-      [ { source = "${xen}/etc/xen/xl.conf";
+      [ { source = "${pkgs.xen}/etc/xen/xl.conf";
           target = "xen/xl.conf";
+        }
+        { source = "${pkgs.xen}/etc/xen/scripts";
+          target = "xen/scripts";
         }
       ];
 
     # Xen provides udev rules.
-    services.udev.packages = [ xen ];
+    services.udev.packages = [ pkgs.xen ];
 
     services.udev.path = [ pkgs.bridge-utils pkgs.iproute ];
 
