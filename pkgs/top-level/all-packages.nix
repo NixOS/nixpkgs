@@ -10607,6 +10607,8 @@ let
     amdappsdk = amdappsdk28;
   };
 
+  CharacterCompressor = callPackage ../applications/audio/CharacterCompressor { };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
   chromium = callPackage ../applications/networking/browsers/chromium {
@@ -10642,9 +10644,13 @@ let
 
   cmus = callPackage ../applications/audio/cmus { };
 
+  CompBus = callPackage ../applications/audio/CompBus { };
+
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome) GConf ORBit2 metacity;
   };
+
+  constant-detune-chorus = callPackage ../applications/audio/constant-detune-chorus { };
 
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
@@ -12219,6 +12225,8 @@ let
   retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix {
     qt = qt4;
   });
+
+  RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
   rofi = callPackage ../applications/misc/rofi {
     automake = automake114x;
