@@ -223,6 +223,7 @@
       nix-serve = 199;
       tvheadend = 200;
       uwsgi = 201;
+      gitit = 202;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -424,6 +425,7 @@
       #nix-serve = 199; #unused
       #tvheadend = 200; #unused
       uwsgi = 201;
+      gitit = 202;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
