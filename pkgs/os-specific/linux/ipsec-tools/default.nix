@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline openssl flex kerberos pam ];
 
-  patches = [ ./dont-create-localstatedir-during-install.patch ];
+  patches = [ ./dont-create-localstatedir-during-install.patch
+              ./CVE-2015-4047.patch ];
 
   # fix build with newer gcc versions
   preConfigure = ''substituteInPlace configure --replace "-Werror" "" '';
