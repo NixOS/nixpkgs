@@ -14551,6 +14551,8 @@ let
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
+  tewi-font = callPackage ../data/fonts/tewi  {};
+
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
 
   texFunctions = import ../tools/typesetting/tex/nix pkgs;
