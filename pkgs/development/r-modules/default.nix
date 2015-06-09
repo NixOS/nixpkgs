@@ -1041,7 +1041,7 @@ let
     });
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
+      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
     gputools = old.gputools.overrideDerivation (attrs: {
