@@ -104,7 +104,7 @@ in
       };
 
       background = mkOption {
-        default = "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';

@@ -14422,12 +14422,7 @@ let
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
-  # Remember to check the default lightdm wallpaper
-  nixos-artwork = fetchgit {
-    url = "git://github.com/NixOS/nixos-artwork";
-    rev = "e71b6846023919136795ede22b16d73b2cf1693d";
-    sha256 = "167yvhm2qy7qgyrqqs4hv98mmlarhgxpcsyv0r8a9g3vkblfdczb";
-  };
+  nixos-artwork = callPackage ../data/misc/nixos-artwork { };
 
   nut = callPackage ../applications/misc/nut { };
 
