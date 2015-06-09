@@ -122,6 +122,9 @@ self: super: {
   hmatrix = overrideCabal super.hmatrix (drv: {
     configureFlags = (drv.configureFlags or []) ++ [ "-fopenblas" ];
     extraLibraries = [ pkgs.openblasCompat ];
+    preConfigure = ''
+      sed -i hmatrix.cabal -e 's@/usr/lib/openblas/lib@${pkgs.openblasCompat}/lib@'
+    '';
   });
 
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
