@@ -124,6 +124,14 @@ self: super: {
     extraLibraries = [ pkgs.openblasCompat ];
   });
 
+  bindings-levmar = overrideCabal super.bindings-levmar (drv: {
+    preConfigure = ''
+      sed -i bindings-levmar.cabal \
+          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
+    '';
+    extraLibraries = [ pkgs.openblas ];
+  });
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;
