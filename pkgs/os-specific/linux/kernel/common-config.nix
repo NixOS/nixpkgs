@@ -396,7 +396,7 @@ with stdenv.lib;
     KVM_CLOCK? y
   ''}
   ${optionalString (versionAtLeast version "4.0") ''
-    KVM_COMPAT y
+    KVM_COMPAT? y
   ''}
   ${optionalString (versionAtLeast version "3.10") ''
     KVM_DEVICE_ASSIGNMENT? y
