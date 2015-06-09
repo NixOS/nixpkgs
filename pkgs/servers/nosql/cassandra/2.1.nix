@@ -10,8 +10,8 @@
 
 let
 
-  version = "2.1.5";
-  sha256 = "1zrnmwyxcrdphcbi82ps0qp81yrn1gny4iv2wa4n4mwwp8pqwxid";
+  version = "2.1.6";
+  sha256 = "1xq96h33f4xmld114mrd57z396f9ykcj0xy50fnnhy5mhafkn4n2";
 
 in
 
