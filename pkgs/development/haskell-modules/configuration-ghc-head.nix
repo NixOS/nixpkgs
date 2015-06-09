@@ -53,10 +53,6 @@ self: super: {
   # https://github.com/haskell-suite/haskell-src-exts/issues/224
   haskell-src-exts = dontCheck super.haskell-src-exts;
 
-  process-extras = appendPatch super.process-extras (pkgs.fetchpatch {
-    url = "https://github.com/seereason/process-extras/pull/4.patch";
-    sha256 = "0wfd8dmr0a4dvgp6nhmkznxq1nq8ciprsacn1canmkzjkdidn6kj";
-  });
   mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
     url = "https://github.com/snoyberg/mono-traversable/pull/77.patch";
     sha256 = "1qrvrh3cqfkymi5yb9y9z88rq4n7ag0ac2k00mcnqh4dz1vh4fg1";
