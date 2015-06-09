@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp mpfr luajit boost cmake python gperftools ninja ];
   enableParallelBuilding = true;
 
-  preConfigure = "cd src";
+  preConfigure = ''
+    patchShebangs bin/leantags
+    cd src
+  '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 

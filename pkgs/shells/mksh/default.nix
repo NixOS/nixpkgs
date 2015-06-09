@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       systems.
     '';
     homepage = "https://www.mirbsd.org/mksh.htm";
-    license = with stdenv.lib.licenses; free;
+    license = stdenv.lib.licenses.free;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;
   };

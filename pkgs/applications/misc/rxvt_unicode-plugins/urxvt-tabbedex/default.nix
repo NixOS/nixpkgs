@@ -1,12 +1,12 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "urxvt-tabbedex";
+  name = "urxvt-tabbedex-2015-03-03";
 
   src = fetchgit {
     url = "https://github.com/mina86/urxvt-tabbedex";
-    rev = "54c8d6beb4d65278ed6db24693ca56e1ee65bb42";
-    sha256 = "f8734ee289e1cfc517d0699627191c98d32ae3549e0f1935af2a5ccb86d4dc1e";
+    rev = "b0a02018b1cbaaba2a0c8ea7af9368db0adf3363";
+    sha256 = "f0025f2741d424736620147d9fc39faac68193cb9f74bde0fb6e02a6f1ae61c3";
   };
 
   installPhase = ''
@@ -16,6 +16,6 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Tabbed plugin for rxvt-unicode with many enhancements (mina86's fork)";
     homepage = "https://github.com/mina86/urxvt-tabbedex";
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

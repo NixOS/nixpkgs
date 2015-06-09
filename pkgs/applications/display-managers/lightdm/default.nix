@@ -5,27 +5,28 @@
 
 let
   ver_branch = "1.14";
-  version = "1.14.0";
+  version = "1.14.2";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "0fkbzqncx34dhylrg5328fih7xywmsqj2p40smnx33nyf047jdgc";
+    sha256 = "18dvipdkp6hc1hysyiwpd5nwq6db3mg98rwi3am2ly3hk2bpic18";
   };
+
+  patches = [ ./fix-paths.patch ];
 
   buildInputs = [
     pkgconfig pam libxcb glib libXdmcp itstool libxml2 intltool libxklavier libgcrypt
-    qt4 qt5
-  ];
+    qt4
+  ] ++ stdenv.lib.optional (qt5 != null) qt5.base;
 
   configureFlags = [
-    "--enable-liblightdm-gobject"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
   ] ++ stdenv.lib.optional (qt4 != null) "--enable-liblightdm-qt"
-    ++ stdenv.lib.optional (qt5 != null) "--enable-liblightdm-qt5";
+    ++ stdenv.lib.optional ((qt5.base or null) != null) "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://launchpad.net/lightdm;
+    homepage = https://launchpad.net/lightdm;
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ocharles wkennington ];

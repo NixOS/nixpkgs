@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, alsaLib, bzip2, fftw, jack2, libX11, liblo
 , libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
-, libsndfile, pkgconfig, pulseaudio, qt5, redland
+, libsndfile, pkgconfig, libpulseaudio, qt5, redland
 , rubberband, serd, sord, vampSDK
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libsndfile qt5 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
+    [ libsndfile qt5.base fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
       serd
       sord
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       # optional
       jack2
       # portaudio
-      pulseaudio
+      libpulseaudio
       libmad
       libogg # ?
       # fishsound

@@ -66,6 +66,12 @@ stdenv.mkDerivation {
       makeWrapper "$prog" $out/bin/$(basename "$prog") \
         --suffix EMACSLOADPATH ":" "$out/share/emacs/site-lisp:"
     done
+
+    mkdir -p $out/share
+    # Link icons and desktop files into place
+    for dir in applications icons info man; do
+      ln -s $emacs/share/$dir $out/share/$dir
+    done
   '';
   inherit (emacs) meta;
 }

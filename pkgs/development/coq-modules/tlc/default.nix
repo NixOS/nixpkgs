@@ -13,6 +13,15 @@ stdenv.mkDerivation {
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
+  preConfigure = ''
+    patch Makefile <<EOF
+    105c105
+    < 	\$(COQC) \$<
+    ---
+    > 	\$(COQC) -R . Tlc \$<
+    EOF
+  '';
+
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Tlc

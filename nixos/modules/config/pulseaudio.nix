@@ -12,7 +12,7 @@ let
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.pulseaudio != null);
+  enable32BitAlsaPlugins = stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.libpulseaudio != null);
 
   ids = config.ids;
 
@@ -89,12 +89,12 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioFull;
+        default = pulseaudioLight;
         example = literalExample "pkgs.pulseaudioFull";
         description = ''
-          The PulseAudio derivation to use.  This can be used to disable
-          features (such as JACK support, Bluetooth) that are enabled in the
-          pulseaudioFull package in Nixpkgs.
+          The PulseAudio derivation to use.  This can be used to enable
+          features (such as JACK support, Bluetooth) via the
+          <literal>pulseaudioFull</literal> package.
         '';
       };
 

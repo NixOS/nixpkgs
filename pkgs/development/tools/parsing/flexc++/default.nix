@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://flexcpp.sourceforge.net/;
     downloadPage = http://sourceforge.net/projects/flexcpp/files/;
-    license = with licenses; gpl3;
+    license = licenses.gpl3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

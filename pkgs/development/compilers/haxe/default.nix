@@ -32,11 +32,11 @@ stdenv.mkDerivation {
 
   dontStrip = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
     homepage = http://haxe.org;
-    license = ["GPLv2" "BSD2" /*?*/ ];  # -> docs/license.txt
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2 bsd2 /*?*/ ];  # -> docs/license.txt
+    maintainers = [ maintainers.marcweber ];
+    platforms = platforms.linux;
   };
 }

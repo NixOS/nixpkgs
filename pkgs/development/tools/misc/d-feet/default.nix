@@ -3,7 +3,7 @@
 , pygobject3, gobjectIntrospection, libwnck3 }:
 
 let
-  version = "${major}.8";
+  version = "${major}.9";
   major = "0.3";
 in
 
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
-    sha256 = "e8423feb18fdff9b1465bf8442b78994ba13c12f8fa3b08e6a2f05768b4feee5";
+    sha256 = "0lvrrbxkvw495jn4vj64r8vd3hng5v0lvagfzcbk5x1f3ky1gybd";
   };
 
   buildInputs = [
     pkgconfig libxml2 itstool intltool glib gtk3 pep8 python
-    gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
+    gnome3.defaultIconTheme
     makeWrapper pygobject3 libwnck3
   ];
 

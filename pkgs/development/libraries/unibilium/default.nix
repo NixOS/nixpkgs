@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A very basic terminfo library";
-    license = with licenses; [ lgpl3Plus ];
+    license = licenses.lgpl3Plus;
   };
 }

@@ -2,7 +2,7 @@
 , attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
 , libseccomp, libaio, libcap_ng, gnutls
 , makeWrapper
-, pulseSupport ? true, pulseaudio
+, pulseSupport ? true, libpulseaudio
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? true, spice, spice_protocol, usbredir
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
       libcap_ng gnutls
     ]
-    ++ optionals pulseSupport [ pulseaudio ]
+    ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice_protocol spice usbredir ]

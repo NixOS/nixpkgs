@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) viewer";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;
-    license = with licenses; lgpl3;
+    license = licenses.lgpl3;
     longDescription = ''
       A simple, graphical Java application to view, print and save data from
       Belgian electronic identity cards. Independent of the eid-mw package,

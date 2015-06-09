@@ -196,7 +196,6 @@
       nylon = 168;
       apache-kafka = 169;
       panamax = 170;
-      marathon = 171;
       exim = 172;
       #fleet = 173; # unused
       #input = 174; # unused
@@ -217,7 +216,11 @@
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
-      mldonkey = 195;
+      bird = 195;
+      grafana = 196;
+      skydns = 197;
+      ripple-rest = 198;
+      mldonkey = 199;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -391,7 +394,6 @@
       gitlab = 165;
       nylon = 168;
       panamax = 170;
-      #marathon = 171; # unused
       exim = 172;
       fleet = 173;
       input = 174;
@@ -413,8 +415,11 @@
       #asterisk = 192; # unused
       plex = 193;
       sabnzbd = 194;
-
-      mldonkey = 195;
+      bird = 195;
+      #grafana = 196; #unused
+      #skydns = 197; #unused
+      #ripple-rest = 198; #unused
+      mldonkey = 199;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

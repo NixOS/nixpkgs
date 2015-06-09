@@ -56,7 +56,7 @@ buildFHSUserEnv {
       pkgs.alsaLib
       pkgs.libvorbis
       pkgs.openal
-      pkgs.pulseaudio
+      pkgs.libpulseaudio
 
       pkgs.flashplayer
 

@@ -354,6 +354,16 @@ in {
         type = types.lines;
       };
     };
+
+    beacon = {
+      enable = mkEnableOption "Whether to enable graphite beacon.";
+
+      config = mkOption {
+        description = "Graphite beacon configuration.";
+        default = {};
+        type = types.attrs;
+      };
+    };
   };
 
   ###### implementation
@@ -535,10 +545,25 @@ in {
       environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
     })
 
+    (mkIf cfg.beacon.enable {
+      systemd.services.graphite-beacon = {
+        description = "Grpahite Beacon Alerting Daemon";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = ''
+            ${pkgs.pythonPackages.graphite_beacon}/bin/graphite-beacon \
+              --config ${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
+          '';
+          User = "graphite";
+          Group = "graphite";
+        };
+      };
+    })
+
     (mkIf (
       cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
       cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.pager.enable
+      cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
      ) {
       users.extraUsers = singleton {
         name = "graphite";

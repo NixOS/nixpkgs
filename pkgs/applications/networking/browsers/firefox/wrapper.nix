@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   desktopItem = makeDesktopItem {
     name = browserName;
     exec = browserName + " %U";
-    icon = browserName;
+    inherit icon;
     comment = "";
     desktopName = desktopName;
     genericName = "Web Browser";
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
         --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
-        --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}*")"
+        --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}"*)"
 
     ${ lib.optionalString libtrick
     ''
@@ -58,8 +58,14 @@ stdenv.mkDerivation {
     ''
     }
 
-    mkdir -p $out/share/icons
-    ln -s $out/lib/${browserName}${nameSuffix}/browser/icons/mozicon128.png $out/share/icons/${browserName}.png
+    if [ -e "${browser}/share/icons" ]; then
+        mkdir -p "$out/share"
+        ln -s "${browser}/share/icons" "$out/share/icons"
+    else
+        mkdir -p "$out/share/icons/hicolor/128x128/apps"
+        ln -s "$out/lib/$libdirbasename/browser/icons/mozicon128.png" \
+            "$out/share/icons/hicolor/128x128/apps/${browserName}.png"
+    fi
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications

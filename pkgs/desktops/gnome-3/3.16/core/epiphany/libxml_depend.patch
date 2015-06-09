@@ -1,0 +1,10 @@
+--- configure.ac.orig	2015-04-08 18:53:52.284580835 +0200
++++ configure.ac	2015-04-08 18:55:55.697225280 +0200
+@@ -113,6 +113,7 @@
+ PKG_CHECK_MODULES(WEB_EXTENSION, [
+                   webkit2gtk-web-extension-4.0 >= $WEBKIT_GTK_REQUIRED
+                   libsecret-1 >= $LIBSECRET_REQUIRED
++                  libxml-2.0 >= $LIBXML_REQUIRED
+                   ])
+ AC_SUBST(WEB_EXTENSION_CFLAGS)
+ AC_SUBST(WEB_EXTENSION_LIBS)

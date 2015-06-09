@@ -13,34 +13,13 @@ stdenv.mkDerivation rec {
     alsaLib libclthreads libclxclient libX11 libXft libXrender fftwFloat jack2 zita-alsa-pcmi
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${xlibs.xproto}/include"
-    "-I${libX11}/include"
-    "-I${libXft}/include"
-    "-I${freetype}/include"
-    "-I${fontconfig}/include"
-    "-I${libXrender}/include"
-    "-I${xlibs.renderproto}/include"
-    "-I${alsaLib}/include"
-    "-I${zita-alsa-pcmi}/include"
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SUFFIX=''"
   ];
 
-  patchPhase = ''
-    cd source/
-    sed -i "s@clthreads.h@${libclthreads}/include@g" $(find . -name '*.cc')
-    sed -i "s@clxclient.h@${libclxclient}/include@g" $(find . -name '*.cc')
-    sed -i "s@clthreads.h@${libclthreads}/include@g" $(find . -name '*.h')
-    sed -i "s@clxclient.h@${libclxclient}/include@g" $(find . -name '*.h')
-  '';
-
-  buildlPhase = ''
-    make PREFIX="$out"
-  '';
-
-  installPhase = ''
-    echo zita= ${zita-alsa-pcmi}
-    make PREFIX="$out" install
-    install -Dm644 ../README "$out/README"
+  preConfigure = ''
+    cd ./source/
   '';
 
   meta = with stdenv.lib; {

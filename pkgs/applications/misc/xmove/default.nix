@@ -3,7 +3,7 @@ stdenv.mkDerivation {
   name = "xmove-2.0b2";
 
   src = fetchurl {
-    url = http://ftp.debian.org/debian/pool/main/x/xmove/xmove_2.0beta2.orig.tar.gz;
+    url = mirror://debian/pool/main/x/xmove/xmove_2.0beta2.orig.tar.gz;
     sha256 = "0q310k3bi39vdk0kqqvsahnb1k6lx9hlx80iyxnkq59l6jxnhyhf";
   };
 

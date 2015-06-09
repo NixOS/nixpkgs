@@ -91,6 +91,7 @@ rec {
           nativeTools = false;
           nativeLibc = false;
           cc = gccPlain;
+          isGNU = true;
           libc = glibc;
           inherit binutils coreutils;
           name = name;
@@ -234,6 +235,7 @@ rec {
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
+        isGNU = true;
         cc = stage4.stdenv.cc.cc;
         libc = stage4.pkgs.glibc;
         inherit (stage4.pkgs) binutils coreutils;

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, jdk }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.0-rc14";
+  version = "2.0.0";
   name = "boot-${version}";
 
   src = fetchurl {

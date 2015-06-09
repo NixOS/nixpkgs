@@ -41,7 +41,7 @@ self: super: {
   unix = null;
 
   # binary is not a core library for this compiler.
-  binary = self.binary_0_7_4_0;
+  binary = self.binary_0_7_5_0;
 
   # deepseq is not a core library for this compiler.
   deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
@@ -54,8 +54,8 @@ self: super: {
   Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;
 
   # We have no working cabal-install at the moment.
-  cabal-install_1_18_0_8 = markBroken super.cabal-install_1_18_0_8;
-  cabal-install = self.cabal-install_1_18_0_8;
+  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
+  cabal-install = self.cabal-install_1_18_1_0;
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;

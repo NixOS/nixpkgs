@@ -26,7 +26,7 @@
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 , hiDPISupport ? false
 
 , source
@@ -113,12 +113,12 @@ let
       glib gtk dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      pythonPackages.gyp pythonPackages.ply pythonPackages.jinja2
+      pythonPackages.gyp_svn1977 pythonPackages.ply pythonPackages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport pulseaudio;
+      ++ optional pulseSupport libpulseaudio;
 
     # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
     #      be fixed, then try again to unbundle everything into separate

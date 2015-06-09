@@ -1,13 +1,13 @@
 { fetchurl, stdenv, gmp, mpfr }:
 let
-  version = "1.0.1";
+  version = "1.0.3";
 in
 stdenv.mkDerivation rec {
   name = "libmpc-${version}"; # to avoid clash with the MPD client
 
   src = fetchurl {
     url = "http://www.multiprecision.org/mpc/download/mpc-${version}.tar.gz";
-    sha1 = "vxg0rkyn4cs40wr2cp6bbcyr1nnijzlc";
+    sha256 = "1hzci2zrrd7v3g1jk35qindq05hbl0bhjcyyisq9z209xb3fqzb1";
   };
 
   buildInputs = [ gmp mpfr ];

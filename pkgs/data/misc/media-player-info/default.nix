@@ -26,7 +26,7 @@ in
     meta = with stdenv.lib; {
       description = "A repository of data files describing media player capabilities";
       homepage = "http://www.freedesktop.org/wiki/Software/media-player-info/";
-      license = with licenses; [ bsd3 ];
+      license = licenses.bsd3;
       maintainer = with maintainers; [ ttuegel ];
     };
   }

@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "speexdsp-1.2rc3";
-  
+
   src = fetchurl {
     url = "http://downloads.us.xiph.org/releases/speex/${name}.tar.gz";
     sha256 = "1wcjyrnwlkayb20zdhp48y260rfyzg925qpjpljd5x9r01h8irja";
   };
 
   patches = [ ./build-fix.patch ];
-  
+  postPatch = "sed '3i#include <stdint.h>' -i ./include/speex/speexdsp_config_types.h.in";
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw ];
 

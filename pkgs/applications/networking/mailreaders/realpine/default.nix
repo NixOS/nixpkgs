@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   };
   configureFlags = [
     "--with-ssl-include-dir=${openssl}/include/openssl"
-    "--with-tcl-lib=tcl8.5"
+    "--with-tcl-lib=${tcl.libPrefix}"
     ];
   preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"

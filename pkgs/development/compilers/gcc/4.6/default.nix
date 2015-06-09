@@ -52,13 +52,13 @@ let version = "4.6.4";
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
     patches = [ ]
-      ++ optional (cross != null) ./libstdc++-target.patch
+      ++ optional (cross != null) ../libstdc++-target.patch
       ++ optional noSysDirs ./no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
-      ++ optional langAda ./gnat-cflags.patch
+      ++ optional langAda ../gnat-cflags.patch
       ++ optional langVhdl ./ghdl-ortho-cflags.patch
-      ++ optional langFortran ./gfortran-driving.patch
+      ++ optional langFortran ../gfortran-driving.patch
       ++ optional (stdenv.isGNU || crossGNU) ./hurd-sigrtmin.patch;
 
     javaEcj = fetchurl {

@@ -30,7 +30,7 @@ let
     importManifest ./manifest.nix { mirror = "http://download.qt.io"; };
   srcs = mapAttrs (name: manifest: manifest.src) manifest;
 
-  version = "5.4.0";
+  version = "5.4.2";
 
   callPackage = newScope (self // { inherit qtSubmodule; });
 
@@ -147,14 +147,14 @@ let
       multimedia = callPackage
         (
           { qtSubmodule, base, declarative
-          , alsaLib, gstreamer, gst_plugins_base, pulseaudio
+          , alsaLib, gstreamer, gst_plugins_base, libpulseaudio
           }:
 
           qtSubmodule {
             name = "qtmultimedia";
             qtInputs = [ base declarative ];
             buildInputs = [
-              alsaLib gstreamer gst_plugins_base pulseaudio
+              alsaLib gstreamer gst_plugins_base libpulseaudio
             ];
           }
         )

@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://sourceforge.net/projects/libxls/;
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

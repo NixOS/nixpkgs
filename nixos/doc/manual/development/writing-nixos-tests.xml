@@ -155,6 +155,15 @@ startAll;
   </varlistentry>
 
   <varlistentry>
+    <term><methodname>getScreenText</methodname></term>
+    <listitem><para>Return a textual representation of what is currently
+    visible on the machine's screen using optical character
+    recognition.</para>
+    <note><para>This requires passing <option>enableOCR</option> to the test
+    attribute set.</para></note></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><methodname>sendMonitorCommand</methodname></term>
     <listitem><para>Send a command to the QEMU monitor. This is rarely
     used, but allows doing stuff such as attaching virtual USB disks
@@ -235,6 +244,15 @@ startAll;
     <term><methodname>waitForX</methodname></term>
     <listitem><para>Wait until the X11 server is accepting
     connections.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><methodname>waitForText</methodname></term>
+    <listitem><para>Wait until the supplied regular expressions matches
+    the textual contents of the screen by using optical character recognition
+    (see <methodname>getScreenText</methodname>).</para>
+    <note><para>This requires passing <option>enableOCR</option> to the test
+    attribute set.</para></note></listitem>
   </varlistentry>
 
   <varlistentry>

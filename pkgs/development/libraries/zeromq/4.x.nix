@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "zeromq-4.0.5";
+  name = "zeromq-4.0.6";
 
   src = fetchurl {
     url = "http://download.zeromq.org/${name}.tar.gz";
-    sha256 = "0arl8fy8d03xd5h0mgda1s5bajwg8iyh1kk4hd1420rpcxgkrj9v";
+    sha256 = "0arl8fy8d03xd5h0mgda1s5bajwg8iyh1kk4hd1420rpcxgkrj91";
   };
 
   buildInputs = [ libuuid ];

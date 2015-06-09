@@ -121,7 +121,12 @@ stdenv.mkDerivation {
 
       for executable in \
         thunderbird mozilla-xremote-client thunderbird-bin plugin-container \
-        updater libxul.so
+        updater \
+        components/libdbusservice.so components/libmozgnome.so \
+        libnssdbm3.so libsmime3.so libxul.so libprldap60.so libnss3.so \
+        libplc4.so libfreebl3.so libmozsqlite3.so libmozalloc.so libnspr4.so \
+        libssl3.so libldif60.so libsoftokn3.so libldap60.so libnssutil3.so \
+        libnssckbi.so libplds4.so
       do
         patchelf --set-rpath "$libPath" \
           "$out/usr/lib/thunderbird-bin-${version}/$executable"

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     patchShebangs share/extensions
   ''
   # Clang gets misdetected, so hardcode the right answer
-  + stdenv.lib.optionalString (stdenv.cc.cc.isClang or false) ''
+  + stdenv.lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/ui/tool/node.h \
       --replace "#if __cplusplus >= 201103L" "#if true"
   '';

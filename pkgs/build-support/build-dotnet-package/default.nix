@@ -1,0 +1,109 @@
+{ stdenv, lib, makeWrapper, pkgconfig, mono, dotnetbuildhelpers }:
+
+attrsOrig @
+{ baseName
+, version
+, buildInputs ? []
+, xBuildFiles ? [ ]
+, xBuildFlags ? [ "/p:Configuration=Release" ]
+, outputFiles ? [ "bin/Release/*" ]
+, dllFiles ? [ "*.dll" ]
+, exeFiles ? [ "*.exe" ]
+, ... }:
+  let
+    arrayToShell = (a: toString (map (lib.escape (lib.stringToCharacters "\\ ';$`()|<>\t") ) a));
+
+    attrs = {
+      name = "${baseName}-${version}";
+
+      buildInputs = [
+        pkgconfig
+        mono
+        dotnetbuildhelpers
+        makeWrapper
+      ] ++ buildInputs;
+
+      configurePhase = ''
+        runHook preConfigure
+
+        [ -z "$dontPlacateNuget" ] && placate-nuget.sh
+        [ -z "$dontPlacatePaket" ] && placate-paket.sh
+        [ -z "$dontPatchFSharpTargets" ] && patch-fsharp-targets.sh
+
+        runHook postConfigure
+      '';
+
+      buildPhase = ''
+        runHook preBuild
+
+        echo Building dotNET packages...
+
+        # Probably needs to be moved to fsharp
+        if pkg-config FSharp.Core
+        then
+          export FSharpTargetsPath="$(dirname $(pkg-config FSharp.Core --variable=Libraries))/Microsoft.FSharp.Targets"
+        fi
+
+        ran=""
+        for xBuildFile in ${arrayToShell xBuildFiles} ''${xBuildFilesExtra}
+        do
+          ran="yes"
+          xbuild ${arrayToShell xBuildFlags} ''${xBuildFlagsArray} $xBuildFile
+        done
+
+        [ -z "$ran" ] && xbuild ${arrayToShell xBuildFlags} ''${xBuildFlagsArray}
+
+        runHook postBuild
+      '';
+
+      dontStrip = true;
+
+      installPhase = ''
+        runHook preInstall
+
+        target="$out/lib/dotnet/${baseName}"
+        mkdir -p "$target"
+
+        cp -rv ${arrayToShell outputFiles} "''${outputFilesArray[@]}" "$target"
+
+        if [ -z "$dontRemoveDuplicatedDlls" ]
+        then
+          pushd "$out"
+          remove-duplicated-dlls.sh
+          popd
+        fi
+
+        set -f
+        for dllPattern in ${arrayToShell dllFiles} ''${dllFilesArray[@]}
+        do
+          set +f
+          for dll in "$target"/$dllPattern
+          do
+            [ -f "$dll" ] || continue
+            if pkg-config $(basename -s .dll "$dll")
+            then
+              echo "$dll already exported by a buildInputs, not re-exporting"
+            else
+              ${dotnetbuildhelpers}/bin/create-pkg-config-for-dll.sh "$out/lib/pkgconfig" "$dll"
+            fi
+          done
+        done
+
+        set -f
+        for exePattern in ${arrayToShell exeFiles} ''${exeFilesArray[@]}
+        do
+          set +f
+          for exe in "$target"/$exePattern
+          do
+            [ -f "$exe" ] || continue
+            mkdir -p "$out"/bin
+            commandName="$(basename -s .exe "$(echo "$exe" | tr "[A-Z]" "[a-z]")")"
+            makeWrapper "${mono}/bin/mono \"$exe\"" "$out"/bin/"$commandName"
+          done
+        done
+
+        runHook postInstall
+      '';
+    };
+  in
+    stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "buildInputs" ] ))

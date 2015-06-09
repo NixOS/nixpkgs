@@ -14,11 +14,6 @@ buildGoPackage rec {
 
   subPackages = [ "client" ];
 
-  renameImports = [
-    "code.google.com/p/go.crypto golang.org/x/crypto"
-    "code.google.com/p/goprotobuf github.com/golang/protobuf"
-  ];
-
   buildInputs = [ trousers net crypto protobuf ed25519 govers ];
     
   buildFlags = "--tags nogui";

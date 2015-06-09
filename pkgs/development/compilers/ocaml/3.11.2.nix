@@ -41,9 +41,12 @@ stdenv.mkDerivation rec {
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://caml.inria.fr/ocaml;
-    license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
+    license = with licenses; [
+      qpl /* compiler */
+      lgpl2 /* library */
+    ];
     description = "Most popular variant of the Caml language";
 
     longDescription =
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
          documentation generator (ocamldoc).
        '';
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 
 }

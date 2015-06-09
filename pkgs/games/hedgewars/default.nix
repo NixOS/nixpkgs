@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
        contact with explosions, to zero (the damage dealt to the attacked
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
-    maintainers = maintainers.kragniz;
+    maintainers = with maintainers; [ kragniz ];
     platforms = ghc.meta.platforms;
   };
 }

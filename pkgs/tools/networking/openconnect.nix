@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, vpnc, openssl, libxml2 } :
+{ stdenv, fetchurl, pkgconfig, vpnc, openssl, libxml2, zlib } :
 
 stdenv.mkDerivation rec {
   name = "openconnect-5.02";
@@ -22,5 +22,5 @@ stdenv.mkDerivation rec {
     "--without-openssl-version-check"
   ];
 
-  propagatedBuildInputs = [ vpnc openssl libxml2 ];
+  propagatedBuildInputs = [ vpnc openssl libxml2 zlib ];
 }

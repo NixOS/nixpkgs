@@ -1,65 +1,88 @@
-{ stdenv, fetchgit, fetchurl, unzip, callPackage, ncurses, gettext, pkgconfig,
-cmake, pkgs, lpeg, lua, luajit, luaMessagePack, luabitop }:
+{ stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack
+, libtermkey, libtool, libuv, lpeg, lua, luajit, luaMessagePack
+, luabitop, ncurses, perl, pkgconfig, unibilium
+, withJemalloc ? true, jemalloc }:
 
+let version = "2015-05-26"; in
 stdenv.mkDerivation rec {
-  name = "neovim-nightly";
+  name = "neovim-${version}";
 
-  version = "nightly";
-
-  src = fetchgit {
-    url = "https://github.com/neovim/neovim";
-    rev = "68fcd8b696dae33897303c9f8265629a31afbf17";
-    sha256 = "0hxkcy641jpn4qka44gfvhmb6q3dkjx6lvn9748lcl2gx2d36w4i";
+  src = fetchFromGitHub {
+    sha256 = "0sszpqlq0yp6r62zgcjcmnllc058wzzh9ccvgb2jh9k19ksszyhc";
+    rev = "5a9ad68b258f33ebd7fa0a5da47b308f50f1e5e7";
+    repo = "neovim";
+    owner = "neovim";
   };
 
-  libmsgpack = stdenv.mkDerivation rec {
-    version = "0.5.9";
-    name = "libmsgpack-${version}";
+  # FIXME: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
+  neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation rec {
+    name = "neovim-libvterm-${version}";
 
-    src = fetchgit {
-      rev = "ecf4b09acd29746829b6a02939db91dfdec635b4";
-      url = "https://github.com/msgpack/msgpack-c";
-      sha256 = "076ygqgxrc3vk2l20l8x2cgcv05py3am6mjjkknr418pf8yav2ww";
+    src = fetchFromGitHub {
+      sha256 = "0i2h74jrx4fy90sv57xj8g4lbjjg4nhrq2rv6rz576fmqfpllcc5";
+      rev = "20ad1396c178c72873aeeb2870bd726f847acb70";
+      repo = "libvterm";
+      owner = "neovim";
     };
 
-    buildInputs = [ cmake ];
+    buildInputs = [ libtool perl ];
+
+    makeFlags = "PREFIX=$(out)";
+
+    enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
-      description = "MessagePack implementation for C and C++";
-      homepage = http://msgpack.org;
-      maintainers = [ maintainers.manveru ];
-      license = licenses.asl20;
-      platforms = platforms.all;
+      description = "VT220/xterm/ECMA-48 terminal emulator library";
+      homepage = http://www.leonerd.org.uk/code/libvterm/;
+      license = licenses.mit;
+      maintainers = with maintainers; [ nckx ];
+      platforms = platforms.unix;
     };
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [
-    ncurses
-    pkgconfig
     cmake
-    pkgs.libuvVersions.v0_11_29
+    glib
+    libtermkey
+    libuv
     luajit
     lua
     lpeg
     luaMessagePack
     luabitop
     libmsgpack
+    ncurses
+    neovimLibvterm
+    pkgconfig
+    unibilium
+  ] ++ stdenv.lib.optional withJemalloc jemalloc;
+  nativeBuildInputs = [
+    gettext
   ];
-  nativeBuildInputs = [ gettext ];
 
   LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
   LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
-  cmakeFlags = [
-    "-DUSE_BUNDLED_MSGPACK=ON"
-  ];
 
   meta = with stdenv.lib; {
-    description = "Aggressive refactor of Vim";
-    homepage    = http://www.neovim.org;
-    maintainers = with maintainers; [ manveru ];
+    description = "Vim text editor fork focused on extensibility and agility";
+    longDescription = ''
+      Neovim is a project that seeks to aggressively refactor Vim in order to:
+      - Simplify maintenance and encourage contributions
+      - Split the work between multiple developers
+      - Enable the implementation of new/modern user interfaces without any
+        modifications to the core source
+      - Improve extensibility with a new plugin architecture
+    '';
+    homepage    = http://www.neovim.io;
+    # "Contributions committed before b17d96 by authors who did not sign the
+    # Contributor License Agreement (CLA) remain under the Vim license.
+    # Contributions committed after b17d96 are licensed under Apache 2.0 unless
+    # those contributions were copied from Vim (identified in the commit logs
+    # by the vim-patch token). See LICENSE for details."
+    license = with licenses; [ asl20 vim ];
+    maintainers = with maintainers; [ manveru nckx ];
     platforms   = platforms.unix;
   };
 }
-

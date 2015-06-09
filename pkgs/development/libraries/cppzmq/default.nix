@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "cppzmq";
+  name = "cppzmq-2015-03-05";
 
   src = fetchgit {
     url = "git://github.com/zeromq/cppzmq";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/zeromq/cppzmq;
     license = licenses.bsd2;
     description = "C++ binding for 0MQ";
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };
 }

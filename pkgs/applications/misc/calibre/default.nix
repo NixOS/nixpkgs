@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, python, pyqt5, sip_4_16, poppler, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt5, icu, sqlite
+{ stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
+, imagemagick, libjpeg, fontconfig, podofo, qt53, icu, sqlite
 , pil, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-2.27.0";
+  name = "calibre-2.30.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "13id1r2q6alw4wzb4z0njkyr6lsmzs2fjp3cflqavx3qk25darv5";
+    sha256 = "1k2rpn06nfzqjy5k6fh8pwfj8vbhpn7rgkpkkpz5n2fqg3z8ph1j";
   };
 
   inherit python;
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs =
-    [ python pyqt5 sip_4_16 poppler libpng imagemagick libjpeg
-      fontconfig podofo qt5 pil chmlib icu sqlite libusb1 libmtp xdg_utils
+    [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
+      fontconfig podofo qt53 pil chmlib icu sqlite libusb1 libmtp xdg_utils
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
       pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler}/include/poppler
-    export POPPLER_LIB_DIR=${poppler}/lib
+    export POPPLER_INC_DIR=${poppler_utils}/include/poppler
+    export POPPLER_LIB_DIR=${poppler_utils}/lib
     export MAGICK_INC=${imagemagick}/include/ImageMagick
     export MAGICK_LIB=${imagemagick}/lib
     export FC_INC_DIR=${fontconfig}/include/fontconfig
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
                      --prefix LD_LIBRARY_PATH : ${unrar}/lib \
-                     --prefix PATH : ${poppler}/bin
+                     --prefix PATH : ${poppler_utils}/bin
     done
   '';
 

@@ -28,13 +28,13 @@ addQtModule() {
         propagatedBuildInputs+=" $1"
     fi
 
-    if [[ -f "$1/bin/qmake" ]]; then
-        addToSearchPath PATH "$qtOut/bin"
-    fi
-
     if [[ -d "$1/lib/qt5/qml" ]] || [[ -d "$1/lib/qt5/plugins" ]] || [[ -d "$1/lib/qt5/imports" ]]; then
         propagatedUserEnvPkgs+=" $1"
     fi
+}
+
+setQMakePath() {
+    export PATH="$qtOut/bin${PATH:+:}$PATH"
 }
 
 qtOut=""
@@ -56,3 +56,4 @@ Qml2Imports = $qtOut/lib/qt5/qml
 EOF
 
 envHooks+=(addQtModule)
+preConfigurePhases+=" setQMakePath"

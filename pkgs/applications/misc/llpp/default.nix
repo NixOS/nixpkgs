@@ -4,12 +4,12 @@
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
   name = "llpp-${version}";
-  version = "21";
+  version = "21-git-2015-06-06";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
-    rev  = "refs/tags/v${version}";
-    sha256 = "0rxdq6j3bs4drnhlxgm0gcwkhxi98vmxm22lnkpic7h67lgsz51q";
+    rev = "492d761c0c7c8c4ccdd4f0d3fa7c51434ce8acf2";
+    sha256 = "14dp5sw7cd6bja9d3zpxmswbk0k0b7x2fzb1fflhnnnhjc39irk9";
   };
 
   buildInputs = [ pkgconfig ninja makeWrapper ocaml findlib mupdf lablgl

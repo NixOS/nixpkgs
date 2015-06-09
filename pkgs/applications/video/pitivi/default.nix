@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     gobjectIntrospection clutter-gst clutter-gtk librsvg gnome3.gnome_desktop
-    hicolor_icon_theme gnome3.gnome_icon_theme gnome3.gnome_icon_theme_symbolic
+    gnome3.defaultIconTheme
     gnome3.gsettings_desktop_schemas libnotify
   ] ++ (with gst; [
     gstreamer gst-python gst-editing-services

@@ -76,7 +76,7 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec ${plasma5.startkde}/bin/startkde;'';
+      start = ''exec ${plasma5.plasma-workspace}/bin/startkde;'';
     };
 
     security.setuidOwners = singleton {
