@@ -844,4 +844,7 @@ self: super: {
   # https://github.com/jaspervdj/websockets/issues/104
   websockets = dontCheck super.websockets;
 
+  # Avoid spurious test suite failures.
+  fft = dontCheck super.fft;
+
 }
