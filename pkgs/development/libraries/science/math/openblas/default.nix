@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       "CC=${if stdenv.isDarwin then "clang" else "gcc"}"
       ''PREFIX="''$(out)"''
       "BINARY=${binary}"
-      "USE_OPENMP=1"
+      "USE_OPENMP=${if stdenv.isDarwin then "0" else "1"}"
       "INTERFACE64=${if blas64 then "1" else "0"}"
     ];
 
