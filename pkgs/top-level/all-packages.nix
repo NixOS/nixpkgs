@@ -10404,6 +10404,8 @@ let
 
   a2jmidid = callPackage ../applications/audio/a2jmidid { };
 
+  aacgain = callPackage ../applications/audio/aacgain { };
+
   aangifte2006 = callPackage_i686 ../applications/taxes/aangifte-2006 { };
 
   aangifte2007 = callPackage_i686 ../applications/taxes/aangifte-2007 { };
