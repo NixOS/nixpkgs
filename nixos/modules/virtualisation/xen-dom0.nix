@@ -262,15 +262,12 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "xen-domains.service" ];
       serviceConfig.RemainAfterExit = "yes";
-      serviceConfig.ExecStart = ''
-        ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge}
-        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} up
-        '';
-      serviceConfig.ExecStop = ''
-        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} down
-        ${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge}
-        '';
+      serviceConfig.ExecStart = "${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge}";
+      postStart = "${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} up";
+      serviceConfig.ExecStop = "${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} down";
+      postStop = "${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge}";
     };
+
 
     systemd.services.xen-domains = {
       description = "Xen domains - automatically starts, saves and restores Xen domains";
