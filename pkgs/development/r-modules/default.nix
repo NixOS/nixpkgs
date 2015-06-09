@@ -1087,6 +1087,7 @@ let
 
     BayesLogit = old.BayesLogit.overrideDerivation (attrs: {
       patches = [ ./patches/BayesLogit.patch ];
+      buildInputs = (attrs.buildInputs or []) ++ [ pkgs.openblasCompat ];
     });
 
     BayesBridge = old.BayesBridge.overrideDerivation (attrs: {
