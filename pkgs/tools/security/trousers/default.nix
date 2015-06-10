@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-usercheck" ];
 
-  NIX_CFLAGS_COMPILE = "-DALLOW_NON_TSS_CONFIG_FILE";
+  # https://gcc.gnu.org/gcc-5/porting_to.html, search for
+  # "Different semantics for inline functions"
+  NIX_CFLAGS_COMPILE = "-DALLOW_NON_TSS_CONFIG_FILE -fgnu89-inline";
   NIX_LDFLAGS = "-lgcc_s";
 
   # Fix broken libtool file
