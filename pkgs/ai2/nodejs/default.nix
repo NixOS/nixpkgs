@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, pkgconfig, runCommand, which, ...}:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http-parser, pkgconfig, runCommand, which, ... }:
 
 let
   dtrace = runCommand "dtrace-native" {} ''
