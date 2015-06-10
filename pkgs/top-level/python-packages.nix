@@ -5708,14 +5708,14 @@ let
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.3";
+    version = "2.4.2";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "09x9g4wzfxfhpby3aa1fbhw3iqv1vyd6h526nrm9612ba5d0myh9";
+      sha256 = "1ghx62z63yyf8wv4bcvfxwxs5mc7b4nrcss6lc1i5s0yjvzvyi6h";
     };
 
     doCheck = false;
