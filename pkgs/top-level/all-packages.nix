@@ -6796,7 +6796,8 @@ let
   libev = callPackage ../development/libraries/libev { };
 
   libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
-  libevent = callPackage ../development/libraries/libevent { };
+  libevent = callPackage ../development/libraries/libevent { python = null; };
+  libevent-rpcgen = callPackage ../development/libraries/libevent { python = pkgs.python; };
 
   libewf = callPackage ../development/libraries/libewf { };
 
