@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, python, zip, ffmpeg, pandoc ? null }:
+{ stdenv, fetchurl, makeWrapper, buildPythonPackage, zip, ffmpeg
+, pandoc ? null }:
 
 # Pandoc is required to build the package's man page. Release tarballs
 # contain a formatted man page already, though, so it's fine to pass
@@ -7,7 +8,7 @@
 # case someone wants to use this derivation to build a Git version of
 # the tool that doesn't have the formatted man page included.
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   name = "youtube-dl-${version}";
   version = "2015.05.29";
 
@@ -16,18 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "0lgxir2i5ipplg57wk8gnbbsdrk7szqnyb1bxr97f3h0rbm4dfij";
   };
 
-  buildInputs = [ python makeWrapper zip pandoc ];
-
-  patchPhase = "rm youtube-dl";
-
-  configurePhase = ''
-    makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc PYTHON=${python}/bin/python )
-  '';
+  buildInputs = [ makeWrapper zip pandoc ];
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
-  postInstall = ''
-    wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"
-  '';
+  postInstall = stdenv.lib.optionalString (ffmpeg != null) 
+    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"'';
 
   meta = with stdenv.lib; {
     homepage = "http://rg3.github.com/youtube-dl/";
