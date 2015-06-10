@@ -7943,8 +7943,13 @@ let
       sha256 = "1fp3d3z2grb1ls97smjkraazpxnvajda2d1g1378s6gzmda2jvjd";
     };
 
-    buildInputs = with self; [ pkgs.makeWrapper ];
-    propagatedBuildInputs = with self; [ requests2 pkgs.rtmpdump pycrypto singledispatch futures ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    propagatedBuildInputs = with self; [ pkgs.rtmpdump pycrypto requests2 ]
+      ++ optionals isPy26 [ singledispatch futures argparse ]
+      ++ optionals isPy27 [ singledispatch futures ]
+      ++ optionals isPy33 [ singledispatch ];
+
     postInstall = ''
       wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
     '';
