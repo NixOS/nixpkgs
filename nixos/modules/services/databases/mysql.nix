@@ -77,14 +77,6 @@ in
         description = "Location of the file which stores the PID of the MySQL server";
       };
 
-      enableSocketAccess = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to grant local processes access to the mysqld socket.
-        '';
-      };
-
       extraOptions = mkOption {
         default = "";
         example = ''
