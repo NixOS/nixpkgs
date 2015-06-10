@@ -57,6 +57,8 @@ my $grubTargetEfi = get("grubTargetEfi");
 my $bootPath = get("bootPath");
 my $canTouchEfiVariables = get("canTouchEfiVariables");
 my $efiSysMountPoint = get("efiSysMountPoint");
+my $gfxmodeEfi = get("gfxmodeEfi");
+my $gfxmodeBios = get("gfxmodeBios");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -255,14 +257,22 @@ else {
         fi
 
         # Setup the graphics stack for bios and efi systems
-        insmod vbe
-        insmod efi_gop
-        insmod efi_uga
+        if [ \"\${grub_platform}\" = \"efi\" ]; then
+          insmod efi_gop
+          insmod efi_uga
+        else
+          insmod vbe
+        fi
         insmod font
         if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
           insmod gfxterm
-          set gfxmode=auto
-          set gfxpayload=keep
+          if [ \"\${grub_platform}\" = \"efi\" ]; then
+            set gfxmode=$gfxmodeEfi
+            set gfxpayload=keep
+          else
+            set gfxmode=$gfxmodeBios
+            set gfxpayload=text
+          fi
           terminal_output gfxterm
         fi
     ";

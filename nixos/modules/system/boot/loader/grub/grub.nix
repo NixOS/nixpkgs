@@ -28,7 +28,7 @@ let
   f = x: if x == null then "" else "" + x;
 
   grubConfig = args: pkgs.writeText "grub-config.xml" (builtins.toXML
-    { splashImage = f config.boot.loader.grub.splashImage;
+    { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.stdenv.shell}";
@@ -42,7 +42,7 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default fsIdentifier efiSupport;
+        default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
       path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
@@ -239,6 +239,24 @@ in
           14-colour image in XPM format, optionally compressed with
           <command>gzip</command> or <command>bzip2</command>.  Set to
           <literal>null</literal> to run GRUB in text mode.
+        '';
+      };
+
+      gfxmodeEfi = mkOption {
+        default = "auto";
+        example = "1024x768";
+        type = types.str;
+        description = ''
+          The gfxmode to pass to grub when loading a graphical boot interface under efi.
+        '';
+      };
+
+      gfxmodeBios = mkOption {
+        default = "1024x768";
+        example = "auto";
+        type = types.str;
+        description = ''
+          The gfxmode to pass to grub when loading a graphical boot interface under bios.
         '';
       };
 
