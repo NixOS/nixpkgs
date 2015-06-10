@@ -5509,18 +5509,18 @@ let
   };
 
   futures = buildPythonPackage rec {
-    name = "futures-2.1.6";
-
+    name = "futures-3.0.2";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/f/futures/futures-2.1.6.tar.gz";
-      md5 = "cfab9ac3cd55d6c7ddd0546a9f22f453";
+      url = "https://pypi.python.org/packages/source/f/futures/${name}.tar.gz";
+      md5 = "42aaf1e4de48d6e871d77dc1f9d96d5a";
     };
 
     meta = with pkgs.stdenv.lib; {
       description = "Backport of the concurrent.futures package from Python 3.2";
-      homepage = http://code.google.com/p/pythonfutures;
+      homepage = "https://github.com/agronholm/pythonfutures";
       license = licenses.bsd2;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -15715,6 +15715,52 @@ let
       license = licenses.gpl1;
       maintainers = with maintainers; [ hbunke ];
 
+    };
+  };
+
+  trollius = buildPythonPackage rec {
+    version = "1.0.4";
+    name = "trollius-${version}";
+    disabled = ! isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/trollius/${name}.tar.gz";
+      md5 = "3631a464d49d0cbfd30ab2918ef2b783";
+    };
+
+    buildInputs = [ self.mock ];
+
+    propagatedBuildInputs = [ self.futures ];
+
+    meta = {
+      description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
+      homepage = "https://bitbucket.org/enovance/trollius";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  neovim = buildPythonPackage rec {
+    version = "0.0.36";
+    name = "neovim-${version}";
+    disabled = ! isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/neovim/${name}.tar.gz";
+      md5 = "8cdad23402e29c7c5a1e85770e976edf";
+    };
+
+    propagatedBuildInputs = with self; [
+      msgpack
+      trollius
+      greenlet
+    ];
+
+    meta = {
+      description = "Python client for Neovim";
+      homepage = "https://github.com/neovim/python-client";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
