@@ -4258,6 +4258,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    faillib = callPackage ../development/ocaml-modules/faillib { };
+
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
