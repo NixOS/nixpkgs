@@ -29,7 +29,8 @@ let
 
     buildInputs = [ libtool perl ];
 
-    makeFlags = "PREFIX=$(out)";
+    makeFlags = [ "PREFIX=$(out)" ]
+      ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
     enableParallelBuilding = true;
 
@@ -89,7 +90,16 @@ let
     LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
     LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
 
-    postInstall = optionalString withPython ''
+    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=${jemalloc}/lib
+    '';
+
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      echo patching $out/bin/nvim
+      install_name_tool -change libjemalloc.1.dylib \
+                ${jemalloc}/lib/libjemalloc.1.dylib \
+                $out/bin/nvim
+    '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python $out/bin/nvim-python3
