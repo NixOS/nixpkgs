@@ -4157,6 +4157,8 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bitstring = callPackage ../development/ocaml-modules/bitstring { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
