@@ -8,7 +8,7 @@ let
 
   # The configuration to install.
   makeConfig = { grubVersion, grubDevice, grubIdentifier
-               , extraConfig, readOnly ? true, forceGrubReinstallCount ? 0
+               , extraConfig, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
@@ -27,8 +27,6 @@ let
         boot.loader.grub.fsIdentifier = "${grubIdentifier}";
 
         boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
-
-        ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
 
         hardware.enableAllFirmware = lib.mkForce false;
 
@@ -116,7 +114,7 @@ let
 
       # We need to a writable nix-store on next boot.
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -134,7 +132,7 @@ let
       ${preBootCommands}
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
