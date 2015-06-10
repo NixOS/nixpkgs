@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "The ocaml-bitstring project adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml.";
     homepage = http://code.google.com/p/bitstring/;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Plus;
     platforms = ocaml.meta.platforms;
   };
 }
