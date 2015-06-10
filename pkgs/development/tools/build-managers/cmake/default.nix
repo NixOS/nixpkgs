@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    }) ++ stdenv.lib.optional stdenv.isCygwin ./2.8.11-cygwin.patch;
+    }) ++ stdenv.lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   buildInputs =
     [ bzip2 curl expat libarchive xz zlib ]
-    ++ optional (jsoncpp != null) jsoncpp
+    ++ optional (jsoncpp != null && !stdenv.isCygwin) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -53,8 +53,7 @@ stdenv.mkDerivation rec {
       "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
     ]
-    ++ optional (!stdenv.isCygwin) "--system-libs"
-    ++ optional (jsoncpp == null) "--no-system-jsoncpp"
+    ++ optional (jsoncpp == null || stdenv.isCygwin) "--no-system-jsoncpp"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]
     ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
