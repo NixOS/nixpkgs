@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
   doCheck = true;
 
   unpackPhase = ''
