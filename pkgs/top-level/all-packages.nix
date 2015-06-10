@@ -7526,7 +7526,9 @@ let
 
   openbr = callPackage ../development/libraries/openbr { };
 
-  opencascade = callPackage ../development/libraries/opencascade { };
+  opencascade = callPackage ../development/libraries/opencascade {
+    tcl = tcl-8_5;
+  };
 
   opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
     automake = automake111x;
