@@ -4556,6 +4556,8 @@ let
 
     utop = callPackage ../development/tools/ocaml/utop { };
 
+    uuidm = callPackage ../development/ocaml-modules/uuidm { };
+
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
     uucd = callPackage ../development/ocaml-modules/uucd { };
