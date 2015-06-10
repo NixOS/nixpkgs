@@ -11,6 +11,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml findlib camlp4];
 
+  patches = [ ./camlp4.patch ];
 
   meta =  {
     homepage = https://github.com/diml/optcomp;
