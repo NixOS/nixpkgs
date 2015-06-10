@@ -339,7 +339,6 @@ rec {
     http://cran.hafro.is/
     http://ftp.iitm.ac.in/cran/
     http://cran.repo.bppt.go.id/
-    http://cran.unej.ac.id/
     http://cran.um.ac.ir/
     http://ftp.heanet.ie/mirrors/cran.r-project.org/
     http://cran.mirror.garr.it/mirrors/CRAN/
