@@ -35,10 +35,6 @@ let
 
     buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
 
-    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-      sed -e "s,MACOSX_DEPLOYMENT_TARGET=10.4,MACOSX_DEPLOYMENT_TARGET=10.10," -i Makefile
-    '';
-
     preBuild = ''
       makeFlagsArray=(
         ${stdenv.lib.optionalString stdenv.cc.isClang "CC=clang"}
