@@ -3946,27 +3946,27 @@ let
     bootjdk = openjdk7-bootstrap;
   };
   openjdk7_jdk = openjdk7 // { outputs = [ "out" ]; };
-  openjdk7_jre = openjdk7 // { outputs = [ "jre" ]; };
+  openjdk7_jre = openjdk7.jre // { outputs = [ "jre" ]; };
 
   openjdk8 = callPackage ../development/compilers/openjdk/openjdk8.nix {
     bootjdk = openjdk8-bootstrap;
   };
   openjdk8_jdk = openjdk8 // { outputs = [ "out" ]; };
-  openjdk8_jre = openjdk8 // { outputs = [ "jre" ]; };
+  openjdk8_jre = openjdk8.jre // { outputs = [ "jre" ]; };
 
   openjdk = if stdenv.isDarwin then openjdk-darwin else openjdk8;
 
   java7 = openjdk7;
   jdk7 = java7 // { outputs = [ "out" ]; };
-  jre7 = java7 // { outputs = [ "jre" ]; };
+  jre7 = java7.jre // { outputs = [ "jre" ]; };
 
   java8 = openjdk8;
   jdk8 = java8 // { outputs = [ "out" ]; };
-  jre8 = java8 // { outputs = [ "jre" ]; };
+  jre8 = java8.jre // { outputs = [ "jre" ]; };
 
   java = if stdenv.isDarwin then openjdk-darwin else jdk8;
   jdk = java // { outputs = [ "out" ]; };
-  jre = java // { outputs = [ "jre" ]; };
+  jre = java.jre // { outputs = [ "jre" ]; };
 
   oraclejdk = pkgs.jdkdistro true false;
 
