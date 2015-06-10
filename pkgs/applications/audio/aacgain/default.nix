@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, unzip, m4, libtool, automake, autoconf, mp3gain, mp4v2, faad2 }:
+{ stdenv, fetchFromGitHub, unzip, m4, libtool, automake, autoconf, mp3gain, mp4v2, faad2 }:
 
 stdenv.mkDerivation {
   name = "aacgain-1.9";
   srcs = [
-    (fetchgit {
-      url = "https://github.com/mecke/aacgain.git";
+    (fetchFromGitHub {
+      owner = "mecke";
+      repo = "aacgain";
       rev = "4a7d59d78eadbbd5413e905af8f91fe9184ce7a8";
       sha256 = "0y25avgmm1xpbggvkhby1a7v9wmhsp3wmp74q06sf8ph8xsfajw4";
     })
