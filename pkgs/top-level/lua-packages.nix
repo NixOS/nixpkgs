@@ -33,8 +33,15 @@ let
       sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
     };
 
+    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
+
+    patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+      sed -e "s,MACOSX_DEPLOYMENT_TARGET=10.4,MACOSX_DEPLOYMENT_TARGET=10.10," -i Makefile
+    '';
+
     preBuild = ''
       makeFlagsArray=(
+        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=clang"}
         INCLUDES="-I${lua}/include"
         LUA="${lua}/bin/lua");
     '';
