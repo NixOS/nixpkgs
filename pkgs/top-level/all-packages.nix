@@ -4213,6 +4213,14 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
+    bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
+    
+    bitstring =
+      if lib.versionOlder "4.02" ocaml_version
+      then bitstring_git
+      else bitstring_2_0_4;
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
