@@ -4481,6 +4481,7 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     piqi = callPackage ../development/ocaml-modules/piqi { };
+    piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
 
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
