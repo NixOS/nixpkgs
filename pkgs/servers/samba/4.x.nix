@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
+{ lib, stdenv, fetchurl, pythonPackages, pkgconfig, perl, libxslt, docbook_xsl
 , docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc, ntdb, tdb, tevent
 , ldb, popt, iniparser, libbsd, libarchive, libiconv, gettext
 , kerberos, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, libgcrypt, libgpgerror
+, gnutls, libgcrypt, libgpgerror, nss_wrapper, socket_wrapper, uid_wrapper, subunit
 , ncurses, libunwind, libibverbs, librdmacm, systemd
 
 , enableKerberos ? false
@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional enableKerberos ./4.x-heimdal-compat.patch;
 
   buildInputs =
-    [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
+    [ pythonPackages.python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
       docbook_xml_dtd_45 */ readline talloc ntdb tdb tevent ldb popt iniparser
       libbsd libarchive zlib acl fam libiconv gettext libunwind
+      pythonPackages.wrapPython
     ]
     ++ optionals stdenv.isLinux [ libaio pam systemd ]
-    ++ optional enableKerberos kerberos
+    ++ optionals enableKerberos [ kerberos nss_wrapper socket_wrapper uid_wrapper subunit ]
     ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
@@ -46,6 +47,10 @@ stdenv.mkDerivation rec {
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optional (enableGlusterFS && stdenv.isLinux) glusterfs;
+
+  pythonPath =
+    [ talloc ldb tdb ntdb
+    ];
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -72,6 +77,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   stripAllList = [ "bin" "sbin" ];
+
+  postInstall = "wrapPythonPrograms";
 
   postFixup = ''
     export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
