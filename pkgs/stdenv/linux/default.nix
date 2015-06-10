@@ -287,6 +287,7 @@ rec {
       [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
         glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
         paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
+        stage3.pkgs.isl_0_11 stage3.pkgs.cloog_0_18_0
       ];
 
     overrides = pkgs: {

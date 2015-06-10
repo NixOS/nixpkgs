@@ -132,9 +132,6 @@ stdenv.mkDerivation {
       `#$out/lib/libXvMC*` \
       $out/lib/gbm $out/lib/libgbm* \
   '' + ''
-      $out/lib/gallium-pipe \
-      $out/lib/libdricore* \
-      $out/lib/libgallium* \
       $out/lib/vdpau \
       $out/lib/libxatracker*
 
@@ -149,18 +146,6 @@ stdenv.mkDerivation {
       $out/lib/pkgconfig/osmesa.pc
 
   '' + /* now fix references in .la files */ ''
-    sed "/^libdir=/s,$out,$drivers," -i \
-  '' + optionalString enableExtraFeatures ''
-      `#$drivers/lib/libXvMC*.la` \
-  '' + ''
-      $drivers/lib/gallium-pipe/*.la \
-      $drivers/lib/libgallium.la \
-      $drivers/lib/vdpau/*.la \
-      $drivers/lib/libdricore*.la
-
-    sed "s,$out\(/lib/\(libdricore[0-9\.]*\|libgallium\).la\),$drivers\1,g" \
-      -i $drivers/lib/*.la $drivers/lib/*/*.la
-
     sed "/^libdir=/s,$out,$osmesa," -i \
       $osmesa/lib/libOSMesa*.la
 

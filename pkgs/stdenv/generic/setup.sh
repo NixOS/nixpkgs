@@ -19,7 +19,7 @@ runHook() {
     if [[ "$hookName" =~ Hook$ ]]; then var+=s; else var+=Hooks; fi
     eval "local -a dummy=(\"\${$var[@]}\")"
     for hook in "_callImplicitHook 0 $hookName" "${dummy[@]}"; do
-        if ! _eval "$hook" "$@"; then return 1; fi
+        _eval "$hook" "$@"
     done
     return 0
 }

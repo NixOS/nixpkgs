@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "173w0pqzk2m7hjlg15bymrx7ynxgq1ciadg03hzybxwnvfi4gsmx";
   };
 
-  configureFlags = "--with-scanner";
+  configureFlags = "--with-scanner --disable-documentation";
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libffi docbook_xsl doxygen graphviz libxslt xmlto expat ];
+  buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat ];
 
   meta = {
     description = "Reference implementation of the wayland protocol";

@@ -1,12 +1,13 @@
-{ stdenv, fetchsvn, python, llvm, clang }:
+{ stdenv, fetchFromGitHub, python, llvm, clang }:
 
 stdenv.mkDerivation {
   name = "libclc-2015-03-27";
 
-  src = fetchsvn {
-    url = "http://llvm.org/svn/llvm-project/libclc/trunk";
-    rev = "233456";
-    sha256 = "0g56kgffc1qr9rzhcjr4w8kljcicg0q828s9b4bmfzjvywd7hhr0";
+  src = fetchFromGitHub {
+    owner = "llvm-mirror";
+    repo = "libclc";
+    rev = "0a2d1619921545b52303be5608b64dc46f381e97";
+    sha256 = "0hgm013c0vlfqfbbf4cdajl01hhk1mhsfk4h4bfza1san97l0vcc";
   };
 
   buildInputs = [ python llvm clang ];
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://libclc.llvm.org/;
-    description = "implementation of the library requirements of the OpenCL C programming language";
+    description = "Implementation of the library requirements of the OpenCL C programming language";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];
