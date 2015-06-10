@@ -49,10 +49,10 @@ let
     </server>
     <import hidden-files="no">
       <scripting script-charset="UTF-8">
-        <common-script>/nix/store/cngbzn39vidd6jm4wgzxfafqll74ybfa-mediatomb-0.12.1/share/mediatomb/js/common.js</common-script>
-        <playlist-script>/nix/store/cngbzn39vidd6jm4wgzxfafqll74ybfa-mediatomb-0.12.1/share/mediatomb/js/playlists.js</playlist-script>
+        <common-script>${pkgs.mediatomb}/share/mediatomb/js/common.js</common-script>
+        <playlist-script>${pkgs.mediatomb}/share/mediatomb/js/playlists.js</playlist-script>
         <virtual-layout type="builtin">
-          <import-script>/nix/store/cngbzn39vidd6jm4wgzxfafqll74ybfa-mediatomb-0.12.1/share/mediatomb/js/import.js</import-script>
+          <import-script>${pkgs.mediatomb}/share/mediatomb/js/import.js</import-script>
         </virtual-layout>
       </scripting>
       <mappings>

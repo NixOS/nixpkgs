@@ -40,9 +40,9 @@ stdenv.mkDerivation {
       --prefix PATH : ${ghostscript}/bin:${pngnq}/bin:${djvulibre}/bin:${unrar}/bin:${optipng}/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "PDF/DJVU to ebook format converter";
     homepage = http://www.mobileread.com/forums/showthread.php?t=21906;
-    license = "bsd";
+    license = licenses.mit;
   };
 }

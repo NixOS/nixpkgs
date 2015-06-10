@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost }:
+{ stdenv, fetchurl, cmake, boost, makePIC ? false }:
 
 stdenv.mkDerivation {
   name = "libyaml-cpp-0.5.1";
@@ -9,6 +9,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ cmake boost ];
+
+  cmakeFlags = stdenv.lib.optionals makePIC [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ];
 
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/yaml-cpp/;

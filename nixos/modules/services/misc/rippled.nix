@@ -27,7 +27,7 @@ let
     protocol=${concatStringsSep "," p.protocol}
     ${optionalString (p.user != "") "user=${p.user}"}
     ${optionalString (p.password != "") "user=${p.password}"}
-    admin=${if p.admin then "allow" else "no"}
+    admin=${concatStringsSep "," p.admin}
     ${optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
     ${optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
     ${optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
@@ -118,9 +118,9 @@ let
       };
 
       admin = mkOption {
-	description = "Controls whether or not administrative commands are allowed.";
-	type = types.bool;
-	default = false;
+	description = "A comma-separated list of admin IP addresses.";
+	type = types.listOf types.str;
+	default = ["127.0.0.1"];
       };
 
       ssl = {
@@ -156,7 +156,7 @@ let
   dbOptions = {
     type = mkOption {
       description = "Rippled database type.";
-      type = types.enum ["rocksdb" "nudb" "sqlite" "hyperleveldb"];
+      type = types.enum ["rocksdb" "nudb"];
       default = "rocksdb";
     };
 
@@ -217,7 +217,7 @@ in
 	default = {
 	  rpc = {
 	    port = 5005;
-	    admin = true;
+	    admin = ["127.0.0.1"];
 	    protocol = ["http"];
 	  };
 

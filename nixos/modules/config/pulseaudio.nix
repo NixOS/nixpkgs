@@ -12,7 +12,7 @@ let
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.libpulseaudio != null);
+  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.libpulseaudio != null);
 
   ids = config.ids;
 
@@ -76,6 +76,12 @@ in {
           server is launched on boot, running as the user "pulse".
           Please read the PulseAudio documentation for more details.
         '';
+      };
+
+      support32Bit = mkOption {
+        type = types.bool;
+        default = false;
+        description = "no";
       };
 
       configFile = mkOption {

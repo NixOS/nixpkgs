@@ -841,4 +841,10 @@ self: super: {
   # https://github.com/ekmett/semigroupoids/issues/35
   semigroupoids = disableCabalFlag super.semigroupoids "doctests";
 
+  # https://github.com/jaspervdj/websockets/issues/104
+  websockets = dontCheck super.websockets;
+
+  # Avoid spurious test suite failures.
+  fft = dontCheck super.fft;
+
 }

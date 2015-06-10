@@ -1,10 +1,12 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
   name = "wavegain-1.3.1";
-  src = fetchgit {
-    url = "https://github.com/MestreLion/wavegain.git";
-    sha256 = "1h886xijc9d7h4p6qx12c6kgwmp6s1bdycnyylkayfncczzlbi24";
+  src = fetchFromGitHub {
+    owner = "MestreLion";
+    repo = "wavegain";
+    rev = "c928eaf97aeec5732625491b64c882e08e314fee";
+    sha256 = "0wghqnsbypmr4xcrhb568bfjdnxzzp8qgnws3jslzmzf34dpk5ls";
   };
 
   installPhase = ''
@@ -17,6 +19,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/MestreLion/wavegain;
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    maintainers = [ stdenv.lib.maintainers.robbinch ];
   };
 }

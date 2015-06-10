@@ -7,100 +7,86 @@
 , extension ? (self: super: {})
 }:
 
+with stdenv.lib.strings;
+
 let
-  optionalString = stdenv.lib.optionalString;
-  filter = stdenv.lib.filter;
-  concatMapStringsSep = stdenv.lib.strings.concatMapStringsSep;
-  concatMapStrings = stdenv.lib.strings.concatMapStrings;
-  unwords = stdenv.lib.strings.concatStringsSep " ";
-  mapInside = xs: unwords (map (x: x + "/*") xs);
-in
-{ mkDerivation = args:
-    let
-      postprocess = x: x // {
-        sourceDirectories = filter (y: !(y == null)) x.sourceDirectories;
-        propagatedBuildInputs = filter (y : ! (y == null)) x.propagatedBuildInputs;
-        propagatedUserEnvPkgs = filter (y : ! (y == null)) x.propagatedUserEnvPkgs;
-        everythingFile = if x.everythingFile == "" then "Everything.agda" else x.everythingFile;
+  defaults = self : {
+    # There is no Hackage for Agda so we require src.
+    inherit (self) src name;
 
-        passthru = { inherit (x) extras; };
-        extras = null;
-      };
+    isAgdaPackage = true;
 
-      defaults = self : {
-        # There is no Hackage for Agda so we require src.
-        inherit (self) src name;
+    buildInputs = [ Agda ] ++ self.buildDepends;
+    buildDepends = [];
 
-        isAgdaPackage = true;
+    buildDependsAgda = stdenv.lib.filter
+      (dep: dep ? isAgdaPackage && dep.isAgdaPackage)
+      self.buildDepends;
+    buildDependsAgdaShareAgda = map (x: x + "/share/agda") self.buildDependsAgda;
 
-        buildInputs = [ Agda ] ++ self.buildDepends;
-        buildDepends = [];
+    # Not much choice here ;)
+    LANG = "en_US.UTF-8";
+    LOCALE_ARCHIVE = stdenv.lib.optionalString
+      stdenv.isLinux
+      "${glibcLocales}/lib/locale/locale-archive";
 
-        buildDependsAgda = filter
-          (dep: dep ? isAgdaPackage && dep.isAgdaPackage)
-          self.buildDepends;
-        buildDependsAgdaShareAgda = map (x: x + "/share/agda") self.buildDependsAgda;
+    everythingFile = "Everything.agda";
 
-        # Not much choice here ;)
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
+    propagatedBuildInputs = self.buildDependsAgda;
+    propagatedUserEnvPkgs = self.buildDependsAgda;
 
-        everythingFile = "Everything.agda";
+    # Immediate source directories under which modules can be found.
+    sourceDirectories = [ ];
 
-        propagatedBuildInputs = self.buildDependsAgda;
-        propagatedUserEnvPkgs = self.buildDependsAgda;
+    # This is used if we have a top-level element that only serves
+    # as the container for the source and we only care about its
+    # contents. The directories put here will have their
+    # *contents* copied over as opposed to sourceDirectories which
+    # would make a direct copy of the whole thing.
+    topSourceDirectories = [ "src" ];
 
-        # Immediate source directories under which modules can be found.
-        sourceDirectories = [ ];
+    # FIXME: `dirOf self.everythingFile` is what we really want, not hardcoded "./"
+    includeDirs = self.buildDependsAgdaShareAgda
+                  ++ self.sourceDirectories ++ self.topSourceDirectories
+                  ++ [ "." ];
+    buildFlags = concatStringsSep " " (map (x: "-i " + x) self.includeDirs);
 
-        # This is used if we have a top-level element that only serves
-        # as the container for the source and we only care about its
-        # contents. The directories put here will have their
-        # *contents* copied over as opposed to sourceDirectories which
-        # would make a direct copy of the whole thing.
-        topSourceDirectories = [ "src" ];
+    agdaWithArgs = "${Agda}/bin/agda ${self.buildFlags}";
 
-        # FIXME: `dirOf self.everythingFile` is what we really want, not hardcoded "./"
-        includeDirs = self.buildDependsAgdaShareAgda
-                      ++ self.sourceDirectories ++ self.topSourceDirectories
-                      ++ [ "." ];
-        buildFlags = unwords (map (x: "-i " + x) self.includeDirs);
+    buildPhase = ''
+      runHook preBuild
+      ${self.agdaWithArgs} ${self.everythingFile}
+      runHook postBuild
+    '';
 
-        agdaWithArgs = "${Agda}/bin/agda ${self.buildFlags}";
+    installPhase = let
+      srcFiles = self.sourceDirectories
+                 ++ map (x: x + "/*") self.topSourceDirectories;
+    in ''
+      runHook preInstall
+      mkdir -p $out/share/agda
+      cp -pR ${concatStringsSep " " srcFiles} $out/share/agda
+      runHook postInstall
+    '';
 
-        buildPhase = ''
-          runHook preBuild
-          ${self.agdaWithArgs} ${self.everythingFile}
-          runHook postBuild
-        '';
-
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out/share/agda
-          cp -pR ${unwords self.sourceDirectories} ${mapInside self.topSourceDirectories} $out/share/agda
-          runHook postInstall
-        '';
-
-        # Optionally-built conveniences
-        extras = {
+    passthru = {
+      env = stdenv.mkDerivation {
+        name = "interactive-${self.name}";
+        inherit (self) LANG LOCALE_ARCHIVE;
+        AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDependsAgdaShareAgda;
+        buildInputs = let
           # Makes a wrapper available to the user. Very useful in
           # nix-shell where all dependencies are -i'd.
           agdaWrapper = writeScriptBin "agda" ''
             ${self.agdaWithArgs} "$@"
           '';
-
-          # Use this to stick `agdaWrapper` at the front of the PATH:
-          #
-          # agda.mkDerivation (self: { PATH = self.extras.agdaWrapperPATH; })
-          #
-          # Not sure this is the best way to handle conflicts....
-          agdaWrapperPATH = "${self.extras.agdaWrapper}/bin:$PATH";
-
-          AGDA_PACKAGE_PATH = concatMapStrings (x: x + ":") self.buildDependsAgdaShareAgda;
-        };
+        in [agdaWrapper] ++ self.buildDepends;
       };
-    in stdenv.mkDerivation
-         (postprocess (let super = defaults self // args self;
-                           self  = super // extension self super;
-                       in self));
+    };
+  };
+in
+{ mkDerivation = args: let
+      super = defaults self // args self;
+      self  = super // extension self super;
+    in stdenv.mkDerivation self;
 }

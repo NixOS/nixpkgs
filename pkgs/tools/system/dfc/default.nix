@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, gettext}:
 
 stdenv.mkDerivation rec {
-  name = "dfc-3.0.4";
+  name = "dfc-3.0.5";
 
   src = fetchurl {
-    url = "http://projects.gw-computing.net/attachments/download/79/dfc-3.0.4.tar.gz";
-    sha256 = "0bdc2edb92c7f740a0b7d3fa75eb134adf197ba711bfa589ab51c691fabd617e";
+    url = "http://projects.gw-computing.net/attachments/download/467/${name}.tar.gz";
+    sha256 = "0yl5dl1nydinji71zz37c7myg3vg9jzxq89rcjqlfcy5dcfpm51w";
   };
 
   buildInputs = [ cmake gettext ];

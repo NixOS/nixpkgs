@@ -3,18 +3,18 @@
 , luabitop, ncurses, perl, pkgconfig, unibilium
 , withJemalloc ? true, jemalloc }:
 
-let version = "2015-05-26"; in
+let version = "2015-06-09"; in
 stdenv.mkDerivation rec {
   name = "neovim-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0sszpqlq0yp6r62zgcjcmnllc058wzzh9ccvgb2jh9k19ksszyhc";
-    rev = "5a9ad68b258f33ebd7fa0a5da47b308f50f1e5e7";
+    sha256 = "1lycql0lwi7ynrsaln4kxybwvxb9fvganiq3ba4pnpcfgl155k1j";
+    rev = "6270d431aaeed71e7a8782411f36409ab8e0ee35";
     repo = "neovim";
     owner = "neovim";
   };
 
-  # FIXME: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
+  # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
   neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation rec {
     name = "neovim-libvterm-${version}";
 

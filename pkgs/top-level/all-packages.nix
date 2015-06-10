@@ -285,6 +285,10 @@ let
     dotnetfx = dotnetfx40;
   };
 
+  dotnetbuildhelpers = import ../build-support/dotnetbuildhelpers {
+    inherit mono helperFunctions pkgconfig;
+  };
+
   scatterOutputHook = makeSetupHook {} ../build-support/setup-hooks/scatter_output.sh;
 
   vsenv = callPackage ../build-support/vsenv {
@@ -408,6 +412,9 @@ let
     url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
     meta.homepage = "http://repo.or.cz/${repo}.git/";
   };
+
+  fetchNuGet = import ../build-support/fetchnuget { inherit stdenv fetchurl buildDotnetPackage unzip; };
+  buildDotnetPackage = import ../build-support/build-dotnet-package { inherit stdenv lib makeWrapper mono pkgconfig dotnetbuildhelpers; };
 
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
@@ -1643,6 +1650,13 @@ let
 
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
+  };
+
+  calamares = callPackage ../tools/misc/calamares rec {
+    python = python3;
+    boost = callPackage ../development/libraries/boost/1.57.nix { python=python3; };
+    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+    inherit (kf5_stable) extra-cmake-modules kconfig ki18n kcoreaddons solid;
   };
 
   grub = callPackage_i686 ../tools/misc/grub {
@@ -3872,6 +3886,8 @@ let
 
   fsharp = callPackage ../development/compilers/fsharp {};
 
+  dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { inherit stdenv fetchNuGet; });
+
   go_1_0 = callPackage ../development/compilers/go { };
 
   go_1_1 =
@@ -3896,23 +3912,17 @@ let
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
-  icedtea7_jdk = callPackage ../development/compilers/icedtea rec {
-    jdk = openjdk;
-    giflib = giflib_5_0;
-  } // { outputs = [ "out" ]; };
-
-  icedtea7_jre = (lib.setName "icedtea7-${lib.getVersion pkgs.icedtea7_jdk.jre}" (lib.addMetaAttrs
-    { description = "Free Java runtime environment based on OpenJDK 7.0 and the IcedTea project"; }
-    pkgs.icedtea7_jdk.jre)) // { outputs = [ "jre" ]; };
-
   icedtea7_web = callPackage ../development/compilers/icedtea-web {
-    jdk = icedtea7_jdk;
+    jdk = jdk7;
     xulrunner = firefox;
   };
 
-  icedtea_jdk = icedtea7_jdk;
-  icedtea_jre = icedtea7_jre;
-  icedtea_web = icedtea7_web;
+  icedtea8_web = callPackage ../development/compilers/icedtea-web {
+    jdk = jdk8;
+    xulrunner = firefox;
+  };
+
+  icedtea_web = icedtea8_web;
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
@@ -3920,34 +3930,43 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
-  openjdk =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk-darwin { }
-    else
-      let
-        openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { };
-      in (callPackage ../development/compilers/openjdk {
-        jdk = openjdkBootstrap;
-      }) // { outputs = [ "out" ]; };
+  openjdk7-bootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "7"; };
+  openjdk8-bootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
 
-  openjdk8 = callPackage ../development/compilers/openjdk/openjdk8.nix { } // { outputs = [ "out" ]; };
+  openjdk7-make-bootstrap = callPackage ../development/compilers/openjdk/make-bootstrap.nix {
+    openjdk = openjdk7.override { minimal = true; };
+  };
+  openjdk8-make-bootstrap = callPackage ../development/compilers/openjdk/make-bootstrap.nix {
+    openjdk = openjdk8.override { minimal = true; };
+  };
 
-  # FIXME: Need a way to set per-output meta attributes.
-  openjre = (lib.setName "openjre-${lib.getVersion pkgs.openjdk.jre}" (lib.addMetaAttrs
-    { description = "The open-source Java Runtime Environment"; }
-    pkgs.openjdk.jre)) // { outputs = [ "jre" ]; };
+  openjdk-darwin = callPackage ../development/compilers/openjdk-darwin { };
 
-  jdk = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.icedtea_jdk
-    else if stdenv.isDarwin
-      then pkgs.openjdk # TODO: Use icedtea for darwin
-      else pkgs.oraclejdk;
+  openjdk7 = callPackage ../development/compilers/openjdk {
+    bootjdk = openjdk7-bootstrap;
+  };
+  openjdk7_jdk = openjdk7 // { outputs = [ "out" ]; };
+  openjdk7_jre = openjdk7 // { outputs = [ "jre" ]; };
 
-  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-    then pkgs.icedtea_jre
-    else if stdenv.isDarwin
-      then pkgs.openjre # TODO: Use icedtea for darwin
-      else pkgs.oraclejre;
+  openjdk8 = callPackage ../development/compilers/openjdk/openjdk8.nix {
+    bootjdk = openjdk8-bootstrap;
+  };
+  openjdk8_jdk = openjdk8 // { outputs = [ "out" ]; };
+  openjdk8_jre = openjdk8 // { outputs = [ "jre" ]; };
+
+  openjdk = if stdenv.isDarwin then openjdk-darwin else openjdk8;
+
+  java7 = openjdk7;
+  jdk7 = java7 // { outputs = [ "out" ]; };
+  jre7 = java7 // { outputs = [ "jre" ]; };
+
+  java8 = openjdk8;
+  jdk8 = java8 // { outputs = [ "out" ]; };
+  jre8 = java8 // { outputs = [ "jre" ]; };
+
+  java = if stdenv.isDarwin then openjdk-darwin else jdk8;
+  jdk = java // { outputs = [ "out" ]; };
+  jre = java // { outputs = [ "jre" ]; };
 
   oraclejdk = pkgs.jdkdistro true false;
 
@@ -7512,7 +7531,9 @@ let
 
   openbr = callPackage ../development/libraries/openbr { };
 
-  opencascade = callPackage ../development/libraries/opencascade { };
+  opencascade = callPackage ../development/libraries/opencascade {
+    tcl = tcl-8_5;
+  };
 
   opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
     automake = automake111x;
@@ -8974,10 +8995,10 @@ let
   };
 
   rippled = callPackage ../servers/rippled {
-    boost = boost155;
+    boost = boost157;
   };
 
-  ripple-data-api = callPackage ../servers/rippled/data-api.nix { };
+  ripple-rest = callPackage ../servers/rippled/ripple-rest.nix { };
 
   s6 = callPackage ../servers/s6 { };
 
@@ -10423,9 +10444,13 @@ let
     tcl = tcl-8_5;
   };
 
+  AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
+
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
+
+  antimony = callPackage ../applications/graphics/antimony {};
 
   antiword = callPackage ../applications/office/antiword {};
 
@@ -10561,6 +10586,8 @@ let
 
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
+  carddav-util = callPackage ../tools/networking/carddav-util { };
+
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
@@ -10590,6 +10617,8 @@ let
   cgminer = callPackage ../applications/misc/cgminer {
     amdappsdk = amdappsdk28;
   };
+
+  CharacterCompressor = callPackage ../applications/audio/CharacterCompressor { };
 
   chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
@@ -10626,9 +10655,13 @@ let
 
   cmus = callPackage ../applications/audio/cmus { };
 
+  CompBus = callPackage ../applications/audio/CompBus { };
+
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome) GConf ORBit2 metacity;
   };
+
+  constant-detune-chorus = callPackage ../applications/audio/constant-detune-chorus { };
 
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
@@ -10783,6 +10816,8 @@ let
     gconf = null;
     alsaLib = null;
     imagemagick = null;
+    acl = null;
+    gpm = null;
   };
 
   emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
@@ -12204,6 +12239,8 @@ let
     qt = qt4;
   });
 
+  RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
+
   rofi = callPackage ../applications/misc/rofi {
     automake = automake114x;
   };
@@ -12377,7 +12414,6 @@ let
   sonic-visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
     inherit (pkgs.xlibs) libX11;
-    fftw = pkgs.fftwSinglePrec;
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
@@ -12995,6 +13031,8 @@ let
   xournal = callPackage ../applications/graphics/xournal {
     inherit (gnome) libgnomeprint libgnomeprintui libgnomecanvas;
   };
+
+  apvlv = callPackage ../applications/misc/apvlv { };
 
   xpdf = callPackage ../applications/misc/xpdf {
     motif = lesstif;
@@ -14394,12 +14432,7 @@ let
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
-  # Remember to check the default lightdm wallpaper
-  nixos-artwork = fetchgit {
-    url = "git://github.com/NixOS/nixos-artwork";
-    rev = "e71b6846023919136795ede22b16d73b2cf1693d";
-    sha256 = "167yvhm2qy7qgyrqqs4hv98mmlarhgxpcsyv0r8a9g3vkblfdczb";
-  };
+  nixos-artwork = callPackage ../data/misc/nixos-artwork { };
 
   nut = callPackage ../applications/misc/nut { };
 
@@ -14534,6 +14567,8 @@ let
   sqsh = callPackage ../development/tools/sqsh { };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
+
+  tewi-font = callPackage ../data/fonts/tewi  {};
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
 
@@ -14697,6 +14732,8 @@ let
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   zdfmediathk = callPackage ../applications/video/zdfmediathk { };
+
+  zopfli = callPackage ../tools/compression/zopfli { };
 
   myEnvFun = import ../misc/my-env {
     inherit substituteAll pkgs;

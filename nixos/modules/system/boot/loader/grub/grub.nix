@@ -28,7 +28,7 @@ let
   f = x: if x == null then "" else "" + x;
 
   grubConfig = args: pkgs.writeText "grub-config.xml" (builtins.toXML
-    { splashImage = f config.boot.loader.grub.splashImage;
+    { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.stdenv.shell}";
@@ -42,7 +42,7 @@ let
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default fsIdentifier efiSupport;
+        default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
       path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
@@ -242,6 +242,24 @@ in
         '';
       };
 
+      gfxmodeEfi = mkOption {
+        default = "auto";
+        example = "1024x768";
+        type = types.str;
+        description = ''
+          The gfxmode to pass to grub when loading a graphical boot interface under efi.
+        '';
+      };
+
+      gfxmodeBios = mkOption {
+        default = "1024x768";
+        example = "auto";
+        type = types.str;
+        description = ''
+          The gfxmode to pass to grub when loading a graphical boot interface under bios.
+        '';
+      };
+
       configurationLimit = mkOption {
         default = 100;
         example = 120;
@@ -337,7 +355,7 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png");
+        else "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png");
     }
 
     (mkIf cfg.enable {
