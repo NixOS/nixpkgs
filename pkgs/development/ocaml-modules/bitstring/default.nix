@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     sha256 = "0mapzn2ls5qcrzjm1az50lqjj76ldkmz4fbv2phc9w6smab50qy5";
   };
 
+  patches = [ ./camlp4.patch ];
+
   buildInputs = [ocaml findlib camlp4 time];
 
   createFindlibDestdir = true;
