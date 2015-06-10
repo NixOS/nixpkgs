@@ -1,61 +1,34 @@
-{ stdenv, fetchFromGitHub, unzip, m4, libtool, automake, autoconf, mp3gain, mp4v2, faad2 }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "aacgain-1.9";
-  srcs = [
-    (fetchFromGitHub {
-      owner = "mecke";
-      repo = "aacgain";
-      rev = "4a7d59d78eadbbd5413e905af8f91fe9184ce7a8";
-      sha256 = "0y25avgmm1xpbggvkhby1a7v9wmhsp3wmp74q06sf8ph8xsfajw4";
-    })
-    mp3gain.src
-    mp4v2.src
-    faad2.src
-  ];
-
-  buildInputs = [ unzip m4 libtool automake autoconf ];
-
-  setSourceRoot = "sourceRoot=`pwd`";
-
-  postUnpack = ''
-    cd $sourceRoot
-    # mp3gain does not unzip to its own directory, so move files accordingly.
-    mkdir mp3gain
-    find . -type f -maxdepth 1 -exec mv {} mp3gain/ \;
-    mv mpglibDBL mp3gain/
-
-    mv aacgain-* aacgain
-    mv faad2-* faad2
-    mv mp4v2-* mp4v2
-  '';
-
-  patchPhase = ''
-    cd $sourceRoot
-    patch -p2 -N < aacgain/linux/mp3gain.patch
-  '';
+  name = "aacgain-1.9.0";
+  src = fetchFromGitHub {
+    owner = "mulx";
+    repo = "aacgain";
+    rev = "7c29dccd878ade1301710959aeebe87a8f0828f5";
+    sha256 = "07hl432vsscqg01b6wr99qmsj4gbx0i02x4k565432y6zpfmaxm0";
+  };
 
   configurePhase = ''
-    cd $sourceRoot/mp4v2
+    cd mp4v2
     ./configure
 
-    cd $sourceRoot/faad2
+    cd ../faad2
+    ./configure
+
+    cd ..
     ./configure
   '';
 
   buildPhase = ''
-    cd $sourceRoot/mp4v2
+    cd mp4v2
     make libmp4v2.la
 
-    cd $sourceRoot/faad2/libfaad
-    make
+    cd ../faad2
+    make LDFLAGS=-static
 
-    cd $sourceRoot/aacgain/linux
-    sh prepare.sh
-    mkdir build
-    cd build
-    ../../../configure
-    make
+    cd ..
+    make   
   '';
 
   installPhase = ''
@@ -65,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "ReplayGain for AAC files";
-    homepage = https://github.com/mecke/aacgain.git;
+    homepage = https://github.com/mulx/aacgain;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.robbinch ];
