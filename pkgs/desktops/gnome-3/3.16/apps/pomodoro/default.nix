@@ -38,9 +38,11 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/codito/gnome-shell-pomodoro;
-    description =
-      "Personal information management application that provides integrated " + 
-      "mail, calendaring and address book functionality";
+    description = "A time management utility for GNOME based on the pomodoro technique";
+    longDescription = ''
+      This GNOME utility helps to manage time according to Pomodoro Technique.
+      It intends to improve productivity and focus by taking short breaks.
+    '';
     maintainers = with maintainers; [ DamienCassou jgeerds ];
     license = licenses.gpl3;
     platforms = platforms.linux;
