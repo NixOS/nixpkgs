@@ -522,16 +522,53 @@ let
     };
   };
 
+  funcsigs = buildPythonPackage rec {
+    name = "funcsigs-0.4";
+    disabled = ! (isPy26 || isPy27 || isPy33 || isPyPy);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/funcsigs/${name}.tar.gz";
+      md5 = "fb1d031f284233e09701f6db1281c2a5";
+    };
+
+    buildInputs = with self; [
+      unittest2
+    ];
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
+      homepage = "https://github.com/aliles/funcsigs";
+      maintainers = with maintainers; [ garbas ];
+      license = licenses.asl20;
+    };
+  };
 
   apscheduler = buildPythonPackage rec {
     name = "APScheduler-3.0.1";
-
-    propagatedBuildInputs = with self; [ futures tzlocal six pytest mock sqlalchemy9 ];
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/A/APScheduler/${name}.tar.gz";
-      sha256 = "1dcyk58svhhd7flpq0fbyzcp0z3a1as4ddmdv1rxqvqng0sxhwaf";
+      md5 = "7c3687b3dcd645fe9df48e34eb7a7592";
     };
+
+    buildInputs = with self; [
+      pytest
+      sqlalchemy9
+      tornado
+      twisted
+      mock
+      trollius
+      funcsigs
+      gevent
+    ];
+
+    propagatedBuildInputs = with self; [
+      six
+      pytz
+      tzlocal
+      futures
+    ];
 
     meta = with pkgs.stdenv.lib; {
       description = "A Python library that lets you schedule your Python code to be executed";
@@ -539,7 +576,6 @@ let
       license = licenses.mit;
     };
   };
-
 
   area53 = buildPythonPackage (rec {
     name = "Area53-0.94";
