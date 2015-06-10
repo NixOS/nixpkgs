@@ -12405,7 +12405,6 @@ let
   sonic-visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
     inherit (pkgs.xlibs) libX11;
-    fftw = pkgs.fftwSinglePrec;
   };
 
   sox = callPackage ../applications/misc/audio/sox { };
