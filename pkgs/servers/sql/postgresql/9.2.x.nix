@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "world" ];
 
-  configureFlags = [ "--with-openssl" ];
+  configureFlags = stdenv.lib.optionals (!stdenv.isCygwin) [ "--with-openssl" ];
 
   patches = [ ./disable-resolve_symlinks.patch ./less-is-more.patch ];
 
