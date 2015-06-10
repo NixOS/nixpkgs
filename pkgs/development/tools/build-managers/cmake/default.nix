@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
       "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
     ]
+    ++ optional (!stdenv.isCygwin) "--system-libs"
     ++ optional (jsoncpp == null || stdenv.isCygwin) "--no-system-jsoncpp"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]
