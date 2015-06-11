@@ -5941,28 +5941,6 @@ let
     };
   };
 
-  # Needed to build Chromium until #7402 is fixed.
-  gyp_svn1977 = pkgs.lowPrio (buildPythonPackage rec {
-    rev = "1977";
-    name = "gyp-r${rev}";
-
-    src = pkgs.fetchsvn {
-      url = "http://gyp.googlecode.com/svn/trunk";
-      inherit rev;
-      sha256 = "0vnr75yd3bidysiwl9lljvf1dv6v9m9xqdnx0hdgyl92w689n9j8";
-    };
-
-    patches = optionals pkgs.stdenv.isDarwin [
-      ../development/python-modules/gyp/no-darwin-cflags.patch
-    ];
-
-    meta = {
-      homepage = http://code.google.com/p/gyp;
-      license = licenses.bsd3;
-      description = "Generate Your Projects";
-    };
-  });
-
   guessit = buildPythonPackage rec {
     version = "0.9.4";
     name = "guessit-${version}";
