@@ -33,11 +33,18 @@ let
       sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
     };
 
+    patchPhase = ''
+      sed -e "s,MACOSX_DEPLOYMENT_TARGET=10.4,MACOSX_DEPLOYMENT_TARGET=10.10," -i Makefile
+    '';
+
     preBuild = ''
       makeFlagsArray=(
+        CC=$CC
         INCLUDES="-I${lua}/include"
         LUA="${lua}/bin/lua");
     '';
+
+    buildFlags = if stdenv.isDarwin then "macosx" else "";
 
     installPhase = ''
       mkdir -p $out/lib/lua/${lua.luaversion}
