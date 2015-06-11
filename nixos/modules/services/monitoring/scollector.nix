@@ -73,7 +73,7 @@ in {
       };
 
       collectors = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf (listOf path);
         default = {};
         example = literalExample "{ 0 = [ \"\${postgresStats}/bin/collect-stats\" ]; }";
         description = ''
