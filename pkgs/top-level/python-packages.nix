@@ -32,12 +32,7 @@ let
     crypt = null;
   };
 
-  pythonPackages = modules // import ./python-packages-generated.nix {
-    inherit pkgs python;
-    inherit (pkgs) stdenv fetchurl;
-    self = pythonPackages;
-  }
-// {
+  pythonPackages = modules // {
 
   inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName buildPythonPackage;
 
