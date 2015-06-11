@@ -1609,7 +1609,8 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs = callPackage ../development/web/nodejs { };
+  #nodejs = callPackage ../development/web/nodejs { };
+
   nodejs-unstable = callPackage ../development/web/nodejs { unstableVersion = true; };
 
   nodePackages = callPackage ./node-packages.nix {
@@ -13011,7 +13012,6 @@ let
 
 
   ### Custom packages.
-
-  nodejs12 = callPackage ../ai2/nodejs {};
+  nodejs = callPackage ../ai2/nodejs {};
 
 }; in self; in pkgs
