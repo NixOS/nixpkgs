@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, intltool, flex, bison, autoreconfHook, substituteAll
 , python, libxml2Python, file, expat, makedepend, pythonPackages
 , libdrm, xorg, wayland, udev, llvmPackages, libffi, libomxil-bellagio
-, libvdpau, libelf, libva, libclc
+, libvdpau, libelf, libva
 , grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
 , enableExtraFeatures ? false # not maintained
@@ -26,7 +26,6 @@ let
   version = "10.5.6";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
-  clang = if llvmPackages ? clang-unwrapped then llvmPackages.clang-unwrapped else llvmPackages.clang;
 in
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
@@ -63,7 +62,6 @@ stdenv.mkDerivation {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-clang-libdir=${clang}/lib"
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${driverLink}/lib/dri"
 
@@ -81,13 +79,11 @@ stdenv.mkDerivation {
     ++ [
     "--enable-xvmc"
     "--enable-vdpau"
-    "--enable-omx"
-    "--enable-va"
+    #"--enable-omx"
+    #"--enable-va"
 
     # TODO: Figure out how to enable opencl without having a runtime dependency on clang
     "--disable-opencl"
-    #"--enable-opencl"
-    #"--enable-opencl-icd"
 
     "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
     "--enable-shared-glapi"
@@ -111,8 +107,7 @@ stdenv.mkDerivation {
     autoreconfHook intltool expat libxml2Python llvmPackages.llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
-    libffi wayland libvdpau libelf libXvMC libomxil-bellagio libva
-    libclc clang
+    libffi wayland libvdpau libelf libXvMC /* libomxil-bellagio libva */
   ] ++ optional stdenv.isLinux udev;
 
   enableParallelBuilding = true;
