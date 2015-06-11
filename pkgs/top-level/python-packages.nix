@@ -15791,6 +15791,8 @@ let
       ++ optional isPy26 ordereddict
       ++ optional (isPy26 || isPy27 || isPyPy) futures;
 
+    # Some of the tests fail on darwin with `error: AF_UNIX path too long'
+    # because of the *long* pathnames in the /nix/store
     patchPhase = optionalString stdenv.isDarwin ''
       sed -i -e "s|test_create_ssl_unix_connection|skip_test_create_ssl_unix_connection|" tests/test_events.py
       sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
