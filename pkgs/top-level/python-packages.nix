@@ -15791,11 +15791,37 @@ let
       ++ optional isPy26 ordereddict
       ++ optional (isPy26 || isPy27 || isPyPy) futures;
 
-    patchPhase = optionalString isPy26 ''
+    # Some of the tests fail on darwin with `error: AF_UNIX path too long'
+    # because of the *long* path names for sockets
+    patchPhase = optionalString stdenv.isDarwin ''
+      sed -i -e "s|test_create_ssl_unix_connection|skip_test_create_ssl_unix_connection|" tests/test_events.py
+      sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
+      sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
+      sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_existing_path_nonsock|skip_test_create_unix_server_existing_path_nonsock|" tests/test_unix_events.py
+      sed -i -e "s|test_create_unix_server_existing_path_sock|skip_test_create_unix_server_existing_path_sock|" tests/test_unix_events.py
+      sed -i -e "s|test_create_unix_server_ssl_verified|skip_test_create_unix_server_ssl_verified|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl_verified|skip_test_create_unix_server_ssl_verified|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl_verified|skip_test_create_unix_server_ssl_verified|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl_verify_failed|skip_test_create_unix_server_ssl_verify_failed|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl_verify_failed|skip_test_create_unix_server_ssl_verify_failed|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl_verify_failed|skip_test_create_unix_server_ssl_verify_failed|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl|skip_test_create_unix_server_ssl|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl|skip_test_create_unix_server_ssl|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server_ssl|skip_test_create_unix_server_ssl|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server|skip_test_create_unix_server|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server|skip_test_create_unix_server|" tests/test_events.py
+      sed -i -e "s|test_create_unix_server|skip_test_create_unix_server|" tests/test_events.py
+      sed -i -e "s|test_open_unix_connection_error|skip_test_open_unix_connection_error|" tests/test_streams.py
+      sed -i -e "s|test_open_unix_connection_no_loop_ssl|skip_test_open_unix_connection_no_loop_ssl|" tests/test_streams.py
+      sed -i -e "s|test_open_unix_connection|skip_test_open_unix_connection|" tests/test_streams.py
+      sed -i -e "s|test_start_unix_server|skip_test_start_unix_server|" tests/test_streams.py
+      sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
+      sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
+      sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
+    '' + optionalString isPy26 ''
       sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
     '';
-
-    doCheck = !stdenv.isDarwin;
 
     meta = {
       description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
