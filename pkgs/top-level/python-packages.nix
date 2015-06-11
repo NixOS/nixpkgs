@@ -8100,14 +8100,21 @@ let
   #   };
   # });
 
-  ordereddict = if isPy26 then (buildPythonPackage {
+  ordereddict = buildPythonPackage rec {
     name = "ordereddict-1.1";
+    disabled = !isPy26;
+
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/o/ordereddict/ordereddict-1.1.tar.gz";
+      url = "http://pypi.python.org/packages/source/o/ordereddict/${name}.tar.gz";
       md5 = "a0ed854ee442051b249bfad0f638bbec";
     };
-    doCheck = false;
-  }) else null;
+
+    meta = {
+      description = "A drop-in substitute for Py2.7's new collections.OrderedDict that works in Python 2.4-2.6.";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
 
   ply = buildPythonPackage (rec {
     name = "ply-3.4";
@@ -15775,16 +15782,23 @@ let
   trollius = buildPythonPackage rec {
     version = "1.0.4";
     name = "trollius-${version}";
-    disabled = ! isPy27;
+    disabled = isPy34;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/trollius/${name}.tar.gz";
       md5 = "3631a464d49d0cbfd30ab2918ef2b783";
     };
 
-    buildInputs = [ self.mock ];
+    buildInputs = with self; [ mock ]
+      ++ optional isPy26 unittest2;
 
-    propagatedBuildInputs = [ self.futures ];
+    propagatedBuildInputs = with self; []
+      ++ optional isPy26 ordereddict
+      ++ optional (isPy26 || isPy27 || isPyPy) futures;
+
+    patchPhase = optionalString isPy26 ''
+      sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
+    '';
 
     meta = {
       description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
@@ -15797,18 +15811,15 @@ let
   neovim = buildPythonPackage rec {
     version = "0.0.36";
     name = "neovim-${version}";
-    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/neovim/${name}.tar.gz";
       md5 = "8cdad23402e29c7c5a1e85770e976edf";
     };
 
-    propagatedBuildInputs = with self; [
-      msgpack
-      trollius
-      greenlet
-    ];
+    propagatedBuildInputs = with self; [ msgpack ]
+      ++ optional (!isPyPy) greenlet
+      ++ optional (!isPy34) trollius;
 
     meta = {
       description = "Python client for Neovim";
