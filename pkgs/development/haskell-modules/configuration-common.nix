@@ -849,4 +849,8 @@ self: super: {
   # Avoid spurious test suite failures.
   fft = dontCheck super.fft;
 
+  # This package can't be built on non-Windows systems.
+  Win32 = overrideCabal super.Win32 (drv: { broken = !pkgs.stdenv.isCygwin; });
+  inline-c-win32 = dontDistribute super.inline-c-win32;
+
 }
