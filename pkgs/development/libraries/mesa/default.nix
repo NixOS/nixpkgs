@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   name = "mesa-noglu-${version}";
 
   src =  fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
+    url = "ftp://ftp.freedesktop.org/pub/mesa/older-versions/10.x/${version}/MesaLib-${version}.tar.bz2";
     sha256 = "f6031f8b7113a92325b60635c504c510490eebb2e707119bbff7bd86aa34657d";
   };
 
