@@ -11260,7 +11260,13 @@ let
     goffice = goffice_0_8;
   };
 
-  goffice_0_8 = gnome3.goffice_0_8;
+  goffice = callPackage ../development/libraries/goffice { };
+
+  goffice_0_8 = callPackage ../development/libraries/goffice/0.8.nix {
+    inherit (pkgs.gnome2) libglade libgnomeui;
+    gconf = pkgs.gnome2.GConf;
+    libart = pkgs.gnome2.libart_lgpl;
+  };
 
   idea = recurseIntoAttrs (callPackage ../applications/editors/idea { androidsdk = androidsdk_4_4; });
 
