@@ -3144,7 +3144,16 @@ let
 
   vpnc = callPackage ../tools/networking/vpnc { };
 
-  openconnect = callPackage ../tools/networking/openconnect.nix { };
+  openconnect = openconnect_openssl;
+
+  openconnect_openssl = callPackage ../tools/networking/openconnect.nix {
+    gnutls = null;
+  };
+
+  openconnect_gnutls = lowPrio (openconnect.override {
+    openssl = null;
+    gnutls = gnutls;
+  });
 
   vtun = callPackage ../tools/networking/vtun { };
 
