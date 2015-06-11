@@ -10413,6 +10413,7 @@ let
 
   abiword = callPackage ../applications/office/abiword {
     inherit (gnome) libglade libgnomecanvas;
+    iconTheme = gnome3.defaultIconTheme;
   };
 
   abook = callPackage ../applications/misc/abook { };
