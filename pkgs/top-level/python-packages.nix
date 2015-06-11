@@ -5920,12 +5920,12 @@ let
 
   gyp = buildPythonPackage rec {
     name = "gyp-${version}";
-    version = "2015-05-15";
+    version = "2015-06-11";
 
     src = pkgs.fetchgit {
       url = "https://chromium.googlesource.com/external/gyp.git";
-      rev = "9f594095c5b14f8bc518081a660e77890c294861";
-      sha256 = "1xqi44alnw9c31jg2hz7flz5nabq003b4jyin12h3s9zl82y6vd5";
+      rev = "fdc7b812f99e48c00e9a487bd56751bbeae07043";
+      sha256 = "176sdxkva2irr1v645nn4q6rwc6grbb1wxj82n7x9hh09q4bxqcz";
     };
 
     patches = optionals pkgs.stdenv.isDarwin [
