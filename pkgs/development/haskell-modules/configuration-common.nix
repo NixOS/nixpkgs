@@ -853,4 +853,7 @@ self: super: {
   Win32 = overrideCabal super.Win32 (drv: { broken = !pkgs.stdenv.isCygwin; });
   inline-c-win32 = dontDistribute super.inline-c-win32;
 
+  # Doesn't work with recent versions of mtl.
+  cron-compat = markBroken super.cron-compat;
+
 }
