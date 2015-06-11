@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lsof-4.88";
 
   src = fetchurl {
-    url = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.88.tar.bz2;
+    url = "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/lsof_4.88.tar.bz2";
     sha256 = "16y9wm26rg81mihnzcbdg8h8vhxmq8kn62ssxb8cqydp4q79nvzy";
   };
 
