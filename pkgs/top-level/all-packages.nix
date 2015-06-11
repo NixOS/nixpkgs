@@ -2815,6 +2815,8 @@ let
 
   sdcv = callPackage ../applications/misc/sdcv { };
 
+  sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
+
   sec = callPackage ../tools/admin/sec { };
 
   seccure = callPackage ../tools/security/seccure { };
