@@ -800,6 +800,8 @@ let
 
   ddate = callPackage ../tools/misc/ddate { };
 
+  dfilemanager = callPackage ../applications/misc/dfilemanager { };
+
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellngPackages) ghcWithPackages diagrams-builder;
   };
