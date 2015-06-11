@@ -2333,6 +2333,9 @@ let
 
   netselect = callPackage ../tools/networking/netselect { };
 
+  # stripped down, needed by steam
+  networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8.nix { };
+
   networkmanager = callPackage ../tools/networking/network-manager { };
 
   networkmanager_openvpn = callPackage ../tools/networking/network-manager/openvpn.nix { };
