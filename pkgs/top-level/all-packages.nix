@@ -13418,7 +13418,7 @@ let
 
   stardust = callPackage ../games/stardust {};
 
-  steam-original = callPackage ../games/steam { };
+  steam-original = lowPrio (callPackage ../games/steam { });
 
   steam = callPackage ../games/steam/chrootenv.nix { };
 
