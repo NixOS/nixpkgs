@@ -14,6 +14,8 @@ stdenv.mkDerivation rec
     sha256 = "10v7mrq3zsbxdlg8k8xif777mbvcdpabvnd1g7p2yqivr7f1qm24";
   };
 
+  patches = [ ./camlp4.patch ];
+
   buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
                  js_of_ocaml ocaml_optcomp opam];
 
