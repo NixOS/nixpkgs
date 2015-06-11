@@ -15795,6 +15795,8 @@ let
       sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
     '';
 
+    doCheck = !stdenv.isDarwin;
+
     meta = {
       description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
       homepage = "https://bitbucket.org/enovance/trollius";
