@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ninja, which
 
 # default dependencies
-, bzip2, flac, speex, icu, libopus
+, bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, libcap
 , xdg_utils, yasm, minizip, libwebp
@@ -84,7 +84,7 @@ let
   };
 
   defaultDependencies = [
-    bzip2 flac speex icu opusWithCustomModes
+    bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
     libpng libxml2 libxslt libcap
     xdg_utils yasm minizip libwebp
@@ -113,7 +113,7 @@ let
       glib gtk dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
-      pythonPackages.gyp_svn1977 pythonPackages.ply pythonPackages.jinja2
+      pythonPackages.gyp pythonPackages.ply pythonPackages.jinja2
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
@@ -124,15 +124,10 @@ let
     #      be fixed, then try again to unbundle everything into separate
     #      derivations.
     prePatch = ''
-      cp -dsr --no-preserve=mode "${source.main}"/* .
-      cp -dsr --no-preserve=mode "${source.sandbox}" sandbox
+      cp -dr --no-preserve=mode "${source.main}"/* .
+      cp -dr --no-preserve=mode "${source.sandbox}" sandbox
       cp -dr "${source.bundled}" third_party
       chmod -R u+w third_party
-
-      # Hardcode source tree root in all gyp files
-      find -iname '*.gyp*' \( -type f -o -type l \) \
-        -exec sed -i -e 's|<(DEPTH)|'"$(pwd)"'|g' {} + \
-        -exec chmod u+w {} +
     '';
 
     postPatch = optionalString (versionOlder version "42.0.0.0") ''
@@ -200,7 +195,7 @@ let
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
-      python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
+      python build/gyp_chromium -f ninja --depth . ${gypFlags}
     '';
 
     buildPhase = let
