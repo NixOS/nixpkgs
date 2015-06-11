@@ -4147,6 +4147,8 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    bap = callPackage ../development/ocaml-modules/bap { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
