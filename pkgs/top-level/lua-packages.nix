@@ -37,7 +37,7 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=clang"}
+        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
         INCLUDES="-I${lua}/include"
         LUA="${lua}/bin/lua");
     '';
