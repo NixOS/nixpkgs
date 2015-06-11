@@ -5995,12 +5995,11 @@ let
   fcgi = callPackage ../development/libraries/fcgi { };
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
-  ffmpeg_0_11 = callPackage ../development/libraries/ffmpeg/0.11.nix { };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
   ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
   ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
   # Aliases
-  ffmpeg_0 = ffmpeg_0_11;
+  ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
   ffmpeg_2 = ffmpeg_2_6;
   ffmpeg = ffmpeg_2;
@@ -6253,7 +6252,7 @@ let
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/legacy/gst-plugins-ugly {};
 
   gst_ffmpeg = callPackage ../development/libraries/gstreamer/legacy/gst-ffmpeg {
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
   };
 
   gst_python = callPackage ../development/libraries/gstreamer/legacy/gst-python {};
@@ -7572,7 +7571,7 @@ let
 
   openscenegraph = callPackage ../development/libraries/openscenegraph {
     giflib = giflib_4_1;
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
   };
 
   openspades = callPackage ../games/openspades {};
@@ -10476,7 +10475,7 @@ let
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity {
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
   };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
@@ -11107,7 +11106,7 @@ let
       blas liblapack libjpeg libpng mysql unixODBC mesa postgresql python
       readline sqlite tcl tk libtiff freetype makeWrapper wxGTK;
     fftw = fftwSinglePrec;
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
     motif = lesstif;
     opendwg = libdwg;
     wxPython = wxPython28;
@@ -13473,7 +13472,7 @@ let
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
   ultrastardx = callPackage ../games/ultrastardx {
-    ffmpeg = ffmpeg_0_10;
+    ffmpeg = ffmpeg_0;
     lua = lua5;
   };
 
