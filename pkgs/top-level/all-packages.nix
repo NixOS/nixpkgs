@@ -4147,9 +4147,13 @@ let
 
     atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
+    bap = callPackage ../development/ocaml-modules/bap { };
+
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
+
+    bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
@@ -4255,6 +4259,8 @@ let
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
+
+    faillib = callPackage ../development/ocaml-modules/faillib { };
 
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
 
@@ -4410,6 +4416,9 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    piqi = callPackage ../development/ocaml-modules/piqi { };
+    piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -4483,6 +4492,8 @@ let
     typerep = callPackage ../development/ocaml-modules/typerep { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
+
+    uuidm = callPackage ../development/ocaml-modules/uuidm { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 

@@ -1,0 +1,73 @@
+diff -rupN optcomp-1.6.orig/myocamlbuild.ml optcomp-1.6.new/myocamlbuild.ml
+--- optcomp-1.6.orig/myocamlbuild.ml	2015-06-10 21:37:34.532000000 +0200
++++ optcomp-1.6.new/myocamlbuild.ml	2015-06-10 22:28:40.706000000 +0200
+@@ -324,8 +324,9 @@ module MyOCamlbuildFindlib = struct
+ 
+   (* This lists all supported packages. *)
+   let find_packages () =
+-    List.map before_space (split_nl & run_and_read "ocamlfind list")
++    List.map before_space (split_nl & run_and_read (exec_from_conf "ocamlfind" ^ " list"))
+ 
++  let camlp4_path = String.trim (run_and_read (exec_from_conf "ocamlfind" ^ " query camlp4"))
+ 
+   (* Mock to list available syntaxes. *)
+   let find_syntaxes () = ["camlp4o"; "camlp4r"]
+@@ -418,7 +419,13 @@ module MyOCamlbuildFindlib = struct
+           flag ["ocaml"; "package(threads)"; "doc"] (S[A "-I"; A "+threads"]);
+           flag ["ocaml"; "package(threads)"; "link"] (S[A "-thread"]);
+           flag ["ocaml"; "package(threads)"; "infer_interface"] (S[A "-thread"]);
+-
++          
++          (* Avoid hardcoded +camlp4 refs *)
++          flag ["ocaml"; "use_camlp4_custom"; "compile"] (S[A "-I"; A camlp4_path;
++                                                            A "-I"; A (camlp4_path ^ "/Camlp4Parsers");
++                                                            A "-I"; A (camlp4_path ^ "/Camlp4Filters");
++                                                            A "-I"; A (camlp4_path ^ "/Camlp4Printers");
++                                                            ]); 
+       | _ ->
+           ()
+ end
+diff -rupN optcomp-1.6.orig/myocamlbuild.ml.rej optcomp-1.6.new/myocamlbuild.ml.rej
+--- optcomp-1.6.orig/myocamlbuild.ml.rej	1970-01-01 01:00:00.000000000 +0100
++++ optcomp-1.6.new/myocamlbuild.ml.rej	2015-06-10 22:29:47.739000000 +0200
+@@ -0,0 +1,28 @@
++--- myocamlbuild.ml	2015-06-10 21:37:34.532000000 +0200
+++++ myocamlbuild.ml	2015-06-10 22:15:56.422000000 +0200
++@@ -324,8 +327,9 @@ module MyOCamlbuildFindlib = struct
++ 
++   (* This lists all supported packages. *)
++   let find_packages () =
++-    List.map before_space (split_nl & run_and_read "ocamlfind list")
+++    List.map before_space (split_nl & run_and_read (exec_from_conf "ocamlfind" ^ " list"))
++ 
+++  let camlp4_path = String.trim (run_and_read (exec_from_conf "ocamlfind" ^ " query camlp4"))
++ 
++   (* Mock to list available syntaxes. *)
++   let find_syntaxes () = ["camlp4o"; "camlp4r"]
++@@ -418,7 +430,13 @@ module MyOCamlbuildFindlib = struct
++           flag ["ocaml"; "package(threads)"; "doc"] (S[A "-I"; A "+threads"]);
++           flag ["ocaml"; "package(threads)"; "link"] (S[A "-thread"]);
++           flag ["ocaml"; "package(threads)"; "infer_interface"] (S[A "-thread"]);
++-
+++          
+++          (* Avoid hardcoded +camlp4 refs *)
+++          flag ["ocaml"; "use_camlp4_custom"; "compile"] (S[A "-I"; A camlp4_path;
+++                                                            A "-I"; A (camlp4_path ^ "/Camlp4Parsers");
+++                                                            A "-I"; A (camlp4_path ^ "/Camlp4Filters");
+++                                                            A "-I"; A (camlp4_path ^ "/Camlp4Printers");
+++                                                            ]); 
++       | _ ->
++           ()
++ end
+diff -rupN optcomp-1.6.orig/_tags optcomp-1.6.new/_tags
+--- optcomp-1.6.orig/_tags	2015-06-10 21:37:34.531000000 +0200
++++ optcomp-1.6.new/_tags	2015-06-10 22:28:58.404000000 +0200
+@@ -1,7 +1,7 @@
+ # -*- conf -*-
+ 
+ <src/pa_optcomp.ml>: syntax_camlp4o
+-<src/optcomp_{o,r}.*>: use_camlp4_full
++<src/optcomp_{o,r}.*>: use_camlp4_full, use_camlp4_custom
+ 
+ # OASIS_START
+ # DO NOT EDIT (digest: 54f80de4770febb3be98588ec0abde0d)
