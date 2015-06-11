@@ -6967,6 +6967,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/G/GA/GAAS/Net-HTTP-6.06.tar.gz;
       sha256 = "1m1rvniffadq99gsy25298ia3lixwymr6kan64jd3ylyi7nkqkhx";
     };
+    doCheck = false; # binds to TCP ports
     meta = {
       description = "Low-level HTTP connection (client)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
