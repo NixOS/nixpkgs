@@ -9,6 +9,10 @@ assert useX11 -> !stdenv.isArm && !stdenv.isMips;
 let
    useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
+   patchOcamlBuild = fetchurl {
+     url = https://github.com/ocaml/ocaml/pull/117.patch;
+     sha256 = "0x2cdn2sgzq29qzqg5y2ial0jqy8gjg5a7jf8qqch55dc4vkyjw0";
+   };
 in
 
 stdenv.mkDerivation rec {
@@ -23,6 +27,8 @@ stdenv.mkDerivation rec {
     url = "http://caml.inria.fr/pub/distrib/ocaml-4.02/${name}.tar.xz";
     sha256 = "1p7lqvh64xpykh99014mz21q8fs3qyjym2qazhhbq8scwldv1i38";
   };
+
+  patches = [ patchOcamlBuild ];
 
   prefixKey = "-prefix ";
   configureFlags = optionals useX11 [ "-x11lib" x11lib
