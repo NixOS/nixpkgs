@@ -37,7 +37,7 @@ let
         };
     };
 
-  # fills the base derivation's resource directory up with 
+  # fill the base derivation's resource directory up with 
   # the necessary library files, patch the binary, and make a caller
   # function in $out/bin
   makeConfortable = { deriv, bin, resources }:
