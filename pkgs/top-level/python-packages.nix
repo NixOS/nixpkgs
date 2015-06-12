@@ -11298,15 +11298,14 @@ let
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy pkgs.atlas ];
+    propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
 
     buildPhase = ''
-      export ATLAS=${pkgs.atlas}
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
     '';
 
     checkPhase = ''
-      LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+      LC_ALL="en_US.UTF-8" HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests
     '';
 
     meta = {
