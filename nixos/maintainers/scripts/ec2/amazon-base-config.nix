@@ -1,5 +1,5 @@
 { modulesPath, ...}:
 {
-  imports = [ "${modulesPath}/virtualisation/amazon-config.nix" ];
+  imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
   services.journald.rateLimitBurst = 0;
 }
