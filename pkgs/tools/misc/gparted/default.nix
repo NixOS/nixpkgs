@@ -1,5 +1,6 @@
 { stdenv, fetchurl, parted, gtk, glib, intltool, gettext, libuuid
-, pkgconfig, gtkmm, libxml2 }:
+, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+}:
 
 stdenv.mkDerivation rec {
   name = "gparted-0.22.0";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-doc";
 
   buildInputs = [
-    parted gtk glib intltool gettext libuuid pkgconfig gtkmm libxml2
+    parted gtk glib intltool gettext libuuid pkgconfig gtkmm libxml2 hicolor_icon_theme
   ];
 
   meta = with stdenv.lib; {
