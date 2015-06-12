@@ -1710,22 +1710,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.0-jessie-i386";
-      fullName = "Debian 8.0 Jessie (i386)";
+      name = "debian-8.1-jessie-i386";
+      fullName = "Debian 8.1 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "0lrv1lnd595c346ci7z8ja2b0rm2gx5r4hwp0wbp9lzxi8k5nk1d";
+        sha256 = "e658c2aebc3c0bc529e89de3ad916a71372f0a80161111d86a7dab1026644507";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.0-jessie-amd64";
-      fullName = "Debian 8.0 Jessie (amd64)";
+      name = "debian-8.1-jessie-amd64";
+      fullName = "Debian 8.1 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "0hhagvybciy89wr1cy9dgdfki668dvcywgbz4w01qwivyd6dsia4";
+        sha256 = "265907f3cb05aff5f653907e9babd4704902f78cd5e355d4cd4ae590e4d5b043";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
