@@ -119,6 +119,22 @@ self: super: {
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 
+  hmatrix = overrideCabal super.hmatrix (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [ "-fopenblas" ];
+    extraLibraries = [ pkgs.openblasCompat ];
+    preConfigure = ''
+      sed -i hmatrix.cabal -e 's@/usr/lib/openblas/lib@${pkgs.openblasCompat}/lib@'
+    '';
+  });
+
+  bindings-levmar = overrideCabal super.bindings-levmar (drv: {
+    preConfigure = ''
+      sed -i bindings-levmar.cabal \
+          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
+    '';
+    extraLibraries = [ pkgs.openblas ];
+  });
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;

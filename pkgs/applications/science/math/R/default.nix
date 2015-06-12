@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, blas, bzip2, gfortran, liblapack, libX11, libXmu, libXt
+{ stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt
 , libjpeg, libpng, libtiff, ncurses, pango, pcre, perl, readline, tcl
 , texLive, tk, xz, zlib, less, texinfo, graphviz, icu, pkgconfig, bison
-, imake, which, jdk, atlas
+, imake, which, jdk, openblas
 , withRecommendedPackages ? true
 }:
 
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0dagyqgvi8i3nw158qi2zpwm04s4ffzvnmk5niaksvxs30zrbbpm";
   };
 
-  buildInputs = [ blas bzip2 gfortran liblapack libX11 libXmu libXt
+  buildInputs = [ bzip2 gfortran libX11 libXmu libXt
     libXt libjpeg libpng libtiff ncurses pango pcre perl readline tcl
     texLive tk xz zlib less texinfo graphviz icu pkgconfig bison imake
-    which jdk atlas
+    which jdk openblas
   ];
 
   patches = [ ./no-usr-local-search-paths.patch ];
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       --disable-lto
       --with${stdenv.lib.optionalString (!withRecommendedPackages) "out"}-recommended-packages
-      --with-blas="-L${atlas}/lib -lf77blas -latlas"
-      --with-lapack="-L${liblapack}/lib -llapack"
+      --with-blas="-L${openblas}/lib -lopenblas"
+      --with-lapack="-L${openblas}/lib -lopenblas"
       --with-readline
       --with-tcltk --with-tcl-config="${tcl}/lib/tclConfig.sh" --with-tk-config="${tk}/lib/tkConfig.sh"
       --with-cairo

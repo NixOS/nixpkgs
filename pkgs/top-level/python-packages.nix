@@ -1068,7 +1068,12 @@ let
       sha256 = "f856ea2e9e2947abc1a6557625cc6b0e45228984f397a90c420b2f468dc4cb97";
     };
     doCheck = false;
-    buildInputs = with pkgs; [ liblapack blas ];
+    buildInputs = with pkgs; [ openblasCompat ];
+    preConfigure = ''
+      export CVXOPT_BLAS_LIB_DIR=${pkgs.openblasCompat}/lib
+      export CVXOPT_BLAS_LIB=openblas
+      export CVXOPT_LAPACK_LIB=openblas
+    '';
     meta = {
       homepage = "http://cvxopt.org/";
       description = "Python Software for Convex Optimization";
@@ -7850,7 +7855,7 @@ let
   numpy = let
     support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
-      atlas = pkgs.atlasWithLapack;
+      openblas = pkgs.openblasCompat;
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
@@ -7873,7 +7878,7 @@ let
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ support.atlas ];
+    propagatedBuildInputs = [ support.openblas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -11322,7 +11327,7 @@ let
   scipy = let
     support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
-      atlas = pkgs.atlasWithLapack;
+      openblas = pkgs.openblasCompat;
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
@@ -11360,15 +11365,14 @@ let
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy pkgs.atlas ];
+    propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
 
     buildPhase = ''
-      export ATLAS=${pkgs.atlas}
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
     '';
 
     checkPhase = ''
-      LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+      LC_ALL="en_US.UTF-8" HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests
     '';
 
     meta = {

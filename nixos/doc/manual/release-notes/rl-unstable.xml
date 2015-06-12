@@ -153,6 +153,19 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    The OpenBLAS library has been updated to version
+    <literal>0.2.14</literal>. Support for the
+    <literal>x86_64-darwin</literal> platform was added. Dynamic
+    architecture detection was enabled; OpenBLAS now selects
+    microarchitecture-optimized routines at runtime, so optimal
+    performance is achieved without the need to rebuild OpenBLAS
+    locally. OpenBLAS has replaced ATLAS in most packages which use an
+    optimized BLAS or LAPACK implementation.
+ </para>
+</listitem>
+
 </itemizedlist>
 </para>
 

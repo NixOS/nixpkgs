@@ -997,7 +997,7 @@ let
     });
 
     Mposterior = old.Mposterior.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
+      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
     qtbase = old.qtbase.overrideDerivation (attrs: {
@@ -1037,11 +1037,11 @@ let
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
+      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.atlas}/lib -lf77blas -latlas";
+      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
     });
 
     gputools = old.gputools.overrideDerivation (attrs: {
@@ -1087,6 +1087,7 @@ let
 
     BayesLogit = old.BayesLogit.overrideDerivation (attrs: {
       patches = [ ./patches/BayesLogit.patch ];
+      buildInputs = (attrs.buildInputs or []) ++ [ pkgs.openblasCompat ];
     });
 
     BayesBridge = old.BayesBridge.overrideDerivation (attrs: {
