@@ -22,7 +22,7 @@ let
     then pkg
     else null;
 
-  buildShared = !stdenv.isDarwin;
+  buildShared = true;
 
   optGpm = shouldUsePkg gpm;
 in
@@ -91,6 +91,17 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  cursesCompat = if unicode then (''
+    shopt -s extglob
+    lib=( "$out"/lib/libncursesw.@(so|dylib) )
+    ln -svf "$(basename "$lib")" "''${lib/libncursesw/libcursesw}"
+    ln -svf "$(basename "$lib")" "''${lib/libncursesw/libcurses}"
+  '') else ''  
+    shopt -s extglob
+    lib=( "$out"/lib/libncurses.@(so|dylib) )
+    ln -svf "$(basename "$lib")" "''${lib/libncurses/libcurses}"
+  '';
+
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
@@ -105,19 +116,15 @@ stdenv.mkDerivation rec {
     ln -svf . $out/include/ncurses
 
     # Create non-unicode compatability
-    libs="$(find $out/lib -name \*w.a | sed 's,.*lib\(.*\)w.a.*,\1,g')"
-    for lib in $libs; do
-      if [ -e "$out/lib/lib''${lib}w.so" ]; then
-        ln -svf lib''${lib}w.so $out/lib/lib$lib.so
-        ln -svf lib''${lib}w.so.${abiVersion} $out/lib/lib$lib.so.${abiVersion}
-      fi
-      ln -svf lib''${lib}w.a $out/lib/lib$lib.a
-      ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
+    for w in "$out"/lib/lib*w.* "$out"/lib/pkgconfig/*w.pc; do
+      [[ "$w" =~ .a$ ]] && continue
+      [[ "$w" =~ ^(.*lib/lib[^\.]+)w(.*)$ ]] && {
+        ln -svf "$(basename "$w")" "''${BASH_REMATCH[1]}''${BASH_REMATCH[2]}"
+      }
     done
 
     # Create curses compatability
-    ln -svf libncursesw.so $out/lib/libcursesw.so
-    ln -svf libncursesw.so $out/lib/libcurses.so
+    bash -c "$cursesCompat"
   '' + stdenv.lib.optionalString stdenv.isCygwin ''
     for lib in $libs; do
       if test -e $out/lib/lib''${lib}w.dll.a; then
@@ -133,7 +140,7 @@ stdenv.mkDerivation rec {
     ln -svf . $out/include/ncurses
 
     # Create curses compatability
-    ln -svf libncurses.so $out/lib/libcurses.so
+    bash -c "$cursesCompat"
   '';
 
   meta = with stdenv.lib; {
