@@ -10721,7 +10721,10 @@ let
   darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
+    enableSharedLibraries = false;
     isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share";
   });
 
   darktable = callPackage ../applications/graphics/darktable {
