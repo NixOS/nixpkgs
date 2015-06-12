@@ -1846,7 +1846,7 @@ let
 
   ised = callPackage ../tools/misc/ised {};
 
-  isl = callPackage ../development/libraries/isl { };
+  isl = isl_0_14;
   isl_0_11 = callPackage ../development/libraries/isl/0.11.1.nix { };
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
   isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
