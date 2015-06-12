@@ -13570,6 +13570,10 @@ let
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
 
+  zandronum = callPackage ../games/zandronum { };
+  zandronum-server = callPackage ../games/zandronum/server.nix { };
+  zandronum-bin = callPackage ../games/zandronum/bin.nix { };
+
   zdoom = callPackage ../games/zdoom { };
 
   zod = callPackage ../games/zod { };
