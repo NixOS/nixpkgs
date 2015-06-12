@@ -62,7 +62,7 @@ let
     "9ZcDMiWaEhoAR6FGoaGI04ff7CS+1yybQ= snakeoil"
   ];
 in {
-  bootEc2NixOps = makeEc2Test {
+  boot-ec2-nixops = makeEc2Test {
     name         = "nixops-userdata";
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!
 
@@ -91,6 +91,29 @@ in {
       $machine->succeed("ssh -o BatchMode=yes localhost exit");
 
       $machine->shutdown;
+    '';
+  };
+
+  boot-ec2-config = makeEc2Test {
+    name         = "config-userdata";
+    sshPublicKey = snakeOilPublicKey;
+
+    userData = ''
+      ### http://nixos.org/channels/nixos-unstable nixos
+      {
+        imports = [
+          <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
+          <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+        ];
+        environment.etc.testFile = {
+          text = "whoa";
+        };
+      }
+    '';
+    script = ''
+      $machine->start;
+      $machine->waitForFile("/etc/testFile");
+      $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
     '';
   };
 }
