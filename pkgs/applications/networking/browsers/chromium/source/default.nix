@@ -18,7 +18,7 @@ let
     "s,^/,,"
   ]);
 
-  pre42 = versionOlder version "42.0.0.0";
+  pre44 = versionOlder version "44.0.0.0";
 
 in stdenv.mkDerivation {
   name = "chromium-source-${version}";
@@ -47,10 +47,10 @@ in stdenv.mkDerivation {
     done
   '';
 
-  patches = if pre42 then [
-    ./sandbox_userns_36.patch ./nix_plugin_paths.patch
-  ] else [
+  patches = if pre44 then [
     ./nix_plugin_paths_42.patch
+  ] else [
+    ./nix_plugin_paths_44.patch
   ];
 
   patchPhase = let
@@ -73,11 +73,10 @@ in stdenv.mkDerivation {
       -e 's|/bin/echo|echo|' \
       -e "/python_arch/s/: *'[^']*'/: '""'/" \
       "$out/build/common.gypi" "$main/chrome/chrome_tests.gypi"
-  '' + optionalString useOpenSSL ''
-    cat $opensslPatches | patch -p1 -d "$bundled/openssl/openssl"
-  '' + optionalString (!pre42) ''
     sed -i -e '/LOG.*no_suid_error/d' \
       "$main/content/browser/browser_main_loop.cc"
+  '' + optionalString useOpenSSL ''
+    cat $opensslPatches | patch -p1 -d "$bundled/openssl/openssl"
   '';
 
   preferLocalBuild = true;
