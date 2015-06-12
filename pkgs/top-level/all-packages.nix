@@ -14431,10 +14431,13 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
+  nixUnstable = nixStable;
+  /*
+  nixUnstable = lowPrio (callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
-  };
+  });
+  */
 
   nixops = callPackage ../tools/package-management/nixops { };
 
