@@ -215,6 +215,7 @@
   ./services/misc/ripple-rest.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
+  ./services/misc/sinopia.nix
   ./services/misc/siproxd.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
