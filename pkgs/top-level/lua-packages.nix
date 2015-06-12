@@ -33,8 +33,11 @@ let
       sha256 = "16fffbrgfcw40kskh2bn9q7m3gajffwd2f35rafynlnd7llwj1qj";
     };
 
+    buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
+
     preBuild = ''
       makeFlagsArray=(
+        ${stdenv.lib.optionalString stdenv.cc.isClang "CC=$CC"}
         INCLUDES="-I${lua}/include"
         LUA="${lua}/bin/lua");
     '';

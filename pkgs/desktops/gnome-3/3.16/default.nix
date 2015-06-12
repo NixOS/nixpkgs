@@ -273,14 +273,6 @@ rec {
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 
-  goffice = callPackage ./misc/goffice { };
-
-  goffice_0_8 = callPackage ./misc/goffice/0.8.nix { 
-    inherit (pkgs.gnome2) libglade libgnomeui;
-    gconf = pkgs.gnome2.GConf;
-    libart = pkgs.gnome2.libart_lgpl;
-  };
-
   gitg = callPackage ./misc/gitg { 
     webkitgtk = webkitgtk24x;
   };

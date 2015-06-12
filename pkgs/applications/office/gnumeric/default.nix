@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
-, gnome3, makeWrapper, gtk3
+, goffice, gnome3, makeWrapper, gtk3
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # ToDo: optional libgda, python, introspection?
   buildInputs = [
     pkgconfig intltool perl perlXMLParser
-    gnome3.goffice gtk3 makeWrapper gnome3.defaultIconTheme
+    goffice gtk3 makeWrapper gnome3.defaultIconTheme
   ];
 
   enableParallelBuilding = true;

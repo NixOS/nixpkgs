@@ -51,6 +51,9 @@ stdenv.mkDerivation {
       mkdir -p $out/share/cgi-bin
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
+
+      # install bash completion
+      install -D -v contrib/bash_completion $out/share/bash-completion/completions/mercurial
     '';
 
   meta = {

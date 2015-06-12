@@ -27,7 +27,12 @@ let
 
   f = x: if x == null then "" else "" + x;
 
-  grubConfig = args: pkgs.writeText "grub-config.xml" (builtins.toXML
+  grubConfig = args:
+    let
+      efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+      efiSysMountPoint' = replaceChars [ "/" ] [ "-" ] efiSysMountPoint;
+    in
+    pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
@@ -36,7 +41,8 @@ let
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
       bootPath = args.path;
-      efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+      bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
+      inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
@@ -138,6 +144,17 @@ in
             description = ''
               The path to the efi system mount point. Usually this is the same
               partition as the above path and can be left as null.
+            '';
+          };
+
+          efiBootloaderId = mkOption {
+            default = null;
+            example = "NixOS-fsid";
+            type = types.nullOr types.str;
+            description = ''
+              The id of the bootloader to store in efi nvram.
+              The default is to name it NixOS and append the path or efiSysMountPoint.
+              This is only used if <literal>boot.loader.efi.canTouchEfiVariables</literal> is true.
             '';
           };
 

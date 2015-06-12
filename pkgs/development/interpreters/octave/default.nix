@@ -1,9 +1,21 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
-, libX11, graphicsmagick, pcre, liblapack, pkgconfig, mesa, fltk
-, fftw, fftwSinglePrec, zlib, curl, qrupdate
+, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
+, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, jdk ? null, python ? null
 }:
+
+let
+  suitesparseOrig = suitesparse;
+  qrupdateOrig = qrupdate;
+in
+# integer width is determined by openblas, so all dependencies must be built
+# with exactly the same openblas
+let
+  suitesparse =
+    if suitesparseOrig != null then suitesparseOrig.override { inherit openblas; } else null;
+  qrupdate = if qrupdateOrig != null then qrupdateOrig.override { inherit openblas; } else null;
+in
 
 stdenv.mkDerivation rec {
   version = "4.0.0";
@@ -14,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre liblapack pkgconfig mesa fltk zlib curl
+    graphicsmagick pcre pkgconfig mesa fltk zlib curl openblas
     fftw fftwSinglePrec qrupdate ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
@@ -34,7 +46,13 @@ stdenv.mkDerivation rec {
   # problems on Hydra
   enableParallelBuilding = false;
 
-  configureFlags = [ "--enable-readline" "--enable-dl" ];
+  configureFlags =
+    [ "--enable-readline"
+      "--enable-dl"
+      "--with-blas=openblas"
+      "--with-lapack=openblas"
+    ]
+    ++ stdenv.lib.optional openblas.blas64 "--enable-64";
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care

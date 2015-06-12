@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk, libglade, bzip2
 , pango, libgsf, libxml2, libart, intltool, gettext
-, cairo, gconf, libgnomeui, pcre, gnome3/*just meta*/ }:
+, cairo, gconf, libgnomeui, pcre, goffice/*just meta*/ }:
 
 stdenv.mkDerivation rec {
   name = "goffice-0.8.17";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = gnome3.goffice.meta // {
+  meta = goffice.meta // {
     maintainers = [ ];
   };
 }

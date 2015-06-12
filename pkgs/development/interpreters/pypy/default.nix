@@ -6,8 +6,8 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.5";
-  version = "${majorVersion}.1";
+  majorVersion = "2.6";
+  version = "${majorVersion}.0";
   libPrefix = "pypy${majorVersion}";
 
   pypy = stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "0gzhgc0rh5ywpkvzishpvkninl41r5k207y8afa8vxwpfx03vcrj";
+      sha256 = "0xympj874cnjpxj68xm5gllq2f8bbvz8hr0md8mh1yd6fgzzxibh";
     };
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 makeWrapper ]

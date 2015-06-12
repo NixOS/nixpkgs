@@ -2,13 +2,13 @@
 
 let wrappedGhc = ghcWithPackages (hpkgs: with hpkgs; [shuffle hashable mtl network uhc-util uulib] );
 in stdenv.mkDerivation rec {
-  version = "1.1.9.0";
+  version = "1.1.9.1";
   name = "uhc-${version}";
 
   src = fetchgit {
     url = "https://github.com/UU-ComputerScience/uhc.git";
-    rev = "0363bbcf4cf8c47d30c3a188e3e53b3f8454bbe4";
-    sha256 = "0sa9b341mm5ggmbydc33ja3h7k9w65qnki9gsaagb06gkvvqc7c2";
+    rev = "c4955d01089485cdcfec785fe2bbcdf2253bee4b";
+    sha256 = "1n2bfbzni2hwv90z3mgn0x3l3jwc7sy8ryk81p5mlvlis1wzxnq3";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";

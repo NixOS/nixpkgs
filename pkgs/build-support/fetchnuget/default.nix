@@ -18,7 +18,7 @@ attrs @
 
     buildInputs = [ unzip ];
 
-    phases = [ "unpackPhase" "installPhase" ];
+    dontBuild = true;
 
     preInstall = ''
       function traverseRename () {

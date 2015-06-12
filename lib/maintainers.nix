@@ -1,11 +1,15 @@
 /* -*- coding: utf-8; -*- */
 
 {
-  /* Add your name and email address here.  Keep the list
-     alphabetically sorted.  */
+  /* Add your name and email address here.
+     Keep the list alphabetically sorted.
+     Prefer the same attrname as your github username, please,
+     so it's easy to ping a package @maintainer.
+  */
 
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
+  adev	   = "Adrien Devresse <adev@adev.name>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";

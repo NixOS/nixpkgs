@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gfortran, liblapack, blas}:
+{stdenv, fetchurl, gfortran, openblas}:
 
 stdenv.mkDerivation rec {
   name = "JAGS-3.4.0";
@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/mcmc-jags/${name}.tar.gz";
     sha256 = "0ayqsz9kkmbss7mxlwr34ch2z1vsb65lryjzqpprab1ccyiaksib";
   };
-  buildInputs = [gfortran liblapack blas];
+  buildInputs = [gfortran openblas];
+  configureFlags = [ "--with-blas=-lopenblas" "--with-lapack=-lopenblas" ];
 
   meta = {
     description = "Just Another Gibbs Sampler";

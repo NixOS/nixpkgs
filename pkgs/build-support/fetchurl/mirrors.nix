@@ -14,8 +14,6 @@ rec {
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
     http://dfn.dl.sourceforge.net/sourceforge/
-    http://mesh.dl.sourceforge.net/sourceforge/
-    http://ovh.dl.sourceforge.net/sourceforge/
     http://osdn.dl.sourceforge.net/sourceforge/
     http://kent.dl.sourceforge.net/sourceforge/
   ];
