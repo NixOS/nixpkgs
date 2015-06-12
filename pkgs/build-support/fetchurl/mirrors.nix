@@ -151,9 +151,11 @@ rec {
 
   # ImageMagick mirrors, see http://www.imagemagick.org/script/download.php.
   imagemagick = [
+    http://ftp.surfnet.nl/pub/ImageMagick/
+    http://www.imagemagick.org/download/
     ftp://ftp.nluug.nl/pub/ImageMagick/
-    ftp://ftp.imagemagick.org/pub/ImageMagick/
-    ftp://ftp.imagemagick.net/pub/ImageMagick/
+    ftp://ftp.imagemagick.org/pub/ImageMagick/releases/
+    ftp://ftp.imagemagick.net/pub/ImageMagick/releases/
     ftp://ftp.sunet.se/pub/multimedia/graphics/ImageMagick/
   ];
 
