@@ -58,7 +58,7 @@ let
         mkdir -p $out/$resources
         ${unlines (map (lib: "ln -s ${lib}/lib/*.so* $out/$resources/") libs)}
 
-        ln -s /nix/store/2q4nir7g03b7qidk9m2r9wcq3ga1fv65-gcc-4.8.4/lib64/libstdc++.so.6 $out/$resources/libstdc++.so.6 #FIXME: figure this shit out
+        ln -s ${gcc.cc}/lib/libstdc++.so.6 $out/$resources/
 
         cp -r $src/* $out/
         
