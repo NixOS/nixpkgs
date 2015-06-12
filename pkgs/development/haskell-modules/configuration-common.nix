@@ -760,7 +760,7 @@ self: super: {
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
   # https://github.com/gwern/mueval/issues/9
-  mueval = appendPatch super.mueval ./mueval-fix.patch;
+  mueval = appendPatch (appendPatch super.mueval ./mueval-fix.patch) ./mueval-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
