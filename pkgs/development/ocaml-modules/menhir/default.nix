@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "menhir-20130116";
+  name = "menhir-20140422";
 
   src = fetchurl {
-    url = http://pauillac.inria.fr/~fpottier/menhir/menhir-20130116.tar.gz;
-    sha256 = "65cd9e4f813c62697c60c344963ca11bd461169f574ba3a866c2691541cb4682";
+    url = http://pauillac.inria.fr/~fpottier/menhir/menhir-20140422.tar.gz;
+    sha256 = "1ki1f2id6a14h9xpv2k8yb6px7dyw8cvwh39csyzj4qpzx7wia0d";
   };
 
   buildInputs = [ocaml findlib];
