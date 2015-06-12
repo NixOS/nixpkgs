@@ -14,6 +14,8 @@
 
 let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
+  # BINARY PACKAGES
+
   Autofac = fetchNuGet {
     baseName = "Autofac";
     version = "3.5.2";
@@ -44,6 +46,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
+  FSharpDataSQLProvider = fetchNuGet {
+    baseName = "SQLProvider";
+    version = "0.0.9-alpha";
+    sha256 = "1wmgr5ca9hh6a7f0s8yc87n6arn7bq6nwc8n4crbbdil4r0bw46w";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
   FsCheck = fetchNuGet {
     baseName = "FsCheck";
     version = "1.0.4";
@@ -55,6 +64,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     baseName = "FsCheck.Nunit";
     version = "1.0.4";
     sha256 = "1s62jrsa5hxqy1ginl8r29rjdc8vbkwmz7mb0hglhwccdqfyr5xy";
+    outputFiles = [ "lib/net45/*" ];
+  };
+
+  FsPickler = fetchNuGet {
+    baseName = "FsPickler";
+    version = "1.2.9";
+    sha256 = "12fgcj7pvffsj1s1kaz15j22i1n98dy5mf4z84555xdf7mw7dpm4";
     outputFiles = [ "lib/net45/*" ];
   };
 
@@ -86,6 +102,15 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     sha256 = "0760kzf5s771pnvnxsgas446kqdh1b71w6g3k75jpzldfmsd3vyq";
     outputFiles = [ "lib/portable-net45+win8+wp8+wpa81/*" ];
   };
+
+  Suave = fetchNuGet {
+    baseName = "Suave";
+    version = "0.29.0";
+    sha256 = "0rgqy0afwm50gq5ca94w16s565yx5wf961683ghfld6ir0k3dhln";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
+  # SOURCE PACKAGES
 
   ExtCore = buildDotnetPackage rec {
     baseName = "ExtCore";
@@ -492,4 +517,5 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       platforms = with stdenv.lib.platforms; linux;
     };
   };
+
 }; in self
