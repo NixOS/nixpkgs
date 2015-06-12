@@ -3701,7 +3701,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc49;
+  gcc = gcc5;
 
   gcc_multi =
     if system == "x86_64-linux" then lowPrio (
