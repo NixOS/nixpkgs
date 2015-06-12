@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   
   buildInputs = [ getopt ]
     ++ stdenv.lib.optional enableEjabberdDump ejabberd
-    ++ stdenv.lib.optional enableMySQLDatabase mysql.lib
+    ++ stdenv.lib.optional enableMySQLDatabase mysql.out
     ++ stdenv.lib.optional enablePostgreSQLDatabase postgresql
     ++ stdenv.lib.optional enableSubversionRepository subversion
     ++ stdenv.lib.optional enableMongoDatabase mongodb;
