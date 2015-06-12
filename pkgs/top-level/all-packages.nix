@@ -6059,6 +6059,8 @@ let
 
   fmod = callPackage ../development/libraries/fmod { };
 
+  fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
+
   freeimage = callPackage ../development/libraries/freeimage { };
 
   freetts = callPackage ../development/libraries/freetts { };
