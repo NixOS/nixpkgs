@@ -13454,6 +13454,8 @@ let
   };
 
   tbe = callPackage ../games/the-butterfly-effect { };
+  
+  the-infinite-black = callPackage ../games/the-infinite-black { };
 
   teetertorture = callPackage ../games/teetertorture { };
 
