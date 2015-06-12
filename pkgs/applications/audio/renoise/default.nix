@@ -29,7 +29,7 @@ let
       '';
 
       installPhase = ''
-        cd ${if demo then "Renoise_3_0_1_Demo_x86_64" else "Renoise_3_0_1_x86_64"}
+        cd ${if demo then "Renoise_3_0_1_Demo_x86_64" else "rns_3_0_1_linux_x86_64"}
 
         mkdir -p $out/
         cp -r ./Resources/* $out/
