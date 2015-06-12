@@ -37,6 +37,12 @@ let
         mv $out/AudioPluginServer_x86_64 $out/lib/
         cp renoise $out/renoise
       '';
+
+      meta = {
+        description = "modern tracker-based DAW";
+        homepage = http://www.renoise.com/;
+        license = stdenv.lib.licenses.unfree;
+      };
     };
   # fill the base derivation's resource directory up with 
   # the necessary library files, patch the binary, and make a caller
