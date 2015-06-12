@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./clang.patch ];
+  # gcc-5.patch should be removed after 5.9
+  patches = [ ./clang.patch ./gcc-5.patch ];
 
   configureFlags =
     [ "--with-shared" "--without-debug" "--enable-pc-files" "--enable-symlinks" ]
