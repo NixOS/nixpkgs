@@ -106,6 +106,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   Suave = fetchNuGet {
     baseName = "Suave";
     version = "0.29.0";
+    propagatedBuildInputs = [ FsPickler ];
     sha256 = "0rgqy0afwm50gq5ca94w16s565yx5wf961683ghfld6ir0k3dhln";
     outputFiles = [ "lib/net40/*" ];
   };
