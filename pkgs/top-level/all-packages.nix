@@ -4842,6 +4842,11 @@ let
     fetchurl = fetchurlBoot;
   };
 
+  perl522 = callPackage ../development/interpreters/perl/5.22 {
+    fetchurl = fetchurlBoot;
+  };
+
+  # Make perl522 the default once gnulib is updated to support it.
   perl = perl520;
 
   php = php56;
