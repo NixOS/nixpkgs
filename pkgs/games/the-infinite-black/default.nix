@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, mesa_glu, libX11, libXext, libXcursor, libXrandr, gcc, alsaLib}:
+{ stdenv, lib, fetchurl, unzip, mesa_glu, libX11, libXext, libXcursor, libXrandr, alsaLib, gcc}:
 
 let
   unlines = strs: lib.concatStrings ((map (x: x + "\n")) strs);
@@ -15,7 +15,7 @@ let
               url = "https://files.spellbook.com/download/tib-unity-linux.zip";
               sha256 = "0cahbbw5d4fg6wirsckcjfwbzgsfb7g1dxngw95ldcdakj7pj5la";
             }
-          else throw "incompatible system";
+          else throw "haven't written this for systems besides x86_64 linux";
 
       phases = "unpackPhase installPhase";
 
@@ -46,9 +46,7 @@ let
       inherit (deriv) name meta;
 
       src = deriv;
-
       phases = "installPhase";
-
       libs = [mesa_glu libX11 libXext libXcursor libXrandr alsaLib];
 
       inherit resources bin;
@@ -66,13 +64,14 @@ let
         # patching file
         patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $out/$resources $out/$bin
 
+        # distributing executable
         mkdir $out/bin
-        ln -s $out/$bin $out/bin/
+        ln -s $out/$bin $out/bin/the-infinite-black
       '';
     };
 in
   makeConfortable { 
-    deriv = tib;
+    deriv = tib; 
     bin = "tib-unity-linux.x86_64";
     resources = "lib";
   }   
