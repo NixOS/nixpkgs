@@ -116,11 +116,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
-  # Until the changes have been pushed to Hackage
-  mueval = appendPatch super.mueval (pkgs.fetchpatch {
-    url = "https://github.com/gwern/mueval/commit/c41aa40ed63b74c069d1e4e3caa8c8d890cde960.patch";
-    sha256 = "0h1lx4z15imq009k0qmwkn5l3hmigw463ahvwffdnszi2n618kpg";
-  });
   present = appendPatch super.present (pkgs.fetchpatch {
     url = "https://github.com/chrisdone/present/commit/6a61f099bf01e2127d0c68f1abe438cd3eaa15f7.patch";
     sha256 = "1vn3xm38v2f4lzyzkadvq322f3s2yf8c88v56wpdpzfxmvlzaqr8";
