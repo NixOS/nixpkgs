@@ -34,6 +34,7 @@ let
       meta =
         { 
           description = "Interesting, free (as in free beer) and very active space-based MMO.";
+          license = stdenv.lib.licenses.unfree;
         };
     };
 
