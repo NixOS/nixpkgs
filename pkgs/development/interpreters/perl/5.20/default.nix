@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
+      # Remove in 5.20.3
+      ./perl-5.20.2-gcc5_fixes-1.patch
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ];
