@@ -9,7 +9,7 @@ let
       name = "the-infinite-black";
 
       src = 
-        if stdenv.system == "x86_64-linux"
+        if stdenv.system == "x86_64-linux" 
           then
             fetchurl {
               url = "https://files.spellbook.com/download/tib-unity-linux.zip";
@@ -71,7 +71,7 @@ let
     };
 in
   makeConfortable { 
-      deriv = tib;
-      bin = "tib-unity-linux.x86_64";
-      resources = "lib";
+    deriv = tib;
+    bin = "tib-unity-linux.x86_64";
+    resources = "lib";
   }   
