@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
+{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false
+, locale ? null }:
 
 stdenv.mkDerivation rec {
   name = "gawk-4.1.3";
@@ -8,10 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  doCheck = !(
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+  );
 
   buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
-    ++ stdenv.lib.optional readlineSupport readline;
+    ++ stdenv.lib.optional readlineSupport readline
+    ++ stdenv.lib.optional stdenv.isDarwin locale;
 
   configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
     ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"

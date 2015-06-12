@@ -1,6 +1,6 @@
 { pkgs, newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
 let
-  callPackage = newScope (self // { inherit isl version fetch; });
+  callPackage = newScope (self // { inherit stdenv isl version fetch; });
 
   version = "3.6.1";
 

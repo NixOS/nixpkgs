@@ -63,13 +63,15 @@ rec {
 
       cp -d ${gnugrep.pcre}/lib/libpcre*.dylib $out/lib
       cp -d ${libiconv}/lib/libiconv*.dylib $out/lib
+      cp -d ${gettext}/lib/libintl*.dylib $out/lib
+      chmod +x $out/lib/libintl*.dylib
 
       # Copy what we need of clang
-      cp -d ${llvmPackages.clang}/bin/clang $out/bin
-      cp -d ${llvmPackages.clang}/bin/clang++ $out/bin
-      cp -d ${llvmPackages.clang}/bin/clang-3.5 $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang++ $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang-3.6 $out/bin
 
-      cp -rL ${llvmPackages.clang}/lib/clang $out/lib
+      cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
       cp -d ${libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${libcxxabi}/lib/libc++abi*.dylib $out/lib
