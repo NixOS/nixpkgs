@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bzip2, zlib, enableThreading ? stdenv ? glibc }:
+{ stdenv, fetchurl, enableThreading ? stdenv ? glibc }:
 
 # We can only compile perl with threading on platforms where we have a
 # real glibc in the stdenv.
@@ -34,11 +34,6 @@ stdenv.mkDerivation rec {
     ]
     ++ optional stdenv.isSunOS ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin [ ./cpp-precomp.patch ./no-libutil.patch ];
-
-  buildInputs = [ zlib bzip2 ];
-
-  BUILD_ZLIB = "false";
-  BUILD_BZIP2 = "0";
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
   # "installstyle" option to ensure that modules are put under
