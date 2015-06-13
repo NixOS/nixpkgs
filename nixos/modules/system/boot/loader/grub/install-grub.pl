@@ -55,6 +55,7 @@ my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
 my $grubTargetEfi = get("grubTargetEfi");
 my $bootPath = get("bootPath");
+my $storePath = get("storePath");
 my $canTouchEfiVariables = get("canTouchEfiVariables");
 my $efiSysMountPoint = get("efiSysMountPoint");
 my $gfxmodeEfi = get("gfxmodeEfi");
@@ -213,7 +214,7 @@ sub GrubFs {
 my $grubBoot = GrubFs($bootPath);
 my $grubStore;
 if ($copyKernels == 0) {
-    $grubStore = GrubFs("/nix/store");
+    $grubStore = GrubFs($storePath);
 }
 
 # Generate the header.
