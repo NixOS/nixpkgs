@@ -426,12 +426,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Paket = buildDotnetPackage rec {
     baseName = "Paket";
-    version = "1.6.2";
+    version = "1.18.2";
 
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/fsprojects/Paket/archive/${version}.tar.gz";
-      sha256 = "1ryslxdgc3r7kcn1gq4bqcyrqdi8z6364aj3lr7yjz71wi22fca8";
+    src = fetchFromGitHub {
+      owner = "fsprojects";
+      repo = "Paket";
+      rev = version;
+      sha256 = "04iwy3mggz7xn36lhzyrwqzlw451a16jblwx131qjm6fnac6rq1m";
     };
 
     buildInputs = [
@@ -446,12 +447,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       url = https://raw.githubusercontent.com/forki/FsUnit/81d27fd09575a32c4ed52eadb2eeac5f365b8348/FsUnit.fs;
       sha256 = "1zxigqgb2s2v755622jbbzibvf91990x2dijhbdgg646vsybkpdp";
     };
-
-    # fileOctokit = fetchurl {
-    #   name = "Octokit.fsx";
-    #   url = https://raw.githubusercontent.com/fsharp/FAKE/8e65e2fc1406f326b44f3f87ec9ca9b3127a6e78/modules/Octokit/Octokit.fsx;
-    #   sha256 = "16qxwmgyg3fn3z9a8hppv1m579828x7lvfj8qflcgs2g6ciagsir";
-    # };
 
     fileGlobbing = fetchurl {
       name = "Globbing.fs";
@@ -477,7 +472,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
        cp -v "${fileErrorHandling}" "paket-files/fsprojects/Chessie/src/Chessie/ErrorHandling.fs"
     '';
 
-    xBuildFiles = [ ];
+    xBuildFiles = [ "Paket.sln" ];
 
     outputFiles = [ "bin/*" ];
     exeFiles = [ "paket.exe" ];
