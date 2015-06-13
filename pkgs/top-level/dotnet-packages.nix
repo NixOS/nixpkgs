@@ -149,12 +149,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpAutoComplete = buildDotnetPackage rec {
     baseName = "FSharp.AutoComplete";
-    version = "0.16.0";
+    version = "0.18.2";
 
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/fsharp/FSharp.AutoComplete/archive/${version}.tar.gz";
-      sha256 = "0mwp456zfw1sjy2mafz2shx0sjn4f858pfnsmawy50g8l2znw8qg";
+    src = fetchFromGitHub {
+      owner = "fsharp";
+      repo = "FSharp.AutoComplete";
+      rev = version;
+      sha256 = "1ikl72003xzqq2dc8i6h404hnq3q5g1p1q4rmzz9bdm7282q2jgs";
     };
 
     buildInputs = [
