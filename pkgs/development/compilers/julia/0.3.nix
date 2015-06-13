@@ -127,10 +127,6 @@ stdenv.mkDerivation rec {
     "-lz"
   ];
 
-  preConfigure = ''
-    export PATH="$PATH:${stdenv.cc.libc}/sbin"
-  '';
-
   dontStrip = true;
   dontPatchELF = true;
 
