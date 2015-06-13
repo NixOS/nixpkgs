@@ -278,6 +278,30 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   };
   # };
 
+  MathNetNumerics = buildDotnetPackage rec {
+    baseName = "MathNet.Numerics";
+    version = "3.7.0";
+
+    src = fetchurl {
+      name = "${baseName}-${version}.tar.gz";
+      url = "https://github.com/mathnet/mathnet-numerics/archive/v${version}.tar.gz";
+      sha256 = "1yq6aqmc2gwh96z544qn83kby01lv1lsxm158hq0bimv2i9yywc7";
+    };
+
+    buildInputs = [ fsharp ];
+
+    xBuildFiles = [ "MathNet.Numerics.sln" ];
+    outputFiles = [ "out/lib/Net40/*" "src/FSharp/MathNet.Numerics.fsx" "src/FSharp/MathNet.Numerics.IfSharp.fsx" ];
+
+    meta = {
+      description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono.";
+      homepage = http://numerics.mathdotnet.com/;
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
   MonoDevelopFSharpBinding = buildDotnetPackage rec {
     baseName = "MonoDevelop.FSharpBinding";
     version = "git-a09c8185eb";
