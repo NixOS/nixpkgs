@@ -36,6 +36,7 @@ let
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
       bootPath = args.path;
+      storePath = config.boot.loader.grub.storePath;
       efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
@@ -160,6 +161,15 @@ in
         type = types.str;
         description = ''
           GRUB entry name instead of default.
+        '';
+      };
+
+      storePath = mkOption {
+        default = "/nix/store";
+        type = types.str;
+        description = ''
+          Path to the Nix store when looking for kernels at boot.
+          Only makes sense when copyKernels is false.
         '';
       };
 
