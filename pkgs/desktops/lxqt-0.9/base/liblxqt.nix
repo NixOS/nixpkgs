@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub
 , cmake
 , qt54
 , kwindowsystem
@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
   name = "${basename}-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/lxde/${basename}.git";
-    rev = "64d1e6c1076aea2783138e9d5ce4bb30b58c77b4";
-    sha256 = "940e505ba9c7693770224aa16e64bbb805736b946bbaa25e8180528d3681359d";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = basename;
+    rev = version;
+    sha256 = "00smn3a32gmzhhl3j884659sw0wkcm618q899633k5m1kw5dlb3y";
   };
 
   buildInputs = [ stdenv cmake qt54.base qt54.tools qt54.x11extras kwindowsystem libqtxdg ];

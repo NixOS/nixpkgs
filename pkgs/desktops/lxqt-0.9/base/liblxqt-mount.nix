@@ -10,11 +10,9 @@ stdenv.mkDerivation rec {
   name = "${basename}-${version}";
 
   src = fetchFromGitHub {
-    #url = "https://github.com/lxde/${basename}/archive/${version}.tar.gz";
-    #rev = "1c8422bd78dfb06b631568b1780ec5f59682cbdc";
     owner = "lxde";
     repo = basename;
-    rev = "${version}";
+    rev = version;
     sha256 = "1njfbg5ia7417dqn0bb11998ivdp2dg14ym7hihi5v2wvm48n161";
   };
 
