@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   preInstall = ''
     substituteInPlace src/redshift-gtk/redshift-gtk python --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
   '';
-
+/*
   postInstall = ''
     wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0:${pyxdg}/lib/${python.libPrefix}/site-packages/pyxdg:$out/lib/${python.libPrefix}/site-packages
   '';
-
+*/
   meta = with stdenv.lib; {
     description = "changes the color temperature of your screen gradually";
     longDescription = ''
