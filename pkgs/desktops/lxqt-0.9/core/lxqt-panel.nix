@@ -18,7 +18,7 @@
 # additional optional dependencies
 , icu
 , alsaLib
-, pulseaudio
+, pulseaudioFull
 , lm_sensors
 , libstatgrab
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     kguiaddons kwindowsystem
     libqtxdg liblxqt liblxqt-mount lxqt-globalkeys libsysstat
     menu-cache
-    icu alsaLib pulseaudio lm_sensors libstatgrab
+    icu alsaLib pulseaudioFull lm_sensors libstatgrab
   ];
 
   patchPhase = standardPatch;
