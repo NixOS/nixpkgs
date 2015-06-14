@@ -2856,6 +2856,8 @@ let
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
+  skippy-xd = callPackage ../tools/X11/skippy-xd {};
+
   skydns = callPackage ../servers/dns/skydns { };
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
