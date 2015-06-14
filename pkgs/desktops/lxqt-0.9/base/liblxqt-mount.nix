@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub
 , cmake
 , qt54
 , liblxqt
@@ -9,10 +9,13 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
   name = "${basename}-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/lxde/${basename}.git";
-    rev = "1c8422bd78dfb06b631568b1780ec5f59682cbdc";
-    sha256 = "7214227f9410b33044f15debe4202f87795dd39b27c7fa328c0780c9a79f2a96";
+  src = fetchFromGitHub {
+    #url = "https://github.com/lxde/${basename}/archive/${version}.tar.gz";
+    #rev = "1c8422bd78dfb06b631568b1780ec5f59682cbdc";
+    owner = "lxde";
+    repo = basename;
+    rev = "${version}";
+    sha256 = "1njfbg5ia7417dqn0bb11998ivdp2dg14ym7hihi5v2wvm48n161";
   };
 
   buildInputs = [ stdenv cmake qt54.base qt54.tools liblxqt ];
