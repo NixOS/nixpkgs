@@ -14710,6 +14710,10 @@ let
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
+  vbam = callPackage ../misc/emulators/vbam {
+    inherit (xlibs) libpthreadstubs;
+  };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
