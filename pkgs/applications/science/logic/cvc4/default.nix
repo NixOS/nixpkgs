@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, libantlr3c, boost }:
+{ stdenv, fetchurl, gmp, libantlr3c, boost, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "cvc4-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "093h7zgv4z4ad503j30dpn8k2pz9m90pvd7gi5axdmwsxgwlzzkn";
   };
 
-  buildInputs = [ gmp libantlr3c boost ];
+  buildInputs = [ gmp libantlr3c boost autoreconfHook ];
   preConfigure = "patchShebangs ./src/";
   doChecks = true;
 
