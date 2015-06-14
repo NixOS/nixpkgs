@@ -8741,6 +8741,11 @@ let
 
   slowaes = callPackage ../development/python-modules/slowaes { };
 
+  vpython = callPackage ../development/python-modules/vpython {
+    inherit (pythonPackages) numpy wxPython30 polygon2 fonttools ttfquery;
+    inherit (gnome2) gtkglextmm;
+  };
+
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
 
