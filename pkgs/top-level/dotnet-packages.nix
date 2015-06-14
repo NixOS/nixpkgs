@@ -113,6 +113,65 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   # SOURCE PACKAGES
 
+  ExcelDna = buildDotnetPackage rec {
+    baseName = "Excel-DNA";
+    version = "0.32.0";
+
+    src = fetchFromGitHub {
+      owner = "Excel-DNA";
+      repo = "ExcelDna";
+      rev = "10a163843bcc2fb5517f6f3d499e18a8b64df511";
+      sha256 = "1w2ag9na20ly0m2sic3nkgdc4qqyb4x4c9iv588ynpkgd1pjndrk";
+    };
+
+    buildInputs = [ ];
+
+    preConfigure = ''
+      rm -vf Distribution/*.dll Distribution/*.exe # Make sure we don't use those
+      substituteInPlace Source/ExcelDna.Integration/ExcelDna.Integration.csproj --replace LogDisplay.designer.cs LogDisplay.Designer.cs
+    '';
+
+    xBuildFiles = [ "Source/ExcelDna.sln" ];
+    outputFiles = [ "Source/ExcelDnaPack/bin/Release/*" "Distribution/ExcelDna.xll" "Distribution/ExcelDna64.xll" ];
+
+    meta = {
+      description = "Excel-DNA is an independent project to integrate .NET into Excel";
+      homepage = "http://excel-dna.net/";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
+  ExcelDnaRegistration = buildDotnetPackage rec {
+    baseName = "Excel-DNA.Registration";
+    version = "git-" + (builtins.substring 0 10 rev);
+    rev = "69abb1b3528f40dbcf425e13690aaeab5f707bb6";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "Excel-DNA";
+      repo = "Registration";
+      sha256 = "094932h6r2f4x9r5mnw8rm4jzz8vkfv90d95qi3h0i89ws2dnn07";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.ExcelDna
+    ];
+
+    xBuildFiles = [ "Source/ExcelDna.Registration/ExcelDna.Registration.csproj" "Source/ExcelDna.Registration.FSharp/ExcelDna.Registration.FSharp.fsproj" ];
+    outputFiles = [ "Source/ExcelDna.Registration/bin/Release/*" "Source/ExcelDna.Registration.FSharp/bin/Release/*FSharp*" ];
+
+    meta = {
+      description = "This library implements helper functions to assist and modify the Excel-DNA function registration";
+      homepage = "https://github.com/Excel-DNA/Registration";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
   ExtCore = buildDotnetPackage rec {
     baseName = "ExtCore";
     version = "0.8.46";
