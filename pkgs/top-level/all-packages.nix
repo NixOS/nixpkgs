@@ -6727,6 +6727,8 @@ let
 
   libebml = callPackage ../development/libraries/libebml { };
 
+  libebur128 = callPackage ../development/libraries/libebur128 { };
+
   libedit = callPackage ../development/libraries/libedit { };
 
   libelf = callPackage ../development/libraries/libelf { };
