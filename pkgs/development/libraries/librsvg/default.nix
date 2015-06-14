@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # The loaders.cache can be used by setting GDK_PIXBUF_MODULE_FILE to
   # point to this file in a wrapper.
   postConfigure = ''
-    GDK_PIXBUF=$out/lib/gdk-pixbuf
+    GDK_PIXBUF=$out/lib/gdk-pixbuf-2.0/2.10.0
     mkdir -p $GDK_PIXBUF/loaders
     sed -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
         -i gdk-pixbuf-loader/Makefile
@@ -42,5 +42,12 @@ stdenv.mkDerivation rec {
         -i gdk-pixbuf-loader/Makefile
     sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
          -i gdk-pixbuf-loader/Makefile
+  '';
+
+  # Merge gdkpixbuf and librsvg loaders
+  postInstall = ''
+    mv $GDK_PIXBUF/loaders.cache $GDK_PIXBUF/loaders.cache.tmp
+    cat ${gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
+    rm $GDK_PIXBUF/loaders.cache.tmp
   '';
 }
