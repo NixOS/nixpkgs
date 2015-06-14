@@ -13467,6 +13467,8 @@ let
 
   tintin = callPackage ../games/tintin { };
 
+  tome4 = callPackage ../games/tome4 { };
+
   tpm = callPackage ../games/thePenguinMachine { };
 
   tremulous = callPackage ../games/tremulous { };
