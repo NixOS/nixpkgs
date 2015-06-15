@@ -222,7 +222,7 @@ runHook addInputsHook
 
 # Recursively find all build inputs.
 findInputs() {
-    local pkg=$1
+    local pkg="$1"
     local var=$2
     local propagatedBuildInputsFile=$3
 
@@ -234,17 +234,22 @@ findInputs() {
 
     eval $var="'${!var} $pkg '"
 
-    if [ -f $pkg ]; then
-        source $pkg
+    if ! [ -e "$pkg" ]; then
+        echo "build input $pkg does not exist" >&2
+        exit 1
     fi
 
-    if [ -f $pkg/nix-support/setup-hook ]; then
-        source $pkg/nix-support/setup-hook
+    if [ -f "$pkg" ]; then
+        source "$pkg"
     fi
 
-    if [ -f $pkg/nix-support/$propagatedBuildInputsFile ]; then
-        for i in $(cat $pkg/nix-support/$propagatedBuildInputsFile); do
-            findInputs $i $var $propagatedBuildInputsFile
+    if [ -f "$pkg/nix-support/setup-hook" ]; then
+        source "$pkg/nix-support/setup-hook"
+    fi
+
+    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
+        for i in $(cat "$pkg/nix-support/$propagatedBuildInputsFile"); do
+            findInputs "$i" $var $propagatedBuildInputsFile
         done
     fi
 }
