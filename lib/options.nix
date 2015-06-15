@@ -59,20 +59,6 @@ rec {
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
 
-  /* Obsolete, will remove soon.  Specify an option type or apply
-     function instead.  */
-  mergeTypedOption = typeName: predicate: merge: loc: list:
-    let list' = map (x: x.value) list; in
-    if all predicate list then merge list'
-    else throw "Expected a ${typeName}.";
-
-  mergeEnableOption = mergeTypedOption "boolean"
-    (x: true == x || false == x) (fold lib.or false);
-
-  mergeListOption = mergeTypedOption "list" isList concatLists;
-
-  mergeStringOption = mergeTypedOption "string" isString lib.concatStrings;
-
   mergeOneOption = loc: defs:
     if defs == [] then abort "This case should never happen."
     else if length defs != 1 then
