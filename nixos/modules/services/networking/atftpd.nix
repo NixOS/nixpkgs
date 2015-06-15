@@ -26,7 +26,7 @@ in
 
       root = mkOption {
         default = "/var/empty";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Document root directory for the atftpd.
         '';
