@@ -14169,6 +14169,8 @@ let
 
   satallax = callPackage ../applications/science/logic/satallax {};
 
+  saw-tools = callPackage ../applications/science/logic/saw-tools {};
+
   spass = callPackage ../applications/science/logic/spass {};
 
   tptp = callPackage ../applications/science/logic/tptp {};
