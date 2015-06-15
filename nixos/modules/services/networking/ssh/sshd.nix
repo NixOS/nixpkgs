@@ -234,7 +234,7 @@ in
         ];
         options = {
           hostNames = mkOption {
-            type = types.listOf types.string;
+            type = types.listOf types.str;
             default = [];
             description = ''
               A list of host names and/or IP numbers used for accessing

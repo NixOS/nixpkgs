@@ -63,7 +63,7 @@ let
 
       directives = mkOption {
         default = [];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         description = ''
           List of configuration directives for this UPS.
         '';

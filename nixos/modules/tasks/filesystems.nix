@@ -121,7 +121,7 @@ in
     boot.supportedFilesystems = mkOption {
       default = [ ];
       example = [ "btrfs" ];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = "Names of supported filesystem types.";
     };
 

@@ -70,7 +70,7 @@ in {
           See https://mesos.apache.org/documentation/latest/configuration/
         '';
         default = [ "" ];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         example = [ "--gc_delay=3days" ];
       };
 
