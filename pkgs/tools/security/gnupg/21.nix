@@ -13,14 +13,12 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.1.4";
+  name = "gnupg-2.1.5";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1c3c89b7ziknz6h1dnwmfjhgyy28g982rcncrhmhylb8v3npw4k4";
+    sha256 = "0k5818r847zplbrwjp6i48s6xb5zy44rny2kmbisd6y3c1qml45m";
   };
-
-  patches = [ ./socket-activate-2.1.1.patch ];
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c

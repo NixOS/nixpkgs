@@ -43,7 +43,7 @@ in {
     enable = mkOption {
       description = "Whether to enable neo4j.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     package = mkOption {

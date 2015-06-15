@@ -1,11 +1,11 @@
 { stdenv, fetchurl, self, callPackage
-, bzip2, openssl
+, bzip2, openssl, gettext
 
 , includeModules ? false
 
 , db, gdbm, ncurses, sqlite, readline
 
-, tcl ? null, tk ? null, x11 ? null, libX11 ? null, x11Support ? true
+, tcl ? null, tk ? null, x11 ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
 , zlib ? null, zlibSupport ? true
 , expat, libffi
 }:
@@ -224,7 +224,7 @@ let
     gdbm = buildInternalPythonModule {
       moduleName = "gdbm";
       internalName = "gdbm";
-      deps = [ gdbm ];
+      deps = [ gdbm ] ++ stdenv.lib.optional stdenv.isCygwin gettext;
     };
 
     sqlite3 = buildInternalPythonModule {

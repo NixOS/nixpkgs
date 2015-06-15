@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "t1utils-1.38";
+  name = "t1utils-1.39";
 
   src = fetchurl {
     url = "http://www.lcdf.org/type/${name}.tar.gz";
-    sha256 = "1pnxpjabjyzfjrp319wsq4acxw99c8nnsaalbz7nwamj8kkim7zw";
+    sha256 = "1i6ln194ns2g4j5zjlj4bfzxpkfpnxvy37n9baq3hywjqkjz7bhg";
   };
 
   meta = with stdenv.lib; {

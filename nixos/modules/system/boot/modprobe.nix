@@ -101,7 +101,7 @@ with lib;
         echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
       '';
 
-    environment.variables.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
+    environment.sessionVariables.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
 
   };
 

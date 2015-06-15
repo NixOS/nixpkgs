@@ -21,7 +21,7 @@ sub new {
     my ($class, $args) = @_;
 
     my $startCommand = $args->{startCommand};
-    
+
     my $name = $args->{name};
     if (!$name) {
         $startCommand =~ /run-(.*)-vm$/ if defined $startCommand;
@@ -34,7 +34,7 @@ sub new {
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
         my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,boot=on,werror=report "
+        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
@@ -43,8 +43,6 @@ sub new {
         $startCommand .= "-bios $args->{bios} "
             if defined $args->{bios};
         $startCommand .= $args->{qemuFlags} || "";
-    } else {
-        $startCommand = Cwd::abs_path $startCommand;
     }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
@@ -171,7 +169,7 @@ sub start {
 
     eval {
         local $SIG{CHLD} = sub { die "QEMU died prematurely\n"; };
-        
+
         # Wait until QEMU connects to the monitor.
         accept($self->{monitor}, $monitorS) or die;
 
@@ -182,11 +180,11 @@ sub start {
         $self->{socket}->autoflush(1);
     };
     die "$@" if $@;
-    
+
     $self->waitForMonitorPrompt;
 
     $self->log("QEMU running (pid $pid)");
-    
+
     $self->{pid} = $pid;
     $self->{booted} = 1;
 }
@@ -241,7 +239,7 @@ sub connect {
         alarm 300;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
-        
+
         $self->log("connected to guest root shell");
         $self->{connected} = 1;
 
@@ -270,7 +268,7 @@ sub isUp {
 
 sub execute_ {
     my ($self, $command) = @_;
-    
+
     $self->connect;
 
     print { $self->{socket} } ("( $command ); echo '|!=EOF' \$?\n");
@@ -453,7 +451,7 @@ sub shutdown {
 sub crash {
     my ($self) = @_;
     return unless $self->{booted};
-    
+
     $self->log("forced crash");
 
     $self->sendMonitorCommand("quit");

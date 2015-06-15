@@ -116,11 +116,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
-  # Until the changes have been pushed to Hackage
-  mueval = appendPatch super.mueval (pkgs.fetchpatch {
-    url = "https://github.com/gwern/mueval/commit/c41aa40ed63b74c069d1e4e3caa8c8d890cde960.patch";
-    sha256 = "0h1lx4z15imq009k0qmwkn5l3hmigw463ahvwffdnszi2n618kpg";
-  });
   present = appendPatch super.present (pkgs.fetchpatch {
     url = "https://github.com/chrisdone/present/commit/6a61f099bf01e2127d0c68f1abe438cd3eaa15f7.patch";
     sha256 = "1vn3xm38v2f4lzyzkadvq322f3s2yf8c88v56wpdpzfxmvlzaqr8";
@@ -230,7 +225,6 @@ self: super: {
   cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
   control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
-  equivalence_0_2_5 = markBroken super.equivalence_0_2_5;
   haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
   optparse-applicative_0_10_0 = markBroken super.optparse-applicative_0_10_0;
   QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
@@ -277,19 +271,5 @@ self: super: {
 
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
-
-  # Ugly hack to trigger a rebuild to fix the broken package on Hydra.
-  asn1-encoding = appendConfigureFlag super.asn1-encoding "-fignore-me-1";
-  asn1-types = appendConfigureFlag super.asn1-types "-fignore-me-1";
-  cmdargs = appendConfigureFlag super.cmdargs "-fignore-me-1";
-  crypto-api = appendConfigureFlag super.crypto-api "-fignore-me-1";
-  crypto-pubkey-types = appendConfigureFlag super.crypto-pubkey-types "-fignore-me-1";
-  hourglass = appendConfigureFlag super.hourglass "-fignore-me-1";
-  math-functions = appendConfigureFlag super.math-functions "-fignore-me-1";
-  tagsoup = appendConfigureFlag super.tagsoup "-fignore-me-1";
-  X11 = appendConfigureFlag super.X11 "-fignore-me-1";
-  x509 = appendConfigureFlag super.x509 "-fignore-me-1";
-  x509-store = appendConfigureFlag super.x509-store "-fignore-me-1";
-  x509-system = appendConfigureFlag super.x509-system "-fignore-me-1";
 
 }

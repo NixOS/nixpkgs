@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap gtk2 ncurses qt4 ];
 
+  # configure cannot find moc on its own
+  preConfigure = stdenv.lib.optionalString (qt4 != null) ''
+    export QTDIR="${qt4}"
+    export MOC="${qt4}/bin/moc"
+  '';
+
   configureFlags = [
     (mkWith   (libcap != null)  "libcap")
     (mkWith   (hasX)            "x")
@@ -36,8 +42,9 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
     longDescription = ''
-      Pinentry provides a console and a GTK+ GUI that allows users to
-      enter a passphrase when `gpg' or `gpg2' is run and needs it.
+      Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
+      to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
+    maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };
 }

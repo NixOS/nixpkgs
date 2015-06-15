@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "urxvt-tabbedex";
+  name = "urxvt-tabbedex-2015-03-03";
 
   src = fetchgit {
     url = "https://github.com/mina86/urxvt-tabbedex";

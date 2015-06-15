@@ -6,46 +6,9 @@ with pkgs.lib;
 
 let
 
-  # Build the ISO.  This is the regular minimal installation CD but
-  # with test instrumentation.
-  iso =
-    (import ../lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ ../modules/installer/cd-dvd/installation-cd-minimal.nix
-          ../modules/testing/test-instrumentation.nix
-          { key = "serial";
-            boot.loader.grub.timeout = mkOverride 0 0;
-
-            # The test cannot access the network, so any sources we
-            # need must be included in the ISO.
-            isoImage.storeContents =
-              [ pkgs.glibcLocales
-                pkgs.sudo
-                pkgs.docbook5
-                pkgs.docbook5_xsl
-                pkgs.unionfs-fuse
-
-                # Bootloader support
-                pkgs.grub
-                pkgs.grub2
-                pkgs.grub2_efi
-                pkgs.gummiboot
-                pkgs.perlPackages.XMLLibXML
-                pkgs.perlPackages.ListCompare
-              ];
-
-            # Don't use https://cache.nixos.org since the fake
-            # cache.nixos.org doesn't do https.
-            nix.binaryCaches = [ http://cache.nixos.org/ ];
-          }
-        ];
-    }).config.system.build.isoImage;
-
-
   # The configuration to install.
-  makeConfig = { testChannel, grubVersion, grubDevice, grubIdentifier
-               , extraConfig, readOnly ? true, forceGrubReinstallCount ? 0
+  makeConfig = { grubVersion, grubDevice, grubIdentifier
+               , extraConfig, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
@@ -53,7 +16,6 @@ let
       { imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-            <nixpkgs/nixos/modules/profiles/minimal.nix>
           ];
 
         boot.loader.grub.version = ${toString grubVersion};
@@ -66,95 +28,38 @@ let
 
         boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
 
-        ${optionalString (!readOnly) "nix.readOnlyStore = false;"}
+        hardware.enableAllFirmware = lib.mkForce false;
 
-        environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
-
-        nix.binaryCaches = [ http://cache.nixos.org/ ];
         ${replaceChars ["\n"] ["\n  "] extraConfig}
       }
     '';
 
 
-  # Configuration of a web server that simulates the Nixpkgs channel
-  # distribution server.
-  webserver =
-    { config, lib, pkgs, ... }:
-
-    { services.httpd.enable = true;
-      services.httpd.adminAddr = "foo@example.org";
-      services.httpd.servedDirs = singleton
-        { urlPath = "/";
-          dir = "/tmp/channel";
-        };
-
-      virtualisation.writableStore = true;
-      virtualisation.pathsInNixDB = channelContents ++ [ pkgs.hello.src ];
-      virtualisation.memorySize = 768;
-
-      networking.firewall.allowedTCPPorts = [ 80 ];
-    };
-
   channelContents = [ pkgs.rlwrap ];
 
 
-  # The test script boots the CD, installs NixOS on an empty hard
+  # The test script boots a NixOS VM, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { createPartitions, testChannel, grubVersion, grubDevice
+  testScriptFun = { createPartitions, grubVersion, grubDevice
                   , grubIdentifier, preBootCommands, extraConfig
                   }:
     let
-      # FIXME: OVMF doesn't boot from virtio http://www.mail-archive.com/edk2-devel@lists.sourceforge.net/msg01501.html
       iface = if grubVersion == 1 then "scsi" else "virtio";
       qemuFlags =
-        (if iso.system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (iso.system == "x86_64-linux") "-cpu kvm64 ");
-      hdFlags =''hda => "harddisk", hdaInterface => "${iface}", '';
+        (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
+        (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
+      hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", '';
     in
     ''
-      createDisk("harddisk", 8 * 1024);
-
-      my $machine = createMachine({ ${hdFlags}
-        cdrom => glob("${iso}/iso/*.iso"),
-        qemuFlags => "${qemuFlags} " . '${optionalString testChannel (toString (qemuNICFlags 1 1 2))}' });
       $machine->start;
-
-      ${optionalString testChannel ''
-        # Create a channel on the web server containing a few packages
-        # to simulate the Nixpkgs channel.
-        $webserver->start;
-        $webserver->waitForUnit("httpd");
-        $webserver->succeed(
-            "nix-push --bzip2 --dest /tmp/channel --manifest --url-prefix http://nixos.org/channels/nixos-unstable " .
-            "${toString channelContents} >&2");
-        $webserver->succeed("mkdir /tmp/channel/sha256");
-        $webserver->succeed("cp ${pkgs.hello.src} /tmp/channel/sha256/${pkgs.hello.src.outputHash}");
-      ''}
 
       # Make sure that we get a login prompt etc.
       $machine->succeed("echo hello");
       #$machine->waitForUnit('getty@tty2');
       $machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
-
-      ${optionalString testChannel ''
-        $machine->waitForUnit("dhcpcd");
-
-        # Allow the machine to talk to the fake nixos.org.
-        $machine->succeed(
-            "rm /etc/hosts",
-            "echo 192.168.1.1 nixos.org cache.nixos.org tarballs.nixos.org > /etc/hosts",
-            "ifconfig eth1 up 192.168.1.2",
-        );
-
-        # Test nix-env.
-        $machine->fail("hello");
-        $machine->succeed("nix-env -i hello");
-        $machine->succeed("hello") =~ /Hello, world/
-            or die "bad `hello' output";
-      ''}
 
       # Wait for hard disks to appear in /dev
       $machine->succeed("udevadm settle");
@@ -163,14 +68,12 @@ let
       ${createPartitions}
 
       # Create the NixOS configuration.
-      $machine->succeed(
-          "nixos-generate-config --root /mnt",
-      );
+      $machine->succeed("nixos-generate-config --root /mnt");
 
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; } }",
+          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -188,7 +91,7 @@ let
       # Now see if we can boot the installation.
       $machine = createMachine({ ${hdFlags} qemuFlags => "${qemuFlags}" });
 
-      # For example to enter LUKS passphrase
+      # For example to enter LUKS passphrase.
       ${preBootCommands}
 
       # Did /boot get mounted?
@@ -209,9 +112,9 @@ let
       $machine->succeed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
-      # We need to a writable nix-store on next boot
+      # We need to a writable nix-store on next boot.
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -220,7 +123,7 @@ let
       # Test nixos-option.
       $machine->succeed("nixos-option boot.initrd.kernelModules | grep virtio_console");
       $machine->succeed("nixos-option boot.initrd.kernelModules | grep 'List of modules'");
-      $machine->succeed("nixos-option  boot.initrd.kernelModules | grep qemu-guest.nix");
+      $machine->succeed("nixos-option boot.initrd.kernelModules | grep qemu-guest.nix");
 
       $machine->shutdown;
 
@@ -229,7 +132,7 @@ let
       ${preBootCommands}
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit testChannel grubVersion grubDevice grubIdentifier extraConfig; readOnly = false; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
@@ -245,16 +148,60 @@ let
 
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
-    , testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda"
+    , grubVersion ? 2, grubDevice ? "/dev/vda"
     , grubIdentifier ? "uuid", enableOCR ? false
     }:
     makeTest {
-      inherit iso;
-      name = "installer-" + name;
-      nodes = if testChannel then { inherit webserver; } else { };
       inherit enableOCR;
+      name = "installer-" + name;
+
+      nodes = {
+
+        # The configuration of the machine used to run "nixos-install". It
+        # also has a web server that simulates cache.nixos.org.
+        machine =
+          { config, lib, pkgs, ... }:
+
+          { imports =
+              [ ../modules/profiles/installation-device.nix
+                ../modules/profiles/base.nix
+              ];
+
+            virtualisation.diskSize = 8 * 1024;
+            virtualisation.memorySize = 768;
+            virtualisation.writableStore = true;
+
+            # Use a small /dev/vdb as the root disk for the
+            # installer. This ensures the target disk (/dev/vda) is
+            # the same during and after installation.
+            virtualisation.emptyDiskImages = [ 512 ];
+            virtualisation.bootDevice = "/dev/vdb";
+
+            hardware.enableAllFirmware = mkForce false;
+
+            # The test cannot access the network, so any packages we
+            # need must be included in the VM.
+            system.extraDependencies =
+              [ pkgs.sudo
+                pkgs.docbook5
+                pkgs.docbook5_xsl
+                pkgs.unionfs-fuse
+                pkgs.ntp
+                pkgs.nixos-artwork
+                pkgs.gummiboot
+                pkgs.perlPackages.XMLLibXML
+                pkgs.perlPackages.ListCompare
+              ]
+              ++ optional (grubVersion == 1) pkgs.grub
+              ++ optionals (grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
+
+            nix.binaryCaches = mkForce [ ];
+          };
+
+      };
+
       testScript = testScriptFun {
-        inherit createPartitions preBootCommands testChannel grubVersion
+        inherit createPartitions preBootCommands grubVersion
                 grubDevice grubIdentifier extraConfig;
       };
     };
@@ -281,7 +228,6 @@ in {
               "mount LABEL=nixos /mnt",
           );
         '';
-      testChannel = true;
     };
 
   # Same as the previous, but now with a separate /boot partition.
@@ -413,38 +359,9 @@ in {
               "mkfs.ext3 -L nixos /dev/sda2",
               "mount LABEL=nixos /mnt",
           );
-
         '';
       grubVersion = 1;
       grubDevice = "/dev/sda";
-    };
-
-  # Rebuild the CD configuration with a little modification.
-  rebuildCD = makeTest
-    { inherit iso;
-      name = "rebuild-cd";
-      nodes = { };
-      testScript =
-        ''
-          my $machine = createMachine({ cdrom => glob("${iso}/iso/*.iso"), qemuFlags => '-m 768' });
-          $machine->start;
-
-          # Enable sshd service.
-          $machine->succeed(
-            "sed -i 's,^}\$,systemd.services.sshd.wantedBy = pkgs.lib.mkOverride 0 [\"multi-user.target\"]; },' /etc/nixos/configuration.nix"
-          );
-
-          $machine->succeed("cat /etc/nixos/configuration.nix >&2");
-
-          # Apply the new CD configuration.
-          $machine->succeed("nixos-rebuild test");
-
-          # Connect to it-self.
-          $machine->waitForUnit("sshd");
-          $machine->waitForOpenPort(22);
-
-          $machine->shutdown;
-        '';
     };
 
   # Test using labels to identify volumes in grub
@@ -545,4 +462,5 @@ in {
       );
     '';
   };
+
 }

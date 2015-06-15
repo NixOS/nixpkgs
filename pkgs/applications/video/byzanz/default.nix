@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix=$out
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   buildInputs = [ which gnome3.gnome_common glib intltool pkgconfig libtool cairo gtk3 gst_all_1.gstreamer gst_all_1.gst-plugins-base ];
 
   meta = with stdenv.lib; {

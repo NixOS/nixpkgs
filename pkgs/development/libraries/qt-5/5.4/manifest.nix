@@ -2,273 +2,273 @@
 { stdenv, fetchurl, mirror }:
 [
   {
-    name = stdenv.lib.nameFromURL "qtwayland-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/32jn5sn8im7andkd6m15s95n48ald7pw-qtwayland-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtbase-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/60xy2xnsl5kwraqkgh8d950nj1pk3kmi-qtbase-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwayland-opensource-src-5.4.1.tar.xz";
-      sha256 = "14npf3lclkb83s8ywla67a1129ia1mbib145s1sk5gqw1dh5wfv5";
-      name = "qtwayland-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtbase-opensource-src-5.4.2.tar.xz";
+      sha256 = "0x2szpjjvsrpcqw0dd3gsim7b1jv9p716pnllzjbia5mp0hggi4z";
+      name = "qtbase-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtandroidextras-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/604ifwwrzpm96rffszyl11xjirm0w65j-qtandroidextras-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtenginio-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/4iprnq6sm0b1pnxmxb5krip7kk40xqmr-qtenginio-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtandroidextras-opensource-src-5.4.1.tar.xz";
-      sha256 = "0s12hmn2lnlbp7y47v344lyli6wh670dwazl3kkzv9vdv52df4wp";
-      name = "qtandroidextras-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtenginio-opensource-src-5.4.2.tar.xz";
+      sha256 = "082i3fapjw6xs0jkz7x529dn3pb6w1pfli3cjrgvggff86gwlgwn";
+      name = "qtenginio-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtgraphicaleffects-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/wcwaylvnlrfy6d6pc0ka7mkcam846cqb-qtgraphicaleffects-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtserialport-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/l9k1v23ddnhjch5b2p3l28xbqkhz63yl-qtserialport-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtgraphicaleffects-opensource-src-5.4.1.tar.xz";
-      sha256 = "071mz2w25g5svknb97y6yw55sq9171qqd92n3dp4w2qg2blg1qms";
-      name = "qtgraphicaleffects-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtserialport-opensource-src-5.4.2.tar.xz";
+      sha256 = "1h6p5rb0ldxgzd4md3n79gy0j9blhj736670xqjd9vlvh1743kck";
+      name = "qtserialport-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtenginio-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/k7gayy35qqwbaf2yyr1lfydmsp6p9k3i-qtenginio-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtscript-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/n4ixnakw3fiflyimshkp43h7ijlpiif6-qtscript-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtenginio-opensource-src-5.4.1.tar.xz";
-      sha256 = "0yjpx43qy6yc6hblcrkp6g9jv2ipg2hdd27q86y7s30q54f17nxf";
-      name = "qtenginio-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtscript-opensource-src-5.4.2.tar.xz";
+      sha256 = "0izsmy0cr8iii78r10ndkidyljxqd2k9g03f5xb9nxacvr2f8hp0";
+      name = "qtscript-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtwebengine-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/0y1p0ssxbd8wp4vyq5ad2f77inh07p1b-qtwebengine-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwebchannel-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/qbkqkn4ck0fqbndl9fzp7iaz6c475xq8-qtwebchannel-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwebengine-opensource-src-5.4.1.tar.xz";
-      sha256 = "1c5akxh6wxgc72md6802fbvd601n03assv6i542siwmmnp5anhij";
-      name = "qtwebengine-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwebchannel-opensource-src-5.4.2.tar.xz";
+      sha256 = "0vy1zjbghfa1wirxd8fd2n2n8yryykzr09913qm2nlfbcxdsgqsn";
+      name = "qtwebchannel-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtmacextras-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/0mdhndcp51g2160559kgd5a93c0c3317-qtmacextras-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwinextras-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/9kmig3lg8d8s5r1jl3xj5q3jrkp3p8sx-qtwinextras-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtmacextras-opensource-src-5.4.1.tar.xz";
-      sha256 = "0hivjn3yfidzj4la3rlrqzjawrakxyhc886w2jcf0bjz3vzl9xp2";
-      name = "qtmacextras-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwinextras-opensource-src-5.4.2.tar.xz";
+      sha256 = "0sgybvr1y2xsddlqc95ninxj3rfmd4gv7a8f7rqcxdynjan5gij0";
+      name = "qtwinextras-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qttranslations-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/hhana1500hq2h2l8815wq8rfrp7nizpb-qttranslations-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwebsockets-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/zk4s5pgp3mh6xdq6z3svi305vn0pli27-qtwebsockets-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qttranslations-opensource-src-5.4.1.tar.xz";
-      sha256 = "0hchmz7hjdjx0wn2v9sbgilvi0pigiriklw5pdvfxjabjxgh8k9w";
-      name = "qttranslations-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwebsockets-opensource-src-5.4.2.tar.xz";
+      sha256 = "0lv1la8333qnirxmscs42xnnra0xry1gjbhi3bxrf1hrfs2im9j4";
+      name = "qtwebsockets-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtwebchannel-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/qfa1hycl1lh8pm2x65frxlms3waqbsfg-qtwebchannel-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtmultimedia-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/n8wpy6b8jw1rf51z1qhxbbym7j8rr8ay-qtmultimedia-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwebchannel-opensource-src-5.4.1.tar.xz";
-      sha256 = "0ldjyyp0ym3hndd0bq5mwjry2yilf1cv9iddqb8adz46k3nbkb64";
-      name = "qtwebchannel-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtmultimedia-opensource-src-5.4.2.tar.xz";
+      sha256 = "0h29cs8ajnjarhjx1aczdnxqwvg6pqs9s8w28hw488s149wqqrnj";
+      name = "qtmultimedia-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtdoc-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/hif7dg37sz0yjj09844f0gyqqsf9cpxx-qtdoc-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtgraphicaleffects-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/2q2vk530mf32zzd1v8bpax8iixviw6q5-qtgraphicaleffects-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtdoc-opensource-src-5.4.1.tar.xz";
-      sha256 = "1afg2lxyxgqhq02a58c9yshvkinlk5mw19yff1421fma6j925c8q";
-      name = "qtdoc-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtgraphicaleffects-opensource-src-5.4.2.tar.xz";
+      sha256 = "02p8xm5ajicjam30ry3g1lm2p4nja2q0sls8dzimqrxhw5xlg3xs";
+      name = "qtgraphicaleffects-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtwebkit-examples-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/shz5132xvpp2hvmsyl1mhps0qanrgw43-qtwebkit-examples-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtxmlpatterns-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/3fqgpa668hb1xmwjw056cw58qzb3r0g4-qtxmlpatterns-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwebkit-examples-opensource-src-5.4.1.tar.xz";
-      sha256 = "02kj4rw40s7xhdz1ixfy5fc7n5pr2ipqkpwj1kwng71l3jrpn60r";
-      name = "qtwebkit-examples-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtxmlpatterns-opensource-src-5.4.2.tar.xz";
+      sha256 = "0ar7znqp1i02ha5ngy2kzk3hlgkafjbn2xa8j2k78gzmwsmdhzxa";
+      name = "qtxmlpatterns-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtbase-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/nl8rm1q2sqyq5y91h6d9dbks82krykn1-qtbase-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qttranslations-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/mg9b5z2nznzxrz501hm06b7l27jjwaca-qttranslations-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtbase-opensource-src-5.4.1.tar.xz";
-      sha256 = "1dxigzgv6xj5lybs654y57ssfbl38dxff3s3wpvw0n89hf9sax45";
-      name = "qtbase-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qttranslations-opensource-src-5.4.2.tar.xz";
+      sha256 = "0b4l69c16z8gjd4mq75zz3lj2gxarr9wyk0vk60jg1mi62vxvdls";
+      name = "qttranslations-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qttools-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/f9cbf92nhmfkz1q2n4nidh432s5d3pls-qttools-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtdeclarative-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/bjmv4fgphx9bggzcwy4lcdas9phbwjsg-qtdeclarative-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qttools-opensource-src-5.4.1.tar.xz";
-      sha256 = "0whzcwgzwh1m6fqb7h2gvkx9hi2ijjaz8ap36jqr8cc4ff2hzphi";
-      name = "qttools-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtdeclarative-opensource-src-5.4.2.tar.xz";
+      sha256 = "1bj1wwms6lpj8s70y8by3j0hjsw6g9v8m6fybx68krzzizbj2c5p";
+      name = "qtdeclarative-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qt5-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/hl5gzwaq43afs2z7ga10161myzz3xrwb-qt5-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwebkit-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/pfhq8ask8jhzdh2x882d014b10ddywma-qtwebkit-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qt5-opensource-src-5.4.1.tar.xz";
-      sha256 = "01xgf3531q60vrkg1pp07q4p0ildj42zgnw63v8fnwjg7c5m59rd";
-      name = "qt5-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwebkit-opensource-src-5.4.2.tar.xz";
+      sha256 = "0vffbpiczag2n2hp5gc0nii8n7vkidr8f8pp8a47px0183hl6hiy";
+      name = "qtwebkit-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtquick1-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/9y9qhciiqys5sm502bbflqzrjmvxpqh6-qtquick1-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtquick1-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/n807cxddkvhbzw3ciqs29zc5mw47z2qs-qtquick1-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtquick1-opensource-src-5.4.1.tar.xz";
-      sha256 = "0ba3r89j75vrjgh8h3ik64x84bhgbckc4bvy1wympwgfhk3j8lzb";
-      name = "qtquick1-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtquick1-opensource-src-5.4.2.tar.xz";
+      sha256 = "0178z15a31fw3l6933fwxs7sk0csifpwckydp3rqnn3fg5f2fwvp";
+      name = "qtquick1-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtwebsockets-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/cmvv503q10qnmmbb8yxvvjlxpqqaswyb-qtwebsockets-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtquickcontrols-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/gq8afk8zr2vrrsfmp4caqv02209qk9xb-qtquickcontrols-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwebsockets-opensource-src-5.4.1.tar.xz";
-      sha256 = "0i5bcxlwxbzq9k0kq1m90cbslby05x3j3r6js8xjarz2qnc6zxfs";
-      name = "qtwebsockets-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtquickcontrols-opensource-src-5.4.2.tar.xz";
+      sha256 = "137z3c3drxlvkdfc7zgcl0xqmavw0ladzqy0i3bq51h756qdc877";
+      name = "qtquickcontrols-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtsensors-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/9c4zpbngylc7cqqyai2ysglajapphxp7-qtsensors-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtimageformats-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/cmpx0338z1j0wzk6scfpay5k10023d46-qtimageformats-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtsensors-opensource-src-5.4.1.tar.xz";
-      sha256 = "1y6vbvvcgph466whcc896lkyk2lx8lyyqj1qnm76f3jjywp8wjxc";
-      name = "qtsensors-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtimageformats-opensource-src-5.4.2.tar.xz";
+      sha256 = "1nny6j9pm5ri3n1vwl5lrfrdz0fl81rx127wa49rkg2rjai2aawb";
+      name = "qtimageformats-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtx11extras-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/njkpa0ahd4l5307b4qmqlqiv4nw1by7z-qtx11extras-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtdoc-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/jv4wgs6pz9xqmin9m4q4mifr2vfcjn3h-qtdoc-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtx11extras-opensource-src-5.4.1.tar.xz";
-      sha256 = "0blcdqccxhdqj4v5zp6m34b74nw5n6pfgldyb6wrlpljkzdir9i0";
-      name = "qtx11extras-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtdoc-opensource-src-5.4.2.tar.xz";
+      sha256 = "15lamv6jvd7v33ldpcrazcdksv6qibdcgh4ncbyh774k8avgrlh8";
+      name = "qtdoc-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtmultimedia-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/q2ji7ilipdvx0p6iyrwhhfczzw1j11ws-qtmultimedia-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwayland-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/qa3yi9lyx2dm4wqzb3qzvzba1sgnj74z-qtwayland-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtmultimedia-opensource-src-5.4.1.tar.xz";
-      sha256 = "0kjk3q7y2lr8a62rdidhn783jrq1rpj11p1jmfiw8z3j255dsc1q";
-      name = "qtmultimedia-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwayland-opensource-src-5.4.2.tar.xz";
+      sha256 = "14pmpkfq70plw07igxjaiji4vnjg5kg7izlb0wwym1lisg7bwkg0";
+      name = "qtwayland-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtactiveqt-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/ikxpk38h1arms4x0qlnd7g5g3fg26fg4-qtactiveqt-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtmacextras-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/wdq1z3bzr9n11yln8avx10sgzgyvp8cl-qtmacextras-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtactiveqt-opensource-src-5.4.1.tar.xz";
-      sha256 = "14984cvh9cfnrgls40i28fjdhs015izzlvwck9va4167y3ix4zbx";
-      name = "qtactiveqt-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtmacextras-opensource-src-5.4.2.tar.xz";
+      sha256 = "0h0p3s0rvd3g9rgr4hwcggdbsav2g30vijqwmdxgxd8c00yply80";
+      name = "qtmacextras-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtxmlpatterns-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/0a30a874s507fmrsd1jlggbh9j953jb9-qtxmlpatterns-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtactiveqt-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/0ik7vc3zwdjvrp4fpyqf1zpyqdxvvqvq-qtactiveqt-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtxmlpatterns-opensource-src-5.4.1.tar.xz";
-      sha256 = "062kqs8m9js8mlld1lsm01prq57zs88g7p8fad84a5gisgs2y57m";
-      name = "qtxmlpatterns-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtactiveqt-opensource-src-5.4.2.tar.xz";
+      sha256 = "014kwficqydciwdm1yw88yms81qm8pmi6xfhhfpbc9k85pc6jlla";
+      name = "qtactiveqt-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtscript-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/cbb46kpmk6radk9v8cyngxcxr11g06f6-qtscript-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtlocation-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/sa4dawsw2wv45ld3afbz9nfc64qkyx1s-qtlocation-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtscript-opensource-src-5.4.1.tar.xz";
-      sha256 = "1bybzcp9smasw0syvb7vrz85jq124r7gywz2msgjg1kb6z4aqcpl";
-      name = "qtscript-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtlocation-opensource-src-5.4.2.tar.xz";
+      sha256 = "1v43hl2zzi90vaw11y8dvsksrjn0r2v0br7pw6njl8lqadpg4jnw";
+      name = "qtlocation-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtquickcontrols-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/h5hg9z346lh2w8whf0zgq5kbwffpmnkk-qtquickcontrols-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtconnectivity-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/v2aiscvf582azyzg696rglway56l7xl2-qtconnectivity-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtquickcontrols-opensource-src-5.4.1.tar.xz";
-      sha256 = "1hpvbjr76q9i2idgmblr80khhjgkn78q0s0d648r3axp232m427y";
-      name = "qtquickcontrols-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtconnectivity-opensource-src-5.4.2.tar.xz";
+      sha256 = "1nj68bzgm3r1gg171kj0acnifzb3jx0m5pf4f81xb7zl4hfxasrs";
+      name = "qtconnectivity-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtimageformats-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/7vxgal1cag6cakigc7h3rjvvr64b7sd3-qtimageformats-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtx11extras-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/nz62qld9h96z5a0b7fg52fsh5d6q0kqw-qtx11extras-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtimageformats-opensource-src-5.4.1.tar.xz";
-      sha256 = "0vw4bg68kwp48v49ds2vxvgjc82i5q5scff4013y5gpbd2smnv1z";
-      name = "qtimageformats-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtx11extras-opensource-src-5.4.2.tar.xz";
+      sha256 = "0jgyywjxavfpiz8202g3s0g9izfl185mmak4fs9h80w1i3gn5zzn";
+      name = "qtx11extras-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtserialport-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/pgcv75a5x56s88qclqvbw04dzywcxm73-qtserialport-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qttools-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/i8n6xrhalg3z4i0min4w79rq9h9hch0x-qttools-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtserialport-opensource-src-5.4.1.tar.xz";
-      sha256 = "1zyhlpmh7yisk9qpk8map0myam4bkm4jvp0wcnd4d7pldf19xnbr";
-      name = "qtserialport-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qttools-opensource-src-5.4.2.tar.xz";
+      sha256 = "1d5nx01r7wxhdg9f1i9xhsvsbwgaz3yv516s068riy970bhdgwzd";
+      name = "qttools-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtwebkit-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/p8jka7s4la8f83xqnl1a4ivdw95dajb8-qtwebkit-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtsensors-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/0ar28gp8klqxynjnc1r4kj9x7g8cknk2-qtsensors-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwebkit-opensource-src-5.4.1.tar.xz";
-      sha256 = "1gqrf5g07q5bgr3vnfnsw5qwqd0fjyh4pgqphrvxq4x9z0g221v6";
-      name = "qtwebkit-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtsensors-opensource-src-5.4.2.tar.xz";
+      sha256 = "1yawvjbdymgw8af7ir9zcin89xxck9dm2l6hnc43lwrky0frcvcf";
+      name = "qtsensors-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtconnectivity-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/ggn5pkvp89qh12vzhhk572s38vg3zn72-qtconnectivity-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwebengine-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/ikr8cc3bn62jlv9afpzhxvqs5qhsc2yc-qtwebengine-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtconnectivity-opensource-src-5.4.1.tar.xz";
-      sha256 = "0q13gg7fmfb7cfq403ql8s5qi6s9a4fd86i7v9r6cwgnj2szzi42";
-      name = "qtconnectivity-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwebengine-opensource-src-5.4.2.tar.xz";
+      sha256 = "06cyl733prakniqrn8sd807lclk5im2vmysjdcijry2mcyah2ih8";
+      name = "qtwebengine-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtlocation-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/pnblj6ncfvz4id84asjlnrxb2papsn1v-qtlocation-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtsvg-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/0llm31zpiaqig940a8dsp1dk2npxsnjc-qtsvg-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtlocation-opensource-src-5.4.1.tar.xz";
-      sha256 = "113rx43349f7yn4crhgg6ciz6lyvfvfnc0vkdaz09a2r461hr7w8";
-      name = "qtlocation-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtsvg-opensource-src-5.4.2.tar.xz";
+      sha256 = "1dsyncp154xvb7d82nmnfjm0ngymnhqmliq58ljwxsjmpjlncakz";
+      name = "qtsvg-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtdeclarative-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/0bz5yxqc9yg94jyjkvsgn7h7lph99a5v-qtdeclarative-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qt5-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/0jrx1clg8vqid9b2n9z8f0xbwjm0yynr-qt5-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtdeclarative-opensource-src-5.4.1.tar.xz";
-      sha256 = "05s4imk7whm2qir9byb35dn2ndqb7c5r2cnxpv2qyjla58j4w4hm";
-      name = "qtdeclarative-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qt5-opensource-src-5.4.2.tar.xz";
+      sha256 = "17a0pybr4bpyv9pj7cr5hl4g31biv89bjr8zql723h0b12ql1w44";
+      name = "qt5-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtwinextras-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/xdbwakyhif8cjwyii7v32zkxlrbrksmc-qtwinextras-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtwebkit-examples-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/6pmmi9bjbdxkbw2xkkc1srk5ambnjcxv-qtwebkit-examples-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtwinextras-opensource-src-5.4.1.tar.xz";
-      sha256 = "01ddgvq8wny162njlzqnbphiiw565xsqy6h3s39cipa05c6mxblv";
-      name = "qtwinextras-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtwebkit-examples-opensource-src-5.4.2.tar.xz";
+      sha256 = "0pm9ik1j09jfb5xflc16449nff2xsfyfms7vxlcdjg4dhcqfmll8";
+      name = "qtwebkit-examples-opensource-src-5.4.2.tar.xz";
     };
   }
   {
-    name = stdenv.lib.nameFromURL "qtsvg-opensource-src-5.4.1.tar.xz" ".tar";
-    store = "/nix/store/m3wk5r1ihbrjz9zpi57nllzqzha06c8j-qtsvg-opensource-src-5.4.1.tar.xz";
+    name = stdenv.lib.nameFromURL "qtandroidextras-opensource-src-5.4.2.tar.xz" ".tar";
+    store = "/nix/store/grrsklibvplaj5pdwjp2zirxmqnq10hf-qtandroidextras-opensource-src-5.4.2.tar.xz";
     src = fetchurl {
-      url = "${mirror}/official_releases/qt/5.4/5.4.1/submodules/qtsvg-opensource-src-5.4.1.tar.xz";
-      sha256 = "0b71kngnq7c5ry8bkb0rjlr6xx49h1sd25m4i4s3v1rfrv6912my";
-      name = "qtsvg-opensource-src-5.4.1.tar.xz";
+      url = "${mirror}/official_releases/qt/5.4/5.4.2/submodules/qtandroidextras-opensource-src-5.4.2.tar.xz";
+      sha256 = "0krfm0wg26x7575p8isswdhrkb0jxyp169grwklil7mfw8yg3xhx";
+      name = "qtandroidextras-opensource-src-5.4.2.tar.xz";
     };
   }
 ]

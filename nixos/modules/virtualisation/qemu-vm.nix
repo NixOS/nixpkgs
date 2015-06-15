@@ -61,8 +61,8 @@ let
       idx=2
       extraDisks=""
       ${flip concatMapStrings cfg.emptyDiskImages (size: ''
-        ${pkgs.qemu_kvm}/bin/qemu-img create -f raw "empty$idx" "${toString size}M"
-        extraDisks="$extraDisks -drive index=$idx,file=$(pwd)/empty$idx,if=virtio,werror=report"
+        ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 "empty$idx.qcow2" "${toString size}M"
+        extraDisks="$extraDisks -drive index=$idx,file=$(pwd)/empty$idx.qcow2,if=virtio,werror=report"
         idx=$((idx + 1))
       '')}
 
@@ -83,7 +83,7 @@ let
             '' else ''
             ''}
           '' else ''
-            -drive file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
+            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
@@ -165,7 +165,7 @@ let
           ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
           umount /boot
-        ''
+        '' # */
     );
 
 in
@@ -204,17 +204,25 @@ in
           '';
       };
 
+    virtualisation.bootDevice =
+      mkOption {
+        type = types.str;
+        default = "/dev/vda";
+        description =
+          ''
+            The disk to be used for the root filesystem.
+          '';
+      };
+
     virtualisation.emptyDiskImages =
       mkOption {
         default = [];
         type = types.listOf types.int;
         description =
           ''
-            Additional disk images to provide to the VM, the value is a list of
-            sizes in megabytes the empty disk should be.
-
-            These disks are writeable by the VM and will be thrown away
-            afterwards.
+            Additional disk images to provide to the VM. The value is
+            a list of size in megabytes of each disk. These disks are
+            writeable by the VM.
           '';
       };
 
@@ -341,7 +349,7 @@ in
 
   config = {
 
-    boot.loader.grub.device = mkVMOverride "/dev/vda";
+    boot.loader.grub.device = mkVMOverride cfg.bootDevice;
 
     boot.initrd.extraUtilsCommands =
       ''
@@ -353,9 +361,9 @@ in
       ''
         # If the disk image appears to be empty, run mke2fs to
         # initialise.
-        FSTYPE=$(blkid -o value -s TYPE /dev/vda || true)
+        FSTYPE=$(blkid -o value -s TYPE ${cfg.bootDevice} || true)
         if test -z "$FSTYPE"; then
-            mke2fs -t ext4 /dev/vda
+            mke2fs -t ext4 ${cfg.bootDevice}
         fi
       '';
 
@@ -396,7 +404,7 @@ in
     # attribute should be disregarded for the purpose of building a VM
     # test image (since those filesystems don't exist in the VM).
     fileSystems = mkVMOverride (
-      { "/".device = "/dev/vda";
+      { "/".device = cfg.bootDevice;
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";

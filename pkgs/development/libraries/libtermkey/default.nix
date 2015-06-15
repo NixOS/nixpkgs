@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "085mdshgqsn76gfnnzfns7awv6lals9mgv5a6bybd9f9aj7lvrm5";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
   buildInputs = [ libtool pkgconfig ncurses ];
 

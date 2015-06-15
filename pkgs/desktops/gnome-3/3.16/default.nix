@@ -1,6 +1,18 @@
-{ callPackage, pkgs, self }:
+{ pkgs }:
 
-rec {
+let
+
+  pkgsFun = overrides:
+    let 
+      self = self_ // overrides;
+      self_ = with self; {
+
+  overridePackages = f:
+    let newself = pkgsFun (f newself self);
+    in newself;
+
+  callPackage = pkgs.newScope self;
+
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
     pkgs.shared_mime_info # for update-mime-database
@@ -273,14 +285,6 @@ rec {
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 
-  goffice = callPackage ./misc/goffice { };
-
-  goffice_0_8 = callPackage ./misc/goffice/0.8.nix { 
-    inherit (pkgs.gnome2) libglade libgnomeui;
-    gconf = pkgs.gnome2.GConf;
-    libart = pkgs.gnome2.libart_lgpl;
-  };
-
   gitg = callPackage ./misc/gitg { 
     webkitgtk = webkitgtk24x;
   };
@@ -301,4 +305,7 @@ rec {
 
   gtkhtml = callPackage ./misc/gtkhtml { };
 
-}
+    };
+  in self; # pkgsFun
+
+in pkgsFun {}

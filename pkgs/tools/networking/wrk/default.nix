@@ -1,20 +1,19 @@
 { stdenv, fetchgit, openssl }:
 
 let
-  version = "3.1.2";
+  version = "4.0.0";
 
 in stdenv.mkDerivation rec {
   name = "wrk-${version}";
 
   src = fetchgit {
     url = "https://github.com/wg/wrk.git";
-    rev = "a52c770204a732aa63e1bb6eb241a70949e3a2a9";
-    sha256 = "0b81lg251ivi94f7kfgz8ws4xns5p7hw5qiwjwwlc3dimjgrg387";
+    rev = "7cdede916a53da253c995767a92eec36a245a2cc";
+    sha256 = "0m8i5pk2rj40v28bzrskkzw54v9jqdby52dwfcypannhlhgqnhy2";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${openssl}/include";
-  NIX_CFLAGS_LINK = "-L${openssl}/lib";
-
+  buildInputs = [ openssl ];
+  
   installPhase = ''
     mkdir -p $out/bin
     cp wrk $out/bin

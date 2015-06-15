@@ -294,8 +294,8 @@ rec {
     name = "vim-addon-vim2nix-2015-06-01";
     src = fetchgit {
       url = "git://github.com/JagaJaga/vim-addon-vim2nix";
-      rev = "fc2eeffca48b224ef15beda57586f6d1271ff68d";
-      sha256 = "b626dab117b9331b6f9ff0bf05ac1f479db82a60dd5cb87a0f3a8d3d7de9220e";
+      rev = "cfa1f191b9e427dee77f8054a911a327c3cf4f79";
+      sha256 = "9960dd3248ffc8d2d3b9bf322df2369feb7a6bf54d47253bd65de1988d2e5ec3";
     };
     dependencies = ["vim-addon-manager"];
 
@@ -517,6 +517,10 @@ rec {
       rev = "0854ac6a810daae4a5c99bcae61613266ce75c26";
       sha256 = "886a173d48340ad0ddeb3c852e4f2bdfc7b513a9d5a954115d081a3e276fa655";
     };
+    patchPhase = ''
+      substituteInPlace plugin/xkbswitch.vim \
+              --replace /usr/local/lib/libxkbswitch.so ${xkb_switch}/lib/libxkbswitch.so
+    '';
     dependencies = [];
     buildInputs = [ xkb_switch ];
   };

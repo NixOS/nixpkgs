@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "16qwazays2j448kmfckv6wvh4rhmhc9q4vp1s75hm9z02cmhvk8q";
   };
 
+  # https://github.com/tgraf/bmon/pull/24#issuecomment-98068887
+  postPatch = "sed '1i#include <net/if.h>' -i src/in_netlink.c";
+
   buildInputs = [ autoconf automake pkgconfig ncurses confuse libnl ];
 
   preConfigure = "sh ./autogen.sh";

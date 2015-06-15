@@ -88,12 +88,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1.4";
     homepage = http://golang.org/;
     description = "The Go Programming language";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ cstrahan wkennington ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cstrahan wkennington ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

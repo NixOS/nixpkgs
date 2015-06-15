@@ -17,6 +17,10 @@ rec {
      evalModules) and the less declarative the module set is. */
   evalModules = { modules
                 , prefix ? []
+                , # This should only be used for special arguments that need to be evaluated
+                  # when resolving module structure (like in imports). For everything else,
+                  # there's _module.args.
+                  specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
@@ -39,7 +43,7 @@ rec {
           };
 
           _module.check = mkOption {
-            type = types.uniq types.bool;
+            type = types.bool;
             internal = true;
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
@@ -51,7 +55,7 @@ rec {
         };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
+      closed = closeModules (modules ++ [ internalModule ]) (specialArgs // { inherit config options; lib = import ./.; });
 
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
@@ -118,7 +122,7 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+  applyIfFunction = f: arg@{ config, options, lib, ... }: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the

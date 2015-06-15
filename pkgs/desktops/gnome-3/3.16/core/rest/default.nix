@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib libsoup gobjectIntrospection];
 
-  configureFlags = "--with-ca-certificates=${cacert}/ca-bundle.crt";
+  configureFlags = "--with-ca-certificates=${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

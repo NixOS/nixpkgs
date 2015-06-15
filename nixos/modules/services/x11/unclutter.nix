@@ -13,7 +13,7 @@ in {
     services.unclutter.arguments = mkOption {
       description = "Arguments to pass to unclutter command";
       default = "-idle 1";
-      type = types.uniq types.string;
+      type = types.str;
     };
   };
 

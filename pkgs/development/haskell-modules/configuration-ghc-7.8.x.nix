@@ -52,14 +52,13 @@ self: super: {
   haddock-api = super.haddock-api_2_15_0_2;
 
   # This is part of bytestring in our compiler.
-  bytestring-builder = dontHaddock super.bytestring-builder;
+  bytestring-builder = triggerRebuild (dontHaddock super.bytestring-builder) 1;
 
   # Won't compile against mtl 2.1.x.
   imports = super.imports.override { mtl = self.mtl_2_2_1; };
 
   # Newer versions require mtl 2.2.x.
   mtl-prelude = self.mtl-prelude_1_0_3;
-  equivalence = super.equivalence_0_2_5;        # required by Agda
 
   # purescript requires mtl 2.2.x.
   purescript = overrideCabal (super.purescript.overrideScope (self: super: {
@@ -130,5 +129,8 @@ self: super: {
   sandi = overrideCabal super.sandi (drv: {
     patchPhase = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal"; }
   );
+
+  # Overriding mtl 2.2.x is fine here because ghc-events is an stand-alone executable.
+  ghc-events = super.ghc-events.override { mtl = self.mtl_2_2_1; };
 
 }

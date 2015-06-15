@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   inherit url rev leaveDotGit fetchSubmodules deepClone branchName;
 
-  GIT_SSL_CAINFO = "${cacert}/ca-bundle.crt";
+  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow

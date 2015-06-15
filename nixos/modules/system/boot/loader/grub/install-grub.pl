@@ -55,8 +55,12 @@ my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
 my $grubTargetEfi = get("grubTargetEfi");
 my $bootPath = get("bootPath");
+my $storePath = get("storePath");
 my $canTouchEfiVariables = get("canTouchEfiVariables");
 my $efiSysMountPoint = get("efiSysMountPoint");
+my $gfxmodeEfi = get("gfxmodeEfi");
+my $gfxmodeBios = get("gfxmodeBios");
+my $bootloaderId = get("bootloaderId");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -210,7 +214,7 @@ sub GrubFs {
 my $grubBoot = GrubFs($bootPath);
 my $grubStore;
 if ($copyKernels == 0) {
-    $grubStore = GrubFs("/nix/store");
+    $grubStore = GrubFs($storePath);
 }
 
 # Generate the header.
@@ -255,14 +259,22 @@ else {
         fi
 
         # Setup the graphics stack for bios and efi systems
-        insmod vbe
-        insmod efi_gop
-        insmod efi_uga
+        if [ \"\${grub_platform}\" = \"efi\" ]; then
+          insmod efi_gop
+          insmod efi_uga
+        else
+          insmod vbe
+        fi
         insmod font
         if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
           insmod gfxterm
-          set gfxmode=auto
-          set gfxpayload=keep
+          if [ \"\${grub_platform}\" = \"efi\" ]; then
+            set gfxmode=$gfxmodeEfi
+            set gfxpayload=keep
+          else
+            set gfxmode=$gfxmodeBios
+            set gfxpayload=text
+          fi
           terminal_output gfxterm
         fi
     ";
@@ -511,7 +523,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
 if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
     print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
     if ($canTouchEfiVariables eq "true") {
-        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint") == 0
+        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", "--bootloader-id=$bootloaderId") == 0
                 or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
     } else {
         system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", "--no-nvram") == 0

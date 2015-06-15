@@ -10,6 +10,7 @@ if [ $# -eq 0 ]; then
   $(nix-build ../../.. -A autonix.manifest) \
       "${KDE_MIRROR}/stable/applications/15.04.0/" \
       "${KDE_MIRROR}/stable/applications/15.04.1/" \
+      "${KDE_MIRROR}/stable/applications/15.04.2/" \
       $MANIFEST_EXTRA_ARGS -A '*.tar.xz'
 
 else

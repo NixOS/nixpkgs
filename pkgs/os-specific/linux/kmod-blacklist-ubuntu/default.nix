@@ -1,13 +1,13 @@
 { stdenv, fetchurl, gnugrep, findutils }:
 let
-  version = "18-3ubuntu1"; # Vivid
+  version = "3ubuntu1"; # Saucy
 in
 stdenv.mkDerivation {
   name = "kmod-blacklist-${version}";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";
-    sha256 = "14ypc1ij9rjnkz4zklbxpgf0ac1bnqlx0mjv0pjjvrrf857fiq94";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_9-${version}.debian.tar.gz";
+    sha256 = "0h6h0zw2490iqj9xa2sz4309jyfmcc50jdvkhxa1nw90npxglp67";
   };
 
   installPhase = ''

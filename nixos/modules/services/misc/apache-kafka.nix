@@ -33,7 +33,7 @@ in {
     enable = mkOption {
       description = "Whether to enable Apache Kafka.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     brokerId = mkOption {
@@ -108,7 +108,7 @@ in {
         "-Djava.awt.headless=true"
         "-Djava.net.preferIPv4Stack=true"
       ];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [
         "-Djava.net.preferIPv4Stack=true"
         "-Dcom.sun.management.jmxremote"
@@ -116,11 +116,19 @@ in {
       ];
     };
 
+    package = mkOption {
+      description = "The kafka package to use";
+
+      default = pkgs.apacheKafka;
+
+      type = types.package;
+    };
+
   };
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [pkgs.apacheKafka];
+    environment.systemPackages = [cfg.package];
 
     users.extraUsers = singleton {
       name = "apache-kafka";
@@ -136,7 +144,7 @@ in {
       serviceConfig = {
         ExecStart = ''
           ${pkgs.jre}/bin/java \
-            -cp "${pkgs.apacheKafka}/libs/*:${configDir}" \
+            -cp "${cfg.package}/libs/*:${configDir}" \
             ${toString cfg.jvmOptions} \
             kafka.Kafka \
             ${configDir}/server.properties
