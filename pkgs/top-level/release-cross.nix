@@ -16,7 +16,6 @@ let
       #xorgserver.crossDrv = nativePlatforms;
     };
     nixUnstable.crossDrv = nativePlatforms;
-    linuxPackages_3_4.kernel.crossDrv = linux;
   };
 
   /* Basic list of packages to be natively built,
