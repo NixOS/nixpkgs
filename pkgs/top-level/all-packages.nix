@@ -2294,7 +2294,7 @@ let
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
-  msf = builderDefsPackage (callPackage ../tools/security/metasploit/3.1.nix) { };
+  msf = callPackage ../tools/security/metasploit { };
 
   mssys = callPackage ../tools/misc/mssys { };
 
