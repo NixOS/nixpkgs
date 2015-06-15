@@ -1022,10 +1022,6 @@ let
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
-  cheetahTemplate = builderDefsPackage (import ../tools/text/cheetah-template/2.0.1.nix) {
-    inherit makeWrapper python;
-  };
-
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
@@ -14802,6 +14798,7 @@ let
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
+  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
