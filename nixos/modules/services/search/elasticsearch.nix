@@ -34,7 +34,7 @@ in {
     enable = mkOption {
       description = "Whether to enable elasticsearch.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     host = mkOption {

@@ -16,7 +16,7 @@ rec {
     services.kippo = {
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''Enable the kippo honeypot ssh server.'';
       };
       port = mkOption {

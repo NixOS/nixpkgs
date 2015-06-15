@@ -27,7 +27,7 @@ in {
     enable = mkOption {
       description = "Whether to enable Zookeeper.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     port = mkOption {

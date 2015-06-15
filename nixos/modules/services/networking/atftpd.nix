@@ -18,7 +18,7 @@ in
 
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''
           Whenever to enable the atftpd TFTP server.
         '';

@@ -25,7 +25,7 @@ in
   options = {
 
     services.unifi.enable = mkOption {
-      type = types.uniq types.bool;
+      type = types.bool;
       default = false;
       description = ''
         Whether or not to enable the unifi controller service.

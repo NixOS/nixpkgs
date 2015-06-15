@@ -13,7 +13,7 @@ in {
       enable = mkOption {
         description = "Whether to enable the Mesos Master.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       port = mkOption {

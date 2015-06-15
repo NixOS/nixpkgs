@@ -37,7 +37,7 @@ in
     enable = mkOption {
       description = "Whether to enable statsd stats aggregation service";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     host = mkOption {

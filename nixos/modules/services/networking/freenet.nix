@@ -20,7 +20,7 @@ in
     services.freenet = {
 
       enable = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "Enable the Freenet daemon";
       };

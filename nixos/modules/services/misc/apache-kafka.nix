@@ -33,7 +33,7 @@ in {
     enable = mkOption {
       description = "Whether to enable Apache Kafka.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     brokerId = mkOption {
