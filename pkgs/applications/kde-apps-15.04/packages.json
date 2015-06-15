@@ -1,0 +1,5693 @@
+{
+    "libkexiv2": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkexiv2-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkexiv2-15.04.2.tar.xz",
+            "name": "libkexiv2-15.04.2.tar.xz",
+            "sha256": "0nycanbbk50flb92bgk9zddpny8fb74k2b5fb26x33msx04854vb"
+        },
+        "buildInputs": [
+            "exiv2",
+            "kde4"
+        ]
+    },
+    "kde-l10n-bg": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-bg-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-bg-15.04.2.tar.xz",
+            "name": "kde-l10n-bg-15.04.2.tar.xz",
+            "sha256": "1jap82rz52a43rad33hidsyvvzm3s4ma5yk75clv5f8fhnjc946k"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kqtquickcharts": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kqtquickcharts-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kqtquickcharts-15.04.2.tar.xz",
+            "name": "kqtquickcharts-15.04.2.tar.xz",
+            "sha256": "02fclmqa845cd6gll89m2fi382syani9r84w0hnnsyc77dqrlqi6"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "palapeli": {
+        "nativeBuildInputs": [
+            "cmake",
+            "qvoronoi_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "palapeli-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/palapeli-15.04.2.tar.xz",
+            "name": "palapeli-15.04.2.tar.xz",
+            "sha256": "0jsgbddk631z010dam8khbcq9qphkgax9rbgn26r9cv29cfd0h5j"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames",
+            "sharedmimeinfo"
+        ]
+    },
+    "kmahjongg": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmahjongg-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmahjongg-15.04.2.tar.xz",
+            "name": "kmahjongg-15.04.2.tar.xz",
+            "sha256": "17jlb1nr2i79s4m3srv0fm4zwqqknabfa0zwb6y5bdlk9bjpphaq"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames",
+            "libkmahjongg"
+        ]
+    },
+    "analitza": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5core"
+        ],
+        "name": "analitza-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/analitza-15.04.2.tar.xz",
+            "name": "analitza-15.04.2.tar.xz",
+            "sha256": "117mw7c74vxh6mp76lxw1jc231b2zvif8d721dl5nshggkxhmf9j"
+        },
+        "buildInputs": [
+            "ecm",
+            "eigen3",
+            "glew",
+            "opengl",
+            "qt5",
+            "qt5opengl",
+            "qt5qml",
+            "qt5quick",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "qt5xml"
+        ]
+    },
+    "kfourinline": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kfourinline-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kfourinline-15.04.2.tar.xz",
+            "name": "kfourinline-15.04.2.tar.xz",
+            "sha256": "1r53xqvgsvy1las85jccya2xxfk43bwzbzr6lp2vny1624g3vhdc"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5dnssd",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemmodels",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5xmlgui",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "juk": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "juk-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/juk-15.04.2.tar.xz",
+            "name": "juk-15.04.2.tar.xz",
+            "sha256": "08lwi7yakry6cwrr0hxmrb9h2nm5xkx39bwfsphrd4vkyfd94awp"
+        },
+        "buildInputs": [
+            "kde4",
+            "taglib",
+            "tunepimp"
+        ]
+    },
+    "kde-l10n-id": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-id-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-id-15.04.2.tar.xz",
+            "name": "kde-l10n-id-15.04.2.tar.xz",
+            "sha256": "1vadznjjy32brc76d2wzq31xf69dq2fxipg8rhvjh2f8cy068blf"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-wallpapers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-wallpapers-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-wallpapers-15.04.2.tar.xz",
+            "name": "kde-wallpapers-15.04.2.tar.xz",
+            "sha256": "1qcj8qdryqsqv430bmzv0hir7gbqbfw9sc3x7i4692h8cwvzkw5d"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "libkipi": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkipi-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkipi-15.04.2.tar.xz",
+            "name": "libkipi-15.04.2.tar.xz",
+            "sha256": "1fn671kjmin20bgi6h34fvcn3811ms34i9xbpxc3vv2s4sgn2v72"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "artikulate": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "artikulate-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/artikulate-15.04.2.tar.xz",
+            "name": "artikulate-15.04.2.tar.xz",
+            "sha256": "1hi57rl5ibs28l5w3gwciv9yi9gw7q22say8w5b34b5kjw0cyg2v"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdeclarative",
+            "qtgstreamer"
+        ]
+    },
+    "kde-l10n-it": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-it-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-it-15.04.2.tar.xz",
+            "name": "kde-l10n-it-15.04.2.tar.xz",
+            "sha256": "156j8dj9c44j6mbqka3d0rpkdp2wg5hj7l1kzd2lb0ybvk7vr0r0"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-da": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-da-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-da-15.04.2.tar.xz",
+            "name": "kde-l10n-da-15.04.2.tar.xz",
+            "sha256": "1np194cir3wh9sm8pqr4s3sx3k8p4rdndvpx7vgw63jlazrw4rlj"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-km": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-km-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-km-15.04.2.tar.xz",
+            "name": "kde-l10n-km-15.04.2.tar.xz",
+            "sha256": "1bs10bgnzqwj9adq6xl1y534br74hcvickf2ylw27wqgszwzvd18"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-ca_valencia": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ca_valencia-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ca@valencia-15.04.2.tar.xz",
+            "name": "kde-l10n-ca_valencia-15.04.2.tar.xz",
+            "sha256": "0cg2is4lzy9fxz37ciy3ddjd5z1i2ni8gg5pq7v7hz7fqa8bb3w6"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-wa": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-wa-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-wa-15.04.2.tar.xz",
+            "name": "kde-l10n-wa-15.04.2.tar.xz",
+            "sha256": "10vzzwhgnxx5rj7h99b63kgpak2mkmdjr7381w7q1iwq816qxxy8"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "libkomparediff2": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkomparediff2-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkomparediff2-15.04.2.tar.xz",
+            "name": "libkomparediff2-15.04.2.tar.xz",
+            "sha256": "0qj9ih96v3r2l9nq68z4y175nhizl8rmd4nypswy5lzi7k8m9q99"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5codecs",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5kio",
+            "kf5parts",
+            "kf5xmlgui",
+            "qt5core",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kwalletmanager": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kwalletmanager-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kwalletmanager-15.04.2.tar.xz",
+            "name": "kwalletmanager-15.04.2.tar.xz",
+            "sha256": "0wch3bm2c7xjbrjvn1ka3iyawi6h6snfab7dzp6na8n4ck7y9s4p"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "ktp-auth-handler": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-auth-handler-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-auth-handler-15.04.2.tar.xz",
+            "name": "ktp-auth-handler-15.04.2.tar.xz",
+            "sha256": "1fp1yks0k2mfn9kqfsy5y27ibpfjvmlx4h1ah6sy5mmqvh96s04h"
+        },
+        "buildInputs": [
+            "accountsqt5",
+            "ecm",
+            "kaccounts",
+            "kf5",
+            "kf5i18n",
+            "kf5kio",
+            "kf5wallet",
+            "kf5webkit",
+            "kf5widgetsaddons",
+            "ktp",
+            "qca-qt5",
+            "qca-qt5-ossl",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5gui",
+            "qt5network",
+            "signonqt5",
+            "telepathyqt5"
+        ]
+    },
+    "kde-l10n-ga": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ga-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ga-15.04.2.tar.xz",
+            "name": "kde-l10n-ga-15.04.2.tar.xz",
+            "sha256": "0wn2q9vbaqkhb60q7x70b2j3yh8k21y4isk5js2ardzz1gpzmrxk"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ksnapshot": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksnapshot-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksnapshot-15.04.2.tar.xz",
+            "name": "ksnapshot-15.04.2.tar.xz",
+            "sha256": "1zpc9pasw5r68rmkaz8la75hbp9na4114j7w0a9fcgjlvllaij57"
+        },
+        "buildInputs": [
+            "kde4",
+            "kipi"
+        ]
+    },
+    "kreversi": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kreversi-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kreversi-15.04.2.tar.xz",
+            "name": "kreversi-15.04.2.tar.xz",
+            "sha256": "0qzwk8yj5dk01n6w1jmrqncy48cpg2xriqqiachx4gh878f2y4cs"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdeclarative",
+            "kdegames"
+        ]
+    },
+    "kmix": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmix-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmix-15.04.2.tar.xz",
+            "name": "kmix-15.04.2.tar.xz",
+            "sha256": "0g601dmd7f0j70y50xkw4y8vpb5xgjz938m266sklkkwjdcf2fg9"
+        },
+        "buildInputs": [
+            "alsa",
+            "canberra",
+            "ecm",
+            "glib2",
+            "kde4",
+            "kf5",
+            "kf5configwidgets",
+            "kf5dbusaddons",
+            "kf5globalaccel",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5xmlgui",
+            "phonon",
+            "pulseaudio"
+        ]
+    },
+    "signon-kwallet-extension": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "signon-kwallet-extension-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/signon-kwallet-extension-15.04.2.tar.xz",
+            "name": "signon-kwallet-extension-15.04.2.tar.xz",
+            "sha256": "0bp1j0hc0a7lwmzi97hymd83vb5x8ks4m4a1k3h2h86wq3gnnfyj"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5wallet",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5test",
+            "signonextension"
+        ]
+    },
+    "kde-l10n-es": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-es-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-es-15.04.2.tar.xz",
+            "name": "kde-l10n-es-15.04.2.tar.xz",
+            "sha256": "1clrjb4wgwx8ijykrdylfgscwimkawpaq13a32m6dka4ipk58399"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kompare": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kompare-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kompare-15.04.2.tar.xz",
+            "name": "kompare-15.04.2.tar.xz",
+            "sha256": "0c3kyfqz6mp4mj0ryhjgqwp2x93bj0nsbgp2vf9rgvkcdvhd6fqk"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5codecs",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5iconthemes",
+            "kf5jobwidgets",
+            "kf5parts",
+            "kf5texteditor",
+            "kf5widgetsaddons",
+            "libkomparediff2",
+            "qt5",
+            "qt5core",
+            "qt5printsupport",
+            "qt5widgets"
+        ]
+    },
+    "kdiamond": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdiamond-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdiamond-15.04.2.tar.xz",
+            "name": "kdiamond-15.04.2.tar.xz",
+            "sha256": "1k0w2d0ysvwhvmsn0smi1s5dwrcwdnqfzny5dgblc3p62xw1wm1j"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kdegames",
+            "kf5notifyconfig",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5widgets"
+        ]
+    },
+    "kaccounts-integration": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "accountsqt5",
+            "kf5coreaddons",
+            "qt5widgets",
+            "signonqt5"
+        ],
+        "name": "kaccounts-integration-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kaccounts-integration-15.04.2.tar.xz",
+            "name": "kaccounts-integration-15.04.2.tar.xz",
+            "sha256": "1586bv0h98rqbigrcsqx51nvzxk0zzxvqcxgncnjxknn4rhdkk86"
+        },
+        "buildInputs": [
+            "accountsqt5",
+            "ecm",
+            "kf5",
+            "kf5akonadi",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5wallet",
+            "kf5widgetsaddons",
+            "qt5",
+            "qt5core",
+            "qt5test",
+            "qt5widgets",
+            "signonqt5"
+        ]
+    },
+    "kde-l10n-gl": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-gl-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-gl-15.04.2.tar.xz",
+            "name": "kde-l10n-gl-15.04.2.tar.xz",
+            "sha256": "1mnyc9ms863s3x6l85kfglz7q8h9faqgkv7vcf8qfjs1vs6qbh6x"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kwordquiz": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kwordquiz-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kwordquiz-15.04.2.tar.xz",
+            "name": "kwordquiz-15.04.2.tar.xz",
+            "sha256": "0irs4nchd0fwxvv4c9wxww6vbi97ffz4rihwg1p5jipcad2l13ch"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5crash",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5sonnet",
+            "kf5xmlgui",
+            "libkeduvocdocument",
+            "phonon4qt5",
+            "qt5",
+            "qt5core",
+            "qt5printsupport",
+            "qt5widgets"
+        ]
+    },
+    "kigo": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kigo-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kigo-15.04.2.tar.xz",
+            "name": "kigo-15.04.2.tar.xz",
+            "sha256": "00hhdhv905l1y79i2vsz65r7vqbz2vlzl57y4sdcjpk65ababcrc"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "ktp-desktop-applets": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-desktop-applets-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-desktop-applets-15.04.2.tar.xz",
+            "name": "ktp-desktop-applets-15.04.2.tar.xz",
+            "sha256": "00jlhfm7sbg73y9zbkjicz7wr8740qi3ifm493m2f37cndljllhn"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5plasma",
+            "kf5windowsystem",
+            "qt5",
+            "qt5qml"
+        ]
+    },
+    "kolourpaint": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kolourpaint-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kolourpaint-15.04.2.tar.xz",
+            "name": "kolourpaint-15.04.2.tar.xz",
+            "sha256": "04rly3wrh8hibaps90mphvbb35d9c308czfmnhqxyk6np4bfvrk6"
+        },
+        "buildInputs": [
+            "kde4",
+            "qimageblitz"
+        ]
+    },
+    "kapptemplate": {
+        "nativeBuildInputs": [
+            "cmake",
+            "rbkconfig_compiler4",
+            "rbuic4",
+            "xsltproc_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kapptemplate-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kapptemplate-15.04.2.tar.xz",
+            "name": "kapptemplate-15.04.2.tar.xz",
+            "sha256": "092wysas8zfhz8af4fvizbn148c4jhj4vk2cy6z94qih8hnry294"
+        },
+        "buildInputs": [
+            "ecm",
+            "kde4",
+            "kdepimlibs",
+            "kf5",
+            "kf5archive",
+            "kf5completion",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kio",
+            "kf5plasma",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5gui",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kdegraphics-thumbnailers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdegraphics-thumbnailers-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdegraphics-thumbnailers-15.04.2.tar.xz",
+            "name": "kdegraphics-thumbnailers-15.04.2.tar.xz",
+            "sha256": "15w0bli83ykqdxv37zpmdgf66gkqmb3gf1wxqfhw241pfcqbsxc3"
+        },
+        "buildInputs": [
+            "kdcraw",
+            "kde4",
+            "kexiv2"
+        ]
+    },
+    "kde-l10n-pt_BR": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-pt_BR-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-pt_BR-15.04.2.tar.xz",
+            "name": "kde-l10n-pt_BR-15.04.2.tar.xz",
+            "sha256": "0xfcid4xqcjnlq83ql4rlhb8swn2y9ixzfyx3zbdwjjlkaaqmnr4"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ksystemlog": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksystemlog-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksystemlog-15.04.2.tar.xz",
+            "name": "ksystemlog-15.04.2.tar.xz",
+            "sha256": "00il9r3n5756n0n6k515fdm9z7mfa1gd1n6kac4vr7yldvll9wh1"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kuser": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kuser-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kuser-15.04.2.tar.xz",
+            "name": "kuser-15.04.2.tar.xz",
+            "sha256": "0b2q616nzqjb0q9as71x2njdjlcd3576rkwnyv5acjgb5bq7wgg4"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdepimlibs"
+        ]
+    },
+    "libksane": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libksane-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libksane-15.04.2.tar.xz",
+            "name": "libksane-15.04.2.tar.xz",
+            "sha256": "0s2jmp1596qnjff2fqmlmg3qzfhf2wjfvazkrrndfr6dzn4sz72s"
+        },
+        "buildInputs": []
+    },
+    "knavalbattle": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "knavalbattle-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/knavalbattle-15.04.2.tar.xz",
+            "name": "knavalbattle-15.04.2.tar.xz",
+            "sha256": "15pmbj230rhiyxx2cz1wsx29zp0p4my54i8099yv943w8wswwy8x"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kaccessible": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kaccessible-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kaccessible-15.04.2.tar.xz",
+            "name": "kaccessible-15.04.2.tar.xz",
+            "sha256": "1aa4c5r0bm0azm8dhkvnrk87669vp397xzz0v0d3ih7ffmh72il1"
+        },
+        "buildInputs": [
+            "kde4",
+            "qt4",
+            "speechd",
+            "x11"
+        ]
+    },
+    "knetwalk": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "knetwalk-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/knetwalk-15.04.2.tar.xz",
+            "name": "knetwalk-15.04.2.tar.xz",
+            "sha256": "0j2zkh87wd2xhd0aaad40cjq1na4kg18y0bnpiqdgwgmvvss18cn"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kdewebdev": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdewebdev-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdewebdev-15.04.2.tar.xz",
+            "name": "kdewebdev-15.04.2.tar.xz",
+            "sha256": "0cq2zyi4j6z70ghy8x1hhi3bgph6ql2k71vllfc37gb5h8gqpfh4"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdepimlibs",
+            "libtidy",
+            "ruby",
+            "zlib"
+        ]
+    },
+    "kget": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kget-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kget-15.04.2.tar.xz",
+            "name": "kget-15.04.2.tar.xz",
+            "sha256": "0cc7rva5yig01kfih1im0ncf0jk7hq1pwyqr9486n024161fc1n0"
+        },
+        "buildInputs": [
+            "boost",
+            "kde4",
+            "kde4workspace",
+            "ktorrent",
+            "libmms",
+            "nepomukcore",
+            "nepomukwidgets",
+            "qca2",
+            "qgpgme",
+            "shareddesktopontologies",
+            "soprano",
+            "sqlite"
+        ]
+    },
+    "kalzium": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kalzium-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kalzium-15.04.2.tar.xz",
+            "name": "kalzium-15.04.2.tar.xz",
+            "sha256": "1mcfw1l0qqzr212ysgppva8s4dn3dfhzqh712fc3kd416azz985x"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdewin32"
+        ]
+    },
+    "marble": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "marble-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/marble-15.04.2.tar.xz",
+            "name": "marble-15.04.2.tar.xz",
+            "sha256": "1jwh0vqdzj7r039pg84rh6jk4dznyanirv286v8anf23s3mjwf6a"
+        },
+        "buildInputs": [
+            "kde4",
+            "libgps",
+            "liblocation",
+            "libshp",
+            "libwlocate",
+            "perl",
+            "phonon",
+            "protobuf",
+            "pyqt4",
+            "pythonlibrary",
+            "qextserialport",
+            "qt4",
+            "qt5concurrent",
+            "qt5core",
+            "qt5designer",
+            "qt5network",
+            "qt5printsupport",
+            "qt5quick",
+            "qt5script",
+            "qt5sql",
+            "qt5svg",
+            "qt5test",
+            "qt5webkitwidgets",
+            "qt5widgets",
+            "qt5xml",
+            "qtlocation",
+            "quazip",
+            "sharedmimeinfo",
+            "sip",
+            "zlib"
+        ]
+    },
+    "kig": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kig-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kig-15.04.2.tar.xz",
+            "name": "kig-15.04.2.tar.xz",
+            "sha256": "19wv15ji7f0m0zzymw11g28sa5n1kyhpnqbcgpfkaqxynv2fn4cv"
+        },
+        "buildInputs": [
+            "boostpython",
+            "ecm",
+            "kf5archive",
+            "kf5configwidgets",
+            "kf5doctools",
+            "kf5emoticons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemmodels",
+            "kf5kdelibs4support",
+            "kf5parts",
+            "kf5texteditor",
+            "kf5xmlgui",
+            "qt5printsupport",
+            "qt5svg",
+            "qt5test"
+        ]
+    },
+    "kiten": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kiten-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kiten-15.04.2.tar.xz",
+            "name": "kiten-15.04.2.tar.xz",
+            "sha256": "0yr7i1k3qpifwy2a58b899nfglkyf8gdrbakhdd9j2rlyyk3hya3"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5archive",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5khtml",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets"
+        ]
+    },
+    "ktp-contact-list": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-contact-list-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-contact-list-15.04.2.tar.xz",
+            "name": "ktp-contact-list-15.04.2.tar.xz",
+            "sha256": "10zjv2imp03p2wh9vj217skx5fmmscb5l8nwlcv7mlh0b74mlx5n"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5people",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "ktp",
+            "qt5",
+            "qt5widgets",
+            "qt5xml",
+            "telepathyqt5"
+        ]
+    },
+    "kde-l10n-pt": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-pt-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-pt-15.04.2.tar.xz",
+            "name": "kde-l10n-pt-15.04.2.tar.xz",
+            "sha256": "0bkdm2skvkaqspfq7rsqwahm6h17j46fd97wkqrkmdswgnbn14fw"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-fr": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-fr-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-fr-15.04.2.tar.xz",
+            "name": "kde-l10n-fr-15.04.2.tar.xz",
+            "sha256": "1rgy0qw313wk39f8lxb812kfh7i0b3fqgdz1dv22mpd143ywz0xr"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kmouth": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmouth-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmouth-15.04.2.tar.xz",
+            "name": "kmouth-15.04.2.tar.xz",
+            "sha256": "1hjn1fb5c7a5yw0yzsb7v3wdgq1wyqj7zs7jw71gsgkq3sy0as47"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "filelight": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "filelight-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/filelight-15.04.2.tar.xz",
+            "name": "filelight-15.04.2.tar.xz",
+            "sha256": "0ynrirvrisswaia9894wd4b6f97h04bd3w9zlv28nc9ck1p2d5zv"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kio",
+            "kf5parts",
+            "kf5solid",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5script",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kdesdk-kioslaves": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdesdk-kioslaves-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdesdk-kioslaves-15.04.2.tar.xz",
+            "name": "kdesdk-kioslaves-15.04.2.tar.xz",
+            "sha256": "0fpmn0cv95jicxq6zbxivarlyhmjbi3a2brnz9xb4jznx06c2cz8"
+        },
+        "buildInputs": [
+            "kde4",
+            "perl",
+            "svn"
+        ]
+    },
+    "kde-baseapps": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-baseapps-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-baseapps-15.04.2.tar.xz",
+            "name": "kde-baseapps-15.04.2.tar.xz",
+            "sha256": "0yqg1z6c9ma8cfhpb21jgk5hcpg0dscm89sy5jxwflg1n355jkhv"
+        },
+        "buildInputs": [
+            "baloo",
+            "baloowidgets",
+            "glib2",
+            "kactivities",
+            "kde4",
+            "kfilemetadata",
+            "libtidy",
+            "x11",
+            "zlib"
+        ]
+    },
+    "ksirk": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksirk-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksirk-15.04.2.tar.xz",
+            "name": "ksirk-15.04.2.tar.xz",
+            "sha256": "0w6j3z8vzj3wnnwkpm2gv533jkjwdx8f2m6hnqa3ckzashmlqx7w"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames",
+            "qca2"
+        ]
+    },
+    "killbots": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "killbots-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/killbots-15.04.2.tar.xz",
+            "name": "killbots-15.04.2.tar.xz",
+            "sha256": "1xr7857fi5l5h6d6fsyqsb803h29gprfsxz4h73scnnn70bkkm9q"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kjumpingcube": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kjumpingcube-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kjumpingcube-15.04.2.tar.xz",
+            "name": "kjumpingcube-15.04.2.tar.xz",
+            "sha256": "04c0klbgsnp6brf8zml8sz6iyi9m7gidwpgdzrrnnhzwfpgaf9zc"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5itemmodels",
+            "kf5kdegames",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-sr": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-sr-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-sr-15.04.2.tar.xz",
+            "name": "kde-l10n-sr-15.04.2.tar.xz",
+            "sha256": "1pwwvj7s6ivmx6c5gh6dvfrvi5xp66b40fsnn04zwsp0iamxkdqi"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-et": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-et-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-et-15.04.2.tar.xz",
+            "name": "kde-l10n-et-15.04.2.tar.xz",
+            "sha256": "1w08blhf6adlj0yanfac2b3kk0ag3gbazjdywz9cf21ks6ni6bsn"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kmag": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmag-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmag-15.04.2.tar.xz",
+            "name": "kmag-15.04.2.tar.xz",
+            "sha256": "1kbxhq9mfjxswds60pa6v1ixc8grn0m1f84da7s18ph5r1wdpkr3"
+        },
+        "buildInputs": [
+            "kde4",
+            "qaccessibilityclient"
+        ]
+    },
+    "kdenetwork-strigi-analyzers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdenetwork-strigi-analyzers-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdenetwork-strigi-analyzers-15.04.2.tar.xz",
+            "name": "kdenetwork-strigi-analyzers-15.04.2.tar.xz",
+            "sha256": "13bc2a1m64k6iki12kpynf3f1wijxch8rg9nn7xc8rl3bjms8x9k"
+        },
+        "buildInputs": [
+            "boost",
+            "kde4",
+            "strigi"
+        ]
+    },
+    "kcharselect": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kcharselect-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kcharselect-15.04.2.tar.xz",
+            "name": "kcharselect-15.04.2.tar.xz",
+            "sha256": "084qzv8x6262xsl5n4ynkm3zsqf2wdlj5gn4y9jql7in1b92w293"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets"
+        ]
+    },
+    "kdegraphics-strigi-analyzer": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdegraphics-strigi-analyzer-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdegraphics-strigi-analyzer-15.04.2.tar.xz",
+            "name": "kdegraphics-strigi-analyzer-15.04.2.tar.xz",
+            "sha256": "1gf6n1bdhbizfgpbn1p81gzz09a028dadij7gn016vkfczjkl1k8"
+        },
+        "buildInputs": [
+            "kde4",
+            "openexr",
+            "strigi",
+            "tiff"
+        ]
+    },
+    "libkmahjongg": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kf5configwidgets",
+            "qt5gui"
+        ],
+        "name": "libkmahjongg-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkmahjongg-15.04.2.tar.xz",
+            "name": "libkmahjongg-15.04.2.tar.xz",
+            "sha256": "1xrdv1p5gjzg4cs35y2kmd49lwiinl1wqaw76y5lq3p303k7vvm1"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5widgetsaddons",
+            "qt5",
+            "qt5core",
+            "qt5gui",
+            "qt5svg",
+            "qt5test"
+        ]
+    },
+    "ktp-kded-module": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-kded-module-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-kded-module-15.04.2.tar.xz",
+            "name": "ktp-kded-module-15.04.2.tar.xz",
+            "sha256": "1a7jfa8lqb24dpckiix13lhdgb18rv4v9ib908jqqqnk8rphac5n"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5idletime",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5notifications",
+            "kf5widgetsaddons",
+            "ktp",
+            "qt5",
+            "qt5concurrent",
+            "qt5network",
+            "qt5sql",
+            "qt5widgets"
+        ]
+    },
+    "ktuberling": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktuberling-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktuberling-15.04.2.tar.xz",
+            "name": "ktuberling-15.04.2.tar.xz",
+            "sha256": "1kf2gwxwh0v9lai5lwbgd9d8d27d9p6vxj6i4291w5wv9plld9my"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kcron": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kcron-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kcron-15.04.2.tar.xz",
+            "name": "kcron-15.04.2.tar.xz",
+            "sha256": "0fszrwgsib82glm0hi2iq11b8z3w8j14vp8hqfxp8ccggk1a0xaf"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kio",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5printsupport",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-nl": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-nl-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-nl-15.04.2.tar.xz",
+            "name": "kde-l10n-nl-15.04.2.tar.xz",
+            "sha256": "0l4frxfrpii14iisjnnpzz0yja6mb6qlz05v1wn6sqqqvv8snq17"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "parley": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "parley-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/parley-15.04.2.tar.xz",
+            "name": "parley-15.04.2.tar.xz",
+            "sha256": "1xzjpm8vfxp7g5497n95r3x4pbs6s29jaf6rlkb3lm72x7yml7fc"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5docbook",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kcmutils",
+            "kf5khtml",
+            "kf5kio",
+            "kf5kross",
+            "kf5module",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5produce",
+            "kf5sonnet",
+            "kf5the",
+            "kf5xmlgui",
+            "libattica",
+            "libkeduvocdocument",
+            "libxml2",
+            "libxslt",
+            "qt5",
+            "qt5concurrent",
+            "qt5core",
+            "qt5multimedia",
+            "qt5svg",
+            "qt5test"
+        ]
+    },
+    "kgoldrunner": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kgoldrunner-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kgoldrunner-15.04.2.tar.xz",
+            "name": "kgoldrunner-15.04.2.tar.xz",
+            "sha256": "1x5pza747k69wx54fiparqx43pk112cma2pq6c4ndycrm5lqxg5v"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kiriki": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kiriki-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kiriki-15.04.2.tar.xz",
+            "name": "kiriki-15.04.2.tar.xz",
+            "sha256": "0sdpswz6gvk03sza5n7n9kf6xi0p7azkgkn27hn0ydh5fm7rfi98"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "sweeper": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "sweeper-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/sweeper-15.04.2.tar.xz",
+            "name": "sweeper-15.04.2.tar.xz",
+            "sha256": "0nyl587zrmz4aynbp7g7415gczilmb02h79s4xpfxilmxc9910w3"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "lokalize": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "lokalize-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/lokalize-15.04.2.tar.xz",
+            "name": "lokalize-15.04.2.tar.xz",
+            "sha256": "1hj36k0arfqbyyxccbk6n9skc38a7g6vs3l4r0pdz40b4s65l4hz"
+        },
+        "buildInputs": [
+            "ecm",
+            "hunspell",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kio",
+            "kf5kross",
+            "kf5notifications",
+            "kf5sonnet",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5script",
+            "qt5sql",
+            "qt5widgets"
+        ]
+    },
+    "kbounce": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kbounce-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kbounce-15.04.2.tar.xz",
+            "name": "kbounce-15.04.2.tar.xz",
+            "sha256": "094cwq972h36mznl9snc52248vag1myxlndykagv13kdj7jwynx8"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-eo": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-eo-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-eo-15.04.2.tar.xz",
+            "name": "kde-l10n-eo-15.04.2.tar.xz",
+            "sha256": "020zq1ygjkpx5y2isqqp3chk0s1jcd29zy6fwr6jyxvj0260fa8q"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-is": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-is-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-is-15.04.2.tar.xz",
+            "name": "kde-l10n-is-15.04.2.tar.xz",
+            "sha256": "0xf361dsvlg525w10y1p638ksrb5x381sw322rs14dlpqn89ywl0"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-sl": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-sl-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-sl-15.04.2.tar.xz",
+            "name": "kde-l10n-sl-15.04.2.tar.xz",
+            "sha256": "03chmprkais0cq3z4j9xzy3lq91imf3q4mcaccpknla247a8viqf"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "libkcompactdisc": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkcompactdisc-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkcompactdisc-15.04.2.tar.xz",
+            "name": "libkcompactdisc-15.04.2.tar.xz",
+            "sha256": "14qryxim0fhx7npbicv1pvkr42544jzplfmng7z2cjxx4c636j9v"
+        },
+        "buildInputs": [
+            "alsa",
+            "kde4"
+        ]
+    },
+    "picmi": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "picmi-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/picmi-15.04.2.tar.xz",
+            "name": "picmi-15.04.2.tar.xz",
+            "sha256": "06dz8552rfydirvmnibvpw0ahg4f2za82qkv2j2crfqm2iigp9rv"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames",
+            "qt4"
+        ]
+    },
+    "superkaramba": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "superkaramba-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/superkaramba-15.04.2.tar.xz",
+            "name": "superkaramba-15.04.2.tar.xz",
+            "sha256": "1x8kxj2ndpnpfbxk33rqyq64y1chlll8j3331skzss9117fsp7z1"
+        },
+        "buildInputs": [
+            "kde4",
+            "pythonlibs",
+            "qimageblitz"
+        ]
+    },
+    "gwenview": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "gwenview-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/gwenview-15.04.2.tar.xz",
+            "name": "gwenview-15.04.2.tar.xz",
+            "sha256": "1c1fqwgq91s0c9f85g3i3dwaq16r260jj4wx4xcr3qi4bm12lq5k"
+        },
+        "buildInputs": [
+            "ecm",
+            "exiv2",
+            "jpeg",
+            "kf5",
+            "kf5activities",
+            "kf5baloo",
+            "kf5kdcraw",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5kipi",
+            "lcms2",
+            "phonon4qt5",
+            "png",
+            "qt5",
+            "qt5concurrent",
+            "qt5core",
+            "qt5dbus",
+            "qt5opengl",
+            "qt5script",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "qt5x11extras",
+            "x11"
+        ]
+    },
+    "kde-l10n-fa": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-fa-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-fa-15.04.2.tar.xz",
+            "name": "kde-l10n-fa-15.04.2.tar.xz",
+            "sha256": "0kb7lxvgbdwlyi1rli7xrk4ykdnljdcm0clkgl1bla6vgxhlc7mj"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kpat": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kpat-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kpat-15.04.2.tar.xz",
+            "name": "kpat-15.04.2.tar.xz",
+            "sha256": "0vhrq3ssfqwpkrx355v91gg1kdl8sjfpkp4fqyi9h36nps7qdiqj"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "sharedmimeinfo"
+        ]
+    },
+    "klettres": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "klettres-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/klettres-15.04.2.tar.xz",
+            "name": "klettres-15.04.2.tar.xz",
+            "sha256": "1rmf5hpc9zwaham157xzn3dvh0z6scpr2i38i513b0ji0kdizikc"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5emoticons",
+            "kf5i18n",
+            "kf5itemmodels",
+            "kf5kdelibs4support",
+            "kf5newstuff",
+            "kf5widgetsaddons",
+            "phonon4qt5",
+            "qt5",
+            "qt5core",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kdelibs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdelibs-4.14.9",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdelibs-4.14.9.tar.xz",
+            "name": "kdelibs-4.14.9.tar.xz",
+            "sha256": "07klv3hxgq1w85lx2myw131r4v3fd726fljipkd7arwzp8mbwcix"
+        },
+        "buildInputs": [
+            "acl",
+            "agg",
+            "aspell",
+            "automoc4",
+            "avahi",
+            "bison",
+            "blitz",
+            "bluez",
+            "bzip2",
+            "carbon",
+            "dbusmenuqt",
+            "dnssd",
+            "docbookxml",
+            "docbookxsl",
+            "eigen2",
+            "enchant",
+            "fam",
+            "ffmpeg",
+            "flac",
+            "flex",
+            "gif",
+            "gobject",
+            "grantlee",
+            "gssapi",
+            "gstreamer",
+            "hspell",
+            "hunspell",
+            "hupnp",
+            "iokit",
+            "jasper",
+            "jpeg",
+            "kde4",
+            "kde4internal",
+            "lcms",
+            "libart",
+            "libattica",
+            "libintl",
+            "libxml2",
+            "libxslt",
+            "openexr",
+            "openssl",
+            "pcre",
+            "perl",
+            "png",
+            "qca2",
+            "qimageblitz",
+            "qt4",
+            "shareddesktopontologies",
+            "sharedmimeinfo",
+            "soprano",
+            "sqlite",
+            "strigi",
+            "udev",
+            "usb",
+            "xine",
+            "xmms",
+            "zlib"
+        ]
+    },
+    "katomic": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "katomic-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/katomic-15.04.2.tar.xz",
+            "name": "katomic-15.04.2.tar.xz",
+            "sha256": "1gpg01ngqmfkiwzfcx686x2yzd4sjlp5xkdrgdwy20czl1i6rras"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5widgets"
+        ]
+    },
+    "kollision": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kollision-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kollision-15.04.2.tar.xz",
+            "name": "kollision-15.04.2.tar.xz",
+            "sha256": "0jqjg6dr2ff5qb5f23kfd017m1lm7h2rim6q8dkbxk4xm92f5kqi"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "klines": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "klines-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/klines-15.04.2.tar.xz",
+            "name": "klines-15.04.2.tar.xz",
+            "sha256": "11ksr0khyj29bbzcavpxm4kc109m2g2gbhi4qhsyanfj8a0811az"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5service",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-ru": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ru-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ru-15.04.2.tar.xz",
+            "name": "kde-l10n-ru-15.04.2.tar.xz",
+            "sha256": "155mbg25anmdy6vgz3fsn4p8m7c8syfwiy70jsgqv9751dvkajlk"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kcalc": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kcalc-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kcalc-15.04.2.tar.xz",
+            "name": "kcalc-15.04.2.tar.xz",
+            "sha256": "0sk431vrz8xc12fc6qfdlxcnkr5yl729pk450pj90xm6x0jj24lp"
+        },
+        "buildInputs": [
+            "ecm",
+            "gmp",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5init",
+            "kf5notifications",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-mr": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-mr-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-mr-15.04.2.tar.xz",
+            "name": "kde-l10n-mr-15.04.2.tar.xz",
+            "sha256": "1clmi1vflqi63kihv9ljkbns4r0v7yb65zkdv642kdcfmwz9kgw8"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "lskat": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "lskat-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/lskat-15.04.2.tar.xz",
+            "name": "lskat-15.04.2.tar.xz",
+            "sha256": "1ydmglbihijpsgq29nz3sg3g8sja9nzqd7czpg8z8zy9gylh6cl4"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kcolorchooser": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kcolorchooser-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kcolorchooser-15.04.2.tar.xz",
+            "name": "kcolorchooser-15.04.2.tar.xz",
+            "sha256": "1hypa5q9vfk3imc6fng7li3jkh51phsk2cq1sjri1czl547ij38h"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kde-l10n-kk": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-kk-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-kk-15.04.2.tar.xz",
+            "name": "kde-l10n-kk-15.04.2.tar.xz",
+            "sha256": "0xgncx5xbhnzxzpzaawvj9d19s8zzdrc76qa986xf37zahjv7v1r"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kblocks": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kblocks-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kblocks-15.04.2.tar.xz",
+            "name": "kblocks-15.04.2.tar.xz",
+            "sha256": "1bpvw5sghg7qiqs97p0xn7b23jgmzk590kmdjcwigfz788ac4ylv"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5itemmodels",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-lt": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-lt-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-lt-15.04.2.tar.xz",
+            "name": "kde-l10n-lt-15.04.2.tar.xz",
+            "sha256": "03vwx16wwihq0qlzs8w1rdlld0951x0yr9w36bvjsrl985n500ip"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-cs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-cs-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-cs-15.04.2.tar.xz",
+            "name": "kde-l10n-cs-15.04.2.tar.xz",
+            "sha256": "0ks75clbhywql9pgchxi5phc50n9qama5v4crngwkxfbs2lhp05d"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kblackbox": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kblackbox-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kblackbox-15.04.2.tar.xz",
+            "name": "kblackbox-15.04.2.tar.xz",
+            "sha256": "1ib9a9pp9mdp2kbz2gb4lnrlf66v7170y4qrg24vmvpsa7csgmx3"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kdegames",
+            "kf5xmlgui",
+            "qt5",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "libkdeedu": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkdeedu-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkdeedu-15.04.2.tar.xz",
+            "name": "libkdeedu-15.04.2.tar.xz",
+            "sha256": "1pvipdv3zhqpnmz4x68jdfml2hjamlb591r9qcibw1pzgx7bz77q"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "amor": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "amor-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/amor-15.04.2.tar.xz",
+            "name": "amor-15.04.2.tar.xz",
+            "sha256": "1kbdarrf2jxr5f458m28fg19g29xpj5n7fb9w2311052xaywf0rr"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kde-l10n-eu": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-eu-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-eu-15.04.2.tar.xz",
+            "name": "kde-l10n-eu-15.04.2.tar.xz",
+            "sha256": "18bry21g828n0rvaq4510pj8fb4f49jn5yxvf1jm6qn3wcfg5qws"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kamera": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kamera-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kamera-15.04.2.tar.xz",
+            "name": "kamera-15.04.2.tar.xz",
+            "sha256": "01r16868mdmpfjwzz7wa1qykc6lif9yi7fp0zxyk5hy77wp4jwdy"
+        },
+        "buildInputs": [
+            "gphoto2",
+            "kde4"
+        ]
+    },
+    "pairs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "pairs-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/pairs-15.04.2.tar.xz",
+            "name": "pairs-15.04.2.tar.xz",
+            "sha256": "11hbzh8nk38m1n61vcyzz1v6q1fpwyiv9l6s05mrsm4krny2bi4a"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "dragon": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "dragon-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/dragon-15.04.2.tar.xz",
+            "name": "dragon-15.04.2.tar.xz",
+            "sha256": "0kf692d3wsj32iry3dl148f4i04y9y26nc9v4skpwf5pvsgp2d5s"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kmplot": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmplot-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmplot-15.04.2.tar.xz",
+            "name": "kmplot-15.04.2.tar.xz",
+            "sha256": "0p1qkhmdn7wqggk1z4c8mwbgrk7daxgfjg6yhhscaj13ikg2l4qc"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5kdelibs4support",
+            "kf5parts",
+            "kf5widgetsaddons",
+            "qt5",
+            "qt5core",
+            "qt5gui",
+            "qt5printsupport",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "kde-base-artwork": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-base-artwork-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-base-artwork-15.04.2.tar.xz",
+            "name": "kde-base-artwork-15.04.2.tar.xz",
+            "sha256": "0if4i3zag7hzgrf89bswfg7c95m066phjs89fk4ss45ak25rgddy"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "blinken": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "blinken-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/blinken-15.04.2.tar.xz",
+            "name": "blinken-15.04.2.tar.xz",
+            "sha256": "1k0idsbqnhmrlnsl8l45wkipb6hch1imrkxglxl1xw0pr0s7c8rg"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5core",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "konquest": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "konquest-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/konquest-15.04.2.tar.xz",
+            "name": "konquest-15.04.2.tar.xz",
+            "sha256": "1w03w8nxkbz9ng2spa3pc5gmigajm7k8dcz2j1nly44a6g85rxnn"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kde-l10n-he": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-he-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-he-15.04.2.tar.xz",
+            "name": "kde-l10n-he-15.04.2.tar.xz",
+            "sha256": "04kayv647nj3hrxl0863gks5z53v1ax9pafncm70ls79rzz95zsa"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "bovo": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "bovo-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/bovo-15.04.2.tar.xz",
+            "name": "bovo-15.04.2.tar.xz",
+            "sha256": "00w5d9mapy4f634ys1k45fhpa50h5299y9q6wann9phrmf8kj8y2"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5coreaddons",
+            "kf5declarative",
+            "kf5kdegames",
+            "kf5newstuff",
+            "kf5xmlgui",
+            "qt5",
+            "qt5concurrent",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "ktimer": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktimer-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktimer-15.04.2.tar.xz",
+            "name": "ktimer-15.04.2.tar.xz",
+            "sha256": "19ah9r92i8r4059apvv1aj25hvkhq3dw9vmvi5r8sxrdbd3m0yw0"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kio",
+            "kf5notifications",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets"
+        ]
+    },
+    "kde-l10n-hu": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-hu-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-hu-15.04.2.tar.xz",
+            "name": "kde-l10n-hu-15.04.2.tar.xz",
+            "sha256": "1ilhnp6x3lahhc0rkhn2zv6g9ck8w7b9qaw8fgqkiz0n19hv564f"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-ro": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ro-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ro-15.04.2.tar.xz",
+            "name": "kde-l10n-ro-15.04.2.tar.xz",
+            "sha256": "05pgpshvs08inygighi3ya0bl49238l96sgqql0377cm9cw2hj9l"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-sv": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-sv-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-sv-15.04.2.tar.xz",
+            "name": "kde-l10n-sv-15.04.2.tar.xz",
+            "sha256": "11mnbalw3lpdgv3bbhhh658cs34impi7gymhcw129il0jsc5yz53"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kgamma": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kgamma-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kgamma-15.04.2.tar.xz",
+            "name": "kgamma-15.04.2.tar.xz",
+            "sha256": "08ia2skz3w6zwzm9jlgiyrlxnn7mx83d78350plr5k6qrszn483l"
+        },
+        "buildInputs": [
+            "kde4",
+            "x11"
+        ]
+    },
+    "kanagram": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kanagram-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kanagram-15.04.2.tar.xz",
+            "name": "kanagram-15.04.2.tar.xz",
+            "sha256": "1zqjms2ai4bpfmbf136q94gbl59vjszlfsp8xi0pmpp138yii9a8"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5sonnet",
+            "libkeduvocdocument",
+            "qt5",
+            "qt5core",
+            "qt5opengl",
+            "qt5optional_components",
+            "qt5qml",
+            "qt5quick",
+            "qt5texttospeech"
+        ]
+    },
+    "kstars": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kstars-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kstars-15.04.2.tar.xz",
+            "name": "kstars-15.04.2.tar.xz",
+            "sha256": "01mzd0qbfjx6fzbaii6al6r62frygf9psi4av1227p3drwmnxrz6"
+        },
+        "buildInputs": [
+            "astrometrynet",
+            "cfitsio",
+            "ecm",
+            "eigen3",
+            "indi",
+            "kf5",
+            "kf5config",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5init",
+            "kf5jobwidgets",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5plotting",
+            "kf5texteditor",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "opengl",
+            "qt5",
+            "qt5gui",
+            "qt5multimedia",
+            "qt5opengl",
+            "qt5printsupport",
+            "qt5qml",
+            "qt5quick",
+            "qt5sql",
+            "qt5svg",
+            "qt5test",
+            "qt5xml",
+            "wcslib",
+            "xplanet"
+        ]
+    },
+    "kdeartwork": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdeartwork-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdeartwork-15.04.2.tar.xz",
+            "name": "kdeartwork-15.04.2.tar.xz",
+            "sha256": "0dhm6n5x8pq4nl8f5gnr2cdgy3fjkqyhij9gdxqan5s7rhfq7j4n"
+        },
+        "buildInputs": [
+            "eigen3",
+            "kde4",
+            "kde4workspace",
+            "kexiv2",
+            "opengl",
+            "xscreensaver"
+        ]
+    },
+    "kfloppy": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kfloppy-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kfloppy-15.04.2.tar.xz",
+            "name": "kfloppy-15.04.2.tar.xz",
+            "sha256": "0r8cgmwa0b9r6dl5vslw4g03mm3qvrswqhk4pdbph3iw1qykxypw"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "jovie": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "jovie-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/jovie-15.04.2.tar.xz",
+            "name": "jovie-15.04.2.tar.xz",
+            "sha256": "0lc751p2s96qjqh7dccjm498m7c370dcsm5bxqks9imyi9l7syyx"
+        },
+        "buildInputs": [
+            "kde4",
+            "qt4",
+            "speechd"
+        ]
+    },
+    "kde-l10n-zh_TW": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-zh_TW-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-zh_TW-15.04.2.tar.xz",
+            "name": "kde-l10n-zh_TW-15.04.2.tar.xz",
+            "sha256": "1gvr4k48qjwgw9qsv3rlz210slqdvsxvqxwsy7j5ndcjfs2724wi"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kscd": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kscd-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kscd-15.04.2.tar.xz",
+            "name": "kscd-15.04.2.tar.xz",
+            "sha256": "1066yavabxax059fwgp0rmspfsy065x0nisci0ybyfh0y9m8m48j"
+        },
+        "buildInputs": [
+            "alsa",
+            "kde4",
+            "musicbrainz3",
+            "qt4"
+        ]
+    },
+    "kde-l10n-uk": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-uk-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-uk-15.04.2.tar.xz",
+            "name": "kde-l10n-uk-15.04.2.tar.xz",
+            "sha256": "1hbwwj1k4g4z6wkrxd3aalbhvsqvnzgv56s1m748vp7196d7h6wk"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "konsole": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "konsole-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/konsole-15.04.2.tar.xz",
+            "name": "konsole-15.04.2.tar.xz",
+            "sha256": "1cy71kfv1f9bq3y3n73brm6wzl03qgcvx5rg0kflx3ihjl1aclgc"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5bookmarks",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5init",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5parts",
+            "kf5pty",
+            "kf5service",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5script",
+            "qt5test",
+            "qt5widgets",
+            "x11"
+        ]
+    },
+    "kruler": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kruler-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kruler-15.04.2.tar.xz",
+            "name": "kruler-15.04.2.tar.xz",
+            "sha256": "0rl81v1lhljfqvz98zfvnfbnylxn3l9qzy7b33hfkpmm9bjkp0i2"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5notifications",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets",
+            "qt5x11extras",
+            "x11",
+            "xcb"
+        ]
+    },
+    "kubrick": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kubrick-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kubrick-15.04.2.tar.xz",
+            "name": "kubrick-15.04.2.tar.xz",
+            "sha256": "16ndnx92mb307qjkwljdbgp69aamk268yqn2w9w8y4yjhmvsmx3d"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames",
+            "opengl"
+        ]
+    },
+    "kdenetwork-filesharing": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdenetwork-filesharing-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdenetwork-filesharing-15.04.2.tar.xz",
+            "name": "kdenetwork-filesharing-15.04.2.tar.xz",
+            "sha256": "0l7s9a8ngwvz11bk5d5q4vxi0xvqc2jk62zcqq0mjiznd3vwiqdy"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "dolphin-plugins": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "dolphin-plugins-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/dolphin-plugins-15.04.2.tar.xz",
+            "name": "dolphin-plugins-15.04.2.tar.xz",
+            "sha256": "19hyki0k06bma2a236w45hip6gb8fzwcm51qx8xxbii4di6qrkvx"
+        },
+        "buildInputs": [
+            "kde4",
+            "libkonq"
+        ]
+    },
+    "kmines": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmines-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmines-15.04.2.tar.xz",
+            "name": "kmines-15.04.2.tar.xz",
+            "sha256": "1n49vzbyiiya0inxp0kydh47mm5m2qgm8x3n6yj9hjhllvjm885s"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5qml",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kspaceduel": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kspaceduel-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kspaceduel-15.04.2.tar.xz",
+            "name": "kspaceduel-15.04.2.tar.xz",
+            "sha256": "07pgrdywj0jbvqw21qkblax30jym9x8y94ig5jn3jl19ax7a8wqy"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kde-l10n-tr": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-tr-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-tr-15.04.2.tar.xz",
+            "name": "kde-l10n-tr-15.04.2.tar.xz",
+            "sha256": "1ddbxlf9bqd3zqwxfhygfmy15prhh0albp83saprk94bbdirp0lq"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "libkdcraw": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkdcraw-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkdcraw-15.04.2.tar.xz",
+            "name": "libkdcraw-15.04.2.tar.xz",
+            "sha256": "1j277ydzn35hzk5v0vf50giw1j3yibskpkb4kr5kirszs8m2yqkf"
+        },
+        "buildInputs": [
+            "kde4",
+            "libraw"
+        ]
+    },
+    "ktp-approver": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-approver-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-approver-15.04.2.tar.xz",
+            "name": "ktp-approver-15.04.2.tar.xz",
+            "sha256": "1qik158frx7208adk7r573a85y8xjd1q8r9yw4fb592hvlkdk3i7"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5notifications",
+            "kf5service",
+            "qt5",
+            "qt5network",
+            "qt5widgets",
+            "telepathyqt5"
+        ]
+    },
+    "ktp-contact-runner": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-contact-runner-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-contact-runner-15.04.2.tar.xz",
+            "name": "ktp-contact-runner-15.04.2.tar.xz",
+            "sha256": "00r8z9zg9g1lpr6jmkr5l0n4w7zsskl35spral6ibbnnvfcv7jrf"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5i18n",
+            "kf5runner",
+            "kf5service",
+            "ktp",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5network",
+            "qt5widgets"
+        ]
+    },
+    "kdepim-runtime": {
+        "nativeBuildInputs": [
+            "_testrunner",
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdepim-runtime-4.14.9",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdepim-runtime-4.14.9.tar.xz",
+            "name": "kdepim-runtime-4.14.9.tar.xz",
+            "sha256": "0h6q08j5i2lhvlv92daxdyf7vncisbx0ya11vh45wmbv30xv2cl0"
+        },
+        "buildInputs": [
+            "accountsqt",
+            "akonadi",
+            "boost",
+            "kde4",
+            "kdepimlibs",
+            "libkfbapi",
+            "libkgapi2",
+            "libkolab",
+            "libkolabxml",
+            "qjson",
+            "qt4",
+            "sasl2",
+            "sharedmimeinfo",
+            "signonqt",
+            "xsltproc"
+        ]
+    },
+    "print-manager": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "print-manager-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/print-manager-15.04.2.tar.xz",
+            "name": "print-manager-15.04.2.tar.xz",
+            "sha256": "0hry52ypcchzbsvg5y4mw2h494l3cp4lqflhw48pilgzmz6pa1rk"
+        },
+        "buildInputs": [
+            "cups",
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5notifications",
+            "kf5plasma",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5network",
+            "qt5qml",
+            "qt5quick",
+            "qt5widgets"
+        ]
+    },
+    "oxygen-icons": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "oxygen-icons-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/oxygen-icons-15.04.2.tar.xz",
+            "name": "oxygen-icons-15.04.2.tar.xz",
+            "sha256": "1xwa8y6alrk6faf6bw3wc0y2vxjx32wzl9ncywisb4823xc8njbi"
+        },
+        "buildInputs": []
+    },
+    "umbrello": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "umbrello-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/umbrello-15.04.2.tar.xz",
+            "name": "umbrello-15.04.2.tar.xz",
+            "sha256": "08bz8lg2arrwsnf0gjjjrf6bihrv9bdz8n4hdvilhpy0ls78v2va"
+        },
+        "buildInputs": [
+            "kde4",
+            "libxml2",
+            "libxslt"
+        ]
+    },
+    "kde-l10n-ar": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ar-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ar-15.04.2.tar.xz",
+            "name": "kde-l10n-ar-15.04.2.tar.xz",
+            "sha256": "05wspvz4fk6xy3d9zjgrj7kzj213hhkv7fvs43iy2l4vm8b3vski"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ktp-filetransfer-handler": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-filetransfer-handler-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-filetransfer-handler-15.04.2.tar.xz",
+            "name": "ktp-filetransfer-handler-15.04.2.tar.xz",
+            "sha256": "15y53z3kbbvk6vg1f3ns88mq6c9hmd41s2ayixhg109nwp7q0177"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5kio",
+            "ktp",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5widgets"
+        ]
+    },
+    "kdepimlibs": {
+        "nativeBuildInputs": [
+            "_testrunner",
+            "cmake",
+            "perl_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdepimlibs-4.14.9",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdepimlibs-4.14.9.tar.xz",
+            "name": "kdepimlibs-4.14.9.tar.xz",
+            "sha256": "0mjbaszc14ilvcjmr7aqy41py7yfriz1glvwpbr89z9nqjvy62yj"
+        },
+        "buildInputs": [
+            "akonadi",
+            "boost",
+            "gpgme",
+            "kde4",
+            "ldap",
+            "libical",
+            "libxml2",
+            "libxslt",
+            "prison",
+            "qjson",
+            "sasl2",
+            "sharedmimeinfo",
+            "xsltproc"
+        ]
+    },
+    "step": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "step-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/step-15.04.2.tar.xz",
+            "name": "step-15.04.2.tar.xz",
+            "sha256": "0skcnrdb3gcl8z2krmhi38dz5gr9a0bzvfgiv953bbr93hkjsscf"
+        },
+        "buildInputs": [
+            "ecm",
+            "eigen3",
+            "gsl",
+            "kf5",
+            "kf5config",
+            "kf5doctools",
+            "kf5kdelibs4support",
+            "kf5khtml",
+            "kf5newstuff",
+            "kf5plotting",
+            "pythoninterp",
+            "qalculate",
+            "qt5",
+            "qt5opengl",
+            "qt5printsupport",
+            "qt5qml",
+            "qt5quick",
+            "qt5svg",
+            "qt5test",
+            "qt5xml"
+        ]
+    },
+    "kmousetool": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmousetool-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kmousetool-15.04.2.tar.xz",
+            "name": "kmousetool-15.04.2.tar.xz",
+            "sha256": "1nkn25zg6bb4pc7s93f6igcpspy1a1wlzh2ckmm2613594jh1qr9"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kde-l10n-ja": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ja-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ja-15.04.2.tar.xz",
+            "name": "kde-l10n-ja-15.04.2.tar.xz",
+            "sha256": "02b3243zbnrkygnbiq7nxrl2sq6ssi27kpn9382aa8b19w96gcsz"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kdenlive": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdenlive-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdenlive-15.04.2.tar.xz",
+            "name": "kdenlive-15.04.2.tar.xz",
+            "sha256": "1q17b5gihcgi5svs123h0vl25ij4ajybk16is9hjyfpmhkl7nyfa"
+        },
+        "buildInputs": [
+            "ecm",
+            "git",
+            "kf5",
+            "kf5archive",
+            "kf5bookmarks",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5iconthemes",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5plotting",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "libv4l2",
+            "mlt",
+            "opengl",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5opengl",
+            "qt5script",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "sdl",
+            "sharedmimeinfo"
+        ]
+    },
+    "kbreakout": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kbreakout-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kbreakout-15.04.2.tar.xz",
+            "name": "kbreakout-15.04.2.tar.xz",
+            "sha256": "1wrggwcgyc6vlxy0zx8y69lvz0njalbfw54sgnrnc8ka65mjr0pg"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5jobwidgets",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5service",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "kde-workspace": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-workspace-4.11.20",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-workspace-4.11.20.tar.xz",
+            "name": "kde-workspace-4.11.20.tar.xz",
+            "sha256": "06n4aq0mi36d1ssqbvwxgy6jc18q70xp772i58ni0akw0ckrp33c"
+        },
+        "buildInputs": [
+            "akonadi",
+            "boost",
+            "dbusmenuqt",
+            "fontconfig",
+            "freetype",
+            "glib2",
+            "jpeg",
+            "kactivities",
+            "kde4",
+            "kdeclarative",
+            "kdepimlibs",
+            "libgps",
+            "nepomukcore",
+            "opengl",
+            "opengles",
+            "pciutils",
+            "png",
+            "prison",
+            "pythonlibrary",
+            "qalculate",
+            "qimageblitz",
+            "qjson",
+            "qt4",
+            "raw1394",
+            "sensors",
+            "soprano",
+            "strigi",
+            "udev",
+            "usb",
+            "wayland",
+            "x11",
+            "x11_xcb",
+            "xcb",
+            "xmms",
+            "zlib"
+        ]
+    },
+    "ffmpegthumbs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ffmpegthumbs-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ffmpegthumbs-15.04.2.tar.xz",
+            "name": "ffmpegthumbs-15.04.2.tar.xz",
+            "sha256": "122mfd85yzkmyg1wzz7fz4v0jnxxifinckc9rb5ydjlj3c85y9qg"
+        },
+        "buildInputs": [
+            "ffmpeg",
+            "kde4"
+        ]
+    },
+    "ktux": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktux-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktux-15.04.2.tar.xz",
+            "name": "ktux-15.04.2.tar.xz",
+            "sha256": "0pdgbqbk3iwjywvhm6bzwqc6acfnyjixj2j3yxczn2k6fy5k0vkf"
+        },
+        "buildInputs": [
+            "kde4",
+            "kde4workspace"
+        ]
+    },
+    "kde-dev-utils": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-dev-utils-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-dev-utils-15.04.2.tar.xz",
+            "name": "kde-dev-utils-15.04.2.tar.xz",
+            "sha256": "100kia4fd6gc10mh1nmadrm60wwnciyq5nlm0m4c1cjbp9ypyfh5"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "libkeduvocdocument": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkeduvocdocument-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkeduvocdocument-15.04.2.tar.xz",
+            "name": "libkeduvocdocument-15.04.2.tar.xz",
+            "sha256": "13hzs4lrlrnyya3321iqky2nxjlh65fs2lr0nbl3g6k9wxdxlqfw"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5archive",
+            "kf5i18n",
+            "kf5kio",
+            "qt5",
+            "qt5test",
+            "qt5xml"
+        ]
+    },
+    "kde-l10n-pl": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-pl-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-pl-15.04.2.tar.xz",
+            "name": "kde-l10n-pl-15.04.2.tar.xz",
+            "sha256": "1zs799470abqq9hxgik0wka2im6fi12057jg6id7fi9d58h3lyap"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ktp-send-file": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-send-file-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-send-file-15.04.2.tar.xz",
+            "name": "ktp-send-file-15.04.2.tar.xz",
+            "sha256": "1jygvxc8ajy6p6qhpfwj0chc0571x50h7n2nzwqiz3nhs3avqxnx"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kio",
+            "ktp",
+            "qt5",
+            "qt5widgets"
+        ]
+    },
+    "cantor": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "cantor-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/cantor-15.04.2.tar.xz",
+            "name": "cantor-15.04.2.tar.xz",
+            "sha256": "0y7gs13s38swvicfw9wlxgqr96bvny4d2rsvnkb0cn1d68vmb7jm"
+        },
+        "buildInputs": [
+            "analitza5",
+            "ecm",
+            "kde4",
+            "kf5",
+            "kf5archive",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5kdelibs4support",
+            "kf5newstuff",
+            "kf5parts",
+            "kf5pty",
+            "kf5texteditor",
+            "libspectre",
+            "luajit",
+            "pythonlibs",
+            "pythonlibs3",
+            "qalculate",
+            "qt5",
+            "qt5core",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "qt5xml",
+            "qt5xmlpatterns",
+            "r"
+        ]
+    },
+    "libkcddb": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkcddb-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkcddb-15.04.2.tar.xz",
+            "name": "libkcddb-15.04.2.tar.xz",
+            "sha256": "1yrmvy8kldhh312dk4kipr15hr4zhsg2yj645naybfh2dya89q6m"
+        },
+        "buildInputs": [
+            "kde4",
+            "musicbrainz5"
+        ]
+    },
+    "bomber": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "bomber-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/bomber-15.04.2.tar.xz",
+            "name": "bomber-15.04.2.tar.xz",
+            "sha256": "1xn52p5apfbm3iyjq1hw2mg5isl3jcbq4x8wfzil2vp3ir16f1j3"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5widgets"
+        ]
+    },
+    "libkface": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkface-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkface-15.04.2.tar.xz",
+            "name": "libkface-15.04.2.tar.xz",
+            "sha256": "08xc93jjplqc6y0m9q6krwplfjj2cklvbw8m9dhhv1w6mn8qp8r3"
+        },
+        "buildInputs": [
+            "kde4",
+            "qt4"
+        ]
+    },
+    "kde-l10n-nb": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-nb-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-nb-15.04.2.tar.xz",
+            "name": "kde-l10n-nb-15.04.2.tar.xz",
+            "sha256": "16ya60pxn30rpwidijcycmjxm8c61hiykzfirba73i0pkzq13nij"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kturtle": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kturtle-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kturtle-15.04.2.tar.xz",
+            "name": "kturtle-15.04.2.tar.xz",
+            "sha256": "0xgb2ahzyg88iz1dgvbc5n17fbds56mixcfk4mmi2hgycckjk910"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5i18n",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "qt5",
+            "qt5core",
+            "qt5gui",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "svgpart": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "svgpart-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/svgpart-15.04.2.tar.xz",
+            "name": "svgpart-15.04.2.tar.xz",
+            "sha256": "09f9zfppa82zxzrm7b1c7q6hn3dry0rwzz3xpx26dsh219qaax29"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kdegraphics-mobipocket": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdegraphics-mobipocket-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdegraphics-mobipocket-15.04.2.tar.xz",
+            "name": "kdegraphics-mobipocket-15.04.2.tar.xz",
+            "sha256": "1y3w477bws206fx1rymvp9dr7z8bxy1l2p0cdawlnbir9bamsnnc"
+        },
+        "buildInputs": [
+            "kde4",
+            "strigi"
+        ]
+    },
+    "krfb": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "krfb-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/krfb-15.04.2.tar.xz",
+            "name": "krfb-15.04.2.tar.xz",
+            "sha256": "1ynvwvhkshjrh1d1rifawzwv0srqj9wlqhhiv5nr8lwd4m29pdj2"
+        },
+        "buildInputs": [
+            "kde4",
+            "ktp",
+            "libvncserver",
+            "telepathyqt4"
+        ]
+    },
+    "kde-l10n-ko": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ko-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ko-15.04.2.tar.xz",
+            "name": "kde-l10n-ko-15.04.2.tar.xz",
+            "sha256": "1knsgxhgz0cvxk0y460zyzk5n9q0rk8p3cdf0wlpxf7z8wvxcab0"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "libkgeomap": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "libkgeomap-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkgeomap-15.04.2.tar.xz",
+            "name": "libkgeomap-15.04.2.tar.xz",
+            "sha256": "091jl7zdcvj91xqr6fh8vvn5wrbg86ykczj43lgvnnph28h1xpyh"
+        },
+        "buildInputs": [
+            "kde4",
+            "marble",
+            "marblewidget",
+            "qt4"
+        ]
+    },
+    "kalgebra": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kalgebra-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kalgebra-15.04.2.tar.xz",
+            "name": "kalgebra-15.04.2.tar.xz",
+            "sha256": "1h8rpikyigx9804pn0624g83ja1wlb2m4hfc29jpi4j6va4h8j4f"
+        },
+        "buildInputs": [
+            "analitza5",
+            "curses",
+            "ecm",
+            "kf5configwidgets",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kio",
+            "kf5widgetsaddons",
+            "opengl",
+            "qt5",
+            "qt5opengl",
+            "qt5printsupport",
+            "qt5qml",
+            "qt5quick",
+            "qt5svg",
+            "qt5test",
+            "qt5webkitwidgets",
+            "qt5xml",
+            "readline"
+        ]
+    },
+    "rocs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "rocs-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/rocs-15.04.2.tar.xz",
+            "name": "rocs-15.04.2.tar.xz",
+            "sha256": "0zgxgbmmc3wy0k0s6dx7gprw4dl1rgdrq2ah98zr658bpwkkm9aw"
+        },
+        "buildInputs": [
+            "boost",
+            "ecm",
+            "grantlee5",
+            "kf5",
+            "kf5archive",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5itemviews",
+            "kf5texteditor",
+            "kf5xmlgui",
+            "qt5",
+            "qt5concurrent",
+            "qt5core",
+            "qt5gui",
+            "qt5quickwidgets",
+            "qt5script",
+            "qt5scripttools",
+            "qt5svg",
+            "qt5test",
+            "qt5webkit",
+            "qt5webkitwidgets",
+            "qt5widgets",
+            "qt5xmlpatterns"
+        ]
+    },
+    "kbruch": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kbruch-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kbruch-15.04.2.tar.xz",
+            "name": "kbruch-15.04.2.tar.xz",
+            "sha256": "0w1fw3lydp5znk3n5fhg30gj7mxi7v6y7hv46wl01cysd73m7825"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5crash",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets"
+        ]
+    },
+    "ksudoku": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksudoku-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksudoku-15.04.2.tar.xz",
+            "name": "ksudoku-15.04.2.tar.xz",
+            "sha256": "1xn2d7aiqv0q3lg5iwhjp2abwq2ssxa8gdjawvj40xq4zffr0wna"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames",
+            "opengl"
+        ]
+    },
+    "kde-l10n-el": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-el-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-el-15.04.2.tar.xz",
+            "name": "kde-l10n-el-15.04.2.tar.xz",
+            "sha256": "1y2q5vqm9xkv2yxzwqxrsyqnd8zdfzz5vyza3g4aisawh3xhwq25"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kopete": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kopete-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kopete-15.04.2.tar.xz",
+            "name": "kopete-15.04.2.tar.xz",
+            "sha256": "1zvf0y7f8r97lvwcspp2bwph5wsh1rcac9hp6vg0hkama3iqfbk3"
+        },
+        "buildInputs": [
+            "alsa",
+            "boost",
+            "expat",
+            "gif",
+            "glib2",
+            "idn",
+            "jasper",
+            "jsoncpp",
+            "kde4",
+            "kdepimlibs",
+            "kleopatra",
+            "libgadu",
+            "libmeanwhile",
+            "libmsn",
+            "libortp",
+            "libotr",
+            "libv4l2",
+            "libxml2",
+            "libxslt",
+            "mediastreamer",
+            "openssl",
+            "qca2",
+            "qgpgme",
+            "qimageblitz",
+            "qt4",
+            "qt5core",
+            "qt5network",
+            "speex",
+            "sqlite",
+            "srtp",
+            "xmms",
+            "zlib"
+        ]
+    },
+    "kde-l10n-de": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-de-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-de-15.04.2.tar.xz",
+            "name": "kde-l10n-de-15.04.2.tar.xz",
+            "sha256": "0fvb169pl9ibppiinc2sq164i7cikn7qxvycdv1whk3bcv376rrh"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-nds": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-nds-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-nds-15.04.2.tar.xz",
+            "name": "kde-l10n-nds-15.04.2.tar.xz",
+            "sha256": "0ryjlw2d9lrzzf08v1vscjr6mp2ckpbd0f2hkxg0ck8wgn7c2mxd"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-pa": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-pa-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-pa-15.04.2.tar.xz",
+            "name": "kde-l10n-pa-15.04.2.tar.xz",
+            "sha256": "1wi9l74fln9q92l1qmxgb2223gwkb6x2v753mzm7607hbcx9y8dx"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "okteta": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kastencore",
+            "kastengui",
+            "kf5kio",
+            "oktetacore",
+            "oktetagui",
+            "oktetakastencore",
+            "oktetakastengui",
+            "qt5core",
+            "qt5gui",
+            "qt5widgets"
+        ],
+        "name": "okteta-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/okteta-15.04.2.tar.xz",
+            "name": "okteta-15.04.2.tar.xz",
+            "sha256": "00y3kcl57crwkycd7ahf9cw20bnjwzjrxnlkvdpqansmcqvmmih5"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5bookmarks",
+            "kf5codecs",
+            "kf5completion",
+            "kf5configwidgets",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5parts",
+            "kf5service",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qca-qt5",
+            "qt5",
+            "qt5core",
+            "qt5designer",
+            "qt5network",
+            "qt5printsupport",
+            "qt5script",
+            "qt5scripttools",
+            "qt5test",
+            "qt5widgets",
+            "qt5xml",
+            "sharedmimeinfo"
+        ]
+    },
+    "ktp-accounts-kcm": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-accounts-kcm-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-accounts-kcm-15.04.2.tar.xz",
+            "name": "ktp-accounts-kcm-15.04.2.tar.xz",
+            "sha256": "1icmsax7abwfjavmq9vn2l3hj7hbjdhky60hga52sdnw7hy58n01"
+        },
+        "buildInputs": [
+            "accountsfiledir",
+            "accountsqt5",
+            "ecm",
+            "intltool",
+            "kaccounts",
+            "kf5",
+            "kf5codecs",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5widgetsaddons",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5widgets",
+            "signonqt5",
+            "telepathyqt5"
+        ]
+    },
+    "zeroconf-ioslave": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "zeroconf-ioslave-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/zeroconf-ioslave-15.04.2.tar.xz",
+            "name": "zeroconf-ioslave-15.04.2.tar.xz",
+            "sha256": "0129dc6r1sfxjg3bdfbnprgvf7iricshw1l879cw2lzb7wmqdpm9"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kremotecontrol": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kremotecontrol-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kremotecontrol-15.04.2.tar.xz",
+            "name": "kremotecontrol-15.04.2.tar.xz",
+            "sha256": "0npdbdjcfa8y7lmzl80fgbvv94hj2v0fc1lfmii0k0xnb6jv8cvl"
+        },
+        "buildInputs": [
+            "kde4",
+            "qt4"
+        ]
+    },
+    "kde-l10n-bs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-bs-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-bs-15.04.2.tar.xz",
+            "name": "kde-l10n-bs-15.04.2.tar.xz",
+            "sha256": "0vlsij3zfbqlcl9xg3iwvyi112d8i00rjbrpwc15lyhw19xzjakb"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ark": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ark-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ark-15.04.2.tar.xz",
+            "name": "ark-15.04.2.tar.xz",
+            "sha256": "0pssyyk8kf0qy9vh71kx3h5f1fs26k21cql97mfsl4hz181mfxkq"
+        },
+        "buildInputs": [
+            "bzip2",
+            "kde4",
+            "libarchive",
+            "libkonq",
+            "liblzma",
+            "qjson",
+            "zlib"
+        ]
+    },
+    "libkdegames": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5i18n",
+            "kf5kdelibs4support",
+            "kf5widgetsaddons",
+            "qt5network",
+            "qt5qml",
+            "qt5quickwidgets",
+            "qt5widgets",
+            "qt5xml"
+        ],
+        "name": "libkdegames-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/libkdegames-15.04.2.tar.xz",
+            "name": "libkdegames-15.04.2.tar.xz",
+            "sha256": "0r3mnbc4ka8whmdjadnr6wyac4bwfv6w01l6nm2k7gsq2n38q2yj"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5archive",
+            "kf5bookmarks",
+            "kf5codecs",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5dnssd",
+            "kf5globalaccel",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5jobwidgets",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5service",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "openal",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "sndfile"
+        ]
+    },
+    "kde-l10n-hi": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-hi-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-hi-15.04.2.tar.xz",
+            "name": "kde-l10n-hi-15.04.2.tar.xz",
+            "sha256": "1yqk7wva2r6smasgxzw6f1pw43z1jddf4br1rzq3k7f18np89im7"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "cervisia": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "cervisia-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/cervisia-15.04.2.tar.xz",
+            "name": "cervisia-15.04.2.tar.xz",
+            "sha256": "10a6k6x5mxcp3ark71rjcsbvi9q7r7sqc0pqx6wqg8wrvqng776i"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kde-l10n-en_GB": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-en_GB-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-en_GB-15.04.2.tar.xz",
+            "name": "kde-l10n-en_GB-15.04.2.tar.xz",
+            "sha256": "10db8pnbbxc35shx0f7vfiz0glm9kb521b99iksjkwnxpss9kyvx"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kapman": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kapman-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kapman-15.04.2.tar.xz",
+            "name": "kapman-15.04.2.tar.xz",
+            "sha256": "1jxxs2ljfci9llfv1pyybrw10nbajk06k8yhw4yswn23j544049a"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "kdeedu-data": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdeedu-data-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdeedu-data-15.04.2.tar.xz",
+            "name": "kdeedu-data-15.04.2.tar.xz",
+            "sha256": "04m14g1b8bkngawjx3x9sdla7p10dhxqwvfv29nkm1lblmc547ia"
+        },
+        "buildInputs": [
+            "ecm"
+        ]
+    },
+    "kgeography": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kgeography-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kgeography-15.04.2.tar.xz",
+            "name": "kgeography-15.04.2.tar.xz",
+            "sha256": "1iddjjpvyimbc9p0z2qzqc2v1q48pvm1d6qd4pdbycshpcm4wjwd"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5service",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5widgets"
+        ]
+    },
+    "kdesdk-thumbnailers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdesdk-thumbnailers-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdesdk-thumbnailers-15.04.2.tar.xz",
+            "name": "kdesdk-thumbnailers-15.04.2.tar.xz",
+            "sha256": "048i3xy580gpgbk9m42wv2v0cf1gk2zlx52dvf4izczracsvl2n7"
+        },
+        "buildInputs": [
+            "gettextpo",
+            "kde4"
+        ]
+    },
+    "kppp": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kppp-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kppp-15.04.2.tar.xz",
+            "name": "kppp-15.04.2.tar.xz",
+            "sha256": "0g89b800v06p1ymxdm7g04ajdmdh86y740hnzr0r64rdhsxq0wn9"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kde-l10n-ug": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ug-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ug-15.04.2.tar.xz",
+            "name": "kde-l10n-ug-15.04.2.tar.xz",
+            "sha256": "0ck01ygnz7ycfpff7g2zyix0zv19ia8csmggvyv07lp0k84asxr1"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kgpg": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kgpg-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kgpg-15.04.2.tar.xz",
+            "name": "kgpg-15.04.2.tar.xz",
+            "sha256": "1z3p0131hvnj3mm53n3q1hdkpvi77x1k8gv1bi3wblqin41dgmfx"
+        },
+        "buildInputs": [
+            "gpgme",
+            "kde4",
+            "kdepimlibs"
+        ]
+    },
+    "kde-l10n-lv": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-lv-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-lv-15.04.2.tar.xz",
+            "name": "kde-l10n-lv-15.04.2.tar.xz",
+            "sha256": "1skw7d5yxdy7vd2z6fnslcp7xpwjrvxzgl7kd9shvj7px988bfng"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-hr": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-hr-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-hr-15.04.2.tar.xz",
+            "name": "kde-l10n-hr-15.04.2.tar.xz",
+            "sha256": "0r5hfhdnjj9j0zzs6yr7a6hc1aidki5far9njn88c78ialw4y9kn"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kde-l10n-ca": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ca-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ca-15.04.2.tar.xz",
+            "name": "kde-l10n-ca-15.04.2.tar.xz",
+            "sha256": "00imm41b9769j0pwgcgavdcwmy59qwnab3qkf8xq22899fvadq7b"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "mplayerthumbs": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "mplayerthumbs-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/mplayerthumbs-15.04.2.tar.xz",
+            "name": "mplayerthumbs-15.04.2.tar.xz",
+            "sha256": "0lgag714pqpqnf6v9dz5xlriswcyqvjnj309gk0wji523hny3mim"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kate": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kate-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kate-15.04.2.tar.xz",
+            "name": "kate-15.04.2.tar.xz",
+            "sha256": "1llsg7ywl9mwl4gc25vw44v708r9k960c2lgqkfjpxnxpjlwk5vp"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5dbusaddons",
+            "libgit2",
+            "pykde4",
+            "pyqt4",
+            "pythonlibrary",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5script",
+            "qt5sql",
+            "qt5test",
+            "qt5widgets",
+            "sip"
+        ]
+    },
+    "ksaneplugin": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksaneplugin-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksaneplugin-15.04.2.tar.xz",
+            "name": "ksaneplugin-15.04.2.tar.xz",
+            "sha256": "0s69h4swdcxagv45v8y0kbg4ik3pyl7asiryvz9dip7yznwlxlz9"
+        },
+        "buildInputs": [
+            "kde4",
+            "ksane"
+        ]
+    },
+    "kde-runtime": {
+        "nativeBuildInputs": [
+            "cmake",
+            "md5sum_executable",
+            "windres_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-runtime-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-runtime-15.04.2.tar.xz",
+            "name": "kde-runtime-15.04.2.tar.xz",
+            "sha256": "1bcg5g6b8vij6zf1s6y4m5296yqiaavgbfcg1xzfcs8b5l7pckrn"
+        },
+        "buildInputs": [
+            "alsa",
+            "bzip2",
+            "exiv2",
+            "glib2",
+            "gpgme",
+            "jpeg",
+            "kactivities",
+            "kde4",
+            "kdeclarative",
+            "kdepimlibs",
+            "libattica",
+            "libgcrypt",
+            "liblzma",
+            "libssh",
+            "nepomukcore",
+            "networkmanager",
+            "openexr",
+            "pulseaudio",
+            "qca2",
+            "qgpgme",
+            "qntrack",
+            "samba",
+            "sharedmimeinfo",
+            "slp",
+            "soprano"
+        ]
+    },
+    "ktp-text-ui": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktp-text-ui-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-text-ui-15.04.2.tar.xz",
+            "name": "ktp-text-ui-15.04.2.tar.xz",
+            "sha256": "15kh8jwysvzlxrp4r4vhnla0lmwpxcyaf3gyy2lz0lb1k2k368n4"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5archive",
+            "kf5dbusaddons",
+            "kf5emoticons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5people",
+            "kf5service",
+            "kf5sonnet",
+            "kf5textwidgets",
+            "kf5webkit",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "ktp",
+            "qt5",
+            "qt5webkitwidgets"
+        ]
+    },
+    "kaccounts-providers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kaccounts-providers-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kaccounts-providers-15.04.2.tar.xz",
+            "name": "kaccounts-providers-15.04.2.tar.xz",
+            "sha256": "1a2mwv1lvmnw7apb94w4620ip3d3p8xxp3ff0yg633x60g0wnkiv"
+        },
+        "buildInputs": [
+            "accountsfiledir",
+            "ecm",
+            "intltool"
+        ]
+    },
+    "kteatime": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kteatime-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kteatime-15.04.2.tar.xz",
+            "name": "kteatime-15.04.2.tar.xz",
+            "sha256": "0cpy6z6nxys307247l9rcms9f4n2qpnvij1c20s0bcb03n5ya0vp"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5crash",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5textwidgets",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5widgets"
+        ]
+    },
+    "krdc": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "krdc-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/krdc-15.04.2.tar.xz",
+            "name": "krdc-15.04.2.tar.xz",
+            "sha256": "0m7jmwrzihzm8iswzvw5ajz4yiaxdsprdkhgl1a59hgm7wgrp8yg"
+        },
+        "buildInputs": [
+            "kde4",
+            "libnxcl",
+            "libvncserver",
+            "telepathyqt4"
+        ]
+    },
+    "klickety": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "klickety-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/klickety-15.04.2.tar.xz",
+            "name": "klickety-15.04.2.tar.xz",
+            "sha256": "149jka949jcpd75kg9rk2xa6m3hvkaiif57a35bg2pdzs41dqnn5"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kolf": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kolf-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kolf-15.04.2.tar.xz",
+            "name": "kolf-15.04.2.tar.xz",
+            "sha256": "0fifvpsp6nbr58r1pammynw4zh4k9z51vgm5xbcl1k6pblh6hn6l"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "ktouch": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ktouch-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktouch-15.04.2.tar.xz",
+            "name": "ktouch-15.04.2.tar.xz",
+            "sha256": "18f0r9d0hs1prrwj33iwik9ipdf3hyf316yz7jbg3iyygp8xa1wf"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdeclarative",
+            "x11"
+        ]
+    },
+    "kdepim": {
+        "nativeBuildInputs": [
+            "cmake",
+            "dblatex_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdepim-4.14.9",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdepim-4.14.9.tar.xz",
+            "name": "kdepim-4.14.9.tar.xz",
+            "sha256": "0l4nfcf0k958w37bzmbfpvs96yba0r22q16z4d1ksqbyrr6v7ycf"
+        },
+        "buildInputs": [
+            "akonadi",
+            "baloo",
+            "boost",
+            "git",
+            "grantlee",
+            "kde4",
+            "kdepimlibs",
+            "libkgapi2",
+            "prison",
+            "qgpgme",
+            "qjson",
+            "sasl2",
+            "xsltproc",
+            "zlib"
+        ]
+    },
+    "poxml": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "poxml-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/poxml-15.04.2.tar.xz",
+            "name": "poxml-15.04.2.tar.xz",
+            "sha256": "09rvf4yzrncc0q3975mwj37a3pm0l07r3jnqzhbapdkkwjqs9ad3"
+        },
+        "buildInputs": [
+            "gettext",
+            "gettextpo",
+            "kde4"
+        ]
+    },
+    "okular": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "okular-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/okular-15.04.2.tar.xz",
+            "name": "okular-15.04.2.tar.xz",
+            "sha256": "0cqqh4f4ymyx7204ba0afy2hscayd8aqg8dpbv13xxhs8m1aa3p7"
+        },
+        "buildInputs": [
+            "activeapp",
+            "chm",
+            "djvulibre",
+            "epub",
+            "freetype",
+            "jpeg",
+            "kactivities",
+            "kde4",
+            "kexiv2",
+            "libkscreen",
+            "libspectre",
+            "poppler",
+            "qca2",
+            "qimageblitz",
+            "qmobipocket",
+            "tiff",
+            "zlib"
+        ]
+    },
+    "kde-l10n-fi": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-fi-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-fi-15.04.2.tar.xz",
+            "name": "kde-l10n-fi-15.04.2.tar.xz",
+            "sha256": "0zpkcs64g5si5r5q075vkva41sx39qp30hycdzhvbs72hkjkp6m8"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ktp-common-internals": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kf5wallet",
+            "telepathyloggerqt",
+            "telepathyqt5"
+        ],
+        "name": "ktp-common-internals-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ktp-common-internals-15.04.2.tar.xz",
+            "name": "ktp-common-internals-15.04.2.tar.xz",
+            "sha256": "0b255d8yf8xi426kpsqb3s1dqsqvypk485pw327kvqg2jj2jdmiq"
+        },
+        "buildInputs": [
+            "accountsqt5",
+            "doxygen",
+            "ecm",
+            "kaccounts",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5people",
+            "kf5texteditor",
+            "kf5wallet",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "libgcrypt",
+            "libotr",
+            "qt5",
+            "qt5qml",
+            "qt5sql",
+            "qt5test",
+            "telepathyloggerqt",
+            "telepathyqt5",
+            "telepathyqt5service"
+        ]
+    },
+    "kcachegrind": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kcachegrind-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kcachegrind-15.04.2.tar.xz",
+            "name": "kcachegrind-15.04.2.tar.xz",
+            "sha256": "1f3iqjd4dk3agk6kw096199yrd8ag3zjx9zz58gvlkdww9rlap13"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kdf": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdf-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdf-15.04.2.tar.xz",
+            "name": "kdf-15.04.2.tar.xz",
+            "sha256": "17mb2hmbm1r0rq5nnh0xmrv3gqcs0ywan8jvxagvli350xgrn2ck"
+        },
+        "buildInputs": [
+            "kde4"
+        ]
+    },
+    "kajongg": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kajongg-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kajongg-15.04.2.tar.xz",
+            "name": "kajongg-15.04.2.tar.xz",
+            "sha256": "1ih2gz0i4r1pbx0ys6wi0fgwwh6c5mlq1hy8qfhbb1kanpl0v30k"
+        },
+        "buildInputs": [
+            "kde4",
+            "twisted"
+        ]
+    },
+    "ksquares": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksquares-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksquares-15.04.2.tar.xz",
+            "name": "ksquares-15.04.2.tar.xz",
+            "sha256": "01h8kcahn72lh9hdqljz9fx9wdh3gx7rk7fk0xpc7fh0qqwcdv9i"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "kshisen": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kshisen-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kshisen-15.04.2.tar.xz",
+            "name": "kshisen-15.04.2.tar.xz",
+            "sha256": "0syx9x96zm4hlmpz644sn2rfb4phyzrgvcr0kl38l9aj1i56q81a"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5declarative",
+            "kf5dnssd",
+            "kf5doctools",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5kmahjongglib",
+            "kf5newstuff",
+            "kf5xmlgui",
+            "phonon4qt5",
+            "qt5",
+            "qt5core",
+            "qt5gui"
+        ]
+    },
+    "kde-l10n-nn": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-nn-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-nn-15.04.2.tar.xz",
+            "name": "kde-l10n-nn-15.04.2.tar.xz",
+            "sha256": "0j0nn7qk7shq5xi9zma0fl7fibsaindsai8lrvfvaphrbdylp3cx"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "kdesdk-strigi-analyzers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdesdk-strigi-analyzers-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kdesdk-strigi-analyzers-15.04.2.tar.xz",
+            "name": "kdesdk-strigi-analyzers-15.04.2.tar.xz",
+            "sha256": "0wbm6q02zkqbvcq716v468mjxw3zd8xcjqyc3vvz80zfgpbm2dnd"
+        },
+        "buildInputs": [
+            "kde4",
+            "strigi"
+        ]
+    },
+    "kde-l10n-zh_CN": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-zh_CN-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-zh_CN-15.04.2.tar.xz",
+            "name": "kde-l10n-zh_CN-15.04.2.tar.xz",
+            "sha256": "08p3nlyigw1mxqajm2z0gs2ils8aymizmb3iiprnzi3zgcnbg45y"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "ksnakeduel": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksnakeduel-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/ksnakeduel-15.04.2.tar.xz",
+            "name": "ksnakeduel-15.04.2.tar.xz",
+            "sha256": "1zzwkc6k6315a02il4sp4zswz0i1031bcvsvxrpxb45s4rqhds3b"
+        },
+        "buildInputs": [
+            "kde4",
+            "kdegames"
+        ]
+    },
+    "kde-l10n-ia": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-ia-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-ia-15.04.2.tar.xz",
+            "name": "kde-l10n-ia-15.04.2.tar.xz",
+            "sha256": "0rg8zwwmwwm373fnsrcj3cdx88c1z674n398kyv3v6xdi31j2f5p"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "granatier": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "granatier-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/granatier-15.04.2.tar.xz",
+            "name": "granatier-15.04.2.tar.xz",
+            "sha256": "1jcxnm1hy6s6g6yls8ljcrhhp3qsp58gcs46hy4s25nacx5m4kh6"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdegames",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "qt5",
+            "qt5svg",
+            "qt5widgets"
+        ]
+    },
+    "kde-dev-scripts": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-dev-scripts-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-dev-scripts-15.04.2.tar.xz",
+            "name": "kde-dev-scripts-15.04.2.tar.xz",
+            "sha256": "07lliwm96m2nvwa52vsch9x85vxxj7cqlvfm3ynv8nw49pmlkdi5"
+        },
+        "buildInputs": [
+            "ecm",
+            "kde4",
+            "kf5doctools"
+        ]
+    },
+    "khangman": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "khangman-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/khangman-15.04.2.tar.xz",
+            "name": "khangman-15.04.2.tar.xz",
+            "sha256": "0wpgm0ipm9n6lhyiymf0ncmw8lgz2pc0fh4ghs4n692ihipiw4xf"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5xmlgui",
+            "libkeduvocdocument",
+            "qt5",
+            "qt5core",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5svg"
+        ]
+    },
+    "kde-l10n-sk": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-l10n-sk-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/kde-l10n/kde-l10n-sk-15.04.2.tar.xz",
+            "name": "kde-l10n-sk-15.04.2.tar.xz",
+            "sha256": "1nhvb2kdlxfvch0hly80lm4z17kijy860z2pk23n65r8lmhngf07"
+        },
+        "buildInputs": [
+            "ecm",
+            "gettext",
+            "kde4",
+            "kf5doctools",
+            "kf5i18n"
+        ]
+    },
+    "audiocd-kio": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "audiocd-kio-15.04.2",
+        "src": {
+            "url": "stable/applications/15.04.2/src/audiocd-kio-15.04.2.tar.xz",
+            "name": "audiocd-kio-15.04.2.tar.xz",
+            "sha256": "1vxqabysh3mjmrzaxz2kldx2a6w07rxf1adka1fwp2yhajb1bzlh"
+        },
+        "buildInputs": [
+            "cdparanoia",
+            "flac",
+            "kde4",
+            "libkcddb",
+            "libkcompactdisc",
+            "oggvorbis"
+        ]
+    }
+}
