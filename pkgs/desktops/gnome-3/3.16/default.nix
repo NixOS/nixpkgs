@@ -7,7 +7,9 @@ let
       self = self_ // overrides;
       self_ = with self; {
 
-  overridePackages = f: pkgsFun (f self);
+  overridePackages = f:
+    let newself = pkgsFun (f newself self);
+    in newself;
 
   callPackage = pkgs.newScope self;
 
