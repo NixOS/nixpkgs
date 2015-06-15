@@ -1278,6 +1278,8 @@ let
 
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
+  drive = callPackage ../applications/networking/drive { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
