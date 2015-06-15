@@ -65,6 +65,15 @@ rec {
       throw "The unique option `${showOption loc}' is defined multiple times, in ${showFiles (getFiles defs)}."
     else (head defs).value;
 
+  /* "Merge" option definitions by checking that they all have the same value. */
+  mergeEqualOption = loc: defs:
+    if defs == [] then abort "This case should never happen."
+    else fold (def: val:
+      if def.value != val then
+        throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
+      else
+        val) (head defs).value defs;
+
   getValues = map (x: x.value);
   getFiles = map (x: x.file);
 
