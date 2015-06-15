@@ -685,7 +685,8 @@ rec {
     dependencies = [];
     buildInputs = [
       python cmake
-      llvmPackages.clang-unwrapped llvmPackages.llvm
+      (if stdenv.isDarwin then llvmPackages.clang else llvmPackages.clang-unwrapped)
+      llvmPackages.llvm
     ];
 
     configurePhase = ":";
