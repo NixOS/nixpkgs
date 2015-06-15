@@ -264,12 +264,12 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpData = buildDotnetPackage rec {
     baseName = "FSharp.Data";
-    version = "2.2.2";
+    version = "2.2.3";
 
     src = fetchurl {
       name = "${baseName}-${version}.tar.gz";
       url = "https://github.com/fsharp/FSharp.Data/archive/${version}.tar.gz";
-      sha256 = "1li33ydjxz18v8siw53vv1nmkp5w7sdlsjcrfp6dzcynpvwbjw3s";
+      sha256 = "162ncwjyc74ndh3m5dpppg9aag1f8ijkjwv5dx0mid3mw592bjh1";
     };
 
     buildInputs = [ fsharp ];
