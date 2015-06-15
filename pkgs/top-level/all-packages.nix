@@ -3002,6 +3002,8 @@ let
 
   su = shadow.su;
 
+  subsonic = callPackage ../servers/misc/subsonic { };
+
   surfraw = callPackage ../tools/networking/surfraw { };
 
   swec = callPackage ../tools/networking/swec {
