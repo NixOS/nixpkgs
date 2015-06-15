@@ -1034,7 +1034,7 @@ let
   ceph-dev = ceph;
   #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
-  cfdg = builderDefsPackage (callPackage ../tools/graphics/cfdg) {};
+  cfdg = callPackage ../tools/graphics/cfdg { };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
