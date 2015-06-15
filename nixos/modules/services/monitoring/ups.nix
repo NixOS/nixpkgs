@@ -32,7 +32,7 @@ let
 
       shutdownOrder = mkOption {
         default = 0;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           When you have multiple UPSes on your system, you usually need to
           turn them off in a certain order.  upsdrvctl shuts down all the
@@ -151,7 +151,7 @@ in
 
       maxStartDelay = mkOption {
         default = 45;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           This can be set as a global variable above your first UPS
           definition and it can also be set in a UPS section.  This value

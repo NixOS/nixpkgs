@@ -130,7 +130,7 @@ in
 
       port = mkOption {
         default = 80;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           TCP port number for lighttpd to bind to.
         '';

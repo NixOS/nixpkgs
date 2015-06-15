@@ -66,7 +66,7 @@ in
       };
 
       port = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 9091;
         description = "TCP port number to run the RPC/web interface.";
       };

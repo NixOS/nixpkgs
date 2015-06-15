@@ -26,12 +26,12 @@ in {
       day = mkOption {
         description = "Colour temperature to use during day time";
         default = 5500;
-        type = types.uniq types.int;
+        type = types.int;
       };
       night = mkOption {
         description = "Colour temperature to use during night time";
         default = 3700;
-        type = types.uniq types.int;
+        type = types.int;
       };
     };
 

@@ -49,7 +49,7 @@ in
     port = mkOption {
       description = "Port that stats listens for messages on over UDP";
       default = 8125;
-      type = types.uniq types.int;
+      type = types.int;
     };
 
     mgmt_address = mkOption {
@@ -61,7 +61,7 @@ in
     mgmt_port = mkOption {
       description = "Port to run the management TCP interface on";
       default = 8126;
-      type = types.uniq types.int;
+      type = types.int;
     };
 
     backends = mkOption {

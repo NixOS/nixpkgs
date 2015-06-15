@@ -39,13 +39,13 @@ with lib;
       };
 
       port = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 8444;
         description = "The port which the daemon listens for other bitmessage clients";
       };
 
       nice = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 10;
         description = "Set the nice level for the notbit daemon";
       };

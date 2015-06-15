@@ -21,7 +21,7 @@ rec {
       };
       port = mkOption {
         default = 2222;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''TCP port number for kippo to bind to.'';
       };
       hostname = mkOption {
