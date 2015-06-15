@@ -73,6 +73,35 @@ _eval() {
 
 
 ######################################################################
+# Logging.
+
+nestingLevel=0
+
+startNest() {
+    nestingLevel=$(($nestingLevel + 1))
+    echo -en "\033[$1p"
+}
+
+stopNest() {
+    nestingLevel=$(($nestingLevel - 1))
+    echo -en "\033[q"
+}
+
+header() {
+    startNest "$2"
+    echo "$1"
+}
+
+# Make sure that even when we exit abnormally, the original nesting
+# level is properly restored.
+closeNest() {
+    while [ $nestingLevel -gt 0 ]; do
+        stopNest
+    done
+}
+
+
+######################################################################
 # Error handling.
 
 exitHandler() {
@@ -407,32 +436,6 @@ substituteAllInPlace() {
 
 ######################################################################
 # What follows is the generic builder.
-
-
-nestingLevel=0
-
-startNest() {
-    nestingLevel=$(($nestingLevel + 1))
-    echo -en "\033[$1p"
-}
-
-stopNest() {
-    nestingLevel=$(($nestingLevel - 1))
-    echo -en "\033[q"
-}
-
-header() {
-    startNest "$2"
-    echo "$1"
-}
-
-# Make sure that even when we exit abnormally, the original nesting
-# level is properly restored.
-closeNest() {
-    while [ $nestingLevel -gt 0 ]; do
-        stopNest
-    done
-}
 
 
 # This function is useful for debugging broken Nix builds.  It dumps
