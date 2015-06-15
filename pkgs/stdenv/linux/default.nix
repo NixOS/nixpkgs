@@ -86,7 +86,7 @@ rec {
         };
 
         cc = if isNull gccPlain
-             then "/no-such-path"
+             then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;

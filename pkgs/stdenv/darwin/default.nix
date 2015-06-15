@@ -31,7 +31,7 @@ rec {
       shell        = "/bin/bash";
       initialPath  = [ bootstrapTools ];
       fetchurlBoot = fetchurl;
-      cc           = "/no-such-path";
+      cc           = null;
     };
   };
 
