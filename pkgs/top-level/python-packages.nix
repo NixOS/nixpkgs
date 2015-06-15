@@ -10604,6 +10604,12 @@ let
     };
 
     propagatedBuildInputs = with self; [ xmltodict isodate ];
+
+    meta = {
+      homepage = "http://github.com/diyan/pywinrm/";
+      description = "Python library for Windows Remote Management";
+      license = licenses.mit;
+    };
   });
 
 
