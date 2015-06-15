@@ -26,7 +26,7 @@ in
     hardware.bumblebee.group = mkOption {
       default = "wheel";
       example = "video";
-      type = types.uniq types.str;
+      type = types.str;
       description = ''Group for bumblebee socket'';
     };
     hardware.bumblebee.connectDisplay = mkOption {
