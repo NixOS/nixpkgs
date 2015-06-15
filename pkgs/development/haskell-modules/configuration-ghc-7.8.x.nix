@@ -59,7 +59,6 @@ self: super: {
 
   # Newer versions require mtl 2.2.x.
   mtl-prelude = self.mtl-prelude_1_0_3;
-  equivalence = super.equivalence_0_2_5;        # required by Agda
 
   # purescript requires mtl 2.2.x.
   purescript = overrideCabal (super.purescript.overrideScope (self: super: {

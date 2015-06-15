@@ -4815,6 +4815,26 @@ let
   };
 
 
+  django_pipeline = buildPythonPackage rec {
+    name = "django-pipeline-${version}";
+    version = "1.5.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-pipeline/${name}.tar.gz";
+      md5 = "dff8a4abb2895ee5df335c3fb2775a02";
+      sha256 = "1y49fa8jj7x9qjj5wzhns3zxwj0s73sggvkrv660cqw5qb7d8hha";
+    };
+
+    propagatedBuildInputs = with self; [ django futures ];
+
+    meta = with stdenv.lib; {
+      description = "Pipeline is an asset packaging library for Django.";
+      homepage = https://github.com/cyberdelia/django-pipeline;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
   djblets = buildPythonPackage rec {
     name = "Djblets-0.6.28";
 

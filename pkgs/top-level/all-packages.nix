@@ -2061,6 +2061,8 @@ let
 
   maildrop = callPackage ../tools/networking/maildrop { };
 
+  mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
+
   mailsend = callPackage ../tools/networking/mailsend { };
 
   mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
@@ -2854,6 +2856,8 @@ let
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
+  skippy-xd = callPackage ../tools/X11/skippy-xd {};
+
   skydns = callPackage ../servers/dns/skydns { };
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
@@ -3409,6 +3413,8 @@ let
   xvkbd = callPackage ../tools/X11/xvkbd {
     inherit (xlibs) libXt libXaw libXtst xextproto libXi libXpm gccmakedep;
   };
+
+  xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
@@ -5279,6 +5285,8 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
+  infer = callPackage ../development/tools/analysis/infer { };
+
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
 
@@ -6702,6 +6710,8 @@ let
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
 
   libebml = callPackage ../development/libraries/libebml { };
+
+  libebur128 = callPackage ../development/libraries/libebur128 { };
 
   libedit = callPackage ../development/libraries/libedit { };
 
@@ -10698,7 +10708,10 @@ let
   darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
+    enableSharedLibraries = false;
     isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share";
   });
 
   darktable = callPackage ../applications/graphics/darktable {
@@ -12211,6 +12224,8 @@ let
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
+  ratmen = callPackage ../tools/X11/ratmen {};
+
   ratox = callPackage ../applications/networking/instant-messengers/ratox { };
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
@@ -13443,6 +13458,8 @@ let
 
   tintin = callPackage ../games/tintin { };
 
+  tome4 = callPackage ../games/tome4 { };
+
   tpm = callPackage ../games/thePenguinMachine { };
 
   tremulous = callPackage ../games/tremulous { };
@@ -13822,6 +13839,7 @@ let
 
   plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
     kf5 = kf510;
+    kdeApps = kdeApps_15_04;
   });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;

@@ -230,6 +230,13 @@ in {
         '';
       };
 
+      interface = mkOption {
+        default = "";
+        description = ''
+          A specific interface to bind to.
+        '';
+      };
+
       uuid = mkOption {
         default = "fdfc8a4e-a3ad-4c1d-b43d-a2eedb03a687";
         description = ''
@@ -256,7 +263,7 @@ in {
       after = [ "local-fs.target" "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.mediatomb ];
-      serviceConfig.ExecStart = "${pkgs.mediatomb}/bin/mediatomb -p ${toString cfg.port} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
+      serviceConfig.ExecStart = "${pkgs.mediatomb}/bin/mediatomb -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
       serviceConfig.User = "${cfg.user}";
     };
 
