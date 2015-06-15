@@ -3342,7 +3342,11 @@ let
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
 
-  vncrec = builderDefsPackage (callPackage ../tools/video/vncrec) {};
+  vncrec = callPackage ../tools/video/vncrec {
+    inherit (xlibs) imake libX11 xproto gccmakedep libXt
+      libXmu libXaw libXext xextproto libSM libICE libXpm
+      libXp;
+  };
 
   vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
 
