@@ -1,17 +1,16 @@
-{ stdenv, fetchurl, ocaml, findlib, ncurses }:
+{ stdenv, fetchurl, ocaml, findlib, ncurses, camlp4 }:
 
 stdenv.mkDerivation {
 
-  name = "ocp-build-1.99.8-beta";
+  name = "ocp-build-1.99.9-beta";
 
   src = fetchurl {
-    url = http://www.typerex.org/pub/ocp-build/ocp-build.1.99.8-beta.tar.gz;
-    sha256 = "03zqpl73ah0fji5baxmk8w0h7waamlnhhysi128yap4abzsh5w87";
+    url = http://www.typerex.org/pub/ocp-build/ocp-build.1.99.9-beta.tar.gz;
+    sha256 = "0wcb49bp239ns9mz55ky0kfjcz80cp97k0j0rwaw4h5sp3phn4l0";
   };
 
-  buildInputs = [ ocaml findlib ncurses ];
-
-  patches = [ ./fix-for-no-term.patch ];
+  buildInputs = [ ocaml findlib ncurses camlp4 ];
+  preInstall = "mkdir -p $out/bin";
 
   # In the Nix sandbox, the TERM variable is unset and stty does not
   # work. In such a case, ocp-build crashes due to a bug. The
