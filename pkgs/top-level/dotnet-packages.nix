@@ -81,6 +81,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "Lib/Net40/*" ];
   };
 
+  FSharpFormatting = fetchNuGet {
+    baseName = "FSharp.Formatting";
+    version = "2.9.8";
+    sha256 = "1bswcpa68i2lqds4kkl2qxgkfrppbpxa4jkyja48azljajh0df3m";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
   NUnit = fetchNuGet {
     baseName = "NUnit";
     version = "2.6.4";
@@ -112,6 +119,52 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   # SOURCE PACKAGES
+
+  Deedle = buildDotnetPackage rec {
+    baseName = "Deedle";
+    version = "1.2.0";
+
+    src = fetchFromGitHub {
+      owner = "BlueMountainCapital";
+      repo = baseName;
+      rev = "v${version}";
+      sha256 = "115zzh3q57w8wr02cl2v8wijnj1rg01j1mk9zbzixbb4aird72n5";
+    };
+
+    # Enough files from this repo are needed that it will be quicker to just get the entire repo
+    fsharpDataSrc = fetchFromGitHub {
+      owner = "fsharp";
+      repo = "FSharp.Data";
+      rev = "2.2.3";
+      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.FsCheck
+      dotnetPackages.FSharpCompilerService
+      dotnetPackages.FSharpData
+      dotnetPackages.FSharpFormatting
+      dotnetPackages.MathNetNumerics
+      dotnetPackages.NUnit
+    ];
+
+    preConfigure = ''
+      mkdir -vp paket-files/fsharp
+      ln -sv ${fsharpDataSrc} paket-files/fsharp/FSharp.Data
+    '';
+
+    xBuildFiles = [ "Deedle.Core.sln" ];  # Come back later to get RProvider as well
+    outputFiles = [ "bin/*" "LICENSE.md" ];
+
+    meta = {
+      description = "Deedle is an easy to use library for data and time series manipulation and for scientific programming";
+      homepage = "http://bluemountaincapital.github.io/Deedle/";
+      license = stdenv.lib.licenses.free;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
 
   ExcelDna = buildDotnetPackage rec {
     baseName = "Excel-DNA";
@@ -266,10 +319,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     baseName = "FSharp.Data";
     version = "2.2.3";
 
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/fsharp/FSharp.Data/archive/${version}.tar.gz";
-      sha256 = "162ncwjyc74ndh3m5dpppg9aag1f8ijkjwv5dx0mid3mw592bjh1";
+    src = fetchFromGitHub {
+      owner = "fsharp";
+      repo = baseName;
+      rev = version;
+      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
     };
 
     buildInputs = [ fsharp ];
