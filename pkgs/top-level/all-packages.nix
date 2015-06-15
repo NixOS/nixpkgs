@@ -9742,7 +9742,9 @@ let
 
   dietlibc = callPackage ../os-specific/linux/dietlibc { };
 
-  directvnc = builderDefsPackage (callPackage ../os-specific/linux/directvnc) {};
+  directvnc = callPackage ../os-specific/linux/directvnc {
+    inherit (xlibs) xproto;
+  };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
     devicemapper = devicemapper.override {enable_dmeventd = true;};
