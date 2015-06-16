@@ -7881,7 +7881,7 @@ let
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
-  ode = builderDefsPackage (callPackage ../development/libraries/ode) { };
+  ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
 
