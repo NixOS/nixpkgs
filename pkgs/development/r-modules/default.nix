@@ -259,6 +259,7 @@ let
     R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
     RAppArmor = [ pkgs.libapparmor ];
     rapport = [ pkgs.which ];
+    rapportools = [ pkgs.which ];
     rbamtools = [ pkgs.zlib ];
     RCA = [ pkgs.gmp ];
     rcdd = [ pkgs.gmp ];
