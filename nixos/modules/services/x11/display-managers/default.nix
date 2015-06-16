@@ -165,6 +165,7 @@ let
         Type=XSession
         TryExec=${cfg.displayManager.session.script}
         Exec=${cfg.displayManager.session.script} '${n}'
+        X-GDM-BypassXsession=true
         Name=${n}
         Comment=
         EODESKTOP
