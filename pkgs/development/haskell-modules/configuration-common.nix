@@ -873,4 +873,7 @@ self: super: {
   # Doesn't work with recent versions of mtl.
   cron-compat = markBroken super.cron-compat;
 
+  # https://github.com/yesodweb/serversession/issues/1
+  serversession = dontCheck super.serversession;
+
 }
