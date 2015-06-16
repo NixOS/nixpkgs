@@ -127,4 +127,5 @@ in mkDerivation (rec {
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
   maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
+  broken = true; # configure fails: "aeson >=0.7 && <0.9, syb ==0.4.*, text-binary ==0.1.*"
 })
