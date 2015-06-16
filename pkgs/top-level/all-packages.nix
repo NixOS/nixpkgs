@@ -8765,6 +8765,8 @@ let
 
   ghostOne = callPackage ../servers/games/ghost-one { };
 
+  groovebasin = callPackage ../applications/audio/groovebasin { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
