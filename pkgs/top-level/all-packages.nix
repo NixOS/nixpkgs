@@ -13564,7 +13564,8 @@ let
 
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
-  xaos = builderDefsPackage (callPackage ../applications/graphics/xaos) {
+  xaos = callPackage ../applications/graphics/xaos {
+    inherit (xlibs) libXt libX11 libXext xextproto xproto;
     libpng = libpng12;
   };
 
