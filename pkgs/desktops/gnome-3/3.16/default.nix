@@ -271,8 +271,6 @@ let
 
   seahorse = callPackage ./apps/seahorse { };
 
-  pomodoro = callPackage ./apps/pomodoro { };
-
   vinagre = callPackage ./apps/vinagre { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
@@ -310,6 +308,8 @@ let
   gpaste = callPackage ./misc/gpaste { };
 
   gtkhtml = callPackage ./misc/gtkhtml { };
+
+  pomodoro = callPackage ./misc/pomodoro { };
 
     };
   in self; # pkgsFun
