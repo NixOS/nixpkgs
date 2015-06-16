@@ -326,7 +326,6 @@ in {
     };
 
     users.extraUsers.grafana = {
-      uid = config.ids.uids.grafana;
       description = "Grafana user";
       home = cfg.dataDir;
       createHome = true;
