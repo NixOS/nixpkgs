@@ -293,15 +293,15 @@ rec {
   # The commented-out ones don't seem to allow direct package downloads;
   # they serve error messages that result in hash mismatches instead.
   bioc = [
-    # http://bioc.ism.ac.jp/3.0/bioc/
-    # http://bioc.openanalytics.eu/3.0/bioc/
-    # http://bioconductor.fmrp.usp.br/3.0/bioc/
-    # http://mirror.aarnet.edu.au/pub/bioconductor/3.0/bioc/
-    # http://watson.nci.nih.gov/bioc_mirror/3.0/bioc/
-    http://bioconductor.jp/packages/3.0/bioc/
-    http://bioconductor.statistik.tu-dortmund.de/packages/3.0/bioc/
-    http://mirrors.ebi.ac.uk/bioconductor/packages/3.0/bioc/
-    http://mirrors.ustc.edu.cn/bioc/3.0/bioc/
+    # http://bioc.ism.ac.jp/3.2/bioc/
+    # http://bioc.openanalytics.eu/3.2/bioc/
+    # http://bioconductor.fmrp.usp.br/3.2/bioc/
+    # http://mirror.aarnet.edu.au/pub/bioconductor/3.2/bioc/
+    # http://watson.nci.nih.gov/bioc_mirror/3.2/bioc/
+    http://bioconductor.jp/packages/3.2/bioc/
+    http://bioconductor.statistik.tu-dortmund.de/packages/3.2/bioc/
+    http://mirrors.ebi.ac.uk/bioconductor/packages/3.2/bioc/
+    http://mirrors.ustc.edu.cn/bioc/3.2/bioc/
   ];
 
   # CRAN mirrors (from http://cran.r-project.org/mirrors.html)
