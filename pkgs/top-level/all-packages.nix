@@ -3611,7 +3611,7 @@ let
 
   xmltv = callPackage ../tools/misc/xmltv { };
 
-  xmpppy = builderDefsPackage (callPackage ../development/python-modules/xmpppy) {};
+  xmpppy = callPackage ../development/python-modules/xmpppy { };
 
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
