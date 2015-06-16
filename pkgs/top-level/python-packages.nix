@@ -8868,11 +8868,11 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.39";
+    version = "0.40";
 
     src = pkgs.fetchurl {
+      sha256 = "0zyp2zpbckpdhapijvg7jwli71ilhp02awn99ly70q3l1f44m9dj";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
-      sha256 = "1046fhgqd1171n8xyzcxwzcxgkcwa77r08g7iih8k5x7z59l94lb";
     };
 
     buildInputs = with self; [ jedi ipython pygments ];
