@@ -42,10 +42,6 @@ stdenv.mkDerivation {
   configureFlags = "shared --libdir=lib --openssldir=etc/ssl" +
     stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
 
-  # CYGXXX: used to be set for cygwin with optionalString. Not needed
-  # anymore but kept to prevent rebuild.
-  preBuild = "";
-
   makeFlags = "MANDIR=$(out)/share/man";
 
   # Parallel building is broken in OpenSSL.
@@ -56,12 +52,12 @@ stdenv.mkDerivation {
       # If we're building dynamic libraries, then don't install static
       # libraries.
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib)" ]; then
-          rm $out/lib/*.a
+          rm "$out/lib/"*.a
       fi
 
       # remove dependency on Perl at runtime
       rm -rf $out/etc/ssl/misc
-    ''; # */
+    '';
 
   crossAttrs = {
     patches = patchesCross true;
