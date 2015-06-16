@@ -8,8 +8,11 @@ let
   b2s = val: if val then "true" else "false";
 
   cfgFile = pkgs.writeText "grafana.ini" ''
-    app_name = grafana
     app_mode = production
+
+    [paths]
+    data = ${cfg.dataDir}
+    logs = ${cfg.dataDir}/log
 
     [server]
     ; protocol (http or https)
@@ -119,7 +122,6 @@ let
     token_url = https://accounts.google.com/o/oauth2/token
 
     [log]
-    root_path = data/log
     ; Either "console", "file", default is "console"
     ; Use comma to separate multiple modes, e.g. "console, file"
     mode = console
@@ -319,8 +321,8 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["networking.target"];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/grafana-server --config ${cfgFile} web";
-        WorkingDirectory = cfg.dataDir;
+        ExecStart = "bin/grafana-server --config ${cfgFile} web";
+        WorkingDirectory = cfg.package;
         User = "grafana";
       };
     };
