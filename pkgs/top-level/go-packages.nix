@@ -652,6 +652,12 @@ let
     buildInputs = [ net oauth2 protobuf google-api-go-client grpc ];
   };
 
+  gcloud-golang-compute-metadata = buildGoPackage rec {
+    inherit (gcloud-golang) rev name goPackagePath src;
+    subPackages = [ "compute/metadata" ];
+    buildInputs = [ net ];
+  };
+
   ginkgo = buildGoPackage rec {
     rev = "5ed93e443a4b7dfe9f5e95ca87e6082e503021d2";
     name = "ginkgo-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1378,6 +1384,7 @@ let
       sha256 = "07dfpwwk68rrhxmqj69gq2ncsf3kfmn0zhlwscda0gc5gb57n5x1";
     };
 
+    buildInputs = [ gcloud-golang-compute-metadata ];
     propagatedBuildInputs = [ http2 glog net protobuf oauth2 ];
   };
 
