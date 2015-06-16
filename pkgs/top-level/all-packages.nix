@@ -9653,14 +9653,13 @@ let
 
     klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
-
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
     */
     ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
 
     netatop = callPackage ../os-specific/linux/netatop { };
-
+    
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
     phc-intel = callPackage ../os-specific/linux/phc-intel { };
@@ -9837,6 +9836,7 @@ let
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (xlibs) libXinerama libXi libXrender libXrandr libXtst;
     inherit (gnome) gtk gtkmm;
+    kernel = null;
   };
 
   gocode = callPackage ../development/tools/gocode { };
