@@ -84,11 +84,7 @@ let
       sha256 = "0hi54mm63ha7a75avydj6xm0a4dd2njdzllr9y2si1i1wnijqw2i";
     };
 
-    extraSrcs = [
-      { inherit (gcloud-golang) src goPackagePath; }
-    ];
-
-    propagatedBuildInputs = [ net ];
+    propagatedBuildInputs = [ net gcloud-golang-compute-metadata ];
   };
 
 
