@@ -199,6 +199,7 @@ let
 
   packagesWithRDepends = {
     FactoMineR = [ self.car ];
+    pander = [ self.codetools ];
   };
 
   packagesWithNativeBuildInputs = {
@@ -244,6 +245,7 @@ let
     nloptr = [ pkgs.nlopt ];
     openssl = [ pkgs.openssl ];
     outbreaker = [ pkgs.gsl ];
+    pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
@@ -265,9 +267,9 @@ let
     RcppZiggurat = [ pkgs.gsl ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
     rgl = [ pkgs.mesa pkgs.x11 ];
     Rglpk = [ pkgs.glpk ];
-    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
     RGtk2 = [ pkgs.gtk2 ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     ridge = [ pkgs.gsl ];
@@ -972,7 +974,6 @@ let
     "PairViz" # requires graph
     "pamm" # requires nlopt
     "PANDA" # requires GO.db
-    "pander" # build is broken
     "panelAR" # requires nlopt
     "papeR" # requires nlopt
     "parboost" # requires nlopt
