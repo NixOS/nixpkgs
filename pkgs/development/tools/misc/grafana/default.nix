@@ -1,4 +1,8 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, glibc, patchelf }:
+
+let
+  loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
+in
 
 with stdenv.lib;
 
@@ -11,7 +15,13 @@ stdenv.mkDerivation rec {
     sha1 = "4291aada705bb69e32bd9467fbd6d0d0789e2c59";
   };
 
-  phases = ["unpackPhase" "installPhase"];
+
+  phases = ["unpackPhase" "patchPhase" "installPhase"];
+
+  patchPhase = ''
+    $patchelf --set-interpreter ${loaderAmd64} bin/grafana-server
+  '';
+
   installPhase = ''
     mkdir -p $out && cp -R * $out
   '';
