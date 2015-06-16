@@ -279,6 +279,8 @@ let
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
+  california = callPackage ./misc/california { };
+
   geary = callPackage ./misc/geary { 
     webkitgtk = webkitgtk24x;
   };
