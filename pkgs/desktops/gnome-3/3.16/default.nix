@@ -151,6 +151,8 @@ let
 
   gtksourceview = callPackage ./core/gtksourceview { };
 
+  gtk-vnc = callPackage ./core/gtk-vnc { };
+
   gucharmap = callPackage ./core/gucharmap { };
 
   gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
