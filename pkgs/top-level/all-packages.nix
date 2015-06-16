@@ -6771,6 +6771,8 @@ let
 
   libgnurl = callPackage ../development/libraries/libgnurl { };
 
+  libgringotts = callPackage ../development/libraries/libgringotts { };
+
   libgroove = callPackage ../development/libraries/libgroove { };
 
   libseccomp = callPackage ../development/libraries/libseccomp { };
