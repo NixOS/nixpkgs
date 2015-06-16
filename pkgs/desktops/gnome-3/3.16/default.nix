@@ -28,7 +28,7 @@ let
     gnome-shell-extensions gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor
+    nautilus-sendto dconf-editor vinagre
   ];
 
   inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -272,6 +272,8 @@ let
   seahorse = callPackage ./apps/seahorse { };
 
   pomodoro = callPackage ./apps/pomodoro { };
+
+  vinagre = callPackage ./apps/vinagre { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
