@@ -14554,6 +14554,8 @@ let
 
   robomongo = callPackage ../applications/misc/robomongo { };
 
+  rucksack = callPackage ../development/tools/rucksack { };
+
   opkg = callPackage ../tools/package-management/opkg { };
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
