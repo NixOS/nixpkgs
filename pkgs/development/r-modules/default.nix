@@ -325,6 +325,7 @@ let
     VBmix = [ pkgs.gsl pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib ];
     XBRL = [ pkgs.zlib pkgs.libxml2 ];
+    xml2 = [ pkgs.libxml2 ];
     XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
   };
 
@@ -1215,7 +1216,6 @@ let
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
     "xergm" # requires nlopt
-    "xml2" # build is broken
     "ZeligMultilevel" # Requires Nlopt
     "zetadiv" # requires nlopt
     "zoib" # tarball is invalid on server
@@ -1223,10 +1223,7 @@ let
 
   otherOverrides = old: new: {
     xml2 = old.xml2.overrideDerivation (attrs: {
-      preConfigure = ''
-        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
-        export LIBXML_LIBDIR=${pkgs.libxml2}/lib
-      '';
+      preConfigure = "export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2";
     });
 
     curl = old.curl.overrideDerivation (attrs: {
