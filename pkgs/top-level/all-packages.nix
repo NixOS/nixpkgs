@@ -2780,7 +2780,7 @@ let
 
   pythonDBus = dbus_python;
 
-  pythonIRClib = builderDefsPackage (callPackage ../development/python-modules/irclib) { };
+  pythonIRClib = callPackage ../development/python-modules/irclib { };
 
   pythonSexy = builderDefsPackage (callPackage ../development/python-modules/libsexy) { };
 
