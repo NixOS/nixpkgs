@@ -12060,6 +12060,8 @@ let
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
+  osmo = callPackage ../applications/office/osmo { };
+
   pamixer = callPackage ../applications/audio/pamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
