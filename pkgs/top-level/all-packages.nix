@@ -10757,6 +10757,8 @@ let
     pulseSupport = config.pulseaudio or true;
   };
 
+  dfasma = callPackage ../applications/audio/dfasma { };
+
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
   };
