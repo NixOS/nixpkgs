@@ -216,7 +216,7 @@ let
     CARramps = [ pkgs.linuxPackages.nvidia_x11 pkgs.liblapack ];
     chebpol = [ pkgs.fftw ];
     cit = [ pkgs.gsl ];
-    curl = [ pkgs.curl pkgs.openldap ];
+    curl = [ pkgs.curl ];
     devEMF = [ pkgs.xlibs.libXft ];
     diversitree = [ pkgs.gsl pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -737,7 +737,6 @@ let
     "Crossover" # fails self-test
     "CrypticIBDcheck" # requires rJPSGCS
     "cudaBayesreg" # requres Rmath
-    "curl" # build is broken
     "curvHDR" # requires flowCore
     "D2C" # requires gRbase
     "DAAGbio" # requires limma
@@ -1230,7 +1229,7 @@ let
     });
 
     curl = old.curl.overrideDerivation (attrs: {
-      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
+      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include";
     });
 
     iFes = old.iFes.overrideDerivation (attrs: {
