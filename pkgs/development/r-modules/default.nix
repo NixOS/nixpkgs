@@ -258,6 +258,7 @@ let
     R2GUESS = [ pkgs.gsl ];
     R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
     RAppArmor = [ pkgs.libapparmor ];
+    rapport = [ pkgs.which ];
     rbamtools = [ pkgs.zlib ];
     RCA = [ pkgs.gmp ];
     rcdd = [ pkgs.gmp ];
