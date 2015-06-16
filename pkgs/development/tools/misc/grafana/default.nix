@@ -15,11 +15,13 @@ stdenv.mkDerivation rec {
     sha1 = "4291aada705bb69e32bd9467fbd6d0d0789e2c59";
   };
 
-
   phases = ["unpackPhase" "patchPhase" "installPhase"];
 
+  inherit patchelf;
+
   patchPhase = ''
-    $patchelf --set-interpreter ${loaderAmd64} bin/grafana-server
+    PATH=$patchelf/bin:$PATH
+    patchelf --set-interpreter ${loaderAmd64} bin/grafana-server
   '';
 
   installPhase = ''
