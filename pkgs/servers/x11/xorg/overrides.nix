@@ -294,7 +294,7 @@ in
         libpciaccess inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
-      commonPatches = [ ./xorgserver-xkbcomp-path.patch ./xorgserver-gcc5.patch ]
+      commonPatches = [ ./xorgserver-xkbcomp-path.patch ]
                    ++ lib.optional isDarwin ./fix-clang.patch;
       # XQuartz requires two compilations: the first to get X / XQuartz,
       # and the second to get Xvfb, Xnest, etc.
