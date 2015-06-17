@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  doCheck = true;
+  doCheck = false;
   checkTarget = "test";
   checkFlags = "-j1 -C programs"; # -j1 required since version 128, -C should be temporary
 
