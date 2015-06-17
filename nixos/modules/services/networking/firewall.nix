@@ -287,7 +287,7 @@ in
     };
 
     networking.firewall.trustedInterfaces = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description =
         ''
           Traffic coming in from these interfaces will be accepted
@@ -379,7 +379,7 @@ in
     networking.firewall.connectionTrackingModules = mkOption {
       default = [ "ftp" ];
       example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description =
         ''
           List of connection-tracking helpers that are auto-loaded.

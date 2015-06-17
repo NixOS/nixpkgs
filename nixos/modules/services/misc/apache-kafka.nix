@@ -33,7 +33,7 @@ in {
     enable = mkOption {
       description = "Whether to enable Apache Kafka.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     brokerId = mkOption {
@@ -108,7 +108,7 @@ in {
         "-Djava.awt.headless=true"
         "-Djava.net.preferIPv4Stack=true"
       ];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [
         "-Djava.net.preferIPv4Stack=true"
         "-Dcom.sun.management.jmxremote"

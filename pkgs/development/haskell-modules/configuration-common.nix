@@ -334,6 +334,7 @@ self: super: {
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
+  serversession-backend-redis = dontCheck super.serversession-backend-redis;
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -872,5 +873,12 @@ self: super: {
 
   # Doesn't work with recent versions of mtl.
   cron-compat = markBroken super.cron-compat;
+
+  # https://github.com/yesodweb/serversession/issues/1
+  serversession = dontCheck super.serversession;
+
+  # https://github.com/singpolyma/wai-session/issues/8
+  wai-session = markBroken super.wai-session;
+  serversession-frontend-wai = dontDistribute super.serversession-frontend-wai;
 
 }

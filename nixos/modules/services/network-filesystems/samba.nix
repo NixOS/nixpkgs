@@ -137,7 +137,7 @@ in
 
       nsswins = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''
           Whether to enable the WINS NSS (Name Service Switch) plug-in.
           Enabling it allows applications to resolve WINS/NetBIOS names (a.k.a.

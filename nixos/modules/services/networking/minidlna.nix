@@ -30,7 +30,7 @@ in
     };
 
     services.minidlna.mediaDirs = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = [ "/data/media" "V,/home/alice/video" ];
       description =

@@ -33,7 +33,7 @@ in
     };
 
     security.pki.certificates = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = singleton ''
         NixOS.org

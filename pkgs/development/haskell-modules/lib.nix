@@ -79,4 +79,10 @@ rec {
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
+  withHoogle = haskellEnv: with haskellEnv.haskellPackages;
+    import ./hoogle.nix {
+      inherit (pkgs) stdenv;
+      inherit hoogle rehoo ghc;
+      packages = haskellEnv.paths;
+    };
 }

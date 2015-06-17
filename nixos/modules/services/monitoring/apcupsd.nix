@@ -74,7 +74,7 @@ in
 
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''
           Whether to enable the APC UPS daemon. apcupsd monitors your UPS and
           permits orderly shutdown of your computer in the event of a power

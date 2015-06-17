@@ -199,6 +199,7 @@ let
 
   packagesWithRDepends = {
     FactoMineR = [ self.car ];
+    pander = [ self.codetools ];
   };
 
   packagesWithNativeBuildInputs = {
@@ -216,7 +217,7 @@ let
     CARramps = [ pkgs.linuxPackages.nvidia_x11 pkgs.liblapack ];
     chebpol = [ pkgs.fftw ];
     cit = [ pkgs.gsl ];
-    curl = [ pkgs.curl pkgs.openldap ];
+    curl = [ pkgs.curl ];
     devEMF = [ pkgs.xlibs.libXft ];
     diversitree = [ pkgs.gsl pkgs.fftw ];
     EMCluster = [ pkgs.liblapack ];
@@ -244,6 +245,7 @@ let
     nloptr = [ pkgs.nlopt ];
     openssl = [ pkgs.openssl ];
     outbreaker = [ pkgs.gsl ];
+    pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
@@ -256,6 +258,8 @@ let
     R2GUESS = [ pkgs.gsl ];
     R2SWF = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
     RAppArmor = [ pkgs.libapparmor ];
+    rapport = [ pkgs.which ];
+    rapportools = [ pkgs.which ];
     rbamtools = [ pkgs.zlib ];
     RCA = [ pkgs.gmp ];
     rcdd = [ pkgs.gmp ];
@@ -265,9 +269,9 @@ let
     RcppZiggurat = [ pkgs.gsl ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
+    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
     rgl = [ pkgs.mesa pkgs.x11 ];
     Rglpk = [ pkgs.glpk ];
-    rggobi = [ pkgs.ggobi pkgs.gtk2 pkgs.libxml2 ];
     RGtk2 = [ pkgs.gtk2 ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     ridge = [ pkgs.gsl ];
@@ -323,6 +327,7 @@ let
     VBmix = [ pkgs.gsl pkgs.fftw pkgs.qt4 ];
     WhopGenome = [ pkgs.zlib ];
     XBRL = [ pkgs.zlib pkgs.libxml2 ];
+    xml2 = [ pkgs.libxml2 ];
     XML = [ pkgs.libtool pkgs.libxml2 pkgs.xmlsec pkgs.libxslt ];
   };
 
@@ -649,42 +654,89 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "abd" # requires nlopt
     "ACNE" # requires aroma_affymetrix
     "Actigraphy" # SDMTools.so: undefined symbol: X
+    "adabag" # requires nlopt
     "adaptsmoFMRI" # requires spatstat
     "ads" # requires spatstat
+    "AER" # REQUIRES NLOPT
+    "afex" # requires nlopt
+    "agRee" # requires nlopt
     "agridat" # requires pcaMethods
     "aLFQ" # requires protiq
+    "alr3" # requires nlopt
+    "alr4" # requires nlopt
+    "anacor" # requires nlopt
     "AntWeb" # requires leafletR
+    "aods3" # requires nlopt
     "aoristic" # requires spatstat
     "apmsWAPP" # requires genefilter, Biobase, multtest, edgeR, DESeq, and aroma.light
+    "apt" # requires nlopt
+    "ArfimaMLM" # Requires Nlopt
+    "arm" # requires nlopt
     "aroma_affymetrix" # requires aroma_core
     "aroma_cn" # requires PSCBS
     "aroma_core" # requires PSCBS
     "ArrayBin" # requires SAGx
+    "ARTool" # Requires Nlopt
     "babel" # requires edgeR
     "BACA" # requires RDAVIDWebService
+    "backShift" # requires pcalg to build
+    "bartMachine" # requires nlopt
+    "bayesDem" # requires nlopt
+    "bayesLife" # requires nlopt
+    "bayesPop" # requires nlopt
+    "Bayesthresh" # Requires Nlopt
+    "BBRecapture" # Requires Nlopt
+    "BCA" # REQUIRES NLOPT
     "BcDiag" # requires fabia
     "bdvis" # requres taxize
     "beadarrayFilter" # requires beadarray
     "beadarrayMSV" # requires Biobase, geneplotter, andlimma
+    "bgmm" # requires nlopt
+    "BIFIEsurvey" # requires DiagrammeR to build
     "bigGP" # requires MPI running. HELP WANTED!
     "bigpca" # requires NCmisc
+    "BiodiversityR" # Requires Nlopt
     "Biograph" # requires mvna
     "biotools" # requires rpanel
     "BiSEp" # requires GOSemSim, GO.db, and org.Hs.eg.db
     "BLCOP" # depends on broken fPortfolio
+    "blmeco" # requires nlopt
+    "blme" # requires nlopt
+    "bmd" # requires nlopt
+    "bmem" # requires DiagrammeR to build
     "bmrm" # requires clpAPI
+    "bootnet" # requires IsingFit
+    "boss" # requires nlopt
+    "BradleyTerry2" # Requires Nlopt
     "branchLars" # requires Rgraphviz
     "BRugs" # requires OpenBUGS
+    "CADFtest" # Requires Nlopt
+    "cAIC4" # requires nlopt
     "calmate" # requires aroma_core
+    "candisc" # requires nlopt
+    "carcass" # requires nlopt
+    "caretEnsemble" # requires nlopt
+    "caret" # requires nlopt
     "CARrampsOcl" # depends on OpenCL
+    "car" # requires nlopt
+    "CCpop" # Requires Nlopt
+    "ChainLadder" # Requires Nlopt
     "CHAT" # requires DNAcopy
     "ChemoSpec" # depends on broken speaq
     "classGraph" # requires graph, and Rgraphviz
+    "climwin" # requires nlopt
+    "CLME" # REQUIRES NLOPT
     "clpAPI" # requires clp
+    "clusterPower" # requires nlopt
     "compendiumdb" # requires Biobase
+    "conformal" # requires nlopt
+    "corHMM" # requires nlopt
     "CORM" # requires limma
+    "CosmoPhotoz" # Requires Nlopt
+    "cp4p" # build is broken
     "cplexAPI" # requires CPLEX
     "crmn" # requires pcaMethods, and Biobase
     "Crossover" # fails self-test
@@ -695,51 +747,97 @@ let
     "DAAGbio" # requires limma
     "daff" # requires V8 to build
     "dagbag" # requires Rlapack
+    "DAMisc" # Requires Nlopt
     "DBKGrad" # requires SDD
     "dbmss" # requires spatstat
     "DCGL" # requires limma
     "dcGOR" # requires dnet
+    "DeducerExtras" # Requires Nlopt
+    "DeducerPlugInExample" # Requires Nlopt
+    "DeducerPlugInScaling" # Requires Nlopt
+    "Deducer" # Requires Nlopt
+    "DeducerSpatial" # Requires Nlopt
+    "DeducerSurvival" # Requires Nlopt
+    "DeducerText" # Requires Nlopt
     "demi" # requires affy, affxparser, and oligo
     "DepthProc" # requires samr
     "DiagrammeR" # requires V8 to build
+    "DiagTest3Grp" # Requires Nlopt
     "DiffCorr" # misses undeclared dependencies 'pcaMethods', 'multtest'
+    "difR" # requires nlopt
     "Digiroo2" # requires spatstat
+    "discSurv" # requires nlopt
+    "DistatisR" # Requires Nlopt
+    "diveRsity" # requires DiagrammeR to build
     "dixon" # requires spatstat
     "dnet" # requires supraHex, graph, Rgraphviz, and Biobase
     "doMPI" # requires MPI running. HELP WANTED!
+    "dpa" # requires DiagrammeR to build
     "dpcR" # requires spatstat
+    "drc" # requires nlopt
+    "drfit" # requires nlopt
+    "drsmooth" # requires nlopt
     "DSpat" # requires spatstat
+    "dynlm" # requires nlopt
+    "easyanova" # requires nlopt
     "ecespa" # requires spatstat
     "ecoengine" # requires leafletR
     "ecospat" # requires spatstat
     "edgeRun" # requires edgeR
+    "eeptools" # requires nlopt
+    "EffectLiteR" # Requires Nlopt
+    "effects" # requires nlopt
     "EMA" # requires siggenes, affy, multtest, gcrma, biomaRt, and AnnotationDbi
     "empiricalFDR_DESeq2" # requires DESeq2, and GenomicRanges
+    "EnQuireR" # Requires Nlopt
+    "episplineDensity" # requires nlopt
     "epoc" # requires graph, and Rgraphviz
+    "epr" # requires nlopt
+    "erer" # requires nlopt
     "erpR" # requires rpanel
     "ETAS" # requires spatstat
     "eulerian" # requires graph
     "evobiR" # requres taxiz
     "evora" # requires qvalue
     "ExomeDepth" # requires GenomicRanges, and Rsamtools
+    "extRemes" # requires nlopt
+    "ez" # requires nlopt
+    "FactoMineR" # Requires Nlopt
+    "Factoshiny" # Requires Nlopt
     "FAMT" # requires impute
+    "faoutlier" # requires DiagrammeR to build
+    "fastR" # requires nlopt
     "fdrDiscreteNull" # requires edgeR
+    "FDRreg" # Requires Nlopt
     "FHtest" # requires interval
     "flexCWM" # depends on broken mixture
     "fPortfolio" # requires rneos
+    "freqweights" # requires nlopt
+    "fscaret" # requires nlopt
     "FunctionalNetworks" # requires breastCancerVDX, and Biobase
+    "fxregime" # requires nlopt
+    "gamclass" # requires nlopt
     "gamlss_demo" # requires rpanel
+    "gamm4" # requires nlopt
+    "gcmr" # requires nlopt
+    "GDAtools" # Requires Nlopt
     "GeneticTools" # requires snpStats
+    "genridge" # requires nlopt
     "geojsonio" # requires V8 to build
     "GExMap" # requires Biobase and multtest
+    "gimme" # requires DiagrammeR to build
     "gitter" # requires EBImage
     "glmgraph" # test suite says: "undefined symbol: dgemv_"
     "gmatrix" # depends on proprietary cudatoolkit
     "gMCP" # fails self-test
     "GOGANPA" # requires WGCNA
+    "gplm" # requires nlopt
     "gputools" # depends on proprietary cudatoolkit
     "gRain" # requires gRbase
+    "granova" # requires nlopt
     "gRapHD" # requires graph
+    "graphicalVAR" # requires DiagrammeR to build
+    "GraphPCA" # Requires Nlopt
     "gRbase" # requires RBGL, and graph
     "gRc" # requires gRbase
     "gridDebug" # requires gridGraphviz
@@ -748,51 +846,101 @@ let
     "gRim" # requires gRbase
     "GSAgm" # requires edgeR
     "GUIDE" # requires rpanel
+    "GWAF" # REQUIRES NLOPT
     "h2o" # tries to download some h2o.jar during its build
+    "h5" # depends on missing h5 system library
     "hasseDiagram" # requires Rgraphviz
+    "hbsae" # requires nlopt
     "hddplot" # requires multtest
+    "heplots" # requires nlopt
+    "HH" # REQUIRES NLOPT
     "HierO" # requires rneos
     "HiPLARM" # requires MAGMA or PLASMA
+    "HistDAWass" # Requires Nlopt
+    "HLMdiag" # Requires Nlopt
     "hpoPlot" # requires Rgraphviz
     "hsdar" # fails to build
     "HTSCluster" # requires edgeR
+    "hysteresis" # requires nlopt
+    "IATscores" # requires DiagrammeR to build
+    "ibd" # requires nlopt
+    "iccbeta" # requires nlopt
     "iFes" # depends on proprietary cudatoolkit
     "imputeLCMD" # requires pcaMethods, and impute
+    "imputeR" # requires nlopt
+    "in2extRemes" # requires nlopt
+    "incReg" # requires nlopt
+    "inferference" # requires nlopt
+    "influence_ME" # requires nlopt
     "intamapInteractive" # requires spatstat
     "interval" # requires Icens
     "ionflows" # requires Biostrings
     "iRefR" # requires graph, and RBGL
+    "IsingFit" # requires DiagrammeR to build
     "IsoGene" # requires Biobase, and affy
     "isva" # requires qvalue
+    "ivpack" # requires nlopt
+    "JAGUAR" # REQUIRES NLOPT
     "jomo" # linking errors
     "js" # requires broken V8
     "KANT" # requires affy, and Biobase
     "ktspair" # requires Biobase
     "latticeDensity" # requires spatstat
+    "lawn" # requires DiagrammeR to build
+    "lawn" # requires V8 to build
     "leapp" # requires sva
+    "learnstats" # requires nlopt
     "lefse" # SDMTools.so: undefined symbol: X
+    "lessR" # requires nlopt
     "lfe" # fails to compile
     "lgcp" # requires rpanel
     "LinRegInteractive" # requires Rpanel
+    "lme4" # requires nlopt
+    "LMERConvenienceFunctions" # Requires Nlopt
+    "lmerTest" # requires nlopt
+    "lmSupport" # requires nlopt
     "LogisticDx" # requires gRbase
+    "longpower" # requires nlopt
     "LOST" # requires pcaMethods
     "ltsk" # requires Rlapack and Rblas
-    "magma" # requires MAGMA
     "MAMA" # requires metaMA
+    "marked" # requires nlopt
+    "MaxPro" # Requires Nlopt
+    "mbest" # requires nlopt
+    "meboot" # requires nlopt
     "MEET" # requires pcaMethods, and seqLogo
+    "MEMSS" # REQUIRES NLOPT
     "metabolomics" # depends on broken crmn
     "MetaDE" # requires impute, and Biobase
+    "metagear" # build is broken
     "MetaLandSim" # requires Biobase
     "metaMA" # requires limma
     "metaMix" # requires MPI running. HELP WANTED!
+    "metaplus" # requires nlopt
+    "metaSEM" # requires OpenMx
+    "Metatron" # Requires Nlopt
     "mGSZ" # requires Biobase, and limma
+    "miceadds" # requires DiagrammeR to build
+    "micEconAids" # requires nlopt
+    "micEconCES" # requires nlopt
+    "micEconSNQP" # requires nlopt
     "MigClim" # SDMTools.So: Undefined Symbol: X
+    "migui" # requires nlopt
     "minimist" # requires broken V8
+    "mi" # requires nlopt
     "miRtest" # requires globaltest, GlobalAncova, and limma
+    "missMDA" # requires nlopt
+    "mixAK" # requires nlopt
     "MixGHD" # requires mixture to build
+    "mixlm" # requires nlopt
+    "MixMAP" # Requires Nlopt
     "mixture" # mixture.so: undefined symbol: dtrmm_
+    "mlmRev" # requires nlopt
+    "mlVAR" # requires DiagrammeR to build
+    "MM2S" # BUILD IS BROKEN
     "moduleColor" # requires impute
     "mongolite" # doesn't find OpenSSL
+    "mosaic" # requires nlopt
     "msarc" # requires AnnotationDbi
     "MSeasy" # requires mzR, and xcms
     "MSeasyTkGUI" # requires MSeasyTkGUI
@@ -800,106 +948,208 @@ let
     "msSurv" # requires graph
     "muir" # requires DiagrammeR to build
     "multiDimBio" # requires pcaMethods
+    "MultiRR" # Requires Nlopt
+    "muma" # requires nlopt
     "mutossGUI" # requires mutoss
     "mutoss" # requires multtest
+    "mvinfluence" # requires nlopt
     "MXM" # depends on broken gRbase
     "NBPSeq" # requires qvalue
+    "nCal" # requires nlopt
     "NCmisc" # requires BiocInstaller
     "netClass" # requires samr
     "nettools" # requires WGCNA
     "netweavers" # requires BiocGenerics, Biobase, and limma
+    "NHPoisson" # Requires Nlopt
+    "nloptr" # requires nlopt
     "NLPutils" # requires qdap
+    "nonrandom" # requires nlopt
     "NORRRM" # can't load SDMTools properly
+    "npIntFactRep" # requires nlopt
     "NSA" # requires aroma_core
     "OpenCL" # FIXME: requires CL/opencl.h
+    "OpenMx" # Build Is Broken
     "optBiomarker" # requires rpanel
     "ora" # requires ROracle
+    "ordBTL" # requires nlopt
     "orQA" # requires genefilter
+    "OUwie" # Requires Nlopt
     "PairViz" # requires graph
+    "pamm" # requires nlopt
     "PANDA" # requires GO.db
+    "panelAR" # requires nlopt
+    "papeR" # requires nlopt
+    "parboost" # requires nlopt
     "ParDNAcopy" # requires DNAcopy
+    "parma" # requires nlopt
     "pathClass" # requires affy, and Biobase
     "PatternClass" # SDMTools.So: Undefined Symbol: X
     "pbdBASE" # requires pbdMPI
     "pbdDEMO" # requires pbdMPI
     "pbdDMAT" # requires pbdMPI
     "pbdSLAP" # requires pbdMPI
+    "PBImisc" # Requires Nlopt
+    "pbkrtest" # requires nlopt
     "PBSddesolve" # fails its test suite for unclear reasons
     "PBSmapping" # fails its test suite for unclear reasons
     "pcaL1" # requires clp
     "pcalg" # requires graph, and RBGL
     "PCGSE" # requires safe
     "PCS" # requires multtest
+    "pedigreemm" # requires nlopt
+    "pedometrics" # requires nlopt
     "PepPrep" # requires biomaRt
+    "pequod" # requires nlopt
     "PerfMeas" # requires limma, graph, and RBGL
     "permGPU" # requires Biobase
+    "phia" # requires nlopt
     "PhViD" # requires LBE
+    "phylocurve" # requires nlopt
+    "phyloTop" # requires nlopt
     "pi0" # requires qvalue
     "plmDE" # requires limma
+    "plsRbeta" # requires nlopt
     "plsRcox" # requires survcomp
+    "plsRglm" # requires nlopt
     "PMA" # requires impute
     "pmcgd" # depends on broken mixture
     "pmclust" # requires MPI running. HELP WANTED!
     "polyCub" # requires spatstat
+    "polytomous" # requires nlopt
+    "pomp" # requires nlopt
     "ppiPre" # requires AnnotationDbi, GOSemSim, GO.db
+    "predictmeans" # requires nlopt
     "pRF" # requires multtest
+    "prLogistic" # requires nlopt
     "propOverlap" # requires Biobase
     "protiq" # requires graph, and RBGL
+    "PSAboot" # Requires Nlopt
     "PSCBS" # requires DNAcopy
     "pubmed_mineR" # requires SSOAP
     "PubMedWordcloud" # requires GOsummaries
     "qdap" # requires gender
+    "qgraph" # requires DiagrammeR to build
+    "qtbase" # build is broken
     "qtlnet" # requires pcalg
     "qtpaint" # can't find QtCore libraries
+    "qtutils" # requires qtbase
     "QuACN" # requires graph, RBGL
     "quanteda" # fails to build
+    "quantification" # requires nlopt
     "QuasiSeq" # requires edgeR
+    "R2STATS" # REQUIRES NLOPT
     "RADami" # requires Biostrings
+    "radiant" # requires nlopt
     "raincpc" # SDMTools.so: undefined symbol: X
     "rainfreq" # SDMTools.so: undefined symbol: X
     "RAM" # requires Heatplus
     "RapidPolygonLookup" # depends on broken PBSmapping
     "RAPIDR" # requires Biostrings, Rsamtools, and GenomicRanges
+    "rasclass" # requires nlopt
     "RbioRXN" # requires fmcsR, and KEGGREST
+    "RcmdrMisc" # Requires Nlopt
+    "RcmdrPlugin_BCA" # Requires Nlopt
+    "RcmdrPlugin_coin" # requires nlopt
+    "RcmdrPlugin_depthTools" # requires nlopt
+    "RcmdrPlugin_DoE" # Requires Nlopt
+    "RcmdrPlugin_doex" # requires nlopt
+    "RcmdrPlugin_EACSPIR" # Requires Nlopt
+    "RcmdrPlugin_EBM" # Requires Nlopt
+    "RcmdrPlugin_EcoVirtual" # Requires Nlopt
+    "RcmdrPlugin_epack" # requires nlopt
+    "RcmdrPlugin_EZR" # Requires Nlopt
+    "RcmdrPlugin_FactoMineR" # Requires Nlopt
+    "RcmdrPlugin_HH" # Requires Nlopt
+    "RcmdrPlugin_IPSUR" # Requires Nlopt
+    "RcmdrPlugin_KMggplot2" # Requires Nlopt
+    "RcmdrPlugin_lfstat" # requires nlopt
+    "RcmdrPlugin_MA" # Requires Nlopt
+    "RcmdrPlugin_mosaic" # requires nlopt
+    "RcmdrPlugin_MPAStats" # Requires Nlopt
+    "RcmdrPlugin_NMBU" # Requires Nlopt
+    "RcmdrPlugin_orloca" # requires nlopt
+    "RcmdrPlugin_plotByGroup" # requires nlopt
+    "RcmdrPlugin_pointG" # requires nlopt
+    "RcmdrPlugin_qual" # requires nlopt
+    "RcmdrPlugin_RMTCJags" # Requires Nlopt
+    "RcmdrPlugin_ROC" # Requires Nlopt
+    "RcmdrPlugin_sampling" # requires nlopt
+    "RcmdrPlugin_SCDA" # Requires Nlopt
     "RcmdrPlugin_seeg" # requires seeg
+    "RcmdrPlugin_SLC" # Requires Nlopt
+    "RcmdrPlugin_SM" # Requires Nlopt
+    "RcmdrPlugin_sos" # requires nlopt
+    "RcmdrPlugin_StatisticalURV" # Requires Nlopt
+    "RcmdrPlugin_steepness" # requires nlopt
+    "RcmdrPlugin_survival" # requires nlopt
+    "RcmdrPlugin_TeachingDemos" # Requires Nlopt
+    "RcmdrPlugin_temis" # requires nlopt
+    "RcmdrPlugin_UCA" # Requires Nlopt
+    "Rcmdr" # Requires Nlopt
     "Rcplex" # requires cplexAPI
     "RcppAPT" # configure script depends on /bin/sh
+    "RcppOctave" # Build Is Broken
     "RcppRedis" # requires Hiredis
+    "rdd" # requires nlopt
     "rDEA" # no such file or directory
     "RDieHarder" # requires libdieharder
     "reader" # requires NCmisc
     "REBayes" # requires Rmosek
+    "referenceIntervals" # requires nlopt
     "RefFreeEWAS" # requires isva
+    "refund" # requires nlopt
+    "REST" # REQUIRES NLOPT
     "retistruct" # depends on broken RImageJROI
+    "rgbif" # requires V8 to build
     "rgp" # fails self-test
     "rgpui" # depends on broken rgp
     "RImageJROI" # requires spatstat
     "rjade" # requires V8 to build
     "rJPSGCS" # requires chopsticks
     "rLindo" # requires LINDO API
+    "rmgarch" # requires nlopt
+    "rminer" # requires nlopt
     "Rmosek" # requires mosek
     "RnavGraph" # requires graph, and RBGL
     "rneos" # requires XMLRPC
     "RNeXML" # requres taxize
     "RobLoxBioC" # requires Biobase
     "RobLox" # requires Biobase
+    "robustlmm" # requires nlopt
+    "rockchalk" # requires nlopt
     "RockFab" # requires EBImage
     "ROI_plugin_symphony" # depends on broken Rsymphony
     "ROracle" # requires OCI
     "rpanel" # I could not make Tcl to recognize BWidget. HELP WANTED!
+    "rpubchem" # requires nlopt
     "RQuantLib" # requires QuantLib
+    "rr" # requires nlopt
     "RSAP" # requires SAPNWRFCSDK
+    "rscala" # build is broken
+    "RSDA" # REQUIRES NLOPT
     "RSeed" # requires RBGL, and graph
     "rsig" # requires survcomp
     "RSNPset" # requires qvalue
     "Rsymphony" # FIXME: requires SYMPHONY
+    "rugarch" # requires nlopt
+    "RVAideMemoire" # Requires Nlopt
+    "RVFam" # Requires Nlopt
     "RVideoPoker" # requires Rpanel
+    "ryouready" # requires nlopt
     "rysgran" # requires soiltexture
+    "sampleSelection" # requires nlopt
     "samr" # requires impute
+    "sdcMicroGUI" # requires nlopt
+    "sdcMicro" # requires nlopt
     "SDD" # requires rpanel
     "seeg" # requires spatstat
     "selectspm" # depends on broken ecespa
+    "semdiag" # requires DiagrammeR to build
+    "semGOF" # requires DiagrammeR to build
     "semiArtificial" # requires RSNNS
+    "semPlot" # requires DiagrammeR to build
+    "sem" # requires DiagrammeR to build
+    "SensoMineR" # Requires Nlopt
     "SeqFeatR" # requires Biostrings, qvalue, and widgetTools
     "SeqGrapheR" # depends on Biostrings
     "sequenza" # requires copynumber
@@ -909,6 +1159,8 @@ let
     "SimRAD" # requires Biostrings, and ShortRead
     "SimSeq" # requires edgeR
     "siplab" # requires spatstat
+    "sirt" # requires DiagrammeR to build
+    "sjPlot" # requires nlopt
     "smart" # requires PMA
     "snpEnrichment" # requires snpStats
     "snplist" # requires biomaRt
@@ -916,53 +1168,68 @@ let
     "SNPtools" # requires IRanges, GenomicRanges, Biostrings, and Rsamtools
     "SOD" # depends on proprietary cudatoolkit
     "soilphysics" # requires rpanel
+    "spacom" # requires nlopt
     "sparr" # requires spatstat
     "spatialsegregation" # requires spatstat
     "SpatialVx" # requires spatstat
     "speaq" # requires MassSpecWavelet
+    "specificity" # requires nlopt
     "spocc" # requires leafletR
     "SQDA" # requires limma
+    "ssizeRNA" # depends on missing 'Biobase', 'edgeR', 'limma', 'qvalue'
+    "ssmrob" # requires nlopt
     "stagePop" # depends on broken PBSddesolve
     "statar" # depends on broken lfe
     "Statomica" # requires Biobase, multtest
+    "stcm" # requires nlopt
+    "stepp" # requires nlopt
     "stpp" # requires spatstat
     "structSSI" # requires multtest
     "strum" # requires Rgraphviz
     "superbiclust" # requires fabia
+    "Surrogate" # Requires Nlopt
     "surveillance" # requires polyCub
+    "survJamda" # depends on missing survcomp
     "swamp" # requires impute
+    "switchr" # build is broken
+    "switchrGist" # requires switchr
     "sybilSBML" # requires libSBML
+    "systemfit" # requires nlopt
     "taxize" # requres bold
     "TcGSA" # requires multtest
+    "TDMR" # REQUIRES NLOPT
+    "tigerstats" # requires nlopt
+    "timeSeq" # depends on missing edgeR
     "topologyGSA" # requires gRbase
     "TR8" # requres taxize
+    "TriMatch" # Requires Nlopt
     "trip" # requires spatstat
     "TROM" # misses undeclared dependencies topGO', 'AnnotationDbi', 'GO.db'
     "ttScreening" # requires sva, and limma
+    "userfriendlyscience" # requires nlopt
     "V8" # compilation error
+    "VIMGUI" # REQUIRES NLOPT
+    "VIM" # REQUIRES NLOPT
     "vmsbase" # depends on broken PBSmapping
     "vows" # requires rpanel
+    "wfe" # requires nlopt
     "WGCNA" # requires impute
     "wgsea" # requires snpStats
     "WideLM" # depends on proprietary cudatoolkit
     "x_ent" # requires opencpu
+    "xergm" # requires nlopt
+    "ZeligMultilevel" # Requires Nlopt
+    "zetadiv" # requires nlopt
     "zoib" # tarball is invalid on server
-    "timeSeq" # depends on missing edgeR
-    "survJamda" # depends on missing survcomp
-    "ssizeRNA" # depends on missing 'Biobase', 'edgeR', 'limma', 'qvalue'
-    "h5" # depends on missing h5 system library
   ];
 
   otherOverrides = old: new: {
     xml2 = old.xml2.overrideDerivation (attrs: {
-      preConfigure = ''
-        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
-        export LIBXML_LIBDIR=${pkgs.libxml2}/lib
-      '';
+      preConfigure = "export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2";
     });
 
     curl = old.curl.overrideDerivation (attrs: {
-      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include/curl";
+      preConfigure = "export CURL_INCLUDES=${pkgs.curl}/include";
     });
 
     iFes = old.iFes.overrideDerivation (attrs: {
