@@ -10594,6 +10594,24 @@ let
     };
   };
 
+  pywinrm = buildPythonPackage (rec {
+    name = "pywinrm";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/diyan/pywinrm.git;
+      rev = "c9ce62d500007561ab31a8d0a5d417e779fb69d9";
+      sha256 = "0n0qlcgin2g5lpby07qbdlnpq5v2qc2yns9zc4zm5prwh2mhs5za";
+    };
+
+    propagatedBuildInputs = with self; [ xmltodict isodate ];
+
+    meta = {
+      homepage = "http://github.com/diyan/pywinrm/";
+      description = "Python library for Windows Remote Management";
+      license = licenses.mit;
+    };
+  });
+
 
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
@@ -13534,6 +13552,23 @@ let
       homepage = http://python-xlib.sourceforge.net/;
 
       license = licenses.gpl2Plus;
+    };
+  });
+
+  xmltodict = buildPythonPackage (rec {
+    name = "xmltodict-0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/x/xmltodict/${name}.tar.gz";
+      sha256 = "00crqnjh1kbvcgfnn3b8c7vq30lf4ykkxp1xf3pf7mswr5l1wp97";
+    };
+
+    buildInputs = with self; [ coverage nose ];
+
+    meta = {
+      description = "Makes working with XML feel like you are working with JSON";
+      homepage = https://github.com/martinblech/xmltodict;
+      license = licenses.mit;
     };
   });
 

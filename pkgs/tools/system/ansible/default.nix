@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, python }:
+{ windowsSupport ? true, stdenv, fetchurl, pythonPackages, python }:
 
 pythonPackages.buildPythonPackage rec {
   version = "1.9.1";
@@ -21,7 +21,7 @@ pythonPackages.buildPythonPackage rec {
 
   propagatedBuildInputs = with pythonPackages; [
     paramiko jinja2 pyyaml httplib2 boto six
-  ];
+  ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
   postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
