@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
 
-  name = "coq-${coq.coq-version}-mathcomp-1.5";
+  name = "coq-mathcomp-1.5-${coq.coq-version}";
 
   inherit src;
 

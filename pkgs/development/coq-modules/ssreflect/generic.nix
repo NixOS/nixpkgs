@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
 
-  name = "coq-${coq.coq-version}-ssreflect-1.5";
+  name = "coq-ssreflect-1.5-${coq.coq-version}";
 
   inherit src;
 
