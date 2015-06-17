@@ -303,6 +303,7 @@ self: super: {
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
+  xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
