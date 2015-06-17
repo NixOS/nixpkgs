@@ -139,9 +139,11 @@ stdenv.mkDerivation {
       pythonPackages.wrapPython
       saneBackends
       dbus
-      pkgconfig
       net_snmp
     ] ++ stdenv.lib.optional qtSupport qt4;
+  nativeBuildInputs = [
+    pkgconfig
+  ];
 
   pythonPath = with pythonPackages; [
       dbus

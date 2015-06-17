@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ gcc49 icmake libmilter libX11 openssl readline utillinux
-    yodl ];
+  buildInputs = [ gcc49 libmilter libX11 openssl readline utillinux ];
+  nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out

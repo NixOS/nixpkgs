@@ -34,7 +34,8 @@ in stdenv.mkDerivation {
 
   patches = [ ./work-around-API-borkage.patch ];
 
-  buildInputs = [ curl fuse libxml2 pkgconfig ];
+  buildInputs = [ curl fuse libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildFlags = "static";
 

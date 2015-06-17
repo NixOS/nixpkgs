@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cmake coreutils dbus freetype glib gnused libpthreadstubs
-    pango pkgconfig libpulseaudio which ];
+  buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
+    pango libpulseaudio which ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   postPatch = ''
     for i in squeak.in squeak.sh.in; do

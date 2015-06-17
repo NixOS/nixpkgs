@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     owner = "vgough";
   };
 
-  buildInputs = [ autoreconfHook boost fuse openssl perl pkgconfig rlog ];
+  buildInputs = [ boost fuse openssl rlog ];
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig ];
 
   configureFlags = [
     "--with-boost-serialization=boost_wserialization"
