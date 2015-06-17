@@ -1305,6 +1305,7 @@ let
       homepage = http://pythonhosted.org/blinker/;
       description = "Fast, simple object-to-object and broadcast signaling";
       license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -4904,8 +4905,9 @@ let
     doCheck = false;
 
     meta = {
-      homepage = http://docutils.sourceforge.net/;
       description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
+      homepage = http://docutils.sourceforge.net/;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -5089,8 +5091,9 @@ let
     propagatedBuildInputs = with self; [ six pytz ];
 
     meta = {
-      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
       description = "Standalone version of django.utils.feedgenerator,  compatible with Py3k";
+      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
+      maintainers = with maintainers; [ garbas ];
     };
   });
 
@@ -6430,7 +6433,7 @@ let
       sha256 = "2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb";
     };
 
-    propagatedBuildInputs = with self; [ self.markupsafe ];
+    propagatedBuildInputs = with self; [ markupsafe ];
 
     meta = {
       homepage = http://jinja.pocoo.org/;
@@ -6442,7 +6445,7 @@ let
         an optional sandboxed environment.
       '';
       platforms = platforms.all;
-      maintainers = with maintainers; [ pierron ];
+      maintainers = with maintainers; [ pierron garbas ];
     };
   };
 
@@ -6856,8 +6859,8 @@ let
     meta = {
       description = "Implements a XML/HTML/XHTML Markup safe string";
       homepage = http://dev.pocoo.org;
-      license = "BSD";
-      maintainers = with maintainers; [ iElectric ];
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ iElectric garbas ];
     };
   };
 
@@ -8434,33 +8437,46 @@ let
 
   pelican = buildPythonPackage rec {
     name = "pelican-${version}";
-    version = "3.5.0";
+    version = "3.6.0";
+    disabled = isPy26;
 
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pelican/${name}.tar.gz";
-      sha256 = "0dl8i26sa20iijlg3z9gxn3p6f1d9v44b9742929xfaqwj4amvdp";
+    src = pkgs.fetchFromGitHub {
+      owner = "getpelican";
+      repo = "pelican";
+      rev = version;
+      sha256 = "0a9r90d85rn2cvl6yyk6q5i5kwz9igfj8fdwi37zsx4ijhmn2b5j";
     };
 
-    preConfigure = ''
-      export LC_ALL="en_US.UTF-8"
-    '';
-
-    # Test data not provided
-    #buildInputs = [nose mock];
-    doCheck = false;
-
-    buildInputs = [ pkgs.glibcLocales ];
+    buildInputs = with self; [
+      pkgs.glibcLocales
+      pkgs.pandoc
+      pkgs.git
+      mock
+      nose
+      markdown
+      beautifulsoup4
+      lxml
+      typogrify
+    ];
 
     propagatedBuildInputs = with self; [
       jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
       blinker pillow beautifulsoup4 markupsafe
     ];
 
+    postPatch= ''
+      sed -i -e "s|'git'|'${pkgs.git}/bin/git'|" pelican/tests/test_pelican.py
+    '';
+
+    preConfigure = ''
+      export LC_ALL="en_US.UTF-8"
+    '';
+
     meta = {
-      homepage = http://getpelican.com/;
       description = "A tool to generate a static blog from reStructuredText or Markdown input files";
+      homepage = "http://getpelican.com/";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ offline prikhi ];
+      maintainers = with maintainers; [ offline prikhi garbas ];
     };
   };
 
@@ -9635,7 +9651,7 @@ let
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ nckx ];
+      maintainers = with maintainers; [ nckx garbas ];
     };
   };
 
@@ -14191,7 +14207,7 @@ let
       md5 = "6c73c5b668a67fdc116a25b884058ed9";
     };
 
-    doCheck = !(python.isPypy or false);
+    doCheck = !isPyPy;
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_location ];
 
@@ -15888,5 +15904,60 @@ let
       maintainers = with maintainers; [ garbas ];
     };
   };
+
+  ghp-import = buildPythonPackage rec {
+    version = "0.4.1";
+    name = "ghp-import-${version}";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/ghp-import/${name}.tar.gz";
+      md5 = "99e018372990c03ab355aa62c34965c5";
+    };
+    disabled = isPyPy;
+    buildInputs = [ pkgs.glibcLocales ];
+    preConfigure = ''
+      export LC_ALL="en_US.UTF-8"
+    '';
+    meta = {
+      description = "Copy your docs directly to the gh-pages branch.";
+      homepage = "http://github.com/davisp/ghp-import";
+      license = "Tumbolia Public License";
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  typogrify = buildPythonPackage rec {
+    name = "typogrify-2.0.7";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/typogrify/${name}.tar.gz";
+      md5 = "63f38f80531996f187d2894cc497ba08";
+    };
+    disabled = isPyPy;
+    propagatedBuildInputs = with self; [ smartypants ];
+    meta = {
+      description = "Filters to enhance web typography, including support for Django & Jinja templates";
+      homepage = "https://github.com/mintchaos/typogrify";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  smartypants = buildPythonPackage rec {
+    version = "1.8.6";
+    name = "smartypants-${version}";
+    src = pkgs.fetchhg {
+      url = "https://bitbucket.org/livibetter/smartypants.py";
+      rev = "v${version}";
+      sha256 = "1cmzz44d2hm6y8jj2xcq1wfr26760gi7iq92ha8xbhb1axzd7nq6";
+    };
+    disabled = isPyPy;
+    buildInputs = with self; [ ]; #docutils pygments ];
+    meta = {
+      description = "Python with the SmartyPants";
+      homepage = "https://bitbucket.org/livibetter/smartypants.py";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
 
 }; in pythonPackages
