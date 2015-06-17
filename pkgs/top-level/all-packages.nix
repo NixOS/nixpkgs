@@ -8227,6 +8227,8 @@ let
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
+  wxmac = callPackage ../development/libraries/wxmac { };
+
   wtk = callPackage ../development/libraries/wtk { };
 
   x264 = callPackage ../development/libraries/x264 { };
