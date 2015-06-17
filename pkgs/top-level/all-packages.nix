@@ -635,6 +635,9 @@ let
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  derez = callPackage ../os-specific/darwin/derez { };
+  rez = callPackage ../os-specific/darwin/rez { };
+
   setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
