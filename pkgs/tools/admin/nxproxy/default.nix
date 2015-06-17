@@ -17,6 +17,10 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
+  patches = [
+    ./0660_nxcomp_fix-negotiation-in-stage-10-error.full+lite.patch
+  ];
+
   buildInputs = [ autoreconfHook libxcomp ];
 
   preAutoreconf = ''
