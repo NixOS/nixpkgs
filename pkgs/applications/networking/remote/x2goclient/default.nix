@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cups libssh libXpm nxproxy openldap qt4 ];
-  nativeBuildInputs [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
      substituteInPlace Makefile \

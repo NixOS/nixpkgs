@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ perl zlib bzip2 xz ];
-  nativeBuildInputs [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall =
     ''
