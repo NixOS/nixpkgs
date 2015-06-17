@@ -6,9 +6,9 @@
 , version, revision ? null
 , sha256 ? null
 , src ? fetchurl { url = "mirror://hackage/${pname}-${version}.tar.gz"; inherit sha256; }
-, buildDepends ? []
+, buildDepends ? [], libraryHaskellDepends ? [], executableHaskellDepends ? []
 , buildTarget ? ""
-, buildTools ? []
+, buildTools ? [], libraryToolDepends ? [], executableToolDepends ? [], testToolDepends ? []
 , configureFlags ? []
 , description ? ""
 , doCheck ? stdenv.lib.versionOlder "7.4" ghc.version
@@ -19,7 +19,7 @@
 , enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSplitObjs ? !stdenv.isDarwin # http://hackage.haskell.org/trac/ghc/ticket/4013
 , enableStaticLibraries ? true
-, extraLibraries ? []
+, extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 , homepage ? "http://hackage.haskell.org/package/${pname}"
 , hydraPlatforms ? ghc.meta.hydraPlatforms or ghc.meta.platforms
 , hyperlinkSource ? true
@@ -29,9 +29,9 @@
 , maintainers ? []
 , doHaddock ? true
 , passthru ? {}
-, pkgconfigDepends ? []
+, pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
 , platforms ? ghc.meta.platforms
-, testDepends ? []
+, testDepends ? [], testHaskellDepends ? [], testSystemDepends ? []
 , testTarget ? ""
 , broken ? false
 , preUnpack ? "", postUnpack ? ""
@@ -84,7 +84,7 @@ let
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
-    (optionalString (useCpphs) "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
+    (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
     (enableFeature enableSplitObjs "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (enableFeature enableSharedLibraries "shared")
@@ -105,11 +105,11 @@ let
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
 
-  propagatedBuildInputs = buildDepends;
-  otherBuildInputs = extraLibraries ++
-                     buildTools ++
-                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends) ++
-                     optionals doCheck testDepends;
+  propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
+  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
+                     buildTools ++ libraryToolDepends ++ executableToolDepends ++
+                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends) ++
+                     optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends);
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
