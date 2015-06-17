@@ -44,7 +44,7 @@
     * _If you don't want to install pkg in you profile_. 
       * `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>/default.nix` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
     * If you did `nix-env -i pkg-name` you can do `nix-env -e pkg-name` to uninstall it from your system.
-  * nixos and it's modules
+  * nixos and its modules
     * You can add new module to you `nixos-configuration file` (usually it's `/etc/nixos/configuration.nix`.  
     And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`
 * If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
@@ -56,7 +56,7 @@
 * Create pull request.
   * Write the title in format `(pkg-name | service): improvement`
     * If you update the pkg, write versions `from -> to`
-  * Write in comment if you have tested your patch. Do not rely much on `TravisCL`.
+  * Write in comment if you have tested your patch. Do not rely much on `TravisCI`.
   * If you make an improvement, write why is it good.
   * Notify maintainers of the package. For example add to the message: `cc @jagajaga @domenkozar`
 
