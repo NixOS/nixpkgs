@@ -22,7 +22,7 @@ in {
       };
 
       dataDir = mkOption {
-        default = "/var/lib/taskserver/data/";
+        default = "/var/lib/taskserver/";
         description = "Data directory for taskserver.";
         type = types.path;
       };
@@ -191,6 +191,8 @@ in {
     users.extraUsers = singleton
       { name = cfg.user;
         group = cfg.group;
+        createHome = true;
+        home = cfg.dataDir;
         uid = config.ids.uids.taskserver;
       };
 
@@ -206,14 +208,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      preStart = ''
-        mkdir -p ${cfg.dataDir}
-        chown ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-      '';
-
-      environment = {
-        TASKDDATA = "${cfg.dataDir}";
-      };
+      environment = { TASKDDATA = "${cfg.dataDir}"; };
 
       serviceConfig = {
         ExecStart = "${pkgs.taskserver}/bin/taskdctl start";
