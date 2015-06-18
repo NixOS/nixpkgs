@@ -70,7 +70,7 @@ in rec {
 
         name = "stdenv-darwin-boot-${toString step}";
 
-        cc = if isNull last then "/no-such-path" else import ../../build-support/cc-wrapper {
+        cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
           inherit shell;
           inherit (last) stdenv;
           inherit (last.pkgs.darwin) dyld;
