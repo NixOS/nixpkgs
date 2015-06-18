@@ -16,7 +16,7 @@
 
 let inherit (pkgs) autonix stdenv symlinkJoin; in
 
-let kf5Orig = kf5; in
+with autonix; let inherit (stdenv) lib; in
 
 let
   kf5_ = if kf5 != null then kf5 else pkgs.kf510;
@@ -26,7 +26,7 @@ in
 let
 
   qt5 = qt5_;
-  kf5 = kf5_.override { inherit qt5; };
+  kf5 = kf5_.override { inherit debug qt5; };
 
   kdePackage = name: pkg:
     let defaultOverride = drv: drv // {
@@ -106,7 +106,7 @@ let
               modemmanager openconnect openexr pam pango qt4 samba
               socat substituteAll taglib utillinux wayland xapian
               xkeyboard_config xlibs xorg;
-      boost = boost155;
+      boost = boost156;
       canberra = libcanberra;
       epub = ebook_tools;
       fontforge_executable = fontforge;
@@ -153,7 +153,7 @@ let
         });
       in symlinkJoin "breeze-${version}" [ breeze-qt4 breeze-qt5 ];
 
-    kde-gtk-config = overrideDerivation super.kde-gtk-config (drv: {
+    kde-gtk-config = extendDerivation super.kde-gtk-config {
       NIX_CFLAGS_COMPILE = with scope;
         lib.concatStringsSep " " [
           "-I${cairo}/include/cairo"
@@ -163,55 +163,51 @@ let
           "-I${glib}/lib/glib-2.0/include"
           "-I${pango}/include/pango-1.0"
         ];
-    });
+    };
 
-    kfilemetadata = overrideDerivation super.kfilemetadata (drv: {
-      buildInputs = drv.buildInputs ++ [ pkgs.attr ];
-    });
+    kfilemetadata = extendDerivation super.kfilemetadata {
+      buildInputs = [ scope.attr ];
+    };
 
-    kwin = overrideDerivation super.kwin (drv: {
-      buildInputs =
-        drv.buildInputs ++ (with pkgs.xlibs; [ libICE libSM libXcursor ]);
+    kwin = extendDerivation super.kwin {
+      buildInputs = with scope.xlibs; [ libICE libSM libXcursor ];
       patches = [ ./kwin/kwin-import-plugin-follow-symlinks.patch ];
-    });
+    };
 
-    libkscreen = overrideDerivation super.libkscreen (drv: {
-      buildInputs = drv.buildInputs ++ [ pkgs.xlibs.libXrandr];
-    });
+    libkscreen = extendDerivation super.libkscreen {
+      buildInputs = [ scope.xlibs.libXrandr];
+    };
 
-    plasma-desktop = overrideDerivation super.plasma-desktop (drv: {
-      buildInputs =
-        drv.buildInputs
-        ++ [ pkgs.libcanberra ]
-        ++ (with pkgs.xlibs; [ libxkbfile libXcursor libXft ]);
+    plasma-desktop = extendDerivation super.plasma-desktop {
+      buildInputs = with scope;
+        [ canberra ]
+        ++ (with xlibs; [ libxkbfile libXcursor libXft ]);
       patches = [
         ./plasma-desktop/plasma-desktop-hwclock.patch
         ./plasma-desktop/plasma-desktop-zoneinfo.patch
-        (pkgs.substituteAll {
+        (scope.substituteAll {
           src = ./plasma-desktop/plasma-desktop-xkb-rules.patch;
-          xkb = pkgs.xkeyboard_config;
+          xkb = scope.xkeyboard_config;
         })
       ];
       preConfigure = ''
         substituteInPlace kcms/dateandtime/helper.cpp \
           --subst-var-by hwclock "${scope.utillinux}/sbin/hwclock"
       '';
-    });
+    };
 
-    plasma-workspace = overrideDerivation super.plasma-workspace (drv: {
+    plasma-workspace = extendDerivation super.plasma-workspace {
       patches = [
-        (pkgs.substituteAll {
+        (scope.substituteAll {
           src = ./plasma-workspace/0001-startkde-NixOS-patches.patch;
-          inherit (pkgs) bash gnused gnugrep socat;
-          inherit (kf5) kconfig kinit kservice;
-          inherit (pkgs.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
-          qt5tools = qt5.tools;
-          dbus_tools = pkgs.dbus.tools;
+          inherit (scope) bash gnused gnugrep socat;
+          inherit (scope) kconfig kinit kservice;
+          inherit (scope.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
+          qt5tools = scope.qt5tools;
+          dbus_tools = scope.dbus.tools;
         })
       ];
-      buildInputs =
-        (drv.buildInputs or [])
-        ++ (with pkgs.xlibs; [ libSM libXcursor scope.pam ]);
+      buildInputs = with scope.xlibs; [ libSM libXcursor scope.pam ];
       postPatch = ''
         substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
           --replace kdostartupconfig5 $out/bin/kdostartupconfig5
@@ -220,15 +216,15 @@ let
         substituteInPlace startkde/startkde.cmake \
           --subst-var-by plasmaWorkspace "$out"
       '';
-    });
+    };
 
-    powerdevil = overrideDerivation super.powerdevil (drv: {
-      buildInputs = drv.buildInputs ++ [pkgs.xlibs.libXrandr];
-    });
+    powerdevil = extendDerivation super.powerdevil {
+      buildInputs = [ scope.xlibs.libXrandr ];
+    };
 
-    sddm-kcm = overrideDerivation super.sddm-kcm (drv: {
-      buildInputs = drv.buildInputs ++ [pkgs.xlibs.libXcursor];
-    });
+    sddm-kcm = extendDerivation super.sddm-kcm {
+      buildInputs = [ scope.xlibs.libXcursor ];
+    };
 
   };
 

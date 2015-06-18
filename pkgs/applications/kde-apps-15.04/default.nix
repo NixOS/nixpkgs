@@ -12,23 +12,23 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, symlinkJoin, kde4, kf5, pkgs, qt4, qt5, stdenv, newScope, debug ? false }:
+{ pkgs, newScope, kf5 ? null, plasma5 ? null, qt5 ? null, debug ? false }:
 
-with autonix;
+let inherit (pkgs) autonix kde4 stdenv symlinkJoin; in
 
-let inherit (stdenv) lib; in
+with autonix; let inherit (stdenv) lib; in
 
-let kf5Orig = kf5; in
+let
+  kf5_ = if kf5 != null then kf5 else pkgs.kf510;
+  plasma5_ = if plasma5 != null then plasma5 else pkgs.plasma53;
+  qt5_ = if qt5 != null then qt5 else pkgs.qt54;
+in
 
 let
 
-  kf5 = kf5Orig.override { inherit debug qt5; };
-
-  kdePackage = pkg:
-    (kf5.kdePackage pkg).override {
-      inherit (stdenv) mkDerivation;
-      inherit scope;
-    };
+  kf5 = kf5_.override { inherit debug qt5; };
+  plasma5 = plasma5_.override { inherit debug kf5 qt5; };
+  qt5 = qt5_;
 
   kdeOrL10nPackage = name: pkg:
     assert (builtins.isAttrs pkg);
@@ -124,53 +124,58 @@ let
       (lib.mapAttrs mirrorUrl)
     ];
 
-  overrideDerivation = pkg: f:
-    let mkDerivation = super: drv: super.mkDerivation (drv // f drv);
-    in pkg.override (super: super // { mkDerivation = mkDerivation super; });
+  kde4Package = pkg: overrideScope pkg (with kde4; {
+    inherit akonadi baloo kactivities libkdegames libkmahjongg;
+    kde4 = self.kdelibs;
+  });
 
   scope =
+    # KDE Frameworks 5
+    kf5 //
     # packages in this collection
     self //
     {
+      kf5baloo = plasma5.baloo;
+      kf5kdcraw = self.libkdcraw;
       kf5kdegames = self.libkdegames;
+      kf5kipi = self.libkipi;
       libkonq = self.kde-baseapps;
     } //
-    # packages from KDE Frameworks 5
-    kf5.scope //
     # packages requiring same Qt 5
     (with pkgs; {
       accountsqt5 = accounts-qt.override { inherit qt5; };
       dbusmenuqt = libdbusmenu_qt;
       grantlee5 = grantlee5.override { inherit qt5; };
       mlt = pkgs.mlt-qt5.override { inherit qt5; };
+      phonon4qt5 = pkgs.phonon_qt5.override { inherit qt5; };
       qca-qt5 = qca-qt5.override { inherit qt5; };
+      qt5script = qt5.script;
+      qt5x11extras = qt5.x11extras;
       signonqt5 = signon.override { inherit qt5; };
       telepathyqt5 = telepathy_qt5.override { inherit qt5; };
     }) //
-    # packages from KDE 4
-    (with kde4; {
-      inherit akonadi baloo kactivities libkdegames libkmahjongg;
-      kde4 = self.kdelibs;
-    }) //
     # packages from nixpkgs
     (with pkgs; {
-      inherit acl attr automoc4 avahi bison cdparanoia cfitsio cups
+      inherit acl attr automoc4 avahi bison cdparanoia cfitsio cmake cups
               djvulibre docbook_xml_dtd_42 docbook_xsl enchant eigen2
               exiv2 fam ffmpeg flac flex freetype gmp gettext gpgme
               grantlee gsl hunspell ilmbase intltool jasper lcms2
-              libgcrypt libraw libssh libspectre libvncserver libical
-              networkmanager openal opencv openexr phonon pkgconfig
-              polkit_qt4 prison python qca2 qimageblitz qjson qt4
-              samba saneBackends soprano
-              speechd strigi taglib udev xplanet xscreensaver xz;
+              libaccounts-glib libgcrypt libotr libraw libssh libspectre
+              libvncserver libical networkmanager openal opencv
+              openexr perl phonon pkgconfig polkit_qt4 prison python qca2
+              qimageblitz qjson qt4 samba saneBackends soprano speechd
+              strigi taglib udev xlibs xplanet xscreensaver xz;
       alsa = alsaLib;
       assuan = libassuan;
       boost = boost156;
       canberra = libcanberra;
+      eigen3 = eigen;
       epub = ebook_tools;
+      gif = giflib;
       gphoto2 = libgphoto2;
       hupnp = herqq;
       indi = indilib;
+      jpeg = libjpeg;
       ldap = openldap;
       libattica = attica;
       musicbrainz3 = libmusicbrainz;
@@ -180,6 +185,7 @@ let
       qalculate = libqalculate;
       sasl2 = cyrus_sasl;
       shareddesktopontologies = shared_desktop_ontologies;
+      sharedmimeinfo = shared_mime_info;
       sndfile = libsndfile;
       tiff = libtiff;
       telepathyqt4 = telepathy_qt;
@@ -189,212 +195,330 @@ let
     });
 
   self =
-    (builtins.removeAttrs super [ "artikulate" # build failure; wrong boost?
+    (builtins.removeAttrs super [
+      "artikulate" # build failure; wrong boost?
       "kde-dev-scripts" "kde-dev-utils" # docbook errors
       "kdewebdev" # unknown build failure
+      "kde-l10n-sr" # missing CMake command
     ]) // {
-      inherit kdePackage qt5 scope;
+      audiocd-kio = kde4Package super.audiocd-kio;
 
-      ark = overrideDerivation super.ark (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ pkgs.makeWrapper ];
+      amor = kde4Package super.amor;
+
+      ark = extendDerivation (kde4Package super.ark) {
+        buildInputs = [ pkgs.makeWrapper ];
         # runtime dependency
-        postInstall = (drv.postInstall or "") + ''
+        postInstall = ''
           wrapProgram $out/bin/ark --prefix PATH : "${pkgs.unzipNLS}/bin"
         '';
-      });
+      };
 
-      ffmpegthumbs = overrideDerivation super.ffmpegthumbs (drv: {
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-      });
+      cervisia = kde4Package super.cervisia;
 
-      kaccounts-providers = overrideDerivation super.kaccounts-providers (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ pkgs.libaccounts-glib ];
+      dolphin-plugins = kde4Package super.dolphin-plugins;
+
+      dragon = kde4Package super.dragon;
+
+      ffmpegthumbs = extendDerivation (kde4Package super.ffmpegthumbs) {
+        nativeBuildInputs = [ scope.pkgconfig ];
+      };
+
+      juk = kde4Package super.juk;
+
+      jovie = kde4Package super.jovie;
+
+      kaccessible = kde4Package super.kaccessible;
+
+      kaccounts-providers = extendDerivation super.kaccounts-providers {
+        buildInputs = [ pkgs.libaccounts-glib ];
         # hard-coded install path
-        preConfigure = (drv.preConfigure or "") + ''
+        preConfigure = ''
           substituteInPlace webkit-options/CMakeLists.txt \
             --replace "/etc/signon-ui/webkit-options.d/" \
                       "$out/etc/signon-ui/webkit-options.d/"
         '';
-      });
+      };
 
-      kalzium = overrideDerivation super.kalzium (drv: {
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-      });
+      kajongg = kde4Package super.kajongg;
 
-      kate = overrideDerivation super.kate (drv: {
-        buildInputs =
-          (drv.buildInputs or [])
-          ++ (with kf5; [ kconfig kguiaddons kiconthemes ki18n kinit kjobwidgets
-                          kio kparts ktexteditor kwindowsystem kxmlgui ]);
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ ([ kf5.kdoctools ]);
-      });
+      kalzium = extendDerivation (kde4Package super.kalzium) {
+        nativeBuildInputs = [ scope.pkgconfig ];
+      };
 
-      /*
-      kde-baseapps = overrideDerivation super.kde-baseapps (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.qt4 ];
-      });
-      */
+      kamera = kde4Package super.kamera;
 
-      kde-runtime = overrideDerivation super.kde-runtime (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.canberra ];
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
+      kate = extendDerivation super.kate {
+        buildInputs = with scope; [
+          kconfig kguiaddons kiconthemes ki18n kinit kjobwidgets kio
+          kparts ktexteditor kwindowsystem kxmlgui
+        ];
+        nativeBuildInputs = [ scope.kdoctools ];
+      };
+
+      kcachegrind = kde4Package super.kcachegrind;
+
+      kcolorchooser = kde4Package super.kcolorchooser;
+
+      kde-base-artwork = kde4Package super.kde-base-artwork;
+
+      kde-baseapps = kde4Package super.kde-baseapps;
+
+      kde-runtime = extendDerivation (kde4Package super.kde-runtime) {
+        buildInputs = [ scope.canberra ];
+        nativeBuildInputs = [ scope.pkgconfig ];
         # cmake does not detect path to `ilmbase`
-        NIX_CFLAGS_COMPILE =
-          (drv.NIX_CFLAGS_COMPILE or "") + " -I${scope.ilmbase}/include/OpenEXR";
+        NIX_CFLAGS_COMPILE = "-I${scope.ilmbase}/include/OpenEXR";
         # some components of this package have been replaced in other packages
         meta = { priority = 10; };
-      });
+      };
 
-      kde-workspace = overrideDerivation super.kde-workspace (drv: {
-        buildInputs =
-          (drv.buildInputs or []) ++
-          (with pkgs.xlibs; [
+      kde-wallpapers = kde4Package super.kde-wallpapers;
+
+      kde-workspace = extendDerivation (kde4Package super.kde-workspace) {
+        buildInputs = with scope.xlibs; [
             libxkbfile libXcomposite xcbutilimage xcbutilkeysyms xcbutilrenderutil
-          ]);
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
+        ];
+        nativeBuildInputs = [ scope.pkgconfig ];
         # some components of this package have been replaced in other packages
         meta = { priority = 10; };
-      });
+      };
 
-      kdelibs = overrideDerivation super.kdelibs (drv: {
-        buildInputs =
-          (drv.buildInputs or []) ++ (with scope; [ attr polkit_qt4 xsltproc xz ]);
+      kdeartwork = kde4Package super.kdeartwork;
 
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
+      kdegraphics-mobipocket = kde4Package super.kdegraphics-mobipocket;
+
+      kdegraphics-strigi-analyzer = kde4Package super.kdegraphics-strigi-analyzer;
+
+      kdegraphics-thumbnailers = kde4Package super.kdegraphics-thumbnailers;
+
+      kdelibs = extendDerivation super.kdelibs {
+        buildInputs = with scope; [ attr polkit_qt4 xsltproc xz ];
+        propagatedBuildInputs = with scope; [ qt4 soprano phonon strigi ];
+        nativeBuildInputs = [ scope.pkgconfig ];
+        propagatedNativeBuildInputs = with scope; [
+          automoc4 cmake perl sharedmimeinfo
+        ];
+
+        patches = [ ./kdelibs/polkit-install.patch ];
 
         # cmake does not detect path to `ilmbase`
-        NIX_CFLAGS_COMPILE =
-          (drv.NIX_CFLAGS_COMPILE or "") + " -I${scope.ilmbase}/include/OpenEXR";
+        NIX_CFLAGS_COMPILE = "-I${scope.ilmbase}/include/OpenEXR";
 
-        propagatedBuildInputs =
-          (drv.propagatedBuildInputs or [])
-          ++ (with scope; [ qt4 soprano phonon strigi ]);
-
-        propagatedNativeBuildInputs =
-          (drv.propagatedNativeBuildInputs or [])
-          ++ (with scope; [ automoc4 cmake perl sharedmimeinfo ]);
-
-        patches = (drv.patches or []) ++ [ ./kdelibs/polkit-install.patch ];
-
-        cmakeFlags = (drv.cmakeFlags or []) ++ [
+        cmakeFlags = [
           "-DDOCBOOKXML_CURRENTDTD_DIR=${scope.docbook_xml_dtd_42}/xml/dtd/docbook"
           "-DDOCBOOKXSL_DIR=${scope.docbook_xsl}/xml/xsl/docbook"
           "-DHUPNP_ENABLED=ON"
           "-DWITH_SOLID_UDISKS2=ON"
           "-DKDE_DEFAULT_HOME=.kde"
         ];
-      });
+      };
 
-      kdenlive = overrideDerivation super.kdenlive (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.mlt ];
-      });
+      kdenetwork-filesharing = kde4Package super.kdenetwork-filesharing;
 
-      kdepim = overrideDerivation super.kdepim (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with scope; [ gpgme assuan ]);
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-      });
+      kdenetwork-strigi-analyzers = kde4Package super.kdenetwork-strigi-analyzers;
 
-      kdepimlibs = overrideDerivation super.kdepimlibs (drv: {
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-      });
+      kdenlive = extendDerivation super.kdenlive { buildInputs = [ scope.mlt ]; };
 
-      kdesdk-thumbnailers = overrideDerivation super.kdesdk-thumbnailers (drv: {
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.gettext ];
-      });
+      kdepim = extendDerivation (kde4Package super.kdepim) {
+        buildInputs = with scope; [ gpgme assuan ];
+        nativeBuildInputs = [ scope.pkgconfig ];
+      };
 
-      kgpg = overrideDerivation super.kgpg (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.boost ];
-      });
+      kdepim-runtime = kde4Package super.kdepim-runtime;
 
-      khangman = overrideDerivation super.khangman (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ kf5.kio ];
-      });
+      kdepimlibs = extendDerivation (kde4Package super.kdepimlibs) {
+        nativeBuildInputs = [ scope.pkgconfig ];
+      };
 
-      kmix = overrideDerivation super.kmix (drv: {
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-        cmakeFlags = (drv.cmakeFlags or []) ++ [ "-DKMIX_KF5_BUILD=ON" ];
-      });
+      kdesdk-kioslaves = kde4Package super.kdesdk-kioslaves;
 
-      kmousetool = overrideDerivation super.kmousetool (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with pkgs.xlibs; [ libXtst libXt ]);
-      });
+      kdesdk-strigi-analyzers = kde4Package super.kdesdk-strigi-analyzers;
 
-      kremotecontrol = overrideDerivation super.kremotecontrol (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ pkgs.xlibs.libXtst ];
-      });
+      kdesdk-thumbnailers =
+        extendDerivation (kde4Package super.kdesdk-thumbnailers) {
+          nativeBuildInputs = [ scope.gettext ];
+        };
 
-      krfb = overrideDerivation super.krfb (drv: {
-        buildInputs =
-          (drv.buildInputs or [])
-          ++ [ pkgs.xlibs.libXtst scope.ktp-common-internals ];
-      });
+      kdf = kde4Package super.kdf;
 
-      kstars = overrideDerivation super.kstars (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with scope; [ kparts cfitsio ]);
-      });
+      kfloppy = kde4Package super.kfloppy;
 
-      ktp-accounts-kcm = overrideDerivation super.ktp-accounts-kcm (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ pkgs.libaccounts-glib ];
-      });
+      kgamma = kde4Package super.kgamma;
 
-      ktp-common-internals = overrideDerivation super.ktp-common-internals (drv: {
-        buildInputs =
-          (drv.buildInputs or [])
-          ++ (with scope; [ kdelibs4support kparts ])
-          ++ [ pkgs.libotr ]; # needed for ktp-text-ui
-      });
+      kget = kde4Package super.kget;
 
-      ktp-text-ui = overrideDerivation super.ktp-text-ui (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.kdbusaddons ];
-      });
+      kgoldrunner = kde4Package super.kgoldrunner;
 
-      lokalize = overrideDerivation super.lokalize (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.kdbusaddons ];
-      });
+      kgpg = extendDerivation (kde4Package super.kgpg) {
+        buildInputs = [ scope.boost ];
+      };
 
-      libkdcraw = overrideDerivation super.libkdcraw (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with scope; [ kdelibs libraw ]);
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-      });
+      khangman = extendDerivation super.khangman { buildInputs = [ scope.kio ]; };
 
-      libkexiv2 = overrideDerivation super.libkexiv2 (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with scope; [ exiv2 kdelibs ]);
-      });
+      kigo = kde4Package super.kigo;
 
-      libkface = overrideDerivation super.libkface (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with scope; [ kdelibs opencv ]);
-      });
+      kiriki = kde4Package super.kiriki;
 
-      libkgeomap = overrideDerivation super.libkgeomap (drv: {
+      klickety = kde4Package super.klickety;
+
+      kmag = kde4Package super.kmag;
+
+      kmahjongg = kde4Package super.kmahjongg;
+
+      kmix = extendDerivation super.kmix {
+        nativeBuildInputs = [ scope.pkgconfig ];
+        cmakeFlags = [ "-DKMIX_KF5_BUILD=ON" ];
+      };
+
+      kmousetool = extendDerivation (kde4Package super.kmousetool) {
+        buildInputs = with scope.xlibs; [ libXtst libXt ];
+      };
+
+      kmouth = kde4Package super.kmouth;
+
+      knavalbattle = kde4Package super.knavalbattle;
+
+      kolf = kde4Package super.kolf;
+
+      kolourpaint = kde4Package super.kolourpaint;
+
+      konquest = kde4Package super.konquest;
+
+      kopete = kde4Package super.kopete;
+
+      kppp = kde4Package super.kppp;
+
+      kqtquickcharts = kde4Package super.kqtquickcharts;
+
+      krdc = kde4Package super.krdc;
+
+      kremotecontrol = extendDerivation (kde4Package super.kremotecontrol) {
+        buildInputs = [ scope.xlibs.libXtst ];
+      };
+
+      kreversi = kde4Package super.kreversi;
+
+      krfb = extendDerivation (kde4Package super.krfb) {
+        buildInputs = with scope; [ xlibs.libXtst ktp-common-internals ];
+      };
+
+      ksaneplugin = kde4Package super.ksaneplugin;
+
+      kscd = kde4Package super.kscd;
+
+      ksirk = kde4Package super.ksirk;
+
+      ksnakeduel = kde4Package super.ksnakeduel;
+
+      ksnapshot = kde4Package super.ksnapshot;
+
+      kspaceduel = kde4Package super.kspaceduel;
+
+      kstars = extendDerivation super.kstars {
+        buildInputs = with scope; [ kparts cfitsio ];
+      };
+
+      ksudoku = kde4Package super.ksudoku;
+
+      ksystemlog = kde4Package super.ksystemlog;
+
+      ktp-accounts-kcm = extendDerivation super.ktp-accounts-kcm {
+        buildInputs = [ scope.libaccounts-glib ];
+      };
+
+      ktp-common-internals = extendDerivation super.ktp-common-internals {
+        buildInputs = with scope; [ kdelibs4support kparts libotr ];
+      };
+
+      ktp-text-ui = extendDerivation super.ktp-text-ui {
+        buildInputs = [ scope.kdbusaddons ];
+      };
+
+      ktuberling = kde4Package super.ktuberling;
+
+      ktux = kde4Package super.ktux;
+
+      kubrick = kde4Package super.kubrick;
+
+      kuser = kde4Package super.kuser;
+
+      kwalletmanager = kde4Package super.kwalletmanager;
+
+      lokalize = extendDerivation super.lokalize {
+        buildInputs = [ scope.kdbusaddons ];
+      };
+
+      libkcddb = kde4Package super.libkcddb;
+
+      libkcompactdisc = kde4Package super.libkcompactdisc;
+
+      libkdcraw = extendDerivation super.libkdcraw {
+        buildInputs = with scope; [ kdelibs libraw ];
+        nativeBuildInputs = [ scope.pkgconfig ];
+      };
+
+      libkdeedu = kde4Package super.libkdeedu;
+
+      libkexiv2 = extendDerivation super.libkexiv2 {
+        buildInputs = with scope; [ exiv2 kdelibs ];
+      };
+
+      libkface = extendDerivation super.libkface {
+        buildInputs = with scope; [ kdelibs opencv ];
+      };
+
+      libkgeomap = extendDerivation (kde4Package super.libkgeomap) {
         cmakeFlags =
-          (drv.cmakeFlags or [])
-          ++ [ "-DCMAKE_MODULE_PATH=${scope.marble}/share/apps/cmake/modules" ];
-      });
+          [ "-DCMAKE_MODULE_PATH=${scope.marble}/share/apps/cmake/modules" ];
+      };
 
-      libkipi = overrideDerivation super.libkipi (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.kdelibs ];
-      });
+      libkipi = extendDerivation super.libkipi {
+        buildInputs = [ scope.kdelibs ];
+      };
 
-      libksane = overrideDerivation super.libksane (drv: {
-        buildInputs = (drv.buildInputs or []) ++ (with scope; [ kdelibs saneBackends]);
-      });
+      libksane = extendDerivation super.libksane {
+        buildInputs = with scope; [ kdelibs saneBackends];
+      };
 
-      okular = overrideDerivation super.okular (drv: {
-        nativeBuildInputs = (drv.nativeBuildInputs or []) ++ [ scope.pkgconfig ];
-      });
+      lskat = kde4Package super.lskat;
 
-      rocs = overrideDerivation super.rocs (drv: {
-        buildInputs = (drv.buildInputs or []) ++ [ scope.kdelibs4support ];
-      });
+      marble = kde4Package super.marble;
 
-      signon-kwallet-extension =
-        overrideDerivation super.signon-kwallet-extension (drv: {
-          buildInputs = (drv.buildInputs or []) ++ [ scope.signonqt5 ];
-          preConfigure = (drv.preConfigure or "") + ''
-            sed -i src/CMakeLists.txt \
-                -e "s,\''${SIGNONEXTENSION_PLUGINDIR},$out/lib/signon/extensions,"
-          '';
-        });
+      mplayerthumbs = kde4Package super.mplayerthumbs;
+
+      okular = extendDerivation (kde4Package super.okular) {
+        nativeBuildInputs = [ scope.pkgconfig ];
+      };
+
+      pairs = kde4Package super.pairs;
+
+      palapeli = kde4Package super.palapeli;
+
+      picmi = kde4Package super.picmi;
+
+      poxml = kde4Package super.poxml;
+
+      rocs = extendDerivation super.rocs {
+        buildInputs = [ scope.kdelibs4support ];
+      };
+
+      signon-kwallet-extension = extendDerivation super.signon-kwallet-extension {
+        buildInputs = [ scope.signonqt5 ];
+        preConfigure = ''
+          sed -i src/CMakeLists.txt \
+              -e "s,\''${SIGNONEXTENSION_PLUGINDIR},$out/lib/signon/extensions,"
+        '';
+      };
+
+      superkaramba = kde4Package super.superkaramba;
+
+      svgpart = kde4Package super.svgpart;
+
+      sweeper = kde4Package super.sweeper;
+
+      umbrello = kde4Package super.umbrello;
+
+      zeroconf-ioslave = kde4Package super.zeroconf-ioslave;
 
     };
 

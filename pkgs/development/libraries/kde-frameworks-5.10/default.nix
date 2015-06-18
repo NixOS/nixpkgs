@@ -12,13 +12,19 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, fetchurl, pkgs, qt5, stdenv, newScope, debug ? false }:
+{ pkgs, newScope, qt5 ? null, debug ? false }:
 
-with autonix;
+let inherit (pkgs) autonix stdenv symlinkJoin; in
 
-let inherit (stdenv) lib; in
+with autonix; let inherit (stdenv) lib; in
 
 let
+  qt5_ = if qt5 != null then qt5 else pkgs.qt54;
+in
+
+let
+
+  qt5 = qt5_;
 
   super =
     let json = builtins.fromJSON (builtins.readFile ./packages.json);
@@ -114,8 +120,6 @@ let
     );
 
   self = super // {
-    inherit kdePackage scope;
-
     extra-cmake-modules = overrideDerivation super.extra-cmake-modules (drv: {
       buildInputs = [];
       nativeBuildInputs = [];
@@ -132,78 +136,72 @@ let
       };
     });
 
-    frameworkintegration = overrideDerivation super.frameworkintegration (drv: {
-      buildInputs = drv.buildInputs ++ [ pkgs.xlibs.libXcursor ];
-    });
+    frameworkintegration = extendDerivation super.frameworkintegration {
+      buildInputs = [ scope.xlibs.libXcursor ];
+    };
 
-    kauth = overrideDerivation super.kauth (drv: {
-      buildInputs = drv.buildInputs ++ [ scope.polkit_qt5 ];
-      patches = [./kauth/kauth-policy-install.patch];
-    });
+    kauth = extendDerivation super.kauth {
+      buildInputs = [ scope.polkit_qt5 ];
+      patches = [ ./kauth/kauth-policy-install.patch ];
+    };
 
-    kcmutils = overrideDerivation super.kcmutils (drv: {
-      patches = [./kcmutils/kcmutils-pluginselector-follow-symlinks.patch];
-    });
+    kcmutils = extendDerivation super.kcmutils {
+      patches = [ ./kcmutils/kcmutils-pluginselector-follow-symlinks.patch ];
+    };
 
-    kconfigwidgets = overrideDerivation super.kconfigwidgets (drv: {
-      patches = [./kconfigwidgets/kconfigwidgets-helpclient-follow-symlinks.patch];
-    });
+    kconfigwidgets = extendDerivation super.kconfigwidgets {
+      patches = [ ./kconfigwidgets/kconfigwidgets-helpclient-follow-symlinks.patch ];
+    };
 
-    kdelibs4support = overrideDerivation super.kdelibs4support (drv: {
-      buildInputs = drv.buildInputs ++ [ scope.networkmanager pkgs.xlibs.libSM ];
-      cmakeFlags =
-        drv.cmakeFlags
-        ++ [
-          "-DDocBookXML4_DTD_DIR=${pkgs.docbook_xml_dtd_45}/xml/dtd/docbook"
-          "-DDocBookXML4_DTD_VERSION=4.5"
-        ];
-    });
+    kdelibs4support = extendDerivation super.kdelibs4support {
+      buildInputs = [ scope.networkmanager scope.xlibs.libSM ];
+      cmakeFlags = [
+        "-DDocBookXML4_DTD_DIR=${pkgs.docbook_xml_dtd_45}/xml/dtd/docbook"
+        "-DDocBookXML4_DTD_VERSION=4.5"
+      ];
+    };
 
-    kdoctools = overrideDerivation super.kdoctools (drv: {
-      propagatedNativeBuildInputs =
-        drv.propagatedNativeBuildInputs ++ [ scope.perl scope.perlPackages.URI ];
-      cmakeFlags =
-        drv.cmakeFlags
-        ++ [
-          "-DDocBookXML4_DTD_DIR=${pkgs.docbook_xml_dtd_45}/xml/dtd/docbook"
-          "-DDocBookXML4_DTD_VERSION=4.5"
-          "-DDocBookXSL_DIR=${pkgs.docbook5_xsl}/xml/xsl/docbook"
-        ];
-      patches = [./kdoctools/kdoctools-no-find-docbook-xml.patch];
-    });
+    kdoctools = extendDerivation super.kdoctools {
+      propagatedNativeBuildInputs = [ scope.perl scope.perlPackages.URI ];
+      cmakeFlags = [
+        "-DDocBookXML4_DTD_DIR=${scope.docbook_xml_dtd_45}/xml/dtd/docbook"
+        "-DDocBookXML4_DTD_VERSION=4.5"
+        "-DDocBookXSL_DIR=${scope.docbook5_xsl}/xml/xsl/docbook"
+      ];
+      patches = [ ./kdoctools/kdoctools-no-find-docbook-xml.patch ];
+    };
 
-    ki18n = overrideDerivation super.ki18n (drv: {
-      propagatedNativeBuildInputs =
-        drv.propagatedNativeBuildInputs ++ [ scope.libintl scope.pythoninterp ];
-    });
+    ki18n = extendDerivation super.ki18n {
+      propagatedNativeBuildInputs = with scope; [ libintl pythoninterp ];
+    };
 
-    kimageformats = overrideDerivation super.kimageformats (drv: {
+    kimageformats = extendDerivation super.kimageformats {
       NIX_CFLAGS_COMPILE = "-I${pkgs.ilmbase}/include/OpenEXR";
-    });
+    };
 
-    kinit = overrideDerivation super.kinit (drv: {
+    kinit = extendDerivation super.kinit {
       patches = [./kinit/0001-kinit-libpath.patch];
-    });
+    };
 
-    kpackage = overrideDerivation super.kpackage (drv: {
-      patches = [./kpackage/0001-allow-external-paths.patch];
-    });
+    kpackage = extendDerivation super.kpackage {
+      patches = [ ./kpackage/0001-allow-external-paths.patch ];
+    };
 
-    kservice = overrideDerivation super.kservice (drv: {
-      buildInputs = drv.buildInputs ++ [ self.kwindowsystem ];
+    kservice = extendDerivation super.kservice {
+      buildInputs = [ scope.kwindowsystem ];
       patches = [
         ./kservice/kservice-kbuildsycoca-follow-symlinks.patch
         ./kservice/kservice-kbuildsycoca-no-canonicalize-path.patch
       ];
-    });
+    };
 
-    ktexteditor = overrideDerivation super.ktexteditor (drv: {
+    ktexteditor = extendDerivation super.ktexteditor {
       patches = [ ./ktexteditor/0001-no-qcoreapplication.patch ];
-    });
+    };
 
-    networkmanager-qt = overrideDerivation super.networkmanager-qt (drv: {
-      propagatedBuildInputs = drv.propagatedBuildInputs ++ [ scope.networkmanager ];
-    });
+    networkmanager-qt = extendDerivation super.networkmanager-qt {
+      propagatedBuildInputs = [ scope.networkmanager ];
+    };
   };
 
 in self
