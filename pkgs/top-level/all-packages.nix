@@ -5313,8 +5313,6 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
-  infer = callPackage ../development/tools/analysis/infer { };
-
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
 
