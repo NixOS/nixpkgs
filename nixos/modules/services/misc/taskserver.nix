@@ -16,6 +16,11 @@ in {
         description = "User for taskserver.";
       };
 
+      group = mkOption {
+        default = "taskd";
+        description = "Group for taskserver.";
+      };
+
       dataDir = mkOption {
         default = "/var/lib/taskserver/data/";
         description = "Data directory for taskserver.";
@@ -201,6 +206,7 @@ in {
       serviceConfig = {
         ExecStart = "${pkgs.taskserver}/bin/taskdctl start";
         User = cfg.user;
+        Group = cfg.group;
       };
     };
   };
