@@ -19,7 +19,12 @@ stdenv.mkDerivation (rec {
             "--with-included-gettext"
             "--with-included-glib"
             "--with-included-libcroco"
-          ]);
+          ])
+     # avoid retaining reference to CF during stdenv bootstrap
+     ++ (stdenv.lib.optionals stdenv.isDarwin [
+        "gt_cv_func_CFPreferencesCopyAppValue=no"
+        "gt_cv_func_CFLocaleCopyCurrent=no"
+      ]);
 
   # On cross building, gettext supposes that the wchar.h from libc
   # does not fulfill gettext needs, so it tries to work with its

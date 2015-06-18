@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ] else null;
 
   postInstall = ''
-    sed -i ${stdenv.lib.optionalString (stdenv.isDarwin && stdenv.cc.nativeTools) "''"} s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
+    sed -i s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
   '';
 
   configureFlags = [ "--enable-widec" ];
