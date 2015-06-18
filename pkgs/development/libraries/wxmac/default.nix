@@ -1,5 +1,5 @@
 { stdenv, fetchurl, setfile, rez, derez,
-  expat, libjpeg, libpng, libtiff, zlib
+  expat, libiconv, libjpeg, libpng, libtiff, zlib
 }:
 
 with stdenv.lib;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wx.patch ];
 
-  buildInputs = [ setfile rez derez expat libjpeg libpng libtiff zlib ];
+  buildInputs = [ setfile rez derez expat libiconv libjpeg libpng libtiff zlib ];
 
   configureFlags = [
     "--enable-unicode"
