@@ -208,6 +208,7 @@ in {
 
       preStart = ''
         mkdir -p ${cfg.dataDir}
+        chown ${cfg.user}:${cfg.group} "${cfg.dataDir}"
       '';
 
       environment = {
