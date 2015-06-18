@@ -10775,12 +10775,12 @@ let
   };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.3.0";
+    version = "0.4.0";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "177lqpm2czx81pjg0zfs1dkbbmcn5yf1y5qxj23x6y5d28518qwl";
+      sha256 = "0zvfz4c9lqiwh2qh51rba6ckpjl3pbp9fcm0ri58qhcjd8mh8k34";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
@@ -10788,7 +10788,7 @@ let
     meta = {
       description = "A toolbelt of useful classes and functions to be used with python-requests";
       homepage = http://toolbelt.rtfd.org;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ matthiasbeyer jgeerds ];
     };
 
   };
