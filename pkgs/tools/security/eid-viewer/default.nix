@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "e263e6751ef7c185e278a607fdc46c207306d9a56c6ddb2ce6f58fb4464a2893";
   };
 
-  buildInputs = [ jre makeWrapper pcsclite ];
+  buildInputs = [ jre pcsclite ];
+  nativeBuildInputs = [ makeWrapper ];
 
   unpackPhase = "tar -xzf ${src} --strip-components=1";
 

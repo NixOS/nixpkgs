@@ -22,6 +22,7 @@
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   anderspapitto = "Anders Papitto <anderspapitto@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
+  andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   antono = "Antono Vasiljev <self@antono.info>";
   ardumont = "Antoine R. Dumont <eniotna.t@gmail.com>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";
@@ -133,6 +134,7 @@
   lhvwb = "Nathaniel Baxter <nathaniel.baxter@gmail.com>";
   linquize = "Linquize <linquize@yahoo.com.hk>";
   linus = "Linus Arver <linusarver@gmail.com>";
+  lnl7 = "Daiderd Jordan <daiderd@gmail.com>";
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";

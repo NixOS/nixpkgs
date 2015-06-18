@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "02r0r4lgz10ivbmgdzivj7dvry1aad75ik9vyy6irjvngjkzg5r3";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt openssl perl ];
+  buildInputs = [ geoip geolite-legacy getopt openssl ];
+  nativeBuildInputs = [ perl ];
 
   patchPhase = ''
     for i in {,databases/}lib/Makefile.in; do

@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ autoreconfHook icu libxslt pkgconfig ];
+  buildInputs = [ icu libxslt ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags = "--disable-static --enable-man";
 

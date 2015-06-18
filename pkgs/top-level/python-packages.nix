@@ -10775,12 +10775,12 @@ let
   };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.3.0";
+    version = "0.4.0";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "177lqpm2czx81pjg0zfs1dkbbmcn5yf1y5qxj23x6y5d28518qwl";
+      sha256 = "0zvfz4c9lqiwh2qh51rba6ckpjl3pbp9fcm0ri58qhcjd8mh8k34";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
@@ -10788,7 +10788,7 @@ let
     meta = {
       description = "A toolbelt of useful classes and functions to be used with python-requests";
       homepage = http://toolbelt.rtfd.org;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ matthiasbeyer jgeerds ];
     };
 
   };
@@ -11483,6 +11483,29 @@ let
         x_ignore_nofocus.o
       cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
     '';
+  };
+
+  setuptools_scm = buildPythonPackage rec {
+    name = "setuptools_scm-${version}";
+    version = "1.5.4";
+
+    src = pkgs.fetchurl {
+      url = "https://bitbucket.org/pypa/setuptools_scm/get/v${version}.tar.bz2";
+      sha256 = "0vd6xsl7r0vn5gpw87d31s195j33sqw5c26zdagimy9qzydgq6y6";
+    };
+
+    buildInputs = with self; [ pip ];
+
+    preBuild = ''
+      ${python.interpreter} setup.py egg_info
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = https://bitbucket.org/pypa/setuptools_scm/;
+      description = "Handles managing your python package versions in scm metadata";
+      license = licenses.mit;
+      maintainers = with maintainers; [ jgeerds ];
+    };
   };
 
   setuptoolsDarcs = buildPythonPackage {

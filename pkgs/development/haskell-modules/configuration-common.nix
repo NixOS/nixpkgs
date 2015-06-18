@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_3_0; zlib = self.zlib_0_5_4_2; });
+  Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
+  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; zlib = self.zlib_0_5_4_2; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Break infinite recursions.
@@ -132,7 +132,7 @@ self: super: {
       sed -i bindings-levmar.cabal \
           -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
     '';
-    extraLibraries = [ pkgs.openblas ];
+    extraLibraries = [ pkgs.openblasCompat ];
   });
 
   # The Haddock phase fails for one reason or another.
@@ -303,6 +303,7 @@ self: super: {
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
+  xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.

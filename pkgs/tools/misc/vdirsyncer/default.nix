@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.4.3";
+  version = "0.5.2";
   name = "vdirsyncer-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/untitaker/vdirsyncer/archive/${version}.tar.gz";
-    sha256 = "0jrxmq8lq0dvqflmh42hhyvc3jjrg1cg3gzfhdcsskj9zz0m6wai";
+    sha256 = "02k6ijj0z0r08l50ignm2ngd4ax84l0r1wshh1is0wcfr70d94h9";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    icalendar
     click
     lxml
     setuptools
+    setuptools_scm
     requests_toolbelt
     requests2
     atomicwrites

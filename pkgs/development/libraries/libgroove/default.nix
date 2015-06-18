@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/andrewrk/libgroove;
     license = licenses.mit;
     platforms = platforms.unix;
+    maintainers = [ maintainers.andrewrk ];
   };
 }

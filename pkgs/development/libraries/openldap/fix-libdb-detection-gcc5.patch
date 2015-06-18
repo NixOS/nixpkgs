@@ -1,0 +1,43 @@
+From f0409f40dab6013d1aec05f5c86ae31d2f49b485 Mon Sep 17 00:00:00 2001
+From: Jan Synacek <jsynacek@redhat.com>
+Date: Wed, 11 Feb 2015 10:32:28 +0100
+Subject: [PATCH] fix libdb detection with gcc 5
+
+The old cpp version generated:
+__db_version 5
+
+The new output:
+__db_version
+            5
+
+Running cpp with -P (inhibit linemarkers generation) fixes this when using gcc 5.
+Behavior with older versions of gcc is not changed.
+---
+ build/openldap.m4 | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build/openldap.m4 b/build/openldap.m4
+index caf8fc2..bdcb4d6 100644
+--- a/build/openldap.m4
++++ b/build/openldap.m4
+@@ -328,7 +328,7 @@ AC_DEFUN([OL_BDB_HEADER_VERSION],
+ #endif
+ __db_version DB_VERSION_MAJOR
+ ])
+-	set X `eval "$ac_cpp conftest.$ac_ext" | $EGREP __db_version` none none
++	set X `eval "$ac_cpp -P conftest.$ac_ext" | $EGREP __db_version` none none
+ 	ol_cv_bdb_major=${3}
+ ])
+ case $ol_cv_bdb_major in [[1-9]]*) : ;; *)
+@@ -344,7 +344,7 @@ AC_CACHE_CHECK([for Berkeley DB minor version in db.h], [ol_cv_bdb_minor],[
+ #endif
+ __db_version DB_VERSION_MINOR
+ ])
+-	set X `eval "$ac_cpp conftest.$ac_ext" | $EGREP __db_version` none none
++	set X `eval "$ac_cpp -P conftest.$ac_ext" | $EGREP __db_version` none none
+ 	ol_cv_bdb_minor=${3}
+ ])
+ case $ol_cv_bdb_minor in [[0-9]]*) : ;; *)
+-- 
+2.1.0
+

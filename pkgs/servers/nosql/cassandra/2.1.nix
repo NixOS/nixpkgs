@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     url = "http://apache.cs.utah.edu/cassandra/${version}/apache-${name}-bin.tar.gz";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir $out

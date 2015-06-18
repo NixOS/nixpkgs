@@ -635,6 +635,9 @@ let
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  derez = callPackage ../os-specific/darwin/derez { };
+  rez = callPackage ../os-specific/darwin/rez { };
+
   setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
@@ -1026,10 +1029,6 @@ let
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
-  cheetahTemplate = builderDefsPackage (import ../tools/text/cheetah-template/2.0.1.nix) {
-    inherit makeWrapper python;
-  };
-
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
@@ -1282,6 +1281,8 @@ let
 
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
+  drive = callPackage ../applications/networking/drive { };
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
@@ -1511,7 +1512,9 @@ let
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
-  gawk = callPackage ../tools/text/gawk { };
+  gawk = callPackage ../tools/text/gawk {
+    locale = darwin.adv_cmds;
+  };
 
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
@@ -1969,7 +1972,7 @@ let
   else
     nodePackages_0_12;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_5_0; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_6_1; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
@@ -4663,12 +4666,13 @@ let
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
     libc = libc;
+    dyld = if stdenv.isDarwin then darwin.dyld else null;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
     inherit stdenv binutils coreutils zlib;
   };
 
-  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) glibc;
+  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) stdenv.cc.libc;
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: (makeOverridable (import ../build-support/gcc-wrapper-old)) {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -5158,11 +5162,9 @@ let
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
-  binutils = if stdenv.isDarwin
-    then import ../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
-    else callPackage ../development/tools/misc/binutils {
-      inherit noSysDirs;
-    };
+  binutils = if stdenv.isDarwin then darwin.binutils else binutils-raw;
+
+  binutils-raw = callPackage ../development/tools/misc/binutils { inherit noSysDirs; };
 
   binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
@@ -5259,12 +5261,12 @@ let
 
   cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.ps else null;
+    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.ps else null;
+    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
@@ -5288,8 +5290,6 @@ let
   cscope = callPackage ../development/tools/misc/cscope { };
 
   csslint = callPackage ../development/web/csslint { };
-
-  infer = callPackage ../development/tools/analysis/infer { };
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
@@ -6039,6 +6039,8 @@ let
   fltk20 = callPackage ../development/libraries/fltk { };
 
   fmod = callPackage ../development/libraries/fmod { };
+
+  fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
 
   freeimage = callPackage ../development/libraries/freeimage { };
 
@@ -6918,7 +6920,10 @@ let
   # glibc provides libiconv so systems with glibc don't need to build libiconv
   # separately, but we also provide libiconvReal, which will always be a
   # standalone libiconv, just in case you want it
-  libiconv = if stdenv.isGlibc then stdenv.cc.libc else libiconvReal;
+  libiconv =
+    if stdenv.isGlibc then stdenv.cc.libc
+    else if stdenv.isDarwin then darwin.libiconv
+    else libiconvReal;
 
   libiconvReal = callPackage ../development/libraries/libiconv {
     fetchurl = fetchurlBoot;
@@ -7218,7 +7223,7 @@ let
     automake = automake113x; # fails with 14
   });
 
-  libuv = libuvVersions.v1_5_0;
+  libuv = libuvVersions.v1_6_1;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
@@ -7983,6 +7988,8 @@ let
 
   sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
 
+  sqlite-amalgamation = callPackage ../development/libraries/sqlite-amalgamation { };
+
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; });
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
@@ -8199,6 +8206,8 @@ let
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
+
+  wxmac = callPackage ../development/libraries/wxmac { };
 
   wtk = callPackage ../development/libraries/wtk { };
 
@@ -8741,6 +8750,8 @@ let
 
   ghostOne = callPackage ../servers/games/ghost-one { };
 
+  groovebasin = callPackage ../applications/audio/groovebasin { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -9248,7 +9259,7 @@ let
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {}).native;
+    cctools = (callPackage ../os-specific/darwin/cctools/port.nix { inherit libobjc; }).native;
 
     maloader = callPackage ../os-specific/darwin/maloader {
       inherit opencflite;
@@ -9261,9 +9272,9 @@ let
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
 
-    ps = callPackage ../os-specific/darwin/adv_cmds/ps.nix {};
-
     security_tool = callPackage ../os-specific/darwin/security-tool { inherit osx_private_sdk; };
+
+    binutils = callPackage ../os-specific/darwin/binutils { inherit cctools; };
 
     cmdline_sdk   = cmdline.sdk;
     cmdline_tools = cmdline.tools;
@@ -10780,6 +10791,8 @@ let
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
+
+  dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
   dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
 
@@ -12575,8 +12588,8 @@ let
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
-      libXinerama libXrender libXt;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+      libXfixes libXinerama libXrender libXt;
   };
 
   tig = gitAndTools.tig;
@@ -13552,6 +13565,10 @@ let
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
 
+  zandronum = callPackage ../games/zandronum { };
+  zandronum-server = callPackage ../games/zandronum/server.nix { };
+  zandronum-bin = callPackage ../games/zandronum/bin.nix { };
+
   zdoom = callPackage ../games/zdoom { };
 
   zod = callPackage ../games/zod { };
@@ -14132,6 +14149,8 @@ let
 
   satallax = callPackage ../applications/science/logic/satallax {};
 
+  saw-tools = callPackage ../applications/science/logic/saw-tools {};
+
   spass = callPackage ../applications/science/logic/spass {};
 
   tptp = callPackage ../applications/science/logic/tptp {};
@@ -14673,6 +14692,10 @@ let
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
+  vbam = callPackage ../misc/emulators/vbam {
+    inherit (xlibs) libpthreadstubs;
+  };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
@@ -14835,6 +14858,7 @@ let
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
+  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 

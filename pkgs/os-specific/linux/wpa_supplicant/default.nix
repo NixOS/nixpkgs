@@ -84,6 +84,26 @@ stdenv.mkDerivation rec {
       url = "http://w1.fi/cgit/hostap/patch/?id=8a78e227df1ead19be8e12a4108e448887e64d6f";
       sha256 = "1k2mcq1jv8xzi8061ixcz6j56n4i8wbq0vxcvml204q1syy2ika0";
     })
+    (fetchpatch {
+      url = http://w1.fi/security/2015-4/0001-EAP-pwd-peer-Fix-payload-length-validation-for-Commi.patch;
+      sha256 = "1cg4r638s4m9ar9lmzm534y657ppcm8bl1h363kjnng1zbzh8rfb";
+    })
+    (fetchpatch {
+      url = http://w1.fi/security/2015-4/0002-EAP-pwd-server-Fix-payload-length-validation-for-Com.patch;
+      sha256 = "0ky850rg1k9lwd1p4wzyvl2dpi5g7k1mwx1ndjclp4x7bshb6w79";
+    })
+    (fetchpatch {
+      url = http://w1.fi/security/2015-4/0003-EAP-pwd-peer-Fix-Total-Length-parsing-for-fragment-r.patch;
+      sha256 = "0hicw3vk1khk849xil75ckrg1xzbwcva7g01kp0lvab34dwhryy7";
+    })
+    (fetchpatch {
+      url = http://w1.fi/security/2015-4/0004-EAP-pwd-server-Fix-Total-Length-parsing-for-fragment.patch;
+      sha256 = "18d5r3zbwz96n4zzj9r27cv4kvc09zkj9x0p6qji68h8k2pcazxd";
+    })
+    (fetchpatch {
+      url = http://w1.fi/security/2015-4/0005-EAP-pwd-peer-Fix-asymmetric-fragmentation-behavior.patch;
+      sha256 = "1ndzyfpnxpvryiqal4kdic02kg9dgznh65kaqydaqqfj3rbjdqip";
+    })
   ];
 
   postInstall = ''

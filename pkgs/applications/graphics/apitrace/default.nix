@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     owner = "apitrace";
   };
 
-  buildInputs = [ cmake python libX11 qt4 ];
+  buildInputs = [ python libX11 qt4 ];
+  nativeBuildInputs = [ cmake ];
 
   buildPhase = ''
     cmake

@@ -27,7 +27,8 @@ let
       owner = "neovim";
     };
 
-    buildInputs = [ libtool perl ];
+    buildInputs = [ perl ];
+    nativeBuildInputs = [ libtool ];
 
     makeFlags = [ "PREFIX=$(out)" ]
       ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
@@ -66,8 +67,6 @@ let
     enableParallelBuilding = true;
 
     buildInputs = [
-      makeWrapper
-      cmake
       glib
       libtermkey
       libuv
@@ -79,12 +78,14 @@ let
       libmsgpack
       ncurses
       neovimLibvterm
-      pkgconfig
       unibilium
     ] ++ optional withJemalloc jemalloc;
 
     nativeBuildInputs = [
+      cmake
       gettext
+      makeWrapper
+      pkgconfig
     ];
 
     LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
@@ -136,7 +137,7 @@ let
 
 in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation rec {
   name = "neovim-${version}-configured";
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   buildCommand = ''
     mkdir -p $out/bin
     for item in ${neovim}/bin/*; do

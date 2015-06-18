@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     owner = "Fedict";
   };
 
-  buildInputs = [ autoreconfHook gtk2 pcsclite pkgconfig ];
+  buildInputs = [ gtk2 pcsclite ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   enableParallelBuilding = true;
 

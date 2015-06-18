@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ bobcat gcc49 icmake yodl ];
+  buildInputs = [ bobcat gcc49 ];
+  nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out

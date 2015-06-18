@@ -1,13 +1,12 @@
-{ stdenv, fetchzip, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto, w3m }:
-
-let rev = "e8ee3b18d16e41b95148111b920a0c8beed3ac6c"; in
+{ stdenv, fetchzip, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
+, w3m, which, gnugrep, gnused, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "xdg-utils-1.1.0-rc3p7";
 
   src = fetchzip {
-    name = "xdg-utils-${rev}.tar.gz";
-    url = "http://cgit.freedesktop.org/xdg/xdg-utils/snapshot/${rev}.tar.gz";
+    name = "${name}.tar.gz";
+    url = "http://cgit.freedesktop.org/xdg/xdg-utils/snapshot/e8ee3b18d16e4.tar.gz";
     sha256 = "1hz6rv45blcii1a8n1j45rg8vzm98vh4fvlca3zmay1kp57yr4jl";
   };
 
@@ -15,7 +14,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
 
   postInstall = ''
-    substituteInPlace $out/bin/xdg-mime --replace /usr/bin/file ${file}/bin/file
+    for item in $out/bin/*; do
+      substituteInPlace $item --replace "cut " "${coreutils}/bin/cut "
+      substituteInPlace $item --replace "sed " "${gnused}/bin/sed "
+      substituteInPlace $item --replace "grep " "${gnugrep}/bin/grep "
+      substituteInPlace $item --replace "egrep " "${gnugrep}/bin/egrep "
+      substituteInPlace $item --replace "which " "${which}/bin/which "
+      substituteInPlace $item --replace "/usr/bin/file" "${file}/bin/file"
+    done
   '';
 
   meta = {

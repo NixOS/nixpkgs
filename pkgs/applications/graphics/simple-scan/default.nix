@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cairo colord glib gtk3 intltool itstool libxml2 makeWrapper
-    pkgconfig saneBackends systemd vala ];
+  buildInputs = [ cairo colord glib gtk3 intltool itstool libxml2
+    saneBackends systemd vala ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
 

@@ -64,6 +64,8 @@ let
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     '';
 
   configureFlags = [
@@ -74,6 +76,8 @@ let
     "--with-system-ffi"
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-toolbox-glue"
   ];
 
   postConfigure = if stdenv.isCygwin then ''

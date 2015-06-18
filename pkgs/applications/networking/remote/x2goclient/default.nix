@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cups libssh libXpm nxproxy openldap makeWrapper qt4 ];
+  buildInputs = [ cups libssh libXpm nxproxy openldap qt4 ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
      substituteInPlace Makefile \

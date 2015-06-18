@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     homepage = http://rhash.anz.ru;
     description = "Console utility and library for computing and verifying hash sums of files";
     platforms = platforms.linux;
+    maintainers = [ maintainers.andrewrk ];
   };
 }

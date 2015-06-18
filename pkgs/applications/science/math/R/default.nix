@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.2.0";
+  name = "R-3.2.1";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0dagyqgvi8i3nw158qi2zpwm04s4ffzvnmk5niaksvxs30zrbbpm";
+    sha256 = "d59dbc3f04f4604a5cf0fb210b8ea703ef2438b3ee65fd5ab536ec5234f4c982";
   };
 
   buildInputs = [ bzip2 gfortran libX11 libXmu libXt
