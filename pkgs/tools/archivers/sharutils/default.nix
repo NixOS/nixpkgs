@@ -9,10 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure =
-    ''
+    let needSedSpace = ((stdenv.isFreeBSD || stdenv.isOpenBSD) && stdenv.cc.nativeTools)
+                    || (stdenv.isDarwin && stdenv.cc.nativeLibc);
+    in ''
        # Fix for building on Glibc 2.16.  Won't be needed once the
        # gnulib in sharutils is updated.
-       sed -i ${stdenv.lib.optionalString ((stdenv.isFreeBSD || stdenv.isOpenBSD) && stdenv.cc.nativeTools) "''"} '/gets is a security hole/d' lib/stdio.in.h
+       sed -i ${stdenv.lib.optionalString needSedSpace "''"} '/gets is a security hole/d' lib/stdio.in.h
     '';
 
   # GNU Gettext is needed on non-GNU platforms.
