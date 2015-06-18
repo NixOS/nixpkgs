@@ -1512,7 +1512,9 @@ let
 
   garmintools = callPackage ../development/libraries/garmintools {};
 
-  gawk = callPackage ../tools/text/gawk { inherit (darwin) locale; };
+  gawk = callPackage ../tools/text/gawk {
+    locale = darwin.adv_cmds;
+  };
 
   gawkInteractive = appendToName "interactive"
     (gawk.override { readlineSupport = true; });
@@ -5282,12 +5284,12 @@ let
 
   cmake-2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.ps else null;
+    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
     wantPS = stdenv.isDarwin;
-    ps     = if stdenv.isDarwin then darwin.ps else null;
+    ps     = if stdenv.isDarwin then darwin.adv_cmds else null;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
@@ -9293,10 +9295,6 @@ let
 
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
     osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { inherit osx_sdk; };
-
-    ps = callPackage ../os-specific/darwin/adv_cmds/ps.nix {};
-
-    locale = callPackage ../os-specific/darwin/adv_cmds/locale.nix {};
 
     security_tool = callPackage ../os-specific/darwin/security-tool { inherit osx_private_sdk; };
 
