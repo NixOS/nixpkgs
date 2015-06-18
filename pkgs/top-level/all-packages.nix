@@ -10818,6 +10818,8 @@ let
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
+  dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
+
   dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
 
   dwbWrapper = wrapFirefox
