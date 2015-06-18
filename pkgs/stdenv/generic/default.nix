@@ -162,12 +162,12 @@ let
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
 
-          __impureHostDeps = lib.unique (lib.sort (x: y: x < y) (computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
+          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
             "/dev/zero"
             "/dev/random"
             "/dev/urandom"
             "/bin/sh"
-          ]));
+          ];
           __propagatedImpureHostDeps = lib.unique (lib.sort (x: y: x < y) (computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps));
         }))) (
       {
