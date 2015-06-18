@@ -13,5 +13,6 @@ stdenv.mkDerivation {
     homepage = http://trac.osgeo.org/proj/;
     license = licenses.mit;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ vbgl ];
   };
 }
