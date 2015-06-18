@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl }:
+{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
+, libmilter }:
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
   version = "0.98.7";
@@ -8,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wp2ad8km4cqmlndni5ljv7q3lfxm6y4r3giv0yf23bl0yvif918";
   };
 
-  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv ];
+  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter ];
 
   configureFlags = [
     "--with-zlib=${zlib}"
@@ -18,6 +19,7 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl}"
     "--with-libncurses-prefix=${ncurses}"
     "--with-libcurl=${curl}"
+    "--enable-milter"
     "--disable-clamav"
   ];
 
