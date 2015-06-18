@@ -21,6 +21,8 @@ let
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
 
+  ifDarwin = attrs: if system == "x86_64-darwin" then attrs else {};
+
   onlyLicenses = list:
     lib.lists.all (license:
       let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
@@ -132,7 +134,9 @@ let
       assert licenseAllowed attrs;
 
       lib.addPassthru (derivation (
-        (removeAttrs attrs ["meta" "passthru" "crossAttrs" "pos"])
+        (removeAttrs attrs
+          ["meta" "passthru" "crossAttrs" "pos"
+           "__impureHostDeps" "__propagatedImpureHostDeps"])
         // (let
           buildInputs = attrs.buildInputs or [];
           nativeBuildInputs = attrs.nativeBuildInputs or [];
@@ -161,14 +165,14 @@ let
           nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
-
+        } // ifDarwin {
           __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
             "/dev/zero"
             "/dev/random"
             "/dev/urandom"
             "/bin/sh"
           ];
-          __propagatedImpureHostDeps = lib.unique (lib.sort (x: y: x < y) (computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps));
+          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         }))) (
       {
         # The meta attribute is passed in the resulting attribute set,
@@ -193,7 +197,6 @@ let
     (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
     {
       inherit system name;
-      __impureHostDeps = __stdenvImpureHostDeps;
 
       builder = shell;
 
@@ -202,6 +205,9 @@ let
       setup = setupScript;
 
       inherit preHook initialPath shell defaultNativeBuildInputs;
+    }
+    // ifDarwin {
+      __impureHostDeps = __stdenvImpureHostDeps;
     })
 
     // rec {
