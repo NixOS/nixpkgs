@@ -22,6 +22,7 @@
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   anderspapitto = "Anders Papitto <anderspapitto@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
+  andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   antono = "Antono Vasiljev <self@antono.info>";
   ardumont = "Antoine R. Dumont <eniotna.t@gmail.com>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";

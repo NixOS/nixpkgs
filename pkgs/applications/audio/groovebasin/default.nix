@@ -38,6 +38,7 @@ in nodePackages.buildNodePackage rec {
     homepage = http://groovebasin.com/;
     license = licenses.mit;
     platforms = platforms.unix;
+    maintainers = [ maintainers.andrewrk ];
     longDescription = ''
       Groove Basin runs on a server optionally connected to speakers. Guests can
       control the music player by connecting with a laptop, tablet, or smart phone.
