@@ -188,6 +188,17 @@ in {
 
     environment.systemPackages = [ pkgs.taskserver ];
 
+    users.extraUsers = singleton
+      { name = cfg.user;
+        group = cfg.group;
+        uid = config.ids.uids.taskserver;
+      };
+
+    users.extraGroups = singleton
+      { name = cfg.group;
+        gid = config.ids.gids.taskserver;
+      };
+
     systemd.services.taskserver = {
       description = "taskserver Service.";
       path = [ pkgs.taskserver ];
