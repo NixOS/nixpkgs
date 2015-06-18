@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ protobuf boost zlib curl icu jemalloc ];
 
+  patches = if stdenv.isDarwin then [ ./sedDarwin.patch ] else null;
+
   nativeBuildInputs = [ which m4 python ];
 
   meta = {
