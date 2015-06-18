@@ -132,7 +132,7 @@ self: super: {
       sed -i bindings-levmar.cabal \
           -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
     '';
-    extraLibraries = [ pkgs.openblas ];
+    extraLibraries = [ pkgs.openblasCompat ];
   });
 
   # The Haddock phase fails for one reason or another.
