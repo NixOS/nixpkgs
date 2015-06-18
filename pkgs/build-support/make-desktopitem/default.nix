@@ -10,6 +10,7 @@
 , mimeType ? ""
 , categories ? "Application;Other;"
 , encoding ? "UTF-8"
+, noDisplay ? "false"
 }:
 
 stdenv.mkDerivation {
@@ -28,6 +29,7 @@ stdenv.mkDerivation {
     MimeType=${mimeType}
     Categories=${categories}
     Encoding=${encoding}
+    NoDisplay=${noDisplay}
     EOF
   '';
 }

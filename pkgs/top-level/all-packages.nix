@@ -423,6 +423,10 @@ let
 
   libredirect = callPackage ../build-support/libredirect { };
 
+  makeDefaultApps = import ../misc/defaultapps.nix {
+    inherit pkgs lib;
+  };
+
   makeDesktopItem = import ../build-support/make-desktopitem {
     inherit stdenv;
   };
