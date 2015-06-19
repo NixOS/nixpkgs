@@ -9,9 +9,7 @@
 , abiVersion ? "5"
 }:
 
-let libSuffix = if stdenv.isDarwin then "dylib" else "so";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "ncurses-5.9";
 
   src = fetchurl {
@@ -50,50 +48,37 @@ in stdenv.mkDerivation rec {
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postInstall = if unicode then (''
-    # Create a non-abi versioned config
+  postInstall = ''
+    # Determine what suffixes our libraries have
+    suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
+    libs="$(ls $out/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
+    suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
+
+    # Get the path to the config util
     cfg=$(basename $out/bin/ncurses*-config)
-    ln -svf $cfg $out/bin/ncursesw-config
-    ln -svf $cfg $out/bin/ncurses-config
 
-    # Allow for end users who #include <ncurses?w/*.h>
-    mv "$out"/include/ncursesw/* "$out"/include/
-    rmdir "$out"/include/ncursesw
-    ln -svf . $out/include/ncursesw
-    ln -svf . $out/include/ncurses
+    for newsuffix in $suffixes ""; do
+      # Create a non-abi versioned config util links
+      ln -svf $cfg $out/bin/ncurses$newsuffix-config
 
-    # Create non-unicode compatability
-    libs="$(find $out/lib -name \*w.a | sed 's,.*lib\(.*\)w.a.*,\1,g')"
-    for lib in $libs; do
-      if [ -e "$out/lib/lib''${lib}w.${libSuffix}" ]; then
-        ln -svf lib''${lib}w.${libSuffix} $out/lib/lib$lib.${libSuffix}
-        ln -svf lib''${lib}w.${libSuffix}.${abiVersion} $out/lib/lib$lib.${libSuffix}.${abiVersion}
-      fi
-      ln -svf lib''${lib}w.a $out/lib/lib$lib.a
-      ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
+      # Allow for end users who #include <ncurses?w/*.h>
+      ln -svf . $out/include/ncurses$newsuffix
+
+      for lib in $libs; do
+        for dylibtype in so dll dylib; do
+          if [ -e "$out/lib/lib''${lib}$suffix.$dylibtype" ]; then
+            ln -svf lib''${lib}$suffix.$dylibtype $out/lib/lib$lib$newsuffix.$dylibtype
+            ln -svf lib''${lib}$suffix.$dylibtype.${abiVersion} $out/lib/lib$lib$newsuffix.$dylibtype.${abiVersion}
+          fi
+        done
+        for statictype in a dll.a la; do
+          if [ -e "$out/lib/lib''${lib}$suffix.$statictype" ]; then
+            ln -svf lib''${lib}$suffix.$statictype $out/lib/lib$lib$newsuffix.$statictype
+          fi
+        done
+        ln -svf ''${lib}$suffix.pc $out/lib/pkgconfig/$lib$newsuffix.pc
+      done
     done
-
-    # Create curses compatability
-    ln -svf libncursesw.so $out/lib/libcursesw.so
-    ln -svf libncursesw.so $out/lib/libcurses.so
-  '' + lib.optionalString stdenv.isCygwin ''
-    for lib in $libs; do
-      if test -e $out/lib/lib''${lib}w.dll.a; then
-          ln -svf lib''${lib}w.dll.a $out/lib/lib$lib.dll.a
-      fi
-    done
-  '') else ''
-    # Create a non-abi versioned config
-    cfg=$(basename $out/bin/ncurses*-config)
-    ln -svf $cfg $out/bin/ncurses-config
-
-    # Allow for end users who #include <ncurses/*.h>
-    mv "$out"/include/ncurses/* "$out"/include/
-    rmdir "$out"/include/ncurses
-    ln -svf . $out/include/ncurses
-
-    # Create curses compatability
-    ln -svf libncurses.so $out/lib/libcurses.so
   '';
 
   preFixup = ''
@@ -124,5 +109,5 @@ in stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.wkennington ];
   };
 
-  passthru.ldflags = if unicode then "-lncursesw" else "-lncurses";
+  passthru.ldflags = "-lncurses";
 }
