@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xlibs, libcap
+, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xlibs, libcap, systemd
 }:
 
 let
@@ -11,16 +11,16 @@ let
       fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
       xlibs.libXrender xlibs.libX11 xlibs.libXext xlibs.libXdamage xlibs.libXtst
       xlibs.libXcomposite xlibs.libXi xlibs.libXfixes xlibs.libXrandr
-      xlibs.libXcursor libcap
+      xlibs.libXcursor libcap systemd
     ];
   };
 in stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "0.187.0";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "0s6173dg5m52zc8kqwlgjn113d84cskrv9v29fb0nrvwvkv2xzmw";
+    sha256 = "434be52726fed9804ddb8c07dba200d774d145d0a870d2a013b5f95eb882fa7e";
     name = "${name}.deb";
   };
 
