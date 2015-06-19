@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # while at the same time erasing the PATH environment variable so it unconditionally
   # fails. The code in question is guarded by a check for Mac OS, but the patch below
   # doesn't have any runtime effect on other platforms.
-  postPatch = ''
+  postPatch = stdenv.lib.optional (stdenv.isDarwin && !stdenv.cc.nativeLibc) ''
     pwd="$(type -P pwd)"
     substituteInPlace dist/PathTools/Cwd.pm \
       --replace "pwd_cmd = 'pwd'" "pwd_cmd = '$pwd'"
