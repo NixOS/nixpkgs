@@ -12260,6 +12260,8 @@ let
     fltk = fltk13;
   };
 
+  renoise = callPackage ../applications/audio/renoise { demo = true; };
+
   rapcad = callPackage ../applications/graphics/rapcad {};
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
@@ -13485,6 +13487,8 @@ let
   };
 
   tbe = callPackage ../games/the-butterfly-effect { };
+  
+  the-infinite-black = callPackage ../games/the-infinite-black { };
 
   teetertorture = callPackage ../games/teetertorture { };
 
