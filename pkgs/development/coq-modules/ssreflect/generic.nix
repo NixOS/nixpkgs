@@ -1,22 +1,21 @@
-{stdenv, fetchurl, coq}:
-
-assert coq.coq-version == "8.5";
+{ stdenv, fetchurl, coq
+, graphviz, withDoc ? true
+, src, patches ? []
+}:
 
 stdenv.mkDerivation {
 
-  name = "coq-ssreflect-1.5-8.5b2";
+  name = "coq-ssreflect-1.5-${coq.coq-version}";
 
-  src = fetchurl {
-    url = http://ssr.msr-inria.inria.fr/FTP/ssreflect-1.5.coq85beta2.tar.gz;
-    sha256 = "084l9xd5vgb8jml0dkm66g8cil5rsf04w821pjhn2qk9mdbwaagf";
-  };
+  inherit src;
 
+  nativeBuildInputs = stdenv.lib.optionals withDoc [ graphviz ];
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./threads.patch ];
+  inherit patches;
 
   postPatch = ''
     # Permit building of the ssrcoq statically-bound executable
@@ -24,12 +23,17 @@ stdenv.mkDerivation {
     sed -i 's/^#SSRCOQ/SSRCOQ/' Make
   '';
 
+  buildFlags = stdenv.lib.optionalString withDoc "doc";
+
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
   postInstall = ''
     mkdir -p $out/bin
     cp -p bin/ssrcoq $out/bin
     cp -p bin/ssrcoq.byte $out/bin
+  '' + stdenv.lib.optionalString withDoc ''
+    mkdir -p $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
+    cp -r html $out/share/doc/coq/${coq.coq-version}/user-contrib/Ssreflect/
   '';
 
   meta = with stdenv.lib; {
