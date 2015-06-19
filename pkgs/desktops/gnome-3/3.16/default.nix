@@ -1,6 +1,18 @@
-{ callPackage, pkgs, self }:
+{ pkgs }:
 
-rec {
+let
+
+  pkgsFun = overrides:
+    let 
+      self = self_ // overrides;
+      self_ = with self; {
+
+  overridePackages = f:
+    let newself = pkgsFun (f newself self);
+    in newself;
+
+  callPackage = pkgs.newScope self;
+
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
     pkgs.shared_mime_info # for update-mime-database
@@ -16,7 +28,7 @@ rec {
     gnome-shell-extensions gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor
+    nautilus-sendto dconf-editor vinagre
   ];
 
   inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -139,6 +151,8 @@ rec {
 
   gtksourceview = callPackage ./core/gtksourceview { };
 
+  gtk-vnc = callPackage ./core/gtk-vnc { };
+
   gucharmap = callPackage ./core/gucharmap { };
 
   gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
@@ -257,7 +271,7 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
-  pomodoro = callPackage ./apps/pomodoro { };
+  vinagre = callPackage ./apps/vinagre { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
@@ -266,6 +280,8 @@ rec {
   gdl = callPackage ./devtools/gdl { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
+
+  california = callPackage ./misc/california { };
 
   geary = callPackage ./misc/geary { 
     webkitgtk = webkitgtk24x;
@@ -293,4 +309,9 @@ rec {
 
   gtkhtml = callPackage ./misc/gtkhtml { };
 
-}
+  pomodoro = callPackage ./misc/pomodoro { };
+
+    };
+  in self; # pkgsFun
+
+in pkgsFun {}

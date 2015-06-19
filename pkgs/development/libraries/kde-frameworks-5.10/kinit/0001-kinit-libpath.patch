@@ -1,8 +1,17 @@
+From 723c9b1268a04127647a1c20eebe9804150566dd Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sat, 13 Jun 2015 08:57:55 -0500
+Subject: [PATCH] kinit libpath
+
+---
+ src/kdeinit/kinit.cpp | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
+
 diff --git a/src/kdeinit/kinit.cpp b/src/kdeinit/kinit.cpp
-index 3c3c913..f510620 100644
+index 9e775b6..0ac5646 100644
 --- a/src/kdeinit/kinit.cpp
 +++ b/src/kdeinit/kinit.cpp
-@@ -652,15 +652,17 @@ static pid_t launch(int argc, const char *_name, const char *args,
+@@ -660,15 +660,17 @@ static pid_t launch(int argc, const char *_name, const char *args,
          if (!libpath.isEmpty()) {
              if (!l.load()) {
                  if (libpath_relative) {
@@ -15,10 +24,10 @@ index 3c3c913..f510620 100644
 -                    libpath = install_lib_dir + libpath;
 -                    l.setFileName(libpath);
 +                  // Use QT_PLUGIN_PATH to find shared library directories
-+                  // For KF5, the plugin path is /lib/plugins, so the kdeinit5
-+                  // shared libraries should be in /lib/plugins/../
++                  // For KF5, the plugin path is /lib/qt5/plugins/, so kdeinit5
++                  // shared libraries should be in /lib/qt5/plugins/../../
 +                  const QRegExp pathSepRegExp(QString::fromLatin1("[:\b]"));
-+                  const QString up = QString::fromLocal8Bit("/../");
++                  const QString up = QString::fromLocal8Bit("/../../");
 +                  const QStringList paths = QString::fromLocal8Bit(qgetenv("QT_PLUGIN_PATH")).split(pathSepRegExp, QString::KeepEmptyParts);
 +                  Q_FOREACH (const QString &path, paths) {
 +                    l.setFileName(path + up + libpath);
@@ -28,3 +37,6 @@ index 3c3c913..f510620 100644
                  }
              }
              if (!l.isLoaded()) {
+-- 
+2.4.2
+

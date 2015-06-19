@@ -43,7 +43,7 @@ rec {
           };
 
           _module.check = mkOption {
-            type = types.uniq types.bool;
+            type = types.bool;
             internal = true;
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";

@@ -635,6 +635,9 @@ let
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  derez = callPackage ../os-specific/darwin/derez { };
+  rez = callPackage ../os-specific/darwin/rez { };
+
   setfile = callPackage ../os-specific/darwin/setfile { };
 
   install_name_tool = callPackage ../os-specific/darwin/install_name_tool { };
@@ -1026,10 +1029,6 @@ let
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
-  cheetahTemplate = builderDefsPackage (import ../tools/text/cheetah-template/2.0.1.nix) {
-    inherit makeWrapper python;
-  };
-
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
@@ -1281,6 +1280,8 @@ let
   dolphinEmuMaster = callPackage ../misc/emulators/dolphin-emu/master.nix { };
 
   doomseeker = callPackage ../applications/misc/doomseeker { };
+
+  drive = callPackage ../applications/networking/drive { };
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
@@ -1792,6 +1793,8 @@ let
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
+  i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
+
   i2p = callPackage ../tools/networking/i2p {};
 
   i2pd = callPackage ../tools/networking/i2pd {};
@@ -1967,7 +1970,7 @@ let
   else
     nodePackages_0_12;
 
-  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_5_0; };
+  iojs = callPackage ../development/web/iojs { libuv = libuvVersions.v1_6_1; };
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
@@ -2060,6 +2063,8 @@ let
   mailcheck = callPackage ../applications/networking/mailreaders/mailcheck { };
 
   maildrop = callPackage ../tools/networking/maildrop { };
+
+  mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
@@ -2682,6 +2687,8 @@ let
 
   privateer = callPackage ../games/privateer { };
 
+  read-edid = callPackage ../os-specific/linux/read-edid { };
+
   redmine = callPackage ../applications/version-management/redmine { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
@@ -2853,6 +2860,8 @@ let
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
+
+  skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   skydns = callPackage ../servers/dns/skydns { };
 
@@ -3409,6 +3418,8 @@ let
   xvkbd = callPackage ../tools/X11/xvkbd {
     inherit (xlibs) libXt libXaw libXtst xextproto libXi libXpm gccmakedep;
   };
+
+  xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
@@ -4022,18 +4033,11 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   julia02 = callPackage ../development/compilers/julia/0.2.nix {
-    liblapack = liblapack.override {shared = true;};
     llvm = llvm_33;
     suitesparse = suitesparse_4_2;
   };
 
-  julia03 = let
-    liblapack = liblapack_3_5_0.override {shared = true;};
-  in callPackage ../development/compilers/julia/0.3.nix {
-    inherit liblapack;
-    suitesparse = suitesparse_4_2.override {
-      inherit liblapack;
-    };
+  julia03 = callPackage ../development/compilers/julia/0.3.nix {
     llvm = llvm_33;
   };
   julia = julia03;
@@ -4859,6 +4863,7 @@ let
     glpk = null;
     suitesparse = null;
     jdk = null;
+    openblas = openblasCompat;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13.override { cfg.xftSupport = true; };
@@ -6057,6 +6062,8 @@ let
 
   fmod = callPackage ../development/libraries/fmod { };
 
+  fmod42416 = callPackage ../development/libraries/fmod/4.24.16.nix { };
+
   freeimage = callPackage ../development/libraries/freeimage { };
 
   freetts = callPackage ../development/libraries/freetts { };
@@ -6731,6 +6738,8 @@ let
 
   libebml = callPackage ../development/libraries/libebml { };
 
+  libebur128 = callPackage ../development/libraries/libebur128 { };
+
   libedit = callPackage ../development/libraries/libedit { };
 
   libelf = callPackage ../development/libraries/libelf { };
@@ -6762,6 +6771,10 @@ let
   libgnome_keyring3 = gnome3.libgnome_keyring;
 
   libgnurl = callPackage ../development/libraries/libgnurl { };
+
+  libgringotts = callPackage ../development/libraries/libgringotts { };
+
+  libgroove = callPackage ../development/libraries/libgroove { };
 
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
@@ -7229,7 +7242,7 @@ let
     automake = automake113x; # fails with 14
   });
 
-  libuv = libuvVersions.v1_5_0;
+  libuv = libuvVersions.v1_6_1;
 
   libv4l = lowPrio (v4l_utils.override {
     alsaLib = null;
@@ -7995,6 +8008,8 @@ let
 
   sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
 
+  sqlite-amalgamation = callPackage ../development/libraries/sqlite-amalgamation { };
+
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; });
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
@@ -8211,6 +8226,8 @@ let
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
+
+  wxmac = callPackage ../development/libraries/wxmac { };
 
   wtk = callPackage ../development/libraries/wtk { };
 
@@ -8596,6 +8613,7 @@ let
   R = callPackage ../applications/science/math/R {
     inherit (xlibs) libX11 libXt;
     texLive = texLiveAggregationFun { paths = [ texLive texLiveExtra ]; };
+    openblas = openblasCompat;
     withRecommendedPackages = false;
   };
 
@@ -8751,6 +8769,8 @@ let
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   ghostOne = callPackage ../servers/games/ghost-one { };
+
+  groovebasin = callPackage ../applications/audio/groovebasin { };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
@@ -10726,7 +10746,10 @@ let
   darcs = haskell.lib.overrideCabal haskellPackages.darcs (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
     enableSharedExecutables = false;
+    enableSharedLibraries = false;
     isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share";
   });
 
   darktable = callPackage ../applications/graphics/darktable {
@@ -10742,6 +10765,8 @@ let
   deadbeef = callPackage ../applications/audio/deadbeef {
     pulseSupport = config.pulseaudio or true;
   };
+
+  dfasma = callPackage ../applications/audio/dfasma { };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
@@ -10786,6 +10811,8 @@ let
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
+
+  dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
   dwb = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
 
@@ -11599,9 +11626,7 @@ let
 
   keymon = callPackage ../applications/video/key-mon { };
 
-  khal = callPackage ../applications/misc/khal {
-    pythonPackages = python3Packages;
-  };
+  khal = callPackage ../applications/misc/khal { };
 
   kid3 = callPackage ../applications/audio/kid3 {
     qt = qt4;
@@ -11624,6 +11649,10 @@ let
   ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
 
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
+    fftw = fftwSinglePrec;
+  };
+
+  ladspaPlugins-git = callPackage ../applications/audio/ladspa-plugins/git.nix {
     fftw = fftwSinglePrec;
   };
 
@@ -12040,6 +12069,8 @@ let
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
+  osmo = callPackage ../applications/office/osmo { };
+
   pamixer = callPackage ../applications/audio/pamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
@@ -12234,6 +12265,8 @@ let
   rapcad = callPackage ../applications/graphics/rapcad {};
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
+
+  ratmen = callPackage ../tools/X11/ratmen {};
 
   ratox = callPackage ../applications/networking/instant-messengers/ratox { };
 
@@ -12575,8 +12608,8 @@ let
   thunderbird-bin = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.xlibs) libX11 libXScrnSaver libXext
-      libXinerama libXrender libXt;
+    inherit (pkgs.xlibs) libX11 libXScrnSaver libXcomposite libXdamage libXext
+      libXfixes libXinerama libXrender libXt;
   };
 
   tig = gitAndTools.tig;
@@ -12669,9 +12702,7 @@ let
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
- vdirsyncer = callPackage ../tools/misc/vdirsyncer {
-   pythonPackages = python3Packages;
- };
+  vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
@@ -13469,6 +13500,8 @@ let
 
   tintin = callPackage ../games/tintin { };
 
+  tome4 = callPackage ../games/tome4 { };
+
   tpm = callPackage ../games/thePenguinMachine { };
 
   tremulous = callPackage ../games/tremulous { };
@@ -13554,6 +13587,10 @@ let
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
 
+  zandronum = callPackage ../games/zandronum { };
+  zandronum-server = callPackage ../games/zandronum/server.nix { };
+  zandronum-bin = callPackage ../games/zandronum/bin.nix { };
+
   zdoom = callPackage ../games/zdoom { };
 
   zod = callPackage ../games/zod { };
@@ -13602,10 +13639,7 @@ let
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3_16 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.16 {
-    callPackage = pkgs.newScope pkgs.gnome3_16;
-    self = pkgs.gnome3_16;
-  });
+  gnome3_16 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.16 { });
 
   gnome3 = gnome3_16;
 
@@ -13848,6 +13882,7 @@ let
 
   plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
     kf5 = kf510;
+    kdeApps = kdeApps_15_04;
   });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;
@@ -13939,9 +13974,11 @@ let
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
-  openblas = callPackage ../development/libraries/science/math/openblas {
-    liblapack = liblapack_3_5_0;
-  };
+  openblas = callPackage ../development/libraries/science/math/openblas { };
+
+  # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
+  # standard BLAS and LAPACK.
+  openblasCompat = openblas.override { blas64 = false; };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
@@ -13949,9 +13986,10 @@ let
   sage = callPackage ../applications/science/math/sage { };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
-  suitesparse_4_4_1 = callPackage ../development/libraries/science/math/suitesparse {};
+  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
+  suitesparse = suitesparse_4_4;
 
-  ipopt = callPackage ../development/libraries/science/math/ipopt { };
+  ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
@@ -14132,6 +14170,8 @@ let
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
   satallax = callPackage ../applications/science/logic/satallax {};
+
+  saw-tools = callPackage ../applications/science/logic/saw-tools {};
 
   spass = callPackage ../applications/science/logic/spass {};
 
@@ -14674,6 +14714,10 @@ let
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
+  vbam = callPackage ../misc/emulators/vbam {
+    inherit (xlibs) libpthreadstubs;
+  };
+
   vice = callPackage ../misc/emulators/vice {
     libX11 = xlibs.libX11;
     giflib = giflib_4_1;
@@ -14836,6 +14880,7 @@ let
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
+  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
 

@@ -1068,7 +1068,12 @@ let
       sha256 = "f856ea2e9e2947abc1a6557625cc6b0e45228984f397a90c420b2f468dc4cb97";
     };
     doCheck = false;
-    buildInputs = with pkgs; [ liblapack blas ];
+    buildInputs = with pkgs; [ openblasCompat ];
+    preConfigure = ''
+      export CVXOPT_BLAS_LIB_DIR=${pkgs.openblasCompat}/lib
+      export CVXOPT_BLAS_LIB=openblas
+      export CVXOPT_LAPACK_LIB=openblas
+    '';
     meta = {
       homepage = "http://cvxopt.org/";
       description = "Python Software for Convex Optimization";
@@ -1300,6 +1305,7 @@ let
       homepage = http://pythonhosted.org/blinker/;
       description = "Fast, simple object-to-object and broadcast signaling";
       license = licenses.mit;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -4810,6 +4816,26 @@ let
   };
 
 
+  django_pipeline = buildPythonPackage rec {
+    name = "django-pipeline-${version}";
+    version = "1.5.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django-pipeline/${name}.tar.gz";
+      md5 = "dff8a4abb2895ee5df335c3fb2775a02";
+      sha256 = "1y49fa8jj7x9qjj5wzhns3zxwj0s73sggvkrv660cqw5qb7d8hha";
+    };
+
+    propagatedBuildInputs = with self; [ django futures ];
+
+    meta = with stdenv.lib; {
+      description = "Pipeline is an asset packaging library for Django.";
+      homepage = https://github.com/cyberdelia/django-pipeline;
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
   djblets = buildPythonPackage rec {
     name = "Djblets-0.6.28";
 
@@ -4879,8 +4905,9 @@ let
     doCheck = false;
 
     meta = {
-      homepage = http://docutils.sourceforge.net/;
       description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
+      homepage = http://docutils.sourceforge.net/;
+      maintainers = with maintainers; [ garbas ];
     };
   };
 
@@ -5064,8 +5091,9 @@ let
     propagatedBuildInputs = with self; [ six pytz ];
 
     meta = {
-      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
       description = "Standalone version of django.utils.feedgenerator,  compatible with Py3k";
+      homepage = https://github.com/dmdm/feedgenerator-py3k.git;
+      maintainers = with maintainers; [ garbas ];
     };
   });
 
@@ -6405,7 +6433,7 @@ let
       sha256 = "2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb";
     };
 
-    propagatedBuildInputs = with self; [ self.markupsafe ];
+    propagatedBuildInputs = with self; [ markupsafe ];
 
     meta = {
       homepage = http://jinja.pocoo.org/;
@@ -6417,7 +6445,7 @@ let
         an optional sandboxed environment.
       '';
       platforms = platforms.all;
-      maintainers = with maintainers; [ pierron ];
+      maintainers = with maintainers; [ pierron garbas ];
     };
   };
 
@@ -6831,8 +6859,8 @@ let
     meta = {
       description = "Implements a XML/HTML/XHTML Markup safe string";
       homepage = http://dev.pocoo.org;
-      license = "BSD";
-      maintainers = with maintainers; [ iElectric ];
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ iElectric garbas ];
     };
   };
 
@@ -7850,7 +7878,7 @@ let
   numpy = let
     support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
-      atlas = pkgs.atlasWithLapack;
+      openblas = pkgs.openblasCompat;
       pkgName = "numpy";
     };
   in buildPythonPackage ( rec {
@@ -7873,7 +7901,7 @@ let
     setupPyBuildFlags = ["--fcompiler='gnu95'"];
 
     buildInputs = [ pkgs.gfortran self.nose ];
-    propagatedBuildInputs = [ support.atlas ];
+    propagatedBuildInputs = [ support.openblas ];
 
     meta = {
       description = "Scientific tools for Python";
@@ -8409,33 +8437,46 @@ let
 
   pelican = buildPythonPackage rec {
     name = "pelican-${version}";
-    version = "3.5.0";
+    version = "3.6.0";
+    disabled = isPy26;
 
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pelican/${name}.tar.gz";
-      sha256 = "0dl8i26sa20iijlg3z9gxn3p6f1d9v44b9742929xfaqwj4amvdp";
+    src = pkgs.fetchFromGitHub {
+      owner = "getpelican";
+      repo = "pelican";
+      rev = version;
+      sha256 = "0a9r90d85rn2cvl6yyk6q5i5kwz9igfj8fdwi37zsx4ijhmn2b5j";
     };
 
-    preConfigure = ''
-      export LC_ALL="en_US.UTF-8"
-    '';
-
-    # Test data not provided
-    #buildInputs = [nose mock];
-    doCheck = false;
-
-    buildInputs = [ pkgs.glibcLocales ];
+    buildInputs = with self; [
+      pkgs.glibcLocales
+      pkgs.pandoc
+      pkgs.git
+      mock
+      nose
+      markdown
+      beautifulsoup4
+      lxml
+      typogrify
+    ];
 
     propagatedBuildInputs = with self; [
       jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
       blinker pillow beautifulsoup4 markupsafe
     ];
 
+    postPatch= ''
+      sed -i -e "s|'git'|'${pkgs.git}/bin/git'|" pelican/tests/test_pelican.py
+    '';
+
+    preConfigure = ''
+      export LC_ALL="en_US.UTF-8"
+    '';
+
     meta = {
-      homepage = http://getpelican.com/;
       description = "A tool to generate a static blog from reStructuredText or Markdown input files";
+      homepage = "http://getpelican.com/";
       license = licenses.agpl3;
-      maintainers = with maintainers; [ offline prikhi ];
+      maintainers = with maintainers; [ offline prikhi garbas ];
     };
   };
 
@@ -8843,11 +8884,11 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.39";
+    version = "0.40";
 
     src = pkgs.fetchurl {
+      sha256 = "0zyp2zpbckpdhapijvg7jwli71ilhp02awn99ly70q3l1f44m9dj";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
-      sha256 = "1046fhgqd1171n8xyzcxwzcxgkcwa77r08g7iih8k5x7z59l94lb";
     };
 
     buildInputs = with self; [ jedi ipython pygments ];
@@ -9610,7 +9651,7 @@ let
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ nckx ];
+      maintainers = with maintainers; [ nckx garbas ];
     };
   };
 
@@ -10569,6 +10610,24 @@ let
     };
   };
 
+  pywinrm = buildPythonPackage (rec {
+    name = "pywinrm";
+
+    src = pkgs.fetchgit {
+      url = https://github.com/diyan/pywinrm.git;
+      rev = "c9ce62d500007561ab31a8d0a5d417e779fb69d9";
+      sha256 = "0n0qlcgin2g5lpby07qbdlnpq5v2qc2yns9zc4zm5prwh2mhs5za";
+    };
+
+    propagatedBuildInputs = with self; [ xmltodict isodate ];
+
+    meta = {
+      homepage = "http://github.com/diyan/pywinrm/";
+      description = "Python library for Windows Remote Management";
+      license = licenses.mit;
+    };
+  });
+
 
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
@@ -10716,12 +10775,12 @@ let
   };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.3.0";
+    version = "0.4.0";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "177lqpm2czx81pjg0zfs1dkbbmcn5yf1y5qxj23x6y5d28518qwl";
+      sha256 = "0zvfz4c9lqiwh2qh51rba6ckpjl3pbp9fcm0ri58qhcjd8mh8k34";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
@@ -10729,7 +10788,7 @@ let
     meta = {
       description = "A toolbelt of useful classes and functions to be used with python-requests";
       homepage = http://toolbelt.rtfd.org;
-      maintainers = with maintainers; [ matthiasbeyer ];
+      maintainers = with maintainers; [ matthiasbeyer jgeerds ];
     };
 
   };
@@ -11322,7 +11381,7 @@ let
   scipy = let
     support = import ../development/python-modules/numpy-scipy-support.nix {
       inherit python;
-      atlas = pkgs.atlasWithLapack;
+      openblas = pkgs.openblasCompat;
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
@@ -11360,15 +11419,14 @@ let
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy pkgs.atlas ];
+    propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
 
     buildPhase = ''
-      export ATLAS=${pkgs.atlas}
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
     '';
 
     checkPhase = ''
-      LC_ALL="en_US.UTF-8" HOME=$TMPDIR ATLAS="" nosetests
+      LC_ALL="en_US.UTF-8" HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests
     '';
 
     meta = {
@@ -11425,6 +11483,29 @@ let
         x_ignore_nofocus.o
       cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
     '';
+  };
+
+  setuptools_scm = buildPythonPackage rec {
+    name = "setuptools_scm-${version}";
+    version = "1.5.4";
+
+    src = pkgs.fetchurl {
+      url = "https://bitbucket.org/pypa/setuptools_scm/get/v${version}.tar.bz2";
+      sha256 = "0vd6xsl7r0vn5gpw87d31s195j33sqw5c26zdagimy9qzydgq6y6";
+    };
+
+    buildInputs = with self; [ pip ];
+
+    preBuild = ''
+      ${python.interpreter} setup.py egg_info
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = https://bitbucket.org/pypa/setuptools_scm/;
+      description = "Handles managing your python package versions in scm metadata";
+      license = licenses.mit;
+      maintainers = with maintainers; [ jgeerds ];
+    };
   };
 
   setuptoolsDarcs = buildPythonPackage {
@@ -13513,6 +13594,23 @@ let
     };
   });
 
+  xmltodict = buildPythonPackage (rec {
+    name = "xmltodict-0.9.2";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/x/xmltodict/${name}.tar.gz";
+      sha256 = "00crqnjh1kbvcgfnn3b8c7vq30lf4ykkxp1xf3pf7mswr5l1wp97";
+    };
+
+    buildInputs = with self; [ coverage nose ];
+
+    meta = {
+      description = "Makes working with XML feel like you are working with JSON";
+      homepage = https://github.com/martinblech/xmltodict;
+      license = licenses.mit;
+    };
+  });
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {
     # Release versions don't need pandoc because the formatted man page
     # is included in the tarball.
@@ -14132,7 +14230,7 @@ let
       md5 = "6c73c5b668a67fdc116a25b884058ed9";
     };
 
-    doCheck = !(python.isPypy or false);
+    doCheck = !isPyPy;
 
     propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_location ];
 
@@ -15829,5 +15927,60 @@ let
       maintainers = with maintainers; [ garbas ];
     };
   };
+
+  ghp-import = buildPythonPackage rec {
+    version = "0.4.1";
+    name = "ghp-import-${version}";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/ghp-import/${name}.tar.gz";
+      md5 = "99e018372990c03ab355aa62c34965c5";
+    };
+    disabled = isPyPy;
+    buildInputs = [ pkgs.glibcLocales ];
+    preConfigure = ''
+      export LC_ALL="en_US.UTF-8"
+    '';
+    meta = {
+      description = "Copy your docs directly to the gh-pages branch.";
+      homepage = "http://github.com/davisp/ghp-import";
+      license = "Tumbolia Public License";
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  typogrify = buildPythonPackage rec {
+    name = "typogrify-2.0.7";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/typogrify/${name}.tar.gz";
+      md5 = "63f38f80531996f187d2894cc497ba08";
+    };
+    disabled = isPyPy;
+    propagatedBuildInputs = with self; [ smartypants ];
+    meta = {
+      description = "Filters to enhance web typography, including support for Django & Jinja templates";
+      homepage = "https://github.com/mintchaos/typogrify";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  smartypants = buildPythonPackage rec {
+    version = "1.8.6";
+    name = "smartypants-${version}";
+    src = pkgs.fetchhg {
+      url = "https://bitbucket.org/livibetter/smartypants.py";
+      rev = "v${version}";
+      sha256 = "1cmzz44d2hm6y8jj2xcq1wfr26760gi7iq92ha8xbhb1axzd7nq6";
+    };
+    disabled = isPyPy;
+    buildInputs = with self; [ ]; #docutils pygments ];
+    meta = {
+      description = "Python with the SmartyPants";
+      homepage = "https://bitbucket.org/livibetter/smartypants.py";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
 
 }; in pythonPackages

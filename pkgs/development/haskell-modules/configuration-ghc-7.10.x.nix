@@ -225,7 +225,6 @@ self: super: {
   cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
   control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
-  equivalence_0_2_5 = markBroken super.equivalence_0_2_5;
   haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
   optparse-applicative_0_10_0 = markBroken super.optparse-applicative_0_10_0;
   QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;

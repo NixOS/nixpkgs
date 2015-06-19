@@ -67,7 +67,7 @@ in {
       enable = mkOption {
         description = "Whether to enable graphite web frontend.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       host = mkOption {
@@ -95,7 +95,7 @@ in {
           <link xlink:href="http://graphite-api.readthedocs.org/en/latest/"/>
         '';
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       finders = mkOption {
@@ -177,7 +177,7 @@ in {
       enableCache = mkOption {
         description = "Whether to enable carbon cache, the graphite storage daemon.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       storageAggregation = mkOption {
@@ -234,7 +234,7 @@ in {
       enableRelay = mkOption {
         description = "Whether to enable carbon relay, the carbon replication and sharding service.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       relayRules = mkOption {
@@ -251,7 +251,7 @@ in {
       enableAggregator = mkOption {
         description = "Whether to enable carbon agregator, the carbon buffering service.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       aggregationRules = mkOption {
@@ -269,7 +269,7 @@ in {
       enable = mkOption {
         description = "Whether to enable seyren service.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       port = mkOption {
@@ -319,7 +319,7 @@ in {
           <link xlink:href="https://github.com/seatgeek/graphite-pager"/>
         '';
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       redisUrl = mkOption {

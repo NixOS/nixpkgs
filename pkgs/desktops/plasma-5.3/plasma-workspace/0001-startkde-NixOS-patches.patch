@@ -1,14 +1,14 @@
-From 37abdee4e25f6aff55da838864d1a67a7be758ad Mon Sep 17 00:00:00 2001
+From ff61c8ba856328a60e29938466b69d0bb38a357f Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
 Date: Tue, 2 Jun 2015 11:21:43 -0500
 Subject: [PATCH] startkde: NixOS patches
 
 ---
- startkde/startkde.cmake | 214 ++++++++++++++++++++----------------------------
- 1 file changed, 87 insertions(+), 127 deletions(-)
+ startkde/startkde.cmake | 218 ++++++++++++++++++++----------------------------
+ 1 file changed, 89 insertions(+), 129 deletions(-)
 
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index 24e5c1b..787d719 100644
+index 24e5c1b..e7bdd32 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,8 +1,31 @@
@@ -93,7 +93,7 @@ index 24e5c1b..787d719 100644
  
  #This is basically setting defaults so we can use them with kstartupconfig5
  cat >$configDir/startupconfigkeys <<EOF
-@@ -106,53 +111,19 @@ toolBarFont=Oxygen-Sans,9,-1,5,50,0,0,0,0,0
+@@ -106,55 +111,21 @@ toolBarFont=Oxygen-Sans,9,-1,5,50,0,0,0,0,0
  EOF
  }
  
@@ -148,9 +148,12 @@ index 24e5c1b..787d719 100644
  if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
 -    @EXPORT_XCURSOR_PATH@
  
-     kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
+-    kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
++    @kde_workspace@/bin/kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
      if test $? -eq 10; then
-@@ -168,15 +139,33 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize"
+         XCURSOR_THEME=breeze_cursors
+         export XCURSOR_THEME
+@@ -168,21 +139,39 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize"
      fi
  fi
  
@@ -175,7 +178,7 @@ index 24e5c1b..787d719 100644
 +# Make sure that D-Bus is running
 +# D-Bus autolaunch is broken
 +if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-+    eval `@dbus_tools@/dbus-launch --sh-syntax --exit-with-session`
++    eval `@dbus_tools@/bin/dbus-launch --sh-syntax --exit-with-session`
 +fi
 +if @qt5tools@/bin/qdbus >/dev/null 2>/dev/null; then
 +    : # ok
@@ -189,6 +192,13 @@ index 24e5c1b..787d719 100644
  ksplash_pid=
  if test -z "$dl"; then
    # the splashscreen and progress indicator
+   case "$ksplashrc_ksplash_engine" in
+     KSplashQML)
+-      ksplash_pid=`ksplashqml "${ksplashrc_ksplash_theme}" --pid`
++      ksplash_pid=`@out@/bin/ksplashqml "${ksplashrc_ksplash_theme}" --pid`
+       ;;
+     None)
+       ;;
 @@ -205,8 +194,7 @@ fi
  # For anything else (that doesn't set env vars, or that needs a window manager),
  # better use the Autostart folder.

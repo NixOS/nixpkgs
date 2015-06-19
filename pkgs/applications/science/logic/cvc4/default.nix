@@ -1,23 +1,23 @@
-{stdenv, fetchurl, gmp, libantlr3c, boost}:
+{ stdenv, fetchurl, gmp, libantlr3c, boost, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "cvc4-1.4";
+stdenv.mkDerivation rec {
+  name = "cvc4-${version}";
+  version = "1.4";
+
   src = fetchurl {
-    url = http://cvc4.cs.nyu.edu/builds/src/cvc4-1.4.tar.gz;
+    url = "http://cvc4.cs.nyu.edu/builds/src/cvc4-${version}.tar.gz";
     sha256 = "093h7zgv4z4ad503j30dpn8k2pz9m90pvd7gi5axdmwsxgwlzzkn";
   };
 
-  buildInputs = [ gmp libantlr3c boost ];
-
+  buildInputs = [ gmp libantlr3c boost autoreconfHook ];
   preConfigure = "patchShebangs ./src/";
-
   doChecks = true;
 
   meta = with stdenv.lib; {
-    description = "An efficient open-source automatic theorem prover for satisfiability modulo theories (SMT) problems";
-    homepage = http://cvc4.cs.nyu.edu/web/;
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl ];
+    description = "A high-performance theorem prover and SMT solver";
+    homepage    = http://cvc4.cs.nyu.edu/web/;
+    license     = licenses.bsd3;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ vbgl thoughtpolice ];
   };
 }

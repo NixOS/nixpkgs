@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/hvesalai/scala-mode2/archive/c154f1623f4696d26e1c88d19170e67bf6825837.zip";
-    sha256 = "0fyxdpwz55n4c87v4ijqlbv6w1rybg5qrgsc40f6bs6sd747scy5";
+    sha256 = "0im2ajb1iagjldh52j8wz4yby68rs3h7shrdf1pqy5ds7s4fa8cc";
   };
 
   buildInputs = [ unzip emacs ];

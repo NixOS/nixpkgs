@@ -1,7 +1,8 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rhash-1.3.3";
+  version = "1.3.3";
+  name = "rhash-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/rhash/${name}-src.tar.gz";
@@ -10,9 +11,24 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
 
+  # we build the static library because of two makefile bugs
+  # * .h files installed for static library target only
+  # * .so.0 -> .so link only created in the static library install target
+  buildPhase = ''
+    make lib-shared lib-static build-shared
+  '';
+
+  # we don't actually want the static library, so we remove it after it
+  # gets installed
+  installPhase = ''
+    make DESTDIR="$out" PREFIX="/" install-shared install-lib-shared install-lib-static
+    rm $out/lib/librhash.a
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://rhash.anz.ru;
-    description = "Console utility for computing and verifying hash sums of files";
+    description = "Console utility and library for computing and verifying hash sums of files";
     platforms = platforms.linux;
+    maintainers = [ maintainers.andrewrk ];
   };
 }

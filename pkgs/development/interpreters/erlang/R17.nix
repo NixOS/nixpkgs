@@ -1,11 +1,15 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl
 , gnused, gawk, makeWrapper
 , odbcSupport ? false, unixODBC ? null
-, wxSupport ? true, mesa ? null, wxGTK ? null, xlibs ? null
+, wxSupport ? true, mesa ? null, wxGTK ? null, xlibs ? null, wxmac ? null
 , javacSupport ? false, openjdk ? null
-, enableHipe ? true}:
+, enableHipe ? true
+}:
 
-assert wxSupport -> mesa != null && wxGTK != null && xlibs != null;
+assert wxSupport -> (if stdenv.isDarwin
+  then wxmac != null
+  else mesa != null && wxGTK != null && xlibs != null);
+
 assert odbcSupport -> unixODBC != null;
 assert javacSupport ->  openjdk != null;
 
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ perl gnum4 ncurses openssl makeWrapper
-    ] ++ optional wxSupport [ mesa wxGTK xlibs.libX11 ]
+    ] ++ optional wxSupport (if stdenv.isDarwin then [ wxmac ] else [ mesa wxGTK xlibs.libX11 ])
       ++ optional odbcSupport [ unixODBC ]
       ++ optional javacSupport [ openjdk ];
 
@@ -34,7 +38,13 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString enableHipe "--enable-hipe"} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"} ${optionalString javacSupport "--with-javac"}";
+  configureFlags= [
+    "--with-ssl=${openssl}"
+  ] ++ optional enableHipe "--enable-hipe"
+    ++ optional wxSupport "--enable-wx"
+    ++ optional odbcSupport "--with-odbc=${unixODBC}"
+    ++ optional javacSupport "--with-javac"
+    ++ optional stdenv.isDarwin "--enable-darwin-64bit";
 
   postInstall = let
     manpages = fetchurl {

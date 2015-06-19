@@ -3,14 +3,14 @@
   python,
   # Name of package (e.g. numpy or scipy)
   pkgName,
-  # Atlas math library
-  atlas
+  # OpenBLAS math library
+  openblas
 }:
 
 {
-  # Re-export atlas here so that it can be sure that the same one will be used
+  # Re-export openblas here so that it can be sure that the same one will be used
   # in the propagatedBuildInputs.
-  inherit atlas;
+  inherit openblas;
 
   # First "install" the package, then import what was installed, and call the
   # .test() function, which will run the test suite.
@@ -48,9 +48,9 @@
   preBuild = ''
     echo "Creating site.cfg file..."
     cat << EOF > site.cfg
-    [atlas]
-    include_dirs = ${atlas}/include
-    library_dirs = ${atlas}/lib
+    [openblas]
+    include_dirs = ${openblas}/include
+    library_dirs = ${openblas}/lib
     EOF
   '';
 }

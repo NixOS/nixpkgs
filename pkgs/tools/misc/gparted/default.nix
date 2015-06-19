@@ -12,9 +12,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-doc";
 
-  buildInputs = [
-    parted gtk glib intltool gettext libuuid pkgconfig gtkmm libxml2 hicolor_icon_theme
-  ];
+  buildInputs = [ parted gtk glib libuuid gtkmm libxml2 hicolor_icon_theme ];
+  nativeBuildInputs = [ intltool gettext pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Graphical disk partitioning tool";

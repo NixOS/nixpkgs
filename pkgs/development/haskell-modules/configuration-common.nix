@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_3_0; zlib = self.zlib_0_5_4_2; });
+  Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
+  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; zlib = self.zlib_0_5_4_2; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Break infinite recursions.
@@ -119,6 +119,22 @@ self: super: {
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 
+  hmatrix = overrideCabal super.hmatrix (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [ "-fopenblas" ];
+    extraLibraries = [ pkgs.openblasCompat ];
+    preConfigure = ''
+      sed -i hmatrix.cabal -e 's@/usr/lib/openblas/lib@${pkgs.openblasCompat}/lib@'
+    '';
+  });
+
+  bindings-levmar = overrideCabal super.bindings-levmar (drv: {
+    preConfigure = ''
+      sed -i bindings-levmar.cabal \
+          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
+    '';
+    extraLibraries = [ pkgs.openblasCompat ];
+  });
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;
@@ -150,6 +166,7 @@ self: super: {
   types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
+  record = dontHaddock super.record;                            # https://github.com/nikita-volkov/record/issues/22
 
   # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = (overrideCabal super.darcs (drv: {
@@ -286,6 +303,7 @@ self: super: {
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
+  xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
@@ -317,6 +335,7 @@ self: super: {
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
+  serversession-backend-redis = dontCheck super.serversession-backend-redis;
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -855,5 +874,12 @@ self: super: {
 
   # Doesn't work with recent versions of mtl.
   cron-compat = markBroken super.cron-compat;
+
+  # https://github.com/yesodweb/serversession/issues/1
+  serversession = dontCheck super.serversession;
+
+  # https://github.com/singpolyma/wai-session/issues/8
+  wai-session = markBroken super.wai-session;
+  serversession-frontend-wai = dontDistribute super.serversession-frontend-wai;
 
 }

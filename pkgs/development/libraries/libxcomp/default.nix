@@ -17,7 +17,8 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ autoreconfHook libjpeg libpng12 libX11 zlib ];
+  buildInputs = [ libjpeg libpng12 libX11 zlib ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   preAutoreconf = ''
     cd nxcomp/

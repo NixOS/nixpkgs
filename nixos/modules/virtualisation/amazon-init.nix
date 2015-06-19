@@ -8,7 +8,7 @@ let
 
     echo "attempting to fetch configuration from user-data..."
 
-    export PATH=${pkgs.nix}/bin:${pkgs.wget}/bin:${pkgs.systemd}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${config.system.build.nixos-rebuild}/bin:$PATH
+    export PATH=${config.nix.package}/bin:${pkgs.wget}/bin:${pkgs.systemd}/bin:${pkgs.gnugrep}/bin:${pkgs.gnused}/bin:${config.system.build.nixos-rebuild}/bin:$PATH
     export NIX_PATH=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/etc/nixos/configuration.nix:/nix/var/nix/profiles/per-user/root/channels
 
     userData="$(mktemp)"

@@ -6,11 +6,11 @@
 
 let
 
-  name = "hplip-3.15.4";
+  name = "hplip-3.15.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0s1yiifp002n8qy0i4cv6j0hq9ikp4jabki5w3xzlaqgd4bjz1x3";
+    sha256 = "1jbnjw7vrn1qawrjfdv8j58w69q8ki1qkzvlh0nk8nxacpp17i9h";
   };
 
   hplip_state =
@@ -31,7 +31,7 @@ let
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "00zhaq48m7p6nrxfy16086hzghf2pfr32s53sndbpp2514v2j392";
+    sha256 = "1rymxahz12s1s37rri5qyvka6q0yi0yai08kgspg24176ry3a3fx";
   };
 
 in
@@ -139,9 +139,11 @@ stdenv.mkDerivation {
       pythonPackages.wrapPython
       saneBackends
       dbus
-      pkgconfig
       net_snmp
     ] ++ stdenv.lib.optional qtSupport qt4;
+  nativeBuildInputs = [
+    pkgconfig
+  ];
 
   pythonPath = with pythonPackages; [
       dbus

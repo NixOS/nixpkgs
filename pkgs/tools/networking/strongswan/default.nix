@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "strongswan-5.2.1";
+  name = "strongswan-5.3.2";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "05cjjd7gg65bl6fswj2r2i13nn1nk4x86s06y75gwfdvnlrsnlga";
+    sha256 = "09gjrd5f8iykh926y35blxlm2hlzpw15m847d8vc9ga29s6brad4";
   };
 
   dontPatchELF = true;

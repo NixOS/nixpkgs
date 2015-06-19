@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     name = "${name}.tar.gz";
   };
 
-  buildInputs = [ pkgconfig fuse scons ];
+  buildInputs = [ fuse ];
+  nativeBuildInputs = [ pkgconfig scons ];
 
   buildPhase = ''
     export CCFLAGS="-O2 -Wall -std=c99 -I${fuse}/include"

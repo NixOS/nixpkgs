@@ -175,7 +175,10 @@ let
             # installer. This ensures the target disk (/dev/vda) is
             # the same during and after installation.
             virtualisation.emptyDiskImages = [ 512 ];
-            virtualisation.bootDevice = "/dev/vdb";
+            virtualisation.bootDevice =
+              if grubVersion == 1 then "/dev/sdb" else "/dev/vdb";
+            virtualisation.qemu.diskInterface =
+              if grubVersion == 1 then "scsi" else "virtio";
 
             hardware.enableAllFirmware = mkForce false;
 

@@ -19,7 +19,10 @@
 , kerberos
 , libX11
 , libXScrnSaver
+, libXcomposite
+, libXdamage
 , libXext
+, libXfixes
 , libXinerama
 , libXrender
 , libXt
@@ -88,7 +91,10 @@ stdenv.mkDerivation {
       kerberos
       libX11
       libXScrnSaver
+      libXcomposite
+      libXdamage
       libXext
+      libXfixes
       libXinerama
       libXrender
       libXt
@@ -112,25 +118,15 @@ stdenv.mkDerivation {
       ln -s "$prefix/usr/lib/thunderbird-bin-${version}/thunderbird" "$out/bin/"
 
       for executable in \
-        thunderbird mozilla-xremote-client thunderbird-bin plugin-container \
-        updater
+        thunderbird crashreporter thunderbird-bin plugin-container updater
       do
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           "$out/usr/lib/thunderbird-bin-${version}/$executable"
       done
 
-      for executable in \
-        thunderbird mozilla-xremote-client thunderbird-bin plugin-container \
-        updater \
-        components/libdbusservice.so components/libmozgnome.so \
-        libnssdbm3.so libsmime3.so libxul.so libprldap60.so libnss3.so \
-        libplc4.so libfreebl3.so libmozsqlite3.so libmozalloc.so libnspr4.so \
-        libssl3.so libldif60.so libsoftokn3.so libldap60.so libnssutil3.so \
-        libnssckbi.so libplds4.so
-      do
+      find . -executable -type f -exec \
         patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/thunderbird-bin-${version}/$executable"
-      done
+          "$out/usr/lib/thunderbird-bin-${version}/{}" \;
 
       # Create a desktop item.
       mkdir -p $out/share/applications

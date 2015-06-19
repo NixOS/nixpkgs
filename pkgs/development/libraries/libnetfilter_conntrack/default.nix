@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0zcwjav1qgr7ikmvfmy7g3nc7s1kj4j4939d18mpyha9mwy4mv6r";
   };
 
-  buildInputs = [ pkgconfig libmnl ];
+  buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Userspace library providing an API to the in-kernel connection tracking state table";
