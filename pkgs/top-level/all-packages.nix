@@ -13013,5 +13013,7 @@ let
 
   ### Custom packages.
   nodejs = callPackage ../ai2/nodejs {};
+  grobid-home = callPackage ../ai2/grobid-home {};
+  grobid-native-libs = callPackage ../ai2/grobid-native-libs {};
 
 }; in self; in pkgs
