@@ -63,7 +63,7 @@ let version = if isRelease then
       homepage = http://www.rust-lang.org/;
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ madjar cstrahan wizeman globin ];
-      license = map (builtins.getAttr "shortName") [ licenses.mit licenses.asl20 ];
+      license = [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux;
     };
 
