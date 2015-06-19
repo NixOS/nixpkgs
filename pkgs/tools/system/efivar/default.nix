@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ popt ];
 
+  # 0.20 Relies on symbols from libdl.so which breaks efibootmgr
+  NIX_LDFLAGS = "-ldl";
+
   installFlags = [
     "libdir=$(out)/lib"
     "mandir=$(out)/share/man"
