@@ -14610,7 +14610,7 @@ let
 
   ### SCIENCE/GEOMETRY
 
-  drgeo = builderDefsPackage (callPackage ../applications/science/geometry/drgeo) {
+  drgeo = callPackage ../applications/science/geometry/drgeo {
     inherit (gnome) libglade;
     guile = guile_1_8;
   };
