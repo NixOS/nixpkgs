@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0igqq5m204w71m11y0nipbdf5apx87hwfll6axs12hn4dqfb6vkb";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isCygwin libiconv;
+  buildInputs = stdenv.lib.optional (stdenv.isCygwin || stdenv.isDarwin) libiconv;
 
   configureFlags = [ "--with-internal-glib" ];
 
