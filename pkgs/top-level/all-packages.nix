@@ -8087,7 +8087,10 @@ let
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
-  tk = callPackage ../development/libraries/tk { };
+  tk = tk-8_6;
+
+  tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
+  tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
   tnt = callPackage ../development/libraries/tnt { };
 
@@ -13568,7 +13571,10 @@ let
 
   xboard =  callPackage ../games/xboard { };
 
-  xconq = callPackage ../games/xconq {};
+  xconq = callPackage ../games/xconq {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
 
   # TODO: the corresponding nix file is missing
   # xracer = callPackage ../games/xracer { };
