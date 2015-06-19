@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtk-vnc, intltool
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtkvnc, intltool
 , libsecret, itstool, makeWrapper, librsvg }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gs8sqd4r6jlgxn1b7ggyfcisig50z79p0rmigpzwpjjx1bh0z6p";
   };
 
-  buildInputs = [ pkgconfig gtk3 vte libxml2 gtk-vnc intltool libsecret
+  buildInputs = [ pkgconfig gtk3 vte libxml2 gtkvnc intltool libsecret
                   itstool makeWrapper gnome3.defaultIconTheme librsvg ];
 
   preFixup = ''
