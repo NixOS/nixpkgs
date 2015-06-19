@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1";
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
+    "-DWITHOUT_TOKUDB=1"
+  ];
 
   enableParallelBuilding = true;
 
