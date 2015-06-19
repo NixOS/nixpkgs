@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   patches = [ ./cve-2015-1345.patch ];
 
-  buildInputs = [ pcre libiconv ];
+  nativeBuildInputs = [ pcre libiconv ];
 
   # cygwin: FAIL: multibyte-white-space
   doCheck = !stdenv.isDarwin && !stdenv.isCygwin;
