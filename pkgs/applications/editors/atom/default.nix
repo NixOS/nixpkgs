@@ -31,7 +31,10 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     ar p $src data.tar.gz | tar -C $out -xz ./usr
+    substituteInPlace $out/usr/share/applications/atom.desktop \
+      --replace /usr/share/atom $out/bin
     mv $out/usr/* $out/
+    rm -r $out/share/lintian
     rm -r $out/usr/
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/share/atom/atom
