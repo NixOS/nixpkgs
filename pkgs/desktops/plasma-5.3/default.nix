@@ -12,21 +12,23 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ pkgs, newScope, kf5 ? null, qt5 ? null, debug ? false }:
+{ pkgs, newScope, kdeApps ? null, kf5 ? null, qt5 ? null, debug ? false }:
 
 let inherit (pkgs) autonix stdenv symlinkJoin; in
 
 with autonix; let inherit (stdenv) lib; in
 
 let
+  kdeApps_ = if kdeApps != null then kdeApps else pkgs.kdeApps_15_04;
   kf5_ = if kf5 != null then kf5 else pkgs.kf510;
   qt5_ = if qt5 != null then qt5 else pkgs.qt54;
 in
 
 let
 
-  qt5 = qt5_;
+  kdeApps = kdeApps_.override { inherit debug kf5 qt5; plasma5 = self; };
   kf5 = kf5_.override { inherit debug qt5; };
+  qt5 = qt5_;
 
   kdePackage = name: pkg:
     let defaultOverride = drv: drv // {
@@ -113,6 +115,7 @@ let
       mobilebroadbandproviderinfo = mobile_broadband_provider_info;
       mtp = libmtp;
       pulseaudio = libpulseaudio;
+      qalculate = libqalculate;
       shareddesktopontologies = shared_desktop_ontologies;
       sharedmimeinfo = shared_mime_info;
       usb = libusb;
@@ -213,6 +216,7 @@ let
       inherit (scope) kconfig kinit kservice qt5tools;
       inherit (scope.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
       dbus_tools = scope.dbus.tools;
+      kde_workspace = kdeApps.kde-workspace;
       postPatch = ''
         substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
           --replace kdostartupconfig5 $out/bin/kdostartupconfig5
