@@ -9,7 +9,9 @@
 , abiVersion ? "5"
 }:
 
-stdenv.mkDerivation rec {
+let libSuffix = if stdenv.isDarwin then "dylib" else "so";
+
+in stdenv.mkDerivation rec {
   name = "ncurses-5.9";
 
   src = fetchurl {
@@ -63,9 +65,9 @@ stdenv.mkDerivation rec {
     # Create non-unicode compatability
     libs="$(find $out/lib -name \*w.a | sed 's,.*lib\(.*\)w.a.*,\1,g')"
     for lib in $libs; do
-      if [ -e "$out/lib/lib''${lib}w.so" ]; then
-        ln -svf lib''${lib}w.so $out/lib/lib$lib.so
-        ln -svf lib''${lib}w.so.${abiVersion} $out/lib/lib$lib.so.${abiVersion}
+      if [ -e "$out/lib/lib''${lib}w.${libSuffix}" ]; then
+        ln -svf lib''${lib}w.${libSuffix} $out/lib/lib$lib.${libSuffix}
+        ln -svf lib''${lib}w.${libSuffix}.${abiVersion} $out/lib/lib$lib.${libSuffix}.${abiVersion}
       fi
       ln -svf lib''${lib}w.a $out/lib/lib$lib.a
       ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
