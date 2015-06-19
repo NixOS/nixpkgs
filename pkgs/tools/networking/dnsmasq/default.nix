@@ -1,11 +1,11 @@
 { pkgconfig, dbus_libs, nettle, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.72";
+  name = "dnsmasq-2.73";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "1c80hq09hfm8cp5pirfb8wdlc7dqkp7zzmbmdaradcvlblzx42vx";
+    sha256 = "1xnqfaw2l78f4zw4z9sgr9nl9yc233gxc3sd7hxapz2k7q883zqb";
   };
 
   # Can't rely on make flags because of space in one of the parameters
