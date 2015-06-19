@@ -206,24 +206,17 @@ let
     };
 
     plasma-workspace = extendDerivation super.plasma-workspace {
-      patches = [
-        (scope.substituteAll {
-          src = ./plasma-workspace/0001-startkde-NixOS-patches.patch;
-          inherit (scope) bash gnused gnugrep socat;
-          inherit (scope) kconfig kinit kservice;
-          inherit (scope.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
-          qt5tools = scope.qt5tools;
-          dbus_tools = scope.dbus.tools;
-        })
-      ];
+      patches = [ ./plasma-workspace/0001-startkde-NixOS-patches.patch ];
       buildInputs = with scope.xlibs; [ libSM libXcursor scope.pam ];
+
+      inherit (scope) bash gnused gnugrep socat;
+      inherit (scope) kconfig kinit kservice qt5tools;
+      inherit (scope.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
+      dbus_tools = scope.dbus.tools;
       postPatch = ''
         substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
           --replace kdostartupconfig5 $out/bin/kdostartupconfig5
-      '';
-      preConfigure = ''
-        substituteInPlace startkde/startkde.cmake \
-          --subst-var-by plasmaWorkspace "$out"
+        substituteAllInPlace startkde/startkde.cmake
       '';
     };
 
