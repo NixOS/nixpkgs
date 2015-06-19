@@ -74,15 +74,12 @@ in stdenv.mkDerivation {
     sandboxBinary = "${chromium.sandbox}/bin/chromium-sandbox";
     mkEnvVar = key: val: "--set '${key}' '${val}'";
     envVars = chromium.plugins.settings.envVars or {};
-    isVer42 = !stdenv.lib.versionOlder chromium.browser.version "42.0.0.0";
     flags = chromium.plugins.settings.flags or [];
-    setBinPath = "--set CHROMIUM_SANDBOX_BINARY_PATH \"${sandboxBinary}\"";
   in with stdenv.lib; ''
     mkdir -p "$out/bin" "$out/share/applications"
 
     ln -s "${chromium.browser}/share" "$out/share"
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      ${optionalString (!isVer42) setBinPath} \
       ${concatStrings (mapAttrsToList mkEnvVar envVars)} \
       --add-flags "${concatStringsSep " " flags}"
 

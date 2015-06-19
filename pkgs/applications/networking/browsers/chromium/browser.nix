@@ -15,9 +15,6 @@ mkChromiumDerivation (base: rec {
     ${optionalString (versionOlder base.version "45.0.0.0") ''
       cp -v "$buildPath/libffmpegsumo.so" "$libExecPath/"
     ''}
-    ${optionalString (versionOlder base.version "42.0.0.0") ''
-      cp -v "$buildPath/libpdf.so" "$libExecPath/"
-    ''}
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     mkdir -vp "$out/share/man/man1"
