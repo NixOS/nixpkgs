@@ -109,6 +109,7 @@ cat > $tmpFile <<EOF
 # Change this to e.g. nixos-42 to temporarily boot to an older configuration.
 DEFAULT nixos-default
 
+MENU TITLE ------------------------------------------------------------
 TIMEOUT $timeout
 EOF
 
