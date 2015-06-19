@@ -12260,6 +12260,10 @@ let
     fltk = fltk13;
   };
 
+  renoise = callPackage ../applications/audio/renoise {
+    demo = true;
+  };
+
   rapcad = callPackage ../applications/graphics/rapcad {};
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
