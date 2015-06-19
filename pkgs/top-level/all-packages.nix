@@ -3184,6 +3184,10 @@ let
 
   welkin = callPackage ../tools/graphics/welkin {};
 
+  wolfebin = callPackage ../tools/networking/wolfebin {
+    python = python2;
+  };
+
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
   testdisk = callPackage ../tools/misc/testdisk { };
