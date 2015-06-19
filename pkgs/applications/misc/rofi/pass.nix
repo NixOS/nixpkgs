@@ -1,7 +1,7 @@
 { stdenv, fetchgit, rofi, wmctrl, xprop, xdotool}:
 
 stdenv.mkDerivation rec {
-  name = "rofi-${version}";
+  name = "rofi-pass-${version}";
   version = "2015-06-08";
 
   src = fetchgit {
