@@ -4,6 +4,7 @@
 , channel ? "stable"
 , enableSELinux ? false
 , enableNaCl ? false
+, enableHotwording ? false
 , useOpenSSL ? false
 , gnomeSupport ? false
 , gnomeKeyringSupport ? false
@@ -26,9 +27,9 @@ let
     };
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableSELinux enableNaCl useOpenSSL gnomeSupport
-              gnomeKeyringSupport proprietaryCodecs cupsSupport
-              pulseSupport hiDPISupport;
+      inherit enableSELinux enableNaCl enableHotwording useOpenSSL gnomeSupport
+              gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
+              hiDPISupport;
     };
 
     browser = callPackage ./browser.nix { };

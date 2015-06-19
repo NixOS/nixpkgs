@@ -21,6 +21,7 @@
 # package customization
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
+, enableHotwording ? false
 , useOpenSSL ? false, nss ? null, openssl ? null
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
@@ -158,6 +159,7 @@ let
       use_pulseaudio = pulseSupport;
       linux_link_pulseaudio = pulseSupport;
       disable_nacl = !enableNaCl;
+      enable_hotwording = enableHotwording;
       use_openssl = useOpenSSL;
       selinux = enableSELinux;
       use_cups = cupsSupport;
