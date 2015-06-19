@@ -8,6 +8,8 @@
 , tcl ? null, tk ? null, x11 ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
 , zlib ? null, zlibSupport ? true
 , expat, libffi
+
+, CF, configd
 }:
 
 assert zlibSupport -> zlib != null;
@@ -92,7 +94,8 @@ let
         [ db gdbm ncurses sqlite readline
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
     )
-    ++ optional zlibSupport zlib;
+    ++ optional zlibSupport zlib
+    ++ optionals stdenv.isDarwin [ CF configd ];
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
