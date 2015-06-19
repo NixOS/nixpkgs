@@ -183,17 +183,26 @@ let
         [ canberra ]
         ++ (with xlibs; [ libxkbfile libXcursor libXft ]);
       patches = [
-        ./plasma-desktop/plasma-desktop-hwclock.patch
+        (scope.substituteAll {
+          src = ./plasma-desktop/plasma-desktop-hwclock.patch;
+          hwclock = "${scope.utillinux}/sbin/hwclock";
+        })
         ./plasma-desktop/plasma-desktop-zoneinfo.patch
         (scope.substituteAll {
           src = ./plasma-desktop/plasma-desktop-xkb-rules.patch;
           xkb = scope.xkeyboard_config;
         })
       ];
-      preConfigure = ''
-        substituteInPlace kcms/dateandtime/helper.cpp \
-          --subst-var-by hwclock "${scope.utillinux}/sbin/hwclock"
-      '';
+      NIX_CFLAGS_COMPILE = with scope.xlibs;
+        lib.concatStringsSep " " [
+          "-I${xf86inputsynaptics}/include/xorg"
+          "-I${xf86inputevdev}/include/xorg"
+          "-I${xorgserver}/include/xorg"
+        ];
+      cmakeFlags = with scope.xlibs; [
+        "-DEvdev_INCLUDE_DIRS=${xf86inputevdev}/include"
+        "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics}/include"
+      ];
     };
 
     plasma-workspace = extendDerivation super.plasma-workspace {
