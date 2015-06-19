@@ -2074,6 +2074,8 @@ let
     guile = guile_1_8;
   };
 
+  maim = callPackage ../tools/graphics/maim {};
+
   mairix = callPackage ../tools/text/mairix { };
 
   makemkv = callPackage ../applications/video/makemkv { };
@@ -12381,6 +12383,8 @@ let
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
   slmenu = callPackage ../applications/misc/slmenu {};
+
+  slop = callPackage ../tools/misc/slop {};
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
