@@ -136,6 +136,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "doc" ];
+
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 
   doCheck = true;
