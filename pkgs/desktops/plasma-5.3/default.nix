@@ -118,7 +118,7 @@ let
       usb = libusb;
     });
 
-  self = (builtins.removeAttrs super ["bluedevil"]) // {
+  self = super // {
 
     bluez-qt = overrideDerivation super.bluez-qt (drv: {
       preConfigure = ''
