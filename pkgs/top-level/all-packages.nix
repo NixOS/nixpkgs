@@ -2046,7 +2046,9 @@ let
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lxc = callPackage ../os-specific/linux/lxc { };
+  lxc = callPackage ../os-specific/linux/lxc {
+    wrapPython = python3Packages.wrapPython;
+  };
 
   lzip = callPackage ../tools/compression/lzip { };
 
