@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, popt }:
+{ stdenv, fetchFromGitHub, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.15";
+  version = "0.20";
 
-  src = fetchgit {
-    url = "git://github.com/rhinstaller/efivar.git";
-    rev = "refs/tags/${version}";
-    sha256 = "1k5krjghb2r04wv6kxnhs1amqwzk7khzm7bsh0wnbsz7qn92masr";
+  src = fetchFromGitHub {
+    owner = "rhinstaller";
+    repo = "efivar";
+    rev = version;
+    sha256 = "14c8x9dhi4scj42n1cf513b551c1ccm8lwpaqx8h8ydpm2k35qi4";
   };
 
   buildInputs = [ popt ];
