@@ -1,7 +1,7 @@
 { stdenv, fetchurl, yacc, ncurses, libxml2 }:
 
 let
-  version = "0.1.8";
+  version = "0.1.9";
 in
 stdenv.mkDerivation rec {
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/andmarti1424/scim/archive/v${version}.tar.gz";
-    sha256 = "0qjixb1hzbdrypbmzwb2iaw5wp57kn7fmm1zpjp4gzjyanrhazs2";
+    sha256 = "00rjz344acw0bxv78x1w9jz8snl9lb9qhr9z22phxinidnd3vaaz";
   };
 
   buildInputs = [ yacc ncurses libxml2 ];
