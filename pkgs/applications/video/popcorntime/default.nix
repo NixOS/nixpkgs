@@ -1,8 +1,7 @@
-{ stdenv, pkgs, fetchurl, runCommand, makeWrapper, node_webkit_0_9
+{ stdenv, pkgs, fetchurl, runCommand, makeWrapper, node_webkit ? pkgs.node_webkit_0_9
 }:
 
 let
-  node-webkit = node_webkit_0_9;
   version = "0.3.7.2";
 
   srcs = {
@@ -23,7 +22,7 @@ let
     installPhase = ''
       mkdir -p $out
       cp -r *.so *.pak $out/
-      cat ${node-webkit}/bin/nw package.nw > $out/Popcorn-Time
+      cat ${node_webkit}/bin/nw package.nw > $out/Popcorn-Time
       chmod 555 $out/Popcorn-Time
     '';
   };
