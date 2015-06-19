@@ -12549,7 +12549,9 @@ let
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
-  tabbed = callPackage ../applications/window-managers/tabbed { };
+  tabbed = callPackage ../applications/window-managers/tabbed {
+    enableXft = true;
+  };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
