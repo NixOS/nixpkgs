@@ -8180,11 +8180,11 @@ let
   };
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.15.0";
+    name = "pandas-0.16.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "1w3wjnn3v37hf3hrd24lfgk6vpykarv9mihhpcfq6y7rg586bgjk";
+      sha256 = "1dpq5p4iym7y13wkrm0hma87rvvv5rfj5fb10iwbys5hihzj83ap";
     };
 
     buildInputs = [ self.nose ];
@@ -8200,26 +8200,6 @@ let
       lxml
       modules.sqlite3
     ];
-
-    preCheck = ''
-      # Need to do this patch or tests will fail (swaps 1st and 2nd lines).
-      # See: https://github.com/pydata/pandas/commit/c4bcc2054bfd2f89b640bea0c9a109b0184d6710
-      first=$(sed -n '1p' < pandas/tests/test_format.py)
-      second=$(sed -n '2p' < pandas/tests/test_format.py)
-      rest=$(tail -n +3 pandas/tests/test_format.py)
-      echo $second > pandas/tests/test_format.py
-      echo $first >> pandas/tests/test_format.py
-      echo "$rest" >> pandas/tests/test_format.py
-
-      # Need to skip this test; insert a line here... hacky but oh well.
-      badtest=pandas/tseries/tests/test_timezones.py
-      fixed=$TMPDIR/fixed_test_timezones.py
-      touch $fixed
-      head -n 602 $badtest > $fixed
-      echo '        raise nose.SkipTest("Not working")' >> $fixed
-      tail -n +603 $badtest >> $fixed
-      mv $fixed $badtest
-    '';
 
     checkPhase = ''
       runHook preCheck
