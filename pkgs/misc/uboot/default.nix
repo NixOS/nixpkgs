@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q2x1wh1f6rjh9rmcnkf28dxcvp9hkhi4vzspqkzamb6b3gp06ha";
   };
 
+  patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
+
   nativeBuildInputs = [ bc dtc ];
 
   configurePhase = ''
