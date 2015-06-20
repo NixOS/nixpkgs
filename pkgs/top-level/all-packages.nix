@@ -1127,11 +1127,9 @@ let
 
   cool-retro-term = callPackage ../applications/misc/cool-retro-term { };
 
-  coreutils = callPackage ../tools/misc/coreutils
-    {
-      # TODO: Add ACL support for cross-Linux.
-      aclSupport = crossSystem == null && stdenv.isLinux;
-    };
+  coreutils = callPackage ../tools/misc/coreutils {
+    aclSupport = stdenv.isLinux;
+  };
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -3602,36 +3600,22 @@ let
 
   gccApple = throw "gccApple is no longer supported";
 
-  gcc48_realCross = lib.addMetaAttrs { hydraPlatforms = []; }
-    (callPackage ../development/compilers/gcc/4.8 {
-      inherit noSysDirs;
-      binutilsCross = binutilsCross;
-      libcCross = libcCross;
-      profiledCompiler = false;
-      enableMultilib = false;
-      crossStageStatic = false;
-      cross = assert crossSystem != null; crossSystem;
-    });
-
-  gcc_realCross = gcc48_realCross;
-
   gccCrossStageStatic = let
-      libcCross1 =
-        if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
-        else if stdenv.cross.libc == "libSystem" then darwin.xcode
-        else null;
-    in
-      wrapGCCCross {
-      gcc = forceNativeDrv (lib.addMetaAttrs { hydraPlatforms = []; } (
-        gcc_realCross.override {
-          crossStageStatic = true;
-          langCC = false;
-          libcCross = libcCross1;
-          enableShared = false;
-        }));
+    libcCross1 =
+      if stdenv.cross.libc == "msvcrt" then windows.mingw_w64_headers
+      else if stdenv.cross.libc == "libSystem" then darwin.xcode
+      else null;
+    in wrapGCCCross {
+      gcc = forceNativeDrv (gcc.cc.override {
+        cross = crossSystem;
+        crossStageStatic = true;
+        langCC = false;
+        libcCross = libcCross1;
+        enableShared = false;
+      });
       libc = libcCross1;
       binutils = binutilsCross;
-      cross = assert crossSystem != null; crossSystem;
+      cross = crossSystem;
   };
 
   # Only needed for mingw builds
@@ -3643,21 +3627,17 @@ let
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceNativeDrv (gcc_realCross.override {
-      libpthreadCross =
-        # FIXME: Don't explicitly refer to `i586-pc-gnu'.
-        if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-        then gnu.libpthreadCross
-        else null;
+    gcc = forceNativeDrv (gcc.cc.override {
+      cross = crossSystem;
+      crossStageStatic = false;
 
       # XXX: We have troubles cross-compiling libstdc++ on MinGW (see
       # <http://hydra.nixos.org/build/4268232>), so don't even try.
-      langCC = (crossSystem == null
-                || crossSystem.config != "i686-pc-mingw32");
-     });
+      langCC = crossSystem.config != "i686-pc-mingw32";
+    });
     libc = libcCross;
     binutils = binutilsCross;
-    cross = assert crossSystem != null; crossSystem;
+    cross = crossSystem;
   };
 
   gcc44 = lowPrio (wrapCC (makeOverridable (import ../development/compilers/gcc/4.4) {
@@ -3684,10 +3664,6 @@ let
     # be passed.
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
-    libpthreadCross =
-      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-      then gnu.libpthreadCross
-      else null;
   }));
 
   gcc46 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.6 {
@@ -3705,10 +3681,6 @@ let
     # be passed.
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
-    libpthreadCross =
-      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-      then gnu.libpthreadCross
-      else null;
     texinfo = texinfo413;
   }));
 
@@ -3723,10 +3695,6 @@ let
     # be passed.
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
-    libpthreadCross =
-      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-      then gnu.libpthreadCross
-      else null;
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
@@ -3740,10 +3708,6 @@ let
     # be passed.
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
-    libpthreadCross =
-      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-      then gnu.libpthreadCross
-      else null;
 
     isl = isl_0_11;
 
@@ -3761,10 +3725,6 @@ let
     # be passed.
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
-    libpthreadCross =
-      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-      then gnu.libpthreadCross
-      else null;
 
     isl = isl_0_14;
   }));
@@ -5172,12 +5132,11 @@ let
     gold = false;
   });
 
-  binutilsCross =
-    if crossSystem != null && crossSystem.libc == "libSystem" then darwin.cctools_cross
-    else lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
-      inherit stdenv fetchurl zlib bison;
+  binutilsCross = lowPrio (forceNativeDrv (
+    if crossSystem.libc == "libSystem" then darwin.cctools_cross
+    else binutils.override {
       noSysDirs = true;
-      cross = assert crossSystem != null; crossSystem;
+      cross = crossSystem;
     }));
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
@@ -6158,28 +6117,19 @@ let
     withGd = true;
   };
 
-  glibcCross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc)
-    (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
-     in {
-       inherit stdenv fetchurl;
-       gccCross = gccCrossStageStatic;
-       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
-       installLocales = config.glibc.locales or false;
-     }
-     // lib.optionalAttrs crossGNU {
-        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
-        inherit fetchgit;
-      }));
-
+  glibcCross = forceNativeDrv (glibc.override {
+    gccCross = gccCrossStageStatic;
+    kernelHeaders = linuxHeadersCross;
+  });
 
   # We can choose:
-  libcCrossChooser = name : if name == "glibc" then glibcCross
+  libcCrossChooser = name: if name == "glibc" then glibcCross
     else if name == "uclibc" then uclibcCross
     else if name == "msvcrt" then windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
-  libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
+  libcCross = libcCrossChooser crossSystem.libc;
 
   # Only supported on Linux
   glibcLocales = if stdenv.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
