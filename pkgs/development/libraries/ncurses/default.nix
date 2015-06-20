@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   # the place we want to put *.pc files from other packages anyway. So we must
   # tell it explicitly where to install with PKG_CONFIG_LIBDIR.
   preConfigure = ''
+    export configureFlags="$configureFlags --includedir=$out/include"
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
   '' + lib.optionalString stdenv.isCygwin ''
