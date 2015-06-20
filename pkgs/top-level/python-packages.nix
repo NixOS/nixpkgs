@@ -3446,6 +3446,26 @@ let
     };
   };
 
+  jdcal = buildPythonPackage rec {
+    version = "1.0";
+    name = "jdcal-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "phn";
+      repo = "jdcal";
+      rev = "v${version}";
+      sha256 = "0jjgrrylraqzk3n97hay4gj00ky6vlvkfaapfgqlbcxyq30j24vq";
+    };
+
+    meta = {
+      description = "A module containing functions for converting between Julian dates and calendar dates";
+      homepage = "https://github.com/phn/jdcal";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ lihop ];
+      platforms = platforms.all;
+    };
+  };
+
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
 
@@ -8077,6 +8097,27 @@ let
       sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
     };
     doCheck = false;
+  };
+
+  openpyxl = buildPythonPackage rec {
+    version = "2.2.4";
+    name = "openpyxl-${version}";
+
+    src = pkgs.fetchhg {
+      url = "https://bitbucket.org/openpyxl/openpyxl";
+      rev = "${version}";
+      sha256 = "1g9imbg4sjfyv5sqg2s7h4svhdmbnvq16hvc1a8jpaqq8nc2vjj2";
+    };
+
+    propagatedBuildInputs = with self; [ jdcal ];
+
+    meta = {
+      description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
+      homepage = "https://openpyxl.readthedocs.org";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lihop ];
+      platforms = platforms.all;
+    };
   };
 
   # optfunc = buildPythonPackage ( rec {
