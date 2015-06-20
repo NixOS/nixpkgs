@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
     description = "Cross platform desktop application shell";
     homepage = https://github.com/atom/electron;
     license = licenses.mit;
-    maintainers = [ maintainers.fluffynukeit ];
+    maintainers = [ maintainers.travisbhartwell ];
     platforms = [ "x86_64-linux" ];
   };
 }
