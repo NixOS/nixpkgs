@@ -1497,6 +1497,8 @@ let
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
+  lp_solve = callPackage ../applications/science/math/lp_solve { };
+
   lprof = callPackage ../tools/graphics/lprof { };
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
