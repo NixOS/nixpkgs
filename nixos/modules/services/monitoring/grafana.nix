@@ -27,7 +27,7 @@ let
     root_url = ${cfg.rootUrl}
     router_logging = false
     ; the path relative to the binary where the static (html/js/css) files are placed
-    static_root_path = ${cfg.staticRootPath}
+    static_root_path = ${cfg.package}/public
     ; enable gzip
     enable_gzip = false
     ; https certs & key file
@@ -54,26 +54,6 @@ let
     ssl_mode = disable
     ; For "sqlite3" only
     path = ${cfg.database.path}
-
-    [session]
-    ; Either "memory", "file", "redis", "mysql", default is "memory"
-    provider = file
-    ; Provider config options
-    ; memory: not have any config yet
-    ; file: session file path, e.g. `data/sessions`
-    ; redis: config like redis server addr, poolSize, password, e.g. `127.0.0.1:6379,100,grafana`
-    ; mysql: go-sql-driver/mysql dsn config string, e.g. `user:password@tcp(127.0.0.1)/database_name`
-    provider_config = data/sessions
-    ; Session cookie name
-    cookie_name = grafana_sess
-    ; If you use session in https only, default is false
-    cookie_secure = false
-    ; Session life time, default is 86400
-    session_life_time = 86400
-    ; session id hash func, Either "sha1", "sha256" or "md5" default is sha1
-    session_id_hashfunc = sha1
-    ; Session hash key, default is use random string
-    session_id_hashkey =
 
     [security]
     ; default admin user, created on startup
@@ -105,22 +85,6 @@ let
     ; specify role for unauthenticated users
     org_role = Viewer
 
-    [auth.github]
-    enabled = false
-    client_id = some_id
-    client_secret = some_secret
-    scopes = user:email
-    auth_url = https://github.com/login/oauth/authorize
-    token_url = https://github.com/login/oauth/access_token
-
-    [auth.google]
-    enabled = false
-    client_id = some_client_id
-    client_secret = some_client_secret
-    scopes = https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email
-    auth_url = https://accounts.google.com/o/oauth2/auth
-    token_url = https://accounts.google.com/o/oauth2/token
-
     [log]
     ; Either "console", "file", default is "console"
     ; Use comma to separate multiple modes, e.g. "console, file"
@@ -129,29 +93,6 @@ let
     buffer_len = 10000
     ; Either "Trace", "Debug", "Info", "Warn", "Error", "Critical", default is "Trace"
     level = Info
-
-    ; For "console" mode only
-    [log.console]
-    level =
-
-    ; For "file" mode only
-    [log.file]
-    level =
-    ; This enables automated log rotate(switch of following options), default is true
-    log_rotate = true
-    ; Max line number of single file, default is 1000000
-    max_lines = 1000000
-    ; Max size shift of single file, default is 28 means 1 << 28, 256MB
-    max_lines_shift = 28
-    ; Segment log daily, default is true
-    daily_rotate = true
-    ; Expired days of log file(delete after max days), default is 7
-    max_days = 7
-
-    [event_publisher]
-    enabled = false
-    rabbitmq_url = amqp://localhost/
-    exchange = grafana_events
   '';
 
 in {
@@ -166,7 +107,7 @@ in {
 
     addr = mkOption {
       description = "Listening address.";
-      default = "127.0.0.1";
+      default = "0.0.0.0";
       type = types.str;
     };
 
@@ -197,12 +138,6 @@ in {
     certKey = mkOption {
       description = "Cert key for ssl.";
       default = "";
-      type = types.str;
-    };
-
-    staticRootPath = mkOption {
-      description = "Root path for static assets.";
-      default = "${cfg.package}/share/go/src/github.com/grafana/grafana/public";
       type = types.str;
     };
 
@@ -321,16 +256,9 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["networking.target"];
       serviceConfig = {
-        ExecStart = "bin/grafana-server --config ${cfgFile} web";
+        ExecStart = "${cfg.package}/bin/grafana-server --config ${cfgFile} web";
         WorkingDirectory = cfg.package;
-        User = "grafana";
       };
-    };
-
-    users.extraUsers.grafana = {
-      description = "Grafana user";
-      home = cfg.dataDir;
-      createHome = true;
     };
   };
 }
