@@ -5630,6 +5630,8 @@ let
   omake = callPackage ../development/tools/ocaml/omake { };
   omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
+  omniorb = callPackage ../development/tools/omniorb { };
+
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/tools/misc/openocd { };
