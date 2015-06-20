@@ -20,23 +20,17 @@ stdenv.mkDerivation rec {
   # gcc-5.patch should be removed after 5.9
   patches = [ ./clang.patch ./gcc-5.patch ];
 
-  configureFlags =
-    [ "--with-shared" "--without-debug" "--enable-pc-files" "--enable-symlinks" ]
-    ++ lib.optional unicode "--enable-widec";
+  configureFlags = [
+    "--with-shared"
+    "--without-debug"
+    "--enable-pc-files"
+    "--enable-symlinks"
+    "--includedir=\${out}/include"
+  ] ++ lib.optional unicode "--enable-widec";
 
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
-  # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
-  # directory doesn't exist, the configure script will disable installation of
-  # *.pc files. The configure script usually (on LSB distros) pick $(path of
-  # pkg-config)/../lib/pkgconfig. On NixOS that path doesn't exist and is not
-  # the place we want to put *.pc files from other packages anyway. So we must
-  # tell it explicitly where to install with PKG_CONFIG_LIBDIR.
-  preConfigure = ''
-    export configureFlags="$configureFlags --includedir=$out/include"
-    export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
-    mkdir -p "$PKG_CONFIG_LIBDIR"
-  '' + lib.optionalString stdenv.isCygwin ''
+  preConfigure = lib.optionalString stdenv.isCygwin ''
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
@@ -45,6 +39,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false;
+
+  # The install expects the pkgconfig directory to exist in 5.9
+  preInstall = ''
+    mkdir -p "$out/lib/pkgconfig"
+  '';
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
