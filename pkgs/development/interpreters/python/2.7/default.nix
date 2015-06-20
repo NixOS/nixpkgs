@@ -95,7 +95,11 @@ let
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
     )
     ++ optional zlibSupport zlib
-    ++ optionals stdenv.isDarwin [ CF configd ];
+
+    # depend on CF and configd only if purity is an issue
+    # the impure bootstrap compiler can't build CoreFoundation currently. it requires
+    # <mach-o/dyld.h> which is in our pure bootstrapTools, but not in the system headers.
+    ++ optionals (stdenv.isDarwin && !stdenv.cc.nativeLibc) [ CF configd ];
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
