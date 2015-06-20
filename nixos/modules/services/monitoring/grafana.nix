@@ -83,7 +83,7 @@ let
     ; specify organization name that should be used for unauthenticated users
     org_name = Main Org.
     ; specify role for unauthenticated users
-    org_role = Viewer
+    org_role = ${cfg.auth.anonymous.role}
 
     [log]
     ; Either "console", "file", default is "console"
@@ -242,6 +242,12 @@ in {
         description = "Whether to allow anonymous access";
         default = false;
         type = types.bool;
+      };
+
+      role = mkOption {
+        description = "The role of anonymous users";
+        default = "Viewer";
+        type = types.enum ["Viewer" "Editor" "Admin"];
       };
     };
   };
