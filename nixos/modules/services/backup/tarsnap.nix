@@ -110,6 +110,18 @@ in
                 '';
               };
 
+              persistent = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Store last trigger time on disk and when the timer is
+                  activated, the service unit is triggered immediately if it
+                  would have been triggered at least once during the time when
+                  the timer was inactive. This is useful to catch up on missed
+                  runs of the service when the machine was off.
+                '';
+              };
+
               aggressiveNetworking = mkOption {
                 type = types.bool;
                 default = false;
@@ -242,9 +254,11 @@ in
 
     systemd.services."tarsnap@" = {
       description = "Tarsnap archive '%i'";
-      requires    = [ "network.target" ];
+      requires    = [ "network-online.target" ];
+      after       = [ "network-online.target" ];
 
-      path = [ pkgs.tarsnap pkgs.coreutils ];
+      path = [ pkgs.tarsnap pkgs.coreutils pkgs.iputils ];
+      preStart = "while ! ping -q -c 1 betatest-server.tarsnap.com &> /dev/null; do true; done";
       scriptArgs = "%i";
       script = ''
         mkdir -p -m 0755 ${dirOf cfg.cachedir}
@@ -259,11 +273,13 @@ in
         IOSchedulingClass = "idle";
         NoNewPrivileges = "true";
         CapabilityBoundingSet = "CAP_DAC_READ_SEARCH";
+        PermissionsStartOnly = "true";
       };
     };
 
     systemd.timers = mapAttrs' (name: cfg: nameValuePair "tarsnap@${name}"
       { timerConfig.OnCalendar = cfg.period;
+        timerConfig.Persistent = cfg.persistent;
         wantedBy = [ "timers.target" ];
       }) cfg.archives;
 
