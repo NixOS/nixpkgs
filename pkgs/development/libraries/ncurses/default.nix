@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
-  preConfigure = lib.optionalString stdenv.isCygwin ''
+  preConfigure = ''
+    export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
+    mkdir -p "$PKG_CONFIG_LIBDIR"
+  '' + lib.optionalString stdenv.isCygwin ''
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
@@ -39,11 +42,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = false;
-
-  # The install expects the pkgconfig directory to exist in 5.9
-  preInstall = ''
-    mkdir -p "$out/lib/pkgconfig"
-  '';
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
