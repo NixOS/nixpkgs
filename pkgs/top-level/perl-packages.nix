@@ -5142,11 +5142,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   ListAllUtils = buildPerlPackage {
-    name = "List-AllUtils-0.03";
+    name = "List-AllUtils-0.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.03.tar.gz;
-      sha256 = "05d1q88pr4wgsqcla0g4kd45mxg7h9v3z3f4pv830xaviiqwq1j8";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.09.tar.gz;
+      sha256 = "4cfe6359cc6c9f4ba0d178e223f4b468d3cf7768d645334962f05de069bdaee2";
     };
+    buildInputs = [ TestWarnings ];
     propagatedBuildInputs = [ ListMoreUtils ];
     meta = {
       description = "Combines List::Util and List::MoreUtils in one bite-sized package";
