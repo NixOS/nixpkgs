@@ -1,13 +1,14 @@
 { stdenv, fetchzip, python3Packages, openssl, acl }:
 
 python3Packages.buildPythonPackage rec {
-  name = "attic-0.15";
+  name = "attic-${version}";
+  version = "0.16";
   namePrefix = "";
 
   src = fetchzip {
     name = "${name}-src";
-    url = "https://github.com/jborg/attic/archive/0.15.tar.gz";
-    sha256 = "0c5rsxxcg897a619cbv75hzi1ahpkym8dccf6y3jlcs98z11vm5d";
+    url = "https://github.com/jborg/attic/archive/${version}.tar.gz";
+    sha256 = "008566hhsd3ck70ql0fdn4vaqjfcnf493gwd49d6294f8r7qn06z";
   };
 
   propagatedBuildInputs = with python3Packages;
@@ -18,8 +19,8 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A deduplication backup program";
-    homepage = "https://attic-backup.org";
+    description = "A deduplicating backup program";
+    homepage = https://attic-backup.org;
     license = licenses.bsd3;
     maintainers = [ maintainers.wscott ];
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
