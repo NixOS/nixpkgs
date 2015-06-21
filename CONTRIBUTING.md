@@ -30,10 +30,10 @@
         Additional information.
         ```
   * Examples:
-    * `foo-pkg: init at 2.0.1`
-    * `bar-pkg: update 3.0 -> 3.1.1`
-    * `lala-service: add bazBaz option`
-    * `tata-service: refactor config generation`
+    * `nginx: init at 2.0.1`
+    * `firefox: update 3.0 -> 3.1.1`
+    * `hydra service: add bazBaz option`
+    * `nginx service: refactor config generation`
 * Test your changes. If you work with 
   * nixpkgs
     * update pkg -> 
