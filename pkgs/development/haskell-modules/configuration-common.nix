@@ -194,6 +194,7 @@ self: super: {
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
+  # hfsevents needs CoreServices in scope
   hfsevents = if pkgs.stdenv.isDarwin
     then addBuildTool super.hfsevents pkgs.darwin.apple_sdk.frameworks.CoreServices
     else super.hfsevents;
@@ -201,6 +202,9 @@ self: super: {
   # FSEvents API is very buggy and tests are unreliable. See
   # http://openradar.appspot.com/10207999 and similar issues
   fsnotify = if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
+
+  # the system-fileio tests use canonicalizePath, which fails in the sandbox
+  system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
 
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
