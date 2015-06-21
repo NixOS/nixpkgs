@@ -17,12 +17,10 @@ pythonPackages.buildPythonPackage rec {
     python.modules.curses
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/michael-lazar/rtv;
     description = "Browse Reddit from your Terminal";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer jgeerds ];
   };
 }
-
-
