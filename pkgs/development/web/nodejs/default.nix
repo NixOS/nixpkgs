@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, python, zlib, libuv, v8, utillinux, http-parser
-, pkgconfig, runCommand, which, unstableVersion ? false
+, pkgconfig, runCommand, which, libtool, unstableVersion ? false
 }:
 
 # nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
@@ -7,11 +7,6 @@
 assert stdenv.system != "armv5tel-linux";
 
 let
-  dtrace = runCommand "dtrace-native" {} ''
-    mkdir -p $out/bin
-    ln -sv /usr/sbin/dtrace $out/bin
-  '';
-
   version = "0.12.0";
 
   deps = {
@@ -39,7 +34,7 @@ in stdenv.mkDerivation {
     sha256 = "0cifd2qhpyrbxx71a4hsagzk24qas8m5zvwcyhx69cz9yhxf404p";
   };
 
-  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
+  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
 
   prePatch = ''
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
@@ -51,10 +46,16 @@ in stdenv.mkDerivation {
     (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
   '' else null;
 
+  preBuild = if stdenv.isDarwin then ''
+    patchShebangs .
+  '' else null;
+
   buildInputs = [ python which ]
     ++ (optional stdenv.isLinux utillinux)
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
   setupHook = ./setup-hook.sh;
+
+  enableParallelBuilding = true;
 
   passthru.interpreterName = "nodejs";
 
