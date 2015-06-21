@@ -216,6 +216,15 @@ self: super: {
     '';
   });
 
+  double-conversion = if !pkgs.stdenv.isDarwin
+    then super.double-conversion
+    else overrideCabal super.double-conversion (drv:
+      {
+        patchPhase = ''
+          substituteInPlace double-conversion.cabal --replace stdc++ c++
+        '';
+      });
+
   # Does not compile: "fatal error: ieee-flpt.h: No such file or directory"
   base_4_8_0_0 = markBroken super.base_4_8_0_0;
 
