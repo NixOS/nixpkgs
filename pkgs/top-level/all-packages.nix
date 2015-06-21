@@ -12576,6 +12576,8 @@ let
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
+  tasknc = callPackage ../applications/misc/tasknc { };
+
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
   taskserver = callPackage ../servers/misc/taskserver { };
