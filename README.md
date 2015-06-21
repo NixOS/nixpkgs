@@ -40,6 +40,3 @@ Communication:
 
 * [Mailing list](http://lists.science.uu.nl/mailman/listinfo/nix-dev)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
-
----
-[![Throughput Graph](https://graphs.waffle.io/nixos/nixpkgs/throughput.svg)](https://waffle.io/nixos/nixpkgs/metrics)
