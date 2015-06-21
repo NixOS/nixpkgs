@@ -1676,6 +1676,19 @@ let
     };
   };
 
+  ipfs = buildGoPackage rec {
+    rev = "952dc9c60fdff27902749222fdc30164e7eea1ee";
+    name = "ipfs-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/ipfs/go-ipfs";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner  = "ipfs";
+      repo   = "go-ipfs";
+      sha256 = "1mlilx1i77px85jag4jwpcy8fy0vv15hsmpr1d9zvcs3b7qhskqp";
+    };
+  };
+
   vanackere.ldap = buildGoPackage rec {
     rev = "e29b797d1abde6567ccb4ab56236e033cabf845a";
     name = "ldap-${stdenv.lib.strings.substring 0 7 rev}";
