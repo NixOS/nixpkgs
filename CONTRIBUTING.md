@@ -36,7 +36,7 @@
     * `hydra service: add bazBaz option`
     * `nginx service: refactor config generation`
 * Test your changes. If you work with 
-  a) nixpkgs
+  * nixpkgs
     * update pkg -> 
       * `nix-env -i pkg-name -f <path to your local nixpkgs folder>`
     * add pkg -> 
@@ -45,7 +45,7 @@
     * _If you don't want to install pkg in you profile_. 
       * `nix-build -A pkg-attribute-name <path to your local nixpkgs folder>/default.nix` and check results in the folder `result`. It will appear in the same directory where you did `nix-build`.
     * If you did `nix-env -i pkg-name` you can do `nix-env -e pkg-name` to uninstall it from your system.
-  b) NixOS and its modules
+  * NixOS and its modules
     * You can add new module to your NixOS configuration file (usually it's `/etc/nixos/configuration.nix`.
     And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`
 * If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
