@@ -215,6 +215,7 @@
   sjmackenzie = "Stewart Mackenzie <setori88@gmail.com>";
   skeidel = "Sven Keidel <svenkeidel@gmail.com>";
   smironov = "Sergey Mironov <ierton@gmail.com>";
+  spacefrogg = "Michael Raitza <spacefrogg-nixos@meterriblecrew.net>";
   sprock = "Roger Mason <rmason@mun.ca>";
   spwhitt = "Spencer Whitt <sw@swhitt.me>";
   stephenmw = "Stephen Weinberg <stephen@q5comm.com>";
