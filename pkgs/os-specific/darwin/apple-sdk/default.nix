@@ -1,9 +1,7 @@
 { stdenv, fetchurl, xar, gzip, cpio, CF }:
 
 let
-  # I'd rather not "export" this, since they're somewhat monolithic and encourage bad habits.
-  # Also, the include directory inside here should be captured (almost?) entirely by our more
-  # precise Apple package structure, so with any luck it's unnecessary.
+  # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     version = "10.9";
     name    = "MacOS_SDK-${version}";
