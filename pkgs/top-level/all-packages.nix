@@ -5155,7 +5155,7 @@ let
     gold = false;
   });
 
-  binutilsCross = lowPrio (forceNativeDrv (
+  binutilsCross = assert crossSystem != null; lowPrio (forceNativeDrv (
     if crossSystem.libc == "libSystem" then darwin.cctools_cross
     else binutils.override {
       noSysDirs = true;
@@ -6152,7 +6152,7 @@ let
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
-  libcCross = libcCrossChooser crossSystem.libc;
+  libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
 
   # Only supported on Linux
   glibcLocales = if stdenv.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
