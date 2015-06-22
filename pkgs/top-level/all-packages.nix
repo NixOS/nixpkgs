@@ -1112,6 +1112,10 @@ let
 
   ibus-anthy = callPackage ../tools/inputmethods/ibus-anthy { };
 
+  ibus-table = callPackage ../tools/inputmethods/ibus-table { };
+
+  ibus-table-others = callPackage ../tools/inputmethods/ibus-table-others { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   checkbashism = callPackage ../development/tools/misc/checkbashisms { };
