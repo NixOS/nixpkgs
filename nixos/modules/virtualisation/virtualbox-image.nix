@@ -18,6 +18,15 @@ in {
           a format the qemu-img command accepts.
         '';
       };
+      baseImagePreUnmountHook = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Run commands after generating the GRUB menu and before unmounting
+          /mnt/{proc,dev,sys,}. This can be used to provide additional files in
+          the created image.
+        '';
+      };
     };
   };
 
@@ -92,7 +101,9 @@ in {
             # Generate the GRUB menu.
             ln -s vda /dev/sda
             chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
-  
+            
+            ${config.virtualbox.baseImagePreUnmountHook}
+
             umount /mnt/proc /mnt/dev /mnt/sys
             umount /mnt
           ''
