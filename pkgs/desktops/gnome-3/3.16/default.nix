@@ -41,6 +41,7 @@ let
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
   gtkmm = gtkmm3;
+  gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
   vala = pkgs.vala_0_26;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
