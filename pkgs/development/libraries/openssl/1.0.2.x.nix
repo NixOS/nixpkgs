@@ -31,9 +31,7 @@ let
     ++ stdenv.lib.optionals (stdenv.system == "x86_64-kfreebsd-gnu")
         [ ./gnu.patch
           ./kfreebsd-gnu.patch
-        ]
-
-    ++ stdenv.lib.optional isDarwin ./darwin-arch.patch;
+        ];
 
   extraPatches = stdenv.lib.optional stdenv.isCygwin ./1.0.1-cygwin64.patch;
 in
