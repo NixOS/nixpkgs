@@ -27,6 +27,15 @@ in {
           the created image.
         '';
       };
+      preExportOVAHook = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''VBoxManage modifyvm "$vmName" --natpf1 app,tcp,,22,,22'';
+        description = ''
+          Additional commands to run when creating the Virtualbox VM. These
+          will run just before exporting it to the OVA format.
+        '';
+      };
     };
   };
 
@@ -128,6 +137,7 @@ in {
         VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
         VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
           --medium ${config.system.build.virtualBoxImage}/disk.vdi
+        ${config.virtualbox.preExportOVAHook}
   
         echo "exporting VirtualBox VM..."
         mkdir -p $out
