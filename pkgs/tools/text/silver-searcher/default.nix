@@ -14,11 +14,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ autoreconfHook pkgconfig pcre zlib lzma ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/ggreer/the_silver_searcher/;
     description = "A code-searching tool similar to ack, but faster";
-    maintainers = [ stdenv.lib.maintainers.madjar ];
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.asl20;
+    maintainers = with maintainers; [ madjar jgeerds ];
+    platforms = platforms.all;
+    license = licenses.asl20;
   };
 }

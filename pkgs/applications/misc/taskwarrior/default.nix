@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     ln -s "../../share/doc/task/scripts/bash/task.sh" "$out/etc/bash_completion.d/"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GTD (getting things done) implementation";
     homepage = http://taskwarrior.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcweber jgeerds ];
+    platforms = platforms.linux;
   };
 }

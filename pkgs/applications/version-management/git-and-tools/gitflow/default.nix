@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "A collection of Git extensions to provide high-level repository operations for Vincent Driessen's branching model";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = [ maintainers.offline ];
+    maintainers = with maintainers; [ offline jgeerds ];
   };
 }
