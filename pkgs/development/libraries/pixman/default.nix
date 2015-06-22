@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postInstall = glib.flattenInclude;
 
-  patches = stdenv.lib.optional stdenv.cc.isClang ./fix-clang36.patch;
+  patches = stdenv.lib.optional stdenv.isDarwin ./fix-clang36.patch;
 
   meta = {
     homepage = http://pixman.org;
