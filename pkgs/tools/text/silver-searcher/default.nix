@@ -1,12 +1,14 @@
-{stdenv, fetchurl, autoreconfHook, pkgconfig, pcre, zlib, lzma}:
+{stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, pcre, zlib, lzma}:
 
 stdenv.mkDerivation rec {
   name = "silver-searcher-${version}";
   version = "0.30.0";
 
-  src = fetchurl {
-    url = "https://github.com/ggreer/the_silver_searcher/archive/${version}.tar.gz";
-    sha256 = "1nx5glgd0x55z073qcaazav5sm0jfvxai2bykkldniv6z601pdm3";
+  src = fetchFromGitHub {
+    owner = "ggreer";
+    repo = "the_silver_searcher";
+    rev = "${version}";
+    sha256 = "07fz0hyisy3kisisxy558lfmmjdxq03x5ljdfxfkpw0xbfwgz14j";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
