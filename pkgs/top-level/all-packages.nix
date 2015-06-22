@@ -10610,6 +10610,8 @@ let
     gtk = gtk3;
   };
 
+  bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
+
   bristol = callPackage ../applications/audio/bristol { };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
@@ -12939,6 +12941,7 @@ let
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
           ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
+          ++ lib.optional (cfg.enableBluejeans or false) bluejeans
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
              (with xlibs; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
