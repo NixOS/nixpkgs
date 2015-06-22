@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "A tool for securing communications between a client and a DNS resolver";
     homepage = http://dnscrypt.org/;
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ joachifm ];
+    maintainers = with stdenv.lib.maintainers; [ joachifm jgeerds ];
     platforms = stdenv.lib.platforms.all;
   };
 }
