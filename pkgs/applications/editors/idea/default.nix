@@ -225,37 +225,37 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "1.0.3";
-    build = "141.873";
+    version = "1.0.4";
+    build = "141.874";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "0ksxpml6fzj91hnzy59wlgz7q76dhc3715jalacq748y0i1jdh3f";
+      sha256 = "1cz59h2znzjy7zncc049f2w30kc89rvmk7l51a1y6ymf9s7cj4cm";
     };
   };
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "14.1.3";
-    build = "IC-141.1010.3";
+    version = "14.1.4";
+    build = "IC-141.1532.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "104ba057p49l41g9gdcgbywdxyqzkm4rfm7yivkcsddh5drsk4jv";
+      sha256 = "1yx93dfbajk2icm2jkfp5s5jnr1czyk179va3n5zndzzhzags4xx";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "14.1.3";
-    build = "IU-141.1010.3";
+    version = "14.1.4";
+    build = "IU-141.1532.4";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1flg3rpb86xfcxlys5rxywa0z9c6j9h3qd8mkadx5pnay1f97pwi";
+      sha256 = "1hxs0mh35r43iqd1i1s2g1ha91q2wnb6xs95w572khzjm5dznvaw";
     };
   };
 
@@ -273,25 +273,25 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "4.5.1";
-    build = "141.1245";
+    version = "4.5.2";
+    build = "141.1580";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1rjl8r863cm7bn3bkp8kbkb9f35rb344pycg5qlvjlvwvp2f448f";
+      sha256 = "09v1ni06h381y7d5cglifwsz81kln2y4ld7hgpz1sn56fwbi8ld9";
     };
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "4.5.1";
-    build = "141.1245";
+    version = "4.5.2";
+    build = "141.1580";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1wwyggl6941hd034xfsb3avjgvvah9lh0pdmzlndmvm677cdgzz1";
+      sha256 = "1dgpzn7wgaxicgw48z83fp462g5mxsr7iwkgp11ffypz93ba2dm7";
     };
   };
 
@@ -309,13 +309,13 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "10.0.3";
-    build = "141.1237";
+    version = "10.0.4";
+    build = "141.1550";
     description = "Professional IDE for Web and JavaScript devlopment";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "06m852mbiij2dbmiz5y10bd4mhsdg5dmpy8arg75psl2j354spf8";
+      sha256 = "171i544ssvjnbr1vq6ncxlj38swsygacavsa427qa4s5wzyvdipj";
     };
   };
 

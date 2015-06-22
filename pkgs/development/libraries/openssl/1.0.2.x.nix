@@ -8,10 +8,6 @@ let
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
 
-  patchesCross = isCross: let
-    isDarwin = stdenv.isDarwin || (isCross && stdenv.cross.libc == "libSystem");
-  in stdenv.lib.optional isDarwin ./darwin-arch.patch;
-
   extraPatches = stdenv.lib.optional stdenv.isCygwin ./1.0.1-cygwin64.patch;
 in
 
@@ -26,7 +22,7 @@ stdenv.mkDerivation {
     sha256 = "10vasdg52qiyqvgbp14n9z7ghglmhzvag9qpiz2nfqssycvvlf00";
   };
 
-  patches = (patchesCross false) ++ extraPatches;
+  patches = extraPatches;
 
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
@@ -61,8 +57,6 @@ stdenv.mkDerivation {
     ''; # */
 
   crossAttrs = {
-    patches = patchesCross true;
-
     preConfigure=''
       # It's configure does not like --build or --host
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
