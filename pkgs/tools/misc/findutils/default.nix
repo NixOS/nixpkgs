@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [coreutils];
 
-  patches = [ ./findutils-path.patch ./change_echo_path.patch ];
+  patches = [ ./findutils-path.patch ./change_echo_path.patch ./disable-test-canonicalize.patch ];
 
   doCheck = true;
 
