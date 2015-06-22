@@ -17,7 +17,6 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  NIX_CFLAGS_COMPILE = "-I${libiconv}/include";
-
-  NIX_CFLAGS_LINK = "-L${libiconv}/lib -liconv";
+  NIX_LDFLAGS = "-liconv";
+  propagatedBuildInputs = [ libiconv ];
 })
