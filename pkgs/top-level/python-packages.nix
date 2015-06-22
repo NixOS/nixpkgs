@@ -8862,12 +8862,12 @@ let
 
 
   powerline = buildPythonPackage rec {
-    rev  = "8164f42fb924f38dc5b9dd6d32063e8c3d41e504";
-    name = "powerline-2.1";
+    rev  = "2.1.4";
+    name = "powerline-${rev}";
     src = pkgs.fetchurl {
-      url    = "https://github.com/powerline/powerline/tarball/${rev}";
-      name   = "${name}.tar.bz";
-      sha256 = "0xrasj1lh9ypz1q6q4k997rfym9r16bclfbpzjqj8qfkp4i62lz6";
+      url    = "https://github.com/powerline/powerline/archive/${rev}.tar.gz";
+      name   = "${name}.tar.gz";
+      sha256 = "0gnh5yyackmqcphiympan48dm5lc834yzspss1lp4g1wq3vpyraf";
     };
 
     propagatedBuildInputs = with self; [ pkgs.git pkgs.mercurial pkgs.bazaar self.psutil self.pygit2 ];
