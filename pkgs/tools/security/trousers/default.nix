@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-usercheck" ];
 
-  NIX_CFLAGS_COMPILE = "-DALLOW_NON_TSS_CONFIG_FILE";
+  # Attempt to remove -std=gnu89 when updating if using gcc5
+  NIX_CFLAGS_COMPILE = "-std=gnu89 -DALLOW_NON_TSS_CONFIG_FILE";
   NIX_LDFLAGS = "-lgcc_s";
 
   # Fix broken libtool file

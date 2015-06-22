@@ -118,7 +118,7 @@ in {
       };
 
       appendNameservers = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           A list of name servers that should be appended
@@ -127,7 +127,7 @@ in {
       };
 
       insertNameservers = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           A list of name servers that should be inserted before

@@ -43,7 +43,7 @@ in
 
       consoleFont = mkOption {
         type = types.str;
-        default = "lat9w-16";
+        default = "Lat2-Terminus16";
         example = "LatArCyrHeb-16";
         description = ''
           The font used for the virtual consoles.  Leave empty to use

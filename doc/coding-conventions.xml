@@ -451,10 +451,15 @@ splitting up an existing category.</para>
     </listitem>
   </varlistentry>
   <varlistentry>
-    <term>If it’s a <emphasis>desktop environment</emphasis>
-    (including <emphasis>window managers</emphasis>):</term>
+    <term>If it’s a <emphasis>desktop environment</emphasis>:</term>
     <listitem>
       <para><filename>desktops</filename> (e.g. <filename>kde</filename>, <filename>gnome</filename>, <filename>enlightenment</filename>)</para>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>If it’s a <emphasis>window manager</emphasis>:</term>
+    <listitem>
+      <para><filename>applications/window-managers</filename> (e.g. <filename>awesome</filename>, <filename>compiz</filename>, <filename>stumpwm</filename>)</para>
     </listitem>
   </varlistentry>
   <varlistentry>

@@ -192,7 +192,7 @@ in
 
       extraGroups = mkOption {
         default = [];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         example = [ "postdrop" "mongodb" ];
         description = ''
           Extra groups for the logcheck user, for example to be able to use sendmail,

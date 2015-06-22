@@ -211,7 +211,7 @@ in
     };
 
     boot.initrd.luks.cryptoModules = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default =
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"

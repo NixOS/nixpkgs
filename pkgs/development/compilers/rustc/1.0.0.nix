@@ -1,5 +1,5 @@
 { stdenv, callPackage }:
-callPackage ./makeRustcDerivation.nix {
+callPackage ./generic.nix {
   shortVersion = "1.0.0";
   isRelease = true;
   srcSha = "14brziw91d3r88fa1kvpvhap5ws4z8h2mas7h6k9lpsc2zl9blak";

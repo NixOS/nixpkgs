@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1110r3gpsj9xmybdw7w4zkhj3zmn5mnv2nq0ijbvrywbn019zdfs";
   };
 
-  buildInputs = [ gettext ncurses ];
+  buildInputs = [ ncurses ];
+  nativeBuildInputs = [ gettext ];
 
   makeFlags = [
     "DESTDIR=$(out)"

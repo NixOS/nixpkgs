@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 GNOME_FTP="ftp.gnome.org/pub/GNOME/sources"
 

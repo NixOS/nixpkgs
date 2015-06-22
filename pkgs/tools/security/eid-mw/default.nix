@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     owner = "Fedict";
   };
 
-  buildInputs = [ autoreconfHook gtk2 pcsclite pkgconfig ];
+  buildInputs = [ gtk2 pcsclite ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   enableParallelBuilding = true;
 
@@ -22,6 +23,9 @@ stdenv.mkDerivation rec {
     install -D ${./eid-nssdb.in} $out/bin/eid-nssdb
     substituteInPlace $out/bin/eid-nssdb \
       --replace "modutil" "${nssTools}/bin/modutil"
+
+    # Only provides a useless "about-eid-mw.desktop" that doesn't even work:
+    rm -rf $out/share/applications
   '';
 
   meta = with stdenv.lib; {

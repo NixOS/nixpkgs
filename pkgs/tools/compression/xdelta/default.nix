@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "jmacd";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   postPatch = ''
     cd xdelta3

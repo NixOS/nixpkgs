@@ -34,7 +34,7 @@ in {
     enable = mkOption {
       description = "Whether to enable elasticsearch.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     host = mkOption {
@@ -102,7 +102,7 @@ in {
     extraCmdLineOptions = mkOption {
       description = "Extra command line options for the elasticsearch launcher.";
       default = [];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "-Djava.net.preferIPv4Stack=true" ];
     };
 

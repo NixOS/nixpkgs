@@ -20,6 +20,7 @@
 
 # options
 , developerBuild ? false
+, decryptSslTraffic ? false
 }:
 
 with autonix;
@@ -30,7 +31,7 @@ let
     importManifest ./manifest.nix { mirror = "http://download.qt.io"; };
   srcs = mapAttrs (name: manifest: manifest.src) manifest;
 
-  version = "5.4.1";
+  version = "5.4.2";
 
   callPackage = newScope (self // { inherit qtSubmodule; });
 
@@ -61,7 +62,7 @@ let
         # GNOME dependencies are not used unless gtkStyle == true
         inherit (gnome) libgnomeui GConf gnome_vfs;
         bison = bison2; # error: too few arguments to function 'int yylex(...
-        inherit developerBuild srcs version;
+        inherit developerBuild srcs version decryptSslTraffic;
       };
 
       connectivity = callPackage

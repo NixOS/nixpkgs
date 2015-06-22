@@ -17,7 +17,7 @@ in
 
     enable = mkOption {
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
       description = ''
         If true, enable gitweb in lighttpd. Access it at http://yourserver/gitweb
       '';

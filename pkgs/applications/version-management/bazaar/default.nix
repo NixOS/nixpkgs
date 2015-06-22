@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [ ./add_certificates.patch ];
   postPatch = ''
     substituteInPlace bzrlib/transport/http/_urllib2_wrappers.py \
-      --subst-var-by "certPath" "${cacert}/ca-bundle.crt"
+      --subst-var-by "certPath" "${cacert}/etc/ssl/certs/ca-bundle.crt"
   '';
 
 

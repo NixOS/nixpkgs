@@ -9,7 +9,7 @@
 # https://github.com/codyopel/dotfiles/blob/master/dotfiles/rtorrent.rc
 
 stdenv.mkDerivation {
-  name = "rtorrent-git";
+  name = "rtorrent-git-2014-07-02";
 
   src = fetchFromGitHub {
     owner = "rakshasa";

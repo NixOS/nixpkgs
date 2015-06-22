@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "abc-verifier-${version}";
-  version = "20150406";
+  version = "20150614";
 
   src = fetchhg {
     url    = "https://bitbucket.org/alanmi/abc";
-    rev    = "7d9c50a17d8676ad0c9792bb87102d7cb4b10667";
-    sha256 = "1gg5jjfjjnv0fl7jsz37hzd9dpv58r8p0q8qvms0r289fcdxalcx";
+    rev    = "38661894bc1287cad9bd35978bd252dbfe3e6c56";
+    sha256 = "04v0hkvj501r10pj3yrqrk2463d1d7lhl8dzfjwkmlbmlmpjlvvv";
   };
 
   buildInputs = [ readline ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Sequential Logic Synthesis and Formal Verification";
+    description = "A tool for squential logic synthesis and ormal verification";
     homepage    = "www.eecs.berkeley.edu/~alanmi/abc/abc.htm";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;

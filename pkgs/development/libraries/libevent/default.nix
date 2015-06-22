@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, python }:
+{ stdenv, fetchFromGitHub, autoreconfHook, python, findutils }:
 
 let version = "2.0.22"; in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ python ];
+  buildInputs = [ python ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
 
   patchPhase = ''
     patchShebangs event_rpcgen.py

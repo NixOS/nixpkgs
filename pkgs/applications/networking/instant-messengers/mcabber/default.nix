@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ncurses pkgconfig glib loudmouth libotr gpgme ];
 
   configureFlags = "--with-openssl=${openssl} --enable-modules --enable-otr";
+
+  doCheck = true;
   
   meta = with stdenv.lib; {
     homepage = http://mcabber.com/;

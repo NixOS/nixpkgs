@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ scons ];
+  nativeBuildInputs = [ scons ];
 
   buildPhase = ''
     export CCFLAGS="-std=c99"

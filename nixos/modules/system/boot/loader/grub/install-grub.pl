@@ -55,8 +55,12 @@ my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
 my $grubTargetEfi = get("grubTargetEfi");
 my $bootPath = get("bootPath");
+my $storePath = get("storePath");
 my $canTouchEfiVariables = get("canTouchEfiVariables");
 my $efiSysMountPoint = get("efiSysMountPoint");
+my $gfxmodeEfi = get("gfxmodeEfi");
+my $gfxmodeBios = get("gfxmodeBios");
+my $bootloaderId = get("bootloaderId");
 $ENV{'PATH'} = get("path");
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
@@ -210,7 +214,7 @@ sub GrubFs {
 my $grubBoot = GrubFs($bootPath);
 my $grubStore;
 if ($copyKernels == 0) {
-    $grubStore = GrubFs("/nix/store");
+    $grubStore = GrubFs($storePath);
 }
 
 # Generate the header.
@@ -255,14 +259,22 @@ else {
         fi
 
         # Setup the graphics stack for bios and efi systems
-        insmod vbe
-        insmod efi_gop
-        insmod efi_uga
+        if [ \"\${grub_platform}\" = \"efi\" ]; then
+          insmod efi_gop
+          insmod efi_uga
+        else
+          insmod vbe
+        fi
         insmod font
         if loadfont " . $grubBoot->path . "/grub/fonts/unicode.pf2; then
           insmod gfxterm
-          set gfxmode=auto
-          set gfxpayload=keep
+          if [ \"\${grub_platform}\" = \"efi\" ]; then
+            set gfxmode=$gfxmodeEfi
+            set gfxpayload=keep
+          else
+            set gfxmode=$gfxmodeBios
+            set gfxpayload=text
+          fi
           terminal_output gfxterm
         fi
     ";
@@ -490,6 +502,14 @@ my $efiDiffer = ($efiTarget eq \$prevGrubState->efi);
 my $efiMountPointDiffer = ($efiSysMountPoint eq \$prevGrubState->efiMountPoint);
 my $requireNewInstall = $devicesDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
 
+# install a symlink so that grub can detect the boot drive when set
+# as the root directory
+if (! -l "$bootPath/boot") {
+    if (-e "$bootPath/boot") {
+        unlink "$bootPath/boot";
+    }
+    symlink ".", "$bootPath/boot";
+}
 
 # install non-EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
@@ -497,10 +517,10 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
         if ($grubTarget eq "") {
-            system("$grub/sbin/grub-install", "--recheck", "--boot-directory=$bootPath", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$bootPath", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         } else {
-            system("$grub/sbin/grub-install", "--recheck", "--boot-directory=$bootPath", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$bootPath", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         }
     }
@@ -511,7 +531,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
 if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both")) {
     print STDERR "installing the GRUB $grubVersion EFI boot loader into $efiSysMountPoint...\n";
     if ($canTouchEfiVariables eq "true") {
-        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint") == 0
+        system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", "--bootloader-id=$bootloaderId") == 0
                 or die "$0: installation of GRUB EFI into $efiSysMountPoint failed\n";
     } else {
         system("$grubEfi/sbin/grub-install", "--recheck", "--target=$grubTargetEfi", "--boot-directory=$bootPath", "--efi-directory=$efiSysMountPoint", "--no-nvram") == 0

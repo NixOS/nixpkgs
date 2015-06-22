@@ -417,6 +417,7 @@ in
 
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
+    patches = [ ./xf86-video-intel-2.99.917-libdrm-kernel-4_0-crash.patch ];
   };
 
   xwd = attrs: attrs // {

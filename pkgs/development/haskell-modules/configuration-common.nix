@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_6 = dontCheck super.Cabal_1_18_1_6;
   Cabal_1_20_0_3 = dontCheck super.Cabal_1_20_0_3;
-  Cabal_1_22_3_0 = dontCheck super.Cabal_1_22_3_0;
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_3_0; zlib = self.zlib_0_5_4_2; });
+  Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
+  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; zlib = self.zlib_0_5_4_2; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_6; zlib = self.zlib_0_5_4_2; });
 
   # Break infinite recursions.
@@ -119,6 +119,22 @@ self: super: {
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 
+  hmatrix = overrideCabal super.hmatrix (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [ "-fopenblas" ];
+    extraLibraries = [ pkgs.openblasCompat ];
+    preConfigure = ''
+      sed -i hmatrix.cabal -e 's@/usr/lib/openblas/lib@${pkgs.openblasCompat}/lib@'
+    '';
+  });
+
+  bindings-levmar = overrideCabal super.bindings-levmar (drv: {
+    preConfigure = ''
+      sed -i bindings-levmar.cabal \
+          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
+    '';
+    extraLibraries = [ pkgs.openblasCompat ];
+  });
+
   # The Haddock phase fails for one reason or another.
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;
@@ -150,6 +166,7 @@ self: super: {
   types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
+  record = dontHaddock super.record;                            # https://github.com/nikita-volkov/record/issues/22
 
   # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = (overrideCabal super.darcs (drv: {
@@ -286,6 +303,7 @@ self: super: {
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
+  xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
 
   # These packages try to access the network.
@@ -293,6 +311,7 @@ self: super: {
   amqp-conduit = dontCheck super.amqp-conduit;
   bitcoin-api = dontCheck super.bitcoin-api;
   bitcoin-api-extra = dontCheck super.bitcoin-api-extra;
+  bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
@@ -305,6 +324,7 @@ self: super: {
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
+  pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
@@ -315,6 +335,7 @@ self: super: {
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
+  serversession-backend-redis = dontCheck super.serversession-backend-redis;
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -402,6 +423,7 @@ self: super: {
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
+  influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
@@ -757,7 +779,7 @@ self: super: {
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
   # https://github.com/gwern/mueval/issues/9
-  mueval = markBrokenVersion "0.9.1.1" super.mueval;
+  mueval = appendPatch (appendPatch super.mueval ./mueval-fix.patch) ./mueval-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
@@ -779,11 +801,12 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/116
   # https://github.com/goldfirere/singletons/issues/117
   # https://github.com/goldfirere/singletons/issues/118
-  singletons = markBroken super.singletons;
-  singleton-nats = dontDistribute super.singleton-nats;
+  clash-lib = dontDistribute super.clash-lib;
+  clash-verilog = dontDistribute super.clash-verilog;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
-  clash-lib = dontDistribute super.clash-lib;
+  singleton-nats = dontDistribute super.singleton-nats;
+  singletons = markBroken super.singletons;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
@@ -827,17 +850,36 @@ self: super: {
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
-  # https://github.com/vincenthz/hs-cipher-aes/issues/35
-  cipher-aes = dontCheck super.cipher-aes;
-
   # https://github.com/DanielG/cabal-helper/issues/2
   cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
 
   # https://github.com/jgm/gitit/issues/494
   gitit = markBroken super.gitit;
 
-  # https://github.com/maoe/influxdb-haskell/issues/26
-  influxdb = markBroken (dontCheck super.influxdb);
-  snaplet-influxdb = dontDistribute super.snaplet-influxdb;
+  # https://github.com/ekmett/comonad/issues/25
+  comonad = dontCheck super.comonad;
+
+  # https://github.com/ekmett/semigroupoids/issues/35
+  semigroupoids = disableCabalFlag super.semigroupoids "doctests";
+
+  # https://github.com/jaspervdj/websockets/issues/104
+  websockets = dontCheck super.websockets;
+
+  # Avoid spurious test suite failures.
+  fft = dontCheck super.fft;
+
+  # This package can't be built on non-Windows systems.
+  Win32 = overrideCabal super.Win32 (drv: { broken = !pkgs.stdenv.isCygwin; });
+  inline-c-win32 = dontDistribute super.inline-c-win32;
+
+  # Doesn't work with recent versions of mtl.
+  cron-compat = markBroken super.cron-compat;
+
+  # https://github.com/yesodweb/serversession/issues/1
+  serversession = dontCheck super.serversession;
+
+  # https://github.com/singpolyma/wai-session/issues/8
+  wai-session = markBroken super.wai-session;
+  serversession-frontend-wai = dontDistribute super.serversession-frontend-wai;
 
 }

@@ -63,7 +63,7 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.nixUnstable;
+        default = pkgs.nix;
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';

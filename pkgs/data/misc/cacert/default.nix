@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -pv $out
-    cp -v ca-bundle.crt $out
+    mkdir -pv $out/etc/ssl/certs
+    cp -v ca-bundle.crt $out/etc/ssl/certs
   '';
 
   meta = with stdenv.lib; {

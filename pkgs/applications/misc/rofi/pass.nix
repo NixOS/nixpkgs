@@ -1,13 +1,13 @@
 { stdenv, fetchgit, rofi, wmctrl, xprop, xdotool}:
 
 stdenv.mkDerivation rec {
-  name = "rofi-${version}";
-  version = "2015-05-29";
+  name = "rofi-pass-${version}";
+  version = "2015-06-08";
 
   src = fetchgit {
     url = "https://github.com/carnager/rofi-pass";
-    rev = "92c26557ec4b0508c563d596291571bbef402899";
-    sha256 = "17k9jmmckqaw75i0qsay2gc8mrjrs6jjfwfxaggspj912sflmjng";
+    rev = "7e376b5ec64974c4e8478acf3ada8d111896f391";
+    sha256 = "1ywsxdgy5m63a2f5vd7np2f1qffz7y95z7s1gq5d87s8xd8myadl";
   };
 
   buildInputs = [ rofi wmctrl xprop xdotool ];

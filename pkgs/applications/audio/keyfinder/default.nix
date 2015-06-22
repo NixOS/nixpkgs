@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qt5, taglib }:
 
-stdenv.mkDerivation rec {
-  version = "1.25-17-gf670607";
+let version = "1.26"; in
+stdenv.mkDerivation {
   name = "keyfinder-${version}";
 
   src = fetchFromGitHub {
+    sha256 = "1sfnywc6jdpm03344i6i4pz13mqa4i5agagj4k6252m63cqmjkrc";
+    rev = version;
     repo = "is_KeyFinder";
     owner = "ibsh";
-    rev = "f6706074435ac14c5238ee3f0dd22ac22d72af9c";
-    sha256 = "1sfnywc6jdpm03344i6i4pz13mqa4i5agagj4k6252m63cqmjkrc";
   };
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Musical key detection for digital audio (graphical UI)";
     longDescription = ''
       KeyFinder is an open source key detection tool, for DJs interested in

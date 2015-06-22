@@ -13,7 +13,7 @@ in {
       enable = mkOption {
         description = "Whether to enable the Mesos Master.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       port = mkOption {
@@ -45,7 +45,7 @@ in {
           See https://mesos.apache.org/documentation/latest/configuration/
         '';
         default = [ "" ];
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         example = [ "--credentials=VALUE" ];
       };
 

@@ -45,7 +45,7 @@ in
       };
 
       servers = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
         description = ''

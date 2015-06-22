@@ -17,7 +17,12 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ autoreconfHook libxcomp ];
+  patches = [
+    ./0660_nxcomp_fix-negotiation-in-stage-10-error.full+lite.patch
+  ];
+
+  buildInputs = [ libxcomp ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   preAutoreconf = ''
     cd nxproxy/

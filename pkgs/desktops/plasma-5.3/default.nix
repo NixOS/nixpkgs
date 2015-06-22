@@ -12,7 +12,7 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, kf5, pkgs, qt5, stdenv, debug ? false }:
+{ autonix, kf5, kdeApps, pkgs, qt5, stdenv, debug ? false }:
 
 with stdenv.lib; with autonix;
 
@@ -143,19 +143,19 @@ let
       };
 
       plasma-workspace = with pkgs; super.plasma-workspace // {
-        patches = [
-          (substituteAll {
-            src = ./plasma-workspace/0001-startkde-NixOS-patches.patch;
-            inherit (pkgs) bash gnused gnugrep socat;
-            inherit (kf5) kconfig kinit kservice;
-            inherit (pkgs.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
-            qt5tools = qt5.tools;
-            dbus_tools = pkgs.dbus.tools;
-          })
-        ];
+        patches = [ ./plasma-workspace/0001-startkde-NixOS-patches.patch ];
         buildInputs = with xlibs;
           super.plasma-workspace.buildInputs ++ [ libSM libXcursor pam ];
+
+        inherit (pkgs) bash gnused gnugrep socat;
+        inherit (kf5) kconfig kinit kservice;
+        inherit (pkgs.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
+        kde_workspace = kdeApps.kde-workspace;
+        qt5tools = qt5.tools;
+        dbus_tools = pkgs.dbus.tools;
+
         postPatch = ''
+          substituteAllInPlace startkde/startkde.cmake
           substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
             --replace kdostartupconfig5 $out/bin/kdostartupconfig5
         '';

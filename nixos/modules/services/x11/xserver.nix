@@ -469,6 +469,11 @@ in
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
+    # The default max inotify watches is 8192.
+    # Nowadays most apps require a good number of inotify watches,
+    # the value below is used by default on several other distros.
+    boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
+
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     systemd.services.display-manager =

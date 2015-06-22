@@ -178,7 +178,7 @@ let
           + " -I${ilmbase}/include/OpenEXR";
       };
 
-      kinit = super.kinit // { patches = [ ./kinit/kinit-libpath.patch ]; };
+      kinit = super.kinit // { patches = [ ./kinit/0001-kinit-libpath.patch ]; };
 
       kpackage = super.kpackage // { patches = [ ./kpackage/0001-allow-external-paths.patch ]; };
 

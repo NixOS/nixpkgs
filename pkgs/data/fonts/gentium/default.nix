@@ -1,46 +1,29 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="1.504";
-    baseName="GentiumPlus";
-    name="${baseName}-${version}";
-    url="http://scripts.sil.org/cms/scripts/render_download.php?&format=file&media_id=${name}.zip&filename=${name}";
-    hash="04kslaqbscpfrc6igkifcv1nkrclrm35hqpapjhw9102wpq12fpr";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-    name = "${sourceInfo.name}.zip";
+stdenv.mkDerivation rec {
+  name = "gentium-${version}";
+  version = "1.504";
+
+  src = fetchzip {
+    name = "${name}.zip";
+    url = "http://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=GentiumPlus-${version}.zip&filename=${name}.zip";
+    sha256 = "1xdx80dfal0b8rkrp1janybx2hki7algnvkx4hyghgikpjcjkdh7";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  phases = [ "unpackPhase" "installPhase" ];
 
-  phaseNames = ["addInputs" "doUnpack" "installFonts"];
+  installPhase = ''
+    mkdir -p $out/share/fonts/truetype
+    mkdir -p $out/share/doc/${name}
+    cp -v *.ttf $out/share/fonts/truetype/
+    cp -v FONTLOG.txt GENTIUM-FAQ.txt README.txt $out/share/doc/${name}
+  '';
 
-  meta = {
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
+  meta = with stdenv.lib; {
+    homepage = "http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&item_id=Gentium";
+    description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
+    maintainers = with maintainers; [ raskin rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://scripts.sil.org/cms/scripts/page.php?item_id=Gentium_download";
-    };
-  };
-}) x
-
+}

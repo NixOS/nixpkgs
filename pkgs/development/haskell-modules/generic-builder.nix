@@ -72,7 +72,10 @@ let
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
 
-  enableParallelBuilding = versionOlder "7.10" ghc.version || (versionOlder "7.8" ghc.version && !hasActiveLibrary);
+  # We cannot enable -j<n> parallelism for libraries because GHC is far more
+  # likely to generate a non-determistic library ID in that case. Further
+  # details are at <https://github.com/peti/ghc-library-id-bug>.
+  enableParallelBuilding = versionOlder "7.8" ghc.version && !hasActiveLibrary;
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"

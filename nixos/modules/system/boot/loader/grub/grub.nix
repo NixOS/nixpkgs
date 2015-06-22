@@ -27,8 +27,13 @@ let
 
   f = x: if x == null then "" else "" + x;
 
-  grubConfig = args: pkgs.writeText "grub-config.xml" (builtins.toXML
-    { splashImage = f config.boot.loader.grub.splashImage;
+  grubConfig = args:
+    let
+      efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+      efiSysMountPoint' = replaceChars [ "/" ] [ "-" ] efiSysMountPoint;
+    in
+    pkgs.writeText "grub-config.xml" (builtins.toXML
+    { splashImage = f cfg.splashImage;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.stdenv.shell}";
@@ -36,13 +41,15 @@ let
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
       bootPath = args.path;
-      efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+      storePath = config.boot.loader.grub.storePath;
+      bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
+      inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
-        default fsIdentifier efiSupport;
+        default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
       path = (makeSearchPath "bin" ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfsProgs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
@@ -141,6 +148,17 @@ in
             '';
           };
 
+          efiBootloaderId = mkOption {
+            default = null;
+            example = "NixOS-fsid";
+            type = types.nullOr types.str;
+            description = ''
+              The id of the bootloader to store in efi nvram.
+              The default is to name it NixOS and append the path or efiSysMountPoint.
+              This is only used if <literal>boot.loader.efi.canTouchEfiVariables</literal> is true.
+            '';
+          };
+
           devices = mkOption {
             default = [ ];
             example = [ "/dev/sda" "/dev/sdb" ];
@@ -160,6 +178,15 @@ in
         type = types.str;
         description = ''
           GRUB entry name instead of default.
+        '';
+      };
+
+      storePath = mkOption {
+        default = "/nix/store";
+        type = types.str;
+        description = ''
+          Path to the Nix store when looking for kernels at boot.
+          Only makes sense when copyKernels is false.
         '';
       };
 
@@ -239,6 +266,24 @@ in
           14-colour image in XPM format, optionally compressed with
           <command>gzip</command> or <command>bzip2</command>.  Set to
           <literal>null</literal> to run GRUB in text mode.
+        '';
+      };
+
+      gfxmodeEfi = mkOption {
+        default = "auto";
+        example = "1024x768";
+        type = types.str;
+        description = ''
+          The gfxmode to pass to grub when loading a graphical boot interface under efi.
+        '';
+      };
+
+      gfxmodeBios = mkOption {
+        default = "1024x768";
+        example = "auto";
+        type = types.str;
+        description = ''
+          The gfxmode to pass to grub when loading a graphical boot interface under bios.
         '';
       };
 
@@ -337,7 +382,7 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png");
+        else "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png");
     }
 
     (mkIf cfg.enable {
