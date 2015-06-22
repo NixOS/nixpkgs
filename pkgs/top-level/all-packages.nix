@@ -781,6 +781,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  ckbcomp = callPackage ../tools/X11/ckbcomp { };
+
   cli53 = callPackage ../tools/admin/cli53 { };
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
