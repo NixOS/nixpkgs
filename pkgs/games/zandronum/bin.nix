@@ -17,6 +17,8 @@
 , zlib
 }:
 
+assert stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   name = "zandronum-2.0";
   src = fetchurl {
