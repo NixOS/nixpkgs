@@ -238,6 +238,14 @@ in
         '';
       };
 
+      startDbusSession = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to start a new DBus session when you log in with dbus-launch.
+        '';
+      };
+
       layout = mkOption {
         type = types.str;
         default = "us";

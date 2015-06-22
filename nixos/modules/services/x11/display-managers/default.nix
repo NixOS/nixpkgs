@@ -50,6 +50,12 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
+      ${optionalString cfg.startDbusSession ''
+        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+          exec ${pkgs.dbus.tools}/bin/dbus-launch --exit-with-session "$0" "$sessionType"
+        fi
+      ''}
+
       ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
         # Stop systemd from handling the power button and lid switch,
         # since presumably the desktop environment will handle these.
