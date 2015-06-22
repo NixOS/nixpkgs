@@ -280,6 +280,8 @@ let
     runScript = args.runScript;
   };
 
+  buildMaven = callPackage ../build-support/build-maven.nix {};
+
   dotnetenv = import ../build-support/dotnetenv {
     inherit stdenv;
     dotnetfx = dotnetfx40;
