@@ -827,6 +827,8 @@ let
     inherit (haskellngPackages) ghcWithPackages diagrams-builder;
   };
 
+  dialog = callPackage ../development/tools/misc/dialog { };
+
   direnv = callPackage ../tools/misc/direnv { };
 
   discount = callPackage ../tools/text/discount { };
