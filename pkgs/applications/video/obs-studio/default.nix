@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
                   libv4l
                   libxkbcommon
                   qt5.base
+                  qt5.x11extras
                   x264
                 ];
 
