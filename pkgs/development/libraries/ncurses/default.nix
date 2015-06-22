@@ -107,5 +107,8 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.wkennington ];
   };
 
-  passthru.ldflags = "-lncurses";
+  passthru = {
+    ldflags = "-lncurses";
+    inherit unicode abiVersion;
+  };
 }

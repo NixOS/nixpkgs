@@ -280,6 +280,8 @@ let
     runScript = args.runScript;
   };
 
+  buildMaven = callPackage ../build-support/build-maven.nix {};
+
   dotnetenv = import ../build-support/dotnetenv {
     inherit stdenv;
     dotnetfx = dotnetfx40;
@@ -586,6 +588,8 @@ let
 
   ascii = callPackage ../tools/text/ascii { };
 
+  asciinema = callPackage ../tools/misc/asciinema { };
+
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texLiveAggregationFun {
       paths = [ texLive texLiveExtra texLiveCMSuper ];
@@ -779,6 +783,8 @@ let
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  ckbcomp = callPackage ../tools/X11/ckbcomp { };
+
   cli53 = callPackage ../tools/admin/cli53 { };
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
@@ -822,6 +828,8 @@ let
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellngPackages) ghcWithPackages diagrams-builder;
   };
+
+  dialog = callPackage ../development/tools/misc/dialog { };
 
   direnv = callPackage ../tools/misc/direnv { };
 
@@ -1103,6 +1111,10 @@ let
   ibus-qt = callPackage ../tools/inputmethods/ibus-qt { };
 
   ibus-anthy = callPackage ../tools/inputmethods/ibus-anthy { };
+
+  ibus-table = callPackage ../tools/inputmethods/ibus-table { };
+
+  ibus-table-others = callPackage ../tools/inputmethods/ibus-table-others { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
@@ -2049,7 +2061,9 @@ let
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lxc = callPackage ../os-specific/linux/lxc { };
+  lxc = callPackage ../os-specific/linux/lxc {
+    wrapPython = python3Packages.wrapPython;
+  };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -2076,6 +2090,8 @@ let
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
   };
+
+  maim = callPackage ../tools/graphics/maim {};
 
   mairix = callPackage ../tools/text/mairix { };
 
@@ -3182,6 +3198,10 @@ let
   wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
+
+  wolfebin = callPackage ../tools/networking/wolfebin {
+    python = python2;
+  };
 
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
@@ -6464,6 +6484,10 @@ let
     lua = lua5_1;
   };
 
+  k9copy = callPackage ../applications/video/k9copy {
+    kf5 = kf510;
+  };
+
   keybinder3 = callPackage ../development/libraries/keybinder3 {
     automake = automake111x;
   };
@@ -6717,6 +6741,8 @@ let
   libgtop = callPackage ../development/libraries/libgtop {};
 
   libLAS = callPackage ../development/libraries/libLAS { };
+
+  liblaxjson = callPackage ../development/libraries/liblaxjson { };
 
   liblo = callPackage ../development/libraries/liblo { };
 
@@ -8027,7 +8053,10 @@ let
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
-  tk = callPackage ../development/libraries/tk { };
+  tk = tk-8_6;
+
+  tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
+  tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
   tnt = callPackage ../development/libraries/tnt { };
 
@@ -10537,6 +10566,8 @@ let
     gtk = gtk3;
   };
 
+  bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
+
   bristol = callPackage ../applications/audio/bristol { };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
@@ -12323,6 +12354,8 @@ let
 
   slmenu = callPackage ../applications/misc/slmenu {};
 
+  slop = callPackage ../tools/misc/slop {};
+
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
@@ -12480,7 +12513,9 @@ let
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
-  tabbed = callPackage ../applications/window-managers/tabbed { };
+  tabbed = callPackage ../applications/window-managers/tabbed {
+    enableXft = true;
+  };
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
@@ -12502,6 +12537,8 @@ let
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
+
+  tasknc = callPackage ../applications/misc/tasknc { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
@@ -12862,6 +12899,7 @@ let
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
           ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
+          ++ lib.optional (cfg.enableBluejeans or false) bluejeans
          );
       libs = [ gstreamer gst_plugins_base ] ++ lib.optionals (cfg.enableQuakeLive or false)
              (with xlibs; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
@@ -13512,7 +13550,10 @@ let
 
   xboard =  callPackage ../games/xboard { };
 
-  xconq = callPackage ../games/xconq {};
+  xconq = callPackage ../games/xconq {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
 
   # TODO: the corresponding nix file is missing
   # xracer = callPackage ../games/xracer { };
@@ -13982,6 +14023,8 @@ let
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
 
+    inherit callPackage;
+
     bedrock = callPackage ../development/coq-modules/bedrock {};
 
     contribs =
@@ -14024,19 +14067,18 @@ let
 
   mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
 
-    mathcomp = callPackage ../development/coq-modules/mathcomp/1.5.nix {
-      coq = coq_8_5;
-      ssreflect = ssreflect;
-    };
+    inherit callPackage;
 
-    ssreflect = callPackage ../development/coq-modules/ssreflect/1.5.nix {
-      coq = coq_8_5;
-    };
+    coq = coq_8_5;
+
+    mathcomp = callPackage ../development/coq-modules/mathcomp { };
+
+    ssreflect = callPackage ../development/coq-modules/ssreflect { };
 
   };
 
   coqPackages = recurseIntoAttrs (mkCoqPackages_8_4 coqPackages);
-  coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages);
+  coqPackages_8_5 = recurseIntoAttrs (mkCoqPackages_8_5 coqPackages_8_5);
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
@@ -14372,7 +14414,9 @@ let
   gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
   gnuk-git = callPackage ../misc/gnuk/git.nix { };
 
-  guix = callPackage ../tools/package-management/guix { };
+  guix = callPackage ../tools/package-management/guix {
+    libgcrypt = libgcrypt_1_5;
+  };
 
   gxemul = callPackage ../misc/emulators/gxemul { };
 
@@ -14474,6 +14518,8 @@ let
   };
 
   robomongo = callPackage ../applications/misc/robomongo { };
+
+  rucksack = callPackage ../development/tools/rucksack { };
 
   opkg = callPackage ../tools/package-management/opkg { };
 

@@ -324,7 +324,7 @@ in {
     };
 
     kube2sky = {
-      enable = mkEnableOption "Whether to enable kube2sky dns service.";
+      enable = mkEnableOption "kube2sky dns service";
 
       domain = mkOption  {
         description = "Kuberntes kube2sky domain under which all DNS names will be hosted.";

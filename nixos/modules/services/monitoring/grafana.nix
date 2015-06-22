@@ -154,7 +154,7 @@ let
 
 in {
   options.services.grafana = {
-    enable = mkEnableOption "Whether to enable grafana.";
+    enable = mkEnableOption "grafana";
 
     protocol = mkOption {
       description = "Which protocol to listen.";

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Low-latency, high quality voice chat software";
     homepage = "http://mumble.sourceforge.net/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric jgeerds ];
     platforms = platforms.linux;
   };
 }

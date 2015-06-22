@@ -1,14 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, tcl, libXft, fontconfig }:
+{ stdenv, src, pkgconfig, tcl, libXft, fontconfig, patches ? [], ... }:
 
 stdenv.mkDerivation {
   name = "tk-${tcl.version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/tcl/tk${tcl.version}-src.tar.gz";
-    sha256 = "1h96vp15zl5xz0d4qp6wjyrchqmrmdm3q5k22wkw9jaxbvw9vy88";
-  };
-
-  patches = [ ./different-prefix-with-tcl.patch ];
+  inherit src patches;
 
   postInstall = ''
     ln -s $out/bin/wish* $out/bin/wish

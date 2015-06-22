@@ -77,8 +77,6 @@ let
       smtpd_tls_key_file = ${cfg.sslKey}
 
       smtpd_use_tls = yes
-
-      recipientDelimiter = ${cfg.recipientDelimiter}
     ''
     + optionalString (cfg.virtual != "") ''
       virtual_alias_maps = hash:/etc/postfix/virtual
@@ -291,14 +289,6 @@ in
         description = "SSL key to use.";
       };
 
-      recipientDelimiter = mkOption {
-        default = "";
-        example = "+";
-        description = "
-          Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
-        ";
-      };
-
       virtual = mkOption {
         default = "";
         description = "
@@ -369,31 +359,30 @@ in
 
         daemonType = "fork";
 
-        preStart =
-          ''
-            if ! [ -d /var/spool/postfix ]; then
-              ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
-            fi
+        preStart = ''
+          if ! [ -d /var/spool/postfix ]; then
+            ${pkgs.coreutils}/bin/mkdir -p /var/spool/mail /var/postfix/conf /var/postfix/queue
+          fi
 
-            ${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/postfix
-            ${pkgs.coreutils}/bin/chown -R ${user}:${setgidGroup} /var/postfix/queue
-            ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue
-            ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
-            ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
-            ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/mail
+          ${pkgs.coreutils}/bin/chown -R ${user}:${group} /var/postfix
+          ${pkgs.coreutils}/bin/chown -R ${user}:${setgidGroup} /var/postfix/queue
+          ${pkgs.coreutils}/bin/chmod -R ug+rwX /var/postfix/queue
+          ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
+          ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
+          ${pkgs.coreutils}/bin/ln -sf /var/spool/mail /var/mail
 
-            ln -sf "${pkgs.postfix}/share/postfix/conf/"* /var/postfix/conf
+          ln -sf "${pkgs.postfix}/etc/postfix/"* /var/postfix/conf
 
-            ln -sf ${aliasesFile} /var/postfix/conf/aliases
-            ln -sf ${virtualFile} /var/postfix/conf/virtual
-            ln -sf ${mainCfFile} /var/postfix/conf/main.cf
-            ln -sf ${masterCfFile} /var/postfix/conf/master.cf
+          ln -sf ${aliasesFile} /var/postfix/conf/aliases
+          ln -sf ${virtualFile} /var/postfix/conf/virtual
+          ln -sf ${mainCfFile} /var/postfix/conf/main.cf
+          ln -sf ${masterCfFile} /var/postfix/conf/master.cf
 
-            ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
-            ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
+          ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
+          ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
 
-            ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
-          '';
+          ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
+        '';
 
         preStop = ''
             ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop

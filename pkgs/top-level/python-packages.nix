@@ -3410,6 +3410,26 @@ let
     };
   };
 
+  i3-py = buildPythonPackage rec {
+    version = "0.6.4";
+    name = "i3-py-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/i3-py/i3-py-${version}.tar.gz";
+      sha256 = "1sgl438jrb4cdyl7hbc3ymwsf7y3zy09g1gh7ynilxpllp37jc8y";
+    };
+
+    # no tests in tarball
+    doCheck = false;
+
+    meta = {
+      description = "tools for i3 users and developers";
+      homepage =  "https://github.com/ziberna/i3-py";
+      license = licenses.gpl3;
+      platforms = platforms.linux;
+    };
+  };
+
   jsonpatch = buildPythonPackage rec {
     name = "jsonpatch-1.8";
 
@@ -3442,6 +3462,26 @@ let
       description = "Identify specific nodes in a JSON document (RFC 6901)";
       homepage = "https://github.com/stefankoegl/python-json-pointer";
       license = licenses.bsd3;
+      platforms = platforms.all;
+    };
+  };
+
+  jdcal = buildPythonPackage rec {
+    version = "1.0";
+    name = "jdcal-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "phn";
+      repo = "jdcal";
+      rev = "v${version}";
+      sha256 = "0jjgrrylraqzk3n97hay4gj00ky6vlvkfaapfgqlbcxyq30j24vq";
+    };
+
+    meta = {
+      description = "A module containing functions for converting between Julian dates and calendar dates";
+      homepage = "https://github.com/phn/jdcal";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ lihop ];
       platforms = platforms.all;
     };
   };
@@ -8079,6 +8119,27 @@ let
     doCheck = false;
   };
 
+  openpyxl = buildPythonPackage rec {
+    version = "2.2.4";
+    name = "openpyxl-${version}";
+
+    src = pkgs.fetchhg {
+      url = "https://bitbucket.org/openpyxl/openpyxl";
+      rev = "${version}";
+      sha256 = "1g9imbg4sjfyv5sqg2s7h4svhdmbnvq16hvc1a8jpaqq8nc2vjj2";
+    };
+
+    propagatedBuildInputs = with self; [ jdcal ];
+
+    meta = {
+      description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
+      homepage = "https://openpyxl.readthedocs.org";
+      license = licenses.mit;
+      maintainers = with maintainers; [ lihop ];
+      platforms = platforms.all;
+    };
+  };
+
   # optfunc = buildPythonPackage ( rec {
   #   name = "optfunc-git";
   #
@@ -8884,10 +8945,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.40";
+    version = "0.41";
 
     src = pkgs.fetchurl {
-      sha256 = "0zyp2zpbckpdhapijvg7jwli71ilhp02awn99ly70q3l1f44m9dj";
+      sha256 = "0s8zsa06vbs8n959ri2cc2fk5dkxjfr0zabqzjvx7klasxwzmsra";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 

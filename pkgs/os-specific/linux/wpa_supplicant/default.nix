@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     CONFIG_IEEE80211W=y
     CONFIG_TLS=openssl
     CONFIG_TLSV11=y
-    CONFIG_TLSV12=y
+    #CONFIG_TLSV12=y see #8332
     CONFIG_IEEE80211R=y
     CONFIG_DEBUG_SYSLOG=y
     #CONFIG_PRIVSEP=y

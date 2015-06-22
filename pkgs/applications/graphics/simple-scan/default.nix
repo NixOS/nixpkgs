@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, intltool, itstool, libxml2
 , makeWrapper, pkgconfig, saneBackends, systemd, vala }:
 
-let version = "3.17.2"; in
+let version = "3.17.3"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "07r32hsafb8is2fs0flk7dvi5agyzf9jqs96sbgia2pizmyl1s1m";
+    sha256 = "1kb2xk4vr2nab3hfjfnfyapv2z65h99c3g7mfkmanzrng5xwrj8q";
     url = "https://launchpad.net/simple-scan/3.17/${version}/+download/${name}.tar.xz";
   };
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cairo colord glib gtk3 intltool itstool libxml2
+  buildInputs = [ cairo colord glib gtk3 libxml2
     saneBackends systemd vala ];
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ intltool itstool makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
 
