@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "jruby-${version}";
 
-  version = "1.7.12";
+  version = "1.7.20.1";
 
   src = fetchurl {
     url = "http://jruby.org.s3.amazonaws.com/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha1 = "056cee1138e49da40a77f179b771372692479002";
+    sha1 = "6a6e701a3a5769ec5d53a78660521c37da36e41f";
   };
 
   buildInputs = [ makeWrapper ];
