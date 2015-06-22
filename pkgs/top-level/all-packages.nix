@@ -588,6 +588,8 @@ let
 
   ascii = callPackage ../tools/text/ascii { };
 
+  asciinema = callPackage ../tools/misc/asciinema { };
+
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texLiveAggregationFun {
       paths = [ texLive texLiveExtra texLiveCMSuper ];
