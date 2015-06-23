@@ -21,6 +21,7 @@
 # package customization
 , enableSELinux ? false, libselinux ? null
 , enableNaCl ? false
+, enableHotwording ? false
 , useOpenSSL ? false, nss ? null, openssl ? null
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome_keyring3 ? null
@@ -130,11 +131,7 @@ let
       chmod -R u+w third_party
     '';
 
-    postPatch = optionalString (versionOlder version "42.0.0.0") ''
-      sed -i -e '/base::FilePath exe_dir/,/^ *} *$/c \
-        sandbox_binary = base::FilePath(getenv("CHROMIUM_SANDBOX_BINARY_PATH"));
-      ' sandbox/linux/suid/client/setuid_sandbox_client.cc
-    '' + ''
+    postPatch = ''
       sed -i -e '/module_path *=.*libexif.so/ {
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
@@ -158,11 +155,10 @@ let
       use_pulseaudio = pulseSupport;
       linux_link_pulseaudio = pulseSupport;
       disable_nacl = !enableNaCl;
+      enable_hotwording = enableHotwording;
       use_openssl = useOpenSSL;
       selinux = enableSELinux;
       use_cups = cupsSupport;
-    } // optionalAttrs (versionOlder version "42.0.0.0") {
-      linux_sandbox_chrome_path="${libExecPath}/${packageName}";
     } // {
       werror = "";
       clang = false;
