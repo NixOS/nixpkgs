@@ -1861,6 +1861,8 @@ let
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
+  ipcalc = callPackage ../tools/networking/ipcalc {};
+
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
 
   ipxe = callPackage ../tools/misc/ipxe { };
@@ -2882,6 +2884,8 @@ let
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
   skydns = callPackage ../servers/dns/skydns { };
+
+  sipcalc = callPackage ../tools/networking/sipcalc { };
 
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
