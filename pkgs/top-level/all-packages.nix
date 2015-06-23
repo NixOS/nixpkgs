@@ -789,6 +789,8 @@ let
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
 
+  clib = callPackage ../tools/package-management/clib { };
+
   consul = goPackages.consul;
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
