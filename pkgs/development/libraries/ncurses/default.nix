@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
     # Get the path to the config util
     cfg=$(basename $out/bin/ncurses*-config)
 
+    # symlink the full suffixed include directory
+    ln -svf . $out/include/ncurses$suffix
+
     for newsuffix in $suffixes ""; do
       # Create a non-abi versioned config util links
       ln -svf $cfg $out/bin/ncurses$newsuffix-config
