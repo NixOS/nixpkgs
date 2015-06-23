@@ -12299,6 +12299,10 @@ let
     gst_plugins_bad = null;
   };
 
+  qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
+  };
+
   rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
     fltk = fltk13;
