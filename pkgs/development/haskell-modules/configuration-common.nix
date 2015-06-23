@@ -792,7 +792,8 @@ self: super: {
   HGamer3D-Data = markBroken super.HGamer3D-Data;
 
   # https://github.com/ndmitchell/shake/issues/206
-  shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin; });
+  # https://github.com/ndmitchell/shake/issues/267
+  shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
 
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
