@@ -27,6 +27,25 @@ in {
           the created image.
         '';
       };
+      baseImageQemuOpts = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          -virtfs local,path=/home,security_model=none,mount_tag=home \
+          -virtfs local,path=/boot,security_model=none,mount_tag=boot
+        '';
+        description = ''
+          Additional options to the QEMU instance where the image will be
+          built. This is useful in conjunction with baseImagePreUnmountHook.
+          A backslash must be given at the end of a line if a new line
+          follows, see the example.
+
+          If a directory is provided by adding a -virtfs option one can mount
+          it with `mount -t 9p shared /fs/foo -o
+          trans=virtio,version=9p2000.L,msize=262144,cache=loose`. Here `shared`
+          is the `mount_tag`.
+        '';
+      };
       preExportOVAHook = mkOption {
         type = types.lines;
         default = "";
@@ -60,6 +79,7 @@ in {
             buildInputs = [ pkgs.utillinux pkgs.perl ];
             exportReferencesGraph =
               [ "closure" config.system.build.toplevel ];
+            QEMU_OPTS = cfg.baseImageQemuOpts;
           }
           ''
             # Create a single / partition.
