@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
-    "--includedir=\${out}/include"
   ] ++ lib.optional unicode "--enable-widec";
 
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
+    configureFlagsArray+=("--includedir=$out/include")
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
   '' + lib.optionalString stdenv.isCygwin ''
