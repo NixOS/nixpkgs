@@ -5165,7 +5165,7 @@ let
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
-  atom-shell = callPackage ../development/tools/atom-shell {
+  electron = callPackage ../development/tools/electron {
     gconf = pkgs.gnome.GConf;
   };
 
