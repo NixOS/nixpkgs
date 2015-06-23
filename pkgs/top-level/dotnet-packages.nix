@@ -290,13 +290,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpCompilerService = buildDotnetPackage rec {
     baseName = "FSharp.Compiler.Service";
-    version = "0.0.89";
+    version = "0.0.90";
 
     src = fetchFromGitHub {
       owner = "fsharp";
       repo = "FSharp.Compiler.Service";
-      rev = "55a8143a82bb31c3e8c1ad2af64eb64162fed0d7";
-      sha256 = "1f5f97382h8v9p0j7c2gksrps12d869m752n692b3g0k8h4zpial";
+      rev = "a87939ab3f3c571cad79bc3b5f298aa3e180e6b3";
+      sha256 = "0axr38q8m0h11hhbxg5myd1wwfgysadriln8c7bqsv5sf9djihvd";
     };
 
     buildInputs = [
