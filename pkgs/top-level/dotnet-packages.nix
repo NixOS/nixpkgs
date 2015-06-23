@@ -624,6 +624,39 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  Projekt = buildDotnetPackage rec {
+    baseName = "projekt";
+    version = "git-" + (builtins.substring 0 10 rev);
+    rev = "715a21e5cd3c86310387562618b04e979d0ec9c4";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kjnilsson";
+      repo = "projekt";
+      sha256 = "1ph3af07wmia6qkiq1qlywaj2xh6zn5drdx19dwb1g3237h5fnz0";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.UnionArgParser
+      dotnetPackages.FsUnit
+    ];
+
+    preConfigure = ''
+      sed -i -e "s/FSharp.Core, Version=\$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a/FSharp.Core/" src/Projekt/Projekt.fsproj
+    '';
+
+    outputFiles = [ "src/Projekt/bin/Release/*" ];
+
+    meta = {
+      description = "A command-line tool for manipulating F# project files";
+      homepage = "https://github.com/kjnilsson/projekt";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
   UnionArgParser = buildDotnetPackage rec {
     baseName = "UnionArgParser";
     version = "0.8.7";
