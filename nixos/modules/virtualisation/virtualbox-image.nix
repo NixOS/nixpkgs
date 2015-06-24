@@ -27,6 +27,13 @@ in {
           the created image.
         '';
       };
+      baseImageQemuMem = mkOption {
+        type = types.int;
+        default = 768;
+        description = ''
+          Amount of megabytes in memory assigned to the QEMU instance.
+        '';
+      };
       baseImageQemuOpts = mkOption {
         type = types.lines;
         default = "";
@@ -62,7 +69,7 @@ in {
     system.build.virtualBoxImage =
       pkgs.vmTools.runInLinuxVM (
         pkgs.runCommand "virtualbox-image"
-          { memSize = 768;
+          { memSize = cfg.baseImageQemuMem;
             preVM =
               ''
                 mkdir $out
