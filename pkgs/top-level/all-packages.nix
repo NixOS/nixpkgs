@@ -1714,6 +1714,8 @@ let
   groonga = callPackage ../servers/search/groonga { };
   libgroonga = groonga.dev;
 
+  groonga-normalizer-mysql = callPackage ../development/libraries/groonga-normalizer-mysql { };
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
     automake = automake112x; # fails with 13 and 14
