@@ -1711,6 +1711,9 @@ let
     inherit (kf5_stable) extra-cmake-modules kconfig ki18n kcoreaddons solid;
   };
 
+  groonga = callPackage ../servers/search/groonga { };
+  libgroonga = groonga.dev;
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
     automake = automake112x; # fails with 13 and 14
