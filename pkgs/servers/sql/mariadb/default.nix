@@ -6,11 +6,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.19";
+  version = "10.0.20";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0cm1j4805ypbmrhajn4ar5rqsis1p5haxs7c04b6k540gmfmxgrg";
+    sha256 = "0ywb730l68mxvmpik1x2ndbdaaks6dmc17pxspspm5wlqxinjkrs";
   };
 
   nativeBuildInputs = [ pkgconfig bison cmake ]
