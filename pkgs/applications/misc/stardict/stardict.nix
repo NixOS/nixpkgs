@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk, glib, zlib, libxml2, intltool, gnome_doc_utils, libgnomeui, scrollkeeper, mysql, pcre, which, libxslt}:
+{stdenv, fetchurl, pkgconfig, gtk, glib, zlib, libxml2, intltool, gnome_doc_utils, libgnomeui, scrollkeeper, libmysql, pcre, which, libxslt}:
 stdenv.mkDerivation rec {
   name= "stardict-3.0.3";
 
@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
     sha256 = "0wrb8xqy6x9piwrn0vw5alivr9h3b70xlf51qy0jpl6d7mdhm8cv";
   };
 
-  buildInputs = [ pkgconfig gtk glib zlib libxml2 intltool gnome_doc_utils libgnomeui scrollkeeper mysql.lib pcre which libxslt];
+  buildInputs = [ pkgconfig gtk glib zlib libxml2 intltool gnome_doc_utils libgnomeui scrollkeeper libmysql pcre which libxslt];
 
   postPatch = ''
     # mysql hacks: we need dynamic linking as there is no libmysqlclient.a
-    substituteInPlace tools/configure --replace '/usr/local/include/mysql' '${mysql.lib}/include/mysql/'
+    substituteInPlace tools/configure --replace '/usr/local/include/mysql' '${libmysql.dev}/include/mysql'
     substituteInPlace tools/configure --replace 'AC_FIND_FILE([libmysqlclient.a]' 'AC_FIND_FILE([libmysqlclient.so]'
-    substituteInPlace tools/configure --replace '/usr/local/lib/mysql' '${mysql.lib}/lib/mysql/'
+    substituteInPlace tools/configure --replace '/usr/local/lib/mysql' '${libmysql.lib}/lib'
     substituteInPlace tools/configure --replace 'for y in libmysqlclient.a' 'for y in libmysqlclient.so'
     substituteInPlace tools/configure --replace 'libmysqlclient.a' 'libmysqlclient.so'
 

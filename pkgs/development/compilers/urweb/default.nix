@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, openssl, mlton, mysql, postgresql, sqlite }:
+{ stdenv, fetchurl, file, openssl, mlton, libmysql, postgresql, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "urweb";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "f7b7587fe72c04f14581ded11588777f7bb61e392634966cc0354e13d69f236d";
   };
 
-  buildInputs = [ stdenv.cc file openssl mlton mysql postgresql sqlite ];
+  buildInputs = [ stdenv.cc file openssl mlton libmysql postgresql sqlite ];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     ''
       export CC="${stdenv.cc}/bin/gcc";
       export CCARGS="-I$out/include \
-                      -L${mysql.lib}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib";
+                      -L${libmysql.lib}/lib -L${postgresql}/lib -L${sqlite}/lib";
 
       export PGHEADER="${postgresql}/include/libpq-fe.h";
-      export MSHEADER="${mysql.lib}/include/mysql/mysql.h";
+      export MSHEADER="${libmysql.dev}/include/mysql/mysql.h";
       export SQHEADER="${sqlite}/include/sqlite3.h";
     '';
 

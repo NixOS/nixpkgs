@@ -2,7 +2,7 @@
 , kdepimlibs, createresources ? null, eigen, qca2, exiv2, soprano, marble, lcms2
 , fontconfig, freetype, sqlite, icu, libwpd, libwpg, pkgconfig, poppler_qt4
 , libkdcraw, libxslt, fftw, glew, gsl, shared_desktop_ontologies, okular
-, libvisio, kactivities, mysql, postgresql, freetds, xbase, openexr, ilmbase
+, libvisio, kactivities, libmysql, postgresql, freetds, xbase, openexr, ilmbase
 , libodfgen, opencolorio, openjpeg, pstoedit, librevenge
  }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     createresources eigen qca2 exiv2 soprano marble lcms2 fontconfig freetype
     sqlite icu libwpd libwpg poppler_qt4 libkdcraw libxslt fftw glew gsl
     shared_desktop_ontologies okular libodfgen opencolorio openjpeg
-    libvisio kactivities mysql.lib postgresql freetds xbase openexr pstoedit
+    libvisio kactivities libmysql postgresql freetds xbase openexr pstoedit
     librevenge
   ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
-, mysql, libxml2, readline, zlib, curl, postgresql, gettext
+, libmysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
 , uwimap, pam, gmp
@@ -96,13 +96,13 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     };
 
     mysql = {
-      configureFlags = ["--with-mysql=${mysql.lib}"];
-      buildInputs = [ mysql.lib ];
+      configureFlags = ["--with-mysql=${libmysql}"];
+      buildInputs = [ libmysql ];
     };
 
     mysqli = {
-      configureFlags = ["--with-mysqli=${mysql.lib}/bin/mysql_config"];
-      buildInputs = [ mysql.lib ];
+      configureFlags = ["--with-mysqli=${libmysqld.dev}/bin/mysql_config"];
+      buildInputs = [ libmysql ];
     };
 
     mysqli_embedded = {
@@ -112,8 +112,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     };
 
     pdo_mysql = {
-      configureFlags = ["--with-pdo-mysql=${mysql.lib}"];
-      buildInputs = [ mysql.lib ];
+      configureFlags = ["--with-pdo-mysql=${libmysql}"];
+      buildInputs = [ libmysql ];
     };
 
     bcmath = {

@@ -7716,7 +7716,7 @@ let
 
     buildInputs = with self; [ nose pkgs.openssl ];
 
-    propagatedBuildInputs = with self; [ pkgs.mysql.lib pkgs.zlib ];
+    propagatedBuildInputs = with self; [ pkgs.libmysql pkgs.zlib ];
 
     meta = {
       description = "MySQL database binding for Python";

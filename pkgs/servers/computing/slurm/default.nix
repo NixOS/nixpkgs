@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, munge, perl, pam, openssl, mysql }:
+{ stdenv, fetchurl, python, munge, perl, pam, openssl, libmysql }:
 
 #TODO: add sview support based on gtk2
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xx1q9ximsyyipl0xbj8r7ajsz4xrxik8xmhcb1z9nv0aza1rff2";
   };
 
-  buildInputs = [ python munge perl pam openssl mysql.lib ];
+  buildInputs = [ python munge perl pam openssl libmysql ];
 
   configureFlags = ''
     --with-munge=${munge}

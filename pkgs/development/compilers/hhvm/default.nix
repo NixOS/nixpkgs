@@ -2,7 +2,7 @@
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
+, libxslt, ocaml, freetype, gdb, git, perl, libmysql, gmp, libyaml, libedit
 , libvpx, imagemagick, fribidi
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind libmysql libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
-  MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";
-  MYSQL_DIR=mariadb;
+  MYSQL_INCLUDE_DIR="${libmysql.dev}/include/mysql";
+  MYSQL_DIR=libmysql;
 
   # work around broken build system
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";

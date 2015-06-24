@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, gmp, zlib, bzip2, boost, mysql }:
+{ stdenv, fetchurl, unzip, gmp, zlib, bzip2, boost, libmysql }:
 stdenv.mkDerivation rec {
 
   name = "ghost-one-${version}";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1sm2ca3lcdr4vjg7v94d8zhqz8cdp44rg8yinzzwkgsr0hj74fv2";
   };
 
-  buildInputs = [ unzip gmp zlib bzip2 boost mysql.lib ];
+  buildInputs = [ unzip gmp zlib bzip2 boost libmysql ];
 
   patchPhase = ''
-    substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" "${mysql.lib}/lib/mysql"
+    substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" "${libmysql.lib}/lib"
   '';
 
   buildPhase = ''

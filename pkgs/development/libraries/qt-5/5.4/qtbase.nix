@@ -11,7 +11,7 @@
 
 # optional dependencies
 , cups ? null
-, mysql ? null, postgresql ? null
+, libmysql ? null, postgresql ? null
 
 # options
 , mesaSupported, mesa, mesa_glu
@@ -133,7 +133,7 @@ stdenv.mkDerivation {
     -dbus-linked
 
     -system-sqlite
-    -${if mysql != null then "plugin" else "no"}-sql-mysql
+    -${if libmysql != null then "plugin" else "no"}-sql-mysql
     -${if postgresql != null then "plugin" else "no"}-sql-psql
 
     -make libs
@@ -152,7 +152,7 @@ stdenv.mkDerivation {
   # doesn't remain a runtime-dep if not used
   ++ optionals mesaSupported [ mesa mesa_glu ]
   ++ optional (cups != null) cups
-  ++ optional (mysql != null) mysql.lib
+  ++ optional (libmysql != null) libmysql
   ++ optional (postgresql != null) postgresql
   ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 

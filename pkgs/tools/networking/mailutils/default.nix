@@ -1,5 +1,5 @@
 { fetchurl, stdenv, gettext, gdbm, libtool, pam, readline
-, ncurses, gnutls, mysql, guile, texinfo, gnum4, dejagnu, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
+, ncurses, gnutls, libmysql, guile, texinfo, gnum4, dejagnu, sendmailPath ? "/var/setuid-wrappers/sendmail" }:
 
 /* TODO: Add GNU SASL, GNU GSSAPI, and FreeBidi.  */
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
    [ gettext gdbm libtool pam readline ncurses
-     gnutls mysql.lib guile texinfo gnum4 ]
+     gnutls libmysql guile texinfo gnum4 ]
    ++ stdenv.lib.optional doCheck dejagnu;
 
   # Tests fail since gcc 4.8

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll, libXrender, libXext
 , libXfixes, freetype, fontconfig, zlib, libjpeg, libpng
 , mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
-, libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
+, libtiff, glib, icu, libmysql, postgresql, sqlite, perl, coreutils, libXi
 , gdk_pixbuf, python, gdb, xlibs, libX11, libxcb, xcbutil, xcbutilimage
 , xcbutilkeysyms, xcbutilwm, udev, libxml2, libxslt, pcre, libxkbcommon
 , alsaLib, gstreamer, gst_plugins_base
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     -dbus-linked
 
     -system-sqlite
-    -${if mysql != null then "plugin" else "no"}-sql-mysql
+    -${if libmysql != null then "plugin" else "no"}-sql-mysql
     -${if postgresql != null then "plugin" else "no"}-sql-psql
 
     -make libs
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
   # doesn't remain a runtime-dep if not used
   ++ optionals mesaSupported [ mesa mesa_glu ]
   ++ optional (cups != null) cups
-  ++ optional (mysql != null) mysql.lib
+  ++ optional (libmysql != null) libmysql
   ++ optional (postgresql != null) postgresql
   ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
