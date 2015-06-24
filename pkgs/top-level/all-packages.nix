@@ -9041,7 +9041,7 @@ let
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix { };
 
   mysql = mariadb;
-  libmysql = mysql.lib;
+  libmysql = mysql.dev;
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
