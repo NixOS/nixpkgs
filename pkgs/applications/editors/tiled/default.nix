@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, qt }:
+{ stdenv, fetchurl, qt5, pkgconfig, python }:
+
+let
+  version = "0.12.3";
+  sha256 = "001j4lvb5d9h3m6vgz2na07637x6xg4bdvxi2hg4a0j9rikb4y40";
+in
 
 stdenv.mkDerivation rec {
-  name = "tiled-0.11.0";
+  name = "tiled-${version}";
 
   src = fetchurl {
-    url = "https://github.com/bjorn/tiled/archive/v0.11.0.tar.gz";
-    sha256 = "03a15vbzjfwc8dpifbjvd0gnr208mzmdkgs2nlc8zq6z0a4h4jqd";
+    url = "https://github.com/bjorn/tiled/archive/v${version}.tar.gz";
+    inherit sha256;
   };
 
-  buildInputs = [ qt ];
+  buildInputs = [ qt5.base qt5.tools pkgconfig python ];
 
   preConfigure = "qmake -r PREFIX=$out";
 
