@@ -42,11 +42,11 @@
 }:
 
 let
-  inherit (stdenv) isi686 isx86_64 isArm is64bit isMips isDarwin isCygwin;
+  inherit (stdenv) isX86 isArm is64bit isMips isDarwin isCygwin;
   inherit (stdenv.lib) enableFeature optional optionals;
 in
 
-assert isi686 || isx86_64 || isArm || isMips; # Requires ARM with floating point support
+assert isX86 || isArm || isMips; # Requires ARM with floating point support
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
 assert internalStatsSupport && (vp9DecoderSupport || vp9EncoderSupport) -> postprocSupport;
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     (enableFeature gcovSupport "gcov")
     # Required to build shared libraries
     (enableFeature (!isCygwin) "pic")
-    (enableFeature (isi686 || isx86_64) "use-x86inc")
+    (enableFeature isX86 "use-x86inc")
     (enableFeature optimizationsSupport "optimizations")
     (enableFeature runtimeCpuDetectSupport "runtime-cpu-detect")
     (enableFeature thumbSupport "thumb")

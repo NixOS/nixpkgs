@@ -157,7 +157,7 @@ stdenv.mkDerivation rec {
       ${if jackaudioSupport then "" else "--disable-jack"}
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
-      ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
+      ${optionalString stdenv.isX86 "--enable-runtime-cpudetection"}
       ${optionalString fribidiSupport "--enable-fribidi"}
       --disable-xanim
       --disable-ivtv

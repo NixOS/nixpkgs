@@ -2,7 +2,7 @@
 
 let
   version = "9.2";
-  bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
+  bootstrapFromC = !stdenv.isX86;
 
   arch = if      stdenv.isi686   then "-i386"
          else if stdenv.isx86_64 then "-x86-64"

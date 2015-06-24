@@ -13,10 +13,9 @@ let
     unzip
   ];
   isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
-  isx86 = stdenv.isi686 || stdenv.isx86_64;
   compileFlags = ""
     + (stdenv.lib.optionalString isUnix " -Dunix -pthread ")
-    + (stdenv.lib.optionalString (!isx86) " -DNOJIT ")
+    + (stdenv.lib.optionalString (!stdenv.isX86) " -DNOJIT ")
     + " -DNDEBUG "
     + " -fPIC "
     ;

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses, x11 }:
 
 let
-   useX11 = stdenv.isi686 || stdenv.isx86_64;
-   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
+   useX11 = stdenv.isX86;
+   useNativeCompilers = stdenv.isX86 || stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
 in
 

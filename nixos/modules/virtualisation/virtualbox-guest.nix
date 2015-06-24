@@ -33,7 +33,7 @@ in
 
   config = mkIf cfg.enable {
     assertions = [ {
-      assertion = pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64;
+      assertion = pkgs.stdenv.isX86;
       message = "Virtualbox not currently supported on ${pkgs.stdenv.system}";
     } ];
 
