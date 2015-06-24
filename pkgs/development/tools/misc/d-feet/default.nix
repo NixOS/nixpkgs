@@ -3,7 +3,7 @@
 , pygobject3, gobjectIntrospection, libwnck3 }:
 
 let
-  version = "${major}.9";
+  version = "${major}.10";
   major = "0.3";
 in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
-    sha256 = "0lvrrbxkvw495jn4vj64r8vd3hng5v0lvagfzcbk5x1f3ky1gybd";
+    sha256 = "88f0df5fcb862387ff3d1793873c5eb368c3e4db0bbd82ea65f748cbf70a6359";
   };
 
   buildInputs = [
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
     homepage = https://wiki.gnome.org/action/show/Apps/DFeet;
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ktosiek ];
   };
 }
