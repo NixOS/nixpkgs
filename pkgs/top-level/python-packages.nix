@@ -4916,14 +4916,14 @@ let
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.7.0";
+    version = "0.8.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
-      sha256 = "1ab1phaqa8jrba6dqsf3b0lgx912j41b8dlkna9c2wxip63wvfcx";
+      sha256 = "07a5p5wfs60hmzv3h64fysvm91ablhiaf5ccpv3f8q61insdzvff";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.mercurial dulwich ];
+    propagatedBuildInputs = with self; [ dulwich ];
 
     meta = {
       description = "Push and pull from a Git server using Mercurial";
