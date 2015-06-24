@@ -11833,7 +11833,7 @@ let
   mendeley = callPackage ../applications/office/mendeley { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) curses docutils;
+    inherit (pythonPackages) curses docutils hg-git dulwich;
     guiSupport = false; # use mercurialFull to get hgk GUI
   };
 
