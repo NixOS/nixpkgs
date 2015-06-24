@@ -13015,5 +13015,6 @@ let
   nodejs = callPackage ../ai2/nodejs {};
   grobid-home = callPackage ../ai2/grobid-home {};
   grobid-native-libs = callPackage ../ai2/grobid-native-libs {};
+  grafana2 = callPackage ../development/tools/misc/grafana2 {};
 
 }; in self; in pkgs

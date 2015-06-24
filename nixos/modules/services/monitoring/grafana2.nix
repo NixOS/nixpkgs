@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.grafana;
+  cfg = config.services.grafana2;
 
   b2s = val: if val then "true" else "false";
 
@@ -143,7 +143,7 @@ in {
 
     package = mkOption {
       description = "Package to use.";
-      default = pkgs.grafana;
+      default = pkgs.grafana2;
       type = types.package;
     };
 
