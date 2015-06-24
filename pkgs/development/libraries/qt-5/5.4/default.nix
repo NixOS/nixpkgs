@@ -27,9 +27,14 @@ with autonix;
 with stdenv.lib;
 
 let
-  manifest =
-    importManifest ./manifest.nix { mirror = "http://download.qt.io"; };
-  srcs = mapAttrs (name: manifest: manifest.src) manifest;
+  srcs =
+    let
+      manifest = builtins.fromJSON (builtins.readFile ./manifest.json);
+      mirror = "http://download.qt.io";
+      fetch = src: fetchurl (src // { url = "${mirror}/${src.url}"; });
+      mkPair = pkg: nameValuePair (builtins.parseDrvName pkg.name).name (fetch pkg.src);
+      pairs = map mkPair manifest;
+    in listToAttrs pairs;
 
   version = "5.4.2";
 
