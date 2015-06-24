@@ -112,6 +112,16 @@ let
           "pythoninterp"
         ];
         user = [
+          "qt5"
+          "qt5core"
+          "qt5dbus"
+          "qt5gui"
+          "qt5qml"
+          "qt5quick"
+          "qt5svg"
+          "qt5webkitwidgets"
+          "qt5widgets"
+          "qt5x11extras"
           "shareddesktopontologies"
           "sharedmimeinfo"
         ];

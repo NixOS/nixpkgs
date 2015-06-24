@@ -44,6 +44,16 @@ let
           "pythoninterp"
         ];
         user = [
+          "qt5"
+          "qt5core"
+          "qt5dbus"
+          "qt5gui"
+          "qt5qml"
+          "qt5quick"
+          "qt5svg"
+          "qt5webkitwidgets"
+          "qt5widgets"
+          "qt5x11extras"
           "shareddesktopontologies"
           "sharedmimeinfo"
         ];
@@ -84,6 +94,7 @@ let
     self //
     # packages pinned to this version of Qt 5
     {
+      dbusmenu-qt5 = pkgs.libdbusmenu_qt5.override { inherit qt5; };
       phonon4qt5 = pkgs.phonon_qt5.override { inherit qt5; };
       polkit_qt5 = pkgs.polkit_qt5.override { inherit qt5; };
       qt5 = qt5.base;
@@ -99,7 +110,6 @@ let
       qt5widgets = qt5.base;
       qt5x11extras = qt5.x11extras;
       qt5xmlpatterns = qt5.xmlpatterns;
-      dbusmenu-qt5 = pkgs.libdbusmenu_qt5.override { inherit qt5; };
     } //
     # packages from the nixpkgs collection
     (with pkgs;

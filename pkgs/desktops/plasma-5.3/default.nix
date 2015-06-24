@@ -73,6 +73,16 @@ let
           "pythoninterp"
         ];
         user = [
+          "qt5"
+          "qt5core"
+          "qt5dbus"
+          "qt5gui"
+          "qt5qml"
+          "qt5quick"
+          "qt5svg"
+          "qt5webkitwidgets"
+          "qt5widgets"
+          "qt5x11extras"
           "shareddesktopontologies"
           "sharedmimeinfo"
         ];
@@ -97,9 +107,20 @@ let
       phonon4qt5 = pkgs.phonon_qt5.override { inherit qt5; };
       polkitqt5-1 = pkgs.polkit_qt5.override { inherit qt5; };
       poppler_qt5 = pkgs.poppler_qt5.override { inherit qt5; };
+      qt5 = qt5.base;
+      qt5core = qt5.base;
+      qt5dbus = qt5.base;
+      qt5gui = qt5.base;
+      qt5linguisttools = qt5.tools;
+      qt5qml = [qt5.declarative qt5.graphicaleffects];
+      qt5quick = [qt5.quickcontrols qt5.graphicaleffects];
       qt5script = qt5.script;
+      qt5svg = qt5.svg;
       qt5tools = qt5.tools;
+      qt5webkitwidgets = qt5.webkit;
+      qt5widgets = qt5.base;
       qt5x11extras = qt5.x11extras;
+      qt5xmlpatterns = qt5.xmlpatterns;
     } //
     # packages from nixpkgs
     (with pkgs; {
