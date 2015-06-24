@@ -96,7 +96,7 @@ let
   '';
 
 in {
-  options.services.grafana = {
+  options.services.grafana2 = {
     enable = mkEnableOption "Whether to enable grafana.";
 
     protocol = mkOption {
