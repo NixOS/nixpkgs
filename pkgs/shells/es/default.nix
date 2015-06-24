@@ -25,7 +25,8 @@ stdenv.mkDerivation {
   configureFlags="--with-readline --prefix=$(out) --bindir=$(out)/bin --mandir=$(out)/man";
 
   preInstall = ''
-    mkdir -p $out/{bin,man}
+    mkdir -p $out/bin
+    mkdir -p $out/man/man1
   '';
 
   meta = with stdenv.lib; {
