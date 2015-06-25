@@ -6,6 +6,7 @@
 , gawk
 , bash
 , getopt
+, procps
 }:
 
 let
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
         --set JAVA_HOME ${jre} \
         --prefix PATH : ${bash}/bin \
         --prefix PATH : ${getopt}/bin \
-        --prefix PATH : ${gawk}/bin
+        --prefix PATH : ${gawk}/bin \
+        --prefix PATH : ${procps}/bin
     done
 
     wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
