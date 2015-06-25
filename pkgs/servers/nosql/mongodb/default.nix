@@ -27,6 +27,7 @@ let version = "3.0.4";
       "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
       "--js-engine=v8-3.25"
       "--use-sasl-client"
+      "--disable-warnings-as-errors"
       "--variant-dir=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
       "--extrapath=${concatStringsSep "," buildInputs}"
     ] ++ map (lib: "--use-system-${lib}") system-libraries);

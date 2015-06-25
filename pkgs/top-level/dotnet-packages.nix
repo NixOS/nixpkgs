@@ -81,6 +81,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "Lib/Net40/*" ];
   };
 
+  FSharpFormatting = fetchNuGet {
+    baseName = "FSharp.Formatting";
+    version = "2.9.8";
+    sha256 = "1bswcpa68i2lqds4kkl2qxgkfrppbpxa4jkyja48azljajh0df3m";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
   NUnit = fetchNuGet {
     baseName = "NUnit";
     version = "2.6.4";
@@ -112,6 +119,111 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   };
 
   # SOURCE PACKAGES
+
+  Deedle = buildDotnetPackage rec {
+    baseName = "Deedle";
+    version = "1.2.0";
+
+    src = fetchFromGitHub {
+      owner = "BlueMountainCapital";
+      repo = baseName;
+      rev = "v${version}";
+      sha256 = "115zzh3q57w8wr02cl2v8wijnj1rg01j1mk9zbzixbb4aird72n5";
+    };
+
+    # Enough files from this repo are needed that it will be quicker to just get the entire repo
+    fsharpDataSrc = fetchFromGitHub {
+      owner = "fsharp";
+      repo = "FSharp.Data";
+      rev = "2.2.3";
+      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.FsCheck
+      dotnetPackages.FSharpCompilerService
+      dotnetPackages.FSharpData
+      dotnetPackages.FSharpFormatting
+      dotnetPackages.MathNetNumerics
+      dotnetPackages.NUnit
+    ];
+
+    preConfigure = ''
+      mkdir -vp paket-files/fsharp
+      ln -sv ${fsharpDataSrc} paket-files/fsharp/FSharp.Data
+    '';
+
+    xBuildFiles = [ "Deedle.Core.sln" ];  # Come back later to get RProvider as well
+    outputFiles = [ "bin/*" "LICENSE.md" ];
+
+    meta = {
+      description = "Deedle is an easy to use library for data and time series manipulation and for scientific programming";
+      homepage = "http://bluemountaincapital.github.io/Deedle/";
+      license = stdenv.lib.licenses.free;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
+  ExcelDna = buildDotnetPackage rec {
+    baseName = "Excel-DNA";
+    version = "0.32.0";
+
+    src = fetchFromGitHub {
+      owner = "Excel-DNA";
+      repo = "ExcelDna";
+      rev = "10a163843bcc2fb5517f6f3d499e18a8b64df511";
+      sha256 = "1w2ag9na20ly0m2sic3nkgdc4qqyb4x4c9iv588ynpkgd1pjndrk";
+    };
+
+    buildInputs = [ ];
+
+    preConfigure = ''
+      rm -vf Distribution/*.dll Distribution/*.exe # Make sure we don't use those
+      substituteInPlace Source/ExcelDna.Integration/ExcelDna.Integration.csproj --replace LogDisplay.designer.cs LogDisplay.Designer.cs
+    '';
+
+    xBuildFiles = [ "Source/ExcelDna.sln" ];
+    outputFiles = [ "Source/ExcelDnaPack/bin/Release/*" "Distribution/ExcelDna.xll" "Distribution/ExcelDna64.xll" ];
+
+    meta = {
+      description = "Excel-DNA is an independent project to integrate .NET into Excel";
+      homepage = "http://excel-dna.net/";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
+  ExcelDnaRegistration = buildDotnetPackage rec {
+    baseName = "Excel-DNA.Registration";
+    version = "git-" + (builtins.substring 0 10 rev);
+    rev = "69abb1b3528f40dbcf425e13690aaeab5f707bb6";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "Excel-DNA";
+      repo = "Registration";
+      sha256 = "094932h6r2f4x9r5mnw8rm4jzz8vkfv90d95qi3h0i89ws2dnn07";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.ExcelDna
+    ];
+
+    xBuildFiles = [ "Source/ExcelDna.Registration/ExcelDna.Registration.csproj" "Source/ExcelDna.Registration.FSharp/ExcelDna.Registration.FSharp.fsproj" ];
+    outputFiles = [ "Source/ExcelDna.Registration/bin/Release/*" "Source/ExcelDna.Registration.FSharp/bin/Release/*FSharp*" ];
+
+    meta = {
+      description = "This library implements helper functions to assist and modify the Excel-DNA function registration";
+      homepage = "https://github.com/Excel-DNA/Registration";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
 
   ExtCore = buildDotnetPackage rec {
     baseName = "ExtCore";
@@ -149,12 +261,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpAutoComplete = buildDotnetPackage rec {
     baseName = "FSharp.AutoComplete";
-    version = "0.16.0";
+    version = "0.18.2";
 
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/fsharp/FSharp.AutoComplete/archive/${version}.tar.gz";
-      sha256 = "0mwp456zfw1sjy2mafz2shx0sjn4f858pfnsmawy50g8l2znw8qg";
+    src = fetchFromGitHub {
+      owner = "fsharp";
+      repo = "FSharp.AutoComplete";
+      rev = version;
+      sha256 = "1ikl72003xzqq2dc8i6h404hnq3q5g1p1q4rmzz9bdm7282q2jgs";
     };
 
     buildInputs = [
@@ -177,13 +290,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpCompilerService = buildDotnetPackage rec {
     baseName = "FSharp.Compiler.Service";
-    version = "0.0.89";
+    version = "0.0.90";
 
     src = fetchFromGitHub {
       owner = "fsharp";
       repo = "FSharp.Compiler.Service";
-      rev = "55a8143a82bb31c3e8c1ad2af64eb64162fed0d7";
-      sha256 = "1f5f97382h8v9p0j7c2gksrps12d869m752n692b3g0k8h4zpial";
+      rev = "a87939ab3f3c571cad79bc3b5f298aa3e180e6b3";
+      sha256 = "0axr38q8m0h11hhbxg5myd1wwfgysadriln8c7bqsv5sf9djihvd";
     };
 
     buildInputs = [
@@ -204,12 +317,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpData = buildDotnetPackage rec {
     baseName = "FSharp.Data";
-    version = "2.2.2";
+    version = "2.2.3";
 
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/fsharp/FSharp.Data/archive/${version}.tar.gz";
-      sha256 = "1li33ydjxz18v8siw53vv1nmkp5w7sdlsjcrfp6dzcynpvwbjw3s";
+    src = fetchFromGitHub {
+      owner = "fsharp";
+      repo = baseName;
+      rev = version;
+      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
     };
 
     buildInputs = [ fsharp ];
@@ -276,6 +390,30 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #     platforms = with stdenv.lib.platforms; linux;
   #   };
   # };
+
+  MathNetNumerics = buildDotnetPackage rec {
+    baseName = "MathNet.Numerics";
+    version = "3.7.0";
+
+    src = fetchurl {
+      name = "${baseName}-${version}.tar.gz";
+      url = "https://github.com/mathnet/mathnet-numerics/archive/v${version}.tar.gz";
+      sha256 = "1yq6aqmc2gwh96z544qn83kby01lv1lsxm158hq0bimv2i9yywc7";
+    };
+
+    buildInputs = [ fsharp ];
+
+    xBuildFiles = [ "MathNet.Numerics.sln" ];
+    outputFiles = [ "out/lib/Net40/*" "src/FSharp/MathNet.Numerics.fsx" "src/FSharp/MathNet.Numerics.IfSharp.fsx" ];
+
+    meta = {
+      description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono.";
+      homepage = http://numerics.mathdotnet.com/;
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
 
   MonoDevelopFSharpBinding = buildDotnetPackage rec {
     baseName = "MonoDevelop.FSharpBinding";
@@ -426,12 +564,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Paket = buildDotnetPackage rec {
     baseName = "Paket";
-    version = "1.6.2";
+    version = "1.18.2";
 
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/fsprojects/Paket/archive/${version}.tar.gz";
-      sha256 = "1ryslxdgc3r7kcn1gq4bqcyrqdi8z6364aj3lr7yjz71wi22fca8";
+    src = fetchFromGitHub {
+      owner = "fsprojects";
+      repo = "Paket";
+      rev = version;
+      sha256 = "04iwy3mggz7xn36lhzyrwqzlw451a16jblwx131qjm6fnac6rq1m";
     };
 
     buildInputs = [
@@ -446,12 +585,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       url = https://raw.githubusercontent.com/forki/FsUnit/81d27fd09575a32c4ed52eadb2eeac5f365b8348/FsUnit.fs;
       sha256 = "1zxigqgb2s2v755622jbbzibvf91990x2dijhbdgg646vsybkpdp";
     };
-
-    # fileOctokit = fetchurl {
-    #   name = "Octokit.fsx";
-    #   url = https://raw.githubusercontent.com/fsharp/FAKE/8e65e2fc1406f326b44f3f87ec9ca9b3127a6e78/modules/Octokit/Octokit.fsx;
-    #   sha256 = "16qxwmgyg3fn3z9a8hppv1m579828x7lvfj8qflcgs2g6ciagsir";
-    # };
 
     fileGlobbing = fetchurl {
       name = "Globbing.fs";
@@ -477,7 +610,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
        cp -v "${fileErrorHandling}" "paket-files/fsprojects/Chessie/src/Chessie/ErrorHandling.fs"
     '';
 
-    xBuildFiles = [ ];
+    xBuildFiles = [ "Paket.sln" ];
 
     outputFiles = [ "bin/*" ];
     exeFiles = [ "paket.exe" ];
@@ -485,6 +618,39 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "A dependency manager for .NET and Mono projects";
       homepage = "http://fsprojects.github.io/Paket/";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
+  Projekt = buildDotnetPackage rec {
+    baseName = "projekt";
+    version = "git-" + (builtins.substring 0 10 rev);
+    rev = "715a21e5cd3c86310387562618b04e979d0ec9c4";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "kjnilsson";
+      repo = "projekt";
+      sha256 = "1ph3af07wmia6qkiq1qlywaj2xh6zn5drdx19dwb1g3237h5fnz0";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.UnionArgParser
+      dotnetPackages.FsUnit
+    ];
+
+    preConfigure = ''
+      sed -i -e "s/FSharp.Core, Version=\$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a/FSharp.Core/" src/Projekt/Projekt.fsproj
+    '';
+
+    outputFiles = [ "src/Projekt/bin/Release/*" ];
+
+    meta = {
+      description = "A command-line tool for manipulating F# project files";
+      homepage = "https://github.com/kjnilsson/projekt";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

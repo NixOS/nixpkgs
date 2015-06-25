@@ -24,12 +24,6 @@ addQtModule() {
             @lndir@/bin/lndir -silent "$1/lib" "$qtOut/lib"
             find "$1/lib" -printf 'lib/%P\n' >> "$qtOut/nix-support/qt-inputs"
         fi
-
-        propagatedBuildInputs+=" $1"
-    fi
-
-    if [[ -d "$1/lib/qt5/qml" ]] || [[ -d "$1/lib/qt5/plugins" ]] || [[ -d "$1/lib/qt5/imports" ]]; then
-        propagatedUserEnvPkgs+=" $1"
     fi
 }
 

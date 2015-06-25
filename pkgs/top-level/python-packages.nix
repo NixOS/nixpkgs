@@ -572,6 +572,20 @@ let
     };
   };
 
+  args = buildPythonPackage rec {
+    name = "args-0.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/args/${name}.tar.gz";
+      md5 = "66faf79ba2511def7b8b81d542482046";
+    };
+
+    meta = {
+      description = "Command Arguments for Humans";
+      homepage = "https://github.com/kennethreitz/args";
+    };
+  };
+
   area53 = buildPythonPackage (rec {
     name = "Area53-0.94";
 
@@ -3430,42 +3444,6 @@ let
     };
   };
 
-  jsonpatch = buildPythonPackage rec {
-    name = "jsonpatch-1.8";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jsonpatch/jsonpatch-1.8.tar.gz";
-      sha256 = "0xhp6prvk219vnzixbj231wymd458nqbnmsf5fn4252092prvig5";
-    };
-
-    propagatedBuildInputs = with self; [ six jsonpointer ];
-
-    meta = {
-      description = "Apply JSON-Patches (RFC 6902)";
-      homepage = "https://github.com/stefankoegl/python-json-patch";
-      license = licenses.bsd3;
-      platforms = platforms.all;
-    };
-  };
-
-  jsonpointer = buildPythonPackage rec {
-    name = "jsonpointer-1.4";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jsonpointer/jsonpointer-1.4.tar.gz";
-      sha256 = "1d0555smqwdbi0nm48hyqzywb9m2jlz5izgv56ll3zk7viz3b7fb";
-    };
-
-    #propagatedBuildInputs = with self; [ six jsonpointer ];
-
-    meta = {
-      description = "Identify specific nodes in a JSON document (RFC 6901)";
-      homepage = "https://github.com/stefankoegl/python-json-pointer";
-      license = licenses.bsd3;
-      platforms = platforms.all;
-    };
-  };
-
   jdcal = buildPythonPackage rec {
     version = "1.0";
     name = "jdcal-${version}";
@@ -3483,6 +3461,60 @@ let
       license = licenses.bsd2;
       maintainers = with maintainers; [ lihop ];
       platforms = platforms.all;
+    };
+  };
+
+  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
+    name = "internetarchive-${ver}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
+      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
+    };
+
+    # It is hardcoded to specific versions, I don't know why.
+    preConfigure = ''
+        sed 's/==/>=/' -i setup.py
+    '';
+
+    propagatedBuildInputs = with self; [ six clint pyyaml docopt pytest
+      requests2 jsonpatch args ];
+
+    meta = with stdenv.lib; {
+      description = "A python wrapper for the various Internet Archive APIs";
+      homepage = "https://github.com/jjjake/internetarchive";
+    };
+  };
+
+  jsonpatch = buildPythonPackage rec {
+    name = "jsonpatch-1.11";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpatch/${name}.tar.gz";
+      md5 = "9f2d0aa31f99cc97089a203c5bed3924";
+    };
+
+    propagatedBuildInputs = with self; [ jsonpointer ];
+
+    meta = {
+      description = "Library to apply JSON Patches according to RFC 6902";
+      homepage = "https://github.com/stefankoegl/python-json-patch";
+      license = stdenv.lib.licenses.bsd2; # "Modified BSD licence, says pypi"
+    };
+  };
+
+  jsonpointer = buildPythonPackage rec {
+    name = "jsonpointer-1.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpointer/${name}.tar.gz";
+      md5 = "c4d3f28e72ba77062538d1c0864c40a9";
+    };
+
+    meta = {
+      description = "Resolve JSON Pointers in Python";
+      homepage = "https://github.com/stefankoegl/python-json-pointer";
+      license = stdenv.lib.licenses.bsd2; # "Modified BSD licence, says pypi"
     };
   };
 
@@ -4895,11 +4927,11 @@ let
 
   dulwich = buildPythonPackage rec {
     name = "dulwich-${version}";
-    version = "0.9.8";
+    version = "0.10.1a";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dulwich/${name}.tar.gz";
-      sha256 = "0iwxp9n2c09wahq8bqnc5z431kq5bs75vbwl93nzwm2grj00l6lb";
+      sha256 = "02rknqarwy7p50693cqswbibqwgxzrfzdq4yhwqxbdmhbsmh0rk6";
     };
 
     # Only test dependencies
@@ -4916,14 +4948,14 @@ let
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.7.0";
+    version = "0.8.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
-      sha256 = "1ab1phaqa8jrba6dqsf3b0lgx912j41b8dlkna9c2wxip63wvfcx";
+      sha256 = "07a5p5wfs60hmzv3h64fysvm91ablhiaf5ccpv3f8q61insdzvff";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.mercurial dulwich ];
+    propagatedBuildInputs = with self; [ dulwich ];
 
     meta = {
       description = "Push and pull from a Git server using Mercurial";
@@ -8241,11 +8273,11 @@ let
   };
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.15.0";
+    name = "pandas-0.16.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "1w3wjnn3v37hf3hrd24lfgk6vpykarv9mihhpcfq6y7rg586bgjk";
+      sha256 = "1dpq5p4iym7y13wkrm0hma87rvvv5rfj5fb10iwbys5hihzj83ap";
     };
 
     buildInputs = [ self.nose ];
@@ -8259,18 +8291,18 @@ let
       bottleneck
       sqlalchemy9
       lxml
+      html5lib
       modules.sqlite3
+      beautifulsoup4
     ];
 
     preCheck = ''
-      # Need to do this patch or tests will fail (swaps 1st and 2nd lines).
-      # See: https://github.com/pydata/pandas/commit/c4bcc2054bfd2f89b640bea0c9a109b0184d6710
-      first=$(sed -n '1p' < pandas/tests/test_format.py)
-      second=$(sed -n '2p' < pandas/tests/test_format.py)
-      rest=$(tail -n +3 pandas/tests/test_format.py)
-      echo $second > pandas/tests/test_format.py
-      echo $first >> pandas/tests/test_format.py
-      echo "$rest" >> pandas/tests/test_format.py
+      # Broken test, probably https://github.com/pydata/pandas/issues/10312:
+      rm pandas/io/tests/test_html.py
+
+      # Hitting https://github.com/pydata/pandas/pull/7362 on python
+      # 3.3 and 3.4, not sure why:
+      rm pandas/tseries/tests/test_daterange.py
 
       # Need to skip this test; insert a line here... hacky but oh well.
       badtest=pandas/tseries/tests/test_timezones.py
@@ -8862,12 +8894,12 @@ let
 
 
   powerline = buildPythonPackage rec {
-    rev  = "8164f42fb924f38dc5b9dd6d32063e8c3d41e504";
-    name = "powerline-2.1";
+    rev  = "2.1.4";
+    name = "powerline-${rev}";
     src = pkgs.fetchurl {
-      url    = "https://github.com/powerline/powerline/tarball/${rev}";
-      name   = "${name}.tar.bz";
-      sha256 = "0xrasj1lh9ypz1q6q4k997rfym9r16bclfbpzjqj8qfkp4i62lz6";
+      url    = "https://github.com/powerline/powerline/archive/${rev}.tar.gz";
+      name   = "${name}.tar.gz";
+      sha256 = "0gnh5yyackmqcphiympan48dm5lc834yzspss1lp4g1wq3vpyraf";
     };
 
     propagatedBuildInputs = with self; [ pkgs.git pkgs.mercurial pkgs.bazaar self.psutil self.pygit2 ];
@@ -11862,11 +11894,11 @@ let
   };
 
   clint = buildPythonPackage rec {
-    name = "clint-0.3.1";
+    name = "clint-0.4.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/clint/${name}.tar.gz";
-      md5 = "7dcd43fb08bfb84c7d63e9356ada7b73";
+      md5 = "d0a0952bfcc5f4c5e03c36854665b298";
     };
 
     checkPhase = ''
@@ -16039,6 +16071,57 @@ let
       description = "Python with the SmartyPants";
       homepage = "https://bitbucket.org/livibetter/smartypants.py";
       license = licenses.bsd3;
+      maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  pypeg2 = buildPythonPackage rec {
+    version = "2.15.1";
+    name = "pypeg2-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pyPEG2/pyPEG2-${version}.tar.gz";
+      sha256 = "f4814a5f9c84bbb0794bef8d2a5871f4aed25366791c55e2162681873ad8bd21";
+    };
+
+    meta = {
+      description = "PEG parser interpreter in Python";
+      homepage = http://fdik.org/pyPEG;
+      license = licenses.gpl2;
+    };
+  };
+
+  jenkins-job-builder = buildPythonPackage rec {
+    name = "jenkins-job-builder-1.2.0";
+    disabled = ! (isPy26 || isPy27);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jenkins-job-builder/${name}.tar.gz";
+      md5 = "79e44ef0d3fffc19f415d8c0caac6b7b";
+    };
+
+    # pbr required for jenkins-job-builder is <1.0.0 while many of the test
+    # dependencies require pbr>=1.1
+    doCheck = false;
+
+    buildInputs = with self; [
+      pip
+    ];
+
+    propagatedBuildInputs = with self; [
+      pbr
+      python-jenkins
+      pyyaml
+      six
+    ] ++ optionals isPy26 [
+      argparse
+      ordereddict
+    ];
+
+    meta = {
+      description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git.";
+      homepage = "http://docs.openstack.org/infra/system-config/jjb.html";
+      license = licenses.asl20;
       maintainers = with maintainers; [ garbas ];
     };
   };

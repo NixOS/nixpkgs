@@ -71,7 +71,7 @@ in
         rm -rf "${stateDir}/webapps"
         mkdir -p "${stateDir}/webapps"
         chown unifi "${stateDir}/webapps"
-        ln -s "${pkgs.unifi}/webapps/ROOT.war" "${stateDir}/webapps/ROOT.war"
+        ln -s "${pkgs.unifi}/webapps/ROOT" "${stateDir}/webapps/ROOT"
       '';
 
       postStop = ''

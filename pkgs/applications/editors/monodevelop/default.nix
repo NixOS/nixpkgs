@@ -5,13 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.9.0.431";
-  revision = "7560726734fc7267de2fa9abed2509968deefaa8";
+  version = "5.9.4.5";
+  revision = "8010a90f6e246b32364e3fb46ef2c9d1be9c9a2b";
   name = "monodevelop-${version}";
 
   src = fetchurl {
     url = "http://download.mono-project.com/sources/monodevelop/${name}.tar.bz2";
-    sha256 = "1bgqvlfi6pilj2zxsviqilh63qq98wsijqdiqwpkqchcw741zlyn";
+    sha256 = "0bim4bfv3zwijafl9g0cx3159zq43dlcv74mnyrda41j4p52w5ji";
   };
 
   nunit2510 = fetchurl {

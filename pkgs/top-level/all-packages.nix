@@ -251,7 +251,7 @@ let
     theAttrSet = arg;
   };
 
-  autonix = callPackage ../build-support/autonix {};
+  autonix = import ../build-support/autonix { inherit pkgs; };
 
   autoreconfHook = makeSetupHook
     { substitutions = { inherit autoconf automake libtool gettext; }; }
@@ -788,6 +788,8 @@ let
   cli53 = callPackage ../tools/admin/cli53 { };
 
   cloud-init = callPackage ../tools/virtualization/cloud-init { };
+
+  clib = callPackage ../tools/package-management/clib { };
 
   consul = goPackages.consul;
 
@@ -1859,6 +1861,8 @@ let
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
+  ipcalc = callPackage ../tools/networking/ipcalc {};
+
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
 
   ipxe = callPackage ../tools/misc/ipxe { };
@@ -2884,6 +2888,8 @@ let
 
   skydns = callPackage ../servers/dns/skydns { };
 
+  sipcalc = callPackage ../tools/networking/sipcalc { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
@@ -3040,7 +3046,7 @@ let
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
-  tiled = callPackage ../applications/editors/tiled { qt = qt4; };
+  tiled = callPackage ../applications/editors/tiled { };
 
   tinc = callPackage ../tools/networking/tinc { };
 
@@ -5048,7 +5054,7 @@ let
 
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
-  jruby165 = callPackage ../development/interpreters/jruby { };
+  jruby = callPackage ../development/interpreters/jruby { };
 
   jython = callPackage ../development/interpreters/jython {};
 
@@ -5103,7 +5109,7 @@ let
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
-  atom-shell = callPackage ../development/tools/atom-shell {
+  electron = callPackage ../development/tools/electron {
     gconf = pkgs.gnome.GConf;
   };
 
@@ -10186,6 +10192,8 @@ let
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
+  coreclr = callPackage ../development/compilers/coreclr { };
+
   corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
@@ -11592,9 +11600,7 @@ let
     boost = boost155;
   };
 
-  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
-    kf5 = kf510;
-  });
+  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {});
   kdeApps_stable = kdeApps_15_04;
   kdeApps_latest = kdeApps_15_04;
 
@@ -11769,7 +11775,7 @@ let
   mendeley = callPackage ../applications/office/mendeley { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) curses docutils;
+    inherit (pythonPackages) curses docutils hg-git dulwich;
     guiSupport = false; # use mercurialFull to get hgk GUI
   };
 
@@ -12239,6 +12245,10 @@ let
     inherit (pythonPackages) mutagen;
     withGstPlugins = true;
     gst_plugins_bad = null;
+  };
+
+  qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (python34Packages) buildPythonPackage python pyqt5 jinja2 pygments pyyaml pypeg2;
   };
 
   rakarrack = callPackage ../applications/audio/rakarrack {
@@ -13872,10 +13882,7 @@ let
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
-  plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
-    kf5 = kf510;
-    kdeApps = kdeApps_15_04;
-  });
+  plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 { inherit pkgs newScope; });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;
 
@@ -14708,6 +14715,8 @@ let
   thinkfan = callPackage ../tools/system/thinkfan { };
 
   tup = callPackage ../development/tools/build-managers/tup { };
+
+  tvheadend = callPackage ../servers/tvheadend { };
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 

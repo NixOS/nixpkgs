@@ -3,12 +3,10 @@
 , libgcrypt, chromium, udev, fontconfig
 , dbus, expat }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+assert stdenv.system == "x86_64-linux";
 
 let
-  version = if stdenv.system == "i686-linux"
-    then "0.9.4.183.g644e24e.428"
-    else "0.9.17.1.g9b85d43.7";
+  version = "0.9.17.1.g9b85d43.7";
 
   deps = [
     alsaLib
@@ -29,6 +27,7 @@ let
     pango
     qt4
     stdenv.cc.cc
+    udev
     xlibs.libX11
     xlibs.libXcomposite
     xlibs.libXdamage
@@ -47,17 +46,10 @@ stdenv.mkDerivation {
   name = "spotify-${version}";
 
   src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_i386.deb";
-        sha256 = "1wl6v5x8vm74h5lxp8fhvmih8l122aadsf1qxvpk0k3y6mbx0ifa";
-      }
-    else if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_amd64.deb";
-        sha256 = "0x87q7gd2997sgppsm4lmdiz1cm11x5vnd5c34nqb5d4ry5qfyki";
-      }
-    else throw "Spotify not supported on this platform.";
+    fetchurl {
+      url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_amd64.deb";
+      sha256 = "0x87q7gd2997sgppsm4lmdiz1cm11x5vnd5c34nqb5d4ry5qfyki";
+    };
 
   buildInputs = [ dpkg makeWrapper ];
 
@@ -74,24 +66,10 @@ stdenv.mkDerivation {
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
-      ln -s ${nss}/lib/libnss3.so $libdir/libnss3.so.1d
-      ln -s ${nss}/lib/libnssutil3.so $libdir/libnssutil3.so.1d
-      ln -s ${nss}/lib/libsmime3.so $libdir/libsmime3.so.1d
-
-      ${if stdenv.system == "x86_64-linux" then ''
       ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
       ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
       ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
-      '' else ''
-      ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.0.9.8
-      ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.0.9.8
-      ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so.0d
-      ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so.0d
-      ''}
-
-      # Work around Spotify trying to open libudev.so.1 (which we don't have)
-      ln -s ${udev}/lib/libudev.so.1 $libdir/libudev.so.1
 
       mkdir -p $out/bin
 

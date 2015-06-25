@@ -41,6 +41,7 @@
 <itemizedlist>
 <listitem><para><literal>brltty</literal></para></listitem>
 <listitem><para><literal>marathon</literal></para></listitem>
+<listitem><para><literal>Tvheadend</literal></para></listitem>
 </itemizedlist>
 </para>
 
@@ -57,6 +58,10 @@ and old <literal>steam</literal> package -- to <literal>steamOriginal</literal>.
 
 <listitem><para>CMPlayer has been renamed to bomi upstream. Package <literal>cmplayer</literal>
 was accordingly renamed to <literal>bomi</literal>
+</para></listitem>
+
+<listitem><para>Atom Shell has been renamed to Electron upstream.  Package <literal>atom-shell</literal>
+was accordingly renamed to <literal>electron</literal>
 </para></listitem>
 
 <listitem>

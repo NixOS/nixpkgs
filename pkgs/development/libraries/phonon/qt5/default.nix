@@ -18,11 +18,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  NIX_CFLAGS_COMPILE = "-fPIC";
+
   cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
     "-DPHONON_BUILD_PHONON4QT5=ON"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ]
-  ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
+  ];
 
   meta = {
     homepage = http://phonon.kde.org/;
