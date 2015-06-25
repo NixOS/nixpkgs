@@ -2,22 +2,22 @@
 # nettools needed for hostname
 
 let
-  dirname = "Isabelle2014";
+  dirname = "Isabelle2015";
   theories = ["HOL" "FOL" "ZF"];
 in
 
 stdenv.mkDerivation {
-  name = "isabelle-2014";
+  name = "isabelle-2015";
   inherit dirname theories;
 
   src = if stdenv.isDarwin
     then fetchurl {
-      url = http://isabelle.in.tum.de/website-Isabelle2014/dist/Isabelle2014_macos.tar.gz;
-      sha256 = "1aa3vz2nnkkyd4mlsqbs69jqfxlll5h0k5fj9m1j9wqiddqwvwcf";
+      url = http://isabelle.in.tum.de/dist/Isabelle2015.dmg;
+      sha256 = "1vhm10qc1rn3wy9r12clrl33p64h3q1aj41mcnxkbnsyg2bx03im";
     }
     else fetchurl {
-      url = http://isabelle.in.tum.de/website-Isabelle2014/dist/Isabelle2014_linux.tar.gz;
-      sha256 = "0z81pwwllavka4r57fx6yi9kbpbb9xbanp8dsjix49qpyj2a72jy";
+      url = http://isabelle.in.tum.de/dist/Isabelle2015_linux.tar.gz;
+      sha256 = "13kqm458d8mw7il1zg5bdb1nfbb869p331d75xzlm2v9xgjxx862";
     };
 
   buildInputs = [ perl polyml ]
@@ -32,12 +32,13 @@ stdenv.mkDerivation {
       --replace /usr/bin/env $ENV
     substituteInPlace lib/Tools/install \
       --replace /usr/bin/env $ENV
+    sed -i 's|isabelle_java java|${java}/bin/java|g' lib/Tools/java
     substituteInPlace etc/settings \
       --subst-var-by ML_HOME "${polyml}/bin" \
       --subst-var-by PROOFGENERAL_HOME "${proofgeneral}/share/emacs/site-lisp/ProofGeneral"
     substituteInPlace contrib/jdk/etc/settings \
       --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
-    substituteInPlace contrib/polyml-5.5.2-1/etc/settings \
+    substituteInPlace contrib/polyml-*/etc/settings \
       --replace 'ML_HOME="$POLYML_HOME/$ML_PLATFORM"' \
                 "ML_HOME=\"${polyml}/bin\""
   '';
