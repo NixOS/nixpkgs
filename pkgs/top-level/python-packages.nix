@@ -3512,8 +3512,8 @@ let
     };
 
     meta = {
-      description = "Library to apply JSON Patches according to RFC 6902";
-      homepage = "https://github.com/stefankoegl/python-json-patch";
+      description = "Resolve JSON Pointers in Python";
+      homepage = "https://github.com/stefankoegl/python-json-pointer";
       license = stdenv.lib.licenses.bsd2; # "Modified BSD licence, says pypi"
     };
   };
