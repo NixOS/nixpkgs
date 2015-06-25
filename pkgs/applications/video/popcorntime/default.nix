@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, runCommand, makeWrapper, node_webkit ? pkgs.node_webkit_0_9
+{ stdenv, fetchurl, runCommand, makeWrapper, node_webkit_0_9
 }:
 
 let
@@ -22,7 +22,7 @@ let
     installPhase = ''
       mkdir -p $out
       cp -r *.so *.pak $out/
-      cat ${node_webkit}/bin/nw package.nw > $out/Popcorn-Time
+      cat ${node_webkit_0_9}/bin/nw package.nw > $out/Popcorn-Time
       chmod 555 $out/Popcorn-Time
     '';
   };
