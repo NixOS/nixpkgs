@@ -251,7 +251,7 @@ let
     theAttrSet = arg;
   };
 
-  autonix = callPackage ../build-support/autonix {};
+  autonix = import ../build-support/autonix { inherit pkgs; };
 
   autoreconfHook = makeSetupHook
     { substitutions = { inherit autoconf automake libtool gettext; }; }
@@ -11658,9 +11658,7 @@ let
     boost = boost155;
   };
 
-  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {
-    kf5 = kf510;
-  });
+  kdeApps_15_04 = recurseIntoAttrs (callPackage ../applications/kde-apps-15.04 {});
   kdeApps_stable = kdeApps_15_04;
   kdeApps_latest = kdeApps_15_04;
 
@@ -13940,10 +13938,7 @@ let
 
   numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
 
-  plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 {
-    kf5 = kf510;
-    kdeApps = kdeApps_15_04;
-  });
+  plasma53 = recurseIntoAttrs (callPackage ../desktops/plasma-5.3 { inherit pkgs newScope; });
   plasma5_latest = plasma53;
   plasma5_stable = plasma53;
 

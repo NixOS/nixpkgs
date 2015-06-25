@@ -1,0 +1,1358 @@
+{
+    "bluez-qt": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5core"
+        ],
+        "name": "bluez-qt-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/bluez-qt-5.3.1.tar.xz",
+            "name": "bluez-qt-5.3.1.tar.xz",
+            "sha256": "13i5ybmkf6xg49jh5fbbayxg3gp5h8g1gayc0mdc4cwzx1v6g70l"
+        },
+        "buildInputs": [
+            "ecm",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5network",
+            "qt5qml",
+            "qt5quicktest",
+            "qt5test"
+        ]
+    },
+    "kmenuedit": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kmenuedit-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kmenuedit-5.3.1.tar.xz",
+            "name": "kmenuedit-5.3.1.tar.xz",
+            "sha256": "0vyy3xb32nb2qxfv3qvrrzlnck6gas0gwyncbn4rzimaygm2vzqz"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5sonnet",
+            "kf5xmlgui",
+            "khotkeysdbusinterface",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5xml"
+        ]
+    },
+    "plasma-nm": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "plasma-nm-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/plasma-nm-5.3.1.tar.xz",
+            "name": "plasma-nm-5.3.1.tar.xz",
+            "sha256": "0jgrz9j2228aya7n1dg4npicsbgv93f8n80b9yjax8mrd6qhq55k"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5completion",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5init",
+            "kf5itemviews",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5modemmanagerqt",
+            "kf5networkmanagerqt",
+            "kf5notifications",
+            "kf5plasma",
+            "kf5service",
+            "kf5solid",
+            "kf5wallet",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "mobilebroadbandproviderinfo",
+            "modemmanager",
+            "networkmanager",
+            "openconnect",
+            "openssl",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5network",
+            "qt5quick",
+            "qt5widgets"
+        ]
+    },
+    "khotkeys": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "khotkeys-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/khotkeys-5.3.1.tar.xz",
+            "name": "khotkeys-5.3.1.tar.xz",
+            "sha256": "11mzrjzk2j9x32mg77d2al19b4iin0rfxs710mhsjbgriq144smv"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5dbusaddons",
+            "kf5globalaccel",
+            "kf5i18n",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5plasma",
+            "kf5xmlgui",
+            "libkworkspace",
+            "qt5",
+            "qt5x11extras",
+            "x11"
+        ]
+    },
+    "plasma-workspace-wallpapers": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "plasma-workspace-wallpapers-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/plasma-workspace-wallpapers-5.3.1.tar.xz",
+            "name": "plasma-workspace-wallpapers-5.3.1.tar.xz",
+            "sha256": "1y6gdzs0qxiw4hl9r6v3blcm8gq61wapagn6sj5ixagvwlhf2w5y"
+        },
+        "buildInputs": [
+            "ecm"
+        ]
+    },
+    "kscreen": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kscreen-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kscreen-5.3.1.tar.xz",
+            "name": "kscreen-5.3.1.tar.xz",
+            "sha256": "008ys3glpvpcvjh7n2gls3m13q9qswmnc5l2lz4zs1dvcrk5z7yr"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5configwidgets",
+            "kf5dbusaddons",
+            "kf5globalaccel",
+            "kf5i18n",
+            "kf5screen",
+            "kf5xmlgui",
+            "qt5",
+            "qt5quickwidgets",
+            "qt5test"
+        ]
+    },
+    "oxygen-fonts": {
+        "nativeBuildInputs": [
+            "cmake",
+            "fontforge_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "oxygen-fonts-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/oxygen-fonts-5.3.1.tar.xz",
+            "name": "oxygen-fonts-5.3.1.tar.xz",
+            "sha256": "0zp81c4s0xvr1d0nvlssk3k3456farz157sqnjvgbsarxnzmgppv"
+        },
+        "buildInputs": [
+            "ecm"
+        ]
+    },
+    "breeze": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "breeze-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/breeze-5.3.1.tar.xz",
+            "name": "breeze-5.3.1.tar.xz",
+            "sha256": "0sh7vgg3dz0cs6mqs4c3ygw5qg4lcjm0vdh4mm4xfxnizagkqrr5"
+        },
+        "buildInputs": [
+            "ecm",
+            "kde4",
+            "kdecoration2",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5frameworkintegration",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5kcmutils",
+            "kf5windowsystem",
+            "pkgconfig",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5widgets",
+            "qt5x11extras",
+            "xcb"
+        ]
+    },
+    "oxygen": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "oxygen-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/oxygen-5.3.1.tar.xz",
+            "name": "oxygen-5.3.1.tar.xz",
+            "sha256": "03b8rxgspkv5p8mfb53v92bi62cqp7rcma2fjarmgw4ri5w6cwx9"
+        },
+        "buildInputs": [
+            "ecm",
+            "kde4",
+            "kde4workspace",
+            "kdecoration2",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5frameworkintegration",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5service",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "pkgconfig",
+            "qt5",
+            "qt5dbus",
+            "qt5widgets",
+            "qt5x11extras",
+            "xcb"
+        ]
+    },
+    "plasma-workspace": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kf5sysguard"
+        ],
+        "name": "plasma-workspace-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/plasma-workspace-5.3.1.tar.xz",
+            "name": "plasma-workspace-5.3.1.tar.xz",
+            "sha256": "1cjg8rhwhm015fg36idn4shddcy6sjnb4y0x9vmxbsdvfx2nnhr1"
+        },
+        "buildInputs": [
+            "dbusmenu-qt5",
+            "ecm",
+            "kf5",
+            "kf5activities",
+            "kf5baloo",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5globalaccel",
+            "kf5i18n",
+            "kf5idletime",
+            "kf5jsembed",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5networkmanagerqt",
+            "kf5newstuff",
+            "kf5notifyconfig",
+            "kf5package",
+            "kf5plasma",
+            "kf5plasmaquick",
+            "kf5prison",
+            "kf5runner",
+            "kf5screen",
+            "kf5solid",
+            "kf5su",
+            "kf5sysguard",
+            "kf5texteditor",
+            "kf5textwidgets",
+            "kf5wallet",
+            "kf5wayland",
+            "kf5webkit",
+            "kf5xmlrpcclient",
+            "kwindbusinterface",
+            "libgps",
+            "phonon4qt5",
+            "qalculate",
+            "qt5",
+            "qt5concurrent",
+            "qt5dbus",
+            "qt5network",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5script",
+            "qt5sql",
+            "qt5test",
+            "qt5webkitwidgets",
+            "qt5widgets",
+            "qt5x11extras",
+            "wayland",
+            "waylandscanner",
+            "x11",
+            "xcb",
+            "zlib"
+        ]
+    },
+    "kwrited": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kwrited-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kwrited-5.3.1.tar.xz",
+            "name": "kwrited-5.3.1.tar.xz",
+            "sha256": "0qivfycr4ak5zsplnzv968sya2rc3vz9z6h8gv4b2scf99zjp2g8"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5notifications",
+            "kf5pty",
+            "qt5",
+            "qt5widgets"
+        ]
+    },
+    "plasma-desktop": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5core"
+        ],
+        "name": "plasma-desktop-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/plasma-desktop-5.3.1.tar.xz",
+            "name": "plasma-desktop-5.3.1.tar.xz",
+            "sha256": "079v2pbpgn1gr03l3qcxk3rsgbip318xpjbni4vxf08fhsh1ixlp"
+        },
+        "buildInputs": [
+            "boost",
+            "canberra",
+            "ecm",
+            "evdev",
+            "fontconfig",
+            "freetype",
+            "glib2",
+            "kde4",
+            "kded",
+            "kf5",
+            "kf5activities",
+            "kf5attica",
+            "kf5auth",
+            "kf5baloo",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5emoticons",
+            "kf5globalaccel",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5itemmodels",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5notifyconfig",
+            "kf5people",
+            "kf5plasma",
+            "kf5plasmaquick",
+            "kf5runner",
+            "kf5wallet",
+            "krunnerappdbusinterface",
+            "ksmserverdbusinterface",
+            "kwindbusinterface",
+            "libkworkspace",
+            "libtaskmanager",
+            "opengl",
+            "opengles",
+            "packagekitqt5",
+            "phonon4qt5",
+            "pulseaudio",
+            "qt4",
+            "qt5",
+            "qt5concurrent",
+            "qt5dbus",
+            "qt5qml",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5sql",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "qt5x11extras",
+            "screensaverdbusinterface",
+            "strigi",
+            "synaptics",
+            "usb",
+            "x11",
+            "xcb"
+        ]
+    },
+    "systemsettings": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "systemsettings-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/systemsettings-5.3.1.tar.xz",
+            "name": "systemsettings-5.3.1.tar.xz",
+            "sha256": "06m3r31dr0ivhn25fg0sg8pbxyzvm8slsmqkqsm4cbypg028axx0"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5dbusaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kcmutils",
+            "kf5khtml",
+            "kf5kio",
+            "kf5service",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "qt5",
+            "qt5widgets"
+        ]
+    },
+    "libkscreen": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5core"
+        ],
+        "name": "libkscreen-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/libkscreen-5.3.1.tar.xz",
+            "name": "libkscreen-5.3.1.tar.xz",
+            "sha256": "00g401yfiyqh09ajkinlkzhfpb7lsy0wpnrk1ba8vm4wmcvkp63l"
+        },
+        "buildInputs": [
+            "doxygen",
+            "ecm",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5gui",
+            "qt5test",
+            "qt5x11extras",
+            "xcb"
+        ]
+    },
+    "plasma-sdk": {
+        "nativeBuildInputs": [
+            "cmake",
+            "git_executable_found"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "plasma-sdk-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/plasma-sdk-5.3.1.tar.xz",
+            "name": "plasma-sdk-5.3.1.tar.xz",
+            "sha256": "157742d7wm21y4g7gs0483jd4sd6q2a0ppyk3mr544nagydvpqfs"
+        },
+        "buildInputs": [
+            "activeapp",
+            "ecm",
+            "kdepimlibs",
+            "kdevplatform",
+            "kf5",
+            "kf5archive",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5declarative",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5parts",
+            "kf5plasma",
+            "kf5plasmaquick",
+            "kf5service",
+            "kf5texteditor",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "qgpgme",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5gui",
+            "qt5qml",
+            "qt5quick",
+            "qt5svg",
+            "qt5test",
+            "qt5webkit",
+            "qt5webkitwidgets",
+            "qt5widgets",
+            "qt5xml"
+        ]
+    },
+    "kwin": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kwin-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kwin-5.3.1.tar.xz",
+            "name": "kwin-5.3.1.tar.xz",
+            "sha256": "04bxf45lcbmnl8fks1k6j6i0sk7x5abzhmyrziliz2yx5kyi4m36"
+        },
+        "buildInputs": [
+            "ecm",
+            "egl",
+            "epoxy",
+            "kdecoration2",
+            "kf5",
+            "kf5activities",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5globalaccel",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5init",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5plasma",
+            "kf5service",
+            "kf5wayland",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "kf5xmlgui",
+            "libinput",
+            "qt5",
+            "qt5concurrent",
+            "qt5core",
+            "qt5dbus",
+            "qt5multimedia",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5script",
+            "qt5test",
+            "qt5uitools",
+            "qt5widgets",
+            "qt5x11extras",
+            "threads",
+            "udev",
+            "wayland",
+            "x11",
+            "x11_xcb",
+            "xcb",
+            "xkb"
+        ]
+    },
+    "kdeplasma-addons": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kdeplasma-addons-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kdeplasma-addons-5.3.1.tar.xz",
+            "name": "kdeplasma-addons-5.3.1.tar.xz",
+            "sha256": "1myk3508jqgalyqa1rlx1dq5afppvhvsnd7irf4wywpgls20nwnv"
+        },
+        "buildInputs": [
+            "ecm",
+            "gio",
+            "glib2",
+            "gobject",
+            "ibus",
+            "kde4",
+            "kdepimlibs",
+            "kexiv2",
+            "kf5",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5kross",
+            "kf5newstuff",
+            "kf5plasma",
+            "kf5purpose",
+            "kf5runner",
+            "kf5service",
+            "kf5unitconversion",
+            "lancelot",
+            "lancelot-datamodels",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5gui",
+            "qt5qml",
+            "qt5quick",
+            "qt5widgets",
+            "qt5x11extras",
+            "scim",
+            "sharedmimeinfo",
+            "x11",
+            "xcb"
+        ]
+    },
+    "sddm-kcm": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "sddm-kcm-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/sddm-kcm-5.3.1.tar.xz",
+            "name": "sddm-kcm-5.3.1.tar.xz",
+            "sha256": "16viwz7b8s77g5fqw7g7asrrk44fif4fmmif7g3bkmq7rncd3hw9"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5auth",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5kio",
+            "kf5xmlgui",
+            "qt5",
+            "qt5core",
+            "qt5designer",
+            "qt5gui",
+            "qt5quick",
+            "qt5quickwidgets",
+            "qt5widgets",
+            "qt5x11extras",
+            "x11",
+            "xcb"
+        ]
+    },
+    "khelpcenter": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "khelpcenter-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/khelpcenter-5.3.1.tar.xz",
+            "name": "khelpcenter-5.3.1.tar.xz",
+            "sha256": "0dik353w6ri6mfkvkz3v5xva6x59zlbz1sj522li0gbd73x4bzf2"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5i18n",
+            "kf5init",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5khtml",
+            "qt5",
+            "qt5dbus",
+            "qt5widgets"
+        ]
+    },
+    "bluedevil": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "bluedevil-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/bluedevil-5.3.1.tar.xz",
+            "name": "bluedevil-5.3.1.tar.xz",
+            "sha256": "050hpiifrhm2vzab527anfncdf04cikz5149iabz3aflxcvabqpl"
+        },
+        "buildInputs": [
+            "ecm",
+            "kded",
+            "kf5",
+            "kf5bluezqt",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kio",
+            "kf5module",
+            "kf5notifications",
+            "kf5plasma",
+            "kf5widgetsaddons",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5qml",
+            "qt5widgets",
+            "sharedmimeinfo"
+        ]
+    },
+    "ksysguard": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksysguard-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/ksysguard-5.3.1.tar.xz",
+            "name": "ksysguard-5.3.1.tar.xz",
+            "sha256": "1z1qgf5qskzf4r524lf75pdyw7gdwrx2yr8nac9622hvgrfh7yhj"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdelibs4support",
+            "kf5newstuff",
+            "kf5sysguard",
+            "qt5",
+            "qt5core",
+            "qt5widgets",
+            "sensors"
+        ]
+    },
+    "baloo": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kf5coreaddons",
+            "kf5filemetadata",
+            "qt5core",
+            "xapian"
+        ],
+        "name": "baloo-5.9.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/baloo-5.9.1.tar.xz",
+            "name": "baloo-5.9.1.tar.xz",
+            "sha256": "0wx9n3l4f1ibddvhbiharhgd20s8hzs64b2c0686bm82qmbkkl7n"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5auth",
+            "kf5config",
+            "kf5crash",
+            "kf5dbusaddons",
+            "kf5filemetadata",
+            "kf5i18n",
+            "kf5idletime",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5solid",
+            "qt5",
+            "qt5dbus",
+            "qt5quick",
+            "qt5sql",
+            "qt5test",
+            "qt5widgets",
+            "xapian"
+        ]
+    },
+    "kde-cli-tools": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-cli-tools-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kde-cli-tools-5.3.1.tar.xz",
+            "name": "kde-cli-tools-5.3.1.tar.xz",
+            "sha256": "0x4k3yi4qccvfp4ia75alihcivk4slwsx8i0wdb00qjl1nj7jbc1"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5su",
+            "kf5windowsystem",
+            "qt5",
+            "qt5dbus",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "qt5x11extras",
+            "x11"
+        ]
+    },
+    "milou": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "milou-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/milou-5.3.1.tar.xz",
+            "name": "milou-5.3.1.tar.xz",
+            "sha256": "17xw62pngq3bb7vkbkn8c099ivsf1xmns0f65v7j112yqpz33b8a"
+        },
+        "buildInputs": [
+            "ecm",
+            "kdepimlibs",
+            "kf5",
+            "kf5coreaddons",
+            "kf5declarative",
+            "kf5i18n",
+            "kf5plasma",
+            "kf5runner",
+            "kf5service",
+            "qt5",
+            "qt5qml",
+            "qt5quick",
+            "qt5script",
+            "qt5test",
+            "qt5widgets"
+        ]
+    },
+    "powerdevil": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "powerdevil-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/powerdevil-5.3.1.tar.xz",
+            "name": "powerdevil-5.3.1.tar.xz",
+            "sha256": "07kcqd7qzblapxnwczfdj4vwb8s6s8mp7qhl4mb663f2a0z6fn8l"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5activities",
+            "kf5auth",
+            "kf5config",
+            "kf5dbusaddons",
+            "kf5globalaccel",
+            "kf5i18n",
+            "kf5idletime",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5notifyconfig",
+            "kf5screen",
+            "kf5solid",
+            "libkworkspace",
+            "qt5",
+            "qt5dbus",
+            "qt5widgets",
+            "qt5x11extras",
+            "udev",
+            "xcb"
+        ]
+    },
+    "libksysguard": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "kf5config",
+            "kf5i18n",
+            "kf5iconthemes",
+            "qt5core",
+            "qt5network",
+            "qt5widgets"
+        ],
+        "name": "libksysguard-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/libksysguard-5.3.1.tar.xz",
+            "name": "libksysguard-5.3.1.tar.xz",
+            "sha256": "115iwqq4y6pnhqsa5yn30q6wdpad5v48m7hjrn7jbpm3gsiwq1ym"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5auth",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5plasma",
+            "kf5service",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "qt5",
+            "qt5dbus",
+            "qt5network",
+            "qt5script",
+            "qt5test",
+            "qt5webkitwidgets",
+            "qt5widgets",
+            "qt5x11extras",
+            "x11",
+            "zlib"
+        ]
+    },
+    "plasma-mediacenter": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "plasma-mediacenter-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/plasma-mediacenter-5.3.1.tar.xz",
+            "name": "plasma-mediacenter-5.3.1.tar.xz",
+            "sha256": "0h8dpyszn7hk7b1y1m9qb83gzjnp8ymslpranxdan36r5bm2ayd8"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5baloo",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5declarative",
+            "kf5filemetadata",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5kio",
+            "kf5plasma",
+            "kf5plasmaquick",
+            "kf5service",
+            "kf5windowsystem",
+            "mockcpp",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5multimedia",
+            "qt5quick",
+            "qt5sql",
+            "qt5test",
+            "qt5xml",
+            "taglib"
+        ]
+    },
+    "kfilemetadata": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5core"
+        ],
+        "name": "kfilemetadata-5.9.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kfilemetadata-5.9.1.tar.xz",
+            "name": "kfilemetadata-5.9.1.tar.xz",
+            "sha256": "02gffgwbic4h8zdknp32cczplw3cc9ahg483aa3frhhgvgvrq8hs"
+        },
+        "buildInputs": [
+            "ecm",
+            "epub",
+            "exiv2",
+            "ffmpeg",
+            "kf5",
+            "kf5archive",
+            "kf5i18n",
+            "popplerqt5",
+            "qmobipocket",
+            "qt5",
+            "qt5test",
+            "qt5xml",
+            "taglib"
+        ]
+    },
+    "kde-gtk-config": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kde-gtk-config-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kde-gtk-config-5.3.1.tar.xz",
+            "name": "kde-gtk-config-5.3.1.tar.xz",
+            "sha256": "1frykdckgrfbiyjshdkjv6hp8mrpfz3g461w6snb65yly02qjb5l"
+        },
+        "buildInputs": [
+            "ecm",
+            "gtk2",
+            "gtk3",
+            "kf5",
+            "kf5archive",
+            "kf5configwidgets",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kio",
+            "kf5newstuff",
+            "qt5",
+            "qt5test",
+            "qt5widgets",
+            "x11"
+        ]
+    },
+    "kwayland": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5gui"
+        ],
+        "name": "kwayland-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kwayland-5.3.1.tar.xz",
+            "name": "kwayland-5.3.1.tar.xz",
+            "sha256": "1vsdsf00py6i16zwbwpplq1v7m3fy1j0dskvkb080wm0fskz1r8f"
+        },
+        "buildInputs": [
+            "ecm",
+            "egl",
+            "qt5",
+            "qt5_check_private",
+            "qt5component",
+            "qt5concurrent",
+            "qt5core",
+            "qt5gui",
+            "qt5private",
+            "qt5test",
+            "qt5widgets",
+            "wayland",
+            "waylandscanner"
+        ]
+    },
+    "ksshaskpass": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "ksshaskpass-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/ksshaskpass-5.3.1.tar.xz",
+            "name": "ksshaskpass-5.3.1.tar.xz",
+            "sha256": "0ids7vbi46bdd5dbjgv0wfv4rfv03kpln5vr3rwavah892q1dad2"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5coreaddons",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5wallet",
+            "kf5widgetsaddons",
+            "qt5",
+            "qt5core"
+        ]
+    },
+    "kinfocenter": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kinfocenter-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kinfocenter-5.3.1.tar.xz",
+            "name": "kinfocenter-5.3.1.tar.xz",
+            "sha256": "02gqlidh9pb924vhhaxnidpjz3cb32r6icikhcv7csrll13wgp1a"
+        },
+        "buildInputs": [
+            "ecm",
+            "egl",
+            "kf5",
+            "kf5completion",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5doctools",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kcmutils",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5package",
+            "kf5service",
+            "kf5solid",
+            "kf5wayland",
+            "kf5widgetsaddons",
+            "kf5xmlgui",
+            "opengl",
+            "opengles",
+            "pciutils",
+            "qt5",
+            "qt5core",
+            "qt5gui",
+            "qt5widgets",
+            "raw1394",
+            "x11"
+        ]
+    },
+    "polkit-kde-agent": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "polkit-kde-agent-1-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/polkit-kde-agent-1-5.3.1.tar.xz",
+            "name": "polkit-kde-agent-1-5.3.1.tar.xz",
+            "sha256": "01ragaa1r144g25kqdc157d7lbq69cclanaljgwkvs2mn0ib031c"
+        },
+        "buildInputs": [
+            "ecm",
+            "kf5",
+            "kf5config",
+            "kf5coreaddons",
+            "kf5crash",
+            "kf5dbusaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5notifications",
+            "kf5widgetsaddons",
+            "kf5windowsystem",
+            "polkitqt5-1",
+            "qt5",
+            "qt5core",
+            "qt5dbus",
+            "qt5widgets"
+        ]
+    },
+    "kdecoration": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [
+            "qt5gui"
+        ],
+        "name": "kdecoration-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kdecoration-5.3.1.tar.xz",
+            "name": "kdecoration-5.3.1.tar.xz",
+            "sha256": "19qxz5ivrjq9a1shk7mjin0r9v37g33l762nf7lb1xf29y13mhsn"
+        },
+        "buildInputs": [
+            "ecm",
+            "qt5",
+            "qt5core",
+            "qt5gui",
+            "qt5test"
+        ]
+    },
+    "kio-extras": {
+        "nativeBuildInputs": [
+            "cmake",
+            "md5sum_executable"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "kio-extras-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/kio-extras-5.3.1.tar.xz",
+            "name": "kio-extras-5.3.1.tar.xz",
+            "sha256": "1m1gc0m9xhapnchiicsn93spylczkggj8c79ixgk99b1ha7vbc87"
+        },
+        "buildInputs": [
+            "ecm",
+            "exiv2",
+            "jpeg",
+            "kf5",
+            "kf5archive",
+            "kf5bookmarks",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5dnssd",
+            "kf5doctools",
+            "kf5guiaddons",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5kdelibs4support",
+            "kf5khtml",
+            "kf5kio",
+            "kf5pty",
+            "kf5solid",
+            "libssh",
+            "mtp",
+            "openexr",
+            "phonon4qt5",
+            "qt5",
+            "qt5dbus",
+            "qt5network",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "samba",
+            "sharedmimeinfo",
+            "slp"
+        ]
+    },
+    "muon": {
+        "nativeBuildInputs": [
+            "cmake"
+        ],
+        "propagatedNativeBuildInputs": [],
+        "propagatedUserEnvPkgs": [],
+        "propagatedBuildInputs": [],
+        "name": "muon-5.3.1",
+        "src": {
+            "url": "stable/plasma/5.3.1/muon-5.3.1.tar.xz",
+            "name": "muon-5.3.1.tar.xz",
+            "sha256": "0k2c625d9i5gyyvdzlajkb0kcvss60lhs7qssil1a4w34ch3zfmk"
+        },
+        "buildInputs": [
+            "akabeiclient",
+            "appstreamqt",
+            "bodega",
+            "debconfkde",
+            "ecm",
+            "kf5",
+            "kf5attica",
+            "kf5config",
+            "kf5configwidgets",
+            "kf5coreaddons",
+            "kf5dbusaddons",
+            "kf5declarative",
+            "kf5i18n",
+            "kf5iconthemes",
+            "kf5itemviews",
+            "kf5kdelibs4support",
+            "kf5kio",
+            "kf5newstuff",
+            "kf5notifications",
+            "kf5plasma",
+            "kf5solid",
+            "kf5wallet",
+            "kf5widgetsaddons",
+            "packagekitqt5",
+            "phonon4qt5",
+            "qapt",
+            "qca-qt5",
+            "qt5",
+            "qt5concurrent",
+            "qt5dbus",
+            "qt5network",
+            "qt5qml",
+            "qt5quickwidgets",
+            "qt5svg",
+            "qt5test",
+            "qt5widgets",
+            "qt5xml",
+            "qtoauth"
+        ]
+    }
+}

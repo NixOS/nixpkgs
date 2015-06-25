@@ -12,199 +12,206 @@
 #  make a copy of this directory first. After copying, be sure to delete ./tmp
 #  if it exists. Then follow the minor update instructions.
 
-{ autonix, fetchurl, pkgs, qt5, stdenv, debug ? false }:
+{ pkgs, newScope, qt5 ? null, debug ? false }:
 
-with stdenv.lib; with autonix;
+let inherit (pkgs) autonix stdenv symlinkJoin; in
+
+with autonix; let inherit (stdenv) lib; in
+
+let
+  qt5_ = if qt5 != null then qt5 else pkgs.qt54;
+in
 
 let
 
-  mkDerivation = drv:
-    let inherit (builtins.parseDrvName drv.name) version; in
-    stdenv.mkDerivation
-      (drv // {
-        setupHook = ./setup-hook.sh;
+  qt5 = qt5_;
 
-        enableParallelBuilding = drv.enableParallelBuilding or true;
-        cmakeFlags =
-          (drv.cmakeFlags or [])
-          ++ [ "-DBUILD_TESTING=OFF" ]
-          ++ optional debug "-DCMAKE_BUILD_TYPE=Debug";
+  super =
+    let json = builtins.fromJSON (builtins.readFile ./packages.json);
+        mirrorUrl = n: pkg: pkg // {
+          src = pkg.src // { url = "mirror://kde/${pkg.src.url}"; };
+        };
+        renames = builtins.fromJSON (builtins.readFile ./renames.json);
+        propagated = [ "extra-cmake-modules" ];
+        native = [
+          "bison"
+          "extra-cmake-modules"
+          "flex"
+          "kdoctools"
+          "ki18n"
+          "libxslt"
+          "perl"
+          "pythoninterp"
+        ];
+        user = [
+          "qt5"
+          "qt5core"
+          "qt5dbus"
+          "qt5gui"
+          "qt5qml"
+          "qt5quick"
+          "qt5svg"
+          "qt5webkitwidgets"
+          "qt5widgets"
+          "qt5x11extras"
+          "shareddesktopontologies"
+          "sharedmimeinfo"
+        ];
+    in lib.fold (f: attrs: f attrs) json [
+      (lib.mapAttrs kdePackage)
+      (userEnvDeps user)
+      (nativeDeps native)
+      (propagateDeps propagated)
+      (renameDeps renames)
+      (lib.mapAttrs mirrorUrl)
+    ];
 
-        meta =
-          {
+  kdePackage = name: pkg:
+    let defaultOverride = drv: drv // {
+          setupHook = ./setup-hook.sh;
+          cmakeFlags =
+            (drv.cmakeFlags or [])
+            ++ [ "-DBUILD_TESTING=OFF" ]
+            ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+          meta = {
             license = with stdenv.lib.licenses; [
               lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
             ];
             platforms = stdenv.lib.platforms.linux;
             maintainers = with stdenv.lib.maintainers; [ ttuegel ];
             homepage = "http://www.kde.org";
-            inherit version;
-            branch = intersperse "." (take 2 (splitString "." version));
-          } // (drv.meta or {});
-      });
-
-  renames = builtins.removeAttrs (import ./renames.nix {}) ["Backend" "CTest"];
+          };
+        };
+        callPackage = newScope {
+          inherit (stdenv) mkDerivation;
+          inherit (pkgs) fetchurl;
+          inherit scope;
+        };
+    in mkPackage callPackage defaultOverride name pkg;
 
   scope =
     # packages in this collection
-    (mapAttrs (dep: name: kf5."${name}") renames) //
+    self //
     # packages pinned to this version of Qt 5
     {
-      Phonon4Qt5 = pkgs.phonon_qt5.override { inherit qt5; };
-      Qt5 = qt5.base;
-      Qt5Core = qt5.base;
-      Qt5DBus = qt5.base;
-      Qt5Gui = qt5.base;
-      Qt5LinguistTools = qt5.tools;
-      Qt5Qml = [qt5.declarative qt5.graphicaleffects];
-      Qt5Quick = [qt5.quickcontrols qt5.graphicaleffects];
-      Qt5Script = qt5.script;
-      Qt5Svg = qt5.svg;
-      Qt5WebkitWidgets = qt5.webkit;
-      Qt5Widgets = qt5.base;
-      Qt5X11Extras = qt5.x11extras;
-      Qt5XmlPatterns = qt5.xmlpatterns;
       dbusmenu-qt5 = pkgs.libdbusmenu_qt5.override { inherit qt5; };
+      phonon4qt5 = pkgs.phonon_qt5.override { inherit qt5; };
+      polkit_qt5 = pkgs.polkit_qt5.override { inherit qt5; };
+      qt5 = qt5.base;
+      qt5core = qt5.base;
+      qt5dbus = qt5.base;
+      qt5gui = qt5.base;
+      qt5linguisttools = qt5.tools;
+      qt5qml = [qt5.declarative qt5.graphicaleffects];
+      qt5quick = [qt5.quickcontrols qt5.graphicaleffects];
+      qt5script = qt5.script;
+      qt5svg = qt5.svg;
+      qt5webkitwidgets = qt5.webkit;
+      qt5widgets = qt5.base;
+      qt5x11extras = qt5.x11extras;
+      qt5xmlpatterns = qt5.xmlpatterns;
     } //
     # packages from the nixpkgs collection
     (with pkgs;
       {
-        Boost = boost155;
-        inherit cmake;
-        inherit epoxy;
-        GIF = giflib;
-        GLIB2 = glib;
-        Gpgme = gpgme;
-        JPEG = libjpeg;
-        LibGcrypt = libgcrypt;
-        LibGit2 = libgit2;
-        LibIntl = gettext;
-        LibLZMA = lzma;
-        ModemManager = modemmanager;
-        NetworkManager = networkmanager;
-        Perl = perl;
-        PythonInterp = python;
-        QImageBlitz = qimageblitz;
-        SharedMimeInfo = shared_mime_info;
-        ZLIB = zlib;
+        inherit acl cmake docbook_xml_dtd_45 docbook5_xsl epoxy fam gpgme
+                libgcrypt libgit2 modemmanager networkmanager perl
+                perlPackages qimageblitz xlibs zlib;
+        boost = boost156;
+        gif = giflib;
+        glib2 = glib;
+        jpeg = libjpeg;
+        libintl = gettext;
+        liblzma = lzma;
+        pythoninterp = python;
+        pythonlibrary = python;
+        sharedmimeinfo = shared_mime_info;
       }
     );
 
-  mirror = "mirror://kde";
-
-  preResolve = super:
-    fold (f: x: f x) super
-      [
-        (userEnvPkg "SharedMimeInfo")
-        (userEnvPkg "SharedDesktopOntologies")
-      ];
-
-  postResolve = super:
-    super // {
-      extra-cmake-modules = {
-        inherit (super.extra-cmake-modules) name src;
-
-        propagatedNativeBuildInputs = [ scope.cmake pkgs.pkgconfig qt5.tools ];
-        cmakeFlags = ["-DBUILD_TESTING=OFF"];
-        patches =
-          [
-            ./extra-cmake-modules/0001-extra-cmake-modules-paths.patch
-          ];
-        meta =
-          let inherit (builtins.parseDrvName super.extra-cmake-modules.name) version; in
-          {
-            license = stdenv.lib.licenses.bsd2;
-            platforms = stdenv.lib.platforms.linux;
-            maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-            homepage = "http://www.kde.org";
-            inherit version;
-            branch = intersperse "." (take 2 (splitString "." version));
-          };
+  self = super // {
+    extra-cmake-modules = overrideDerivation super.extra-cmake-modules (drv: {
+      buildInputs = [];
+      nativeBuildInputs = [];
+      propagatedBuildInputs = [];
+      propagatedNativeBuildInputs = [ scope.cmake pkgs.pkgconfig qt5.tools ];
+      propagatedUserEnvPkgs = [];
+      cmakeFlags = ["-DBUILD_TESTING=OFF"];
+      patches = [./extra-cmake-modules/0001-extra-cmake-modules-paths.patch];
+      meta = {
+        license = stdenv.lib.licenses.bsd2;
+        platforms = stdenv.lib.platforms.linux;
+        maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+        homepage = "http://www.kde.org";
       };
+    });
 
-      frameworkintegration = super.frameworkintegration // {
-        buildInputs = with pkgs.xlibs; super.frameworkintegration.buildInputs ++ [ libXcursor ];
-      };
-
-      kauth = super.kauth // {
-        buildInputs =
-          super.kauth.buildInputs
-          ++ [(pkgs.polkit_qt5.override { inherit qt5; })];
-        patches = [./kauth/kauth-policy-install.patch];
-      };
-
-      kcmutils = super.kcmutils // {
-        patches =
-          [./kcmutils/kcmutils-pluginselector-follow-symlinks.patch];
-      };
-
-      kconfigwidgets = super.kconfigwidgets // {
-        patches =
-          [./kconfigwidgets/kconfigwidgets-helpclient-follow-symlinks.patch];
-      };
-
-      kdelibs4support = with pkgs; super.kdelibs4support // {
-        buildInputs =
-          super.kdelibs4support.buildInputs
-          ++ [networkmanager xlibs.libSM];
-        cmakeFlags =
-          (super.kdelibs4support.cmakeFlags or [])
-          ++ [
-            "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
-            "-DDocBookXML4_DTD_VERSION=4.5"
-          ];
-      };
-
-      kdoctools = with pkgs; super.kdoctools // {
-        propagatedNativeBuildInputs = [ perl perlPackages.URI ];
-        cmakeFlags =
-          (super.kdoctools.cmakeFlags or [])
-          ++ [
-            "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
-            "-DDocBookXML4_DTD_VERSION=4.5"
-            "-DDocBookXSL_DIR=${docbook5_xsl}/xml/xsl/docbook"
-          ];
-        patches = [./kdoctools/kdoctools-no-find-docbook-xml.patch];
-      };
-
-      ki18n = with pkgs; super.ki18n // {
-        propagatedNativeBuildInputs =
-          super.ki18n.propagatedNativeBuildInputs ++ [gettext python];
-      };
-
-      kimageformats = with pkgs; super.kimageformats // {
-        NIX_CFLAGS_COMPILE =
-          (super.kimageformats.NIX_CFLAGS_COMPILE or "")
-          + " -I${ilmbase}/include/OpenEXR";
-      };
-
-      kinit = super.kinit // { patches = [ ./kinit/0001-kinit-libpath.patch ]; };
-
-      kpackage = super.kpackage // { patches = [ ./kpackage/0001-allow-external-paths.patch ]; };
-
-      kservice = super.kservice // {
-        buildInputs = super.kservice.buildInputs ++ [kf5.kwindowsystem];
-        patches =
-          [
-            ./kservice/kservice-kbuildsycoca-follow-symlinks.patch
-            ./kservice/kservice-kbuildsycoca-no-canonicalize-path.patch
-          ];
-      };
-
-      ktexteditor = super.ktexteditor // {
-        patches = [ ./ktexteditor/0001-no-qcoreapplication.patch ];
-      };
-
-      networkmanager-qt = super.networkmanager-qt // {
-        propagatedBuildInputs = with pkgs; super.networkmanager-qt.propagatedBuildInputs ++ [ networkmanager ];
-      };
-
+    frameworkintegration = extendDerivation super.frameworkintegration {
+      buildInputs = [ scope.xlibs.libXcursor ];
     };
 
-  kf5 = generateCollection ./. {
-    inherit mirror mkDerivation preResolve postResolve renames scope;
+    kauth = extendDerivation super.kauth {
+      buildInputs = [ scope.polkit_qt5 ];
+      patches = [ ./kauth/kauth-policy-install.patch ];
+    };
+
+    kcmutils = extendDerivation super.kcmutils {
+      patches = [ ./kcmutils/kcmutils-pluginselector-follow-symlinks.patch ];
+    };
+
+    kconfigwidgets = extendDerivation super.kconfigwidgets {
+      patches = [ ./kconfigwidgets/kconfigwidgets-helpclient-follow-symlinks.patch ];
+    };
+
+    kdelibs4support = extendDerivation super.kdelibs4support {
+      buildInputs = [ scope.networkmanager scope.xlibs.libSM ];
+      cmakeFlags = [
+        "-DDocBookXML4_DTD_DIR=${pkgs.docbook_xml_dtd_45}/xml/dtd/docbook"
+        "-DDocBookXML4_DTD_VERSION=4.5"
+      ];
+    };
+
+    kdoctools = extendDerivation super.kdoctools {
+      propagatedNativeBuildInputs = [ scope.perl scope.perlPackages.URI ];
+      cmakeFlags = [
+        "-DDocBookXML4_DTD_DIR=${scope.docbook_xml_dtd_45}/xml/dtd/docbook"
+        "-DDocBookXML4_DTD_VERSION=4.5"
+        "-DDocBookXSL_DIR=${scope.docbook5_xsl}/xml/xsl/docbook"
+      ];
+      patches = [ ./kdoctools/kdoctools-no-find-docbook-xml.patch ];
+    };
+
+    ki18n = extendDerivation super.ki18n {
+      propagatedNativeBuildInputs = with scope; [ libintl pythoninterp ];
+    };
+
+    kimageformats = extendDerivation super.kimageformats {
+      NIX_CFLAGS_COMPILE = "-I${pkgs.ilmbase}/include/OpenEXR";
+    };
+
+    kinit = extendDerivation super.kinit {
+      patches = [./kinit/0001-kinit-libpath.patch];
+    };
+
+    kpackage = extendDerivation super.kpackage {
+      patches = [ ./kpackage/0001-allow-external-paths.patch ];
+    };
+
+    kservice = extendDerivation super.kservice {
+      buildInputs = [ scope.kwindowsystem ];
+      patches = [
+        ./kservice/kservice-kbuildsycoca-follow-symlinks.patch
+        ./kservice/kservice-kbuildsycoca-no-canonicalize-path.patch
+      ];
+    };
+
+    ktexteditor = extendDerivation super.ktexteditor {
+      patches = [ ./ktexteditor/0001-no-qcoreapplication.patch ];
+    };
+
+    networkmanager-qt = extendDerivation super.networkmanager-qt {
+      propagatedBuildInputs = [ scope.networkmanager ];
+    };
   };
 
-in
-
-  kf5 // { inherit mkDerivation qt5 scope; }
+in self
