@@ -250,6 +250,50 @@ in {
         type = types.enum ["Viewer" "Editor" "Admin"];
       };
     };
+
+    datasource = {
+      name = mkOption {
+        description = "The name of the datasource to create, if any";
+        default = null;
+        type = types.nullOr types.str;
+      };
+
+      type = mkOption {
+        description = "The backend type of the datasource";
+        default = "influxdb_08";
+        type = types.enum ["elasticsearch" "grafana" "graphite" "influxdb" "influxdb_08" "opentsdb"];
+      };
+
+      url = mkOption {
+        description = "The URL of the datasource backend";
+        default = "";
+        type = types.str;
+      };
+
+      access = mkOption {
+        description = "The access type for the datasource";
+        default = "proxy";
+        type = types.enum ["direct" "proxy"];
+      };
+
+      user = mkOption {
+        description = "The username for the datasource's backend";
+        default = "root";
+        type = types.str;
+      };
+
+      password = mkOption {
+        description = "The password for the datasource's backend";
+        default = "root";
+        type = types.str;
+      };
+
+      database = mkOption {
+        description = "The database for the datasource's backend";
+        default = "";
+        type = types.str;
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -257,13 +301,17 @@ in {
       "Grafana passwords will be stored as plaintext in nix store!"
     ];
 
-    systemd.services.grafana = {
+    systemd.services.grafana2 = {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
       after = ["networking.target"];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/grafana-server --config ${cfgFile} web";
         WorkingDirectory = cfg.package;
+      };
+      postStart = import ./setup.nix {
+        config = cfg;
+        inherit pkgs;
       };
     };
   };
