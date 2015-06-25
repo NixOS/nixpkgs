@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
+  preFixup = ''
+    sed 's,-ludev,-L${udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
+  '';
+
   meta = {
     homepage = http://www.libusb.info;
     description = "User-space USB library";
