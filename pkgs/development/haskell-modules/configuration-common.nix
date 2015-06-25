@@ -328,6 +328,7 @@ self: super: {
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
+  stack = overrideCabal super.stack (drv: { preConfigure = "export HOME=$TMPDIR"; });
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
@@ -702,7 +703,7 @@ self: super: {
     enableSharedExecutables = false;
     postInstall = ''            # install man pages
       mv man $out/
-      find $out/man -type f ! -name "*.[0-9]" -exec rm {} +
+      find $out/man -type f ! -name "*.[0-9]" -exec rm {}
     '';
   });
 
