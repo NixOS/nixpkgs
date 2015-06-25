@@ -47,11 +47,17 @@ in {
 
   options = {
     services.uwsgi = {
-      
+
       enable = mkOption {
         type = types.bool;
         default = false;
         description = "Enable uWSGI";
+      };
+
+      runDir = mkOption {
+        type = types.string;
+        default = "/run/uwsgi";
+        description = "Where uWSGI communication sockets can live";
       };
 
       instance = mkOption {
@@ -66,7 +72,7 @@ in {
               moin = {
                 type = "normal";
                 python2Packages = self: with self; [ moinmoin ];
-                socket = "/run/uwsgi.sock";
+                socket = "${config.services.uwsgi.runDir}/uwsgi.sock";
               };
             };
           }
@@ -89,24 +95,46 @@ in {
         description = "Plugins used with uWSGI";
       };
 
-    };
+      user = mkOption {
+        type = types.str;
+        default = "uwsgi";
+        description = "User account under which uwsgi runs.";
+      };
 
+      group = mkOption {
+        type = types.str;
+        default = "uwsgi";
+        description = "Group account under which uwsgi runs.";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
-
     systemd.services.uwsgi = {
       wantedBy = [ "multi-user.target" ];
-      
+      preStart = ''
+        mkdir -p ${cfg.runDir}
+        chown ${cfg.user}:${cfg.group} ${cfg.runDir}
+      '';
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${uwsgi}/bin/uwsgi --json ${pkgs.writeText "uwsgi.json" (buildCfg cfg.instance)}";
+        ExecStart = "${uwsgi}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${pkgs.writeText "uwsgi.json" (buildCfg cfg.instance)}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         NotifyAccess = "main";
         KillSignal = "SIGQUIT";
       };
-
     };
+
+    users.extraUsers = optionalAttrs (cfg.user == "uwsgi") (singleton
+      { name = "uwsgi";
+        group = cfg.group;
+        uid = config.ids.uids.uwsgi;
+      });
+
+    users.extraGroups = optionalAttrs (cfg.group == "uwsgi") (singleton
+      { name = "uwsgi";
+        gid = config.ids.gids.uwsgi;
+      });
   };
 }
