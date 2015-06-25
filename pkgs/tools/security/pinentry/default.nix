@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap gtk2 ncurses qt4 ];
 
+  prePatch = ''
+    substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
+  '';
+
   # configure cannot find moc on its own
   preConfigure = stdenv.lib.optionalString (qt4 != null) ''
     export QTDIR="${qt4}"
