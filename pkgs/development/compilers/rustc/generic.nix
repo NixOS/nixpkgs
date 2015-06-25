@@ -84,6 +84,8 @@ stdenv.mkDerivation {
   inherit version;
   inherit meta;
 
+  __impureHostDeps = [ "/usr/lib/libedit.3.dylib" ];
+
   src = if isRelease then
       fetchzip {
         url = "http://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
@@ -107,16 +109,16 @@ stdenv.mkDerivation {
     installPhase = ''
       mkdir -p "$out"
       cp -r bin "$out/bin"
-    '' + (if stdenv.isLinux then ''
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
       patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
                --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/" \
                "$out/bin/rustc"
-    '' else "");
+    '';
   };
 
   configureFlags = configureFlags
-                ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" ]
-                ++ stdenv.lib.optional (stdenv.cc ? clang) "--enable-clang";
+                ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
+                ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang";
 
   inherit patches;
 
@@ -132,7 +134,8 @@ stdenv.mkDerivation {
       --replace /bin/echo "${coreutils}/bin/echo"
   '';
 
-  buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];
+  buildInputs = [ which file perl curl python27 makeWrapper git ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ procps valgrind ];
 
   enableParallelBuilding = true;
 
