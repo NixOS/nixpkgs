@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
   makeFlags = stdenv.lib.optionalString (!enableGTK3)
     "CODEGENDIR=${pygobject}/share/pygobject/2.0/codegen/ DEFSDIR=${pygtk}/share/pygtk/2.0/defs/";
 
+  # Fix broken .la files
+  preFixup = ''
+    sed 's,-lgpg-error,-L${libgpgerror}/lib -lgpg-error,' -i $out/lib/*.la
+  '';
+
   meta = with stdenv.lib; {
     description = "A GTK VNC widget";
     maintainers = with maintainers; [ raskin offline ];
