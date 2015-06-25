@@ -135,6 +135,7 @@ self: super: {
   });
 
   # The Haddock phase fails for one reason or another.
+  acme-one = dontHaddock super.acme-one;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
