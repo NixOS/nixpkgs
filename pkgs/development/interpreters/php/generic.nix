@@ -101,7 +101,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     };
 
     mysqli = {
-      configureFlags = ["--with-mysqli=${libmysqld.dev}/bin/mysql_config"];
+      configureFlags = ["--with-mysqli=${libmysql.dev}/bin/mysql_config"];
       buildInputs = [ libmysql ];
     };
 
