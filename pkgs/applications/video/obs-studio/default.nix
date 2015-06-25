@@ -7,9 +7,14 @@
 , qt5
 , libv4l
 , x264
+
+, pulseaudioSupport ? false
+, libpulseaudio
 }:
 
-stdenv.mkDerivation rec {
+let
+  optional = stdenv.lib.optional;
+in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
   version = "0.10.0";
 
@@ -26,7 +31,8 @@ stdenv.mkDerivation rec {
                   qt5.base
                   qt5.x11extras
                   x264
-                ];
+                ]
+                ++ optional pulseaudioSupport libpulseaudio;
 
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure
   # DL_OPENGL is an explicit path. Not sure if there's a better way
