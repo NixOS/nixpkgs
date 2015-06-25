@@ -12266,6 +12266,8 @@ let
 
   qtox = callPackage ../applications/networking/instant-messengers/qtox { };
 
+  qtpass = callPackage ../applications/misc/qtpass { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
