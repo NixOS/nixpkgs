@@ -884,4 +884,8 @@ self: super: {
   # https://github.com/commercialhaskell/stack/issues/409
   stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });
 
+  # Missing dependency on some hid-usb library.
+  hid = markBroken super.hid;
+  msi-kb-backlit = dontDistribute super.msi-kb-backlit;
+
 }
