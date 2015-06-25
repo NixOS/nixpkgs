@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, which }:
+{ stdenv, fetchurl, ocaml, findlib, which, camlp4 }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -14,7 +14,20 @@ stdenv.mkDerivation rec {
     sha256 = "1c807wrpxra9sbb34lajhimwra28ldxv04m570567lh2b04n38zy";
   };
 
-  buildInputs = [ ocaml findlib which ];
+  buildInputs = [ ocaml findlib which camlp4 ];
+
+  patchPhase = ''
+    patch myocamlbuild.ml <<EOF
+70,74c70
+<         let camlp4of =
+<           try
+<             let path_bin = Filename.concat (Sys.getenv "PATH_OCAML_PREFIX") "bin" in
+<             Filename.concat path_bin "camlp4of"
+<           with _ -> "camlp4of" in
+---
+>         let camlp4of = "camlp4of" in
+EOF
+  '';
 
   # The custom `configure` script does not expect the --prefix
   # option. Installation is handled by ocamlfind.
