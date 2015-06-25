@@ -14776,6 +14776,8 @@ let
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
+  vault = callPackage ../servers/vault {};
+
   vbam = callPackage ../misc/emulators/vbam {
     inherit (xlibs) libpthreadstubs;
   };
