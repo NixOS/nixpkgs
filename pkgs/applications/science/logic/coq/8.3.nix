@@ -1,6 +1,6 @@
 # - coqide compilation can be disabled by setting lablgtk to null;
 
-{stdenv, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
+{ stdenv, make, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null }:
 
 let 
   version = "8.3pl4";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "17d3lmchmqir1rawnr52g78srg4wkd7clzpzfsivxc4y1zp6rwkr";
   };
 
-  buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
+  buildInputs = [ make ocaml findlib camlp5 ncurses lablgtk ];
 
   prefixKey = "-prefix ";
 
