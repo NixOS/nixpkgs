@@ -4211,6 +4211,8 @@ let
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
+    bap = callPackage ../development/ocaml-modules/bap { };
+
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
