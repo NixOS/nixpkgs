@@ -2,7 +2,7 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.8.5";
+  version = "1.8.6";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ocamlgraph.lri.fr/download/ocamlgraph-${version}.tar.gz";
-    sha256 = "0bxqxzd5sd7siz57vhzb8bmiz1ddhgdv49gcsmwwfmd16mj4cryi";
+    sha256 = "1vyvy9cazv1grh0xn0j47w8bnhw93jbn29cqv34k1r0px16yyxdx";
   };
 
   buildInputs = [ ocaml findlib ocamlPackages.lablgtk ocamlPackages.camlp4 ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   # * configure looked in the wrong path
   # * ocaml needs that directory and the stubs directory as -I flag
   postPatch = ''
-    sed -i 's@$(DESTDIR)$(OCAMLLIB)/ocamlgraph@$(DESTDIR)/lib/ocaml/${ocaml_version}/site-lib/ocamlgraph@' Makefile.in
+    sed -i 's@$(DESTDIR)$(OCAMLLIB)@$(DESTDIR)/lib/ocaml/${ocaml_version}/site-lib@' Makefile.in
     sed -i 's@$OCAMLLIB/lablgtk2@${ocamlPackages.lablgtk}/lib/ocaml/${ocaml_version}/site-lib/lablgtk2@' configure Makefile.in
     sed -i 's@+lablgtk2@${ocamlPackages.lablgtk}/lib/ocaml/${ocaml_version}/site-lib/lablgtk2 -I ${ocamlPackages.lablgtk}/lib/ocaml/${ocaml_version}/site-lib/stublibs@' configure Makefile.in editor/Makefile
   '';
@@ -32,6 +32,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     make all
     make install-findlib
+    echo "breakhash2"
   '';
 
   meta = {
