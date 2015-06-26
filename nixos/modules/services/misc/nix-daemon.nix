@@ -296,7 +296,7 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${machine.sshUser}@${machine.hostName} "
+            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
             + (if machine ? system then machine.system else concatStringsSep "," machine.systems)
             + " ${machine.sshKey} ${toString machine.maxJobs} "
             + (if machine ? speedFactor then toString machine.speedFactor else "1" )
