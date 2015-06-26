@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cp -r --no-preserve=mode ${contrib} modules
+    substituteInPlace  head.lisp \
+      --replace 'run-shell-command "xdpyinfo' 'run-shell-command "${xdpyinfo}/bin/xdpyinfo'
   '';
 
   installPhase = ''
