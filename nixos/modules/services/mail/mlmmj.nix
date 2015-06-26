@@ -88,6 +88,7 @@ in
 
     services.postfix = {
       enable = true;
+      recipientDelimiter= "+";
       extraMasterConf = ''
         mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nextHop
       '';
