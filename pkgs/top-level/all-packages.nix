@@ -4779,10 +4779,14 @@ let
   erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix { odbcSupport = true; };
   erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; };
   erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; odbcSupport = true; };
-  erlang = erlangR17;
-  erlang_odbc = erlangR17_odbc;
-  erlang_javac = erlangR17_javac;
-  erlang_odbc_javac = erlangR17_odbc_javac;
+  erlangR18 = callPackage ../development/interpreters/erlang/R18.nix { };
+  erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix { odbcSupport = true; };
+  erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix { javacSupport = true; };
+  erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix { javacSupport = true; odbcSupport = true; };
+  erlang = erlangR18;
+  erlang_odbc = erlangR18_odbc;
+  erlang_javac = erlangR18_javac;
+  erlang_odbc_javac = erlangR18_odbc_javac;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
 
@@ -9191,7 +9195,7 @@ let
 
   xwayland = with xorg; callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws { };
+  yaws = callPackage ../servers/http/yaws { erlang = erlangR17; };
 
   zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
