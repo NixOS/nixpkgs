@@ -41,6 +41,8 @@ let
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
+        trusted-users = ${toString cfg.trustedUsers}
+        allowed-users = ${toString cfg.allowedUsers}
         $extraOptions
         END
       '';
@@ -242,6 +244,36 @@ in
           addition to those specified using
           <option>nix.binaryCaches</option> by passing
           <literal>--option binary-caches</literal> to Nix commands.
+        '';
+      };
+
+      trustedUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "root" ];
+        example = [ "root" "alice" "@wheel" ];
+        description = ''
+          A list of names of users that have additional rights when
+          connecting to the Nix daemon, such as the ability to specify
+          additional binary caches, or to import unsigned NARs. You
+          can also specify groups by prefixing them with
+          <literal>@</literal>; for instance,
+          <literal>@wheel</literal> means all users in the wheel
+          group.
+        '';
+      };
+
+      allowedUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "*" ];
+        example = [ "@wheel" "@builders" "alice" "bob" ];
+        description = ''
+          A list of names of users (separated by whitespace) that are
+          allowed to connect to the Nix daemon. As with
+          <option>nix.trustedUsers</option>, you can specify groups by
+          prefixing them with <literal>@</literal>. Also, you can
+          allow all users by specifying <literal>*</literal>. The
+          default is <literal>*</literal>. Note that trusted users are
+          always allowed to connect.
         '';
       };
 
