@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, automoc4, kf5, dvdauthor, xineLib, libmpeg2, libav,
-libdvdread, libdvdnav, dvdplusrwtools }:
+{ stdenv, fetchurl, cmake, automoc4, qt5, kf5, dvdauthor, xineLib, libmpeg2, libav,
+libdvdread, libdvdnav, dvdplusrwtools, phonon_qt5 }:
 
 stdenv.mkDerivation rec {
   version = "3.0.3";
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     libdvdnav
     dvdplusrwtools
     automoc4
+    phonon_qt5
   ] ++ (with kf5; [
     extra-cmake-modules
     kio
     solid
-    scope.Phonon4Qt5
-    scope.Qt5X11Extras
+    qt5.x11extras
     kiconthemes
     ki18n
     kdesu
