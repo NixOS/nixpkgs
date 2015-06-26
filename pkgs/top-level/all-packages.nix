@@ -7224,7 +7224,9 @@ let
 
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
 
-  libtsm = callPackage ../development/libraries/libtsm { };
+  libtsm = callPackage ../development/libraries/libtsm {
+    automake = automake114x;
+  };
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
