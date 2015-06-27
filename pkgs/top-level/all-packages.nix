@@ -15045,6 +15045,8 @@ let
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
+  wcalc = callPackage ../applications/misc/wcalc { };
+
   wine = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
