@@ -6453,7 +6453,7 @@ let
 
   # TODO : Add MIT Kerberos and let admin choose.
   # TODO : Fix kerberos on Darwin
-  kerberos = if stdenv.isDarwin then null else heimdal;
+  kerberos = if stdenv.isDarwin then null else libheimdal;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     openldap = openldap.override {
