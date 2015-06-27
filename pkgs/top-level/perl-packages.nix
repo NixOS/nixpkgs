@@ -827,24 +827,6 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystEngineHTTPPrefork = buildPerlPackage rec {
-    name = "Catalyst-Engine-HTTP-Prefork-0.51";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AG/AGRUNDMA/${name}.tar.gz";
-      sha256 = "1ygmrzc9akjaqfxid8br11ajj9qgfvhkimakcv4ffk4s5v7q2sii";
-    };
-    propagatedBuildInputs = [
-      CatalystRuntime HTTPBody NetServer
-      CookieXS HTTPHeaderParserXS
-    ];
-    buildInputs = [TestPod TestPodCoverage];
-    patches = [
-      # Fix chunked transfers (they were missing the final CR/LF at
-      # the end, which makes curl barf).
-      ../development/perl-modules/catalyst-fix-chunked-encoding.patch
-    ];
-  };
-
   CatalystManual = buildPerlPackage {
     name = "Catalyst-Manual-5.9007";
     src = fetchurl {
@@ -873,17 +855,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystRuntime = buildPerlPackage {
-    name = "Catalyst-Runtime-5.90075";
+    name = "Catalyst-Runtime-5.90093";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90075.tar.gz;
-      sha256 = "a80ed1b1600a8ababda34bc024756a6fb0275b0fff3fa1bb17104813e3ce8752";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90093.tar.gz;
+      sha256 = "548d312afbe66dd0c60570e9166b0bbd751d5f41499b39539b5f3a89954ba6ab";
     };
-    buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal ];
-    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList Encode HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TermSizeAny TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI namespaceautoclean namespaceclean ];
+    buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal TypeTiny ];
+    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI URIws namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ rycee ];
       platforms = stdenv.lib.platforms.linux;
     };
   };
@@ -1118,16 +1101,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystViewTT = buildPerlPackage {
-    name = "Catalyst-View-TT-0.41";
+    name = "Catalyst-View-TT-0.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-View-TT-0.41.tar.gz;
-      sha256 = "1yrigxqapxj4k1qkykiiqy6a30ljb7hlkaw80d7n0n5mpm67j1nb";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-View-TT-0.42.tar.gz;
+      sha256 = "e804ca8ab0ea1417f390eaf7129884f20daab35c2cf2a4b472122becd28c91a1";
     };
-    propagatedBuildInputs = [ CatalystRuntime ClassAccessor MROCompat PathClass TemplateToolkit TemplateTimer ];
+    propagatedBuildInputs = [ CatalystRuntime ClassAccessor MROCompat PathClass TemplateTimer TemplateToolkit ];
     meta = {
       description = "Template View Class";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -4681,16 +4665,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   HTTPBody = buildPerlPackage {
-    name = "HTTP-Body-1.19";
+    name = "HTTP-Body-1.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.19.tar.gz;
-      sha256 = "0ahhksj0zg6wq6glpjkxdr3byd5riwvq2f5aw21n1jcsl71nll01";
+      url = mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.22.tar.gz;
+      sha256 = "fc0d2c585b3bd1532d92609965d589e0c87cd380e7cca42fb9ad0a1311227297";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "HTTP Body Parser";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -11017,6 +11002,21 @@ let self = _self // overrides; _self = with self; {
       homepage = https://metacpan.org/release/URI-Nested/;
       description = "Nested URIs";
       license = "perl";
+    };
+  };
+
+  URIws = buildPerlPackage {
+    name = "URI-ws-0.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/URI-ws-0.03.tar.gz;
+      sha256 = "6e6b0e4172acb6a53c222639c000608c2dd61d50848647482ac8600d50e541ef";
+    };
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      homepage = http://perl.wdlabs.com/URI-ws/;
+      description = "WebSocket support for URI package";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
