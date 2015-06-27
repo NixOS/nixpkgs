@@ -11,11 +11,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchurl {
     url = "${meta.homepage}dist/krb5/1.13/krb5-${version}-signed.tar";
-    sha256 = "0gk6jvr64rf6l4xcyxn8i3fr5d1j7dhqvwyv3vw2qdkzz7yjkxjd";
+    sha256 = "1qbdzyrws7d0q4filsibh28z54pd5l987jr0ygv43iq9085w6a75";
   };
 
   nativeBuildInputs = [ pkgconfig perl yacc ]
