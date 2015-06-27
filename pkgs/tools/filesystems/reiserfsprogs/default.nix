@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libuuid ];
 
+  NIX_CFLAGS_COMPILE = "-std=gnu90";
+
   meta = {
     inherit version;
     homepage = http://www.namesys.com/;
