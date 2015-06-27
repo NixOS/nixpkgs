@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       "--private-libraries=NONE"
       "--builtin-libraries=replace"
     ]
-    ++ optional (enableKerberos != null && kerberos.implementation == "krb5") "--with-system-mitkrb5"
+    ++ optional (enableKerberos && kerberos.implementation == "krb5") "--with-system-mitkrb5"
     ++ optional (!enableDomainController) "--without-ad-dc"
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ];
 

@@ -4172,6 +4172,14 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
+    bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
+    
+    bitstring =
+      if lib.versionOlder "4.02" ocaml_version
+      then bitstring_git
+      else bitstring_2_0_4;
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
@@ -4276,6 +4284,8 @@ let
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
+
+    faillib = callPackage ../development/ocaml-modules/faillib { };
 
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
 
@@ -4429,6 +4439,9 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    piqi = callPackage ../development/ocaml-modules/piqi { };
+    piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -4502,6 +4515,8 @@ let
     typerep = callPackage ../development/ocaml-modules/typerep { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
+
+    uuidm = callPackage ../development/ocaml-modules/uuidm { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
@@ -6017,7 +6032,7 @@ let
     frei0r = if stdenv.isDarwin then null else frei0r;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     gsm = if stdenv.isDarwin then null else gsm;
-    jack2 = if stdenv.isDarwin then null else jack2;
+    libjack2 = if stdenv.isDarwin then null else libjack2;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
     libssh = if stdenv.isDarwin then null else libssh;
     libvpx = if stdenv.isDarwin then null else libvpx;
@@ -9356,8 +9371,8 @@ let
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = callPackage ../os-specific/linux/ffado { };
-  libffado = ffado.override { prefix = "lib"; };
+  ffadoFull = callPackage ../os-specific/linux/ffado { };
+  libffado = ffadoFull.override { prefix = "lib"; };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
 
