@@ -806,6 +806,7 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/118
   clash-lib = dontDistribute super.clash-lib;
   clash-verilog = dontDistribute super.clash-verilog;
+  Frames = dontDistribute super.Frames;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
   singleton-nats = dontDistribute super.singleton-nats;
