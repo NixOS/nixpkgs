@@ -1,13 +1,12 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ stdenv, fetchurl, ncurses }:
 
-stdenv.mkDerivation {
-  name = "mdp-0.93";
+stdenv.mkDerivation rec {
+  version = "1.0.0";
+  name = "mdp-${version}";
 
-  src = fetchFromGitHub {
-    owner = "visit1985";
-    repo = "mdp";
-    rev = "09d6bd1a8a33fac75a999f0822ec10cb77fbc072";
-    sha256 = "0ksa0zqzv1yb8nspxp2vww7bp9y99pcma1vx3cixd3qb5y5ljn1n";
+  src = fetchurl {
+    url = "https://github.com/visit1985/mdp/archive/${version}.tar.gz";
+    sha256 = "1xkmzcwa5ml1xfv92brwirnm00a44jkj7wpfimxbny98zgmad8vn";
   };
 
   makeFlags = "PREFIX=$(out)";
