@@ -25,11 +25,4 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    mkdir $out/lib
-    cp libXcomp.so* $out/lib
-    mkdir $out/include
-    cp NX.h $out/include
-  '';
 }
