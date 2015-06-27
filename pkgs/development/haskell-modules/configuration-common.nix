@@ -22,6 +22,9 @@ self: super: {
   statistics = dontCheck super.statistics;
   text = dontCheck super.text;
 
+  # Lens doctests take ages to run and ad little value.
+  lens = appendConfigureFlag super.lens [ "-f-test-doctests" ];
+
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
