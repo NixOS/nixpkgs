@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "MIT Kerberos 5";
     homepage = http://web.mit.edu/kerberos/;
     license = licenses.mit;
