@@ -6526,13 +6526,10 @@ let
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
 
-  krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
-    openldap = openldap.override {
-      cyrus_sasl = cyrus_sasl.override { kerberos = null; };
-    };
+  krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (darwin) bootstrap_cmds;
   };
-  libkrb5 = krb5;
+  libkrb5 = krb5Full.override { type = "lib"; };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
