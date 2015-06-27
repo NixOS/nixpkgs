@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, faac, jack2, lame, libopus, libpulseaudio, libsamplerate, libvorbis }:
+{ stdenv, fetchurl, alsaLib, faac, libjack2, lame, libopus, libpulseaudio, libsamplerate, libvorbis }:
 
 with stdenv.lib;
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-alsa-prefix=${alsaLib}"
     "--with-faac-prefix=${faac}"
-    "--with-jack-prefix=${jack2}"
+    "--with-jack-prefix=${libjack2}"
     "--with-lame-prefix=${lame}"
     "--with-opus-prefix=${libopus}"
     "--with-pulseaudio-prefix=${libpulseaudio}"

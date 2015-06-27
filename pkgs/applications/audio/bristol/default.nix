@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, jack2, pkgconfig, libpulseaudio, xlibs }:
+{ stdenv, fetchurl, alsaLib, libjack2, pkgconfig, libpulseaudio, xlibs }:
 
 stdenv.mkDerivation  rec {
   name = "bristol-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    alsaLib jack2 pkgconfig libpulseaudio xlibs.libX11 xlibs.libXext
+    alsaLib libjack2 pkgconfig libpulseaudio xlibs.libX11 xlibs.libXext
     xlibs.xproto
   ];
 

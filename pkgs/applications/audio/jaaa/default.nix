@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libclthreads, libclxclient, libX11, libXft, libXrender, fftwFloat, freetype, fontconfig, jack2, xlibs, zita-alsa-pcmi }:
+{ stdenv, fetchurl, alsaLib, libclthreads, libclxclient, libX11, libXft, libXrender, fftwFloat, freetype, fontconfig, libjack2, xlibs, zita-alsa-pcmi }:
 
 stdenv.mkDerivation rec {
   name = "jaaa-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib libclthreads libclxclient libX11 libXft libXrender fftwFloat jack2 zita-alsa-pcmi
+    alsaLib libclthreads libclxclient libX11 libXft libXrender fftwFloat libjack2 zita-alsa-pcmi
   ];
 
   makeFlags = [

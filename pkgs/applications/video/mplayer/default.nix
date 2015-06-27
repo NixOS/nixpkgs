@@ -17,7 +17,7 @@
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
 , x264Support ? false, x264 ? null
-, jackaudioSupport ? false, jack2 ? null
+, jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
@@ -44,7 +44,7 @@ assert lameSupport -> lame != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert x264Support -> x264 != null;
-assert jackaudioSupport -> jack2 != null;
+assert jackaudioSupport -> libjack2 != null;
 assert pulseSupport -> libpulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     ++ optional dvdnavSupport libdvdnav
     ++ optional bluraySupport libbluray
     ++ optional cddaSupport cdparanoia
-    ++ optional jackaudioSupport jack2
+    ++ optional jackaudioSupport libjack2
     ++ optionals amrSupport [ amrnb amrwb ]
     ++ optional x264Support x264
     ++ optional pulseSupport libpulseaudio

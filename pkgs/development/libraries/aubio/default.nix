@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, fftw, jack2, libsamplerate
+{ stdenv, fetchurl, alsaLib, fftw, libjack2, libsamplerate
 , libsndfile, pkgconfig, python
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib fftw jack2 libsamplerate libsndfile pkgconfig python
+    alsaLib fftw libjack2 libsamplerate libsndfile pkgconfig python
   ];
 
   configurePhase = "python waf configure --prefix=$out";

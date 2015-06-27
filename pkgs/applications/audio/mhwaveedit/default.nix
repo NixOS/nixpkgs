@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL , alsaLib, gtk, jack2, ladspaH
+{ stdenv, fetchurl, SDL , alsaLib, gtk, libjack2, ladspaH
 , ladspaPlugins, libsamplerate, libsndfile, pkgconfig, libpulseaudio }:
 
 stdenv.mkDerivation  rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs =
-   [ SDL alsaLib gtk jack2 ladspaH libsamplerate libsndfile
+   [ SDL alsaLib gtk libjack2 ladspaH libsamplerate libsndfile
      pkgconfig libpulseaudio
    ];
 

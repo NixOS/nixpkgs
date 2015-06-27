@@ -67,7 +67,7 @@
 , gnutls ? null
 , gsm ? null # GSM de/encoder
 #, ilbc ? null # iLBC de/encoder
-, jack2 ? null # Jack audio (only version 2 is supported in this build)
+, libjack2 ? null # Jack audio (only version 2 is supported in this build)
 , ladspaH ? null # LADSPA audio filtering
 , lame ? null # LAME MP3 encoder
 , libass ? null # (Advanced) SubStation Alpha subtitle rendering
@@ -157,7 +157,7 @@
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
- *   frei0r, game-music-emu, gsm, jack2, libssh, libvpx(stable 1.3.0), openal, openjpeg_1,
+ *   frei0r, game-music-emu, gsm, libjack2, libssh, libvpx(stable 1.3.0), openal, openjpeg_1,
  *   pulseaudio, rtmpdump, samba, vid-stab, wavpack, x265. xavs
  *
  * Not supported:
@@ -397,7 +397,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
-    jack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
+    libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXext libXfixes libXv lzma openal openjpeg_1 libpulseaudio rtmpdump
     samba SDL soxr speex vid-stab wavpack x264 x265 xavs xvidcore zeromq4 zlib

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, alsaLib, cmake, fftw
-, freeglut, jack2, libXmu, qt4 }:
+, freeglut, libjack2, libXmu, qt4 }:
 
 let version = "1.0.0"; in
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ alsaLib fftw freeglut jack2 libXmu qt4 ];
+  buildInputs = [ alsaLib fftw freeglut libjack2 libXmu qt4 ];
   nativeBuildInputs = [ cmake ];
 
   enableParallelBuilding = true;

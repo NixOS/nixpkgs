@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig
-, alsaLib, freetype, jack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
+, alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
 , portaudio, qt5 #, tesseract
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    alsaLib jack2 freetype lame libogg libpulseaudio libsndfile libvorbis
+    alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
     portaudio qt5.base qt5.declarative qt5.enginio qt5.script qt5.svg qt5.tools
     qt5.webkit qt5.xmlpatterns #tesseract
   ];

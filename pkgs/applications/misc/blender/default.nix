@@ -2,7 +2,7 @@
 , ilmbase, libXi, libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
-, jackaudioSupport ? false, jack2
+, jackaudioSupport ? false, libjack2
 , cudaSupport ? false, cudatoolkit65
 , colladaSupport ? true, opencollada
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       libjpeg libpng libsamplerate libsndfile libtiff mesa openal
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ]
-    ++ optional jackaudioSupport jack2
+    ++ optional jackaudioSupport libjack2
     ++ optional cudaSupport cudatoolkit65
     ++ optional colladaSupport opencollada;
 

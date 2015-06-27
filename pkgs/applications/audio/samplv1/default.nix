@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jack2, libsndfile, lv2, qt4 }:
+{ stdenv, fetchurl, libjack2, libsndfile, lv2, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "samplv1-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c62fpfl9xv93m04hfh72vzbljr0c5p409vzf3xxmvj9x610yx1w";
   };
 
-  buildInputs = [ jack2 libsndfile lv2 qt4 ];
+  buildInputs = [ libjack2 libsndfile lv2 qt4 ];
 
   meta = with stdenv.lib; {
     description = "An old-school all-digital polyphonic sampler synthesizer with stereo fx";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, SDL, alsaLib, cmake, fftwSinglePrec, fluidsynth
-, fltk13, jack2, libvorbis , libsamplerate, libsndfile, pkgconfig
+, fltk13, libjack2, libvorbis , libsamplerate, libsndfile, pkgconfig
 , libpulseaudio, qt4, freetype
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [
-    SDL alsaLib cmake fftwSinglePrec fltk13 fluidsynth jack2
+    SDL alsaLib cmake fftwSinglePrec fltk13 fluidsynth libjack2
     libsamplerate libsndfile libvorbis pkgconfig libpulseaudio qt4
   ];
 
