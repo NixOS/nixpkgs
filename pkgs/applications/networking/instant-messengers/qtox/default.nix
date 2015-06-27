@@ -4,13 +4,13 @@
 let
 
   filteraudio = stdenv.mkDerivation rec {
-    name = "filter_audio-20150128";
+    name = "filter_audio-20150516";
 
     src = fetchFromGitHub {
       owner = "irungentoo";
       repo = "filter_audio";
-      rev = "76428a6cda";
-      sha256 = "0c4wp9a7dzbj9ykfkbsxrkkyy0nz7vyr5map3z7q8bmv9pjylbk9";
+      rev = "612c5a102550c614e4c8f859e753ea64c0b7250c";
+      sha256 = "0bmf8dxnr4vb6y36lvlwqd5x68r4cbsd625kbw3pypm5yqp0n5na";
     };
 
     doCheck = false;
@@ -19,13 +19,13 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "qtox-dev-20150130";
+  name = "qtox-dev-20150519";
 
   src = fetchFromGitHub {
     owner = "tux3";
     repo = "qTox";
-    rev = "7574569b3d";
-    sha256 = "0a7zkhl4w2r5ifzs7vwws2lpplp6q5c4jllyf4ld64njgiz6jzip";
+    rev = "a841224683116e75852d6d2ebc9a9f1dc70ec957";
+    sha256 = "0bq6wdb8y9mxdvb1i77nck36jh2x5cf1rx8wkikgnapq0j911yss";
   };
 
   buildInputs =

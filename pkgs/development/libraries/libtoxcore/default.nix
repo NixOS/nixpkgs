@@ -2,8 +2,8 @@
 , libvpx, check, libconfig, pkgconfig }:
 
 let
-  version = "4c220e336330213b151a0c20307d0a1fce04ac9e";
-  date = "20150126";
+  version = "8760aba257b5f96d082a58abbc9fb4ca2dd73638";
+  date = "20150518";
 in
 stdenv.mkDerivation rec {
   name = "tox-core-${date}-${builtins.substring 0 7 version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner  = "irungentoo";
     repo   = "toxcore";
     rev    = version;
-    sha256 = "152yamak9ykl8dgkx1qzyrpa3f4xr1s8lgcb5k58r9lb1iwnhvqc";
+    sha256 = "0kdbxpjs6wy5qwwcn1256sayj0mcyl4gka0y0rhyga5nsma908ak";
   };
 
   NIX_LDFLAGS = "-lgcc_s";
