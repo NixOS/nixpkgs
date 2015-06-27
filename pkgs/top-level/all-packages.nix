@@ -6461,6 +6461,7 @@ let
     };
     cyrus_sasl = cyrus_sasl.override { kerberos = null; };
   };
+  libheimdal = heimdal;
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
   harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
@@ -6597,6 +6598,7 @@ let
     };
     inherit (darwin) bootstrap_cmds;
   };
+  libkrb5 = krb5;
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
