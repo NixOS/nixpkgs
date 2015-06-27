@@ -45,12 +45,16 @@ stdenv.mkDerivation rec {
     (cd include; make -j $NIX_BUILD_CORES)
     (cd lib; make -j $NIX_BUILD_CORES)
     (cd tools; make -j $NIX_BUILD_CORES)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES)
   '';
 
   installPhase = optionalString libOnly ''
     (cd include; make -j $NIX_BUILD_CORES install)
     (cd lib; make -j $NIX_BUILD_CORES install)
     (cd tools; make -j $NIX_BUILD_CORES install)
+    (cd include/hcrypto; make -j $NIX_BUILD_CORES install)
+    (cd lib/hcrypto; make -j $NIX_BUILD_CORES install)
     rm -rf $out/{libexec,sbin,share}
     find $out/bin -type f | grep -v 'krb5-config' | xargs rm
   '';
