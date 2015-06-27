@@ -4213,6 +4213,14 @@ let
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
+    bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
+    bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
+    
+    bitstring =
+      if lib.versionOlder "4.02" ocaml_version
+      then bitstring_git
+      else bitstring_2_0_4;
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
@@ -4317,6 +4325,8 @@ let
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
+
+    faillib = callPackage ../development/ocaml-modules/faillib { };
 
     fieldslib = callPackage ../development/ocaml-modules/fieldslib { };
 
@@ -4470,6 +4480,9 @@ let
 
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
+    piqi = callPackage ../development/ocaml-modules/piqi { };
+    piqi-ocaml = callPackage ../development/ocaml-modules/piqi-ocaml { };
+
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -4543,6 +4556,8 @@ let
     typerep = callPackage ../development/ocaml-modules/typerep { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
+
+    uuidm = callPackage ../development/ocaml-modules/uuidm { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
