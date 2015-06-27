@@ -6389,7 +6389,7 @@ let
   # We are using mit-krb5 because it is better maintained
   kerberos = libkrb5;
 
-  heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
+  heimdalFull = callPackage ../development/libraries/kerberos/heimdal.nix { };
   libheimdal = heimdal.override { type = "lib"; };
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
