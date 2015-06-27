@@ -47,6 +47,8 @@ let
         ${optionalString cfg.requireSignedBinaryCaches ''
           signed-binary-caches = *
         ''}
+        trusted-users = ${toString cfg.trustedUsers}
+        allowed-users = ${toString cfg.allowedUsers}
         $extraOptions
         END
       '';
@@ -277,6 +279,36 @@ in
         '';
       };
 
+      trustedUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "root" ];
+        example = [ "root" "alice" "@wheel" ];
+        description = ''
+          A list of names of users that have additional rights when
+          connecting to the Nix daemon, such as the ability to specify
+          additional binary caches, or to import unsigned NARs. You
+          can also specify groups by prefixing them with
+          <literal>@</literal>; for instance,
+          <literal>@wheel</literal> means all users in the wheel
+          group.
+        '';
+      };
+
+      allowedUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "*" ];
+        example = [ "@wheel" "@builders" "alice" "bob" ];
+        description = ''
+          A list of names of users (separated by whitespace) that are
+          allowed to connect to the Nix daemon. As with
+          <option>nix.trustedUsers</option>, you can specify groups by
+          prefixing them with <literal>@</literal>. Also, you can
+          allow all users by specifying <literal>*</literal>. The
+          default is <literal>*</literal>. Note that trusted users are
+          always allowed to connect.
+        '';
+      };
+
     };
 
   };
@@ -296,7 +328,7 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${machine.sshUser}@${machine.hostName} "
+            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
             + (if machine ? system then machine.system else concatStringsSep "," machine.systems)
             + " ${machine.sshKey} ${toString machine.maxJobs} "
             + (if machine ? speedFactor then toString machine.speedFactor else "1" )
@@ -313,7 +345,7 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.openssl pkgs.utillinux pkgs.openssh ]
+      { path = [ nix pkgs.openssl pkgs.utillinux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars

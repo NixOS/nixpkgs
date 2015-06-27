@@ -38,7 +38,7 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.openssh
+      config.programs.ssh.package
       pkgs.perl
       pkgs.procps
       pkgs.rsync

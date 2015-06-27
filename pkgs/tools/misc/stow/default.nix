@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl perlPackages.TestOutput ];
 
+  patches = [ ./precedence-issue.patch ];
+
   doCheck = true;
 
   meta = {

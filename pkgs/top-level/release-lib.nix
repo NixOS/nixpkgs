@@ -7,6 +7,7 @@ rec {
   # Ensure that we don't build packages marked as unfree.
   allPackages = args: packageSet (args // {
     config.allowUnfree = false;
+    config.inHydra = true;
   });
 
   pkgs = pkgsFor "x86_64-linux";

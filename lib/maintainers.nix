@@ -31,6 +31,7 @@
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
+  avnik = "Alexander V. Nikolaev <avn@avnik.info>";
   aycanirican = "Aycan iRiCAN <iricanaycan@gmail.com>";
   balajisivaraman = "Balaji Sivaraman<sivaraman.balaji@gmail.com>";
   bbenoist = "Baptist BENOIST <return_0@live.com>";
@@ -60,6 +61,7 @@
   codyopel = "Cody Opel <codyopel@gmail.com>";
   copumpkin = "Dan Peebles <pumpkingod@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
+  couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien.cassou@gmail.com>";

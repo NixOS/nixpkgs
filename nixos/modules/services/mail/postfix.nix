@@ -77,6 +77,8 @@ let
       smtpd_tls_key_file = ${cfg.sslKey}
 
       smtpd_use_tls = yes
+
+      recipient_delimiter = ${cfg.recipientDelimiter}
     ''
     + optionalString (cfg.virtual != "") ''
       virtual_alias_maps = hash:/etc/postfix/virtual
@@ -287,6 +289,14 @@ in
       sslKey = mkOption {
         default = "";
         description = "SSL key to use.";
+      };
+
+      recipientDelimiter = mkOption {
+        default = "";
+        example = "+";
+        description = "
+          Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
+        ";
       };
 
       virtual = mkOption {

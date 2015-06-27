@@ -100,6 +100,8 @@ let
   # ... pkgs.foo ...").
   pkgs = applyGlobalOverrides (config.packageOverrides or (pkgs: {}));
 
+  mkOverrides = pkgsOrig: overrides: overrides //
+        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
 
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
@@ -110,8 +112,7 @@ let
       # in the case of cross-building, or otherwise the basic
       # overrided packages will not be built with the crossStdenv
       # adapter.
-      overrides = overrider pkgsOrig //
-        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
+      overrides = mkOverrides pkgsOrig (overrider pkgsOrig);
 
       # The un-overriden packages, passed to `overrider'.
       pkgsOrig = pkgsFun pkgs {};
@@ -142,6 +143,22 @@ let
 
   newScope = extra: lib.callPackageWith (defaultScope // extra);
 
+  # Easily override this package set.
+  # Warning: this function is very expensive and must not be used
+  # from within the nixpkgs repository.
+  #
+  # Example:
+  #  pkgs.overridePackages (self: super: {
+  #    foo = super.foo.override { ... };
+  #  }
+  #
+  # The result is `pkgs' where all the derivations depending on `foo'
+  # will use the new version.
+  overridePackages = f:
+    let
+      newpkgs = pkgsFun newpkgs overrides;
+      overrides = mkOverrides pkgs (f newpkgs pkgs);
+    in newpkgs;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ./all-packages.nix) {
@@ -890,7 +907,7 @@ let
   };
 
   rsyslog-light = callPackage ../tools/system/rsyslog {
-    krb5 = null;
+    libkrb5 = null;
     systemd = null;
     jemalloc = null;
     libmysql = null;
@@ -4339,8 +4356,6 @@ let
 
     mezzo = callPackage ../development/compilers/mezzo { };
 
-    mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
-
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
@@ -4719,10 +4734,14 @@ let
   erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix { odbcSupport = true; };
   erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; };
   erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; odbcSupport = true; };
-  erlang = erlangR17;
-  erlang_odbc = erlangR17_odbc;
-  erlang_javac = erlangR17_javac;
-  erlang_odbc_javac = erlangR17_odbc_javac;
+  erlangR18 = callPackage ../development/interpreters/erlang/R18.nix { };
+  erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix { odbcSupport = true; };
+  erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix { javacSupport = true; };
+  erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix { javacSupport = true; odbcSupport = true; };
+  erlang = erlangR18;
+  erlang_odbc = erlangR18_odbc;
+  erlang_javac = erlangR18_javac;
+  erlang_odbc_javac = erlangR18_odbc_javac;
 
   rebar = callPackage ../development/tools/build-managers/rebar { };
 
@@ -6368,7 +6387,7 @@ let
 
   # TODO : Add MIT Kerberos and let admin choose.
   # TODO : Fix kerberos on Darwin
-  kerberos = if stdenv.isDarwin then null else heimdal;
+  kerberos = if stdenv.isDarwin then null else libheimdal;
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     openldap = openldap.override {
@@ -6376,6 +6395,7 @@ let
     };
     cyrus_sasl = cyrus_sasl.override { kerberos = null; };
   };
+  libheimdal = heimdal;
 
   harfbuzz = callPackage ../development/libraries/harfbuzz { };
   harfbuzz-icu = callPackage ../development/libraries/harfbuzz {
@@ -6512,6 +6532,7 @@ let
     };
     inherit (darwin) bootstrap_cmds;
   };
+  libkrb5 = krb5;
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
@@ -7166,7 +7187,9 @@ let
 
   libtoxcore = callPackage ../development/libraries/libtoxcore { };
 
-  libtsm = callPackage ../development/libraries/libtsm { };
+  libtsm = callPackage ../development/libraries/libtsm {
+    automake = automake114x;
+  };
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
@@ -8610,7 +8633,7 @@ let
   ### SERVERS
 
   "389-ds-base" = callPackage ../servers/ldap/389 {
-    kerberos = krb5;
+    kerberos = libkrb5;
   };
 
   rdf4store = callPackage ../servers/http/4store { };
@@ -9016,7 +9039,7 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    kerberos = heimdal;
+    kerberos = null;  # Bundle kerberos because samba uses internal, non-stable functions
     gnutls = gnutls33;
     # enableLDAP
   };
@@ -9133,7 +9156,7 @@ let
 
   xwayland = with xorg; callPackage ../servers/x11/xorg/xwayland.nix { };
 
-  yaws = callPackage ../servers/http/yaws { };
+  yaws = callPackage ../servers/http/yaws { erlang = erlangR17; };
 
   zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
@@ -10705,11 +10728,6 @@ let
   codeblocks = callPackage ../applications/editors/codeblocks { };
   codeblocksFull = callPackage ../applications/editors/codeblocks { contribPlugins = true; };
 
-  codeville = builderDefsPackage (import ../applications/version-management/codeville/0.8.0.nix) {
-    inherit makeWrapper;
-    python = pythonFull;
-  };
-
   comical = callPackage ../applications/graphics/comical { };
 
   conkeror = callPackage ../applications/networking/browsers/conkeror { };
@@ -11821,6 +11839,8 @@ let
 
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+
   mmex = callPackage ../applications/office/mmex { };
 
   moc = callPackage ../applications/audio/moc { };
@@ -12034,7 +12054,9 @@ let
     inherit (gnome) libglade;
   };
 
-  obs-studio = callPackage ../applications/video/obs-studio { };
+  obs-studio = callPackage ../applications/video/obs-studio {
+    pulseaudioSupport = config.pulseaudio or false;
+  };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 
@@ -12210,6 +12232,8 @@ let
   qsynth = callPackage ../applications/audio/qsynth { };
 
   qtox = callPackage ../applications/networking/instant-messengers/qtox { };
+
+  qtpass = callPackage ../applications/misc/qtpass { };
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
@@ -14042,6 +14066,7 @@ let
   };
 
   coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
+    make = gnumake3;
     inherit (ocamlPackages_3_12_1) ocaml findlib;
     camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
     lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
@@ -14111,13 +14136,7 @@ let
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {};
 
-  eprover = callPackage ../applications/science/logic/eprover {
-    texLive = texLiveAggregationFun {
-      paths = [
-        texLive texLiveExtra
-      ];
-    };
-  };
+  eprover = callPackage ../applications/science/logic/eprover { };
 
   gappa = callPackage ../applications/science/logic/gappa { };
 
@@ -14655,7 +14674,7 @@ let
     inherit builderDefs zlib bzip2 ncurses libpng ed lesstif ruby potrace
       gd t1lib freetype icu perl expat curl xz pkgconfig zziplib texinfo
       libjpeg bison python fontconfig flex poppler libpaper graphite2
-      makeWrapper gmp mpfr xpdf;
+      makeWrapper gmp mpfr xpdf config;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
@@ -14727,6 +14746,8 @@ let
   tvheadend = callPackage ../servers/tvheadend { };
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
+
+  vault = callPackage ../servers/vault {};
 
   vbam = callPackage ../misc/emulators/vbam {
     inherit (xlibs) libpthreadstubs;
