@@ -3386,6 +3386,29 @@ let
     };
   };
 
+  humanize = buildPythonPackage rec {
+    version = "0.5.1";
+    name = "humanize-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/humanize/${name}.tar.gz";
+      md5 = "e8473d9dc1b220911cac2edd53b1d973";
+    };
+
+    buildInputs = with self; [ mock ];
+
+    doCheck = false;
+
+    meta = {
+      description = "python humanize utilities";
+      homepage = https://github.com/jmoiron/humanize;
+      license = licenses.mit;
+      maintainers = with maintainers; [ matthiasbeyer ];
+      platforms = platforms.linux; # can only test on linux
+    };
+
+  };
+
   hovercraft = buildPythonPackage rec {
     disabled = ! isPy3k;
     name = "hovercraft-${version}";
