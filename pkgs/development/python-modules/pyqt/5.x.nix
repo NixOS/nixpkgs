@@ -18,7 +18,10 @@ in stdenv.mkDerivation {
     sha256 = "1402n5kwzd973b65avxk1j9js96wzfm0yw4rshjfy8l7an00bnac";
   };
 
-  buildInputs = [ python pkgconfig makeWrapper lndir qt5 ];
+  buildInputs = [
+    python pkgconfig makeWrapper lndir
+    qt5.base qt5.svg qt5.webkit
+  ];
 
   propagatedBuildInputs = [ sip ];
 
