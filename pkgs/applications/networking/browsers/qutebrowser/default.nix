@@ -23,5 +23,6 @@ buildPythonPackage {
     homepage = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
+    maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }
