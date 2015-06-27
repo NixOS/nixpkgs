@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, expat, fftwFloat, fontconfig, freetype, jack2, libclthreads, libclxclient
+, expat, fftwFloat, fontconfig, freetype, libjack2, jack2Full, libclthreads, libclxclient
 , libsndfile, libxcb, xlibs
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    expat jack2 libclthreads libclxclient fftwFloat fontconfig libsndfile freetype
+    expat libjack2 libclthreads libclxclient fftwFloat fontconfig libsndfile freetype
     libxcb xlibs.libX11 xlibs.libXau xlibs.libXdmcp xlibs.libXft xlibs.libXrender
   ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Make sure Jack is avalable in $PATH for tetraproc
-    wrapProgram $out/bin/tetraproc --prefix PATH : "${jack2}/bin"
+    wrapProgram $out/bin/tetraproc --prefix PATH : "${jack2Full}/bin"
   '';
 
   meta = with stdenv.lib; {

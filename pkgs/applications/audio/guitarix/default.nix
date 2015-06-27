@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gettext, intltool, pkgconfig, python
-, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, jack2
+, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, libjack2
 , ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
 ,  zita-convolver, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext intltool pkgconfig python ];
 
   buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm gtk gtkmm jack2
+    avahi bluez boost eigen fftw glib glibmm gtk gtkmm libjack2
     ladspaH librdf libsndfile lilv lv2 serd sord sratom
     zita-convolver zita-resampler
   ];

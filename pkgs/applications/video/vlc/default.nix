@@ -3,7 +3,7 @@
 , pkgconfig, dbus, fribidi, freefont_ttf, libebml, libmatroska
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
 , libcaca, libpulseaudio, flac, schroedinger, libxml2, librsvg
-, mpeg2dec, udev, gnutls, avahi, libcddb, jack2, SDL, SDL_image
+, mpeg2dec, udev, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 , libvdpau
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       libdc1394 libraw1394 libopus libebml libmatroska libvdpau
     ]
     ++ (if withQt5 then with qt5; [ base ] else [qt4])
-    ++ optional jackSupport jack2;
+    ++ optional jackSupport libjack2;
 
   nativeBuildInputs = [ pkgconfig ];
 

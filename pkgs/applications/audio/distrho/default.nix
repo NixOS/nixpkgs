@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, jack2
+{ stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, libjack2
 , libxslt, lv2, pkgconfig, premake3, xlibs }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    alsaLib fftwSinglePrec freetype jack2 pkgconfig premake3
+    alsaLib fftwSinglePrec freetype libjack2 pkgconfig premake3
     xlibs.libX11 xlibs.libXcomposite xlibs.libXcursor xlibs.libXext
     xlibs.libXinerama xlibs.libXrender
   ];

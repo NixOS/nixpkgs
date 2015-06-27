@@ -14466,10 +14466,10 @@ let
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
 
-  jack2 = callPackage ../misc/jackaudio {
+  jack2Full = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
   };
-  libjack2 = jack2.override { prefix = "lib"; };
+  libjack2 = jack2Full.override { prefix = "lib"; };
 
   keynav = callPackage ../tools/X11/keynav { };
 

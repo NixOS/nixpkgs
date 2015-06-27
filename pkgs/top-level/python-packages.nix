@@ -4434,7 +4434,7 @@ let
       sed -i "/use_setuptools/d" setup.py
     '';
 
-    buildInputs = with self; [ pkgs.alsaLib pkgs.jack2 ];
+    buildInputs = with self; [ pkgs.alsaLib pkgs.libjack2 ];
 
     meta = {
       description = "A Python wrapper for the RtMidi C++ library written with Cython";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, expat, glib, jack2, libX11, libpng
+{ stdenv, fetchurl, alsaLib, expat, glib, libjack2, libX11, libpng
 , libpthreadstubs, libsmf, libsndfile, lv2, pkgconfig
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-lv2" ];
 
   buildInputs = [
-    alsaLib expat glib jack2 libX11 libpng libpthreadstubs libsmf
+    alsaLib expat glib libjack2 libX11 libpng libpthreadstubs libsmf
     libsndfile lv2 pkgconfig
   ];
 
