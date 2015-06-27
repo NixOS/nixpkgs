@@ -13,9 +13,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig autoconf automake openssl libgsf gmp ];
 
+  patchPhase =
+  ''
+    substituteInPlace Makefile.in --replace '-march=native' ""
+    substituteInPlace Makefile.in --replace '-mtune=native' ""
+  '';
+
   installPhase =
   ''
-    mkdir $out/bin
+    mkdir -p $out/bin
     cp crackxls2003 $out/bin/
   '';
 
