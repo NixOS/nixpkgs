@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, exo, pcre
-, libxfce4util, xfce4panel, libxfce4ui, libxfcegui4, xfconf, gtk}:
+, libxfce4util, xfce4panel, libxfce4ui, xfconf, gtk }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-verve-plugin";
   ver_maj = "1.0";
-  ver_min = "0";
+  ver_min = "1";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "18zi8lam82xwjm5zdnilg3ffxpp5z8vjad3kjvdsyxdhsdza84fh";
+    sha256 = "1y4vvk3nk1haq39xw0gzscsnnj059am1p3acgq9mj0miyiz8971v";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool glib exo pcre libxfce4util libxfce4ui xfce4panel libxfcegui4 xfconf gtk ];
+  buildInputs = [ pkgconfig intltool glib exo pcre libxfce4util libxfce4ui xfce4panel xfconf gtk ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

@@ -1,15 +1,18 @@
-{ stdenv, fetchgit, cmake, python, libX11, qt4 }:
+{ stdenv, fetchFromGitHub, cmake, python, libX11, qt4 }:
 
+let version = "6.1"; in
 stdenv.mkDerivation {
-  name = "apitrace-09519af205";
+  name = "apitrace-${version}";
 
-  src = fetchgit {
-    url = git://github.com/apitrace/apitrace.git;
-    rev = "09519af2056879ce0ea59f7085ac4b282c7d01d0";
-    sha256 = "1ka34fhl85k90r7kvp89awlqb6prkbqx0kg1whb3535rnvficxdv";
+  src = fetchFromGitHub {
+    sha256 = "1v38111ljd35v5sahshs3inhk6nsv7rxh4r0ck8k0njkwzlx2yqk";
+    rev = version;
+    repo = "apitrace";
+    owner = "apitrace";
   };
 
-  buildInputs = [ cmake python libX11 qt4 ];
+  buildInputs = [ python libX11 qt4 ];
+  nativeBuildInputs = [ cmake ];
 
   buildPhase = ''
     cmake
@@ -18,7 +21,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://apitrace.github.io;
-    description = "A set of tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
+    description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
+    license = licenses.mit;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

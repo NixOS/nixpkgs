@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, autoconf, automake, libtool, 
-  pkgconfig, sodium, python }:
+  pkgconfig, libsodium, python }:
 stdenv.mkDerivation rec {
   name = "libmacaroons-${version}";
   version = "HEAD";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/rescrv/libmacaroons/archive/6febf3ce6c4c77a46d24b40ed29b03ffbfb175a7.zip";
     sha256 = "0b4qgim87398chvc3qhxfqv2l1cyl65rhyknln8lk0gq9y00p1ik";
   };
-  buildInputs = [ unzip autoconf automake libtool python sodium pkgconfig ];
+  buildInputs = [ unzip autoconf automake libtool python libsodium pkgconfig ];
   preConfigure = "autoreconf -i";
   
   meta = with stdenv.lib; {

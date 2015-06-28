@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preConfigure = /* we prefer system-wide libs */ ''
     mv lib-src lib-src-rm
     mkdir lib-src
-    mv lib-src-rm/{Makefile*,lib-widget-extra,portaudio-v19,portmixer,portsmf,FileDialog,sbsms} lib-src/
+    mv lib-src-rm/{Makefile*,lib-widget-extra,portaudio-v19,portmixer,portsmf,FileDialog,sbsms,libnyquist} lib-src/
     rm -r lib-src-rm/
   '';
 

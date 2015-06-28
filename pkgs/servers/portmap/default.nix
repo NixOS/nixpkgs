@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://neil.brown.name/portmap/;
     license = "BSD";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

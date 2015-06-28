@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, cups, poppler, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
+{ stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
+, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi }:
 
 stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
@@ -10,16 +10,26 @@ stdenv.mkDerivation rec {
     sha256 = "1bq48nnrarlbf6qc93bz1n5wlh6j420gppbck3r45sinwhz5wa7m";
   };
 
-  buildInputs = [
-    pkgconfig cups poppler fontconfig libjpeg libpng perl
-    ijs qpdf dbus
+  patches = [
+    (substituteAll {
+      src = ./longer-shell-path.patch;
+      bash = "${bash}/bin/bash";
+    })
+
+    # Fix build with poppler-0.31.0
+    (fetchurl {
+      url = "https://bugs.linuxfoundation.org/attachment.cgi?id=476";
+      name = "cups-filters-poppler-0.31.0.patch";
+      sha256 = "016pzksz4nl1sv3p5ahlnbmb7c899yrvlzq8jxic0gvdrzwd5bl4";
+    })
   ];
 
-  preBuild = ''
-    substituteInPlace Makefile --replace "/etc/rc.d" "$out/etc/rc.d"
-  '';
+  buildInputs = [
+    pkgconfig cups poppler poppler_utils fontconfig libjpeg libpng perl
+    ijs qpdf dbus avahi
+  ];
 
-  configureFlags = "--with-pdftops=pdftops --enable-imagefilters";
+  configureFlags = "--with-pdftops=pdftops --enable-imagefilters --with-rcdir=no";
 
   makeFlags = "CUPS_SERVERBIN=$(out)/lib/cups CUPS_DATADIR=$(out)/share/cups CUPS_SERVERROOT=$(out)/etc/cups";
 
@@ -33,13 +43,6 @@ stdenv.mkDerivation rec {
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe
     '';
-
-  patches = [
-    (substituteAll {
-      src = ./longer-shell-path.patch;
-      bash = "${bash}/bin/bash";
-    })
-  ];
 
   postInstall =
     ''

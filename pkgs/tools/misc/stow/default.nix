@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl perlPackages.TestOutput ];
 
+  patches = [ ./precedence-issue.patch ];
+
   doCheck = true;
 
   meta = {
@@ -28,7 +30,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3Plus;
     homepage = http://www.gnu.org/software/stow/;
 
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny jgeerds ];
     platforms = stdenv.lib.platforms.all;
   };
 }

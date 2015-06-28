@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/engla/keybinder/;
     license = licenses.gpl2Plus;
-    platform = platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }

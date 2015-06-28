@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libyubikey-1.12";
+  name = "libyubikey-1.13";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubico-c/Releases/${name}.tar.gz";
-    sha256 = "1f0plzmr1gwry4rfgq9q70v6qwqny009hac289ad5m6sj7vqflxr";
+    sha256 = "009l3k2zyn06dbrlja2d4p2vfnzjhlcqxi88v02mlrnb17mx1v84";
   };
 
   meta = with stdenv.lib; {

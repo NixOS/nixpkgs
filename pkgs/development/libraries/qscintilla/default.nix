@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qscintilla";
-  version = "2.8.4";
+  version = "2.9";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/QScintilla2/QScintilla-${version}/QScintilla-gpl-${version}.tar.gz";
-    sha256 = "03z8mc7wpk0hyza9b45pyf523gdk0qsqaywkprmp6ffc81s2sywv";
+    sha256 = "d7c32e32582f93779de861006d87467b38b9ebc06e3d0b32e981cb24369fa417";
   };
 
   buildInputs = [ qt ];

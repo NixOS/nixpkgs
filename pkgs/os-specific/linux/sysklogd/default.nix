@@ -21,5 +21,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A system logging daemon";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

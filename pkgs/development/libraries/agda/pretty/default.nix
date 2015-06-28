@@ -1,13 +1,13 @@
 { stdenv, agda, fetchdarcs, AgdaStdlib }:
 
 agda.mkDerivation (self: rec {
-  version = "2014-11-28";
+  version = "2015-03-19";
   name = "pretty-${version}";
 
   src = fetchdarcs {
     url = "http://www.cse.chalmers.se/~nad/repos/pretty/";
     context = ./contextfile;
-    sha256 = "1y896qqlfjqvpd09cp0x9nhr60ii21f5cibl0v73xl3z2d0wn0xa";
+    sha256 = "0zmwh9kln7ykpmkx1qhqz64qm2arq62b17vs5fswnxk7mqxsmrf0";
   };
 
   buildDepends = [ AgdaStdlib ];

@@ -14,7 +14,7 @@ buildGoPackage rec {
 
   subPackages = [ "client" ];
 
-  buildInputs = [ trousers net crypto protobuf ed25519 ];
+  buildInputs = [ trousers net crypto protobuf ed25519 govers ];
     
   buildFlags = "--tags nogui";
 

@@ -1,5 +1,5 @@
 # Provide a basic configuration for installation devices like CDs.
-{ config, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -13,9 +13,16 @@ with lib;
       # Allow "nixos-rebuild" to work properly by providing
       # /etc/nixos/configuration.nix.
       ./clone-config.nix
+
+      # Include a copy of Nixpkgs so that nixos-install works out of
+      # the box.
+      ../installer/cd-dvd/channel.nix
     ];
 
   config = {
+
+    # Enable in installer, even if the minimal profile disables it.
+    services.nixosManual.enable = mkForce true;
 
     # Show the manual.
     services.nixosManual.showManual = true;
@@ -26,15 +33,14 @@ with lib;
     # Disable some other stuff we don't need.
     security.sudo.enable = false;
 
-    # Include only the en_US locale.  This saves 75 MiB or so compared to
-    # the full glibcLocales package.
-    i18n.supportedLocales = ["en_US.UTF-8/UTF-8" "en_US/ISO-8859-1"];
+    # Automatically log in at the virtual consoles.
+    services.mingetty.autologinUser = "root";
 
     # Some more help text.
     services.mingetty.helpLine =
       ''
 
-        Log in as "root" with an empty password.  ${
+        The "root" account has an empty password.  ${
           optionalString config.services.xserver.enable
             "Type `start display-manager' to\nstart the graphical user interface."}
       '';
@@ -44,13 +50,25 @@ with lib;
     systemd.services.sshd.wantedBy = mkOverride 50 [];
 
     # Enable wpa_supplicant, but don't start it by default.
-    networking.wireless.enable = true;
+    networking.wireless.enable = mkDefault true;
     jobs.wpa_supplicant.startOn = mkOverride 50 "";
 
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
     # (yet) have swap set up.
     environment.variables.GC_INITIAL_HEAP_SIZE = "100000";
+
+    # Make the installer more likely to succeed in low memory
+    # environments.  The kernel's overcommit heustistics bite us
+    # fairly often, preventing processes such as nix-worker or
+    # download-using-manifests.pl from forking even if there is
+    # plenty of free memory.
+    boot.kernel.sysctl."vm.overcommit_memory" = "1";
+
+    # To speed up installation a little bit, include the complete
+    # stdenv in the Nix store on the CD.  Archive::Cpio is needed for
+    # the initrd builder.
+    system.extraDependencies = [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio ];
 
   };
 }

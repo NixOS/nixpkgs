@@ -1,11 +1,16 @@
-{ stdenv, fetchurl, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, libidn, openssl, makeWrapper, fetchhg, withLibevent ? false }:
+{ stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
+, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop, luaevent ? null, luazlib ? null
+, withLibevent ? true, withZlib ? true }:
 
 assert withLibevent -> luaevent != null;
+assert withZlib -> luazlib != null;
 
 with stdenv.lib;
 
 let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ] ++ optional withLibevent luaevent;
+  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
+                ++ optional withLibevent luaevent
+                ++ optional withZlib luazlib;
   getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
   getLuaPath  = lib : getPath lib "lua";
   getLuaCPath = lib : getPath lib "so";
@@ -14,11 +19,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.9.7";
+  version = "0.9.8";
   name = "prosody-${version}";
+
   src = fetchurl {
     url = "http://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "001fgslg3h7zfrfpkmqixnz5ircq6l0kr4wci5aj0i3nk6rrjjyx";
+    sha256 = "0wbq4ps69l09fjb5dfjzab6i30hzpi4bvyj5kc44gf70arf42w4l";
   };
 
   communityModules = fetchhg {
@@ -28,7 +34,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ lua5 luasocket luasec luaexpat luabitop libidn openssl makeWrapper ]
-                ++ optional withLibevent luaevent;
+                ++ optional withLibevent luaevent
+                ++ optional withZlib luazlib;
 
   configureFlags = [
     "--ostype=linux"

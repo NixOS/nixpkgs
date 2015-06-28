@@ -1,20 +1,28 @@
-{stdenv, fetchurl, runCommand, gcc, zlib}:
+{ stdenv, fetchurl, runCommand, gcc, perl, zlib }:
 
 let
+  # TODO: find out if there's harm in just using 'rec' instead.
+  name = "ccache-${version}";
+  version = "3.2.2";
+  sha256 = "1jm0qb3h5sypllaiyj81zp6m009vm50hzjnx994ril94kxlrj3ag";
+  doCheck = true;
+
   ccache =
 stdenv.mkDerivation {
-  name = "ccache-3.2.1";
+  inherit name doCheck;
   src = fetchurl {
-    url = mirror://samba/ccache/ccache-3.2.1.tar.xz;
-    sha256 = "17dxb0adha2bqzb2r8rcc3kl9mk7y6vrvlh181liivrc3m7g6al7";
+    inherit sha256;
+    url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
-  buildInputs = [ zlib ];
+  # The test dependency on perl should be gone in the next release:
+  buildInputs = [ zlib ]
+    ++ stdenv.lib.optionals doCheck [ perl ];
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig : (runCommand "ccache-links" { }
+    links = extraConfig : (runCommand "ccache-links" { passthru.gcc = gcc; }
       ''
         mkdir -p $out/bin
         if [ -x "${gcc.cc}/bin/gcc" ]; then
@@ -37,9 +45,11 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = http://ccache.samba.org/;
-    license = with licenses; gpl3Plus;
+    downloadPage = https://ccache.samba.org/download.html;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nckx ];
   };
 };

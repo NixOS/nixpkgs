@@ -21,6 +21,8 @@ let
       fi
       wrapProgram $out/bin/urxvt \
         --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
+      wrapProgram $out/bin/urxvtd \
+        --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
     '';
   };
 in stdenv.lib.overrideDerivation drv (x : { buildInputs = x.buildInputs ++ [ makeWrapper ]; })

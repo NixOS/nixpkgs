@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, python
 , makeWrapper, virtinst, pyGtkGlade, pythonDBus, gnome_python, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
-, avahi, dconf, spiceSupport ? true, spice_gtk
+, avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo
 }:
 
 with stdenv.lib;
@@ -9,12 +9,12 @@ with pythonPackages;
 
 buildPythonPackage rec {
   name = "virt-manager-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1n248kack1fni8y17ysgq5xhvffcgy4l62hnd0zvr4kjw0579qq8";
+    sha256 = "0hbr1wf4byfvbqlbq3w6s71ckhn626i4rb497y4z2cm12p5hc2db";
   };
 
   propagatedBuildInputs =
@@ -22,7 +22,7 @@ buildPythonPackage rec {
       paste_deploy m2crypto ipy twisted sqlalchemy_migrate
       distutils_extra simplejson readline glance cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
-      libvirt libxml2Python ipaddr vte
+      libvirt libxml2Python ipaddr vte libosinfo
     ] ++ optional spiceSupport spice_gtk;
 
   buildInputs =

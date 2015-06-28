@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, cmake, ffmpeg, boost }:
+{ stdenv, fetchurl, cmake, boost, ffmpeg }:
 
 stdenv.mkDerivation rec {
   name = "chromaprint-${version}";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchurl {
     url = "http://bitbucket.org/acoustid/chromaprint/downloads/${name}.tar.gz";
-    sha256 = "04nd8xmy4kgnpfffj6hw893f80bwhp43i01zpmrinn3497mdf53b";
+    sha256 = "06h36223r4bwcazp42faqs9w9g49wvspivd3z3309b12ld4qjaw2";
   };
 
-  buildInputs = [ cmake ffmpeg boost ];
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ boost ffmpeg ];
 
   cmakeFlags = [ "-DBUILD_EXAMPLES=ON" ];
-
-  postInstall = "installBin examples/fpcalc";
 
   meta = with stdenv.lib; {
     homepage = "http://acoustid.org/chromaprint";

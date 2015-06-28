@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "75e3b7853de4783b8ab8270dcbe6a1e4f576224f77f7463116532e11c6498c26";
   };
   buildInputs = [ emacs ];
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Jabber client for Emacs";
     longDescription = ''
       jabber.el is a Jabber client for Emacs. It may seem strange to have a
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
       a special case of text editing.
     '';
     homepage = http://emacs-jabber.sourceforge.net/;
-    license = [ "GPLv2+" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = with platforms; linux;
   };
 }

@@ -2,13 +2,17 @@
 , pkgconfig, runCommand, which, unstableVersion ? false
 }:
 
+# nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
+# Related post: http://zo0ok.com/techfindings/archives/1820
+assert stdenv.system != "armv5tel-linux";
+
 let
   dtrace = runCommand "dtrace-native" {} ''
     mkdir -p $out/bin
     ln -sv /usr/sbin/dtrace $out/bin
   '';
 
-  version = if unstableVersion then "0.11.13" else "0.12.0";
+  version = "0.12.0";
 
   deps = {
     inherit openssl zlib libuv;
@@ -32,9 +36,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = if unstableVersion
-             then "1642zj3sajhqflfhb8fsvy84w9mm85wagm8w8300gydd2q6fkmhm"
-             else "0cifd2qhpyrbxx71a4hsagzk24qas8m5zvwcyhx69cz9yhxf404p";
+    sha256 = "0cifd2qhpyrbxx71a4hsagzk24qas8m5zvwcyhx69cz9yhxf404p";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps);
@@ -60,7 +62,7 @@ in stdenv.mkDerivation {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.shlevy ];
+    maintainers = [ maintainers.goibhniu maintainers.shlevy maintainers.havvy ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

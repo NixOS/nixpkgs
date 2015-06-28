@@ -16,6 +16,7 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     patchShebangs libsoup/
+    patch -p1 < ${./bad-symbol.patch}
   '';
 
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ];

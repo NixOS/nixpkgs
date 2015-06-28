@@ -85,6 +85,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Creative Commons Zero v1.0 Universal";
   };
 
+  cc-by-sa-25 = spdx {
+    spdxId = "CC-BY-SA-2.5";
+    fullName = "Creative Commons Attribution Share Alike 2.5";
+  };
+
   cc-by-30 = spdx {
     spdxId = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
@@ -98,6 +103,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   cc-by-40 = spdx {
     spdxId = "CC-BY-4.0";
     fullName = "Creative Commons Attribution 4.0";
+  };
+
+  cc-by-sa-40 = spdx {
+    spdxId = "CC-BY-SA-4.0";
+    fullName = "Creative Commons Attribution Share Alike 4.0";
   };
 
   cddl = spdx {
@@ -123,6 +133,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   cpl10 = spdx {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
+  };
+
+  efl10 = spdx {
+    spdxId = "EFL-1.0";
+    fullName = "Eiffel Forum License v1.0";
+  };
+
+  efl20 = spdx {
+    spdxId = "EFL-2.0";
+    fullName = "Eiffel Forum License v2.0";
   };
 
   epl10 = spdx {
@@ -282,6 +302,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "MIT License";
   };
 
+  mpl10 = spdx {
+    spdxId = "MPL-1.0";
+    fullName = "Mozilla Public License 1.0";
+  };
+
   mpl11 = spdx {
     spdxId = "MPL-1.1";
     fullName = "Mozilla Public License 1.1";
@@ -381,6 +406,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   unlicense = spdx {
     spdxId = "Unlicense";
     fullName = "The Unlicense";
+  };
+
+  vim = spdx {
+    spdxId = "Vim";
+    fullName = "Vim License";
   };
 
   vsl10 = spdx {

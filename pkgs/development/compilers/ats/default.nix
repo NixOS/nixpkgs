@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "ats-${version}";
-  version = "0.2.11";
+  version = "0.2.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/ats-lang/ats-lang-anairiats-${version}.tgz";
-    sha256 = "0rqykyx5whichx85jr4l4c9fdan0qsdd4kwd7a81k3l07zbd9fc6";
+    sha256 = "0l2kj1fzhxwsklwmn5yj2vp9rmw4jg0b18bzwqz72bfi8i39736k";
   };
 
   # this is necessary because atxt files usually include some .hats files

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, frei0r, lib, cmake, qt4, perl, kdelibs, automoc4
 , phonon , makeWrapper, mlt, gettext , qimageblitz, qjson
 , shared_mime_info, soprano, pkgconfig, shared_desktop_ontologies
-, libv4l
+, libv4l, oxygen_icons
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     phonon pkgconfig qimageblitz qjson qt4 shared_desktop_ontologies
     shared_mime_info soprano
   ];
+
+  propagatedUserEnvPkgs = [ oxygen_icons ];
 
   enableParallelBuilding = true;
 

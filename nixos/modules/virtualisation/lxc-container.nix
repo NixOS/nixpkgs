@@ -4,7 +4,7 @@ with lib;
 
 {
   imports = [
-    ../profiles/container.nix
+    ../profiles/docker-container.nix # FIXME, shouldn't include something from profiles/
   ];
 
   # Allow the user to login as root without password.

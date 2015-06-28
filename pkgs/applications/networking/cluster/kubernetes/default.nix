@@ -1,34 +1,43 @@
-{ stdenv, fetchFromGitHub, which, go, makeWrapper, iptables,rsync }:
+{ stdenv, fetchFromGitHub, which, go, makeWrapper, iptables, rsync, utillinux, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "v0.5.4";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "kubernetes";
-    rev = version;
-    sha256 = "1pipcqpjz9zsi4kfsbdvbbbia642l4xg50pznjw5v061c5xk7vnk";
+    rev = "v${version}";
+    sha256 = "1adbd5n2fs1278f6kz6pd23813w2k4pgcxjl21idflh8jafxsyj7";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
 
-  preBuild = "patchShebangs ./hack";
+  buildPhase = ''
+    GOPATH=$(pwd):$(pwd)/Godeps/_workspace
+    mkdir -p $(pwd)/Godeps/_workspace/src/github.com/GoogleCloudPlatform
+    ln -s $(pwd) $(pwd)/Godeps/_workspace/src/github.com/GoogleCloudPlatform/kubernetes
 
-  postBuild = ''go build --ldflags '-extldflags "-static" -s' build/pause/pause.go'';
+    substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
+    patchShebangs ./hack
+    hack/build-go.sh --use_go_build
+
+    (cd cluster/addons/dns/kube2sky && go build ./kube2sky.go)
+  '';
 
   installPhase = ''
     mkdir -p "$out/bin"
     cp _output/local/go/bin/* "$out/bin/"
-    cp pause $out/bin/kube-pause
+    cp cluster/addons/dns/kube2sky/kube2sky "$out/bin/"
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/kube-proxy" --set "PATH" "${iptables}/bin"
+    wrapProgram "$out/bin/kube-proxy" --prefix PATH : "${iptables}/bin"
+    wrapProgram "$out/bin/kubelet" --prefix PATH : "${utillinux}/bin"
   '';
 
   meta = with stdenv.lib; {
-    description = "Open source implementation of container cluster management.";
+    description = "Open source implementation of container cluster management";
     license = licenses.asl20;
     homepage = https://github.com/GoogleCloudPlatform;
     maintainers = with maintainers; [offline];

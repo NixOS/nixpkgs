@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${hicolor_icon_theme}/share"
   '';
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
-
   meta = {
     homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
     description = "A fast and lightweight picture-viewer for the Xfce desktop environment";

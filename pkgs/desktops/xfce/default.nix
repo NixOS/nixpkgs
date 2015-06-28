@@ -1,4 +1,6 @@
-{ config, pkgs, newScope }: let
+{ config, pkgs, newScope }:
+
+let
 
 callPackage = newScope (deps // xfce_self);
 

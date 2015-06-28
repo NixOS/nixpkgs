@@ -28,12 +28,13 @@ stdenv.mkDerivation rec {
   #configureFlags = [ "--disable-print" ];
 
   # "screenshot" needs this.
-  NIX_LDFLAGS = "-rpath ${xlibs.libX11}/lib";
+  NIX_LDFLAGS = "-rpath ${xlibs.libX11}/lib"
+    + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
 
   meta = {
     description = "The GNU Image Manipulation Program";
     homepage = http://www.gimp.org/;
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

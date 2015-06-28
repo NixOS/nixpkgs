@@ -233,4 +233,9 @@ rec {
         xs = unique (drop 1 list);
       in [x] ++ remove x xs;
 
+  # Intersects list 'e' and another list
+  intersectLists = e: filter (x: elem x e);
+
+  # Subtracts list 'e' from another list
+  subtractLists = e: filter (x: !(elem x e));
 }

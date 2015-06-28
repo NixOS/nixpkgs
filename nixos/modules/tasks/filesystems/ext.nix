@@ -10,12 +10,11 @@
     boot.initrd.extraUtilsCommands =
       ''
         # Copy e2fsck and friends.
-        cp -v ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
-        cp -v ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
+        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/e2fsck
+        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/tune2fs
         ln -sv e2fsck $out/bin/fsck.ext2
         ln -sv e2fsck $out/bin/fsck.ext3
         ln -sv e2fsck $out/bin/fsck.ext4
-        cp -pdv ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
       '';
 
   };

@@ -68,7 +68,6 @@ installPhase() {
     #patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
     #patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
 
-
     if test -z "$libsOnly"; then
         # Install headers and /share files etc.
         mkdir -p $out/include/nvidia
@@ -99,15 +98,16 @@ installPhase() {
                 --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
         done
 
-        patchelf --set-rpath $glPath:$gtk3Path $out/lib/libnvidia-gtk3.so.*.*
+        patchelf --set-rpath $glPath:$gtkPath $out/lib/libnvidia-gtk2.so.*.*
 
         # Test a bit.
         $out/bin/nvidia-settings --version
     else
-        rm $out/lib/libnvidia-gtk3.*
+        rm $out/lib/libnvidia-gtk2.*
     fi
-    # for simplicity and dependency reduction, don't support the gtk2 interface
-    rm $out/lib/libnvidia-gtk2.*
+
+    # For simplicity and dependency reduction, don't support the gtk3 interface.
+    rm $out/lib/libnvidia-gtk3.*
 }
 
 

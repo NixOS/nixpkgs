@@ -1,5 +1,5 @@
 { lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
-, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig
+, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
 , withGtk ? false, gtk ? null }:
 
 with lib;
@@ -21,8 +21,9 @@ stdenv.mkDerivation {
   '';
 
   # perf refers both to newt and slang
+  # binutils is required for libbfd.
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
-  buildInputs = [ elfutils python perl newt slang pkgconfig] ++
+  buildInputs = [ elfutils python perl newt slang pkgconfig libunwind binutils ] ++
     stdenv.lib.optional withGtk gtk;
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";

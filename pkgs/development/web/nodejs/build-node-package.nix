@@ -57,15 +57,20 @@ let
       mv $(find . -type d -mindepth 1 -maxdepth 1) $out
     '';
 
-    platforms = fold (entry: platforms:
-      let
-        filterPlatforms = attrByPath [(removePrefix "!" entry)] [] stdenv.lib.platforms;
-      in
-        if hasPrefix "!" entry then
-          filter (p: any (f: p != f) filterPlatforms) platforms
-        else
-          filter (p: any (f: p == f) filterPlatforms) platforms
-    ) nodejs.meta.platforms os;
+    platforms = if os == [] then nodejs.meta.platforms else
+      fold (entry: platforms:
+        let
+          filterPlatforms =
+            stdenv.lib.platforms.${removePrefix "!" entry} or [];
+        in
+          # Ignore unknown platforms
+          if filterPlatforms == [] then (if platforms == [] then nodejs.meta.platforms else platforms)
+          else
+            if hasPrefix "!" entry then
+              subtractLists (intersectLists filterPlatforms nodejs.meta.platforms) platforms
+            else
+              platforms ++ (intersectLists filterPlatforms nodejs.meta.platforms)
+      ) [] os;
 
     mapDependencies = deps: f: rec {
       # Convert deps to attribute set
@@ -87,8 +92,8 @@ let
     _dependencies = mapDependencies deps (name: dep:
       dep.pkgName != pkgName);
     _optionalDependencies = mapDependencies optionalDependencies (name: dep:
-      any (platform: stdenv.system == platform) dep.meta.platforms &&
-      all (d: d != dep.pkgName) skipOptionalDependencies
+      (builtins.tryEval dep).success &&
+      !(elem dep.pkgName skipOptionalDependencies)
     );
     _peerDependencies = mapDependencies peerDependencies (name: dep:
       dep.pkgName != pkgName);
@@ -301,7 +306,7 @@ let
     dontStrip = true;
 
     meta = {
-      platforms = platforms;
+      inherit platforms;
       maintainers = [ stdenv.lib.maintainers.offline ];
     };
 

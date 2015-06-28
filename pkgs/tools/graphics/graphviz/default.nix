@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat, libXaw
 , yacc, libtool, fontconfig, pango, gd, xlibs, gts, libdevil, gettext, cairo
+, flex
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "17l5czpvv5ilmg17frg0w4qwf89jzh2aglm9fgx0l0aakn6j7al1";
   };
 
-  patches = [ ./0001-vimdot-lookup-vim-in-PATH.patch ];
+  patches =
+    [ ./0001-vimdot-lookup-vim-in-PATH.patch
+    
+      # NOTE: Once this patch is removed, flex can probably be removed from
+      # buildInputs.
+      ./cve-2014-9157.patch
+    ];
 
   buildInputs =
-    [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil
+    [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex
     ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender pango libXaw ]
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 

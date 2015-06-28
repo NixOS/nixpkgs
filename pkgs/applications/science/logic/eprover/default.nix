@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, texLive }:
+{ stdenv, fetchurl, which }:
 let
   s = # Generated upstream information
   rec {
@@ -18,26 +18,22 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  buildInputs = [which texLive];
+  buildInputs = [ which ];
 
   preConfigure = "sed -e 's@^EXECPATH\\s.*@EXECPATH = '\$out'/bin@' -i Makefile.vars";
 
   buildPhase = "make install";
 
-  # HOME=. allows to build missing TeX formats
   installPhase = ''
     mkdir -p $out/bin
     make install
-    HOME=. make documentation
-    mkdir -p $out/share/doc
-    cp -r DOC $out/share/doc/EProver
     echo eproof -xAuto --tstp-in --tstp-out '"$@"' > $out/bin/eproof-tptp
     chmod a+x $out/bin/eproof-tptp
   '';
 
   meta = {
     inherit (s) version;
-    description = "E automated theorem prover";
+    description = "Automated theorem prover for full first-order logic with equality";
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
   };

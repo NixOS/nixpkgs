@@ -10,6 +10,7 @@
 , zlib ? null, extraPackages ? []
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , setupHook ? ./setup-hook.sh
+, isGNU ? false, isClang ? false
 }:
 
 with stdenv.lib;
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
   # The wrapper scripts use 'cat', so we may need coreutils.
   coreutils = if nativeTools then null else coreutils;
 
-  passthru = { inherit nativeTools nativeLibc nativePrefix; };
+  passthru = { inherit nativeTools nativeLibc nativePrefix isGNU isClang; };
 
   buildCommand =
     ''
@@ -169,6 +170,12 @@ stdenv.mkDerivation {
 
       export real_cc=cc
       export real_cxx=c++
+      export default_cxx_stdlib_compile="${
+        if stdenv.isLinux && !(cc.isGNU or false)
+          then "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)"
+          else ""
+      }"
+
       if [ -e $ccPath/gcc ]; then
         wrap gcc ${./cc-wrapper.sh} $ccPath/gcc
         ln -s gcc $out/bin/cc
@@ -205,7 +212,7 @@ stdenv.mkDerivation {
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ccgo ${./cc-wrapper.sh} $ccPath/gccgo
+      wrap gccgo ${./cc-wrapper.sh} $ccPath/gccgo
     ''
 
     + optionalString cc.langAda or false ''

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "07h49xwvg61dx20rk5p4r3ax2ar5y0ppvm60cqwqljyi9rdfbh7p";
   };
 
-  enableParallelBuilding = true;
+  # nondeterministic failures when creating directories
+  enableParallelBuilding = false;
 
   buildInputs = [ pkgconfig SDL2 alsaLib gtk3 mesa_glu mesa makeWrapper
                   libarchive libao unzip xdg_utils gsettings_desktop_schemas ];

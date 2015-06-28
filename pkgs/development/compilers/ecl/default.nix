@@ -1,4 +1,5 @@
 {stdenv, fetchurl
+, libtool, autoconf, automake
 , gmp, mpfr, libffi
 , noUnicode ? false, 
 }:
@@ -6,17 +7,17 @@ let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="13.5.1";
+    version="15.3.7";
     name="${baseName}-${version}";
-    hash="18ic8w9sdl0dh3kmyc9lsrafikrd9cg1jkhhr25p9saz0v75f77r";
-    url="mirror://sourceforge/project/ecls/ecls/13.5/ecl-13.5.1.tgz";
-    sha256="18ic8w9sdl0dh3kmyc9lsrafikrd9cg1jkhhr25p9saz0v75f77r";
+    hash="13wlxkd5prm93gcm2dhm7v52fl803yx93aa97lrb39z0y6xzziid";
+    url="mirror://sourceforge/project/ecls/ecls/15.3/ecl-15.3.7.tgz";
+    sha256="13wlxkd5prm93gcm2dhm7v52fl803yx93aa97lrb39z0y6xzziid";
   };
   buildInputs = [
-    libffi
+    libtool autoconf automake
   ];
   propagatedBuildInputs = [
-    gmp mpfr
+    libffi gmp mpfr
   ];
 in
 stdenv.mkDerivation {
@@ -25,8 +26,18 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
+  patches = [ ./libffi-prefix.patch ];
+  preConfigure = ''
+    (cd src ; libtoolize -f)
+    (cd src ; autoheader -f)
+    (cd src ; aclocal)
+    (cd src ; automake --add-missing -c)
+    (cd src ; autoconf -f)
+  '';
   configureFlags = [
     "--enable-threads"
+    "--with-gmp-prefix=${gmp}"
+    "--with-libffi-prefix=${libffi}"
     ]
     ++
     (stdenv.lib.optional (! noUnicode)

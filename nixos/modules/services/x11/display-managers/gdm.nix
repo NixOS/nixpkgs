@@ -58,14 +58,14 @@ in
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";
         };
-        execCmd = "exec ${gdm}/sbin/gdm";
+        execCmd = "exec ${gdm}/bin/gdm";
       };
 
     # Because sd_login_monitor_new requires /run/systemd/machines
     systemd.services.display-manager.wants = [ "systemd-machined.service" ];
     systemd.services.display-manager.after = [ "systemd-machined.service" ];
 
-    systemd.services.display-manager.path = [ gnome3.gnome_shell gnome3.caribou ];
+    systemd.services.display-manager.path = [ gnome3.gnome_shell gnome3.caribou pkgs.xlibs.xhost pkgs.dbus_tools ];
 
     services.dbus.packages = [ gdm ];
 
@@ -95,15 +95,23 @@ in
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
         auth     optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
-        auth     sufficient     pam_unix.so nullok likeauth
-        auth     required       pam_deny.so
+        auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
+        ${optionalString config.security.pam.enableEcryptfs
+          "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
+
+        ${optionalString (! config.security.pam.enableEcryptfs)
+          "auth     required       pam_deny.so"}
 
         account  sufficient     pam_unix.so
 
         password requisite      pam_unix.so nullok sha512
+        ${optionalString config.security.pam.enableEcryptfs
+          "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
 
         session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
         session  required       pam_unix.so
+        ${optionalString config.security.pam.enableEcryptfs
+          "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
         session  required       pam_loginuid.so
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
@@ -115,15 +123,22 @@ in
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
         auth     optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
-        auth     sufficient     pam_unix.so nullok likeauth
-        auth     required       pam_deny.so 
+        auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
+        ${optionalString config.security.pam.enableEcryptfs
+          "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
+        ${optionalString (! config.security.pam.enableEcryptfs)
+          "auth     required       pam_deny.so"}
 
         account  sufficient     pam_unix.so
         
         password requisite      pam_unix.so nullok sha512
+        ${optionalString config.security.pam.enableEcryptfs
+          "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
 
         session  required       pam_env.so envfile=${config.system.build.pamEnvironment}
         session  required       pam_unix.so
+        ${optionalString config.security.pam.enableEcryptfs
+          "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
         session  required       pam_loginuid.so
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
         session  optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start

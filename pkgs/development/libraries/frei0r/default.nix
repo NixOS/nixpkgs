@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.4";
 
   src = fetchurl {
-    url = "https://files.dyne.org/.xsend.php?file=frei0r/releases/${name}.tar.gz";
+    url = "https://files.dyne.org/frei0r/releases/${name}.tar.gz";
     sha256 = "0mxyhdp1p1a3ga8170ijygb870zwbww1dgp3kdr1nd4zvsmzqw44";
   };
 

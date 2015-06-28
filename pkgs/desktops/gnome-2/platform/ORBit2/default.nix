@@ -1,11 +1,11 @@
-{ stdenv, fetchurlGnome, pkgconfig, glib, libIDL, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, glib, libIDL, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
-  
-  src = fetchurlGnome {
-    project = "ORBit2";
-    major = "2"; minor = "14"; patchlevel = "19";
+  name = "ORBit2-${minVer}.19";
+  minVer = "2.14";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/ORBit2/${minVer}/${name}.tar.bz2";
     sha256 = "0l3mhpyym9m5iz09fz0rgiqxl2ym6kpkwpsp1xrr4aa80nlh1jam";
   };
 

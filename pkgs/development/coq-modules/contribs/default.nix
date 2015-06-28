@@ -4,6 +4,15 @@ let
   mkContrib = import ./mk-contrib.nix;
   all = import ./all.nix;
   overrides = {
+    Additions = self: {
+      patchPhase = ''
+        for p in binary_strat dicho_strat generation log2_implementation shift
+        do
+          substituteInPlace $p.v \
+          --replace 'Require Import Euclid.' 'Require Import Coq.Arith.Euclid.'
+        done
+      '';
+    };
     BDDs = self: {
       buildInputs = self.buildInputs ++ [ contribs.IntMap ];
       patchPhase = ''
@@ -13,6 +22,7 @@ let
         32d30
         < extraction
         EOF
+        coq_makefile -f Make -o Makefile
       '';
       postInstall = ''
         mkdir -p $out/bin
@@ -25,6 +35,7 @@ let
         17d16
         < rauzy/algorithme1/extraction
         EOF
+        coq_makefile -f Make -o Makefile
       '';
       postInstall = ''
         mkdir -p $out/bin
@@ -38,6 +49,7 @@ let
         2d1
         < -R ../QArithSternBrocot QArithSternBrocot
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     CoRN = self: {
@@ -47,7 +59,9 @@ let
         2d1
         < -R ../MathClasses/ MathClasses
         EOF
+        coq_makefile -f Make -o Makefile.coq
       '';
+      enableParallelBuilding = true;
       installFlags = self.installFlags + " -f Makefile.coq";
     };
     Counting = self: {
@@ -70,6 +84,7 @@ let
         < -I ../Counting/src
         < -R ../Counting/theories Counting
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     FingerTree = self: {
@@ -78,6 +93,22 @@ let
         21d20
         < extraction
         EOF
+        coq_makefile -f Make -o Makefile
+      '';
+    };
+    FOUnify = self: {
+      patchPhase = ''
+        patch Make <<EOF
+        8c8
+        < -custom "\$(CAMLOPTLINK) -pp '\$(CAMLBIN)\$(CAMLP4)o' -o unif unif.mli unif.ml main.ml" unif.ml unif
+        ---
+        > -custom "\$(CAMLOPTLINK) -pp 'camlp5o' -o unif unif.mli unif.ml main.ml" unif.ml unif
+        EOF
+        coq_makefile -f Make -o Makefile
+      '';
+      postInstall = ''
+        mkdir -p $out/bin
+        cp unif $out/bin/
       '';
     };
     Goedel = self: {
@@ -85,8 +116,9 @@ let
       patchPhase = ''
         patch Make <<EOF
         2d1
-	< -R ../../Eindhoven/Pocklington Pocklington
+        < -R ../../Eindhoven/Pocklington Pocklington
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     Graphs = self: {
@@ -96,6 +128,7 @@ let
         2d1
         < -R ../../Cachan/IntMap IntMap
         EOF
+        coq_makefile -f Make -o Makefile
       '';
       postInstall = ''
         mkdir -p $out/bin
@@ -110,6 +143,7 @@ let
         2d1
         < -R ../../Sophia-Antipolis/Algebra/ Algebra
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     Markov = self: { configurePhase = "coq_makefile -o Makefile -R . Markov markov.v"; };
@@ -129,6 +163,7 @@ let
         < -R ../../Sophia-Antipolis/Algebra Algebra
         < -R ../../Nijmegen/LinAlg LinAlg
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     PTSF = self: {
@@ -138,6 +173,7 @@ let
         1d0
         < -R ../../Paris/PTSATR/ PTSATR
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     RelationExtraction = self: {
@@ -146,6 +182,20 @@ let
         31d30
         < test
         EOF
+        coq_makefile -f Make -o Makefile
+      '';
+    };
+    Semantics = self: {
+      patchPhase = ''
+        patch Make <<EOF
+        18a19
+        > interp.mli
+        EOF
+      '';
+      configurePhase = ''
+        coq_makefile -f Make -o Makefile
+        make extract_interpret.vo
+        rm -f str_little.ml.d
       '';
     };
     SMC = self: {
@@ -155,12 +205,13 @@ let
         2d1
         < -R ../../Cachan/IntMap IntMap
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     Ssreflect = self: {
       patchPhase = ''
         substituteInPlace Makefile \
-	--replace "/bin/mkdir" "mkdir"
+        --replace "/bin/mkdir" "mkdir"
       '';
     };
     Stalmarck = self: {
@@ -173,6 +224,7 @@ let
         2d1
         < -R ../ZornsLemma ZornsLemma
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
     TreeAutomata = self: {
@@ -182,6 +234,7 @@ let
         2d1
         < -R ../../Cachan/IntMap IntMap
         EOF
+        coq_makefile -f Make -o Makefile
       '';
     };
   };

@@ -18,16 +18,14 @@ let
 
 in
 
-with {
-  inherit (stdenv.lib) optional optionalString;
-};
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "perl-5.20.1";
+  name = "perl-5.20.2";
 
   src = fetchurl {
     url = "mirror://cpan/authors/id/S/SH/SHAY/${name}.tar.gz";
-    sha256 = "1dfl4v5fngnkd1c4278gcdjgcapsw7laxq0b34nxrx76z4805wgy";
+    sha256 = "17cvplgpxbm1hshxlkra2fldn4da1iap1lsnb04hdm8ply93k95i";
   };
 
   patches =
@@ -79,4 +77,11 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru.libPrefix = "lib/perl5/site_perl";
+
+  meta = {
+    homepage = https://www.perl.org/;
+    description = "The standard implementation of the Perl 5 programmming language";
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.all;
+  };
 }

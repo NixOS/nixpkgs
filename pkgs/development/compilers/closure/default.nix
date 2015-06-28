@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "closure-compiler-${version}";
-  version = "20130603";
+  version = "20150315";
 
   src = fetchurl {
     url = "http://dl.google.com/closure-compiler/compiler-${version}.tar.gz";
-    sha256 = "0bk0s8p9r9an5m0l8y23wjlx490k15i4zah0a384a2akzji8y095";
+    sha256 = "1vzwyhpqbrndg7mri81f1b2yi8cshw5pghvdda9vdxgq465sa52f";
   };
 
   phases = [ "installPhase" ];

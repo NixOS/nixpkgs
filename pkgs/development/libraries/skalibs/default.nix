@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.2.0.0";
+  version = "2.3.4.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/skalibs";
     rev = "refs/tags/v${version}";
-    sha256 = "1ww45ygrws7h3p3p7y3blc5kzvvy5fmzb158ngfbdamf0pgc5vkn";
+    sha256 = "03kqcinb5sn1pk297nqg7w5hzgmkkhhcs3l9x99w1x9kgmw6wisp";
   };
 
   dontDisableStatic = true;
@@ -30,6 +30,7 @@ in stdenv.mkDerivation rec {
     description = "A set of general-purpose C programming libraries";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

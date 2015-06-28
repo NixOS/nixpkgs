@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
-, gtk3, atk, pango, glib, gdk_pixbuf, cairo
+, gtk, atk, pango, glib, gdk_pixbuf, cairo
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -12,9 +12,11 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "346.35";
+  versionNumber = "352.21";
+
   # Policy: use the highest stable version as the default (on our master).
   inherit (stdenv.lib) makeLibraryPath;
+
 in
 
 stdenv.mkDerivation {
@@ -26,12 +28,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "09fz8nydi8ip3yv7dmbwnpwvjql5wp582z57022ppb9hqwq3r9mv";
+        sha256 = "1l206091frcpql8ql82i5jkf955wdr56ikh9aprwhqkyyjjq4qv1";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "1z9a69a9xbcrz925mj02l2qaqcnhxzh2msbq4hf73p7x4h94ibkx";
+        sha256 = "1sv495i5s1fd7j4k4yr53xbgc9jind0y74mqivv36p5z6m8z5k6g";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -46,9 +48,8 @@ stdenv.mkDerivation {
   openclPath  = makeLibraryPath [zlib];
   allLibPath  = makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr zlib stdenv.cc.cc];
 
-  # we don't support the gtk2 version
-  gtk3Path = optionalString (!libsOnly) (makeLibraryPath
-    [ gtk3 atk pango glib gdk_pixbuf cairo ] );
+  gtkPath = optionalString (!libsOnly) (makeLibraryPath
+    [ gtk atk pango glib gdk_pixbuf cairo ] );
   programPath = makeLibraryPath [ xlibs.libXv ];
 
   buildInputs = [ perl ];

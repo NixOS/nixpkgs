@@ -13,10 +13,11 @@ rec {
 
   addErrorContextToAttrs = lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v);
 
+  traceIf = p: msg: x: if p then trace msg x else x;
 
-  traceVal = x: builtins.trace x x;
-  traceXMLVal = x: builtins.trace (builtins.toXML x) x;
-  traceXMLValMarked = str: x: builtins.trace (str + builtins.toXML x) x;
+  traceVal = x: trace x x;
+  traceXMLVal = x: trace (builtins.toXML x) x;
+  traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
 
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x : trace (showVal x) x;
@@ -42,6 +43,7 @@ rec {
   traceCall2 = n : f : a : b : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b));
   traceCall3 = n : f : a : b : c : let t = n2 : x : traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
+  # FIXME: rename this?
   traceValIfNot = c: x:
     if c x then true else trace (showVal x) false;
 
@@ -106,6 +108,6 @@ rec {
             )
           else
             let r = strict expr;
-            in builtins.trace "${str}\n result:\n${builtins.toXML r}" r
+            in trace "${str}\n result:\n${builtins.toXML r}" r
       );
 }

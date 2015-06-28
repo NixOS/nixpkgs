@@ -3,10 +3,10 @@
 , bash, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xmlto-0.0.25";
+  name = "xmlto-0.0.26";
   src = fetchurl {
     url = "http://fedorahosted.org/releases/x/m/xmlto/${name}.tar.bz2";
-    sha256 = "0dp5nxq491gymq806za0dk4hngfmq65ysrqbn0ypajqbbl6vf71n";
+    sha256 = "1v5mahfg5k9lh3anykl482xnrgxn36zlmqsgwahw29xwncprpd7g";
   };
 
   patchPhase = ''

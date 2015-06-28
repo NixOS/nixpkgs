@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     mkdir -pv $out
     cp -rv lib $out
 
+    gradle_launcher_jar=$(echo $out/lib/gradle-launcher-*.jar)
+    test -f $gradle_launcher_jar
     makeWrapper ${jdk}/bin/java $out/bin/gradle \
       --set JAVA_HOME ${jdk} \
-      --add-flags "-classpath $out/lib/gradle-launcher-2.2.1.jar org.gradle.launcher.GradleMain"
+      --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
   '';
 
   phases = "unpackPhase installPhase";

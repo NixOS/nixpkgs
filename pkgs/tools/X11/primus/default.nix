@@ -14,12 +14,7 @@ let
   ldPath = makeLibraryPath ([primusLib] ++ optional (primusLib_i686 != null) primusLib_i686);
   primusrun = writeScript "primusrun"
 ''
-  export LD_LIBRARY_PATH=${ldPath}:\$LD_LIBRARY_PATH
-  # see: https://github.com/amonakov/primus/issues/138
-  # On my system, as of 3.16.6, the intel driver dies when the pixel buffers try to read from the
-  # source memory directly. Setting PRIMUS_UPLOAD causes an indirection through textures which
-  # avoids this issue.
-  export PRIMUS_UPLOAD=1
+  export LD_LIBRARY_PATH=${ldPath}:$LD_LIBRARY_PATH
   exec "$@"
 '';
 in
@@ -35,6 +30,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/amonakov/primus;
     description = "Faster OpenGL offloading for Bumblebee";
-    maintainers = maintainers.coconnor;
+    maintainers = with maintainers; [ coconnor ];
   };
 }

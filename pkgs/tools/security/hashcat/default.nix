@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, p7zip, patchelf }:
+{ stdenv, fetchurl, p7zip, patchelf, gmp }:
 
 assert stdenv.isLinux;
 
 let
   bits    = if stdenv.system == "x86_64-linux" then "64" else "32";
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc gmp ];
 
   fixBin = x: ''
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "hashcat-${version}";
-  version = "0.47";
+  version = "0.49";
 
   src = fetchurl {
     url    = "http://hashcat.net/files/${name}.7z";
-    sha256 = "0mc4lv4qfxabp794xfzgr63fhwk7lvbg12pry8a96lldp0jwp6i3";
+    sha256 = "0va07flncihgmnri5wj0jn636w86x5qwm4jmj2halcyg7qwqijh2";
   };
 
   buildInputs = [ p7zip patchelf ];

@@ -21,9 +21,9 @@
 , samba ? null, sambaSupport ? true
 , libmicrohttpd, bash
 # TODO: would be nice to have nfsSupport (needs libnfs library)
-# TODO: librtmp
+, rtmpdump ? null, rtmpSupport ? true
 , libvdpau ? null, vdpauSupport ? true
-, pulseaudio ? null, pulseSupport ? true
+, libpulseaudio ? null, pulseSupport ? true
 , libcec ? null, cecSupport ? true
 }:
 
@@ -32,8 +32,9 @@ assert udevSupport  -> udev != null;
 assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used if udev is avaliable
 assert sambaSupport -> samba != null;
 assert vdpauSupport -> libvdpau != null;
-assert pulseSupport -> pulseaudio != null;
+assert pulseSupport -> libpulseaudio != null;
 assert cecSupport   -> libcec != null;
+assert rtmpSupport  -> rtmpdump != null;
 
 let
   rel = "Helix";
@@ -43,11 +44,11 @@ let
   };
 in stdenv.mkDerivation rec {
     name = "kodi-" + version;
-    version = "14.1";
+    version = "14.2";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1mjmf8ag8dg5brzxy7cmnz72b1b85p69zr1li28j71fgjbi5k053";
+      sha256 = "1x37l8db6xrvdw933p804lnwvkcm4vdb9gm5i6vmz4ha8f88bjyr";
     };
 
     buildInputs = [
@@ -66,7 +67,7 @@ in stdenv.mkDerivation rec {
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql nasm avahi libdvdcss lame
+      sqlite mysql.lib nasm avahi libdvdcss lame
       curl bzip2 zip unzip glxinfo xdpyinfo
     ]
     ++ lib.optional dbusSupport dbus_libs
@@ -74,8 +75,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional usbSupport libusb
     ++ lib.optional sambaSupport samba
     ++ lib.optional vdpauSupport libvdpau
-    ++ lib.optional pulseSupport pulseaudio
-    ++ lib.optional cecSupport libcec;
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional cecSupport libcec
+    ++ lib.optional rtmpSupport rtmpdump;
 
     dontUseCmakeConfigure = true;
 
@@ -96,7 +98,8 @@ in stdenv.mkDerivation rec {
     ]
     ++ lib.optional (!sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"
-    ++ lib.optional pulseSupport "--enable-pulse";
+    ++ lib.optional pulseSupport "--enable-pulse"
+    ++ lib.optional rtmpSupport "--enable-rtmp";
 
     postInstall = ''
       for p in $(ls $out/bin/) ; do
@@ -108,7 +111,8 @@ in stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libmad}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libcec}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${libcec}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib"
       done
     '';
 

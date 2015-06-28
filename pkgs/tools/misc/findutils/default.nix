@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];
   };
 
+  preConfigure = if stdenv.isCygwin then ''
+    sed -i gnulib/lib/fpending.h -e '/include <stdio_ext.h>/d'
+  '' else null;
+
   meta = {
     homepage = http://www.gnu.org/software/findutils/;
     description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
@@ -37,6 +41,8 @@ stdenv.mkDerivation rec {
           * updatedb - update a file name database;
           * xargs - build and execute command lines from standard input.
     '';
+
+    platforms = stdenv.lib.platforms.all;
 
     license = stdenv.lib.licenses.gpl3Plus;
   };

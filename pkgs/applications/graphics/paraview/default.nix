@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     "-DPARAVIEW_INSTALL_DEVELOPMENT=ON"
   ];
 
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1138466
+  NIX_CFLAGS_COMPILE = "-DGLX_GLXEXT_LEGACY";
+
   enableParallelBuilding = true;
 
   buildInputs = [ cmake qt4 hdf5 mpich2 python libxml2 mesa libXt ];

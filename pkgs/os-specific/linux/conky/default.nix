@@ -1,31 +1,59 @@
 { stdenv, fetchurl, pkgconfig
 
 # dependencies
-, glib, ncurses
+, glib
 
 # optional features without extra dependencies
-, mpdSupport   ? true
+, mpdSupport          ? true
+, ibmSupport          ? true # IBM/Lenovo notebooks
+
+# This should be optional, but it is not due to a bug in conky
+# Please, try to make it optional again on update
+, ncurses
+#, ncursesSupport      ? true      , ncurses       ? null
 
 # optional features with extra dependencies
-, x11Support   ? false, x11           ? null
-, xdamage      ? false, libXdamage    ? null
-, wireless     ? false, wirelesstools ? null
-, luaSupport   ? false, lua5          ? null
+, x11Support          ? true      , x11           ? null
+, xdamageSupport      ? x11Support, libXdamage    ? null
+, imlib2Support       ? x11Support, imlib2        ? null
+, luaSupport          ? true      , lua           ? null
 
-, rss          ? false
-, weatherMetar ? false
-, weatherXoap  ? false
-, curl ? null, libxml2 ? null
+, luaImlib2Support    ? luaSupport && imlib2Support
+, luaCairoSupport     ? luaSupport && x11Support, cairo ? null
+, toluapp ? null
+
+, alsaSupport         ? true      , alsaLib       ? null
+
+, wirelessSupport     ? true      , wirelesstools ? null
+
+, curlSupport         ? true      , curl ? null
+, rssSupport          ? curlSupport
+, weatherMetarSupport ? curlSupport
+, weatherXoapSupport  ? curlSupport
+, libxml2 ? null
 }:
 
-assert luaSupport -> lua5          != null;
-assert wireless   -> wirelesstools != null;
-assert x11Support -> x11           != null;
-assert xdamage    -> x11Support && libXdamage != null;
+#assert ncursesSupport      -> ncurses != null;
 
-assert rss          -> curl != null && libxml2 != null;
-assert weatherMetar -> curl != null;
-assert weatherXoap  -> curl != null && libxml2 != null;
+assert x11Support          -> x11 != null;
+assert xdamageSupport      -> x11Support && libXdamage != null;
+assert imlib2Support       -> x11Support && imlib2     != null;
+assert luaSupport          -> lua != null;
+assert luaImlib2Support    -> luaSupport && imlib2Support
+                                         && toluapp != null;
+assert luaCairoSupport     -> luaSupport && toluapp != null
+                                         && cairo   != null;
+assert luaCairoSupport || luaImlib2Support
+                           -> lua.luaversion == "5.1";
+
+assert alsaSupport         -> alsaLib != null;
+
+assert wirelessSupport     -> wirelesstools != null;
+
+assert curlSupport         -> curl != null;
+assert rssSupport          -> curlSupport && libxml2 != null;
+assert weatherMetarSupport -> curlSupport;
+assert weatherXoapSupport  -> curlSupport && libxml2 != null;
 
 with stdenv.lib;
 
@@ -39,30 +67,47 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  buildInputs = [ pkgconfig glib ncurses ]
-    ++ optional  luaSupport   lua5
-    ++ optional  wireless     wirelesstools
-    ++ optional  x11Support   x11
-    ++ optional  xdamage      libXdamage
+  buildInputs = [ pkgconfig glib ]
+    ++ [ ncurses ]
+    #++ optional  ncursesSupport     ncurses
+    ++ optional  x11Support         x11
+    ++ optional  xdamageSupport     libXdamage
+    ++ optional  imlib2Support      imlib2
+    ++ optional  luaSupport         lua
+    ++ optionals luaImlib2Support   [ toluapp imlib2 ]
+    ++ optionals luaCairoSupport    [ toluapp cairo ]
 
-    ++ optionals rss          [ curl libxml2 ]
-    ++ optional  weatherMetar curl
-    ++ optionals weatherXoap  [ curl libxml2 ]
+    ++ optional  alsaSupport        alsaLib
+
+    ++ optional  wirelessSupport    wirelesstools
+
+    ++ optional  curlSupport        curl
+    ++ optional  rssSupport         libxml2
+    ++ optional  weatherXoapSupport libxml2
     ;
 
   configureFlags =
     let flag = state: flags: if state then map (x: "--enable-${x}")  flags
                                       else map (x: "--disable-${x}") flags;
-     in flag mpdSupport   [ "mpd" ]
+     in flag mpdSupport          [ "mpd" ]
+     ++ flag ibmSupport          [ "ibm" ]
 
-     ++ flag luaSupport   [ "lua" ]
-     ++ flag wireless     [ "wlan" ]
-     ++ flag x11Support   [ "x11" "xft" "argb" "double-buffer" "own-window" ] # conky won't compile without --enable-own-window
-     ++ flag xdamage      [ "xdamage" ]
+     #++ flag ncursesSupport      [ "ncurses" ]
+     ++ flag x11Support          [ "x11" "xft" "argb" "double-buffer" "own-window" ] # conky won't compile without --enable-own-window
+     ++ flag xdamageSupport      [ "xdamage" ]
+     ++ flag imlib2Support       [ "imlib2" ]
+     ++ flag luaSupport          [ "lua" ]
+     ++ flag luaImlib2Support    [ "lua-imlib2" ]
+     ++ flag luaCairoSupport     [ "lua-cairo" ]
 
-     ++ flag rss          [ "rss" ]
-     ++ flag weatherMetar [ "weather-metar" ]
-     ++ flag weatherXoap  [ "weather-xoap" ]
+     ++ flag alsaSupport         [ "alsa" ]
+
+     ++ flag wirelessSupport     [ "wlan" ]
+
+     ++ flag curlSupport         [ "curl" ]
+     ++ flag rssSupport          [ "rss" ]
+     ++ flag weatherMetarSupport [ "weather-metar" ]
+     ++ flag weatherXoapSupport  [ "weather-xoap" ]
      ;
 
   meta = {

@@ -67,7 +67,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
+    environment.systemPackages = [ pkgs.disnix pkgs.dysnomia ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
     services.dbus.enable = true;
     services.dbus.packages = [ pkgs.disnix ];
@@ -132,7 +132,7 @@ in
 
           restartIfChanged = false;
           
-          path = [ pkgs.nix pkgs.disnix dysnomia ];
+          path = [ pkgs.nix pkgs.disnix dysnomia "/run/current-system/sw" ];
           
           environment = {
             HOME = "/root";

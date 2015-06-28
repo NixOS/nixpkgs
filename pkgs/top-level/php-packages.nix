@@ -33,12 +33,6 @@ let self = with self; {
     sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
   };
 
-  apc = buildPecl {
-    name = "apc-3.1.13";
-
-    sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
-  };
-
   zendopcache = buildPecl {
     name = "zendopcache-7.0.3";
 
@@ -95,4 +89,35 @@ let self = with self; {
     buildInputs = [ pkgs.geoip ];
   };
 
+  redis = buildPecl {
+    name = "redis-2.2.7";
+    sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
+  };
+
+  composer = pkgs.stdenv.mkDerivation rec {
+    name = "composer-${version}";
+    version = "1.0.0-alpha9";
+
+    src = pkgs.fetchurl {
+      url = "https://getcomposer.org/download/1.0.0-alpha9/composer.phar";
+      sha256 = "1x7i9xs9xggq0qq4kzrwh2pky8skax0l829zwwsy3hcvch3irvrk";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/composer/composer.phar
+      makeWrapper ${php}/bin/php $out/bin/composer \
+        --add-flags "$out/libexec/composer/composer.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "Dependency Manager for PHP";
+      license = licenses.mit;
+      homepage = https://getcomposer.org/;
+      maintainers = with maintainers; [offline];
+    };
+  };
 }; in self

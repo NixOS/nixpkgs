@@ -8,6 +8,7 @@ let
 
   inherit (config.services.avahi) nssmdns;
   inherit (config.services.samba) nsswins;
+  ldap = config.users.ldap.enable;
 
 in
 
@@ -40,9 +41,9 @@ in
     # should define an option used by this module.
     environment.etc."nsswitch.conf".text =
       ''
-        passwd:    files ldap
-        group:     files ldap
-        shadow:    files ldap
+        passwd:    files ${optionalString ldap "ldap"}
+        group:     files ${optionalString ldap "ldap"}
+        shadow:    files ${optionalString ldap "ldap"}
         hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
         networks:  files dns
         ethers:    files

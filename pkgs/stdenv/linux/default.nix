@@ -91,6 +91,7 @@ rec {
           nativeTools = false;
           nativeLibc = false;
           cc = gccPlain;
+          isGNU = true;
           libc = glibc;
           inherit binutils coreutils;
           name = name;
@@ -234,6 +235,7 @@ rec {
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
+        isGNU = true;
         cc = stage4.stdenv.cc.cc;
         libc = stage4.pkgs.glibc;
         inherit (stage4.pkgs) binutils coreutils;
@@ -288,8 +290,6 @@ rec {
       ];
 
     overrides = pkgs: {
-      inherit cc;
-
       gcc = cc;
 
       inherit (stage4.pkgs)
@@ -298,8 +298,8 @@ rec {
         attr acl paxctl zlib pcre;
     };
   };
-  
-  
+
+
   testBootstrapTools = let
     defaultPkgs = allPackages { inherit system platform; };
   in derivation {
@@ -310,7 +310,7 @@ rec {
 
     buildCommand = ''
       export PATH=${bootstrapTools}/bin
-      
+
       ls -l
       mkdir $out
       mkdir $out/bin

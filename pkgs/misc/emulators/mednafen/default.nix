@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , libX11, mesa, freeglut
-, jack2, libcdio, libsndfile, libsamplerate
+, libjack2, libcdio, libsndfile, libsamplerate
 , SDL, SDL_net, zlib
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig libX11 mesa freeglut jack2 libcdio libsndfile libsamplerate SDL SDL_net zlib ];
+  [ pkgconfig libX11 mesa freeglut libjack2 libcdio libsndfile libsamplerate SDL SDL_net zlib ];
   
 
   # Install docs

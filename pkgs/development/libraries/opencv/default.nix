@@ -2,20 +2,15 @@
 , fetchpatch, pkgconfig, gstreamer, xineLib, glib, python27, python27Packages, unzip
 , enableBloat ? false }:
 
-let v = "2.4.10"; in
+let v = "2.4.11"; in
 
 stdenv.mkDerivation rec {
   name = "opencv-${v}";
 
   src = fetchurl {
     url = "mirror://sourceforge/opencvlibrary/opencv-${v}.zip";
-    sha256 = "1ilnfm7id8jqg5xmfjhbq81sjxx64av90kwxcs8zv5rp523wpx0v";
+    sha256 = "1shz5g7ahvbb41gprxzvavllf235qhx0fpkjd7iwa3gv83ym46dg";
   };
-
-  patches = [(fetchpatch {
-    url = "https://github.com/Itseez/opencv/commit/ea50be0529c24.diff";
-    sha256 = "0nm02v7rmfcndj3jzmv3mrqh3hk5n6axx6gdxndyhabn201hqswn";
-  })];
 
   buildInputs =
     [ unzip libjpeg libpng libtiff ]

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = stdenv.lib.licenses.bsd3;
-    platform = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

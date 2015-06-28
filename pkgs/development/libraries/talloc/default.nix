@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.1";
+  name = "talloc-2.1.2";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "0x31id42b425dbxv5whrqlc6dj14ph7wzs3wsp1ggi537dncwa9y";
+    sha256 = "13c365f7y8idjf2v1jxdjpkc3lxdmsxxfxjx1ymianm7zjiph393";
   };
 
   buildInputs = [
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
+
+  postInstall = ''
+    ar qf $out/lib/libtalloc.a bin/default/talloc_5.o
+  '';
 
   meta = with stdenv.lib; {
     description = "Hierarchical pool based memory allocator with destructors";

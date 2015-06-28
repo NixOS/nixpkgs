@@ -4,9 +4,9 @@
 
 let s = 
 rec {
-   version = "1.7.6";
+   version = "1.7.7";
    name="directfb-${version}";
-   sha256 = "1qf94vgsbcwfa00x2aqd6795n6z43x4ghclmb4sa4bl4zfn2pws4";
+   sha256 = "18r7h0pwbyyk8z3pgdv77nmma8lvr1si9gl1ghxgxf1ivhwcd1dp";
    url="http://directfb.org/downloads/Core/DirectFB-1.7/DirectFB-${version}.tar.gz";
 }
 ; in

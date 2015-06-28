@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, buggyBiosCDSupport ? true}:
+{stdenv, fetchurl, autoconf, automake, texinfo, buggyBiosCDSupport ? true}:
 
 stdenv.mkDerivation {
   name = "grub-0.97-patch-1.12";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   ] ++ (stdenv.lib.optional buggyBiosCDSupport ./buggybios.patch);
 
   # Autoconf/automake required for the splashimage patch.
-  buildInputs = [autoconf automake];
+  buildInputs = [autoconf automake texinfo];
 
   prePatch = ''
     unpackFile $gentooPatches
@@ -47,8 +47,12 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     autoreconf
+    automake --add-missing
   '';
 
   passthru.grubTarget = "";
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

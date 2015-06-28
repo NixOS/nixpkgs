@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Sticky notes plugin for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
+    broken = true;
   };
 }

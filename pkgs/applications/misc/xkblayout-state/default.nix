@@ -1,11 +1,12 @@
 { stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "xkblayout-state";
+  name = "${pname}-${version}";
+  pname = "xkblayout-state";
   version = "1b";
 
   src = fetchurl {
-    url = "https://github.com/nonpop/${name}/archive/v${version}.tar.gz";
+    url = "https://github.com/nonpop/${pname}/archive/v${version}.tar.gz";
     sha256 = "1m1nnplrdb2mclhj0881wf78ckvdnyk24g4k4p5s5gpd96cxxwnx";
   };
 

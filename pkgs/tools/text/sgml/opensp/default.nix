@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, xmlto, docbook_xml_dtd_412, libxslt, docbook_xsl }:
+{ lib, stdenv, fetchurl, xmlto, docbook_xml_dtd_412, libxslt, docbook_xsl, autoconf, automake, gettext, libiconv, libtool}:
 
 stdenv.mkDerivation {
   name = "opensp-1.5.2";
@@ -26,7 +26,11 @@ stdenv.mkDerivation {
     sed -i -e 's/name="idm.*"//g' $out/share/doc/OpenSP/releasenotes.html
     '';
 
-  buildInputs = [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl ];
+  preConfigure = if stdenv.isCygwin then "autoreconf -fi" else null;
+
+  # need autoconf, automake, gettext, and libtool for reconfigure
+  buildInputs = stdenv.lib.optionals stdenv.isCygwin [ autoconf automake gettext libiconv libtool ]
+    ++ [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl ];
 
   meta = {
     description = "A suite of SGML/XML processing tools";

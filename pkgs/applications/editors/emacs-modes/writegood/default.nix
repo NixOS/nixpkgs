@@ -1,12 +1,12 @@
 {stdenv, fetchurl, emacs}:
 
-let version = "2.0";
+let version = "2.0.2";
 
 in stdenv.mkDerivation {
   name = "writegood-mode-${version}";
   src = fetchurl {
     url = "https://github.com/bnbeckwith/writegood-mode/archive/v${version}.tar.gz";
-    sha256 = "0wf7bj9d00ggy3xigym885a3njfr98i3aqrrawf8x6lgbfc56dgp";
+    sha256 = "1ilbqj24vzpfh9n1wph7idj0914ga290jkpv9kr1pff3a0v5hf6k";
   };
 
   buildInputs = [ emacs ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zeromq4}:
+{ stdenv, fetchurl, zeromq }:
 
 stdenv.mkDerivation rec {
   baseName="czmq";
@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1g3rk3fz7xzsbqcdcwn0x18nmiyr70k47kg00gdrq8g10li8mmd9";
   };
 
-  buildInputs = [ zeromq4 ];
+  buildInputs = [ zeromq ];
 
-  meta = {
-    license = stdenv.lib.licenses.mpl20;
+  meta = with stdenv.lib; {
     homepage = "http://czmq.zeromq.org/";
     description = "High-level C Binding for ZeroMQ";
+    license = licenses.mpl20;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

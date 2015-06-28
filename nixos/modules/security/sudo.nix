@@ -77,7 +77,7 @@ in
         root        ALL=(ALL) SETENV: ALL
 
         # Users in the "wheel" group can do anything.
-        %wheel      ALL=(ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL
+        %wheel      ALL=(ALL:ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL
         ${cfg.extraConfig}
       '';
 

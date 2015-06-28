@@ -18,6 +18,19 @@ stdenv.mkDerivation {
     })
   ] ++ stdenv.lib.optional stdenv.isDarwin ./darwin-fix.patch;
 
+  postPatch = let pp =
+    fetchpatch {
+      name = "CVE-2015-1197.diff";
+      url = "https://marc.info/?l=oss-security&m=142289947619786&w=2";
+      sha256 = "0fr95bj416zfljv40fl1sh50059d18wdmfgaq8ad2fqi5cnbk859";
+    };
+    # one "<" and one "&" sign get mangled in the patch
+    in "cat ${pp} | sed 's/&lt;/</;s/&amp;/\\&/' | patch -p1";
+
+  preConfigure = if stdenv.isCygwin then ''
+    sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
+  '' else null;
+
   meta = {
     homepage = http://www.gnu.org/software/cpio/;
     description = "A program to create or extract from cpio archives";

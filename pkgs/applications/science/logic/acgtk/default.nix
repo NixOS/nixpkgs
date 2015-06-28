@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, dypgen, bolt, ansiterminal,
+{ stdenv, fetchurl, ocaml, findlib, dypgen, bolt, ansiterminal, camlp4,
   buildBytecode ? true,
   buildNative ? true,
   installExamples ? true,
@@ -22,10 +22,15 @@ stdenv.mkDerivation {
     sha256 = "1k1ldqg34bwmgdpmi9gry9czlsk85ycjxnkd25fhlf3mmgg4n9p6";
   };
 
-  buildInputs = [ ocaml findlib dypgen bolt ansiterminal ];
+  buildInputs = [ ocaml findlib dypgen bolt ansiterminal camlp4 ];
 
   patches = [ ./install-emacs-to-site-lisp.patch
               ./use-nix-ocaml-byteflags.patch ];
+
+  postPatch = stdenv.lib.optionalString (camlp4 != null) ''
+    substituteInPlace src/Makefile.master.in \
+      --replace "+camlp4" "${camlp4}/lib/ocaml/${getVersion ocaml}/site-lib/camlp4/"
+  '';
 
   # The bytecode executable is dependent on the dynamic library provided by
   # ANSITerminal. We can use the -dllpath flag of ocamlc (analogous to

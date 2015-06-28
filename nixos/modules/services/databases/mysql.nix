@@ -8,9 +8,7 @@ let
 
   mysql = cfg.package;
 
-  is55 = mysql.mysqlVersion == "5.5";
-
-  mysqldDir = if is55 then "${mysql}/bin" else "${mysql}/libexec";
+  atLeast55 = versionAtLeast mysql.mysqlVersion "5.5";
 
   pidFile = "${cfg.pidDir}/mysqld.pid";
 
@@ -24,7 +22,7 @@ let
     port = ${toString cfg.port}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
-    ${optionalString (cfg.replication.role == "slave" && !is55)
+    ${optionalString (cfg.replication.role == "slave" && !atLeast55)
     ''
       master-host = ${cfg.replication.masterHost}
       master-user = ${cfg.replication.masterUser}
@@ -75,7 +73,7 @@ in
       };
 
       pidDir = mkOption {
-        default = "/var/run/mysql";
+        default = "/run/mysqld";
         description = "Location of the file which stores the PID of the MySQL server";
       };
 
@@ -178,17 +176,22 @@ in
                 touch /tmp/mysql_init
             fi
 
-            mkdir -m 0700 -p ${cfg.pidDir}
+            mkdir -m 0755 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
+
+            # Make the socket directory
+            mkdir -p /run/mysqld
+            chmod 0755 /run/mysqld
+            chown -R ${cfg.user} /run/mysqld
           '';
 
-        serviceConfig.ExecStart = "${mysqldDir}/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
 
         postStart =
           ''
             # Wait until the MySQL server is available for use
             count=0
-            while [ ! -e /tmp/mysql.sock ]
+            while [ ! -e /run/mysqld/mysqld.sock ]
             do
                 if [ $count -eq 30 ]
                 then
@@ -222,7 +225,7 @@ in
                     fi
                   '') cfg.initialDatabases}
 
-                ${optionalString (cfg.replication.role == "slave" && is55)
+                ${optionalString (cfg.replication.role == "slave" && atLeast55)
                   ''
                     # Set up the replication master
 

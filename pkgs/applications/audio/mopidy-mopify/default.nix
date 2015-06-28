@@ -3,11 +3,11 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-mopify-${version}";
 
-  version = "0.1.6";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://github.com/dirkgroenen/mopidy-mopify/archive/${version}.tar.gz";
-    sha256 = "3581de6b0b42d2ece63bc153dcdba0594fbbeaacf695f2cd1e5d199670d83775";
+    sha256 = "0hhdss4i5436dj37pndxk81a4g3g8f6zqjyv04lhpqcww01290as";
   };
 
   propagatedBuildInputs = [ mopidy ];
@@ -16,7 +16,7 @@ pythonPackages.buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dirkgroenen/mopidy-mopify;
-    description = "A mopidy webclient based on the Spotify webbased interface.";
+    description = "A mopidy webclient based on the Spotify webbased interface";
     license = licenses.gpl3;
     maintainers = [ maintainers.Gonzih ];
   };

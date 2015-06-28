@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, freetype, yasm
+, aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
@@ -16,8 +17,8 @@
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
 , x264Support ? false, x264 ? null
-, jackaudioSupport ? false, jack2 ? null
-, pulseSupport ? false, pulseaudio ? null
+, jackaudioSupport ? false, libjack2 ? null
+, pulseSupport ? false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
@@ -43,8 +44,8 @@ assert lameSupport -> lame != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert x264Support -> x264 != null;
-assert jackaudioSupport -> jack2 != null;
-assert pulseSupport -> pulseaudio != null;
+assert jackaudioSupport -> libjack2 != null;
+assert pulseSupport -> libpulseaudio != null;
 assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 assert libjpegSupport -> libjpeg != null;
@@ -103,6 +104,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib;
     [ pkgconfig freetype ]
+    ++ optional aalibSupport aalib
     ++ optional fontconfigSupport fontconfig
     ++ optional fribidiSupport fribidi
     ++ optionals x11Support [ libX11 libXext mesa ]
@@ -114,10 +116,10 @@ stdenv.mkDerivation rec {
     ++ optional dvdnavSupport libdvdnav
     ++ optional bluraySupport libbluray
     ++ optional cddaSupport cdparanoia
-    ++ optional jackaudioSupport jack2
+    ++ optional jackaudioSupport libjack2
     ++ optionals amrSupport [ amrnb amrwb ]
     ++ optional x264Support x264
-    ++ optional pulseSupport pulseaudio
+    ++ optional pulseSupport libpulseaudio
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional lameSupport lame
     ++ optional vdpauSupport libvdpau
@@ -152,7 +154,7 @@ stdenv.mkDerivation rec {
       ${if speexSupport then "--enable-speex" else "--disable-speex"}
       ${if theoraSupport then "--enable-theora" else "--disable-theora"}
       ${if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc"}
-      ${if jackaudioSupport then "--enable-jack" else "--disable-jack"}
+      ${if jackaudioSupport then "" else "--disable-jack"}
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}

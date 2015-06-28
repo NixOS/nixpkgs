@@ -6,7 +6,7 @@ assert stdenv.system == "x86_64-linux";
 let
   curl_custom =
     stdenv.lib.overrideDerivation curl (args: { 
-      configureFlags = args.configureFlags ++ ["--with-ca-bundle=${cacert}/etc/ca-bundle.crt"] ; 
+      configureFlags = args.configureFlags ++ ["--with-ca-bundle=${cacert}/etc/ssl/certs/ca-bundle.crt"] ; 
     } );
 in
 stdenv.mkDerivation {

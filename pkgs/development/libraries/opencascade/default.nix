@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     cmakeFlags="$cmakeFlags -DINSTALL_DIR=$out -D3RDPARTY_TCL_DIR=${tcl} -D3RDPARTY_FREETYPE_DIR=${freetype}"
   '';
 
+  # https://bugs.freedesktop.org/show_bug.cgi?id=83631
+  NIX_CFLAGS_COMPILE = "-DGLX_GLXEXT_LEGACY";
+
   postInstall = ''
     mv $out/inc $out/include
     mkdir -p $out/share/doc/${name}

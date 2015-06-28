@@ -109,7 +109,7 @@ chmod +x "$out/bin/$crossConfig-ld"
 
 # Emit a setup hook.  Also store the path to the original GCC and
 # Glibc.
-test -n "$gcc" && echo $gcc > $out/nix-support/orig-gcc
+test -n "$gcc" && echo $gcc > $out/nix-support/orig-cc
 test -n "$libc" && echo $libc > $out/nix-support/orig-libc
 
 doSubstitute "$addFlags" "$out/nix-support/add-flags"

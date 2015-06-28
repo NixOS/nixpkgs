@@ -5,7 +5,7 @@
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
-, alsaLib, pulseaudio
+, alsaLib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
@@ -28,11 +28,11 @@
 # handle that.
 
 stdenv.mkDerivation rec {
-  name = "qmmp-0.8.2";
+  name = "qmmp-0.8.4";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "1vwjy3bv1gj6k5kqkhw2q7aspashw6x4lxccl28iydjfzk7d7cd4";
+    sha256 = "1ld69xypyak3lzwmfvzbxsyd4fl841aaq0gmkfa7jpavbdlggydf";
   };
 
   buildInputs =
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
-      alsaLib pulseaudio
+      alsaLib libpulseaudio
       # effect plugins
       libsamplerate
     ];

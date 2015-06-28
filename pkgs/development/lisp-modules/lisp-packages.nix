@@ -20,7 +20,7 @@ let lispPackages = rec {
   clx = buildLispPackage rec {
     baseName = "clx";
     version = "git-20150117";
-    description = "An implementation of the X Window System protocol in Lisp.";
+    description = "An implementation of the X Window System protocol in Lisp";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -36,11 +36,11 @@ let lispPackages = rec {
     version = "darcs-2014-11-01";
     description = "Iteration package for Common Lisp";
     deps = [];
-    src = pkgs.fetchdarcs {
-      url = "http://common-lisp.net/project/iterate/darcs/iterate";
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
+      url = "https://common-lisp.net/project/iterate/darcs/iterate";
       sha256 = "0gm05s3laiivsqgqjfj1rkz83c2c0jyn4msfgbv6sz42znjpam25";
       context = ./iterate.darcs-context;
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ssl/certs/ca-bundle.crt";}));
     overrides = x: {
       configurePhase="buildPhase(){ true; }";
     };
@@ -52,7 +52,7 @@ let lispPackages = rec {
     description = "A collection of portable public domain utilities";
     deps = [];
     src = pkgs.fetchgit {
-      url = "git://common-lisp.net/projects/alexandria/alexandria.git";
+      url = "https://gitlab.common-lisp.net/alexandria/alexandria.git";
       sha256 = "1d981a243f9d4d3c9fd86cc47698050507ff615b87b9a710449abdb4234e501b";
       rev = ''2b1eb4067fb34bc501e527de75d09166a8ba9ceb'';
     };
@@ -98,7 +98,7 @@ let lispPackages = rec {
   clx-truetype = buildLispPackage rec {
     baseName = "clx-truetype";
     version = "git-20141112";
-    description = "clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.";
+    description = "A pure Common Lisp solution for antialiased TrueType font rendering using CLX and the XRender extension";
     deps = [cl-fad cl-store cl-vectors clx trivial-features zpb-ttf];
     # Source type: git
     src = pkgs.fetchgit {
@@ -178,7 +178,7 @@ let lispPackages = rec {
   trivial-features = buildLispPackage rec {
     baseName = "trivial-features";
     version = "git-20141112";
-    description = "Ensures consistent *FEATURES* across multiple CLs.";
+    description = "Ensures consistent *FEATURES* across multiple CLs";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -190,20 +190,23 @@ let lispPackages = rec {
 
   clsql = buildLispPackage rec {
     baseName = "clsql";
-    version = "git-20141112";
+    version = "git-20150514";
     description = "Common Lisp SQL Interface library";
     deps = [uffi];
-    buildInputs = [pkgs.mysql pkgs.zlib];
+    buildInputs = [pkgs.mysql.lib pkgs.zlib];
     # Source type: git
     src = pkgs.fetchgit {
-      url = ''http://git.b9.com/clsql.git'';
-      sha256 = "dacd56bc9a0348e8101184bf154b971407a98f3a753d7cce34c7a44b4b19f8fd";
-      rev = ''180b52cb686a87487e12e87b13bafe131e6c3bef'';
+      url =
+        #''http://git.b9.com/clsql.git''
+	"http://repo.or.cz/r/clsql.git"
+	;
+      sha256 = "1wzc7qsnq8hk0j0h9jmj4xczmh7h6njafwab2zylh8wxmfzwp2nw";
+      rev = ''a646f558b54191eda1d64f2926eee7b4fa763f89'';
     };
     overrides = x:{
       preConfigure = ''
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql}/include/mysql"
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql}/lib/mysql"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${pkgs.mysql.lib}/include/mysql"
+        export NIX_LDFLAGS="$NIX_LDFLAGS -L${pkgs.mysql.lib}/lib/mysql"
       '';
     };
   };
@@ -223,14 +226,14 @@ let lispPackages = rec {
 
   query-fs = buildLispPackage rec {
     baseName = "query-fs";
-    version = "git-20141113";
+    version = "git-20150523";
     description = "High-level virtual FS using CL-Fuse-Meta-FS to represent results of queries";
     deps = [bordeaux-threads cl-fuse cl-fuse-meta-fs cl-ppcre command-line-arguments iterate trivial-backtrace];
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/fb08af68/query-fs'';
-      sha256 = "4ed66f255e50d2c9ea9f0b3fbaa92bde9b8acf6a5fafb0d7f12b254be9de99e9";
-      rev = ''831f0180967f09b1dd345fef82144f48334279c3'';
+      sha256 = "19h6hscza7p93bc7jvb6ya7ghg96dr1c1v4imlxpjqfdhhdpxsq6";
+      rev = ''0f28e3f31a4cd3636a8edb346230482e68af86c2'';
     };
     overrides = x: {
       linkedSystems = [];
@@ -238,7 +241,7 @@ let lispPackages = rec {
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
 	export HOME=$PWD
 	build-with-lisp.sh sbcl \
-	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/:\2/g')" \
+	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
 	  "$out/bin/query-fs" \
 	  "(query-fs:run-fs-with-cmdline-args)"
       '';
@@ -280,7 +283,7 @@ let lispPackages = rec {
   babel = buildLispPackage rec {
     baseName = "babel";
     version = "git-20141113";
-    description = "Babel, a charset conversion library.";
+    description = "A charset conversion library";
     deps = [alexandria trivial-features];
     # Source type: git
     src = pkgs.fetchgit {
@@ -308,22 +311,22 @@ let lispPackages = rec {
     description = "A UTF-8 encoding library";
     deps = [];
     # Source type: darcs
-    src = pkgs.fetchdarcs {
+    src = (pkgs.lib.overrideDerivation (pkgs.fetchdarcs {
       url = ''http://common-lisp.net/project/trivial-utf-8/darcs/trivial-utf-8/'';
       sha256 = "1jz27gz8gvqdmvp3k9bxschs6d5b3qgk94qp2bj6nv1d0jc3m1l1";
-    };
+    }) (x: {SSL_CERT_FILE=pkgs.cacert + "/etc/ssl/certs/ca-bundle.crt";}));
   };
 
   cl-fuse-meta-fs = buildLispPackage rec {
     baseName = "cl-fuse-meta-fs";
-    version = "git-20141113";
+    version = "git-20150523";
     description = "CFFI bindings to FUSE (Filesystem in user space)";
     deps = [bordeaux-threads cl-fuse iterate pcall];
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/fb08af68/cl-fuse-meta-fs'';
-      sha256 = "259303effea61baf293ffc5d080cb071ef15bed8fa1c76f0c1631f68d2aa3c85";
-      rev = ''d3d332471ce9330e3eaebf9d6cecdd2014c3599b'';
+      sha256 = "0cpxwsc0ma1ypl54n3n37wbgdxhz5j67h28q6rhghjn96dgy4ac9";
+      rev = ''6ab92ebbb8e6f1f69d179214032915e3744d8c03'';
     };
   };
 
@@ -408,7 +411,7 @@ let lispPackages = rec {
   trivial-gray-streams = buildLispPackage rec {
     baseName = "trivial-gray-streams";
     version = "git-20141113";
-    description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams).";
+    description = "Compatibility layer for Gray Streams (see http://www.cliki.net/Gray%20streams)";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -421,7 +424,7 @@ let lispPackages = rec {
   cl-ssl = buildLispPackage rec {
     baseName = "cl+ssl";
     version = "git-20141113";
-    description = "Common Lisp interface to OpenSSL.";
+    description = "Common Lisp interface to OpenSSL";
     deps = [bordeaux-threads cffi flexi-streams trivial-garbage trivial-gray-streams];
     # Source type: git
     src = pkgs.fetchgit {
@@ -448,7 +451,7 @@ let lispPackages = rec {
   trivial-garbage = buildLispPackage rec {
     baseName = "trivial-garbage";
     version = "git-20141113";
-    description = "Portable finalizers, weak hash-tables and weak pointers.";
+    description = "Portable finalizers, weak hash-tables and weak pointers";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -461,7 +464,7 @@ let lispPackages = rec {
   cl-base64 = buildLispPackage rec {
     baseName = "cl-base64";
     version = "git-20141113";
-    description = "Base64 encoding and decoding with URI support.";
+    description = "Base64 encoding and decoding with URI support";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {
@@ -547,5 +550,32 @@ let lispPackages = rec {
       cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
     };
   };
+
+  md5 = buildLispPackage rec {
+    baseName = "md5";
+    version = "git-20150415";
+    description = "The MD5 Message-Digest Algorithm RFC 1321";
+    deps = [];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/pmai/md5'';
+      sha256 = "f64d7e36c54da649bb1d574b92cdb907291224fb3d8565b3708703a81820367b";
+      rev = ''9d6f82f7121c87fb7e3b314987ba93900d300dc6'';
+    };
+  };
+
+  clx-xkeyboard = buildLispPackage rec {
+    baseName = "clx-xkeyboard";
+    version = "git-20150523";
+    description = "CLX support for X Keyboard extensions";
+    deps = [clx];
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = ''https://github.com/filonenko-mikhail/clx-xkeyboard'';
+      sha256 = "11b34da7d354a709a24774032e85a8947be023594f8a333eaff6d4aa79f2b3db";
+      rev = ''11455d36283ef31c498bd58ffebf48c0f6b86ea6'';
+    };
+  };
+
 };
 in lispPackages

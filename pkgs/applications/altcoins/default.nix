@@ -2,8 +2,8 @@
 
 rec {
 
-  bitcoin  = callPackage ./bitcoin.nix { openssl = pkgs.openssl_1_0_1j; withGui = true; };
-  bitcoind = callPackage ./bitcoin.nix { openssl = pkgs.openssl_1_0_1j; withGui = false; };
+  bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
+  bitcoind = callPackage ./bitcoin.nix { withGui = false; };
 
   darkcoin  = callPackage ./darkcoin.nix { withGui = true; };
   darkcoind = callPackage ./darkcoin.nix { withGui = false; };
@@ -19,4 +19,8 @@ rec {
 
   namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
   namecoind = callPackage ./namecoind.nix { };
+
+  primecoin  = callPackage ./primecoin.nix { withGui = true; };
+  primecoind = callPackage ./primecoin.nix { withGui = false; };
+
 }

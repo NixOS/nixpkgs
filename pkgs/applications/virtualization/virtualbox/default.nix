@@ -5,7 +5,7 @@
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
 , enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
-, pulseSupport ? false, pulseaudio ? null
+, pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 }:
 
@@ -14,7 +14,7 @@ with stdenv.lib;
 let
   buildType = "release";
 
-  version = "4.3.20"; # changes ./guest-additions as well
+  version = "4.3.28"; # changes ./guest-additions as well
 
   forEachModule = action: ''
     for mod in \
@@ -35,13 +35,13 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "96996";
+  extpackRevision = "100309";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
     # Tip: see http://dlc.sun.com.edgesuite.net/virtualbox/4.3.10/SHA256SUMS
-    sha256 = "7e1253f7013e9cdc84a614a0db38b40de7bbd330cb5b85bd3ef3de213773450d";
+    sha256 = "72e101d9dc5eabeb76d1ab5bd6d2f817a11c89adfe8bb72cc5d614a2eef532d1";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) by downloading the related binaries from:
@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "1484f8e9993ec4fe3892c5165db84d238713d2506e147ed8236541ece642e965";
+    sha256 = "e157ab76d1958ae2c56b2a3875194fbff3de82486ad0e30032fd5bd772297c31";
   };
 
   buildInputs =
@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
       pkgconfig which libXmu nukeReferences ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python
-    ++ optional pulseSupport pulseaudio;
+    ++ optional pulseSupport libpulseaudio;
 
   prePatch = ''
     set -x

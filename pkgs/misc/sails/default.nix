@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake pkgconfig gtk3 librsvg ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   meta = with stdenv.lib; {
     description = "Simulator for autonomous sailing boats";
     homepage = https://github.com/kragniz/sails;
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
       Sails is a simulator designed to test the AI of autonomous sailing
       robots. It emulates the basic physics of sailing a small single sail
       boat'';
-    maintainers = maintainers.kragniz;
+    maintainers = with maintainers; [ kragniz ];
     platforms = platforms.all;
   };
 }

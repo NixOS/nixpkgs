@@ -7,6 +7,10 @@
 stdenv.mkDerivation rec {
   name = "notmuch-0.19";
 
+  passthru = {
+    pythonSourceRoot = "${name}/bindings/python";
+  };
+
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
     sha256 = "1szf6c44g209pcjq5nvfhlp3nzcm3lrcwv4spsxmwy13hiaccvrr";

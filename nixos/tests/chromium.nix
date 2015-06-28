@@ -9,6 +9,8 @@ import ./make-test.nix (
 }: rec {
   name = "chromium";
 
+  enableOCR = true;
+
   machine.imports = [ ./common/x11.nix ];
   machine.virtualisation.memorySize = 1024;
 
@@ -106,10 +108,11 @@ import ./make-test.nix (
         "ulimit -c unlimited; ".
         "$pkg/bin/chromium $args \"$url\" & disown"
       );
+      $machine->waitForText(qr/Type to search or enter a URL to navigate/);
       $machine->waitUntilSucceeds("${xdo "check-startup" ''
         search --sync --onlyvisible --name "startup done"
         # close first start help popup
-        key Escape
+        key -delay 1000 Escape
         windowfocus --sync
         windowactivate --sync
       ''}");

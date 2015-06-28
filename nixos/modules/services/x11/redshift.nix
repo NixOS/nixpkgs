@@ -14,24 +14,24 @@ in {
 
     services.redshift.latitude = mkOption {
       description = "Your current latitude";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     services.redshift.longitude = mkOption {
       description = "Your current longitude";
-      type = types.uniq types.string;
+      type = types.str;
     };
 
     services.redshift.temperature = {
       day = mkOption {
         description = "Colour temperature to use during day time";
         default = 5500;
-        type = types.uniq types.int;
+        type = types.int;
       };
       night = mkOption {
         description = "Colour temperature to use during night time";
         default = 3700;
-        type = types.uniq types.int;
+        type = types.int;
       };
     };
 
@@ -39,12 +39,12 @@ in {
       day = mkOption {
         description = "Screen brightness to apply during the day (between 0.1 and 1.0)";
         default = "1";
-        type = types.uniq types.string;
+        type = types.str;
       };
       night = mkOption {
         description = "Screen brightness to apply during the night (between 0.1 and 1.0)";
         default = "1";
-        type = types.uniq types.string;
+        type = types.str;
       };
     };
   };

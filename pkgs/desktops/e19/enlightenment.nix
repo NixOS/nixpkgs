@@ -3,16 +3,16 @@
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.19.3";
+  version = "0.19.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1myv463agfzgva7fv0y74lk5sxfpf6mxykkc37cb7dyn3cxchdan";
+    sha256 = "0j66x7x76fbgqfw6fi77v8qy50slw3jnsq3vvs82rrfvniabm8wc";
   };
   buildInputs = [ pkgconfig e19.efl e19.elementary xlibs.libXdmcp xlibs.libxcb
     xlibs.xcbutilkeysyms xlibs.libXrandr libffi pam alsaLib luajit bzip2
     libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  NIX_CFLAGS_COMPILE = [ "-I${e19.efl}/include/eo-1" "-I${e19.efl}/include/emile-1" ];
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="-I${e19.efl}/include/eo-1 -I${e19.efl}/include/ecore-imf-1 -I${e19.efl}/include/ethumb-client-1 -I${e19.efl}/include/ethumb-1 $NIX_CFLAGS_COMPILE"
     export USER_SESSION_DIR=$prefix/lib/systemd/user
 
     substituteInPlace src/modules/xkbswitch/e_mod_parse.c \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = http://enlightenment.org/;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ];
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
   };

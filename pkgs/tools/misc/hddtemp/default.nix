@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     description = "Tool for displaying hard disk temperature";
     homepage = https://savannah.nongnu.org/projects/hddtemp/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

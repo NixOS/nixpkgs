@@ -6,7 +6,7 @@ assert zlibSupport -> zlib != null;
 
 let
 
-  majorVersion = "2.5";
+  majorVersion = "2.6";
   version = "${majorVersion}.0";
   libPrefix = "pypy${majorVersion}";
 
@@ -18,7 +18,7 @@ let
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-${version}.tar.bz2";
-      sha256 = "126zrsx6663n9w60018mii1z7cqb87iq9irnhp8z630mldallr4d";
+      sha256 = "0xympj874cnjpxj68xm5gllq2f8bbvz8hr0md8mh1yd6fgzzxibh";
     };
 
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl x11 libX11 makeWrapper ]
@@ -51,7 +51,7 @@ let
       # tkinter hints
       substituteInPlace lib_pypy/_tkinter/tklib.py \
         --replace "'/usr/include/tcl'" "'${tk}/include', '${tcl}/include'" \
-        --replace "linklibs=['tcl', 'tk']" "linklibs=['tcl8.5', 'tk8.5']" \
+        --replace "linklibs=['tcl', 'tk']" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
       sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3.py

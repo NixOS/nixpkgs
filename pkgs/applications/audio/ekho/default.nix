@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, libsndfile, pulseaudio
+, libsndfile, libpulseaudio
 }:
 
 let
@@ -35,5 +35,5 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libsndfile pulseaudio ];
+  buildInputs = [ libsndfile libpulseaudio ];
 }

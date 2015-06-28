@@ -2,14 +2,14 @@
 , inotifyTools, clucene_core_2, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.2.15";
+  name = "dovecot-2.2.16";
 
   buildInputs = [perl openssl bzip2 zlib openldap clucene_core_2 sqlite]
     ++ stdenv.lib.optionals (stdenv.isLinux) [ systemd pam inotifyTools ];
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.2/${name}.tar.gz";
-    sha256 = "17rr7krfvyk706j12y9wy6nf7wh5vppqjrgxjdf66z9nw9lpf3ni";
+    sha256 = "1w6gg4h9mxg3i8faqpmgj19imzyy001b0v8ihch8ma3zl63i5kjn";
   };
 
   preConfigure = ''

@@ -32,11 +32,16 @@ stdenv.mkDerivation {
     )
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/gsettings-schemas/$name
+    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/finalterm" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_icon_theme}/share:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with lib; {

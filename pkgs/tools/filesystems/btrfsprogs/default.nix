@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, attr, acl, zlib, libuuid, e2fsprogs, lzo
+{ stdenv, fetchurl, pkgconfig, attr, acl, zlib, libuuid, e2fsprogs, lzo
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
-let version = "3.18.2"; in
+let version = "4.1"; in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "1v6zqac6c4xfkyd53wc3cfqqyb5w7zry3l2yl4rgspqy416xp3fx";
+    sha256 = "1s5pzvi30mivxgbkx7nbqn38pfiw20rdnd6xiqsyfj7rpffzzimb";
   };
 
   buildInputs = [
-    attr acl zlib libuuid e2fsprogs lzo
+    pkgconfig attr acl zlib libuuid e2fsprogs lzo
     asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
 
@@ -28,4 +28,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin wkennington ];
     platforms = platforms.linux;
   };
-}
+} // (if stdenv.isArm then {
+  # gcc bug with -O1 on ARM
+  patchPhase = "sed -i s/-O1/-O2/ configure";
+} else {}))

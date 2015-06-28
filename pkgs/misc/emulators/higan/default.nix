@@ -3,7 +3,7 @@
 , libX11, libXv
 , udev
 , mesa, SDL
-, libao, openal, pulseaudio
+, libao, openal, libpulseaudio
 , profile ? "performance" # Options: accuracy, balanced, performance
 , guiToolkit ? "gtk" # can be gtk or qt4
 , gtk ? null, qt4 ? null }:
@@ -11,6 +11,7 @@
 assert guiToolkit == "gtk" || guiToolkit == "qt4";
 assert (guiToolkit == "gtk" -> gtk != null) || (guiToolkit == "qt4" -> qt4 != null);
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
@@ -18,13 +19,13 @@ stdenv.mkDerivation rec {
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
-    urls = [ "http://byuu.org/files/${sourceName}.tar.xz" "http://byuu.net/files/${sourceName}.tar.xz" ];
+    urls = [ "http://files.byuu.org/download/${sourceName}.tar.xz" ];
     sha256 = "06qm271pzf3qf2labfw2lx6k0xcd89jndmn0jzmnc40cspwrs52y";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
-  buildInputs = with stdenv.lib;
-  [ pkgconfig libX11 libXv udev mesa SDL libao openal pulseaudio ]
+  buildInputs =
+  [ pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio ]
   ++ optionals (guiToolkit == "gtk") [ gtk ]
   ++ optionals (guiToolkit == "qt4") [ qt4 ];
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/higan-init.sh
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "An open-source, cycle-accurate Nintendo multi-system emulator";
     longDescription = ''
       Higan (formerly bsnes) is a Nintendo multi-system emulator.

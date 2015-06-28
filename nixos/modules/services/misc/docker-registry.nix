@@ -29,8 +29,8 @@ in {
 
     storagePath = mkOption {
       type = types.path;
-      default = "/var/lib/docker/registry";
-      description = "Docker registry strorage path.";
+      default = "/var/lib/docker-registry";
+      description = "Docker registry storage path.";
     };
 
     extraConfig = mkOption {
@@ -61,14 +61,9 @@ in {
         User = "docker-registry";
         Group = "docker";
         PermissionsStartOnly = true;
+        WorkingDirectory = cfg.storagePath;
       };
 
-      preStart = ''
-        mkdir -p ${cfg.storagePath}
-        if [ "$(id -u)" = 0 ]; then
-          chown -R docker-registry:docker ${cfg.storagePath}
-        fi
-      '';
       postStart = ''
         until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.host}:${toString cfg.port}/'; do
           sleep 1;
@@ -77,6 +72,10 @@ in {
     };
 
     users.extraGroups.docker.gid = mkDefault config.ids.gids.docker;
-    users.extraUsers.docker-registry.uid = config.ids.uids.docker-registry;
+    users.extraUsers.docker-registry = {
+      createHome = true;
+      home = cfg.storagePath;
+      uid = config.ids.uids.docker-registry;
+    };
   };
 }

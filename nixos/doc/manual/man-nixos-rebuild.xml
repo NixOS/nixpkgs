@@ -1,7 +1,7 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xi="http://www.w3.org/2001/XInclude">
-  
+
 <refmeta>
   <refentrytitle><command>nixos-rebuild</command></refentrytitle>
   <manvolnum>8</manvolnum>
@@ -22,7 +22,8 @@
       <arg choice='plain'><option>boot</option></arg>
       <arg choice='plain'><option>test</option></arg>
       <arg choice='plain'><option>build</option></arg>
-      <arg choice='plain'><option>dry-run</option></arg>
+      <arg choice='plain'><option>dry-build</option></arg>
+      <arg choice='plain'><option>dry-activate</option></arg>
       <arg choice='plain'><option>build-vm</option></arg>
       <arg choice='plain'><option>build-vm-with-bootloader</option></arg>
     </group>
@@ -114,10 +115,22 @@ $ nix-build /path/to/nixpkgs/nixos -A system
   </varlistentry>
 
   <varlistentry>
-    <term><option>dry-run</option></term>
+    <term><option>dry-build</option></term>
     <listitem>
-      <para>Simply show what store paths would be built or downloaded
-      by any of the operations above.</para>
+      <para>Show what store paths would be built or downloaded by any
+      of the operations above, but otherwise do nothing.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>dry-activate</option></term>
+    <listitem>
+      <para>Build the new configuration, but instead of activating it,
+      show what changes would be performed by the activation (i.e. by
+      <command>nixos-rebuild test</command>). For
+      instance, this command will print which systemd units would be
+      restarted. The list of changes is not guaranteed to be
+      complete.</para>
     </listitem>
   </varlistentry>
 

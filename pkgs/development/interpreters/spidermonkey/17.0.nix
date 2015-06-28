@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
 
+    # Test broken on ARM. Fedora disables it.
+    # https://lists.fedoraproject.org/pipermail/scm-commits/Week-of-Mon-20130617/1041155.html
+    echo -e '#!${stdenv.shell}\nexit 0' > config/find_vanilla_new_calls
+
     paxmark m shell/js17
     paxmark mr jsapi-tests/jsapi-tests
   '';

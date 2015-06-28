@@ -30,8 +30,8 @@
 , nspr
 , nss
 , pango
-, heimdal
-, pulseaudio
+, libheimdal
+, libpulseaudio
 , systemd
 }:
 
@@ -102,8 +102,8 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
-      heimdal
-      pulseaudio
+      libheimdal
+      libpulseaudio
       systemd
     ] + ":" + stdenv.lib.makeSearchPath "lib64" [
       stdenv.cc.cc
@@ -122,7 +122,7 @@ stdenv.mkDerivation {
       ln -s "$prefix/usr/lib/firefox-bin-${version}/firefox" "$out/bin/"
 
       for executable in \
-        firefox mozilla-xremote-client firefox-bin plugin-container \
+        firefox firefox-bin plugin-container \
         updater crashreporter webapprt-stub
       do
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -130,8 +130,14 @@ stdenv.mkDerivation {
       done
 
       for executable in \
-        firefox mozilla-xremote-client firefox-bin plugin-container \
-        updater crashreporter webapprt-stub libxul.so
+        firefox firefox-bin plugin-container \
+        updater crashreporter webapprt-stub \
+        components/libdbusservice.so components/libmozgnome.so \
+        gmp-clearkey/0.1/libclearkey.so \
+        browser/components/libbrowsercomps.so \
+        libnssdbm3.so libsmime3.so libxul.so  libnss3.so libplc4.so \
+        libfreebl3.so libmozsqlite3.so libmozalloc.so libnspr4.so libssl3.so \
+        libsoftokn3.so libnssutil3.so libnssckbi.so libplds4.so
       do
         patchelf --set-rpath "$libPath" \
           "$out/usr/lib/firefox-bin-${version}/$executable"
@@ -143,7 +149,7 @@ stdenv.mkDerivation {
       [Desktop Entry]
       Type=Application
       Exec=$out/bin/firefox
-      Icon=$out/lib/firefox-bin-${version}/chrome/icons/default/default256.png
+      Icon=$out/usr/lib/firefox-bin-${version}/browser/icons/mozicon128.png
       Name=Firefox
       GenericName=Web Browser
       Categories=Application;Network;

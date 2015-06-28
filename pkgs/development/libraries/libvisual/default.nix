@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     description = "An abstraction library for audio visualisations";
     homepage = "http://sourceforge.net/projects/libvisual/";
     license = stdenv.lib.licenses.lgpl21Plus;
-    platform = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

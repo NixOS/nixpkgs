@@ -25,13 +25,12 @@
 
 let
   v8 = v8_3_16_14;
-  mysql = (import <nixpkgs> {}).mysql;
 
 in
 
 {
   charlock_holmes = attrs: {
-    buildInputs = [ which icu ];
+    buildInputs = [ which icu zlib ];
   };
 
   ffi = attrs: {
@@ -57,7 +56,7 @@ in
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql zlib openssl ];
+    buildInputs = [ mysql.lib zlib openssl ];
   };
 
   ncursesw = attrs: {

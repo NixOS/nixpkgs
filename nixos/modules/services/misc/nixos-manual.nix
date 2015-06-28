@@ -3,7 +3,7 @@
 # of the virtual consoles.  The latter is useful for the installation
 # CD.
 
-{ config, lib, pkgs, baseModules, ... } @ extraArgs:
+{ config, lib, pkgs, baseModules, ... }:
 
 with lib;
 
@@ -14,11 +14,12 @@ let
   versionModule =
     { system.nixosVersionSuffix = config.system.nixosVersionSuffix;
       system.nixosRevision = config.system.nixosRevision;
+      nixpkgs.system = config.nixpkgs.system;
     };
 
   eval = evalModules {
     modules = [ versionModule ] ++ baseModules;
-    args = (removeAttrs extraArgs ["config" "options"]) // { modules = [ ]; };
+    args = (config._module.args) // { modules = [ ]; };
   };
 
   manual = import ../../../doc/manual {

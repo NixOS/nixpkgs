@@ -6,8 +6,9 @@
 with lib;
 
 let
+  parentConfig = config;
 
-  pamOpts = args: {
+  pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
 
     options = {
 
@@ -32,6 +33,16 @@ let
         description = ''
           If set, root doesn't need to authenticate (e.g. for the
           <command>useradd</command> service).
+        '';
+      };
+
+      u2fAuth = mkOption {
+        default = config.security.pam.enableU2F;
+        type = types.bool;
+        description = ''
+          If set, users listed in
+          <filename>~/.yubico/u2f_keys</filename> are able to log in
+          with the associated U2F key.
         '';
       };
 
@@ -180,8 +191,8 @@ let
 
     };
 
-    config = let cfg = args.config; in {
-      name = mkDefault args.name;
+    config = {
+      name = mkDefault name;
       setLoginUid = mkDefault cfg.startSession;
       limits = mkDefault config.security.pam.loginLimits;
 
@@ -208,10 +219,14 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
+          ${optionalString cfg.u2fAuth
+              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${optionalString cfg.unixAuth
-              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth"}
+              "auth ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth"}
+          ${optionalString config.security.pam.enableEcryptfs
+              "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString cfg.oathAuth
@@ -223,9 +238,11 @@ let
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
             auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
           ''}
-          auth required   pam_deny.so
+          ${optionalString (! config.security.pam.enableEcryptfs) "auth required pam_deny.so"}
 
           # Password management.
+          ${optionalString config.security.pam.enableEcryptfs
+              "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           password requisite pam_unix.so nullok sha512
           ${optionalString config.users.ldap.enable
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
@@ -245,6 +262,8 @@ let
               "session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=/etc/skel umask=0022"}
           ${optionalString cfg.updateWtmp
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
+          ${optionalString config.security.pam.enableEcryptfs
+              "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
@@ -357,6 +376,20 @@ in
       '';
     };
 
+    security.pam.enableU2F = mkOption {
+      default = false;
+      description = ''
+        Enable the U2F PAM module.
+      '';
+    };
+
+    security.pam.enableEcryptfs = mkOption {
+      default = false;
+      description = ''
+        Enable eCryptfs PAM module (mounting ecryptfs home directory on login).
+      '';
+    };
+
     users.motd = mkOption {
       default = null;
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
@@ -377,7 +410,12 @@ in
       ++ optional config.users.ldap.enable pam_ldap
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
-      ++ optionals config.security.pam.enableOATH [ pkgs.oathToolkit ];
+      ++ optionals config.security.pam.enableOATH [ pkgs.oathToolkit ]
+      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
+      ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
+
+    security.setuidPrograms =
+        optionals config.security.pam.enableEcryptfs [ "mount.ecryptfs_private" "umount.ecryptfs_private" ];
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;

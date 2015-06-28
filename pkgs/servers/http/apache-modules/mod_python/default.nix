@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install.patch ];
 
+  postPatch = ''
+    substituteInPlace dist/version.sh \
+        --replace 'GIT=`git describe --always`' "" \
+        --replace '-$GIT' ""
+  '';
+
   preInstall = ''
     installFlags="LIBEXECDIR=$out/modules $installFlags"
     mkdir -p $out/modules $out/bin

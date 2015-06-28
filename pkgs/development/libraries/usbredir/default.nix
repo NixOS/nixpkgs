@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "usbredir-${version}";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchurl {
     url = "http://spice-space.org/download/usbredir/${name}.tar.bz2";
-    sha256 = "028184960044ea4124030000b3c55a35c3238835116e3a0fbcaff449df2c8edf";
+    sha256 = "1ah64271r83lvh8hrpkxzv0iwpga1wkrfkx4rkljpijx5dqs0qqa";
   };
 
   buildInputs = [ pkgconfig libusb ];

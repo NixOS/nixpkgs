@@ -1,20 +1,17 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchgit, kernel }:
 
 assert stdenv.lib.versionAtLeast kernel.version "3.4";  # fails on 3.2
-assert builtins.substring 0 4 kernel.version != "3.12";
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${version}";
   name = "${pname}-${kernel.version}";
-  version = "2.6.0-rc1"; # "git describe bf2ba318fff"
+  version = "2.6.0-5-g1b2a542";
 
-  src = fetchurl {
-    url = "https://github.com/lttng/lttng-modules/archive/v${version}.tar.gz";
-    sha256 = "01gha02ybbzr86v6s6bqn649jiw5k89kb363b9s1iv8igrdlzhl1";
+  src = fetchgit {
+    url = "https://github.com/lttng/lttng-modules.git";
+    rev = "1b2a5429de815c95643df2eadf91253909708728";
+    sha256 = "0zccaiadnk0xl6xrqaqlg9rpkwjgbq2fiyc3psylzqimnx0ydxc2";
   };
-
-  # from upstream ML, should be in the next release
-  patches = [ ./build-fix.patch ./6f0af2643c40b57280796eaa4fe60ce4f678b6dc.patch ];
 
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

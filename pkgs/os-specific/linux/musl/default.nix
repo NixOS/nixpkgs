@@ -2,17 +2,21 @@
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.1.4";
+  version = "1.1.10";
 
   src = fetchurl {
     url    = "http://www.musl-libc.org/releases/${name}.tar.gz";
-    sha256 = "1kgmi17zpzgjhywmmqxazj8qsx8cf9siwa65jqd2i6rs7jnnb335";
+    sha256 = "0z4b3j1r0v4zr3v1cpl1v56zx6w8nq1y3wbs8x1zg87pqyqykfs5";
   };
 
   enableParallelBuilding = true;
-  configurePhase = ''
-    ./configure --enable-shared --enable-static --prefix=$out --syslibdir=$out/lib
-  '';
+
+  configureFlags = [
+    "--enable-shared"
+    "--enable-static"
+  ];
+
+  dontDisableStatic = true;
 
   meta = {
     description = "An efficient, small, quality libc implementation";

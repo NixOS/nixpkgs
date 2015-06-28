@@ -1,143 +1,189 @@
-{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype, alsaLib, openjdk, cacert, perl } :
+{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype
+, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
+
+, minimal ? false } :
 let
-  update = "31";
-  build = "13";
-  baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
+  update = "40";
+  build = "27";
+  baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u40";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "824b28c554ce32edbdaa77cc4f21f8ed57542c74c8748b89cd06be43a1537b34";
+             sha256 = "0ra05jngvvy2g1da5b9anrp86m812g2wlkxpijc82kxv6c3h6g28";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "3e09a644d2fb38970acf78c72bc201c031d43574b5a3f7e00bec1b11bffec9c4";
+             sha256 = "0r9zdq13kgqqm8rgr36qf03h23psxcwzvdqffsncd4jvbfap3n5f";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "485b1a88b4b44b468e96211de238a5eed80f7472f91977fc27e2f443a8ab8ed3";
+             sha256 = "07v3z38v5fdsx3g28c4pkdq76cdmnc4qflf1wb3lz46lhy230hkd";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "47b07945d3f534e6b87dc273676b8bcb493292e8769667493bb5febfb5c9f347";
+             sha256 = "0y20468f2yi14lijbd732f2mlgrn718pyfji3279l2rm4ad7r7pl";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "b3801935199973cc02df02ac2f2587ff0f1989f98af5bf6fe46520a8108c8d6a";
+             sha256 = "1sgfxmkq6z3vj9yq9kszr42b1ijvsknlss353jpcmyr1lljhyvfg";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "04bb35fd8b071f65014fa1d3b9816886b88e06548eeda27181993b80efb6a0bf";
+             sha256 = "08p3657d0871pz0g5fg157az9q38r5h2zs49dm7512sc9qrn5c06";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "74bb7a376fa706e4283e235caebbcf9736974a6a4cf97b8c8335d389581965e2";
+             sha256 = "1f1vlrvlvnjbyh8d168smizvmkcm076zc496sxk6njqamby16ip2";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "2fbdcb016506de4e86db5813c78b28382df5b601f0e73ffd5465c12519b75fd3";
+             sha256 = "1llf3l4483kd8m1a77n7y9fgvm6fa63nim3qhp5z4gnw68ldbhra";
           };
-in
-stdenv.mkDerivation {
-  name = "openjdk-8u${update}b${build}";
-  srcs = [jdk8 langtools hotspot corba jdk jaxws jaxp nashorn];
-  outputs = [ "out" "jre" ];
-  buildInputs = [ cpio file which unzip zip
-                  xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
-                  xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
-                  cups freetype alsaLib openjdk perl ];
-  setSourceRoot = ''
-    sourceRoot="jdk8u-jdk8u${update}-b${build}";
-  '';
-  prePatch = ''
-    # despite --with-override-jdk the build still searchs here
-    ln -s "../jdk-${repover}" "jdk";
-    ln -s "../hotspot-${repover}" "hotspot";
-  '';
-  patches = [
-    ./fix-java-home.patch
-    ./read-truststore-from-env-jdk8.patch
-    ./currency-date-range-jdk8.patch
-    ./nonreparenting-wm.patch
-  ];
-  preConfigure = ''
-    chmod +x configure
-    substituteInPlace configure --replace /bin/bash "$shell"
-    substituteInPlace ../hotspot-${repover}/make/linux/adlc_updater --replace /bin/sh "$shell"
-  '';
-  configureFlags = [
-    "--with-freetype=${freetype}"
-    "--with-override-langtools=../langtools-${repover}"
-    "--with-override-hotspot=../hotspot-${repover}"
-    "--with-override-corba=../corba-${repover}"
-    "--with-override-jdk=../jdk-${repover}"
-    "--with-override-jaxws=../jaxws-${repover}"
-    "--with-override-jaxp=../jaxp-${repover}"
-    "--with-override-nashorn=../nashorn-${repover}"
-    "--with-boot-jdk=${openjdk}/lib/openjdk/"
-    "--with-update-version=${update}"
-    "--with-build-number=b${build}"
-    "--with-milestone=fcs"
-  ];
-  buildFlags = "DEBUG_BINARIES=true all";
-  installPhase = ''
-    mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
+  openjdk8 = stdenv.mkDerivation {
+    name = "openjdk-8u${update}b${build}";
 
-    cp -av build/*/images/j2sdk-image/* $out/lib/openjdk
+    srcs = [ jdk8 langtools hotspot corba jdk jaxws jaxp nashorn ];
+    sourceRoot = ".";
 
-    # Move some stuff to top-level.
-    mv $out/lib/openjdk/include $out/include
-    mv $out/lib/openjdk/man $out/share/man
+    outputs = [ "out" "jre" ];
 
-    # jni.h expects jni_md.h to be in the header search path.
-    ln -s $out/include/linux/*_md.h $out/include/
+    buildInputs = [
+      cpio file which unzip zip
+      xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
+      xorg.libXi xorg.libXinerama xorg.libXcursor xorg.lndir
+      cups freetype alsaLib perl liberation_ttf fontconfig bootjdk zlib
+    ];
 
-    # Remove some broken manpages.
-    rm -rf $out/share/man/ja*
+    prePatch = ''
+      ls | grep jdk | grep -v '^jdk8u' | awk -F- '{print $1}' | while read p; do
+        mv $p-* $(ls | grep '^jdk8u')/$p
+      done
+      cd $(ls | grep '^jdk8u')
+    '';
 
-    # Remove crap from the installation.
-    rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
+    patches = [
+      ./fix-java-home-jdk8.patch
+      ./read-truststore-from-env-jdk8.patch
+      ./currency-date-range-jdk8.patch
+      ./JDK-8074312-hotspot.patch
+    ];
 
-    # Move the JRE to a separate output.
-    mv $out/lib/openjdk/jre $jre/lib/openjdk/
-    mkdir $out/lib/openjdk/jre
-    lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+    preConfigure = ''
+      chmod +x configure
+      substituteInPlace configure --replace /bin/bash "$shell"
+      substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
+    '';
 
-    rm -rf $out/lib/openjdk/jre/bina
-    ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+    configureFlags = [
+      "--with-freetype=${freetype}"
+      "--with-boot-jdk=${bootjdk.home}"
+      "--with-update-version=${update}"
+      "--with-build-number=${build}"
+      "--with-milestone=fcs"
+      "--enable-unlimited-crypto"
+      "--disable-debug-symbols"
+      "--disable-freetype-bundling"
+    ] ++ (if minimal then [
+      "--disable-headful"
+      "--with-zlib=bundled"
+      "--with-giflib=bundled"
+    ] else [
+      "--with-zlib=system"
+    ]);
 
-    # Set PaX markings
-    exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
-    echo "to mark: *$exes*"
-    for file in $exes; do
-      echo "marking *$file*"
-      paxmark ${paxflags} "$file"
-    done
+    NIX_LDFLAGS= if minimal then null else "-lfontconfig";
 
-    # Remove duplicate binaries.
-    for i in $(cd $out/lib/openjdk/bin && echo *); do
-      if [ "$i" = java ]; then continue; fi
-      if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
-        ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
-      fi
-    done
+    buildFlags = "all";
 
-    # Generate certificates.
-    pushd $jre/lib/openjdk/jre/lib/security
-    rm cacerts
-    perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ca-bundle.crt
-    popd
+    installPhase = ''
+      mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
-    ln -s $out/lib/openjdk/bin $out/bin
-    ln -s $jre/lib/openjdk/jre/bin $jre/bin
-  '';
+      cp -av build"/"*/images/j2sdk-image"/"* $out/lib/openjdk
 
-  meta = {
-    homepage = http://openjdk.java.net/;
-    license = stdenv.lib.licenses.gpl2;
-    description = "The open-source Java Development Kit";
-    maintainers = [ stdenv.lib.maintainers.cocreature ];
-    platforms = stdenv.lib.platforms.linux;
+      # Move some stuff to top-level.
+      mv $out/lib/openjdk/include $out/include
+      mv $out/lib/openjdk/man $out/share/man
+
+      # jni.h expects jni_md.h to be in the header search path.
+      ln -s $out/include/linux"/"*_md.h $out/include/
+
+      # Remove some broken manpages.
+      rm -rf $out/share/man/ja*
+
+      # Remove crap from the installation.
+      rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
+
+      # Move the JRE to a separate output and setup fallback fonts
+      mv $out/lib/openjdk/jre $jre/lib/openjdk/
+      mkdir $out/lib/openjdk/jre
+      mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
+      lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
+
+      rm -rf $out/lib/openjdk/jre/bina
+      ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+
+      # Set PaX markings
+      exes=$(file $out/lib/openjdk/bin"/"* $jre/lib/openjdk/jre/bin"/"* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+      echo "to mark: *$exes*"
+      for file in $exes; do
+        echo "marking *$file*"
+        paxmark ${paxflags} "$file"
+      done
+
+      # Remove duplicate binaries.
+      for i in $(cd $out/lib/openjdk/bin && echo *); do
+        if [ "$i" = java ]; then continue; fi
+        if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
+          ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
+        fi
+      done
+
+      # Generate certificates.
+      pushd $jre/lib/openjdk/jre/lib/security
+      rm cacerts
+      perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      popd
+
+      ln -s $out/lib/openjdk/bin $out/bin
+      ln -s $jre/lib/openjdk/jre/bin $jre/bin
+    '';
+
+    postFixup = ''
+      # Build the set of output library directories to rpath against
+      LIBDIRS=""
+      for output in $outputs; do
+        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \; | sort | uniq | tr '\n' ':'):$LIBDIRS"
+      done
+
+      # Add the local library paths to remove dependencies on the bootstrap
+      for output in $outputs; do
+        OUTPUTDIR="$(eval echo \$$output)"
+        BINLIBS="$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)"
+        echo "$BINLIBS" | while read i; do
+          patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
+          patchelf --shrink-rpath "$i" || true
+        done
+      done
+
+      # Test to make sure that we don't depend on the bootstrap
+      for output in $outputs; do
+        if grep -q -r '${bootjdk}' $(eval echo \$$output); then
+          echo "Extraneous references to ${bootjdk} detected"
+          exit 1
+        fi
+      done
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = http://openjdk.java.net/;
+      license = licenses.gpl2;
+      description = "The open-source Java Development Kit";
+      maintainers = with maintainers; [ edwtjo ];
+      platforms = platforms.linux;
+    };
+
+    passthru.home = "${openjdk8}/lib/openjdk";
   };
-
-}
+in openjdk8

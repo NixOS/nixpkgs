@@ -1,90 +1,154 @@
-{ stdenv, fetchurl, unzip, zlib, libpng, bzip2, SDL, SDL_mixer, makeWrapper } :
+{ stdenv, fetchurl, pkgconfig, unzip, zlib, libpng, bzip2, SDL, SDL_mixer
+, buildEnv, config
+}:
 
 let
-  result = withPak (mkPak pak128);
+  # Choose your "paksets" of objects, images, text, music, etc.
+  paksets = config.simutrans.paksets or "pak64 pak128";
 
-  ver_1 = "112";
-  ver_2 = "3";
-  ver_h2 = "${ver_1}-${ver_2}";
+  result = with stdenv.lib; withPaks (
+    if paksets == "*" then attrValues pakSpec # taking all
+      else map (name: pakSpec.${name}) (splitString " " paksets)
+  );
 
-  # "pakset" of objects, images, text, music, etc.
-  mkPak = src: stdenv.mkDerivation {
-    name = "simutrans-pakset";
-    inherit src;
-    unpackPhase = "true";
-    buildInputs = [ unzip ];
-    installPhase = ''
-      mkdir -p $out
-      cd $out
-      unzip ${src}
-      mv simutrans/*/* .
-      rm -rf simutrans
-    '';
-  };
-  pak64 = fetchurl {
-    url = "mirror://sourceforge/simutrans/pak64/${ver_h2}/simupak64-${ver_h2}.zip";
-    sha256 = "1ng963n2gvnwmsj73iy3gp9i5iqf5g6qk1gh1jnfm86gnjrsrq4m";
-  };
-  pak128 = fetchurl {
-    url = "mirror://sourceforge/simutrans/pak128/pak128%20for%20${ver_1}/pak128-2.3.0--${ver_1}.2.zip";
-    sha256 = "0jcif6mafsvpvxh1njyd6z2f6sab0fclq3f3nlg765yp3i1bfgff";
+  ver1 = "120";
+  ver2 = "0";
+  ver3 = "1";
+  version =   "${ver1}.${ver2}.${ver3}";
+  ver_dash =  "${ver1}-${ver2}-${ver3}";
+  ver2_dash = "${ver1}-${ver2}";
+
+  binary_src = fetchurl {
+    url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
+    sha256 = "10rn259nxq2hhfpar8zwgxi1p4djvyygcm2f6qhih7l9clvnw2h1";
   };
 
-  withPak = pak: stdenv.mkDerivation {
+
+  # As of 2015/03, many packsets still didn't have a release for version 120.
+  pakSpec = stdenv.lib.mapAttrs
+    (pakName: attrs: mkPak (attrs // {inherit pakName;}))
+  {
+    pak64 = {
+      srcPath = "${ver2_dash}/simupak64-${ver_dash}";
+      sha256 = "0y5v1ncpjyhjkkznqmk13kg5d0slhjbbvg1y8q5jxhmhlkghk9q2";
+    };
+    "pak64.japan" = {
+      srcPath = "${ver2_dash}/simupak64.japan-${ver_dash}";
+      sha256 = "14swy3h4ij74bgaw7scyvmivfb5fmp21nixmhlpk3mav3wr3167i";
+    };
+
+    pak128 = {
+      srcPath = "pak128%20for%20ST%20120%20%282.5.2%2B%20nightly%20r1560%2C%20bugfixes%29/pak128-r1560--ST120";
+      sha256 = "1wd51brc4aglqi3w7s8fxgxrw0k7f653w4wbnmk83k07fwfdyf24";
+    };
+    "pak128.britain" = {
+      srcPath = "pak128.Britain%20for%20${ver2_dash}/pak128.Britain.1.16-${ver2_dash}";
+      sha256 = "1rww9rnpk22l2z3s1d7y2gmd6iwhv72s7pff8krnh7z0q386waak";
+    };
+    "pak128.cs" = { # note: it needs pak128 to work
+      url = "mirror://sourceforge/simutrans/Pak128.CS/pak128.cz_v.0.2.1.zip";
+      sha256 = "008d8x1s0vxsq78rkczlnf57pv1n5hi1v5nbd1l5w3yls7lk11sc";
+    };
+    "pak128.german" = {
+      url = "mirror://sourceforge/simutrans/PAK128.german/"
+        + "PAK128.german_0.7_${ver1}.x/PAK128.german_0.7.0.1_${ver1}.x.zip";
+      sha256 = "1575akms18raxaijy2kfyqm07wdx6y5q85n7wgvq2fqydrnx33w8";
+    };
+
+    /* This release contains accented filenames that prevent unzipping.
+    "pak192.comic" = {
+      srcPath = "pak192comic%20for%20${ver2_dash}/pak192comic-0.4-${ver2_dash}up";
+      sha256 = throw "";
+    };
+    */
+  };
+
+
+  mkPak = {
+    sha256, pakName, srcPath ? null
+    , url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip"
+  }:
+    stdenv.mkDerivation {
+      name = "simutrans-${pakName}";
+      unpackPhase = "true";
+      installPhase = let src = fetchurl { inherit url sha256; };
+      in ''
+        mkdir -p "$out/share/simutrans/${pakName}"
+        cd "$out/share/simutrans/${pakName}"
+        "${unzip}/bin/unzip" "${src}"
+        chmod -R +w . # some zipfiles need that
+
+        set +o pipefail # no idea why it's needed
+        toStrip=`find . -iname '*.pak' | head -n 1 | sed 's|\./\(.*\)/[^/]*$|\1|'`
+        echo "Detected path '$toStrip' to strip"
+        mv ./"$toStrip"/* .
+        rmdir -p "$toStrip"
+      '';
+    };
+
+  /* The binaries need all data in one directory; the default is directory
+      of the executable, and another option is the current directory :-/ */
+  withPaks = paks: buildEnv {
     inherit (binaries) name;
-    unpackPhase = "true";
-    buildInputs = [ makeWrapper ];
-    installPhase = ''makeWrapper "${binaries}/bin/simutrans" "$out/bin/simutrans" --add-flags -objects --add-flags "${pak}"'';
-    inherit (binaries) meta;
+    paths = [binaries] ++ paks;
+    postBuild = ''
+      rm "$out/bin" && mkdir "$out/bin"
+      cat > "$out/bin/simutrans" <<EOF
+      #!${stdenv.shell}
+      cd "$out"/share/simutrans
+      exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
+      EOF
+      chmod +x "$out/bin/simutrans"
+    '';
+
+    passthru.meta = binaries.meta // { hydraPlatforms = []; };
+    passthru.binaries = binaries;
   };
 
   binaries = stdenv.mkDerivation rec {
-    pname = "simutrans";
-    name = "${pname}-${ver_1}.${ver_2}";
+    name = "simutrans-${version}";
 
-    src = fetchurl {
-      url = "mirror://sourceforge/simutrans/simutrans/${ver_h2}/simutrans-src-${ver_h2}.zip";
-      sha256 = "0jdq2krfj3qsh8dks9ixsdvpyjq9yi80p58b0xjpsn35mkbxxaca";
-    };
+    src = binary_src;
 
-    # this resource is needed since 112.2 because the folders in simutrans directory has been removed from source code
-    resources = fetchurl {
-      url = "mirror://sourceforge/simutrans/simutrans/${ver_h2}/simulinux-${ver_h2}.zip";
-      sha256 = "14ly341pdkr8r3cd0q49w424m79iz38iaxfi9l1yfcxl8idkga1c";
-    };
     sourceRoot = ".";
 
-    buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
+    buildInputs = [ pkgconfig zlib libpng bzip2 SDL SDL_mixer unzip ];
 
-    preConfigure = ''
-      # Configuration as per the readme.txt
-      sed \
-        -e 's@#BACKEND = sdl@BACKEND = sdl@' \
-        -e 's@#COLOUR_DEPTH = 16@COLOUR_DEPTH = 16@' \
-        -e 's@#OSTYPE = linux@OSTYPE = linux@' \
-        < config.template > config.default
+    configurePhase = let
+      # Configuration as per the readme.txt and config.template
+      platform =
+        if stdenv.isLinux then "linux" else
+        if stdenv.isDarwin then "mac" else throw "add your platform";
+      config = ''
+        BACKEND = mixer_sdl
+        COLOUR_DEPTH = 16
+        OSTYPE = ${platform}
+        VERBOSE = 1
+      '';
+      #TODO: MULTI_THREAD = 1 is "highly recommended",
+      # but it's roughly doubling CPU usage for me
+    in ''
+      echo "${config}" > config.default
 
-      # Different default data dir
-      sed -i -e 's:argv\[0\]:"'$out'/share/simutrans/":' \
-        simmain.cc
+      # Use ~/.simutrans instead of ~/simutrans
+      substituteInPlace simsys.cc --replace '%s/simutrans' '%s/.simutrans'
 
-      # Use ~/.simutrans instead of ~/simutrans ##not working
-      #sed -i -e 's@%s/simutrans@%s/.simutrans@' simsys_s.cc
-
-      # No optimization overriding
-      sed -i -e '/-O$/d' Makefile
+      # use -O2 optimization (defaults are -O or -O3)
+      sed -i -e '/CFLAGS += -O/d' Makefile
+      export CFLAGS+=-O2
     '';
+
+    enableParallelBuilding = true;
 
     installPhase = ''
       mkdir -p $out/share/
       mv simutrans $out/share/
-      unzip -o ${resources} -d $out/share/
 
       mkdir -p $out/bin/
       mv build/default/sim $out/bin/simutrans
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A simulation game in which the player strives to run a successful transport system";
       longDescription = ''
         Simutrans is a cross-platform simulation game in which the
@@ -94,10 +158,11 @@ let
       '';
 
       homepage = http://www.simutrans.com/;
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ stdenv.lib.maintainers.kkallio ];
-      platforms = stdenv.lib.platforms.linux;
+      license = with licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ kkallio vcunat ];
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
 in result
+

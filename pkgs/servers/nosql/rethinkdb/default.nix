@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, which, protobuf, gperftools, boost, zlib, curl, python, m4 }:
+{ stdenv, fetchurl, which, protobuf, gperftools
+, boost, zlib, curl, python, m4, icu, jemalloc }:
 
 stdenv.mkDerivation rec {
-  name = "rethinkdb-1.15.2";
+  name = "rethinkdb-${version}";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "http://download.rethinkdb.com/dist/${name}.tgz";
-    sha256 = "1fpx9apqm62i332q2isanpdql8gwwab4qxwzrspqwgcka9zd6gy3";
+    sha256 = "1580h5clkw8kprdb9waaf8al3wa2vj5d2l2m394r91fq45ss23sd";
   };
 
   preConfigure = ''
@@ -13,9 +15,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = "--lib-path ${gperftools}/lib";
+  configureFlags = "--lib-path ${gperftools}/lib --lib-path ${jemalloc}/lib";
 
-  buildInputs = [ protobuf boost zlib curl ];
+  buildInputs = [ protobuf boost zlib curl icu jemalloc ];
 
   nativeBuildInputs = [ which m4 python ];
 

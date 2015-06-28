@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, autoconf, automake, gettext }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
+let version = "0.5.2"; in
 stdenv.mkDerivation rec {
   name = "duff-${version}";
-  version = "0.5.2";
 
-  src = fetchurl {
-    url = "https://github.com/elmindreda/duff/archive/${version}.tar.gz";
-    sha256 = "149dd80f9758085ed199c37aa32ad869409fa5e2c8da8a51294bd64ca886e058";
+  src = fetchFromGitHub {
+    sha256 = "0yfm910wjj6z0f0cg68x59ykf4ql5m49apzy8sra00f8kv4lpn53";
+    rev = version;
+    repo = "duff";
+    owner = "elmindreda";
   };
 
-  buildInputs = [ autoconf automake gettext ];
+  nativeBuildInputs = [ autoreconfHook gettext ];
 
-  preConfigure = ''
+  preAutoreconf = ''
     # duff is currently badly packaged, requiring us to do extra work here that
     # should be done upstream. If that is ever fixed, this entire phase can be
     # removed along with all buildInputs.
@@ -23,13 +25,14 @@ stdenv.mkDerivation rec {
     ./gettextize
     sed 's@po/Makefile.in\( .*\)po/Makefile.in@po/Makefile.in \1@' \
       -i configure.ac
-    autoreconf -i
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    description = "Quickly find duplicate files.";
+    description = "Quickly find duplicate files";
     homepage = http://duff.dreda.org/;
-    license = with licenses; zlib;
+    license = licenses.zlib;
     longDescription = ''
       Duff is a Unix command-line utility for quickly finding duplicates in
       a given set of files.

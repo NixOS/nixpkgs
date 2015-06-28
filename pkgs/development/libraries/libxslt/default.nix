@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libxslt-1.1.28";
 
   src = fetchurl {
-    url = "ftp://xmlsoft.org/libxml2/${name}.tar.gz";
+    url = "http://xmlsoft.org/sources/${name}.tar.gz";
     sha256 = "13029baw9kkyjgr7q3jccw2mz38amq7mmpr5p3bh775qawd1bisz";
   };
 

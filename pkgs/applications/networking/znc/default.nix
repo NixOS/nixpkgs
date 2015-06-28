@@ -7,11 +7,11 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "znc-1.4";
+  name = "znc-1.6.0";
 
   src = fetchurl {
     url = "http://znc.in/releases/${name}.tar.gz";
-    sha256 = "0lkv58pq4d5lzcyx8v8anzinx0sx0zw0js4jij13jb8qxp88zsc6";
+    sha256 = "df622aeae34d26193c738dff6499e56ad669ec654484e19623738d84cc80aba7";
   };
 
   buildInputs = [ openssl pkgconfig ]

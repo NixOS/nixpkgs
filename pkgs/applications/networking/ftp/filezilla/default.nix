@@ -1,13 +1,13 @@
 { stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
 , pkgconfig, xdg_utils, gtk2, sqlite }:
 
-let version = "3.9.0.6"; in
+let version = "3.11.0.2"; in
 stdenv.mkDerivation {
   name = "filezilla-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/filezilla/FileZilla_Client/${version}/FileZilla_${version}_src.tar.bz2";
-    sha256 = "1dxhj4ijpl5m2r5f9p04kbaqcvivy3lrb1kdn5axqngshfrmczyf";
+    sha256 = "1nc9d46jwz3x9dd6na1ds8rq8a797xr29r9wkhgxv6y20cla06rl";
   };
 
   configureFlags = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://filezilla-project.org/";
+    homepage = http://filezilla-project.org/;
     description = "Graphical FTP, FTPS and SFTP client";
     license = licenses.gpl2;
     longDescription = ''
@@ -29,5 +29,6 @@ stdenv.mkDerivation {
       provided.
     '';
     platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

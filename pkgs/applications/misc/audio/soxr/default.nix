@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1hmadwqfpg15vhwq9pa1sl5xslibrjpk6hpq2s9hfmx1s5l6ihfw";
   };
 
-  preConfigure = ''export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/build/src'';
+  preConfigure = if stdenv.isDarwin then ''
+    export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:"`pwd`/build/src
+  '' else ''
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:"`pwd`/build/src
+  '';
 
   buildInputs = [ cmake ];
 

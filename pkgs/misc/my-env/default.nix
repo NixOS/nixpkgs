@@ -141,7 +141,7 @@ mkDerivation {
       }
 
       export PATH
-      echo $name loaded
+      echo $name loaded >&2
 
       trap nix_cleanup EXIT
     EOF

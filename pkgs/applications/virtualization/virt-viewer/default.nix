@@ -11,10 +11,10 @@ with stdenv.lib;
 
 let sourceInfo = rec {
     baseName="virt-viewer";
-    version="1.0";
+    version="2.0";
     name="${baseName}-${version}";
     url="http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    hash="09sf1xzvw2yysv4c1jkqlzrazdg501r4j12hiwjdzk5swk6lppw0";
+    hash="0dylhpk5rq9jz0l1cxs50q2s74z0wingygm1m33bmnmcnny87ig9";
 }; in
 
 stdenv.mkDerivation  {

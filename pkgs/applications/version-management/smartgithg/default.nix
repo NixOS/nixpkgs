@@ -7,7 +7,7 @@
 }:
 
 let
-  the_version = "6_5_3";
+  the_version = "6_5_7";
 
 in
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   name = "smartgithg-${the_version}";
 
   src = fetchurl {
-    url = "http://www.syntevo.com/download/smartgit/" +
+    url = "http://www.syntevo.com/downloads/smartgit/" +
           "smartgit-generic-${the_version}.tar.gz";
-    sha256 = "0hz1y29ipls58fizr27w6rbv7v7qbbc1h70xvjjd8c94k9ajmav9";
+    sha256 = "0db4dxp0dl173z9r8n25zdl1il240p751d2f77cw0nmyibik7q4l";
   };
 
   buildInputs = [

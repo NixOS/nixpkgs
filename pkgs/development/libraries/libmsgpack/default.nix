@@ -1,22 +1,12 @@
-{ stdenv, fetchurl, cmake}:
+{ callPackage, fetchFromGitHub, ... } @ args:
 
-stdenv.mkDerivation rec {
-  version = "0.5.9";
-  name = "libmsgpack-${version}";
+callPackage ./generic.nix (args // rec {
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/msgpack/msgpack-c/archive/cpp-${version}.tar.gz";
-    sha256 = "0xy204srq5grng7p17hwdxpfzbsfrn89gi4c3k62a23p4f9z0szq";
+  src = fetchFromGitHub {
+    owner = "msgpack";
+    repo = "msgpack-c";
+    rev = "cpp-${version}";
+    sha256 = "1hnpnin6gjiilbzfd75871kamfn9grrf53qpbs061sflvz56fddq";
   };
-
-  buildInputs = [ cmake ];
-  patches = [ ./CMakeLists.patch ];
-
-  meta = with stdenv.lib; {
-    description = "MessagePack implementation for C and C++";
-    homepage = http://msgpack.org;
-    maintainers = [ maintainers.redbaron ];
-    license = licenses.asl20;
-    platforms = platforms.all;
-  };
-}
+})

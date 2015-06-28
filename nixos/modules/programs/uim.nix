@@ -7,14 +7,16 @@ let
 in
 {
   options = {
+
     uim = {
       enable = mkOption {
         type = types.bool;
         default = false;
         example = true;
-        description = "enable UIM input method";
+        description = "Enable UIM input method";
       };
     };
+
   };
 
   config = mkIf cfg.enable {

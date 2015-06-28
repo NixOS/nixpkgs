@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib
 , autoconf, automake, gnum4, libtool, git, perl, gnulib, uthash, pkgconfig, gettext
-, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2
+, python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, pango
 , withGTK ? false, gtk2
 , withPython ? false # python-scripting was breaking inconsolata and libertine builds
 }:
@@ -30,7 +30,9 @@ stdenv.mkDerivation {
     git autoconf automake gnum4 libtool perl pkgconfig gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
-    ++ lib.optionals withGTK [ gtk2 ];
+    ++ lib.optionals withGTK [ gtk2 ]
+    # I'm not sure why pango doesn't seem necessary on Linux
+    ++ lib.optionals stdenv.isDarwin [ pango ];
 
   configureFlags =
     lib.optionals (!withPython) [ "--disable-python-scripting" "--disable-python-extension" ]

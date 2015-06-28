@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xorg, ncurses, freetype, fontconfig, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-312";
+  name = "xterm-317";
 
   src = fetchurl {
     url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "0vpkhls3i12ly4r68igz91vh6s9179wihjkdy0gvwr752hdqxm7s";
+    sha256 = "0v9mirqws1vb8wxbdgn1w166ln7xmapg1913c7kzjs3mwkdv1rfj";
   };
 
   buildInputs =
@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
       ncurses freetype fontconfig pkgconfig xorg.libXft xorg.luit
     ];
 
-  configureFlags =
-    ''
-      --enable-wide-chars --enable-256-color
-      --enable-load-vt-fonts --enable-i18n --enable-doublechars --enable-luit
-      --enable-mini-luit --with-tty-group=tty
-    '';
+  configureFlags = [
+    "--enable-wide-chars"
+    "--enable-256-color"
+    "--enable-load-vt-fonts"
+    "--enable-i18n"
+    "--enable-doublechars"
+    "--enable-luit"
+    "--enable-mini-luit"
+    "--with-tty-group=tty"
+  ];
 
   # Work around broken "plink.sh".
   NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";

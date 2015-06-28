@@ -1,4 +1,4 @@
-{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.14.3" }:
+{ callPackage, callPackageOrig, stdenv, qt48, release ? "4.14.3", kdelibs }:
 
 let
   branch = "4.14";
@@ -26,6 +26,8 @@ in
 kde.modules // kde.individual //
 {
   inherit (kde) manifest modules individual splittedModuleList;
+
+  inherit kdelibs;
 
   akonadi = callPackage ./support/akonadi { };
 

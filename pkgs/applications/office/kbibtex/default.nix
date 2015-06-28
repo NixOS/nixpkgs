@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, libxslt, popplerQt4 }:
+{ stdenv, fetchurl, kdelibs, libxslt, poppler_qt4 }:
 
 stdenv.mkDerivation rec {
   pname = "kbibtex";
@@ -14,5 +14,5 @@ stdenv.mkDerivation rec {
     sed -e '25i#include <QModelIndex>' -i src/gui/preferences/settingsabstractwidget.h
     '';
 
-  buildInputs = [ kdelibs libxslt popplerQt4 ];
+  buildInputs = [ kdelibs libxslt poppler_qt4 ];
 }

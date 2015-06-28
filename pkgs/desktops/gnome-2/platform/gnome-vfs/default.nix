@@ -1,12 +1,12 @@
-{ stdenv, fetchurlGnome, pkgconfig, libxml2, bzip2, openssl, samba, dbus_glib
+{ stdenv, fetchurl, pkgconfig, libxml2, bzip2, openssl, samba, dbus_glib
 , glib, fam, cdparanoia, intltool, GConf, gnome_mime_data, avahi, acl }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "gnome-vfs-${minVer}.4";
+  minVer = "2.24";
 
-  src = fetchurlGnome {
-    project = "gnome-vfs";
-    major = "2"; minor = "24"; patchlevel = "4";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-vfs/${minVer}/${name}.tar.bz2";
     sha256 = "1ajg8jb8k3snxc7rrgczlh8daxkjidmcv3zr9w809sq4p2sn9pk2";
   };
 

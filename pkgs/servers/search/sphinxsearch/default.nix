@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig,
-  version ? "2.1.9",
+  version ? "2.2.8",
   mainSrc ? fetchurl {
     url = "http://sphinxsearch.com/files/sphinx-${version}-release.tar.gz";
-    sha256 = "00vwxf3zr0g1fq9mls1z2rd8nxw74b76pkl1j466lig1qc5am2b2";
+    sha256 = "1q6jdw5g81k7ciw9fhwklb5ifgb8zna39795m0x0lbvwjbk3ampv";
   }
 }:
 

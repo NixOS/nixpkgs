@@ -208,4 +208,15 @@ rec {
   # standard GNU Autoconf scripts.
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
+  # Create a fixed width string with additional prefix to match required width
+  fixedWidthString = width: filler: str:
+    let
+      strw = lib.stringLength str;
+      reqWidth = width - (lib.stringLength filler);
+    in
+      assert strw <= width;
+      if strw == width then str else filler + fixedWidthString reqWidth filler str;
+
+  # Format a number adding leading zeroes up to fixed width
+  fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 }

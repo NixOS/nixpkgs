@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl }:
+{ stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
+, libmilter }:
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.98.6";
+  version = "0.98.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
-    sha256 = "0l99a0shgzpl8rvrrgbm1ki2zxlb7g1n82bhq7f2snj4amfj94b5";
+    sha256 = "0wp2ad8km4cqmlndni5ljv7q3lfxm6y4r3giv0yf23bl0yvif918";
   };
 
-  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv ];
+  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter ];
 
   configureFlags = [
     "--with-zlib=${zlib}"
@@ -18,6 +19,7 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl}"
     "--with-libncurses-prefix=${ncurses}"
     "--with-libcurl=${curl}"
+    "--enable-milter"
     "--disable-clamav"
   ];
 
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.clamav.net;
     description = "Antivirus engine designed for detecting Trojans, viruses, malware and other malicious threats";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom maintainers.robberer ];
+    maintainers = with maintainers; [ phreedom robberer qknight ];
     platforms = platforms.linux;
   };
 }

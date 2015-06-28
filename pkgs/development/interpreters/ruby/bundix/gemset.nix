@@ -1,12 +1,12 @@
 {
   "bundix" = {
-    version = "0.1.0";
+    version = "1.0.2";
     source = {
       type = "git";
       url = "https://github.com/cstrahan/bundix.git";
-      rev = "5df25b11b5b86e636754d54c2a8859c7c6ec78c7";
+      rev = "c879cf901ff8084b4c97aaacfb5ecbdb0f95cc03";
+      sha256 = "05kmdnq4qa5h8l3asv05cjpnyplnqqx6hrqybj2cjlzmdxnkkgyj";
       fetchSubmodules = false;
-      sha256 = "1iqx12y777v8gszggj25x0xcf6lzllx58lmv53x6zy3jmvfh4siv";
     };
     dependencies = [
       "thor"

@@ -1,16 +1,22 @@
 { fetchurl, stdenv, readline, zlib, libgpgerror, pth, libgcrypt, libassuan
-, libksba, coreutils, libiconv
+, libksba, coreutils, libiconv, pcsclite
+
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
+, pinentry ? null, x11Support ? true
+, openldap ? null, bzip2 ? null, libusb ? null, curl ? null
 }:
 
+with stdenv.lib;
+
+assert x11Support -> pinentry != null;
+
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.26";
+  name = "gnupg-2.0.27";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1q5qcl5panrvcvpwvz6nl9gayl5a6vwvfhgdcxqpmbl2qc6y6n3p";
+    sha256 = "1wihx7dphacg9fy5wfj93h236lr1w5gwzh7ir3js37wi9cz6sr2p";
   };
 
   buildInputs
@@ -19,15 +25,15 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
+    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     find . -name pcsc-wrapper.c | xargs sed -i 's/typedef unsinged int pcsc_dword_t/typedef unsigned int pcsc_dword_t/'
   '' + ''
     patch gl/stdint_.h < ${./clang.patch}
   '';
 
-  configureFlags =
-    if pinentry != null then "--with-pinentry-pgm=${pinentry}/bin/pinentry"
-                        else "";
+  configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
 
   checkPhase="GNUPGHOME=`pwd` ./agent/gpg-agent --daemon make check";
 

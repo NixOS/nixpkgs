@@ -1,11 +1,12 @@
 {stdenv, fetchurl, gettext}:
 
-stdenv.mkDerivation {
-  name = "ms-sys-2.1.3";
+stdenv.mkDerivation rec {
+  name = "ms-sys-${version}";
+  version = "2.4.1";
   
   src = fetchurl {
-    url = mirror://sourceforge/ms-sys/ms-sys-2.1.3.tgz;
-    sha256 = "05djdqp7gqfrfb4czrmbgxgd8qr0h3781gzqvsp3qhfx6ay37z0p";
+    url = "mirror://sourceforge/ms-sys/${name}.tar.gz";
+    sha256 = "0qccv67fc2q97218b9wm6qpmx0nc0ssca391i0q15351y1na78nc";
   };
 
   buildInputs = [gettext];

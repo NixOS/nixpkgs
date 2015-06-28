@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver
+{ stdenv, fetchgit, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver
 , autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config
 , fontDirectories, fontutil, libgcrypt, gnutls, pam, flex, bison
 , fixesproto, damageproto, xcmiscproto, bigreqsproto, randrproto, renderproto
@@ -10,12 +10,13 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.3.1";
+  version = "git-20150504";
   name = "tigervnc-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/TigerVNC/tigervnc/archive/v${version}.tar.gz";
-    sha256 = "161bhibic777g47lbjgdnvjhkkdzxrzmxz9rw9sim3q0gcbp0vz3";
+  src = fetchgit {
+    url = "https://github.com/TigerVNC/tigervnc/";
+    sha256 = "1ib8f870wqa8kpvif01fvd2690dhq7fg233pc78pl9ag6pxlihmn";
+    rev = "bc84faa2f366ed8fa0f44abc7e3e481e0a54859d";
   };
 
   inherit fontDirectories;
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     tar xf ${xorgserver.src}
     cp -R xorg*/* unix/xserver
     pushd unix/xserver
-    for a in $xorgPatches ../xserver114.patch
+    for a in $xorgPatches ../xserver116.patch
     do
       patch -p1 < $a
     done

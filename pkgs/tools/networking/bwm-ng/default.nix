@@ -7,11 +7,14 @@ stdenv.mkDerivation rec {
     url = "http://www.gropp.org/bwm-ng/${name}.tar.gz";
     sha256 = "1pgzc8y2y73n72qvbd2g0dkbkw5h0f83k5h9id1rsck8w9c464y1";
   };
-  
+
   buildInputs = [ ncurses ];
 
+  # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
+  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=gnu89" else null;
+
   meta = with stdenv.lib; {
-    description = "Bandwidth Monitor NG is a small and simple console-based live network and disk io bandwidth monitor";
+    description = "A small and simple console-based live network and disk io bandwidth monitor";
     homepage = "http://www.gropp.org/?id=projects&sub=bwm-ng";
     license = licenses.gpl2;
     platforms = platforms.unix;

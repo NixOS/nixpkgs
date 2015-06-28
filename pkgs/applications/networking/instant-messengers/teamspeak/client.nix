@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, zlib, glib, libpng, freetype, xorg
-, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, pulseaudio ? null
+, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
 , libredirect, quazip, less, which
 }:
 
@@ -12,7 +12,7 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5 pulseaudio
+      xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base libpulseaudio
     ];
 
 in
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       echo "patching ts3client..."
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-gcc)/${libDir} \
+        --set-rpath ${stdenv.lib.makeLibraryPath deps}:$(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         ts3client
     '';

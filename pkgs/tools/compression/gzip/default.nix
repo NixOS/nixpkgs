@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preConfigure = if stdenv.isCygwin then ''
+    sed -i lib/fpending.h -e 's,include <stdio_ext.h>,,'
+  '' else null;
+
   # In stdenv-linux, prevent a dependency on bootstrap-tools.
   makeFlags = "SHELL=/bin/sh GREP=grep";
 
@@ -28,6 +32,8 @@ stdenv.mkDerivation rec {
         and we needed a replacement.  The superior compression ratio of gzip
         is just a bonus.
       '';
+
+    platforms = stdenv.lib.platforms.all;
 
     license = stdenv.lib.licenses.gpl3Plus;
   };

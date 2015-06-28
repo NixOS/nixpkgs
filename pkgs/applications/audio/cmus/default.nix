@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ncurses, pkgconfig, alsaLib, flac, libmad, ffmpeg, libvorbis, libmpc, mp4v2, libcue, pulseaudio}:
+{ stdenv, fetchgit, ncurses, pkgconfig, alsaLib, flac, libmad, ffmpeg, libvorbis, libmpc, mp4v2, libcue, libpulseaudio}:
 
 stdenv.mkDerivation rec {
   name = "cmus-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "./configure prefix=$out";
 
-  buildInputs = [ ncurses pkgconfig alsaLib flac libmad ffmpeg libvorbis libmpc mp4v2 libcue pulseaudio ];
+  buildInputs = [ ncurses pkgconfig alsaLib flac libmad ffmpeg libvorbis libmpc mp4v2 libcue libpulseaudio ];
 
   meta = {
     description = "Small, fast and powerful console music player for Linux and *BSD";

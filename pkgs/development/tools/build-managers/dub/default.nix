@@ -1,11 +1,11 @@
-{stdenv, fetchurl, curl, dmd, gcc, unzip}:
+{stdenv, fetchurl, curl, dmd, gcc, unzip }:
 
 stdenv.mkDerivation {
-  name = "dub-0.9.22";
+  name = "dub-0.9.23";
 
   src = fetchurl {
-    url = "https://github.com/rejectedsoftware/dub/archive/v0.9.22.tar.gz";
-    sha256 = "0vhn96ybbsfflldlbyc17rmwb7bz21slbm189k5glyfr9nnp4cir";
+    url = "https://github.com/D-Programming-Language/dub/archive/v0.9.23.tar.gz";
+    sha256 = "7ecbce89c0e48b43705d7c48003394f383556f33562c4b5d884a786cd85814d1";
   };
 
   buildInputs = [ unzip curl ];

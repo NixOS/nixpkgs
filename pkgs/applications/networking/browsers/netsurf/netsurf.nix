@@ -23,13 +23,16 @@ stdenv.mkDerivation {
   buildPhase = "make PREFIX=$out";
   installPhase = "make PREFIX=$out install";
 
-  meta = {
+  meta = with args.lib; {
     description = "free, open source web browser";
     homepage = http://www.netsurf-browser.org;
-    license = ["GPLv2" /* visual worrk : */ "MIT" ];
-    maintainers = [args.lib.maintainers.marcweber];
-    platforms = args.lib.platforms.linux;
-    broken = true;              # libnsbmp-0.0.1 is broken
+    license = with licenses; [
+      gpl2
+      mit /* visual work */
+    ];
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.linux;
   };
 
 }
+

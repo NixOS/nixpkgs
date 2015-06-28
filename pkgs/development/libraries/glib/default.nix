@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-assert !stdenv.isDarwin -> stdenv.cc.cc.isGNU or false;
+assert !stdenv.isDarwin -> stdenv.cc.isGNU;
 
 # TODO:
 # * Add gio-module-fam
@@ -39,8 +39,8 @@ let
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.42";
-  ver_min = "1";
+  ver_maj = "2.44";
+  ver_min = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "16pqvikrps1fvwwqvk0qi4a13mfg7gw6w5qfhk7bhi8f51jhhgwg";
+    sha256 = "1fgmjv3yzxgbks31h42201x2izpw0sd84h8dfw0si3x00sqn5lzj";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;

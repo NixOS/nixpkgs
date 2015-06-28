@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1asrq1v6vjzxd2zz92brdfs5f5b1qf8zwd7k2dpg3dl4shl8wwg5";
   };
 
-  buildInputs = [ cmake freetype libpng mesa gettext openssl qt5 perl libiconv ];
+  buildInputs = [ cmake freetype libpng mesa gettext openssl qt5.base qt5.quick1 perl libiconv ];
 
   enableParallelBuilding = true;
 

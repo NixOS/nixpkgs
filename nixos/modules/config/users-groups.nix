@@ -110,7 +110,7 @@ let
 
       shell = mkOption {
         type = types.str;
-        default = "/run/current-system/sw/sbin/nologin";
+        default = "/run/current-system/sw/bin/nologin";
         description = "The path to the user's shell.";
       };
 
@@ -489,6 +489,7 @@ in {
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
       grsecurity.gid = ids.gids.grsecurity;
+      input.gid = ids.gids.input;
     };
 
     system.activationScripts.users = stringAfter [ "etc" ]

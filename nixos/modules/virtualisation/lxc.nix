@@ -32,7 +32,9 @@ in
         default = "";
         description =
           ''
-            This is the system-wide LXC config. See lxc.system.conf(5).
+            This is the system-wide LXC config. See
+            <citerefentry><refentrytitle>lxc.system.conf</refentrytitle>
+            <manvolnum>5</manvolnum></citerefentry>.
           '';
       };
 
@@ -43,7 +45,8 @@ in
         description =
           ''
             Default config (default.conf) for new containers, i.e. for
-            network config. See lxc.container.conf(5).
+            network config. See <citerefentry><refentrytitle>lxc.container.conf
+            </refentrytitle><manvolnum>5</manvolnum></citerefentry>.
           '';
       };
 
@@ -54,7 +57,9 @@ in
         description =
           ''
             This is the config file for managing unprivileged user network
-            administration access in LXC. See lxc-user-net(5).
+            administration access in LXC. See <citerefentry>
+            <refentrytitle>lxc-user-net</refentrytitle><manvolnum>5</manvolnum>
+            </citerefentry>.
           '';
       };
 

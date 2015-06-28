@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, nix, readline, boehmgc }:
 
-let rev = "f92408136ed08804bab14b3e2a2def9b8effd7eb"; in
+let rev = "45c6405a30bd1b2cb8ad6a94b23be8b10cf52069"; in
 
 stdenv.mkDerivation {
   name = "nix-repl-${lib.getVersion nix}-${lib.substring 0 7 rev}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     owner = "edolstra";
     repo = "nix-repl";
     inherit rev;
-    sha256 = "1vl36d3n7hrw4vy2n358zx210ygkj4lmd8zsiifna6x7w7q388bj";
+    sha256 = "0c6sifpz8j898xznvy9dvm44w4nysqprrhs553in19jwwkf7kryp";
   };
 
   buildInputs = [ nix readline ];

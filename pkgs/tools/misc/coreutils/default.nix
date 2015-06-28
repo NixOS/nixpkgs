@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
+, autoconf, automake114x, texinfo
 }:
 
 assert aclSupport -> acl != null;
@@ -18,9 +19,17 @@ let
       sha256 = "0bdq6yggyl7nkc2pbl6pxhhyx15nyqhz3ds6rfn448n6rxdwlhzc";
     };
 
+    patches = if stdenv.isCygwin then [ ./coreutils-8.23-4.cygwin.patch ] else null;
+
+    # The test tends to fail on btrfs and maybe other unusual filesystems.
+    postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+      sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
+    '';
+
     nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
+      ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
@@ -76,6 +85,8 @@ let
       '';
 
       license = stdenv.lib.licenses.gpl3Plus;
+
+      platforms = stdenv.lib.platforms.all;
 
       maintainers = [ stdenv.lib.maintainers.eelco ];
     };

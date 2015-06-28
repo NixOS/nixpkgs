@@ -1,14 +1,14 @@
 {stdenv, fetchurl}:
 
 let
-  version = "5.1.7";
+  version = "5.2.7";
 in
 stdenv.mkDerivation {
   name = "unrar-${version}";
 
   src = fetchurl {
     url = "http://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    sha256 = "13ida8vcamiagl40d9yfjma9k6givxczhx278f1p7bv9wgb8gfmc";
+    sha256 = "1b1ggrqn020pvvh2ia98alqxpl1q3x65cb6zzqwv91rpjiz7a57g";
   };
 
   preBuild = ''
@@ -23,10 +23,12 @@ stdenv.mkDerivation {
         $out/share/doc/unrar
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     description = "Utility for RAR archives";
     homepage = http://www.rarlab.com/;
-    license = licenses.unfreeRedistributable;
+    license = licenses.gpl2;
     maintainers = [ maintainers.emery ];
     platforms = platforms.all;
   };

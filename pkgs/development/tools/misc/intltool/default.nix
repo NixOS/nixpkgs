@@ -1,33 +1,21 @@
-{ stdenv, fetchurl, perl, perlXMLParser, gettext }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="intltool";
-    version="0.50.2";
-    name="intltool-0.50.2";
-    hash="01j4yd7i84n9nk4ccs6yifg84pp68nr9by57jdbhj7dpdxf5rwk7";
-    url="https://launchpad.net/intltool/trunk/0.50.2/+download/intltool-0.50.2.tar.gz";
-    sha256="01j4yd7i84n9nk4ccs6yifg84pp68nr9by57jdbhj7dpdxf5rwk7";
-  };
-  propagatedBuildInputs = [perl perlXMLParser];
-  buildInputs = [];
-  in
-stdenv.mkDerivation {
-  inherit (s) name version;
+{ stdenv, fetchurl, gettext, perl, perlXMLParser }:
+
+stdenv.mkDerivation rec {
+  name = "intltool-${version}";
+  version = "0.51.0";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://launchpad.net/intltool/trunk/${version}/+download/${name}.tar.gz";
+    sha256 = "1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
-  inherit buildInputs;
 
-  # not needed by intltool itself but (probably) needed for its usage
-  propagatedBuildInputs = propagatedBuildInputs ++ [ gettext ];
+  propagatedBuildInputs = [ gettext perl perlXMLParser ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Translation helper tool";
-    homepage = "http://launchpad.net/intltool/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    inherit (s) version;
+    homepage = http://launchpad.net/intltool/;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.unix;
   };
 }

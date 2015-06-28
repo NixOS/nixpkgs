@@ -5,14 +5,12 @@
 
 stdenv.mkDerivation rec {
   name = "openntpd-${version}";
-  version = "5.7p3";
+  version = "5.7p4";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenNTPD/${name}.tar.gz";
-    sha256 = "4f417c8a4c21ed7ec3811107829f931404f9bf121855b8571a2ca3355695343a";
+    sha256 = "08ybpi351284wj53qqrmg13j8l7md397yrqsmg0aqxg3frcxk4x9";
   };
-
-  patches = [ ./no-install.patch ];
 
   configureFlags = [
     "--with-privsep-path=${privsepPath}"
@@ -22,6 +20,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ];
+
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.openntpd.org/";

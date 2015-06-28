@@ -67,7 +67,7 @@ in {
       enable = mkOption {
         description = "Whether to enable graphite web frontend.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       host = mkOption {
@@ -95,7 +95,7 @@ in {
           <link xlink:href="http://graphite-api.readthedocs.org/en/latest/"/>
         '';
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       finders = mkOption {
@@ -177,7 +177,7 @@ in {
       enableCache = mkOption {
         description = "Whether to enable carbon cache, the graphite storage daemon.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       storageAggregation = mkOption {
@@ -234,7 +234,7 @@ in {
       enableRelay = mkOption {
         description = "Whether to enable carbon relay, the carbon replication and sharding service.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       relayRules = mkOption {
@@ -251,7 +251,7 @@ in {
       enableAggregator = mkOption {
         description = "Whether to enable carbon agregator, the carbon buffering service.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       aggregationRules = mkOption {
@@ -269,7 +269,7 @@ in {
       enable = mkOption {
         description = "Whether to enable seyren service.";
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       port = mkOption {
@@ -319,7 +319,7 @@ in {
           <link xlink:href="https://github.com/seatgeek/graphite-pager"/>
         '';
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       redisUrl = mkOption {
@@ -352,6 +352,16 @@ in {
               name: Deal quality venue cache hits
         '';
         type = types.lines;
+      };
+    };
+
+    beacon = {
+      enable = mkEnableOption "graphite beacon";
+
+      config = mkOption {
+        description = "Graphite beacon configuration.";
+        default = {};
+        type = types.attrs;
       };
     };
   };
@@ -535,10 +545,25 @@ in {
       environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
     })
 
+    (mkIf cfg.beacon.enable {
+      systemd.services.graphite-beacon = {
+        description = "Grpahite Beacon Alerting Daemon";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = ''
+            ${pkgs.pythonPackages.graphite_beacon}/bin/graphite-beacon \
+              --config ${pkgs.writeText "graphite-beacon.json" (builtins.toJSON cfg.beacon.config)}
+          '';
+          User = "graphite";
+          Group = "graphite";
+        };
+      };
+    })
+
     (mkIf (
       cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
       cfg.web.enable || cfg.api.enable ||
-      cfg.seyren.enable || cfg.pager.enable
+      cfg.seyren.enable || cfg.pager.enable || cfg.beacon.enable
      ) {
       users.extraUsers = singleton {
         name = "graphite";

@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   inherit (backintime-common) version src installFlags meta;
 
-  name = "backintime-gnome-${version}";
+  name = "backintime-qt4-${version}";
 
   buildInputs = [ makeWrapper gettext python3 python3Packages.pyqt4 backintime-common python3 ];
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   configureFlags = [  ];
 
   dontAddPrefix = true;
-  
+
   preFixup =
       ''
       substituteInPlace "$out/bin/backintime-qt4" \

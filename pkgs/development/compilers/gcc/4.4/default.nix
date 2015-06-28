@@ -243,7 +243,7 @@ stdenv.mkDerivation ({
 
 
   passthru = { inherit langC langCC langAda langFortran langVhdl
-      enableMultilib version; };
+      enableMultilib version; isGNU = true; };
 
   # ghdl does not build fine with parallel building
   # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=46173

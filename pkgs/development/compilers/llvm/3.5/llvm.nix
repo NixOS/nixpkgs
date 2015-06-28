@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
+    "-DLLVM_REQUIRES_RTTI=1"
   ] ++ stdenv.lib.optionals (!isDarwin) [
     "-DBUILD_SHARED_LIBS=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"

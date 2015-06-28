@@ -87,10 +87,10 @@ a.composableDerivation.composableDerivation {} (fix: {
   // wwf {
     name = "mysql";
     enable = {
-      buildInputs = [ a.mysql ];
+      buildInputs = [ a.mysql.lib ];
       configureFlags = [
-        "--with-mysql-libs=${a.mysql}/lib/mysql"
-        "--with-mysql-includes=${a.mysql}/include/mysql"
+        "--with-mysql-libs=${a.mysql.lib}/lib/mysql"
+        "--with-mysql-includes=${a.mysql.lib}/include/mysql"
       ];
     };
   }
@@ -176,7 +176,7 @@ a.composableDerivation.composableDerivation {} (fix: {
   meta = {
     description = "free Geographic Information System (GIS) software used for geospatial data management and analysis, image processing, graphics/maps production, spatial modeling, and visualization";
     homepage = http://grass.itc.it/index.php;
-    license = [ "GPL" ];
+    license = "GPL";
     broken = true;
   };
 

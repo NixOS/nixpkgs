@@ -102,3 +102,10 @@ int __xstat(int ver, const char * path, struct stat * st)
     char buf[PATH_MAX];
     return __xstat_real(ver, rewrite(path, buf), st);
 }
+
+int * access(const char * path, int mode)
+{
+    int * (*access_real) (const char *, int mode) = dlsym(RTLD_NEXT, "access");
+    char buf[PATH_MAX];
+    return access_real(rewrite(path, buf), mode);
+}

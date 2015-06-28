@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "http://aide.sourceforge.net/";
-    description = "Advanced Intrusion Detection Environment (AIDE) is a file and directory integrity checker";
+    description = "A file and directory integrity checker";
     license = licenses.free;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;

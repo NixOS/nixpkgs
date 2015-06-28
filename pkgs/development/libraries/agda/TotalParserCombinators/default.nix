@@ -1,13 +1,13 @@
 { stdenv, agda, fetchdarcs, AgdaStdlib }:
 
 agda.mkDerivation (self: rec {
-  version = "2014-11-28";
+  version = "2015-03-19";
   name = "TotalParserCombinators-${version}";
 
   src = fetchdarcs {
     url = "http://www.cse.chalmers.se/~nad/repos/parser-combinators.code/";
     context = ./contextfile;
-    sha256 = "03fjrgj0749929h5zz6yfz5x9h7fln95c8ydrm44550350n4xjvk";
+    sha256 = "0jlbz8yni6i7vb2qsd41bdkpchqirvc5pavckaf97z7p4gqi2mlj";
   };
 
   buildDepends = [ AgdaStdlib ];

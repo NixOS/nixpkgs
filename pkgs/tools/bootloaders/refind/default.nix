@@ -26,9 +26,13 @@ stdenv.mkDerivation rec {
     sed -e 's|-m64|-maccumulate-outgoing-args -m64|g' -i filesystems/Make.gnuefi
   '';
 
-  buildPhase = ''
-    make prefix= EFIINC=${gnu-efi}/include/efi EFILIB=${gnu-efi}/lib GNUEFILIB=${gnu-efi}/lib  EFICRT0=${gnu-efi}/lib LDSCRIPT=${gnu-efi}/lib/elf_x86_64_efi.lds gnuefi fs_gnuefi
-  '';
+  buildPhase =
+    let ldScript =
+      if stdenv.system == "x86_64-linux" then "elf_x86_64_efi.lds"
+      else if stdenv.system == "i686-linux" then "elf_ia32_efi.lds" else "null";
+    in ''
+      make prefix= EFIINC=${gnu-efi}/include/efi EFILIB=${gnu-efi}/lib GNUEFILIB=${gnu-efi}/lib  EFICRT0=${gnu-efi}/lib LDSCRIPT=${gnu-efi}/lib/${ldScript} gnuefi fs_gnuefi
+    '';
 
   installPhase = ''
     install -d $out/bin/

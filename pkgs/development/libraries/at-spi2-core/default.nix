@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = with stdenv; lib.optionalString isDarwin "-lintl";
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 

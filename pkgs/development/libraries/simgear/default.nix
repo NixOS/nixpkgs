@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "simgear-${version}";
-  version = "3.0.0";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "http://mirrors.ibiblio.org/pub/mirrors/simgear/ftp/Source/${name}.tar.bz2";
-    sha256 = "1ssrcmvk3a4dv0k4vjzndmirwmdgzk689d7wpmjm423nydmwajh0";
+    sha256 = "152q3aqlrg3631ppvl6kr1mp5iszplq68l6lrsn9vjxafbz6czcj";
   };
 
   buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto

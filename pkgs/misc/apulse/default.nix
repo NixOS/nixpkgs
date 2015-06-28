@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "apulse-${version}";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "i-rinat";
     repo = "apulse";
     rev = "v${version}";
-    sha256 = "115z5a0n8lkcqfgz0cgvjw3p7d0nvzfxzd9g0h137ziflyx3ysh1";
+    sha256 = "0b384dr415flxk3n4abfwfljlh7vvr1g9gad15zc5fgbyxsinv12";
   };
 
   buildInputs =

@@ -1,10 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "fdupes-1.50-PR2";
+  name = "fdupes-1.51";
   src = fetchurl {
-    url = http://fdupes.googlecode.com/files/fdupes-1.50-PR2.tar.gz;
-    sha256 = "068nxcn3xilaphq53sywli9ndydy4gijfi2mz7h45kpy0q9cgwjs";
+    url = https://github.com/adrianlopezroche/fdupes/archive/fdupes-1.51.tar.gz;
+    sha256 = "11j96vxl9vg3jsnxqxskrv3gad6dh7hz2zpyc8n31xzyxka1c7kn";
   };
 
   # workaround: otherwise make install fails (should be fixed in trunk)

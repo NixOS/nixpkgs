@@ -23,6 +23,7 @@ let
     # proxy_password: password
 
     # tags: mytag0, mytag1
+    ${optionalString (cfg.tags != null ) "tags: ${concatStringsSep "," cfg.tags }"}
 
     # collect_ec2_tags: no
     # recent_point_threshold: 30
@@ -78,6 +79,13 @@ in {
       description = "The Datadog API key to associate the agent with your account";
       example = "ae0aa6a8f08efa988ba0a17578f009ab";
       type = types.str;
+    };
+
+    tags = mkOption {
+      description = "The tags to mark this Datadog agent";
+      example = [ "test" "service" ];
+      default = null;
+      type = types.nullOr (types.listOf types.str);
     };
 
     hostname = mkOption {

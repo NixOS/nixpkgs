@@ -1,6 +1,42 @@
 
 Context:
 
+[Updated the code in response to changes to Agda.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150319181310
+ Ignore-this: 52b9ff613d7f10b0c8f45591a0759d07
+] 
+
+[Rolled back most of "Updated the code in response to changes to Agda".
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150319101420
+ Ignore-this: c2ea7bdf79848235fa3ea64ebda116eb
+ * One of the Agda changes has been reverted.
+] 
+
+[Removed an outdated comment.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150217162945
+ Ignore-this: 3ff7732335750305fe220e65693f0cbf
+] 
+
+[Added the simplification "nonempty (return x) → fail".
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150217161718
+ Ignore-this: 56ad6a68c314446d8986a8c1b49655d0
+] 
+
+[Added Nonempty.nonempty-return.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150217161629
+ Ignore-this: 68829d3f9a248272c46848daa05ccfe3
+] 
+
+[Updated the copyright year range.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150212154744
+ Ignore-this: 3410a12ca1f9de825b00e692b136d500
+] 
+
+[Updated the code in response to changes to Agda.
+Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20150212152207
+ Ignore-this: 683b5eeca5fa9c8490bceaf68c23a204
+] 
+
 [Updated the copyright year range.
 Nils Anders Danielsson <nils.anders.danielsson@gmail.com>**20141128223227
  Ignore-this: 31d3f5e4fdd6fbfad9758d9bfd0d3a3e

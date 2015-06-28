@@ -13,7 +13,7 @@ in
     boot.initrd.kernelModules = mkIf inInitrd [ "jfs" ];
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd ''
-      cp -v ${pkgs.jfsutils}/sbin/fsck.jfs "$out/bin/"
+      copy_bin_and_libs ${pkgs.jfsutils}/sbin/fsck.jfs
     '';
   };
 }

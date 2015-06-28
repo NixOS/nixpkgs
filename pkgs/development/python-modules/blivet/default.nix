@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, cryptsetup, multipath_tools, lsof, utillinux, isPy3k
+, pyudev, six, libselinux, cryptsetup, multipath_tools, lsof, utillinux
 }:
 
 let
@@ -9,7 +9,6 @@ let
 in buildPythonPackage rec {
   name = "blivet-${version}";
   version = "0.67";
-  disabled = isPy3k;            # for urlgrabber
 
   src = fetchFromGitHub {
     owner = "dwlehman";
@@ -40,10 +39,10 @@ in buildPythonPackage rec {
   # Tests are in <nixos/tests/blivet.nix>.
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://fedoraproject.org/wiki/Blivet";
     description = "Module for management of a system's storage configuration";
-    license = [ "GPLv2+" "LGPLv2.1+" ];
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    platforms = platforms.linux;
   };
 }

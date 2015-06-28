@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    broken = stdenv.isDarwin;
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
       stdenv.lib.maintainers.simons
     ];
-    platforms = ["x86_64-linux" "i686-linux" "i686-darwin" "x86_64-darwin"];
+    platforms = ["x86_64-linux" "i686-linux"];  # Darwin is not supported.
+    inherit (ghc.meta) license;
   };
 
 }

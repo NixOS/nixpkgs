@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "dmenu2";
+  name = "dmenu2-0.3pre-2014-07-08";
 
   src = fetchhg {
     url = "https://bitbucket.org/melek/dmenu2";

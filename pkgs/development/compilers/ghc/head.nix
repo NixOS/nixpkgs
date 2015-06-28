@@ -7,6 +7,7 @@ let
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
+    DYNAMIC_BY_DEFAULT = NO
     ${stdenv.lib.optionalString stdenv.isDarwin ''
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
@@ -16,14 +17,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150118";
+  version = "7.11.20150607";
   name = "ghc-${version}";
-  rev = "6ff3db92140e3ac8cbda50d1a4aab976350ac8c4";
+  rev = "89223ce1340654455a9f3aa9cbf25f30884227fd";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "1a1r3nw7x5rd8563770zcg1phm55vi3sxs2zwr91ik026n8jjba6";
+    sha256 = "1qsv2n5js21kqphq92xlyc91f11fnr9sh1glqzsirc8xr60dg5cs";
   };
 
   postUnpack = ''

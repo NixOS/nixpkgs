@@ -1,4 +1,4 @@
-import ./make-test.nix ({ version, ... }:
+import ./make-test.nix ({ version ? 4, ... }:
 
 let
 

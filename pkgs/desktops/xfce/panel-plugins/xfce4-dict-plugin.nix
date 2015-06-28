@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Dictionary plugin for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
+    broken = true; # see http://goodies.xfce.org/projects/panel-plugins/xfce4-dict-plugin
   };
 }

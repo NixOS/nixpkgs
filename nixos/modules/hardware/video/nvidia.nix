@@ -13,7 +13,7 @@ let
   # driver.
   nvidiaForKernel = kernelPackages:
     if elem "nvidia" drivers then
-      kernelPackages.nvidia_x11
+        kernelPackages.nvidia_x11
     else if elem "nvidiaLegacy173" drivers then
       kernelPackages.nvidia_x11_legacy173
     else if elem "nvidiaLegacy304" drivers then
@@ -46,6 +46,15 @@ in
     environment.systemPackages = [ nvidia_x11 ];
 
     boot.extraModulePackages = [ nvidia_x11 ];
+
+    # nvidia-uvm is required by CUDA applications.
+    boot.kernelModules = [ "nvidia-uvm" ];
+
+    # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
+    services.udev.extraRules =
+      ''
+        KERNEL=="nvidia_uvm", RUN+="${pkgs.stdenv.shell} -c 'mknod -m 666 /dev/nvidia-uvm c $(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+      '';
 
     boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" ];
 

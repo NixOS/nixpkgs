@@ -1,22 +1,33 @@
-{stdenv, fetchurl, polyml, graphviz, fontconfig, liberation_ttf,
+{stdenv, pkgs, fetchurl, graphviz, fontconfig, liberation_ttf,
  experimentalKernel ? true}:
 
 let
   pname = "hol4";
-  version = "k.8";
-  holsubdir = "hol-kananaskis-8";
+  vnum = "10";
+in
+
+let
+  version = "k.${vnum}";
+  longVersion = "kananaskis-${vnum}";
+  holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "-expk" else "-stdknl";
+in
+
+let
+  polymlEnableShared = with pkgs; lib.overrideDerivation polyml (attrs: {
+    configureFlags = "--enable-shared";
+  });
 in
 
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/hol/hol/kananaskis-8/kananaskis-8.tar.gz;
-    sha256 = "5ce4c1e37301dbc38772694e98f1c7eabf69255908de204b280d8b2b1709e9d0";
+    url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
+    sha256 = "0x2wxksr305h1lrbklf6p42lp09rbhb4rsh74g0l70sgapyiac9b";
   };
 
-  buildInputs = [polyml graphviz fontconfig liberation_ttf];
+  buildInputs = [polymlEnableShared graphviz fontconfig liberation_ttf];
 
   buildCommand = ''
 
@@ -46,7 +57,7 @@ stdenv.mkDerivation {
     #sed -ie "/compute/,999 d" tools/build-sequence # for testing
 
     poly < tools/smart-configure.sml
-    
+
     bin/build ${kernelFlag} -symlink
 
     mkdir -p "$out/bin"
@@ -54,7 +65,7 @@ stdenv.mkDerivation {
     # ln -s $out/src/hol4.${version}/bin $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
       HOL4 is the latest version of the HOL interactive proof
@@ -69,6 +80,7 @@ stdenv.mkDerivation {
       checking.
     '';
     homepage = "http://hol.sourceforge.net/";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ mudri ];
   };
 }

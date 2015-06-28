@@ -48,7 +48,6 @@ hashes=builtins.listToAttrs[
   {name="kdegraphics-mobipocket";value="0m41s8scy5hym6mk0kfmjj54dc3yxahsdrliaadixhp0fx02cx0v";}
   {name="kdegraphics-strigi-analyzer";value="08d2vrghwqkw4mg4vmgsynfnhygxpavxnscvs3z70hdff7i001f0";}
   {name="kdegraphics-thumbnailers";value="1lhb7m298mbz7dk50savqdz3p6lkbscn0gi6bqapji24464vlb8k";}
-  {name="kdelibs";value="17pxihhcbinr3jpwvi1iwfnqs2wiqh0jgf1is05yz13122hns87q";}
   {name="kdenetwork-filesharing";value="0a8vw6jj0kz0lq96mj3mfzpdvb6xpw8xvccwxhjqp164bzqdz66d";}
   {name="kdenetwork-strigi-analyzers";value="14px6ddp8flqd40bww0sl71jmn5bfqm9j3v6rqm63ii7z87qk6xl";}
   {name="kdepim";value="0i7r68r5nzflmpdkkzpj5xc3fwxg5903g1fj5g1yn79v5zx1gzd3";}
@@ -117,7 +116,6 @@ hashes=builtins.listToAttrs[
   {name="ksnapshot";value="10grzlp7sq367g91858d16sadzipzmgwczhnb5xvy0437lqhhz7c";}
   {name="kspaceduel";value="0cwgmpv2xcjwz914hqx6rivi5sk4x66imcdqy7pjnj5vk4f197m7";}
   {name="ksquares";value="1zzg6y6zfqd1a0939hd1wy7ix4wld7ixp5pz2qs315g51m9lpn7i";}
-  {name="kstars";value="1pjvy476yjir4z6x1j7192xjr9m0zcxq3x3lpvsxf92pk3l4c73p";}
   {name="ksudoku";value="0qgjx7fbawhn63vv37wv4z56jf0gi4chs64aw9bllbq52syirmgb";}
   {name="ksystemlog";value="11xh1psqhq7vimymb394kxjk83yax3gzi9fdckjspk6p10cycln2";}
   {name="kteatime";value="16rrlxc67afkin3afdf1s9dlr7z2281dfsja64pdrrdilwwpyqwi";}
@@ -221,7 +219,6 @@ versions=builtins.listToAttrs[
   {name="kdegraphics-mobipocket";value="4.14.3";}
   {name="kdegraphics-strigi-analyzer";value="4.14.3";}
   {name="kdegraphics-thumbnailers";value="4.14.3";}
-  {name="kdelibs";value="4.14.3";}
   {name="kdenetwork-filesharing";value="4.14.3";}
   {name="kdenetwork-strigi-analyzers";value="4.14.3";}
   {name="kdepim";value="4.14.3";}
@@ -290,7 +287,6 @@ versions=builtins.listToAttrs[
   {name="ksnapshot";value="4.14.3";}
   {name="kspaceduel";value="4.14.3";}
   {name="ksquares";value="4.14.3";}
-  {name="kstars";value="4.14.3";}
   {name="ksudoku";value="4.14.3";}
   {name="ksystemlog";value="4.14.3";}
   {name="kteatime";value="4.14.3";}
@@ -387,7 +383,6 @@ modules=[
   module="kdelibs";
   split=true;
   pkgs=[
-    { name="kdelibs"; }
     { name="baloo";  }
     { name="baloo-widgets"; sane="baloo_widgets"; }
     { name="kfilemetadata";  }
@@ -532,7 +527,6 @@ modules=[
     { name="klettres";  }
     { name="kmplot";  }
     { name="kqtquickcharts";  }
-    { name="kstars";  }
     { name="ktouch";  }
     { name="kturtle";  }
     { name="kwordquiz";  }

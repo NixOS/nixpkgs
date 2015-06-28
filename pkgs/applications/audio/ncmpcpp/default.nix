@@ -15,11 +15,11 @@ assert taglibSupport -> (taglib != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "ncmpcpp-${version}";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchurl {
     url = "http://ncmpcpp.rybczak.net/stable/${name}.tar.bz2";
-    sha256 = "1mrd6m6ph0fscxp9x96ipxh6ai7w0n1miapcfqrqfy058qx5zbck";
+    sha256 = "1w85r23s0b30vh03xybnjikslqcf02gsciib9v10jw71nw32wzkm";
   };
 
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]
@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
     ++ optional curlSupport "--with-curl"
     ++ optional taglibSupport "--with-taglib";
 
-  buildInputs = [ boost mpd_clientlib ncurses pkgconfig readline libiconv ]
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ boost mpd_clientlib ncurses readline libiconv ]
     ++ optional curlSupport curl
     ++ optional visualizerSupport fftw
     ++ optional taglibSupport taglib;

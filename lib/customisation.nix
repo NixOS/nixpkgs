@@ -29,8 +29,8 @@ rec {
 
      For another application, see build-support/vm, where this
      function is used to build arbitrary derivations inside a QEMU
-     virtual machine. */
-     
+     virtual machine.
+  */
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
@@ -56,18 +56,17 @@ rec {
   makeOverridable = f: origArgs:
     let
       ff = f origArgs;
+      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff //
-        { override = newArgs:
-            makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
+        { override = newArgs: makeOverridable f (overrideWith newArgs);
           deepOverride = newArgs:
             makeOverridable f (lib.overrideExisting (lib.mapAttrs (deepOverrider newArgs) origArgs) newArgs);
           overrideDerivation = fdrv:
             makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
         })
       else if builtins.isFunction ff then
-        { override = newArgs:
-            makeOverridable f (origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs));
+        { override = newArgs: makeOverridable f (overrideWith newArgs);
           __functor = self: ff;
           deepOverride = throw "deepOverride not yet supported for functors";
           overrideDerivation = throw "overrideDerivation not yet supported for functors";
@@ -102,8 +101,11 @@ rec {
       };
   */
   callPackageWith = autoArgs: fn: args:
-    let f = if builtins.isFunction fn then fn else import fn; in
-    makeOverridable f ((builtins.intersectAttrs (builtins.functionArgs f) autoArgs) // args);
+    let
+      f    = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+    in makeOverridable f (auto // args);
+
 
   /* Add attributes to each output of a derivation without changing the derivation itself */
   addPassthru = drv: passthru:
@@ -122,4 +124,38 @@ rec {
 
       outputsList = map outputToAttrListElement outputs;
   in commonAttrs.${drv.outputName};
+
+
+  /* Strip a derivation of all non-essential attributes, returning
+     only those needed by hydra-eval-jobs. Also strictly evaluate the
+     result to ensure that there are no thunks kept alive to prevent
+     garbage collection. */
+  hydraJob = drv:
+    let
+      outputs = drv.outputs or ["out"];
+
+      commonAttrs =
+        { inherit (drv) name system meta; inherit outputs; }
+        // lib.optionalAttrs (drv._hydraAggregate or false) {
+          _hydraAggregate = true;
+          constituents = map hydraJob (lib.flatten drv.constituents);
+        }
+        // (lib.listToAttrs outputsList);
+
+      makeOutput = outputName:
+        let output = drv.${outputName}; in
+        { name = outputName;
+          value = commonAttrs // {
+            outPath = output.outPath;
+            drvPath = output.drvPath;
+            type = "derivation";
+            inherit outputName;
+          };
+        };
+
+      outputsList = map makeOutput outputs;
+
+      drv' = (lib.head outputsList).value;
+    in lib.deepSeq drv' drv';
+
 }

@@ -13,7 +13,7 @@ import ./make-test.nix rec {
           id: redis-master-pod
           containers:
             - name: master
-              image: master:5000/scratch
+              image: master:5000/nix
               cpu: 100
               ports:
                 - name: redis-server
@@ -50,8 +50,8 @@ import ./make-test.nix rec {
           virtualisation.memorySize = 768;
           services.kubernetes = {
             roles = ["master" "node"];
+            dockerCfg = ''{"master:5000":{}}'';
             controllerManager.machines = ["master" "node"];
-            kubelet.extraOpts = "-network_container_image=master:5000/pause";
             apiserver.address = "0.0.0.0";
             verbose = true;
           };
@@ -94,7 +94,8 @@ import ./make-test.nix rec {
         {
           services.kubernetes = {
             roles = ["node"];
-            kubelet.extraOpts = "-network_container_image=master:5000/pause";
+            dockerCfg = ''{"master:5000":{}}'';
+            kubelet.apiServers = ["master:8080"];
             verbose = true;
           };
           virtualisation.docker.extraOptions = "--iptables=false --ip-masq=false -b cbr0 --insecure-registry master:5000";
@@ -155,14 +156,14 @@ import ./make-test.nix rec {
     $node->waitForUnit("kubernetes-kubelet.service");
     $node->waitForUnit("kubernetes-proxy.service");
 
-    $master->waitUntilSucceeds("kubecfg list minions | grep master");
-    $master->waitUntilSucceeds("kubecfg list minions | grep node");
+    $master->waitUntilSucceeds("kubectl get minions | grep master");
+    $master->waitUntilSucceeds("kubectl get minions | grep node");
 
     $client->waitForUnit("docker.service");
-    $client->succeed("tar cv --files-from /dev/null | docker import - scratch");
-    $client->succeed("docker tag scratch master:5000/scratch");
+    $client->succeed("tar cv --files-from /dev/null | docker import - nix");
+    $client->succeed("docker tag nix master:5000/nix");
     $master->waitForUnit("docker-registry.service");
-    $client->succeed("docker push master:5000/scratch");
+    $client->succeed("docker push master:5000/nix");
     $client->succeed("mkdir -p /root/pause");
     $client->succeed("cp /etc/test/pause /root/pause/");
     $client->succeed("cp /etc/test/Dockerfile /root/pause/");

@@ -17,7 +17,7 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
-        cp -v ${pkgs.xfsprogs}/sbin/fsck.xfs $out/bin
+        copy_bin_and_libs ${pkgs.xfsprogs}/sbin/fsck.xfs
       '';
 
     # Trick just to set 'sh' after the extraUtils nuke-refs.

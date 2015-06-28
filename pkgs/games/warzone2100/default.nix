@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bison, flex, gettext, pkgconfig, libpng
-, libtheora, openalSoft, physfs, mesa, fribidi, fontconfig
+, libtheora, openal, physfs, mesa, fribidi, fontconfig
 , freetype, qt4, glew, libogg, libvorbis, zlib, libX11
 , libXrandr, zip, unzip, which
 , withVideos ? false
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/${pname}/warzone2100/Videos/high-quality-en/sequences.wz";
     sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
   };
-  buildInputs = [ bison flex gettext pkgconfig libpng libtheora openalSoft
+  buildInputs = [ bison flex gettext pkgconfig libpng libtheora openal
                   physfs mesa fribidi fontconfig freetype qt4
                   glew libogg libvorbis zlib libX11 libXrandr zip
                   unzip

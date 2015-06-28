@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "ettercap-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Ettercap";
     repo = "ettercap";
     rev = "v${version}";
-    sha256 = "017398fiqcl2x1bjfnz97y6j8v5n83gbsniy73vbx21kmhh5pacg";
+    sha256 = "1kvrzv2f8kxy7pndfadkzv10cs5wsyfkaa1ski20r2mq4wrvd0cd";
   };
 
   buildInputs = [

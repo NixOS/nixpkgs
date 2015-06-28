@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, pythonPackages, gettext, pygtksourceview, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "cherrytree-0.35.6";
+  name = "cherrytree-0.35.8";
 
   src = fetchurl {
     url = "http://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "1nfrnnwaxb07jf5c3id8zimr3q3rbhvzjlmpb99d41d7hqrd2bxj";
+    sha256 = "0vqc1idzd73f4q5f4zwwypj4jiivwnb4y0r3041h2pm08y1wgsd8";
   };
 
   propagatedBuildInputs = [ pythonPackages.sqlite3 ];

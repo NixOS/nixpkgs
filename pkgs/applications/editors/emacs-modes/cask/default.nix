@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     install -d "$out/bin"
     install bin/cask "$out/bin"
 
+    # We also need to install cask's templates in order for 'cask
+    # init' to work properly.
+    install -d "$out/templates"
+    install templates/* "$out/templates"
+
     # In order to work with cask's hard coded file paths (during bootstrap),
     # we have to create these links.
     ln -s "$out/share/emacs/site-lisp/"* "$out"

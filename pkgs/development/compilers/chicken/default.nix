@@ -5,9 +5,9 @@ let
   platform = with stdenv;
     if isDarwin then "macosx"
     else if isCygwin then "cygwin"
-    else if isBSD then "bsd"
+    else if (isFreeBSD || isOpenBSD) then "bsd"
     else if isSunOS then "solaris"
-    else "linux";               # Should be a sane default
+    else "linux"; # Should be a sane default
   lib = stdenv.lib;
 in
 stdenv.mkDerivation {

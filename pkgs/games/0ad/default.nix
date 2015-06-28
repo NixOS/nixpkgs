@@ -1,7 +1,7 @@
 { stdenv, callPackage, fetchurl, python27
 , pkgconfig, spidermonkey_24, boost, icu, libxml2, libpng
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openalSoft, mesa, xproto, libX11, libXcursor, nspr, SDL
+, openal, mesa, xproto, libX11, libXcursor, nspr, SDL
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zeroadData python27 pkgconfig spidermonkey_24 boost icu
     libxml2 libpng libjpeg zlib curl libogg libvorbis enet
-    miniupnpc openalSoft mesa xproto libX11 libXcursor nspr
+    miniupnpc openal mesa xproto libX11 libXcursor nspr
     SDL gloox nvidia-texture-tools
   ] ++ stdenv.lib.optional withEditor wxGTK;
 
@@ -112,10 +112,13 @@ stdenv.mkDerivation rec {
     done <build/resources/0ad.desktop >"$out"/share/applications/0ad.desktop
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare";
     homepage = "http://wildfiregames.com/0ad/";
-    license = [ "GPLv2" "LGPLv2.1" "MIT" "CC BY-SA 3.0" "zlib" ];
+    license = with licenses; [
+      gpl2 lgpl21 mit cc-by-sa-30
+      licenses.zlib # otherwise masked by pkgs.zlib
+    ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

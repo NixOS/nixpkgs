@@ -24,7 +24,6 @@ let
     path =
       [ pkgs.coreutils
         pkgs.utillinux
-        pkgs.sysvtools
         pkgs.openresolv
       ] ++ optional config.nix.readOnlyStore readonlyMountpoint;
     postBootCommands = pkgs.writeText "local-cmds"

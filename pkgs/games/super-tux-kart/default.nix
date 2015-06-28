@@ -1,33 +1,37 @@
-{ fetchurl, cmake, stdenv, plib, SDL, openal, freealut, mesa
+{ fetchgit, fetchsvn, cmake, stdenv, plib, SDL, openal, freealut, mesa
 , libvorbis, libogg, gettext, libXxf86vm, curl, pkgconfig
-, fribidi, autoconf, automake, libtool, bluez }:
+, fribidi, autoconf, automake, libtool, bluez, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.1";
   name = "supertuxkart-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/supertuxkart/${name}-src.tar.bz2";
-    sha256 = "1mpqmi62a2kl6n58mw11fj0dr5xiwmjkqnfmd2z7ghdhc6p02lrk";
-  };
-
+  version = "0.9";
+  srcs = [
+    (fetchgit {
+      url = "https://github.com/supertuxkart/stk-code";
+      rev = "28a525f6d4aba2667c41a549b027149fcceda97e";
+      sha256 = "0b5izr7j3clm6pcxanwwaas06f17wi454s6hwmgv1mg48aay2v97";
+      name = "stk-code";
+    })
+    (fetchsvn {
+      url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
+      rev = "16293";
+      sha256 = "07jdkli28xr3rcxvixyy5bwi26n5i7dkhd9q0j4wifgs4pymm8r5";
+      name = "stk-assets";
+    })
+  ];
+  
   buildInputs = [
     plib SDL openal freealut mesa libvorbis libogg gettext
-    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake bluez
+    libXxf86vm curl pkgconfig fribidi autoconf automake libtool cmake bluez libjpeg
   ];
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    echo Building internal Irrlicht
-    cd lib/irrlicht/source/Irrlicht/
-    cp "${mesa}"/include/GL/{gl,glx,wgl}ext.h .
-    NDEBUG=1 make ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
-    cd -
-  '';
+  sourceRoot = "stk-code";
 
   meta = {
-    description = "SuperTuxKart is a Free 3D kart racing game";
+    description = "A Free 3D kart racing game";
     longDescription = ''
       SuperTuxKart is a Free 3D kart racing game, with many tracks,
       characters and items for you to try, similar in spirit to Mario
@@ -35,6 +39,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://supertuxkart.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ c0dehero fuuzetsu ];
   };
 }

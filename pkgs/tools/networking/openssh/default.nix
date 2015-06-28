@@ -18,11 +18,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-6.7p1";
+  name = "openssh-6.8p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "01smf9pvn2sk5qs80gkmc9acj07ckawi1b3xxyysp3c5mr73ky5j";
+    sha256 = "03hnrqvjq6ghg1mp3gkarfxh6g3x1n1vjrzpbc5lh9717vklrxiz";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport

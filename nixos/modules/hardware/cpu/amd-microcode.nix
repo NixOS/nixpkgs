@@ -22,8 +22,7 @@ with lib;
   ###### implementation
 
   config = mkIf config.hardware.cpu.amd.updateMicrocode {
-    hardware.firmware = [ "${pkgs.amdUcode}/lib/firmware" ];
-    boot.kernelModules = [ "microcode" ];
+    boot.initrd.prepend = [ "${pkgs.microcodeAmd}/amd-ucode.img" ];
   };
 
 }

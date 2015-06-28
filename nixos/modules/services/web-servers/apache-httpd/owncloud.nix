@@ -384,8 +384,7 @@ rec {
     };
 
     adminPassword = mkOption {
-      description = "The admin password for accessing owncloud.
-        Warning: this is stored in cleartext in the Nix store!";
+      description = "The admin password for accessing owncloud.";
     };
 
     dbType = mkOption {
@@ -571,7 +570,7 @@ rec {
 
     chown wwwrun:wwwrun ${config.dataDir}/owncloud.log || true
 
-    QUERY="INSERT INTO groups (gid) values('admin'); INSERT INTO users (uid,password) values('${config.adminUser}','`echo -n "${config.adminPassword}" | ${pkgs.openssl}/bin/openssl dgst -sha1 | ${pkgs.gawk}/bin/awk '{print $2}'`'); INSERT INTO group_user (gid,uid) values('admin','${config.adminUser}');"
+    QUERY="INSERT INTO groups (gid) values('admin'); INSERT INTO users (uid,password) values('${config.adminUser}','${builtins.hashString "sha1" config.adminPassword}'); INSERT INTO group_user (gid,uid) values('admin','${config.adminUser}');"
     ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
   '';
 }

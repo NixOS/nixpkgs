@@ -1,10 +1,22 @@
-{ stdenv, fetchurl, gfortran, atlas, cmake, python, shared ? false }:
+{
+  stdenv,
+  fetchurl,
+  gfortran,
+  cmake,
+  python,
+  atlas ? null,
+  shared ? false
+}:
 let
-  atlasMaybeShared = atlas.override { inherit shared; };
+  atlasMaybeShared = if atlas != null then atlas.override { inherit shared; }
+                     else null;
   usedLibExtension = if shared then ".so" else ".a";
-in
-stdenv.mkDerivation rec {
+  inherit (stdenv.lib) optional optionals concatStringsSep;
+  inherit (builtins) hasAttr attrNames;
   version = "3.5.0";
+in
+
+stdenv.mkDerivation rec {
   name = "liblapack-${version}";
   src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${version}.tgz";
@@ -17,11 +29,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_OPTIMIZED_BLAS=ON"
-    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
-    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
   ]
-  ++ (stdenv.lib.optional shared "-DBUILD_SHARED_LIBS=ON")
+  ++ (optionals (atlas != null) [
+    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
+    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
+  ])
+  ++ (optional shared "-DBUILD_SHARED_LIBS=ON")
+  # If we're on darwin, CMake will automatically detect impure paths. This switch
+  # prevents that.
+  ++ (optional stdenv.isDarwin "-DCMAKE_OSX_SYSROOT:PATH=''")
   ;
 
   doCheck = ! shared;
@@ -37,13 +54,13 @@ stdenv.mkDerivation rec {
     blas = atlas;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit version;
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
-    license = "revised-BSD";
+    license = licenses.bsd3;
 
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.simons ];
   };
 }

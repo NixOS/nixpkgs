@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "9ab48f44ac26a6deb374cb5fe6bad103bbf4fdf5186140e2d40ebe48bd01f3ea";
+    sha256 = "9f52e186d6c9407b2676d4b2ed1cdf96940ec129cc2bd92e54b24526271a9733";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
@@ -77,6 +77,10 @@ stdenv.mkDerivation {
     do
         patchelf --set-rpath $out/lib:${dbus}/lib $i
     done
+
+    # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions
+    # NixOS module) to 98vboxadd-xclient. For now, just work around it:
+    mv lib/VBoxGuestAdditions/98vboxadd-xclient bin/VBoxClient-all
 
     # Remove references to /usr from various scripts and files
     sed -i -e "s|/usr/bin|$out/bin|" share/VBoxGuestAdditions/vboxclient.desktop

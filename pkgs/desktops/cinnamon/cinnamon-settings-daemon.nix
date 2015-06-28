@@ -1,6 +1,6 @@
 
 { stdenv, fetchurl, pkgconfig, autoreconfHook, glib, gettext, gnome_common, cinnamon-desktop, intltool, gtk3,
-libnotify, lcms2, libxklavier, libgnomekbd, libcanberra, pulseaudio, upower, libcanberra_gtk3, colord,
+libnotify, lcms2, libxklavier, libgnomekbd, libcanberra, libpulseaudio, upower, libcanberra_gtk3, colord,
 systemd, libxslt, docbook_xsl, makeWrapper, gsettings_desktop_schemas}:
 
 let
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     glib gettext gnome_common
     intltool gtk3 libnotify lcms2
     libgnomekbd libxklavier colord
-    libcanberra pulseaudio upower
+    libcanberra libpulseaudio upower
     libcanberra_gtk3 cinnamon-desktop
     systemd libxslt docbook_xsl makeWrapper
     gsettings_desktop_schemas

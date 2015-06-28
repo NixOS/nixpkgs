@@ -1,6 +1,7 @@
 args : with args;
+
 rec {
-  src = fetchurl {
+  src = assert !config.inHydra or false; fetchurl {
     url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2014.20140926.35254.orig.tar.xz;
     sha256 = "1c39x059jhn5jsy6i9j3akjbkm1kmmzssy1jyi1aw20rl2vp86w3";
   };
@@ -147,5 +148,6 @@ rec {
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
+    hydraPlatforms = [];
   };
 }

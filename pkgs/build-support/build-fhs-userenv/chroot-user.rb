@@ -11,25 +11,20 @@ mounts = [ ['/nix/store', nil],
            ['/var', nil],
            ['/run', nil],
            ['/root', nil],
-         ].map! { |x| [ x[0], x[1].nil? ? x[0].sub(/^\/*/, '') : x[1] ] }
+         ]
 
 # Create directories
 mkdirs = ['tmp',
          ]
 
-# Symlinks: [from, to (dir)]
-symlinks =
-  # /etc symlinks: [file name, prefix in host-etc]
-  [ ['passwd', ''],
-    ['group', ''],
-    ['shadow', ''],
-    ['hosts', ''],
-    ['resolv.conf', ''],
-    ['nsswitch.conf', ''],
-    ['pam.d', 'static'],
-    ['fonts/fonts.conf', 'static'],
-    ['fonts/conf.d/00-nixos.conf', 'static'],
-  ].map! { |x| [ "host-etc/#{x[1]}/#{x[0]}", "etc/#{File.dirname x[0]}" ] }
+# Propagate environment variables
+envvars = [ 'TERM',
+            'DISPLAY',
+            'HOME',
+            'XDG_RUNTIME_DIR',
+            'LANG',
+            'SSL_CERT_FILE',
+          ]
 
 require 'tmpdir'
 require 'fileutils'
@@ -73,6 +68,9 @@ abort "Usage: chrootenv swdir program args..." unless ARGV.length >= 2
 swdir = Pathname.new ARGV[0]
 execp = ARGV.drop 1
 
+# Set destination paths for mounts
+mounts.map! { |x| [x[0], x[1].nil? ? x[0].sub(/^\/*/, '') : x[1]] }
+
 # Create temporary directory for root and chdir
 root = Dir.mktmpdir 'chrootenv'
 
@@ -93,12 +91,16 @@ if $cpid == 0
   $unshare.call CLONE_NEWNS | CLONE_NEWUSER
 
   # Map users and groups to the parent namespace
-  write_file '/proc/self/setgroups', 'deny'
+  begin
+    # setgroups is only available since Linux 3.19
+    write_file '/proc/self/setgroups', 'deny'
+  rescue
+  end
   write_file '/proc/self/uid_map', "#{uid} #{uid} 1"
   write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
 
   # Do mkdirs
-  mkdirs.each { |x| FileUtils.mkdir_p x }
+  mkdirs.each { |x| FileUtils.mkdir_p "#{root}/#{x}" }
 
   # Do rbind mounts.
   mounts.each do |x|
@@ -110,12 +112,6 @@ if $cpid == 0
   # Chroot!
   Dir.chroot root
   Dir.chdir '/'
-
-  # Do symlinks
-  symlinks.each do |x|
-    FileUtils.mkdir_p x[1]
-    FileUtils.ln_s x[0], x[1]
-  end
 
   # Symlink swdir hierarchy
   mount_dirs = Set.new mounts.map { |x| Pathname.new x[1] }
@@ -136,14 +132,7 @@ if $cpid == 0
   link_swdir.call swdir, Pathname.new('')
 
   # New environment
-  oldenv = ENV.to_h
-  ENV.replace({ 'PS1' => oldenv['PS1'],
-                'TERM' => oldenv['TERM'],
-                'DISPLAY' => oldenv['DISPLAY'],
-                'HOME' => oldenv['HOME'],
-                'PATH' => '/bin:/sbin',
-                'XDG_RUNTIME_DIR' => oldenv['XDG_RUNTIME_DIR'],
-              })
+  ENV.replace(Hash[ envvars.map { |x| [x, ENV[x]] } ])
 
   # Finally, exec!
   exec *execp

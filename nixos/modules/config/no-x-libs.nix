@@ -27,6 +27,6 @@ with lib;
     fonts.fontconfig.enable = false;
 
     nixpkgs.config.packageOverrides = pkgs:
-      { dbus = pkgs.dbus.override { useX11 = false; }; };
+      { dbus = pkgs.dbus.override { x11Support = false; }; };
   };
 }

@@ -42,9 +42,8 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = "nscd";
-        uid = config.ids.uids.nscd;
+    users.extraUsers.nscd =
+      { isSystemUser = true;
         description = "Name service cache daemon user";
       };
 

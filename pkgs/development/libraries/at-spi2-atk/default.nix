@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
                   intltool dbus_glib at_spi2_core libSM ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

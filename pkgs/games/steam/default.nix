@@ -1,7 +1,7 @@
 {stdenv, fetchurl, traceDeps ? false}:
 
 stdenv.mkDerivation rec {
-  name = "${program}-${version}";
+  name = "${program}-original-${version}";
   program = "steam";
   version = "1.0.0.49";
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A digital distribution platform";
     homepage = http://store.steampowered.com/;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jagajaga ];
   };
 }

@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
   # The following libraries are only used in plugins
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
-      mysql postgresql sqlite libjpeg libmng libtiff icu ]
+      mysql.lib postgresql sqlite libjpeg libmng libtiff icu ]
     ++ optionals gtkStyle [ gtk gdk_pixbuf ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
@@ -180,6 +180,6 @@ stdenv.mkDerivation rec {
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
     maintainers = with maintainers; [ lovek323 phreedom sander urkud ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

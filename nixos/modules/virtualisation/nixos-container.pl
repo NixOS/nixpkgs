@@ -8,6 +8,7 @@ use Fcntl ':flock';
 use Getopt::Long qw(:config gnu_getopt);
 
 my $nsenter = "@utillinux@/bin/nsenter";
+my $su = "@su@";
 
 # Ensure a consistent umask.
 umask 0022;
@@ -22,6 +23,7 @@ Usage: nixos-container list
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container status <container-name>
+       nixos-container update <container-name> [--config <string>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -271,14 +273,14 @@ elsif ($action eq "login") {
 }
 
 elsif ($action eq "root-login") {
-    runInContainer("su", "root", "-l");
+    runInContainer("@su@", "root", "-l");
 }
 
 elsif ($action eq "run") {
     shift @ARGV; shift @ARGV;
     # Escape command.
     my $s = join(' ', map { s/'/'\\''/g; "'$_'" } @ARGV);
-    runInContainer("su", "root", "-l", "-c", "exec " . $s);
+    runInContainer("@su@", "root", "-l", "-c", "exec " . $s);
 }
 
 elsif ($action eq "show-ip") {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libusb }:
 let
-  version = "0.7.1";
+  version = "0.7.2";
 in
 stdenv.mkDerivation rec {
   name="dfu-programmer-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dfu-programmer/${name}.tar.gz";
-    sha256 = "0cwy7z5h6f13yx9bkgh61bphzii6lcl21j2gckskphf37bfzazwz";
+    sha256 = "15gr99y1z9vbvhrkd25zqhnzhg6zjmaam3vfjzf2mazd39mx7d0x";
   };
 
   configureFlags = [ "--disable-libusb_1_0" ];
