@@ -61,11 +61,13 @@ stdenv.mkDerivation rec {
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
-      "--bundled-libraries=${if enableKerberos && kerberos.implementation == "heimdal" then "NONE" else "com_err"}"
+      "--bundled-libraries=${if enableKerberos && kerberos != null &&
+        kerberos.implementation == "heimdal" then "NONE" else "com_err"}"
       "--private-libraries=NONE"
       "--builtin-libraries=replace"
     ]
-    ++ optional (enableKerberos && kerberos.implementation == "krb5") "--with-system-mitkrb5"
+    ++ optional (enableKerberos && kerberos != null &&
+      kerberos.implementation == "krb5") "--with-system-mitkrb5"
     ++ optional (!enableDomainController) "--without-ad-dc"
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ];
 
