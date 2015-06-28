@@ -1,0 +1,11 @@
+--- a/src/_macosx.m	2015-06-30 12:18:48.000000000 +0300
++++ b/src/_macosx.m	2015-06-30 12:19:12.000000000 +0300
+@@ -5,6 +5,8 @@
+ #include "numpy/arrayobject.h"
+ #include "path_cleanup.h"
+ 
++#define WITH_NEXT_FRAMEWORK 1
++
+ #if PY_MAJOR_VERSION >= 3
+ #define PY3K 1
+ #else

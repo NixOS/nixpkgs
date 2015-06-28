@@ -4,6 +4,7 @@
 , enableGhostscript ? false, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobjectIntrospection
 , enableGtk3 ? false, cairo
+, Cocoa, Foundation, CoreData, cf-private, libobjc, libcxx
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -17,11 +18,15 @@ buildPythonPackage rec {
     url = "https://pypi.python.org/packages/source/m/matplotlib/${name}.tar.gz";
     sha256 = "67b08b1650a00a6317d94b76a30a47320087e5244920604c5462188cba0c2646";
   };
-  
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+
   XDG_RUNTIME_DIR = "/tmp";
 
   buildInputs = [ python which sphinx stdenv ]
-    ++ stdenv.lib.optional enableGhostscript ghostscript;
+    ++ stdenv.lib.optional enableGhostscript ghostscript
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation CoreData
+                                              cf-private libobjc ];
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype 
@@ -29,6 +34,8 @@ buildPythonPackage rec {
     ]
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ];
+
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
 
   patchPhase = ''
     # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
