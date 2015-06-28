@@ -15,13 +15,15 @@ let
   buildInputs = [
     fuse bison flex_2_5_35 openssl python ncurses readline
     autoconf automake libtool pkgconfig zlib libaio libxml2
-    acl sqlite liburcu attr
+    sqlite liburcu attr
   ];
+  propagatedBuildInputs = [ acl ];
 in
 stdenv.mkDerivation
 rec {
   inherit (s) name version;
   inherit buildInputs;
+  inherit propagatedBuildInputs;
 
   preConfigure = ''
     ./autogen.sh
