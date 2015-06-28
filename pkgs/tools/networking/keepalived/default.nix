@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl net_snmp libnl ];
 
+  # Remove in 1.2.18
+  patches = [ ./fix-ip-release.patch ];
+
   postPatch = ''
     sed -i 's,$(DESTDIR)/usr/share,$out/share,g' Makefile.in
   '';
