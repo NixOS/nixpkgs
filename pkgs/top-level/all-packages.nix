@@ -2630,6 +2630,8 @@ let
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
+  popcorntime = callPackage ../applications/video/popcorntime { };
+
   ponysay = callPackage ../tools/misc/ponysay { };
 
   povray = callPackage ../tools/graphics/povray {
