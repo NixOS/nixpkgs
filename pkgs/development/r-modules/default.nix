@@ -5,7 +5,10 @@
 let
   inherit (pkgs) fetchurl stdenv lib;
 
-  buildRPackage = pkgs.callPackage ./generic-builder.nix { inherit R; };
+  buildRPackage = pkgs.callPackage ./generic-builder.nix {
+    inherit R;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa Foundation;
+  };
 
   # Generates package templates given per-repository settings
   #
