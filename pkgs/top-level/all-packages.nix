@@ -1318,6 +1318,8 @@ let
 
   dtach = callPackage ../tools/misc/dtach { };
 
+  dtc = callPackage ../development/compilers/dtc { };
+
   dub = callPackage ../development/tools/build-managers/dub { };
 
   duff = callPackage ../tools/filesystems/duff { };
