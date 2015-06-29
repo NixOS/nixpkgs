@@ -57,7 +57,7 @@ let requireSource = version: part: hash: (requireFile rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    description = "Oracle instant client libraries and sqlplus CLI.";
+    description = "Oracle instant client libraries and sqlplus CLI";
     longDescription = ''
       Oracle instant client provides access to Oracle databases (OCI,
       OCCI, Pro*C, ODBC or JDBC). This package includes the sqlplus

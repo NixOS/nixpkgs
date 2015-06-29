@@ -5195,8 +5195,8 @@ let
     };
 
     meta = {
-      description = "simple wrapper around fribidi.";
-      homepage = "https://github.com/pediapress/pyfribidi";
+      description = "A simple wrapper around fribidi";
+      homepage = https://github.com/pediapress/pyfribidi;
       license = stdenv.lib.licenses.gpl2;
     };
   };
@@ -9295,7 +9295,8 @@ let
     };
 
     meta = {
-      description = ''PicoSAT is a popular SAT solver written by Armin
+      description = "Python bindings for PicoSAT";
+      longDescription = ''PicoSAT is a popular SAT solver written by Armin
           Biere in pure C. This package provides efficient Python bindings
           to picosat on the C level, i.e. when importing pycosat, the
           picosat solver becomes part of the Python process itself. For
