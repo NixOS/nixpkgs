@@ -3386,6 +3386,29 @@ let
     };
   };
 
+  humanize = buildPythonPackage rec {
+    version = "0.5.1";
+    name = "humanize-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/humanize/${name}.tar.gz";
+      md5 = "e8473d9dc1b220911cac2edd53b1d973";
+    };
+
+    buildInputs = with self; [ mock ];
+
+    doCheck = false;
+
+    meta = {
+      description = "python humanize utilities";
+      homepage = https://github.com/jmoiron/humanize;
+      license = licenses.mit;
+      maintainers = with maintainers; [ matthiasbeyer ];
+      platforms = platforms.linux; # can only test on linux
+    };
+
+  };
+
   hovercraft = buildPythonPackage rec {
     disabled = ! isPy3k;
     name = "hovercraft-${version}";
@@ -3407,6 +3430,25 @@ let
       homepage = https://github.com/regebro/hovercraft;
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu ];
+    };
+  };
+
+  httpauth = buildPythonPackage rec {
+    version = "0.2";
+    name = "httpauth-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/httpauth/${name}.tar.gz";
+      md5 = "78d1835a80955e68e98a3ca5ab7f7dbd";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "WSGI HTTP Digest Authentication middleware";
+      homepage = https://github.com/jonashaag/httpauth;
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ matthiasbeyer ];
     };
   };
 
@@ -6607,6 +6649,27 @@ let
       license     = licenses.psfl;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
+    };
+  };
+
+  klaus = buildPythonPackage rec {
+    version = "0.4.9";
+    name = "klaus-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
+      sha256 = "0qcbv3shz530mn53pdc68fx38ylz72033xsrz77ffi0cks32az2w";
+    };
+
+    propagatedBuildInputs = with self;
+      [ humanize httpauth dulwich pygments flask ];
+
+    meta = {
+      description = "The first Git web viewer that Just Works";
+      homepage    = "https://github.com/jonashaag/klaus";
+      #license     = licenses.mit; # I'm not sure about the license
+      maintainers = with maintainers; [ matthiasbeyer ];
+      platforms   = platforms.linux; # Can only test linux
     };
   };
 
