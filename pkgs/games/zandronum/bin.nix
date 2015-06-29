@@ -3,6 +3,7 @@
 , bzip2
 , cairo
 , fetchurl
+, fluidsynth
 , fontconfig
 , freetype
 , gdk_pixbuf
@@ -20,16 +21,17 @@
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
-  name = "zandronum-2.0";
+  name = "zandronum-2.1";
   src = fetchurl {
-    url = "http://zandronum.com/downloads/zandronum2.0-linux-x86_64.tar.bz2";
-    sha256 = "1k49az7x0ig40r2xisscpyhfcx9zzivx8w1l1ispj58g6qivicgc";
+    url = "http://zandronum.com/downloads/zandronum2.1-linux-x86_64.tar.bz2";
+    sha256 = "0fhk2gd0lqmc6brbli17ks5ywnlzkjyas1kfdqsf3d96w0z5rz11";
   };
 
   libPath = stdenv.lib.makeLibraryPath [
     atk
     bzip2
     cairo
+    fluidsynth
     fontconfig
     freetype
     gdk_pixbuf
