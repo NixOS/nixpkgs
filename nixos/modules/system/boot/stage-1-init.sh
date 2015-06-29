@@ -317,7 +317,7 @@ mountFS() {
 
 
 # Try to find and mount the root device.
-mkdir /mnt-root
+mkdir -p $targetRoot
 
 exec 3< @fsInfo@
 

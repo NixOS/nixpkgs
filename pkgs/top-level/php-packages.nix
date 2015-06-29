@@ -33,12 +33,6 @@ let self = with self; {
     sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
   };
 
-  apc = buildPecl {
-    name = "apc-3.1.13";
-
-    sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
-  };
-
   zendopcache = buildPecl {
     name = "zendopcache-7.0.3";
 
@@ -96,9 +90,8 @@ let self = with self; {
   };
 
   redis = buildPecl {
-    name = "redis-2.2.5";
-
-    sha256 = "0hrk0lf8h6l30zrjld29csl186zb1cl2rz1gfn9dma33np4iisyw";
+    name = "redis-2.2.7";
+    sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
 
   composer = pkgs.stdenv.mkDerivation rec {

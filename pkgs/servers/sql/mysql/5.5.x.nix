@@ -4,12 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.42";
+  version = "5.5.44";
 
   src = fetchurl {
     url = "http://mysql.mirrors.pair.com/Downloads/MySQL-5.5/${name}.tar.gz";
-    sha256 = "0jn7py2wsq78rwi7vfihxs6z3h5hr338b9g46fl3z2g4ddki4yw8";
+    sha256 = "1pp5ngm4ibnp8xnn9haz1db0favd1i7cxdgl5z4677mkgljmpw45";
   };
+
+  patches = if stdenv.isCygwin then [
+    ./5.5.17-cygwin.patch
+    ./5.5.17-export-symbols.patch
+  ] else null;
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps

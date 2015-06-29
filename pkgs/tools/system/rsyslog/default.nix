@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libestr, json_c, zlib, pythonPackages
-, krb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
+, libkrb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null
 , libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
@@ -11,16 +11,16 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.9.0";
+  name = "rsyslog-8.10.0";
 
   src = fetchurl {
     url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1p3saxfs723479rbsdyvqwfrblcp0bw6mkz2ncrxvnccfn70xc7a";
+    sha256 = "04k90v7fm1czg3lm5anfnf5cnxcxyhxldkgwzzi1k0hhczrz6bdr";
   };
 
   buildInputs = [
     pkgconfig libestr json_c zlib pythonPackages.docutils
-    krb5 jemalloc libmysql postgresql libdbi net_snmp libuuid curl gnutls
+    libkrb5 jemalloc libmysql postgresql libdbi net_snmp libuuid curl gnutls
     libgcrypt liblognorm openssl librelp libgt liblogging libnet hadoop rdkafka
     libmongo-client czmq rabbitmq-c hiredis
   ] ++ stdenv.lib.optional stdenv.isLinux systemd;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
     (mkFlag true                      "largefile")
     (mkFlag true                      "regexp")
-    (mkFlag (krb5 != null)            "gssapi-krb5")
+    (mkFlag (libkrb5 != null)         "gssapi-krb5")
     (mkFlag true                      "klog")
     (mkFlag true                      "kmsg")
     (mkFlag (systemd != null)         "imjournal")

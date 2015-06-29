@@ -11,6 +11,6 @@ stdenv.mkDerivation rec {
     description = ''Lambda calculus interpreter'';
     maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = with stdenv.lib.platforms; linux;
-    license = with stdenv.lib.licenses; gpl3;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

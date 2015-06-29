@@ -9,6 +9,7 @@ use FileHandle;
 use Cwd;
 use File::Basename;
 use File::Path qw(make_path);
+use File::Slurp;
 
 
 my $showGraphics = defined $ENV{'DISPLAY'};
@@ -20,7 +21,7 @@ sub new {
     my ($class, $args) = @_;
 
     my $startCommand = $args->{startCommand};
-    
+
     my $name = $args->{name};
     if (!$name) {
         $startCommand =~ /run-(.*)-vm$/ if defined $startCommand;
@@ -33,7 +34,7 @@ sub new {
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
         my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,boot=on,werror=report "
+        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
             if defined $args->{hda};
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
@@ -42,8 +43,6 @@ sub new {
         $startCommand .= "-bios $args->{bios} "
             if defined $args->{bios};
         $startCommand .= $args->{qemuFlags} || "";
-    } else {
-        $startCommand = Cwd::abs_path $startCommand;
     }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
@@ -170,7 +169,7 @@ sub start {
 
     eval {
         local $SIG{CHLD} = sub { die "QEMU died prematurely\n"; };
-        
+
         # Wait until QEMU connects to the monitor.
         accept($self->{monitor}, $monitorS) or die;
 
@@ -181,11 +180,11 @@ sub start {
         $self->{socket}->autoflush(1);
     };
     die "$@" if $@;
-    
+
     $self->waitForMonitorPrompt;
 
     $self->log("QEMU running (pid $pid)");
-    
+
     $self->{pid} = $pid;
     $self->{booted} = 1;
 }
@@ -240,7 +239,7 @@ sub connect {
         alarm 300;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
-        
+
         $self->log("connected to guest root shell");
         $self->{connected} = 1;
 
@@ -269,7 +268,7 @@ sub isUp {
 
 sub execute_ {
     my ($self, $command) = @_;
-    
+
     $self->connect;
 
     print { $self->{socket} } ("( $command ); echo '|!=EOF' \$?\n");
@@ -452,7 +451,7 @@ sub shutdown {
 sub crash {
     my ($self) = @_;
     return unless $self->{booted};
-    
+
     $self->log("forced crash");
 
     $self->sendMonitorCommand("quit");
@@ -490,6 +489,44 @@ sub screenshot {
             or die "cannot convert screenshot";
         unlink $tmp;
     }, { image => $name } );
+}
+
+
+# Take a screenshot and return the result as text using optical character
+# recognition.
+sub getScreenText {
+    my ($self) = @_;
+
+    system("command -v tesseract &> /dev/null") == 0
+        or die "getScreenText used but enableOCR is false";
+
+    my $text;
+    $self->nest("performing optical character recognition", sub {
+        my $tmpbase = Cwd::abs_path(".")."/ocr";
+        my $tmpin = $tmpbase."in.ppm";
+        my $tmpout = "$tmpbase.ppm";
+
+        $self->sendMonitorCommand("screendump $tmpin");
+        system("ppmtopgm $tmpin | pamscale 4 -filter=lanczos > $tmpout") == 0
+            or die "cannot scale screenshot";
+        unlink $tmpin;
+        system("tesseract $tmpout $tmpbase") == 0 or die "OCR failed";
+        unlink $tmpout;
+        $text = read_file("$tmpbase.txt");
+        unlink "$tmpbase.txt";
+    });
+    return $text;
+}
+
+
+# Wait until a specific regexp matches the textual contents of the screen.
+sub waitForText {
+    my ($self, $regexp) = @_;
+    $self->nest("waiting for $regexp to appear on the screen", sub {
+        retry sub {
+            return 1 if $self->getScreenText =~ /$regexp/;
+        }
+    });
 }
 
 

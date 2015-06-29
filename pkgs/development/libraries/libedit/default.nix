@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   NROFF = "${groff}/bin/nroff";
 
+  patches = if stdenv.isCygwin then [
+    ./01-cygwin.patch
+  ] else null;
+
   postInstall = ''
     sed -i ${stdenv.lib.optionalString (stdenv.isDarwin && stdenv.cc.nativeTools) "''"} s/-lncurses/-lncursesw/g $out/lib/pkgconfig/libedit.pc
   '';

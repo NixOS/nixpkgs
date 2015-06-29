@@ -1,16 +1,20 @@
-{ stdenv, fetchgit, popt }:
+{ stdenv, fetchFromGitHub, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.10";
+  version = "0.20";
 
-  src = fetchgit {
-    url = "git://github.com/vathpela/efivar.git";
-    rev = "refs/tags/${version}";
-    sha256 = "04fznbmrf860b4d4i8rshx3mgwbx06v187wf1rddvxxnpkq8920w";
+  src = fetchFromGitHub {
+    owner = "rhinstaller";
+    repo = "efivar";
+    rev = version;
+    sha256 = "14c8x9dhi4scj42n1cf513b551c1ccm8lwpaqx8h8ydpm2k35qi4";
   };
 
   buildInputs = [ popt ];
+
+  # 0.20 Relies on symbols from libdl.so which breaks efibootmgr
+  NIX_LDFLAGS = "-ldl";
 
   installFlags = [
     "libdir=$(out)/lib"

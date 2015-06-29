@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
      substituteInPlace configure --replace "-Werror" ""
   '';
 
+  configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
+
   propagatedBuildInputs = [ dbus dbus_glib glib ];
 
   meta = {

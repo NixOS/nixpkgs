@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, qt4, poppler_qt4, zlib}:
+{ stdenv, fetchurl, qt4, poppler_qt4, zlib, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.7.0";
+  version = "2.9.4";
   name = "${pname}-${version}";
   altname="Texstudio";
 
   src = fetchurl {
     url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "167d78nfk265jjvl129nr70v8ladb2rav2qyhw7ngr6m54gak831";
+    sha256 = "1smmc4xqs8x8qzp6iqj2wr4xarfnxxxp6rq6chx1kb256w75jwfw";
   };
 
-  buildInputs = [ qt4 poppler_qt4 zlib ];
+  buildInputs = [ qt4 poppler_qt4 zlib pkgconfig];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${poppler_qt4}/include/poppler/qt4) "
-    qmake PREFIX=$out texstudio.pro
+    qmake PREFIX=$out NO_APPDATA=True texstudio.pro
   '';
 
   meta = with stdenv.lib; {

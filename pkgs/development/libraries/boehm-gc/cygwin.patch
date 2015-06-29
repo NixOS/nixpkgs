@@ -1,0 +1,108 @@
+--- gc-7.2/include/gc.h	2014-06-01 19:00:48.000000000 +0200
++++ gc-7.2/include/gc.h	2015-05-27 12:55:42.248984200 +0200
+@@ -1386,7 +1386,14 @@
+ /* THREAD_LOCAL_ALLOC defined and the initial allocation call is not    */
+ /* to GC_malloc() or GC_malloc_atomic().                                */
+ 
+-#ifdef __CYGWIN32__
++#ifdef __CYGWIN__
++#ifdef __x86_64__
++  extern int __data_start__[], __data_end__[], __bss_start__[], __bss_end__[];
++#define GC_DATASTART (__data_start__ < __bss_start__ ?\
++                      (void *)__data_start__ : (void *)__bss_start__)
++#define GC_DATAEND (__data_end__ < __bss_end__ ?\
++                      (void *)__data_end__ : (void *)__bss_end__)
++#else
+   /* Similarly gnu-win32 DLLs need explicit initialization from the     */
+   /* main program, as does AIX.                                         */
+   extern int _data_start__[], _data_end__[], _bss_start__[], _bss_end__[];
+@@ -1394,6 +1401,7 @@
+                        (void *)_data_start__ : (void *)_bss_start__)
+ # define GC_DATAEND (_data_end__ > _bss_end__ ? \
+                      (void *)_data_end__ : (void *)_bss_end__)
++#endif
+ # define GC_INIT_CONF_ROOTS GC_add_roots(GC_DATASTART, GC_DATAEND); \
+                                  GC_gcollect() /* For blacklisting. */
+         /* Required at least if GC is in a DLL.  And doesn't hurt. */
+--- gc-7.2/include/private/gcconfig.h	2014-06-01 19:00:48.000000000 +0200
++++ gc-7.2/include/private/gcconfig.h	2015-05-27 12:46:01.864338700 +0200
+@@ -441,10 +441,20 @@
+ #   endif
+ #   define mach_type_known
+ # endif
+-# if defined(__CYGWIN32__) || defined(__CYGWIN__)
++# if defined(__CYGWIN32__)
+ #   define I386
+ #   define CYGWIN32
+ #   define mach_type_known
++#if defined(__CYGWIN__)
++#  if defined(__LP64__)
++#    define X86_64
++#    define mach_type_known
++#  else
++#    define I386
++#  endif
++#  define CYGWIN32
++#  define mach_type_known
++#endif
+ # endif
+ # if defined(__MINGW32__) && !defined(mach_type_known)
+ #   define I386
+@@ -511,6 +521,16 @@
+ #    define mach_type_known
+ # endif
+ 
++#if defined(__CYGWIN__)
++#  if defined(__LP64__)
++#    define X86_64
++#    define mach_type_known
++#  else
++#    define I386
++#  endif
++#  define CYGWIN32
++#  define mach_type_known
++#endif
+ /* Feel free to add more clauses here */
+ 
+ /* Or manually define the machine type here.  A machine type is         */
+@@ -2279,6 +2299,20 @@
+ #       define GWW_VDB
+ #       define DATAEND  /* not needed */
+ #   endif
++
++#   ifdef CYGWIN32
++#       define OS_TYPE "CYGWIN32"
++#       define DATASTART ((ptr_t)GC_DATASTART)  /* From gc.h */
++#       define DATAEND   ((ptr_t)GC_DATAEND)
++#       define ALIGNMENT 8
++#       undef STACK_GRAN
++#       define STACK_GRAN 0x10000
++#       ifdef USE_MMAP
++#         define NEED_FIND_LIMIT
++#         define USE_MMAP_ANON
++#       endif
++#   endif
++
+ # endif /* X86_64 */
+ 
+ # ifdef HEXAGON
+--- gc-7.2/os_dep.c	2015-05-27 12:25:29.097698800 +0200
++++ gc-7.2/os_dep.c	2015-05-27 12:48:23.714600800 +0200
+@@ -764,10 +764,16 @@
+     /* gcc version of boehm-gc).                                        */
+     GC_API int GC_CALL GC_get_stack_base(struct GC_stack_base *sb)
+     {
++# ifdef __x86_64__
++      PNT_TIB pTib = NtCurrentTeb();
++      void * _tlsbase = pTib->StackBase;
++      /*void * _tlsbase = NtCurrentTeb()->pTib.StackBase;*/
++      /*extern void * _tlsbase __asm__ ("%gs:8");*/
++# else
+       void * _tlsbase;
+-
+       __asm__ ("movl %%fs:4, %0"
+                : "=r" (_tlsbase));
++# endif
+       sb -> mem_base = _tlsbase;
+       return GC_SUCCESS;
+     }

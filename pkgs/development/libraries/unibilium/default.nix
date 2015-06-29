@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "143j7qrqjxxmdf3yzhn6av2qwiyjjk4cnskkgz6ir2scjfd5gvja";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
   buildInputs = [ libtool pkgconfig ];
 
   meta = with lib; {
     description = "A very basic terminfo library";
-    license = with licenses; [ lgpl3Plus ];
+    license = licenses.lgpl3Plus;
   };
 }

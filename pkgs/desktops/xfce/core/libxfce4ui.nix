@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   p_name  = "libxfce4ui";
   ver_maj = "4.12";
-  ver_min = "0";
+  ver_min = "1";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "11rrhqxnfwx5jls3nlg9s2x8saag9f2zqk9cdm6hr3bs6cr9a781";
+    sha256 = "3d619811bfbe7478bb984c16543d980cadd08586365a7bc25e59e3ca6384ff43";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

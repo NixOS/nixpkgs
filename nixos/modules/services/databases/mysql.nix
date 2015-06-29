@@ -176,11 +176,12 @@ in
                 touch /tmp/mysql_init
             fi
 
-            mkdir -m 0700 -p ${cfg.pidDir}
+            mkdir -m 0755 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
 
             # Make the socket directory
-            mkdir -m 0700 -p /run/mysqld
+            mkdir -p /run/mysqld
+            chmod 0755 /run/mysqld
             chown -R ${cfg.user} /run/mysqld
           '';
 

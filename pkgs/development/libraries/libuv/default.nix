@@ -105,5 +105,5 @@ in
   //
   mapAttrs (v: h: mkWithAutotools stable (toVersion v) h) {
     v1_2_0 = "1nbp8qpgw64gl9nrjzxw0ndv1m64cfms0cy5a2883vw6877kizmx";
-    v1_4_0 = "17k028gn07vb9in440wbf0ar0rdl8bi5v4shm8nhj22vfb18dhl5";
+    v1_6_1 = "10w9pjbmqcv03v04rnjd8mdh886j7v4y0svdsdklz69zskgdvvqg";
   }

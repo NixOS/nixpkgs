@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, jack2, mesa, pkgconfig }:
+{ stdenv, fetchurl, SDL, libjack2, mesa, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "jack_oscrolloscope-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pl55in0sj7h5r06n1v91im7d18pplvhbjhjm1fdl39zwnyxiash";
   };
 
-  buildInputs = [ SDL jack2 mesa pkgconfig ];
+  buildInputs = [ SDL libjack2 mesa pkgconfig ];
 
   installPhase = ''
     mkdir -p $out/bin

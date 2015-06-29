@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # optimize.diff is taken from https://projects.archlinux.org/svntogit/packages.git/tree/trunk/optimize.diff?h=packages/libmad
   # It is included here in order to fix a build failure in Clang
   # But it may be useful to fix other, currently unknown problems as well
-  ++ stdenv.lib.optional (stdenv.cc.cc.isClang or false) [ ./optimize.diff ];
+  ++ stdenv.lib.optional stdenv.cc.isClang [ ./optimize.diff ];
 
   nativeBuildInputs = [ autoconf ];
 

@@ -2,14 +2,14 @@
 
 with stdenv.lib;
 
-let version = "9.3.6"; in
+let version = "9.3.9"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "056ass7nnfyv7blv02anv795kgpz77gipdpxggd835cdwrhwns13";
+    sha256 = "0j85j69rf54cwz5yhrhk4ca22b82990j5sqb8cr1fl9843nd0fzp";
   };
 
   buildInputs = [ zlib readline openssl ]
@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
     psqlSchema = "9.3";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
-    license = stdenv.lib.licenses.postgresql;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    license = licenses.postgresql;
+    maintainers = [ maintainers.ocharles ];
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux;
   };
 }

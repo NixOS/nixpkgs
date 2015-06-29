@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "A tool for building complete development environments";
     homepage    = http://vagrantup.com;
     license     = licenses.mit;
-    maintainers = with maintainers; [ lovek323 globin ];
+    maintainers = with maintainers; [ lovek323 globin jgeerds ];
     platforms   = platforms.linux;
   };
 

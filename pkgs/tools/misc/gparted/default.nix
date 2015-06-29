@@ -1,5 +1,6 @@
 { stdenv, fetchurl, parted, gtk, glib, intltool, gettext, libuuid
-, pkgconfig, gtkmm, libxml2 }:
+, pkgconfig, gtkmm, libxml2, hicolor_icon_theme
+}:
 
 stdenv.mkDerivation rec {
   name = "gparted-0.22.0";
@@ -11,9 +12,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-doc";
 
-  buildInputs = [
-    parted gtk glib intltool gettext libuuid pkgconfig gtkmm libxml2
-  ];
+  buildInputs = [ parted gtk glib libuuid gtkmm libxml2 hicolor_icon_theme ];
+  nativeBuildInputs = [ intltool gettext pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Graphical disk partitioning tool";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       while preserving the partition contents.
     '';
     homepage = http://gparted.sourceforge.net;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-let version = "3.0.2";
+let version = "3.0.4";
     system-libraries = [
       "pcre"
       "wiredtiger"
@@ -17,16 +17,17 @@ let version = "3.0.2";
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
     buildInputs = [
       sasl boost gperftools pcre snappy
-      zlib libyamlcpp sasl openssl libpcap wiredtiger
-    ];
+      zlib libyamlcpp sasl openssl libpcap
+    ] ++ optional stdenv.is64bit wiredtiger;
 
     other-args = concatStringsSep " " ([
       "--c++11=on"
       "--ssl"
       #"--rocksdb" # Don't have this packaged yet
-      "--wiredtiger=on"
+      "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
       "--js-engine=v8-3.25"
       "--use-sasl-client"
+      "--disable-warnings-as-errors"
       "--variant-dir=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
       "--extrapath=${concatStringsSep "," buildInputs}"
     ] ++ map (lib: "--use-system-${lib}") system-libraries);
@@ -36,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "16c3cr7l8ddziavmxrg2aq9bp1knnscy57xx5zsvz6yv7hh24181";
+    sha256 = "0q23hvi0axc14s1ah1p67rxvi36skw34kj9ahpijx2dd2a5smrvd";
   };
 
   nativeBuildInputs = [ scons ];

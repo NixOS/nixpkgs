@@ -10,6 +10,9 @@
 , phonon_qt5, libdbusmenu_qt5
 , stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf }:
 
+
+assert stdenv.isLinux;
+
 assert monolithic -> !client && !daemon;
 assert client || daemon -> !monolithic;
 assert withKDE -> kdelibs != null;

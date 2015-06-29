@@ -1,18 +1,16 @@
 { stdenv, fetchurl, cmake, qt5, exiv2, graphicsmagick }:
 
 let
-  version = "1.1.0.1";
+  version = "1.2";
 in
 stdenv.mkDerivation rec {
   name = "photoqt-${version}";
   src = fetchurl {
     url = "http://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    sha256 = "1y59ys1dgjppahs7v7kxwva7ik23s0x7j2f6glv6sn23l9cfq9rp";
+    sha256 = "1dnnj2h3j517hcbjxlzk035fis44wdmqq7dvhwpmq1rcr0v32aaa";
   };
 
-  buildInputs = [ cmake qt5 exiv2 graphicsmagick ];
-
-  patches = [ ./graphicsmagick-path.patch ];
+  buildInputs = [ cmake qt5.base qt5.tools exiv2 graphicsmagick ];
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"

@@ -1,22 +1,16 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "inetutils-1.9.2";
+  name = "inetutils-1.9.4";
 
   src = fetchurl {
     url = "mirror://gnu/inetutils/${name}.tar.gz";
-    sha256 = "04wrm0v7l4890mmbaawd6wjwdv08bkglgqhpz0q4dkb0l50fl8q4";
+    sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
 
   buildInputs = [ ncurses /* for `talk' */ ];
 
   configureFlags = "--with-ncurses-include-dir=${ncurses}/include";
-
-  preConfigure = ''
-     # Fix for building on Glibc 2.16.  Won't be needed once the
-     # gnulib in inetutils is updated.
-     sed -i '/gets is a security hole/d' lib/stdio.in.h
-  '';
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.

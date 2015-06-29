@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       the internal hard drive and park its heads on the ramp when critical
       situations are anticipated. This has no effect on SSD devices!
     '';
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

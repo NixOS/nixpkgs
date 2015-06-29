@@ -31,7 +31,15 @@ elif [[ $1 == build ]]; then
         echo "=== Not a pull request"
     else
         echo "=== Checking PR"
-        nox-review pr ${TRAVIS_PULL_REQUEST}
+
+        if ! nox-review pr ${TRAVIS_PULL_REQUEST}; then
+            if sudo dmesg | egrep 'Out of memory|Killed process' > /tmp/oom-log; then
+                echo "=== The build failed due to running out of memory:"
+                cat /tmp/oom-log
+                echo "=== Please disregard the result of this Travis build."
+            fi
+            exit 1
+        fi
     fi
     # echo "=== Checking tarball creation"
     # nix-build pkgs/top-level/release.nix -A tarball

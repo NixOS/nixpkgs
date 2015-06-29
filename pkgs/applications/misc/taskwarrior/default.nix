@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "taskwarrior-${version}";
-  version = "2.4.0";
+  version = "2.4.4";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
     url = "http://www.taskwarrior.org/download/task-${version}.tar.gz";
-    sha256 = "17hiv7zld06zb5xmyp96bw9xl6vp178fhffs660fxxpxn3srb9bg";
+    sha256 = "7ff406414e0be480f91981831507ac255297aab33d8246f98dbfd2b1b2df8e3b";
   };
 
   nativeBuildInputs = [ cmake libuuid gnutls ];
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     ln -s "../../share/doc/task/scripts/bash/task.sh" "$out/etc/bash_completion.d/"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GTD (getting things done) implementation";
     homepage = http://taskwarrior.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcweber jgeerds ];
+    platforms = platforms.linux;
   };
 }

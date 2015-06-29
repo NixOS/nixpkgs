@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ getopt lua boost pkgconfig ];
 
-  preConfigure = ''makeFlags="PREFIX=$out conf_dir=$out/etc/highlight"'';
+  preConfigure = ''makeFlags="PREFIX=$out conf_dir=$out/etc/highlight/"'';
 
   meta = {
     description = "Source code highlighting tool";

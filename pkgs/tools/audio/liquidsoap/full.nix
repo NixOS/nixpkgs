@@ -1,6 +1,6 @@
 { stdenv, fetchurl, which, pkgconfig
 , ocaml, ocamlPackages
-, libao, portaudio, alsaLib, pulseaudio, jack2
+, libao, portaudio, alsaLib, libpulseaudio, libjack2
 , libsamplerate, libmad, taglib, lame, libogg
 , libvorbis, speex, libtheora, libopus, fdk_aac
 , faad2, flac, ladspaH, ffmpeg, frei0r, dssi
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ which ocaml ocamlPackages.findlib pkgconfig
-      libao portaudio alsaLib pulseaudio jack2
+      libao portaudio alsaLib libpulseaudio libjack2
       libsamplerate libmad taglib lame libogg
       libvorbis speex libtheora libopus fdk_aac
       faad2 flac ladspaH ffmpeg frei0r dssi

@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "telegram-cli";
+  name = "telegram-cli-2014-03-04";
 
   src = fetchgit {
     url = "https://github.com/vysheng/tg.git";

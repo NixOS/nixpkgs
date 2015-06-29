@@ -55,7 +55,7 @@ in
       enable = mkOption {
         default = false;
         description = "Whether to enable the influxdb server";
-        type = types.uniq types.bool;
+        type = types.bool;
       };
 
       package = mkOption {

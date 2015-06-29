@@ -1,12 +1,12 @@
 { stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
 
 let
-  gcc = if stdenv.cc.cc.isGNU or false then stdenv.cc.cc else stdenv.cc.cc.gcc;
+  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation {
   name = "clang-${version}";
 
   unpackPhase = ''
-    unpackFile ${fetch "cfe" "0b8825mvdhfk5r9gwcwp1j2dl9kw5glgyk7pybq2dzhrh4vnj3my"}
+    unpackFile ${fetch "cfe" "1myssbxlyln0nggfz04nfrbzdckljksmaxp82nq7hrmqjc62vybl"}
     mv cfe-${version}.src clang
     sourceRoot=$PWD/clang
     unpackFile ${clang-tools-extra_src}

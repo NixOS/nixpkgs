@@ -7,7 +7,7 @@ assert withGui -> gtk2 != null;
 stdenv.mkDerivation rec {
 
   version = "1.0.6";
-  name = "arduino${stdenv.lib.optionalString (withGui == false) "-core"}";
+  name = "arduino${stdenv.lib.optionalString (withGui == false) "-core"}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";

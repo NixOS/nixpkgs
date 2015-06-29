@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "icmake-${version}";
-  version = "7.22.00";
+  version = "7.22.01";
 
   src = fetchurl {
     url = "mirror://sourceforge/icmake/icmake_${version}.orig.tar.gz";
-    sha256 = "013vxnilygad981zb2608f95q2h3svvbgpjvzvk16qyxjy4y4q6z";
+    sha256 = "1iv6p9cyvr9i2sjhklplr65llg1ycxqy7z4dfgn0nkwxgs9yf8mm";
   };
 
   preConfigure = ''

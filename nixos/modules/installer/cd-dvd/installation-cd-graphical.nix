@@ -11,9 +11,16 @@ with lib;
   # Provide wicd for easy wireless configuration.
   #networking.wicd.enable = true;
 
-  # Include gparted for partitioning disks
-  environment.systemPackages = [ pkgs.gparted ];
-  
+  environment.systemPackages =
+    [ # Include gparted for partitioning disks.
+      pkgs.gparted
+
+      # Include some editors.
+      pkgs.vim
+      pkgs.bvi # binary editor
+      pkgs.joe
+    ];
+
   # Provide networkmanager for easy wireless configuration.
   networking.networkmanager.enable = true;
   networking.wireless.enable = mkForce false;
@@ -67,7 +74,7 @@ with lib;
       loadTemplate("org.kde.plasma-desktop.defaultPanel")
 
       for (var i = 0; i < screenCount; ++i) {
-      	var desktop = new Activity
+        var desktop = new Activity
         desktop.name = i18n("Desktop")
         desktop.screen = i
         desktop.wallpaperPlugin = 'image'
@@ -75,7 +82,7 @@ with lib;
 
         var folderview = desktop.addWidget("folderview");
         folderview.writeConfig("url", "desktop:/");
-        
+
         //Create more panels for other screens
         if (i > 0){
           var panel = new Panel

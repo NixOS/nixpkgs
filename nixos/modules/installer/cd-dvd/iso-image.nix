@@ -40,7 +40,7 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixosVersion} Installer
+    MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
     LINUX /boot/bzImage
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
@@ -105,7 +105,7 @@ in
   options = {
 
     isoImage.isoName = mkOption {
-      default = "${config.isoImage.isoName}.iso";
+      default = "${config.isoImage.isoBaseName}.iso";
       description = ''
         Name of the generated ISO image file.
       '';
@@ -189,6 +189,18 @@ in
         };
       description = ''
         The splash image to use in the bootloader.
+      '';
+    };
+
+    isoImage.appendToMenuLabel = mkOption {
+      default = " Installer";
+      example = " Live System";
+      description = ''
+        The string to append after the menu label for the NixOS system.
+        This will be directly appended (without whitespace) to the NixOS version
+        string, like for example if it is set to <literal>XXX</literal>:
+
+        <para><literal>NixOS 99.99-pre666XXX</literal></para>
       '';
     };
 

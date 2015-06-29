@@ -1,22 +1,20 @@
-{ stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
-, pkgconfig, boehmgc, perlPackages
+{ lib, stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
+, pkgconfig, boehmgc, perlPackages, libsodium
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.8";
+  name = "nix-1.9";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-    sha256 = "a30a5e801bc1cb1019cbc3456d961a307c45c9c588b8692cf1293ea6588ef01c";
+    sha256 = "8a47cd7c35dfa628a4acfaef387e7451013c61d250bbcf1f38067a7c73f9f3e1";
   };
-
-  patches = [ ./xfs.patch ];
 
   nativeBuildInputs = [ perl pkgconfig ];
 
-  buildInputs = [ curl openssl sqlite ];
+  buildInputs = [ curl openssl sqlite ] ++ lib.optional stdenv.isLinux libsodium;
 
   propagatedBuildInputs = [ boehmgc ];
 

@@ -1,14 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "google-gflags-2.0";
+  name = "google-gflags-${version}";
+  version = "2.1.2";
 
-  src = fetchurl {
-    url = "https://gflags.googlecode.com/files/gflags-2.0.tar.gz";
-    sha256 = "1mypfahsfy0piavhf7il2jfs1gq7jp6yarl9sq5hhypj34s5sjnf";
+  src = fetchFromGitHub {
+    owner = "gflags";
+    repo = "gflags";
+    rev = "v${version}";
+    sha256 = "0qxvr9cyxq3px60jglkm94pq5bil8dkjjdb99l3ypqcds7iypx9w";
   };
 
-  doCheck = true;
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_STATIC_LIBS=ON"
+    "-DBUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+  ];
+
+  doCheck = false;
 
   meta = {
     description = "A C++ library that implements commandline flags processing";

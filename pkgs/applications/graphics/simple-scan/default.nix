@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, intltool, itstool, libxml2
 , makeWrapper, pkgconfig, saneBackends, systemd, vala }:
 
-let version = "3.16.0.1"; in
+let version = "3.17.3"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
 
   src = fetchurl {
-    sha256 = "0p1knmbrdwrnjjk5x0szh3ja2lfamaaynj2ai92zgci2ma5xh2ma";
-    url = "https://launchpad.net/simple-scan/3.16/${version}/+download/${name}.tar.xz";
+    sha256 = "1kb2xk4vr2nab3hfjfnfyapv2z65h99c3g7mfkmanzrng5xwrj8q";
+    url = "https://launchpad.net/simple-scan/3.17/${version}/+download/${name}.tar.xz";
   };
 
   meta = with stdenv.lib; {
@@ -21,13 +21,14 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = https://launchpad.net/simple-scan;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ cairo colord glib gtk3 intltool itstool libxml2 makeWrapper
-    pkgconfig saneBackends systemd vala ];
+  buildInputs = [ cairo colord glib gtk3 libxml2
+    saneBackends systemd vala ];
+  nativeBuildInputs = [ intltool itstool makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
 

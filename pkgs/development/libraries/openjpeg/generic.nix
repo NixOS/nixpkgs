@@ -1,83 +1,70 @@
-{ stdenv, cmake, pkgconfig, libpng, libtiff, lcms2, glib/*passthru only*/
-, sharedLibsSupport ? true # Build shared libraries
-, codecSupport ? true # Codec executables
+{ stdenv, fetchurl, cmake, pkgconfig
+, libpng, libtiff, lcms2
 , mj2Support ? true # MJ2 executables
 , jpwlLibSupport ? true # JPWL library & executables
-, jpipLibSupport ? true # JPIP library & executables
+, jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl ? null, fcgi ? null # JPIP Server
 #, opjViewerSupport ? false, wxGTK ? null # OPJViewer executable
-, openjpegJarSupport ? false, jdk ? null # Openjpeg jar (Java)
+, openjpegJarSupport ? false # Openjpeg jar (Java)
 , jp3dSupport ? true # # JP3D comp
 , thirdPartySupport ? false # Third party libraries - OFF: only build when found, ON: always build
 , testsSupport ? false
+, jdk ? null
 # Inherit generics
-, branch, src, version, ...
+, branch, sha256, version, ...
 }:
 
-assert jpipServerSupport -> (jpipLibSupport && (curl != null) && (fcgi != null));
+assert jpipServerSupport -> jpipLibSupport && curl != null && fcgi != null;
 #assert opjViewerSupport -> (wxGTK != null);
-assert openjpegJarSupport -> (jdk != null);
-assert testsSupport -> codecSupport;
+assert (openjpegJarSupport || jpipLibSupport) -> jdk != null;
 
 let
-  mkFlag = optSet: flag: if optSet then "-D${flag}=ON" else "-D${flag}=OFF";
+  inherit (stdenv.lib) optional optionals;
+  mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
 in
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openjpeg-${version}";
-  inherit branch;
-  inherit version;
-  inherit src;
+  
+  src = fetchurl {
+    url = "mirror://sourceforge/openjpeg.mirror/${version}/openjpeg-${version}.tar.gz";
+    inherit sha256;
+  };
 
   cmakeFlags = [
-    (mkFlag sharedLibsSupport "BUILD_SHARED_LIBS")
-    (mkFlag codecSupport "BUILD_CODEC")
+    "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_CODEC=ON"
     (mkFlag mj2Support "BUILD_MJ2")
     (mkFlag jpwlLibSupport "BUILD_JPWL")
     (mkFlag jpipLibSupport "BUILD_JPIP")
     (mkFlag jpipServerSupport "BUILD_JPIP_SERVER")
     #(mkFlag opjViewerSupport "BUILD_VIEWER")
+    "-DBUILD_VIEWER=OFF"
     (mkFlag openjpegJarSupport "BUILD_JAVA")
     (mkFlag jp3dSupport "BUILD_JP3D")
     (mkFlag thirdPartySupport "BUILD_THIRDPARTY")
     (mkFlag testsSupport "BUILD_TESTING")
   ];
 
-  nativebuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ cmake ]
+  buildInputs = [ ]
     ++ optionals jpipServerSupport [ curl fcgi ]
     #++ optional opjViewerSupport wxGTK
-    ++ optional openjpegJarSupport jdk;
+    ++ optional (openjpegJarSupport || jpipLibSupport) jdk;
 
   propagatedBuildInputs = [ libpng libtiff lcms2 ];
-
-  postInstall = glib.flattenInclude + ''
-    mkdir -p "$out/lib/pkgconfig"
-    cat > "$out/lib/pkgconfig/libopenjp2.pc" <<EOF
-    prefix=$out
-    libdir=$out/lib
-    includedir=$out/include
-
-    Name: openjp2
-    Description: JPEG2000 library (Part 1 and 2)
-    URL: http://www.openjpeg.org/
-    Version: ${version}
-    Libs: -L$out/lib -lopenjp2
-    Cflags: -I$out/include
-    EOF
-  '';
 
   passthru = {
     incDir = "openjpeg-${branch}";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open-source JPEG 2000 codec written in C language";
-    homepage    = http://www.openjpeg.org/;
-    license     = licenses.bsd2;
-    maintainer  = with maintainers; [ codyopel ];
-    platforms   = platforms.all;
+    homepage = http://www.openjpeg.org/;
+    license = licenses.bsd2;
+    maintainer = with maintainers; [ codyopel ];
+    platforms = platforms.all;
   };
 }

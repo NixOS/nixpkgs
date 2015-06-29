@@ -77,6 +77,12 @@ stdenv.mkDerivation ({
     + ''
       cat ${./glibc-remove-datetime-from-nscd.patch} \
         | sed "s,@out@,$out," | patch -p1
+    ''
+    # CVE-2014-8121, see https://bugzilla.redhat.com/show_bug.cgi?id=1165192
+    + ''
+      substituteInPlace ./nss/nss_files/files-XXX.c \
+        --replace 'status = internal_setent (stayopen);' \
+                  'status = internal_setent (1);'
     '';
 
   configureFlags =

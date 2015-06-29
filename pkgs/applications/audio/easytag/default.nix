@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libid3tag, id3lib, taglib
 , libvorbis, libogg, flac, itstool, libxml2, gsettings_desktop_schemas
-, makeWrapper, gnome_icon_theme, dconf
+, makeWrapper, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram $out/bin/easytag \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share" \
-      --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
   '';
 
   NIX_LDFLAGS = "-lid3tag -lz";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     pkgconfig intltool gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
-    itstool libxml2 gsettings_desktop_schemas gnome_icon_theme dconf
+    itstool libxml2 gsettings_desktop_schemas gnome3.defaultIconTheme gnome3.dconf
   ];
 
   meta = {

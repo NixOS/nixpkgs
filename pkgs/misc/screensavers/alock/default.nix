@@ -2,13 +2,13 @@
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
-  date = "20141209";
+  date = "20150418";
   name = "alock-${date}";
 
   src = fetchgit {
     url = https://github.com/Arkq/alock;
-    rev = "5ab7e6014faa1659c2d55bf9734bfa3ce7137443";
-    sha256 = "07wf3vxh54ncxslp3zf8m7szpqbissxf8q9rs5zgvg333zdqd49s";
+    rev = "69b547602d965733d415f877eb59d05966bd158d";
+    sha256 = "c1f00bf90c966b2b76e00061cc4b54a3c0bc6547e788731ab694b43f55a216ab";
   };
 
   preConfigure = "autoreconf -fvi";

@@ -13,7 +13,7 @@ bundlerEnv {
   meta = with lib; {
     description = "A data collector";
     homepage    = http://www.fluentd.org/;
-    license     = with licenses; asl20;
+    license     = licenses.asl20;
     maintainers = with maintainers; [ offline ];
     platforms   = platforms.unix;
   };

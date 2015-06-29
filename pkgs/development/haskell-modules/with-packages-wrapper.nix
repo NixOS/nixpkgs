@@ -1,6 +1,7 @@
 { stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper
 , ignoreCollisions ? false, withLLVM ? false
 , postBuild ? ""
+, haskellPackages
 }:
 
 # This wrapper works only with GHC 6.12 or later.
@@ -32,6 +33,7 @@ let
   ghc761OrLater = isGhcjs || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
   ghcCommand    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommandCaps= lib.toUpper ghcCommand;
   libDir        = "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
@@ -51,10 +53,6 @@ buildEnv {
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
 
-    ${lib.optionalString isGhcjs ''
-    cp -r "${ghc}/${ghc.libDir}/"* ${libDir}/
-    ''}
-
     if test -L "$out/bin"; then
       binTarget="$(readlink -f "$out/bin")"
       rm "$out/bin"
@@ -62,36 +60,44 @@ buildEnv {
       chmod u+w "$out/bin"
     fi
 
-    for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
-      rm -f $out/bin/$prg
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg             \
-        --add-flags '"-B$NIX_GHC_LIBDIR"'                   \
-        --set "NIX_GHC"        "$out/bin/${ghcCommand}"     \
-        --set "NIX_GHCPKG"     "$out/bin/${ghcCommand}-pkg" \
-        --set "NIX_GHC_DOCDIR" "${docDir}"                  \
-        --set "NIX_GHC_LIBDIR" "${libDir}"                  \
-        ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+    for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
+      if [[ -x "${ghc}/bin/$prg" ]]; then
+        rm -f $out/bin/$prg
+        makeWrapper ${ghc}/bin/$prg $out/bin/$prg                           \
+          --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'                   \
+          --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
+          --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
+          --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
+          --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
+          ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
+      fi
     done
 
     for prg in runghc runhaskell; do
-      rm -f $out/bin/$prg
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg             \
-        --add-flags "-f $out/bin/ghc"                       \
-        --set "NIX_GHC"        "$out/bin/${ghcCommand}"     \
-        --set "NIX_GHCPKG"     "$out/bin/${ghcCommand}-pkg" \
-        --set "NIX_GHC_DOCDIR" "${docDir}"                  \
-        --set "NIX_GHC_LIBDIR" "${libDir}"
+      if [[ -x "${ghc}/bin/$prg" ]]; then
+        rm -f $out/bin/$prg
+        makeWrapper ${ghc}/bin/$prg $out/bin/$prg                           \
+          --add-flags "-f $out/bin/${ghcCommand}"                           \
+          --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
+          --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
+          --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
+          --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
+      fi
     done
 
     for prg in ${ghcCommand}-pkg ${ghcCommand}-pkg-${ghc.version}; do
-      rm -f $out/bin/$prg
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
+      if [[ -x "${ghc}/bin/$prg" ]]; then
+        rm -f $out/bin/$prg
+        makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "${packageDBFlag}=${packageCfgDir}"
+      fi
     done
 
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
-} // {
-  preferLocalBuild = true;
-  inherit (ghc) version meta;
+  passthru = {
+    preferLocalBuild = true;
+    inherit (ghc) version meta;
+    inherit haskellPackages;
+  };
 }

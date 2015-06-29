@@ -1,0 +1,57 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+	 xmlns:xlink="http://www.w3.org/1999/xlink"
+	 xml:id="chap-functions">
+
+<title>Functions reference</title>
+
+<para>
+  The nixpkgs repository has several utility functions to manipulate Nix expressions.
+</para>
+
+<section xml:id="sec-pkgs-overridePackages">
+  <title>pkgs.overridePackages</title>
+
+  <para>
+    This function inside the nixpkgs expression (<varname>pkgs</varname>)
+    can be used to override the set of packages itself.
+  </para>
+  <para>
+    Warning: this function is expensive and must not be used from within
+    the nixpkgs repository.
+  </para>
+  <para>
+    Example usage:
+
+    <programlisting>let
+  pkgs = import &lt;nixpkgs&gt; {};
+  newpkgs = pkgs.overridePackages (self: super: {
+    foo = super.foo.override { ... };
+  };
+in ...</programlisting>
+  </para>
+
+  <para>
+    The resulting <varname>newpkgs</varname> will have the new <varname>foo</varname>
+    expression, and all other expressions depending on <varname>foo</varname> will also
+    use the new <varname>foo</varname> expression.
+  </para>
+
+  <para>
+    The behavior of this function is similar to <link 
+    linkend="sec-modify-via-packageOverrides">config.packageOverrides</link>.
+  </para>
+
+  <para>
+    The <varname>self</varname> parameter refers to the final package set with the
+    applied overrides. Using this parameter may lead to infinite recursion if not
+    used consciously.
+  </para>
+
+  <para>
+    The <varname>super</varname> parameter refers to the old package set.
+    It's equivalent to <varname>pkgs</varname> in the above example.
+  </para>
+
+</section>
+
+</chapter>

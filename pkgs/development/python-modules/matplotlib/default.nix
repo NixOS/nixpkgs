@@ -10,11 +10,11 @@ assert enableGhostscript -> ghostscript != null;
 assert enableGtk2 -> pygtk != null;
 
 buildPythonPackage rec {
-  name = "matplotlib-1.4.2";
+  name = "matplotlib-1.4.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/matplotlib/${name}.tar.gz";
-    sha256 = "0m6v9nwdldlwk22gcd339zg6mny5m301fxgks7z8sb8m9wawg8qp";
+    sha256 = "1dn05cvd0g984lzhh72wa0z93psgwshbbg93fkab6slx5m3l95av";
   };
   
   XDG_RUNTIME_DIR = "/tmp";

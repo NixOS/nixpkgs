@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex bison readline ];
 
+  patches = [
+    ./dont-create-sysconfdir.patch
+  ];
+
+  configureFlags = [
+    "--localstatedir /var"
+  ];
+
   meta = {
     description = "BIRD Internet Routing Daemon";
     homepage = http://bird.network.cz;

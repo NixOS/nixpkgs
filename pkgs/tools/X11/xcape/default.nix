@@ -3,7 +3,7 @@
 let
   s = rec {
     baseName = "xcape";
-    version = "git-2013-05-30";
+    version = "git-2015-03-01";
     name = "${baseName}-${version}";
   };
   buildInputs = [
@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   inherit buildInputs;
   src = fetchgit {
     url = https://github.com/alols/xcape;
-    rev = "39aa08c5da354a8fe495eba8787a01957cfa5fcb";
-    sha256 = "1yh0vbaj4c5lflxm3d4xrfaric1lp0gfcyzq33bqphpsba439bmg";
+    rev = "f3802fc086ce9d961d644a5d29ad5b650db56215";
+    sha256 = "05mm4ap69ncwl4hhzf2dvbazqxjf27477cd3chpfc7qi7srqasvz";
   };
   preConfigure = ''
     makeFlags="$makeFlags PREFIX=$out"

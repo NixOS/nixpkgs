@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   # Required binaries during execution
   # Python: Autocompletion generated from manpages and config editing
-  propagatedBuildInputs = [ python which groff gettext man_db bc ];
+  propagatedBuildInputs = [ python which groff gettext ]
+                          ++ stdenv.lib.optional (!stdenv.isDarwin) man_db
+                          ++ [ bc ];
 
   postInstall = ''
     sed -i "s|bc|${bc}/bin/bc|" "$out/share/fish/functions/seq.fish"
@@ -22,7 +24,9 @@ stdenv.mkDerivation rec {
     sed -e "s|gettext |${gettext}/bin/gettext |" \
         -e "s|which |${which}/bin/which |" \
         -i "$out/share/fish/functions/_.fish"
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s|Popen(\['manpath'|Popen(\['${man_db}/bin/manpath'|" "$out/share/fish/tools/create_manpage_completions.py"
+  '' + ''
     sed -i "s|/sbin /usr/sbin||" \
            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
   '';

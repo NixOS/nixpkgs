@@ -1,59 +1,31 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    url="http://www.i18nguy.com/unicode/andagii.zip";
-    name="andagii";
-    version="1.0.2";
-    hash="0cknb8vin15akz4ahpyayrpqyaygp9dgrx6qw7zs7d6iv9v59ds1";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
+stdenv.mkDerivation rec {
+  name = "andagii-${version}";
+  version = "1.0.2";
+
+  src = fetchzip {
+    url = http://www.i18nguy.com/unicode/andagii.zip;
+    sha256 = "0a0c43y1fd5ksj50axhng7p00kgga0i15p136g68p35wj7kh5g2k";
+    stripRoot = false;
     curlOpts = "--user-agent 'Mozilla/5.0'";
-    sha256 = sourceInfo.hash;
   };
 
-  name = "${sourceInfo.name}-${sourceInfo.version}";
-  inherit buildInputs;
+  phases = [ "unpackPhase" "installPhase" ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doUnpack" "doInstall"];
+  installPhase = ''
+    mkdir -p $out/share/fonts/truetype
+    cp -v ANDAGII_.TTF $out/share/fonts/truetype/andagii.ttf
+  '';
 
-  doUnpack = a.fullDepEntry ''
-    unzip "${src}"
-  '' ["addInputs"];
-
-  doInstall = a.fullDepEntry (''
-    mkdir -p "$out"/share/fonts/ttf/
-    cp ANDAGII_.TTF "$out"/share/fonts/ttf/andagii.ttf
-  '') ["defEnsureDir" "minInit"];
-      
-  meta = {
+  # There are multiple claims that the font is GPL, so I include the
+  # package; but I cannot find the original source, so use it on your
+  # own risk Debian claims it is GPL - good enough for me.
+  meta = with stdenv.lib; {
+    homepage = http://www.i18nguy.com/unicode/unicode-font.HTML;
     description = "Unicode Plane 1 Osmanya script font";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    hydraPlatforms = [];
-    # There are multiple claims that the font is GPL, 
-    # so I include the package; but I cannot find the
-    # original source, so use it on your own risk
-    # Debian claims it is GPL - good enough for me.
+    maintainers = with maintainers; [ raskin rycee ];
+    license = "unknown";
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.i18nguy.com/unicode/unicode-font.html";
-    };
-  };
-}) x
-
+}

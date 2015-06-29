@@ -2,6 +2,10 @@
 , pkgconfig, runCommand, which, unstableVersion ? false
 }:
 
+# nodejs 0.12 can't be built on armv5tel. Armv6 with FPU, minimum I think.
+# Related post: http://zo0ok.com/techfindings/archives/1820
+assert stdenv.system != "armv5tel-linux";
+
 let
   dtrace = runCommand "dtrace-native" {} ''
     mkdir -p $out/bin
@@ -58,7 +62,7 @@ in stdenv.mkDerivation {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.shlevy ];
+    maintainers = [ maintainers.goibhniu maintainers.shlevy maintainers.havvy ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

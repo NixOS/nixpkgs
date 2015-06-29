@@ -15,7 +15,7 @@
 }:
 
 let
-  src = fetch "llvm" "1kmr5vlnz1419nnvyc7lsrcfx09n65ravjbmzxrqz7ml07jnk6mk";
+  src = fetch "llvm" "0ypwcqrld91jn0zz4mkdksl2mbb0ds9lh5gf0xkbb81sj4awc01g";
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
+    "-DLLVM_ENABLE_RTTI=ON"
   ] ++ stdenv.lib.optionals (!isDarwin) [
     "-DBUILD_SHARED_LIBS=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"

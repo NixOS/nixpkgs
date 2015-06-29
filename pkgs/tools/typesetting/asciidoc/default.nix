@@ -255,6 +255,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = "mkdir -p $out/etc/vim";
+  makeFlags = if stdenv.isCygwin then "DESTDIR=/." else null;
 
   meta = with stdenv.lib; {
     description = "Text-based document generation system";

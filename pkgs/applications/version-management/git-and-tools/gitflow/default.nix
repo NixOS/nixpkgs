@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gitflow-${version}";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://github.com/petervanderdoes/gitflow/archive/${version}.tar.gz";
-    sha256 = "0rppgyqgk0drip6852bdm2479zks16cb3mj1jdw6jq80givrqnjx";
+    sha256 = "1vxdawx4sinl19g59ifmrdalmr2dl5pkgawyj9z0s5mcildi6fc2";
   };
 
   preBuild = ''
@@ -15,9 +15,15 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/petervanderdoes/gitflow;
-    description = "A collection of Git extensions to provide high-level repository operations for Vincent Driessen's branching model";
+    description = "Extend git with the Gitflow branching model";
+    longDescription = ''
+      A set of scripts that provide high-level repository operations
+      for managing feature/release/hotfix branches in a Git repository,
+      particularly suited to be utilised to follow Vincent Driessen's
+      branching model.
+    '';
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = [ maintainers.offline ];
+    maintainers = with maintainers; [ offline jgeerds ];
   };
 }

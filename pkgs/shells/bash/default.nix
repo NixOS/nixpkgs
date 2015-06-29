@@ -3,8 +3,11 @@
 assert interactive -> readline != null;
 
 let
-  realName = "bash-4.3";
+  version = "4.3";
+  realName = "bash-${version}";
+  shortName = "bash43";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
+  sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/bash/${realName}.tar.gz";
-    sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+    inherit sha256;
   };
 
   NIX_CFLAGS_COMPILE = ''
@@ -30,15 +33,23 @@ stdenv.mkDerivation rec {
     (let
       patch = nr: sha256:
         fetchurl {
-          url = "mirror://gnu/bash/bash-4.3-patches/bash43-${nr}";
+          url = "mirror://gnu/bash/${realName}-patches/${shortName}-${nr}";
           inherit sha256;
         };
     in
-      import ./bash-4.3-patches.nix patch);
+      import ./bash-4.3-patches.nix patch) 
+      ++ stdenv.lib.optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
-      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing";
+      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing" +
+      stdenv.lib.optionalString stdenv.isCygwin ''
+        --without-libintl-prefix --without-libiconv-prefix
+        --with-installed-readline
+        bash_cv_dev_stdin=present
+        bash_cv_dev_fd=standard
+        bash_cv_termcap_lib=libncurses 
+      '';
   };
 
   configureFlags = baseConfigureFlags;

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, ibus, anthy, intltool, pkgconfig, glib, gobjectIntrospection, python, pythonPackages }:
 
-let version = "1.5.4";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ibus-anthy-${version}";
+  version = "1.5.6";
 
   meta = with stdenv.lib; {
     description = "IBus interface to the anthy input method";
-    homepace    = https://code.google.com/p/ibus/;
+    homepage    = http://wiki.github.com/fujiwarat/ibus-anthy;
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ gebner ];
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = "https://ibus.googlecode.com/files/ibus-anthy-${version}.tar.gz";
-    sha256 = "4c0a8b88a2c547e72173a7d682d82797f6c65fe712abe5f3b89495d4eec7b031";
+    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
+    sha256 = "0vl904l5862zxfi8fiiljwvqv4yvb3nfdbkmpcqk3zw4r1mn6p03";
   };
 }

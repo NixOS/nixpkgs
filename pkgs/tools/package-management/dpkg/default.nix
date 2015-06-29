@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
 
-let version = "1.17.25"; in
+let version = "1.18.1"; in
 
 stdenv.mkDerivation {
   name = "dpkg-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1akblsdfblih7879gi5qagqpgy6zz866kcyvg5y11ywqmqw9s087";
+    sha256 = "1nlr0djn5zl9cmlcxxmd7dk3fx0zw9gi4qm7cfz0r5qwl9yaj9nb";
   };
 
   postPatch = ''
@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [ perl zlib bzip2 xz makeWrapper ];
+  buildInputs = [ perl zlib bzip2 xz ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postInstall =
     ''
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mornfall nckx ];
   };

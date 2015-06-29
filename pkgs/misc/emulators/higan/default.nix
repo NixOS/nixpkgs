@@ -3,7 +3,7 @@
 , libX11, libXv
 , udev
 , mesa, SDL
-, libao, openal, pulseaudio
+, libao, openal, libpulseaudio
 , profile ? "performance" # Options: accuracy, balanced, performance
 , guiToolkit ? "gtk" # can be gtk or qt4
 , gtk ? null, qt4 ? null }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ pkgconfig libX11 libXv udev mesa SDL libao openal pulseaudio ]
+  [ pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio ]
   ++ optionals (guiToolkit == "gtk") [ gtk ]
   ++ optionals (guiToolkit == "qt4") [ qt4 ];
 

@@ -1,0 +1,39 @@
+From d80c171e7e8fe7fb4e0878a15027ac80c23b0a14 Mon Sep 17 00:00:00 2001
+From: David Stapleton <dstaplet@brocade.com>
+Date: Mon, 15 Jun 2015 13:07:21 +0100
+Subject: [PATCH] Fix vrrp removes incorrect IPv4 address when VIPs are removed
+
+When vrrp has an IPv4 VIP that matches the primary interface
+address, when the VIP is removed from the interface, the original
+address ends up getting removed instead of the VIP.
+
+The kernel receives a netlink message instructing it to remove
+address x from a particular interface. For IPv4, address x can
+be configured multiple times providing the prefix lengths differ.
+If the IFA_ADDRESS attribute is not specified in a RTM_DELADDR
+message, the kernel will delete the first address it finds a
+match on, prefix length is not taken into account.
+
+This fix therefore adds the IFA_ADDRESS attribute when deleting
+IPv4 addresses so that the address removed is actually the VIP.
+---
+ keepalived/vrrp/vrrp_ipaddress.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/keepalived/vrrp/vrrp_ipaddress.c b/keepalived/vrrp/vrrp_ipaddress.c
+index 0f9ce23..698f35c 100644
+--- a/keepalived/vrrp/vrrp_ipaddress.c
++++ b/keepalived/vrrp/vrrp_ipaddress.c
+@@ -86,6 +86,9 @@ netlink_ipaddress(ip_address_t *ipaddress, int cmd)
+ 	} else {
+ 		addattr_l(&req.n, sizeof(req), IFA_LOCAL,
+ 			  &ipaddress->u.sin.sin_addr, sizeof(ipaddress->u.sin.sin_addr));
++		if (cmd == IPADDRESS_DEL)
++			addattr_l(&req.n, sizeof(req), IFA_ADDRESS,
++			  &ipaddress->u.sin.sin_addr, sizeof(ipaddress->u.sin.sin_addr));
+ 		if (ipaddress->u.sin.sin_brd.s_addr)
+ 			addattr_l(&req.n, sizeof(req), IFA_BROADCAST,
+ 				  &ipaddress->u.sin.sin_brd, sizeof(ipaddress->u.sin.sin_brd));
+-- 
+2.4.4
+

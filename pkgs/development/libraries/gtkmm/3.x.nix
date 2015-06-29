@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm }:
 
 let
-  ver_maj = "3.12";
+  ver_maj = "3.16";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "86c526ceec15d889996822128d566748bb36f70cf5a2c270530dfc546a2574e1";
+    sha256 = "036xn22jkaf3akpid7w23b8vkqa3xxqz93mwacmyar5vw7slm3cv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

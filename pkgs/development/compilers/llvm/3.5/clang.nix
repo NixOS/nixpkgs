@@ -1,6 +1,6 @@
 { stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
 let
-  gcc = if stdenv.cc.cc.isGNU or false then stdenv.cc.cc else stdenv.cc.cc.gcc;
+  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation {
   name = "clang-${version}";
 

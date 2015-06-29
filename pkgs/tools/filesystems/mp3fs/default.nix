@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-statfs-operation.patch ];
 
-  buildInputs = [ flac fuse lame libid3tag pkgconfig ];
+  buildInputs = [ flac fuse lame libid3tag ];
+  nativeBuildInputs = [ pkgconfig ];
 
   enableParallelBuilding = true;
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
       simple drag-and-drop in a file browser.
     '';
     homepage = http://khenriks.github.io/mp3fs/;
-    license = with licenses; gpl3Plus;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, alsaLib, dbus, jack2
+{ stdenv, fetchurl, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
 , python, pythonDBus }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzm0qk5ilqhwz74pydg1jwrds27vm47185dakdrxidb5bv3b5ia";
   };
 
-  buildInputs = [ makeWrapper pkgconfig alsaLib dbus jack2 python pythonDBus ];
+  buildInputs = [ makeWrapper pkgconfig alsaLib dbus libjack2 python pythonDBus ];
 
   configurePhase = "python waf configure --prefix=$out";
 

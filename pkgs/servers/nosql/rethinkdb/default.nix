@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "rethinkdb-${version}";
-  version = "2.0.0-1";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "http://download.rethinkdb.com/dist/${name}.tgz";
-    sha256 = "0fbxs6gmlmgkbfrmi0f4xyr3vqwylr6i7fa4p68y12qy6kv7q9pc";
+    sha256 = "1580h5clkw8kprdb9waaf8al3wa2vj5d2l2m394r91fq45ss23sd";
   };
 
   preConfigure = ''
