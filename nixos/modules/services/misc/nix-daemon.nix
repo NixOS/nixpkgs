@@ -329,13 +329,13 @@ in
         text =
           concatMapStrings (machine:
             "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + (if machine ? system then machine.system else concatStringsSep "," machine.systems)
-            + " ${machine.sshKey} ${toString machine.maxJobs} "
-            + (if machine ? speedFactor then toString machine.speedFactor else "1" )
+            + machine.system or (concatStringsSep "," machine.systems)
+            + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
+            + toString (machine.speedFactor or 1)
             + " "
-            + (if machine ? supportedFeatures then concatStringsSep "," machine.supportedFeatures else "" )
+            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
             + " "
-            + (if machine ? mandatoryFeatures then concatStringsSep "," machine.mandatoryFeatures else "" )
+            + concatStringsSep "," machine.mandatoryFeatures or []
             + "\n"
           ) cfg.buildMachines;
       };
