@@ -3597,7 +3597,7 @@ let
     libc = glibc;
     binutils = binutils;
     inherit coreutils zlib;
-    extraPackages = [ libcxx libcxxabi ];
+    extraPackages = [ libcxx ];
     nativeTools = false;
     nativeLibc = false;
   };
