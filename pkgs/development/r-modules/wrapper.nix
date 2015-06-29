@@ -1,9 +1,13 @@
-{ stdenv, R, makeWrapper, recommendedPackages, packages }:
+{ stdenv, R, libcxx, makeWrapper, recommendedPackages, packages }:
 
 stdenv.mkDerivation {
   name = R.name + "-wrapper";
 
-  buildInputs = [makeWrapper R] ++ recommendedPackages ++ packages;
+  buildInputs = [makeWrapper R] ++ recommendedPackages ++ packages
+    ++ stdenv.lib.optionals stdenv.isDarwin R.darwinFrameworks;
+
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
   unpackPhase = ":";
 
