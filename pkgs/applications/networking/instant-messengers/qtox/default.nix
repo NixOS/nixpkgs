@@ -1,41 +1,38 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore, qt5, openal, opencv
-, libsodium, libXScrnSaver }:
+{ stdenv, fetchgit, pkgconfig, libtoxcore-dev, qt5, openal, opencv,
+  libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
+  pango, atk, qrencode, ffmpeg, filter-audio }:
 
-let
+stdenv.mkDerivation rec {
+  name = "qtox-dev-20150624";
 
-  filteraudio = stdenv.mkDerivation rec {
-    name = "filter_audio-20150128";
-
-    src = fetchFromGitHub {
-      owner = "irungentoo";
-      repo = "filter_audio";
-      rev = "76428a6cda";
-      sha256 = "0c4wp9a7dzbj9ykfkbsxrkkyy0nz7vyr5map3z7q8bmv9pjylbk9";
-    };
-
-    doCheck = false;
-
-    makeFlags = "PREFIX=$(out)";
-  };
-
-in stdenv.mkDerivation rec {
-  name = "qtox-dev-20150130";
-
-  src = fetchFromGitHub {
-    owner = "tux3";
-    repo = "qTox";
-    rev = "7574569b3d";
-    sha256 = "0a7zkhl4w2r5ifzs7vwws2lpplp6q5c4jllyf4ld64njgiz6jzip";
+  src = fetchgit {
+      url = "https://github.com/tux3/qTox.git";
+      rev = "9f386135a2cf428d2802b158c70be4beee5abf86";
+      sha256 = "1m2y50q5yim1q75k48cy5daq5qm77cvb3kcla7lpqv54xnfdwxk8";
   };
 
   buildInputs =
     [
-      libtoxcore openal opencv libsodium filteraudio
-      qt5.base qt5.tools libXScrnSaver
+      libtoxcore-dev openal opencv libsodium filter-audio
+      qt5.base qt5.tools libXScrnSaver glib gtk2 cairo
+      pango atk qrencode ffmpeg qt5.translations
     ];
+
   nativeBuildInputs = [ pkgconfig ];
 
-  configurePhase = "qmake";
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags glib-2.0)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gdk-pixbuf-2.0)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags cairo)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags pango)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags atk)"
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+    qmake
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -49,3 +46,4 @@ in stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
+
