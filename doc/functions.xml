@@ -54,4 +54,35 @@ in ...</programlisting>
 
 </section>
 
+<section xml:id="sec-pkg-override">
+  <title>&lt;pkg&gt;.override</title>
+
+  <para>
+    The function <varname>override</varname> is usually available for all the
+    derivations in the nixpkgs expression (<varname>pkgs</varname>).
+  </para>
+  <para>
+    It is used to override the arguments passed to a function.
+  </para>
+  <para>
+    Example usages:
+
+    <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
+    <programlisting>pkgs.overridePackages (self: super: {
+  foo = super.foo.override { barSupport = true ; };
+})</programlisting>
+    <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
+  mydep = pkgs.mydep.override { ... };
+})</programlisting>
+  </para>
+
+  <para>
+    In the first example, <varname>pkgs.foo</varname> is the result of a function call
+    with some default arguments, usually a derivation.
+    Using <varname>pkgs.foo.override</varname> will call the same function with
+    the given new arguments.
+  </para>
+
+</section>
+
 </chapter>
