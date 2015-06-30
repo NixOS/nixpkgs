@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0apcz4vy2z5645jhrs60wj3w27mncjjqv42h5lln36g6qs2n9113";
   };
 
-  __propagatedImpureHostDeps = import ./impure-deps.nix;
-
   patchPhase = ''
     # copied from libsecurity_generic
     ln -s ${osx_private_sdk}/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
@@ -41,10 +39,10 @@ stdenv.mkDerivation rec {
     "security_INSTALL_DIR=\$(out)/bin"
   ];
 
+  propagatedBuildInputs = [ Security PCSC Foundation ];
+
   buildInputs = [
     gnustep-make
-    Security
-    Foundation
     libsecurity_asn1
     libsecurity_utilities
     libsecurity_cdsa_utilities
