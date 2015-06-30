@@ -92,7 +92,7 @@ let
     propagatedBuildInputs = deps;
 
     # Not going to bother being more precise than this...
-    __propagatedImpureHostDeps = [ "/System/Library/Frameworks/${name}.framework/Versions" ];
+    __propagatedImpureHostDeps = (import ./impure-deps.nix).${name};
 
     meta = with stdenv.lib; {
       description = "Apple SDK framework ${name}";
