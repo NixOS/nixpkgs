@@ -102,6 +102,10 @@ in
         "xenfs"
       ];
 
+    # The xenfs module is needed in system.activationScripts.xen, but
+    # the modprobe command there fails silently. Include xenfs in the
+    # initrd as a work around.
+    boot.initrd.kernelModules = [ "xenfs" ];
 
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.
@@ -163,6 +167,9 @@ in
         { source = "${pkgs.xen}/etc/xen/scripts";
           target = "xen/scripts";
         }
+        { source = "${pkgs.xen}/etc/default/xendomains";
+          target = "default/xendomains";
+        }
       ];
 
     # Xen provides udev rules.
@@ -180,7 +187,9 @@ in
         rm -f "$XENSTORED_ROOTDIR"/tdb* &>/dev/null
 
         mkdir -p /var/run
-        ${optionalString cfg.trace "mkdir -p /var/log/xen"}
+        #${optionalString cfg.trace "mkdir -p /var/log/xen"}
+        mkdir -p /var/log/xen # Running xl requires /var/log/xen and /var/lib/xen,
+        mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
         '';
       serviceConfig.ExecStart = ''
@@ -262,10 +271,15 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "xen-domains.service" ];
       serviceConfig.RemainAfterExit = "yes";
-      serviceConfig.ExecStart = "${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge}";
-      postStart = "${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} up";
-      serviceConfig.ExecStop = "${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} down";
-      postStop = "${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge}";
+      serviceConfig.Type = "oneshot";
+      serviceConfig.ExecStart = ''
+        ${pkgs.bridge-utils}/bin/brctl addbr ${cfg.bridge} ;\
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} up
+      '';
+      serviceConfig.ExecStop = ''
+        ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge} down ;\
+        ${pkgs.bridge-utils}/bin/brctl delbr ${cfg.bridge}
+      '';
     };
 
 
