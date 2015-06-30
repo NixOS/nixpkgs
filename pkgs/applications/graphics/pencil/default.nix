@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xulrunner }:
+{ stdenv, fetchurl, makeWrapper, xulrunner }:
 
 stdenv.mkDerivation rec {
   version = "2.0.11";
@@ -12,15 +12,19 @@ stdenv.mkDerivation rec {
 
   buildPhase = "";
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
     mkdir -p "$out"
     cp -r usr/* "$out"
-    sed -e "s|/usr/bin/xulrunner|${xulrunner}/bin/xulrunner|" \
-        -e "s|/usr/share/evolus-pencil|$out/share/evolus-pencil|" \
+    sed -e "s|/usr/share/evolus-pencil|$out/share/evolus-pencil|" \
         -i "$out/bin/pencil"
     sed -e "s|/usr/bin/pencil|$out/bin/pencil|" \
         -e "s|Icon=.*|Icon=$out/share/evolus-pencil/skin/classic/icon.svg|" \
         -i "$out/share/applications/pencil.desktop"
+
+    wrapProgram $out/bin/pencil \
+      --prefix PATH ":" ${xulrunner}/bin
   '';
 
   meta = with stdenv.lib; {

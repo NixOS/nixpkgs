@@ -17,10 +17,10 @@ buildOcaml rec {
   createFindlibDestdir = true;
   hasSharedObjects = true;
 
-  preConfigure = "./bootstrap; echo breakhash";
+  preConfigure = "./bootstrap";
 
   meta = with stdenv.lib; {
-    description = "This library adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml.";
+    description = "This library adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml";
     homepage = http://code.google.com/p/bitstring/;
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.maurer ];
