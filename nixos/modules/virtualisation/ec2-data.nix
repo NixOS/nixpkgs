@@ -7,16 +7,6 @@
 with lib;
 
 {
-  options = {
-    ec2.metadata = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to allow access to EC2 metadata.
-      '';
-    };
-  };
-
   config = {
 
     systemd.services."fetch-ec2-data" =
