@@ -13,7 +13,7 @@ wrapPythonProgramsIn() {
     local pythonPath="$2"
     local python="@executable@"
     local path
-    local f
+    local i
 
     # Create an empty table of python paths (see doc on _addToPythonPath
     # for how this is used). Build up the program_PATH and program_PYTHONPATH
@@ -26,22 +26,22 @@ wrapPythonProgramsIn() {
     done
 
     # Find all regular files in the output directory that are executable.
-    for f in $(find "$dir" -type f -perm +0100); do
+    for i in $(find "$dir" -type f -perm +0100); do
         # Rewrite "#! .../env python" to "#! /nix/store/.../python".
-        if head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'; then
-            sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)^#! $python^"
+        if head -n1 "$i" | grep -q '#!.*/env.*\(python\|pypy\)'; then
+            sed -i "$i" -e "1 s^.*/env[ ]*\(python\|pypy\)^#! $python^"
         fi
 
         # catch /python and /.python-wrapped
-        if head -n1 "$f" | grep -q '/\.\?\(python\|pypy\)'; then
+        if head -n1 "$i" | grep -q '/\.\?\(python\|pypy\)'; then
             # dont wrap EGG-INFO scripts since they are called from python
-            if echo "$f" | grep -qv EGG-INFO/scripts; then
-                echo "wrapping \`$f'..."
-                sed -i "$f" -re '@magicalSedExpression@'
+            if echo "$i" | grep -qv EGG-INFO/scripts; then
+                echo "wrapping \`$i'..."
+                sed -i "$i" -re '@magicalSedExpression@'
                 # wrapProgram creates the executable shell script described
                 # above. The script will set PYTHONPATH and PATH variables.!
                 # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
-                local wrap_args="$f \
+                local wrap_args="$i \
                                  --prefix PYTHONPATH ':' $program_PYTHONPATH \
                                  --prefix PATH ':' $program_PATH"
 
