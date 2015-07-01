@@ -3553,7 +3553,6 @@ let
 
   ats = callPackage ../development/compilers/ats { };
   ats2 = callPackage ../development/compilers/ats2 { };
-  ats-extsolve = callPackage ../development/compilers/ats-extsolve { };
 
   avra = callPackage ../development/compilers/avra { };
 

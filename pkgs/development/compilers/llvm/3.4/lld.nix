@@ -25,7 +25,6 @@ stdenv.mkDerivation {
     description = "A set of modular code for creating linker tools";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

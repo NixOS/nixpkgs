@@ -19,7 +19,6 @@ stdenv.mkDerivation {
     description = "Collection of miscellaneous plugins for the nix expression language";
     homepage = https://github.com/shlevy/nix-plugins;
     license = stdenv.lib.licenses.mit;
-    maintaners = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.all;
     broken = true;
   };

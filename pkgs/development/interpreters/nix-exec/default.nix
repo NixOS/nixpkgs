@@ -18,8 +18,6 @@ in stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.mit;
 
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-
     platforms = nix.meta.platforms;
   };
 }

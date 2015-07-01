@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     description = "GNU EFI development toolchain";
     homepage = http://sourceforge.net/projects/gnu-efi/;
     license = licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = platforms.linux;
   };
 }
