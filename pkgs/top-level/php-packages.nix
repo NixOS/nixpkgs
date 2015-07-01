@@ -28,9 +28,12 @@ let self = with self; {
   };
 
   xdebug = buildPecl {
-    name = "xdebug-2.2.5";
+    name = "xdebug-2.3.1";
 
-    sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
+    sha256 = "0k567i6w7cw14m13s7ip0946pvy5ii16cjwjcinnviw9c24na0xm";
+
+    doCheck = true;
+    checkTarget = "test";
   };
 
   zendopcache = buildPecl {
