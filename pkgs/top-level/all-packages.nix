@@ -6116,6 +6116,8 @@ let
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
 
+  filter-audio = callPackage ../development/libraries/filter-audio {};
+
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flann = callPackage ../development/libraries/flann { };
@@ -7266,7 +7268,9 @@ let
       else stdenv;
   };
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore { };
+  libtoxcore = callPackage ../development/libraries/libtoxcore/old-api { };
+
+  libtoxcore-dev = callPackage ../development/libraries/libtoxcore/new-api { };
 
   libtsm = callPackage ../development/libraries/libtsm {
     automake = automake114x;
