@@ -3170,6 +3170,8 @@ let
 
   unoconv = callPackage ../tools/text/unoconv { };
 
+  unrtf = callPackage ../tools/text/unrtf { };
+
   upx = callPackage ../tools/compression/upx { };
 
   urlview = callPackage ../applications/misc/urlview {};
