@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://libcxx.llvm.org/;
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = "BSD";
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

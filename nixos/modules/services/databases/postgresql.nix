@@ -154,7 +154,7 @@ in
 
   config = mkIf config.services.postgresql.enable {
 
-    services.postgresql.authentication =
+    services.postgresql.authentication = mkAfter
       ''
         # Generated file; do not edit!
         local all all              ident ${optionalString pre84 "sameuser"}

@@ -24,7 +24,5 @@ stdenv.mkDerivation rec {
     description = "System-wide monitoring for newrelic";
 
     license = stdenv.lib.licenses.unfree;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

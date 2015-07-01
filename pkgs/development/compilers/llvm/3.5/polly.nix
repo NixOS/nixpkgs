@@ -21,7 +21,6 @@ stdenv.mkDerivation {
     description = "A polyhedral optimizer for llvm";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

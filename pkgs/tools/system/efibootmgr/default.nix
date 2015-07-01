@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     description = "A Linux user-space application to modify the Intel Extensible Firmware Interface (EFI) Boot Manager";
     homepage = http://linux.dell.com/efibootmgr/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ shlevy ];
     platforms = platforms.linux;
   };
 }

@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
     description = "KMS/DRM based System Console";
     homepage = "http://www.freedesktop.org/wiki/Software/kmscon/";
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
