@@ -15,16 +15,16 @@ let self = with self; {
   };
 
   memcached = buildPecl {
-    name = "memcached-2.1.0";
+    name = "memcached-2.2.0";
 
-    sha256 = "1by4zhkq4mbk9ja6s0vlavv5ng8aw5apn3a1in84fkz7bc0l0jdw";
+    sha256 = "0n4z2mp4rvrbmxq079zdsrhjxjkmhz6mzi7mlcipz02cdl7n1f8p";
 
     configureFlags = [
       "--with-zlib-dir=${pkgs.zlib}"
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = [ pkgs.cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
   };
 
   xdebug = buildPecl {
