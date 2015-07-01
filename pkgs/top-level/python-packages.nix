@@ -6654,12 +6654,12 @@ let
   };
 
   klaus = buildPythonPackage rec {
-    version = "0.4.9";
+    version = "0.4.10";
     name = "klaus-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "0qcbv3shz530mn53pdc68fx38ylz72033xsrz77ffi0cks32az2w";
+      sha256 = "1yq1dz3cd2qdn8vi1ivf6biab76cfmcvis07d6a8039w5wxdzc80";
     };
 
     propagatedBuildInputs = with self;
