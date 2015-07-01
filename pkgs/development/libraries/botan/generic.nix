@@ -26,10 +26,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preInstall = ''
-    patchShebangs src/scripts
-  '';
-
   postInstall = ''
     cd "$out"/lib/pkgconfig
     ln -s botan-*.pc botan.pc || true
