@@ -10,7 +10,7 @@ with frameworks; with libs; {
   AVKit                   = [];
   Accounts                = [];
   AddressBook             = [ Carbon CoreFoundation ];
-  AppKit                  = [ QuartzCore ];
+  AppKit                  = [ AudioToolbox QuartzCore ];
   AppKitScripting         = [];
   AppleScriptKit          = [];
   AppleScriptObjC         = [];
@@ -27,7 +27,7 @@ with frameworks; with libs; {
   CoreAudioKit            = [ AudioUnit ];
   CoreData                = [];
   CoreFoundation          = [];
-  CoreGraphics            = [ CoreFoundation IOKit IOSurface ];
+  CoreGraphics            = [ Accelerate CoreFoundation IOKit IOSurface ];
   CoreLocation            = [];
   CoreMIDI                = [ CoreFoundation ];
   CoreMIDIServer          = [];
@@ -35,7 +35,7 @@ with frameworks; with libs; {
   CoreMediaIO             = [ CoreFoundation CoreMedia ];
   CoreText                = [ CoreFoundation CoreGraphics ];
   CoreVideo               = [ ApplicationServices CoreFoundation CoreGraphics IOSurface OpenGL ];
-  CoreWLAN                = [];
+  CoreWLAN                = [ SecurityFoundation ];
   DVComponentGlue         = [ CoreServices QuickTime ];
   DVDPlayback             = [];
   DirectoryService        = [ CoreFoundation ];
@@ -47,7 +47,7 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CoreFoundation IOKit ];
-  Foundation              = [ CoreFoundation Security ApplicationServices AppKit ];
+  Foundation              = [ CoreFoundation Security ApplicationServices AppKit SystemConfiguration ];
   GLKit                   = [ CoreFoundation ];
   GLUT                    = [ GL OpenGL ];
   GSS                     = [];
@@ -75,7 +75,7 @@ with frameworks; with libs; {
   NetFS                   = [ CoreFoundation ];
   OSAKit                  = [ Carbon ];
   OpenAL                  = [];
-  OpenCL                  = [ CL IOSurface OpenGL ];
+  OpenCL                  = [ IOSurface OpenGL ];
   OpenGL                  = [];
   PCSC                    = [];
   PreferencePanes         = [];
@@ -107,13 +107,13 @@ with frameworks; with libs; {
   WebKit                  = [ ApplicationServices Carbon JavaScriptCore OpenGL X11 ];
 
   # Umbrellas
-  Accelerate          = [ CoreGraphics ];
+  Accelerate          = [ CoreWLAN IOBluetooth ];
   ApplicationServices = [ CoreFoundation CoreServices CoreText ImageIO ];
   Carbon              = [ ApplicationServices CoreFoundation CoreServices IOKit Security ];
-  CoreServices        = [ CFNetwork CoreFoundation DiskArbitration Security ];
+  CoreServices        = [ CFNetwork CoreFoundation DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
-  OpenDirectory       = [ CoreFoundation Foundation ];
+  OpenDirectory       = [];
   Quartz              = [ QuickLook ];
-  QuartzCore          = [ ApplicationServices CoreFoundation CoreVideo ];
+  QuartzCore          = [ ApplicationServices CoreFoundation CoreVideo OpenCL ];
 }

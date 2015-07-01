@@ -17,10 +17,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ ncurses pkgconfig ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ CoreData CoreServices Cocoa Foundation libobjc ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreData CoreServices Cocoa Foundation libobjc ];
   nativeBuildInputs = [ gettext ];
-
-  __impureHostDeps = import ./impure-deps.nix;
 
   configureFlags = [
     "--enable-multibyte"
