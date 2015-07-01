@@ -2774,6 +2774,7 @@ let
   rhash = callPackage ../tools/security/rhash { };
 
   riemann_c_client = callPackage ../tools/misc/riemann-c-client { };
+  riemann-tools = callPackage ../tools/misc/riemann-tools { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
