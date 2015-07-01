@@ -633,6 +633,27 @@ let
     };
   };
 
+  atomiclong = buildPythonPackage rec {
+    version = "0.1.1";
+    name = "atomiclong-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/atomiclong/atomiclong-${version}.tar.gz";
+      sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ cffi ];
+
+    meta = {
+      description = "Long data type with atomic operations using CFFI";
+      homepage = https://github.com/dreid/atomiclong;
+      license = licenses.mit;
+      maintainers = with maintainers; [ robbinch ];
+    };
+
+  };
+
   atomicwrites = buildPythonPackage rec {
     version = "0.1.0";
     name = "atomicwrites-${version}";
