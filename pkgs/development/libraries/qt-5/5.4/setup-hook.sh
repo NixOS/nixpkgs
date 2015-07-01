@@ -48,6 +48,7 @@ Plugins = lib/qt5/plugins
 Imports = lib/qt5/imports
 Qml2Imports = lib/qt5/qml
 EOF
+export QMAKE="$qtOut/bin/qmake"
 
 envHooks+=(addQtModule)
 preConfigurePhases+=" setQMakePath"
