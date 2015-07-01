@@ -20,9 +20,11 @@ addQtModule() {
             fi
         fi
 
-        if [[ -n $qtSubmodule ]] && [[ -d "$1/lib" ]]; then
+        if [[ -d "$1/lib" ]]; then
             @lndir@/bin/lndir -silent "$1/lib" "$qtOut/lib"
-            find "$1/lib" -printf 'lib/%P\n' >> "$qtOut/nix-support/qt-inputs"
+            if [[ -n $qtSubmodule ]]; then
+                find "$1/lib" -printf 'lib/%P\n' >> "$qtOut/nix-support/qt-inputs"
+            fi
         fi
     fi
 }
