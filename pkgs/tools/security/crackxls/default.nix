@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
   ''
-    mkdir $out/bin
+    mkdir -p $out/bin
     cp crackxls2003 $out/bin/
   '';
 
