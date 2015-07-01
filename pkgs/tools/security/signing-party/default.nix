@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # no check rule
 
   meta = {
-    description = "PGP Tools is a collection for all kinds of pgp related things, including signing scripts, party preparation scripts etc.";
+    description = "A collection for all kinds of pgp related things, including signing scripts, party preparation scripts etc";
     homepage = http://pgp-tools.alioth.debian.org;
     platforms = gnupg.meta.platforms;
     license = stdenv.lib.licenses.gpl2;

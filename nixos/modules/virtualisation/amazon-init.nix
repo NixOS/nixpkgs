@@ -45,7 +45,6 @@ let
   '';
 in {
   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
-  ec2.metadata = true;
   boot.postBootCommands = ''
     ${bootScript} &
   '';

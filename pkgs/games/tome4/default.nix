@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://te4.org/";
     description = "Tales of Maj'eyal (rogue-like game)";
+    maintainers = [ stdenv.lib.maintainers.chattered  ];
     license = stdenv.lib.licenses.gpl3;
   };
 }

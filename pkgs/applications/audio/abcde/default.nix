@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, vorbisTools, id3v2, lame, flac, eject, mkcue
+{ stdenv, fetchurl, libcdio, cddiscid, wget, bash, vorbisTools, id3v2, eyeD3
+, lame, flac, eject, mkcue
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
-let version = "2.6";
+let version = "2.7";
 in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
-      url = "mirror://debian/pool/main/a/abcde/abcde_${version}.orig.tar.gz";
-      sha256 = "0y2cg233n2hixs0ji76dggpzgf52v4c4mnpwiai889ql2piafgk8";
+      url = "http://abcde.einval.com/download/abcde-${version}.tar.gz";
+      sha256 = "0ikpffzvacadh6vj9qlary8126j1zrd2knp9gvivmp7y1656jj01";
     };
 
-    # FIXME: This package does not support MP3 encoding (only Ogg),
-    # nor `distmp3', `eject', etc.
+    # FIXME: This package does not support `distmp3', `eject', etc.
 
     patches = [ ./abcde.patch ];
 
@@ -50,7 +50,7 @@ in
          --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
 
       wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        "$out/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbisTools}/bin:${id3v2}/bin:${lame}/bin"
+        "$out/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbisTools}/bin:${id3v2}/bin:${eyeD3}/bin:${lame}/bin"
 
       wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
         "${wget}/bin"
@@ -60,7 +60,7 @@ in
     '';
 
     meta = {
-      homepage = "http://lly.org/~rcw/abcde/page/";
+      homepage = http://abcde.einval.com/wiki/;
       license = stdenv.lib.licenses.gpl2Plus;
       description = "Command-line audio CD ripper";
 

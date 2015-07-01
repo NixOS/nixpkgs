@@ -868,9 +868,6 @@ self: super: {
   # https://github.com/DanielG/cabal-helper/issues/2
   cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
 
-  # https://github.com/jgm/gitit/issues/494
-  gitit = markBroken super.gitit;
-
   # https://github.com/ekmett/comonad/issues/25
   comonad = dontCheck super.comonad;
 

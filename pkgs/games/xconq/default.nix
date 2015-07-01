@@ -1,5 +1,6 @@
 x@{builderDefsPackage
   , rpm, cpio, xproto, libX11, libXmu, libXaw, libXt, tcl, tk, libXext
+  , fontconfig
   , makeWrapper
   , ...}:
 builderDefsPackage
@@ -33,7 +34,7 @@ rec {
   phaseNames = ["addInputs" "doUnpack" "fixMakefiles" "fixCfiles" "fixTCLfiles" 
     "doConfigure" "doMakeInstall" "doWrap"];
       
-  doWrap = a.makeManyWrappers ''$out/bin/*'' ''--prefix TCLLIBPATH : "${tk}/lib"'';
+  doWrap = a.makeManyWrappers ''$out/bin/*'' ''--prefix TCLLIBPATH ' ' "${tk}/lib"'';
 
   fixMakefiles = a.fullDepEntry ''
     find . -name 'Makefile.in' -exec sed -re 's@^        ( *)(cd|[&][&])@	\1\2@' -i '{}' ';'

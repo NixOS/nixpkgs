@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, valgrind }:
 
-let version = "130"; in
+let version = "131"; in
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1050hwnbqyz2m26vayv942dh92689qp73chrbnqlg8awhlb5kyi5";
+    sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
     rev = "r${version}";
     repo = "lz4";
     owner = "Cyan4973";

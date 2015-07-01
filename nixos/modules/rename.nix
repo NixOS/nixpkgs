@@ -148,5 +148,6 @@ in zipModules ([]
 ++ obsolete' [ "services" "samba" "defaultShare" ]
 ++ obsolete' [ "services" "syslog-ng" "serviceName" ]
 ++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
+++ obsolete' [ "ec2" "metadata" ]
 
 )

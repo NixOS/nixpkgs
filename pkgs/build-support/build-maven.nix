@@ -13,7 +13,7 @@
 infoFile: let
   info = builtins.fromJSON (builtins.readFile infoFile);
 
-  repo = runCommand "maven-repository" {} ''
+  script = writeText "build-maven-repository.sh" ''
     ${lib.concatStrings (map (dep: let
       inherit (dep) url sha1 groupId artifactId version;
 
@@ -23,6 +23,10 @@ infoFile: let
       mkdir -p $dir
       ln -sv ${fetch} $dir/${fetch.name}
     '') info.dependencies)}
+  '';
+
+  repo = runCommand "maven-repository" {} ''
+    bash ${script}
   '';
 
   settings = writeText "settings.xml" ''
