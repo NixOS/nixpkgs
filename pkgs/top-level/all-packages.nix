@@ -7268,7 +7268,9 @@ let
       else stdenv;
   };
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore { };
+  libtoxcore = callPackage ../development/libraries/libtoxcore/old-api { };
+
+  libtoxcore-dev = callPackage ../development/libraries/libtoxcore/new-api { };
 
   libtsm = callPackage ../development/libraries/libtsm {
     automake = automake114x;
