@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    rm $out/lib/lib{mbedtls.so.8,polarssl.{a,so}}
+    rm -f $out/lib/lib{mbedtls.so.8,polarssl.{a,so}}
     ln -s libmbedtls.so $out/lib/libmbedtls.so.8
     ln -s libmbedtls.so $out/lib/libpolarssl.so
     ln -s libmbedtls.a $out/lib/libpolarssl.a
