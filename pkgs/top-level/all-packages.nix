@@ -4545,6 +4545,10 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
+    qcheck = callPackage ../development/ocaml-modules/qcheck {
+      oasis = ocaml_oasis;
+    };
+
     qtest = callPackage ../development/ocaml-modules/qtest {
       oasis = ocaml_oasis;
     };
