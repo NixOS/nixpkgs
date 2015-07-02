@@ -7042,7 +7042,10 @@ let
 
     src = pkgs.file.src;
 
-    patches = [ ../tools/misc/file/python.patch ];
+    patchPhase = ''
+      substituteInPlace python/magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic.so'"
+    '';
+
     buildInputs = with self; [ python pkgs.file ];
 
     preConfigure = "cd python";
