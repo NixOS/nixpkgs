@@ -38,6 +38,15 @@ in
         /etc/resolv.conf. This option enables that.
       '';
     };
+    
+    networking.runResolvconfAtActivation = lib.mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to perform a resolvconf update as part of a profile activation script.
+        You may want to disable this if you use software that manages resolv.conf directly.
+      '';
+    };
 
     networking.proxy = {
 
@@ -198,8 +207,9 @@ in
           ln -s /run/systemd/resolve/resolv.conf /run/resolvconf/interfaces/systemd
         ''}
 
-        # Make sure resolv.conf is up to date if not managed by systemd
-        ${optionalString (!config.services.resolved.enable) ''
+        # Make sure resolv.conf is up to date, if this is needed.
+        # For example, systemd resolved will disable it.
+        ${optionalString config.networking.runResolvconfAtActivation ''
           ${pkgs.openresolv}/bin/resolvconf -u
         ''}
       '';
