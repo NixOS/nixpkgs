@@ -1240,6 +1240,8 @@ let
 
   dcfldd = callPackage ../tools/system/dcfldd { };
 
+  debbindiff = callPackage ../tools/misc/debbindiff { };
+
   debian_devscripts = callPackage ../tools/misc/debian-devscripts {
     inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
   };
