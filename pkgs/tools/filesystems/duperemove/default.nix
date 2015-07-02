@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, libgcrypt, pkgconfig, glib, linuxHeaders }:
+{ lib, stdenv, fetchFromGitHub, libgcrypt, pkgconfig, glib, linuxHeaders }:
 
 stdenv.mkDerivation rec {
   name = "duperemove-${version}";
-  version = "0.09.beta2";
+  version = "0.09.4";
 
-  src = fetchurl {
-    url = "https://github.com/markfasheh/duperemove/archive/v${version}.tar.gz";
-    sha256 = "0rn7lf9rjf4ypgfwms2y7b459rri4rfn809h6wx8xl9nbm5niil4";
+  src = fetchFromGitHub {
+    owner = "markfasheh";
+    repo = "duperemove";
+    rev = "v${version}";
+    sha256 = "1d586k6rbfqb5557i1p5xq8ngbppbwpxlkw8wqm7d900a3hp36nl";
   };
 
   buildInputs = [ libgcrypt pkgconfig glib linuxHeaders ];
