@@ -15108,6 +15108,8 @@ let
     inherit texLive unzip;
   };
 
+  texLiveAuctex = callPackage ../tools/typesetting/tex/texlive/auctex.nix { };
+
   thermald = callPackage ../tools/system/thermald { };
 
   thinkfan = callPackage ../tools/system/thinkfan { };
