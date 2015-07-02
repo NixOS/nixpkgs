@@ -101,8 +101,6 @@ in stdenv.mkDerivation {
       -e 's|/bin/echo|echo|' \
       -e "/python_arch/s/: *'[^']*'/: '""'/" \
       "$out/build/common.gypi" "$main/chrome/chrome_tests.gypi"
-    sed -i -e '/LOG.*no_suid_error/d' \
-      "$main/content/browser/browser_main_loop.cc"
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d "$bundled/openssl/openssl"
   '';
