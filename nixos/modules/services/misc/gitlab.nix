@@ -50,7 +50,7 @@ let
           --set GEM_HOME '${gemHome}'\
           --set UNICORN_PATH "${cfg.stateDir}/"\
           --set GITLAB_PATH "${pkgs.gitlab}/share/gitlab/"\
-          --set GITLAB_APPLICATION_LOG_PATH "${cfg.stateDir}/log/application.log"\
+          --set GITLAB_APPLICATION_LOG_PATH "${cfg.stateDir}/log/"\
           --set GITLAB_SATELLITES_PATH "${cfg.stateDir}/satellites"\
           --set GITLAB_SHELL_PATH "${pkgs.gitlab-shell}"\
           --set GITLAB_REPOSITORIES_PATH "${cfg.stateDir}/repositories"\
@@ -178,7 +178,7 @@ in {
       environment.GEM_HOME = gemHome;
       environment.UNICORN_PATH = "${cfg.stateDir}/";
       environment.GITLAB_PATH = "${pkgs.gitlab}/share/gitlab/";
-      environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/application.log";
+      environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/";
       environment.GITLAB_SATELLITES_PATH = "${cfg.stateDir}/satellites";
       environment.GITLAB_SHELL_PATH = "${pkgs.gitlab-shell}";
       environment.GITLAB_REPOSITORIES_PATH = "${cfg.stateDir}/repositories";
@@ -198,6 +198,8 @@ in {
         ruby
         openssh
         nodejs
+	procps
+	coreutils
       ];
       serviceConfig = {
         Type = "simple";
@@ -216,7 +218,7 @@ in {
       environment.GEM_HOME = gemHome;
       environment.UNICORN_PATH = "${cfg.stateDir}/";
       environment.GITLAB_PATH = "${pkgs.gitlab}/share/gitlab/";
-      environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/application.log";
+      environment.GITLAB_APPLICATION_LOG_PATH = "${cfg.stateDir}/log/";
       environment.GITLAB_SATELLITES_PATH = "${cfg.stateDir}/satellites";
       environment.GITLAB_SHELL_PATH = "${pkgs.gitlab-shell}";
       environment.GITLAB_REPOSITORIES_PATH = "${cfg.stateDir}/repositories";
@@ -234,6 +236,8 @@ in {
         ruby
         openssh
         nodejs
+        procps
+        coreutils
       ];
       preStart = ''
         # TODO: use env vars
