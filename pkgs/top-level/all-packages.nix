@@ -5432,6 +5432,8 @@ let
 
   docutils = pythonPackages.docutils;
 
+  dot2tex = pythonPackages.dot2tex;
+
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
   };
