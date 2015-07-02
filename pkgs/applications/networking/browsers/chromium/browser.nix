@@ -12,7 +12,7 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    ${optionalString (versionOlder base.version "45.0.0.0") ''
+    ${optionalString (versionOlder base.version "44.0.0.0") ''
       cp -v "$buildPath/libffmpegsumo.so" "$libExecPath/"
     ''}
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
