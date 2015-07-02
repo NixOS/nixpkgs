@@ -20,17 +20,13 @@ stdenv.mkDerivation rec {
     export sourceRoot=${src.name}
   '';
 
-  nativeBuildInputs = [
-    # cmake can be built with the system jsoncpp, or its own bundled version.
-    # Obviously we cannot build it against the system jsoncpp that doesn't yet exist, so
-    # we make a bootstrapping build with the bundled version.
-    (cmake.override { jsoncpp = null; })
-    python
-  ];
+  nativeBuildInputs = [ cmake python ];
 
   cmakeFlags = [
     "-DJSONCPP_WITH_CMAKE_PACKAGE=1"
   ];
+
+  postInstall = "rm $out/lib/*.a";
 
   meta = {
     inherit version;

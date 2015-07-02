@@ -31,7 +31,7 @@ rec {
       shell        = "/bin/bash";
       initialPath  = [ bootstrapTools ];
       fetchurlBoot = fetchurl;
-      cc           = "/no-such-path";
+      cc           = null;
     };
   };
 
@@ -106,7 +106,7 @@ rec {
       inherit system config;
       inherit (stage1.stdenv) shell fetchurlBoot preHook cc;
 
-      initialPath = [ stage1.pkgs.xz ] ++ stage1.stdenv.initialPath;
+      initialPath = [ stage1.pkgs.xz stage1.pkgs.gnused ] ++ stage1.stdenv.initialPath;
     };
     pkgs = allPackages {
       inherit system platform;

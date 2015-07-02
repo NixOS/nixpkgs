@@ -1,4 +1,7 @@
-{ stdenv, fetchhg, ncurses, gettext, pkgconfig }:
+{ stdenv, fetchhg, ncurses, gettext, pkgconfig
+
+# apple frameworks
+, CoreServices, CoreData, Cocoa, Foundation, libobjc }:
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
@@ -13,7 +16,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ ncurses pkgconfig ];
+  buildInputs = [ ncurses pkgconfig ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreData CoreServices Cocoa Foundation libobjc ];
   nativeBuildInputs = [ gettext ];
 
   configureFlags = [

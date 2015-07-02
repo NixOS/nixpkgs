@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
-  preBuild = "patchShebangs ./scripts";
-
   buildInputs = [ intltool pkgconfig glib gobjectIntrospection ];
 
   meta = {

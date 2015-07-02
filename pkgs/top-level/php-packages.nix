@@ -15,22 +15,25 @@ let self = with self; {
   };
 
   memcached = buildPecl {
-    name = "memcached-2.1.0";
+    name = "memcached-2.2.0";
 
-    sha256 = "1by4zhkq4mbk9ja6s0vlavv5ng8aw5apn3a1in84fkz7bc0l0jdw";
+    sha256 = "0n4z2mp4rvrbmxq079zdsrhjxjkmhz6mzi7mlcipz02cdl7n1f8p";
 
     configureFlags = [
       "--with-zlib-dir=${pkgs.zlib}"
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = [ pkgs.cyrus_sasl ];
+    buildInputs = with pkgs; [ pkgconfig cyrus_sasl ];
   };
 
   xdebug = buildPecl {
-    name = "xdebug-2.2.5";
+    name = "xdebug-2.3.1";
 
-    sha256 = "0vss35da615709kdvqji8pblckfvmabmj2njjjz6h8zzvj9gximd";
+    sha256 = "0k567i6w7cw14m13s7ip0946pvy5ii16cjwjcinnviw9c24na0xm";
+
+    doCheck = true;
+    checkTarget = "test";
   };
 
   zendopcache = buildPecl {
@@ -54,12 +57,15 @@ let self = with self; {
   xcache = buildPecl rec {
     name = "xcache-${version}";
 
-    version = "3.1.0";
+    version = "3.2.0";
 
     src = pkgs.fetchurl {
       url = "http://xcache.lighttpd.net/pub/Releases/${version}/${name}.tar.bz2";
-      sha256 = "1saysvzwkfmcyg53za4j7qnranxd6871spjzfpclhdlqm043xbw6";
+      sha256 = "1gbcpw64da9ynjxv70jybwf9y88idm01kb16j87vfagpsp5s64kx";
     };
+
+    doCheck = true;
+    checkTarget = "test";
 
     configureFlags = [
       "--enable-xcache"

@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zr3kadv35ii6liia0bpfgxpag27xcivp571ybckpbz4b10nnd14";
   };
 
+  patches = [ ./gcc-4.9.patch ];
+
   nativeBuildInputs = [ ]
     ++ optional nasmSupport nasm;
 

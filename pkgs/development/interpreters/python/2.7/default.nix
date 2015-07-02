@@ -8,6 +8,8 @@
 , tcl ? null, tk ? null, x11 ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
 , zlib ? null, zlibSupport ? true
 , expat, libffi
+
+, CF, configd
 }:
 
 assert zlibSupport -> zlib != null;
@@ -40,6 +42,8 @@ let
       # patch python to put zero timestamp into pyc
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
+
+      ./properly-detect-curses.patch
     ] ++ optionals stdenv.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
@@ -62,6 +66,8 @@ let
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     '';
 
   configureFlags = [
@@ -72,6 +78,8 @@ let
     "--with-system-ffi"
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-toolbox-glue"
   ];
 
   postConfigure = if stdenv.isCygwin then ''
@@ -86,7 +94,12 @@ let
         [ db gdbm ncurses sqlite readline
         ] ++ optionals x11Support [ tcl tk x11 libX11 ]
     )
-    ++ optional zlibSupport zlib;
+    ++ optional zlibSupport zlib
+
+    # depend on CF and configd only if purity is an issue
+    # the impure bootstrap compiler can't build CoreFoundation currently. it requires
+    # <mach-o/dyld.h> which is in our pure bootstrapTools, but not in the system headers.
+    ++ optionals (stdenv.isDarwin && !stdenv.cc.nativeLibc) [ CF configd ];
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.

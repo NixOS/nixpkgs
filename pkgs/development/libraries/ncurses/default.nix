@@ -1,31 +1,14 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 
-# Optional Dependencies
-, gpm ? null
+, mouseSupport ? false
+, unicode ? true
+
+, gpm
 
 # Extra Options
 , abiVersion ? "5"
-, unicode ? true
 }:
 
-let
-  mkFlag = trueStr: falseStr: cond: name: val:
-    if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
-  mkEnable = mkFlag "enable-" "disable-";
-  mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
-
-  shouldUsePkg = pkg_: let
-    pkg = (builtins.tryEval pkg_).value;
-  in if stdenv.lib.any (x: x == stdenv.system) (pkg.meta.platforms or [])
-    then pkg
-    else null;
-
-  buildShared = !stdenv.isDarwin;
-
-  optGpm = shouldUsePkg gpm;
-in
 stdenv.mkDerivation rec {
   name = "ncurses-5.9";
 
@@ -34,54 +17,23 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./clang.patch ];
-
-  buildInputs = [ optGpm ];
+  # gcc-5.patch should be removed after 5.9
+  patches = [ ./clang.patch ./gcc-5.patch ];
 
   configureFlags = [
-    (mkWith   true        "abi-version" abiVersion)
-    (mkWith   true        "cxx"         null)
-    (mkWith   true        "cxx-binding" null)
-    (mkWith   false       "ada"         null)
-    (mkWith   true        "manpages"    null)
-    (mkWith   true        "progs"       null)
-    (mkWith   doCheck     "tests"       null)
-    (mkWith   true        "curses-h"    null)
-    (mkEnable true        "pc-files"    null)
-    (mkWith   buildShared "shared"      null)
-    (mkWith   true        "normal"      null)
-    (mkWith   false       "debug"       null)
-    (mkWith   false       "termlib"     null)
-    (mkWith   false       "ticlib"      null)
-    (mkWith   optGpm      "gpm"         null)
-    (mkEnable true        "overwrite"   null)
-    (mkEnable true        "database"    null)
-    (mkWith   true        "xterm-new"   null)
-    (mkEnable true        "symlinks"    null)
-    (mkEnable unicode     "widec"       null)
-    (mkEnable true        "ext-colors"  null)
-    (mkEnable true        "ext-mouse"   null)
-  ] ++ stdenv.lib.optionals stdenv.isCygwin [
-    "--enable-sp-funcs"
-    "--enable-term-driver"
-    "--enable-const"
-    "--enable-ext-colors"
-    "--enable-ext-mouse"
-    "--enable-reentrant"
-    "--enable-colorfgbg"
-    "--enable-tcap-names"
-  ];
+    "--with-shared"
+    "--without-debug"
+    "--enable-pc-files"
+    "--enable-symlinks"
+  ] ++ lib.optional unicode "--enable-widec";
 
-  # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
-  # directory doesn't exist, the configure script will disable installation of
-  # *.pc files. The configure script usually (on LSB distros) pick $(path of
-  # pkg-config)/../lib/pkgconfig. On NixOS that path doesn't exist and is not
-  # the place we want to put *.pc files from other packages anyway. So we must
-  # tell it explicitly where to install with PKG_CONFIG_LIBDIR.
+  buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
+
   preConfigure = ''
+    configureFlagsArray+=("--includedir=$out/include")
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-  '' + stdenv.lib.optionalString stdenv.isCygwin ''
+  '' + lib.optionalString stdenv.isCygwin ''
     sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
@@ -94,49 +46,47 @@ stdenv.mkDerivation rec {
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postInstall = if unicode then (''
-    # Create a non-abi versioned config
+  postInstall = ''
+    # Determine what suffixes our libraries have
+    suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
+    libs="$(ls $out/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
+    suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
+
+    # Get the path to the config util
     cfg=$(basename $out/bin/ncurses*-config)
-    ln -svf $cfg $out/bin/ncursesw-config
-    ln -svf $cfg $out/bin/ncurses-config
 
-    # Allow for end users who #include <ncurses?w/*.h>
-    ln -svf . $out/include/ncursesw
-    ln -svf . $out/include/ncurses
+    # symlink the full suffixed include directory
+    ln -svf . $out/include/ncurses$suffix
 
-    # Create non-unicode compatability
-    libs="$(find $out/lib -name \*w.a | sed 's,.*lib\(.*\)w.a.*,\1,g')"
-    for lib in $libs; do
-      if [ -e "$out/lib/lib''${lib}w.so" ]; then
-        ln -svf lib''${lib}w.so $out/lib/lib$lib.so
-        ln -svf lib''${lib}w.so.${abiVersion} $out/lib/lib$lib.so.${abiVersion}
-      fi
-      ln -svf lib''${lib}w.a $out/lib/lib$lib.a
-      ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
+    for newsuffix in $suffixes ""; do
+      # Create a non-abi versioned config util links
+      ln -svf $cfg $out/bin/ncurses$newsuffix-config
+
+      # Allow for end users who #include <ncurses?w/*.h>
+      ln -svf . $out/include/ncurses$newsuffix
+
+      for lib in $libs; do
+        for dylibtype in so dll dylib; do
+          if [ -e "$out/lib/lib''${lib}$suffix.$dylibtype" ]; then
+            ln -svf lib''${lib}$suffix.$dylibtype $out/lib/lib$lib$newsuffix.$dylibtype
+            ln -svf lib''${lib}$suffix.$dylibtype.${abiVersion} $out/lib/lib$lib$newsuffix.$dylibtype.${abiVersion}
+          fi
+        done
+        for statictype in a dll.a la; do
+          if [ -e "$out/lib/lib''${lib}$suffix.$statictype" ]; then
+            ln -svf lib''${lib}$suffix.$statictype $out/lib/lib$lib$newsuffix.$statictype
+          fi
+        done
+        ln -svf ''${lib}$suffix.pc $out/lib/pkgconfig/$lib$newsuffix.pc
+      done
     done
-
-    # Create curses compatability
-    ln -svf libncursesw.so $out/lib/libcursesw.so
-    ln -svf libncursesw.so $out/lib/libcurses.so
-  '' + stdenv.lib.optionalString stdenv.isCygwin ''
-    for lib in $libs; do
-      if test -e $out/lib/lib''${lib}w.dll.a; then
-          ln -svf lib''${lib}w.dll.a $out/lib/lib$lib.dll.a
-      fi
-    done
-  '') else ''
-    # Create a non-abi versioned config
-    cfg=$(basename $out/bin/ncurses*-config)
-    ln -svf $cfg $out/bin/ncurses-config
-
-    # Allow for end users who #include <ncurses/*.h>
-    ln -svf . $out/include/ncurses
-
-    # Create curses compatability
-    ln -svf libncurses.so $out/lib/libcurses.so
   '';
 
-  meta = with stdenv.lib; {
+  preFixup = ''
+    rm $out/lib/*.a
+  '';
+
+  meta = {
     description = "Free software emulation of curses in SVR4 and more";
 
     longDescription = ''
@@ -155,13 +105,13 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/ncurses/;
 
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ wkennington ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.wkennington ];
   };
 
   passthru = {
-    ldflags = if unicode then "-lncursesw" else "-lncurses";
+    ldflags = "-lncurses";
     inherit unicode abiVersion;
   };
 }

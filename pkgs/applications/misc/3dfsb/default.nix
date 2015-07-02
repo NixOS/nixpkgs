@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   buildPhase = "sh ./compile.sh";
   dontStrip = true;
 
-  installPhase = "mkdir $out/bin/ && cp 3dfsb $out/bin/";
+  installPhase = "mkdir -p $out/bin/ && cp 3dfsb $out/bin/";
 
   preFixup = ''
     wrapProgram $out/bin/3dfsb \

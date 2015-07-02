@@ -17,7 +17,7 @@ with stdenv.lib;
 
 let
   v_maj = "4.8";
-  v_min = "6";
+  v_min = "7";
   vers = "${v_maj}.${v_min}";
 in
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qt/"
       + "${v_maj}/${vers}/qt-everywhere-opensource-src-${vers}.tar.gz";
-    sha256 = "0b036iqgmbbv37dgwwfihw3mihjbnw3kb5kaisdy0qi8nn8xs54b";
+    sha256 = "183fca7n7439nlhxyg1z7aky0izgbyll3iwakw4gwivy16aj5272";
   };
 
   # The version property must be kept because it will be included into the QtSDK package name
@@ -126,8 +126,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
-  # occasional build problems if one has too many cores (like on Hydra)
-  # @vcunat has been unable to find a *reliable* fix
   enableParallelBuilding = false;
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin

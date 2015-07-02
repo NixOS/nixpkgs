@@ -5,7 +5,7 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.42";
+  ver_maj = "1.44";
   ver_min = "0";
 in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "3ba2edfad4f71d4f0de16960b5d5f2511335fa646b2c49bbb93ce5942b3f95f7";
+    sha256 = "1b972qg2yb51sdavfvb6kc19akwc15c1bwnbg81vadxamql2q33g";
   };
 
   buildInputs = [ flex bison pkgconfig python ]

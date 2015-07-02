@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     ./configure --prefix=$out \
       --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"}
+      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
   '';
 
   # Stripping combined with patchelf breaks the executables (they die

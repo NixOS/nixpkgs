@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     paxmark mr jsapi-tests/jsapi-tests
   '';
 
+  postInstall = ''rm "$out"/lib/*.a''; # halve the output size
+
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = https://developer.mozilla.org/en/SpiderMonkey;

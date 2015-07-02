@@ -1,5 +1,7 @@
 { stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, curses, cacert }:
+, guiSupport ? false, tk ? null, curses, cacert
+
+, ApplicationServices }:
 
 let
   version = "3.3.3";
@@ -17,7 +19,8 @@ stdenv.mkDerivation {
   inherit python; # pass it so that the same version can be used in hg2git
   pythonPackages = [ curses ];
 
-  buildInputs = [ python makeWrapper docutils unzip ];
+  buildInputs = [ python makeWrapper docutils unzip ]
+    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   makeFlags = "PREFIX=$(out)";
 

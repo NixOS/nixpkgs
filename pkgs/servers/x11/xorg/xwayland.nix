@@ -20,7 +20,7 @@ overrideDerivation xorgserver (oldAttrs: {
     "--with-default-font-path="
     "--with-xkb-bin-directory=${xkbcomp}/bin"
     "--with-xkb-path=${xkeyboard_config}/etc/X11/xkb"
-    "--with-xkb-output=$out/share/X11/xkb/compiled"
+    "--with-xkb-output=$(out)/share/X11/xkb/compiled"
   ];
 
   postInstall = ''

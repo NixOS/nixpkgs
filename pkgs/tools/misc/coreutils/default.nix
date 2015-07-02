@@ -33,7 +33,7 @@ let
       ++ optionals selinuxSupport [ libselinux libsepol ];
 
     crossAttrs = {
-      buildInputs = [ gmp ]
+      buildInputs = [ gmp.crossDrv ]
         ++ optional aclSupport acl.crossDrv
         ++ optionals selinuxSupport [ libselinux.crossDrv libsepol.crossDrv ]
         ++ optional (stdenv.ccCross.libc ? libiconv)

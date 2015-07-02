@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   buildInputs = [ pkgconfig audiofile ] ++
-    stdenv.lib.optional openglSupport [ mesa ] ++
+    stdenv.lib.optional openglSupport mesa ++
     stdenv.lib.optional alsaSupport alsaLib;
 
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431

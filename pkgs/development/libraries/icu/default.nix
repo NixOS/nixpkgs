@@ -32,6 +32,11 @@ stdenv.mkDerivation {
   configureFlags = "--disable-debug" +
     stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
 
+  # remove dependency on bootstrap-tools in early stdenv build
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
+  '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
