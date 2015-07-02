@@ -3172,6 +3172,8 @@ let
 
   unrtf = callPackage ../tools/text/unrtf { };
 
+  untex = callPackage ../tools/text/untex { };
+
   upx = callPackage ../tools/compression/upx { };
 
   urlview = callPackage ../applications/misc/urlview {};
