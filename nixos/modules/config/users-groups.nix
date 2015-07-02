@@ -108,6 +108,15 @@ let
         description = "The user's home directory.";
       };
 
+      cryptHomeLuks = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = ''
+          Path to encrypted luks device that contains
+          the user's home directory.
+        '';
+      };
+
       shell = mkOption {
         type = types.str;
         default = "/run/current-system/sw/bin/nologin";
