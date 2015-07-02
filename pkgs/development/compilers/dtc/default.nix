@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0z7yrv0sdhsh5wwy7yd1fvs4pqaq0n9m5i8w65lyibg77ahkasdg";
   };
 
-  buildInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ];
 
   installFlags = [ "INSTALL=install" "PREFIX=$(out)" ];
 

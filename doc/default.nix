@@ -36,6 +36,9 @@ stdenv.mkDerivation {
 
     cp ${./style.css} $dst/style.css
 
+    mkdir -p $dst/images/callouts
+    cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
+
     mkdir -p $out/nix-support
     echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
   '';

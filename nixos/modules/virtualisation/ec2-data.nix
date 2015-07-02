@@ -7,16 +7,6 @@
 with lib;
 
 {
-  options = {
-    ec2.metadata = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to allow access to EC2 metadata.
-      '';
-    };
-  };
-
   config = {
 
     systemd.services."fetch-ec2-data" =
@@ -31,8 +21,6 @@ with lib;
 
         script =
           ''
-            ip route del blackhole 169.254.169.254/32 || true
-
             wget="wget -q --retry-connrefused -O -"
 
             ${optionalString (config.networking.hostName == "") ''
@@ -67,14 +55,6 @@ with lib;
                 (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
                 echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
             fi
-
-            ${optionalString (! config.ec2.metadata) ''
-              # Since the user data is sensitive, prevent it from
-              # being accessed from now on. FIXME: remove at some
-              # point, since current NixOps no longer relies on
-              # metadata secrecy.
-              ip route add blackhole 169.254.169.254/32
-            ''}
           '';
 
         serviceConfig.Type = "oneshot";

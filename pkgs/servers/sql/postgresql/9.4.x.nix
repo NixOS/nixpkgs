@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "world" ];
 
   configureFlags = [ "--with-openssl" ]
+                   ++ optional (stdenv.isDarwin)  "--with-uuid=e2fs"
                    ++ optional (!stdenv.isDarwin) "--with-ossp-uuid";
 
   patches = [ ./disable-resolve_symlinks-94.patch ./less-is-more.patch ];

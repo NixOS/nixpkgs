@@ -42,7 +42,5 @@ in stdenv.mkDerivation {
     homepage = https://github.com/joyent/http-parser;
 
     license = stdenv.lib.licenses.mit;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

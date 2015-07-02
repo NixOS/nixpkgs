@@ -1,17 +1,14 @@
 { stdenv, fetchurl, openssl, net_snmp, libnl }:
 
 stdenv.mkDerivation rec {
-  name = "keepalived-1.2.17";
+  name = "keepalived-1.2.18";
 
   src = fetchurl {
     url = "http://keepalived.org/software/${name}.tar.gz";
-    sha256 = "1w7px8phx3pyb3b56m3nz1a9ncx26q34fgy8j4n2dpi284jmqm6z";
+    sha256 = "07l1ywg44zj2s3wn9mh6y7qbcc0cgp6q1q39hnm0c5iv5izakkg5";
   };
 
   buildInputs = [ openssl net_snmp libnl ];
-
-  # Remove in 1.2.18
-  patches = [ ./fix-ip-release.patch ];
 
   postPatch = ''
     sed -i 's,$(DESTDIR)/usr/share,$out/share,g' Makefile.in

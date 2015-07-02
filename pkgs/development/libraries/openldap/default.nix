@@ -1,15 +1,12 @@
 { stdenv, fetchurl, autoconf, openssl, cyrus_sasl, db, groff }:
 
 stdenv.mkDerivation rec {
-  name = "openldap-2.4.40";
+  name = "openldap-2.4.41";
 
   src = fetchurl {
     url = "http://www.openldap.org/software/download/OpenLDAP/openldap-release/${name}.tgz";
-    sha256 = "1nyslrgwxwilgv5sixc37svls5rbvhsv9drb7hlrjr2vqaji29ni";
+    sha256 = "0vkzfd1pmin6xsv8lb1nabfxma8n1q00khr6nfifqkxlm2s6p197";
   };
-
-  # Last tested for openldap 2.4.40
-  patches = [ ./fix-libdb-detection-gcc5.patch ];
 
   nativeBuildInputs = [ autoconf ];
   buildInputs = [ openssl cyrus_sasl db groff ];

@@ -3057,20 +3057,21 @@ let
 
 
   eyeD3 = buildPythonPackage rec {
-    version = "0.7.4";
+    version = "0.7.8";
     name    = "eyeD3-${version}";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
-      url = "http://eyed3.nicfit.net/releases/${name}.tgz";
-      sha256 = "001hzgqqnf2ig432mq78jsxidpky2rl2ilm28xwjp32vzphycf51";
+      url = "http://eyed3.nicfit.net/releases/${name}.tar.gz";
+      sha256 = "1nv7nhfn1d0qm7rgkzksbccgqisng8klf97np0nwaqwd5dbmdf86";
     };
 
     buildInputs = with self; [ paver ];
 
     postInstall = ''
       for prog in "$out/bin/"*; do
-        wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH"
+        wrapProgram "$prog" --prefix PYTHONPATH : "$PYTHONPATH" \
+                            --prefix PATH : ${python}/bin
       done
     '';
 
@@ -6653,12 +6654,12 @@ let
   };
 
   klaus = buildPythonPackage rec {
-    version = "0.4.9";
+    version = "0.4.10";
     name = "klaus-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "0qcbv3shz530mn53pdc68fx38ylz72033xsrz77ffi0cks32az2w";
+      sha256 = "1yq1dz3cd2qdn8vi1ivf6biab76cfmcvis07d6a8039w5wxdzc80";
     };
 
     propagatedBuildInputs = with self;

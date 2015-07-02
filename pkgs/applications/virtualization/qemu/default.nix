@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric shlevy eelco ];
+    maintainers = with maintainers; [ viric eelco ];
     platforms = platforms.linux;
   };
 }
