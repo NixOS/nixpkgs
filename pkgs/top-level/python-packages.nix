@@ -1117,6 +1117,17 @@ let
     };
   };
 
+  debian = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "python-debian";
+    version = "0.1.23";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${pname}/${name}.tar.gz";
+      sha256 = "193faznwnjc3n5991wyzim6h9gyq1zxifmfrnpm3avgkh7ahyynh";
+    };
+    propagatedBuildInputs = with self; [ chardet six ];
+  };
+
   defusedxml = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "defusedxml";
