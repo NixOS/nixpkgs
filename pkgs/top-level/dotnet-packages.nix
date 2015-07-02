@@ -280,8 +280,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "FSharp.AutoComplete/bin/Release/*" ];
 
     meta = {
-      description = "This project provides a command-line interface to the FSharp.Compiler.Service project. It is intended to be used as a backend service for rich editing or 'intellisense' features for editors.";
-      homepage = "https://github.com/fsharp/FSharp.AutoComplete";
+      description = "An interface to the FSharp.Compiler.Service project";
+      longDescription = ''
+        This project provides a command-line interface to the
+        FSharp.Compiler.Service project. It is intended to be used as a backend
+        service for rich editing or 'intellisense' features for editors.
+        '';
+      homepage = https://github.com/fsharp/FSharp.AutoComplete;
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -498,8 +503,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     dontStrip = true;
 
     meta = {
-      description = "NDesk.Options is a callback-based program option parser for C#.";
-      homepage = "http://www.ndesk.org/Options";
+      description = "A callback-based program option parser for C#";
+      homepage = http://www.ndesk.org/Options;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -677,8 +682,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "bin/net40/*" ];
 
     meta = {
-      description = "A declarative CLI argument/XML configuration parser for F# applications.";
-      homepage = "http://nessos.github.io/UnionArgParser/";
+      description = "A declarative CLI argument/XML configuration parser for F# applications";
+      homepage = http://nessos.github.io/UnionArgParser/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

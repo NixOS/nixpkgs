@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     description = "Next Generation IRC Daemon";
     homepage    = http://ngircd.barton.de;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

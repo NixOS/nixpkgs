@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.eclipse.org/jetty/;
 
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-
     platforms = stdenv.lib.platforms.all;
 
     license = [ stdenv.lib.licenses.asl20 stdenv.lib.licenses.epl10 ];

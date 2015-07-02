@@ -17,11 +17,15 @@ let
     autoconf automake libtool pkgconfig zlib libaio libxml2
     acl sqlite liburcu attr
   ];
+  # Some of the headers reference acl
+  propagatedBuildInputs = [
+    acl
+  ];
 in
 stdenv.mkDerivation
 rec {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit buildInputs propagatedBuildInputs;
 
   preConfigure = ''
     ./autogen.sh

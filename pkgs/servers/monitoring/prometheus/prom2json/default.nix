@@ -19,7 +19,7 @@ goPackages.buildGoPackage rec {
   ];
 
   meta = with lib; {
-    description = "A tool to scrape a Prometheus client and dump the result as JSON.";
+    description = "A tool to scrape a Prometheus client and dump the result as JSON";
     homepage = https://github.com/prometheus/prom2json;
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];

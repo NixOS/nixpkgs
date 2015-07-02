@@ -233,7 +233,7 @@ let
       homepage = http://openjdk.java.net/;
       license = stdenv.lib.licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.shlevy ];
+      maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.linux;
     };
 

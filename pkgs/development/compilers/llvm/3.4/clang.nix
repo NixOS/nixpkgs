@@ -48,7 +48,6 @@ stdenv.mkDerivation {
     description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -2,7 +2,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-contributing">
 
-<title>Contributing</title>
+<title>Contributing to this documentation</title>
 
 <para>The DocBook sources of the Nixpkgs manual are in the <filename
 xlink:href="https://github.com/NixOS/nixpkgs/tree/master/doc">doc</filename>

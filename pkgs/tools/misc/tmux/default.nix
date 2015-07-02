@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thammers ];
+    maintainers = with stdenv.lib.maintainers; [ thammers ];
   };
 }

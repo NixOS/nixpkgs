@@ -44,10 +44,11 @@ cp "@out@/bin/qmake" "$qtOut/bin"
 cat >"$qtOut/bin/qt.conf" <<EOF
 [Paths]
 Prefix = $qtOut
-Plugins = $qtOut/lib/qt5/plugins
-Imports = $qtOut/lib/qt5/imports
-Qml2Imports = $qtOut/lib/qt5/qml
+Plugins = lib/qt5/plugins
+Imports = lib/qt5/imports
+Qml2Imports = lib/qt5/qml
 EOF
+export QMAKE="$qtOut/bin/qmake"
 
 envHooks+=(addQtModule)
 preConfigurePhases+=" setQMakePath"

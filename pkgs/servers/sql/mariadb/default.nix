@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thoughtpolice wkennington ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice wkennington ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

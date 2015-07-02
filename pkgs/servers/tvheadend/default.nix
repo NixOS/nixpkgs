@@ -1,4 +1,5 @@
-{avahi, dbus, fetchurl, git, gzip, libav, libiconv, openssl, pkgconfig, python, stdenv, which, zlib}:
+{avahi, dbus, fetchurl, git, gzip, libav, libiconv, openssl, pkgconfig, python
+, stdenv, which, zlib}:
 
 let version = "4.0.4";
     pkgName = "tvheadend"; in
@@ -13,7 +14,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ avahi dbus git gzip libav libiconv openssl pkgconfig python which zlib];
+  configureFlags = [ "--disable-dvbscan" ];
+
+  buildInputs = [ avahi dbus git gzip libav libiconv openssl pkgconfig python
+    which zlib ];
 
   preConfigure = "patchShebangs ./configure";
 
