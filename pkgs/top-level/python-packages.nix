@@ -444,21 +444,6 @@ let
     };
   };
 
-  args = buildPythonPackage rec {
-    name = "args-0.1.0";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/a/args/${name}.tar.gz";
-      md5 = "66faf79ba2511def7b8b81d542482046";
-    };
-
-    meta = {
-      description = "Command Arguments for Humans";
-      homepage = "https://github.com/kennethreitz/args";
-      license = stdenv.lib.licenses.bsd;
-    };
-  };
-
 
   area53 = buildPythonPackage (rec {
     name = "Area53-0.94";
@@ -2791,60 +2776,6 @@ let
     meta = with stdenv.lib; {
       description = "helpers to pass trusted data to untrusted environments and back";
       homepage = "https://pypi.python.org/pypi/itsdangerous/";
-    };
-  };
-
-  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
-    name = "internetarchive-${ver}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
-      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
-    };
-
-    # It is hardcoded to specific versions, I don't know why.
-    preConfigure = ''
-        sed 's/==/>=/' -i setup.py
-    '';
-
-    propagatedBuildInputs = with self; [ six clint pyyaml docopt pytest
-      requests2 jsonpatch args ];
-
-    meta = with stdenv.lib; {
-      description = "A python wrapper for the various Internet Archive APIs";
-      homepage = "https://github.com/jjjake/internetarchive";
-    };
-  };
-
-  jsonpatch = buildPythonPackage rec {
-    name = "jsonpatch-1.11";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jsonpatch/${name}.tar.gz";
-      md5 = "9f2d0aa31f99cc97089a203c5bed3924";
-    };
-
-    propagatedBuildInputs = with self; [ jsonpointer ];
-
-    meta = {
-      description = "Library to apply JSON Patches according to RFC 6902";
-      homepage = "https://github.com/stefankoegl/python-json-patch";
-      license = stdenv.lib.licenses.bsd2; # "Modified BSD licence, says pypi"
-    };
-  };
-
-  jsonpointer = buildPythonPackage rec {
-    name = "jsonpointer-1.9";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/j/jsonpointer/${name}.tar.gz";
-      md5 = "c4d3f28e72ba77062538d1c0864c40a9";
-    };
-
-    meta = {
-      description = "Library to apply JSON Patches according to RFC 6902";
-      homepage = "https://github.com/stefankoegl/python-json-patch";
-      license = stdenv.lib.licenses.bsd2; # "Modified BSD licence, says pypi"
     };
   };
 
@@ -8259,11 +8190,11 @@ let
 
 
   requests2 = buildPythonPackage rec {
-    name = "requests-2.7.0";
+    name = "requests-2.4.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "29b173fd5fa572ec0764d1fd7b527260";
+      md5 = "02214b3a179e445545de4b7a98d3dd17";
     };
 
     meta = {
@@ -9149,11 +9080,11 @@ let
   };
 
   clint = buildPythonPackage rec {
-    name = "clint-0.4.1";
+    name = "clint-0.3.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/clint/${name}.tar.gz";
-      md5 = "d0a0952bfcc5f4c5e03c36854665b298";
+      md5 = "7dcd43fb08bfb84c7d63e9356ada7b73";
     };
 
     checkPhase = ''
