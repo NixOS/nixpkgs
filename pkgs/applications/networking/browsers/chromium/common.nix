@@ -126,7 +126,6 @@ let
     #      derivations.
     prePatch = ''
       cp -dr --no-preserve=mode "${source.main}"/* .
-      cp -dr --no-preserve=mode "${source.sandbox}" sandbox
       cp -dr "${source.bundled}" third_party
       chmod -R u+w third_party
     '';

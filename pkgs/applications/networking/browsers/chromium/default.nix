@@ -33,7 +33,6 @@ let
     };
 
     browser = callPackage ./browser.nix { };
-    sandbox = callPackage ./sandbox.nix { };
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;
@@ -71,7 +70,6 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
-    sandboxBinary = "${chromium.sandbox}/bin/chromium-sandbox";
     mkEnvVar = key: val: "--set '${key}' '${val}'";
     envVars = chromium.plugins.settings.envVars or {};
     flags = chromium.plugins.settings.flags or [];

@@ -14,7 +14,6 @@ let
     "s,^[^/]+(.*)$,$main\\1,"
     "s,$main/(build|tools)(/.*)?$,$out/\\1\\2,"
     "s,$main/third_party(/.*)?$,$bundled\\1,"
-    "s,$main/sandbox(/.*)?$,$sandbox\\1,"
     "s,^/,,"
   ]);
 
@@ -29,7 +28,7 @@ in stdenv.mkDerivation {
   buildInputs = [ python ]; # cannot patch shebangs otherwise
 
   phases = [ "unpackPhase" "patchPhase" ];
-  outputs = [ "out" "sandbox" "bundled" "main" ];
+  outputs = [ "out" "bundled" "main" ];
 
   unpackPhase = ''
     tar xf "$src" -C / \
