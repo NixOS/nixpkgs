@@ -43,38 +43,27 @@ let
   '';
 
   # WP translation can be found here:
-  #   https://make.wordpress.org/polyglots/teams/
-  # FIXME: 
-  #  - add all these languages: 
-  #    sq ar az eu bs bg ca zh-cn zh-tw hr da nl en-au 
-  #    en-ca en-gb eo fi fr gl de el he hu is id it ja 
-  #    ko lt nb nn oci pl pt-br pt ro ru sr sk es-mx es 
-  #    sv th tr uk cy
-  #  - cache the files on github.com/qknight/WordpressLanguages and use fetchFromGithub instead
-  #    note: this implementation of supportedLanguages will only work for me (qknight) as i'm using nix-prefetch-url
-  #          as the sha256 changes like every download. 
-  # note: this is also true for plugins and themes but these are controlled not from withing wordpress.nix
+  #   https://github.com/nixcloud/wordpress-translations
   supportedLanguages = {
-    en_GB = "1yf1sb6ji3l4lg8nkkjhckbwl81jly8z93jf06pvk6a1p6bsr6l6";
-    de_DE = "3881221f337799b88f9562df8b3f1560f2c49a8f662297561a5b25ce77f22e17";
+    en_GB = { revision="d6c005372a5318fd758b710b77a800c86518be13"; sha256="0qbbsi87k47q4rgczxx541xz4z4f4fr49hw4lnaxkdsf5maz8p9p"; };
+    de_DE = { revision="3c62955c27baaae98fd99feb35593d46562f4736"; sha256="1shndgd11dk836dakrjlg2arwv08vqx6j4xjh4jshvwmjab6ng6p"; };
+    zh_ZN = { revision="12b9f811e8cae4b6ee41de343d35deb0a8fdda6d"; sha256="1339ggsxh0g6lab37jmfxicsax4h702rc3fsvv5azs7mcznvwh47"; };
+    fr_FR = { revision="688c8b1543e3d38d9e8f57e0a6f2a2c3c8b588bd"; sha256="1j41iak0i6k7a4wzyav0yrllkdjjskvs45w53db8vfm8phq1n014"; };
   };
 
-  downloadLanguagePack = language: sha256:
+  downloadLanguagePack = language: revision: sha256s:
     pkgs.stdenv.mkDerivation rec {
-      name = "wp_${language}-${version}";
-      src = pkgs.fetchurl {
-        url = "https://downloads.wordpress.org/translation/core/${version}/${language}.zip";
-        sha256 = "${sha256}";
+      name = "wp_${language}";
+      src = pkgs.fetchFromGitHub {
+        owner = "nixcloud";
+        repo = "wordpress-translations";
+        rev = revision;
+        sha256 = sha256s;
       };
-      buildInputs = [ pkgs.unzip ];
-      unpackPhase = ''
-        unzip $src
-        export sourceRoot=.
-      '';
       installPhase = "mkdir -p $out; cp -R * $out/";
     };
 
-  selectedLanguages = map (lang: downloadLanguagePack lang supportedLanguages.${lang}) (config.languages);
+  selectedLanguages = map (lang: downloadLanguagePack lang supportedLanguages.${lang}.revision supportedLanguages.${lang}.sha256) (config.languages);
 
   # The wordpress package itself
   wordpressRoot = pkgs.stdenv.mkDerivation rec {
@@ -235,6 +224,7 @@ in
 
   documentRoot = wordpressRoot;
 
+  # FIXME adding the user has to be done manually for the time being
   startupScript = pkgs.writeScript "init-wordpress.sh" ''
     #!/bin/sh
     mkdir -p ${config.wordpressUploads}
