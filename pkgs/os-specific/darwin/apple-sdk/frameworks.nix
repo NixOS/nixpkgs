@@ -76,7 +76,7 @@ with frameworks; with libs; {
   OpenAL                  = [];
   OpenCL                  = [ IOSurface OpenGL ];
   OpenGL                  = [];
-  PCSC                    = [];
+  PCSC                    = [ CoreData ];
   PreferencePanes         = [];
   PubSub                  = [];
   Python                  = [ ApplicationServices ];
