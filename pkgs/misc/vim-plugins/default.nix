@@ -82,6 +82,17 @@ rec {
   webapi-vim          = WebAPI;
   yankring            = YankRing;
 
+  CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "CSApprox-2013-07-26";
+    src = fetchgit {
+      url = "git://github.com/godlygeek/csapprox";
+      rev = "7981dac51d8b6776985aa08cb7b5ee98ea7f2ddd";
+      sha256 = "8ccb47eb79c7ab63109d32158388812bdca340985527af4f2a5489ff8683389f";
+    };
+    dependencies = [];
+
+  };
+
   Gist = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "Gist-2015-06-24";
     src = fetchgit {
@@ -871,6 +882,17 @@ rec {
       url = "git://github.com/tpope/vim-sensible";
       rev = "d0beb8ab42627bea2c747564ca46ec663e3ba0ba";
       sha256 = "c1893990e7b0b3f409b2ec4f4e1fb7f00f61a5146b94314ad28d86231d3ab6f7";
+    };
+    dependencies = [];
+
+  };
+
+  sleuth = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "sleuth-2015-06-07";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-sleuth";
+      rev = "a17462708aa40a7fc0afd4effa559087d8a2c908";
+      sha256 = "72f4b7c5e60c942592e624806960736e71b9f109fbbfa3a5a2a37970b90f6025";
     };
     dependencies = [];
 
