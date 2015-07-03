@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite kyotocabinet ];
 
   buildPhase = ''
-    make all db_bench{,_sqlite3,_tree_db} leveldbutil
+    make all db_bench{,_sqlite3,_tree_db} leveldbutil libmemenv.a
   '';
 
   installPhase = "
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     cp -r include $out
     cp lib* $out/lib
     cp db_bench{,_sqlite3,_tree_db} leveldbutil $out/bin
+    mkdir -p $out/include/leveldb/helpers
+    cp helpers/memenv/memenv.h $out/include/leveldb/helpers
   ";
 
   meta = with stdenv.lib; {
