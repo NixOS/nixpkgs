@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby, perl }:
+{ stdenv, lib, bundlerEnv, ruby, perl, autoconf }:
 
 bundlerEnv {
   name = "chefdk-0.4.0";
@@ -8,7 +8,7 @@ bundlerEnv {
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;
 
-  buildInputs = [ perl ];
+  buildInputs = [ perl autoconf ];
 
   meta = with lib; {
     description = "A streamlined development and deployment workflow for Chef platform";
