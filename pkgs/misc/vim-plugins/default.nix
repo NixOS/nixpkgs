@@ -82,6 +82,17 @@ rec {
   webapi-vim          = WebAPI;
   yankring            = YankRing;
 
+  CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "CSApprox-2013-07-26";
+    src = fetchgit {
+      url = "git://github.com/godlygeek/csapprox";
+      rev = "7981dac51d8b6776985aa08cb7b5ee98ea7f2ddd";
+      sha256 = "8ccb47eb79c7ab63109d32158388812bdca340985527af4f2a5489ff8683389f";
+    };
+    dependencies = [];
+
+  };
+
   Gist = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "Gist-2015-06-24";
     src = fetchgit {
