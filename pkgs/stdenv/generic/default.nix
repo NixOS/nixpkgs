@@ -147,8 +147,9 @@ let
           __impureHostDeps = attrs.__impureHostDeps or [];
           __propagatedImpureHostDeps = attrs.__propagatedImpureHostDeps or [];
 
-          computedImpureHostDeps           = lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
-          computedPropagatedImpureHostDeps = lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs);
+          # TODO: remove lib.unique once nix has a list canonicalization primitive
+          computedImpureHostDeps           = lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
+          computedPropagatedImpureHostDeps = lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
         in
         {
           builder = attrs.realBuilder or shell;
