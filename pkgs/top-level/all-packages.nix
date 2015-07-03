@@ -1971,9 +1971,7 @@ let
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
-  minidlna = callPackage ../tools/networking/minidlna {
-    ffmpeg = ffmpeg_0;
-  };
+  minidlna = callPackage ../tools/networking/minidlna { };
 
   mmv = callPackage ../tools/misc/mmv { };
 
