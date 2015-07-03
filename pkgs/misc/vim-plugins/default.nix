@@ -887,6 +887,17 @@ rec {
 
   };
 
+  sleuth = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "sleuth-2015-06-07";
+    src = fetchgit {
+      url = "git://github.com/tpope/vim-sleuth";
+      rev = "a17462708aa40a7fc0afd4effa559087d8a2c908";
+      sha256 = "72f4b7c5e60c942592e624806960736e71b9f109fbbfa3a5a2a37970b90f6025";
+    };
+    dependencies = [];
+
+  };
+
   snipmate = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "snipmate-2015-04-04";
     src = fetchgit {
