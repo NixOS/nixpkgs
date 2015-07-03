@@ -12991,6 +12991,22 @@ let
     };
   };
 
+  toolz = buildPythonPackage rec{
+    name = "toolz-${version}";
+    version = "0.7.2";
+    
+    src = pkgs.fetchurl{
+      url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+      md5 = "6f045541a9e7ee755b7b00fced4a7fde";
+    };
+    
+    meta = {
+      homepage = "http://github.com/pytoolz/toolz/";
+      description = "List processing tools and functional utilities";
+      license = "licenses.bsd3";   
+    };
+  };
+  
   tox = buildPythonPackage rec {
     name = "tox-1.8.1";
 
