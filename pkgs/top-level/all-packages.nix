@@ -13993,6 +13993,8 @@ let
 
   orion = callPackage ../misc/themes/orion {};
 
+  albatross = callPackage ../misc/themes/albatross { };
+
   oxygen-gtk2 = callPackage ../misc/themes/gtk2/oxygen-gtk { };
 
   oxygen-gtk3 = callPackage ../misc/themes/gtk3/oxygen-gtk3 { };
