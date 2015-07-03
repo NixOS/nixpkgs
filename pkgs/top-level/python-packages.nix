@@ -16219,5 +16219,26 @@ let
     };
   };
 
+  potr = buildPythonPackage rec {
+    version = "1.0.1";
+    name = "potr-${version}";
+
+    meta = {
+      description = "pure Python Off-The-Record encryption";
+      homepage    = "http://python-otr.pentabarf.de";
+      license     = licenses.lgpl3Plus;
+      platforms   = platforms.all;
+      maintainers = with maintainers; [ np ];
+    };
+
+    propagatedBuildInputs = [ self.pycrypto ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-potr/python-${name}.zip";
+      sha256 = "a8a23fc1aac1e9c97b02fe462097f54f2d247f7979f0aa8ce4d66f88f6927bac";
+      md5 = "cb7c7d812ca548e81175e9e0298d70ac";
+    };
+  };
+
 
 }; in pythonPackages
