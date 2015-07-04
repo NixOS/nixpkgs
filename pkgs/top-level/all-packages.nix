@@ -3105,6 +3105,8 @@ let
 
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
+  chaps = callPackage ../tools/security/chaps { };
+
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   traceroute = callPackage ../tools/networking/traceroute { };
