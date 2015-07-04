@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
+  openCommand = { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -33,6 +33,7 @@ let
 
     open_normally() {
         cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
+          ${optionalString (header != null) "--header=${header}"} \
           ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
     }
 
@@ -249,6 +250,16 @@ in
           example = "/dev/sda2";
           type = types.string;
           description = "Path of the underlying block device.";
+        };
+
+        header = mkOption {
+          default = null;
+          example = "/root/header.img";
+          type = types.nullOr types.string;
+          description = ''
+            The name of the file or block device that
+            should be used as header for the encrypted device.
+          '';
         };
 
         keyFile = mkOption {
