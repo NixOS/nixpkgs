@@ -7696,17 +7696,17 @@ let
 
   namebench = buildPythonPackage (rec {
     name = "namebench-1.0.5";
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "http://namebench.googlecode.com/files/${name}.tgz";
       sha256 = "6cbde35ce94d1f31e7d48f5d8eec13238b4dbc505675a33f1e183e600c1482c3";
     };
 
-    # No support of GUI yet.
-
     # error: invalid command 'test'
     doCheck = false;
+
+    propagatedBuildInputs = [ self.tkinter ];
 
     # namebench expects to be run from its own source tree (it uses relative
     # paths to various resources), make it work.
