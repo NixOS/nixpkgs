@@ -30,18 +30,19 @@ in
     system.activationScripts = mkOption {
       default = {};
 
-      example = {
-        stdio = {
-          text = ''
-            # Needed by some programs.
-            ln -sfn /proc/self/fd /dev/fd
-            ln -sfn /proc/self/fd/0 /dev/stdin
-            ln -sfn /proc/self/fd/1 /dev/stdout
-            ln -sfn /proc/self/fd/2 /dev/stderr
-          '';
-          deps = [];
-        };
-      };
+      example = literalExample ''
+        { stdio = {
+            text = '''
+              # Needed by some programs.
+              ln -sfn /proc/self/fd /dev/fd
+              ln -sfn /proc/self/fd/0 /dev/stdin
+              ln -sfn /proc/self/fd/1 /dev/stdout
+              ln -sfn /proc/self/fd/2 /dev/stderr
+            ''';
+            deps = [];
+          };
+        }
+      '';
 
       description = ''
         A set of shell script fragments that are executed when a NixOS
