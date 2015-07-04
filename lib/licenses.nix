@@ -332,6 +332,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "SIL Open Font License 1.1";
   };
 
+  openldap = spdx {
+    spdxId = "OLDAP-2.8";
+    fullName = "Open LDAP Public License v2.8";
+  };
+
   openssl = spdx {
     spdxId = "OpenSSL";
     fullName = "OpenSSL License";
