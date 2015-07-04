@@ -3319,6 +3319,8 @@ let
 
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
+  xsensors = callPackage ../os-specific/linux/xsensors { };
+
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   unarj = callPackage ../tools/archivers/unarj { };
