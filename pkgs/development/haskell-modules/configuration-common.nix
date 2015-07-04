@@ -612,6 +612,7 @@ self: super: {
 
   # https://github.com/srijs/hwsl2/issues/1
   hwsl2 = markBroken super.hwsl2;
+  hwsl2-reducers = dontDistribute super.hwsl2-reducers;
 
   # https://code.google.com/p/linux-music-player/issues/detail?id=1
   mp = markBroken super.mp;
