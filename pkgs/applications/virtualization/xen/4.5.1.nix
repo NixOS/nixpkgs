@@ -1,14 +1,14 @@
 { callPackage, fetchurl, fetchgit, ... } @ args:
 
 let
-  # Xen 4.5.0
+  # Xen 4.5.1
   xenConfig = {
-    name = "xen-4.5.0";
-    version = "4.5.0";
+    name = "xen-4.5.1";
+    version = "4.5.1";
 
     src = fetchurl {
-      url = "http://bits.xensource.com/oss-xen/release/4.5.0/xen-4.5.0.tar.gz";
-      sha256 = "0fvg00d596gh6cfm51xr8kj2mghcyivrf6np3dafnbldnbi41nsv";
+      url = "http://bits.xensource.com/oss-xen/release/4.5.1/xen-4.5.1.tar.gz";
+      sha256 = "0w8kbqy7zixacrpbk3yj51xx7b3f6l8ghsg3551w8ym6zka13336";
     };
 
     # Sources needed to build the xen tools and tools/firmware.
@@ -30,18 +30,18 @@ let
       ];
 
     toolsGits =
-      [ # tag qemu-xen-4.5.0
+      [ # tag qemu-xen-4.5.1
         { git = { name = "qemu-xen";
                   url = git://xenbits.xen.org/qemu-upstream-4.5-testing.git;
-                  rev = "1ebb75b1fee779621b63e84fefa7b07354c43a99";
-                  sha256 = "1j312q2mqvkvby9adkkxf7f1pn3nz85g5mr9nbg4qpf2y9cg122z";
+                  rev = "d9552b0af21c27535cd3c8549bb31d26bbecd506";
+                  sha256 = "15dbz8j26wl4vs5jijhccwgd8c6wkmpj4mz899fa7i1bbh8yysfy";
                 };
         }
-        # tag xen-4.5.0
+        # tag xen-4.5.1
         { git = { name = "qemu-xen-traditional";
                   url = git://xenbits.xen.org/qemu-xen-4.5-testing.git;
-                  rev = "b0d42741f8e9a00854c3b3faca1da84bfc69bf22";
-                  sha256 = "ce52b5108936c30ab85ec0c9554f88d5e7b34896f3acb666d56765b49c86f2af";
+                  rev = "afaa35b4bc975b2b89ad44c481d0d7623e3d1c49";
+                  sha256 = "906b31cf32b52d29e521abaa76d641123bdf24f33fa53c6f109b6d7834e514be";
                 };
         }
         { git = { name = "xen-libhvm";
@@ -57,18 +57,6 @@ let
           #license = licenses.bsd2;
         }
       ];
-
-    xenserverPatches = let
-      patches = {
-        url = https://github.com/ts468/xen-4.5.pg.git;
-        rev = "3442b65b490f43c817cbc53369220d0b1ab9b785";
-        sha256 = "31436c15def0a300b3ea1a63b2208c4a3bcbb143db5c6488d4db370b3ceeb845";
-      };
-      in ''
-        cp -r ${fetchgit patches}/master patches
-        quilt push -a
-        substituteInPlace tools/xenguest/Makefile --replace "_BSD_SOURCE" "_DEFAULT_SOURCE"
-        '';
 
     xenPatches = [ ./0001-libxl-Spice-image-compression-setting-support-for-up.patch
                    ./0002-libxl-Spice-streaming-video-setting-support-for-upst.patch
