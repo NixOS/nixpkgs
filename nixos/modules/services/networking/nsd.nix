@@ -621,34 +621,37 @@ in
       zones = mkOption {
         type        = types.attrsOf zoneOptions;
         default     = {};
-        example     = {
-          "serverGroup1" = {
-            provideXFR = [ "10.1.2.3 NOKEY" ];
-            children = {
-              "example.com." = {
-                data = ''
-                  $ORIGIN example.com.
-                  $TTL    86400
-                  @ IN SOA a.ns.example.com. admin.example.com. (
-                  ...
-                '';
-              };
-              "example.org." = {
-                data = ''
-                  $ORIGIN example.org.
-                  $TTL    86400
-                  @ IN SOA a.ns.example.com. admin.example.com. (
-                  ...
-                '';
+        example     = literalExample ''
+          { "serverGroup1" = {
+              provideXFR = [ "10.1.2.3 NOKEY" ];
+              children = {
+                "example.com." = {
+                  data = '''
+                    $ORIGIN example.com.
+                    $TTL    86400
+                    @ IN SOA a.ns.example.com. admin.example.com. (
+                    ...
+                  ''';
+                };
+                "example.org." = {
+                  data = '''
+                    $ORIGIN example.org.
+                    $TTL    86400
+                    @ IN SOA a.ns.example.com. admin.example.com. (
+                    ...
+                  ''';
+                };
               };
             };
-          };
 
-          "example.net." = {
-            provideXFR = [ "10.3.2.1 NOKEY" ];
-            data = ''...'';
-          };
-        };
+            "example.net." = {
+              provideXFR = [ "10.3.2.1 NOKEY" ];
+              data = '''
+                ...
+              ''';
+            };
+          }
+        '';
         description = ''
           Define your zones here. Zones can cascade other zones and therefore
           inherit settings from parent zones. Look at the definition of
