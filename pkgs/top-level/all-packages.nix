@@ -6651,6 +6651,8 @@ let
 
   leveldb = callPackage ../development/libraries/leveldb { };
 
+  lmdb = callPackage ../development/libraries/lmdb { };
+
   levmar = callPackage ../development/libraries/levmar { };
 
   leptonica = callPackage ../development/libraries/leptonica {
