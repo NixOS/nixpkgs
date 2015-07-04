@@ -7885,7 +7885,7 @@ let
   };
 
   qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt48.override { developerBuild = true; };
+    qtLib = qt5.override { developerBuild = true; };
   };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
