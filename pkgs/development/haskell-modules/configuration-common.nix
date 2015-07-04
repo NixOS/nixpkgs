@@ -781,9 +781,6 @@ self: super: {
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
-  # https://github.com/gwern/mueval/issues/9
-  mueval = appendPatch (appendPatch super.mueval ./mueval-fix.patch) ./mueval-nix.patch;
-
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
 
