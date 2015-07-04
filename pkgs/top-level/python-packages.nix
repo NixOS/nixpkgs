@@ -7695,12 +7695,12 @@ let
 
 
   namebench = buildPythonPackage (rec {
-    name = "namebench-1.0.5";
+    name = "namebench-1.3.1";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "http://namebench.googlecode.com/files/${name}.tgz";
-      sha256 = "6cbde35ce94d1f31e7d48f5d8eec13238b4dbc505675a33f1e183e600c1482c3";
+      url = "http://namebench.googlecode.com/files/${name}-source.tgz";
+      sha256 = "09clbcd6wxgk4r6qw7hb78h818mvca7lijigy1mlq5y1f3lgkk1h";
     };
 
     # error: invalid command 'test'
