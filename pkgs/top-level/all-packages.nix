@@ -3103,6 +3103,8 @@ let
 
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
+  tpm-luks = callPackage ../tools/security/tpm-luks { };
+
   chaps = callPackage ../tools/security/chaps { };
 
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
