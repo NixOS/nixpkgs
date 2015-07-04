@@ -8526,7 +8526,24 @@ let
     };
   };
 
-
+  patsy = buildPythonPackage rec {
+    name = "patsy-${version}";
+    version = "0.3.0";
+    
+    src = pkgs.fetchurl{
+      url = "https://pypi.python.org/packages/source/p/patsy/${name}.zip";
+      md5 = "7545518b413136ba8343dcebea07e5e2";
+    };
+    
+    propagatedBuildInputs = with self; [six numpy];
+    
+    meta = {
+      description = "A Python package for describing statistical models";
+      homepage = "https://github.com/pydata/patsy";
+      license = licenses.bsd2;
+    };
+  };
+  
   paste = buildPythonPackage rec {
     name = "paste-1.7.5.1";
     disabled = isPy3k;
