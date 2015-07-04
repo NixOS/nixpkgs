@@ -1596,9 +1596,7 @@ let
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
-  minidlna = callPackage ../tools/networking/minidlna {
-    ffmpeg = ffmpeg_0_10;
-  };
+  minidlna = callPackage ../tools/networking/minidlna { };
 
   mmv = callPackage ../tools/misc/mmv { };
 
