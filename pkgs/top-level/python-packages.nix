@@ -10764,16 +10764,18 @@ let
 
 
   pytz = buildPythonPackage rec {
-    name = "pytz-2013.9";
+    name = "pytz-${version}";
+    version = "2015.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
-      md5 = "ec7076947a46a8a3cb33cbf2983a562c";
+      md5 = "39f7375c4b1fa34cdcb4b4765d08f817";
     };
 
     meta = {
       description = "World timezone definitions, modern and historical";
-      homepage = http://pytz.sourceforge.net/;
+      homepage = "http://pythonhosted.org/pytz";
+      license = licenses.mit;
     };
   };
 
