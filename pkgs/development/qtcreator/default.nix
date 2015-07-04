@@ -3,8 +3,8 @@
 with stdenv.lib;
 
 let
-  baseVersion = "3.2";
-  revision = "1";
+  baseVersion = "3.4";
+  revision = "2";
   version = "${baseVersion}.${revision}";
 in
 
