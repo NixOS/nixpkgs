@@ -4,22 +4,22 @@ with goPackages;
 
 buildGoPackage rec {
   name = "prometheus-node-exporter-${rev}";
-  rev = "0.8.1";
+  rev = "0.10.0";
   goPackagePath = "github.com/prometheus/node_exporter";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "node_exporter";
     inherit rev;
-    sha256 = "15vp88w0b7h6sryy61qk369yjr3p4qvpch1nbxd9rm51bdgsqyys";
+    sha256 = "0dmczav52v9vi0kxl8gd2s7x7c94g0vzazhyvlq1h3729is2nf0p";
   };
 
   buildInputs = [
-    glog
     go-runit
     ntp
     prometheus.client_golang
     prometheus.client_model
+    prometheus.log
     protobuf
   ];
 
