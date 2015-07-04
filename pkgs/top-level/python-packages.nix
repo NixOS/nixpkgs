@@ -7708,6 +7708,12 @@ let
     # error: invalid command 'test'
     doCheck = false;
 
+    # namebench expects to be run from its own source tree (it uses relative
+    # paths to various resources), make it work.
+    postInstall = ''
+      sed -i "s|import os|import os; os.chdir(\"$out/namebench\")|" "$out/bin/namebench.py"
+    '';
+
     meta = {
       homepage = http://namebench.googlecode.com/;
       description = "Find fastest DNS servers available";
