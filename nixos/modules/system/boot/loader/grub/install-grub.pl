@@ -499,11 +499,11 @@ my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/:/, $prevGrubState->devices;
 
-my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference() );
-my $nameDiffer = !(get("fullName") eq $prevGrubState->name);
-my $versionDiffer = !(get("fullVersion") eq $prevGrubState->version);
-my $efiDiffer = !($efiTarget eq $prevGrubState->efi);
-my $efiMountPointDiffer = !($efiSysMountPoint eq $prevGrubState->efiMountPoint);
+my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
+my $nameDiffer = get("fullName") ne $prevGrubState->name;
+my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
+my $efiDiffer = $efiTarget ne $prevGrubState->efi;
+my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
 my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive when set
