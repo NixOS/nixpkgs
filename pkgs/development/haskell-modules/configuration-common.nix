@@ -887,4 +887,7 @@ self: super: {
   hid = markBroken super.hid;
   msi-kb-backlit = dontDistribute super.msi-kb-backlit;
 
+  # Hydra no longer allows building texlive packages.
+  lhs2tex = dontDistribute super.lhs2tex;
+
 }
