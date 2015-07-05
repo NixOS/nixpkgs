@@ -42,9 +42,6 @@ in stdenv.mkDerivation {
 
   patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
 
-  postPatch = if stdenv.isDarwin then ''
-    (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
-  '' else null;
 
   preBuild = if stdenv.isDarwin then ''
     patchShebangs .

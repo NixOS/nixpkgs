@@ -15,8 +15,8 @@ import ./make-test.nix {
     startAll;
 
     $docker->waitForUnit("docker.service");
-    $docker->succeed("tar cv --files-from /dev/null | docker import - scratch");
-    $docker->succeed("docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratch /bin/sleep 10");
+    $docker->succeed("tar cv --files-from /dev/null | docker import - scratchimg");
+    $docker->succeed("docker run -d --name=sleeping -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 10");
     $docker->succeed("docker ps | grep sleeping");
     $docker->succeed("docker stop sleeping");
   '';

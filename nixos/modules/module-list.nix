@@ -84,6 +84,7 @@
   ./security/grsecurity.nix
   ./security/pam.nix
   ./security/pam_usb.nix
+  ./security/pam_mount.nix
   ./security/polkit.nix
   ./security/prey.nix
   ./security/rngd.nix
@@ -383,6 +384,7 @@
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm.nix
+  ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix

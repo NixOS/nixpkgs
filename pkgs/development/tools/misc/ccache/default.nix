@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, runCommand, gcc, perl, zlib }:
+{ stdenv, fetchurl, runCommand, gcc, zlib }:
 
 let
   # TODO: find out if there's harm in just using 'rec' instead.
   name = "ccache-${version}";
   version = "3.2.2";
   sha256 = "1jm0qb3h5sypllaiyj81zp6m009vm50hzjnx994ril94kxlrj3ag";
-  doCheck = true;
 
   ccache =
 stdenv.mkDerivation {
-  inherit name doCheck;
+  inherit name;
   src = fetchurl {
     inherit sha256;
     url = "mirror://samba/ccache/${name}.tar.xz";
   };
 
-  # The test dependency on perl should be gone in the next release:
-  buildInputs = [ zlib ]
-    ++ stdenv.lib.optionals doCheck [ perl ];
+  patches = [ ./test-drop-perl-requirement.patch ];
+
+  buildInputs = [ zlib ];
+
+  doCheck = true;
 
   passthru = {
     # A derivation that provides gcc and g++ commands, but that

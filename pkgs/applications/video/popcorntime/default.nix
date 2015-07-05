@@ -4,20 +4,21 @@
 let
   version = "0.3.7.2";
 
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux64.tar.xz";
-      sha256 = "0lm9k4fr73a9p00i3xj2ywa4wvjf9csadm0pcz8d6imwwq44sa8b";
-    };
-    i686-linux = fetchurl {
-      url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux32.tar.xz";
-      sha256 = "1dz1cp31qbwamm9pf8ydmzzhnb6d9z73bigdv3y74dgicz3dpr91";
-    };
-  };
-
   popcorntimePackage = stdenv.mkDerivation rec {
     name = "popcorntime-package-${version}";
-    src = srcs."${stdenv.system}";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux64.tar.xz";
+          sha256 = "0lm9k4fr73a9p00i3xj2ywa4wvjf9csadm0pcz8d6imwwq44sa8b";
+        }
+      else if stdenv.system == "i686-linux" then
+        fetchurl {
+          url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux32.tar.xz";
+          sha256 = "1dz1cp31qbwamm9pf8ydmzzhnb6d9z73bigdv3y74dgicz3dpr91";
+        }
+      else
+        throw "Unsupported system ${stdenv.system}";
     sourceRoot = ".";
     installPhase = ''
       mkdir -p $out

@@ -1170,15 +1170,23 @@ let
 
   cron = callPackage ../tools/system/cron { };
 
-  cudatoolkit5 = callPackage ../development/compilers/cudatoolkit/5.5.nix {
+  cudatoolkit5 = import ../development/compilers/cudatoolkit/5.5.nix {
+    inherit callPackage;
     python = python26;
   };
 
-  cudatoolkit6 = callPackage ../development/compilers/cudatoolkit/6.0.nix {
+  cudatoolkit6 = import ../development/compilers/cudatoolkit/6.0.nix {
+    inherit callPackage;
     python = python26;
   };
 
-  cudatoolkit65 = callPackage ../development/compilers/cudatoolkit/6.5.nix {
+  cudatoolkit65 = import ../development/compilers/cudatoolkit/6.5.nix {
+    inherit callPackage;
+    python = python26;
+  };
+
+  cudatoolkit7 = import ../development/compilers/cudatoolkit/7.0.nix {
+    inherit callPackage;
     python = python26;
   };
 
@@ -1702,10 +1710,7 @@ let
     automake = automake112x; # fails with 13 and 14
   };
 
-  trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix {
-    buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
-    automake = automake112x; # fails with 13 and 14
-  };
+  trustedGrub = callPackage_i686 ../tools/misc/grub/trusted.nix { };
 
   grub2 = grub2_full;
 
@@ -1971,9 +1976,7 @@ let
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
-  minidlna = callPackage ../tools/networking/minidlna {
-    ffmpeg = ffmpeg_0;
-  };
+  minidlna = callPackage ../tools/networking/minidlna { };
 
   mmv = callPackage ../tools/misc/mmv { };
 
@@ -3108,6 +3111,10 @@ let
 
   tpm-tools = callPackage ../tools/security/tpm-tools { };
 
+  tpm-luks = callPackage ../tools/security/tpm-luks { };
+
+  chaps = callPackage ../tools/security/chaps { };
+
   trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   traceroute = callPackage ../tools/networking/traceroute { };
@@ -3321,6 +3328,8 @@ let
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
+
+  xsensors = callPackage ../os-specific/linux/xsensors { };
 
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
@@ -4504,6 +4513,10 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
+    qcheck = callPackage ../development/ocaml-modules/qcheck {
+      oasis = ocaml_oasis;
+    };
+
     qtest = callPackage ../development/ocaml-modules/qtest {
       oasis = ocaml_oasis;
     };
@@ -5369,6 +5382,8 @@ let
 
   docutils = pythonPackages.docutils;
 
+  dot2tex = pythonPackages.dot2tex;
+
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
   };
@@ -6023,10 +6038,10 @@ let
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
-  ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix { };
-  ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix { };
-  ffmpeg_2_2 = callPackage ../development/libraries/ffmpeg/2.2.nix { };
-  ffmpeg_2_6 = callPackage ../development/libraries/ffmpeg/2.6.nix { };
+  ffmpeg_0_10 = import ../development/libraries/ffmpeg/0.10.nix { inherit callPackage; };
+  ffmpeg_1_2 = import ../development/libraries/ffmpeg/1.2.nix { inherit callPackage; };
+  ffmpeg_2_2 = import ../development/libraries/ffmpeg/2.2.nix { inherit callPackage; };
+  ffmpeg_2_6 = import ../development/libraries/ffmpeg/2.6.nix { inherit callPackage; };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
@@ -6568,6 +6583,8 @@ let
   lesstif = callPackage ../development/libraries/lesstif { };
 
   leveldb = callPackage ../development/libraries/leveldb { };
+
+  lmdb = callPackage ../development/libraries/lmdb { };
 
   levmar = callPackage ../development/libraries/levmar { };
 
@@ -12392,11 +12409,13 @@ let
   };
 
   # urxvt plugins
+  urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
   urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
+  urxvt_font_size = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-font-size { };
 
   rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
-    plugins = [ urxvt_perls urxvt_tabbedex ];
+    plugins = [ urxvt_perl urxvt_perls urxvt_tabbedex urxvt_font_size ];
   };
 
   # FIXME: remove somewhere in future
@@ -13136,8 +13155,15 @@ let
 
   xen_4_4_1 = callPackage ../applications/virtualization/xen/4.4.1.nix { };
   xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
+  xen_4_5_1 = callPackage ../applications/virtualization/xen/4.5.1.nix { };
   xen_xenServer = callPackage ../applications/virtualization/xen/4.5.0.nix { xenserverPatched = true; };
-  xen = xen_4_5_0;
+  xen = xen_4_5_1;
+
+  win-spice = callPackage ../applications/virtualization/driver/win-spice { };
+  win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
+  win-qemu = callPackage ../applications/virtualization/driver/win-qemu { };
+  win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
+  win-signed-gplpv-drivers = callPackage ../applications/virtualization/driver/win-signed-gplpv-drivers { };
 
   xfe = callPackage ../applications/misc/xfe {
     fox = fox_1_6;
@@ -13532,10 +13558,7 @@ let
 
   sdlmame = callPackage ../games/sdlmame { };
 
-  sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
-    inherit pkgconfig fetchsvn perl gtk;
-    inherit (xlibs) libX11;
-  };
+  sgtpuzzles = callPackage (import ../games/sgt-puzzles) { };
 
   simutrans = callPackage ../games/simutrans { };
   # get binaries without data built by Hydra
@@ -13947,6 +13970,8 @@ let
   };
 
   orion = callPackage ../misc/themes/orion {};
+
+  albatross = callPackage ../misc/themes/albatross { };
 
   oxygen-gtk2 = callPackage ../misc/themes/gtk2/oxygen-gtk { };
 
@@ -14865,6 +14890,8 @@ let
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
+
+  xhyve = callPackage ../applications/virtualization/xhyve { };
 
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {
     inherit (xlibs) libXi inputproto;

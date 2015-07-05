@@ -10,7 +10,7 @@ let
     version="2.35";
     name="${baseName}-${version}";
     hash="11f28vxw0ybhvl7vxmqcdwvw7y6gz55ykw9ybgzb2px6lsvgag7z";
-    url="http://softlayer-ams.dl.sourceforge.net/project/asymptote/2.35/asymptote-2.35.src.tgz";
+    url="mirror://sourceforge/asymptote/2.35/asymptote-2.35.src.tgz";
     sha256="11f28vxw0ybhvl7vxmqcdwvw7y6gz55ykw9ybgzb2px6lsvgag7z";
   };
   buildInputs = [

@@ -633,6 +633,27 @@ let
     };
   };
 
+  atomiclong = buildPythonPackage rec {
+    version = "0.1.1";
+    name = "atomiclong-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/atomiclong/atomiclong-${version}.tar.gz";
+      sha256 = "1gjbc9lvpkgg8vj7dspif1gz9aq4flkhxia16qj6yvb7rp27h4yb";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ cffi ];
+
+    meta = {
+      description = "Long data type with atomic operations using CFFI";
+      homepage = https://github.com/dreid/atomiclong;
+      license = licenses.mit;
+      maintainers = with maintainers; [ robbinch ];
+    };
+
+  };
+
   atomicwrites = buildPythonPackage rec {
     version = "0.1.0";
     name = "atomicwrites-${version}";
@@ -2157,6 +2178,22 @@ let
     meta = {
       description = "An interpreter to help writing C extensions for Python 2";
       platforms = platforms.all;
+    };
+  };
+  
+  cytoolz = buildPythonPackage rec {
+    name = "cytoolz-${version}";
+    version = "0.7.3";
+    
+    src = pkgs.fetchurl{
+      url = "https://pypi.python.org/packages/source/c/cytoolz/cytoolz-${version}.tar.gz";
+      md5 = "e9f0441d9f340a23c60357f68f25d163";
+    };
+    
+    meta = {
+      homepage = "http://github.com/pytoolz/cytoolz/";
+      description = "Cython implementation of Toolz: High performance functional utilities";
+      license = "licenses.bsd3";   
     };
   };
 
@@ -4130,11 +4167,11 @@ let
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
-    version = "0.9";
+    version = "0.10";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/R/Radicale/Radicale-${version}.tar.gz";
-      sha256 = "77bf813fd26f0d359c1a7b7bcce9b842b4503c5516989a4a0a4f648e299e41f7";
+      sha256 = "0r1x23h9raadpdmxnanvhajvkk0ix377mv94jlazr18nfpsj4r8c";
     };
 
     propagatedBuildInputs = with self; [
@@ -4146,7 +4183,7 @@ let
     doCheck = false;
 
     meta = {
-      homepage = "http://www.radicale.org/";
+      homepage = http://www.radicale.org/;
       description = "CalDAV CardDAV server";
       longDescription = ''
         The Radicale Project is a complete CalDAV (calendar) and CardDAV
@@ -4156,7 +4193,7 @@ let
         on mobile phones or computers.
       '';
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ edwtjo ];
+      maintainers = with maintainers; [ edwtjo pSub ];
     };
   };
 
@@ -6660,12 +6697,12 @@ let
   };
 
   klaus = buildPythonPackage rec {
-    version = "0.4.9";
+    version = "0.4.10";
     name = "klaus-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "0qcbv3shz530mn53pdc68fx38ylz72033xsrz77ffi0cks32az2w";
+      sha256 = "1yq1dz3cd2qdn8vi1ivf6biab76cfmcvis07d6a8039w5wxdzc80";
     };
 
     propagatedBuildInputs = with self;
@@ -7664,18 +7701,24 @@ let
 
 
   namebench = buildPythonPackage (rec {
-    name = "namebench-1.0.5";
-    disabled = isPy3k;
+    name = "namebench-1.3.1";
+    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "http://namebench.googlecode.com/files/${name}.tgz";
-      sha256 = "6cbde35ce94d1f31e7d48f5d8eec13238b4dbc505675a33f1e183e600c1482c3";
+      url = "http://namebench.googlecode.com/files/${name}-source.tgz";
+      sha256 = "09clbcd6wxgk4r6qw7hb78h818mvca7lijigy1mlq5y1f3lgkk1h";
     };
-
-    # No support of GUI yet.
 
     # error: invalid command 'test'
     doCheck = false;
+
+    propagatedBuildInputs = [ self.tkinter ];
+
+    # namebench expects to be run from its own source tree (it uses relative
+    # paths to various resources), make it work.
+    postInstall = ''
+      sed -i "s|import os|import os; os.chdir(\"$out/namebench\")|" "$out/bin/namebench.py"
+    '';
 
     meta = {
       homepage = http://namebench.googlecode.com/;
@@ -8495,7 +8538,24 @@ let
     };
   };
 
-
+  patsy = buildPythonPackage rec {
+    name = "patsy-${version}";
+    version = "0.3.0";
+    
+    src = pkgs.fetchurl{
+      url = "https://pypi.python.org/packages/source/p/patsy/${name}.zip";
+      md5 = "7545518b413136ba8343dcebea07e5e2";
+    };
+    
+    propagatedBuildInputs = with self; [six numpy];
+    
+    meta = {
+      description = "A Python package for describing statistical models";
+      homepage = "https://github.com/pydata/patsy";
+      license = licenses.bsd2;
+    };
+  };
+  
   paste = buildPythonPackage rec {
     name = "paste-1.7.5.1";
     disabled = isPy3k;
@@ -9075,10 +9135,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.41";
+    version = "0.42";
 
     src = pkgs.fetchurl {
-      sha256 = "0s8zsa06vbs8n959ri2cc2fk5dkxjfr0zabqzjvx7klasxwzmsra";
+      sha256 = "04nywwyxzkl3qgah29i959irsbqi8viiadxfkxycqh7hq2yq8h86";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 
@@ -10733,16 +10793,18 @@ let
 
 
   pytz = buildPythonPackage rec {
-    name = "pytz-2013.9";
+    name = "pytz-${version}";
+    version = "2015.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
-      md5 = "ec7076947a46a8a3cb33cbf2983a562c";
+      md5 = "39f7375c4b1fa34cdcb4b4765d08f817";
     };
 
     meta = {
       description = "World timezone definitions, modern and historical";
-      homepage = http://pytz.sourceforge.net/;
+      homepage = "http://pythonhosted.org/pytz";
+      license = licenses.mit;
     };
   };
 
@@ -12997,6 +13059,22 @@ let
     };
   };
 
+  toolz = buildPythonPackage rec{
+    name = "toolz-${version}";
+    version = "0.7.2";
+    
+    src = pkgs.fetchurl{
+      url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+      md5 = "6f045541a9e7ee755b7b00fced4a7fde";
+    };
+    
+    meta = {
+      homepage = "http://github.com/pytoolz/toolz/";
+      description = "List processing tools and functional utilities";
+      license = "licenses.bsd3";   
+    };
+  };
+  
   tox = buildPythonPackage rec {
     name = "tox-1.8.1";
 
@@ -16222,6 +16300,25 @@ let
       homepage = "http://docs.openstack.org/infra/system-config/jjb.html";
       license = licenses.asl20;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  dot2tex = buildPythonPackage rec {
+    name = "dot2tex-2.9.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dot2tex/dot2tex-2.9.0.tar.gz";
+      md5 = "2dbaeac905424d0410751235bde4b8b2";
+    };
+
+    propagatedBuildInputs = with self; [
+      pyparsing
+    ];
+
+    meta = {
+      description = "Convert graphs generated by Graphviz to LaTeX friendly formats";
+      homepage = "https://github.com/kjellmf/dot2tex";
+      license = licenses.mit;
     };
   };
 

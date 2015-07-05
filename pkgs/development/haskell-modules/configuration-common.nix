@@ -135,6 +135,7 @@ self: super: {
   });
 
   # The Haddock phase fails for one reason or another.
+  acme-one = dontHaddock super.acme-one;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
   base-noprelude = dontHaddock super.base-noprelude;
   blaze-builder-conduit = dontHaddock super.blaze-builder-conduit;
@@ -330,6 +331,7 @@ self: super: {
   bitx-bitcoin = dontCheck super.bitx-bitcoin;          # http://hydra.cryp.to/build/926187/log/raw
   concurrent-dns-cache = dontCheck super.concurrent-dns-cache;
   dbus = dontCheck super.dbus;                          # http://hydra.cryp.to/build/498404/log/raw
+  digitalocean-kzs = dontCheck super.digitalocean-kzs;  # https://github.com/KazumaSATO/digitalocean-kzs/issues/1
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
@@ -344,14 +346,15 @@ self: super: {
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
   riak = dontCheck super.riak;                          # http://hydra.cryp.to/build/498763/log/raw
   scotty-binding-play = dontCheck super.scotty-binding-play;
+  serversession-backend-redis = dontCheck super.serversession-backend-redis;
   slack-api = dontCheck super.slack-api;                # https://github.com/mpickering/slack-api/issues/5
+  socket = dontCheck super.socket;
   stackage = dontCheck super.stackage;                  # http://hydra.cryp.to/build/501867/nixlog/1/raw
   textocat-api = dontCheck super.textocat-api;          # http://hydra.cryp.to/build/887011/log/raw
   warp = dontCheck super.warp;                          # http://hydra.cryp.to/build/501073/nixlog/5/raw
   wreq = dontCheck super.wreq;                          # http://hydra.cryp.to/build/501895/nixlog/1/raw
   wreq-sb = dontCheck super.wreq-sb;                    # http://hydra.cryp.to/build/783948/log/raw
   wuss = dontCheck super.wuss;                          # http://hydra.cryp.to/build/875964/nixlog/2/raw
-  serversession-backend-redis = dontCheck super.serversession-backend-redis;
 
   # https://github.com/NICTA/digit/issues/3
   digit = dontCheck super.digit;
@@ -626,6 +629,7 @@ self: super: {
 
   # https://github.com/srijs/hwsl2/issues/1
   hwsl2 = markBroken super.hwsl2;
+  hwsl2-reducers = dontDistribute super.hwsl2-reducers;
 
   # https://code.google.com/p/linux-music-player/issues/detail?id=1
   mp = markBroken super.mp;
@@ -794,9 +798,6 @@ self: super: {
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./dyre-nix.patch;
 
-  # https://github.com/gwern/mueval/issues/9
-  mueval = appendPatch (appendPatch super.mueval ./mueval-fix.patch) ./mueval-nix.patch;
-
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
 
@@ -820,6 +821,7 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/118
   clash-lib = dontDistribute super.clash-lib;
   clash-verilog = dontDistribute super.clash-verilog;
+  Frames = dontDistribute super.Frames;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
   singleton-nats = dontDistribute super.singleton-nats;
@@ -897,5 +899,12 @@ self: super: {
   # https://github.com/commercialhaskell/stack/issues/408
   # https://github.com/commercialhaskell/stack/issues/409
   stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });
+
+  # Missing dependency on some hid-usb library.
+  hid = markBroken super.hid;
+  msi-kb-backlit = dontDistribute super.msi-kb-backlit;
+
+  # Hydra no longer allows building texlive packages.
+  lhs2tex = dontDistribute super.lhs2tex;
 
 }

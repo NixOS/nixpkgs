@@ -10,7 +10,8 @@ let
 
   realGrub = if cfg.version == 1 then pkgs.grub
     else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
-    else pkgs.grub2;
+    else if cfg.enableTrustedboot then pkgs.trustedGrub
+           else pkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -37,6 +38,7 @@ let
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.stdenv.shell}";
+      fullName = (builtins.parseDrvName realGrub.name).name;
       fullVersion = (builtins.parseDrvName realGrub.name).version;
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
@@ -367,6 +369,15 @@ in
         '';
       };
 
+      enableTrustedboot = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enable trusted boot. Grub will measure all critical components during
+          the boot process to offer TCG (TPM) support.
+        '';
+      };
+
     };
 
   };
@@ -428,6 +439,22 @@ in
         {
           assertion = all (c: c < 2) (mapAttrsToList (_: c: c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
+        }
+        {
+          assertion = !cfg.enableTrustedboot || cfg.version == 2;
+          message = "Trusted GRUB is only available for GRUB 2";
+        }
+        {
+          assertion = !cfg.efiSupport || !cfg.enableTrustedboot;
+          message = "Trusted GRUB does not have EFI support";
+        }
+        {
+          assertion = !cfg.zfsSupport || !cfg.enableTrustedboot;
+          message = "Trusted GRUB does not have ZFS support";
+        }
+        {
+          assertion = !cfg.enableTrustedboot;
+          message = "Trusted GRUB can break your system. Remove assertion if you want to test trustedGRUB nevertheless.";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {

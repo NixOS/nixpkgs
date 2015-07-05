@@ -433,15 +433,18 @@ foreach my $fn (glob "$bootPath/kernels/*") {
 #
 
 struct(GrubState => {
+    name => '$',
     version => '$',
     efi => '$',
     devices => '$',
     efiMountPoint => '$',
 });
 sub readGrubState {
-    my $defaultGrubState = GrubState->new(version => "", efi => "", devices => "", efiMountPoint => "" );
+    my $defaultGrubState = GrubState->new(name => "", version => "", efi => "", devices => "", efiMountPoint => "" );
     open FILE, "<$bootPath/grub/state" or return $defaultGrubState;
     local $/ = "\n";
+    my $name = <FILE>;
+    chomp($name);
     my $version = <FILE>;
     chomp($version);
     my $efi = <FILE>;
@@ -451,7 +454,7 @@ sub readGrubState {
     my $efiMountPoint = <FILE>;
     chomp($efiMountPoint);
     close FILE;
-    my $grubState = GrubState->new(version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
+    my $grubState = GrubState->new(name => $name, version => $version, efi => $efi, devices => $devices, efiMountPoint => $efiMountPoint );
     return $grubState
 }
 
@@ -496,11 +499,12 @@ my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
 my @prevDeviceTargets = split/:/, $prevGrubState->devices;
 
-my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference() );
-my $versionDiffer = (get("fullVersion") eq \$prevGrubState->version);
-my $efiDiffer = ($efiTarget eq \$prevGrubState->efi);
-my $efiMountPointDiffer = ($efiSysMountPoint eq \$prevGrubState->efiMountPoint);
-my $requireNewInstall = $devicesDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
+my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
+my $nameDiffer = get("fullName") ne $prevGrubState->name;
+my $versionDiffer = get("fullVersion") ne $prevGrubState->version;
+my $efiDiffer = $efiTarget ne $prevGrubState->efi;
+my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
+my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
 
 # install a symlink so that grub can detect the boot drive when set
 # as the root directory
@@ -543,6 +547,7 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
 # update GRUB state file
 if ($requireNewInstall != 0) {
     open FILE, ">$bootPath/grub/state" or die "cannot create $bootPath/grub/state: $!\n";
+    print FILE get("fullName"), "\n" or die;
     print FILE get("fullVersion"), "\n" or die;
     print FILE $efiTarget, "\n" or die;
     print FILE join( ":", @deviceTargets ), "\n" or die;

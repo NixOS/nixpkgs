@@ -1,25 +1,27 @@
-{ stdenv, fetchzip, ocaml, findlib, re, sexplib, stringext }:
+{ stdenv, fetchzip, ocaml, findlib, re, sexplib, stringext, ounit }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
 
-let version = "1.9.0"; in
+let version = "1.9.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml-uri-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/ocaml-uri/archive/v${version}.tar.gz";
-    sha256 = "13vbv6q7npl2bvvqfw03mav90jcrrvjbdpdp4y8mcjz0iax5ww9b";
+    sha256 = "0v3jxqgyi4kj92r3x83rszfpnvvzy9lyb913basch4q64yka3w85";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ounit ];
   propagatedBuildInputs = [ re sexplib stringext ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
   buildPhase = ''
     ocaml setup.ml -build
     ocaml setup.ml -doc
   '';
+  doCheck = true;
+  checkPhase = "ocaml setup.ml -test";
   installPhase = "ocaml setup.ml -install";
 
   createFindlibDestdir = true;

@@ -1,19 +1,25 @@
-{ stdenv, fetchzip, ocaml, findlib }:
+{ stdenv, fetchzip, ocaml, findlib, ounit, qcheck
+# Optionally enable tests; test script use OCaml-4.01+ features
+, doCheck ? stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01"
+}:
 
-let version = "1.3.0"; in
+let version = "1.4.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml-stringext-${version}";
 
   src = fetchzip {
     url = "https://github.com/rgrinberg/stringext/archive/v${version}.tar.gz";
-    sha256 = "0sd1chyxclmip0nxqhasp1ri91bwxr8nszkkr5kpja45f6bav6k9";
+    sha256 = "1jp0x9rkss8a48z9wbnc4v5zvmnysin30345psl3xnxb2aqzwlii";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ounit qcheck ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  configurePhase = "ocaml setup.ml -configure --prefix $out"
+  + stdenv.lib.optionalString doCheck " --enable-tests";
   buildPhase = "ocaml setup.ml -build";
+  inherit doCheck;
+  checkPhase = "ocaml setup.ml -test";
   installPhase = "ocaml setup.ml -install";
 
   createFindlibDestdir = true;

@@ -1,23 +1,20 @@
-{ stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite }:
+{ stdenv, fetchurl, ffmpeg, flac, libvorbis, libogg, libid3tag, libexif, libjpeg, sqlite, gettext }:
 
-let version = "1.0.25"; in
+let version = "1.1.4"; in
 
 stdenv.mkDerivation rec {
   name = "minidlna-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna_${version}_src.tar.gz";
-    sha256 = "0l987x3bx2apnlihnjbhywgk5b2g9ysiapwclz5vphj2w3xn018p";
+    url = "mirror://sourceforge/project/minidlna/minidlna/${version}/minidlna-${version}.tar.gz";
+    sha256 = "9814c04a2c506a0dd942c4218d30c07dedf90dabffbdef2d308a3f9f23545314";
   };
 
-  patches = [ ./config.patch ];
-
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${ffmpeg}/include/libavutil -I${ffmpeg}/include/libavcodec -I${ffmpeg}/include/libavformat"
     export makeFlags="INSTALLPREFIX=$out"
   '';
 
-  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite ];
+  buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
 
   meta = {
     description = "Media server software";
