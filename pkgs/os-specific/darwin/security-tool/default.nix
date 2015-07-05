@@ -1,4 +1,4 @@
-{ CoreServices, Foundation, PCSC, Security, apple_sdk, fetchurl, gnustep-make, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl, libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb, libsecurity_keychain, libsecurity_mds, libsecurity_pkcs12, libsecurity_sd_cspdl, libsecurity_utilities, libsecurityd, osx_private_sdk, stdenv }:
+{ CoreServices, Foundation, PCSC, Security, GSS, Kerberos, makeWrapper, apple_sdk, fetchurl, gnustep-make, libobjc, libsecurity_apple_csp, libsecurity_apple_cspdl, libsecurity_apple_file_dl, libsecurity_apple_x509_cl, libsecurity_apple_x509_tp, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_plugin, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_cssm, libsecurity_filedb, libsecurity_keychain, libsecurity_mds, libsecurity_pkcs12, libsecurity_sd_cspdl, libsecurity_utilities, libsecurityd, osx_private_sdk, stdenv }:
 
 stdenv.mkDerivation rec {
   version = "55115";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     "security_INSTALL_DIR=\$(out)/bin"
   ];
 
-  propagatedBuildInputs = [ Security PCSC Foundation ];
+  propagatedBuildInputs = [ GSS Kerberos Security PCSC Foundation ];
 
   buildInputs = [
     gnustep-make
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     libsecurity_sd_cspdl
     libsecurity_filedb
     libsecurityd
+    makeWrapper
   ];
 
   NIX_CFLAGS_COMPILE = [
@@ -69,6 +70,10 @@ stdenv.mkDerivation rec {
     "-F${PCSC}/Library/Frameworks"
     "-Wno-deprecated-declarations"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/security --set DYLD_INSERT_LIBRARIES /usr/lib/libsqlite3.dylib
+  '';
 
   meta = with stdenv.lib; {
     description = "Command line interface to Mac OS X keychains and Security framework";
