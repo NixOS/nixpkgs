@@ -14946,6 +14946,8 @@ let
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xhyve = callPackage ../applications/virtualization/xhyve { };
+
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {
     inherit (xlibs) libXi inputproto;
   };
