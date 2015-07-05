@@ -3,7 +3,7 @@
 with lib;
 
 let
-  quassel = pkgs.quasselDaemon_qt5;
+  quassel = pkgs.kde4.quasselDaemon;
   cfg = config.services.quassel;
   user = if cfg.user != null then cfg.user else "quassel";
 in
