@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256 = "0sy4awsak8yhja86n69bmi8i2c91hfs7zbkwn5y81qfrivh8b41j";
+    sha256 = "0k9z64ynpcfy19a33lm6g75ry3mb6zilm3dnm0zq9whrj9hw386l";
   };
 
   buildInputs =
