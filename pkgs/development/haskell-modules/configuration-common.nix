@@ -866,10 +866,6 @@ self: super: {
   # https://github.com/yesodweb/serversession/issues/1
   serversession = dontCheck super.serversession;
 
-  # https://github.com/singpolyma/wai-session/issues/8
-  wai-session = markBroken super.wai-session;
-  serversession-frontend-wai = dontDistribute super.serversession-frontend-wai;
-
   # https://github.com/commercialhaskell/stack/issues/408
   # https://github.com/commercialhaskell/stack/issues/409
   stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });
