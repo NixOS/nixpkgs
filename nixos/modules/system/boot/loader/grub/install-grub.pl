@@ -7,6 +7,7 @@ use File::Path;
 use File::stat;
 use File::Copy;
 use File::Slurp;
+use File::Temp;
 require List::Compare;
 use POSIX;
 use Cwd;
@@ -506,14 +507,9 @@ my $efiDiffer = $efiTarget ne $prevGrubState->efi;
 my $efiMountPointDiffer = $efiSysMountPoint ne $prevGrubState->efiMountPoint;
 my $requireNewInstall = $devicesDiffer || $nameDiffer || $versionDiffer || $efiDiffer || $efiMountPointDiffer || (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1");
 
-# install a symlink so that grub can detect the boot drive when set
-# as the root directory
-if (! -l "$bootPath/boot") {
-    if (-e "$bootPath/boot") {
-        unlink "$bootPath/boot";
-    }
-    symlink ".", "$bootPath/boot";
-}
+# install a symlink so that grub can detect the boot drive
+my $tmpDir = File::Temp::tempdir(CLEANUP => 1) or die "Failed to create temporary space";
+symlink "$bootPath", "$tmpDir/boot" or die "Failed to symlink $tmpDir/boot";
 
 # install non-EFI GRUB
 if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
@@ -521,10 +517,10 @@ if (($requireNewInstall != 0) && ($efiTarget eq "no" || $efiTarget eq "both")) {
         next if $dev eq "nodev";
         print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
         if ($grubTarget eq "") {
-            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$bootPath", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         } else {
-            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$bootPath", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
+            system("$grub/sbin/grub-install", "--recheck", "--root-directory=$tmpDir", "--target=$grubTarget", Cwd::abs_path($dev)) == 0
                 or die "$0: installation of GRUB on $dev failed\n";
         }
     }
