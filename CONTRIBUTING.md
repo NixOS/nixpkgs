@@ -26,13 +26,13 @@
 * Format the commit in a following way:
 
         ```
-        (pkg-name | service-name): (from -> to | init at version | refactor | etc)
+        (pkg-name | service-name): (bump from -> to | init at version | refactor | etc)
 
         Additional information.
         ```
   * Examples:
     * `nginx: init at 2.0.1`
-    * `firefox: 3.0 -> 3.1.1`
+    * `firefox: bump 3.0 -> 3.1.1`
     * `hydra service: add bazBaz option`
     * `nginx service: refactor config generation`
 * Test your changes. If you work with
@@ -56,7 +56,7 @@
 * Push your changes to your fork of nixpkgs.
 * Create pull request:
   * Write the title in format `(pkg-name | service): improvement`.
-    * If you update the pkg, write versions `from -> to`.
+    * If you update the pkg, write versions `bump from -> to`.
   * Write in comment if you have tested your patch. Do not rely much on `TravisCI`.
   * If you make an improvement, write about your motivation.
   * Notify maintainers of the package. For example add to the message: `cc @jagajaga @domenkozar`.
