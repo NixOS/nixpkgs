@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr }:
+{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr, python }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.4";
+  name = "bitlbee-3.4.1";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "0plx4dryf8i6hz7vghg84z5f6w6rkw1l8ckl4c4wh5zxpd3ddfnf";
+    sha256 = "1qf0ypa9ba5jvsnpg9slmaran16hcc5fnfzbb1sdch1hjhchn2jh";
   };
 
-  buildInputs = [ gnutls glib pkgconfig libotr ]
+  buildInputs = [ gnutls glib pkgconfig libotr python ]
     ++ optional doCheck check;
 
   configureFlags = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.bitlbee.org/;
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington pSub ];
     platforms = platforms.gnu;  # arbitrary choice
   };
 }
