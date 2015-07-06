@@ -13553,6 +13553,8 @@ let
 
   njam = callPackage ../games/njam { };
 
+  newtonwars = callPackage ../games/newtonwars { };
+
   oilrush = callPackage ../games/oilrush { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
