@@ -5086,6 +5086,7 @@ let
   ruby_2_1_1 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { });
   ruby_2_1_2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { });
   ruby_2_1_3 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { });
+  ruby_2_1_6 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { });
   ruby_2_2_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { });
 
   # Ruby aliases
@@ -5093,7 +5094,7 @@ let
   ruby_1_8 = ruby_1_8_7;
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
-  ruby_2_1 = ruby_2_1_3;
+  ruby_2_1 = ruby_2_1_6;
   ruby_2_2 = ruby_2_2_0;
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
