@@ -136,6 +136,7 @@ haskell.compiler.ghc763         ghc-7.6.3
 haskell.compiler.ghc784         ghc-7.8.4
 haskell.compiler.ghc7101        ghc-7.10.1
 haskell.compiler.ghcHEAD        ghc-7.11.20150402
+haskell.compiler.ghcNokinds     ghc-nokinds-7.11.20150704
 haskell.compiler.ghcjs          ghcjs-0.1.0
 haskell.compiler.jhc            jhc-0.8.2
 haskell.compiler.uhc            uhc-1.1.9.0
