@@ -4653,7 +4653,7 @@ let
   };
 
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
-  rustc = callPackage ../development/compilers/rustc/1.0.0.nix {};
+  rustc = callPackage ../development/compilers/rustc/default.nix {};
 
   rustPlatform = rustStable;
 
