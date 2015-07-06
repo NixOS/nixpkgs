@@ -1726,6 +1726,8 @@ let
     zfsSupport = false;
   };
 
+  sbsigntool = callPackage ../tools/security/sbsigntool { };
+
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
     inherit (gnome) libglademm;
   };
