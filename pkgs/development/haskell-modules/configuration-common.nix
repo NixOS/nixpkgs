@@ -112,9 +112,6 @@ self: super: {
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = dontCheck super.time_1_5_0_1;
 
-  # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
-  network-uri = dontCheck super.network-uri;
-
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
 
