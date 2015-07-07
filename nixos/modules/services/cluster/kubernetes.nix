@@ -224,7 +224,7 @@ in {
 
       machines = mkOption {
         description = "Kubernetes controller list of machines to schedule to schedule onto";
-        default = [config.networking.hostName];
+        default = [];
         type = types.listOf types.str;
       };
 
@@ -239,6 +239,12 @@ in {
       enable = mkOption {
         description = "Whether to enable kubernetes kubelet.";
         default = false;
+        type = types.bool;
+      };
+
+      registerNode = mkOption {
+        description = "Whether to auto register kubelet with API server.";
+        default = true;
         type = types.bool;
       };
 
@@ -274,7 +280,7 @@ in {
 
       cadvisorPort = mkOption {
         description = "Kubernetes kubelet local cadvisor port.";
-        default = config.services.cadvisor.port;
+        default = 4194;
         type = types.int;
       };
 
@@ -324,7 +330,7 @@ in {
     };
 
     kube2sky = {
-      enable = mkEnableOption "kube2sky dns service";
+      enable = mkEnableOption "Whether to enable kube2sky dns service.";
 
       domain = mkOption  {
         description = "Kuberntes kube2sky domain under which all DNS names will be hosted.";
@@ -445,6 +451,7 @@ in {
           export PATH="/bin:/sbin:/usr/bin:/usr/sbin:$PATH"
           exec ${cfg.package}/bin/kubelet \
             --api-servers=${concatMapStringsSep "," (f: "http://${f}") cfg.kubelet.apiServers}  \
+            --register-node=${if cfg.kubelet.registerNode then "true" else "false"} \
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
             --hostname-override=${cfg.kubelet.hostname} \
@@ -511,8 +518,6 @@ in {
 
     (mkIf (any (el: el == "node") cfg.roles) {
       virtualisation.docker.enable = mkDefault true;
-      services.cadvisor.enable = mkDefault true;
-      services.cadvisor.port = mkDefault 4194;
       services.kubernetes.kubelet.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
     })
