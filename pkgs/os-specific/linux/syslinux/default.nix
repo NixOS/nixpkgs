@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "03l5iifwlg1wyb4yh98i0b7pd4j55a1c9y74q1frs47a5dnrilr6";
   };
 
-  patches = [ ./perl-deps.patch ];
+  # gcc5-fix should be in 6.04+, so remove if it fails to apply.
+  patches = [ ./perl-deps.patch ./gcc5-fix.patch ];
 
   buildInputs = [ nasm perl libuuid ];
 
