@@ -14,6 +14,7 @@ self: super: {
   # Break infinite recursions.
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
+  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
   mwc-random = dontCheck super.mwc-random;
