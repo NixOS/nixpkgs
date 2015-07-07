@@ -63,12 +63,30 @@ in {
       twoFingerScroll = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable two-finger drag-scrolling.";
+        description = "Whether to enable two-finger drag-scrolling. Overridden by horizTwoFingerScroll and vertTwoFingerScroll.";
+      };
+
+      horizTwoFingerScroll = mkOption {
+        type = types.bool;
+        default = cfg.twoFingerScroll;
+        description = "Whether to enable horizontal two-finger drag-scrolling.";
+      };
+
+      vertTwoFingerScroll = mkOption {
+        type = types.bool;
+        default = cfg.twoFingerScroll;
+        description = "Whether to enable vertical two-finger drag-scrolling.";
+      };
+
+      horizEdgeScroll = mkOption {
+        type = types.bool;
+        default = ! cfg.horizTwoFingerScroll;
+        description = "Whether to enable horizontal edge drag-scrolling.";
       };
 
       vertEdgeScroll = mkOption {
         type = types.bool;
-        default = ! cfg.twoFingerScroll;
+        default = ! cfg.vertTwoFingerScroll;
         description = "Whether to enable vertical edge drag-scrolling.";
       };
 
@@ -147,9 +165,10 @@ in {
           Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
           Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"
           Option "ClickFinger3" "${builtins.elemAt cfg.buttonsMap 2}"
-          Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
-          Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
+          Option "VertTwoFingerScroll" "${if cfg.vertTwoFingerScroll then "1" else "0"}"
+          Option "HorizTwoFingerScroll" "${if cfg.horizTwoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
+          Option "HorizEdgeScroll" "${if cfg.horizEdgeScroll then "1" else "0"}"
           ${if cfg.palmDetect then ''Option "PalmDetect" "1"'' else ""}
           ${if cfg.horizontalScroll then "" else ''Option "HorizScrollDelta" "0"''}
           ${cfg.additionalOptions}
