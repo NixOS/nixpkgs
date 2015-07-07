@@ -1710,6 +1710,29 @@ let
     };
   };
 
+  cassandraDriver = buildPythonPackage rec {
+    name = "cassandra-driver-2.6.0c2";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cassandra-driver/${name}.tar.gz";
+      sha256 = "00cc2rkvkxaxn7sf2qzy29s6h394fla73rbdh9krxbswp5nvp27r";
+    };
+
+    propagatedBuildInputs = with self; [
+      futures
+      nose
+      six
+      sure
+      pytz
+      pyyaml
+    ];
+
+    meta = {
+      homepage = http://datastax.github.io/python-driver/;
+      description = "A Python client driver for Apache Cassandra";
+    };
+  };
+
 
   celery = buildPythonPackage rec {
     name = "celery-${version}";
