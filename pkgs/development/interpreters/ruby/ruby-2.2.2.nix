@@ -6,7 +6,7 @@
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , libffi, fiddleSupport ? true
-, ruby_2_2_0, autoreconfHook, bison, useRailsExpress ? true
+, ruby_2_2_2, autoreconfHook, bison, useRailsExpress ? true
 }:
 
 let
@@ -14,7 +14,7 @@ let
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix fetchgit;
-  baseruby = ruby_2_2_0.override { useRailsExpress = false; };
+  baseruby = ruby_2_2_2.override { useRailsExpress = false; };
 in
 
 stdenv.mkDerivation rec {
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
   src = if useRailsExpress then fetchFromGitHub {
     owner  = "ruby";
     repo   = "ruby";
-    rev    = "v2_2_0";
-    sha256 = "1w7rr2nq1bbw6aiagddzlrr3rl95kk33x4pv6570nm072g55ybpi";
+    rev    = "v2_2_2";
+    sha256 = "08mw1ql2ghy483cp8xzzm78q17simn4l6phgm2gah7kjh9y3vbrn";
   } else fetchurl {
-    url = "http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.0.tar.gz";
-    sha256 = "1z2092fbpc2qkv1j3yj7jdz7qwvqpxqpmcnkphpjcpgvmfaf6wbn";
+    url = "http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz";
+    sha256 = "0i4v7l8pnam0by2cza12zldlhrffqchwb2m9shlnp7j2gqqhzz2z";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -52,11 +52,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.2.0/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.2.0/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.2.0/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.2.0/railsexpress/04-backport-401c8bb.patch"
-    "${patchSet}/patches/ruby/2.2.0/railsexpress/05-fix-packed-bitfield-compat-warning-for-older-gccs.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/04-backported-bugfixes-222.patch"
   ];
 
   postPatch = ops useRailsExpress ''
