@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub
+{ stdenv, lib, fetchurl, fetchgit, fetchFromGitHub
 , zlib, zlibSupport ? true
 , openssl, opensslSupport ? true
 , gdbm, gdbmSupport ? true
@@ -6,14 +6,15 @@
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , libffi, fiddleSupport ? true
-, ruby_2_0_0, autoreconfHook, bison, useRailsExpress ? true
+, ruby_2_2_2, autoreconfHook, bison, useRailsExpress ? true
 }:
 
 let
   op = stdenv.lib.optional;
   ops = stdenv.lib.optionals;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
-  baseruby = ruby_2_0_0.override { useRailsExpress = false; };
+  config = import ./config.nix fetchgit;
+  baseruby = ruby_2_2_2.override { useRailsExpress = false; };
 in
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,11 @@ stdenv.mkDerivation rec {
   src = if useRailsExpress then fetchFromGitHub {
     owner  = "ruby";
     repo   = "ruby";
-    rev    = "v2_0_0_${passthru.patchLevel}";
-    sha256 = "14bnas1iif2shyaz4ylb0832x96y2mda52x0v0aglkvqmcz1cfxb";
+    rev    = "v2_2_2";
+    sha256 = "08mw1ql2ghy483cp8xzzm78q17simn4l6phgm2gah7kjh9y3vbrn";
   } else fetchurl {
-    url = "https://cache.ruby-lang.org/pub/ruby/2.0/${name}.tar.bz2";
-    sha256 = "1sc36qxqhziqbrvp99z4qdx9j0f8r1xhcbb6scb3m4nb02cwzk9d";
+    url = "http://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz";
+    sha256 = "0i4v7l8pnam0by2cza12zldlhrffqchwb2m9shlnp7j2gqqhzz2z";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -36,8 +37,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = ops useRailsExpress [ autoreconfHook bison ]
     ++ (op fiddleSupport libffi)
-    ++ (ops cursesSupport [ ncurses readline ] )
-    ++ (op docSupport groff )
+    ++ (ops cursesSupport [ ncurses readline ])
+    ++ (op docSupport groff)
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
     ++ (op gdbmSupport gdbm)
@@ -51,11 +52,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/02-railsexpress-gc.patch"
-    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.0.0/p${passthru.patchLevel}/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/03-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/2.2.2/railsexpress/04-backported-bugfixes-222.patch"
   ];
+
+  postPatch = ops useRailsExpress ''
+    sed -i configure.in -e '/config.guess/d'
+    cp ${config}/config.guess tool/
+    cp ${config}/config.sub tool/
+  '';
 
   configureFlags = ["--enable-shared" ]
     ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
@@ -93,9 +100,9 @@ stdenv.mkDerivation rec {
 
   passthru = rec {
     majorVersion = "2";
-    minorVersion = "0";
+    minorVersion = "2";
     teenyVersion = "0";
-    patchLevel = "645";
+    patchLevel = "0";
     rubyEngine = "ruby";
     libPath = "lib/${rubyEngine}/${majorVersion}.${minorVersion}.${teenyVersion}";
     gemPath = "lib/${rubyEngine}/gems/${majorVersion}.${minorVersion}.${teenyVersion}";
