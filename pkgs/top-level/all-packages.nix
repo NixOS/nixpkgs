@@ -1580,6 +1580,8 @@ let
 
   git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
 
+  gitfs = callPackage ../tools/filesystems/gitfs { };
+
   gitlab = callPackage ../applications/version-management/gitlab {
     ruby = ruby_2_1_3;
   };
@@ -1723,6 +1725,8 @@ let
   grub2_light = grub2_full.override {
     zfsSupport = false;
   };
+
+  sbsigntool = callPackage ../tools/security/sbsigntool { };
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
     inherit (gnome) libglademm;
@@ -3004,6 +3008,8 @@ let
   strongswan = callPackage ../tools/networking/strongswan { };
 
   su = shadow.su;
+
+  subsonic = callPackage ../servers/misc/subsonic { };
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
@@ -5026,14 +5032,15 @@ let
   ruby_2_1_1 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { });
   ruby_2_1_2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { });
   ruby_2_1_3 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { });
+  ruby_2_1_6 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { });
   ruby_2_2_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { });
 
   # Ruby aliases
-  ruby = ruby_1_9;
+  ruby = ruby_2_1;
   ruby_1_8 = ruby_1_8_7;
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
-  ruby_2_1 = ruby_2_1_3;
+  ruby_2_1 = ruby_2_1_6;
   ruby_2_2 = ruby_2_2_0;
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
@@ -10861,7 +10868,7 @@ let
   djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu {
-    enableXft = config.dmenu.enableXft or false;
+    enableXft = true;
   };
 
   dmenu2 = callPackage ../applications/misc/dmenu2 { };
@@ -13494,6 +13501,8 @@ let
   nexuiz = callPackage ../games/nexuiz { };
 
   njam = callPackage ../games/njam { };
+
+  newtonwars = callPackage ../games/newtonwars { };
 
   oilrush = callPackage ../games/oilrush { };
 
