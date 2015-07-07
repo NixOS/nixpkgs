@@ -12133,6 +12133,8 @@ let
 
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
+  pdfdiff = callPackage ../applications/misc/pdfdiff { };
+
   mupdf = callPackage ../applications/misc/mupdf {
     openjpeg = openjpeg_2_0;
   };
