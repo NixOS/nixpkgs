@@ -32,7 +32,9 @@ let
     };
 
   popcorntimePackage = stdenv.mkDerivation rec {
-    name = "popcorntime-package-${version}";
+    name = 
+      if fromCi then "popcorntime-git-2015-07-07"
+                else "popcorntime-${version}";
     src = fetchurl fetchurlConf;
     sourceRoot = ".";
     installPhase = ''
