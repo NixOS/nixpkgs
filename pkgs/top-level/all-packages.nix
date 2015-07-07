@@ -4661,7 +4661,7 @@ let
   rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster cargo rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot rustCargoPlatform;
+  rustCargoPlatform = makeRustPlatform rustc cargoSnapshot rustCargoPlatform;
 
   makeRustPlatform = rustc: cargo: self:
     let
