@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip }:
+{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip, libffi, readline }:
 
 stdenv.mkDerivation rec {
   version = "24.2.0";
@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python zip ];
+  buildInputs = [ pkgconfig perl python zip libffi readline ];
+
+  postPatch = ''
+    # Fixes an issue with version detection under perl 5.22.x
+    sed -i 's/(defined\((@TEMPLATE_FILE)\))/\1/' config/milestone.pl
+  '';
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
@@ -20,7 +25,12 @@ stdenv.mkDerivation rec {
     export LIBXUL_DIST=$out
   '';
 
-  configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ];
+  configureFlags = [
+    "--enable-threadsafe"
+    "--with-system-nspr"
+    "--with-system-ffi"
+    "--enable-readline"
+  ];
 
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
   preBuild = "touch -- {.,shell,jsapi-tests}/{-lpthread,-ldl}";
