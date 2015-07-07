@@ -13,13 +13,20 @@ rec {
       pathSafeName = lib.replaceChars ["@" ":" "\\"] ["-" "-" "-"] name;
     in
     if unit.enable then
-      pkgs.runCommand "unit-${pathSafeName}" { preferLocalBuild = true; inherit (unit) text; }
+      pkgs.runCommand "unit-${pathSafeName}"
+        { preferLocalBuild = true;
+          allowSubstitutes = false;
+          inherit (unit) text;
+        }
         ''
           mkdir -p $out
           echo -n "$text" > $out/${shellEscape name}
         ''
     else
-      pkgs.runCommand "unit-${pathSafeName}-disabled" { preferLocalBuild = true; }
+      pkgs.runCommand "unit-${pathSafeName}-disabled"
+        { preferLocalBuild = true;
+          allowSubstitutes = false;
+        }
         ''
           mkdir -p $out
           ln -s /dev/null $out/${shellEscape name}
@@ -89,7 +96,10 @@ rec {
         as));
 
   generateUnits = type: units: upstreamUnits: upstreamWants:
-    pkgs.runCommand "${type}-units" { preferLocalBuild = true; } ''
+    pkgs.runCommand "${type}-units"
+      { preferLocalBuild = true;
+        allowSubstitutes = false;
+      } ''
       mkdir -p $out
 
       # Copy the upstream systemd units we're interested in.

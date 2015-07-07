@@ -101,6 +101,7 @@ let
     if [] == failed then pkgs.stdenv.mkDerivation {
       name = "nixos-${config.system.nixosVersion}";
       preferLocalBuild = true;
+      allowSubstitutes = false;
       buildCommand = systemBuilder;
 
       inherit (pkgs) utillinux coreutils;

@@ -28,7 +28,10 @@ let
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
+
     preferLocalBuild = true;
+    allowSubstitutes = false;
+
     buildCommand = ''
       mkdir -p $out
       shopt -s nullglob

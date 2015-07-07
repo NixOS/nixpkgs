@@ -14,6 +14,7 @@ let
     builder = ./make-etc.sh;
 
     preferLocalBuild = true;
+    allowSubstitutes = false;
 
     /* !!! Use toXML. */
     sources = map (x: x.source) etc';
