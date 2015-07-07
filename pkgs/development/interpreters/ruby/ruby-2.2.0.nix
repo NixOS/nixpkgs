@@ -59,9 +59,8 @@ stdenv.mkDerivation rec {
     "${patchSet}/patches/ruby/2.2.0/railsexpress/05-fix-packed-bitfield-compat-warning-for-older-gccs.patch"
   ];
 
-  # Ruby >= 2.1.0 tries to download config.{guess,sub}
-  postPatch = ''
-    rm tool/config_files.rb
+  postPatch = ops useRailsExpress ''
+    sed -i configure.in -e '/config.guess/d'
     cp ${config}/config.guess tool/
     cp ${config}/config.sub tool/
   '';
