@@ -5090,6 +5090,7 @@ let
   ruby_2_1_3 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { });
   ruby_2_1_6 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { });
   ruby_2_2_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { });
+  ruby_2_2_2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.2.2.nix { });
 
   # Ruby aliases
   ruby = ruby_2_1;
