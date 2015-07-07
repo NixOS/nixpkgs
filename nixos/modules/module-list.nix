@@ -219,6 +219,7 @@
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
   ./services/misc/subsonic.nix
+  ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/uhub.nix
