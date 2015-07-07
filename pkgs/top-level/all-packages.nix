@@ -12139,6 +12139,8 @@ let
     openjpeg = openjpeg_2_0;
   };
 
+  diffpdf = callPackage ../applications/misc/diffpdf { };
+
   mypaint = callPackage ../applications/graphics/mypaint { };
 
   mythtv = callPackage ../applications/video/mythtv { };
