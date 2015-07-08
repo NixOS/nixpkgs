@@ -18,6 +18,50 @@ in {
           a format the qemu-img command accepts.
         '';
       };
+      baseImagePreUnmountHook = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Run commands after generating the GRUB menu and before unmounting
+          /mnt/{proc,dev,sys,}. This can be used to provide additional files in
+          the created image.
+        '';
+      };
+      baseImageQemuMem = mkOption {
+        type = types.int;
+        default = 768;
+        description = ''
+          Amount of megabytes in memory assigned to the QEMU instance.
+        '';
+      };
+      baseImageQemuOpts = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          -virtfs local,path=/home,security_model=none,mount_tag=home \
+          -virtfs local,path=/boot,security_model=none,mount_tag=boot
+        '';
+        description = ''
+          Additional options to the QEMU instance where the image will be
+          built. This is useful in conjunction with baseImagePreUnmountHook.
+          A backslash must be given at the end of a line if a new line
+          follows, see the example.
+
+          If a directory is provided by adding a -virtfs option one can mount
+          it with `mount -t 9p shared /fs/foo -o
+          trans=virtio,version=9p2000.L,msize=262144,cache=loose`. Here `shared`
+          is the `mount_tag`.
+        '';
+      };
+      preExportOVAHook = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''VBoxManage modifyvm "$vmName" --natpf1 app,tcp,,22,,22'';
+        description = ''
+          Additional commands to run when creating the Virtualbox VM. These
+          will run just before exporting it to the OVA format.
+        '';
+      };
     };
   };
 
@@ -25,7 +69,7 @@ in {
     system.build.virtualBoxImage =
       pkgs.vmTools.runInLinuxVM (
         pkgs.runCommand "virtualbox-image"
-          { memSize = 768;
+          { memSize = cfg.baseImageQemuMem;
             preVM =
               ''
                 mkdir $out
@@ -42,6 +86,7 @@ in {
             buildInputs = [ pkgs.utillinux pkgs.perl ];
             exportReferencesGraph =
               [ "closure" config.system.build.toplevel ];
+            QEMU_OPTS = cfg.baseImageQemuOpts;
           }
           ''
             # Create a single / partition.
@@ -92,7 +137,9 @@ in {
             # Generate the GRUB menu.
             ln -s vda /dev/sda
             chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
-  
+            
+            ${config.virtualbox.baseImagePreUnmountHook}
+
             umount /mnt/proc /mnt/dev /mnt/sys
             umount /mnt
           ''
@@ -117,6 +164,7 @@ in {
         VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
         VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
           --medium ${config.system.build.virtualBoxImage}/disk.vdi
+        ${config.virtualbox.preExportOVAHook}
   
         echo "exporting VirtualBox VM..."
         mkdir -p $out
