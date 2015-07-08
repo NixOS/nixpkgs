@@ -4006,10 +4006,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   FontTTF = buildPerlPackage {
-    name = "Font-TTF-0.48";
+    name = "Font-TTF-1.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MH/MHOSKEN/Font-TTF-0.48.tar.gz;
-      sha256 = "0lhz7v8ihaj35y6kr7jb971hgc4iqh1nz3qbfkignb9i8b1dw97r";
+      url = mirror://cpan/authors/id/M/MH/MHOSKEN/Font-TTF-1.05.tar.gz;
+      sha256 = "26c48e4e76e00f0ac00766b3cfba79f0cb8cbf005b7a39033f0e8e0d9eeafb50";
+    };
+    propagatedBuildInputs = [ IOString ];
+    meta = {
+      description = "TTF font support for Perl";
+      maintainers = [ maintainers.rycee ];
+      license = stdenv.lib.licenses.artistic2;
     };
   };
 
