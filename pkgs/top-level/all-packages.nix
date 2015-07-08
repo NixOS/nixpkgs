@@ -12926,6 +12926,8 @@ let
 
   qpdfview = callPackage ../applications/misc/qpdfview {};
 
+  qtile = callPackage ../applications/window-managers/qtile { };
+
   qvim = lowPrio (callPackage ../applications/editors/vim/qvim.nix {
     inherit (pkgs) fetchgit stdenv ncurses pkgconfig gettext
       composableDerivation lib config python perl tcl ruby qt4;
