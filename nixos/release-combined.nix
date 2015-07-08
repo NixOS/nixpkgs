@@ -56,6 +56,7 @@ in rec {
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
+        (all nixos.tests.installer.separateBootFat)
         (all nixos.tests.installer.simple)
         (all nixos.tests.installer.simpleLabels)
         (all nixos.tests.installer.simpleProvided)
