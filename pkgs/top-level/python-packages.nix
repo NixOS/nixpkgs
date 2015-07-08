@@ -8839,22 +8839,21 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.17.0";
+    version = "0.18.0";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "0fnzhsir1m7a2rlh3iqinrz5i38ssfg9p7s60bkyy55614l146yg";
+      sha256 = "1ydi1725ryz9by770kyx06cwrvyvixbg3502brkf5hvbjd8ddzrl";
       rev = "v${version}";
       repo = "pgcli";
       owner = "amjith";
     };
 
-    propagatedBuildInputs = with self; [ click jedi prompt_toolkit psycopg2 pygments sqlparse ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-    '';
+    propagatedBuildInputs = with self; [
+      click configobj prompt_toolkit psycopg2 pygments sqlparse
+    ];
 
     meta = {
+      inherit version;
       description = "Command-line interface for PostgreSQL";
       longDescription = ''
         Rich command-line interface for PostgreSQL with auto-completion and
