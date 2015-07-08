@@ -26,8 +26,7 @@ with frameworks; with libs; {
   CoreAudio               = [ CoreFoundation IOKit ];
   CoreAudioKit            = [ AudioUnit ];
   CoreData                = [];
-  CoreFoundation          = [];
-  CoreGraphics            = [ Accelerate CoreFoundation IOKit IOSurface ];
+  CoreGraphics            = [ Accelerate CoreFoundation IOKit IOSurface SystemConfiguration ];
   CoreLocation            = [];
   CoreMIDI                = [ CoreFoundation ];
   CoreMIDIServer          = [];
@@ -110,7 +109,7 @@ with frameworks; with libs; {
   Accelerate          = [ CoreWLAN IOBluetooth ];
   ApplicationServices = [ CoreFoundation CoreServices CoreText ImageIO ];
   Carbon              = [ ApplicationServices CoreFoundation CoreServices IOKit Security ];
-  CoreServices        = [ CFNetwork CoreFoundation DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
+  CoreServices        = [ CFNetwork CoreAudio CoreData CoreFoundation DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
   IOBluetooth         = [ IOKit ];
   JavaVM              = [];
   OpenDirectory       = [];

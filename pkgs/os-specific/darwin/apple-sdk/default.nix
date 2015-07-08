@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, gzip, cpio }:
+{ stdenv, fetchurl, xar, gzip, cpio, CF }:
 
 let
   # I'd rather not "export" this, since they're somewhat monolithic and encourage bad habits.
@@ -146,5 +146,9 @@ in rec {
     };
   };
 
-  frameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs; });
+  frameworks = (stdenv.lib.mapAttrs framework (import ./frameworks.nix { inherit frameworks libs; })) // {
+    CoreFoundation = CF;
+  };
+
+  inherit sdk;
 }

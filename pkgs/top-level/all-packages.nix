@@ -9343,7 +9343,9 @@ let
     cmdline_sdk   = cmdline.sdk;
     cmdline_tools = cmdline.tools;
 
-    apple_sdk = callPackage ../os-specific/darwin/apple-sdk {};
+    apple_sdk = callPackage ../os-specific/darwin/apple-sdk {
+      inherit (darwin) CF;
+    };
 
     libobjc = apple-source-releases.objc4;
   };
