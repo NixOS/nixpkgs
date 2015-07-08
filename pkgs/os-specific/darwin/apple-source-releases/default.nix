@@ -64,7 +64,7 @@ let
     Libc_old        = applePackage "Libc/825_40_1.nix" "825.40.1"    "0xsx1im52gwlmcrv4lnhhhn9dyk5ci6g27k6yvibn9vj8fzjxwcf" {};
     libclosure      = applePackage "libclosure"        "63"          "083v5xhihkkajj2yvz0dwgbi0jl2qvzk22p7pqq1zp3ry85xagrx" {};
     libdispatch     = applePackage "libdispatch"       "339.92.1"    "1lc5033cmkwxy3r26gh9plimxshxfcbgw6i0j7mgjlnpk86iy5bk" {};
-    libiconv        = applePackage "libiconv"          "41"          "10q7yd35flr893nysn9i04njgks4m3gis7jivb9ra9dcb77gqdcn" {};
+    libiconv        = applePackage "libiconv"          "41"          "0sni1gx6i2h7r4r4hhwbxdir45cp039m4wi74izh4l0pfw7gywad" {};
     Libinfo         = applePackage "Libinfo"           "449.1.3"     "1ix6f7xwjnq9bqgv8w27k4j64bqn1mfhh91nc7ciiv55axpdb9hq" {};
     Libm            = applePackage "Libm"              "2026"        "02sd82ig2jvvyyfschmb4gpz6psnizri8sh6i982v341x6y4ysl7" {};
     Libnotify       = applePackage "Libnotify"         "121.20.1"    "164rx4za5z74s0mk9x0m1815r1m9kfal8dz3bfaw7figyjd6nqad" {};
