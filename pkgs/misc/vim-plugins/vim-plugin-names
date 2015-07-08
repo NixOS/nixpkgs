@@ -57,6 +57,7 @@
 "github:vim-scripts/a.vim"
 "github:vim-scripts/align"
 "github:vim-scripts/tabmerge"
+"github:vim-scripts/wombat256.vim"
 "github:wakatime/vim-wakatime"
 "github:wincent/command-t"
 "matchit.zip"
@@ -97,4 +98,3 @@
 "vim-snippets"
 "vim2hs"
 "vundle"
-"wombat256"

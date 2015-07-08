@@ -80,6 +80,7 @@ rec {
   vimshell            = vimshell-vim;
   watchdogs           = vim-watchdogs;
   webapi-vim          = WebAPI;
+  wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
 
   CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1315,18 +1316,15 @@ rec {
 
   };
 
-  wombat256 = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "wombat256";
-    src = fetchurl {
-      url = "http://www.vim.org/scripts/download_script.php?src_id=13400";
-      name = "wombat256mod.vim";
-      sha256 = "1san0jg9sfm6chhnr1wc5nhczlp11ibca0v7i4gf68h9ick9mysn";
+  wombat256-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "wombat256-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/wombat256.vim";
+      rev = "8734ba45dcf5e38c4d2686b35c94f9fcb30427e2";
+      sha256 = "2feb7d57ab0a9f2ea44ccd606e540db64ab3285956398a50ecc562d7b8dbcd05";
     };
-    buildInputs = [ unzip ];
     dependencies = [];
-    meta = {
-       url = "http://www.vim.org/scripts/script.php?script_id=2465";
-    };
+
   };
 
 }
