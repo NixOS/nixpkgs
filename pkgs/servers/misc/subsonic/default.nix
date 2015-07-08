@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://subsonic.org;
     description = "Personal media streamer";
     license = stdenv.lib.licenses.gpl3;
+    maintainers = with stdenv.lib.maintainers; [ telotortium ];
   };
 
   phases = ["unpackPhase" "installPhase"];
