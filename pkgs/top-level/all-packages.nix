@@ -6521,8 +6521,6 @@ let
     withGraphite2 = true;
   };
 
-  hawknl = callPackage ../development/libraries/hawknl { };
-
   herqq = callPackage ../development/libraries/herqq { };
 
   hidapi = callPackage ../development/libraries/hidapi {
@@ -14580,8 +14578,6 @@ let
   emulationstation = callPackage ../misc/emulators/emulationstation { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
-
-  fakenes = callPackage ../misc/emulators/fakenes { };
 
   faust = callPackage ../applications/audio/faust { };
 
