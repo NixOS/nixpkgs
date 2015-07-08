@@ -219,6 +219,7 @@
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
   ./services/misc/subsonic.nix
+  ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/uhub.nix
@@ -346,6 +347,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
+  ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix

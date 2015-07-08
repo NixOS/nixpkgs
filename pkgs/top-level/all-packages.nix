@@ -1154,6 +1154,8 @@ let
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
+  compass = callPackage ../development/tools/compass { };
+
   convmv = callPackage ../tools/misc/convmv { };
 
   cool-retro-term = callPackage ../applications/misc/cool-retro-term { };
@@ -2981,6 +2983,8 @@ let
 
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
+  sundtek = callPackage ../misc/drivers/sundtek { };
+
   super = callPackage ../tools/security/super { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
@@ -4195,7 +4199,7 @@ let
 
     bitstring_2_0_4 = callPackage ../development/ocaml-modules/bitstring/2.0.4.nix { };
     bitstring_git   = callPackage ../development/ocaml-modules/bitstring { };
-    
+
     bitstring =
       if lib.versionOlder "4.02" ocaml_version
       then bitstring_git
@@ -5024,24 +5028,23 @@ let
   bundlerEnv = callPackage ../development/interpreters/ruby/bundler-env { };
 
   ruby_1_8_7 = callPackage ../development/interpreters/ruby/ruby-1.8.7.nix { };
-  ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix {
-    inherit (darwin) libobjc;
-  };
-  ruby_2_0_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.0.nix { });
-  ruby_2_1_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.0.nix { });
-  ruby_2_1_1 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { });
-  ruby_2_1_2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { });
-  ruby_2_1_3 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { });
-  ruby_2_1_6 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { });
-  ruby_2_2_0 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { });
+  ruby_1_9_3 = callPackage ../development/interpreters/ruby/ruby-1.9.3.nix { };
+  ruby_2_0_0 = callPackage ../development/interpreters/ruby/ruby-2.0.0.nix { };
+  ruby_2_1_0 = callPackage ../development/interpreters/ruby/ruby-2.1.0.nix { };
+  ruby_2_1_1 = callPackage ../development/interpreters/ruby/ruby-2.1.1.nix { };
+  ruby_2_1_2 = callPackage ../development/interpreters/ruby/ruby-2.1.2.nix { };
+  ruby_2_1_3 = callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { };
+  ruby_2_1_6 = callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { };
+  ruby_2_2_0 = callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { };
+  ruby_2_2_2 = callPackage ../development/interpreters/ruby/ruby-2.2.2.nix { };
 
   # Ruby aliases
-  ruby = ruby_2_1;
+  ruby = ruby_2_2;
   ruby_1_8 = ruby_1_8_7;
   ruby_1_9 = ruby_1_9_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_6;
-  ruby_2_2 = ruby_2_2_0;
+  ruby_2_2 = ruby_2_2_2;
 
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
@@ -12028,6 +12031,8 @@ let
 
   mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
 
+  openshift = callPackage ../applications/networking/cluster/openshift { };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
     ruby = ruby_2_1;
   };
@@ -12069,9 +12074,13 @@ let
 
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
+  pdfdiff = callPackage ../applications/misc/pdfdiff { };
+
   mupdf = callPackage ../applications/misc/mupdf {
     openjpeg = openjpeg_2_0;
   };
+
+  diffpdf = callPackage ../applications/misc/diffpdf { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
@@ -14333,6 +14342,10 @@ let
 
 
   ### SCIENCE / MATH
+
+  caffe = callPackage ../applications/science/math/caffe {
+    cudaSupport = config.caffe.cudaSupport or config.cudaSupport or true;
+  };
 
   ecm = callPackage ../applications/science/math/ecm { };
 

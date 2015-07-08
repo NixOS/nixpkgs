@@ -229,6 +229,7 @@ in rec {
   tests.installer.lvm = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).lvm.test);
   tests.installer.luksroot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).luksroot.test);
   tests.installer.separateBoot = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).separateBoot.test);
+  tests.installer.separateBootFat = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).separateBootFat.test);
   tests.installer.simple = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simple.test);
   tests.installer.simpleLabels = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleLabels.test);
   tests.installer.simpleProvided = forAllSystems (system: hydraJob (import tests/installer.nix { inherit system; }).simpleProvided.test);

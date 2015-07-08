@@ -37,6 +37,9 @@ wrapPythonProgramsIn() {
             # dont wrap EGG-INFO scripts since they are called from python
             if echo "$f" | grep -qv EGG-INFO/scripts; then
                 echo "wrapping \`$f'..."
+                # The magicalSedExpression will invoke a "$(basename "$f")", so
+                # if you change $f to something else, be sure to also change it
+                # in pkgs/top-level/python-packages.nix!
                 sed -i "$f" -re '@magicalSedExpression@'
                 # wrapProgram creates the executable shell script described
                 # above. The script will set PYTHONPATH and PATH variables.!

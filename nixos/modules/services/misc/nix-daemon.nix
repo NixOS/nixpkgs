@@ -143,7 +143,7 @@ in
         default = 0;
         description = ''
           Nix daemon process priority. This priority propagates to build processes.
-          0 is the default Unix process priority, 20 is the lowest.
+          0 is the default Unix process priority, 19 is the lowest.
         '';
       };
 
