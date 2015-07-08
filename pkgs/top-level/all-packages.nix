@@ -10408,6 +10408,8 @@ let
 
   fira = callPackage ../data/fonts/fira { };
 
+  fira-code = callPackage ../data/fonts/fira-code { };
+
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
   font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
