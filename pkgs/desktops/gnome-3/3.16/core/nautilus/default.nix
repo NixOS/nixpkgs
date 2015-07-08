@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  patches = [ ./extension_dir.patch ];
+  patches = [
+    ./extension_dir.patch
+    ./interactive_search.patch # from https://bugzilla.gnome.org/show_bug.cgi?id=721968 / https://bugs.launchpad.net/ubuntu/+source/nautilus/+bug/1164016
+  ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
