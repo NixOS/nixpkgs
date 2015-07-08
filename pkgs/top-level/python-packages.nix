@@ -2452,6 +2452,24 @@ let
     };
   };
 
+  pytestpep257 = buildPythonPackage rec {
+     name = "pytest-pep257-${version}";
+     version = "0.0.1";
+
+     src = pkgs.fetchurl {
+       url = "https://pypi.python.org/packages/source/p/pytest-pep257/${name}.tar.gz";
+       sha256 = "003vdkxpx37n0kjqpwgj3314hwk2jfz3nz58db7xh68bf8xy75lk";
+     };
+
+     propagatedBuildInputs = with self ; [ pytest pep257 ];
+
+     meta = {
+       homepage = https://github.com/anderslime/pytest-pep257;
+       description = "py.test plugin for PEP257";
+       license = licenses.mit;
+     };
+  };
+
   pytestquickcheck = buildPythonPackage rec {
     name = "pytest-quickcheck-0.8.2";
 
