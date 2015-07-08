@@ -14434,7 +14434,7 @@ let
   };
 
   isabelle = import ../applications/science/logic/isabelle {
-    inherit (pkgs) stdenv fetchurl nettools perl polyml;
+    inherit (pkgs) stdenv fetchurl nettools perl polyml texLive;
     inherit (pkgs.emacs24Packages) proofgeneral;
     java = if stdenv.isLinux then jre else jdk;
   };

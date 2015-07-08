@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, proofgeneral }:
+{ stdenv, fetchurl, perl, nettools, java, polyml, proofgeneral, texLive }:
 # nettools needed for hostname
 
 let
@@ -32,6 +32,11 @@ stdenv.mkDerivation {
       --replace /usr/bin/env $ENV
     substituteInPlace lib/Tools/install \
       --replace /usr/bin/env $ENV
+    substituteInPlace lib/Tools/latex \
+      --replace '$ISABELLE_LATEX' ${texLive}/bin/latex \
+      --replace '$ISABELLE_PDFLATEX' ${texLive}/bin/pdflatex \
+      --replace '$ISABELLE_BIBTEX' ${texLive}/bin/bibtex \
+      --replace '$ISABELLE_MAKEINDEX' ${texLive}/bin/mkindex
     sed -i 's|isabelle_java java|${java}/bin/java|g' lib/Tools/java
     substituteInPlace etc/settings \
       --subst-var-by ML_HOME "${polyml}/bin" \
@@ -44,6 +49,9 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
+    pushd contrib/exec_process*/
+    ./build x86_64-linux
+    popd
     ISABELLE_JDK_HOME=${java} ./bin/isabelle build -s $theories
   '';
 
