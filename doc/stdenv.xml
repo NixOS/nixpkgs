@@ -817,6 +817,12 @@ following:
   </varlistentry>
 
   <varlistentry>
+    <term><varname>dontMoveSbin</varname></term>
+    <listitem><para>If set, files in <filename>$out/sbin</filename> are not moved
+    to <filename>$out/bin</filename>. By default, they are.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>stripAllList</varname></term>
     <listitem><para>List of directories to search for libraries and
     executables from which <emphasis>all</emphasis> symbols should be
