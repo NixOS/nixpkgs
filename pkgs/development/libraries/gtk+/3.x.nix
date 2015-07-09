@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "13pwj12m55mbhdaiar57q2ivdsm3lm5ycyhvm8gak0fblkbxpr8a";
+    sha256 = "0cdwykh4086f7fl4dkybgpyxyb1jcmxbfin2az42z5pb4z8rjz5q";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
