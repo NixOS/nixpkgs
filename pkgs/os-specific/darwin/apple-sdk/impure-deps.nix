@@ -54,6 +54,7 @@ rec {
   ];
   QuartzCore = [
     "/System/Library/Frameworks/QuartzCore.framework"
+    "/System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport"
   ];
   PCSC = [
     "/System/Library/Frameworks/PCSC.framework"
@@ -131,6 +132,14 @@ rec {
   ];
   Carbon = [
     "/System/Library/Frameworks/Carbon.framework"
+    "/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI"
+    "/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv"
+    "/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices"
+    "/System/Library/PrivateFrameworks/ChunkingLibrary.framework/Versions/A/ChunkingLibrary"
+    "/System/Library/PrivateFrameworks/Ubiquity.framework/Versions/A/Ubiquity"
+    "/System/Library/PrivateFrameworks/Sharing.framework/Versions/A/Sharing"
+    "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Apple80211"
+    "/System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/GenerationalStorage"
   ];
   CoreAudio = [
     "/System/Library/Frameworks/CoreAudio.framework"
@@ -169,7 +178,9 @@ rec {
   ];
   IOBluetooth = [
     "/System/Library/Frameworks/IOBluetooth.framework"
-    "/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth"
+  ] ++ AudioUnit ++ CoreBluetooth;
+  CoreBluetooth = [
+    "/System/Library/Frameworks/CoreBluetooth.framework"
   ];
   SecurityFoundation = [
     "/System/Library/Frameworks/SecurityFoundation.framework"

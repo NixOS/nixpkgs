@@ -2007,9 +2007,12 @@ let
     libtool = darwin.cctools;
   };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
-  nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix { };
+  nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
+    libtool = darwin.cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
+  };
 
-  nodejs = if stdenv.system == "armv5tel-linux" then
+  nodejs = if stdenv.system == "armv5tel-linux" || stdenv.isDarwin then
     nodejs-0_10
   else
     nodejs-0_12;
