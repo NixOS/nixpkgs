@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt53, icu, sqlite
+, imagemagick, libjpeg, fontconfig, podofo, qt5, icu, sqlite
 , pil, makeWrapper, unrar, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg
-      fontconfig podofo qt53 pil chmlib icu sqlite libusb1 libmtp xdg_utils
+      fontconfig podofo qt5.base pil chmlib icu sqlite libusb1 libmtp xdg_utils
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup pythonPackages.pillow
       pythonPackages.sqlite3 pythonPackages.netifaces pythonPackages.apsw
