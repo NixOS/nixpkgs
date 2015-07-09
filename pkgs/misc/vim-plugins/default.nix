@@ -772,6 +772,17 @@ rec {
 
   };
 
+  changeColorScheme-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "changeColorScheme-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/changeColorScheme.vim";
+      rev = "b041d49f828629d72f2232531a230d1ec5de2405";
+      sha256 = "094ccc132dc3991a30feb31bbdd777755294957e843517491345a4999e86cb5f";
+    };
+    dependencies = [];
+
+  };
+
   tabmerge = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "tabmerge-2010-10-17";
     src = fetchgit {
@@ -861,6 +872,17 @@ rec {
       url = "git://github.com/kien/rainbow_parentheses.vim";
       rev = "eb8baa5428bde10ecc1cb14eed1d6e16f5f24695";
       sha256 = "47975a426d06f41811882691d8a51f32bc72f590477ed52b298660486b2488e3";
+    };
+    dependencies = [];
+
+  };
+
+  random-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "random-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/random.vim";
+      rev = "b2d85eb24a38074eab37a5acf2a295e1f2ad8989";
+      sha256 = "571f4ed0a2d8c66d1c15029fb812a84b55228d07cd2e4bbbc73a33493013fed3";
     };
     dependencies = [];
 
