@@ -12322,6 +12322,8 @@ let
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
+  poezio = python3Packages.poezio;
+
   pommed = callPackage ../os-specific/linux/pommed {
     inherit (xorg) libXpm;
   };
