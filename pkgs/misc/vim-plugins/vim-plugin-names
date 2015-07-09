@@ -56,6 +56,7 @@
 "github:vim-scripts/Colour-Sampler-Pack"
 "github:vim-scripts/a.vim"
 "github:vim-scripts/align"
+"github:vim-scripts/changeColorSchemes.vim"
 "github:vim-scripts/random.vim"
 "github:vim-scripts/tabmerge"
 "github:vim-scripts/wombat256.vim"

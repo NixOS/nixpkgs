@@ -772,6 +772,17 @@ rec {
 
   };
 
+  changeColorScheme-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "changeColorScheme-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/changeColorScheme.vim";
+      rev = "b041d49f828629d72f2232531a230d1ec5de2405";
+      sha256 = "094ccc132dc3991a30feb31bbdd777755294957e843517491345a4999e86cb5f";
+    };
+    dependencies = [];
+
+  };
+
   tabmerge = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "tabmerge-2010-10-17";
     src = fetchgit {
