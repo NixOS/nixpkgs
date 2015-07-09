@@ -7810,6 +7810,25 @@ let
     };
   };
 
+  sleekxmpp = buildPythonPackage rec {
+    name = "sleekxmpp-${version}";
+    version = "1.2.5";
+
+    disabled = (!isPy3k);
+
+    propagatedBuildInputs = with self ; [ dnspython3 pyasn1 ];
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/fritzy/SleekXMPP/archive/${version}.tar.gz";
+      sha256 = "1hqs2w5d7x532psfqipd2wl1mkmsaak83jvp1rh9rv406fzp9h67";
+    };
+
+    meta = {
+      description = "XMPP library for Python";
+      license = licenses.mit;
+      homepage = "http://sleekxmpp.com/";
+    };
+  };
 
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.5";
