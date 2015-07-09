@@ -13648,6 +13648,8 @@ let
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
 
+  snake4 = callPackage ../games/snake4 { };
+
   soi = callPackage ../games/soi {};
 
   # You still can override by passing more arguments.
