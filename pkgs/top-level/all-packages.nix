@@ -8034,6 +8034,8 @@ let
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
+  shhmsg = callPackage ../development/libraries/shhmsg { };
+
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
