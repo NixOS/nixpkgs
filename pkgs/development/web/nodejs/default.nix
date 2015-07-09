@@ -37,15 +37,10 @@ in stdenv.mkDerivation {
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
 
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
+    patchShebangs .
   '';
 
-  patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
-
-
-  preBuild = if stdenv.isDarwin then ''
-    patchShebangs .
-  '' else null;
+  patches = stdenv.lib.optional stdenv.isDarwin ./no-xcode.patch;
 
   buildInputs = [ python which ]
     ++ (optional stdenv.isLinux utillinux)
