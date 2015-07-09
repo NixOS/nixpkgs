@@ -217,9 +217,6 @@ self: super: {
   # https://github.com/haskell/bytestring/issues/41
   bytestring_0_10_6_0 = dontCheck super.bytestring_0_10_6_0;
 
-  # https://github.com/zmthy/http-media/issues/6
-  http-media = dontCheck super.http-media;
-
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
