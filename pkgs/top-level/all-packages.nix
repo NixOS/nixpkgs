@@ -5047,7 +5047,9 @@ let
   ruby_2_1_3 = callPackage ../development/interpreters/ruby/ruby-2.1.3.nix { };
   ruby_2_1_6 = callPackage ../development/interpreters/ruby/ruby-2.1.6.nix { };
   ruby_2_2_0 = callPackage ../development/interpreters/ruby/ruby-2.2.0.nix { };
-  ruby_2_2_2 = callPackage ../development/interpreters/ruby/ruby-2.2.2.nix { };
+  ruby_2_2_2 = callPackage ../development/interpreters/ruby/ruby-2.2.2.nix {
+    inherit (darwin) libobjc libunwind;
+  };
 
   # Ruby aliases
   ruby = ruby_2_2;
