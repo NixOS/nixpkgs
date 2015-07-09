@@ -1710,7 +1710,7 @@ let
     };
   };
 
-  cassandraDriver = buildPythonPackage rec {
+  cassandra-driver = buildPythonPackage rec {
     name = "cassandra-driver-2.6.0c2";
 
     src = pkgs.fetchurl {
