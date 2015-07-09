@@ -1,15 +1,15 @@
 {stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "symbola-7.18";
+  name = "symbola-8.00";
 
   src = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.zip";
-    sha256 = "1dk0qawlgdfh58pz2wb80rs9h8m20nmnr4bhk6jmva8201ixz62f";
+    sha256 = "07bczpl3vqdpg2gakfddhzzgpb6v2wpasv7rwqxkyg9yd9lmbr0s";
   };
   docs_pdf = fetchurl {
     url = "http://users.teilar.gr/~g1951d/Symbola.pdf";
-    sha256 = "16f37fsi2zyy3ka409g3m5d9c09l0ba3rqkz912j90p4588dvk85";
+    sha256 = "1zmq1ijl0k5hrc6vpa2xp9n1x2zrrd7ng3jwc9yf0qsi3pmkpk0p";
   };
 
   buildInputs = [ unzip ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode";
-    # In lieu of a licence:
+    # In lieu of a license:
     # Fonts in this site are offered free for any use;
     # they may be installed, embedded, opened, edited, modified, regenerated, posted, packaged and redistributed.
     license = stdenv.lib.licenses.free;
