@@ -12,6 +12,10 @@ stdenv.mkDerivation {
 
   propagatedNativeBuildInputs = [ m4 ];
 
+  postInstall = ''
+    (cd $out/bin; ln -s flex lex)
+  '';
+
   crossAttrs = {
     preConfigure = ''
       export ac_cv_func_malloc_0_nonnull=yes
