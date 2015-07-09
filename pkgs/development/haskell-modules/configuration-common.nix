@@ -88,9 +88,6 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
-  # The test suite refers to its own library with an invalid version constraint.
-  presburger = dontCheck super.presburger;
-
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
