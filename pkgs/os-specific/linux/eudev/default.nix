@@ -26,6 +26,12 @@ stdenv.mkDerivation {
     "hwdb_bin=/var/lib/udev/hwdb.bin"
     "udevrulesdir=/etc/udev/rules.d"
     ];
+
+  preInstall = ''
+    # Disable install-exec-hook target as it conflicts with our move-sbin setup-hook
+    sed -i 's;$(MAKE) $(AM_MAKEFLAGS) install-exec-hook;$(MAKE) $(AM_MAKEFLAGS);g' src/udev/Makefile
+  '';
+
   installFlags =
     [
     "localstatedir=$(TMPDIR)/var"
