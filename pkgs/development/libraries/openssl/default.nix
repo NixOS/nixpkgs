@@ -8,14 +8,14 @@ let
     stdenv.cross;
 in
 stdenv.mkDerivation rec {
-  name = "openssl-1.0.1o";
+  name = "openssl-1.0.1p";
 
   src = fetchurl {
     urls = [
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha1 = "b003e3382607ef2c6d85b51e4ed7a4c0a76b8d5a";
+    sha1 = "9d1977cc89242cd11471269ece2ed4650947c046";
   };
 
   patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch
