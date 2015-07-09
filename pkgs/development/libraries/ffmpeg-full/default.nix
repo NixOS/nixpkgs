@@ -231,11 +231,11 @@ assert x11grabExtlib -> libX11 != null && libXv != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-${version}";
-  version = "2.6.3";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "1yqc3vm1xrwf866q262qd4nr9d6ifp4gg183pjdc4sl9np0rissr";
+    sha256 = "087pyx1wxvniq3wgj6z80wrb7ampwwsmwndmr7lymzhm4iyvj1vy";
   };
 
   patchPhase = ''patchShebangs .'';
