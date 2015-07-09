@@ -866,6 +866,17 @@ rec {
 
   };
 
+  random-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "random-vim-2010-10-17";
+    src = fetchgit {
+      url = "git://github.com/vim-scripts/random.vim";
+      rev = "b2d85eb24a38074eab37a5acf2a295e1f2ad8989";
+      sha256 = "571f4ed0a2d8c66d1c15029fb812a84b55228d07cd2e4bbbc73a33493013fed3";
+    };
+    dependencies = [];
+
+  };
+
   rust = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "rust-2015-01-29";
     src = fetchgit {
