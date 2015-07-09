@@ -1,16 +1,16 @@
 { stdenv, callPackage }:
 callPackage ./generic.nix {
-  shortVersion = "1.0.0-dev";
+  shortVersion = "2015-07-01";
   isRelease = false;
-  # src rev for master on 2015-05-13
-  srcRev = "67433c1a309d3c9457e49f15e80a2d927d165996";
-  srcSha = "0idc3nh0sfjlv7m9710azx7n6awzwj6mhw3aybsb9bbagzy2sdsg";
-  snapshotHashLinux686 = "0bc8cffdce611fb71fd7d3d8e7cdbfaf748a4f16";
-  snapshotHashLinux64 = "94089740e48167c5975c92c139ae9c286764012f";
-  snapshotHashDarwin686 = "54cc35e76497e6e94fddf38d6e40e9d168491ddb";
-  snapshotHashDarwin64 = "43a1c1fba0d1dfee4c2ca310d506f8f5f51b3f6f";
-  snapshotDate = "2015-04-27";
-  snapshotRev = "857ef6e";
+  # src rev for master on 2015-07-01
+  srcRev = "bf3c979ec";
+  srcSha = "1xp2fjffz5bwxfs37w80bdhy9lv091ps7xbnsvxid2i91rbxfrkk";
+  snapshotHashLinux686 = "a6f22e481eabf098cc65bda97bf7e434a1fcc20b";
+  snapshotHashLinux64 = "5fd8698fdfe953e6c4d86cf4fa1d5f3a0053248c";
+  snapshotHashDarwin686 = "9a273324a6b63a40f67a553029c0a9fb692ffd1f";
+  snapshotHashDarwin64 = "e5b12cb7c179fc98fa905a3c84803645d946a6ae";
+  snapshotDate = "2015-05-24";
+  snapshotRev = "ba0e1cd";
   patches = [
     ./patches/head.patch
   ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;

@@ -125,11 +125,18 @@ stdenv.mkDerivation {
       --subst-var-by "ccPath" "${stdenv.cc}/bin/cc"
     substituteInPlace src/librustc_back/archive.rs \
       --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
+    substituteInPlace src/librustc_back/target/mod.rs \
+      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc" \
+      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
 
     substituteInPlace src/rust-installer/gen-install-script.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
     substituteInPlace src/rust-installer/gen-installer.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
+
+    # Workaround for NixOS/nixpkgs#8676
+    substituteInPlace mk/rustllvm.mk \
+      --replace "\$\$(subst  /,//," "\$\$(subst /,/,"
   '';
 
   buildInputs = [ which file perl curl python27 makeWrapper git valgrind procps ];

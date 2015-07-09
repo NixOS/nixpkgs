@@ -1,49 +1,20 @@
-diff --git a/src/etc/local_stage0.sh b/src/etc/local_stage0.sh
-index ca59b1c..65ee7bf 100755
---- a/src/etc/local_stage0.sh
-+++ b/src/etc/local_stage0.sh
-@@ -50,11 +50,6 @@ if [ -z $TARG_DIR ]; then
- fi
- 
- cp ${PREFIX}/bin/rustc${BIN_SUF} ${TARG_DIR}/stage0/bin/
--cp ${PREFIX}/${LIB_DIR}/${RUSTLIBDIR}/${TARG_DIR}/${LIB_DIR}/* ${TARG_DIR}/stage0/${LIB_DIR}/
--cp ${PREFIX}/${LIB_DIR}/${LIB_PREFIX}extra*${LIB_SUF} ${TARG_DIR}/stage0/${LIB_DIR}/
--cp ${PREFIX}/${LIB_DIR}/${LIB_PREFIX}rust*${LIB_SUF} ${TARG_DIR}/stage0/${LIB_DIR}/
--cp ${PREFIX}/${LIB_DIR}/${LIB_PREFIX}std*${LIB_SUF} ${TARG_DIR}/stage0/${LIB_DIR}/
--cp ${PREFIX}/${LIB_DIR}/${LIB_PREFIX}syntax*${LIB_SUF} ${TARG_DIR}/stage0/${LIB_DIR}/
- 
- # do not fail if one of the above fails, as all we need is a working rustc!
- exit 0
-diff --git a/src/librustc_back/archive.rs b/src/librustc_back/archive.rs
-index 9f5751c..c98828f 100644
---- a/src/librustc_back/archive.rs
-+++ b/src/librustc_back/archive.rs
-@@ -57,7 +57,7 @@ fn run_ar(handler: &ErrorHandler, maybe_ar_prog: &Option<String>,
-           paths: &[&Path]) -> Output {
-     let ar = match *maybe_ar_prog {
-         Some(ref ar) => &ar[..],
--        None => "ar"
-+        None => "@arPath@"
-     };
-     let mut cmd = Command::new(ar);
- 
-diff --git a/src/librustc_trans/back/link.rs b/src/librustc_trans/back/link.rs
-index ad77735..1764f71 100644
---- a/src/librustc_trans/back/link.rs
-+++ b/src/librustc_trans/back/link.rs
-@@ -360,8 +360,8 @@ pub fn mangle_internal_name_by_path_and_seq(path: PathElems, flav: &str) -> Stri
- 
- pub fn get_cc_prog(sess: &Session) -> String {
-     match sess.opts.cg.linker {
--        Some(ref linker) => return linker.to_string(),
--        None => sess.target.target.options.linker.clone(),
-+        Some(ref linker) => linker.to_string(),
-+        None => "@ccPath@".to_string(),
-     }
- }
- 
+diff --git a/src/librustc_back/target/mod.rs b/src/librustc_back/target/mod.rs
+index a42f861..bda4bde 100644
+--- a/src/librustc_back/target/mod.rs
++++ b/src/librustc_back/target/mod.rs
+@@ -172,8 +172,8 @@ impl Default for TargetOptions {
+     /// incomplete, and if used for compilation, will certainly not work.
+     fn default() -> TargetOptions {
+         TargetOptions {
+-            linker: "cc".to_string(),
+-            ar: "ar".to_string(),
++            linker: "@ccPath@".to_string(), // ignore-tidy-linelength
++            ar: "@arPath@".to_string(), // ignore-tidy-linelength
+             pre_link_args: Vec::new(),
+             post_link_args: Vec::new(),
+             cpu: "generic".to_string(),
 diff --git a/src/test/run-pass/issue-20797.rs b/src/test/run-pass/issue-20797.rs
-index 8b5e6f8..480ad79 100644
+index 2772fc8..3d37b08 100644
 --- a/src/test/run-pass/issue-20797.rs
 +++ b/src/test/run-pass/issue-20797.rs
 @@ -97,7 +97,7 @@ impl<S: Strategy> Iterator for Subpaths<S> {
