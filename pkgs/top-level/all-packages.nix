@@ -8036,6 +8036,8 @@ let
 
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
+  shhopt = callPackage ../development/libraries/shhopt { };
+
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
