@@ -417,7 +417,6 @@ let
     "BEQI2"
     "betapart"
     "betaper"
-    "BHMSMAfMRI"
     "BiodiversityR"
     "BioGeoBEARS"
     "bio_infer"
@@ -607,7 +606,6 @@ let
     "rgl"
     "RHRV"
     "rich"
-    "ringscale"
     "rioja"
     "ripa"
     "rite"
@@ -1155,7 +1153,6 @@ let
     "immunoClust" # build is broken
     "imputeR" # depends on broken package nlopt-2.4.2
     "in2extRemes" # depends on broken package nlopt-2.4.2
-    "incReg" # depends on broken package nlopt-2.4.2
     "inferference" # depends on broken package nlopt-2.4.2
     "influence_ME" # depends on broken package nlopt-2.4.2
     "inSilicoMerging" # build is broken
