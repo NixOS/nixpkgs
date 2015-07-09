@@ -1147,7 +1147,10 @@ let
     inherit (perlPackages) perl AlgorithmDiff RegexpCommon;
   };
 
-  cloog = callPackage ../development/libraries/cloog { };
+  cloog = callPackage ../development/libraries/cloog {
+    isl = isl_0_14;
+  };
+
   cloog_0_18_0 = callPackage ../development/libraries/cloog/0.18.0.nix {
     isl = isl_0_11;
   };
