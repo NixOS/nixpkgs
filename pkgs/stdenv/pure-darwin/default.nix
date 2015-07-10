@@ -5,11 +5,26 @@
 }:
 
 let
-  fetch = { file, sha256 }: import <nix/fetchurl.nix> {
+  # libSystem and its transitive dependencies. Get used to this; it's a recurring theme in darwin land
+  libSystemClosure = [
+    "/usr/lib/libSystem.dylib"
+    "/usr/lib/libSystem.B.dylib"
+    "/usr/lib/libobjc.A.dylib"
+    "/usr/lib/libobjc.dylib"
+    "/usr/lib/libauto.dylib"
+    "/usr/lib/libc++abi.dylib"
+    "/usr/lib/libc++.1.dylib"
+    "/usr/lib/libDiagnosticMessagesClient.dylib"
+    "/usr/lib/system"
+  ];
+
+  fetch = { file, sha256 }: derivation ((import <nix/fetchurl.nix> {
     url = "https://dl.dropboxusercontent.com/u/2857322/${file}";
     inherit sha256;
     executable = true;
-  };
+  }).drvAttrs // {
+    __impureHostDeps = libSystemClosure;
+  });
 
   bootstrapFiles = {
     sh    = fetch { file = "sh";    sha256 = "1qakpg37vl61jnkplz13m3g1csqr85cg8ybp6jwiv6apmg26isnm"; };
@@ -29,19 +44,6 @@ in rec {
     export SDKROOT=
     export CMAKE_OSX_ARCHITECTURES=x86_64
   '';
-
-  # libSystem and its transitive dependencies. Get used to this; it's a recurring theme in darwin land
-  libSystemClosure = [
-    "/usr/lib/libSystem.dylib"
-    "/usr/lib/libSystem.B.dylib"
-    "/usr/lib/libobjc.A.dylib"
-    "/usr/lib/libobjc.dylib"
-    "/usr/lib/libauto.dylib"
-    "/usr/lib/libc++abi.dylib"
-    "/usr/lib/libc++.1.dylib"
-    "/usr/lib/libDiagnosticMessagesClient.dylib"
-    "/usr/lib/system"
-  ];
 
   # The one dependency of /bin/sh :(
   binShClosure = [ "/usr/lib/libncurses.5.4.dylib" ];
