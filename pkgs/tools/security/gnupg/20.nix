@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   buildInputs
     = [ readline zlib libgpgerror libgcrypt libassuan libksba pth
-        openldap bzip2 libusb curl libiconv ];
+        openldap bzip2 curl libiconv ]
+        ++ stdenv.lib.optional (!stdenv.isDarwin) libusb;
 
   patchPhase = ''
     find tests -type f | xargs sed -e 's@/bin/pwd@${coreutils}&@g' -i
