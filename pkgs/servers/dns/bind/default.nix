@@ -1,13 +1,13 @@
 { stdenv, fetchurl, openssl, libtool, perl, libxml2 }:
 
-let version = "9.10.2"; in
+let version = "9.10.2-P2"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "163s8pvqj4lyryvfzkc6acbys7gw1by5dqwilggiwp54ia8bg6vg";
+    sha256 = "0pvcnwd4rzfk3l35ys72p14ly9k857wbn1lxzd4ayjk3i2pz1rmi";
   };
 
   patchPhase = ''
