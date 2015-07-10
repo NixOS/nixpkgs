@@ -3770,6 +3770,8 @@ let
     # be passed.
     cross = null;
     libcCross = if crossSystem != null then libcCross else null;
+
+    isl = isl_0_14;
   }));
 
   gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
