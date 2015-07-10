@@ -743,7 +743,9 @@ let
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
-  blink = callPackage ../applications/networking/instant-messengers/blink { };
+  blink = callPackage ../applications/networking/instant-messengers/blink {
+    gnutls = gnutls33;
+  };
 
   blitz = callPackage ../development/libraries/blitz { };
 
