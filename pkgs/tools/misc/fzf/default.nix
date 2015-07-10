@@ -13,7 +13,16 @@ buildGoPackage rec {
     sha256 = "1m9zbf02d6i47c33jys9lr0krqfjk2dr8jzpfhnrb266qcdb27xi";
   };
 
-  buildInputs = with goPackages; [ crypto ginkgo gomega junegunn.go-runewidth go-shellwords ncurses syncthing text ];
+  buildInputs = with goPackages; [
+    crypto
+    ginkgo
+    gomega
+    junegunn.go-runewidth
+    go-shellwords
+    ncurses
+    syncthing
+    text
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/junegunn/fzf;
