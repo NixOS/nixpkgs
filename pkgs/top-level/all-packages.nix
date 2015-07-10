@@ -6246,6 +6246,8 @@ let
 
   gdal = callPackage ../development/libraries/gdal { };
 
+  gdal_1_11_2 = callPackage ../development/libraries/gdal/gdal-1_11_2.nix { };
+
   gdcm = callPackage ../development/libraries/gdcm { };
 
   ggz_base_libs = callPackage ../development/libraries/ggz_base_libs {};
