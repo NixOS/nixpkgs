@@ -10749,6 +10749,8 @@ let
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
+  bleachbit = callPackage ../applications/misc/bleachbit { };
+
   blender = callPackage  ../applications/misc/blender {
     python = python34;
   };
