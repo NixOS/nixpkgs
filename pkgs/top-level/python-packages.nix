@@ -12224,19 +12224,19 @@ let
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "2.4.0";
+    version = "2.5.0";
     disabled = isPy3k;
 
     configurePhase = "find -name 'configure' -exec chmod a+x {} \\; ; find -name 'aconfigure' -exec chmod a+x {} \\; ; ${python}/bin/${python.executable} setup.py build_ext --pjsip-clean-compile";
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "f66543c680f22aa3cf86f55373a01a2bb699366a1be5e257c417d018696b6840";
+      sha256 = "1k97pdpqjs5dw7v73082jpqhv6xhlrdy987qbdb9a9zvfiz7q8sj";
     };
 
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
 
-    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite ];
+    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
 
     installPhase = "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
