@@ -67,3 +67,13 @@
 * Don't create additional commits, do
   * `git rebase -i`
   * `git push --force` to your branch.
+
+## Commit policy
+
+* Commits must be sufficiently tested before being merged, both the master and staging branches.
+* Hydra builds for master and stagingshould not be used as testing platform, it's a build farm for changes that have been already tested.
+* Master should only see non-breaking commits that do not cause mass rebuilds.
+* Staging should only see non-breaking mass-rebuild commits. That means it's not to be used for testing, changes must have been well tested already. [Read policy here](http://comments.gmane.org/gmane.linux.distributions.nixos/13447).
+* If staging is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days, merge into master, then resume development on staging. [Keep an eye on the staging evaluations here](http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations).
+* When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people installation forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from @edolstra.
+
