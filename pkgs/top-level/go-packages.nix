@@ -1366,6 +1366,18 @@ let
     };
   };
 
+  junegunn.go-runewidth = buildGoPackage rec {
+    rev = "travisish";
+    name = "go-runewidth-${rev}";
+    goPackagePath = "github.com/junegunn/go-runewidth";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "junegunn";
+      repo = "go-runewidth";
+      sha256 = "07d612val59sibqly5d6znfkp4h4gjd77783jxvmiq6h2fwb964k";
+    };
+  };
+
   go-runit = buildGoPackage rec {
     rev = "a9148323a615e2e1c93b7a9893914a360b4945c8";
     name = "go-runit-${stdenv.lib.strings.substring 0 7 rev}";
