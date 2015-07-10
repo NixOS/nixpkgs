@@ -878,6 +878,8 @@ let
 
   filter_audio = callPackage ../development/libraries/filter_audio { };
 
+  fzf = callPackage ../tools/misc/fzf { };
+
   gist = callPackage ../tools/text/gist { };
 
   mcrl = callPackage ../tools/misc/mcrl { };
