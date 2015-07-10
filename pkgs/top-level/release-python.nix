@@ -52,11 +52,8 @@ let
   pysideShiboken = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pysideTools = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pystringtemplate = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  python26 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   python27 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  python26Full = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   python27Full = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  python26Packages = jobsForDerivations pkgs.python26Packages;
   python27Packages = jobsForDerivations pkgs.python27Packages;
   python3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pythonDBus = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
