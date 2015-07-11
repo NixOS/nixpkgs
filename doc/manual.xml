@@ -11,6 +11,7 @@
 
   <xi:include href="introduction.xml" />
   <xi:include href="quick-start.xml" />
+  <xi:include href="submitting-changes.xml" />
   <xi:include href="stdenv.xml" />
   <xi:include href="packageconfig.xml" />
   <xi:include href="functions.xml" />
