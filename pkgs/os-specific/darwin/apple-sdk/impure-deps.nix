@@ -12,9 +12,12 @@ rec {
   ];
   Security = [
     "/System/Library/Frameworks/Security.framework"
+    "/usr/lib/libbsm.0.dylib"
     "/usr/lib/libbz2.1.0.dylib"
     "/usr/lib/libpam.2.dylib"
     "/usr/lib/libxar.1.dylib"
+    "/usr/lib/libxml2.2.dylib"
+    "/usr/lib/libsqlite3.dylib"
   ];
   GSS = [
     "/System/Library/Frameworks/GSS.framework"

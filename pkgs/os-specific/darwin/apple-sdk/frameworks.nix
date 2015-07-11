@@ -89,7 +89,7 @@ with frameworks; with libs; {
   ScreenSaver             = [];
   Scripting               = [];
   ScriptingBridge         = [];
-  Security                = [ CoreFoundation ];
+  Security                = [ CoreFoundation IOKit ];
   SecurityFoundation      = [];
   SecurityInterface       = [ Security ];
   ServiceManagement       = [ CoreFoundation Security ];
