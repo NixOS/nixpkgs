@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, Security, goPackages }:
+{ stdenv, lib, fetchurl, bison, glibc, bash, coreutils, makeWrapper, tzdata, iana_etc, perl, goPackages
+
+, Security }:
 
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
@@ -17,8 +19,9 @@ stdenv.mkDerivation rec {
 
   # perl is used for testing go vet
   buildInputs = [ bison bash makeWrapper perl ]
-             ++ lib.optionals stdenv.isLinux [ glibc ]
-             ++ lib.optionals stdenv.isDarwin [ Security ];
+             ++ lib.optionals stdenv.isLinux [ glibc ];
+
+  propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.
@@ -56,6 +59,13 @@ stdenv.mkDerivation rec {
     sed -i 's,/lib/ld-linux.so.3,${loaderArm},' src/cmd/5l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
+    sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
+    sed -i '/TestRead0/areturn' src/os/os_test.go
+    sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+
+    touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';
 
   patches = [

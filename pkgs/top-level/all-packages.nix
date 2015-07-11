@@ -3958,7 +3958,9 @@ let
 
   go_1_3 = callPackage ../development/compilers/go/1.3.nix { };
 
-  go_1_4 = callPackage ../development/compilers/go/1.4.nix { inherit (darwin) Security; };
+  go_1_4 = callPackage ../development/compilers/go/1.4.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   go = go_1_4;
 
