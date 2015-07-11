@@ -3338,6 +3338,28 @@ let
     };
   };
 
+  gmpy2 = buildPythonPackage rec {
+    name = "gmpy2-2.0.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gmpy2/${name}.zip";
+      md5 = "7365d880953ba54c2cdcf171c7e19b2b";
+    };
+
+    buildInputs = [
+      pkgs.gcc
+      pkgs.gmp
+      pkgs.mpfr
+      pkgs.libmpc
+    ];
+
+    meta = {
+      description = "GMP/MPIR, MPFR, and MPC interface to Python 2.6+ and 3.x";
+      homepage = http://code.google.com/p/gmpy/;
+      license = licenses.gpl3Plus;
+    };
+  };
+
   gmusicapi = with pkgs; pythonPackages.buildPythonPackage rec {
     name = "gmusicapi-4.0.0";
 
