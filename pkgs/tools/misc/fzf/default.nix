@@ -28,5 +28,6 @@ buildGoPackage rec {
     homepage = https://github.com/junegunn/fzf;
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
+    maintainers = [ maintainers.magnetophon ];
   };
 }
