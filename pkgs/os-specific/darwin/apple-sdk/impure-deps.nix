@@ -16,6 +16,12 @@ rec {
     "/usr/lib/libpam.2.dylib"
     "/usr/lib/libxar.1.dylib"
   ];
+  GSS = [
+    "/System/Library/Frameworks/GSS.framework"
+  ];
+  Kerberos = [
+    "/System/Library/Frameworks/Kerberos.framework"
+  ];
   CoreServices = [
     "/System/Library/Frameworks/CoreServices.framework"
     "/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore"
@@ -76,6 +82,8 @@ rec {
     "/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv"
     "/System/Library/PrivateFrameworks/FaceCore.framework/Versions/A/FaceCore"
     "/System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/GenerationalStorage"
+    "/System/Library/PrivateFrameworks/Heimdal.framework/Heimdal"
+    "/System/Library/PrivateFrameworks/Heimdal.framework/Versions/Current"
     "/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal"
     "/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices"
     "/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling"
