@@ -9941,6 +9941,22 @@ let
       maintainers = with maintainers; [ koral ];
     };
   };
+  
+  pystache = buildPythonPackage rec {
+    name = "pystache-${version}";
+    version = "0.5.4";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pystache/${name}.tar.gz";
+      sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
+    };
+    
+    meta = {
+      description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
+      homepage = https://github.com/defunkt/pystache;
+      license = licenses.mit;
+    };
+  };
 
   PyStemmer = buildPythonPackage (rec {
     name = "PyStemmer-1.3.0";
