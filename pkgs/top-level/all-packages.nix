@@ -2655,6 +2655,8 @@ let
 
   pptp = callPackage ../tools/networking/pptp {};
 
+  predictionio = callPackage ../servers/predictionio { };
+
   prey-bash-client = callPackage ../tools/security/prey { };
 
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
