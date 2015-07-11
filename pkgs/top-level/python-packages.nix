@@ -3319,6 +3319,25 @@ let
     propagatedBuildInputs = with self; [ gflags iso8601 ipaddr httplib2 google_apputils google_api_python_client ];
   };
 
+  gmpy = buildPythonPackage rec {
+    name = "gmpy-1.17";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/gmpy/${name}.zip";
+      md5 = "2bf419076b06e107167e219f60ac6d27";
+    };
+
+    buildInputs = [
+      pkgs.gcc
+      pkgs.gmp
+    ];
+
+    meta = {
+      description = "GMP or MPIR interface to Python 2.4+ and 3.x";
+      homepage = http://code.google.com/p/gmpy/;
+    };
+  };
+
   gmusicapi = with pkgs; pythonPackages.buildPythonPackage rec {
     name = "gmusicapi-4.0.0";
 
