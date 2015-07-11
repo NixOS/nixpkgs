@@ -2003,7 +2003,9 @@ let
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs-0_12 = callPackage ../development/web/nodejs {
-    libuv = libuvVersions.v1_2_0;
+    libuv = if stdenv.isDarwin
+      then libuvVersions.v1_6_1
+      else libuvVersions.v1_2_0;
     libtool = darwin.cctools;
   };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
@@ -2012,7 +2014,7 @@ let
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
-  nodejs = if stdenv.system == "armv5tel-linux" || stdenv.isDarwin then
+  nodejs = if stdenv.system == "armv5tel-linux" then
     nodejs-0_10
   else
     nodejs-0_12;
