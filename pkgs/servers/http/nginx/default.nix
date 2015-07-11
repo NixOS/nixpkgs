@@ -8,6 +8,7 @@
 , ngx_lua ? false
 , set_misc ? false
 , fluent ? false
+, extraModules ? []
 }:
 
 with stdenv.lib;
@@ -133,7 +134,8 @@ stdenv.mkDerivation rec {
     ++ optional set_misc "--add-module=${set-misc-ext}"
     ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd)) 
         [ "--with-file-aio" "--with-aio_module" ]
-    ++ optional fluent "--add-module=${fluentd}";
+    ++ optional fluent "--add-module=${fluentd}"
+    ++ (map (m: "--add-module=${m}") extraModules);
 
 
   additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
