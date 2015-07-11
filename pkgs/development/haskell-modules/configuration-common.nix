@@ -88,9 +88,6 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
-  # The test suite refers to its own library with an invalid version constraint.
-  presburger = dontCheck super.presburger;
-
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
@@ -219,9 +216,6 @@ self: super: {
 
   # https://github.com/haskell/bytestring/issues/41
   bytestring_0_10_6_0 = dontCheck super.bytestring_0_10_6_0;
-
-  # https://github.com/zmthy/http-media/issues/6
-  http-media = dontCheck super.http-media;
 
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
