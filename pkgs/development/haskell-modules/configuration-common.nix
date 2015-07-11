@@ -897,6 +897,10 @@ self: super: {
   wai-session = markBroken super.wai-session;
   serversession-frontend-wai = dontDistribute super.serversession-frontend-wai;
 
+  yesod-bin = if pkgs.stdenv.isDarwin
+    then addBuildDepend super.yesod-bin pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else super.yesod-bin;
+
   # https://github.com/commercialhaskell/stack/issues/408
   # https://github.com/commercialhaskell/stack/issues/409
   stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });
