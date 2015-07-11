@@ -57,8 +57,8 @@ let
   lua-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "lua-nginx-module";
-    rev = "v0.9.16rc1";
-    sha256 = "0fdrzfkzdrxykbyxrpas7ns6kxzjf9s6h0fj7k4423wfwybi0kic";
+    rev = "v0.9.16";
+    sha256 = "0dvdam228jhsrayb22ishljdkgib08bakh8ygn84sq0c2xbidzlp";
   };
 
   set-misc-ext = fetchFromGitHub {
