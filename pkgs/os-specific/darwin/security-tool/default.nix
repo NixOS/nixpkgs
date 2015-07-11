@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ GSS Kerberos Security PCSC Foundation ];
 
+  __propagatedImpureHostDeps = [ "/System/Library/Keychains" ];
+
   buildInputs = [
     gnustep-make
     libsecurity_asn1

@@ -214,9 +214,6 @@ self: super: {
         patchPhase = (drv.patchPhase or "") + ''
           substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
         '';
-        __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
-          "/System/Library/Keychains"
-        ];
       })
     else super.x509-system;
 
