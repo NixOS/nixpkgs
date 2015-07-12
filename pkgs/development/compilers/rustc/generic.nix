@@ -62,7 +62,7 @@ let version = if isRelease then
     meta = with stdenv.lib; {
       homepage = http://www.rust-lang.org/;
       description = "A safe, concurrent, practical language";
-      maintainers = with maintainers; [ madjar cstrahan wizeman globin ];
+      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy ];
       license = [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux;
     };
