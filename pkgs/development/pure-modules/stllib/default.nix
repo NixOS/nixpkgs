@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "1d550764fc2f8ba6ddbd1fbd3da2d6965b69e2c992747265d9ebe4f16aa5e455";
   };
 
+  postPatch = ''
+    for f in pure-stlmap/{stlmap.cpp,stlmmap.cpp,stlhmap.cpp}; do
+      sed -i '1i\#include <cstddef>' $f
+    done
+  '';
+
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
