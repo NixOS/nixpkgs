@@ -1,3 +1,4 @@
+
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-language-support">
@@ -340,8 +341,6 @@ twisted = buildPythonPackage {
 
   <para>By default <varname>doCheck = true</varname> is set and tests are run with
   <literal>${python.interpreter} setup.py test</literal> command in <varname>checkPhase</varname>.</para>
-
-  <para><varname>propagatedBuildInputs</varname> packages are propagated to the user environment.</para>
 
   <para>
     As in Perl, dependencies on other Python packages can be specified in the
