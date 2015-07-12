@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./autoconf.patch ];
 
+  prePatch = "patchShebangs .";
+
   buildInputs = [ autoconf automake utillinux openssl libuuid gnu-efi binutils pkgconfig help2man ];
 
   configurePhase = ''
