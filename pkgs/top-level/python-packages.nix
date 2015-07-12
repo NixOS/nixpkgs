@@ -12973,7 +12973,24 @@ let
     };
   };
 
-
+  terminado = buildPythonPackage rec {
+    name = "terminado-${version}";
+    version = "0.5";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/terminado/${name}.tar.gz";
+      sha256 = "63e893eff1ba84f1ee7c4bfcca7676ba1de6394538bb9aa80cbbc8866cb875b6";
+    };
+    
+    propagatedBuildInputs = with self; [ ptyprocess tornado ];
+    
+    meta = {
+      description = "Terminals served to term.js using Tornado websockets";
+      homepage = https://github.com/takluyver/terminado;
+      licenses = licenses.bsd2;
+    };
+  };
+  
   testscenarios = buildPythonPackage rec {
     name = "testscenarios-${version}";
     version = "0.4";
