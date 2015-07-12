@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, readline, texinfo }:
+{ stdenv, fetchurl, pkgconfig, libcap, readline, texinfo, nss, nspr }:
 
 assert stdenv.isLinux -> libcap != null;
 
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1194maargy4hpl2a3vy5mbrrswzajjdn92p4w17gbb9vlq7q5zfk";
   };
 
-  buildInputs = [ readline texinfo ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+  buildInputs = [ readline texinfo nss nspr ] ++ stdenv.lib.optional stdenv.isLinux libcap;
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [
     "--sysconfdir=$(out)/etc"
