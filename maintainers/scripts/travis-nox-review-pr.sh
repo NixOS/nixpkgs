@@ -2,6 +2,7 @@
 set -e
 
 export NIX_CURL_FLAGS=-sS
+export NIX_CONF_DIR=/tmp/etc/nix
 
 if [[ $1 == nix ]]; then
     echo "=== Installing Nix..."
@@ -10,8 +11,8 @@ if [[ $1 == nix ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
     # Make sure we can use hydra's binary cache
-    sudo mkdir /etc/nix
-    sudo tee /etc/nix/nix.conf <<EOF >/dev/null
+    sudo mkdir $NIX_CONF_DIR
+    sudo tee $NIX_CONF_DIR/nix.conf <<EOF >/dev/null
 binary-caches = http://cache.nixos.org http://hydra.nixos.org
 trusted-binary-caches = http://hydra.nixos.org
 build-max-jobs = 4
@@ -33,7 +34,7 @@ elif [[ $1 == build ]]; then
         echo "=== Checking PR"
 
         if ! nox-review pr ${TRAVIS_PULL_REQUEST}; then
-            if sudo dmesg | egrep 'Out of memory|Killed process' > /tmp/oom-log; then
+            if dmesg | egrep 'Out of memory|Killed process' > /tmp/oom-log; then
                 echo "=== The build failed due to running out of memory:"
                 cat /tmp/oom-log
                 echo "=== Please disregard the result of this Travis build."
