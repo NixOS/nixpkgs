@@ -47,12 +47,7 @@ in
       };
 
       servers = mkOption {
-        default = [
-          "0.nixos.pool.ntp.org"
-          "1.nixos.pool.ntp.org"
-          "2.nixos.pool.ntp.org"
-          "3.nixos.pool.ntp.org"
-        ];
+        default = config.services.ntp.servers;
         description = ''
           The set of NTP servers from which to synchronise.
         '';
@@ -90,6 +85,8 @@ in
     # Make chronyc available in the system path
     environment.systemPackages = [ pkgs.chrony ];
 
+    systemd.services.ntpd.enable = false;
+
     users.extraUsers = singleton
       { name = chronyUser;
         uid = config.ids.uids.chrony;
@@ -102,6 +99,7 @@ in
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
+        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
 
         path = [ chrony ];
 
