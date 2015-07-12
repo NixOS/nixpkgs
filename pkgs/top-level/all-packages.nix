@@ -5831,6 +5831,8 @@ let
 
   afflib = callPackage ../development/libraries/afflib { };
 
+  ag = callPackage ../tools/misc/ag { };
+
   agg = callPackage ../development/libraries/agg { };
 
   allegro = callPackage ../development/libraries/allegro {};
