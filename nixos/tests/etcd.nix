@@ -1,7 +1,10 @@
 # This test runs etcd as single node, multy node and using discovery
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ... } : {
   name = "etcd";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ offline ];
+  };
 
   nodes = {
     simple =
@@ -105,4 +108,4 @@ import ./make-test.nix {
       $discovery2->waitUntilSucceeds("etcdctl get /foo/bar | grep 'Hello world'");
     };
   '';
-}
+})

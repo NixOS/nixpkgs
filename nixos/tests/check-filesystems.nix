@@ -7,6 +7,9 @@ with import ../lib/build-vms.nix { inherit nixos nixpkgs system; };
 
 rec {
   name = "check-filesystems";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   nodes = {
     share = {pkgs, config, ...}: {

@@ -1,5 +1,8 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "i3wm";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aszlig ];
+  };
 
   machine = { lib, pkgs, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
@@ -25,4 +28,4 @@ import ./make-test.nix {
     $machine->sleep(1);
     $machine->screenshot("terminal");
   '';
-}
+})
