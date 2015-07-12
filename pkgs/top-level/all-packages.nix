@@ -9549,6 +9549,8 @@ let
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
 
+  jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
+
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
@@ -9791,6 +9793,7 @@ let
 
     klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
+    jool = callPackage ../os-specific/linux/jool { };
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
