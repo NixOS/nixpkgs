@@ -7505,11 +7505,23 @@ let
 
     doCheck = false;
 
+    patches = [
+      ../development/python-modules/rainbowstream/image.patch
+    ];
+
+    postPatch = ''
+      clib=$out/${python.sitePackages}/rainbowstream/image.so
+      substituteInPlace rainbowstream/c_image.py \
+        --replace @CLIB@ $clib
+    '';
+
     preBuild = ''
       export LC_ALL="en_US.UTF-8"
     '';
 
     postInstall = ''
+      mkdir -p $out/lib
+      cc -fPIC -shared -o $clib rainbowstream/image.c
       for prog in "$out/bin/"*; do
         wrapProgram "$prog" \
           --prefix PYTHONPATH : "$PYTHONPATH"
