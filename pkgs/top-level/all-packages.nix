@@ -1178,22 +1178,18 @@ let
 
   cudatoolkit5 = import ../development/compilers/cudatoolkit/5.5.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit6 = import ../development/compilers/cudatoolkit/6.0.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit65 = import ../development/compilers/cudatoolkit/6.5.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit7 = import ../development/compilers/cudatoolkit/7.0.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit = cudatoolkit5;
@@ -5015,10 +5011,6 @@ let
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
-  python26 = callPackage ../development/interpreters/python/2.6 {
-    db = db47;
-    self = python26;
-  };
   python27 = callPackage ../development/interpreters/python/2.7 {
     self = python27;
   };
@@ -5037,10 +5029,6 @@ let
 
   pythonFull = python2Full;
   python2Full = python27Full;
-  python26Full = python26.override {
-    includeModules = true;
-    self = python26Full;
-  };
   python27Full = python27.override {
     includeModules = true;
     self = python27Full;
@@ -8623,20 +8611,15 @@ let
   # python function with default python interpreter
   buildPythonPackage = pythonPackages.buildPythonPackage;
 
-  # `nix-env -i python-nose` installs for 2.7, the default python.
-  # Therefore we do not recurse into attributes here, in contrast to
-  # python27Packages. `nix-env -iA python26Packages.nose` works
-  # regardless.
-  python26Packages = callPackage ./python-packages.nix {
-    python = python26;
-    self = python26Packages;
-  };
-
   python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
     python = python27;
     self = python27Packages;
   }));
 
+  # `nix-env -i python-nose` installs for 2.7, the default python.
+  # Therefore we do not recurse into attributes here, in contrast to
+  # python27Packages. `nix-env -iA python32Packages.nose` works
+  # regardless.
   python32Packages = callPackage ./python-packages.nix {
     python = python32;
     self = python32Packages;

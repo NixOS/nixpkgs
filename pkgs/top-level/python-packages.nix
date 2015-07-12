@@ -5,7 +5,6 @@ with pkgs.lib;
 let
   pythonAtLeast = versionAtLeast python.pythonVersion;
   pythonOlder = versionOlder python.pythonVersion;
-  isPy26 = python.majorVersion == "2.6";
   isPy27 = python.majorVersion == "2.7";
   isPy33 = python.majorVersion == "3.3";
   isPy34 = python.majorVersion == "3.4";
@@ -18,7 +17,6 @@ let
 
   # Unique python version identifier
   pythonName =
-    if isPy26 then "python26" else
     if isPy27 then "python27" else
     if isPy33 then "python33" else
     if isPy34 then "python34" else
@@ -34,7 +32,7 @@ let
 
   pythonPackages = modules // {
 
-  inherit python isPy26 isPy27 isPy33 isPy34 isPyPy isPy3k pythonName buildPythonPackage;
+  inherit python isPy27 isPy33 isPy34 isPyPy isPy3k pythonName buildPythonPackage;
 
   # helpers
 
@@ -419,7 +417,6 @@ let
   amqp = buildPythonPackage rec {
     name = "amqp-${version}";
     version = "1.4.6";
-    disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/amqp/${name}.tar.gz";
@@ -519,7 +516,7 @@ let
 
   funcsigs = buildPythonPackage rec {
     name = "funcsigs-0.4";
-    disabled = ! (isPy26 || isPy27 || isPy33 || isPyPy);
+    disabled = ! (isPy27 || isPy33 || isPyPy);
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/funcsigs/${name}.tar.gz";
@@ -1738,8 +1735,6 @@ let
     name = "celery-${version}";
     version = "3.1.17";
 
-    disabled = pythonOlder "2.6";
-
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/celery/${name}.tar.gz";
       sha256 = "0qh38xnbgbj7awpjxxvjlddyafxyyy3fhxcas3i8dmcb4r9vdqng";
@@ -1748,9 +1743,6 @@ let
 
     buildInputs = with self; [ mock nose unittest2 ];
     propagatedBuildInputs = with self; [ kombu billiard pytz anyjson ];
-
-    # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
-    doCheck = pythonAtLeast "2.7";
 
     meta = {
       homepage = https://github.com/celery/celery/;
@@ -2393,7 +2385,6 @@ let
     '';
 
     propagatedBuildInputs = with self; [ py ]
-      ++ (optional isPy26 argparse)
       ++ stdenv.lib.optional
         pkgs.config.pythonPackages.pytest.selenium or false
         self.selenium;
@@ -2668,8 +2659,6 @@ let
       md5 = "7a90d41f7fbc18002ce74f39bd90a5e4";
     };
 
-    buildInputs = with self; [] ++ optional isPy26 unittest2;
-
     propagatedBuildInputs =
       [ self.beautifulsoup4
         self.peppercorn
@@ -2694,8 +2683,6 @@ let
       url = "http://pypi.python.org/packages/source/d/deform/${name}.tar.gz";
       sha256 = "1gfaf1d8zp0mp4h229srlffxdp86w1nni9g4aqsshxysr23x591z";
     };
-
-    buildInputs = with self; [] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs =
       [ self.beautifulsoup4
@@ -3410,8 +3397,6 @@ let
     name = "gtimelog-${version}";
     version = "0.9.1";
 
-    disabled = isPy26;
-
     src = pkgs.fetchurl {
       url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
       sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
@@ -4023,7 +4008,7 @@ let
       webtest
       zope_component
       zope_interface
-    ] ++ optional isPy26 unittest2;
+    ];
 
     propagatedBuildInputs = with self; [
       paste_deploy
@@ -4662,8 +4647,6 @@ let
       md5 = "0214647152fcfcb9ce357624f8f9f203";
     };
 
-    buildInputs = with self; [] ++ optionals isPy26 [ ordereddict unittest2 ];
-
     # TODO: https://github.com/malthe/chameleon/issues/139
     doCheck = false;
 
@@ -5186,8 +5169,6 @@ let
       url = "http://pypi.python.org/packages/source/e/enum34/${name}.tar.gz";
       sha256 = "0iz4jjdvdgvfllnpmd92qxj5fnfxqpgmjpvpik0jjim3lqk9zhfk";
     };
-
-    buildInputs = optional isPy26 self.ordereddict;
 
     meta = {
       homepage = https://pypi.python.org/pypi/enum34;
@@ -5718,7 +5699,6 @@ let
       sha256 = "0hgp9kq7h4ipw8ax5xvvkyh3bkqw361d3rndvb9xix01h9j9mi3p";
     };
 
-    propagatedBuildInputs = with self; optionals isPy26 [ importlib argparse ];
     doCheck = false;
 
     meta = {
@@ -5910,7 +5890,7 @@ let
       md5 = "7a954f1835875002e9044fe55ed1b488";
     };
 
-    buildInputs = with self; [ pkgs.setuptools ] ++ (optional isPy26 argparse);
+    buildInputs = [ pkgs.setuptools ];
 
     meta = {
       description = "automatically generated zsh completion function for Python's option parser modules";
@@ -5935,7 +5915,7 @@ let
 
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
-    disabled = !isPy26 && !isPy27;
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/g/gipc/${name}.zip";
@@ -5969,9 +5949,6 @@ let
     };
 
     buildInputs = with self; [ nose mox ];
-
-    # tests fail for python2.6
-    doCheck = python.majorVersion != "2.6";
 
     propagatedBuildInputs = with self; [ gflags sqlalchemy webob routes eventlet ];
 
@@ -6276,7 +6253,7 @@ let
     buildInputs = with self; [ nose flake8 ];
     propagatedBuildInputs = with self; [
       six
-    ] ++ optionals isPy26 [ ordereddict ];
+    ];
 
     checkPhase = "nosetests";
 
@@ -6417,14 +6394,7 @@ let
     };
   };
 
-  importlib = if isPy26 then (buildPythonPackage {
-    name = "importlib-1.0.2";
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
-      md5 = "4aa23397da8bd7c7426864e88e4db7e1";
-    };
-    doCheck = false;
-  }) else null;
+  importlib = null;
 
   influxdb = buildPythonPackage rec {
     name = "influxdb-0.1.12";
@@ -6632,7 +6602,7 @@ let
       sha256 = "0y3w1x9935qzx8w6m2r6g4ghyjmxn33wryiif6xb56q7cj9w1433";
     };
 
-    disabled = ! (isPy26 || isPy27);
+    disabled = !isPy27;
 
     buildInputs = [ self.nose ];
 
@@ -6762,8 +6732,6 @@ let
     name = "kombu-${version}";
     version = "3.0.24";
 
-    disabled = pythonOlder "2.6";
-
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
       sha256 = "13dzybciispin9c4znpiyvgha354mz124lgx06ksw4vic0vh9zxr";
@@ -6775,9 +6743,8 @@ let
     propagatedBuildInputs = with self; [ amqp ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
-    # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
-    # tests also appear to depend on anyjson, which has Py3k problems
-    doCheck = (pythonAtLeast "2.7") && !isPy3k ;
+    # tests appear to depend on anyjson, which has Py3k problems
+    doCheck = !isPy3k ;
 
     meta = {
       description = "Messaging library for Python";
@@ -7541,8 +7508,7 @@ let
       export LC_ALL="en_US.UTF-8"
     '';
 
-    propagatedBuildInputs = with self; [ argparse jinja2 six modules.readline ] ++
-                            (optionals isPy26 [ importlib ordereddict ]);
+    propagatedBuildInputs = with self; [ argparse jinja2 six modules.readline ];
 
     meta = {
       homepage = https://github.com/iElectric/mr.bob.git;
@@ -7955,7 +7921,7 @@ let
   };
 
 
-  nose2 = if isPy26 then null else (buildPythonPackage rec {
+  nose2 = buildPythonPackage rec {
     name = "nose2-0.4.5";
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose2/${name}.tar.gz";
@@ -7967,7 +7933,7 @@ let
     propagatedBuildInputs = with self; [ six ];
     # AttributeError: 'module' object has no attribute 'collector'
     doCheck = false;
-  });
+  };
 
   nose-cover3 = buildPythonPackage rec {
     name = "nose-cover3-${version}";
@@ -8201,7 +8167,6 @@ let
     buildInputs = [ pkgs.makeWrapper ];
 
     propagatedBuildInputs = with self; [ pkgs.rtmpdump pycrypto requests2 ]
-      ++ optionals isPy26 [ singledispatch futures argparse ]
       ++ optionals isPy27 [ singledispatch futures ]
       ++ optionals isPy33 [ singledispatch ];
 
@@ -8378,7 +8343,7 @@ let
 
   ordereddict = buildPythonPackage rec {
     name = "ordereddict-1.1";
-    disabled = !isPy26;
+    disabled = true;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/o/ordereddict/${name}.tar.gz";
@@ -8730,7 +8695,6 @@ let
   pelican = buildPythonPackage rec {
     name = "pelican-${version}";
     version = "3.6.0";
-    disabled = isPy26;
 
     src = pkgs.fetchFromGitHub {
       owner = "getpelican";
@@ -9002,7 +8966,7 @@ let
 
     buildInputs = with self; [
       pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl ]
-      ++ optionals (isPy26 || isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
+      ++ optionals (isPy27 || isPy33 || isPyPy) [ pkgs.lcms2 ]
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xlibs.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
@@ -11181,7 +11145,7 @@ let
 
   repocheck = buildPythonPackage rec {
     name = "repocheck-2015-06-27";
-    disabled = isPy26 || isPy27;
+    disabled = isPy27;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "0psihwph10sx07xc2gfch739laz7x1kwl5c991cci8cfn5jzy8bp";
@@ -12007,7 +11971,7 @@ let
       sha256 = "bec9269cbfa58de4f0849ec79bb7d54eeeed9df8b5fbfa1637fbc68062822847";
     };
 
-    buildInputs = with self; [ pbr pip ] ++ optional isPy26 argparse;
+    buildInputs = with self; [ pbr pip ];
 
     propagatedBuildInputs = with self; [ setuptools ];
 
@@ -13228,7 +13192,7 @@ let
       md5 = "71b9e3ab12d9186798e739b5273d1438";
     };
 
-    propagatedBuildInputs = with self; [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
+    propagatedBuildInputs = with self; [ oauth2 urwid tweepy ];
 
     #buildInputs = [ tox ];
     # needs tox
@@ -13565,7 +13529,7 @@ let
       stevedore
       virtualenv
       virtualenv-clone
-    ] ++ optional isPy26 argparse;
+    ];
 
     patchPhase = ''
       for file in "virtualenvwrapper.sh" "virtualenvwrapper_lazy.sh"; do
@@ -13769,11 +13733,6 @@ let
     preConfigure = ''
       substituteInPlace setup.py --replace "nose<1.3.0" "nose"
     '';
-
-    # XXX: skipping two tests fails in python2.6
-    doCheck = ! isPy26;
-
-    buildInputs = with self; optionals isPy26 [ ordereddict unittest2 ];
 
     propagatedBuildInputs = with self; [
       nose
@@ -14493,7 +14452,7 @@ let
       sha256 = "1p943jdxb587dh7php4vx04qvn7b2877hr4qs5zyckvp5afhhank";
     };
 
-    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
+    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ];
 
     meta = {
         maintainers = with maintainers; [ goibhniu ];
@@ -16195,12 +16154,10 @@ let
       md5 = "3631a464d49d0cbfd30ab2918ef2b783";
     };
 
-    buildInputs = with self; [ mock ]
-      ++ optional isPy26 unittest2;
+    buildInputs = with self; [ mock ];
 
     propagatedBuildInputs = with self; []
-      ++ optional isPy26 ordereddict
-      ++ optional (isPy26 || isPy27 || isPyPy) futures;
+      ++ optional (isPy27 || isPyPy) futures;
 
     # Some of the tests fail on darwin with `error: AF_UNIX path too long'
     # because of the *long* path names for sockets
@@ -16230,8 +16187,6 @@ let
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
-    '' + optionalString isPy26 ''
-      sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
     '';
 
     meta = {
@@ -16335,7 +16290,7 @@ let
 
   jenkins-job-builder = buildPythonPackage rec {
     name = "jenkins-job-builder-1.2.0";
-    disabled = ! (isPy26 || isPy27);
+    disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jenkins-job-builder/${name}.tar.gz";
@@ -16355,9 +16310,6 @@ let
       python-jenkins
       pyyaml
       six
-    ] ++ optionals isPy26 [
-      argparse
-      ordereddict
     ];
 
     meta = {
