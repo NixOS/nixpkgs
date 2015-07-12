@@ -1188,12 +1188,10 @@ let
 
   cudatoolkit65 = import ../development/compilers/cudatoolkit/6.5.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit7 = import ../development/compilers/cudatoolkit/7.0.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit = cudatoolkit5;
