@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python3Packages}:
+{stdenv, fetchFromGitHub, python3Packages}:
 
 python3Packages.buildPythonPackage rec {
   name = "xonsh-${version}";
@@ -16,9 +16,11 @@ python3Packages.buildPythonPackage rec {
 
   propagatedBuildInputs = [ python3Packages.ply ];
 
-  src = fetchurl {
-    url = "https://github.com/scopatz/xonsh/archive/${version}.zip";
-    sha256 = "0p2d7p892w77ii8yy51vpw7jlz2y53k8g61m7l8bar3hr3qrl306";
+  src = fetchFromGitHub {
+    owner = "scopatz";
+    repo = "xonsh";
+    rev = version;
+    sha256 = "04qnjqpz5y38g22irpph13j2a4hy7mk9pqvqz1mfimaf8zgmyh1n";
   };
 
   meta = with stdenv.lib; {
