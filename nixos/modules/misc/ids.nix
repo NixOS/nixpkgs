@@ -303,7 +303,7 @@
       nslcd = 58;
       scanner = 59;
       nginx = 60;
-      #chrony = 61; # unused
+      chrony = 61;
       systemd-journal = 62;
       smtpd = 63;
       smtpq = 64;

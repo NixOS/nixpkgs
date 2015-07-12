@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [
-    "--sysconfdir=$(out)/etc"
     "--chronyvardir=$(out)/var/lib/chrony"
   ];
 
