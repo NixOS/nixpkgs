@@ -36,13 +36,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "bomi-${version}";
-  version = "0.9.10";
+  version = "0.9.11";
 
   src = fetchFromGitHub {
     owner = "xylosper";
     repo = "bomi";
     rev = "v${version}";
-    sha256 = "1c7497gks7yxzfy6jx77vn9zs2pdq7y6l9w61miwnkdm91093n17";
+    sha256 = "0bi8kspwf5xvi3qqbk9hxjddz0x6j1d8w5xw7c0agbyd6dbw8sn7";
   };
 
   buildInputs = with stdenv.lib;
