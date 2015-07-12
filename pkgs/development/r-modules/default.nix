@@ -334,6 +334,7 @@ let
     sprint = [ pkgs.openmpi ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl ];
+    stringi = [ pkgs.icu ];
     survSNP = [ pkgs.gsl ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype ];
     TAQMNGR = [ pkgs.zlib ];
