@@ -10503,6 +10503,21 @@ let
     propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
+  ptyprocess = buildPythonPackage rec {
+    name = "ptyprocess-${version}";
+    version = "0.5";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/ptyprocess/${name}.tar.gz";
+      sha256= "dcb78fb2197b49ca1b7b2f37b047bc89c0da7a90f90bd5bc17c3ce388bb6ef59";
+    };
+    
+    meta = {
+      description = "Run a subprocess in a pseudo terminal";
+      homepage = https://github.com/pexpect/ptyprocess;
+      license = licenses.isc;
+    };
+  };
 
   pylibacl = buildPythonPackage (rec {
     name = "pylibacl-0.5.1";
