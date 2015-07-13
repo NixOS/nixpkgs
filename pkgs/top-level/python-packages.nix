@@ -7631,6 +7631,21 @@ let
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
+  multipledispatch = buildPythonPackage rec {
+    name = "multipledispatch-${version}";
+    version = "0.4.8";
+   
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/multipledispatch/${name}.tar.gz";
+      sha256 = "07d41fb3ed25e8424536e48a8566f88a0f9926ca4b6174bff6aa16c98251b92e";
+    };
+    
+    meta = {
+      homepage = http://github.com/mrocklin/multipledispatch/;
+      description = "A relatively sane approach to multiple dispatch in Python";
+      license = licenses.bsd3;
+    };
+  };
 
   munkres = buildPythonPackage rec {
     name = "munkres-1.0.6";
