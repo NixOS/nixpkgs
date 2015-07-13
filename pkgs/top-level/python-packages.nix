@@ -2214,20 +2214,20 @@ let
       license = licenses.asl20;
     };
   };
-  
+
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
     version = "0.7.3";
-    
+
     src = pkgs.fetchurl{
       url = "https://pypi.python.org/packages/source/c/cytoolz/cytoolz-${version}.tar.gz";
       md5 = "e9f0441d9f340a23c60357f68f25d163";
     };
-    
+
     meta = {
       homepage = "http://github.com/pytoolz/cytoolz/";
       description = "Cython implementation of Toolz: High performance functional utilities";
-      license = "licenses.bsd3";   
+      license = "licenses.bsd3";
     };
   };
 
@@ -2597,14 +2597,14 @@ let
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
     version = "0.4.6";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
-      sha256 = "0caa86a4347f1b0c45f3890d78d0b89662189c7dd6df3a8e5ff3532ae8bc434f";    
+      sha256 = "0caa86a4347f1b0c45f3890d78d0b89662189c7dd6df3a8e5ff3532ae8bc434f";
     };
-    
+
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
-    
+
     meta = {
       homepage = https://github.com/ContinuumIO/datashape;
       description = "A data description language";
@@ -7669,12 +7669,12 @@ let
   multipledispatch = buildPythonPackage rec {
     name = "multipledispatch-${version}";
     version = "0.4.8";
-   
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/m/multipledispatch/${name}.tar.gz";
       sha256 = "07d41fb3ed25e8424536e48a8566f88a0f9926ca4b6174bff6aa16c98251b92e";
     };
-    
+
     meta = {
       homepage = http://github.com/mrocklin/multipledispatch/;
       description = "A relatively sane approach to multiple dispatch in Python";
@@ -8432,21 +8432,21 @@ let
   odo = buildPythonPackage rec {
     name = "odo-${version}";
     version= "0.3.3";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
       sha256 = "2499ee86c26c74daa28f21ed235ca331911065950deea5169ebdb7d5dae6ebef";
     };
-    
+
     propagatedBuildInputs = with self; [ datashape numpy pandas toolz multipledispatch networkx ];
-    
+
     meta = {
       homepage = https://github.com/ContinuumIO/odo;
       description = "Data migration utilities";
       license = licenses.bsdOriginal;
     };
   };
-  
+
   offtrac = buildPythonPackage rec {
     name = "offtrac-0.1.0";
     meta.maintainers = with maintainers; [ mornfall ];
@@ -8707,21 +8707,21 @@ let
   patsy = buildPythonPackage rec {
     name = "patsy-${version}";
     version = "0.3.0";
-    
+
     src = pkgs.fetchurl{
       url = "https://pypi.python.org/packages/source/p/patsy/${name}.zip";
       md5 = "7545518b413136ba8343dcebea07e5e2";
     };
-    
+
     propagatedBuildInputs = with self; [six numpy];
-    
+
     meta = {
       description = "A Python package for describing statistical models";
       homepage = "https://github.com/pydata/patsy";
       license = licenses.bsd2;
     };
   };
-  
+
   paste = buildPythonPackage rec {
     name = "paste-1.7.5.1";
     disabled = isPy3k;
@@ -10662,12 +10662,12 @@ let
   ptyprocess = buildPythonPackage rec {
     name = "ptyprocess-${version}";
     version = "0.5";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/ptyprocess/${name}.tar.gz";
       sha256= "dcb78fb2197b49ca1b7b2f37b047bc89c0da7a90f90bd5bc17c3ce388bb6ef59";
     };
-    
+
     meta = {
       description = "Run a subprocess in a pseudo terminal";
       homepage = https://github.com/pexpect/ptyprocess;
@@ -13132,21 +13132,21 @@ let
   terminado = buildPythonPackage rec {
     name = "terminado-${version}";
     version = "0.5";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/terminado/${name}.tar.gz";
       sha256 = "63e893eff1ba84f1ee7c4bfcca7676ba1de6394538bb9aa80cbbc8866cb875b6";
     };
-    
+
     propagatedBuildInputs = with self; [ ptyprocess tornado ];
-    
+
     meta = {
       description = "Terminals served to term.js using Tornado websockets";
       homepage = https://github.com/takluyver/terminado;
       licenses = licenses.bsd2;
     };
   };
-  
+
   testscenarios = buildPythonPackage rec {
     name = "testscenarios-${version}";
     version = "0.4";
@@ -13292,19 +13292,19 @@ let
   toolz = buildPythonPackage rec{
     name = "toolz-${version}";
     version = "0.7.2";
-    
+
     src = pkgs.fetchurl{
       url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
       md5 = "6f045541a9e7ee755b7b00fced4a7fde";
     };
-    
+
     meta = {
       homepage = "http://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
-      license = "licenses.bsd3";   
+      license = "licenses.bsd3";
     };
   };
-  
+
   tox = buildPythonPackage rec {
     name = "tox-1.8.1";
 
