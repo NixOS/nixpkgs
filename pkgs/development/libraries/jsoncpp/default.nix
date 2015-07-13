@@ -20,19 +20,25 @@ stdenv.mkDerivation rec {
     export sourceRoot=${src.name}
   '';
 
+  # Hack to be able to run the test, broken because we use
+  # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
+  preBuild = ''
+    export LD_LIBRARY_PATH="`pwd`/src/lib_json:$LD_LIBRARY_PATH"
+  '';
+
   nativeBuildInputs = [ cmake python ];
 
   cmakeFlags = [
-    "-DJSONCPP_WITH_CMAKE_PACKAGE=1"
+    "-DJSONCPP_LIB_BUILD_SHARED=ON"
+    "-DJSONCPP_LIB_BUILD_STATIC=OFF"
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
-
-  postInstall = "rm $out/lib/*.a";
 
   meta = {
     inherit version;
     homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A simple API to manipulate JSON data in C++";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
+    maintainers = with stdenv.lib.maintainers; [ ttuegel page ];
     license = stdenv.lib.licenses.mit;
     branch = "1.6";
   };
