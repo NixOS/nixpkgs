@@ -97,7 +97,7 @@ in
             Type = "forking";
             PIDFile = "/run/minidlna/pid";
             ExecStart =
-              "@${pkgs.minidlna}/sbin/minidlna minidlna -P /run/minidlna/pid" +
+              "@${pkgs.minidlna}/sbin/minidlnad minidlnad -P /run/minidlna/pid" +
               " -f ${pkgs.writeText "minidlna.conf" cfg.config}";
           };
       };
