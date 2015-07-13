@@ -70,7 +70,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
-my @imports = ("<nixpkgs/nixos/modules/installer/scan/not-detected.nix>");
+my @imports;
 
 
 sub debug {
@@ -243,6 +243,18 @@ if ($virt eq "oracle") {
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
     push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
 }
+
+
+# Pull in NixOS configuration for containers.
+if ($virt eq "systemd-nspawn") {
+    push @attrs, "boot.isContainer = true;";
+}
+
+
+# Provide firmware for devices that are not detected by this script,
+# unless we're in a VM/container.
+push @imports, "<nixpkgs/nixos/modules/installer/scan/not-detected.nix>"
+    if $virt eq "none";
 
 
 # For a device name like /dev/sda1, find a more stable path like
@@ -459,14 +471,14 @@ if ($showHardwareConfig) {
     if ($force || ! -e $fn) {
         print STDERR "writing $fn...\n";
 
-        my $bootloaderConfig;
+        my $bootloaderConfig = "";
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
   # Use the gummiboot efi boot loader.
   boot.loader.gummiboot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
-        } else {
+        } elsif ($virt ne "systemd-nspawn") {
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
