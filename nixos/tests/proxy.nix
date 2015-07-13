@@ -1,4 +1,4 @@
-import ./make-test.nix (
+import ./make-test.nix ({ pkgs, ...} : 
 
 let
 
@@ -15,6 +15,9 @@ in
 
 {
   name = "proxy";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   nodes =
     { proxy =
@@ -89,5 +92,4 @@ in
       $backend2->unblock;
       $client->succeed("curl --fail http://proxy/");
     '';
-
 })

@@ -1,5 +1,8 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "firefox";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow shlevy ];
+  };
 
   machine =
     { config, pkgs, ... }:

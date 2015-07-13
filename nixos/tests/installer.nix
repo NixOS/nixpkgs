@@ -149,12 +149,15 @@ let
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
     , grubVersion ? 2, grubDevice ? "/dev/vda"
-    , grubIdentifier ? "uuid", enableOCR ? false
+    , grubIdentifier ? "uuid", enableOCR ? false, meta ? {}
     }:
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
-
+      meta = with pkgs.stdenv.lib.maintainers; {
+        # put global maintainers here, individuals go into makeInstallerTest fkt call
+        maintainers = [ wkennington ] ++ (meta.maintainers or []);
+      };
       nodes = {
 
         # The configuration of the machine used to run "nixos-install". It

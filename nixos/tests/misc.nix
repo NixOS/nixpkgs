@@ -1,7 +1,10 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "misc";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   machine =
     { config, lib, pkgs, ... }:
@@ -107,5 +110,4 @@ import ./make-test.nix {
           $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
       };
     '';
-
-}
+})

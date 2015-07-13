@@ -1,8 +1,11 @@
 # This test runs basic munin setup with node and cron job running on the same
 # machine.
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "munin";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric eelco chaoflow ];
+  };
 
   nodes = {
     one =
@@ -29,4 +32,4 @@ import ./make-test.nix {
     $one->waitForFile("/var/lib/munin/one/one-uptime-uptime-g.rrd");
     $one->waitForFile("/var/www/munin/one/index.html");
   '';
-}
+})

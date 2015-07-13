@@ -1,5 +1,8 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "xfce";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow shlevy ];
+  };
 
   machine =
     { config, pkgs, ... }:
@@ -28,5 +31,4 @@ import ./make-test.nix {
       $machine->sleep(10);
       $machine->screenshot("screen");
     '';
-
-}
+})

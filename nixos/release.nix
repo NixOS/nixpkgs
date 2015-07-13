@@ -330,7 +330,5 @@ in rec {
         services.postgresql.package = pkgs.postgresql93;
         environment.systemPackages = [ pkgs.php ];
       });
-
   };
-
 }

@@ -1,4 +1,4 @@
-import ./make-test.nix (
+import ./make-test.nix ({ pkgs, ...} :
 
 let
   replicateUser = "replicate";
@@ -7,6 +7,9 @@ in
 
 {
   name = "mysql-replication";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow shlevy ];
+  };
 
   nodes = {
     master =

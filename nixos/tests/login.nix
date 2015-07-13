@@ -2,6 +2,9 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
 
 {
   name = "login";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   machine =
     { config, pkgs, lib, ... }:

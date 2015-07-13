@@ -17,6 +17,9 @@ let
 
 in {
   name = "openssh";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aszlig eelco chaoflow ];
+  };
 
   nodes = {
 

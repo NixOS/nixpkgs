@@ -1,7 +1,10 @@
 # Test for NixOS' container support.
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "containers";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aristid aszlig eelco chaoflow ];
+  };
 
   machine =
     { config, pkgs, ... }:
@@ -113,4 +116,4 @@ import ./make-test.nix {
       $machine->fail("nixos-container destroy webserver");
     '';
 
-}
+})
