@@ -12,14 +12,15 @@
 , url
 , ... } @ args:
 
-lib.overrideDerivation (fetchurl ({
+lib.overrideDerivation (fetchurl (rec {
   name = args.name or (baseNameOf url);
 
   recursiveHash = true;
 
   downloadToTemp = true;
 
-  postFetch =
+
+  postFetch = let baseName = baseNameOf ("/" + name); in
     ''
       export PATH=${unzip}/bin:$PATH
       mkdir $out
@@ -28,7 +29,9 @@ lib.overrideDerivation (fetchurl ({
       mkdir "$unpackDir"
       cd "$unpackDir"
 
-      renamed="$TMPDIR/${baseNameOf url}"
+      # FIXME: Uncomment and drop `let baseName =` when NixOS/nix#582 is merged
+      #renamed="$TMPDIR/[dollar]{baseNameOf name}"
+      renamed="$TMPDIR/${baseName}"
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
 
