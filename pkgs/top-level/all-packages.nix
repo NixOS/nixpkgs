@@ -1454,6 +1454,10 @@ let
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  fgallery = callPackage ../tools/graphics/fgallery {
+    inherit (perlPackages) ImageExifTool JSON;
+  };
+
   flannel = callPackage ../tools/networking/flannel { };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
