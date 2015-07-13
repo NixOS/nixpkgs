@@ -13376,6 +13376,8 @@ let
     qt = qt4;
   };
 
+  pahole = callPackage ../development/tools/misc/pahole {};
+
   yed = callPackage ../applications/graphics/yed {};
 
   ykpers = callPackage ../applications/misc/ykpers {};
