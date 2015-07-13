@@ -2576,6 +2576,23 @@ let
     };
   });
 
+  datashape = buildPythonPackage rec {
+    name = "datashape-${version}";
+    version = "0.4.6";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
+      sha256 = "0caa86a4347f1b0c45f3890d78d0b89662189c7dd6df3a8e5ff3532ae8bc434f";    
+    };
+    
+    propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
+    
+    meta = {
+      homepage = https://github.com/ContinuumIO/datashape;
+      description = "A data description language";
+      license = licenses.bsd2;
+    };
+  };
 
   dateutil = buildPythonPackage (rec {
     name = "dateutil-2.2";
