@@ -8443,7 +8443,7 @@ let
     meta = {
       homepage = https://github.com/ContinuumIO/odo;
       description = "Data migration utilities";
-      license = licenses.bsd4;
+      license = licenses.bsdOriginal;
     };
   };
   
