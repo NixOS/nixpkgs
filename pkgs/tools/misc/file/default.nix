@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       "ftp://ftp.astron.com/pub/file/${name}.tar.gz"
       "http://distfiles.macports.org/file/${name}.tar.gz"
     ];
-    sha256 = "0z0mwqayrrf3w734rjp9rysf0y8az191ff7fxjsxyb1y2kzv72ia";
+    sha256 = "1kjhqwmi1sjw8jcf6li725c59wm00zajrdfwgkwqxs295vgb6b40";
   };
 
   meta = {
