@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mumble-${version}";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mumble/${name}.tar.gz";
-    sha256 = "1frc6b284cl36czrsrg47mnmg1im0pjqscp877gz2rrjc62pxlab";
+    url = "https://github.com/mumble-voip/mumble/releases/download/${version}/${name}.tar.gz";
+    sha256 = "012vm0xf84x13414jlsx964c5a1nwnbn41jnspkciajlxxipldn6";
   };
 
   patches = optional jackSupport ./mumble-jack-support.patch;

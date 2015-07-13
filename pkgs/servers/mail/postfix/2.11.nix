@@ -6,11 +6,11 @@ stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "2.11.4";
+  version = "2.11.5";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "07h3rdfgs449hb49rxcx4iapib0l0zchnhscgn4h00wcnlflq5gl";
+    sha256 = "11riz8ggaa09pi8d6xv2807qp7yjn918mrylfvkfwmvcdlgwck0a";
   };
 
   patches = [ ./postfix-2.11.0.patch ];

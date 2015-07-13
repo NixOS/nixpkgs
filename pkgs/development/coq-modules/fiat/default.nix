@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ coq ];
 
   enableParallelBuilding = false;
-  doCheck = true;
+  doCheck = !stdenv.isi686;
 
   unpackPhase = ''
     mkdir fiat

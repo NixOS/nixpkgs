@@ -4,7 +4,7 @@
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 let
-  version = "1.7.2";
+  version = "1.7.3";
   rake = buildRubyGem {
     inherit ruby;
     name = "rake-10.3.2";
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_x86_64.deb";
-        sha256 = "0s1rwzpcp0nc7v04fvbd5vsqfm79q2v23sr9ahniw09lf5c1qzwx";
+        sha256 = "0zg2sdxgrmwqvzqw4z8d6ji8d0cby33nggv0n9ncjxp0wjiv8nkm";
       }
     else
       fetchurl {
         url    = "https://dl.bintray.com/mitchellh/vagrant/vagrant_${version}_i686.deb";
-        sha256 = "1yj8iyhsgj6j3r7p3ppmsz01j6vnxqb18rjhsbp2sz45kbfs1wxz";
+        sha256 = "0r23w49jwl3c3g4nns5xnrsrqyfkqsgln91cj30hxkw50d0ldpvs";
       };
 
   meta = with stdenv.lib; {

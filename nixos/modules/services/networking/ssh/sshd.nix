@@ -244,13 +244,12 @@ in
           publicKey = mkOption {
             default = null;
             type = types.nullOr types.str;
+            example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
             description = ''
               The public key data for the host. You can fetch a public key
               from a running SSH server with the <command>ssh-keyscan</command>
               command. The public key should not include any host names, only
-              the key type and the key itself. It is allowed to add several
-              lines here, each line will be treated as type/key pair and the
-              host names will be prepended to each line.
+              the key type and the key itself.
             '';
           };
           publicKeyFile = mkOption {

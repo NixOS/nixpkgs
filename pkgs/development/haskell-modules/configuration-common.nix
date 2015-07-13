@@ -14,7 +14,7 @@ self: super: {
   # Break infinite recursions.
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec-expectations = dontCheck super.hspec-expectations;
+  hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   HTTP = dontCheck super.HTTP;
   mwc-random = dontCheck super.mwc-random;
   nanospec = dontCheck super.nanospec;
@@ -88,9 +88,6 @@ self: super: {
   yices-easy = dontDistribute super.yices-easy;
   yices-painless = dontDistribute super.yices-painless;
 
-  # The test suite refers to its own library with an invalid version constraint.
-  presburger = dontCheck super.presburger;
-
   # Won't find it's header files without help.
   sfml-audio = appendConfigureFlag super.sfml-audio "--extra-include-dirs=${pkgs.openal}/include/AL";
 
@@ -111,9 +108,6 @@ self: super: {
 
   # https://github.com/haskell/time/issues/23
   time_1_5_0_1 = dontCheck super.time_1_5_0_1;
-
-  # Cannot compile its own test suite: https://github.com/haskell/network-uri/issues/10.
-  network-uri = dontCheck super.network-uri;
 
   # Help libconfig find it's C language counterpart.
   libconfig = (dontCheck super.libconfig).override { config = pkgs.libconfig; };
@@ -240,9 +234,6 @@ self: super: {
 
   # https://github.com/haskell/bytestring/issues/41
   bytestring_0_10_6_0 = dontCheck super.bytestring_0_10_6_0;
-
-  # https://github.com/zmthy/http-media/issues/6
-  http-media = dontCheck super.http-media;
 
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
@@ -635,10 +626,6 @@ self: super: {
   # https://code.google.com/p/linux-music-player/issues/detail?id=1
   mp = markBroken super.mp;
 
-  # Depends on broken lmdb package.
-  vcache = markBroken super.vcache;
-  vcache-trie = markBroken super.vcache-trie;
-
   # https://github.com/afcowie/http-streams/issues/80
   http-streams = dontCheck super.http-streams;
 
@@ -892,10 +879,6 @@ self: super: {
 
   # https://github.com/yesodweb/serversession/issues/1
   serversession = dontCheck super.serversession;
-
-  # https://github.com/singpolyma/wai-session/issues/8
-  wai-session = markBroken super.wai-session;
-  serversession-frontend-wai = dontDistribute super.serversession-frontend-wai;
 
   yesod-bin = if pkgs.stdenv.isDarwin
     then addBuildDepend super.yesod-bin pkgs.darwin.apple_sdk.frameworks.Cocoa

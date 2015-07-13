@@ -1,13 +1,13 @@
 { stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
 , pkgconfig, xdg_utils, gtk2, sqlite }:
 
-let version = "3.11.0.2"; in
+let version = "3.12.0.2"; in
 stdenv.mkDerivation {
   name = "filezilla-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/filezilla/FileZilla_Client/${version}/FileZilla_${version}_src.tar.bz2";
-    sha256 = "1nc9d46jwz3x9dd6na1ds8rq8a797xr29r9wkhgxv6y20cla06rl";
+    sha256 = "038xgvajn0nq1dzw1pac3xwhmil1y17vhadd2hx0vl4lrp16yabs";
   };
 
   configureFlags = [

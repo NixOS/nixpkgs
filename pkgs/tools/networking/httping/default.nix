@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, ncurses }:
+{ stdenv, fetchurl, gettext, ncurses, openssl }:
 
 stdenv.mkDerivation rec {
   name = "httping-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1110r3gpsj9xmybdw7w4zkhj3zmn5mnv2nq0ijbvrywbn019zdfs";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses openssl ];
   nativeBuildInputs = [ gettext ];
 
   makeFlags = [

@@ -22,8 +22,11 @@ let
 
 in
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "cjdns";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ emery ];
+  };
 
   nodes = rec
     { # Alice finds peers over over ETHInterface.
@@ -119,4 +122,4 @@ import ./make-test.nix {
 
       $bob->succeed("curl --fail -g http://[$aliceIp6]");
     '';
-}
+})

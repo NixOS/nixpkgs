@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   passthru = rec {
     majorVersion = "2";
     minorVersion = "2";
-    teenyVersion = "0";
+    teenyVersion = "2";
     patchLevel = "0";
     rubyEngine = "ruby";
     libPath = "lib/${rubyEngine}/${majorVersion}.${minorVersion}.${teenyVersion}";

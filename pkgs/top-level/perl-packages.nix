@@ -484,6 +484,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1jnihz3029x51a455nxa0jx2z125x38q3vkkggsgdlrvawzxsm00";
     };
     propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsTypemapsDefault ];
+    patches = [
+      # Fix out of memory error on Perl 5.19.4 and later.
+      ../development/perl-modules/boost-geometry-utils-fix-oom.patch
+    ];
   };
 
   BusinessISBN = buildPerlPackage {

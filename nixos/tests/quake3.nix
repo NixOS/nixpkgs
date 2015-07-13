@@ -1,4 +1,4 @@
-import ./make-test.nix (
+import ./make-test.nix ({ pkgs, ...} :
 
 let
 
@@ -14,6 +14,9 @@ in
 
 rec {
   name = "quake3";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric eelco chaoflow ];
+  };
 
   # TODO: lcov doesn't work atm
   #makeCoverageReport = true;

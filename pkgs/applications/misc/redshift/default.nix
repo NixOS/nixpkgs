@@ -1,45 +1,40 @@
-{ fetchurl, stdenv, libX11, libXrandr, libXxf86vm, libxcb, pkgconfig, python
-, randrproto, xcbutil, xf86vidmodeproto, autoconf, automake, gettext, glib
-, GConf, dbus, dbus_glib, makeWrapper, gtk, pygtk, pyxdg, geoclue }:
+{ fetchurl, stdenv, gettext, geoclue, intltool, makeWrapper
+, pkgconfig , python, pygobject3, pyxdg }:
 
-stdenv.mkDerivation rec {
-  version = "1.9.1";
+let version = "1.10"; in
+stdenv.mkDerivation {
   name = "redshift-${version}";
   src = fetchurl {
-    url = "https://github.com/jonls/redshift/archive/v${version}.tar.gz";
-    sha256 = "0rj7lyg4ikwpk1hr1k2bgk9gjqvvv51z8hydsgpx2k2lqdv6lqri";
+    sha256 = "19pfk9il5x2g2ivqix4a555psz8mj3m0cvjwnjpjvx0llh5fghjv";
+    url = "https://github.com/jonls/redshift/releases/download/v${version}/redshift-${version}.tar.xz";
   };
 
   buildInputs = [
-    libX11 libXrandr libXxf86vm libxcb pkgconfig python randrproto xcbutil
-    xf86vidmodeproto autoconf automake gettext glib GConf dbus dbus_glib
-    makeWrapper gtk pygtk pyxdg geoclue
+    gettext intltool makeWrapper pkgconfig python pygobject3 pyxdg
   ];
 
-  preConfigure = ''
-    ./bootstrap
-  '';
-
   preInstall = ''
-    substituteInPlace src/redshift-gtk/redshift-gtk python --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
+    substituteInPlace src/redshift-gtk/redshift-gtk python \
+      --replace "/usr/bin/env python3" "${python}/bin/${python.executable}"
   '';
 /*
   postInstall = ''
-    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0:${pyxdg}/lib/${python.libPrefix}/site-packages/pyxdg:$out/lib/${python.libPrefix}/site-packages
+    wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH
   '';
 */
   meta = with stdenv.lib; {
-    description = "changes the color temperature of your screen gradually";
+    inherit version;
+    description = "Gradually change screen color temperature";
     longDescription = ''
       The color temperature is set according to the position of the
       sun. A different color temperature is set during night and
       daytime. During twilight and early morning, the color
       temperature transitions smoothly from night to daytime
       temperature to allow your eyes to slowly adapt.
-      '';
-    license = stdenv.lib.licenses.gpl3Plus;
+    '';
+    license = licenses.gpl3Plus;
     homepage = http://jonls.dk/redshift;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mornfall ];
+    maintainers = with maintainers; [ mornfall nckx ];
   }; 
 }

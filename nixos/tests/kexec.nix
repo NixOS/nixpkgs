@@ -1,7 +1,10 @@
 # Test whether fast reboots via kexec work.
 
-import ./make-test.nix  {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "kexec";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   machine = { config, pkgs, ... }:
     { virtualisation.vlans = [ ]; };
@@ -13,5 +16,4 @@ import ./make-test.nix  {
       $machine->{connected} = 0;
       $machine->waitForUnit("multi-user.target");
     '';
-
-}
+})

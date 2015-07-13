@@ -1,7 +1,10 @@
 # Test the firewall module.
 
-import ./make-test.nix {
+import ./make-test.nix ( { pkgs, ... } : {
   name = "firewall";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ eelco chaoflow ];
+  };
 
   nodes =
     { walled =
@@ -44,5 +47,4 @@ import ./make-test.nix {
       $walled->stopJob("firewall");
       $attacker->succeed("curl -v http://walled/ >&2");
     '';
-
-}
+})

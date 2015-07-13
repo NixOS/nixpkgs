@@ -311,9 +311,9 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
 
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
-        # Make sure this isn't a btrfs subvolume
-        my ($status, @msg) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if (join("", @msg) =~ /ERROR:/) {
+        # Make sure this isn't a btrfs subvolume.
+        my $msg = `btrfs subvol show $rootDir$mountPoint`;
+        if ($? != 0 || $msg =~ /ERROR:/s) {
             my $path = $fields[3]; $path = "" if $path eq "/";
             my $base = $fsByDev{$fields[2]};
             $base = "" if $base eq "/";

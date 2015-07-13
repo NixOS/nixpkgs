@@ -1,24 +1,24 @@
 { fetchurl, stdenv, libiconv }:
 
-stdenv.mkDerivation (rec {
-  name = "libunistring-0.9.3";
+stdenv.mkDerivation rec {
+  name = "libunistring-0.9.6";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "18q620269xzpw39dwvr9zpilnl2dkw5z5kz3mxaadnpv4k3kw3b1";
+    sha256 = "0ixxmgpgh2v8ifm6hbwsjxl023myk3dfnj7wnvmqjivza31fw9cn";
   };
 
   patches = stdenv.lib.optional stdenv.isDarwin [ ./clang.patch ];
 
-  propagatedBuildInputs =
-    stdenv.lib.optional ((! (stdenv ? glibc))
-                         || (stdenv ? cross &&
-                             stdenv.cross.config == "i686-pc-mingw32"))
-     libiconv;
+  propagatedBuildInputs = [ libiconv ];
+
+  configureFlags = [
+    "--with-libiconv-prefix=${libiconv}"
+  ];
 
   # XXX: There are test failures on non-GNU systems, see
   # http://lists.gnu.org/archive/html/bug-libunistring/2010-02/msg00004.html .
-  doCheck = (stdenv ? glibc);
+  doCheck = stdenv ? glibc;
 
   meta = {
     homepage = http://www.gnu.org/software/libunistring/;
@@ -52,19 +52,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-# On Cygwin Libtool is unable to find `libiconv.dll' if there's no explicit
-# `-L/path/to/libiconv' argument on the linker's command line; and since it
-# can't find the dll, it will only create a static library.
-(if (stdenv ? glibc)
- then {}
- else { configureFlags = "--with-libiconv-prefix=${libiconv}"; })
-
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))

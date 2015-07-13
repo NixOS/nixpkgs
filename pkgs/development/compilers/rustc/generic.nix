@@ -62,7 +62,7 @@ let version = if isRelease then
     meta = with stdenv.lib; {
       homepage = http://www.rust-lang.org/;
       description = "A safe, concurrent, practical language";
-      maintainers = with maintainers; [ madjar cstrahan wizeman globin ];
+      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy ];
       license = [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux;
     };
@@ -127,11 +127,18 @@ stdenv.mkDerivation {
       --subst-var-by "ccPath" "${stdenv.cc}/bin/cc"
     substituteInPlace src/librustc_back/archive.rs \
       --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
+    substituteInPlace src/librustc_back/target/mod.rs \
+      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc" \
+      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
 
     substituteInPlace src/rust-installer/gen-install-script.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
     substituteInPlace src/rust-installer/gen-installer.sh \
       --replace /bin/echo "${coreutils}/bin/echo"
+
+    # Workaround for NixOS/nixpkgs#8676
+    substituteInPlace mk/rustllvm.mk \
+      --replace "\$\$(subst  /,//," "\$\$(subst /,/,"
   '';
 
   buildInputs = [ which file perl curl python27 makeWrapper git ]

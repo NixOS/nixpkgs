@@ -743,7 +743,9 @@ let
 
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
-  blink = callPackage ../applications/networking/instant-messengers/blink { };
+  blink = callPackage ../applications/networking/instant-messengers/blink {
+    gnutls = gnutls33;
+  };
 
   blitz = callPackage ../development/libraries/blitz { };
 
@@ -1187,12 +1189,10 @@ let
 
   cudatoolkit65 = import ../development/compilers/cudatoolkit/6.5.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit7 = import ../development/compilers/cudatoolkit/7.0.nix {
     inherit callPackage;
-    python = python26;
   };
 
   cudatoolkit = cudatoolkit5;
@@ -1240,6 +1240,8 @@ let
   dcraw = callPackage ../tools/graphics/dcraw { };
 
   dcfldd = callPackage ../tools/system/dcfldd { };
+
+  debbindiff = callPackage ../tools/misc/debbindiff { };
 
   debian_devscripts = callPackage ../tools/misc/debian-devscripts {
     inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
@@ -2003,9 +2005,7 @@ let
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs-0_12 = callPackage ../development/web/nodejs {
-    libuv = if stdenv.isDarwin
-      then libuvVersions.v1_6_1
-      else libuvVersions.v1_2_0;
+    libuv = libuvVersions.v1_6_1;
     libtool = darwin.cctools;
   };
   nodejs-unstable = callPackage ../development/web/nodejs { libuv = libuvVersions.v1_2_0; unstableVersion = true; };
@@ -4625,7 +4625,7 @@ let
   };
 
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
-  rustc = callPackage ../development/compilers/rustc/1.0.0.nix {};
+  rustc = callPackage ../development/compilers/rustc {};
 
   rustPlatform = rustStable;
 
@@ -4633,7 +4633,7 @@ let
   rustUnstable = recurseIntoAttrs (makeRustPlatform rustcMaster cargo rustUnstable);
 
   # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform rustcMaster cargoSnapshot rustCargoPlatform;
+  rustCargoPlatform = makeRustPlatform rustc cargoSnapshot.cargo rustCargoPlatform;
 
   makeRustPlatform = rustc: cargo: self:
     let
@@ -5276,7 +5276,9 @@ let
     rustPlatform = rustCargoPlatform;
   };
 
-  cargoSnapshot = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
+  cargoSnapshot = {
+    cargo = callPackage ../development/tools/build-managers/cargo/snapshot.nix { };
+  };
 
   casperjs = callPackage ../development/tools/casperjs { };
 
@@ -5689,6 +5691,8 @@ let
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
   };
+
+  sqlitebrowser = callPackage ../development/tools/database/sqlitebrowser { };
 
   sselp = callPackage ../tools/X11/sselp{ };
 
@@ -6205,6 +6209,8 @@ let
   gd = callPackage ../development/libraries/gd { };
 
   gdal = callPackage ../development/libraries/gdal { };
+
+  gdal_1_11_2 = callPackage ../development/libraries/gdal/gdal-1_11_2.nix { };
 
   gdcm = callPackage ../development/libraries/gdcm { };
 
@@ -7985,6 +7991,10 @@ let
 
   sfsexp = callPackage ../development/libraries/sfsexp {};
 
+  shhmsg = callPackage ../development/libraries/shhmsg { };
+
+  shhopt = callPackage ../development/libraries/shhopt { };
+
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
@@ -9007,6 +9017,8 @@ let
 
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
+  qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
+
   OVMF = callPackage ../applications/virtualization/OVMF { seabios=false; openssl=null; };
   OVMF-CSM = callPackage ../applications/virtualization/OVMF { openssl=null; };
   #WIP: OVMF-secureBoot = callPackage ../applications/virtualization/OVMF { seabios=false; secureBoot=true; };
@@ -9076,7 +9088,6 @@ let
   radius = callPackage ../servers/radius { };
 
   redis = callPackage ../servers/nosql/redis { };
-  redis3 = callPackage ../servers/nosql/redis/3.0.nix { };
 
   redstore = callPackage ../servers/http/redstore { };
 
@@ -9504,6 +9515,8 @@ let
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
 
+  jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
+
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
@@ -9746,6 +9759,7 @@ let
 
     klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
+    jool = callPackage ../os-specific/linux/jool { };
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -10370,6 +10384,8 @@ let
 
   fira = callPackage ../data/fonts/fira { };
 
+  fira-code = callPackage ../data/fonts/fira-code { };
+
   fira-mono = callPackage ../data/fonts/fira-mono { };
 
   font-awesome-ttf = callPackage ../data/fonts/font-awesome-ttf { };
@@ -10702,6 +10718,8 @@ let
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
+
+  bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
     python = python34;
@@ -13328,6 +13346,8 @@ let
     qt = qt4;
   };
 
+  pahole = callPackage ../development/tools/misc/pahole {};
+
   yed = callPackage ../applications/graphics/yed {};
 
   ykpers = callPackage ../applications/misc/ykpers {};
@@ -13609,6 +13629,8 @@ let
   simutrans = callPackage ../games/simutrans { };
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
+
+  snake4 = callPackage ../games/snake4 { };
 
   soi = callPackage ../games/soi {};
 
@@ -14008,10 +14030,7 @@ let
   };
 
   redshift = callPackage ../applications/misc/redshift {
-    inherit (xorg) libX11 libXrandr libxcb randrproto libXxf86vm
-      xf86vidmodeproto;
-    inherit (gnome) GConf;
-    inherit (pythonPackages) pyxdg;
+    inherit (python3Packages) python pygobject3 pyxdg;
     geoclue = geoclue2;
   };
 

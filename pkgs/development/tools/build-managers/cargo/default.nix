@@ -1,7 +1,7 @@
 { stdenv, fetchgit, rustPlatform, file, curl, python, pkgconfig, openssl
 , cmake, zlib }:
 
-with ((import ./common.nix) { inherit stdenv; version = "2015-05-13"; });
+with ((import ./common.nix) { inherit stdenv; version = "0.3.0"; });
 
 with rustPlatform;
 
@@ -10,12 +10,12 @@ buildRustPackage rec {
 
   src = fetchgit {
     url = "https://github.com/rust-lang/cargo.git";
-    rev = "d814fcbf8efda3027d54c09e11aa7eaf0006a83c";
-    sha256 = "0sppd3x2cacmbnypcjip44amnh66lrrbwwzsbz8rqf3nq2ah496x";
+    rev = "refs/tags/0.3.0";
+    sha256 = "1ckb2xd7nm8357imw6b1ci2ar8grnihzan94kvmjrijq6sz8yv9i";
     leaveDotGit = true;
   };
 
-  depsSha256 = "1b0mpdxmp7inkg59n2phjwzpz5gx22wqg9rfd1s01a5ylara37jw";
+  depsSha256 = "1sgdr2akd9xrfmf5g0lbf842b2pdj1ymxk37my0cf2x349rjsf0w";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib ];
 

@@ -86,7 +86,7 @@ GEM
       railties (>= 3.2.16)
     json (1.8.2)
     kramdown (1.4.0)
-    libv8 (3.16.14.7)
+    libv8 (3.16.14.11)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)

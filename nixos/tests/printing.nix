@@ -2,6 +2,9 @@
 
 import ./make-test.nix ({pkgs, ... }: {
   name = "printing";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ iElectric eelco chaoflow jgeerds vcunat ];
+  };
 
   nodes = {
 
@@ -90,5 +93,4 @@ import ./make-test.nix ({pkgs, ... }: {
           };
       }
     '';
-
 })

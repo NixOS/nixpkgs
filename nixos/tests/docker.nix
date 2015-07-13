@@ -1,7 +1,10 @@
 # This test runs docker and checks if simple container starts
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "docker";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ offline ];
+  };
 
   nodes = {
     docker =
@@ -20,5 +23,4 @@ import ./make-test.nix {
     $docker->succeed("docker ps | grep sleeping");
     $docker->succeed("docker stop sleeping");
   '';
-
-}
+})
