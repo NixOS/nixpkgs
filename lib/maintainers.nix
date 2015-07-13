@@ -117,6 +117,7 @@
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jb55 = "William Casarin <bill@casarin.me>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
+  jfb = "James Felix Black <james@yamtime.com>";
   jgeerds = "Jascha Geerds <jg@ekby.de>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";

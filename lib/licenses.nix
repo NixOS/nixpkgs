@@ -327,6 +327,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName  = "University of Illinois/NCSA Open Source License";
   };
 
+  notion_lgpl = {
+    url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
+    fullName = "Notion modified LGPL";
+  };
+  
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
