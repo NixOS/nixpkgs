@@ -5538,13 +5538,13 @@ let
   };
 
   flexget = buildPythonPackage rec {
-    version = "1.2.278";
+    version = "1.2.337";
     name = "FlexGet-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
-      md5 = "9c8e41d9e59d53cf2c720661b2880719";
+      md5 = "2c249c43bc594726f908b1425a8b8081";
     };
 
     doCheck = false;
