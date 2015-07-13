@@ -6523,6 +6523,8 @@ let
 
   herqq = callPackage ../development/libraries/herqq { };
 
+  heyefi = haskellPackages.heyefi;
+
   hidapi = callPackage ../development/libraries/hidapi {
     libusb = libusb1;
   };
