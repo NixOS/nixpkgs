@@ -5734,6 +5734,8 @@ let
     flex = flex_2_5_35;
   };
 
+  sqlitebrowser = callPackage ../development/tools/database/sqlitebrowser { };
+
   sselp = callPackage ../tools/X11/sselp{ };
 
   stm32flash = callPackage ../development/tools/misc/stm32flash { };
