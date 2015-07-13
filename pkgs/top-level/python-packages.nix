@@ -2195,11 +2195,12 @@ let
   };
 
   cython = buildPythonPackage rec {
-    name = "Cython-0.20.1";
+    name = "Cython-${version}";
+    version = "0.22.1";
 
     src = pkgs.fetchurl {
       url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "0v3nc9z5ynnnjdgcgkyy5g9wazmkjv53nnpjal1v3mr199s6799i";
+      sha256 = "7fff120e65e7b66edb4a42823f5642bad3bc1e5601bf882d66aee50248cf0682";
     };
 
     setupPyBuildFlags = ["--build-base=$out"];
@@ -2207,8 +2208,10 @@ let
     buildInputs = with self; [ pkgs.pkgconfig ];
 
     meta = {
-      description = "An interpreter to help writing C extensions for Python 2";
+      description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
       platforms = platforms.all;
+      homepage = http://cython.org;
+      license = licenses.asl20;
     };
   };
   
