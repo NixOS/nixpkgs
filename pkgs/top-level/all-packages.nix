@@ -11845,6 +11845,8 @@ let
     inherit (gnome) libglade;
   };
 
+  leo-editor = callPackage ../applications/editors/leo-editor { };
+
   libowfat = callPackage ../development/libraries/libowfat { };
 
   librecad = callPackage ../applications/misc/librecad { };
