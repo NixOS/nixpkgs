@@ -8411,6 +8411,24 @@ let
     };
   });
 
+  odo = buildPythonPackage rec {
+    name = "odo-${version}";
+    version= "0.3.3";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/odo/${name}.tar.gz";
+      sha256 = "2499ee86c26c74daa28f21ed235ca331911065950deea5169ebdb7d5dae6ebef";
+    };
+    
+    propagatedBuildInputs = with self; [ datashape numpy pandas toolz multipledispatch networkx ];
+    
+    meta = {
+      homepage = https://github.com/ContinuumIO/odo;
+      description = "Data migration utilities";
+      license = licenses.bsd4;
+    };
+  };
+  
   offtrac = buildPythonPackage rec {
     name = "offtrac-0.1.0";
     meta.maintainers = with maintainers; [ mornfall ];
