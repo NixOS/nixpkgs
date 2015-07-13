@@ -85,10 +85,8 @@ in
         PermissionsStartOnly = true; # preStart needs to run with root permissions
       };
       preStart = ''
-        if ! test -d /var/lib/charybdis; then
-          ${coreutils}/bin/mkdir -p ${cfg.statedir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
-        fi
+        ${coreutils}/bin/mkdir -p ${cfg.statedir}
+        ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
       '';
 
     };
