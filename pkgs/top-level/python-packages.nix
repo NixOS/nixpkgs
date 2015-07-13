@@ -1960,19 +1960,16 @@ let
 
 
   colorama = buildPythonPackage rec {
-    name = "colorama-0.2.5";
+    name = "colorama-${version}";
+    version = "0.3.3";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/c/colorama/colorama-0.2.5.tar.gz";
-      md5 = "308c6e38917bdbfc4d3b0783c614897d";
+      url = "https://pypi.python.org/packages/source/c/colorama/${name}.tar.gz";
+      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
     };
 
-    propagatedBuildInputs = with self; [ self.clientform ];
-
-    doCheck = false;
-
     meta = {
-      homepage = http://code.google.com/p/colorama/;
+      homepage = https://github.com/tartley/colorama;
       license = "bsd";
       description = "Cross-platform colored terminal text";
     };
