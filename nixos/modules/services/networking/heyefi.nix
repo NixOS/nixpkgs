@@ -32,7 +32,7 @@ in
       };
 
       uploadDir = mkOption {
-        example = /home/ryantm/picture;
+        example = "/home/username/pictures";
         description = ''
           The directory to upload the files to.
           '';
