@@ -84,6 +84,7 @@ in rec {
 
         nixpkgs.tarball
         (all nixpkgs.emacs)
+        (all nixpkgs.jdk)
       ];
   };
 
