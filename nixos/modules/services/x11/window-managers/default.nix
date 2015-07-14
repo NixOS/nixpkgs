@@ -16,6 +16,7 @@ in
     ./i3.nix
     ./metacity.nix
     ./openbox.nix
+    ./notion.nix
     ./ratpoison.nix
     ./sawfish.nix
     ./stumpwm.nix
