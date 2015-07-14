@@ -9,4 +9,4 @@
 
 ## Submitting changes
 
-See the nixpkgs manual for details on how to [Submit changes to nixpkgs](http://nixos.org/nixpkgs/manual/#chap-submitting-changes).
+See the nixpkgs manual for details on how to [Submit changes to nixpkgs](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-submitting-changes).
