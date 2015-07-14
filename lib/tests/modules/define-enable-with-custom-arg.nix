@@ -2,7 +2,6 @@
 
 {
   config = {
-    _module.args.custom = true;
     enable = custom;
   };
 }
