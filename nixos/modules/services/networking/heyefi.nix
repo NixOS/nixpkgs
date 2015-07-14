@@ -15,6 +15,8 @@ in
 
     services.heyefi = {
 
+      enable = mkEnableOption "heyefi";
+
       cardMacaddress = mkOption {
         default = "";
         description = ''
@@ -34,13 +36,6 @@ in
         description = ''
           The directory to upload the files to.
           '';
-      };
-
-      enable = mkOption {
-        default = false;
-        description = ''
-          Enable heyefi, an Eye-Fi upload server.
-        '';
       };
 
       user = mkOption {
