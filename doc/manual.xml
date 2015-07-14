@@ -18,6 +18,7 @@
   <xi:include href="language-support.xml" />
   <xi:include href="package-notes.xml" />
   <xi:include href="coding-conventions.xml" />
+  <xi:include href="submitting-changes.xml" />
   <xi:include href="haskell-users-guide.xml" />
   <xi:include href="contributing.xml" />
 
