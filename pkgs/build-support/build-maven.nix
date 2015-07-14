@@ -42,7 +42,7 @@ infoFile: let
 
   src = dirOf infoFile;
 in {
-  inherit repo settings;
+  inherit repo settings info;
 
   build = stdenv.mkDerivation {
     name = "${info.project.artifactId}-${info.project.version}.jar";
