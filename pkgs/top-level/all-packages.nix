@@ -8955,6 +8955,8 @@ let
 
   myserver = callPackage ../servers/http/myserver { };
 
+  nixos-scripts = callPackage ../tools/misc/nixos-scripts { };
+
   nginx = callPackage ../servers/http/nginx {
     rtmp        = true;
     fullWebDAV  = true;
