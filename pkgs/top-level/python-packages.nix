@@ -3839,6 +3839,32 @@ let
     };
   };
 
+  motuclient = buildPythonPackage rec {
+    name = "motu-client-${version}";
+    version = "1.0.8";
+
+    namePrefix = "";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://gitlab.com/lsix/motu-client/repository/archive.tar.gz?ref=${name}";
+      sha256 = "1d2hbws085hxf5hb1wsdlacy8skwn2sswr1b2xv18fbw5ckbqi8i";
+    };
+
+    meta = {
+      homepage = https://gitlab.com/lsix/motu-client;
+      description = "CLI to query oceanographic data to Motu servers";
+      longDescription = ''
+        Access data from (motu)[http://sourceforge.net/projects/cls-motu/] servers.
+        This is a refactored fork of the original release in order to simplify integration,
+        deployment and packaging. Upstream code can be found at
+        http://sourceforge.net/projects/cls-motu/ .
+      '';
+      license = licenses.lgpl3Plus;
+      maintainers = [ maintainers.lsix ];
+    };
+  };
+
   mwlib-ext = buildPythonPackage rec {
     version = "0.13.2";
     name = "mwlib.ext-${version}";
