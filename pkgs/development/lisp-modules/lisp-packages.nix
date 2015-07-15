@@ -75,11 +75,10 @@ let lispPackages = rec {
     version = "cvs-2013-10-28";
     description = "";
     deps = [];
-    src = pkgs.fetchcvs {
-      sha256 = "a574b7f9615232366e3e5e7ee400d60dbff23f6d0e1def5a3c77aafdfd786e6a";
-      date = ''2013-10-28'';
-      module = ''cl-unification'';
-      cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-unification/cvsroot'';
+    src = pkgs.fetchgit {
+      url = "https://gitlab.common-lisp.net/cl-unification/cl-unification.git";
+      sha256 = "01k2k7n98flnzm6mipk4xq2rqmjkjg8rcv4dsgifyxhqjwqf0l24";
+      rev = ''283c94d38d11c806a1fc9db022f0b54dced93bab'';
     };
   };
 
