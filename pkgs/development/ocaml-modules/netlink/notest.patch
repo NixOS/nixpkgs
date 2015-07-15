@@ -1,0 +1,12 @@
+diff -uNr ocaml-netlink-0.2.0/libnl.obuild ocaml-netlink-0.2.0-new/libnl.obuild
+--- ocaml-netlink-0.2.0/libnl.obuild	2014-12-29 12:19:18.179903866 +0100
++++ ocaml-netlink-0.2.0-new/libnl.obuild	2014-12-29 12:20:14.795478214 +0100
+@@ -8,8 +8,3 @@
+   modules: netlink
+   build-deps: ctypes.foreign
+ 
+-executable test
+-  main: test.ml
+-  src-dir: test
+-  build-deps: netlink
+-

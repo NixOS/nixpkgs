@@ -4195,6 +4195,98 @@ let
     inherit ocaml;
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    fd-send-recv = callPackage ../development/ocaml-modules/fd-send-recv { };
+
+    inotify = callPackage ../development/ocaml-modules/inotify { };
+
+    libvirt = callPackage ../development/ocaml-modules/libvirt { };
+
+    obuild = callPackage ../development/ocaml-modules/obuild { };
+
+    oclock = callPackage ../development/ocaml-modules/oclock { };
+
+    omd = callPackage ../development/ocaml-modules/omd { };
+
+    pa-pipebang = callPackage ../development/ocaml-modules/pa-pipebang { };
+
+    sha = callPackage ../development/ocaml-modules/sha { };
+
+    cdrom = callPackage ../development/ocaml-modules/cdrom { };
+
+    dyntype = callPackage ../development/ocaml-modules/dyntype { };
+
+    netlink = callPackage ../development/ocaml-modules/netlink { };
+
+    opasswd = callPackage ../development/ocaml-modules/opasswd { };
+
+    stdext = callPackage ../development/ocaml-modules/stdext { };
+
+    netdev = callPackage ../development/ocaml-modules/netdev { };
+
+    rpc = callPackage ../development/ocaml-modules/rpc { };
+
+    xcp-idl = callPackage ../development/ocaml-modules/xcp-idl { };
+
+    xcp-inventory = callPackage ../development/ocaml-modules/xcp-inventory { };
+
+    cow = callPackage ../development/ocaml-modules/cow { };
+
+    crc = callPackage ../development/ocaml-modules/crc { };
+
+    nbd = callPackage ../development/ocaml-modules/nbd { };
+
+    qmp = callPackage ../development/ocaml-modules/qmp { };
+
+    shared-memory-ring = callPackage ../development/ocaml-modules/shared-memory-ring { };
+
+    tapctl = callPackage ../development/ocaml-modules/tapctl { };
+
+    tar = callPackage ../development/ocaml-modules/tar { };
+
+    xcp-rrd = callPackage ../development/ocaml-modules/xcp-rrd { };
+
+    xenstore = callPackage ../development/ocaml-modules/xenstore { };
+
+    backtrace = callPackage ../development/ocaml-modules/backtrace { };
+
+    evtchn = callPackage ../development/ocaml-modules/evtchn { xen = xen_xenServer; };
+
+    gnt = callPackage ../development/ocaml-modules/gnt { xen = xen_xenServer; };
+
+    mirage-types = callPackage ../development/ocaml-modules/mirage-types { };
+
+    xenstore-clients = callPackage ../development/ocaml-modules/xenstore-clients { };
+
+    mirage = callPackage ../development/ocaml-modules/mirage { };
+
+    mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock-unix { };
+
+    mirage-clock-xen = callPackage ../development/ocaml-modules/mirage-clock-xen { };
+
+    vchan = callPackage ../development/ocaml-modules/vchan { xen = xen_xenServer; };
+
+    vhd = callPackage ../development/ocaml-modules/vhd { };
+
+    mirage-xen = callPackage ../development/ocaml-modules/mirage-xen { };
+
+    mirage-block-xen = callPackage ../development/ocaml-modules/mirage-block-xen { };
+
+    mirage-console-xen = callPackage ../development/ocaml-modules/mirage-console-xen { };
+
+    async-inotify = callPackage ../development/ocaml-modules/async-inotify { };
+
+    testvmlib = callPackage ../development/ocaml-modules/testvmlib { xen = xen_xenServer; };
+
+    xen-api-client = callPackage ../development/ocaml-modules/xen-api-client { };
+
+    rrd-transport = callPackage ../development/ocaml-modules/rrd-transport { xen = xen_xenServer; };
+
+    xen-api-libs-transitional = callPackage ../development/ocaml-modules/xen-api-libs-transitional { xen = xen_xenServer; };
+
+    rrdd-plugin = callPackage ../development/ocaml-modules/rrdd-plugin { xen = xen_xenServer; };
+
+    xenops = callPackage ../development/ocaml-modules/xenops { xen = xen_xenServer; };
+
     acgtk = callPackage ../applications/science/logic/acgtk { };
 
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
