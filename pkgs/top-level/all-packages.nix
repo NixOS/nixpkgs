@@ -7098,6 +7098,7 @@ let
 
   libkate = callPackage ../development/libraries/libkate { };
 
+  libkeyfinder_0_11 = callPackage ../development/libraries/libkeyfinder/0.11.nix { };
   libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
   libksba = callPackage ../development/libraries/libksba { };
