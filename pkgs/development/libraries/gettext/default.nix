@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.19.5";
+  name = "gettext-0.19.5.1";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0fppvj4l9maa9q1swvhnv96hsqxx90vcjbdyjhqpir3ll55q2n0j";
+    sha256 = "0cbp498ckjwj7qr8b9pmkry8hkhldgkvg5yix8hi9c8z1hxxb651";
   };
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
