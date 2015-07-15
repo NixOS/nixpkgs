@@ -6414,7 +6414,6 @@ let
 
   gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
     guileBindings = config.gnutls.guile or false;
-    nettle = nettle27;
   };
 
   gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
