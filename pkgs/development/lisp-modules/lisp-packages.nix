@@ -541,12 +541,11 @@ let lispPackages = rec {
     version = "cvs-2014-11-15";
     description = "SMTP client library";
     deps = [cl-ssl cl-base64 flexi-streams trivial-gray-streams usocket];
-    # Source type: cvs
-    src = pkgs.fetchcvs {
-      sha256 = "15b7lvayn1izzfism7s7rcw2mv1hwgp9l2lgb5na9qxmqzjlw0r9";
-      date = ''2014-11-15'';
-      module = ''cl-smtp'';
-      cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = "https://gitlab.common-lisp.net/cl-smtp/cl-smtp.git";
+      sha256 = "1i66x351cj114r2i8j6bhif5fcysfq5ia91hv7ksjqa4q7rfmpw2";
+      rev = ''2bf946c1d561c0085dba6d6337e3e53d9711a5d2'';
     };
   };
 
