@@ -9082,6 +9082,8 @@ let
 
   seabios = callPackage ../applications/virtualization/seabios { };
 
+  cbfstool = callPackage ../applications/virtualization/cbfstool { };
+
   pgpool92 = pgpool.override { postgresql = postgresql92; };
   pgpool93 = pgpool.override { postgresql = postgresql93; };
   pgpool94 = pgpool.override { postgresql = postgresql94; };
