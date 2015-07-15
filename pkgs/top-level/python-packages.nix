@@ -3587,11 +3587,11 @@ let
 
   django_1_6 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.6.6";
+    version = "1.6.11";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.6/${name}.tar.gz";
-      sha256 = "143yp984n8a2bs1dflxjp1s7skmji0cwkw05s9ikbfikwmabsv2k";
+      sha256 = "0misvia78c14y07zs5xsb9lv54q0v217jpaindrmhhw4wiryal3y";
     };
 
     # error: invalid command 'test'
@@ -3605,11 +3605,11 @@ let
 
   django_1_5 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.5.9";
+    version = "1.5.12";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.5/${name}.tar.gz";
-      sha256 = "1lm0pa6m9f4cd6pv239lqj32z1snf8xjbvlbh8bqihs6a1f51kj7";
+      sha256 = "1vbcvn6ncg7hq5i1w95h746vkq9lmp120vx63h3p56z5nsz7gpmk";
     };
 
     # error: invalid command 'test'
@@ -3623,11 +3623,11 @@ let
 
   django_1_4 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4.14";
+    version = "1.4.21";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "173ci9ml2vs1z2x51wahssfn8mrmhd02varmg9kibm8z460svvc1";
+      sha256 = "1x5wk3yh6ydbp4sgsxl4qjmdvcazphwkmmm99lfdb04645sijkwk";
     };
 
     # error: invalid command 'test'
