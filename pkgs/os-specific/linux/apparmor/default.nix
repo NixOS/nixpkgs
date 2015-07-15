@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, perl, which
+{ stdenv, fetchurl, autoconf, autoreconfHook, automake, libtool, pkgconfig, perl, which
 , glibc, flex, bison, python27, swig, pam
 }:
 
@@ -33,6 +33,7 @@ let
     buildInputs = [
       autoconf
       automake
+      autoreconfHook
       bison
       flex
       glibc
@@ -44,21 +45,16 @@ let
       which
     ];
 
+    # required to build apparmor-parser
+    dontDisableStatic = true;
+
     prePatch = prePatchCommon + ''
       substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
       substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
       '';
 
-    buildPhase = ''
-      cd ./libraries/libapparmor
-      ./autogen.sh
-      ./configure --prefix="$out" --with-python --with-perl
-      make
-      '';
-
-    installPhase = ''
-      make install
-    '';
+    postPatch = "cd ./libraries/libapparmor";
+    configureFlags = "--with-python --with-perl";
 
     meta = apparmor-meta "library";
   };
@@ -74,15 +70,9 @@ let
     ];
 
     prePatch = prePatchCommon;
-
-    buildPhase = ''
-      cd ./utils
-      make LANGS=""
-    '';
-
-    installPhase = ''
-      make install LANGS="" DESTDIR="$out" BINDIR="$out/bin" VIM_INSTALL_PATH="$out/share" PYPREFIX=""
-    '';
+    postPatch = "cd ./utils";
+    makeFlags = ''LANGS='';
+    installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin VIM_INSTALL_PATH=$(out)/share PYPREFIX='';
 
     meta = apparmor-meta "user-land utilities";
   };
@@ -105,15 +95,9 @@ let
       ## techdoc.pdf still doesn't build ...
       substituteInPlace ./parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
     '';
-
-    buildPhase = ''
-      cd ./parser
-      make LANGS="" USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include
-    '';
-
-    installPhase = ''
-      make install LANGS="" USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include DESTDIR="$out" DISTRO="unknown"
-    '';
+    postPatch = "cd ./parser";
+    makeFlags = ''LANGS= USE_SYSTEM=1 INCLUDEDIR=${libapparmor}/include'';
+    installFlags = ''DESTDIR=$(out) DISTRO=unknown'';
 
     meta = apparmor-meta "rule parser";
   };
@@ -129,14 +113,9 @@ let
       which
     ];
 
-    buildPhase = ''
-      cd ./changehat/pam_apparmor
-      make USE_SYSTEM=1
-    '';
-
-    installPhase = ''
-      make install DESTDIR="$out"
-    '';
+    postPatch = "cd ./changehat/pam_apparmor";
+    makeFlags = ''USE_SYSTEM=1'';
+    installFlags = ''DESTDIR=$(out)'';
 
     meta = apparmor-meta "PAM service";
   };
@@ -147,14 +126,8 @@ let
 
     buildInputs = [ which ];
 
-    buildPhase = ''
-      cd ./profiles
-      make
-    '';
-
-    installPhase = ''
-      make install DESTDIR="$out" EXTRAS_DEST="$out/share/apparmor/extra-profiles"
-    '';
+    postPatch = "cd ./profiles";
+    installFlags = ''DESTDIR=$(out) EXTRAS_DEST=$(out)/share/apparmor/extra-profiles'';
 
     meta = apparmor-meta "profiles";
   };
