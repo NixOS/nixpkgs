@@ -2848,6 +2848,25 @@ let
     };
   };
 
+  dnspython3 = buildPythonPackage rec {
+    name = "dnspython3-${version}";
+    version = "1.12.0";
+
+    disabled = (!isPy3k);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dnspython3/${name}.zip";
+      sha256 = "138wxj702vx6zni9g2y8dbgbpin95v6hk23rh2kwfr3q4130jqz9";
+    };
+
+    meta = {
+      description = "A DNS toolkit for Python 3.x";
+      homepage = http://www.dnspython.org;
+      # BSD-like, check http://www.dnspython.org/LICENSE for details
+      license = licenses.free;
+    };
+  };
+
   docker = buildPythonPackage rec {
     name = "docker-py-1.1.0";
 
@@ -3817,6 +3836,32 @@ let
       description = "Library for parsing MediaWiki articles and converting them to different output formats";
       homepage = "http://pediapress.com/code/";
       license = licenses.bsd3;
+    };
+  };
+
+  motuclient = buildPythonPackage rec {
+    name = "motu-client-${version}";
+    version = "1.0.8";
+
+    namePrefix = "";
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://gitlab.com/lsix/motu-client/repository/archive.tar.gz?ref=${name}";
+      sha256 = "1d2hbws085hxf5hb1wsdlacy8skwn2sswr1b2xv18fbw5ckbqi8i";
+    };
+
+    meta = {
+      homepage = https://gitlab.com/lsix/motu-client;
+      description = "CLI to query oceanographic data to Motu servers";
+      longDescription = ''
+        Access data from (motu)[http://sourceforge.net/projects/cls-motu/] servers.
+        This is a refactored fork of the original release in order to simplify integration,
+        deployment and packaging. Upstream code can be found at
+        http://sourceforge.net/projects/cls-motu/ .
+      '';
+      license = licenses.lgpl3Plus;
+      maintainers = [ maintainers.lsix ];
     };
   };
 
@@ -7928,6 +7973,25 @@ let
     };
   };
 
+  sleekxmpp = buildPythonPackage rec {
+    name = "sleekxmpp-${version}";
+    version = "1.2.5";
+
+    disabled = (!isPy3k);
+
+    propagatedBuildInputs = with self ; [ dnspython3 pyasn1 ];
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/fritzy/SleekXMPP/archive/${version}.tar.gz";
+      sha256 = "1hqs2w5d7x532psfqipd2wl1mkmsaak83jvp1rh9rv406fzp9h67";
+    };
+
+    meta = {
+      description = "XMPP library for Python";
+      license = licenses.mit;
+      homepage = "http://sleekxmpp.com/";
+    };
+  };
 
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.5";
@@ -16583,5 +16647,31 @@ let
     };
   };
 
+  poezio = buildPythonPackage rec {
+    name = "poezio-${version}";
+    version = "0.8.1";
+
+    namePrefix = "";
+    disabled = (!isPy3k);
+    propagatedBuildInputs = with self ; [ dnspython3 sleekxmpp ];
+
+   patches =
+   let patch_base = ../development/python-modules/poezio ;
+   in [ "${patch_base}/make_default_config_writable.patch"
+        "${patch_base}/fix_requirements.patch"
+      ];
+
+    src = pkgs.fetchurl {
+      url = "http://dev.louiz.org/attachments/download/52/${name}.tar.xz";
+      sha256 = "0n3phh3lc82609ssfvqvd4papvhykd1sf2bm88dggh2x4mypwjff";
+    };
+
+    meta = {
+      description = "Free console XMPP client";
+      homepage = http://poez.io;
+      license = licenses.mit;
+      maintainers = [ maintainers.lsix ];
+    };
+  };
 
 }; in pythonPackages

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";
-  version = "2015-06-30";
+  version = "2015-07-12";
 
   src = fetchgit {
     url = "http://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/linux-firmware.git";
-    rev = "ea901a57054441907e9b127ad407a8554532f992";
-    sha256 = "00899r0gakdy2vpgq5zbhbxrl4kyczg1kybv1h3m2lrk9a0j7v67";
+    rev = "5e6d7a9d70b562c60471e234f78137020d65ccbf";
+    sha256 = "06gvjdqpbayfv696hxn9xjkbzddj1hy6z9aahi156lvj96qb9z49";
   };
 
   preInstall = ''

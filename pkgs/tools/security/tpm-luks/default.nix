@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "tpm-luks-${version}";
-  version = "0.9pre";
+  version = "git-2015-07-11";
 
   src = fetchgit {
-    url = "https://github.com/shpedoikal/tpm-luks/";
-    rev = "3fa3ea4bbd34b5b02e9271e775a338fa49dc834f";
-    sha256 = "37a56f05ad492d3128b07b3cb9dbf85ba8a0dd791329323fb398eb1026dfc89c";
+    url = "https://github.com/momiji/tpm-luks";
+    rev = "c9c5b7fdddbcdac1cd4d2ea6baddd0617cc88ffa";
+    sha256 = "fdd451caddb4e51ede3f2406245e1ace57389596e85aa402c9f2606303707539";
   };
 
   buildInputs = [ autoreconfHook gawk trousers cryptsetup openssl ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc, libiconv }:
+{ stdenv, fetchurl, ncurses, python, which, groff, gettext, man_db, bc, libiconv, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
@@ -15,10 +15,12 @@ stdenv.mkDerivation rec {
   # Python: Autocompletion generated from manpages and config editing
   propagatedBuildInputs = [ python which groff gettext ]
                           ++ stdenv.lib.optional (!stdenv.isDarwin) man_db
-                          ++ [ bc ];
+                          ++ [ bc coreutils ];
 
   postInstall = ''
-    sed -i "s|bc|${bc}/bin/bc|" "$out/share/fish/functions/seq.fish"
+    sed -e "s|bc|${bc}/bin/bc|" \
+        -e "s|/usr/bin/seq|${coreutils}/bin/seq|" \
+        -i "$out/share/fish/functions/seq.fish"
     sed -i "s|which |${which}/bin/which |" "$out/share/fish/functions/type.fish"
     sed -i "s|nroff |${groff}/bin/nroff |" "$out/share/fish/functions/__fish_print_help.fish"
     sed -e "s|gettext |${gettext}/bin/gettext |" \

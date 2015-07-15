@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, libav, libkeyfinder }:
+{ stdenv, fetchFromGitHub, libav, libkeyfinder_0_11 }:
 
-let version = "20150130"; in
+let version = "20150201"; in
 stdenv.mkDerivation rec {
   name = "keyfinder-cli-${version}";
 
@@ -12,19 +12,20 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    inherit version;
+    inherit (src.meta) homepage;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''
       This small utility is the automation-oriented DJ's best friend. By making
       use of Ibrahim Sha'ath's high quality libKeyFinder library, it can be
       used to estimate the musical key of many different audio formats.
     '';
-    homepage = https://github.com/EvanPurkhiser/keyfinder-cli;
     license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ libav libkeyfinder ];
+  buildInputs = [ libav libkeyfinder_0_11 ];
 
   makeFlagsArray = "PREFIX=$(out)";
 

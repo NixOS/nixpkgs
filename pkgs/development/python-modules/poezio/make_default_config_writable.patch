@@ -1,0 +1,25 @@
+diff -ruN a/src/config.py b/src/config.py
+--- a/src/config.py	2014-03-20 22:27:05.000000000 +0100
++++ b/src/config.py	2015-07-10 21:24:37.583136078 +0200
+@@ -18,6 +18,7 @@
+ 
+ import os
+ import logging
++import stat
+ 
+ from configparser import RawConfigParser, NoOptionError, NoSectionError
+ from os import environ, makedirs, path, remove
+@@ -279,6 +280,13 @@
+         copy2(default, options.filename)
+     elif path.isfile(other):
+         copy2(other, options.filename)
++
++    # Inside the nixstore, the reference file is readonly, so is the copy.
++    # Make it writable by the user who just created it.
++    if os.path.exists(options.filename):
++        os.chmod(options.filename,
++                 os.stat(options.filename).st_mode | stat.S_IWUSR)
++
+     firstrun = True
+ 
+ try:

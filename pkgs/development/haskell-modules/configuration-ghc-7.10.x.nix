@@ -265,4 +265,7 @@ self: super: {
   # Won't work with LLVM 3.5.
   llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
+  # Inexplicable haddock failure
+  # https://github.com/gregwebs/aeson-applicative/issues/2
+  aeson-applicative = dontHaddock super.aeson-applicative;
 }
