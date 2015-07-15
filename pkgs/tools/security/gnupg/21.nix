@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba npth
     autoreconfHook gettext texinfo
-    readline libusb gnutls adns openldap zlib bzip2
-  ];
+    readline gnutls adns openldap zlib bzip2
+  ] ++ stdenv.lib.optional stdenv.isLinux libusb;
 
   configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
 
