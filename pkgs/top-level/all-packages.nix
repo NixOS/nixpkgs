@@ -3646,7 +3646,11 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert {};
+  compcert = callPackage ../development/compilers/compcert (
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  );
 
   cryptol = haskellPackages.cryptol;
 
