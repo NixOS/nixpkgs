@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoconf, autoreconfHook, automake, libtool, pkgconfig, perl, which
-, glibc, flex, bison, python27, swig, pam
+{ stdenv, fetchurl, makeWrapper, autoconf, autoreconfHook, automake, libtool, pkgconfig, perl, which
+, glibc, flex, bison, python27Packages, swig, pam
 }:
 
 let
@@ -40,7 +40,7 @@ let
       libtool
       perl
       pkgconfig
-      python27
+      python27Packages.python
       swig
       which
     ];
@@ -64,8 +64,11 @@ let
     src = apparmor-sources;
 
     buildInputs = [
-      python27
+      perl
+      python27Packages.python
+      python27Packages.readline
       libapparmor
+      makeWrapper
       which
     ];
 
@@ -73,6 +76,16 @@ let
     postPatch = "cd ./utils";
     makeFlags = ''LANGS='';
     installFlags = ''DESTDIR=$(out) BINDIR=$(out)/bin VIM_INSTALL_PATH=$(out)/share PYPREFIX='';
+
+    postInstall = ''
+      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-status aa-unconfined ; do
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python27Packages.python.libPrefix}/site-packages:$PYTHONPATH"
+      done
+
+      for prog in aa-exec aa-notify ; do
+        wrapProgram $out/bin/$prog --prefix PERL5LIB : "${libapparmor}/lib/perl5:$PERL5LIB"
+      done
+    '';
 
     meta = apparmor-meta "user-land utilities";
   };
