@@ -72,7 +72,7 @@ let lispPackages = rec {
 
   cl-unification = buildLispPackage rec {
     baseName = "cl-unification";
-    version = "cvs-2013-10-28";
+    version = "git-2015-07-01";
     description = "";
     deps = [];
     src = pkgs.fetchgit {
@@ -538,7 +538,7 @@ let lispPackages = rec {
 
   cl-smtp = buildLispPackage rec {
     baseName = "cl-smtp";
-    version = "cvs-2014-11-15";
+    version = "git-2015-07-01";
     description = "SMTP client library";
     deps = [cl-ssl cl-base64 flexi-streams trivial-gray-streams usocket];
     # Source type: git
