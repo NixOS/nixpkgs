@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, boost, fftw, qt5 }:
+{ stdenv, fetchFromGitHub, fftw, qt5 }:
 
-let version = "0.11"; in
+let version = "2.1"; in
 stdenv.mkDerivation {
   name = "libkeyfinder-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0674gykdi1nffvba5rv6fsp0zw02w1gkpn9grh8w983xf13ykbz9";
+    sha256 = "07kc0cl6kirgmpdgkgmp6r3yvyf7b1w569z01g8rfl1cig80qdc7";
     rev = "v${version}";
     repo = "libKeyFinder";
     owner = "ibsh";
@@ -21,10 +21,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ fftw qt5.base ];
-  propagatedBuildInputs = [ boost ];
 
-  patchPhase = ''
-    substituteInPlace LibKeyFinder.pro --replace "/usr/local" "$out"
+  postPatch = ''
+    substituteInPlace LibKeyFinder.pro \
+      --replace "/usr/local" "$out" \
+      --replace "-stdlib=libc++" ""
   '';
 
   configurePhase = ''
@@ -35,6 +36,8 @@ stdenv.mkDerivation {
 
   postInstall = ''
     mkdir -p $out/include/keyfinder
-    cp *.h $out/include/keyfinder
+    install -m644 *.h $out/include/keyfinder
+    mkdir -p $out/lib
+    cp -a lib*.so* $out/lib
   '';
 }
