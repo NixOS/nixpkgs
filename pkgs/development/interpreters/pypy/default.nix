@@ -49,15 +49,24 @@ let
         --replace "libraries=['curses']" "libraries=['ncurses']"
 
       # tkinter hints
-      substituteInPlace lib_pypy/_tkinter/tklib.py \
+      substituteInPlace lib_pypy/_tkinter/tklib_build.py \
         --replace "'/usr/include/tcl'" "'${tk}/include', '${tcl}/include'" \
-        --replace "linklibs=['tcl', 'tk']" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
+        --replace "linklibs = ['tcl' + _ver, 'tk' + _ver]" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
-      sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3.py
+      sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3_build.py
     '';
 
     setupHook = ./setup-hook.sh;
+
+    postBuild = ''
+      cd ./lib_pypy
+        ../pypy-c ./_audioop_build.py
+        ../pypy-c ./_curses_build.py
+        ../pypy-c ./_sqlite3_build.py
+        ../pypy-c ./_tkinter/tklib_build.py
+      cd ..
+    '';
 
     doCheck = true;
     checkPhase = ''
