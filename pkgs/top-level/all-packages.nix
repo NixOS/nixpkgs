@@ -11309,6 +11309,12 @@ let
     fftw = fftwFloat;
   };
 
+  gnuradio-wrapper = callPackage ../applications/misc/gnuradio/wrapper.nix { };
+
+  gnuradio-full = gnuradio-wrapper.override {
+    extraPackages = [ gnuradio-osmosdr ];
+  };
+
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
