@@ -5406,6 +5406,8 @@ let
 
   framac = callPackage ../development/tools/analysis/frama-c { };
 
+  cpptest = callPackage ../development/libraries/cpptest { };
+
   cppi = callPackage ../development/tools/misc/cppi { };
 
   cproto = callPackage ../development/tools/misc/cproto { };
