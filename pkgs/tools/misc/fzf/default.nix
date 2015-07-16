@@ -4,13 +4,13 @@ with goPackages;
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.9.13";
+  version = "0.10.0";
   goPackagePath = "github.com/junegunn/fzf";
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
     rev = "${version}";
-    sha256 = "1m9zbf02d6i47c33jys9lr0krqfjk2dr8jzpfhnrb266qcdb27xi";
+    sha256 = "0dx9qwmcrnh31m2n75qmpj1dxm6rr6xsbazy4nwa3bzrb8y6svh2";
   };
 
   buildInputs = with goPackages; [
