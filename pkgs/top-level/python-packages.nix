@@ -293,11 +293,11 @@ let
 
 
   alembic = buildPythonPackage rec {
-    name = "alembic-0.6.6";
+    name = "alembic-0.7.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/alembic/${name}.tar.gz";
-      md5 = "71e4a8f6849e1527abfc4ea33d51f37c";
+      sha256 = "0qgglnxsn470ncyipm33j3d5nf5ny2g3wq7fxyy9fv2x4rhs8kw6";
     };
 
     buildInputs = with self; [ nose mock ];
