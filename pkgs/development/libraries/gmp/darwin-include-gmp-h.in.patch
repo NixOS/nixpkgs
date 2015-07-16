@@ -1,0 +1,11 @@
+--- a/gmp-h.in
++++ b/gmp-h.in.new
+@@ -21,6 +21,8 @@ along with the GNU MP Library.  If not, see http://www.gnu.org/licenses/.  */
+ 
+ #ifndef __GMP_H__
+ 
++#include <stddef.h>
++
+ #if defined (__cplusplus)
+ #include <iosfwd>   /* for std::istream, std::ostream, std::string */
+ #include <cstdio>

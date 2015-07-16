@@ -1,6 +1,6 @@
 { stdenv, fetchurl, m4, cxx ? true, withStatic ? false }:
 
-with { inherit (stdenv.lib) optional; };
+with { inherit (stdenv.lib) optional; inherit (stdenv.lib) optionals; };
 
 stdenv.mkDerivation (rec {
   name = "gmp-5.1.3";
@@ -11,6 +11,12 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ m4 ];
+
+  # In later versions of Xcode, we need to include stddef.h or some symbols
+  # won't be defined.
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    ./darwin-include-gmp-h.in.patch
+  ];
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
