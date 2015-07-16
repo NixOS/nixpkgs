@@ -21,7 +21,7 @@ let
     DaemonInterface = ${cfg.interface}
     DaemonPort = ${toString cfg.portNumber}
     AuthMode = ${cfg.authMode}
-    ${lib.optionalStringv (cfg.hostName != "") "HostName = ${cfg.hostName}"}
+    ${lib.optionalString (cfg.hostName != "") "HostName = ${cfg.hostName}"}
     ${lib.optionalString (cfg.protocols != "") "Protocols = ${cfg.protocols}"}
     ${cfg.extraSettings}
 
