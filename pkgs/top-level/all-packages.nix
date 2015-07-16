@@ -882,6 +882,8 @@ let
 
   gist = callPackage ../tools/text/gist { };
 
+  gmic = callPackage ../tools/graphics/gmic { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
