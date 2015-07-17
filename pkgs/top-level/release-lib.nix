@@ -1,4 +1,4 @@
-{ supportedSystems, packageSet ? (import ./all-packages.nix) }:
+{ supportedSystems, packageSet ? (import ./all-packages.nix), allowTexliveBuilds ? false }:
 
 with import ../../lib;
 
@@ -7,7 +7,7 @@ rec {
   # Ensure that we don't build packages marked as unfree.
   allPackages = args: packageSet (args // {
     config.allowUnfree = false;
-    config.inHydra = true;
+    config.allowTexliveBuilds = allowTexliveBuilds;
   });
 
   pkgs = pkgsFor "x86_64-linux";
