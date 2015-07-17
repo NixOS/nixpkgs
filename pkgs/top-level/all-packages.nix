@@ -5003,6 +5003,8 @@ let
 
   php56 = callPackage ../development/interpreters/php/5.6.nix { };
 
+  php70 = callPackage ../development/interpreters/php/7.0.nix { };
+
   picoc = callPackage ../development/interpreters/picoc {};
 
   picolisp = callPackage ../development/interpreters/picolisp {};
