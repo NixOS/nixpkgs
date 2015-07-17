@@ -5706,12 +5706,10 @@ let
 
   strace = callPackage ../development/tools/misc/strace { };
 
-  swig = callPackage ../development/tools/misc/swig { };
-
+  swig1 = callPackage ../development/tools/misc/swig { };
   swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
-
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
-
+  swig = swig3;
   swigWithJava = swig;
 
   swfmill = callPackage ../tools/video/swfmill { };
@@ -9291,7 +9289,7 @@ let
     perl = perl516; # ${perl}/.../CORE/handy.h:124:34: error: 'bool' undeclared
   };
 
-  apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { swig = swig2; };
+  apparmor_2_9 = callPackage ../os-specific/linux/apparmor/2.9 { };
   libapparmor = apparmor_2_9.libapparmor;
   apparmor-pam = apparmor_2_9.apparmor-pam;
   apparmor-parser = apparmor_2_9.apparmor-parser;
