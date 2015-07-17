@@ -8,6 +8,7 @@ rec {
   allPackages = args: packageSet (args // {
     config.allowUnfree = false;
     config.allowTexliveBuilds = allowTexliveBuilds;
+    config.inHydra = true;
   });
 
   pkgs = pkgsFor "x86_64-linux";
