@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0mjy345wszskz1vnk83360c1y37arwgap3gwz8hy13sjqpig0imy";
   };
 
+  patches = [ ./CVE-2015-1419.patch ];
+
   preConfigure = stdenv.lib.optionalString sslEnable ''
     echo "Will enable SSL"
     sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h

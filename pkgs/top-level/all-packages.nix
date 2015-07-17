@@ -882,6 +882,8 @@ let
 
   gist = callPackage ../tools/text/gist { };
 
+  gmic = callPackage ../tools/graphics/gmic { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
@@ -1397,6 +1399,8 @@ let
 
   enscript = callPackage ../tools/text/enscript { };
 
+  eplot = callPackage ../tools/graphics/eplot { };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   eternity = callPackage ../games/eternity-engine { };
@@ -1454,6 +1458,10 @@ let
   fcron = callPackage ../tools/system/fcron { };
 
   fdm = callPackage ../tools/networking/fdm {};
+
+  fgallery = callPackage ../tools/graphics/fgallery {
+    inherit (perlPackages) ImageExifTool JSON;
+  };
 
   flannel = callPackage ../tools/networking/flannel { };
 
@@ -6080,10 +6088,11 @@ let
   ffmpeg_1_2 = import ../development/libraries/ffmpeg/1.2.nix { inherit callPackage; };
   ffmpeg_2_2 = import ../development/libraries/ffmpeg/2.2.nix { inherit callPackage; };
   ffmpeg_2_6 = import ../development/libraries/ffmpeg/2.6.nix { inherit callPackage; };
+  ffmpeg_2_7 = import ../development/libraries/ffmpeg/2.7.nix { inherit callPackage; };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
-  ffmpeg_2 = ffmpeg_2_6;
+  ffmpeg_2 = ffmpeg_2_7;
   ffmpeg = ffmpeg_2;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
@@ -6358,7 +6367,6 @@ let
 
   gnutls33 = callPackage ../development/libraries/gnutls/3.3.nix {
     guileBindings = config.gnutls.guile or false;
-    nettle = nettle27;
   };
 
   gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
@@ -8752,6 +8760,7 @@ let
 
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
+  cassandra_1_2 = callPackage ../servers/nosql/cassandra/1.2.nix { };
   cassandra_2_0 = callPackage ../servers/nosql/cassandra/2.0.nix { };
   cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
   cassandra = cassandra_2_1;
@@ -9123,7 +9132,6 @@ let
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
     kerberos = null;  # Bundle kerberos because samba uses internal, non-stable functions
-    gnutls = gnutls33;
     # enableLDAP
   };
 
@@ -11268,6 +11276,12 @@ let
     fftw = fftwFloat;
   };
 
+  gnuradio-wrapper = callPackage ../applications/misc/gnuradio/wrapper.nix { };
+
+  gnuradio-full = gnuradio-wrapper.override {
+    extraPackages = [ gnuradio-osmosdr ];
+  };
+
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
@@ -11814,6 +11828,8 @@ let
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
     inherit (gnome) libglade;
   };
+
+  leo-editor = callPackage ../applications/editors/leo-editor { };
 
   libowfat = callPackage ../development/libraries/libowfat { };
 

@@ -63,7 +63,9 @@ let
       cd ./lib_pypy
         ../pypy-c ./_audioop_build.py
         ../pypy-c ./_curses_build.py
+        ../pypy-c ./_pwdgrp_build.py
         ../pypy-c ./_sqlite3_build.py
+        ../pypy-c ./_syslog_build.py
         ../pypy-c ./_tkinter/tklib_build.py
       cd ..
     '';

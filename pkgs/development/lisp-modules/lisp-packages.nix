@@ -72,14 +72,13 @@ let lispPackages = rec {
 
   cl-unification = buildLispPackage rec {
     baseName = "cl-unification";
-    version = "cvs-2013-10-28";
+    version = "git-2015-07-01";
     description = "";
     deps = [];
-    src = pkgs.fetchcvs {
-      sha256 = "a574b7f9615232366e3e5e7ee400d60dbff23f6d0e1def5a3c77aafdfd786e6a";
-      date = ''2013-10-28'';
-      module = ''cl-unification'';
-      cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-unification/cvsroot'';
+    src = pkgs.fetchgit {
+      url = "https://gitlab.common-lisp.net/cl-unification/cl-unification.git";
+      sha256 = "01k2k7n98flnzm6mipk4xq2rqmjkjg8rcv4dsgifyxhqjwqf0l24";
+      rev = ''283c94d38d11c806a1fc9db022f0b54dced93bab'';
     };
   };
 
@@ -539,15 +538,14 @@ let lispPackages = rec {
 
   cl-smtp = buildLispPackage rec {
     baseName = "cl-smtp";
-    version = "cvs-2014-11-15";
+    version = "git-2015-07-01";
     description = "SMTP client library";
     deps = [cl-ssl cl-base64 flexi-streams trivial-gray-streams usocket];
-    # Source type: cvs
-    src = pkgs.fetchcvs {
-      sha256 = "15b7lvayn1izzfism7s7rcw2mv1hwgp9l2lgb5na9qxmqzjlw0r9";
-      date = ''2014-11-15'';
-      module = ''cl-smtp'';
-      cvsRoot = '':pserver:anonymous:anonymous@common-lisp.net:/project/cl-smtp/cvsroot'';
+    # Source type: git
+    src = pkgs.fetchgit {
+      url = "https://gitlab.common-lisp.net/cl-smtp/cl-smtp.git";
+      sha256 = "1i66x351cj114r2i8j6bhif5fcysfq5ia91hv7ksjqa4q7rfmpw2";
+      rev = ''2bf946c1d561c0085dba6d6337e3e53d9711a5d2'';
     };
   };
 
