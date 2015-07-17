@@ -293,11 +293,11 @@ let
 
 
   alembic = buildPythonPackage rec {
-    name = "alembic-0.6.6";
+    name = "alembic-0.7.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/alembic/${name}.tar.gz";
-      md5 = "71e4a8f6849e1527abfc4ea33d51f37c";
+      sha256 = "0qgglnxsn470ncyipm33j3d5nf5ny2g3wq7fxyy9fv2x4rhs8kw6";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -4904,12 +4904,12 @@ let
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8";
+    version = "1.8.3";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "04mlx3920r46vn69alrf4bmv1xqp7m6k1xzwgr798rjcrd1assq6";
+      sha256 = "1fjv63rdm45j5057zb7qj4ya4pjwig1jpbwcr0bk1mazq3y59dib";
     };
 
     # error: invalid command 'test'
@@ -4929,12 +4929,12 @@ let
 
   django_1_7 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.7.7";
+    version = "1.7.9";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.7/${name}.tar.gz";
-      sha256 = "0crfpnf246c25887by2fjlxinp4rnhya4ksqfydcls9m0s9gh5j8";
+      sha256 = "0q3q46yjjsqwp0ywrkbqwiac13rdvzrd5dchdbnzh3yjwpj9ygsg";
     };
 
     # error: invalid command 'test'
@@ -4999,11 +4999,11 @@ let
 
   django_1_4 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4.20";
+    version = "1.4.21";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "1cgb23afinmbvbaryvy3yj5m40h68mq6gvadcqyv3j64cja73b2q";
+      sha256 = "1x5wk3yh6ydbp4sgsxl4qjmdvcazphwkmmm99lfdb04645sijkwk";
     };
 
     # error: invalid command 'test'
@@ -5583,13 +5583,13 @@ let
   };
 
   flexget = buildPythonPackage rec {
-    version = "1.2.278";
+    version = "1.2.337";
     name = "FlexGet-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/F/FlexGet/${name}.tar.gz";
-      md5 = "9c8e41d9e59d53cf2c720661b2880719";
+      md5 = "2c249c43bc594726f908b1425a8b8081";
     };
 
     doCheck = false;

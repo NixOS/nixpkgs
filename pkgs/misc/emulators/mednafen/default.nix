@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
 
   name = "mednafen-${version}";
-  version = "0.9.36.4";
+  version = "0.9.38.5";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/mednafen/Mednafen/${version}/${name}.tar.bz2";
-    sha256 = "0s6dhdar6y64fah2ij98a9gskm0rzcbqdbksicnba8cakc87nsfy";
+    sha256 = "1s1qwwlhkxr0vhzvlc1m0ib9lj7cws3cldm2mbjz4b421nxfdi8h";
   };
 
   buildInputs = with stdenv.lib;

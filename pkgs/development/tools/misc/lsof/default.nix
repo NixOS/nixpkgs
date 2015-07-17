@@ -1,11 +1,12 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "lsof-4.88";
+stdenv.mkDerivation rec {
+  name = "lsof-${version}";
+  version = "4.89";
 
   src = fetchurl {
-    url = "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/lsof_4.88.tar.bz2";
-    sha256 = "16y9wm26rg81mihnzcbdg8h8vhxmq8kn62ssxb8cqydp4q79nvzy";
+    url = "ftp://sunsite.ualberta.ca/pub/Mirror/lsof/lsof_${version}.tar.bz2";
+    sha256 = "061p18v0mhzq517791xkjs8a5dfynq1418a1mwxpji69zp2jzb41";
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
