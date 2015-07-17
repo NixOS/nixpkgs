@@ -631,12 +631,8 @@ self: super: {
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
-  # wxc needs help deciding which version of GTK to use.
-  wxc = overrideCabal (super.wxc.override { wxGTK = pkgs.wxGTK29; }) (drv: {
-    patches = [ ./patches/wxc-no-ldconfig.patch ];
-    doHaddock = false;
-    postInstall = "cp -v dist/build/libwxc.so.${drv.version} $out/lib/libwxc.so";
-  });
+  # wxc supports wxGTX >= 2.9, but our current default version points to 2.8.
+  wxc = super.wxc.override { wxGTK = pkgs.wxGTK29; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK29; };
 
   # Depends on QuickCheck 1.x.
