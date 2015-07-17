@@ -2432,10 +2432,12 @@ let
   };
 
   pytestflakes = buildPythonPackage rec {
-    name = "pytset-flakes-0.2";
+    name = "pytest-flakes-${version}";
+    version = "1.0.0";
+
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pytest-flakes/pytest-flakes-0.2.zip";
-      sha256 = "0n4mc2kaqasxmj8jid7jlss7nwgz4qgglcwdyrqvh08dilnp354i";
+      url = "https://pypi.python.org/packages/source/p/pytest-flakes/${name}.tar.gz";
+      sha256 = "0vvfprga6k4v2zq1qsr3yq1bjl22vygfsnvyn3hh80cc2386dk6h";
     };
 
     propagatedBuildInputs = with self ; [ pytest pyflakes pytestcache ];
