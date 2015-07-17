@@ -15044,6 +15044,8 @@ let
 
   znc = callPackage ../applications/networking/znc { };
 
+  znc_14 = callPackage ../applications/networking/znc/1.4.nix { };
+
   zncModules = recurseIntoAttrs (
     callPackage ../applications/networking/znc/modules.nix { }
   );

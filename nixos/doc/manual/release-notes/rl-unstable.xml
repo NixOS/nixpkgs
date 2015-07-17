@@ -171,6 +171,13 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
  </para>
 </listitem>
 
+<listitem>
+  <para>
+    The <literal>phpfpm</literal> is now using the default PHP version
+    (<literal>pkgs.php</literal>) instead of PHP 5.4 (<literal>pkgs.php54</literal>).
+  </para>
+</listitem>
+
 </itemizedlist>
 </para>
 
