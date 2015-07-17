@@ -2,19 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.20";
+  version = "0.21";
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "efivar";
     rev = version;
-    sha256 = "14c8x9dhi4scj42n1cf513b551c1ccm8lwpaqx8h8ydpm2k35qi4";
+    sha256 = "0iakv8prvl61mb2wnll02sxlg3kfzh3d4qb41d0bklmnljjkqr8p";
   };
 
   buildInputs = [ popt ];
 
-  # 0.20 Relies on symbols from libdl.so which breaks efibootmgr
-  NIX_LDFLAGS = "-ldl";
+  # 0.21 Has build warnings so disable -Werror
+  postPatch = ''
+    sed -i 's,-Werror,,g' Make.defaults
+  '';
 
   installFlags = [
     "libdir=$(out)/lib"
