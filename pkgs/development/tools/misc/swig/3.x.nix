@@ -1,14 +1,27 @@
-{ stdenv, fetchurl, pcre }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "swig-3.0.2";
+  name = "swig-${version}";
+  version = "3.0.6";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/swig/${name}.tar.gz";
-    sha256 = "04vqrij3k6pcq41y7rzl5rmhnghqg905f11wyrqw7vdwr9brcrm2";
+  src = fetchFromGitHub {
+    owner = "swig";
+    repo = "swig";
+    rev = "rel-${version}";
+    sha256 = "1y8rlrkqs9h5cyp75s1i9rvrj35kkcwjjw65dyv3xy1skgfxb6w8";
   };
 
+  nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ pcre ];
+
+  postPatch = ''
+    # Disable ccache documentation as it need yodl
+    sed -i '/man1/d' CCache/Makefile.in
+  '';
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
