@@ -1445,11 +1445,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.10.0";
+    name = "xf86-input-libinput-0.12.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.10.0.tar.bz2;
-      sha256 = "1w1v83qlr7n4iqgd7grmhx0gbz1fhsnpk88j4a136dk4xmc069x4";
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.12.0.tar.bz2;
+      sha256 = "1mi6m1a32xc43na46amfqz0025952whiy3w4wz0wx0d34jf933yv";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   }) // {inherit inputproto xorgserver xproto ;};
@@ -1475,14 +1475,14 @@ let
   }) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
 
   xf86inputvmmouse = (mkDerivation "xf86inputvmmouse" {
-    name = "xf86-input-vmmouse-13.0.0";
+    name = "xf86-input-vmmouse-13.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-vmmouse-13.0.0.tar.bz2;
-      sha256 = "0b31ap9wp7nwpnihz8m7bz3p0hhaipxxhl652nw4v380cq1vdkq4";
+      url = mirror://xorg/individual/driver/xf86-input-vmmouse-13.1.0.tar.bz2;
+      sha256 = "06ckn4hlkpig5vnivl0zj8a7ykcgvrsj8b3iccl1pgn1gaamix8a";
     };
-    buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
-  }) // {inherit inputproto randrproto xorgserver xproto ;};
+    buildInputs = [pkgconfig inputproto udev randrproto xorgserver xproto ];
+  }) // {inherit inputproto udev randrproto xorgserver xproto ;};
 
   xf86inputvoid = (mkDerivation "xf86inputvoid" {
     name = "xf86-input-void-1.4.1";
@@ -1815,11 +1815,11 @@ let
   }) // {inherit randrproto videoproto xorgserver xproto ;};
 
   xf86videovesa = (mkDerivation "xf86videovesa" {
-    name = "xf86-video-vesa-2.3.3";
+    name = "xf86-video-vesa-2.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-vesa-2.3.3.tar.bz2;
-      sha256 = "1y5fsg0c4bgmh1cfsbnaaf388fppyy02i7mcy9vax78flkjpb2yf";
+      url = mirror://xorg/individual/driver/xf86-video-vesa-2.3.4.tar.bz2;
+      sha256 = "1haiw8r1z8ihk68d0jqph2wsld13w4qkl86biq46fvyxg7cg9pbv";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
   }) // {inherit fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ;};
