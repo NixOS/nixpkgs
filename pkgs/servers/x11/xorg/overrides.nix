@@ -256,15 +256,14 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb"; 
+    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb";
   };
 
   xkeyboardconfig = attrs: attrs // {
 
     buildInputs = attrs.buildInputs ++ [args.intltool];
 
-    #TODO: resurrect patches for US_intl?
-    patches = [ ./xkeyboard-config-eo.patch ];
+    #TODO: resurrect patches for US_intl or Esperanto?
 
     # 1: compatibility for X11/xkb location
     # 2: I think pkgconfig/ is supposed to be in /lib/
