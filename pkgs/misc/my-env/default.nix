@@ -148,7 +148,8 @@ mkDerivation {
 
     mkdir -p $out/bin
     sed -e 's,@shell@,${shell},' -e s,@myenvpath@,$out/dev-envs/${name}, \
-      -e 's,@name@,${name},' ${./loadenv.sh} > $out/bin/load-env-${name}
+      -e 's,@name@,${name},' -e 's,^\#\!/bin/sh,\#\!${stdenv.shell},' \
+      ${./loadenv.sh} > $out/bin/load-env-${name}
     chmod +x $out/bin/load-env-${name}
   '';
 }
