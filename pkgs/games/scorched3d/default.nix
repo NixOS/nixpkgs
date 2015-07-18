@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     ''
       mkdir -pv mybin
       export PATH=$PATH:$PWD/mybin
-      echo -e "#!/bin/sh\npkg-config openal \"$@\"" > mybin/openal-config
+      echo -e "#!${stdenv.shell}\npkg-config openal \"$@\"" > mybin/openal-config
       chmod +x mybin/openal-config
     '';
 
