@@ -46,7 +46,7 @@ let
           mkdir -p $out/bin
           if [ -x "${gcc.cc}/bin/gcc" ]; then
             cat > $out/bin/gcc << EOF
-            #!/bin/sh
+            #! ${stdenv.shell}
             ${extraConfig}
             exec ${distcc}/bin/distcc gcc "\$@"
           EOF
@@ -54,7 +54,7 @@ let
           fi
           if [ -x "${gcc.cc}/bin/g++" ]; then
             cat > $out/bin/g++ << EOF
-            #!/bin/sh
+            #! ${stdenv.shell}
             ${extraConfig}
             exec ${distcc}/bin/distcc g++ "\$@"
           EOF
