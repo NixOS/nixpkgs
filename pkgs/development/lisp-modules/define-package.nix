@@ -1,6 +1,6 @@
-args @ {stdenv, clwrapper, baseName, version ? "latest", src, description, deps, 
+args @ {stdenv, clwrapper, baseName, version ? "latest", src, description, deps,
   buildInputs ? [], meta ? {}, overrides?(x: {}), propagatedBuildInputs ? []}:
-let 
+let
   deployConfigScript = ''
     config_script="$out"/lib/common-lisp-settings/${args.baseName}-shell-config.sh
     mkdir -p "$(dirname "$config_script")"
@@ -19,10 +19,10 @@ let
     mkdir -p "$(dirname "$launch_script")"
     touch "$launch_script"
     chmod a+x "$launch_script"
-    echo "#! /bin/sh" >> "$launch_script"
+    echo "#! ${stdenv.shell}" >> "$launch_script"
     echo "source '$config_script'" >> "$launch_script"
     echo "export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${NIX_LISP_LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
-    echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script" 
+    echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script"
   '';
 basePackage = {
   name = "lisp-${baseName}-${version}";
@@ -42,7 +42,7 @@ basePackage = {
 
     eval "$postInstall"
   '';
-  propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp] 
+  propagatedBuildInputs = (args.deps or []) ++ [clwrapper clwrapper.lisp]
     ++ (args.propagatedBuildInputs or []);
   buildInputs = buildInputs;
   dontStrip=true;
