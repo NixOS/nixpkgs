@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     mkdir -p $out/include
     mkdir -p $out/lib
     mkdir -p $out/bin
-    substituteInPlace csrc/configure --replace "/usr/local" $out --replace "/usr/bin/env sh" "/bin/sh"
+    substituteInPlace csrc/configure --replace "/usr/local" $out --replace "/usr/bin/env sh" "${stdenv.shell}"
   '';
   meta = with stdenv.lib; {
     homepage = "http://www.ccnx.org/";
