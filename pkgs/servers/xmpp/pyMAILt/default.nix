@@ -1,5 +1,5 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
 
   buildInputs = with a; [
@@ -27,12 +27,12 @@ rec {
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-mail-transport.xml"]' -i config.py
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/$name
-    echo "#! /bin/sh" > $out/bin/pyMAILt
+    echo "#! ${a.stdenv.shell}" > $out/bin/pyMAILt
     echo "cd $out/share/${name}" >> $out/bin/pyMAILt
     echo "./mail.py \"$@\"" >> $out/bin/pyMAILt
     chmod a+rx  $out/bin/pyMAILt $out/share/${name}/mail.py
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-      
+
   name = "pyMAILt-20090101";
   meta = {
     description = "Email transport module for XMPP";
