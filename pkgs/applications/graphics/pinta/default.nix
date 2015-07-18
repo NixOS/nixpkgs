@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     mkdir -p $out/lib/pinta $out/bin
     cp bin/*.{dll,exe} $out/lib/pinta
     cat > $out/bin/pinta << EOF
-    #!/bin/sh
+    #! ${stdenv.shell}
     export MONO_GAC_PREFIX=${gtksharp}:\$MONO_GAC_PREFIX
     export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gtksharp}/lib:${gtksharp.gtk}/lib:${mono}/lib
     exec ${mono}/bin/mono $out/lib/pinta/Pinta.exe
