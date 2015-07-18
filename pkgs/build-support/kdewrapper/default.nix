@@ -3,7 +3,7 @@
 /* Supply a KDE program, and it will have the necessary KDE vars to
   get icons, mime types, etc. working.
   For example:
-  
+
   packageOverrides = pkgs : {
     kdenliveWrapped = kde4.wrapper kde4.kdenlive;
   };
@@ -28,10 +28,10 @@ stdenv.mkDerivation {
       KDEDIRS=$a''${KDEDIRS:+:}$KDEDIRS
       QT_PLUGIN_PATH=$a/lib/qt4/plugins:$a/lib/kde4/plugins''${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
     done
-    for a in ${program}/bin/*; do 
-      PROG=$out/bin/`basename $a` 
+    for a in ${program}/bin/*; do
+      PROG=$out/bin/`basename $a`
     cat > $PROG << END
-    #!/bin/sh
+    #! ${stdenv.shell}
     export KDEDIRS=$KDEDIRS\''${KDEDIRS:+:}\$KDEDIRS
     export QT_PLUGIN_PATH=$QT_PLUGIN_PATH\''${QT_PLUGIN_PATH:+:}\$QT_PLUGIN_PATH
     exec $a "\$@"
