@@ -130,6 +130,13 @@ let
     );
 
   self = super // {
+    bluez-qt = overrideDerivation super.bluez-qt (drv: {
+      preConfigure = ''
+        substituteInPlace CMakeLists.txt \
+          --replace /lib/udev/rules.d "$out/lib/udev/rules.d"
+      '';
+    });
+
     extra-cmake-modules = overrideDerivation super.extra-cmake-modules (drv: {
       buildInputs = [];
       nativeBuildInputs = [];
