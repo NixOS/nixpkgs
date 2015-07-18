@@ -3440,7 +3440,9 @@ let
 
   wv2 = callPackage ../tools/misc/wv2 { };
 
-  wyrd = callPackage ../tools/misc/wyrd { };
+  wyrd = callPackage ../tools/misc/wyrd {
+    inherit (ocamlPackages) camlp4;
+  };
 
   x86info = callPackage ../os-specific/linux/x86info { };
 
