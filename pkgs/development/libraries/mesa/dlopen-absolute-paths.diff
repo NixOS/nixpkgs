@@ -1,28 +1,22 @@
-diff --git a/src/loader/loader.c b/src/loader/loader.c
-index 4fdf3c2..0cd62b5 100644
+diff --git a/loader.c b/loader.c
+index 4fdf3c2..69ea22d 100644
 --- a/src/loader/loader.c
 +++ b/src/loader/loader.c
-@@ -112,7 +112,6 @@ static void *udev_handle = NULL;
+@@ -112,7 +112,7 @@ static void *udev_handle = NULL;
  static void *
  udev_dlopen_handle(void)
  {
 -   char name[80];
++   char name[256];
     unsigned flags = RTLD_NOLOAD | RTLD_LOCAL | RTLD_LAZY;
     int version;
  
-@@ -125,12 +124,9 @@ udev_dlopen_handle(void)
- 
+@@ -126,7 +126,7 @@ udev_dlopen_handle(void)
     /* First try opening an already linked libudev, then try loading one */
     do {
--      for (version = 1; version >= 0; version--) {
+       for (version = 1; version >= 0; version--) {
 -         snprintf(name, sizeof(name), "libudev.so.%d", version);
--         udev_handle = dlopen(name, flags);
--         if (udev_handle)
--            return udev_handle;
--      }
-+      udev_handle = dlopen("@udev@/lib/libudev.so", flags);
-+      if (udev_handle)
-+          return udev_handle;
- 
-       if ((flags & RTLD_NOLOAD) == 0)
-          break;
++         snprintf(name, sizeof(name), "@udev@/lib/libudev.so.%d", version);
+          udev_handle = dlopen(name, flags);
+          if (udev_handle)
+             return udev_handle;
