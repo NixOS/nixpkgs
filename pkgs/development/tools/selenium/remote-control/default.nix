@@ -20,10 +20,10 @@ in stdenv.mkDerivation {
       mv * $out/lib
       bin="$out/bin/selenium-remote-control"
       cat >> "$bin" << EOF
-      #!/bin/sh
+      #! ${stdenv.shell}
       exec ${jre}/bin/java -jar $out/lib/selenium-server-${version}/selenium-server.jar "\$@"
       EOF
-      chmod +x "$bin" 
+      chmod +x "$bin"
     '';
     */
 
@@ -41,9 +41,9 @@ in stdenv.mkDerivation {
       cp $src $out/lib/
       bin="$out/bin/selenium-remote-control"
       cat >> "$bin" << EOF
-      #!/bin/sh
+      #! ${stdenv.shell}
       exec ${jre}/bin/java -jar "$out/lib/$(basename $src)" "\$@"
       EOF
-      chmod +x "$bin" 
+      chmod +x "$bin"
     '';
 }
