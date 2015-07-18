@@ -3184,6 +3184,8 @@ let
 
   upx = callPackage ../tools/compression/upx { };
 
+  uriparser = callPackage ../development/libraries/uriparser {};
+
   urlview = callPackage ../applications/misc/urlview {};
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
