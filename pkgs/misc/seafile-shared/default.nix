@@ -15,7 +15,7 @@ stdenv.mkDerivation rec
   propagatedBuildInputs = [ ccnet curl ];
 
   preConfigure = ''
-  sed -ie 's|/bin/bash|/bin/sh|g' ./autogen.sh
+  sed -ie 's|/bin/bash|${stdenv.shell}|g' ./autogen.sh
   ./autogen.sh
   '';
 
