@@ -6661,7 +6661,8 @@ let
   };
 
   kf510 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.10 { });
-  kf5_latest = kf510;
+  kf512 = recurseIntoAttrs (callPackage ../development/libraries/kde-frameworks-5.12 { });
+  kf5_latest = kf512;
   kf5_stable = kf510;
 
   kinetic-cpp-client = callPackage ../development/libraries/kinetic-cpp-client { };
