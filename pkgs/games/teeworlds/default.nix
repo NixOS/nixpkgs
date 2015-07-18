@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     do
       mv -v "$out/bin/$program" "$out/bin/.wrapped-$program"
       cat > "$out/bin/$program" <<EOF
-#!/bin/sh
+#! ${stdenv.shell}
 cd "$out/share/${name}" && exec "$out/bin/.wrapped-$program" "\$@"
 EOF
       chmod -v +x "$out/bin/$program"
