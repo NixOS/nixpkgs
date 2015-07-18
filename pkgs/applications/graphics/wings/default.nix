@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp ebin/* $out/lib/${name}/ebin
     cp -R fonts textures shaders plugins $out/lib/$name
     cat << EOF > $out/bin/wings
-    #!/bin/sh
+    #! ${stdenv.shell}
     export ROOTDIR=$out/lib/erlang/addons/${name}
     ${erlang}/bin/erl -smp disable -pa ${esdl}/lib/erlang/addons/${esdl.name}/ebin \
       -pa $out/lib/${name}/ebin -run wings_start start_halt "$@"
