@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/bin
-    echo "#!/bin/sh" > $out/bin/stepmania
+    echo "#! ${stdenv.shell}" > $out/bin/stepmania
     echo "export LD_LIBRARY_PATH=$out/stepmania-5.0:${alsaLib}/lib:\$LD_LIBRARY_PATH" >> $out/bin/stepmania
     echo "exec $out/stepmania-5.0/stepmania" >> $out/bin/stepmania
     chmod +x $out/bin/stepmania
