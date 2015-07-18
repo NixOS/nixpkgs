@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     rm -R $out/share/teamviewer9/tv_bin/wine/{bin,lib,share}
 
     cat > $out/bin/teamviewer << EOF
-    #!${bash}/bin/sh
+    #! ${stdenv.shell}
     export LD_LIBRARY_PATH=${toldpath}\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
     export PATH=${topath}\''${PATH:+:\$PATH}
     $out/share/teamviewer9/tv_bin/script/teamviewer "\$@"
