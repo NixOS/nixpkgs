@@ -216,6 +216,10 @@ let
       patches = [ ./ktexteditor/0001-no-qcoreapplication.patch ];
     };
 
+    kwallet = extendDerivation super.kwallet {
+      buildInputs = [ scope.kdoctools ];
+    };
+
     networkmanager-qt = extendDerivation super.networkmanager-qt {
       propagatedBuildInputs = [ scope.networkmanager ];
     };
