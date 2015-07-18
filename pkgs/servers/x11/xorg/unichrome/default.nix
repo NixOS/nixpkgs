@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     glproto mesa automake autoconf libtool libXext utilmacros pixman ];
   preConfigure = "chmod +x autogen.sh";
   prePatch = ''
-    sed s,/bin/bash,/bin/sh, -i git_version.sh
+    sed s,/bin/bash,${stdenv.shell}, -i git_version.sh
   '';
   patches = [ ./configure.patch ];
   configureScript = "./autogen.sh";
