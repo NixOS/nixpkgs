@@ -16,7 +16,7 @@ stdenv.mkDerivation rec
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
 
   preConfigure = ''
-  sed -ie 's|/bin/bash|/bin/sh|g' ./autogen.sh
+  sed -ie 's|/bin/bash|${stdenv.shell}|g' ./autogen.sh
   ./autogen.sh
   '';
 
