@@ -39,7 +39,7 @@ in {
 
     postHook = ''
       PATH=/usr/bin:/bin:/usr/sbin:/sbin
-      SHELL=/bin/sh
+      SHELL=${pkgs.stdenv.shell}
       eval "$origPostHook"
     '';
 
