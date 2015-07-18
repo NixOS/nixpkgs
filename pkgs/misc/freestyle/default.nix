@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     cp build/Freestyle $hide
     cp -r build/linux-g++/debug/lib/python $hide/pylib
     cat > $out/bin/Freestyle << EOF
-      #!/bin/sh
+      #! ${stdenv.shell}
       echo use export PYTHONPATH to add your py files to the search path
       echo the style modules can be loded from directory $moddir
       echo starting Freestyle know - have fun
