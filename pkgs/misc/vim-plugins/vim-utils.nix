@@ -1,6 +1,6 @@
 {stdenv, vim, vimPlugins, vim_configurable, buildEnv, writeText, writeScriptBin}:
 
-/* 
+/*
 
 USAGE EXAMPLE
 =============
@@ -64,8 +64,8 @@ See vimHelpTags sample code below.
 
 CONTRIBUTING AND CUSTOMIZING
 ============================
-The example file pkgs/misc/vim-plugins/default.nix provides both: 
-* manually mantained plugins 
+The example file pkgs/misc/vim-plugins/default.nix provides both:
+* manually mantained plugins
 * plugins created by VAM's nix#ExportPluginsForNix implementation
 
 I highly recommend to lookup vim plugin attribute names at the [vim-pi] project
@@ -104,7 +104,7 @@ Then ":source %" it.
 
 nix#ExportPluginsForNix is provided by github.com/JagaJaga/vim-addon-vim2nix
 
-A buffer will open containing the plugin derivation lines as well list 
+A buffer will open containing the plugin derivation lines as well list
 fitting the vimrcConfig.vam.pluginDictionaries option.
 
 Thus the most simple usage would be:
@@ -124,7 +124,7 @@ Thus the most simple usage would be:
       vimrcConfig.vam.knownPlugins = vimPlugins;
       vimrcConfig.vam.pluginDictionaries = [
           # the plugin list form ~/.vim-scripts turned into nix format added to
-          # the buffer created by the nix#ExportPluginsForNix 
+          # the buffer created by the nix#ExportPluginsForNix
       ];
     }
 
@@ -280,7 +280,7 @@ rec {
   vimWithRC = {vimExecutable, name ? null, vimrcFile ? null, gvimrcFile ? null}:
     let rcOption = o: file: stdenv.lib.optionalString (file != null) "-${o} ${file}";
     in writeScriptBin (if name == null then "vim" else name) ''
-      #!/bin/sh
+      #! ${stdenv.shell}
       exec ${vimExecutable} ${rcOption "u" vimrcFile} ${rcOption "U" gvimrcFile} "$@"
       '';
 
