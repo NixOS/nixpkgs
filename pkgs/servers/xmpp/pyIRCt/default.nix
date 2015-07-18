@@ -1,8 +1,8 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.4" a; 
+  version = a.lib.attrByPath ["version"] "0.4" a;
   buildInputs = with a; [
     xmpppy pythonIRClib python makeWrapper
   ];
@@ -25,12 +25,12 @@ rec {
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-irc-transport.xml"]' -i config.py
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/$name
-    echo "#! /bin/sh" > $out/bin/pyIRCt
+    echo "#! ${a.stdenv.shell}" > $out/bin/pyIRCt
     echo "cd $out/share/${name}" >> $out/bin/pyIRCt
     echo "./irc.py \"$@\"" >> $out/bin/pyIRCt
     chmod a+rx  $out/bin/pyIRCt $out/share/${name}/irc.py
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
-      
+
   name = "pyIRCt-" + version;
   meta = {
     description = "IRC transport module for XMPP";
