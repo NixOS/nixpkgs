@@ -11,7 +11,7 @@ with builderDefs;
 
 		buildInputs = [mesa libXi libXt libXext libX11 libXmu freeglut];
 		configureFlags = [];
-		debianPatch = 
+		debianPatch =
 		fetchurl {
 			url = http://ftp.de.debian.org/debian/pool/main/s/space-orbit/space-orbit_1.01-9.diff.gz;
 			sha256 = "1v3s97day6fhv08l2rn81waiprhi1lfyjjsj55axfh6n6zqfn1w2";
@@ -20,12 +20,12 @@ with builderDefs;
 			gunzip < ${debianPatch} | patch -Np1
                         cd src
 			sed -e 's@/usr/share/games/orbit/@'$out'/dump/@g' -i *.c
-                        sed -e '/DIR=/d; s/-lesd//; s/-DESD//;' -i Makefile 
-                        make 
+                        sed -e '/DIR=/d; s/-lesd//; s/-DESD//;' -i Makefile
+                        make
                         mkdir -p $out/bin
                         cp -r .. $out/dump
                         cat >$out/bin/space-orbit <<EOF
-#! /bin/sh
+#! ${stdenv.shell}
 $out/dump/orbit "\$@"
 EOF
                         chmod a+x $out/bin/space-orbit
@@ -35,7 +35,7 @@ EOF
 stdenv.mkDerivation rec {
 	name = "space-orbit-1.01";
 	builder = writeScript (name + "-builder")
-		(textClosure localDefs 
+		(textClosure localDefs
 			[ customBuild doForceShare doPropagate]);
 	meta = {
 		description = "Orbit space flight simulator";
