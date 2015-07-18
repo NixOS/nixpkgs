@@ -5,7 +5,7 @@
 let
 
   patchUsrBinEnv = writeScript "path-usr-bin-env" ''
-    #!/bin/sh
+    #! ${stdenv.shell}
     echo "==================="
     find "$1" -type f -name "*.rb" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
     find "$1" -type f -name "*.mk" | xargs sed -i "s@/usr/bin/env@$(type -p env)@g"
@@ -60,7 +60,7 @@ in
     '';
     buildInputs = [ python ];
     NIX_POST_EXTRACT_FILES_HOOK = writeScript "patch-scons" ''
-      #!/bin/sh
+      #! ${stdenv.shell}
       for i in `find "$1" -name scons`
       do
           sed -i -e "s@/usr/bin/env@$(type -p env)@g" $i
