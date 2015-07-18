@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cp -r .  "$out/share/ccl-installation"
 
     mkdir -p "$out/bin"
-    echo -e '#!/bin/sh\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
+    echo -e '#! ${stdenv.shell} \n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
     chmod a+x "$out"/bin/"${CCL_RUNTIME}"
   '';
 
