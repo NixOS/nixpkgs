@@ -28,7 +28,7 @@ rec {
 
   postInstall = a.fullDepEntry (''
     mv $out/bin/zangband $out/bin/.zangband.real
-    echo '#! /bin/sh
+    echo '#! ${a.tdenv.shell}
       PATH="$PATH:${a.coreutils}/bin"
 
       ZANGBAND_PATH="$HOME/.zangband"
