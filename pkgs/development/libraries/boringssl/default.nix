@@ -1,16 +1,16 @@
-{ stdenv, fetchgit, cmake, perl }:
+{ stdenv, fetchgit, cmake, perl, go }:
 
 stdenv.mkDerivation rec {
   name = "boringssl-${version}";
-  version = "20140820-a7d1363f";
+  version = "20150713-7f15ff53";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "a7d1363fcb1f0d825ec2393c06be3d58b0c57efd";
-    sha256 = "d27dd1416de1a2ea4ec2c219248b2ed2cce5c0405e56adb394077ddc7c319bab";
+    rev    = "7f15ff53d82a1991d6732d2303eb652b1cf7e023";
+    sha256 = "0c48vf6wcqm26lyn03f72yw3l1wng02zw1pjya1d1vqld7s0bdxq";
   };
 
-  buildInputs = [ cmake perl ];
+  buildInputs = [ cmake perl go ];
   enableParallelBuilding = true;
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
