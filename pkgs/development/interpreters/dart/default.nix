@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
- 
+
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
   name = "dart-0.4";
- 
+
   installPhase = ''
     mkdir -p $out
     cp -R * $out/
@@ -12,15 +12,15 @@ stdenv.mkDerivation {
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
              --set-rpath $libPath \
              $out/bin/dart
-    
+
     # Hack around weird dart2js resolving bug
     mv $out/bin/dart2js $out/bin/.dart2js
-    echo "#!/bin/sh" > $out/bin/dart2js
+    echo "#! ${stdenv.shell}" > $out/bin/dart2js
     echo "$out/bin/.dart2js \$*" >> $out/bin/dart2js
     chmod +x $out/bin/dart2js
   '';
-  
-  
+
+
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
         url = http://download.zef.s3.amazonaws.com/dartsdk-m4-linux-32.tar.gz;
         sha256 = "00935c4vxfj2h3x354g75qdazswwissbwc7kj5k05l1m3lizikf6";
       };
- 
+
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
- 
+
   dontStrip = true;
 }
