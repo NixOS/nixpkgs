@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     '' for i in "src/smpi/"*
        do
          test -f "$i" &&
-         sed -i "$i" -e's|/bin/bash|/bin/sh|g'
+         sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
 
        for i in $(grep -rl /usr/bin/perl .)
