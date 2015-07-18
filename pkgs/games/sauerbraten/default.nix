@@ -3,9 +3,9 @@ x@{builderDefsPackage
   , libpng, zlib, libjpeg, imagemagick, libX11
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["fetchsvn"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -51,15 +51,15 @@ rec {
   doCreateScripts = a.fullDepEntry ''
     cd ..
     mkdir -p $out/bin
-    echo '#! /bin/sh' >> $out/bin/sauerbraten_server
+    echo '#! ${a.stdenv.shell}' >> $out/bin/sauerbraten_server
     echo 'cd "'"$out"'/share/sauerbraten/build-dir"' >> $out/bin/sauerbraten_server
     echo './bin_unix/native_server "$@"' >> $out/bin/sauerbraten_server
-    echo '#! /bin/sh' >> $out/bin/sauerbraten_client
+    echo '#! ${a.stdenv.shell}' >> $out/bin/sauerbraten_client
     echo 'cd "'"$out"'/share/sauerbraten/build-dir"' >> $out/bin/sauerbraten_client
     echo './bin_unix/native_client "$@"' >> $out/bin/sauerbraten_client
     chmod a+x $out/bin/sauerbraten_*
   '' ["minInit" "defEnsureDir"];
-      
+
   meta = {
     description = "";
     maintainers = with a.lib.maintainers;
