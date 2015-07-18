@@ -1,14 +1,14 @@
-From ff61c8ba856328a60e29938466b69d0bb38a357f Mon Sep 17 00:00:00 2001
+From f124d2204cff11ae0ff0d6c788d268b746180407 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Tue, 2 Jun 2015 11:21:43 -0500
-Subject: [PATCH] startkde: NixOS patches
+Date: Sat, 18 Jul 2015 12:13:08 -0500
+Subject: [PATCH] startkde NixOS patches
 
 ---
- startkde/startkde.cmake | 218 ++++++++++++++++++++----------------------------
- 1 file changed, 89 insertions(+), 129 deletions(-)
+ startkde/startkde.cmake | 222 ++++++++++++++++++++----------------------------
+ 1 file changed, 91 insertions(+), 131 deletions(-)
 
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index 24e5c1b..e7bdd32 100644
+index 6f93108..26cc2fc 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,8 +1,31 @@
@@ -62,7 +62,8 @@ index 24e5c1b..e7bdd32 100644
 -fi
 -
  # Check if a KDE session already is running and whether it's possible to connect to X
- kcheckrunning
+-kcheckrunning
++@out@/bin/kcheckrunning
  kcheckrunning_result=$?
  if test $kcheckrunning_result -eq 0 ; then
 -	echo "KDE seems to be already running on this display."
@@ -129,7 +130,8 @@ index 24e5c1b..e7bdd32 100644
 -    }
 -fi
 -
- kstartupconfig5
+-kstartupconfig5
++@out@/bin/kstartupconfig5
  returncode=$?
  if test $returncode -ne 0; then
 -    xmessage -geometry 500x100 "kstartupconfig5 does not exist or fails. The error code is $returncode. Check your installation."
@@ -141,7 +143,7 @@ index 24e5c1b..e7bdd32 100644
 -if test "$kdeglobals_kscreen_scalefactor" -ne 1; then
 -    export QT_DEVICE_PIXEL_RATIO=$kdeglobals_kscreen_scalefactor
 -fi
-+XCURSOR_PATH=~/.icons:$(echo "$XDG_DATA_DIRS" | tr ":" "\n" | @gnused@/bin/sed 's,$,/icons,g' | tr "\n" ":")
++XCURSOR_PATH=~/.icons:$(echo "$XDG_DATA_DIRS" | @coreutils@/bin/tr ":" "\n" | @gnused@/bin/sed 's,$,/icons,g' | @coreutils@/bin/tr "\n" ":")
 +export XCURSOR_PATH
  
  # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
@@ -391,7 +393,7 @@ index 24e5c1b..e7bdd32 100644
  for prefix in `echo "$scriptpath"`; do
 -  for file in `ls "$prefix"/shutdown 2> /dev/null | egrep -v '(~|\.bak)$'`; do
 +  for file in `ls "$prefix"/shutdown 2> /dev/null | @gnugrep@/bin/egrep -v '(~|\.bak)$'`; do
-     test -x "$prefix$file" && "$prefix$file"
+     test -x "$prefix/shutdown/$file" && "$prefix/shutdown/$file"
    done
  done
  
@@ -405,5 +407,5 @@ index 24e5c1b..e7bdd32 100644
  
  echo 'startkde: Done.'  1>&2
 -- 
-2.4.1
+2.4.5
 
