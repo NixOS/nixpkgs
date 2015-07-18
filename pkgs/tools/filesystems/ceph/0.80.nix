@@ -12,5 +12,6 @@ callPackage ./generic.nix (args // rec {
   patches = [
     ./0001-Cleanup-boost-optionals.patch
     ./fix-pgrefdebugging.patch
+    ./boost-158.patch
   ];
 })

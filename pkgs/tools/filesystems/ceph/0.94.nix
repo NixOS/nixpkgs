@@ -9,5 +9,8 @@ callPackage ./generic.nix (args // rec {
     sha256 = "1nhqzmxv7bz93b8rbd88wgmw9icm2lhmc94dfscgh23kfpipyd6l";
   };
 
-  patches = [ ./fix-pgrefdebugging.patch ];
+  patches = [
+    ./fix-pgrefdebugging.patch
+    ./boost-158.patch
+  ];
 })
