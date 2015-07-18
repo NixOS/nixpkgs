@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "SHELL=/bin/sh"
+    "SHELL=${stdenv.shell}"
   ];
 
   installPhase = ''
