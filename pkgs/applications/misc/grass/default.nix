@@ -28,7 +28,7 @@ a.composableDerivation.composableDerivation {} (fix: {
   name = "grass-6.4.0RC6";
 
   buildInputs = [
-    # gentoos package depends on gmath ? 
+    # gentoos package depends on gmath ?
     a.pkgconfig
     a.flex a.bison a.libXmu a.libXext a.libXp a.libX11 a.libXt a.libSM a.libICE
     a.libXpm a.libXaw a.flex a.bison a.gdbm
@@ -72,7 +72,7 @@ a.composableDerivation.composableDerivation {} (fix: {
       configureFlags = [ "--with-python=${a.python}/bin/python-config" ];
       buildInputs = [a.python a.swig];
     };
-    
+
   }
   // edf { name = "_64bit"; feat = "64bit"; }
   // wwfp a.ncurses { name = "curses"; }
@@ -119,7 +119,7 @@ a.composableDerivation.composableDerivation {} (fix: {
   // wwfp a.unixODBC { name = "odbc"; }
   // wwfp a.fftw { name = "fftw"; }
   // wwf {
-    name = "blas"; 
+    name = "blas";
     enable.configureFlags = [ "--with-blas-libs=${a.blas}/lib" ];
   }
   // wwf {
@@ -162,11 +162,11 @@ a.composableDerivation.composableDerivation {} (fix: {
     e=$(echo $out/bin/grass*)
     mv $out/bin/{,.}$(basename $e)
     cat >> $e << EOF
-    #!/bin/sh
+    #! ${a.stdenv.shell}
     export PATH=${a.python}/bin:\$PATH
     export GRASS_WISH=\${a.tk}/bin/wish
     export GRASS_GUI=\''${GRASS_GUI:-wxpython}
-    export SHELL=/bin/sh
+    export SHELL=${a.stdenv.shell}
     ${optionalString fix.fixed.cfg.wxwidgetsSupport ''export PYTHONPATH=\$PYTHONPATH\''${PYTHONPATH:+:}:$(toPythonPath ${a.wxPython})''}
     exec $out/bin/.$(basename $e)
     EOF
