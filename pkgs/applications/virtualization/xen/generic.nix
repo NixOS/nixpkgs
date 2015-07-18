@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     # Fake wget: copy prefetched downloads instead
     mkdir wget
-    echo "#!/bin/sh" > wget/wget
+    echo "#! ${stdenv.shell}" > wget/wget
     echo "echo ===== Not fetching \$*, copy pre-fetched file instead" >> wget/wget
     echo "cp \$4 \$3" >> wget/wget
     chmod +x wget/wget
