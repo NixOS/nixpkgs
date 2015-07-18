@@ -28,7 +28,7 @@ stdenv.mkDerivation (
     postPhases =
       ["generateWrappersPhase" "finalPhase"];
 
-    prePhases = 
+    prePhases =
       ["antSetupPhase"];
 
     antSetupPhase = with stdenv.lib; ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation (
 
     installPhase = ''
       mkdir -p $out/share/java
-      ${ if jars == [] then '' 
+      ${ if jars == [] then ''
            find . -name "*.jar" | xargs -I{} cp -v {} $out/share/java
          '' else stdenv.lib.concatMapStrings (j: ''
            cp -v ${j} $out/share/java
@@ -55,17 +55,17 @@ stdenv.mkDerivation (
       done
     '';
 
-    generateWrappersPhase = 
-      let 
+    generateWrappersPhase =
+      let
         cp = w: "-cp '${lib.optionalString (w ? classPath) w.classPath}${lib.optionalString (w ? mainClass) ":$out/share/java/*"}'";
       in
-      '' 
+      ''
       header "Generating jar wrappers"
     '' + (stdenv.lib.concatMapStrings (w: ''
 
       mkdir -p $out/bin
       cat >> $out/bin/${w.name} <<EOF
-      #! /bin/sh
+      #! ${stdenv.shell}
       export JAVA_HOME=$jre
       $jre/bin/java ${cp w} ${if w ? mainClass then w.mainClass else "-jar ${w.jar}"} \$@
       EOF
@@ -81,7 +81,7 @@ stdenv.mkDerivation (
       closeNest
     '' else stdenv.lib.concatMapStrings (t: ''
       header "Building '${t}' target"
-      ant ${antFlags} ${t} 
+      ant ${antFlags} ${t}
       closeNest
     '') antTargets;
 
@@ -95,11 +95,11 @@ stdenv.mkDerivation (
       '';
   }
 
-  // removeAttrs args ["antProperties" "buildInputs" "pkgs" "jarWrappers"] // 
+  // removeAttrs args ["antProperties" "buildInputs" "pkgs" "jarWrappers"] //
 
   {
     name = name + (if src ? version then "-" + src.version else "");
-  
+
     buildInputs = [ant jre zip unzip] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
@@ -109,6 +109,6 @@ stdenv.mkDerivation (
 
       origSrc=$src
       src=$(findTarball $src)
-    ''; 
+    '';
   }
 )
