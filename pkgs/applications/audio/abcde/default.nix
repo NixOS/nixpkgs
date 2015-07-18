@@ -43,7 +43,7 @@ in
     #   substituteInPlace "$out/bin/cddb-tool" \
     #      --replace '#!/bin/sh' '#!${bash}/bin/sh'
     #   substituteInPlace "$out/bin/abcde" \
-    #      --replace '#!/bin/bash' '#!${bash}/bin/bash'
+    #      --replace '#!/bin/bash' '#! ${stdenv.shell}'
 
       # generic fixup script should be doing this, but it ignores this file for some reason
       substituteInPlace "$out/bin/abcde-musicbrainz-tool" \
