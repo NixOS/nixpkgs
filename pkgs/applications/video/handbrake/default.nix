@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # Fake wget to prevent downloads
     mkdir wget
-    echo "#!/bin/sh" > wget/wget
+    echo "#! ${stdenv.shell}" > wget/wget
     echo "echo ===== Not fetching \$*" >> wget/wget
     echo "exit 1" >> wget/wget
     chmod +x wget/wget
