@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     for i in $t/bin/*; do
       b="$(basename "$i")";
     cat > "$out/bin/$b" << EOF
-    #!/bin/sh
+    #! ${stdenv.shell}
     exec $t/bin/$b "\$@"
     EOF
       chmod +x $out/bin/$b $t/bin/$b
