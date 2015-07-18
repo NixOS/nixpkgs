@@ -2,7 +2,7 @@
 
 let
   start_script = ''
-    #!/bin/sh
+    #! ${stdenv.shell}
     cd "$out/lib/hol_light"
     exec ${ocaml}/bin/ocaml -I \`${camlp5}/bin/camlp5 -where\` -init make.ml
   '';
