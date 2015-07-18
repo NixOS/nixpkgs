@@ -2,9 +2,9 @@ x@{builderDefsPackage
   , ocaml, eprover, zlib
   , ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
     ["eprover"];
 
   buildInputs = map (n: builtins.getAttr n x)
@@ -37,7 +37,7 @@ rec {
 
   doFinalize = a.fullDepEntry (''
     mkdir -p "$out/bin"
-    echo -e "#! /bin/sh\\n$PWD/../bin/leo --atprc $out/etc/leoatprc \"\$@\"\\n" > "$out/bin/leo"
+    echo -e "#! ${a.stdenv.shell}\\n$PWD/../bin/leo --atprc $out/etc/leoatprc \"\$@\"\\n" > "$out/bin/leo"
     chmod a+x "$out/bin/leo"
     mkdir -p "$out/etc"
     echo -e "e = ${eprover}/bin/eprover\\nepclextract = ${eprover}/bin/epclextract" > "$out/etc/leoatprc"
