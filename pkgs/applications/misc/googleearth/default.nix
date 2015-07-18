@@ -17,38 +17,38 @@ stdenv.mkDerivation {
     glibc
     glib
     stdenv.cc.cc
-    libSM 
-    libICE 
-    libXi 
+    libSM
+    libICE
+    libXi
     libXv
     mesa
-    libXrender 
-    libXrandr 
-    libXfixes 
-    libXcursor 
-    libXinerama 
-    freetype 
-    libXext 
-    libX11 
+    libXrender
+    libXrandr
+    libXfixes
+    libXcursor
+    libXinerama
+    freetype
+    libXext
+    libX11
     qt4
     zlib
     fontconfig
   ];
 
   phases = "unpackPhase installPhase";
-  
+
   unpackPhase = ''
     bash $src --noexec --target unpacked
     cd unpacked
   '';
-  
+
   installPhase =''
     mkdir -p $out/{opt/googleearth/,bin};
     tar xf googleearth-data.tar -C $out/opt/googleearth
     tar xf googleearth-linux-x86.tar -C $out/opt/googleearth
     cp bin/googleearth $out/opt/googleearth
     cat > $out/bin/googleearth << EOF
-    #!/bin/sh
+    #! ${stdenv.shell}
     export GOOGLEEARTH_DATA_PATH=$out/opt/googleearth
     exec $out/opt/googleearth/googleearth
     EOF
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     for i in $nativeBuildInputs; do
       fullPath=$fullPath:$i/lib
     done
-          
+
     patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $fullPath \
       $out/opt/googleearth/googleearth-bin
