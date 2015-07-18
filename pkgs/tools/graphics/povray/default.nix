@@ -26,11 +26,11 @@ stdenv.mkDerivation {
   configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" ];
 
   enableParallelBuilding = true;
-  
+
   preInstall = ''
     mkdir "$TMP/bin"
     for i in chown chgrp; do
-      echo '#!/bin/sh' >> "$TMP/bin/$i"
+      echo '#! ${stdenv.shell}' >> "$TMP/bin/$i"
       chmod +x "$TMP/bin/$i"
       PATH="$TMP/bin:$PATH"
     done
