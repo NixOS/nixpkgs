@@ -4,7 +4,8 @@
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
 , uwimap, pam, gmp
 
-, phpVersion, apacheHttpd, sha }:
+, phpVersion, apacheHttpd, sha
+, php7 ? false, url ? null }:
 
 let
   libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
@@ -212,7 +213,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     imapSupport = config.php.imap or true;
     ldapSupport = config.php.ldap or true;
     mhashSupport = config.php.mhash or true;
-    mysqlSupport = config.php.mysql or true;
+    mysqlSupport = (!php7) && (config.php.mysql or true);
     mysqliSupport = config.php.mysqli or true;
     pdo_mysqlSupport = config.php.pdo_mysql or true;
     libxml2Support = config.php.libxml2 or true;
@@ -220,7 +221,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     bcmathSupport = config.php.bcmath or true;
     socketsSupport = config.php.sockets or true;
     curlSupport = config.php.curl or true;
-    curlWrappersSupport = config.php.curlWrappers or true;
+    curlWrappersSupport = (!php7) && (config.php.curlWrappers or true);
     gettextSupport = config.php.gettext or true;
     pcntlSupport = config.php.pcntl or true;
     postgresqlSupport = config.php.postgresql or true;
@@ -241,7 +242,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     ftpSupport = config.php.ftp or true;
     fpmSupport = config.php.fpm or true;
     gmpSupport = config.php.gmp or true;
-    mssqlSupport = config.php.mssql or (!stdenv.isDarwin);
+    mssqlSupport = (!php7) && (config.php.mssql or (!stdenv.isDarwin));
     ztsSupport = config.php.zts or false;
     calendarSupport = config.php.calendar or true;
   };
@@ -267,7 +268,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
   '';
 
   src = fetchurl {
-    url = "http://www.php.net/distributions/php-${version}.tar.bz2";
+    url = if url == null then
+      "http://www.php.net/distributions/php-${version}.tar.bz2"
+    else
+      url;
     sha256 = sha;
   };
 
@@ -278,6 +282,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     maintainers = with maintainers; [ globin ];
   };
 
-  patches = [ ./fix-paths.patch ];
+  patches = if !php7 then
+    [ ./fix-paths.patch ]
+  else
+    [ ./fix-paths-php7.patch ]
+  ;
 
 })
