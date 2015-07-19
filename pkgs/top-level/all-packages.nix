@@ -10767,6 +10767,8 @@ let
       inherit (gnome) libglade;
   };
 
+  calcurse = callPackage ../applications/misc/calcurse { };
+
   calibre = callPackage ../applications/misc/calibre {
     inherit (pythonPackages) pyqt5 sip_4_16;
   };
