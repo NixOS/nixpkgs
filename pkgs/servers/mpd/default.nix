@@ -60,8 +60,8 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt pulseaudioSupport libpulseaudio
-    ++ opt jackSupport libjack2
+    ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
+    ++ opt (!stdenv.isDarwin && jackSupport) libjack2
     ++ opt gmeSupport game-music-emu
     ++ opt icuSupport icu
     ++ opt clientSupport mpd_clientlib
@@ -87,8 +87,8 @@ in stdenv.mkDerivation rec {
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
-      (mkFlag pulseaudioSupport "pulse")
-      (mkFlag jackSupport "jack")
+      (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
+      (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
       (mkFlag stdenv.isDarwin "osx")
       (mkFlag icuSupport "icu")
       (mkFlag gmeSupport "gme")
