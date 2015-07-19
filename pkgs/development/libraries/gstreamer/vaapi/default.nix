@@ -5,17 +5,17 @@
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "0.5.10";
+  version = "0.6.0";
 
   src = fetchurl {
     url = "${meta.homepage}/software/vaapi/releases/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.bz2";
-    sha256 = "179wnz4c4gnw9ibfgjrad9b44icygadaknsgjfw24lr2pz3kdlhd";
+    sha256 = "1f3ji0h0x49w4wpqc0widraa9kvq0b47idrdxq4znjb8c1bwd97n";
   };
 
   nativeBuildInputs = with stdenv.lib; [ pkgconfig bzip2 ];
 
   buildInputs = with stdenv.lib; [ gstreamer gst-plugins-base gst-plugins-bad libva libdrm udev
-    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr mesa nasm libvpx ];
+    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM xorg.libICE mesa nasm libvpx ];
 
   preConfigure = "
     export GST_PLUGIN_PATH_1_0=$out/lib/gstreamer-1.0
