@@ -186,21 +186,39 @@ self: super: {
 
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146
-  hinotify = if pkgs.stdenv.isDarwin then super.hfsevents else super.hinotify;
+  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
+
+  # hfsevents needs CoreServices in scope
+  hfsevents = if pkgs.stdenv.isDarwin
+    then addBuildTool super.hfsevents pkgs.darwin.apple_sdk.frameworks.CoreServices
+    else super.hfsevents;
 
   # FSEvents API is very buggy and tests are unreliable. See
   # http://openradar.appspot.com/10207999 and similar issues
   fsnotify = if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
 
+  # the system-fileio tests use canonicalizePath, which fails in the sandbox
+  system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
+
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
-  # TODO: use pkgs.darwin.security_tool once we can build it
-  x509-system = let security_tool = "/usr";
-  in overrideCabal super.x509-system (drv: {
-    patchPhase = (drv.patchPhase or "") + pkgs.stdenv.lib.optionalString pkgs.stdenv.isDarwin ''
-      substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
-    '';
-  });
+  x509-system = if pkgs.stdenv.isDarwin && !pkgs.stdenv.cc.nativeLibc
+    then let inherit (pkgs.darwin) security_tool;
+      in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
+        patchPhase = (drv.patchPhase or "") + ''
+          substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
+        '';
+      })
+    else super.x509-system;
+
+  double-conversion = if !pkgs.stdenv.isDarwin
+    then super.double-conversion
+    else overrideCabal super.double-conversion (drv:
+      {
+        patchPhase = ''
+          substituteInPlace double-conversion.cabal --replace stdc++ c++
+        '';
+      });
 
   # Does not compile: "fatal error: ieee-flpt.h: No such file or directory"
   base_4_8_0_0 = markBroken super.base_4_8_0_0;
@@ -861,6 +879,10 @@ self: super: {
 
   # https://github.com/yesodweb/serversession/issues/1
   serversession = dontCheck super.serversession;
+
+  yesod-bin = if pkgs.stdenv.isDarwin
+    then addBuildDepend super.yesod-bin pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else super.yesod-bin;
 
   # https://github.com/commercialhaskell/stack/issues/408
   # https://github.com/commercialhaskell/stack/issues/409

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jyw7qbl0spxqa0dccj9x1jsw7cj7szff43cq4acmklnra4mzz48";
   };
 
+  patches = [ ./noreturn.patch ];
+
   # Version 4.19 is not valid C11 (which Clang default to)
   # Check if this is still necessary on upgrade
   NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=c99" else null;

@@ -44,10 +44,6 @@ self: super: {
   # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
   jailbreak-cabal = pkgs.haskell.packages.ghc784.jailbreak-cabal;
 
-  # GHC 7.10.x's Haddock binary cannot generate hoogle files.
-  # https://ghc.haskell.org/trac/ghc/ticket/9921
-  mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
-
   idris =
     let idris' = overrideCabal super.idris (drv: {
       # "idris" binary cannot find Idris library otherwise while building.
@@ -230,9 +226,6 @@ self: super: {
   QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
   vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
-
-  # https://github.com/purefn/hipbot/issues/1
-  hipbot = dontDistribute super.hipbot;
 
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;

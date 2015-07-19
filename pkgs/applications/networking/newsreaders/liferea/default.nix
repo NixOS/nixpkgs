@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \

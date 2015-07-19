@@ -22,19 +22,6 @@ Index: gyp/pylib/gyp/xcode_emulation.py
      self._Appendf(cflags, 'GCC_OPTIMIZATION_LEVEL', '-O%s', default='s')
  
      if self._Test('GCC_GENERATE_DEBUGGING_SYMBOLS', 'YES', default='YES'):
-@@ -519,12 +513,6 @@
-     if self._Test('GCC_SYMBOLS_PRIVATE_EXTERN', 'YES', default='NO'):
-       cflags.append('-fvisibility=hidden')
- 
--    if self._Test('GCC_TREAT_WARNINGS_AS_ERRORS', 'YES', default='NO'):
--      cflags.append('-Werror')
--
--    if self._Test('GCC_WARN_ABOUT_MISSING_NEWLINE', 'YES', default='NO'):
--      cflags.append('-Wnewline-eof')
--
-     # In Xcode, this is only activated when GCC_COMPILER_VERSION is clang or
-     # llvm-gcc. It also requires a fairly recent libtool, and
-     # if the system clang isn't used, DYLD_LIBRARY_PATH needs to contain the
 @@ -553,7 +541,6 @@
        # TODO: Supporting fat binaries will be annoying.
        self._WarnUnimplemented('ARCHS')

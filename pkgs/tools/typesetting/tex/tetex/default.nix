@@ -39,6 +39,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/texmf
     mkdir -p $out/share/texmf-dist
     gunzip < $texmf | (cd $out/share/texmf-dist && tar xvf -)
+
+    substituteInPlace ./tetex-src-3.0/configure --replace /usr/bin/install $(type -P install)
   '';
 
   meta = with stdenv.lib; {

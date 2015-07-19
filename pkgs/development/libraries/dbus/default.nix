@@ -7,8 +7,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.8.16";
-  sha256 = "01rba8mp8kqvmy6ibdmi806kjr3m14swnskqk02gyhykxxl54ybz";
+  version = "1.8.18";
+  sha256 = "1wn4k142m68d8yqd4i6dmx1ac0798yhkdnkk4mb72g3sfyffpwin";
 
   inherit (stdenv) lib;
 

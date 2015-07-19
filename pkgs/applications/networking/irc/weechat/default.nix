@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ncurses, openssl, perl, python, aspell, gnutls
 , zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile
-, pythonPackages, cacert, cmake, makeWrapper
+, pythonPackages, cacert, cmake, makeWrapper, libobjc
 , extraBuildInputs ? [] }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig
       libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
       cacert cmake ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ pythonPackages.pync libobjc ]
     ++ extraBuildInputs;
 
   NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix} -DCA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt";

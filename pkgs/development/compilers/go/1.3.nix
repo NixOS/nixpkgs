@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
   '';
 
-  patches = [ ./cacert-1.2.patch ];
+  patches = [ ./cacert-1.2.patch ./R_386_GOT32.patch ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"

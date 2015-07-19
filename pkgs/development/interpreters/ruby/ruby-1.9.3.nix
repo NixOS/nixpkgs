@@ -6,6 +6,7 @@
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , ruby_1_9_3, autoreconfHook, bison, useRailsExpress ? true
+, libiconv, libobjc
 }:
 
 let
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
     # support is not enabled, so add readline to the build inputs if curses
     # support is disabled (if it's enabled, we already have it) and we're
     # running on darwin
-    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline)
+    ++ (ops stdenv.isDarwin [ libiconv libobjc ]);
 
   enableParallelBuilding = true;
 

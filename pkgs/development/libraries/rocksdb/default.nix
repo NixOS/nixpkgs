@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   # Environment vars used for building certain configurations
   PORTABLE = "1";
   USE_SSE = "1";
+  CMAKE_CXX_FLAGS = "-std=gnu++11";
   JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
 
   buildFlags = [

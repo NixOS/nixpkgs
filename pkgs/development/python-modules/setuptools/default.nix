@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ''
       dst=$out/lib/${python.libPrefix}/site-packages
       mkdir -p $dst
-      PYTHONPATH="$dst:$PYTHONPATH"
+      export PYTHONPATH="$dst:$PYTHONPATH"
       ${python}/bin/${python.executable} setup.py install --prefix=$out --install-lib=$out/lib/${python.libPrefix}/site-packages
       wrapPythonPrograms
     '';

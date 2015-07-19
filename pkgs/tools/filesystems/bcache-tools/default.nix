@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
         -i Makefile
   '';
 
-  patches = [ ./bcache-udev-modern.patch ];
+  patches = [
+    ./bcache-udev-modern.patch
+    ./fix-static.patch
+  ];
 
   preBuild = ''
     export makeFlags="$makeFlags PREFIX=\"$out\" UDEVLIBDIR=\"$out/lib/udev/\"";

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace "/usr/local" "$out" \
       --replace "CFLAGS = " "CFLAGS = -I${ncurses}/include " \
-      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses}/lib "
+      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses}/lib " \
+      --replace "-lcurses" "-lncurses"
   '';
   preBuild = ''
     mkdir -p $out/bin

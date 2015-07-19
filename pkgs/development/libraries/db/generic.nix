@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
     (if compat185 then "--enable-compat185" else "--disable-compat185")
+    "--enable-dbm"
   ];
 
   preConfigure = ''

@@ -1,5 +1,7 @@
 { stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, curses, cacert }:
+, guiSupport ? false, tk ? null, curses, cacert
+
+, ApplicationServices }:
 
 let
   version = "3.3.3";
@@ -18,6 +20,8 @@ stdenv.mkDerivation {
   pythonPackages = [ curses ];
 
   buildInputs = [ python makeWrapper docutils unzip ];
+
+  propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   makeFlags = "PREFIX=$(out)";
 

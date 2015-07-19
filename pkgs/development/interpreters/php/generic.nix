@@ -18,7 +18,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   enableParallelBuilding = true;
 
-  buildInputs = ["flex" "bison" "pkgconfig"];
+  buildInputs = [ flex bison pkgconfig ];
 
   flags = {
 
@@ -146,7 +146,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
     openssl = {
       configureFlags = ["--with-openssl=${openssl}"];
-      buildInputs = ["openssl"];
+      buildInputs = [openssl];
     };
 
     mbstring = {

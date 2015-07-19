@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   makeFlags = ["prefix=$(out)" "gamesdir=$(out)/bin"];
   preInstall = ''
     mkdir -p "$out"/{bin,share/doc/sgtpuzzles}
-    cp puzzles.txt LICENCE README "$out/share/doc/sgtpuzzles"
+    cp gamedesc.txt LICENCE README "$out/share/doc/sgtpuzzles"
     cp LICENCE "$out/share/doc/sgtpuzzles/LICENSE"
   '';
   preConfigure = ''

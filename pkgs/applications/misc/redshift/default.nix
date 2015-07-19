@@ -17,11 +17,11 @@ stdenv.mkDerivation {
     substituteInPlace src/redshift-gtk/redshift-gtk python \
       --replace "/usr/bin/env python3" "${python}/bin/${python.executable}"
   '';
-
+/*
   postInstall = ''
     wrapProgram "$out/bin/redshift-gtk" --prefix PYTHONPATH : $PYTHONPATH
   '';
-
+*/
   meta = with stdenv.lib; {
     inherit version;
     description = "Gradually change screen color temperature";

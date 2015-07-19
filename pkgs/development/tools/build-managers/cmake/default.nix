@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, bzip2, curl, expat, jsoncpp, libarchive, xz, zlib
+, bzip2, curl, expat, libarchive, xz, zlib
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
 , wantPS ? false, ps ? null
 }:
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ bzip2 curl expat libarchive xz zlib ]
-    ++ optional (jsoncpp != null && !stdenv.isCygwin) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -49,12 +48,11 @@ stdenv.mkDerivation rec {
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
 
   configureFlags =
-    [
-      "--docdir=/share/doc/${name}"
+    [ "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
+      "--no-system-jsoncpp"
     ]
     ++ optional (!stdenv.isCygwin) "--system-libs"
-    ++ optional (jsoncpp == null || stdenv.isCygwin) "--no-system-jsoncpp"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]
     ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";

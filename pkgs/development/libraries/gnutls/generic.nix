@@ -7,15 +7,21 @@
 
 assert guileBindings -> guile != null;
 
+let
+  inherit (stdenv.lib) optional optionals optionalString;
+in
 stdenv.mkDerivation rec {
   name = "gnutls-${version}";
 
   inherit src patches;
 
-  configureFlags = [
+  configureFlags =
+    # FIXME: perhaps use $SSL_CERT_FILE instead
+    optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+  ++ [
     "--disable-dependency-tracking"
     "--enable-fast-install"
-  ] ++ stdenv.lib.optional guileBindings
+  ] ++ optionals guileBindings
     [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
 
   # Build of the Guile bindings is not parallel-safe.  See
@@ -24,9 +30,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = !guileBindings;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp ]
-    ++ stdenv.lib.optional stdenv.isLinux trousers
+    ++ optional stdenv.isLinux trousers
     ++ [ unbound ]
-    ++ stdenv.lib.optional guileBindings guile;
+    ++ optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkgconfig autoreconfHook ];
 
@@ -35,7 +41,7 @@ stdenv.mkDerivation rec {
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
   # Fixup broken libtool and pkgconfig files
-  preFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  preFixup = optionalString (!stdenv.isDarwin) ''
     sed -e 's,-ltspi,-L${trousers}/lib -ltspi,' \
         -e 's,-lz,-L${zlib}/lib -lz,' \
         -e 's,-lgmp,-L${gmp}/lib -lgmp,' \

@@ -23,6 +23,7 @@ rec {
         passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
+        allowSubstitutes = false;
       }
       ''
         n=$out${destination}

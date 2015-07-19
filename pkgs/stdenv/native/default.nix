@@ -98,7 +98,7 @@ rec {
 
 
   stdenvBoot0 = makeStdenv {
-    cc = "/no-such-path";
+    cc = null;
     fetchurl = null;
   };
 

@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "5b894ae6dc574c7022258e2732bea649c82c959ec4d0be13fb5a3e8ba8488f28";
   };
 
+  postPatch = ''
+    for f in hashdict.cc orddict.cc; do
+      sed -i '1i\#include <stddef.h>' $f
+    done
+  '';
+
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
