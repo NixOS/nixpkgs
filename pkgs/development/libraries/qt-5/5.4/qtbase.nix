@@ -172,11 +172,10 @@ stdenv.mkDerivation {
 
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
-
-      mkdir -p "$out/nix-support"
-      substitute ${./setup-hook.sh} "$out/nix-support/setup-hook" \
-        --subst-var out --subst-var-by lndir "${lndir}"
     '';
+
+  inherit lndir;
+  setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 
