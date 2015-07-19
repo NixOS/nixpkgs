@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     cat >$out/bin/adom <<EOF
     #! ${stdenv.shell}
-    (cd $out; $out/adom ; )
+    (cd $out; exec $out/adom ; )
     EOF
     chmod +x $out/bin/adom
   '';
