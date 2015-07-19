@@ -91,10 +91,6 @@ let
     '')}
   '';
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface:
-    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
-
   addrOpts = v:
     assert v == 4 || v == 6;
     {
