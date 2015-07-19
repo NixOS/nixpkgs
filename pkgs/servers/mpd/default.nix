@@ -38,6 +38,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0vzj365s4j0pw5w37lfhx3dmpkdp85driravsvx8rlrw0lii91a7";
   };
 
+  patches = stdenv.lib.optionals stdenv.isDarwin ./darwin-enable-cxx-exceptions.patch;
+
   buildInputs = [ pkgconfig glib boost ]
     ++ opt stdenv.isLinux systemd
     ++ opt (stdenv.isLinux && alsaSupport) alsaLib
