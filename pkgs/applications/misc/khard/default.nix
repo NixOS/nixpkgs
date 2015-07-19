@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgs, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  version = "0.4.0";
+  version = "0.4.1";
   name = "khard-${version}";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/scheibler/khard/archive/v${version}.tar.gz";
-    sha256 = "0xvg8725297faw5mk7ka4xjc968vq3ix7izd4vmsaqysl43gnh21";
+    sha256 = "09yibjzly711hwpg345n653rz47llvrj4shnlcxd8snzvg8m5gri";
   };
 
   propagatedBuildInputs = with pythonPackages; [

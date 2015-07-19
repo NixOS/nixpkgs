@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "http://www.linux-pam.org/library/Linux-PAM-${version}.tar.bz2";
-    sha256 = "192y2fgf24a5qsg7rl1mzgw5axs5lg8kqamkfff2x50yjv2ym2yd";
+    sha256 = "1n9lnf9gjs72kbj1g354v1xhi2j27aqaah15vykh7cnkq08i4arl";
   };
 
   nativeBuildInputs = [ flex ];

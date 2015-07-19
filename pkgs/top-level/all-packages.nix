@@ -4961,6 +4961,8 @@ let
 
   php56 = callPackage ../development/interpreters/php/5.6.nix { };
 
+  php70 = callPackage ../development/interpreters/php/7.0.nix { };
+
   picoc = callPackage ../development/interpreters/picoc {};
 
   picolisp = callPackage ../development/interpreters/picolisp {};
@@ -8395,6 +8397,8 @@ let
     fetchurl = fetchurlBoot;
   };
 
+  zlog = callPackage ../development/libraries/zlog { };
+
   zlibStatic = lowPrio (appendToName "static" (callPackage ../development/libraries/zlib {
     static = true;
   }));
@@ -10763,6 +10767,8 @@ let
   calf = callPackage ../applications/audio/calf {
       inherit (gnome) libglade;
   };
+
+  calcurse = callPackage ../applications/misc/calcurse { };
 
   calibre = callPackage ../applications/misc/calibre {
     inherit (pythonPackages) pyqt5 sip_4_16;
@@ -15103,5 +15109,7 @@ let
   opentsdb = callPackage ../tools/misc/opentsdb {};
 
   hbase = callPackage ../servers/hbase {};
+
+  udevil = callPackage ../applications/misc/udevil {};
 
 }; in self; in pkgs
