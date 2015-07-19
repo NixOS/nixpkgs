@@ -8396,6 +8396,8 @@ let
     fetchurl = fetchurlBoot;
   };
 
+  zlog = callPackage ../development/libraries/zlog { };
+
   zlibStatic = lowPrio (appendToName "static" (callPackage ../development/libraries/zlib {
     static = true;
   }));
