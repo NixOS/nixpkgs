@@ -3006,6 +3006,8 @@ let
 
   super = callPackage ../tools/security/super { };
 
+  superUserSpark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
+
   ssdeep = callPackage ../tools/security/ssdeep { };
 
   sshpass = callPackage ../tools/networking/sshpass { };
