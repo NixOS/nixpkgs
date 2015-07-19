@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dnscrypt-proxy-${version}";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://download.dnscrypt.org/dnscrypt-proxy/${name}.tar.bz2";
-    sha256 = "1cp3ivxngrihil6i7b659d39v9v6iwjs16s2kj9wz1anzyx0j6nx";
+    sha256 = "0zfw9vi9qbsc55awncyigqfqp25v5adqk6jpg1jdfkmbqqfykk70";
   };
 
   configureFlags = ''
