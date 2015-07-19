@@ -124,8 +124,8 @@ let
     } //
     # packages from nixpkgs
     (with pkgs; {
-      inherit attr bash cairo cmake dbus epoxy exiv2 ffmpeg freetype
-              glib gnugrep gnused gtk2 gtk3 libinput libssh
+      inherit attr bash cairo cmake coreutils dbus epoxy exiv2 ffmpeg
+              freetype glib gnugrep gnused gtk2 gtk3 libinput libssh
               modemmanager openconnect openexr pam pango qt4 samba
               socat substituteAll taglib utillinux wayland xapian
               xkeyboard_config xlibs xorg;
@@ -233,7 +233,7 @@ let
       patches = [ ./plasma-workspace/0001-startkde-NixOS-patches.patch ];
       buildInputs = with scope.xlibs; [ libSM libXcursor scope.pam ];
 
-      inherit (scope) bash gnused gnugrep socat;
+      inherit (scope) bash coreutils gnused gnugrep socat;
       inherit (scope) kconfig kinit kservice qt5tools;
       inherit (scope.xorg) mkfontdir xmessage xprop xrdb xset xsetroot;
       dbus_tools = scope.dbus.tools;

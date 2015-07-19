@@ -268,4 +268,8 @@ self: super: {
   # Inexplicable haddock failure
   # https://github.com/gregwebs/aeson-applicative/issues/2
   aeson-applicative = dontHaddock super.aeson-applicative;
+
+  # GHC 7.10.1 is affected by https://github.com/srijs/hwsl2/issues/1.
+  hwsl2 = dontCheck super.hwsl2;
+
 }
