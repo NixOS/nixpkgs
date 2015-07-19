@@ -104,6 +104,7 @@ stdenv.mkDerivation {
     -strip
     -reduce-relocations
     -system-proxies
+    -pkg-config
 
     -gui
     -widgets
