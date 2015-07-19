@@ -15107,4 +15107,6 @@ let
 
   hbase = callPackage ../servers/hbase {};
 
+  udevil = callPackage ../applications/misc/udevil {};
+
 }; in self; in pkgs
