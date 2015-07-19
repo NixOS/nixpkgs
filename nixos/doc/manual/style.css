@@ -104,9 +104,6 @@ pre.screen, pre.programlisting
     padding: 3px 3px;
     margin-left: 1.5em;
     margin-right: 1.5em;
-    color: #600000;
-    background: #f4f4f8;
-    font-family: monospace;
     border-radius: 0.4em;
     box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
 }

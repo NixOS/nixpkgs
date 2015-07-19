@@ -8,7 +8,7 @@
 
 <para>The NixOS configuration file generally looks like this:
 
-<programlisting>
+<programlisting role="nix">
 { config, pkgs, ... }:
 
 { <replaceable>option definitions</replaceable>
@@ -67,14 +67,14 @@ that share the same prefix (such as
 instance, if you try to define an option that doesn’t exist (that is,
 doesn’t have a corresponding <emphasis>option declaration</emphasis>),
 <command>nixos-rebuild</command> will give an error like:
-<screen>
+<screen role="nohighlight hljs">
 The option `services.httpd.enable' defined in `/etc/nixos/configuration.nix' does not exist.
 </screen>
 Likewise, values in option definitions must have a correct type.  For
 instance, <option>services.httpd.enable</option> must be a Boolean
 (<literal>true</literal> or <literal>false</literal>).  Trying to give
 it a value of another type, such as a string, will cause an error:
-<screen>
+<screen role="nohighlight hljs">
 The option value `services.httpd.enable' in `/etc/nixos/configuration.nix' is not a boolean.
 </screen>
 
@@ -98,7 +98,7 @@ networking.hostName = "dexter";
       <para>Multi-line strings can be enclosed in <emphasis>double
       single quotes</emphasis>, e.g.
 
-<programlisting>
+<programlisting role="nix">
 networking.extraHosts =
   ''
     127.0.0.2 other-localhost
@@ -133,7 +133,7 @@ networking.firewall.allowPing = false;
     <listitem>
       <para>For example,
 
-<programlisting>
+<programlisting role="nix">
 boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 60;
 </programlisting>
 

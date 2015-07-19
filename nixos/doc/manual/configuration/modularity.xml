@@ -65,7 +65,7 @@ instance, if two modules define
 <option>services.httpd.adminAddr</option>,
 <command>nixos-rebuild</command> will give an error:
 
-<screen>
+<screen role="nohighlight hljs">
 The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc/nixos/httpd.nix' and `/etc/nixos/configuration.nix'.
 </screen>
 

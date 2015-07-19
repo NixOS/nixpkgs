@@ -60,7 +60,7 @@ to the initial ramdisk.</para>
 
 <para>Kernel runtime parameters can be set through
 <option>boot.kernel.sysctl</option>, e.g.
-<programlisting>
+<programlisting role="nix">
 boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
 </programlisting>
 sets the kernel’s TCP keepalive time to 120 seconds.  To see the

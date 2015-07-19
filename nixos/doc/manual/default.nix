@@ -1,5 +1,4 @@
-{ pkgs, options, version, revision }:
-
+{ pkgs, options, version, revision }: 
 with pkgs;
 with pkgs.lib;
 
@@ -61,6 +60,11 @@ let
       echo "${version}" > version
     '';
 
+  hljs = import ./highlight/default.nix {
+    inherit pkgs;
+    buildArgs = "nix bash json xml";
+  };
+
 in rec {
 
   # The NixOS options in JSON format.
@@ -102,10 +106,13 @@ in rec {
       # Generate the HTML manual.
       dst=$out/share/doc/nixos
       mkdir -p $dst
+
+      XML_CATALOG_FILES="catalog.xml  file://${docbook5_xsl}/share/xml/docbook-xsl-ns/catalog.xml" \
       xsltproc \
         --param section.autolabel 1 \
         --param section.label.includes.component.label 1 \
-        --stringparam html.stylesheet style.css \
+        --stringparam html.stylesheet "style.css \
+                                       highlight.css" \
         --param xref.with.number.and.title 1 \
         --param toc.section.depth 3 \
         --stringparam admon.style "" \
@@ -113,14 +120,17 @@ in rec {
         --param chunk.section.depth 0 \
         --param chunk.first.sections 1 \
         --param use.id.as.filename 1 \
-        --stringparam generate.toc "book toc chapter toc appendix toc" \
+        --stringparam generate.toc "book toc chapter appendix toc" \
         --nonet --xinclude --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunkfast.xsl ./manual.xml
+        ${./html-customization-layer.xsl} ./manual.xml
 
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
 
+      cp ${./highlight/init.js} $dst/init.js
       cp ${./style.css} $dst/style.css
+      cp ${hljs}/styles/github.css $dst/highlight.css
+      cp -r ${hljs}/highlight.pack.js $dst/highlight.js
 
       mkdir -p $out/nix-support
       echo "nix-build out $out" >> $out/nix-support/hydra-build-products
