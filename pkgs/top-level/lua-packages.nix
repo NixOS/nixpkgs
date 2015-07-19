@@ -8,6 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, fetchFromGitHub
 }:
 
 let
@@ -145,11 +146,12 @@ let
   };
 
   luasec = buildLuaPackage rec {
-    version = "0.5";
-    name = "sec-${version}";
-    src = fetchzip {
-      url = "https://github.com/brunoos/luasec/archive/luasec-${version}.tar.gz";
-      sha256 = "1zl6wwcyd4dfcw01qan7dkcw0rgzm69w819qbaddcr2ik147ccmq";
+    name = "sec-0.6pre-2015-04-17";
+    src = fetchFromGitHub {
+      owner = "brunoos";
+      repo = "luasec";
+      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
+      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
     };
 
     buildInputs = [ openssl ];
