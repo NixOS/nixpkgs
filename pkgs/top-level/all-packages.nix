@@ -3687,8 +3687,12 @@ let
 
   gcc_multi =
     if system == "x86_64-linux" then lowPrio (
-      wrapCCWith (import ../build-support/cc-wrapper) glibc_multi (gcc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi gcc.cc);
+      let
+        extraBuildCommands = ''
+          echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+        '';
+      in wrapCCWith (import ../build-support/cc-wrapper) glibc_multi extraBuildCommands (gcc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi "" gcc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
@@ -4741,7 +4745,7 @@ let
 
   win32hello = callPackage ../development/compilers/visual-c++/test { };
 
-  wrapCCWith = ccWrapper: libc: baseCC: ccWrapper {
+  wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
@@ -4750,10 +4754,10 @@ let
     dyld = if stdenv.isDarwin then darwin.dyld else null;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
-    inherit stdenv binutils coreutils zlib;
+    inherit stdenv binutils coreutils zlib extraBuildCommands;
   };
 
-  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) stdenv.cc.libc;
+  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) stdenv.cc.libc "";
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: (makeOverridable (import ../build-support/gcc-wrapper-old)) {
     nativeTools = stdenv.cc.nativeTools or false;
