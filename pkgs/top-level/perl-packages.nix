@@ -4674,6 +4674,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  IMAPClient = buildPerlPackage {
+    name = "IMAP-Client-0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/CONTEB/IMAP-Client-0.13.tar.gz;
+      sha256 = "15fa4hpw2rqg2iadyz10rnv99hns78wph5qlh3257a3mbfjjyyla";
+    };
+    propagatedBuildInputs = [IOSocketSSL URIIMAP];
+    doCheck = false; # nondeterministic
+  };
+
   ImportInto = buildPerlPackage {
     name = "Import-Into-1.002004";
     src = fetchurl {
