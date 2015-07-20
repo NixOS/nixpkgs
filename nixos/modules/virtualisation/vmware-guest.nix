@@ -8,7 +8,7 @@ let
 in
 {
   options = {
-    services.vmwareGuest.enable = mkEnableOption "Enable VMWare Guest Support";
+    services.vmwareGuest.enable = mkEnableOption "VMWare Guest Support";
   };
 
   config = mkIf cfg.enable {

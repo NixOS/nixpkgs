@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preInstall = ''
-    patchShebangs src/scripts
+    if [ -d src/scripts ]; then
+      patchShebangs src/scripts
+    fi
   '';
 
   postInstall = ''

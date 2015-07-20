@@ -1,9 +1,22 @@
-{ callPackage, pkgs, self }:
+{ pkgs }:
 
-rec {
+let
+
+  pkgsFun = overrides:
+    let 
+      self = self_ // overrides;
+      self_ = with self; {
+
+  overridePackages = f:
+    let newself = pkgsFun (f newself self);
+    in newself;
+
+  callPackage = pkgs.newScope self;
+
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
     pkgs.shared_mime_info # for update-mime-database
+    glib # for gsettings
     gtk3 # for gtk-update-icon-cache
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
@@ -16,7 +29,7 @@ rec {
     gnome-shell-extensions gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor
+    nautilus-sendto dconf-editor vinagre
   ];
 
   inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -29,6 +42,7 @@ rec {
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
   gtkmm = gtkmm3;
+  gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
   vala = pkgs.vala_0_26;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
@@ -257,7 +271,7 @@ rec {
 
   seahorse = callPackage ./apps/seahorse { };
 
-  pomodoro = callPackage ./apps/pomodoro { };
+  vinagre = callPackage ./apps/vinagre { };
 
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
@@ -267,19 +281,13 @@ rec {
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
+  california = callPackage ./misc/california { };
+
   geary = callPackage ./misc/geary { 
     webkitgtk = webkitgtk24x;
   };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
-
-  goffice = callPackage ./misc/goffice { };
-
-  goffice_0_8 = callPackage ./misc/goffice/0.8.nix { 
-    inherit (pkgs.gnome2) libglade libgnomeui;
-    gconf = pkgs.gnome2.GConf;
-    libart = pkgs.gnome2.libart_lgpl;
-  };
 
   gitg = callPackage ./misc/gitg { 
     webkitgtk = webkitgtk24x;
@@ -301,4 +309,9 @@ rec {
 
   gtkhtml = callPackage ./misc/gtkhtml { };
 
-}
+  pomodoro = callPackage ./misc/pomodoro { };
+
+    };
+  in self; # pkgsFun
+
+in pkgsFun {}

@@ -4,12 +4,12 @@ with goPackages;
 
 buildGoPackage rec {
   name = "syncthing-${version}";
-  version = "0.11.5";
+  version = "0.11.16";
   goPackagePath = "github.com/syncthing/syncthing";
   src = fetchgit {
     url = "git://github.com/syncthing/syncthing.git";
     rev = "refs/tags/v${version}";
-    sha256 = "3a68cdecaec8d00b0fbf6348fb9b8adc628910e9572a89d9a413d6e7b79e7a06";
+    sha256 = "f9b5c2de7e2b6592cccb0222c48b9baa2497dce519824a75923d40cc722ab937";
   };
 
   subPackages = [ "cmd/syncthing" ];
@@ -25,8 +25,8 @@ buildGoPackage rec {
   meta = {
     homepage = http://syncthing.net/;
     description = "Replaces Dropbox and BitTorrent Sync with something open, trustworthy and decentralized";
-    license = with lib.licenses; mit;
-    maintainers = with lib.maintainers; [ matejc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matejc theuni ];
     platforms = with lib.platforms; unix;
   };
 }

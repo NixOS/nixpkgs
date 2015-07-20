@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "16614ebddf8ab2811d3dc0e7f329c7de88929ac6a9632d4cb4aef7fe11b8f2a9";
   };
 
+  patches = [ ./fix-CVE-2012-3368.patch ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp dtach $out/bin/dtach

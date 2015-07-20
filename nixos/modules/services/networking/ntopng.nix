@@ -57,7 +57,7 @@ in
 
       http-port = mkOption {
         default = 3000;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           Sets the HTTP port of the embedded web server.
         '';

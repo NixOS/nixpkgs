@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     description = "The Glasgow Haskell Compiler";
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
     inherit (ghc.meta) license;
-    broken = true;              # https://github.com/NixOS/nixpkgs/issues/7810
   };
 }

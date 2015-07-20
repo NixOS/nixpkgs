@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed }:
+{ stdenv, fetchurl, flex, bison, zlib, libpng, ncurses, ed, automake }:
 
 stdenv.mkDerivation {
   name = "tetex-3.0";
@@ -20,6 +20,10 @@ stdenv.mkDerivation {
     sed -i 57d texk/kpathsea/c-std.h
   '';
 
+  preConfigure = if stdenv.isCygwin then ''
+    find ./ -name "config.guess" -exec rm {} \; -exec ln -s ${automake}/share/automake-*/config.guess {} \;
+  '' else null;
+
   patches = [ ./environment.patch ./getline.patch ./clang.patch ];
 
   setupHook = ./setup-hook.sh;
@@ -35,6 +39,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/texmf
     mkdir -p $out/share/texmf-dist
     gunzip < $texmf | (cd $out/share/texmf-dist && tar xvf -)
+
+    substituteInPlace ./tetex-src-3.0/configure --replace /usr/bin/install $(type -P install)
   '';
 
   meta = with stdenv.lib; {

@@ -9,7 +9,6 @@
 , genericName
 , mimeType ? ""
 , categories ? "Application;Other;"
-, encoding ? "UTF-8"
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +26,6 @@ stdenv.mkDerivation {
     GenericName=${genericName}
     MimeType=${mimeType}
     Categories=${categories}
-    Encoding=${encoding}
     EOF
   '';
 }

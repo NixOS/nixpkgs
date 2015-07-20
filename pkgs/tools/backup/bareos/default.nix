@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool
+{ stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
 , readline ? null, openssl ? null, python ? null, ncurses ? null
 , sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
 , acl ? null, glusterfs ? null, libceph ? null, libcap ? null
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig nettools gettext readline openssl python
+    pkgconfig nettools gettext readline openssl python flex
     ncurses sqlite postgresql libmysql zlib lzo acl glusterfs libceph libcap
   ];
 
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
     "working_dir=\${TMPDIR}"
     "log_dir=\${TMPDIR}"
+    "sbindir=\${out}/bin"
   ];
 
   meta = with stdenv.lib; {

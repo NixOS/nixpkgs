@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0rlnzmiqdannzf81fbh41541lrck63v9zhskm6h4i2jj8ahvsa8f";
   };
 
-  patches = [ ./rtcwake-search-PATH-for-shutdown.patch
-            ];
+  patches = [
+    ./rtcwake-search-PATH-for-shutdown.patch
+  ];
 
   #FIXME: make it also work on non-nixos?
   postPatch = ''

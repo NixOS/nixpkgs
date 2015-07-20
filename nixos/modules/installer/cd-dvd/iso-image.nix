@@ -40,7 +40,7 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixosVersion} Installer
+    MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel}
     LINUX /boot/bzImage
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
@@ -192,6 +192,18 @@ in
       '';
     };
 
+    isoImage.appendToMenuLabel = mkOption {
+      default = " Installer";
+      example = " Live System";
+      description = ''
+        The string to append after the menu label for the NixOS system.
+        This will be directly appended (without whitespace) to the NixOS version
+        string, like for example if it is set to <literal>XXX</literal>:
+
+        <para><literal>NixOS 99.99-pre666XXX</literal></para>
+      '';
+    };
+
   };
 
   config = {
@@ -204,7 +216,7 @@ in
 
     # !!! Hack - attributes expected by other modules.
     system.boot.loader.kernelFile = "bzImage";
-    environment.systemPackages = [ pkgs.grub2 pkgs.syslinux ];
+    environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi pkgs.syslinux ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the

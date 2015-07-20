@@ -1,13 +1,15 @@
 { stdenv, lib, goPackages, fetchFromGitHub }:
 
 goPackages.buildGoPackage rec {
-  name = "prometheus-cli-0.2.0";
+  name = "prometheus-cli-${rev}";
+  rev = "0.3.0";
   goPackagePath = "github.com/prometheus/prometheus_cli";
+
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "prometheus_cli";
-    rev = "b36c21d2301cf686bff81953573a29a6d5a0a883";
-    sha256 = "190dlc6fyrfgxab4xj3gaz4jwx33jhzg57d8h36xjx56gbvp7iyk";
+    inherit rev;
+    sha256 = "1qxqrcbd0d4mrjrgqz882jh7069nn5gz1b84rq7d7z1f1dqhczxn";
   };
 
   buildInputs = [

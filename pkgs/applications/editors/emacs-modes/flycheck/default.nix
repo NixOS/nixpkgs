@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, emacs, let-alist, dash, texinfo }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "flycheck-0.22-64-g90dbc2d";
 
   src = fetchFromGitHub {
@@ -24,8 +24,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/magit/git-modes";
-    description = "Emacs modes for various Git-related files";
+    inherit (src.meta) homepage;
+    description = "Modern on-the-fly syntax checking for GNU Emacs";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ simons ];
   };

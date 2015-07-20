@@ -15,7 +15,7 @@ in
 
     enable = mkOption {
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
       description = ''
         If true, enable cgit (fast web interface for git repositories) as a
         sub-service in lighttpd. cgit will be accessible at

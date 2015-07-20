@@ -25,7 +25,7 @@ in
   options = {
 
     services.unifi.enable = mkOption {
-      type = types.uniq types.bool;
+      type = types.bool;
       default = false;
       description = ''
         Whether or not to enable the unifi controller service.
@@ -71,7 +71,7 @@ in
         rm -rf "${stateDir}/webapps"
         mkdir -p "${stateDir}/webapps"
         chown unifi "${stateDir}/webapps"
-        ln -s "${pkgs.unifi}/webapps/ROOT.war" "${stateDir}/webapps/ROOT.war"
+        ln -s "${pkgs.unifi}/webapps/ROOT" "${stateDir}/webapps/ROOT"
       '';
 
       postStop = ''

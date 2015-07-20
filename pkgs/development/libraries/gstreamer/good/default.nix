@@ -3,7 +3,7 @@
 , libv4l, libdv, libavc1394, libiec61883
 , libvpx, speex, flac, taglib
 , cairo, gdk_pixbuf, aalib, libcaca
-, libsoup, pulseaudio, libintlOrEmpty
+, libsoup, libpulseaudio, libintlOrEmpty
 }:
 
 let
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libsoup
   ]
   ++ libintlOrEmpty
-  ++ optionals stdenv.isLinux [ libv4l pulseaudio libavc1394 libiec61883 ];
+  ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }

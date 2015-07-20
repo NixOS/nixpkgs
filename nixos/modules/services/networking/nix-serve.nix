@@ -26,6 +26,14 @@ in
         '';
       };
 
+      secretKeyFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          The path to the file used for signing derivation data.
+        '';
+      };
+
       extraParams = mkOption {
         type = types.string;
         default = "";
@@ -44,13 +52,19 @@ in
 
       path = [ config.nix.package pkgs.bzip2 ];
       environment.NIX_REMOTE = "daemon";
+      environment.NIX_SECRET_KEY_FILE = cfg.secretKeyFile;
 
       serviceConfig = {
         ExecStart = "${pkgs.nix-serve}/bin/nix-serve " +
           "--port ${cfg.bindAddress}:${toString cfg.port} ${cfg.extraParams}";
-        User = "nobody";
+        User = "nix-serve";
         Group = "nogroup";
       };
+    };
+
+    users.extraUsers.nix-serve = {
+      description = "Nix-serve user";
+      uid = config.ids.uids.nix-serve;
     };
   };
 }

@@ -5,11 +5,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.0.18";
+  version = "10.0.20";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "1xcs391cm0vnl9bvx1470v8z4d77zqv16n6iaqi12jm0ma8fwvv8";
+    sha256 = "0ywb730l68mxvmpik1x2ndbdaaks6dmc17pxspspm5wlqxinjkrs";
   };
 
   buildInputs = [ cmake ncurses openssl zlib pcre libxml2 boost judy bison libevent ]
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1";
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
+    "-DWITHOUT_TOKUDB=1"
+  ];
 
   enableParallelBuilding = true;
 
@@ -111,7 +112,7 @@ stdenv.mkDerivation rec {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;
     license     = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thoughtpolice wkennington ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice wkennington ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

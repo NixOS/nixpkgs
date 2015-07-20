@@ -13,6 +13,5 @@ stdenv.mkDerivation rec {
     homepage = http://c-ares.haxx.se;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ shlevy ];
   };
 }

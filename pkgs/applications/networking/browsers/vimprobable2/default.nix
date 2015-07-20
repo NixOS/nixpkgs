@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk, libsoup, libX11, perl,
-  pkgconfig, webkit, gsettings_desktop_schemas }:
+  pkgconfig, webkit, gsettings_desktop_schemas, cacert }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # Nixos default ca bundle
   patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ssl/certs/ca-bundle.crt, config.h
+    sed -i s,/etc/ssl/certs/ca-certificates.crt,${cacert}/etc/ssl/certs/ca-bundle.crt, config.h
   '';
 
   buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];

@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    wrapProgram "$out/libexec/gnome-user-share" \
+    wrapProgram "$out/libexec/gnome-user-share-webdav" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   '';

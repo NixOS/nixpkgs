@@ -8,6 +8,7 @@
 , ngx_lua ? false
 , set_misc ? false
 , fluent ? false
+, extraModules ? []
 }:
 
 with stdenv.lib;
@@ -57,8 +58,8 @@ let
   lua-ext = fetchFromGitHub {
     owner = "openresty";
     repo = "lua-nginx-module";
-    rev = "v0.9.15";
-    sha256 = "0kicfs0gyfb5fhjmrwr6p09c5x6g0jwsh0wg5bsp3p209rnbq94q";
+    rev = "v0.9.16";
+    sha256 = "0dvdam228jhsrayb22ishljdkgib08bakh8ygn84sq0c2xbidzlp";
   };
 
   set-misc-ext = fetchFromGitHub {
@@ -133,7 +134,8 @@ stdenv.mkDerivation rec {
     ++ optional set_misc "--add-module=${set-misc-ext}"
     ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd)) 
         [ "--with-file-aio" "--with-aio_module" ]
-    ++ optional fluent "--add-module=${fluentd}";
+    ++ optional fluent "--add-module=${fluentd}"
+    ++ (map (m: "--add-module=${m}") extraModules);
 
 
   additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";

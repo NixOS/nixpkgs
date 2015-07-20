@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       reliable and faster recovery.
     '';
     homepage = http://foremost.sourceforge.net/;
-    license = with licenses; publicDomain;
+    license = licenses.publicDomain;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

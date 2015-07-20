@@ -38,7 +38,7 @@ let
     };
     opam = fetchurl {
       url = "https://github.com/ocaml/opam/archive/1.2.2.zip";
-      sha256 = "1fxd5axlh9f3jb47y9paa9ld78qwcyp7pv3m60k401ym1dps32jk";
+      sha256 = "c590ce55ae69ec74f46215cf16a156a02b23c5f3ecb22f23a3ad9ba3d91ddb6e";
     };
   };
 in stdenv.mkDerivation rec {

@@ -1,0 +1,23 @@
+diff --git a/src/Kconfig b/src/Kconfig
+index 45ca59c..faf8951 100644
+--- a/src/Kconfig
++++ b/src/Kconfig
+@@ -144,13 +144,13 @@ menu "Hardware support"
+     config ATA_DMA
+         depends on ATA
+         bool "ATA DMA"
+-        default n
++        default y
+         help
+             Detect and try to use ATA bus mastering DMA controllers.
+     config ATA_PIO32
+         depends on ATA
+         bool "ATA 32bit PIO"
+-        default n
++        default y
+         help
+             Use 32bit PIO accesses on ATA (minor optimization on PCI 
+transfers).
+     config AHCI
+-- 
+1.7.10.4

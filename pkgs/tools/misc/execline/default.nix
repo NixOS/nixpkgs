@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.1.1.0";
+  version = "2.1.2.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/execline";
     rev = "refs/tags/v${version}";
-    sha256 = "0yhxyih8p6p9135nifi655qk4gnhdarjzfp1lb4pxx9ar9ay5q7w";
+    sha256 = "0p9wp1rq8010k5yxlvamajhi6m24r9v7ikb7scvznf6zb2b0d9hf";
   };
 
   dontDisableStatic = true;
@@ -32,6 +32,7 @@ in stdenv.mkDerivation rec {
     description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

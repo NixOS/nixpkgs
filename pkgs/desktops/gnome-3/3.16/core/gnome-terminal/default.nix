@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     for f in "$out/libexec/gnome-terminal-server"; do
-      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+      wrapProgram "$f" \
+        --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
     done
   '';
 

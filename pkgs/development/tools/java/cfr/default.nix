@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       entirely in Java 6.
     '';
     homepage = http://www.benf.org/other/cfr/;
-    license = with licenses; mit;
+    license = licenses.mit;
     platforms = with platforms; all;
     maintainers = with maintainers; [ nckx ];
   };

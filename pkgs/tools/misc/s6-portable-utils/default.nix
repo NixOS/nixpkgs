@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.4.0";
+  version = "2.0.5.0";
 
 in stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6-portable-utils/${name}.tar.gz";
-    sha256 = "0gl4v6hslqkxdfxj3qzi1xpiiw52ic8y8l9nkl2z5gp893qb6yvx";
+    sha256 = "099c7isi5vynis4iaiz362rvr73w4rvjhv3c2f7ddxgfyvd2331l";
   };
 
   dontDisableStatic = true;
@@ -27,6 +27,7 @@ in stdenv.mkDerivation rec {
     description = "A set of tiny general Unix utilities optimized for simplicity and small size";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

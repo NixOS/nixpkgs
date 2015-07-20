@@ -112,10 +112,13 @@ stdenv.mkDerivation rec {
     done <build/resources/0ad.desktop >"$out"/share/applications/0ad.desktop
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare";
     homepage = "http://wildfiregames.com/0ad/";
-    license = [ "GPLv2" "LGPLv2.1" "MIT" "CC BY-SA 3.0" "zlib" ];
+    license = with licenses; [
+      gpl2 lgpl21 mit cc-by-sa-30
+      licenses.zlib # otherwise masked by pkgs.zlib
+    ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

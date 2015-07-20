@@ -1,8 +1,8 @@
 { stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null
 , notebookSupport ? true   # ipython notebook
 , qtconsoleSupport ? true  # ipython qtconsole
-, pylabSupport ? true      # ipython --pylab    (backend: agg - no gui, just file)
-, pylabQtSupport ? true    # ipython --pylab=qt (backend: Qt4Agg - plot to window)
+, pylabSupport ? true      # '%pylab' magic (backend: agg - no gui, just file)
+, pylabQtSupport ? true    # '%pylab qt' (backend: Qt4Agg - plot to window)
 }:
 
 # ipython qtconsole works with both pyside and pyqt4. But ipython --pylab=qt
@@ -52,6 +52,6 @@ buildPythonPackage rec {
       enhanced interactive Python shell and an architecture for
       interactive parallel computing.
     '';
-    maintainers = [ stdenv.lib.maintainers.bjornfor ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor jgeerds ];
   };
 }

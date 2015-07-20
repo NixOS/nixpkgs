@@ -2,17 +2,17 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "obnam-${version}";
-  version = "1.8";
+  version = "1.12";
 
   namePrefix = "";
 
   src = fetchurl rec {
-    url = "http://code.liw.fi/debian/pool/main/o/obnam/obnam_${version}.orig.tar.gz";
-    sha256 = "0190yz65hfdq69xws4h1izxz59by0b437d7z1l4cf5ixkv16j17p";
+    url = "http://code.liw.fi/debian/pool/main/o/obnam/obnam_${version}.orig.tar.xz";
+    sha256 = "09b9j2mygv1dsrq424j535c92wvlbzpwgzcgg7x922dxrnsdsxpr";
   };
 
   buildInputs = [ pythonPackages.sphinx attr ];
-  propagatedBuildInputs = [ pycrypto pythonPackages.paramiko pythonPackages.tracing pythonPackages.ttystatus pythonPackages.cliapp pythonPackages.larch ];
+  propagatedBuildInputs = [ pycrypto pythonPackages.paramiko pythonPackages.tracing pythonPackages.ttystatus pythonPackages.cliapp pythonPackages.larch pythonPackages.pyyaml ];
 
   doCheck = false;
 

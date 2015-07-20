@@ -5,11 +5,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.30";
+  name = "bluez-5.32";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "0b1qbnq1xzcdw5rajg9yyg31bf21jnff0n6gnf1snz89bbdllfhy";
+    sha256 = "1xspdw87h2mpy5q36q7225yizgcvxlag1b8qi13h9v6b07kkakzy";
   };
 
   pythonPath = with pythonPackages;

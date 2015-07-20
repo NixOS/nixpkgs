@@ -24,7 +24,7 @@ let version = "5.18"; in
 
     #doCheck = true; # 2 tests fail because of missing /dev/tty
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "Automated text and program generation tool";
 
       longDescription = ''
@@ -46,7 +46,7 @@ let version = "5.18"; in
         documentation of program options.
       '';
 
-      license = ["GPLv3+" "LGPLv3+" ];
+      license = with licenses; [ gpl3Plus lgpl3Plus ];
 
       homepage = http://www.gnu.org/software/autogen/;
 

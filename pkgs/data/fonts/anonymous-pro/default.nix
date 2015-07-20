@@ -1,50 +1,36 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, unzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version = "1.002";
-    name="anonymousPro";
-    url="http://www.ms-studio.com/FontSales/AnonymousPro-${version}.zip";
+stdenv.mkDerivation rec {
+  name = "anonymousPro-${version}";
+  version = "1.002";
+
+  src = fetchurl {
+    url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";
     sha256 = "1asj6lykvxh46czbal7ymy2k861zlcdqpz8x3s5bbpqwlm3mhrl6";
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.sha256;
-  };
 
-  name = "${sourceInfo.name}-${sourceInfo.version}";
-  inherit buildInputs;
+  nativeBuildInputs = [ unzip ];
+  phases = [ "unpackPhase" "installPhase" ];
 
-  phaseNames = ["doUnpack" "installFonts"];
+  installPhase = ''
+    mkdir -p $out/share/fonts/truetype
+    mkdir -p $out/share/doc/${name}
+    find . -name "*.ttf" -exec cp -v {} $out/share/fonts/truetype \;
+    find . -name "*.txt" -exec cp -v {} $out/share/doc/${name} \;
+  '';
 
-  doUnpack = a.fullDepEntry (''
-    unzip ${src}
-    cd AnonymousPro*/
-  '') ["addInputs"];
-      
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = http://www.marksimonson.com/fonts/view/anonymous-pro;
     description = "TrueType font set intended for source code";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
-    license = with a.lib.licenses; ofl;
-    hydraPlatforms = [];
-    homepage = "http://www.marksimonson.com/fonts/view/anonymous-pro";
-    downloadPage = "http://www.ms-studio.com/FontSales/anonymouspro.html";
-    inherit (sourceInfo) version;
+    longDescription = ''
+      Anonymous Pro (2009) is a family of four fixed-width fonts
+      designed with coding in mind. Anonymous Pro features an
+      international, Unicode-based character set, with support for
+      most Western and Central European Latin-based languages, plus
+      Greek and Cyrillic. It is designed by Mark Simonson.
+    '';
+    maintainers = with maintainers; [ raskin rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-}) x
-
+}

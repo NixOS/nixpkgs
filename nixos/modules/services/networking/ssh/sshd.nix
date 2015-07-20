@@ -234,7 +234,7 @@ in
         ];
         options = {
           hostNames = mkOption {
-            type = types.listOf types.string;
+            type = types.listOf types.str;
             default = [];
             description = ''
               A list of host names and/or IP numbers used for accessing
@@ -244,13 +244,12 @@ in
           publicKey = mkOption {
             default = null;
             type = types.nullOr types.str;
+            example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
             description = ''
               The public key data for the host. You can fetch a public key
               from a running SSH server with the <command>ssh-keyscan</command>
               command. The public key should not include any host names, only
-              the key type and the key itself. It is allowed to add several
-              lines here, each line will be treated as type/key pair and the
-              host names will be prepended to each line.
+              the key type and the key itself.
             '';
           };
           publicKeyFile = mkOption {
@@ -266,6 +265,16 @@ in
             '';
           };
         };
+      };
+
+      moduliFile = mkOption {
+        example = "services.openssh.moduliFile = /etc/my-local-ssh-moduli;";
+        type = types.path;
+        description = ''
+          Path to <literal>moduli</literal> file to install in
+          <literal>/etc/ssh/moduli</literal>. If this option is unset, then
+          the <literal>moduli</literal> file shipped with OpenSSH will be used.
+        '';
       };
 
     };
@@ -286,8 +295,10 @@ in
         description = "SSH privilege separation user";
       };
 
+    services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
+
     environment.etc = authKeysFiles ++ [
-      { source = "${cfgc.package}/etc/ssh/moduli";
+      { source = cfg.moduliFile;
         target = "ssh/moduli";
       }
       { text = knownHostsText;

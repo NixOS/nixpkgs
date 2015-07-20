@@ -1,23 +1,23 @@
 {
   execjs = {
-    version = "2.0.2";
+    version = "2.3.0";
     source = {
       type = "gem";
-      sha256 = "167kbkyql7nvvwjsgdw5z8j66ngq7kc59gxfwsxhqi5fl1z0jbjs";
+      sha256 = "097v02bhmzc70j7n0yyf8j0z5wms88zcmgpmggby4hnvqxf41y1h";
     };
   };
   json = {
-    version = "1.8.1";
+    version = "1.8.2";
     source = {
       type = "gem";
-      sha256 = "0002bsycvizvkmk1jyv8px1hskk6wrjfk4f7x5byi8gxm6zzn6wn";
+      sha256 = "0zzvv25vjikavd3b1bp6lvbgj23vv9jvmnl4vpim8pv30z8p6vr5";
     };
   };
   libv8 = {
-    version = "3.16.14.3";
+    version = "3.16.14.11";
     source = {
       type = "gem";
-      sha256 = "1arjjbmr9zxkyv6pdrihsz1p5cadzmx8308vgfvrhm380ccgridm";
+      sha256 = "000vbiy78wk5r1f6p7qncab8ldg7qw5pjz7bchn3lw700gpaacxp";
     };
   };
   ref = {
@@ -28,10 +28,10 @@
     };
   };
   sass = {
-    version = "3.3.6";
+    version = "3.4.11";
     source = {
       type = "gem";
-      sha256 = "0ra0kxx52cgyrq6db7a1vysk984ilshbx40bcf527k8b3fha6k5r";
+      sha256 = "10dncnv7g5v8d1xpw2aaarxjjlm68f7nm02ns2kl8nf3yxi6wzdf";
     };
   };
   therubyracer = {
@@ -46,10 +46,10 @@
     ];
   };
   uglifier = {
-    version = "2.5.0";
+    version = "2.7.0";
     source = {
       type = "gem";
-      sha256 = "0b9kxgyg8cv3g1bp6casndfzfy71jd9xyjxwng0lj90vzqrgjp20";
+      sha256 = "1x1mnakx086l83a3alj690c6n8kfmb4bk243a6m6yz99s15gbxfq";
     };
     dependencies = [
       "execjs"

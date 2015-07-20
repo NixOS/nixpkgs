@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fbida-2.09";
+  name = "fbida-2.10";
   
   src = fetchurl {
     url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
-    sha256 = "1riia87v5nsx858xnlvc7sspr1p36adjqrdch1255ikr5xbv6h6x";
+    sha256 = "1dkc1d6qlfa1gn94wcbyr7ayiy728q52fvbipwmnl2mlc6n3lnks";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
     makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP="];
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Image viewing and manipulation programs";
+    homepage = https://www.kraxel.org/blog/linux/fbida/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ pSub ];
   };
 }

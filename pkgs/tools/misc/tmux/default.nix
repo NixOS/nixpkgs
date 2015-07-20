@@ -1,10 +1,11 @@
 { stdenv, fetchurl, ncurses, libevent, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tmux-2.0";
+  name = "tmux-${version}";
+  version = "2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tmux/${name}.tar.gz";
+    url = "https://github.com/tmux/tmux/releases/download/${version}/${name}.tar.gz";
     sha256 = "0qnkda8kb747vmbldjpb23ksv9pq3s65xhh1ja5rdsmh8r24npvr";
   };
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://tmux.sourceforge.net/;
+    homepage = http://tmux.github.io/;
     description = "Terminal multiplexer";
 
     longDescription =
@@ -43,6 +44,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thammers ];
+    maintainers = with stdenv.lib.maintainers; [ thammers ];
   };
 }

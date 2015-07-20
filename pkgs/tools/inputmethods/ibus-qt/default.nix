@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-qt-${version}";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = "http://ibus.googlecode.com/files/${name}-Source.tar.gz";
-    sha256 = "070c8ef4e6c74eddf7ddf4385936aed730c2dfe2160162e5c56b5158d1061a76";
+    url = "https://github.com/ibus/ibus-qt/releases/download/${version}/${name}-Source.tar.gz";
+    sha256 = "1q9g7qghpcf07valc2ni7yf994xqx2pmdffknj7scxfidav6p19g";
   };
 
   buildInputs = [
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQT_PLUGINS_DIR=lib/qt4/plugins" ];
 
   meta = with stdenv.lib; {
-    homepage    = https://code.google.com/p/ibus/;
+    homepage    = https://github.com/ibus/ibus-qt/;
     description = "Qt4 interface to the ibus input method";
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;

@@ -1,4 +1,4 @@
-{ stdenv, goPackages, ruby , nodejs, bundlerEnv }:
+{ stdenv, goPackages, ruby, bundlerEnv }:
 
 let
   # `sass` et al
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = goPackages.consul.src;
 
-  buildInputs = [ ruby gems nodejs ];
+  buildInputs = [ ruby gems ];
 
   buildPhase = ''
     # Build ui static files

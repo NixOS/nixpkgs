@@ -208,8 +208,8 @@ in
 
       storagePath = mkOption {
         type = types.path;
-        default = "/var/lib/btsync";
-        example = "/var/lib/btsync";
+        default = "/var/lib/btsync/";
+        example = "/var/lib/btsync/";
         description = ''
           Where to store the bittorrent sync files.
         '';

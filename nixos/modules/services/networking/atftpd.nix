@@ -18,7 +18,7 @@ in
 
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''
           Whenever to enable the atftpd TFTP server.
         '';
@@ -26,7 +26,7 @@ in
 
       root = mkOption {
         default = "/var/empty";
-        type = types.uniq types.string;
+        type = types.str;
         description = ''
           Document root directory for the atftpd.
         '';

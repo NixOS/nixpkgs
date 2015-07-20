@@ -1,50 +1,28 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :
-let
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
-    [];
+{ stdenv, fetchzip }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="0.016";
-    name="EBGaramond";
-    url="https://bitbucket.org/georgd/eb-garamond/downloads/${name}-${version}.zip";
-    hash="0y630khn5zh70al3mm84fs767ac94ffyz1w70zzhrhambx07pdx0";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation rec {
+  name = "eb-garamond-${version}";
+  version = "0.016";
+
+  src = fetchzip {
+    url = "https://bitbucket.org/georgd/eb-garamond/downloads/EBGaramond-${version}.zip";
+    sha256 = "0j40bg1di39q7zis64il67xchldyznrl8wij9il10c4wr8nl4r9z";
   };
 
-  name = "eb-garamond-${sourceInfo.version}";
-  inherit buildInputs;
+  phases = [ "unpackPhase" "installPhase" ];
 
-  phaseNames = ["doUnpack" "installFonts"];
+  installPhase = ''
+    mkdir -p $out/share/fonts/opentype
+    mkdir -p $out/share/doc/${name}
+    cp -v "otf/"*.otf $out/share/fonts/opentype/
+    cp -v Changes README.markdown README.xelualatex $out/share/doc/${name}
+  '';
 
-  # This will clean up if/when 8263996 lands.
-  doUnpack = a.fullDepEntry (''
-    unzip ${src}
-    cd ${sourceInfo.name}*
-    mv {ttf,otf}/* .
-  '') ["addInputs"];
-
-  meta = with a.lib; {
-    description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
-    maintainers = with maintainers; [ relrod ];
-    platforms = platforms.all;
-    license = licenses.ofl;
+  meta = with stdenv.lib; {
     homepage = http://www.georgduffner.at/ebgaramond/;
+    description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
+    maintainers = with maintainers; [ relrod rycee ];
+    license = licenses.ofl;
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "https://github.com/georgd/EB-Garamond/releases";
-    };
-  };
-}) x
-
+}

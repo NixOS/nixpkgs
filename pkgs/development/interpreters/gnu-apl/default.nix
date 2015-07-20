@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, liblapack, readline, gettext, ncurses }:
+{ stdenv, fetchurl, readline, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "gnu-apl-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0h4diq3wfbdwxp5nm0z4b0p1zq13lwip0y7v28r9v0mbbk8xsfh1";
   };
 
-  buildInputs = [ liblapack readline gettext ncurses ];
+  buildInputs = [ readline gettext ncurses ];
 
   postInstall = ''
     cp -r support-files/ $out/share/doc/

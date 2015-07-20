@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage    = http://www.gnu.org/software/dico/;
-    license     = "GPLv3+";
+    license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
 

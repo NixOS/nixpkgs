@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
-
     /* Leads to an ICE on Cygwin:
 
        make[3]: Entering directory `/tmp/nix-build-9q5gw5m37q5l4f0kjfv9ar8fsc9plk27-ppl-0.10.2.drv-1/ppl-0.10.2/src'

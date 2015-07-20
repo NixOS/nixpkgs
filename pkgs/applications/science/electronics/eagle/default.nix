@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "eagle-${version}";
-  version = "6.5.0";
+  version = "6.6.0";
 
   src = fetchurl {
-    url = "ftp://ftp.cadsoft.de/eagle/program/6.5/eagle-lin-${version}.run";
-    sha256 = "17plwx2p8q2ylk0nzj5crfbdm7jc35pw7v3j8f4j81yl37l7bj22";
+    url = "ftp://ftp.cadsoft.de/eagle/program/6.6/eagle-lin-${version}.run";
+    sha256 = "0m5289daah85b2rwpivnh2z1573v6j4alzjy9hg78fkb9jdgbn0x";
   };
 
   desktopItem = makeDesktopItem {

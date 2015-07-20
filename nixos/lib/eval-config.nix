@@ -47,6 +47,7 @@ in rec {
     inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
+    specialArgs = { modulesPath = ../modules; };
   }) config options;
 
   # These are the extra arguments passed to every module.  In

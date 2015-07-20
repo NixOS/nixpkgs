@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, gnutls33 }:
+{ stdenv, fetchFromGitHub, gnutls33, autoreconfHook }:
 
 let
   version = "1.99.13";
 in
 stdenv.mkDerivation {
-  name = "inadny-${version}";
+  name = "inadyn-${version}";
 
   src = fetchFromGitHub {
     repo = "inadyn";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     export makeFlags=prefix=$out
   '';
 
-  buildInputs = [ gnutls33 ];
+  buildInputs = [ gnutls33 autoreconfHook ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 

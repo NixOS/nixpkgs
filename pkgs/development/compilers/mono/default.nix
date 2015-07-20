@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? true }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert }:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -31,11 +31,16 @@ stdenv.mkDerivation rec {
   # Parallel building doesn't work, as shows http://hydra.nixos.org/build/2983601
   enableParallelBuilding = false;
 
+  # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
+  # because we control pkg-config
+  patches = [ ./pkgconfig-before-gac.patch ];
+
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
     patchShebangs ./
+    substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
   '' + stdenv.lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
@@ -48,6 +53,14 @@ stdenv.mkDerivation rec {
         sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
         sed -i "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" $i
     done
+  '';
+
+  # Without this, any Mono application attempting to open an SSL connection will throw with 
+  # The authentication or decryption has failed.
+  # ---> Mono.Security.Protocol.Tls.TlsException: Invalid certificate received from server.
+  postInstall = ''
+    echo "Updating Mono key store"
+    $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
   '';
 
   meta = {

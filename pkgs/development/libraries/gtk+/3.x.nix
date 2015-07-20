@@ -10,7 +10,7 @@ assert cupsSupport -> cups != null;
 
 let
   ver_maj = "3.16";
-  ver_min = "2";
+  ver_min = "5";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -18,18 +18,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "1yhwg2l72l3khfkprydcjlpxjrg11ccqfc80sjl56llz3jk66fd0";
+    sha256 = "0cdwykh4086f7fl4dkybgpyxyb1jcmxbfin2az42z5pb4z8rjz5q";
   };
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
   buildInputs = [ libxkbcommon epoxy ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
-    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk ]
-    ++ optionals stdenv.isLinux [ libXrandr libXrender libXcomposite libXi libXcursor wayland ]
-    ++ optional stdenv.isDarwin x11
+    [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
+    ++ optionals stdenv.isLinux [ wayland ]
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   # demos fail to install, no idea where's the problem
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";

@@ -198,6 +198,19 @@ let self = _self // overrides;
     };
   };
 
+  autotetris = melpaBuild {
+    pname = "autotetris-mode";
+    version = "20141114.846";
+    src = fetchFromGitHub {
+      owner = "skeeto";
+      repo = "autotetris-mode";
+      rev = "7d348d33829bc89ddbd2b4d5cfe5073c3b0cbaaa";
+      sha256 = "14pjsb026mgjf6l3dggy255knr7c1vfmgb6kgafmkzvr96aglcdc";
+    };
+    files = [ "autotetris-mode.el" ];
+    meta =  { license = unlicense; };
+  };
+
   bind-key = melpaBuild {
     pname   = "bind-key";
     version = "20150317";
@@ -673,12 +686,12 @@ let self = _self // overrides;
 
   haskell-mode = melpaBuild rec {
     pname   = "haskell-mode";
-    version = "13.12";
+    version = "13.14";
     src = fetchFromGitHub {
       owner  = "haskell";
       repo   = pname;
       rev    = "v${version}";
-      sha256 = "1l8sby2626hpp0li23mic3qq8w7jirsp1hd08hkx2z84gvz4j6fz";
+      sha256 = "1mxr2cflgafcr8wkvgbq8l3wmc9qhhb7bn9zl1bkf10zspw9m58z";
     };
     meta = { license = gpl3Plus; };
   };
@@ -826,6 +839,18 @@ let self = _self // overrides;
     meta = { license = gpl3Plus; };
   };
 
+  moe-theme = melpaBuild rec {
+    pname   = "moe-theme";
+    version = "1.0";
+    src = fetchFromGitHub {
+      owner  = "kuanyui";
+      repo   = "${pname}.el";
+      rev    = "39384a7a9e6886f3a3d79efac4009fcd800a4a14";
+      sha256 = "0i7m15x9sij5wh0gwbijsis8a4jm8izywj7xprk21644ndskvfiz";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   monokai-theme = melpaBuild rec {
     pname   = "monokai-theme";
     version = "1.0.0";
@@ -836,6 +861,17 @@ let self = _self // overrides;
       sha256 = "02w7k4s4698p4adjy4a36na28sb1s2zw4xsjs7p2hv9iiw9kmyvz";
     };
     meta = { license = gpl3Plus; };
+  };
+
+  multiple-cursors = melpaBuild rec {
+    pname = "multiple-cursors";
+    version = "20150627";
+    src = fetchFromGitHub {
+      owner  = "magnars";
+      repo   = "multiple-cursors.el";
+      rev    = "9b53e892e6167f930763a3c5aedf8773110a8ae9";
+      sha256 = "0wcrdb137a9aq6dynlqbvypb6m2dj48m899xwy7ilnf2arrmipid";
+    };
   };
 
   nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
@@ -875,6 +911,18 @@ let self = _self // overrides;
     };
   };
 
+  perspective = melpaBuild rec {
+    pname   = "perspective";
+    version = "1.12";
+    src = fetchFromGitHub {
+      owner  = "nex3";
+      repo   = "${pname}-el";
+      rev    = version;
+      sha256 = "12c2rrhysrcl2arc6hpzv6lxbb1r3bzlvdp23hnp9sci6yc10k3q";
+    };
+    meta = { license = gpl3Plus; };
+  };
+
   pkg-info = melpaBuild rec {
     pname   = "pkg-info";
     version = "20140610";
@@ -909,7 +957,24 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1bl5wpkyv9xlf5v5hzkj8si1z4hjn3yywrjs1mx0g4irmq3mk29m";
     };
-    packageRequires = [ dash helm s pkg-info epl ];
+    fileSpecs = [ "projectile.el" ];
+    packageRequires = [ dash helm pkg-info ];
+    meta = { license = gpl3Plus; };
+  };
+  helm-projectile = melpaBuild rec {
+    pname   = "helm-projectile";
+    version = projectile.version;
+    src     = projectile.src;
+    fileSpecs = [ "helm-projectile.el" ];
+    packageRequires = [ helm projectile ];
+    meta = { license = gpl3Plus; };
+  };
+  persp-projectile = melpaBuild rec {
+    pname   = "persp-projectile";
+    version = projectile.version;
+    src     = projectile.src;
+    fileSpecs = [ "persp-projectile.el" ];
+    packageRequires = [ perspective projectile ];
     meta = { license = gpl3Plus; };
   };
 
@@ -1093,14 +1158,14 @@ let self = _self // overrides;
 
   swiper = melpaBuild rec {
     pname   = "swiper";
-    version = "0.4.0";
+    version = "0.5.0";
     src = fetchFromGitHub {
       owner  = "abo-abo";
       repo   = pname;
       rev    = version;
-      sha256 = "1skgw84j5a59ds86bpdcaf3c8iq2m0fz720chjh91ixhkavvdd87";
+      sha256 = "1a28vignwpcn62xk46w5p5wjfrbcmvs0gz1jgn4ba7ibmn4cmnnm";
     };
-    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" ];
+    fileSpecs = [ "swiper.el" "ivy.el" "colir.el" "counsel.el" ];
     meta = { license = gpl3Plus; };
   };
 
@@ -1198,6 +1263,22 @@ let self = _self // overrides;
     meta = {
       description = "E-Mail client for Emacs";
       license = gpl3Plus; # probably
+    };
+  };
+
+  web-mode = melpaBuild rec {
+    pname   = "web-mode";
+    version = "11.1.12";
+    src = fetchFromGitHub {
+      owner  = "fxbois";
+      repo   = pname;
+      rev    = "67259f16bfaec5c006a53533b8feeba7771e1365";
+      sha256 = "16zcnwm7wnbl1xbsx7rr5rr697ax141akfx2lknwirx18vqmkijj";
+    };
+
+    meta = {
+      description = "Web template editing mode for emacs";
+      license = gpl2;
     };
   };
 

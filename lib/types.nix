@@ -54,7 +54,7 @@ rec {
     bool = mkOptionType {
       name = "boolean";
       check = isBool;
-      merge = loc: fold (x: y: x.value || y) false;
+      merge = mergeEqualOption;
     };
 
     int = mkOptionType {

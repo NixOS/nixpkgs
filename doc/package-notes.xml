@@ -141,7 +141,7 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
 
 <!--============================================================-->
 
-<section>
+<section xml:id="sec-xorg">
 
 <title>X.org</title>
 

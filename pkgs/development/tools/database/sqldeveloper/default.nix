@@ -1,13 +1,13 @@
-{ stdenv, makeWrapper, requireFile, unzip, oraclejdk7, bash}:
+{ stdenv, makeWrapper, requireFile, unzip, oraclejdk8, bash}:
 
 stdenv.mkDerivation rec {
-  version = "4.0.3.16.84";
+  version = "4.1.0.19.07";
   name = "sqldeveloper-${version}";
 
   src = requireFile {
     name = "${name}-no-jre.zip";
     url = http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/index.html;
-    sha256 = "1qbqjkfda7xry716da2hdbbazks96rgyslrw1lw0azmqdp1mir7g";
+    sha256 = "09gr40n4574fw9hg47xi4dk8vwgawzkjzzzj2h5jaicy0fdjkpbx";
   };
 
   buildInputs = [ makeWrapper unzip ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/sqldeveloper/bin/sqldeveloper
 
     wrapProgram $out/bin/sqldeveloper \
-      --set JAVA_HOME "${oraclejdk7}"
+      --set JAVA_HOME "${oraclejdk8}"
   '';
 
   meta = with stdenv.lib; {

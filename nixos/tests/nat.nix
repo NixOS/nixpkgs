@@ -3,12 +3,15 @@
 # client on the inside network, a server on the outside network, and a
 # router connected to both that performs Network Address Translation
 # for the client.
-import ./make-test.nix ({ withFirewall, ... }:
+import ./make-test.nix ({ pkgs, withFirewall, ... }:
   let
     unit = if withFirewall then "firewall" else "nat";
   in
   {
     name = "nat${if withFirewall then "WithFirewall" else "Standalone"}";
+  meta = with pkgs.stdenv.lib.maintainers; {
+      maintainers = [ eelco chaoflow rob wkennington ];
+    };
 
     nodes =
       { client =

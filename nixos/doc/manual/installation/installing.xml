@@ -120,7 +120,11 @@ $ nixos-generate-config --root /mnt</screen>
 $ nano /mnt/etc/nixos/configuration.nix
 </screen>
 
-    The <command>vim</command> text editor is also available.</para>
+    If you’re using the graphical ISO image, other editors may be
+    available (such as <command>vim</command>). If you have network
+    access, you can also install other editors — for instance, you can
+    install Emacs by running <literal>nix-env -i
+    emacs</literal>.</para>
 
     <para>You <emphasis>must</emphasis> set the option
     <option>boot.loader.grub.device</option> to specify on which disk
@@ -189,11 +193,13 @@ $ reboot</screen>
 
   <listitem>
 
-    <para>You should now be able to boot into the installed NixOS. The GRUB boot menu shows a list
-                of <emphasis>available configurations</emphasis> (initially just one). Every time
-                you change the NixOS configuration (see<link linkend="sec-changing-config">Changing
-                    Configuration</link> ), a new item appears in the menu. This allows you to
-                easily roll back to another configuration if something goes wrong.</para>
+    <para>You should now be able to boot into the installed NixOS. The
+    GRUB boot menu shows a list of <emphasis>available
+    configurations</emphasis> (initially just one). Every time you
+    change the NixOS configuration (see <link
+    linkend="sec-changing-config">Changing Configuration</link> ), a
+    new item is added to the menu. This allows you to easily roll back
+    to a previous configuration if something goes wrong.</para>
 
     <para>You should log in and change the <literal>root</literal>
     password with <command>passwd</command>.</para>

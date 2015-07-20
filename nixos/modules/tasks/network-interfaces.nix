@@ -392,7 +392,7 @@ in
 
         interfaces = mkOption {
           example = [ "eth0" "eth1" ];
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           description =
             "The physical network interfaces connected by the bridge.";
         };

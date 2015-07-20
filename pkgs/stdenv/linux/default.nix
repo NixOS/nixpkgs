@@ -86,7 +86,7 @@ rec {
         };
 
         cc = if isNull gccPlain
-             then "/no-such-path"
+             then null
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
@@ -202,7 +202,7 @@ rec {
     coreutils = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
-    overrides = pkgs: {
+    overrides = pkgs: rec {
       inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
@@ -210,9 +210,15 @@ rec {
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      gccPlain = pkgs.gcc.cc;
+      isl_0_11 = pkgs.isl_0_11.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
+      cloog_0_18_0 = pkgs.cloog_0_18_0.override {
+        stdenv = pkgs.makeStaticLibraries pkgs.stdenv;
+        isl = isl_0_11;
+      };
+      gccPlain = pkgs.gcc.cc.override {
+        isl = isl_0_11;
+        cloog = cloog_0_18_0;
+      };
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
   };

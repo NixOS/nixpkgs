@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "ttylog-0.25";
+  name = "ttylog-${version}";
+  version = "0.26";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/ttylog/${name}.tar.gz";
-    sha256 = "0546mj5gcxi7idvfw82p8qw27lk7wsk6j4b6zw7nb6z2wi517l40";
+  src = fetchFromGitHub {
+    owner = "rocasa";
+    repo = "ttylog";
+    rev = version;
+    sha256 = "1xvqch1dwpl2d89n9cjcxhqbpvm50fspj5yn883wbii6dpg62p84";
   };
 
   nativeBuildInputs = [ cmake ];

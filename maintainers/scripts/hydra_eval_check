@@ -6,6 +6,7 @@ hydra_eval_jobs \
   --argstr system i686-linux \
   --argstr system x86_64-darwin \
   --argstr system i686-cygwin \
+  --argstr system x86_64-cygwin \
   --argstr system i686-freebsd \
   --arg officialRelease false \
   --arg nixpkgs "{ outPath = builtins.storePath ./. ; rev = 1234; }" \

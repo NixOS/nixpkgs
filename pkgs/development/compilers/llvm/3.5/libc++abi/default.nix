@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
     homepage = http://libcxxabi.llvm.org/;
     description = "A new implementation of low level support for a standard C++ library";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ shlevy vlstill ];
+    maintainers = with stdenv.lib.maintainers; [ vlstill ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libtool, gtk ? null, libcap
-, alsaLib, pulseaudio, gstreamer, gst_plugins_base, libvorbis }:
+, alsaLib, libpulseaudio, gstreamer, gst_plugins_base, libvorbis }:
 
 stdenv.mkDerivation rec {
   name = "libcanberra-0.30";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig libtool alsaLib pulseaudio libvorbis gtk libcap
+    pkgconfig libtool alsaLib libpulseaudio libvorbis gtk libcap
     /*gstreamer gst_plugins_base*/      # ToDo: gstreamer not found (why?), add (g)udev?
   ];
 

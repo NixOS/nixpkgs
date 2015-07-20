@@ -22,7 +22,6 @@ in stdenv.mkDerivation {
     description = "Simple plaintext todo list manager";
     homepage = "http://todotxt.com";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     description = "Gnome docking library";
     homepage = https://developer.gnome.org/gdl/;
     maintainers = [ maintainers.lethalman ];
-    license = [ licenses.gpl2 ];
+    license = licenses.gpl2;
     platforms = platforms.linux;
   };
 }

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     name = "${name}.tar.gz";
   };
 
-  buildInputs = [ pkgconfig fuse scons ];
+  buildInputs = [ fuse ];
+  nativeBuildInputs = [ pkgconfig scons ];
 
   buildPhase = ''
     export CCFLAGS="-O2 -Wall -std=c99 -I${fuse}/include"
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/exfat/;
     description = "A FUSE-based filesystem that allows read and write access to exFAT devices";
     platforms = with platforms; linux;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nckx ];
   };
 }

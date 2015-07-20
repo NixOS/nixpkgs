@@ -187,6 +187,7 @@ rec {
     # then don't start the build again, but instead drop the user into
     # an interactive shell.
     if test -n "$origBuilder" -a ! -e /.debug; then
+      exec < /dev/null
       ${coreutils}/bin/touch /.debug
       $origBuilder $origArgs
       echo $? > /tmp/xchg/in-vm-exit
@@ -694,7 +695,17 @@ rec {
     runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
-        bunzip2 < $i >> ./Packages
+        case $i in
+          *.xz | *.lzma)
+            xz -d < $i >> ./Packages
+            ;;
+          *.bz2)
+            bunzip2 < $i >> ./Packages
+            ;;
+          *.gz)
+            gzip -dc < $i >> ./Packages
+            ;;
+        esac
       done
 
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
@@ -1698,6 +1709,27 @@ rec {
       packages = commonDebianPackages;
     };
 
+    debian8i386 = {
+      name = "debian-8.1-jessie-i386";
+      fullName = "Debian 8.1 Jessie (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
+        sha256 = "e658c2aebc3c0bc529e89de3ad916a71372f0a80161111d86a7dab1026644507";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian8x86_64 = {
+      name = "debian-8.1-jessie-amd64";
+      fullName = "Debian 8.1 Jessie (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
+        sha256 = "265907f3cb05aff5f653907e9babd4704902f78cd5e355d4cd4ae590e4d5b043";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
   };
 
 

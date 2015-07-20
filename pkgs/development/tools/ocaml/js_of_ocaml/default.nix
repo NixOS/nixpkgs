@@ -9,8 +9,8 @@ stdenv.mkDerivation {
     };
   
   buildInputs = [ocaml findlib menhir ocsigen_deriving
-                 cmdliner tyxml camlp4 reactivedata];
-  propagatedBuildInputs = [ ocaml_lwt ];
+                 cmdliner tyxml reactivedata];
+  propagatedBuildInputs = [ ocaml_lwt camlp4 ];
 
   patches = [ ./Makefile.conf.diff ];  
 

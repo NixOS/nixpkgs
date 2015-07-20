@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
+{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false
+, locale ? null }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.2";
+  name = "gawk-4.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "10glh5amry76v8fzhp4phi4119zwjwzjg9ybzq971qjfhg2m72za";
+    sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  doCheck = !(
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+  );
 
-  buildInputs = [ libsigsegv ]
-    ++ stdenv.lib.optional readlineSupport readline;
+  buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
+    ++ stdenv.lib.optional readlineSupport readline
+    ++ stdenv.lib.optional stdenv.isDarwin locale;
 
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
+  configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
     ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
       # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
     ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";

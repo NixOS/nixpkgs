@@ -8,4 +8,5 @@ with lib;
 {
   environment.noXlibs = mkDefault true;
   i18n.supportedLocales = [ config.i18n.defaultLocale ];
+  services.nixosManual.enable = mkDefault false;
 }

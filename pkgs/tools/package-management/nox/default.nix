@@ -10,6 +10,8 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "1s1jhickdhym70qrb5h4qxq1mvkpwgdppqpfb2jnpfaf1az6c207";
   };
 
+  patches = [ ./show-trace.patch ];
+
   buildInputs = [ pythonPackages.pbr ];
 
   pythonPath = with pythonPackages; [

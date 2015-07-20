@@ -1,16 +1,22 @@
-{ stdenv, fetchgit, popt }:
+{ stdenv, fetchFromGitHub, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.15";
+  version = "0.21";
 
-  src = fetchgit {
-    url = "git://github.com/rhinstaller/efivar.git";
-    rev = "refs/tags/${version}";
-    sha256 = "1k5krjghb2r04wv6kxnhs1amqwzk7khzm7bsh0wnbsz7qn92masr";
+  src = fetchFromGitHub {
+    owner = "rhinstaller";
+    repo = "efivar";
+    rev = version;
+    sha256 = "0iakv8prvl61mb2wnll02sxlg3kfzh3d4qb41d0bklmnljjkqr8p";
   };
 
   buildInputs = [ popt ];
+
+  # 0.21 Has build warnings so disable -Werror
+  postPatch = ''
+    sed -i 's,-Werror,,g' Make.defaults
+  '';
 
   installFlags = [
     "libdir=$(out)/lib"

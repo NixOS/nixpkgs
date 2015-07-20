@@ -1,8 +1,8 @@
 Index: gyp/pylib/gyp/xcode_emulation.py
 ===================================================================
---- gyp/pylib/gyp/xcode_emulation.py	(revision 1635)
-+++ gyp/pylib/gyp/xcode_emulation.py	(working copy)
-@@ -280,9 +280,6 @@
+--- gyp/pylib/gyp/xcode_emulation.py
++++ gyp/pylib/gyp/xcode_emulation.py
+@@ -483,9 +483,6 @@
      if self._Test('GCC_CHAR_IS_UNSIGNED_CHAR', 'YES', default='NO'):
        cflags.append('-funsigned-char')
  
@@ -12,7 +12,7 @@ Index: gyp/pylib/gyp/xcode_emulation.py
      if 'GCC_DYNAMIC_NO_PIC' in self._Settings():
        if self._Settings()['GCC_DYNAMIC_NO_PIC'] == 'YES':
          cflags.append('-mdynamic-no-pic')
-@@ -292,9 +289,6 @@
+@@ -495,9 +492,6 @@
        # mdynamic-no-pic by default for executable and possibly static lib
        # according to mento
  
@@ -22,20 +22,7 @@ Index: gyp/pylib/gyp/xcode_emulation.py
      self._Appendf(cflags, 'GCC_OPTIMIZATION_LEVEL', '-O%s', default='s')
  
      if self._Test('GCC_GENERATE_DEBUGGING_SYMBOLS', 'YES', default='YES'):
-@@ -311,12 +305,6 @@
-     if self._Test('GCC_SYMBOLS_PRIVATE_EXTERN', 'YES', default='NO'):
-       cflags.append('-fvisibility=hidden')
- 
--    if self._Test('GCC_TREAT_WARNINGS_AS_ERRORS', 'YES', default='NO'):
--      cflags.append('-Werror')
--
--    if self._Test('GCC_WARN_ABOUT_MISSING_NEWLINE', 'YES', default='NO'):
--      cflags.append('-Wnewline-eof')
--
-     self._AppendPlatformVersionMinFlags(cflags)
- 
-     # TODO:
-@@ -334,7 +322,6 @@
+@@ -553,7 +541,6 @@
        # TODO: Supporting fat binaries will be annoying.
        self._WarnUnimplemented('ARCHS')
        archs = ['i386']
@@ -43,7 +30,7 @@ Index: gyp/pylib/gyp/xcode_emulation.py
  
      if archs[0] in ('i386', 'x86_64'):
        if self._Test('GCC_ENABLE_SSE3_EXTENSIONS', 'YES', default='NO'):
-@@ -570,7 +557,6 @@
+@@ -811,7 +798,6 @@
        # TODO: Supporting fat binaries will be annoying.
        self._WarnUnimplemented('ARCHS')
        archs = ['i386']

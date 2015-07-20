@@ -6,7 +6,7 @@ in stdenv.mkDerivation {
   name = "clang-${version}";
 
   unpackPhase = ''
-    unpackFile ${fetch "cfe" "0b8825mvdhfk5r9gwcwp1j2dl9kw5glgyk7pybq2dzhrh4vnj3my"}
+    unpackFile ${fetch "cfe" "1wwr8s6lzr324hv4s1k6na4j5zv6n9kdhi14s4kb9b13d93814df"}
     mv cfe-${version}.src clang
     sourceRoot=$PWD/clang
     unpackFile ${clang-tools-extra_src}
@@ -50,7 +50,6 @@ in stdenv.mkDerivation {
     description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -26,43 +26,79 @@
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
+with stdenv;
 with stdenv.lib;
 let
   mkFlag = trueStr: falseStr: cond: name: val:
     if cond == null then null else
-      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+      "--${if cond != false then trueStr else falseStr}${name}"
+      + "${if val != null && cond != false then "=${val}" else ""}";
+
   mkEnable = mkFlag "enable-" "disable-";
   mkWith = mkFlag "with-" "without-";
   mkOther = mkFlag "" "" true;
 
-  hasServer = snappy != null && leveldb != null;
+  shouldUsePkg = pkg_: let pkg = (builtins.tryEval pkg_).value;
+    in if lib.any (x: x == system) (pkg.meta.platforms or [])
+      then pkg else null;
+
+  optSnappy = shouldUsePkg snappy;
+  optLeveldb = shouldUsePkg leveldb;
+  optYasm = shouldUsePkg yasm;
+  optFcgi = shouldUsePkg fcgi;
+  optExpat = shouldUsePkg expat;
+  optCurl = shouldUsePkg curl;
+  optFuse = shouldUsePkg fuse;
+  optAccelio = shouldUsePkg accelio;
+  optLibibverbs = shouldUsePkg libibverbs;
+  optLibrdmacm = shouldUsePkg librdmacm;
+  optLibedit = shouldUsePkg libedit;
+  optLibatomic_ops = shouldUsePkg libatomic_ops;
+  optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
+  optRocksdb = shouldUsePkg rocksdb;
+  optLibs3 = shouldUsePkg libs3;
+
+  optJemalloc = shouldUsePkg jemalloc;
+  optGperftools = shouldUsePkg gperftools;
+
+  optCryptopp = shouldUsePkg cryptopp;
+  optNss = shouldUsePkg nss;
+  optNspr = shouldUsePkg nspr;
+
+  optLibaio = shouldUsePkg libaio;
+  optLibxfs = shouldUsePkg libxfs;
+  optZfs = shouldUsePkg zfs;
+
+  hasServer = optSnappy != null && optLeveldb != null;
   hasMon = hasServer;
   hasMds = hasServer;
   hasOsd = hasServer;
-  hasRadosgw = fcgi != null && expat != null && curl != null && libedit != null;
+  hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
-  hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
-    versionAtLeast version "0.95" &&
-    accelio != null && libibverbs != null && librdmacm != null;
+  /*hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
+    versionAtLeast version "9.0.0" &&
+    optAccelio != null && optLibibverbs != null && optLibrdmacm != null;*/
+  hasXio = false;  # Broken with xio 1.4
 
-  hasRocksdb = versionAtLeast version "0.95" && rocksdb != null;
+  hasRocksdb = versionAtLeast version "9.0.0" && optRocksdb != null;
 
   # TODO: Reenable when kinetic support is fixed
-  hasKinetic = versionAtLeast version "0.95" && kinetic-cpp-client != null && false;
+  #hasKinetic = versionAtLeast version "9.0.0" && optKinetic-cpp-client != null;
+  hasKinetic = false;
 
   # Malloc implementation (can be jemalloc, tcmalloc or null)
-  malloc = if jemalloc != null then jemalloc else gperftools;
+  malloc = if optJemalloc != null then optJemalloc else optGperftools;
 
   # We prefer nss over cryptopp
-  cryptoStr = if nss != null && nspr != null then "nss" else
-    if cryptopp != null then "cryptopp" else "none";
+  cryptoStr = if optNss != null && optNspr != null then "nss" else
+    if optCryptopp != null then "cryptopp" else "none";
   cryptoLibsMap = {
-    nss = [ nss nspr ];
-    cryptopp = [ cryptopp ];
+    nss = [ optNss optNspr ];
+    cryptopp = [ optCryptopp ];
     none = [ ];
   };
 
-  wrapArgs = "--set PYTHONPATH : \"$(toPythonPath $lib)\""
+  wrapArgs = "--set PYTHONPATH \"$(toPythonPath $lib)\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${python.modules.readline})\""
     + " --prefix PYTHONPATH : \"$(toPythonPath ${pythonPackages.flask})\""
     + " --set PATH : \"$out/bin\"";
@@ -76,24 +112,27 @@ stdenv.mkDerivation {
     ./0001-Makefile-env-Don-t-force-sbin.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ];
+  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ]
+    ++ optionals (versionAtLeast version "9.0.2") [
+      pythonPackages.setuptools pythonPackages.argparse
+    ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
-    boost python libxml2 yasm libatomic_ops libs3 malloc pythonPackages.flask zlib
+    boost python libxml2 optYasm optLibatomic_ops optLibs3 malloc pythonPackages.flask zlib
   ] ++ optional (versionAtLeast version "9.0.0") [
     git                   # Used for the gitversion string
     pythonPackages.sphinx # Used for docs
   ] ++ optional stdenv.isLinux [
-    linuxHeaders libuuid udev keyutils libaio libxfs zfs
+    linuxHeaders libuuid udev keyutils optLibaio optLibxfs optZfs
   ] ++ optional hasServer [
-    snappy leveldb
+    optSnappy optLeveldb
   ] ++ optional hasRadosgw [
-    fcgi expat curl fuse libedit
+    optFcgi optExpat optCurl optFuse optLibedit
   ] ++ optional hasXio [
-    accelio libibverbs librdmacm
+    optAccelio optLibibverbs optLibrdmacm
   ] ++ optional hasRocksdb [
-    rocksdb
+    optRocksdb
   ] ++ optional hasKinetic [
-    kinetic-cpp-client
+    optKinetic-cpp-client
   ];
 
   postPatch = ''
@@ -102,12 +141,15 @@ stdenv.mkDerivation {
 
     # Fix seagate kinetic linking
     sed -i 's,libcrypto.a,-lcrypto,g' src/os/Makefile.am
+  '' + optionalString (versionAtLeast version "9.0.0") ''
+    # Fix gmock
+    patchShebangs src/gmock
   '';
 
   preConfigure = ''
     # Ceph expects the arch command to be usable during configure
     # for detecting the assembly type
-    mkdir mybin
+    mkdir -p mybin
     echo "#${stdenv.shell} -e" >> mybin/arch
     echo "uname -m" >> mybin/arch
     chmod +x mybin/arch
@@ -117,52 +159,61 @@ stdenv.mkDerivation {
 
     # Fix the python site-packages install directory
     sed -i "s,\(PYTHON\(\|_EXEC\)_PREFIX=\).*,\1'$lib',g" configure
+
+    # Fix the PYTHONPATH for installing ceph-detect-init to $out
+    mkdir -p "$(toPythonPath $out)"
+    export PYTHONPATH="$(toPythonPath $out):$PYTHONPATH"
   '';
 
   configureFlags = [
-    "--exec_prefix=\${out}"
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--libdir=\${lib}/lib"
-    "--includedir=\${lib}/include"
-
-    (mkWith   true                         "rbd"               null)
-    (mkWith   true                         "cephfs"            null)
-    (mkWith   hasRadosgw                   "radosgw"           null)
-    (mkWith   true                         "radosstriper"      null)
-    (mkWith   hasServer                    "mon"               null)
-    (mkWith   hasServer                    "osd"               null)
-    (mkWith   hasServer                    "mds"               null)
-    (mkEnable true                         "client"            null)
-    (mkEnable hasServer                    "server"            null)
-    (mkWith   (cryptoStr == "cryptopp")    "cryptopp"          null)
-    (mkWith   (cryptoStr == "nss")         "nss"               null)
-    (mkEnable false                        "root-make-check"   null)
-    (mkWith   false                        "profiler"          null)
-    (mkWith   false                        "debug"             null)
-    (mkEnable false                        "coverage"          null)
-    (mkWith   (fuse != null)               "fuse"              null)
-    (mkWith   (malloc == jemalloc)         "jemalloc"          null)
-    (mkWith   (malloc == gperftools)       "tcmalloc"          null)
-    (mkEnable false                        "pgrefdebugging"    null)
-    (mkEnable false                        "cephfs-java"       null)
-    (mkEnable hasXio                       "xio"               null)
-    (mkWith   (libatomic_ops != null)      "libatomic-ops"     null)
-    (mkWith   true                         "ocf"               null)
-    (mkWith   hasKinetic                   "kinetic"           null)
-    (mkWith   hasRocksdb                   "librocksdb"        null)
-    (mkWith   false                        "librocksdb-static" null)
-    (mkWith   (libs3 != null)              "system-libs3"      null)
-    (mkWith   true                         "rest-bench"        null)
+    (mkOther                               "exec_prefix"        "\${out}")
+    (mkOther                               "sysconfdir"         "/etc")
+    (mkOther                               "localstatedir"      "/var")
+    (mkOther                               "libdir"             "\${lib}/lib")
+    (mkOther                               "includedir"         "\${lib}/include")
+    (mkWith   true                         "rbd"                 null)
+    (mkWith   true                         "cephfs"              null)
+    (mkWith   hasRadosgw                   "radosgw"             null)
+    (mkWith   true                         "radosstriper"        null)
+    (mkWith   hasServer                    "mon"                 null)
+    (mkWith   hasServer                    "osd"                 null)
+    (mkWith   hasServer                    "mds"                 null)
+    (mkEnable true                         "client"              null)
+    (mkEnable hasServer                    "server"              null)
+    (mkWith   (cryptoStr == "cryptopp")    "cryptopp"            null)
+    (mkWith   (cryptoStr == "nss")         "nss"                 null)
+    (mkEnable false                        "root-make-check"     null)
+    (mkWith   false                        "profiler"            null)
+    (mkWith   false                        "debug"               null)
+    (mkEnable false                        "coverage"            null)
+    (mkWith   (optFuse != null)            "fuse"                null)
+    (mkWith   (malloc == optJemalloc)      "jemalloc"            null)
+    (mkWith   (malloc == optGperftools)    "tcmalloc"            null)
+    (mkEnable false                        "pgrefdebugging"      null)
+    (mkEnable false                        "cephfs-java"         null)
+    (mkEnable hasXio                       "xio"                 null)
+    (mkWith   (optLibatomic_ops != null)   "libatomic-ops"       null)
+    (mkWith   true                         "ocf"                 null)
+    (mkWith   hasKinetic                   "kinetic"             null)
+    (mkWith   hasRocksdb                   "librocksdb"          null)
+    (mkWith   false                        "librocksdb-static"   null)
+    (mkWith   (optLibs3 != null)           "system-libs3"        null)
+    (mkWith   true                         "rest-bench"          null)
   ] ++ optional stdenv.isLinux [
-    (mkWith   (libaio != null)             "libaio"            null)
-    (mkWith   (libxfs != null)             "libxfs"            null)
-    (mkWith   (zfs != null)                "libzfs"            null)
-  ] ++ optional (versionAtLeast version "10.0.0") [
-    (mkWith   true                         "man-pages"         null)
-    (mkWith   false                        "tcmalloc-minimal"  null)
-    (mkWith   false                        "valgrind"          null)
+    (mkWith   (optLibaio != null)          "libaio"              null)
+    (mkWith   (optLibxfs != null)          "libxfs"              null)
+    (mkWith   (optZfs != null)             "libzfs"              null)
+  ] ++ optional (versionAtLeast version "9.0.1") [
+    (mkWith   false                        "tcmalloc-minimal"    null)
+    (mkWith   false                        "valgrind"            null)
+  ] ++ optional (versionAtLeast version "9.0.2") [
+    (mkWith   true                         "man-pages"           null)
+    (mkWith   true                         "systemd-libexec-dir" "\${TMPDIR}")
   ];
+
+  preBuild = optionalString (versionAtLeast version "9.0.0") ''
+    (cd src/gmock; make -j $NIX_BUILD_CORES)
+  '';
 
   installFlags = [ "sysconfdir=\${out}/etc" ];
 

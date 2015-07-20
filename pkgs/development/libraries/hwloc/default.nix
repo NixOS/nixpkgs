@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   # <http://hydra.bordeaux.inria.fr/build/51474/nixlog/1/raw>.
   doCheck = !stdenv.isCygwin;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";
 
     longDescription = ''
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     '';
 
     # http://www.open-mpi.org/projects/hwloc/license.php
-    license = "revised-BSD";
+    license = licenses.bsd3;
 
     homepage = http://www.open-mpi.org/projects/hwloc/;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
   };
 }

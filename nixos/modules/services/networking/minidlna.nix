@@ -30,7 +30,7 @@ in
     };
 
     services.minidlna.mediaDirs = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = [ "/data/media" "V,/home/alice/video" ];
       description =
@@ -97,7 +97,7 @@ in
             Type = "forking";
             PIDFile = "/run/minidlna/pid";
             ExecStart =
-              "@${pkgs.minidlna}/sbin/minidlna minidlna -P /run/minidlna/pid" +
+              "@${pkgs.minidlna}/sbin/minidlnad minidlnad -P /run/minidlna/pid" +
               " -f ${pkgs.writeText "minidlna.conf" cfg.config}";
           };
       };

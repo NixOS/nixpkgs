@@ -1,0 +1,23 @@
+--- php-7.0.0beta1/configure	    2015-07-10 12:11:41.810045613 +0000
++++ php-7.0.0beta1-new/configure	2015-07-17 16:10:21.775528267 +0000
+@@ -6172,7 +6172,7 @@
+     as_fn_error $? "Please note that Apache version >= 2.0.44 is required" "$LINENO" 5
+   fi
+ 
+-  APXS_LIBEXECDIR='$(INSTALL_ROOT)'`$APXS -q LIBEXECDIR`
++  APXS_LIBEXECDIR="$prefix/modules"
+   if test -z `$APXS -q SYSCONFDIR`; then
+     INSTALL_IT="\$(mkinstalldirs) '$APXS_LIBEXECDIR' && \
+                  $APXS -S LIBEXECDIR='$APXS_LIBEXECDIR' \
+@@ -37303,9 +37303,7 @@
+ 
+ 
+ if test "$PHP_GETTEXT" != "no"; then
+-  for i in $PHP_GETTEXT /usr/local /usr; do
+-    test -r $i/include/libintl.h && GETTEXT_DIR=$i && break
+-  done
++  GETTEXT_DIR=$PHP_GETTEXT
+ 
+   if test -z "$GETTEXT_DIR"; then
+     as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5
+

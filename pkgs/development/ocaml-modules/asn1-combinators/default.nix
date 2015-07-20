@@ -1,21 +1,25 @@
-{ stdenv, fetchzip, ocaml, findlib, cstruct, zarith }:
+{ stdenv, fetchzip, ocaml, findlib, cstruct, zarith, ounit }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
-let version = "0.1.1"; in
+let version = "0.1.2"; in
 
 stdenv.mkDerivation {
   name = "ocaml-asn1-combinators-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirleft/ocaml-asn1-combinators/archive/${version}.tar.gz";
-    sha256 = "1wl5g2cqd4dk33w0ski6z425cs4sgj980fw0xkwgz1w1xzywh4i2";
+    sha256 = "13vpdgcyph4vq3gcp8b16756s4nz3crpxhxfhcqgc1ffz61gc0h5";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ounit ];
   propagatedBuildInputs = [ cstruct zarith ];
 
   createFindlibDestdir = true;
+
+  configureFlags = "--enable-tests";
+  doCheck = true;
+  checkTarget = "test";
 
   meta = {
     homepage = https://github.com/mirleft/ocaml-asn1-combinators;

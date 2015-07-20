@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     inherit version;
     description = "Setuid-safe wrapper for chroot";
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nckx ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, lame, mplayer, pulseaudio, portaudio
+{ stdenv, lib, fetchurl, lame, mplayer, libpulseaudio, portaudio
 , python, pyqt4, pythonPackages
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     pythonPath = [ pyqt4 py.pysqlite py.sqlalchemy9 py.pyaudio ]
               ++ lib.optional plotsSupport py.matplotlib;
 
-    buildInputs = [ python py.wrapPython lame mplayer pulseaudio ];
+    buildInputs = [ python py.wrapPython lame mplayer libpulseaudio ];
 
     preConfigure = ''
       substituteInPlace anki \

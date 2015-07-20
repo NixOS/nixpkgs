@@ -182,7 +182,7 @@ in {
  
       port = mkOption {
         default = 9102;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
         	This specifies the port number on which the Client listens for Director connections. It must agree with the FDPort specified in the Client resource of the Director's configuration file. The default is 9102.
         '';
@@ -237,7 +237,7 @@ in {
  
       port = mkOption {
         default = 9103;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           Specifies port number on which the Storage daemon listens for Director connections. The default is 9103.
         '';
@@ -302,7 +302,7 @@ in {
  
       port = mkOption {
         default = 9101;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''
           Specify the port (a positive integer) on which the Director daemon will listen for Bacula Console connections. This same port number must be specified in the Director resource of the Console configuration file. The default is 9101, so normally this directive need not be specified. This directive should not be used if you specify DirAddresses (N.B plural) directive.
         '';

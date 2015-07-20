@@ -52,16 +52,22 @@ rec {
     shopt -s expand_aliases
   '';
 
+  # prevent libtool from failing to find dynamic libraries
   prehookCygwin = ''
     ${prehookBase}
 
-    if test -z "$cygwinConfigureEnableShared"; then
-      export configureFlags="$configureFlags --disable-shared"
-    fi
-
-    PATH_DELIMITER=';'
+    shopt -s expand_aliases
+    export lt_cv_deplibs_check_method=pass_all
   '';
 
+  extraBuildInputsCygwin = [
+    ../cygwin/all-buildinputs-as-runtimedep.sh
+    ../cygwin/wrap-exes-to-find-dlls.sh
+  ] ++ (if system == "i686-cygwin" then [
+    ../cygwin/rebase-i686.sh
+  ] else if system == "x86_64-cygwin" then [
+    ../cygwin/rebase-x86_64.sh
+  ] else []);
 
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
@@ -74,7 +80,14 @@ rec {
         if system == "x86_64-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
         if system == "i686-netbsd" then prehookNetBSD else
+        if system == "i686-cygwin" then prehookCygwin else
+        if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
+
+      extraBuildInputs =
+        if system == "i686-cygwin" then extraBuildInputsCygwin else
+        if system == "x86_64-cygwin" then extraBuildInputsCygwin else
+        [];
 
       initialPath = extraPath ++ path;
 
@@ -85,7 +98,7 @@ rec {
 
 
   stdenvBoot0 = makeStdenv {
-    cc = "/no-such-path";
+    cc = null;
     fetchurl = null;
   };
 

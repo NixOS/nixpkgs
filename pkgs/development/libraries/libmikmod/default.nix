@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, texinfo, alsaLib, pulseaudio }:
+{ stdenv, fetchurl, texinfo, alsaLib, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   name = "libmikmod-3.3.7";
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ]
-    ++ stdenv.lib.optional stdenv.isLinux [ alsaLib pulseaudio ];
+    ++ stdenv.lib.optional stdenv.isLinux [ alsaLib libpulseaudio ];
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux pulseaudio;
+    stdenv.lib.optional stdenv.isLinux libpulseaudio;
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lasound";
 

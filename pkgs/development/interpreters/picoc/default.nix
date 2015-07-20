@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/zsaleeba/picoc;
     downloadPage = https://code.google.com/p/picoc/downloads/list;
-    license = with licenses; bsd3;
+    license = licenses.bsd3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

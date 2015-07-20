@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
     description = "skarnet.org's small & secure supervision software suite";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
   };
 
 }

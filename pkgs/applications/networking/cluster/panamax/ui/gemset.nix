@@ -332,11 +332,11 @@
       sha256 = "001vy0ymiwbvkdbb9wpqmswv6imliv7xim00gq6rlk0chnbiaq80";
     };
   };
-  "libv8" = {
-    version = "3.16.14.7";
+  libv8 = {
+    version = "3.16.14.11";
     source = {
       type = "gem";
-      sha256 = "0dv5q5n5nf6b8h3fybwmsr3vkj70w4g1jpf6661j3hsv9vp0g4qq";
+      sha256 = "000vbiy78wk5r1f6p7qncab8ldg7qw5pjz7bchn3lw700gpaacxp";
     };
   };
   "mail" = {

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       cp -v *.jar "$out/share/java"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An implementation of JavaScript written in Java";
 
     longDescription =
@@ -52,6 +52,6 @@ stdenv.mkDerivation {
 
     homepage = http://www.mozilla.org/rhino/;
 
-    license = [ "MPLv1.1" /* or */ "GPLv2+" ];
+    license = with licenses; [ mpl11 /* or */ gpl2Plus ];
   };
 }

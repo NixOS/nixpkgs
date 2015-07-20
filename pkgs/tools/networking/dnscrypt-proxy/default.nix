@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, libsodium }:
+{ stdenv, fetchurl, libsodium, pkgconfig, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "dnscrypt-proxy-1.4.3";
+  name = "dnscrypt-proxy-${version}";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://download.dnscrypt.org/dnscrypt-proxy/${name}.tar.bz2";
-    sha256 = "0cij80ryxnikpmm6s79c2fqg6bdiz1wdy50xrnd7w954vw9mhr0b";
+    sha256 = "0zfw9vi9qbsc55awncyigqfqp25v5adqk6jpg1jdfkmbqqfykk70";
   };
 
-  buildInputs = [ libsodium ];
+  configureFlags = ''
+    ${stdenv.lib.optionalString stdenv.isLinux "--with-systemd"}
+  '';
+
+  buildInputs = [ pkgconfig libsodium ] ++ stdenv.lib.optional stdenv.isLinux systemd;
 
   meta = {
     description = "A tool for securing communications between a client and a DNS resolver";
     homepage = http://dnscrypt.org/;
-    license = with stdenv.lib.licenses; [ isc ];
-    maintainers = with stdenv.lib.maintainers; [ joachifm ];
+    license = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ joachifm jgeerds ];
     platforms = stdenv.lib.platforms.all;
   };
 }

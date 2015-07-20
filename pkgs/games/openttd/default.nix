@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.4.4";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "1xykqb5bx2dzffxhvm4cbn1nf72f7zcdz8hy25i5wky4hfw31x3h";
+    sha256 = "0jcg8b0jbiw5kg7rqqw74hdh675r08pgm95grk9ch4z2gpjpd3n9";
   };
 
   buildInputs = [ SDL libpng pkgconfig xz zlib freetype fontconfig ];
@@ -15,12 +15,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-zlib=${zlib}/lib/libz.a"
     "--without-liblzo2"
-  ];
-
-  # NOTE: Remove this patch in 1.4.5 or greater
-  patches = [
-    # Adapted from svn r27079
-    ./fix-freetype-1.4.4.patch
   ];
 
   makeFlags = "INSTALL_PERSONAL_DIR=";

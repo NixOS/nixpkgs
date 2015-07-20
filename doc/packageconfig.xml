@@ -67,7 +67,8 @@
 	<filename>lib/licenses.nix</filename> of the nix package tree.
     </para>
 
-<section><title>Modify packages via <literal>packageOverrides</literal></title>
+<section xml:id="sec-modify-via-packageOverrides"><title>Modify
+packages via <literal>packageOverrides</literal></title>
 
 <para>
 

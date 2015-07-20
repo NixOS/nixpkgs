@@ -1,7 +1,7 @@
 { stdenv, fetchgit, alsaLib, pkgconfig, gtk3, glibc, autoconf, automake, libnotify, libX11, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "pnmixer";
+  name = "pnmixer-2014-07-24";
 
   src = fetchgit {
     url = "git://github.com/nicklan/pnmixer.git";

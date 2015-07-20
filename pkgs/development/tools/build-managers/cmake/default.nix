@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, bzip2, curl, expat, jsoncpp, libarchive, xz, zlib
+, bzip2, curl, expat, libarchive, xz, zlib
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
 , wantPS ? false, ps ? null
 }:
@@ -36,11 +36,10 @@ stdenv.mkDerivation rec {
       url = "http://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";
       sha256 = "16acmdr27adma7gs9rs0dxdiqppm15vl3vv3agy7y8s94wyh4ybv";
-    });
+    }) ++ stdenv.lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   buildInputs =
     [ bzip2 curl expat libarchive xz zlib ]
-    ++ optional (jsoncpp != null) jsoncpp
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -49,12 +48,11 @@ stdenv.mkDerivation rec {
   CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
 
   configureFlags =
-    [
-      "--docdir=/share/doc/${name}"
+    [ "--docdir=/share/doc/${name}"
       "--mandir=/share/man"
-      "--system-libs"
+      "--no-system-jsoncpp"
     ]
-    ++ optional (jsoncpp == null) "--no-system-jsoncpp"
+    ++ optional (!stdenv.isCygwin) "--system-libs"
     ++ optional useQt4 "--qt-gui"
     ++ ["--"]
     ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";

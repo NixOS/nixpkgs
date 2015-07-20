@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   # -fpermissive helps building opencascade, although gcc detects a flaw in the code
   # and reports an error otherwise. Further versions may fix that.
   NIX_CFLAGS_COMPILE = "-fpermissive"
+  # https://bugzilla.redhat.com/show_bug.cgi?id=902561
+    + " -DUSE_INTERP_RESULT"
   # https://bugs.freedesktop.org/show_bug.cgi?id=83631
     + " -DGLX_GLXEXT_LEGACY";
 

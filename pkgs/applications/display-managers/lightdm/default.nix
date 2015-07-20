@@ -4,15 +4,15 @@
 }:
 
 let
-  ver_branch = "1.15";
-  version = "1.15.0";
+  ver_branch = "1.14";
+  version = "1.14.2";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "0f0c2irb7qq49dabxhh99bwyvkxpfpscy4vynm7y800sz15lm2hs";
+    sha256 = "18dvipdkp6hc1hysyiwpd5nwq6db3mg98rwi3am2ly3hk2bpic18";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://launchpad.net/lightdm;
+    homepage = https://launchpad.net/lightdm;
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ocharles wkennington ];

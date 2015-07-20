@@ -1,66 +1,44 @@
-x@{builderDefsPackage
-  , jdk /* only used in bootstrap */
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchurl, jdk }:
+with stdenv.lib;
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="picolisp";
-    tarballBaseName="picoLisp";
-    version="3.1.9";
-    name="${baseName}-${version}";
-    tarballName="${tarballBaseName}-${version}";
-    extension="tgz";
-    url="http://www.software-lab.de/${tarballName}.${extension}";
-    sha256="1rhfd743ga9qsgn4h2aw1xcgrc7amsllli2zqg8cgm408vxkr6j1";
+stdenv.mkDerivation rec {
+  name = "picoLisp-${version}";
+  version = "3.1.10";
+  src = fetchurl {
+    url = "http://www.software-lab.de/${name}.tgz";
+    sha256 = "1pn5c0d81rz1fazsdijhw4cqybaad2wn6qramdj2qqkzxa3vvll1";
   };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.sha256;
-  };
-
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doMake" "doDeploy"];
-
-  goSrcDir = if a.stdenv.system == "x86_64-linux" then 
-    "cd src64" else "cd src";
-  makeFlags = [''PREFIX=$out''];
-
-  doDeploy = a.fullDepEntry (''
+  buildInputs = [ jdk ];
+  sourceRoot = ''picoLisp/src${optionalString stdenv.is64bit "64"}'';
+  installPhase = ''
     cd ..
-
-    sed -e "s@/usr/@$out/@g" -i bin/pil
 
     mkdir -p "$out/share/picolisp" "$out/lib" "$out/bin"
     cp -r . "$out/share/picolisp/build-dir"
     ln -s "$out/share/picolisp/build-dir" "$out/lib/picolisp"
     ln -s "$out/lib/picolisp/bin/picolisp" "$out/bin/picolisp"
-  '') ["minInit" "defEnsureDir" "doMake"];
-      
+
+    cat >"$out/bin/pil" <<EOF
+    #! /bin/sh
+    $out/bin/picolisp $out/lib/picolisp/lib.l @lib/misc.l @lib/btree.l @lib/db.l @lib/pilog.l
+    EOF
+    chmod +x "$out/bin/pil"
+
+    mkdir -p "$out/share/emacs"
+    ln -s "$out/lib/picolisp/lib/el" "$out/share/emacs/site-lisp"
+  '';
+
   meta = {
-    description = "An interpreter for a small Lisp dialect with builtin DB";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
-    license = a.lib.licenses.mit;
+    description = "A simple Lisp with an integrated database.";
+    homepage = http://picolisp.com/;
+    license = licenses.mit;
+    platform = platforms.all;
+    maintainers = with maintainers; [ raskin ];
   };
+
   passthru = {
     updateInfo = {
       downloadPage = "http://www.software-lab.de/down.html";
     };
   };
-}) x
-
+}

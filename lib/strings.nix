@@ -107,11 +107,13 @@ rec {
   # replaceChars ["<" ">"] ["&lt;" "&gt;"] "<foo>" returns "&lt;foo&gt;".
   replaceChars = del: new: s:
     let
+      substList = lib.zipLists del new;
       subst = c:
-        (lib.fold
-          (sub: res: if sub.fst == c then sub else res)
-          {fst = c; snd = c;} (lib.zipLists del new)
-        ).snd;
+        let found = lib.findFirst (sub: sub.fst == c) null substList; in
+        if found == null then
+          c
+        else
+          found.snd;
     in
       stringAsChars subst s;
 

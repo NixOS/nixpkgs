@@ -9,11 +9,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ libmusclecard pcsclite pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Smart card applications for use with MUSCLE plugins";
     homepage = http://muscleapps.alioth.debian.org/;
-    license = "BSD"; # http://anonscm.debian.org/viewvc/muscleapps/trunk/muscleTool/COPYING?view=markup
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [viric];
     # XXX: don't build before libmusclecard is fixed
     # platforms = with stdenv.lib.platforms; linux;
   };

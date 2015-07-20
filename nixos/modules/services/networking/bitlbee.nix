@@ -17,10 +17,12 @@ let
     [settings]
     RunMode = Daemon
     User = bitlbee  
-    ConfigDir = /var/lib/bitlbee      
+    ConfigDir = ${cfg.configDir}
     DaemonInterface = ${cfg.interface}
     DaemonPort = ${toString cfg.portNumber}
     AuthMode = ${cfg.authMode}
+    ${lib.optionalString (cfg.hostName != "") "HostName = ${cfg.hostName}"}
+    ${lib.optionalString (cfg.protocols != "") "Protocols = ${cfg.protocols}"}
     ${cfg.extraSettings}
 
     [defaults]
@@ -71,6 +73,34 @@ in
             Closed -- Require authorization (using the PASS command during login) before allowing the user to connect at all.
             Registered -- Only allow registered users to use this server; this disables the register- and the account command until the user identifies himself.
         ''; 
+      };
+
+      hostName = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          Normally, BitlBee gets a hostname using getsockname(). If you have a nicer
+          alias for your BitlBee daemon, you can set it here and BitlBee will identify
+          itself with that name instead.
+        '';
+      };
+
+      configDir = mkOption {
+        default = "/var/lib/bitlbee";
+        type = types.path;
+        description = ''
+          Specify an alternative directory to store all the per-user configuration
+          files.
+        '';
+      };
+
+      protocols = mkOption {
+        default = "";
+        type = types.str;
+        description = ''
+          This option allows to remove the support of protocol, even if compiled
+          in. If nothing is given, there are no restrictions.
+        '';
       };
 
       extraSettings = mkOption {

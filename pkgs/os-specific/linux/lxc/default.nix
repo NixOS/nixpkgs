@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, docbook2x
-, docbook_xml_dtd_45, systemd
+, docbook_xml_dtd_45, systemd, wrapPython
 , libapparmor ? null, gnutls ? null, libseccomp ? null, cgmanager ? null
-, libnih ? null, dbus ? null, libcap ? null
+, libnih ? null, dbus ? null, libcap ? null, python3 ? null
 }:
 
 let
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoreconfHook pkgconfig perl docbook2x systemd
-    libapparmor gnutls libseccomp cgmanager libnih dbus libcap
+    libapparmor gnutls libseccomp cgmanager libnih dbus libcap python3
+    wrapPython
   ];
 
   patches = [ ./support-db2x.patch ];
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
     "LXCPATH=\${TMPDIR}/var/lib/lxc"
   ];
 
+  postInstall = "wrapPythonPrograms";
+
   meta = {
     homepage = "http://lxc.sourceforge.net";
     description = "userspace tools for Linux Containers, a lightweight virtualization system";
@@ -63,6 +66,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ simons wkennington ];
+    maintainers = with maintainers; [ simons wkennington globin ];
   };
 }

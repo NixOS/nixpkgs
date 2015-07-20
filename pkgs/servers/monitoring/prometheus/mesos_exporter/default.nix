@@ -1,18 +1,22 @@
 { stdenv, lib, goPackages, fetchFromGitHub }:
 
 goPackages.buildGoPackage rec {
-  name = "prometheus-mesos-exporter-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "a4a6638d6db6b5137e130cd4903b30dd82b78e9a";
+  name = "prometheus-mesos-exporter-${rev}";
+  rev = "0.1.0";
   goPackagePath = "github.com/prometheus/mesos_exporter";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "mesos_exporter";
-    sha256 = "1h4yxfcr8l9i2m1s5ygk3slhxdrs4mvmpn3sq8m5s205abvp891q";
+    sha256 = "059az73j717gd960g4jigrxnvqrjh9jw1c324xpwaafa0bf10llm";
   };
 
-  buildInputs = [ goPackages.mesos-stats ];
+  buildInputs = [
+    goPackages.mesos-stats
+    goPackages.prometheus.client_golang
+    goPackages.glog
+  ];
 
   meta = with lib; {
     description = "Export Mesos metrics to Prometheus";

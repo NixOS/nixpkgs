@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensc-${version}";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "02q3rndcfd7lga1ph0xcl556rgigzpp9bpwqyn42rfbx8lll7gzv";
+    sha256 = "16y3ryx606nry2li05hm88bllrragdj3sfl3yh7pf71777n4lsk4";
   };
 
   postPatch = ''
@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
     "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so"
+  ];
+
+  installFlags = [
+    "sysconfdir=\${out}/etc"
   ];
 
   meta = with stdenv.lib; {

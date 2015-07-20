@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qt5, libarchive }:
+{ stdenv, fetchFromGitHub, pkgconfig, qt5, libarchive, xlibs }:
 
 stdenv.mkDerivation rec {
   version = "0.1.1";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "172wf50fq1l5p8hq1irvpwr7ljxkjaby71afrm82jz3ixl6dg2ii";
   };
 
-  buildInputs = [ pkgconfig qt5.base qt5.webkit qt5.imageformats libarchive ];
+  buildInputs = [
+    xlibs.xcbutilkeysyms pkgconfig qt5.base qt5.webkit qt5.imageformats libarchive
+  ];
 
   configurePhase = ''
     qmake PREFIX=/
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
       app), available for Linux and Windows.
     '';
     homepage = "http://zealdocs.org/";
-    license = with stdenv.lib.licenses; [ gpl3 ];
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };

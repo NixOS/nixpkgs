@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, pulseaudio }:
+{ stdenv, fetchurl, boost, libpulseaudio }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ad6b46hh02hs1978pgihrm2bnq4z2v0imrfm3wy74xdkr6xjxy4";
   };
 
-  buildInputs = [ boost pulseaudio ];
+  buildInputs = [ boost libpulseaudio ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/cdemoulins/pamixer;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ _1126 ];
+    maintainers = with maintainers; [ hiberno ];
     platforms = platforms.linux;
   };
 }

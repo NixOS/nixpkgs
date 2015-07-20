@@ -1,6 +1,7 @@
 { stdenv, fetchurl, gettext, intltool, pkgconfig, python
-, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, jack2
+, avahi, bluez, boost, eigen, fftw, glib, glibmm, gtk, gtkmm, libjack2
 , ladspaH, librdf, libsndfile, lilv, lv2, serd, sord, sratom
+,  zita-convolver, zita-resampler
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
 
@@ -20,17 +21,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext intltool pkgconfig python ];
 
   buildInputs = [
-    avahi bluez boost eigen fftw glib glibmm gtk gtkmm jack2
+    avahi bluez boost eigen fftw glib glibmm gtk gtkmm libjack2
     ladspaH librdf libsndfile lilv lv2 serd sord sratom
+    zita-convolver zita-resampler
   ];
 
   configureFlags = [
     "--shared-lib"
     "--no-desktop-update"
-    "--no-faust" # Need to package a release of faust, 0.9.58 or 0.9.65
     "--enable-nls"
-    "--includeresampler" # Zita-resampler not packaged, use vendored version
-    "--includeconvolver" # Zita-convolver not packaged, use vendored version
+    "--no-faust" # todo: find out why --faust doesn't work
   ] ++ optional optimizationSupport "--optimization";
 
   configurePhase = ''python waf configure --prefix=$out $configureFlags'';

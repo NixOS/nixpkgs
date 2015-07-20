@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, doxygen, glib, libaccounts-glib, pkgconfig, qt5 }:
+{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qt5 }:
 
+let version = "1.13"; in
 stdenv.mkDerivation rec {
-  name = "accounts-qt-1.11";
-  src = fetchurl {
-    url = "https://accounts-sso.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "07drh4s7zaz4bzg2xhwm50ig1g8vlphfv02nrzz1yi085az1fmch";
+  name = "accounts-qt-${version}";
+
+  src = fetchFromGitLab {
+    sha256 = "1gpkgw05dwsf2wk5cy3skgss3kw6mqh7iv3fadrxqxfc1za1xmyl";
+    rev = version;
+    repo = "libaccounts-qt";
+    owner = "accounts-sso";
+  };
+
+  meta = with stdenv.lib; {
+    description = "Qt library for accessing the online accounts database";
+    homepage = "http://code.google.com/p/accounts-sso/";
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ nckx ];
   };
 
   buildInputs = [ glib libaccounts-glib qt5.base ];
   nativeBuildInputs = [ doxygen pkgconfig ];
 
   configurePhase = ''
-    qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake/AccountsQt5
-  '';
-
-  postInstall = ''
-    mv $out/lib/cmake/AccountsQt5/AccountsQtConfig.cmake \
-       $out/lib/cmake/AccountsQt5/AccountsQt5Config.cmake
-    mv $out/lib/cmake/AccountsQt5/AccountsQtConfigVersion.cmake \
-       $out/lib/cmake/AccountsQt5/AccountsQt5ConfigVersion.cmake
+    qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake
   '';
 }

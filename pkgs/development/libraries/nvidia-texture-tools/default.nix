@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
   # No support yet for cg, cuda, glew, glut, openexr.
 
-  name = "nvidia-texture-tools";
+  name = "nvidia-texture-tools-1388";
 
   src = fetchsvn {
     url = "http://nvidia-texture-tools.googlecode.com/svn/trunk";

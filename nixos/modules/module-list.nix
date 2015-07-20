@@ -84,6 +84,7 @@
   ./security/grsecurity.nix
   ./security/pam.nix
   ./security/pam_usb.nix
+  ./security/pam_mount.nix
   ./security/polkit.nix
   ./security/prey.nix
   ./security/rngd.nix
@@ -188,12 +189,14 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
+  ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
+  ./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
@@ -202,6 +205,7 @@
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix
   ./services/misc/mesos-slave.nix
+  ./services/misc/mwlib.nix
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
@@ -211,9 +215,12 @@
   ./services/misc/plex.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
+  ./services/misc/ripple-rest.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
+  ./services/misc/subsonic.nix
+  ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/uhub.nix
@@ -222,13 +229,16 @@
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
+  ./services/monitoring/das_watchdog.nix
   ./services/monitoring/dd-agent.nix
+  ./services/monitoring/grafana.nix
   ./services/monitoring/graphite.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
+  ./services/monitoring/riemann-tools.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
@@ -266,6 +276,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnsmasq.nix
+  ./services/networking/docker-registry-server.nix
   ./services/networking/ejabberd.nix
   ./services/networking/firefox/sync-server.nix
   ./services/networking/firewall.nix
@@ -306,6 +317,7 @@
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
   ./services/networking/quassel.nix
+  ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
@@ -313,6 +325,7 @@
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
+  ./services/networking/skydns.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
@@ -326,6 +339,7 @@
   ./services/networking/tftpd.nix
   ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
+  ./services/networking/tvheadend.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
   ./services/networking/vsftpd.nix
@@ -334,6 +348,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
+  ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix
@@ -373,6 +388,7 @@
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm.nix
+  ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
@@ -406,12 +422,14 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/generations-dir/generations-dir.nix
+  ./system/boot/loader/generic-extlinux-compatible
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/ipxe.nix
   ./system/boot/loader/grub/memtest.nix
@@ -436,6 +454,7 @@
   ./tasks/filesystems.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
+  ./tasks/filesystems/exfat.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix
   ./tasks/filesystems/jfs.nix

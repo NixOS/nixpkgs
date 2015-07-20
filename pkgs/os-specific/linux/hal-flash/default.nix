@@ -21,7 +21,7 @@ stdenv.mkDerivation {
         package.  Provides the minimum necessary functionality to enable
         libflashplayer.so/libadobecp.so to play back DRM content.
       '';
-    license = "afl21 gpl2";
+    license = with licenses; [ afl21 gpl2 ];
     maintainers = with maintainers; [ malyn ];
     platforms = platforms.linux;
   };

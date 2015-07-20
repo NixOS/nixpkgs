@@ -1,6 +1,6 @@
 {fetchurl, stdenv, fontforge, perl, fontconfig, FontTTF}:
 
-let version = "2.34" ; in
+let version = "2.35" ; in
 
 stdenv.mkDerivation rec {
   name = "dejavu-fonts-${version}";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dejavu/dejavu-fonts-${version}.tar.bz2";
-    sha256 = "09wh9c9kk82i4kwy73fcqa0779bvf0ncikciqw2gxa9m2rkrxjmm";
+    sha256 = "1xdbi4llrq1qbkd73352ibrfqcbz93dww8hab216qz5szd95yvv4";
   };
   buildFlags = "full-ttf";
   preBuild = ''

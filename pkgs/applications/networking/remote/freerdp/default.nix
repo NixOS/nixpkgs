@@ -15,7 +15,7 @@
 #, xmlto, docbook_xml_dtd_412, docbook_xml_xslt
 , libXinerama
 , libXv
-, pulseaudioSupport ? true, pulseaudio
+, pulseaudioSupport ? true, libpulseaudio
 }:
 
 assert printerSupport -> cups != null;

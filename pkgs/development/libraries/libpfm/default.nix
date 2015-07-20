@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   installFlags = "DESTDIR=\${out} PREFIX= LDCONFIG=true";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Helper library to program the performance monitoring events";
     longDescription = ''
       This package provides a library, called libpfm4 which is used to
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
       events such as those provided by the Performance Monitoring Unit
       (PMU) of modern processors.
     '';
-    licence = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.pierron ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.pierron ];
+    platforms = platforms.all;
   };
 }

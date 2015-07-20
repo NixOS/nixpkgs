@@ -490,7 +490,7 @@ in
 
     services.journald.rateLimitBurst = mkOption {
       default = 100;
-      type = types.uniq types.int;
+      type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
         interval) that is applied to all messages generated on the system.

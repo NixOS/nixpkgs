@@ -10,20 +10,19 @@ stdenv.mkDerivation rec {
     sha256 = "0dzv5xf9qxc2bp4cyifmaghh3h464wbm73xiwcrvckf1ynqbgxv7";
   };
 
-  preConfigure = stdenv.lib.optionalString doCheck
-    '' for i in "doc/texi2pod.pl" "util/rmold.pl"
-       do
-         sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
-       done
-
-       # Work around lack of DNS resolution in chroots.
-       for i in "tests/"*.pm "tests/"*.px
-       do
-         sed -i "$i" -e's/localhost/127.0.0.1/g'
-       done
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
-       export LIBS="-liconv -lintl"
-    '';
+  preConfigure = ''
+    for i in "doc/texi2pod.pl" "util/rmold.pl"; do
+      sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
+    done
+  '' + stdenv.lib.optionalString doCheck ''
+    # Work around lack of DNS resolution in chroots.
+    for i in "tests/"*.pm "tests/"*.px
+    do
+      sed -i "$i" -e's/localhost/127.0.0.1/g'
+    done
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    export LIBS="-liconv -lintl"
+  '';
 
   nativeBuildInputs = [ gettext pkgconfig ];
   buildInputs = [ libidn libiconv libpsl ]

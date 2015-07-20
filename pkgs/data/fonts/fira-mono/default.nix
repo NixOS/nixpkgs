@@ -1,16 +1,16 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "fira-mono-3.2";
+  name = "fira-mono-3.204";
 
   src = fetchurl {
-    url = http://www.carrois.com/downloads/fira_mono_3_2/FiraMonoFonts3200.zip;
-    sha256 = "0g3i54q8czf3vylgasj62w2n7l1a2yrbyibjlx1qk3awh7fr1r7p";
+    url = http://www.carrois.com/downloads/fira_mono_3_2/FiraMonoFonts3204.zip;
+    sha256 = "0pnsw7b1i5vkwq0kny4lxzly4h8rlwkj610rykhax6zayfbnz62a";
   };
 
   buildInputs = [ unzip ];
   phases = [ "unpackPhase" "installPhase" ];
-  sourceRoot = "FiraMonoFonts3200";
+  sourceRoot = "FiraMonoFonts3204";
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype

@@ -302,4 +302,20 @@ in {
         };
     };
   };
+
+  eclipse_sdk_45 = buildEclipse {
+    name = "eclipse-sdk-4.5";
+    description = "Eclipse Mars Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-SDK-4.5-linux-gtk-x86_64.tar.gz;
+          sha256 = "0vfql4gh263ms8bg7sgn05gnjajplx304cn3nr03jlacgr3pkarf";
+
+        };
+      "i686-linux" = fetchurl {
+          url = http://download.eclipse.org/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-SDK-4.5-linux-gtk.tar.gz;
+          sha256 = "0xv66l6hdlvxpswcqrsh398wg6xhy30f833dr7jvvz45s5437hm3";
+        };
+    };
+  };
 }

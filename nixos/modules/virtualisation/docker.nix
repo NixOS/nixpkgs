@@ -45,7 +45,7 @@ in
       };
     extraOptions =
       mkOption {
-        type = types.str;
+        type = types.separatedString " ";
         default = "";
         description =
           ''
@@ -102,6 +102,9 @@ in
           LimitNOFILE = 1048576;
           LimitNPROC = 1048576;
         } // proxy_env;
+
+        path = [ pkgs.kmod ];
+        environment.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
 
         postStart = ''
           while ! [ -e /var/run/docker.sock ]; do

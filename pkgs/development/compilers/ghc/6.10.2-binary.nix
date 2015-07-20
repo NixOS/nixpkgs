@@ -102,7 +102,6 @@ stdenv.mkDerivation rec {
     description = "The Glasgow Haskell Compiler";
     license = stdenv.lib.licenses.bsd3;
     platforms = ["x86_64-linux" "i686-linux"];
-    broken = true;              # https://github.com/NixOS/nixpkgs/issues/7810
   };
 
 }

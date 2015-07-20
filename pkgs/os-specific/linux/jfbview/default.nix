@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       - Customizable multi-threaded caching
     '';
     homepage = http://seasonofcode.com/pages/jfbview.html;
-    license = with licenses; asl20;
+    license = licenses.asl20;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

@@ -1,6 +1,7 @@
 { stdenv, lib, ghc, llvmPackages, packages, buildEnv, makeWrapper
 , ignoreCollisions ? false, withLLVM ? false
 , postBuild ? ""
+, haskellPackages
 }:
 
 # This wrapper works only with GHC 6.12 or later.
@@ -94,7 +95,9 @@ buildEnv {
     ${lib.optionalString hasLibraries "$out/bin/${ghcCommand}-pkg recache"}
     $out/bin/${ghcCommand}-pkg check
   '' + postBuild;
-} // {
-  preferLocalBuild = true;
-  inherit (ghc) version meta;
+  passthru = {
+    preferLocalBuild = true;
+    inherit (ghc) version meta;
+    inherit haskellPackages;
+  };
 }

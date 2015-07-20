@@ -1,16 +1,18 @@
 { stdenv, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.46.5";
+  name = "help2man-1.47.1";
 
   src = fetchurl {
     url = "mirror://gnu/help2man/${name}.tar.xz";
-    sha256 = "1gqfqgxq3qgwnldjz3i5mxvzyx2w3j042r3fw1wygic3f6327nha";
+    sha256 = "01ib718afwc28bmh1n0p5h7245vs3rrfm7bj1sq4avmh1kv2d6y5";
   };
 
   buildInputs = [ makeWrapper perl gettext LocaleGettext ];
 
   doCheck = false;                                # target `check' is missing
+
+  patches = if stdenv.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
 
   postInstall =
     '' wrapProgram "$out/bin/help2man" \

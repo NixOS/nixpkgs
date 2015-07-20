@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://github.com/grondo/edac-utils;
-    description = "handles the reporting of hardware-related memory errors.";
+    description = "Handles the reporting of hardware-related memory errors";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

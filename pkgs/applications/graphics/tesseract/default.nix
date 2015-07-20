@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
                   'LIBLEPT_HEADERSDIR=${leptonica}/include'
   '';
 
-  postInstall = concatStrings extraLanguages;
+  postInstall = concatStringsSep "; " extraLanguages;
 
   meta = {
     description = "OCR engine";

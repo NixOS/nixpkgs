@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
-  enableParallelBuilding = true;
-  doCheck = true;
+  enableParallelBuilding = false;
+  doCheck = !stdenv.isi686;
 
   unpackPhase = ''
     mkdir fiat

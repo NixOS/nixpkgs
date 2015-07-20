@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     homepage = "http://ab-initio.mit.edu/nlopt/";
     description = "Free open-source library for nonlinear optimization";
     license = stdenv.lib.licenses.lgpl21Plus;
-
     hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
+    broken = true;              # cannot cope with Octave 4.x
   };
 
 }

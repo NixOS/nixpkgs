@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, pkgconfig, autoconf, automake, yasm, zlib, bzip2, alsaLib
-, pulseaudio, libmad, libtheora, libvorbis, libpng, libjpeg, gtk
+, libpulseaudio, libmad, libtheora, libvorbis, libpng, libjpeg, gtk
 , mesa, glew }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig autoconf automake yasm zlib bzip2 alsaLib pulseaudio libmad libtheora
+    pkgconfig autoconf automake yasm zlib bzip2 alsaLib libpulseaudio libmad libtheora
     libvorbis libpng libjpeg gtk mesa glew
   ];
 

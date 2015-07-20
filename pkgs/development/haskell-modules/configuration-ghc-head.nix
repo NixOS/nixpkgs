@@ -42,9 +42,26 @@ self: super: {
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
+  bytestring-builder = dontHaddock super.bytestring-builder;
+
+  alex = dontCheck super.alex;
 
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
+
+  # Show works differently for record syntax now, breaking haskell-src-exts' parser tests
+  # https://github.com/haskell-suite/haskell-src-exts/issues/224
+  haskell-src-exts = dontCheck super.haskell-src-exts;
+
+  mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
+    url = "https://github.com/snoyberg/mono-traversable/pull/77.patch";
+    sha256 = "1qrvrh3cqfkymi5yb9y9z88rq4n7ag0ac2k00mcnqh4dz1vh4fg1";
+  });
+  yesod-auth = appendPatch super.yesod-auth (pkgs.fetchpatch {
+    url = "https://github.com/yesodweb/yesod/pull/1006.patch";
+    sha256 = "0l6wjj8cfz6jy6j92kywsccafyffhlm5240q82bzirb278adqvar";
+    stripLen = 1;
+  });
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
@@ -80,5 +97,8 @@ self: super: {
 
   # The compat library is empty in the presence of mtl 2.2.x.
   mtl-compat = dontHaddock super.mtl-compat;
+
+  # Won't work with LLVM 3.5.
+  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
 
 }

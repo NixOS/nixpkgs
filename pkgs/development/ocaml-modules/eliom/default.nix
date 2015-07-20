@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ocaml, findlib, which, ocsigen_server, ocsigen_deriving,
   js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
-  ocaml_ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
+  ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
   reactivedata, opam}:
 
 stdenv.mkDerivation rec
@@ -14,10 +14,12 @@ stdenv.mkDerivation rec
     sha256 = "10v7mrq3zsbxdlg8k8xif777mbvcdpabvnd1g7p2yqivr7f1qm24";
   };
 
+  patches = [ ./camlp4.patch ];
+
   buildInputs = [ocaml which ocsigen_server findlib ocsigen_deriving
                  js_of_ocaml ocaml_optcomp opam];
 
-  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ocaml_ipaddr
+  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr
                             calendar cryptokit ocamlnet ocaml_react ocaml_ssl
                             ocaml_pcre ];
 

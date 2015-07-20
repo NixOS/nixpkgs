@@ -13,7 +13,7 @@ in {
     enable = mkOption {
       description = "Whether to enable graphite web frontend.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     httpPort = mkOption {

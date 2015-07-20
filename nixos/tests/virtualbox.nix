@@ -298,6 +298,9 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
 
 in {
   name = "virtualbox";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ aszlig wkennington ];
+  };
 
   machine = { pkgs, lib, config, ... }: {
     imports = let

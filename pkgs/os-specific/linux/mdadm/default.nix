@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ groff ];
 
+  # Attempt removing if building with gcc5 when updating
+  NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile";
 
   # Force mdadm to use /var/run/mdadm.map for its map file (or

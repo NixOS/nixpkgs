@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "02r0r4lgz10ivbmgdzivj7dvry1aad75ik9vyy6irjvngjkzg5r3";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt openssl perl ];
+  buildInputs = [ geoip geolite-legacy getopt openssl ];
+  nativeBuildInputs = [ perl ];
 
   patchPhase = ''
     for i in {,databases/}lib/Makefile.in; do
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
       Now only one utiltity is needed to do a lot.
     '';
     homepage = http://www.deepspace6.net/projects/ipv6calc.html;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

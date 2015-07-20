@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "riemann-${version}";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchurl {
     url = "http://aphyr.com/riemann/${name}.tar.bz2";
-    sha256 = "1p2pdkxy2xc5zlj6kadf4z8l0f0r4bvdgipqf52193l7rdm6dfzm";
+    sha256 = "10zz92sg9ak8g7xsfc05p4kic6hzwj7nqpkjgsd8f7f3slvfjqw3";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

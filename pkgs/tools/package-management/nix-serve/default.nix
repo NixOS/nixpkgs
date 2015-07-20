@@ -1,18 +1,19 @@
 { lib, stdenv, fetchFromGitHub, perl, nix, perlPackages }:
 
-let rev = "4c24e3ffa7d267d67d87135e7ac4c9198e449cd3"; in
+let rev = "7e09caa2a7a435aeb2cd5446aa590d6f9ae1699d"; in
 
 stdenv.mkDerivation rec {
-  name = "nix-serve-0.1-${lib.substring 0 7 rev}";
+  name = "nix-serve-0.2-${lib.substring 0 7 rev}";
 
   src = fetchFromGitHub {
     owner = "edolstra";
     repo = "nix-serve";
     inherit rev;
-    sha256 = "1c0ip4w00j86412l2qf0dwzjr9jzimiygbx82x15r46kr3cpk7kp";
+    sha256 = "0mjzsiknln3isdri9004wwjjjpak5fj8ncizyncf5jv7g4m4q1pj";
   };
 
-  buildInputs = [ perl nix perlPackages.Plack perlPackages.Starman ];
+  buildInputs = [ perl nix ]
+    ++ (with perlPackages; [ DBI DBDSQLite Plack Starman ]);
 
   buildPhase = "true";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, blas, liblapack, gfortran }:
+{ stdenv, fetchurl, unzip, openblas, gfortran }:
 
 stdenv.mkDerivation rec {
   version = "3.12.3";
@@ -13,9 +13,14 @@ stdenv.mkDerivation rec {
      export CXXDEFS="-DHAVE_RAND -DHAVE_CSTRING -DHAVE_CSTDIO"
   '';
 
+  configureFlags = [
+    "--with-blas-lib=-lopenblas"
+    "--with-lapack-lib=-lopenblas"
+  ];
+
   nativeBuildInputs = [ unzip ];
 
-  buildInputs = [ gfortran blas liblapack ];
+  buildInputs = [ gfortran openblas ];
 
   enableParallelBuilding = true;
 

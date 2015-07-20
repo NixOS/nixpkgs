@@ -1,7 +1,7 @@
 { stdenv, fetchgit, python3 }:
 
 stdenv.mkDerivation {
-  name = "cortex";
+  name = "cortex-2014-08-01";
 
   src = fetchgit {
     url = "https://github.com/gglucas/cortex";

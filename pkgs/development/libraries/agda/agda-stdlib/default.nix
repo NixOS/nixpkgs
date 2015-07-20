@@ -6,8 +6,8 @@ agda.mkDerivation (self: rec {
 
   src = fetchgit {
     url = "git://github.com/agda/agda-stdlib";
-    rev = "451446c5d849b8c5d6d34363e3551169eb126cfb";
-    sha256 = "40a55d3c22fb3462b110859f4cd63e79e086b25f23964b465768397b93c57701";
+    rev = "9c9b3cb28f9a7d39a256890a1469c1a3f7fc4faf";
+    sha256 = "521899b820e70abbae7cb30008b87a2f8676bc6265b78865e42982fc2e5c972f";
   };
 
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];

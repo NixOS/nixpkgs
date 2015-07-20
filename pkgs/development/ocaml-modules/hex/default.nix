@@ -1,16 +1,17 @@
-{ stdenv, fetchzip, ocaml, findlib }:
+{ stdenv, fetchzip, ocaml, findlib, cstruct }:
 
-let version = "0.1.0"; in
+let version = "0.2.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml-hex-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/ocaml-hex/archive/${version}.tar.gz";
-    sha256 = "1nna0v5wi1g8l9ywl43xda2lqbz3sa3ncpyg84bl9baxyfmw4p9n";
+    sha256 = "13vmpxwg5vb2qvkdqz37rx1ya19r9cp4dwylx8jj15mn77hpy7xg";
   };
 
   buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ cstruct ];
   createFindlibDestdir = true;
 
   meta = {

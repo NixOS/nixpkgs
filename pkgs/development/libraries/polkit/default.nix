@@ -15,11 +15,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.112";
+  name = "polkit-0.113";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
-    sha256 = "1xkary7yirdcjdva950nqyhmsz48qhrdsr78zciahj27p8yg95fn";
+    sha256 = "109w86kfqrgz83g9ivggplmgc77rz8kx8646izvm2jb57h4rbh71";
   };
 
   buildInputs =
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs .
   '' + stdenv.lib.optionalString useSystemd /* bogus chroot detection */ ''
-    sed '/libsystemd-login autoconfigured, but system does not appear to use systemd/s/.*/:/' -i configure
+    sed '/libsystemd autoconfigured/s/.*/:/' -i configure
   ''
     # ‘libpolkit-agent-1.so’ should call the setuid wrapper on
     # NixOS.  Hard-coding the path is kinda ugly.  Maybe we can just

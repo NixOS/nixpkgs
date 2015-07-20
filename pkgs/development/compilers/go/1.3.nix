@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
   '';
 
-  patches = [ ./cacert-1.2.patch ];
+  patches = [ ./cacert-1.2.patch ./R_386_GOT32.patch ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
@@ -102,12 +102,12 @@ stdenv.mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1.3";
     homepage = http://golang.org/;
     description = "The Go Programming language";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ cstrahan ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ cstrahan ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

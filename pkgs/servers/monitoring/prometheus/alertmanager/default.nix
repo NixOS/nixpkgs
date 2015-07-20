@@ -1,25 +1,23 @@
 { stdenv, lib, goPackages, fetchFromGitHub, protobuf, vim }:
 
-with goPackages;
-
-buildGoPackage rec {
-  name = "prometheus-alertmanager-${version}";
-  version = "0.1.0";
+goPackages.buildGoPackage rec {
+  name = "prometheus-alertmanager-${rev}";
+  rev = "0.0.4";
   goPackagePath = "github.com/prometheus/alertmanager";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
-    rev = "942cd35dea6dc406b106d7a57ffe7adbb3b978a5";
-    sha256 = "1c14vgn9s0dn322ss8fs5b47blw1g8cxy9w4yjn0f7x2sdwplx1i";
+    inherit rev;
+    sha256 = "0g656rzal7m284mihqdrw23vhs7yr65ax19nvi70jl51wdallv15";
   };
 
   buildInputs = [
-    goPackages.glog
     goPackages.protobuf
-    goPackages.fsnotify.v1
+    goPackages.fsnotify.v0
     goPackages.httprouter
     goPackages.prometheus.client_golang
+    goPackages.prometheus.log
     goPackages.pushover
     protobuf
     vim
@@ -27,11 +25,11 @@ buildGoPackage rec {
 
   buildFlagsArray = ''
     -ldflags=
-        -X main.buildVersion ${version}
+        -X main.buildVersion ${rev}
         -X main.buildBranch master
         -X main.buildUser nix@nixpkgs
         -X main.buildDate 20150101-00:00:00
-        -X main.goVersion ${lib.getVersion go}
+        -X main.goVersion ${lib.getVersion goPackages.go}
   '';
 
   preBuild = ''

@@ -27,11 +27,10 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     substituteInPlace daemon/gdm-simple-slave.c --replace 'BINDIR "/gnome-session' '"${gnome_session}/bin/gnome-session'
-    substituteInPlace daemon/gdm-launch-environment.c --replace 'BINDIR "/dbus-launch' '"${dbus.tools}/bin/dbus-launch'
   '';
 
   # Disable Access Control because our X does not support FamilyServerInterpreted yet
-  patches = [ ./xserver_path.patch ./sessions_dir.patch ./disable_x_access_control.patch ];
+  patches = [ ./xserver_path.patch ./sessions_dir.patch ./disable_x_access_control.patch ./no-dbus-launch.patch ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GDM;

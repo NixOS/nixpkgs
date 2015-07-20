@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
 stdenv.mkDerivation rec {
-  name = "dhcpcd-6.8.1";
+  name = "dhcpcd-6.9.0";
 
   src = fetchurl {
     url = "mirror://roy/dhcpcd/${name}.tar.bz2";
-    sha256 = "10mg68yxvl4kn1ya8ziifg2dm71c10r12sg7y7k1k0vafazhrdi7";
+    sha256 = "0s0a29ml9x108lxv5yz55f3l5kvlx4hcbxigfq3hr245yy7aarhm";
   };
 
   buildInputs = [ pkgconfig udev ];

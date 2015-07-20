@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig intltool gnupg p11_kit glib gobjectIntrospection libxslt
+    pkgconfig intltool gnupg glib gobjectIntrospection libxslt
     libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk makeWrapper vala
   ];
+
+  propagatedBuildInputs = [ p11_kit ];
 
   #doCheck = true;
 

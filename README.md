@@ -5,7 +5,7 @@
 [![Issue Stats](http://www.issuestats.com/github/nixos/nixpkgs/badge/issue)](http://www.issuestats.com/github/nixos/nixpkgs)
 
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
-manager. It is periodically build and tested by the [hydra](http://hydra.nixos.org/)
+manager. It is periodically built and tested by the [hydra](http://hydra.nixos.org/)
 build daemon as so-called channels. To get channel information via git, add
 [nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels.git) as a remote:
 
@@ -15,7 +15,7 @@ build daemon as so-called channels. To get channel information via git, add
 
 For stability and maximum binary package support, it is recommended to maintain
 custom changes on top of one of the channels, e.g. `nixos-14.12` for the latest
-release and `nixos-unstable` for the latest successfully build master:
+release and `nixos-unstable` for the latest successful build of master:
 
 ```
 % git remote update channels
@@ -40,6 +40,3 @@ Communication:
 
 * [Mailing list](http://lists.science.uu.nl/mailman/listinfo/nix-dev)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
-
----
-[![Throughput Graph](https://graphs.waffle.io/nixos/nixpkgs/throughput.svg)](https://waffle.io/nixos/nixpkgs/metrics)

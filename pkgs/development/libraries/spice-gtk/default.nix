@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pkgconfig, gtk, spice_protocol, intltool, celt_0_5_1
-, openssl, pulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
+, openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python, pygtk, autoconf, automake, libtool, usbredir, libsoup
 , gtk3, enableGTK3 ? false }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "spice-gtk-0.25";
+  name = "spice-gtk-0.27";
 
   src = fetchurl {
     url = "http://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "11yh593frbafp0ywkk7pfc2k17q1fwrl8zcjclph3xfr1alccc07";
+    sha256 = "0323j3q7gagi83fvxd7v9vdxqv2s3ziss44ici342hyv21qf0xah";
   };
 
   buildInputs = [
-    spice_protocol celt_0_5_1 openssl pulseaudio pixman gobjectIntrospection
+    spice_protocol celt_0_5_1 openssl libpulseaudio pixman gobjectIntrospection
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir
   ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk ]);
 

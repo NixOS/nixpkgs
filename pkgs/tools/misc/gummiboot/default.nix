@@ -25,7 +25,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
 
     platforms = [ "x86_64-linux" "i686-linux" ];
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

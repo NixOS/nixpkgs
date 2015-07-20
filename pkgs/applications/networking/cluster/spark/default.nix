@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "spark-${version}";
-  version = "1.1.1";
+  version = "1.4.0";
 
   src = fetchurl {
-    url    = "http://d3kbcqa49mib13.cloudfront.net/${name}-bin-cdh4.tgz";
-    sha256 = "1k0lw8aq5is3gnsrm8q24s0knga6kb3c9xsca20g11fy8b0y4nvk";
+    url    = "mirror://apache/spark/${name}/${name}-bin-cdh4.tgz";
+    sha256 = "1w60xzzg9mcymin1pmqwx1mvcqmdpfyxhd2dmw5alhnrzi21ycxi";
   };
 
   buildInputs = [ makeWrapper jre pythonPackages.python pythonPackages.numpy ]

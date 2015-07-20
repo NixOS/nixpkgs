@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib }:
+{ stdenv, fetchurl, ocaml, findlib, camlp4 }:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -17,7 +17,8 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ocaml findlib];
+  buildInputs = [ ocaml findlib ];
+  propagatedBuildInputs = [ camlp4 ];
 
   buildFlags = "all all.opt";
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     homepage = http://www.cduce.org/download.html;
     description = "A lexer generator for Unicode and OCaml";
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = ocaml.meta.platforms;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

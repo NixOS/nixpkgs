@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libXv, libXi, libXrender, libXrandr, zlib, glib
 , libXext, libX11, libXScrnSaver, libSM, qt4, libICE, freetype, fontconfig
-, pulseaudio, lib, ... }:
+, libpulseaudio, lib, ... }:
 
 assert stdenv.system == "i686-linux";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libXi
     libXrender
     libXrandr
-    pulseaudio
+    libpulseaudio
     freetype
     fontconfig
     zlib

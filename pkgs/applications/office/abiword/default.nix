@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk3, libglade, libgnomecanvas, fribidi
 , libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt
+, boost, libxslt, goffice, makeWrapper, iconTheme
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +16,13 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig gtk3 libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
-      libgsf enchant wv libjpeg perl boost libxslt
+      libgsf enchant wv libjpeg perl boost libxslt goffice makeWrapper iconTheme
     ];
+
+  postFixup = ''
+    wrapProgram "$out/bin/abiword" \
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+  '';
 
   meta = with stdenv.lib; {
     description = "Word processing program, similar to Microsoft Word";

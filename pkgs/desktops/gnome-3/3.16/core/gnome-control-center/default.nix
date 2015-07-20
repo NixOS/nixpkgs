@@ -1,8 +1,8 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
-, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, pulseaudio, fontconfig
+, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio, fontconfig
 , gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
-, cracklib, python, krb5, networkmanagerapplet, networkmanager
+, cracklib, python, libkrb5, networkmanagerapplet, networkmanager
 , libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev
 , docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk }:
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = with gnome3;
     [ pkgconfig intltool ibus gtk glib upower libcanberra gsettings_desktop_schemas
       libxml2 gnome_desktop gnome_settings_daemon polkit libxslt libgtop gnome-menus
-      gnome_online_accounts libsoup colord pulseaudio fontconfig colord-gtk libpwquality
-      accountsservice krb5 networkmanagerapplet libwacom samba libnotify libxkbfile
+      gnome_online_accounts libsoup colord libpulseaudio fontconfig colord-gtk libpwquality
+      accountsservice libkrb5 networkmanagerapplet libwacom samba libnotify libxkbfile
       shared_mime_info icu libtool docbook_xsl docbook_xsl_ns gnome3.grilo
       gdk_pixbuf gnome3.defaultIconTheme librsvg clutter clutter_gtk
       gnome3.vino udev libcanberra_gtk3

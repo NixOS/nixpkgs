@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qjson, kdelibs }:
+{ stdenv, fetchgit, pkgconfig, qjson, kdelibs }:
 
 stdenv.mkDerivation {
   name = "libkvkonatkte-1.0-pre20120103";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0ryvjfrsws845k9s76715xid48y01h0ynb5wdx6ln8cm5z5wqj61";
   };
 
-  buildInputs = [ qjson kdelibs ];
+  buildInputs = [ pkgconfig qjson kdelibs ];
 
   meta = {
     homepage = https://projects.kde.org/projects/extragear/libs/libkvkontakte;

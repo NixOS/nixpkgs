@@ -22,7 +22,7 @@ in
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = literalExample "[ \"\${pkgs.cacert}/etc/ca-bundle.crt\" ]";
+      example = literalExample "[ \"\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt\" ]";
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -33,7 +33,7 @@ in
     };
 
     security.pki.certificates = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       example = singleton ''
         NixOS.org
@@ -53,7 +53,7 @@ in
 
   config = {
 
-    security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ca-bundle.crt" ];
+    security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ];
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
@@ -66,8 +66,6 @@ in
 
     environment.sessionVariables =
       { SSL_CERT_FILE          = "/etc/ssl/certs/ca-certificates.crt";
-        # FIXME: unneeded - remove eventually.
-        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
         # FIXME: unneeded - remove eventually.
         GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-certificates.crt";
       };

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libasr-${version}";
-  version=  "1.0.1";
+  version=  "1.0.2";
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "10h1c9b58msbggns8k2m0857zmbldb0x8ghk3aay88yn2bip2916";
+    sha256 = "0d4blm0kzdhb75fq8sbcpvkc25lv5dbjaxa2ldniaf39633d3xd6";
   };
 
   buildInputs = [ libevent openssl ];

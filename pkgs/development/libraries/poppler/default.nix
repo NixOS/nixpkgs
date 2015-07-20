@@ -5,8 +5,8 @@
 }:
 
 let
-  version = "0.32.0"; # even major numbers are stable
-  sha256 = "162vfbvbz0frvqyk00ldsbl49h4bj8i8wn0ngfl30xg1lldy6qs9";
+  version = "0.34.0"; # even major numbers are stable
+  sha256 = "1c2wa4pfzqmvzq1jpp3ps5nmzz745gcg8dnpwqpfdccy5ydbm90v";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "libeatmydata-82";
@@ -7,6 +7,13 @@ stdenv.mkDerivation rec {
     url = "http://www.flamingspork.com/projects/libeatmydata/${name}.tar.gz";
     sha256 = "0aavq71bf0yxdgyf8gvyzq086shszzwpbsz5rqkjg4cz0rc5yrqb";
   };
+
+  buildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/eatmydata \
+      --prefix PATH : $out/bin
+  '';
 
   meta = {
     homepage = http://www.flamingspork.com/projects/libeatmydata/;

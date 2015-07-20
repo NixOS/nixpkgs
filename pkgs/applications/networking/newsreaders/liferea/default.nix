@@ -6,14 +6,14 @@
 }:
 
 let pname = "liferea";
-    version = "1.10.14";
+    version = "1.10.16";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0szazfknarw6ivnr4flr928ar309pz2mv6alc6pk6l1i9jchcnfs";
+    sha256 = "0b8cvlyiamc4hwjcxzs0h3mk3gxnmnwyi79mjv36601xgfjs5f9j";
   };
 
   buildInputs = with gst_all_1; [
@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
-
     for f in "$out"/bin/*; do
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \

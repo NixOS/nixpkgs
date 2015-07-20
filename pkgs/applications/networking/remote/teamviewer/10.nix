@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes, wineUnstable, makeWrapper, libXau
-, bash, patchelf, config }:
+{ stdenv, fetchurl, libX11, libXtst, libXext, libXdamage, libXfixes,
+wineUnstable, makeWrapper, libXau , bash, patchelf, config,
+acceptLicense ? false }:
+
+with stdenv.lib;
 
 let
   topath = "${wineUnstable}/bin";
@@ -37,11 +40,18 @@ stdenv.mkDerivation {
     patchelf --set-rpath "${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${libX11}/lib:${libXext}/lib:${libXau}/lib:${libXdamage}/lib:${libXfixes}/lib" $out/share/teamviewer/tv_bin/teamviewerd
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/teamviewer/tv_bin/teamviewerd
     ln -s $out/share/teamviewer/tv_bin/teamviewerd $out/bin/
+    ${optionalString acceptLicense "
+      cat > $out/share/teamviewer/config/global.conf << EOF
+      [int32] EulaAccepted = 1
+      [int32] EulaAcceptedRevision = 6
+      EOF
+    "}
   '';
 
   meta = {
     homepage = "http://www.teamviewer.com";
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
+    maintainers = with maintainers; [ jagajaga ];
   };
 }

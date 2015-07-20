@@ -52,9 +52,11 @@ in rec {
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         (all nixos.tests.gnome3)
+        (all nixos.tests.installer.grub1)
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
+        (all nixos.tests.installer.separateBootFat)
         (all nixos.tests.installer.simple)
         (all nixos.tests.installer.simpleLabels)
         (all nixos.tests.installer.simpleProvided)
@@ -62,8 +64,10 @@ in rec {
         (all nixos.tests.installer.btrfsSimple)
         (all nixos.tests.installer.btrfsSubvols)
         (all nixos.tests.installer.btrfsSubvolDefault)
+        (all nixos.tests.bootBiosCdrom)
         (all nixos.tests.ipv6)
         (all nixos.tests.kde4)
+        (all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
         (all nixos.tests.nat.firewall)
@@ -86,6 +90,7 @@ in rec {
 
         nixpkgs.tarball
         (all nixpkgs.emacs)
+        (all nixpkgs.jdk)
       ];
   });
 

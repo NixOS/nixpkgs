@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = "prefix=$(out)";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://dag.wieers.com/home-made/dstat/;
     description = "Versatile resource statistics tool";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jgeerds ];
   };
 }

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "voxelands-${version}";
-  version = "1504.01";
+  version = "1506.00";
 
   src = fetchurl {
       url = "http://voxelands.com/downloads/${name}-src.tar.bz2";
-      sha256 = "17jv2pz0mbkkf7jw3jcpix8hb46b382hc7vki42n9rrdynydq5zp";
+      sha256 = "0j82zidxv2rzx7fmw5z27nfldqkixbrs1f6l3fs433xr3d05406y";
   };
 
   cmakeFlags = [

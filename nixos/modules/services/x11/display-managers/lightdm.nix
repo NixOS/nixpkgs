@@ -33,7 +33,7 @@ let
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
         --prefix PATH : "${pkgs.glibc}/bin" \
-        --set GDK_PIXBUF_MODULE_FILE "$(find ${theme} -name loaders.cache)" \
+        --set GDK_PIXBUF_MODULE_FILE "${pkgs.gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
         --set GTK_PATH "${theme}:${pkgs.gtk3}" \
         --set GTK_EXE_PREFIX "${theme}" \
         --set GTK_DATA_PREFIX "${theme}" \
@@ -104,7 +104,7 @@ in
       };
 
       background = mkOption {
-        default = "${pkgs.nixos-artwork}/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';

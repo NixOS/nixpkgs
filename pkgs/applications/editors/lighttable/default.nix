@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "the next generation code editor";
     homepage = http://www.lighttable.com/;
-    license = [ licenses.gpl3 ];
+    license = licenses.gpl3;
   };
 }

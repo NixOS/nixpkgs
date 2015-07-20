@@ -3,7 +3,7 @@
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
 
-let version = "2.1.2"; in
+let version = "2.2"; in
 
 stdenv.mkDerivation {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/the-lambda-church/merlin/archive/v${version}.tar.gz";
-    sha256 = "0l6s4bvspjl1l26bf33xf4k5imdzryas15s1isn6998aiakxq20n";
+    sha256 = "19n4gwpqav2kax5rl61bq354g7ycdahl4f3ihjp418hwi1phwbzz";
   };
 
   buildInputs = [ ocaml findlib yojson menhir ]

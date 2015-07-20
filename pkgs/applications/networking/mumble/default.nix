@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mumble-${version}";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mumble/${name}.tar.gz";
-    sha256 = "0ng1xd7i0951kqnd9visf84y2dcwia79a1brjwfvr1wnykgw6bsc";
+    url = "https://github.com/mumble-voip/mumble/releases/download/${version}/${name}.tar.gz";
+    sha256 = "012vm0xf84x13414jlsx964c5a1nwnbn41jnspkciajlxxipldn6";
   };
 
   patches = optional jackSupport ./mumble-jack-support.patch;
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Low-latency, high quality voice chat software";
     homepage = "http://mumble.sourceforge.net/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric jgeerds ];
     platforms = platforms.linux;
   };
 }

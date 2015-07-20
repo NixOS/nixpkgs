@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, autoconf, automake, wineStaging, perl, xlibs
-  , gnupg, gcc48_multi, mesa, curl, bash, cacert, cabextract, utillinux, attr
+  , gnupg, gcc_multi, mesa, curl, bash, cacert, cabextract, utillinux, attr
   }:
 
 let
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1i440rf22fmd2w86dlm1mpi3nb7410rfczc0yldnhgsvp5p3sm5f";
   };
 
-  buildInputs = [ wine_custom xlibs.libX11 gcc48_multi mesa curl ];
+  buildInputs = [ wine_custom xlibs.libX11 gcc_multi mesa curl ];
   propagatedbuildInputs = [ curl cabextract ];
 
   patches = [ ./pipelight.patch ];

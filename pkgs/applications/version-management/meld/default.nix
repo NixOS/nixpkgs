@@ -1,5 +1,6 @@
 { stdenv, fetchurl, itstool, buildPythonPackage, python27, intltool, makeWrapper
 , libxml2, pygobject3, gobjectIntrospection, gtk3, gnome3, pycairo, cairo
+, hicolor_icon_theme
 }:
 
 
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   buildInputs = [
     python27 intltool makeWrapper itstool libxml2
     gnome3.gtksourceview gnome3.gsettings_desktop_schemas pycairo cairo
+    hicolor_icon_theme
   ];
   propagatedBuildInputs = [ gobjectIntrospection pygobject3 gtk3 ];
 

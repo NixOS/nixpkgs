@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
 
   installTargets = "install install-lib install-dev";
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://savannah.nongnu.org/projects/attr/;
     description = "Library and tools for manipulating extended attributes";
-    platforms = platforms.all;
   };
 }

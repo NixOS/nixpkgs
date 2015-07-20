@@ -1,7 +1,7 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation {
-  name = "urxvt-perls";
+  name = "urxvt-perls-2015-03-28";
 
   src = fetchgit {
     url = "git://github.com/muennich/urxvt-perls";

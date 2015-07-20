@@ -20,16 +20,12 @@ addQtModule() {
             fi
         fi
 
-        if [[ -n $qtSubmodule ]] && [[ -d "$1/lib" ]]; then
+        if [[ -d "$1/lib" ]]; then
             @lndir@/bin/lndir -silent "$1/lib" "$qtOut/lib"
-            find "$1/lib" -printf 'lib/%P\n' >> "$qtOut/nix-support/qt-inputs"
+            if [[ -n $qtSubmodule ]]; then
+                find "$1/lib" -printf 'lib/%P\n' >> "$qtOut/nix-support/qt-inputs"
+            fi
         fi
-
-        propagatedBuildInputs+=" $1"
-    fi
-
-    if [[ -d "$1/lib/qt5/qml" ]] || [[ -d "$1/lib/qt5/plugins" ]] || [[ -d "$1/lib/qt5/imports" ]]; then
-        propagatedUserEnvPkgs+=" $1"
     fi
 }
 
@@ -50,10 +46,11 @@ cp "@out@/bin/qmake" "$qtOut/bin"
 cat >"$qtOut/bin/qt.conf" <<EOF
 [Paths]
 Prefix = $qtOut
-Plugins = $qtOut/lib/qt5/plugins
-Imports = $qtOut/lib/qt5/imports
-Qml2Imports = $qtOut/lib/qt5/qml
+Plugins = lib/qt5/plugins
+Imports = lib/qt5/imports
+Qml2Imports = lib/qt5/qml
 EOF
+export QMAKE="$qtOut/bin/qmake"
 
 envHooks+=(addQtModule)
 preConfigurePhases+=" setQMakePath"

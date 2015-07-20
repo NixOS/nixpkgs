@@ -5,11 +5,11 @@
 pythonPackages.buildPythonPackage rec {
   name = "mopidy-${version}";
 
-  version = "1.0.0";
+  version = "1.0.5";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "15cz6mqw8ihqxhlssnbbssl3bi1xxbmq7krf3hv0zmmdj73ilsd6";
+    sha256 = "0lhmm2w2djf6mb3acw1yq1k4j74v1lf4kgx24dsdnpkgsycrv5q6";
   };
 
   propagatedBuildInputs = with pythonPackages; [

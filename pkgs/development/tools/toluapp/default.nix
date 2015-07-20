@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   installPhase = ''scons install'';
 
   meta = {
-    licence = stdenv.lib.licenses.mit;
+    license = stdenv.lib.licenses.mit;
   };
 
 }

@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     description = "A collection of open-source libraries for high level network programming";
     homepage    = http://cpp-netlib.org;
     license     = licenses.boost;
-    maintainers = with maintainers; [ shlevy ];
     platforms   = platforms.all;
   };
 }

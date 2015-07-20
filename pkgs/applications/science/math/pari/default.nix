@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gmp, readline }:
 
 stdenv.mkDerivation rec {
-  version = "2.7.3";
+  version = "2.7.4";
   name = "pari-${version}";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "02k54m7p47r54lgxqanxvf7pdrss17n8if1qwk5wx0j1px22j0rq";
+    sha256 = "0k1qqagfl6zn7gvwmsqffj6g9yrzqvszwh2mblhmxpjlw1pigfh8";
   };
 
   buildInputs = [gmp readline];
@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
     "--with-gmp=${gmp} " +
     "--with-readline=${readline}";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Computer algebra system for high-performance number theory computations";
     homepage    = "http://pari.math.u-bordeaux.fr/";
-    license     = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [ertes raskin];
-    platforms   = stdenv.lib.platforms.linux;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ ertes raskin ];
+    platforms   = platforms.linux;
 
     inherit version;
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";

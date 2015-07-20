@@ -1,5 +1,7 @@
 { stdenv, fetchgit, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, x11, sqlite }:
+, libjpeg, libXxf86vm, mesa, openal, libvorbis, x11, sqlite, luajit, freetype
+, gettext
+}:
 
 let
   version = "0.4.12";
@@ -21,12 +23,15 @@ in stdenv.mkDerivation {
   src = sources.src;
 
   cmakeFlags = [
+    "-DENABLE_FREETYPE=1"
+    "-DENABLE_GETTEXT=1"
+    "-DCURL_INCLUDE_DIR=${curl}/include/curl"
     "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
   ];
 
   buildInputs = [
-    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp
-    libXxf86vm mesa openal libvorbis x11 sqlite
+    cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
+    openal libvorbis x11 sqlite luajit freetype gettext
   ];
 
   postInstall = ''

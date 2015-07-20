@@ -1,6 +1,6 @@
 { composableDerivation, fetchurl, pkgconfig, x11, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
-
+, cfg ? {}
 , automake, autoconf, libtool
 }:
 
@@ -14,6 +14,12 @@ composableDerivation.composableDerivation {} {
     url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
     sha256 = "15qd7lkz5d5ynz70xhxhigpz3wns39v9xcf7ggkl0792syc8sfgq";
   };
+
+  # http://www.fltk.org/str.php?L3156
+  postPatch = ''
+    substituteInPlace FL/x.H \
+      --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
+  '';
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
@@ -48,7 +54,7 @@ composableDerivation.composableDerivation {} {
     localpngSupport = false;
     sharedSupport = true;
     threadsSupport = true;
-  };
+  } // cfg;
 
   meta = {
     description = "A C++ cross-platform light-weight GUI library binding";

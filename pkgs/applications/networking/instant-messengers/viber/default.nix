@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, dpkg, makeWrapper, xlibs, qt5, gstreamer, zlib, sqlite, libxslt }:
+{ fetchurl, stdenv, dpkg, makeWrapper, xlibs, qt5Full, gstreamer, zlib, sqlite, libxslt }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   unpackPhase = "true";
 
   libPath = stdenv.lib.makeLibraryPath [
-      qt5
+      qt5Full
       xlibs.libX11
       gstreamer
       zlib

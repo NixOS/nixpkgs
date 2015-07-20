@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = stdenv ? cross;
+  bash_cv_func_sigsetjmp = if stdenv.isCygwin then "missing" else null;
 
   meta = with stdenv.lib; {
     description = "Library for interactive line editing";

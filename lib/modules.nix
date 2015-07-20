@@ -17,6 +17,10 @@ rec {
      evalModules) and the less declarative the module set is. */
   evalModules = { modules
                 , prefix ? []
+                , # This should only be used for special arguments that need to be evaluated
+                  # when resolving module structure (like in imports). For everything else,
+                  # there's _module.args.
+                  specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
@@ -39,7 +43,7 @@ rec {
           };
 
           _module.check = mkOption {
-            type = types.uniq types.bool;
+            type = types.bool;
             internal = true;
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
@@ -51,7 +55,7 @@ rec {
         };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) { inherit config options; lib = import ./.; };
+      closed = closeModules (modules ++ [ internalModule ]) (specialArgs // { inherit config options; lib = import ./.; });
 
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
@@ -87,9 +91,11 @@ rec {
     let
       toClosureList = file: parentKey: imap (n: x:
         if isAttrs x || isFunction x then
-          unifyModuleSyntax file "${parentKey}:anon-${toString n}" (unpackSubmodule applyIfFunction x args)
+          let key = "${parentKey}:anon-${toString n}"; in
+          unifyModuleSyntax file key (unpackSubmodule (applyIfFunction key) x args)
         else
-          unifyModuleSyntax (toString x) (toString x) (applyIfFunction (import x) args));
+          let file = toString x; key = toString x; in
+          unifyModuleSyntax file key (applyIfFunction key (import x) args));
     in
       builtins.genericClosure {
         startSet = toClosureList unknownModule "" modules;
@@ -118,7 +124,7 @@ rec {
         config = removeAttrs m ["key" "_file" "require" "imports"];
       };
 
-  applyIfFunction = f: arg@{ config, options, lib }: if isFunction f then
+  applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
     let
       # Module arguments are resolved in a strict manner when attribute set
       # deconstruction is used.  As the arguments are now defined with the
@@ -133,11 +139,18 @@ rec {
       # not their values.  The values are forwarding the result of the
       # evaluation of the option.
       requiredArgs = builtins.attrNames (builtins.functionArgs f);
+      context = name: ''while evaluating the module argument `${name}' in "${key}":'';
       extraArgs = builtins.listToAttrs (map (name: {
         inherit name;
-        value = config._module.args.${name};
+        value = addErrorContext (context name)
+          (args.${name} or config._module.args.${name});
       }) requiredArgs);
-    in f (extraArgs // arg)
+
+      # Note: we append in the opposite order such that we can add an error
+      # context on the explicited arguments of "args" too. This update
+      # operator is used to make the "args@{ ... }: with args.lib;" notation
+      # works.
+    in f (args // extraArgs)
   else
     f;
 

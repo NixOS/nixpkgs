@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "z3-${version}";
-  version = "4.3.2";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner  = "Z3Prover";
     repo   = "z3";
-    rev    = "ac21ffebdf1512da2a77dc46c47bde87cc3850f3";
-    sha256 = "1y86akhpy41wx3gx7r8gvf7xbax7dj36ikj6gqh5a7p6r6maz9ci";
+    rev    = "7f6ef0b6c0813f2e9e8f993d45722c0e5b99e152";
+    sha256 = "1xllvq9fcj4cz34biq2a9dn2sj33bdgrzyzkj26hqw70wkzv1kzx";
   };
 
   buildInputs = [ python ];

@@ -2,7 +2,7 @@
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, x11 ? null, libXrandr ? null
-, pulseaudioSupport ? true, pulseaudio ? null
+, pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
 # OSS is no longer supported, for it's much crappier than ALSA and
@@ -12,7 +12,7 @@ assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 assert openglSupport -> (stdenv.isDarwin || mesa != null && x11Support);
 assert x11Support -> (x11 != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
-assert pulseaudioSupport -> pulseaudio != null;
+assert pulseaudioSupport -> libpulseaudio != null;
 
 let
   configureFlagsFun = attrs: ''
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
-    stdenv.lib.optional pulseaudioSupport pulseaudio;
+    stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   buildInputs = [ pkgconfig audiofile ] ++
-    stdenv.lib.optional openglSupport [ mesa ] ++
+    stdenv.lib.optional openglSupport mesa ++
     stdenv.lib.optional alsaSupport alsaLib;
 
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431

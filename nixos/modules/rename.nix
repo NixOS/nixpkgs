@@ -141,6 +141,9 @@ in zipModules ([]
 ++ obsolete [ "services" "xserver" "windowManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ]
 ++ obsolete [ "services" "xserver" "desktopManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ]
 
+# DNSCrypt-proxy
+++ obsolete [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ]
+
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]
@@ -148,5 +151,6 @@ in zipModules ([]
 ++ obsolete' [ "services" "samba" "defaultShare" ]
 ++ obsolete' [ "services" "syslog-ng" "serviceName" ]
 ++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
+++ obsolete' [ "ec2" "metadata" ]
 
 )

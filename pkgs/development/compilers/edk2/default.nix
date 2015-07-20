@@ -35,7 +35,6 @@ edk2 = stdenv.mkDerivation {
     description = "Intel EFI development kit";
     homepage = http://sourceforge.net/projects/edk2/;
     license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = ["x86_64-linux" "i686-linux"];
   };
 

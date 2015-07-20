@@ -6,14 +6,14 @@ with stdenv.lib;
 stdenv.mkDerivation rec{
 
   name = "bitcoin" + (toString (optional (!withGui) "d")) + "-" + version;
-  core_version = "0.10.1";
+  core_version = "0.11.0";
   version = core_version;
 
   src = fetchurl {
-    url = [ "https://bitcoin.org/bin/bitcoin-core-${core_version}/bitcoin-${version}.tar.gz"
-            "mirror://sourceforge/bitcoin/Bitcoin/bitcoin-${core_version}/bitcoin-${version}.tar.gz"
-          ];
-    sha256 = "287873f9ba4fd49cd4e4be7eba070d2606878f1690c5be0273164d37cbf3c138";
+    urls = [ "https://bitcoin.org/bin/bitcoin-core-${core_version}/bitcoin-${version}.tar.gz"
+             "mirror://sourceforge/bitcoin/Bitcoin/bitcoin-${core_version}/bitcoin-${version}.tar.gz"
+           ];
+    sha256 = "51ba1756addfa71567559e3f22331c1d908a63571891287689fff7113035d09f";
   };
 
   buildInputs = [ pkgconfig autoreconfHook openssl db48 boost zlib

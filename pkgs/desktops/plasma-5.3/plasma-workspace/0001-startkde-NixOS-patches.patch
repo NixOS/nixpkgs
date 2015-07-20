@@ -1,23 +1,25 @@
-From 9aa37de6cd887c6cdd7ea2356cbb6aecdb988b75 Mon Sep 17 00:00:00 2001
+From f124d2204cff11ae0ff0d6c788d268b746180407 Mon Sep 17 00:00:00 2001
 From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Sun, 3 May 2015 14:51:04 -0500
-Subject: [PATCH] startkde: NixOS patches
+Date: Sat, 18 Jul 2015 12:13:08 -0500
+Subject: [PATCH] startkde NixOS patches
 
 ---
- startkde/startkde.cmake | 212 +++++++++++++++++++-----------------------------
- 1 file changed, 85 insertions(+), 127 deletions(-)
+ startkde/startkde.cmake | 222 ++++++++++++++++++++----------------------------
+ 1 file changed, 91 insertions(+), 131 deletions(-)
 
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index 24e5c1b..d8642d3 100644
+index 6f93108..26cc2fc 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
-@@ -1,8 +1,29 @@
+@@ -1,8 +1,31 @@
 -#!/bin/sh
 +#!@bash@/bin/bash
  #
  #  DEFAULT KDE STARTUP SCRIPT ( @PROJECT_VERSION@ )
  #
  
++set -x
++
 +# The KDE icon cache is supposed to update itself
 +# automatically, but it uses the timestamp on the icon
 +# theme directory as a trigger.  Since in Nix the
@@ -42,7 +44,7 @@ index 24e5c1b..d8642d3 100644
  if test "x$1" = x--failsafe; then
      KDE_FAILSAFE=1 # General failsafe flag
      KWIN_COMPOSE=N # Disable KWin's compositing
-@@ -16,29 +37,16 @@ trap 'echo GOT SIGHUP' HUP
+@@ -16,29 +39,16 @@ trap 'echo GOT SIGHUP' HUP
  # we have to unset this for Darwin since it will screw up KDE's dynamic-loading
  unset DYLD_FORCE_FLAT_NAMESPACE
  
@@ -60,7 +62,8 @@ index 24e5c1b..d8642d3 100644
 -fi
 -
  # Check if a KDE session already is running and whether it's possible to connect to X
- kcheckrunning
+-kcheckrunning
++@out@/bin/kcheckrunning
  kcheckrunning_result=$?
  if test $kcheckrunning_result -eq 0 ; then
 -	echo "KDE seems to be already running on this display."
@@ -75,7 +78,7 @@ index 24e5c1b..d8642d3 100644
  fi
  
  # Boot sequence:
-@@ -56,13 +64,8 @@ fi
+@@ -56,13 +66,8 @@ fi
  # * Then ksmserver is started which takes control of the rest of the startup sequence
  
  # We need to create config folder so we can write startupconfigkeys
@@ -91,7 +94,7 @@ index 24e5c1b..d8642d3 100644
  
  #This is basically setting defaults so we can use them with kstartupconfig5
  cat >$configDir/startupconfigkeys <<EOF
-@@ -106,53 +109,19 @@ toolBarFont=Oxygen-Sans,9,-1,5,50,0,0,0,0,0
+@@ -106,55 +111,21 @@ toolBarFont=Oxygen-Sans,9,-1,5,50,0,0,0,0,0
  EOF
  }
  
@@ -127,7 +130,8 @@ index 24e5c1b..d8642d3 100644
 -    }
 -fi
 -
- kstartupconfig5
+-kstartupconfig5
++@out@/bin/kstartupconfig5
  returncode=$?
  if test $returncode -ne 0; then
 -    xmessage -geometry 500x100 "kstartupconfig5 does not exist or fails. The error code is $returncode. Check your installation."
@@ -139,16 +143,19 @@ index 24e5c1b..d8642d3 100644
 -if test "$kdeglobals_kscreen_scalefactor" -ne 1; then
 -    export QT_DEVICE_PIXEL_RATIO=$kdeglobals_kscreen_scalefactor
 -fi
-+XCURSOR_PATH=~/.icons:$(echo "$XDG_DATA_DIRS" | tr ":" "\n" | @gnused@/bin/sed 's,$,/icons,g' | tr "\n" ":")
++XCURSOR_PATH=~/.icons:$(echo "$XDG_DATA_DIRS" | @coreutils@/bin/tr ":" "\n" | @gnused@/bin/sed 's,$,/icons,g' | @coreutils@/bin/tr "\n" ":")
 +export XCURSOR_PATH
  
  # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
  if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
 -    @EXPORT_XCURSOR_PATH@
  
-     kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
+-    kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
++    @kde_workspace@/bin/kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
      if test $? -eq 10; then
-@@ -168,15 +137,33 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize"
+         XCURSOR_THEME=breeze_cursors
+         export XCURSOR_THEME
+@@ -168,21 +139,39 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize"
      fi
  fi
  
@@ -173,7 +180,7 @@ index 24e5c1b..d8642d3 100644
 +# Make sure that D-Bus is running
 +# D-Bus autolaunch is broken
 +if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-+    eval `@dbus_tools@/dbus-launch --sh-syntax --exit-with-session`
++    eval `@dbus_tools@/bin/dbus-launch --sh-syntax --exit-with-session`
 +fi
 +if @qt5tools@/bin/qdbus >/dev/null 2>/dev/null; then
 +    : # ok
@@ -187,7 +194,14 @@ index 24e5c1b..d8642d3 100644
  ksplash_pid=
  if test -z "$dl"; then
    # the splashscreen and progress indicator
-@@ -205,8 +192,7 @@ fi
+   case "$ksplashrc_ksplash_engine" in
+     KSplashQML)
+-      ksplash_pid=`ksplashqml "${ksplashrc_ksplash_theme}" --pid`
++      ksplash_pid=`@out@/bin/ksplashqml "${ksplashrc_ksplash_theme}" --pid`
+       ;;
+     None)
+       ;;
+@@ -205,8 +194,7 @@ fi
  # For anything else (that doesn't set env vars, or that needs a window manager),
  # better use the Autostart folder.
  
@@ -197,7 +211,7 @@ index 24e5c1b..d8642d3 100644
  
  # Add /env/ to the directory to locate the scripts to be sourced
  for prefix in `echo $scriptpath`; do
-@@ -216,7 +202,7 @@ for prefix in `echo $scriptpath`; do
+@@ -216,7 +204,7 @@ for prefix in `echo $scriptpath`; do
  done
  
  # Set the path for Qt plugins provided by KDE
@@ -206,7 +220,7 @@ index 24e5c1b..d8642d3 100644
  # TODO: Do we really need this?
  QT_PLUGIN_PATH=$QT_PLUGIN_PATH:$kdehome/lib/kde5/plugins/
  export QT_PLUGIN_PATH
-@@ -242,7 +228,7 @@ usr_odir=$HOME/.fonts/kde-override
+@@ -242,7 +230,7 @@ usr_odir=$HOME/.fonts/kde-override
  usr_fdir=$HOME/.fonts
  
  if test -n "$KDEDIRS"; then
@@ -215,7 +229,7 @@ index 24e5c1b..d8642d3 100644
    sys_odir=$kdedirs_first/share/fonts/override
    sys_fdir=$kdedirs_first/share/fonts
  else
-@@ -255,23 +241,13 @@ fi
+@@ -255,23 +243,13 @@ fi
  # add the user's dirs to the font path, as they might simply have been made
  # read-only by the administrator, for whatever reason.
  
@@ -244,7 +258,7 @@ index 24e5c1b..d8642d3 100644
  
  # Get Ghostscript to look into user's KDE fonts dir for additional Fontmap
  if test -n "$GS_LIB" ; then
-@@ -284,30 +260,6 @@ fi
+@@ -284,30 +262,6 @@ fi
  
  echo 'startkde: Starting up...'  1>&2
  
@@ -275,7 +289,7 @@ index 24e5c1b..d8642d3 100644
  # Mark that full KDE session is running (e.g. Konqueror preloading works only
  # with full KDE running). The KDE_FULL_SESSION property can be detected by
  # any X client connected to the same X session, even if not launched
-@@ -332,11 +284,11 @@ fi
+@@ -332,11 +286,11 @@ fi
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -289,7 +303,7 @@ index 24e5c1b..d8642d3 100644
  
  KDE_SESSION_UID=`id -ru`
  export KDE_SESSION_UID
-@@ -346,30 +298,36 @@ export XDG_CURRENT_DESKTOP
+@@ -346,30 +300,36 @@ export XDG_CURRENT_DESKTOP
  
  # At this point all the environment is ready, let's send it to kwalletd if running
  if test -n "$PAM_KWALLET_LOGIN" ; then
@@ -331,7 +345,7 @@ index 24e5c1b..d8642d3 100644
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
  # if the KDEWM environment variable has been set, then it will be used as KDE's
-@@ -385,27 +343,27 @@ test -n "$KDEWM" && KDEWM="--windowmanager $KDEWM"
+@@ -385,27 +345,27 @@ test -n "$KDEWM" && KDEWM="--windowmanager $KDEWM"
  # lock now and do the rest of the KDE startup underneath the locker.
  KSMSERVEROPTIONS=""
  test -n "$dl" && KSMSERVEROPTIONS=" --lockscreen"
@@ -366,7 +380,7 @@ index 24e5c1b..d8642d3 100644
              done
              break
          fi
-@@ -417,21 +375,21 @@ echo 'startkde: Shutting down...'  1>&2
+@@ -417,21 +377,21 @@ echo 'startkde: Shutting down...'  1>&2
  test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
  
  # Clean up
@@ -379,7 +393,7 @@ index 24e5c1b..d8642d3 100644
  for prefix in `echo "$scriptpath"`; do
 -  for file in `ls "$prefix"/shutdown 2> /dev/null | egrep -v '(~|\.bak)$'`; do
 +  for file in `ls "$prefix"/shutdown 2> /dev/null | @gnugrep@/bin/egrep -v '(~|\.bak)$'`; do
-     test -x "$prefix$file" && "$prefix$file"
+     test -x "$prefix/shutdown/$file" && "$prefix/shutdown/$file"
    done
  done
  
@@ -393,5 +407,5 @@ index 24e5c1b..d8642d3 100644
  
  echo 'startkde: Done.'  1>&2
 -- 
-2.3.6
+2.4.5
 

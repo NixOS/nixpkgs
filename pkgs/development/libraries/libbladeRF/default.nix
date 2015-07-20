@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, pkgconfig, cmake, git, doxygen, help2man, tecla, libusb1, udev }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, git, doxygen, help2man, tecla
+, libusb1, udev }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.4.0";
   name = "libbladeRF-v${version}";
 
-  src = fetchgit {
-    url = "https://github.com/Nuand/bladeRF/";
-    rev = "refs/tags/libbladeRF_v${version}";
-    sha256 = "19qd26yflig51scknyjf3r3nmnc2bni75294jpsv0idzqfj87lbr";
-    name = "libbladeRF_v${version}-checkout";
+  src = fetchFromGitHub {
+    owner = "Nuand";
+    repo = "bladeRF";
+    rev = "libbladeRF_v${version}";
+    sha256 = "1y00hqsmqaix4dql8mb75zx87zvn8b483yxv53x9qyjspksbs60c";
   };
 
   buildInputs = [ pkgconfig cmake git doxygen help2man tecla libusb1 udev ];
@@ -19,7 +20,6 @@ stdenv.mkDerivation rec {
   # Let us avoid nettools as a dependency.
   patchPhase = ''
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
-    sed -i 's/ --no-info/ --no-info --no-discard-stderr/' host/utilities/bladeRF-cli/CMakeLists.txt
   '';
 
   cmakeFlags = [
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCUMENTATION=ON"
   ];
 
-  meta = {
-    homepage = "https://www.nuand.com/";
+  meta = with stdenv.lib; {
+    homepage = https://www.nuand.com/;
     description = "Supporting library of the BladeRF SDR opensource hardware";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.funfunctor ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ funfunctor ];
+    platforms = platforms.linux;
   };
 }

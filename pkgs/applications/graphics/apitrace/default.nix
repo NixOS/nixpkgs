@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     owner = "apitrace";
   };
 
-  buildInputs = [ cmake python libX11 qt4 ];
+  buildInputs = [ python libX11 qt4 ];
+  nativeBuildInputs = [ cmake ];
 
   buildPhase = ''
     cmake
@@ -21,7 +22,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = https://apitrace.github.io;
     description = "Tools to trace OpenGL, OpenGL ES, Direct3D, and DirectDraw APIs";
-    license = with licenses; mit;
+    license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
