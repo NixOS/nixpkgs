@@ -54,6 +54,21 @@ in
           '';
       };
 
+    postStart =
+      mkOption {
+        type = types.string;
+        default = ''
+          while ! [ -e /var/run/docker.sock ]; do
+            sleep 0.1
+          done
+        '';
+        description = ''
+          The postStart phase of the systemd service. You may need to
+          override this if you are passing in flags to docker which
+          don't cause the socket file to be created.
+        '';
+      };
+
 
   };
 
@@ -106,11 +121,7 @@ in
         path = [ pkgs.kmod ];
         environment.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
 
-        postStart = ''
-          while ! [ -e /var/run/docker.sock ]; do
-            sleep 0.1
-          done
-        '';
+        postStart = cfg.postStart;
 
         # Presumably some containers are running we don't want to interrupt
         restartIfChanged = false;
