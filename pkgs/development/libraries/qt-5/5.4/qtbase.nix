@@ -25,6 +25,8 @@
 
 with stdenv.lib;
 
+let system-x86_64 = elem stdenv.system platforms.x86_64; in
+
 stdenv.mkDerivation {
 
   name = "qtbase-${version}";
@@ -124,6 +126,16 @@ stdenv.mkDerivation {
     -no-directfb
     -no-linuxfb
     -no-kms
+
+    ${optionalString (!system-x86_64) "-no-sse2"}
+    -no-sse3
+    -no-ssse3
+    -no-sse4.1
+    -no-sse4.2
+    -no-avx
+    -no-avx2
+    -no-mips_dsp
+    -no-mips_dspr2
 
     -system-zlib
     -system-libpng
