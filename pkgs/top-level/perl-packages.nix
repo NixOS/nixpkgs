@@ -10504,6 +10504,15 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [URI TestMore];
   };
 
+  URIIMAP = buildPerlPackage {
+    name = "URI-imap-1.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CW/CWEST/URI-imap-1.01.tar.gz;
+      sha256 = "0bdv6mrdijcq46r3lmz801rscs63f8p9qqliy2safd6fds4rj55v";
+    };
+    propagatedBuildInputs = [URI];
+  };
+
   URINested = buildPerlModule {
     name = "URI-Nested-0.10";
     src = fetchurl {
