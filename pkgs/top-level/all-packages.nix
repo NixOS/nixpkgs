@@ -3192,6 +3192,10 @@ let
 
   unoconv = callPackage ../tools/text/unoconv { };
 
+  unrtf = callPackage ../tools/text/unrtf { };
+
+  untex = callPackage ../tools/text/untex { };
+
   upx = callPackage ../tools/compression/upx { };
 
   uriparser = callPackage ../development/libraries/uriparser {};
