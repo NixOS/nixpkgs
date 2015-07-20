@@ -25,6 +25,8 @@
 
 with stdenv.lib;
 
+let system-x86_64 = elem stdenv.system platforms.x86_64; in
+
 stdenv.mkDerivation {
 
   name = "qtbase-${version}";
@@ -104,6 +106,7 @@ stdenv.mkDerivation {
     -strip
     -reduce-relocations
     -system-proxies
+    -pkg-config
 
     -gui
     -widgets
@@ -124,6 +127,16 @@ stdenv.mkDerivation {
     -no-linuxfb
     -no-kms
 
+    ${optionalString (!system-x86_64) "-no-sse2"}
+    -no-sse3
+    -no-ssse3
+    -no-sse4.1
+    -no-sse4.2
+    -no-avx
+    -no-avx2
+    -no-mips_dsp
+    -no-mips_dspr2
+
     -system-zlib
     -system-libpng
     -system-libjpeg
@@ -141,6 +154,11 @@ stdenv.mkDerivation {
     -${optionalString (buildExamples == false) "no"}make examples
     -${optionalString (buildTests == false) "no"}make tests
   '';
+
+  # PostgreSQL autodetection fails sporadically because Qt omits the "-lpq" flag
+  # if dependency paths contain the string "pq", which can occur in the hash.
+  # To prevent these failures, we need to override PostgreSQL detection.
+  PSQL_LIBS = optionalString (postgresql != null) "-L${postgresql}/lib -lpq";
 
   propagatedBuildInputs = [
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
@@ -171,11 +189,10 @@ stdenv.mkDerivation {
 
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $out/mkspecs/qconfig.pri
-
-      mkdir -p "$out/nix-support"
-      substitute ${./setup-hook.sh} "$out/nix-support/setup-hook" \
-        --subst-var out --subst-var-by lndir "${lndir}"
     '';
+
+  inherit lndir;
+  setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true; # often fails on Hydra, as well as qt4
 
