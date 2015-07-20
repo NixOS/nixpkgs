@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python, makeWrapper, docutils, unzip, hg-git, dulwich
-, guiSupport ? false, tk ? null, curses, cacert
-
+{ stdenv, fetchurl, python, makeWrapper, docutils, unzip, curses, cacert
+, guiSupport ? false, tk ? null
+, gitSupport ? false, hg-git ? null, dulwich ? null
 , ApplicationServices }:
 
 let
@@ -41,7 +41,8 @@ stdenv.mkDerivation {
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath "$out ${curses}"):$(toPythonPath "$out ${hg-git}"):$(toPythonPath "$out ${dulwich}")" \
+          --prefix PYTHONPATH : "$(toPythonPath "$out ${curses}")${stdenv.lib.optionalString gitSupport
+            '':$(toPythonPath "$out ${hg-git}"):$(toPythonPath "$out ${dulwich}")'' }" \
           $WRAP_TK
       done
 
