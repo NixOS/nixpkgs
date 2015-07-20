@@ -1,0 +1,11 @@
+--- a/mk/support/pkg/re2.sh	2015-06-03 11:16:44.000000000 -0600
++++ b/mk/support/pkg/re2.sh	2015-06-03 11:16:59.000000000 -0600
+@@ -12,7 +12,7 @@
+     pkg_copy_src_to_build
+     if [[ "$OS" = Darwin ]]; then
+         # The symbol list is broken on OS X 10.7.5 with XCode 3.2.6
+-        sed -i '' 's/-exported_symbols_list libre2.symbols.darwin//' "$build_dir/Makefile"
++        sed -i 's/-exported_symbols_list libre2.symbols.darwin//' "$build_dir/Makefile"
+         CXXFLAGS="${CXXFLAGS:-} -stdlib=libc++"
+         LDFLAGS="${LDFLAGS:-} -lc++"
+     fi
