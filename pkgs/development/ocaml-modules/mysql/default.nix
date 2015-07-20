@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  propagatedbuildInputs = [ mysql.lib ];
+  propagatedBuildInputs = [ mysql.lib ];
 
   preConfigure = ''
     export LDFLAGS="-L${mysql.lib}/lib/mysql"
