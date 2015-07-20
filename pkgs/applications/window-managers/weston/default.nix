@@ -6,11 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "weston-${wayland.version}";
+  name = "weston-${version}";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1kb6a494j56sh7iy43xwkjlr3bh0nnkq4bkimwj6qirzbya12i8w";
+    sha256 = "04nkbbdglh0pqznxkdqvak3pc53jmz24d0658bn5r0cf6agycqw9";
   };
 
   buildInputs = [
