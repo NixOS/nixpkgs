@@ -9772,8 +9772,6 @@ let
 
     fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
-    ktap = callPackage ../os-specific/linux/ktap { };
-
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
