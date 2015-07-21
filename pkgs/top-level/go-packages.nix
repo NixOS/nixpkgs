@@ -136,6 +136,7 @@ let
     rev = "7d75e8b219c3efda2d08ae38acd6b42f8da4f5f9";
     name = "tools-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "golang.org/x/tools";
+    goPackageAliases = [ "code.google.com/p/go.tools" ];
 
     preConfigure = ''
       # Make the builtin tools available here
