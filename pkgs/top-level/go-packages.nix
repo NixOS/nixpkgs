@@ -1149,6 +1149,8 @@ let
     rev = "4734e7aca379f0d7fcdf04fbb2101696a4b45ce8";
     name = "go-etcd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-etcd";
+    disabled = isGo13;
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "coreos";
