@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Single sign-on framework for GNOME";
+    description = "Utilities to configure the GNOME desktop";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ lethalman ];
     platforms = platforms.linux;
   };
