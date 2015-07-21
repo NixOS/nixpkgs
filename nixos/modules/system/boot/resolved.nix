@@ -32,6 +32,8 @@ with lib;
 
     users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
     users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+    
+    networking.runResolvconfAtActivation = false;
 
   };
 
