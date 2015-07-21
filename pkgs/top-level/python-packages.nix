@@ -11985,12 +11985,12 @@ let
   };
 
 
-  scikitlearn = buildPythonPackage {
+  scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-0.16.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
-      sha256 = "19jzmbi3j4ix8418i80ayl595dwyi4gy474kb2nc1v8kdwgqi2hs";
+      url = "https://pypi.python.org/packages/source/s/scikit-learn/${name}.tar.gz";
+      sha256 = "1r761qmsq2mnl8sapplbx0ipj6i7ppr2cmz009q5rjana0liwwn0";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
