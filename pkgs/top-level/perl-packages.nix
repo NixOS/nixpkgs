@@ -5660,6 +5660,9 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1xmf26dfwr8achprc3n1pxgl0mkiyr6pf25wq3dqgzqkghrrsxa2";
     };
     propagatedBuildInputs = [ ];
+
+    installTargets = "install";
+
     meta = with stdenv.lib; {
       homepage    = http://dcssrv1.oit.uci.edu/indiv/ehood/mhonarch.html;
       description = "A mail-to-HTML converter";
