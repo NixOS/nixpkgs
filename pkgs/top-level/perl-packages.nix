@@ -10380,14 +10380,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   URI = buildPerlPackage {
-    name = "URI-1.60";
+    name = "URI-1.68";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
+      url = mirror://cpan/authors/id/E/ET/ETHER/URI-1.68.tar.gz;
+      sha256 = "c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358";
     };
     meta = {
       description = "Uniform Resource Identifiers (absolute and relative)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
