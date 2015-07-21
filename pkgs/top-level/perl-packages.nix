@@ -4738,15 +4738,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOHTML = buildPerlPackage {
-    name = "IO-HTML-0.04";
+    name = "IO-HTML-1.001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-0.04.tar.gz;
-      sha256 = "0c4hc76c1gypdwfasnibr2qlf9x3bnhyw357lhqlrczbm6vn8hw5";
+      url = mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-1.001.tar.gz;
+      sha256 = "ea78d2d743794adc028bc9589538eb867174b4e165d7d8b5f63486e6b828e7e0";
     };
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Open an HTML file with automatic charset detection";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
