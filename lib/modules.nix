@@ -20,7 +20,7 @@ rec {
                 , # This should only be used for special arguments that need to be evaluated
                   # when resolving module structure (like in imports). For everything else,
                   # there's _module.args.
-                  specialArgs ? {}
+                  importsArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
@@ -55,7 +55,7 @@ rec {
         };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) (specialArgs // { inherit config options; lib = import ./.; });
+      closed = closeModules (modules ++ [ internalModule ]) (importsArgs // { inherit config options; lib = import ./.; });
 
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
