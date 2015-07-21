@@ -53,16 +53,6 @@ self: super: {
   # https://github.com/haskell-suite/haskell-src-exts/issues/224
   haskell-src-exts = dontCheck super.haskell-src-exts;
 
-  mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
-    url = "https://github.com/snoyberg/mono-traversable/pull/77.patch";
-    sha256 = "1qrvrh3cqfkymi5yb9y9z88rq4n7ag0ac2k00mcnqh4dz1vh4fg1";
-  });
-  yesod-auth = appendPatch super.yesod-auth (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/yesod/pull/1006.patch";
-    sha256 = "0l6wjj8cfz6jy6j92kywsccafyffhlm5240q82bzirb278adqvar";
-    stripLen = 1;
-  });
-
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     patchPhase = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
