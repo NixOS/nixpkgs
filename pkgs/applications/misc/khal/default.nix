@@ -5,8 +5,8 @@ pythonPackages.buildPythonPackage rec {
   name = "khal-${version}";
 
   src = fetchurl {
-    url = "https://github.com/geier/khal/archive/v${version}.tar.gz";
-    sha256 = "1rjs5s8ky4n628rs6l5ggaj2abb4kq2avvxmimjjgxz3zh9xlz6s";
+    url = "https://pypi.python.org/packages/source/k/khal/khal-${version}.tar.gz";
+    sha256 = "1042vnc0vsaf0yr44hb0bh227d4rn81smvxksrzwdwja3wwxk4m9";
   };
 
   propagatedBuildInputs = with pythonPackages; [
