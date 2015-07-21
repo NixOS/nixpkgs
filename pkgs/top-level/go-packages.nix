@@ -1423,6 +1423,7 @@ let
     rev = "2688e91251d9d8e404e86dd8f096e23b2f086958";
     name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-systemd";
+    disabled = isGo13;
 
     excludedPackages = "examples";
 
