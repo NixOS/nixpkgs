@@ -755,6 +755,8 @@ let
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
+  borg = callPackage ../tools/backup/borg { };
+
   boomerang = callPackage ../development/tools/boomerang { };
 
   boost-build = callPackage ../development/tools/boost-build { };
