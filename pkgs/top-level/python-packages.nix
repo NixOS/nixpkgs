@@ -11134,11 +11134,11 @@ let
 
 
   pyutil = buildPythonPackage (rec {
-    name = "pyutil-1.7.9";
+    name = "pyutil-2.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyutil/${name}.tar.gz";
-      sha256 = "c303bb779f96073820e2eb7c9692fe15a57df491eb356839f3cb3377ed03b844";
+      sha256 = "1fsg9yz5mi2sb0h6c1vvcqchx56i89nbvdb5gfgv1ia3b2w5ra8c";
     };
 
     buildInputs = with self; [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
