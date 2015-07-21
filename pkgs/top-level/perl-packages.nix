@@ -6994,14 +6994,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetHTTP = buildPerlPackage {
-    name = "Net-HTTP-6.06";
+    name = "Net-HTTP-6.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Net-HTTP-6.06.tar.gz;
-      sha256 = "1m1rvniffadq99gsy25298ia3lixwymr6kan64jd3ylyi7nkqkhx";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Net-HTTP-6.09.tar.gz;
+      sha256 = "52762b939d84806908ba544581c5708375f7938c3c0e496c128ca3fbc425e58d";
     };
+    propagatedBuildInputs = [ URI ];
     meta = {
       description = "Low-level HTTP connection (client)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
