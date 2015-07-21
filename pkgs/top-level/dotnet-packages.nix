@@ -259,6 +259,32 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  FsControl = buildDotnetPackage rec {
+    baseName = "FsControl";
+    version = builtins.substring 0 10 rev;
+    rev = "8196a29201ffe519484a036d1f381223edf2af4a";
+
+    src = fetchFromGitHub {
+      owner = "gmpl";
+      repo = "FsControl";
+      inherit rev;
+      sha256 = "1lh8k57d7bank39910cpa58yhfg5447ic5pncq00br9m5v0fpy15";
+    };
+
+    buildInputs = [ fsharp ];
+
+    xBuildFiles = [ "FsControl.BaseLib/FsControl.BaseLib.csproj" "FsControl.Core/FsControl.Core.fsproj" ];
+    outputFiles = [ "FsControl.BaseLib/bin/Release/*" "FsControl.Core/bin/Release/*" ];
+
+    meta = {
+      description = "FsControl is an overload library for F#";
+      homepage = "https://github.com/gmpl/FsControl";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
   FSharpAutoComplete = buildDotnetPackage rec {
     baseName = "FSharp.AutoComplete";
     version = "0.18.2";
@@ -358,6 +384,41 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     meta = {
       description = "F# Data: Library for Data Access";
       homepage = "http://fsharp.github.io/FSharp.Data/";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
+  FSharpPlus = buildDotnetPackage rec {
+    baseName = "FSharpPlus";
+    version = builtins.substring 0 10 rev;
+    rev = "0f0550000077cb9da3f340612a84911e92c1a790";
+
+    src = fetchFromGitHub {
+      owner = "gmpl";
+      repo = "FSharpPlus";
+      inherit rev;
+      sha256 = "115dlq9lfky2csg0jhdncjlmdla6hr58f5w8zflyz1h5svfskn2y";
+    };
+
+    buildInputs = [
+      fsharp
+      dotnetPackages.FsControl
+    ];
+
+    preConfigure = ''
+      sed -i \
+        -e s,'<DownloadNuGetExe>true</DownloadNuGetExe>','<DownloadNuGetExe>false</DownloadNuGetExe>', \
+        -e s,'<Error Condition=.*Unable to locate .*/>',, \
+        .nuget/NuGet.targets
+    '';
+
+    outputFiles = [ "build/*" ];
+
+    meta = {
+      description = "FSharpPlus contains some extensions for F# using FsControl";
+      homepage = "https://github.com/gmpl/FSharpPlus";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
