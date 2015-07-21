@@ -1497,6 +1497,8 @@ let
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
+  lp_solve = callPackage ../applications/science/math/lp_solve { };
+
   lprof = callPackage ../tools/graphics/lprof { };
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
@@ -2726,6 +2728,8 @@ let
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   openmpi = callPackage ../development/libraries/openmpi { };
+
+  openmodelica = callPackage ../applications/science/misc/openmodelica { };
 
   qarte = callPackage ../applications/video/qarte {
     sip = pythonPackages.sip_4_16;
@@ -5609,6 +5613,8 @@ let
 
   omake = callPackage ../development/tools/ocaml/omake { };
   omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
+
+  omniorb = callPackage ../development/tools/omniorb { };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
