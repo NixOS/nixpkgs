@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-introspection"
-    "--enable-gles1"
-    "--enable-gles2"
     "--enable-kms-egl-platform"
-  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst";
+  ] ++ stdenv.lib.optional gstreamerSupport "--enable-cogl-gst"
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
       glib gdk_pixbuf gobjectIntrospection
