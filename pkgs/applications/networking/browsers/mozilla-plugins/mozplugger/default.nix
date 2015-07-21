@@ -1,36 +1,30 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, firefox, libX11, xproto }:
 
-  version = a.lib.attrByPath ["version"] "1.12.0" a; 
-  buildInputs = with a; [
-    firefox libX11 xproto
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "mozplugger-${version}";
+  version = "2.1.6";
+
   src = fetchurl {
     url = "http://mozplugger.mozdev.org/files/mozplugger-${version}.tar.gz";
-    sha256 = "1vpggfmbv4h3srk80rgidd020i03hrkpb7cfxkwagkcd0zcal4hk";
+    sha256 = "1vszkq4kdbaxsrqr2xn9rq6ipza9fngdri79gvjqk3bvsdmg0k19";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
-  makeFlags = ["linux" "prefix=" "root=$out"];
+  buildInputs = [ firefox libX11 xproto ];
 
-  preBuild = a.fullDepEntry(''
-    sed -e s@/usr/@"$out/"@g -i mozplugger.c
-  '') ["doUnpack" "minInit"];
+  installPhase = ''
+    mkdir -p "$out/etc" "$out/bin" "$out/lib/mozilla/plugins" "$out/share/man/man7"
+    cp mozpluggerrc "$out/etc"
+    cp mozplugger-{helper,controller,linker,update} "$out/bin"
+    cp mozplugger.so "$out/lib/mozilla/plugins"
+    cp mozplugger.7 "$out/share/man/man7"
 
-  postInstall = a.fullDepEntry(''
-    mkdir -p $out/share/${name}/plugin
-    ln -s $out/lib/mozilla/plugins/mozplugger.so $out/share/${name}/plugin
-  '') ["doMakeInstall" "minInit" "defEnsureDir"];
+    mkdir -p "$out/share/${name}/plugin"
+    ln -s "$out/lib/mozilla/plugins/mozplugger.so" "$out/share/${name}/plugin"
+  '';
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preBuild" "doMakeInstall" "postInstall"];
-      
-  name = "mozplugger-" + version;
   meta = {
     description = "Mozilla plugin for launching external program for handling in-page objects";
+    homepage = http://mozplugger.mozdev.org/;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
