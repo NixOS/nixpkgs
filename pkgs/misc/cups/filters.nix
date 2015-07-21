@@ -1,14 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, cups, poppler, fontconfig
+{ stdenv, fetchurl, fetchpatch, pkgconfig, cups, poppler, fontconfig
 , libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash }:
 
 stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.0.61";
+  version = "1.0.71";
 
   src = fetchurl {
     url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "1bq48nnrarlbf6qc93bz1n5wlh6j420gppbck3r45sinwhz5wa7m";
+    sha256 = "07wwlqcykfjfqcwj1bxk60ggahyaw7wcx32n5s104d1qkhham01i";
   };
+
+  patches = [(fetchpatch { # drop on update
+    name = "poppler-0.34.patch";
+    url = "https://bugs.linuxfoundation.org/attachment.cgi?id=493";
+    sha256 = "18za83q0b0n4hpvvw76jsv0hm89zmijvps2z5kg1srickqlxj891";
+  })];
 
   buildInputs = [
     pkgconfig cups poppler fontconfig libjpeg libpng perl
@@ -19,7 +25,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/etc/rc.d" "$out/etc/rc.d"
   '';
 
-  configureFlags = "--with-pdftops=pdftops --enable-imagefilters";
+  configureFlags = [
+    "--with-pdftops=pdftops"
+    "--enable-imagefilters"
+    "--with-shell=${stdenv.shell}"
+  ];
 
   makeFlags = "CUPS_SERVERBIN=$(out)/lib/cups CUPS_DATADIR=$(out)/share/cups CUPS_SERVERROOT=$(out)/etc/cups";
 
@@ -33,13 +43,6 @@ stdenv.mkDerivation rec {
       # Ensure that gstoraster can find gs in $PATH.
       substituteInPlace filter/gstoraster.c --replace execve execvpe
     '';
-
-  patches = [
-    (substituteAll {
-      src = ./longer-shell-path.patch;
-      bash = "${bash}/bin/bash";
-    })
-  ];
 
   postInstall =
     ''

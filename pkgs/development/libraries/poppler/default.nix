@@ -3,7 +3,7 @@
 , qt4Support ? false, qt4 ? null
 }:
 
-let
+let # beware: updates often break cups_filters build
   version = "0.28.1"; # even major numbers are stable
   sha256 = "01pxjdbhvpxf00ncf8d9wxc8gkcqcxz59lwrpa151ah988inxkrc";
 
