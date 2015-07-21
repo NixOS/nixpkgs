@@ -4,7 +4,7 @@
 , utils ? false, suffix ? "glib"
 }:
 
-let
+let # beware: updates often break cups_filters build
   version = "0.32.0"; # even major numbers are stable
   sha256 = "162vfbvbz0frvqyk00ldsbl49h4bj8i8wn0ngfl30xg1lldy6qs9";
 in
