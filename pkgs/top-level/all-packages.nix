@@ -3970,7 +3970,7 @@ let
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { inherit stdenv fetchNuGet; });
 
-  go_1_0 = callPackage ../development/compilers/go { };
+  go_1_0 = callPackage ../development/compilers/go/1.0.nix { };
 
   go_1_1 =
     if stdenv.isDarwin then
