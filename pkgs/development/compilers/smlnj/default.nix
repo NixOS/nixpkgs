@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, darwin }:
 let
   version = "110.78";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
@@ -34,7 +34,15 @@ in stdenv.mkDerivation {
   patchPhase = ''
     sed -i '/PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
     echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
-  '';
+  '' + stdenv.lib.optionalString stdenv.isDarwin (with darwin; ''
+    sed -i '/^[[:space:]]*\*x86-darwin\*)$/,/^[[:space:]]*\*) ;;/ c\
+\  \*x86-darwin\*)\
+\    INCLFILE=${osx_sdk}/Developer/SDKs/${osx_sdk.name}/usr/include/unistd.h\
+\    ;;\
+\  \*) ;;
+' base/runtime/config/gen-posix-names.sh
+    sed -i 's|^AS =\([[:space:]]*\)/usr/bin/as|AS =\1as|' base/runtime/objs/mk.x86-darwin
+  '');
 
   unpackPhase = ''
     for s in $sources; do
@@ -64,7 +72,7 @@ in stdenv.mkDerivation {
     description = "Standard ML of New Jersey, a compiler";
     homepage    = http://smlnj.org;
     license     = licenses.bsd3;
-    platforms   = [ "i686-linux" ];
+    platforms   = [ "i686-linux" ] ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

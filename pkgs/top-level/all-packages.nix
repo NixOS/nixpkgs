@@ -4717,7 +4717,9 @@ let
   sdcc = callPackage ../development/compilers/sdcc { };
 
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
-  smlnj = callPackage_i686 ../development/compilers/smlnj { };
+  smlnj = if stdenv.isDarwin
+            then callPackage ../development/compilers/smlnj { }
+            else callPackage_i686 ../development/compilers/smlnj { };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
 
