@@ -1,13 +1,13 @@
 { fetchurl, stdenv, gmpxx, perl, gnum4 }:
 
-let version = "1.0"; in
+let version = "1.1"; in
 
 stdenv.mkDerivation rec {
   name = "ppl-${version}";
 
   src = fetchurl {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
-    sha256 = "0m0b6dzablci8mlavpsmn5w1v3r46li0wpjwvsybgxx0p1ifjsf1";
+    sha256 = "1vrqhbpyca6sf984cfcwlp8wdnfzj1g7ph9958qdky9978i1nlny";
   };
 
   nativeBuildInputs = [ perl gnum4 ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       "--disable-ppl_lcdd" "--disable-ppl_lpsol" "--disable-ppl_pips"
     ];
 
-  patches = [ ./upstream-based.patch ];
+  patches = [ ./ppl-cstddef.patch /* from Fedora */ ];
 
   # Beware!  It took ~6 hours to compile PPL and run its tests on a 1.2 GHz
   # x86_64 box.  Nevertheless, being a dependency of GCC, it probably ought
