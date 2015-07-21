@@ -5721,21 +5721,32 @@ let
   });
 
   falcon = buildPythonPackage (rec {
-    name = "falcon-0.2";
+    name = "falcon-0.3.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/falcon/${name}.tar.gz";
-      md5 = "bf9e8bdd20700f1ff7ce6397cd441fbd";
+      sha256 = "10ivzk88m8nn3bqbg6xgv6yfy2dgp6yzbcvr645y93pzlash4xpj";
     };
 
     propagatedBuildInputs = with self; [ coverage ddt nose pyyaml requests2 six testtools python_mimeparse ];
 
+    # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
+    # OSError: [Errno 98] Address already in use
+    doCheck = false;
+
+    # This patch is required if the tests are enabled
+    # See https://github.com/falconry/falcon/issues/572
+    #patches = singleton (pkgs.fetchurl {
+    #  name = "falcon-572.patch";
+    #  url = "https://github.com/desiderius/falcon/commit/088bd3f2204eb6368acb3a1bf6c6b54c415225c2.patch";
+    #  sha256 = "19102dlzc4890skmam2v20va2vk5xr56fi4nzibzfvl7vyq68060";
+    #});
+
     meta = {
       description = "An unladen web framework for building APIs and app backends";
-
       homepage = http://falconframework.org;
-
       license = licenses.asl20;
+      maintainers = with maintainers; [ desiderius ];
     };
   });
 
