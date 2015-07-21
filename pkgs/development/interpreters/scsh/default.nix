@@ -22,5 +22,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.scsh.net/;
     license = stdenv.lib.licenses.bsd3;
+
+    broken = true;
   };
 }
