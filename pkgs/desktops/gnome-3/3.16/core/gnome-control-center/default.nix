@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
 
-  enableParallelBuilding = true;
+  # https://bugzilla.gnome.org/show_bug.cgi?id=752596
+  enableParallelBuilding = false;
 
   buildInputs = with gnome3;
     [ pkgconfig intltool ibus gtk glib upower libcanberra gsettings_desktop_schemas
