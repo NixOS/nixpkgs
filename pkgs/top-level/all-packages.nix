@@ -1996,6 +1996,8 @@ let
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  memtester = callPackage ../tools/system/memtester { };
+
   minidlna = callPackage ../tools/networking/minidlna { };
 
   mmv = callPackage ../tools/misc/mmv { };
