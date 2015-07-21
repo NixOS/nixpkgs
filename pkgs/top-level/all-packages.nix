@@ -7898,7 +7898,8 @@ let
   };
 
   qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt48.override { developerBuild = true; };
+    qtLib = qt5Full; # 3.4 only supports qt5; TODO: use modularized qt>=5.4
+    withDocumentation = false; # FIXME: fails to setup some paths
   };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
