@@ -11811,6 +11811,8 @@ let
 
   koji = callPackage ../tools/package-management/koji { };
 
+  ksuperkey = callPackage ../tools/X11/ksuperkey { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
 
   lame = callPackage ../development/libraries/lame { };
