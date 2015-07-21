@@ -12019,8 +12019,7 @@ let
 
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
-  mozplugger = builderDefsPackage (import ../applications/networking/browsers/mozilla-plugins/mozplugger) {
-    inherit firefox;
+  mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {
     inherit (xlibs) libX11 xproto;
   };
 
