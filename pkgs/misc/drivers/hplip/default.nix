@@ -1,5 +1,5 @@
 { stdenv, fetchurl, automake, pkgconfig
-, cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus
+, cups, zlib, libjpeg, libusb1, pythonPackages, saneBackends, dbus, usbutils
 , polkit, qtSupport ? true, qt4, pyqt4, net_snmp
 , withPlugin ? false, substituteAll, makeWrapper
 }:
@@ -59,6 +59,7 @@ stdenv.mkDerivation {
     pygobject
     recursivePthLoader
     reportlab
+    usbutils
   ] ++ stdenv.lib.optional qtSupport pyqt4;
 
   prePatch = ''
