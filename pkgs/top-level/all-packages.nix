@@ -1966,7 +1966,7 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
-  knockknock = callPackage ../tools/security/knockknock { inherit (pythonPackages) pycrypto; };
+  knockknock = callPackage ../tools/security/knockknock { };
 
   kpcli = callPackage ../tools/security/kpcli { };
 

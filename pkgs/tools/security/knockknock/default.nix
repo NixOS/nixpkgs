@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, python, pycrypto, hping }:
 
-buildPythonPackage  rec {
+buildPythonPackage rec {
   rev  = "bf14bbff";
   name = "knockknock-r${rev}";
 
