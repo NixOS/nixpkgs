@@ -2430,8 +2430,15 @@ let
       sha256 = "1jmcidddbbgdavvnvjjc0pda4b9a5i9idsivchn69pqxx68x8k6n";
     };
 
+    # Skip compiler check on Darwin
+    prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace setup.py --replace 'if cc_is_available()' 'if True';
+    '';
+
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest self.py ];
+                    self.iso8601 self.pyasn1 self.pytest self.py ]
+     ++ stdenv.lib.optionals stdenv.isDarwin [
+                    pkgs.darwin.apple_sdk.frameworks.Security ];
     propagatedBuildInputs = [ self.six self.idna self.ipaddress self.pyasn1 ]
      ++ optional (!isPyPy) self.cffi
      ++ optional (pythonOlder "3.4") self.enum34;
