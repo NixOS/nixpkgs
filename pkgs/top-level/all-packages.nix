@@ -5423,6 +5423,8 @@ let
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
 
+  dfu-util = callPackage ../development/tools/misc/dfu-util { };
+
   ddd = callPackage ../development/tools/misc/ddd { };
 
   distcc = callPackage ../development/tools/misc/distcc { };
