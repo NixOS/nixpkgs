@@ -91,15 +91,24 @@ in
 
   config = mkMerge [
 
-    { services.cron.enable = mkDefault (allFiles != []);
-
-    }
+    { services.cron.enable = mkDefault (allFiles != []); }
 
     (mkIf (config.services.cron.enable && allFiles != []) {
 
       security.setuidPrograms = [ "crontab" ];
 
       environment.systemPackages = [ cronNixosPkg ];
+
+      environment.etc.crontab =
+        { source = pkgs.runCommand "crontabs" { inherit allFiles; }
+            ''
+              touch $out
+              for i in $allFiles; do
+                cat "$i" >> $out
+              done
+            '';
+          mode = "0600"; # Cron requires this.
+        };
 
       systemd.services.cron =
         { description = "Cron Daemon";
@@ -108,10 +117,6 @@ in
 
           preStart =
             ''
-              rm -f /etc/crontab
-              cat ${concatMapStrings (f: "\"${f}\" ") allFiles} > /etc/crontab
-              chmod 0600 /etc/crontab
-
               mkdir -m 710 -p /var/cron
 
               # By default, allow all users to create a crontab.  This
