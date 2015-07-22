@@ -1,21 +1,41 @@
 { fetchurl, stdenv, guile, guile_lib, gwrap
 , pkgconfig, gconf, glib, gnome_vfs, gtk
-, libglade, libgnome, libgnomecanvas, libgnomeui, pango, guileCairo }:
+, libglade, libgnome, libgnomecanvas, libgnomeui
+, pango, guileCairo, autoconf, automake, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "guile-gnome-platform-2.16.1";
-
+  name = "guile-gnome-platform-20150123";
+  repo = "guile-gnome";
+  commit = "0fcbe69797b9501b8f1283a78eb92bf43b08d080";
+  savannah = "http://git.savannah.gnu.org/cgit";
+  
   src = fetchurl {
-    url = "mirror://gnu/guile-gnome/guile-gnome-platform/${name}.tar.gz";
-    sha256 = "0yy5f4c78jlakxi2bwgh3knc2szw26hg68xikyaza2iim39mc22c";
+    url = "${savannah}/${repo}.git/snapshot/${repo}-${commit}.tar.gz";
+    sha256 = "1jhpgi7hf7pms4hqlgi97zsxsx8q9kn488mz3hjhb56yyyivxlvp";
   };
+  
+  buildInputs = [
+    autoconf
+    automake
+    texinfo
+    guile
+    gwrap
+    pkgconfig
+    gconf
+    glib
+    gnome_vfs
+    gtk
+    libglade
+    libgnome
+    libgnomecanvas
+    libgnomeui
+    pango
+    guileCairo
+  ] ++ stdenv.lib.optional doCheck guile_lib;
 
-  buildInputs =
-    [ guile gwrap
-      pkgconfig gconf glib gnome_vfs gtk libglade libgnome libgnomecanvas
-      libgnomeui pango guileCairo
-    ]
-    ++ stdenv.lib.optional doCheck guile_lib;
+  preConfigure = ''
+      ./autogen.sh
+  '';
 
   # The test suite tries to open an X display, which fails.
   doCheck = false;
@@ -35,6 +55,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.taktoa ];
   };
 }
