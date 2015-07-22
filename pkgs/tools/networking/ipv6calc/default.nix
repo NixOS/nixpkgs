@@ -21,14 +21,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  configureFlags = ''
-    --disable-bundled-getopt
-    --disable-bundled-md5
-    --disable-dynamic-load
-    --enable-shared
-    --enable-geoip
-    --with-geoip-db=${geolite-legacy}/share/GeoIP
-  '';
+  configureFlags = [
+    "--disable-bundled-getopt"
+    "--disable-bundled-md5"
+    "--disable-dynamic-load"
+    "--enable-shared"
+  ] ++ stdenv.lib.optional (geoip != null ) [
+    "--enable-geoip"
+  ] ++ stdenv.lib.optional (geolite-legacy != null) [
+    "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+  ];
 
   enableParallelBuilding = true;
 
