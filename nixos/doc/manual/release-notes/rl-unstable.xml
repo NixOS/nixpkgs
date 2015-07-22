@@ -41,7 +41,7 @@
 <itemizedlist>
 <listitem><para><literal>brltty</literal></para></listitem>
 <listitem><para><literal>marathon</literal></para></listitem>
-<listitem><para><literal>Tvheadend</literal></para></listitem>
+<listitem><para><literal>tvheadend</literal></para></listitem>
 </itemizedlist>
 </para>
 
@@ -71,20 +71,6 @@ was accordingly renamed to <literal>electron</literal>
 </para></listitem>
 
 <listitem>
-    <para>
-        The default <literal>NIX_PATH</literal> for NixOS now includes
-        <literal>/nix/var/nix/profiles/per-user/root/channels</literal>, so it's
-        easy to add custom channels.
-    </para>
-    <para>
-        Moreover, whenever a <command>nixos-rebuild &lt;action&gt;
-        --upgrade</command> is issued, every channel that includes a file
-        called <filename>.update-on-nixos-rebuild</filename> will be upgraded
-        alongside of the <literal>nixos</literal> channel.
-    </para>
-</listitem>
-
-<listitem>
   <para>
 	The CUPS printing service has been updated to version <literal>2.0.2</literal>.
 	Furthermore its systemd service has been renamed to <literal>cups.service</literal>.
@@ -93,15 +79,6 @@ was accordingly renamed to <literal>electron</literal>
 	Local printers are no longer shared or advertised by default. This behavior
 	can be changed by enabling <literal>services.printing.defaultShared</literal>
 	or <literal>services.printing.browsing</literal> respectively.
-  </para>
-</listitem>
-
-<listitem>
-  <para>
-    HPLIP (printer, scanner, and fax drivers for HP devices) has
-    been updated to version <literal>3.15.4</literal>. This release
-    adds support for the <literal>arm6l-linux</literal> and
-    <literal>arm7l-linux</literal> platforms.
   </para>
 </listitem>
 
@@ -130,7 +107,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
 
 <listitem>
   <para>
-    Previous versions of NixOS come with a feature called
+    Previous versions of NixOS came with a feature called
     <literal>ghc-wrapper</literal>, a small wrapper script that allows
     GHC to transparently pick up on libraries installed in the user's
     profile. This feature has been deprecated;
