@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "digikam-4.10.0";
+  name = "digikam-4.11.0";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/digikam/${name}.tar.bz2";
-    sha256 = "4207e68b6221307111b66bb69485d3e88150df95dae014a99f6f161a3da0c725";
+    sha256 = "1nak3w0717fpbpmklzd3xkkbp2mwi44yxnc789wzmi9d8z9n3jwh";
   };
 
   nativeBuildInputs = [ cmake automoc4 pkgconfig ];
