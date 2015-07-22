@@ -420,7 +420,7 @@ in
 
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
-    patches = [ ./xf86-video-intel-2.99.917-libdrm-kernel-4_0-crash.patch ];
+    nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
   };
 
   xwd = attrs: attrs // {
