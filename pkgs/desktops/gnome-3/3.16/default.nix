@@ -32,6 +32,8 @@ let
     nautilus-sendto dconf-editor vinagre
   ];
 
+  gamesPackages = with gnome3; [ swell-foop ];
+
   inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
   orbit = ORBit2;
@@ -278,6 +280,10 @@ let
   anjuta = callPackage ./devtools/anjuta { };
 
   gdl = callPackage ./devtools/gdl { };
+
+#### Games
+
+  swell-foop = callPackage ./games/swell-foop { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
