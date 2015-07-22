@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gcc49, icmake, libmilter, libX11, openssl, readline
+{ stdenv, fetchurl, icmake, libmilter, libX11, openssl, readline
 , utillinux, yodl }:
 
 let version = "3.25.02"; in
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ gcc49 libmilter libX11 openssl readline utillinux ];
+  buildInputs = [ libmilter libX11 openssl readline utillinux ];
   nativeBuildInputs = [ icmake yodl ];
 
   postPatch = ''

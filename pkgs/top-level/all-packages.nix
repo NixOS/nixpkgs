@@ -3132,9 +3132,7 @@ let
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
-    stdenv = overrideCC stdenv gcc49;
-  };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -10829,7 +10827,6 @@ let
   clipit = callPackage ../applications/misc/clipit { };
 
   bomi = callPackage ../applications/video/bomi {
-    stdenv = overrideCC stdenv gcc49;
     pulseSupport = config.pulseaudio or true;
   };
 
@@ -13390,8 +13387,7 @@ let
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
       import ../applications/misc/zathura {
-        inherit callPackage pkgs fetchurl lib;
-        stdenv = overrideCC stdenv gcc49;
+        inherit stdenv callPackage pkgs fetchurl lib;
         useMupdf = config.zathura.useMupdf or false;
       });
 
@@ -13405,7 +13401,6 @@ let
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
-    stdenv = overrideCC stdenv gcc49;
   };
 
   girara-light = callPackage ../applications/misc/girara {
