@@ -11340,6 +11340,14 @@ let
   wireshark-qt = wireshark-cli.override { withQt = true; };
   wireshark = wireshark-gtk;
 
+  wireshark-dev-cli = callPackage ../applications/networking/sniffers/wireshark/dev.nix {
+    withQt = false;
+    withGtk = false;
+  };
+  wireshark-dev-gtk = wireshark-dev-cli.override { withGtk = true; };
+  wireshark-dev-qt = wireshark-dev-cli.override { withQt = true; };
+  wireshark-dev = wireshark-dev-gtk;
+
   wvdial = callPackage ../os-specific/linux/wvdial { };
 
   fbida = callPackage ../applications/graphics/fbida { };
