@@ -3120,11 +3120,11 @@ let
 
 
   elasticsearch = buildPythonPackage (rec {
-    name = "elasticsearch-1.4.0";
+    name = "elasticsearch-1.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch/${name}.tar.gz";
-      md5 = "14a758debd2296d923cb6c958db98eba";
+      sha256 = "1b0b5d1qp77r83r130kb2ikhd6am0d1389rdcllr1xsajrp5kj4h";
     };
 
     # Check is disabled because running them destroy the content of the local cluster!
@@ -3133,9 +3133,7 @@ let
 
     meta = {
       description = "Official low-level client for Elasticsearch";
-
       homepage = https://github.com/elasticsearch/elasticsearch-py;
-
       license = licenses.asl20;
     };
   });
