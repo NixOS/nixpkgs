@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   # errors
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--build=x86_64";
 
+  # fixes a cast in inline asm: easier than patching
+  buildFlags = stdenv.lib.optional stdenv.isDarwin "CFLAGS=-fheinous-gnu-extensions";
+
   meta = with stdenv.lib; {
     description = "A library of simple functions that are optimized for various CPUs";
     homepage    = http://liboil.freedesktop.org;

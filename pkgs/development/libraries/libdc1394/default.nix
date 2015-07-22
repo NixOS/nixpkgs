@@ -8,13 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1p9b4ciy97s04gmp7656cybr1zfd79hlw0ffhfb52m3zcn07h6aa";
   };
 
-  buildInputs = [ libraw1394 libusb1 ];
+  buildInputs = [ libusb1 ]
+    ++ stdenv.lib.optional stdenv.isLinux [ libraw1394 ];
 
   meta = {
     homepage = http://sourceforge.net/projects/libdc1394/;
     description = "Capture and control API for IIDC compliant cameras";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

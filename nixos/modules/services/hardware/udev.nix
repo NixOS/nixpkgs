@@ -28,6 +28,10 @@ let
   # Perform substitutions in all udev rules files.
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
+
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+
     buildCommand = ''
       mkdir -p $out
       shopt -s nullglob
@@ -236,6 +240,11 @@ in
 
     system.activationScripts.udevd =
       ''
+        # The deprecated hotplug uevent helper is not used anymore
+        if [ -e /proc/sys/kernel/hotplug ]; then
+          echo "" > /proc/sys/kernel/hotplug
+        fi
+
         # Regenerate the hardware database /var/lib/udev/hwdb.bin
         # whenever systemd changes.
         if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${config.systemd.package} ]; then

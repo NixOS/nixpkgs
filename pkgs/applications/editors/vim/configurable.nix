@@ -87,7 +87,7 @@ composableDerivation {
       // edf { name = "darwin"; } #Disable Darwin (Mac OS X) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
-      // edf { name = "mzscheme"; } #Include MzScheme interpreter.
+      // edf { name = "mzscheme"; feat = "mzschemeinterp";} #Include MzScheme interpreter.
       // edf { name = "perl"; feat = "perlinterp"; enable = { nativeBuildInputs = [perl]; };} #Include Perl interpreter.
 
       // edf {
@@ -102,7 +102,20 @@ composableDerivation {
         };
       }
 
-      // edf { name = "tcl"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
+      // edf {
+        name = "python3";
+        feat = "python3interp";
+        enable = {
+          nativeBuildInputs = [ pkgs.python3 ];
+        } // lib.optionalAttrs stdenv.isDarwin {
+          configureFlags
+            = [ "--enable-python3interp=yes"
+                "--with-python3-config-dir=${pkgs.python3}/lib"
+                "--disable-pythoninterp" ];
+        };
+      }
+
+      // edf { name = "tcl"; feat = "tclinterp"; enable = { nativeBuildInputs = [tcl]; }; } #Include Tcl interpreter.
       // edf { name = "ruby"; feat = "rubyinterp"; enable = { nativeBuildInputs = [ruby]; };} #Include Ruby interpreter.
       // edf {
         name = "lua";
@@ -131,6 +144,7 @@ composableDerivation {
   cfg = {
     luaSupport       = config.vim.lua or true;
     pythonSupport    = config.vim.python or true;
+    python3Support   = config.vim.python3 or false;
     rubySupport      = config.vim.ruby or true;
     nlsSupport       = config.vim.nls or false;
     tclSupport       = config.vim.tcl or false;
@@ -176,6 +190,7 @@ composableDerivation {
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";
     homepage    = http://www.vim.org;
+    license = licenses.vim;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };

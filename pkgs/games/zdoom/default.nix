@@ -1,24 +1,25 @@
-{stdenv, fetchurl, cmake, SDL, nasm, p7zip, zlib, flac, fmod, libjpeg}:
+{ stdenv, fetchFromGitHub, cmake, fmod, mesa, SDL }:
 
 stdenv.mkDerivation {
-  name = "zdoom-2.6.1";
-  src = fetchurl {
-    url = http://zdoom.org/files/zdoom/2.6/zdoom-2.6.1-src.7z;
-    sha256 = "1ha7hygwf243vkgw0dfh4dxphf5vffb3kkci1p1p75a7r1g1bir8";
+  name = "zdoom-2.7.1";
+  src = fetchFromGitHub {
+    #url = "https://github.com/rheit/zdoom";
+    owner = "rheit";
+    repo = "zdoom";
+    rev = "2.7.1";
+    sha256 = "00bx4sgl9j1dyih7yysfq4ah6msxw8580g53p99jfym34ky5ppkh";
   };
 
-  # XXX: shouldn't inclusion of p7zip handle this?
-  unpackPhase = ''
-  mkdir zdoom
-  cd zdoom
-  7z x $src
-  '';
+  buildInputs = [ cmake fmod mesa SDL ];
 
-  buildInputs = [cmake nasm SDL p7zip zlib flac fmod libjpeg];
+  cmakeFlags = [
+    "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so"
+    "-DSDL_INCLUDE_DIR=${SDL}/include"
+  ];
 
-  cmakeFlags = [ "-DSDL_INCLUDE_DIR=${SDL}/include/SDL" ];
+  NIX_CFLAGS_COMPILE = [ "-I ${SDL}/include/SDL" ];
    
-  preConfigure=''
+  preConfigure = ''
     sed s@zdoom.pk3@$out/share/zdoom.pk3@ -i src/version.h
  '';
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://zdoom.org/;
     description = "Enhanced port of the official DOOM source code";
+    maintainer = [ stdenv.lib.maintainers.lassulus ];
   };
 }
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   # Test can randomly fail: http://hydra.nixos.org/build/7243912
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Unit testing framework for C";
 
     longDescription =
@@ -26,6 +26,8 @@ stdenv.mkDerivation {
 
     homepage = http://check.sourceforge.net/;
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = licenses.lgpl2Plus;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -18,20 +18,18 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8, v8_3_16_14, clang, sqlite, zlib, imagemagick
+, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql
 }:
 
 let
   v8 = v8_3_16_14;
-  mysql = (import <nixpkgs> {}).mysql;
-
 in
 
 {
   charlock_holmes = attrs: {
-    buildInputs = [ which icu ];
+    buildInputs = [ which icu zlib ];
   };
 
   ffi = attrs: {
@@ -47,17 +45,10 @@ in
     buildFlags = [
       "--with-system-v8=true"
     ];
-    patches = [
-      # see: https://github.com/cowboyd/libv8/pull/161
-      (fetchpatch {
-        url = https://github.com/cstrahan/libv8/commit/c79378bf346d4ed2429af36d745d17c478ffbe96.patch;
-        sha256 = "1l6572cmigc22g249jj8h0xlbig88mj43kdqdbimhw2pmpv3q0rs";
-      })
-    ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql zlib openssl ];
+    buildInputs = [ mysql.lib zlib openssl ];
   };
 
   ncursesw = attrs: {

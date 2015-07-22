@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://procode.org/stgit/";
-    description = "StGit is a patch manager implemented on top of Git";
+    description = "A patch manager implemented on top of Git";
     license = "GPL";
 
     maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];

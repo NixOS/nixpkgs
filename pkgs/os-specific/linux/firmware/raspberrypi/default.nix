@@ -2,14 +2,14 @@
 
 let
 
-  rev = "3ab17ac25e";
+  rev = "b7bbd3d1683e9f3bb11ef86b952adee71e83862f";
 
 in stdenv.mkDerivation {
   name = "raspberrypi-firmware-${rev}";
 
   src = fetchurl {
     url = "https://github.com/raspberrypi/firmware/archive/${rev}.tar.gz";
-    sha256 = "080va4zz858bwwgxam8zy58gpwjpxfg7v5h1q5b4cpbzjihsxcx9";
+    sha256 = "16wpwa1y3imd3la477b3rfbfypssvlh0zjdag3hgkm33aysizijp";
   };
 
   installPhase = ''

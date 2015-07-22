@@ -16,7 +16,7 @@ stdenv.mkDerivation  rec {
     sed -e "s@/usr/local@$out@" -i Makefile
   '';
 
-  makeFlags = [ "TKLIB=-ltk8.5" "TCLLIB=-ltcl8.5" ];
+  makeFlags = [ "TKLIB=-l${tk.libPrefix}" "TCLLIB=-l${tcl.libPrefix}" ];
 
   postInstall = ''
     wrapProgram $out/bin/vkeybd --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchcvs, makeWrapper, makeDesktopItem, jdk, jre, ant
-, p7zip }:
+, gtk3, gsettings_desktop_schemas, p7zip }:
 
 let
 
@@ -17,20 +17,21 @@ let
       categories = "Application;CAD;";
     };
 
-    buildInputs = [ ant jdk jre makeWrapper p7zip ];
+    buildInputs = [ ant jdk jre makeWrapper p7zip gtk3 gsettings_desktop_schemas ];
 
     buildPhase = ''
       ant furniture textures help
       mkdir -p $out/share/{java,applications}
-      mv build/*.jar $out/share/java/.
+      mv "build/"*.jar $out/share/java/.
       ant
     '';
 
     installPhase = ''
       mkdir -p $out/bin
       cp install/${module}-${version}.jar $out/share/java/.
-      cp ${sweethome3dItem}/share/applications/* $out/share/applications
+      cp "${sweethome3dItem}/share/applications/"* $out/share/applications
       makeWrapper ${jre}/bin/java $out/bin/$exec \
+        --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${gsettings_desktop_schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
         --add-flags "-jar $out/share/java/${module}-${version}.jar -cp $out/share/java/Furniture.jar:$out/share/java/Textures.jar:$out/share/java/Help.jar ${if stdenv.system == "x86_64-linux" then "-d64" else "-d32"}"
     '';
 
@@ -50,14 +51,14 @@ let
 in rec {
 
   application = mkSweetHome3D rec {
-    version = "4.4";
+    version = "4.6.2";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "1ziqq8wm6la7bsqya6gc8cc2vz02phl88msqjgqqfl2jf8bz9afv";
+      sha256 = "0pm0rl5y90cjwyjma7g6nnaz6dv4bqcy8vl3zzxfj0q02ww01gbz";
       module = module;
       tag = "V_" + d2u version;
     };

@@ -7,9 +7,8 @@
       boot.initrd.kernelModules = [ "fuse" ];
 
       boot.initrd.extraUtilsCommands = ''
-        cp -v ${pkgs.fuse}/lib/libfuse* $out/lib
-        cp -v ${pkgs.fuse}/sbin/mount.fuse $out/bin
-        cp -v ${pkgs.unionfs-fuse}/bin/unionfs $out/bin
+        copy_bin_and_libs ${pkgs.fuse}/sbin/mount.fuse
+        copy_bin_and_libs ${pkgs.unionfs-fuse}/bin/unionfs
         substitute ${pkgs.unionfs-fuse}/sbin/mount.unionfs-fuse $out/bin/mount.unionfs-fuse \
           --replace '${pkgs.bash}/bin/bash' /bin/sh \
           --replace '${pkgs.fuse}/sbin' /bin \

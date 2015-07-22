@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, libxslt
+{ stdenv, fetchurl, python, pkgconfig, readline, gettext, libxslt
 , docbook_xsl, docbook_xml_dtd_42
 }:
 
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    python pkgconfig readline libxslt docbook_xsl docbook_xml_dtd_42
+    python pkgconfig readline gettext libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
   preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
+    patchShebangs buildtools/bin/waf
   '';
 
   configureFlags = [

@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
-    sed -i -e '/qmltermwidget/d' cool-retro-term.pro 
+    sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ makeWrapper qt5 qmltermwidget ];
+  buildInputs = [ makeWrapper qt5.base qt5.quick1 qmltermwidget ];
 
   configurePhase = "qmake PREFIX=$out";
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       eye-candy, customizable, and reasonably lightweight.
     '';
     homepage = "https://github.com/Swordifish90/cool-retro-term";
-    licenses = with stdenv.lib.licenses; [ gpl2 gpl3 ];
+    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];
   };

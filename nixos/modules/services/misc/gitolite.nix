@@ -75,7 +75,7 @@ in
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;
 
-      path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash pkgs.openssh ];
+      path = [ pkgs.gitolite pkgs.git pkgs.perl pkgs.bash config.programs.ssh.package ];
       script = ''
         cd ${cfg.dataDir}
         mkdir -p .gitolite/logs

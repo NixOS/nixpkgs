@@ -12,7 +12,7 @@
          err  = base ++ ".errors"
          src  = base ++ ".hs"
          lib  = dir </> "lib"
-+    ghc <- fromMaybe "ghc" <$> liftIO (lookupEnv "XMONAD_GHC")
++    ghc <- fromMaybe "ghc" <$> liftIO (lookupEnv "NIX_GHC")
      libTs <- mapM getModTime . Prelude.filter isSource =<< allFiles lib
      srcT <- getModTime src
      binT <- getModTime bin

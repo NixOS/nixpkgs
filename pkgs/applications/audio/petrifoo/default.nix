@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, cmake, gtk, jack2, libgnomecanvas
+{ stdenv, fetchurl, alsaLib, cmake, gtk, libjack2, libgnomecanvas
 , libpthreadstubs, libsamplerate, libsndfile, libtool, libxml2
 , pkgconfig }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs =
-   [ alsaLib cmake  gtk jack2 libgnomecanvas libpthreadstubs
+   [ alsaLib cmake  gtk libjack2 libgnomecanvas libpthreadstubs
      libsamplerate libsndfile libtool libxml2 pkgconfig
    ];
 

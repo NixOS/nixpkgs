@@ -63,7 +63,7 @@ in
       description = ''
         A list of profiles used to setup the global environment.
       '';
-      type = types.listOf types.string;
+      type = types.listOf types.str;
     };
 
     environment.profileRelativeEnvVars = mkOption {

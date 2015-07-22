@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
+{ stdenv, fetch, cmake, libxml2, libedit, llvm, zlib, version, clang-tools-extra_src }:
 
 stdenv.mkDerivation {
   name = "clang-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   patches = [ ./clang-separate-build.patch ./clang-purity.patch ];
 
-  buildInputs = [ cmake libedit libxml2 ];
+  buildInputs = [ cmake libedit libxml2 zlib ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
@@ -34,7 +34,13 @@ stdenv.mkDerivation {
     ln -sv ${llvm}/lib/clang/${version}/lib $out/lib/clang/${version}/
   '';
 
-  passthru.cc = stdenv.cc.cc;
+  passthru = {
+    isClang = true;
+    cc = stdenv.cc.cc;
+    # GCC_INSTALL_PREFIX points here, so just use it even though it may not
+    # actually be a gcc
+    gcc = stdenv.cc.cc;
+  };
 
   enableParallelBuilding = true;
 
@@ -42,7 +48,6 @@ stdenv.mkDerivation {
     description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, unzip, autoconf, automake, libtool,
-  python, sodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
+  python, libsodium, pkgconfig, popt, glog, xz, json_c, gperf, yacc,
   flex, pandoc, help2man, autoconf-archive, callPackage }:
 
 assert stdenv.isLinux;
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   preConfigure = "autoreconf -fi";
 
   meta = with stdenv.lib; {
-    description = "HyperDex is a scalable, searchable key-value store";
+    description = "A scalable, searchable key-value store";
     homepage = http://hyperdex.org;
     license = licenses.bsd3;
   };

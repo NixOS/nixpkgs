@@ -9,12 +9,12 @@ with pythonPackages;
 
 buildPythonPackage rec {
   name = "virt-manager-${version}";
-  version = "1.1.0";
+  version = "1.2.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "0hbr1wf4byfvbqlbq3w6s71ckhn626i4rb497y4z2cm12p5hc2db";
+    sha256 = "1gp6ijrwl6kjs54l395002pc9sblp08p4nqx9zcb9qg5f87aifvl";
   };
 
   propagatedBuildInputs =

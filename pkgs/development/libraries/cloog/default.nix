@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-0.18.0";
+  name = "cloog-0.18.3";
 
   src = fetchurl {
     url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
-    sha256 = "1c4aa8dde7886be9cbe0f9069c334843b21028f61d344a2d685f88cb1dcf2228";
+    sha256 = "0d4pqs4rs1qx0302wpv06ww1nwyg4yv5cw9qpfzxz36b19s6q326";
   };
 
   buildInputs = [ gmp ];
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-isl=system" ];
 
-  enableParallelBuilding = true;
+  # Breaks the test cases
+  #enableParallelBuilding = true;
 
   doCheck = true;
 
@@ -38,8 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.cloog.org/;
 
     license = stdenv.lib.licenses.gpl2Plus;
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
 
     /* Leads to an ICE on Cygwin:
 

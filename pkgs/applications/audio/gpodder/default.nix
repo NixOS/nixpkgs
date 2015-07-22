@@ -1,5 +1,5 @@
 { pkgs, stdenv, fetchurl, python, buildPythonPackage, pythonPackages, mygpoclient, intltool,
-  ipodSupport ? true, libgpod, gnome3, hicolor_icon_theme }:
+  ipodSupport ? true, libgpod, gnome3 }:
 
 with pkgs.lib;
 
@@ -16,8 +16,7 @@ in buildPythonPackage rec {
 
   buildInputs = [
     coverage feedparser minimock sqlite3 mygpoclient intltool
-    gnome3.gnome_themes_standard gnome3.gnome_icon_theme
-    gnome3.gnome_icon_theme_symbolic hicolor_icon_theme
+    gnome3.gnome_themes_standard gnome3.defaultIconTheme
     gnome3.gsettings_desktop_schemas
   ];
 

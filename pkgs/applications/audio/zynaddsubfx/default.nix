@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, cmake, jack2, fftw, fltk13, libjpeg
+{ stdenv, fetchurl, alsaLib, cmake, libjack2, fftw, fltk13, libjpeg
 , minixml, pkgconfig, zlib
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation  rec {
     sha256 = "15byz08p5maf3v8l1zz11xan6s0qcfasjf1b81xc8rffh13x5f53";
   };
 
-  buildInputs = [ alsaLib jack2 fftw fltk13 libjpeg minixml zlib ];
+  buildInputs = [ alsaLib libjack2 fftw fltk13 libjpeg minixml zlib ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = with stdenv.lib; {

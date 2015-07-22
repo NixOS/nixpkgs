@@ -18,6 +18,9 @@ let
       exec ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
     '';
 
+  theme = pkgs.gnome3.gnome_themes_standard;
+  icons = pkgs.gnome3.defaultIconTheme;
+
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
   # fonts/icons.
@@ -26,19 +29,16 @@ let
     buildInputs = [ pkgs.makeWrapper ];
 
     buildCommand = ''
-      mkdir -p $out/gtk-3.0/
-
-      # This wrapper ensures that we actually get ?? (fonts should be OK now)
+      # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
-        --set XDG_DATA_DIRS ${pkgs.gnome2.gnome_icon_theme}/share \
-        --set XDG_CONFIG_HOME $out/
-
-      # We need this to ensure that it actually tries to find icons from gnome-icon-theme
-      cat - > $out/gtk-3.0/settings.ini << EOF
-      [Settings]
-      gtk-icon-theme-name=gnome
-      EOF
+        --prefix PATH : "${pkgs.glibc}/bin" \
+        --set GDK_PIXBUF_MODULE_FILE "${pkgs.gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
+        --set GTK_PATH "${theme}:${pkgs.gtk3}" \
+        --set GTK_EXE_PREFIX "${theme}" \
+        --set GTK_DATA_PREFIX "${theme}" \
+        --set XDG_DATA_DIRS "${theme}/share:${icons}/share" \
+        --set XDG_CONFIG_HOME "${theme}/share"
 
       cat - > $out/lightdm-gtk-greeter.desktop << EOF
       [Desktop Entry]
@@ -50,6 +50,14 @@ let
     '';
   };
 
+  usersConf = writeText "users.conf"
+    ''
+      [UserList]
+      minimum-uid=500
+      hidden-users=${concatStringsSep " " dmcfg.hiddenUsers}
+      hidden-shells=/run/current-system/sw/bin/nologin
+    '';
+
   lightdmConf = writeText "lightdm.conf"
     ''
       [LightDM]
@@ -57,16 +65,26 @@ let
       greeters-directory = ${cfg.greeter.package}
       sessions-directory = ${dmcfg.session.desktops}
 
-      [SeatDefaults]
+      [Seat:*]
       xserver-command = ${xserverWrapper}
       session-wrapper = ${dmcfg.session.script}
       greeter-session = ${cfg.greeter.name}
+      ${cfg.extraSeatDefaults}
+    '';
+
+  gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
+    ''
+    [greeter]
+    theme-name = Adwaita
+    icon-theme-name = Adwaita
+    background = ${cfg.background}
     '';
 
 in
 {
   options = {
     services.xserver.displayManager.lightdm = {
+
       enable = mkOption {
         default = false;
         description = ''
@@ -84,6 +102,23 @@ in
           package = wrappedGtkGreeter;
         };
       };
+
+      background = mkOption {
+        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
+        description = ''
+          The background image or color to use.
+        '';
+      };
+
+      extraSeatDefaults = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          greeter-show-manual-login=true
+        '';
+        description = "Extra lines to append to SeatDefaults section.";
+      };
+
     };
   };
 
@@ -97,19 +132,41 @@ in
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
       execCmd = ''
         export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run --config=${lightdmConf}
+        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
       '';
     };
+
+    environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
+    environment.etc."lightdm/lightdm.conf".source = lightdmConf;
+    environment.etc."lightdm/users.conf".source = usersConf;
 
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    security.pam.services.lightdm = { allowNullPassword = true; startSession = true; };
-    security.pam.services.lightdm-greeter = { allowNullPassword = true; startSession = true; };
+    security.pam.services.lightdm = {
+      allowNullPassword = true;
+      startSession = true;
+    };
+    security.pam.services.lightdm-greeter = {
+      allowNullPassword = true;
+      startSession = true;
+      text = ''
+        auth     required pam_env.so
+        auth     required pam_permit.so
+
+        account  required pam_permit.so
+
+        password required pam_deny.so
+
+        session  required pam_env.so envfile=${config.system.build.pamEnvironment}
+        session  required pam_unix.so
+        session  optional ${pkgs.systemd}/lib/security/pam_systemd.so
+      '';
+    };
 
     users.extraUsers.lightdm = {
       createHome = true;
-      home = "/var/lib/lightdm";
+      home = "/var/lib/lightdm-data";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };

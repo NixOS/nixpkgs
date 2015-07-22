@@ -1,11 +1,12 @@
 { stdenv, fetchurl, cmake, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "unionfs-fuse-0.26";
+  name = "unionfs-fuse-${version}";
+  version = "1.0";
 
   src = fetchurl {
-    url = "http://podgorny.cz/unionfs-fuse/releases/${name}.tar.xz";
-    sha256 = "0qpnr4czgc62vsfnmv933w62nq3xwcbnvqch72qakfgca75rsp4d";
+    url = "https://github.com/rpodgorny/unionfs-fuse/archive/v${version}.tar.gz";
+    sha256 = "02fcrjb06lxkxpk4l8arsqmai807sray24lj2nrasqaacg80ps1f";
   };
 
   patches =
@@ -35,7 +36,6 @@ stdenv.mkDerivation rec {
     description = "FUSE UnionFS implementation";
     homepage = http://podgorny.cz/moin/UnionFsFuse;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

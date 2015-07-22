@@ -1,18 +1,19 @@
-{ stdenv, fetchgit, ocaml, findlib }:
+{ stdenv, fetchzip, ocaml, findlib, ounit }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-re-1.3.0";
+  name = "ocaml-re-1.4.1";
 
-  src = fetchgit {
-    url = https://github.com/ocaml/ocaml-re.git;
-    rev = "refs/tags/${name}";
-    sha256 = "1h8hz0dbjp8l39pva2js380c8bsm8rb4v326l62rkrdv8jvyh6bx";
+  src = fetchzip {
+    url = "https://github.com/ocaml/ocaml-re/archive/${name}.tar.gz";
+    sha256 = "1wmfgazydd20hc796zisqpmsw0sb5lv9g3x77ckmf50v3z8hyhvk";
   };
 
-  buildInputs = [ ocaml findlib ];
+  buildInputs = [ ocaml findlib ounit ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out";
+  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
   buildPhase = "ocaml setup.ml -build";
+  doCheck = true;
+  checkPhase = "ocaml setup.ml -test";
   installPhase = "ocaml setup.ml -install";
 
   createFindlibDestdir = true;

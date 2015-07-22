@@ -20,7 +20,7 @@ in {
     enable = mkOption {
       description = "Whether to enable peerflix service.";
       default = false;
-      type = types.uniq types.bool;
+      type = types.bool;
     };
 
     stateDir = mkOption {

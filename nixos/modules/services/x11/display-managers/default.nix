@@ -50,13 +50,19 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
+      ${optionalString cfg.startDbusSession ''
+        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+          exec ${pkgs.dbus.tools}/bin/dbus-launch --exit-with-session "$0" "$sessionType"
+        fi
+      ''}
+
       ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
         # Stop systemd from handling the power button and lid switch,
         # since presumably the desktop environment will handle these.
         if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
           export _INHIBITION_LOCK_TAKEN=1
           if ! ${config.systemd.package}/bin/loginctl show-session $XDG_SESSION_ID | grep -q '^RemoteHost='; then
-            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
+            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key --why="See NixOS configuration option 'services.xserver.displayManager.desktopManagerHandlesLidAndPower' for more information." "$0" "$sessionType"
           fi
         fi
 
@@ -165,6 +171,7 @@ let
         Type=XSession
         TryExec=${cfg.displayManager.session.script}
         Exec=${cfg.displayManager.session.script} '${n}'
+        X-GDM-BypassXsession=true
         Name=${n}
         Comment=
         EODESKTOP
@@ -206,6 +213,14 @@ in
             xmessage "Hello World!" &
           '';
         description = "Shell commands executed just before the window or desktop manager is started.";
+      };
+
+      hiddenUsers = mkOption {
+        type = types.listOf types.str;
+        default = [ "nobody" ];
+        description = ''
+          A list of users which will not be shown in the display manager.
+        '';
       };
 
       desktopManagerHandlesLidAndPower = mkOption {

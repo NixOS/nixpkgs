@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchurlGnome, which }:
+{ stdenv, fetchurl, which }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "gnome-common-${minVer}.0";
+  minVer = "2.34";
 
-  src = fetchurlGnome {
-    project = "gnome-common";
-    major = "2"; minor = "34"; patchlevel = "0";
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-common/${minVer}/${name}.tar.bz2";
     sha256 = "1pz13mpp09q5s3bikm8ml92s1g0scihsm4iipqv1ql3mp6d4z73s";
   };
 

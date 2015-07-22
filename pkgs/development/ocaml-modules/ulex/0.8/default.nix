@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.cduce.org/download.html;
-    description = "ulex is a lexer generator for Unicode and OCaml";
+    description = "A lexer generator for Unicode and OCaml";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };

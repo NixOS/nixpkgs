@@ -1,12 +1,12 @@
-{ stdenv, fetchurlGnome, bison, pkgconfig, popt, libxml2, gtk, libtool
+{ stdenv, fetchurl, bison, pkgconfig, popt, libxml2, gtk, libtool
 , intltool, libbonobo, GConf, libgnomecanvas, libgnome, libglade }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
-  
-  src = fetchurlGnome {
-    project = "libbonoboui";
-    major = "2"; minor = "24"; patchlevel = "5";
+  name = "libbonoboui-${minVer}.5";
+  minVer = "2.24";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/libbonoboui/${minVer}/${name}.tar.bz2";
     sha256 = "1kbgqh7bw0fdx4f1a1aqwpff7gp5mwhbaz60c6c98bc4djng5dgs";
   };
 

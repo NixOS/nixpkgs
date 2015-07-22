@@ -69,11 +69,11 @@ stdenv.mkDerivation {
     cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://golang.org/;
     description = "The Go Programming language";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ zef ];
-    platforms = stdenv.lib.platforms.darwin;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ zef ];
+    platforms = platforms.darwin;
   };
 }

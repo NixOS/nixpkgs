@@ -1,53 +1,62 @@
-{ stdenv, fetchurl, gfortran, perl, liblapack, config }:
+{ stdenv, fetchurl, gfortran, perl, liblapack, config, coreutils
+# Most packages depending on openblas expect integer width to match pointer width,
+# but some expect to use 32-bit integers always (for compatibility with reference BLAS).
+, blas64 ? null
+}:
 
-# Minimum CPU requirements:
-# x86: Pentium 4 (Prescott, circa 2004)
-# x86_64: Opteron (circa 2003)
-# These are the settings used for the generic builds. Performance will
-# be poor on modern systems. The goal of the Hydra builds is simply to
-# support as many systems as possible. OpenBLAS may support older
-# CPU architectures, but you will need to set 'config.openblas.target'
-# and 'config.openblas.preferLocalBuild', which will build it on your
-# local machine.
+with stdenv.lib;
 
 let local = config.openblas.preferLocalBuild or false;
-    localTarget = config.openblas.target or "";
+    binary =
+      { i686-linux = "32";
+        x86_64-linux = "64";
+        x86_64-darwin = "64";
+      }."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+    genericFlags =
+      [ "DYNAMIC_ARCH=1"
+        "NUM_THREADS=64"
+      ];
+    localFlags = config.openblas.flags or
+      optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
+    blas64Orig = blas64;
 in
 stdenv.mkDerivation rec {
-  version = "0.2.13";
+  version = "0.2.14";
 
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/v${version}";
-    sha256 = "1asg5mix13ipxgj5h2yj2p0r8km1di5jbcjkn5gmhb37nx7qfv6k";
+    sha256 = "0av3pd96j8rx5i65f652xv9wqfkaqn0w4ma1gvbyz73i6j2hi9db";
     name = "openblas-${version}.tar.gz";
   };
 
   preBuild = "cp ${liblapack.src} lapack-${liblapack.meta.version}.tgz";
 
-  buildInputs = [gfortran perl];
+  nativeBuildInputs = optionals stdenv.isDarwin [coreutils] ++ [gfortran perl];
 
-  cpu = builtins.head (stdenv.lib.splitString "-" stdenv.system);
+  makeFlags =
+    (if local then localFlags else genericFlags)
+    ++
+    optionals stdenv.isDarwin ["MACOSX_DEPLOYMENT_TARGET=10.9"]
+    ++
+    [
+      "FC=gfortran"
+      # Note that clang is available through the stdenv on OSX and
+      # thus is not an explicit dependency.
+      "CC=${if stdenv.isDarwin then "clang" else "gcc"}"
+      ''PREFIX="''$(out)"''
+      "BINARY=${binary}"
+      "USE_OPENMP=${if stdenv.isDarwin then "0" else "1"}"
+      "INTERFACE64=${if blas64 then "1" else "0"}"
+    ];
 
-  target = if local then localTarget else
-    if cpu == "i686" then "PRESCOTT" else
-    if cpu == "x86_64" then "OPTERON" else
-     # allow autodetect
-      "";
-
-  makeFlags = [
-    "${if target != "" then "TARGET=" else ""}${target}"
-    "FC=gfortran"
-    "CC=gcc"
-    ''PREFIX="''$(out)"''
-    "INTERFACE64=1"
-  ];
+  blas64 = if blas64Orig != null then blas64Orig else hasPrefix "x86_64" stdenv.system;
 
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

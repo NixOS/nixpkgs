@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     make install fontdir
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A clean fixed width font";
     longDescription = ''
       Terminus Font is designed for long (8 and more hours per day) work
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       EGA/VGA-bold for 8x14 and 8x16.
     '';
     homepage = http://www.is-vn.bg/hamster/;
-    license = [ "GPLv2+" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = with platforms; linux;
   };
 }

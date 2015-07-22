@@ -118,6 +118,7 @@ composableDerivation {
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor (Qt GUI fork)";
     homepage    = https://bitbucket.org/equalsraf/vim-qt/wiki/Home;
+    license = licenses.vim;
     maintainers = with maintainers; [ smironov ttuegel ];
     platforms   = platforms.linux;
   };

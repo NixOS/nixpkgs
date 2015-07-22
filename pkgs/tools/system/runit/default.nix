@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "UNIX init scheme with service supervision";
     license = licenses.bsd3;
-    homePage = "http://smarden.org/runit";
+    homepage = "http://smarden.org/runit";
     maintainers = with maintainers; [ rickynils ];
     platforms = platforms.linux;
   };

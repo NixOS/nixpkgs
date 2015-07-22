@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "emulationstation-${version}";
-  version = "2.0.0-rc1";
+  version = "2.0.1a";
 
   src = fetchFromGitHub {
     owner = "Aloshi";
     repo = "EmulationStation";
-    rev = "8739519e1591819cab85e1d2056804d20c197dac";
-    sha256 = "1psq5cqyq2yy1lqxrcj7pfp8szfmzhamxf3111l97w2h2zzcgvq9";
+    rev = "646bede3d9ec0acf0ae378415edac136774a66c5";
+    sha256 = "0cm0sq2wri2l9cvab1l0g02za59q7klj0h3p028vr96n6njj4w9v";
   };
 
   buildInputs = [ pkgconfig cmake alsaLib boost curl eigen freeimage freetype libarchive mesa SDL2 ];

@@ -4,6 +4,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Suitable LLVM version.
+  llvmPackages = pkgs.llvmPackages_35;
+
   # Disable GHC 7.10.x core libraries.
   array = null;
   base = null;
@@ -30,27 +33,44 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # We have Cabal 1.22.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  # ekmett/linear#74
+  linear = overrideCabal super.linear (drv: {
+    prePatch = "sed -i 's/-Werror//g' linear.cabal";
+  });
 
-  # GHC 7.10.x's Haddock binary cannot generate hoogle files.
-  # https://ghc.haskell.org/trac/ghc/ticket/9921
-  mkDerivation = drv: super.mkDerivation (drv // { doHoogle = false; });
+  # Cabal_1_22_1_1 requires filepath >=1 && <1.4
+  cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
+
+  # Don't use jailbreak built with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
+  jailbreak-cabal = pkgs.haskell.packages.ghc784.jailbreak-cabal;
+
+  idris =
+    let idris' = overrideCabal super.idris (drv: {
+      # "idris" binary cannot find Idris library otherwise while building.
+      # After installing it's completely fine though.
+      # Seems like Nix-specific issue so not reported.
+      preBuild = ''
+        export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH
+      '';
+    });
+    in idris'.overrideScope (self: super: {
+      zlib = self.zlib_0_5_4_2;
+    });
+
+  Extra = appendPatch super.Extra (pkgs.fetchpatch {
+    url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
+    sha256 = "193i1xmq6z0jalwmq0mhqk1khz6zz0i1hs6lgfd7ybd6qyaqnf5f";
+  });
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  # These used to be core packages in GHC 7.8.x.
-  old-locale = self.old-locale_1_0_0_7;
-  old-time = self.old-time_1_1_0_3;
-
-  # We have transformers 4.x
-  mtl = self.mtl_2_2_1;
-  transformers-compat = disableCabalFlag super.transformers-compat "three";
-
   # We have time 1.5
   aeson = disableCabalFlag super.aeson "old-locale";
+
+  # requires filepath >=1.1 && <1.4
+  Glob = doJailbreak super.Glob;
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
@@ -59,10 +79,14 @@ self: super: {
   utf8-string = overrideCabal super.utf8-string (drv: {
     patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
-  esqueleto = doJailbreak super.esqueleto;
+  pointfree = doJailbreak super.pointfree;
 
-  # bos/attoparsec#92
-  attoparsec = dontCheck super.attoparsec;
+  # acid-state/safecopy#25 acid-state/safecopy#26
+  safecopy = dontCheck (super.safecopy);
+
+  # test suite broken, some instance is declared twice.
+  # https://bitbucket.org/FlorianHartwig/attobencode/issue/1
+  AttoBencode = dontCheck super.AttoBencode;
 
   # Test suite fails with some (seemingly harmless) error.
   # https://code.google.com/p/scrapyourboilerplate/issues/detail?id=24
@@ -84,48 +108,168 @@ self: super: {
   # but refused to do anything about it because he "doesn't want to
   # support a moving target". Go figure.
   barecheck = doJailbreak super.barecheck;
-  cartel = overrideCabal super.cartel (drv: { doCheck = false; patchPhase = "sed -i -e 's|base >= .*|base|' cartel.cabal"; });
 
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
-  # https://github.com/peti/jailbreak-cabal/issues/5
-  ReadArgs = dontCheck super.ReadArgs;
+  present = appendPatch super.present (pkgs.fetchpatch {
+    url = "https://github.com/chrisdone/present/commit/6a61f099bf01e2127d0c68f1abe438cd3eaa15f7.patch";
+    sha256 = "1vn3xm38v2f4lzyzkadvq322f3s2yf8c88v56wpdpzfxmvlzaqr8";
+  });
 
-  # Until the changes have been pushed to Hackage
-  haskell-src-meta = appendPatch super.haskell-src-meta (pkgs.fetchpatch {
-    url = "https://github.com/bmillwood/haskell-src-meta/pull/31.patch";
-    sha256 = "0ij5zi2sszqns46mhfb87fzrgn5lkdv8yf9iax7cbrxb4a2j4y1w";
+  # Already applied in darcs repository.
+  gnuplot = appendPatch super.gnuplot ./gnuplot-fix-new-time.patch;
+
+  ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
+    pname = "ghcjs-prim";
+    version = "0.1.0.0";
+    src = fetchgit {
+      url = git://github.com/ghcjs/ghcjs-prim.git;
+      rev = "dfeaab2aafdfefe46bf12960d069f28d2e5f1454"; # ghc-7.10 branch
+      sha256 = "19kyb26nv1hdpp0kc2gaxkq5drw5ib4za0641py5i4bbf1g58yvy";
+    };
+    buildDepends = [ primitive ];
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  }) {};
+
+  # diagrams/monoid-extras#19
+  monoid-extras = overrideCabal super.monoid-extras (drv: {
+    prePatch = "sed -i 's|4\.8|4.9|' monoid-extras.cabal";
   });
-  foldl = appendPatch super.foldl (pkgs.fetchpatch {
-    url = "https://github.com/Gabriel439/Haskell-Foldl-Library/pull/30.patch";
-    sha256 = "0q4gs3xkazh644ff7qn2mp2q1nq3jq71x82g7iaacxclkiv0bphx";
+
+  # diagrams/statestack#5
+  statestack = overrideCabal super.statestack (drv: {
+    prePatch = "sed -i 's|4\.8|4.9|' statestack.cabal";
   });
-  persistent-template = appendPatch super.persistent-template (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/persistent/commit/4d34960bc421ec0aa353d69fbb3eb0c73585db97.patch";
-    sha256 = "1gphl0v87y2fjwkwp6j0bnksd0d9dr4pis6aw97rij477bm5mrvw";
-    stripLen = 1;
+
+  # diagrams/diagrams-core#83
+  diagrams-core = overrideCabal super.diagrams-core (drv: {
+    prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
   });
-  stringsearch = appendPatch super.stringsearch (pkgs.fetchpatch {
-    url = "https://bitbucket.org/api/2.0/repositories/dafis/stringsearch/pullrequests/3/patch";
-    sha256 = "13n7wipaa1j2rghg2j68yjnda8a5galpv5sfz4j4d9509xakz25g";
+
+  misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
+    url = "https://github.com/mokus0/misfortune/commit/9e0a38cf8d59a0de9ae1156034653f32099610e4.patch";
+    sha256 = "01m1l199ihq85j9pyc3n0wqv1z4my453hhhcvg3yz3gpz3lf224r";
   });
-  mono-traversable = appendPatch super.mono-traversable (pkgs.fetchpatch {
-    url = "https://github.com/snoyberg/mono-traversable/pull/68.patch";
-    sha256 = "11hqf6hi3sc34wl0fn4rpigdf7wfklcjv6jwp8c3129yphg8687h";
+
+  timezone-series = doJailbreak super.timezone-series;
+  timezone-olson = doJailbreak super.timezone-olson;
+  libmpd = dontCheck super.libmpd;
+  xmonad-extras = overrideCabal super.xmonad-extras (drv: {
+    postPatch = ''
+      sed -i -e "s,<\*,<¤,g" XMonad/Actions/Volume.hs
+    '';
   });
-  conduit-combinators = appendPatch super.conduit-combinators (pkgs.fetchpatch {
-    url = "https://github.com/fpco/conduit-combinators/pull/16.patch";
-    sha256 = "0jpwpi3shdn5rms3lcr4srajbhhfp5dbwy7pl23c9kmlil3d9mk3";
-  });
-  wai-extra = appendPatch super.wai-extra (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/wai/pull/339.patch";
-    sha256 = "1rmz1ijfch143v7jg4d5r50lqq9r46zhcmdafq8p9g9pjxlyc590";
-    stripLen = 1;
-  });
-  yesod-auth = appendPatch super.yesod-auth (pkgs.fetchpatch {
-    url = "https://github.com/yesodweb/yesod/pull/941.patch";
-    sha256 = "1fycvjfr1l9wa03k30bnppl3ns99lffh9kmp9r7sr8b6yiydcajq";
-    stripLen = 1;
-  });
+
+  # Workaround for a workaround, see comment for "ghcjs" flag.
+  jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
+            in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
+                                          self.webkitgtk3-javascriptcore ];
+
+  # contacted maintainer by e-mail
+  cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
+  darcs-fastconvert = dontDistribute super.darcs-fastconvert;
+  ivory-backend-c = dontDistribute super.ivory-backend-c;
+  ivory-bitdata = dontDistribute super.ivory-bitdata;
+  ivory-examples = dontDistribute super.ivory-examples;
+  ivory-hw = dontDistribute super.ivory-hw;
+  laborantin-hs = dontDistribute super.laborantin-hs;
+
+  # https://github.com/cartazio/arithmoi/issues/1
+  arithmoi = markBroken super.arithmoi;
+  NTRU = dontDistribute super.NTRU;
+  arith-encode = dontDistribute super.arith-encode;
+  barchart = dontDistribute super.barchart;
+  constructible = dontDistribute super.constructible;
+  cyclotomic = dontDistribute super.cyclotomic;
+  diagrams = dontDistribute super.diagrams;
+  diagrams-contrib = dontDistribute super.diagrams-contrib;
+  enumeration = dontDistribute super.enumeration;
+  ghci-diagrams = dontDistribute super.ghci-diagrams;
+  ihaskell-diagrams = dontDistribute super.ihaskell-diagrams;
+  nimber = dontDistribute super.nimber;
+  pell = dontDistribute super.pell;
+  quadratic-irrational = dontDistribute super.quadratic-irrational;
+
+  # https://github.com/kazu-yamamoto/ghc-mod/issues/437
+  ghc-mod = markBroken super.ghc-mod;
+  HaRe = dontDistribute super.HaRe;
+  ghc-imported-from = dontDistribute super.ghc-imported-from;
+  git-vogue = dontDistribute super.git-vogue;
+  haskell-token-utils = dontDistribute super.haskell-token-utils;
+  hbb = dontDistribute super.hbb;
+  hsdev = dontDistribute super.hsdev;
+
+  # https://github.com/lymar/hastache/issues/47
+  hastache = dontCheck super.hastache;
+
+  # The compat library is empty in the presence of mtl 2.2.x.
+  mtl-compat = dontHaddock super.mtl-compat;
+
+  # https://github.com/bos/bloomfilter/issues/11
+  bloomfilter = dontHaddock (appendConfigureFlag super.bloomfilter "--ghc-option=-XFlexibleContexts");
+
+  # https://github.com/ocharles/tasty-rerun/issues/5
+  tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
+
+  # http://hub.darcs.net/ivanm/graphviz/issue/5
+  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./graphviz-fix-ghc710.patch));
+
+  # Broken with GHC 7.10.x.
+  aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
+  Cabal_1_20_0_3 = markBroken super.Cabal_1_20_0_3;
+  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
+  containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
+  control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
+  haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
+  optparse-applicative_0_10_0 = markBroken super.optparse-applicative_0_10_0;
+  QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
+  seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
+  vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
+
+  # https://github.com/HugoDaniel/RFC3339/issues/14
+  timerep = dontCheck super.timerep;
+
+  # Upstream has no issue tracker.
+  harp = markBrokenVersion "0.4" super.harp;
+  happstack-authenticate = dontDistribute super.happstack-authenticate;
+
+  # Upstream has no issue tracker.
+  llvm-base-types = markBroken super.llvm-base-types;
+  llvm-analysis = dontDistribute super.llvm-analysis;
+  llvm-data-interop = dontDistribute super.llvm-data-interop;
+  llvm-tools = dontDistribute super.llvm-tools;
+
+  # Upstream has no issue tracker.
+  MaybeT = markBroken super.MaybeT;
+  grammar-combinators = dontDistribute super.grammar-combinators;
+
+  # Required to fix version 0.91.0.0.
+  wx = dontHaddock (appendConfigureFlag super.wx "--ghc-option=-XFlexibleContexts");
+
+  # Upstream has no issue tracker.
+  Graphalyze = markBroken super.Graphalyze;
+  gbu = dontDistribute super.gbu;
+  SourceGraph = dontDistribute super.SourceGraph;
+
+  # Upstream has no issue tracker.
+  markBroken = super.protocol-buffers;
+  caffegraph = dontDistribute super.caffegraph;
+
+  # Deprecated: https://github.com/mikeizbicki/ConstraintKinds/issues/8
+  ConstraintKinds = markBroken super.ConstraintKinds;
+  HLearn-approximation = dontDistribute super.HLearn-approximation;
+  HLearn-distributions = dontDistribute super.HLearn-distributions;
+  HLearn-classification = dontDistribute super.HLearn-classification;
+
+  # Won't work with LLVM 3.5.
+  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
+
+  # Inexplicable haddock failure
+  # https://github.com/gregwebs/aeson-applicative/issues/2
+  aeson-applicative = dontHaddock super.aeson-applicative;
+
+  # GHC 7.10.1 is affected by https://github.com/srijs/hwsl2/issues/1.
+  hwsl2 = dontCheck super.hwsl2;
+
 }

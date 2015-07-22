@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     ./configure --prefix=$out \
       --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"}
+      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
   '';
 
   # Stripping combined with patchelf breaks the executables (they die
@@ -116,5 +116,5 @@ stdenv.mkDerivation rec {
       '';
 
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "i686-darwin" "x86_64-darwin"];
+  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
 }

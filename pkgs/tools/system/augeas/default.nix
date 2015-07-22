@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig readline libxml2 ];
 
   meta = with stdenv.lib; {
-    description = "Configuration editing tool.";
+    description = "Configuration editing tool";
     license = licenses.lgpl2;
     homepage = http://augeas.net/;
     maintainers = with maintainers; [offline];

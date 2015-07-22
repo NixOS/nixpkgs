@@ -12,7 +12,7 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="xdaliclock";
-    version = "2.41";
+    version = "2.43";
     name="${baseName}-${version}";
     project="${baseName}";
     url="http://www.jwz.org/${project}/${name}.tar.gz";
@@ -21,7 +21,7 @@ in
 rec {
   src = a.fetchurl {
     url = sourceInfo.url;
-    sha256 = "1crkjvza692irkqm9vwgn58m8ps93n0rxigm6pasgl5dnx3p6d1d";
+    sha256 = "194zzp1a989k2v8qzfr81gdknr8xiz16d6fdl63jx9r3mj5klmvb";
   };
 
   inherit (sourceInfo) name version;

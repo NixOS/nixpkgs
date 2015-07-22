@@ -1,25 +1,34 @@
 { stdenv, fetchurl, scons, boost, gperftools, pcre, snappy
-, libyamlcpp, sasl, openssl, libpcap }:
+, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
+}:
 
 with stdenv.lib;
 
-let version = "2.6.7";
+let version = "3.0.4";
     system-libraries = [
       "pcre"
+      "wiredtiger"
       "boost"
       "snappy"
+      "zlib"
+      # "v8"
       # "stemmer" -- not nice to package yet (no versioning, no makefile, no shared libs)
       "yaml"
-      # "v8"
-    ] ++ optionals (!stdenv.isDarwin) [ "tcmalloc" ];
+    ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
     buildInputs = [
       sasl boost gperftools pcre snappy
-      libyamlcpp sasl openssl libpcap
-    ];
+      zlib libyamlcpp sasl openssl libpcap
+    ] ++ optional stdenv.is64bit wiredtiger;
 
     other-args = concatStringsSep " " ([
+      "--c++11=on"
       "--ssl"
+      #"--rocksdb" # Don't have this packaged yet
+      "--wiredtiger=${if stdenv.is64bit then "on" else "off"}"
+      "--js-engine=v8-3.25"
       "--use-sasl-client"
+      "--disable-warnings-as-errors"
+      "--variant-dir=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
       "--extrapath=${concatStringsSep "," buildInputs}"
     ] ++ map (lib: "--use-system-${lib}") system-libraries);
 
@@ -28,35 +37,28 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "1jbbvpp9xisxm7rpx8mm25413b01rrssqcl03349rwgamp8m88ji";
+    sha256 = "0q23hvi0axc14s1ah1p67rxvi36skw34kj9ahpijx2dd2a5smrvd";
   };
 
   nativeBuildInputs = [ scons ];
   inherit buildInputs;
 
   postPatch = ''
-    # fix yaml-cpp detection
-    sed -i -e "s/\[\"yaml\"\]/\[\"yaml-cpp\"\]/" SConstruct
-
-    # bug #482576
-    sed -i -e "/-Werror/d" src/third_party/v8/SConscript
-
-    # fix inclusion of std::swap
-    sed -i '1i #include <algorithm>' src/mongo/shell/linenoise_utf8.h
-
     # fix environment variable reading
     substituteInPlace SConstruct \
-        --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
+        --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '';
 
   buildPhase = ''
-    scons all --release ${other-args}
+    scons -j $NIX_BUILD_CORES core --release ${other-args}
   '';
 
   installPhase = ''
     mkdir -p $out/lib
-    scons install --release --prefix=$out ${other-args}
+    scons -j $NIX_BUILD_CORES install --release --prefix=$out ${other-args}
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "a scalable, high-performance, open source NoSQL database";

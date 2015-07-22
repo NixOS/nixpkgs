@@ -1,7 +1,6 @@
 { pkgs, stdenv, ghc
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
-, provideOldAttributeNames ? false
 }:
 
 with ./lib.nix;
@@ -43,10 +42,11 @@ let
       });
 
       callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-        overrideScope = f: callPackageWithScope (fix (extend scope.__unfix__ f)) drv args;
+        overrideScope = f: callPackageWithScope (mkScope (fix (extend scope.__unfix__ f))) drv args;
       };
 
-      defaultScope = pkgs // pkgs.xlibs // pkgs.gnome // self;
+      mkScope = scope: pkgs // pkgs.xlibs // pkgs.gnome // scope;
+      defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
     in
@@ -54,15 +54,18 @@ let
 
         inherit mkDerivation callPackage;
 
-        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix { packages = pkgs self; };
+        ghcWithPackages = pkgs: callPackage ./with-packages-wrapper.nix {
+          inherit (self) llvmPackages;
+          haskellPackages = self;
+          packages = pkgs self;
+        };
 
         ghc = ghc // { withPackages = self.ghcWithPackages; };
 
       };
 
-  compatLayer = if provideOldAttributeNames then import ./compat-layer.nix else (self: super: {});
   commonConfiguration = import ./configuration-common.nix { inherit pkgs; };
 
 in
 
-  fix (extend (extend (extend (extend haskellPackages commonConfiguration) packageSetConfig) overrides) compatLayer)
+  fix (extend (extend (extend haskellPackages commonConfiguration) packageSetConfig) overrides)

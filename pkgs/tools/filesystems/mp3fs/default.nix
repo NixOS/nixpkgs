@@ -1,7 +1,7 @@
 { stdenv, fetchurl, flac, fuse, lame, libid3tag, pkgconfig }:
 
+let version = "0.91"; in
 stdenv.mkDerivation rec {
-  version = "0.91";
   name = "mp3fs-${version}";
 
   src = fetchurl {
@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "14ngiqg24p3a0s6hp33zjl4i46d8qn4v9id36psycq3n3csmwyx4";
   };
 
-  buildInputs = [ flac fuse lame libid3tag pkgconfig ];
+  patches = [ ./fix-statfs-operation.patch ];
+
+  buildInputs = [ flac fuse lame libid3tag ];
+  nativeBuildInputs = [ pkgconfig ];
 
   enableParallelBuilding = true;
 
@@ -22,8 +25,8 @@ stdenv.mkDerivation rec {
       which only understands the MP3 format, or transcode files through
       simple drag-and-drop in a file browser.
     '';
-    homepage = http://khenriks.github.com/mp3fs/;
-    license = with licenses; gpl3Plus;
+    homepage = http://khenriks.github.io/mp3fs/;
+    license = licenses.gpl3Plus;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

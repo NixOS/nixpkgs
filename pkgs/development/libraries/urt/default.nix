@@ -56,6 +56,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.cs.utah.edu/gdc/projects/urt/;
-    description = "The Utah Raster Toolkit is a library for dealing with raster images";
+    description = "A library for dealing with raster images";
   };
 }

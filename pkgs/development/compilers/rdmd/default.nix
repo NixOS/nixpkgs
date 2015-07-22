@@ -1,14 +1,13 @@
-{stdenv, lib, fetchgit, dmd}:
+{stdenv, lib, fetchurl, dmd}:
 
 stdenv.mkDerivation {
-  name = "rdmd-20141113";
+  name = "rdmd-2.067.0";
 
   buildInputs = [ dmd ];
 
-  src = fetchgit {
-    url = git://github.com/D-Programming-Language/tools.git;
-    rev = "f496c68ee4e776597bd7382aa47f05da698a69e";
-    sha256 = "0vbhmz8nbh8ayml4vad0239kfg982vqfyqqrjv6wrlnjah97n5ms";
+  src = fetchurl {
+    url = "https://github.com/D-Programming-Language/tools/archive/v2.067.0.tar.gz";
+    sha256 = "2702ecda0427c675084d9b688449bc8c8392fd73e30257d79e2488640d5a9982";
   };
 
   buildPhase = ''

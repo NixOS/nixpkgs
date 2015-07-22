@@ -46,7 +46,7 @@ with lib;
       serviceConfig = {
         Type = "dbus";
         BusName = "org.freedesktop.UDisks2";
-        ExecStart = "${pkgs.udisks2}/lib/udisks2/udisksd --no-debug";
+        ExecStart = "${pkgs.udisks2}/libexec/udisks2/udisksd --no-debug";
       };
     };
   };

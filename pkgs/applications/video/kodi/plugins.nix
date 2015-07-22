@@ -18,7 +18,7 @@ let
       mkdir -p $d
       sauce="."
       [ -d ${namespace} ] && sauce=${namespace}
-      cp -R $sauce/* $d
+      cp -R "$sauce/"* $d
     '';
   };
 
@@ -59,13 +59,13 @@ in
 
     plugin = "genesis";
     namespace = "plugin.video.genesis";
-    version = "2.4.1";
+    version = "4.0.1";
 
     src = fetchFromGitHub {
       owner = "lambda81";
       repo = "lambda-addons";
-      rev = "1eb1632063e18f3f30e9fdbed2a15cf1e9c05315";
-      sha256 = "1gzx0jq4gyhkpdd21a70lhww9djr5dlgyl93b4l7dhgr3hnzxccl";
+      rev = "34af083980598177684eeb6e1e73da336b84575a";
+      sha256 = "1fh3j4ymkrx9flpvnlyjp1q4avfmjv5a6yfwl3cmqnslkkp6kn9n";
     };
 
     meta = with stdenv.lib; {
@@ -81,17 +81,17 @@ in
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.9";
+    version = "4.0.14";
 
     src = fetchFromGitHub {
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "29a754e49584d1ca32f0c07b87304669cf266bb0";
-      sha256 = "0k7mwaknw4h1jlq7ialbzgxxpb11j8bk29dx2gimp40lvnyw4yhz";
+      rev = "a6041aa6cf8f8461c0ebb093d901320822539094";
+      sha256 = "1nxa2855i1if4vsflhb88i9s12flp2yzgan2wzdv2117cmll4pvd";
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.org/showthread.php?tid=67110";
+      homepage = "http://forum.kodi.tv/showthread.php?tid=67110";
       description = "Watch content from SVT Play";
       longDescription = ''
         With this addon you can stream content from SVT Play

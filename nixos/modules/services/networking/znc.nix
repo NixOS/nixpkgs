@@ -144,7 +144,7 @@ in
       */
       confOptions = {
         modules = mkOption {
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           default = [ "partyline" "webadmin" "adminlog" "log" ];
           example = [ "partyline" "webadmin" "adminlog" "log" ];
           description = ''
@@ -153,7 +153,7 @@ in
         };
 
         userModules = mkOption {
-          type = types.listOf types.string;
+          type = types.listOf types.str;
           default = [ ];
           example = [ "fish" "push" ];
           description = ''

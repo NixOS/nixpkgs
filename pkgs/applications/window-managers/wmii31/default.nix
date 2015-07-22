@@ -30,6 +30,6 @@ args: with args; stdenv.mkDerivation {
   ";
   meta = { homepage = "www.suckless.org";
            description = "One small tool of the wmii window manger to let the user select an item from a list by filtering";
-           license="MIT";
+           license = stdenv.lib.licenses.mit;
          };
 }

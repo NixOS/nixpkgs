@@ -29,9 +29,9 @@ stdenv.mkDerivation {
       ./patch.patch # patches taken from gentoo
     ];
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "A music composition and modular synthesis application";
     homepage = http://beast.gtk.org;
-    license = ["GPL-2" "LGPL-2.1"];
+    license = with licenses; [ gpl2 lgpl21 ];
   };
 }

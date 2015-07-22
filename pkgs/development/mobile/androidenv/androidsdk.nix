@@ -3,22 +3,22 @@
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit, mesa_32bit, alsaLib_32bit
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, mesa, alsaLib
-, freetype, fontconfig, glib, gtk, atk, file, jdk
+, freetype, fontconfig, glib, gtk, atk, file, jdk, coreutils
 }:
 {platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs?false, useGooglePlayServices?false}:
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "24.0.1";
+  version = "24.1.2";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      sha1 = "fb46b9afa04e09d3c33fa9bfee5c99e9ec6a9523";
+      sha1 = "a46298bjpgzsnchhpcm1i86c4r50x638";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      sha1 = "7097c09c72645d7ad33c81a37b1a1363a9df2a54";
+      sha1 = "as109624lgrn8krylmyvm33yapqkzr00";
     }
     else throw "platform not ${stdenv.system} supported!";
 
@@ -27,7 +27,12 @@ stdenv.mkDerivation rec {
     cd $out/libexec
     unpackFile $src
     cd android-sdk-*/tools
-    
+
+    for f in android traceview draw9patch hierarchyviewer monitor ddms screenshot2 uiautomatorviewer monkeyrunner jobb lint
+    do
+        sed -i -e "s|/bin/ls|${coreutils}/bin/ls|" "$f"
+    done
+
     ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     ''
       # There are a number of native binaries. We must patch them to let them find the interpreter and libstdc++
@@ -84,7 +89,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib
+          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib:${libXtst}/lib
 
         cd ../..
       ''
@@ -97,7 +102,7 @@ stdenv.mkDerivation rec {
         patchelf --set-rpath ${libX11}/lib:${libXext}/lib:${libXrender}/lib:${freetype}/lib:${fontconfig}/lib libcairo-swt.so
         
         wrapProgram `pwd`/monitor \
-          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib
+          --prefix LD_LIBRARY_PATH : ${gtk}/lib:${atk}/lib:${stdenv.cc.cc}/lib::${libXtst}/lib
 
         cd ../..
       ''

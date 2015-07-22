@@ -55,4 +55,34 @@ rec {
   appendPatch = drv: x: appendPatches drv [x];
   appendPatches = drv: xs: overrideCabal drv (drv: { patches = (drv.patches or []) ++ xs; });
 
+  doHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = true; });
+  dontHyperlinkSource = drv: overrideCabal drv (drv: { hyperlinkSource = false; });
+
+  sdistTarball = pkg: pkgs.lib.overrideDerivation pkg (drv: {
+    name = "${drv.pname}-source-${drv.version}";
+    buildPhase = "./Setup sdist";
+    haddockPhase = ":";
+    checkPhase = ":";
+    installPhase = "install -D dist/${drv.pname}-${drv.version}.tar.gz $out/${drv.pname}-${drv.version}.tar.gz";
+    fixupPhase = ":";
+  });
+
+  buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {
+    unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
+      echo "Source tarball is at ${src}/${tarname}.tar.gz"
+      tar xf ${src}/${tarname}.tar.gz
+      cd ${tarname}
+    '';
+  });
+
+  buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
+
+  triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
+
+  withHoogle = haskellEnv: with haskellEnv.haskellPackages;
+    import ./hoogle.nix {
+      inherit (pkgs) stdenv;
+      inherit hoogle rehoo ghc;
+      packages = haskellEnv.paths;
+    };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, kdelibs, libXtst, libfakekey, makeWrapper, pkgconfig, qca2, qca2_ossl
+{ stdenv, fetchurl, gettext, kdelibs, libXtst, libfakekey, makeWrapper, pkgconfig, qca2
 , qjson
 }:
 
@@ -11,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vrr047bq5skxvibv5pb9ch9dxh005zmar017jzbyb9hilxr8kg4";
   };
 
-  buildInputs = [ gettext kdelibs libXtst libfakekey makeWrapper pkgconfig qca2 qca2_ossl qjson ];
-
-  postInstall = ''
-    wrapProgram $out/lib/kde4/libexec/kdeconnectd --prefix QT_PLUGIN_PATH : ${qca2_ossl}/lib/qt4/plugins
-  '';
+  buildInputs = [ gettext kdelibs libXtst libfakekey makeWrapper pkgconfig qca2 qjson ];
 
   meta = with stdenv.lib; {
     description = "A tool to connect and sync your devices with KDE";

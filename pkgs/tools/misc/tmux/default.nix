@@ -1,27 +1,30 @@
-{stdenv, fetchurl, ncurses, libevent, pkgconfig}:
+{ stdenv, fetchurl, ncurses, libevent, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  pname = "tmux";
-  version = "1.9a";
-  name = "${pname}-${version}";
+  name = "tmux-${version}";
+  version = "2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "1x9k4wfd4l5jg6fh7xkr3yyilizha6ka8m5b1nr0kw8wj0mv5qy5";
+    url = "https://github.com/tmux/tmux/releases/download/${version}/${name}.tar.gz";
+    sha256 = "0qnkda8kb747vmbldjpb23ksv9pq3s65xhh1ja5rdsmh8r24npvr";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ ncurses libevent ];
 
-  postInstall =
-    ''
-      mkdir -p $out/etc/bash_completion.d
-      cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
-    '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
+
+  postInstall = ''
+    mkdir -p $out/etc/bash_completion.d
+    cp -v examples/bash_completion_tmux.sh $out/etc/bash_completion.d/tmux
+  '';
 
   meta = {
-    homepage = http://tmux.sourceforge.net/;
+    homepage = http://tmux.github.io/;
     description = "Terminal multiplexer";
 
     longDescription =
@@ -41,6 +44,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ shlevy thammers ];
+    maintainers = with stdenv.lib.maintainers; [ thammers ];
   };
 }

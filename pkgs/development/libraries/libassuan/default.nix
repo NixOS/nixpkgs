@@ -8,9 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "1ikf9whfi7rg71qa610ynyv12qrw20zkn7zxgvvr9dp41gbqxxbx";
   };
 
-  propagatedBuildInputs = [ libgpgerror pth ];
+  buildInputs = [ libgpgerror pth ];
 
   doCheck = true;
+
+  # Make sure includes are fixed for callers who don't use libassuan-config
+  postInstall = ''
+    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/assuan.h
+  '';
 
   meta = {
     description = "IPC library used by GnuPG and related software";

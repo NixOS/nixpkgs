@@ -80,6 +80,5 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
     inherit version;
-    updateWalker = true;
   };
 }

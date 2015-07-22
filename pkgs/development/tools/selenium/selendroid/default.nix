@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://code.google.com/p/selenium;
-    description = "Test automation for native or hybrid Android apps and the mobile web.";
+    description = "Test automation for native or hybrid Android apps and the mobile web";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.all;
     license = licenses.asl20;

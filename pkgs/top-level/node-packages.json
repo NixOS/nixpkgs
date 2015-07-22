@@ -31,7 +31,7 @@
 , "browserchannel"
 , "node-gyp"
 , "semver"
-, { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.11.0" }
+, { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0" }
 , "ansi-remover"
 , "mkdirp"
 , "jshint"
@@ -66,7 +66,7 @@
 , "flatiron"
 , "ironhorse"
 , "fs-walk"
-, "statsd"
+, { "statsd": "https://github.com/etsy/statsd/tarball/23b331895cc4b22b64a19fd0e7b6def6f6f30d9e"}
 , "statsd-librato-backend"
 , "stackdriver-statsd-backend"
 , "statsd-influxdb-backend"
@@ -147,7 +147,7 @@
 , "empty-trash"
 , "castnow"
 , "parsoid"
-, { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy" }
+, { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "react-tools"
 , "json"
 , "bipio"
@@ -192,4 +192,6 @@
 , "bip-pod-github"
 , "sleep"
 , "node-red"
+, "sinopia"
+, "docker-registry-server"
 ]

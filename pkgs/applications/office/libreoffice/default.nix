@@ -24,7 +24,7 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "4";
   minor = "4";
-  patch = "0";
+  patch = "4";
   tweak = "3";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
@@ -61,7 +61,7 @@ let
       ("Error: update liborcus version inside LO expression")
       (import ./libreoffice-srcs.nix));
 
-    buildInputs = [ boost mdds pkgconfig zlib libixion ];
+    buildInputs = [ boost mdds pkgconfig zlib /*libixion*/ ];
 
     configureFlags = [ "--with-boost=${boost.dev}" ];
   };
@@ -80,14 +80,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0y94sry2cghc82628smka7qb1xqlgrgvy98bxd2fpqfkd1llcqfg";
+      sha256 = "1zyfpbdsx0kjkabdpkf0lg7hjnvxsf6hj9ljs8v9iqw3x3b7llib";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "05al25vcz2z6fhm8vx77wa47nyi3r0hwll6mg2aclx7yp0s5k01d";
+      sha256 = "1jbbbv63p63mwby52ynz2yk79pb32wsnakhxfhc75ng1br6cpll0";
     };
 
   };
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1xqc60ckay6xpljipcbm4915qqwk81dm2fbpxwfqc2l4gv9g6s6i";
+    sha256 = "0wns7ny19bsl5ar1rq7n4033rfijl2cjn9l8bj1gwhpqlkd8db1i";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
-  '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sfv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\nln -sfv ${f} $sourceRoot/src/${f.name}\n") srcs.third_party)
   + ''
     ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
@@ -235,6 +235,8 @@ stdenv.mkDerivation rec {
     "--without-system-libpagemaker"
     "--without-system-coinmp"
     "--without-system-libgltf"
+
+    "--without-system-orcus"
   ];
 
   checkPhase = ''
@@ -253,10 +255,10 @@ stdenv.mkDerivation rec {
       gst_all_1.gst-plugins-base
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
       python3 sablotron saneBackends tcsh unzip vigra which zip zlib
-      mdds bluez5 glibc libixion
+      mdds bluez5 glibc /*libixion*/
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew
-      liborcus libodfgen
+      /*liborcus*/ libodfgen
     ];
 
   meta = with stdenv.lib; {

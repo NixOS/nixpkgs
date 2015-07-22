@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gzip, popt }:
 
 stdenv.mkDerivation rec {
-  name = "logrotate-3.8.7";
+  name = "logrotate-3.9.1";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/l/o/logrotate/${name}.tar.gz";
-    sha256 = "0r1bs40gwi8awx6rjq3n4lw9fgws97ww2li7z87683p380gnkfpn";
+    sha256 = "0i95qnacv5wf7kfkcpi38ys3i14fr01ifhm8b4ari04c53inj9q2";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.

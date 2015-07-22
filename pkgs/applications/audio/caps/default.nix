@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   name = "caps-${version}";
-  version = "0.9.16";
+  version = "0.9.24";
   src = fetchurl {
     url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";
-    sha256 = "117l04w2zwqak856lihmaxg6f22vlz71knpxy0axiyri0x82lbwv";
+    sha256 = "081zx0i2ysw5nmy03j60q9j11zdlg1fxws81kwanncdgayxgwipp";
   };
   configurePhase = ''
     echo "PREFIX = $out" > defines.make

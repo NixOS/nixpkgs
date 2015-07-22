@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ cyrus_sasl gettext openldap ptlib opal libXv rarian intltool
                   perl perlXMLParser evolution_data_server gnome_doc_utils avahi
                   libsigcxx gtk dbus_glib libnotify libXext xextproto sqlite
-                  gnome3.libsoup glib gnome3.gnome_icon_theme_symbolic
-                  hicolor_icon_theme gnome3.gnome_icon_theme boost
+                  gnome3.libsoup glib gnome3.defaultIconTheme boost
                   autoreconfHook pkgconfig libxml2 videoproto unixODBC db nspr
                   nss zlib libsecret libXrandr randrproto which libxslt libtasn1
                   gmp nettle makeWrapper ];
 
   preAutoreconf = ''
     substituteInPlace configure.ac --replace AM_GCONF_SOURCE_2 ""
+    substituteInPlace configure.ac --replace gnome-icon-theme adwaita-icon-theme
   '';
 
   configureFlags = [

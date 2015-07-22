@@ -2,16 +2,24 @@
 
 stdenv.mkDerivation rec {
   name    = "stunnel-${version}";
-  version = "5.05";
+  version = "5.20";
 
   src = fetchurl {
     url    = "http://www.stunnel.org/downloads/${name}.tar.gz";
-    # SHA256 provided by upstream.
-    sha256 = "c7e1653345150db7e48d00e1129cf571c7c85de8e7e1aa70b21cf1d76b1e31ef";
+    sha256 = "0ar940mw5sjxkh98d6wnrd366jfkqirbyf2b5kcdk1vjk9ra6dja";
   };
 
   buildInputs = [ openssl ];
-  configureFlags = [ "--with-ssl=${openssl}" ];
+  configureFlags = [
+    "--with-ssl=${openssl}"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
+
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "localstatedir=\${TMPDIR}"
+  ];
 
   meta = {
     description = "universal tls/ssl wrapper";

@@ -20,6 +20,10 @@ let
           cfg.collectors)}
     '';
 
+  cmdLineOpts = concatStringsSep " " (
+    [ "-h=${cfg.bosunHost}" "-c=${collectors}" ] ++ cfg.extraOpts
+  );
+
 in {
 
   options = {
@@ -69,13 +73,22 @@ in {
       };
 
       collectors = mkOption {
-        type = types.attrs;
+        type = with types; attrsOf (listOf path);
         default = {};
         example = literalExample "{ 0 = [ \"\${postgresStats}/bin/collect-stats\" ]; }";
         description = ''
           An attribute set mapping the frequency of collection to a list of
           binaries that should be executed at that frequency. You can use "0"
           to run a binary forever.
+        '';
+      };
+
+      extraOpts = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "-d" ];
+        description = ''
+          Extra scollector command line options
         '';
       };
 
@@ -95,9 +108,7 @@ in {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = ''
-          ${cfg.package}/bin/scollector -h=${cfg.bosunHost} -c=${collectors}
-        '';
+        ExecStart = "${cfg.package}/bin/scollector ${cmdLineOpts}";
       };
     };
 

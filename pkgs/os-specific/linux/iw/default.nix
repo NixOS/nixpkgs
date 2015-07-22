@@ -1,18 +1,16 @@
 {stdenv, fetchurl, libnl, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  name = "iw-3.15";
+  name = "iw-4.1";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/iw/${name}.tar.xz";
-    sha256 = "12jby9nv5nypadgdksbqw0y2kfm3j47zw7a3rwmy56d7rs90lp5x";
+    sha256 = "0jx3s5wdvm2qxd3h883fnyjsb1c29qcsz1r19bc029g8v2nalr2i";
   };
 
   buildInputs = [ libnl pkgconfig ];
 
-  preBuild = "
-    makeFlagsArray=(PREFIX=$out)
-  ";
+  makeFlags = [ "PREFIX=\${out}" ];
 
   meta = {
     description = "Tool to use nl80211";

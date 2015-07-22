@@ -62,51 +62,75 @@ let
       chosenGcc
       bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz
+      gnutar gzip bzip2 xz glibcLocales
     ];
 
-  # Compose a global profile for the chroot environment
-  profilePkg = nixpkgs.stdenv.mkDerivation {
-    name         = "${name}-chrootenv-profile";
+  # Compose /etc for the chroot environment
+  etcPkg = nixpkgs.stdenv.mkDerivation {
+    name         = "${name}-chrootenv-etc";
     buildCommand = ''
       mkdir -p $out/etc
-      cat >> $out/etc/profile << "EOF"
+      cd $out/etc
+
+      # environment variables
+      cat >> profile << "EOF"
       export PS1='${name}-chrootenv:\u@\h:\w\$ '
+      export LOCALE_ARCHIVE='/usr/lib${if is64Bit then "64" else ""}/locale/locale-archive'
+      export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:/lib:/lib32:/lib64
+      export PATH='/bin:/sbin'
       ${profile}
       EOF
+
+      # compatibility with NixOS
+      ln -s /host-etc/static static
+
+      # symlink some NSS stuff
+      ln -s /host-etc/passwd passwd
+      ln -s /host-etc/group group
+      ln -s /host-etc/shadow shadow
+      ln -s /host-etc/hosts hosts
+      ln -s /host-etc/resolv.conf resolv.conf
+      ln -s /host-etc/nsswitch.conf nsswitch.conf
+
+      # symlink other core stuff
+      ln -s /host-etc/localtime localtime
+      ln -s /host-etc/machine-id machine-id
+
+      # symlink PAM stuff
+      ln -s /host-etc/pam.d pam.d
+
+      # symlink fonts stuff
+      ln -s /host-etc/fonts fonts
+
+      # symlink ALSA stuff
+      ln -s /host-etc/asound.conf asound.conf
+
+      # symlink SSL certs
+      mkdir -p ssl
+      ln -s /host-etc/ssl/certs ssl/certs
     '';
   };
 
   # Composes a /usr like directory structure
   staticUsrProfileTarget = nixpkgs.buildEnv {
-    name = "system-profile-target";
-    paths = basePkgs ++ [ profilePkg ] ++ targetPaths;
+    name = "${name}-usr-target";
+    paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
+    ignoreCollisions = true;
   };
 
   staticUsrProfileMulti = nixpkgs.buildEnv {
     name = "system-profile-multi";
     paths = multiPaths;
+    ignoreCollisions = true;
   };
 
   linkProfile = profile: ''
-    for i in ${profile}/{etc,bin,sbin,share,var}; do
+    for i in ${profile}/{bin,sbin,share,var,etc}; do
         if [ -x "$i" ]
         then
             ln -s "$i"
         fi
     done
-  '';
-
-  # the target profile is the actual profile that will be used for the chroot
-  setupTargetProfile = ''
-    ${linkProfile staticUsrProfileTarget}
-    ${setupLibDirs}
-
-    mkdir -m0755 usr
-    cd usr
-    ${linkProfile staticUsrProfileTarget}
-    ${setupLibDirs}
-    cd ..
   '';
 
   # this will happen on x86_64 host:
@@ -120,9 +144,6 @@ let
     ${linkProfile staticUsrProfileMulti}
     cd ..
   '';
-
-  setupLibDirs = if isTargetBuild then setupLibDirs_target
-                                  else setupLibDirs_multi;
 
   # setup library paths only for the targeted architecture
   setupLibDirs_target = ''
@@ -139,23 +160,40 @@ let
     ln -s lib lib32
 
     # copy glibc stuff
-    cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/
+    cp -rsf ${staticUsrProfileTarget}/lib/32/* lib/ && chmod u+w -R lib/
 
     # copy content of multiPaths (32bit libs)
-    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/
+    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsf ${staticUsrProfileMulti}/lib/* lib/ && chmod u+w -R lib/
 
     # copy content of targetPaths (64bit libs)
-    cp -rsf ${staticUsrProfileTarget}/lib/* lib64/
+    cp -rsf ${staticUsrProfileTarget}/lib/* lib64/ && chmod u+w -R lib64/
 
     # most 64bit only libs put their stuff into /lib
     # some pkgs (like gcc_multi) put 32bit libs into and /lib 64bit libs into /lib64
     # by overwriting these we will hopefully catch all these cases
     # in the end /lib should only contain 32bit and /lib64 only 64bit libs
-    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/
+    cp -rsf ${staticUsrProfileTarget}/lib64/* lib64/ && chmod u+w -R lib64/
 
     # copy gcc libs (and may overwrite exitsting wrongly placed libs)
     cp -rsf ${chosenGcc.cc}/lib/*   lib/
     cp -rsf ${chosenGcc.cc}/lib64/* lib64/
+  '';
+
+  setupLibDirs = if isTargetBuild then setupLibDirs_target
+                                  else setupLibDirs_multi;
+
+
+  # the target profile is the actual profile that will be used for the chroot
+  setupTargetProfile = ''
+    ${linkProfile staticUsrProfileTarget}
+    ${setupLibDirs}
+
+    mkdir -m0755 usr
+    cd usr
+    ${linkProfile staticUsrProfileTarget}
+    ${setupLibDirs}
+    cd ..
+    rm -rf usr/etc usr/var
   '';
 
 in nixpkgs.stdenv.mkDerivation {

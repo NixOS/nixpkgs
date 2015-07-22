@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     done
   '';
   dontPatchELF = true;
-  meta = {
+  meta = with stdenv.lib; {
     description = "A game that blends a team based FPS with elements of an RTS";
     longDescription = ''
       Tremulous is a free, open source game that blends a team based FPS with
@@ -70,9 +70,12 @@ stdenv.mkDerivation rec {
       degree), healing functions and much more...
     '';
     homepage = http://www.tremulous.net;
-    license = [ "GPLv2" ];  # media under cc by-sa 2.5
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = with licenses; [
+      gpl2
+      cc-by-sa-25 /* media */
+    ];
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = with platforms; linux;
     broken = true;
   };
 }

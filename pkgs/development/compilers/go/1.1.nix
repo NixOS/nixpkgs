@@ -90,12 +90,12 @@ stdenv.mkDerivation {
     cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "1.1";
     homepage = http://golang.org/;
     description = "The Go Programming language";
-    license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [ pierron viric ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ pierron viric ];
+    platforms = platforms.linux;
   };
 }

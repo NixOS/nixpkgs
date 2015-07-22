@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   postInstall = glib.flattenInclude;
 
+  patches = stdenv.lib.optional stdenv.isDarwin ./fix-clang36.patch;
+
   meta = {
     homepage = http://pixman.org;
     description = "A low-level library for pixel manipulation";

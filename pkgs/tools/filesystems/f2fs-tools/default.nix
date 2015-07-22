@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "f2fs-tools-${version}";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchgit {
     url = git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git;
     rev = "refs/tags/v${version}";
-    sha256 = "1r97k91qaf42jz623jqy0wm97yjq1ym034q4fdhfirq27s46sn6i";
+    sha256 = "16i74r2656q6x4gg5kgjy2fxipr5czbm10r66s34pi2lfczbwhjr";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig libuuid ];
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
     autoreconf --install
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/";
     description = "Userland tools for the f2fs filesystem";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.emery ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ emery jagajaga ];
   };
 }

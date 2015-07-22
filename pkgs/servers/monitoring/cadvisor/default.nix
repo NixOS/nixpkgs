@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "cadvisor-${version}";
-  version = "0.7.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "${version}";
-    sha256 = "1vc9fydi6wra45khxsmfw5mx2qyggi7cg6kgajzw518rqa52ivmg";
+    sha256 = "0k0qfhw755k3ripsfkhml0ixaglhy64hdzxrjvlmbgc50s3j37vh";
   };
 
   buildInputs = [ go ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Analyzes resource usage and performance characteristics of running docker containers.";
+    description = "Analyzes resource usage and performance characteristics of running docker containers";
     homepage = https://github.com/google/cadvisor;
     license = licenses.asl20;
     maintainers = with maintainers; [ offline ];

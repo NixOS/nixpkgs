@@ -46,7 +46,6 @@ in
         pkgs.which # Needed by the xfce's xinitrc script.
         pkgs.xfce.exo
         pkgs.xfce.gtk_xfce_engine
-        pkgs.xfce.libxfcegui4 # For the icons.
         pkgs.xfce.mousepad
         pkgs.xfce.ristretto
         pkgs.xfce.terminal

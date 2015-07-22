@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "httpie-0.8.0";
+  name = "httpie-0.9.2";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/h/httpie/${name}.tar.gz";
-    sha256 = "16f3scm794plxbyw7a5b4541hb2psa85kfi98g83785i2qwz98ag";
+    sha256 = "0s0dsj1iimn17h0xyziwk4kz4ga9s0vy9rhzixh8dna32za84fdg";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pygments requests2 ];
+  propagatedBuildInputs = with pythonPackages; [ pygments requests2 curses ];
 
   doCheck = false;
 

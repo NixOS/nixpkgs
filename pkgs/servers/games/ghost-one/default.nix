@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1sm2ca3lcdr4vjg7v94d8zhqz8cdp44rg8yinzzwkgsr0hj74fv2";
   };
 
-  buildInputs = [ unzip gmp zlib bzip2 boost mysql ];
+  buildInputs = [ unzip gmp zlib bzip2 boost mysql.lib ];
 
   patchPhase = ''
-    substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" "${mysql}/lib/mysql"
+    substituteInPlace ghost/Makefile --replace "/usr/local/lib/mysql" "${mysql.lib}/lib/mysql"
   '';
 
   buildPhase = ''

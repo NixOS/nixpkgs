@@ -1,33 +1,51 @@
-{ stdenv, fetchurl, makeWrapper, cmake, qt4, pkgconfig, alsaLib, portaudio, jack2, libsndfile}:
+{ stdenv, fetchurl, cmake, pkgconfig
+, alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
+, portaudio, qt5 #, tesseract
+}:
 
 stdenv.mkDerivation rec {
-  name = "musescore-1.3";
+  name = "musescore-${version}";
+  version = "2.0.1";
 
   src = fetchurl {
-    url = "http://ftp.osuosl.org/pub/musescore/releases/MuseScore-1.3/mscore-1.3.tar.bz2";
-    sha256 = "a0b60cc892ac0266c58fc6392be72c0a21c3aa7fd0b6e4f1dddad1c8b36be683";
+    url = "https://github.com/musescore/MuseScore/archive/v${version}.tar.gz";
+    sha256 = "0n4xk35jggdq2dcizqjq1kdpclih4scpl93ymmxahvfa1vvwn5iw";
   };
 
-  buildInputs = [ makeWrapper cmake qt4 pkgconfig alsaLib portaudio jack2 libsndfile ];
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
 
-  configurePhase = ''
-    cd mscore;
-    mkdir build;
-    cd build;
-    cmake -DCMAKE_INSTALL_PREFIX=$out -DQT_PLUGINS_DIR=$out/lib/qt4/plugins -DCMAKE_BUILD_TYPE=Release ..'';
+  cmakeFlags = [
+    "-DAEOLUS=OFF"
+    "-DZERBERUS=ON"
+    "-DOSC=ON=ON"
+    "-DOMR=OFF" # TODO: add OMR support, CLEF_G not declared error
+    "-DOCR=OFF" # Not necessary without OMR
+    "-DSOUNDFONT3=ON"
+    "-DHAS_AUDIOFILE=ON"
+    "-DBUILD_JACK=ON"
+  ];
 
-  preBuild = ''make lrelease;'';
-
-  postInstall = ''
-    wrapProgram $out/bin/mscore --prefix QT_PLUGIN_PATH : $out/lib/qt4/plugins
+  preBuild = ''
+    make lupdate
+    make lrelease
   '';
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [
+    alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
+    portaudio qt5.base qt5.declarative qt5.enginio qt5.script qt5.svg qt5.tools
+    qt5.webkit qt5.xmlpatterns #tesseract
+  ];
+
   meta = with stdenv.lib; {
-    description = "Qt-based score editor";
+    description = "Music notation and composition software";
     homepage = http://musescore.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.vandenoever ];
+    maintainers = [ maintainers.vandenoever ];
     repositories.git = https://github.com/musescore/MuseScore;
   };
 }

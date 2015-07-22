@@ -12,7 +12,7 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{stdenv, perl, perlArchiveCpio, cpio, contents, ubootChooser, compressor}:
+{ stdenv, perl, perlArchiveCpio, cpio, contents, ubootChooser, compressor, prepend }:
 
 let
   inputsFun = ubootName : [perl cpio perlArchiveCpio ]
@@ -41,5 +41,5 @@ stdenv.mkDerivation {
     nativeBuildInputs = inputsFun stdenv.cross.platform.uboot;
     makeUInitrd = makeUInitrdFun stdenv.cross.platform.uboot;
   };
-  inherit compressor;
+  inherit compressor prepend;
 }

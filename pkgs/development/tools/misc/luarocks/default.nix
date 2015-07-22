@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="luarocks";
-    version="2.2.0";
+    version="2.2.2";
     name="${baseName}-${version}";
-    hash="1717p694455w1fdldb2ldlyklln8w3bqk1dsly8gpqh3n73lw6lv";
-    url="http://luarocks.org/releases/luarocks-2.2.0-rc1.tar.gz";
-    sha256="1717p694455w1fdldb2ldlyklln8w3bqk1dsly8gpqh3n73lw6lv";
+    hash="08phl5syc7q6bh0rs9558s74g8xq05hgn7gbia4hvwvkd1q2f12g";
+    url="http://luarocks.org/releases/luarocks-2.2.2.tar.gz";
+    sha256="08phl5syc7q6bh0rs9558s74g8xq05hgn7gbia4hvwvkd1q2f12g";
   };
   buildInputs = [
     lua curl makeWrapper which

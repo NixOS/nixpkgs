@@ -1,23 +1,23 @@
-{ stdenv, fetchurl
-, autoconf, automake
-, unzip, pkgconfig
-, file, fuse, libmtp }:
+{ stdenv, fetchFromGitHub, pkgconfig, file, fuse, libmtp }:
 
-stdenv.mkDerivation rec {
-  version = "0.5";
+let version = "0.5"; in
+stdenv.mkDerivation {
   name = "jmtpfs-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/JasonFerrara/jmtpfs/archive/v0.5.zip";
-    sha256 = "09fw4g350mjz1mnga7ws5nvnsnfzs8s7cscl300mas1m9s6vmhz6";
+  src = fetchFromGitHub {
+    sha256 = "1pm68agkhrwgrplrfrnbwdcvx5lrivdmqw8pb5gdmm3xppnryji1";
+    rev = "v${version}";
+    repo = "jmtpfs";
+    owner = "JasonFerrara";
   };
 
-  buildInputs = [ autoconf automake file fuse libmtp pkgconfig unzip ];
+  buildInputs = [ file fuse libmtp pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A FUSE filesystem for MTP devices like Android phones";
     homepage = https://github.com/JasonFerrara/jmtpfs;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.coconnor ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.coconnor ];
   };
 }

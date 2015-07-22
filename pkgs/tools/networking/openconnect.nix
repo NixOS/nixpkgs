@@ -1,13 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, vpnc, openssl, libxml2 } :
+{ stdenv, fetchurl, pkgconfig, vpnc, openssl ? null, gnutls ? null, libxml2, zlib } :
+
+let
+  xor = a: b: (a || b) && (!(a && b));
+in
+
+assert xor (openssl != null) (gnutls != null);
 
 stdenv.mkDerivation rec {
-  name = "openconnect-5.02";
+  name = "openconnect-7.06";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.infradead.org/pub/openconnect/${name}.tar.gz"
     ];
-    sha256 = "1y7dn42gd3763sgwv2j72xy9hsikd6y9x142g84kwdbn0y0psgi4";
+    sha256 = "1wkhmgfxkdkhy2p9w9idrgipxmxij2z4f88flfk3fifwd19nkkzs";
   };
 
   preConfigure = ''
@@ -22,5 +28,6 @@ stdenv.mkDerivation rec {
     "--without-openssl-version-check"
   ];
 
-  propagatedBuildInputs = [ vpnc openssl libxml2 ];
+  buildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ vpnc openssl gnutls libxml2 zlib ];
 }

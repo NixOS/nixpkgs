@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     configureFlags="--disable-move-mount --with-path=$PATH"
     export MOUNT=/var/run/current-system/sw/bin/mount
     export UMOUNT=/var/run/current-system/sw/bin/umount
-    export MODPROBE=/var/run/current-system/sw/sbin/modprobe
+    export MODPROBE=/var/run/current-system/sw/bin/modprobe
     # Grrr, rpcgen can't find cpp. (NIXPKGS-48)
     mkdir rpcgen
     echo "#! $shell" > rpcgen/rpcgen

@@ -7,6 +7,8 @@ stdenv.mkDerivation {
 		sha256 = "09ljks8vj75g00h3azc83yllbfsrxwmv1c9g32gylcmsshik0dqv";
 	};
 
+  broken = true; # Not found
+
   buildInputs = [python pil pygame SDL];
 
   configurePhase = ''

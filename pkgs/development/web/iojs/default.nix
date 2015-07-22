@@ -1,18 +1,14 @@
-{ stdenv, fetchurl, python, utillinux, openssl, http-parser, zlib, libuv, nightly ? false }:
+{ stdenv, fetchurl, python, utillinux, openssl_1_0_2, http-parser, zlib, libuv }:
 
 let
-  version = if nightly then "1.2.1-nightly201502201bf91878e7" else "1.3.0";
+  version = "2.3.4";
   inherit (stdenv.lib) optional maintainers licenses platforms;
 in stdenv.mkDerivation {
   name = "iojs-${version}";
 
   src = fetchurl {
-    url = if nightly
-          then "https://iojs.org/download/nightly/v${version}/iojs-v${version}.tar.gz"
-          else "https://iojs.org/dist/v${version}/iojs-v${version}.tar.gz";
-    sha256 = if nightly
-             then "1bk0jiha7n3s9xawj77d4q1navq28pq061w2wa6cs70lik7n6ri4"
-             else "08g0kmz2978jrfx4551fi12ypcsv9p6vic89lfs08ki7ajw2yrgb";
+    url = "https://iojs.org/dist/v${version}/iojs-v${version}.tar.gz";
+    sha256 = "1h9cjrs93c8rdycc0ahhc27wv826211aljvfmxfg8jdmg6nvibhq";
   };
 
   prePatch = ''
@@ -21,7 +17,11 @@ in stdenv.mkDerivation {
 
   configureFlags = [ "--shared-openssl" "--shared-http-parser" "--shared-zlib" "--shared-libuv" ];
 
-  buildInputs = [ python openssl http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
+  # iojs has --enable-static but no --disable-static. Automatically adding --disable-static
+  # causes configure to fail, so don't add --disable-static.
+  dontDisableStatic = true;
+
+  buildInputs = [ python openssl_1_0_2 http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
   setupHook = ../nodejs/setup-hook.sh;
 
   passthru.interpreterName = "iojs";
@@ -31,5 +31,6 @@ in stdenv.mkDerivation {
     homepage = https://iojs.org/;
     license = licenses.mit;
     platforms = platforms.linux;
+    maintainers = [ maintainers.havvy ];
   };
 }

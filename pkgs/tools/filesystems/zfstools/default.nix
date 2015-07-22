@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, ruby, zfs }:
+{ stdenv, fetchFromGitHub, ruby, zfs }:
 
 stdenv.mkDerivation rec {
   name = "zfstools-${version}";
 
-  version = "0.3.1";
+  version = "0.3.2";
 
-  src = fetchgit {
-    url = https://github.com/bdrewery/zfstools.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "0bhs0gn1f4z1jm631vp26sbysy4crq489q56rxqfd8ns1xsp1f5j";
+  src = fetchFromGitHub {
+    sha256 = "1dzfir9413qrmx9kqpndi3l2m09f6l1wspnwn84lm3n1g9cr46nd";
+    rev = "v${version}";
+    repo = "zfstools";
+    owner = "bdrewery";
   };
 
   buildInputs = [ ruby ];
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    inherit version;
     homepage = https://github.com/bdrewery/zfstools;
     description = "OpenSolaris-like and compatible auto snapshotting script for ZFS";
     longDescription = ''

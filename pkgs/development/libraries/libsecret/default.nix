@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, glib, dbus_libs, unzip, automake, libtool, autoconf, m4, docbook_xsl,
-  intltool, gtk_doc, gobjectIntrospection, pkgconfig, libxslt, libgcrypt }:
-
+{ stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk_doc
+, libgcrypt, gobjectIntrospection }:
+let
+  version = "0.18";
+in
 stdenv.mkDerivation rec {
-  version = "0.16";
   name = "libsecret-${version}";
 
   src = fetchurl {
-    url = "https://git.gnome.org/browse/libsecret/snapshot/libsecret-${version}.zip";
-    sha256 = "1yf4zvzfa45wr5bqlh54g3bmd0lgcsa8hnhppa99czca0zj7bkks";
+    url = "mirror://gnome/sources/libsecret/${version}/${name}.tar.xz";
+    sha256 = "1qq29c01xxjyx5sl6y5h22w8r0ff4c73bph3gfx3h7mx5mvalwqc";
   };
 
-  propagatedBuildInputs = [ glib dbus_libs ];
-  nativeBuildInputs = [ unzip ];
-  buildInputs = [ gtk_doc automake libtool autoconf intltool gobjectIntrospection pkgconfig libxslt libgcrypt m4 docbook_xsl ];
-
-  configureScript = "./autogen.sh";
+  propagatedBuildInputs = [ glib ];
+  nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl ];
+  buildInputs = [ libgcrypt gobjectIntrospection ];
+  # optional: build docs with gtk-doc? (probably needs a flag as well)
 
   meta = {
+    description = "A library for storing and retrieving passwords and other secrets";
+    homepage = https://wiki.gnome.org/Projects/Libsecret;
+    license = stdenv.lib.licenses.lgpl21Plus;
     inherit (glib.meta) platforms maintainers;
   };
 }

@@ -55,8 +55,7 @@ in
     boot.zfs = {
       useGit = mkOption {
         type = types.bool;
-        # TODO(wkennington): Revert when 0.6.4 is out
-        default = versionAtLeast config.boot.kernelPackages.kernel.version "3.19";
+        default = false;
         example = true;
         description = ''
           Use the git version of the SPL and ZFS packages.
@@ -204,11 +203,14 @@ in
         kernelModules = [ "spl" "zfs" ];
         extraUtilsCommands =
           ''
-            cp -v ${zfsUserPkg}/sbin/zfs $out/bin
-            cp -v ${zfsUserPkg}/sbin/zdb $out/bin
-            cp -v ${zfsUserPkg}/sbin/zpool $out/bin
-            cp -pdv ${zfsUserPkg}/lib/lib*.so* $out/lib
-            cp -pdv ${pkgs.zlib}/lib/lib*.so* $out/lib
+            copy_bin_and_libs ${zfsUserPkg}/sbin/zfs
+            copy_bin_and_libs ${zfsUserPkg}/sbin/zdb
+            copy_bin_and_libs ${zfsUserPkg}/sbin/zpool
+          '';
+        extraUtilsCommandsTest = mkIf inInitrd
+          ''
+            $out/bin/zfs --help >/dev/null 2>&1
+            $out/bin/zpool --help >/dev/null 2>&1
           '';
         postDeviceCommands = concatStringsSep "\n" ([''
             ZFS_FORCE="${optionalString cfgZfs.forceImportRoot "-f"}"

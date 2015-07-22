@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, boost, cmake, glib, jack2, libarchive
+{ stdenv, fetchurl, alsaLib, boost, cmake, glib, libjack2, libarchive
 , liblrdf, libsndfile, pkgconfig, qt4 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ 
-    alsaLib boost cmake glib jack2 libarchive liblrdf libsndfile pkgconfig qt4
+    alsaLib boost cmake glib libjack2 libarchive liblrdf libsndfile pkgconfig qt4
   ];
 
   meta = with stdenv.lib; {

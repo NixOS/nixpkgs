@@ -2,7 +2,7 @@
   pyqt4, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.6.1";
+  name = "qgis-2.8.2";
 
   buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt qscintilla
     fcgi libspatialindex libspatialite postgresql ] ++
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "1avw9mnhrcxsdalqr2yhyif1cacl4dsgcpfc31axkv7vj401djnl";
+    sha256 = "fd3c01e48224f611c3bb279b0af9cc1dff3844cdc93f7b45e4f37cf8f350bc4b";
   };
 
   postInstall = ''

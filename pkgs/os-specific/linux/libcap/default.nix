@@ -1,14 +1,12 @@
 { stdenv, fetchurl, attr, perl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
-  version = "2.22";
+  version = "2.24";
   
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/${name}.tar.bz2";
-    sha256 = "03q50j6bg65cc501q87qh328ncav1i8qw2bjig99vxmmfx4bvsvk";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${name}.tar.xz";
+    sha256 = "0rbc9qbqs5bp9am9s9g83wxj5k4ixps2agy9dxr1v1fwg27mdr6f";
   };
   
   nativeBuildInputs = [ perl ];

@@ -12,17 +12,19 @@
 let dummyMount = writeScriptBin "mount" "#!/bin/sh";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
-  name = "store-backup-3.4";
+  version = "3.5";
+
+  name = "store-backup-${version}";
 
   enableParallelBuilding = true;
 
   buildInputs = [ perl makeWrapper ];
 
   src = fetchurl {
-    url = http://download.savannah.gnu.org/releases/storebackup/storeBackup-3.4.tar.bz2;
-    sha256 = "101k3nhyfjj8y8hg0v0xqxsr4vlcfkmlczgbihvlv722fb7n5gi3";
+    url = "http://download.savannah.gnu.org/releases/storebackup/storeBackup-${version}.tar.bz2";
+    sha256 = "0y4gzssc93x6y93mjsxm5b5cdh68d7ffa43jf6np7s7c99xxxz78";
   };
 
   installPhase = ''
@@ -100,7 +102,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "Storebackup is a backup suite that stores files on other disks";
+    description = "A backup suite that stores files on other disks";
     homepage = http://savannah.nongnu.org/projects/storebackup;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];

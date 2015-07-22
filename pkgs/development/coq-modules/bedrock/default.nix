@@ -15,17 +15,23 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildFlags = "cito";
+  buildPhase = ''
+    make -j$NIX_BUILD_CORES -C src/reification
+    make -j$NIX_BUILD_CORES -C src
+    make -j$NIX_BUILD_CORES -C src native
+    # make -j$NIX_BUILD_CORES -C platform
+    # make -j$NIX_BUILD_CORES -C platform -f Makefile.cito
+  '';
 
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Bedrock
-    cp -pR src $COQLIB/user-contrib/Bedrock
+    cp -pR src/* $COQLIB/user-contrib/Bedrock
   '';
 
   meta = with stdenv.lib; {
     homepage = http://plv.csail.mit.edu/bedrock/;
-    description = "Bedrock is a library that turns Coq into a tool much like classical verification systems";
+    description = "A library that turns Coq into a tool much like classical verification systems";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
   };

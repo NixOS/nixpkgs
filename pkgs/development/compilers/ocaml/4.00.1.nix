@@ -33,10 +33,13 @@ stdenv.mkDerivation rec {
     nativeCompilers = useNativeCompilers;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://caml.inria.fr/ocaml;
     branch = "4.00";
-    license = [ "QPL" /* compiler */ "LGPLv2" /* library */ ];
+    license = with licenses; [
+      qpl /* compiler */
+      lgpl2 /* library */
+    ];
     description = "Most popular variant of the Caml language";
 
     longDescription =
@@ -58,7 +61,7 @@ stdenv.mkDerivation rec {
         and a documentation generator (ocamldoc).
       '';
 
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 
 }

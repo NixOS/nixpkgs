@@ -1,14 +1,14 @@
 {stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
 
 stdenv.mkDerivation {
-  name = "mobilesdk-3.5.0.GA";
+  name = "mobilesdk-3.5.1.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = http://builds.appcelerator.com/mobile/3.5.0/mobilesdk-3.5.0.GA-linux.zip;
-    sha1 = "c9850d5db29d8fb0c26b114e8c34bb2c91958eed";
+    url = http://builds.appcelerator.com/mobile/3.5.1/mobilesdk-3.5.1.GA-linux.zip;
+    sha1 = "2fd8c50081af9d03b65ffaf824e2e417832efd92";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = http://builds.appcelerator.com/mobile/3.5.0/mobilesdk-3.5.0.GA-osx.zip;
-    sha1 = "a5ce74f13da09215b7efa81d626c6e6e83d6dc3b";
+    url = http://builds.appcelerator.com/mobile/3.5.1/mobilesdk-3.5.1.GA-osx.zip;
+    sha1 = "f000e66980c2c3a40b6a6fd40a0bd0554fcb0424";
   }
   else throw "Platform: ${stdenv.system} not supported!";
   
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     
     # Rename ugly version number
     cd mobilesdk/*
-    cd 3.5.0.GA
+    cd 3.5.1.GA
     
     # Zip files do not support timestamps lower than 1980. We have to apply a few work-arounds to cope with that
     # Yes, I know it's nasty :-)

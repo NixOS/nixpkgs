@@ -107,10 +107,12 @@ in zipModules ([]
 ++ obsolete [ "services" "sshd" "permitRootLogin" ] [ "services" "openssh" "permitRootLogin" ]
 ++ obsolete [ "services" "xserver" "startSSHAgent" ] [ "services" "xserver" "startOpenSSHAgent" ]
 ++ obsolete [ "services" "xserver" "startOpenSSHAgent" ] [ "programs" "ssh" "startAgent" ]
-++ obsolete [ "services" "xserver" "windowManager" "xbmc" ] [ "services" "xserver" "desktopManager" "xbmc" ]
 
 # VirtualBox
 ++ obsolete [ "services" "virtualbox" "enable" ] [ "services" "virtualboxGuest" "enable" ]
+
+# Tarsnap
+++ obsolete [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ]
 
 # proxy
 ++ obsolete [ "nix" "proxy" ] [ "networking" "proxy" "default" ]
@@ -133,6 +135,15 @@ in zipModules ([]
 
 ++ obsolete [ "services" "mysql55" ] [ "services" "mysql" ]
 
+++ alias    [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ]
+
+# XBMC
+++ obsolete [ "services" "xserver" "windowManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ]
+++ obsolete [ "services" "xserver" "desktopManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ]
+
+# DNSCrypt-proxy
+++ obsolete [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ]
+
 # Options that are obsolete and have no replacement.
 ++ obsolete' [ "boot" "loader" "grub" "bootDevice" ]
 ++ obsolete' [ "boot" "initrd" "luks" "enable" ]
@@ -140,5 +151,6 @@ in zipModules ([]
 ++ obsolete' [ "services" "samba" "defaultShare" ]
 ++ obsolete' [ "services" "syslog-ng" "serviceName" ]
 ++ obsolete' [ "services" "syslog-ng" "listenToJournal" ]
+++ obsolete' [ "ec2" "metadata" ]
 
 )

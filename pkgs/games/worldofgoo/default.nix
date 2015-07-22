@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/WorldofGoo
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
       game, or that they are extremely delicious.
     '';
     homepage = http://worldofgoo.com;
-    license = [ "unfree" ];
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = licenses.unfree;
+    maintainers = with maintainers; [ jcumming ];
   };
 
 }

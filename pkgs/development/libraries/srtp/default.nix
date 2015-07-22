@@ -1,51 +1,36 @@
-x@{builderDefsPackage
-  , autoconf, automake, libtool, doxygen, procps
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ stdenv, fetchFromGitHub, pkgconfig
+, openssl ? null, libpcap ? null
+}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="srtp";
-    version="1.4.4";
-    name="${baseName}-${version}";
-    url="mirror://sourceforge/${baseName}/${name}.tgz";
-    hash="057k191hx7sf84wdvc8wr1nk4whhrvbg1vv3r4nyswjir6qwphnr";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+with stdenv.lib;
+stdenv.mkDerivation rec {
+  name = "libsrtp-${version}";
+  version = "1.5.2";
+
+  src = fetchFromGitHub {
+    owner = "cisco";
+    repo = "libsrtp";
+    rev = "v${version}";
+    sha256 = "0iy1il72gnjcwbi16wf4kzdqs1xx8is9qvs6m49pg37218s26gdw";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  buildInputs = [ pkgconfig ];
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doConfigure" "doMakeInstall"];
+  # libsrtp.pc references -lcrypto -lpcap without -L
+  propagatedBuildInputs = [ openssl libpcap ];
 
-  setVars = a.fullDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
-  '' ["minInit"];
+  configureFlags = [
+    "--disable-debug"
+  ] ++ optional (openssl != null) "--enable-openssl";
+
+  postInstall = ''
+    rmdir $out/bin
+  '';
 
   meta = {
-    description = "Secure RTP";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = https://github.com/cisco/libsrtp;
+    description = "Secure RTP (SRTP) Reference Implementation";
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://srtp.sourceforge.net/download.html";
-    };
-  };
-}) x
-
+}

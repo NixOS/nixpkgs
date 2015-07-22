@@ -1,12 +1,13 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation {
-  name = "firmware-linux-nonfree-2015-02-27";
+stdenv.mkDerivation rec {
+  name = "firmware-linux-nonfree-${version}";
+  version = "2015-07-12";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = "cef33368c4d3425f11306496f0250f8ef1cf3c1f";
-    sha256 = "0az6b7fbhanqdc9v9dl651yqqnfbm1npdibip196vnmd5qlv2iw4";
+    url = "http://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/linux-firmware.git";
+    rev = "5e6d7a9d70b562c60471e234f78137020d65ccbf";
+    sha256 = "06gvjdqpbayfv696hxn9xjkbzddj1hy6z9aahi156lvj96qb9z49";
   };
 
   preInstall = ''
@@ -22,4 +23,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
+
+  passthru = { inherit version; };
 }

@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
+    "-DLLVM_REQUIRES_RTTI=1"
   ] ++ stdenv.lib.optionals (!isDarwin) [
     "-DBUILD_SHARED_LIBS=ON"
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
@@ -67,7 +68,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ shlevy lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

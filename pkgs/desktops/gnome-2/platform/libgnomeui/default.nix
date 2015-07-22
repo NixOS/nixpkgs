@@ -1,16 +1,16 @@
-{ stdenv, fetchurlGnome, pkgconfig, libxml2, xlibs, glib, pango
+{ stdenv, fetchurl, pkgconfig, libxml2, xlibs, glib, pango
 , intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
 , gnome_vfs, libgnome_keyring, libglade }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
-  
-  src = fetchurlGnome {
-    project = "libgnomeui";
-    major = "2"; minor = "24"; patchlevel = "5";
+  name = "libgnomeui-${minVer}.5";
+  minVer = "2.24";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/libgnomeui/${minVer}/${name}.tar.bz2";
     sha256 = "03rwbli76crkjl6gp422wrc9lqpl174k56cp9i96b7l8jlj2yddf";
   };
-  
+
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs =
     [ xlibs.xlibs libxml2 GConf pango glib libgnome_keyring libglade libtool ];

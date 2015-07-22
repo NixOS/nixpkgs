@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   buildInputs = [ autoconf automake libtool pkgconfig perl git libevent openssl];
 
   meta = {
-    description = "C client library for Couchbase.";
+    description = "C client library for Couchbase";
     homepage = "https://github.com/couchbase/libcouchbase";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;

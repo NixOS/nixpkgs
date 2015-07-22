@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   postInstall = "wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB";
 
   meta = {
-    description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young.";
+    description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
     homepage = https://joeyh.name/code/moreutils/;
     maintainers = with maintainers; [ koral ];
   };

@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e 's/^   /\t/' docs/gst/Makefile.in docs/libs/Makefile.in docs/plugins/Makefile.in
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    # Applying this patch manually to avoid a rebuild on Linux. Feel free to refactor later
+    # See https://trac.macports.org/ticket/40783 for explanation of patch
+    patch -p1 < ${./darwin.patch}
   '';
 
   configureFlags = ''

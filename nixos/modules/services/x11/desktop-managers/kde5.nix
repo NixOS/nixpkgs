@@ -35,11 +35,11 @@ let
   phononBackendPackages = flip concatMap cfg.phononBackends
     (name: attrByPath [name] (throw "unknown phonon backend `${name}'") phononBackends);
 
-  kf5 = plasma5.kf5;
+  kf5 = pkgs.kf5_stable;
 
-  plasma5 = pkgs.plasma5_stable;
+  plasma5 = pkgs.plasma5_stable.override { inherit kf5; };
 
-  kdeApps = pkgs.kdeApps_stable;
+  kdeApps = pkgs.kdeApps_stable.override { inherit kf5; };
 
 in
 
@@ -76,7 +76,7 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec ${plasma5.startkde}/bin/startkde;'';
+      start = ''exec ${plasma5.plasma-workspace}/bin/startkde;'';
     };
 
     security.setuidOwners = singleton {
@@ -88,7 +88,9 @@ in
     };
 
     environment.systemPackages =
-      [
+      filter isDerivation (builtins.attrValues plasma5)
+      ++ filter isDerivation (builtins.attrValues kf5)
+      ++ [
         pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
 
         kdeApps.kde-baseapps
@@ -97,13 +99,12 @@ in
         kdeApps.konsole
         kdeApps.oxygen-icons
 
+        kdeApps.kde-runtime
+
         pkgs.hicolor_icon_theme
 
         pkgs.orion # GTK theme, nearly identical to Breeze
-      ]
-      ++ filter isDerivation (builtins.attrValues plasma5)
-      ++ filter isDerivation (builtins.attrValues kf5)
-      ++ phononBackendPackages;
+      ] ++ phononBackendPackages;
 
     environment.pathsToLink = [ "/share" ];
 
@@ -120,6 +121,8 @@ in
       };
 
     fonts.fonts = [ plasma5.oxygen-fonts ];
+
+    programs.ssh.askPassword = "${plasma5.ksshaskpass}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;

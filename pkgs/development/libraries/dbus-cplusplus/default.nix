@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, glib, gtkmm, pkgconfig, expat }:
+{ stdenv, fetchurl, dbus, glib, pkgconfig, expat }:
 
 stdenv.mkDerivation rec {
   name = "dbus-cplusplus-${version}";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/dbus-cplusplus/dbus-c%2B%2B/0.9.0/libdbus-c%2B%2B-0.9.0.tar.gz";
-    name = "dbus-cplusplus.tar.gz";
+    name = "${name}.tar.gz";
     sha256 = "0qafmy2i6dzx4n1dqp6pygyy6gjljnb7hwjcj2z11c1wgclsq4dw";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
   })];
 
-  buildInputs = [ dbus glib gtkmm pkgconfig expat ];
+  buildInputs = [ dbus glib pkgconfig expat ];
 
   configureFlags = "--disable-ecore";
 

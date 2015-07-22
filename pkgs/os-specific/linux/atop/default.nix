@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "2.1-1";
+  version = "2.2-3";
   name = "atop-${version}";
 
   src = fetchurl {
     url = "http://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "17wqqyym4d02cqmn1l1asah3sld939nlkc84g4ad939kpkzd98ir";
+    sha256 = "0p85isn6zih3xfprjym5xanqzazwqjj8x2mmwqyqpqjv6nibi1f7";
   };
 
   buildInputs = [zlib ncurses];
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p "$out"/{bin,sbin}
+    make systemdinstall $makeFlags
   '';
 
   meta = {

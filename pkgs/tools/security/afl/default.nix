@@ -1,16 +1,60 @@
-{ stdenv, fetchurl, bash }:
+{ stdenv, fetchurl, bash, callPackage, makeWrapper
+, clang, llvm, which, libcgroup }:
 
+let
+  afl-qemu = callPackage ./qemu.nix {};
+  qemu-exe-name = if stdenv.system == "x86_64-linux" then "qemu-x86_64"
+    else if stdenv.system == "i686-linux" then "qemu-i386"
+    else throw "afl: no support for ${stdenv.system}!";
+in
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "1.49b";
+  version = "1.83b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "14mbfdg78p80517zirvcsc2l2fbxn7n3j9zyfq8cn9dr2qi9icpq";
+    sha256 = "1zkf9vdhmm1h0flxl1ybmw41amgh9cyh4hyb18jp972lgd9q642v";
   };
 
-  buildPhase   = "make PREFIX=$out";
-  installPhase = "make install PREFIX=$out";
+  # Note: libcgroup isn't needed for building, just for the afl-cgroup
+  # script.
+  buildInputs  = [ makeWrapper clang llvm which ];
+
+  buildPhase   = ''
+    make PREFIX=$out
+    cd llvm_mode
+    make PREFIX=$out CC=${clang}/bin/clang CXX=${clang}/bin/clang++
+    cd ..
+  '';
+  installPhase = ''
+    # Do the normal installation
+    make install PREFIX=$out
+
+    # Install the custom QEMU emulator for binary blob fuzzing.
+    cp ${afl-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
+
+    # Install the cgroups wrapper for asan-based fuzzing.
+    cp experimental/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
+    chmod +x $out/bin/afl-cgroup
+    substituteInPlace $out/bin/afl-cgroup \
+      --replace "cgcreate" "${libcgroup}/bin/cgcreate" \
+      --replace "cgexec"   "${libcgroup}/bin/cgexec" \
+      --replace "cgdelete" "${libcgroup}/bin/cgdelete"
+
+    # Patch shebangs before wrapping
+    patchShebangs $out/bin
+
+    # Wrap afl-clang-fast(++) with a *different* AFL_PATH, because it
+    # has totally different semantics in that case(?) - and also set a
+    # proper AFL_CC and AFL_CXX so we don't pick up the wrong one out
+    # of $PATH.
+    for x in $out/bin/afl-clang-fast $out/bin/afl-clang-fast++; do
+      wrapProgram $x \
+        --prefix AFL_PATH : "$out/lib/afl" \
+        --prefix AFL_CC   : "${clang}/bin/clang" \
+        --prefix AFL_CXX  : "${clang}/bin/clang++"
+    done
+  '';
 
   meta = {
     description = "Powerful fuzzer via genetic algorithms and instrumentation";

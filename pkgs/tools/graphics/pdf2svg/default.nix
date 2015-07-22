@@ -8,13 +8,13 @@ stdenv.mkDerivation {
     sha256 = "1jy6iqwwvd7drcybmdlmnc8m970f82fd7fisa8ha5zh13p49r8n2";
   };
 
-  buildInputs = [ cairo pkgconfig poppler.poppler_glib gtk ];
+  buildInputs = [ cairo pkgconfig poppler gtk ];
 
   meta = { 
     description = "PDF converter to SVG format";
     homepage = http://www.cityinthesky.co.uk/opensource/pdf2svg;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.ianwookim ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

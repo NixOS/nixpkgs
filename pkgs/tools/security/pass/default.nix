@@ -1,12 +1,14 @@
 { stdenv, fetchurl
-, coreutils, gnused, getopt, pwgen, git, tree, gnupg
+, coreutils, gnused, getopt, pwgen, git, tree, gnupg, which
 , makeWrapper
-, withX ? true, xclip, xdotool, dmenu
+
+, xclip ? null, xdotool ? null, dmenu ? null
+, x11Support ? true
 }:
 
-assert withX -> xclip != null;
-assert withX -> xdotool != null;
-assert withX -> dmenu != null;
+assert x11Support -> xclip != null
+                  && xdotool != null
+                  && dmenu != null;
 
 stdenv.mkDerivation rec {
   version = "1.6.5";
@@ -52,10 +54,21 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
 
-    ${if withX then ''
+    ${if x11Support then ''
       cp "contrib/dmenu/passmenu" "$out/bin/"
     '' else ""}
   '';
+
+  wrapperPath = with stdenv.lib; makeSearchPath "bin/" ([
+    coreutils
+    gnused
+    getopt
+    git
+    gnupg
+    pwgen
+    tree
+    which
+  ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
   postFixup = ''
     # Fix program name in --help
@@ -64,11 +77,11 @@ stdenv.mkDerivation rec {
 
     # Ensure all dependencies are in PATH
     wrapProgram $out/bin/pass \
-      --prefix PATH : "${coreutils}/bin:${gnused}/bin:${getopt}/bin:${gnupg}/bin:${git}/bin:${tree}/bin:${pwgen}/bin${if withX then ":${xclip}/bin" else ""}"
-
-    ${if withX then ''
-      wrapProgram $out/bin/passmenu \
-        --prefix PATH : "$out/bin:${xdotool}/bin:${dmenu}/bin"
-    '' else ""}
+      --prefix PATH : "${wrapperPath}"
+  '' + stdenv.lib.optionalString x11Support ''
+    # We just wrap passmenu with the same PATH as pass. It doesn't
+    # need all the tools in there but it doesn't hurt either.
+    wrapProgram $out/bin/passmenu \
+      --prefix PATH : "$out/bin:${wrapperPath}"
   '';
 }

@@ -3,12 +3,12 @@
 
 assert odbcSupport -> unixODBC != null;
 
-stdenv.mkDerivation {
-  name = "freetds-0.91";
+stdenv.mkDerivation rec {
+  name = "freetds-0.91.112";
 
   src = fetchurl {
-    url = ftp://ftp.astron.com/pub/freetds/stable/freetds-stable.tgz;
-    sha256 = "0r946axzxs0czsmr7283w7vmk5jx3jnxxc32d2ncxsrsh2yli0ba";
+    url = "ftp://ftp.astron.com/pub/freetds/stable/${name}.tar.gz";
+    sha256 = "be4f04ee57328c32e7e7cd7e2e1483e535071cec6101e46b9dd15b857c5078ed";
   };
 
   buildInputs = stdenv.lib.optional odbcSupport [ unixODBC ];

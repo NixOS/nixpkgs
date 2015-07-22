@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 
-  configureFlags = if stdenv.isDarwin then "--with-gcc=${../../haskell-modules/gcc-clang-wrapper.sh}"
+  configureFlags = if stdenv.isDarwin then "--with-gcc=${./gcc-clang-wrapper.sh}"
                                       else "--with-gcc=${stdenv.cc}/bin/gcc";
 
   NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
@@ -45,13 +45,13 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    broken = stdenv.isDarwin;
     maintainers = [
       stdenv.lib.maintainers.marcweber
       stdenv.lib.maintainers.andres
       stdenv.lib.maintainers.simons
     ];
-    inherit (ghc.meta) license platforms;
+    platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
+    inherit (ghc.meta) license;
   };
 
 }

@@ -1,5 +1,8 @@
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "simple";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ offline ];
+  };
 
   machine = { config, pkgs, ... }: {
     services.zookeeper.enable = true;
@@ -26,4 +29,4 @@ import ./make-test.nix {
       $machine->waitForUnit("mesos-master.service");
       $machine->waitForUnit("mesos-slave.service");
     '';
-}
+})

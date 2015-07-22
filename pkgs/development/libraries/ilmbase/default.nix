@@ -1,19 +1,20 @@
-{ stdenv, openexr, automake, autoconf, libtool }:
+{ stdenv, fetchurl, automake, autoconf, libtool, which }:
 
-stdenv.mkDerivation {
-  name = "ilmbase-${openexr.source.version}";
-  
-  src = openexr.source.src;
+stdenv.mkDerivation rec {
+  name = "ilmbase-2.2.0";
 
-  prePatch = ''
-    cd IlmBase
-  '';
+  src = fetchurl {
+    url = "http://download.savannah.nongnu.org/releases/openexr/${name}.tar.gz";
+    sha256 = "1izddjwbh1grs8080vmaix72z469qy29wrvkphgmqmcm0sv1by7c";
+  };
 
   preConfigure = ''
     ./bootstrap
   '';
 
-  buildInputs = [ automake autoconf libtool ];
+  buildInputs = [ automake autoconf libtool which ];
+
+  patches = [ ./bootstrap.patch ];
 
   meta = with stdenv.lib; {
     homepage = http://www.openexr.com/;

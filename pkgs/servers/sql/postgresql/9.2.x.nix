@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, zlib, readline }:
+{ stdenv, fetchurl, zlib, readline, openssl }:
 
-let version = "9.2.10"; in
+let version = "9.2.13"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "1bbkinqzb3c8i0vfzcy2g7djrq0kxz63jgvzda9p0vylxazmnm1m";
+    sha256 = "0i3avdr8mnvn6ldkx0hc4jmclhisb2338hzs0j2m03wck8hddjsx";
   };
 
-  buildInputs = [ zlib readline ];
+  buildInputs = [ zlib readline openssl ];
 
   enableParallelBuilding = true;
 
   makeFlags = [ "world" ];
+
+  configureFlags = stdenv.lib.optionals (!stdenv.isCygwin) [ "--with-openssl" ];
 
   patches = [ ./disable-resolve_symlinks.patch ./less-is-more.patch ];
 
@@ -27,11 +29,12 @@ stdenv.mkDerivation rec {
     psqlSchema = "9.2";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
-    license = stdenv.lib.licenses.postgresql;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    license = licenses.postgresql;
+    maintainers = [ maintainers.ocharles ];
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
 { args, xorg }:
 
 let
-  inherit (args) stdenv;
+  inherit (args) stdenv makeWrapper;
   inherit (stdenv) lib isDarwin;
   inherit (lib) overrideDerivation;
 
@@ -61,6 +61,15 @@ in
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
   };
 
+  mkfontscale = attrs: attrs // {
+    patches = lib.singleton (args.fetchpatch {
+      name = "mkfontscale-fix-sig11.patch";
+      url = "https://bugs.freedesktop.org/attachment.cgi?id=113951";
+      sha256 = "0i2xf768mz8kvm7i514v0myna9m6jqw82f9a03idabdpamxvwnim";
+    });
+    patchFlags = [ "-p0" ];
+  };
+
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb";
@@ -68,6 +77,10 @@ in
 
   xcbproto = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
+  };
+
+  libxkbfile = attrs: attrs // {
+    patches = lib.optional stdenv.cc.isClang ./libxkbfile-clang36.patch;
   };
 
   libpciaccess = attrs : attrs // {
@@ -160,6 +173,9 @@ in
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   };
 
+  libXpresent = attrs: attrs
+    // { buildInputs = with xorg; attrs.buildInputs ++ [ libXext libXfixes libXrandr ]; };
+
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
@@ -176,6 +192,10 @@ in
     buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
+  xcbutilcursor = attrs: attrs // {
+    meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
+  };
+
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
@@ -187,6 +207,11 @@ in
   };
 
   xf86inputjoystick = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg";
+  };
+
+  xf86inputlibinput = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.libinput ];
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
@@ -221,11 +246,6 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
-    patches = [( args.fetchpatch {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-vmware/patch/"
-        + "?id=4664412d7a5266d2b392957406b34abc5db95e48";
-      sha256 = "1gix83f1is91iq1zd66nj4k72jm24jjjd9s9l0bzpzhgc8smqdk2";
-    })];
   };
 
   xf86videoqxl = attrs: attrs // {
@@ -292,12 +312,14 @@ in
     in
       if (!isDarwin)
       then {
-        buildInputs = commonBuildInputs;
+        buildInputs = [ makeWrapper ] ++ commonBuildInputs;
         propagatedBuildInputs = commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           args.udev
         ];
         patches = commonPatches;
         configureFlags = [
+          "--enable-kdrive"             # not built by default
+          "--enable-xephyr"
           "--enable-xcsecurity"         # enable SECURITY extension
           "--with-default-font-path="   # there were only paths containing "${prefix}",
                                         # and there are no fonts in this package anyway
@@ -305,6 +327,9 @@ in
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
           ln -s /var/tmp $out/share/X11/xkb/compiled
+          wrapProgram $out/bin/Xephyr \
+            --set XKB_BINDIR "${xorg.xkbcomp}/bin" \
+            --add-flags "-xkbdir ${xorg.xkeyboardconfig}/share/X11/xkb"
         '';
         passthru.version = version; # needed by virtualbox guest additions
       } else {
@@ -395,6 +420,7 @@ in
 
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
+    patches = [ ./xf86-video-intel-2.99.917-libdrm-kernel-4_0-crash.patch ];
   };
 
   xwd = attrs: attrs // {

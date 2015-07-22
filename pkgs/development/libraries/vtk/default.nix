@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, mesa, libX11, xproto, libXt
+{ stdenv, fetchurl, fetchpatch, cmake, mesa, libX11, xproto, libXt
 , qtLib ? null }:
 
 with stdenv.lib;
@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
     url = "${meta.homepage}files/release/${majorVersion}/vtk-${version}.tar.gz";
     sha256 = "1fxxgsa7967gdphkl07lbfr6dcbq9a72z5kynlklxn7hyp0l18pi";
   };
+
+  # https://bugzilla.redhat.com/show_bug.cgi?id=1138466
+  postPatch = "sed '/^#define GL_GLEXT_LEGACY/d' -i ./Rendering/vtkOpenGL.h";
 
   buildInputs = [ cmake mesa libX11 xproto libXt ]
     ++ optional (qtLib != null) qtLib;

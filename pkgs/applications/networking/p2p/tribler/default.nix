@@ -1,33 +1,46 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
+{ stdenv, fetchurl, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
 , enablePlayer ? false, vlc ? null }:
 
-let rev = "25411"; in
 
-stdenv.mkDerivation {
-  name = "tribler-5.5.21-pre${rev}";
+stdenv.mkDerivation rec {
+  name = "tribler-${version}";
+  version = "v6.4.3";
 
-  src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.5.x;
-    inherit rev;
-    sha256 = "17c9svy4zjchzihk6mf0kh4lnvaxjfmgfmimyby5w0d3cwbw49zx";
+  src = fetchurl {
+    url = "https://github.com/Tribler/tribler/releases/download/${version}/Tribler-${version}.tar.xz";
+    sha256 = "1n5qi3jlby41w60zg6dvl933ypyiflq3rb0qkwhxi4b26s3vwvgr";
   };
 
-  buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
+  buildInputs = [
+    pythonPackages.python
+    pythonPackages.wrapPython
+    makeWrapper
+    imagemagick
+  ];
 
-  pythonPath =
-    [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
-      pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
-    ];
+  pythonPath = [
+    libtorrentRasterbar
+    pythonPackages.wxPython
+    pythonPackages.curses
+    pythonPackages.apsw
+    pythonPackages.twisted
+    pythonPackages.gmpy
+    pythonPackages.netifaces
+    pythonPackages.pil
+    pythonPackages.pycrypto
+    pythonPackages.pyasn1
+    pythonPackages.requests
+    pythonPackages.setuptools
+    pythonPackages.m2crypto
+    pythonPackages.sqlite3
+  ];
 
   installPhase =
     ''
-      substituteInPlace Tribler/Core/NATFirewall/guessip.py \
-          --replace /bin/netstat ${nettools}/bin/netstat \
-          --replace /sbin/ifconfig ${nettools}/sbin/ifconfig
-    
+      find . -name '*.png' -exec convert -strip {} {} \;
       # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
       wrapPythonPrograms
-      
+
       mkdir -p $out/share/tribler
       cp -prvd Tribler $out/share/tribler/
 

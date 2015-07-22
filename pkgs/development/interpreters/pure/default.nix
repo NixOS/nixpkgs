@@ -4,17 +4,23 @@
 stdenv.mkDerivation rec {
   baseName="pure";
   project="pure-lang";
-  version="0.63";
+  version="0.64";
   name="${baseName}-${version}";
   extension="tar.gz";
 
   src = fetchurl {
     url="https://bitbucket.org/purelang/${project}/downloads/${name}.${extension}";
-    sha256="33acb2d560b21813f5e856973b493d9cfafba82bd6f539425ce07aa22f84ee29";
+    sha256="01vvix302gh5vsmnjf2g0rrif3hl1yik4izsx1wrvv1a6hlm5mgg";
   };
 
   buildInputs = [ bison flex makeWrapper ];
   propagatedBuildInputs = [ llvm gmp mpfr readline ];
+
+  postPatch = ''
+    for f in expr.cc matcher.cc printer.cc symtable.cc parserdefs.hh; do
+      sed -i '1i\#include <stddef.h>' $f
+    done
+  '';
 
   configureFlags = [ "--enable-release" ];
   doCheck = true;

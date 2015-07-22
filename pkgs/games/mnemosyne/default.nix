@@ -6,13 +6,13 @@
 , cherrypy
 , sqlite3
 }:
-let 
-  version = "2.2.1";
+let
+  version = "2.3.2";
 in buildPythonPackage rec {
   name = "mnemosyne-${version}";
   src = fetchurl {
     url    = "http://sourceforge.net/projects/mnemosyne-proj/files/mnemosyne/${name}/Mnemosyne-${version}.tar.gz";
-    sha256 = "7f5dd06a879b9ab059592355412182ee286e78e124aa25d588cacf9e4ab7c423";
+    sha256 = "0jkrw45i4v24p6xyq94z7rz5948h7f5dspgs5mcdaslnlp2accfp";
   };
   pythonPath = [
     pyqt4
@@ -51,7 +51,7 @@ in buildPythonPackage rec {
       uploaded to a central server for analysis. This data will be valuable to
       study the behaviour of our memory over a very long time period. The
       results will be used to improve the scheduling algorithms behind the
-      software even further.  
+      software even further.
     '';
   };
 }

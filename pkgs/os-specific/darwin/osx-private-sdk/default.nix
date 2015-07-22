@@ -1,34 +1,16 @@
-{ stdenv, fetchFromGitHub, python, osx_sdk }:
+{ stdenv, fetchzip }:
 
-let
-  sdkVersion = "10.9";
-in stdenv.mkDerivation {
-  name = "PrivateMacOSX${sdkVersion}.sdk";
-
-  src = fetchFromGitHub {
-    owner  = "copumpkin";
-    repo   = "OSXPrivateSDK";
-    rev    = "bde9cba13e6ae62a8e4e0f405008ea719526e7ad";
-    sha256 = "1vj3fxwp32irxjk987p7a223sm5bl5rrlajcvgy69k0wb0fp0krc";
-  };
-
-  buildInputs = [ python ];
-
-  configurePhase = "true";
-
-  buildPhase = ''
-    python PrivateSDK.py -i ${osx_sdk}/Developer/SDKs/MacOSX${sdkVersion}.sdk -o PrivateMacOSX${sdkVersion}.sdk
-  '';
-
-  installPhase = ''
-    mkdir -p $out/Developer/SDKs/
-    mv PrivateMacOSX${sdkVersion}.sdk $out/Developer/SDKs
-  '';
-
-  meta = with stdenv.lib; {
-    description = "A private Mac OS ${sdkVersion} SDK, suitable for building many of Apple's open source releases";
-    maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.unfree;
-  };
+let full = stdenv.lib.overrideDerivation (fetchzip {
+  url = "https://github.com/samdmarshall/OSXPrivateSDK/tarball/69bf3c7f7140ed6ab2b6684b427bd457209858fe";
+  name = "osx-private-sdk-10.9";
+  sha256 = "1agl4kyry6m7yz3sql5mrbvmd1xkmb4nbq976phcpk19inans1zm";
+}) (drv: {
+  postFetch = ''
+    unpackFile() {
+      tar xzf "$1"
+    }
+  '' + drv.postFetch;
+}); in {
+  outPath = "${full}/PrivateSDK10.9";
+  passthru.sdk10 = "${full}/PrivateSDK10.10";
 }

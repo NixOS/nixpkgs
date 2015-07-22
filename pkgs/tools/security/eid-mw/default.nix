@@ -1,31 +1,37 @@
-{ stdenv, fetchurl, gtk2, nssTools, pcsclite, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
+, pkgconfig }:
 
+let version = "4.1.2"; in
 stdenv.mkDerivation rec {
-  name = "${package}-${build}";
-  package = "eid-mw-4.0.6-1620";
-  build = "tcm406-258906";
+  name = "eid-mw-${version}";
 
-  src = fetchurl {
-    url = "http://eid.belgium.be/en/binaries/${package}.tar_${build}.gz";
-    sha256 = "1ecb30f9f318bdb61a8d774fe76b948eb5841d4de6fee106029ed78daa7efbf2";
+  src = fetchFromGitHub {
+    sha256 = "034ar1v2qamdyq71nklh1nvqbmw6ryz63jdwnnc873f639mf5w94";
+    rev = "v${version}";
+    repo = "eid-mw";
+    owner = "Fedict";
   };
 
-  buildInputs = [ gtk2 pcsclite pkgconfig ];
+  buildInputs = [ gtk2 pcsclite ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  unpackPhase = "tar -xzf ${src} --strip-components=1";
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   postInstall = ''
     install -D ${./eid-nssdb.in} $out/bin/eid-nssdb
     substituteInPlace $out/bin/eid-nssdb \
       --replace "modutil" "${nssTools}/bin/modutil"
-  '';
 
-  doCheck = true;
+    # Only provides a useless "about-eid-mw.desktop" that doesn't even work:
+    rm -rf $out/share/applications
+  '';
 
   meta = with stdenv.lib; {
     description = "Belgian electronic identity card (eID) middleware";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;
-    license = with licenses; lgpl3;
+    license = licenses.lgpl3;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
       Also requires a running pcscd service and compatible card reader.

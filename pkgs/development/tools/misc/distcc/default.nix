@@ -41,7 +41,7 @@ let
       #
       # extraConfig is meant to be sh lines exporting environment
       # variables like DISTCC_HOSTS, DISTCC_DIR, ...
-      links = extraConfig : (runCommand "distcc-links" { }
+      links = extraConfig: (runCommand "distcc-links" { passthru.gcc = gcc.cc; }
         ''
           mkdir -p $out/bin
           if [ -x "${gcc.cc}/bin/gcc" ]; then

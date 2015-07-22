@@ -1,11 +1,11 @@
 { fetchurl, stdenv, perl }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20150222";
+  name = "parallel-20150622";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "1302snh0aac8978842ci1rvjjjwki7xgj8bd4hq3f2hxp3zdspv7";
+    sha256 = "0j7gg88zk2r4jv3mvmrl4bhwcv9k8rxanygp6lssbx685ab9qfln";
   };
 
   patchPhase =
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Shell tool for executing jobs in parallel";
-
     longDescription =
       '' GNU Parallel is a shell tool for executing jobs in parallel.  A job
          is typically a single command or a small script that has to be run
@@ -40,11 +39,8 @@ stdenv.mkDerivation rec {
          it possible to use output from GNU Parallel as input for other
          programs.
       '';
-
     homepage = http://www.gnu.org/software/parallel/;
-
     license = licenses.gpl3Plus;
-
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];
   };

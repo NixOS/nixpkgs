@@ -13,6 +13,15 @@ stdenv.mkDerivation {
   buildInputs = [ coq.ocaml coq.camlp5 ];
   propagatedBuildInputs = [ coq ];
 
+  preConfigure = ''
+    patch Makefile <<EOF
+    105c105
+    < 	\$(COQC) \$<
+    ---
+    > 	\$(COQC) -R . Tlc \$<
+    EOF
+  '';
+
   installPhase = ''
     COQLIB=$out/lib/coq/${coq.coq-version}/
     mkdir -p $COQLIB/user-contrib/Tlc
@@ -21,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = http://www.chargueraud.org/softs/tlc/;
-    description = "TLC is a general purpose Coq library that provides an alternative to Coq's standard library";
+    description = "A general purpose Coq library that provides an alternative to Coq's standard library";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
   };

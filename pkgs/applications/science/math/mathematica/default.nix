@@ -26,7 +26,7 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-  version = "10.0.1";
+  version = "10.0.2";
 
   name = "mathematica-${version}";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       already part of the store. Find the file on your Mathematica CD
       and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
     '';
-    sha256 = "1514qy5kbyislv8j7ryw8021k26y0z6dndliwy8hfi7w7kgb3ynq";
+    sha256 = "1d2yaiaikzcacjamlw64g3xkk81m3pb4vz4an12cv8nb7kb20x9l";
   };
 
   buildInputs = [

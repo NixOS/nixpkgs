@@ -1,26 +1,28 @@
-{ stdenv, fetchurl, gettext }:
+{ stdenv, fetchurl, gettext, ncurses, openssl }:
 
 stdenv.mkDerivation rec {
   name = "httping-${version}";
 
-  version = "2.3.4";
+  version = "2.4";
 
   src = fetchurl {
-    url = "http://www.vanheusden.com/httping/httping-2.3.4.tgz";
-    sha256 = "1hkbhdxb0phrvrddx9kcfpqlzm41xv9jvy82nfkqa7bb0v5p2qd7";
+    url = "http://www.vanheusden.com/httping/${name}.tgz";
+    sha256 = "1110r3gpsj9xmybdw7w4zkhj3zmn5mnv2nq0ijbvrywbn019zdfs";
   };
 
-  buildInputs = [ gettext ];
+  buildInputs = [ ncurses openssl ];
+  nativeBuildInputs = [ gettext ];
 
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
 
-  meta = {
-    homepage = "http://www.vanheusden.com/httping";
-    description = "ping for HTTP requests";
-    maintainers = with stdenv.lib.maintainers; [ rickynils ];
-    platforms = with stdenv.lib.platforms; linux;
+  meta = with stdenv.lib; {
+    inherit version;
+    homepage = http://www.vanheusden.com/httping;
+    description = "ping with HTTP requests";
+    maintainers = with maintainers; [ nckx rickynils ];
+    platforms = with platforms; linux;
   };
 }

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ethtool-3.18";
+  name = "ethtool-4.0";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/ethtool/${name}.tar.xz";
-    sha256 = "1xj20fr44dk01hghyy5sq962sbiywc88ni3qqliv8bfxzmczwgw1";
+    sha256 = "1zzcwn6pk8qfasalqkxg8vrhacksfa50xsq4xifw7yfjqyn8fj4h";
   };
 
   meta = with stdenv.lib; {

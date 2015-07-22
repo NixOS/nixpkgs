@@ -1,7 +1,7 @@
 { stdenv, coreutils, fetchgit, qt4, dwarf_fortress, bash, makeWrapper }:
 
 let
-  version = "30.2.0pre";
+  version = "31.0.0";
   df = dwarf_fortress;
 in
 stdenv.mkDerivation rec {
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/splintermind/Dwarf-Therapist.git";
-    rev = "65bb15a29d616d788c20a3344058b7277e4fadba";
-    sha256 = "1q1n9sm0lgmn52m4aigb22cdfbh2s569y1mn5cmimgj600i6c2f2";
+    rev = "refs/tags/v${version}";
+    sha256 = "02d6k8c3vm401v04ln9q405njarx869jpfyf42lwskijrzjygk9x";
   };
 
   # Needed for hashing

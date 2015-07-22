@@ -1,18 +1,17 @@
-
-	{ stdenv, fetchgit
+{ stdenv, fetchurl
 , pkgconfig, autoreconfHook
 , readline, texinfo
 , gdbm, gmp, libffi }:
 
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
+  name = "librep-${version}";
+  version = "0.92.5";
 
-  name = "librep-git-2015-02-15";
-
-  src = fetchgit {
-    url = "https://github.com/SawfishWM/librep.git";
-    rev = "a1f2db721aa5055e90f6a76fde625946340ed8cf";
-    sha256 = "c91484d02b2408becc8961997c3d6404aefa8e1f8af4621a8b5f7622b1857fa6";
+  src = fetchurl {
+    url = "https://github.com/SawfishWM/librep/archive/${name}.tar.gz";
+    sha256 = "1ly425cgs0yi3lb5l84v3bacljw7m2nmzgky3acy1anp709iwi76";
   };
 
   buildInputs = [ pkgconfig autoreconfHook readline texinfo ];
@@ -25,15 +24,12 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "Lisp system for Sawfish";
+    description = "Fast, lightweight, and versatile Lisp environment";
     longDescription = ''
-      This is librep, a Lisp system for UNIX, needed by Sawfish window manager.
-      It contains a Lisp interpreter, byte-code compiler and virtual machine.
-      Applications may use the Lisp interpreter as an extension language,
-      or it may be used for stand-alone scripts.
-
-      The Lisp dialect was originally inspired by Emacs Lisp, but with the worst
-      features removed. It also borrows many ideas from Scheme.
+      librep is a Lisp system for UNIX, comprising an
+      interpreter, a byte-code compiler, and a virtual
+      machine. It can serve as an application extension language
+      but is also suitable for standalone scripts.
     '';
     homepage = http://sawfish.wikia.com;
     license = licenses.gpl2;

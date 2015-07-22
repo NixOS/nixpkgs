@@ -2,7 +2,7 @@
 , attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
 , libseccomp, libaio, libcap_ng, gnutls
 , makeWrapper
-, pulseSupport ? true, pulseaudio
+, pulseSupport ? true, libpulseaudio
 , sdlSupport ? true, SDL
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? true, spice, spice_protocol, usbredir
@@ -11,7 +11,7 @@
 
 with stdenv.lib;
 let
-  n = "qemu-2.2.0";
+  n = "qemu-2.2.1";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
+    sha256 = "181m2ddsg3adw8y5dmimsi8x678imn9f6i5p20zbhi7pdr61a5s6";
   };
 
   buildInputs =
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
       libcap_ng gnutls
     ]
-    ++ optionals pulseSupport [ pulseaudio ]
+    ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice_protocol spice usbredir ]
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric shlevy eelco ];
+    maintainers = with maintainers; [ viric eelco ];
     platforms = platforms.linux;
   };
 }

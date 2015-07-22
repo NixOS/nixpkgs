@@ -1,9 +1,10 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
+{ lib, stdenv, fetchurl, pkgconfig, gtk, gtk3, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu
+, enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -15,14 +16,14 @@
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
-let version = "36.0"; in
+let version = "39.0"; in
 
 stdenv.mkDerivation rec {
   name = "firefox-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
-    sha1 = "bcbfe0e4aa3236582c3b5c49619641224cf942df";
+    sha1 = "32785daee7ddb9da8d7509ef095258fc58fe838e";
   };
 
   buildInputs =
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
       gstreamer gst_plugins_base icu
-    ];
+    ]
+    ++ lib.optional enableGTK3 gtk3;
 
   configureFlags =
     [ "--enable-application=browser"
@@ -64,6 +66,7 @@ stdenv.mkDerivation rec {
       "--disable-updater"
       "--disable-pulseaudio"
     ]
+    ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
@@ -92,6 +95,11 @@ stdenv.mkDerivation rec {
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
+    '' + lib.optionalString enableGTK3
+    ''
+      wrapProgram "$out/bin/firefox" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
 
   meta = {

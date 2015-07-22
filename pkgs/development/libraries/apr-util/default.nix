@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
 , bdbSupport ? false, db
-, ldapSupport ? true, openldap
+, ldapSupport ? !stdenv.isCygwin, openldap
 , libiconv
 }:
 
@@ -9,9 +9,7 @@ assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
-let
-  optional = stdenv.lib.optional;
-in
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "apr-util-1.5.4";
@@ -23,10 +21,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     --with-apr=${apr} --with-expat=${expat}
-    --with-crypto
+    ${optionalString (!stdenv.isCygwin) "--with-crypto"}
     ${stdenv.lib.optionalString sslSupport "--with-openssl=${openssl}"}
     ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db}"}
-    ${stdenv.lib.optionalString ldapSupport "--with-ldap"}
+    ${stdenv.lib.optionalString ldapSupport "--with-ldap"}${
+      optionalString stdenv.isCygwin "--without-pgsql --without-sqlite2 --without-sqlite3 --without-freetds --without-berkeley-db --without-crypto"}
   '';
 
   propagatedBuildInputs = [ makeWrapper apr expat libiconv ]

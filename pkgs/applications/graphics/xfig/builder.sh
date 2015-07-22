@@ -5,8 +5,7 @@ makeFlags="XAWLIB=-lXaw3d BINDIR=$out/bin XAPPLOADDIR=$out/etc/X11/app-defaults 
 # We need chmod +wx on dirs, not just chmod +w
 dontMakeSourcesWritable=1
 postUnpack() {
-	find . -type d | xargs -n1 chmod +x
-	find . -type d | xargs -n1 chmod +x
+    find . -type d -exec chmod +x '{}' \;
 }
 
 preBuild() {

@@ -1,11 +1,18 @@
 { kde, kdelibs, libmsn, libotr, kdepimlibs, qimageblitz, libktorrent,
   jasper, libidn, mediastreamer, pkgconfig, libxslt, giflib,
   libgadu, boost, qca2, sqlite, jsoncpp,
-  ortp, srtp, libv4l }:
+  ortp, srtp, libv4l, fetchurl }:
 
 kde {
 
 # TODO: libmeanwhile, xmms, jsoncpp(not found), kleopatra(from kdepim but doesn't install headers?),
+
+  patches = [
+    (fetchurl {
+      url = "https://bugs.kde.org/attachment.cgi?id=91567";
+      sha256 = "0a44rjiqzn6v3sywm17d1741sygbvlfnbqadq7qbdj3amny014m1";
+    })
+  ];
 
   buildInputs = [
     kdelibs qca2 mediastreamer libgadu jsoncpp

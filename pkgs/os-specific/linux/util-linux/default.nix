@@ -1,16 +1,16 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.25.2";
+  name = "util-linux-2.26.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v2.25/${name}.tar.xz";
-    sha256 = "e0457f715b73f4a349e1acb08cb410bf0edc9a74a3f75c357070f31f70e33cd6";
+    url = "mirror://kernel/linux/utils/util-linux/v2.26/${name}.tar.xz";
+    sha256 = "0rlnzmiqdannzf81fbh41541lrck63v9zhskm6h4i2jj8ahvsa8f";
   };
 
-  patches = [ ./rtcwake-search-PATH-for-shutdown.patch
-              ./unshare-fix-map-root-user.patch
-            ];
+  patches = [
+    ./rtcwake-search-PATH-for-shutdown.patch
+  ];
 
   #FIXME: make it also work on non-nixos?
   postPatch = ''
@@ -33,9 +33,8 @@ stdenv.mkDerivation rec {
     --enable-write
     --enable-last
     --enable-mesg
-    --enable-ddate
     --disable-use-tty-group
-    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
+    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/bin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
@@ -53,5 +52,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
     description = "A set of system utilities for Linux";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

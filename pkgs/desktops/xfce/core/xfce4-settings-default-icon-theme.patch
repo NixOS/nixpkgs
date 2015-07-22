@@ -1,12 +1,11 @@
-diff -ru -x '*~' xfce4-settings-4.10.1/xfsettingsd/xsettings.xml xfce4-settings-4.10.1-new/xfsettingsd/xsettings.xml
---- xfce4-settings-4.10.1/xfsettingsd/xsettings.xml	2013-05-05 18:12:54.000000000 +0200
-+++ xfce4-settings-4.10.1-new/xfsettingsd/xsettings.xml	2013-08-15 15:57:48.538586286 +0200
+--- a/xfsettingsd/xsettings.xml       2015-02-28 22:32:02.681796319 +0100
++++ b/xfsettingsd/xsettings.xml       2015-02-28 22:32:27.881214735 +0100
 @@ -7,7 +7,7 @@
  <channel name="xsettings" version="1.0">
    <property name="Net" type="empty">
      <property name="ThemeName" type="empty"/>
 -    <property name="IconThemeName" type="empty"/>
 +    <property name="IconThemeName" type="string" value="Rodent"/>
-     <property name="DoubleClickTime" type="int" value="250"/>
+     <property name="DoubleClickTime" type="int" value="400"/>
      <property name="DoubleClickDistance" type="int" value="5"/>
      <property name="DndDragThreshold" type="int" value="8"/>

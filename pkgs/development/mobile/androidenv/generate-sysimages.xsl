@@ -15,6 +15,6 @@
       sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
     };
   };
-    </xsl:for-each>
+</xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>

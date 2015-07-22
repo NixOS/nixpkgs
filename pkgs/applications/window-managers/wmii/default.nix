@@ -30,6 +30,6 @@ args: with args; stdenv.mkDerivation {
   ";
   meta = { homepage = "www.suckless.org";
            description = "a really cool window manager which can by driven by keyboard only";
-           license="MIT";
+           license = stdenv.lib.licenses.mit;
          };
 }

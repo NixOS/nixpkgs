@@ -1,29 +1,24 @@
-{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false }:
+{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false
+, locale ? null }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.0";
+  name = "gawk-4.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "0hin2hswbbd6kd6i4zzvgciwpl5fba8d2s524z8y5qagyz3x010q";
+    sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
-  # Fix cross compile (stolen from Gentoo).
-  # Not needed for 4.1.1.
-  crossAttrs = {
-    preConfigure = ''
-      sed -i \
-        -e '/check-recursive all-recursive: check-for-shared-lib-support/d' \
-        extension/Makefile.in
-    '';
-  };
+  doCheck = !(
+       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+    || stdenv.isDarwin # XXX: `locale' segfaults
+  );
 
-  doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
+  buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
+    ++ stdenv.lib.optional readlineSupport readline
+    ++ stdenv.lib.optional stdenv.isDarwin locale;
 
-  buildInputs = [ libsigsegv ]
-    ++ stdenv.lib.optional readlineSupport readline;
-
-  configureFlags = [ "--with-libsigsegv-prefix=${libsigsegv}" ]
+  configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
     ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
       # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
     ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";

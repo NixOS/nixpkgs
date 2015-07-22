@@ -1,49 +1,39 @@
-x@{builderDefsPackage
-  , unzip
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
-
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    version="0.2";
-    baseName="tempora-lgc";
-    name="${baseName}-${version}";
-    url="http://www.thessalonica.org.ru/downloads/${baseName}.otf.zip";
-    hash="18n5ml2chc1bhrv43i64sz2dz1zc2dw087wcwn5l9ysqsmf0387i";
-  };
+{stdenv, fetchurl}:
+let
+  srcs = [
+    (fetchurl {
+      url = "www.ttfotf.com/download-font/tempora-lgc-unicode-bold-italic.otf";
+      sha256 = "1yfbi62j6gjmzglxz29m6x6lxqpxghcqjjh916qn8in74ba5v0gq";
+    })
+    (fetchurl {
+      url = "www.ttfotf.com/download-font/tempora-lgc-unicode-bold.otf";
+      sha256 = "0bfbl1h9h1022km2rg1zwl9lpabhnwdsvzdp0bwmf0wbm62550cp";
+    })
+    (fetchurl {
+      url = "www.ttfotf.com/download-font/tempora-lgc-unicode-italic.otf";
+      sha256 = "10m9j4bvr6c4zp691wxm4hvzhph2zlfsxk1nmbsb9vn1i6vfgz04";
+    })
+    (fetchurl {
+      url = "www.ttfotf.com/download-font/tempora-lgc-unicode.otf";
+      sha256 = "0iwa8wyydcpjss6d1jy4jibqxpvzph4vmaxwwmndpsqy1fz64y9i";
+    })
+  ];
+  buildInputs = [
+  ];
 in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
-  };
-
-  inherit (sourceInfo) name version;
+stdenv.mkDerivation {
+  name = "tempora-lgc";
   inherit buildInputs;
-
-  phaseNames = ["doUnpack" "installFonts"];
-
-  doUnpack = a.fullDepEntry ''
-    unzip ${src}
-  '' ["addInputs"];
-      
+  inherit srcs;
+  phases = "installPhase";
+  installPhase = ''
+    mkdir -p "$out/share/fonts/opentype/public"
+    cp ${toString srcs} "$out/share/fonts/opentype/public"
+  '';
   meta = {
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      all;
+    description = ''Tempora font'';
+    license = stdenv.lib.licenses.gpl2 ;
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.thessalonica.org.ru/ru/fonts-download.html";
-    };
-  };
-}) x
-
+}

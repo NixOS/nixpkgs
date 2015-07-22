@@ -1,0 +1,21 @@
+Author: n/a
+Description: Disables to skip on encrypted disks (e.g. DVD with CSS-Encryption).
+
+Index: dvdisaster/scsi-layer.c
+===================================================================
+--- dvdisaster.orig/scsi-layer.c	2012-04-08 21:51:10.995588783 +0900
++++ dvdisaster/scsi-layer.c	2012-04-08 21:51:29.259678075 +0900
+@@ -2693,11 +2693,12 @@
+        	 return NULL;
+       }
+    }
+-
++/*
+    if(dh->mainType == DVD && query_copyright(dh))
+    {  CloseDevice(dh);
+       Stop(_("This software does not support encrypted media.\n"));
+    }
++*/
+ 
+    /* Create the bitmap of simulated defects */
+ 

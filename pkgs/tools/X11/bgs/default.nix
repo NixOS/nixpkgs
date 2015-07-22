@@ -3,21 +3,21 @@
 stdenv.mkDerivation rec {
 
   name = "bgs-${version}";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchurl {
-    url = "https://github.com/Gottox/bgs/archive/${version}.tar.gz";
-    sha256 = "19xwslh74686qln0ylaql28z3ng45c7srrb3cxxvfp35lz7hjpf0";
+    url = "https://github.com/Gottox/bgs/archive/v${version}.tar.gz";
+    sha256 = "1kgm139daz4xrymx11whbmwzsnps9yn4g34a17s34ihi0raf70w8";
   };
 
   buildInputs = [ libX11 libXinerama imlib2 ];
 
   preConfigure = ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk'';
 
-  meta = {
-      description = "Extremely fast and small background setter for X";
-      license = stdenv.lib.licenses.mit;
-      hydraPlatforms = stdenv.lib.platforms.linux;
-      maintainers = with stdenv.lib.maintainers; [pSub];
+  meta = with stdenv.lib; {
+    description = "Extremely fast and small background setter for X";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ pSub ];
   };
 }

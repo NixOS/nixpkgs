@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   # needs fonts otherwise  don't know how to pass them
   configureFlags = "--disable-docs";
 
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
+
   buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 intltool ];
 
   nativeBuildInputs = [ pkgconfig ];

@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--enable-shared" "--enable-pthread" ]
+    # Without this fails due to not finding X11/Xlib.h
+    # Not sure why this isn't required on Linux
+    ++ ops stdenv.isDarwin [ "--without-tcl" "--without-tk" ]
     ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby";
 
   installFlags = stdenv.lib.optionalString docSupport "install-doc";

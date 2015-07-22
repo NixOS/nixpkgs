@@ -1,4 +1,4 @@
-{ stdenv, kde, kdelibs, soprano, shared_desktop_ontologies, exiv2, ffmpeg, taglib, popplerQt4
+{ stdenv, kde, kdelibs, soprano, shared_desktop_ontologies, exiv2, ffmpeg, taglib, poppler_qt4
 , pkgconfig, doxygen, ebook_tools
 }:
 
@@ -8,7 +8,7 @@ kde {
 
   buildInputs = [
     kdelibs soprano shared_desktop_ontologies taglib exiv2 ffmpeg
-    popplerQt4 ebook_tools
+    poppler_qt4 ebook_tools
   ];
 
   nativeBuildInputs = [ pkgconfig doxygen ];

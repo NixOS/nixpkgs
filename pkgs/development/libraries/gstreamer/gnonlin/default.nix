@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
       applications. It introduces the concept of a timeline.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ iyzsong ];
   };
 

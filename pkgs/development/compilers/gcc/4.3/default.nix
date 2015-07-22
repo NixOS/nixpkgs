@@ -171,6 +171,8 @@ stdenv.mkDerivation ({
     rm -Rf ghdl-*
   '';
 
+  passthru.isGNU = true;
+
   meta = {
     homepage = "http://ghdl.free.fr/";
     license = stdenv.lib.licenses.gpl2Plus;

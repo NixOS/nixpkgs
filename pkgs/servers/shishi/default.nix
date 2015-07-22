@@ -1,5 +1,25 @@
-{ fetchurl, stdenv, libtasn1, libgcrypt, gnutls }:
+{ stdenv, fetchurl
+, libgcrypt, libgpgerror, libtasn1
 
+# Optional Dependencies
+, pam ? null, libidn ? null, gnutls ? null
+}:
+
+let
+  mkFlag = trueStr: falseStr: cond: name: val:
+    if cond == null then null else
+      "--${if cond != false then trueStr else falseStr}${name}${if val != null && cond != false then "=${val}" else ""}";
+  mkEnable = mkFlag "enable-" "disable-";
+  mkWith = mkFlag "with-" "without-";
+  mkOther = mkFlag "" "" true;
+
+  shouldUsePkg = pkg: if pkg != null && stdenv.lib.any (x: x == stdenv.system) pkg.meta.platforms then pkg else null;
+
+  optPam = shouldUsePkg pam;
+  optLibidn = shouldUsePkg libidn;
+  optGnutls = shouldUsePkg gnutls;
+in
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "shishi-1.0.2";
 
@@ -8,30 +28,52 @@ stdenv.mkDerivation rec {
     sha256 = "032qf72cpjdfffq1yq54gz3ahgqf2ijca4vl31sfabmjzq9q370d";
   };
 
-  buildInputs = [ libtasn1 libgcrypt gnutls ] ;
+  # Fixes support for gcrypt 1.6+
+  patches = [ ./gcrypt-fix.patch ];
+
+  buildInputs = [ libgcrypt libgpgerror libtasn1 optPam optLibidn optGnutls ];
+
+  configureFlags = [
+    (mkOther                      "sysconfdir"    "/etc")
+    (mkOther                      "localstatedir" "/var")
+    (mkEnable true                "libgcrypt"     null)
+    (mkEnable (optPam != null)    "pam"           null)
+    (mkEnable true                "ipv6"          null)
+    (mkWith   (optLibidn != null) "stringprep"    null)
+    (mkEnable (optGnutls != null) "starttls"      null)
+    (mkEnable true                "des"           null)
+    (mkEnable true                "3des"          null)
+    (mkEnable true                "aes"           null)
+    (mkEnable true                "md"            null)
+    (mkEnable false               "null"          null)
+    (mkEnable true                "arcfour"       null)
+  ];
 
   NIX_CFLAGS_COMPILE
-    = stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
+    = optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
 
   doCheck = true;
 
+  installFlags = [ "sysconfdir=\${out}/etc" ];
+
+  # Fix *.la files
+  postInstall = ''
+    sed -i $out/lib/libshi{sa,shi}.la \
+  '' + optionalString (optLibidn != null) ''
+      -e 's,\(-lidn\),-L${optLibidn}/lib \1,' \
+  '' + optionalString (optGnutls != null) ''
+      -e 's,\(-lgnutls\),-L${optGnutls}/lib \1,' \
+  '' + ''
+      -e 's,\(-lgcrypt\),-L${libgcrypt}/lib \1,' \
+      -e 's,\(-lgpg-error\),-L${libgpgerror}/lib \1,' \
+      -e 's,\(-ltasn1\),-L${libtasn1}/lib \1,'
+  '';
+
   meta = {
-    description = "An implementation of the Kerberos 5 network security system";
     homepage    = http://www.gnu.org/software/shishi/;
-    license     = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ bjg lovek323 ];
-    platforms   = stdenv.lib.platforms.all;
-
-    longDescription =
-      '' GNU Shishi is an implementation of the Kerberos 5 network
-         authentication system, as specified in RFC 4120.  Shishi can be
-         used to authenticate users in distributed systems.
-
-         Shishi contains a library (`libshishi') that can be used by
-         application developers to add support for Kerberos 5.  Shishi
-         contains a command line utility (1shishi') that is used by
-         users to acquire and manage tickets (and more).  The server
-         side, a Key Distribution Center, is implemented by `shishid'.
-      '';
+    description = "An implementation of the Kerberos 5 network security system";
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ bjg lovek323 wkennington ];
+    platforms   = platforms.all;
   };
 }

@@ -18,18 +18,25 @@
 # them with our own.
 
 let
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
-    else if stdenv.system == "i686-linux" then "x86"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+  # NOTE: When updating, please also update in current stable, as older versions stop working
+  version = "3.6.9";
+  sha256 =
+    {
+      "x86_64-linux" = "1i260mi40siwcx9b2sj4zwszxmj1l88mpmyqncsfa72k02jz22j3";
+      "i686-linux" = "0qqc8qbfaighbhjq9y22ka6n6apl8b6cr80a9rkpk2qsk99k8h1z";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  interpreter = if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2"
-    else if stdenv.system == "i686-linux" then "ld-linux.so.2"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+  arch =
+    {
+      "x86_64-linux" = "x86_64";
+      "i686-linux" = "x86";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  version = "3.2.6";
-  sha256 = if stdenv.system == "x86_64-linux" then "1pih4dgqsxx9s8vjmn49qdrrgfkkw8wl3m68x7mdz6wqb4lj3sry"
-    else if stdenv.system == "i686-linux" then "0nnxj32xvhn312a16fhhxjf0brbivaw6m0s8d8qdn44qmg9fr4bz"
-    else throw "Dropbox client for: ${stdenv.system} not supported!";
+  interpreter =
+    {
+      "x86_64-linux" = "ld-linux-x86-64.so.2";
+      "i686-linux" = "ld-linux.so.2";
+    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
@@ -108,6 +115,9 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "${ldpath}"
+
+    mkdir -p "$out/share/icons"
+    ln -s "$out/${appdir}/images/hicolor" "$out/share/icons/hicolor"
   '';
 
   meta = {

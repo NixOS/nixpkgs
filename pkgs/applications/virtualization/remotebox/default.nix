@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "VirtualBox client with remote management";
     homepage = http://remotebox.knobgoblin.org.uk/;
-    license = with licenses; gpl2Plus;
+    license = licenses.gpl2Plus;
     longDescription = ''
       VirtualBox is traditionally considered to be a virtualization solution
       aimed at the desktop.  While it is certainly possible to install

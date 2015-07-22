@@ -17,10 +17,12 @@
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
-, pulseaudioSupport ? true, pulseaudio
-, jackSupport ? true, jack2
+, pulseaudioSupport ? true, libpulseaudio
+, jackSupport ? true, libjack2
 , gmeSupport ? true, game-music-emu
 , icuSupport ? true, icu
+, clientSupport ? false, mpd_clientlib
+, opusSupport ? true, libopus
 }:
 
 let
@@ -32,8 +34,8 @@ let
 in stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
   src = fetchurl {
-    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.gz";
-    sha256 = "1j3cv8b76bfj3ddpd29v3apb5025i87y5h5b4lrs2g5vqsgpvb6y";
+    url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
+    sha256 = "0vzj365s4j0pw5w37lfhx3dmpkdp85driravsvx8rlrw0lii91a7";
   };
 
   buildInputs = [ pkgconfig glib boost ]
@@ -58,10 +60,12 @@ in stdenv.mkDerivation rec {
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
     ++ opt zipSupport zziplib
-    ++ opt pulseaudioSupport pulseaudio
-    ++ opt jackSupport jack2
+    ++ opt pulseaudioSupport libpulseaudio
+    ++ opt jackSupport libjack2
     ++ opt gmeSupport game-music-emu
-    ++ opt icuSupport icu;
+    ++ opt icuSupport icu
+    ++ opt clientSupport mpd_clientlib
+    ++ opt opusSupport libopus;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -88,6 +92,8 @@ in stdenv.mkDerivation rec {
       (mkFlag stdenv.isDarwin "osx")
       (mkFlag icuSupport "icu")
       (mkFlag gmeSupport "gme")
+      (mkFlag clientSupport "libmpdclient")
+      (mkFlag opusSupport "opus")
       "--enable-debug"
     ]
     ++ opt stdenv.isLinux
@@ -101,7 +107,7 @@ in stdenv.mkDerivation rec {
     description = "A flexible, powerful daemon for playing music";
     homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ astsmtl fuuzetsu ];
+    maintainers = with maintainers; [ astsmtl fuuzetsu emery ];
     platforms   = platforms.unix;
 
     longDescription = ''

@@ -171,6 +171,9 @@ let
 
     SSLRandomSeed startup builtin
     SSLRandomSeed connect builtin
+
+    SSLProtocol All -SSLv2 -SSLv3
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!EXP
   '';
 
 
@@ -184,9 +187,6 @@ let
     <IfModule mod_mime_magic.c>
         MIMEMagicFile ${httpd}/conf/magic
     </IfModule>
-
-    AddEncoding x-compress Z
-    AddEncoding x-gzip gz tgz
   '';
 
 
@@ -228,6 +228,9 @@ let
     ${if cfg.sslServerCert != null then ''
       SSLCertificateFile ${cfg.sslServerCert}
       SSLCertificateKeyFile ${cfg.sslServerKey}
+      ${if cfg.sslServerChain != null then ''
+        SSLCertificateChainFile ${cfg.sslServerChain}
+      '' else ""}
     '' else ""}
 
     ${if cfg.enableSSL then ''

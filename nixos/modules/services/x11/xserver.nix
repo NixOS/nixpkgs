@@ -41,16 +41,24 @@ let
     };
   in imap mkHead cfg.xrandrHeads;
 
-  xrandrDeviceSection = flip concatMapStrings xrandrHeads (h: ''
-    Option "monitor-${h.output}" "${h.name}"
-  '');
+  xrandrDeviceSection = let
+    monitors = flip map xrandrHeads (h: ''
+      Option "monitor-${h.output}" "${h.name}"
+    '');
+    # First option is indented through the space in the config but any
+    # subsequent options aren't so we need to apply indentation to
+    # them here
+    monitorsIndented = if length monitors > 1
+      then singleton (head monitors) ++ map (m: "  " + m) (tail monitors)
+      else monitors;
+  in concatStrings monitorsIndented;
 
   # Here we chain every monitor from the left to right, so we have:
   # m4 right of m3 right of m2 right of m1   .----.----.----.----.
   # Which will end up in reverse ----------> | m1 | m2 | m3 | m4 |
   #                                          `----^----^----^----'
   xrandrMonitorSections = let
-    mkMonitor = previous: current: previous ++ singleton {
+    mkMonitor = previous: current: singleton {
       inherit (current) name;
       value = ''
         Section "Monitor"
@@ -60,8 +68,8 @@ let
           ''}
         EndSection
       '';
-    };
-    monitors = foldl mkMonitor [] xrandrHeads;
+    } ++ previous;
+    monitors = reverseList (foldl mkMonitor [] xrandrHeads);
   in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.stdenv.mkDerivation {
@@ -147,6 +155,19 @@ in
         '';
       };
 
+      inputClassSections = mkOption {
+        type = types.listOf types.lines;
+        default = [];
+        example = [ ''
+           Identifier      "Trackpoint Wheel Emulation"
+           MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
+           Option          "EmulateWheel"          "true
+           Option          "EmulateWheelButton"    "2"
+           Option          "Emulate3Buttons"       "false"
+          '' ];
+        description = "Content of additional InputClass sections of the X server configuration file.";
+      };
+
       modules = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -214,6 +235,14 @@ in
           remembers private keys for you so that you don't have to type in
           passphrases every time you make an SSH connection or sign/encrypt
           data.  Use <command>ssh-add</command> to add a key to the agent.
+        '';
+      };
+
+      startDbusSession = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to start a new DBus session when you log in with dbus-launch.
         '';
       };
 
@@ -448,6 +477,11 @@ in
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
+    # The default max inotify watches is 8192.
+    # Nowadays most apps require a good number of inotify watches,
+    # the value below is used by default on several other distros.
+    boot.kernel.sysctl."fs.inotify.max_user_watches" = mkDefault 524288;
+
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     systemd.services.display-manager =
@@ -522,6 +556,14 @@ in
           Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
+        # Additional "InputClass" sections
+        ${flip concatMapStrings cfg.inputClassSections (inputClassSection: ''
+        Section "InputClass"
+          ${inputClassSection}
+        EndSection
+        '')}
+
+
         Section "ServerLayout"
           Identifier "Layout[all]"
           ${cfg.serverLayoutSection}
@@ -593,4 +635,3 @@ in
   };
 
 }
-

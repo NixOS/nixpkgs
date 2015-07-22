@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig openssl autoconf automake libtool ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.opensc-project.org/opensc/wiki/pkcs11-helper;
-    license = [ "BSD" "GPLv2" ];
+    license = with licenses; [ "BSD" gpl2 ];
     description = "Library that simplifies the interaction with PKCS#11 providers";
   };
 }

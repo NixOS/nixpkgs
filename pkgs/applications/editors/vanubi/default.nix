@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig vala which autoconf automake
                   libtool glib gtk3 libwnck3 asciidoc
-                  gnome3.gtksourceview gnome3.vte python3Packages.pygments ];
+                  gnome3.gtksourceview gnome3.vte_290 python3Packages.pygments ];
 
   configureScript = "./autogen.sh";
 

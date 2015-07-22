@@ -10,11 +10,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "selenium-server-standalone-${version}";
-  version = "2.44.0";
+  version = "2.45.0";
 
   src = fetchurl {
-    url = "http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar";
-    sha256 = "1n53pyrxpmfh9lvr68d1l9rsiw7qr36farirpl3ivkyvnpm5iwm5";
+    url = "http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar";
+    sha256 = "0yvmmngqff3k5si1js8v87nx3whlsx7q4p78v6ybqhsbv6idywhi";
   };
 
   unpackPhase = "true";

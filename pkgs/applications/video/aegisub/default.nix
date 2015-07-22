@@ -5,47 +5,47 @@
 , libass, fftw, ffms
 , ffmpeg, pkgconfig, zlib # Undocumented (?) dependencies
 , icu, boost, intltool # New dependencies
-, spellChecking ? true, hunspell ? null
+, spellcheckSupport ? true, hunspell ? null
 , automationSupport ? true, lua ? null
 , openalSupport ? false, openal ? null
 , alsaSupport ? true, alsaLib ? null
-, pulseaudioSupport ? true, pulseaudio ? null
+, pulseaudioSupport ? true, libpulseaudio ? null
 , portaudioSupport ? false, portaudio ? null }:
 
-assert spellChecking -> (hunspell != null);
+assert spellcheckSupport -> (hunspell != null);
 assert automationSupport -> (lua != null);
 assert openalSupport -> (openal != null);
 assert alsaSupport -> (alsaLib != null);
-assert pulseaudioSupport -> (pulseaudio != null);
+assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "aegisub-${version}";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "http://ftp.aegisub.org/pub/releases/${name}.tar.xz";
-    sha256 = "1p7qdnxyyyrlpvxdrrp15b5967d7bzpjl3vdy0q66g4aabr2h6ln";
+    sha256 = "11b83qazc8h0iidyj1rprnnjdivj1lpphvpa08y53n42bfa36pn5";
   };
 
   buildInputs = with stdenv.lib;
   [ pkgconfig intltool libX11 wxGTK fontconfig freetype mesa
     libass fftw ffms ffmpeg zlib icu boost boost.lib libiconv
   ]
-    ++ optional spellChecking hunspell
+    ++ optional spellcheckSupport hunspell
     ++ optional automationSupport lua
     ++ optional openalSupport openal
     ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport pulseaudio
+    ++ optional pulseaudioSupport libpulseaudio
     ++ optional portaudioSupport portaudio
     ;
-
 
   enableParallelBuilding = true;
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "An advanced subtitle editor";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and

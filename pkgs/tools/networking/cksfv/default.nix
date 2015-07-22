@@ -11,5 +11,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://zakalwe.fi/~shd/foss/cksfv/;
     description = "A tool for verifying files against a SFV checksum file";
+    platforms = stdenv.lib.platforms.all;
   };
 }

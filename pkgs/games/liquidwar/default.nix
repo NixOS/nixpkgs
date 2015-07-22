@@ -15,7 +15,7 @@ rec {
 
   src = a.fetchurl {
     url = "mirror://gnu/liquidwar6/${name}.tar.gz";
-    sha256 = "1q58liqm5cgp494yjj6rfc2xj5b4gm8r8yvi46jzwqll353mabwl";
+    sha256 = "1976nnl83d8wspjhb5d5ivdvdxgb8lp34wp54jal60z4zad581fn";
   };
 
   inherit buildInputs;
@@ -36,7 +36,7 @@ rec {
     platforms = with a.lib.platforms; 
       linux;
   homepage = "http://www.gnu.org/software/liquidwar6/";
-  version = "0.4.3681";
+  version = "0.6.3902";
   updateWalker=true;
   };
 }

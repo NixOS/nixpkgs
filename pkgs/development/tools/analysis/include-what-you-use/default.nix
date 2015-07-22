@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, cmake, llvmPackages }:
+{ stdenv, fetchurl, cmake, llvmPackages_36 }:
 
-with llvmPackages;
-
-let version = "3.5"; in
-stdenv.mkDerivation rec {
+let
+  version = "0.4";
+  llvmPackages = llvmPackages_36;
+in stdenv.mkDerivation rec {
   name = "include-what-you-use-${version}";
 
   src = fetchurl {
-    sha256 = "1wfl78wkg8m2ssjnkb2rwcqy35nhc8fa63mk3sa60jrshpy7b15w";
+    sha256 = "19pwhgwvfr86n8ks099p9r02v7zh8d3qs7g7snzkhpdgq1azww85";
     url = "${meta.homepage}/downloads/${name}.src.tar.gz";
   };
 
@@ -16,22 +16,21 @@ stdenv.mkDerivation rec {
     longDescription = ''
       For every symbol (type, function variable, or macro) that you use in
       foo.cc, either foo.cc or foo.h should #include a .h file that exports the
-      declaration of that symbol. The include-what-you-use tool is a program
-      that can be built with the clang libraries in order to analyze #includes
-      of source files to find include-what-you-use violations, and suggest
-      fixes for them. The main goal of include-what-you-use is to remove
-      superfluous #includes. It does this both by figuring out what #includes
-      are not actually needed for this file (for both .cc and .h files), and
+      declaration of that symbol.  The main goal of include-what-you-use is to
+      remove superfluous #includes, both by figuring out what #includes are not
+      actually needed for this file (for both .cc and .h files), and by
       replacing #includes with forward-declares when possible.
     '';
-    homepage = http://include-what-you-use.com;
-    license = with licenses; bsd3;
+    homepage = http://include-what-you-use.org;
+    license = licenses.bsd3;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ clang cmake llvm ];
+  buildInputs = with llvmPackages; [ clang llvm ];
+  nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DLLVM_PATH=${llvm}" ];
+  cmakeFlags = "-DIWYU_LLVM_ROOT_PATH=${llvmPackages.clang-unwrapped}";
+
   enableParallelBuilding = true;
 }

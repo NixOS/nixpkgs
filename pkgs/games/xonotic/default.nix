@@ -8,11 +8,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xonotic-0.7.0";
+  name = "xonotic-0.8.0";
 
   src = fetchurl {
     url = "http://dl.xonotic.org/${name}.zip";
-    sha256 = "21a5fb5493c269cd3843789cb8598f952d4196e8bc71804b9bd5808b646542c6";
+    sha256 = "0w336750sq8nwqljlcj3znk4iaj3nvn6id144d7j72vsh84ci1qa";
   };
 
   buildInputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       aims to become the best possible open-source FPS of its kind.
     '';
     homepage = http://www.xonotic.org;
-    license = with stdenv.lib.licenses; gpl2Plus;
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];

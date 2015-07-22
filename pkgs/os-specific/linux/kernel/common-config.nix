@@ -1,3 +1,21 @@
+/*
+
+  WARNING/NOTE: whenever you want to add an option here you need to
+  either
+
+  * mark it as an optional one with `?` suffix,
+  * or make sure it works for all the versions in nixpkgs,
+  * or check for which kernel versions it will work (using kernel
+    changelog, google or whatever) and mark it with `versionOlder` or
+    `versionAtLeast`.
+
+  Then do test your change by building all the kernels (or at least
+  their configs) in nixpkgs or else you will guarantee lots and lots
+  of pain to users trying to switch to an older kernel because of some
+  hardware problems with a new one.
+
+*/
+
 { stdenv, version, kernelPlatform, extraConfig, features }:
 
 with stdenv.lib;
@@ -36,6 +54,7 @@ with stdenv.lib;
   STANDALONE n
 
   # Make /proc/config.gz available.
+  IKCONFIG y
   IKCONFIG_PROC y
 
   # Optimize with -O2, not -Os.
@@ -53,7 +72,6 @@ with stdenv.lib;
   NUMA? y
 
   # Disable some expensive (?) features.
-  KPROBES n
   PM_TRACE_RTC n
 
   # Enable various subsystems.
@@ -114,6 +132,8 @@ with stdenv.lib;
   FB_SIS_300 y
   FB_SIS_315 y
   FB_3DFX_ACCEL y
+  FB_VESA y
+  FRAMEBUFFER_CONSOLE y
   ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
     FB_GEODE y
   ''}
@@ -172,20 +192,27 @@ with stdenv.lib;
   XFS_RT? y # XFS Realtime subvolume support
   OCFS2_DEBUG_MASKLOG? n
   BTRFS_FS_POSIX_ACL y
-  UBIFS_FS_XATTR? y
   UBIFS_FS_ADVANCED_COMPR? y
-  ${optionalString (versionAtLeast version "3.6") ''
-    NFS_SWAP y
-  ''}
-  ${optionalString (versionAtLeast version "3.11") ''
-    NFS_V4_1 y  # NFSv4.1 client support
-    NFS_V4_2 y
+  ${optionalString (versionAtLeast version "4.0") ''
+    NFSD_PNFS y
   ''}
   NFSD_V2_ACL y
   NFSD_V3 y
   NFSD_V3_ACL y
   NFSD_V4 y
+  ${optionalString (versionAtLeast version "3.11") ''
+    NFSD_V4_SECURITY_LABEL y
+  ''}
   NFS_FSCACHE y
+  ${optionalString (versionAtLeast version "3.6") ''
+    NFS_SWAP y
+  ''}
+  NFS_V3_ACL y
+  ${optionalString (versionAtLeast version "3.11") ''
+    NFS_V4_1 y  # NFSv4.1 client support
+    NFS_V4_2 y
+    NFS_V4_SECURITY_LABEL y
+  ''}
   CIFS_XATTR y
   CIFS_POSIX y
   CIFS_FSCACHE y
@@ -195,11 +222,24 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.14") ''
     CEPH_FS_POSIX_ACL y
   ''}
+  ${optionalString (versionAtLeast version "3.13") ''
+    SQUASHFS_FILE_DIRECT y
+    SQUASHFS_DECOMP_MULTI_PERCPU y
+  ''}
+  SQUASHFS_XATTR y
+  SQUASHFS_ZLIB y
+  SQUASHFS_LZO y
+  SQUASHFS_XZ y
+  ${optionalString (versionAtLeast version "3.19") ''
+    SQUASHFS_LZ4 y
+  ''}
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  DEVKMEM? n # Disable /dev/kmem
+  ${optionalString (!(features.grsecurity or false)) ''
+    DEVKMEM n # Disable /dev/kmem
+  ''}
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
@@ -212,6 +252,16 @@ with stdenv.lib;
   # AppArmor support
   SECURITY_APPARMOR y
   DEFAULT_SECURITY_APPARMOR y
+
+  # Microcode loading support
+  MICROCODE y
+  MICROCODE_INTEL y
+  MICROCODE_AMD y
+  ${optionalString (versionAtLeast version "3.11") ''
+    MICROCODE_EARLY y
+    MICROCODE_INTEL_EARLY y
+    MICROCODE_AMD_EARLY y
+  ''}
 
   # Misc. options.
   8139TOO_8129 y
@@ -230,7 +280,9 @@ with stdenv.lib;
   BT_HCIUART_BCSP? y
   BT_HCIUART_H4? y # UART (H4) protocol support
   BT_HCIUART_LL? y
-  BT_RFCOMM_TTY? y # RFCOMM TTY support
+  ${optionalString (versionAtLeast version "3.4") ''
+    BT_RFCOMM_TTY? y # RFCOMM TTY support
+  ''}
   CRASH_DUMP? n
   ${optionalString (versionOlder version "3.1") ''
     DMAR? n # experimental
@@ -253,7 +305,9 @@ with stdenv.lib;
   LOGO n # not needed
   MEDIA_ATTACH y
   MEGARAID_NEWGEN y
-  MICROCODE_AMD y
+  ${optionalString (versionAtLeast version "3.15") ''
+    MLX4_EN_VXLAN y
+  ''}
   MODVERSIONS y
   MOUSE_PS2_ELANTECH y # Elantech PS/2 protocol extension
   MTRR_SANITIZER y
@@ -264,6 +318,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.6") ''
     RC_DEVICES? y # Enable IR devices
   ''}
+  ${optionalString (versionAtLeast version "3.10") ''
+    RT2800USB_RT55XX y
+  ''}
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
@@ -272,7 +329,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.15") ''
     UEVENT_HELPER n
   ''}
-  USB_DEBUG? n
+  ${optionalString (versionOlder version "3.15") ''
+    USB_DEBUG? n
+  ''}
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   X86_CHECK_BIOS_CORRUPTION y
@@ -303,9 +362,16 @@ with stdenv.lib;
 
   # Tracing.
   FTRACE y
+  KPROBES y
   FUNCTION_TRACER y
   FTRACE_SYSCALLS y
   SCHED_TRACER y
+  STACK_TRACER y
+  ${optionalString (versionAtLeast version "3.10") ''
+    UPROBE_EVENT y
+  ''}
+  FUNCTION_PROFILER y
+  RING_BUFFER_BENCHMARK n
 
   # Devtmpfs support.
   DEVTMPFS y
@@ -317,14 +383,33 @@ with stdenv.lib;
 
   # Virtualisation.
   PARAVIRT? y
-  ${if versionAtLeast version "3.10" then ''
-    HYPERVISOR_GUEST? y
-  '' else ''
-    PARAVIRT_GUEST? y
-  ''}
-  KVM_GUEST? y
+  ${optionalString (!(features.grsecurity or false))
+    (if versionAtLeast version "3.10" then ''
+      HYPERVISOR_GUEST y
+    '' else ''
+      PARAVIRT_GUEST? y
+    '')
+  }
+  KVM_APIC_ARCHITECTURE y
+  KVM_ASYNC_PF y
   ${optionalString (versionOlder version "3.7") ''
     KVM_CLOCK? y
+  ''}
+  ${optionalString (versionAtLeast version "4.0") ''
+    KVM_COMPAT? y
+  ''}
+  ${optionalString (versionAtLeast version "3.10") ''
+    KVM_DEVICE_ASSIGNMENT? y
+  ''}
+  ${optionalString (versionAtLeast version "4.0") ''
+    KVM_GENERIC_DIRTYLOG_READ_PROTECT y
+  ''}
+  ${optionalString (!features.grsecurity or true) ''
+    KVM_GUEST y
+  ''}
+  KVM_MMIO y
+  ${optionalString (versionAtLeast version "3.13") ''
+    KVM_VFIO y
   ''}
   XEN? y
   XEN_DOM0? y

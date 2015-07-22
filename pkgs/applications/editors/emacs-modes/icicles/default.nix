@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.emacswiki.org/emacs/Icicles";
-    description = "Enhance Emacs minibuffer input with cycling and powerful completion.";
+    description = "Enhance Emacs minibuffer input with cycling and powerful completion";
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ simons ];

@@ -11,6 +11,7 @@
 , postInstall ? null
 , documentation ? false
 , meta ? {}
+, ...
 }@args:
 
 let
@@ -253,7 +254,7 @@ let
       ruby
       bundler
       git
-    ];
+    ] ++ args.buildInputs or [];
 
     phases = [ "installPhase" "fixupPhase" ];
 

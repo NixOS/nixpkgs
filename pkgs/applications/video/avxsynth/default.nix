@@ -1,26 +1,42 @@
-{ stdenv, fetchurl, ffmpeg, autoconf, automake, libtool, pkgconfig, log4cpp
-, pango, cairo, python, libjpeg, ffms
-, enableQt ? true, qt4}:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, cairo, ffmpeg, ffms, libjpeg, log4cpp, pango
+, avxeditSupport ? false, qt4 ? null
+}:
+
+let
+  inherit (stdenv.lib) enableFeature optional;
+in
 
 stdenv.mkDerivation rec {
-  name = "avxsynth-4.0-e153e672bf";
+  name = "avxsynth-${version}";
+  version = "2015-04-07";
 
-  src = fetchurl {
-    url = https://github.com/avxsynth/avxsynth/tarball/e153e672bf;
-    name = "${name}.tar.gz";
-    sha256 = "16l2ld8k1nfsms6jd9d9r4l247xxbncsak66w87icr20yzyhs14s";
+  src = fetchFromGitHub {
+    owner = "avxsynth";
+    repo = "avxsynth";
+    rev = "80dcb7ec8d314bc158130c92803308aa8e5e9242";
+    sha256 = "0kckggvgv68b0qjdi7ms8vi97b46dl63n60qr96d2w67lf2nk87z";
   };
 
-  buildInputs = [ ffmpeg autoconf automake libtool pkgconfig log4cpp pango cairo python
-    libjpeg ffms ]
-    ++ stdenv.lib.optional enableQt qt4;
+  configureFlags = [
+    "--enable-autocrop"
+    "--enable-framecapture"
+    "--enable-subtitle"
+    "--enable-ffms2"
+    (enableFeature avxeditSupport "avxedit")
+    "--with-jpeg=${libjpeg}/lib"
+  ];
 
-  preConfigure = "autoreconf -vfi";
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  meta = {
-    homepage = https://github.com/avxsynth/avxsynth/wiki;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+  buildInputs = [ cairo ffmpeg ffms libjpeg log4cpp pango ]
+    ++ optional avxeditSupport qt4;
+
+  meta = with stdenv.lib; {
+    description = "A script system that allows advanced non-linear editing";
+    homepage = https://github.com/avxsynth/avxsynth;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ codyopel viric ];
+    platforms = platforms.linux;
   };
 }

@@ -2,7 +2,7 @@
 , git, xlibs, gnum4, libxcb, gperf }:
 
 stdenv.mkDerivation rec {
-  name = "xcb-util-cursor-HEAD";
+  name = "xcb-util-cursor-0.1.1-3-gf03cc27";
 
   src = fetchgit {
     url    = http://anongit.freedesktop.org/git/xcb/util-cursor.git;

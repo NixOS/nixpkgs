@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://gcc.gnu.org/;
     license = licenses.lgpl2;
     description = "Collection of subroutines used by various GNU programs";
-    maintainers = maintainers.abbradar;
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.unix;
   };
 }

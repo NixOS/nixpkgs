@@ -46,7 +46,8 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   };
 
-  gitAnnex = pkgs.haskellngPackages.git-annex;
+  inherit (pkgs.haskellPackages) git-annex;
+  gitAnnex = git-annex;
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
@@ -100,4 +101,8 @@ rec {
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
 
   git-extras = callPackage ./git-extras { };
+
+  git-cola = callPackage ./git-cola { };
+
+  git-imerge = callPackage ./git-imerge { };
 }

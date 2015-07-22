@@ -6,6 +6,7 @@
 , groff, docSupport ? false
 , libyaml, yamlSupport ? true
 , ruby_1_9_3, autoreconfHook, bison, useRailsExpress ? true
+, libiconv, libobjc
 }:
 
 let
@@ -24,10 +25,10 @@ stdenv.mkDerivation rec {
     owner  = "ruby";
     repo   = "ruby";
     rev    = "v1_9_3_${passthru.patchLevel}";
-    sha256 = "040x67snfjrql5j7blizpm9j58jhwvh00v8h1h59aq90h52lkj68";
+    sha256 = "1r9xzzxmci2ajb34qb4y1w424mz878zdgzxkfp9w60agldxnb36s";
   } else fetchurl {
     url = "http://cache.ruby-lang.org/pub/ruby/1.9/${name}.tar.bz2";
-    sha256 = "0k7g0ahicjnd4sij2pml1p1dcb95ms3k3j1k3169n02kzz9qwn7g";
+    sha256 = "07kpvv2z7g6shflls7fyfga8giifahwlnl30l49qdm9i6izf7idh";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
     # support is not enabled, so add readline to the build inputs if curses
     # support is disabled (if it's enabled, we already have it) and we're
     # running on darwin
-    ++ (op (!cursesSupport && stdenv.isDarwin) readline);
+    ++ (op (!cursesSupport && stdenv.isDarwin) readline)
+    ++ (ops stdenv.isDarwin [ libiconv libobjc ]);
 
   enableParallelBuilding = true;
 
@@ -52,24 +54,25 @@ stdenv.mkDerivation rec {
     ./ruby19-parallel-install.patch
     ./bitperfect-rdoc.patch
   ] ++ ops useRailsExpress [
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/01-fix-make-clean.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/02-railsbench-gc.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/04-fork-support-for-gc-logging.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/05-track-live-dataset-size.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/06-webrick_204_304_keep_alive_fix.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/07-export-a-few-more-symbols-for-ruby-prof.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/08-thread-variables.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/09-faster-loading.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/10-falcon-st-opt.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/11-falcon-sparse-array.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/12-falcon-array-queue.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/13-railsbench-gc-fixes.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/14-show-full-backtrace-on-stack-overflow.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/15-configurable-fiber-stack-sizes.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/16-backport-psych-20.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/17-fix-missing-c-return-event.patch"
-    "${patchSet}/patches/ruby/1.9.3/p547/railsexpress/18-fix-process-daemon-call.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/01-fix-make-clean.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/02-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/03-railsbench-gc.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/04-display-more-detailed-stack-trace.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/05-fork-support-for-gc-logging.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/06-track-live-dataset-size.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/07-webrick_204_304_keep_alive_fix.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/08-export-a-few-more-symbols-for-ruby-prof.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/09-thread-variables.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/10-faster-loading.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/11-falcon-st-opt.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/12-falcon-sparse-array.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/13-falcon-array-queue.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/14-railsbench-gc-fixes.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/15-show-full-backtrace-on-stack-overflow.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/16-configurable-fiber-stack-sizes.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/17-backport-psych-20.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/18-fix-missing-c-return-event.patch"
+    "${patchSet}/patches/ruby/1.9.3/p${passthru.patchLevel}/railsexpress/19-fix-process-daemon-call.patch"
   ];
 
   configureFlags = [ "--enable-shared" "--enable-pthread" ]
@@ -101,19 +104,19 @@ stdenv.mkDerivation rec {
     sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
   '';
 
-  meta = {
-    license     = "Ruby";
+  meta = with stdenv.lib; {
+    license     = licenses.ruby;
     homepage    = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    platforms   = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ lovek323 ];
+    platforms   = platforms.all;
   };
 
   passthru = rec {
     majorVersion = "1";
     minorVersion = "9";
     teenyVersion = "3";
-    patchLevel = "547";
+    patchLevel = "551";
     rubyEngine = "ruby";
     libPath = "lib/${rubyEngine}/${majorVersion}.${minorVersion}.${teenyVersion}";
     gemPath = "lib/${rubyEngine}/gems/${majorVersion}.${minorVersion}.${teenyVersion}";

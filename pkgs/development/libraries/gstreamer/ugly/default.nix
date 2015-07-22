@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python
 , gst-plugins-base, orc
 , a52dec, libcdio, libdvdread
-, lame, libmad, libmpeg2, x264
+, lame, libmad, libmpeg2, x264, libintlOrEmpty
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       like. The code might be widely known to present patent problems.
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ iyzsong ];
   };
 
@@ -32,5 +32,7 @@ stdenv.mkDerivation rec {
     gst-plugins-base orc
     a52dec libcdio libdvdread
     lame libmad libmpeg2 x264
-  ];
+  ] ++ libintlOrEmpty;
+
+  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 }

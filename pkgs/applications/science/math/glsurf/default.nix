@@ -1,4 +1,4 @@
-{ stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
+{ stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
@@ -10,11 +10,11 @@ stdenv.mkDerivation {
   src = fetchdarcs {
     url = "http://lama.univ-savoie.fr/~raffalli/GlSurf";
     rev = "3.3";
-    sha256 = ""; md5="";
+    sha256 = "0ljvvzz31j7l8rvsv63x1kj70nhw3al3k294m79hpmwjvym1mzfa";
   };
 
   buildInputs = [ ocaml findlib freeglut mesa
-  	          lablgl camlimages ocaml_mysql mlgmp mpfr gmp
+  	          lablgl camlimages ocaml_mysql mysql.lib mlgmp mpfr gmp
 		  libtiff libjpeg libpng giflib ];
 
   installPhase = ''

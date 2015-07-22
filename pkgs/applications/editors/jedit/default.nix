@@ -1,10 +1,10 @@
-{stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging}:
+{ stdenv, fetchurl, ant, jdk, commonsBsf, commonsLogging }:
 
 let
-  version = "5.1.0";
+  version = "5.2.0";
   bsh = fetchurl {
-    url = http://www.beanshell.org/bsh-2.0b4.jar;
-    sha256 = "1di7hj2yms1m3wa8k70jpw0wzfnrgibpqnvdk33ahfaqi03mqfci";
+    url = http://www.beanshell.org/bsh-2.0b5.jar;
+    sha256 = "0p2sxrpzd0vsk11zf3kb5h12yl1nq4yypb5mpjrm8ww0cfaijck2";
   };
   bcpg = fetchurl {
     url = http://central.maven.org/maven2/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar;
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   name = "jedit-${version}";
   src = fetchurl {
     url = "mirror://sourceforge/jedit/jedit${version}source.tar.bz2";
-    sha256 = "015rn4339mp4wrd901x56nr42wfcy429pg54n835c6n34b2jjdc6";
+    sha256 = "03wmbh90rl5lsc35d7jwcp9j5qyyzq1nccxf4fal8bmnx8n4si0x";
   };
 
   buildInputs = [ ant jdk commonsBsf commonsLogging ];
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     description = "Mature programmer's text editor (Java based)";
     homepage = http://www.jedit.org;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.vbgl ];
   };
 }

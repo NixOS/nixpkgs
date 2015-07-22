@@ -9,6 +9,7 @@ with lib;
     # Disable some features that are not useful in a container.
     sound.enable = mkDefault false;
     services.udisks2.enable = mkDefault false;
+    powerManagement.enable = mkDefault false;
 
     networking.useHostResolvConf = true;
 
@@ -17,8 +18,6 @@ with lib;
 
     # Shut up warnings about not having a boot loader.
     system.build.installBootLoader = "${pkgs.coreutils}/bin/true";
-
-    systemd.services.systemd-remount-fs.enable = false;
 
   };
 

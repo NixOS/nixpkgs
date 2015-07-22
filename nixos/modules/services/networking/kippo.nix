@@ -16,12 +16,12 @@ rec {
     services.kippo = {
       enable = mkOption {
         default = false;
-        type = types.uniq types.bool;
+        type = types.bool;
         description = ''Enable the kippo honeypot ssh server.'';
       };
       port = mkOption {
         default = 2222;
-        type = types.uniq types.int;
+        type = types.int;
         description = ''TCP port number for kippo to bind to.'';
       };
       hostname = mkOption {

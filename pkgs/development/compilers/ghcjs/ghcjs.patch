@@ -1,5 +1,5 @@
 diff --git a/src-bin/Boot.hs b/src-bin/Boot.hs
-index 988955b..a55f07b 100644
+index 3c68dcf..64f3cf7 100644
 --- a/src-bin/Boot.hs
 +++ b/src-bin/Boot.hs
 @@ -512,9 +512,7 @@ initPackageDB :: B ()
@@ -46,9 +46,11 @@ index 988955b..a55f07b 100644
        mapM_ patchPackage =<< allPackages
        preparePrimops
        buildGenPrim
-@@ -1086,7 +1077,9 @@ cabalInstallFlags parmakeGhcjs = do
+@@ -1085,8 +1076,11 @@ cabalInstallFlags parmakeGhcjs = do
+            , "--avoid-reinstalls"
             , "--builddir",      "dist"
             , "--with-compiler", ghcjs ^. pgmLocText
++           , "--with-gcc",      "@CC@"
             , "--with-hc-pkg",   ghcjsPkg ^. pgmLocText
 -           , "--prefix",        toTextI instDir
 +           , "--prefix",        "@PREFIX@"
@@ -58,15 +60,21 @@ index 988955b..a55f07b 100644
             , "--haddock-html"
  -- workaround for hoogle support being broken in haddock for GHC 7.10RC1
 diff --git a/src/Compiler/Info.hs b/src/Compiler/Info.hs
-index 33a401f..5d09c86 100644
+index 33a401f..79833c5 100644
 --- a/src/Compiler/Info.hs
 +++ b/src/Compiler/Info.hs
-@@ -49,7 +49,7 @@ compilerInfo nativeToo dflags = do
+@@ -48,13 +48,7 @@ compilerInfo nativeToo dflags = do
+
  -- | the directory to use if started without -B flag
  getDefaultTopDir :: IO FilePath
- getDefaultTopDir = do
+-getDefaultTopDir = do
 -  appdir <- getAppUserDataDirectory "ghcjs"
-+  let appdir = "@PREFIX@/share/ghcjs"
-   return (appdir </> subdir </> "ghcjs")
-       where
-         targetARCH = arch
+-  return (appdir </> subdir </> "ghcjs")
+-      where
+-        targetARCH = arch
+-        targetOS   = os
+-        subdir     = targetARCH ++ '-':targetOS ++ '-':getFullCompilerVersion
++getDefaultTopDir = return "@PREFIX@/lib/ghcjs-@VERSION@"
+
+ getDefaultLibDir :: IO FilePath
+ getDefaultLibDir = getDefaultTopDir

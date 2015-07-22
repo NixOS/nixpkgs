@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-appfinder";
-  ver_maj = "4.10";
-  ver_min = "1";
+  ver_maj = "4.12";
+  ver_min = "0";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0xzbi1vvy724s7vljf4153h7s7zqqwg51bn9wirx4d33lzzp9vk5";
+    sha256 = "0ry5hin8xhgnkmm9vs7jq8blk1cnbyr0s18nm1j6nsm7360abm1a";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

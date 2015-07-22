@@ -4,6 +4,9 @@ with lib;
 
 let
   cfg = config.services.btsync;
+
+  bittorrentSync = cfg.package;
+
   listenAddr = cfg.httpListenAddr + ":" + (toString cfg.httpListenPort);
 
   boolStr = x: if x then "true" else "false";
@@ -57,7 +60,7 @@ let
     ''
       {
         "device_name":     "${cfg.deviceName}",
-        "storage_path":    "/var/lib/btsync/",
+        "storage_path":    "${cfg.storagePath}",
         "listening_port":  ${toString cfg.listeningPort},
         "use_gui":         false,
 
@@ -195,6 +198,23 @@ in
           '';
       };
 
+      package = mkOption {
+        type = types.package;
+        example = literalExample "pkgs.bittorrentSync20";
+        description = ''
+          Branch of bittorrent sync to use.
+        '';
+      };
+
+      storagePath = mkOption {
+        type = types.path;
+        default = "/var/lib/btsync/";
+        example = "/var/lib/btsync/";
+        description = ''
+          Where to store the bittorrent sync files.
+        '';
+      };
+
       apiKey = mkOption {
         type = types.str;
         default = "";
@@ -256,9 +276,11 @@ in
         }
       ];
 
+    services.btsync.package = mkOptionDefault pkgs.bittorrentSync14;
+
     users.extraUsers.btsync = {
       description     = "Bittorrent Sync Service user";
-      home            = "/var/lib/btsync";
+      home            = cfg.storagePath;
       createHome      = true;
       uid             = config.ids.uids.btsync;
       group           = "btsync";
@@ -271,7 +293,7 @@ in
     systemd.services.btsync = with pkgs; {
       description = "Bittorrent Sync Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target" ];
+      after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
         UMask     = "0002";
@@ -283,7 +305,7 @@ in
 
     systemd.services."btsync@" = with pkgs; {
       description = "Bittorrent Sync Service for %i";
-      after       = [ "network.target" ];
+      after       = [ "network.target" "local-fs.target" ];
       serviceConfig = {
         Restart   = "on-abort";
         User      = "%i";
@@ -292,6 +314,6 @@ in
       };
     };
 
-    environment.systemPackages = [ pkgs.bittorrentSync ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

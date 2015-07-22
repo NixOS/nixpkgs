@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "miniupnpc-1.7";
+  name = "miniupnpc-1.9.20150430";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0dv3mz4yikngmlnrnmh747mlgbbpijryw03wcs8g4jwvprb29p8n";
+    sha256 = "0ivnvzla0l2pzmy8s0j8ss0fnpsii7z9scvyl4a13g9k911hgmvn";
+    name = "${name}.tar.gz";
   };
 
   installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
@@ -19,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://miniupnp.free.fr/;
     description = "A client that implements the UPnP Internet Gateway Device (IGD) specification";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

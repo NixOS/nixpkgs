@@ -13,7 +13,7 @@ let
   sourceInfo = rec {
     method="fetchgit";
     baseName="libfixposix"; 
-    url="git://gitorious.org/${baseName}/${baseName}";
+    url="https://github.com/sionescu/libfixposix";
     rev="30b75609d858588ea00b427015940351896867e9";
     version="git-${rev}";
     name="${baseName}-${version}";

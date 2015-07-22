@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , ladspaH, jack2, liblo, alsaLib, qt4, libX11, libsndfile, libSM
+  , ladspaH, libjack2, liblo, alsaLib, qt4, libX11, libsndfile, libSM
   , libsamplerate, libtool, autoconf, automake, xproto, libICE, pkgconfig
   , ...}:
 builderDefsPackage

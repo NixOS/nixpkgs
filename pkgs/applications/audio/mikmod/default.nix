@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, libmikmod, ncurses }:
+{ stdenv, fetchurl, libmikmod, ncurses, alsaLib }:
 
 stdenv.mkDerivation rec {
   name = "mikmod-3.2.6";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/mikmod/mikmod/3.2.6/mikmod-3.2.6.tar.gz";
+    url = "mirror://sourceforge/mikmod/${name}.tar.gz";
     sha256 = "0wr61raj10rpl64mk3x9g3rwys898fbzyg93c6mrz89nvc74wm04";
   };
 

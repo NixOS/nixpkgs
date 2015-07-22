@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, coreutils , unzip, which, pkgconfig , dbus
-, freetype, xdg_utils , libXext, glib, pango , cairo, libX11, libnotify
-, libxdg_basedir , libXScrnSaver, xproto, libXinerama , perl, gdk_pixbuf
+{ stdenv, fetchurl, coreutils, unzip, which, pkgconfig, dbus
+, freetype, xdg_utils, libXext, glib, pango, cairo, libX11, libnotify
+, libxdg_basedir, libXScrnSaver, xproto, libXinerama, perl, gdk_pixbuf
+, dbus_daemon, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -15,12 +16,17 @@ stdenv.mkDerivation rec {
   buildInputs =
   [ coreutils unzip which pkgconfig dbus freetype libnotify gdk_pixbuf
     xdg_utils libXext glib pango cairo libX11 libxdg_basedir
-    libXScrnSaver xproto libXinerama perl];
+    libXScrnSaver xproto libXinerama perl dbus_daemon makeWrapper ];
 
   buildPhase = ''
     export VERSION=${version};
     export PREFIX=$out;
     make dunst;
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/dunst" \
+      --prefix PATH : '${dbus_daemon}/bin'
   '';
 
   meta = {

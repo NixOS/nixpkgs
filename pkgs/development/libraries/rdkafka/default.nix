@@ -1,25 +1,27 @@
-{ stdenv, fetchgit, pkgs }:
+{ stdenv, fetchFromGitHub, zlib, perl }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.5";
-  name = "rdkafka";
+  name = "rdkafka-${version}";
+  version = "0.8.6";
 
-  # Maintenance repo for libtar (Arch Linux uses this)
-  src = fetchgit {
-    url = "https://github.com/edenhill/librdkafka.git";
-    rev = "refs/tags/${version}";
-    sha256 = "05a83hmpz1xmnln0wa7n11ijn08zxijdvpdswyymxbdlg69w31y1";
+  src = fetchFromGitHub {
+    owner = "edenhill";
+    repo = "librdkafka";
+    rev = version;
+    sha256 = "0iklvslz35dd0lz26ffrbfb20qirl9v5kcdmlcnnzc034hr2zmnv";
   };
 
-  patchPhase = "patchShebangs .";
-  
-  buildInputs = [ pkgs.zlib pkgs.perl ];
+  buildInputs = [ zlib perl ];
+
+  postPatch = ''
+    patchShebangs .
+  '';
 
   meta = with stdenv.lib; {
     description = "librdkafka - Apache Kafka C/C++ client library";
     homepage = "https://github.com/edenhill/librdkafka";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.boothead ];
+    maintainers = with maintainers; [ boothead wkennington ];
   };
 }

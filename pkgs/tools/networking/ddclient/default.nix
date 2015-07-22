@@ -10,7 +10,7 @@ buildPerlPackage {
 
   buildInputs = [ perlPackages.IOSocketSSL perlPackages.DigestSHA1 ];
 
-  patches = [ ./ddclient-foreground.patch ];
+  patches = [ ./ddclient-foreground.patch ./ddclient-line-buffer-stdout.patch ];
 
   # Use iproute2 instead of ifconfig
   preConfigure = '' 

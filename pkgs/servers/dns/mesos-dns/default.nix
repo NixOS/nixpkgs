@@ -11,8 +11,8 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "mesosphere";
     repo = "mesos-dns";
-    rev = "29940029d4b0c17142373c3280a8b452722b665b";
-    sha256 = "1fycywhdyymibsahjqx9vnigk3pdis3hnmfbxp74pmd9xqqlyv1n";
+    rev = "f37051fc5a723eb021797e7d57d92755c011a28e";
+    sha256 = "0djzd4zdpr4dcp56rqprncan6pcff6gy4wxi9572fmni2ldj4l15";
   };
 
   # Avoid including the benchmarking test helper in the output:

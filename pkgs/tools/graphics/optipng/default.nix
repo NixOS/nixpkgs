@@ -30,9 +30,9 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://optipng.sourceforge.net/;
     description = "A PNG optimizer";
-    license = "bsd";
+    license = licenses.zlib;
   };
 }

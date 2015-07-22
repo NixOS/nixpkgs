@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, python, pkgconfig, usbmuxd, glib, gnutls, libgcrypt,
-  libtasn1, libplist, readline }:
+{ stdenv, fetchurl, python, pkgconfig, usbmuxd, glib, libgcrypt,
+  libtasn1, libplist, readline, libusbmuxd, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "libimobiledevice-1.0.7";
+  name = "libimobiledevice-1.2.0";
 
   nativeBuildInputs = [ python libplist.swig pkgconfig ];
   buildInputs = [ readline ];
-  propagatedBuildInputs = [ usbmuxd glib gnutls libgcrypt libtasn1 libplist ];
+  propagatedBuildInputs = [ libusbmuxd glib libgcrypt libtasn1 libplist openssl ];
 
   patchPhase = ''sed -e 's@1\.3\.21@@' -i configure'';
   passthru.swig = libplist.swig;
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${name}.tar.bz2";
-    sha256 = "15jznqc52yfwkbw19hgv3r1qd4gcymakbfkyizmr6v4n0sn27n0f";
+    sha256 = "0dqhy4qwj30mw8pwckvjmgnj1qqrh6p8c6jknmhvylshhzh0ssvq";
   };
 
   meta = {

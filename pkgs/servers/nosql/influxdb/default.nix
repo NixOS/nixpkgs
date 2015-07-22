@@ -4,14 +4,14 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "influxdb-${version}";
-  version = "0.8.2";
+  version = "0.8.3";
   arch = if stdenv.system == "x86_64-linux" then "amd64" else "386";
 
   src = fetchurl {
     url = "http://s3.amazonaws.com/influxdb/${name}.${arch}.tar.gz";
     sha256 = if arch == "amd64" then
-        "0m27agjf9v76w5xms8w3z91k4hxw832nxqr030qzqxynwbxj0vg6" else
-        "0bdjpdq4yhfsmvl756xhkd1d8565d19g66l5rlymksc71ps8kbj6";
+        "e625902d403434c799f9d9ffc2592a3880f82d435423fde7174e5e4fe0f41148" else
+        "5abe9f432553e66c8aff86c4311eba16b874678d04b52bfe9e2019c01059ec78";
   };
 
   buildInputs = [ makeWrapper ];

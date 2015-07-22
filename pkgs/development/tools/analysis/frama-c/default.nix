@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name    = "frama-c-${version}";
-  version = "20140301";
-  slang   = "Neon";
+  version = "20150201";
+  slang   = "Sodium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${slang}-${version}.tar.gz";
-    sha256 = "0ca7ky7vs34did1j64v6d8gcp2irzw3rr5qgv47jhmidbipn1865";
+    sha256 = "0zask160vj8bxgc07dzxj5hqbdp6gz5g00j6za5397961imxhxaq";
   };
 
   why2 = fetchurl {
@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
 
 
   enableParallelBuilding = true;
-  configureFlags = [ "--disable-local-ocamlgraph" ];
 
   unpackPhase = ''
     tar xf $src
@@ -41,10 +40,6 @@ stdenv.mkDerivation rec {
     make install
   '';
 
-
-  # Taken from Debian Sid
-  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=746091
-  patches = ./0004-Port-to-OCamlgraph-1.8.5.patch;
 
   # Enter frama-c directory before patching
   prePatch = ''cd frama*'';

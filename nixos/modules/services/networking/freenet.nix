@@ -20,13 +20,13 @@ in
     services.freenet = {
 
       enable = mkOption {
-        type = types.uniq types.bool;
+        type = types.bool;
         default = false;
         description = "Enable the Freenet daemon";
       };
 
       nice = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
       };

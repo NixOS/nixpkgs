@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, ncurses, libdrm, libpciaccess }:
 
-let version = "v0.8-8-g2499679"; in
+let version = "2015-06-24"; in
 stdenv.mkDerivation {
   name = "radeontop-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "112zf6ms0qpmr9h3l4lg5wik5j206mgij0nypba5lnqzksxh2f88";
-    rev = "2499679fda60c3f6239886296fd2a74155f45f77";
+    sha256 = "06cn7lixxx94c1fki0plg9f4rdy459mgi9yl80m0k1a20jqykz2a";
+    rev = "976cae0be0ffb9142d5e63e435960c6b2bb0eb34";
     repo = "radeontop";
     owner = "clbr";
   };
 
-  buildInputs = [ pkgconfig gettext ncurses libdrm libpciaccess ];
+  buildInputs = [ ncurses libdrm libpciaccess ];
+  nativeBuildInputs = [ pkgconfig gettext ];
 
   enableParallelBuilding = true;
 

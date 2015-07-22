@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Password Safe is a password database utility";
+    description = "A password database utility";
 
     longDescription = ''
       Password Safe is a password database utility. Like many other

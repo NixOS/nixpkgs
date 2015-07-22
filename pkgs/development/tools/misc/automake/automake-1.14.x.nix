@@ -37,5 +37,7 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = [ stdenv.lib.maintainers.simons ];
+
+    platforms = stdenv.lib.platforms.all;
   };
 }

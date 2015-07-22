@@ -35,7 +35,6 @@ edk2 = stdenv.mkDerivation {
     description = "Intel EFI development kit";
     homepage = http://sourceforge.net/projects/edk2/;
     license = stdenv.lib.licenses.bsd2;
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = ["x86_64-linux" "i686-linux"];
   };
 
@@ -47,7 +46,7 @@ edk2 = stdenv.mkDerivation {
       configurePhase = ''
         mkdir -v Conf
         sed -e 's|Nt32Pkg/Nt32Pkg.dsc|${projectDscPath}|' -e \
-          's|MYTOOLS|GCC48|' -e 's|IA32|${targetArch}|' -e 's|DEBUG|RELEASE|'\
+          's|MYTOOLS|GCC49|' -e 's|IA32|${targetArch}|' -e 's|DEBUG|RELEASE|'\
           < ${edk2}/BaseTools/Conf/target.template > Conf/target.txt
         sed -e 's|DEFINE GCC48_IA32_PREFIX       = /usr/bin/|DEFINE GCC48_IA32_PREFIX       = ""|' \
           -e 's|DEFINE GCC48_X64_PREFIX        = /usr/bin/|DEFINE GCC48_X64_PREFIX        = ""|' \

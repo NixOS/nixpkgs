@@ -2,21 +2,21 @@
 , freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem
+, makeDesktopItem, qt5
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.0";
+  version = "3.4.0";
   name = "flightgear-${version}";
 
   src = fetchurl {
-    url = "http://ftp.linux.kiev.ua/pub/fgfs/Source/${name}.tar.bz2";
-    sha256 = "1sd6ic9rrcgrqvc6ywkasj2pnmmmdv1i2rlyac2a882rh8i1kgz4";
+    url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Source/${name}.tar.bz2";
+    sha256 = "102pg7mahgxzypvyp76x363qy3a4gxavr4hj16gsha07nl2msr5m";
   };
 
   datasrc = fetchurl {
     url = "http://ftp.igh.cnrs.fr/pub/flightgear/ftp/Shared/FlightGear-data-${version}.tar.bz2";
-    sha256 = "0mq5hkh8zgm129mg1ij3rrk7h2xs9ijxa7d7hipjlp6mcyhlk0q4";
+    sha256 = "12qjvycizg693g5jj5qyp1jiwwywg6p9fg6j3zjxhx6r4g1sgvwc";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freeglut freealut mesa libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xproto libXext xextproto libXi inputproto
-    libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr
+    libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qt5.base
   ];
 
   preConfigure = ''

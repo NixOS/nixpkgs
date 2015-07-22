@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip }:
+{ stdenv, fetchurl, pkgconfig, nspr, perl, python, zip, libffi, readline }:
 
 stdenv.mkDerivation rec {
   version = "17.0.0";
@@ -11,16 +11,26 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python zip ];
+  buildInputs = [ pkgconfig perl python zip libffi readline ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
+
+  postPatch = ''
+    # Fixes an issue with version detection under perl 5.22.x
+    sed -i 's/(defined\((@TEMPLATE_FILE)\))/\1/' config/milestone.pl
+  '';
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr}/include/nspr"
     export LIBXUL_DIST=$out
   '';
 
-  configureFlags = [ "--enable-threadsafe" "--with-system-nspr" ];
+  configureFlags = [
+    "--enable-threadsafe"
+    "--with-system-nspr"
+    "--with-system-ffi"
+    "--enable-readline"
+  ];
 
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
   preBuild = "touch -- {.,shell,jsapi-tests}/{-lpthread,-ldl}";
@@ -31,9 +41,15 @@ stdenv.mkDerivation rec {
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
 
+    # Test broken on ARM. Fedora disables it.
+    # https://lists.fedoraproject.org/pipermail/scm-commits/Week-of-Mon-20130617/1041155.html
+    echo -e '#!${stdenv.shell}\nexit 0' > config/find_vanilla_new_calls
+
     paxmark m shell/js17
     paxmark mr jsapi-tests/jsapi-tests
   '';
+
+  postInstall = ''rm "$out"/lib/*.a''; # halve the output size
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";

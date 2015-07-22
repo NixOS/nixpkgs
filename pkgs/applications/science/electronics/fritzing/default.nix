@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "0.9.0b";
-  name = "fritzing";
+  name = "fritzing-${version}";
 
   src = fetchurl {
     url = "http://fritzing.org/download/${version}/source-tarball/fritzing-${version}.source.tar_1.bz2";
@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
     tar xjf ${src}
   '';
 
-  buildInputs = [ qt5 boost ];
+  buildInputs = [ qt5.base qt5.svg boost ];
 
   configurePhase = ''
     cd fritzing-${version}.source
+    echo $PATH
     qmake PREFIX=$out phoenix.pro
   '';
 

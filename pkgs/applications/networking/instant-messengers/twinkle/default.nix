@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig autoreconfHook commoncpp2 openssl boost libsndfile
-      libxml2 libjpeg readline qt3 perl file
+      libxml2 libjpeg readline qt3 perl file ccrtp
       # optional ? :
       alsaLib speex
       libzrtpcpp xorg.libX11 xorg.libXaw xorg.libICE xorg.libXext

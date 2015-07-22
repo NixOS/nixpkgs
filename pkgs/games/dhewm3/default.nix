@@ -1,5 +1,5 @@
 {stdenv, fetchurl, unzip, cmake, SDL, mesa, zlib, libjpeg, libogg, libvorbis
-, openalSoft, curl }:
+, openal, curl }:
 
 stdenv.mkDerivation rec {
   hash = "92a41322f4aa8bd45395d8088721c9a2bf43c79b";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cd */neo
   '';
 
-  buildInputs = [ unzip cmake SDL mesa zlib libjpeg libogg libvorbis openalSoft
+  buildInputs = [ unzip cmake SDL mesa zlib libjpeg libogg libvorbis openal
     curl ];
 
   enableParallelBuilding = true;

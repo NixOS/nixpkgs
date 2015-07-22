@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? true }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert }:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -6,13 +6,15 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
-  version = "3.8.0";
+  version = "4.0.2.5";
   src = fetchurl {
     url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
-    sha256 = "0jraxsjn7ra6z02n4wjpbj21mxm2w50iqviqvfl0ajikbxahvf3i";
+    sha256 = "0lfndz7l3j593wilyczb5w6kvrdbf2fsd1i46qlszfjvx975hx5h";
   };
 
-  buildInputs = [bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib];
+  buildInputs =
+    [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib
+    ];
   propagatedBuildInputs = [glib];
 
   NIX_LDFLAGS = "-lgcc_s" ;
@@ -31,18 +33,23 @@ stdenv.mkDerivation rec {
   # Parallel building doesn't work, as shows http://hydra.nixos.org/build/2983601
   enableParallelBuilding = false;
 
+  # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
+  # because we control pkg-config
+  patches = [ ./pkgconfig-before-gac.patch ];
+
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
   preBuild = ''
     makeFlagsArray=(INSTALL=`type -tp install`)
     patchShebangs ./
+    substituteInPlace mcs/class/corlib/System/Environment.cs --replace /usr/share "$out/share"
   '' + stdenv.lib.optionalString withLLVM ''
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
-  #Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
-  #Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
-  #http://www.mono-project.com/Config_DllMap
+  # Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
+  # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
+  # http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | while read i; do
         sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
@@ -50,11 +57,19 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # Without this, any Mono application attempting to open an SSL connection will throw with 
+  # The authentication or decryption has failed.
+  # ---> Mono.Security.Protocol.Tls.TlsException: Invalid certificate received from server.
+  postInstall = ''
+    echo "Updating Mono key store"
+    $out/bin/cert-sync ${cacert}/etc/ssl/certs/ca-bundle.crt
+  '';
+
   meta = {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
     platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz ];
     license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
   };
 }

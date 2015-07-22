@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-    name = "abduco-0.3";
+    name = "abduco-0.4";
 
     meta = {
         homepage = http://brain-dump.org/projects/abduco;
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
     src = fetchurl {
         url = "http://www.brain-dump.org/projects/abduco/${name}.tar.gz";
-        sha256 = "1m4hafwvpnzz53n15757zrsx3xqv51gpnf3mnxqkzyr5mswz0jwk";
+        sha256 = "1fxwg2s5w183p0rwzsxizy9jdnilv5qqs647l3wl3khny6fp58xx";
     };
 
     configFile = optionalString (conf!=null) (writeText "config.def.h" conf);

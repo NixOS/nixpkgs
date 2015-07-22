@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, pkgconfig, intltool, pulseaudio, gtkmm3
+{ fetchurl, stdenv, pkgconfig, intltool, libpulseaudio, gtkmm3
 , libcanberra_gtk3, makeWrapper, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "pavucontrol-2.0";
+  name = "pavucontrol-3.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/pavucontrol/${name}.tar.xz";
-    sha256 = "02s775m1531sshwlbvfddk3pz8zjmwkv1sgzggn386ja3gc9vwi2";
+    sha256 = "14486c6lmmirkhscbfygz114f6yzf97h35n3h3pdr27w4mdfmlmk";
   };
 
   preFixup = ''
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
   '';
 
-  buildInputs = [ pulseaudio gtkmm3 libcanberra_gtk3 makeWrapper
-                  gnome3.gnome_icon_theme ];
+  buildInputs = [ libpulseaudio gtkmm3 libcanberra_gtk3 makeWrapper
+                  gnome3.defaultIconTheme ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ maintainers.abbradar ];
+    maintainers = with maintainers; [ abbradar jgeerds ];
     platforms = platforms.linux;
   };
 }

@@ -40,7 +40,7 @@
       "ohci1394" "sbp2"
 
       # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console"
+      "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
       # Keyboards
       "usbhid" "hid_apple" "hid_logitech_dj" "hid_lenovo_tpkbd" "hid_roccat"

@@ -1,4 +1,7 @@
-{stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu, cppunit}:
+{ stdenv, fetchurl, gperf, pkgconfig, librevenge, libxml2, boost, icu
+, cppunit, zlib
+}:
+
 let
   s = # Generated upstream information
   rec {
@@ -10,7 +13,7 @@ let
     sha256="1v48pd32r2pfysr3a3igc4ivcf6vvb26jq4pdkcnq75p70alp2bz";
   };
   buildInputs = [
-    gperf pkgconfig librevenge libxml2 boost icu cppunit
+    gperf pkgconfig librevenge libxml2 boost icu cppunit zlib
   ];
 in
 stdenv.mkDerivation {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python, glib, zlib, libpng }:
+{ stdenv, fetchurl, pkgconfig, python, glib, zlib, libpng, gnumake3 }:
 
 stdenv.mkDerivation rec {
   name = "lensfun-0.2.8";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = "sed -e 's@/usr/bin/python@${python}/bin/python@' -i configure";
 
-  buildInputs = [ pkgconfig glib zlib libpng ];
+  buildInputs = [ pkgconfig glib zlib libpng gnumake3 ];
 
   configureFlags = "-v";
 

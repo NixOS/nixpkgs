@@ -107,11 +107,13 @@ rec {
   # replaceChars ["<" ">"] ["&lt;" "&gt;"] "<foo>" returns "&lt;foo&gt;".
   replaceChars = del: new: s:
     let
+      substList = lib.zipLists del new;
       subst = c:
-        (lib.fold
-          (sub: res: if sub.fst == c then sub else res)
-          {fst = c; snd = c;} (lib.zipLists del new)
-        ).snd;
+        let found = lib.findFirst (sub: sub.fst == c) null substList; in
+        if found == null then
+          c
+        else
+          found.snd;
     in
       stringAsChars subst s;
 
@@ -208,4 +210,15 @@ rec {
   # standard GNU Autoconf scripts.
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
+  # Create a fixed width string with additional prefix to match required width
+  fixedWidthString = width: filler: str:
+    let
+      strw = lib.stringLength str;
+      reqWidth = width - (lib.stringLength filler);
+    in
+      assert strw <= width;
+      if strw == width then str else filler + fixedWidthString reqWidth filler str;
+
+  # Format a number adding leading zeroes up to fixed width
+  fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 }

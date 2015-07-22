@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, yubikey-personalization, qt, libyubikey }:
 
 stdenv.mkDerivation rec {
-  name = "yubikey-personalization-gui-3.1.18";
+  name = "yubikey-personalization-gui-3.1.20";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubikey-personalization-gui/Releases/${name}.tar.gz";
-    sha256 = "1jxi7izg9j4nd2jxra7pc18wp2b6a9i9zyix8yzvwkl4yjzpbqw3";
+    sha256 = "157ra39m4rv7ni28q9n7v3n102h89fn43kccvs91fmqbj02i3qvh";
   };
 
   buildInputs = [ pkgconfig yubikey-personalization qt libyubikey ];

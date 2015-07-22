@@ -3,15 +3,15 @@ let
   carolPubKey = "n932l3pjvmhtxxcdrqq2qpw5zc58f01vvjx01h4dtd1bb0nnu2h0.k";
   carolPassword = "678287829ce4c67bc8b227e56d94422ee1b85fa11618157b2f591de6c6322b52";
   carolIp4 = "192.168.0.9";
-  
+
   basicConfig =
     { config, pkgs, ... }:
     { services.cjdns.enable = true;
-    
+
       # Turning off DHCP isn't very realistic but makes
       # the sequence of address assignment less stochastic.
       networking.useDHCP = false;
-      
+
       networking.interfaces.eth1.prefixLength = 24;
       # CJDNS output is incompatible with the XML log.
       systemd.services.cjdns.serviceConfig.StandardOutput = "null";
@@ -22,8 +22,11 @@ let
 
 in
 
-import ./make-test.nix {
+import ./make-test.nix ({ pkgs, ...} : {
   name = "cjdns";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ emery ];
+  };
 
   nodes = rec
     { # Alice finds peers over over ETHInterface.
@@ -41,19 +44,18 @@ import ./make-test.nix {
       # Bob explicitly connects to Carol over UDPInterface.
       bob =
         { config, lib, nodes, ... }:
-        
+
         let carolIp4 = lib.mkForce nodes.carol.config.networking.interfaces.eth1; in
-        
+
           { imports = [ basicConfig ];
-          
+
           networking.interfaces.eth1.ipAddress = "192.168.0.2";
-          
+
           services.cjdns =
             { UDPInterface =
                 { bind = "0.0.0.0:1024";
                   connectTo."192.168.0.1:1024}" =
-                    { hostname = "carol.hype";
-                      password = carolPassword;
+                    { password = carolPassword;
                       publicKey = carolPubKey;
                     };
                 };
@@ -75,7 +77,7 @@ import ./make-test.nix {
           '';
 
           networking.interfaces.eth1.ipAddress = "192.168.0.1";
-                    
+
           services.cjdns =
             { authorizedPasswords = [ carolPassword ];
               ETHInterface.bind = "eth1";
@@ -106,13 +108,13 @@ import ./make-test.nix {
       my $carolIp6 = cjdnsIp $carol;
 
       # ping a few times each to let the routing table establish itself
-      
+
       $alice->succeed("ping6 -c 4 $carolIp6");
-      $bob->succeed("ping6 -c 4 carol.hype");
+      $bob->succeed("ping6 -c 4 $carolIp6");
 
       $carol->succeed("ping6 -c 4 $aliceIp6");
       $carol->succeed("ping6 -c 4 $bobIp6");
-      
+
       $alice->succeed("ping6 -c 4 $bobIp6");
       $bob->succeed("ping6 -c 4 $aliceIp6");
 
@@ -120,4 +122,4 @@ import ./make-test.nix {
 
       $bob->succeed("curl --fail -g http://[$aliceIp6]");
     '';
-}
+})

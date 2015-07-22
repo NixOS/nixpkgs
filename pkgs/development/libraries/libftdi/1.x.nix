@@ -9,11 +9,11 @@ assert pythonSupport -> python != null && swig != null;
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
-  name = "libftdi1-1.1";
+  name = "libftdi1-1.2";
   
   src = fetchurl {
     url = "http://www.intra2net.com/en/developer/libftdi/download/${name}.tar.bz2";
-    sha256 = "088yh8pxd6q53ssqndydcw1dkq51cjqyahc03lm6iip22cdazcf0";
+    sha256 = "1ml8hiahnqm4z0xzyjv8kyrkzvhw6l431c3jndg026cjh9f7ksm6";
   };
 
   buildInputs = with stdenv.lib; [ cmake pkgconfig confuse ]

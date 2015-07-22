@@ -3,17 +3,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.2.7";
   name = "slic3r-${version}";
 
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";
     rev = "refs/tags/${version}";
-    sha256 = "03xj2kv2d4j6nwmdd5cyghnvjyj4g7g9z0ynynbviyfiplmka2ph";
+    sha256 = "1bybbl8b0lfh9wkn1k9cxd11hlc5064wzh0fk6zdmc9vnnay399i";
   };
 
   buildInputs = with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp BoostGeometryUtils
+    EncodeLocale MathClipper ExtUtilsXSpp threads
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
     ExtUtilsMakeMaker OpenGL WxGLCanvas
@@ -69,6 +69,5 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor the-kenny ];
-    broken = true; # requires Perl 5.14
   };
 }

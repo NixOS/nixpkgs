@@ -1,31 +1,44 @@
-{ fetchurl, stdenv, libtool, ncurses }:
+{ fetchurl, stdenv, libtool, makeWrapper
+, coreutils, ctags, ncurses, pythonPackages, sqlite, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  name = "global-6.2.12";
+  name = "global-6.5";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "05jkhya1cs6yqhkf8nw5x56adkxxrqyga7sq7hx44dbf7alczwfa";
+    sha256 = "1af6lhwhrpdnigd3707fnk3dd6y53pbc4g0i75xjf0563bdi5zaa";
   };
 
-  buildInputs = [ libtool ncurses ];
+  nativeBuildInputs = [ libtool makeWrapper ];
 
-  configurePhase =
-    '' ./configure --prefix="$out" --disable-static ''
-    + ''--with-posix-sort=$(type -p sort) ''
-    + ''--with-ltdl-include=${libtool}/include --with-ltdl-lib=${libtool}/lib ''
-    + ''--with-ncurses=${ncurses}'';
+  buildInputs = [ ncurses ];
+
+  propagatedBuildInputs = [ pythonPackages.pygments ];
+
+  configureFlags = [
+    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-lib=${libtool}/lib"
+    "--with-ncurses=${ncurses}"
+    "--with-sqlite3=${sqlite}"
+    "--with-exuberant-ctags=${ctags}/bin/ctags"
+    "--with-posix-sort=${coreutils}/bin/sort"
+  ];
 
   doCheck = true;
 
   postInstall = ''
     mkdir -p "$out/share/emacs/site-lisp"
     cp -v *.el "$out/share/emacs/site-lisp"
+
+    wrapProgram $out/bin/gtags \
+      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
+    wrapProgram $out/bin/global \
+      --prefix PYTHONPATH : "$(toPythonPath ${pythonPackages.pygments})"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Source code tag system";
-
     longDescription = ''
       GNU GLOBAL is a source code tagging system that works the same way
       across diverse environments (Emacs, vi, less, Bash, web browser, etc).
@@ -36,12 +49,9 @@ stdenv.mkDerivation rec {
       independence of any editor.  It runs on a UNIX (POSIX) compatible
       operating system like GNU and BSD.
     '';
-
-    license = stdenv.lib.licenses.gpl3Plus;
-
     homepage = http://www.gnu.org/software/global/;
-
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.unix;
   };
 }

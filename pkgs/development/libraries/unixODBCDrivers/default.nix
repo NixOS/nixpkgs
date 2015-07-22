@@ -64,8 +64,8 @@ args : with args;
         md5 = "a484f590464fb823a8f821b2f1fd7fef";
       };
       configureFlags = "--disable-gui"
-         +  " --with-mysql-path=${mysql} --with-unixODBC=${unixODBC}";
-      buildInputs = [libtool zlib];
+         +  " --with-mysql-path=${mysql.lib} --with-unixODBC=${unixODBC}";
+      buildInputs = [ libtool zlib ];
       inherit mysql unixODBC;
     };
     ini =

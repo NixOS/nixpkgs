@@ -2,12 +2,12 @@
 , libXau, libXdmcp, xcbutil }:
 
 stdenv.mkDerivation {
-  name = "xss-lock-git";
+  name = "xss-lock-git-2014-03-02";
 
   src = fetchgit {
     url = https://bitbucket.org/raymonad/xss-lock.git;
-    rev = "d75612f1d1eea64b5c43806eea88059340a08ca9";
-    sha256 = "4d57bcfd45287b5b068f45eeceb9e43d975806a038a4c586b141da5d99b3e48b";
+    rev = "1e158fb20108058dbd62bd51d8e8c003c0a48717";
+    sha256 = "0jdpd6x1kk30qynv2n4zbjmsicvwjwcldr2224da0srzl7sgyjsg";
   };
 
   buildInputs = [ cmake pkgconfig docutils glib libpthreadstubs libXau

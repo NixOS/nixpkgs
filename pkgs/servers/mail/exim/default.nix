@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://exim.org/";
-    description = "Exim is a mail transfer agent (MTA) for hosts that are running Unix or Unix-like operating systems.";
+    homepage = http://exim.org/;
+    description = "A mail transfer agent (MTA)";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.tv ];

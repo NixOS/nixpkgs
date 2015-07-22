@@ -1,18 +1,19 @@
 { stdenv, fetchFromGitHub, autoreconfHook, boost, fuse, openssl, perl
 , pkgconfig, rlog }:
 
-let version = "1.8-rc1"; in
+let version = "1.8.1"; in
 stdenv.mkDerivation rec {
   name = "encfs-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "17a09pg7752nlbgm2nmrwhm90kv2z3dj20xs79qvvr6x7rdgzck8";
+    sha256 = "1cxihqwpnqbzy8qz0134199pwfnd7ikr2835p5p1yzqnl203wcdb";
     rev = "v${version}";
     repo = "encfs";
     owner = "vgough";
   };
 
-  buildInputs = [ autoreconfHook boost fuse openssl perl pkgconfig rlog ];
+  buildInputs = [ boost fuse openssl rlog ];
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig ];
 
   configureFlags = [
     "--with-boost-serialization=boost_wserialization"
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://vgough.github.io/encfs;
     description = "Provides an encrypted filesystem in user-space via FUSE";
-    license = with licenses; lgpl2;
+    license = licenses.lgpl2;
     maintainers = with maintainers; [ nckx ];
   };
 }

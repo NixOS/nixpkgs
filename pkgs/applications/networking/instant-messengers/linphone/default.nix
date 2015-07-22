@@ -1,33 +1,36 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, libosip, libexosip
-, speex, readline, mediastreamer, libsoup, udev, libnotify }:
+{ stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
+, zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, polarssl, libsoup, udev
+, ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip
+}:
 
 stdenv.mkDerivation rec {
-  name = "linphone-3.6.1";
+  name = "linphone-3.8.1";
 
   src = fetchurl {
-    url = "mirror://savannah/linphone/3.6.x/sources/${name}.tar.gz";
-    sha256 = "186jm4nd4ggb0j8cs8wnpm4sy9cr7chq0c6kx2yc6y4k7qi83fh5";
+    url = "mirror://savannah/linphone/3.8.x/sources/${name}.tar.gz";
+    sha256 = "19xwar8z5hyp1bap1s437ipv90gspmjwcq5zznds55d7r6gbqicd";
   };
 
-  buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex libsoup udev
-    libnotify ];
+  buildInputs = [
+    readline openldap cyrus_sasl libupnp zlib libxml2 gtk2 libnotify speex ffmpeg libX11
+    polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
+  ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  preConfigure = ''
-    rm -r mediastreamer2 oRTP
-    sed -i s,/bin/echo,echo, coreapi/Makefile*
-  '';
+  configureFlags = [
+    "--enable-ldap"
+    "--with-ffmpeg=${ffmpeg}"
+    "--with-polarssl=${polarssl}"
+    "--enable-lime"
+    "--enable-external-ortp"
+    "--enable-external-mediastreamer"
+  ];
 
-  configureFlags = "--enable-external-ortp --enable-external-mediastreamer";
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # I'm lazy to fix these for them
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.linphone.org/;
     description = "Open Source video SIP softphone";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.gnu;
-    broken = true;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

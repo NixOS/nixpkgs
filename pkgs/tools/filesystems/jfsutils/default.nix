@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IBM JFS utilities";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

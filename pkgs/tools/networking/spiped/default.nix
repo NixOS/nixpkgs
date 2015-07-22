@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "spiped-${version}";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url    = "http://www.tarsnap.com/spiped/${name}.tgz";
-    sha256 = "1y642mn4jz2h83vhkji0l42r2l1hbzbwwlplc3xmr66zjj54psqf";
+    sha256 = "1mxcbxifr3bnj6ga8lz88y4bhff016i6kjdzwbb3gzb2zcs4pxxj";
   };
 
   buildInputs = [ openssl ];

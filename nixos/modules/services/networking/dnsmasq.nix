@@ -28,6 +28,7 @@ in
     services.dnsmasq = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to run dnsmasq.
@@ -35,14 +36,16 @@ in
       };
 
       resolveLocalQueries = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
-          /etc/resolv.conf)
+          /etc/resolv.conf).
         '';
       };
 
       servers = mkOption {
+        type = types.listOf types.str;
         default = [];
         example = [ "8.8.8.8" "8.8.4.4" ];
         description = ''
@@ -51,11 +54,11 @@ in
       };
 
       extraConfig = mkOption {
-        type = types.string;
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration directives that should be added to
-          <literal>dnsmasq.conf</literal>
+          <literal>dnsmasq.conf</literal>.
         '';
       };
 
@@ -81,7 +84,7 @@ in
       };
 
     systemd.services.dnsmasq = {
-        description = "dnsmasq daemon";
+        description = "Dnsmasq Daemon";
         after = [ "network.target" "systemd-resolved.service" ];
         wantedBy = [ "multi-user.target" ];
         path = [ dnsmasq ];

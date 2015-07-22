@@ -1,4 +1,4 @@
-{stdenv, fetchgit, coq, ssreflect, mathcomp}:
+{ stdenv, fetchgit, coq, mathcomp }:
 
 stdenv.mkDerivation rec {
 
@@ -11,10 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "1cvjz0yyqihdx1hp1h9x5x14kv9qf3rjhgqq4f7rv8bxcv9p1gv3";
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 ssreflect mathcomp ];
-  propagatedBuildInputs = [ coq ];
+  propagatedBuildInputs = [ mathcomp ];
 
-  preConfigure = "cd theory";
+  preConfigure = ''
+    cd theory
+    patch ./Make <<EOF
+    0a1
+    > -R . CoqEAL
+    EOF
+  '';
 
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 

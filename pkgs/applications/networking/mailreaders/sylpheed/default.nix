@@ -1,8 +1,9 @@
-{ sslSupport ? true
-, gpgSupport ? false
-, stdenv, fetchurl, pkgconfig, gtk
+{ stdenv, fetchurl, pkgconfig, gtk
+
 , openssl ? null
 , gpgme ? null
+, sslSupport ? true
+, gpgSupport ? true
 }:
 
 with stdenv.lib;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libpcap, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
-  name = "tcpdump-4.6.2";
+  name = "tcpdump-4.7.4";
 
   src = fetchurl {
     url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "1f701387jyxq7rjhv4hiig3b3g55m4b4403rd0zncv1sx3cf8kjj";
+    sha256 = "1byr8w6grk08fsq0444jmcz9ar89lq9nf4mjq2cny0w9k8k21rbb";
   };
 
   buildInputs = [ libpcap ];
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     description = "Network sniffer";
     homepage = http://www.tcpdump.org/;
     license = "BSD-style";
-    maintainers = [ stdenv.lib.maintainers.mornfall ];
+    maintainers = with stdenv.lib.maintainers; [ mornfall jgeerds ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

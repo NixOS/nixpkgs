@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     cmakeFlags="$cmakeFlags -DOCE_INSTALL_PREFIX=$out"
   '';
 
+  # https://bugs.freedesktop.org/show_bug.cgi?id=83631
+  NIX_CFLAGS_COMPILE = "-DGLX_GLXEXT_LEGACY";
+
   enableParallelBuilding = true;
 
   meta = {

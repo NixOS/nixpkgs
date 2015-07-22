@@ -12,7 +12,7 @@ evalConfig() {
     local attr=$1
     shift;
     local script="import ./default.nix { modules = [ $@ ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace
 }
 
 reportFailure() {
@@ -57,13 +57,17 @@ checkConfigError() {
     fi
 }
 
+# Check boolean option.
 checkConfigOutput "false" config.enable ./declare-enable.nix
 checkConfigError 'The option .* defined in .* does not exist.' config.enable ./define-enable.nix
+
+# Check mkForce without submodules.
 set -- config.enable ./declare-enable.nix ./define-enable.nix
 checkConfigOutput "true" "$@"
 checkConfigOutput "false" "$@" ./define-force-enable.nix
 checkConfigOutput "false" "$@" ./define-enable-force.nix
 
+# Check mkForce with option and submodules.
 checkConfigError 'attribute .*foo.* .* not found' config.loaOfSub.foo.enable ./declare-loaOfSub-any-enable.nix
 checkConfigOutput 'false' config.loaOfSub.foo.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix
 set -- config.loaOfSub.foo.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo-enable.nix
@@ -73,6 +77,7 @@ checkConfigOutput 'false' "$@" ./define-loaOfSub-force-foo-enable.nix
 checkConfigOutput 'false' "$@" ./define-loaOfSub-foo-force-enable.nix
 checkConfigOutput 'false' "$@" ./define-loaOfSub-foo-enable-force.nix
 
+# Check overriding effect of mkForce on submodule definitions.
 checkConfigError 'attribute .*bar.* .* not found' config.loaOfSub.bar.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix
 checkConfigOutput 'false' config.loaOfSub.bar.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix ./define-loaOfSub-bar.nix
 set -- config.loaOfSub.bar.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix ./define-loaOfSub-bar-enable.nix
@@ -81,6 +86,34 @@ checkConfigError 'attribute .*bar.* .* not found' "$@" ./define-force-loaOfSub-f
 checkConfigError 'attribute .*bar.* .* not found' "$@" ./define-loaOfSub-force-foo-enable.nix
 checkConfigOutput 'true' "$@" ./define-loaOfSub-foo-force-enable.nix
 checkConfigOutput 'true' "$@" ./define-loaOfSub-foo-enable-force.nix
+
+# Check mkIf with submodules.
+checkConfigError 'attribute .*foo.* .* not found' config.loaOfSub.foo.enable ./declare-enable.nix ./declare-loaOfSub-any-enable.nix
+set -- config.loaOfSub.foo.enable ./declare-enable.nix ./declare-loaOfSub-any-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-if-loaOfSub-foo-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-loaOfSub-if-foo-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-loaOfSub-foo-if-enable.nix
+checkConfigOutput 'false' "$@" ./define-loaOfSub-foo-enable-if.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-if-loaOfSub-foo-enable.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-if-foo-enable.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-if-enable.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-enable-if.nix
+
+# Check _module.args.
+set -- config.enable ./declare-enable.nix ./define-enable-with-custom-arg.nix
+checkConfigError 'while evaluating the module argument .*custom.* in .*define-enable-with-custom-arg.nix.*:' "$@"
+checkConfigOutput "true" "$@" ./define-_module-args-custom.nix
+
+# Check that using _module.args on imports cause infinite recursions, with
+# the proper error context.
+set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
+checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
+checkConfigError 'infinite recursion encountered' "$@"
+
+# Check _module.check.
+set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-loaOfSub-foo.nix
+checkConfigError 'The option .* defined in .* does not exist.' "$@"
+checkConfigOutput "true" "$@" ./define-module-check.nix
 
 cat <<EOF
 ====== module tests ======

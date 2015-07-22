@@ -47,11 +47,19 @@
 # Execute after shell hook
 , postShellHook ? ""
 
+# Additional arguments to pass to the makeWrapper function, which wraps
+# generated binaries.
+, makeWrapperArgs ? []
+
 , ... } @ attrs:
 
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled then throw "${name} not supported for interpreter ${python.executable}" else python.stdenv.mkDerivation (attrs // {
+if disabled
+then throw "${name} not supported for interpreter ${python.executable}"
+else
+
+python.stdenv.mkDerivation (attrs // {
   inherit doCheck;
 
   name = namePrefix + name;
@@ -62,10 +70,10 @@ if disabled then throw "${name} not supported for interpreter ${python.executabl
   ] ++ buildInputs ++ pythonPath
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
-  # propagate python to active setup-hook in nix-shell
-  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python ];
+  # propagate python/setuptools to active setup-hook in nix-shell
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader python setuptools ];
 
-  pythonPath = [ setuptools ] ++ pythonPath;
+  pythonPath = pythonPath;
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure

@@ -1,23 +1,19 @@
-{ fetchurl, stdenv, dejagnu }:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libffi-3.0.13";
+  name = "libffi-3.2.1";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/libffi/${name}.tar.gz";
-    sha256 = "077ibkf84bvcd6rw1m6jb107br63i2pp301rkmsbgg6300adxp8x";
+    sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
-  patches = stdenv.lib.optional (stdenv.needsPax) ./libffi-3.0.13-emutramp_pax_proc.patch;
-
-  buildInputs = stdenv.lib.optional doCheck dejagnu;
+  patches = if stdenv.isCygwin then [ ./3.2.1-cygwin.patch ] else null;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
-  ] ++ stdenv.lib.optional (stdenv.needsPax) "--enable-pax_emutramp";
-
-  #doCheck = stdenv.isLinux; # until we solve dejagnu problems on darwin and expect on BSD
-  doCheck = false;
+    "--enable-pax_emutramp"
+  ];
 
   dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
 

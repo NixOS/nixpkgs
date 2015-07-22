@@ -1,7 +1,7 @@
 { stdenv, autoconf, automake, cppunit, fetchFromGitHub, pkgconfig, openssl, libsigcxx, libtool, zlib }:
 
 stdenv.mkDerivation {
-  name = "libtorrent-git";
+  name = "libtorrent-git-2014-08-20";
 
   src = fetchFromGitHub rec {
     owner = "rakshasa";

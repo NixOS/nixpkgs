@@ -2,10 +2,11 @@
 , libvorbis }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "1686-linux";
-
+let
+  archUrl = name: arch: "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/${name}_${arch}.deb";
+in
 stdenv.mkDerivation rec {
-  debversion = "beta_1.0.129.6633-r0";
-  version = "beta_1.0.129.6633-r0"; # friendly to nix-env version sorting algo
+  version = "beta_1.0.182.3607-r0"; # friendly to nix-env version sorting algo
   product = "google-musicmanager";
   name    = "${product}-${version}";
 
@@ -16,12 +17,12 @@ stdenv.mkDerivation rec {
 
   src = if stdenv.system == "x86_64-linux"
     then fetchurl {
-      url    = "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/google-musicmanager-${version}_amd64.deb";
-      sha256 = "1fq2p721mzv8nd4dq6i9xiqvvqd5ak3v142vsxchg6yn14a9kbvr";
+      url    = archUrl name "amd64";
+      sha256 = "141x986haxg3r72ggh8prz0qg298jkad1ys8sdvsac92p4adcqx4";
     }
     else fetchurl {
-        url    = "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/google-musicmanager-${version}_i386.deb";
-        sha256 = "7914e3e6e2adb2e952ebaf383db5e04727c29cfa83401007f29977f6c5ff6873";
+        url    = archUrl name "i386";
+        sha256 = "076iaa7pxhj8b1hlg5ah9jfm4qgzgjc9ivvg2l18wp045gnycv1l";
     };
 
   unpackPhase = ''

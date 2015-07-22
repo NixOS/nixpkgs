@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "rakudo-star-${version}";
-  version = "2014.04";
+  version = "2015.03";
 
   src = fetchurl {
     url    = "http://rakudo.org/downloads/star/${name}.tar.gz";
-    sha256 = "0spdrxc2kiidpgni1vl71brgs4d76h8029w5jxvah3yvjcqixz7l";
+    sha256 = "1fwvmjyc1bv3kq7p25xyl4sqinp19mbrspmf0h7rvxlwnfcrr5mv";
   };
 
   buildInputs = [ icu zlib gmp readline jdk perl ];
   configureScript = "perl ./Configure.pl";
   configureFlags =
-    [ "--gen-moar"
+    [ "--backends=moar,jvm"
+      "--gen-moar"
       "--gen-nqp"
-      "--gen-parrot"
     ];
 
   meta = {

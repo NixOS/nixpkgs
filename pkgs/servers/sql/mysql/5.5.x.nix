@@ -4,12 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.40";
+  version = "5.5.44";
 
   src = fetchurl {
-    url = "http://cdn.mysql.com/archives/mysql-5.5/${name}.tar.gz";
-    sha256 = "0q29nzmmxm78b89qjfzgm93r0glaam3xw3zfx1k8ihii39v22dsd";
+    url = "http://mysql.mirrors.pair.com/Downloads/MySQL-5.5/${name}.tar.gz";
+    sha256 = "1pp5ngm4ibnp8xnn9haz1db0favd1i7cxdgl5z4677mkgljmpw45";
   };
+
+  patches = if stdenv.isCygwin then [
+    ./5.5.17-cygwin.patch
+    ./5.5.17-export-symbols.patch
+  ] else null;
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
@@ -27,15 +32,19 @@ stdenv.mkDerivation rec {
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_ZLIB=yes"
     "-DHAVE_IPV6=yes"
-    "-DINSTALL_DOCDIR=share/doc/mysql"
-    "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
-    "-DINSTALL_INCLUDEDIR=include/mysql"
-    "-DINSTALL_INFODIR=share/doc/mysql"
+    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+    "-DMYSQL_DATADIR=/var/lib/mysql"
+    "-DINSTALL_SYSCONFDIR=etc/mysql"
+    "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
-    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
-    "-DINSTALL_MYSQLPLUGINDIR=lib/mysql/plugin"
+    "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
     "-DINSTALL_SCRIPTDIR=bin"
+    "-DINSTALL_INCLUDEDIR=include/mysql"
+    "-DINSTALL_DOCREADMEDIR=share/mysql"
     "-DINSTALL_SUPPORTFILESDIR=share/mysql"
+    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+    "-DINSTALL_DOCDIR=share/mysql/docs"
+    "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";

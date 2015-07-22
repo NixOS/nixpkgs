@@ -8,10 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0zcwjav1qgr7ikmvfmy7g3nc7s1kj4j4939d18mpyha9mwy4mv6r";
   };
 
-  buildInputs = [ pkgconfig libmnl ];
+  buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Userspace library providing an API to the in-kernel connection tracking state table";
     longDescription = ''
       libnetfilter_conntrack is a userspace library providing a programming interface (API) to the
@@ -20,9 +21,9 @@ stdenv.mkDerivation rec {
       by conntrack-tools among many other applications
     '';
     homepage = http://netfilter.org/projects/libnetfilter_conntrack/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = stdenv.lib.maintainers.nckx;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

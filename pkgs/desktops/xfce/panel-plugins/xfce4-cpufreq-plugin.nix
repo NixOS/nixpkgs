@@ -3,12 +3,12 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   p_name  = "xfce4-cpufreq-plugin";
-  ver_maj = "1.0";
-  ver_min = "0";
+  ver_maj = "1.1";
+  ver_min = "1";
 
   src = fetchurl {
     url = "mirror://xfce/src/panel-plugins/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0q2lj8a25iq9w3dynh6qvsmh19y1v7i82g46yza6gvw7fjcrmcz1";
+    sha256 = "1ryaynkxpqpp92pj18bdds869sf560ir1k3bgl8gqnz60z04ak27";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 

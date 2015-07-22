@@ -1,12 +1,12 @@
 { stdenv, fetchgit, unzip, firefox, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "conkeror-1.0pre-20140616";
+  name = "conkeror-1.0pre-20150319";
 
   src = fetchgit {
     url = git://repo.or.cz/conkeror.git;
-    rev = "98e89c7e5ff3a1069a0984338da01273cdb189a2";
-    sha256 = "284ba966efebfa0aaa768abc1a4f901e2ecf5db9d0391d904a49118b0b94fcd7";
+    rev = "6450632b3f0c315f79e7a9856658083fe8fc9c29";
+    sha256 = "18cqz1n2n6aimmgd69mdrgmkjf4207k7yz11wihka6b5z1hfiv64";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       --add-flags "-app $out/libexec/conkeror/application.ini"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A keyboard-oriented, customizable, extensible web browser";
     longDescription = ''
       Conkeror is a keyboard-oriented, highly-customizable, highly-extensible
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
       self-documenting, featuring a powerful interactive help system.
     '';
     homepage = http://conkeror.org/;
-    license = [ "MPLv1.1" "GPLv2" "LGPLv2.1" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl chaoflow ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = with licenses; [ mpl11 gpl2 lgpl21 ];
+    maintainers = with maintainers; [ astsmtl chaoflow ];
+    platforms = with platforms; linux;
   };
 }

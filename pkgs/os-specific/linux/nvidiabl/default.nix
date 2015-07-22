@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=$(out)"
+    "KVER=${kernel.modDirVersion}"
   ];
 
   meta = {

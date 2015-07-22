@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     cur_rpath=$(patchelf --print-rpath $p)
     patchelf --set-rpath $cur_rpath:${mesa}/lib $p
   '';
-  meta = {
+  meta = with stdenv.lib; {
     description = "A multiplayer tactical FPS on top of Quake 3 engine";
     longDescription = ''
       Urban Terror is a free multiplayer first person shooter developed by
@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
       realism". This results in a very unique, enjoyable and addictive game.
     '';
     homepage = http://www.urbanterror.net;
-    license = [ "unfree-redistributable" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ astsmtl ];
+    platforms = platforms.linux;
     hydraPlatforms = [];
   };
 }

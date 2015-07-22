@@ -82,7 +82,7 @@ in
     systemd.services.prlshprint = {
       description = "Parallels Shared Printer Tool";
       wantedBy = [ "multi-user.target" ];
-      bindsTo = [ "cupsd.service" ];
+      bindsTo = [ "cups.service" ];
       serviceConfig = {
         Type = "forking";
         ExecStart = "${prl-tools}/bin/prlshprint";

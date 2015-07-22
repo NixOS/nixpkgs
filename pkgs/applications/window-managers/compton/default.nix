@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig dbus libconfig libdrm libxml2 mesa pcre
     libXcomposite libXfixes libXdamage libXinerama libXrandr libXrender libXext ];
-  buildFlagsArray = ["CFLAGS=-O3 -fomit-frame-pointer"];
   installFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {

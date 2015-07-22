@@ -1,12 +1,20 @@
-diff --git a/blink/resources.py b/blink/resources.py
-index 524d9e5..c271887 100644
---- a/blink/resources.py
-+++ b/blink/resources.py
-@@ -64,6 +64,7 @@ class Resources(object):
-             if script == '':
-                 application_directory = os.path.realpath(script) # executed in interactive interpreter
+diff -rupN a/blink/resources.py b/blink/resources.py
+--- a/blink/resources.py	2015-03-17 03:24:06.000000000 -0600
++++ b/blink/resources.py	2015-04-07 22:52:06.101096413 -0600
+@@ -60,14 +60,7 @@ class Resources(object):
+     @classproperty
+     def directory(cls):
+         if cls._cached_directory is None:
+-            if sys.path[0] == '':
+-                application_directory = os.path.realpath('') # executed in interactive interpreter
+-            else:
+-                binary_directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+-                if os.path.basename(binary_directory) == 'bin':
+-                    application_directory = os.path.dirname(binary_directory)
+-                else:
+-                    application_directory = binary_directory
++            application_directory = '@out@'
+             if os.path.exists(os.path.join(application_directory, 'resources', 'blink.ui')):
+                 cls._cached_directory = os.path.join(application_directory, 'resources').decode(sys.getfilesystemencoding())
              else:
-+                script = os.path.join(sys.path[0], script)
-                 binary_directory = os.path.dirname(os.path.realpath(script))
-                 if os.path.basename(binary_directory) == 'bin':
-                     application_directory = os.path.dirname(binary_directory)
+Binary files a/blink/.resources.py.swp and b/blink/.resources.py.swp differ

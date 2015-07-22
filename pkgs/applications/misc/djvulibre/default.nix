@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library and viewer for the DJVU file format for scanned images";
     homepage = http://djvu.sourceforge.net;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ urkud ];
+    platforms = platforms.all;
   };
 }

@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
     chmod +x $out/sbin/bootchartd
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.bootchart.org/;
     description = "Performance analysis and visualization of the GNU/Linux boot process";
-    license="GPLv2+";
+    license = licenses.gpl2Plus;
   };
 
 }

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, zlib, openssl}:
 stdenv.mkDerivation rec {
-  version = "0.4.11";
+  version = "0.4.13";
   name = "libre-${version}";
   src=fetchurl {
     url = "http://www.creytiv.com/pub/re-${version}.tar.gz";
-    sha256 = "10jqra8b1nzy1q440ax72fxymxasgjyvpy0x4k67l77wy4p1jr42";
+    sha256 = "0496nfi7vi6ivnyici5bqs147pwkdqn48w2rajhr5k8jd07pq5qp";
   };
   buildInputs = [zlib openssl];
   makeFlags = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.creytiv.com/re.html";
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
-    license = with stdenv.lib.licenses; bsd3;
+    license = stdenv.lib.licenses.bsd3;
     inherit version;
     downloadPage = "http://www.creytiv.com/pub/";
     updateWalker = true;

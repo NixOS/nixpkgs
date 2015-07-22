@@ -1,10 +1,9 @@
-{ pkgs, ... }:
+{ lib, ... }:
 
-{ users.extraUsers = pkgs.lib.singleton
+{ users.extraUsers = lib.singleton
     { isNormalUser = true;
       name = "alice";
       description = "Alice Foobar";
       password = "foobar";
-      uid = 1000;
     };
 }

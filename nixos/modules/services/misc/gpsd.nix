@@ -54,7 +54,7 @@ in
       };
 
       port = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 2947;
         description = ''
           The port where to listen for TCP connections.
@@ -62,7 +62,7 @@ in
       };
 
       debugLevel = mkOption {
-        type = types.uniq types.int;
+        type = types.int;
         default = 0;
         description = ''
           The debugging level.

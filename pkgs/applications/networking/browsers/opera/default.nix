@@ -6,7 +6,7 @@
 , kdeSupport ? false, qt4, kdelibs
 }:
 
-assert stdenv.isLinux && stdenv.cc.cc.isGNU or false && stdenv.cc.libc != null;
+assert stdenv.isLinux && stdenv.cc.isGNU && stdenv.cc.libc != null;
 
 let
   mirror = http://get.geo.opera.com/pub/opera;

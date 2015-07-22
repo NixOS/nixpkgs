@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     ''
       export CC="${stdenv.cc}/bin/gcc";
       export CCARGS="-I$out/include \
-                      -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib";
+                      -L${mysql.lib}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib";
 
       export PGHEADER="${postgresql}/include/libpq-fe.h";
-      export MSHEADER="${mysql}/include/mysql/mysql.h";
+      export MSHEADER="${mysql.lib}/include/mysql/mysql.h";
       export SQHEADER="${sqlite}/include/sqlite3.h";
     '';
 

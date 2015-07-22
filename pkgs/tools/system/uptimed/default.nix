@@ -1,18 +1,30 @@
-{stdenv, fetchurl, automake, autoconf, libtool}:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
+let version = "0.3.18"; in
 stdenv.mkDerivation {
-  name = "uptimed-0.3.16";
+  name = "uptimed-${version}";
   
-  src = fetchurl {
-    url = http://podgorny.cz/uptimed/releases/uptimed-0.3.16.tar.bz2;
-    sha256 = "0axi2rz4gnmzzjl7xay7y8j1mh6iqqyg0arl1jyc3fgsk1ggy27m";
+  src = fetchFromGitHub {
+    sha256 = "108h8ck8cyzvf3xv23vzyj0j8dffdmwavj6nbn9ryqhqhqmk4fhb";
+    rev = "v${version}";
+    repo = "uptimed";
+    owner = "rpodgorny";
+  };
+
+  meta = with stdenv.lib; {
+    description = "Uptime record daemon";
+    longDescription = ''
+      An uptime record daemon keeping track of the highest uptimes a computer
+      system ever had. It uses the system boot time to keep sessions apart from
+      each other. Uptimed comes with a console front-end to parse the records,
+      which can also easily be used to show your records on a web page.
+    '';
+    homepage = https://github.com/rpodgorny/uptimed/;
+    license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 
   patches = [ ./no-var-spool-install.patch ];
 
-  buildInputs = [automake autoconf libtool];
-
-  meta = {
-    homepage = http://podgorny.cz/uptimed/;
-  };
+  buildInputs = [ autoreconfHook ];
 }

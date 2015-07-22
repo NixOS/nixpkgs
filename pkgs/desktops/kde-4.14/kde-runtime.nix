@@ -1,5 +1,5 @@
 { kde, kdelibs, bzip2, libssh, exiv2, attica, qca2
-, libcanberra, virtuoso, samba, libjpeg, ntrack, pkgconfig, xz, pulseaudio
+, libcanberra, virtuoso, samba, libjpeg, ntrack, pkgconfig, xz, libpulseaudio
 , networkmanager, kactivities, kdepimlibs, openexr, ilmbase, gpgme
 }:
 
@@ -8,7 +8,7 @@ kde {
 
   buildInputs = [
     kdelibs attica xz bzip2 libssh libjpeg exiv2 ntrack
-    qca2 samba libcanberra pulseaudio gpgme
+    qca2 samba libcanberra libpulseaudio gpgme
     networkmanager kactivities kdepimlibs openexr
 #todo: add openslp
 #todo: gpgme can't be found because cmake module is provided by kdepimlibs which are found too late

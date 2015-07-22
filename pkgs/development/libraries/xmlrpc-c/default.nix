@@ -1,14 +1,18 @@
-{ stdenv, fetchurl, curl }:
+{ stdenv, fetchurl, curl, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "xmlrpc-c-1.25.30";
+  name = "xmlrpc-c-1.33.17";
 
   src = fetchurl {
     url = "mirror://sourceforge/xmlrpc-c/${name}.tgz";
-    sha256 = "161gj237baagy5jaa08m54zfyvilb19gql0i5c9ysl3xqm7fvrla";
+    sha256 = "0makq1zpfqnrj6xx1xc7wi4mh115ri9p4yz2rbvjhj0il4y8l4ah";
   };
 
-  buildInputs = [ curl ];
+  buildInputs = [ curl libxml2 ];
+
+  configureFlags = [
+    "--enable-libxml2-backend"
+  ];
 
   # Build and install the "xmlrpc" tool (like the Debian package)
   postInstall = ''

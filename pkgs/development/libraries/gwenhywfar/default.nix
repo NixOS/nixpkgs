@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gnutls, gtk, libgcrypt, pkgconfig, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "gwenhywfar-4.10.0beta";
+  name = "gwenhywfar-4.11.1";
 
   src = fetchurl {
-    url = "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=73&file=01&dummy=gwenhywfar-4.10.0beta.tar.gz";
+    url = "http://www2.aquamaniac.de/sites/download/download.php?package=01&release=78&file=01&dummy=${name}.tar.gz";
     name = "${name}.tar.gz";
-    sha256 = "1ihg2s263g540hl42y6g9wqcc4am70kv01yivsqfrpa9fnhbxm7f";
+    sha256 = "0ay79vc03jsw762nax204g112yg5sak340g31bm4hm93q69aiv2b";
   };
 
   propagatedBuildInputs = [ gnutls libgcrypt ];

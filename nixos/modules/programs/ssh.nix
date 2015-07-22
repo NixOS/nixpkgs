@@ -9,7 +9,7 @@ let
   cfg  = config.programs.ssh;
   cfgd = config.services.openssh;
 
-  askPassword = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+  askPassword = cfg.askPassword;
 
   askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
     ''
@@ -25,6 +25,12 @@ in
   options = {
 
     programs.ssh = {
+
+      askPassword = mkOption {
+        type = types.str;
+        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+        description = ''Program used by SSH to ask for passwords.'';
+      };
 
       forwardX11 = mkOption {
         type = types.bool;
@@ -71,7 +77,7 @@ in
       };
 
       agentTimeout = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         example = "1h";
         description = ''

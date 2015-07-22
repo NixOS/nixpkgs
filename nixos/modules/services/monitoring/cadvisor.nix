@@ -90,17 +90,9 @@ in {
             ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
           ''}
         '';
-        User = "cadvisor";
       };
     };
 
-    virtualisation.docker.enable = true;
-
-    users.extraUsers = singleton {
-      name = "cadvisor";
-      uid = config.ids.uids.cadvisor;
-      description = "Cadvisor user";
-      extraGroups = [ "docker" ];
-    };
+    virtualisation.docker.enable = mkDefault true;
   };
 }

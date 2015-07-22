@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, zlib, readline, libossp_uuid }:
+{ stdenv, fetchurl, zlib, readline, libossp_uuid, openssl }:
 
 with stdenv.lib;
 
-let version = "9.4.1"; in
+let version = "9.4.4"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "19n3i14bhmw8dacd2kl3n1wzj362qv3fjmal5vsvi580h9ybgp99";
+    sha256 = "04q07g209y99xzjh88y52qpvz225rxwifv8nzp3bxzfni2bdk3jk";
   };
 
-  buildInputs = [ zlib readline ] ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
+  buildInputs = [ zlib readline openssl ]
+                ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
   enableParallelBuilding = true;
 
   makeFlags = [ "world" ];
 
-  configureFlags = optional (!stdenv.isDarwin)
-    ''
-      --with-ossp-uuid
-    '';
+  configureFlags = [ "--with-openssl" ]
+                   ++ optional (stdenv.isDarwin)  "--with-uuid=e2fs"
+                   ++ optional (!stdenv.isDarwin) "--with-ossp-uuid";
 
   patches = [ ./disable-resolve_symlinks-94.patch ./less-is-more.patch ];
 
@@ -34,11 +34,12 @@ stdenv.mkDerivation rec {
     psqlSchema = "9.4";
   };
 
-  meta = {
-    homepage = http://www.postgresql.org/ ;
+  meta = with stdenv.lib; {
+    homepage = http://www.postgresql.org/;
     description = "A powerful, open source object-relational database system";
-    license = stdenv.lib.licenses.postgresql;
-    maintainers = with stdenv.lib.maintainers; [ aristid ocharles ];
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    license = licenses.postgresql;
+    maintainers = [ maintainers.ocharles ];
+    platforms = platforms.unix;
+    hydraPlatforms = platforms.linux;
   };
 }

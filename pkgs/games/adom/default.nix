@@ -1,4 +1,4 @@
-{ stdenv, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, pulseaudio
+{ stdenv, patchelf, zlib, libmad, libpng12, libcaca, mesa, alsaLib, libpulseaudio
 , xlibs, plowshare }:
 
 assert stdenv.isLinux;
@@ -8,7 +8,7 @@ let
   inherit (xlibs) libXext libX11;
 
   lpath = "${stdenv.cc.cc}/lib64:" + stdenv.lib.makeSearchPath "lib" [
-      zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib pulseaudio];
+      zlib libmad libpng12 libcaca libXext libX11 mesa alsaLib libpulseaudio];
 
 in
 assert stdenv.is64bit;

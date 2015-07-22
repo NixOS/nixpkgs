@@ -60,6 +60,7 @@ in
 
     nixpkgs.system = mkOption {
       type = types.str;
+      example = "i686-linux";
       description = ''
         Specifies the Nix platform type for which NixOS should be built.
         If unset, it defaults to the platform type of your host system.
@@ -71,6 +72,10 @@ in
   };
 
   config = {
-    nixpkgs.system = mkDefault pkgs.stdenv.system;
+    _module.args.pkgs = import ../../lib/nixpkgs.nix {
+      system = config.nixpkgs.system;
+
+      inherit (config.nixpkgs) config;
+    };
   };
 }

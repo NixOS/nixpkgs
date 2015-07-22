@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Library for registering global key bindings";
     homepage = https://github.com/engla/keybinder/;
     license = licenses.mit;
-    platform = platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.cstrahan ];
   };
 }

@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchurl, unicode ? true }:
+{ lib, stdenv, fetchurl
 
-let
-  /* C++ bindings fail to build on `i386-pc-solaris2.11' with GCC 3.4.3:
-     <http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6395191>.
-     It seems that it could be worked around by #including <wchar.h> in the
-     right place, according to
-     <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
-     but this is left as an exercise to the reader.
-     So disable them for now.  */
-  cxx = !stdenv.isSunOS;
-in
+, mouseSupport ? false
+, unicode ? true
+
+, gpm
+
+# Extra Options
+, abiVersion ? "5"
+}:
+
 stdenv.mkDerivation rec {
   name = "ncurses-5.9";
 
@@ -18,54 +17,74 @@ stdenv.mkDerivation rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  patches = [ ./patch-ac ./clang.patch ];
+  # gcc-5.patch should be removed after 5.9
+  patches = [ ./clang.patch ./gcc-5.patch ];
 
-  configureFlags = ''
-    --with-shared --without-debug --enable-pc-files --enable-symlinks
-    ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
-  '';
+  configureFlags = [
+    "--with-shared"
+    "--without-debug"
+    "--enable-pc-files"
+    "--enable-symlinks"
+  ] ++ lib.optional unicode "--enable-widec";
 
-  # PKG_CONFIG_LIBDIR is where the *.pc files will be installed. If this
-  # directory doesn't exist, the configure script will disable installation of
-  # *.pc files. The configure script usually (on LSB distros) pick $(path of
-  # pkg-config)/../lib/pkgconfig. On NixOS that path doesn't exist and is not
-  # the place we want to put *.pc files from other packages anyway. So we must
-  # tell it explicitly where to install with PKG_CONFIG_LIBDIR.
+  buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
+
   preConfigure = ''
-    export configureFlags="$configureFlags --includedir=$out/include"
+    configureFlagsArray+=("--includedir=$out/include")
     export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
+  '' + lib.optionalString stdenv.isCygwin ''
+    sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
 
   selfNativeBuildInput = true;
 
   enableParallelBuilding = true;
 
-  preBuild =
-    # On Darwin, we end up using the native `sed' during bootstrap, and it
-    # fails to run this command, which isn't needed anyway.
-    lib.optionalString (!stdenv.isDarwin)
-      ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
+  doCheck = false;
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postInstall = if unicode then ''
-    ${if cxx then "chmod 644 $out/lib/libncurses++w.a" else ""}
-    for lib in curses ncurses form panel menu; do
-      if test -e $out/lib/lib''${lib}w.a; then
-        rm -f $out/lib/lib$lib.so
-        echo "INPUT(-l''${lib}w)" > $out/lib/lib$lib.so
-        ln -svf lib''${lib}w.a $out/lib/lib$lib.a
-        ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
-        ln -svf ''${lib}w.pc $out/lib/pkgconfig/$lib.pc
-      fi
-    done;
-    ln -svf . $out/include/ncursesw
-    ln -svf ncursesw5-config $out/bin/ncurses5-config
-  '' else "";
+  postInstall = ''
+    # Determine what suffixes our libraries have
+    suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
+    libs="$(ls $out/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
+    suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
 
-  postFixup = lib.optionalString stdenv.isDarwin "rm $out/lib/*.so";
+    # Get the path to the config util
+    cfg=$(basename $out/bin/ncurses*-config)
+
+    # symlink the full suffixed include directory
+    ln -svf . $out/include/ncurses$suffix
+
+    for newsuffix in $suffixes ""; do
+      # Create a non-abi versioned config util links
+      ln -svf $cfg $out/bin/ncurses$newsuffix-config
+
+      # Allow for end users who #include <ncurses?w/*.h>
+      ln -svf . $out/include/ncurses$newsuffix
+
+      for lib in $libs; do
+        for dylibtype in so dll dylib; do
+          if [ -e "$out/lib/lib''${lib}$suffix.$dylibtype" ]; then
+            ln -svf lib''${lib}$suffix.$dylibtype $out/lib/lib$lib$newsuffix.$dylibtype
+            ln -svf lib''${lib}$suffix.$dylibtype.${abiVersion} $out/lib/lib$lib$newsuffix.$dylibtype.${abiVersion}
+          fi
+        done
+        for statictype in a dll.a la; do
+          if [ -e "$out/lib/lib''${lib}$suffix.$statictype" ]; then
+            ln -svf lib''${lib}$suffix.$statictype $out/lib/lib$lib$newsuffix.$statictype
+          fi
+        done
+        ln -svf ''${lib}$suffix.pc $out/lib/pkgconfig/$lib$newsuffix.pc
+      done
+    done
+  '';
+
+  preFixup = ''
+    rm $out/lib/*.a
+  '';
 
   meta = {
     description = "Free software emulation of curses in SVR4 and more";
@@ -87,8 +106,12 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/ncurses/;
 
     license = lib.licenses.mit;
-
-    maintainers = [ ];
     platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.wkennington ];
+  };
+
+  passthru = {
+    ldflags = "-lncurses";
+    inherit unicode abiVersion;
   };
 }

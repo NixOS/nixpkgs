@@ -1,16 +1,15 @@
 { stdenv, fetchurl, zlib }:
 
-let version = "1.11"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "potrace-${version}";
+  version = "1.12";
 
   src = fetchurl {
-    url = "http://potrace.sourceforge.net/download/potrace-${version}.tar.gz";
-    sha256 = "1bbyl7jgigawmwc8r14znv8lb6lrcxh8zpvynrl6s800dr4yp9as";
+    url = "http://potrace.sourceforge.net/download/${version}/potrace-${version}.tar.gz";
+    sha256 = "0fqpfq5wwqz8j6pfh4p2pbflf6r86s4h63r8jawzrsyvpbbz3fxh";
   };
 
-  configureFlags = ["--with-libpotrace"];
+  configureFlags = [ "--with-libpotrace" ];
 
   buildInputs = [ zlib ];
 

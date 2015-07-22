@@ -1,11 +1,12 @@
 {stdenv, fetchurl, ncurses}:
 
+let version = "1.14"; in
 stdenv.mkDerivation rec {
-  name = "vnstat-1.13";
+  name = "vnstat-${version}";
 
   src = fetchurl {
+    sha256 = "11l39qqv5pgli9zzn0xilld67bi5qzxymsn97m4r022xv13jlipq";
     url = "http://humdi.net/vnstat/${name}.tar.gz";
-    sha256 = "1kcrxpvp3al1j6kh7k69vwva6kd1ba32wglx95gv55dixfcjakkg";
   };
 
   installPhase = ''
@@ -18,10 +19,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ncurses];
 
-  meta = {
+  meta = with stdenv.lib; {
+    inherit version;
     homepage = http://humdi.net/vnstat/;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
-    maintainers = with stdenv.lib.maintainers; [ nckx ];
+    maintainers = with maintainers; [ nckx ];
   };
 }

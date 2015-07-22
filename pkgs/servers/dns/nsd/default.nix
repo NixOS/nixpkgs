@@ -8,14 +8,16 @@
 , ratelimit        ? false
 , recvmmsg         ? false
 , rootServer       ? false
+, rrtypes          ? false
+, zoneStats        ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsd-4.1.0";
+  name = "nsd-4.1.3";
 
   src = fetchurl {
     url = "http://www.nlnetlabs.nl/downloads/nsd/${name}.tar.gz";
-    sha256 = "ec3f6902f6f26a6b9248dcd7e9f42472fa52755740b4ba6b9d3bd08910b39b62";
+    sha256 = "1r8p5lqj7i6xi4k04jr1n9r1p8gwy3547hzsi8xags6krnav4z09";
   };
 
   buildInputs = [ libevent openssl ];
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
      ++ edf ratelimit        "ratelimit"
      ++ edf recvmmsg         "recvmmsg"
      ++ edf rootServer       "root-server"
+     ++ edf rrtypes          "draft-rrtypes"
+     ++ edf zoneStats        "zone-stats"
      ++ [ "--with-ssl=${openssl}" "--with-libevent=${libevent}" ];
 
   meta = with stdenv.lib; {

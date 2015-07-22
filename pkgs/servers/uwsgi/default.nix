@@ -24,11 +24,11 @@ in
 assert builtins.filter (x: lib.all (y: y.name != x) available) plugins == [];
 
 stdenv.mkDerivation rec {
-  name = "uwsgi-2.0.9";
+  name = "uwsgi-2.0.10";
 
   src = fetchurl {
     url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "15c2j5myx1s54a1f6a7pjblvk7v96mz2kqlbj19mdfd8l2y8j17y";
+    sha256 = "12q2sn35vf1ils5043svq8da0czy54k63ziybvl33a9dqbb83cy0";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];

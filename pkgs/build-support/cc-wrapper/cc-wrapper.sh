@@ -80,8 +80,8 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
 fi
 
 if [[ "@prog@" = *++ ]]; then
-    if  echo "$@" | grep -qvw -- -nostdlib; then
-        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE"
+    if  echo "$@" | grep -qv -- -nostdlib; then
+        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
         NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
     fi
 fi

@@ -10,7 +10,7 @@ in
 
 (
 assert a.stdenv ? cc ;
-assert a.stdenv.cc.cc.isGNU or false ;
+assert a.stdenv.cc.isGNU ;
 assert a.stdenv.cc ? libc ;
 assert a.stdenv.cc.libc != null ;
 

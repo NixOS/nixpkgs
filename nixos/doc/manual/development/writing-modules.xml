@@ -158,7 +158,7 @@ let locatedb = "/var/cache/locatedb"; in
         script =
           ''
             mkdir -m 0755 -p $(dirname ${locatedb})
-            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /media /run'
+            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /run'
           '';
       };
 

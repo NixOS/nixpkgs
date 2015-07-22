@@ -18,5 +18,6 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
   meta = {
     description = "Python DBus bindings";
     license = stdenv.lib.licenses.mit;
+    platforms = dbus.meta.platforms;
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://launchpad.net/geis";
-    description = "GEIS is a library for applications and toolkit programmers which provides a consistent platform independent interface for any system-wide input gesture recognition mechanism.";
+    description = "A library for applications and toolkit programmers which provides a consistent platform independent interface for any system-wide input gesture recognition mechanism";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

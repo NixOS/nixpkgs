@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, boost, gnuradio, rtl-sdr, uhd
-, makeWrapper
+, makeWrapper, hackrf
 , pythonSupport ? true, python, swig
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    cmake pkgconfig boost gnuradio rtl-sdr uhd makeWrapper
+    cmake pkgconfig boost gnuradio rtl-sdr uhd makeWrapper hackrf
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

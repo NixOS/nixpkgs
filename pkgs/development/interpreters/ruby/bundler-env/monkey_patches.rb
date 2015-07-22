@@ -74,15 +74,23 @@ Bundler::Fetcher.class_eval do
 
     spec_list = gem_names.map do |name|
       spec = Bundler.nix_gemspecs.detect {|spec| spec.name == name }
-      dependencies = spec.dependencies.
-        select {|dep| dep.type != :development}.
-        map do |dep|
-          deps_list << dep.name
-          dep
-        end
+      if spec.nil?
+        msg = "WARNING: Could not find gemspec for '#{name}'"
+        Bundler.ui.warn msg
+        nil
+      else
+        dependencies = spec.dependencies.
+          select {|dep| dep.type != :development}.
+          map do |dep|
+            deps_list << dep.name
+            dep
+          end
 
-      [spec.name, spec.version, spec.platform, dependencies]
+        [spec.name, spec.version, spec.platform, dependencies]
+      end
     end
+
+    spec_list.compact!
 
     [spec_list, deps_list.uniq]
   end

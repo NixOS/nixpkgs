@@ -14,7 +14,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     export ac_cv_lib_curses_initscr=yes
     export ac_cv_lib_pthread_pthread_mutex_init=yes
-    sed -i "s@-lcurses@-lncurses@g" ./configure
     sed -i "s@pcap/\(.*\).pcap@$out/share/pcap/\1.pcap@g" src/scenario.cpp
     ./configure --prefix=$out --with-pcap
   '';

@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-mailpath=" "--enable-smtp"
 
+    # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
+    "ac_cv_path_SENDMAIL=sendmail"
+
     # This allows calls with "-d N", that output debug info into ~/.muttdebug*
     "--enable-debug"
 

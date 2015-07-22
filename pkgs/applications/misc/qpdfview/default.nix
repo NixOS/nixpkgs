@@ -1,17 +1,17 @@
-{stdenv, fetchurl, qt4, pkgconfig, popplerQt4, djvulibre, libspectre, cups
+{stdenv, fetchurl, qt4, pkgconfig, poppler_qt4, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let
   s = # Generated upstream information
   rec {
     baseName="qpdfview";
-    version = "0.4.14beta1";
+    version = "0.4.15";
     name="${baseName}-${version}";
     url="https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
-    sha256 = "0ly0xqpgmd1ccsyqs6z0i3w1g4y3ichmibd809bjy344h6fb0m3b";
+    sha256 = "0wgj02zpbyq4m2ix8rljiz312l2xk81gpy030vy424icq4xsip52";
   };
   buildInputs = [
-    qt4 popplerQt4 pkgconfig djvulibre libspectre cups file ghostscript
+    qt4 poppler_qt4 pkgconfig djvulibre libspectre cups file ghostscript
   ];
 in
 stdenv.mkDerivation {

@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk ];
 
+  preConfigure = ''
+    sed '/DEPRECATED_FLAGS/d' -i configure
+    sed 's/-Wall -Werror//' -i configure
+  '';
+
   doCheck = true;
 
   meta = {

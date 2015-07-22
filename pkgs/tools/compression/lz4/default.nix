@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, valgrind }:
+{ stdenv, fetchFromGitHub, valgrind }:
 
+let version = "131"; in
 stdenv.mkDerivation rec {
-  # The r127 source still calls itself r126 everywhere, but I'm not going to
-  # patch over such silly cosmetic oversights in an official release. -- nckx
-  version = "127";
   name = "lz4-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/Cyan4973/lz4/archive/r${version}.tar.gz";
-    sha256 = "0hvbbr07j4hfix4dn4xw4fsmkr5s02bj596fn0i15d1i49xby2aj";
+  src = fetchFromGitHub {
+    sha256 = "1bhvcq8fxxsqnpg5qa6k3nsyhq0nl0iarh08sqzclww27hlpyay2";
+    rev = "r${version}";
+    repo = "lz4";
+    owner = "Cyan4973";
   };
 
-  # valgrind is required only by `make test`
-  buildInputs = [ valgrind ];
+  buildInputs = stdenv.lib.optional doCheck valgrind;
 
   enableParallelBuilding = true;
 
   makeFlags = "PREFIX=$(out)";
 
-  doCheck = true;
+  doCheck = false;
   checkTarget = "test";
+  checkFlags = "-j1 -C programs"; # -j1 required since version 128, -C should be temporary
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";

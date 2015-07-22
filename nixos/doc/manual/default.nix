@@ -61,6 +61,16 @@ let
       echo "${version}" > version
     '';
 
+  toc = builtins.toFile "toc.xml"
+    ''
+      <toc role="chunk-toc">
+        <d:tocentry xmlns:d="http://docbook.org/ns/docbook" linkend="book-nixos-manual"><?dbhtml filename="index.html"?>
+          <d:tocentry linkend="ch-options"><?dbhtml filename="options.html"?></d:tocentry>
+          <d:tocentry linkend="ch-release-notes"><?dbhtml filename="release-notes.html"?></d:tocentry>
+        </d:tocentry>
+      </toc>
+    '';
+
 in rec {
 
   # The NixOS options in JSON format.
@@ -113,9 +123,10 @@ in rec {
         --param chunk.section.depth 0 \
         --param chunk.first.sections 1 \
         --param use.id.as.filename 1 \
-        --stringparam generate.toc "book toc chapter toc appendix toc" \
+        --stringparam generate.toc "book toc appendix toc" \
+        --stringparam chunk.toc ${toc} \
         --nonet --xinclude --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunkfast.xsl ./manual.xml
+        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl ./manual.xml
 
       mkdir -p $dst/images/callouts
       cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/

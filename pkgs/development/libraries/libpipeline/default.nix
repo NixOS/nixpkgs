@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
  
 stdenv.mkDerivation rec {
-  name = "libpipeline-1.2.6";
+  name = "libpipeline-1.4.0";
   
   src = fetchurl {
     url = "mirror://savannah/libpipeline/${name}.tar.gz";
-    sha256 = "0wjsigim422ilzs46hxzv98l10zprpbk53gq3jzj6s9kn9n1wljc";
+    sha256 = "1dlvp2mxlhg5zbj509kc60h7g39hpgwkzkpdf855cyzizgkmkivr";
   };
 
   meta = with stdenv.lib; {

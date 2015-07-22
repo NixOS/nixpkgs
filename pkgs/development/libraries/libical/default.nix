@@ -1,13 +1,25 @@
-{stdenv, fetchurl, perl, cmake}:
+{ stdenv, fetchFromGitHub, perl, cmake }:
 
 stdenv.mkDerivation rec {
-  pName = "libical";
-  name = "${pName}-1.0";
-  src = fetchurl {
-    url = "mirror://sourceforge/freeassociation/${pName}/${name}/${name}.tar.gz";
-    sha256 = "1dy0drz9hy0sn2q3s2lp00jb9bis5gsm7n3m4zga49s9ir2b6fbw";
+  name = "libical-${version}";
+  version = "1.0.1";
+
+  src = fetchFromGitHub {
+    owner = "libical";
+    repo = "libical";
+    rev = "v${version}";
+    sha256 = "1y6rbw24m133d984pyqzx2bi7f37dsw6f33l6arwn6yd4zlqdib9";
   };
+
   nativeBuildInputs = [ perl cmake ];
 
   patches = [ ./respect-env-tzdir.patch ];
+
+  meta = with stdenv.lib; {
+    homepage = https://github.com/libical/libical;
+    description = "an Open Source implementation of the iCalendar protocols";
+    license = licenses.mpl10;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ wkennington ];
+  };
 }

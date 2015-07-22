@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gnu-efi, unzip, pkgconfig, utillinux, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 stdenv.mkDerivation rec {
-  name = "gummiboot-45";
+  name = "gummiboot-48";
 
   buildInputs = [ gnu-efi pkgconfig libxslt utillinux ];
 
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = http://pkgs.fedoraproject.org/repo/pkgs/gummiboot/gummiboot-45.tar.xz/5d4957390e959cb9f325b87712ddd3f1/gummiboot-45.tar.xz;
-    sha256 = "15227d6abi90vg7rs234fm13af511nsd6dv87c3jvsjhgb9ib0hm";
+    url = http://pkgs.fedoraproject.org/repo/pkgs/gummiboot/gummiboot-48.tar.xz/05ef3951e8322b76c31f2fd14efdc185/gummiboot-48.tar.xz;
+    sha256 = "1bzygyglgglhb3aj77w2qcb0dz9sxgb7lq5krxf6417431h198rg";
   };
 
   meta = {
@@ -25,7 +25,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
 
     platforms = [ "x86_64-linux" "i686-linux" ];
-
-    maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }

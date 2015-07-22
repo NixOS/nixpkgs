@@ -121,7 +121,7 @@ in
     boot.supportedFilesystems = mkOption {
       default = [ ];
       example = [ "btrfs" ];
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       description = "Names of supported filesystem types.";
     };
 
@@ -137,9 +137,7 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
-    environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.fuse ]
-      ++ config.system.fsPackages;
+    environment.systemPackages = [ pkgs.fuse ] ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
       let

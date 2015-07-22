@@ -92,7 +92,7 @@ let
       '';
 
       meta = {
-        description = "A toolkit for the simulation of the passage of particles through matter.";
+        description = "A toolkit for the simulation of the passage of particles through matter";
         longDescription = ''
           Geant4 is a toolkit for the simulation of the passage of particles through matter.
           Its areas of application include high energy, nuclear and accelerator physics, as well as studies in medical and space science.
@@ -129,7 +129,7 @@ let
       '';
 
       meta = {
-        description = "Data files for the Geant4 toolkit.";
+        description = "Data files for the Geant4 toolkit";
         homepage = http://www.geant4.org;
         license = stdenv.lib.licenses.g4sl;
         maintainers = [ ];

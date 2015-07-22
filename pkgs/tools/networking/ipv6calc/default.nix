@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, geoip, getopt, openssl, perl }:
+{ stdenv, fetchurl, geoip, geolite-legacy, getopt, openssl, perl }:
 
 stdenv.mkDerivation rec {
   version = "0.98.0";
@@ -6,10 +6,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "1wdlyklqjvslcbvyx7ch4aziwvjbpj852k59m02gakisq9bywfcd";
+    sha256 = "02r0r4lgz10ivbmgdzivj7dvry1aad75ik9vyy6irjvngjkzg5r3";
   };
 
-  buildInputs = [ geoip getopt openssl perl ];
+  buildInputs = [ geoip geolite-legacy getopt openssl ];
+  nativeBuildInputs = [ perl ];
 
   patchPhase = ''
     for i in {,databases/}lib/Makefile.in; do
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     --disable-dynamic-load
     --enable-shared
     --enable-geoip
-    --with-geoip-db=${geoip}/share/GeoIP
+    --with-geoip-db=${geolite-legacy}/share/GeoIP
   '';
 
   enableParallelBuilding = true;
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
       Now only one utiltity is needed to do a lot.
     '';
     homepage = http://www.deepspace6.net/projects/ipv6calc.html;
-    license = with licenses; gpl2;
+    license = licenses.gpl2;
     platforms = with platforms; linux;
     maintainers = with maintainers; [ nckx ];
   };

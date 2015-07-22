@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       See the kernel documentation for further details. 
     '';
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
   };
 }

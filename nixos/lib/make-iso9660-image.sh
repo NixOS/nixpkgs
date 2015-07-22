@@ -13,6 +13,20 @@ stripSlash() {
     if test "${res:0:1}" = /; then res=${res:1}; fi
 }
 
+# Escape potential equal signs (=) with backslash (\=)
+escapeEquals() {
+    echo "$1" | sed -e 's/\\/\\\\/g' -e 's/=/\\=/g'
+}
+
+# Queues an file/directory to be placed on the ISO.
+# An entry consists of a local source path (2) and
+# a destination path on the ISO (1).
+addPath() {
+    target="$1"
+    source="$2"
+    echo "$(escapeEquals "$target")=$(escapeEquals "$source")" >> pathlist
+}
+
 stripSlash "$bootImage"; bootImage="$res"
 
 
@@ -31,11 +45,20 @@ if test -n "$bootable"; then
         fi
     done
 
-    bootFlags="-b $bootImage -c .boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
+    isoBootFlags="-eltorito-boot ${bootImage}
+                  -eltorito-catalog .boot.cat
+                  -no-emul-boot -boot-load-size 4 -boot-info-table"
+fi
+
+if test -n "$usbBootable"; then
+    usbBootFlags="-isohybrid-mbr ${isohybridMbrImage}"
 fi
 
 if test -n "$efiBootable"; then
-    bootFlags="$bootFlags -eltorito-alt-boot -e $efiBootImage -no-emul-boot"
+    efiBootFlags="-eltorito-alt-boot
+                  -e $efiBootImage
+                  -no-emul-boot
+                  -isohybrid-gpt-basdat"
 fi
 
 touch pathlist
@@ -44,14 +67,14 @@ touch pathlist
 # Add the individual files.
 for ((i = 0; i < ${#targets_[@]}; i++)); do
     stripSlash "${targets_[$i]}"
-    echo "$res=${sources_[$i]}" >> pathlist
+    addPath "$res" "${sources_[$i]}"
 done
 
 
 # Add the closures of the top-level store objects.
 storePaths=$(perl $pathsFromGraph closure-*)
 for i in $storePaths; do
-    echo "${i:1}=$i" >> pathlist
+    addPath "${i:1}" "$i"
 done
 
 
@@ -59,7 +82,7 @@ done
 # nix-store --load-db.
 if [ -n "$object" ]; then
     printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
-    echo "nix-path-registration=nix-path-registration" >> pathlist
+    addPath "nix-path-registration" "nix-path-registration"
 fi
 
 
@@ -70,22 +93,39 @@ for ((n = 0; n < ${#objects[*]}; n++)); do
     if test "$symlink" != "none"; then
         mkdir -p $(dirname ./$symlink)
         ln -s $object ./$symlink
-        echo "$symlink=./$symlink" >> pathlist
+        addPath "$symlink" "./$symlink"
     fi
 done
 
-# !!! what does this do?
-cat pathlist | sed -e 's/=\(.*\)=\(.*\)=/\\=\1=\2\\=/' | tee pathlist.safer
-
-
 mkdir -p $out/iso
-genCommand="genisoimage -iso-level 4 -r -J $bootFlags -hide-rr-moved -graft-points -path-list pathlist.safer ${volumeID:+-V $volumeID}"
-if test -z "$compressImage"; then
-    $genCommand -o $out/iso/$isoName
-else
-    $genCommand | bzip2 > $out/iso/$isoName.bz2
+
+xorriso="xorriso
+ -as mkisofs
+ -iso-level 3
+ -volid ${volumeID}
+ -appid nixos
+ -publisher nixos
+ -graft-points
+ -full-iso9660-filenames
+ ${isoBootFlags}
+ ${usbBootFlags}
+ ${efiBootFlags}
+ -r
+ -path-list pathlist
+ --sort-weight 0 /
+ --sort-weight 1 /isolinux" # Make sure isolinux is near the beginning of the ISO
+
+$xorriso -output $out/iso/$isoName
+
+if test -n "$usbBootable"; then
+    echo "Making image hybrid..."
+    isohybrid --uefi $out/iso/$isoName
 fi
 
+if test -n "$compressImage"; then
+    echo "Compressing image..."
+    bzip2 $out/iso/$isoName
+fi
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system

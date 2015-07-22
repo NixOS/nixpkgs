@@ -1,49 +1,29 @@
-x@{builderDefsPackage, ncurses
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{stdenv, fetchurl, ncurses, autoconf
+, withGtk ? false, gtk ? null}:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="mtr";
-    version="0.85";
-    name="${baseName}-${version}";
+assert withGtk -> gtk != null;
+
+with stdenv.lib;
+stdenv.mkDerivation rec {
+  baseName="mtr";
+  version="0.86";
+  name="${baseName}-${version}";
+  
+  src = fetchurl {
     url="ftp://ftp.bitwizard.nl/${baseName}/${name}.tar.gz";
-    hash="1jqrz8mil3lraaqgc87dyvx8d4bf3vq232pfx9mksxnkbphp4qvd";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+    sha256 = "01lcy89q3i9g4kz4liy6m7kcq1zyvmbc63rqidgw67341f94inf5";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  configureFlags = optionalString (!withGtk) "--without-gtk";
 
-  patches = [ ./edd425.patch ];
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doPatch" "doMakeInstall"];
+  buildInputs = [ autoconf ncurses ] ++ optional withGtk gtk;
 
   meta = {
+    homepage = http://www.bitwizard.nl/mtr/;
     description = "A network diagnostics tool";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      unix;
-    license = a.lib.licenses.gpl2;
+    maintainers = [ maintainers.koral maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "ftp://ftp.bitwizard.nl/mtr/";
-    };
-  };
-}) x
+}
 

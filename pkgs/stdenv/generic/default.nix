@@ -10,6 +10,8 @@ let lib = import ../../../lib; in lib.makeOverridable (
 , setupScript ? ./setup.sh
 
 , extraBuildInputs ? []
+, __stdenvImpureHostDeps ? []
+, __extraImpureHostDeps ? []
 }:
 
 let
@@ -18,6 +20,8 @@ let
 
   whitelist = config.whitelistedLicenses or [];
   blacklist = config.blacklistedLicenses or [];
+
+  ifDarwin = attrs: if system == "x86_64-darwin" then attrs else {};
 
   onlyLicenses = list:
     lib.lists.all (license:
@@ -69,8 +73,6 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
-  unsafeGetAttrPos = builtins.unsafeGetAttrPos or (n: as: null);
-
   defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
@@ -83,19 +85,30 @@ let
 
   # Add a utility function to produce derivations that use this
   # stdenv and its shell.
-  mkDerivation = attrs:
+  mkDerivation =
+    { buildInputs ? []
+    , nativeBuildInputs ? []
+    , propagatedBuildInputs ? []
+    , propagatedNativeBuildInputs ? []
+    , crossConfig ? null
+    , meta ? {}
+    , passthru ? {}
+    , pos ? null # position used in error messages and for meta.position
+    , ... } @ attrs:
     let
-      pos =
-        if attrs.meta.description or null != null then
-          unsafeGetAttrPos "description" attrs.meta
+      pos' =
+        if pos != null then
+          pos
+        else if attrs.meta.description or null != null then
+          builtins.unsafeGetAttrPos "description" attrs.meta
         else
-          unsafeGetAttrPos "name" attrs;
-      pos' = if pos != null then "‘" + pos.file + ":" + toString pos.line + "’" else "«unknown-file»";
+          builtins.unsafeGetAttrPos "name" attrs;
+      pos'' = if pos' != null then "‘" + pos'.file + ":" + toString pos'.line + "’" else "«unknown-file»";
 
       throwEvalHelp = unfreeOrBroken: whatIsWrong:
         assert builtins.elem unfreeOrBroken ["Unfree" "Broken" "blacklisted"];
 
-        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos'} ${whatIsWrong}, refusing to evaluate."
+        throw ("Package ‘${attrs.name or "«name-missing»"}’ in ${pos''} ${whatIsWrong}, refusing to evaluate."
         + (lib.strings.optionalString (unfreeOrBroken != "blacklisted") ''
 
           For `nixos-rebuild` you can set
@@ -121,13 +134,22 @@ let
       assert licenseAllowed attrs;
 
       lib.addPassthru (derivation (
-        (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
+        (removeAttrs attrs
+          ["meta" "passthru" "crossAttrs" "pos"
+           "__impureHostDeps" "__propagatedImpureHostDeps"])
         // (let
           buildInputs = attrs.buildInputs or [];
           nativeBuildInputs = attrs.nativeBuildInputs or [];
           propagatedBuildInputs = attrs.propagatedBuildInputs or [];
           propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
           crossConfig = attrs.crossConfig or null;
+
+          __impureHostDeps = attrs.__impureHostDeps or [];
+          __propagatedImpureHostDeps = attrs.__propagatedImpureHostDeps or [];
+
+          # TODO: remove lib.unique once nix has a list canonicalization primitive
+          computedImpureHostDeps           = lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs));
+          computedPropagatedImpureHostDeps = lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (propagatedBuildInputs ++ propagatedNativeBuildInputs));
         in
         {
           builder = attrs.realBuilder or shell;
@@ -144,6 +166,14 @@ let
           nativeBuildInputs = nativeBuildInputs ++ (if crossConfig == null then buildInputs else []);
           propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
             (if crossConfig == null then propagatedBuildInputs else []);
+        } // ifDarwin {
+          __impureHostDeps = computedImpureHostDeps ++ computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps ++ __impureHostDeps ++ __extraImpureHostDeps ++ [
+            "/dev/zero"
+            "/dev/random"
+            "/dev/urandom"
+            "/bin/sh"
+          ];
+          __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
         }))) (
       {
         # The meta attribute is passed in the resulting attribute set,
@@ -152,15 +182,15 @@ let
         # include it in the result, it *is* available to nix-env for
         # queries.  We also a meta.position attribute here to
         # identify the source location of the package.
-        meta = attrs.meta or {} // (if pos != null then {
-          position = pos.file + ":" + (toString pos.line);
+        meta = meta // (if pos' != null then {
+          position = pos'.file + ":" + toString pos'.line;
         } else {});
-        passthru = attrs.passthru or {};
+        inherit passthru;
       } //
       # Pass through extra attributes that are not inputs, but
       # should be made available to Nix expressions using the
       # derivation (e.g., in assertions).
-      (attrs.passthru or {}));
+      passthru);
 
   # The stdenv that we are producing.
   result =
@@ -176,6 +206,9 @@ let
       setup = setupScript;
 
       inherit preHook initialPath shell defaultNativeBuildInputs;
+    }
+    // ifDarwin {
+      __impureHostDeps = __stdenvImpureHostDeps;
     })
 
     // rec {
@@ -207,17 +240,21 @@ let
             || system == "i686-gnu"
             || system == "i686-freebsd"
             || system == "i686-openbsd"
+            || system == "i686-cygwin"
             || system == "i386-sunos";
       isx86_64 = system == "x86_64-linux"
               || system == "x86_64-darwin"
               || system == "x86_64-freebsd"
               || system == "x86_64-openbsd"
+              || system == "x86_64-cygwin"
               || system == "x86_64-solaris";
       is64bit = system == "x86_64-linux"
              || system == "x86_64-darwin"
              || system == "x86_64-freebsd"
              || system == "x86_64-openbsd"
-             || system == "x86_64-solaris";
+             || system == "x86_64-cygwin"
+             || system == "x86_64-solaris"
+             || system == "mips64el-linux";
       isMips = system == "mips-linux"
             || system == "mips64el-linux";
       isArm = system == "armv5tel-linux"
