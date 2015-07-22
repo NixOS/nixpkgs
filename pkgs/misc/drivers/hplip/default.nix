@@ -139,9 +139,9 @@ stdenv.mkDerivation {
   ''));
 
   fixupPhase = ''
-    # Wrap the user-facing Python scripts in /bin without turning the ones
-    # in /share into shell scripts (they need to be importable).
-    # Complicated by the fact that /bin contains just symlinks to /share.
+    # Wrap the user-facing Python scripts in $out/bin without turning the
+    # ones in $out /share into shell scripts (they need to be importable).
+    # Note that $out/bin contains only symlinks to $out/share.
     for bin in $out/bin/*; do
       py=`readlink -m $bin`
       rm $bin
@@ -153,7 +153,18 @@ stdenv.mkDerivation {
     # Remove originals. Knows a little too much about wrapPythonProgramsIn.
     rm -f $out/bin/.*-wrapped
 
+    # Merely patching shebangs in $out/share does not cause trouble.
+    for i in $out/share/hplip{,/*}/*.py; do
+      substituteInPlace $i \
+        --replace /usr/bin/python \
+        ${pythonPackages.python}/bin/${pythonPackages.python.executable} \
+        --replace "/usr/bin/env python" \
+        ${pythonPackages.python}/bin/${pythonPackages.python.executable}
+    done
+
     wrapPythonProgramsIn $out/lib "$out $pythonPath"
+
+    substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
   '';
 
   meta = with stdenv.lib; {
