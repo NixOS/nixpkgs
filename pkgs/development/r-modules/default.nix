@@ -1499,6 +1499,22 @@ let
     "yaqcaffy" # depends on broken package affyio-1.37.0
     "ZeligMultilevel" # depends on broken package nlopt-2.4.2
     "zetadiv" # depends on broken package nlopt-2.4.2
+    "CNVPanelizer" # depends on broken cn.mops-1.15.1
+    "ClustGeo" # depends on broken FactoMineR-1.31.3
+    "INSPEcT" # depends on broken GenomicFeatures-1.21.13
+    "IONiseR" # depends on broken rhdf5-2.13.4
+    "MBmca" # depends on broken nloptr-1.0.4
+    "RareVariantVis" # depends on broken VariantAnnotation-1.15.19
+    "alsace" # depends on broken nloptr-1.0.4
+    "chipPCR" # depends on broken nloptr-1.0.4
+    "clusterSEs" # depends on broken AER-1.2-4
+    "dpcR" # depends on broken nloptr-1.0.4
+    "erma" # depends on broken GenomicFiles-1.5.4
+    "interplot" # depends on broken arm-1.8-5
+    "pcaBootPlot" # depends on broken FactoMineR-1.31.3
+    "ptw" # depends on broken nloptr-1.0.4
+    "spoccutils" # depends on broken spocc-0.3.0
+    "translateSPSS2R" # depends on broken car-2.0-25
   ];
 
   otherOverrides = old: new: {
