@@ -825,6 +825,7 @@ self: super: {
 
   # Won't compile with recent versions of QuickCheck.
   testpack = markBroken super.testpack;
+  inilist = dontCheck super.inilist;
   MissingH = dontCheck super.MissingH;
 
   # Obsolete for GHC versions after GHC 6.10.x.
