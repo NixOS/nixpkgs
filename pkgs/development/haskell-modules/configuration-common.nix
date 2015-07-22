@@ -529,6 +529,7 @@ self: super: {
   stable-tree = dontDistribute super.stable-tree;
   synthesizer-llvm = dontDistribute super.synthesizer-llvm;
   optimal-blocks = dontDistribute super.optimal-blocks;
+  hs-blake2 = dontDistribute super.hs-blake2;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
