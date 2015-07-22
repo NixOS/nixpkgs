@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.0.4";
 
   src = fetchurl {
-    url    = "hhttps://github.com/aquynh/capstone/archive/${version}.tar.gz";
+    url    = "https://github.com/aquynh/capstone/archive/${version}.tar.gz";
     sha256 = "1whl5c8j6vqvz2j6ay2pyszx0jg8d3x8hq66cvgghmjchvsssvax";
   };
 
