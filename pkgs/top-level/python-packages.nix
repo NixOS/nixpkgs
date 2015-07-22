@@ -5308,6 +5308,11 @@ let
     name = "watchdog-${version}";
     version = "0.8.3";
 
+    buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.CoreServices
+      pkgs.darwin.cf-private
+    ];
+
     propagatedBuildInputs = with self; [ argh pathtools pyyaml ];
 
     doCheck = false;
