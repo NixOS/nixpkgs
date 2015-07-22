@@ -1836,6 +1836,8 @@ let
 
   honcho = callPackage ../tools/system/honcho { };
 
+  horst = callPackage ../tools/networking/horst { };
+
   host = callPackage ../tools/networking/host { };
 
   hping = callPackage ../tools/networking/hping { };
