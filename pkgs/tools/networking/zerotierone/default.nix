@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.zerotier.com;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.sjmackenzie ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = with stdenv.lib; platforms.allBut [ "i686-linux" ];
   };
 }
