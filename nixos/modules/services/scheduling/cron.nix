@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (config.services) jobsTags;
-
   # Put all the system cronjobs together.
   systemCronJobsFile = pkgs.writeText "system-crontab"
     ''
@@ -25,9 +23,9 @@ let
     sendmailPath = "/var/setuid-wrappers/sendmail";
   };
 
-  allFiles = map (f: "\"${f}\"") (
-    [ "${systemCronJobsFile}" ] ++ config.services.cron.cronFiles
-  );
+  allFiles =
+    optional (config.services.cron.systemCronJobs != []) systemCronJobsFile
+    ++ config.services.cron.cronFiles;
 
 in
 
@@ -91,36 +89,44 @@ in
 
   ###### implementation
 
-  config = mkIf (config.services.cron.enable && allFiles != []) {
+  config = mkMerge [
 
-    security.setuidPrograms = [ "crontab" ];
+    { services.cron.enable = mkDefault (allFiles != []);
 
-    environment.systemPackages = [ cronNixosPkg ];
+    }
 
-    systemd.services.cron =
-      { description = "Cron Daemon";
+    (mkIf (config.services.cron.enable && allFiles != []) {
 
-        wantedBy = [ "multi-user.target" ];
+      security.setuidPrograms = [ "crontab" ];
 
-        preStart =
-          ''
-            rm -f /etc/crontab
-            cat ${toString allFiles} > /etc/crontab
-            chmod 0600 /etc/crontab
+      environment.systemPackages = [ cronNixosPkg ];
 
-            mkdir -m 710 -p /var/cron
+      systemd.services.cron =
+        { description = "Cron Daemon";
 
-            # By default, allow all users to create a crontab.  This
-            # is denoted by the existence of an empty cron.deny file.
-            if ! test -e /var/cron/cron.allow -o -e /var/cron/cron.deny; then
-                touch /var/cron/cron.deny
-            fi
-          '';
+          wantedBy = [ "multi-user.target" ];
 
-        restartTriggers = [ config.environment.etc.localtime.source ];
-        serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
-      };
+          preStart =
+            ''
+              rm -f /etc/crontab
+              cat ${concatMapStrings (f: "\"${f}\" ") allFiles} > /etc/crontab
+              chmod 0600 /etc/crontab
 
-  };
+              mkdir -m 710 -p /var/cron
+
+              # By default, allow all users to create a crontab.  This
+              # is denoted by the existence of an empty cron.deny file.
+              if ! test -e /var/cron/cron.allow -o -e /var/cron/cron.deny; then
+                  touch /var/cron/cron.deny
+              fi
+            '';
+
+          restartTriggers = [ config.environment.etc.localtime.source ];
+          serviceConfig.ExecStart = "${cronNixosPkg}/bin/cron -n";
+        };
+
+    })
+
+  ];
 
 }
