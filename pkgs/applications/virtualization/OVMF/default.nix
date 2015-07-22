@@ -1,4 +1,4 @@
-{ stdenv, edk2, nasm, iasl, seabios, openssl, gcc, secureBoot ? false }:
+{ stdenv, edk2, nasm, iasl, seabios, openssl, secureBoot ? false }:
 
 let
 
@@ -15,8 +15,7 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   name = "OVMF-2014-12-10";
 
   # TODO: properly include openssl for secureBoot
-  # Doesn't build with gcc 4.9
-  buildInputs = [nasm iasl gcc] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
+  buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
 
   unpackPhase = ''
     for file in \
