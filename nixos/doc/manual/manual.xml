@@ -33,11 +33,12 @@
   <xi:include href="administration/running.xml" />
   <!-- <xi:include href="userconfiguration.xml" /> -->
   <xi:include href="development/development.xml" />
-  <xi:include href="release-notes/release-notes.xml" />
 
   <appendix xml:id="ch-options">
     <title>Configuration Options</title>
     <xi:include href="options-db.xml" />
   </appendix>
+
+  <xi:include href="release-notes/release-notes.xml" />
 
 </book>
