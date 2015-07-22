@@ -1,12 +1,13 @@
 { stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.19";
+  name = "i2p-0.9.20";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "1q9sda1a708laxf452qnzbfv7bwfwyam5n1giw2n3z3ar602i936";
+    sha256 = "10rynkl9dbnfl67ck3d7wdwz52h7354r7nbwcypsjnng4f1dmj5s";
   };
   buildInputs = [ jdk ant gettext which ];
+  patches = [ ./i2p.patch ];
   buildPhase = ''
     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
     ant preppkg-linux-only
@@ -17,15 +18,15 @@ stdenv.mkDerivation rec {
     cp -r pkg-temp/* $out
     cp installer/lib/wrapper/linux64/* $out
     sed -i $out/i2prouter -i $out/runplain.sh \
-      -e "s#%INSTALL_PATH#$out#" \
+      -e "s#uname#${coreutils}/bin/uname#" \
+      -e "s#which#${which}/bin/which#" \
+      -e "s#%gettext%#${gettext}/bin/gettext#" \
       -e "s#/usr/ucb/ps#${procps}/bin/ps#" \
       -e "s#/usr/bin/tr#${coreutils}/bin/tr#" \
+      -e "s#%INSTALL_PATH#$out#" \
       -e 's#%USER_HOME#$HOME#' \
       -e "s#%SYSTEM_java_io_tmpdir#/tmp#" \
-      -e 's#JAVA=java#JAVA=${jre}/bin/java#'
-    sed -i $out/runplain.sh \
-      -e "s#nohup \(.*Launch\) .*#\1#" \
-      -e "s#echo \$\! .*##"
+      -e "s#%JAVA%#${jre}/bin/java#"
     mv $out/runplain.sh $out/bin/i2prouter-plain
     mv $out/man $out/share/
     chmod +x $out/bin/* $out/i2psvc
