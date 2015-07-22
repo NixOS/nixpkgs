@@ -4033,6 +4033,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0l7vxag0v3hf7w1kjyjv02zqrjzhg6xczcv60z00l3z0fr78xi16";
     };
     propagatedBuildInputs = [ IOString ];
+    meta = {
+      description = "TTF font support for Perl";
+      license = stdenv.lib.licenses.artistic2;
+    };
   };
 
   ForksSuper = buildPerlPackage {
