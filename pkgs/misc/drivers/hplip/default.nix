@@ -39,6 +39,28 @@ in
 stdenv.mkDerivation {
   inherit name src;
 
+  buildInputs = [
+    libjpeg
+    cups
+    libusb1
+    pythonPackages.python
+    pythonPackages.wrapPython
+    saneBackends
+    dbus
+    net_snmp
+  ] ++ stdenv.lib.optional qtSupport qt4;
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+
+  pythonPath = with pythonPackages; [
+    dbus
+    pillow
+    pygobject
+    recursivePthLoader
+    reportlab
+  ] ++ stdenv.lib.optional qtSupport pyqt4;
+
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
     find . -type f -exec sed -i \
@@ -73,24 +95,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall =
-    ''
-      # Wrap the user-facing Python scripts in /bin without turning the ones
-      # in /share into shell scripts (they need to be importable).
-      # Complicated by the fact that /bin contains just symlinks to /share.
-      for bin in $out/bin/*; do
-        py=`readlink -m $bin`
-        rm $bin
-        cp $py $bin
-        wrapPythonProgramsIn $bin "$out $pythonPath"
-        sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
-      done
-
-      # Remove originals. Knows a little too much about wrapPythonProgramsIn.
-      rm -f $out/bin/.*-wrapped
-
-      wrapPythonPrograms $out/lib "$out $pythonPath"
-    ''
-    + (stdenv.lib.optionalString withPlugin
+    (stdenv.lib.optionalString withPlugin
     (let hplip_arch =
           if stdenv.system == "i686-linux" then "x86_32"
           else if stdenv.system == "x86_64-linux" then "x86_64"
@@ -129,29 +134,25 @@ stdenv.mkDerivation {
     mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
 
     rm $out/etc/udev/rules.d/56-hpmud.rules
-    ''));
+  ''));
 
-  buildInputs = [
-      libjpeg
-      cups
-      libusb1
-      pythonPackages.python
-      pythonPackages.wrapPython
-      saneBackends
-      dbus
-      net_snmp
-    ] ++ stdenv.lib.optional qtSupport qt4;
-  nativeBuildInputs = [
-    pkgconfig
-  ];
+  fixupPhase = ''
+    # Wrap the user-facing Python scripts in /bin without turning the ones
+    # in /share into shell scripts (they need to be importable).
+    # Complicated by the fact that /bin contains just symlinks to /share.
+    for bin in $out/bin/*; do
+      py=`readlink -m $bin`
+      rm $bin
+      cp $py $bin
+      wrapPythonProgramsIn $bin "$out $pythonPath"
+      sed -i "s@$(dirname $bin)/[^ ]*@$py@g" $bin
+    done
 
-  pythonPath = with pythonPackages; [
-      dbus
-      pillow
-      pygobject
-      recursivePthLoader
-      reportlab
-    ] ++ stdenv.lib.optional qtSupport pyqt4;
+    # Remove originals. Knows a little too much about wrapPythonProgramsIn.
+    rm -f $out/bin/.*-wrapped
+
+    wrapPythonProgramsIn $out/lib "$out $pythonPath"
+  '';
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
