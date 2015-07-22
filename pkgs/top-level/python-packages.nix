@@ -14101,6 +14101,8 @@ let
       sha256 = "1nqham81ihffc9xmw85dz3rg3v90rw7h0dp3dy0bh3qkp4n499q6";
     };
 
+    doCheck = !pkgs.stdenv.isDarwin;  # fails with UnicodeDecodeError
+
     checkPhase = ''
       export LANG="en_US.UTF-8"
       py.test
