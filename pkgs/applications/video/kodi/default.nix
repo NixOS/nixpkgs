@@ -37,18 +37,18 @@ assert cecSupport   -> libcec != null;
 assert rtmpSupport  -> rtmpdump != null;
 
 let
-  rel = "Helix";
-  ffmpeg_2_4_6 = fetchurl {
-    url = "https://github.com/xbmc/FFmpeg/archive/2.4.6-${rel}.tar.gz";
-    sha256 = "1kxp2z2zgcbplm5398zrfgwcfacfzvbg9y9wwrmm8vgwfmj32wh8";
+  rel = "Isengard";
+  ffmpeg_2_6_3 = fetchurl {
+    url = "https://github.com/xbmc/FFmpeg/archive/2.6.3-${rel}.tar.gz";
+    sha256 = "129nwrj9i758vz9xakpp68sm1l7z4in0krq6ayyqnpsnm54r9xlc";
   };
 in stdenv.mkDerivation rec {
     name = "kodi-" + version;
-    version = "14.2";
+    version = "15.0";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1x37l8db6xrvdw933p804lnwvkcm4vdb9gm5i6vmz4ha8f88bjyr";
+      sha256 = "1zqdmqffjfr5219cvpbvq9v1z5p5pzi2m9xs9lzk4jz7rxrs3nr7";
     };
 
     buildInputs = [
@@ -86,7 +86,7 @@ in stdenv.mkDerivation rec {
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
       substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
         --replace "/bin/bash" "${bash}/bin/bash -ex"
-      cp ${ffmpeg_2_4_6} tools/depends/target/ffmpeg/ffmpeg-2.4.6-${rel}.tar.gz
+      cp ${ffmpeg_2_6_3} tools/depends/target/ffmpeg/ffmpeg-2.6.3-${rel}.tar.gz
     '';
 
     preConfigure = ''
