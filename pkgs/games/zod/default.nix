@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ unrar unzip SDL SDL_image SDL_ttf SDL_mixer libmysql
     makeWrapper ];
 
-  NIX_LDFLAGS="-L${libmysql}/lib/mysql";
-
   installPhase = ''
     mkdir -p $out/bin $out/share/zod
     pushd $out/share/zod

@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null, mongodb ? null
+, ejabberd ? null, libmysql ? null, postgresql ? null, subversion ? null, mongodb ? null
 , enableApacheWebApplication ? false
 , enableAxis2WebService ? false
 , enableEjabberdDump ? false
@@ -13,7 +13,7 @@
 , getopt
 }:
 
-assert enableMySQLDatabase -> mysql != null;
+assert enableMySQLDatabase -> libmysql != null;
 assert enablePostgreSQLDatabase -> postgresql != null;
 assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   
   buildInputs = [ getopt ]
     ++ stdenv.lib.optional enableEjabberdDump ejabberd
-    ++ stdenv.lib.optional enableMySQLDatabase mysql.out
+    ++ stdenv.lib.optional enableMySQLDatabase libmysql
     ++ stdenv.lib.optional enablePostgreSQLDatabase postgresql
     ++ stdenv.lib.optional enableSubversionRepository subversion
     ++ stdenv.lib.optional enableMongoDatabase mongodb;

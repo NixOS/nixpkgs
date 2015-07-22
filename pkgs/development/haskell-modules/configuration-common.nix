@@ -29,7 +29,7 @@ self: super: {
   hslua = super.hslua.override { lua = pkgs.lua5_1; };
 
   # Use the default version of mysql to build this package (which is actually mariadb).
-  mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
+  mysql = super.mysql.override { mysql = pkgs.libmysql; };
 
   # Please also remove optparse-applicative special case from
   # cabal2nix/hackage2nix.hs when removing the following.

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, openssl
+, postgresql, libmysql, libgeotiff, python, pythonPackages, proj, geos, openssl
 , libpng }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
@@ -30,7 +30,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
     "--with-libz=${zlib}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.lib}/bin/mysql_config"
+    "--with-mysql=${libmysql}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-python"               # optional
     "--with-static-proj4=${proj}" # optional

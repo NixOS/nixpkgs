@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, readline, mysql, postgresql, sqlite }:
+{ stdenv, fetchurl, readline, libmysql, postgresql, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "opendbx-1.4.6";
@@ -9,10 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export CPPFLAGS="-I${mysql.lib}/include/mysql"
-    export LDFLAGS="-L${mysql.lib}/lib/mysql"
+    export CPPFLAGS="-I${libmysql.dev}/include/mysql"
     configureFlagsArray=(--with-backends="mysql pgsql sqlite3")
   '';
 
-  buildInputs = [ readline mysql.lib postgresql sqlite ];
+  buildInputs = [ readline libmysql postgresql sqlite ];
 }

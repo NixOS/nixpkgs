@@ -13,7 +13,7 @@
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, wayland
+, sqlite, libmysql, nasm, gnutls, libva, wayland
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , dbus_libs ? null, dbusSupport ? true
 , udev, udevSupport ? true
@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.lib nasm avahi libdvdcss lame
+      sqlite libmysql nasm avahi libdvdcss lame
       curl bzip2 zip unzip glxinfo xdpyinfo
     ]
     ++ lib.optional dbusSupport dbus_libs

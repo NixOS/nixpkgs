@@ -20,7 +20,7 @@
 { lib, fetchurl, writeScript, ruby, libxml2, libxslt, python, stdenv, which
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql
+, cmake, libssh2, openssl, libmysql
 }:
 
 let
@@ -48,7 +48,7 @@ in
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ libmysql zlib openssl ];
   };
 
   ncursesw = attrs: {

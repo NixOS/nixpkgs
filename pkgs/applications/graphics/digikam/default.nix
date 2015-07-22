@@ -1,7 +1,7 @@
 { stdenv, fetchurl, automoc4, boost, shared_desktop_ontologies, cmake
 , eigen, lcms, gettext, jasper, kdelibs, kdepimlibs, lensfun
 , libgphoto2, libjpeg, libkdcraw, libkexiv2, libkipi, libpgf, libtiff
-, libusb1, liblqr1, marble, mysql, opencv, phonon, pkgconfig, qca2
+, libusb1, liblqr1, marble, libmysql, opencv, phonon, pkgconfig, qca2
 , qimageblitz, qjson, qt4, soprano
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost eigen gettext jasper kdelibs kdepimlibs lcms lensfun
     libgphoto2 libjpeg libkdcraw libkexiv2 libkipi liblqr1 libpgf
-    libtiff marble mysql.lib opencv phonon qca2 qimageblitz qjson qt4
+    libtiff marble libmysql opencv phonon qca2 qimageblitz qjson qt4
     shared_desktop_ontologies soprano
   ];
 

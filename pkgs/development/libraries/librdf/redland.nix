@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, openssl, libxslt, perl
 , curl, pcre, libxml2, librdf_rasqal
-, mysql, withMysql ? false
+, libmysql, withMysql ? false
 , postgresql, withPostgresql ? false
 , sqlite, withSqlite ? true
 , db, withBdb ? false
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ openssl libxslt curl pcre libxml2 ]
-    ++ stdenv.lib.optional withMysql mysql
+    ++ stdenv.lib.optional withMysql libmysql
     ++ stdenv.lib.optional withSqlite sqlite
     ++ stdenv.lib.optional withPostgresql postgresql
     ++ stdenv.lib.optional withBdb db;

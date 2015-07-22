@@ -87,10 +87,10 @@ a.composableDerivation.composableDerivation {} (fix: {
   // wwf {
     name = "mysql";
     enable = {
-      buildInputs = [ a.mysql.lib ];
+      buildInputs = [ a.libmysql ];
       configureFlags = [
-        "--with-mysql-libs=${a.mysql.lib}/lib/mysql"
-        "--with-mysql-includes=${a.mysql.lib}/include/mysql"
+        "--with-mysql-libs=${a.libmysql.lib}/lib"
+        "--with-mysql-includes=${a.libmysql.dev}/include/mysql"
       ];
     };
   }

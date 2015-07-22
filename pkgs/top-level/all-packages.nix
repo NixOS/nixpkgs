@@ -1722,6 +1722,11 @@ let
     inherit (kf5_stable) extra-cmake-modules kconfig ki18n kcoreaddons solid;
   };
 
+  groonga = callPackage ../servers/search/groonga { };
+  libgroonga = groonga.dev;
+
+  groonga-normalizer-mysql = callPackage ../development/libraries/groonga-normalizer-mysql { };
+
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
     automake = automake112x; # fails with 13 and 14
@@ -9032,7 +9037,7 @@ let
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix { };
 
   mysql = mariadb;
-  libmysql = mysql.lib;
+  libmysql = mysql.dev;
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 

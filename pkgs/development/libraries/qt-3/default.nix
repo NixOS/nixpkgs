@@ -5,7 +5,7 @@
 , xineramaSupport ? true, libXinerama ? null
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
-, mysqlSupport ? false, mysql ? null
+, mysqlSupport ? false, libmysql ? null
 , openglSupport ? false, mesa ? null, libXmu ? null
 , x11, xextproto, zlib, libjpeg, libpng, which
 }:
@@ -14,7 +14,7 @@ assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;
 assert xrandrSupport -> libXrandr != null && randrproto != null;
 assert cursorSupport -> libXcursor != null;
-assert mysqlSupport -> mysql != null;
+assert mysqlSupport -> libmysql != null;
 assert openglSupport -> mesa != null && libXmu != null;
 
 stdenv.mkDerivation {
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       -I${randrproto}/include" else "-no-xrandr"}
     ${if xineramaSupport then "-xinerama -L${libXinerama}/lib -I${libXinerama}/include" else "-no-xinerama"}
     ${if cursorSupport then "-L${libXcursor}/lib -I${libXcursor}/include" else ""}
-    ${if mysqlSupport then "-qt-sql-mysql -L${mysql.lib}/lib/mysql -I${mysql.lib}/include/mysql" else ""}
+    ${if mysqlSupport then "-qt-sql-mysql -L${libmysql.lib}/lib -I${libmysql.dev}/include/mysql" else ""}
     ${if xftSupport then "-xft
       -L${libXft}/lib -I${libXft}/include
       -L${libXft.freetype}/lib -I${libXft.freetype}/include
