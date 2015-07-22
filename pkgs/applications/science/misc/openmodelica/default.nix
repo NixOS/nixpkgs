@@ -1,7 +1,7 @@
 {stdenv, fetchgit, fetchsvn, autoconf, automake, libtool, gfortran, clang, cmake, gnumake,
 hwloc, jre, liblapack, blas, hdf5, expat, ncurses, readline, qt4, webkit, which,
 lp_solve, omniorb, sqlite, libatomic_ops, pkgconfig, file, gettext, flex, bison,
-doxygen, boost, openscenegraph, gnome, pangox_compat, xlibs, git, bash, gtk }:
+doxygen, boost, openscenegraph, gnome, pangox_compat, xlibs, git, bash, gtk, makeWrapper }:
 
 let
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     hwloc jre liblapack blas hdf5 expat ncurses readline qt4 webkit which
     lp_solve omniorb sqlite libatomic_ops pkgconfig file gettext flex bison
     doxygen boost openscenegraph gnome.gtkglext pangox_compat xlibs.libXmu
-    git gtk];
+    git gtk makeWrapper];
 
   patchPhase = ''
     cp -fv ${fakegit}/bin/checkout-git.sh libraries/checkout-git.sh
@@ -28,6 +28,14 @@ stdenv.mkDerivation {
   configurePhase = ''
     autoconf
     ./configure CC=${clang}/bin/clang CXX=${clang}/bin/clang++ --prefix=$out
+  '';
+
+  postFixup = ''
+    for e in $(cd $out/bin && ls); do
+      wrapProgram $out/bin/$e \
+        --prefix PATH : "${gnumake}/bin" \
+        --prefix LIBRARY_PATH : "${liblapack}/lib:${blas}/lib"
+    done
   '';
 
   meta = with stdenv.lib; {
