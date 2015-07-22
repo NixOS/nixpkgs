@@ -32,7 +32,7 @@ let
     nautilus-sendto dconf-editor vinagre
   ];
 
-  gamesPackages = with gnome3; [ swell-foop ];
+  gamesPackages = with gnome3; [ swell-foop lightsoff ];
 
   inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
@@ -284,6 +284,8 @@ let
 #### Games
 
   swell-foop = callPackage ./games/swell-foop { };
+
+  lightsoff = callPackage ./games/lightsoff { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
