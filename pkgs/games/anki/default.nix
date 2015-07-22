@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     buildInputs = [ python py.wrapPython lame mplayer libpulseaudio ];
 
     preConfigure = ''
-      substituteInPlace anki \
+      substituteInPlace anki/anki \
         --replace /usr/share/ $out/share/
 
       substituteInPlace Makefile \

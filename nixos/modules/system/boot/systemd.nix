@@ -639,14 +639,16 @@ in
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
         mkdir -m 0755 -p /var/lib/udev
-        mkdir -p /var/log/journal
-        chmod 0755 /var/log/journal
 
-        # Make all journals readable to users in the wheel and adm
-        # groups, in addition to those in the systemd-journal group.
-        # Users can always read their own journals.
-        ${pkgs.acl}/bin/setfacl -nm g:wheel:rx,d:g:wheel:rx,g:adm:rx,d:g:adm:rx /var/log/journal || true
+        if ! [ -e /etc/machine-id ]; then
+          ${systemd}/bin/systemd-machine-id-setup
+        fi
       '';
+
+    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
+    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
+    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
 
     # Target for ‘charon send-keys’ to hook into.
     users.extraGroups.keys.gid = config.ids.gids.keys;
@@ -722,16 +724,13 @@ in
         startSession = true;
       };
 
+    environment.etc."tmpfiles.d/systemd.conf".source = "${systemd}/example/tmpfiles.d/systemd.conf";
     environment.etc."tmpfiles.d/x11.conf".source = "${systemd}/example/tmpfiles.d/x11.conf";
 
     environment.etc."tmpfiles.d/nixos.conf".text =
       ''
         # This file is created automatically and should not be modified.
         # Please change the option ‘systemd.tmpfiles.rules’ instead.
-
-        z /var/log/journal 2755 root systemd-journal - -
-        z /var/log/journal/%m 2755 root systemd-journal - -
-        z /var/log/journal/%m/* 0640 root systemd-journal - -
 
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
@@ -748,6 +747,10 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+
+    # Don't bother with certain units in containers.
+    systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
+    systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
   };
 

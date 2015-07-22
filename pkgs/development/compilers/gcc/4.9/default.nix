@@ -320,7 +320,7 @@ stdenv.mkDerivation ({
       " --with-gnu-as --without-gnu-ld "
       else ""}
     --enable-lto
-    ${if enableMultilib then "--disable-libquadmath" else "--disable-multilib"}
+    ${if enableMultilib then "--enable-multilib --disable-libquadmath" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
     ${if enablePlugin then "--enable-plugin" else "--disable-plugin"}
     ${optionalString (isl != null) "--with-isl=${isl}"}

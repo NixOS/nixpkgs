@@ -90,6 +90,6 @@ stdenv.mkDerivation {
     description = "The Go Programming language";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [ pierron viric ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

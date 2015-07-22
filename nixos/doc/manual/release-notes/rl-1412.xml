@@ -1,8 +1,8 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        version="5.0"
-        xml:id="sec-release-14.12">
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-14.12">
 
 <title>Release 14.12 (“Caterpillar”, 2014/12/30)</title>
 
@@ -174,4 +174,4 @@ now.</para></listitem>
 
 </para>
 
-</chapter>
+</section>

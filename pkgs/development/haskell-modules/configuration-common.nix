@@ -891,4 +891,6 @@ self: super: {
   # Hydra no longer allows building texlive packages.
   lhs2tex = dontDistribute super.lhs2tex;
 
+  # https://ghc.haskell.org/trac/ghc/ticket/9825
+  vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
 }

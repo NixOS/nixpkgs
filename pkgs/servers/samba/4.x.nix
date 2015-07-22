@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./4.x-no-persistent-install.patch
       ./4.x-fix-ctdb-deps.patch
-    ] ++ stdenv.lib.optional enableKerberos ./4.x-heimdal-compat.patch;
+    ];
 
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*

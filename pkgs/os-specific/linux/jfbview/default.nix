@@ -1,5 +1,4 @@
-# FIXME: remove gcc49 when the default gcc supports C++1y
-{ stdenv, fetchFromGitHub, freetype, gcc49, imlib2, jbig2dec, libjpeg, libX11
+{ stdenv, fetchFromGitHub, freetype, imlib2, jbig2dec, libjpeg, libX11
 , mujs, mupdf, ncurses, openjpeg, openssl }:
 
 let
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jichu4n";
   };
 
-  buildInputs = [ freetype gcc49 imlib2 jbig2dec libjpeg libX11 mujs mupdf
+  buildInputs = [ freetype imlib2 jbig2dec libjpeg libX11 mujs mupdf
     ncurses openjpeg openssl ];
 
   buildFlags = binaries;

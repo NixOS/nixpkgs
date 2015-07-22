@@ -59,6 +59,7 @@ rec {
   hoogle              = Hoogle;
   ipython             = vim-ipython;
   latex-live-preview  = vim-latex-live-preview;
+  multiple-cursors    = vim-multiple-cursors;
   necoGhc             = neco-ghc; # backwards compat, added 2014-10-18
   neocomplete         = neocomplete-vim;
   neosnippet          = neosnippet-vim;
@@ -446,6 +447,17 @@ rec {
       url = "git://github.com/jgdavey/tslime.vim";
       rev = "71ec1cbe8f9ead9805f8e0c3b76c590aeb5ed0b7";
       sha256 = "81f45f579dcc239ce0b9689044d0e92969f7538759ab0cd88596c7a010d8730b";
+    };
+    dependencies = [];
+
+  };
+
+  vim-multiple-cursors = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-multiple-cursors-2015-05-29";
+    src = fetchgit {
+      url = "git://github.com/terryma/vim-multiple-cursors";
+      rev = "3199d34f57e1e20d2dd807b31a5a72d7f7d42e96";
+      sha256 = "26b43c921b416cc19482d03435516d42a209ab104bac9979b073d0db61e95186";
     };
     dependencies = [];
 

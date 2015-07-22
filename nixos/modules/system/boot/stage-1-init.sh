@@ -182,9 +182,9 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
         for sd in @resumeDevices@; do
             # Try to detect resume device. According to Ubuntu bug:
             # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
-            # When there are multiple swap devices, we can't know where will hibernate
-            # image reside. We can check all of them for swsuspend blkid.
-            resumeInfo="$(udevadm info -q property "$sd" )"
+            # when there are multiple swap devices, we can't know where the hibernate
+            # image will reside. We can check all of them for swsuspend blkid.
+            resumeInfo="$(test -e "$d" && udevadm info -q property "$sd")"
             if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
                 resumeDev="$sd"
                 break

@@ -1966,6 +1966,8 @@ let
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
+  knockknock = callPackage ../tools/security/knockknock { };
+
   kpcli = callPackage ../tools/security/kpcli { };
 
   kst = callPackage ../tools/graphics/kst { };
@@ -1995,6 +1997,8 @@ let
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
+
+  memtester = callPackage ../tools/system/memtester { };
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
@@ -3128,9 +3132,7 @@ let
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
-    stdenv = overrideCC stdenv gcc49;
-  };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -3191,6 +3193,10 @@ let
   unfs3 = callPackage ../servers/unfs3 { };
 
   unoconv = callPackage ../tools/text/unoconv { };
+
+  unrtf = callPackage ../tools/text/unrtf { };
+
+  untex = callPackage ../tools/text/untex { };
 
   upx = callPackage ../tools/compression/upx { };
 
@@ -3683,8 +3689,12 @@ let
 
   gcc_multi =
     if system == "x86_64-linux" then lowPrio (
-      wrapCCWith (import ../build-support/cc-wrapper) glibc_multi (gcc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi gcc.cc);
+      let
+        extraBuildCommands = ''
+          echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+        '';
+      in wrapCCWith (import ../build-support/cc-wrapper) glibc_multi extraBuildCommands (gcc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith (import ../build-support/cc-wrapper) glibc_multi "" gcc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
@@ -3962,7 +3972,7 @@ let
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { inherit stdenv fetchNuGet; });
 
-  go_1_0 = callPackage ../development/compilers/go { };
+  go_1_0 = callPackage ../development/compilers/go/1.0.nix { };
 
   go_1_1 =
     if stdenv.isDarwin then
@@ -4737,7 +4747,7 @@ let
 
   win32hello = callPackage ../development/compilers/visual-c++/test { };
 
-  wrapCCWith = ccWrapper: libc: baseCC: ccWrapper {
+  wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
@@ -4746,10 +4756,10 @@ let
     dyld = if stdenv.isDarwin then darwin.dyld else null;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
-    inherit stdenv binutils coreutils zlib;
+    inherit stdenv binutils coreutils zlib extraBuildCommands;
   };
 
-  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) stdenv.cc.libc;
+  wrapCC = wrapCCWith (makeOverridable (import ../build-support/cc-wrapper)) stdenv.cc.libc "";
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: (makeOverridable (import ../build-support/gcc-wrapper-old)) {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -7641,6 +7651,7 @@ let
 
   opencascade = callPackage ../development/libraries/opencascade {
     tcl = tcl-8_5;
+    tk = tk-8_5;
   };
 
   opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
@@ -7888,7 +7899,8 @@ let
   };
 
   qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt48.override { developerBuild = true; };
+    qtLib = qt5Full; # 3.4 only supports qt5; TODO: use modularized qt>=5.4
+    withDocumentation = false; # FIXME: fails to setup some paths
   };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
@@ -9001,6 +9013,7 @@ let
   };
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
+  riak2 = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   influxdb = callPackage ../servers/nosql/influxdb { };
 
@@ -9592,20 +9605,6 @@ let
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
-  linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ];
-  };
-
-  linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-     ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-      ];
-  };
-
   linux_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
@@ -9642,16 +9641,6 @@ let
   };
 
   linux_3_18 = makeOverridable (import ../os-specific/linux/kernel/linux-3.18.nix) {
-    inherit fetchurl stdenv perl buildLinux;
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-  linux_3_19 = makeOverridable (import ../os-specific/linux/kernel/linux-3.19.nix) {
     inherit fetchurl stdenv perl buildLinux;
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -9758,8 +9747,6 @@ let
 
     fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
-    ktap = callPackage ../os-specific/linux/ktap { };
-
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
@@ -9852,15 +9839,12 @@ let
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
-  linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
   linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
   linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
-  linuxPackages_3_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_19 linuxPackages_3_19);
   linuxPackages_4_0 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_0 linuxPackages_4_0);
   linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
@@ -10193,7 +10177,6 @@ let
     cross = assert crossSystem != null; crossSystem;
   });
 
-  udev145 = callPackage ../os-specific/linux/udev/145.nix { };
   udev = pkgs.systemd;
   eudev = callPackage ../os-specific/linux/eudev {};
 
@@ -10843,7 +10826,6 @@ let
   clipit = callPackage ../applications/misc/clipit { };
 
   bomi = callPackage ../applications/video/bomi {
-    stdenv = overrideCC stdenv gcc49;
     pulseSupport = config.pulseaudio or true;
   };
 
@@ -11802,6 +11784,8 @@ let
 
   koji = callPackage ../tools/package-management/koji { };
 
+  ksuperkey = callPackage ../tools/X11/ksuperkey { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
 
   lame = callPackage ../development/libraries/lame { };
@@ -12027,8 +12011,7 @@ let
 
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
-  mozplugger = builderDefsPackage (import ../applications/networking/browsers/mozilla-plugins/mozplugger) {
-    inherit firefox;
+  mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {
     inherit (xlibs) libX11 xproto;
   };
 
@@ -12354,7 +12337,10 @@ let
 
   qiv = callPackage ../applications/graphics/qiv { };
 
-  processing = callPackage ../applications/graphics/processing { inherit (xorg) libXxf86vm; };
+  processing = callPackage ../applications/graphics/processing {
+    inherit (xorg) libXxf86vm;
+    jdk = jdk7;
+  };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
@@ -13400,8 +13386,7 @@ let
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
       import ../applications/misc/zathura {
-        inherit callPackage pkgs fetchurl lib;
-        stdenv = overrideCC stdenv gcc49;
+        inherit stdenv callPackage pkgs fetchurl lib;
         useMupdf = config.zathura.useMupdf or false;
       });
 
@@ -13415,7 +13400,6 @@ let
 
   girara = callPackage ../applications/misc/girara {
     gtk = gtk3;
-    stdenv = overrideCC stdenv gcc49;
   };
 
   girara-light = callPackage ../applications/misc/girara {

@@ -3120,11 +3120,11 @@ let
 
 
   elasticsearch = buildPythonPackage (rec {
-    name = "elasticsearch-1.4.0";
+    name = "elasticsearch-1.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch/${name}.tar.gz";
-      md5 = "14a758debd2296d923cb6c958db98eba";
+      sha256 = "1b0b5d1qp77r83r130kb2ikhd6am0d1389rdcllr1xsajrp5kj4h";
     };
 
     # Check is disabled because running them destroy the content of the local cluster!
@@ -3133,32 +3133,29 @@ let
 
     meta = {
       description = "Official low-level client for Elasticsearch";
-
       homepage = https://github.com/elasticsearch/elasticsearch-py;
-
       license = licenses.asl20;
     };
   });
 
 
   elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.3";
+    name = "elasticsearch-dsl-0.0.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/e/elasticsearch-dsl/${name}.tar.gz";
-      md5 = "6cbc9ed7aefb3ef804be4e3b318b2570";
+      sha256 = "0bz8p10qk7rz10glq9dm2nq9m1x6czzlqk518107x39gx18lm1a2";
     };
 
-    buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 ];
+    buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
 
     # ImportError: No module named test_elasticsearch_dsl
+    # Tests require a local instance of elasticsearch
     doCheck = false;
 
     meta = {
       description = "Python client for Elasticsearch";
-
       homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
-
       license = licenses.asl20;
     };
   });
@@ -7351,15 +7348,17 @@ let
 
 
   mechanize = buildPythonPackage (rec {
-    name = "mechanize-0.1.11";
+    name = "mechanize-0.2.5";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url = "http://wwwsearch.sourceforge.net/mechanize/src/${name}.tar.gz";
-      sha256 = "1h62mwy4iz09jqz17nrb9j8y0djd500zdfqwrz9xmdwqzqwixkj2";
+      url = "https://pypi.python.org/packages/source/m/mechanize/${name}.tar.gz";
+      sha256 = "0rj7r166i1dyrq0ihm5rijfmvhs8a04im28lv05c0c3v206v4rrf";
     };
 
     propagatedBuildInputs = with self; [ clientform ];
+
+    doCheck = false;
 
     meta = {
       description = "Stateful programmatic web browsing in Python";
@@ -7505,11 +7504,23 @@ let
 
     doCheck = false;
 
+    patches = [
+      ../development/python-modules/rainbowstream/image.patch
+    ];
+
+    postPatch = ''
+      clib=$out/${python.sitePackages}/rainbowstream/image.so
+      substituteInPlace rainbowstream/c_image.py \
+        --replace @CLIB@ $clib
+    '';
+
     preBuild = ''
       export LC_ALL="en_US.UTF-8"
     '';
 
     postInstall = ''
+      mkdir -p $out/lib
+      cc -fPIC -shared -o $clib rainbowstream/image.c
       for prog in "$out/bin/"*; do
         wrapProgram "$prog" \
           --prefix PYTHONPATH : "$PYTHONPATH"
@@ -11120,11 +11131,11 @@ let
 
 
   pyutil = buildPythonPackage (rec {
-    name = "pyutil-1.7.9";
+    name = "pyutil-2.0.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyutil/${name}.tar.gz";
-      sha256 = "c303bb779f96073820e2eb7c9692fe15a57df491eb356839f3cb3377ed03b844";
+      sha256 = "1fsg9yz5mi2sb0h6c1vvcqchx56i89nbvdb5gfgv1ia3b2w5ra8c";
     };
 
     buildInputs = with self; [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
@@ -12805,13 +12816,13 @@ let
   };
 
   sqlalchemy9 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.9.8";
+    name = "SQLAlchemy-0.9.9";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      md5 = "470ca4da4a0081efc830f0d90dd91682";
+      sha256 = "14az6hhrz4bgnicz4q373z119zmaf7j5zxl1jfbfl5lix5m1z9bj";
     };
 
     buildInputs = with self; [ nose mock ]
@@ -12832,6 +12843,14 @@ let
     };
   };
 
+  sqlalchemy_1_0 = self.sqlalchemy9.override rec {
+    name = "SQLAlchemy-1.0.6";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
+      sha256 = "1wv5kjf142m8g1dnbvgpbqxb8v8rm9lzgsafql2gg229xi5sba4r";
+    };
+  };
 
   sqlalchemy_imageattach = buildPythonPackage rec {
     name = "SQLAlchemy-ImageAttach-${version}";

@@ -136,6 +136,7 @@ let
     rev = "7d75e8b219c3efda2d08ae38acd6b42f8da4f5f9";
     name = "tools-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "golang.org/x/tools";
+    goPackageAliases = [ "code.google.com/p/go.tools" ];
 
     preConfigure = ''
       # Make the builtin tools available here
@@ -1148,6 +1149,8 @@ let
     rev = "4734e7aca379f0d7fcdf04fbb2101696a4b45ce8";
     name = "go-etcd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-etcd";
+    disabled = isGo13;
+
     src = fetchFromGitHub {
       inherit rev;
       owner = "coreos";
@@ -1420,6 +1423,7 @@ let
     rev = "2688e91251d9d8e404e86dd8f096e23b2f086958";
     name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-systemd";
+    disabled = isGo13;
 
     excludedPackages = "examples";
 
