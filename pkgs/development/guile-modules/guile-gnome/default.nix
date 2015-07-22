@@ -4,13 +4,13 @@
 , pango, guileCairo, autoconf, automake, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "${pkg-name}-platform-20150123";
-  pkgName = "guile-gnome";
+  name = "guile-gnome-platform-20150123";
+  repo = "guile-gnome";
   commit = "0fcbe69797b9501b8f1283a78eb92bf43b08d080";
   savannah = "http://git.savannah.gnu.org/cgit";
   
   src = fetchurl {
-    url = "${savannah}/${pkgName}.git/snapshot/${pkgName}-${commit}.tar.gz";
+    url = "${savannah}/${repo}.git/snapshot/${repo}-${commit}.tar.gz";
     sha256 = "1jhpgi7hf7pms4hqlgi97zsxsx8q9kn488mz3hjhb56yyyivxlvp";
   };
   
