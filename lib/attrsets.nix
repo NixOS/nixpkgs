@@ -76,7 +76,7 @@ rec {
        => { foo = 1; }
   */
   filterAttrs = pred: set:
-    listToAttrs (fold (n: ys: let v = set.${n}; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
+    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
 
 
   /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
