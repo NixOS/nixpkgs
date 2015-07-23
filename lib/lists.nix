@@ -38,6 +38,10 @@ rec {
     in foldl' (length list - 1);
 
 
+  # Strict version of foldl.
+  foldl' = builtins.foldl' or foldl;
+
+
   # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
   # ["a-1" "b-2"]'
   imap = f: list:
@@ -59,7 +63,7 @@ rec {
   # == [1 2 3 4 5]' and `flatten 1 == [1]'.
   flatten = x:
     if isList x
-    then fold (x: y: (flatten x) ++ y) [] x
+    then foldl' (x: y: x ++ (flatten y)) [] x
     else [x];
 
 
@@ -96,7 +100,7 @@ rec {
 
   # Count how many times function `pred' returns true for the elements
   # of `list'.
-  count = pred: fold (x: c: if pred x then c + 1 else c) 0;
+  count = pred: foldl' (c: x: if pred x then c + 1 else c) 0;
 
 
   # Return a singleton list or an empty list, depending on a boolean

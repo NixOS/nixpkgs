@@ -12,7 +12,7 @@ rec {
 
 
   # Concatenate a list of strings.
-  concatStrings = lib.fold (x: y: x + y) "";
+  concatStrings = lib.foldl' (x: y: x + y) "";
 
 
   # Map a function over a list and concatenate the resulting strings.

@@ -76,8 +76,8 @@ rec {
           else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
         in
         if options._module.check.value && set ? _definedNames then
-          fold (m: res:
-            fold (name: res:
+          foldl' (res: m:
+            foldl' (res: name:
               if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
               res m.names)
             res set._definedNames
@@ -225,7 +225,7 @@ rec {
      'opts' is a list of modules.  Each module has an options attribute which
      correspond to the definition of 'loc' in 'opt.file'. */
   mergeOptionDecls = loc: opts:
-    fold (opt: res:
+    foldl' (res: opt:
       if opt.options ? default && res ? default ||
          opt.options ? example && res ? example ||
          opt.options ? description && res ? description ||
@@ -251,7 +251,7 @@ rec {
             else if opt.options ? options then map (coerceOption opt.file) options' ++ res.options
             else res.options;
         in opt.options // res //
-          { declarations = [opt.file] ++ res.declarations;
+          { declarations = res.declarations ++ [opt.file];
             options = submodules;
           }
     ) { inherit loc; declarations = []; options = []; } opts;
@@ -302,8 +302,8 @@ rec {
         in
           processOrder (processOverride (processIfAndMerge defs));
 
-        # Type-check the remaining definitions, and merge them
-        mergedValue = fold (def: res:
+        # Type-check the remaining definitions, and merge them.
+        mergedValue = foldl' (res: def:
           if type.check def.value then res
           else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
           (type.merge loc defsFinal) defsFinal;
@@ -384,7 +384,7 @@ rec {
       defaultPrio = 100;
       getPrio = def: if def.value._type or "" == "override" then def.value.priority else defaultPrio;
       min = x: y: if x < y then x else y;
-      highestPrio = fold (def: prio: min (getPrio def) prio) 9999 defs;
+      highestPrio = foldl' (prio: def: min (getPrio def) prio) 9999 defs;
       strip = def: if def.value._type or "" == "override" then def // { value = def.value.content; } else def;
     in concatMap (def: if getPrio def == highestPrio then [(strip def)] else []) defs;
 
