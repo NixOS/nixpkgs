@@ -895,7 +895,4 @@ self: super: {
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
 
-  # https://github.com/yesodweb/Shelly.hs/issues/105
-  shelly = dontCheck super.shelly;
-
 }
