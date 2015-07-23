@@ -5754,7 +5754,9 @@ let
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
-  uhd = callPackage ../development/tools/misc/uhd { };
+  uhd = callPackage ../development/tools/misc/uhd {
+    boost = boost157;
+  };
 
   uisp = callPackage ../development/tools/misc/uisp { };
 
@@ -8513,7 +8515,9 @@ let
 
   lucene = callPackage ../development/libraries/java/lucene { };
 
-  lucenepp = callPackage ../development/libraries/lucene++ { };
+  lucenepp = callPackage ../development/libraries/lucene++ {
+    boost = boost157;
+  };
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
@@ -10659,7 +10663,9 @@ let
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
+  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
+    callPackage = newScope { boost = boost157; };
+  } );
   bitcoin = altcoins.bitcoin;
 
   aumix = callPackage ../applications/audio/aumix {
@@ -11396,7 +11402,9 @@ let
     cmake = cmake-2_8;
   };
 
-  freicoin = callPackage ../applications/misc/freicoin { };
+  freicoin = callPackage ../applications/misc/freicoin {
+    boost = boost157;
+  };
 
   fuze = callPackage ../applications/networking/instant-messengers/fuze {};
 
@@ -11862,7 +11870,9 @@ let
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
-  ledger3 = callPackage ../applications/office/ledger { };
+  ledger3 = callPackage ../applications/office/ledger {
+    boost = boost157;
+  };
   ledger = ledger3;
 
   lighttable = callPackage ../applications/editors/lighttable {};
