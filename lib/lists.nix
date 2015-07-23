@@ -90,12 +90,12 @@ rec {
 
   # Return true iff function `pred' returns true for at least element
   # of `list'.
-  any = pred: fold (x: y: if pred x then true else y) false;
+  any = builtins.any or (pred: fold (x: y: if pred x then true else y) false);
 
 
   # Return true iff function `pred' returns true for all elements of
   # `list'.
-  all = pred: fold (x: y: if pred x then y else false) true;
+  all = builtins.all or (pred: fold (x: y: if pred x then y else false) true);
 
 
   # Count how many times function `pred' returns true for the elements
