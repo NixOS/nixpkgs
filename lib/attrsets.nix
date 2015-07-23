@@ -6,7 +6,6 @@ with {
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
   inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
-  inherit (import ./misc.nix) maybeAttr;
 };
 
 rec {
@@ -86,7 +85,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (maybeAttr name nul a); }])
+          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
         ) a (attrNames n)
     ) {} list_of_attrs;
 

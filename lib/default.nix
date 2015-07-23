@@ -11,7 +11,7 @@ let
   types = import ./types.nix;
   meta = import ./meta.nix;
   debug = import ./debug.nix;
-  misc = import ./misc.nix;
+  misc = import ./deprecated.nix;
   maintainers = import ./maintainers.nix;
   platforms = import ./platforms.nix;
   systems = import ./systems.nix;

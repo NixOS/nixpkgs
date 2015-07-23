@@ -4,7 +4,6 @@ let lib = import ./default.nix; in
 
 with import ./trivial.nix;
 with import ./lists.nix;
-with import ./misc.nix;
 with import ./attrsets.nix;
 with import ./strings.nix;
 
