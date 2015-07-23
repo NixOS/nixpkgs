@@ -2927,6 +2927,8 @@ let
 
   shellinabox = callPackage ../servers/shellinabox { };
 
+  sic = callPackage ../applications/networking/irc/sic { };
+
   siege = callPackage ../tools/networking/siege {};
 
   sigil = callPackage ../applications/editors/sigil { };
