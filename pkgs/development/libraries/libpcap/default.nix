@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     else if stdenv.isDarwin then [ "--with-pcap=bpf" ]
     else [];
 
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure --replace " -arch i386" ""
+  '';
+
   preInstall = ''mkdir -p $out/bin'';
   
   crossAttrs = {
