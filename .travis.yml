@@ -1,6 +1,6 @@
 language: python
 python: "3.4"
-sudo: required
+sudo: false
 before_install: ./maintainers/scripts/travis-nox-review-pr.sh nix
 install: ./maintainers/scripts/travis-nox-review-pr.sh nox
 script: ./maintainers/scripts/travis-nox-review-pr.sh build
