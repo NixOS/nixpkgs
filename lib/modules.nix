@@ -182,18 +182,18 @@ rec {
         let
           loc = prefix ++ [name];
           # Get all submodules that declare ‘name’.
-          decls = concatLists (map (m:
+          decls = concatMap (m:
             if m.options ? ${name}
               then [ { inherit (m) file; options = m.options.${name}; } ]
               else []
-            ) options);
+            ) options;
           # Get all submodules that define ‘name’.
-          defns = concatLists (map (m:
+          defns = concatMap (m:
             if m.config ? ${name}
               then map (config: { inherit (m) file; inherit config; })
                 (pushDownProperties m.config.${name})
               else []
-            ) configs);
+            ) configs;
           nrOptions = count (m: isOption m.options) decls;
           # Extract the definitions for this loc
           defns' = map (m: { inherit (m) file; value = m.config.${name}; })
