@@ -83,7 +83,7 @@ rec {
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
   optionAttrSetToDocList' = prefix: options:
-    fold (opt: rest:
+    concatMap (opt:
       let
         docOption = rec {
           name = showOption opt.loc;
@@ -101,8 +101,7 @@ rec {
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
       in
-        # FIXME: expensive, O(n^2)
-        [ docOption ] ++ subOptions ++ rest) [] (collect isOption options);
+        [ docOption ] ++ subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
