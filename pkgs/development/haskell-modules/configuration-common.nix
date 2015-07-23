@@ -221,7 +221,7 @@ self: super: {
       });
 
   # Does not compile: "fatal error: ieee-flpt.h: No such file or directory"
-  base_4_8_0_0 = markBroken super.base_4_8_0_0;
+  base_4_8_1_0 = markBroken super.base_4_8_1_0;
 
   # Obsolete: https://github.com/massysett/prednote/issues/1.
   prednote-test = markBrokenVersion "0.26.0.4" super.prednote-test;
