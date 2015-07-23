@@ -2895,14 +2895,27 @@ let
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-1.1.0";
+    name = "docker-py-1.2.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      md5 = "b44f34530a21ed1129887f9a8b01ecec";
+      sha256 = "4494d699059559118417da192a3d4bf015b097f7b589c48e253c12b4c61e5ef0";
     };
 
-    propagatedBuildInputs = with self; [ six requests websocket_client ];
+    propagatedBuildInputs = with self; [ six
+      (requests.override {
+        src = pkgs.fetchurl {
+          url = "https://pypi.python.org/packages/source/r/requests/requests-2.5.3.tar.gz";
+          sha256 = "55d7f5619daae94ec49ee81ed8c865e5a2a47f0bbf8e06cf94636bee103eaf65";
+        };
+      })
+      (websocket_client.override {
+        src = pkgs.fetchurl {
+          url = "https://pypi.python.org/packages/source/w/websocket-client/websocket-client-0.11.0.tar.gz";
+          sha256 = "3feeab76a7275dd1feda81977dd6897582f01e3d037e9d81e6d08648aa0f7060";
+        };
+      })
+      ];
 
     # Version conflict
     doCheck = false;
