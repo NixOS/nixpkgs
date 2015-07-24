@@ -27,7 +27,7 @@
     sha256 = "0nkqqrzx9hprwjzg7ffzirnldxpqa6wn9c1rcyd34k77ym1v44pa";
   };
   winetricks = {
-    version = "20150416";
-    sha256 = "0467cn5hqry6fscjskpvxw0y00lr059jmldv1csicbav4l0dxx8k";
+    version = "20150706";
+    sha256 = "1n9xbav4q0dpfdmmjcahi4izyhvy2f7ddrq7gyhrm6pxs2zli888";
   };
 }
