@@ -65,13 +65,13 @@ rec {
 
   # Determine whether a string has given prefix/suffix.
   hasPrefix = pref: str:
-    eqStrings (substring 0 (stringLength pref) str) pref;
+    substring 0 (stringLength pref) str == pref;
   hasSuffix = suff: str:
     let
       lenStr = stringLength str;
       lenSuff = stringLength suff;
     in lenStr >= lenSuff &&
-       eqStrings (substring (lenStr - lenSuff) lenStr str) suff;
+       substring (lenStr - lenSuff) lenStr str == suff;
 
 
   # Convert a string to a list of characters (i.e. singleton strings).
@@ -102,10 +102,7 @@ rec {
   escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
 
-  # replace characters by their substitutes.  This function is equivalent to
-  # the `tr' command except that one character can be replace by multiple
-  # ones.  e.g.,
-  # replaceChars ["<" ">"] ["&lt;" "&gt;"] "<foo>" returns "&lt;foo&gt;".
+  # Obsolete - use replaceStrings instead.
   replaceChars = builtins.replaceStrings or (
     del: new: s:
     let
@@ -129,11 +126,6 @@ rec {
 
   # Appends string context from another string.
   addContextFrom = a: b: substring 0 0 a + b;
-
-
-  # Compares strings not requiring context equality
-  # Obviously, a workaround but works on all Nix versions.
-  eqStrings = a: b: addContextFrom b a == addContextFrom a b;
 
 
   # Cut a string with a separator and produces a list of strings which were
@@ -181,7 +173,7 @@ rec {
       sufLen = stringLength suf;
       sLen = stringLength s;
     in
-      if sufLen <= sLen && eqStrings suf (substring (sLen - sufLen) sufLen s) then
+      if sufLen <= sLen && suf == substring (sLen - sufLen) sufLen s then
         substring 0 (sLen - sufLen) s
       else
         s;
@@ -200,14 +192,13 @@ rec {
 
 
   # Extract name with version from URL. Ask for separator which is
-  # supposed to start extension
-  nameFromURL = url: sep: let
-    components = splitString "/" url;
-    filename = lib.last components;
-    name = builtins.head (splitString sep filename);
-  in
-  assert ! eqStrings name filename;
-  name;
+  # supposed to start extension.
+  nameFromURL = url: sep:
+    let
+      components = splitString "/" url;
+      filename = lib.last components;
+      name = builtins.head (splitString sep filename);
+    in assert name !=  filename; name;
 
 
   # Create an --{enable,disable}-<feat> string that can be passed to
@@ -215,7 +206,8 @@ rec {
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
 
-  # Create a fixed width string with additional prefix to match required width
+  # Create a fixed width string with additional prefix to match
+  # required width.
   fixedWidthString = width: filler: str:
     let
       strw = lib.stringLength str;
@@ -225,6 +217,6 @@ rec {
       if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
 
-  # Format a number adding leading zeroes up to fixed width
+  # Format a number adding leading zeroes up to fixed width.
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 }
