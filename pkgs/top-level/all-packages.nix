@@ -14110,6 +14110,8 @@ let
 
   kde5 = kf5_stable // plasma5_stable // kdeApps_stable;
 
+  theme-vertex = callPackage ../misc/themes/vertex { };
+
   xfce = xfce4-12;
   xfce4-12 = recurseIntoAttrs (import ../desktops/xfce { inherit config pkgs newScope; });
 
