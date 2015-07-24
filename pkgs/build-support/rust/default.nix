@@ -44,7 +44,7 @@ in stdenv.mkDerivation (args // {
     export CARGO_HOME="$(realpath deps)"
 
     # Let's find out which $indexHash cargo uses for file:///dev/null
-    (cd $sourceRoot && cargo fetch &>/dev/null)
+    (cd $sourceRoot && cargo fetch &>/dev/null) || true
     cd deps
     indexHash="$(basename $(echo registry/index/*))"
 
