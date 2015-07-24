@@ -6059,7 +6059,7 @@ let self = _self // overrides; _self = with self; {
       description = "A postmodern object system for Perl 5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.eelco ];
-      platforms   = stdenv.lib.platforms.linux;
+      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
