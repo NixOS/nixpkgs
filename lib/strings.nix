@@ -8,7 +8,7 @@ in
 
 rec {
 
-  inherit (builtins) stringLength substring head tail isString;
+  inherit (builtins) stringLength substring head tail isString replaceStrings;
 
 
   # Concatenate a list of strings.
@@ -80,28 +80,25 @@ rec {
   # will likely be horribly inefficient; Nix is not a general purpose
   # programming language.  Complex string manipulations should, if
   # appropriate, be done in a derivation.
-  stringToCharacters = s: let l = stringLength s; in
-    if l == 0
-    then []
-    else map (p: substring p 1 s) (lib.range 0 (l - 1));
+  stringToCharacters = s:
+    map (p: substring p 1 s) (lib.range 0 (stringLength s - 1));
 
 
-  # Manipulate a string charcater by character and replace them by strings
-  # before concatenating the results.
+  # Manipulate a string charactter by character and replace them by
+  # strings before concatenating the results.
   stringAsChars = f: s:
     concatStrings (
       map f (stringToCharacters s)
     );
 
 
-  # same as vim escape function.
-  # Each character contained in list is prefixed by "\"
-  escape = list : string :
-    stringAsChars (c: if lib.elem c list then "\\${c}" else c) string;
+  # Escape occurrence of the elements of ‘list’ in ‘string’ by
+  # prefixing it with a backslash. For example, ‘escape ["(" ")"]
+  # "(foo)"’ returns the string ‘\(foo\)’.
+  escape = list: replaceChars list (map (c: "\\${c}") list);
 
 
-  # still ugly slow. But more correct now
-  # [] for zsh
+  # Escape all characters that have special meaning in the Bourne shell.
   escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
 
@@ -109,7 +106,8 @@ rec {
   # the `tr' command except that one character can be replace by multiple
   # ones.  e.g.,
   # replaceChars ["<" ">"] ["&lt;" "&gt;"] "<foo>" returns "&lt;foo&gt;".
-  replaceChars = del: new: s:
+  replaceChars = builtins.replaceStrings or (
+    del: new: s:
     let
       substList = lib.zipLists del new;
       subst = c:
@@ -119,20 +117,22 @@ rec {
         else
           found.snd;
     in
-      stringAsChars subst s;
+      stringAsChars subst s);
 
 
-  # Case conversion utilities
+  # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
   upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   toLower = replaceChars upperChars lowerChars;
   toUpper = replaceChars lowerChars upperChars;
 
-  # Appends string context from another string
+
+  # Appends string context from another string.
   addContextFrom = a: b: substring 0 0 a + b;
 
+
   # Compares strings not requiring context equality
-  # Obviously, a workaround but works on all Nix versions
+  # Obviously, a workaround but works on all Nix versions.
   eqStrings = a: b: addContextFrom b a == addContextFrom a b;
 
 
