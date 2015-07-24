@@ -6,18 +6,16 @@
 , libXcursor, libXi, libXinerama }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.4.1";
+  version = "3.0.5";
   name = "dillo-${version}";
 
   src = fetchurl {
     url = "http://www.dillo.org/download/${name}.tar.bz2";
-    sha256 = "0iw617nnrz3541jkw5blfdlk4x8jxb382pshi8nfc7xd560c95zd";
+    sha256 = "12ql8n1lypv3k5zqgwjxlw1md90ixz3ag6j1gghfnhjq3inf26yv";
   };
 
   buildInputs = with stdenv.lib;
-    [ fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
-
-  nativeBuildInputs = [ perl ];
+  [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
 
   configureFlags =  "--enable-ssl";
 
