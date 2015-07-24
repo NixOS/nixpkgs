@@ -20,13 +20,13 @@ let
     gtk3 # for gtk-update-icon-cache
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
-    gnome_themes_standard defaultIconTheme
+    gnome_themes_standard defaultIconTheme gnome-shell-extensions
   ];
 
   optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-shell-extensions gnome-system-log gnome-system-monitor
+    gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre
