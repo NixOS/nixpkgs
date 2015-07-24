@@ -1369,6 +1369,30 @@ let
     };
   };
 
+  junegunn.go-runewidth = buildGoPackage rec {
+    rev = "travisish";
+    name = "go-runewidth-${rev}";
+    goPackagePath = "github.com/junegunn/go-runewidth";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "junegunn";
+      repo = "go-runewidth";
+      sha256 = "07d612val59sibqly5d6znfkp4h4gjd77783jxvmiq6h2fwb964k";
+    };
+  };
+
+  go-shellwords = buildGoPackage rec {
+    rev = "35d512af75e283aae4ca1fc3d44b159ed66189a4";
+    name = "go-shellwords-${rev}";
+    goPackagePath = "github.com/junegunn/go-shellwords";
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "junegunn";
+      repo = "go-shellwords";
+      sha256 = "c792abe5fda48d0dfbdc32a84edb86d884a0ccbd9ed49ad48a30cda5ba028a22";
+    };
+  };
+
   go-runit = buildGoPackage rec {
     rev = "a9148323a615e2e1c93b7a9893914a360b4945c8";
     name = "go-runit-${stdenv.lib.strings.substring 0 7 rev}";
