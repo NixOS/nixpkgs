@@ -10829,6 +10829,10 @@ let
 
   chatzilla = callPackage ../applications/networking/irc/chatzilla { };
 
+  chirp = callPackage ../applications/misc/chirp {
+    inherit (pythonPackages) pyserial pygtk;
+  };
+
   chromium = callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
