@@ -29,8 +29,7 @@ rec {
   intersperse = separator: list:
     if list == [] || length list == 1
     then list
-    else [(head list) separator]
-         ++ (intersperse separator (tail list));
+    else tail (lib.concatMap (x: [separator x]) list);
 
 
   # Concatenate a list of strings with a separator between each element, e.g.
@@ -128,9 +127,9 @@ rec {
   addContextFrom = a: b: substring 0 0 a + b;
 
 
-  # Cut a string with a separator and produces a list of strings which were
-  # separated by this separator. e.g.,
-  # `splitString "." "foo.bar.baz"' returns ["foo" "bar" "baz"].
+  # Cut a string with a separator and produces a list of strings which
+  # were separated by this separator; e.g., `splitString "."
+  # "foo.bar.baz"' returns ["foo" "bar" "baz"].
   splitString = _sep: _s:
     let
       sep = addContextFrom _s _sep;
