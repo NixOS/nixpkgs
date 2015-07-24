@@ -12,7 +12,11 @@ rec {
 
 
   # Concatenate a list of strings.
-  concatStrings = lib.foldl' (x: y: x + y) "";
+  concatStrings =
+    if builtins ? concatStringsSep then
+      builtins.concatStringsSep ""
+    else
+      lib.foldl' (x: y: x + y) "";
 
 
   # Map a function over a list and concatenate the resulting strings.
@@ -31,8 +35,8 @@ rec {
 
   # Concatenate a list of strings with a separator between each element, e.g.
   # concatStringsSep " " ["foo" "bar" "xyzzy"] == "foo bar xyzzy"
-  concatStringsSep = separator: list:
-    concatStrings (intersperse separator list);
+  concatStringsSep = builtins.concatStringsSep or (separator: list:
+    concatStrings (intersperse separator list));
 
   concatMapStringsSep = sep: f: list: concatStringsSep sep (map f list);
   concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap f list);
