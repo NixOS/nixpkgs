@@ -11607,6 +11607,8 @@ let
 
   guvcview = callPackage ../os-specific/linux/guvcview { };
 
+  gxmessage = callPackage ../applications/misc/gxmessage { };
+
   hackrf = callPackage ../applications/misc/hackrf { };
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
