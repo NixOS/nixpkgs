@@ -4143,24 +4143,21 @@ let
   llvm_36 = llvmPackages_36.llvm;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
-  llvm_33 = llvm_v ../development/compilers/llvm/3.3/llvm.nix;
+  llvm_33 = callPackage ../development/compilers/llvm/3.3/llvm.nix { };
 
-  llvm_v = path: callPackage path { };
+  llvmPackages = recurseIntoAttrs llvmPackages_36;
 
-  llvmPackages = llvmPackages_36;
-
-  llvmPackages_34 = recurseIntoAttrs (import ../development/compilers/llvm/3.4 {
-    inherit stdenv newScope fetchurl;
-    isl = isl_0_12;
-  });
-  llvmPackagesSelf = import ../development/compilers/llvm/3.4 { inherit newScope fetchurl; isl = isl_0_12; stdenv = libcxxStdenv; };
-
-  llvmPackages_35 = import ../development/compilers/llvm/3.5 {
-    inherit pkgs stdenv newScope fetchurl isl;
+  llvmPackagesSelf = llvmPackages_34.override {
+    stdenv = libcxxStdenv;
   };
 
-  llvmPackages_36 = import ../development/compilers/llvm/3.6 {
-    inherit pkgs stdenv newScope fetchurl isl wrapCC;
+  llvmPackages_34 = callPackage ../development/compilers/llvm/3.4 {
+    isl = isl_0_12;
+  };
+
+  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 { };
+
+  llvmPackages_36 = callPackage ../development/compilers/llvm/3.6 {
     inherit (stdenvAdapters) overrideCC;
   };
 
