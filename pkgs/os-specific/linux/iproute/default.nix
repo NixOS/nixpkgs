@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   patch = [ ./vpnc.patch ];
 
+  postPatch = ''
+    sed -i -e "/CONFDIR/d" Makefile
+  '';
+
   preConfigure = ''
     patchShebangs ./configure
     sed -e '/ARPDDIR/d' -i Makefile
@@ -19,7 +23,6 @@ stdenv.mkDerivation rec {
     "DESTDIR="
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
-    "CONFDIR=$(out)/etc"
     "DOCDIR=$(out)/share/doc/${name}"
     "MANDIR=$(out)/share/man"
   ];
