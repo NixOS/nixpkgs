@@ -30,8 +30,7 @@ let
   #   * COM32 entries (chainload, reboot, poweroff) are not recognized. They
   #     result in incorrect boot entries.
 
-  baseIsolinuxCfg =
-    ''
+  baseIsolinuxCfg = ''
     SERIAL 0 38400
     TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
@@ -44,7 +43,7 @@ let
     LINUX /boot/bzImage
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/initrd
-    '';
+  '';
 
   isolinuxMemtest86Entry = ''
     LABEL memtest
@@ -55,12 +54,12 @@ let
 
   isolinuxCfg = baseIsolinuxCfg + (optionalString config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry);
 
-  # The efi boot image
+  # The EFI boot image.
   efiDir = pkgs.runCommand "efi-directory" {} ''
     mkdir -p $out/EFI/boot
     cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
     mkdir -p $out/loader/entries
-    echo "title NixOS LiveCD" > $out/loader/entries/nixos-livecd.conf
+    echo "title NixOS Live CD" > $out/loader/entries/nixos-livecd.conf
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
     echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
@@ -232,7 +231,6 @@ in
       [ "root=LABEL=${config.isoImage.volumeID}"
         "boot.shell_on_fail"
         "nomodeset"
-        "systemd.log_level=debug"
       ];
 
     fileSystems."/" =
@@ -271,6 +269,8 @@ in
       };
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "usb-storage" ];
+
+    boot.blacklistedKernelModules = [ "nouveau" ];
 
     boot.initrd.kernelModules = [ "loop" ];
 

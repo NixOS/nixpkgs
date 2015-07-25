@@ -6,8 +6,8 @@
 
 <title>Booting from a USB Drive</title>
 
-<para>For systems without CD drive, the NixOS livecd can be booted from
-a usb stick. For non-UEFI installations,
+<para>For systems without CD drive, the NixOS live CD can be booted from
+a USB stick. For non-UEFI installations,
 <link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>
 will work. For UEFI installations, you should mount the ISO, copy its contents
 verbatim to your drive, then either:
