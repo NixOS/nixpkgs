@@ -964,6 +964,12 @@ let
     enableStandardFeatures = true;
   });
 
+  asciidoc-full-with-plugins = appendToName "full-with-plugins" (asciidoc.override {
+    inherit (pythonPackages) pygments;
+    enableStandardFeatures = true;
+    enableExtraPlugins = true;
+  });
+
   autossh = callPackage ../tools/networking/autossh { };
 
   asynk = callPackage ../tools/networking/asynk { };
