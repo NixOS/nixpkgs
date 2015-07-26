@@ -1132,6 +1132,19 @@ let
     };
   };
 
+  go-codec = buildGoPackage rec {
+    rev = "821cda7e48749cacf7cad2c6ed01e96457ca7e9d";
+    name = "go-codec-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/ugorji/go/codec";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "ugorji";
+      repo = "go";
+      sha256 = "1ay1l6gijxjgc7j0093drp5mjm93fmrp7r20qbqz4k05l43mqb3j";
+    };
+  };
+
   go-colortext = buildGoPackage rec {
     rev = "13eaeb896f5985a1ab74ddea58707a73d875ba57";
     name = "go-colortext-${stdenv.lib.strings.substring 0 7 rev}";
@@ -1146,7 +1159,7 @@ let
   };
 
   go-etcd = buildGoPackage rec {
-    rev = "4734e7aca379f0d7fcdf04fbb2101696a4b45ce8";
+    rev = "4cceaf7283b76f27c4a732b20730dcdb61053bf5";
     name = "go-etcd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-etcd";
     disabled = isGo13;
@@ -1155,9 +1168,9 @@ let
       inherit rev;
       owner = "coreos";
       repo = "go-etcd";
-      sha256 = "0zqr7mzd5kq0rnxj3zx5x5wwbmjkg365farwv72hzrsvq6g8zczr";
+      sha256 = "1pxrqkgnvlzq9wg9702lw8hhl8dj2gnh4dq1k90v1x9lidbw07b6";
     };
-    buildInputs = [ pkgs.etcd ];
+    buildInputs = [ pkgs.etcd go-codec ];
   };
 
   go-flags = buildGoPackage rec {
