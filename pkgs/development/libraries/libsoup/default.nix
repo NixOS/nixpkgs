@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
+, gnomeSupport ? false, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
 , libintlOrEmpty
 , intltool, python }:
 let
