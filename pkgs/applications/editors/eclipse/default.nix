@@ -2,6 +2,7 @@
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
 , glib, gtk, libXtst, jre
 , webkitgtk2 ? null  # for internal web browser
+, buildEnv, writeText, runCommand
 }:
 
 assert stdenv ? glibc;
@@ -334,4 +335,38 @@ in {
         };
     };
   };
+
+  eclipseWithPlugins = { eclipse, plugins ? [], jvmArgs ? [] }:
+    let
+      # Gather up the desired plugins.
+      pluginEnv = buildEnv {
+        name = "eclipse-plugins";
+        paths = plugins;
+      };
+
+      # Prepare the JVM arguments to add to the ini file. We here also
+      # add the property indicating the plugin directory.
+      dropinPropName = "org.eclipse.equinox.p2.reconciler.dropins.directory";
+      dropinProp = "-D${dropinPropName}=${pluginEnv}/eclipse/dropins";
+      jvmArgsText = stdenv.lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
+
+      # Prepare an eclipse.ini with the plugin directory.
+      origEclipseIni = builtins.readFile "${eclipse}/eclipse/eclipse.ini";
+      eclipseIniFile = writeText "eclipse.ini" ''
+        ${origEclipseIni}
+        ${jvmArgsText}
+      '';
+
+      # Base the derivation name on the name of the underlying
+      # Eclipse.
+      name = (stdenv.lib.meta.appendToName "with-plugins" eclipse).name;
+    in
+      runCommand name { buildInputs = [ makeWrapper ]; } ''
+        mkdir -p $out/bin
+        makeWrapper ${eclipse}/bin/eclipse $out/bin/eclipse \
+          --add-flags "--launcher.ini ${eclipseIniFile}"
+
+        ln -s ${eclipse}/share $out/
+      '';
+
 }
