@@ -73,6 +73,7 @@ in
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb";
+    outputs = [ "out" "doc" "man" ];
   };
 
   xcbproto = attrs : attrs // {
@@ -97,6 +98,7 @@ in
         rm -rf $out/share/doc
       '';
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    outputs = [ "out" "man" ];
   };
 
   libXfont = attrs: attrs // {
@@ -106,7 +108,6 @@ in
       "CFLAGS=-O0"
     ];
   };
-
 
   libXxf86vm = attrs: attrs // {
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
@@ -126,6 +127,7 @@ in
     '';
     propagatedBuildInputs = [ xorg.libSM ];
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
+    outputs = [ "out" "doc" "man" ];
   };
 
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
@@ -420,4 +422,17 @@ in
   xwd = attrs: attrs // {
     buildInputs = with xorg; attrs.buildInputs ++ [libXt libxkbfile];
   };
+
+  kbproto = attrs: attrs // {
+    outputs = [ "out" "doc" ];
+  };
+
+  xextproto = attrs: attrs // {
+    outputs = [ "out" "doc" ];
+  };
+
+  xproto = attrs: attrs // {
+    outputs = [ "out" "doc" ];
+  };
+
 }

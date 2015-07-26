@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vkzfd1pmin6xsv8lb1nabfxma8n1q00khr6nfifqkxlm2s6p197";
   };
 
+  outputs = [ "out" "man" ];
+
   nativeBuildInputs = [ autoconf ];
   buildInputs = [ openssl cyrus_sasl db groff ];
 

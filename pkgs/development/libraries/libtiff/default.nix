@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wj8d1iwk9vnpax2h29xqc2hwknxg3s0ay2d5pxkg59ihbifn6pa";
   };
 
+  outputs = [ "out" "doc" "man" ];
+
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ zlib libjpeg xz ]; #TODO: opengl support (bogus configure detection)

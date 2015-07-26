@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  outputs = [ "out" "doc" ];
+
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
