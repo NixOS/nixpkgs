@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   name = "electrum-${version}";
-  version = "2.3.2";
+  version = "2.4";
 
   src = fetchurl {
     url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "0idqm77d5rbwpw14wqg4ysvbjyqjw7zlqfcdxniy74i2qwz163bi";
+    sha256 = "0z5ksr1wlywl4bpvxjmmqnsk7jh1jfjdz9lsjkhf2j391jx0wz9q";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -16,6 +16,7 @@ buildPythonPackage rec {
     protobuf
     pyasn1
     pyasn1-modules
+    pycrypto
     pyqt4
     qrcode
     requests
