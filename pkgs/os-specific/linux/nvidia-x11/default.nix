@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
-, gtk, atk, pango, glib, gdk_pixbuf, cairo
+, gtk, atk, pango, glib, gdk_pixbuf, cairo, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -52,7 +52,9 @@ stdenv.mkDerivation {
     [ gtk atk pango glib gdk_pixbuf cairo ] );
   programPath = makeLibraryPath [ xlibs.libXv ];
 
-  buildInputs = [ perl ];
+  buildInputs = [ perl nukeReferences ];
+
+  disallowedReferences = if libsOnly then [] else [ kernel.dev ];
 
   meta = with stdenv.lib.meta; {
     homepage = http://www.nvidia.com/object/unix.html;
