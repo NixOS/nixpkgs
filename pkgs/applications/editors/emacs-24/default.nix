@@ -7,8 +7,8 @@
 , withGTK2 ? true, gtk2
 }:
 
-assert (libXft != null) -> libpng != null;	# probably a bug
-assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
+assert (libXft != null) -> libpng != null;      # probably a bug
+assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
 assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
