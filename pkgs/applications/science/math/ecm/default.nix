@@ -1,8 +1,8 @@
-{stdenv, fetchurl, gmp}:
+{ stdenv, fetchurl, gmp, m4 }:
 
 let
   pname = "ecm";
-  version = "6.2.3";
+  version = "6.4.4";
   name = "${pname}-${version}";
 in
 
@@ -10,11 +10,11 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-      url = https://gforge.inria.fr/frs/download.php/22124/ecm-6.2.3.tar.gz;
-      sha256 = "1iwwhbz5vwl7j6dyh292hahc8yy16pq9mmm7mxy49zhxd81vy08p";
+      url = http://gforge.inria.fr/frs/download.php/file/32159/ecm-6.4.4.tar.gz;
+      sha256 = "0v5h2nicz9yx78c2d72plbhi30iq4nxbvphja1s9501db4aah4y8";
     };
 
-  buildInputs = [ gmp ];
+  buildInputs = [ m4 gmp ];
 
   doCheck = true;
 
@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://ecm.gforge.inria.fr/;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
