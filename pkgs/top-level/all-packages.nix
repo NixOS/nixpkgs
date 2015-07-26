@@ -5283,7 +5283,7 @@ let
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = callPackage ../development/tools/build-managers/bazel { jdk = oraclejdk8; };
+  bazel = callPackage ../development/tools/build-managers/bazel { jdk = openjdk8; };
 
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
