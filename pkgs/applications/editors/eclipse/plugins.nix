@@ -51,6 +51,30 @@ in {
     };
   };
 
+  color-theme = buildEclipsePlugin rec {
+    name = "color-theme-${version}";
+    version = "1.0.0.201410260308";
+    javaName = "com.github.eclipsecolortheme";
+
+    srcFeature = fetchurl {
+      url = "https://eclipse-color-theme.github.io/update/features/${javaName}.feature_${version}.jar";
+      sha256 = "128b9b1cib5ff0w1114ns5mrbrhj2kcm358l4dpnma1s8gklm8g2";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://eclipse-color-theme.github.io/update/plugins/${javaName}_${version}.jar";
+      sha256 = "0wz61909bhqwzpqwll27ia0cn3anyp81haqx3rj1iq42cbl42h0y";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://eclipsecolorthemes.org/;
+      description = "Plugin to switch color themes conveniently and without side effects";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   emacsplus = buildEclipsePlugin rec {
     name = "emacsplus-${version}";
     version = "4.2.0";
