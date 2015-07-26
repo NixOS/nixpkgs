@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "03lvj6rxv16xk0dpsbzvm2gq5bggkwff9wqbpkq0znihzijpax1j";
   };
 
+  outputs = [ "out" "doc" ];
+
   enableParallelBuilding = true;
 
   configureFlags =
