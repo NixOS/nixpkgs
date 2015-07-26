@@ -6418,10 +6418,6 @@ let
     guileBindings = config.gnutls.guile or false;
   };
 
-  gnutls33_with_guile = lowPrio (gnutls33.override { guileBindings = true; });
-
-  gnutls34_with_guile = lowPrio (gnutls34.override { guileBindings = true; });
-
   gpac = callPackage ../applications/video/gpac { };
 
   gpgme = callPackage ../development/libraries/gpgme {
