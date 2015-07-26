@@ -12660,6 +12660,8 @@ let
 
   cura = callPackage ../applications/misc/cura { };
 
+  peru = callPackage ../applications/version-management/peru {};
+
   printrun = callPackage ../applications/misc/printrun { };
 
   sddm = callPackage ../applications/display-managers/sddm { };
