@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
     done
 
     rm -rf $out/lib/cups/filter/{gstopxl,gstoraster}
+
+    rm -rf $out/share/ghostscript/*/{doc,examples}
   '';
 
   meta = {
