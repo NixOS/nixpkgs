@@ -4,7 +4,6 @@
 , libvdpau, libelf, libva
 , grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableExtraFeatures ? false # not maintained
 }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
@@ -123,10 +122,8 @@ stdenv.mkDerivation {
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
   postInstall = with stdenv.lib; ''
     mv -t "$drivers/lib/" \
-  '' + optionalString enableExtraFeatures ''
-      `#$out/lib/libXvMC*` \
-      $out/lib/gbm $out/lib/libgbm* \
-  '' + ''
+      $out/lib/libXvMC* \
+      $out/lib/d3d \
       $out/lib/vdpau \
       $out/lib/libxatracker*
 
