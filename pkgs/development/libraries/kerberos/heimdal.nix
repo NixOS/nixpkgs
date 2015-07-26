@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "an implementation of Kerberos 5 (and some more stuff) largely written in Sweden";
+    description = "An implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
