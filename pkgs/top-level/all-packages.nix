@@ -11668,7 +11668,10 @@ let
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
-  icewm = callPackage ../applications/window-managers/icewm { };
+  icewm = callPackage ../applications/window-managers/icewm {
+    inherit (xlibs) libX11 libXft libXext libXinerama
+      libXrandr libICE libSM;
+  };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
