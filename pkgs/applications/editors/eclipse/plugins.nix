@@ -51,4 +51,28 @@ in {
     };
   };
 
+  emacsplus = buildEclipsePlugin rec {
+    name = "emacsplus-${version}";
+    version = "4.2.0";
+    javaName = "com.mulgasoft.emacsplus";
+
+    srcFeature = fetchurl {
+      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/${javaName}.feature_${version}.jar";
+      sha256 = "0wja3cd7gq8w25797fxnafvcncjnmlv8qkl5iwqj7zja2f45vka8";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/${javaName}_${version}.jar";
+      sha256 = "08yw45nr90mlpdzim74vsvdaxj41sgpxcrqk5ia6l2dzvrqlsjs1";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://www.mulgasoft.com/emacsplus/;
+      description = "Provides a more Emacs-like experience in the Eclipse text editors";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
 }
