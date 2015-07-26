@@ -12138,6 +12138,10 @@ let
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
+  oroborus = callPackage ../applications/window-managers/oroborus {
+    inherit (xlibs) libSM libICE libXt libXaw libXmu libXext libXft libXpm libXrandr libXrender xextproto libXinerama;
+  };
+
   panamax_api = callPackage ../applications/networking/cluster/panamax/api {
     ruby = ruby_2_1;
   };
