@@ -9102,7 +9102,7 @@ let
     libmemcached = null; # Detection is broken upstream
   };
 
-  postgresql = postgresql92;
+  postgresql = postgresql94;
 
   postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
 
