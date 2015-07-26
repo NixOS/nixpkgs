@@ -443,7 +443,7 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ pkgs.iptables pkgs.ipset ];
+    environment.systemPackages = [ pkgs.iptables ];
 
     boot.kernelModules = map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
     boot.extraModprobeConfig = optionalString (!cfg.autoLoadConntrackHelpers) ''
@@ -462,7 +462,7 @@ in
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables pkgs.ipset ];
+      path = [ pkgs.iptables ];
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE. So the host system had
