@@ -11719,8 +11719,7 @@ let
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {
-    ghostscript = if stdenv.isDarwin then null else ghostscript;
-    perl = null; # Currently Broken
+    ghostscript = null;
   };
 
   imagemagickBig = imagemagick;
