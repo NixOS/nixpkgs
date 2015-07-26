@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, fontconfig, autoreconfHook
-, withJava ? true, jdk ? null, ant ? null
+, withJava ? false, jdk ? null, ant ? null
 , withAACS ? false, libaacs ? null
 , withBDplus ? false, libbdplus ? null
 , withMetadata ? true, libxml2 ? null
