@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-let version = "3.0.9"; in
+let version = "3.0.10"; in
 stdenv.mkDerivation rec {
   name = "xdelta-${version}";
   
   src = fetchFromGitHub {
-    sha256 = "1pd7dyq44dbggmwkrr8251anqsf2an67zbvrk4vfnc92jkmjp17i";
+    sha256 = "0wwxdr01var3f90iwi1lgjpsa4y549g850hyyix5cm0qk67ck4rg";
     rev = "v${version}";
     repo = "xdelta-devel";
     owner = "jmacd";
