@@ -3,6 +3,7 @@
 , glib, gtk, libXtst, jre
 , webkitgtk2 ? null  # for internal web browser
 , buildEnv, writeText, runCommand
+, recurseIntoAttrs, callPackage
 }:
 
 assert stdenv ? glibc;
@@ -368,5 +369,7 @@ in {
 
         ln -s ${eclipse}/share $out/
       '';
+
+  plugins = recurseIntoAttrs (callPackage ./plugins.nix { });
 
 }
