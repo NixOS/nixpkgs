@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     sha256 = "ea34dd64fe44343445daf6dd690d0691e9d973468de44878da97371c16d89784";
   };
 
+  outputs = [ "out" "doc" ];
+
   patchPhase = ''
     patchShebangs libsoup/
     patch -p1 < ${./bad-symbol.patch}

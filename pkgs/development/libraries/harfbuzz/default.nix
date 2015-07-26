@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0z05vj3va43adzxn026fpdvdd533q5zrs5dcxaz3gd021hysa6nq";
   };
 
+  outputs = [ "out" "doc" ];
+
   configureFlags = [
     ( "--with-graphite2=" + (if withGraphite2 then "yes" else "no") ) # not auto-detected by default
     ( "--with-icu=" +       (if withIcu       then "yes" else "no") )

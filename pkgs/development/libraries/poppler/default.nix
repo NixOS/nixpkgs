@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  outputs = [ "out" "doc" ];
+
   patches = [ ./datadir_env.patch ];
 
   propagatedBuildInputs = with stdenv.lib;
