@@ -30,6 +30,8 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
+  postInstall = "rm -rf $out/share/gtk-doc";
+
   meta = {
     inherit (glib.meta) maintainers platforms;
   };
