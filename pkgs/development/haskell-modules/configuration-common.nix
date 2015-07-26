@@ -221,7 +221,7 @@ self: super: {
       });
 
   # Does not compile: "fatal error: ieee-flpt.h: No such file or directory"
-  base_4_8_0_0 = markBroken super.base_4_8_0_0;
+  base_4_8_1_0 = markBroken super.base_4_8_1_0;
 
   # Obsolete: https://github.com/massysett/prednote/issues/1.
   prednote-test = markBrokenVersion "0.26.0.4" super.prednote-test;
@@ -825,6 +825,7 @@ self: super: {
 
   # Won't compile with recent versions of QuickCheck.
   testpack = markBroken super.testpack;
+  inilist = dontCheck super.inilist;
   MissingH = dontCheck super.MissingH;
 
   # Obsolete for GHC versions after GHC 6.10.x.
@@ -869,6 +870,7 @@ self: super: {
   # This package can't be built on non-Windows systems.
   Win32 = overrideCabal super.Win32 (drv: { broken = !pkgs.stdenv.isCygwin; });
   inline-c-win32 = dontDistribute super.inline-c-win32;
+  Southpaw = dontDistribute super.Southpaw;
 
   # Doesn't work with recent versions of mtl.
   cron-compat = markBroken super.cron-compat;
@@ -893,4 +895,5 @@ self: super: {
 
   # https://ghc.haskell.org/trac/ghc/ticket/9825
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
+
 }

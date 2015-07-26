@@ -40,7 +40,7 @@ in {
       example = literalExample "[ pkgs.gnome3.gpaste ]";
       description = "Additional list of packages to be added to the session search path.
                      Useful for gnome shell extensions or gsettings-conditionated autostart.";
-      apply = list: list ++ [ gnome3.gnome_shell ]; 
+      apply = list: list ++ [ gnome3.gnome_shell gnome3.gnome-shell-extensions ];
     };
 
     environment.gnome3.packageSet = mkOption {

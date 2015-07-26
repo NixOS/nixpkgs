@@ -203,8 +203,6 @@ rec {
     in
       work startSet [] [];
 
-  genericClosure = builtins.genericClosure or lazyGenericClosure;
-
   innerModifySumArgs = f: x: a: b: if b == null then (f a b) // x else 
         innerModifySumArgs f x (a // b);
   modifySumArgs = f: x: innerModifySumArgs f x {};

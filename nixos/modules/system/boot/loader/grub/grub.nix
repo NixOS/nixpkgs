@@ -10,7 +10,7 @@ let
 
   realGrub = if cfg.version == 1 then pkgs.grub
     else if cfg.zfsSupport then pkgs.grub2.override { zfsSupport = true; }
-    else if cfg.enableTrustedboot then pkgs.trustedGrub
+    else if cfg.enableTrustedBoot then pkgs.trustedGrub
            else pkgs.grub2;
 
   grub =
@@ -112,7 +112,7 @@ in
         description = ''
           The devices on which the boot loader, GRUB, will be
           installed. Can be used instead of <literal>device</literal> to
-          install grub into multiple devices (e.g., if as softraid arrays holding /boot).
+          install GRUB onto multiple devices.
         '';
       };
 
@@ -135,8 +135,8 @@ in
             example = "/boot1";
             type = types.str;
             description = ''
-              The path to the boot directory where grub will be written. Generally
-              this boot parth should double as an efi path.
+              The path to the boot directory where GRUB will be written. Generally
+              this boot path should double as an EFI path.
             '';
           };
 
@@ -166,7 +166,7 @@ in
             example = [ "/dev/sda" "/dev/sdb" ];
             type = types.listOf types.str;
             description = ''
-              The path to the devices which will have the grub mbr written.
+              The path to the devices which will have the GRUB MBR written.
               Note these are typically device paths and not paths to partitions.
             '';
           };
@@ -197,7 +197,7 @@ in
         type = types.lines;
         description = ''
           Additional bash commands to be run at the script that
-          prepares the grub menu entries.
+          prepares the GRUB menu entries.
         '';
       };
 
@@ -276,7 +276,7 @@ in
         example = "1024x768";
         type = types.str;
         description = ''
-          The gfxmode to pass to grub when loading a graphical boot interface under efi.
+          The gfxmode to pass to GRUB when loading a graphical boot interface under EFI.
         '';
       };
 
@@ -285,7 +285,7 @@ in
         example = "auto";
         type = types.str;
         description = ''
-          The gfxmode to pass to grub when loading a graphical boot interface under bios.
+          The gfxmode to pass to GRUB when loading a graphical boot interface under BIOS.
         '';
       };
 
@@ -330,10 +330,10 @@ in
         type = types.addCheck types.str
           (type: type == "uuid" || type == "label" || type == "provided");
         description = ''
-          Determines how grub will identify devices when generating the
+          Determines how GRUB will identify devices when generating the
           configuration file. A value of uuid / label signifies that grub
           will always resolve the uuid or label of the device before using
-          it in the configuration. A value of provided means that grub will
+          it in the configuration. A value of provided means that GRUB will
           use the device name as show in <command>df</command> or
           <command>mount</command>. Note, zfs zpools / datasets are ignored
           and will always be mounted using their labels.
@@ -344,7 +344,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether grub should be build against libzfs.
+          Whether GRUB should be build against libzfs.
           ZFS support is only available for GRUB v2.
           This option is ignored for GRUB v1.
         '';
@@ -354,7 +354,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether grub should be build with EFI support.
+          Whether GRUB should be build with EFI support.
           EFI support is only available for GRUB v2.
           This option is ignored for GRUB v1.
         '';
@@ -364,16 +364,16 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Enable support for encrypted partitions. Grub should automatically
+          Enable support for encrypted partitions. GRUB should automatically
           unlock the correct encrypted partition and look for filesystems.
         '';
       };
 
-      enableTrustedboot = mkOption {
+      enableTrustedBoot = mkOption {
         default = false;
         type = types.bool;
         description = ''
-          Enable trusted boot. Grub will measure all critical components during
+          Enable trusted boot. GRUB will measure all critical components during
           the boot process to offer TCG (TPM) support.
         '';
       };
@@ -429,7 +429,7 @@ in
       assertions = [
         {
           assertion = !cfg.zfsSupport || cfg.version == 2;
-          message = "Only grub version 2 provides zfs support";
+          message = "Only GRUB version 2 provides ZFS support";
         }
         {
           assertion = cfg.mirroredBoots != [ ];
@@ -441,19 +441,19 @@ in
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
-          assertion = !cfg.enableTrustedboot || cfg.version == 2;
+          assertion = !cfg.enableTrustedBoot || cfg.version == 2;
           message = "Trusted GRUB is only available for GRUB 2";
         }
         {
-          assertion = !cfg.efiSupport || !cfg.enableTrustedboot;
+          assertion = !cfg.efiSupport || !cfg.enableTrustedBoot;
           message = "Trusted GRUB does not have EFI support";
         }
         {
-          assertion = !cfg.zfsSupport || !cfg.enableTrustedboot;
+          assertion = !cfg.zfsSupport || !cfg.enableTrustedBoot;
           message = "Trusted GRUB does not have ZFS support";
         }
         {
-          assertion = !cfg.enableTrustedboot;
+          assertion = !cfg.enableTrustedBoot;
           message = "Trusted GRUB can break your system. Remove assertion if you want to test trustedGRUB nevertheless.";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
@@ -471,7 +471,7 @@ in
         }
       ] ++ flip map args.devices (device: {
         assertion = device == "nodev" || hasPrefix "/" device;
-        message = "Grub devices must be absolute paths, not ${dev} in ${args.path}";
+        message = "GRUB devices must be absolute paths, not ${dev} in ${args.path}";
       }));
     })
 

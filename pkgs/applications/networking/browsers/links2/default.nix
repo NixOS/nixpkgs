@@ -1,6 +1,6 @@
 { stdenv, fetchurl
-, gpm, openssl, pkgconfig # Misc.
-, libpng, libjpeg, libtiff # graphic formats
+, gpm, openssl, pkgconfig, libev # Misc.
+, libpng, libjpeg, libtiff, librsvg # graphic formats
 , bzip2, zlib, xz # Transfer encodings
 , enableFB ? true
 , enableDirectFB ? false, directfb
@@ -8,16 +8,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.8";
+  version = "2.10";
   name = "links2-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/download/links-${version}.tar.bz2";
-    sha256 = "15h07498z52jfdahzgvkphg1f7qvxnpbyfn2xmsls0d2dwwdll3r";
+    sha256 = "0lqxg55sp1kphl7ykm2km0s2vsn92a0gmlgypmkqb984r060n3l4";
   };
 
   buildInputs =
-    [ libpng libjpeg libtiff gpm openssl xz bzip2 zlib ]
+    [ libev librsvg libpng libjpeg libtiff gpm openssl xz bzip2 zlib ]
     ++ stdenv.lib.optionals enableX11 [ libX11 libXau libXt ]
     ++ stdenv.lib.optional enableDirectFB [ directfb ];
 

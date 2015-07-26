@@ -3962,6 +3962,41 @@ let
     };
   };
 
+  netcdf4 = buildPythonPackage rec {
+    name = "netCDF4-${version}";
+    version = "1.1.8";
+
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/netCDF4/${name}.tar.gz";
+      sha256 = "0y6s8g82rbij0brh9hz3aapyyq6apj8fpmhhlyibz1354as7rjq1";
+    };
+
+    propagatedBuildInputs = with self ; [
+      numpy
+      pkgs.zlib
+      pkgs.netcdf
+      pkgs.hdf5
+      pkgs.curl
+      pkgs.libjpeg
+    ];
+
+    patchPhase = ''
+      export USE_NCCONFIG=0
+      export HDF5_DIR="${pkgs.hdf5}"
+      export NETCDF4_DIR="${pkgs.netcdf}"
+      export CURL_DIR="${pkgs.curl}"
+      export JPEG_DIR="${pkgs.libjpeg}"
+    '';
+
+    meta = {
+      description = "interface to netCDF library (versions 3 and 4)";
+      homepage = https://pypi.python.org/pypi/netCDF4;
+      license = licenses.free;  # Mix of license (all MIT* like)
+    };
+  };
+
   odfpy = buildPythonPackage rec {
     version = "0.9.6";
     name = "odfpy-${version}";
@@ -9126,6 +9161,10 @@ let
       click configobj prompt_toolkit psycopg2 pygments sqlparse
     ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
       inherit version;
       description = "Command-line interface for PostgreSQL";
@@ -9425,10 +9464,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.42";
+    version = "0.43";
 
     src = pkgs.fetchurl {
-      sha256 = "04nywwyxzkl3qgah29i959irsbqi8viiadxfkxycqh7hq2yq8h86";
+      sha256 = "1z5fap8c7q27p0s82jn11i6fwg0g9zm2zy5na8is53kgbhl10fdr";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 
@@ -11985,12 +12024,12 @@ let
   };
 
 
-  scikitlearn = buildPythonPackage {
+  scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-0.16.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/s/scikit-learn/scikit-learn-0.15.2.tar.gz";
-      sha256 = "19jzmbi3j4ix8418i80ayl595dwyi4gy474kb2nc1v8kdwgqi2hs";
+      url = "https://pypi.python.org/packages/source/s/scikit-learn/${name}.tar.gz";
+      sha256 = "1r761qmsq2mnl8sapplbx0ipj6i7ppr2cmz009q5rjana0liwwn0";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];

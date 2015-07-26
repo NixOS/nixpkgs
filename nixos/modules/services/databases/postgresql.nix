@@ -207,6 +207,7 @@ in
 
         serviceConfig =
           { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
             PermissionsStartOnly = true;

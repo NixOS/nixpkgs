@@ -288,6 +288,7 @@
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
   ./services/networking/haproxy.nix
+  ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix

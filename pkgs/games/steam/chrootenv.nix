@@ -60,8 +60,6 @@ buildFHSUserEnv {
       pkgs.openal
       pkgs.libpulseaudio
 
-      pkgs.flashplayer
-
       pkgs.gst_all_1.gst-plugins-ugly # "Audiosurf 2" needs this
     ];
 

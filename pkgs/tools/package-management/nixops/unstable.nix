@@ -26,7 +26,7 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "01n2ykszrnqr3kqqdg1n2l8wm38yhri7r3d7b0abklsslz9dlvmy";
   };
 
-  buildInputs = [ pythonPackages.nose pythonPackages.coverage ];
+  buildInputs = [ /* libxslt */ pythonPackages.nose pythonPackages.coverage ];
 
   propagatedBuildInputs =
     [ pythonPackages.prettytable
@@ -43,16 +43,17 @@ pythonPackages.buildPythonPackage rec {
       # Backward compatibility symlink.
       ln -s nixops $out/bin/charon
 
-      make -C doc/manual install \
+      # Documentation build is currently broken. Re-try with newer version.
+      : make -C doc/manual install nixops.1 docbookxsl=${docbook5_xsl}/xml/xsl/docbook \
         docdir=$out/share/doc/nixops mandir=$out/share/man
 
       mkdir -p $out/share/nix/nixops
-      cp -av nix/* $out/share/nix/nixops
+      cp -av "nix/"* $out/share/nix/nixops
 
       # Add openssh to nixops' PATH. On some platforms, e.g. CentOS and RHEL
       # the version of openssh is causing errors when have big networks (40+)
       wrapProgram $out/bin/nixops --prefix PATH : "${openssh}/bin"
-    ''; # */
+    '';
 
   meta = {
     homepage = https://github.com/NixOS/nixops;

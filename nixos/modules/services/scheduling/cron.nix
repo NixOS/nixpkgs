@@ -93,7 +93,7 @@ in
 
     { services.cron.enable = mkDefault (allFiles != []); }
 
-    (mkIf (config.services.cron.enable && allFiles != []) {
+    (mkIf (config.services.cron.enable) {
 
       security.setuidPrograms = [ "crontab" ];
 

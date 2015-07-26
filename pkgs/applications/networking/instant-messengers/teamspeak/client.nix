@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, zlib, glib, libpng, freetype, xorg
-, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
-, libredirect, quazip, less, which
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype
+, xorg, fontconfig, xlibs, qt5, xkeyboard_config, alsaLib, libpulseaudio ? null
+, libredirect, quazip, less, which, unzip
 }:
 
 let
@@ -14,6 +14,16 @@ let
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xlibs.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qt5.base libpulseaudio
     ];
+
+  desktopItem = makeDesktopItem {
+    name = "teamspeak";
+    exec = "ts3client";
+    icon = "teamspeak";
+    comment = "The TeamSpeak voice communication tool";
+    desktopName = "TeamSpeak";
+    genericName = "TeamSpeak";
+    categories = "Network";
+  };
 
 in
 
@@ -33,7 +43,13 @@ stdenv.mkDerivation rec {
                 else "1b3nbvfpd8lx3dig8z5yk6zjkbmsy6y938dhj1f562wc8adixciz";
   };
 
-  buildInputs = [ makeWrapper less which ];
+  # grab the plugin sdk for the desktop icon
+  pluginsdk = fetchurl {
+    url = "http://dl.4players.de/ts/client/pluginsdk/pluginsdk_3.0.16.zip";
+    sha256 = "1qpqpj3r21wff3ly9ail4l6b57pcqycsh2hca926j14sdlvpv7kl";
+  };
+
+  buildInputs = [ makeWrapper less which unzip ];
 
   unpackPhase =
     ''
@@ -61,6 +77,12 @@ stdenv.mkDerivation rec {
       # Install files.
       mkdir -p $out/lib/teamspeak
       mv * $out/lib/teamspeak/
+
+      # Make a desktop item
+      mkdir -p $out/share/applications/ $out/share/icons/
+      unzip ${pluginsdk}
+      cp pluginsdk/docs/client_html/images/logo.png $out/share/icons/teamspeak.png
+      cp ${desktopItem}/share/applications/* $out/share/applications/
 
       # Make a symlink to the binary from bin.
       mkdir -p $out/bin/

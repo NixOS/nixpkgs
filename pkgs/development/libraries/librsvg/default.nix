@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
+{ lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
 , bzip2, libcroco, libintlOrEmpty
-, gtk3 ? null
+, withGTK ? false, gtk3 ? null
 , gobjectIntrospection ? null, enableIntrospection ? false }:
 
 # no introspection by default, it's too big
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
 
-  propagatedBuildInputs = [ glib gdk_pixbuf cairo gtk3 ];
+  propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
 
   nativeBuildInputs = [ pkgconfig ];
 

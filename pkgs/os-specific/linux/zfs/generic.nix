@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     "--with-udevdir=$(out)/lib/udev"
     "--with-systemdunitdir=$(out)/etc/systemd/system"
     "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
+    "--with-mounthelperdir=$(out)/bin"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--enable-systemd"
@@ -68,6 +69,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  installFlags = [
+    "sysconfdir=\${out}/etc"
+    "DEFAULT_INITCONF_DIR=\${out}/default"
+  ];
 
   postInstall = ''
     # Prevent kernel modules from depending on the Linux -dev output.

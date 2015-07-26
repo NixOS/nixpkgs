@@ -1,5 +1,5 @@
-{ stdenv, autoconf, automake, makeWrapper, pkgconfig, libtool, which
-, boost, python, pythonPackages, libxml2, git, zlib
+{ stdenv, autoconf, automake, makeWrapper, pkgconfig, libtool, which, git
+, boost, python, pythonPackages, libxml2, zlib
 
 # Optional Dependencies
 , snappy ? null, leveldb ? null, yasm ? null, fcgi ? null, expat ? null
@@ -112,14 +112,13 @@ stdenv.mkDerivation {
     ./0001-Makefile-env-Don-t-force-sbin.patch
   ];
 
-  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which ]
+  nativeBuildInputs = [ autoconf automake makeWrapper pkgconfig libtool which git ]
     ++ optionals (versionAtLeast version "9.0.2") [
       pythonPackages.setuptools pythonPackages.argparse
     ];
   buildInputs = buildInputs ++ cryptoLibsMap.${cryptoStr} ++ [
     boost python libxml2 optYasm optLibatomic_ops optLibs3 malloc pythonPackages.flask zlib
   ] ++ optional (versionAtLeast version "9.0.0") [
-    git                   # Used for the gitversion string
     pythonPackages.sphinx # Used for docs
   ] ++ optional stdenv.isLinux [
     linuxHeaders libuuid udev keyutils optLibaio optLibxfs optZfs

@@ -1,4 +1,4 @@
-{ pkgs, newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
+{ newScope, stdenv, isl, fetchurl, overrideCC, wrapCC }:
 let
   callPackage = newScope (self // { inherit stdenv isl version fetch; });
 

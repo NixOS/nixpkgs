@@ -4,7 +4,6 @@ let lib = import ./default.nix; in
 
 with import ./trivial.nix;
 with import ./lists.nix;
-with import ./misc.nix;
 with import ./attrsets.nix;
 with import ./strings.nix;
 
@@ -53,8 +52,8 @@ rec {
     if length list == 1 then head list
     else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
-    else if all isAttrs list then fold lib.mergeAttrs {} list
-    else if all isBool list then fold lib.or false list
+    else if all isAttrs list then foldl' lib.mergeAttrs {} list
+    else if all isBool list then foldl' lib.or false list
     else if all isString list then lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then head list
     else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
@@ -68,7 +67,7 @@ rec {
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
     if defs == [] then abort "This case should never happen."
-    else fold (def: val:
+    else foldl' (val: def:
       if def.value != val then
         throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
       else
@@ -83,7 +82,7 @@ rec {
   optionAttrSetToDocList = optionAttrSetToDocList' [];
 
   optionAttrSetToDocList' = prefix: options:
-    fold (opt: rest:
+    concatMap (opt:
       let
         docOption = rec {
           name = showOption opt.loc;
@@ -101,8 +100,7 @@ rec {
           let ss = opt.type.getSubOptions opt.loc;
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
       in
-        # FIXME: expensive, O(n^2)
-        [ docOption ] ++ subOptions ++ rest) [] (collect isOption options);
+        [ docOption ] ++ subOptions) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from

@@ -49,9 +49,8 @@ in
       type = types.int;
       default = 4;
       description = ''
-        The kernel console log level.  Only log messages with a
-        priority numerically less than this will appear on the
-        console.
+        The kernel console log level.  Log messages with a priority
+        numerically less than this will not appear on the console.
       '';
     };
 
