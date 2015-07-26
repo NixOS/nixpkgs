@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "8a47cd7c35dfa628a4acfaef387e7451013c61d250bbcf1f38067a7c73f9f3e1";
   };
 
+  outputs = [ "out" "doc" ];
+
   nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ curl openssl sqlite ] ++ lib.optional stdenv.isLinux libsodium;
