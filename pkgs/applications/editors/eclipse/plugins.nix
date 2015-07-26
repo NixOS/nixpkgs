@@ -75,4 +75,28 @@ in {
     };
   };
 
+  findbugs = buildEclipsePlugin rec {
+    name = "findbugs-${version}";
+    version = "3.0.1.20150306-5afe4d1";
+    javaName = "edu.umd.cs.findbugs.plugin.eclipse";
+
+    srcFeature = fetchurl {
+      url = "http://findbugs.cs.umd.edu/eclipse/features/${javaName}_${version}.jar";
+      sha256 = "1m9fav2xlb9wrx2d00lpnh2sy0w5yzawynxm6xhhbfdzd0vpfr9v";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://findbugs.cs.umd.edu/eclipse/plugins/${javaName}_${version}.jar";
+      sha256 = "10p3mrbp9wi6jhlmmc23qv7frh605a23pqsc7w96569bsfb5wa8q";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://findbugs.sourceforge.net/;
+      description = "Plugin that uses static analysis to look for bugs in Java code";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
 }
