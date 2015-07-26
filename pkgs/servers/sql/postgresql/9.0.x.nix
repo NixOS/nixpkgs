@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "19gq6axjhvlr5zlrzwnll1fbrvai4xh0nb1jki6gmmschl6v5m4l";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs = [ zlib readline openssl ];
 
   LC_ALL = "C";

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0j85j69rf54cwz5yhrhk4ca22b82990j5sqb8cr1fl9843nd0fzp";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs = [ zlib readline openssl ]
                 ++ optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
