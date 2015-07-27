@@ -1,14 +1,17 @@
-{ fetchurl, stdenv, binutils }:
+{ stdenv, fetchurl, binutils }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lightning-2.0.5";
+
+  name = "lightning-${version}";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/lightning/${name}.tar.gz";
-    sha256 = "0jm9a8ddxc1v9hyzyv4ybg37fjac2yjqv1hkd262wxzqms36mdk5";
+    sha256 = "19j9nwl88k660045s40cbz5zrl1wpd2mcxnnc8qqnnaj311a58qz";
   };
 
-  # Needs libopcodes.so  from binutils for 'make check'
+  # Needs libopcodes.so from binutils for 'make check'
   buildInputs = [ binutils ];
 
   doCheck = true;
@@ -16,7 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.gnu.org/software/lightning/;
     description = "Run-time code generation library";
-
     longDescription = ''
       GNU lightning is a library that generates assembly language code
       at run-time; it is very fast, making it ideal for Just-In-Time
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
       to the clients a standardized RISC instruction set inspired by
       the MIPS and SPARC chips.
     '';
-
-    license = stdenv.lib.licenses.lgpl3Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    license = licenses.lgpl3Plus;
   };
 }
