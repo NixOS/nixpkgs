@@ -15143,4 +15143,6 @@ let
 
   udevil = callPackage ../applications/misc/udevil {};
 
+  facter = callPackage ../tools/system/facter {};
+
 }; in self; in pkgs
