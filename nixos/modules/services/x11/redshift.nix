@@ -67,7 +67,7 @@ in {
           -l ${cfg.latitude}:${cfg.longitude} \
           -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
           -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
-          ${cfg.extraOptions}
+          ${lib.strings.concatStringsSep " " cfg.extraOptions}
       '';
       environment = { DISPLAY = ":0"; };
       serviceConfig.Restart = "always";
