@@ -34,8 +34,9 @@ let
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno ];
 
-  inherit (pkgs) libsoup glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
+  inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
+  libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;

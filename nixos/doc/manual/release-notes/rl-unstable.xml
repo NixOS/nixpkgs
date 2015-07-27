@@ -50,11 +50,29 @@ following incompatible changes:
 
 <itemizedlist>
 
+<listitem><para><command>sshd</command> no longer supports DSA and ECDSA
+host keys by default. If you have existing systems with such host keys
+and want to continue to use them, please set
+
+<programlisting>
+system.stateVersion = "14.12";
+</programlisting>
+
+(The new option <option>system.stateVersion</option> ensures that
+certain configuration changes that could break existing systems (such
+as the <command>sshd</command> host key setting) will maintain
+compatibility with the specified NixOS release.)</para></listitem>
+
 <listitem><para><command>cron</command> is no longer enabled by
 default, unless you have a non-empty
 <option>services.cron.systemCronJobs</option>. To force
 <command>cron</command> to be enabled, set
 <option>services.cron.enable = true</option>.</para></listitem>
+
+<listitem><para>Nix now requires binary caches to be cryptographically
+signed. If you have unsigned binary caches that you want to continue
+to use, you should set <option>nix.requireSignedBinaryCaches =
+false</option>.</para></listitem>
 
 <listitem><para>Steam now doesn't need root rights to work. Instead of using
 <literal>*-steam-chrootenv</literal>, you should now just run <literal>steam</literal>.

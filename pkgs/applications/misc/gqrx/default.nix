@@ -1,6 +1,6 @@
 { stdenv, fetchurl, qt4, gnuradio, boost, gnuradio-osmosdr
 # drivers (optional):
-, rtl-sdr
+, rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr
+    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   configurePhase = ''qmake PREFIX="$out"'';
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;  # should work on Darwin / OS X too
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor the-kenny ];
   };
 }
