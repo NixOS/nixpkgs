@@ -1,6 +1,6 @@
 { stdenv, fetchurl, qt4, gnuradio, boost, gnuradio-osmosdr
 # drivers (optional):
-, rtl-sdr
+, rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr
+    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   configurePhase = ''qmake PREFIX="$out"'';
