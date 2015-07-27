@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, fetchzip, unzip }:
 
 let
 
@@ -25,6 +25,32 @@ let
 
     };
 
+  # Helper for the case where we have a ZIP file containing an Eclipse
+  # update site.
+  buildEclipseUpdateSite = { name, version, src, meta }:
+    stdenv.mkDerivation {
+      name = "eclipse-" + name;
+      inherit meta src;
+
+      buildInputs = [ unzip ];
+      phases = [ "unpackPhase" "installPhase" ];
+
+      installPhase = ''
+        dropinDir="$out/eclipse/dropins/${name}"
+
+        cd features
+        for feature in *.jar; do
+          feat=''${feature%.jar}
+          mkdir -p $dropinDir/features/$feat
+          unzip $feature -d $dropinDir/features/$feat
+        done
+        cd ..
+
+        mkdir -p $dropinDir/plugins
+        cp -v "plugins/"*.jar $dropinDir/plugins/
+      '';
+    };
+
 in {
 
   anyedittools = buildEclipsePlugin rec {
@@ -49,6 +75,26 @@ in {
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
     };
+  };
+
+  checkstyle = buildEclipseUpdateSite rec {
+    name = "checkstyle-${version}";
+    version = "6.5.0.201504121610";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.5.0/net.sf.eclipsecs-updatesite_6.5.0.201504121610-bin.zip";
+      sha256 = "1zikpkss0c3l460ipvznp22kpak8w31n7k6yk41nc1w49zflvcf0";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://eclipse-cs.sourceforge.net/;
+      description = "Checkstyle integration into the Eclipse IDE";
+      license = licenses.lgpl21;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+
   };
 
   color-theme = buildEclipsePlugin rec {
