@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     "DESTDIR="
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(out)/share/doc/${name}"
     "MANDIR=$(out)/share/man"
+    "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
   ];
 
   buildFlags = [
@@ -35,9 +35,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
-
-  # Get rid of useless TeX/SGML docs.
-  postInstall = "rm -rf $out/share/doc";
 
   meta = with stdenv.lib; {
     homepage = http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2;
