@@ -10948,6 +10948,8 @@ let
 
   diffuse = callPackage ../applications/version-management/diffuse { };
 
+  direwolf = callPackage ../applications/misc/direwolf { };
+
   dirt = callPackage ../applications/audio/dirt {};
 
   distrho = callPackage ../applications/audio/distrho {};
