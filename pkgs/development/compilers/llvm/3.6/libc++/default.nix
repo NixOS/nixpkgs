@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  linkCxxAbi = stdenv.isLinux;
+
   setupHook = ./setup-hook.sh;
 
   meta = {
