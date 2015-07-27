@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;  # should work on Darwin / OS X too
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor the-kenny ];
   };
 }
