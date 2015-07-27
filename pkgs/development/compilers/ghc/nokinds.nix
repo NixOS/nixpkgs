@@ -27,14 +27,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150703";
+  version = "7.11.20150718";
   name = "ghc-nokinds-${version}";
-  rev = "887170ac254aaacc2d5e29f2565ac61522fd8f61";
+  rev = "4cb79c85a4976c509a65a8638899391a60cd0962";
 
   src = fetchgit {
     url = "https://github.com/goldfirere/ghc.git";
     inherit rev;
-    sha256 = "010x9ckig76sz97s2ss1j1sf70czqx1cn39nj4xbh49m8n2zvsqf";
+    sha256 = "1pyz459hs189bw2jaz7k2j2r53nc1vfa4q3zd3zz1zm0h14lsmlv";
   };
 
   postUnpack = ''
