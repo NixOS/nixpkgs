@@ -184,16 +184,11 @@ in
       hostKeys = mkOption {
         type = types.listOf types.attrs;
         default =
-          [ { path = "/etc/ssh/ssh_host_dsa_key";
-              type = "dsa";
-            }
-            { path = "/etc/ssh/ssh_host_ecdsa_key";
-              type = "ecdsa";
-              bits = 521;
-            }
-            { path = "/etc/ssh/ssh_host_ed25519_key";
-              type = "ed25519";
-            }
+          [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
+            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+          ] ++ optionals (!versionAtLeast config.system.stateVersion "15.07")
+          [ { type = "dsa"; path = "/etc/ssh/ssh_host_dsa_key"; }
+            { type = "ecdsa"; bits = 521; path = "/etc/ssh/ssh_host_ecdsa_key"; }
           ];
         description = ''
           NixOS can automatically generate SSH host keys.  This option

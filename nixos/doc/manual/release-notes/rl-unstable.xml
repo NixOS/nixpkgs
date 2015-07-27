@@ -50,6 +50,19 @@ following incompatible changes:
 
 <itemizedlist>
 
+<listitem><para><command>sshd</command> no longer supports DSA and ECDSA
+host keys by default. If you have existing systems with such host keys
+and want to continue to use them, please set
+
+<programlisting>
+system.stateVersion = "14.12";
+</programlisting>
+
+(The new option <option>system.stateVersion</option> ensures that
+certain configuration changes that could break existing systems (such
+as the <command>sshd</command> host key setting) will maintain
+compatibility with the specified NixOS release.)</para></listitem>
+
 <listitem><para><command>cron</command> is no longer enabled by
 default, unless you have a non-empty
 <option>services.cron.systemCronJobs</option>. To force
