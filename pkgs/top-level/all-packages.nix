@@ -11857,7 +11857,6 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
-    #boost = boost155;
     #glm = glm_0954;
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
