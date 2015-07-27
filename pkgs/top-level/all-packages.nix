@@ -7845,6 +7845,7 @@ let
   postgis = callPackage ../development/libraries/postgis { };
 
   protobuf = protobuf2_6;
+  protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
