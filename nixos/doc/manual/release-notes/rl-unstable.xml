@@ -56,6 +56,11 @@ default, unless you have a non-empty
 <command>cron</command> to be enabled, set
 <option>services.cron.enable = true</option>.</para></listitem>
 
+<listitem><para>Nix now requires binary caches to be cryptographically
+signed. If you have unsigned binary caches that you want to continue
+to use, you should set <option>nix.requireSignedBinaryCaches =
+false</option>.</para></listitem>
+
 <listitem><para>Steam now doesn't need root rights to work. Instead of using
 <literal>*-steam-chrootenv</literal>, you should now just run <literal>steam</literal>.
 <literal>steamChrootEnv</literal> package was renamed to <literal>steam</literal>,
