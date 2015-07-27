@@ -121,6 +121,25 @@ in {
     };
   };
 
+  eclemma = buildEclipseUpdateSite rec {
+    name = "eclemma-${version}";
+    version = "2.3.2.201409141915";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "mirror://sourceforge/project/eclemma/01_EclEmma_Releases/2.3.2/eclemma-2.3.2.zip";
+      sha256 = "0w1kwcjh45p7msv5vpc8i6dsqwrnfmjama6vavpnxlji56jd3c43";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://www.eclemma.org/;
+      description = "EclEmma is a free Java code coverage tool for Eclipse";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   emacsplus = buildEclipsePlugin rec {
     name = "emacsplus-${version}";
     version = "4.2.0";
