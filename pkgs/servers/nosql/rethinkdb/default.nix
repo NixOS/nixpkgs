@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, which, protobuf, gperftools
-, boost, zlib, curl, python, m4, icu, jemalloc }:
+{ stdenv, fetchurl, which, m4, python
+, protobuf, boost, zlib, curl, openssl, icu, jemalloc
+}:
 
 stdenv.mkDerivation rec {
   name = "rethinkdb-${version}";
@@ -15,11 +16,16 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = "--lib-path ${gperftools}/lib --lib-path ${jemalloc}/lib";
+  configureFlags = [
+    "--with-jemalloc"
+    "--lib-path=${jemalloc}/lib"
+  ];
 
-  buildInputs = [ protobuf boost zlib curl icu jemalloc ];
+  buildInputs = [ protobuf boost zlib curl openssl icu jemalloc ];
 
   nativeBuildInputs = [ which m4 python ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "An open-source distributed database built with love";
