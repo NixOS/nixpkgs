@@ -19,9 +19,16 @@ stdenv.mkDerivation rec {
     "DESTDIR="
     "LIBDIR=$(out)/lib"
     "SBINDIR=$(out)/sbin"
-    "CONFDIR=$(out)/etc"
     "DOCDIR=$(out)/share/doc/${name}"
     "MANDIR=$(out)/share/man"
+  ];
+
+  buildFlags = [
+    "CONFDIR=/etc"
+  ];
+
+  installFlags = [
+    "CONFDIR=$(out)/etc"
   ];
 
   buildInputs = [ db iptables ];
