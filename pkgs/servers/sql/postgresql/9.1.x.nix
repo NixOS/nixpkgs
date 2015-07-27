@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a44hmcvfaa8j169ladsibmvjakw6maaxqkzz1ab8139cqkda9i7";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs = [ zlib readline openssl ];
 
   enableParallelBuilding = true;

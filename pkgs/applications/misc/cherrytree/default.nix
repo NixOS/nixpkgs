@@ -1,18 +1,24 @@
 { stdenv, fetchurl, python, pythonPackages, gettext, pygtksourceview, sqlite }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cherrytree-0.35.8";
+
+  name = "cherrytree-${version}";
+  version = "0.35.9";
 
   src = fetchurl {
     url = "http://www.giuspen.com/software/${name}.tar.xz";
-    sha256 = "0vqc1idzd73f4q5f4zwwypj4jiivwnb4y0r3041h2pm08y1wgsd8";
+    sha256 = "14yahp0y13z3xkpwvprm7q9x3rj6jbzi0bryqlsn3bbafdq7wnac";
   };
 
-  propagatedBuildInputs = [ pythonPackages.sqlite3 ];
+  propagatedBuildInputs = with pythonPackages;
+  [ sqlite3 ];
 
-  buildInputs = with pythonPackages; [ python gettext wrapPython pygtk dbus pygtksourceview ];
+  buildInputs = with pythonPackages;
+  [ python gettext wrapPython pygtk dbus pygtksourceview ];
 
-  pythonPath = with pythonPackages; [ pygtk dbus pygtksourceview ];
+  pythonPath = with pythonPackages;
+  [ pygtk dbus pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 
@@ -27,10 +33,21 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = {
-    description = "A hierarchical note taking application, featuring rich text and syntax highlighting, storing data in a single xml or sqlite file";
+  meta = { 
+    description = "An hierarchical note taking application";
+    longDescription = ''
+      Cherrytree is an hierarchical note taking application,
+      featuring rich text, syntax highlighting and powerful search
+      capabilities. It organizes all information in units called
+      "nodes", as in a tree, and can be very useful to store any piece
+      of information, from tables and links to pictures and even entire
+      documents. All those little bits of information you have scattered
+      around your hard drive can be conveniently placed into a
+      Cherrytree document where you can easily find it.
+    ''; 
     homepage = http://www.giuspen.com/cherrytree;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; linux;
-  };
+    license = licenses.gpl3;
+    platforms = platforms.linux; 
+    maintainers = [ maintainers.AndersonTorres ]; 
+  }; 
 }

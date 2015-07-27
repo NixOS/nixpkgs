@@ -47,8 +47,10 @@ installPhase() {
 
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
-        cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
-        cp kernel/uvm/nvidia-uvm.ko $out/lib/modules/$kernelVersion/misc
+        for i in kernel/nvidia.ko kernel/uvm/nvidia-uvm.ko; do
+            nuke-refs $i
+            cp $i $out/lib/modules/$kernelVersion/misc/
+        done
     fi
 
     # All libs except GUI-only are in $out now, so fixup them.

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $item --replace "sed " "${gnused}/bin/sed "
       substituteInPlace $item --replace "egrep " "${gnugrep}/bin/egrep "
       sed -i $item -re "s#([^e])grep #\1${gnugrep}/bin/grep #g" # Don't replace 'egrep'
-      substituteInPlace $item --replace "which " "${which}/bin/which "
+      substituteInPlace $item --replace "which " "type -P "
       substituteInPlace $item --replace "/usr/bin/file" "${file}/bin/file"
     done
   '';

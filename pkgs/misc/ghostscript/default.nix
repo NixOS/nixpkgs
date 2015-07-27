@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
+
+    rm -r $out/lib/cups/filter/{gstopxl,gstoraster}
   '';
 
   meta = {

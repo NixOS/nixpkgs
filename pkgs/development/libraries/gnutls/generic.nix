@@ -1,5 +1,6 @@
-{ fetchurl, stdenv, autoreconfHook, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, libidn, p11_kit, unbound, trousers
+{ lib, fetchurl, stdenv, autoreconfHook, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, guileBindings, guile, perl, gmp, libidn, p11_kit, unbound
+, tpmSupport ? false, trousers
 
 # Version dependent args
 , version, src, patches ? []
@@ -7,9 +8,6 @@
 
 assert guileBindings -> guile != null;
 
-let
-  inherit (stdenv.lib) optional optionals optionalString;
-in
 stdenv.mkDerivation rec {
   name = "gnutls-${version}";
 
@@ -19,11 +17,11 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     # FIXME: perhaps use $SSL_CERT_FILE instead
-    optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+    lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
   ++ [
     "--disable-dependency-tracking"
     "--enable-fast-install"
-  ] ++ optionals guileBindings
+  ] ++ lib.optional guileBindings
     [ "--enable-guile" "--with-guile-site-dir=\${out}/share/guile/site" ];
 
   # Build of the Guile bindings is not parallel-safe.  See
@@ -32,9 +30,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = !guileBindings;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp ]
-    ++ optional stdenv.isLinux trousers
+    ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
-    ++ optional guileBindings guile;
+    ++ lib.optional guileBindings guile;
 
   nativeBuildInputs = [ perl pkgconfig autoreconfHook ];
 
@@ -43,14 +41,14 @@ stdenv.mkDerivation rec {
   doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
   # Fixup broken libtool and pkgconfig files
-  preFixup = optionalString (!stdenv.isDarwin) ''
-    sed -e 's,-ltspi,-L${trousers}/lib -ltspi,' \
+  preFixup = lib.optionalString (!stdenv.isDarwin) ''
+    sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
         -e 's,-lz,-L${zlib}/lib -lz,' \
         -e 's,-lgmp,-L${gmp}/lib -lgmp,' \
         -i $out/lib/libgnutls.la $out/lib/pkgconfig/gnutls.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GNU Transport Layer Security Library";
 
     longDescription = ''

@@ -12,7 +12,7 @@
 , bluraySupport ? true, libbluray ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, jackaudioSupport ? true, libjack2 ? null
+, jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? true, libpulseaudio ? null
 , bs2bSupport ? true, libbs2b ? null
 # For screenshots

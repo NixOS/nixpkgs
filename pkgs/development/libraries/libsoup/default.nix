@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, libxml2, pkgconfig
-, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
+, gnomeSupport ? false, libgnome_keyring, sqlite, glib_networking, gobjectIntrospection
 , libintlOrEmpty
 , intltool, python }:
 let
@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   configureFlags = "--disable-tls-check" + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
+  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     inherit (glib.meta) maintainers platforms;

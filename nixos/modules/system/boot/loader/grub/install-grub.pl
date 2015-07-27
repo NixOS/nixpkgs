@@ -237,6 +237,7 @@ else {
         $conf .= "
             " . $grubStore->search;
     }
+    # FIXME: should use grub-mkconfig.
     $conf .= "
         " . $grubBoot->search . "
         if [ -s \$prefix/grubenv ]; then
@@ -245,14 +246,12 @@ else {
 
         # ‘grub-reboot’ sets a one-time saved entry, which we process here and
         # then delete.
-        if [ \"\${saved_entry}\" ]; then
-          # The next line *has* to look exactly like this, otherwise KDM's
-          # reboot feature won't work properly with GRUB 2.
+        if [ \"\${next_entry}\" ]; then
+          # FIXME: KDM expects the next line to be present.
           set default=\"\${saved_entry}\"
-          set saved_entry=
-          set prev_saved_entry=
-          save_env saved_entry
-          save_env prev_saved_entry
+          set default=\"\${next_entry}\"
+          set next_entry=
+          save_env next_entry
           set timeout=1
         else
           set default=$defaultEntry
