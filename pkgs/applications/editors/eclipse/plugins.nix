@@ -188,4 +188,28 @@ in {
     };
   };
 
+  testng = buildEclipsePlugin rec {
+    name = "testng-${version}";
+    version = "6.9.5.201506120235";
+    javaName = "org.testng.eclipse";
+
+    srcFeature = fetchurl {
+      url = "http://beust.com/eclipse/features/org.testng.eclipse_6.9.5.201506120235.jar";
+      sha256 = "02imv0rw10pik55a7p00jin65shvhfpzgna02ky94yx7dlf9fyy9";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://beust.com/eclipse/plugins/org.testng.eclipse_6.9.5.201506120235.jar";
+      sha256 = "0ni1ky4p5l1qzph0np1qw9pcyhrvy6zmn9c8q1b5rm5xv1fcvji4";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://testng.org/;
+      description = "Eclipse plugin for the TestNG testing framework";
+      license = licenses.asl20;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
 }
