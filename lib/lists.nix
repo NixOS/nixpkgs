@@ -209,20 +209,6 @@ rec {
   init = list: assert list != []; take (length list - 1) list;
 
 
-  # Zip two lists together.
-  zipTwoLists = xs: ys:
-    let
-      len1 = length xs;
-      len2 = length ys;
-      len = if len1 < len2 then len1 else len2;
-      zipTwoLists' = n:
-        if n != len then
-          [ { first = elemAt xs n; second = elemAt ys n; } ]
-          ++ zipTwoLists' (n + 1)
-        else [];
-    in zipTwoLists' 0;
-
-
   deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
 
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
