@@ -1681,11 +1681,11 @@ let
 
 
   cairocffi = buildPythonPackage rec {
-    name = "cairocffi-0.5.4";
+    name = "cairocffi-0.7.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cairocffi/${name}.tar.gz";
-      md5 = "e3fa4002583bfaa88b156e1af9c75bde";
+      md5 = "e26d06a8d8b16c7210414ce15d453636";
     };
 
     propagatedBuildInputs = with self; [ cffi ];
@@ -2363,11 +2363,11 @@ let
   };
 
   cffi = buildPythonPackage rec {
-    name = "cffi-0.8.6";
+    name = "cffi-1.1.2";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      sha256 = "0406j3sgndmx88idv5zxkkrwfqxmjl18pj8gf47nsg4ymzixjci5";
+      url = "https://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
+      md5 = "ca6e6c45b45caa87aee9adc7c796eaea";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
@@ -16770,4 +16770,22 @@ let
     };
   };
 
+  xcffib = buildPythonPackage rec {
+    version = "0.3.2";
+    name = "xcffib-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xcffib/${name}.tar.gz";
+      md5 = "fa13f3fee67c83016a1242982a7c8bda";
+    };
+
+    propagatedBuildInputs = [ self.cffi self.six ];
+
+    meta = {
+      description = "A drop in replacement for xpyb, an XCB python binding";
+      homepage = "https://github.com/tych0/xcffib";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ kamilchm ];
+    };
+  };
 }; in pythonPackages
