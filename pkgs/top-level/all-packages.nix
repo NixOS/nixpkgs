@@ -9109,15 +9109,12 @@ let
 
   postgresql = postgresql94;
 
-  postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
-
-  postgresql91 = callPackage ../servers/sql/postgresql/9.1.x.nix { };
-
-  postgresql92 = callPackage ../servers/sql/postgresql/9.2.x.nix { };
-
-  postgresql93 = callPackage ../servers/sql/postgresql/9.3.x.nix { };
-
-  postgresql94 = callPackage ../servers/sql/postgresql/9.4.x.nix { };
+  inherit (callPackages ../servers/sql/postgresql { })
+    postgresql90
+    postgresql91
+    postgresql92
+    postgresql93
+    postgresql94;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
