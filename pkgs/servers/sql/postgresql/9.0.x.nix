@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./less-is-more.patch ];
 
+  postInstall = ''mkdir -p $doc'';
+
   passthru = {
     inherit readline;
     psqlSchema = "9.0";
