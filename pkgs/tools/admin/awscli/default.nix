@@ -21,6 +21,14 @@ pythonPackages.buildPythonPackage rec {
     groff
   ];
 
+  postInstall = ''
+    mkdir -p $out/etc/bash_completion.d
+    echo "complete -C $out/bin/aws_completer aws" > $out/etc/bash_completion.d/awscli
+    mkdir -p $out/share/zsh/site-functions
+    mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
+    rm $out/bin/aws.cmd
+  '';
+
   meta = {
     homepage = https://aws.amazon.com/cli/;
     description = "Unified tool to manage your AWS services";
