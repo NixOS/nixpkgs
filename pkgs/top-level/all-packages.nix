@@ -141,6 +141,8 @@ let
   # below).
   callPackage = newScope {};
 
+  callPackages = lib.callPackagesWith defaultScope;
+
   newScope = extra: lib.callPackageWith (defaultScope // extra);
 
   # Easily override this package set.

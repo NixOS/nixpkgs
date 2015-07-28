@@ -1,6 +1,8 @@
 let
+
   lib = import ./default.nix;
   inherit (builtins) attrNames isFunction;
+
 in
 
 rec {
@@ -90,12 +92,28 @@ rec {
   */
   callPackageWith = autoArgs: fn: args:
     let
-      f    = if builtins.isFunction fn then fn else import fn;
+      f = if builtins.isFunction fn then fn else import fn;
       auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
     in makeOverridable f (auto // args);
 
 
-  /* Add attributes to each output of a derivation without changing the derivation itself */
+  /* Like callPackage, but for a function that returns an attribute
+     set of derivations. The override function is added to the
+     individual attributes. */
+  callPackagesWith = autoArgs: fn: args:
+    let
+      f = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
+      finalArgs = auto // args;
+      pkgs = f finalArgs;
+      mkAttrOverridable = name: pkg: pkg // {
+        override = newArgs: mkAttrOverridable name (f (finalArgs // newArgs)).${name};
+      };
+    in lib.mapAttrs mkAttrOverridable pkgs;
+
+
+  /* Add attributes to each output of a derivation without changing
+     the derivation itself. */
   addPassthru = drv: passthru:
     let
       outputs = drv.outputs or [ "out" ];
