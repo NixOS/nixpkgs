@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "QML based X11 display manager";
-    homepage = http://launchpad.net/lightdm;
+    homepage = https://github.com/sddm/sddm;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
