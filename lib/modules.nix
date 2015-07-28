@@ -281,38 +281,39 @@ rec {
         inherit isDefined files;
       };
 
-    # Merge definitions of a value of a given type
-    mergeDefinitions = loc: type: defs: rec {
-      defsFinal =
-        let
-          # Process mkMerge and mkIf properties
-          processIfAndMerge = defs: concatMap (m:
-            map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
-          ) defs;
+  # Merge definitions of a value of a given type.
+  mergeDefinitions = loc: type: defs: rec {
+    defsFinal =
+      let
+        # Process mkMerge and mkIf properties
+        processIfAndMerge = defs: concatMap (m:
+          map (value: { inherit (m) file; inherit value; }) (dischargeProperties m.value)
+        ) defs;
 
-          # Process mkOverride properties
-          processOverride = defs: filterOverrides defs;
+        # Process mkOverride properties
+        processOverride = defs: filterOverrides defs;
 
-          # Sort mkOrder properties
-          processOrder = defs:
-            # Avoid sorting if we don't have to.
-            if any (def: def.value._type or "" == "order") defs
-            then sortProperties defs
-            else defs;
-        in
-          processOrder (processOverride (processIfAndMerge defs));
+        # Sort mkOrder properties
+        processOrder = defs:
+          # Avoid sorting if we don't have to.
+          if any (def: def.value._type or "" == "order") defs
+          then sortProperties defs
+          else defs;
+      in
+        processOrder (processOverride (processIfAndMerge defs));
 
-        # Type-check the remaining definitions, and merge them.
-        mergedValue = foldl' (res: def:
-          if type.check def.value then res
-          else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
-          (type.merge loc defsFinal) defsFinal;
+    # Type-check the remaining definitions, and merge them.
+    mergedValue = foldl' (res: def:
+      if type.check def.value then res
+      else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
+      (type.merge loc defsFinal) defsFinal;
 
-        isDefined = defsFinal != [];
-        optionalValue =
-          if isDefined then { value = mergedValue; }
-          else {};
-    };
+    isDefined = defsFinal != [];
+
+    optionalValue =
+      if isDefined then { value = mergedValue; }
+      else {};
+  };
 
   /* Given a config set, expand mkMerge properties, and push down the
      other properties into the children.  The result is a list of
