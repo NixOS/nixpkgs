@@ -225,6 +225,22 @@ in {
         };
   };
 
+  eclipse_cpp_45 = buildEclipse {
+    name = "eclipse-cpp-4.5";
+    description = "Eclipse IDE for C/C++ Developers, Mars release";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/R/eclipse-cpp-mars-R-linux-gtk-x86_64.tar.gz;
+          sha1 = "11f9583e23ae68eb675107e6c9acc48e0a2520ae";
+        }
+      else if stdenv.system == "i686-linux" then
+        fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/mars/R/eclipse-cpp-mars-R-linux-gtk.tar.gz;
+          sha1 = "45dddb8c8f2ec79b7e25cc13d93785863ffe4791";
+        }
+      else throw "Unsupported system: ${stdenv.system}";
+  };
 
   eclipse_sdk_421 = buildEclipse {
     name = "eclipse-sdk-4.2.1";
