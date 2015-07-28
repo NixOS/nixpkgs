@@ -12157,6 +12157,10 @@ let
     ruby = ruby_1_9_3.override { cursesSupport = true; };
   };
 
+  synapse = callPackage ../applications/misc/synapse {
+    inherit (gnome3) libgee;
+  };
+
   synfigstudio = callPackage ../applications/graphics/synfigstudio {
     fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
   };
