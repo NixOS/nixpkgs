@@ -10,7 +10,7 @@ let
     ''
       base_dir = /var/run/dovecot2/
 
-      protocols = ${optionalString cfg.enableImap "imap"} ${optionalString cfg.enablePop3 "pop3"}
+      protocols = ${optionalString cfg.enableImap "imap"} ${optionalString cfg.enablePop3 "pop3"} ${optionalString cfg.enableLmtp "lmtp"}
     ''
     + (if cfg.sslServerCert!="" then
     ''
@@ -68,6 +68,11 @@ in
       enableImap = mkOption {
         default = true;
         description = "Start the IMAP listener (when Dovecot is enabled).";
+      };
+
+      enableLmtp = mkOption {
+        default = false;
+        description = "Start the LMTP listener (when Dovecot is enabled).";
       };
 
       user = mkOption {

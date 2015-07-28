@@ -1502,6 +1502,20 @@ let
   ];
 
   otherOverrides = old: new: {
+    stringi = old.stringi.overrideDerivation (attrs: {
+      postInstall = let
+        icuName = "icudt52l";
+        icuSrc = pkgs.fetchzip {
+          url = "http://static.rexamine.com/packages/${icuName}.zip";
+          sha256 = "0hvazpizziq5ibc9017i1bb45yryfl26wzfsv05vk9mc1575r6xj";
+          stripRoot = false;
+        };
+        in ''
+          ${attrs.postInstall or ""}
+          cp ${icuSrc}/${icuName}.dat $out/library/stringi/libs
+        '';
+    });
+
     xml2 = old.xml2.overrideDerivation (attrs: {
       preConfigure = "export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2";
     });

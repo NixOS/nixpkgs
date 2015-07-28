@@ -19,12 +19,12 @@ assert withFonts -> freetype != null;
 
 stdenv.mkDerivation rec {
   baseName = "libbluray";
-  version  = "0.8.0";
+  version  = "0.8.1";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.videolan.org/pub/videolan/${baseName}/${version}/${name}.tar.bz2";
-    sha256 = "027xbdbsjyp1spfiva2331pzixrzw6vm97xlvgz16hzm5a5j103v";
+    sha256 = "13zvkrwy2fr877gkifgwnqfsb3krbz7hklfcwqfjbhmvqn0cdgnd";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ]

@@ -61,6 +61,12 @@ installPhase() {
       patchelf --set-rpath "$out/lib:$allLibPath" "$libname"
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
+
+      # nvidia's EGL stack seems to expect libGLESv2.so.2 to be available
+      if [ $(basename "$libname_short") == "libGLESv2.so" ]; then
+          ln -srnf "$libname" "$libname_short.2"
+      fi
+
       ln -srnf "$libname" "$libname_short"
       ln -srnf "$libname" "$libname_short.1"
     done

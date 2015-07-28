@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
+  sourceRoot = ".";
+
   installPhase = ''
     install -D apktool.jar "$out/libexec/apktool/apktool.jar"
     mkdir -p "$out/bin"
