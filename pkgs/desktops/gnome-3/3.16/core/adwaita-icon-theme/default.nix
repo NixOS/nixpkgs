@@ -13,8 +13,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ hicolor_icon_theme ];
 
   buildInputs = [ gdk_pixbuf librsvg ];
-  
+
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk ];
+
+  # remove a tree of dirs with no files within
+  postInstall = '' rm -r "$out/locale" '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
