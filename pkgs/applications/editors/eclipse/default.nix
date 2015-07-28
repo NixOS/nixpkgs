@@ -321,6 +321,22 @@ in {
     };
   };
 
+  eclipse-platform = buildEclipse {
+    name = "eclipse-platform-4.5";
+    description = "Eclipse platform";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk-x86_64.tar.gz";
+          sha256 = "1510j41yr86pbzwf48kjjdd46nkpkh8zwn0hna0cqvsw1gk2vqcg";
+
+        };
+      "i686-linux" = fetchurl {
+          url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/eclipse-platform-4.5-linux-gtk.tar.gz";
+          sha256 = "1f97jd3qbi3830y3djk8bhwzd9whsq8gzfdk996chxc55prn0qbd";
+        };
+    };
+  };
+
   eclipseWithPlugins = { eclipse, plugins ? [], jvmArgs ? [] }:
     let
       # Gather up the desired plugins.
