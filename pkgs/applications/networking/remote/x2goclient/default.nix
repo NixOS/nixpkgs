@@ -1,12 +1,12 @@
 { stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, makeWrapper, qt4 }:
 
-let version = "4.0.4.0"; in
+let version = "4.0.5.0"; in
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
 
   src = fetchurl {
     url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "0mqn4nvq2w7qja5i4vx9fg2spwzl01p0hmfwbjb0mzir03hmrl46";
+    sha256 = "18a2pszh0nq2ir64a1ah1mlzddn4qcd12b339bv30n0y1ir92bi4";
   };
 
   meta = with stdenv.lib; {
