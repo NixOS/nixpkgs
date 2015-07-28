@@ -11,12 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "19qhia4lfa8a0rzp2v6lnlxp2lf4z4vqhgfxnicfdnx07q4r847i";
   };
 
+  postPatch = ''
+    # Remove the dependence on bundled libraries
+    sed -i '/must_fetch_list/ s/ v8//' configure
+
+    # Don't use the default command line args
+    rm configure.default
+  '';
+
   preConfigure = ''
     export ALLOW_WARNINGS=1
     patchShebangs .
   '';
 
   configureFlags = [
+    "--dynamic=all"
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
