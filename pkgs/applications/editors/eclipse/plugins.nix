@@ -207,6 +207,24 @@ in {
     };
   };
 
+  scala = buildEclipseUpdateSite rec {
+    name = "scala-${version}";
+    version = "4.1.0";
+
+    src = fetchzip {
+      url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
+      sha256 = "1z3pl88kw9qyhhsi8sqwz30c12l7zg8jiz6bz1js7jzpjbs8v70f";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "http://scala-ide.org/";
+      description = "The Scala IDE for Eclipse";
+      license = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
     version = "6.9.5.201506120235";
