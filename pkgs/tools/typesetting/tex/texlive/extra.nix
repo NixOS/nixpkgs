@@ -9,12 +9,14 @@ rec {
   };
 
   buildInputs = [texLive xz];
-  phaseNames = ["doCopy"];
+  phaseNames = ["doCopy" "doCleanInstall"];
   doCopy = fullDepEntry (''
     mkdir -p $out/share
     cp -r texmf* $out/
     ln -s $out/texmf* $out/share
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
+
+  inherit (texLive) doCleanInstall;
 
   meta = {
     description = "Extra components for TeXLive";

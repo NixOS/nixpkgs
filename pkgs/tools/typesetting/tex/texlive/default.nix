@@ -18,7 +18,7 @@ rec {
     sha256 = "1ydz5m1v40n34g1l31r3vqg74rbr01x2f80drhz4igh21fm7zzpa";
   };
 
-  passthru = { inherit texmfSrc langTexmfSrc; };
+  passthru = { inherit texmfSrc langTexmfSrc doCleanInstall; };
 
   setupHook = ./setup-hook.sh;
 
@@ -138,7 +138,12 @@ rec {
       "--disable-dvisvgm"
     ];
 
-  phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" ];
+  phaseNames = [ "addInputs" "doMainBuild" "doMakeInstall" "doPostInstall" "doCleanInstall" ];
+
+  # remove docs and sources of packages
+  doCleanInstall = fullDepEntry ''
+    rm -rf "$out"/share/texmf-dist/{doc,source}
+  '' [];
 
   name = "texlive-core-2014";
 
