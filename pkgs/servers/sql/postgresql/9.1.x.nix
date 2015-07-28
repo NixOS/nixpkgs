@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/share/man
       cp -rvd doc/src/sgml/man1 $out/share/man
+      mkdir -p $doc
     '';
 
   passthru = {
