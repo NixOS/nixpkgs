@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "C";
 
+  postInstall =
+    ''
+      # Prevent a retained dependency on gcc-wrapper.
+      substituteInPlace $out/lib/pgxs/src/Makefile.global --replace ${stdenv.cc}/bin/ld ld
+    '';
+
+  disallowedReferences = [ stdenv.cc ];
+
   passthru = {
     inherit readline;
     psqlSchema = "9.4";
