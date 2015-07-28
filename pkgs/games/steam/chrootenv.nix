@@ -1,4 +1,8 @@
-{ lib, buildFHSUserEnv, config }:
+{ lib, buildFHSUserEnv
+, withRuntime ? false
+, withJava ? false
+, withPrimus ? false
+}:
 
 buildFHSUserEnv {
   name = "steam";
@@ -12,12 +16,12 @@ buildFHSUserEnv {
       pkgs.xlibs.xrandr
       pkgs.which
     ]
-    ++ lib.optional (config.steam.java or false) pkgs.jdk
-    ++ lib.optional (config.steam.primus or false) pkgs.primus
+    ++ lib.optional withJava pkgs.jdk
+    ++ lib.optional withPrimus pkgs.primus
     ;
 
-  multiPkgs = pkgs:
-    [ # These are required by steam with proper errors
+  multiPkgs = pkgs: [
+      # These are required by steam with proper errors
       pkgs.xlibs.libXcomposite
       pkgs.xlibs.libXtst
       pkgs.xlibs.libXrandr
@@ -32,6 +36,10 @@ buildFHSUserEnv {
       pkgs.libpulseaudio
       pkgs.gdk_pixbuf
 
+      # Not formally in runtime but needed by some games
+      pkgs.gst_all_1.gstreamer
+      pkgs.gst_all_1.gst-plugins-ugly
+    ] ++ lib.optionals withRuntime [
       # Without these it silently fails
       pkgs.xlibs.libXinerama
       pkgs.xlibs.libXdamage
@@ -97,10 +105,6 @@ buildFHSUserEnv {
       pkgs.SDL2_mixer
       pkgs.gstreamer
       pkgs.gst_plugins_base
-
-      # Not formally in runtime but needed by some games
-      pkgs.gst_all_1.gstreamer
-      pkgs.gst_all_1.gst-plugins-ugly
     ];
 
   extraBuildCommandsMulti = ''
@@ -111,8 +115,13 @@ buildFHSUserEnv {
     ln -s libcurl.so.4 libcurl-gnutls.so.4
   '';
 
-  profile = ''
-    ${if config.steam.enableRuntime or false then "" else "export STEAM_RUNTIME=0"}
+  profile = if withRuntime then ''
+    export STEAM_RUNTIME=0
+  '' else ''
+    # Ugly workaround for https://github.com/ValveSoftware/steam-for-linux/issues/3504
+    export LD_PRELOAD=/lib32/libpulse.so:/lib64/libpulse.so:/lib32/libasound.so:/lib64/libasound.so:$LD_PRELOAD
+    # Another one for https://github.com/ValveSoftware/steam-for-linux/issues/3801
+    export LD_PRELOAD=/lib32/libstdc++.so:/lib64/libstdc++.so:$LD_PRELOAD
   '';
 
   runScript = "steam";

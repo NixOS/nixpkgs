@@ -13781,7 +13781,12 @@ let
 
   steam-original = lowPrio (callPackage ../games/steam { });
 
-  steam = callPackage ../games/steam/chrootenv.nix { };
+  steam = callPackage ../games/steam/chrootenv.nix {
+    # DEPRECATED
+    withJava = config.steam.java or false;
+    withPrimus = config.steam.primus or false;
+    withRuntime = config.steam.withRuntime or true;
+  };
 
   stuntrally = callPackage ../games/stuntrally { };
 
