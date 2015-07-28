@@ -107,12 +107,12 @@ buildFHSUserEnv {
       pkgs.gst_plugins_base
     ];
 
-  extraBuildCommandsMulti = ''
-    cd usr/lib
-    ln -sf ../lib64/steam steam
+  extraBuildCommands = ''
+    [ -d lib64 ] && mv lib64/steam lib
 
     # FIXME: maybe we should replace this with proper libcurl-gnutls
-    ln -s libcurl.so.4 libcurl-gnutls.so.4
+    ( cd lib; ln -s libcurl.so.4 libcurl-gnutls.so.4 )
+    [ -d lib64 ] && ( cd lib64; ln -s libcurl.so.4 libcurl-gnutls.so.4 )
   '';
 
   profile = if withRuntime then ''
