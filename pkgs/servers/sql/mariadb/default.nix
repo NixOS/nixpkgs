@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "-DWITHOUT_TOKUDB=1"
   ];
 
-  enableParallelBuilding = true;
+  # fails to find lex_token.h sometimes
+  enableParallelBuilding = false;
 
   outputs = [ "out" "lib" ];
 
