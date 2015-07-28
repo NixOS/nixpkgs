@@ -3117,7 +3117,6 @@ let
   texmacs = callPackage ../applications/editors/texmacs {
     tex = texLive; /* tetex is also an option */
     extraFonts = true;
-    guile = guile_1_8;
   };
 
   texmaker = callPackage ../applications/editors/texmaker { };
