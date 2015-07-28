@@ -176,7 +176,8 @@ rec {
   # elements and returns true if the first argument is strictly below
   # the second argument.  The returned list is sorted in an increasing
   # order.  The implementation does a quick-sort.
-  sort = strictLess: list:
+  sort = builtins.sort or (
+    strictLess: list:
     let
       len = length list;
       first = head list;
@@ -190,7 +191,7 @@ rec {
       pivot = pivot' 1 { left = []; right = []; };
     in
       if len < 2 then list
-      else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right);
+      else (sort strictLess pivot.left) ++  [ first ] ++  (sort strictLess pivot.right));
 
 
   # Return the first (at most) N elements of a list.
