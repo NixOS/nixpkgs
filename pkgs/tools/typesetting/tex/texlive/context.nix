@@ -6,7 +6,6 @@ rec {
     sha256 = "1d744xrsjyl52x2xbh87k5ad826mzz8yqmhdznrmqrhk3qpjkzic";
   };
 
-  buildInputs = [texLive];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     mkdir -p $out/share/
@@ -16,6 +15,8 @@ rec {
 
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
+
+  preferLocalBuild = true;
 
   meta = {
     description = "ConTEXt TeX wrapper";

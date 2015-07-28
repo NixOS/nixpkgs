@@ -7,7 +7,7 @@ rec {
     sha256 = "0k26s0z8hmw3h09vnpndim7gigwh8q6n9nbbihb5qbrw5qg2yqck";
   };
 
-  buildInputs = [texLive unzip];
+  buildInputs = [unzip];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     mkdir -p $out/texmf-dist/tex/latex/moderncv $out/texmf-dist/doc $out/share
@@ -15,6 +15,8 @@ rec {
     mv examples $out/texmf-dist/doc/moderncv
     ln -s $out/texmf* $out/share/
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
+
+  preferLocalBuild = true;
 
   meta = {
     description = "the moderncv class for TeXLive";

@@ -8,7 +8,7 @@ rec {
     sha256 = "190p5v6madcgkxjmfal0pcylfz88zi6yaixky0vrcz1kbvxqlcb9";
   };
 
-  buildInputs = [texLive xz];
+  buildInputs = [xz];
   phaseNames = ["doCopy" "doCleanInstall"];
   doCopy = fullDepEntry (''
     mkdir -p $out/share
@@ -17,6 +17,8 @@ rec {
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
 
   inherit (texLive) doCleanInstall;
+
+  preferLocalBuild = true;
 
   meta = {
     description = "Extra components for TeXLive";

@@ -10,7 +10,7 @@ rec {
     sha256 = "0y2m0qd0izrfjcwrmf3nvzkqmrhkdhzbv29s4c0knksdnfgcchc8";
   };
 
-  buildInputs = [texLive unzip];
+  buildInputs = [unzip];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     mkdir -p $out/texmf-dist/tex/latex/moderntimeline $out/texmf-dist/doc/moderntimeline $out/share
@@ -18,6 +18,8 @@ rec {
     mv *.pdf $out/texmf-dist/doc/moderntimeline/
     ln -s $out/texmf* $out/share/
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
+
+  preferLocalBuild = true;
 
   meta = {
     description = "the moderntimeline extensions for moderncv";

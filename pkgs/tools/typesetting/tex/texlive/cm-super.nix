@@ -23,7 +23,8 @@ rec {
 
     ln -s $out/texmf* $out/share/
   '') ["minInit" "doUnpack" "defEnsureDir" "addInputs"];
-  buildInputs = [texLive];
+
+  preferLocalBuild = true;
 
   meta = {
     description = "Extra components for TeXLive: CM-Super fonts";
