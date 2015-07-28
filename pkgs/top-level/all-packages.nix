@@ -12370,6 +12370,8 @@ let
 
   pond = callPackage ../applications/networking/pond { goPackages = go14Packages; };
 
+  ponymix = callPackage ../applications/audio/ponymix { };
+
   potrace = callPackage ../applications/graphics/potrace {};
 
   posterazor = callPackage ../applications/misc/posterazor { };
