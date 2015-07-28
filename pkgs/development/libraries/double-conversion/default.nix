@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.5";
+  version = "2.0.1";
   name = "double-conversion-${version}";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "double-conversion";
     rev = "v${version}";
-    sha256 = "1a264wpnvxmnq5pdlnp417ld1ybrng83lnbg38bv4ahz7a29ap4z";
+    sha256 = "05x5rdwndgp1vdq2z1bpvng0dd8pn93kw4vhl6nsvv9vsara2q4b";
   };
 
   nativeBuildInputs = [ cmake ];
