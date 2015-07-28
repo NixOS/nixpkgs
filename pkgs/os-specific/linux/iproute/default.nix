@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildFlags = [
-    "CONFDIR=/etc"
+    "CONFDIR=/etc/iproute2"
   ];
 
   installFlags = [
-    "CONFDIR=$(out)/etc"
+    "CONFDIR=$(out)/etc/iproute2"
   ];
 
   buildInputs = [ db iptables ];
