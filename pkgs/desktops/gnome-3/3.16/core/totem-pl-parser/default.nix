@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, gmime, libxml2, libsoup }:
+{ stdenv, fetchurl, pkgconfig, file, intltool, gmime, libxml2, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "totem-pl-parser-3.10.2";

@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/GDM;
     description = "A program that manages graphical display servers and handles graphical user logins";
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libcanberra, gobjectIntrospection, libtool }:
+{ stdenv, fetchurl, pkgconfig, glib, libcanberra, gobjectIntrospection, libtool, gnome3 }:
 
 let
   majVer = "1.0";

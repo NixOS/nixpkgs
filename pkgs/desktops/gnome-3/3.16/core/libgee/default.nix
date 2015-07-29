@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobjectIntrospection }:
+{ stdenv, fetchurl, autoconf, vala, pkgconfig, glib, gobjectIntrospection, gnome3 }:
 let
   ver_maj = "0.16";
   ver_min = "1";
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

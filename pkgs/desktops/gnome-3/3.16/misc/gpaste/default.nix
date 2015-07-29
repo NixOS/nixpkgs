@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Clipboard management system with GNOME3 integration";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

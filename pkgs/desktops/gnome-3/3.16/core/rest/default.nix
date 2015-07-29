@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libsoup, gobjectIntrospection, cacert }:
+{ stdenv, fetchurl, pkgconfig, glib, libsoup, gobjectIntrospection, cacert, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "rest-0.7.92";
@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

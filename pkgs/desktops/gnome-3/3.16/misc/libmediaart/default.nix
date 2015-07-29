@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, gobjectIntrospection, gnome3 }:
 
 let
   majorVersion = "1.9";
