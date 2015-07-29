@@ -2,7 +2,7 @@
 , pkgconfig, gtk3, glib, hicolor_icon_theme
 , makeWrapper, itstool, libxslt, webkitgtk
 , gnome3, librsvg, gdk_pixbuf, libsoup, docbook_xsl
-, gobjectIntrospection, json_glib
+, gobjectIntrospection, json_glib, inkscape, poppler_utils
 , gmp, desktop_file_utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  configureFlags = [ "--enable-getting-started" ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxslt
-                  docbook_xsl desktop_file_utils
+                  docbook_xsl desktop_file_utils inkscape poppler_utils
                   gnome3.gsettings_desktop_schemas makeWrapper gmp
                   gdk_pixbuf gnome3.adwaita-icon-theme librsvg evince
                   libsoup webkitgtk gjs gobjectIntrospection gnome3.rest
