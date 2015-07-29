@@ -648,7 +648,6 @@ rec {
       rev = "adb2a0d95e9b0009d152c35c930eb04875562d87";
       sha256 = "fe52fef67c242756c67ec134634b380077e16729d59b1dcd8f50e41512010723";
     };
-    dependencies = [];
     dependencies = [ "vimproc-vim" ];
   };
 
