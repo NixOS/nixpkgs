@@ -10723,6 +10723,8 @@ let
 
   clipit = callPackage ../applications/misc/clipit { };
 
+  cmatrix = callPackage ../applications/misc/cmatrix { };
+
   bomi = callPackage ../applications/video/bomi {
     stdenv = overrideCC stdenv gcc49;
     pulseSupport = config.pulseaudio or true;
