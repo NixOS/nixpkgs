@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
+  isBroken = stdenv.isDarwin;
+
   meta = {
     homepage = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/;
     description = "A tool to list open files";
