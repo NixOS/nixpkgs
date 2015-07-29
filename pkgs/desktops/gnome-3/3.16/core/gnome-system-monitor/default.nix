@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://help.gnome.org/users/gnome-system-monitor/3.12/;
     description = "System Monitor shows you what programs are running and how much processor time, memory, and disk space are being used";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

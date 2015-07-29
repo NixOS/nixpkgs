@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;
     description = "Simple GObject-based library to parse and save a host of playlist formats";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

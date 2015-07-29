@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Projects/Grilo;
     description = "A collection of plugins for the Grilo framework";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Empathy;
     description = "Messaging program which supports text, voice, video chat, and file transfers over many different protocols";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     # TODO: license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
   };
