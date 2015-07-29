@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GLib/GObject wrapper for the Facebook Graph API";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

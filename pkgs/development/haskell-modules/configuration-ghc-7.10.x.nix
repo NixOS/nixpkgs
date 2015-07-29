@@ -144,11 +144,6 @@ self: super: {
     prePatch = "sed -i 's|4\.8|4.9|' diagrams-core.cabal";
   });
 
-  misfortune = appendPatch super.misfortune (pkgs.fetchpatch {
-    url = "https://github.com/mokus0/misfortune/commit/9e0a38cf8d59a0de9ae1156034653f32099610e4.patch";
-    sha256 = "01m1l199ihq85j9pyc3n0wqv1z4my453hhhcvg3yz3gpz3lf224r";
-  });
-
   timezone-series = doJailbreak super.timezone-series;
   timezone-olson = doJailbreak super.timezone-olson;
   libmpd = dontCheck super.libmpd;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libcanberra, gobjectIntrospection, libtool }:
+{ stdenv, fetchurl, pkgconfig, glib, libcanberra, gobjectIntrospection, libtool, gnome3 }:
 
 let
   majVer = "1.0";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GSound;
     description = "Small library for playing system sounds";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool
-, glib, gtk3, gobjectIntrospection, python, pygobject3
+{ stdenv, fetchurl, pkgconfig, intltool, gnome3
+, glib, gtk3, gobjectIntrospection, python, pygobject3, hicolor_icon_theme
 }:
 
 let
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =  [
    intltool pkgconfig
-   glib gtk3 gobjectIntrospection python pygobject3
+   glib gtk3 gobjectIntrospection python pygobject3 hicolor_icon_theme
   ];
 
   src = fetchurl {
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ftp.acc.umu.se/pub/GNOME/sources/libpeas/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

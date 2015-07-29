@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, gmime, libxml2, libsoup }:
+{ stdenv, fetchurl, pkgconfig, file, intltool, gmime, libxml2, libsoup, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "totem-pl-parser-3.10.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;
     description = "Simple GObject-based library to parse and save a host of playlist formats";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

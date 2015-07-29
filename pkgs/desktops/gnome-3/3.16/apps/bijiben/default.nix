@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Bijiben;
     description = "Note editor designed to remain simple to use";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

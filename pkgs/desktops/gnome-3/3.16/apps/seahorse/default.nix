@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Seahorse;
     description = "Application for managing encryption keys and passwords in the GnomeKeyring";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

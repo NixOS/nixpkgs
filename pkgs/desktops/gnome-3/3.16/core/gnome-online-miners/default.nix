@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeOnlineMiners;
     description = "A set of crawlers that go through your online content and index them locally in Tracker";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "http://en.wikipedia.org/wiki/Sushi_(software)";
     description = "A quick previewer for Nautilus";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

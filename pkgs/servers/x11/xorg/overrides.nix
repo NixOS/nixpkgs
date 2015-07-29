@@ -80,9 +80,9 @@ in
     nativeBuildInputs = [ args.python ];
   };
 
-  libxkbfile = attrs: attrs // {
-    patches = lib.optional stdenv.cc.isClang ./libxkbfile-clang36.patch;
-  };
+  # libxkbfile = attrs: attrs // {
+  #   patches = lib.optional stdenv.cc.isClang ./libxkbfile-clang36.patch;
+  # };
 
   libpciaccess = attrs : attrs // {
     patches = [ ./libpciaccess-apple.patch ];
@@ -287,9 +287,9 @@ in
         dmxproto /*libdmx not used*/ xf86vidmodeproto
         recordproto libXext pixman libXfont
         damageproto xcmiscproto  bigreqsproto
-        libpciaccess inputproto xextproto randrproto renderproto presentproto
+        inputproto xextproto randrproto renderproto presentproto
         dri2proto dri3proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
-      ];
+      ] ++ lib.optional (!isDarwin) libpciaccess;
       commonPatches = [ ./xorgserver-xkbcomp-path.patch ]
                    ++ lib.optional isDarwin ./fix-clang.patch;
       # XQuartz requires two compilations: the first to get X / XQuartz,

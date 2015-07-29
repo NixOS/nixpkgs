@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, exiv2, glib, libtool, m4 }:
+{ stdenv, fetchurl, pkgconfig, exiv2, glib, libtool, m4, gnome3 }:
 
 let
   majorVersion = "0.10";
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/gexiv2;
     description = "GObject wrapper around the Exiv2 photo metadata library";
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }

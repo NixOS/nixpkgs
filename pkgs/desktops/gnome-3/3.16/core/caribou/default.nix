@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-	maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 
 }

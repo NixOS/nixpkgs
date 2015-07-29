@@ -21,6 +21,7 @@ let
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
     gnome_themes_standard defaultIconTheme gnome-shell-extensions
+    pkgs.hicolor_icon_theme
   ];
 
   optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
@@ -32,7 +33,9 @@ let
     nautilus-sendto dconf-editor vinagre
   ];
 
-  gamesPackages = with gnome3; [ swell-foop lightsoff iagno ];
+  gamesPackages = with gnome3; [ swell-foop lightsoff iagno
+    tali quadrapassel
+  ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
@@ -50,6 +53,7 @@ let
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
   version = "3.16";
+  maintainers = with pkgs.lib.maintainers; [ lethalman ];
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
@@ -289,6 +293,10 @@ let
   lightsoff = callPackage ./games/lightsoff { };
 
   swell-foop = callPackage ./games/swell-foop { };
+
+  tali = callPackage ./games/tali { };
+
+  quadrapassel = callPackage ./games/quadrapassel { };
 
 #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 

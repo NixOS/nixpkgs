@@ -1,7 +1,7 @@
 { stdenv, intltool, fetchurl, exempi, libxml2
 , pkgconfig, gtk3, glib, hicolor_icon_theme
 , makeWrapper, itstool, gegl, babl, lcms2
-, desktop_file_utils, gmp, libmediaart
+, desktop_file_utils, gmp, libmediaart, wrapGAppsHook
 , gnome3, librsvg, gdk_pixbuf, libexif }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   # doCheck = true;
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gegl babl gnome3.libgdata
@@ -24,23 +22,14 @@ stdenv.mkDerivation rec {
                   gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
                   gnome3.gnome_online_accounts gnome3.gnome_desktop
                   lcms2 libexif gnome3.tracker libxml2 desktop_file_utils
-                  hicolor_icon_theme gnome3.adwaita-icon-theme ];
-
-  preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram "$f" \
-        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix GRL_PLUGIN_PATH : "${gnome3.grilo-plugins}/lib/grilo-0.2" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
+                  wrapGAppsHook ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Photos;
     description = "Photos is an application to access, organize and share your photos with GNOME 3";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -52,6 +52,7 @@ in
             TTYPath = "/dev/${cfg.tty}";
             TTYReset = true;
             TTYVTDisallocate = true;
+            WorkingDirectory = "/tmp";
             Restart = "always";
           };
       };

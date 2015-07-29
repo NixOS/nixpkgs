@@ -130,6 +130,7 @@
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
+  kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
@@ -148,6 +149,7 @@
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
+  mahe = "Matthias Herrmann <matthias.mh.herrmann@gmail.com>";
   malyn = "Michael Alyn Miller <malyn@strangeGizmo.com>";
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";

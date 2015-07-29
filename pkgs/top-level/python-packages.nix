@@ -1433,12 +1433,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.0.0a1";
+    version = "1.1.4";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0fybr48l0fvpc57n71khynpb4j0ibzn35bzybw6g1q9063xfwnxm";
+      sha256 = "1wbbaj0y6bfzsh61hgnnssn5j8m93r6r2m5r1jmlf6iz3l9gqkkp";
     };
 
     propagatedBuildInputs =
@@ -1446,6 +1446,8 @@ let
         self.requests
         self.jmespath
       ];
+
+    buildInputs = [ self.docutils ];
 
     meta = {
       homepage = https://github.com/boto/botocore;
@@ -1681,11 +1683,11 @@ let
 
 
   cairocffi = buildPythonPackage rec {
-    name = "cairocffi-0.5.4";
+    name = "cairocffi-0.7.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cairocffi/${name}.tar.gz";
-      md5 = "e3fa4002583bfaa88b156e1af9c75bde";
+      md5 = "e26d06a8d8b16c7210414ce15d453636";
     };
 
     propagatedBuildInputs = with self; [ cffi ];
@@ -2363,11 +2365,11 @@ let
   };
 
   cffi = buildPythonPackage rec {
-    name = "cffi-0.8.6";
+    name = "cffi-1.1.2";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      sha256 = "0406j3sgndmx88idv5zxkkrwfqxmjl18pj8gf47nsg4ymzixjci5";
+      url = "https://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
+      md5 = "ca6e6c45b45caa87aee9adc7c796eaea";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
@@ -8734,11 +8736,11 @@ let
   };
 
   pandas = buildPythonPackage rec {
-    name = "pandas-0.16.1";
+    name = "pandas-0.16.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "1dpq5p4iym7y13wkrm0hma87rvvv5rfj5fb10iwbys5hihzj83ap";
+      sha256 = "10agmrkps8bi5948vwpipfxds5kj1d076m9i0nhaxwqiw7gm6670";
     };
 
     buildInputs = [ self.nose ];
@@ -16770,4 +16772,22 @@ let
     };
   };
 
+  xcffib = buildPythonPackage rec {
+    version = "0.3.2";
+    name = "xcffib-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xcffib/${name}.tar.gz";
+      md5 = "fa13f3fee67c83016a1242982a7c8bda";
+    };
+
+    propagatedBuildInputs = [ self.cffi self.six ];
+
+    meta = {
+      description = "A drop in replacement for xpyb, an XCB python binding";
+      homepage = "https://github.com/tych0/xcffib";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ kamilchm ];
+    };
+  };
 }; in pythonPackages

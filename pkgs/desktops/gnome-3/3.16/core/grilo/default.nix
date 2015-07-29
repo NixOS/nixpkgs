@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "11bvc7rsrjjwz8hp67p3fn8zmywrpawrcbi3vgw8b0dwa0sndd2m";
   };
 
+  setupHook = ./setup-hook.sh;
+
   configureFlags = [ "--enable-grl-pls" "--enable-grl-net" ];
 
   preConfigure = ''
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Projects/Grilo;
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = gnome3.maintainers;
     license = licenses.lgpl2;
     platforms = platforms.linux;
   };

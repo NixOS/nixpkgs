@@ -29,7 +29,6 @@ rec {
                           } ));
 	withStdOverrides = base // {
 	   override = base.passthru.function;
-	   deepOverride = a : (base.passthru.function ((lib.mapAttrs (lib.deepOverrider a) base.passthru.args) // a));
 	   } ;
         in
 	withStdOverrides;

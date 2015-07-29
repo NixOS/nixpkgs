@@ -338,6 +338,7 @@ with stdenv.lib;
   X86_MCE y
 
   # Linux containers.
+  NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
   RT_GROUP_SCHED? y
   CGROUP_DEVICE? y
   ${if versionAtLeast version "3.6" then ''

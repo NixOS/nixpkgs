@@ -18,6 +18,6 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ which autoconf automake ]; # autogen.sh which is using gnome_common tends to require which
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.lethalman ];
+    maintainers = gnome3.maintainers;
   };
 }
