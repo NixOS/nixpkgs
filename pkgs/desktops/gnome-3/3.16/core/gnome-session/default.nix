@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/gnome-session" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
+      --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
   meta = with stdenv.lib; {
