@@ -21,6 +21,7 @@ let
     glib_networking gvfs dconf gnome-backgrounds gnome_control_center
     gnome-menus gnome_settings_daemon gnome_shell
     gnome_themes_standard defaultIconTheme gnome-shell-extensions
+    pkgs.hicolor_icon_theme
   ];
 
   optionalPackages = with gnome3; [ baobab empathy eog epiphany evince
