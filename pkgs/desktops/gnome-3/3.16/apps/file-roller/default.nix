@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, glib, pkgconfig, gnome3, intltool, itstool, libxml2
-, libarchive, attr, bzip2, acl, makeWrapper, librsvg, gdk_pixbuf
-, hicolor_icon_theme, openssl }:
+{ stdenv, fetchurl, glib, pkgconfig, gnome3, intltool, itstool, libxml2, libarchive
+, attr, bzip2, acl, makeWrapper, librsvg, gdk_pixbuf, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   name = "file-roller-${version}";
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
   # it tries to create {nautilus}/lib/nautilus/extensions-3.0/libnautilus-fileroller.so
 
   buildInputs = [ glib pkgconfig gnome3.gtk intltool itstool libxml2 libarchive
-                  hicolor_icon_theme gnome3.adwaita-icon-theme openssl
+                  hicolor_icon_theme gnome3.adwaita-icon-theme
                   attr bzip2 acl gdk_pixbuf librsvg makeWrapper ];
 
   preFixup = ''
