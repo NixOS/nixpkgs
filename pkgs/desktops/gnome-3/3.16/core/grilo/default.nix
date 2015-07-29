@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "11bvc7rsrjjwz8hp67p3fn8zmywrpawrcbi3vgw8b0dwa0sndd2m";
   };
 
+  setupHook = ./setup-hook.sh;
+
   configureFlags = [ "--enable-grl-pls" "--enable-grl-net" ];
 
   preConfigure = ''
