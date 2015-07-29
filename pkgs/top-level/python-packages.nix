@@ -1433,12 +1433,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.0.0a1";
+    version = "1.1.4";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "0fybr48l0fvpc57n71khynpb4j0ibzn35bzybw6g1q9063xfwnxm";
+      sha256 = "1wbbaj0y6bfzsh61hgnnssn5j8m93r6r2m5r1jmlf6iz3l9gqkkp";
     };
 
     propagatedBuildInputs =
@@ -1446,6 +1446,8 @@ let
         self.requests
         self.jmespath
       ];
+
+    buildInputs = [ self.docutils ];
 
     meta = {
       homepage = https://github.com/boto/botocore;
