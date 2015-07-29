@@ -3873,12 +3873,12 @@ let
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
-      url = "https://gitlab.com/lsix/motu-client/repository/archive.tar.gz?ref=${name}";
-      sha256 = "1d2hbws085hxf5hb1wsdlacy8skwn2sswr1b2xv18fbw5ckbqi8i";
+      url = "https://github.com/quiet-oceans/motuclient-setuptools/archive/${name}.tar.gz";
+      sha256 = "1naqmav312agn72iad9kyxwscn2lz4v1cfcqqi1qcgvc82vnwkw2";
     };
 
     meta = {
-      homepage = https://gitlab.com/lsix/motu-client;
+      homepage = https://github.com/quiet-oceans/motuclient-setuptools;
       description = "CLI to query oceanographic data to Motu servers";
       longDescription = ''
         Access data from (motu)[http://sourceforge.net/projects/cls-motu/] servers.
