@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
 , pkgconfig }:
 
-let version = "4.1.2"; in
+let version = "4.1.4"; in
 stdenv.mkDerivation rec {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "034ar1v2qamdyq71nklh1nvqbmw6ryz63jdwnnc873f639mf5w94";
+    sha256 = "0v0p0kdjscvf4bn14dyny399k1bfsz8v7n8v16lv0q0xs5nwqnky";
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";
@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2 pcsclite ];
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+  '';
 
   enableParallelBuilding = true;
 
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/eid-nssdb \
       --replace "modutil" "${nssTools}/bin/modutil"
 
-    # Only provides a useless "about-eid-mw.desktop" that doesn't even work:
-    rm -rf $out/share/applications
+    # Only provides a useless "about-eid-mw.desktop" that segfaults:
+    rm -rf $out/share/applications $out/bin/about-eid-mw
   '';
 
   meta = with stdenv.lib; {
