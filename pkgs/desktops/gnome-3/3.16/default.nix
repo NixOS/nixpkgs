@@ -34,7 +34,7 @@ let
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
-    quadrapassel
+    tali quadrapassel
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -292,6 +292,8 @@ let
   lightsoff = callPackage ./games/lightsoff { };
 
   swell-foop = callPackage ./games/swell-foop { };
+
+  tali = callPackage ./games/tali { };
 
   quadrapassel = callPackage ./games/quadrapassel { };
 
