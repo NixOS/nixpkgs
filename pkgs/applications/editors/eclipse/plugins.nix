@@ -2,20 +2,33 @@
 
 let
 
+  buildEclipsePluginBase =  { name
+                            , buildInputs ? []
+                            , passthru ? {}
+                            , ... } @ attrs:
+    stdenv.mkDerivation (attrs // {
+      name = "eclipse-" + name;
+
+      buildInputs = buildInputs ++ [ unzip ];
+
+      passthru = {
+        isEclipsePlugin = true;
+      } // passthru;
+    });
+
   # Helper for the common case where we have separate feature and
   # plugin JARs.
-  buildEclipsePlugin = { name, version, javaName, srcFeature, srcPlugin, meta }:
-    stdenv.mkDerivation {
-      name = "eclipse-" + name;
-      inherit meta;
+  buildEclipsePlugin = { name, version, javaName, srcFeature, srcPlugin, meta, propagatedBuildInputs ? [] }:
+    buildEclipsePluginBase {
+      inherit name meta propagatedBuildInputs;
 
       srcs = [ srcFeature srcPlugin ];
 
-      buildInputs = [ unzip ];
       phases = [ "installPhase" ];
 
       installPhase = ''
         dropinDir="$out/eclipse/dropins/${name}"
+
         mkdir -p $dropinDir/features/${javaName}_${version}
         unzip ${srcFeature} -d $dropinDir/features/${javaName}_${version}
 
@@ -27,12 +40,10 @@ let
 
   # Helper for the case where we have a ZIP file containing an Eclipse
   # update site.
-  buildEclipseUpdateSite = { name, version, src, meta }:
-    stdenv.mkDerivation {
-      name = "eclipse-" + name;
-      inherit meta src;
+  buildEclipseUpdateSite = { name, version, src, meta, propagatedBuildInputs ? [] }:
+    buildEclipsePluginBase {
+      inherit name meta src propagatedBuildInputs;
 
-      buildInputs = [ unzip ];
       phases = [ "unpackPhase" "installPhase" ];
 
       installPhase = ''
