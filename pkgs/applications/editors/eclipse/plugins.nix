@@ -62,6 +62,30 @@ rec {
       '';
     };
 
+  acejump = buildEclipsePlugin rec {
+    name = "acejump-${version}";
+    version = "1.0.0.201501181511";
+    javaName = "acejump";
+
+    srcFeature = fetchurl {
+      url = "https://tobiasmelcher.github.io/acejumpeclipse/features/${javaName}.feature_${version}.jar";
+      sha256 = "127xqrnns4h96g21c9zg0iblxprx3fg6fg0w5f413rf84415z884";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://tobiasmelcher.github.io/acejumpeclipse/plugins/${javaName}_${version}.jar";
+      sha256 = "0mz79ca32yryidd1wijirvnmfg4j5q4g84vdspdi56z0r4xrja13";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/tobiasmelcher/EclipseAceJump;
+      description = "Provides fast jumps to text based on initial letter";
+      license = licenses.mit;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
     version = "2.4.15.201504172030";
