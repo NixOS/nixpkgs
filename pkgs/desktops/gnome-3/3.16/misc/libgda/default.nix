@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3 }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl }:
 
 let
   major = "5.2";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig intltool itstool libxml2 gtk3 ];
+  buildInputs = [ pkgconfig intltool itstool libxml2 gtk3 openssl ];
 
   meta = with stdenv.lib; {
     description = "Database access library";
