@@ -5150,6 +5150,7 @@ let
   spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.2.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
+    gcc = gcc48; # doesn't build with gcc49
     qt = qt4;
     fftw = fftwSinglePrec;
   };
