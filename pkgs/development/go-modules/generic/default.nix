@@ -66,13 +66,16 @@ go.stdenv.mkDerivation (
 
     runHook renameImports
 
+    PIDS=()
     if [ -n "$subPackages" ] ; then
         for p in $subPackages ; do
-            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p
+            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p &
+            PIDS+=("$!")
         done
     else
-        (cd go/src
-        find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq | while read d; do
+        pushd go/src
+        while read d; do
+          {
             echo "$d" | grep -q "/_" && continue
             [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && continue
             local OUT
@@ -85,8 +88,16 @@ go.stdenv.mkDerivation (
             if [ -n "$OUT" ]; then
               echo "$OUT" >&2
             fi
-        done)
+          } &
+          PIDS+=("$!")
+        done < <(find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq)
+        popd
     fi
+
+    # Exit on error from the parallel process
+    for PID in "''${PIDS[@]}"; do
+        wait $PID || exit 1
+    done
 
     runHook postBuild
   '';
@@ -94,16 +105,25 @@ go.stdenv.mkDerivation (
   checkPhase = args.checkPhase or ''
     runHook preCheck
 
+    PIDS=()
     if [ -n "$subPackages" ] ; then
         for p in $subPackages ; do
-            go test -p $NIX_BUILD_CORES -v $goPackagePath/$p
+            go test -p $NIX_BUILD_CORES -v $goPackagePath/$p &
         done
+        PIDS+=("$!")
     else
-        (cd go/src
-        find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq | while read d; do
+        pushd go/src
+        while read d; do
             go test -p $NIX_BUILD_CORES -v $d
-        done)
+        done < <(find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq)
+        popd
+        PIDS+=("$!")
     fi
+
+    # Exit on error from the parallel process
+    for PID in "''${PIDS[@]}"; do
+        wait $PID || exit 1
+    done
 
     runHook postCheck
   '';
@@ -114,12 +134,13 @@ go.stdenv.mkDerivation (
     mkdir -p $out
 
     if [ -z "$dontInstallSrc" ]; then
-        (cd "$NIX_BUILD_TOP/go"
-        find . -type f | while read f; do
+        pushd "$NIX_BUILD_TOP/go"
+        while read f; do
           echo "$f" | grep -q '^./\(src\|pkg/[^/]*\)/${goPackagePath}' || continue
           mkdir -p "$(dirname "$out/share/go/$f")"
           cp $NIX_BUILD_TOP/go/$f $out/share/go/$f
-        done)
+        done < <(find . -type f)
+        popd
     fi
 
     dir="$NIX_BUILD_TOP/go/bin"
