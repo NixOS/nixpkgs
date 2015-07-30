@@ -11397,6 +11397,37 @@ let
     };
   };
 
+  qscintilla = pkgs.stdenv.mkDerivation rec {
+    # TODO: Qt5 support
+    name = "qscintilla-${version}";
+    version = pkgs.qscintilla.version;
+    disabled = isPy3k || isPyPy;
+
+    src = pkgs.qscintilla.src;
+
+    buildInputs = with pkgs; [ xorg.lndir qt4 pyqt4 python ];
+
+    preConfigure = ''
+      mkdir -p $out
+      lndir ${pkgs.pyqt4} $out
+      cd Python
+      ${python.executable} ./configure-old.py \
+          --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \
+          --apidir $out/api/${python.libPrefix} \
+          -n ${pkgs.qscintilla}/include \
+          -o ${pkgs.qscintilla}/lib \
+          --sipdir $out/share/sip
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A Python binding to QScintilla, Qt based text editing control";
+      license = licenses.lgpl21Plus;
+      maintainers = [ "abcz2.uprola@gmail.com" ];
+      platforms = platforms.linux;
+    };
+  };
+
+
   qserve = buildPythonPackage rec {
     name = "qserve-0.2.8";
     disabled = isPy3k;
