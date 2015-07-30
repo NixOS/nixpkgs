@@ -7212,7 +7212,9 @@ let
 
   libopus = callPackage ../development/libraries/libopus { };
 
-  libosinfo = callPackage ../development/libraries/libosinfo {};
+  libosinfo = callPackage ../development/libraries/libosinfo {
+    inherit (gnome3) libsoup;
+  };
 
   libosip = callPackage ../development/libraries/osip {};
 
