@@ -3922,7 +3922,7 @@ let
     emacsSupport = config.emacsSupport or false;
   };
 
-  gccgo = gccgo48;
+  gccgo = gccgo49;
 
   gccgo48 = wrapCC (gcc48.cc.override {
     name = "gccgo";
