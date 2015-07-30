@@ -3659,6 +3659,23 @@ let
     };
   };
 
+  iniparse = buildPythonPackage rec {
+
+    name = "iniparse-${version}";
+    version = "0.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/iniparse/iniparse-${version}.tar.gz";
+      sha256 = "0m60k46vr03x68jckachzsipav0bwhhnqb8715hm1cngs89fxhdb";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Accessing and Modifying INI files";
+      license = licenses.mit;
+      maintainers = [ "abcz2.uprola@gmail.com" ];
+    };
+  };
+
   i3-py = buildPythonPackage rec {
     version = "0.6.4";
     name = "i3-py-${version}";
