@@ -8902,7 +8902,7 @@ let
     v8 = v8_3_24_10;
   };
 
-  etcdctl = callPackage ../development/tools/etcdctl { };
+  etcdctl = goPackages.etcd;
 
   exim = callPackage ../servers/mail/exim { };
 
