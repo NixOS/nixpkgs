@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, llvmPackages }:
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   ];
 
   dontDisableStatic = true;
+
+  postInstall = "cp ${llvmPackages.libunwind}/lib/libunwind.a $out/lib/";
 
   meta = {
     description = "An efficient, small, quality libc implementation";

@@ -5089,17 +5089,22 @@ let
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
   rustc = callPackage ../development/compilers/rustc {};
+  rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
+  rustcMusl = callPackage ../development/compilers/rustc/musl.nix {};
 
   rustPlatform = rustStable;
 
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable);
+  rustUnstable = recurseIntoAttrs (makeRustPlatform
+    (cargo.override { rustPlatform = rustUnstableCargoPlatform; }) rustUnstable);
+  rustMusl = recurseIntoAttrs (makeRustPlatform
+    (cargo.override { rustPlatform = rustMuslCargoPlatform; }) rustMusl);
 
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
   rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcMaster) rustUnstableCargoPlatform;
+  rustMuslCargoPlatform = makeRustPlatform (cargoSnapshot rustcMusl) rustMuslCargoPlatform;
 
   makeRustPlatform = cargo: self:
     let
@@ -10667,6 +10672,10 @@ let
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
+  muslWithUnwind = callPackage ../os-specific/linux/musl {
+    withUnwind = true;
+    inherit libunwind-llvm;
+  };
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
