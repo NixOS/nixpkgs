@@ -212,7 +212,7 @@ stdenv.mkDerivation rec {
   '' + optionalString enableStandardFeatures ''
     sed -e "s|dot|${graphviz}/bin/dot|g" \
         -e "s|neato|${graphviz}/bin/neato|g" \
-        -e "s|twopi|${graphviz}/bin/circo|g" \
+        -e "s|twopi|${graphviz}/bin/twopi|g" \
         -e "s|circo|${graphviz}/bin/circo|g" \
         -e "s|fdp|${graphviz}/bin/fdp|g" \
         -i "filters/graphviz/graphviz2png.py"
