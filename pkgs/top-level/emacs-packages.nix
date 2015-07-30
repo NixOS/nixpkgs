@@ -327,12 +327,12 @@ let self = _self // overrides;
 
   dash = melpaBuild rec {
     pname   = "dash";
-    version = "2.9.0";
+    version = "2.11.0";
     src = fetchFromGitHub {
       owner  = "magnars";
       repo   = "${pname}.el";
       rev    = version;
-      sha256 = "1lg31s8y6ljsz6ps765ia5px39wim626xy8fbc4jpk8fym1jh7ay";
+      sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
     };
     meta = { license = gpl3Plus; };
   };
