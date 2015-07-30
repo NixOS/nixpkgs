@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchzip, unzip }:
 
-let
+rec {
 
   buildEclipsePluginBase =  { name
                             , buildInputs ? []
@@ -61,8 +61,6 @@ let
         cp -v "plugins/"*.jar $dropinDir/plugins/
       '';
     };
-
-in {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
