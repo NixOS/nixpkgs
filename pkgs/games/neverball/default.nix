@@ -1,14 +1,14 @@
-{stdenv, fetchurl, SDL, mesa, libpng, libjpeg, SDL_ttf, libvorbis, gettext,
-physfs} :
+{ stdenv, fetchurl, SDL2, mesa_noglu, libpng, libjpeg, SDL2_ttf, libvorbis, gettext
+, physfs }:
 
 stdenv.mkDerivation rec {
-  name = "neverball-1.5.4";
+  name = "neverball-1.6.0";
   src = fetchurl {
     url = "http://neverball.org/${name}.tar.gz";
-    sha256 = "19hdgdmv20y56xvbj4vk0zdmyaa8kv7df85advkchw7cdsgwlcga";
+    sha256 = "184gm36c6p6vaa6gwrfzmfh86klhnb03pl40ahsjsvprlk667zkk";
   };
 
-  buildInputs = [ libpng SDL mesa libjpeg SDL_ttf libvorbis gettext physfs];
+  buildInputs = [ libpng SDL2 mesa_noglu libjpeg SDL2_ttf libvorbis gettext physfs ];
 
   dontPatchElf = true;
 

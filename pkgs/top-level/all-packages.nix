@@ -9985,9 +9985,7 @@ let
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
-  neverball = callPackage ../games/neverball {
-    libpng = libpng15;
-  };
+  neverball = callPackage ../games/neverball { };
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
