@@ -17,9 +17,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  doCheck = false;
+  doCheck = false; # tests take a very long time
   checkTarget = "test";
-  checkFlags = "-j1 -C programs"; # -j1 required since version 128, -C should be temporary
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
