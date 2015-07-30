@@ -14980,7 +14980,7 @@ let
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
-  vault = callPackage ../servers/vault {};
+  vault = goPackages.vault;
 
   vbam = callPackage ../misc/emulators/vbam {
     inherit (xlibs) libpthreadstubs;
