@@ -1,5 +1,13 @@
 gappsWrapperArgs=()
 
+find_gio_modules() {
+    if [ -d "$1"/lib/gio/modules ] && [ -n "$(ls -A $1/lib/gio/modules)" ] ; then
+        gappsWrapperArgs+=(--prefix GIO_EXTRA_MODULES : "$1/lib/gio/modules")
+    fi
+}
+
+envHooks+=(find_gio_modules)
+
 wrapGAppsHook() {
   if [ -n "$GDK_PIXBUF_MODULE_FILE" ]; then
     gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
