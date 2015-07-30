@@ -843,14 +843,62 @@ let self = _self // overrides;
 
   magit = melpaBuild rec {
     pname   = "magit";
-    version = "1.4.0";
+    version = "2.1.0";
     src = fetchFromGitHub {
-      owner  = "magit";
-      repo   = "magit";
+      owner  = pname;
+      repo   = pname;
       rev    = version;
-      sha256 = "0x8bvfw47bfpzsv9yr98aays4idbbwvnkp0pag1q78gcn9h2k9vi";
+      sha256 = "0pyqa79km1y58phsf4sq2a25rx9lw0di1hb6a5y17xisa8li7sfl";
     };
-    packageRequires = [ git-commit-mode git-rebase-mode ];
+    packageRequires = [ dash git-commit magit-popup with-editor ];
+    fileSpecs = [ "lisp/magit-utils.el"
+                  "lisp/magit-section.el"
+                  "lisp/magit-git.el"
+                  "lisp/magit-mode.el"
+                  "lisp/magit-process.el"
+                  "lisp/magit-core.el"
+                  "lisp/magit-diff.el"
+                  "lisp/magit-wip.el"
+                  "lisp/magit-apply.el"
+                  "lisp/magit-log.el"
+                  "lisp/magit.el"
+                  "lisp/magit-sequence.el"
+                  "lisp/magit-commit.el"
+                  "lisp/magit-remote.el"
+                  "lisp/magit-bisect.el"
+                  "lisp/magit-stash.el"
+                  "lisp/magit-blame.el"
+                  "lisp/magit-ediff.el"
+                  "lisp/magit-extras.el"
+                  "lisp/git-rebase.el"
+                  "Documentation/magit.texi"
+                  "Documentation/AUTHORS.md"
+                  "COPYING"
+                ];
+    meta = { license = gpl3Plus; };
+  };
+  git-commit = melpaBuild rec {
+    pname = "git-commit";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash with-editor ];
+    fileSpecs = [ "lisp/git-commit.el" ];
+    meta = { license = gpl3Plus; };
+  };
+  magit-popup = melpaBuild rec {
+    pname = "magit-popup";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash with-editor ];
+    fileSpecs = [ "Documentation/magit-popup.texi" "lisp/magit-popup.el" ];
+    meta = { license = gpl3Plus; };
+  };
+  with-editor = melpaBuild rec {
+    pname = "with-editor";
+    version = magit.version;
+    src = magit.src;
+    packageRequires = [ dash ];
+    fileSpecs = [ "Documentation/with-editor.texi" "lisp/with-editor.el" ];
     meta = { license = gpl3Plus; };
   };
 
