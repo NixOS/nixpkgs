@@ -16790,4 +16790,24 @@ let
       maintainers = with maintainers; [ kamilchm ];
     };
   };
+
+  pafy = buildPythonPackage rec {
+    name = "pafy-${version}";
+    version = "0.3.74";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
+      md5 = "fbf0e7f85914eaf35f87837232eec09c";
+    };
+
+    propagatedBuildInputs = with self; [ youtube-dl ];
+
+    meta = with stdenv.lib; {
+      description = "A library to download YouTube content and retrieve metadata";
+      homepage = http://np1.github.io/pafy/;
+      license = licenses.lgpl3Plus;
+      maintainers = with maintainers; [ odi ];
+    };
+  };
+
 }; in pythonPackages
