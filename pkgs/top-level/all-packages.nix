@@ -14736,20 +14736,13 @@ let
 
   mupen64plus1_5 = callPackage ../misc/emulators/mupen64plus/1.5.nix { };
 
-  nix = nixStable;
-
-  nixStable = callPackage ../tools/package-management/nix {
-    storeDir = config.nix.storeDir or "/nix/store";
-    stateDir = config.nix.stateDir or "/nix/var";
-  };
-
-  nixUnstable = nixStable;
-  /*
-  nixUnstable = lowPrio (callPackage ../tools/package-management/nix/unstable.nix {
-    storeDir = config.nix.storeDir or "/nix/store";
-    stateDir = config.nix.stateDir or "/nix/var";
-  });
-  */
+  inherit (callPackages ../tools/package-management/nix {
+      storeDir = config.nix.storeDir or "/nix/store";
+      stateDir = config.nix.stateDir or "/nix/var";
+      })
+    nix
+    nixStable
+    nixUnstable;
 
   nixops = callPackage ../tools/package-management/nixops { };
 

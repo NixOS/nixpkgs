@@ -8,7 +8,7 @@ pkgs.releaseTools.makeSourceTarball {
   officialRelease = false; # FIXME: fix this in makeSourceTarball
   inherit version versionSuffix;
 
-  buildInputs = [ pkgs.nixUnstable ];
+  buildInputs = [ pkgs.nix ];
 
   expr = builtins.readFile ./channel-expr.nix;
 
