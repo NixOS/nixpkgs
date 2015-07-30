@@ -825,17 +825,12 @@ let
     propagatedBuildInputs = [ google-api-go-client ];
   };
 
-  gopass = buildGoPackage rec {
-    rev = "2c70fa70727c953c51695f800f25d6b44abb368e";
-    name = "gopass-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/howeyc/gopass";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "howeyc";
-      repo = "gopass";
-      sha256 = "152lrkfxk205rlxiign0w5wb0fmfh910yz4jhlv4f4l1qr1h2lx8";
-    };
-    buildInputs = [ crypto ];
+  gopass = buildFromGitHub {
+    rev = "10b54de414cc9693221d5ff2ae14fd2fbf1b0ac1";
+    owner = "howeyc";
+    repo = "gopass";
+    sha256 = "0lsi89zx1i2f5vhm66zqn2drs7xi7ff8r1xlp6m58r99dddws57s";
+    propagatedBuildInputs = [ crypto ];
   };
 
   gopherduty = buildFromGitHub {
@@ -966,10 +961,10 @@ let
   };
 
   go-flags = buildFromGitHub {
-    rev    = "5e118789801496c93ba210d34ef1f2ce5a9173bd";
+    rev    = "1b89bf73cd2c3a911d7b2a279ab085c4a18cf539";
     owner  = "jessevdk";
     repo   = "go-flags";
-    sha256 = "1davr5h936fhc8zy7digp5yqxr216d1mshksr7iiad5xb3r8r9ja";
+    sha256 = "027nglc5xx1cm03z9sisg0iqrhwcj6gh5z254rrpl8p4fwrxx680";
   };
 
   go-fuse = buildGoPackage rec {
@@ -1568,18 +1563,34 @@ let
     };
   };
 
-  mgo = buildGoPackage rec {
-    rev = "c6a7dce14133ccac2dcac3793f1d6e2ef048503a";
-    name = "mgo-${rev}";
+  mgo = buildFromGitHub {
+    rev = "r2015.06.03";
+    owner = "go-mgo";
+    repo = "mgo";
+    sha256 = "1bwqbngdy0ghwpvarsz8rlrirdmjrda44aghihpfmin06hxy3zcd";
     goPackagePath = "gopkg.in/mgo.v2";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "go-mgo";
-      repo = "mgo";
-      sha256 ="0rg232q1bkq3y3kd5816hgk1jpf7i38aha5q5ia7j6p9xashz7vj";
-    };
+    goPackageAliases = [ "github.com/go-mgo/mgo" ];
+    buildInputs = [ pkgs.cyrus_sasl tomb ];
+  };
 
-    buildInputs = [ pkgs.cyrus_sasl ];
+  mongo-tools = buildFromGitHub {
+    rev    = "621464ebd2ba0c6ee373600b0cb7fd4216405550";
+    owner  = "mongodb";
+    repo   = "mongo-tools";
+    sha256 = "0hgh5h7bpn5xxnxgmw30fi51l4cb4g029nih8j8m0sr4if0n9vkf";
+    buildInputs = [ gopass go-flags mgo openssl tomb ];
+    excludedPackages = "vendor";
+
+    # Mongodb incorrectly names all of their binaries main
+    # Let's work around this with our own installer
+    installPhase = ''
+      mkdir -p $out/bin
+      while read b; do
+        rm -f go/bin/main
+        go install $goPackagePath/$b/main
+        cp go/bin/main $out/bin/$b
+      done < <(find go/src/$goPackagePath -name main | xargs dirname | xargs basename -a)
+    '';
   };
 
   mousetrap = buildFromGitHub {
@@ -1700,17 +1711,18 @@ let
     doCheck = false; # check this again
   };
 
-  openssl = buildGoPackage rec {
-    rev = "84b5df477423634115e53fb171a66007cece19f5";
-    name = "openssl-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/spacemonkeygo/openssl";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "spacemonkeygo";
-      repo = "openssl";
-      sha256 = "1l0cyazxp8bwmi151djyr6pknj9jv8n53lgfhgj6l0zj32p5kh1v";
-    };
-    buildInputs = [ spacelog pkgconfig pkgs.openssl ];
+  openssl = buildFromGitHub {
+    rev = "4c6dbafa5ec35b3ffc6a1b1e1fe29c3eba2053ec";
+    owner = "10gen";
+    repo = "openssl";
+    sha256 = "1033c9vgv9lf8ks0qjy0ylsmx1hizqxa6izalma8vi30np6ka6zn";
+    goPackageAliases = [ "github.com/spacemonkeygo/openssl" ];
+    buildInputs = [ pkgs.pkgconfig pkgs.openssl ];
+    propagatedBuildInputs = [ spacelog ];
+
+    preBuild = ''
+      find go/src/$goPackagePath -name \*.go | xargs sed -i 's,spacemonkeygo/openssl,10gen/openssl,g'
+    '';
   };
 
   osext = buildFromGitHub {
@@ -2075,16 +2087,11 @@ let
     propagatedBuildInputs = [ raw ];
   };
 
-  spacelog = buildGoPackage rec {
+  spacelog = buildFromGitHub {
     rev = "ae95ccc1eb0c8ce2496c43177430efd61930f7e4";
-    name = "spacelog-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/spacemonkeygo/spacelog";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "spacemonkeygo";
-      repo = "spacelog";
-      sha256 = "1i1awivsix0ch0vg6rwvx0536ziyw6phcx45b1rmrclp6b6dyacy";
-    };
+    owner = "spacemonkeygo";
+    repo = "spacelog";
+    sha256 = "1i1awivsix0ch0vg6rwvx0536ziyw6phcx45b1rmrclp6b6dyacy";
     buildInputs = [ flagfile ];
   };
 
@@ -2171,16 +2178,13 @@ let
     propagatedBuildInputs = [ pty ];
   };
 
-  tomb = buildGoPackage rec {
+  tomb = buildFromGitHub {
     rev = "14b3d72120e8d10ea6e6b7f87f7175734b1faab8";
-    name = "tomb-${stdenv.lib.strings.substring 0 7 rev}";
+    owner = "go-tomb";
+    repo = "tomb";
+    sha256 = "1nza31jvkpka5431c4bdbirvjdy36b1b55sbzljqhqih25jrcjx5";
     goPackagePath = "gopkg.in/tomb.v2";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "go-tomb";
-      repo = "tomb";
-      sha256 = "1nza31jvkpka5431c4bdbirvjdy36b1b55sbzljqhqih25jrcjx5";
-    };
+    goPackageAliases = [ "github.com/go-tomb/tomb" ];
   };
 
   toml = buildFromGitHub {
