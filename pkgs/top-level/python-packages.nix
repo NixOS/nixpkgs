@@ -13586,6 +13586,28 @@ let
    };
 
 
+  ttfquery = buildPythonPackage rec {
+    name = "ttfquery-${version}";
+    version = "1.0.5";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/T/TTFQuery/TTFQuery-${version}.tar.gz";
+      sha256 = "0kbymjlxj0wmhsj3ckj84k8qcm53ivg2g7w1852pbqiyj1lx7f6m";
+    };
+
+    #propagatedBuildInputs = with pythonPackages; [  ];
+
+    meta = with stdenv.lib; {
+      description = "FontTools-based package for querying system fonts";
+      homepage = http://ttfquery.sourceforge.net/;
+      #license = unknown;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
+
   turses = buildPythonPackage (rec {
     name = "turses-0.2.23";
 
