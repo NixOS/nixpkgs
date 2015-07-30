@@ -52,7 +52,7 @@ in stdenv.mkDerivation {
 
     RPATH=${libPaths}:$out/${appdir}
     echo "Updating rpaths to $RPATH in:"
-    find "$out/${appdir}" -type f -a -perm +0100 \
+    find "$out/${appdir}" -type f -a -perm /0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
   '';
 
