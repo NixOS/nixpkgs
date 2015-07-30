@@ -17,7 +17,7 @@ let
   version = "2015-06-09";
 
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
-  neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation rec {
+  neovimLibvterm = let version = "2015-02-23"; in stdenv.mkDerivation {
     name = "neovim-libvterm-${version}";
 
     src = fetchFromGitHub {
@@ -54,7 +54,7 @@ let
     ignoreCollisions = true;
   };
 
-  neovim = stdenv.mkDerivation rec {
+  neovim = stdenv.mkDerivation {
     name = "neovim-${version}";
 
     src = fetchFromGitHub {
@@ -135,7 +135,7 @@ let
     };
   };
 
-in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation rec {
+in if (vimAlias == false && configure == null) then neovim else stdenv.mkDerivation {
   name = "neovim-${version}-configured";
   nativeBuildInputs = [ makeWrapper ];
   buildCommand = ''

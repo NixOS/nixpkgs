@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 let version = "0.4.8"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "aha-${version}";
 
   src = fetchFromGitHub {

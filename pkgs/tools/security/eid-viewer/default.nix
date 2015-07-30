@@ -1,9 +1,10 @@
 { stdenv, fetchurl, jre, makeWrapper, pcsclite }:
 
-stdenv.mkDerivation rec {
+let
   # TODO: find out what the version components actually mean, if anything:
   package = "eid-viewer-4.0.7-195";
   build = "tcm406-258907";
+in stdenv.mkDerivation rec {
   name = "${package}-${build}";
 
   src = fetchurl {

@@ -7,7 +7,7 @@ assert stdenv.lib.versionAtLeast kernel.version "4.0";
 assert !kernel.features ? grsecurity;
 
 let version = "0.4.0-rev17"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "linux-phc-intel-${version}-${kernel.version}";
 
   src = fetchurl {

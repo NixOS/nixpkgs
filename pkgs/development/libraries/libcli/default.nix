@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 let version = "1.9.7"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libcli-${version}";
 
   src = fetchFromGitHub {

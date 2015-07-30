@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qt5 }:
 
 let version = "1.13"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "accounts-qt-${version}";
 
   src = fetchFromGitLab {

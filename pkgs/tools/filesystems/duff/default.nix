@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gettext }:
 
 let version = "0.5.2"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "duff-${version}";
 
   src = fetchFromGitHub {
