@@ -184,7 +184,7 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
             # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
             # when there are multiple swap devices, we can't know where the hibernate
             # image will reside. We can check all of them for swsuspend blkid.
-            resumeInfo="$(test -e "$d" && udevadm info -q property "$sd")"
+            resumeInfo="$(test -e "$sd" && udevadm info -q property "$sd")"
             if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
                 resumeDev="$sd"
                 break
