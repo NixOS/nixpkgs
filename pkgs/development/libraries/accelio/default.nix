@@ -6,18 +6,18 @@
 
 stdenv.mkDerivation rec {
   name = "accelio-${version}${stdenv.lib.optionalString (kernel != null) "-kernel"}";
-  version = "1.4";
+  version = "2015-07-28";
 
   src = fetchFromGitHub {
     owner = "accelio";
     repo = "accelio";
-    rev = "v${version}";
-    sha256 = "0cxiwn63481m88zisd0pqs6g0h5k1amz2kidwyxkdbl6xgf70cwd";
+    rev = "0c4b6d535831650112ba9409a5c7d6e1bc436d61";
+    sha256 = "044m92pnvdl64irvy7bdqr51gz0qr5f14xnsig4gkc3vb0afbb4j";
   };
 
   postPatch = ''
     # Don't build broken examples
-    sed -i '/AC_CONFIG_SUBDIRS(\[\(examples\|tests\)\/kernel/d' configure.ac
+    sed -i '/AC_CONFIG_SUBDIRS(\[\(examples\|tests\).*\/kernel/d' configure.ac
 
     # Allow the installation of xio kernel headers
     sed -i 's,/opt/xio,''${out},g' src/kernel/xio/Makefile.in

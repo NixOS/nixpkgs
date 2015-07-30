@@ -85,6 +85,44 @@ in ...</programlisting>
 
 </section>
 
+<section xml:id="sec-pkg-overrideDerivation">
+  <title>&lt;pkg&gt;.overrideDerivation</title>
+
+  <para>
+    The function <varname>overrideDerivation</varname> is usually available for all the
+    derivations in the nixpkgs expression (<varname>pkgs</varname>).
+  </para> 
+  <para>
+    It is used to create a new derivation by overriding the attributes of
+    the original derivation according to the given function.
+  </para>
+
+  <para>
+    Example usage:
+
+    <programlisting>mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
+  name = "sed-4.2.2-pre";
+  src = fetchurl {
+    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+  };
+  patches = [];
+});</programlisting>
+  </para>
+
+  <para>
+    In the above example, the name, src and patches of the derivation
+    will be overridden, while all other attributes will be retained from the
+    original derivation.
+  </para>
+
+  <para>
+    The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
+    the original derivation.
+  </para>
+
+</section>
+
 <section xml:id="sec-lib-makeOverridable">
   <title>lib.makeOverridable</title>
 

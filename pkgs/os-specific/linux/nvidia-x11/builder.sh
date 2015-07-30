@@ -20,9 +20,15 @@ buildPhase() {
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
         make SYSSRC=$sysSrc SYSOUT=$sysOut module
-        cd uvm
-        make SYSSRC=$sysSrc SYSOUT=$sysOut module
-        cd ..
+
+        # nvidia no longer provides uvm kernel module for 32-bit archs
+        # http://www.nvidia.com/download/driverResults.aspx/79722/en-us
+        if [[ "$system" = "x86_64-linux" ]]; then
+            cd uvm
+            make SYSSRC=$sysSrc SYSOUT=$sysOut module
+            cd ..
+        fi
+
         cd ..
     fi
 }
@@ -47,7 +53,7 @@ installPhase() {
 
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
-        for i in kernel/nvidia.ko kernel/uvm/nvidia-uvm.ko; do
+        for i in $(find ./kernel -name '*.ko'); do
             nuke-refs $i
             cp $i $out/lib/modules/$kernelVersion/misc/
         done

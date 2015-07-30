@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, makeWrapper
-, intltool, itstool, libcanberra_gtk3, libxml2 }:
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
+, intltool, itstool, libcanberra_gtk3, libxml2, dconf }:
 
 stdenv.mkDerivation rec {
   name = "iagno-${gnome3.version}.1";
@@ -10,16 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
-                  libxml2 libcanberra_gtk3 makeWrapper itstool intltool ];
+                  dconf libxml2 libcanberra_gtk3 wrapGAppsHook itstool intltool ];
 
   enableParallelBuilding = true;
-
-  preFixup = ''
-    wrapProgram "$out/bin/iagno" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share" \
-      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Iagno;

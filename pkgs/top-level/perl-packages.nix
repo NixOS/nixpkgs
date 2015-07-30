@@ -2658,16 +2658,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClassSchemaLoader = buildPerlPackage {
-    name = "DBIx-Class-Schema-Loader-0.07033";
+    name = "DBIx-Class-Schema-Loader-0.07043";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RK/RKITOVER/DBIx-Class-Schema-Loader-0.07033.tar.gz;
-      sha256 = "1vrcxxlbvdch5r9v5i6vrb4fqqfbpxybpdqndmlnc2jzlqjwjahi";
+      url = mirror://cpan/authors/id/I/IL/ILMARI/DBIx-Class-Schema-Loader-0.07043.tar.gz;
+      sha256 = "01944d429a420fcb961aa4ab002f884f3d54529b3346816502c27d31c956194d";
     };
-    buildInputs = [ ConfigAny ConfigGeneral DBDSQLite DBI DBIxClassIntrospectableM2M Moose MooseXMarkAsMethods MooseXNonMoose namespaceautoclean TestException TestPod TestWarn ];
-    propagatedBuildInputs = [ CarpClan ClassAccessorGrouped ClassC3Componentised ClassInspector ClassUnload DataDump DBIxClass HashMerge LinguaENInflectNumber LinguaENInflectPhrase LinguaENTagger ListMoreUtils MROCompat namespaceclean ScopeGuard StringCamelCase StringToIdentifierEN SubName TaskWeaken TryTiny ];
+    buildInputs = [ ConfigAny ConfigGeneral DBDSQLite DBIxClassIntrospectableM2M Moose MooseXMarkAsMethods MooseXNonMoose TestDeep TestDifferences TestException TestPod TestWarn namespaceautoclean ];
+    propagatedBuildInputs = [ CarpClan ClassAccessorGrouped ClassC3Componentised ClassInspector ClassUnload DBIxClass DataDump HashMerge LinguaENInflectNumber LinguaENInflectPhrase LinguaENTagger MROCompat ScalarListUtils ScopeGuard StringCamelCase StringToIdentifierEN TryTiny namespaceclean ];
     meta = {
       description = "Create a DBIx::Class::Schema based on a database";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = "perl";
     };
   };
 
@@ -5111,6 +5111,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [XMLParser];
   };
 
+  LinguaENFindNumber = buildPerlPackage {
+    name = "Lingua-EN-FindNumber-1.31";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NE/NEILB/Lingua-EN-FindNumber-1.31.tar.gz;
+      sha256 = "f67f4d4983bd29da5cbbff3cb18dd70788692b35e2dabcd4c65bef1cd2bf658f";
+    };
+    propagatedBuildInputs = [ LinguaENWords2Nums ];
+    meta = {
+      homepage = https://github.com/neilbowers/Lingua-EN-FindNumber;
+      description = "Locate (written) numbers in English text";
+      license = "perl";
+    };
+  };
+
   LinguaENInflect = buildPerlPackage {
     name = "Lingua-EN-Inflect-1.895";
     src = fetchurl {
@@ -5131,15 +5145,34 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ LinguaENInflect ];
   };
 
-  LinguaENInflectPhrase = buildPerlPackage rec {
-    name = "Lingua-EN-Inflect-Phrase-0.10";
+  LinguaENInflectPhrase = buildPerlPackage {
+    name = "Lingua-EN-Inflect-Phrase-0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RK/RKITOVER/${name}.tar.gz";
-      sha256 = "1l7sjnibnvgb7a73cjhysmrg4j2bfcn0x5yrqmh0v23laj9fsbbm";
+      url = mirror://cpan/authors/id/R/RK/RKITOVER/Lingua-EN-Inflect-Phrase-0.18.tar.gz;
+      sha256 = "290a5b8fc2be28d6d479517655027a90e944476cb3552f10cbf6db37af79f9a6";
     };
-    buildInputs = [ TestMore ];
-    propagatedBuildInputs =
-      [ LinguaENInflect LinguaENInflectNumber LinguaENTagger ];
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [ LinguaENFindNumber LinguaENInflect LinguaENInflectNumber LinguaENNumberIsOrdinal LinguaENTagger ];
+    meta = {
+      homepage = http://metacpan.org/release/Lingua-EN-Inflect-Phrase;
+      description = "Inflect short English Phrases";
+      license = "perl";
+    };
+  };
+
+  LinguaENNumberIsOrdinal = buildPerlPackage {
+    name = "Lingua-EN-Number-IsOrdinal-0.05";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RK/RKITOVER/Lingua-EN-Number-IsOrdinal-0.05.tar.gz;
+      sha256 = "28d5695400c0f4e2bd209793cb74f6da2b9257356aacb2947c603425e09618d6";
+    };
+    buildInputs = [ TestFatal TryTiny ];
+    propagatedBuildInputs = [ LinguaENFindNumber ];
+    meta = {
+      homepage = http://metacpan.org/release/Lingua-EN-Number-IsOrdinal;
+      description = "Detect if English number is ordinal or cardinal";
+      license = "perl";
+    };
   };
 
   LinguaENTagger = buildPerlPackage {
@@ -5152,6 +5185,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Part-of-speech tagger for English natural language processing";
       license = stdenv.lib.licenses.gpl3;
+    };
+  };
+
+  LinguaENWords2Nums = buildPerlPackage {
+    name = "Lingua-EN-Words2Nums-0.18";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JO/JOEY/Lingua-EN-Words2Nums-0.18.tar.gz;
+      sha256 = "686556797cd2a4eaa066f19bbf03ab25c06278292c9ead2f187dfd9031ea1d85";
+    };
+    meta = {
+      description = "Convert English text to numbers";
+      license = "unknown";
     };
   };
 
@@ -8093,6 +8138,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ScalarListUtils = buildPerlPackage {
+    name = "Scalar-List-Utils-1.42";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.42.tar.gz;
+      sha256 = "3507f72541f66a2dce850b9b56771e5fccda3d215c52f74946c6e370c0f4a4da";
+    };
+    meta = {
+      description = "Common Scalar and List utility subroutines";
+      license = "perl";
+    };
+  };
+
   ScalarString = buildPerlPackage rec {
     name = "Scalar-String-0.002";
     src = fetchurl {
@@ -9185,15 +9242,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestDifferences = buildPerlPackage {
-    name = "Test-Differences-0.4801";
+    name = "Test-Differences-0.63";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OV/OVID/Test-Differences-0.4801.tar.gz;
-      sha256 = "1p5bqyq3gxfb1q4wajd28498fsbqk7f2y7pk9c3rnh0x36cqbvyw";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Test-Differences-0.63.tar.gz;
+      sha256 = "7c657a178c32f48de3b469f6d4f67b75f018a3a19c1e6d0d8892188b0d261a66";
     };
-    propagatedBuildInputs = [ TextDiff ];
+    propagatedBuildInputs = [ CaptureTiny TextDiff ];
     meta = {
       description = "Test strings and data structures and show differences if not ok";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = "unknown";
     };
   };
 

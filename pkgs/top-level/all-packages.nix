@@ -3036,6 +3036,8 @@ let
 
   super = callPackage ../tools/security/super { };
 
+  super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
+
   ssdeep = callPackage ../tools/security/ssdeep { };
 
   sshpass = callPackage ../tools/networking/sshpass { };
@@ -3883,9 +3885,8 @@ let
     profiledCompiler = false;
   });
 
-  gcj = gcj48;
-
-  gcj48 = wrapCC (gcc48.cc.override {
+  gcj = gcj49;
+  gcj49 = wrapCC (gcc49.cc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -3922,7 +3923,7 @@ let
     emacsSupport = config.emacsSupport or false;
   };
 
-  gccgo = gccgo48;
+  gccgo = gccgo49;
 
   gccgo48 = wrapCC (gcc48.cc.override {
     name = "gccgo";
@@ -5151,6 +5152,7 @@ let
   spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.2.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
+    gcc = gcc48; # doesn't build with gcc49
     qt = qt4;
     fftw = fftwSinglePrec;
   };
@@ -7206,7 +7208,9 @@ let
 
   libopus = callPackage ../development/libraries/libopus { };
 
-  libosinfo = callPackage ../development/libraries/libosinfo {};
+  libosinfo = callPackage ../development/libraries/libosinfo {
+    inherit (gnome3) libsoup;
+  };
 
   libosip = callPackage ../development/libraries/osip {};
 
@@ -7231,7 +7235,6 @@ let
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
-  libpng15 = callPackage ../development/libraries/libpng/15.nix { };
 
   libpaper = callPackage ../development/libraries/libpaper { };
 
@@ -7478,14 +7481,13 @@ let
 
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
-    inherit gmp mesa libjpeg
+    inherit gmp mesa libjpeg libpng
       expat gettext perl
       SDL SDL_image SDL_mixer SDL_ttf
       curl sqlite
       libogg libvorbis libcaca csound cunit
       ;
     guile = guile_1_8;
-    libpng = libpng15; # 0.0.13 needs libpng 1.2--1.5
   };
 
   log4cpp = callPackage ../development/libraries/log4cpp { };
@@ -8879,7 +8881,7 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
-  etcd = callPackage ../servers/etcd { };
+  etcd = goPackages.etcd;
 
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16;
@@ -8896,7 +8898,7 @@ let
     v8 = v8_3_24_10;
   };
 
-  etcdctl = callPackage ../development/tools/etcdctl { };
+  etcdctl = goPackages.etcd;
 
   exim = callPackage ../servers/mail/exim { };
 
@@ -9977,9 +9979,7 @@ let
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
-  neverball = callPackage ../games/neverball {
-    libpng = libpng15;
-  };
+  neverball = callPackage ../games/neverball { };
 
   nftables = callPackage ../os-specific/linux/nftables { };
 
@@ -14730,20 +14730,13 @@ let
 
   mupen64plus1_5 = callPackage ../misc/emulators/mupen64plus/1.5.nix { };
 
-  nix = nixStable;
-
-  nixStable = callPackage ../tools/package-management/nix {
-    storeDir = config.nix.storeDir or "/nix/store";
-    stateDir = config.nix.stateDir or "/nix/var";
-  };
-
-  nixUnstable = nixStable;
-  /*
-  nixUnstable = lowPrio (callPackage ../tools/package-management/nix/unstable.nix {
-    storeDir = config.nix.storeDir or "/nix/store";
-    stateDir = config.nix.stateDir or "/nix/var";
-  });
-  */
+  inherit (callPackages ../tools/package-management/nix {
+      storeDir = config.nix.storeDir or "/nix/store";
+      stateDir = config.nix.stateDir or "/nix/var";
+      })
+    nix
+    nixStable
+    nixUnstable;
 
   nixops = callPackage ../tools/package-management/nixops { };
 

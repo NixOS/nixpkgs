@@ -555,6 +555,14 @@ let
     sha256 = "0kmv0p605di6jc8i1778qzass18m0mv9ks9vxxrfsiwcp4la82jf";
   };
 
+  etcd = buildFromGitHub {
+    rev    = "v2.1.1";
+    owner  = "coreos";
+    repo   = "etcd";
+    sha256 = "0jd97091jwwdvx50vbdi1py9v5w9fk86cw85p0zinb0ww6bs4y0s";
+    excludedPackages = "Godeps";
+  };
+
   fsnotify.v0 = buildGoPackage rec {
     rev = "v0.9.3";
     name = "fsnotify.v0-${rev}";
