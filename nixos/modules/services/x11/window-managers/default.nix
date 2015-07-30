@@ -25,6 +25,7 @@ in
     ./windowmaker.nix
     ./wmii.nix
     ./xmonad.nix
+    ./qtile.nix
     ./none.nix ];
 
   options = {
