@@ -19,6 +19,7 @@ rec {
     , apply ? null # Function that converts the option value to something else.
     , internal ? null # Whether the option is for NixOS developers only.
     , visible ? null # Whether the option shows up in the manual.
+    , readOnly ? null # Whether the option can be set only once
     , options ? null # Obsolete, used by types.optionSet.
     } @ attrs:
     attrs // { _type = "option"; };
@@ -90,6 +91,7 @@ rec {
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible = opt.visible or true;
+          readOnly = opt.readOnly or false;
           type = opt.type.name or null;
         }
         // (if opt ? example then { example = scrubOptionValue opt.example; } else {})

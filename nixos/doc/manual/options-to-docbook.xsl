@@ -39,6 +39,10 @@
                   <emphasis>Type:</emphasis>
                   <xsl:text> </xsl:text>
                   <xsl:apply-templates select="attr[@name = 'type']" mode="top" />
+                  <xsl:if test="attr[@name = 'readOnly']/bool/@value = 'true'">
+                    <xsl:text> </xsl:text>
+                    <emphasis>(read only)</emphasis>
+                  </xsl:if>
                 </para>
               </xsl:if>
 

@@ -29,7 +29,7 @@ with lib;
     };
 
     system.nixosRelease = mkOption {
-      internal = true;
+      readOnly = true;
       type = types.str;
       default = readFile "${toString pkgs.path}/.version";
       description = "NixOS release.";
@@ -48,7 +48,7 @@ with lib;
     };
 
     system.nixosCodeName = mkOption {
-      internal = true;
+      readOnly = true;
       type = types.str;
       description = "NixOS release code name.";
     };

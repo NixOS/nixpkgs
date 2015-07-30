@@ -261,11 +261,16 @@ rec {
   evalOptionValue = loc: opt: defs:
     let
       # Add in the default value for this option, if any.
-      defs' = (optional (opt ? default)
-        { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+      defs' =
+          (optional (opt ? default)
+            { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
 
       # Handle properties, check types, and merge everything together.
-      res = mergeDefinitions loc opt.type defs';
+      res =
+        if opt.readOnly or false && length defs' > 1 then
+          throw "The option `${showOption loc}' is read-only, but it's set multiple times."
+        else
+          mergeDefinitions loc opt.type defs';
 
       # Check whether the option is defined, and apply the ‘apply’
       # function to the merged value.  This allows options to yield a
