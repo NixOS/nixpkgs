@@ -3883,9 +3883,8 @@ let
     profiledCompiler = false;
   });
 
-  gcj = gcj48;
-
-  gcj48 = wrapCC (gcc48.cc.override {
+  gcj = gcj49;
+  gcj49 = wrapCC (gcc49.cc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
