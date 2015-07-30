@@ -1,5 +1,5 @@
-{ stdenv, fetchzip, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper
-, par2cmdline, par2Support ? false }:
+{ stdenv, fetchzip, fetchurl, python, pyxattr, pylibacl, setuptools
+, fuse, git, perl, pandoc, makeWrapper, par2cmdline, par2Support ? false }:
 
 assert par2Support -> par2cmdline != null;
 
@@ -7,7 +7,7 @@ let version = "0.26"; in
 
 with stdenv.lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "bup-${version}";
 
   src = fetchzip {
@@ -18,12 +18,19 @@ stdenv.mkDerivation {
   buildInputs = [ python git ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
-  patchPhase = ''
+  darwin_10_10_patch = fetchurl {
+    url = "https://github.com/bup/bup/commit/75d089e7cdb7a7eb4d69c352f56dad5ad3aa1f97.diff";
+    sha256 = "05kp47p30a45ip0fg090vijvzc7ijr0alc3y8kjl6bvv3gliails";
+  };
+
+  postPatch = ''
     patchShebangs .
     substituteInPlace Makefile --replace "-Werror" ""
     substituteInPlace Makefile --replace "./format-subst.pl" "perl ./format-subst.pl"
   '' + optionalString par2Support ''
     substituteInPlace cmd/fsck-cmd.py --replace "['par2'" "['${par2cmdline}/bin/par2'"
+  '' + optionalString (elem stdenv.system platforms.darwin) ''
+    patch -p1 < ${darwin_10_10_patch}
   '';
 
   dontAddPrefix = true;
