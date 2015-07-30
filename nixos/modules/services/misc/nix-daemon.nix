@@ -78,8 +78,8 @@ in
         description = ''
           This option defines the maximum number of jobs that Nix will try
           to build in parallel.  The default is 1.  You should generally
-          set it to the number of CPUs in your system (e.g., 2 on an Athlon
-          64 X2).
+          set it to the total number of logical cores in your system (e.g., 16
+          for two CPUs with 4 cores each and hyper-threading).
         '';
       };
 
