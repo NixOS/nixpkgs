@@ -1,7 +1,7 @@
 { fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
 , webkitgtk24x, pkgconfig, gnome3, gst_all_1, which, udev, libraw, glib, json_glib
 , gettext, desktop_file_utils, lcms2, gdk_pixbuf, librsvg, makeWrapper
-, gnome_doc_utils, hicolor_icon_theme, cacert }:
+, gnome_doc_utils, hicolor_icon_theme }:
 
 # for dependencies see http://www.yorba.org/projects/shotwell/install/
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
-  
+
   configureFlags = [ "--disable-gsettings-convert-install" ];
-  
+
   preConfigure = ''
     patchShebangs .
   '';
