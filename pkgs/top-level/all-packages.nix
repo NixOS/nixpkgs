@@ -11984,12 +11984,17 @@ let
   mendeley = callPackage ../applications/office/mendeley { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) curses docutils hg-git dulwich;
+    inherit (pythonPackages) curses docutils;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     guiSupport = false; # use mercurialFull to get hgk GUI
+    gitSupport = false; # use mercurialFull to get hg-git
   };
 
-  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
+  mercurialFull = appendToName "full" (pkgs.mercurial.override {
+    guiSupport = true;
+    gitSupport = true;
+    inherit (pythonPackages) hg-git dulwich;
+  });
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
