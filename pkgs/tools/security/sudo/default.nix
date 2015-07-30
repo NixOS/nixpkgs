@@ -1,5 +1,6 @@
 { stdenv, fetchurl, coreutils, pam, groff
 , sendmailPath ? "/var/setuid-wrappers/sendmail"
+, withInsults ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,9 @@ stdenv.mkDerivation rec {
     "--with-vardir=/var/db/sudo"
     "--with-logpath=/var/log/sudo.log"
     "--with-sendmail=${sendmailPath}"
+  ] ++ stdenv.lib.optional withInsults [
+    "--with-insults"
+    "--with-all-insults"
   ];
 
   configureFlagsArray = [
