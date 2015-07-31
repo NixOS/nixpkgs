@@ -12478,6 +12478,24 @@ let
     tag = "-daemon-qt5";
   };
 
+  quassel_kf5 = callPackage ../applications/networking/irc/quassel {
+    monolithic = true;
+    daemon = false;
+    client = false;
+    withKDE = true;
+    useQt5 = true;
+    qt = qt5;
+    kf5 = kf510;
+    dconf = gnome3.dconf;
+    tag = "-kf5";
+  };
+
+  quasselClient_kf5 = quassel_kf5.override {
+    monolithic = false;
+    client = true;
+    tag = "-client-kf5";
+  };
+
   quirc = callPackage ../tools/graphics/quirc {};
 
   quodlibet = callPackage ../applications/audio/quodlibet {
