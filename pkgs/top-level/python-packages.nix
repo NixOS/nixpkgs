@@ -1884,11 +1884,11 @@ let
   };
 
   click = buildPythonPackage rec {
-    name = "click-3.3";
+    name = "click-4.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "1rfn8ml80rw3hkgpm1an5p3vdyhh7hzx4zynr8dhfl7bsw28r77p";
+      sha256 = "1n4fvxpgbna83g6daarscljwpbarr45qfalh9hqla8ayy84ysfg3";
     };
 
     meta = {
@@ -1901,17 +1901,6 @@ let
       license = licenses.bsd3;
       maintainers = with maintainers; [ nckx ];
     };
-  };
-
-  click_4_1 = buildPythonPackage rec {
-    name = "click-4.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "1n4fvxpgbna83g6daarscljwpbarr45qfalh9hqla8ayy84ysfg3";
-    };
-
-    inherit (self.click) meta;
   };
 
   clepy = buildPythonPackage rec {
