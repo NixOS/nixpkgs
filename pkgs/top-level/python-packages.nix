@@ -16820,5 +16820,20 @@ let
       maintainers = with maintainers; [ odi ];
     };
   };
+  
+  suds = buildPythonPackage rec {
+    name = "suds-0.4";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
+      md5 = "b7502de662341ed7275b673e6bd73191";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Lightweight SOAP client";
+      homepage = https://fedorahosted.org/suds;
+      license = licenses.lgpl3Plus;
+    };
+  };
 
 }; in pythonPackages
