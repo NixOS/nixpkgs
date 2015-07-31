@@ -12858,6 +12858,8 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  tortoisehg = callPackage ../applications/version-management/tortoisehg { };
+
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   transcode = callPackage ../applications/audio/transcode { };
