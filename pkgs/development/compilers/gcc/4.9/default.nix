@@ -303,7 +303,6 @@ stdenv.mkDerivation ({
     configureFlagsArray+=(
       --with-sysroot="${stdenv.libc}"
       --with-native-system-header-dir=/include
-      CFLAGS_FOR_BUILD=
     )
   '';
 
