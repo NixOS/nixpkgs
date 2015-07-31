@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libsepol libselinux ustr bzip2 libaudit ];
 
+  NIX_CFLAGS_COMPILE = "-fstack-protector-all -std=gnu89";
+
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
     makeFlagsArray+=("DESTDIR=$out")
   '';
-
-  NIX_CFLAGS_COMPILE = "-fstack-protector-all -std=gnu89";
 
   meta = libsepol.meta // {
     description = "Policy management tools for SELinux";

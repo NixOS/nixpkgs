@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libsepol pcre ]
              ++ optionals enablePython [ swig python ];
 
+  NIX_CFLAGS_COMPILE = "-fstack-protector-all -std=gnu89";
+
   postPatch = optionalString enablePython ''
     sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
   '';
-
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   preBuild = ''
     # Build fails without this precreated

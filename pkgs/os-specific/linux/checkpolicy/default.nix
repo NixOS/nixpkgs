@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libsepol ];
 
+  NIX_CFLAGS_COMPILE = "-fstack-protector-all";
+
   # Don't build tests
   postPatch = ''
     sed -i '/-C test/d' Makefile
