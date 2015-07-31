@@ -10875,6 +10875,8 @@ let
 
   clipit = callPackage ../applications/misc/clipit { };
 
+  cmatrix = callPackage ../applications/misc/cmatrix { };
+
   bomi = callPackage ../applications/video/bomi {
     pulseSupport = config.pulseaudio or true;
   };
