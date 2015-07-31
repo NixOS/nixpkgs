@@ -2,14 +2,15 @@
 
 let
   # TODO: find out what the version components actually mean, if anything:
-  package = "eid-viewer-4.0.7-195";
-  build = "tcm406-258907";
+  major = "4.1.4-v4.1.4";
+  minor = "tcm406-270732";
+  version = "${major}-${minor}";
 in stdenv.mkDerivation rec {
-  name = "${package}-${build}";
+  name = "eid-viewer-${version}";
 
   src = fetchurl {
-    url = "http://eid.belgium.be/en/binaries/${package}.src.tar_${build}.gz";
-    sha256 = "e263e6751ef7c185e278a607fdc46c207306d9a56c6ddb2ce6f58fb4464a2893";
+    url = "http://eid.belgium.be/en/binaries/eid-viewer-${major}.src.tar_${minor}.gz";
+    sha256 = "06kda45y7c3wvvqby153zcasgz4jibjypv8gvfwvrwvn4ag2z934";
   };
 
   buildInputs = [ jre pcsclite ];
@@ -32,6 +33,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
+    inherit version;
     description = "Belgian electronic identity card (eID) viewer";
     homepage = http://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/;
     license = licenses.lgpl3;
