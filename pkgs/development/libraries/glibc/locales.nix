@@ -29,10 +29,25 @@ build null {
 
       # Hack to allow building of the locales (needed since glibc-2.12)
       sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
+    ''
+      + stdenv.lib.optionalString (!allLocales) ''
+      # Check that all locales to be built are supported
+      echo -n '${stdenv.lib.concatMapStrings (s: s + " \\\n") locales}' \
+        | sort > locales-to-build.txt
+      cat ../glibc-2*/localedata/SUPPORTED | grep ' \\' \
+        | sort > locales-supported.txt
+      comm -13 locales-supported.txt locales-to-build.txt \
+        > locales-unsupported.txt
+      if [[ $(wc -c locales-unsupported.txt) != "0 locales-unsupported.txt" ]]; then
+        cat locales-supported.txt
+        echo "Error: unsupported locales detected:"
+        cat locales-unsupported.txt
+        echo "You should choose from the list above the error."
+        false
+      fi
 
-      ${if allLocales then "" else
-          "echo SUPPORTED-LOCALES=\"${toString locales}\" > ../glibc-2*/localedata/SUPPORTED"}
-
+      echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
+    '' + ''
       make localedata/install-locales \
           localedir=$out/lib/locale \
     '';
