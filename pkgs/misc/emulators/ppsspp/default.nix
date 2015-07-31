@@ -2,17 +2,21 @@
 , withGamepads ? true, SDL # SDL is used for gamepad functionality
 }:
 
+assert withGamepads -> (SDL != null);
+
 let
-  version = "0.9.9.1";
+  version = "1.1.0";
   fstat = x: fn: "-D" + fn + "=" + (if x then "ON" else "OFF");
-in stdenv.mkDerivation {
+in
+with stdenv.lib;
+stdenv.mkDerivation rec{
   name = "PPSSPP-${version}";
 
   src = fetchgit {
     url = "https://github.com/hrydgard/ppsspp.git";
-    sha256 = "0fdbda0b4dfbecacd01850f1767e980281fed4cc34a21df26ab3259242d8c352";
-    rev = "bf709790c4fed9cd211f755acaa650ace0f7555a";
+    rev = "8c8e5de89d52b8bcb968227d96cbf049d04d1241";
     fetchSubmodules = true;
+    sha256 = "71dfa0be045f31969b1d6ab4f1adf6a208f9ef4834d708bc7bf6d9195efb5f80";
   };
 
   buildInputs = [ zlib libpng pkgconfig qt4 ]
@@ -21,11 +25,11 @@ in stdenv.mkDerivation {
   configurePhase = "cd Qt && qmake PPSSPPQt.pro";
   installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "http://www.ppsspp.org/";
     description = "A PSP emulator, the Qt4 version";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ maintainers.fuuzetsu maintainers.AndersonTorres ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;
   };
 }
