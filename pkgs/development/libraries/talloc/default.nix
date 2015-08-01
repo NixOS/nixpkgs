@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.2";
+  name = "talloc-2.1.3";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "13c365f7y8idjf2v1jxdjpkc3lxdmsxxfxjx1ymianm7zjiph393";
+    sha256 = "1c1c3zs13qyripjwcjpz2hqc3p9p50m5yl95gdrrrvyl49dzg9bs";
   };
 
   buildInputs = [

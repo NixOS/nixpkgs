@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "--with-sock-dir=/run"
     "--with-privsep-user=smtpd"
     "--with-queue-user=smtpq"
-    "--with-ca-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
+    "--with-ca-file=/etc/ssl/certs/ca-certificates.crt"
   ];
 
   installFlags = [

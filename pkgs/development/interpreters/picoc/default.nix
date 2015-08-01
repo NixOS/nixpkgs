@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, readline }:
 
 let version = "2015-05-04"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "picoc-${version}";
 
   src = fetchFromGitHub {

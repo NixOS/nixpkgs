@@ -21,8 +21,6 @@ self: super: {
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   text = dontCheck super.text;
-  c2hs = dontCheck super.c2hs;
-  mockery = dontCheck super.mockery;
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };

@@ -1415,6 +1415,8 @@ let
 
   enscript = callPackage ../tools/text/enscript { };
 
+  entr = callPackage ../tools/misc/entr { };
+
   eplot = callPackage ../tools/graphics/eplot { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
@@ -2138,9 +2140,7 @@ let
 
   lshw = callPackage ../tools/system/lshw { };
 
-  lxc = callPackage ../os-specific/linux/lxc {
-    wrapPython = python3Packages.wrapPython;
-  };
+  lxc = callPackage ../os-specific/linux/lxc { };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -9372,6 +9372,7 @@ let
   atop = callPackage ../os-specific/linux/atop { };
 
   audit = callPackage ../os-specific/linux/audit { };
+  libaudit = audit;
 
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
@@ -10872,6 +10873,8 @@ let
   clipgrab = callPackage ../applications/video/clipgrab { };
 
   clipit = callPackage ../applications/misc/clipit { };
+
+  cmatrix = callPackage ../applications/misc/cmatrix { };
 
   bomi = callPackage ../applications/video/bomi {
     pulseSupport = config.pulseaudio or true;
@@ -12476,6 +12479,24 @@ let
     monolithic = false;
     daemon = true;
     tag = "-daemon-qt5";
+  };
+
+  quassel_kf5 = callPackage ../applications/networking/irc/quassel {
+    monolithic = true;
+    daemon = false;
+    client = false;
+    withKDE = true;
+    useQt5 = true;
+    qt = qt5;
+    kf5 = kf510;
+    dconf = gnome3.dconf;
+    tag = "-kf5";
+  };
+
+  quasselClient_kf5 = quassel_kf5.override {
+    monolithic = false;
+    client = true;
+    tag = "-client-kf5";
   };
 
   quirc = callPackage ../tools/graphics/quirc {};
@@ -14824,7 +14845,7 @@ let
 
   polytable = callPackage ../tools/typesetting/tex/polytable { };
 
-  PPSSPP = callPackage ../misc/emulators/ppsspp { };
+  PPSSPP = callPackage ../misc/emulators/ppsspp { SDL = SDL2; };
 
   uae = callPackage ../misc/emulators/uae { };
 

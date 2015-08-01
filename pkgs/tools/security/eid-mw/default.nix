@@ -2,7 +2,7 @@
 , pkgconfig }:
 
 let version = "4.1.4"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {

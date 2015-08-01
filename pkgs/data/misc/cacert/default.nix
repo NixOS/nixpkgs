@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     unpackFile ${curl.src};
   '';
 
-  nativeBuildInputs = [ perl ] ++ (with perlPackages; [ LWP ]);
+  nativeBuildInputs = [ perl perlPackages.LWP ];
 
   buildPhase = ''
     perl curl-*/lib/mk-ca-bundle.pl -d "file://$(pwd)/nss/lib/ckfw/builtins/certdata.txt" ca-bundle.crt

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash, cacert }:
+{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash }:
 
 let
   version = "1.0.5";
@@ -32,8 +32,8 @@ stdenv.mkDerivation {
      b=$(basename $f)
       if [ $b == "mix" ]; then continue; fi
       wrapProgram $f \
-      --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
-      --set CURL_CA_BUNDLE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+        --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
+        --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
     done
   '';
 

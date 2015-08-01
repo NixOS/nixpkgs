@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libelf, txt2man }:
 
 let version = "0.2"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bin_replace_string-${version}";
 
   src = fetchurl {

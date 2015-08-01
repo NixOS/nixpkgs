@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let version = "3.19"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "freefall-${version}";
 
   src = fetchurl {

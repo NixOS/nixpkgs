@@ -2,7 +2,7 @@
 , pkgconfig, rlog }:
 
 let version = "1.8.1"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "encfs-${version}";
 
   src = fetchFromGitHub {

@@ -4679,6 +4679,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  IMAPClient = buildPerlPackage {
+    name = "IMAP-Client-0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/CONTEB/IMAP-Client-0.13.tar.gz;
+      sha256 = "15fa4hpw2rqg2iadyz10rnv99hns78wph5qlh3257a3mbfjjyyla";
+    };
+    propagatedBuildInputs = [IOSocketSSL URIIMAP];
+    doCheck = false; # nondeterministic
+  };
+
   ImportInto = buildPerlPackage {
     name = "Import-Into-1.002004";
     src = fetchurl {
@@ -10510,6 +10520,15 @@ let self = _self // overrides; _self = with self; {
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
     buildInputs = [URI TestMore];
+  };
+
+  URIIMAP = buildPerlPackage {
+    name = "URI-imap-1.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CW/CWEST/URI-imap-1.01.tar.gz;
+      sha256 = "0bdv6mrdijcq46r3lmz801rscs63f8p9qqliy2safd6fds4rj55v";
+    };
+    propagatedBuildInputs = [URI];
   };
 
   URINested = buildPerlModule {

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libsoup, webkit, gtk, glib_networking
-, gsettings_desktop_schemas, makeWrapper, cacert
+, gsettings_desktop_schemas, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -10,11 +10,6 @@ stdenv.mkDerivation rec {
     url = "https://github.com/fanglingsu/vimb/archive/${version}.tar.gz";
     sha256 = "0h9m5qfs09lb0dz8a79yccmm3a5rv6z8gi5pkyfh8fqkgkh2940p";
   };
-
-  # Nixos default ca bundle
-  patchPhase = ''
-    sed -i s,/etc/ssl/certs/ca-certificates.crt,${cacert}/etc/ssl/certs/ca-bundle.crt, src/config.def.h
-  '';
 
   buildInputs = [ makeWrapper gtk libsoup pkgconfig webkit gsettings_desktop_schemas ];
 

@@ -5,7 +5,7 @@ let
   version = "0.5.1";
   binaries = [ "jfbpdf" "jfbview" "jpdfcat" "jpdfgrep" ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "jfbview-${version}";
 
   src = fetchFromGitHub {
