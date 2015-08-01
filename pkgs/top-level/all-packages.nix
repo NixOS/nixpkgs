@@ -12042,6 +12042,8 @@ let
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
+  monkeysphere = callPackage ../tools/security/monkeysphere { };
+
   monodevelop = callPackage ../applications/editors/monodevelop {};
 
   monotone = callPackage ../applications/version-management/monotone {
