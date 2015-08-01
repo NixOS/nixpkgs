@@ -446,6 +446,30 @@ in {
       options = [ groupOpts ];
     };
 
+
+    users.initialHomeSetup = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        The specified script will be called when the home directory of the user
+        gets created. It will not be called if the directory already exists.
+
+        The script gets passed two arguments, the first one is the user's
+        staging home directory, the second one is the user's name. The staging
+        directory will be renamed to the user's home directory when the
+        "initialHomeSetup" script succeeds. Your script should operate in the
+        passed staging directory and not in the actual user's home directory,
+        which does not even exist when the script is run.
+
+        After your script is run, owner and group of all files in the staging
+        directory will be set to the values specified in the NixOS
+        configuration.
+
+        Operating with a staging home directory ensures that the home directory
+        is either set up completely or not at all.
+        '';
+    };
+
     # FIXME: obsolete - will remove.
     security.initialRootPassword = mkOption {
       type = types.str;
@@ -506,7 +530,7 @@ in {
         ${pkgs.perl}/bin/perl -w \
           -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl \
           -I${pkgs.perlPackages.JSON}/lib/perl5/site_perl \
-          ${./update-users-groups.pl} ${spec}
+          ${./update-users-groups.pl} ${spec} ${config.users.initialHomeSetup}
       '';
 
     # for backwards compatibility

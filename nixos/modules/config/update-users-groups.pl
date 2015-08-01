@@ -1,5 +1,6 @@
 use strict;
-use File::Path qw(make_path);
+use File::Copy qw(move);
+use File::Path qw(make_path remove_tree);
 use File::Slurp;
 use JSON;
 
@@ -46,6 +47,7 @@ sub allocUid {
 
 # Read the declared users/groups.
 my $spec = decode_json(read_file($ARGV[0]));
+my $setupHomeScript = $ARGV[1];
 
 # Don't allocate UIDs/GIDs that are already in use.
 foreach my $g (@{$spec->{groups}}) {
@@ -146,8 +148,11 @@ system("nscd --invalidate group");
 
 # Generate a new /etc/passwd containing the declared users.
 my %usersOut;
+
 foreach my $u (@{$spec->{users}}) {
     my $name = $u->{name};
+    # Work in staging home to be atomic:
+    my $stagingHome = $u->{home} . ".nixos-staging-deleteme";
 
     # Resolve the gid of the user.
     if ($u->{group} =~ /^[0-9]$/) {
@@ -178,8 +183,23 @@ foreach my $u (@{$spec->{users}}) {
 
     # Create a home directory.
     if ($u->{createHome} && ! -e $u->{home}) {
-        make_path($u->{home}, { mode => 0700 }) if ! -e $u->{home};
-        chown $u->{uid}, $u->{gid}, $u->{home};
+        if (-e ${stagingHome}) {
+            remove_tree(${stagingHome});
+        }
+        make_path(${stagingHome}, { mode => 0700 });
+        if (${setupHomeScript}) {
+            if (system(${setupHomeScript}, ${stagingHome}, $u->{name}) == 0
+                && system("chown", "-R", $u->{uid} . ":" . $u->{gid}, ${stagingHome}) == 0) {
+               move(${stagingHome}, $u->{home}) if ! -e $u->{home};
+            }
+            else {
+                # Let's be tidy:
+                remove_tree(${stagingHome});
+            }
+        }
+        else {
+            move(${stagingHome}, $u->{home});
+        }
     }
 
     if (defined $u->{passwordFile}) {
