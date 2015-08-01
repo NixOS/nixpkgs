@@ -11157,7 +11157,7 @@ let
     metaweblog = callPackage ../applications/editors/emacs-modes/metaweblog { };
 
     monky = callPackage ../applications/editors/emacs-modes/monky { };
-
+    
     notmuch = lowPrio (pkgs.notmuch.override { inherit emacs; });
 
     ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
@@ -12041,6 +12041,8 @@ let
   monero = callPackage ../applications/misc/monero { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
+
+  monkeysphere = callPackage ../tools/security/monkeysphere { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {};
 
