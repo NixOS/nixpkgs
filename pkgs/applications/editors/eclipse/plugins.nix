@@ -49,16 +49,35 @@ rec {
       installPhase = ''
         dropinDir="$out/eclipse/dropins/${name}"
 
+        # Install features.
         cd features
         for feature in *.jar; do
-          feat=''${feature%.jar}
-          mkdir -p $dropinDir/features/$feat
-          unzip $feature -d $dropinDir/features/$feat
+          featureName=''${feature%.jar}
+          mkdir -p $dropinDir/features/$featureName
+          unzip $feature -d $dropinDir/features/$featureName
         done
         cd ..
 
+        # Install plugins.
         mkdir -p $dropinDir/plugins
-        cp -v "plugins/"*.jar $dropinDir/plugins/
+
+        # A bundle should be unpacked if the manifest matches this
+        # pattern.
+        unpackPat="Eclipse-BundleShape:\\s*dir"
+
+        cd plugins
+        for plugin in *.jar ; do
+          pluginName=''${plugin%.jar}
+          manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
+
+          if [[ $manifest =~ $unpackPat ]] ; then
+            mkdir $dropinDir/plugins/$pluginName
+            unzip $plugin -d $dropinDir/plugins/$pluginName
+          else
+            cp -v $plugin $dropinDir/plugins/
+          fi
+        done
+        cd ..
       '';
     });
 
