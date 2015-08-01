@@ -2,6 +2,8 @@
 
 rec {
 
+  # A primitive builder of Eclipse plugins. This function is intended
+  # to be used when building more advanced builders.
   buildEclipsePluginBase =  { name
                             , buildInputs ? []
                             , passthru ? {}
@@ -18,10 +20,8 @@ rec {
 
   # Helper for the common case where we have separate feature and
   # plugin JARs.
-  buildEclipsePlugin = { name, version, javaName, srcFeature, srcPlugin, meta, propagatedBuildInputs ? [] }:
-    buildEclipsePluginBase {
-      inherit name meta propagatedBuildInputs;
-
+  buildEclipsePlugin = { name, srcFeature, srcPlugin, ... } @ attrs:
+    buildEclipsePluginBase (attrs // {
       srcs = [ srcFeature srcPlugin ];
 
       phases = [ "installPhase" ];
@@ -29,21 +29,21 @@ rec {
       installPhase = ''
         dropinDir="$out/eclipse/dropins/${name}"
 
-        mkdir -p $dropinDir/features/${javaName}_${version}
-        unzip ${srcFeature} -d $dropinDir/features/${javaName}_${version}
+        mkdir -p $dropinDir/features
+        unzip ${srcFeature} -d $dropinDir/features/
 
         mkdir -p $dropinDir/plugins
-        cp -v ${srcPlugin} $dropinDir/plugins/${javaName}_${version}.jar
+        cp -v ${srcPlugin} $dropinDir/plugins/${name}.jar
       '';
 
-    };
+    });
 
-  # Helper for the case where we have a ZIP file containing an Eclipse
-  # update site.
-  buildEclipseUpdateSite = { name, version, src, meta, propagatedBuildInputs ? [] }:
-    buildEclipsePluginBase {
-      inherit name meta src propagatedBuildInputs;
-
+  # Helper for the case where the build directory has the layout of an
+  # Eclipse update site, that is, it contains the directories
+  # `features` and `plugins`. All features and plugins inside these
+  # directories will be installed.
+  buildEclipseUpdateSite = { name, ... } @ attrs:
+    buildEclipsePluginBase (attrs // {
       phases = [ "unpackPhase" "installPhase" ];
 
       installPhase = ''
@@ -60,20 +60,19 @@ rec {
         mkdir -p $dropinDir/plugins
         cp -v "plugins/"*.jar $dropinDir/plugins/
       '';
-    };
+    });
 
   acejump = buildEclipsePlugin rec {
     name = "acejump-${version}";
     version = "1.0.0.201501181511";
-    javaName = "acejump";
 
     srcFeature = fetchurl {
-      url = "https://tobiasmelcher.github.io/acejumpeclipse/features/${javaName}.feature_${version}.jar";
+      url = "https://tobiasmelcher.github.io/acejumpeclipse/features/acejump.feature_${version}.jar";
       sha256 = "127xqrnns4h96g21c9zg0iblxprx3fg6fg0w5f413rf84415z884";
     };
 
     srcPlugin = fetchurl {
-      url = "https://tobiasmelcher.github.io/acejumpeclipse/plugins/${javaName}_${version}.jar";
+      url = "https://tobiasmelcher.github.io/acejumpeclipse/plugins/acejump_${version}.jar";
       sha256 = "0mz79ca32yryidd1wijirvnmfg4j5q4g84vdspdi56z0r4xrja13";
     };
 
@@ -89,7 +88,6 @@ rec {
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
     version = "2.4.15.201504172030";
-    javaName = "de.loskutov.anyedit.AnyEditTools";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
@@ -97,7 +95,7 @@ rec {
     };
 
     srcPlugin = fetchurl {
-      url = "http://dl.bintray.com/iloveeclipse/plugins/${javaName}_${version}.jar";
+      url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
       sha256 = "1i3ghf2mhdfhify30hlyxqmyqcp40pkd5zhsiyg6finn4w81sxv2";
     };
 
@@ -133,15 +131,14 @@ rec {
   color-theme = buildEclipsePlugin rec {
     name = "color-theme-${version}";
     version = "1.0.0.201410260308";
-    javaName = "com.github.eclipsecolortheme";
 
     srcFeature = fetchurl {
-      url = "https://eclipse-color-theme.github.io/update/features/${javaName}.feature_${version}.jar";
+      url = "https://eclipse-color-theme.github.io/update/features/com.github.eclipsecolortheme.feature_${version}.jar";
       sha256 = "128b9b1cib5ff0w1114ns5mrbrhj2kcm358l4dpnma1s8gklm8g2";
     };
 
     srcPlugin = fetchurl {
-      url = "https://eclipse-color-theme.github.io/update/plugins/${javaName}_${version}.jar";
+      url = "https://eclipse-color-theme.github.io/update/plugins/com.github.eclipsecolortheme_${version}.jar";
       sha256 = "0wz61909bhqwzpqwll27ia0cn3anyp81haqx3rj1iq42cbl42h0y";
     };
 
@@ -176,15 +173,14 @@ rec {
   emacsplus = buildEclipsePlugin rec {
     name = "emacsplus-${version}";
     version = "4.2.0";
-    javaName = "com.mulgasoft.emacsplus";
 
     srcFeature = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/${javaName}.feature_${version}.jar";
+      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/com.mulgasoft.emacsplus.feature_${version}.jar";
       sha256 = "0wja3cd7gq8w25797fxnafvcncjnmlv8qkl5iwqj7zja2f45vka8";
     };
 
     srcPlugin = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/${javaName}_${version}.jar";
+      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/com.mulgasoft.emacsplus_${version}.jar";
       sha256 = "08yw45nr90mlpdzim74vsvdaxj41sgpxcrqk5ia6l2dzvrqlsjs1";
     };
 
@@ -200,15 +196,14 @@ rec {
   findbugs = buildEclipsePlugin rec {
     name = "findbugs-${version}";
     version = "3.0.1.20150306-5afe4d1";
-    javaName = "edu.umd.cs.findbugs.plugin.eclipse";
 
     srcFeature = fetchurl {
-      url = "http://findbugs.cs.umd.edu/eclipse/features/${javaName}_${version}.jar";
+      url = "http://findbugs.cs.umd.edu/eclipse/features/edu.umd.cs.findbugs.plugin.eclipse_${version}.jar";
       sha256 = "1m9fav2xlb9wrx2d00lpnh2sy0w5yzawynxm6xhhbfdzd0vpfr9v";
     };
 
     srcPlugin = fetchurl {
-      url = "http://findbugs.cs.umd.edu/eclipse/plugins/${javaName}_${version}.jar";
+      url = "http://findbugs.cs.umd.edu/eclipse/plugins/edu.umd.cs.findbugs.plugin.eclipse_${version}.jar";
       sha256 = "10p3mrbp9wi6jhlmmc23qv7frh605a23pqsc7w96569bsfb5wa8q";
     };
 
@@ -261,7 +256,6 @@ rec {
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
     version = "6.9.5.201506120235";
-    javaName = "org.testng.eclipse";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse/features/org.testng.eclipse_6.9.5.201506120235.jar";
