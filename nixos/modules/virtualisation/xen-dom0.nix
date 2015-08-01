@@ -121,6 +121,10 @@ in
         "xenfs"
       ];
 
+    # The xenfs module is needed in system.activationScripts.xen, but
+    # the modprobe command there fails silently. Include xenfs in the
+    # initrd as a work around.
+    boot.initrd.kernelModules = [ "xenfs" ];
 
     # The radeonfb kernel module causes the screen to go black as soon
     # as it's loaded, so don't load it.
@@ -182,6 +186,9 @@ in
         { source = "${pkgs.xen}/etc/xen/scripts";
           target = "xen/scripts";
         }
+        { source = "${pkgs.xen}/etc/default/xendomains";
+          target = "default/xendomains";
+        }
       ];
 
     # Xen provides udev rules.
@@ -199,7 +206,8 @@ in
         rm -f "$XENSTORED_ROOTDIR"/tdb* &>/dev/null
 
         mkdir -p /var/run
-        ${optionalString cfg.trace "mkdir -p /var/log/xen"}
+        mkdir -p /var/log/xen # Running xl requires /var/log/xen and /var/lib/xen,
+        mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
         '';
       serviceConfig.ExecStart = ''
