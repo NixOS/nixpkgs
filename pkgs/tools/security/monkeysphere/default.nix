@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://web.monkeysphere.info/;
-    description = ''
+    description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
+    longDescription = ''
       The Monkeysphere project's goal is to extend OpenPGP's web of
       trust to new areas of the Internet to help us securely identify
       servers we connect to, as well as each other while we work online.
