@@ -56,7 +56,7 @@ let
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
   optRocksdb = shouldUsePkg rocksdb;
-  optLibs3 = shouldUsePkg libs3;
+  optLibs3 = if versionAtLeast version "10.0.0" then null else shouldUsePkg libs3;
 
   optJemalloc = shouldUsePkg jemalloc;
   optGperftools = shouldUsePkg gperftools;
@@ -195,8 +195,6 @@ stdenv.mkDerivation {
     (mkWith   hasKinetic                   "kinetic"             null)
     (mkWith   hasRocksdb                   "librocksdb"          null)
     (mkWith   false                        "librocksdb-static"   null)
-    (mkWith   (optLibs3 != null)           "system-libs3"        null)
-    (mkWith   true                         "rest-bench"          null)
   ] ++ optional stdenv.isLinux [
     (mkWith   (optLibaio != null)          "libaio"              null)
     (mkWith   (optLibxfs != null)          "libxfs"              null)
@@ -207,6 +205,9 @@ stdenv.mkDerivation {
   ] ++ optional (versionAtLeast version "9.0.2") [
     (mkWith   true                         "man-pages"           null)
     (mkWith   true                         "systemd-libexec-dir" "\${TMPDIR}")
+  ] ++ optional (versionOlder version "10.0.0") [
+    (mkWith   (optLibs3 != null)           "system-libs3"        null)
+    (mkWith   true                         "rest-bench"          null)
   ];
 
   preBuild = optionalString (versionAtLeast version "9.0.0") ''
