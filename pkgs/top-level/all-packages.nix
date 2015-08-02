@@ -2949,6 +2949,8 @@ let
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
+  shout = callPackage ../applications/networking/irc/shout { };
+
   shellinabox = callPackage ../servers/shellinabox { };
 
   sic = callPackage ../applications/networking/irc/sic { };
