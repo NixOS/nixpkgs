@@ -147,6 +147,9 @@ stdenv.mkDerivation {
         --replace /etc/xen/scripts/hotplugpath.sh $out/etc/xen/scripts/hotplugpath.sh \
         --replace /bin/ls ls
 
+      substituteInPlace tools/hotplug/Linux/xendomains \
+        --replace /bin/ls ls
+
       # Xen's tools and firmares need various git repositories that it
       # usually checks out at time using git.  We can't have that.
       ${flip concatMapStrings xenConfig.toolsGits (x: let src = fetchgit x.git; in ''

@@ -56,7 +56,7 @@ let
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
   optRocksdb = shouldUsePkg rocksdb;
-  optLibs3 = shouldUsePkg libs3;
+  optLibs3 = if versionAtLeast version "10.0.0" then null else shouldUsePkg libs3;
 
   optJemalloc = shouldUsePkg jemalloc;
   optGperftools = shouldUsePkg gperftools;
@@ -195,8 +195,6 @@ stdenv.mkDerivation {
     (mkWith   hasKinetic                   "kinetic"             null)
     (mkWith   hasRocksdb                   "librocksdb"          null)
     (mkWith   false                        "librocksdb-static"   null)
-    (mkWith   (optLibs3 != null)           "system-libs3"        null)
-    (mkWith   true                         "rest-bench"          null)
   ] ++ optional stdenv.isLinux [
     (mkWith   (optLibaio != null)          "libaio"              null)
     (mkWith   (optLibxfs != null)          "libxfs"              null)
@@ -207,6 +205,9 @@ stdenv.mkDerivation {
   ] ++ optional (versionAtLeast version "9.0.2") [
     (mkWith   true                         "man-pages"           null)
     (mkWith   true                         "systemd-libexec-dir" "\${TMPDIR}")
+  ] ++ optional (versionOlder version "10.0.0") [
+    (mkWith   (optLibs3 != null)           "system-libs3"        null)
+    (mkWith   true                         "rest-bench"          null)
   ];
 
   preBuild = optionalString (versionAtLeast version "9.0.0") ''
@@ -234,15 +235,24 @@ stdenv.mkDerivation {
     for PY in $(find $lib/lib -name \*.py); do
       LIBS="$(sed -n "s/.*find_library('\([^)]*\)').*/\1/p" "$PY")"
 
+      # Delete any calls to find_library
+      sed -i '/find_library/d' "$PY"
+
       # Fix each find_library call
       for LIB in $LIBS; do
         REALLIB="$lib/lib/lib$LIB.so"
-        sed -i "s,find_library('$LIB'),'$REALLIB',g" "$PY"
+        sed -i "s,\(lib$LIB = CDLL(\).*,\1'$REALLIB'),g" "$PY"
       done
 
       # Reapply compilation optimizations
       NAME=$(basename -s .py "$PY")
-      (cd "$(dirname $PY)"; python -c "import $NAME"; python -O -c "import $NAME")
+      rm -f "$PY"{c,o}
+      pushd "$(dirname $PY)"
+      python -c "import $NAME"
+      python -O -c "import $NAME"
+      popd
+      test -f "$PY"c
+      test -f "$PY"o
     done
   '';
 

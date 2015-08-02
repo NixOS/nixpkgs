@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, avahi, boost, libopus, libsndfile, protobuf, qt4, speex
+, avahi, boost, libopus, celt, libsndfile, protobuf, qt4, speex
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
 , pulseSupport ? false, libpulseaudio ? null
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "CONFIG+=no-update"
     "CONFIG+=no-server"
     "CONFIG+=no-embed-qt-translations"
-    "CONFIG+=bundled-celt"
+    "CONFIG+=no-bundled-celt"
     "CONFIG+=no-bundled-opus"
     "CONFIG+=no-bundled-speex"
   ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
@@ -43,7 +43,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ avahi boost libopus libsndfile protobuf qt4 speex ]
+  NIX_CFLAGS_COMPILE = [ "-I${celt}/include/celt" ];
+
+  buildInputs = [ avahi boost libopus celt libsndfile protobuf qt4 speex ]
     ++ optional jackSupport libjack2
     ++ optional speechdSupport speechd
     ++ optional pulseSupport libpulseaudio;
