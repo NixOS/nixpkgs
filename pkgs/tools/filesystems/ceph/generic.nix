@@ -235,15 +235,24 @@ stdenv.mkDerivation {
     for PY in $(find $lib/lib -name \*.py); do
       LIBS="$(sed -n "s/.*find_library('\([^)]*\)').*/\1/p" "$PY")"
 
+      # Delete any calls to find_library
+      sed -i '/find_library/d' "$PY"
+
       # Fix each find_library call
       for LIB in $LIBS; do
         REALLIB="$lib/lib/lib$LIB.so"
-        sed -i "s,find_library('$LIB'),'$REALLIB',g" "$PY"
+        sed -i "s,\(lib$LIB = CDLL(\).*,\1'$REALLIB'),g" "$PY"
       done
 
       # Reapply compilation optimizations
       NAME=$(basename -s .py "$PY")
-      (cd "$(dirname $PY)"; python -c "import $NAME"; python -O -c "import $NAME")
+      rm -f "$PY"{c,o}
+      pushd "$(dirname $PY)"
+      python -c "import $NAME"
+      python -O -c "import $NAME"
+      popd
+      test -f "$PY"c
+      test -f "$PY"o
     done
   '';
 
