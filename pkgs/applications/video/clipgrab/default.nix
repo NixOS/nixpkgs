@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, qt4 }:
+{ stdenv, fetchurl, ffmpeg, makeDesktopItem, qt4 }:
 
 let version = "3.5.1"; in
 stdenv.mkDerivation rec {
@@ -24,7 +24,13 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ nckx ];
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ ffmpeg qt4 ];
+
+  postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
+  substituteInPlace converter_ffmpeg.cpp \
+    --replace '"ffmpeg"' '"${ffmpeg}/bin/ffmpeg"' \
+    --replace '"ffmpeg ' '"${ffmpeg}/bin/ffmpeg '
+  '';
 
   configurePhase = ''
     qmake clipgrab.pro
