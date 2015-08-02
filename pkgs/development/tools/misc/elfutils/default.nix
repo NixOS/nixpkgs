@@ -3,21 +3,20 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.158";
+  version = "0.163";
 
   src = fetchurl {
     urls = [
       "http://fedorahosted.org/releases/e/l/elfutils/${version}/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "0z9rprmizd7rwb3xwfmz5liii7hbiv3g2arl23h56brm45fay9xy";
+    sha256 = "7c774f1eef329309f3b05e730bdac50013155d437518a2ec0e24871d312f2e23";
   };
 
   patches = [
-    ./CVE-2014-0172.patch
     (fetchurl {
-      url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/elfutils-portability.patch";
-      sha256 = "0y2fyjis5xrd3g2pcbcm145q2kmh52n5c74w8dwv3hqdp5ky7igd";
+      url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/elfutils-portability-${version}.patch";
+      sha256 = "e4e82315dad2efaa4e4476503e7537e01b7c1b1f98a96de4ca1c7fa85f4f1045";
     }) ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
