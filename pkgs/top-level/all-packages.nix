@@ -2026,6 +2026,8 @@ let
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
+  minisign = callPackage ../tools/security/minisign { };
+
   mmv = callPackage ../tools/misc/mmv { };
 
   morituri = callPackage ../applications/audio/morituri { };
