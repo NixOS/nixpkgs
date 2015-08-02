@@ -1918,6 +1918,8 @@ let
 
   iodine = callPackage ../tools/networking/iodine { };
 
+  ipad_charge = callPackage ../tools/misc/ipad_charge { };
+
   iperf2 = callPackage ../tools/networking/iperf/2.nix { };
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
