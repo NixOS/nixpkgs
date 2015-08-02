@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, intltool, vala, makeWrapper
 , gtk3, webkitgtk, librsvg, libnotify, sqlite
-, glib_networking, gsettings_desktop_schemas
+, glib_networking, gsettings_desktop_schemas, libsoup
 }:
 
 let
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake pkgconfig intltool vala makeWrapper
     webkitgtk librsvg libnotify sqlite
+    (libsoup.override {gnomeSupport = true;})
   ];
 
   cmakeFlags = ''
