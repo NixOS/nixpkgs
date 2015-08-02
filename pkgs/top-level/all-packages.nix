@@ -3868,6 +3868,8 @@ let
     libcCross = if crossSystem != null then libcCross else null;
 
     isl = isl_0_14;
+
+    inherit (darwin) CF;
   }));
 
   gfortran = if !stdenv.isDarwin then gfortran49
