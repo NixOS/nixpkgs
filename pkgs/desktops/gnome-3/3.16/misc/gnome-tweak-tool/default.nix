@@ -28,12 +28,17 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/gnome-tweak-tool" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
+      --suffix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)"
   '';
 
-  patches = [ ./find_gsettings.patch ];
+  patches = [
+    ./find_gsettings.patch
+    ./0001-Search-for-themes-and-icons-in-system-data-dirs.patch
+    ./0002-Don-t-show-multiple-entries-for-a-single-theme.patch
+    ./0003-Create-config-dir-if-it-doesn-t-exist.patch
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/GnomeTweakTool;
