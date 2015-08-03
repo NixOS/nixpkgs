@@ -244,6 +244,7 @@
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
+      gale = 223;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -465,6 +466,7 @@
       postsrsd = 220;
       opendkim = 221;
       dspam = 222;
+      gale = 223;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
