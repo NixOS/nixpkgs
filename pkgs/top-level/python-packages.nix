@@ -275,6 +275,26 @@ let
     };
   };
 
+  aiodns = buildPythonPackage rec {
+    name = "aiodns-${version}";
+    version = "0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/aiodns/${name}.tar.gz";
+      sha256 = "0i9ypv9l4d59j87kkrsh1livfgnspyzcbx26jw9x58xs5z05xj7k";
+    };
+
+    propagatedBuildInputs = with self ; [
+      pycares
+    ] ++ optional (isPy33) self.asyncio
+      ++ optional (isPy26 || isPy27) self.trollius;
+
+    meta = {
+      homepage = http://github.com/saghul/aiodns;
+      license = licenses.mit;
+      description = "Simple DNS resolver for asyncio";
+    };
+  };
 
   alabaster = buildPythonPackage rec {
     name = "alabaster-0.7.3";
@@ -514,6 +534,24 @@ let
     meta = {
       description = "A Python wrapper for the SQLite embedded relational database engine";
       homepage = http://code.google.com/p/apsw/;
+    };
+  };
+
+  asyncio = buildPythonPackage rec {
+    name = "asyncio-${version}";
+    version = "3.4.3";
+
+    disabled = (!isPy33);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/asyncio/${name}.tar.gz";
+      sha256 = "0hfbqwk9y0bbfgxzg93s2wyk6gcjsdxlr5jwy97hx64ppkw0ydl3";
+    };
+
+    meta = {
+      description = "reference implementation of PEP 3156";
+      homepage = http://www.python.org/dev/peps/pep-3156;
+      license = licenses.free;
     };
   };
 
@@ -4198,6 +4236,23 @@ let
     };
   };
 
+  pycares = buildPythonPackage rec {
+    name = "pycares-${version}";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycares/${name}.tar.gz";
+      sha256 = "10lr3ij67khmfm14cb3sqch3vhv37f3j1whwznq6qy4prfmz5gvl";
+    };
+
+    propagatedBuildInputs = [ pkgs.c-ares ];
+
+    meta = {
+      homepage = http://github.com/saghul/pycares;
+      description = "Interface for c-ares";
+      license = licenses.mit;
+    };
+  };
 
   pyramid = buildPythonPackage rec {
     name = "pyramid-1.5.2";
@@ -8076,6 +8131,26 @@ let
       description = "XMPP library for Python";
       license = licenses.mit;
       homepage = "http://sleekxmpp.com/";
+    };
+  };
+
+  slixmpp = buildPythonPackage rec {
+    name = "slixmpp-${version}";
+    version = "1.0.post5";
+
+    disabled = (!isPy34);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/slixmpp/${name}.tar.gz";
+      sha256 = "0ik23w3y52m30z56874wgac07j70k7b06n20j44slii8avf58p4b";
+    };
+
+    propagatedBuildInputs = with self ; [ aiodns pyasn1 ];
+
+    meta = {
+      meta = "Elegant Python library for XMPP";
+      license = licenses.mit;
+      homepage = https://dev.louiz.org/projects/slixmpp;
     };
   };
 
@@ -16747,21 +16822,20 @@ let
 
   poezio = buildPythonPackage rec {
     name = "poezio-${version}";
-    version = "0.8.1";
+    version = "0.9";
 
     namePrefix = "";
-    disabled = (!isPy3k);
-    propagatedBuildInputs = with self ; [ dnspython3 sleekxmpp ];
+    disabled = (!isPy34);
+    propagatedBuildInputs = with self ; [ aiodns slixmpp ];
 
    patches =
    let patch_base = ../development/python-modules/poezio ;
    in [ "${patch_base}/make_default_config_writable.patch"
-        "${patch_base}/fix_requirements.patch"
       ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/52/${name}.tar.xz";
-      sha256 = "0n3phh3lc82609ssfvqvd4papvhykd1sf2bm88dggh2x4mypwjff";
+      url = "http://dev.louiz.org/attachments/download/91/${name}.tar.xz";
+      sha256 = "1vc7zn4rp0ds0cdh1xcmbwx6w2qh4pnpzi5mdnj3rpl7xdr6jqzi";
     };
 
     meta = {
