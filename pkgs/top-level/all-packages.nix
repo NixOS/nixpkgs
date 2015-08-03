@@ -6764,6 +6764,7 @@ let
     else libcanberra;
 
   libcec = callPackage ../development/libraries/libcec { };
+  libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
   libcello = callPackage ../development/libraries/libcello {};
 
