@@ -3193,6 +3193,8 @@ let
 
   trousers = callPackage ../tools/security/trousers { };
 
+  omapd = callPackage ../tools/security/omapd { };
+
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
   ttfautohint = callPackage ../tools/misc/ttfautohint { };
