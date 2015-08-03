@@ -4216,6 +4216,23 @@ let
     };
   };
 
+  pycares = buildPythonPackage rec {
+    name = "pycares-${version}";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycares/${name}.tar.gz";
+      sha256 = "10lr3ij67khmfm14cb3sqch3vhv37f3j1whwznq6qy4prfmz5gvl";
+    };
+
+    propagatedBuildInputs = [ pkgs.c-ares ];
+
+    meta = {
+      homepage = http://github.com/saghul/pycares;
+      description = "Interface for c-ares";
+      license = licenses.mit;
+    };
+  };
 
   pyramid = buildPythonPackage rec {
     name = "pyramid-1.5.2";
