@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , libxml2, libXinerama, libXcursor, libXau, libXrandr
-, imlib2, pango, libstartup_notification, makeWrapper}:
+, imlib2, pango, libstartup_notification, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "openbox-3.5.2";
@@ -8,8 +8,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libxml2
     libXinerama libXcursor libXau libXrandr
-    imlib2 pango libstartup_notification
-    makeWrapper
+    libstartup_notification makeWrapper
+  ];
+
+  propagatedBuildInputs = [
+    pango imlib2
   ];
 
   src = fetchurl {
