@@ -53,7 +53,8 @@ let
 
   postgresqlConfig = pkgs.writeText "postgres.yaml" cfg.postgresqlConfig;
   nginxConfig = pkgs.writeText "nginx.yaml" cfg.nginxConfig;
-
+  mongoConfig = pkgs.writeText "mongo.yaml" cfg.mongoConfig;
+  
   etcfiles =
     [ { source = ddConf;
         target = "dd-agent/datadog.conf";
@@ -65,6 +66,10 @@ let
     (optional (cfg.nginxConfig != null)
       { source = nginxConfig;
         target = "dd-agent/conf.d/nginx.yaml";
+      }) ++
+    (optional (cfg.mongoConfig != null)
+      { source = mongoConfig;
+        target = "dd-agent/conf.d/mongo.yaml";
       });
 
 in {
@@ -106,6 +111,12 @@ in {
       default = null;
       type = types.uniq (types.nullOr types.string);
     };
+    
+    mongoConfig = mkOption {
+      description = "MongoDB integration configuration";
+      default = null;
+      type = types.uniq (types.nullOr types.string);
+    };
   };
 
   config = mkIf cfg.enable {
@@ -123,7 +134,7 @@ in {
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps];
+      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
@@ -132,7 +143,7 @@ in {
         Restart = "always";
         RestartSec = 2;
       };
-      restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig ];
+      restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig mongoConfig ];
     };
 
     systemd.services.dogstatsd = {
@@ -149,7 +160,7 @@ in {
         RestartSec = 2;
       };
       environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-      restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig ];
+      restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig mongoConfig ];
     };
 
     environment.etc = etcfiles;

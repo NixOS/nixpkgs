@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     pythonPackages.simplejson
     pythonPackages.pyyaml
     pythonPackages.requests
+    pythonPackages.pymongo
   ];
   propagatedBuildInputs = [ python tornado ];
 
