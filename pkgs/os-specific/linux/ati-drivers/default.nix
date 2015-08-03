@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
-  patchPhase = "patch -p1 < ${./fglrx_3.18.19-no_hotplug_underscore_cr4.patch}";
+  patchPhase = "patch -p1 < ${./kernel-api-fixes.patch}";
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
 
   buildInputs =
