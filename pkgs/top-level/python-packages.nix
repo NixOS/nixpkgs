@@ -16822,21 +16822,20 @@ let
 
   poezio = buildPythonPackage rec {
     name = "poezio-${version}";
-    version = "0.8.1";
+    version = "0.9";
 
     namePrefix = "";
-    disabled = (!isPy3k);
-    propagatedBuildInputs = with self ; [ dnspython3 sleekxmpp ];
+    disabled = (!isPy34);
+    propagatedBuildInputs = with self ; [ aiodns slixmpp ];
 
    patches =
    let patch_base = ../development/python-modules/poezio ;
    in [ "${patch_base}/make_default_config_writable.patch"
-        "${patch_base}/fix_requirements.patch"
       ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/52/${name}.tar.xz";
-      sha256 = "0n3phh3lc82609ssfvqvd4papvhykd1sf2bm88dggh2x4mypwjff";
+      url = "http://dev.louiz.org/attachments/download/91/${name}.tar.xz";
+      sha256 = "1vc7zn4rp0ds0cdh1xcmbwx6w2qh4pnpzi5mdnj3rpl7xdr6jqzi";
     };
 
     meta = {
