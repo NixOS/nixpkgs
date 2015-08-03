@@ -292,14 +292,10 @@ let
       plugins = mkOption {
         type = types.path;
         description = ''
-          Specifies a list of plugins to load.  Plugins may be specified either
-          by their path or by their module name.  If the plugin name starts
+          Specifies a list of plugins to load. Plugins may be specified either
+          by their path or by their module name. If the plugin name starts
           with Gitit.Plugin., gitit will assume that the plugin is an installed
           module and will not try to find a source file.
-          Examples:
-          plugins: plugins/DotPlugin.hs, CapitalizeEmphasisPlugin.hs
-          plugins: plugins/DotPlugin
-          plugins: Gitit.Plugin.InterwikiLinks
         '';
       };
 
@@ -355,7 +351,9 @@ let
           line of the file should contain two fields, separated by whitespace.
           The first field is the mime type, the second is a file extension.
           For example:
-          video/x-ms-wmx                    wmx
+<programlisting>
+video/x-ms-wmx  wmx
+</programlisting>
           If the file is not found, some simple defaults will be used.
         '';
       };
@@ -482,7 +480,7 @@ let
         default = null;
         description = ''
           The base URL of the wiki, to be used in constructing feed IDs and RPX
-          token_urls.  Set this if use-feed is 'yes' or authentication-method
+          token_urls.  Set this if useFeed is false or authentication-method
           is 'rpx'.
         '';
       };
@@ -494,7 +492,7 @@ let
           Make wikilinks absolute with respect to the base-url.  So, for
           example, in a wiki served at the base URL '/wiki', on a page
           Sub/Page, the wikilink '[Cactus]()' will produce a link to
-          '/wiki/Cactus' if absolute-urls is 'yes', and a relative link to
+          '/wiki/Cactus' if absoluteUrls is true, and a relative link to
           'Cactus' (referring to '/wiki/Sub/Cactus') if absolute-urls is 'no'.
         '';
       };
@@ -515,7 +513,7 @@ let
         type = types.bool;
         default = false;
         description = ''
-          If yes, PDF will appear in export options. PDF will be created using
+          If true, PDF will appear in export options. PDF will be created using
           pdflatex, which must be installed and in the path. Note that PDF
           exports create significant additional server load.
         '';
@@ -538,7 +536,7 @@ let
         type = types.bool;
         default = true;
         description = ''
-          If yes, all HTML (including that produced by pandoc) is filtered
+          If true, all HTML (including that produced by pandoc) is filtered
           through xss-sanitize.  Set to no only if you trust all of your users.
         '';
       };
