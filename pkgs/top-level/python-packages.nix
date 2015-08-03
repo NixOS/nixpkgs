@@ -16825,4 +16825,27 @@ let
     };
   };
 
+  mps-youtube = buildPythonPackage rec {
+    name = "mps-youtube-${version}";
+    version = "0.2.5";
+
+    disabled = (!isPy3k);
+
+    src = pkgs.fetchFromGitHub {
+      owner = "mps-youtube";
+      repo = "mps-youtube";
+      rev = "7e457d2b4700387b88a3c96579e13cb76ca1f06b";
+      sha256 = "1811vlhgfi4rasjfsfdl7x174s75zk3x08p2z05wfcvinflfgxly";
+    };
+
+    propagatedBuildInputs = with self; [ pafy ];
+
+    meta = with stdenv.lib; {
+      description = "Terminal based YouTube player and downloader";
+      homepage = http://github.com/np1/mps-youtube;
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ odi ];
+    };
+  };
+
 }; in pythonPackages
