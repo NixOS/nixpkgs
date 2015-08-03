@@ -60,7 +60,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to include <filename>/nix/store<filename> in the locate database.
+          Whether to include <filename>/nix/store</filename> in the locate database.
         '';
       };
 
