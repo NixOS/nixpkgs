@@ -15,6 +15,7 @@
 , lzo, libcdio, libmodplug, libass, libbluray
 , sqlite, mysql, nasm, gnutls, libva, wayland
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
+, libcec, libcec_platform
 , dbus_libs ? null, dbusSupport ? true
 , udev, udevSupport ? true
 , libusb ? null, usbSupport ? false
@@ -24,7 +25,6 @@
 , rtmpdump ? null, rtmpSupport ? true
 , libvdpau ? null, vdpauSupport ? true
 , libpulseaudio ? null, pulseSupport ? true
-, libcec ? null, cecSupport ? true
 }:
 
 assert dbusSupport  -> dbus_libs != null;
@@ -33,7 +33,6 @@ assert usbSupport   -> libusb != null && ! udevSupport; # libusb won't be used i
 assert sambaSupport -> samba != null;
 assert vdpauSupport -> libvdpau != null;
 assert pulseSupport -> libpulseaudio != null;
-assert cecSupport   -> libcec != null;
 assert rtmpSupport  -> rtmpdump != null;
 
 let
@@ -69,6 +68,7 @@ in stdenv.mkDerivation rec {
       lzo libcdio libmodplug libass libbluray
       sqlite mysql.lib nasm avahi libdvdcss lame
       curl bzip2 zip unzip glxinfo xdpyinfo
+      libcec libcec_platform
     ]
     ++ lib.optional dbusSupport dbus_libs
     ++ lib.optional udevSupport udev
@@ -76,7 +76,6 @@ in stdenv.mkDerivation rec {
     ++ lib.optional sambaSupport samba
     ++ lib.optional vdpauSupport libvdpau
     ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional cecSupport libcec
     ++ lib.optional rtmpSupport rtmpdump;
 
     dontUseCmakeConfigure = true;
@@ -93,9 +92,7 @@ in stdenv.mkDerivation rec {
       ./bootstrap
     '';
 
-    configureFlags = [
-      "--enable-external-libraries"
-    ]
+    configureFlags = [ ]
     ++ lib.optional (!sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"
     ++ lib.optional pulseSupport "--enable-pulse"
@@ -112,6 +109,7 @@ in stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH ":" "${libmad}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libcec}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${libcec_platform}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib"
       done
     '';
