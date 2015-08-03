@@ -35,7 +35,7 @@ in {
         type = types.listOf types.str;
         default = [ ];
         description = ''
-          Extra flags to append to <command>updatedb</command>.
+          Extra flags to pass to <command>updatedb</command>.
         '';
       };
 
@@ -60,7 +60,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Whether to include /nix/store in the locate database.
+          Whether to include <filename>/nix/store<filename> in the locate database.
         '';
       };
 
@@ -78,9 +78,9 @@ in {
           ''
             mkdir -m 0755 -p $(dirname ${toString cfg.output})
             exec updatedb \
-            --localuser=${cfg.localuser} \
-	    ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
-            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+              --localuser=${cfg.localuser} \
+              ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
+              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
         serviceConfig.Nice = 19;
         serviceConfig.IOSchedulingClass = "idle";
