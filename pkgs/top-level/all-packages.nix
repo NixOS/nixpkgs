@@ -9587,6 +9587,8 @@ let
 
   ifplugd = callPackage ../os-specific/linux/ifplugd { };
 
+  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
+
   iomelt = callPackage ../os-specific/linux/iomelt { };
 
   iotop = callPackage ../os-specific/linux/iotop { };
