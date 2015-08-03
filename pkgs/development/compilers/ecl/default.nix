@@ -26,14 +26,6 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
-  patches = [ ./libffi-prefix.patch ];
-  preConfigure = ''
-    (cd src ; libtoolize -f)
-    (cd src ; autoheader -f)
-    (cd src ; aclocal)
-    (cd src ; automake --add-missing -c)
-    (cd src ; autoconf -f)
-  '';
   configureFlags = [
     "--enable-threads"
     "--with-gmp-prefix=${gmp}"
