@@ -41,8 +41,6 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  patches = [ ./urw-font-files.patch ];
-
   outputs = [ "out" "doc" ];
 
   enableParallelBuilding = true;
