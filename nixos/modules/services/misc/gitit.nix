@@ -19,9 +19,6 @@ let
   in writeScript "gitit" ''
     #!${stdenv.shell}
     cd $HOME
-    export PATH="${makeSearchPath "bin" (
-      [ git curl ] ++ (if cfg.pdfExport then [texLiveFull] else [])
-      )}:$PATH";
     export NIX_GHC="${env}/bin/ghc"
     export NIX_GHCPKG="${env}/bin/ghc-pkg"
     export NIX_GHC_DOCDIR="${env}/share/doc/ghc/html"
@@ -624,8 +621,16 @@ in
       description = "Git and Pandoc Powered Wiki";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [ curl ]
+             ++ optional cfg.pdfExport texLiveFull
+	     ++ optional (cfg.repositoryType == "darcs") darcs
+	     ++ optional (cfg.repositoryType == "mercurial") mercurial
+	     ++ optional (cfg.repositoryType == "git") git;
 
-      preStart = with cfg; ''
+      preStart = let
+        gm = "gitit@${config.networking.hostName}";
+      in
+      with cfg; ''
         chown ${uid}:${gid} -R ${homeDir}
         for dir in ${repositoryPath} ${staticDir} ${templatesDir} ${cacheDir}
         do
@@ -637,14 +642,35 @@ in
           fi
         done
         cd ${repositoryPath}
-        if [ ! -d  .git ]
-        then
-          ${pkgs.git}/bin/git init
-          ${pkgs.git}/bin/git config user.email "gitit@${config.networking.hostName}"
-          ${pkgs.git}/bin/git config user.name "gitit"
-          chown ${uid}:${gid} -R {repositoryPath}
-        fi
-        cd -
+	${
+	  if repositoryType == "darcs" then
+	  ''
+	  if [ ! -d _darcs ]
+	  then
+	    ${pkgs.darcs}/bin/darcs initialize
+	    echo "${gm}" > _darcs/prefs/email
+	  ''
+	  else if repositoryType == "mercurial" then
+	  ''
+	  if [ ! -d .hg ]
+	  then
+	    ${pkgs.mercurial}/bin/hg init
+	    cat >> .hg/hgrc <<NAMED
+[ui]
+username = gitit ${gm}
+NAMED
+	  ''
+	  else
+	  ''
+	  if [ ! -d  .git ]
+          then
+            ${pkgs.git}/bin/git init
+            ${pkgs.git}/bin/git config user.email "${gm}"
+            ${pkgs.git}/bin/git config user.name "gitit"
+	  ''}
+          chown ${uid}:${gid} -R ${repositoryPath}
+          fi
+	cd -
       '';
 
       serviceConfig = {
