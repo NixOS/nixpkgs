@@ -8134,6 +8134,26 @@ let
     };
   };
 
+  slixmpp = buildPythonPackage rec {
+    name = "slixmpp-${version}";
+    version = "1.0.post5";
+
+    disabled = (!isPy34);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/slixmpp/${name}.tar.gz";
+      sha256 = "0ik23w3y52m30z56874wgac07j70k7b06n20j44slii8avf58p4b";
+    };
+
+    propagatedBuildInputs = with self ; [ aiodns pyasn1 ];
+
+    meta = {
+      meta = "Elegant Python library for XMPP";
+      license = licenses.mit;
+      homepage = https://dev.louiz.org/projects/slixmpp;
+    };
+  };
+
   netaddr = buildPythonPackage rec {
     name = "netaddr-0.7.5";
 
