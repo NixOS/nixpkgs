@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-ssl=${openssl}" "--with-drill" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Library with the aim of simplifying DNS programming in C";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = "http://www.nlnetlabs.nl/projects/ldns/";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jgeerds ];
   };
 }

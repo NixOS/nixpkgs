@@ -53,7 +53,7 @@ let
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
   version = "3.16";
-  maintainers = with pkgs.lib.maintainers; [ lethalman ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
 
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;

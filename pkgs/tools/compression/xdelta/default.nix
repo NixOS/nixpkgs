@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 let version = "3.0.10"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xdelta-${version}";
   
   src = fetchFromGitHub {
@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cd xdelta3
-  '' + stdenv.lib.optionalString doCheck ''
-    mkdir tmp
-    substituteInPlace testing/file.h --replace /tmp tmp
-    substituteInPlace xdelta3-test.h --replace /tmp $PWD/tmp
   '';
 
   enableParallelBuilding = true;
 
   doCheck = true;
   checkPhase = ''
+    mkdir $PWD/tmp
+    for i in testing/file.h xdelta3-test.h; do
+      substituteInPlace $i --replace /tmp $PWD/tmp
+    done
     ./xdelta3regtest
   '';
 

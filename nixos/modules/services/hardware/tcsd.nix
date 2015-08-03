@@ -76,7 +76,7 @@ in
       };
 
       kernelPCRs = mkOption {
-        default = "10,11";
+        default = "8,9,10,11,12";
         type = types.string;
         description = "PCR indices used in the TPM for kernel measurements.";
       };

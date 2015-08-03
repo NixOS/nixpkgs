@@ -179,6 +179,15 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    The <literal>locate</literal> service no longer indexes the Nix store
+    by default, preventing packages with potentially numerous versions from
+    cluttering the output. Indexing the store can be activated by setting
+    <literal>services.locate.includeStore = true</literal>.
+  </para>
+</listitem>
+
 </itemizedlist>
 </para>
 

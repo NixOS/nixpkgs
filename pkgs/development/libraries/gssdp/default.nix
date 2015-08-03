@@ -1,14 +1,16 @@
-{stdenv, fetchurl, pkgconfig, libsoup, glib, libxml2}:
+{ stdenv, fetchurl, pkgconfig, libsoup, glib }:
 
 stdenv.mkDerivation {
-  name = "gssdp-0.12.2.1";
+  name = "gssdp-0.14.11";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gssdp/0.14/gssdp-0.14.6.tar.xz;
-    sha256 = "1kgakr0rpdpm7nkp4ycka12nndga16wmzim79v1nbcc0j2wxxkws";
+    url = mirror://gnome/sources/gssdp/0.14/gssdp-0.14.11.tar.xz;
+    sha256 = "0njkqr2y7c6linnw4wkc4y2vq5dfkpryqcinbzn0pzhr46psxxbv";
   };
 
-  buildInputs = [pkgconfig libsoup glib libxml2];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libsoup ];
+  propagatedBuildInputs = [ glib ];
 
   meta = {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
