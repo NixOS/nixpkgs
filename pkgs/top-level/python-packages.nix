@@ -517,6 +517,24 @@ let
     };
   };
 
+  asyncio = buildPythonPackage rec {
+    name = "asyncio-${version}";
+    version = "3.4.3";
+
+    disabled = (!isPy33);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/asyncio/${name}.tar.gz";
+      sha256 = "0hfbqwk9y0bbfgxzg93s2wyk6gcjsdxlr5jwy97hx64ppkw0ydl3";
+    };
+
+    meta = {
+      description = "reference implementation of PEP 3156";
+      homepage = http://www.python.org/dev/peps/pep-3156;
+      license = licenses.free;
+    };
+  };
+
   funcsigs = buildPythonPackage rec {
     name = "funcsigs-0.4";
     disabled = ! (isPy26 || isPy27 || isPy33 || isPyPy);
