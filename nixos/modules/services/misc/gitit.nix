@@ -290,7 +290,7 @@ let
       };
 
       plugins = mkOption {
-        type = types.path;
+        type = with types; listOf str;
         description = ''
           Specifies a list of plugins to load. Plugins may be specified either
           by their path or by their module name. If the plugin name starts
@@ -565,7 +565,7 @@ video/x-ms-wmx  wmx
     no-edit: ${cfg.noEdit}
     default-summary: ${cfg.defaultSummary}
     table-of-contents: ${toYesNo cfg.tableOfContents}
-    plugins: ${cfg.plugins}
+    plugins: ${concatStringsSep "," cfg.plugins}
     use-cache: ${toYesNo cfg.useCache}
     cache-dir: ${cfg.cacheDir}
     max-upload-size: ${cfg.maxUploadSize}
@@ -604,7 +604,7 @@ in
       haskellPackages = mkDefault pkgs.haskellPackages;
       staticDir = gititShared + "/data/static";
       templatesDir = gititShared + "/data/templates";
-      plugins = gititShared + "/plugins/Dot.hs";
+      plugins = [ ];
     };
 
     users.extraUsers.gitit = {
