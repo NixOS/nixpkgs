@@ -51,6 +51,24 @@ let
     # ganglia_port: 8651
   '';
 
+  diskConfig = pkgs.writeText "disk.yaml" ''
+    init_config:
+
+    instances:
+      - use_mount: no
+  '';
+  
+  networkConfig = pkgs.writeText "network.yaml" ''
+    init_config:
+
+    instances:
+      # Network check only supports one configured instance
+      - collect_connection_state: false
+        excluded_interfaces:
+          - lo
+          - lo0
+  '';
+  
   postgresqlConfig = pkgs.writeText "postgres.yaml" cfg.postgresqlConfig;
   nginxConfig = pkgs.writeText "nginx.yaml" cfg.nginxConfig;
   mongoConfig = pkgs.writeText "mongo.yaml" cfg.mongoConfig;
@@ -58,6 +76,12 @@ let
   etcfiles =
     [ { source = ddConf;
         target = "dd-agent/datadog.conf";
+      }
+      { source = diskConfig;
+        target = "dd-agent/conf.d/disk.yaml";
+      }
+      { source = networkConfig;
+        target = "dd-agent/conf.d/network.yaml";
       } ] ++
     (optional (cfg.postgresqlConfig != null)
       { source = postgresqlConfig;
@@ -143,7 +167,7 @@ in {
         Restart = "always";
         RestartSec = 2;
       };
-      restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig mongoConfig ];
+      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig ];
     };
 
     systemd.services.dogstatsd = {
@@ -160,7 +184,7 @@ in {
         RestartSec = 2;
       };
       environment.SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
-      restartTriggers = [ pkgs.dd-agent ddConf postgresqlConfig nginxConfig mongoConfig ];
+      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig ];
     };
 
     environment.etc = etcfiles;
