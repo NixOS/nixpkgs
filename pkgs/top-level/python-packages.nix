@@ -275,6 +275,26 @@ let
     };
   };
 
+  aiodns = buildPythonPackage rec {
+    name = "aiodns-${version}";
+    version = "0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/aiodns/${name}.tar.gz";
+      sha256 = "0i9ypv9l4d59j87kkrsh1livfgnspyzcbx26jw9x58xs5z05xj7k";
+    };
+
+    propagatedBuildInputs = with self ; [
+      pycares
+    ] ++ optional (isPy33) self.asyncio
+      ++ optional (isPy26 || isPy27) self.trollius;
+
+    meta = {
+      homepage = http://github.com/saghul/aiodns;
+      license = licenses.mit;
+      description = "Simple DNS resolver for asyncio";
+    };
+  };
 
   alabaster = buildPythonPackage rec {
     name = "alabaster-0.7.3";
