@@ -8,6 +8,8 @@ let
 
   homeDir = "/var/lib/gitit";
 
+  toYesNo = b: if b then "yes" else "no";
+
   gititShared = with cfg.haskellPackages; gitit + "/share/" + pkgs.stdenv.system + "-" + ghc.name + "/" + gitit.pname + "-" + gitit.version;
 
   gititWithPkgs = hsPkgs: extras: hsPkgs.ghcWithPackages (self: with self; [ gitit ] ++ (extras self));
@@ -18,7 +20,7 @@ let
     #!${stdenv.shell}
     cd $HOME
     export PATH="${makeSearchPath "bin" (
-      [ git curl ] ++ (if cfg.pdfExport == "yes" then [texLiveFull] else [])
+      [ git curl ] ++ (if cfg.pdfExport then [texLiveFull] else [])
       )}:$PATH";
     export NIX_GHC="${env}/bin/ghc"
     export NIX_GHCPKG="${env}/bin/ghc-pkg"
@@ -27,11 +29,7 @@ let
     ${env}/bin/gitit -f ${configFile}
   '';
 
-  gititOptions = let
-
-    yesNo = types.enum [ "yes" "no" ];
-
-  in {
+  gititOptions = {
 
       enable = mkOption {
         type = types.bool;
@@ -202,8 +200,8 @@ let
       };
 
       showLhsBirdTracks = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = ''
           Specifies whether to show Haskell code blocks in "bird style", with
           "> " at the beginning of each line.
@@ -283,8 +281,8 @@ let
       };
 
       tableOfContents = mkOption {
-        type = yesNo;
-        default = "yes";
+        type = types.bool;
+        default = true;
         description = ''
           Specifies whether to print a tables of contents (with links to
           sections) on each wiki page.
@@ -306,8 +304,8 @@ let
       };
 
       useCache = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = ''
           Specifies whether to cache rendered pages.  Note that if use-feed is
           selected, feeds will be cached regardless of the value of use-cache.
@@ -338,14 +336,14 @@ let
       };
 
       debugMode = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = "Causes debug information to be logged while gitit is running.";
       };
 
       compressResponses = mkOption {
-        type = yesNo;
-        default = "yes";
+        type = types.bool;
+        default = true;
         description = "Specifies whether HTTP responses should be compressed.";
       };
 
@@ -363,10 +361,10 @@ let
       };
 
       useReCaptcha = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = ''
-          If "yes", causes gitit to use the reCAPTCHA service
+          If true, causes gitit to use the reCAPTCHA service
           (http://recaptcha.net) to prevent bots from creating accounts.
         '';
       };
@@ -471,8 +469,8 @@ let
       };
 
       useFeed = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = ''
           Specifies whether an ATOM feed should be enabled (for the site and
           for individual pages).
@@ -490,8 +488,8 @@ let
       };
 
       absoluteUrls = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = ''
           Make wikilinks absolute with respect to the base-url.  So, for
           example, in a wiki served at the base URL '/wiki', on a page
@@ -514,8 +512,8 @@ let
       };
 
       pdfExport = mkOption {
-        type = yesNo;
-        default = "no";
+        type = types.bool;
+        default = false;
         description = ''
           If yes, PDF will appear in export options. PDF will be created using
           pdflatex, which must be installed and in the path. Note that PDF
@@ -537,8 +535,8 @@ let
       };
 
       xssSanitize = mkOption {
-        type = yesNo;
-        default = "yes";
+        type = types.bool;
+        default = true;
         description = ''
           If yes, all HTML (including that produced by pandoc) is filtered
           through xss-sanitize.  Set to no only if you trust all of your users.
@@ -560,7 +558,7 @@ let
     default-page-type: ${cfg.defaultPageType}
     math: ${cfg.math}
     mathjax-script: ${cfg.mathJaxScript}
-    show-lhs-bird-tracks: ${cfg.showLhsBirdTracks}
+    show-lhs-bird-tracks: ${toYesNo cfg.showLhsBirdTracks}
     templates-dir: ${cfg.templatesDir}
     log-file: ${cfg.logFile}
     log-level: ${cfg.logLevel}
@@ -568,16 +566,16 @@ let
     no-delete: ${cfg.noDelete}
     no-edit: ${cfg.noEdit}
     default-summary: ${cfg.defaultSummary}
-    table-of-contents: ${cfg.tableOfContents}
+    table-of-contents: ${toYesNo cfg.tableOfContents}
     plugins: ${cfg.plugins}
-    use-cache: ${cfg.useCache}
+    use-cache: ${toYesNo cfg.useCache}
     cache-dir: ${cfg.cacheDir}
     max-upload-size: ${cfg.maxUploadSize}
     max-page-size: ${cfg.maxPageSize}
-    debug-mode: ${cfg.debugMode}
-    compress-responses: ${cfg.compressResponses}
+    debug-mode: ${toYesNo cfg.debugMode}
+    compress-responses: ${toYesNo cfg.compressResponses}
     mime-types-file: ${cfg.mimeTypesFile}
-    use-recaptcha: ${cfg.useReCaptcha}
+    use-recaptcha: ${toYesNo cfg.useReCaptcha}
     recaptcha-private-key: ${toString cfg.reCaptchaPrivateKey}
     recaptcha-public-key: ${toString cfg.reCaptchaPublicKey}
     access-question: ${cfg.accessQuestion}
@@ -586,14 +584,14 @@ let
     rpx-key: ${toString cfg.rpxKey}
     mail-command: ${cfg.mailCommand}
     reset-password-message: ${cfg.resetPasswordMessage}
-    use-feed: ${cfg.useFeed}
+    use-feed: ${toYesNo cfg.useFeed}
     base-url: ${toString cfg.baseUrl}
-    absolute-urls: ${cfg.absoluteUrls}
+    absolute-urls: ${toYesNo cfg.absoluteUrls}
     feed-days: ${toString cfg.feedDays}
     feed-refresh-time: ${toString cfg.feedRefreshTime}
-    pdf-export: ${cfg.pdfExport}
+    pdf-export: ${toYesNo cfg.pdfExport}
     pandoc-user-data: ${toString cfg.pandocUserData}
-    xss-sanitize: ${cfg.xssSanitize}
+    xss-sanitize: ${toYesNo cfg.xssSanitize}
   '';
 
 in
