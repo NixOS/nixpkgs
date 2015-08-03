@@ -3066,6 +3066,8 @@ let
 
   strongswan = callPackage ../tools/networking/strongswan { };
 
+  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC=true; };
+
   su = shadow.su;
 
   subsonic = callPackage ../servers/misc/subsonic { };
