@@ -1,7 +1,22 @@
 diff -Nru 15.7/common/lib/modules/fglrx/build_mod/firegl_public.c 15.7.new/common/lib/modules/fglrx/build_mod/firegl_public.c
 --- 15.7/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-07-04 10:31:23.000000000 -0400
-+++ 15.7.new/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-08-03 00:30:34.927839497 -0400
-@@ -3495,10 +3495,12 @@
++++ 15.7.new/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-08-03 21:21:13.893211082 -0400
+@@ -242,6 +242,14 @@
+ #endif
+ 
+ // ============================================================
++
++#if LINUX_VERSION_CODE < KERNEL_VERSION(3,18,0)
++#define __read_cr4 read_cr4
++#define __write_cr4 write_cr4
++#endif
++
++// ============================================================
++
+ /* globals */
+ 
+ char* firegl = NULL;
+@@ -3495,10 +3503,12 @@
          KCL_PUB_InterruptHandlerWrap,
  #if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
          ((useMSI) ? (SA_INTERRUPT) : (SA_SHIRQ)),
@@ -15,7 +30,7 @@ diff -Nru 15.7/common/lib/modules/fglrx/build_mod/firegl_public.c 15.7.new/commo
  #endif
          dev_name,
          context);
-@@ -4498,8 +4500,8 @@
+@@ -4498,8 +4508,8 @@
  
      if (cpu_has_pge)
      {
@@ -26,7 +41,7 @@ diff -Nru 15.7/common/lib/modules/fglrx/build_mod/firegl_public.c 15.7.new/commo
      }
       __flush_tlb();
  
-@@ -4512,7 +4514,7 @@
+@@ -4512,7 +4522,7 @@
      write_cr0(cr0 & 0xbfffffff);
      if (cpu_has_pge)
      {
@@ -35,7 +50,7 @@ diff -Nru 15.7/common/lib/modules/fglrx/build_mod/firegl_public.c 15.7.new/commo
      }
      local_irq_restore(flags);
  
-@@ -4539,8 +4541,8 @@
+@@ -4539,8 +4549,8 @@
  
      if (cpu_has_pge)
      {
@@ -46,7 +61,7 @@ diff -Nru 15.7/common/lib/modules/fglrx/build_mod/firegl_public.c 15.7.new/commo
      }
       __flush_tlb();
    
-@@ -4552,7 +4554,7 @@
+@@ -4552,7 +4562,7 @@
      write_cr0(cr0 & 0xbfffffff);
      if (cpu_has_pge)
      {
