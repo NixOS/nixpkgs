@@ -13611,6 +13611,8 @@ let
 
   flightgear = callPackage ../games/flightgear { };
 
+  freecell-solver = callPackage ../games/freecell-solver { };
+
   freeciv = callPackage ../games/freeciv { };
 
   freeciv_gtk = callPackage ../games/freeciv {
