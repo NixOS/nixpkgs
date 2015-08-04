@@ -15259,6 +15259,22 @@ let
     propagatedBuildInputs = with self; [ pkgs.libarchive ];
   };
 
+  libarchive-c = buildPythonPackage rec {
+    name = "libarchive-c-2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/libarchive-c/${name}.tar.gz";
+      sha256 = "089lrz6xyrfnk55v35vis6jyqyyl77w093057djyspnd2744wi2n";
+    };
+
+    patchPhase = ''
+      substituteInPlace libarchive/ffi.py --replace \
+        "find_library('archive')" "'${pkgs.libarchive}/lib/libarchive.so'"
+    '';
+
+    buildInputs = [ pkgs.libarchive ];
+  };
+
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
     version = "0.9.2";
