@@ -6186,6 +6186,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXlate = buildPerlPackage {
+    name = "MooX-late-0.015";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.015.tar.gz;
+      sha256 = "175326af3076fa8698669f289fad1322724978cddaf40ea04e600fcd7f6afbbf";
+    };
+    buildInputs = [ TestFatal TestRequires ];
+    propagatedBuildInputs = [ Moo TypeTiny ];
+    meta = {
+      homepage = https://metacpan.org/release/MooX-late;
+      description = "Easily translate Moose code to Moo";
+      license = "perl";
+    };
+  };
+
   MouseXSimpleConfig = buildPerlPackage {
     name = "MouseX-SimpleConfig-0.11";
     src = fetchurl {
