@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       partitions. GParted enables you to change the partition organization
       while preserving the partition contents.
     '';
-    homepage = http://gparted.sourceforge.net;
+    homepage = http://gparted.org;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
