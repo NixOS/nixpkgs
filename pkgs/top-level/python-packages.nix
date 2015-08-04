@@ -9571,10 +9571,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.43";
+    version = "0.45";
 
     src = pkgs.fetchurl {
-      sha256 = "1z5fap8c7q27p0s82jn11i6fwg0g9zm2zy5na8is53kgbhl10fdr";
+      sha256 = "19lp15rc0rq4jqaacg2a38cdgfy2avhf5v97yanasx4n2swx4gsm";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 
