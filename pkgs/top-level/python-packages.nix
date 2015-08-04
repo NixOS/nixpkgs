@@ -9255,10 +9255,10 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.18.0";
+    version = "0.19.0";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "1ydi1725ryz9by770kyx06cwrvyvixbg3502brkf5hvbjd8ddzrl";
+      sha256 = "1fp73zwbfd4xalrcjnnplvr6890hr528jmqsvc4xgxh9ic2x03bp";
       rev = "v${version}";
       repo = "pgcli";
       owner = "amjith";
@@ -9267,10 +9267,6 @@ let
     propagatedBuildInputs = with self; [
       click configobj prompt_toolkit psycopg2 pygments sqlparse
     ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-    '';
 
     meta = {
       inherit version;
