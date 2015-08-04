@@ -21,4 +21,6 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ subversion apr qt4 ];
+
+  meta.broken = true;
 }
