@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   version = "7.4.648";
 
-  src = self.fetchurl {
+  src = fetchurl {
     url = "https://github.com/genoma/macvim/archive/g-snapshot-32.tar.gz";
     sha256 = "1wqg5sy7krgqg3sj00gb34avg90ga2kbvv09bsxv2267j7agi0iq";
   };
