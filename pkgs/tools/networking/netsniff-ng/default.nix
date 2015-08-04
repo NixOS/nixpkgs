@@ -2,7 +2,7 @@
 , libnetfilter_conntrack, libnl, libpcap, libsodium, liburcu, ncurses, perl
 , pkgconfig, zlib }:
 
-let version = "0.5.9-34-g95c4582"; in
+let version = "0.5.9-70-g123b444"; in
 stdenv.mkDerivation {
   name = "netsniff-ng-${version}";
 
@@ -10,13 +10,17 @@ stdenv.mkDerivation {
   src = fetchFromGitHub rec {
     repo = "netsniff-ng";
     owner = repo;
-    rev = "95c4582b742fd4fa58e5f14971164b941b0f730d";
-    sha256 = "0anai392n8zx8vcjbjg776lbiwrv95x2dbd8rypbqfzmj8nhzric";
+    rev = "123b444d78337a8f00d3ba83de3af3cdc6891de8";
+    sha256 = "0yqh83g0ja4ggdiylp63h57pxx39fn6axzfvs2w0lp27gbl4yc0i";
   };
 
   buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl
     libnetfilter_conntrack libpcap libsodium liburcu ncurses perl
     pkgconfig zlib ];
+
+  postPatch = ''
+    substituteInPlace curvetun/Makefile --replace "curvetun.o" "curvetun.o sysctl.o"
+  '';
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
