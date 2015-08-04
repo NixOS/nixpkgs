@@ -72,7 +72,6 @@
   ./programs/ssmtp.nix
   ./programs/uim.nix
   ./programs/venus.nix
-  ./programs/virtualbox-host.nix
   ./programs/wvdial.nix
   ./programs/freetds.nix
   ./programs/zsh/zsh.nix
@@ -486,6 +485,7 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
+  ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
 ]
