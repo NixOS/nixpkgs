@@ -3,11 +3,11 @@ btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchurl {
-    url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "03nzhikxp60falshzyk6ip8g9fhrczhvnvgmzqr8bny6w8x1v84b";
+    url = "https://github.com/docker/docker/archive/v${version}.tar.gz";
+    sha256 = "00rjyblwrd0f00l7pd4i6h2vnlgccjf49fgzygdhzzx97sr3387k";
   };
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.docker.io/;
+    homepage = http://www.docker.com/;
     description = "An open source project to pack, ship and run any application as a lightweight container";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline tailhook ];
