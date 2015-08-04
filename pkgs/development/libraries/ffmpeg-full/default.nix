@@ -253,7 +253,7 @@ stdenv.mkDerivation rec {
     # On some ARM platforms --enable-thumb
     "--enable-shared --disable-static"
     (enableFeature true "pic")
-    (if (stdenv.cc.cc.isClang or false) then "--cc=clang" else null)
+    (if stdenv.cc.isClang then "--cc=clang" else null)
     (enableFeature smallBuild "small")
     (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
     (enableFeature grayBuild "gray")

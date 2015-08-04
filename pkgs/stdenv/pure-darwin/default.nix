@@ -81,6 +81,7 @@ in rec {
           nativePrefix = bootstrapTools;
           nativeLibc   = false;
           libc         = last.pkgs.darwin.Libsystem;
+          isClang      = true;
           cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
         };
 
