@@ -1068,12 +1068,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "0.69.0";
+    version = "1.1.4";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      md5 = "b71fe35ee01e636b54de28f1f875f084";
+      sha256 = "1wbbaj0y6bfzsh61hgnnssn5j8m93r6r2m5r1jmlf6iz3l9gqkkp";
     };
 
     propagatedBuildInputs =
@@ -1081,6 +1081,8 @@ let
         self.requests
         self.jmespath
       ];
+
+    buildInputs = [ self.docutils ];
 
     meta = {
       homepage = https://github.com/boto/botocore;
@@ -4899,11 +4901,11 @@ let
 
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.4.1";
+    name = "jmespath-0.7.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jmespath/${name}.tar.gz";
-      md5 = "a11ae39472672a650dfb55feab7d65eb";
+      sha256 = "1lazbx65imassd7h24z49za001rvx1lmx8r0l21h4izs7pp14nnd";
     };
 
     propagatedBuildInputs = with self; [ ply ];
