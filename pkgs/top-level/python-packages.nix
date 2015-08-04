@@ -4558,6 +4558,19 @@ let
   };
 
 
+  ssdeep = buildPythonPackage rec {
+    name = "ssdeep-3.1.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/ssdeep/${name}.tar.gz";
+      sha256 = "1p9dpykmnfb73cszdiic5wbz5bmbbmkiih08pb4dah5mwq4n7im6";
+    };
+
+    buildInputs = with pkgs; [ ssdeep ];
+    propagatedBuildInputs = with self; [ cffi six ];
+  };
+
+
   statsd = buildPythonPackage rec {
     name = "statsd-2.0.2";
 
