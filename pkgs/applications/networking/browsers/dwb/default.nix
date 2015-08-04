@@ -30,5 +30,9 @@ stdenv.mkDerivation {
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ pSub ];
     license = licenses.gpl3;
+
+    # dwb is no longer maintained by portix and efforts to keep it alive
+    # were not successful, see issue #7952 for discussion.
+    broken = true;
   };
 }

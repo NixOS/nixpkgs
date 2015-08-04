@@ -6,18 +6,20 @@
 
 let
 
-  version = "3.15.7";
+  # Version 3.15.7 breaks certain (but not all) PCL-based printers:
+  # https://github.com/NixOS/nixpkgs/commit/b0e46fc3ead209ef24ed6214bd41ef6e604af54f
+  version = "3.15.6";
 
   name = "hplip-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "17flpl89lgwlbsy9mka910g530nnvlwqqnif8a9hyq7k90q9046k";
+    sha256 = "1jbnjw7vrn1qawrjfdv8j58w69q8ki1qkzvlh0nk8nxacpp17i9h";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "0fblh5m43jnws4vkwks0b4m9k3jg9kspaj1l8bic0r5swy97s41m";
+    sha256 = "1rymxahz12s1s37rri5qyvka6q0yi0yai08kgspg24176ry3a3fx";
   };
 
   hplip_state =
@@ -75,23 +77,25 @@ stdenv.mkDerivation {
       {} +
   '';
 
-  configureFlags = ''
-    --with-cupsfilterdir=$(out)/lib/cups/filter
-    --with-cupsbackenddir=$(out)/lib/cups/backend
-    --with-icondir=$(out)/share/applications
-    --with-systraydir=$(out)/xdg/autostart
-    --with-mimedir=$(out)/etc/cups
-    --enable-policykit
-  '';
+  preConfigure = ''
+    export configureFlags="$configureFlags
+      --with-cupsfilterdir=$out/lib/cups/filter
+      --with-cupsbackenddir=$out/lib/cups/backend
+      --with-icondir=$out/share/applications
+      --with-systraydir=$out/xdg/autostart
+      --with-mimedir=$out/etc/cups
+      --enable-policykit
+    "
 
-  makeFlags = ''
-    halpredir=$(out)/share/hal/fdi/preprobe/10osvendor
-    rulesdir=$(out)/etc/udev/rules.d
-    policykit_dir=$(out)/share/polkit-1/actions
-    policykit_dbus_etcdir=$(out)/etc/dbus-1/system.d
-    policykit_dbus_sharedir=$(out)/share/dbus-1/system-services
-    hplip_confdir=$(out)/etc/hp
-    hplip_statedir=$(out)/var/lib/hp
+    export makeFlags="
+      halpredir=$out/share/hal/fdi/preprobe/10osvendor
+      rulesdir=$out/etc/udev/rules.d
+      policykit_dir=$out/share/polkit-1/actions
+      policykit_dbus_etcdir=$out/etc/dbus-1/system.d
+      policykit_dbus_sharedir=$out/share/dbus-1/system-services
+      hplip_confdir=$out/etc/hp
+      hplip_statedir=$out/var/lib/hp
+    "
   '';
 
   enableParallelBuilding = true;
@@ -175,6 +179,6 @@ stdenv.mkDerivation {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ ttuegel jgeerds nckx ];
+    maintainers = with maintainers; [ jgeerds nckx ];
   };
 }

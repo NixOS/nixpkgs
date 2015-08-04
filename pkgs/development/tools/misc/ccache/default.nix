@@ -42,6 +42,11 @@ stdenv.mkDerivation {
         EOF
           chmod +x $out/bin/g++
         fi
+        for executable in $(ls ${gcc.cc}/bin); do
+          if [ ! -x "$out/bin/$executable" ]; then
+            ln -s ${gcc.cc}/bin/$executable $out/bin/$executable
+          fi
+        done
       '');
   };
 

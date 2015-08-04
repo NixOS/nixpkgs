@@ -72,7 +72,6 @@
   ./programs/ssmtp.nix
   ./programs/uim.nix
   ./programs/venus.nix
-  ./programs/virtualbox-host.nix
   ./programs/wvdial.nix
   ./programs/freetds.nix
   ./programs/zsh/zsh.nix
@@ -283,6 +282,7 @@
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
+  ./services/networking/gateone.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
   ./services/networking/gogoclient.nix
@@ -486,6 +486,7 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/virtualbox-guest.nix
+  ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
 ]

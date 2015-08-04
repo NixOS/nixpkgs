@@ -54,7 +54,7 @@ in
 
         unitConfig.ConditionVirtualization = "oracle";
 
-        serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/sbin/VBoxService VBoxService --foreground";
+        serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
       };
 
     services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];

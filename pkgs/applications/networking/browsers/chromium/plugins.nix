@@ -53,7 +53,7 @@ let
       wvDescription = "Playback of encrypted HTML audio/video content";
       wvMimeTypes = "application/x-ppapi-widevine-cdm";
       wvModule = "$widevine/lib/libwidevinecdmadapter.so";
-      wvInfo = "#${wvName}#${wvDescription}:${wvMimeTypes}";
+      wvInfo = "#${wvName}#${wvDescription};${wvMimeTypes}";
     in ''
       flashVersion="$(
         sed -n -r 's/.*"version": "([^"]+)",.*/\1/p' PepperFlash/manifest.json

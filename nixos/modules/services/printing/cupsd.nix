@@ -230,8 +230,8 @@ in
           ];
       };
 
-    systemd.services.cups-browsed =
-      { description = "Make remote CUPS printers available locally";
+    systemd.services.cups-browsed = mkIf config.services.avahi.enable
+      { description = "CUPS Remote Printer Discovery";
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "cups.service" "avahi-daemon.service" ];

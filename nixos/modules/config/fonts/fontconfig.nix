@@ -142,7 +142,7 @@ with lib;
   config =
     let fontconfig = config.fonts.fontconfig;
         fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
-        nixosConf = ''
+        renderConf = ''
           <?xml version='1.0'?>
           <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
           <fontconfig>
@@ -168,6 +168,21 @@ with lib;
                 <const>lcd${fontconfig.subpixel.lcdfilter}</const>
               </edit>
             </match>
+
+            ${optionalString (fontconfig.dpi != 0) ''
+            <match target="pattern">
+              <edit name="dpi" mode="assign">
+                <double>${toString fontconfig.dpi}</double>
+              </edit>
+            </match>
+            ''}
+
+          </fontconfig>
+        '';
+        genericAliasConf = ''
+          <?xml version='1.0'?>
+          <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+          <fontconfig>
 
             <!-- Default fonts -->
             ${optionalString (fontconfig.defaultFonts.sansSerif != []) ''
@@ -201,14 +216,6 @@ with lib;
             </alias>
             ''}
 
-            ${optionalString (fontconfig.dpi != 0) ''
-            <match target="pattern">
-              <edit name="dpi" mode="assign">
-                <double>${toString fontconfig.dpi}</double>
-              </edit>
-            </match>
-            ''}
-
           </fontconfig>
         '';
     in mkIf fontconfig.enable {
@@ -219,7 +226,8 @@ with lib;
       environment.etc."fonts/fonts.conf".source =
         pkgs.makeFontsConf { fontconfig = pkgs.fontconfig_210; fontDirectories = config.fonts.fonts; };
 
-      environment.etc."fonts/conf.d/98-nixos.conf".text = nixosConf;
+      environment.etc."fonts/conf.d/10-nixos-rendering.conf".text = renderConf;
+      environment.etc."fonts/conf.d/60-nixos-generic-alias.conf".text = genericAliasConf;
 
       # Versioned fontconfig > 2.10. Take shared fonts.conf from fontconfig.
       # Otherwise specify only font directories.
@@ -236,7 +244,8 @@ with lib;
           </fontconfig>
         '';
 
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/98-nixos.conf".text = nixosConf;
+      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/10-nixos-rendering.conf".text = renderConf;
+      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/60-nixos-generic-alias.conf".text = genericAliasConf;
 
       environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/99-user.conf" = {
         enable = fontconfig.includeUserConf;
