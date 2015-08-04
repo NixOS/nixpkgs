@@ -4062,6 +4062,20 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  GamesSolitaireVerify = buildPerlModule {
+    name = "Games-Solitaire-Verify-0.1400";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.1400.tar.gz;
+      sha256 = "0c897c17f23ed6710d0e3ddfb54cce0f00f5b68c55277181adc94a03b7d8c659";
+    };
+    buildInputs = [ TestDifferences ];
+    propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils MooXlate ];
+    meta = {
+      description = "Verify solutions for solitaire games";
+      license = "mit";
+    };
+  };
+
   GD = buildPerlPackage rec {
     name = "GD-2.53";
     src = fetchurl {
