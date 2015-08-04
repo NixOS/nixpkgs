@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, utillinux, openssl_1_0_2, http-parser, zlib, libuv }:
+{ stdenv, fetchurl, python, utillinux, openssl, http-parser, zlib, libuv }:
 
 let
   version = "3.1.0";
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   # causes configure to fail, so don't add --disable-static.
   dontDisableStatic = true;
 
-  buildInputs = [ python openssl_1_0_2 http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
+  buildInputs = [ python openssl http-parser zlib libuv ] ++ (optional stdenv.isLinux utillinux);
   setupHook = ../nodejs/setup-hook.sh;
 
   passthru.interpreterName = "iojs";
