@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, go, lxc, sqlite, iproute, bridge-utils, devicemapper,
+{ stdenv, fetchFromGitHub, makeWrapper, go, lxc, sqlite, iproute, bridge-utils, devicemapper,
 btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.6.0";
+  version = "1.7.1";
 
-  src = fetchurl {
-    url = "https://github.com/dotcloud/docker/archive/v${version}.tar.gz";
-    sha256 = "03nzhikxp60falshzyk6ip8g9fhrczhvnvgmzqr8bny6w8x1v84b";
+  src = fetchFromGitHub {
+    owner = "docker";
+    repo = "docker";
+    rev = "v${version}";
+    sha256 = "0r0j8aj1a7lbnc9piznp02h5n2gdw3v3n4q2ipmapi9ax0wj82lz";
   };
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="03nzhikx"
+    export DOCKER_GITCOMMIT="786b29d4"
     ./hack/make.sh dynbinary
   '';
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.docker.io/;
+    homepage = http://www.docker.com/;
     description = "An open source project to pack, ship and run any application as a lightweight container";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline tailhook ];
