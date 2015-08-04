@@ -811,6 +811,7 @@ self: super: {
   Frames = dontDistribute super.Frames;
   hgeometry = dontDistribute super.hgeometry;
   hipe = dontDistribute super.hipe;
+  hsqml-datamodel-vinyl = dontDistribute super.hsqml-datamodel-vinyl;
   singleton-nats = dontDistribute super.singleton-nats;
   singletons = markBroken super.singletons;
   units-attoparsec = dontDistribute super.units-attoparsec;
