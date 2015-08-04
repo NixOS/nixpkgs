@@ -7345,6 +7345,8 @@ let
 
   libtoxcore-dev = callPackage ../development/libraries/libtoxcore/new-api { };
 
+  libtap = callPackage ../development/libraries/libtap { };
+
   libtsm = callPackage ../development/libraries/libtsm {
     automake = automake114x;
   };
