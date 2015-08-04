@@ -11002,7 +11002,7 @@ let
   };
 
   docker = callPackage ../applications/virtualization/docker {
-    go = go_1_3;
+    go = go_1_4;
   };
 
   doodle = callPackage ../applications/search/doodle { };
