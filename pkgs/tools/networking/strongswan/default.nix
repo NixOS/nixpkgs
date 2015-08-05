@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
-, curl, trousers, sqlite, iptables, libxml2
+, curl, trousers, sqlite, iptables, libxml2, openresolv
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     ./firewall_defaults.patch
     ./updown-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
+    '';
 
   configureFlags =
     [ "--enable-swanctl" "--enable-cmd"
