@@ -9255,10 +9255,10 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.19.0";
+    version = "0.19.1";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "1fp73zwbfd4xalrcjnnplvr6890hr528jmqsvc4xgxh9ic2x03bp";
+      sha256 = "1r34bbqbd4h72cl0cxi9w6q2nwx806wpxq220mzyiy8g45xv0ghj";
       rev = "v${version}";
       repo = "pgcli";
       owner = "amjith";
