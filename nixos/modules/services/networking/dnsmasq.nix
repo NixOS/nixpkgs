@@ -98,6 +98,7 @@ in
           ExecStart = "${dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${dnsmasqConf}";
           ExecReload = "${dnsmasq}/bin/kill -HUP $MAINPID";
         };
+        restartTriggers = [ config.environment.etc.hosts.source ];
     };
 
   };
