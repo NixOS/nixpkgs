@@ -2145,6 +2145,7 @@ let
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
+  lxd = goPackages.lxd;
 
   lzip = callPackage ../tools/compression/lzip { };
 
