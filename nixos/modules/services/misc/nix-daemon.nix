@@ -309,6 +309,21 @@ in
         '';
       };
 
+      nixPath = mkOption {
+        type = types.listOf types.str;
+        default =
+          [ "/nix/var/nix/profiles/per-user/root/channels/nixos"
+            "nixpkgs=/etc/nixos/nixpkgs"
+            "nixos-config=/etc/nixos/configuration.nix"
+            "/nix/var/nix/profiles/per-user/root/channels"
+          ];
+        description = ''
+          The default Nix expression search path, used by the Nix
+          evaluator to look up paths enclosed in angle brackets
+          (e.g. <literal>&lt;nixpkgs&gt;</literal>).
+        '';
+      };
+
     };
 
   };
@@ -378,7 +393,9 @@ in
       };
 
     # Set up the environment variables for running Nix.
-    environment.sessionVariables = cfg.envVars;
+    environment.sessionVariables = cfg.envVars //
+      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      };
 
     environment.extraInit =
       ''
