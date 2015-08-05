@@ -205,7 +205,7 @@ self: super: {
   tasty-rerun = dontHaddock (appendConfigureFlag super.tasty-rerun "--ghc-option=-XFlexibleContexts");
 
   # http://hub.darcs.net/ivanm/graphviz/issue/5
-  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./graphviz-fix-ghc710.patch));
+  graphviz = dontCheck (dontJailbreak (appendPatch super.graphviz ./patches/graphviz-fix-ghc710.patch));
 
   # Broken with GHC 7.10.x.
   aeson_0_7_0_6 = markBroken super.aeson_0_7_0_6;
