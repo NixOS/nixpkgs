@@ -18,9 +18,6 @@
     gecko64Sha256 = "0grc86dkq90i59zw43hakh62ra1ajnk11m64667xjrlzi7f0ndxw";
     monoVersion = "4.5.6";
     monoSha256 = "09dwfccvfdp3walxzp6qvnyxdj2bbyw9wlh6cxw2sx43gxriys5c";
-    ## TESTME wine stable should work with most recent mono
-    #monoVersion = "0.0.8";
-    #monoSha256 = "00jl24qp7vh3hlqv7wsw1s529lr5p0ybif6s73jy85chqaxj7z1x";
   };
   staging = {
     version = "1.7.48";
