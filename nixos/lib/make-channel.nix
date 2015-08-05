@@ -10,19 +10,15 @@ pkgs.releaseTools.makeSourceTarball {
 
   buildInputs = [ pkgs.nix ];
 
-  expr = builtins.readFile ./channel-expr.nix;
-
   distPhase = ''
     rm -rf .git
     echo -n $VERSION_SUFFIX > .version-suffix
     echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
     releaseName=nixos-$VERSION$VERSION_SUFFIX
     mkdir -p $out/tarballs
-    mkdir ../$releaseName
-    cp -prd . ../$releaseName/nixpkgs
+    cp -prd . ../$releaseName
     chmod -R u+w ../$releaseName
-    ln -s nixpkgs/nixos ../$releaseName/nixos
-    echo "$expr" > ../$releaseName/default.nix
+    ln -s . ../$releaseName/nixpkgs # hack to make ‘<nixpkgs>’ work
     NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
     cd ..
     chmod -R u+w $releaseName

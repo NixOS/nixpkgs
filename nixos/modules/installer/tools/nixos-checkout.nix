@@ -27,7 +27,7 @@ let
 
         if [ -z "$(type -P git)" ]; then
             echo "installing Git..."
-            nix-env -iA nixos.pkgs.git || nix-env -i git
+            nix-env -iA nixos.git
         fi
 
         # Move any old nixpkgs directories out of the way.

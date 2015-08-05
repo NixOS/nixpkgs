@@ -72,7 +72,7 @@ in
   };
 
   config = {
-    _module.args.pkgs = import ../../lib/nixpkgs.nix {
+    _module.args.pkgs = import ../../.. {
       system = config.nixpkgs.system;
 
       inherit (config.nixpkgs) config;
