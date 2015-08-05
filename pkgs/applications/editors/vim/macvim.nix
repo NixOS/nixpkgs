@@ -5,11 +5,11 @@
 stdenv.mkDerivation rec {
   name = "macvim-${version}";
 
-  version = "7.4.479";
+  version = "7.4.648";
 
   src = fetchurl {
-    url = "https://github.com/genoma/macvim/archive/g-snapshot-21.tar.gz";
-    sha256 = "1s86dpb8bcxh309gikiz8gm9ygv3d2jy6i4qlnxarbvcdk65fzv4";
+    url = "https://github.com/genoma/macvim/archive/g-snapshot-32.tar.gz";
+    sha256 = "1wqg5sy7krgqg3sj00gb34avg90ga2kbvv09bsxv2267j7agi0iq";
   };
 
   enableParallelBuilding = true;

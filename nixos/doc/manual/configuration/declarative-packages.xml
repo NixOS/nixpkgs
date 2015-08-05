@@ -23,13 +23,13 @@ Nixpkgs will be built or downloaded as part of the system when you run
 <para>You can get a list of the available packages as follows:
 <screen>
 $ nix-env -qaP '*' --description
-nixos.pkgs.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
+nixos.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
 <replaceable>...</replaceable>
 </screen>
 
 The first column in the output is the <emphasis>attribute
 name</emphasis>, such as
-<literal>nixos.pkgs.thunderbird</literal>. (The
+<literal>nixos.thunderbird</literal>. (The
 <literal>nixos</literal> prefix allows distinguishing between
 different channels that you might have.)</para>
 

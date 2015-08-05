@@ -9255,10 +9255,10 @@ let
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.18.0";
+    version = "0.19.1";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "1ydi1725ryz9by770kyx06cwrvyvixbg3502brkf5hvbjd8ddzrl";
+      sha256 = "1r34bbqbd4h72cl0cxi9w6q2nwx806wpxq220mzyiy8g45xv0ghj";
       rev = "v${version}";
       repo = "pgcli";
       owner = "amjith";
@@ -9267,10 +9267,6 @@ let
     propagatedBuildInputs = with self; [
       click configobj prompt_toolkit psycopg2 pygments sqlparse
     ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-    '';
 
     meta = {
       inherit version;
@@ -9571,10 +9567,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.43";
+    version = "0.45";
 
     src = pkgs.fetchurl {
-      sha256 = "1z5fap8c7q27p0s82jn11i6fwg0g9zm2zy5na8is53kgbhl10fdr";
+      sha256 = "19lp15rc0rq4jqaacg2a38cdgfy2avhf5v97yanasx4n2swx4gsm";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 
@@ -11607,19 +11603,19 @@ let
   };
 
   repocheck = buildPythonPackage rec {
-    name = "repocheck-2015-06-27";
+    name = "repocheck-2015-08-05";
     disabled = isPy26 || isPy27;
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "0psihwph10sx07xc2gfch739laz7x1kwl5c991cci8cfn5jzy8bp";
-      rev = "231e05b4fa55955ef8492581a15f508ffa0037d4";
+      sha256 = "1jc4v5zy7z7xlfmbfzvyzkyz893f5x2k6kvb3ni3rn2df7jqhc81";
+      rev = "ee48d0e88d3f5814d24a8d1f22d5d83732824688";
       repo = "repocheck";
       owner = "kynikos";
     };
 
     meta = {
+      inherit (src.meta) homepage;
       description = "Check the status of code repositories under a root directory";
-      homepage = https://github.com/kynikos/repocheck;
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ nckx ];
     };

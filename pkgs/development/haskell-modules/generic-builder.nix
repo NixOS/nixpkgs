@@ -45,7 +45,6 @@
 , useCpphs ? false
 } @ args:
 
-assert pkgconfigDepends != [] -> pkgconfig != null;
 assert editedCabalFile != null -> revision != null;
 
 let
@@ -105,10 +104,13 @@ let
   isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
   isSystemPkg = x: !isHaskellPkg x;
 
+  allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+                        optionals doCheck testPkgconfigDepends;
+
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
   otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      buildTools ++ libraryToolDepends ++ executableToolDepends ++
-                     optionals (pkgconfigDepends != []) ([pkgconfig] ++ pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends) ++
+                     optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends);
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
@@ -122,6 +124,9 @@ let
   ghcCommandCaps = toUpper ghcCommand;
 
 in
+
+assert allPkgconfigDepends != [] -> pkgconfig != null;
+
 stdenv.mkDerivation ({
   name = "${optionalString (hasActiveLibrary && pname != "ghcjs") "haskell-"}${pname}-${version}";
 

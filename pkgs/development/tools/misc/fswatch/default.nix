@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   name = "fswatch-${version}";
-  version = "1.4.7";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "0f6aa14v31gy3j7qx563ml37r8mylpbqfjrz2v5g44zrrg6086w7";
+    sha256 = "09np75m9df2nk7lc5y9wgq467ca6jsd2p5666d5rkzjvy6s0a51n";
   };
 
   buildInputs = [ autoreconfHook gettext libtool makeWrapper texinfo ];

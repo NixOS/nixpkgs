@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/nirvdrum/svn2git;
-    description = "Ruby tool for importing existing svn projects into git";
+    description = "Tool for importing Subversion repositories into git";
     license = stdenv.lib.licenses.mit;
 
     maintainers = [ stdenv.lib.maintainers.the-kenny ];
