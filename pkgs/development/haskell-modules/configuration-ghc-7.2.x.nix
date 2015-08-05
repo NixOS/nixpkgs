@@ -70,4 +70,7 @@ self: super: {
   # Needs hashable on pre 7.10.x compilers.
   nats = addBuildDepend super.nats self.hashable;
 
+  # Newer versions require bytestring >=0.10.
+  tar = super.tar_0_4_1_0;
+
 }

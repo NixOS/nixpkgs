@@ -79,4 +79,7 @@ self: super: {
   # Avoid depending on tasty-golden.
   monad-par = dontCheck super.monad-par;
 
+  # Newer versions require bytestring >=0.10.
+  tar = super.tar_0_4_1_0;
+
 }
