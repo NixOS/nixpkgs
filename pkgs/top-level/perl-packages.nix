@@ -4731,17 +4731,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  GetoptLongDescriptive = buildPerlPackage {
-    name = "Getopt-Long-Descriptive-0.093";
+  GetoptLongDescriptive = buildPerlPackage rec {
+    name = "Getopt-Long-Descriptive-0.099";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Getopt-Long-Descriptive-0.093.tar.gz;
-      sha256 = "0iccps0jlcjm68i5yywgs477plfnkc6b2386bzb99blm3jwdfyac";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "1sf5r3vy7880ynsn2aqmb5p6rzmhq5v072x33g8c7aqjpz81wkgw";
     };
+    buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ ParamsValidate SubExporter SubExporterUtil ];
     meta = {
       homepage = https://github.com/rjbs/Getopt-Long-Descriptive;
       description = "Getopt::Long, but simpler and more powerful";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
