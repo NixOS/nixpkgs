@@ -1515,6 +1515,14 @@ let
     "ptw" # depends on broken nloptr-1.0.4
     "spoccutils" # depends on broken spocc-0.3.0
     "translateSPSS2R" # depends on broken car-2.0-25
+    "EnrichmentBrowser" # depends on broken package r-EDASeq-2.3.2
+    "SoyNAM" # depends on broken package r-lme4-1.1-8
+    "genotypeeval" # depends on broken package r-rtracklayer-1.29.12
+    "ifaTools" # depends on broken package r-OpenMx-2.2.6
+    "mediation" # depends on broken package r-lme4-1.1-8
+    "rCGH" # depends on broken package r-affy-1.47.1
+    "rddtools" # depends on broken package r-AER-1.2-4
+    "spsann" # depends on broken package r-pedometrics-0.6-2
   ];
 
   otherOverrides = old: new: {
