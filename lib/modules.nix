@@ -285,7 +285,7 @@ rec {
 
     in opt //
       { value = addErrorContext "while evaluating the option `${showOption loc}':" value;
-        definitions = map (def: def.value) defsFinal;
+        definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
         inherit (res) isDefined;
       };
