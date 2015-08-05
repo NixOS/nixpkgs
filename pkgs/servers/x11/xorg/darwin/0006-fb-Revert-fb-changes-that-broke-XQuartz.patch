@@ -1,38 +1,29 @@
-From 4a0444a2773bddc3abbf5305a344001ecfe9378c Mon Sep 17 00:00:00 2001
+From 4c7572abafeac9b2dcd884c444c5a5bae5b302c3 Mon Sep 17 00:00:00 2001
 From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
-Date: Tue, 18 Dec 2012 01:03:38 -0800
-Subject: [PATCH 5003/5004] fb: Revert fb changes that broke XQuartz
+Date: Sat, 31 May 2014 13:14:20 -0700
+Subject: [PATCH 6/6] fb: Revert fb changes that broke XQuartz
 
     http://bugs.freedesktop.org/show_bug.cgi?id=26124
 
 Revert "Use new pixman_glyph_cache_t API that will be in pixman 0.28.0"
+Revert "fb: Fix origin of source picture in fbGlyphs"
+Revert "fb: Publish fbGlyphs and fbUnrealizeGlyph"
 
 This reverts commit 9cbcb5bd6a5360a128d15b77a02d8d3351f74366.
+This reverts commit 983e30361f49a67252d0b5d82630e70724d69dbf.
+This reverts commit 3c2c59eed3c68c0e5a93c38cf01eedad015e3157.
 ---
- configure.ac  |   2 +-
  fb/fb.h       |   3 --
- fb/fbpict.c   | 153 +---------------------------------------------------------
+ fb/fbpict.c   | 149 +---------------------------------------------------------
+ fb/fbpict.h   |  11 +----
  fb/fbscreen.c |   1 -
- 4 files changed, 2 insertions(+), 157 deletions(-)
+ 4 files changed, 2 insertions(+), 162 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 8797df5..99a1e62 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -811,7 +811,7 @@ LIBPCIACCESS="pciaccess >= 0.12.901"
- LIBUDEV="libudev >= 143"
- LIBSELINUX="libselinux >= 2.0.86"
- LIBDBUS="dbus-1 >= 1.0"
--LIBPIXMAN="pixman-1 >= 0.27.2"
-+LIBPIXMAN="pixman-1 >= 0.21.8"
- 
- dnl Pixman is always required, but we separate it out so we can link
- dnl specific modules against it
 diff --git a/fb/fb.h b/fb/fb.h
-index 895b148..cc5759c 100644
+index 59eaac3..046b948 100644
 --- a/fb/fb.h
 +++ b/fb/fb.h
-@@ -1344,9 +1344,6 @@ extern _X_EXPORT void
+@@ -1116,9 +1116,6 @@ extern _X_EXPORT void
  extern _X_EXPORT Bool
   fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats);
  
@@ -43,10 +34,10 @@ index 895b148..cc5759c 100644
   * fbpixmap.c
   */
 diff --git a/fb/fbpict.c b/fb/fbpict.c
-index 80c2a91..dc0ca3c 100644
+index 6ee63e9..9c4cc42 100644
 --- a/fb/fbpict.c
 +++ b/fb/fbpict.c
-@@ -65,156 +65,6 @@ fbComposite(CARD8 op,
+@@ -65,152 +65,6 @@ fbComposite(CARD8 op,
      free_pixman_pict(pDst, dest);
  }
  
@@ -70,7 +61,7 @@ index 80c2a91..dc0ca3c 100644
 -	pixman_glyph_cache_remove (glyphCache, pGlyph, NULL);
 -}
 -
--static void
+-void
 -fbGlyphs(CARD8 op,
 -	 PicturePtr pSrc,
 -	 PicturePtr pDst,
@@ -93,7 +84,7 @@ index 80c2a91..dc0ca3c 100644
 -    int xDst = list->xOff, yDst = list->yOff;
 -
 -    miCompositeSourceValidate(pSrc);
--    
+-
 -    n_glyphs = 0;
 -    for (i = 0; i < nlist; ++i)
 -	n_glyphs += list[i].len;
@@ -102,12 +93,12 @@ index 80c2a91..dc0ca3c 100644
 -	glyphCache = pixman_glyph_cache_create();
 -
 -    pixman_glyph_cache_freeze (glyphCache);
--    
+-
 -    if (n_glyphs > N_STACK_GLYPHS) {
 -	if (!(pglyphs = malloc (n_glyphs * sizeof (pixman_glyph_t))))
 -	    goto out;
 -    }
--    
+-
 -    i = 0;
 -    x = y = 0;
 -    while (nlist--) {
@@ -165,19 +156,15 @@ index 80c2a91..dc0ca3c 100644
 -    if (maskFormat) {
 -	pixman_format_code_t format;
 -	pixman_box32_t extents;
--	int x, y;
 -
 -	format = maskFormat->format | (maskFormat->depth << 24);
 -
 -	pixman_glyph_get_extents(glyphCache, n_glyphs, pglyphs, &extents);
 -
--	x = extents.x1;
--	y = extents.y1;
--
 -	pixman_composite_glyphs(op, srcImage, dstImage, format,
--				xSrc + srcXoff + xDst, ySrc + srcYoff + yDst,
--				x, y,
--				x + dstXoff, y + dstYoff,
+-				xSrc + srcXoff + extents.x1 - xDst, ySrc + srcYoff + extents.y1 - yDst,
+-				extents.x1, extents.y1,
+-				extents.x1 + dstXoff, extents.y1 + dstYoff,
 -				extents.x2 - extents.x1,
 -				extents.y2 - extents.y1,
 -				glyphCache, n_glyphs, pglyphs);
@@ -203,7 +190,7 @@ index 80c2a91..dc0ca3c 100644
  static pixman_image_t *
  create_solid_fill_image(PicturePtr pict)
  {
-@@ -473,8 +323,7 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
+@@ -461,8 +315,7 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
          return FALSE;
      ps = GetPictureScreen(pScreen);
      ps->Composite = fbComposite;
@@ -212,9 +199,35 @@ index 80c2a91..dc0ca3c 100644
 +    ps->Glyphs = miGlyphs;
      ps->CompositeRects = miCompositeRects;
      ps->RasterizeTrapezoid = fbRasterizeTrapezoid;
-     ps->Trapezoids = fbTrapezoids;
+     ps->AddTraps = fbAddTraps;
+diff --git a/fb/fbpict.h b/fb/fbpict.h
+index 5cb8663..110f32d 100644
+--- a/fb/fbpict.h
++++ b/fb/fbpict.h
+@@ -65,20 +65,11 @@ fbTrapezoids(CARD8 op,
+              INT16 xSrc, INT16 ySrc, int ntrap, xTrapezoid * traps);
+ 
+ extern _X_EXPORT void
++
+ fbTriangles(CARD8 op,
+             PicturePtr pSrc,
+             PicturePtr pDst,
+             PictFormatPtr maskFormat,
+             INT16 xSrc, INT16 ySrc, int ntris, xTriangle * tris);
+ 
+-extern _X_EXPORT void
+-fbGlyphs(CARD8 op,
+-	 PicturePtr pSrc,
+-	 PicturePtr pDst,
+-	 PictFormatPtr maskFormat,
+-	 INT16 xSrc,
+-	 INT16 ySrc, int nlist,
+-	 GlyphListPtr list,
+-	 GlyphPtr *glyphs);
+-
+ #endif                          /* _FBPICT_H_ */
 diff --git a/fb/fbscreen.c b/fb/fbscreen.c
-index f9080a4..7c7d656 100644
+index 71bcc5d..55330fc 100644
 --- a/fb/fbscreen.c
 +++ b/fb/fbscreen.c
 @@ -32,7 +32,6 @@ fbCloseScreen(ScreenPtr pScreen)
@@ -226,5 +239,5 @@ index f9080a4..7c7d656 100644
          free(depths[d].vids);
      free(depths);
 -- 
-1.8.4.1
+2.3.2 (Apple Git-55)
 
