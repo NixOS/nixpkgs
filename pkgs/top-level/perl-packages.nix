@@ -2025,15 +2025,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CPANChanges = buildPerlPackage {
-    name = "CPAN-Changes-0.27";
+  CPANChanges = buildPerlPackage rec {
+    name = "CPAN-Changes-0.400002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BR/BRICAS/CPAN-Changes-0.27.tar.gz;
-      sha256 = "14dizyvgzp81hmg0djwnvvkdhqd3bsmms462cj0ai84z221scv1q";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "01eedea90d07468cb58e4a50bfa3bb1d4eeda9073596add1118fc359153abe8d";
     };
     meta = {
       description = "Read and write Changes files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
