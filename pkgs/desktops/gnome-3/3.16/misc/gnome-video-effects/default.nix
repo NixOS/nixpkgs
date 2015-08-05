@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool }:
+{ stdenv, fetchurl, pkgconfig, intltool, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-video-effects-${version}";
