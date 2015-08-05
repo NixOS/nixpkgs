@@ -188,6 +188,15 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    The Nix expression search path (<envar>NIX_PATH</envar>) no longer
+    contains <filename>/etc/nixos/nixpkgs</filename> by default. You
+    can override <envar>NIX_PATH</envar> by setting
+    <option>nix.nixPath</option>.
+  </para>
+</listitem>
+
 </itemizedlist>
 </para>
 
