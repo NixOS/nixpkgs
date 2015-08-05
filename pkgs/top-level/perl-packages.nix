@@ -7704,18 +7704,24 @@ let self = _self // overrides; _self = with self; {
   };
 
   PPI = buildPerlPackage {
-    name = "PPI-1.215";
+    name = "PPI-1.220";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/PPI-1.215.tar.gz;
-      sha256 = "db238e84da705b952b69f25554019ce70124079a0ad43713d0638aa14ba54878";
+      url = mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.220.tar.gz;
+      sha256 = "1e15be50e7d95a36d351af8bf5074f6695a2c72165e586d93e616183e7602b83";
     };
     buildInputs = [ ClassInspector FileRemove TestNoWarnings TestObject TestSubCalls ];
     propagatedBuildInputs = [ Clone IOString ListMoreUtils ParamsUtil TaskWeaken ];
+
+    # Remove test that fails due to unexpected shebang after
+    # patchShebang.
+    preCheck = "rm t/03_document.t";
+
     meta = {
+      homepage = https://github.com/adamkennedy/PPI;
       description = "Parse, Analyze and Manipulate Perl (without perl)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
-    doCheck = false;
   };
 
   PPIxRegexp = buildPerlPackage {
