@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace "pcf2vpnc" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"
-
-    # use random local port by default to reduce clashes with
-    # other IPSec services like, e.g., strongSwan
-    echo "Local Port 0" >> vpnc.conf
   '';
 
   postInstall = ''
