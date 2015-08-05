@@ -1,30 +1,43 @@
-{ stdenv, fetchurl, nettools, libgcrypt, perl, gawk, makeWrapper }:
+{ stdenv, fetchsvn, nettools, libgcrypt, openssl, openresolv, perl, gawk, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "vpnc-0.5.3";
-  src = fetchurl {
-    url = "http://www.unix-ag.uni-kl.de/~massar/vpnc/${name}.tar.gz";
-    sha256 = "1128860lis89g1s21hqxvap2nq426c9j4bvgghncc1zj0ays7kj6";
+  name = "vpnc-rev550";
+  src = fetchsvn {
+    url = "http://svn.unix-ag.uni-kl.de/vpnc";
+    rev = "550";
+    sha256 = "0x4ckfv9lpykwmh28v1kyzz91y1j2v48fi8q5nsawrba4q0wlrls";
   };
 
-  patches = [ ./makefile.patch ./vpnc-script.patch ];
+  postUnpack = ''
+    mv $sourceRoot/trunk/* $sourceRoot/.
+    rm -r $sourceRoot/{trunk,branches,tags}
+  '';
+
+  patches = [ ./makefile.patch ];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).
   propagatedBuildInputs = [ nettools ];
 
-  buildInputs = [libgcrypt perl makeWrapper];
+  buildInputs = [libgcrypt perl makeWrapper openssl ];
 
   preConfigure = ''
-    substituteInPlace "vpnc-script.in" \
+    sed -i 's|^#OPENSSL|OPENSSL|g' Makefile
+
+    substituteInPlace "vpnc-script" \
       --replace "which" "type -P" \
-      --replace "awk" "${gawk}/bin/awk"
+      --replace "awk" "${gawk}/bin/awk" \
+      --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf"
 
     substituteInPlace "config.c" \
       --replace "/etc/vpnc/vpnc-script" "$out/etc/vpnc/vpnc-script"
 
     substituteInPlace "pcf2vpnc" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"
+
+    # use random local port by default to reduce clashes with
+    # other IPSec services like, e.g., strongSwan
+    echo "Local Port 0" >> vpnc.conf
   '';
 
   postInstall = ''
