@@ -44,6 +44,7 @@ let
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
   clutter_gtk = pkgs.clutter_gtk_1_6.override { inherit clutter gtk3; };
+  clutter-gst_2 = pkgs.clutter-gst;
   clutter-gst = pkgs.clutter-gst_3_0.override { inherit clutter; };
   cogl = pkgs.cogl_1_20;
   gtk = gtk3;
@@ -245,6 +246,8 @@ let
   bijiben = callPackage ./apps/bijiben {
     webkitgtk = webkitgtk24x;
   };
+
+  cheese = callPackage ./apps/cheese { };
 
   evolution = callPackage ./apps/evolution {
     webkitgtk = webkitgtk24x;
