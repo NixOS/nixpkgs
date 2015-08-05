@@ -330,6 +330,8 @@ let
 
   pomodoro = callPackage ./misc/pomodoro { };
 
+  gnome-video-effects = callPackage ./misc/gnome-video-effects { };
+
     };
   in self; # pkgsFun
 
