@@ -74,7 +74,6 @@ releaseTools.sourceTarball rec {
     mkdir -p $out/tarballs
     mkdir ../$releaseName
     cp -prd . ../$releaseName
-    echo nixpkgs > ../$releaseName/channel-name
     (cd .. && tar cfa $out/tarballs/$releaseName.tar.xz $releaseName) || false
   '';
 
