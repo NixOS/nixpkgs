@@ -22,6 +22,12 @@ if disabled then throw "${name} not supported for go ${go.meta.branch}" else
 
 let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';
+
+  removeReferences = [ go ];
+
+  removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
+    | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
+  '');
 in
 
 go.stdenv.mkDerivation (
@@ -146,9 +152,16 @@ go.stdenv.mkDerivation (
 
     dir="$NIX_BUILD_TOP/go/bin"
     [ -e "$dir" ] && cp -r $dir $out
+    while read file; do
+      cat $file ${removeExpr removeReferences} > $file.tmp
+      mv $file.tmp $file
+      chmod +x $file
+    done < <(find $out/bin -type f 2>/dev/null)
 
     runHook postInstall
   '';
+
+  disallowedReferences = [ go ] ++ lib.optional (!dontRenameImports) govers;
 
   passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
