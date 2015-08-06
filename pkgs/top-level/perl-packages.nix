@@ -4612,6 +4612,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileUtil = buildPerlPackage rec {
+    name = "File-Util-4.132140";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";
+      sha256 = "4233c493468da8b34f2df19b191aaa400f328d877c8c023605e43385976a99d1";
+    };
+    buildInputs = [ TestFatal TestNoWarnings ];
+    meta = {
+      homepage = https://github.com/tommybutler/file-util/wiki;
+      description = "Easy, versatile, portable file handling";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   FileWhich = buildPerlPackage rec {
     name = "File-Which-1.09";
     src = fetchurl {
