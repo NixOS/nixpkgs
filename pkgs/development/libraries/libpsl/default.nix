@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, icu, libxslt
-, pkgconfig }:
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, docbook_xsl, gtk_doc
+, icu, libxslt, pkgconfig }:
 
 let
 
@@ -26,18 +26,18 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [ icu libxslt ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig ];
 
   preAutoreconf = ''
-    echo "EXTRA_DIST =" > gtk-doc.make
-    echo "CLEANFILES =" >> gtk-doc.make
+    mkdir m4
+    gtkdocize
   '';
 
   preConfigure = ''
     # The libpsl check phase requires the list's test scripts (tests/) as well
     tar --directory=list --strip-components=1 -xf "${listArchive}"
   '';
-  configureFlags = "--disable-static --enable-man";
+  configureFlags = "--disable-static --enable-gtk-doc --enable-man";
 
   enableParallelBuilding = true;
 
