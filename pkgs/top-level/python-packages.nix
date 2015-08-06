@@ -7278,6 +7278,28 @@ let
     };
   };
 
+  llvmlite = buildPythonPackage rec {
+    name = "llvmlite-${version}";
+    version = "0.6.0";
+    
+    src = pkgs.fetchurl { 
+      url = "https://github.com/numba/llvmlite/archive/v${version}.tar.gz";
+      md5 = "b3a6b60d600f18e9f5948af5fb4a354b";
+    };
+    
+    propagatedBuildInputs = with self; [ pkgs.llvm ];
+    
+    # set directory containing llvm-config binary
+    makeFlags = "LLVM_CONFIG=$(dirname ($readlink -f $(which llvm-config)))";
+    
+    meta = {
+      description = "A lightweight LLVM python binding for writing JIT compilers";
+      homepage = "http://llvmlite.pydata.org/";
+      license = licenses.bsd2;
+    };
+  };
+  
+  
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
 
