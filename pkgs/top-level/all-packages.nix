@@ -7348,6 +7348,8 @@ let
 
   libtoxcore-dev = callPackage ../development/libraries/libtoxcore/new-api { };
 
+  libtap = callPackage ../development/libraries/libtap { };
+
   libtsm = callPackage ../development/libraries/libtsm {
     automake = automake114x;
   };
@@ -13612,6 +13614,8 @@ let
   fairymax = callPackage ../games/fairymax {};
 
   flightgear = callPackage ../games/flightgear { };
+
+  freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv { };
 
