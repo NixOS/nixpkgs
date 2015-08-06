@@ -933,4 +933,7 @@ self: super: {
   # https://github.com/ekmett/wl-pprint-terminfo/issues/7
   wl-pprint-terminfo = addExtraLibrary super.wl-pprint-terminfo pkgs.ncurses;
 
+  # https://github.com/bos/pcap/issues/5
+  pcap = addExtraLibrary super.pcap pkgs.libpcap;
+
 }
