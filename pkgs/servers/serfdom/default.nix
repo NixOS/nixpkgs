@@ -3,7 +3,7 @@
 with goPackages;
 
 buildGoPackage rec {
-  version = "0.6.3";
+  version = "0.6.4";
   name = "serfdom-${version}";
   goPackagePath = "github.com/hashicorp/serf";
 
@@ -11,10 +11,10 @@ buildGoPackage rec {
     owner = "hashicorp";
     repo = "serf";
     rev = "v${version}";
-    sha256 = "0ck77ji28bvm4ahzxyyi4sm17c3fxc16k0k5mihl1nlkgdd73m8y";
+    sha256 = "1fhz8wrvsmgaky22n255w9hkyfph2n45c47ivdyzrrxisg5j2438";
   };
 
-  buildInputs = [ cli mapstructure memberlist logutils go-syslog mdns columnize circbuf ];
+  buildInputs = [ cli mapstructure memberlist_v2 logutils go-syslog mdns columnize circbuf ugorji.go ];
 
   dontInstallSrc = true;
 

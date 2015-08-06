@@ -1601,6 +1601,21 @@ let
     propagatedBuildInputs = [ ugorji.go armon.go-metrics ];
   };
 
+  memberlist_v2 = buildGoPackage rec {
+    rev = "165267096ca647f00cc0b59a8f1ede9a96cbfbb1";
+    name = "memberlist-${stdenv.lib.strings.substring 0 7 rev}";
+    goPackagePath = "github.com/hashicorp/memberlist";
+
+    src = fetchFromGitHub {
+      inherit rev;
+      owner = "hashicorp";
+      repo = "memberlist";
+      sha256 = "09lh79xqy7q0gy23x22lpfwihb5acr750vxl2fx0i4b88kq1vrzh";
+    };
+
+    propagatedBuildInputs = [ ugorji.go armon.go-metrics ];
+  };
+
   mesos-stats = buildGoPackage rec {
     rev = "0c6ea494c19bedc67ebb85ce3d187ec21050e920";
     name = "mesos-stats-${stdenv.lib.strings.substring 0 7 rev}";
