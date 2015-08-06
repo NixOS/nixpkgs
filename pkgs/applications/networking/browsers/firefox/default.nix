@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu
+, cairo, gst_all_1, icu, libpng, jemalloc
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
       xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
-      gstreamer gst_plugins_base icu
+      gst_all_1.gstreamer gst_all_1.gst-plugins-base icu libpng
+      jemalloc
     ]
     ++ lib.optional enableGTK3 gtk3;
 
@@ -48,26 +49,27 @@ stdenv.mkDerivation rec {
       "--with-system-nss"
       "--with-system-libevent"
       "--with-system-libvpx"
-      # "--with-system-png" # needs APNG support
-      # "--with-system-icu" # causes ‘ar: invalid option -- 'L'’ in Firefox 28.0
+      "--with-system-png" # needs APNG support
+      "--with-system-icu"
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
       "--enable-system-cairo"
-      "--enable-gstreamer"
+      "--enable-gstreamer=1.0"
       "--enable-startup-notification"
-      # "--enable-content-sandbox"            # available since 26.0, but not much info available
-      # "--enable-content-sandbox-reporter"   # keeping disabled for now
+      "--enable-content-sandbox"            # available since 26.0, but not much info available
+      "--disable-content-sandbox-reporter"  # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
       "--disable-pulseaudio"
+      "--enable-jemalloc"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
-    ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
+    ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
                              "--enable-strip" ])
