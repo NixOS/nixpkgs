@@ -10546,6 +10546,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestClass = buildPerlPackage rec {
+    name = "Test-Class-0.50";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "099154ed8caf3ff97c71237fab952264ac1c03d9270737a56071cabe65991350";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ MROCompat ModuleRuntime TryTiny ];
+    meta = {
+      description = "Easily create test classes in an xUnit/JUnit style";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   TestCleanNamespaces = buildPerlPackage {
     name = "Test-CleanNamespaces-0.16";
     src = fetchurl {
