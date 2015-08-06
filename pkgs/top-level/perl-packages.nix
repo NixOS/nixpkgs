@@ -7140,6 +7140,21 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Moo TestFatal ];
   };
 
+  MooXTypesMooseLikeNumeric = buildPerlPackage rec {
+    name = "MooX-Types-MooseLike-Numeric-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATEU/${name}.tar.gz";
+      sha256 = "6186f75ab2747723fd979249ec6ee0c4550f5b47aa50c0d222cc7d3590182bb6";
+    };
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ MooXTypesMooseLike ];
+    meta = {
+      description = "Moo types for numbers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   MooseAutobox = buildPerlPackage {
     name = "Moose-Autobox-0.15";
     src = fetchurl {
