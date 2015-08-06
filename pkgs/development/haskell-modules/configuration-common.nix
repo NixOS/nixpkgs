@@ -303,6 +303,7 @@ self: super: {
   dbmigrations = dontCheck super.dbmigrations;
   euler = dontCheck super.euler;                        # https://github.com/decomputed/euler/issues/1
   filestore = dontCheck super.filestore;
+  getopt-generics = dontCheck super.getopt-generics;
   graceful = dontCheck super.graceful;
   hakyll = dontCheck super.hakyll;
   Hclip = dontCheck super.Hclip;
