@@ -1871,6 +1871,8 @@ let
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
 
+  hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
+
   hwinfo = callPackage ../tools/system/hwinfo { };
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
