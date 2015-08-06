@@ -14,6 +14,9 @@ self: super: {
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
 
+  # Apply NixOS-specific patches.
+  ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
+
   # Break infinite recursions.
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
