@@ -561,7 +561,7 @@ self: super: {
   duplo = dontCheck super.duplo;
 
   # Nix-specific workaround
-  xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
+  xmonad = appendPatch super.xmonad ./patches/xmonad-nix.patch;
 
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
@@ -633,7 +633,7 @@ self: super: {
 
   # wxc needs help deciding which version of GTK to use.
   wxc = overrideCabal (super.wxc.override { wxGTK = pkgs.wxGTK29; }) (drv: {
-    patches = [ ./wxc-no-ldconfig.patch ];
+    patches = [ ./patches/wxc-no-ldconfig.patch ];
     doHaddock = false;
     postInstall = "cp -v dist/build/libwxc.so.${drv.version} $out/lib/libwxc.so";
   });
@@ -783,7 +783,7 @@ self: super: {
   leksah = dontCheck super.leksah;
 
   # Patch to consider NIX_GHC just like xmonad does
-  dyre = appendPatch super.dyre ./dyre-nix.patch;
+  dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;

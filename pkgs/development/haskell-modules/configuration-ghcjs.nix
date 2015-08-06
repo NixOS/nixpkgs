@@ -87,7 +87,7 @@ self: super: {
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {
-    patches = [ ./ghc-paths-nix-ghcjs.patch ];
+    patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
   });
 
   reflex-dom = overrideCabal super.reflex-dom (drv: {

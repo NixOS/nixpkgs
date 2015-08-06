@@ -3,8 +3,6 @@
 , overrides ? (self: super: {})
 }:
 
-with ./lib.nix;
-
 let
 
   fix = f: let x = f x // { __unfix__ = f; }; in x;
