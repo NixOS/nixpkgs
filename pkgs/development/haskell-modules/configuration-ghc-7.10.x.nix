@@ -49,9 +49,9 @@ self: super: {
       # "idris" binary cannot find Idris library otherwise while building.
       # After installing it's completely fine though.
       # Seems like Nix-specific issue so not reported.
-      preBuild = ''
-        export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH
-      '';
+      preBuild = "export LD_LIBRARY_PATH=$PWD/dist/build:$LD_LIBRARY_PATH";
+      # add missing libgmp build input
+      librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
     });
     in idris'.overrideScope (self: super: {
       zlib = self.zlib_0_5_4_2;
