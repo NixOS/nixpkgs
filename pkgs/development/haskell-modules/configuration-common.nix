@@ -265,9 +265,6 @@ self: super: {
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
-  # https://github.com/jgm/zip-archive/issues/21
-  zip-archive = addBuildTool super.zip-archive pkgs.zip;
-
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
 
