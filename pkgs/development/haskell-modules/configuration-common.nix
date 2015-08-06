@@ -271,6 +271,9 @@ self: super: {
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
+  # While waiting for https://github.com/jwiegley/gitlib/pull/53 to be merged
+  hlibgit2 = addBuildTool super.hlibgit2 pkgs.git;
+
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
 
