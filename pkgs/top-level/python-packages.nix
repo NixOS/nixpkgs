@@ -16980,6 +16980,7 @@ let
   
   suds = buildPythonPackage rec {
     name = "suds-0.4";
+    disabled = isPy3k;
     
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
