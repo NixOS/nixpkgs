@@ -923,4 +923,8 @@ self: super: {
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
 
+  # https://github.com/edwinb/EpiVM/issues/13
+  # https://github.com/edwinb/EpiVM/issues/14
+  epic = addExtraLibraries (addBuildTool super.epic self.happy) [pkgs.boehmgc pkgs.gmp];
+
 }
