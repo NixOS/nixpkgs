@@ -1,6 +1,11 @@
 # FIXME: upgrading qt5Full (Qt 5.3) to qt5.{base,multimedia} (Qt 5.4) breaks
 # the default Qt audio capture source!
-{ stdenv, fetchFromGitHub, alsaLib, fftw, freeglut, libjack2, qt5Full }:
+{ stdenv, fetchFromGitHub, fftw, freeglut, qt5Full
+, alsaSupport ? false, alsaLib ? null
+, jackSupport ? false, libjack2 ? null }:
+
+assert alsaSupport -> alsaLib != null;
+assert jackSupport -> libjack2 != null;
 
 let version = "1.0.5"; in
 stdenv.mkDerivation {
@@ -13,7 +18,9 @@ stdenv.mkDerivation {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ alsaLib fftw freeglut libjack2 qt5Full ];
+  buildInputs = [ fftw freeglut qt5Full ]
+    ++ stdenv.lib.optional alsaSupport [ alsaLib ]
+    ++ stdenv.lib.optional jackSupport [ libjack2 ];
 
   postPatch = ''
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
@@ -23,7 +30,10 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
-    qmake CONFIG+="acs_alsa acs_jack" fmit.pro
+    qmake \
+      CONFIG+=${stdenv.lib.optionalString alsaSupport "acs_alsa"} \
+      CONFIG+=${stdenv.lib.optionalString jackSupport "acs_jack"} \
+      fmit.pro
   '';
 
   enableParallelBuilding = true;
