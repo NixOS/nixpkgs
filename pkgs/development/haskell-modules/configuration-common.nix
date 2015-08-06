@@ -166,7 +166,7 @@ self: super: {
   # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
+    postPatch = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
   })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
@@ -206,7 +206,7 @@ self: super: {
   x509-system = if pkgs.stdenv.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
-        patchPhase = (drv.patchPhase or "") + ''
+        postPatch = (drv.postPatch or "") + ''
           substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
         '';
       })
@@ -216,7 +216,7 @@ self: super: {
     then super.double-conversion
     else overrideCabal super.double-conversion (drv:
       {
-        patchPhase = ''
+        postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++
         '';
       });
@@ -721,7 +721,7 @@ self: super: {
 
   # Already fixed in upstream darcs repo.
   xmonad-contrib = overrideCabal super.xmonad-contrib (drv: {
-    patchPhase = ''
+    postPatch = ''
       sed -i -e '24iimport Control.Applicative' XMonad/Util/Invisible.hs
       sed -i -e '22iimport Control.Applicative' XMonad/Hooks/DebugEvents.hs
     '';
@@ -732,7 +732,7 @@ self: super: {
 
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
-    patchPhase = ''
+    postPatch = ''
       sed -i -e 's,glib/poppler.h,poppler.h,' poppler.cabal
       sed -i -e 's,glib/poppler.h,poppler.h,' Graphics/UI/Gtk/Poppler/Structs.hsc
     '';
