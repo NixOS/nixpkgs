@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu
+, cairo, gstreamer, gst_plugins_base, icu, libpulseaudio
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
       gstreamer gst_plugins_base icu
+      libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3;
 
@@ -64,7 +65,6 @@ stdenv.mkDerivation rec {
       "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-installer"
       "--disable-updater"
-      "--disable-pulseaudio"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling"]
