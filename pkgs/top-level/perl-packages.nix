@@ -2754,6 +2754,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DateTimeFormatMySQL = buildPerlPackage rec {
+    name = "DateTime-Format-MySQL-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XM/XMIKEW/${name}.tar.gz";
+      sha256 = "26d0348a930aa34d3b33ec1b2a9d9629f2ee78234e224ca74d594703922ca2e9";
+    };
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+    meta = {
+      description = "Parse and format MySQL dates and times";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   DateTimeFormatPg = buildPerlPackage {
     name = "DateTime-Format-Pg-0.16008";
     src = fetchurl {
