@@ -588,31 +588,6 @@ self: super: {
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
 
-  # Disable tests which couldn't be built.
-  distributed-process-async = dontCheck super.distributed-process-async;
-
-  # Disable tests which couldn't be built.
-  distributed-process-client-server = dontCheck super.distributed-process-client-server;
-
-  # Disable tests which couldn't be built.
-  distributed-process-extras = dontCheck super.distributed-process-extras;
-
-  # Make distributed-process-platform compile until next version
-  distributed-process-platform = overrideCabal super.distributed-process-platform (drv: {
-    patchPhase = "mv Setup.hs Setup.lhs";
-    doCheck = false;
-    doHaddock = false;
-  });
-
-  # Disable tests due to a failure (Sequential Shutdown Ordering test.)
-  distributed-process-supervisor = dontCheck super.distributed-process-supervisor;
-
-  # Disable network test and errorneous haddock.
-  distributed-process-tests = overrideCabal super.distributed-process-tests (drv: {
-    doCheck = false;
-    doHaddock = false;
-  });
-
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
