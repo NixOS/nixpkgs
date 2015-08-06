@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, intltool, itstool, libxml2
-, makeWrapper, pkgconfig, saneBackends, systemd, vala }:
+, makeWrapper, pkgconfig, saneBackends, systemd, vala, lcms }:
 
 let version = "3.17.4"; in
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cairo colord glib gtk3 libxml2
-    saneBackends systemd vala ];
+    saneBackends systemd vala lcms ];
   nativeBuildInputs = [ intltool itstool makeWrapper pkgconfig ];
 
   enableParallelBuilding = true;
