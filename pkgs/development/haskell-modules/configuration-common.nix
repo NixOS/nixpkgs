@@ -920,4 +920,7 @@ self: super: {
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
 
+  # https://github.com/kazu-yamamoto/logger/issues/42
+  logger = dontCheck super.logger;
+
 }
