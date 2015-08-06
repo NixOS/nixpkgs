@@ -6235,16 +6235,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogAny = buildPerlPackage {
+  LogAny = buildPerlPackage rec {
     name = "Log-Any-1.032";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Log-Any-1.032.tar.gz;
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
       sha256 = "808558fa42aa96365ed0af773973a5618b4ad50511d81fc7548f67133efdb956";
     };
     meta = {
       homepage = https://github.com/dagolden/Log-Any;
       description = "Bringing loggers and listeners together";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
