@@ -930,4 +930,7 @@ self: super: {
   # Upstream has no issue tracker.
   dpkg = markBroken super.dpkg;
 
+  # https://github.com/ekmett/wl-pprint-terminfo/issues/7
+  wl-pprint-terminfo = addExtraLibrary super.wl-pprint-terminfo pkgs.ncurses;
+
 }
