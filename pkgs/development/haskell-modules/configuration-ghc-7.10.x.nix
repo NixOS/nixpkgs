@@ -267,4 +267,7 @@ self: super: {
   # GHC 7.10.1 is affected by https://github.com/srijs/hwsl2/issues/1.
   hwsl2 = dontCheck super.hwsl2;
 
+  # https://github.com/haskell/haddock/issues/427
+  haddock = dontCheck super.haddock;
+
 }
