@@ -13409,11 +13409,12 @@ let
       pkgName = "numpy";
     };
   in buildPythonPackage rec {
-    name = "scipy-0.15.1";
+    name = "scipy-${version}";
+    version = "0.16.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/scipy/${name}.tar.gz";
-      sha256 = "16i5iksaas3m0hgbxrxpgsyri4a9ncbwbiazlhx5d6lynz1wn4m2";
+      sha256 = "92592f40097098f3fdbe7f5855d535b29bb16719c2bb59c728bce5e7a28790e0";
     };
 
     buildInputs = [ pkgs.gfortran self.nose ];
