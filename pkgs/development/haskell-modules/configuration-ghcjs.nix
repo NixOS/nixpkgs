@@ -56,7 +56,7 @@ self: super: {
   vector = null;
 
   pqueue = overrideCabal super.pqueue (drv: {
-    patchPhase = ''
+    postPatch = ''
       sed -i -e '12s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
       sed -i -e '64s|null|Data.PQueue.Internals.null|' Data/PQueue/Internals.hs
       sed -i -e '32s|null|Data.PQueue.Internals.null|' Data/PQueue/Min.hs
