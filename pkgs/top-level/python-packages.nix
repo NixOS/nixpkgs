@@ -8449,14 +8449,16 @@ let
   };
 
   numexpr = buildPythonPackage rec {
-    version = "2.4";
+    version = "2.4.3";
     name = "numexpr-${version}";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/pydata/numexpr.git;
-      rev = "606cc9a110711e947d35ac2770749c00dab184c8";
-      sha256 = "1gxgkg7ncgjhnifn444iha5nrjhyr8sr6w5yp204186a1ysz858g";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numexpr/${name}.tar.gz";
+      sha256 = "3ae7191c89df40db6b0a8637a4dace7c5956bc910793a53225f985f3b443c722";
     };
+    
+    # Tests fail with python 3. https://github.com/pydata/numexpr/issues/177
+    doCheck = !isPy3k;
 
     propagatedBuildInputs = with self; [ numpy ];
 
