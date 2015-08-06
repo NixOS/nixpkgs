@@ -16021,12 +16021,12 @@ let
     };
   };
 
-  pythonefl_1_14 = buildPythonPackage rec {
+  pythonefl_1_15 = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.14.0";
+    version = "1.15.0";
     src = pkgs.fetchurl {
       url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
-      sha256 = "1pns5mdyc069z6j1pywjasdd6v9xka5kjdl2yxpd6ds948dia0q0";
+      sha256 = "1k3vb7pb70l2v1s2mzg91wvmncq93vb04vn60pzdlrnbcns0grhi";
     };
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
