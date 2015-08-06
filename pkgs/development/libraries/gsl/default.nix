@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "bug-39055.patch";
       url = "http://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d0377";
-      sha256 = "1bmrmihi28cly9g9pq54kkix2jy59y7cd7h5fw4v1c7h5rc2qvs8";
+      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
     })
   ];
 
