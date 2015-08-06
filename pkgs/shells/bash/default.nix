@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, bison }:
+{ stdenv, fetchurl, readline ? null, interactive ? false, texinfo ? null, binutils ? null, bison }:
 
 assert interactive -> readline != null;
+assert stdenv.isDarwin -> binutils != null;
 
 let
   version = "4.3";
@@ -59,7 +60,8 @@ stdenv.mkDerivation rec {
   # Note: Bison is needed because the patches above modify parse.y.
   nativeBuildInputs = [bison]
     ++ stdenv.lib.optional (texinfo != null) texinfo
-    ++ stdenv.lib.optional interactive readline;
+    ++ stdenv.lib.optional interactive readline
+    ++ stdenv.lib.optional stdenv.isDarwin binutils;
 
   # Bash randomly fails to build because of a recursive invocation to
   # build `version.h'.
