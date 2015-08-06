@@ -5830,15 +5830,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuild = buildPerlPackage {
-    name = "Module-Build-0.4005";
+    name = "Module-Build-0.4214";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4005.tar.gz;
-      sha256 = "eb2522507251550f459c11223ea6d86b34f1dee9b3e3928d0d6a0497505cb7ef";
+      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4214.tar.gz;
+      sha256 = "c579488918cf4db84954a550c475272b3c25f5100c739339e91a65d7c055dc3f";
     };
-    buildInputs = [ CPANMeta ExtUtilsCBuilder ];
+    buildInputs = [ CPANMeta ExtUtilsCBuilder inclatest ];
     meta = {
       description = "Build and install Perl modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
