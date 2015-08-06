@@ -21,5 +21,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];
+
+    # See https://bitbucket.org/purelang/pure-lang/issues/38
+    broken = true;
   };
 }
