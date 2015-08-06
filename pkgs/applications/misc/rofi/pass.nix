@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "rofi-pass-${version}";
-  version = "2015-06-08";
+  version = "2015-08-06";
 
   src = fetchgit {
     url = "https://github.com/carnager/rofi-pass";
-    rev = "7e376b5ec64974c4e8478acf3ada8d111896f391";
-    sha256 = "1ywsxdgy5m63a2f5vd7np2f1qffz7y95z7s1gq5d87s8xd8myadl";
+    rev = "bb1f0d08cd438cc8da24e0341f902706a88e7aa5";
+    sha256 = "1qx690vazwzzcg4yaghj9zd4c4md7bi6b90lgv4gwmdw74v6ghah";
   };
 
   buildInputs = [ rofi wmctrl xprop xdotool ];
