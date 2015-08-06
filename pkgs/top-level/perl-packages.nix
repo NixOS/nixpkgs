@@ -4440,6 +4440,26 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CryptRijndael ];
   };
 
+  FileLibMagic = buildPerlPackage rec {
+    name = "File-LibMagic-1.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "61f92c3137a3b86d63e61313b51aa2673991110d655eee792ea11c68bf2c0092";
+    };
+    buildInputs = [ TestFatal pkgs.file ];
+    makeMakerFlags = "--lib=${pkgs.file}/lib";
+    preCheck = ''
+      substituteInPlace t/oo-api.t \
+        --replace "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
+    '';
+    meta = {
+      homepage = http://metacpan.org/release/File::LibMagic;
+      description = "Determine MIME types of data or files using libmagic";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   FileListing = buildPerlPackage rec {
     name = "File-Listing-6.04";
     src = fetchurl {
