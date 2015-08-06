@@ -1,15 +1,17 @@
-{stdenv, fetchurl, which, ocaml}:
+{stdenv, fetchzip, which, ocaml}:
 let
   ocaml_version = (stdenv.lib.getVersion ocaml);
+  version = "4.02+6";
+
 in
 
 assert stdenv.lib.versionAtLeast ocaml_version "4.02";
 
 stdenv.mkDerivation {
-  name = "camlp4-4.02.0+1";
-  src = fetchurl {
-    url = https://github.com/ocaml/camlp4/archive/4.02.0+1.tar.gz;
-    sha256 = "0055f4jiz82rgn581xhq3mr4qgq2qgdxqppmp8i2x1xnsim4h9pn";
+  name = "camlp4-${version}";
+  src = fetchzip {
+    url = "https://github.com/ocaml/camlp4/archive/${version}.tar.gz";
+    sha256 = "06yl4q0qazl7g25b0axd1gdkfd4qpqzs1gr5fkvmkrcbz113h1hj";
   };
 
   buildInputs = [ which ocaml ];
@@ -27,10 +29,6 @@ stdenv.mkDerivation {
   postConfigure = ''
     substituteInPlace camlp4/META.in \
     --replace +camlp4 $out/lib/ocaml/${ocaml_version}/site-lib/camlp4
-    substituteInPlace camlp4/config/Camlp4_config.ml \
-    --replace \
-      "Filename.concat ocaml_standard_library" \
-      "Filename.concat \"$out/lib/ocaml/${ocaml_version}/site-lib\""
   '';
 
 
