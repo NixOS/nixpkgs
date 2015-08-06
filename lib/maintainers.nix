@@ -151,6 +151,7 @@
   madjar = "Georges Dubus <georges.dubus@compiletoi.net>";
   magnetophon = "Bart Brouns <bart@magnetophon.nl>";
   mahe = "Matthias Herrmann <matthias.mh.herrmann@gmail.com>";
+  makefu = "Felix Richter <makefu@syntax-fehler.de>";
   malyn = "Michael Alyn Miller <malyn@strangeGizmo.com>";
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
