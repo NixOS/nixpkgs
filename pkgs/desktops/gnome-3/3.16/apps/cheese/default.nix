@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra_gtk3
 , pkgconfig, gtk3, glib, clutter_gtk, clutter-gst_2, udev, gst_all_1, itstool
-, adwaita-icon-theme, librsvg, gdk_pixbuf, gnome3, gnome_desktop, libxml2, libtool }:
+, adwaita-icon-theme, librsvg, gdk_pixbuf, gnome3, gnome_desktop, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "cheese-${gnome3.version}.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
                   gdk_pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer libxml2
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome_desktop
                   gst_all_1.gst-plugins-bad clutter_gtk clutter-gst_2
-                  libtool libcanberra_gtk3 ];
+                  libcanberra_gtk3 ];
 
   enableParallelBuilding = true;
 
