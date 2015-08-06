@@ -15201,16 +15201,15 @@ let
     doCheck = false;
   };
   tornado = buildPythonPackage rec {
-    name = "tornado-4.1";
+    name = "tornado-${version}";
+    version = "4.2.1";
 
     propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "0a12f00h277zbifibnj46wf14801f573irvf6hwkgja5vspd7awr";
+      sha256 = "a16fcdc4f76b184cb82f4f9eaeeacef6113b524b26a2cb331222e4a7fa6f2969";
     };
-
-    doCheck = false;
   };
 
   tokenlib = buildPythonPackage rec {
