@@ -917,4 +917,7 @@ self: super: {
   SVGFonts = dontDistribute super.SVGFonts;
   yesod-media-simple = dontDistribute super.yesod-media-simple;
 
+  # https://github.com/alphaHeavy/lzma-conduit/issues/5
+  lzma-conduit = dontCheck super.lzma-conduit;
+
 }
