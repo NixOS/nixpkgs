@@ -4558,6 +4558,19 @@ let
   };
 
 
+  ssdeep = buildPythonPackage rec {
+    name = "ssdeep-3.1.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/ssdeep/${name}.tar.gz";
+      sha256 = "1p9dpykmnfb73cszdiic5wbz5bmbbmkiih08pb4dah5mwq4n7im6";
+    };
+
+    buildInputs = with pkgs; [ ssdeep ];
+    propagatedBuildInputs = with self; [ cffi six ];
+  };
+
+
   statsd = buildPythonPackage rec {
     name = "statsd-2.0.2";
 
@@ -15243,6 +15256,22 @@ let
     };
 
     propagatedBuildInputs = with self; [ pkgs.libarchive ];
+  };
+
+  libarchive-c = buildPythonPackage rec {
+    name = "libarchive-c-2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/libarchive-c/${name}.tar.gz";
+      sha256 = "089lrz6xyrfnk55v35vis6jyqyyl77w093057djyspnd2744wi2n";
+    };
+
+    patchPhase = ''
+      substituteInPlace libarchive/ffi.py --replace \
+        "find_library('archive')" "'${pkgs.libarchive}/lib/libarchive.so'"
+    '';
+
+    buildInputs = [ pkgs.libarchive ];
   };
 
   pybrowserid = buildPythonPackage rec {
