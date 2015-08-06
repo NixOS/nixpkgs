@@ -927,4 +927,7 @@ self: super: {
   # https://github.com/edwinb/EpiVM/issues/14
   epic = addExtraLibraries (addBuildTool super.epic self.happy) [pkgs.boehmgc pkgs.gmp];
 
+  # Upstream has no issue tracker.
+  dpkg = markBroken super.dpkg;
+
 }
