@@ -16,10 +16,14 @@ with lib;
 }@args:
 
 let
+
   defaultMeta = {
     broken = false;
     platforms = emacs.meta.platforms;
+  } // optionalAttrs ((args.src.meta.homepage or "") != "") {
+    homepage = args.src.meta.homepage;
   };
+
 in
 
 stdenv.mkDerivation ({

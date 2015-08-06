@@ -1,17 +1,35 @@
 # package.el-based emacs packages
+
+## FOR USERS
 #
-## add this at the start your init.el:
-# (require 'package)
+# Recommended way: simply use `emacsWithPackages` from
+# `all-packages.nix` with the packages you want.
 #
-# ;; optional. makes unpure packages archives unavailable
-# (setq package-archives nil)
+# Possible way: use `emacs` from `all-packages.nix`, install
+# everything to a system or user profile and then add this at the
+# start your `init.el`:
+/*
+  (require 'package)
+
+  ;; optional. makes unpure packages archives unavailable
+  (setq package-archives nil)
+
+  ;; optional. use this if you install emacs packages to the system profile
+  (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
+
+  ;; optional. use this if you install emacs packages to user profiles (with nix-env)
+  (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
+
+  (package-initialize)
+*/
+
+## FOR CONTRIBUTORS
 #
-# (add-to-list 'package-directory-list "/run/current-system/sw/share/emacs/site-lisp/elpa")
-#
-# ;; optional. use this if you install emacs packages to user profiles (with nix-env)
-# (add-to-list 'package-directory-list "~/.nix-profile/share/emacs/site-lisp/elpa")
-#
-# (package-initialize)
+# When adding a new package here please note that
+# * lib.licenses are `with`ed on top of the file here
+# * both trivialBuild and melpaBuild will automatically derive a
+#   `meta` with `platforms` and `homepage` set to something you are
+#   unlikely to want to override for most packages
 
 { overrides
 
@@ -44,7 +62,10 @@ let self = _self // overrides;
       sha256 = "0dlrhc1dmzgrjvcnlqvm6clyv0r6zray6qqliqngy14880grghbm";
     };
     packageRequires = [ auto-complete haskell-mode ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Haskell code completion for auto-complete Emacs framework";
+      license = gpl3Plus;
+    };
   };
 
   ace-jump-mode = melpaBuild rec {
@@ -72,7 +93,10 @@ let self = _self // overrides;
       sha256 = "19y5w9m2flp4as54q8yfngrkri3kd7fdha9pf2xjgx6ryflqx61k";
     };
     packageRequires = [ dash s ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Search using ag from inside Emacs";
+      license = gpl3Plus;
+    };
   };
 
   agda2-mode = with external; trivialBuild {
@@ -108,7 +132,10 @@ let self = _self // overrides;
       sha256 = "1vpc3q40m6dcrslki4bg725j4kv6c6xfxwjjl1ilg7la49fwwf26";
     };
     packageRequires = [ gntp log4e ];
-    meta = { license = gpl2Plus; };
+    meta = {
+      description = "A Growl-like alerts notifier for Emacs";
+      license = gpl2Plus;
+    };
   };
 
   anzu = melpaBuild rec {
@@ -127,7 +154,6 @@ let self = _self // overrides;
         mode which displays current match and total matches information
         in the mode-line in various search mode.
       '';
-      homepage = https://github.com/syohex/emacs-anzu/;
       license = gpl3Plus;
     };
   };
@@ -164,7 +190,10 @@ let self = _self // overrides;
       rev    = "v${version}";
       sha256 = "1j6mbvvbnm2m1gpsy9ipxiv76b684nn57yssbqdyiwyy499cma6q";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Asynchronous processing in Emacs";
+      license = gpl3Plus;
+    };
   };
 
   auctex = melpaBuild rec {
@@ -177,7 +206,11 @@ let self = _self // overrides;
     buildPhase = ''
       cp $src ${pname}-${version}.tar
     '';
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+      homepage = https://www.gnu.org/software/auctex/;
+      license = gpl3Plus;
+    };
   };
 
   auto-complete = melpaBuild rec {
@@ -194,7 +227,6 @@ let self = _self // overrides;
       description = "Auto-complete extension for Emacs";
       homepage = http://cx4a.org/software/auto-complete/;
       license = gpl3Plus;
-      platforms = lib.platforms.all;
     };
   };
 
@@ -221,7 +253,10 @@ let self = _self // overrides;
       sha256 = "187wnqqm5g43cg8b6a9rbd9ncqad5fhjb96wjszbinjh1mjxyh7i";
     };
     files = [ "bind-key.el" ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "A simple way to manage personal keybindings";
+      license = gpl3Plus;
+    };
   };
 
   browse-kill-ring = melpaBuild rec {
@@ -235,7 +270,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Interactively insert items from Emacs kill-ring";
-      homepage = https://github.com/browse-kill-ring/browse-kill-ring/;
       license = gpl2Plus;
     };
   };
@@ -251,7 +285,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Mouseable text in Emacs";
-      homepage = "https://github.com/rolandwalker/button-lock";
       license  = bsd2;
     };
   };
@@ -267,7 +300,10 @@ let self = _self // overrides;
     };
     fileSpecs = [ "emacs/*.el" ];
     configurePhase = "true";
-    meta = { license = gpl2Plus; };
+    meta = {
+      description = "OCaml code editing commands for Emacs";
+      license = gpl2Plus;
+    };
   };
 
   change-inner = melpaBuild rec {
@@ -280,7 +316,10 @@ let self = _self // overrides;
       sha256 = "1fv8630bqbmfr56zai08f1q4dywksmghhm70084bz4vbs6rzdsbq";
     };
     packageRequires = [ expand-region ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Change contents based on semantic units in Emacs";
+      license = gpl3Plus;
+    };
   };
 
   circe = melpaBuild rec {
@@ -294,7 +333,10 @@ let self = _self // overrides;
     };
     packageRequires = [ lcs lui ];
     fileSpecs = [ "lisp/circe*.el" ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "IRC client for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   company = melpaBuild rec {
@@ -306,7 +348,10 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "08rrjfp2amgya1hswjz3vd5ja6lg2nfmm7454p0h1naz00hlmmw0";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Modular text completion framework for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   company-ghc = melpaBuild rec {
@@ -334,7 +379,10 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "02gfrcda7gj3j5yx71dz40xylrafl4pcaj7bgfajqi9by0w2nrnx";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "A modern list library for Emacs";
+      license = gpl3Plus;
+    };
   };
 
   deferred = melpaBuild rec {
@@ -355,7 +403,6 @@ let self = _self // overrides;
         The API and implementations were translated from JSDeferred (by cho45)
          and Mochikit.Async (by Bob Ippolito) in JavaScript.
       '';
-      homepage =  https://github.com/kiwanami/emacs-deferred;
       license = gpl3Plus;
     };
   };
@@ -369,7 +416,11 @@ let self = _self // overrides;
       rev    = version;
       sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
     };
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
+      homepage = http://www.eskimo.com/~seldon/;
+      license = gpl3Plus;
+    };
   };
 
   epl = melpaBuild rec {
@@ -770,7 +821,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "Does what you expected ido-everywhere to do in Emacs";
-      homepage = https://github.com/DarwinAwardWinner/ido-ubiquitous/;
       license = gpl3Plus;
     };
   };
@@ -949,7 +999,9 @@ let self = _self // overrides;
     };
   };
 
-  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {};
+  nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {
+    inherit lib;
+  };
 
   org-plus-contrib = melpaBuild rec {
     pname   = "org-plus-contrib";
@@ -981,7 +1033,7 @@ let self = _self // overrides;
         Org-trello is an emacs minor mode that extends org-mode with
         Trello abilities.
       '';
-      homepage = https://org-trello.github.io;
+      homepage = https://org-trello.github.io/;
       license = gpl3Plus;
     };
   };
@@ -1079,7 +1131,9 @@ let self = _self // overrides;
       sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
     };
 
-    meta = with stdenv.lib; {
+    files = [ "request.el" ];
+
+    meta = {
       description = "Easy HTTP request for Emacs Lisp";
       longDescription = ''
         Request.el is a HTTP request library with multiple backends. It supports
@@ -1088,36 +1142,18 @@ let self = _self // overrides;
         Library author can use request.el to avoid imposing external dependencies
         such as curl to users while giving richer experience for users who have curl.
       '';
-      homepage = https://github.com/tkf/emacs-request;
       license = gpl3Plus;
     };
   };
 
   request-deferred = melpaBuild rec {
     pname = "request-deferred";
-    version = "0.2.0";
-
-    src = fetchFromGitHub {
-      owner = "tkf";
-      repo = "emacs-request";
-      rev = "adf7de452f9914406bfb693541f1d280093c4efd";
-      sha256 = "0dja4g43zfjbxqvz2cgivgq5sfm6fz1563qgrp4yxknl7bdggb92";
-    };
-
+    version = request.version;
+    src = request.src;
     packageRequires = [ request deferred ];
-
-    meta = with stdenv.lib; {
-      description = "Easy HTTP request for Emacs Lisp";
-      longDescription = ''
-        Request.el is a HTTP request library with multiple backends. It supports
-        url.el which is shipped with Emacs and curl command line program. User
-        can use curl when s/he has it, as curl is more reliable than url.el.
-        Library author can use request.el to avoid imposing external dependencies
-        such as curl to users while giving richer experience for users who have curl.
-      '';
-      homepage = https://github.com/tkf/emacs-request;
-      license = gpl3Plus;
-    };
+    files = [ "request-deferred.el" ];
+    meta = request.meta
+        // { description = "${request.meta.description} (deferred)"; };
   };
 
   rich-minority = melpaBuild rec {
@@ -1130,7 +1166,10 @@ let self = _self // overrides;
       sha256 = "0kvhy4mgs9llihwsb1a9n5a85xzjiyiyawxnz0axy2bvwcxnp20k";
     };
     packageRequires = [ dash ];
-    meta = { license = gpl3Plus; };
+    meta = {
+      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line.";
+      license = gpl3Plus;
+    };
   };
 
   s = melpaBuild rec {
@@ -1211,7 +1250,6 @@ let self = _self // overrides;
     };
     meta = {
       description = "M-x enhancement for Emacs build on top of Ido";
-      homepage = https://github.com/nonsequitur/smex/;
       license = emacs.meta.license; # should be "same as Emacs"
     };
   };
@@ -1224,7 +1262,6 @@ let self = _self // overrides;
     fileSpecs = [ "elisp/*.el" ];
 
     meta = {
-      homepage = "https://github.com/chrisdone/structured-haskell-mode";
       description = "Structured editing Emacs mode for Haskell";
       license = bsd3;
       platforms = external.structured-haskell-mode.meta.platforms;
