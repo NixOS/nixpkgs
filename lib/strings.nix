@@ -208,4 +208,8 @@ rec {
   # standard GNU Autoconf scripts.
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
+
+  # Check whether a value is a store path.
+  isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == builtins.storeDir;
+
 }
