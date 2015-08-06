@@ -107,6 +107,15 @@ options = {
   </varlistentry>
 
   <varlistentry>
+    <term><varname>types.package</varname></term>
+    <listitem>
+      <para>A derivation (such as <literal>pkgs.hello</literal>) or a
+      store path (such as
+      <filename>/nix/store/1ifi1cfbfs5iajmvwgrbmrnrw3a147h9-hello-2.10</filename>).</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>types.listOf</varname> <replaceable>t</replaceable></term>
     <listitem>
       <para>A list of elements of type <replaceable>t</replaceable>

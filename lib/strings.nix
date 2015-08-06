@@ -218,4 +218,9 @@ rec {
 
   # Format a number adding leading zeroes up to fixed width.
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
+
+
+  # Check whether a value is a store path.
+  isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == builtins.storeDir;
+
 }
