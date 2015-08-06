@@ -919,4 +919,7 @@ self: super: {
   # https://github.com/skogsbaer/hscurses/issues/24
   hscurses = markBroken super.hscurses;
 
+  # https://github.com/qnikst/imagemagick/issues/34
+  imagemagick = dontCheck super.imagemagick;
+
 }
