@@ -11146,7 +11146,6 @@ let
     gitModes = callPackage ../applications/editors/emacs-modes/git-modes { };
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
-    haskellModeGit = lowPrio (callPackage ../applications/editors/emacs-modes/haskell/git.nix { });
 
     hsc3Mode = callPackage ../applications/editors/emacs-modes/hsc3 { };
 
