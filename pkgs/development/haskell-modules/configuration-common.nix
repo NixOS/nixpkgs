@@ -916,9 +916,6 @@ self: super: {
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
 
-  # https://github.com/bscarlet/llvm-general/issues/143
-  llvm-general-pure = dontCheck super.llvm-general-pure;
-
   # https://github.com/skogsbaer/hscurses/issues/24
   hscurses = markBroken super.hscurses;
 
