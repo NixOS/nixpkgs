@@ -2300,7 +2300,7 @@ let
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
                     self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi;
+    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi_0_8;
   };
 
   cryptography_vectors = buildPythonPackage rec {
@@ -2396,6 +2396,21 @@ let
     };
 
     buildInputs = with self; [ pycparser mock pytest py ] ++ optionals (!isPyPy) [ cffi ];
+
+    meta = {
+      maintainers = with maintainers; [ iElectric ];
+    };
+  };
+
+  cffi_0_8 = buildPythonPackage rec {
+    name = "cffi-0.8.6";
+ 
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
+      sha256 = "0406j3sgndmx88idv5zxkkrwfqxmjl18pj8gf47nsg4ymzixjci5";
+    };
+
+    propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
 
     meta = {
       maintainers = with maintainers; [ iElectric ];
