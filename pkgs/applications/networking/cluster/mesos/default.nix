@@ -19,6 +19,11 @@ in stdenv.mkDerivation rec {
     sha256 = "1v5xpn4wal4vcrvcklchx9slkpa8xlwqkdbnxzy9zkzpq5g3arxr";
   };
 
+  patches = [
+    # https://reviews.apache.org/r/36610/
+    ./rb36610.patch
+  ];
+
   buildInputs = [
     makeWrapper autoconf automake114x libtool curl sasl jdk maven
     python wrapPython boto distutils-cfg setuptools leveldb
