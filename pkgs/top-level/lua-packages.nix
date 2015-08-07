@@ -287,6 +287,7 @@ let
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       hydraPlatforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
+      broken = true;
     };
   };
 
