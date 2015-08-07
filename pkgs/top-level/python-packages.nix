@@ -9351,6 +9351,29 @@ let
     propagatedBuildInputs = with self; [ unittest2 ];
   };
 
+  pysftp = buildPythonPackage rec {
+    name = "pysftp-${version}";
+    version = "0.2.8";
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pysftp/${name}.tar.gz";
+      sha256 = "1d69z8yngciksch1i8rivy1xl8f6g6sb7c3kk5cm3pf8304q6hhm";
+    };
+
+    propagatedBuildInputs = with self; [ paramiko ];
+
+    meta = {
+      homepage = https://bitbucket.org/dundeemt/pysftp;
+      description = "A friendly face on SFTP";
+      license = licenses.mit;
+      longDescription = ''
+        A simple interface to SFTP. The module offers high level abstractions
+        and task based routines to handle your SFTP needs. Checkout the Cook
+        Book, in the docs, to see what pysftp can do for you.
+      '';
+    };
+  };
 
   python3pika = buildPythonPackage {
     name = "python3-pika-0.9.14";
