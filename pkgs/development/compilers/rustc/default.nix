@@ -27,7 +27,7 @@ callPackage ./generic.nix {
   snapshotRev = "857ef6e";
 
   patches = [
-    ./patches/beta.patch
+    ./patches/stable.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
   configureFlags = [ "--release-channel=stable" ];
 }
