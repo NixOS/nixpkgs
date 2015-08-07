@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "rocksdb-${version}";
-  version = "3.11.2";
+  version = "3.12.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     rev = "rocksdb-${version}";
-    sha256 = "0cjwr7n5l2wdzdv4b0p90k0ijg9ka28akpq2aqa8lknsa1kb1cyv";
+    sha256 = "0692jlnakwd5c1h6czd3l7rxhz514whpixyd8y805bnkj2ag61sa";
   };
 
   buildInputs = [ snappy google-gflags zlib bzip2 lz4 numactl malloc ];
