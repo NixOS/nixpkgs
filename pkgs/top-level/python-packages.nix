@@ -9594,15 +9594,21 @@ let
 
 
 
-  praw = pythonPackages.buildPythonPackage rec {
-    name = "praw-2.1.21";
+  praw = buildPythonPackage rec {
+    name = "praw-3.1.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/praw/praw-2.1.21.tar.gz";
-      md5 = "3b0388c9105662f8be8f1a4d3a38216d";
+      url = "https://pypi.python.org/packages/source/p/praw/${name}.zip";
+      sha256 = "1dilb3vr5llqy344i6nh7gl07wcssb5dmqrhjwhfqi1mais7b953";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ update_checker six mock flake8 ];
+    propagatedBuildInputs = with self; [
+      decorator
+      flake8
+      mock
+      six
+      update_checker
+    ];
 
     # can't find the tests module?
     doCheck = false;
@@ -9611,6 +9617,8 @@ let
       description = "Python Reddit API wrapper";
       homepage = http://praw.readthedocs.org/;
       license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ jgeerds ];
     };
   };
 
