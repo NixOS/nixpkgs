@@ -922,4 +922,7 @@ self: super: {
   # https://github.com/qnikst/imagemagick/issues/34
   imagemagick = dontCheck super.imagemagick;
 
+  # https://github.com/liyang/thyme/issues/36
+  thyme = dontCheck super.thyme;
+
 }
