@@ -15,7 +15,7 @@ mkDerivation rec {
     sha256 = "1w5ba7cdanpq4nr8xngk1jsj0p6b17c6ap24ldzggrln216f3f7d";
     deepClone = true;
   };
-  isLibrary = true;
+  isLibrary = false;
   isExecutable = true;
   libraryHaskellDepends = [
     aeson ansi-wl-pprint base bytestring Cabal containers

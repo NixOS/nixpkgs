@@ -766,7 +766,7 @@ self: super: {
   zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
-  cabal2nix = pkgs.cabal2nix;
+  cabal2nix = self.callPackage ../tools/haskell/cabal2nix {};
 
   # https://github.com/urs-of-the-backwoods/HGamer3D/issues/7
   HGamer3D-Bullet-Binding = dontDistribute super.HGamer3D-Bullet-Binding;
