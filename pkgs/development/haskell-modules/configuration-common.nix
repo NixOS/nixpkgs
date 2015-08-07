@@ -878,7 +878,7 @@ self: super: {
   vimus = overrideCabal super.vimus (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; });
 
   # https://github.com/hspec/mockery/issues/6
-  mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
+  mockery = dontCheck (overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; }));
 
   # https://github.com/diagrams/diagrams-lib/issues/258
   # https://github.com/diagrams/diagrams-lib/issues/259
