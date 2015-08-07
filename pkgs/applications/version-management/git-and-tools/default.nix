@@ -105,4 +105,6 @@ rec {
   git-cola = callPackage ./git-cola { };
 
   git-imerge = callPackage ./git-imerge { };
+
+  git-crypt = callPackage ./git-crypt { };
 }
