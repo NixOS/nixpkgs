@@ -1,3 +1,4 @@
+"CheckAttach"
 "CSApprox"
 "Gist"
 "Gundo"
@@ -100,4 +101,5 @@
 "vim-signature"
 "vim-snippets"
 "vim2hs"
+"vimwiki"
 "vundle"
