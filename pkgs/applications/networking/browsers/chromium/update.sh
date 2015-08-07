@@ -11,22 +11,6 @@ source "$(nix-build --no-out-link "$base_path/update.nix" -A updateHelpers)";
 
 ver_sha_table=""; # list of version:sha256
 
-sha_lookup()
-{
-    version="$1";
-
-    for ver_sha in $ver_sha_table;
-    do
-        if [ "x${ver_sha%:*}" = "x$version" ];
-        then
-            echo "${ver_sha##*:}";
-            return 0;
-        fi;
-    done;
-
-    return 1;
-}
-
 sha_insert()
 {
     version="$1";
@@ -72,22 +56,15 @@ get_channel_exprs()
         channel="${chline%%,*}";
         version="${chline##*,}";
 
-        echo -n "Checking if sha256 of version $version is cached..." >&2;
-        if sha256="$(sha_lookup "$version")";
+        sha256="$(get_sha256 "$channel" "$version")";
+        if [ $? -ne 0 ];
         then
-            echo " yes: $sha256" >&2;
-        else
-            echo " no." >&2;
-            sha256="$(get_sha256 "$channel" "$version")";
-            if [ $? -ne 0 ];
-            then
-                echo "Whoops, failed to fetch $version, trying previous" \
-                     "versions:" >&2;
+            echo "Whoops, failed to fetch $version, trying previous" \
+                 "versions:" >&2;
 
-                sha_ver="$(get_prev_sha256 "$channel" "$version")";
-                sha256="${sha_ver%:*}";
-                version="${sha_ver#*:}";
-            fi;
+            sha_ver="$(get_prev_sha256 "$channel" "$version")";
+            sha256="${sha_ver%:*}";
+            version="${sha_ver#*:}";
         fi;
 
         sha_insert "$version" "$sha256";

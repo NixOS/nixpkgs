@@ -1,23 +1,25 @@
 { stdenv, fetchurl, pcsclite, pkgconfig, libusb1, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.19";
+  version = "1.4.20";
   name = "ccid-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/c/ccid/ccid_${version}.orig.tar.bz2";
-    sha256 = "1q9lx5ci8kikwk9mhbjl6m3zk4id209zfna5wgpqjrp5nhmjrjyc";
+    url = "https://alioth.debian.org/frs/download.php/file/4140/ccid-1.4.20.tar.bz2";
+    sha256 = "1g0w4pv6q30d8lhs3kd6nywkhh34nhf9fbcbcvbxdvk3pdjvh320";
   };
 
   patchPhase = ''
-    sed -i 's,/usr/bin/env perl,${perl}/bin/perl,' src/*.pl
+    patchShebangs .
     substituteInPlace src/Makefile.in --replace /bin/echo echo
   '';
+
   preConfigure = ''
-    configureFlags="$configureFlags --enable-usbdropdir=$out/pcsc/drivers"
+    configureFlagsArray+=("--enable-usbdropdir=$out/pcsc/drivers")
   '';
 
-  buildInputs = [ pcsclite pkgconfig libusb1 ];
+  nativeBuildInputs = [ pkgconfig perl ];
+  buildInputs = [ pcsclite libusb1 ];
 
   meta = with stdenv.lib; {
     description = "ccid drivers for pcsclite";

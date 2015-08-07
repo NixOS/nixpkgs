@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig, intltool, autoreconfHook
-, json_c, libsndfile
+, json_c, libsndfile, libtool
 , xlibs, libcap, alsaLib, glib
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
@@ -109,6 +109,7 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
+    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/libpulsecore-6.0.la
   '';
 
   meta = {

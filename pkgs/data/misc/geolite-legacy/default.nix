@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     description = "GeoLite Legacy IP geolocation databases";
     homepage = https://geolite.maxmind.com/download/geoip;
     license = licenses.cc-by-sa-30;
-    platforms = with platforms; linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ nckx ];
   };
 

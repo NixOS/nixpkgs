@@ -678,6 +678,7 @@ let
     "a4" # depends on broken package annaffy-1.41.1
     "a4Reporting" # depends on broken package annaffy-1.41.1
     "abd" # depends on broken package nlopt-2.4.2
+    "Actigraphy" # Build Is Broken
     "adabag" # depends on broken package nlopt-2.4.2
     "ADaCGH2" # depends on broken package tilingArray-1.47.0
     "adSplit" # build is broken
@@ -699,11 +700,15 @@ let
     "AgiMicroRna" # depends on broken package affyio-1.37.0
     "agRee" # depends on broken package nlopt-2.4.2
     "aLFQ" # depends on broken package nlopt-2.4.2
+    "AllelicImbalance" # depends on broken package Rsamtools-1.21.8
     "alr3" # depends on broken package nlopt-2.4.2
     "alr4" # depends on broken package nlopt-2.4.2
+    "alsace" # depends on broken nloptr-1.0.4
     "altcdfenvs" # depends on broken package affyio-1.37.0
+    "ampliQueso" # depends on broken package Rsamtools-1.21.8
     "anacor" # depends on broken package nlopt-2.4.2
     "annaffy" # build is broken
+    "annmap" # depends on broken package Rsamtools-1.21.8
     "AnnotationForge" # Build Is Broken
     "AnnotationHub" # depends on broken package interactiveDisplayBase-1.7.0
     "aods3" # depends on broken package nlopt-2.4.2
@@ -712,6 +717,7 @@ let
     "ArfimaMLM" # depends on broken package nlopt-2.4.2
     "arm" # depends on broken package nlopt-2.4.2
     "ArrayExpress" # depends on broken package affyio-1.37.0
+    "ArrayExpressHTS" # depends on broken package Rsamtools-1.21.8
     "arrayMvout" # depends on broken package affyio-1.37.0
     "arrayQualityMetrics" # depends on broken package affyio-1.37.0
     "ArrayTools" # depends on broken package affyio-1.37.0
@@ -721,20 +727,31 @@ let
     "attract" # depends on broken package AnnotationForge-1.11.3
     "BACA" # depends on broken package Category-2.35.1
     "BAGS" # build is broken
+    "ballgown" # depends on broken package Rsamtools-1.21.8
+    "bamsignals" # build is broken
     "bartMachine" # depends on broken package nlopt-2.4.2
+    "Basic4Cseq" # depends on broken package Rsamtools-1.21.8
     "bayesDem" # depends on broken package nlopt-2.4.2
     "bayesLife" # depends on broken package nlopt-2.4.2
     "bayesPop" # depends on broken package nlopt-2.4.2
     "Bayesthresh" # depends on broken package nlopt-2.4.2
     "BBRecapture" # depends on broken package nlopt-2.4.2
     "BCA" # depends on broken package nlopt-2.4.2
+    "BEAT" # depends on broken package Rsamtools-1.21.8
     "bgmm" # depends on broken package nlopt-2.4.2
     "bgx" # depends on broken package affyio-1.37.0
     "BIFIEsurvey" # depends on broken package nlopt-2.4.2
+    "bigGP" # build is broken
     "BiGGR" # depends on broken package rsbml-2.27.0
     "BiodiversityR" # depends on broken package nlopt-2.4.2
+    "biomvRCNS" # depends on broken package Rsamtools-1.21.8
+    "biotools" # depends on broken package rpanel-1.1-3
+    "biovizBase" # depends on broken package Rsamtools-1.21.8
     "birte" # build is broken
     "BiSEp" # depends on broken package GOSemSim-1.27.3
+    "BiSeq" # depends on broken package Rsamtools-1.21.8
+    "BitSeq" # depends on broken package Rsamtools-1.21.8
+    "BLCOP" # depends on broken package Rsymphony-0.1-20
     "blmeco" # depends on broken package nlopt-2.4.2
     "blme" # depends on broken package nlopt-2.4.2
     "bmd" # depends on broken package nlopt-2.4.2
@@ -743,295 +760,90 @@ let
     "boss" # depends on broken package nlopt-2.4.2
     "BradleyTerry2" # depends on broken package nlopt-2.4.2
     "BRugs" # build is broken
+    "BSgenome" # depends on broken package Rsamtools-1.21.8
+    "bumphunter" # depends on broken package Rsamtools-1.21.8
     "CADFtest" # depends on broken package nlopt-2.4.2
     "CAFE" # depends on broken package affyio-1.37.0
+    "CAGEr" # depends on broken package Rsamtools-1.21.8
     "cAIC4" # depends on broken package nlopt-2.4.2
+    "CAMERA" # depends on broken package mzR-2.3.1
     "canceR" # depends on broken package Category-2.35.1
     "candisc" # depends on broken package nlopt-2.4.2
     "carcass" # depends on broken package nlopt-2.4.2
     "car" # depends on broken package nlopt-2.4.2
     "caret" # depends on broken package nlopt-2.4.2
     "caretEnsemble" # depends on broken package nlopt-2.4.2
+    "CARrampsOcl" # depends on broken package OpenCL-0.1-3
+    "casper" # depends on broken package Rsamtools-1.21.8
     "Category" # Build Is Broken
     "categoryCompare" # depends on broken package Category-2.35.1
     "CCpop" # depends on broken package nlopt-2.4.2
     "cellHTS2" # depends on broken package Category-2.35.1
+    "CexoR" # depends on broken package Rsamtools-1.21.8
     "ChainLadder" # depends on broken package nlopt-2.4.2
     "ChAMP" # depends on broken package affyio-1.37.0
     "charm" # depends on broken package affyio-1.37.0
     "ChemmineR" # Build Is Broken
+    "chimera" # depends on broken package Rsamtools-1.21.8
     "chipenrich" # build is broken
+    "chipPCR" # depends on broken nloptr-1.0.4
+    "ChIPpeakAnno" # depends on broken package Rsamtools-1.21.8
     "ChIPQC" # depends on broken package AnnotationForge-1.11.3
+    "ChIPseeker" # depends on broken package Rsamtools-1.21.8
+    "chipseq" # depends on broken package Rsamtools-1.21.8
+    "ChIPseqR" # depends on broken package Rsamtools-1.21.8
+    "ChIPsim" # depends on broken package Rsamtools-1.21.8
     "ChIPXpress" # depends on broken package affyio-1.37.0
+    "ChromHeatMap" # depends on broken package Rsamtools-1.21.8
+    "cleanUpdTSeq" # depends on broken package Rsamtools-1.21.8
     "climwin" # depends on broken package nlopt-2.4.2
+    "clipper" # depends on broken package Rsamtools-1.21.8
     "CLME" # depends on broken package nlopt-2.4.2
     "clpAPI" # build is broken
     "clusterPower" # depends on broken package nlopt-2.4.2
-    "Actigraphy" # Build Is Broken
-    "Crossover" # Build Is Broken
-    "FunctionalNetworks" # Build Is Broken
-    "HiPLARM" # Build Is Broken
-    "HierO" # Build Is Broken
-    "KEGGprofile" # Build Is Broken
-    "MigClim" # Build Is Broken
-    "ROracle" # Build Is Broken
-    "Rcplex" # Build Is Broken
-    "RcppAPT" # Build Is Broken
-    "RnaSeqSampleSize" # Build Is Broken
-    "Rsamtools" # Build Is Broken
-    "SeqGrapheR" # Build Is Broken
-    "bamsignals" # build is broken
-    "bigGP" # build is broken
-    "cudaBayesreg" # build is broken
-    "dagbag" # build is broken
-    "gMCP" # build is broken
-    "h5" # build is broken
-    "lefse" # build is broken
-    "metaMix" # build is broken
-    "mirIntegrator" # build is broken
-    "pathview" # build is broken
-    "pcaL1" # build is broken
-    "permGPU" # build is broken
-    "pmclust" # build is broken
-    "qtbase" # build is broken
-    "rDEA" # build is broken
-    "rJPSGCS" # build is broken
-    "rLindo" # build is broken
-    "seqCNA" # build is broken
-    "sybilSBML" # build is broken
-    "AllelicImbalance" # depends on broken package Rsamtools-1.21.8
-    "ArrayExpressHTS" # depends on broken package Rsamtools-1.21.8
-    "BEAT" # depends on broken package Rsamtools-1.21.8
-    "BLCOP" # depends on broken package Rsymphony-0.1-20
-    "BSgenome" # depends on broken package Rsamtools-1.21.8
-    "Basic4Cseq" # depends on broken package Rsamtools-1.21.8
-    "BiSeq" # depends on broken package Rsamtools-1.21.8
-    "BitSeq" # depends on broken package Rsamtools-1.21.8
-    "CAGEr" # depends on broken package Rsamtools-1.21.8
-    "CAMERA" # depends on broken package mzR-2.3.1
-    "CARrampsOcl" # depends on broken package OpenCL-0.1-3
-    "CNEr" # depends on broken package Rsamtools-1.21.8
-    "CNVrd2" # depends on broken package Rsamtools-1.21.8
-    "CODEX" # depends on broken package Rsamtools-1.21.8
-    "CRISPRseek" # depends on broken package Rsamtools-1.21.8
-    "CexoR" # depends on broken package Rsamtools-1.21.8
-    "ChIPpeakAnno" # depends on broken package Rsamtools-1.21.8
-    "ChIPseeker" # depends on broken package Rsamtools-1.21.8
-    "ChIPseqR" # depends on broken package Rsamtools-1.21.8
-    "ChIPsim" # depends on broken package Rsamtools-1.21.8
-    "ChromHeatMap" # depends on broken package Rsamtools-1.21.8
-    "CopyNumber450k" # depends on broken package Rsamtools-1.21.8
-    "CopywriteR" # depends on broken package Rsamtools-1.21.8
-    "CoverageView" # depends on broken package Rsamtools-1.21.8
-    "DBKGrad" # depends on broken package rpanel-1.1-3
-    "DEXSeq" # depends on broken package Rsamtools-1.21.8
-    "DMRcate" # depends on broken package Rsamtools-1.21.8
-    "DMRforPairs" # depends on broken package Rsamtools-1.21.8
-    "DOQTL" # depends on broken package Rsamtools-1.21.8
-    "EDASeq" # depends on broken package Rsamtools-1.21.8
-    "ELMER" # depends on broken package Rsamtools-1.21.8
-    "ExomeDepth" # depends on broken package Rsamtools-1.21.8
-    "FourCSeq" # depends on broken package Rsamtools-1.21.8
-    "GOGANPA" # depends on broken package WGCNA-1.47
-    "GOTHiC" # depends on broken package Rsamtools-1.21.8
-    "GUIDE" # depends on broken package rpanel-1.1-3
-    "GenoView" # depends on broken package Rsamtools-1.21.8
-    "GenomicAlignments" # depends on broken package Rsamtools-1.21.8
-    "GenomicFeatures" # depends on broken package Rsamtools-1.21.8
-    "GenomicFiles" # depends on broken package Rsamtools-1.21.8
-    "GenomicInteractions" # depends on broken package Rsamtools-1.21.8
-    "GoogleGenomics" # depends on broken package Rsamtools-1.21.8
-    "GreyListChIP" # depends on broken package Rsamtools-1.21.8
-    "Gviz" # depends on broken package Rsamtools-1.21.8
-    "HTSeqGenie" # depends on broken package Rsamtools-1.21.8
-    "HiTC" # depends on broken package Rsamtools-1.21.8
-    "IdeoViz" # depends on broken package Rsamtools-1.21.8
-    "InPAS" # depends on broken package Rsamtools-1.21.8
-    "LinRegInteractive" # depends on broken package rpanel-1.1-3
-    "LowMACA" # depends on broken package Rsamtools-1.21.8
-    "M3D" # depends on broken package Rsamtools-1.21.8
-    "MEDIPS" # depends on broken package Rsamtools-1.21.8
-    "MSeasy" # depends on broken package mzR-2.3.1
-    "MSeasyTkGUI" # depends on broken package mzR-2.3.1
-    "Metab" # depends on broken package mzR-2.3.1
-    "MethylAid" # depends on broken package Rsamtools-1.21.8
-    "MethylSeekR" # depends on broken package Rsamtools-1.21.8
-    "MotIV" # depends on broken package Rsamtools-1.21.8
-    "MotifDb" # depends on broken package Rsamtools-1.21.8
-    "OTUbase" # depends on broken package Rsamtools-1.21.8
-    "OrganismDbi" # depends on broken package Rsamtools-1.21.8
-    "PGA" # depends on broken package Rsamtools-1.21.8
-    "PICS" # depends on broken package Rsamtools-1.21.8
-    "PING" # depends on broken package Rsamtools-1.21.8
-    "Pviz" # depends on broken package Rsamtools-1.21.8
-    "QDNAseq" # depends on broken package Rsamtools-1.21.8
-    "QuasR" # depends on broken package Rsamtools-1.21.8
-    "R3CPET" # depends on broken package Rsamtools-1.21.8
-    "R453Plus1Toolbox" # depends on broken package Rsamtools-1.21.8
-    "RAPIDR" # depends on broken package Rsamtools-1.21.8
-    "REBayes" # depends on broken package Rmosek-1.2.5.1
-    "REDseq" # depends on broken package Rsamtools-1.21.8
-    "RIPSeeker" # depends on broken package Rsamtools-1.21.8
-    "RMassBank" # depends on broken package mzR-2.3.1
-    "RNAprobR" # depends on broken package Rsamtools-1.21.8
-    "ROI_plugin_symphony" # depends on broken package Rsymphony-0.1-20
-    "RSVSim" # depends on broken package Rsamtools-1.21.8
-    "RUVSeq" # depends on broken package Rsamtools-1.21.8
-    "RVideoPoker" # depends on broken package rpanel-1.1-3
-    "RapidPolygonLookup" # depends on broken package PBSmapping-2.69.76
-    "Rariant" # depends on broken package Rsamtools-1.21.8
-    "Rcade" # depends on broken package Rsamtools-1.21.8
-    "ReQON" # depends on broken package Rsamtools-1.21.8
-    "RnBeads" # depends on broken package Rsamtools-1.21.8
-    "Rolexa" # depends on broken package Rsamtools-1.21.8
-    "Rqc" # depends on broken package Rsamtools-1.21.8
-    "SDD" # depends on broken package rpanel-1.1-3
-    "SGSeq" # depends on broken package Rsamtools-1.21.8
-    "SIMAT" # depends on broken package mzR-2.3.1
-    "SNPtools" # depends on broken package Rsamtools-1.21.8
-    "SVM2CRM" # depends on broken package Rsamtools-1.21.8
-    "SeqArray" # depends on broken package Rsamtools-1.21.8
-    "SeqVarTools" # depends on broken package Rsamtools-1.21.8
-    "ShortRead" # depends on broken package Rsamtools-1.21.8
-    "SimRAD" # depends on broken package Rsamtools-1.21.8
-    "SomaticSignatures" # depends on broken package Rsamtools-1.21.8
-    "SplicingGraphs" # depends on broken package Rsamtools-1.21.8
-    "TEQC" # depends on broken package Rsamtools-1.21.8
-    "TIN" # depends on broken package WGCNA-1.47
-    "TargetSearch" # depends on broken package mzR-2.3.1
-    "TitanCNA" # depends on broken package Rsamtools-1.21.8
-    "ToPASeq" # depends on broken package Rsamtools-1.21.8
-    "TransView" # depends on broken package Rsamtools-1.21.8
-    "VariantAnnotation" # depends on broken package Rsamtools-1.21.8
-    "VariantFiltering" # depends on broken package Rsamtools-1.21.8
-    "VariantTools" # depends on broken package Rsamtools-1.21.8
-    "ampliQueso" # depends on broken package Rsamtools-1.21.8
-    "annmap" # depends on broken package Rsamtools-1.21.8
-    "ballgown" # depends on broken package Rsamtools-1.21.8
-    "biomvRCNS" # depends on broken package Rsamtools-1.21.8
-    "biotools" # depends on broken package rpanel-1.1-3
-    "biovizBase" # depends on broken package Rsamtools-1.21.8
-    "bumphunter" # depends on broken package Rsamtools-1.21.8
-    "casper" # depends on broken package Rsamtools-1.21.8
-    "chimera" # depends on broken package Rsamtools-1.21.8
-    "chipseq" # depends on broken package Rsamtools-1.21.8
-    "cleanUpdTSeq" # depends on broken package Rsamtools-1.21.8
-    "clipper" # depends on broken package Rsamtools-1.21.8
-    "cn_mops" # depends on broken package Rsamtools-1.21.8
-    "coMET" # depends on broken package Rsamtools-1.21.8
-    "cobindR" # depends on broken package Rsamtools-1.21.8
-    "conumee" # depends on broken package Rsamtools-1.21.8
-    "cosmiq" # depends on broken package mzR-2.3.1
-    "cpvSNP" # depends on broken package Rsamtools-1.21.8
-    "csaw" # depends on broken package Rsamtools-1.21.8
-    "cummeRbund" # depends on broken package Rsamtools-1.21.8
-    "customProDB" # depends on broken package Rsamtools-1.21.8
-    "daff" # depends on broken package V8-0.6
-    "dagLogo" # depends on broken package Rsamtools-1.21.8
-    "deepSNV" # depends on broken package Rsamtools-1.21.8
-    "derfinder" # depends on broken package Rsamtools-1.21.8
-    "derfinderPlot" # depends on broken package Rsamtools-1.21.8
-    "easyRNASeq" # depends on broken package Rsamtools-1.21.8
-    "ensemblVEP" # depends on broken package Rsamtools-1.21.8
-    "epigenomix" # depends on broken package Rsamtools-1.21.8
-    "epivizr" # depends on broken package Rsamtools-1.21.8
-    "erpR" # depends on broken package rpanel-1.1-3
-    "exomeCopy" # depends on broken package Rsamtools-1.21.8
-    "exomePeak" # depends on broken package Rsamtools-1.21.8
-    "fPortfolio" # depends on broken package Rsymphony-0.1-20
-    "fastLiquidAssociation" # depends on broken package LiquidAssociation-1.23.0
-    "flagme" # depends on broken package mzR-2.3.1
-    "gamlss_demo" # depends on broken package rpanel-1.1-3
-    "genomation" # depends on broken package Rsamtools-1.21.8
-    "geojsonio" # depends on broken package V8-0.6
-    "ggbio" # depends on broken package Rsamtools-1.21.8
-    "girafe" # depends on broken package Rsamtools-1.21.8
-    "gmapR" # depends on broken package Rsamtools-1.21.8
-    "groHMM" # depends on broken package Rsamtools-1.21.8
-    "hiAnnotator" # depends on broken package Rsamtools-1.21.8
-    "hiReadsProcessor" # depends on broken package Rsamtools-1.21.8
-    "htSeqTools" # depends on broken package Rsamtools-1.21.8
-    "intansv" # depends on broken package Rsamtools-1.21.8
-    "js" # depends on broken package V8-0.6
-    "lawn" # depends on broken package V8-0.6
-    "lgcp" # depends on broken package rpanel-1.1-3
-    "mcaGUI" # depends on broken package Rsamtools-1.21.8
-    "metaMS" # depends on broken package mzR-2.3.1
-    "metaSEM" # depends on broken package OpenMx-2.2.4
-    "metagene" # depends on broken package Rsamtools-1.21.8
-    "methylPipe" # depends on broken package Rsamtools-1.21.8
-    "methylumi" # depends on broken package Rsamtools-1.21.8
-    "minfi" # depends on broken package Rsamtools-1.21.8
-    "minimist" # depends on broken package V8-0.6
-    "missMethyl" # depends on broken package Rsamtools-1.21.8
-    "motifRG" # depends on broken package Rsamtools-1.21.8
-    "motifStack" # depends on broken package Rsamtools-1.21.8
-    "mygene" # depends on broken package Rsamtools-1.21.8
-    "nettools" # depends on broken package WGCNA-1.47
-    "nucleR" # depends on broken package Rsamtools-1.21.8
-    "optBiomarker" # depends on broken package rpanel-1.1-3
-    "ora" # depends on broken package ROracle-1.1-12
-    "pbdBASE" # depends on broken package pbdSLAP-0.2-0
-    "pbdDEMO" # depends on broken package pbdSLAP-0.2-0
-    "pbdDMAT" # depends on broken package pbdSLAP-0.2-0
-    "podkat" # depends on broken package Rsamtools-1.21.8
-    "proBAMr" # depends on broken package Rsamtools-1.21.8
-    "qpgraph" # depends on broken package Rsamtools-1.21.8
-    "qrqc" # depends on broken package Rsamtools-1.21.8
-    "qtpaint" # depends on broken package qtbase-1.0.9
-    "qtutils" # depends on broken package qtbase-1.0.9
-    "quantro" # depends on broken package Rsamtools-1.21.8
-    "r3Cseq" # depends on broken package Rsamtools-1.21.8
-    "rGADEM" # depends on broken package Rsamtools-1.21.8
-    "rSFFreader" # depends on broken package Rsamtools-1.21.8
-    "rTRMui" # depends on broken package Rsamtools-1.21.8
-    "regionReport" # depends on broken package Rsamtools-1.21.8
-    "regioneR" # depends on broken package Rsamtools-1.21.8
-    "repijson" # depends on broken package V8-0.6
-    "rfPred" # depends on broken package Rsamtools-1.21.8
-    "rgbif" # depends on broken package V8-0.6
-    "rgpui" # depends on broken package rgp-0.4-1
-    "rjade" # depends on broken package V8-0.6
-    "rnaSeqMap" # depends on broken package Rsamtools-1.21.8
-    "roar" # depends on broken package Rsamtools-1.21.8
-    "rtracklayer" # depends on broken package Rsamtools-1.21.8
-    "sapFinder" # depends on broken package rTANDEM-1.9.0
-    "segmentSeq" # depends on broken package Rsamtools-1.21.8
-    "seq2pathway" # depends on broken package WGCNA-1.47
-    "seqbias" # depends on broken package Rsamtools-1.21.8
-    "seqplots" # depends on broken package Rsamtools-1.21.8
-    "shinyMethyl" # depends on broken package Rsamtools-1.21.8
-    "shinyTANDEM" # depends on broken package rTANDEM-1.9.0
-    "similaRpeak" # depends on broken package Rsamtools-1.21.8
-    "soGGi" # depends on broken package Rsamtools-1.21.8
-    "soilphysics" # depends on broken package rpanel-1.1-3
-    "spliceR" # depends on broken package Rsamtools-1.21.8
-    "spocc" # depends on broken package V8-0.6
-    "ssviz" # depends on broken package Rsamtools-1.21.8
-    "stagePop" # depends on broken package PBSddesolve-1.11.29
-    "topologyGSA" # depends on broken package Rsamtools-1.21.8
-    "trackViewer" # depends on broken package Rsamtools-1.21.8
-    "tracktables" # depends on broken package Rsamtools-1.21.8
-    "vmsbase" # depends on broken package PBSmapping-2.69.76
-    "wavClusteR" # depends on broken package Rsamtools-1.21.8
-    "xcms" # depends on broken package mzR-2.3.1
     "clusterProfiler" # depends on broken package GOSemSim-1.27.3
+    "clusterSEs" # depends on broken AER-1.2-4
+    "ClustGeo" # depends on broken FactoMineR-1.31.3
+    "CNEr" # depends on broken package Rsamtools-1.21.8
     "cn_farms" # depends on broken package affyio-1.37.0
+    "cn_mops" # depends on broken package Rsamtools-1.21.8
     "CNORfuzzy" # depends on broken package nlopt-2.4.2
+    "CNVPanelizer" # depends on broken cn.mops-1.15.1
+    "CNVrd2" # depends on broken package Rsamtools-1.21.8
+    "cobindR" # depends on broken package Rsamtools-1.21.8
     "CoCiteStats" # Build Is Broken
+    "CODEX" # depends on broken package Rsamtools-1.21.8
     "COHCAP" # build is broken
+    "colorscience"
+    "coMET" # depends on broken package Rsamtools-1.21.8
     "compEpiTools" # depends on broken package topGO-2.21.0
     "CompGO" # depends on broken package Category-2.35.1
     "conformal" # depends on broken package nlopt-2.4.2
     "ConsensusClusterPlus" # Build Is Broken
+    "conumee" # depends on broken package Rsamtools-1.21.8
+    "CopyNumber450k" # depends on broken package Rsamtools-1.21.8
+    "CopywriteR" # depends on broken package Rsamtools-1.21.8
     "corHMM" # depends on broken package nlopt-2.4.2
     "Cormotif" # depends on broken package affyio-1.37.0
     "coRNAi" # depends on broken package Category-2.35.1
+    "cosmiq" # depends on broken package mzR-2.3.1
     "CosmoPhotoz" # depends on broken package nlopt-2.4.2
+    "CoverageView" # depends on broken package Rsamtools-1.21.8
     "cplexAPI" # build is broken
+    "cpvSNP" # depends on broken package Rsamtools-1.21.8
+    "CRISPRseek" # depends on broken package Rsamtools-1.21.8
     "crlmm" # depends on broken package affyio-1.37.0
+    "Crossover" # Build Is Broken
     "CrypticIBDcheck" # depends on broken package nlopt-2.4.2
+    "csaw" # depends on broken package Rsamtools-1.21.8
+    "cudaBayesreg" # build is broken
+    "cummeRbund" # depends on broken package Rsamtools-1.21.8
+    "customProDB" # depends on broken package Rsamtools-1.21.8
+    "daff" # depends on broken package V8-0.6
+    "dagbag" # build is broken
+    "dagLogo" # depends on broken package Rsamtools-1.21.8
     "DAMisc" # depends on broken package nlopt-2.4.2
+    "DBKGrad" # depends on broken package rpanel-1.1-3
     "Deducer" # depends on broken package nlopt-2.4.2
     "DeducerExtras" # depends on broken package nlopt-2.4.2
     "DeducerPlugInExample" # depends on broken package nlopt-2.4.2
@@ -1039,8 +851,13 @@ let
     "DeducerSpatial" # depends on broken package nlopt-2.4.2
     "DeducerSurvival" # depends on broken package nlopt-2.4.2
     "DeducerText" # depends on broken package nlopt-2.4.2
+    "deepSNV" # depends on broken package Rsamtools-1.21.8
     "DEGraph" # depends on broken package RCytoscape-1.19.0
     "demi" # depends on broken package affyio-1.37.0
+    "derfinder" # depends on broken package Rsamtools-1.21.8
+    "derfinderPlot" # depends on broken package Rsamtools-1.21.8
+    "destiny" # depends on broken package VIM-4.3.0
+    "DEXSeq" # depends on broken package Rsamtools-1.21.8
     "DiagTest3Grp" # depends on broken package nlopt-2.4.2
     "DiffBind" # depends on broken package AnnotationForge-1.11.3
     "diffHic" # depends on broken package rhdf5-2.13.1
@@ -1049,10 +866,14 @@ let
     "discSurv" # depends on broken package nlopt-2.4.2
     "DistatisR" # depends on broken package nlopt-2.4.2
     "diveRsity" # depends on broken package nlopt-2.4.2
+    "DMRcate" # depends on broken package Rsamtools-1.21.8
+    "DMRforPairs" # depends on broken package Rsamtools-1.21.8
     "domainsignatures" # build is broken
     "doMPI" # build is broken
+    "DOQTL" # depends on broken package Rsamtools-1.21.8
     "DOSE" # depends on broken package GOSemSim-1.27.3
     "dpa" # depends on broken package nlopt-2.4.2
+    "dpcR" # depends on broken nloptr-1.0.4
     "drc" # depends on broken package nlopt-2.4.2
     "drfit" # depends on broken package nlopt-2.4.2
     "drsmooth" # depends on broken package nlopt-2.4.2
@@ -1060,20 +881,32 @@ let
     "dualKS" # depends on broken package affyio-1.37.0
     "dynlm" # depends on broken package nlopt-2.4.2
     "easyanova" # depends on broken package nlopt-2.4.2
+    "easyRNASeq" # depends on broken package Rsamtools-1.21.8
+    "EDASeq" # depends on broken package Rsamtools-1.21.8
     "edge" # depends on broken package nlopt-2.4.2
     "eeptools" # depends on broken package nlopt-2.4.2
     "EffectLiteR" # depends on broken package nlopt-2.4.2
     "effects" # depends on broken package nlopt-2.4.2
     "eiR" # depends on broken package ChemmineR-2.21.7
     "eisa" # depends on broken package Category-2.35.1
+    "ELMER" # depends on broken package Rsamtools-1.21.8
     "EMA" # depends on broken package nlopt-2.4.2
     "ENmix" # depends on broken package affyio-1.37.0
     "EnQuireR" # depends on broken package nlopt-2.4.2
+    "EnrichmentBrowser" # depends on broken package r-EDASeq-2.3.2
     "ensembldb" # depends on broken package interactiveDisplayBase-1.7.0
+    "ensemblVEP" # depends on broken package Rsamtools-1.21.8
+    "epigenomix" # depends on broken package Rsamtools-1.21.8
     "episplineDensity" # depends on broken package nlopt-2.4.2
+    "epivizr" # depends on broken package Rsamtools-1.21.8
     "epr" # depends on broken package nlopt-2.4.2
     "erer" # depends on broken package nlopt-2.4.2
+    "erma" # depends on broken GenomicFiles-1.5.4
+    "erpR" # depends on broken package rpanel-1.1-3
     "ExiMiR" # depends on broken package affyio-1.37.0
+    "exomeCopy" # depends on broken package Rsamtools-1.21.8
+    "ExomeDepth" # depends on broken package Rsamtools-1.21.8
+    "exomePeak" # depends on broken package Rsamtools-1.21.8
     "ExpressionView" # depends on broken package Category-2.35.1
     "extRemes" # depends on broken package nlopt-2.4.2
     "ez" # depends on broken package nlopt-2.4.2
@@ -1082,10 +915,12 @@ let
     "Factoshiny" # depends on broken package nlopt-2.4.2
     "faoutlier" # depends on broken package nlopt-2.4.2
     "farms" # depends on broken package affyio-1.37.0
+    "fastLiquidAssociation" # depends on broken package LiquidAssociation-1.23.0
     "fastR" # depends on broken package nlopt-2.4.2
     "FDRreg" # depends on broken package nlopt-2.4.2
     "FEM" # build is broken
     "ffpe" # depends on broken package affyio-1.37.0
+    "flagme" # depends on broken package mzR-2.3.1
     "flowDensity" # depends on broken package nlopt-2.4.2
     "flowPeaks" # build is broken
     "flowQ" # build is broken
@@ -1094,13 +929,17 @@ let
     "flowVS" # depends on broken package ncdfFlow-2.15.2
     "flowWorkspace" # depends on broken package ncdfFlow-2.15.2
     "fmcsR" # depends on broken package ChemmineR-2.21.7
+    "FourCSeq" # depends on broken package Rsamtools-1.21.8
+    "fPortfolio" # depends on broken package Rsymphony-0.1-20
     "freqweights" # depends on broken package nlopt-2.4.2
     "frma" # depends on broken package affyio-1.37.0
     "frmaTools" # depends on broken package affyio-1.37.0
     "fscaret" # depends on broken package nlopt-2.4.2
     "FunciSNP" # depends on broken package snpStats-1.19.0
+    "FunctionalNetworks" # Build Is Broken
     "fxregime" # depends on broken package nlopt-2.4.2
     "gamclass" # depends on broken package nlopt-2.4.2
+    "gamlss_demo" # depends on broken package rpanel-1.1-3
     "gamm4" # depends on broken package nlopt-2.4.2
     "gCMAP" # depends on broken package Category-2.35.1
     "gCMAPWeb" # depends on broken package Category-2.35.1
@@ -1110,20 +949,35 @@ let
     "GENE_E" # depends on broken package rhdf5-2.13.1
     "GeneExpressionSignature" # depends on broken package annaffy-1.41.1
     "GeneticTools" # depends on broken package snpStats-1.19.0
+    "genomation" # depends on broken package Rsamtools-1.21.8
+    "GenomicAlignments" # depends on broken package Rsamtools-1.21.8
+    "GenomicFeatures" # depends on broken package Rsamtools-1.21.8
+    "GenomicFiles" # depends on broken package Rsamtools-1.21.8
+    "GenomicInteractions" # depends on broken package Rsamtools-1.21.8
+    "genotypeeval" # depends on broken package r-rtracklayer-1.29.12
+    "GenoView" # depends on broken package Rsamtools-1.21.8
     "genridge" # depends on broken package nlopt-2.4.2
+    "geojsonio" # depends on broken package V8-0.6
     "GEOsubmission" # depends on broken package affyio-1.37.0
     "gespeR" # depends on broken package Category-2.35.1
     "GEWIST" # depends on broken package nlopt-2.4.2
     "GGBase" # depends on broken package snpStats-1.19.0
+    "ggbio" # depends on broken package Rsamtools-1.21.8
     "GGtools" # depends on broken package snpStats-1.19.0
     "gimme" # depends on broken package nlopt-2.4.2
+    "girafe" # depends on broken package Rsamtools-1.21.8
+    "gmapR" # depends on broken package Rsamtools-1.21.8
     "gmatrix" # depends on broken package cudatoolkit-5.5.22
+    "gMCP" # build is broken
     "GOFunction" # build is broken
+    "GOGANPA" # depends on broken package WGCNA-1.47
+    "GoogleGenomics" # depends on broken package Rsamtools-1.21.8
     "goProfiles" # build is broken
     "GOSemSim" # Build Is Broken
     "goseq" # build is broken
     "GOSim" # depends on broken package topGO-2.21.0
     "GOstats" # depends on broken package AnnotationForge-1.11.3
+    "GOTHiC" # depends on broken package Rsamtools-1.21.8
     "goTools" # build is broken
     "gplm" # depends on broken package nlopt-2.4.2
     "gputools" # depends on broken package cudatoolkit-5.5.22
@@ -1131,24 +985,40 @@ let
     "granova" # depends on broken package nlopt-2.4.2
     "graphicalVAR" # depends on broken package nlopt-2.4.2
     "GraphPCA" # depends on broken package nlopt-2.4.2
+    "GreyListChIP" # depends on broken package Rsamtools-1.21.8
+    "groHMM" # depends on broken package Rsamtools-1.21.8
     "GSCA" # depends on broken package rhdf5-2.13.1
+    "GUIDE" # depends on broken package rpanel-1.1-3
+    "Gviz" # depends on broken package Rsamtools-1.21.8
     "GWAF" # depends on broken package nlopt-2.4.2
     "gwascat" # depends on broken package interactiveDisplayBase-1.7.0
     "h2o" # build is broken
+    "h5" # build is broken
     "h5vc" # depends on broken package rhdf5-2.13.1
     "Harshlight" # depends on broken package affyio-1.37.0
     "hbsae" # depends on broken package nlopt-2.4.2
     "heplots" # depends on broken package nlopt-2.4.2
+    "hiAnnotator" # depends on broken package Rsamtools-1.21.8
+    "hierGWAS"
+    "HierO" # Build Is Broken
+    "highriskzone"
     "HilbertVisGUI" # Build Is Broken
+    "HiPLARM" # Build Is Broken
+    "hiReadsProcessor" # depends on broken package Rsamtools-1.21.8
     "HistDAWass" # depends on broken package nlopt-2.4.2
+    "HiTC" # depends on broken package Rsamtools-1.21.8
     "HLMdiag" # depends on broken package nlopt-2.4.2
     "HTqPCR" # depends on broken package affyio-1.37.0
     "HTSanalyzeR" # depends on broken package Category-2.35.1
+    "HTSeqGenie" # depends on broken package Rsamtools-1.21.8
+    "htSeqTools" # depends on broken package Rsamtools-1.21.8
     "hysteresis" # depends on broken package nlopt-2.4.2
     "IATscores" # depends on broken package nlopt-2.4.2
     "ibd" # depends on broken package nlopt-2.4.2
     "ibh" # build is broken
     "iccbeta" # depends on broken package nlopt-2.4.2
+    "IdeoViz" # depends on broken package Rsamtools-1.21.8
+    "ifaTools" # depends on broken package r-OpenMx-2.2.6
     "iFes" # depends on broken package cudatoolkit-5.5.22
     "imageHTS" # depends on broken package Category-2.35.1
     "immunoClust" # build is broken
@@ -1156,9 +1026,15 @@ let
     "in2extRemes" # depends on broken package nlopt-2.4.2
     "inferference" # depends on broken package nlopt-2.4.2
     "influence_ME" # depends on broken package nlopt-2.4.2
+    "InPAS" # depends on broken package Rsamtools-1.21.8
     "inSilicoMerging" # build is broken
+    "INSPEcT" # depends on broken GenomicFeatures-1.21.13
+    "intansv" # depends on broken package Rsamtools-1.21.8
     "interactiveDisplayBase" # build is broken
     "interactiveDisplay" # depends on broken package Category-2.35.1
+    "interplot" # depends on broken arm-1.8-5
+    "IONiseR" # depends on broken rhdf5-2.13.4
+    "iptools"
     "IsingFit" # depends on broken package nlopt-2.4.2
     "IsoGene" # depends on broken package affyio-1.37.0
     "IsoGeneGUI" # depends on broken package affyio-1.37.0
@@ -1166,14 +1042,21 @@ let
     "IVAS" # depends on broken package nlopt-2.4.2
     "ivpack" # depends on broken package nlopt-2.4.2
     "JAGUAR" # depends on broken package nlopt-2.4.2
+    "jetset"
     "joda" # depends on broken package nlopt-2.4.2
     "jomo" # build is broken
+    "js" # depends on broken package V8-0.6
     "KANT" # depends on broken package affyio-1.37.0
     "keggorthology" # build is broken
+    "KEGGprofile" # Build Is Broken
+    "lawn" # depends on broken package V8-0.6
     "learnstats" # depends on broken package nlopt-2.4.2
+    "lefse" # build is broken
     "lessR" # depends on broken package nlopt-2.4.2
     "lfe" # build is broken
+    "lgcp" # depends on broken package rpanel-1.1-3
     "limmaGUI" # depends on broken package affyio-1.37.0
+    "LinRegInteractive" # depends on broken package rpanel-1.1-3
     "LiquidAssociation" # build is broken
     "lmdme" # build is broken
     "lme4" # depends on broken package nlopt-2.4.2
@@ -1184,8 +1067,10 @@ let
     "LogisticDx" # depends on broken package nlopt-2.4.2
     "logitT" # depends on broken package affyio-1.37.0
     "longpower" # depends on broken package nlopt-2.4.2
+    "LowMACA" # depends on broken package Rsamtools-1.21.8
     "lumi" # depends on broken package affyio-1.37.0
     "LVSmiRNA" # depends on broken package affyio-1.37.0
+    "M3D" # depends on broken package Rsamtools-1.21.8
     "MAIT" # depends on broken package nlopt-2.4.2
     "makecdfenv" # depends on broken package affyio-1.37.0
     "mAPKL" # build is broken
@@ -1195,27 +1080,46 @@ let
     "MatrixRider" # depends on broken package DirichletMultinomial-1.11.1
     "MaxPro" # depends on broken package nlopt-2.4.2
     "mbest" # depends on broken package nlopt-2.4.2
+    "MBmca" # depends on broken nloptr-1.0.4
     "mBPCR" # depends on broken package affyio-1.37.0
+    "mcaGUI" # depends on broken package Rsamtools-1.21.8
     "MCRestimate" # build is broken
     "mdgsa" # build is broken
     "meboot" # depends on broken package nlopt-2.4.2
+    "mediation" # depends on broken package r-lme4-1.1-8
+    "MEDIPS" # depends on broken package Rsamtools-1.21.8
     "MEDME" # depends on broken package nlopt-2.4.2
     "MEMSS" # depends on broken package nlopt-2.4.2
     "meshr" # depends on broken package Category-2.35.1
+    "Metab" # depends on broken package mzR-2.3.1
     "metagear" # build is broken
+    "metagene" # depends on broken package Rsamtools-1.21.8
+    "metaMix" # build is broken
+    "metaMS" # depends on broken package mzR-2.3.1
     "metaplus" # depends on broken package nlopt-2.4.2
+    "metaSEM" # depends on broken package OpenMx-2.2.4
     "metaseqR" # depends on broken package affyio-1.37.0
     "Metatron" # depends on broken package nlopt-2.4.2
     "methyAnalysis" # depends on broken package affyio-1.37.0
+    "MethylAid" # depends on broken package Rsamtools-1.21.8
+    "methylPipe" # depends on broken package Rsamtools-1.21.8
+    "MethylSeekR" # depends on broken package Rsamtools-1.21.8
+    "methylumi" # depends on broken package Rsamtools-1.21.8
     "miceadds" # depends on broken package nlopt-2.4.2
     "micEconAids" # depends on broken package nlopt-2.4.2
     "micEconCES" # depends on broken package nlopt-2.4.2
     "micEconSNQP" # depends on broken package nlopt-2.4.2
     "mi" # depends on broken package nlopt-2.4.2
+    "MigClim" # Build Is Broken
     "migui" # depends on broken package nlopt-2.4.2
     "MineICA" # depends on broken package AnnotationForge-1.11.3
+    "minfi" # depends on broken package Rsamtools-1.21.8
+    "minimist" # depends on broken package V8-0.6
     "MinimumDistance" # depends on broken package affyio-1.37.0
+    "mirIntegrator" # build is broken
+    "missDeaths"
     "missMDA" # depends on broken package nlopt-2.4.2
+    "missMethyl" # depends on broken package Rsamtools-1.21.8
     "mitoODE" # build is broken
     "mixAK" # depends on broken package nlopt-2.4.2
     "mixlm" # depends on broken package nlopt-2.4.2
@@ -1229,6 +1133,12 @@ let
     "mongolite" # build is broken
     "monocle" # build is broken
     "mosaic" # depends on broken package nlopt-2.4.2
+    "MotifDb" # depends on broken package Rsamtools-1.21.8
+    "motifRG" # depends on broken package Rsamtools-1.21.8
+    "motifStack" # depends on broken package Rsamtools-1.21.8
+    "MotIV" # depends on broken package Rsamtools-1.21.8
+    "MSeasy" # depends on broken package mzR-2.3.1
+    "MSeasyTkGUI" # depends on broken package mzR-2.3.1
     "MSGFgui" # depends on broken package MSGFplus-1.3.0
     "MSGFplus" # Build Is Broken
     "msmsEDA" # depends on broken package affyio-1.37.0
@@ -1239,15 +1149,19 @@ let
     "multiDimBio" # depends on broken package nlopt-2.4.2
     "MultiRR" # depends on broken package nlopt-2.4.2
     "muma" # depends on broken package nlopt-2.4.2
+    "munsellinterpol"
     "mutossGUI" # build is broken
     "mvGST" # depends on broken package AnnotationForge-1.11.3
     "mvinfluence" # depends on broken package nlopt-2.4.2
+    "mygene" # depends on broken package Rsamtools-1.21.8
     "mzR" # build is broken
     "NanoStringQCPro" # build is broken
     "nCal" # depends on broken package nlopt-2.4.2
     "ncdfFlow" # build is broken
     "NCIgraph" # depends on broken package RCytoscape-1.19.0
     "netbenchmark" # build is broken
+    "nettools" # depends on broken package WGCNA-1.47
+    "NGScopy"
     "NHPoisson" # depends on broken package nlopt-2.4.2
     "nloptr" # depends on broken package nlopt-2.4.2
     "nondetects" # depends on broken package affyio-1.37.0
@@ -1255,6 +1169,7 @@ let
     "NormqPCR" # depends on broken package affyio-1.37.0
     "NORRRM" # build is broken
     "npIntFactRep" # depends on broken package nlopt-2.4.2
+    "nucleR" # depends on broken package Rsamtools-1.21.8
     "oligoClasses" # depends on broken package affyio-1.37.0
     "oligo" # depends on broken package affyio-1.37.0
     "OmicsMarkeR" # depends on broken package nlopt-2.4.2
@@ -1263,7 +1178,11 @@ let
     "openCyto" # depends on broken package ncdfFlow-2.15.2
     "OpenMx" # build is broken
     "OperaMate" # depends on broken package Category-2.35.1
+    "optBiomarker" # depends on broken package rpanel-1.1-3
+    "ora" # depends on broken package ROracle-1.1-12
     "ordBTL" # depends on broken package nlopt-2.4.2
+    "OrganismDbi" # depends on broken package Rsamtools-1.21.8
+    "OTUbase" # depends on broken package Rsamtools-1.21.8
     "OUwie" # depends on broken package nlopt-2.4.2
     "PADOG" # build is broken
     "pamm" # depends on broken package nlopt-2.4.2
@@ -1273,15 +1192,22 @@ let
     "papeR" # depends on broken package nlopt-2.4.2
     "parboost" # depends on broken package nlopt-2.4.2
     "parma" # depends on broken package nlopt-2.4.2
+    "Pasha" # depends on broken package GenomicAlignments-1.5.12
     "pathClass" # depends on broken package affyio-1.37.0
     "pathRender" # build is broken
+    "pathview" # build is broken
     "PatternClass" # build is broken
     "Pbase" # depends on broken package affyio-1.37.0
+    "pbdBASE" # depends on broken package pbdSLAP-0.2-0
+    "pbdDEMO" # depends on broken package pbdSLAP-0.2-0
+    "pbdDMAT" # depends on broken package pbdSLAP-0.2-0
     "pbdSLAP" # build is broken
     "PBImisc" # depends on broken package nlopt-2.4.2
     "pbkrtest" # depends on broken package nlopt-2.4.2
     "PBSddesolve" # build is broken
     "PBSmapping" # build is broken
+    "pcaBootPlot" # depends on broken FactoMineR-1.31.3
+    "pcaL1" # build is broken
     "PCpheno" # depends on broken package Category-2.35.1
     "pdInfoBuilder" # depends on broken package affyio-1.37.0
     "pdmclass" # build is broken
@@ -1289,20 +1215,27 @@ let
     "pedigreemm" # depends on broken package nlopt-2.4.2
     "pedometrics" # depends on broken package nlopt-2.4.2
     "pequod" # depends on broken package nlopt-2.4.2
+    "permGPU" # build is broken
+    "PGA" # depends on broken package Rsamtools-1.21.8
     "PGSEA" # depends on broken package annaffy-1.41.1
+    "PharmacoGx"
     "phenoDist" # depends on broken package Category-2.35.1
     "phenoTest" # depends on broken package Category-2.35.1
     "PhenStat" # depends on broken package nlopt-2.4.2
     "phia" # depends on broken package nlopt-2.4.2
     "phylocurve" # depends on broken package nlopt-2.4.2
     "phyloTop" # depends on broken package nlopt-2.4.2
+    "PICS" # depends on broken package Rsamtools-1.21.8
+    "PING" # depends on broken package Rsamtools-1.21.8
     "plateCore" # depends on broken package ncdfFlow-2.15.2
     "plier" # depends on broken package affyio-1.37.0
     "plsRbeta" # depends on broken package nlopt-2.4.2
     "plsRcox" # depends on broken package nlopt-2.4.2
     "plsRglm" # depends on broken package nlopt-2.4.2
     "plw" # depends on broken package affyio-1.37.0
+    "pmclust" # build is broken
     "pmm" # depends on broken package nlopt-2.4.2
+    "podkat" # depends on broken package Rsamtools-1.21.8
     "polytomous" # depends on broken package nlopt-2.4.2
     "pomp" # depends on broken package nlopt-2.4.2
     "ppiPre" # depends on broken package GOSemSim-1.27.3
@@ -1310,28 +1243,51 @@ let
     "prebs" # depends on broken package affyio-1.37.0
     "predictmeans" # depends on broken package nlopt-2.4.2
     "prLogistic" # depends on broken package nlopt-2.4.2
+    "proBAMr" # depends on broken package Rsamtools-1.21.8
     "ProCoNA" # depends on broken package AnnotationForge-1.11.3
     "pRoloc" # depends on broken package nlopt-2.4.2
     "pRolocGUI" # depends on broken package nlopt-2.4.2
     "proteoQC" # depends on broken package affyio-1.37.0
     "PSAboot" # depends on broken package nlopt-2.4.2
+    "ptw" # depends on broken nloptr-1.0.4
     "puma" # depends on broken package affyio-1.37.0
     "pvac" # depends on broken package affyio-1.37.0
     "pvca" # depends on broken package nlopt-2.4.2
+    "Pviz" # depends on broken package Rsamtools-1.21.8
     "pwOmics" # depends on broken package interactiveDisplayBase-1.7.0
+    "PythonInR"
     "qcmetrics" # build is broken
+    "QDNAseq" # depends on broken package Rsamtools-1.21.8
+    "QFRM"
     "qgraph" # depends on broken package nlopt-2.4.2
     "qpcrNorm" # depends on broken package affyio-1.37.0
+    "qpgraph" # depends on broken package Rsamtools-1.21.8
+    "qrqc" # depends on broken package Rsamtools-1.21.8
+    "qtbase" # build is broken
     "qtlnet" # depends on broken package nlopt-2.4.2
+    "qtpaint" # depends on broken package qtbase-1.0.9
+    "qtutils" # depends on broken package qtbase-1.0.9
     "QUALIFIER" # depends on broken package ncdfFlow-2.15.2
     "quantification" # depends on broken package nlopt-2.4.2
+    "quantro" # depends on broken package Rsamtools-1.21.8
+    "QuasR" # depends on broken package Rsamtools-1.21.8
     "R2STATS" # depends on broken package nlopt-2.4.2
+    "R3CPET" # depends on broken package Rsamtools-1.21.8
+    "r3Cseq" # depends on broken package Rsamtools-1.21.8
+    "R453Plus1Toolbox" # depends on broken package Rsamtools-1.21.8
     "radiant" # depends on broken package nlopt-2.4.2
     "raincpc" # build is broken
     "rainfreq" # build is broken
     "RamiGO" # depends on broken package RCytoscape-1.19.0
+    "RapidPolygonLookup" # depends on broken package PBSmapping-2.69.76
+    "RAPIDR" # depends on broken package Rsamtools-1.21.8
+    "RareVariantVis" # depends on broken VariantAnnotation-1.15.19
+    "Rariant" # depends on broken package Rsamtools-1.21.8
     "rasclass" # depends on broken package nlopt-2.4.2
+    "RBerkeley"
     "RbioRXN" # depends on broken package ChemmineR-2.21.7
+    "Rcade" # depends on broken package Rsamtools-1.21.8
+    "rCGH" # depends on broken package r-affy-1.47.1
     "Rchemcpp" # depends on broken package ChemmineR-2.21.7
     "Rcmdr" # depends on broken package nlopt-2.4.2
     "RcmdrMisc" # depends on broken package nlopt-2.4.2
@@ -1373,27 +1329,47 @@ let
     "RcmdrPlugin_temis" # depends on broken package nlopt-2.4.2
     "RcmdrPlugin_UCA" # depends on broken package nlopt-2.4.2
     "Rcpi" # depends on broken package ChemmineR-2.21.7
+    "Rcplex" # Build Is Broken
+    "RcppAPT" # Build Is Broken
     "RcppOctave" # build is broken
     "RcppRedis" # build is broken
     "RCytoscape" # Build Is Broken
     "RDAVIDWebService" # depends on broken package Category-2.35.1
     "rdd" # depends on broken package nlopt-2.4.2
+    "rddtools" # depends on broken package r-AER-1.2-4
+    "rDEA" # build is broken
     "RDieHarder" # build is broken
     "ReactomePA" # depends on broken package GOSemSim-1.27.3
     "ReadqPCR" # depends on broken package affyio-1.37.0
+    "REBayes" # depends on broken package Rmosek-1.2.5.1
+    "REDseq" # depends on broken package Rsamtools-1.21.8
     "referenceIntervals" # depends on broken package nlopt-2.4.2
     "RefNet" # depends on broken package interactiveDisplayBase-1.7.0
     "RefPlus" # depends on broken package affyio-1.37.0
     "refund" # depends on broken package nlopt-2.4.2
+    "regioneR" # depends on broken package Rsamtools-1.21.8
+    "regionReport" # depends on broken package Rsamtools-1.21.8
+    "repijson" # depends on broken package V8-0.6
     "Repitools" # depends on broken package affyio-1.37.0
     "ReportingTools" # depends on broken package Category-2.35.1
+    "ReQON" # depends on broken package Rsamtools-1.21.8
     "REST" # depends on broken package nlopt-2.4.2
+    "rfPred" # depends on broken package Rsamtools-1.21.8
+    "rGADEM" # depends on broken package Rsamtools-1.21.8
+    "rgbif" # depends on broken package V8-0.6
+    "Rgnuplot"
     "rgp" # build is broken
+    "rgpui" # depends on broken package rgp-0.4-1
     "rgsepd" # depends on broken package goseq-1.21.1
     "rhdf5" # build is broken
     "rHVDM" # depends on broken package affyio-1.37.0
     "Ringo" # depends on broken package affyio-1.37.0
+    "RIPSeeker" # depends on broken package Rsamtools-1.21.8
     "Risa" # depends on broken package affyio-1.37.0
+    "rjade" # depends on broken package V8-0.6
+    "rJPSGCS" # build is broken
+    "rLindo" # build is broken
+    "RMassBank" # depends on broken package mzR-2.3.1
     "rMAT" # build is broken
     "rmgarch" # depends on broken package nlopt-2.4.2
     "rminer" # depends on broken package nlopt-2.4.2
@@ -1401,37 +1377,56 @@ let
     "Rmosek" # build is broken
     "RNAinteract" # depends on broken package Category-2.35.1
     "RNAither" # depends on broken package nlopt-2.4.2
+    "RNAprobR" # depends on broken package Rsamtools-1.21.8
+    "rnaSeqMap" # depends on broken package Rsamtools-1.21.8
+    "RnaSeqSampleSize" # Build Is Broken
     "RnavGraph" # build is broken
+    "RnBeads" # depends on broken package Rsamtools-1.21.8
     "Rnits" # depends on broken package affyio-1.37.0
+    "roar" # depends on broken package Rsamtools-1.21.8
     "RobLoxBioC" # depends on broken package affyio-1.37.0
     "robustlmm" # depends on broken package nlopt-2.4.2
     "rockchalk" # depends on broken package nlopt-2.4.2
+    "ROI_plugin_symphony" # depends on broken package Rsymphony-0.1-20
+    "Rolexa" # depends on broken package Rsamtools-1.21.8
     "rols" # build is broken
+    "ROracle" # Build Is Broken
     "RPA" # depends on broken package affyio-1.37.0
     "rpanel" # build is broken
     "rpubchem" # depends on broken package nlopt-2.4.2
+    "Rqc" # depends on broken package Rsamtools-1.21.8
     "RQuantLib" # build is broken
     "rr" # depends on broken package nlopt-2.4.2
+    "Rsamtools" # Build Is Broken
     "RSAP" # build is broken
     "rsbml" # build is broken
     "rscala" # build is broken
     "RSDA" # depends on broken package nlopt-2.4.2
+    "rSFFreader" # depends on broken package Rsamtools-1.21.8
     "Rsubread" # Build Is Broken
+    "RSVSim" # depends on broken package Rsamtools-1.21.8
     "Rsymphony" # build is broken
     "rTANDEM" # build is broken
     "RTN" # depends on broken package nlopt-2.4.2
+    "rtracklayer" # depends on broken package Rsamtools-1.21.8
+    "rTRMui" # depends on broken package Rsamtools-1.21.8
     "rugarch" # depends on broken package nlopt-2.4.2
     "RUVcorr" # build is broken
     "RUVnormalize" # Build Is Broken
+    "RUVSeq" # depends on broken package Rsamtools-1.21.8
     "RVAideMemoire" # depends on broken package nlopt-2.4.2
     "RVFam" # depends on broken package nlopt-2.4.2
+    "RVideoPoker" # depends on broken package rpanel-1.1-3
     "ryouready" # depends on broken package nlopt-2.4.2
     "sampleSelection" # depends on broken package nlopt-2.4.2
+    "sapFinder" # depends on broken package rTANDEM-1.9.0
     "SCAN_UPC" # depends on broken package affyio-1.37.0
     "ScISI" # depends on broken package apComplex-2.35.0
     "sdcMicro" # depends on broken package nlopt-2.4.2
     "sdcMicroGUI" # depends on broken package nlopt-2.4.2
+    "SDD" # depends on broken package rpanel-1.1-3
     "seeg" # depends on broken package nlopt-2.4.2
+    "segmentSeq" # depends on broken package Rsamtools-1.21.8
     "sem" # depends on broken package nlopt-2.4.2
     "semdiag" # depends on broken package nlopt-2.4.2
     "SemDist" # Build Is Broken
@@ -1439,9 +1434,23 @@ let
     "semPlot" # depends on broken package nlopt-2.4.2
     "SensoMineR" # depends on broken package nlopt-2.4.2
     "SEPA" # depends on broken package topGO-2.21.0
+    "seq2pathway" # depends on broken package WGCNA-1.47
+    "SeqArray" # depends on broken package Rsamtools-1.21.8
+    "seqbias" # depends on broken package Rsamtools-1.21.8
+    "seqCNA" # build is broken
+    "SeqGrapheR" # Build Is Broken
+    "seqplots" # depends on broken package Rsamtools-1.21.8
     "seqTools" # build is broken
+    "SeqVarTools" # depends on broken package Rsamtools-1.21.8
+    "SGSeq" # depends on broken package Rsamtools-1.21.8
+    "shinyMethyl" # depends on broken package Rsamtools-1.21.8
+    "shinyTANDEM" # depends on broken package rTANDEM-1.9.0
+    "ShortRead" # depends on broken package Rsamtools-1.21.8
+    "SIMAT" # depends on broken package mzR-2.3.1
     "SimBindProfiles" # depends on broken package affyio-1.37.0
+    "similaRpeak" # depends on broken package Rsamtools-1.21.8
     "simpleaffy" # depends on broken package affyio-1.37.0
+    "SimRAD" # depends on broken package Rsamtools-1.21.8
     "sirt" # depends on broken package nlopt-2.4.2
     "sjPlot" # depends on broken package nlopt-2.4.2
     "skewr" # depends on broken package affyio-1.37.0
@@ -1453,11 +1462,23 @@ let
     "snpEnrichment" # depends on broken package snpStats-1.19.0
     "snpStats" # build is broken
     "snpStatsWriter" # depends on broken package snpStats-1.19.0
+    "SNPtools" # depends on broken package Rsamtools-1.21.8
     "SOD" # depends on broken package cudatoolkit-5.5.22
+    "soGGi" # depends on broken package Rsamtools-1.21.8
+    "soilphysics" # depends on broken package rpanel-1.1-3
+    "SomaticSignatures" # depends on broken package Rsamtools-1.21.8
+    "SoyNAM" # depends on broken package r-lme4-1.1-8
     "spacom" # depends on broken package nlopt-2.4.2
     "specificity" # depends on broken package nlopt-2.4.2
+    "spliceR" # depends on broken package Rsamtools-1.21.8
+    "SplicingGraphs" # depends on broken package Rsamtools-1.21.8
+    "spocc" # depends on broken package V8-0.6
+    "spoccutils" # depends on broken spocc-0.3.0
+    "spsann" # depends on broken package r-pedometrics-0.6-2
     "sscore" # depends on broken package affyio-1.37.0
     "ssmrob" # depends on broken package nlopt-2.4.2
+    "ssviz" # depends on broken package Rsamtools-1.21.8
+    "stagePop" # depends on broken package PBSddesolve-1.11.29
     "staRank" # depends on broken package Category-2.35.1
     "Starr" # depends on broken package affyio-1.37.0
     "STATegRa" # depends on broken package affyio-1.37.0
@@ -1465,16 +1486,29 @@ let
     "stepp" # depends on broken package nlopt-2.4.2
     "stringgaussnet" # build is broken
     "Surrogate" # depends on broken package nlopt-2.4.2
+    "SVM2CRM" # depends on broken package Rsamtools-1.21.8
+    "sybilSBML" # build is broken
     "synapter" # depends on broken package affyio-1.37.0
     "systemfit" # depends on broken package nlopt-2.4.2
     "systemPipeR" # depends on broken package AnnotationForge-1.11.3
+    "TargetSearch" # depends on broken package mzR-2.3.1
     "TcGSA" # depends on broken package nlopt-2.4.2
     "TDMR" # depends on broken package nlopt-2.4.2
+    "TEQC" # depends on broken package Rsamtools-1.21.8
     "TFBSTools" # depends on broken package DirichletMultinomial-1.11.1
     "tigerstats" # depends on broken package nlopt-2.4.2
     "tilingArray" # depends on broken package affyio-1.37.0
+    "TIN" # depends on broken package WGCNA-1.47
+    "TitanCNA" # depends on broken package Rsamtools-1.21.8
+    "ToPASeq" # depends on broken package Rsamtools-1.21.8
     "topGO" # build is broken
+    "topologyGSA" # depends on broken package Rsamtools-1.21.8
+    "tracktables" # depends on broken package Rsamtools-1.21.8
+    "trackViewer" # depends on broken package Rsamtools-1.21.8
+    "translateSPSS2R" # depends on broken car-2.0-25
     "tRanslatome" # depends on broken package GOSemSim-1.27.3
+    "TransView" # depends on broken package Rsamtools-1.21.8
+    "traseR"
     "TriMatch" # depends on broken package nlopt-2.4.2
     "TROM" # depends on broken package topGO-2.21.0
     "TurboNorm" # depends on broken package affyio-1.37.0
@@ -1482,18 +1516,25 @@ let
     "userfriendlyscience" # depends on broken package nlopt-2.4.2
     "V8" # build is broken
     "VanillaICE" # depends on broken package affyio-1.37.0
+    "variancePartition" # depends on broken package lme4-1.1-8
+    "VariantAnnotation" # depends on broken package Rsamtools-1.21.8
+    "VariantFiltering" # depends on broken package Rsamtools-1.21.8
+    "VariantTools" # depends on broken package Rsamtools-1.21.8
     "VIM" # depends on broken package nlopt-2.4.2
     "VIMGUI" # depends on broken package nlopt-2.4.2
+    "vmsbase" # depends on broken package PBSmapping-2.69.76
     "vows" # depends on broken package nlopt-2.4.2
     "vsn" # depends on broken package affyio-1.37.0
     "vtpnet" # depends on broken package interactiveDisplayBase-1.7.0
     "wateRmelon" # depends on broken package affyio-1.37.0
+    "wavClusteR" # depends on broken package Rsamtools-1.21.8
     "waveTiling" # depends on broken package affyio-1.37.0
     "webbioc" # depends on broken package affyio-1.37.0
     "wfe" # depends on broken package nlopt-2.4.2
     "WGCNA" # build is broken
     "wgsea" # depends on broken package snpStats-1.19.0
     "WideLM" # depends on broken package cudatoolkit-5.5.22
+    "xcms" # depends on broken package mzR-2.3.1
     "xergm" # depends on broken package nlopt-2.4.2
     "xps" # build is broken
     "yaqcaffy" # depends on broken package affyio-1.37.0

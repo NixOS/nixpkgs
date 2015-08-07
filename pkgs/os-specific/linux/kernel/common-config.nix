@@ -141,6 +141,8 @@ with stdenv.lib;
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
   DRM_I915_KMS y
+  # Allow specifying custom EDID on the kernel command line
+  DRM_LOAD_EDID_FIRMWARE y
   ${optionalString (versionOlder version "3.9") ''
     DRM_RADEON_KMS? y
   ''}

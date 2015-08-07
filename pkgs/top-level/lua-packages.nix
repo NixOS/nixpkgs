@@ -287,6 +287,7 @@ let
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       hydraPlatforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
+      broken = true;
     };
   };
 
@@ -397,6 +398,31 @@ let
 
     preBuild = ''
       sed -i "s|/usr/local|$out|" lgi/Makefile
+    '';
+  };
+
+  vicious = stdenv.mkDerivation rec {
+    name = "vicious-${version}";
+    version = "2.1.3";
+
+    src = fetchzip {
+      url    = "http://git.sysphere.org/vicious/snapshot/vicious-${version}.tar.xz";
+      sha256 = "1c901siza5vpcbkgx99g1vkqiki5qgkzx2brnj4wrpbsbfzq0bcq";
+    };
+
+    meta = with stdenv.lib; {
+      description = "vicious widgets for window managers";
+      homepage    = http://git.sysphere.org/vicious/;
+      license     = licenses.gpl2;
+      maintainers = with maintainers; [ makefu ];
+      platforms   = platforms.linux;
+    };
+
+    buildInputs = [ lua ];
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}/
+      cp -r . $out/lib/lua/${lua.luaversion}/vicious/
+      printf "package.path = '$out/lib/lua/${lua.luaversion}/?/init.lua;' ..  package.path\nreturn require((...) .. '.init')\n" > $out/lib/lua/${lua.luaversion}/vicious.lua
     '';
   };
 

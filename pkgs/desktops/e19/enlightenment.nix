@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.19.5";
+  version = "0.19.8";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0j66x7x76fbgqfw6fi77v8qy50slw3jnsq3vvs82rrfvniabm8wc";
+    sha256 = "1y83jnq01k9i328adgjgpfwgpvvd2a1ixpm029pjcar8p1mvgadi";
   };
   buildInputs = [ pkgconfig e19.efl e19.elementary xlibs.libXdmcp xlibs.libxcb
     xlibs.xcbutilkeysyms xlibs.libXrandr libffi pam alsaLib luajit bzip2

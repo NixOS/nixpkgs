@@ -85,6 +85,17 @@ rec {
   yankring            = YankRing;
 
 
+  CheckAttach = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "CheckAttach-2015-06-22";
+    src = fetchgit {
+      url = "git://github.com/chrisbra/CheckAttach";
+      rev = "a1d86be7e69b25b41ce1a7fe2d2844330f783b68";
+      sha256 = "b8921c826f5a122e9b128301c620b8b3d3fd88a15a2b0634fdea01062fba2c1f";
+    };
+    dependencies = [];
+
+  };
+
   CSApprox = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "CSApprox-2013-07-26";
     src = fetchgit {
@@ -1346,6 +1357,17 @@ rec {
       url = "git://github.com/dag/vim2hs";
       rev = "f2afd55704bfe0a2d66e6b270d247e9b8a7b1664";
       sha256 = "485fc58595bb4e50f2239bec5a4cbb0d8f5662aa3f744e42c110cd1d66b7e5b0";
+    };
+    dependencies = [];
+
+  };
+
+  vimwiki = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vimwiki-2014-02-21";
+    src = fetchgit {
+      url = "git://github.com/vimwiki/vimwiki";
+      rev = "2c03d82a0e4662adf1e347487d73a9bf4bf6fdac";
+      sha256 = "8f94fe1204ae3770b114370382f9c616f971eb9b940d8d08ca96ac83405a0cdf";
     };
     dependencies = [];
 

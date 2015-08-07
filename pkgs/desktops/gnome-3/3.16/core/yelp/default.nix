@@ -3,11 +3,11 @@
 , bash, makeWrapper, itstool, libxml2, libxslt, icu }:
 
 stdenv.mkDerivation rec {
-  name = "yelp-${gnome3.version}.0";
+  name = "yelp-${gnome3.version}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/yelp/${gnome3.version}/${name}.tar.xz";
-    sha256 = "0az2f1g8gz341i93zxnm6sabrqx416a348ylwfr8vzlg592am2r3";
+    sha256 = "1jk7aad1srykhgc3x0hd3q3dnlshmy1ak00alwjzaasxvy6hp0b0";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];

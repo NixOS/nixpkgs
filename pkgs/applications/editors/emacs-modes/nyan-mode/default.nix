@@ -1,4 +1,4 @@
-{trivialBuild, lib, fetchFromGitHub}:
+{lib, trivialBuild, fetchFromGitHub}:
 
 trivialBuild rec {
   pname    = "nyan-mode";
@@ -23,9 +23,8 @@ trivialBuild rec {
     cp -r mus $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "An analog indicator of the position in the buffer";
-    homepage = https://github.com/TeMPOraL/nyan-mode/;
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

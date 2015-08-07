@@ -31,6 +31,9 @@ rec {
   addBuildDepend = drv: x: addBuildDepends drv [x];
   addBuildDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
 
+  addPkgconfigDepend = drv: x: addPkgconfigDepends drv [x];
+  addPkgconfigDepends = drv: xs: overrideCabal drv (drv: { buildDepends = (drv.pkgconfigDepends or []) ++ xs; });
+
   enableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f-${x}") "-f${x}";
   disableCabalFlag = drv: x: appendConfigureFlag (removeConfigureFlag drv "-f${x}") "-f-${x}";
 

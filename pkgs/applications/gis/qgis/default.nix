@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, x11, sqlite, gsl,
-  pyqt4, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
+  qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "qgis-2.10.1";
 
-  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl pyqt4 qwt qscintilla
+  buildInputs = [ gdal qt4 flex bison proj geos x11 sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql ] ++
-    (with pythonPackages; [ numpy psycopg2 ]);
+    (with pythonPackages; [ numpy psycopg2 ]) ++ [ pythonPackages.qscintilla ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 

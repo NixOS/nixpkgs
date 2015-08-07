@@ -7,7 +7,7 @@ self: super: {
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
-  inherit (pkgs.haskell-ng.packages.ghc7101) jailbreak-cabal alex happy;
+  inherit (pkgs.haskell.packages.ghc7102) jailbreak-cabal alex happy;
 
   # Many packages fail with:
   #   haddock: internal error: expectJust getPackageDetails
@@ -87,7 +87,7 @@ self: super: {
   });
 
   ghc-paths = overrideCabal super.ghc-paths (drv: {
-    patches = [ ./ghc-paths-nix-ghcjs.patch ];
+    patches = [ ./patches/ghc-paths-nix-ghcjs.patch ];
   });
 
   reflex-dom = overrideCabal super.reflex-dom (drv: {

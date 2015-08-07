@@ -57,7 +57,9 @@ let
 in
 
 {
+
   config = {
+
     environment.systemPackages =
       [ nixos-build-vms
         nixos-install
@@ -70,5 +72,7 @@ in
     system.build = {
       inherit nixos-install nixos-generate-config nixos-option nixos-rebuild;
     };
+
   };
+
 }

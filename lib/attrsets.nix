@@ -221,6 +221,16 @@ rec {
   isDerivation = x: isAttrs x && x ? type && x.type == "derivation";
 
 
+  /* Convert a store path to a fake derivation. */
+  toDerivation = path:
+    let path' = builtins.storePath path; in
+    { type = "derivation";
+      name = builtins.unsafeDiscardStringContext (builtins.substring 33 (-1) (baseNameOf path'));
+      outPath = path';
+      outputs = [ "out" ];
+    };
+
+
   /* If the Boolean `cond' is true, return the attribute set `as',
      otherwise an empty attribute set. */
   optionalAttrs = cond: as: if cond then as else {};

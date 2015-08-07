@@ -1632,17 +1632,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   ConfigMVP = buildPerlPackage {
-    name = "Config-MVP-2.200007";
+    name = "Config-MVP-2.200010";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200007.tar.gz;
-      sha256 = "10hc8v22mv56wqi6drpl4pw3r8y3xrgh80ayrb2gir80ah9s5bvi";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200010.tar.gz;
+      sha256 = "bfb5870452a12ead4d3fd485045d1fa92b2a11741c3b93b61eb43f3dcbd6099b";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassLoad Moose MooseXOneArgNew ParamsUtil RoleHasMessage RoleIdentifiable Throwable TieIxHash TryTiny ];
+    propagatedBuildInputs = [ ClassLoad ModulePluggable Moose MooseXOneArgNew ParamsUtil RoleHasMessage RoleIdentifiable Throwable TieIxHash TryTiny ];
     meta = {
-      homepage = https://github.com/rjbs/config-mvp;
+      homepage = https://github.com/rjbs/Config-MVP;
       description = "Multivalue-property package-oriented configuration";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -4066,6 +4067,20 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  GamesSolitaireVerify = buildPerlModule {
+    name = "Games-Solitaire-Verify-0.1400";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.1400.tar.gz;
+      sha256 = "0c897c17f23ed6710d0e3ddfb54cce0f00f5b68c55277181adc94a03b7d8c659";
+    };
+    buildInputs = [ TestDifferences ];
+    propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils MooXlate ];
+    meta = {
+      description = "Verify solutions for solitaire games";
+      license = "mit";
+    };
+  };
+
   GD = buildPerlPackage rec {
     name = "GD-2.53";
     src = fetchurl {
@@ -6190,6 +6205,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MooXlate = buildPerlPackage {
+    name = "MooX-late-0.015";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.015.tar.gz;
+      sha256 = "175326af3076fa8698669f289fad1322724978cddaf40ea04e600fcd7f6afbbf";
+    };
+    buildInputs = [ TestFatal TestRequires ];
+    propagatedBuildInputs = [ Moo TypeTiny ];
+    meta = {
+      homepage = https://metacpan.org/release/MooX-late;
+      description = "Easily translate Moose code to Moo";
+      license = "perl";
+    };
+  };
+
   MouseXSimpleConfig = buildPerlPackage {
     name = "MouseX-SimpleConfig-0.11";
     src = fetchurl {
@@ -7514,18 +7544,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PerlCritic = buildPerlPackage {
-    name = "Perl-Critic-1.121";
+  PerlCritic = buildPerlModule {
+    name = "Perl-Critic-1.125";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TH/THALJEF/Perl-Critic-1.121.tar.gz;
-      sha256 = "1y2bxjwzlp6ix51h36a5g3dqpaviaajij1rn22hpvcqxh4hh6car";
+      url = mirror://cpan/authors/id/T/TH/THALJEF/Perl-Critic-1.125.tar.gz;
+      sha256 = "503b718356b14d4c00ed486b66a0f622f4bef2b206be406ee7922c8270463fa1";
     };
     buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ BKeywords ConfigTiny EmailAddress ExceptionClass IOString ListMoreUtils PPI PPIxRegexp PPIxUtilities PerlTidy PodSpell Readonly StringFormat TaskWeaken ];
+    propagatedBuildInputs = [ BKeywords ConfigTiny EmailAddress ExceptionClass FileHomeDir FileWhich IOString ListMoreUtils ModulePluggable PPI PPIxRegexp PPIxUtilities PerlTidy PodSpell Readonly StringFormat TaskWeaken ];
     meta = {
       homepage = http://perlcritic.com;
       description = "Critique Perl source code for best-practices";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -7710,18 +7741,24 @@ let self = _self // overrides; _self = with self; {
   };
 
   PPI = buildPerlPackage {
-    name = "PPI-1.215";
+    name = "PPI-1.220";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/PPI-1.215.tar.gz;
-      sha256 = "db238e84da705b952b69f25554019ce70124079a0ad43713d0638aa14ba54878";
+      url = mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.220.tar.gz;
+      sha256 = "1e15be50e7d95a36d351af8bf5074f6695a2c72165e586d93e616183e7602b83";
     };
     buildInputs = [ ClassInspector FileRemove TestNoWarnings TestObject TestSubCalls ];
     propagatedBuildInputs = [ Clone IOString ListMoreUtils ParamsUtil TaskWeaken ];
+
+    # Remove test that fails due to unexpected shebang after
+    # patchShebang.
+    preCheck = "rm t/03_document.t";
+
     meta = {
+      homepage = https://github.com/adamkennedy/PPI;
       description = "Parse, Analyze and Manipulate Perl (without perl)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
-    doCheck = false;
   };
 
   PPIxRegexp = buildPerlPackage {
@@ -7867,17 +7904,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodElementalPerlMunger = buildPerlPackage {
-    name = "Pod-Elemental-PerlMunger-0.093332";
+    name = "Pod-Elemental-PerlMunger-0.200003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.093332.tar.gz;
-      sha256 = "fc4c4ef76d2b557c590b998d08393b189a2af969d4d195439f37e7d7d466d062";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.200003.tar.gz;
+      sha256 = "94b3abe6894c96b7990cb324a3789af05489dc2b5d1ec8961d37309cc6e8c243";
     };
     buildInputs = [ Moose PodElemental ];
-    propagatedBuildInputs = [ ListMoreUtils Moose PPI PodElemental namespaceautoclean ];
+    propagatedBuildInputs = [ ListMoreUtils Moose PPI ParamsUtil PodElemental namespaceautoclean ];
     meta = {
-      homepage = https://github.com/rjbs/pod-elemental-perlmunger;
+      homepage = https://github.com/rjbs/Pod-Elemental-PerlMunger;
       description = "A thing that takes a string of Perl and rewrites its documentation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 

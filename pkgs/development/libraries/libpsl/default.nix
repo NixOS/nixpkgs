@@ -1,15 +1,47 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, icu, libxslt, pkgconfig }:
+{ stdenv, fetchurl, fetchFromGitHub, autoreconfHook, docbook_xsl, gtk_doc
+, icu, libxslt, pkgconfig }:
 
-let version = "0.7.1"; in
-stdenv.mkDerivation rec {
+let
+
+  version = "${libVersion}-list-${listVersion}";
+
+  listVersion = "2015-08-03";
+  listArchive = let
+    rev = "447962d71bf512fe41e828afc7fa66a1701c7c3c";
+  in fetchurl {
+    sha256 = "0gp0cb6p8yvyy5kvgdwg45ian9rb07bb0a9ibdj58g21l54mx3r2";
+    url = "https://codeload.github.com/publicsuffix/list/tar.gz/${rev}";
+  };
+
+  libVersion = "0.8.0";
+
+in stdenv.mkDerivation {
   name = "libpsl-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0hbsidbmwgpg0h48wh2pzsq59j8az7naz3s5q3yqn99yyjji2vgw";
-    rev = name;
+    sha256 = "0mjnj36igk6w3c0d4k2fqqg1kl6bpnxfrcgcgz1zdw33gfa5gdi7";
+    rev = "libpsl-${libVersion}";
     repo = "libpsl";
     owner = "rockdaboot";
   };
+
+  buildInputs = [ icu libxslt ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl gtk_doc pkgconfig ];
+
+  preAutoreconf = ''
+    mkdir m4
+    gtkdocize
+  '';
+
+  preConfigure = ''
+    # The libpsl check phase requires the list's test scripts (tests/) as well
+    tar --directory=list --strip-components=1 -xf "${listArchive}"
+  '';
+  configureFlags = "--disable-static --enable-gtk-doc --enable-man";
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     inherit version;
@@ -26,13 +58,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ nckx ];
   };
-
-  buildInputs = [ icu libxslt ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-
-  configureFlags = "--disable-static --enable-man";
-
-  enableParallelBuilding = true;
-
-  doCheck = true;
 }

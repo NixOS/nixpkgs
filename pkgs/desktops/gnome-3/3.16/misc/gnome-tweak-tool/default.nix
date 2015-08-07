@@ -4,11 +4,11 @@
 , gnome3, librsvg, gdk_pixbuf, file, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-tweak-tool-${gnome3.version}.0";
+  name = "gnome-tweak-tool-${gnome3.version}.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-tweak-tool/${gnome3.version}/${name}.tar.xz";
-    sha256 = "0pc62qwxgjrgxdhn3qqdzxpx0prrn6c948hqj66w2dy8r0yrdiqw";
+    sha256 = "0r5x67aj79dsw2xl98q4harxv3hjs52g0m6pw43vx29lbir07r5i";
   };
 
   doCheck = true;

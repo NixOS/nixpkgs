@@ -44,8 +44,8 @@ rec {
       libiconv = pkgs.darwin.libiconv;
     });
 
-    ghcjs = packages.ghc7101.callPackage ../development/compilers/ghcjs {
-      ghc = compiler.ghc7101;
+    ghcjs = packages.ghc7102.callPackage ../development/compilers/ghcjs {
+      ghc = compiler.ghc7102;
     };
 
     jhc = callPackage ../development/compilers/jhc {

@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-oss";
 
+  postInstall = ''
+    for f in $out/lib/*.la; do
+      sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $f
+    done
+  '';
+
   passthru = {
     gtkModule = "/lib/gtk-2.0/";
   };

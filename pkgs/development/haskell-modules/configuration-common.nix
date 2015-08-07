@@ -14,6 +14,9 @@ self: super: {
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = disableSharedExecutables super.jailbreak-cabal;
 
+  # Apply NixOS-specific patches.
+  ghc-paths = appendPatch super.ghc-paths ./patches/ghc-paths-nix.patch;
+
   # Break infinite recursions.
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
@@ -250,23 +253,23 @@ self: super: {
   # https://github.com/tibbe/ekg/commit/95018646f48f60d9ccf6209cc86747e0f132e737, not yet in hackage
   ekg = doJailbreak super.ekg;
 
-  # https://github.com/diagrams/diagrams-rasterific/commit/2758e5760c64f8ca2528628bd11de502f354ab15, not yet in hackage
-  diagrams-rasterific = doJailbreak super.diagrams-rasterific;
-
   # https://github.com/NixOS/cabal2nix/issues/136
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
+  # webkit does not recognize its system library build input any more.
+  webkit = markBroken super.webkit; # http://hydra.cryp.to/build/1041942/nixlog/1/raw
+  ghcjs-dom-hello = dontDistribute super.ghcjs-dom-hello;       # depends on broken webkit
+  ghcjs-dom = dontDistribute super.ghcjs-dom;                   # depends on broken webkit
+  jsaddle-hello = dontDistribute super.jsaddle-hello;           # depends on broken webkit
+  reflex-dom = dontDistribute super.reflex-dom;                 # depends on broken webkit
+
   # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
-
-  # https://github.com/jgm/zip-archive/issues/21
-  zip-archive = addBuildTool super.zip-archive pkgs.zip;
 
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
@@ -300,6 +303,7 @@ self: super: {
   dbmigrations = dontCheck super.dbmigrations;
   euler = dontCheck super.euler;                        # https://github.com/decomputed/euler/issues/1
   filestore = dontCheck super.filestore;
+  getopt-generics = dontCheck super.getopt-generics;
   graceful = dontCheck super.graceful;
   hakyll = dontCheck super.hakyll;
   Hclip = dontCheck super.Hclip;
@@ -331,6 +335,7 @@ self: super: {
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
   hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   holy-project = dontCheck super.holy-project;          # http://hydra.cryp.to/build/502002/nixlog/1/raw
+  hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
   http-client = dontCheck super.http-client;            # http://hydra.cryp.to/build/501430/nixlog/1/raw
   http-conduit = dontCheck super.http-conduit;          # http://hydra.cryp.to/build/501966/nixlog/1/raw
   js-jquery = dontCheck super.js-jquery;
@@ -526,6 +531,7 @@ self: super: {
   stable-tree = dontDistribute super.stable-tree;
   synthesizer-llvm = dontDistribute super.synthesizer-llvm;
   optimal-blocks = dontDistribute super.optimal-blocks;
+  hs-blake2 = dontDistribute super.hs-blake2;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
@@ -561,7 +567,7 @@ self: super: {
   duplo = dontCheck super.duplo;
 
   # Nix-specific workaround
-  xmonad = appendPatch super.xmonad ./xmonad-nix.patch;
+  xmonad = appendPatch super.xmonad ./patches/xmonad-nix.patch;
 
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
@@ -582,31 +588,6 @@ self: super: {
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
 
-  # Disable tests which couldn't be built.
-  distributed-process-async = dontCheck super.distributed-process-async;
-
-  # Disable tests which couldn't be built.
-  distributed-process-client-server = dontCheck super.distributed-process-client-server;
-
-  # Disable tests which couldn't be built.
-  distributed-process-extras = dontCheck super.distributed-process-extras;
-
-  # Make distributed-process-platform compile until next version
-  distributed-process-platform = overrideCabal super.distributed-process-platform (drv: {
-    patchPhase = "mv Setup.hs Setup.lhs";
-    doCheck = false;
-    doHaddock = false;
-  });
-
-  # Disable tests due to a failure (Sequential Shutdown Ordering test.)
-  distributed-process-supervisor = dontCheck super.distributed-process-supervisor;
-
-  # Disable network test and errorneous haddock.
-  distributed-process-tests = overrideCabal super.distributed-process-tests (drv: {
-    doCheck = false;
-    doHaddock = false;
-  });
-
   # This packages compiles 4+ hours on a fast machine. That's just unreasonable.
   CHXHtml = dontDistribute super.CHXHtml;
 
@@ -615,9 +596,6 @@ self: super: {
 
   # https://github.com/NixOS/nixpkgs/issues/6350
   paypal-adaptive-hoops = overrideCabal super.paypal-adaptive-hoops (drv: { testTarget = "local"; });
-
-  # https://github.com/seanparsons/wiring/issues/1
-  wiring = markBrokenVersion super.wiring;
 
   # https://github.com/jwiegley/simple-conduit/issues/2
   simple-conduit = markBroken super.simple-conduit;
@@ -631,12 +609,8 @@ self: super: {
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
-  # wxc needs help deciding which version of GTK to use.
-  wxc = overrideCabal (super.wxc.override { wxGTK = pkgs.wxGTK29; }) (drv: {
-    patches = [ ./wxc-no-ldconfig.patch ];
-    doHaddock = false;
-    postInstall = "cp -v dist/build/libwxc.so.${drv.version} $out/lib/libwxc.so";
-  });
+  # wxc supports wxGTX >= 2.9, but our current default version points to 2.8.
+  wxc = super.wxc.override { wxGTK = pkgs.wxGTK29; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK29; };
 
   # Depends on QuickCheck 1.x.
@@ -783,7 +757,7 @@ self: super: {
   leksah = dontCheck super.leksah;
 
   # Patch to consider NIX_GHC just like xmonad does
-  dyre = appendPatch super.dyre ./dyre-nix.patch;
+  dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
   zlib = dontCheck super.zlib;
@@ -902,5 +876,50 @@ self: super: {
 
   # https://github.com/hspec/mockery/issues/6
   mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
+
+  # https://github.com/diagrams/diagrams-lib/issues/258
+  # https://github.com/diagrams/diagrams-lib/issues/259
+  diagrams-lib = markBroken super.diagrams-lib;
+  diagrams-cairo = dontDistribute super.diagrams-cairo;
+  diagrams-gtk = dontDistribute super.diagrams-gtk;
+  diagrams-html5 = dontDistribute super.diagrams-html5;
+  diagrams-pandoc = dontDistribute super.diagrams-pandoc;
+  diagrams-postscript = dontDistribute super.diagrams-postscript;
+  diagrams-rasterific = dontDistribute super.diagrams-rasterific;
+  diagrams-rubiks-cube = dontDistribute super.diagrams-rubiks-cube;
+  diagrams-svg = dontDistribute super.diagrams-svg;
+  halma = dontDistribute super.halma;
+  midi-music-box = dontDistribute super.midi-music-box;
+  potrace-diagrams = dontDistribute super.potrace-diagrams;
+  SVGFonts = dontDistribute super.SVGFonts;
+  yesod-media-simple = dontDistribute super.yesod-media-simple;
+
+  # https://github.com/alphaHeavy/lzma-conduit/issues/5
+  lzma-conduit = dontCheck super.lzma-conduit;
+
+  # https://github.com/kazu-yamamoto/logger/issues/42
+  logger = dontCheck super.logger;
+
+  # https://github.com/edwinb/EpiVM/issues/13
+  # https://github.com/edwinb/EpiVM/issues/14
+  epic = addExtraLibraries (addBuildTool super.epic self.happy) [pkgs.boehmgc pkgs.gmp];
+
+  # Upstream has no issue tracker.
+  dpkg = markBroken super.dpkg;
+
+  # https://github.com/ekmett/wl-pprint-terminfo/issues/7
+  wl-pprint-terminfo = addExtraLibrary super.wl-pprint-terminfo pkgs.ncurses;
+
+  # https://github.com/bos/pcap/issues/5
+  pcap = addExtraLibrary super.pcap pkgs.libpcap;
+
+  # https://github.com/bscarlet/llvm-general/issues/143
+  llvm-general-pure = dontCheck super.llvm-general-pure;
+
+  # https://github.com/skogsbaer/hscurses/issues/24
+  hscurses = markBroken super.hscurses;
+
+  # https://github.com/qnikst/imagemagick/issues/34
+  imagemagick = dontCheck super.imagemagick;
 
 }
