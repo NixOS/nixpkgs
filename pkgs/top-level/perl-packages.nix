@@ -4712,6 +4712,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  inclatest = buildPerlPackage {
+    name = "inc-latest-0.500";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/inc-latest-0.500.tar.gz;
+      sha256 = "daa905f363c6a748deb7c408473870563fcac79b9e3e95b26e130a4a8dc3c611";
+    };
+    meta = {
+      homepage = https://github.com/dagolden/inc-latest;
+      description = "Use modules bundled in inc/ if they are newer than installed ones";
+      license = [ stdenv.lib.licenses.asl20 ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   IOAll = buildPerlPackage {
     name = "IO-All-0.60";
     src = fetchurl {
@@ -5816,15 +5830,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleBuild = buildPerlPackage {
-    name = "Module-Build-0.4005";
+    name = "Module-Build-0.4214";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4005.tar.gz;
-      sha256 = "eb2522507251550f459c11223ea6d86b34f1dee9b3e3928d0d6a0497505cb7ef";
+      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4214.tar.gz;
+      sha256 = "c579488918cf4db84954a550c475272b3c25f5100c739339e91a65d7c055dc3f";
     };
-    buildInputs = [ CPANMeta ExtUtilsCBuilder ];
+    buildInputs = [ CPANMeta ExtUtilsCBuilder inclatest ];
     meta = {
       description = "Build and install Perl modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
