@@ -325,6 +325,7 @@ self: super: {
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
+  ide-backend = dontCheck super.ide-backend;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
