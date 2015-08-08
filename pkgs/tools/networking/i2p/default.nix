@@ -1,10 +1,10 @@
 { stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.20";
+  name = "i2p-0.9.21";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "10rynkl9dbnfl67ck3d7wdwz52h7354r7nbwcypsjnng4f1dmj5s";
+    sha256 = "1cgki9sg0pc4d66rr556lw0682c4mmdvmr6awvsn7ch0rp4zav9f";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = "https://geti2p.net";
+    homepage = https://geti2p.net;
     description = "Applications and router for I2P, anonymity over the Internet";
-    maintainers = [ stdenv.lib.maintainers.joelmo ];
+    maintainers = [ maintainers.joelmo ];
     license = licenses.gpl2;
     # TODO: support other systems, just copy appropriate lib/wrapper.. to $out
     platforms = [ "x86_64-linux" ];
