@@ -13,15 +13,17 @@
   enableOfficialBranding ? false
 }:
 
-let version = "31.7.0"; in
+let version = "38.1.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
   name = "thunderbird-${verName}";
 
   src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
-    sha1 = "90e18f8ecccdaf1ee39493223a7e3ad8b3b7bede";
+    url = "http://archive.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
+
+    # https://archive.mozilla.org/pub/thunderbird/releases/${verName}/SHA1SUMS
+    sha1 = "7bb0c85e889e397e53dcbcbd36957dbd7c8c10bd";
   };
 
   buildInputs = # from firefox30Pkgs.xulrunner, but without gstreamer and libvpx
@@ -75,6 +77,10 @@ stdenv.mkDerivation rec {
     cd objdir
     echo '${stdenv.lib.concatMapStrings (s : "ac_add_options ${s}\n") configureFlags}' > .mozconfig
     echo 'ac_add_options --prefix="'"$out"'"' >> .mozconfig
+    # From version 38, we need to specify the source directory to build
+    # Thunderbird. Refer to mozilla/configure and search a line with
+    # "checking for application to build" and "# Support comm-central".
+    echo 'ac_add_options --with-external-source-dir="'`realpath ..`'"' >> .mozconfig
     echo 'mk_add_options MOZ_MAKE_FLAGS="-j'"$NIX_BUILD_CORES"'"' >> .mozconfig
     echo 'mk_add_options MOZ_OBJDIR="'`pwd`'"' >> .mozconfig
 
