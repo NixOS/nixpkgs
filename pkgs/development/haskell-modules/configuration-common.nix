@@ -192,8 +192,7 @@ self: super: {
 
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
-  # hinotify's test suite is broken: https://github.com/kolmodin/hinotify/issues/15.
-  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else dontCheck super.hinotify;
+  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
   # hfsevents needs CoreServices in scope
   hfsevents = if pkgs.stdenv.isDarwin
