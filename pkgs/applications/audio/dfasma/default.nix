@@ -30,6 +30,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ fftw libsndfile qt5.base qt5.multimedia ];
 
+  postPatch = ''
+    substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
+  '';
+
   configurePhase = ''
     qmake DESTDIR=$out/bin dfasma.pro
   '';
