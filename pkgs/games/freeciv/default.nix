@@ -9,13 +9,14 @@ let
   sdlName = if sdlClient then "-sdl" else "";
   gtkName = if gtkClient then "-gtk" else "";
 
-  baseName = "freeciv-2.5.0";
+  name = "freeciv";
+  version = "2.5.0";
 in
 stdenv.mkDerivation {
-  name = baseName + sdlName + gtkName;
+  name = "${name}${sdlName}${gtkName}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freeciv/${baseName}.tar.bz2";
+    url = "mirror://sourceforge/freeciv/${name}-${version}.tar.bz2";
     sha256 = "bd9f7523ea79b8d2806d0c1844a9f48506ccd18276330580319913c43051210b";
     # sha1 = "477b60e02606e47b31a019b065353c1a6da6c305";
     # md5 = "8a61ecd986853200326711446c573f1b";
