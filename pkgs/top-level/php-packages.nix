@@ -6,6 +6,12 @@ let self = with self; {
     inherit (pkgs) stdenv autoreconfHook fetchurl;
   };
 
+  apcu = buildPecl {
+    name = "apcu-4.0.7";
+
+    sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+  };
+
   memcache = buildPecl {
     name = "memcache-3.0.8";
 
