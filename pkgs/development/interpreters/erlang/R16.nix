@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${gnused}/bin/:${gawk}/bin"
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "http://www.erlang.org/";
     description = "Programming language used for massively scalable soft real-time systems";
