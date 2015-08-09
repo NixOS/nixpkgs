@@ -58,6 +58,16 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
+  ubuntu_fan =
+    { name = "ubuntu-fan";
+      patch = ./ubuntu-fan-3.patch;
+    };
+
+  ubuntu_fan_4 =
+    { name = "ubuntu-fan";
+      patch = ./ubuntu-fan-4.patch;
+    };
+
   tuxonice_3_10 = makeTuxonicePatch {
     version = "2013-11-07";
     kernelVersion = "3.10.18";
