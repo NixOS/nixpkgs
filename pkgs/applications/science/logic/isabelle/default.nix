@@ -1,5 +1,9 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, proofgeneral, texLive }:
-# nettools needed for hostname
+{ stdenv, fetchurl, perl, java, polyml, proofgeneral
+, texLiveSupport ? false, texLive ? null
+, nettools # nettools needed for hostname
+}:
+
+assert texLiveSupport -> texLive != null;
 
 let
   dirname = "Isabelle2015";
@@ -25,28 +29,32 @@ stdenv.mkDerivation {
 
   sourceRoot = dirname;
 
-  postPatch = ''
-    ENV=$(type -p env)
-    patchShebangs "."
-    substituteInPlace lib/Tools/env \
-      --replace /usr/bin/env $ENV
-    substituteInPlace lib/Tools/install \
-      --replace /usr/bin/env $ENV
-    substituteInPlace lib/Tools/latex \
-      --replace '$ISABELLE_LATEX' ${texLive}/bin/latex \
-      --replace '$ISABELLE_PDFLATEX' ${texLive}/bin/pdflatex \
-      --replace '$ISABELLE_BIBTEX' ${texLive}/bin/bibtex \
-      --replace '$ISABELLE_MAKEINDEX' ${texLive}/bin/mkindex
-    sed -i 's|isabelle_java java|${java}/bin/java|g' lib/Tools/java
-    substituteInPlace etc/settings \
-      --subst-var-by ML_HOME "${polyml}/bin" \
-      --subst-var-by PROOFGENERAL_HOME "${proofgeneral}/share/emacs/site-lisp/ProofGeneral"
-    substituteInPlace contrib/jdk/etc/settings \
-      --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
-    substituteInPlace contrib/polyml-*/etc/settings \
-      --replace 'ML_HOME="$POLYML_HOME/$ML_PLATFORM"' \
-                "ML_HOME=\"${polyml}/bin\""
-  '';
+  postPatch = stdenv.lib.concatStrings [
+    ''
+      ENV=$(type -p env)
+      patchShebangs "."
+      substituteInPlace lib/Tools/env \
+        --replace /usr/bin/env $ENV
+      substituteInPlace lib/Tools/install \
+        --replace /usr/bin/env $ENV
+      sed -i 's|isabelle_java java|${java}/bin/java|g' lib/Tools/java
+      substituteInPlace etc/settings \
+        --subst-var-by ML_HOME "${polyml}/bin" \
+        --subst-var-by PROOFGENERAL_HOME "${proofgeneral}/share/emacs/site-lisp/ProofGeneral"
+      substituteInPlace contrib/jdk/etc/settings \
+        --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
+      substituteInPlace contrib/polyml-*/etc/settings \
+        --replace 'ML_HOME="$POLYML_HOME/$ML_PLATFORM"' \
+                  "ML_HOME=\"${polyml}/bin\""
+    ''
+    (stdenv.lib.optionalString texLiveSupport ''
+      substituteInPlace lib/Tools/latex \
+        --replace '$ISABELLE_LATEX' ${texLive}/bin/latex \
+        --replace '$ISABELLE_PDFLATEX' ${texLive}/bin/pdflatex \
+        --replace '$ISABELLE_BIBTEX' ${texLive}/bin/bibtex \
+        --replace '$ISABELLE_MAKEINDEX' ${texLive}/bin/mkindex
+    '')
+  ];
 
   buildPhase = ''
     pushd contrib/exec_process*/

@@ -14433,10 +14433,10 @@ let
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
-  isabelle = import ../applications/science/logic/isabelle {
-    inherit (pkgs) stdenv fetchurl nettools perl polyml texLive;
+  isabelle = callPackage ../applications/science/logic/isabelle {
     inherit (pkgs.emacs24Packages) proofgeneral;
     java = if stdenv.isLinux then jre else jdk;
+    texLiveSupport = false;
   };
 
   iprover = callPackage ../applications/science/logic/iprover {};
