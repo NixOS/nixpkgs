@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ghc, perl, gmp, ncurses, libiconv }:
+{ stdenv, fetchurl, fetchpatch, ghc, perl, gmp, ncurses, libiconv, binutils, coreutils }:
 
 let
 
@@ -45,6 +45,15 @@ stdenv.mkDerivation rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+
+  postInstall = ''
+    # Patch scripts to include "readelf" and "cat" in $PATH.
+    for i in "$out/bin/"*; do
+      test ! -h $i || continue
+      egrep --quiet '^#!' <(head -n 1 $i) || continue
+      sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
+    done
+  '';
 
   meta = {
     homepage = "http://haskell.org/ghc";
