@@ -8329,6 +8329,25 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOStringy OLEStorageLight ];
   };
 
+  SpreadsheetWriteExcel = buildPerlPackage rec {
+    name = "Spreadsheet-WriteExcel-2.40";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/${name}.tar.gz";
+      sha256 = "0zn0sqm043g8yff8x1q4bb0l6x0rkabhxvk829rkbwbchvbalmp3";
+    };
+
+    propagatedBuildInputs = [ ParseRecDescent OLEStorageLight FileTemp ];
+  };
+
+  SpreadsheetXLSX = buildPerlPackage rec {
+    name = "Spreadsheet-XLSX-0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DM/DMOW/${name}.tar.gz";
+      sha256 = "1y2f9hzz7r6xm3ax5gcp1f5li4a4g06azzl6mz4mgdc3qb8s4xga";
+    };
+    propagatedBuildInputs = [ ArchiveZip SpreadsheetParseExcel ];
+  };
+
   SQLAbstract = buildPerlPackage {
     name = "SQL-Abstract-1.80";
     src = fetchurl {
@@ -9936,6 +9955,15 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/${name}.tar.gz";
       sha256 = "1bzrizyp8n2013nhd34j52bzdqcp9la30aqbdfkij52ssxkfm7xl";
     };
+  };
+
+  TextCSV_XS = buildPerlPackage rec {
+    name = "Text-CSV_XS-1.16";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/${name}.tgz";
+      sha256 = "1cf3kfciw07bqbr92s9l516bqv0vcc07f5ckii2b6r3yaaf3zpyw";
+    };
+    buildInputs = [ TestMore ];
   };
 
   TextDiff = buildPerlPackage {

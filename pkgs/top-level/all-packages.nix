@@ -9032,6 +9032,8 @@ let
 
   osrm-backend_luajit = callPackage ../servers/osrm-backend { luabind = luabind_luajit; };
 
+  pcp = callPackage ../servers/monitoring/pcp { };
+
   petidomo = callPackage ../servers/mail/petidomo { };
 
   popa3d = callPackage ../servers/mail/popa3d { };
