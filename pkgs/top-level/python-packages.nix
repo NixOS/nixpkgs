@@ -15408,7 +15408,7 @@ let
 
 
   pyusb = buildPythonPackage rec {
-    name = "pyusb-1.0.0b1";
+    name = "pyusb-1.0.0b2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyusb/${name}.tar.gz";
@@ -15425,7 +15425,7 @@ let
     meta = {
       description = "Python USB access module (wraps libusb 1.0)";  # can use other backends
       homepage = http://pyusb.sourceforge.net/;
-      license = "BSD";
+      license = licenses.bsd3;
       maintainers = with maintainers; [ bjornfor ];
     };
   };
