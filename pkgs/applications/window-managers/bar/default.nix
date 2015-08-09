@@ -1,14 +1,14 @@
 { stdenv, fetchurl, perl, libxcb }:
 
 let
-  version = "1.0";
+  version = "1.1";
 in
   stdenv.mkDerivation rec {
     name = "bar-${version}";
   
     src = fetchurl {
       url = "https://github.com/LemonBoy/bar/archive/v${version}.tar.gz";
-      sha256 = "1n2vak2acs37sslxl250cnz9c3irif5z4s54wi9qjyxbfzr2h2nc";
+      sha256 = "171ciw676cvj80zzbqfbg9nwix36zph0683zmqf279q9b9bmayan";
     };
   
     buildInputs = [ libxcb perl ];
