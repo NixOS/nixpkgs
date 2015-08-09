@@ -11460,9 +11460,7 @@ let
     fftw = fftwFloat;
   };
 
-  gnuradio-wrapper = callPackage ../applications/misc/gnuradio/wrapper.nix { };
-
-  gnuradio-full = gnuradio-wrapper.override {
+  gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
     extraPackages = [ gnuradio-osmosdr ];
   };
 
@@ -15346,6 +15344,8 @@ aliases = with self; rec {
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
   firefoxWrapper = firefox-wrapper;
+  gnuradio-full = gnuradio-with-packages; # 2016-01-30, deleted in master @ 2015-08
+  gnuradio-wrapper = gnuradio-with-packages; # 2016-01-30, deleted in master @ 2015-08
   haskell-ng = haskell;                 # 2015-04-19
   haskellngPackages = haskellPackages;  # 2015-04-19
   htmlTidy = html-tidy;  # added 2014-12-06
