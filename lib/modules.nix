@@ -55,7 +55,7 @@ rec {
         };
       };
 
-      closed = closeModules (modules ++ [ internalModule ]) (specialArgs // { inherit config options; lib = import ./.; });
+      closed = closeModules (modules ++ [ internalModule ]) ({ inherit config options; lib = import ./.; } // specialArgs);
 
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
