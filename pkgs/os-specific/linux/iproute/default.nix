@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, flex, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, lib, flex, bison, db, iptables, pkgconfig
+, enableFan ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "iproute2-4.1.1";
@@ -7,6 +9,8 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
     sha256 = "0vz6m2k6hdrjlg4x0r3cd75lg9ysmndbsp35pm8494zvksc7l1vk";
   };
+
+  patches = lib.optionals enableFan [ ./ubuntu-fan.patch ];
 
   preConfigure = ''
     patchShebangs ./configure
