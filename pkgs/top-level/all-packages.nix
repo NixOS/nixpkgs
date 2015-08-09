@@ -4019,20 +4019,22 @@ let
     gmp = gmp4;
   };
 
-  gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
-    version = "4.7-2013q3-20130916";
-    releaseType = "update";
-    sha256 = "1bd9bi9q80xn2rpy0rn1vvj70rh15kb7dmah0qs4q2rv78fqj40d";
-  };
-  gcc-arm-embedded-4_8 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
-    version = "4.8-2014q1-20140314";
-    releaseType = "update";
-    sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
-  };
-  gcc-arm-embedded-4_9 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
-    version = "4.9-2015q1-20150306";
-    releaseType = "update";
-    sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
+  makeGccArmEmbedded = binaries:
+    (if stdenv.isDarwin then callPackage else callPackage_i686) ../development/compilers/gcc-arm-embedded {
+      inherit binaries;
+    };
+  
+  gcc-arm-embedded-4_9 = makeGccArmEmbedded {
+    linux = {
+      version = "4.9-2015q3-20150921";
+      releaseType = "update";
+      sha256 = "c50078bfbd29e6c15615900e746f4d0acde917338e55860b0f145f57387c12ab";
+    };
+    mac = {
+      version = "4.9-2015q3-20150921";
+      releaseType = "update";
+      sha256 = "a6353db31face60c2091c2c84c902fc4d566decd1aa04884cd822c383d13c9fa";
+    };
   };
   gcc-arm-embedded = gcc-arm-embedded-4_9;
 
