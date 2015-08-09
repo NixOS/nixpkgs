@@ -1,8 +1,8 @@
 { stdenv, callPackage }:
 callPackage ./generic.nix {
-  shortVersion = "1.1.0";
+  shortVersion = "1.2.0";
   isRelease = true;
-  srcSha = "0lsfrclj5imxy6129ggya7rb2h04cgqq53f75z2jv40y5xk25sy8";
+  srcSha = "1zq2nhgaxkv1ghi3z2qgff6cylqirn33nphvkjiczlkjfi0pyw16";
 
   /* Rust is bootstrapped from an earlier built version. We need
   to fetch these earlier versions, which vary per platform.
@@ -12,22 +12,22 @@ callPackage ./generic.nix {
   */
 
   # linux-i386
-  snapshotHashLinux686 = "0bc8cffdce611fb71fd7d3d8e7cdbfaf748a4f16";
+  snapshotHashLinux686 = "a6f22e481eabf098cc65bda97bf7e434a1fcc20b";
 
   # linux-x86_64
-  snapshotHashLinux64 = "94089740e48167c5975c92c139ae9c286764012f";
+  snapshotHashLinux64 = "5fd8698fdfe953e6c4d86cf4fa1d5f3a0053248c";
 
   # macos-i386
-  snapshotHashDarwin686 = "54cc35e76497e6e94fddf38d6e40e9d168491ddb";
+  snapshotHashDarwin686 = "9a273324a6b63a40f67a553029c0a9fb692ffd1f";
 
   # macos-x86_64
-  snapshotHashDarwin64 = "43a1c1fba0d1dfee4c2ca310d506f8f5f51b3f6f";
+  snapshotHashDarwin64 = "e5b12cb7c179fc98fa905a3c84803645d946a6ae";
 
-  snapshotDate = "2015-04-27";
-  snapshotRev = "857ef6e";
+  snapshotDate = "2015-05-24";
+  snapshotRev = "ba0e1cd";
 
   patches = [
-    ./patches/beta.patch
+    ./patches/stable.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
   configureFlags = [ "--release-channel=stable" ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
+{ stdenv, fetchFromGitHub, alsaLib, aubio, boost, cairomm, curl, doxygen, dbus, fftw
 , fftwSinglePrec, flac, glibc, glibmm, graphviz, gtk, gtkmm, libjack2
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
@@ -15,24 +15,25 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "4.0";
+  tag = "4.1";
 
   # Version info that is built into the binary. Keep in sync with 'tag'. The
   # last 8 digits is a (fake) commit id.
-  revision = "4.0-e1aa66cb3f";
+  revision = "4.1-fe672c8";
 
 in
 
 stdenv.mkDerivation rec {
   name = "ardour-${tag}";
 
-  src = fetchgit {
-    url = git://git.ardour.org/ardour/ardour.git;
-    rev = "e1aa66cb3f";
-    sha256 = "396668fb9116a68f5079f0d880930e890fd0cdf7ee5f3b97fcf44b88cf840b4c";
+  src = fetchFromGitHub {
+    owner = "Ardour";
+    repo = "ardour";
+    rev = "fe672c827cb2c08c94b1fa7e527d884c522a1af7";
+    sha256 = "12yfy9l5mnl96ix4s2qicp3m2zscli1a4bd50nk9v035pgf77s3f";
   };
 
-  buildInputs = 
+  buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
       glibmm graphviz gtk gtkmm libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate

@@ -8163,12 +8163,12 @@ let
   };
 
   nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-0.5.2";
+    name = "nbxmpp-0.5.3";
 
     src = pkgs.fetchurl {
       name = "${name}.tar.gz";
-      url = "https://python-nbxmpp.gajim.org/downloads/7";
-      sha256 = "0q2iph07aahwn6hlr38v0cvzlfc9hrf5mz6qs1kp4b4x9l8x5mqn";
+      url = "https://python-nbxmpp.gajim.org/downloads/8";
+      sha256 = "0dcr786dyips1fdvgsn8yvpgcz5j7217fi05c29cfypdl8jnp6mp";
     };
 
     meta = {
@@ -15636,7 +15636,7 @@ let
 
 
   pyusb = buildPythonPackage rec {
-    name = "pyusb-1.0.0b1";
+    name = "pyusb-1.0.0b2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyusb/${name}.tar.gz";
@@ -15653,7 +15653,7 @@ let
     meta = {
       description = "Python USB access module (wraps libusb 1.0)";  # can use other backends
       homepage = http://pyusb.sourceforge.net/;
-      license = "BSD";
+      license = licenses.bsd3;
       maintainers = with maintainers; [ bjornfor ];
     };
   };

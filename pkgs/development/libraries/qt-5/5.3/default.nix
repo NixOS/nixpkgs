@@ -176,7 +176,9 @@ stdenv.mkDerivation rec {
   ++ optional (postgresql != null) postgresql
   ++ optionals gtkStyle [gnome_vfs libgnomeui gtk GConf];
 
-  buildInputs = [ gdb bison flex gperf ruby ];
+  buildInputs =
+    [ bison flex gperf ruby ]
+    ++ optional developerBuild gdb;
 
   nativeBuildInputs = [ python perl pkgconfig ];
 

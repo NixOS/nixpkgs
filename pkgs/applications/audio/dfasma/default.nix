@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, fftw, libsndfile, qt5 }:
 
-let version = "1.0.1"; in
+let version = "1.1.2"; in
 stdenv.mkDerivation {
   name = "dfasma-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "16m6jnr49j525xxqiwmwni07rcdg92p0dcznd5bmzz34xsm0cbiz";
+    sha256 = "0xqam5hm4kvfksdlyz1rviijv386fk3px4lhz6glfsimbcvvzl0r";
     rev = "v${version}";
     repo = "dfasma";
     owner = "gillesdegottex";
@@ -29,6 +29,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ fftw libsndfile qt5.base qt5.multimedia ];
+
+  postPatch = ''
+    substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
+  '';
 
   configurePhase = ''
     qmake DESTDIR=$out/bin dfasma.pro

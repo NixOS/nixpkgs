@@ -123,10 +123,6 @@ stdenv.mkDerivation {
   inherit patches;
 
   postPatch = ''
-    substituteInPlace src/librustc_trans/back/link.rs \
-      --subst-var-by "ccPath" "${stdenv.cc}/bin/cc"
-    substituteInPlace src/librustc_back/archive.rs \
-      --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"
     substituteInPlace src/librustc_back/target/mod.rs \
       --subst-var-by "ccPath" "${stdenv.cc}/bin/cc" \
       --subst-var-by "arPath" "${stdenv.cc.binutils}/bin/ar"

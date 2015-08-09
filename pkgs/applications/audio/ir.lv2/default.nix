@@ -17,10 +17,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir "$out/bin"
+    mkdir -p "$out/bin"
     mkdir "$out/include"
-    mkdir "$out/share"
-    mkdir "$out/share/doc"
+    mkdir -p "$out/share/doc"
 
     make PREFIX="$out" install
     install -Dm755 convert4chan "$out/bin/convert4chan"

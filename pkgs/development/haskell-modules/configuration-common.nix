@@ -191,7 +191,7 @@ self: super: {
   vector = if pkgs.stdenv.isi686 then appendConfigureFlag super.vector "--ghc-options=-msse2" else super.vector;
 
   # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
-  # on darwin: https://github.com/NixOS/cabal2nix/issues/146
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
   # hfsevents needs CoreServices in scope
@@ -271,6 +271,9 @@ self: super: {
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
+  # While waiting for https://github.com/jwiegley/gitlib/pull/53 to be merged
+  hlibgit2 = addBuildTool super.hlibgit2 pkgs.git;
+
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
 
@@ -321,6 +324,7 @@ self: super: {
   wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
+  ide-backend = dontCheck super.ide-backend;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -763,7 +767,7 @@ self: super: {
   zlib = dontCheck super.zlib;
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
-  cabal2nix = pkgs.cabal2nix;
+  cabal2nix = self.callPackage ../tools/haskell/cabal2nix {};
 
   # https://github.com/urs-of-the-backwoods/HGamer3D/issues/7
   HGamer3D-Bullet-Binding = dontDistribute super.HGamer3D-Bullet-Binding;
@@ -913,13 +917,13 @@ self: super: {
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
 
-  # https://github.com/bscarlet/llvm-general/issues/143
-  llvm-general-pure = dontCheck super.llvm-general-pure;
-
   # https://github.com/skogsbaer/hscurses/issues/24
   hscurses = markBroken super.hscurses;
 
   # https://github.com/qnikst/imagemagick/issues/34
   imagemagick = dontCheck super.imagemagick;
+
+  # https://github.com/liyang/thyme/issues/36
+  thyme = dontCheck super.thyme;
 
 }

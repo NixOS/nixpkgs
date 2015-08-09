@@ -213,6 +213,7 @@ stdenv.mkDerivation {
     (mkWith   true                         "rgw-user"             "rgw")
     (mkWith   true                         "rgw-group"            "rgw")
     (mkWith   true                         "systemd-unit-dir"     "\${out}/etc/systemd/system")
+    (mkWith   false                        "selinux"              null)  # TODO: Implement
   ];
 
   preBuild = optionalString (versionAtLeast version "9.0.0") ''

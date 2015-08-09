@@ -22,11 +22,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.16.1";
+  version = "0.16.3";
 
   src = fetchurl {
     url = "http://www.gajim.org/downloads/0.16/gajim-${version}.tar.bz2";
-    sha256 = "1gp8mdn6sz2pks5irsf563zbz98ldqksfky84ga9fzqndmq35bi6";
+    sha256 = "05a59hf9wna6n9fi0a4bhz1hifqj21bwb4ff9rd0my23rdwmij51";
   };
 
   patches = [

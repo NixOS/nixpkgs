@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat > $out/bin/sbt << EOF
     #! ${stdenv.shell}
+    if [ ! -v JAVA_HOME ]; then
+        export JAVA_HOME="${jre.home}"
+    fi
     ${jre}/bin/java \$SBT_OPTS -jar ${src} "\$@"
     EOF
     chmod +x $out/bin/sbt

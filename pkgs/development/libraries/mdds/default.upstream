@@ -1,4 +1,4 @@
-url https://code.google.com/p/multidimalgorithm/wiki/Downloads
+url https://gitlab.com/mdds/mdds
 version_link '[.]tar[.][a-z0-9]+$'
 version '.*_([0-9.]+)[.]tar[.].*' '\1'
 

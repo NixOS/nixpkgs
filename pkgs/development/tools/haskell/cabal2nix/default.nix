@@ -8,14 +8,14 @@
 
 mkDerivation rec {
   pname = "cabal2nix";
-  version = "20150807";
+  version = "20150807-6-g9f58996";
   src = fetchgit {
     url = "http://github.com/NixOS/cabal2nix.git";
-    rev = "796dabfc3fb0a98174b680c5d722954096465103";
-    sha256 = "1blyjq80w9534ap4cg0m6awks0zj2135kxld1i9d2z88x1ijzx9v";
+    rev = "9f589961fba9fa6a92900c37cf1ab16c597b0c69";
+    sha256 = "1w5ba7cdanpq4nr8xngk1jsj0p6b17c6ap24ldzggrln216f3f7d";
     deepClone = true;
   };
-  isLibrary = true;
+  isLibrary = false;
   isExecutable = true;
   libraryHaskellDepends = [
     aeson ansi-wl-pprint base bytestring Cabal containers

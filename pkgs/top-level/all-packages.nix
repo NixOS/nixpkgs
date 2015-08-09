@@ -788,7 +788,7 @@ let
 
   byobu = callPackage ../tools/misc/byobu { };
 
-  cabal2nix = haskellPackages.callPackage ../development/tools/haskell/cabal2nix {};
+  cabal2nix = haskellPackages.cabal2nix;
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -13574,6 +13574,8 @@ let
   bzflag = callPackage ../games/bzflag { };
 
   castle_combat = callPackage ../games/castle-combat { };
+
+  cataclysm-dda = callPackage ../games/cataclysm-dda { };
 
   chessdb = callPackage ../games/chessdb { };
 
