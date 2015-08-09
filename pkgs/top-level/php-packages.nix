@@ -1,4 +1,4 @@
-{ pkgs, php }:
+{ pkgs, php, fetchgit }:
 
 let self = with self; {
   buildPecl = import ../build-support/build-pecl.nix {
@@ -40,6 +40,16 @@ let self = with self; {
 
     doCheck = true;
     checkTarget = "test";
+  };
+
+  apcu = buildPecl {
+    name = "apcu-git";
+
+    src = fetchgit {
+      url = https://github.com/krakjoe/apcu.git;
+      rev = "db5d3db91470fdf07f6d873cba3f75326079869f";
+      sha256 = "be868fec46f76693ab52ecbbb5c2abfe5ba634afdb238b80a0d18a7ba56080c7";
+    };
   };
 
   zendopcache = buildPecl {
