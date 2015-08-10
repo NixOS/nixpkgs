@@ -6945,7 +6945,7 @@ let self = _self // overrides; _self = with self; {
     name = "Net-Amazon-EC2-0.14-stanaka-bc66577e13";
     src = fetchurl {
       url = https://github.com/stanaka/net-amazon-ec2/zipball/bc66577e1312e828e252937d95f9f5f637af6a0b;
-      sha256 = "1c0k3addkaaf4zj7z87svm9xc3c06v0r06rf5rpqmps413lqisbn";
+      sha256 = "1a46lcphsrvi0ypgk64qwan3zfar6f1ha4z2w4ly7ga6lwrb2a1c";
       name  = "${name}.zip";
     };
     buildInputs = [ pkgs.unzip ];
@@ -8939,10 +8939,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   TaskPlack = buildPerlPackage rec {
-    name = "Task-Plack-0.25";
+    name = "Task-Plack-0.28";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Task/${name}.tar.gz";
-      sha256 = "1mk3z7xis1akf8245qgw5mnnsl7570kdidx83nj81kv410pw2v43";
+      sha256 = "0ajwkyr9nwn11afi6fz6kx4bi7a3p8awjsldmsakz3sl0s42pmbr";
     };
     propagatedBuildInputs = [ Plack PSGI ];
   };
@@ -10488,15 +10488,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  URI = buildPerlPackage {
-    name = "URI-1.60";
+  URI = buildPerlPackage rec {
+    name = "URI-1.65";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "149bvzb0873vqp993mkcwmgmk2cyaa5kzmfdn2msprigvklc7plk";
     };
-    meta = {
+    meta = with stdenv.lib; {
       description = "Uniform Resource Identifiers (absolute and relative)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ nckx ];
     };
   };
 
