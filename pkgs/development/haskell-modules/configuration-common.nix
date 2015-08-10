@@ -926,4 +926,7 @@ self: super: {
   # https://github.com/liyang/thyme/issues/36
   thyme = dontCheck super.thyme;
 
+  # https://github.com/aka-bash0r/multi-cabal/issues/4
+  multi-cabal = markBroken super.multi-cabal;
+
 }
