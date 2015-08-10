@@ -13068,11 +13068,11 @@ let
 
 
   sh = buildPythonPackage rec {
-    name = "sh-1.08";
+    name = "sh-1.11";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sh/${name}.tar.gz";
-      md5 = "4028bcba85daa0aef579ed24261e88a3";
+      md5 = "7af8df6c92d29ff927b6db0146bddec3";
     };
 
     doCheck = false;
