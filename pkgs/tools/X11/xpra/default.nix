@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages
 , python, cython, pkgconfig
 , xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pil pygtk pygobject
+    pil pygtk pygobject pythonPackages.rencode
   ];
 
   postPatch = ''
