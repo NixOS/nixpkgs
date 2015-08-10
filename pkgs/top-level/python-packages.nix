@@ -9771,13 +9771,13 @@ let
   };
 
   plumbum = buildPythonPackage rec {
-    name = "plumbum-1.4.2";
+    name = "plumbum-1.5.0";
 
     buildInputs = with self; [ self.six ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/plumbum/${name}.tar.gz";
-      md5 = "38b526af9012a5282ae91dfe372cefd3";
+      sha256 = "b759f9e3b6771dff3332f01bc0683d1a56218f44d97942dabd906a0cd1cfb756";
     };
   };
 
