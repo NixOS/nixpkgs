@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
 , fetchpatch, pkgconfig, gstreamer, xineLib, glib, python27, python27Packages, unzip
-, enableBloat ? false }:
+, zlib, enableBloat ? false }:
 
 let v = "2.4.11"; in
 
@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
+    "-DZLIB_LIBRARY=${zlib}/lib/libz.so"
+    "-DTIFF_LIBRARY=${libtiff}/lib/libtiff.so"
+    "-DPNG_LIBRARY_RELEASE=${libpng}/lib/libpng.so"
+    "-DJPEG_LIBRARY=${libjpeg}/lib/libjpeg.so"
+    "-DJASPER_LIBRARY_RELEASE=${jasper}/lib/libjasper.so"
   ];
 
   meta = {
