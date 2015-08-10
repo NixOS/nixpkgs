@@ -10064,6 +10064,8 @@ let
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
+  pipework = callPackage ../os-specific/linux/pipework { };
+
   plymouth = callPackage ../os-specific/linux/plymouth { };
 
   pmount = callPackage ../os-specific/linux/pmount { };
