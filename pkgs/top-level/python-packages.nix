@@ -11496,6 +11496,26 @@ let
     };
   };
 
+  rencode = buildPythonPackage rec {
+    name = "rencode-${version}";
+    version = "git20150810";
+    disabled = isPy33;
+
+    src = pkgs.fetchgit {
+      url = https://github.com/aresch/rencode;
+      rev = "b45e04abdca0dea36e383a8199783269f186c99e";
+      sha256 = "b4bd82852d4220e8a9493d3cfaecbc57b1325708a2d48c0f8acf262edb10dc40";
+    };
+
+    buildInputs = with self; [ cython ];
+
+    meta = {
+      homepage = https://github.com/aresch/rencode;
+      description = "Fast (basic) object serialization similar to bencode";
+      license = licenses.gpl3;
+    };
+  };
+
 
   reportlab =
    let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
