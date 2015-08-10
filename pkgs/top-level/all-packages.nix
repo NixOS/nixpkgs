@@ -2417,6 +2417,8 @@ let
     pythonPackages = python3Packages;
   };
 
+  nsjail = callPackage ../tools/security/nsjail {};
+
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
   ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
