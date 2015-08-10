@@ -71,7 +71,7 @@ buildPerlPackage {
   meta = {
     homepage = "http://www.openxpki.org";
     description = "Enterprise-grade PKI/Trustcenter software";
-    license = stdenv.lib.licences.apache20;
+    license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
   };
 }
