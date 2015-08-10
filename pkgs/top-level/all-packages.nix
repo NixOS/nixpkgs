@@ -12396,6 +12396,8 @@ let
 
   toxprpl = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tox-prpl { };
 
+  pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
+
   pithos = callPackage ../applications/audio/pithos {
     pythonPackages = python34Packages;
   };
