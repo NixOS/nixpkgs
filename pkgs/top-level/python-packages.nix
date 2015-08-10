@@ -11487,11 +11487,11 @@ let
   };
 
   pymongo = buildPythonPackage rec {
-    name = "pymongo-2.8";
+    name = "pymongo-3.0.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pymongo/${name}.tar.gz";
-      sha256 = "0d9rlxghqg9dqmcmrlf1lw9ap2g6npv6q4slp5agnm7vci9zchq5";
+      sha256 = "3c6b2317f8031bc1e200fd1ea35f00a96f4569e3f3f220a5e66ab6227d96ccaf";
     };
 
     doCheck = false;
