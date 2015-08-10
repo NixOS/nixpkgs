@@ -9030,6 +9030,8 @@ let
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
+  openxpki = callPackage ../servers/openxpki { };
+
   osrm-backend = callPackage ../servers/osrm-backend { };
 
   osrm-backend_luajit = callPackage ../servers/osrm-backend { luabind = luabind_luajit; };
