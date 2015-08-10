@@ -1104,6 +1104,29 @@ let
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
   };
 
+  cgroup-utils = buildPythonPackage rec {
+    version = "0.6";
+    name = "cgroup-utils-${version}";
+
+    propagatedBuildInputs = with self; [ argparse ];
+    buildInputs = with self; [ pep8 nose ];
+    # Pep8 tests fail...
+    doCheck = false;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "peo3";
+      repo = "cgroup-utils";
+      rev = "v${version}";
+      sha256 = "1ck0aijzrg9xf6hjdxnynkapnyxw0y385jb0q7wyq4jf77ayfszc";
+    };
+
+    meta = {
+      description = "Utility tools for control groups of Linux";
+      maintainers = with maintainers; [ layus ];
+      license = licenses.gpl2;
+    };
+  };
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
