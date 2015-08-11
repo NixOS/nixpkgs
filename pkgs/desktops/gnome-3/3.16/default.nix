@@ -276,6 +276,8 @@ let
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
 
+  polari = callPackage ./apps/polari { };
+
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
 
