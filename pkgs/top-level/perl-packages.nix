@@ -5739,7 +5739,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  lib = buildPerlPackage {
+  lib_ = buildPerlPackage {
     name = "lib-0.63";
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SM/SMUELLER/lib-0.63.tar.gz;
