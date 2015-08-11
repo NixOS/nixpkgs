@@ -9026,6 +9026,8 @@ let
 
   nsq = callPackage ../servers/nsq { };
 
+  openpts = callPackage ../servers/openpts { };
+
   openresty = callPackage ../servers/http/openresty { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
