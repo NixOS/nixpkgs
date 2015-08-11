@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0vz6m2k6hdrjlg4x0r3cd75lg9ysmndbsp35pm8494zvksc7l1vk";
   };
 
-  patch = [ ./vpnc.patch ];
-
   preConfigure = ''
     patchShebangs ./configure
     sed -e '/ARPDDIR/d' -i Makefile
