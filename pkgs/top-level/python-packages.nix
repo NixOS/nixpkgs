@@ -3278,6 +3278,21 @@ let
     };
   };
 
+  easy-process = buildPythonPackage rec {
+    name = "EasyProcess-0.1.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/E/EasyProcess/${name}.tar.gz";
+      md5 = "3da72e2fe16781fe5c7b3b0c6c40ee7b";
+    };
+
+    meta = {
+      description = "Easy to use python subprocess interface";
+      homepage = "https://github.com/ponty/EasyProcess";
+      licenses = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
 
   elasticsearch = buildPythonPackage (rec {
     name = "elasticsearch-1.6.0";
