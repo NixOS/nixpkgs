@@ -12785,6 +12785,30 @@ let
     };
   });
 
+  simpleldap = buildPythonPackage rec {
+    version = "0.8";
+    name = "simpleldap-${version}";
+
+    propagatedBuildInputs = with self; [ ldap ];
+    buildInputs = with self; [ pep8 pytest tox ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/simpleldap/simpleldap-${version}.tar.gz";
+      md5 = "f8a95b24895596338032ca4b4450f1de";
+    };
+
+    meta = {
+      description = "A module that makes simple LDAP usage simple";
+      longDescription = ''
+        A small wrapper around the python-ldap library that provides a more
+        Pythonic interface for LDAP server connections, LDAP objects, and the
+        common get and search operations.
+      '';
+      license = licenses.mit;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   simpleparse = buildPythonPackage rec {
     version = "2.1.1";
     name = "simpleparse-${version}";
