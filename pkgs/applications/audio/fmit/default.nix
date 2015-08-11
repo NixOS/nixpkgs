@@ -26,24 +26,23 @@ stdenv.mkDerivation {
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
     substituteInPlace distrib/fmit.desktop \
       --replace "Icon=fmit" "Icon=$out/share/pixmaps/fmit.svg"
-    substituteInPlace src/main.cpp --replace "PREFIX" "\"$out\""
   '';
 
   configurePhase = ''
+    mkdir build
+    cd build
     qmake \
       CONFIG+=${stdenv.lib.optionalString alsaSupport "acs_alsa"} \
       CONFIG+=${stdenv.lib.optionalString jackSupport "acs_jack"} \
-      fmit.pro
+      PREFIX="$out" PREFIXSHORTCUT="$out" \
+      ../fmit.pro
   '';
 
   enableParallelBuilding = true;
 
-  installPhase = ''
-    install -D fmit $out/bin/fmit
-    install -Dm644 distrib/fmit.desktop $out/share/applications/fmit.desktop
-    install -Dm644 ui/images/fmit.svg $out/share/pixmaps/fmit.svg
-    mkdir -p $out/share/fmit
-    cp -R tr $out/share/fmit
+  postInstall = ''
+    cd ..
+    install -Dm644 {ui/images,$out/share/pixmaps}/fmit.svg
   '';
 
   meta = with stdenv.lib; {
