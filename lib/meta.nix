@@ -28,7 +28,8 @@ rec {
      Example:
        updateName (oldName: oldName + "-experimental") somePkg
   */
-  updateName = updater: drv: drv // {name = updater (drv.name);};
+  updateName = updater: drv: drv.overrideDerivation
+    (args: {name = updater args.name;});
 
 
   /* Append a suffix to the name of a package (before the version
