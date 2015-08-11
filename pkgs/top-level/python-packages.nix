@@ -12959,6 +12959,27 @@ let
     };
   };
 
+  tidylib = buildPythonPackage rec {
+    version = "0.2.4";
+    name = "pytidylib-${version}";
+
+    propagatedBuildInputs = [ pkgs.html-tidy ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytidylib/pytidylib-${version}.tar.gz";
+      md5 = "2a28267370c9409b592cdb786649cb25";
+    };
+
+    patchPhase = ''
+      sed -i 's#load_library(name)#load_library("${pkgs.html-tidy}/lib/libtidy.so")#' tidylib/__init__.py
+    '';
+
+    meta = {
+      homepage = " http://countergram.com/open-source/pytidylib/";
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   timelib = buildPythonPackage rec {
     name = "timelib-0.2.4";
 
