@@ -4010,6 +4010,29 @@ let
     };
   };
 
+  lti = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "PyLTI-${version}";
+
+    propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
+    buildInputs = with self; [
+      flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
+      pytestflakes pytestpep8 sphinx mock
+    ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyLTI/${name}.tar.gz";
+      sha256 = "1lkk6qx8yfx1h0rhi4abnd44x0wakggi6zs0nvi572lajf6ydmdh";
+    };
+
+    meta = {
+      description = "Implementation of IMS LTI interface that works with edX";
+      homepage = "https://github.com/mitodl/pylti";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.3";
 
