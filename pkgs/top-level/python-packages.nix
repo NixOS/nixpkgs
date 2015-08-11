@@ -13151,6 +13151,20 @@ let
     };
   };
 
+  semantic-version = buildPythonPackage rec {
+    name = "semantic_version-2.4.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/semantic_version/${name}.tar.gz";
+      md5 = "fd7d5ade76e78d8540b9a4044496a57c";
+    };
+
+    meta = {
+      description = "A library implementing the 'SemVer' scheme";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   sexpdata = buildPythonPackage rec {
     name = "sexpdata-0.0.2";
     src = pkgs.fetchurl {
