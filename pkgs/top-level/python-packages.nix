@@ -14544,6 +14544,24 @@ let
     };
   };
 
+  virtual-display = buildPythonPackage rec {
+    name = "PyVirtualDisplay-0.1.5";
+
+    propagatedBuildInputs = with self; [ easy-process ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/P/PyVirtualDisplay/${name}.tar.gz";
+      md5 = "90b65fe15b81788c2e208d124e3a3c14";
+    };
+
+    meta = {
+      description = "python wrapper for Xvfb, Xephyr and Xvnc";
+      homepage = "https://github.com/ponty/pyvirtualdisplay";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   virtualenv = buildPythonPackage rec {
     name = "virtualenv-1.11.6";
     src = pkgs.fetchurl {
