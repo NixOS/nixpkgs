@@ -7,12 +7,12 @@
 assert alsaSupport -> alsaLib != null;
 assert jackSupport -> libjack2 != null;
 
-let version = "1.0.5"; in
+let version = "1.0.6"; in
 stdenv.mkDerivation {
   name = "fmit-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1p49ykg7mf62xrn08fqss8yr1nf53mm8w9zp2sgcy48bfsa9xbpy";
+    sha256 = "1ls6pcal5vimr3syz4ih06s1j746z63hgj5wbg5z349gy6zl43fh";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
