@@ -14746,6 +14746,27 @@ let
     };
   };
 
+  web = buildPythonPackage rec {
+    version = "0.37";
+    name = "web.py-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/web.py/web.py-${version}.tar.gz";
+      md5 = "93375e3f03e74d6bf5c5096a4962a8db";
+    };
+
+    meta = {
+      description = "Makes web apps";
+      longDescription = ''
+        Think about the ideal way to write a web app.
+        Write the code to make it happen.
+      '';
+      homepage = "http://webpy.org/";
+      license = licenses.publicDomain;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   webob = buildPythonPackage rec {
     version = "1.4";
     name = "webob-${version}";
