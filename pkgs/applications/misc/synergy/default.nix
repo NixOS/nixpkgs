@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   checkPhase = "../bin/unittests";
 
   meta = {
-    description = "Tool to share the mouse keyboard and the clipboard between computers";
-    homepage = http://synergy-foss.org;
+    description = "Share one mouse and keyboard between multiple computers";
+    homepage = "http://synergy-project.org/";
     license = licenses.gpl2;
     maintainers = [ maintainers.aszlig ];
     platforms = platforms.all;
