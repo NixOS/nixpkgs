@@ -1,21 +1,23 @@
 { stdenv, fetchurl, pkgconfig, intltool, perl, perlXMLParser
 , goffice, gnome3, makeWrapper, gtk3
+, python, pygobject3
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnumeric-1.12.20";
+  name = "gnumeric-1.12.23";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnumeric/1.12/${name}.tar.xz";
-    sha256 = "1k915ks55a32fpqrr0rx6j8ml9bw0a07f11350qc1bvkx53i2jad";
+    sha256 = "0lcmw4jrfg9y2fhx13xw8w85vi7bcmgyn2sdjxi21xkh3szlqiq0";
   };
 
   configureFlags = "--disable-component";
 
-  # ToDo: optional libgda, python, introspection?
+  # ToDo: optional libgda, introspection?
   buildInputs = [
     pkgconfig intltool perl perlXMLParser
     goffice gtk3 makeWrapper gnome3.defaultIconTheme
+    python pygobject3
   ];
 
   enableParallelBuilding = true;
