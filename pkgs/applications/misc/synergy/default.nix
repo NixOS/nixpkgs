@@ -1,38 +1,27 @@
 { stdenv, fetchFromGitHub, cmake, x11, libX11, libXi, libXtst, libXrandr
-, xinput, curl, cryptopp ? null, unzip }:
-
-assert stdenv.isLinux -> cryptopp != null;
+, xinput, curl, openssl, unzip }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "synergy-${version}";
-  version = "1.6.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "synergy";
     repo = "synergy";
-    rev = version;
-    sha256 = "0n4zvz669vi2wyn6i6xhxp0j3nvjl4yzm441cqv6hb0d5k26wbcn";
+    rev = "v${version}-stable";
+    sha256 = "0pxj0qpnsaffpaxik8vc5rjfinmx8ab3b2lssrxkfbs7isskvs33";
   };
 
-  patches = optional stdenv.isLinux ./cryptopp.patch;
-
-  postPatch = (if stdenv.isLinux then ''
-    sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
-      set(HAVE_X11_EXTENSIONS_XRANDR_H true)' CMakeLists.txt
-  '' else ''
-    ${unzip}/bin/unzip -d ext/cryptopp562 ext/cryptopp562.zip
-  '') + ''
+  postPatch = ''
     ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip
     ${unzip}/bin/unzip -d ext/gtest-1.6.0 ext/gtest-1.6.0.zip
   '';
 
-  buildInputs = [ cmake x11 libX11 libXi libXtst libXrandr xinput curl ]
-             ++ optional stdenv.isLinux cryptopp;
-
-  # At this moment make install doesn't work for synergy
-  # http://synergy-foss.org/spit/issues/details/3317/
+  buildInputs = [
+    cmake x11 libX11 libXi libXtst libXrandr xinput curl openssl
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
