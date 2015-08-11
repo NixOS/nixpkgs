@@ -6989,6 +6989,43 @@ let
     };
   };
 
+  inginious = buildPythonPackage rec {
+    version = "0.3.dev1";
+    name = "inginious-${version}";
+
+    disabled = isPy3k;
+
+    # patched version of docker bindings.
+    docker-custom = self.docker.override {
+      name = "docker-1.3.0-dirty";
+      src = pkgs.fetchFromGitHub {
+        owner = "GuillaumeDerval";
+        repo = "docker-py";
+        rev = "1.3.0-dev";
+        sha256 = "0rx686riw4w6kanw4nsyzhcy84fz251g9x59piba2n62qpa1rlxf";
+      };
+    };
+
+    propagatedBuildInputs = with self; [
+      requests2 # Needs to be first;
+      cgroup-utils docker-custom docutils lti multiprocessing pygments pymongo
+      pyyaml rpyc selenium sh simpleldap tidylib virtual-display web
+      websocket_client
+    ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/I/INGInious/INGInious-${version}.tar.gz";
+      md5 = "40474dd6b6d4fc26e47a1d9c77bcf943";
+    };
+
+    meta = {
+      description = "An intelligent grader that allows secured and automated testing of code made by students.";
+      homepage = "https://github.com/UCL-INGI/INGInious";
+      license = licenses.agpl3;
+      maintainers = with maintainers; [ layus ];
+    };
+  };
+
   iptools = buildPythonPackage rec {
     version = "0.6.1";
     name = "iptools-${version}";
