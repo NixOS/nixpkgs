@@ -881,23 +881,6 @@ self: super: {
   # https://github.com/hspec/mockery/issues/6
   mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
 
-  # https://github.com/diagrams/diagrams-lib/issues/258
-  # https://github.com/diagrams/diagrams-lib/issues/259
-  diagrams-lib = markBroken super.diagrams-lib;
-  diagrams-cairo = dontDistribute super.diagrams-cairo;
-  diagrams-gtk = dontDistribute super.diagrams-gtk;
-  diagrams-html5 = dontDistribute super.diagrams-html5;
-  diagrams-pandoc = dontDistribute super.diagrams-pandoc;
-  diagrams-postscript = dontDistribute super.diagrams-postscript;
-  diagrams-rasterific = dontDistribute super.diagrams-rasterific;
-  diagrams-rubiks-cube = dontDistribute super.diagrams-rubiks-cube;
-  diagrams-svg = dontDistribute super.diagrams-svg;
-  halma = dontDistribute super.halma;
-  midi-music-box = dontDistribute super.midi-music-box;
-  potrace-diagrams = dontDistribute super.potrace-diagrams;
-  SVGFonts = dontDistribute super.SVGFonts;
-  yesod-media-simple = dontDistribute super.yesod-media-simple;
-
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
 
