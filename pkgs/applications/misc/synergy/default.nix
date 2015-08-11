@@ -17,6 +17,23 @@ stdenv.mkDerivation rec {
   postPatch = ''
     ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip
     ${unzip}/bin/unzip -d ext/gtest-1.6.0 ext/gtest-1.6.0.zip
+  ''
+    # We have XRRNotifyEvent (libXrandr), but with the upstream CMakeLists.txt
+    # it's not able to find it (it's trying to search the store path of libX11
+    # instead) and we don't get XRandR support, even though the CMake output
+    # _seems_ to say so:
+    #
+    #   Looking for XRRQueryExtension in Xrandr - found
+    #
+    # The relevant part however is:
+    #
+    #   Looking for XRRNotifyEvent - not found
+    #
+    # So let's force it:
+  + optionalString stdenv.isLinux ''
+    sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
+      set(HAVE_X11_EXTENSIONS_XRANDR_H true)
+    ' CMakeLists.txt
   '';
 
   buildInputs = [
