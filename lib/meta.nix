@@ -20,8 +20,7 @@ rec {
   /* Change the symbolic name of a package for presentation purposes
      (i.e., so that nix-env users can tell them apart).
   */
-  setName = name: drv: drv // {inherit name;};
-
+  setName = name: updateName (_oldName: name);
 
   /* Like `setName', but takes the previous name as an argument.
 
