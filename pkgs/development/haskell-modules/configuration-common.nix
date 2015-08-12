@@ -206,9 +206,6 @@ self: super: {
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
 
-  # same as above
-  mockery = if pkgs.stdenv.isDarwin then dontCheck super.mockery else super.mockery;
-
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
   x509-system = if pkgs.stdenv.isDarwin && !pkgs.stdenv.cc.nativeLibc

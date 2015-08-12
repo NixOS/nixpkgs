@@ -111,6 +111,10 @@ self: super: {
   # Test suite has stricter version bounds
   retry = dontCheck super.retry;
 
+  # test/System/Posix/Types/OrphansSpec.hs:19:13:
+  #    Not in scope: type constructor or class ‘Int32’
+  base-orphans = dontCheck super.base-orphans;
+
   # Test suite fails with time >= 1.5
   http-date = dontCheck super.http-date;
 
