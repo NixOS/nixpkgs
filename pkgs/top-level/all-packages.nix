@@ -15103,6 +15103,7 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
+  mps-youtube = python3Packages.mps-youtube;
 
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;

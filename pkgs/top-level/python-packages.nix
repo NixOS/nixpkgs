@@ -16732,6 +16732,35 @@ let
     };
   };
 
+  pafy = buildPythonPackage rec {
+    version = "0.3.74";
+    name = "pafy-${version}";
+    disabled = (!isPy3k);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pafy/pafy-${version}.tar.gz";
+      sha256 = "03jblmvwzpqms71jxkwcd9agw04l617g4l5cqshkp3x5g6arzn6w";
+    };
+
+    propagatedBuildInputs = [ pkgs.youtube-dl self.urllib3 ];
+
+    # no tests in tarball
+    doCheck = false;
+  };
+
+  mps-youtube = buildPythonPackage rec {
+    name = "mps-youtube";
+    version = "0.2.5-2";
+    disabled = (!isPy3k);
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/m/mps-youtube/mps-youtube-${version}.tar.gz";
+      sha256 = "1vvl4jh2aiv91krq71n56pfyyn50wyfsb8i98k340jhp91bpmzqk";
+    };
+
+    propagatedBuildInputs = [ self.pafy pkgs.mpv ];
+  };
+
   poezio = buildPythonPackage rec {
     name = "poezio-${version}";
     version = "0.8.1";
