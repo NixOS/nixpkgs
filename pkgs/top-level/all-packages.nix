@@ -10769,6 +10769,8 @@ let
 
   bar = callPackage ../applications/window-managers/bar { };
 
+  bar-xft = callPackage ../applications/window-managers/bar/xft.nix { };
+
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
   };
