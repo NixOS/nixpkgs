@@ -43,7 +43,7 @@ in {
   testScript = ''
     startAll;
 
-    my $key=`${pkgs.openssh}/bin/ssh-keygen -t dsa -f key -N ""`;
+    my $key=`${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f key -N ""`;
 
     $server->waitForUnit("sshd");
 
@@ -52,8 +52,8 @@ in {
       $server->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
 
       $client->succeed("mkdir -m 700 /root/.ssh");
-      $client->copyFileFromHost("key", "/root/.ssh/id_dsa");
-      $client->succeed("chmod 600 /root/.ssh/id_dsa");
+      $client->copyFileFromHost("key", "/root/.ssh/id_ed25519");
+      $client->succeed("chmod 600 /root/.ssh/id_ed25519");
 
       $client->waitForUnit("network.target");
       $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2");
