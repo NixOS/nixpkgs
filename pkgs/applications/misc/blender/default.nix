@@ -10,11 +10,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.73a";
+  name = "blender-2.73";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "114ipidrja6ryi6wv0w55wmh10ikazy24r8js596g7b9fpkzpymc";
+    sha256 = "140fcxjb73gim430v08021ls3civ3yghld63ljkgxi5vaww1cq95";
   };
 
   buildInputs =
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     [ "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
+      "-DWITH_FFTW3=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
       "-DWITH_FFTW3=ON"
       "-DWITH_SDL=ON"
