@@ -14316,6 +14316,8 @@ let
 
   sage = callPackage ../applications/science/math/sage { };
 
+  metis = callPackage ../development/libraries/science/math/metis {};
+
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
   suitesparse = suitesparse_4_4;
