@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     pushd ghc-${builtins.substring 0 7 rev}
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
     patchShebangs .
     ./boot
     popd
