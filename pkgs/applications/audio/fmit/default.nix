@@ -7,12 +7,12 @@
 assert alsaSupport -> alsaLib != null;
 assert jackSupport -> libjack2 != null;
 
-let version = "1.0.6"; in
+let version = "1.0.7"; in
 stdenv.mkDerivation {
   name = "fmit-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1ls6pcal5vimr3syz4ih06s1j746z63hgj5wbg5z349gy6zl43fh";
+    sha256 = "14dzrrxjskhqamhfqhzp6napvc1vyjxcc0v8id1iqzsfdn86xqm9";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
@@ -24,8 +24,6 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
-    substituteInPlace distrib/fmit.desktop \
-      --replace "Icon=fmit" "Icon=$out/share/pixmaps/fmit.svg"
   '';
 
   configurePhase = ''
@@ -39,11 +37,6 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    cd ..
-    install -Dm644 {ui/images,$out/share/pixmaps}/fmit.svg
-  '';
 
   meta = with stdenv.lib; {
     inherit version;
