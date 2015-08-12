@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     [ "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
-      "-DWITH_FFTW3=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
       "-DWITH_FFTW3=ON"
       "-DWITH_SDL=ON"
