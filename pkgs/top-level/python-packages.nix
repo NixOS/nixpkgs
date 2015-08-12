@@ -16746,6 +16746,12 @@ let
 
     # no tests in tarball
     doCheck = false;
+
+    meta = {
+      description = "Python library to download YouTube content and retrieve metadata";
+      homepage = "https://github.com/mps-youtube/pafy";
+      licence = licences.lgpl3;
+    };
   };
 
   mps-youtube = buildPythonPackage rec {
@@ -16759,6 +16765,12 @@ let
     };
 
     propagatedBuildInputs = [ self.pafy pkgs.mpv ];
+
+    meta = {
+      description = "Terminal based YouTube player and downloader";
+      homepage = "https://github.com/mps-youtube/mps-youtube";
+      licence = licences.gpl3;
+    };
   };
 
   poezio = buildPythonPackage rec {
