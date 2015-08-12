@@ -20,12 +20,10 @@ stdenv.mkDerivation rec {
     "-DUSE_PYTHON=OFF"
   ];
 
-  preBuild = ''
-    makeFlags="ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0
-      INSTALLDIR=$out dist_dir="
+  buildPhase = ''
+    make ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0 \
+      INSTALLDIR=$out dist_dir=
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.openimageio.org;
