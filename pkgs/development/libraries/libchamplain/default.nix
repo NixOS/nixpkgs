@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
 
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
-
   meta = {
     homepage = http://projects.gnome.org/libchamplain/;
     license = stdenv.lib.licenses.lgpl2Plus;
