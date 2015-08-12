@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3, gobjectIntrospection
+{ stdenv, fetchurl, intltool, pkgconfig, gnome3, gtk3
+, gobjectIntrospection, gdk_pixbuf, librsvg
 , geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, file, libsoup }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig intltool gobjectIntrospection wrapGAppsHook
                   gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
                   gnome3.geocode_glib libchamplain file libsoup
-                  gnome3.gnome_online_accounts ];
+                  gdk_pixbuf librsvg
+                  gnome3.gnome_online_accounts gnome3.defaultIconTheme ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Maps;
