@@ -13733,6 +13733,8 @@ let
 
   prboom = callPackage ../games/prboom { };
 
+  qqwing = callPackage ../games/qqwing { };
+
   quake3demo = callPackage ../games/quake3/wrapper {
     name = "quake3-demo-${quake3game.name}";
     description = "Demo of Quake 3 Arena, a classic first-person shooter";
