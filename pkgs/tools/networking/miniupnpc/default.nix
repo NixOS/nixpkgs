@@ -1,21 +1,17 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "miniupnpc-1.9.20150430";
+  name = "miniupnpc-1.9.20150730";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0ivnvzla0l2pzmy8s0j8ss0fnpsii7z9scvyl4a13g9k911hgmvn";
+    sha256 = "0156hssql8iaziwba8ag7y39lchrgwcvlhck2d2qak1vznqzlr0x";
     name = "${name}.tar.gz";
   };
 
-  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+  doCheck = true;
 
-  postInstall =
-    ''
-      mkdir -p $out/share/man/man3
-      cp man3/miniupnpc.3 $out/share/man/man3/
-    '';
+  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
 
   meta = {
     homepage = http://miniupnp.free.fr/;
