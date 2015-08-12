@@ -34,7 +34,7 @@ let
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
-    tali quadrapassel gnome-sudoku
+    tali quadrapassel gnome-sudoku aisleriot
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -295,6 +295,8 @@ let
   gdl = callPackage ./devtools/gdl { };
 
 #### Games
+
+  aisleriot = callPackage ./games/aisleriot { };
 
   gnome-sudoku = callPackage ./games/gnome-sudoku { };
 
