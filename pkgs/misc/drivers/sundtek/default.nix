@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "30-06-2015";
+  version = "28-07-2015";
   rpath = makeLibraryPath [ "$out/lib" "$out/bin" ];
   platform = with stdenv;
     if isx86_64 then "64bit"
@@ -15,7 +15,7 @@ in
   stdenv.mkDerivation {
     src = fetchurl {
       url = "http://www.sundtek.de/media/netinst/${platform}/installer.tar.gz";
-      sha256 = "304d2785b5e9046c78fc092341721fdc404074105e63dd635e838559d42313c3";
+      sha256 = "1gpz42rwxm76fzq6088gjzbfl82mhapc34c0ms7vphrhra6yw19h";
     };
     name = "sundtek-${version}";
 
