@@ -127,6 +127,25 @@ rec {
     };
   };
 
+  cdt = buildEclipseUpdateSite rec {
+    name = "cdt-${version}";
+    version = "8.7.0";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/8.7/${name}.zip";
+      sha256 = "0qpcjcl6n98x7ys4qz8p1x5hhk2ydrgh8w3r1kqk0zc7liqrx7vg";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://eclipse.org/cdt/;
+      description = "C/C++ development tooling";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
     version = "6.5.0.201504121610";
