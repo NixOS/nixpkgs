@@ -254,6 +254,25 @@ rec {
     };
   };
 
+  gnuarmeclipse = buildEclipseUpdateSite rec {
+    name = "gnuarmeclipse-${version}";
+    version = "2.8.1-201504061754";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "mirror://sourceforge/project/gnuarmeclipse/Current%20Releases/2.x/ilg.gnuarmeclipse.repository-${version}.zip";
+      sha256 = "08jsnyis1ry62cidr9sl11ylyxbkwh834nlhx6qp31gh1l439px9";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://gnuarmeclipse.livius.net/;
+      description = "GNU ARM Eclipse Plug-ins";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.bjornfor ];
+    };
+  };
+
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
     version = "4.5";
