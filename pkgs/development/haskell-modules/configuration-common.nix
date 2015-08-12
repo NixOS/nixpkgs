@@ -793,6 +793,7 @@ self: super: {
   singleton-nats = dontDistribute super.singleton-nats;
   singletons = markBroken super.singletons;
   units-attoparsec = dontDistribute super.units-attoparsec;
+  ihaskell-widgets = dontDistribute super.ihaskell-widgets;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
