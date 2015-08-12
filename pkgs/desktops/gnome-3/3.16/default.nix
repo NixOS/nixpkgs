@@ -40,6 +40,7 @@ let
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
+  libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
@@ -267,6 +268,8 @@ let
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
+
+  gnome-maps = callPackage ./apps/gnome-maps { };
 
   gnome-music = callPackage ./apps/gnome-music { };
 
