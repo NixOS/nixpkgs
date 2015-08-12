@@ -12,7 +12,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   buildInputs = [ pythonPackages.sphinx attr ];
-  propagatedBuildInputs = [ pycrypto pythonPackages.paramiko pythonPackages.tracing pythonPackages.ttystatus pythonPackages.cliapp pythonPackages.larch pythonPackages.pyyaml ];
+  propagatedBuildInputs = [ pycrypto pythonPackages.paramiko pythonPackages.tracing pythonPackages.ttystatus pythonPackages.cliapp pythonPackages.larch pythonPackages.pyyaml pythonPackages.fuse ];
 
   doCheck = false;
 
