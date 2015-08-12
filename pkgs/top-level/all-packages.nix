@@ -15186,6 +15186,8 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
+  mps-youtube = python3Packages.mps-youtube;
+  pafy = python3Packages.pafy;
 
   # Attributes for backward compatibility.
   adobeReader = adobe-reader;
