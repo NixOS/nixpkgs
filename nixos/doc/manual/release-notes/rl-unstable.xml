@@ -202,4 +202,16 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
 </itemizedlist>
 </para>
 
+
+<para>Other notable improvements:
+
+<itemizedlist>
+  <listitem><para>The nixos and nixpkgs channels were unified,
+    so one <emphasis>can</emphasis> use <literal>nix-env -iA nixos.bash</literal>
+    instead of <literal>nix-env -iA nixos.pkgs.bash</literal>.
+    See <link xlink:href="https://github.com/NixOS/nixpkgs/commit/2cd7c1f198">the commit</link> for details.
+  </para></listitem>
+</itemizedlist>
+</para>
+
 </section>
