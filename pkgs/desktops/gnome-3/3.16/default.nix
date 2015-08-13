@@ -35,6 +35,7 @@ let
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
     tali quadrapassel gnome-sudoku aisleriot five-or-more
+    four-in-a-row
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -299,6 +300,8 @@ let
   aisleriot = callPackage ./games/aisleriot { };
 
   five-or-more = callPackage ./games/five-or-more { };
+
+  four-in-a-row = callPackage ./games/four-in-a-row { };
 
   gnome-sudoku = callPackage ./games/gnome-sudoku { };
 
