@@ -5736,6 +5736,8 @@ let
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  rhc = callPackage ../development/tools/rhc { };
+
   rman = callPackage ../development/tools/misc/rman { };
 
   rr = callPackage ../development/tools/analysis/rr { };
