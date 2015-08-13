@@ -3063,6 +3063,10 @@ let
 
   stress-ng = callPackage ../tools/system/stress-ng { };
 
+  stoken = callPackage ../tools/security/stoken {
+    withGTK3 = config.stoken.withGTK3 or true;
+  };
+
   storeBackup = callPackage ../tools/backup/store-backup { };
 
   stow = callPackage ../tools/misc/stow { };
