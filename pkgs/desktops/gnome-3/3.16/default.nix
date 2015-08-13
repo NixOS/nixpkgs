@@ -301,6 +301,8 @@ let
 
   gdl = callPackage ./devtools/gdl { };
 
+  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
+
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
