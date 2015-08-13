@@ -18,6 +18,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" ]
+, withHelp ? true
 }:
 
 let
@@ -136,6 +137,8 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       "--with-parallelism=$NIX_BUILD_CORES"
       "--with-lang=${langsSpaces}"
+      "${if withHelp then "" else "--without-help"}"
+      
     );
 
     chmod a+x ./bin/unpack-sources
@@ -176,13 +179,13 @@ stdenv.mkDerivation rec {
 
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
     for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=$out/bin/soffice"
-      substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=$out/bin/soffice"
-      substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=$out/bin/soffice"
+      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice"
+      substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=libreoffice"
+      substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=libreoffice"
     done
 
     mkdir -p "$out/share/desktop"
-    cp -r sysui/desktop/icons  "$out/share/desktop"
+    cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreofficedev[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
   '';
 
