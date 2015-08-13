@@ -36,7 +36,7 @@ let
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
     tali quadrapassel gnome-sudoku aisleriot five-or-more
     four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
-    gnome-mines gnome-nibbles gnome-robots
+    gnome-mines gnome-nibbles gnome-robots gnome-tetravex
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -317,6 +317,8 @@ let
   gnome-robots = callPackage ./games/gnome-robots { };
 
   gnome-sudoku = callPackage ./games/gnome-sudoku { };
+
+  gnome-tetravex = callPackage ./games/gnome-tetravex { };
 
   iagno = callPackage ./games/iagno { };
 
