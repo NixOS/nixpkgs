@@ -259,14 +259,8 @@ self: super: {
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
-  # webkit does not recognize its system library build input any more.
-  webkit = markBroken super.webkit; # http://hydra.cryp.to/build/1041942/nixlog/1/raw
-  ghcjs-dom-hello = dontDistribute super.ghcjs-dom-hello;       # depends on broken webkit
-  ghcjs-dom = dontDistribute super.ghcjs-dom;                   # depends on broken webkit
-  jsaddle-hello = dontDistribute super.jsaddle-hello;           # depends on broken webkit
-  reflex-dom = dontDistribute super.reflex-dom;                 # depends on broken webkit
-
   # Need WebkitGTK, not just webkit.
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
   webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
