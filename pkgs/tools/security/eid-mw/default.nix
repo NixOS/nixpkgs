@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk2, nssTools, pcsclite
 , pkgconfig }:
 
-let version = "4.1.4"; in
+let version = "4.1.5"; in
 stdenv.mkDerivation {
   name = "eid-mw-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "0v0p0kdjscvf4bn14dyny399k1bfsz8v7n8v16lv0q0xs5nwqnky";
+    sha256 = "0m2awjfj2vs3aahy1ygrxi7mx12bhr1a621kiiszzai38crpgwbj";
     rev = "v${version}";
     repo = "eid-mw";
     owner = "Fedict";
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     substituteInPlace $out/bin/eid-nssdb \
       --replace "modutil" "${nssTools}/bin/modutil"
 
-    # Only provides a useless "about-eid-mw.desktop" that segfaults:
+    # Only provides a useless "about-eid-mw.desktop" that segfaults anyway:
     rm -rf $out/share/applications $out/bin/about-eid-mw
   '';
 
@@ -55,6 +55,6 @@ stdenv.mkDerivation {
       and remove all ~/.pki and/or /etc/pki directories no longer needed.
     '';
     maintainers = with maintainers; [ nckx ];
-    platforms = with platforms; linux;
+    platforms = platforms.linux;
   };
 }
