@@ -7,12 +7,12 @@
 assert alsaSupport -> alsaLib != null;
 assert jackSupport -> libjack2 != null;
 
-let version = "1.0.7"; in
+let version = "1.0.8"; in
 stdenv.mkDerivation {
   name = "fmit-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "14dzrrxjskhqamhfqhzp6napvc1vyjxcc0v8id1iqzsfdn86xqm9";
+    sha256 = "04s7xcgmi5g58lirr48vf203n1jwdxf981x1p6ysbax24qwhs2kd";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
@@ -21,10 +21,6 @@ stdenv.mkDerivation {
   buildInputs = [ fftw freeglut qt5Full ]
     ++ stdenv.lib.optional alsaSupport [ alsaLib ]
     ++ stdenv.lib.optional jackSupport [ libjack2 ];
-
-  postPatch = ''
-    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
-  '';
 
   configurePhase = ''
     mkdir build
