@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   builder = ./builder-legacy304.sh;
 
+  patches = [ ./nvidia-340.76-kernel-4.0.patch ];
+
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
