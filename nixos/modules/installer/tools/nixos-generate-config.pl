@@ -538,9 +538,6 @@ $bootLoaderConfig
   #   uid = 1000;
   # };
 
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "@nixosRelease@";
-
 }
 EOF
     } else {

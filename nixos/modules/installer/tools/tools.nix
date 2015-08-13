@@ -40,7 +40,6 @@ let
     src = ./nixos-generate-config.pl;
     path = [ pkgs.btrfsProgs ];
     perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-    inherit (config.system) nixosRelease;
   };
 
   nixos-option = makeProg {
