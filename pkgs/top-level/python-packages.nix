@@ -8038,11 +8038,11 @@ let
 
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
-    version = "0.6.3";
+    version = "0.6.6";
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
       rev = "refs/tags/pymysql-${version}";
-      sha256 = "1m9fr2x49s3aixlmccr3w80skl19dya9h3x69wgl6ly1z27iyg24";
+      sha256 = "12v8bw7pp455zqkwraxk69qycz2ngk18bbz60v72kdbp6kssnqhz";
     };
   };
 
