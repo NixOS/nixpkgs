@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     autoconf automake libtool pkgconfig
     libxml2 nettle
-  ] ++ (if withGTK3 then [ gtk3 ] else []);
+  ] ++ stdenv.lib.optional withGTK3 gtk3;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Software Token for Linux/UNIX";
     homepage = https://github.com/cernekee/stoken;
-    license = stdenv.lib.license.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.fuuzetsu ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.lgpl21Plus;
+    maintainers = [ maintainers.fuuzetsu ];
+    platforms = platforms.all;
   };
 }
