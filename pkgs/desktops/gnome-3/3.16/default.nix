@@ -37,6 +37,7 @@ let
     tali quadrapassel gnome-sudoku aisleriot five-or-more
     four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
     gnome-mines gnome-nibbles gnome-robots gnome-tetravex
+    hitori
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -319,6 +320,8 @@ let
   gnome-sudoku = callPackage ./games/gnome-sudoku { };
 
   gnome-tetravex = callPackage ./games/gnome-tetravex { };
+
+  hitori = callPackage ./games/hitori { };
 
   iagno = callPackage ./games/iagno { };
 
