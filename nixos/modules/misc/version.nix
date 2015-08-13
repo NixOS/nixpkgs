@@ -8,7 +8,7 @@ with lib;
 
     system.stateVersion = mkOption {
       type = types.str;
-      default = config.system.nixosRelease;
+      default = "14.12";
       description = ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful
@@ -26,13 +26,6 @@ with lib;
       internal = true;
       type = types.str;
       description = "NixOS version.";
-    };
-
-    system.nixosRelease = mkOption {
-      internal = true;
-      type = types.str;
-      default = readFile "${toString pkgs.path}/.version";
-      description = "NixOS release.";
     };
 
     system.nixosVersionSuffix = mkOption {
@@ -64,7 +57,8 @@ with lib;
 
   config = {
 
-    system.nixosVersion = mkDefault (config.system.nixosRelease + config.system.nixosVersionSuffix);
+    system.nixosVersion =
+      mkDefault (readFile "${toString pkgs.path}/.version" + config.system.nixosVersionSuffix);
 
     system.nixosVersionSuffix =
       let suffixFile = "${toString pkgs.path}/.version-suffix"; in
