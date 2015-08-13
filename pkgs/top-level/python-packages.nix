@@ -9439,6 +9439,33 @@ let
     };
   };
 
+  mycli = buildPythonPackage rec {
+    name = "mycli-${version}";
+    version = "1.3.0";
+
+    src = pkgs.fetchFromGitHub {
+      sha256 = "109jz84m29v4fjhk2ngsfc1b6zw4w6dbjlr2izvib63ylcz7b5nh";
+      rev = "v${version}";
+      repo = "mycli";
+      owner = "dbcli";
+    };
+
+    propagatedBuildInputs = with self; [
+      pymysql configobj sqlparse prompt_toolkit pygments click
+    ];
+
+    meta = {
+      inherit version;
+      description = "Command-line interface for MySQL";
+      longDescription = ''
+        Rich command-line interface for MySQL with auto-completion and
+        syntax highlighting.
+      '';
+      homepage = http://mycli.net;
+      license = licenses.bsd3;
+    };
+  };
+
   pip = buildPythonPackage rec {
     version = "1.5.6";
     name = "pip-${version}";
