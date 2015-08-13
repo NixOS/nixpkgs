@@ -36,6 +36,7 @@ let
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
     tali quadrapassel gnome-sudoku aisleriot five-or-more
     four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
+    gnome-mines
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
@@ -308,6 +309,8 @@ let
   gnome-klotski = callPackage ./games/gnome-klotski { };
 
   gnome-mahjongg = callPackage ./games/gnome-mahjongg { };
+
+  gnome-mines = callPackage ./games/gnome-mines { };
 
   gnome-sudoku = callPackage ./games/gnome-sudoku { };
 
