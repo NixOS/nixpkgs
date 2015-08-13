@@ -31,7 +31,7 @@ let
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
-    gnome-maps gnome-characters
+    gnome-maps gnome-characters gnome-calendar
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -268,6 +268,8 @@ let
     gtkvnc = pkgs.gtkvnc.override { enableGTK3 = true; };
     spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
   };
+
+  gnome-calendar = callPackage ./apps/gnome-calendar { };
 
   gnome-characters = callPackage ./apps/gnome-characters { };
 
