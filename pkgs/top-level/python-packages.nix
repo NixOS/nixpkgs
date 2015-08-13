@@ -9359,7 +9359,7 @@ let
       sha256 = "1r34bbqbd4h72cl0cxi9w6q2nwx806wpxq220mzyiy8g45xv0ghj";
       rev = "v${version}";
       repo = "pgcli";
-      owner = "amjith";
+      owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
