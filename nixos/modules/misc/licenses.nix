@@ -6,6 +6,8 @@ let
 
   cfg = config.nixpkgs.licenses;
 
+  accept = x: x == "accept";
+
 in
 
 {
@@ -22,6 +24,19 @@ in
         '';
       };
 
+      oracleBinaryCodeLicenseForJava = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Say "accept" if you accept the:
+
+          Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX
+ 
+          The full license text is at:
+          http://www.oracle.com/technetwork/java/javase/terms/license/index.html
+        '';
+      };
+
     };
 
   };
@@ -32,6 +47,9 @@ in
     nixpkgs.config = {
 
       allowUnfree = cfg.allowUnfree;
+
+      blacklistedLicenses = []
+        ++ lib.optional (!accept cfg.oracleBinaryCodeLicenseForJava) lib.licenses.oraclejavabcl;
 
     };
 

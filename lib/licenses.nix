@@ -347,6 +347,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "OpenSSL License";
   };
 
+  oraclejavabcl = {
+    fullName = "Oracle Binary Code License Agreement for the Java SE Platform Products and JavaFX";
+    url = "http://www.oracle.com/technetwork/java/javase/terms/license/index.html";
+  };
+
   php301 = spdx {
     spdxId = "PHP-3.01";
     fullName = "PHP License v3.01";
