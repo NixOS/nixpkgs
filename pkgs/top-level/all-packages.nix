@@ -8043,6 +8043,8 @@ let
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
+  rote = callPackage ../development/libraries/rote { };
+
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
