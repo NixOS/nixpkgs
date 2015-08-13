@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     description = "Wrapper for 'diff' that produces the same output but with pretty 'syntax' highlighting";
     homepage = http://www.colordiff.org/;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainer = with maintainers; [ nckx ];
   };
 }
