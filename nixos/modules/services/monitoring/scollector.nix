@@ -20,9 +20,11 @@ let
           cfg.collectors)}
     '';
 
-  cmdLineOpts = concatStringsSep " " (
-    [ "-h=${cfg.bosunHost}" "-c=${collectors}" ] ++ cfg.extraOpts
-  );
+  conf = pkgs.writeText "scollector.toml" ''
+    Host = "${cfg.bosunHost}"
+    ColDir = "${collectors}"
+    ${cfg.extraConfig}
+  '';
 
 in {
 
@@ -92,6 +94,14 @@ in {
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra scollector configuration added to the end of scollector.toml
+        '';
+      };
+
     };
 
   };
@@ -108,7 +118,7 @@ in {
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${cfg.package}/bin/scollector ${cmdLineOpts}";
+        ExecStart = "${cfg.package}/bin/scollector -conf=${conf} ${lib.concatStringsSep " " cfg.extraOpts}";
       };
     };
 

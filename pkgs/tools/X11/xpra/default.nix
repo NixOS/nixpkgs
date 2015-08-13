@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages
 , python, cython, pkgconfig
 , xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
 , makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf, xkeyboard_config
@@ -6,12 +6,12 @@
 , libfakeXinerama }:
 
 buildPythonPackage rec {
-  name = "xpra-0.14.19";
+  name = "xpra-0.15.3";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://www.xpra.org/src/${name}.tar.xz";
-    sha256 = "0jifaysz4br1v0zibnzgd0k02rgybbsysvwrgbar1452sjb3db5m";
+    sha256 = "1671r4ah2h0i3qbp27csck506n5y1zr9fv0869cv09knspa358i4";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pil pygtk pygobject
+    pil pygtk pygobject pythonPackages.rencode
   ];
 
   postPatch = ''

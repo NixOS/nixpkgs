@@ -36,14 +36,6 @@
 
 </para>
 
-<para>The following new services were added since the last release:
-
-<itemizedlist>
-<listitem><para><literal>brltty</literal></para></listitem>
-<listitem><para><literal>marathon</literal></para></listitem>
-<listitem><para><literal>tvheadend</literal></para></listitem>
-</itemizedlist>
-</para>
 
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:
@@ -97,6 +89,17 @@ was accordingly renamed to <literal>electron</literal>
 	Local printers are no longer shared or advertised by default. This behavior
 	can be changed by enabling <literal>services.printing.defaultShared</literal>
 	or <literal>services.printing.browsing</literal> respectively.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
+    The VirtualBox host and guest options have been moved/renamed more
+    consistently and less confusing to be now found in
+    <literal>virtualisation.virtualbox.host.*</literal> instead of
+    <literal>services.virtualboxHost.*</literal> and
+    <literal>virtualisation.virtualbox.guest.*</literal> instead of
+    <literal>services.virtualboxGuest.*</literal>.
   </para>
 </listitem>
 
@@ -197,6 +200,28 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
   </para>
 </listitem>
 
+</itemizedlist>
+</para>
+
+
+<para>The following new services were added since the last release:
+
+<itemizedlist>
+<listitem><para><literal>brltty</literal></para></listitem>
+<listitem><para><literal>marathon</literal></para></listitem>
+<listitem><para><literal>tvheadend</literal></para></listitem>
+</itemizedlist>
+</para>
+
+
+<para>Other notable improvements:
+
+<itemizedlist>
+  <listitem><para>The nixos and nixpkgs channels were unified,
+    so one <emphasis>can</emphasis> use <literal>nix-env -iA nixos.bash</literal>
+    instead of <literal>nix-env -iA nixos.pkgs.bash</literal>.
+    See <link xlink:href="https://github.com/NixOS/nixpkgs/commit/2cd7c1f198">the commit</link> for details.
+  </para></listitem>
 </itemizedlist>
 </para>
 

@@ -5,11 +5,11 @@ let
 
   version = "${libVersion}-list-${listVersion}";
 
-  listVersion = "2015-08-03";
+  listVersion = "2015-08-07";
   listArchive = let
-    rev = "447962d71bf512fe41e828afc7fa66a1701c7c3c";
+    rev = "de9af76664aa5fd89dfee3c44c56ba91c03eefab";
   in fetchurl {
-    sha256 = "0gp0cb6p8yvyy5kvgdwg45ian9rb07bb0a9ibdj58g21l54mx3r2";
+    sha256 = "007yxs92dffgapkqik6rfrng5af8hjzf8wd7hlff91q836k40abi";
     url = "https://codeload.github.com/publicsuffix/list/tar.gz/${rev}";
   };
 

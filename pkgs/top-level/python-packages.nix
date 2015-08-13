@@ -8038,11 +8038,11 @@ let
 
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
-    version = "0.6.3";
+    version = "0.6.6";
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
       rev = "refs/tags/pymysql-${version}";
-      sha256 = "1m9fr2x49s3aixlmccr3w80skl19dya9h3x69wgl6ly1z27iyg24";
+      sha256 = "12v8bw7pp455zqkwraxk69qycz2ngk18bbz60v72kdbp6kssnqhz";
     };
   };
 
@@ -8315,6 +8315,57 @@ let
       license = "BSD-style";
     };
   });
+
+  nibabel = buildPythonPackage rec {
+    version = "2.0.1";
+    name = "nibabel-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nibabel/${name}.tar.gz";
+      md5 = "3be518fde5ec5b09483d4f28c81dc974";
+    };
+
+    propagatedBuildInputs = with self; [
+      numpy
+      nose
+      modules.sqlite3
+    ];
+
+    meta = {
+      homepage = http://nipy.org/nibabel/;
+      description = "Access a multitude of neuroimaging data formats";
+      license = "BSD";
+    };
+  };
+
+  nipype = buildPythonPackage rec {
+    version = "0.10.0";
+    name = "nipype-${version}";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nipype/${name}.tar.gz";
+      md5 = "480013709633a6d292e2ef668443e0c9";
+    };
+
+    # Tests fail due to getcwd returning ENOENT???
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+     numpy
+     dateutil
+     nose
+     traits
+     scipy
+     nibabel
+     networkx
+   ];
+
+    meta = {
+      homepage = http://nipy.org/nipype/;
+      description = "Neuroimaging in Python: Pipelines and Interfaces";
+      license = "BSD";
+    };
+  };
 
   nose = buildPythonPackage rec {
     version = "1.3.4";
@@ -11496,6 +11547,26 @@ let
     };
   };
 
+  rencode = buildPythonPackage rec {
+    name = "rencode-${version}";
+    version = "git20150810";
+    disabled = isPy33;
+
+    src = pkgs.fetchgit {
+      url = https://github.com/aresch/rencode;
+      rev = "b45e04abdca0dea36e383a8199783269f186c99e";
+      sha256 = "b4bd82852d4220e8a9493d3cfaecbc57b1325708a2d48c0f8acf262edb10dc40";
+    };
+
+    buildInputs = with self; [ cython ];
+
+    meta = {
+      homepage = https://github.com/aresch/rencode;
+      description = "Fast (basic) object serialization similar to bencode";
+      license = licenses.gpl3;
+    };
+  };
+
 
   reportlab =
    let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
@@ -13716,6 +13787,24 @@ let
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
 
+      license = "BSD";
+    };
+  };
+
+  traits = buildPythonPackage rec {
+    name = "traits-${version}";
+    version = "4.5.0";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/t/traits/${name}.tar.gz";
+      md5 = "3ad558eebaedc63c29c80183c0371d2f";
+    };
+
+    propagatedBuildInputs = with self; [ numpy ];
+
+    meta = {
+      description = "explicitly typed attributes for Python";
+      homepage = http://pypi.python.org/pypi/traits;
       license = "BSD";
     };
   };

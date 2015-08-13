@@ -259,14 +259,8 @@ self: super: {
   gtk = addBuildDepends super.gtk [pkgs.pkgconfig pkgs.gtk];
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
-  # webkit does not recognize its system library build input any more.
-  webkit = markBroken super.webkit; # http://hydra.cryp.to/build/1041942/nixlog/1/raw
-  ghcjs-dom-hello = dontDistribute super.ghcjs-dom-hello;       # depends on broken webkit
-  ghcjs-dom = dontDistribute super.ghcjs-dom;                   # depends on broken webkit
-  jsaddle-hello = dontDistribute super.jsaddle-hello;           # depends on broken webkit
-  reflex-dom = dontDistribute super.reflex-dom;                 # depends on broken webkit
-
   # Need WebkitGTK, not just webkit.
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
   webkitgtk3 = super.webkitgtk3.override { webkit = pkgs.webkitgtk24x; };
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
@@ -793,6 +787,7 @@ self: super: {
   singleton-nats = dontDistribute super.singleton-nats;
   singletons = markBroken super.singletons;
   units-attoparsec = dontDistribute super.units-attoparsec;
+  ihaskell-widgets = dontDistribute super.ihaskell-widgets;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
@@ -881,23 +876,6 @@ self: super: {
   # https://github.com/hspec/mockery/issues/6
   mockery = overrideCabal super.mockery (drv: { preCheck = "export TRAVIS=true"; });
 
-  # https://github.com/diagrams/diagrams-lib/issues/258
-  # https://github.com/diagrams/diagrams-lib/issues/259
-  diagrams-lib = markBroken super.diagrams-lib;
-  diagrams-cairo = dontDistribute super.diagrams-cairo;
-  diagrams-gtk = dontDistribute super.diagrams-gtk;
-  diagrams-html5 = dontDistribute super.diagrams-html5;
-  diagrams-pandoc = dontDistribute super.diagrams-pandoc;
-  diagrams-postscript = dontDistribute super.diagrams-postscript;
-  diagrams-rasterific = dontDistribute super.diagrams-rasterific;
-  diagrams-rubiks-cube = dontDistribute super.diagrams-rubiks-cube;
-  diagrams-svg = dontDistribute super.diagrams-svg;
-  halma = dontDistribute super.halma;
-  midi-music-box = dontDistribute super.midi-music-box;
-  potrace-diagrams = dontDistribute super.potrace-diagrams;
-  SVGFonts = dontDistribute super.SVGFonts;
-  yesod-media-simple = dontDistribute super.yesod-media-simple;
-
   # https://github.com/alphaHeavy/lzma-conduit/issues/5
   lzma-conduit = dontCheck super.lzma-conduit;
 
@@ -925,5 +903,8 @@ self: super: {
 
   # https://github.com/liyang/thyme/issues/36
   thyme = dontCheck super.thyme;
+
+  # https://github.com/aka-bash0r/multi-cabal/issues/4
+  multi-cabal = markBroken super.multi-cabal;
 
 }

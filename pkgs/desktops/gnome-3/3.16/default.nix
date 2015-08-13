@@ -30,16 +30,21 @@ let
     gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor vinagre
+    nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
+    gnome-maps gnome-characters
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
-    tali quadrapassel
+    tali quadrapassel gnome-sudoku aisleriot five-or-more
+    four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
+    gnome-mines gnome-nibbles gnome-robots gnome-tetravex
+    hitori gnome-taquin
   ];
 
   inherit (pkgs) glib gtk2 webkitgtk24x gtk3 gtkmm3 libcanberra;
   inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
+  libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   clutter = pkgs.clutter_1_22;
@@ -264,9 +269,15 @@ let
     spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
   };
 
+  gnome-characters = callPackage ./apps/gnome-characters { };
+
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
+
+  gnome-logs = callPackage ./apps/gnome-logs { };
+
+  gnome-maps = callPackage ./apps/gnome-maps { };
 
   gnome-music = callPackage ./apps/gnome-music { };
 
@@ -274,7 +285,11 @@ let
     gegl = gegl_0_3;
   };
 
+  gnome-weather = callPackage ./apps/gnome-weather { };
+
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
+
+  polari = callPackage ./apps/polari { };
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
@@ -289,7 +304,35 @@ let
 
   gdl = callPackage ./devtools/gdl { };
 
+  gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
+
 #### Games
+
+  aisleriot = callPackage ./games/aisleriot { };
+
+  five-or-more = callPackage ./games/five-or-more { };
+
+  four-in-a-row = callPackage ./games/four-in-a-row { };
+
+  gnome-chess = callPackage ./games/gnome-chess { };
+
+  gnome-klotski = callPackage ./games/gnome-klotski { };
+
+  gnome-mahjongg = callPackage ./games/gnome-mahjongg { };
+
+  gnome-mines = callPackage ./games/gnome-mines { };
+
+  gnome-nibbles = callPackage ./games/gnome-nibbles { };
+
+  gnome-robots = callPackage ./games/gnome-robots { };
+
+  gnome-sudoku = callPackage ./games/gnome-sudoku { };
+
+  gnome-taquin = callPackage ./games/gnome-taquin { };
+
+  gnome-tetravex = callPackage ./games/gnome-tetravex { };
+
+  hitori = callPackage ./games/hitori { };
 
   iagno = callPackage ./games/iagno { };
 

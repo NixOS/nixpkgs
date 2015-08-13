@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.virtualboxHost;
+  cfg = config.virtualisation.virtualbox.host;
   virtualbox = config.boot.kernelPackages.virtualbox.override {
     inherit (cfg) enableHardening;
   };
@@ -11,12 +11,12 @@ let
 in
 
 {
-  options.services.virtualboxHost = {
+  options.virtualisation.virtualbox.host = {
     enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        Whether to enable host-side support for VirtualBox.
+        Whether to enable VirtualBox.
 
         <note><para>
           In order to pass USB devices from the host to the guests, the user

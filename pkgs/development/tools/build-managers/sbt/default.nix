@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sbt-${version}";
-  version = "0.13.8";
+  version = "0.13.9";
 
   src = fetchurl {
     url = "http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/${version}/sbt-launch.jar";
-    sha256 = "0n4ivla8s8ygfnf95dj624nhcyganigf7fy0gamgyf31vw1vnw35";
+    sha256 = "04k411gcrq35ayd2xj79bcshczslyqkicwvhkf07hkyr4j3blxda";
   };
 
   phases = [ "installPhase" ];

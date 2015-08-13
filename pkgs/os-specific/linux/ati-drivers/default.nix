@@ -31,7 +31,7 @@ assert (!libsOnly) -> kernel != null;
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "ati-drivers-14.12" + (optionalString (!libsOnly) "-${kernel.version}");
+  name = "ati-drivers-15.7" + (optionalString (!libsOnly) "-${kernel.version}");
 
   builder = ./builder.sh;
 
@@ -39,12 +39,12 @@ stdenv.mkDerivation {
   gcc = stdenv.cc.cc;
 
   src = fetchurl {
-    url = http://www2.ati.com/drivers/linux/amd-catalyst-omega-14.12-linux-run-installers.zip;
-    sha256 = "0jd2scrdlyapynxfjdrarnwcdzxjqrk5fg5i10g3bm0ay8v9hrk8";
+    url = "http://www2.ati.com/drivers/linux/amd-driver-installer-15.20.1046-x86.x86_64.zip";
+    sha256 = "ffde64203f49d9288eaa25f4d744187b6f4f14a87a444bab6a001d822b327a9d";
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
-  patchPhase = "patch -p1 < ${./fglrx_3.17rc6-no_hotplug.patch}";
+  patchPhase = "patch -p1 < ${./kernel-api-fixes.patch}";
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
 
   buildInputs =

@@ -109,7 +109,14 @@ in zipModules ([]
 ++ obsolete [ "services" "xserver" "startOpenSSHAgent" ] [ "programs" "ssh" "startAgent" ]
 
 # VirtualBox
-++ obsolete [ "services" "virtualbox" "enable" ] [ "services" "virtualboxGuest" "enable" ]
+++ obsolete [ "services" "virtualbox" "enable" ] [ "virtualisation" "virtualbox" "guest" "enable" ]
+++ obsolete [ "services" "virtualboxGuest" "enable" ] [ "virtualisation" "virtualbox" "guest" "enable" ]
+++ obsolete [ "programs" "virtualbox" "enable" ] [ "virtualisation" "virtualbox" "host" "enable" ]
+++ obsolete [ "programs" "virtualbox" "addNetworkInterface" ] [ "virtualisation" "virtualbox" "host" "addNetworkInterface" ]
+++ obsolete [ "programs" "virtualbox" "enableHardening" ] [ "virtualisation" "virtualbox" "host" "enableHardening" ]
+++ obsolete [ "services" "virtualboxHost" "enable" ] [ "virtualisation" "virtualbox" "host" "enable" ]
+++ obsolete [ "services" "virtualboxHost" "addNetworkInterface" ] [ "virtualisation" "virtualbox" "host" "addNetworkInterface" ]
+++ obsolete [ "services" "virtualboxHost" "enableHardening" ] [ "virtualisation" "virtualbox" "host" "enableHardening" ]
 
 # Tarsnap
 ++ obsolete [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ]

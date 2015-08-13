@@ -1,5 +1,5 @@
-{ lib, fetchurl, stdenv, autoreconfHook, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
-, guileBindings, guile, perl, gmp, libidn, p11_kit, unbound
+{ lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound
 , tpmSupport ? false, trousers
 
 # Version dependent args
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .

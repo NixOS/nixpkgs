@@ -43,7 +43,6 @@ in rec {
         simple;
       installer = {
         inherit (nixos'.tests.installer)
-          grub1
           lvm
           separateBoot
           simple;

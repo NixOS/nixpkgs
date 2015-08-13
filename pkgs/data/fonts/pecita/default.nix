@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://pecita.eu/b/Pecita.otf";
-    sha256 = "11v5yzxa38fxpz8j3fc0v3l7py4i12avjnwrgkmd9clq9jhzk78s";
+    sha256 = "0agml1886jvb0j6jar8hjx4hfbz3n0msszyp625b96ilv09qrcyz";
   };
 
   phases = ["installPhase"];
