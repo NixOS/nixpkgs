@@ -49,6 +49,7 @@
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
+  ./misc/licenses.nix
   ./misc/locate.nix
   ./misc/meta.nix
   ./misc/nixpkgs.nix
