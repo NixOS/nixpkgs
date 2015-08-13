@@ -6746,6 +6746,8 @@ let
 
   libatomic_ops = callPackage ../development/libraries/libatomic_ops {};
 
+  libaudclient = callPackage ../development/libraries/libaudclient { };
+
   libav = libav_11; # branch 11 is API-compatible with branch 10
   libav_all = callPackage ../development/libraries/libav { };
   inherit (libav_all) libav_0_8 libav_9 libav_11;
