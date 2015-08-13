@@ -31,6 +31,7 @@ let
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
+    gnome-maps
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
