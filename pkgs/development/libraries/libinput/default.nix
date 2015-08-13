@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig
 , libevdev, mtdev, udev
-, documentationSupport ? true, doxygen ? null, graphviz ? null # Documentation
+, documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
 , testsSupport ? false, check ? null, valgrind ? null
 }:
