@@ -31,7 +31,7 @@ let
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
-    gnome-maps gnome-characters gnome-calendar
+    gnome-maps gnome-characters gnome-calendar accerciser
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -247,6 +247,8 @@ let
 
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
+
+  accerciser = callPackage ./apps/accerciser { };
 
   bijiben = callPackage ./apps/bijiben {
     webkitgtk = webkitgtk24x;
