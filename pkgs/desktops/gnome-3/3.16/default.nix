@@ -30,7 +30,7 @@ let
     gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor vinagre gnome-weather
+    nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -271,6 +271,8 @@ let
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
+
+  gnome-logs = callPackage ./apps/gnome-logs { };
 
   gnome-maps = callPackage ./apps/gnome-maps { };
 
