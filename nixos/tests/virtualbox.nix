@@ -31,7 +31,7 @@ import ./make-test.nix ({ pkgs, ... }: with pkgs.lib; let
       fsType = "vboxsf";
     };
 
-    services.virtualboxGuest.enable = true;
+    virtualisation.virtualbox.guest.enable = true;
 
     boot.initrd.kernelModules = [
       "af_packet" "vboxsf"
@@ -308,9 +308,9 @@ in {
       vmConfigs = mapAttrsToList mkVMConf vboxVMs;
     in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
     virtualisation.memorySize = 768;
-    services.virtualboxHost.enable = true;
+    virtualisation.virtualbox.host.enable = true;
     users.extraUsers.alice.extraGroups = let
-      inherit (config.services.virtualboxHost) enableHardening;
+      inherit (config.virtualisation.virtualbox.host) enableHardening;
     in lib.mkIf enableHardening (lib.singleton "vboxusers");
   };
 

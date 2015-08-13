@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.programs.virtualbox;
+  cfg = config.virtualisation.virtualbox.host;
   virtualbox = config.boot.kernelPackages.virtualbox.override {
     inherit (cfg) enableHardening;
   };
@@ -11,7 +11,7 @@ let
 in
 
 {
-  options.programs.virtualbox = {
+  options.virtualisation.virtualbox.host = {
     enable = mkOption {
       type = types.bool;
       default = false;

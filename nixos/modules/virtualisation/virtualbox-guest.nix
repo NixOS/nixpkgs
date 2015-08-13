@@ -6,7 +6,7 @@ with lib;
 
 let
 
-  cfg = config.services.virtualboxGuest;
+  cfg = config.virtualisation.virtualbox.guest;
   kernel = config.boot.kernelPackages;
 
 in
@@ -15,19 +15,10 @@ in
 
   ###### interface
 
-  options = {
-
-    services.virtualboxGuest = {
-
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the VirtualBox service and other guest additions.";
-      };
-
-    };
-
+  options.virtualisation.virtualbox.guest.enable = mkOption {
+    default = false;
+    description = "Whether to enable the VirtualBox service and other guest additions.";
   };
-
 
   ###### implementation
 

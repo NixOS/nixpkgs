@@ -94,6 +94,17 @@ was accordingly renamed to <literal>electron</literal>
 
 <listitem>
   <para>
+    The VirtualBox host and guest options have been moved/renamed more
+    consistently and less confusing to be now found in
+    <literal>virtualisation.virtualbox.host.*</literal> instead of
+    <literal>services.virtualboxHost.*</literal> and
+    <literal>virtualisation.virtualbox.guest.*</literal> instead of
+    <literal>services.virtualboxGuest.*</literal>.
+  </para>
+</listitem>
+
+<listitem>
+  <para>
     Haskell packages can no longer be found by name, i.e. the commands
     <literal>nix-env -qa cabal-install</literal> and <literal>nix-env -i
     ghc</literal> will fail, even though we <emphasis>do</emphasis> ship
