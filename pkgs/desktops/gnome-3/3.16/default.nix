@@ -30,7 +30,7 @@ let
     gnome-system-log gnome-system-monitor
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
-    nautilus-sendto dconf-editor vinagre
+    nautilus-sendto dconf-editor vinagre gnome-weather
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -279,6 +279,8 @@ let
   gnome-photos = callPackage ./apps/gnome-photos {
     gegl = gegl_0_3;
   };
+
+  gnome-weather = callPackage ./apps/gnome-weather { };
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
 
