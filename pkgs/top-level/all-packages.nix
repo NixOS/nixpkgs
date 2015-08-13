@@ -11402,6 +11402,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  gjay = callPackage ../applications/audio/gjay { };
+
   photivo = callPackage ../applications/graphics/photivo { };
 
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
