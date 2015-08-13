@@ -3729,6 +3729,8 @@ let
 
   eql = callPackage ../development/compilers/eql {};
 
+  elmPackages = callPackage ../development/compilers/elm { };
+
   adobe_flex_sdk = callPackage ../development/compilers/adobe-flex-sdk { };
 
   fpc = callPackage ../development/compilers/fpc { };
