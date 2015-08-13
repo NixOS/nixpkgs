@@ -28,7 +28,7 @@ in
 
 stdenv.mkDerivation rec {
   version = "7.11.20150718";
-  name = "ghc-nokinds-${version}";
+  name = "ghc-${version}"; # We cannot add a "nokinds" tag here; see git comment for details.
   rev = "4cb79c85a4976c509a65a8638899391a60cd0962";
 
   src = fetchgit {
