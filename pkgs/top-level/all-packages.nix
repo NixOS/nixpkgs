@@ -2742,6 +2742,8 @@ let
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
+  pyatspi = callPackage ../development/python-modules/pyatspi { };
+
   pycangjie = callPackage ../development/python-modules/pycangjie { };
 
   pydb = callPackage ../development/tools/pydb { };
