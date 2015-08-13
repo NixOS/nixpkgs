@@ -9,7 +9,7 @@ source $mirrorsFile
 # cryptographic hash of the output anyway).
 curl="curl \
  --location --max-redirs 20 \
- --retry 3
+ --retry 3 \
  --disable-epsv \
  --cookie-jar cookies \
  --insecure \
@@ -32,7 +32,7 @@ tryDownload() {
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
-       if $curl -C - --fail "$url" --output "$downloadedFile"; then
+       if eval $curl -C - --fail "$url" --output "$downloadedFile"; then
           success=1
           break
        else
@@ -58,7 +58,7 @@ tryHashedMirrors() {
 
     for mirror in $hashedMirrors; do
         url="$mirror/$outputHashAlgo/$outputHash"
-        if $curl --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
+        if eval $curl --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
             --write-out "%{http_code}" --output /dev/null > code 2> log; then
             tryDownload "$url"
