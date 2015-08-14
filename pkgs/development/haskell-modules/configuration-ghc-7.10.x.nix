@@ -230,10 +230,10 @@ self: super: {
   containers_0_4_2_1 = markBroken super.containers_0_4_2_1;
   control-monad-free_0_5_3 = markBroken super.control-monad-free_0_5_3;
   haddock-api_2_15_0_2 = markBroken super.haddock-api_2_15_0_2;
-  optparse-applicative_0_10_0 = markBroken super.optparse-applicative_0_10_0;
   QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
   vector_0_10_9_2 = markBroken super.vector_0_10_9_2;
+  hoopl_3_10_2_0 = markBroken super.hoopl_3_10_2_0;
 
   # http://hub.darcs.net/shelarcy/regex-tdfa-text/issue/1 -- upstream seems to be asleep
   regex-tdfa-text = appendPatch super.regex-tdfa-text ./patches/regex-tdfa-text.patch;
