@@ -16,14 +16,14 @@
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
-let version = "40.0"; in
+let version = "40.0.2"; in
 
 stdenv.mkDerivation rec {
   name = "firefox-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.bz2";
-    sha1 = "48483e5738182f8567e2b6d2e29bd6bc1812d3eb";
+    sha1 = "b5d79fa3684284bfeb7277e99c756b8688e8121d";
   };
 
   buildInputs =
