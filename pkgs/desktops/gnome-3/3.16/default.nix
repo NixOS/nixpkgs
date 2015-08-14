@@ -308,6 +308,10 @@ let
 
   anjuta = callPackage ./devtools/anjuta { };
 
+  devhelp = callPackage ./devtools/devhelp {
+    webkitgtk = webkitgtk24x;
+  };
+
   gdl = callPackage ./devtools/gdl { };
 
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
