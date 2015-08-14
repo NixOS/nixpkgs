@@ -12603,6 +12603,22 @@ let
       license = "unspecified"; # !
     };
   };
+  
+  simplegeneric = buildPythonPackage rec {
+    version = "0.8.1";
+    name = "simplegeneric-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/simplegeneric/${name}.zip";
+      sha256 = "dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173";
+    };
+    
+    meta = {
+      description = "Simple generic functions";
+      homepage = http://cheeseshop.python.org/pypi/simplegeneric;
+      license = licenses.zpt21;
+    };
+  };
 
 
   simplejson = buildPythonPackage (rec {
