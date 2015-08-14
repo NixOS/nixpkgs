@@ -7164,6 +7164,24 @@ let
     };
   };
   
+  jupyter_client = buildPythonPackage rec {
+    version = "4.0.0";
+    name = "jupyter_client-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter_client/${name}.tar.gz";
+      sha256 = "a39a4181ea2021daf6e821acae836999ef6e0fefe603813a7a7d4658d2ffa2ac";
+    };
+        
+    propagatedBuildInputs = with self; [traitlets jupyter_core pyzmq] ++ optional isPyPy py;
+    
+    meta = {
+      description = "Jupyter protocol implementation and client libraries";
+      homepage = http://jupyter.org/;
+      license = licenses.bsd3;
+    };  
+  };
+  
   jupyter_core = buildPythonPackage rec {
     version = "4.0.4";
     name = "jupyter_core-${version}";
