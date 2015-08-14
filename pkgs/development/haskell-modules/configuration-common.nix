@@ -37,11 +37,6 @@ self: super: {
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
-  # Please also remove optparse-applicative special case from
-  # cabal2nix/hackage2nix.hs when removing the following.
-  elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-  elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
@@ -398,7 +393,6 @@ self: super: {
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
-  elm-repl = dontCheck super.elm-repl;                  # http://hydra.cryp.to/build/501878/nixlog/1/raw
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
@@ -915,5 +909,20 @@ self: super: {
 
   # https://github.com/aka-bash0r/multi-cabal/issues/4
   multi-cabal = markBroken super.multi-cabal;
+
+  # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  Elm = markBroken super.Elm;
+  elm-bridge = markBroken super.elm-bridge;
+  elm-build-lib = markBroken super.elm-build-lib;
+  elm-compiler = markBroken super.elm-compiler;
+  elm-core-sources = markBroken super.elm-core-sources;
+  elm-get = markBroken super.elm-get;
+  elm-init = markBroken super.elm-init;
+  elm-make = markBroken super.elm-make;
+  elm-package = markBroken super.elm-package;
+  elm-reactor = markBroken super.elm-reactor;
+  elm-repl = markBroken super.elm-repl;
+  elm-server = markBroken super.elm-server;
+  elm-yesod = markBroken super.elm-yesod;
 
 }
