@@ -8674,7 +8674,26 @@ let
 
     buildInputs = with self; [ nose ];
   };
-
+  
+  notebook = buildPythonPackage rec {
+    version = "4.0.4";
+    name = "notebook-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/notebook/${name}.tar.gz";
+      sha256 = "a57852514bce1b1cf41fa0311f6cf894960cf68b083b55e6c408316b598d5648";
+    };
+    
+    buildInputs = with self; [nose]  ++ optionals isPy27 [mock];
+    
+    propagatedBuildInputs = with self; [jinja2 tornado ipython_genutils traitlets jupyter_core jupyter_client nbformat nbconvert ipykernel terminado requests pexpect];
+    
+    meta = {
+      description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
+      homepage = http://jupyter.org/;
+      license = licenses.bsd3;
+    };
+  };
 
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
