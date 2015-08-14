@@ -13598,7 +13598,7 @@ let
     meta = {
       description = "Terminals served to term.js using Tornado websockets";
       homepage = https://github.com/takluyver/terminado;
-      licenses = licenses.bsd2;
+      license = licenses.bsd2;
     };
   };
 
