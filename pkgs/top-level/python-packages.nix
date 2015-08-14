@@ -120,20 +120,6 @@ let
     hdf5 = pkgs.hdf5.override { mpi = pkgs.openmpi; enableShared = true; };
   };
 
-  ipython = callPackage ../shells/ipython {
-    inherit pythonPackages;
-
-    qtconsoleSupport = !pkgs.stdenv.isDarwin; # qt is not supported on darwin
-    pylabQtSupport = !pkgs.stdenv.isDarwin;
-    pylabSupport = !pkgs.stdenv.isDarwin; # cups is not supported on darwin
-  };
-
-  ipythonLight = lowPrio (self.ipython.override {
-    qtconsoleSupport = false;
-    pylabSupport = false;
-    pylabQtSupport = false;
-  });
-
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -6912,6 +6898,27 @@ let
     };
   };
   
+  ipython = buildPythonPackage rec {
+    version = "4.0.0";
+    name = "ipython-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
+      sha256 = "2fd276c407fb0b29e5d4884a7029a2c27fef0a06fd7a34924cce69b7cc43f4da";
+    };
+    
+    buildInputs = with self; [nose] ++ optionals isPy27 [mock];
+    
+    propagatedBuildInputs = with self; [decorator pickleshare simplegeneric traitlets requests pexpect sqlite3];
+    
+    meta = {
+      description = "IPython: Productive Interactive Computing";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ bjornfor jgeerds ];
+    };
+  };
+  
   ipython_genutils = buildPythonPackage rec {
     version = "0.1.0";
     name = "ipython_genutils-${version}";
@@ -6967,7 +6974,7 @@ let
       url = "http://pypi.python.org/packages/source/i/ipdb/${name}.zip";
       md5 = "96dca0712efa01aa5eaf6b22071dd3ed";
     };
-    propagatedBuildInputs = with self; [ self.ipythonLight ];
+    propagatedBuildInputs = with self; [ self.ipython ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -6976,7 +6983,7 @@ let
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       md5 = "f9a41512e5d901ea0fa199c3f648bba7";
     };
-    propagatedBuildInputs = with self; [ self.nose self.ipythonLight ];
+    propagatedBuildInputs = with self; [ self.nose self.ipython ];
   };
 
   iso8601 = buildPythonPackage {
