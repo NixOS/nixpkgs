@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = https://telegram.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = stdenv.lib.maintainers.jagajaga;
+    maintainers = [ stdenv.lib.maintainers.jagajaga ];
   };
 }
