@@ -31,7 +31,7 @@ let
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
-    gnome-maps gnome-characters gnome-calendar accerciser
+    gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -284,6 +284,8 @@ let
   gnome-maps = callPackage ./apps/gnome-maps { };
 
   gnome-music = callPackage ./apps/gnome-music { };
+
+  gnome-nettool = callPackage ./apps/gnome-nettool { };
 
   gnome-photos = callPackage ./apps/gnome-photos {
     gegl = gegl_0_3;
