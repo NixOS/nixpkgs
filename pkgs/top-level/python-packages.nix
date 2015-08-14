@@ -6916,6 +6916,26 @@ let
       license = licenses.bsd3;
     };
   };
+  
+  ipyparallel = buildPythonPackage rec {
+    version = "4.0.2";
+    name = "ipyparallel-${version}";
+    
+    src = pkgs.fetchurl { 
+      url = "https://pypi.python.org/packages/source/i/ipyparallel/${name}.tar.gz";
+      sha256 = "6b9e09ca441a45e055b97cb8e3e1dd30de85b935fae3aa0d97f138352fd3089b";
+    };
+    
+    propagatedBuildInputs = with self; [ipython_genutils decorator pyzmq ipython jupyter_client ipykernel];
+    
+    meta = {
+      description = "Interactive Parallel Computing with IPython";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+    };
+  
+  };
+  
   ipython = buildPythonPackage rec {
     version = "4.0.0";
     name = "ipython-${version}";
