@@ -788,6 +788,11 @@ self: super: {
   singletons = markBroken super.singletons;
   units-attoparsec = dontDistribute super.units-attoparsec;
   ihaskell-widgets = dontDistribute super.ihaskell-widgets;
+  exinst-bytes = dontDistribute super.exinst-bytes;
+  exinst-deepseq = dontDistribute super.exinst-deepseq;
+  exinst-aeson = dontDistribute super.exinst-aeson;
+  exinst = dontDistribute super.exinst;
+  exinst-hashable = dontDistribute super.exinst-hashable;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
