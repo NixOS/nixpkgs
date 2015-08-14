@@ -827,14 +827,13 @@ let self = _self // overrides;
 
   idris-mode = melpaBuild rec {
     pname   = "idris-mode";
-    version = "0.9.15";
+    version = "0.9.18";
     src = fetchFromGitHub {
       owner  = "idris-hackers";
       repo   = "idris-mode";
       rev    = version;
-      sha256 = "00pkgk1zxan89i8alsa2dpa9ls7imqk5zb1kbjwzrlbr0gk4smdb";
+      sha256 = "11dw2ydlqhqx569wrp56w11rhgvm6mb6mzq2cwsv2vfyjvvawyxg";
     };
-    packageRequires = [ flycheck ];
     meta = { license = gpl3Plus; };
   };
 

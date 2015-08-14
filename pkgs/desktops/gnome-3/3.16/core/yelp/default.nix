@@ -1,6 +1,7 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
 , file, librsvg, hicolor_icon_theme, gnome3, gdk_pixbuf, sqlite
-, bash, makeWrapper, itstool, libxml2, libxslt, icu }:
+, bash, makeWrapper, itstool, libxml2, libxslt, icu, gst_all_1
+, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "yelp-${gnome3.version}.1";
@@ -18,13 +19,8 @@ stdenv.mkDerivation rec {
                   libxml2 libxslt icu file makeWrapper gnome3.yelp_xsl
                   librsvg gdk_pixbuf gnome3.adwaita-icon-theme
                   hicolor_icon_theme gnome3.adwaita-icon-theme
-                  gnome3.gsettings_desktop_schemas ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/yelp" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/:${gnome3.gnome_themes_standard}/share:${gnome3.yelp_xsl}/share/yelp-xsl:${gnome3.gsettings_desktop_schemas}/share:$out/share:$out/share/yelp:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
+                  gnome3.gsettings_desktop_schemas wrapGAppsHook
+                  gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Yelp;

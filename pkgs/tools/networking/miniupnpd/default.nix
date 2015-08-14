@@ -1,25 +1,22 @@
-{ stdenv, fetchurl, iptables, libnfnetlink }:
+{ stdenv, fetchurl, iptables, pkgconfig }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-1.9.20150430";
+  name = "miniupnpd-1.9.20150721";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0ajqs3lf2cgq5fm1v79fa23sbb623i89sqnx7d9cnqbqq5py1k71";
-    name = "miniupnpd-1.9.20150430.tar.gz";
+    sha256 = "0w2422wfcir333qd300swkdvmksdfdllspplnz8vbv13a1724h4k";
+    name = "${name}.tar.gz";
   };
 
-  buildInputs = [ iptables libnfnetlink ];
+  buildInputs = [ iptables ];
+  nativeBuildInputs= [ pkgconfig ];
 
-  NIX_CFLAGS_COMPILE = "-DIPTABLES_143";
-
-  NIX_CFLAGS_LINK = "-liptc -lnfnetlink";
+  NIX_CFLAGS_LINK = "-liptc";
 
   makefile = "Makefile.linux";
-
-  makeFlags = "LIBS=";
 
   buildFlags = "miniupnpd genuuid";
 

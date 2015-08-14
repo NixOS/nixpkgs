@@ -17,7 +17,7 @@ let
     baseName="OpenSceneGraph";
     version="3.2.1";
     name="${baseName}-${version}";
-    url="http://www.openscenegraph.org/downloads/developer_releases/${name}.zip";
+    url="http://trac.openscenegraph.org/downloads/developer_releases/${name}.zip";
     hash="0v9y1gxb16y0mj994jd0mhcz32flhv2r6kc01xdqb4817lk75bnr";
   };
 in

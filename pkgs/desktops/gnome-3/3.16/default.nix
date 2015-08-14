@@ -31,7 +31,8 @@ let
     gnome_terminal gnome-user-docs bijiben evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
-    gnome-maps gnome-characters
+    gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
+    gnome-getting-started-docs
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -248,6 +249,8 @@ let
 
 #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
+  accerciser = callPackage ./apps/accerciser { };
+
   bijiben = callPackage ./apps/bijiben {
     webkitgtk = webkitgtk24x;
   };
@@ -269,17 +272,23 @@ let
     spice_gtk = pkgs.spice_gtk.override { enableGTK3 = true; };
   };
 
+  gnome-calendar = callPackage ./apps/gnome-calendar { };
+
   gnome-characters = callPackage ./apps/gnome-characters { };
 
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
 
+  gnome-getting-started-docs = callPackage ./apps/gnome-getting-started-docs { };
+
   gnome-logs = callPackage ./apps/gnome-logs { };
 
   gnome-maps = callPackage ./apps/gnome-maps { };
 
   gnome-music = callPackage ./apps/gnome-music { };
+
+  gnome-nettool = callPackage ./apps/gnome-nettool { };
 
   gnome-photos = callPackage ./apps/gnome-photos {
     gegl = gegl_0_3;
@@ -301,6 +310,10 @@ let
 #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
   anjuta = callPackage ./devtools/anjuta { };
+
+  devhelp = callPackage ./devtools/devhelp {
+    webkitgtk = webkitgtk24x;
+  };
 
   gdl = callPackage ./devtools/gdl { };
 
