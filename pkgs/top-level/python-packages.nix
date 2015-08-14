@@ -12352,6 +12352,22 @@ let
     };
   };
 
+  seaborn= buildPythonPackage rec {
+    name = "seaborn-0.6.0";
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/s/seaborn/${name}.tar.gz";
+      md5 = "bc518f1f45dadb9deb2bb57ca3af3cad";
+    };
+
+    propagatedBuildInputs = with self; [ pandas matplotlib ];
+
+    meta = {
+      description = "statisitical data visualization";
+      homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
+      license     = "BSD";
+    };
+  };
+
   selenium = buildPythonPackage rec {
     name = "selenium-2.44.0";
     src = pkgs.fetchurl {
