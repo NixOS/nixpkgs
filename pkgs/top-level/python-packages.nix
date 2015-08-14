@@ -7138,6 +7138,24 @@ let
       license = licenses.mit;
     };
   };
+  
+  jupyter_core = buildPythonPackage rec {
+    version = "4.0.4";
+    name = "jupyter_core-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jupyter_core/${name}.tar.gz";
+      sha256 = "fcf45478025f34174943993947f51a41ad871ac998a14bf1cb87d8eb61e75c6d";
+    };
+    
+    propagatedBuildInputs = with self; [traitlets];
+    
+    meta = {
+      description = "Jupyter core package. A base package on which Jupyter projects rely";
+      homepage = http://jupyter.org/;
+      license = licenses.bsd3;
+    };
+  };
 
 
   keyring = buildPythonPackage rec {
