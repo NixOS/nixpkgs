@@ -6911,6 +6911,22 @@ let
       homepage = http://pypi.python.org/pypi/IPy;
     };
   };
+  
+  ipython_genutils = buildPythonPackage rec {
+    version = "0.1.0";
+    name = "ipython_genutils-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipython_genutils/${name}.tar.gz";
+      sha256 = "3a0624a251a26463c9dfa0ffa635ec51c4265380980d9a50d65611c3c2bd82a6";
+    };
+    
+    meta = {
+      description = "Vestigial utilities from IPython";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+    };
+  };
 
 
   ipaddr = buildPythonPackage rec {
