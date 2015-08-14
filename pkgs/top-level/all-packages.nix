@@ -10683,7 +10683,7 @@ let
   audacious = callPackage ../applications/audio/audacious { };
 
   audacity = callPackage ../applications/audio/audacity {
-    ffmpeg = ffmpeg_0;
+    ffmpeg = ffmpeg_2_2;
   };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
