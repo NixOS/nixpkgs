@@ -2473,11 +2473,11 @@ let
   };
 
   pytest = buildPythonPackage rec {
-    name = "pytest-2.6.2";
+    name = "pytest-2.7.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
-      md5 = "0a1735fb1d481ef3864f34678607ba85";
+      sha256 = "b30457f735420d0000d10a44bbd478cf03f8bf20e25bd77248f9bab40f4fd6a4";
     };
 
     preCheck = ''
