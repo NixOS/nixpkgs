@@ -9529,6 +9529,24 @@ let
     };
   };
 
+  pickleshare = buildPythonPackage rec {
+    version = "0.5";
+    name = "pickleshare-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pickleshare/${name}.tar.gz";
+      sha256 = "c0be5745035d437dbf55a96f60b7712345b12423f7d0951bd7d8dc2141ca9286";
+    };
+    
+    propagatedBuildInputs = with self; [pathpy];
+    
+    meta = {
+      description = "Tiny 'shelve'-like database with concurrency support";
+      homepage = https://github.com/vivainio/pickleshare;
+      license = licenses.mit;
+    };
+  };
+  
   pip = buildPythonPackage rec {
     version = "1.5.6";
     name = "pip-${version}";
