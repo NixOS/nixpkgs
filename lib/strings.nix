@@ -210,6 +210,6 @@ rec {
 
 
   # Check whether a value is a store path.
-  isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == builtins.storeDir;
+  isStorePath = x: builtins.substring 0 1 (toString x) == "/" && dirOf (builtins.toPath x) == (builtins.storeDir or "/nix/store");
 
 }
