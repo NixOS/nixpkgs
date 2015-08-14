@@ -13880,6 +13880,23 @@ let
     };
   };
 
+  traitlets = buildPythonPackage rec {
+    version = "4.0.0";
+    name = "traitlets-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/t/traitlets/${name}.tar.gz";
+      sha256 = "0b140b4a94a4f1951887d9bce4650da211f79600fc9fdb422acc90c5bbe0233b";
+    };
+    
+    propagatedBuildInputs = with self; [ipython_genutils decorator];
+    
+    meta = {
+      description = "Traitlets Python config system";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+    };
+  };
 
   python_mimeparse = buildPythonPackage rec {
     name = "python-mimeparse-${version}";
