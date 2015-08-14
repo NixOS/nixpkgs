@@ -233,7 +233,7 @@ self: super: {
   optparse-applicative_0_10_0 = markBroken super.optparse-applicative_0_10_0;
   QuickCheck_1_2_0_1 = markBroken super.QuickCheck_1_2_0_1;
   seqid-streams_0_1_0 = markBroken super.seqid-streams_0_1_0;
-  vector_0_10_9_3 = markBroken super.vector_0_10_9_3;
+  vector_0_10_9_2 = markBroken super.vector_0_10_9_2;
 
   # http://hub.darcs.net/shelarcy/regex-tdfa-text/issue/1 -- upstream seems to be asleep
   regex-tdfa-text = appendPatch super.regex-tdfa-text ./patches/regex-tdfa-text.patch;
