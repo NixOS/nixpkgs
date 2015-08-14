@@ -12003,6 +12003,25 @@ let
       license = licenses.bsd3;
     };
   };
+  
+  qtconsole = buildPythonPackage rec {
+    version = "4.0.1";
+    name = "qtconsole-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/q/qtconsole/${name}.tar.gz";
+      sha256 = "7d2cf976bb960df11f413709b5b5b809365c48426110e946d0c12117e6ced3a5";
+    };
+    
+    buildInputs = with self; [] ++ optionals isPy27 [mock];
+    propagatedBuildInputs = with self; [traitlets jupyter_core jupyter_client pygments ipykernel pyqt4];
+    
+    meta = {
+      description = "Jupyter Qt console";
+      homepage = http://jupyter.org/;
+      license = licenses.bsd3;
+    };
+  };
 
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
