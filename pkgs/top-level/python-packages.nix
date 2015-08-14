@@ -8351,6 +8351,23 @@ let
       license = licenses.lgpl21Plus;
     };
   };
+  nbformat = buildPythonPackage rec {
+    version = "4.0.0";
+    name = "nbformat-${version}";
+  
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nbformat/${name}.tar.gz";
+      sha256 = "daf9b990e96863d120aff123361156a316757757b81a8070eb6945e4a9774b2d";
+    };
+    
+    propagatedBuildInputs = with self; [ipython_genutils traitlets jsonschema jupyter_core];
+    
+    meta = {
+      description = "The Jupyter Notebook format";
+      homepage = "http://jupyter.org/";
+      license = licenses.bsd3;
+    };
+  };
 
   nbxmpp = buildPythonPackage rec {
     name = "nbxmpp-0.5.3";
