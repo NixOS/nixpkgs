@@ -8351,6 +8351,27 @@ let
       license = licenses.lgpl21Plus;
     };
   };
+  
+  nbconvert = buildPythonPackage rec {
+    version = "4.0.0";
+    name = "nbconvert-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/nbconvert/${name}.tar.gz";
+      sha256 = "472ad15d1a71f1ef00c4094c11bb93638858fc89fb2c5838b3aa6b67d981b437";
+    };
+    
+    buildInputs = with self; [nose];
+    
+    propagatedBuildInputs = with self; [mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
+    
+    meta = {
+      description = "Converting Jupyter Notebooks";
+      homepage = http://jupyter.org/;
+      license = licenses.bsd3;
+    }; 
+  };
+  
   nbformat = buildPythonPackage rec {
     version = "4.0.0";
     name = "nbformat-${version}";
