@@ -10493,6 +10493,8 @@ let
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
+  gohufont = callPackage ../data/fonts/gohufont { };
+
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
   inherit (gnome3) gsettings_desktop_schemas;
