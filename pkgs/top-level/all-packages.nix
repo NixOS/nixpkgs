@@ -7973,7 +7973,7 @@ let
   qt5SDK = qtcreator.override {
     sdkBuild = true;
     qtLib = qt5Full;
-    withDocumentation = false; # fails to setup some paths
+    withDocumentation = true;
   };
 
   qtcreator = callPackage ../development/qtcreator {
