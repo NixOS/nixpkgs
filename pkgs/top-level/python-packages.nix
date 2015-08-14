@@ -6898,6 +6898,24 @@ let
     };
   };
   
+  ipykernel = buildPythonPackage rec {
+    version = "4.0.3";
+    name = "ipykernel-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
+      sha256 = "a4d7d2d35a0af432c8391872cb4dae727d77031212f32ca858b5c84cd0ea821f";
+    };
+    
+    buildInputs = with self; [] ++ optionals isPy27 [mock];
+    propagatedBuildInputs = with self; [ipython traitlets jupyter_client pexpect];
+    
+    meta = {
+      description = "IPython Kernel for Jupyter";
+      homepage = http://ipython.org/;
+      license = licenses.bsd3;
+    };
+  };
   ipython = buildPythonPackage rec {
     version = "4.0.0";
     name = "ipython-${version}";
