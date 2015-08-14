@@ -32,6 +32,7 @@ let
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
+    gnome-getting-started-docs
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -278,6 +279,8 @@ let
   gnome-clocks = callPackage ./apps/gnome-clocks { };
 
   gnome-documents = callPackage ./apps/gnome-documents { };
+
+  gnome-getting-started-docs = callPackage ./apps/gnome-getting-started-docs { };
 
   gnome-logs = callPackage ./apps/gnome-logs { };
 
