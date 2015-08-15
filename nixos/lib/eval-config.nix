@@ -17,6 +17,8 @@
   baseModules ? import ../modules/module-list.nix
 , # !!! See comment about args in lib/modules.nix
   extraArgs ? {}
+, # !!! See comment about args in lib/modules.nix
+  specialArgs ? {}
 , modules
 , # !!! See comment about check in lib/modules.nix
   check ? true
@@ -47,7 +49,7 @@ in rec {
     inherit prefix check;
     modules = modules ++ extraModules ++ baseModules ++ [ pkgsModule ];
     args = extraArgs;
-    specialArgs = { modulesPath = ../modules; };
+    specialArgs = { modulesPath = ../modules; } // specialArgs;
   }) config options;
 
   # These are the extra arguments passed to every module.  In
