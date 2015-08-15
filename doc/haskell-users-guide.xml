@@ -712,7 +712,7 @@ text-1.2.0.4-98506efb1b9ada233bb5c2b2db516d91
     </para>
     <programlisting>
 # nix-store -q --referrers /nix/store/*-haskell-text-1.2.0.4 \
-  | nix-store --repair-path --option binary-caches http://hydra.nixos.org
+  | xargs -L 1 nix-store --repair-path --option binary-caches http://hydra.nixos.org
 </programlisting>
     <para>
       If you're using additional Hydra servers other than
