@@ -3049,6 +3049,8 @@ let
 
   super = callPackage ../tools/security/super { };
 
+  supertux-editor = callPackage ../applications/editors/supertux-editor { };
+
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
