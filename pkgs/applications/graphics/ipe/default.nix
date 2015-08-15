@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
       as well as presentations in PDF.
     '';
     maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
