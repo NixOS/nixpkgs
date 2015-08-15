@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p data/keymaps/i386/neo
       cat "$neoSrc" > data/keymaps/i386/neo/neo.map
-      sed -i -e 's,^KEYMAPSUBDIRS *= *,&i386/neo ,' data/Makefile.in
+      sed -i -e 's,^KEYMAPSUBDIRS *= *,&i386/neo ,' data/Makefile.am
 
       # Add the dvp keyboard in the dvorak folder
       ${gzip}/bin/gzip -c -d ${dvpSrc} > data/keymaps/i386/dvorak/dvp.map
