@@ -1343,6 +1343,33 @@ let
       maintainers = with maintainers; [ bjornfor ];
     };
   };
+  
+  blaze = buildPythonPackage rec {
+    name = "blaze-${version}";
+    version = "0.8.2";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
+      sha256 = "1abedabf2a1e62dd059e0942d60f27337763de26f5e3f61ed55baaf97723b624";
+    };
+    
+    propagatedBuildInputs = with self; [
+      numpy
+      pandas
+      datashape
+      odo
+      toolz
+      multipledispatch
+      sqlalchemy9 # sqlalchemy8 should also work
+      psutil
+    ];
+    
+    meta = {
+      homepage = https://github.com/ContinuumIO/blaze;
+      description = "Allows Python users a familiar interface to query data living in other data storage systems";
+      license = licenses.bsdOriginal;
+    };
+  };
 
   bleach = buildPythonPackage rec {
     version = "v1.4";
