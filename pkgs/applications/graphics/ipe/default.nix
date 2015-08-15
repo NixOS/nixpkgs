@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, qt4, freetype, cairo, lua5, texLive, ghostscriptX
+, libjpeg
 , makeWrapper }:
 let ghostscript = ghostscriptX; in
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    pkgconfig zlib qt4 freetype cairo lua5 texLive ghostscript makeWrapper
+    libjpeg pkgconfig zlib qt4 freetype cairo lua5 texLive ghostscript makeWrapper
   ];
 
   postInstall = ''
