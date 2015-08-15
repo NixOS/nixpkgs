@@ -10698,7 +10698,8 @@ let
       sha256 = "1g05bh7d5d0gzrlnhpnca7jpqbgs2rgnlzzbvzzxmdbmlkqi3mws";
     };
     propagatedBuildInputs = with self; [ kitchen requests bunch paver ];
-    doCheck = false;
+    broken = true;
+    disabled = true;
   });
 
   python_simple_hipchat = buildPythonPackage rec {
