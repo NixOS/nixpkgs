@@ -939,4 +939,7 @@ self: super: {
   # https://github.com/athanclark/set-with/issues/1
   set-with = dontCheck super.set-with;
 
+  # https://github.com/athanclark/sets/issues/1
+  sets = dontCheck super.sets;
+
 }
