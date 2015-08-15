@@ -13437,26 +13437,15 @@ let
 
   scikitlearn = buildPythonPackage rec {
     name = "scikit-learn-${version}";
-    version = "0.16.1";
+    version = "0.17b1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/scikit-learn/scikit-learn/archive/${version}.tar.gz";
-      sha256 = "140skabifgc7lvvj873pnzlwx0ni6q8qkrsyad2ccjb3h8rxzkih";
+      sha256 = "b5965c888ae44fe3f5a1b15297e5d8e254a41d1848df99e00efc2fc643e6e8f2";
     };
 
     buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [ numpy scipy pkgs.openblas ];
-
-    patches = [
-      (pkgs.fetchurl {
-        url = "https://patch-diff.githubusercontent.com/raw/scikit-learn/scikit-learn/pull/5197.patch";
-        sha256 = "1b261wcvim6s0sqmd20jylwz09g5bh3xzhagjlslmv4q50qxpvkg";
-      })
-    ];
-
-    postPatch = optionalString stdenv.isi686 ''
-      sed -i -e "s|test_standard_scaler_numerical_stability|_skip_test_standard_scaler_numerical_stability|g" sklearn/preprocessing/tests/test_data.py
-    '';
 
     buildPhase = ''
       ${self.python.executable} setup.py build_ext -i --fcompiler='gnu95'
@@ -13471,7 +13460,7 @@ let
       homepage = http://scikit-learn.org;
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
-    };
+    };  
   };
 
   scripttest = buildPythonPackage rec {
