@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   IPEPREFIX="$$out";
   URWFONTDIR="${texLive}/texmf-dist/fonts/type1/urw/";
+  LUA_PACKAGE = "lua";
 
   buildInputs = [
     pkgconfig zlib qt4 freetype cairo lua5 texLive ghostscript makeWrapper
