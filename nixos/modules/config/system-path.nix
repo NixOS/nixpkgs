@@ -57,7 +57,7 @@ in
     environment = {
 
       systemPackages = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.package;
         default = [];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
