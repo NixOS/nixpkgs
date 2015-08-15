@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   name = "xiphos-${version}";  
-  version = "4.0.0";
+  version = "4.0.3-20150806";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/gnomesword/Xiphos/${version}/${name}.tar.gz";
-    sha256 = "0rk9xhnaqm17af9ppjf2yqpy9p8s0z7m5ax586b7p16lylcqjh68";
+    sha256 = "1xkvhpasdlda2rp0874znz158z4rjh1hpynwy13d96kjxq4npiqv";
   };
 
   buildInputs = [ pkgconfig python intltool docbook2x docbook_xml_dtd_412 libxslt
