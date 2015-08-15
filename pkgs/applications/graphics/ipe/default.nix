@@ -2,11 +2,11 @@
 , makeWrapper }:
 let ghostscript = ghostscriptX; in
 stdenv.mkDerivation rec {
-  name = "ipe-7.1.2";
+  name = "ipe-7.1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ipe7/ipe/7.1.0/${name}-src.tar.gz";
-    sha256 = "04fs5slci3bmpgz8d038h3hnzzdw57xykcpsmisdxci2xrkxx41k";
+    url = "http://github.com/otfried/ipe/raw/master/releases/7.1/${name}-src.tar.gz";
+    sha256 = "1zx6dyr1rb6m6rvawagg9f8bc2li9nbighv2dglzjbh11bxqsyva";
   };
 
   # changes taken from Gentoo portage
