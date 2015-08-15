@@ -925,4 +925,6 @@ self: super: {
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
 
+  # https://github.com/GaloisInc/HaNS/pull/8
+  hans = appendPatch super.hans ./patches/hans-disable-webserver.patch;
 }
