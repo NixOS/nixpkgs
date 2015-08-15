@@ -814,9 +814,6 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # This needs the latest version of errors to compile.
-  pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
-
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
