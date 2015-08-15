@@ -935,4 +935,7 @@ self: super: {
   yi-solarized = dontDistribute super.yi-solarized;
   yi-spolsky = dontDistribute super.yi-spolsky;
 
+  # https://github.com/athanclark/commutative/issues/1
+  commutative = dontCheck super.commutative;
+
 }
