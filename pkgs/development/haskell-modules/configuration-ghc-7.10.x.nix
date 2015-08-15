@@ -199,15 +199,6 @@ self: super: {
   pell = dontDistribute super.pell;
   quadratic-irrational = dontDistribute super.quadratic-irrational;
 
-  # https://github.com/kazu-yamamoto/ghc-mod/issues/437
-  ghc-mod = markBroken super.ghc-mod;
-  HaRe = dontDistribute super.HaRe;
-  ghc-imported-from = dontDistribute super.ghc-imported-from;
-  git-vogue = dontDistribute super.git-vogue;
-  haskell-token-utils = dontDistribute super.haskell-token-utils;
-  hbb = dontDistribute super.hbb;
-  hsdev = dontDistribute super.hsdev;
-
   # https://github.com/lymar/hastache/issues/47
   hastache = dontCheck super.hastache;
 
