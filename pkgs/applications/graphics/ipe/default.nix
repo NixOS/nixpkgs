@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
       It supports making small figures for inclusion into LaTeX-documents
       as well as presentations in PDF.
     '';
+    maintainers = [ stdenv.lib.maintainers.ttuegel ];
   };
 }
