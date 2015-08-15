@@ -314,6 +314,7 @@ self: super: {
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
   ide-backend = dontCheck super.ide-backend;
+  msgpack-rpc = dontCheck super.msgpack-rpc;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
