@@ -8231,8 +8231,8 @@ let
     propagatedBuildInputs = with self ; [ dnspython3 pyasn1 ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/fritzy/SleekXMPP/archive/${version}.tar.gz";
-      sha256 = "1hqs2w5d7x532psfqipd2wl1mkmsaak83jvp1rh9rv406fzp9h67";
+      url = "https://github.com/fritzy/SleekXMPP/archive/sleek-${version}.tar.gz";
+      sha256 = "07zz0bm098zss0xww11gj45aw417nrkp9k1szzs1zm88wyfr1z31";
     };
 
     meta = {
