@@ -1,13 +1,13 @@
 { stdenv, fetchgit, alsaLib, fftwSinglePrec, freetype, libjack2
-, libxslt, lv2, pkgconfig, premake3, xlibs }:
+, libxslt, lv2, pkgconfig, premake3, xlibs, ladspa-sdk }:
 
 stdenv.mkDerivation rec {
-  name = "distrho-ports-git-2015-05-04";
+  name = "distrho-ports-git-2015-07-18";
 
   src = fetchgit {
     url = "https://github.com/DISTRHO/DISTRHO-Ports.git";
-    rev = "3f13db5dc7722ed0dcbb5256d7fac1ac9165c2d8";
-    sha256 = "6f740f6a8af714436ef75b858944e8122490a2faa04591a201105e84bca42fa0";
+    rev = "53458838505efef91ed069d0a7d970b6b3588eba";
+    sha256 = "0fb4dxfvvqy8lnm9c91sxwn5wbcw8grfpm52zag25vrls251aih3";
   };
 
   patchPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib fftwSinglePrec freetype libjack2 pkgconfig premake3
     xlibs.libX11 xlibs.libXcomposite xlibs.libXcursor xlibs.libXext
-    xlibs.libXinerama xlibs.libXrender
+    xlibs.libXinerama xlibs.libXrender ladspa-sdk
   ];
 
   buildPhase = ''
