@@ -9845,11 +9845,11 @@ let
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.24";
+    name = "py-1.4.30";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "8f32ee0cd1e01472a255fe1d28d81217";
+      md5 = "a904aabfe4765cb754f2db84ec7bb03a";
     };
   };
 
