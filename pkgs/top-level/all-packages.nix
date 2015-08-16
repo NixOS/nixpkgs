@@ -398,7 +398,7 @@ let
     inherit name sha256;
     url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
     meta.homepage = "https://github.com/${owner}/${repo}/";
-  };
+  } // { inherit rev; };
 
   fetchFromBitbucket = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name sha256;
