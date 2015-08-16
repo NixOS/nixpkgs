@@ -2318,16 +2318,18 @@ let
   };
 
   cryptography = buildPythonPackage rec {
-    name = "cryptography-0.6.1";
+    name = "cryptography-1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography/${name}.tar.gz";
-      sha256 = "17ij2acy28ryxahiq64lpf71d5z3sa9xhr4pjv7a1v81189i0j82";
+      sha256 = "008hq9s4z7y17yjxh1aycvddas320hfbl9vj8gydg4fpfzz04711";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi_0_8;
+                    self.iso8601 self.pyasn1 self.pytest self.py ];
+    propagatedBuildInputs = [ self.six self.idna self.ipaddress ]
+     ++ optional (!isPyPy) self.cffi
+     ++ optional (pythonOlder "3.4") self.enum34;
   };
 
   idna = buildPythonPackage rec {
