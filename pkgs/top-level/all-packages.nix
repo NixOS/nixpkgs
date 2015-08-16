@@ -11009,6 +11009,8 @@ let
     pulseSupport = config.pulseaudio or true;
   };
 
+  deadbeef-mpris2-plugin = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
+
   dfasma = callPackage ../applications/audio/dfasma { };
 
   dia = callPackage ../applications/graphics/dia {
