@@ -2,7 +2,7 @@
 , python
 , intltool
 , docbook2x, docbook_xml_dtd_412, libxslt
-, sword, clucene_core
+, sword, clucene_core, biblesync
 , gnome_doc_utils
 , libgsf, gconf
 , gtkhtml, libgtkhtml, libglade, scrollkeeper
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   version = "4.0.3-20150806";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/gnomesword/Xiphos/${version}/${name}.tar.gz";
+    url = "http://downloads.sourceforge.net/project/gnomesword/Xiphos/4.0.3/${name}.tar.gz";
     sha256 = "1xkvhpasdlda2rp0874znz158z4rjh1hpynwy13d96kjxq4npiqv";
   };
 
   buildInputs = [ pkgconfig python intltool docbook2x docbook_xml_dtd_412 libxslt
-                  sword clucene_core gnome_doc_utils libgsf gconf gtkhtml libgtkhtml
+                  sword clucene_core biblesync gnome_doc_utils libgsf gconf gtkhtml libgtkhtml
                   libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid ];
 
   prePatch = ''
