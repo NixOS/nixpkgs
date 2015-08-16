@@ -1,12 +1,13 @@
 { stdenv, fetchgit, autoconf, automake, boost, pkgconfig, libtool, acl, libxml2, btrfsProgs, dbus_libs, docbook_xsl, libxslt, docbook_xml_dtd_45,  diffutils, pam, utillinux, attr, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-0.2.4";
+  name = "snapper-${version}";
+  version = "0.2.6";
 
   src = fetchgit {
     url = "https://github.com/openSUSE/snapper";
-    rev = "24e18153f7a32d0185dcfb20f8b8a4709ba8fe4a";
-    sha256 = "ec4b829430bd7181995e66a26ac86e8ac71c27e77faf8eb06db71d645c6f859b";
+    rev = "071c381b356a505dcb59811e917f776592eca89b";
+    sha256 = "1n5jxym07a47l0zys2lp1rmzfl7lhkgp0sdg6hxbhzhy192j0v16";
   };
 
   buildInputs = [ autoconf automake boost pkgconfig libtool acl libxml2 btrfsProgs dbus_libs docbook_xsl libxslt docbook_xml_dtd_45 diffutils pam utillinux attr gettext ];
@@ -18,8 +19,9 @@ stdenv.mkDerivation rec {
     substituteInPlace snapper/Makefile.am --replace \
       "libsnapper_la_LIBADD = -lboost_thread-mt -lboost_system-mt -lxml2 -lacl -lz -lm" \
       "libsnapper_la_LIBADD = -lboost_thread -lboost_system -lxml2 -lacl -lz -lm";
-    # general cleanup
-    sed -i 's/^INCLUDES/AM_CPPFLAGS/' $(grep -rl ^INCLUDES .|grep "\.am$")
+    # Install dbus service file to /share instead of /usr/share
+    substituteInPlace data/Makefile.am  --replace \
+      "usr/share/dbus-1/system-services" "share/dbus-1/system-services"
     '';
 
   configurePhase = ''
@@ -40,6 +42,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp -r $out/$out/* $out
     rm -r $out/nix
+    substituteInPlace $out/share/dbus-1/system-services/* \
+        --replace "/usr/sbin" "$out/bin"
     '';
 
   meta = with stdenv.lib; {
