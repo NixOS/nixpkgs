@@ -9914,11 +9914,11 @@ let
 
 
   pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.1.7";
+    name = "pyasn1-0.1.8";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/pyasn1/0.1.7/pyasn1-0.1.7.tar.gz";
-      sha256 = "1aqy21fb564gmnkw2fbkn55c40diyx3z0ixh4savvxikqm9ivy74";
+      url = "mirror://sourceforge/pyasn1/0.1.8/pyasn1-0.1.8.tar.gz";
+      sha256 = "0iw31d9l0zwx35szkzq72hiw002wnqrlrsi9dpbrfngcl1ybwcsx";
     };
 
     meta = {
