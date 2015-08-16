@@ -3408,6 +3408,8 @@ let
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
+  xdg-app = callPackage ../os-specific/linux/xdg-app { };
+
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
   xsensors = callPackage ../os-specific/linux/xsensors { };
