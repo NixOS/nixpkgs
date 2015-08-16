@@ -98,6 +98,9 @@ in zipModules ([]
 ++ obsolete [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ]
 ++ obsolete [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ]
 
+# smartd
+++ obsolete [ "services" "smartd" "deviceOpts" ] [ "services" "smartd" "defaults" "monitored" ]
+
 # OpenSSH
 ++ obsolete [ "services" "sshd" "ports" ] [ "services" "openssh" "ports" ]
 ++ alias [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ]
