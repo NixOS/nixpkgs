@@ -9845,11 +9845,18 @@ let
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.24";
+    version = "1.4.30";
+    name = "py-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "8f32ee0cd1e01472a255fe1d28d81217";
+      sha256 = "b703e57685ed7c280b1a51c496a4984d83d89def2a930b5e9e5da5a6ca151514";
+    };
+    
+    meta = {
+      description = "Library with cross-python path, ini-parsing, io, code, log facilities";
+      homepage = http://pylib.readthedocs.org/;
+      license = licenses.mit;
     };
   };
 
