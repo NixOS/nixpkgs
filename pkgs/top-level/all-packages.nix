@@ -8512,7 +8512,7 @@ let
   agda = callPackage ../build-support/agda {
     glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
     extension = self : super : { };
-    inherit (haskell.packages.ghc784) Agda;
+    inherit (haskellPackages) Agda;
     inherit writeScriptBin;
   };
 
@@ -11287,9 +11287,7 @@ let
     };
 
     external = {
-      # FIXME: revert when Agda and ghc-mod are fixed on 7.10
-      inherit (haskell.packages.ghc784) ghc-mod Agda;
-      inherit (haskellPackages) structured-haskell-mode;
+      inherit (haskellPackages) ghc-mod structured-haskell-mode Agda;
     };
   };
 
