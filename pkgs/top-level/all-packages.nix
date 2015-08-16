@@ -11011,6 +11011,10 @@ let
 
   deadbeef-mpris2-plugin = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
 
+  deadbeef-with-plugins = callPackage ../applications/audio/deadbeef/wrapper.nix {
+    plugins = [];
+  };
+
   dfasma = callPackage ../applications/audio/dfasma { };
 
   dia = callPackage ../applications/graphics/dia {

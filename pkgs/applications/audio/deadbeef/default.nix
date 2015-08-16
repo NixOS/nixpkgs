@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig
+{ stdenv, fetchurl, intltool, pkgconfig, fetchpatch
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? true, gtk2 ? null
 , gtk3Support ? false, gtk3 ? null, gsettings_desktop_schemas ? null, makeWrapper ? null
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   name = "deadbeef-0.6.2";
 
   src = fetchurl {
-    url = "http://garr.dl.sourceforge.net/project/deadbeef/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/deadbeef/${name}.tar.bz2";
     sha256 = "06jfsqyakpvq0xhah7dlyvdzh5ym3hhb4yfczczw11ijd1kbjcrl";
   };
 
@@ -81,6 +81,12 @@ stdenv.mkDerivation rec {
     ++ optional gtk3Support makeWrapper;
 
   enableParallelBuilding = true;
+
+  patches = [ (fetchpatch {
+                url = "https://github.com/Alexey-Yakovenko/deadbeef/commit/e7725ea73fa1bd279a3651704870156bca8efea8.patch";
+                sha256 = "0a04l2607y3swcq9b1apffl1chdwj38jwfiizxcfmdbia4a0qlyg";
+              })
+            ];
 
   postInstall = if !gtk3Support then "" else ''
     wrapProgram "$out/bin/deadbeef" \
