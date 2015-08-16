@@ -8067,6 +8067,8 @@ let
 
   sword = callPackage ../development/libraries/sword { };
 
+  biblesync = callPackage ../development/libraries/biblesync { };
+
   szip = callPackage ../development/libraries/szip { };
 
   t1lib = callPackage ../development/libraries/t1lib { };
