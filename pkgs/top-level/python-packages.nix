@@ -2330,6 +2330,21 @@ let
     propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi_0_8;
   };
 
+  idna = buildPythonPackage rec {
+    name = "idna-2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/idna/${name}.tar.gz";
+      sha256 = "0frxgmgi234lr9hylg62j69j4ik5zhg0wz05w5dhyacbjfnrl68n";
+    };
+
+    meta = {
+      homepage = "http://github.com/kjd/idna/";
+      description = "Internationalized Domain Names in Applications (IDNA)";
+      license = "licenses.bsd3";
+    };
+  };
+
   cryptography_vectors = buildPythonPackage rec {
     name = "cryptography_vectors-0.6.1";
 
