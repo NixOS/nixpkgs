@@ -55,6 +55,23 @@ rec {
       '';
 
 
+  # This is identical to symlinkJoin, except that in some cases program do
+  # not trust symbolic links for security reasons, so we have to copy files.
+  copyJoin = name: paths:
+    runCommand name { inherit paths; }
+      ''
+        set -x
+        mkdir -p $out
+        for i in $paths; do
+          (cd $i; find . -type d) | while read d; do
+            mkdir -p $out/$dir
+          done
+          (cd $i; find . \! -type d) | while read f; do
+            cp $i/$f $out/$f
+          done
+        done
+      '';
+
   # Make a package that just contains a setup hook with the given contents.
   makeSetupHook = { deps ? [], substitutions ? {} }: script:
     runCommand "hook" substitutions

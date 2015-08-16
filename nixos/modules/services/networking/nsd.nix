@@ -17,18 +17,11 @@ let
     zoneStats  = length (collect (x: (x.zoneStats or null) != null) cfg.zones) > 0;
   };
 
-  zoneFiles = pkgs.stdenv.mkDerivation {
-    preferLocalBuild = true;
-    name = "nsd-env";
-    buildCommand = concatStringsSep "\n"
-      [ "mkdir -p $out"
-        (concatStrings (mapAttrsToList (zoneName: zoneOptions: ''
-          cat > "$out/${zoneName}" <<_EOF_
-          ${zoneOptions.data}
-          _EOF_
-        '') zoneConfigs))
-      ];
-  };
+  # Create a directory which contains all zone files named `zoneName`.
+  zoneFiles = pkgs.copyJoin "nsd-env"
+    (flip mapAttrsToList zoneConfigs (zoneName: zoneOptions:
+       pkgs.writeTextDir zoneName zoneOptions.data
+    ));
 
   configFile = pkgs.writeText "nsd.conf" ''
     server:
