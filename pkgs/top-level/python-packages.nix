@@ -11208,7 +11208,7 @@ let
     # 17 tests failing
     doCheck = false;
 
-    propagatedBuildInputs = [ self.cryptography ];
+    propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
   };
 
 
