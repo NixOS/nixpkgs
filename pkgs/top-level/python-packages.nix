@@ -17195,4 +17195,42 @@ let
     };
   };
 
+  d2to1 = buildPythonPackage rec {
+    name = "d2to1-${version}";
+    version = "0.2.11";
+
+    buildInputs = with self; [ nose ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/d2to1/d2to1-${version}.tar.gz";
+      sha256 = "1a5z367b7dpd6dgi0w8pymb68aj2pblk8w04l2c8hibhj8dpl2b4";
+    };
+
+    meta = {
+      description = "Support for distutils2-like setup.cfg files as package metadata";
+      homepage = https://pypi.python.org/pypi/d2to1;
+      license = licenses.bsd2;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  ovh = buildPythonPackage rec {
+    name = "ovh-${version}";
+    version = "0.3.5";
+    doCheck = false; #test needs packages too explicit
+    buildInputs = with self; [ d2to1 ];
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/ovh/ovh-${version}.tar.gz";
+      sha256 = "1y74lrdlgbb786mwas7ynphimfi00dgr67ncjq20kdf31jg5415n";
+    };
+
+    meta = {
+      description = "Thin wrapper around OVH's APIs";
+      homepage = https://pypi.python.org/pypi/ovh;
+      license = licenses.bsd2;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
 }; in pythonPackages
