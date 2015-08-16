@@ -942,4 +942,7 @@ self: super: {
   # https://github.com/athanclark/sets/issues/1
   sets = dontCheck super.sets;
 
+  # https://github.com/lens/lens-aeson/issues/18
+  lens-aeson = dontCheck super.lens-aeson;
+
 }
