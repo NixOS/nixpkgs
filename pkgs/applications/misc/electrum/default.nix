@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://download.electrum.org/Electrum-${version}.tar.gz";
-    sha256 = "0z5ksr1wlywl4bpvxjmmqnsk7jh1jfjdz9lsjkhf2j391jx0wz9q";
+    sha256 = "0y04m5b410y3s9vqvkbvmlvvx1nr0cyvrnl41yapz8hydw9vdkjx";
   };
 
   propagatedBuildInputs = with pythonPackages; [
