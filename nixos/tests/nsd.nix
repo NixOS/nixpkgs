@@ -45,6 +45,8 @@ in import ./make-test.nix ({ pkgs, ...} : {
         ns AAAA dead:beef::1
       '';
       services.nsd.zones."deleg.example.com.".data = ''
+        $ORIGIN deleg.example.com.
+        $TTL 3600
         @ SOA ns.example.com noc.example.com 666 7200 3600 1209600 3600
         @ A 9.8.7.6
         @ AAAA fedc::bbaa
