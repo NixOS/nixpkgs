@@ -401,7 +401,6 @@ self: super: {
   ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
   ghcid = dontCheck super.ghcid;
   ghc-imported-from = dontCheck super.ghc-imported-from;
-  ghc-mod = dontCheck super.ghc-mod;                    # http://hydra.cryp.to/build/499674/log/raw
   ghc-parmake = dontCheck super.ghc-parmake;
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   git-vogue = dontCheck super.git-vogue;
@@ -938,5 +937,19 @@ self: super: {
 
   # https://github.com/lens/lens-aeson/issues/18
   lens-aeson = dontCheck super.lens-aeson;
+
+  # Byte-compile elisp code for Emacs.
+  ghc-mod = overrideCabal super.ghc-mod (drv: {
+    preCheck = "export HOME=$TMPDIR";
+    testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
+    doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      make -C $lispdir
+      mkdir -p $out/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+    '';
+  });
 
 }
