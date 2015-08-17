@@ -1949,11 +1949,11 @@ let
   };
 
   click = buildPythonPackage rec {
-    name = "click-4.1";
+    name = "click-5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "1n4fvxpgbna83g6daarscljwpbarr45qfalh9hqla8ayy84ysfg3";
+      sha256 = "1n3yz0ilv3k9lahajgjpc68dr0gp96v4zwf8rd1spy4bh8hnrga6";
     };
 
     meta = {
