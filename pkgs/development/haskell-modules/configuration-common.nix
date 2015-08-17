@@ -971,4 +971,8 @@ self: super: {
     '';
   });
 
+  # https://github.com/yesodweb/Shelly.hs/issues/106
+  # https://github.com/yesodweb/Shelly.hs/issues/108
+  shelly = dontCheck super.shelly;
+
 }
