@@ -85,6 +85,7 @@ rec {
   withHoogle = haskellEnv: with haskellEnv.haskellPackages;
     import ./hoogle.nix {
       inherit (pkgs) stdenv;
+      inherit (pkgs.stdenv) lib;
       inherit hoogle rehoo ghc;
       packages = haskellEnv.paths;
     };
