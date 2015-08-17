@@ -2318,24 +2318,41 @@ let
   };
 
   cryptography = buildPythonPackage rec {
-    name = "cryptography-0.6.1";
+    name = "cryptography-1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography/${name}.tar.gz";
-      sha256 = "17ij2acy28ryxahiq64lpf71d5z3sa9xhr4pjv7a1v81189i0j82";
+      sha256 = "008hq9s4z7y17yjxh1aycvddas320hfbl9vj8gydg4fpfzz04711";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi_0_8;
+                    self.iso8601 self.pyasn1 self.pytest self.py ];
+    propagatedBuildInputs = [ self.six self.idna self.ipaddress ]
+     ++ optional (!isPyPy) self.cffi
+     ++ optional (pythonOlder "3.4") self.enum34;
+  };
+
+  idna = buildPythonPackage rec {
+    name = "idna-2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/idna/${name}.tar.gz";
+      sha256 = "0frxgmgi234lr9hylg62j69j4ik5zhg0wz05w5dhyacbjfnrl68n";
+    };
+
+    meta = {
+      homepage = "http://github.com/kjd/idna/";
+      description = "Internationalized Domain Names in Applications (IDNA)";
+      license = "licenses.bsd3";
+    };
   };
 
   cryptography_vectors = buildPythonPackage rec {
-    name = "cryptography_vectors-0.6.1";
+    name = "cryptography_vectors-1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "1ks1xdb1ff74qmjdzqcfvkrwsbnwpsjgg3cy18zh37p8985cvl3r";
+      sha256 = "0d02x93vk0b1fla914bij71pfma0p7sprlvrxq1bb6dxnwc7h9z7";
     };
   };
 
@@ -8214,8 +8231,8 @@ let
     propagatedBuildInputs = with self ; [ dnspython3 pyasn1 ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/fritzy/SleekXMPP/archive/${version}.tar.gz";
-      sha256 = "1hqs2w5d7x532psfqipd2wl1mkmsaak83jvp1rh9rv406fzp9h67";
+      url = "https://github.com/fritzy/SleekXMPP/archive/sleek-${version}.tar.gz";
+      sha256 = "07zz0bm098zss0xww11gj45aw417nrkp9k1szzs1zm88wyfr1z31";
     };
 
     meta = {
@@ -9899,11 +9916,11 @@ let
 
 
   pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.1.7";
+    name = "pyasn1-0.1.8";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/pyasn1/0.1.7/pyasn1-0.1.7.tar.gz";
-      sha256 = "1aqy21fb564gmnkw2fbkn55c40diyx3z0ixh4savvxikqm9ivy74";
+      url = "mirror://sourceforge/pyasn1/0.1.8/pyasn1-0.1.8.tar.gz";
+      sha256 = "0iw31d9l0zwx35szkzq72hiw002wnqrlrsi9dpbrfngcl1ybwcsx";
     };
 
     meta = {
@@ -11191,7 +11208,7 @@ let
     # 17 tests failing
     doCheck = false;
 
-    propagatedBuildInputs = [ self.cryptography ];
+    propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
   };
 
 
