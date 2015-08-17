@@ -158,6 +158,7 @@
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
+  mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
   mbakke = "Marius Bakke <ymse@tuta.io>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
