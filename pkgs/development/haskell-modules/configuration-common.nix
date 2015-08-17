@@ -919,13 +919,6 @@ self: super: {
   # https://github.com/GaloisInc/HaNS/pull/8
   hans = appendPatch super.hans ./patches/hans-disable-webserver.patch;
 
-  # https://github.com/yi-editor/yi/issues/776
-  yi = markBroken super.yi;
-  yi-monokai = dontDistribute super.yi-monokai;
-  yi-snippet = dontDistribute super.yi-snippet;
-  yi-solarized = dontDistribute super.yi-solarized;
-  yi-spolsky = dontDistribute super.yi-spolsky;
-
   # https://github.com/athanclark/commutative/issues/1
   commutative = dontCheck super.commutative;
 
