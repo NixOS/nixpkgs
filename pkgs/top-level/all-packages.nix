@@ -4190,7 +4190,10 @@ let
     isl = isl_0_12;
   };
 
-  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 { };
+  llvmPackages_35 = callPackage ../development/compilers/llvm/3.5 { 
+    isl = isl_0_14;
+    gcc = gcc5;
+  };
 
   llvmPackages_36 = callPackage ../development/compilers/llvm/3.6 {
     inherit (stdenvAdapters) overrideCC;
@@ -6121,7 +6124,7 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = llvmPackages_35.dragonegg;
+  #dragonegg = llvmPackages_35.dragonegg;
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
