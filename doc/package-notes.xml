@@ -346,4 +346,24 @@ packageOverrides = pkgs: {
 
 </section>
 
+<section xml:id="sec-elm">
+
+<title>Elm</title>
+
+<para>
+The Nix expressions for Elm reside in
+<filename>pkgs/development/compilers/elm</filename>. They are generated
+automatically by <command>update-elm.rb</command> script. One should
+specify versions of Elm packages inside the script, clear the
+<filename>packages</filename> directory and run the script from inside it.
+<literal>elm-reactor</literal> is special because it also has Elm package
+dependencies. The process is not automated very much for now -- you should
+get the <literal>elm-reactor</literal> source tree (e.g. with
+<command>nix-shell</command>) and run <command>elm2nix.rb</command> inside
+it. Place the resulting <filename>package.nix</filename> file into
+<filename>packages/elm-reactor-elm.nix</filename>.
+</para>
+
+</section>
+
 </chapter>

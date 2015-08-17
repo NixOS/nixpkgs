@@ -910,12 +910,9 @@ self: super: {
 
   # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
   Elm = markBroken super.Elm;
-  elm-bridge = markBroken super.elm-bridge;
   elm-build-lib = markBroken super.elm-build-lib;
   elm-compiler = markBroken super.elm-compiler;
-  elm-core-sources = markBroken super.elm-core-sources;
   elm-get = markBroken super.elm-get;
-  elm-init = markBroken super.elm-init;
   elm-make = markBroken super.elm-make;
   elm-package = markBroken super.elm-package;
   elm-reactor = markBroken super.elm-reactor;
