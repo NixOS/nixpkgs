@@ -22,6 +22,4 @@ in stdenv.mkDerivation {
   '';
 
   configureFlags = [ "--enable-warnings" ];
-
-  # patches = [ ./0001-remove-typedefs-now-living-in-mesa.patch ];
 }
