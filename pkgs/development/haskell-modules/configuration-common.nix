@@ -166,7 +166,7 @@ self: super: {
   # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' darcs.cabal";
+    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
   })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
