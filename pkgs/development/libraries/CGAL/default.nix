@@ -6,10 +6,12 @@ stdenv.mkDerivation rec {
   name = "cgal-${version}";
 
   src = fetchurl {
-    url = "https://github.com/CGAL/releases/archive/releases/CGAL-${version}.tar.gz";
-    sha256 = "09ph5qi7ixbkk3jssq3pdjf2nyw91s73dizi2mkx6brhrzd1zd5y";
+    url = "https://github.com/CGAL/releases/archive/CGAL-${version}.tar.gz";
+    sha256 = "05vk4l62d7g6cz19q36h1an5krxdbgq1fbs5hi0x2l7blsja1z6g";
   };
 
+  # note: optional component libCGAL_ImageIO would need zlib and opengl;
+  #   there are also libCGAL_Qt{3,4} omitted ATM
   buildInputs = [ cmake boost gmp mpfr ];
 
   doCheck = false;
