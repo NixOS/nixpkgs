@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
-  name = "procps-3.3.10";
+  name = "procps-3.3.11";
 
   src = fetchurl {
-    url = mirror://sourceforge/procps-ng/procps-ng-3.3.10.tar.xz;
-    sha256 = "013z4rzy3p5m1zp6mmynpblv0c6zlcn91pw4k2vymz2djyc6ybm0";
+    url = mirror://sourceforge/procps-ng/procps-ng-3.3.11.tar.xz;
+    sha256 = "1va4n0mpsq327ca9dqp4hnrpgs6821rp0f2m0jyc1bfjl9lk2jg9";
   };
 
   buildInputs = [ ncurses ];
