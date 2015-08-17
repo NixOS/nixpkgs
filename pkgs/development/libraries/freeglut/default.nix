@@ -22,4 +22,20 @@ in stdenv.mkDerivation {
   '';
 
   configureFlags = [ "--enable-warnings" ];
+
+  meta = with stdenv.lib; {
+    description = "Create and manage windows containing OpenGL contexts";
+    longDescription = ''
+      FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
+      (GLUT) library. GLUT (and hence FreeGLUT) allows the user to create and
+      manage windows containing OpenGL contexts on a wide range of platforms
+      and also read the mouse, keyboard and joystick functions. FreeGLUT is
+      intended to be a full replacement for GLUT, and has only a few
+      differences.
+    '';
+    homepage = http://freeglut.sourceforge.net/;
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = [ maintainers.bjornfor ];
+  };
 }
