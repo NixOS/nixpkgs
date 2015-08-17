@@ -66,7 +66,7 @@ in rec {
         (all nixos.tests.bootBiosCdrom)
         (all nixos.tests.ipv6)
         (all nixos.tests.kde4)
-        (all nixos.tests.lightdm)
+        #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
         (all nixos.tests.nat.firewall)
