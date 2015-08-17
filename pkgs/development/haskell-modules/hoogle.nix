@@ -98,6 +98,10 @@ stdenv.mkDerivation {
     chmod +x $out/bin/hoogle
   '';
 
+  passthru = {
+    isHaskellLibrary = false; # for the filter in ./with-packages-wrapper.nix
+  };
+
   meta = {
     description = "A local Hoogle database";
     platforms = ghc.meta.platforms;
