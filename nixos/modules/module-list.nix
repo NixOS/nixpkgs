@@ -61,7 +61,6 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
-  ./programs/info.nix
   ./programs/ibus.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
