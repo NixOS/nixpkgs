@@ -108,7 +108,7 @@ in
             };
 
             hostAddress = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "10.231.136.1";
               description = ''
@@ -117,7 +117,7 @@ in
             };
 
             localAddress = mkOption {
-              type = types.nullOr types.string;
+              type = types.nullOr types.str;
               default = null;
               example = "10.231.136.2";
               description = ''

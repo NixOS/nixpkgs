@@ -22,21 +22,21 @@ let
       blkDev = mkOption {
         default = null;
         example = "/dev/sda1";
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         description = "Location of the backing encrypted device.";
       };
 
       label = mkOption {
         default = null;
         example = "rootfs";
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         description = "Label of the backing encrypted device.";
       };
 
       keyFile = mkOption {
         default = null;
         example = "/root/.swapkey";
-        type = types.uniq (types.nullOr types.string);
+        type = types.nullOr types.str;
         description = "File system location of keyfile.";
       };
     };

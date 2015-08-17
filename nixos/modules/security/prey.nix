@@ -24,7 +24,7 @@ in {
       };
 
       deviceKey = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           <literal>Device key</literal> obtained by visiting
           <link xlink:href="https://panel.preyproject.com/devices" />
@@ -33,7 +33,7 @@ in {
       };
 
       apiKey = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           <literal>API key</literal> obtained from
           <link xlink:href="https://panel.preyproject.com/profile" />.

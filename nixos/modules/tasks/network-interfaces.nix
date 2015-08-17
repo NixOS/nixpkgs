@@ -499,7 +499,7 @@ in
 
         interface = mkOption {
           example = "enp4s0";
-          type = types.string;
+          type = types.str;
           description = "The interface the macvlan will transmit packets through.";
         };
 
@@ -605,7 +605,7 @@ in
 
         interface = mkOption {
           example = "enp4s0";
-          type = types.string;
+          type = types.str;
           description = "The interface the vlan will transmit packets through.";
         };
 
