@@ -13,7 +13,8 @@ let
 
     nativeBuildInputs = [ perl pkgconfig ];
 
-    buildInputs = [ curl openssl sqlite ] ++ lib.optional stdenv.isLinux libsodium;
+    buildInputs = [ curl openssl sqlite ] ++
+      lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium;
 
     propagatedBuildInputs = [ boehmgc ];
 
