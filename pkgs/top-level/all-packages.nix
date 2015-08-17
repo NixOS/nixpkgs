@@ -10601,6 +10601,8 @@ let
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
+  sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
+
   source-code-pro = callPackage ../data/fonts/source-code-pro {};
 
   source-sans-pro = callPackage ../data/fonts/source-sans-pro { };
