@@ -1,14 +1,17 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchFromGitHub, stdenv, autoreconfHook, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "htop-1.0.3";
+  name = "htop-2015-08-12";
 
-  src = fetchurl {
-    url = "http://hisham.hm/htop/releases/1.0.3/htop-1.0.3.tar.gz";
-    sha256 = "0a8qbpsifzjwc4f45xfwm48jhm59g6q5hlib4bf7z13mgy95fp05";
+  src = fetchFromGitHub {
+    sha256 = "017aihyg0bjli1hlvcqgqxpwzy2ayvwv6byhqd97n9sqfkmi9i0p";
+    rev = "f2c053a88497f3ad5ae786c16ecf1275212c13be";
+    repo = "htop";
+    owner = "hishamhm";
   };
 
   buildInputs = [ ncurses ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
     description = "An interactive process viewer for Linux";
