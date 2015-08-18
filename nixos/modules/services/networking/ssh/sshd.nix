@@ -413,6 +413,9 @@ in
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
         '')}
+
+        # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
+        PubkeyAcceptedKeyTypes +ssh-dss
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

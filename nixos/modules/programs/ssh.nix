@@ -103,20 +103,23 @@ in
         message = "cannot enable X11 forwarding without setting XAuth location";
       };
 
-    environment.etc =
-      [ { # SSH configuration.  Slight duplication of the sshd_config
-          # generation in the sshd service.
-          source = pkgs.writeText "ssh_config" ''
-            AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-            ${optionalString cfg.setXAuthLocation ''
-              XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-            ''}
-            ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
-            ${cfg.extraConfig}
-          '';
-          target = "ssh/ssh_config";
-        }
-      ];
+    # SSH configuration. Slight duplication of the sshd_config
+    # generation in the sshd service.
+    environment.etc."ssh/ssh_config".text =
+      ''
+        AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
+
+        ${optionalString cfg.setXAuthLocation ''
+          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+        ''}
+
+        ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
+
+        # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
+        PubkeyAcceptedKeyTypes +ssh-dss
+
+        ${cfg.extraConfig}
+      '';
 
     # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent =
