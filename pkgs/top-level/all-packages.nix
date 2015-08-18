@@ -7802,6 +7802,8 @@ let
     };
   };
 
+  openwsman = callPackage ../development/libraries/openwsman {};
+
   ortp = callPackage ../development/libraries/ortp { };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
