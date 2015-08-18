@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
     maintainers = [ maintainers.koral ];
     license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }
