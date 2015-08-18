@@ -879,6 +879,16 @@ rec {
     '';
   };
 
+  molokai = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "molokai-2014-04-11";
+    src = fetchgit {
+      url = "git://github.com/tomasr/molokai";
+      rev = "db8ce13b3737d3ddea8368498183d7c204a762eb";
+      sha256 = "34587133f0f17b8950ed0428b3deeacc2f15933ede8bfdd000593098ed6d903a";
+    };
+    dependencies = [];
+  };
+
   pathogen = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "pathogen-2014-11-06";
     src = fetchgit {
