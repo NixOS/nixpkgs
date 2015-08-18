@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, cmake, libcxxabi, fixDarwinDylibNames }:
 
-let version = "3.5.0"; in
+let version = "3.5.2"; in
 
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
   src = fetchurl {
     url = "http://llvm.org/releases/${version}/libcxx-${version}.src.tar.xz";
-    sha256 = "1h5is2jd802344kddm45jcm7bra51llsiv9r34h0rrb3ba2dlic0";
+    sha256 = "0irnl54fwzh2hzn9x4jfvnfyq5kd0zn0iwbzdivgwhqzw6fjdwdv";
   };
 
   # instead of allowing libc++ to link with /usr/lib/libc++abi.dylib,
