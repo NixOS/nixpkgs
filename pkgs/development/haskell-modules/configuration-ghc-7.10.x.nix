@@ -175,7 +175,6 @@ self: super: {
                                           self.webkitgtk3-javascriptcore ];
 
   # contacted maintainer by e-mail
-  cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
   darcs-fastconvert = dontDistribute super.darcs-fastconvert;
   ivory-backend-c = dontDistribute super.ivory-backend-c;
   ivory-bitdata = dontDistribute super.ivory-bitdata;
