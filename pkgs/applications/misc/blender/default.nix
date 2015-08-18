@@ -3,7 +3,7 @@
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
 , zlib, fftw
 , jackaudioSupport ? false, libjack2
-, cudaSupport ? false, cudatoolkit65
+, cudaSupport ? false, cudatoolkit7
 , colladaSupport ? true, opencollada
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       opencolorio openexr openimageio /* openjpeg */ python zlib fftw
     ]
     ++ optional jackaudioSupport libjack2
-    ++ optional cudaSupport cudatoolkit65
+    ++ optional cudaSupport cudatoolkit7
     ++ optional colladaSupport opencollada;
 
   postUnpack =
