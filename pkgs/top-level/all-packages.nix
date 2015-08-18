@@ -14560,6 +14560,12 @@ let
 
   iprover = callPackage ../applications/science/logic/iprover {};
 
+  JonPRL = callPackage ../applications/science/logic/jonprl {
+    smlnj = if stdenv.isDarwin
+      then smlnjBootstrap
+      else smlnj;
+  };
+
   lean = callPackage ../applications/science/logic/lean {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
