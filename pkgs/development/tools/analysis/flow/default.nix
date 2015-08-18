@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, ocaml, libelf }:
 
 stdenv.mkDerivation rec {
-  version = "0.13.1";
+  version = "0.14.0";
   name = "flow-${version}";
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "1p7rzhvmz9y7ii2z05mfdb49i45f82kx8c9ywciwqma06zycvd80";
+    sha256 = "02adbn2h5bfc4drcpbalq7acx573a657ik3008fr8s9qyqdp2nl6";
   };
 
   installPhase = ''
