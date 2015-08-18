@@ -895,8 +895,7 @@ self: super: {
   # https://github.com/liyang/thyme/issues/36
   thyme = dontCheck super.thyme;
 
-  # https://github.com/k0ral/hbro/issues/15
-  hbro = markBroken super.hbro;
+  # https://github.com/k0ral/hbro-contrib/issues/1
   hbro-contrib = dontDistribute super.hbro-contrib;
 
   # https://github.com/aka-bash0r/multi-cabal/issues/4
