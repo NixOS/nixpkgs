@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, cppunit, libgcrypt
-, c-ares, openssl, libxml2, sqlite, zlib }:
+, c-ares, libxml2, sqlite, zlib }:
 
 stdenv.mkDerivation rec {
   name = "aria2-${version}";
@@ -13,8 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig autoreconfHook cppunit libgcrypt c-ares openssl libxml2
-    sqlite zlib
+    pkgconfig autoreconfHook cppunit libgcrypt c-ares libxml2 sqlite zlib
   ];
 
   configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
