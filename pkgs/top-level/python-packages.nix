@@ -8080,6 +8080,25 @@ let
     };
   });
 
+  plover = pythonPackages.buildPythonPackage rec {
+    name = "plover-${version}";
+    version = "2.5.8";
+    
+    meta = {
+      description = "OpenSteno Plover stenography software";
+      maintainers = [ maintainers.twey ];
+      license = licenses.gpl2;
+    };
+    
+    src = pkgs.fetchurl {
+      url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
+      sha256 = "23f7824a715f93eb2c41d5bafd0c6f3adda92998e9321e1ee029abe7a6ab41e5";
+    };
+    
+    propagatedBuildInputs = with self; [ wxPython pyserial xlib appdirs pkgs.wmctrl ];
+    preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
+  };
+  
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
