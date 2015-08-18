@@ -82,11 +82,6 @@ rec {
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
-  withHoogle = haskellEnv: with haskellEnv.haskellPackages;
-    import ./hoogle.nix {
-      inherit (pkgs) stdenv;
-      inherit (pkgs.stdenv) lib;
-      inherit hoogle rehoo ghc;
-      packages = haskellEnv.paths;
-    };
+  #FIXME: throw this away sometime in the future. added 2015-08-18
+  withHoogle = throw "withHoogle is no longer supported, use ghcWithHoogle instead";
 }
