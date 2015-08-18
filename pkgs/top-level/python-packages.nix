@@ -1521,12 +1521,12 @@ let
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.1.4";
+    version = "1.1.10";
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "1wbbaj0y6bfzsh61hgnnssn5j8m93r6r2m5r1jmlf6iz3l9gqkkp";
+      sha256 = "0syj0m0l7k4wa0n9h7h8ywayjv9fgpn5wyzpdriws0j417y1zlyc";
     };
 
     propagatedBuildInputs =
