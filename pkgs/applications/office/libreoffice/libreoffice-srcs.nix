@@ -333,6 +333,7 @@
   name = "libgltf-0.0.2.tar.bz2";
   md5 = "d63a9f47ab048f5009d90693d6aa6424";
   brief = true;
+  subDir = "libgltf/";
 }
 {
   name = "liblangtag-0.5.1.tar.bz2";

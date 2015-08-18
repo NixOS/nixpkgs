@@ -91,4 +91,9 @@ self: super: {
   # blaze-builder requires an additional build input on older compilers.
   blaze-builder = addBuildDepend super.blaze-builder super.bytestring-builder;
 
+  # available convertible package won't build with the available
+  # bytestring and ghc-mod won't build without convertible
+  convertible = markBroken super.convertible;
+  ghc-mod = markBroken super.ghc-mod;
+
 }

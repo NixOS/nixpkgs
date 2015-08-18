@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, makeWrapper, lrzsz }:
+{ stdenv, fetchFromGitHub, makeWrapper, lrzsz }:
 
 stdenv.mkDerivation rec {
-  name = "picocom-1.7";
+  name = "picocom-${version}";
+  version = "1.8";
 
-  src = fetchurl {
-    url = "http://picocom.googlecode.com/files/${name}.tar.gz";
-    sha256 = "17hjq713naq02xar711aw24qqd52p591mj1h5n97cni1ga7irwyh";
+  src = fetchFromGitHub {
+    owner = "npat-efault";
+    repo = "picocom";
+    rev = version;
+    sha256 = "1954hnmnnr9yj5skynj2x5wjap8vlr4ski2rhwr36p5pzwmr9gni";
   };
 
   buildInputs = [ makeWrapper ];

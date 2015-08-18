@@ -80,6 +80,9 @@ was accordingly renamed to <literal>bomi</literal>
 was accordingly renamed to <literal>electron</literal>
 </para></listitem>
 
+<listitem><para>Elm is not released on Hackage anymore. You should now use <literal>elmPackages.elm</literal>
+which contains the latest Elm platform.</para></listitem>
+
 <listitem>
   <para>
 	The CUPS printing service has been updated to version <literal>2.0.2</literal>.

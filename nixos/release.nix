@@ -245,7 +245,7 @@ in rec {
   tests.kde4 = callTest tests/kde4.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
-  tests.lightdm = callTest tests/lightdm.nix {};
+  #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
   tests.misc = callTest tests/misc.nix {};

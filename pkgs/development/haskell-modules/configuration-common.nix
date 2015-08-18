@@ -37,11 +37,6 @@ self: super: {
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
-  # Please also remove optparse-applicative special case from
-  # cabal2nix/hackage2nix.hs when removing the following.
-  elm-make = super.elm-make.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-  elm-package = super.elm-package.override { optparse-applicative = self.optparse-applicative_0_10_0; };
-
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
@@ -171,7 +166,7 @@ self: super: {
   # Jailbreak doesn't get the job done because the Cabal file uses conditionals a lot.
   darcs = (overrideCabal super.darcs (drv: {
     doCheck = false;            # The test suite won't even start.
-    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' darcs.cabal";
+    patchPhase = "sed -i -e 's|attoparsec .*,|attoparsec,|' -e 's|vector .*,|vector,|' darcs.cabal";
   })).overrideScope (self: super: { zlib = self.zlib_0_5_4_2; });
 
   # https://github.com/massysett/rainbox/issues/1
@@ -319,6 +314,7 @@ self: super: {
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
   ide-backend = dontCheck super.ide-backend;
+  msgpack-rpc = dontCheck super.msgpack-rpc;
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -398,7 +394,6 @@ self: super: {
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
   DRBG = dontCheck super.DRBG;                          # http://hydra.cryp.to/build/498245/nixlog/1/raw
   either-unwrap = dontCheck super.either-unwrap;        # http://hydra.cryp.to/build/498782/log/raw
-  elm-repl = dontCheck super.elm-repl;                  # http://hydra.cryp.to/build/501878/nixlog/1/raw
   etcd = dontCheck super.etcd;
   fb = dontCheck super.fb;                              # needs credentials for Facebook
   fptest = dontCheck super.fptest;                      # http://hydra.cryp.to/build/499124/log/raw
@@ -406,7 +401,6 @@ self: super: {
   ghc-events-parallel = dontCheck super.ghc-events-parallel;    # http://hydra.cryp.to/build/496828/log/raw
   ghcid = dontCheck super.ghcid;
   ghc-imported-from = dontCheck super.ghc-imported-from;
-  ghc-mod = dontCheck super.ghc-mod;                    # http://hydra.cryp.to/build/499674/log/raw
   ghc-parmake = dontCheck super.ghc-parmake;
   gitlib-cmdline = dontCheck super.gitlib-cmdline;
   git-vogue = dontCheck super.git-vogue;
@@ -788,6 +782,11 @@ self: super: {
   singletons = markBroken super.singletons;
   units-attoparsec = dontDistribute super.units-attoparsec;
   ihaskell-widgets = dontDistribute super.ihaskell-widgets;
+  exinst-bytes = dontDistribute super.exinst-bytes;
+  exinst-deepseq = dontDistribute super.exinst-deepseq;
+  exinst-aeson = dontDistribute super.exinst-aeson;
+  exinst = dontDistribute super.exinst;
+  exinst-hashable = dontDistribute super.exinst-hashable;
 
   # https://github.com/anton-k/temporal-music-notation/issues/1
   temporal-music-notation = markBroken super.temporal-music-notation;
@@ -814,9 +813,6 @@ self: super: {
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
 
-  # This needs the latest version of errors to compile.
-  pipes-errors = super.pipes-errors.override { errors = self.errors_2_0_0; };
-
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
 
@@ -828,9 +824,6 @@ self: super: {
 
   # FPCO's fork of Cabal won't succeed its test suite.
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
-
-  # https://github.com/DanielG/cabal-helper/issues/2
-  cabal-helper = overrideCabal super.cabal-helper (drv: { preCheck = "export HOME=$TMPDIR"; });
 
   # https://github.com/ekmett/comonad/issues/25
   comonad = dontCheck super.comonad;
@@ -904,7 +897,93 @@ self: super: {
   # https://github.com/liyang/thyme/issues/36
   thyme = dontCheck super.thyme;
 
+  # https://github.com/k0ral/hbro/issues/15
+  hbro = markBroken super.hbro;
+  hbro-contrib = dontDistribute super.hbro-contrib;
+
   # https://github.com/aka-bash0r/multi-cabal/issues/4
   multi-cabal = markBroken super.multi-cabal;
+
+  # Elm is no longer actively maintained on Hackage: https://github.com/NixOS/nixpkgs/pull/9233.
+  Elm = markBroken super.Elm;
+  elm-build-lib = markBroken super.elm-build-lib;
+  elm-compiler = markBroken super.elm-compiler;
+  elm-get = markBroken super.elm-get;
+  elm-make = markBroken super.elm-make;
+  elm-package = markBroken super.elm-package;
+  elm-reactor = markBroken super.elm-reactor;
+  elm-repl = markBroken super.elm-repl;
+  elm-server = markBroken super.elm-server;
+  elm-yesod = markBroken super.elm-yesod;
+
+  # https://github.com/GaloisInc/HaNS/pull/8
+  hans = appendPatch super.hans ./patches/hans-disable-webserver.patch;
+
+  # https://github.com/yi-editor/yi/issues/776
+  yi = markBroken super.yi;
+  yi-monokai = dontDistribute super.yi-monokai;
+  yi-snippet = dontDistribute super.yi-snippet;
+  yi-solarized = dontDistribute super.yi-solarized;
+  yi-spolsky = dontDistribute super.yi-spolsky;
+
+  # https://github.com/athanclark/commutative/issues/1
+  commutative = dontCheck super.commutative;
+
+  # https://github.com/athanclark/set-with/issues/1
+  set-with = dontCheck super.set-with;
+
+  # https://github.com/athanclark/sets/issues/1
+  sets = dontCheck super.sets;
+
+  # https://github.com/lens/lens-aeson/issues/18
+  lens-aeson = dontCheck super.lens-aeson;
+
+  # Byte-compile elisp code for Emacs.
+  ghc-mod = overrideCabal super.ghc-mod (drv: {
+    preCheck = "export HOME=$TMPDIR";
+    testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
+    doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      make -C $lispdir
+      mkdir -p $out/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+    '';
+  });
+
+  # Byte-compile elisp code for Emacs.
+  structured-haskell-mode = overrideCabal super.structured-haskell-mode (drv: {
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      pushd >/dev/null $lispdir
+      for i in *.el; do
+        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
+          -f batch-byte-compile $i
+      done
+      popd >/dev/null
+      mkdir -p $out/share/emacs
+      ln -s $lispdir $out/share/emacs/site-lisp
+    '';
+  });
+
+  # Byte-compile elisp code for Emacs.
+  hindent = overrideCabal super.hindent (drv: {
+    executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
+    postInstall = ''
+      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      pushd >/dev/null $lispdir
+      for i in *.el; do
+        emacs -Q -L . -L ${pkgs.emacs24Packages.haskellMode}/share/emacs/site-lisp \
+          --batch --eval "(byte-compile-disable-warning 'cl-functions)" \
+          -f batch-byte-compile $i
+      done
+      popd >/dev/null
+      mkdir -p $out/share/emacs
+      ln -s $lispdir $out/share/emacs/site-lisp
+    '';
+  });
 
 }

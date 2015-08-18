@@ -464,6 +464,27 @@ python.buildEnv.override {
     with wrapped binaries in <filename>bin/</filename>.
   </para>
 
+  <para>
+  You can also use <varname>env</varname> attribute to create local
+  environments with needed packages installed (somewhat comparable to
+  <literal>virtualenv</literal>). For example, with the following
+  <filename>shell.nix</filename>:
+
+<programlisting language="nix">
+<![CDATA[with import <nixpkgs> {};
+
+(python3.buildEnv.override {
+  extraLibs = with python3Packages;
+    [ numpy
+      requests
+    ];
+}).env]]>
+</programlisting>
+
+  Running <command>nix-shell</command> will drop you into a shell where
+  <command>python</command> will have specified packages in its path.
+  </para>
+
   <variablelist>
     <title>
       <function>python.buildEnv</function> arguments

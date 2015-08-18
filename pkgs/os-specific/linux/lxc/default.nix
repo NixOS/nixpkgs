@@ -11,13 +11,13 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lxc-1.1.2";
+  name = "lxc-1.1.3";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = name;
-    sha256 = "149nq630h9bg87hb3cn086ci0cz29l7fp3i6qf1mqxv7hnildm8p";
+    sha256 = "109vpkxzkhixfvwfs6qphfbxb7pbk2qx22qc4zbk52d6gl78ygsb";
   };
 
   nativeBuildInputs = [

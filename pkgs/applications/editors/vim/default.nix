@@ -1,17 +1,17 @@
-{ stdenv, fetchhg, ncurses, gettext, pkgconfig
+{ stdenv, fetchFromGitHub, ncurses, gettext, pkgconfig
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc }:
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
+  version = "7.4.826";
 
-  version = "7.4.683";
-
-  src = fetchhg {
-    url = "https://code.google.com/p/vim/";
-    rev = "v7-4-663";
-    sha256 = "1z0qarf6a2smab28g9dnxklhfayn85wx48bnddmyhb9kqzjgqgjc";
+  src = fetchFromGitHub {
+    owner = "vim";
+    repo = "vim";
+    rev = "v${stdenv.lib.replaceChars ["."] ["-"] version}";
+    sha256 = "147lkcjdd0jbc7y2hflfzwnyjhdgi1971pmkizihybxmmj1a4g8y";
   };
 
   # this makes maintainers very sad

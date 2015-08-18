@@ -1343,6 +1343,33 @@ let
       maintainers = with maintainers; [ bjornfor ];
     };
   };
+  
+  blaze = buildPythonPackage rec {
+    name = "blaze-${version}";
+    version = "0.8.2";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
+      sha256 = "1abedabf2a1e62dd059e0942d60f27337763de26f5e3f61ed55baaf97723b624";
+    };
+    
+    propagatedBuildInputs = with self; [
+      numpy
+      pandas
+      datashape
+      odo
+      toolz
+      multipledispatch
+      sqlalchemy9 # sqlalchemy8 should also work
+      psutil
+    ];
+    
+    meta = {
+      homepage = https://github.com/ContinuumIO/blaze;
+      description = "Allows Python users a familiar interface to query data living in other data storage systems";
+      license = licenses.bsdOriginal;
+    };
+  };
 
   bleach = buildPythonPackage rec {
     version = "v1.4";
@@ -1922,11 +1949,11 @@ let
   };
 
   click = buildPythonPackage rec {
-    name = "click-4.1";
+    name = "click-5.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "1n4fvxpgbna83g6daarscljwpbarr45qfalh9hqla8ayy84ysfg3";
+      sha256 = "0njsm0wn31l21bi118g5825ma5sa3rwn7v2x4wjd7yiiahkri337";
     };
 
     meta = {
@@ -2291,24 +2318,41 @@ let
   };
 
   cryptography = buildPythonPackage rec {
-    name = "cryptography-0.6.1";
+    name = "cryptography-1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography/${name}.tar.gz";
-      sha256 = "17ij2acy28ryxahiq64lpf71d5z3sa9xhr4pjv7a1v81189i0j82";
+      sha256 = "008hq9s4z7y17yjxh1aycvddas320hfbl9vj8gydg4fpfzz04711";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest ];
-    propagatedBuildInputs = [ self.six ] ++ optional (!isPyPy) self.cffi_0_8;
+                    self.iso8601 self.pyasn1 self.pytest self.py ];
+    propagatedBuildInputs = [ self.six self.idna self.ipaddress ]
+     ++ optional (!isPyPy) self.cffi
+     ++ optional (pythonOlder "3.4") self.enum34;
+  };
+
+  idna = buildPythonPackage rec {
+    name = "idna-2.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/idna/${name}.tar.gz";
+      sha256 = "0frxgmgi234lr9hylg62j69j4ik5zhg0wz05w5dhyacbjfnrl68n";
+    };
+
+    meta = {
+      homepage = "http://github.com/kjd/idna/";
+      description = "Internationalized Domain Names in Applications (IDNA)";
+      license = "licenses.bsd3";
+    };
   };
 
   cryptography_vectors = buildPythonPackage rec {
-    name = "cryptography_vectors-0.6.1";
+    name = "cryptography_vectors-1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "1ks1xdb1ff74qmjdzqcfvkrwsbnwpsjgg3cy18zh37p8985cvl3r";
+      sha256 = "0d02x93vk0b1fla914bij71pfma0p7sprlvrxq1bb6dxnwc7h9z7";
     };
   };
 
@@ -2473,11 +2517,11 @@ let
   };
 
   pytest = buildPythonPackage rec {
-    name = "pytest-2.6.2";
+    name = "pytest-2.7.2";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytest/${name}.tar.gz";
-      md5 = "0a1735fb1d481ef3864f34678607ba85";
+      sha256 = "b30457f735420d0000d10a44bbd478cf03f8bf20e25bd77248f9bab40f4fd6a4";
     };
 
     preCheck = ''
@@ -8036,6 +8080,25 @@ let
     };
   });
 
+  plover = pythonPackages.buildPythonPackage rec {
+    name = "plover-${version}";
+    version = "2.5.8";
+    
+    meta = {
+      description = "OpenSteno Plover stenography software";
+      maintainers = [ maintainers.twey ];
+      license = licenses.gpl2;
+    };
+    
+    src = pkgs.fetchurl {
+      url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
+      sha256 = "23f7824a715f93eb2c41d5bafd0c6f3adda92998e9321e1ee029abe7a6ab41e5";
+    };
+    
+    propagatedBuildInputs = with self; [ wxPython pyserial xlib appdirs pkgs.wmctrl ];
+    preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
+  };
+  
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
@@ -8187,8 +8250,8 @@ let
     propagatedBuildInputs = with self ; [ dnspython3 pyasn1 ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/fritzy/SleekXMPP/archive/${version}.tar.gz";
-      sha256 = "1hqs2w5d7x532psfqipd2wl1mkmsaak83jvp1rh9rv406fzp9h67";
+      url = "https://github.com/fritzy/SleekXMPP/archive/sleek-${version}.tar.gz";
+      sha256 = "07zz0bm098zss0xww11gj45aw417nrkp9k1szzs1zm88wyfr1z31";
     };
 
     meta = {
@@ -9818,11 +9881,11 @@ let
 
 
   py = buildPythonPackage rec {
-    name = "py-1.4.24";
+    name = "py-1.4.30";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
-      md5 = "8f32ee0cd1e01472a255fe1d28d81217";
+      md5 = "a904aabfe4765cb754f2db84ec7bb03a";
     };
   };
 
@@ -9872,11 +9935,11 @@ let
 
 
   pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.1.7";
+    name = "pyasn1-0.1.8";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/pyasn1/0.1.7/pyasn1-0.1.7.tar.gz";
-      sha256 = "1aqy21fb564gmnkw2fbkn55c40diyx3z0ixh4savvxikqm9ivy74";
+      url = "mirror://sourceforge/pyasn1/0.1.8/pyasn1-0.1.8.tar.gz";
+      sha256 = "0iw31d9l0zwx35szkzq72hiw002wnqrlrsi9dpbrfngcl1ybwcsx";
     };
 
     meta = {
@@ -11164,7 +11227,7 @@ let
     # 17 tests failing
     doCheck = false;
 
-    propagatedBuildInputs = [ self.cryptography ];
+    propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
   };
 
 
@@ -13598,7 +13661,7 @@ let
     meta = {
       description = "Terminals served to term.js using Tornado websockets";
       homepage = https://github.com/takluyver/terminado;
-      licenses = licenses.bsd2;
+      license = licenses.bsd2;
     };
   };
 
@@ -17165,6 +17228,44 @@ let
       homepage = http://github.com/np1/mps-youtube;
       license = licenses.gpl3;
       maintainers = with maintainers; [ odi ];
+    };
+  };
+
+  d2to1 = buildPythonPackage rec {
+    name = "d2to1-${version}";
+    version = "0.2.11";
+
+    buildInputs = with self; [ nose ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/d2to1/d2to1-${version}.tar.gz";
+      sha256 = "1a5z367b7dpd6dgi0w8pymb68aj2pblk8w04l2c8hibhj8dpl2b4";
+    };
+
+    meta = {
+      description = "Support for distutils2-like setup.cfg files as package metadata";
+      homepage = https://pypi.python.org/pypi/d2to1;
+      license = licenses.bsd2;
+      maintainers = [ maintainers.makefu ];
+    };
+  };
+
+  ovh = buildPythonPackage rec {
+    name = "ovh-${version}";
+    version = "0.3.5";
+    doCheck = false; #test needs packages too explicit
+    buildInputs = with self; [ d2to1 ];
+    propagatedBuildInputs = with self; [ requests2 ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/ovh/ovh-${version}.tar.gz";
+      sha256 = "1y74lrdlgbb786mwas7ynphimfi00dgr67ncjq20kdf31jg5415n";
+    };
+
+    meta = {
+      description = "Thin wrapper around OVH's APIs";
+      homepage = https://pypi.python.org/pypi/ovh;
+      license = licenses.bsd2;
+      maintainers = [ maintainers.makefu ];
     };
   };
 

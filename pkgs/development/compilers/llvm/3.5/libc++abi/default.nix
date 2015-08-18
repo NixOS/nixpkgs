@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchurl, libcxx, libunwind, llvm }:
 
 let
-  version = "3.5.0";
+  version = "3.5.2";
   cmakeLists = fetchurl {
     name   = "CMakeLists.txt";
     url    = "http://llvm.org/svn/llvm-project/libcxxabi/trunk/CMakeLists.txt?p=217324";
@@ -12,7 +12,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/libcxxabi-${version}.src.tar.xz";
-    sha256 = "1ndcpw3gfrzh7m1jac2qadhkrqgvb65cns69j9niydyj5mmbxijk";
+    sha256 = "1c6rv0zx0na1w4hdmdfq2f6nj7limb7d1krrknwajxxkcn4yws92";
   };
 
   buildInputs = [ cmake ] ++ stdenv.lib.optional (!stdenv.isDarwin) libunwind;

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \
         --suffix-each GTK_PATH ':' "$gtk_modules" \
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
-        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
+        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
         --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}"*)"
 

@@ -1,10 +1,11 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
-, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio, fontconfig
+, libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
 , gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, libkrb5, networkmanagerapplet, networkmanager
 , libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev
-, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk }:
+, docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk
+, fontconfig, sound-theme-freedesktop }:
 
 # http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
 # TODO: bluetooth, wacom, printers
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "07vvmnqjjcc0cblpr6cdmg3693hihpjrq3q30mm3q68pdyfzbjgf";
   };
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard gnome3.libgnomekbd ];
+  propagatedUserEnvPkgs =
+    [ gnome3.gnome_themes_standard gnome3.libgnomekbd sound-theme-freedesktop ];
 
   # https://bugzilla.gnome.org/show_bug.cgi?id=752596
   enableParallelBuilding = false;
