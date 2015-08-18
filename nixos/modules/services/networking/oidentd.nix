@@ -28,7 +28,9 @@ with lib;
     jobs.oidentd =
       { startOn = "started network-interfaces";
         daemonType = "fork";
-        exec = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup";
+        exec = "${pkgs.oidentd}/sbin/oidentd -u oidentd -g nogroup" +
+          optionalString config.networking.enableIPv6 " -a ::"
+        ;
       };
 
     users.extraUsers.oidentd = {
