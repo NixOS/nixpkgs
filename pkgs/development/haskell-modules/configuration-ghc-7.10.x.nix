@@ -174,15 +174,6 @@ self: super: {
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
 
-  # contacted maintainer by e-mail
-  cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
-  darcs-fastconvert = dontDistribute super.darcs-fastconvert;
-  ivory-backend-c = dontDistribute super.ivory-backend-c;
-  ivory-bitdata = dontDistribute super.ivory-bitdata;
-  ivory-examples = dontDistribute super.ivory-examples;
-  ivory-hw = dontDistribute super.ivory-hw;
-  laborantin-hs = dontDistribute super.laborantin-hs;
-
   # https://github.com/cartazio/arithmoi/issues/1
   arithmoi = markBroken super.arithmoi;
   NTRU = dontDistribute super.NTRU;
