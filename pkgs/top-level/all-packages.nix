@@ -8102,6 +8102,8 @@ let
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
+  sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
+
   serd = callPackage ../development/libraries/serd {};
 
   serf = callPackage ../development/libraries/serf {};
