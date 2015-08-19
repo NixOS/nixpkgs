@@ -106,4 +106,18 @@ in {
     };
   };
 
+  search_guard = esPlugin rec {
+    name = "elastic-search-guard-${version}";
+    pluginName = "search-guard";
+    version = "0.5";
+    src = fetchurl {
+      url = "https://github.com/floragunncom/search-guard/releases/download/v${version}/${pluginName}-${version}.zip";
+      sha256 = "1zima4jmq1rrcqxhlrp2xian80vp244d2splby015n5cgqrp39fl";
+    };
+    meta = {
+      homepage = https://github.com/floragunncom/search-guard;
+      description = "Plugin to fetch data from JDBC sources for indexing into Elasticsearch";
+      license = licenses.asl20;
+    };
+  };
 }
