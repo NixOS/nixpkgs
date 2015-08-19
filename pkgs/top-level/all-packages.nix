@@ -1214,7 +1214,7 @@ let
     inherit callPackage;
   };
 
-  cudatoolkit = cudatoolkit5;
+  cudatoolkit = cudatoolkit7;
 
   curlFull = curl.override {
     idnSupport = true;
