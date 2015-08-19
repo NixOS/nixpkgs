@@ -45,6 +45,7 @@ let
       pkgs.strace
       pkgs.su
       pkgs.time
+      pkgs.texinfoInteractive
       pkgs.utillinux
       extraManpages
     ];
@@ -105,12 +106,14 @@ in
         "/lib"
         "/man"
         "/sbin"
+        "/share/doc"
         "/share/emacs"
-        "/share/vim-plugins"
-        "/share/org"
         "/share/info"
-        "/share/terminfo"
         "/share/man"
+        "/share/nano"
+        "/share/org"
+        "/share/terminfo"
+        "/share/vim-plugins"
       ];
 
     system.path = pkgs.buildEnv {
@@ -135,6 +138,13 @@ in
 
           if [ -x $out/bin/update-desktop-database -a -w $out/share/applications ]; then
               $out/bin/update-desktop-database $out/share/applications
+          fi
+
+          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
+            shopt -s nullglob
+            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
+                $out/bin/install-info $i $out/share/info/dir
+            done
           fi
         '';
     };

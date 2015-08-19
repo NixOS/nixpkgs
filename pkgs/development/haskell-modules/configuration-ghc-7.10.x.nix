@@ -90,10 +90,10 @@ self: super: {
 
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
-    patchPhase = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
+    postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
   });
   utf8-string = overrideCabal super.utf8-string (drv: {
-    patchPhase = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
+    postPatch = "sed -i -e 's|base >= 3 && < 4.8|base|' utf8-string.cabal";
   });
   pointfree = doJailbreak super.pointfree;
 
@@ -177,15 +177,6 @@ self: super: {
   jsaddle = let jsaddle' = disableCabalFlag super.jsaddle "ghcjs";
             in addBuildDepends jsaddle' [ self.glib self.gtk3 self.webkitgtk3
                                           self.webkitgtk3-javascriptcore ];
-
-  # contacted maintainer by e-mail
-  cmdlib = markBrokenVersion "0.3.5" super.cmdlib;
-  darcs-fastconvert = dontDistribute super.darcs-fastconvert;
-  ivory-backend-c = dontDistribute super.ivory-backend-c;
-  ivory-bitdata = dontDistribute super.ivory-bitdata;
-  ivory-examples = dontDistribute super.ivory-examples;
-  ivory-hw = dontDistribute super.ivory-hw;
-  laborantin-hs = dontDistribute super.laborantin-hs;
 
   # https://github.com/cartazio/arithmoi/issues/1
   arithmoi = markBroken super.arithmoi;
@@ -280,5 +271,8 @@ self: super: {
 
   # https://github.com/haskell/haddock/issues/427
   haddock = dontCheck super.haddock;
+
+  # The tests in vty-ui do not build, but vty-ui itself builds.
+  vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
 }
