@@ -27,7 +27,7 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Whether to enable the SoftEther VPN Bridge.
+            Whether to enable the SoftEther VPN Server.
           '';
       };
 
@@ -89,7 +89,7 @@ in
       ];
 
       jobs.softether = {
-        description = "SoftEther VPN services initail job";
+        description = "SoftEther VPN services initial job";
         startOn = "started network-interfaces";
         preStart = ''
           for d in vpnserver vpnbridge vpnclient vpncmd; do
