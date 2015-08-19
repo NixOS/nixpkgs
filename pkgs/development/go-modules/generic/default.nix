@@ -16,6 +16,10 @@
 
 , dontRenameImports ? false
 
+# Do not enable this without good reason
+# IE: programs coupled with the compiler
+, allowGoReference ? false
+
 , meta ? {}, ... } @ args':
 
 if disabled then throw "${name} not supported for go ${go.meta.branch}" else
@@ -161,7 +165,8 @@ go.stdenv.mkDerivation (
     runHook postInstall
   '';
 
-  disallowedReferences = [ go ] ++ lib.optional (!dontRenameImports) govers;
+  disallowedReferences = lib.optional (!allowGoReference) go
+    ++ lib.optional (!dontRenameImports) govers;
 
   passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 

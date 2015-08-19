@@ -117,9 +117,12 @@ let
     goPackageAliases = [ "github.com/golang/text" ];
   };
 
-  tools = buildGoPackage rec {
-    rev = "7d75e8b219c3efda2d08ae38acd6b42f8da4f5f9";
-    name = "tools-${stdenv.lib.strings.substring 0 7 rev}";
+  tools = buildFromGitHub {
+    rev = "93604a3dc2a5ae0168456c672ec35cc90ea881e6";
+    date = "2015-08-19";
+    owner = "golang";
+    repo = "tools";
+    sha256 = "1yd3hwsbsjrmx85nihss55wy91y8sld7p0599j5k9xi0n1mrxdci";
     goPackagePath = "golang.org/x/tools";
     goPackageAliases = [ "code.google.com/p/go.tools" ];
 
@@ -135,14 +138,11 @@ let
 
     excludedPackages = "testdata";
 
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "golang";
-      repo = "tools";
-      sha256 = "0vq0l3pjhgsp97v6ndlr3jcs029r5zilwai30snwfq74s580sriq";
-    };
-
     buildInputs = [ net ];
+
+    # Do not copy this without a good reason for enabling
+    # In this case tools is heavily coupled with go itself and embeds paths.
+    allowGoReference = true;
   };
 
   ## THIRD PARTY
