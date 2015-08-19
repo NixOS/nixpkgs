@@ -1346,6 +1346,8 @@ let
 
   drive = callPackage ../applications/networking/drive { };
 
+  driftnet = callPackage ../tools/networking/driftnet {};
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
