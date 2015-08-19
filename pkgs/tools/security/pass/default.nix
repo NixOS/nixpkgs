@@ -3,7 +3,7 @@
 , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? true
+, x11Support ? !stdenv.isDarwin
 }:
 
 assert x11Support -> xclip != null
