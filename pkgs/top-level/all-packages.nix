@@ -3335,6 +3335,8 @@ let
 
   welkin = callPackage ../tools/graphics/welkin {};
 
+  wsmancli = callPackage ../tools/system/wsmancli {};
+
   wolfebin = callPackage ../tools/networking/wolfebin {
     python = python2;
   };
