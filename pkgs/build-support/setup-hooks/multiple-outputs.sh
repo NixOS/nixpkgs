@@ -138,9 +138,11 @@ _multioutPropagateDev() {
     # Default value: propagate binaries, includes and libraries
     if [[ ! -v "$propagatedOutputs" ]]; then
         local po_dirty="$outputBin $outputInclude $outputLib"
+        set +o pipefail
         propagatedOutputs=`echo "$po_dirty" \
             | tr -s ' ' '\n' | grep -v -F "$outputFirst" \
             | sort -u | tr '\n' ' ' `
+        set -o pipefail
 
     elif [ -z "$propagatedOutputs" ]; then
         return # variable was explicitly set to empty
