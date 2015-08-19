@@ -4039,18 +4039,6 @@ let
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { inherit stdenv fetchNuGet; });
 
-  go_1_0 = callPackage ../development/compilers/go/1.0.nix { };
-
-  go_1_1 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/go/1.1-darwin.nix { }
-    else
-      callPackage ../development/compilers/go/1.1.nix { };
-
-  go_1_2 = callPackage ../development/compilers/go/1.2.nix { };
-
-  go_1_3 = callPackage ../development/compilers/go/1.3.nix { };
-
   go_1_4 = callPackage ../development/compilers/go/1.4.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -4059,7 +4047,7 @@ let
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
 
-  gox = callPackage ../development/compilers/go/gox.nix { };
+  gox = goPackages.gox;
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
