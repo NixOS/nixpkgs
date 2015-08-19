@@ -342,6 +342,13 @@ let
     propagatedBuildInputs = [ pflag ];
   };
 
+  cli-go = buildFromGitHub {
+    rev    = "v1.2.0";
+    owner  = "codegangsta";
+    repo   = "cli";
+    sha256 = "1axcpc8wgs0b66dpl36pz97pqbxkgvvbwz1b6rf7gl103jqpii40";
+  };
+
   columnize = buildFromGitHub {
     rev    = "44cb4788b2ec3c3d158dd3d1b50aba7d66f4b59a";
     owner  = "ryanuber";
@@ -522,6 +529,13 @@ let
     };
   };
 
+  cookoo = buildFromGitHub {
+    rev    = "v1.2.0";
+    owner  = "Masterminds";
+    repo   = "cookoo";
+    sha256 = "1mxqnxddny43k1shsvd39sfzfs0d20gv3vm9lcjp04g3b0rplck1";
+  };
+
   dbus = buildGoPackage rec {
     rev = "a5942dec6340eb0d57f43f2003c190ce06e43dea";
     name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
@@ -650,6 +664,14 @@ let
       sha256 = "0ghrx5qmgvgb8cbvsj53v1ir4j9agilg4wyhpk5ikqdv6mmqly4h";
     };
     subPackages = [ "./" ];  # don't try to build test fixtures
+  };
+
+  glide = buildFromGitHub {
+    rev    = "0.4.1";
+    owner  = "Masterminds";
+    repo   = "glide";
+    sha256 = "0237l8s7z1ysfkv3kmw4788fg4kjcq2sh6073bjcwynz3hldkrlr";
+    buildInputs = [ cookoo cli-go go-gypsy ];
   };
 
   gls = buildFromGitHub {
@@ -1036,6 +1058,13 @@ let
     };
 
     buildInputs = [ go-querystring oauth2 ];
+  };
+
+  go-gypsy = buildFromGitHub {
+    rev    = "42fc2c7ee9b8bd0ff636cd2d7a8c0a49491044c5";
+    owner  = "kylelemons";
+    repo   = "go-gypsy";
+    sha256 = "04iy8rdk19n7i18bqipknrcb8lsy1vr4d1iqyxsxq6rmb7298iwj";
   };
 
   go-homedir = buildFromGitHub {
