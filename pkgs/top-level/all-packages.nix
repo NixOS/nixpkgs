@@ -398,7 +398,7 @@ let
     inherit name sha256;
     url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
     meta.homepage = "https://github.com/${owner}/${repo}/";
-  };
+  } // { inherit rev; };
 
   fetchFromBitbucket = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
     inherit name sha256;
@@ -2851,6 +2851,8 @@ let
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rkflashtool = callPackage ../tools/misc/rkflashtool { };
+
+  rkrlv2 = callPackage ../applications/audio/rkrlv2 {};
 
   rmlint = callPackage ../tools/misc/rmlint {
     inherit (pythonPackages) sphinx;
