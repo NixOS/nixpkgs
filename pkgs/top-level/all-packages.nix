@@ -4045,6 +4045,10 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  go_1_5 = callPackage ../development/compilers/go/1.5.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   go = go_1_4;
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
@@ -8626,6 +8630,16 @@ let
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_4;
       govers = go14Packages.govers;
+      inherit lib;
+    };
+    overrides = (config.goPackageOverrides or (p: {})) pkgs;
+  });
+
+  go15Packages = recurseIntoAttrs (callPackage ./go-packages.nix {
+    go = go_1_5;
+    buildGoPackage = import ../development/go-modules/generic {
+      go = go_1_5;
+      govers = go15Packages.govers;
       inherit lib;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
