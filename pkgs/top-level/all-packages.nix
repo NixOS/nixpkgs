@@ -10835,6 +10835,7 @@ let
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
+    cudatoolkit = cudatoolkit7;
     python = python34;
   };
 
