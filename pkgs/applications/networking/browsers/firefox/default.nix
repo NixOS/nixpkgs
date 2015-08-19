@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gst_all_1, icu, libpng, jemalloc
+, cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
-      gst_all_1.gstreamer gst_all_1.gst-plugins-base icu libpng
+      gstreamer gst_plugins_base icu libpng
       jemalloc
     ]
     ++ lib.optional enableGTK3 gtk3;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       "--enable-system-pixman"
       "--enable-system-sqlite"
       "--enable-system-cairo"
-      "--enable-gstreamer=1.0"
+      "--enable-gstreamer"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
       "--disable-content-sandbox-reporter"  # keeping disabled for now
