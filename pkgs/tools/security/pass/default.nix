@@ -2,8 +2,7 @@
 , coreutils, gnused, getopt, pwgen, git, tree, gnupg, which
 , makeWrapper
 
-, xclip ? null, xdotool ? null, dmenu ? null
-, x11Support ? true
+, x11Support ? if stdenv.isDarwin then false else true, xclip, xdotool, dmenu
 }:
 
 assert x11Support -> xclip != null
