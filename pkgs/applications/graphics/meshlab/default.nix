@@ -1,22 +1,18 @@
 {stdenv, fetchurl, qt4, bzip2, lib3ds, levmar, muparser, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "meshlab-1.3.2";
+  name = "meshlab-1.3.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/meshlab/meshlab/MeshLab%20v1.3.2/MeshLabSrc_AllInc_v132.tgz";
-    sha256 = "d57f0a99a55421aac54a66e2475d48f00f7b1752f9587cd69cf9b5b9c1a519b1";
+    url = "mirror://sourceforge/meshlab/meshlab/MeshLab%20v1.3.3/MeshLabSrc_AllInc_v133.tgz";
+    sha256 = "03wqaibfbfag2w1zi1a5z6h546r9d7pg2sjl5pwg24w7yp8rr0n9";
   };
 
   # I don't know why I need this; without this, the rpath set at the beginning of the
   # buildPhase gets removed from the 'meshlab' binary
   dontPatchELF = true;
 
-  # Patches are from the Arch Linux package
-  patchPhase = ''
-    patch -Np0 -i "${./qt-4.8.patch}"
-    patch -Np1 -i "${./gcc-4.7.patch}"
-  '';
+  patches = [ ./include-unistd.diff ];
 
   buildPhase = ''
     mkdir -p "$out/include"
