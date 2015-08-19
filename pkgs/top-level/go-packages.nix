@@ -1298,6 +1298,17 @@ let
     sha256 = "0v6g14ygnjl1l2fykyfjyvnab82a70jy0zzmsn5swlyy45b9gq2d";
   };
 
+  lint = buildFromGitHub {
+    rev = "7b7f4364ff76043e6c3610281525fabc0d90f0e4";
+    date = "2015-06-23";
+    owner = "golang";
+    repo = "lint";
+    sha256 = "1bj7zv534hyh87bp2vsbhp94qijc5nixb06li1dzfz9n0wcmlqw9";
+    excludedPackages = "testdata";
+    dontInstallSrc = true;
+    buildInputs = [ tools ];
+  };
+
   goquery = buildGoPackage rec {
     rev = "f065786d418c9d22a33cad33decd59277af31471"; #tag v.0.3.2
     name = "goquery-${stdenv.lib.strings.substring 0 7 rev}";
