@@ -23,6 +23,7 @@ in
 
     programs.xfs_quota = {
       projects = mkOption {
+        default = {};
         type = types.attrsOf (types.submodule {
           options = {
             id = mkOption {
