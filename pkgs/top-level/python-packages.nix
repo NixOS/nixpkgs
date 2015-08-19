@@ -2994,11 +2994,11 @@ let
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-1.1.0";
+    name = "docker-py-1.3.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      md5 = "b44f34530a21ed1129887f9a8b01ecec";
+      md5 = "07a5f41fd3f8cc72d05deed628700e99";
     };
 
     propagatedBuildInputs = with self; [ six requests websocket_client ];
@@ -3014,12 +3014,14 @@ let
   };
 
   dockerpty = buildPythonPackage rec {
-    name = "dockerpty-0.3.2";
+    name = "dockerpty-0.3.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dockerpty/${name}.tar.gz";
-      md5 = "1f97b24d2f4b2c345f176f91655002dd";
+      md5 = "92fb66d28aa19bf5268e7e3935670e5d";
     };
+
+    propagatedBuildInputs = with self; [ six ];
 
     meta = {
       description = "Functionality needed to operate the pseudo-tty (PTY) allocated to a docker container";
@@ -5663,32 +5665,22 @@ let
   };
 
   docker_compose = buildPythonPackage rec {
-    name = "docker-compose-1.2.0rc2";
+    version = "1.4.0";
+    name = "docker-compose-${version}";
+    namePrefix = "";
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
-      md5 = "311ec5023e51097ca3acbf37fac062bd";
+      md5 = "a93e801ebe829c2f869cb23d0b606272";
     };
 
     propagatedBuildInputs = with self; [
-      six requests pyyaml texttable docopt docker
+      six requests pyyaml texttable docopt docker dockerpty websocket_client
       (requests2.override {
         src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/r/requests/requests-2.5.3.tar.gz";
-          md5 = "23bf4fcc89ea8d353eb5353bb4a475b1";
-        };
-      })
-      (dockerpty.override {
-        src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/d/dockerpty/dockerpty-0.3.2.tar.gz";
-          md5 = "1f97b24d2f4b2c345f176f91655002dd";
-        };
-      })
-      (websocket_client.override {
-        src = pkgs.fetchurl {
-          url = "https://pypi.python.org/packages/source/w/websocket-client/websocket-client-0.11.0.tar.gz";
-          md5 = "fcffbb5ac10941d9ace416d14d1e3ec8";
+          url = "https://pypi.python.org/packages/source/r/requests/requests-2.6.1.tar.gz";
+          md5 = "da6e487f89e6a531699b7fd97ff182af";
         };
       })
     ];
@@ -15691,11 +15683,11 @@ let
 
 
   websocket_client = buildPythonPackage rec {
-    name = "websocket-client-0.17.0";
+    name = "websocket_client-0.32.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/w/websocket-client/${name}.tar.gz";
-      md5 = "c86591719085eaf4a01c2275e0c834fc";
+      md5 = "b07a897511a3c585251fe2ea85a9d9d9";
     };
 
     propagatedBuildInputs = with self; [ six backports_ssl_match_hostname_3_4_0_2 unittest2 argparse ];
