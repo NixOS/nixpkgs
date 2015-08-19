@@ -1,4 +1,4 @@
-{stdenv, fetchurl, linuxHeaders, libiconvReal, cross ? null, gccCross ? null,
+{stdenv, fetchzip, linuxHeaders, libiconvReal, cross ? null, gccCross ? null,
 extraConfig ? ""}:
 
 assert stdenv.isLinux;
@@ -52,15 +52,18 @@ let
     UCLIBC_HAS_FPU n
   '';
 
+  name = "uclibc-0.9.34-pre-20150131";
+  rev = "343f6b8f1f754e397632b0552e4afe586c8b392b";
+
 in
 
 stdenv.mkDerivation {
-  name = "uclibc-0.9.34-pre-20150131" + stdenv.lib.optionalString (cross != null)
-    ("-" + cross.config);
+  name = name + stdenv.lib.optionalString (cross != null) ("-" + cross.config);
 
-  src = fetchurl {
-    url = http://www.uclibc.org/downloads/snapshots/uClibc-20150131.tar.bz2;
-    sha256 = "14svyxw4nizdcz4vqk9nizlgy32d8ngpvcca34jjbdjjg77xdvkc";
+  src = fetchzip {
+    name = name + "-source";
+    url = "http://git.uclibc.org/uClibc/snapshot/uClibc-${rev}.tar.bz2";
+    sha256 = "1kgylzpid7da5i7wz7slh5q9rnq1m8bv5h9ilm76g0xwc2iwlhbw";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
