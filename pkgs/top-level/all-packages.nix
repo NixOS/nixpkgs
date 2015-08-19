@@ -7810,6 +7810,7 @@ let
 
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
+    inherit (xorg) libXt;
   };
 
   pcre = callPackage ../development/libraries/pcre {
