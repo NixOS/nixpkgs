@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross, Security }:
+{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
+, pkgconfig
+, pcre
+, Security }:
 
 let
   libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
@@ -13,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre ];
   propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
   # I'm not sure what go wants from its 'src', but the go installation manual
