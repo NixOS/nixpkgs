@@ -19,7 +19,7 @@ let
   allowUnfree = config.allowUnfree or false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   whitelist = config.whitelistedLicenses or [];
-  blacklist = config.blacklistedLicenses or [];
+  blacklist = config.blacklistedLicenses or [ lib.licenses.oraclejavabcl ];
 
   ifDarwin = attrs: if system == "x86_64-darwin" then attrs else {};
 

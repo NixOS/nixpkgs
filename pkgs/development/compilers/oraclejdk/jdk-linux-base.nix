@@ -1,16 +1,16 @@
 { productVersion
 , patchVersion
-, downloadUrl
+, url_i686
+, url_x86_64
 , sha256_i686
 , sha256_x86_64
-, jceName
-, jceDownloadUrl
+, urlJCE
 , sha256JCE
 }:
 
 { swingSupport ? true
 , stdenv
-, requireFile
+, fetchurl
 , unzip
 , file
 , xlibs ? null
@@ -51,10 +51,10 @@ let
 
   jce =
     if installjce then
-      requireFile {
-        name = jceName;
-        url = jceDownloadUrl;
+      fetchurl {
+        url = urlJCE;
         sha256 = sha256JCE;
+        curlOpts = "-H \`echo 'Cookie: oraclelicense=accept-securebackup-cookie'\`";
       }
     else
       "";
@@ -66,16 +66,16 @@ let result = stdenv.mkDerivation rec {
 
   src =
     if stdenv.system == "i686-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-i586.tar.gz";
-        url = downloadUrl;
+      fetchurl {
+        url = url_i686;
         sha256 = sha256_i686;
+        curlOpts = "-H 'Cookie: oraclelicense=accept-securebackup-cookie'";
       }
     else if stdenv.system == "x86_64-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
-        url = downloadUrl;
+      fetchurl {
+        url = url_x86_64;
         sha256 = sha256_x86_64;
+        curlOpts = "-H 'Cookie: oraclelicense=accept-securebackup-cookie'";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
@@ -182,6 +182,6 @@ let result = stdenv.mkDerivation rec {
 
   passthru.home = result;
 
-  meta.license = stdenv.lib.licenses.unfree;
+  meta.license = stdenv.lib.licenses.oraclejavabcl;
 
 }; in result
