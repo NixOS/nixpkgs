@@ -8619,16 +8619,6 @@ let
 
   ### DEVELOPMENT / GO MODULES
 
-  go13Packages = recurseIntoAttrs (callPackage ./go-packages.nix {
-    go = go_1_3;
-    buildGoPackage = import ../development/go-modules/generic {
-      go = go_1_3;
-      govers = go13Packages.govers;
-      inherit lib;
-   };
-    overrides = (config.goPackageOverrides or (p: {})) pkgs;
-  });
-
   go14Packages = recurseIntoAttrs (callPackage ./go-packages.nix {
     go = go_1_4;
     buildGoPackage = import ../development/go-modules/generic {

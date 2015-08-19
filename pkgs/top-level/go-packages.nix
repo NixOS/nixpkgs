@@ -4,7 +4,6 @@
 , fetchgit, fetchhg, fetchurl, fetchFromGitHub, fetchFromBitbucket, fetchbzr, pkgs }:
 
 let
-  isGo13 = go.meta.branch == "1.3";
   isGo14 = go.meta.branch == "1.4";
 
   buildFromGitHub = { rev, owner, repo, sha256, name ? repo, goPackagePath ? "github.com/${owner}/${repo}", ... }@args: buildGoPackage (args // {
@@ -21,7 +20,6 @@ let
 
   crypto = buildFromGitHub {
     rev      = "4d48e5fa3d62b5e6e71260571bf76c767198ca02";
-    disabled = isGo13;
     owner    = "golang";
     repo     = "crypto";
     sha256   = "0plvjv56afb02p7l3c2zfwffnhscmc3f0ckj1gls9ay6vj85y7l8";
@@ -1014,7 +1012,6 @@ let
     rev = "4734e7aca379f0d7fcdf04fbb2101696a4b45ce8";
     name = "go-etcd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-etcd";
-    disabled = isGo13;
 
     src = fetchFromGitHub {
       inherit rev;
@@ -1255,7 +1252,6 @@ let
     rev = "2688e91251d9d8e404e86dd8f096e23b2f086958";
     name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/coreos/go-systemd";
-    disabled = isGo13;
 
     excludedPackages = "examples";
 
