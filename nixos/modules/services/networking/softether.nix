@@ -15,38 +15,14 @@ in
 
     services.softether = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the SoftEther VPN services.
-        '';
-      };
+      enable = mkEnableOption "SoftEther VPN services";
 
-      vpnserver.enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to enable the SoftEther VPN Server.
-          '';
-      };
+      vpnserver.enable = mkEnableOption "SoftEther VPN Server";
 
-      vpnbridge.enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to enable the SoftEther VPN Bridge.
-          '';
-      };
+      vpnbridge.enable = mkEnableOption "SoftEther VPN Bridge";
 
       vpnclient = {
-        enable = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Whether to enable the SoftEther VPN Client.
-            '';
-        };
+        enable = mkEnableOption "SoftEther VPN Client";
 
         up = mkOption {
           type = types.lines;
