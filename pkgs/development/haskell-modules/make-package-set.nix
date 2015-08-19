@@ -44,9 +44,23 @@ self: let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-    overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
-  };
+  callPackageWithScope = scope: fn: manualArgs:
+    let
+      # this code is copied from callPackage in lib/customisation.nix
+      #
+      # we cannot use `callPackage` here because we want to call `makeOverridable`
+      # on `drvScope` (we cannot add `overrideScope` after calling `callPackage` because then it is
+      # lost on `.override`) but determine the auto-args based on `drv` (the problem here
+      # is that nix has no way to "passthrough" args while preserving the reflection
+      # info that callPackage uses to determine the arguments).
+      drv = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs drv) scope;
+      drvScope = allArgs: drv allArgs // {
+        overrideScope = f:
+          let newScope = mkScope (fix' (extends f scope.__unfix__));
+          in callPackageWithScope newScope drv manualArgs;
+      };
+    in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
 
   mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
   defaultScope = mkScope self;
