@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     homepage = https://projects.coin-or.org/Cbc;
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.eelco ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     description = "A mixed integer programming solver";
   };
 }
