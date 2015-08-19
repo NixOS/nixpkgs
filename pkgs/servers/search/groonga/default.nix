@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--includedir=$dev/include")
     configureFlagsArray+=("--datarootdir=$data/share")
     configureFlagsArray+=("--mandir=$man/share/man")
-    configureFlagsArray+=("--docdir=$doc/share/doc")
-    configureFlagsArray+=("--infodir=$doc/share/info")
+    configureFlagsArray+=("--docdir=$aux/share/doc")
+    configureFlagsArray+=("--infodir=$aux/share/info")
 
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
   '';
@@ -38,7 +38,16 @@ stdenv.mkDerivation rec {
     "--enable-futex"
   ];
 
-  outputs = [ "out" "bin" "dev" "lib" "data" "man" "doc" ];
+  outputs = [ "dev" "bin" "lib" "data" "man" "aux" ];
+
+  allowedReferences = {
+    dev = [ "dev" "lib" "data" ];
+    bin = [ "bin" "lib" "data" ];
+    lib = [ "lib" "data" ];
+    data = [ "data" ];
+    man = [ ];
+    aux = [ "dev" "bin" "lib" "data" ];
+  };
 
   installFlags = [
     "sysconfdir=\${data}/etc"
@@ -49,24 +58,12 @@ stdenv.mkDerivation rec {
     # Make dev propagate libs so that linking works
     mkdir -p $dev/nix-support
     echo "$lib" >> $dev/nix-support/propagated-native-build-inputs
-
-    # We expect to be storing nothing in out
-    # rmdir should therefore succeed
-    if ! rmdir $out; then
-      echo "$out unexpected contained files"
-      exit 1
-    fi
-
-    # Out needs to propagate the expected installed files
-    mkdir -p $out/nix-support
-    echo "$bin" >> $out/nix-support/propagated-native-build-inputs
-    echo "$man" >> $out/nix-support/propagated-native-build-inputs
   '';
 
   preFixup = ''
     # Fix the groonga executable to not include paths
     # It writes the entire config string into the --version option
-    for output in "$out" "$dev" "$man" "$doc"; do
+    for output in "$dev" "$man" "$aux"; do
       sed -i "s,$output,$(echo "$output" | sed 's/./x/g'),g" $bin/bin/groonga
     done
     sed -i "/prefix=/d" $bin/sbin/groonga-httpd-restart
@@ -92,42 +89,33 @@ stdenv.mkDerivation rec {
       fi
     }
 
-    check_references "$dev" "$out"
-    check_references "$doc" "$out"
-
-    check_references "$out" "$bin"
     check_references "$dev" "$bin"
     check_references "$man" "$bin"
-    check_references "$doc" "$bin"
+    check_references "$aux" "$bin"
 
-    check_references "$out" "$dev"
     check_references "$bin" "$dev"
     check_references "$man" "$dev"
-    check_references "$doc" "$dev"
+    check_references "$aux" "$dev"
 
-    check_references "$out" "$lib"
     check_references "$bin" "$lib"
     check_references "$dev" "$lib"
     check_references "$man" "$lib"
-    check_references "$doc" "$lib"
+    check_references "$aux "$lib"
 
-    check_references "$out" "$data"
     check_references "$bin" "$data"
     check_references "$dev" "$data"
     check_references "$lib" "$data"
     check_references "$man" "$data"
-    check_references "$doc" "$data"
+    check_references "$aux" "$data"
 
-    check_references "$out" "$man"
     check_references "$bin" "$man"
     check_references "$dev" "$man"
     check_references "$lib" "$man"
     check_references "$data" "$man"
-    check_references "$doc" "$man"
+    check_references "$aux" "$man"
 
-    check_references "$out" "$doc"
-    check_references "$dev" "$doc"
-    check_references "$man" "$doc"
+    check_references "$dev" "$aux"
+    check_references "$man" "$aux"
   '';
 
   enableParallelBuilding = true;
