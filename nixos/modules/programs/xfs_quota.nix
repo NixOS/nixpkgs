@@ -96,7 +96,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ ((replaceChars [ "/" ] [ "-" ] opts.fileSystem) + ".mount") ];
 
-        restartTriggers = [ (pkgs.writeText "xfs_quota-project-trigger-${name}" (builtins.toJSON opts)) ];
+        restartTriggers = [ config.environment.etc.projects.source ];
 
         serviceConfig = {
           Type = "oneshot";
