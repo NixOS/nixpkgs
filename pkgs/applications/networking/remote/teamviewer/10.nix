@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   name = "teamviewer-10.0.37742";
   src = fetchurl {
     url = config.teamviewer10.url or "http://download.teamviewer.com/download/teamviewer_amd64.deb";
-    sha256 = config.teamviewer10.sha256 or "0n2lzphvsqnlvm7pd7hjlislqj9rr57lai8jyw4wpqcy9j2xwxd2";
+    sha256 = config.teamviewer10.sha256 or "10risay1a5a85ijbjaz2vxqbfxygpxslvh0dvzz32k988hr9p1gk";
   };
 
   buildInputs = [ makeWrapper patchelf ];
