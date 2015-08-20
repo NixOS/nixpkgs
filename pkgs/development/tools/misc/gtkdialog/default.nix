@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gtk, pkgconfig}:
+{stdenv, fetchurl, gtk, pkgconfig, hicolor_icon_theme }:
 
 stdenv.mkDerivation {
   name = "gtkdialog-0.8.3";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "ff89d2d7f1e6488e5df5f895716ac1d4198c2467a2a5dc1f51ab408a2faec38e";
   };
 
-  buildInputs = [ gtk pkgconfig ];
+  buildInputs = [ gtk pkgconfig hicolor_icon_theme ];
 
   meta = {
     homepage = http://gtkdialog.googlecode.com/;
