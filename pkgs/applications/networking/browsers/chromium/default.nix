@@ -42,7 +42,7 @@ let
   desktopItem = makeDesktopItem {
     name = "chromium";
     exec = "chromium %U";
-    icon = "${chromium.browser}/share/icons/hicolor/48x48/apps/chromium.png";
+    icon = "chromium";
     comment = "An open source web browser from Google";
     desktopName = "Chromium";
     genericName = "Web browser";

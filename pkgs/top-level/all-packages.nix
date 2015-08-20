@@ -1521,6 +1521,8 @@ let
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   lprof = callPackage ../tools/graphics/lprof { };
+  
+  fatresize = callPackage ../tools/filesystems/fatresize {};
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
@@ -7808,6 +7810,7 @@ let
 
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
+    inherit (xorg) libXt;
   };
 
   pcre = callPackage ../development/libraries/pcre {

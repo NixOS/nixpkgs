@@ -17,11 +17,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-7.0p1";
+  name = "openssh-6.9p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1rc52jyc5v5b8j9kvasrnz9vnj9b0i7fw4nqac8wix0r794k4ngx";
+    sha256 = "1zkci5nbpb4frmzj2vr3kv9j47x2h72kvybcpr0d8mzk73sls1vf";
   };
 
   prePatch = optionalString hpnSupport
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ];
+  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch];
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ optional withKerberos [ kerberos ];
