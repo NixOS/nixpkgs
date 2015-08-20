@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, libxml2, webkitgtk, highlight
-, pkgconfig, gtk3, glib, hicolor_icon_theme, libnotify, gtkspell3
+, pkgconfig, gtk3, glib, libnotify, gtkspell3
 , makeWrapper, itstool, shared_mime_info, libical, db, gcr, sqlite
 , gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu, libtool
 , libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit }:
@@ -21,12 +21,11 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gnome3.gtkhtml ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 libtool
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg db icu
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
                   gnome3.evolution_data_server libsecret libical gcr
                   webkitgtk shared_mime_info gnome3.gnome_desktop gtkspell3
                   libcanberra_gtk3 bogofilter gnome3.libgdata sqlite
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base p11_kit
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
                   nss nspr libnotify procps highlight gnome3.libgweather
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 

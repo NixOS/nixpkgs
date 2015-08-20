@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, libxml2, intltool, itstool, hicolor_icon_theme }:
+, libxml2, intltool, itstool }:
 
 stdenv.mkDerivation rec {
   name = "gnome-tetravex-${gnome3.version}.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2 hicolor_icon_theme
+    pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2 gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

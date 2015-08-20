@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gnome3, ibus, intltool, upower, makeWrapper
 , libcanberra, libcanberra_gtk3, accountsservice, libpwquality, libpulseaudio
-, gdk_pixbuf, hicolor_icon_theme, librsvg, libxkbfile, libnotify
+, gdk_pixbuf, librsvg, libxkbfile, libnotify
 , libxml2, polkit, libxslt, libgtop, libsoup, colord, colord-gtk
 , cracklib, python, libkrb5, networkmanagerapplet, networkmanager
 , libwacom, samba, shared_mime_info, tzdata, icu, libtool, udev

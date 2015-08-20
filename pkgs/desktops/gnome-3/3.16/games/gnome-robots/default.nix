@@ -1,6 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra_gtk3, intltool, itstool, libxml2
-, hicolor_icon_theme }:
+, librsvg, libcanberra_gtk3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-robots-${gnome3.version}.1";
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool itstool librsvg libcanberra_gtk3
-    libxml2 hicolor_icon_theme
+    libxml2 gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, vala
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , makeWrapper, itstool, gnupg, libsoup
 , gnome3, librsvg, gdk_pixbuf, gpgme
 , libsecret, avahi, p11_kit, openssh }:
@@ -22,9 +22,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gcr
                   gnome3.gsettings_desktop_schemas makeWrapper gnupg
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg gpgme
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg gpgme
                   libsecret avahi libsoup p11_kit vala gnome3.gcr
-                  hicolor_icon_theme gnome3.adwaita-icon-theme openssh ];
+                  openssh ];
 
   preFixup = ''
     wrapProgram "$out/bin/seahorse" \

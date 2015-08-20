@@ -1,6 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, libgtop, intltool, itstool, libxml2, hicolor_icon_theme
-, nmap, inetutils }:
+, libgtop, intltool, itstool, libxml2, nmap, inetutils }:
 
 stdenv.mkDerivation rec {
   name = "gnome-nettool-3.8.1";
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook libgtop intltool itstool libxml2
-    hicolor_icon_theme
+    gnome3.defaultIconTheme
   ];
 
   propagatedUserEnvPkgs = [ nmap inetutils ];

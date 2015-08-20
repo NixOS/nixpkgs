@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , bash, makeWrapper, itstool, libxml2
 , gnome3, librsvg, gdk_pixbuf, file }:
 
@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
-  propagatedBuildInputs = [ gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                            hicolor_icon_theme gnome3.adwaita-icon-theme ];
+  propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 file
                   gnome3.gsettings_desktop_schemas makeWrapper ];

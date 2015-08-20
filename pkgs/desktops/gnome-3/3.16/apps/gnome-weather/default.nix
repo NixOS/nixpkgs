@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook, gjs
-, libgweather, intltool, itstool, hicolor_icon_theme }:
+, libgweather, intltool, itstool }:
 
 stdenv.mkDerivation rec {
   name = "gnome-weather-${gnome3.version}.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook gjs intltool itstool
-    libgweather hicolor_icon_theme
+    libgweather gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

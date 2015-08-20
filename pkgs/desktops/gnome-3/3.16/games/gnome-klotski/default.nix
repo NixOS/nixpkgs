@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libxml2, intltool, itstool, hicolor_icon_theme }:
+, librsvg, libxml2, intltool, itstool }:
 
 stdenv.mkDerivation rec {
   name = "gnome-klotski-${gnome3.version}.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool itstool librsvg libxml2
-    hicolor_icon_theme
+    gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

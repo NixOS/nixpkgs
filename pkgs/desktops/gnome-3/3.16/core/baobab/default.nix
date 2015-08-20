@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, vala, libgtop
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , bash, makeWrapper, itstool, libxml2
 , gnome3, librsvg, gdk_pixbuf, file }:
 
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ vala pkgconfig gtk3 glib libgtop intltool itstool libxml2
                   gnome3.gsettings_desktop_schemas makeWrapper file
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                  hicolor_icon_theme gnome3.adwaita-icon-theme ];
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
   preFixup = ''
     wrapProgram "$out/bin/baobab" \

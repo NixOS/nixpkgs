@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, libgweather, libnotify
-, pkgconfig, gtk3, glib, hicolor_icon_theme, gsound
+, pkgconfig, gtk3, glib, gsound
 , makeWrapper, itstool, libcanberra_gtk3, libtool
 , gnome3, librsvg, gdk_pixbuf, geoclue2, wrapGAppsHook }:
 
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libcanberra_gtk3
                   gnome3.gsettings_desktop_schemas makeWrapper
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg
                   gnome3.gnome_desktop gnome3.geocode_glib geoclue2
                   libgweather libnotify libtool gsound
-                  hicolor_icon_theme wrapGAppsHook ];
+                  wrapGAppsHook ];
 
   enableParallelBuilding = true;
 
