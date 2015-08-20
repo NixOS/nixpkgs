@@ -79,7 +79,7 @@ in {
         ETCD_CACERT = cfg.etcd.caCert;
         SKYDNS_ADDR = cfg.address;
         SKYDNS_DOMAIN = cfg.domain;
-        SKYDNS_NAMESERVER = concatStringsSep "," cfg.nameservers;
+        SKYDNS_NAMESERVERS = concatStringsSep "," cfg.nameservers;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/skydns";
