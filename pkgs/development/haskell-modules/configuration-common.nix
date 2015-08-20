@@ -977,4 +977,12 @@ self: super: {
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
+  # Use global libsass library in order to use hsass in the repl
+  hlibsass = overrideCabal super.hlibsass (drv: {
+    configureFlags = drv.configureFlags or [] ++ ["-fexternalLibsass"];
+    extraLibraries = drv.extraLibraries or [] ++ [ pkgs.libsass ];
+  });
+
+  # Use global libsass library in order to use hsass in the repl
+  hsass = hsass.overrideScope (self: super: { hlibsass = self.hlibsass; });
 }
