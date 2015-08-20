@@ -15149,14 +15149,13 @@ let
 
   wavegain = callPackage ../applications/audio/wavegain { };
 
-  # Wine defaults to a mixed 64 / 32 build on x86_64 and to pure 32 on x86
   wine = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
-    wineBuild = config.wine.build or (if system == "x86_64-linux" then "wineWow" else "wine32");
+    wineBuild = config.wine.build or "wine32";
   };
   wineStable = wine.override { wineRelease = "stable"; };
-  wineUnstable = wine.override { wineRelease = "unstable"; };
-  wineStaging = wine.override { wineRelease = "staging"; };
+  wineUnstable = lowPrio (wine.override { wineRelease = "unstable"; });
+  wineStaging = lowPrio (wine.override { wineRelease = "staging"; });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
