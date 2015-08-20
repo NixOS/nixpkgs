@@ -31,9 +31,10 @@ let inherit (args.composableDerivation) composableDerivation edf;
   '';
 in
 composableDerivation {
-} (fix: {
+} (fix: rec {
 
-    name = "vim_configurable-7.4.516";
+    name = "vim_configurable-${version}";
+    version = "7.4.826";
 
     enableParallelBuilding = true; # test this
 
@@ -43,8 +44,8 @@ composableDerivation {
         # latest release
       args.fetchhg {
             url = "http://vim.googlecode.com/hg/";
-            rev = "v7-4-516";
-            sha256 = "0a3b5qaywfn7jjr7fjpl8y8jx4wjj2630wxfjnmn3hi1l7iiz4z8";
+            rev = "v${version}";
+            sha256 = "01m67lvnkz0ad28ifj964zcg63y5hixplbnzas5xarj8vl3pc5a0";
       };
 
       "vim-nox" =
