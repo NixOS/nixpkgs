@@ -4076,7 +4076,9 @@ let
 
   oraclejdk7psu = pkgs.oraclejdk7psu_distro true false;
 
-  oraclejdk8 = pkgs.oraclejdk8distro true false;
+  oraclejdk8 = pkgs.oraclejdk8distro true false false;
+
+  oraclejdk8jce = pkgs.oraclejdk8distro true true false;
 
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
@@ -4084,7 +4086,9 @@ let
 
   oraclejre7psu = lowPrio (pkgs.oraclejdk7psu_distro false false);
 
-  oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
+  oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false false);
+
+  oraclejre8jce = lowPrio (pkgs.oraclejdk8distro false true false);
 
   jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
@@ -4107,10 +4111,10 @@ let
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk7psu-linux.nix { inherit installjdk; });
 
-  oraclejdk8distro = installjdk: pluginSupport:
+  oraclejdk8distro = installjdk: installjce: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk installjce; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
