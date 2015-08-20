@@ -32,7 +32,7 @@
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
-, CF ? null
+, gnused ? null
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -47,8 +47,8 @@ assert cloog != null -> isl != null;
 # LTO needs libelf and zlib.
 assert libelf != null -> zlib != null;
 
-# Make sure we get CoreFoundation
-assert stdenv.isDarwin -> CF != null;
+# Make sure we get GNU sed.
+assert stdenv.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -288,6 +288,10 @@ stdenv.mkDerivation ({
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
+
+    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
+    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
+    ++ (optional stdenv.isDarwin gnused)
     ;
 
   NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
@@ -298,10 +302,14 @@ stdenv.mkDerivation ({
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    configureFlagsArray+=(
-      --with-sysroot="${stdenv.libc}"
-      --with-native-system-header-dir=/include
-    )
+    if SDKROOT=$(/usr/bin/xcrun --show-sdk-path); then
+      configureFlagsArray+=(--with-native-system-header-dir=$SDKROOT/usr/include)
+      makeFlagsArray+=( \
+       CFLAGS_FOR_BUILD=-F$SDKROOT/System/Library/Frameworks \
+       CFLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
+       FLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
+      )
+    fi
   '';
 
   dontDisableStatic = true;
@@ -470,10 +478,10 @@ stdenv.mkDerivation ({
                                           ++ optionals javaAwtGtk [ gmp mpfr ]
                                           ++ optional (libpthread != null) libpthread)));
 
-  extraFlags =
-    (if cross != null && libcCross != null
+  EXTRA_TARGET_CFLAGS =
+    if cross != null && libcCross != null
     then "-idirafter ${libcCross}/include"
-    else "") + optionalString stdenv.isDarwin " -F${CF}/Library/Frameworks";
+    else null;
 
   EXTRA_TARGET_LDFLAGS =
     if cross != null && libcCross != null
