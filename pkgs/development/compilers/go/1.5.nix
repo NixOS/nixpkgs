@@ -1,22 +1,29 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, libcCross
-, pkgconfig
+{ stdenv, lib, fetchurl, tzdata, iana_etc, go_1_4, runCommand
+, perl, which, pkgconfig, patch
 , pcre
 , Security }:
 
 let
-  libc = if stdenv ? "cross" then libcCross else stdenv.cc.libc;
+  goBootstrap = runCommand "go-bootstrap" {} ''
+    mkdir $out
+    cp -rf ${go_1_4}/* $out/
+    chmod -R u+w $out
+    find $out -name "*.c" -delete
+    cp -rf $out/bin/* $out/share/go/bin/
+  '';
 in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.4.2";
+  version = "1.5";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "3e5d07bc5214a1ffe187cf6406c5b5a80ee44f12f6bca97a5463db0afee2f6ac";
+    sha256 = "03g3w6af74xggqlgwf5xriqzl9a0q17sp0qbyq8qs55qls07r81p";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  # perl is used for testing go vet
+  nativeBuildInputs = [ perl which pkgconfig patch ];
   buildInputs = [ pcre ];
   propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
@@ -39,7 +46,8 @@ stdenv.mkDerivation rec {
 
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
-    rm src/net/{multicast_test.go,parse_test.go,port_test.go}
+    rm src/net/{listen_test.go,parse_test.go,port_test.go}
+    rm src/syscall/exec_linux_test.go
     # !!! substituteInPlace does not seems to be effective.
     # The os test wants to read files in an existing path. Just don't let it be /usr/bin.
     sed -i 's,/usr/bin,'"`pwd`", src/os/os_test.go
@@ -50,16 +58,14 @@ stdenv.mkDerivation rec {
     sed -i '/TestHostname/areturn' src/os/os_test.go
     # ParseInLocation fails the test
     sed -i '/TestParseInSydney/areturn' src/time/format_test.go
+    # Remove the api check as it never worked
+    sed -i '/src\/cmd\/api\/run.go/ireturn nil' src/cmd/dist/test.go
+    # Remove the coverage test as we have removed this utility
+    sed -i '/TestCoverageWithCgo/areturn' src/cmd/go/go_test.go
 
     sed -i 's,/etc/protocols,${iana_etc}/etc/protocols,' src/net/lookup_unix.go
   '' + lib.optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
-
-    # Find the loader dynamically
-    LOADER="$(find ${libc}/lib -name ld-linux\* | head -n 1)"
-
-    # Replace references to the loader
-    find src/cmd -name asm.c -exec sed -i "s,/lib/ld-linux.*\.so\.[0-9],$LOADER," {} \;
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's,"/etc","'"$TMPDIR"'",' src/os/os_test.go
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
@@ -70,8 +76,8 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    ./cacert-1.4.patch
-    ./remove-tools-1.4.patch
+    ./cacert-1.5.patch
+    ./remove-tools-1.5.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
@@ -83,6 +89,7 @@ stdenv.mkDerivation rec {
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   # The go build actually checks for CC=*/clang and does something different, so we don't
   # just want the generic `cc` here.
@@ -94,13 +101,14 @@ stdenv.mkDerivation rec {
     export GOBIN="$out/bin"
     export PATH="$GOBIN:$PATH"
     cd ./src
+    echo Building
     ./all.bash
   '';
 
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    branch = "1.4";
+    branch = "1.5";
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;

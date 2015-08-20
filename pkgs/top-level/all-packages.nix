@@ -1346,6 +1346,8 @@ let
 
   drive = callPackage ../applications/networking/drive { };
 
+  driftnet = callPackage ../tools/networking/driftnet {};
+
   dropbear = callPackage ../tools/networking/dropbear { };
 
   dtach = callPackage ../tools/misc/dtach { };
@@ -2559,6 +2561,8 @@ let
   p2pvc = callPackage ../applications/video/p2pvc {};
 
   p7zip = callPackage ../tools/archivers/p7zip { };
+
+  packagekit = callPackage ../tools/package-management/packagekit { };
 
   pal = callPackage ../tools/misc/pal { };
 
@@ -4050,7 +4054,11 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  go = go_1_4;
+  go_1_5 = callPackage ../development/compilers/go/1.5.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  go = go_1_5;
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
 
@@ -8633,7 +8641,17 @@ let
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   });
 
-  goPackages = go14Packages;
+  go15Packages = recurseIntoAttrs (callPackage ./go-packages.nix {
+    go = go_1_5;
+    buildGoPackage = import ../development/go-modules/generic {
+      go = go_1_5;
+      govers = go15Packages.govers;
+      inherit lib;
+    };
+    overrides = (config.goPackageOverrides or (p: {})) pkgs;
+  });
+
+  goPackages = go15Packages;
 
   ### DEVELOPMENT / LISP MODULES
 
@@ -11042,9 +11060,7 @@ let
   dmtx-utils = callPackage (import ../tools/graphics/dmtx-utils) {
   };
 
-  docker = callPackage ../applications/virtualization/docker {
-    go = go_1_4;
-  };
+  docker = callPackage ../applications/virtualization/docker { };
 
   doodle = callPackage ../applications/search/doodle { };
 
@@ -12449,7 +12465,7 @@ let
     inherit (xorg) libXpm;
   };
 
-  pond = callPackage ../applications/networking/pond { goPackages = go14Packages; };
+  pond = callPackage ../applications/networking/pond { };
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
@@ -14942,6 +14958,8 @@ let
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
   sails = callPackage ../misc/sails { };
+
+  canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
   samsungUnifiedLinuxDriver = import ../misc/cups/drivers/samsung {
     inherit fetchurl stdenv;
