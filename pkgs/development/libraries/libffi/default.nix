@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
 
   # Install headers and libs in the right places.
   postInstall = ''
-    mv "$out"/lib64/* "$out/lib"
-    rmdir "$out/lib64"
-    ln -s lib "$out/lib64"
-
     mkdir -p "$dev/"
     mv "$out/lib/${name}/include" "$dev/include"
     rmdir "$out/lib/${name}"
