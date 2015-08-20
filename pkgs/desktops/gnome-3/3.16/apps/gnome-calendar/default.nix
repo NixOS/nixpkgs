@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , intltool, evolution_data_server, sqlite, libxml2, libsoup
-, glib }:
+, glib, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   name = "gnome-calendar-${gnome3.version}.2";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool evolution_data_server
-    sqlite libxml2 libsoup glib
+    sqlite libxml2 libsoup glib hicolor_icon_theme
   ];
 
   meta = with stdenv.lib; {
