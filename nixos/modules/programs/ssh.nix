@@ -115,9 +115,6 @@ in
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
-        # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
-        PubkeyAcceptedKeyTypes +ssh-dss
-
         ${cfg.extraConfig}
       '';
 
