@@ -95,7 +95,7 @@ in
 
       filterConfig = mkOption {
         type = types.lines;
-        default = ''noop {}'';
+        default = "";
         description = "logstash filter configuration.";
         example = ''
           if [type] == "syslog" {
