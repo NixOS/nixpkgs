@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     # Fix a broken sed expression used for detecting the minor
     # version of guile we are using
     sed -i "s,sed '.*-I.*',sed 's/\\\(^\\\| \\\)-I/\\\1/g',g" configure
+
+    substituteInPlace pkg/libopts/mklibsrc.sh --replace /tmp $TMPDIR
   '';
 
   #doCheck = true; # 2 tests fail because of missing /dev/tty
