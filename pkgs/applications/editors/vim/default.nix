@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "vim-${version}";
-  version = "7.4.826";
+  version = "7.4.827";
 
   src = fetchFromGitHub {
     owner = "vim";
     repo = "vim";
-    rev = "v${stdenv.lib.replaceChars ["."] ["-"] version}";
-    sha256 = "147lkcjdd0jbc7y2hflfzwnyjhdgi1971pmkizihybxmmj1a4g8y";
+    rev = "v${version}";
+    sha256 = "1m34s2hsc5lcish6gmvn2iwaz0k7jc3kg9q4nf30fj9inl7gaybs";
   };
 
   # this makes maintainers very sad
