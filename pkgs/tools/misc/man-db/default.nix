@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, libpipeline, db, groff }:
+{ stdenv, fetchurl, pkgconfig, libpipeline, db
+, groff, less, gzip, bzip2, xz}:
  
 stdenv.mkDerivation rec {
   name = "man-db-2.7.2";
@@ -8,24 +9,21 @@ stdenv.mkDerivation rec {
     sha256 = "14p4sr57qc02gfnpybcnv33fb7gr266iqsyq7z4brs6wa6plwrr2";
   };
   
-  buildInputs = [ pkgconfig libpipeline db groff ];
+  buildInputs = [ pkgconfig libpipeline db groff
+                less gzip bzip2 xz ];
   
   configureFlags = [
     "--disable-setuid"
-    "--sysconfdir=/etc"
+    "--sysconfdir=\${out}/etc"
     "--localstatedir=/var"
     "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
-  ];
+    "--with-pager=${less}/bin/less"
+    "--with-gzip=${gzip}/bin/gzip"
+    "--with-bzip2=${bzip2}/bin/bzip2"
+    "--with-xz=${xz}/bin/xz"
+  ] ++ map (exe: "--with-" + exe + "=${groff}/bin/" + exe) [ "nroff" "eqn" "neqn" "tbl" "refer" "pic"];
 
-  installFlags = [ "DESTDIR=\${out}" ];
-
-  postInstall = ''
-    mv $out/$out/* $out
-    DIR=$out/$out
-    while rmdir $DIR 2>/dev/null; do
-      DIR="$(dirname "$DIR")"
-    done
-  '';
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = "http://man-db.nongnu.org";
