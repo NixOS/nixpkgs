@@ -9421,6 +9421,10 @@ let
       click configobj prompt_toolkit psycopg2 pygments sqlparse
     ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
       inherit version;
       description = "Command-line interface for PostgreSQL";
@@ -9751,10 +9755,10 @@ let
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.45";
+    version = "0.46";
 
     src = pkgs.fetchurl {
-      sha256 = "19lp15rc0rq4jqaacg2a38cdgfy2avhf5v97yanasx4n2swx4gsm";
+      sha256 = "1yq9nis1b2rgpndi2rqh4divf6j22jjva83r5z8jf7iffywmr8hs";
       url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
     };
 
