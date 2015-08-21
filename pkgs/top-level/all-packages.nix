@@ -4862,8 +4862,6 @@ let
 
   chibi = callPackage ../development/interpreters/chibi { };
 
-  ceptre = callPackage ../development/interpreters/ceptre { };
-
   clisp = callPackage ../development/interpreters/clisp { };
 
   # compatibility issues in 2.47 - at list 2.44.1 is known good
