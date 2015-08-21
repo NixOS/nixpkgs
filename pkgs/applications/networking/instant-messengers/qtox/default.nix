@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pkgconfig, libtoxcore-dev, qt5, openal, opencv,
   libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
-  pango, atk, qrencode, ffmpeg, filter-audio }:
+  pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "qtox-dev-20150624";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     [
       libtoxcore-dev openal opencv libsodium filter-audio
       qt5.base qt5.tools libXScrnSaver glib gtk2 cairo
-      pango atk qrencode ffmpeg qt5.translations
+      pango atk qrencode ffmpeg qt5.translations makeWrapper
     ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp qtox $out/bin
+    wrapProgram $out/bin/qtox \
+      --prefix QT_PLUGIN_PATH : ${qt5.svg}/lib/qt5/plugins
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "QT Tox client";
@@ -46,4 +50,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-
