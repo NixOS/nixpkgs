@@ -5635,9 +5635,7 @@ let
 
   libtool_2 = callPackage ../development/tools/misc/libtool/libtool2.nix { };
 
-  lsof = if stdenv.isDarwin
-    then darwin.lsof
-    else callPackage ../development/tools/misc/lsof { };
+  lsof = callPackage ../development/tools/misc/lsof { };
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
