@@ -4054,7 +4054,9 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  go = go_1_5;
+  go = if stdenv.isDarwin
+    then go_1_4 # missing DWARF files during go-1.5 build
+    else go_1_5;
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
 
