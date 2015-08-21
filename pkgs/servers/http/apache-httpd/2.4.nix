@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [perl] ++
+    optional sslSupport openssl ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
     optional libxml2Support libxml2;
 
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     --enable-imagemap
     --enable-cgi
     ${optionalString proxySupport "--enable-proxy"}
-    ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
+    ${optionalString sslSupport "--enable-ssl"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
     ${optionalString libxml2Support "--with-libxml2=${libxml2}/include/libxml2"}
   '';
