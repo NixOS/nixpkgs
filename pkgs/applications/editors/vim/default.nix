@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "vim";
     repo = "vim";
-    rev = "v${stdenv.lib.replaceChars ["."] ["-"] version}";
-    sha256 = "147lkcjdd0jbc7y2hflfzwnyjhdgi1971pmkizihybxmmj1a4g8y";
+    rev = "v${version}";
+    sha256 = "04hp2gqbbj9h872bgj1g9xcaj5qlg9q45v6by2ch9n105dng9aj3";
   };
 
   # this makes maintainers very sad
