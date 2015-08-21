@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.networking.ubuntu-fan;
+  cfg = config.networking.fan;
   modprobe = "${config.system.sbin.modprobe}/sbin/modprobe";
 
 in
@@ -15,9 +15,9 @@ in
 
   options = {
 
-    networking.ubuntu-fan = {
+    networking.fan = {
 
-      enable = mkEnableOption "Ubuntu FAN Networking";
+      enable = mkEnableOption "FAN Networking";
 
     };
 
@@ -30,8 +30,8 @@ in
 
     environment.systemPackages = [ pkgs.fanctl ];
 
-    systemd.services.ubuntu-fan = {
-      description = "Ubuntu FAN Networking";
+    systemd.services.fan = {
+      description = "FAN Networking";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       before = [ "docker.service" ];
@@ -40,12 +40,12 @@ in
         if [ ! -f /proc/sys/net/fan/version ]; then
           ${modprobe} ipip
           if [ ! -f /proc/sys/net/fan/version ]; then
-            echo "The Ubuntu Fan Networking patches have not been applied to this kernel!" 1>&2
+            echo "The Fan Networking patches have not been applied to this kernel!" 1>&2
             exit 1
           fi
         fi
 
-        mkdir -p /var/lib/ubuntu-fan
+        mkdir -p /var/lib/fan-networking
       '';
       serviceConfig = {
         Type = "oneshot";
