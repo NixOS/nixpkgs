@@ -495,7 +495,7 @@ in
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11}/lib" "${xorg.libXext}/lib" ]
+              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 
