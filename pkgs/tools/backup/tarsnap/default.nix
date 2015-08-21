@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "tarsnap-${version}";
-  version = "1.0.35";
+  version = "1.0.36.1";
 
   src = fetchurl {
-    url = "https://www.tarsnap.com/download/tarsnap-autoconf-1.0.35.tgz";
-    sha256 = "16lc14rwrq84fz95j1g10vv0qki0qw73lzighidj5g23pib6g7vc";
+    url = "https://www.tarsnap.com/download/tarsnap-autoconf-${version}.tgz";
+    sha256 = "1446l8g39bi5xxk4x1ijc1qjrj824729887gcffig0zrw80rx452";
   };
 
   postInstall = ''
