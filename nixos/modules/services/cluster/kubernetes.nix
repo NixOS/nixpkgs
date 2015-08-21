@@ -412,7 +412,7 @@ in {
             --service-cluster-ip-range=${cfg.apiserver.portalNet} \
             ${optionalString (cfg.apiserver.runtimeConfig!="")
               "--runtime-config=${cfg.apiserver.runtimeConfig}"} \
-            --admission_control=${cfg.apiserver.admissionControl} \
+            --admission_control=${concatStringsSep "," cfg.apiserver.admissionControl} \
             --logtostderr=true \
             ${optionalString cfg.verbose "--v=6 --log-flush-frequency=1s"} \
             ${cfg.apiserver.extraOpts}

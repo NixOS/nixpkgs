@@ -1521,7 +1521,7 @@ let
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   lprof = callPackage ../tools/graphics/lprof { };
-  
+
   fatresize = callPackage ../tools/filesystems/fatresize {};
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
@@ -11901,7 +11901,9 @@ let
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes {
+    go = go_1_4;
+  };
 
   lame = callPackage ../development/libraries/lame { };
 

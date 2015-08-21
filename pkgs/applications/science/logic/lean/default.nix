@@ -2,13 +2,14 @@
 , gperftools, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "lean-20150328";
+  name = "lean-${version}";
+  version = "20150821";
 
   src = fetchFromGitHub {
     owner  = "leanprover";
     repo   = "lean";
-    rev    = "1b15036dba469020d37f7d6b77b88974d8a36cb1";
-    sha256 = "0w38g83gp7d3ybfiz9jpl2jz3ljad70bxmar0dnnv45wx42clg96";
+    rev    = "453bd2341dac51e50d9bff07d5ff6c9c3fb3ba0b";
+    sha256 = "1hmga5my123sra873iyqc7drj4skny4hnhsasaxjkmmdhmj1zpka";
   };
 
   buildInputs = [ gmp mpfr luajit boost cmake python gperftools ninja ];

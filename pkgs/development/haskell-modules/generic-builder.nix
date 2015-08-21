@@ -28,7 +28,7 @@
 , jailbreak ? false
 , license
 , maintainers ? []
-, doHaddock ? true
+, doHaddock ? !stdenv.isDarwin || stdenv.lib.versionAtLeast ghc.version "7.8"
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? []
 , platforms ? ghc.meta.platforms

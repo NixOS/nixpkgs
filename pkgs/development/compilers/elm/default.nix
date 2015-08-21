@@ -45,14 +45,14 @@ let
               buildTools = drv.buildTools or [] ++ [ self.elm-make ];
               patches = [ (fetchpatch {
                 url = "https://github.com/elm-lang/elm-reactor/commit/ca4d91d3fc7c6f72aa802d79fd1563ab5f3c4f2c.patch";
-                sha256 = "1msq7rvjid27m11lwcz9r1vyczlk7bfknyywqln300c8bgqyl45j";
+                sha256 = "0cjcv5rvrq7v1j8n8w87ljgza522cm32cy4n4rq5ysjq3qnaxwcq";
               }) ];
               preConfigure = makeElmStuff (import ./packages/elm-reactor-elm.nix);
             });
 
             elm-package = hlib.appendPatch elmPkgs'.elm-package (fetchpatch {
               url = "https://github.com/elm-lang/elm-package/commit/af517f2ffe15f8ec1d8c38f01ce188bbdefea47a.patch";
-              sha256 = "0yq5vawmp9qq5w6qfy12r32ahpvccra749pnhg0zdykrj369m8a8";
+              sha256 = "1l66i4qssp0mcq8yypcn1ps3n2bskyfiqf0qr8gan6wz3znafpy9";
             });
 
             elm-repl = hlib.overrideCabal elmPkgs'.elm-repl (drv: {
