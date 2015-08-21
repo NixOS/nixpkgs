@@ -185,6 +185,11 @@ in
     outputs = [ "dev" "out" "man" ];
   };
 
+  libXmu = attrs: attrs // {
+    outputs = [ "dev" "out" "doc" ];
+    buildFlags = ''BITMAP_DEFINES=-DBITMAPDIR=\"/no-such-path\"'';
+  };
+
   libXrandr = attrs: attrs // {
     outputs = [ "dev" "out" "man" ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
