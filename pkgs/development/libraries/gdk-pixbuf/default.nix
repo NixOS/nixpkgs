@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
     ;
 
-  # Seems to randomly fail sometimes with a bus error. FIXME
-  doCheck = !stdenv.isDarwin;
+  # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
+  doCheck = false;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 
