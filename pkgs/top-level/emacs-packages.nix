@@ -33,7 +33,7 @@
 
 { overrides
 
-, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub
+, lib, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
 , emacs
 , trivialBuild
@@ -498,11 +498,11 @@ let self = _self // overrides;
 
   evil = melpaBuild {
     pname   = "evil";
-    version = "20141020";
-    src = fetchgit {
-      url = "https://github.com/emacsmirror/evil.git";
-      rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
-      sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
+    version = "1.2.3";
+    src = fetchhg {
+      url = "https://bitbucket.org/lyro/evil";
+      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
+      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
     };
     packageRequires = [ goto-chg undo-tree ];
     meta = {
@@ -740,10 +740,10 @@ let self = _self // overrides;
   goto-chg = melpaBuild rec {
     pname   = "goto-chg";
     version = "1.6";
-    src = fetchgit {
-      url = "https://gitorious.org/evil/evil.git";
-      rev = "999ec15587f85100311c031aa8efb5d50c35afe4";
-      sha256 = "5f67643d19a31172e68f2f195959d33bcd26c2786eb71e67eb27eb52f5bf387a";
+    src = fetchhg {
+      url = "https://bitbucket.org/lyro/evil";
+      rev = "e5588e50c0e40a66c099868ea825755e348311fb";
+      sha256 = "0185vrzfdz6iwhmc22rjy0n7ppfppp2ddc8xl0vvbda79q6w3bp8";
     };
     files = [ "lib/goto-chg.el" ];
     meta = { license = gpl3Plus; };

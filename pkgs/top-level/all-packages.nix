@@ -11296,7 +11296,7 @@ let
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
 
-    inherit lib stdenv fetchurl fetchgit fetchFromGitHub emacs;
+    inherit lib stdenv fetchurl fetchgit fetchFromGitHub fetchhg emacs;
 
     trivialBuild = import ../build-support/emacs/trivial.nix {
       inherit lib stdenv emacs texinfo;
