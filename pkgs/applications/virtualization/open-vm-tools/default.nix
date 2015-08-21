@@ -26,6 +26,8 @@ in stdenv.mkDerivation {
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
   '';
 
+  patches = [ ./recognize_nixos.patch ];
+
   preConfigure = "autoreconf";
   configureFlags = "--without-kernel-modules --without-xmlsecurity";
 
