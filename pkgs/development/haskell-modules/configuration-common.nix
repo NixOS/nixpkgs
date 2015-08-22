@@ -680,6 +680,10 @@ self: super: {
     '';
   });
 
+  # Tests attempt to use NPM to install from the network into
+  # /homeless-shelter. Disabled.
+  purescript = dontCheck super.purescript;
+
   # Broken by GLUT update.
   Monadius = markBroken super.Monadius;
 
