@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.yworks.com/products/yed/demo/${name}.zip";
-    sha256 = "1i2fncp7q0xin42sf55zc79jzrkzbp25yw8rcjkgsy6hgnhl73nh";
+    sha256 = "0i39n8h97v688r0nydcm0wj1ins2v83xjgykr7czpnmp600cq9cy";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
