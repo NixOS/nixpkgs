@@ -92,6 +92,17 @@ stdenv.mkDerivation rec {
       substituteInPlace dist/PathTools/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
     '';
 
+  postInstall =
+    ''
+      # Remove dependency between "out" and "man" outputs.
+      rm $out/lib/perl5/*/*/.packlist
+
+      # Remove dependencies on glibc.dev and coreutils.
+      substituteInPlace $out/lib/perl5/*/*/Config_heavy.pl \
+        --replace ${stdenv.glibc.dev or "/blabla"} /no-such-path \
+        --replace $man /no-such-path
+    ''; # */
+
   setupHook = ./setup-hook.sh;
 
   passthru.libPrefix = "lib/perl5/site_perl";

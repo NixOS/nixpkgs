@@ -101,6 +101,17 @@ stdenv.mkDerivation rec {
     unset LD_LIBRARY_PATH
   '';
 
+  postInstall =
+    ''
+      # Remove dependency between "out" and "man" outputs.
+      rm $out/lib/perl5/*/*/.packlist
+
+      # Remove dependencies on glibc.dev and coreutils.
+      substituteInPlace $out/lib/perl5/*/*/Config_heavy.pl \
+        --replace ${stdenv.glibc.dev or "/blabla"} /no-such-path \
+        --replace $man /no-such-path
+    ''; # */
+
   meta = {
     homepage = https://www.perl.org/;
     description = "The standard implementation of the Perl 5 programmming language";
