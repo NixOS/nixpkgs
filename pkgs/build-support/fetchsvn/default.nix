@@ -8,7 +8,7 @@ let
       snd = l: head (tail l);
       trd = l: head (tail (tail l));
       path_ = reverseList (splitString "/" url);
-      path = if head path_ == "" then tail path_ else path_;
+      path = [ (removeSuffix "/" (head path_)) ] ++ (tail path_);
     in
       # ../repo/trunk -> repo
       if fst path == "trunk" then snd path
