@@ -84,6 +84,7 @@ stdenv.mkDerivation {
     sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
     export configureFlags+="-plugindir $out/lib/qt5/plugins -importdir $out/lib/qt5/imports -qmldir $out/lib/qt5/qml"
+    export configureFlags+=" -docdir $out/share/doc/qt5"
   '';
 
   prefixKey = "-prefix ";

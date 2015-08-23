@@ -5075,8 +5075,9 @@ let
       pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses
     ];
 
+    nativeBuildInputs = [ pkgs.intltool ];
+
     postInstall = ''
-       cp -R deluge/data/share $out/share
        cp -R deluge/data/pixmaps $out/share/
        cp -R deluge/data/icons $out/share/
     '';

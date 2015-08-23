@@ -7973,12 +7973,12 @@ let
   qt5SDK = qtcreator.override {
     sdkBuild = true;
     qtLib = qt5Full;
-    withDocumentation = false; # fails to setup some paths
+    withDocumentation = true;
   };
 
   qtcreator = callPackage ../development/qtcreator {
     qtLib = qt5Full; # 3.4 only supports qt5; TODO: use modularized qt>=5.4
-    withDocumentation = false; # FIXME: fails to setup some paths
+    withDocumentation = true;
   };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
@@ -10139,6 +10139,8 @@ let
 
   sassc = callPackage ../development/tools/sassc { };
 
+  scanmem = callPackage ../tools/misc/scanmem { };
+
   schedtool = callPackage ../os-specific/linux/schedtool { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
@@ -11292,7 +11294,7 @@ let
   emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
     overrides = (config.emacsPackageOverrides or (p: {})) pkgs;
 
-    inherit lib stdenv fetchurl fetchgit fetchFromGitHub emacs;
+    inherit lib stdenv fetchurl fetchgit fetchFromGitHub fetchhg emacs;
 
     trivialBuild = import ../build-support/emacs/trivial.nix {
       inherit lib stdenv emacs texinfo;

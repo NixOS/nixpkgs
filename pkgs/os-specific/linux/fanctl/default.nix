@@ -1,6 +1,7 @@
 { stdenv, lib, fetchbzr, makeWrapper, bridge-utils, iproute, dnsmasq, iptables, kmod, utillinux }:
 
-stdenv.mkDerivation rec {
+let stateDir = "/var/lib/fan-networking";
+in stdenv.mkDerivation rec {
   name = "fanctl-${version}";
 
   version = "0.3.0";
@@ -17,16 +18,16 @@ stdenv.mkDerivation rec {
   # if that files does not exist, dnsmasq subsequently fails,
   # so we'll use /dev/null.
   #
-  # Also, make sure /var/lib/ubuntu-fan exists before starting dnsmasq.
+  # Also, make sure the state directory before starting dnsmasq.
   buildPhase = ''
     substituteInPlace fanctl \
       --replace '--conf-file= ' \
                 '--conf-file=/dev/null ' \
       --replace '/var/lib/misc' \
-                '/var/lib/ubuntu-fan'
+                '${stateDir}'
 
     sed -i '/dnsmasq -u/i \
-    mkdir -p /var/lib/ubuntu-fan' fanctl
+    mkdir -p ${stateDir}' fanctl
   '';
 
   installPhase = ''

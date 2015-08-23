@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     sha256 = "0klwr0y3a72xpz6bwv4afbk3vvx5r1av5idhz3mx4p9ssnscb1mi";
-    url = "https://www.freedesktop.org/software/PackageKit/releases/PackageKit-${version}.tar.xz";
+    url = "http://www.freedesktop.org/software/PackageKit/releases/PackageKit-${version}.tar.xz";
   };
 
   buildInputs = [ glib polkit python ];
