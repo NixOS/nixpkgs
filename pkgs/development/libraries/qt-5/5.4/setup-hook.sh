@@ -59,7 +59,8 @@ else
     qtOut=$out
 fi
 
-mkdir -p "$qtOut/bin" "$qtOut/mkspecs" "$qtOut/include" "$qtOut/nix-support" "$qtOut/lib"
+mkdir -p "$qtOut/bin" "$qtOut/mkspecs" "$qtOut/include" \
+         "$qtOut/nix-support" "$qtOut/lib" "$qtOut/share"
 
 cp "@out@/bin/qmake" "$qtOut/bin"
 cat >"$qtOut/bin/qt.conf" <<EOF
