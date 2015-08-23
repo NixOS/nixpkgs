@@ -25,6 +25,18 @@ addQtModule() {
             if [[ -n $qtSubmodule ]]; then
                 find "$1/lib" -printf 'lib/%P\n' >> "$qtOut/nix-support/qt-inputs"
             fi
+
+            if [[ -d "$1/lib/qt5/plugins" ]]; then
+                QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}$1/lib/qt5/plugins";
+            fi
+
+            if [[ -d "$1/lib/qt5/imports" ]]; then
+                QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}$1/lib/qt5/imports";
+            fi
+
+            if [[ -d "$1/lib/qt5/qml" ]]; then
+                QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}$1/lib/qt5/qml";
+            fi
         fi
     fi
 }
