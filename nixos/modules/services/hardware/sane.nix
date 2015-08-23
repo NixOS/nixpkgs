@@ -36,8 +36,8 @@ in
 
     hardware.sane.configDir = mkOption {
       type = types.string;
-      default = "${saneConfig}/etc/sane.d";
-      description = "The value of SANE_CONFIG_DIR.";
+      default = "";
+      description = "Override the value of SANE_CONFIG_DIR.";
     };
 
   };
@@ -45,17 +45,21 @@ in
 
   ###### implementation
 
-  config = mkIf config.hardware.sane.enable {
+  config = mkIf config.hardware.sane.enable (let
+    effectiveConfigDir = if config.hardware.sane.configDir != "" then
+      config.hardware.sane.configDir else
+      "${saneConfig}/etc/sane.d";
+  in {
 
     environment.systemPackages = backends;
     environment.sessionVariables = {
-      SANE_CONFIG_DIR = config.hardware.sane.configDir;
+      SANE_CONFIG_DIR = effectiveConfigDir;
       LD_LIBRARY_PATH = [ "${saneConfig}/lib/sane" ];
     };
     services.udev.packages = backends;
 
     users.extraGroups."scanner".gid = config.ids.gids.scanner;
 
-  };
+  });
 
 }
