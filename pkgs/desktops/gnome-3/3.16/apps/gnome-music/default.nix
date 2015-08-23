@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   hicolor_icon_theme gnome3.adwaita-icon-theme wrapGAppsHook
-                  gnome3.gsettings_desktop_schemas makeWrapper tracker ];
+                  gnome3.gsettings_desktop_schemas makeWrapper tracker gnome3.tracker ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 
