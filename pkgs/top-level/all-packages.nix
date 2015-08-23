@@ -13779,16 +13779,12 @@ let
 
   stardust = callPackage ../games/stardust {};
 
-  steam-original = lowPrio (callPackage ../games/steam { });
-
-  steam = callPackage ../games/steam/chrootenv.nix {
+  steamPackages = callPackage ../games/steam { };
+  steam = steamPackages.steam-chrootenv.override {
     # DEPRECATED
     withJava = config.steam.java or false;
     withPrimus = config.steam.primus or false;
-    withRuntime = config.steam.withRuntime or true;
   };
-
-  steam-runtime = callPackage ../games/steam/runtime.nix { };
 
   stuntrally = callPackage ../games/stuntrally { };
 
