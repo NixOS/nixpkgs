@@ -2882,6 +2882,8 @@ let
 
   rockbox_utility = callPackage ../tools/misc/rockbox-utility { };
 
+  rosegarden = callPackage ../applications/audio/rosegarden { };
+
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
     inherit ppp;
   };
