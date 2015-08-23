@@ -2079,7 +2079,7 @@ let
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
-  npm2nix = nodePackages_0_10.npm2nix;
+  npm2nix = nodePackages.npm2nix;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
