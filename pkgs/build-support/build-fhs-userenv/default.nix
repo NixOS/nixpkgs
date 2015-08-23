@@ -10,6 +10,9 @@ let
   '';
 
   init = writeText "init" ''
+           # Make /tmp directory
+           mkdir -m 1777 /tmp
+
            # Expose sockets in /tmp
            for i in /host-tmp/.*-unix; do
              ln -s "$i" "/tmp/$(basename "$i")"
