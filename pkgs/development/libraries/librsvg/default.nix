@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   # Merge gdkpixbuf and librsvg loaders
   postInstall = ''
     mv $GDK_PIXBUF/loaders.cache $GDK_PIXBUF/loaders.cache.tmp
-    cat ${gdk_pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
+    cat ${gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
     rm $GDK_PIXBUF/loaders.cache.tmp
   '';
 }
