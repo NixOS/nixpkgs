@@ -1,5 +1,5 @@
 { stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, openssl
+, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng }:
 
 composableDerivation.composableDerivation {} (fixed: rec {
@@ -11,7 +11,8 @@ composableDerivation.composableDerivation {} (fixed: rec {
     sha256 = "53761563ff53c5bf27bff7c4d6cab8bb1634baccefda05348e0f3b7acaf4c9e6";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libpng python pythonPackages.numpy proj openssl ];
+  buildInputs = [ unzip libjpeg libtiff libpng proj openssl ]
+  ++ (with pythonPackages; [ python numpy wrapPython ]);
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
@@ -44,9 +45,13 @@ composableDerivation.composableDerivation {} (fixed: rec {
   #   TEST FAILED: /nix/store/xkrmb8xnvqxzjwsdmasqmsdh1a5y2y99-gdal-1.11.2/lib/python2.7/site-packages/ does NOT support .pth files
   #   error: bad install directory or PYTHONPATH
   preBuild = ''
-    pythonInstallDir=$out/lib/${python.libPrefix}/site-packages
+    pythonInstallDir=$out/lib/${pythonPackages.python.libPrefix}/site-packages
     mkdir -p $pythonInstallDir
     export PYTHONPATH=''${PYTHONPATH:+''${PYTHONPATH}:}$pythonInstallDir
+  '';
+
+  postInstall = ''
+    wrapPythonPrograms
   '';
 
   meta = {
