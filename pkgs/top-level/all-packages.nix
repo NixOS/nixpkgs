@@ -3335,6 +3335,8 @@ let
 
   welkin = callPackage ../tools/graphics/welkin {};
 
+  wsmancli = callPackage ../tools/system/wsmancli {};
+
   wolfebin = callPackage ../tools/networking/wolfebin {
     python = python2;
   };
@@ -7802,6 +7804,8 @@ let
     };
   };
 
+  openwsman = callPackage ../development/libraries/openwsman {};
+
   ortp = callPackage ../development/libraries/ortp { };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
@@ -8101,6 +8105,8 @@ let
   SDL2_gfx = callPackage ../development/libraries/SDL2_gfx { };
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
+
+  sblim-sfcc = callPackage ../development/libraries/sblim-sfcc {};
 
   serd = callPackage ../development/libraries/serd {};
 
