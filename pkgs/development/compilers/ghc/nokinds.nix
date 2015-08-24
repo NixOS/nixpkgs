@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The dependently-typed 'nokinds' branch of the Glasgow Haskell Compiler by Richard Eisenberg";
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ deepfire ];
     inherit (ghc.meta) license platforms;
   };
 
