@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];
+    priority = 6; # give precedence to kernel firmware
   };
 
   passthru = { inherit version; };

@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     homepage = http://www.gnu.org/software/cpio/;
     description = "A program to create or extract from cpio archives";
     platforms = stdenv.lib.platforms.all;
+    priority = 6; # resolves collision with gnutar's "libexec/rmt"
   };
 }
