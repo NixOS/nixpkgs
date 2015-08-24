@@ -7968,7 +7968,7 @@ let
   });
 
   qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt5Full; # 3.4 only supports qt5; TODO: use modularized qt>=5.4
+    qtLib = qt54;
     withDocumentation = true;
   };
 
