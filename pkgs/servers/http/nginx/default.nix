@@ -8,6 +8,7 @@
 , ngx_lua ? false
 , set_misc ? false
 , fluent ? false
+, pagespeed ? false
 , extraModules ? []
 }:
 
@@ -83,12 +84,25 @@ let
     sha256 = "1cqcasp4lc6yq5pihfcdw4vp4wicngvdc3nqg3bg52r63c1qrz76";
   };
 
+  ngx-pagespeed =
+   fetchFromGitHub {
+    owner = "pagespeed";
+    repo = "ngx_pagespeed";
+    rev = "v1.9.32.6-beta";
+    sha256 = "08xvdmfpj7rhfm8zmvi5plysjx5qhmn2bw4cfnsshalwm7lixxm8";
+  };
+
+  pagespeedLib = fetchurl {
+    url = "https://dl.google.com/dl/page-speed/psol/1.9.32.6.tar.gz";
+    sha256 = "04lrxx843fqaxx2xxpxi9a0b3vcgybnq09450x0zz983kwd5la5j";
+  };
 
 in
 
 stdenv.mkDerivation rec {
   name = "nginx-${version}";
-  src = mainSrc;
+  srcs = [mainSrc] ++ optional pagespeed pagespeedLib;
+  sourceRoot = "nginx-${version}";
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip
@@ -132,17 +146,21 @@ stdenv.mkDerivation rec {
     ++ optional echo "--add-module=${echo-ext}"
     ++ optional ngx_lua "--add-module=${develkit-ext} --add-module=${lua-ext}"
     ++ optional set_misc "--add-module=${set-misc-ext}"
-    ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd)) 
+    ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd))
         [ "--with-file-aio" "--with-aio_module" ]
     ++ optional fluent "--add-module=${fluentd}"
+    ++ optional pagespeed "--add-module=${ngx-pagespeed}"
     ++ (map (m: "--add-module=${m}") extraModules);
-
 
   additionalFlags = optionalString stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2 $additionalFlags"
-  '';
+
+  '' + (optionalString pagespeed ''
+          export MOD_PAGESPEED_DIR="$(pwd)/../psol/include"
+          export PSOL_BINARY="$(pwd)/../psol/lib/Release/linux/${if stdenv.system == "x86_64-linux" then "x64" else "ia32"}/pagespeed_automatic.a"
+        '');
 
   meta = {
     description = "A reverse proxy and lightweight webserver";
