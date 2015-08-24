@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ # These are all changes between upstream and
-      # https://github.com/edolstra/systemd/tree/nixos-v217.
+      # https://github.com/NixOS/systemd/tree/nixos-v217.
       ./fixes.patch
     ];
 
