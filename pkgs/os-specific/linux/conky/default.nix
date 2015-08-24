@@ -86,6 +86,8 @@ stdenv.mkDerivation rec {
     ++ optional  weatherXoapSupport libxml2
     ;
 
+  patches = [ ./scroll-utf8-aware.patch ];
+
   configureFlags =
     let flag = state: flags: if state then map (x: "--enable-${x}")  flags
                                       else map (x: "--disable-${x}") flags;

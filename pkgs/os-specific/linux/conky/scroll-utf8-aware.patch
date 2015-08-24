@@ -1,0 +1,90 @@
+--- a/src/scroll.c
++++ b/src/scroll.c
+@@ -34,12 +34,33 @@
+ 
+ struct scroll_data {
+ 	char *text;
++	unsigned int show_orig;
+ 	unsigned int show;
+ 	unsigned int step;
+ 	unsigned int start;
+ 	long resetcolor;
+ };
+ 
++int utf8_charlen(char c) {
++	unsigned char uc = (unsigned char) c;
++	int len = 0;
++
++	if ((uc & 0x80) == 0)
++		return 1;
++
++	while ((uc & 0x80) != 0) {
++		++len;
++		uc <<= 1;
++	}
++
++	return (len > 0 && len <= 4) ? len : -1;
++}
++
++int is_utf8_char_tail(char c) {
++	unsigned char uc = (unsigned char) c;
++	return (uc & 0xc0) == 0x80;
++}
++
+ void parse_scroll_arg(struct text_object *obj, const char *arg, void *free_at_crash)
+ {
+ 	struct scroll_data *sd;
+@@ -60,15 +81,18 @@ void parse_scroll_arg(struct text_object *obj, const char *arg, void *free_at_cr
+ 		sd->step = 1;
+ 	}
+ 	sd->text = malloc(strlen(arg + n1) + sd->show + 1);
++	// sd->show value may change when there are UTF-8 chars to be shown, so
++	// save its origin value
++	sd->show_orig = sd->show;
+ 
+ 	if (strlen(arg) > sd->show) {
+ 		for(n2 = 0; (unsigned int) n2 < sd->show; n2++) {
+-		    sd->text[n2] = ' ';
++			sd->text[n2] = ' ';
+ 		}
+ 		sd->text[n2] = 0;
+ 	}
+ 	else
+-	    sd->text[0] = 0;
++		sd->text[0] = 0;
+ 
+ 	strcat(sd->text, arg + n1);
+ 	sd->start = 0;
+@@ -82,9 +106,13 @@ void print_scroll(struct text_object *obj, char *p, int p_max_size, struct infor
+ {
+ 	struct scroll_data *sd = obj->data.opaque;
+ 	unsigned int j, colorchanges = 0, frontcolorchanges = 0, visibcolorchanges = 0, strend;
++	int charlen = 0;
++	unsigned int utf8lenfix = 0;
+ 	char *pwithcolors;
+ 	char buf[max_user_text];
+ 
++	sd->show = sd->show_orig;
++
+ 	if (!sd)
+ 		return;
+ 
+@@ -109,6 +137,18 @@ void print_scroll(struct text_object *obj, char *p, int p_max_size, struct infor
+ 	while(*(buf + sd->start) == SPECIAL_CHAR) {
+ 		sd->start++;
+ 	}
++	//skip parts of UTF-8 character which messes up display
++	while(is_utf8_char_tail(*(buf + sd->start))) {
++		sd->start++;
++	}
++	//extend length to be shown for wide characters
++	j = 0;
++	while(j < sd->show + visibcolorchanges + utf8lenfix) {
++		charlen = utf8_charlen(*(buf + sd->start + j));
++		utf8lenfix += (charlen > 1 ? charlen - 1 : 0);
++		j += charlen;
++	}
++	sd->show = sd->show_orig + utf8lenfix;
+ 	//place all chars that should be visible in p, including colorchanges
+ 	for(j=0; j < sd->show + visibcolorchanges; j++) {
+ 		p[j] = *(buf + sd->start + j);
