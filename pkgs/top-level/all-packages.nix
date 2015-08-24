@@ -14846,6 +14846,8 @@ let
     inherit (pkgs.gnome) GConf;
   };
 
+  mongoc = callPackage ../development/libraries/mongoc { };
+
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
   mupen64plus1_5 = callPackage ../misc/emulators/mupen64plus/1.5.nix { };
