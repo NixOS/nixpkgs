@@ -1,11 +1,11 @@
 { stdenv, fetchurl, automake, autoconf, libtool, pkgconfig, libzen, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.75";
+  version = "0.7.76";
   name = "libmediainfo-${version}";
   src = fetchurl {
     url = "http://mediaarea.net/download/source/libmediainfo/${version}/libmediainfo_${version}.tar.xz";
-    sha256 = "1im39kd595ia6g41qvwgvszn1s10nwa3q5r2lj2g5fm4kgi0dwhr";
+    sha256 = "088hxj3x12ww8zym3g6izz1w9m6wxgdy7hc2m089cd4sv9dlccnq";
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig libzen zlib ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "./MediaInfoLib/Project/GNU/Library/";
 
   configureFlags = [ "--enable-shared" ];
-  preConfigure = "sh autogen";
+  preConfigure = "sh autogen.sh";
 
   postInstall = ''
     install -vD -m 644 libmediainfo.pc "$out/lib/pkgconfig/libmediainfo.pc"
