@@ -96,14 +96,31 @@ index e7a8d08..834ecaf 100644
      # When you run tests we clone and setup gitlab-shell
 diff --git a/lib/gitlab/app_logger.rb b/lib/gitlab/app_logger.rb
 index 8e4717b..abfe2e4 100644
---- a/lib/gitlab/app_logger.rb
-+++ b/lib/gitlab/app_logger.rb
-@@ -1,7 +1,7 @@
- module Gitlab
-   class AppLogger < Gitlab::Logger
-     def self.file_name
--      'application.log'
-+      ENV["GITLAB_APPLICATION_LOG_PATH"]
+--- a/lib/gitlab/logger.rb
++++ b/lib/gitlab/logger.rb
+@@ -8,21 +8,22 @@
+       build.info(message)
      end
  
-     def format_message(severity, timestamp, progname, msg)
+     def self.read_latest
+-      path = Rails.root.join("log", file_name)
++      path = File.join(ENV['GITLAB_APPLICATION_LOG_PATH'], file_name)
+       self.build unless File.exist?(path)
+       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
+       tail_output.split("\n")
+     end
+ 
+     def self.read_latest_for(filename)
+-      path = Rails.root.join("log", filename)
++      path = File.join(ENV['GITLAB_APPLICATION_LOG_PATH'], filename)
+       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
+       tail_output.split("\n")
+     end
+ 
+     def self.build
+-      new(Rails.root.join("log", file_name))
++      path = File.join(ENV['GITLAB_APPLICATION_LOG_PATH'], file_name)
++      new(path)
+     end
+   end
+ end
