@@ -6,7 +6,7 @@ rec {
     sha256 = "0z78xfn5iq5ncg82sd6v2qrxs8p9hs3m4agaz90p4db5dvk2w0mn";
   };
 
-  buildInputs = [texLive];
+  buildInputs = [texLive tetex];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     export HOME=$PWD
@@ -14,7 +14,7 @@ rec {
 
     mkdir -p $out/texmf-dist/tex/latex/xcolor
     mkdir -p $out/texmf-dist/dvips/xcolor
-    latex xcolor.ins 
+    latex xcolor.ins
     cp *.sty *.def $out/texmf-dist/tex/latex/xcolor
     cp *.pro $out/texmf-dist/dvips/xcolor
 

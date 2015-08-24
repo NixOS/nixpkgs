@@ -15070,7 +15070,7 @@ let
   };
 
   texLiveLatexXColor = builderDefsPackage (import ../tools/typesetting/tex/texlive/xcolor.nix) {
-    inherit texLive;
+    inherit texLive tetex;
   };
 
   texLivePGF = pgf3;
