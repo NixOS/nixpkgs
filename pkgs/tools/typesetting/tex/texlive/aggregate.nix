@@ -53,7 +53,7 @@ rec {
 
     rm -f $out/texmf*/ls-R
     for i in web2c texconfig fonts/map; do
-        mkdir -p $out/texmf-config/$i 
+        mkdir -p $out/texmf-config/$i
         cp -Lr $out/texmf*/$i/* $out/texmf-config/$i || true
     done
     chmod -R u+w $out/texmf-config

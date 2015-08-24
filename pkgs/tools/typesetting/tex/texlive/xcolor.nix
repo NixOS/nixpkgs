@@ -14,7 +14,7 @@ rec {
 
     mkdir -p $out/texmf-dist/tex/latex/xcolor
     mkdir -p $out/texmf-dist/dvips/xcolor
-    latex xcolor.ins 
+    latex xcolor.ins
     cp *.sty *.def $out/texmf-dist/tex/latex/xcolor
     cp *.pro $out/texmf-dist/dvips/xcolor
 

@@ -81,7 +81,7 @@ rec {
 
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
 
-    HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees
+    yes | HOME=. PATH=$PATH:$out/bin updmap-sys --syncwithtrees || echo $?
 
     # Prebuild the format files, as it used to be done with TeXLive 2007.
     # Luatex currently fails this way:
