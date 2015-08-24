@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, go, lxc, sqlite, iproute, bridge-utils, devicemapper,
+{ stdenv, fetchFromGitHub, makeWrapper, go_1_4, lxc, sqlite, iproute, bridge-utils, devicemapper,
 btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0r0j8aj1a7lbnc9piznp02h5n2gdw3v3n4q2ipmapi9ax0wj82lz";
   };
 
-  buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
+  buildInputs = [ makeWrapper go_1_4 sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
 
   dontStrip = true;
 
