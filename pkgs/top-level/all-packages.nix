@@ -13412,6 +13412,8 @@ let
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
+  xenserver-buildroot = callPackage ../applications/virtualization/xenserver-buildroot { };
+
   xen_4_4_1 = callPackage ../applications/virtualization/xen/4.4.1.nix { };
   xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { };
   xen_4_5_1 = callPackage ../applications/virtualization/xen/4.5.1.nix { };
