@@ -146,7 +146,7 @@ let
         };
 
         openssl = {
-          configureFlags = ["--with-openssl=${openssl}"];
+          configureFlags = ["--enable-openssl"];
           buildInputs = [openssl];
         };
 
