@@ -50,7 +50,7 @@ let
 
         ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
 
-        ln -s ${config.hardware.firmware} $out/firmware
+        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
       ''}
 
       echo "$activationScript" > $out/activate
