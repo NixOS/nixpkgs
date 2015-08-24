@@ -3,13 +3,9 @@
 stdenv.mkDerivation rec {
   name = "yEd-3.14.3";
 
-  #src = fetchurl {
-  #  url = "http://www.yworks.com/products/yed/demo/${name}.zip";
-  #  sha256 = "0xgazknbz82sgk65hxmvbycl1vd25z80a7jgwjgw7syicrgmplcl";
-  #};
   src = requireFile {
     name = "${name}.zip";
-    url = "https://www.yworks.com/en/products_download.php?file=${name}.zip";
+    url = "https://www.yworks.com/en/products/yfiles/yed/";
     sha256 = "0xgazknbz82sgk65hxmvbycl1vd25z80a7jgwjgw7syicrgmplcl";
   };
 
