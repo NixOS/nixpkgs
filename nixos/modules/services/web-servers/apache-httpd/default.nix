@@ -577,7 +577,7 @@ in
       enablePHP = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the PHP module.";
+        description = "Enable the PHP module.";
       };
 
       phpOptions = mkOption {
@@ -626,7 +626,7 @@ in
       enableCompression = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable compression of responses using mod_deflate.";
+        description = "Enable compression of responses using <literal>mod_deflate</literal>.";
       };
 
       verifyConfig = mkOption {
