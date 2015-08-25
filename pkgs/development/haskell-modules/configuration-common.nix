@@ -978,4 +978,10 @@ self: super: {
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
+  # https://github.com/thoughtpolice/hs-ed25519/issues/9
+  ed25519 = markBroken super.ed25519;
+  hackage-repo-tool = dontDistribute super.hackage-repo-tool;
+  hackage-security = dontDistribute super.hackage-security;
+  hackage-security-HTTP = dontDistribute super.hackage-security-HTTP;
+
 }
