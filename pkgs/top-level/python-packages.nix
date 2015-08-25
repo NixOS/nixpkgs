@@ -5130,12 +5130,12 @@ let
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.3";
+    version = "1.8.4";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1fjv63rdm45j5057zb7qj4ya4pjwig1jpbwcr0bk1mazq3y59dib";
+      sha256 = "1n3hb80v7wl5j2mry5pfald6i9z42a9c3m9405877iqw3v49csc2";
     };
 
     # error: invalid command 'test'
@@ -5155,12 +5155,12 @@ let
 
   django_1_7 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.7.9";
+    version = "1.7.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.7/${name}.tar.gz";
-      sha256 = "0q3q46yjjsqwp0ywrkbqwiac13rdvzrd5dchdbnzh3yjwpj9ygsg";
+      sha256 = "0xbwg6nyvwcbp2hvk0x3s5y823k5kizn0za1bl2rf6g6xcn7sddr";
     };
 
     # error: invalid command 'test'
@@ -5225,11 +5225,11 @@ let
 
   django_1_4 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4.21";
+    version = "1.4.22";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
-      sha256 = "1x5wk3yh6ydbp4sgsxl4qjmdvcazphwkmmm99lfdb04645sijkwk";
+      sha256 = "110p1mgdcf87kyr64mr2jgmyapyg27kha74yq3wjrazwfbbwkqnh";
     };
 
     # error: invalid command 'test'
