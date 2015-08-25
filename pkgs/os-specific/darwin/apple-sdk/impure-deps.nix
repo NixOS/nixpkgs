@@ -6,6 +6,7 @@ rec {
   ];
   IOKit = [
     "/System/Library/Frameworks/IOKit.framework"
+    "/usr/lib/libenergytrace.dylib"
   ];
   DiskArbitration = [
     "/System/Library/Frameworks/DiskArbitration.framework"
