@@ -1536,7 +1536,9 @@ let
   isl = callPackage ../development/libraries/isl { };
   isl_0_12 = callPackage ../development/libraries/isl/0.12.2.nix { };
 
-  isync = callPackage ../tools/networking/isync { };
+  isync = callPackage ../tools/networking/isync {
+    sasl = cyrus_sasl; 
+  };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
