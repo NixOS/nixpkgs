@@ -948,7 +948,7 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
+  mongodb-tools = goPackages.mongo-tools;
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
@@ -2152,6 +2152,7 @@ let
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
+  lxd = goPackages.lxd;
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -3717,7 +3718,7 @@ let
     libc = glibc;
     binutils = binutils;
     inherit coreutils zlib;
-    extraPackages = [ libcxx ];
+    extraPackages = [ libcxx libcxxabi ];
     nativeTools = false;
     nativeLibc = false;
   };
@@ -4055,7 +4056,9 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  go = go_1_5;
+  go = if stdenv.isDarwin
+    then go_1_4 # missing DWARF files during go-1.5 build
+    else go_1_5;
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
 
@@ -5820,9 +5823,10 @@ let
   teensy-loader = callPackage ../development/tools/misc/teensy { };
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
-  texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo4 = texinfo413;
-  texinfo = texinfo5;
+  texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
+  texinfo6 = callPackage ../development/tools/misc/texinfo/6.0.nix { };
+  texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
   );
@@ -6303,15 +6307,9 @@ let
 
   getdata = callPackage ../development/libraries/getdata { };
 
-  gettext = gettext_0_19;
+  gettext = callPackage ../development/libraries/gettext { };
 
-  gettext_0_17 = callPackage ../development/libraries/gettext/0.17.nix { };
-  gettext_0_18 = callPackage ../development/libraries/gettext/0.18.nix { };
-  gettext_0_19 = callPackage ../development/libraries/gettext { };
-
-  gettextWithExpat = gettext: callPackage ../development/libraries/gettext/expat.nix {
-    inherit gettext;
-  };
+  gettextWithExpat = callPackage ../development/libraries/gettext/expat.nix { };
 
   gd = callPackage ../development/libraries/gd { };
 
@@ -6530,7 +6528,7 @@ let
   };
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
-    gettext = gettextWithExpat gettext_0_19;
+    gettext = gettextWithExpat;
   };
 
   gtk = pkgs.gtk2;

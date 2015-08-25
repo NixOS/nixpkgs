@@ -9,7 +9,7 @@
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
-, isGNU ? false, isClang ? false
+, isGNU ? false, isClang ? cc.isClang or false
 }:
 
 with stdenv.lib;

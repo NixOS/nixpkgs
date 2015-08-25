@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1l3l39mw23zyjlcqidvkyqlr4gwbhplzw2hcv3qvn6p8ikxpf2qw";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs = [
     python pkgconfig popt  intltool dbus_glib
     libX11 xextproto libSM libICE libXtst libXi

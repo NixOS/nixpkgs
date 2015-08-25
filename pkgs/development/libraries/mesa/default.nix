@@ -4,7 +4,6 @@
 , libvdpau, libelf, libva
 , grsecEnabled
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableExtraFeatures ? false # not maintained
 }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
@@ -23,7 +22,7 @@ else
 */
 
 let
-  version = "10.6.2";
+  version = "10.6.5";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
@@ -37,7 +36,7 @@ stdenv.mkDerivation {
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "05753d3db4212900927b9894221a1669a10f56786e86a7e818b6e18a0817dca9";
+    sha256 = "fb6fac3c85bcfa9d06b8dd439169f23f0c0924a88e44362e738b99b1feff762f";
   };
 
   prePatch = "patchShebangs .";
@@ -123,10 +122,8 @@ stdenv.mkDerivation {
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
   postInstall = with stdenv.lib; ''
     mv -t "$drivers/lib/" \
-  '' + optionalString enableExtraFeatures ''
-      `#$out/lib/libXvMC*` \
-      $out/lib/gbm $out/lib/libgbm* \
-  '' + ''
+      $out/lib/libXvMC* \
+      $out/lib/d3d \
       $out/lib/vdpau \
       $out/lib/libxatracker*
 

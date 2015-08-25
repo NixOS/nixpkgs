@@ -65,6 +65,12 @@ stdenv.mkDerivation rec {
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
     sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
+    sed -i '/TestDialDualStackLocalhost/areturn' src/net/dial_test.go
+
+    # remove IP resolving tests, on darwin they can find fe80::1%lo while expecting ::1
+    sed -i '/TestResolveIPAddr/areturn' src/net/ipraw_test.go
+    sed -i '/TestResolveTCPAddr/areturn' src/net/tcp_test.go
+    sed -i '/TestResolveUDPAddr/areturn' src/net/udp_test.go
 
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
   '';

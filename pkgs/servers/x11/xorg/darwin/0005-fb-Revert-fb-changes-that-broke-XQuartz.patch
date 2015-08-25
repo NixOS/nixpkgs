@@ -1,7 +1,7 @@
-From 07f9e0beaf66ec9de1455a305c87ab642968f3f1 Mon Sep 17 00:00:00 2001
+From a635e397d5830f7f60e3690a1bb36f7a725b915a Mon Sep 17 00:00:00 2001
 From: Jeremy Huddleston <jeremyhu@apple.com>
 Date: Fri, 12 Feb 2010 19:48:52 -0800
-Subject: [PATCH 5002/5004] fb: Revert fb changes that broke XQuartz
+Subject: [PATCH 5/6] fb: Revert fb changes that broke XQuartz
 
 http://bugs.freedesktop.org/show_bug.cgi?id=26124
 
@@ -21,10 +21,10 @@ Signed-off-by: Jeremy Huddleston <jeremyhu@apple.com>
  3 files changed, 43 insertions(+), 85 deletions(-)
 
 diff --git a/fb/fb.h b/fb/fb.h
-index b869d12..895b148 100644
+index ab110f3..59eaac3 100644
 --- a/fb/fb.h
 +++ b/fb/fb.h
-@@ -1686,8 +1686,7 @@ fbFillRegionSolid(DrawablePtr pDrawable,
+@@ -1326,8 +1326,7 @@ fbFillRegionSolid(DrawablePtr pDrawable,
                    RegionPtr pRegion, FbBits and, FbBits xor);
  
  extern _X_EXPORT pixman_image_t *image_from_pict(PicturePtr pict,
@@ -35,7 +35,7 @@ index b869d12..895b148 100644
  extern _X_EXPORT void free_pixman_pict(PicturePtr, pixman_image_t *);
  
 diff --git a/fb/fbpict.c b/fb/fbpict.c
-index 2804ff4..80c2a91 100644
+index cafb027..6ee63e9 100644
 --- a/fb/fbpict.c
 +++ b/fb/fbpict.c
 @@ -46,23 +46,18 @@ fbComposite(CARD8 op,
@@ -67,7 +67,7 @@ index 2804ff4..80c2a91 100644
      }
  
      free_pixman_pict(pSrc, src);
-@@ -293,20 +288,22 @@ create_conical_gradient_image(PictGradient * gradient)
+@@ -289,20 +284,22 @@ create_conical_gradient_image(PictGradient * gradient)
  }
  
  static pixman_image_t *
@@ -97,8 +97,8 @@ index 2804ff4..80c2a91 100644
                                       stride * sizeof(FbStride));
  
      if (!image)
-@@ -333,57 +330,31 @@ create_bits_picture(PicturePtr pict, Bool has_clip, int *xoff, int *yoff)
-         if (pict->clientClipType != CT_NONE)
+@@ -321,57 +318,31 @@ create_bits_picture(PicturePtr pict, Bool has_clip, int *xoff, int *yoff)
+         if (pict->clientClip)
              pixman_image_set_has_client_clip(image, TRUE);
  
 -        if (*xoff || *yoff)
@@ -159,7 +159,7 @@ index 2804ff4..80c2a91 100644
      }
  
      switch (pict->repeatType) {
-@@ -411,10 +382,8 @@ set_image_properties(pixman_image_t * image, PicturePtr pict, Bool has_clip,
+@@ -399,10 +370,8 @@ set_image_properties(pixman_image_t * image, PicturePtr pict, Bool has_clip,
       * as the alpha map for this operation
       */
      if (pict->alphaMap && !is_alpha_map) {
@@ -171,7 +171,7 @@ index 2804ff4..80c2a91 100644
  
          pixman_image_set_alpha_map(image, alpha_map, pict->alphaOrigin.x,
                                     pict->alphaOrigin.y);
-@@ -448,8 +417,7 @@ set_image_properties(pixman_image_t * image, PicturePtr pict, Bool has_clip,
+@@ -436,8 +405,7 @@ set_image_properties(pixman_image_t * image, PicturePtr pict, Bool has_clip,
  }
  
  static pixman_image_t *
@@ -181,7 +181,7 @@ index 2804ff4..80c2a91 100644
  {
      pixman_image_t *image = NULL;
  
-@@ -457,7 +425,7 @@ image_from_pict_internal(PicturePtr pict, Bool has_clip, int *xoff, int *yoff,
+@@ -445,7 +413,7 @@ image_from_pict_internal(PicturePtr pict, Bool has_clip, int *xoff, int *yoff,
          return NULL;
  
      if (pict->pDrawable) {
@@ -190,7 +190,7 @@ index 2804ff4..80c2a91 100644
      }
      else if (pict->pSourcePict) {
          SourcePict *sp = pict->pSourcePict;
-@@ -475,19 +443,17 @@ image_from_pict_internal(PicturePtr pict, Bool has_clip, int *xoff, int *yoff,
+@@ -463,19 +431,17 @@ image_from_pict_internal(PicturePtr pict, Bool has_clip, int *xoff, int *yoff,
              else if (sp->type == SourcePictTypeConical)
                  image = create_conical_gradient_image(gradient);
          }
@@ -312,5 +312,5 @@ index bf82f8f..0145ce9 100644
  
          DamageRegionProcessPending(pDst->pDrawable);
 -- 
-1.8.4.1
+2.3.2 (Apple Git-55)
 

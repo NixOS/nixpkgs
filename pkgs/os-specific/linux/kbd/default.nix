@@ -1,11 +1,11 @@
 { stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, check, pam }:
 
 stdenv.mkDerivation rec {
-  name = "kbd-2.0.2";
+  name = "kbd-2.0.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${name}.tar.xz";
-    sha256 = "04mrms12nm5sas0nxs94yrr3hz7gmqhnmfgb9ff34bh1jszxmzcx";
+    sha256 = "0ppv953gn2zylcagr4z6zg5y2x93dxrml29plypg6xgbq3hrv2bs";
   };
 
   /* Get the dvorak programmer keymap (present in X but not in kbd) */

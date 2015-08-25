@@ -3794,16 +3794,21 @@ let self = _self // overrides; _self = with self; {
   };
 
   EncodeLocale = buildPerlPackage rec {
-    name = "Encode-Locale-1.03";
+    name = "Encode-Locale-1.05";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Encode/${name}.tar.gz";
-      sha256 = "0m9d1vdphlyzybgmdanipwd9ndfvyjgk3hzw250r299jjgh3fqzp";
+      sha256 = "176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1";
     };
     preCheck = if stdenv.isCygwin then ''
       sed -i"" -e "s@plan tests => 13@plan tests => 10@" t/env.t
       sed -i"" -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
       sed -i"" -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
     '' else null;
+    meta = {
+      description = "Determine the locale encoding";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
   };
 
   Env = buildPerlPackage {
@@ -5368,15 +5373,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOHTML = buildPerlPackage {
-    name = "IO-HTML-0.04";
+    name = "IO-HTML-1.001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-0.04.tar.gz;
-      sha256 = "0c4hc76c1gypdwfasnibr2qlf9x3bnhyw357lhqlrczbm6vn8hw5";
+      url = mirror://cpan/authors/id/C/CJ/CJM/IO-HTML-1.001.tar.gz;
+      sha256 = "ea78d2d743794adc028bc9589538eb867174b4e165d7d8b5f63486e6b828e7e0";
     };
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Open an HTML file with automatic charset detection";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -6162,8 +6167,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "1cpqjl59viw50bnbdyn8xzrwzg7g54b2rszw0fifacqrppp17gaz";
     };
-    propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPDaemon HTTPDate HTTPNegotiate HTTPMessage LWPMediaTypes NetHTTP URI WWWRobotRules ];
-    doCheck = false; # tries to start a daemon
+    patches = [ ../development/perl-modules/lwp-test-with-localhost.patch ];
+    propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPDaemon HTTPDate HTTPMessage HTTPNegotiate LWPMediaTypes NetHTTP URI WWWRobotRules ];
     meta = {
       description = "The World-Wide Web library for Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -7906,14 +7911,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetHTTP = buildPerlPackage {
-    name = "Net-HTTP-6.06";
+    name = "Net-HTTP-6.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/Net-HTTP-6.06.tar.gz;
-      sha256 = "1m1rvniffadq99gsy25298ia3lixwymr6kan64jd3ylyi7nkqkhx";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Net-HTTP-6.09.tar.gz;
+      sha256 = "52762b939d84806908ba544581c5708375f7938c3c0e496c128ca3fbc425e58d";
     };
+    propagatedBuildInputs = [ URI ];
     meta = {
       description = "Low-level HTTP connection (client)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -11799,14 +11806,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   URI = buildPerlPackage {
-    name = "URI-1.60";
+    name = "URI-1.68";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
-      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
+      url = mirror://cpan/authors/id/E/ET/ETHER/URI-1.68.tar.gz;
+      sha256 = "c840d30f7657bfd4b2acbb311bd764232911cd3dc97e92415fbd0a242185c358";
     };
     meta = {
       description = "Uniform Resource Identifiers (absolute and relative)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 

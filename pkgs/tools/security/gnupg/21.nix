@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, npth
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
 , autoreconfHook, gettext, texinfo, pcsclite
 
 # Each of the dependencies below are optional.
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    pkgconfig libgcrypt libassuan libksba npth
+    pkgconfig libgcrypt libassuan libksba libiconv npth
     autoreconfHook gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
   ];

@@ -72,8 +72,8 @@ makeWrapper() {
 
     # Note: extraFlagsArray is an array containing additional flags
     # that may be set by --run actions.
-    echo exec "$original" $flagsBefore '"${extraFlagsArray[@]}"' '"$@"' >> $wrapper
-    
+    echo exec -a '"$0"' "$original" $flagsBefore '"${extraFlagsArray[@]}"' '"$@"' >> $wrapper
+
     chmod +x $wrapper
 }
 

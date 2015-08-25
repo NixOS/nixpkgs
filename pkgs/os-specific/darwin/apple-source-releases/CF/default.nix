@@ -1,5 +1,8 @@
 { stdenv, appleDerivation, icu, dyld, libdispatch, launchd, libclosure }:
 
+# this project uses blocks, a clang-only extension
+assert stdenv.cc.isClang;
+
 appleDerivation {
   buildInputs = [ dyld icu libdispatch launchd libclosure ];
 

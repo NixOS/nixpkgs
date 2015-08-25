@@ -101,12 +101,12 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/qt.conf"
     rm -fr "$out/${appdir}/plugins"
 
-    find "$out/${appdir}" -type f -a -perm +0100 \
+    find "$out/${appdir}" -type f -a -perm /0100 \
       -print -exec patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} {} \;
 
     RPATH=${ldpath}:${gcc.cc}/lib:$out/${appdir}
     echo "updating rpaths to: $RPATH"
-    find "$out/${appdir}" -type f -a -perm +0100 \
+    find "$out/${appdir}" -type f -a -perm /0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
     mkdir -p "$out/share/applications"

@@ -1,7 +1,7 @@
-From bd9fce8b74f5358e4d7e5ce9b5cdd8fd195bb3fd Mon Sep 17 00:00:00 2001
+From b229a04bde765424542eeba17a7e2bc25785a890 Mon Sep 17 00:00:00 2001
 From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
 Date: Sat, 2 Nov 2013 11:00:23 -0700
-Subject: [PATCH 5004/5004] Use old miTrapezoids and miTriangles routines
+Subject: [PATCH 4/6] Use old miTrapezoids and miTriangles routines
 
 Reverts commits:
     788ccb9a8bcf6a4fb4054c507111eec3338fb969
@@ -19,11 +19,11 @@ Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
  5 files changed, 201 insertions(+), 4 deletions(-)
 
 diff --git a/fb/fbpict.c b/fb/fbpict.c
-index dc0ca3c..276ff06 100644
+index c8378ad..cafb027 100644
 --- a/fb/fbpict.c
 +++ b/fb/fbpict.c
-@@ -326,10 +326,8 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
-     ps->Glyphs = miGlyphs;
+@@ -499,10 +499,8 @@ fbPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
+     ps->UnrealizeGlyph = fbUnrealizeGlyph;
      ps->CompositeRects = miCompositeRects;
      ps->RasterizeTrapezoid = fbRasterizeTrapezoid;
 -    ps->Trapezoids = fbTrapezoids;
@@ -34,10 +34,10 @@ index dc0ca3c..276ff06 100644
      return TRUE;
  }
 diff --git a/render/mipict.c b/render/mipict.c
-index 2e64b20..d21b58a 100644
+index a725104..e14293a 100644
 --- a/render/mipict.c
 +++ b/render/mipict.c
-@@ -595,8 +595,8 @@ miPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
+@@ -575,8 +575,8 @@ miPictureInit(ScreenPtr pScreen, PictFormatPtr formats, int nformats)
      ps->Composite = 0;          /* requires DDX support */
      ps->Glyphs = miGlyphs;
      ps->CompositeRects = miCompositeRects;
@@ -49,7 +49,7 @@ index 2e64b20..d21b58a 100644
      ps->RasterizeTrapezoid = 0; /* requires DDX support */
      ps->AddTraps = 0;           /* requires DDX support */
 diff --git a/render/mipict.h b/render/mipict.h
-index 9436228..7ee2991 100644
+index 23ce9e8..e0f1d4c 100644
 --- a/render/mipict.h
 +++ b/render/mipict.h
 @@ -122,6 +122,16 @@ miCompositeRects(CARD8 op,
@@ -293,5 +293,5 @@ index 922f22a..bdca9ca 100644
 +}
 +
 -- 
-1.8.4.1
+2.3.2 (Apple Git-55)
 

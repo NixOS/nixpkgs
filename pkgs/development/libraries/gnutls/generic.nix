@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   inherit src patches;
 
+  outputs = [ "out" "man" ];
+
   configureFlags =
     # FIXME: perhaps use $SSL_CERT_FILE instead
     lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"

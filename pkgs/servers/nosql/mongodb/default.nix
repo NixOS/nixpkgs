@@ -21,6 +21,10 @@ let version = "3.0.5";
     ] ++ optional stdenv.is64bit wiredtiger;
 
     other-args = concatStringsSep " " ([
+      # these are opt-in, lol
+      "--cc-use-shell-environment"
+      "--cxx-use-shell-environment"
+
       "--c++11=on"
       "--ssl"
       #"--rocksdb" # Don't have this packaged yet
@@ -47,6 +51,13 @@ in stdenv.mkDerivation rec {
     # fix environment variable reading
     substituteInPlace SConstruct \
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+
+    substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s2latlng.cc --replace drem remainder
+    substituteInPlace src/third_party/s2/s2latlngrect.cc --replace drem remainder
   '';
 
   buildPhase = ''
