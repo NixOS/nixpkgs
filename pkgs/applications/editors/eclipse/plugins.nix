@@ -298,7 +298,7 @@ rec {
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "0p2dbf56rw733dhsxy9hdwmbzqlk01j8f2hci21bsipq5w2144x6";
+      sha256 = "0x5cdcm7p2ynz5ryw041gb150sripf9i4m1yrfqklnn581yqm6y8";
     };
 
     meta = with stdenv.lib; {
