@@ -34,7 +34,9 @@ appleDerivation rec {
                  "system_platform"
                  "system_pthread"
                  "system_sandbox"
-                 "system_stats"
+                 # does not exist in El Capitan beta
+                 # FIXME: does anything on yosemite actually need this?
+                 # "system_stats"
                  "unc"
                  "unwind"
                  "xpc"
