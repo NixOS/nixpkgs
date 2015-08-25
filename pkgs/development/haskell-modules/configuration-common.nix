@@ -157,7 +157,6 @@ self: super: {
   network-conduit = dontHaddock super.network-conduit;
   shakespeare-js = dontHaddock super.shakespeare-js;
   shakespeare-text = dontHaddock super.shakespeare-text;
-  types-compat = dontHaddock super.types-compat;                # https://github.com/philopon/apiary/issues/15
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
   record = dontHaddock super.record;                            # https://github.com/nikita-volkov/record/issues/22
