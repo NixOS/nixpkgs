@@ -6098,6 +6098,8 @@ let
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
+  cwiid = callPackage ../development/libraries/cwiid { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
   # Make bdb5 the default as it is the last release under the custom
