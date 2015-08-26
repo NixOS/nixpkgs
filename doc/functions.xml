@@ -155,4 +155,119 @@ c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
 
 </section>
 
+
+<section xml:id="sec-fhs-environments">
+  <title>buildFHSChrootEnv/buildFHSUserEnv</title>
+
+  <para>
+    <function>buildFHSChrootEnv</function> and
+    <function>buildFHSUserEnv</function> provide a way to build and run
+    FHS-compatible lightweight sandboxes. They get their own isolated root with
+    binded <filename>/nix/store</filename>, so their footprint in terms of disk
+    space needed is quite small. This allows one to run software which is hard or
+    unfeasible to patch for NixOS -- 3rd-party source trees with FHS assumptions,
+    games distributed as tarballs, software with integrity checking and/or external
+    self-updated binaries.
+  </para>
+
+  <para>
+    <function>buildFHSChrootEnv</function> allows to create persistent
+    environments, which can be constructed, deconstructed and entered by
+    multiple users at once. A downside is that it requires
+    <literal>root</literal> access for both those who create and destroy and
+    those who enter it. It can be useful to create environments for daemons that
+    one can enter and observe.
+  </para>
+
+  <para>
+    <function>buildFHSUserEnv</function> uses Linux namespaces feature to create
+    temporary lightweight environments which are destroyed after all child
+    processes exit. It does not require root access, and can be useful to create
+    sandboxes and wrap applications.
+  </para>
+
+  <para>
+    Those functions both rely on <function>buildFHSEnv</function>, which creates
+    an actual directory structure given a list of necessary packages and extra
+    build commands.
+    <function>buildFHSChrootEnv</function> and <function>buildFHSUserEnv</function>
+    both accept those arguments which are passed to
+    <function>buildFHSEnv</function>:
+  </para>
+
+  <variablelist>
+    <varlistentry>
+    <term><literal>name</literal></term>
+
+    <listitem><para>Environment name.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>targetPkgs</literal></term>
+
+    <listitem><para>Packages to be installed for the main host's architecture
+    (i.e. x86_64 on x86_64 installations).</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>multiPkgs</literal></term>
+
+    <listitem><para>Packages to be installed for all architectures supported by
+    a host (i.e. i686 and x86_64 on x86_64 installations).</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>extraBuildCommands</literal></term>
+
+    <listitem><para>Additional commands to be executed for finalizing the
+    directory structure.</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+    <term><literal>extraBuildCommandsMulti</literal></term>
+
+    <listitem><para>Like <literal>extraBuildCommandsMulti</literal>, but
+    executed only on multilib architectures.</para></listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>
+    Additionally, <function>buildFHSUserEnv</function> accepts
+    <literal>runScript</literal> parameter, which is a command that would be
+    executed inside the sandbox and passed all the command line arguments. It
+    default to <literal>bash</literal>.
+    One can create a simple environment using a <literal>shell.nix</literal>
+    like that:
+  </para>
+
+<programlisting><![CDATA[
+{ pkgs ? import <nixpkgs> {} }:
+
+(pkgs.buildFHSUserEnv {
+  name = "simple-x11-env";
+  targetPkgs = pkgs: (with pkgs;
+    [ udev
+      alsaLib
+    ]) ++ (with pkgs.xlibs;
+    [ libX11
+      libXcursor
+      libXrandr
+    ]);
+  multiPkgs = pkgs: (with pkgs;
+    [ udev
+      alsaLib
+    ]) ++ (with [];
+  runScript = "bash";
+}).env
+]]></programlisting>
+
+  <para>
+    Running <literal>nix-shell</literal> would then drop you into a shell with
+    these libraries and binaries available. You can use this to run
+    closed-source applications which expect FHS structure without hassles:
+    simply change <literal>runScript</literal> to the application path,
+    e.g. <filename>./bin/start.sh</filename> -- relative paths are supported.
+  </para>
+</section>
+
 </chapter>
