@@ -122,7 +122,7 @@ in
 
             interfaces = mkOption {
               type = types.listOf types.string;
-              default = null;
+              default = [];
               example = [ "eth1" "eth2" ];
               description = ''
                 The list of interfaces to be moved into the container.
@@ -344,9 +344,7 @@ in
                 LOCAL_ADDRESS=${cfg.localAddress}
               ''}
             ''}
-           ${optionalString (cfg.interfaces != null) ''
              INTERFACES="${toString cfg.interfaces}"
-           ''}
            ${optionalString cfg.autoStart ''
              AUTO_START=1
            ''}
