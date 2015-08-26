@@ -120,15 +120,15 @@ go.stdenv.mkDerivation (
     if [ -n "$subPackages" ] ; then
         for p in $subPackages ; do
             go test -p $NIX_BUILD_CORES -v $goPackagePath/$p &
+            PIDS+=("$!")
         done
-        PIDS+=("$!")
     else
         pushd go/src
         while read d; do
             go test -p $NIX_BUILD_CORES -v $d &
+            PIDS+=("$!")
         done < <(find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq)
         popd
-        PIDS+=("$!")
     fi
 
     # Exit on error from the parallel process
