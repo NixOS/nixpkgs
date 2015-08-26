@@ -7575,6 +7575,8 @@ let
   # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
+  mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
+
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
@@ -7786,6 +7788,8 @@ let
   ois = callPackage ../development/libraries/ois {};
 
   opal = callPackage ../development/libraries/opal {};
+
+  openh264 = callPackage ../development/libraries/openh264 { };
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
   openjpeg_2_0 = callPackage ../development/libraries/openjpeg/2.0.nix { };
