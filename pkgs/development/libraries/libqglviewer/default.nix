@@ -1,10 +1,11 @@
 { stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "libQGLViewer-2.6.3";
+  name = "libqglviewer-2.6.3";
+  version = "2.6.3";
 
   src = fetchurl {
-    url = "http://www.libqglviewer.com/src/${name}.tar.gz";
+    url = "http://www.libqglviewer.com/src/libQGLViewer-${version}.tar.gz";
     sha256 = "00jdkyk4wg1356c3ar6nk3hyp494ya3yvshq9m57kfmqpn3inqdy";
   };
 
