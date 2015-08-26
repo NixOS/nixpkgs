@@ -6266,6 +6266,10 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
+  
+  freenect = callPackage ../development/libraries/freenect { 
+      inherit (xlibs) libXi libXmu;
+  };
 
   freetype = callPackage ../development/libraries/freetype { };
 
