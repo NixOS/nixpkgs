@@ -9356,16 +9356,14 @@ let
   };
 
 
-  pexpect = buildPythonPackage {
-    name = "pexpect-2.3";
+  pexpect = buildPythonPackage rec {
+    version = "3.3";
+    name = "pexpect-${version}";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/pexpect/pexpect-2.3.tar.gz";
-      sha256 = "0x8bfjjqygriry1iyygm5048ykl5qpbpzqfp6i8dhkslm3ryf5fk";
+      url = "https://pypi.python.org/packages/source/p/pexpect/${name}.tar.gz";
+      sha256 = "dfea618d43e83cfff21504f18f98019ba520f330e4142e5185ef7c73527de5ba";
     };
-
-    # error: invalid command 'test'
-    doCheck = false;
 
     meta = {
       homepage = http://www.noah.org/wiki/Pexpect;
