@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://rkt.io;
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
