@@ -992,4 +992,21 @@ self: super: {
       "--extra-include-dirs=${pkgs.smpeg}/include/smpeg"
     ];
   });
+
+  # https://github.com/chrisdone/freenect/pull/11
+  freenect = overrideCabal super.freenect (drv: {
+    libraryPkgconfigDepends = [ pkgs.freenect ];
+    prePatch = '' echo "  Pkgconfig-Depends: libfreenect" >> freenect.cabal '';
+  });
+
+  # https://github.com/ivanperez-keera/hcwiid/pull/4
+  hcwiid = overrideCabal super.hcwiid (drv: {
+    configureFlags = (drv.configureFlags or []) ++ [
+      "--extra-lib-dirs=${pkgs.bluez}/lib"
+      "--extra-lib-dirs=${pkgs.cwiid}/lib"
+      "--extra-include-dirs=${pkgs.cwiid}/include"
+      "--extra-include-dirs=${pkgs.bluez}/include"
+    ];
+    prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
+  });
 }
