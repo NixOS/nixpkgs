@@ -9,12 +9,12 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "1.6.7";
+  version = "1.6.8";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "162c9kdj71az0ipaw4kiqcxhig0hcbmzw936d390r8zhkns76l57";
+    sha256 = "0189d5pn6g01rynfkhxynrqgfi24v94x8fp0fs7ilrncv0dzhxmn";
   };
 
   buildInputs =
