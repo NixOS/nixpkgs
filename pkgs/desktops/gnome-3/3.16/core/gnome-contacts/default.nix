@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                   gnome3.gsettings_desktop_schemas makeWrapper file libnotify
                   folks gnome3.gnome_desktop telepathy_glib libsecret dbus_glib
                   libxml2 libsoup gnome3.gnome_online_accounts nspr nss
-                  gdk_pixbuf gnome3.defaulticontheme librsvg
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg
                   libchamplain clutter_gtk geocode_glib
                   vala automake115x autoconf db ];
 
