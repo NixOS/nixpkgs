@@ -80,8 +80,8 @@ go.stdenv.mkDerivation (
     PIDS=()
     if [ -n "$subPackages" ] ; then
         for p in $subPackages ; do
-            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p &
-            PIDS+=("$!")
+            go install $buildFlags "''${buildFlagsArray[@]}" -p $NIX_BUILD_CORES -v $goPackagePath/$p
+            #PIDS+=("$!")
         done
     else
         pushd go/src
@@ -99,8 +99,8 @@ go.stdenv.mkDerivation (
             if [ -n "$OUT" ]; then
               echo "$OUT" >&2
             fi
-          } &
-          PIDS+=("$!")
+          }
+          #PIDS+=("$!")
         done < <(find $goPackagePath -type f -name \*.go -exec dirname {} \; | sort | uniq)
         popd
     fi
@@ -119,16 +119,16 @@ go.stdenv.mkDerivation (
     PIDS=()
     if [ -n "$subPackages" ] ; then
         for p in $subPackages ; do
-            go test -p $NIX_BUILD_CORES -v $goPackagePath/$p &
+            go test -p $NIX_BUILD_CORES -v $goPackagePath/$p
         done
-        PIDS+=("$!")
+        #PIDS+=("$!")
     else
         pushd go/src
         while read d; do
             go test -p $NIX_BUILD_CORES -v $d
         done < <(find $goPackagePath -type f -name \*_test.go -exec dirname {} \; | sort | uniq)
         popd
-        PIDS+=("$!")
+        #PIDS+=("$!")
     fi
 
     # Exit on error from the parallel process
