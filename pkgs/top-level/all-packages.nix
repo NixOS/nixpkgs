@@ -531,6 +531,8 @@ let
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
+  
+  airwave = callPackage ../applications/audio/airwave {};
 
   analog = callPackage ../tools/admin/analog {};
 
