@@ -221,9 +221,6 @@ self: super: {
   vector_0_10_9_2 = markBroken super.vector_0_10_9_2;
   hoopl_3_10_2_0 = markBroken super.hoopl_3_10_2_0;
 
-  # http://hub.darcs.net/shelarcy/regex-tdfa-text/issue/1 -- upstream seems to be asleep
-  regex-tdfa-text = appendPatch super.regex-tdfa-text ./patches/regex-tdfa-text.patch;
-
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
 
