@@ -237,9 +237,6 @@ self: super: {
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
-  # https://github.com/liamoc/wizards/issues/5
-  wizards = doJailbreak super.wizards;
-
   # https://github.com/tibbe/ekg-core/commit/c986d9750d026a0c049cf6e6610d69fc1f23121f, not yet in hackage
   ekg-core = doJailbreak super.ekg-core;
 
