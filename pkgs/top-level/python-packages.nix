@@ -1556,7 +1556,7 @@ let
 
     patches = [ ../development/python-modules/box2d/disable-test.patch ];
 
-    propagatedBuildInputs = [ pkgs.swig pkgs.box2d ];
+    propagatedBuildInputs = [ pkgs.swig2 pkgs.box2d ];
 
     meta = {
       homepage = https://code.google.com/p/pybox2d/;
