@@ -1,8 +1,4 @@
-{ stdenv, fetchurl, libftdi, libusb1, pkgconfig }:
-
-# TODO: Add "hidapi" as dependency to gain access to CMSIS-DAP debuggers.
-# Support should be auto-detected, but if not, pass "--enable-cmsis-dap" to
-# configure.
+{ stdenv, fetchurl, libftdi, libusb1, pkgconfig, hidapi }:
 
 stdenv.mkDerivation rec {
   name = "openocd-${version}";
@@ -13,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hzlnm19c4b35vsxs6ik94xbigv3ykdgr8gzrdir6sqmkan44w43";
   };
 
-  buildInputs = [ libftdi libusb1 pkgconfig ];
+  buildInputs = [ libftdi libusb1 pkgconfig hidapi ];
 
   configureFlags = [
     "--enable-jtag_vpi"
