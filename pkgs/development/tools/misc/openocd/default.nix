@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "openocd-${version}";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/openocd/openocd-${version}.tar.bz2";
-    sha256 = "0byk7hnccgmhw0f84qlkfhps38gp2xp628bfrsc03vq08hr6q1sv";
+    sha256 = "0hzlnm19c4b35vsxs6ik94xbigv3ykdgr8gzrdir6sqmkan44w43";
   };
 
   buildInputs = [ libftdi libusb1 pkgconfig ];
