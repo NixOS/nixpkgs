@@ -296,7 +296,7 @@ let
 
   buildFHSUserEnv = args: userFHSEnv {
     env = buildFHSEnv (removeAttrs args [ "runScript" ]);
-    runScript = args.runScript;
+    runScript = args.runScript or "bash";
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
