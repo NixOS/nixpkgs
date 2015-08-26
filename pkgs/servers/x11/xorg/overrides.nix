@@ -91,7 +91,6 @@ in
         rm -rf $out/share/doc
       '';
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
-    outputs = [ "out" "man" ];
   };
 
   libAppleWM = attrs: attrs // {
