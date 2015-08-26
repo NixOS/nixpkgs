@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , autoconf, automake, libtool, makeWrapper
-, perl, bison, flex, glibc, gettext, which, rpm, tetex, LocaleGettext
+, perl, bison, flex, glibc, gettext, which, rpm, LocaleGettext
 , bash, pam, TermReadKey, RpcXML, swig, python}:
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    autoconf automake libtool perl bison flex gettext which rpm tetex
+    autoconf automake libtool perl bison flex gettext which rpm
     LocaleGettext pam TermReadKey RpcXML swig makeWrapper python ];
 
   prePatch = ''
