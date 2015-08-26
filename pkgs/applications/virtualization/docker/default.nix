@@ -3,13 +3,13 @@ btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "0r0j8aj1a7lbnc9piznp02h5n2gdw3v3n4q2ipmapi9ax0wj82lz";
+    sha256 = "0nwd5wsw9f50jh4s5c5sfd6hnyh3g2kmxcrid36y1phabh30yrcz";
   };
 
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
