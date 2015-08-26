@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
       make
     '';
 
-  meta = { 
-    description = "trackball-based 3D viewer qt widget including many useful features";
-    homepage = http://artis.imag.fr/Members/Gilles.Debunne/QGLViewer/installUnix.html;
-    license = stdenv.lib.licenses.gpl2;
+  meta = with stdenv.lib; {
+    description = "C++ library based on Qt that eases the creation of OpenGL 3D viewers";
+    homepage = http://libqglviewer.com/;
+    license = licenses.gpl2;
+    platforms = platforms.all;
   };
 }
