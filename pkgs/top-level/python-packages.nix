@@ -9935,6 +9935,12 @@ let
       url = "https://pypi.python.org/packages/source/p/py/${name}.tar.gz";
       md5 = "a904aabfe4765cb754f2db84ec7bb03a";
     };
+
+    meta = {
+      description = "Library with cross-python path, ini-parsing, io, code, log facilities";
+      homepage = http://pylib.readthedocs.org/;
+      license = licenses.mit;
+    };
   };
 
 
