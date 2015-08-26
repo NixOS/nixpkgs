@@ -25,6 +25,8 @@ mkDerivation rec {
     python27 rcs cvs git makeWrapper
   ];
 
+  postPatch = "patchShebangs .";
+
   preBuild = ''
     makeFlagsArray=(
       XML_CATALOG_FILES="${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xml_xslt}/xml/xsl/docbook/catalog.xml"
