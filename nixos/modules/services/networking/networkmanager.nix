@@ -6,7 +6,8 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient";
+  # /var/lib/misc is for dnsmasq.leases.
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
   configFile = writeText "NetworkManager.conf" ''
     [main]
