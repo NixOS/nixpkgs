@@ -203,6 +203,27 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.cabal-install
   </para>
 </listitem>
 
+<listitem>
+  <para>
+    The option <option>services.nsd.zones.&lt;name&gt;.data</option> no
+    longer interpret the dollar sign ($) as a shell variable, as such it
+    should not be escaped anymore.  Thus the following zone data:
+  </para>
+  <programlisting>
+\$ORIGIN example.com.
+\$TTL 1800
+@       IN      SOA     ns1.vpn.nbp.name.      admin.example.com. (
+  </programlisting>
+  <para>
+    Should modified to look like the actual file expected by nsd:
+  </para>
+  <programlisting>
+$ORIGIN example.com.
+$TTL 1800
+@       IN      SOA     ns1.vpn.nbp.name.      admin.example.com. (
+  </programlisting>
+</listitem>
+
 </itemizedlist>
 </para>
 
