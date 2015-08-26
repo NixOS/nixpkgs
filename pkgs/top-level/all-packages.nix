@@ -1242,6 +1242,8 @@ let
 
   cutter = callPackage ../tools/networking/cutter { };
 
+  cvs_fast_export = callPackage ../applications/version-management/cvs-fast-export { };
+
   dadadodo = callPackage ../tools/text/dadadodo { };
 
   daemonize = callPackage ../tools/system/daemonize { };
