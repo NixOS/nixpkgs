@@ -713,6 +713,14 @@ in
         })
         (filterAttrs (name: service: service.startAt != "") cfg.services);
 
+    # Generate timer units for all services that have a ‘startAt’ value.
+    systemd.user.timers =
+      mapAttrs (name: service:
+        { wantedBy = [ "timers.target" ];
+          timerConfig.OnCalendar = service.startAt;
+        })
+        (filterAttrs (name: service: service.startAt != "") cfg.user.services);
+
     systemd.sockets.systemd-journal-gatewayd.wantedBy =
       optional config.services.journald.enableHttpGateway "sockets.target";
 
