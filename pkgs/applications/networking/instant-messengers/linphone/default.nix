@@ -1,6 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
 , zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, polarssl, libsoup, udev
 , ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip
+, mediastreamer-openh264, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
     polarssl libsoup udev ortp mediastreamer sqlite belle-sip libosip libexosip
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig makeWrapper ];
 
   configureFlags = [
     "--enable-ldap"
@@ -26,6 +27,12 @@ stdenv.mkDerivation rec {
     "--enable-external-ortp"
     "--enable-external-mediastreamer"
   ];
+
+  postInstall = ''
+    for i in $(cd $out/bin && ls); do
+      wrapProgram $out/bin/$i --set MEDIASTREAMER_PLUGINS_DIR ${mediastreamer-openh264}/lib/mediastreamer/plugins
+    done
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.linphone.org/;
