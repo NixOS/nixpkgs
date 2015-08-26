@@ -10772,6 +10772,8 @@ let
 
   arora = callPackage ../applications/networking/browsers/arora { };
 
+  artha = callPackage ../applications/misc/artha { };
+
   atom = callPackage ../applications/editors/atom {
     gconf = gnome.GConf;
   };
