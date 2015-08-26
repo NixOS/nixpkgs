@@ -9,7 +9,7 @@ rec {
                             , passthru ? {}
                             , ... } @ attrs:
     stdenv.mkDerivation (attrs // {
-      name = "eclipse-" + name;
+      name = "eclipse-plugin-" + name;
 
       buildInputs = buildInputs ++ [ unzip ];
 
