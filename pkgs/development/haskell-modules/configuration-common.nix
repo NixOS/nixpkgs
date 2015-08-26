@@ -237,9 +237,6 @@ self: super: {
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
-  # https://github.com/tibbe/ekg-core/commit/c986d9750d026a0c049cf6e6610d69fc1f23121f, not yet in hackage
-  ekg-core = doJailbreak super.ekg-core;
-
   # https://github.com/tibbe/ekg/commit/95018646f48f60d9ccf6209cc86747e0f132e737, not yet in hackage
   ekg = doJailbreak super.ekg;
 
