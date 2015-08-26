@@ -100,7 +100,12 @@ let
        ln -s $out/pypy-c/include $out/include/${libPrefix}
        ln -s $out/pypy-c/lib-python/${pythonVersion} $out/lib/${libPrefix}
 
-       wrapProgram "$out/bin/pypy" \
+       # We must wrap the original, not the symlink.
+       # PyPy uses argv[0] to find its standard library, and while it knows
+       # how to follow symlinks, it doesn't know about wrappers. So, it
+       # will think the wrapper is the original. As long as the wrapper has
+       # the same path as the original, this is OK.
+       wrapProgram "$out/pypy-c/pypy-c" \
          --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$out/lib" \
          --set LIBRARY_PATH "${LIBRARY_PATH}:$out/lib"
 
