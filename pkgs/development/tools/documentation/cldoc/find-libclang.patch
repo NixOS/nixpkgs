@@ -1,0 +1,47 @@
+diff --git a/cldoc/tree.py b/cldoc/tree.py
+index 845f8ba..1402dc9 100644
+--- a/cldoc/tree.py
++++ b/cldoc/tree.py
+@@ -30,40 +30,7 @@ import os, sys, sets, re, glob, platform
+ 
+ from ctypes.util import find_library
+ 
+-if platform.system() == 'Darwin':
+-    libclangs = [
+-        '/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib',
+-        '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+-    ]
+-
+-    found = False
+-
+-    for libclang in libclangs:
+-        if os.path.exists(libclang):
+-            cindex.Config.set_library_path(os.path.dirname(libclang))
+-            found = True
+-            break
+-
+-    if not found:
+-        lname = find_library("clang")
+-
+-        if not lname is None:
+-            cindex.Config.set_library_file(lname)
+-else:
+-    versions = [None, '3.5', '3.4', '3.3', '3.2']
+-
+-    for v in versions:
+-        name = 'clang'
+-
+-        if not v is None:
+-            name += '-' + v
+-
+-        lname = find_library(name)
+-
+-        if not lname is None:
+-            cindex.Config.set_library_file(lname)
+-            break
+-
++cindex.Config.set_library_file("NIXOS_CLANG_SO")
+ testconf = cindex.Config()
+ 
+ try:
+

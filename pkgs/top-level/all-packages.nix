@@ -5417,6 +5417,8 @@ let
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
+  cldoc = callPackage ../development/tools/documentation/cldoc { };
+
   coan = callPackage ../development/tools/analysis/coan { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
