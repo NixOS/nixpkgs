@@ -237,9 +237,6 @@ self: super: {
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 
-  # https://github.com/tibbe/ekg/commit/95018646f48f60d9ccf6209cc86747e0f132e737, not yet in hackage
-  ekg = doJailbreak super.ekg;
-
   # https://github.com/NixOS/cabal2nix/issues/136
   glib = addBuildDepends super.glib [pkgs.pkgconfig pkgs.glib];
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
