@@ -36,7 +36,8 @@ in stdenv.mkDerivation rec {
       --add-flags "--datadir $out/share/"
   '';
 
-  enableParallelBuilding = true;
+  # Disable, possible problems with hydra
+  #enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
