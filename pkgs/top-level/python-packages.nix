@@ -11058,12 +11058,13 @@ let
   };
 
   python_fedora = buildPythonPackage (rec {
-    name = "python-fedora-0.3.33";
+    version = "0.5.5";
+    name = "python-fedora-${version}";
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/p/y/python-fedora/${name}.tar.gz";
-      sha256 = "1g05bh7d5d0gzrlnhpnca7jpqbgs2rgnlzzbvzzxmdbmlkqi3mws";
+      url = "https://pypi.python.org/packages/source/p/python-fedora/${name}.tar.gz";
+      sha256 = "15m8lvbb5q4rg508i4ah8my872qrq5xjwgcgca4d3kzjv2x6fhim";
     };
     propagatedBuildInputs = with self; [ kitchen requests bunch paver ];
     doCheck = false;
@@ -13674,12 +13675,12 @@ let
   };
 
   taskw = buildPythonPackage rec {
-    version = "1.0.2";
+    version = "1.0.3";
     name = "taskw-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/taskw/${name}.tar.gz";
-      sha256 = "0wa2hwplss2r56jrwib6j9sxxm02dz78878975jk9fj10p84w5kr";
+      sha256 = "1fa7bv5996ppfbryv02lpnlhk5dra63lhlwrb1i4ifqbziqfqh5n";
     };
 
     patches = [ ../development/python-modules/taskw/use-template-for-taskwarrior-install-path.patch ];
@@ -13687,6 +13688,9 @@ let
       substituteInPlace taskw/warrior.py \
         --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
     '';
+
+    # https://github.com/ralphbean/taskw/issues/98
+    doCheck = false;
 
     buildInputs = with self; [ nose pkgs.taskwarrior tox ];
     propagatedBuildInputs = with self; [ six dateutil pytz ];
