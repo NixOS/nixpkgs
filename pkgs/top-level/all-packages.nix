@@ -10245,7 +10245,7 @@ let
   ubootJetsonTK1 = callPackage ../misc/uboot {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-dtb-tegra.bin"];
+    filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
   };
 
   ubootPcduino3Nano = callPackage ../misc/uboot {
