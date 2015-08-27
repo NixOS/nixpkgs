@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub, makeWrapper, go, lxc, sqlite, iproute, bridge-utils, devicemapper,
 btrfsProgs, iptables, bash, e2fsprogs, xz}:
 
+# https://github.com/docker/docker/blob/master/project/PACKAGERS.md
+
 stdenv.mkDerivation rec {
   name = "docker-${version}";
   version = "1.8.1";
@@ -15,6 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper go sqlite lxc iproute bridge-utils devicemapper btrfsProgs iptables e2fsprogs ];
 
   dontStrip = true;
+
+  preConfigure = ''
+    mv vendor/src/github.com/opencontainers/runc/libcontainer/seccomp/{jump_amd64.go,jump_linux.go}
+    sed -i 's/,amd64//' vendor/src/github.com/opencontainers/runc/libcontainer/seccomp/jump_linux.go
+  '';
 
   buildPhase = ''
     patchShebangs .
