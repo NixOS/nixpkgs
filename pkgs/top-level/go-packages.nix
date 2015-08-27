@@ -118,11 +118,11 @@ let
   };
 
   tools = buildFromGitHub {
-    rev = "93604a3dc2a5ae0168456c672ec35cc90ea881e6";
-    date = "2015-08-19";
+    rev = "b48dc8da98ae78c3d11f220e7d327304c84e623a";
+    date = "2015-08-24";
     owner = "golang";
     repo = "tools";
-    sha256 = "1yd3hwsbsjrmx85nihss55wy91y8sld7p0599j5k9xi0n1mrxdci";
+    sha256 = "187p3jjxrw2qjnzqwwrq7f9w10zh6vcnwnfl3q7ms8rbiffpjy5c";
     goPackagePath = "golang.org/x/tools";
     goPackageAliases = [ "code.google.com/p/go.tools" ];
 
@@ -136,7 +136,9 @@ let
       export GOTOOLDIR=$out/bin
     '';
 
-    excludedPackages = "testdata";
+    excludedPackages = "\\("
+      + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
+      + "\\)";
 
     buildInputs = [ net ];
 
