@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ python ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
 
-  patchPhase = ''
+  patchPhase = stdenv.lib.optionalString (python != null) ''
     patchShebangs event_rpcgen.py
   '';
 
