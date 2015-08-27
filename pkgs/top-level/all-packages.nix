@@ -12532,6 +12532,8 @@ let
 
   QmidiNet = callPackage ../applications/audio/QmidiNet { };
 
+  qmidiroute = callPackage ../applications/audio/qmidiroute { };
+
   qmmp = callPackage ../applications/audio/qmmp { };
 
   qrcode = callPackage ../tools/graphics/qrcode {};
