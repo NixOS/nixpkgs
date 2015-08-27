@@ -27,7 +27,7 @@ let
     lib.lists.all (license:
       let l = lib.licenses.${license.shortName or "BROKEN"} or false; in
       if license == l then true else
-        throw ''‘${builtins.toJSON license}’ is not an attribute of lib.licenses''
+        throw ''‘${showLicense license}’ is not an attribute of lib.licenses''
     ) list;
 
   mutuallyExclusive = a: b:
@@ -72,6 +72,8 @@ let
     hasLicense attrs &&
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
+
+  showLicense = license: license.shortName or "unknown";
 
   defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
@@ -121,9 +123,9 @@ let
 
       licenseAllowed = attrs:
         if hasDeniedUnfreeLicense attrs && !(hasWhitelistedLicense attrs) then
-          throwEvalHelp "Unfree" "has an unfree license ‘${builtins.toJSON attrs.meta.license}’ which is not whitelisted"
+          throwEvalHelp "Unfree" "has an unfree license (‘${showLicense attrs.meta.license}’)"
         else if hasBlacklistedLicense attrs then
-          throwEvalHelp "blacklisted" "has the ‘${builtins.toJSON attrs.meta.license}’ license which is blacklisted"
+          throwEvalHelp "blacklisted" "has a blacklisted license (‘${showLicense attrs.meta.license}’)"
         else if !allowBroken && attrs.meta.broken or false then
           throwEvalHelp "Broken" "is marked as broken"
         else if !allowBroken && attrs.meta.platforms or null != null && !lib.lists.elem result.system attrs.meta.platforms then
