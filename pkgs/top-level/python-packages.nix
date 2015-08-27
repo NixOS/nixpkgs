@@ -1343,16 +1343,16 @@ let
       maintainers = with maintainers; [ bjornfor ];
     };
   };
-  
+
   blaze = buildPythonPackage rec {
     name = "blaze-${version}";
     version = "0.8.2";
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/blaze/${name}.tar.gz";
       sha256 = "1abedabf2a1e62dd059e0942d60f27337763de26f5e3f61ed55baaf97723b624";
     };
-    
+
     propagatedBuildInputs = with self; [
       numpy
       pandas
@@ -1363,7 +1363,7 @@ let
       sqlalchemy9 # sqlalchemy8 should also work
       psutil
     ];
-    
+
     meta = {
       homepage = https://github.com/ContinuumIO/blaze;
       description = "Allows Python users a familiar interface to query data living in other data storage systems";
@@ -2448,7 +2448,7 @@ let
 
   cffi_0_8 = buildPythonPackage rec {
     name = "cffi-0.8.6";
- 
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
       sha256 = "0406j3sgndmx88idv5zxkkrwfqxmjl18pj8gf47nsg4ymzixjci5";
@@ -8094,22 +8094,22 @@ let
   plover = pythonPackages.buildPythonPackage rec {
     name = "plover-${version}";
     version = "2.5.8";
-    
+
     meta = {
       description = "OpenSteno Plover stenography software";
       maintainers = [ maintainers.twey ];
       license = licenses.gpl2;
     };
-    
+
     src = pkgs.fetchurl {
       url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
       sha256 = "23f7824a715f93eb2c41d5bafd0c6f3adda92998e9321e1ee029abe7a6ab41e5";
     };
-    
+
     propagatedBuildInputs = with self; [ wxPython pyserial xlib appdirs pkgs.wmctrl ];
     preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
   };
-  
+
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
@@ -8626,7 +8626,7 @@ let
       url = "https://pypi.python.org/packages/source/n/numexpr/${name}.tar.gz";
       sha256 = "3ae7191c89df40db6b0a8637a4dace7c5956bc910793a53225f985f3b443c722";
     };
-    
+
     # Tests fail with python 3. https://github.com/pydata/numexpr/issues/177
     doCheck = !isPy3k;
 
@@ -11068,6 +11068,11 @@ let
     };
     propagatedBuildInputs = with self; [ kitchen requests bunch paver ];
     doCheck = false;
+
+    # https://github.com/fedora-infra/python-fedora/issues/140
+    preBuild = ''
+      sed -i '4,15d' setup.py
+    '';
   });
 
   python_simple_hipchat = buildPythonPackage rec {
@@ -17267,11 +17272,11 @@ let
       maintainers = with maintainers; [ odi ];
     };
   };
-  
+
   suds = buildPythonPackage rec {
     name = "suds-0.4";
     disabled = isPy3k;
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/suds/suds-0.4.tar.gz";
       md5 = "b7502de662341ed7275b673e6bd73191";
