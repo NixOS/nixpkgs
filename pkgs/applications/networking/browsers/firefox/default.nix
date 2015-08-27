@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       alsaLib nspr nss libnotify xlibs.pixman yasm mesa
       xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
       xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
-      hunspell libevent libstartup_notification libvpx cairo
+      hunspell libevent libstartup_notification libvpx /* cairo */
       gstreamer gst_plugins_base icu libpng jemalloc
       libpulseaudio # only headers are needed
     ]
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
-      "--enable-system-cairo"
+      #"--enable-system-cairo"
       "--enable-gstreamer"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
