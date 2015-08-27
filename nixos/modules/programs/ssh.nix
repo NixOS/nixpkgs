@@ -102,7 +102,41 @@ in
 
       knownHosts = mkOption {
         default = {};
-        type = types.loaOf types.optionSet;
+        type = types.loaOf (types.submodule {
+          options = {
+            hostNames = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              description = ''
+                A list of host names and/or IP numbers used for accessing
+                the host's ssh service.
+              '';
+            };
+            publicKey = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
+              description = ''
+                The public key data for the host. You can fetch a public key
+                from a running SSH server with the <command>ssh-keyscan</command>
+                command. The public key should not include any host names, only
+                the key type and the key itself.
+              '';
+            };
+            publicKeyFile = mkOption {
+              default = null;
+              type = types.nullOr types.path;
+              description = ''
+                The path to the public key file for the host. The public
+                key file is read at build time and saved in the Nix store.
+                You can fetch a public key file from a running SSH server
+                with the <command>ssh-keyscan</command> command. The content
+                of the file should follow the same format as described for
+                the <literal>publicKey</literal> option.
+              '';
+            };
+          };
+        });
         description = ''
           The set of system-wide known SSH hosts.
         '';
@@ -116,39 +150,6 @@ in
             publicKeyFile = literalExample "./pubkeys/myhost2_ssh_host_dsa_key.pub";
           }
         ];
-        options = {
-          hostNames = mkOption {
-            type = types.listOf types.str;
-            default = [];
-            description = ''
-              A list of host names and/or IP numbers used for accessing
-              the host's ssh service.
-            '';
-          };
-          publicKey = mkOption {
-            default = null;
-            type = types.nullOr types.str;
-            example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
-            description = ''
-              The public key data for the host. You can fetch a public key
-              from a running SSH server with the <command>ssh-keyscan</command>
-              command. The public key should not include any host names, only
-              the key type and the key itself.
-            '';
-          };
-          publicKeyFile = mkOption {
-            default = null;
-            type = types.nullOr types.path;
-            description = ''
-              The path to the public key file for the host. The public
-              key file is read at build time and saved in the Nix store.
-              You can fetch a public key file from a running SSH server
-              with the <command>ssh-keyscan</command> command. The content
-              of the file should follow the same format as described for
-              the <literal>publicKey</literal> option.
-            '';
-          };
-        };
       };
 
     };
