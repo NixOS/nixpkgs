@@ -109,7 +109,7 @@ checkout_hash(){
         hash=$(hash_from_ref $ref)
     fi
 
-    git fetch ${builder:+--progress} origin || return 1
+    git fetch -t ${builder:+--progress} origin || return 1
     git checkout -b $branchName $hash || return 1
 }
 
