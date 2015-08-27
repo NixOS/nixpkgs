@@ -4,11 +4,11 @@ stdenv.mkDerivation rec {
   shortName = "setuptools-${version}";
   name = "${python.executable}-${shortName}";
 
-  version = "18.0.1";
+  version = "18.2";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${shortName}.tar.gz";
-    sha256 = "152b4qlpqc54939vfx5ipjpgx0kln02n3ywpm6x25pqysngwjjad";
+    sha256 = "07avbdc26yl2a46s76fc7m4vg611g8sh39l26x9dr9byya6sb509";
   };
 
   buildInputs = [ python wrapPython distutils-cfg ];
@@ -35,5 +35,5 @@ stdenv.mkDerivation rec {
     homepage = http://pypi.python.org/pypi/setuptools;
     license = [ "PSF" "ZPL" ];
     platforms = platforms.all;
-  };    
+  };
 }
