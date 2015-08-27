@@ -11058,15 +11058,17 @@ let
   };
 
   python_fedora = buildPythonPackage (rec {
-    name = "python-fedora-0.3.33";
+    version = "0.4.0";
+    name = "python-fedora-${version}";
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/p/y/python-fedora/${name}.tar.gz";
-      sha256 = "1g05bh7d5d0gzrlnhpnca7jpqbgs2rgnlzzbvzzxmdbmlkqi3mws";
+      url = "https://pypi.python.org/packages/source/p/python-fedora/${name}.tar.gz";
+      sha256 = "464d0223ee2ebe97072afd6c47e4c6a3faa6beeeea4615029972626d241cbe0d";
     };
     propagatedBuildInputs = with self; [ kitchen requests bunch paver ];
-    doCheck = false;
+    broken = true;
+    disabled = true;
   });
 
   python_simple_hipchat = buildPythonPackage rec {
