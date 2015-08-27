@@ -36,9 +36,7 @@ in
       dataDir = mkOption {
         default = "/var/lib/syncthing";
         description = ''
-          Path where the `.syncthing` (settings and keys) and `Sync`
-          (your synced files) directories will exist. This can be your home
-          directory.
+          Path where the settings and keys will exist.
         '';
       };
 
@@ -57,18 +55,12 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.STNORESTART = "placeholder";  # do not self-restart
-        environment.HOME = "${cfg.dataDir}";
         serviceConfig = {
           User = "${cfg.user}";
           PermissionsStartOnly = true;
           Restart = "always";
-          ExecStart = "${pkgs.syncthing}/bin/syncthing -home=${cfg.dataDir}/.syncthing";
+          ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser -home=${cfg.dataDir}";
         };
-        preStart = ''
-          mkdir -p ${cfg.dataDir}
-          chown ${cfg.user} ${cfg.dataDir}
-        '';
-
       };
 
     environment.systemPackages = [ pkgs.syncthing ];
