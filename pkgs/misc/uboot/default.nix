@@ -22,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "uboot-${defconfig}-${version}";
-  version = "2015.04";
+  version = "2015.07";
 
   src = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-    sha256 = "0q2x1wh1f6rjh9rmcnkf28dxcvp9hkhi4vzspqkzamb6b3gp06ha";
+    sha256 = "1nclmyii5a1igvgjc4kxvi1fk2y82hp2iy4iywp34b3zf6ywjj0b";
   };
 
   patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
