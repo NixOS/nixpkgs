@@ -277,12 +277,45 @@ rec {
 
   };
 
+  "css_color_5056" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "css_color_5056-2015-06-22";
+    src = fetchgit {
+      url = "git://github.com/ap/vim-css-color";
+      rev = "ceb028b27eae0550533501b1f02cb512a482ba85";
+      sha256 = "d428970699b59b0da89d3cf73be39f62c2751512919fa2773baa241a9f79fccd";
+    };
+    dependencies = [];
+
+  };
+
   ctrlp = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "ctrlp-2013-07-29";
     src = fetchgit {
       url = "git://github.com/kien/ctrlp.vim";
       rev = "b5d3fe66a58a13d2ff8b6391f4387608496a030f";
       sha256 = "41f7884973770552395b96f8693da70999dc815462d4018c560d3ff6be462e76";
+    };
+    dependencies = [];
+
+  };
+
+  ctrlp-py-matcher = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ctrlp-py-matcher-2015-07-18";
+    src = fetchgit {
+      url = "git://github.com/FelikZ/ctrlp-py-matcher";
+      rev = "9e84cf8072866b92faf5082cb93a554b75e35fd0";
+      sha256 = "7d4d5f7da148ddc9c8956aca87f53d9d0ff458b8fb4bc4ab2a9bff2ee6026cde";
+    };
+    dependencies = [];
+
+  };
+
+  ctrlp-z = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ctrlp-z-2013-05-08";
+    src = fetchgit {
+      url = "git://github.com/amiorin/ctrlp-z";
+      rev = "7845735a3d63a68ed63aa3a5363b178c48f199bf";
+      sha256 = "14c5240e6ab373cbd04d105a46808aed4a324472ddfd67b993534bf5d726e93f";
     };
     dependencies = [];
 
@@ -736,7 +769,7 @@ rec {
       cd $target/build
       cmake -G "Unix Makefiles" . $target/third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
       make ycm_support_libs -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
-      ${bash}/bin/bash $target/install.sh --clang-completer --system-libclang
+      ${python}/bin/python $target/third_party/ycmd/build.py --clang-completer --system-libclang
 
       ${vimHelpTags}
       vimHelpTags $target
@@ -858,6 +891,17 @@ rec {
       make
       popd
     '';
+  };
+
+  goyo = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "goyo-2015-08-08";
+    src = fetchgit {
+      url = "git://github.com/junegunn/goyo.vim";
+      rev = "c1293a91a3a04bcb82421b2ee711c49f83a418ae";
+      sha256 = "258b23f4f043569e6e0458c8035d5b00be6031b02e460136f7783da1bbadcc49";
+    };
+    dependencies = [];
+
   };
 
   matchit-zip = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -1353,12 +1397,34 @@ rec {
 
   };
 
+  vim-signify = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-signify-2015-08-13";
+    src = fetchgit {
+      url = "git://github.com/mhinz/vim-signify";
+      rev = "d08f17873e3187da3f9998ddb81d81626ffb9ecf";
+      sha256 = "7fffc5fbd21dd4f3ea81131ccb52d992d95a73be72288457b2ec3a0fa53ce3b2";
+    };
+    dependencies = [];
+
+  };
+
   vim-snippets = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-snippets-2015-08-23";
     src = fetchgit {
       url = "git://github.com/honza/vim-snippets";
       rev = "21c7f2052057304f9002b42b53391e2c89197a10";
       sha256 = "11a5cf8bf8f7fbf9100a69c2457d901143aaaeea5bd29884eb93d8b4439b306d";
+    };
+    dependencies = [];
+
+  };
+
+  vim-webdevicons = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-webdevicons-2015-08-14";
+    src = fetchgit {
+      url = "git://github.com/ryanoasis/vim-devicons";
+      rev = "771769d21615d08b22f23c32e97e67e95db7d122";
+      sha256 = "8291c8be6a45d6492ad9ff2972f481d7093fff95c764b3499d0877f5365b3f27";
     };
     dependencies = [];
 
