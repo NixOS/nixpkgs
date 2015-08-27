@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/Applications
     mkdir -p $out/bin
     cp -r terminal-notifier.app $out/Applications
-    ln -s $out/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier $out/bin/terminal-notifier
+    cat >$out/bin/terminal-notifier <<EOF
+    cd $out/Applications/terminal-notifier.app
+    exec ./Contents/MacOS/terminal-notifier
+    EOF
+    chmod +x $out/bin/terminal-notifier
   '';
 
   meta = with lib; {
