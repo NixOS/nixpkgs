@@ -21,7 +21,7 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsText = flip (concatMapStringsSep "\n") knownHosts
-    (h:
+    (h: assert h.hostNames != [];
       concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
     );
@@ -102,7 +102,7 @@ in
 
       knownHosts = mkOption {
         default = {};
-        type = types.loaOf (types.submodule {
+        type = types.loaOf (types.submodule ({ name, ... }: {
           options = {
             hostNames = mkOption {
               type = types.listOf types.str;
@@ -136,7 +136,10 @@ in
               '';
             };
           };
-        });
+          config = {
+            hostNames = mkDefault [ name ];
+          };
+        }));
         description = ''
           The set of system-wide known SSH hosts.
         '';
