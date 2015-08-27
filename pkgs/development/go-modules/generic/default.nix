@@ -1,6 +1,9 @@
 { go, govers, lib }:
 
-{ name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}
+{ name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
+
+# We want parallel builds by default
+, enableParallelBuilding ? true
 
 # Disabled flag
 , disabled ? false
@@ -156,19 +159,24 @@ go.stdenv.mkDerivation (
 
     dir="$NIX_BUILD_TOP/go/bin"
     [ -e "$dir" ] && cp -r $dir $out
+
+    runHook postInstall
+  '';
+
+  preFixup = preFixup + ''
     while read file; do
       cat $file ${removeExpr removeReferences} > $file.tmp
       mv $file.tmp $file
       chmod +x $file
     done < <(find $out/bin -type f 2>/dev/null)
-
-    runHook postInstall
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
 
   passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
+
+  enableParallelBuilding = enableParallelBuilding;
 
   meta = {
     # Add default meta information
