@@ -948,7 +948,7 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = goPackages.mongo-tools;
+  mongodb-tools = go14Packages.mongo-tools;
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
@@ -1346,7 +1346,7 @@ let
 
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
-  drive = callPackage ../applications/networking/drive { };
+  drive = callPackage ../applications/networking/drive { goPackages = go14Packages; };
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
@@ -8919,8 +8919,8 @@ let
 
   bird = callPackage ../servers/bird { };
 
-  bosun = callPackage ../servers/monitoring/bosun {};
-  scollector = callPackage ../servers/monitoring/bosun/scollector.nix {};
+  bosun = callPackage ../servers/monitoring/bosun { goPackages = go14Packages; };
+  scollector = callPackage ../servers/monitoring/bosun/scollector.nix { goPackages = go14Packages; };
 
   charybdis = callPackage ../servers/irc/charybdis {};
 
