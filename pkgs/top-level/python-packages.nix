@@ -3698,6 +3698,24 @@ let
     };
   };
 
+  hglib = buildPythonPackage rec {
+    version = "1.7";
+    name = "hglib-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-hglib/python-hglib-${version}.tar.gz";
+      sha256 = "0dc087d15b774cda82d3c8096fb0e514caeb2ddb60eed38e9056b16e279ba3c5";
+    };
+
+    meta = {
+      description = "Mercurial Python library";
+      homepage = "http://selenic.com/repo/python-hglib";
+      license = licenses.mit;
+      maintainers = with maintainers; [ dfoxfranke ];
+      platforms = platforms.all;
+    };
+  };
+
   humanize = buildPythonPackage rec {
     version = "0.5.1";
     name = "humanize-${version}";
