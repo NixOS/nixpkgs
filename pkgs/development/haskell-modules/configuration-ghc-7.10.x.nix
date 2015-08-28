@@ -252,8 +252,8 @@ self: super: {
   HLearn-distributions = dontDistribute super.HLearn-distributions;
   HLearn-classification = dontDistribute super.HLearn-classification;
 
-  # Won't work with LLVM 3.5.
-  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
+  # Doesn't work with LLVM 3.5.
+  llvm-general = markBroken super.llvm-general;
 
   # Inexplicable haddock failure
   # https://github.com/gregwebs/aeson-applicative/issues/2
