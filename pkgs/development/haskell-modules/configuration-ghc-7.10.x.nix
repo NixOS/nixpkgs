@@ -221,15 +221,8 @@ self: super: {
   vector_0_10_9_2 = markBroken super.vector_0_10_9_2;
   hoopl_3_10_2_0 = markBroken super.hoopl_3_10_2_0;
 
-  # http://hub.darcs.net/shelarcy/regex-tdfa-text/issue/1 -- upstream seems to be asleep
-  regex-tdfa-text = appendPatch super.regex-tdfa-text ./patches/regex-tdfa-text.patch;
-
   # https://github.com/HugoDaniel/RFC3339/issues/14
   timerep = dontCheck super.timerep;
-
-  # Upstream has no issue tracker.
-  harp = markBrokenVersion "0.4" super.harp;
-  happstack-authenticate = dontDistribute super.happstack-authenticate;
 
   # Upstream has no issue tracker.
   llvm-base-types = markBroken super.llvm-base-types;
@@ -259,8 +252,8 @@ self: super: {
   HLearn-distributions = dontDistribute super.HLearn-distributions;
   HLearn-classification = dontDistribute super.HLearn-classification;
 
-  # Won't work with LLVM 3.5.
-  llvm-general = markBrokenVersion "3.4.5.3" super.llvm-general;
+  # Doesn't work with LLVM 3.5.
+  llvm-general = markBroken super.llvm-general;
 
   # Inexplicable haddock failure
   # https://github.com/gregwebs/aeson-applicative/issues/2
