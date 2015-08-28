@@ -619,6 +619,8 @@ let
     goPackagePath = "google.golang.org/cloud";
     buildInputs = [ net oauth2 protobuf google-api-go-client grpc ];
     excludedPackages = "oauth2";
+
+    meta.broken = true;
   };
 
   gcloud-golang-compute-metadata = buildGoPackage rec {
