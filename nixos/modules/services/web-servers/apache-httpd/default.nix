@@ -117,7 +117,6 @@ let
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
-    ++ optional mainCfg.enableCompression "deflate"
     ++ extraApacheModules;
 
 
@@ -177,27 +176,6 @@ let
     SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!EXP
   '';
 
-  # From http://paulstamatiou.com/how-to-optimize-your-apache-site-with-mod-deflate/
-  compressConf = ''
-    SetOutputFilter DEFLATE
-
-    # Don't compress binaries
-    SetEnvIfNoCase Request_URI .(?:exe|t?gz|zip|iso|tar|bz2|sit|rar) no-gzip dont-vary
-    # Don't compress images
-    SetEnvIfNoCase Request_URI .(?:gif|jpe?g|jpg|ico|png)  no-gzip dont-vary
-    # Don't compress PDFs
-    SetEnvIfNoCase Request_URI .pdf no-gzip dont-vary
-    # Don't compress flash files (only relevant if you host your own videos)
-    SetEnvIfNoCase Request_URI .flv no-gzip dont-vary
-    # Netscape 4.X has some problems
-    BrowserMatch ^Mozilla/4 gzip-only-text/html
-    # Netscape 4.06-4.08 have some more problems
-    BrowserMatch ^Mozilla/4.0[678] no-gzip
-    # MSIE masquerades as Netscape, but it is fine
-    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
-    # Make sure proxies don't deliver the wrong content
-    Header append Vary User-Agent env=!dont-vary
-  '';
 
   mimeConf = ''
     TypesConfig ${httpd}/conf/mime.types
@@ -373,7 +351,6 @@ let
     ${mimeConf}
     ${loggingConf}
     ${browserHacks}
-    ${optionalString mainCfg.enableCompression compressConf}
 
     Include ${httpd}/conf/extra/httpd-default.conf
     Include ${httpd}/conf/extra/httpd-autoindex.conf
@@ -446,7 +423,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Apache HTTP Server.";
+        description = "Whether to enable the Apache HTTP Server.";
       };
 
       package = mkOption {
@@ -608,12 +585,6 @@ in
         example = 500;
         description =
           "Maximum number of httpd requests answered per httpd child (prefork), 0 means unlimited";
-      };
-
-      enableCompression = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable compression of responses using mod_deflate.";
       };
     }
 
