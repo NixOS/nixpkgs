@@ -36,7 +36,7 @@ with lib;
   enableSSL = mkOption {
     type = types.bool;
     default = false;
-    description = "Whether to enable SSL (https) support.";
+    description = "Enable SSL (https) support.";
   };
 
   # Note: sslServerCert and sslServerKey can be left empty, but this
@@ -115,7 +115,7 @@ with lib;
       </Directory>
     '';
     description = ''
-      These lines go to httpd.conf verbatim. They will go after
+      These lines go to <filename>httpd.conf</filename> verbatim. They will go after
       directories and directory aliases defined by default.
     '';
   };
@@ -130,7 +130,7 @@ with lib;
     type = types.bool;
     default = false;
     description = ''
-      Whether to enable serving <filename>~/public_html</filename> as
+      Enable serving <filename>~/public_html</filename> as
       <literal>/~<replaceable>username</replaceable></literal>.
     '';
   };

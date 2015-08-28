@@ -10,7 +10,7 @@ let
 
   version24 = !versionOlder httpd.version "2.4";
 
-  httpdConf = mainCfg.configFile;
+  httpdConf = if mainCfg.verifyConfig then verifiedConf else mainCfg.configFile;
 
   php = pkgs.php.override { apacheHttpd = httpd; };
 
@@ -417,6 +417,19 @@ let
     }
   '';
 
+  verifiedConf = pkgs.runCommand "apache.conf" {} ''
+    c=${mainCfg.configFile}
+    trap "echo '==> configuration error, see $c'" ERR
+
+    # Allow testing in sandbox
+    sed -e "s:/run/httpd:$PWD:" -e "/^User /d" -e "/^Group /d" < $c > test-conf.conf
+    mkdir runtime
+
+    echo "verifying Apache configuration, ignore warnings about missing directories"
+    ${httpd}/bin/httpd -f $PWD/test-conf.conf -t
+    cp $c $out
+  '';
+
 
   enablePHP = mainCfg.enablePHP || any (svc: svc.enablePHP) allSubservices;
 
@@ -564,7 +577,7 @@ in
       enablePHP = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the PHP module.";
+        description = "Enable the PHP module.";
       };
 
       phpOptions = mkOption {
@@ -613,7 +626,13 @@ in
       enableCompression = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable compression of responses using mod_deflate.";
+        description = "Enable compression of responses using <literal>mod_deflate</literal>.";
+      };
+
+      verifyConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Verify generated configuration.";
       };
     }
 
