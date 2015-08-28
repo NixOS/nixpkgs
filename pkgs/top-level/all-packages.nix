@@ -3109,7 +3109,7 @@ let
   telnet = callPackage ../tools/networking/telnet { };
 
   texmacs = callPackage ../applications/editors/texmacs {
-    tex = texLive; /* tetex is also an option */
+    tex = texlive.combined.scheme-small;
     extraFonts = true;
   };
 
