@@ -11,12 +11,6 @@ let
     find $out -name "*.c" -delete
     cp -rf $out/bin/* $out/share/go/bin/
   '';
-
-  removeReferences = [ go_1_4 ];
-
-  removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
-    | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
-  '');
 in
 
 stdenv.mkDerivation rec {
@@ -112,11 +106,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    while read file; do
-      cat $file ${removeExpr removeReferences} > $file.tmp
-      mv $file.tmp $file
-      chmod +x $file
-    done < <(find $out/share/go/pkg/bootstrap/bin -type f 2>/dev/null)
+    rm -r $out/share/go/pkg/bootstrap
   '';
 
   setupHook = ./setup-hook.sh;
