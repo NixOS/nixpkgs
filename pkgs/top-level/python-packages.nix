@@ -8406,11 +8406,17 @@ let
       nose
       modules.sqlite3
     ];
+    
+    # Test does not work on Py3k because it calls 'python'.
+    # https://github.com/nipy/nibabel/issues/341
+    preCheck = ''
+      rm nisext/tests/test_testers.py
+    '';
 
     meta = {
       homepage = http://nipy.org/nibabel/;
       description = "Access a multitude of neuroimaging data formats";
-      license = "BSD";
+      license = licenses.mit;
     };
   };
 
