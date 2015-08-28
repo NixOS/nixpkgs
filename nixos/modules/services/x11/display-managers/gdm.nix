@@ -19,7 +19,7 @@ in
     services.xserver.displayManager.gdm = {
 
       enable = mkEnableOption ''
-        Whether to enable GDM as the display manager.
+        GDM as the display manager.
         <emphasis>GDM is very experimental and may render system unusable.</emphasis>
       '';
 
