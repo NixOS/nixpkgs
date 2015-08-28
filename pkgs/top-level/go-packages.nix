@@ -1535,17 +1535,12 @@ let
     sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
   };
 
-  ipfs = buildGoPackage rec {
-    rev = "952dc9c60fdff27902749222fdc30164e7eea1ee";
-    name = "ipfs-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/ipfs/go-ipfs";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner  = "ipfs";
-      repo   = "go-ipfs";
-      sha256 = "1mlilx1i77px85jag4jwpcy8fy0vv15hsmpr1d9zvcs3b7qhskqp";
-    };
+  ipfs = buildFromGitHub{
+    rev = "ff26c312000da12d395c9cdba05c43f29b68b456";
+    owner  = "ipfs";
+    repo   = "go-ipfs";
+    sha256 = "0qj3rwq5i4aiwn0i09skpi1s3mzqm8ma9v1cpjl7rya2y6ypx8xg";
+    excludedPackages = "Godeps";
   };
 
   ldap = buildGoPackage rec {
