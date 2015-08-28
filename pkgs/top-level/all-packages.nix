@@ -3939,11 +3939,6 @@ let
 
   gcl = builderDefsPackage (callPackage ../development/compilers/gcl) {
     gmp = gmp4;
-    texLive = texLiveAggregationFun {
-      paths = [
-        texLive texLiveExtra
-      ];
-    };
   };
 
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
