@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pidgin, unzip, glib, json_glib, nss, nspr, libgnome_keyring } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-opensteamworks-1.5.1";
+  name = "pidgin-opensteamworks-${version}";
+  version = "1.6.1";
 
-  # Temporarily sourcing this from a mirror in my github account, until such time as the project is officially migrated away from the deprecated google code service
   src = fetchFromGitHub {
-    owner = "Shados";
+    owner = "EionRobb";
     repo = "pidgin-opensteamworks";
-    rev = "4f0ea110a5bdba9d2b18ec8785b2edb276f0cccd";
-    sha256 = "0gcrc1yaf29yjfhpflpn451i7isw8zc7maw77g604815myc5k025";
+    rev = "${version}";
+    sha256 = "6ab27831e454ad3b440e4f06b52e0b3671a4f8417ba4da3ab6f56c56d82cc29b";
   };
 
   preConfigure = "cd steam-mobile";
