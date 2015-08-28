@@ -3531,6 +3531,7 @@ let
 
   gmpy = buildPythonPackage rec {
     name = "gmpy-1.17";
+    disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gmpy/${name}.zip";
@@ -3550,7 +3551,8 @@ let
 
   gmpy2 = buildPythonPackage rec {
     name = "gmpy2-2.0.6";
-
+    disabled = isPyPy;
+    
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gmpy2/${name}.zip";
       md5 = "7365d880953ba54c2cdcf171c7e19b2b";
