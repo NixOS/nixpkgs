@@ -421,4 +421,8 @@ in
     outputs = [ "out" "doc" ];
   };
 
+  xrdb = attrs: attrs // {
+    configureFlags = "--with-cpp=${args.mcpp}/bin/mcpp";
+  };
+
 }
