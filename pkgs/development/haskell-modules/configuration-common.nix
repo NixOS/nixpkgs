@@ -1010,4 +1010,8 @@ self: super: {
     ];
     prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
   });
+
+  # https://github.com/basvandijk/concurrent-extra/issues/12
+  concurrent-extra = dontCheck super.concurrent-extra;
+
 }
