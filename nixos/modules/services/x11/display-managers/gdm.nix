@@ -25,6 +25,9 @@ in
 
       autoLogin = mkOption {
         default = {};
+        description = ''
+          Auto login configuration attrset.
+        '';
 
         type = types.submodule {
           options = {
@@ -78,7 +81,7 @@ in
     users.extraGroups.gdm.gid = config.ids.gids.gdm;
 
     services.xserver.displayManager.job =
-      { 
+      {
         environment = {
           GDM_X_SERVER = "${cfg.xserverBin} ${cfg.xserverArgs}";
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
@@ -177,7 +180,7 @@ in
           "auth     required       pam_deny.so"}
 
         account  sufficient     pam_unix.so
-        
+
         password requisite      pam_unix.so nullok sha512
         ${optionalString config.security.pam.enableEcryptfs
           "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
