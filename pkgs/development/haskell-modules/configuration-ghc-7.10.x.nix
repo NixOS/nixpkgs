@@ -271,4 +271,7 @@ self: super: {
   # https://github.com/DanielG/cabal-helper/issues/10
   cabal-helper = dontCheck super.cabal-helper;
 
+  # https://github.com/yi-editor/yi-fuzzy-open/issues/3
+  yi-fuzzy-open = dontHaddock (appendConfigureFlag super.yi-fuzzy-open "--ghc-option=-XFlexibleContexts");
+
 }
