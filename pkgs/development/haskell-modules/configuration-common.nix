@@ -1014,4 +1014,7 @@ self: super: {
   # https://github.com/basvandijk/concurrent-extra/issues/12
   concurrent-extra = dontCheck super.concurrent-extra;
 
+  # https://github.com/brendanhay/amazonka/issues/203
+  amazonka-core = dontCheck super.amazonka-core;
+
 }
