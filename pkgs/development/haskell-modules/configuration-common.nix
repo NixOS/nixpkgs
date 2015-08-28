@@ -591,9 +591,9 @@ self: super: {
   # https://github.com/vincenthz/hs-asn1/issues/12
   asn1-encoding = dontCheck super.asn1-encoding;
 
-  # wxc supports wxGTX >= 2.9, but our current default version points to 2.8.
-  wxc = super.wxc.override { wxGTK = pkgs.wxGTK29; };
-  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK29; };
+  # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
+  wxc = super.wxc.override { wxGTK = pkgs.wxGTK30; };
+  wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Depends on QuickCheck 1.x.
   HaVSA = super.HaVSA.override { QuickCheck = self.QuickCheck_1_2_0_1; };
