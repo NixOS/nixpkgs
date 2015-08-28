@@ -225,10 +225,6 @@ self: super: {
   timerep = dontCheck super.timerep;
 
   # Upstream has no issue tracker.
-  harp = markBrokenVersion "0.4" super.harp;
-  happstack-authenticate = dontDistribute super.happstack-authenticate;
-
-  # Upstream has no issue tracker.
   llvm-base-types = markBroken super.llvm-base-types;
   llvm-analysis = dontDistribute super.llvm-analysis;
   llvm-data-interop = dontDistribute super.llvm-data-interop;
