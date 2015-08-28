@@ -7274,6 +7274,33 @@ let
   };
 
 
+  jsonpath_rw = buildPythonPackage rec {
+    name = "jsonpath-rw-${version}";
+    version = "1.4.0";
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonpath-rw/${name}.tar.gz";
+      md5 = "3a807e05c2c12158fc6bb0a402fd5778";
+    };
+
+    propagatedBuildInputs = with self; [
+      ply
+      six
+      decorator
+    ];
+
+    # ImportError: No module named tests
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/kennknowles/python-jsonpath-rw;
+      description = "A robust and significantly extended implementation of JSONPath for Python, with a clear AST for metaprogramming";
+      license = licenses.asl20;
+    };
+  };
+
+
   keyring = buildPythonPackage rec {
     name = "keyring-3.3";
 
