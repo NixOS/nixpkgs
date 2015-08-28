@@ -3,11 +3,11 @@
 , gobjectIntrospection, makeWrapper, libxslt, vala, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gcr-3.14.0";
+  name = "gcr-${gnome3.version}.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gcr/3.14/${name}.tar.xz";
-    sha256 = "2a2231147a01e2061f57fa9ca77557ff97bc6ceab028cee5528079f4b2fca63d";
+    url = "mirror://gnome/sources/gcr/${gnome3.version}/${name}.tar.xz";
+    sha256 = "0xfhi0w358lvca1jjx24x2gm67mif33dsnmi9cv5i0f83ks8vzpc";
   };
 
   buildInputs = [
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ p11_kit ];
 
   #doCheck = true;
+
+  enableParallelBuilding = true;
 
   preFixup = ''
     wrapProgram "$out/bin/gcr-viewer" \
