@@ -15,21 +15,24 @@ let self = buildGoPackage rec {
   };
 
   buildInputs = [
-    go-bindata.bin
     protobuf
     httprouter
     golang_protobuf_extensions
     prometheus.client_golang
   ];
 
+  nativeBuildInputs = [
+    go-bindata.bin
+  ];
+
   buildFlagsArray = ''
     -ldflags=
-        -X main.buildVersion ${rev}
-        -X main.buildRev ${rev}
-        -X main.buildBranch master
-        -X main.buildUser nix@nixpkgs
-        -X main.buildDate 20150101-00:00:00
-        -X main.goVersion ${lib.getVersion go}
+        -X main.buildVersion=${rev}
+        -X main.buildRev=${rev}
+        -X main.buildBranch=master
+        -X main.buildUser=nix@nixpkgs
+        -X main.buildDate=20150101-00:00:00
+        -X main.goVersion=${lib.getVersion go}
   '';
 
   preBuild = ''
