@@ -1,4 +1,5 @@
-#! /bin/sh -e
+#!/usr/bin/env bash
+set -e
 
 cvsRoot=$1
 module=$2
