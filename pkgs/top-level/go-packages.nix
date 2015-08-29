@@ -130,12 +130,12 @@ let
 
     preConfigure = ''
       # Make the builtin tools available here
-      mkdir -p $out/bin
+      mkdir -p $bin/bin
       eval $(go env | grep GOTOOLDIR)
       find $GOTOOLDIR -type f | while read x; do
-        ln -sv "$x" "$out/bin"
+        ln -sv "$x" "$binbin"
       done
-      export GOTOOLDIR=$out/bin
+      export GOTOOLDIR=$bin/bin
     '';
 
     excludedPackages = "\\("
@@ -381,11 +381,11 @@ let
   };
 
   consul = buildFromGitHub {
-    rev    = "a6317f2fb2ba9d5ae695f7fa703cfb30a1c59af1";
-    date   = "2015-07-24";
+    rev    = "4adc0b5c660919e3f21c9a60f567fd872b9e3d1e";
+    date   = "2015-08-27";
     owner  = "hashicorp";
     repo   = "consul";
-    sha256 = "0jixpl9yksasqx9rkidx8qmqc59m34kiibsqfsv56g87wzyp89rs";
+    sha256 = "1h4hbyr2c8yfmn5ijga5zx470mdplg231kbxbqfpvswrk69q89j3";
 
     buildInputs = [
       circbuf armon.go-metrics go-radix gomdb bolt consul-migrate go-checkpoint
@@ -1326,7 +1326,6 @@ let
     repo = "lint";
     sha256 = "1bj7zv534hyh87bp2vsbhp94qijc5nixb06li1dzfz9n0wcmlqw9";
     excludedPackages = "testdata";
-    dontInstallSrc = true;
     buildInputs = [ tools ];
   };
 
@@ -1719,11 +1718,11 @@ let
     # Mongodb incorrectly names all of their binaries main
     # Let's work around this with our own installer
     installPhase = ''
-      mkdir -p $out/bin
+      mkdir -p $bin/bin
       while read b; do
         rm -f go/bin/main
         go install $goPackagePath/$b/main
-        cp go/bin/main $out/bin/$b
+        cp go/bin/main $bin/bin/$b
       done < <(find go/src/$goPackagePath -name main | xargs dirname | xargs basename -a)
     '';
   };

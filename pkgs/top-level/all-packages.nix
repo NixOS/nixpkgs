@@ -818,13 +818,13 @@ let
 
   clib = callPackage ../tools/package-management/clib { };
 
-  consul = goPackages.consul;
+  consul = goPackages.consul.bin // { outputs = [ "bin" ]; };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
 
-  consul-alerts = goPackages.consul-alerts;
+  consul-alerts = goPackages.consul-alerts.bin // { outputs = [ "bin" ]; };
 
-  consul-template = goPackages.consul-template;
+  consul-template = goPackages.consul-template.bin // { outputs = [ "bin" ]; };
 
   corosync = callPackage ../servers/corosync { };
 
@@ -948,7 +948,7 @@ let
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = goPackages.mongo-tools;
+  mongodb-tools = goPackages.mongo-tools.bin // { outputs = [ "bin" ]; };
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
@@ -1701,7 +1701,8 @@ let
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  grafana = callPackage ../development/tools/misc/grafana { };
+  grafana-frontend = callPackage ../development/tools/misc/grafana { };
+  grafana-backend = pkgs.goPackages.grafana.bin // { outputs = [ "bin" ]; };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
 
@@ -2153,7 +2154,7 @@ let
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
-  lxd = goPackages.lxd;
+  lxd = goPackages.lxd.bin // { outputs = [ "bin" ]; };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -4074,7 +4075,7 @@ let
 
   go-repo-root = callPackage ../development/tools/misc/go-repo-root { };
 
-  gox = goPackages.gox;
+  gox = goPackages.gox.bin // { outputs = [ "bin" ]; };
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -8664,7 +8665,7 @@ let
     go = go_1_4;
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_4;
-      govers = go14Packages.govers;
+      govers = go14Packages.govers.bin;
       inherit parallel lib;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
@@ -8674,7 +8675,7 @@ let
     go = go_1_5;
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_5;
-      govers = go15Packages.govers;
+      govers = go15Packages.govers.bin;
       inherit parallel lib;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
@@ -8958,7 +8959,7 @@ let
 
   dovecot_pigeonhole = callPackage ../servers/mail/dovecot-pigeonhole { };
 
-  etcd = goPackages.etcd;
+  etcd = goPackages.etcd.bin // { outputs = [ "bin" ]; };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR16;
@@ -8975,7 +8976,7 @@ let
     v8 = v8_3_24_10;
   };
 
-  etcdctl = goPackages.etcd;
+  etcdctl = etcd;
 
   exim = callPackage ../servers/mail/exim { };
 
@@ -10084,7 +10085,7 @@ let
 
   gotags = callPackage ../development/tools/gotags { };
 
-  golint = goPackages.lint;
+  golint = goPackages.lint.bin // { outputs = [ "bin" ]; };
 
   godep = callPackage ../development/tools/godep { };
 
@@ -13668,6 +13669,8 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
+  confd = pkgs.goPackages.conf.bin // { outputs = [ "bin" ]; };
+
   construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
     freeglut = null;
@@ -14529,6 +14532,8 @@ let
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
+  hologram = pkgs.goPackages.bin // { outputs = [ "bin" ]; };
+
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
     inherit (pkgs.emacs24Packages) proofgeneral;
@@ -15130,7 +15135,7 @@ let
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
-  vault = goPackages.vault;
+  vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
 
   vbam = callPackage ../misc/emulators/vbam {
     inherit (xlibs) libpthreadstubs;
