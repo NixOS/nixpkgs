@@ -14752,6 +14752,25 @@ let
       license = licenses.mit;
     };
   });
+  
+  xray = buildPythonPackage rec {
+    name = "xray-${version}";
+    version = "0.6.0";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xray/${name}.tar.gz";
+      sha256 = "c8c4aadb0d39662a81c259bd609f42708ff31c90012a9dd0a1f9ee56a798196f";
+    };
+    
+    buildInputs = with self; [nose];
+    propagatedBuildInputs = with self; [numpy pandas];
+    
+    meta = {
+      description = "N-D labeled arrays and datasets in Python";
+      homepage = https://github.com/xray/xray;
+      license = licenses.asl20;
+    };  
+  };
 
   youtube-dl = callPackage ../tools/misc/youtube-dl {
     # Release versions don't need pandoc because the formatted man page
