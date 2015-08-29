@@ -13669,7 +13669,7 @@ let
 
   chessdb = callPackage ../games/chessdb { };
 
-  confd = pkgs.goPackages.conf.bin // { outputs = [ "bin" ]; };
+  confd = pkgs.goPackages.confd.bin // { outputs = [ "bin" ]; };
 
   construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
@@ -14532,7 +14532,7 @@ let
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
-  hologram = pkgs.goPackages.bin // { outputs = [ "bin" ]; };
+  hologram = pkgs.goPackages.hologram.bin // { outputs = [ "bin" ]; };
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
