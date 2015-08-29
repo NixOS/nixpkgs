@@ -2946,6 +2946,24 @@ let
       license = licenses.mit;
     };
   };
+  
+  dill = buildPythonPackage rec {
+    name = "dill-${version}";
+    version = "0.2.4";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/dill/${name}.tgz";
+      sha256 = "deca57da33ad2121ab1b9c4493bf8eb2b3a72b6426d4b9a3a853a073c68b97ca";
+    };
+    
+    propagatedBuildInputs = with self; [objgraph];
+    
+    meta = {
+      description = "Serialize all of python (almost)";
+      homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
+      license = licenses.bsd3;
+    };
+  };
 
   discogs_client = buildPythonPackage rec {
     name = "discogs-client-2.0.2";
