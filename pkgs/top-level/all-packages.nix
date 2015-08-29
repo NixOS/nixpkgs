@@ -14419,8 +14419,6 @@ let
 
   ### SCIENCE/PROGRAMMING
 
-  kframework = callPackage ../applications/science/programming/kframework { };
-
   plm = callPackage ../applications/science/programming/plm { };
 
   ### SCIENCE/LOGIC
