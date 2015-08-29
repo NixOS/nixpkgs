@@ -14073,13 +14073,14 @@ let
 
   testtools = buildPythonPackage rec {
     name = "testtools-${version}";
-    version = "0.9.34";
+    version = "1.8.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/t/testtools/${name}.tar.gz";
-      sha256 = "0s6sn9h26dif2c9sayf875x622kq8jb2f4qbc6if7gwh2sssgicn";
+      sha256 = "15yxz8d70iy1b1x6gd7spvblq0mjxjardl4vnaqasxafzc069zca";
     };
 
+    buildInputs = with self; [ pbr ];
     propagatedBuildInputs = with self; [ self.python_mimeparse self.extras lxml ];
 
     meta = {
