@@ -1191,7 +1191,9 @@ let
 
   crackxls = callPackage ../tools/security/crackxls { };
 
-  cromfs = callPackage ../tools/archivers/cromfs { };
+  cromfs = callPackage ../tools/archivers/cromfs {
+    stdenv = overrideCC stdenv gcc48;
+  };
 
   cron = callPackage ../tools/system/cron { };
 
