@@ -3552,7 +3552,7 @@ let
   gmpy2 = buildPythonPackage rec {
     name = "gmpy2-2.0.6";
     disabled = isPyPy;
-    
+
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gmpy2/${name}.zip";
       md5 = "7365d880953ba54c2cdcf171c7e19b2b";
@@ -6807,9 +6807,9 @@ let
 
   importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
-    
+
     disabled = (!isPy26) || isPyPy;
-    
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
       md5 = "4aa23397da8bd7c7426864e88e4db7e1";
@@ -8408,7 +8408,7 @@ let
       nose
       modules.sqlite3
     ];
-    
+
     # Test does not work on Py3k because it calls 'python'.
     # https://github.com/nipy/nibabel/issues/341
     preCheck = ''
@@ -9864,7 +9864,7 @@ let
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
     inherit (protobuf) name src;
-    disabled = isPy3k;
+    disabled = isPy3k || isPyPy;
 
     propagatedBuildInputs = with self; [ protobuf google_apputils ];
 
