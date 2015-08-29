@@ -8416,6 +8416,9 @@ let
     version = "0.10.0";
     name = "nipype-${version}";
 
+    # Uses python 2 print. Master seems to be Py3 compatible.
+    disabled = isPy3k;
+    
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nipype/${name}.tar.gz";
       md5 = "480013709633a6d292e2ef668443e0c9";
