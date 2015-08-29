@@ -1089,6 +1089,17 @@ rec {
 
   };
 
+  unite = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "unite-2015-08-29";
+    src = fetchgit {
+      url = "git://github.com/shougo/unite.vim";
+      rev = "7e1152d8fec124a07c7ea953b792dec3816a97f8";
+      sha256 = "8284ad86ac3fa130a96618292da2a49421d726174a329b32a8d9fd020b8cfc8b";
+    };
+    dependencies = [];
+
+  };
+
   vim-addon-actions = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-addon-actions-2014-09-22";
     src = fetchgit {
