@@ -1,6 +1,6 @@
 { goPackages, lib, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prom2json-${rev}";
   rev = "0.1.0";
   goPackagePath = "github.com/prometheus/prom2json";
@@ -25,4 +25,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

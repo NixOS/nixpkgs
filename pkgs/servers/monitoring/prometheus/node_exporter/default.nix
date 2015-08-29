@@ -2,7 +2,7 @@
 
 with goPackages;
 
-buildGoPackage rec {
+let self = buildGoPackage rec {
   name = "prometheus-node-exporter-${rev}";
   rev = "0.10.0";
   goPackagePath = "github.com/prometheus/node_exporter";
@@ -30,4 +30,6 @@ buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

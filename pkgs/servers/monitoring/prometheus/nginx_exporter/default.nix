@@ -1,6 +1,6 @@
 { lib, goPackages, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prometheus-nginx-exporter-${version}";
   version = "git-2015-06-01";
   goPackagePath = "github.com/discordianfish/nginx_exporter";
@@ -24,4 +24,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

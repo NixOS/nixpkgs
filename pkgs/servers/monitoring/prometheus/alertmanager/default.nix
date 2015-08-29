@@ -1,6 +1,6 @@
 { stdenv, lib, goPackages, fetchFromGitHub, protobuf, vim }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prometheus-alertmanager-${rev}";
   rev = "0.0.4";
   goPackagePath = "github.com/prometheus/alertmanager";
@@ -13,7 +13,7 @@ goPackages.buildGoPackage rec {
   };
 
   buildInputs = [
-    goPackages.protobuf
+    goPackages.protobuf.bin
     goPackages.fsnotify.v0
     goPackages.httprouter
     goPackages.prometheus.client_golang
@@ -51,4 +51,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

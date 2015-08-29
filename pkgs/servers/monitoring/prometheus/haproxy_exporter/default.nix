@@ -1,6 +1,6 @@
 { stdenv, lib, goPackages, fetchFromGitHub, }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prometheus-haproxy-exporter-0.4.0";
   goPackagePath = "github.com/prometheus/haproxy_exporter";
 
@@ -20,4 +20,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

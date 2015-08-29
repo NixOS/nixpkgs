@@ -1,6 +1,6 @@
 { stdenv, lib, goPackages, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prometheus-cli-${rev}";
   rev = "0.3.0";
   goPackagePath = "github.com/prometheus/prometheus_cli";
@@ -24,4 +24,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

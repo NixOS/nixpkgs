@@ -2,7 +2,7 @@
 
 with goPackages;
 
-buildGoPackage rec {
+let self = buildGoPackage rec {
   name = "prometheus-pushgateway-${rev}";
   rev = "0.1.1";
   goPackagePath = "github.com/prometheus/pushgateway";
@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
 
   buildInputs = [
-    go-bindata
+    go-bindata.bin
     protobuf
     httprouter
     golang_protobuf_extensions
@@ -47,4 +47,6 @@ buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin

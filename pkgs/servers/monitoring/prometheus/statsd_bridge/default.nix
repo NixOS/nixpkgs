@@ -1,6 +1,6 @@
 { stdenv, lib, goPackages, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prometheus-statsd-bridge-${version}";
   version = "0.1.0";
   goPackagePath = "github.com/prometheus/statsd_bridge";
@@ -24,4 +24,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin
