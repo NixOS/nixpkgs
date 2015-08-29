@@ -8902,19 +8902,23 @@ let
   };
 
   lockfile = buildPythonPackage rec {
-    name = "lockfile-0.9.1";
-
+    name = "lockfile-${version}";
+    version = "0.10.2";
     src = pkgs.fetchurl {
-      url = "http://pylockfile.googlecode.com/files/${name}.tar.gz";
-      sha1 = "1eebaee375641c9f29aeb21768f917dd2b985752";
+      sha256 = "0zi7amj3y55lp6339w217zksn1a0ssfvscmv059g2wvnyjqi6f95";
+      url = "https://github.com/openstack/pylockfile/archive/${version}.tar.gz";
     };
 
-    # error: invalid command 'test'
-    doCheck = false;
+    doCheck = true;
+    OSLO_PACKAGE_VERSION = "${version}";
+    buildInputs = with self; [
+      pbr nose sphinx_1_2
+    ];
 
     meta = {
-      homepage = http://code.google.com/p/pylockfile/;
+      homepage = http://launchpad.net/pylockfile;
       description = "Platform-independent advisory file locking capability for Python applications";
+      license = licenses.asl20;
     };
   };
 
