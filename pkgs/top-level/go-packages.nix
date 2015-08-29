@@ -133,7 +133,7 @@ let
       mkdir -p $bin/bin
       eval $(go env | grep GOTOOLDIR)
       find $GOTOOLDIR -type f | while read x; do
-        ln -sv "$x" "$binbin"
+        ln -sv "$x" "$bin/bin"
       done
       export GOTOOLDIR=$bin/bin
     '';

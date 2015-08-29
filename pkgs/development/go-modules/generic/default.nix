@@ -137,7 +137,7 @@ go.stdenv.mkDerivation (
     done < <(find . -type f)
     popd
 
-    mkdir $bin
+    mkdir -p $bin
     dir="$NIX_BUILD_TOP/go/bin"
     [ -e "$dir" ] && cp -r $dir $bin
 
