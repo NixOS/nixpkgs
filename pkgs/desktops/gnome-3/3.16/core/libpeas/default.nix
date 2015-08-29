@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, glib, gtk3, gobjectIntrospection, python, pygobject3, hicolor_icon_theme
+, glib, gtk3, gobjectIntrospection, python, pygobject3
 }:
 
 let
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   version = "${majorVersion}.1";
 
   buildInputs =  [
-   intltool pkgconfig
-   glib gtk3 gobjectIntrospection python pygobject3 hicolor_icon_theme
+   intltool pkgconfig glib gtk3 gobjectIntrospection python pygobject3
+   gnome3.defaultIconTheme
   ];
 
   src = fetchurl {

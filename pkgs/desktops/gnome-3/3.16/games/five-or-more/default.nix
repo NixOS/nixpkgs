@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, intltool, itstool, libxml2, hicolor_icon_theme }:
+, librsvg, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "five-or-more-${gnome3.version}.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook librsvg intltool itstool libxml2
-    hicolor_icon_theme
+    gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

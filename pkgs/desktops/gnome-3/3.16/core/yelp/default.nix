@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, hicolor_icon_theme, gnome3, gdk_pixbuf, sqlite
+, file, librsvg, gnome3, gdk_pixbuf, sqlite
 , bash, makeWrapper, itstool, libxml2, libxslt, icu, gst_all_1
 , wrapGAppsHook }:
 
@@ -17,8 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib webkitgtk intltool itstool sqlite
                   libxml2 libxslt icu file makeWrapper gnome3.yelp_xsl
-                  librsvg gdk_pixbuf gnome3.adwaita-icon-theme
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
+                  librsvg gdk_pixbuf gnome3.defaultIconTheme
                   gnome3.gsettings_desktop_schemas wrapGAppsHook
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 

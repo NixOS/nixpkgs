@@ -118,11 +118,11 @@ let
   };
 
   tools = buildFromGitHub {
-    rev = "93604a3dc2a5ae0168456c672ec35cc90ea881e6";
-    date = "2015-08-19";
+    rev = "b48dc8da98ae78c3d11f220e7d327304c84e623a";
+    date = "2015-08-24";
     owner = "golang";
     repo = "tools";
-    sha256 = "1yd3hwsbsjrmx85nihss55wy91y8sld7p0599j5k9xi0n1mrxdci";
+    sha256 = "187p3jjxrw2qjnzqwwrq7f9w10zh6vcnwnfl3q7ms8rbiffpjy5c";
     goPackagePath = "golang.org/x/tools";
     goPackageAliases = [ "code.google.com/p/go.tools" ];
 
@@ -136,7 +136,9 @@ let
       export GOTOOLDIR=$out/bin
     '';
 
-    excludedPackages = "testdata";
+    excludedPackages = "\\("
+      + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
+      + "\\)";
 
     buildInputs = [ net ];
 
@@ -327,10 +329,10 @@ let
   };
 
   cli-go = buildFromGitHub {
-    rev    = "v1.2.0";
+    rev    = "142e6cd241a4dfbf7f07a018f1f8225180018da4";
     owner  = "codegangsta";
     repo   = "cli";
-    sha256 = "1axcpc8wgs0b66dpl36pz97pqbxkgvvbwz1b6rf7gl103jqpii40";
+    sha256 = "1w8naax4gvkkxw5h31a2c2dwniw5hj92nv0hn6ybdlavffyax9h5";
   };
 
   columnize = buildFromGitHub {
@@ -646,11 +648,11 @@ let
   };
 
   glide = buildFromGitHub {
-    rev    = "0.4.1";
+    rev    = "0.5.0";
     owner  = "Masterminds";
     repo   = "glide";
-    sha256 = "0237l8s7z1ysfkv3kmw4788fg4kjcq2sh6073bjcwynz3hldkrlr";
-    buildInputs = [ cookoo cli-go go-gypsy ];
+    sha256 = "10jg3h1zprx2ylmmcvmy94k4pw7lc9a6xfgr2ld8rih642sqg9wh";
+    buildInputs = [ cookoo cli-go go-gypsy vcs ];
   };
 
   gls = buildFromGitHub {
@@ -1531,17 +1533,12 @@ let
     sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
   };
 
-  ipfs = buildGoPackage rec {
-    rev = "952dc9c60fdff27902749222fdc30164e7eea1ee";
-    name = "ipfs-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/ipfs/go-ipfs";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner  = "ipfs";
-      repo   = "go-ipfs";
-      sha256 = "1mlilx1i77px85jag4jwpcy8fy0vv15hsmpr1d9zvcs3b7qhskqp";
-    };
+  ipfs = buildFromGitHub{
+    rev = "ff26c312000da12d395c9cdba05c43f29b68b456";
+    owner  = "ipfs";
+    repo   = "go-ipfs";
+    sha256 = "0qj3rwq5i4aiwn0i09skpi1s3mzqm8ma9v1cpjl7rya2y6ypx8xg";
+    excludedPackages = "Godeps";
   };
 
   ldap = buildGoPackage rec {
@@ -1735,10 +1732,10 @@ let
   };
 
   mongo-tools = buildFromGitHub {
-    rev    = "621464ebd2ba0c6ee373600b0cb7fd4216405550";
+    rev    = "4fcfd3e57415de95c0c016def07b95bca63cccb4";
     owner  = "mongodb";
     repo   = "mongo-tools";
-    sha256 = "0hgh5h7bpn5xxnxgmw30fi51l4cb4g029nih8j8m0sr4if0n9vkf";
+    sha256 = "0rm7bnb81hr0byxhvagwv8an1bky882nz68cmm2kbznzyprvhyaa";
     buildInputs = [ gopass go-flags mgo openssl tomb ];
     excludedPackages = "vendor";
 
@@ -2402,6 +2399,13 @@ let
       hcl logutils osext pq cli copystructure go-homedir mapstructure
       reflectwalk columnize go-zookeeper crypto net oauth2
     ];
+  };
+
+  vcs = buildFromGitHub {
+    rev    = "c709a4244b817af98a8ecb495ca4ab0b11f27ecd";
+    owner  = "Masterminds";
+    repo   = "vcs";
+    sha256 = "04gw4pp1f9wp36nvp9y234bmp267c4ajwcc39wa975cd89zhlhn4";
   };
 
   vulcand = buildGoPackage rec {

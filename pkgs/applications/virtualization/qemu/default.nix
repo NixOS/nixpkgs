@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
 , attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
-, libseccomp, libaio, libcap_ng, gnutls
+, libseccomp, libaio, libcap_ng, gnutls, nettle
 , makeWrapper
 , pulseSupport ? true, libpulseaudio
 , sdlSupport ? true, SDL
@@ -11,7 +11,7 @@
 
 with stdenv.lib;
 let
-  n = "qemu-2.2.1";
+  n = "qemu-2.4.0";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${n}.tar.bz2";
-    sha256 = "181m2ddsg3adw8y5dmimsi8x678imn9f6i5p20zbhi7pdr61a5s6";
+    sha256 = "0836gqv5zcl0xswwjcns3mlkn18lyz2fiq8rl1ihcm6cpf8vkc3j";
   };
 
   buildInputs =
     [ python zlib pkgconfig glib ncurses perl pixman attr libcap
       vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
-      libcap_ng gnutls
+      libcap_ng gnutls nettle
     ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]

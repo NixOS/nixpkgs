@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
-, file, librsvg, hicolor_icon_theme, gnome3, gdk_pixbuf
+, file, librsvg, gnome3, gdk_pixbuf
 , dbus_glib, dbus_libs, telepathy_glib, telepathy_farstream
 , clutter_gtk, clutter-gst, gst_all_1, cogl, gnome_online_accounts
 , gcr, libsecret, folks, libpulseaudio, telepathy_mission_control
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
                   gcr libsecret libpulseaudio gnome3.yelp_xsl gdk_pixbuf
                   libnotify clutter libsoup gnutls libgee p11_kit
                   libcanberra_gtk3 telepathy_farstream farstream
-                  gnome3.adwaita-icon-theme hicolor_icon_theme 
-                  gnome3.gsettings_desktop_schemas file libtool librsvg ];
+                  gnome3.defaultIconTheme gnome3.gsettings_desktop_schemas
+                  file libtool librsvg ];
 
   NIX_CFLAGS_COMPILE = [ "-I${dbus_glib}/include/dbus-1.0"
                          "-I${dbus_libs}/include/dbus-1.0"

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , itstool, libxml2, python3, python3Packages, pyatspi, at_spi2_core
-, dbus, intltool, libwnck3, hicolor_icon_theme }:
+, dbus, intltool, libwnck3 }:
 
 stdenv.mkDerivation rec {
   name = "accerciser-3.14.0";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook itstool libxml2 python3 pyatspi
     python3Packages.pygobject3 python3Packages.ipythonLight
-    at_spi2_core dbus intltool libwnck3 hicolor_icon_theme
+    at_spi2_core dbus intltool libwnck3 gnome3.defaultIconTheme
   ];
 
   wrapPrefixVariables = [ "PYTHONPATH" ];

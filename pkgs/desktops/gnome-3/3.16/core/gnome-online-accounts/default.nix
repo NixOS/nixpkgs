@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, libxslt, gtk, makeWrapper
 , webkitgtk, json_glib, rest, libsecret, dbus_glib, gnome_common
 , telepathy_glib, intltool, dbus_libs, icu, autoreconfHook
-, libsoup, docbook_xsl_ns, docbook_xsl, gnome3, hicolor_icon_theme
+, libsoup, docbook_xsl_ns, docbook_xsl, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common makeWrapper
                   libsecret dbus_glib telepathy_glib intltool icu libsoup autoreconfHook
-                  docbook_xsl_ns docbook_xsl hicolor_icon_theme ];
+                  docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme ];
 
   preFixup = ''
     for f in "$out/libexec/"*; do

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, libxml2, intltool, itstool, hicolor_icon_theme }:
+, libxml2, intltool, itstool }:
 
 stdenv.mkDerivation rec {
   name = "hitori-${gnome3.version}.1";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2
-    hicolor_icon_theme
+    gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

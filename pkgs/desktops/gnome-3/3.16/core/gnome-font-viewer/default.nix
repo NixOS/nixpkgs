@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , bash, makeWrapper, itstool
 , gnome3, librsvg, gdk_pixbuf }:
 
@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gnome_desktop
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
   preFixup = ''

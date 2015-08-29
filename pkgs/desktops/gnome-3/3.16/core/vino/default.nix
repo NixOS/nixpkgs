@@ -1,6 +1,5 @@
 { stdenv, intltool, fetchurl, gtk3, glib, libsoup, pkgconfig, makeWrapper
-, hicolor_icon_theme, gnome3
-, libnotify, file, telepathy_glib, dbus_glib }:
+, gnome3, libnotify, file, telepathy_glib, dbus_glib }:
 
 stdenv.mkDerivation rec {
   name = "vino-${versionMajor}.${versionMinor}";
@@ -15,8 +14,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildInputs = [ gtk3 intltool glib libsoup pkgconfig libnotify
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
-                  dbus_glib telepathy_glib file makeWrapper ];
+                  gnome3.defaultIconTheme dbus_glib telepathy_glib file
+                  makeWrapper ];
 
   preFixup = ''
     wrapProgram "$out/libexec/vino-server" \

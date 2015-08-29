@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, libxml2, upower
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , bash, makeWrapper, itstool, vala, sqlite, libxslt
 , gnome3, librsvg, gdk_pixbuf, file, libnotify
 , evolution_data_server, gst_all_1, poppler
@@ -27,12 +27,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ vala pkgconfig gtk3 glib intltool itstool libxml2
                   bzip2 gnome3.totem-pl-parser libxslt
                   gnome3.gsettings_desktop_schemas makeWrapper file
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg sqlite
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite
                   upower libnotify evolution_data_server gnome3.libgee
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base flac
                   poppler icu taglib libjpeg libtiff giflib libvorbis
-                  exempi networkmanager libpng libexif libgsf libuuid
-                  hicolor_icon_theme gnome3.adwaita-icon-theme ];
+                  exempi networkmanager libpng libexif libgsf libuuid ];
 
   preConfigure = ''
     substituteInPlace src/libtracker-sparql/Makefile.in --replace "--shared-library=libtracker-sparql" "--shared-library=$out/lib/libtracker-sparql"

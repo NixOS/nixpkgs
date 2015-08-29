@@ -2,17 +2,17 @@
 , containers, deepseq, deepseq-generics, directory, doctest, filepath
 , hackage-db, hspec, lens, monad-par, monad-par-extras, mtl
 , optparse-applicative, pretty, process, QuickCheck, regex-posix, SHA, split
-, stdenv, transformers, utf8-string, makeWrapper, gitMinimal, cartel
+, stdenv, transformers, utf8-string, makeWrapper, gitMinimal, cartel, data-default
 , nix-prefetch-scripts
 }:
 
 mkDerivation rec {
   pname = "cabal2nix";
-  version = "20150807-6-g9f58996";
+  version = "20150824";
   src = fetchgit {
     url = "http://github.com/NixOS/cabal2nix.git";
-    rev = "9f589961fba9fa6a92900c37cf1ab16c597b0c69";
-    sha256 = "0vy18gmyrw72m98psz7hz51aqj66b98h1pdv98hf3k1hrdva3ncv";
+    rev = "560fb2b1d22f4c995a526529bb034bd183e85a31";
+    sha256 = "0qaa0l23lc8677wvbgz327yvfg2pxxmvrxga6568ra5kgdy4204c";
     deepClone = true;
   };
   isLibrary = false;
@@ -21,19 +21,19 @@ mkDerivation rec {
     aeson ansi-wl-pprint base bytestring Cabal containers
     deepseq-generics directory filepath hackage-db lens monad-par
     monad-par-extras mtl optparse-applicative pretty process
-    regex-posix SHA split transformers utf8-string
+    regex-posix SHA split transformers utf8-string data-default
   ];
   executableHaskellDepends = [
     aeson ansi-wl-pprint base bytestring Cabal containers
     deepseq-generics directory filepath hackage-db lens monad-par
     monad-par-extras mtl optparse-applicative pretty process
-    regex-posix SHA split transformers utf8-string
+    regex-posix SHA split transformers utf8-string data-default
   ];
   testHaskellDepends = [
     aeson ansi-wl-pprint base bytestring Cabal containers deepseq
     deepseq-generics directory doctest filepath hackage-db hspec lens
     monad-par monad-par-extras mtl optparse-applicative pretty process
-    QuickCheck regex-posix SHA split transformers utf8-string
+    QuickCheck regex-posix SHA split transformers utf8-string data-default
   ];
   buildDepends = [ cartel ];
   buildTools = [ gitMinimal makeWrapper ];

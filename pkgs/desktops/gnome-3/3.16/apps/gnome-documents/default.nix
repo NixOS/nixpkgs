@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, evince, gjs
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , makeWrapper, itstool, libxslt, webkitgtk
 , gnome3, librsvg, gdk_pixbuf, libsoup, docbook_xsl
 , gobjectIntrospection, json_glib, inkscape, poppler_utils
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 glib intltool itstool libxslt
                   docbook_xsl desktop_file_utils inkscape poppler_utils
                   gnome3.gsettings_desktop_schemas makeWrapper gmp
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg evince
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg evince
                   libsoup webkitgtk gjs gobjectIntrospection gnome3.rest
                   gnome3.tracker gnome3.libgdata gnome3.gnome_online_accounts
                   gnome3.gnome_desktop gnome3.libzapojit json_glib

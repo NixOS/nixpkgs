@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = http://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
-    platforms = platforms.all;
+    platforms = platforms.allBut [ "i686-linux" ];
     maintainers = with maintainers; [ wkennington ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, evolution_data_server, db
-, pkgconfig, gtk3, glib, hicolor_icon_theme, libsecret
+, pkgconfig, gtk3, glib, libsecret
 , libchamplain, clutter_gtk, geocode_glib
 , bash, makeWrapper, itstool, folks, libnotify, libxml2
 , gnome3, librsvg, gdk_pixbuf, file, telepathy_glib, nspr, nss
@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
                   gnome3.gsettings_desktop_schemas makeWrapper file libnotify
                   folks gnome3.gnome_desktop telepathy_glib libsecret dbus_glib
                   libxml2 libsoup gnome3.gnome_online_accounts nspr nss
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg
                   libchamplain clutter_gtk geocode_glib
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
                   vala automake115x autoconf db ];
 
   preFixup = ''

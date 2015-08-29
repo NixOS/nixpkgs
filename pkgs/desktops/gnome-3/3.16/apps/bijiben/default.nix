@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, pkgconfig, glib
 , evolution_data_server, evolution, sqlite
-, hicolor_icon_theme, makeWrapper, itstool, desktop_file_utils
+, makeWrapper, itstool, desktop_file_utils
 , clutter_gtk, libuuid, webkitgtk, zeitgeist
 , gnome3, librsvg, gdk_pixbuf, libxml2 }:
 
@@ -20,9 +20,8 @@ stdenv.mkDerivation rec {
                   clutter_gtk libuuid webkitgtk gnome3.tracker
                   gnome3.gnome_online_accounts zeitgeist desktop_file_utils
                   gnome3.gsettings_desktop_schemas makeWrapper
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg
-                  evolution_data_server evolution sqlite
-                  hicolor_icon_theme gnome3.adwaita-icon-theme ];
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg
+                  evolution_data_server evolution sqlite ];
 
   enableParallelBuilding = true;
 

@@ -105,7 +105,13 @@ stdenv.mkDerivation rec {
     ./all.bash
   '';
 
+  preFixup = ''
+    rm -r $out/share/go/pkg/bootstrap
+  '';
+
   setupHook = ./setup-hook.sh;
+
+  disallowedReferences = [ go_1_4 ];
 
   meta = with stdenv.lib; {
     branch = "1.5";

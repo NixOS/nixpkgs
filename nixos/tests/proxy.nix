@@ -7,7 +7,7 @@ let
 
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
-      services.httpd.documentRoot = "${pkgs.valgrind}/share/doc/valgrind/html";
+      services.httpd.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
 

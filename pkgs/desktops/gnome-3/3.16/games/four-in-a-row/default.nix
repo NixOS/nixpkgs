@@ -1,6 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, intltool, itstool, libcanberra_gtk3, librsvg, libxml2
-, hicolor_icon_theme }:
+, intltool, itstool, libcanberra_gtk3, librsvg, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "four-in-a-row-${gnome3.version}.2";
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool itstool libcanberra_gtk3 librsvg
-    libxml2 hicolor_icon_theme
+    libxml2 gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

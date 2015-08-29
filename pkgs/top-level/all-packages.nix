@@ -296,7 +296,7 @@ let
 
   buildFHSUserEnv = args: userFHSEnv {
     env = buildFHSEnv (removeAttrs args [ "runScript" ]);
-    runScript = args.runScript;
+    runScript = args.runScript or "bash";
   };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
@@ -1068,7 +1068,6 @@ let
   libceph = ceph.lib;
   ceph-0_80 = callPackage ../tools/filesystems/ceph/0.80.nix { };
   ceph-0_94 = callPackage ../tools/filesystems/ceph/0.94.nix { };
-  ceph-0_94-pre = callPackage ../tools/filesystems/ceph/0.94-pre.nix { };
   ceph = callPackage ../tools/filesystems/ceph { };
   ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
   ceph-git = lowPrio (callPackage ../tools/filesystems/ceph/git.nix { });
@@ -1244,6 +1243,8 @@ let
 
   cutter = callPackage ../tools/networking/cutter { };
 
+  cvs_fast_export = callPackage ../applications/version-management/cvs-fast-export { };
+
   dadadodo = callPackage ../tools/text/dadadodo { };
 
   daemonize = callPackage ../tools/system/daemonize { };
@@ -1346,7 +1347,7 @@ let
 
   doomseeker = callPackage ../applications/misc/doomseeker { };
 
-  drive = callPackage ../applications/networking/drive { };
+  drive = callPackage ../applications/networking/drive { goPackages = go14Packages; };
 
   driftnet = callPackage ../tools/networking/driftnet {};
 
@@ -2081,7 +2082,7 @@ let
 
   iojsPackages = callPackage ./node-packages.nix { self = iojsPackages; nodejs = iojs; };
 
-  npm2nix = nodePackages_0_10.npm2nix;
+  npm2nix = nodePackages.npm2nix;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
@@ -2842,6 +2843,8 @@ let
 
   replace = callPackage ../tools/text/replace { };
 
+  reposurgeon = callPackage ../applications/version-management/reposurgeon { };
+
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
   rescuetime = callPackage ../applications/misc/rescuetime { };
@@ -2884,6 +2887,8 @@ let
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
   rockbox_utility = callPackage ../tools/misc/rockbox-utility { };
+
+  rosegarden = callPackage ../applications/audio/rosegarden { };
 
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
     inherit ppp;
@@ -3041,6 +3046,9 @@ let
   socat = callPackage ../tools/networking/socat { };
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
+
+  softether_4_18 = callPackage ../servers/softether/4.18.nix { };
+  softether = softether_4_18;
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
@@ -3735,7 +3743,11 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert {};
+  compcert = callPackage ../development/compilers/compcert (
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  );
 
   cryptol = haskellPackages.cryptol;
 
@@ -6093,6 +6105,8 @@ let
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
 
+  cwiid = callPackage ../development/libraries/cwiid { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
   # Make bdb5 the default as it is the last release under the custom
@@ -6261,6 +6275,10 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
+  
+  freenect = callPackage ../development/libraries/freenect { 
+      inherit (xlibs) libXi libXmu;
+  };
 
   freetype = callPackage ../development/libraries/freetype { };
 
@@ -6774,6 +6792,8 @@ let
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
+  libb2 = callPackage ../development/libraries/libb2 { };
+
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
@@ -7086,7 +7106,7 @@ let
 
   libplist = callPackage ../development/libraries/libplist { };
 
-  libQGLViewer = callPackage ../development/libraries/libqglviewer { };
+  libqglviewer = callPackage ../development/libraries/libqglviewer { };
 
   libre = callPackage ../development/libraries/libre {};
   librem = callPackage ../development/libraries/librem {};
@@ -7562,6 +7582,8 @@ let
   # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
+  mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
+
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
@@ -7773,6 +7795,8 @@ let
   ois = callPackage ../development/libraries/ois {};
 
   opal = callPackage ../development/libraries/opal {};
+
+  openh264 = callPackage ../development/libraries/openh264 { };
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
   openjpeg_2_0 = callPackage ../development/libraries/openjpeg/2.0.nix { };
@@ -8898,8 +8922,8 @@ let
 
   bird = callPackage ../servers/bird { };
 
-  bosun = callPackage ../servers/monitoring/bosun {};
-  scollector = callPackage ../servers/monitoring/bosun/scollector.nix {};
+  bosun = callPackage ../servers/monitoring/bosun { goPackages = go14Packages; };
+  scollector = callPackage ../servers/monitoring/bosun/scollector.nix { goPackages = go14Packages; };
 
   charybdis = callPackage ../servers/irc/charybdis {};
 
@@ -10247,7 +10271,7 @@ let
   ubootJetsonTK1 = callPackage ../misc/uboot {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-dtb-tegra.bin"];
+    filesToInstall = ["u-boot" "u-boot.dtb" "u-boot-dtb-tegra.bin" "u-boot-nodtb-tegra.bin"];
   };
 
   ubootPcduino3Nano = callPackage ../misc/uboot {
@@ -10486,13 +10510,13 @@ let
 
   docbook_xml_ebnf_dtd = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf { };
 
+  inherit (callPackages ../data/sgml+xml/stylesheets/xslt/docbook-xsl { })
+    docbook_xsl
+    docbook_xsl_ns;
+
   docbook_xml_xslt = docbook_xsl;
 
-  docbook_xsl = callPackage ../data/sgml+xml/stylesheets/xslt/docbook-xsl { };
-
   docbook5_xsl = docbook_xsl_ns;
-
-  docbook_xsl_ns = callPackage ../data/sgml+xml/stylesheets/xslt/docbook-xsl-ns { };
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
@@ -10754,6 +10778,8 @@ let
   ario = callPackage ../applications/audio/ario { };
 
   arora = callPackage ../applications/networking/browsers/arora { };
+
+  artha = callPackage ../applications/misc/artha { };
 
   atom = callPackage ../applications/editors/atom {
     gconf = gnome.GConf;
@@ -11071,7 +11097,7 @@ let
   dmtx-utils = callPackage (import ../tools/graphics/dmtx-utils) {
   };
 
-  docker = callPackage ../applications/virtualization/docker { };
+  docker = callPackage ../applications/virtualization/docker { go = go_1_4; };
 
   doodle = callPackage ../applications/search/doodle { };
 
@@ -12315,6 +12341,8 @@ let
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
+  ne = callPackage ../applications/editors/ne { };
+
   nedit = callPackage ../applications/editors/nedit {
     motif = lesstif;
   };
@@ -12527,6 +12555,8 @@ let
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
   QmidiNet = callPackage ../applications/audio/QmidiNet { };
+
+  qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
   qmmp = callPackage ../applications/audio/qmmp { };
 

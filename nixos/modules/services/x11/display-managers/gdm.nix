@@ -18,14 +18,45 @@ in
 
     services.xserver.displayManager.gdm = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        example = true;
+      enable = mkEnableOption ''
+        GDM as the display manager.
+        <emphasis>GDM is very experimental and may render system unusable.</emphasis>
+      '';
+
+      autoLogin = mkOption {
+        default = {};
         description = ''
-          Whether to enable GDM as the display manager.
-          <emphasis>GDM is very experimental and may render system unusable.</emphasis>
+          Auto login configuration attrset.
         '';
+
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Automatically log in as the sepecified <option>auto.user</option>.
+              '';
+            };
+
+            user = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                User to be used for the autologin.
+              '';
+            };
+
+            delay = mkOption {
+              type = types.int;
+              default = 0;
+              description = ''
+                Seconds of inactivity after which the autologin will be performed.
+              '';
+            };
+
+          };
+        };
       };
 
     };
@@ -50,7 +81,7 @@ in
     users.extraGroups.gdm.gid = config.ids.gids.gdm;
 
     services.xserver.displayManager.job =
-      { 
+      {
         environment = {
           GDM_X_SERVER = "${cfg.xserverBin} ${cfg.xserverArgs}";
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
@@ -71,6 +102,25 @@ in
 
     programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
 
+    environment.etc."gdm/custom.conf".text = ''
+      [daemon]
+      ${optionalString cfg.gdm.autoLogin.enable ''
+      TimedLoginEnable=true
+      TimedLogin=${cfg.gdm.autoLogin.user}
+      TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
+      ''}
+
+      [security]
+
+      [xdmcp]
+
+      [greeter]
+
+      [chooser]
+
+      [debug]
+    '';
+
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
       gdm-launch-environment.text = ''
@@ -89,7 +139,7 @@ in
         session  optional       pam_permit.so
       '';
 
-     gdm.text = ''
+      gdm.text = ''
         auth     requisite      pam_nologin.so
         auth     required       pam_env.so
 
@@ -130,7 +180,7 @@ in
           "auth     required       pam_deny.so"}
 
         account  sufficient     pam_unix.so
-        
+
         password requisite      pam_unix.so nullok sha512
         ${optionalString config.security.pam.enableEcryptfs
           "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}

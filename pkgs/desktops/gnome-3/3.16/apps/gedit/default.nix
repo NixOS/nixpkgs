@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, enchant, isocodes
-, pkgconfig, gtk3, glib, hicolor_icon_theme
+, pkgconfig, gtk3, glib
 , bash, makeWrapper, itstool, libsoup, libxml2
 , gnome3, librsvg, gdk_pixbuf, file }:
 
@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool enchant isocodes
-                  gdk_pixbuf gnome3.adwaita-icon-theme librsvg libsoup
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg libsoup
                   gnome3.libpeas gnome3.gtksourceview libxml2
-                  hicolor_icon_theme gnome3.adwaita-icon-theme
                   gnome3.gsettings_desktop_schemas makeWrapper file ];
 
   enableParallelBuilding = true;

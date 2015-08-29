@@ -9,7 +9,7 @@ rec {
                             , passthru ? {}
                             , ... } @ attrs:
     stdenv.mkDerivation (attrs // {
-      name = "eclipse-" + name;
+      name = "eclipse-plugin-" + name;
 
       buildInputs = buildInputs ++ [ unzip ];
 
@@ -298,7 +298,7 @@ rec {
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "0p2dbf56rw733dhsxy9hdwmbzqlk01j8f2hci21bsipq5w2144x6";
+      sha256 = "0x5cdcm7p2ynz5ryw041gb150sripf9i4m1yrfqklnn581yqm6y8";
     };
 
     meta = with stdenv.lib; {
@@ -312,16 +312,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.5.201506120235";
+    version = "6.9.5.201508210528";
 
     srcFeature = fetchurl {
-      url = "http://beust.com/eclipse/features/org.testng.eclipse_6.9.5.201506120235.jar";
-      sha256 = "02imv0rw10pik55a7p00jin65shvhfpzgna02ky94yx7dlf9fyy9";
+      url = "http://beust.com/eclipse/features/org.testng.eclipse_${version}.jar";
+      sha256 = "0xalm7pvj0vx61isgkjkgj073b4hlqlzx6xnkrnnnyi0r212a26j";
     };
 
     srcPlugin = fetchurl {
-      url = "http://beust.com/eclipse/plugins/org.testng.eclipse_6.9.5.201506120235.jar";
-      sha256 = "0ni1ky4p5l1qzph0np1qw9pcyhrvy6zmn9c8q1b5rm5xv1fcvji4";
+      url = "http://beust.com/eclipse/plugins/org.testng.eclipse_${version}.jar";
+      sha256 = "07wmivfvfsq6cjw5zwciajdxkfa7drk108jsr44gf4i1bv9fj055";
     };
 
     meta = with stdenv.lib; {

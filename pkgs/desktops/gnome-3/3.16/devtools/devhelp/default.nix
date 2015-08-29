@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, webkitgtk, intltool, hicolor_icon_theme }:
+, webkitgtk, intltool }:
 
 stdenv.mkDerivation rec {
   name = "devhelp-${gnome3.version}.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook webkitgtk intltool hicolor_icon_theme
+    pkgconfig gtk3 wrapGAppsHook webkitgtk intltool gnome3.defaultIconTheme
   ];
 
   meta = with stdenv.lib; {

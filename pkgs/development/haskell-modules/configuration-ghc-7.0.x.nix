@@ -38,7 +38,7 @@ self: super: {
   binary = self.binary_0_7_6_1;
 
   # deepseq is not a core library for this compiler.
-  deepseq = self.deepseq_1_4_1_1;
+  deepseq = self.deepseq_1_4_1_2;
 
   # transformers is not a core library for this compiler.
   transformers = self.transformers_0_4_3_0;
