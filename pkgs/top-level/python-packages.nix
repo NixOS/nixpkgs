@@ -6805,14 +6805,16 @@ let
     };
   };
 
-  importlib = if isPy26 then (buildPythonPackage {
+  importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
+    
+    disabled = (!isPy26) || isPyPy;
+    
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
       md5 = "4aa23397da8bd7c7426864e88e4db7e1";
     };
-    doCheck = false;
-  }) else null;
+  };
 
   influxdb = buildPythonPackage rec {
     name = "influxdb-0.1.12";
