@@ -1,6 +1,6 @@
 { stdenv, lib, goPackages, fetchFromGitHub, vim }:
 
-goPackages.buildGoPackage rec {
+let self = goPackages.buildGoPackage rec {
   name = "prometheus-${version}";
   version = "0.15.1";
   goPackagePath = "github.com/prometheus/prometheus";
@@ -27,6 +27,12 @@ goPackages.buildGoPackage rec {
     yaml-v2
   ];
 
+  preInstall = ''
+    mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
+    cp -a $src/documentation/* $bin/share/doc/prometheus
+    cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
+  '';
+
   # Metadata that gets embedded into the binary
   buildFlagsArray = let t = "${goPackagePath}/version"; in
   ''
@@ -46,4 +52,6 @@ goPackages.buildGoPackage rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-}
+};
+
+in self.bin
