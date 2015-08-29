@@ -7994,13 +7994,11 @@ let
 
   qt5 = qt54;
 
-  qt5Full = appendToName "full" (qt53.override {
-    buildDocs = true;
-    buildExamples = true;
-    buildTests = true;
-    developerBuild = true;
   qtEnv = callPackage ../development/libraries/qt-5/qt-env.nix {};
 
+  qt5Full = appendToName "full" (qtEnv {
+    qtbase = qt5.base;
+    paths = lib.filter (x: !(builtins.isFunction x)) (lib.attrValues qt5);
   });
 
   qt5SDK = qtcreator.override {
