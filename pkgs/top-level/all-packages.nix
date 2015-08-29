@@ -3453,6 +3453,11 @@ let
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  urjtag = callPackage ../tools/misc/urjtag {
+    jedecSupport = true;
+    pythonBindings = true;
+  };
+
   urlwatch = callPackage ../tools/networking/urlwatch { };
 
   varnish = callPackage ../servers/varnish { };
