@@ -7803,7 +7803,43 @@ let
       description = "A load testing tool";
     };
   };
+  
+  llvmlite = buildPythonPackage rec {
+    name = "llvmlite-${version}";
+    version = "0.7.0";
+    
+    disabled = isPyPy;
+    
+    src = pkgs.fetchurl { 
+      url = "https://pypi.python.org/packages/source/l/llvmlite/${name}.tar.gz";
+      sha256 = "6d780980da05d2d82465991bce42c1b4625018d67feae17c672c6a9d5ad0bb1a";
+    };
 
+    llvm = pkgs.llvm;
+    
+    propagatedBuildInputs = with self; [ llvm ] ++ optional (!isPy34) enum34;
+
+    # Disable static linking
+    # https://github.com/numba/llvmlite/issues/93
+    patchPhase = ''
+      substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
+    '';
+    # Set directory containing llvm-config binary
+    preConfigure = ''
+      export LLVM_CONFIG=${llvm}/bin/llvm-config
+    '';
+    checkPhase = ''
+      ${self.python.executable} runtests.py
+    '';
+    
+    meta = {
+      description = "A lightweight LLVM python binding for writing JIT compilers";
+      homepage = "http://llvmlite.pydata.org/";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ fridh ];
+    };
+  };
+  
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
 
