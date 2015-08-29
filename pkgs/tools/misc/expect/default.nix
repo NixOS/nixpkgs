@@ -23,19 +23,26 @@ stdenv.mkDerivation {
     "--exec-prefix=\${out}"
   ];
 
-  postInstall = ''
-    for i in $out/bin/*; do
-      wrapProgram $i \
-        --prefix PATH : "${tcl}/bin" \
-        --prefix TCLLIBPATH ' ' $out/lib/*
-    done
-  '';
+  postInstall =
+    let darwinFlags =
+      if stdenv.isDarwin
+      then "--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version}"
+      else "";
+    in ''
+      for i in $out/bin/*; do
+        wrapProgram $i \
+          --prefix PATH : "${tcl}/bin" \
+          --prefix TCLLIBPATH ' ' $out/lib/* \
+          ${darwinFlags}
+      done
+    ''
+  ;
 
   meta = with stdenv.lib; {
     description = "A tool for automating interactive applications";
     homepage = http://expect.nist.gov/;
     license = "Expect";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
   };
 }
