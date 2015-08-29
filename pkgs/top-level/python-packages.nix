@@ -13272,6 +13272,10 @@ let
     };
   });
 
+  spyder = callPackage ../applications/science/spyder {
+    rope = if isPy3k then null else self.rope;
+  };
+
   sqlalchemy = self.sqlalchemy9.override rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34;
