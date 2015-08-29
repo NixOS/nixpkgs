@@ -9237,6 +9237,32 @@ let
     };
   };
 
+  numba = buildPythonPackage rec {
+    version = "0.21.0";
+    name = "numba-${version}";
+    
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numba/${name}.tar.gz";
+      sha256 = "1806d2f6ad49ad891e9ac6fed0cc0b0489cbfcd9ba2dc81081c1c30091e77604";
+    };
+    
+    propagatedBuildInputs = with self; [numpy llvmlite argparse] ++ optional (!isPy3k) funcsigs ++ optional (isPy27 || isPy33) singledispatch;
+    # Future work: add Cuda support.
+    #propagatedBuildInputs = with self; [numpy llvmlite argparse pkgs.cudatoolkit6];
+    #buildPhase = ''
+    #  export NUMBAPRO_CUDA_DRIVER=
+    #  export NUMBAPRO_NVVM=${pkgs.cudatoolkit6}
+    #  export NUMBAPRO_LIBDEVICE=
+    #'';
+
+    meta = {
+      homepage = http://numba.pydata.org/;
+      license = licenses.bsd2;
+      description = "Compiling Python code using LLVM";
+      maintainers = with maintainers; [ fridh ];
+    };
+  };
+  
   numexpr = buildPythonPackage rec {
     version = "2.4.3";
     name = "numexpr-${version}";
