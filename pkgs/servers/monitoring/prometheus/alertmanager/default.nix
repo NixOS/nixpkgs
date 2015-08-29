@@ -1,4 +1,4 @@
-{ stdenv, lib, goPackages, fetchFromGitHub, protobuf, vim }:
+{ stdenv, lib, goPackages, fetchFromGitHub }:
 
 let self = goPackages.buildGoPackage rec {
   name = "prometheus-alertmanager-${rev}";
@@ -12,40 +12,25 @@ let self = goPackages.buildGoPackage rec {
     sha256 = "0g656rzal7m284mihqdrw23vhs7yr65ax19nvi70jl51wdallv15";
   };
 
-  buildInputs = [
-    goPackages.protobuf.bin
-    goPackages.fsnotify.v0
-    goPackages.httprouter
-    goPackages.prometheus.client_golang
-    goPackages.prometheus.log
-    goPackages.pushover
-    protobuf
-    vim
+  buildInputs = with goPackages; [
+    fsnotify.v0
+    httprouter
+    prometheus.client_golang
+    prometheus.log
+    pushover
   ];
 
   buildFlagsArray = ''
     -ldflags=
-        -X main.buildVersion ${rev}
-        -X main.buildBranch master
-        -X main.buildUser nix@nixpkgs
-        -X main.buildDate 20150101-00:00:00
-        -X main.goVersion ${lib.getVersion goPackages.go}
-  '';
-
-  preBuild = ''
-  (
-    cd "go/src/$goPackagePath"
-    protoc --proto_path=./config \
-           --go_out=./config/generated/ \
-           ./config/config.proto
-    cd web
-    ${stdenv.shell} blob/embed-static.sh static templates \
-      | gofmt > blob/files.go
-  )
+        -X main.buildVersion=${rev}
+        -X main.buildBranch=master
+        -X main.buildUser=nix@nixpkgs
+        -X main.buildDate=20150101-00:00:00
+        -X main.goVersion=${lib.getVersion goPackages.go}
   '';
 
   meta = with lib; {
-    description = "Alerting dispather for the Prometheus monitoring system";
+    description = "Alert dispatcher for the Prometheus monitoring system";
     homepage = "https://github.com/prometheus/alertmanager";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
