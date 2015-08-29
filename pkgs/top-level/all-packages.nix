@@ -7973,11 +7973,6 @@ let
     developerBuild = true;
   });
 
-  qt4SDK = qtcreator.override {
-    sdkBuild = true;
-    qtLib = qt48Full;
-  };
-
   qt53 = callPackage ../development/libraries/qt-5/5.3 {
     mesa = mesa_noglu;
     cups = if stdenv.isLinux then cups else null;
@@ -7990,21 +7985,15 @@ let
 
   qt5 = qt54;
 
-  qt5Full = appendToName "full" (qt53.override {
-    buildDocs = true;
-    buildExamples = true;
-    buildTests = true;
-    developerBuild = true;
+  qtEnv = callPackage ../development/libraries/qt-5/qt-env.nix {};
+
+  qt5Full = appendToName "full" (qtEnv {
+    qtbase = qt5.base;
+    paths = lib.filter (x: !(builtins.isFunction x)) (lib.attrValues qt5);
   });
 
-  qt5SDK = qtcreator.override {
-    sdkBuild = true;
-    qtLib = qt5Full;
-    withDocumentation = true;
-  };
-
   qtcreator = callPackage ../development/qtcreator {
-    qtLib = qt5Full; # 3.4 only supports qt5; TODO: use modularized qt>=5.4
+    qtLib = qt54;
     withDocumentation = true;
   };
 
