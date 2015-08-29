@@ -10799,6 +10799,7 @@ let
     callPackage = newScope { boost = boost157; };
   } );
   bitcoin = altcoins.bitcoin;
+  bitcoin-xt = altcoins.bitcoin-xt;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
