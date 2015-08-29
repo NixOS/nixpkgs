@@ -8,20 +8,28 @@
 }:
 
 buildPythonPackage rec {
-  name = "spyder-2.2.5";
+  name = "spyder-${version}";
+  version = "2.3.6";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://spyderlib.googlecode.com/files/${name}.zip";
-    sha256 = "1bxc5qs2bqc21s6kxljsfxnmwgrgnyjfr9mkwzg9njpqsran3bp2";
+    url = "https://pypi.python.org/packages/source/s/spyder/${name}.zip";
+    sha256 = "0e6502e0d3f270ea8916d1a3d7ca29915801d31932db399582bc468c01d535e2";
   };
+  
+  
 
   buildInputs = [ unzip ];
   propagatedBuildInputs =
-    [ pyside pyflakes rope sphinx numpy scipy matplotlib ipython pylint pep8 ];
+    [ pyside pyflakes sphinx numpy scipy matplotlib ipython pylint pep8 ];
 
   # There is no test for spyder
   doCheck = false;
+  
+  # Use setuptools instead of distutils.
+  preConfigure = ''
+    export USE_SETUPTOOLS=True
+  '';
 
   desktopItem = makeDesktopItem {
     name = "Spyder";
@@ -49,7 +57,7 @@ buildPythonPackage rec {
       environment for the Python language with advanced editing, interactive
       testing, debugging and introspection features.
     '';
-    homepage = https://code.google.com/p/spyderlib/;
+    homepage = https://github.com/spyder-ide/spyder/;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
