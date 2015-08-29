@@ -378,12 +378,12 @@ let
     sha256 = "0xmxy8ay0wzd307x7xba3rmigvr6rjlpfk9fmn6ir2nc97ifv3i0";
   };
 
-  consul = buildFromGitHub {
-    rev    = "a6317f2fb2ba9d5ae695f7fa703cfb30a1c59af1";
-    date   = "2015-07-24";
-    owner  = "hashicorp";
-    repo   = "consul";
-    sha256 = "0jixpl9yksasqx9rkidx8qmqc59m34kiibsqfsv56g87wzyp89rs";
+  consul = buildFromGitHub rec {
+    rev = "v0.5.2";
+    date = rev;
+    owner = "hashicorp";
+    repo = "consul";
+    sha256 = "0p3lc1p346a5ipvkf15l94gn1ml3m7zz6bx0viark3hsv0a7iij7";
 
     buildInputs = [
       circbuf armon.go-metrics go-radix gomdb bolt consul-migrate go-checkpoint
