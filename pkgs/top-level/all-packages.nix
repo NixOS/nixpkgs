@@ -8665,7 +8665,7 @@ let
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_4;
       govers = go14Packages.govers;
-      inherit lib;
+      inherit parallel lib;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   });
@@ -8675,7 +8675,7 @@ let
     buildGoPackage = import ../development/go-modules/generic {
       go = go_1_5;
       govers = go15Packages.govers;
-      inherit lib;
+      inherit parallel lib;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   });
