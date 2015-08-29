@@ -10340,6 +10340,10 @@ let
       sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
     };
 
+    prePatch = ''
+      sed -i -e "s|if type(driver_id)==int|if type(driver_id) in (int, long)|g" cdio.py
+    '';
+
     preConfigure = ''
       patchShebangs .
     '';
