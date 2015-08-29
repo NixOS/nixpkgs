@@ -8744,11 +8744,12 @@ let
 
 
   markupsafe = buildPythonPackage rec {
-    name = "markupsafe-0.15";
+    name = "markupsafe-${version}";
+    version = "0.23";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/M/MarkupSafe/${name}.tar.gz";
-      md5 = "4e7c4d965fe5e033fa2d7bb7746bb186";
+      url = "http://pypi.python.org/packages/source/M/MarkupSafe/MarkupSafe-${version}.tar.gz";
+      sha256 = "a4ec1aff59b95a14b45eb2e23761a0179e98319da5a7eb76b56ea8cdc7b871c3";
     };
 
     meta = {
