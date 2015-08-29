@@ -11,7 +11,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.8.3";
+  version = "2.8.5";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -25,12 +25,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "05igg61lflgwy83cmxgyzmvf2bkhplmp8710ssrlpmbfcz461pmk";
+    sha256 = "082dw0d8jxvsapx30ypmy5h2srzfzi42c3zr9pbkzx1m959hq7rx";
   };
 
   patches = [ ./finding-harfbuzz-icu.patch ];
 
   cmakeFlags = [ "-DPORT=GTK" ];
+
+  # XXX: WebKit2 missing include path for gst-plugins-base.
+  # Filled: https://bugs.webkit.org/show_bug.cgi?id=148894
+  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base}/include/gstreamer-1.0";
 
   nativeBuildInputs = [
     cmake perl python ruby bison gperf sqlite
