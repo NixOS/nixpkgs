@@ -1614,7 +1614,11 @@ let
     buildInputs = [
       gettext-go websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
       lxd-go-systemd go-uuid tablewriter golang-petname mux go-sqlite3 goproxy
+      pkgs.python3
     ];
+    postInstall = ''
+      cp go/src/$goPackagePath/scripts/lxd-images $bin/bin
+    '';
   };
 
   mapstructure = buildFromGitHub {
