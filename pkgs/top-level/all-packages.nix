@@ -9205,9 +9205,8 @@ let
   prometheus-mesos-exporter = goPackages.prometheus.mesos-exporter.bin;
   prometheus-mysqld-exporter = goPackages.prometheus.mysqld-exporter.bin;
   prometheus-nginx-exporter = goPackages.prometheus.nginx-exporter.bin;
+  prometheus-node-exporter = goPackages.prometheus.node-exporter.bin;
 
-  prometheus-node-exporter =
-    callPackage ../servers/monitoring/prometheus/node_exporter { };
   prometheus-pushgateway =
     callPackage ../servers/monitoring/prometheus/pushgateway { };
   prometheus-statsd-bridge =

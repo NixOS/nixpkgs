@@ -2121,6 +2121,30 @@ let
     };
   };
 
+  prometheus.node-exporter = buildFromGitHub {
+    rev = "0.10.0";
+    owner = "prometheus";
+    repo = "node_exporter";
+    sha256 = "0dmczav52v9vi0kxl8gd2s7x7c94g0vzazhyvlq1h3729is2nf0p";
+
+    buildInputs = [
+      go-runit
+      ntp
+      prometheus.client_golang
+      prometheus.client_model
+      prometheus.log
+      protobuf
+    ];
+
+    meta = with stdenv.lib; {
+      description = "Prometheus exporter for machine metrics";
+      homepage = https://github.com/prometheus/node_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.procfs = buildFromGitHub {
     rev    = "c91d8eefde16bd047416409eb56353ea84a186e4";
     date   = "2015-06-16";
