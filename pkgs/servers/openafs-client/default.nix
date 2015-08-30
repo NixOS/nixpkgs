@@ -1,23 +1,13 @@
 { stdenv, fetchurl, which, autoconf, automake, flex, yacc,
   kernel, glibc, ncurses, perl, kerberos }:
 
-assert stdenv.isLinux;
-assert builtins.substring 0 4 kernel.version != "3.18";
-
 stdenv.mkDerivation {
-  name = "openafs-1.6.9-${kernel.version}";
+  name = "openafs-1.6.14-${kernel.version}";
 
   src = fetchurl {
-    url = http://www.openafs.org/dl/openafs/1.6.9/openafs-1.6.9-src.tar.bz2;
-    sha256 = "1isgw7znp10w0mr3sicnjzbc12bd1gdwfqqr667w6p3syyhs6bkv";
+    url = http://www.openafs.org/dl/openafs/1.6.14/openafs-1.6.14-src.tar.bz2;
+    sha256 = "3e62c798a7f982c4f88d85d32e46bee6a47848d207b1e318fe661ce44ae4e01f";
   };
-
-  patches = [
-   ./f3c0f74186f4a323ffc5f125d961fe384d396cac.patch
-   ./ae86b07f827d6f3e2032a412f5f6cb3951a27d2d.patch
-   ./I5558c64760e4cad2bd3dc648067d81020afc69b6.patch
-   ./If1fd9d27f795dee4b5aa2152dd09e0540d643a69.patch
-  ];
 
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];
 
@@ -34,14 +24,14 @@ stdenv.mkDerivation {
 
     ./regen.sh
 
-    ${stdenv.lib.optionalString (kerberos != null) ''
-      export KRB5_CONFIG=${kerberos}/bin/krb5-config"
-    ''}
+    ${stdenv.lib.optionalString (kerberos != null)
+      "export KRB5_CONFIG=${kerberos}/bin/krb5-config"}
 
     configureFlagsArray=(
       "--with-linux-kernel-build=$TMP/linux"
       ${stdenv.lib.optionalString (kerberos != null) "--with-krb5"}
       "--sysconfdir=/etc/static"
+      "--disable-linux-d_splice-alias-extra-iput"
     )
   '';
 
