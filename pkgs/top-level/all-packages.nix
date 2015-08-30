@@ -9200,9 +9200,8 @@ let
   prometheus = goPackages.prometheus.prometheus.bin;
   prometheus-alertmanager = goPackages.prometheus.alertmanager.bin;
   prometheus-cli = goPackages.prometheus.cli.bin;
+  prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin;
 
-  prometheus-collectd-exporter =
-    callPackage ../servers/monitoring/prometheus/collectd_exporter { };
   prometheus-haproxy-exporter =
     callPackage ../servers/monitoring/prometheus/haproxy_exporter { };
   prometheus-mesos-exporter =

@@ -384,7 +384,6 @@ let
 
   consul = buildFromGitHub rec {
     rev = "v0.5.2";
-    date = rev;
     owner = "hashicorp";
     repo = "consul";
     sha256 = "0p3lc1p346a5ipvkf15l94gn1ml3m7zz6bx0viark3hsv0a7iij7";
@@ -1591,7 +1590,6 @@ let
 
   logrus = buildFromGitHub rec {
     rev = "v0.8.6";
-    date = rev;  # Trick buildFromGitHub into keeping the version number.
     owner = "Sirupsen";
     repo = "logrus";
     sha256 = "1v2qcjy6w24jgdm7kk0f8lqpa25qxzll2x6ycqwidd3pzjhrkifa";
@@ -1994,9 +1992,8 @@ let
     };
   };
 
-  prometheus.client_golang = buildFromGitHub rec {
+  prometheus.client_golang = buildFromGitHub {
     rev = "0.7.0";
-    date = rev;  # Trick buildFromGitHub into keeping the version number
     owner = "prometheus";
     repo = "client_golang";
     sha256 = "1i3g5h2ncdb8b67742kfpid7d0a1jas1pyicglbglwngfmzhpkna";
@@ -2037,6 +2034,21 @@ let
     repo   = "client_model";
     sha256 = "11a7v1fjzhhwsl128znjcf5v7v6129xjgkdpym2lial4lac1dhm9";
     buildInputs = [ protobuf ];
+  };
+
+  prometheus.collectd-exporter = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "collectd_exporter";
+    sha256 = "165zsdn0lffb6fvxz75szmm152a6wmia5skb96k1mv59qbmn9fi1";
+    buildInputs = [ prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "Relay server for exporting metrics from collectd to Prometheus";
+      homepage = https://github.com/prometheus/alertmanager;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
   };
 
   prometheus.log = buildFromGitHub {
