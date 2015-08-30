@@ -1575,6 +1575,8 @@ let
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fuseiso = callPackage ../tools/filesystems/fuseiso { };
+
   fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
 
   fuse_exfat = callPackage ../tools/filesystems/fuse-exfat { };
