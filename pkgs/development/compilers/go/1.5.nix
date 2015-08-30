@@ -78,6 +78,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./cacert-1.5.patch
     ./remove-tools-1.5.patch
+  ] ++ lib.optionals stdenv.isDarwin [
+    ./assume-darwin-amd64-1.5.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

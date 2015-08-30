@@ -1,0 +1,33 @@
+diff --git a/src/cmd/dist/util.go b/src/cmd/dist/util.go
+index f13210f..8099a26 100644
+--- a/src/cmd/dist/util.go
++++ b/src/cmd/dist/util.go
+@@ -404,9 +404,9 @@ func main() {
+ 	switch gohostos {
+ 	case "darwin":
+ 		// Even on 64-bit platform, darwin uname -m prints i386.
+-		if strings.Contains(run("", CheckExit, "sysctl", "machdep.cpu.extfeatures"), "EM64T") {
+-			gohostarch = "amd64"
+-		}
++		// if strings.Contains(run("", CheckExit, "sysctl", "machdep.cpu.extfeatures"), "EM64T") {
++		gohostarch = "amd64"
++		// }
+ 	case "solaris":
+ 		// Even on 64-bit platform, solaris uname -m prints i86pc.
+ 		out := run("", CheckExit, "isainfo", "-n")
+diff --git a/src/race.bash b/src/race.bash
+index e091736..ee963e7 100755
+--- a/src/race.bash
++++ b/src/race.bash
+@@ -16,9 +16,9 @@ function usage {
+ case $(uname) in
+ "Darwin")
+ 	# why Apple? why?
+-	if sysctl machdep.cpu.extfeatures | grep -qv EM64T; then
++	# if sysctl machdep.cpu.extfeatures | grep -qv EM64T; then
+ 		usage
+-	fi 
++	# fi 
+ 	;;
+ "Linux")
+ 	if [ $(uname -m) != "x86_64" ]; then
