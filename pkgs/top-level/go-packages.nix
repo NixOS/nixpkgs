@@ -2075,6 +2075,21 @@ let
     propagatedBuildInputs = [ logrus ];
   };
 
+  prometheus.mesos-exporter = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "mesos_exporter";
+    sha256 = "059az73j717gd960g4jigrxnvqrjh9jw1c324xpwaafa0bf10llm";
+    buildInputs = [ mesos-stats prometheus.client_golang glog ];
+    meta = with stdenv.lib; {
+      description = "Export Mesos metrics to Prometheus";
+      homepage = https://github.com/prometheus/mesos_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.procfs = buildFromGitHub {
     rev    = "c91d8eefde16bd047416409eb56353ea84a186e4";
     date   = "2015-06-16";

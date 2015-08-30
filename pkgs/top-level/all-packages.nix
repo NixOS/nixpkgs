@@ -9202,9 +9202,8 @@ let
   prometheus-cli = goPackages.prometheus.cli.bin;
   prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin;
   prometheus-haproxy-exporter = goPackages.prometheus.haproxy-exporter.bin;
+  prometheus-mesos-exporter = goPackages.prometheus.mesos-exporter.bin;
 
-  prometheus-mesos-exporter =
-    callPackage ../servers/monitoring/prometheus/mesos_exporter { };
   prometheus-mysqld-exporter =
     callPackage ../servers/monitoring/prometheus/mysqld_exporter { };
   prometheus-nginx-exporter =
