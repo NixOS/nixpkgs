@@ -1,4 +1,4 @@
-{ stdenv, lib, goPackages, fetchFromGitHub, vim }:
+{ lib, goPackages, fetchFromGitHub }:
 
 let self = goPackages.buildGoPackage rec {
   name = "prometheus-${version}";

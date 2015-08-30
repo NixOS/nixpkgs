@@ -16,7 +16,7 @@ let self = goPackages.buildGoPackage rec {
 
   meta = with lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";
-    homepage = "https://github.com/prometheus/alertmanager";
+    homepage = https://github.com/prometheus/alertmanager;
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;

@@ -1,4 +1,4 @@
-{ stdenv, lib, goPackages, fetchFromGitHub }:
+{ lib, goPackages, fetchFromGitHub }:
 
 with goPackages;
 
