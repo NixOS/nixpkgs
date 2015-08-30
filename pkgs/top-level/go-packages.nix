@@ -2105,6 +2105,22 @@ let
     };
   };
 
+  prometheus.nginx-exporter = buildFromGitHub {
+    rev = "2cf16441591f6b6e58a8c0439dcaf344057aea2b";
+    date = "2015-06-01";
+    owner = "discordianfish";
+    repo = "nginx_exporter";
+    sha256 = "0p9j0bbr2lr734980x2p8d67lcify21glwc5k3i3j4ri4vadpxvc";
+    buildInputs = [ prometheus.client_golang prometheus.log ];
+    meta = with stdenv.lib; {
+      description = "Metrics relay from nginx stats to Prometheus";
+      homepage = https://github.com/discordianfish/nginx_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.procfs = buildFromGitHub {
     rev    = "c91d8eefde16bd047416409eb56353ea84a186e4";
     date   = "2015-06-16";
