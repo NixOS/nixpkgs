@@ -2090,6 +2090,21 @@ let
     };
   };
 
+  prometheus.mysqld-exporter = buildFromGitHub {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "mysqld_exporter";
+    sha256 = "10xnyxyb6saz8pq3ijp424hxy59cvm1b5c9zcbw7ddzzkh1f6jd9";
+    buildInputs = [ mysql prometheus.client_golang ];
+    meta = with stdenv.lib; {
+      description = "Prometheus exporter for MySQL server metrics";
+      homepage = https://github.com/prometheus/mysqld_exporter;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley ];
+      platforms = platforms.unix;
+    };
+  };
+
   prometheus.procfs = buildFromGitHub {
     rev    = "c91d8eefde16bd047416409eb56353ea84a186e4";
     date   = "2015-06-16";
