@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0y9l9k60iy21hj0lcvfdfxs1fxydg6d3pxp9rhy7hwr4y5vgh6dq";
   };
 
+  patches = [ ./fix-printf-type.patch ];
+
   postPatch = ''
     # Fix references to libsepol.a
     find . -name Makefile -exec sed -i 's,[^ ]*/libsepol.a,${libsepol}/lib/libsepol.a,g' {} \;
