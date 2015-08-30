@@ -6272,8 +6272,8 @@ let
   freealut = callPackage ../development/libraries/freealut { };
 
   freeglut = callPackage ../development/libraries/freeglut { };
-  
-  freenect = callPackage ../development/libraries/freenect { 
+
+  freenect = callPackage ../development/libraries/freenect {
       inherit (xlibs) libXi libXmu;
   };
 
@@ -10533,6 +10533,8 @@ let
   inherit (gnome3) gsettings_desktop_schemas;
 
   gyre-fonts = callPackage ../data/fonts/gyre {};
+
+  hack-ttf = callPackage ../data/fonts/hack-ttf {};
 
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
